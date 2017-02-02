@@ -1,8 +1,7 @@
 #ifndef SITEMAP_H_INCLUDED
 #define SITEMAP_H_INCLUDED
 
-//#include <includeDefault.h>
-//#include "tinydir.h"
+#include "includes.h"
 
 #define SITEMAP_ADDTYPE_OR     1
 #define SITEMAP_ADDTYPE_ANDNOT 2

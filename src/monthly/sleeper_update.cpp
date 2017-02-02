@@ -17,32 +17,8 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /* monthly - sleeper behavior */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern vector<LootType *> loottype;
-extern int stat_recruits;
+#include <externs.h>
 
 /**********************************************************************
 ** *JDS*

@@ -1,20 +1,4 @@
-
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h> still includes newscherrybusted
-extern char newscherrybusted;
-//#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern char oldPresidentName[POLITICIAN_NAMELEN];
-//#include <includeExternStat.h>
-
+#include <externs.h>
 
 std::string getLastNameForHeadline(char* fullName)
 {

@@ -1,18 +1,4 @@
-
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-//#include <includeEnum.h>
-//#include <includeCommon.h>
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-//#include <includeExtern.h>
+#include <externs.h>
 
 /**
 ACTIVITY_VISIT, TODO

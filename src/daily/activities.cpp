@@ -59,37 +59,23 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
+#include <externs.h>
 
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-//#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern char newscherrybusted;
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-extern vector<LootType *> loottype;
-extern MusicClass music;
-//#include <includeExternPolitics.h>
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern short mode;
-extern Alignment exec[EXECNUM];
-extern char endgamestate;
+extern vector<string> quality_0;
+extern vector<string> quality_20;
+extern vector<string> quality_35;
+extern vector<string> quality_50;
+extern vector<string> words_meaning_hacked;
+extern vector<string> enemy_website;
+extern vector<string> win_hand_to_hand;
+extern vector<string> lose_hand_to_hand;
+extern vector<string> car_wont_start;
+extern vector<string> gets_nervous;
+extern vector<string> cant_hotwire_car;
+extern vector<string> almost_hotwire_car;
+extern vector<string> cant_find_keys;
+extern vector<string> cant_find_keys_no_free_speech;
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);
@@ -107,114 +93,27 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess);
 
 void adjustblogpower(int &power)
 {
-   if(power<20)
-   {
-      switch(LCSrandom(20))
-      {
-      case 0:addstr("a sub-Liberal");break;
-      case 1:addstr("a really bad");break;
-      case 2:addstr("a pathetic");break;
-      case 3:addstr("a dreadful");break;
-      case 4:addstr("a god-awful");break;
-      case 5:addstr("a Conservative");break;
-      case 6:addstr("a heinous");break;
-      case 7:addstr("an embarrassing");break;
-      case 8:addstr("a shameful");break;
-      case 9:addstr("a counter-productive");break;
-      case 10:addstr("a sad");break;
-      case 11:addstr("a vapid");break;
-      case 12:addstr("a weak");break;
-      case 13:addstr("a brainless");break;
-      case 14:addstr("a repellant");break;
-      case 15:addstr("a nonsensical");break;
-      case 16:addstr("a ludicrous");break;
-      case 17:addstr("a half-baked");break;
-      case 18:addstr("a laughable");break;
-      case 19:addstr("an insane");break;
-      }
-      power = -signed(LCSrandom(2));
-   }
-   else if(power<35)
-   {
-      //switch(LCSrandom(1))
-      //{
-      //case 0:addstr("a fair");break;
-      //case 1:addstr("a mainstream");break;
-      //case 2:addstr("a mediocre");break;
-      //case 3:addstr("a middling");break;
-      //case 4:addstr("a passable");break;
-      //case 5:addstr("a regular");break;
-      //case 6:addstr("a normal");break;
-      //case 7:addstr("a standard");break;
-      //case 9:addstr("a reasonable");break;
-      //case 0:addstr("a typical");break;
-      //case 11:addstr("a vanilla");break;
-      //case 12:addstr("a basic");break;
-      //case 13:addstr("a plain");break;
-      //case 14:addstr("a simple");break;
-      /*case 0:*/addstr("a standard");//break;
-      //case 16:addstr("an everyday");break;
-      //case 17:addstr("a stock");break;
-      //case 18:addstr("a stereotypical");break;
-      //case 19:addstr("an okay");break;
-      //case 8:addstr("a respectable");break;
-      //}
-      power = 1;
-   }
-   else if(power<50)
-   {
-      switch(LCSrandom(11))
-      {
-      //case 0:addstr("a solid");break;
-      case 0:addstr("a good");break;
-      //case 2:addstr("an intelligent");break;
-      case 1:addstr("a satisfying");break;
-      //case 4:addstr("an impressive");break;
-      case 2:addstr("a sound");break;
-      //case 6:addstr("a splendid");break;
-      case 3:addstr("a competent");break;
-      case 4:addstr("a clever");break;
-      //case 10:addstr("a skillful");break;
-      //case 11:addstr("a talented");break;
-      case 5:addstr("a persuasive");break;
-      case 6:addstr("a thorough");break;
-      case 7:addstr("a bold");break;
-      //case 15:addstr("a clever");break;
-      case 8:addstr("a fresh");break;
-      case 9:addstr("a pointed");break;
-      case 10:addstr("a sassy");break;
-      //case 19:addstr("a sharp");break;
-      case 11:addstr("a Liberal");break;
-      }
-      power = 2;
-   }
-   else
-   {
-      switch(LCSrandom(10))
-      {
-      case 0:addstr("a great");break;
-      //case 1:addstr("a masterful");break;
-      //case 2:addstr("a penetrating");break;
-      //case 3:addstr("a profound");break;
-      case 1:addstr("a top-quality");break;
-      //case 5:addstr("a very sound");break;
-      case 2:addstr("an excellent");break;
-      //case 7:addstr("a competent");break;
-      case 3:addstr("a brilliant");break;
-      case 4:addstr("a powerful");break;
-      //case 10:addstr("a slick");break;
-      //case 11:addstr("a winning");break;
-      case 5:addstr("an inspiring");break;
-      case 6:addstr("a touching");break;
-      case 7:addstr("an eloquent");break;
-      case 8:addstr("a forceful");break;
-      case 9:addstr("a compelling");break;
-      //case 17:addstr("an impelling");break;
-      //case 18:addstr("a smooth");break;
-      case 10:addstr("an Elite Liberal");break;
-      }
-      power = 3;
-   }
+
+	if (power<20)
+	{
+		addstr(pickrandom(quality_0));
+		power = -signed(LCSrandom(2));
+	}
+	else if (power<35)
+	{
+		addstr(pickrandom(quality_20));
+		power = 1;
+	}
+	else if (power<50)
+	{
+		addstr(pickrandom(quality_35));
+		power = 2;
+	}
+	else
+	{
+		addstr(pickrandom(quality_50));
+		power = 3;
+	}
 }
 
 
@@ -1379,23 +1278,11 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
          if(len(truehack)>1) strcpy(msg,"Your hackers have ");
          else { strcpy(msg,truehack[0]->name); strcat(msg," has "); }
 
-         switch(LCSrandom(4))
-         {
-         case 0: strcat(msg,"defaced");crime=LAWFLAG_INFORMATION; break;
-         case 1: strcat(msg,"knocked out");crime=LAWFLAG_COMMERCE; break;
-         case 2: strcat(msg,"threatened");crime=LAWFLAG_SPEECH; break;
-         case 3: strcat(msg,"hacked");crime=LAWFLAG_INFORMATION; break;
-         }
-         strcat(msg," a ");
-         switch(LCSrandom(5))
-         {
-         case 0: strcat(msg,"corporate website"); break;
-         case 1: strcat(msg,"Conservative forum");break;
-         case 2: strcat(msg,"Conservative blog"); break;
-         case 3: strcat(msg,"news website"); break;
-         case 4: strcat(msg,"government website"); break;
-         }
-         strcat(msg,".");
+		 strcat(msg, pickrandom(words_meaning_hacked).data());
+		 strcat(msg, " a ");
+
+		 strcat(msg, pickrandom(enemy_website).data());
+		 strcat(msg, ".");
 
          change_public_opinion(issue,1);
 
@@ -1735,7 +1622,7 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
    {
 	   if(ledger.get_funds()<60) break;
 	   ledger.subtract_funds(60,EXPENSE_TRAINING);
-	   CreatureSkill skill[2] = { getSkillFromInt(-1), getSkillFromInt(-1)};
+	   int skill[2] = {-1, -1};
 	   int effectiveness[2] = {20, 20};
 	   switch(students[s]->activity.type)
 	   {
@@ -2067,17 +1954,9 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
                            move(8,1);
                            addstr(trouble[t]->name, gamelog);
-                           switch(LCSrandom(8))
-                           {
-                           case 0:addstr(" breaks the arm of the nearest person!", gamelog);break;
-                           case 1:addstr(" knees a guy in the balls!", gamelog);break;
-                           case 2:addstr(" knocks one out with a fist to the face!", gamelog);break;
-                           case 3:addstr(" bites some hick's ear off!", gamelog);break;
-                           case 4:addstr(" smashes one of them in the jaw!", gamelog);break;
-                           case 5:addstr(" shakes off a grab from behind!", gamelog);break;
-                           case 6:addstr(" yells the slogan!", gamelog);break;
-                           case 7:addstr(" knocks two of their heads together!", gamelog);break;
-                           }
+
+						   addstr(" ", gamelog);
+						   addstr(pickrandom(win_hand_to_hand), gamelog);
 
                            gamelog.nextMessage();
 
@@ -2090,17 +1969,9 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
                            move(8,1);
                            addstr(trouble[t]->name, gamelog);
-                           switch(LCSrandom(8))
-                           {
-                           case 0:addstr(" is held down and kicked by three guys!", gamelog);break;
-                           case 1:addstr(" gets pummeled!", gamelog);break;
-                           case 2:addstr(" gets hit by a sharp rock!", gamelog);break;
-                           case 3:addstr(" is thrown against the sidewalk!", gamelog);break;
-                           case 4:addstr(" is bashed in the face with a shovel!", gamelog);break;
-                           case 5:addstr(" is forced into a headlock!", gamelog);break;
-                           case 6:addstr(" crumples under a flurry of blows!", gamelog);break;
-                           case 7:addstr(" is hit in the chest with a pipe!", gamelog);break;
-                           }
+
+						   addstr(" ", gamelog);
+						   addstr(pickrandom(lose_hand_to_hand), gamelog);
 
                            gamelog.nextMessage();
 
@@ -2261,7 +2132,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 {
    for(int t=0;t<len(teachers);t++)
    {
-      CreatureSkill skillarray[14];
+      int skillarray[14];
       int cost=0, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
@@ -2278,7 +2149,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[6]=SKILL_STREETSENSE;
          skillarray[7]=SKILL_MUSIC;
          skillarray[8]=SKILL_ART;
-         skillarray[9]= getSkillFromInt(-1);
+         skillarray[9]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
          cost=6;
@@ -2290,7 +2161,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[5]=SKILL_SEDUCTION;
          skillarray[6]=SKILL_PSYCHOLOGY;
          skillarray[7]=SKILL_DRIVING;
-         skillarray[8]= getSkillFromInt(-1);
+         skillarray[8]=-1;
          break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=10;
@@ -2307,7 +2178,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[10]=SKILL_HANDTOHAND;
          skillarray[11]=SKILL_DODGE;
          skillarray[12]=SKILL_FIRSTAID;
-         skillarray[13]= getSkillFromInt(-1);
+         skillarray[13]=-1;
          break;
       }
 
@@ -2819,16 +2690,16 @@ bool stealcar(Creature &cr,char &clearformess)
                addstr(cr.name, gamelog);
                int flavor_text;
                if(cr.get_skill(SKILL_SECURITY) < 4)
-                  flavor_text = LCSrandom(3);
-               else flavor_text = LCSrandom(5);
-               switch(flavor_text)
-               {
-                  case 0:addstr(" fiddles with the ignition, but the car doesn't start.", gamelog);break;
-                  case 1:addstr(" digs around in the steering column, but the car doesn't start.", gamelog);break;
-                  case 2:addstr(" touches some wires together, but the car doesn't start.", gamelog);break;
-                  case 3:addstr(" makes something in the engine click, but the car doesn't start.", gamelog);break;
-                  case 4:addstr(" manages to turn on some dash lights, but the car doesn't start.", gamelog);break;
-               }
+				   addstr(pickrandom(cant_hotwire_car));
+			   else {
+				   if (LCSrandom(cant_hotwire_car.size() + almost_hotwire_car.size()) >= cant_hotwire_car.size()) {
+					   addstr(pickrandom(almost_hotwire_car));
+				   }
+				   else {
+					   addstr(pickrandom(cant_hotwire_car));
+				   }
+			   }
+
                gamelog.nextMessage();
 
                getkey();
@@ -2900,31 +2771,17 @@ bool stealcar(Creature &cr,char &clearformess)
                   addstr("If they were here, I'd have found them by now.", gamelog);
                else if (key_search_total>15)
                {
-                  switch(LCSrandom(5))
-                  {
-                  case 0:addstr("This isn't working!", gamelog);break;
-                  case 1:addstr("Why me?", gamelog);break;
-                  case 2:addstr("What do I do now?", gamelog);break;
-                  case 3:addstr("Oh no...", gamelog);break;
-                  case 4:addstr("I'm going to get arrested, aren't I?", gamelog);break;
-                  }
+				   addstr(pickrandom(car_wont_start), gamelog);
                }
                else
                {
-                  switch(LCSrandom(5))
-                  {
-                     case 0:addstr("Please be in here somewhere...", gamelog);break;
-                     case 1:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!", gamelog);
-                        else addstr("Fuck!  Where are they?!", gamelog);
-                        break;
-                     case 2:addstr("Come on, baby, come to me...", gamelog);break;
-                     case 3:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...", gamelog);
-                        else addstr("Dammit...", gamelog);
-                        break;
-                     case 4:addstr("I wish I could hotwire this thing...", gamelog);break;
-                  }
+				   if (law[LAW_FREESPEECH] == -2) {
+					   addstr(pickrandom(cant_find_keys_no_free_speech));
+				   }
+				   else {
+					   addstr(pickrandom(cant_find_keys));
+
+				   }
                }
                gamelog.nextMessage();
 
@@ -2967,12 +2824,10 @@ bool stealcar(Creature &cr,char &clearformess)
             move(++y,0);y++;
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr(cr.name, gamelog);
-            switch(LCSrandom(3))
-            {
-               case 0:addstr(" hears someone nearby making a phone call.", gamelog);break;
-               case 1:addstr(" is getting nervous being out here this long.", gamelog);break;
-               case 2:addstr(" sees a police car driving around a few blocks away.", gamelog);break;
-            }
+
+			addstr(" ", gamelog);
+			addstr(pickrandom(gets_nervous), gamelog);
+
             gamelog.nextMessage();
 
             getkey();

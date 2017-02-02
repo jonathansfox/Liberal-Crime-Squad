@@ -1,0 +1,10 @@
+Biker
+Transient
+Crackhead
+Fast Food Worker
+Telemarketer
+Office Worker
+Mailman
+Musician
+Hairstylist
+Bartender

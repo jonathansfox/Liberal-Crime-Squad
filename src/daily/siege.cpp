@@ -59,41 +59,14 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
+#include <externs.h>
 
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern MusicClass music;
-extern short mode;
-extern char endgamestate;
-extern char foughtthisround;
-extern int stat_dead;
-extern int ccs_siege_kills;
+extern vector<string> words_meaning_news;
+extern vector<string> newspaper_first_name;
+extern vector<string> newspaper_last_name;
+extern vector<string> insult_for_liberal;
+extern vector<string> word_replacing_liberal;
 
 /* TODO
 make it less likely to be raided based on:
@@ -1300,48 +1273,14 @@ void siegeturn(char clearformess)
 
                   erase();
                   move(1,1);
-                  addstr("Elitist ", gamelog);
-                  addstr(repname, gamelog);
-                  addstr(" from the ", gamelog);
-                  switch(LCSrandom(5))
-                  {
-                     case 0:addstr("news program", gamelog);break;
-                     case 1:addstr("news magazine", gamelog);break;
-                     case 2:addstr("website", gamelog);break;
-                     case 3:addstr("scandal rag", gamelog);break;
-                     case 4:addstr("newspaper", gamelog);break;
-                  }
-                  addstr(" ");
-                  switch(LCSrandom(12))
-                  {
-                     case 0:addstr("Daily", gamelog);break;
-                     case 1:addstr("Nightly", gamelog);break;
-                     case 2:addstr("Current", gamelog);break;
-                     case 3:addstr("Pressing", gamelog);break;
-                     case 4:addstr("Socialist", gamelog);break;
-                     case 5:addstr("American", gamelog);break;
-                     case 6:addstr("National", gamelog);break;
-                     case 7:addstr("Union", gamelog);break;
-                     case 8:addstr("Foreign", gamelog);break;
-                     case 9:addstr("Associated", gamelog);break;
-                     case 10:addstr("International", gamelog);break;
-                     case 11:addstr("County", gamelog);break;
-                  }
-                  addstr(" ", gamelog);
-                  switch(LCSrandom(11))
-                  {
-                     case 0:addstr("Reporter", gamelog);break;
-                     case 1:addstr("Issue", gamelog);break;
-                     case 2:addstr("Take", gamelog);break;
-                     case 3:addstr("Constitution", gamelog);break;
-                     case 4:addstr("Times", gamelog);break;
-                     case 5:addstr("Post", gamelog);break;
-                     case 6:addstr("News", gamelog);break;
-                     case 7:addstr("Affair", gamelog);break;
-                     case 8:addstr("Statesman", gamelog);break;
-                     case 9:addstr("Star", gamelog);break;
-                     case 10:addstr("Inquirer", gamelog);break;
-                  }
+				  addstr("Elitist ", gamelog);
+				  addstr(repname, gamelog);
+				  addstr(" from the ", gamelog);
+				  addstr(pickrandom(words_meaning_news), gamelog);
+				  addstr(" ");
+				  addstr(pickrandom(newspaper_first_name), gamelog);
+				  addstr(" ", gamelog);
+				  addstr(pickrandom(newspaper_last_name), gamelog);
                   move(2,1);
                   addstr("got into the compound somehow!", gamelog);
                   gamelog.newline();
@@ -1388,35 +1327,16 @@ void siegeturn(char clearformess)
                      move(9,1);
                      addstr("and later used the material for a Broadway play called", gamelog);
                      move(10,1);
-                     switch(LCSrandom(11))
-                     {
-                        case 0: addstr("Flaming", gamelog); break;
-                        case 1: if(law[LAW_FREESPEECH]==-2) addstr("Dumb", gamelog);
-                                else addstr("Retarded", gamelog); break;
-                        case 2: addstr("Insane", gamelog); break;
-                        case 3: addstr("Crazy", gamelog); break;
-                        case 4: addstr("Loopy", gamelog); break;
-                        case 5: addstr("Idiot", gamelog); break;
-                        case 6: addstr("Empty-Headed", gamelog); break;
-                        case 7: addstr("Nutty", gamelog); break;
-                        case 8: addstr("Half-Baked", gamelog); break;
-                        case 9: addstr("Pot-Smoking", gamelog); break;
-                        case 10: addstr("Stoner", gamelog); break;
-                     }
+					 switch (LCSrandom(insult_for_liberal.size() + 1))
+					 {
+					 case 0: if (law[LAW_FREESPEECH] == -2) addstr("Dumb", gamelog);
+							 else addstr("Retarded", gamelog); break;
+					 default:
+						 addstr(pickrandom(insult_for_liberal));
+						 break;
+					 }
                      addstr(" ", gamelog);
-                     switch(LCSrandom(10))
-                     {
-                        case 0: addstr("Liberal", gamelog); break;
-                        case 1: addstr("Socialist", gamelog); break;
-                        case 2: addstr("Anarchist", gamelog); break;
-                        case 3: addstr("Communist", gamelog); break;
-                        case 4: addstr("Marxist", gamelog); break;
-                        case 5: addstr("Green", gamelog); break;
-                        case 6: addstr("Elite", gamelog); break;
-                        case 7: addstr("Guerrilla", gamelog); break;
-                        case 8: addstr("Commando", gamelog); break;
-                        case 9: addstr("Soldier", gamelog); break;
-                     }
+					 addstr(pickrandom(word_replacing_liberal));
                      addstr(".", gamelog);
                      gamelog.newline();
                   }

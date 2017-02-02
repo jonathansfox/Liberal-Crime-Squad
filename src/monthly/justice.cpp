@@ -25,52 +25,23 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
+#include <externs.h>
 
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-//#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-
-extern MusicClass music;
-extern int stat_dead;
+extern vector<string> liberal_jury;
+extern vector<string> conservative_jury;
+extern vector<string> cruel_and_unusual_execution_methods;
+extern vector<string> standard_execution_methods;
+extern vector<string> supposedly_painless_execution_method;
+extern vector<string> reeducation_experiences;
+extern vector<string> labor_camp_experiences;
+extern vector<string> good_experiences;
+extern vector<string> bad_experiences;
+extern vector<string> general_experiences;
 
 /* monthly - hold trial on a liberal */
-
 void trial(Creature &g)
 {
-	static const int number_of_liberal_juries = 3;
-	static const char* liberal_jury[number_of_liberal_juries] =	{
-		"The jury is Flaming Liberal.", 
-		"A few of the jurors are closet Socialists.",
-		"One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking."
-	};
-	static const char* conservative_jury[] =	{
-		"Such a collection of Conservative jurors has never before been assembled.", 
-		"One of the accepted jurors is a Conservative activist.", 
-		"A few of the jurors are members of the KKK.", 
-		"The jury is frighteningly Conservative."
-	};
-
    music.play(MUSIC_TRIAL);
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
@@ -627,11 +598,11 @@ void trial(Creature &g)
       else if(jury<=-29)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         switch(LCSrandom(number_of_liberal_juries + 1))
-         {
-            case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.", gamelog);break;
-			default:addstr(pickrandom(liberal_jury), gamelog); break;
-         }
+		 switch (LCSrandom(liberal_jury.size() + 1))
+		 {
+		 case 0:addstr(g.name); addstr("'s best friend from childhood is a juror.", gamelog); break;
+		 default:addstr(pickrandom(liberal_jury), gamelog); break;
+		 }
          gamelog.newline();
       }
       else if(jury<=-15) addstr("The jury is fairly Liberal.", gamelog);
@@ -1251,43 +1222,6 @@ void imprison(Creature &g)
 //RETURNS IF SCREEN WAS ERASED
 char prison(Creature &g)
 {
-   static const char *cruel_and_unusual_execution_methods[] =
-   {
-      "beheading",
-      "drawing and quartering",
-      "disemboweling",
-      "one thousand cuts",
-      "feeding the lions",
-      "repeated gladiatorial death matches",
-      "burning",
-      "crucifixion",
-      "head-squishing",
-      "piranha tank swimming exhibition",
-      "forced sucking of Ronald Reagan's ass",
-      "covering with peanut butter and letting rats eat",
-      "burying up to the neck in a fire ant nest",
-      "running truck over the head",
-      "drowning in a sewage digester vat",
-      "chipper-shredder",
-      "use in lab research",
-      "blood draining",
-      "chemical weapons test",
-      "sale to a furniture maker",
-      "sale to a CEO as a personal pleasure toy",
-      "sale to foreign slave traders",
-      "exposure to degenerate Bay 12 Curses games"
-   };
-
-   static const char *standard_execution_methods[] =
-   {
-      "lethal injection",
-      "hanging",
-      "firing squad",
-      "electrocution"
-   };
-
-   static const char *supposedly_painless_execution_method =
-      "lethal injection";
 
    char showed=0;
 
@@ -1355,7 +1289,7 @@ char prison(Creature &g)
             else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
                addstr(pickrandom(standard_execution_methods), gamelog);
             else
-               addstr(supposedly_painless_execution_method, gamelog);
+				addstr(pickrandom(supposedly_painless_execution_method), gamelog);
             addstr(".", gamelog);
 
             getkey();
@@ -1462,17 +1396,6 @@ char prison(Creature &g)
 
 void reeducation(Creature &g)
 {
-   static const char *reeducation_experiences[] =
-   {
-      " is subjected to rehabilitative therapy in prison.",
-      " works on a prison mural about political diversity.",
-      " routinely sees a Liberal therapist in prison.",
-      " participates in a group therapy session in prison.",
-      " sings songs with prisoners of all political persuasions.",
-      " is encouraged to befriend Conservatives in prison.",
-      " puts on an anti-crime performance in prison.",
-      " sees a video in prison by victims of political crime."
-   };
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1564,18 +1487,7 @@ void laborcamp(Creature &g)
       experience = " consumes drugs that simulate death, and is thrown out with the trash!";
    }
 
-   static const char *labor_camp_experiences[] =
-   {
-      " is forced to operate dangerous machinery in prison.",
-      " is beaten by sadistic prison guards.",
-      " carries heavy burdens back and forth in prison labor camp.",
-      " does back-breaking work all month in prison.",
-      " gets in a brutal fight with another prisoner.",
-      " participates in a quickly-suppressed prison riot.",
-      " participates in a quickly-suppressed prison riot."
-   };
-
-   if(!escaped)experience=pickrandom(labor_camp_experiences);
+   if (!escaped)experience = strcat(" ", pickrandom(labor_camp_experiences).data());
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1687,46 +1599,23 @@ void prisonscene(Creature &g)
          experience = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
       }
    }
-
-   static const char *good_experiences[] =
-   {
-      " advertises the LCS every day to other inmates.",
-      " organizes a group of inmates to beat up on a serial rapist.",
-      " learns lots of little skills from other inmates.",
-      " gets a prison tattoo with the letters L-C-S.",
-      " thinks up new protest songs while in prison."
-   };
-   static const char *bad_experiences[] =
-   {
-      " gets sick for a few days from nasty prison food.",
-      " spends too much time working out at the prison gym.",
-      " is raped by another prison inmate, repeatedly.",
-      " writes a letter to the warden swearing off political activism.",
-      " rats out one of the other inmates in exchange for benefits."
-   };
-   static const char *general_experiences[] =
-   {
-      " mouths off to a prison guard and ends up in solitary.",
-      " gets high off drugs smuggled into the prison.",
-      " does nothing but read books at the prison library.",
-      " gets into a fight and is punished with latrine duty.",
-      " constantly tries thinking how to escape from prison."
-   };
-
+   
    if(escaped==0)
    {
-      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
-         effect = 1;
-         if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
-         else experience = pickrandom(general_experiences);
-      } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
-         effect = 0;
-         experience = pickrandom(general_experiences);
-      } else {
-         effect = -1;
-         if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
-         else experience = pickrandom(general_experiences);
-      }
+	   if (g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_HARD)) {
+		   effect = 1;
+		   if (LCSrandom(2) > 0) experience = strcat(" ", pickrandom(good_experiences).data());
+		   else experience = strcat(" ", pickrandom(general_experiences).data());
+	   }
+	   else if (g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_CHALLENGING)) {
+		   effect = 0;
+		   experience = strcat(" ", pickrandom(general_experiences).data());
+	   }
+	   else {
+		   effect = -1;
+		   if (LCSrandom(2) > 0) experience = strcat(" ", pickrandom(bad_experiences).data());
+		   else experience = strcat(" ", pickrandom(general_experiences).data());
+	   }
    }
 
    erase();

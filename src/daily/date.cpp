@@ -25,34 +25,10 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
+#include <externs.h>
 
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-extern MusicClass music;
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-extern int stat_recruits;
-extern int stat_kidnappings;
+extern vector<string> date_fail;
 
 enum DateResults
 {
@@ -413,8 +389,8 @@ char completevacation(datest &d,int p,char &clearformess)
    gamelog.nextMessage();
 
    // Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
-   Alignment datealignment=d.date[e]->align;
-   d.date[e]->align=ALIGN_CONSERVATIVE;
+   int datealignment=d.date[e]->align;
+   d.date[e]->align=-1;
 
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
@@ -426,9 +402,9 @@ char completevacation(datest &d,int p,char &clearformess)
 
    int thingsincommon=0;
    for(int s=0;s<SKILLNUM;s++)
-      if(d.date[e]->get_skill(getSkillFromInt(s))>=1 && pool[p]->get_skill(getSkillFromInt(s))>=1)
+      if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
          //Has a skill that is at least half the same skill of the other person on the date.
-         if (d.date[e]->get_skill(getSkillFromInt(s))<=pool[p]->get_skill(getSkillFromInt(s))*2)
+         if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2)
             thingsincommon++;
    aroll += thingsincommon*3;
 
@@ -557,19 +533,9 @@ char completedate(datest &d,int p,char &clearformess)
             break;
       }
 
-	   static const char *date_fail[] =
-	   {
-	      " is publicly humiliated."
-	      " runs away.",
-	      " escapes through the bathroom window.",
-	      " spends the night getting drunk alone.",
-	      " gets chased out by an angry mob.",
-	      " gets stuck washing dishes all night.",
-	      " is rescued by a passing Elite Liberal.",
-	      " makes like a tree and leaves."
-	   };
       move(5,0);
       addstr(pool[p]->name,gamelog);
+	  addstr(" ", gamelog);
       addstr(pickrandom(date_fail),gamelog);
       addjuice(*pool[p],-5,-50);
       gamelog.nextMessage();
@@ -645,9 +611,9 @@ char completedate(datest &d,int p,char &clearformess)
 
       int thingsincommon = 0;
       for(int s=0;s<SKILLNUM;s++)
-         if(d.date[e]->get_skill(getSkillFromInt(s))>=1 && pool[p]->get_skill(getSkillFromInt(s))>=1)
+         if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
             //Has a skill that is at least half the same skill of the other person on the date.
-            if (d.date[e]->get_skill(getSkillFromInt(s))<=pool[p]->get_skill(getSkillFromInt(s))*2)
+            if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2)
                thingsincommon++;
       while(true)
       {

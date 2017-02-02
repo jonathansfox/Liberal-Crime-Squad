@@ -59,17 +59,7 @@
 */
 
 #define CURSES_GRAPHICS // define this BEFORE including anything
-
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-//#include <includeEnum.h>
-//#include <includeCommon.h>
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeExtern.h>
+#include <externs.h>
 
 #ifdef NCURSES
 /* Translates PDCurses' numerical color values to NCurses' corresponding

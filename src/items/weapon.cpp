@@ -1,27 +1,4 @@
-
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
-
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
+#include <externs.h>
 
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }

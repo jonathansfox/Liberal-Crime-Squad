@@ -1,7 +1,4 @@
-
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* storyx_e);
 void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char* story);

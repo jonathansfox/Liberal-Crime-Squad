@@ -29,6 +29,4 @@ enum Alignment
    ALIGN_STALINIST
 };
 
-
-
 #endif //ALIGNMENT_H_INCLUDED

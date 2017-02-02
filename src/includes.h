@@ -74,9 +74,9 @@
 
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
 // -- yetisyny
-#define PACKAGE_VERSION "4.10.1"
+#define PACKAGE_VERSION "4.10.0"
 
-const int version=41010;
+const int version=40100;
 const int lowestloadversion=40100;
 const int lowestloadscoreversion=31203;
 
@@ -1328,9 +1328,9 @@ void savegame(const string& filename);
 /* loads the game from save.dat */
 char load(const string& filename);
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(const string& filename);
-/* check if file exists */
-bool file_exists(const string& filename);
+void reset();
+/* check if file exists */ 
+bool file_exists(const std::string& filename);
 
 
 /*******************************************************************************

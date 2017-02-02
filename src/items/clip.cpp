@@ -1,23 +1,4 @@
-
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
-
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
+#include <externs.h>
 
 Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
 { }

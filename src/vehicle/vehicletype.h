@@ -1,9 +1,7 @@
 #ifndef VEHICLE_TYPE_H
 #define VEHICLE_TYPE_H
 
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 class VehicleType
 {

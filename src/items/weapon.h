@@ -1,9 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 class Weapon : public Item
 {

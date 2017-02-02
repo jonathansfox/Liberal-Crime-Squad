@@ -8,6 +8,7 @@
 //
 #include <stdio.h>
 #include "Markup.h"
+
 #if defined(MCD_STRERROR) // C error routine
 #include <errno.h>
 #endif // C error routine

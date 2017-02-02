@@ -25,36 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern char newscherrybusted;
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-extern MusicClass music;
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-
-extern char endgamestate;
-extern short mode;
+#include <externs.h>
 
 /* common - test for possible game over */
 char endcheck(char cause)

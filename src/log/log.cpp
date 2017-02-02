@@ -25,16 +25,8 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-//#include <includeEnum.h>
-//#include <includeCommon.h>
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
 
-//#include <includeExtern.h>
+#include <externs.h>
 
 //Constructor.
 Log::Log()

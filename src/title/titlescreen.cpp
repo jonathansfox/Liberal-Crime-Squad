@@ -60,31 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
-
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern short mode;
-extern MusicClass music;
+#include <externs.h>
 
 extern vector<vector<string>> real_quote;
 
@@ -103,6 +79,7 @@ void title() {
    strcpy(str,"Inspired by the 1983 version of Oubliette");
    move(4,39-((len(str)-1)>>1));
    addstr(str);
+
    vector<string> quote = pickrandom(real_quote);
    strcpy(str, quote[0]);
    move(6, 39 - ((len(str) - 1) >> 1));

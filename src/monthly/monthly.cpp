@@ -59,41 +59,13 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-
-extern vector<LootType *> loottype;
-extern MusicClass music;
-extern int year;
-extern char endgamestate;
+#include <externs.h>
 
 /* does end of month actions */
 void passmonth(char &clearformess,char canseethings)
 {
-   Alignment oldlaw[LAWNUM];
+   short oldlaw[LAWNUM];
    memmove(oldlaw,law,sizeof(short)*LAWNUM);
    int l, v, p;
 
@@ -283,7 +255,7 @@ void passmonth(char &clearformess,char canseethings)
    if(stalinmode) for(int v=0;v<VIEWNUM-3;v++)
    {
       if(stalinview(v,false)) { if((attitude[v]+=3)>100) attitude[v]=100; }
-      else { if(--attitude[v]<0) attitude[v]= 0; }
+      else { if(--attitude[v]<0) attitude[v]=0; }
    }
    // End Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
 
@@ -666,7 +638,7 @@ void passmonth(char &clearformess,char canseethings)
 }
 
 /* rename various buildings according to the new laws */
-void updateworld_laws(Alignment *law,Alignment *oldlaw)
+void updateworld_laws(short *law,short *oldlaw)
 {  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
    if(((law[   LAW_POLICEBEHAVIOR]==-2&&law[   LAW_DEATHPENALTY]==-2)||
        (oldlaw[LAW_POLICEBEHAVIOR]==-2&&oldlaw[LAW_DEATHPENALTY]==-2))&&

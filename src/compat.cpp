@@ -61,19 +61,8 @@
 * - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
 
-//#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
+#include <externs.h>
 
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.

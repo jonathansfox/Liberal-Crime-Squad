@@ -25,39 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-
-#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-#include <includeExternDefault.h>
-extern MusicClass music;
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-
-extern char endgamestate;
-extern short mode;
-extern char foughtthisround;
-extern int stat_dead;
+#include <externs.h>
 
 enum CarChaseStatus
 {
@@ -67,6 +36,19 @@ enum CarChaseStatus
    CARCHASE_EVERYONEDEAD,
    CARCHASE_ESCAPED
 };
+
+
+extern vector<string> car_speed;
+extern vector<string> car_plows_through;
+extern vector<string> car_crash_modes;
+extern vector<string> car_crash_fatalities;
+extern vector<string> die_in_car;
+
+extern vector<string> carchase_obstacle_none;
+extern vector<string> carchase_obstacle_fruit_stand;
+extern vector<string> carchase_obstacle_truck_pulls_out;
+extern vector<string> carchase_obstacle_cross_traffic;
+extern vector<string> carchase_obstacle_child;
 
 bool chasesequence()
 {
@@ -667,27 +649,20 @@ void evasivedrive()
    clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   switch(LCSrandom(4))
+
+   switch (LCSrandom(car_speed.size() + 1))
    {
    case 0:
-      addstr("You keep the gas floored!", gamelog);
-      gamelog.newline(); //Newline.
-      break;
-   case 1:
-      addstr("You swerve around the next corner!", gamelog);
-      gamelog.newline(); //New line.
-      break;
-   case 2:
-      addstr("You screech through an empty lot to the next street!", gamelog);
-      gamelog.newline(); //New line.
-      break;
-   case 3:
-      if(yourworst>15)
-         addstr("You boldly weave through oncoming traffic!", gamelog);
-      else
-         addstr("You make obscene gestures at the pursuers!", gamelog);
-      gamelog.newline(); //new line.
-      break;
+	   if (yourworst>15)
+		   addstr("You boldly weave through oncoming traffic!", gamelog);
+	   else
+		   addstr("You make obscene gestures at the pursuers!", gamelog);
+	   gamelog.newline(); //new line.
+	   break;
+   default:
+	   addstr(pickrandom(car_speed), gamelog);
+	   gamelog.newline(); //new line.
+	   break;
    }
 
    getkey();
@@ -852,25 +827,9 @@ void evasiverun()
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
          move(16,1);
          addstr(encounter[e].name, gamelog);
-         switch(LCSrandom(4))
-         {
-         case 0:
-            addstr(" plows through a brick wall like it was nothing!", gamelog);
-            gamelog.newline(); //New line.
-            break;
-         case 1:
-            addstr(" charges down an alley, smashing both side walls out!", gamelog);
-            gamelog.newline(); //Blarg.
-            break;
-         case 2:
-            addstr(" smashes straight through traffic, demolishing cars!", gamelog);
-            gamelog.newline(); //Newline.
-            break;
-         case 3:
-            addstr(" destroys everything in its path, closing the distance!", gamelog);
-            gamelog.newline(); //I wish these were all contained in addstr.
-            break;
-         }
+
+		 addstr(" ", gamelog);
+		 addstr(pickrandom(car_plows_through), gamelog);
 
          getkey();
       }
@@ -1532,18 +1491,6 @@ bool dodgedrive()
 
 void crashfriendlycar(int v)
 {
-	static const char *car_crash_modes[] =
-	{
-		" slams into a building!",
-		" skids out and crashes!",
-		" hits a parked car and flips over!"
-	};
-	static const char *car_crash_fatalities[] =
-	{
-   	" is crushed inside the car.",
-		"'s lifeless body smashes through the windshield.",
-		" is thrown from the car and killed instantly.",
-	};
 
    //CRASH CAR
    clearmessagearea();
@@ -1628,14 +1575,17 @@ void crashfriendlycar(int v)
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(16,1);
             addstr(activesquad->squad[p]->name, gamelog);
-            switch(LCSrandom(3))
-            {
-               case 0:addstr(" slumps in ", gamelog);
-                  addstr(activesquad->squad[p]->hisher(), gamelog);
-                  addstr(" seat, out cold, and dies.", gamelog);break;
-               case 1:addstr(" is crushed by the impact.", gamelog);break;
-               case 2:addstr(" struggles free of the car, then collapses lifelessly.", gamelog);break;
-            }
+
+			switch (LCSrandom(die_in_car.size() + 1))
+			{
+				//TODO IsaacG Migrate Strings
+			case 0:addstr(" slumps in ", gamelog);
+				addstr(activesquad->squad[p]->hisher(), gamelog);
+				addstr(" seat, out cold, and dies.", gamelog); break;
+			default:
+				addstr(pickrandom(die_in_car), gamelog);
+				break;
+			}
             gamelog.newline(); //New line.
             printparty();
 

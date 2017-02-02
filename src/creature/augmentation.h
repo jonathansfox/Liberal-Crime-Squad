@@ -1,9 +1,7 @@
 #ifndef AUGMENTATION_H
 #define AUGMENTATION_H
 
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 enum Augmentations
 {

@@ -1,27 +1,4 @@
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
-
-/*
-translateid.cpp
-*/
-#include "common\\translateid.h"
-
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h>
-//#include <includeExternDefault.h>
-#include "includeActivateB.h"
-//#include <includeExternPolitics.h>
+#include <externs.h>
 
 Armor::Armor(const ArmorType& seed, int quality, int number)
  : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)

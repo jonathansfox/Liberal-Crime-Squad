@@ -25,27 +25,10 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
+#include <externs.h>
 
-//#include <includeNews.h>
-#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-extern vector<Location *> location;
-//#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern short mode;
-extern short sitetype;
+extern vector<string> blew_stealth_check;
 
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude,int difficulty)
@@ -160,14 +143,6 @@ char alienationcheck(char mistake)
 /* checks if conservatives see through your disguise */
 void disguisecheck(int timer)
 {
-   static const char *blew_stealth_check[] =
-   {
-      " coughs.",
-      " accidentally mumbles the slogan.",
-      " paces uneasily.",
-      " stares at the Conservatives.",
-      " laughs nervously."
-   };
 
    int weapon=0,partysize=squadsize(activesquad),blew_it=-1;
    bool forcecheck=false,spotted=false;

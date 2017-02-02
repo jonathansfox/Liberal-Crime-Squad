@@ -1,0 +1,4 @@
+Mall
+Theater
+High School
+University

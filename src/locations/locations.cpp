@@ -18,22 +18,19 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
 
-#include <includeTalk.h>
-extern vector<Location *> location;
-//#include <includeExternDefault.h>
-extern bool multipleCityMode;
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
+#include <externs.h>
 
+extern vector<string> labor_camp_name;
+extern vector<string> labor_camp_name_2;
+extern vector<string> juice_name;
+extern vector<string> juice_name_2;
+extern vector<string> vegan_name;
+extern vector<string> vegan_name_2;
+extern vector<string> cafe_name;
+extern vector<string> cafe_name_2;
+extern vector<string> latte_name;
+extern vector<string> latte_name_2;
 
 // Finds a location with the corresponding type and returns
 // its index in the location array
@@ -364,35 +361,23 @@ void initlocation(Location &loc)
          loc.hidden = true;
       } break;
    case SITE_GOVERNMENT_PRISON:
-      if(law[LAW_PRISONS]==-2)
-      {
-         switch(LCSrandom(5))
-         {
-            case 0:strcpy(loc.name,"Happy");break;
-            case 1:strcpy(loc.name,"Cheery");break;
-            case 2:strcpy(loc.name,"Quiet");break;
-            case 3:strcpy(loc.name,"Green");break;
-            case 4:strcpy(loc.name,"Nectar");break;
-         }
-         strcat(loc.name," ");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Valley");break;
-            case 1:strcat(loc.name,"Meadow");break;
-            case 2:strcat(loc.name,"Hills");break;
-            case 3:strcat(loc.name,"Glade");break;
-            case 4:strcat(loc.name,"Forest");break;
-         }
-         strcat(loc.name," Forced Labor Camp");
-         strcpy(loc.shortname,"Joycamp");
-      }
-      else
-      {
-         lastname(loc.name,true);
-         strcat(loc.name," Prison");
-         strcpy(loc.shortname,"Prison");
-      }
-      break;
+	   if (law[LAW_PRISONS] == -2)
+	   {
+		   strcpy(loc.name, pickrandom(labor_camp_name).data());
+
+		   strcat(loc.name, " ");
+
+		   strcat(loc.name, pickrandom(labor_camp_name_2).data());
+		   strcat(loc.name, " Forced Labor Camp");
+		   strcpy(loc.shortname, "Joycamp");
+	   }
+	   else
+	   {
+		   lastname(loc.name, true);
+		   strcat(loc.name, " Prison");
+		   strcpy(loc.shortname, "Prison");
+	   }
+	   break;
    case SITE_INDUSTRY_NUCLEAR:
       if(law[LAW_NUCLEARPOWER]==2) {
          loc.rename("Nuclear Waste Center", "NWaste Center");
@@ -583,6 +568,7 @@ void initlocation(Location &loc)
          {
             switch(LCSrandom(4))
             {
+				//TODO IsaacG Migrate Strings
             case 0:
                strcat(loc.name,"Recreational Drugs Center");
                strcpy(loc.shortname,"Drugs Center");
@@ -607,102 +593,52 @@ void initlocation(Location &loc)
             strcpy(loc.shortname,"Crack House");
          }
       } while(loc.duplicatelocation());
-      break;
-   case SITE_BUSINESS_JUICEBAR:
-      strcpy(loc.name,"");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Natural");break;
-         case 1:strcat(loc.name,"Harmonious");break;
-         case 2:strcat(loc.name,"Restful");break;
-         case 3:strcat(loc.name,"Healthy");break;
-         case 4:strcat(loc.name,"New You");break;
-      }
-      strcat(loc.name," ");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Diet");break;
-         case 1:strcat(loc.name,"Methods");break;
-         case 2:strcat(loc.name,"Plan");break;
-         case 3:strcat(loc.name,"Orange");break;
-         case 4:strcat(loc.name,"Carrot");break;
-      }
-      strcat(loc.name," Juice Bar");
-      strcpy(loc.shortname,"Juice Bar");
-      break;
-   case SITE_BUSINESS_VEGANCOOP:
-      strcpy(loc.name,"");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Asparagus");break;
-         case 1:strcat(loc.name,"Tofu");break;
-         case 2:strcat(loc.name,"Broccoli");break;
-         case 3:strcat(loc.name,"Radish");break;
-         case 4:strcat(loc.name,"Eggplant");break;
-      }
-      strcat(loc.name," ");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Forest");break;
-         case 1:strcat(loc.name,"Rainbow");break;
-         case 2:strcat(loc.name,"Garden");break;
-         case 3:strcat(loc.name,"Farm");break;
-         case 4:strcat(loc.name,"Meadow");break;
-      }
-      strcat(loc.name," Vegan Co-op");
-      strcpy(loc.shortname,"Vegan Co-op");
-      break;
-   case SITE_BUSINESS_INTERNETCAFE:
-      strcpy(loc.name,"");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Electric");break;
-         case 1:strcat(loc.name,"Wired");break;
-         case 2:strcat(loc.name,"Nano");break;
-         case 3:strcat(loc.name,"Micro");break;
-         case 4:strcat(loc.name,"Techno");break;
-      }
-      strcat(loc.name," ");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Panda");break;
-         case 1:strcat(loc.name,"Troll");break;
-         case 2:strcat(loc.name,"Latte");break;
-         case 3:strcat(loc.name,"Unicorn");break;
-         case 4:strcat(loc.name,"Pixie");break;
-      }
-      strcat(loc.name," Internet Cafe");
-      strcpy(loc.shortname,"Net Cafe");
-      break;
-   case SITE_BUSINESS_CIGARBAR:
-      lastname(str,true);
-      strcpy(loc.name,"The ");
-      strcat(loc.name,str);
-      strcat(loc.name," Gentlemen's Club");
-      strcpy(loc.shortname,"Cigar Bar");
-      break;
-   case SITE_BUSINESS_LATTESTAND:
-      strcpy(loc.name,"");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Frothy");break;
-         case 1:strcat(loc.name,"Milky");break;
-         case 2:strcat(loc.name,"Caffeine");break;
-         case 3:strcat(loc.name,"Morning");break;
-         case 4:strcat(loc.name,"Evening");break;
-      }
-      strcat(loc.name," ");
-      switch(LCSrandom(5))
-      {
-         case 0:strcat(loc.name,"Mug");break;
-         case 1:strcat(loc.name,"Cup");break;
-         case 2:strcat(loc.name,"Jolt");break;
-         case 3:strcat(loc.name,"Wonder");break;
-         case 4:strcat(loc.name,"Express");break;
-      }
-      strcat(loc.name," Latte Stand");
-      strcpy(loc.shortname,"Latte Stand");
-      break;
+      break; case SITE_BUSINESS_JUICEBAR:
+		  strcpy(loc.name, "");
+		  strcat(loc.name, pickrandom(juice_name).data());
+
+		  strcat(loc.name, " ");
+		  strcat(loc.name, pickrandom(juice_name_2).data());
+
+		  strcat(loc.name, " Juice Bar");
+		  strcpy(loc.shortname, "Juice Bar");
+		  break;
+	  case SITE_BUSINESS_VEGANCOOP:
+		  strcpy(loc.name, "");
+		  strcat(loc.name, pickrandom(vegan_name).data());
+
+		  strcat(loc.name, " ");
+
+		  strcat(loc.name, pickrandom(vegan_name_2).data());
+
+		  strcat(loc.name, " Vegan Co-op");
+		  strcpy(loc.shortname, "Vegan Co-op");
+		  break;
+	  case SITE_BUSINESS_INTERNETCAFE:
+		  strcpy(loc.name, "");
+		  strcat(loc.name, pickrandom(cafe_name).data());
+		  strcat(loc.name, " ");
+		  strcat(loc.name, pickrandom(cafe_name_2).data());
+		  strcat(loc.name, " Internet Cafe");
+		  strcpy(loc.shortname, "Net Cafe");
+		  break;
+	  case SITE_BUSINESS_CIGARBAR:
+		  lastname(str, true);
+		  strcpy(loc.name, "The ");
+		  strcat(loc.name, str);
+		  strcat(loc.name, " Gentlemen's Club");
+		  strcpy(loc.shortname, "Cigar Bar");
+		  break;
+	  case SITE_BUSINESS_LATTESTAND:
+		  strcpy(loc.name, "");
+		  strcat(loc.name, pickrandom(latte_name).data());
+
+		  strcat(loc.name, " ");
+		  strcat(loc.name, pickrandom(latte_name_2).data());
+
+		  strcat(loc.name, " Latte Stand");
+		  strcpy(loc.shortname, "Latte Stand");
+		  break;
    case SITE_OUTDOOR_PUBLICPARK:
       lastname(loc.name,true);
       strcat(loc.name," Park");

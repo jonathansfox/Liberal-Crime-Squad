@@ -1,23 +1,4 @@
-
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
-
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-//#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-extern int year;
+#include <externs.h>
 
 WeaponType::WeaponType(MCD_STR xmlstring)
  : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),

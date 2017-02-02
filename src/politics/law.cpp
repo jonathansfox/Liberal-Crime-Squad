@@ -15,21 +15,8 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
-// Still contains
-/*
-commondisplay.cpp
-*/
-#include "common\\commondisplay.h"
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
 
-//#include <includeExtern.h>
+#include <externs.h>
 
 // Default constructor
 law::law()
@@ -54,13 +41,13 @@ void law::addlawtext(bool gameover)
 }
 
 // Set law's alignment
-void law::changealignment(Alignment align)
+void law::changealignment(signed char align)
 {
    alignment = align;
 }
 
 // Set law's text for an alignment
-void law::setlawtext(Alignment align,string text)
+void law::setlawtext(signed char align,string text)
 {
    if(align==-3) // Defeat
       defeat_lawtext = text;

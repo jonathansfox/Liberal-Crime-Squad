@@ -29,9 +29,7 @@ This file is part of Liberal Crime Squad.
 #ifndef LOG_H_INCLUDED
 #define LOG_H_INCLUDED
 
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 /* Not in log.cpp, we just need this declared inside this header */
 void LCSCloseFileCPP(std::fstream &file);

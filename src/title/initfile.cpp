@@ -18,30 +18,8 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-//#include <includeCommon.h>
 
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-/*
-consolesupport.cpp
-*/
-#include "common\\consolesupport.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-//#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
-//#include <includeExternStat.h>
-
+#include <externs.h>
 
 void setconfigoption(std::string name, std::string value)
 {

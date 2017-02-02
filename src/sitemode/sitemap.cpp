@@ -25,24 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-#include <includeEnum.h>
-#include <includeCommon.h>
 
-/*
-stringconversion.cpp
-*/
-#include "common\\stringconversion.h"
-
-//#include <includeNews.h>
-//#include <includeFunctions.h>
-//#include <includeTitle.h>
-
-#include <includeTalk.h>
-#include <includeExternDefault.h>
-//#include <includeExternPolitics.h>
+#include <externs.h>
 
 /* re-create site from seed before squad arrives */
 void initsite(Location &loc)

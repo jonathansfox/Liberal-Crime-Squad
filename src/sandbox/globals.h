@@ -2,9 +2,7 @@
 #ifndef GLOBALS_H_INCLUDED
 #define GLOBALS_H_INCLUDED
 
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#include "includes.h"
 
 class date
 {
