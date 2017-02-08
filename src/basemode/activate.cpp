@@ -62,17 +62,222 @@ the bottom of includes.h in the top src folder.
 
 #include <externs.h>
 
+// This is the lesson data for the University. Keep data_lesson_num matching the number of classes on offer. The code handles the rest.
+const int data_lesson_num = 15;
+struct data_lesson { char *label; int code;	data_lesson(int _code, char *_label) : code(_code), label(_label) {} }
+data_lessons[data_lesson_num] = // format is activity-code, menu-label
+{
+	data_lesson(ACTIVITY_STUDY_DEBATING,	"Public Policy"),
+	data_lesson(ACTIVITY_STUDY_BUSINESS,	"Economics"),
+	data_lesson(ACTIVITY_STUDY_PSYCHOLOGY,	"Psychology"),
+	data_lesson(ACTIVITY_STUDY_LAW,			"Criminal Law"),
+	data_lesson(ACTIVITY_STUDY_SCIENCE,		"Physics"),
+	data_lesson(ACTIVITY_STUDY_DRIVING,		"Drivers Ed"),
+	data_lesson(ACTIVITY_STUDY_FIRST_AID,	"First Aid"),
+	data_lesson(ACTIVITY_STUDY_ART,			"Painting"),
+	data_lesson(ACTIVITY_STUDY_DISGUISE,	"Theatre"),
+	data_lesson(ACTIVITY_STUDY_MARTIAL_ARTS,"Kung Fu"),
+	data_lesson(ACTIVITY_STUDY_GYMNASTICS,	"Gymnastics"),
+	data_lesson(ACTIVITY_STUDY_WRITING,		"Writing"),
+	data_lesson(ACTIVITY_STUDY_TEACHING,	"Education"),
+	data_lesson(ACTIVITY_STUDY_MUSIC,		"Music"),
+	data_lesson(ACTIVITY_STUDY_LOCKSMITHING,"Locksmithing")
+};
+
+// this data struct is for activities, it relates to their info text and a couple of other things to avoid needing big switches in the code
+struct data_activity
+{
+	bool show_name;
+	int code, key, skill;
+	char *_line[3];
+
+	data_activity(int _code, char _key, bool _show_name, char *_line0, char *_line1 = "", char *_line2 = "", int _skill = -1) : code(_code), key(_key), show_name(_show_name), skill(_skill)
+	{
+		_line[0] = _line0; _line[1] = _line1; _line[2] = _line2;
+	}
+
+	char *line(int row, Creature *cr)
+	{
+		if (skill < 0) return _line[row];
+		else
+		{
+			if (row > 0) return "";
+			if (cr->get_skill(skill) >= 8) return _line[2];
+			if (cr->get_skill(skill) >= 4) return _line[1];
+			return _line[0];
+		}
+	}
+};
+
+char *study_string1 = " will attend classes in the University District";
+char *study_string2 = "  at a cost of $60 a day.";
+
+// this is the string data for activities. they write up to three lines of text about the activity
+// the ones with a skill on the end (e.g. ACTIVITY_SELL_ART, ACTIVITY_SELL_MUSIC) pick one of the three lines of text based on the skill in question
+// format is <activity_code>, <menu_key>, <show_name>, <text lines 1-3>, <skill>
+data_activity data_activities[] =
+{
+	data_activity(ACTIVITY_COMMUNITYSERVICE,'a', true, " help the elderly, local library, anything", "  that is Liberal."),
+	data_activity(ACTIVITY_TROUBLE,			'a', true, " create public disturbances. "),
+	data_activity(ACTIVITY_GRAFFITI,		'a', true, " spray political graffiti. Art and Heart will", "  enhance the liberal effect."),
+	data_activity(ACTIVITY_POLLS,			'a', true, " search the internet for public opinion polls.", "  Polls will give an idea on how the liberal agenda is going. Computers", "  and intelligence will provide better results."),
+	data_activity(ACTIVITY_DOS_ATTACKS,		'a', true, " harass Conservative websites. Computer skill", "  will give greater effect."),
+	data_activity(ACTIVITY_HACKING,			'a', true, " harass websites and hack private networks.", "  Computer skill and intelligence will give more frequent results.", "  Multiple hackers will increase chances of both success and detection."),
+	data_activity(ACTIVITY_WRITE_LETTERS,	'a', true, " write letters to newspapers about current events."),
+	data_activity(ACTIVITY_WRITE_GUARDIAN,	'a', true, " write articles for the LCS's newspaper."),
+	data_activity(ACTIVITY_DONATIONS,		'b', true, " walk around and ask for donations to the LCS.", "  Based on persuasion, public's view on the cause, and how well dressed the", "  activist is."),
+	data_activity(ACTIVITY_SELL_TSHIRTS,	'b', true, " tie-dye T-shirts and sell them on the street.", " will embroider shirts and sell them on the street.", " will print and distribute shirts with Liberal slogans.", SKILL_TAILORING),
+	data_activity(ACTIVITY_SELL_ART,		'b', true, " sketch people and sell portraits back to them.", " will make pretty paintings and sell them on the streets.", " will create and sell paintings embracing the Liberal agenda.", SKILL_ART),
+	data_activity(ACTIVITY_SELL_MUSIC,		'b', true, " go out into the streets and drum on buckets,", "  or play guitar if one is equipped."),
+	data_activity(ACTIVITY_SELL_DRUGS,		'c', true, " bake and sell special adult brownies that open", "  magical shimmering doorways to the adamantium pits."),
+	data_activity(ACTIVITY_PROSTITUTION,	'c', true, " trade sex for money."),
+	data_activity(ACTIVITY_CCFRAUD,			'c', true, " commit credit card fraud online."),
+	data_activity(ACTIVITY_DOS_RACKET,		'c', true, " demand money in exchange for not bringing down", "major websites."),
+	data_activity(ACTIVITY_RECRUITING,		'd', true, " try to find someone to join the LCS."),
+	data_activity(ACTIVITY_STEALCARS,		'd', true, " try to find and steal a car."),
+	data_activity(ACTIVITY_MAKE_ARMOR,		'd', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_REPAIR_ARMOR,	'd', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_WHEELCHAIR,		'd', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_AUGMENT, 'd', true, " will augment another Liberal to make them", "physically superior."),
+	data_activity(ACTIVITY_HEAL,			'h', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_HOSTAGETENDING,  'i', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_CLINIC,			'm', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_BURY,			'z', true, ""), // did not have any strings listed
+	data_activity(ACTIVITY_TEACH_POLITICS,	't', false, "  Skills Trained: Writing, Persuasion, Law, Street Sense, Science,", "    Religion, Business, Music, Art", "  Classes cost up to $20/day to conduct. All Liberals able will attend."),
+	data_activity(ACTIVITY_TEACH_COVERT,    't', false, "  Skills Trained: Computers, Security, Stealth, Disguise, Tailoring,", "    Seduction, Psychology, Driving", "  Classes cost up to $60/day to conduct. All Liberals able will attend."),
+	data_activity(ACTIVITY_TEACH_FIGHTING,  't', false, "  Skills Trained: All Weapon Skills, Martial Arts, Dodge, First Aid", "", "  Classes cost up to $100/day to conduct. All Liberals able will attend."),
+	data_activity(ACTIVITY_STUDY_DEBATING,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_MARTIAL_ARTS,	'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_DRIVING,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_PSYCHOLOGY,	'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_FIRST_AID,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_LAW,			'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_DISGUISE,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_SCIENCE,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_BUSINESS,		'l', true, study_string1, study_string2),
+	// data_activity(ACTIVITY_STUDY_COOKING,'l', true,study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_GYMNASTICS,	'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_WRITING,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_ART,			'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_MUSIC,			'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_TEACHING,		'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_STUDY_LOCKSMITHING,	'l', true, study_string1, study_string2),
+	data_activity(ACTIVITY_NONE,				'x', false, "") // indicates the end of the list
+};
+
+data_activity &get_activity(int code) // function gets the activity struct based on the activity code
+{
+	int index = 0;
+	while (data_activities[index].code != code && data_activities[index].code != ACTIVITY_NONE) index++;
+	return data_activities[index];
+}
+
+enum // these codes are used to add special checks to what you're allowed to pick in activity menus
+{
+	ACTIVITIY_MENU_CHECK_NONE,
+	ACTIVITIY_MENU_CHECK_PRESS,
+	ACTIVITIY_MENU_CHECK_AGE,
+	ACTIVITIY_MENU_CHECK_CAN_WALK,
+	ACTIVITIY_MENU_CHECK_WHEELCHAIR,
+	ACTIVITIY_MENU_CHECK_CAN_AUGMENT
+};
+
+// here we pull out the data for the activate menus. Compacts the code and makes it much easier to mod the system
+struct activate_menu_item
+{
+	char key_group, key; // which letter key it belongs to, and which key for this menu item
+	char *_label[3];
+	int code;
+	char check;
+	int skill;
+
+	// basic version
+	activate_menu_item(char _key_group, char _key, int _code, char* _label1, char _check = ACTIVITIY_MENU_CHECK_NONE) : key_group(_key_group), key(_key), code(_code), check(_check), skill(-1)
+	{
+		_label[0] = _label1;
+	}
+
+	// variable skill-based text version
+	activate_menu_item(char _key_group, char _key, int _code, char* _label1, char* _label2, char* _label3, int _skill) : key_group(_key_group), key(_key), code(_code), check(ACTIVITIY_MENU_CHECK_NONE), skill(_skill)
+	{
+		_label[0] = _label1;
+		_label[1] = _label2;
+		_label[2] = _label3;
+	}
+
+	bool ok(Creature *cr)
+	{
+		switch(check)
+		{
+			case ACTIVITIY_MENU_CHECK_NONE: return true;
+			case ACTIVITIY_MENU_CHECK_PRESS: return (cr->location != -1 && location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS);
+			case ACTIVITIY_MENU_CHECK_CAN_WALK: return cr->canwalk();
+			case ACTIVITIY_MENU_CHECK_WHEELCHAIR: return (!cr->canwalk()) && (!cr->flag&CREATUREFLAG_WHEELCHAIR);
+			case ACTIVITIY_MENU_CHECK_CAN_AUGMENT: return (cr->get_skill(SKILL_SCIENCE)!=0);
+			case ACTIVITIY_MENU_CHECK_AGE:
+				#ifndef ZEROMORAL
+					return (cr->age >= 18);
+				#else
+					return true;
+				#endif
+		}
+	} // warning C4715: 'activate_menu_item::ok': not all control paths return a value
+
+	char *label(Creature *cr)
+	{
+		if(skill < 0) return _label[0];
+		if (cr->get_skill(skill) >= 8) return _label[2];
+		if (cr->get_skill(skill) >= 4) return _label[1];
+		return _label[0];
+	}
+};
+
+// This will be used to replace the menu items that are currently generate by a switch.
+// It's not fully implemented yet, so the existing switch statement is still active, and this code does nothing
+vector<activate_menu_item> activate_menu_items =
+{
+	activate_menu_item('a', '1', ACTIVITY_COMMUNITYSERVICE, "Community Service" ),
+	activate_menu_item('a', '2', ACTIVITY_TROUBLE,			"Liberal Disobedience" ),
+	activate_menu_item('a', '3', ACTIVITY_GRAFFITI,			"Graffiti" ),
+	activate_menu_item('a', '4', ACTIVITY_POLLS,			"Search Opinion Polls" ),
+  	//activate_menu_item('a', '5', ACTIVITY_DOS_ATTACKS, "Harass Websites"),
+	activate_menu_item('a', '5', ACTIVITY_HACKING,			"Hacking" ),
+	activate_menu_item('a', '6', ACTIVITY_WRITE_LETTERS,	"Write to Newspapers"),
+	activate_menu_item('a', '7', ACTIVITY_WRITE_GUARDIAN,	"Write for The Liberal Guardian", ACTIVITIY_MENU_CHECK_PRESS), // 
+	activate_menu_item('b', '1', ACTIVITY_DONATIONS,		"Solicit Donations"),
+	activate_menu_item('b', '2', ACTIVITY_SELL_TSHIRTS,		"Sell Tie-Dyed T-Shirts", "Sell Embroidered Shirts", "Sell Liberal T-Shirts", SKILL_TAILORING), 
+	activate_menu_item('b', '3', ACTIVITY_SELL_ART,			"Sell Portrait Sketches", "Sell Paintings", "Sell Liberal Art", SKILL_ART), 
+	activate_menu_item('b', '4', ACTIVITY_SELL_MUSIC,		"Play Street Music", "Play Street Music", "Play Liberal Music", SKILL_MUSIC),
+	activate_menu_item('c', '1', ACTIVITY_SELL_DRUGS,		"Sell Brownies"),
+	activate_menu_item('c', '2', ACTIVITY_PROSTITUTION,		"Prostitution", ACTIVITIY_MENU_CHECK_AGE),
+	activate_menu_item('c', '3', ACTIVITY_CCFRAUD,			"Steal Credit Card Numbers"),
+	//	activate_menu_item('c', '4', ACTIVITY_DOS_RACKET, "Electronic Protection Racket"),
+	activate_menu_item('d', '1', ACTIVITY_RECRUITING,		"Recruiting"),
+	activate_menu_item('d', '2', ACTIVITY_MAKE_ARMOR,		"Make Clothing"),
+	activate_menu_item('d', '3', ACTIVITY_REPAIR_ARMOR,		"Repair Clothing"),
+	activate_menu_item('d', '4', ACTIVITY_STEALCARS,		"Steal a Car", ACTIVITIY_MENU_CHECK_CAN_WALK), 
+	activate_menu_item('d', '4', ACTIVITY_WHEELCHAIR,		"Procure a Wheelchair", ACTIVITIY_MENU_CHECK_WHEELCHAIR), 
+	activate_menu_item('d', '5', ACTIVITY_AUGMENT, "Augment a Liberal", ACTIVITIY_MENU_CHECK_CAN_AUGMENT),
+	activate_menu_item('t',  0,  ACTIVITY_NONE,				"Teach Liberals About What?"),
+	activate_menu_item('t', '1', ACTIVITY_TEACH_POLITICS,	"Political Activism"),
+	activate_menu_item('t', '2', ACTIVITY_TEACH_COVERT,		"Infiltration"),
+	activate_menu_item('t', '3', ACTIVITY_TEACH_FIGHTING,	"Urban Warfare")
+};
+
 vector<Creature *> activatable_liberals()
 {
    vector<Creature *> temppool;
-   for(int p=0;p<len(pool);p++) if(pool[p]->is_active_liberal())
+   for (int p = 0; p < len(pool); p++)
    {
-      if(pool[p]->squadid!=-1)
-      {
-         int sq=getsquad(pool[p]->squadid);
-         if(sq!=-1) if(squad[sq]->activity.type!=ACTIVITY_NONE) continue;
-      }
-      temppool.push_back(pool[p]);
+	   if (pool[p]->is_active_liberal())
+	   {
+		   if (pool[p]->squadid != -1)
+		   {
+			   int sq = getsquad(pool[p]->squadid);
+			   if (sq != -1) if (squad[sq]->activity.type != ACTIVITY_NONE) continue;
+		   }
+		   temppool.push_back(pool[p]);
+	   }
    }
    return temppool;
 }
@@ -96,12 +301,9 @@ void activate()
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds();
 
-      move(0,0);
-      addstr("Activate Uninvolved Liberals");
-      move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-      move(1,57);
-      addstr("ACTIVITY");
+      mvaddstr(0,0, "Activate Uninvolved Liberals");
+      mvaddstr(1,0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+      mvaddstr(1,57,"ACTIVITY");
 
       int y=2;
       for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
@@ -122,15 +324,13 @@ void activate()
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
-         move(y,25);
-         addstr(skill);
+         mvaddstr(y,25, skill);
 
          printhealthstat(*temppool[p],y,33,TRUE);
 
          if(mode==REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,42);
-         addstr(location[temppool[p]->location]->getname(true, true));
+         mvaddstr(y,42, location[temppool[p]->location]->getname(true, true));
 
          move(y,57);
          // Let's add some color here...
@@ -139,13 +339,11 @@ void activate()
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to Assign an Activity.");
+      mvaddstr(22,0, "Press a Letter to Assign an Activity.");
       move(23,0);
       addpagestr();
       addstr(" T to sort people.");
-      move(24,0);
-      addstr("Press Z to assign simple tasks in bulk.");
+      mvaddstr(24,0, "Press Z to assign simple tasks in bulk.");
 
       int c=getkey();
 
@@ -172,153 +370,40 @@ void activate()
    }
 }
 
+// These two functions handle listing and updating class choices
 int classlist=0;
 void listclasses(Creature *cr)
 {
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
-   move(10,40);
-   addstr("Classes cost $60 a day. Study what?");
-   if(classlist==0)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
-      move(12,40);
-      addstr("1 - Public Policy");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
-      move(13,40);
-      addstr("2 - Economics");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
-      move(14,40);
-      addstr("3 - Psychology");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
-      move(15,40);
-      addstr("4 - Criminal Law");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
-      move(16,40);
-      addstr("5 - Physics");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(17,40);
-      addstr("6 - Other classes");
-   }
-   else if(classlist==1)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
-      move(12,40);
-      addstr("1 - Drivers Ed");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
-      move(13,40);
-      addstr("2 - First Aid");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
-      move(14,40);
-      addstr("3 - Painting");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
-      move(15,40);
-      addstr("4 - Theatre");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
-      move(16,40);
-      addstr("5 - Kung Fu");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(17,40);
-      addstr("6 - Other classes");
-   }
-   else if(classlist==2)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_GYMNASTICS);
-      move(12,40);
-      addstr("1 - Gymnastics");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_WRITING);
-      move(13,40);
-      addstr("2 - Writing");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TEACHING);
-      move(14,40);
-      addstr("3 - Education");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MUSIC);
-      move(15,40);
-      addstr("4 - Music");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LOCKSMITHING);
-      move(16,40);
-      addstr("5 - Locksmithing");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(17,40);
-      addstr("6 - Other classes");
-   }
-   else if(classlist==3)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_COMPUTERS);
-      move(12,40);
-      addstr("1 - Computers");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(17,40);
-      addstr("6 - Other classes");
-   }
+	set_color(COLOR_WHITE,COLOR_BLACK,0);
+	mvaddstr(10,40, "Classes cost $60 a day. Study what?");
+	for (int i = 0; i < 5; ++i)
+	{
+		if (i + classlist < data_lesson_num)
+		{
+			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == data_lessons[i + classlist].code);
+			mvaddstr(12 + i, 40, to_string(i + 1).c_str());
+			addstr(" - "); addstr(data_lessons[i + classlist].label);
+		}
+	}
+	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	mvaddstr(17, 40, "6 - Other classes");
 }
 
 void updateclasschoice(Creature *cr, char choice)
 {
-   if(choice=='6')
-   {
-      classlist=(classlist+1)%4;
-      listclasses(cr);
-   }
-   else
-   {
-      if(classlist==0)
-      {
-         switch(choice)
-         {
-            case '1':cr->activity.type=ACTIVITY_STUDY_DEBATING;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_BUSINESS;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_PSYCHOLOGY;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_LAW;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
-         }
-      }
-      else if(classlist==1)
-      {
-         switch(choice)
-         {
-            case '1':cr->activity.type=ACTIVITY_STUDY_DRIVING;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_FIRST_AID;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_ART;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_DISGUISE;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
-         }
-      }
-      else if(classlist==2)
-      {
-         switch(choice)
-         {
-            case '1':cr->activity.type=ACTIVITY_STUDY_GYMNASTICS;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_WRITING;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_TEACHING;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_MUSIC;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_LOCKSMITHING;break;
-         }
-      }
-      else if(classlist==3)
-      {
-         switch(choice)
-         {
-            case '1':cr->activity.type=ACTIVITY_STUDY_COMPUTERS;break;
-         }
-      }
-      listclasses(cr);
-   }
+	if (choice >= '1' && choice <= '5')
+	{
+		if (choice - '1' + classlist < data_lesson_num)
+			cr->activity.type = data_lessons[choice - '1' + classlist].code;
+		listclasses(cr);
+	}
+	else if (choice == '6')
+	{
+		classlist += 5;
+		if (classlist >= data_lesson_num)
+			classlist = 0;
+		listclasses(cr);
+	}
 }
 
 void activate(Creature *cr)
@@ -357,78 +442,12 @@ void activate(Creature *cr)
 
       makedelimiter();
 
-      if(!state) switch(cr->activity.type)
-      {
-      case ACTIVITY_COMMUNITYSERVICE:
-      case ACTIVITY_TROUBLE:
-      case ACTIVITY_GRAFFITI:
-      case ACTIVITY_POLLS:
-      case ACTIVITY_DOS_ATTACKS:
-      case ACTIVITY_HACKING:
-      case ACTIVITY_WRITE_LETTERS:
-      case ACTIVITY_WRITE_GUARDIAN:
-         state='a';
-         break;
-      case ACTIVITY_DONATIONS:
-      case ACTIVITY_SELL_TSHIRTS:
-      case ACTIVITY_SELL_ART:
-      case ACTIVITY_SELL_MUSIC:
-         state='b';
-         break;
-      case ACTIVITY_SELL_DRUGS:
-      case ACTIVITY_PROSTITUTION:
-      case ACTIVITY_CCFRAUD:
-      case ACTIVITY_DOS_RACKET:
-         state='c';
-         break;
-      case ACTIVITY_RECRUITING:
-      case ACTIVITY_MAKE_ARMOR:
-      case ACTIVITY_REPAIR_ARMOR:
-      case ACTIVITY_STEALCARS:
-      case ACTIVITY_WHEELCHAIR:
-      case ACTIVITY_AUGMENT:
-         state='d';
-         break;
-      case ACTIVITY_TEACH_POLITICS:
-      case ACTIVITY_TEACH_COVERT:
-      case ACTIVITY_TEACH_FIGHTING:
-         state='t';
-         break;
-      case ACTIVITY_HOSTAGETENDING:
-         state='i';
-         break;
-      case ACTIVITY_STUDY_DEBATING:
-      case ACTIVITY_STUDY_MARTIAL_ARTS:
-      case ACTIVITY_STUDY_DRIVING:
-      case ACTIVITY_STUDY_PSYCHOLOGY:
-      case ACTIVITY_STUDY_FIRST_AID:
-      case ACTIVITY_STUDY_LAW:
-      case ACTIVITY_STUDY_DISGUISE:
-      case ACTIVITY_STUDY_SCIENCE:
-      case ACTIVITY_STUDY_BUSINESS:
-      //case ACTIVITY_STUDY_COOKING:
-      case ACTIVITY_STUDY_GYMNASTICS:
-      case ACTIVITY_STUDY_WRITING:
-      case ACTIVITY_STUDY_ART:
-      case ACTIVITY_STUDY_MUSIC:
-      case ACTIVITY_STUDY_TEACHING:
-      case ACTIVITY_STUDY_LOCKSMITHING:
-      case ACTIVITY_STUDY_COMPUTERS:
-         state='l';
-         break;
-      case ACTIVITY_CLINIC:
-         state='m';
-         break;
-      case ACTIVITY_HEAL:
-         state='h';
-         break;
-      case ACTIVITY_BURY:
-         state='z';
-         break;
-      case ACTIVITY_NONE:
-         state='x';
-         break;
-      }
+      data_activity activity = get_activity(cr->activity.type);
+	  if(!state) 
+	  {
+	     if(activity.key != 'x')
+		    state = activity.key;
+	  }
       oldstate=state;
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
@@ -484,318 +503,51 @@ void activate(Creature *cr)
       if(state=='a'||state=='b'||state=='c'||state=='d')
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(20,40,"? - Help");
+         mvaddstr(19,40,"? - Help");
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      mvaddstr(21,40,"Enter - Confirm Selection");
+      mvaddstr(20,40,"Enter - Confirm Selection");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='x');
       mvaddstr(21,1,"X - Nothing for Now");
 
-      switch(state)
-      {
-      case 'a':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_COMMUNITYSERVICE);
-         mvaddstr(10,40,"1 - Community Service");
+	  addchar(state);
 
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TROUBLE);
-         mvaddstr(11,40,"2 - Liberal Disobedience");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
-         mvaddstr(12,40,"3 - Graffiti");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
-         mvaddstr(13,40,"4 - Search Opinion Polls");
-
-         //set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_ATTACKS);
-         //mvaddstr(14,40,"5 - Harass Websites");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HACKING);
-         mvaddstr(14,40,"5 - Hacking");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_LETTERS);
-         mvaddstr(15,40,"6 - Write to Newspapers");
-
-         if(cr->location!=-1&&
-            location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_GUARDIAN);
-            mvaddstr(16,40,"7 - Write for The Liberal Guardian");
-         }
-         break;
-      case 'b':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
-         mvaddstr(10,40,"1 - Solicit Donations");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
-         move(11,40);
-         if(cr->get_skill(SKILL_TAILORING)>=8)
-            addstr("2 - Sell Liberal T-Shirts");
-         else if(cr->get_skill(SKILL_TAILORING)>=4)
-            addstr("2 - Sell Embroidered Shirts");
-         else
-            addstr("2 - Sell Tie-Dyed T-Shirts");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_ART);
-         move(12,40);
-         if(cr->get_skill(SKILL_ART)>=8)
-            addstr("3 - Sell Liberal Art");
-         else if(cr->get_skill(SKILL_ART)>=4)
-            addstr("3 - Sell Paintings");
-         else
-            addstr("3 - Sell Portrait Sketches");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_MUSIC);
-         move(13,40);
-         if(cr->get_skill(SKILL_MUSIC)>8)
-            addstr("4 - Play Liberal Music");
-         else
-            addstr("4 - Play Street Music");
-         break;
-      case 'c':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
-         mvaddstr(10,40,"1 - Sell Brownies");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_PROSTITUTION);
-#ifndef ZEROMORAL
-         if(cr->age < 18)
-            set_color(COLOR_BLACK, COLOR_BLACK, 1);    //Grayed out for minors
-#endif
-         mvaddstr(11,40,"2 - Prostitution");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CCFRAUD);
-         mvaddstr(12,40,"3 - Steal Credit Card Numbers");
-
-         /*set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
-         mvaddstr(13,40,"4 - Electronic Protection Racket");*/
-         break;
-      case 'd':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_RECRUITING);
-         mvaddstr(10,40,"1 - Recruiting");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
-         mvaddstr(11,40,"2 - Make Clothing");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_REPAIR_ARMOR);
-         mvaddstr(12,40,"3 - Repair Clothing");
-
-         if(cr->canwalk()) {
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS);
-            mvaddstr(13,40,"4 - Steal a Car");
-         } else {
-            if(!(cr->flag&CREATUREFLAG_WHEELCHAIR)) set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            mvaddstr(13,40,"4 - Procure a Wheelchair");
-         }
-
-         if(cr->get_skill(SKILL_SCIENCE)!=0)
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENT);
-         else
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-         mvaddstr(14,40,"5 - Augment a Liberal");
-
-         break;
-      case 't':
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(10,40);
-         addstr("Teach Liberals About What?");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_POLITICS);
-         move(12,40);
-         addstr("1 - Political Activism");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
-         move(13,40);
-         addstr("2 - Infiltration");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_FIGHTING);
-         move(14,40);
-         addstr("3 - Urban Warfare");
-         break;
-      case 'l':
+ 	  if(state == 'l')
+	  {
          listclasses(cr);
-         break;
-      }
+	  }
+	  else
+	  {
+		  int ypos = 10;
+		  for(int i=0; i < activate_menu_items.size(); ++i)
+		  {
+			  if(activate_menu_items[i].key_group == state && activate_menu_items[i].ok(cr))
+			  {
+				  set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==activate_menu_items[i].code);
+				  move(ypos, 40);
+				  if(activate_menu_items[i].key > 0) 
+				  {
+					 addchar(activate_menu_items[i].key);
+   					 addstr(" - ");
+				  }
+				  ypos++;
+				  addstr(activate_menu_items[i].label(cr));
+			  }
+		  }
+	  }
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      switch(cr->activity.type)
-      {
-      case ACTIVITY_COMMUNITYSERVICE:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will help the elderly, local library, anything");
-         move(23,1);
-         addstr("  that is Liberal.");
-         break;
-      case ACTIVITY_TROUBLE:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will create public disturbances. ");
-         break;
-      case ACTIVITY_GRAFFITI:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will spray political graffiti. Art and Heart will");
-         move(23,1);
-         addstr("  enhance the liberal effect.");
-         break;
-      case ACTIVITY_POLLS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will search the internet for public opinion polls.");
-         move(23,1);
-         addstr("  Polls will give an idea on how the liberal agenda is going. Computers");
-         move(24,1);
-         addstr("  and intelligence will provide better results.");
-         break;
-      case ACTIVITY_DOS_ATTACKS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will harass Conservative websites. Computer skill");
-         move(23,1);
-         addstr("  will give greater effect.");
-         break;
-      case ACTIVITY_HACKING:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will harass websites and hack private networks.");
-         move(23,1);
-         addstr("  Computer skill and intelligence will give more frequent results.");
-         move(24,1);
-         addstr("  Multiple hackers will increase chances of both success and detection.");
-         break;
-      case ACTIVITY_WRITE_LETTERS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will write letters to newspapers about current events.");
-         break;
-      case ACTIVITY_WRITE_GUARDIAN:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will write articles for the LCS's newspaper.");
-         break;
-      case ACTIVITY_DONATIONS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will walk around and ask for donations to the LCS.");
-         move(23,1);
-         addstr("  Based on persuasion, public's view on the cause, and how well dressed the");
-         move(24,1);
-         addstr("  activist is.");
-         break;
-      case ACTIVITY_SELL_TSHIRTS:
-         move(22,3);
-         addstr(cr->name);
-         if(cr->get_skill(SKILL_TAILORING)>=8)
-            addstr(" will print and distribute shirts with Liberal slogans.");
-         else if(cr->get_skill(SKILL_TAILORING)>=4)
-            addstr(" will embroider shirts and sell them on the street.");
-         else addstr(" will tie-dye T-shirts and sell them on the street.");
-         break;
-      case ACTIVITY_SELL_ART:
-         move(22,3);
-         addstr(cr->name);
-         if(cr->get_skill(SKILL_ART)>=8)
-            addstr(" will create and sell paintings embracing the Liberal agenda.");
-         else if(cr->get_skill(SKILL_ART)>=4)
-            addstr(" will make pretty paintings and sell them on the streets.");
-         else addstr(" will sketch people and sell portraits back to them.");
-         break;
-      case ACTIVITY_SELL_MUSIC:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will go out into the streets and drum on buckets,");
-         move(23,1);
-         addstr("  or play guitar if one is equipped.");
-         break;
-      case ACTIVITY_RECRUITING:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will try to find someone to join the LCS.");
-         break;
-      case ACTIVITY_STEALCARS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will try to find and steal a car.");
-         break;
-      case ACTIVITY_SELL_DRUGS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will bake and sell special adult brownies that open");
-         move(23,1);
-         addstr("  magical shimmering doorways to the adamantium pits.");
-         break;
-      case ACTIVITY_PROSTITUTION:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will trade sex for money.");
-         break;
-      case ACTIVITY_CCFRAUD:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will commit credit card fraud online.");
-         break;
-      case ACTIVITY_DOS_RACKET:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will demand money in exchange for not bringing down");
-         move(23,1);
-         addstr("major websites.");
-         break;
-      case ACTIVITY_TEACH_POLITICS:
-         move(22,1);
-         addstr("  Skills Trained: Writing, Persuasion, Law, Street Sense, Science,");
-         move(23,1);
-         addstr("    Religion, Business, Music, Art");
-         move(24,1);
-         addstr("  Classes cost up to $20/day to conduct. All Liberals able will attend.");
-         break;
-      case ACTIVITY_TEACH_COVERT:
-         move(22,1);
-         addstr("  Skills Trained: Computers, Security, Stealth, Disguise, Tailoring,");
-         move(23,1);
-         addstr("    Seduction, Psychology, Driving");
-         move(24,1);
-         addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
-         break;
-      case ACTIVITY_TEACH_FIGHTING:
-         move(22,1);
-         addstr("  Skills Trained: All Weapon Skills, Martial Arts, Dodge, First Aid");
-         move(24,1);
-         addstr("  Classes cost up to $100/day to conduct. All Liberals able will attend.");
-         break;
-      case ACTIVITY_AUGMENT:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will augment another Liberal to make them");
-         move(23,1);
-         addstr("physically superior.");
-         break;
-      case ACTIVITY_STUDY_DEBATING:
-      case ACTIVITY_STUDY_MARTIAL_ARTS:
-      case ACTIVITY_STUDY_DRIVING:
-      case ACTIVITY_STUDY_PSYCHOLOGY:
-      case ACTIVITY_STUDY_FIRST_AID:
-      case ACTIVITY_STUDY_LAW:
-      case ACTIVITY_STUDY_DISGUISE:
-      case ACTIVITY_STUDY_SCIENCE:
-      case ACTIVITY_STUDY_BUSINESS:
-      //case ACTIVITY_STUDY_COOKING:
-      case ACTIVITY_STUDY_GYMNASTICS:
-      case ACTIVITY_STUDY_WRITING:
-      case ACTIVITY_STUDY_ART:
-      case ACTIVITY_STUDY_MUSIC:
-      case ACTIVITY_STUDY_TEACHING:
-      case ACTIVITY_STUDY_LOCKSMITHING:
-      case ACTIVITY_STUDY_COMPUTERS:
-         move(22,3);
-         addstr(cr->name);
-         addstr(" will attend classes in the University District");
-         move(23,1);
-         addstr("  at a cost of $60 a day.");
-         break;
-      }
+	  set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	  move(22, 3);
+	  if (activity.show_name)
+	  {
+		  addstr(cr->name); 
+		  addstr(" will ");
+	  }
+	  addstr(activity.line(0, cr));
+	  mvaddstr(23, 1, activity.line(1, cr));
+	  mvaddstr(24, 1, activity.line(2, cr));
 
       int c=getkey();
 
@@ -1005,10 +757,10 @@ void activate(Creature *cr)
                case CREATURE_DANCER: // for Art & Music
                case CREATURE_ENGINEER: // for Science
                case CREATURE_FASTFOODWORKER:
-            case CREATURE_BAKER:
-            case CREATURE_BARISTA:
-            case CREATURE_BARTENDER:
-            case CREATURE_FOOTBALLCOACH: // for Persuasion
+			   case CREATURE_BAKER:
+			   case CREATURE_BARISTA:
+			   case CREATURE_BARTENDER:
+			   case CREATURE_FOOTBALLCOACH: // for Persuasion
                case CREATURE_HAIRSTYLIST: // for Art
                case CREATURE_HIPPIE: // for Art & Music
                case CREATURE_JOURNALIST: // for Writing & Persuasion
@@ -1142,37 +894,28 @@ void activatebulk()
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds();
 
-      move(0,0);
-      addstr("Activate Uninvolved Liberals");
-      move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-      move(1,51);
-      addstr("BULK ACTIVITY");
+      mvaddstr(0,0, "Activate Uninvolved Liberals");
+      mvaddstr(1,0, "컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+      mvaddstr(1,51, "BULK ACTIVITY");
 
       if(selectedactivity==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(2,51);
-      addstr("1 - Liberal Activism");
+      mvaddstr(2,51, "1 - Liberal Activism");
       if(selectedactivity==1) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(3,51);
-      addstr("2 - Legal Fundraising");
+      mvaddstr(3,51, "2 - Legal Fundraising");
       if(selectedactivity==2) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(4,51);
-      addstr("3 - Illegal Fundraising");
+      mvaddstr(4,51, "3 - Illegal Fundraising");
       if(selectedactivity==3) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(5,51);
-      addstr("4 - Checking Polls");
+      mvaddstr(5,51, "4 - Checking Polls");
       if(selectedactivity==4) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(6,51);
-      addstr("5 - Stealing Cars");
+      mvaddstr(6,51, "5 - Stealing Cars");
       if(selectedactivity==5) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,51);
-      addstr("6 - Community Service");
+      mvaddstr(7,51, "6 - Community Service");
 
       int y=2;
       for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
@@ -1194,8 +937,7 @@ void activatebulk()
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to Assign an Activity.  Press a Number to select an Activity.");
+      mvaddstr(22,0, "Press a Letter to Assign an Activity.  Press a Number to select an Activity.");
       move(23,0);
       addpagestr();
 
@@ -1303,14 +1045,11 @@ void select_tendhostage(Creature *cr)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(0,0);
-      addstr("Which hostage will ");
+      mvaddstr(0,0, "Which hostage will ");
       addstr(cr->name);
       addstr(" be watching over?");
-      move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-      move(1,57);
-      addstr("DAYS IN CAPTIVITY");
+      mvaddstr(1,0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+      mvaddstr(1,57, "DAYS IN CAPTIVITY");
 
       int y=2;
       for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
@@ -1331,8 +1070,7 @@ void select_tendhostage(Creature *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
-         move(y,25);
-         addstr(skill);
+         mvaddstr(y,25, skill);
 
          printhealthstat(*temppool[p],y,33,TRUE);
 
@@ -1340,17 +1078,15 @@ void select_tendhostage(Creature *cr)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(y,42,location[temppool[p]->location]->getname(true, true));
 
-         move(y,57);
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         addstr(temppool[p]->joindays);
+         mvaddstr(y,57, temppool[p]->joindays);
          addstr(" ");
          if(temppool[p]->joindays>1)addstr("Days");
          else addstr("Day");
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to select a Conservative");
+      mvaddstr(22,0, "Press a Letter to select a Conservative");
       move(23,0);
       addpagestr();
 
@@ -1385,40 +1121,31 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds();
-   move(0,0);
-   addstr("Select a Funding Level for this Operation:");
+   mvaddstr(0,0, "Select a Funding Level for this Operation:");
 
-   move(2,0);
-   addstr("A - Don't spend anything.  ");
+   mvaddstr(2,0, "A - Don't spend anything.  ");
    addstr(cr->name);
    addstr(" is just on watch duty.");
 
-   move(3,0);
-   addstr("B - Don't spend anything.  ");
+   mvaddstr(3,0, "B - Don't spend anything.  ");
    addstr(cr->name);
    addstr(" will turn the prisoner over time.");
 
-   move(4,0);
-   addstr("C - $20 per day.  Enough for some props.");
+   mvaddstr(4,0, "C - $20 per day.  Enough for some props.");
 
-   move(5,0);
-   addstr("D - $50 per day.  ");
+   mvaddstr(5,0, "D - $50 per day.  ");
    addstr(cr->name);
    addstr(" will go for a thrifty indoctrination.");
 
-   move(6,0);
-   addstr("E - $100 per day.  ");
+   mvaddstr(6,0, "E - $100 per day.  ");
    addstr(cr->name);
    addstr(" needs enough freedom to be creative.");
 
-   move(7,0);
-   addstr("F - $500 per day.  It is imperative that the Conservative be turned quickly.");
+   mvaddstr(7,0, "F - $500 per day.  It is imperative that the Conservative be turned quickly.");
 
-   move(8,0);
-   addstr("K - This Conservative has become a liability and needs to be terminated.");
+   mvaddstr(8,0, "K - This Conservative has become a liability and needs to be terminated.");
 
-   move(10,0);
-   addstr("Enter - On second thought, this isn't a job for ");
+   mvaddstr(10,0, "Enter - On second thought, this isn't a job for ");
    addstr(cr->name);
    addstr(".");
 
@@ -1488,6 +1215,27 @@ char* recruitName(int creatureType)
    return (char*)"missingno";
 }
 
+void displayDifficulty(int difficulty)
+{
+	const char *_difficulty[] = { "Simple", "Very Easy", "Easy", "Below Average", "Average", "Above Average", "Hard", "Very Hard", "Extremely Difficult", "Nearly Impossible", "Impossible"};
+
+    switch(difficulty)
+    {
+		case 0:	set_color(COLOR_GREEN,COLOR_BLACK,1);break;
+		case 1: set_color(COLOR_CYAN,COLOR_BLACK,1); break;
+		case 2: set_color(COLOR_CYAN,COLOR_BLACK,0); break;
+		case 3: set_color(COLOR_BLUE,COLOR_BLACK,1); break;
+		case 4: set_color(COLOR_WHITE,COLOR_BLACK,1);break;
+		case 5: set_color(COLOR_WHITE,COLOR_BLACK,0);break;
+		case 6: set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
+		case 7: set_color(COLOR_MAGENTA,COLOR_BLACK,0);break;
+		case 8: set_color(COLOR_MAGENTA,COLOR_BLACK,1);break;
+		case 9: set_color(COLOR_RED,COLOR_BLACK,0);	break;
+		default:set_color(COLOR_RED,COLOR_BLACK,1);	break;
+    }
+	if(difficulty >= 0 && difficulty < 10) addstr(_difficulty[difficulty]); else addstr(_difficulty[10]);
+}
+
 void recruitSelect(Creature &cr)
 {
    // Number of recruitable creatures
@@ -1511,13 +1259,11 @@ void recruitSelect(Creature &cr)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("What type of person will ");
+      mvaddstr(0,0, "What type of person will ");
       addstr(cr.name);
       addstr(" try to meet and recruit today?");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(1,0);
-      addstr("컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
+      mvaddstr(1,0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
 
       int y=2,difficulty;
       for(int p=page*19;p<options&&p<page*19+19;p++)
@@ -1529,60 +1275,13 @@ void recruitSelect(Creature &cr)
 
          move(y,49);
          difficulty=recruitable_creatures[p].difficulty;
-         switch(difficulty)
-         {
-         case 0:
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("Simple");
-            break;
-         case 1:
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            addstr("Very Easy");
-            break;
-         case 2:
-            set_color(COLOR_CYAN,COLOR_BLACK,0);
-            addstr("Easy");
-            break;
-         case 3:
-            set_color(COLOR_BLUE,COLOR_BLACK,1);
-            addstr("Below Average");
-            break;
-         case 4:
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Average");
-            break;
-         case 5:
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr("Above Average");
-            break;
-         case 6:
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("Hard");
-            break;
-         case 7:
-            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-            addstr("Very Hard");
-            break;
-         case 8:
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr("Extremely Difficult");
-            break;
-         case 9:
-            set_color(COLOR_RED,COLOR_BLACK,0);
-            addstr("Nearly Impossible");
-            break;
-         default:
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Impossible");
-            break;
-         }
+		 displayDifficulty(difficulty);
 
          y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to select a Profession");
+      mvaddstr(22,0, "Press a Letter to select a Profession");
       move(23,0);
       addpagestr();
 
@@ -1966,7 +1665,6 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
       }
    }
 }
-
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr)
 {
@@ -1990,13 +1688,11 @@ void select_makeclothing(Creature *cr)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("Which will ");
+      mvaddstr(0,0, "Which will ");
       addstr(cr->name);
       addstr(" try to make?   (Note: Half Cost if you have cloth)");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(1,0);
-      addstr("컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
+      mvaddstr(1,0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
 
       int y=2,difficulty;
       for(int p=page*19;p<len(armortypei)&&p<page*19+19;p++,y++)
@@ -2010,63 +1706,15 @@ void select_makeclothing(Creature *cr)
          addstr(armortype[armortypei[p]]->get_name());
 
          move(y,37);
-         switch(difficulty)
-         {
-         case 0:
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("Simple");
-            break;
-         case 1:
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            addstr("Very Easy");
-            break;
-         case 2:
-            set_color(COLOR_CYAN,COLOR_BLACK,0);
-            addstr("Easy");
-            break;
-         case 3:
-            set_color(COLOR_BLUE,COLOR_BLACK,1);
-            addstr("Below Average");
-            break;
-         case 4:
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Average");
-            break;
-         case 5:
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr("Above Average");
-            break;
-         case 6:
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("Hard");
-            break;
-         case 7:
-            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-            addstr("Very Hard");
-            break;
-         case 8:
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr("Extremely Difficult");
-            break;
-         case 9:
-            set_color(COLOR_RED,COLOR_BLACK,0);
-            addstr("Nearly Impossible");
-            break;
-         default:
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Impossible");
-            break;
-         }
+		 displayDifficulty(difficulty);
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
-         move(y,64-len(price));
-         addstr(price);
+         mvaddstr(y,64-len(price), price);
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to select a Type of Clothing");
+      mvaddstr(22,0, "Press a Letter to select a Type of Clothing");
       move(23,0);
       addpagestr();
 
@@ -2113,32 +1761,22 @@ long select_troublefundinglevel(Creature *cr)
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds();
-   move(0,0);
-   addstr("Select a Funding Level for this Operation:");
+   mvaddstr(0,0, "Select a Funding Level for this Operation:");
 
-   move(2,0);
-   addstr("A - Don't spend anything.  ");
+   mvaddstr(2,0, "A - Don't spend anything.  ");
    addstr(cr->name);
    addstr(" just needs something constructive to do.");
 
-   move(3,0);
-   addstr("B - $20 per day.  Some minor purchases are needed.");
-
-   move(4,0);
-   addstr("C - $50 per day.  Disobedience costs money.");
-
-   move(5,0);
-   addstr("D - $100 per day.  Enough to be really disobedient.");
-
-   move(6,0);
-   addstr("E - $500 per day.  The Machine will buckle under the weight of");
-   move(7,0);
-   addstr("    ");
+   mvaddstr(3,0, "B - $20 per day.  Some minor purchases are needed.");
+   mvaddstr(4,0, "C - $50 per day.  Disobedience costs money.");
+   mvaddstr(5,0, "D - $100 per day.  Enough to be really disobedient.");
+   mvaddstr(6,0, "E - $500 per day.  The Machine will buckle under the weight of");
+   
+   mvaddstr(7,0, "    ");
    addstr(cr->name);
    addstr("'s Numerous and Varied Liberal Acts.");
 
-   move(9,0);
-   addstr("Enter - On second thought, this isn't a job for ");
+   mvaddstr(9,0, "Enter - On second thought, this isn't a job for ");
    addstr(cr->name);
    addstr(".");
 
@@ -2169,13 +1807,10 @@ char select_view(Creature *cr,int &v)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("Write a news story if the LCS makes the news on the selected topic today, or");
-      move(1,0);
-      addstr("write editorials if there is no current news but there is public interest.");
+      mvaddstr(0,0, "Write a news story if the LCS makes the news on the selected topic today, or");
+      mvaddstr(1,0, "write editorials if there is no current news but there is public interest.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(2,0);
-      addstr("컴컴TOPIC컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횵NTEREST컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+      mvaddstr(2,0, "컴컴TOPIC컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횵NTEREST컴컴컴컴컴컴컴컴컴컴컴컴컴�");
 
       int y=3,x=0;
       for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++,y++)
@@ -2214,8 +1849,7 @@ char select_view(Creature *cr,int &v)
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to select a Topic");
+      mvaddstr(22,0, "Press a Letter to select a Topic");
       move(23,0);
       addpagestr();
 
@@ -2241,4 +1875,3 @@ char select_view(Creature *cr,int &v)
 
    return 0;
 }
-

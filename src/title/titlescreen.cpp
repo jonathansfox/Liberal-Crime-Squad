@@ -1,29 +1,29 @@
 /*
 
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+//
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+//
+Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+it under the terms of the GNU General Public License as published by            //
+the Free Software Foundation; either version 2 of the License, or               //
+(at your option) any later version.                                             //
+//
+Liberal Crime Squad is distributed in the hope that it will be useful,          //
+but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+GNU General Public License for more details.                                    //
+//
+You should have received a copy of the GNU General Public License               //
+along with Liberal Crime Squad; if not, write to the Free Software              //
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+This file was created by Chris Johnson (grundee@users.sourceforge.net)
+by copying code from game.cpp.
+To see descriptions of files and functions, see the list at
+the bottom of includes.h in the top src folder.
 */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
@@ -62,209 +62,237 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <externs.h>
 
+#include "common\\set_color_support.h"
 extern vector<vector<string>> real_quote;
 
 char str[100];
 
 void title() {
-   //title screen
-   erase();
+	//title screen
+	erase();
 
-   set_color(COLOR_GREEN,COLOR_BLACK,1);
-   strcpy(str,"Liberal Crime Squad");
-   move(2,39-((len(str)-1)>>1));
-   addstr(str);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	strcpy(str, "Liberal Crime Squad");
+	move(2, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
 
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   strcpy(str,"Inspired by the 1983 version of Oubliette");
-   move(4,39-((len(str)-1)>>1));
-   addstr(str);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	strcpy(str, "Inspired by the 1983 version of Oubliette");
+	move(4, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	vector<string> quote = pickrandom(real_quote);
+	strcpy(str, quote[0]);
+	move(6, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, quote[1]);
+	move(7, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, quote[2]);
+	move(8, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, quote[3]);
+	move(9, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
 
-   vector<string> quote = pickrandom(real_quote);
-   strcpy(str, quote[0]);
-   move(6, 39 - ((len(str) - 1) >> 1));
-   addstr(str);
-   strcpy(str, quote[1]);
-   move(7, 39 - ((len(str) - 1) >> 1));
-   addstr(str);
-   strcpy(str, quote[2]);
-   move(8, 39 - ((len(str) - 1) >> 1));
-   addstr(str);
-   strcpy(str, quote[3]);
-   move(9, 39 - ((len(str) - 1) >> 1));
-   addstr(str);
-
-   strcpy(str,"v3.9 Copyright (C) 2002-4, Tarn Adams");
-   move(11,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"A Bay 12 Games Production");
-   move(12,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"http://bay12games.com/lcs/");
-   move(13,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
-   move(15,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"https://github.com/Kamal-Sadek/Liberal-Crime-Squad");
-   move(16,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"http://sourceforge.net/projects/lcsgame/");
-   move(17,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"http://www.bay12games.com/forum/index.php?board=3.0");
-   move(18,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"http://lcs.wikidot.com/");
-   move(19,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"Press ESC now to quit. Quitting later causes your progress to be saved.");
-   move(21,39-((len(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"Press any other key to pursue your Liberal Agenda!");
-   move(23,39-((len(str)-1)>>1));
-   addstr(str);
-   move(24,79);
-   addstr("+");
+	strcpy(str, "v3.9 Copyright (C) 2002-4, Tarn Adams");
+	move(11, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "A Bay 12 Games Production");
+	move(12, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "http://bay12games.com/lcs/");
+	move(13, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "v" PACKAGE_VERSION " Maintained by the Open Source Community");
+	move(15, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "https://github.com/Kamal-Sadek/Liberal-Crime-Squad");
+	move(16, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "http://sourceforge.net/projects/lcsgame/");
+	move(17, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "http://www.bay12games.com/forum/index.php?board=3.0");
+	move(18, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "http://lcs.wikidot.com/");
+	move(19, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "Press ESC now to quit. Quitting later causes your progress to be saved.");
+	move(21, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	strcpy(str, "Press any other key to pursue your Liberal Agenda!");
+	move(23, 39 - ((len(str) - 1) >> 1));
+	addstr(str);
+	move(24, 79);
+	addstr("+");
 }
 
 void choose_savefile_name()
 {
-   erase();
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   mvaddstr(0,0,"In what world will you pursue your Liberal Agenda?");
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
-   mvaddstr(1,0,"Enter a name for the save file.");
+	erase();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstr(0, 0, "In what world will you pursue your Liberal Agenda?");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstr(1, 0, "Enter a name for the save file.");
 
-   char savefile_temp[21];
-   enter_name(2,0, savefile_temp, sizeof(savefile_temp)/sizeof(savefile_temp[0]), "");
-   if(strcmp(savefile_temp, "") != 0) savefile_name = string(savefile_temp) + ".dat";
-   else savefile_name = "save_" + to_string(LCSrandom(1000)) + ".dat";
+	char savefile_temp[21];
+	enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
+	bool justEnter = false;
+	bool enterDamn = false;
+	do {
+		if (strcmp(savefile_temp, "") != 0) {
+			savefile_name = string(savefile_temp) + ".dat";
+			justEnter = false;
+		}
+		else {
+			erase();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstr(0, 0, "In what world will you pursue your Liberal Agenda?");
+			set_color_easy(WHITE_ON_BLACK);
+			if (enterDamn) {
+				mvaddstr(1, 0, "Just enter a [darn] name for the save file.");
+
+			}
+			else if (justEnter) {
+				mvaddstr(1, 0, "Pretty please enter a name for the save file.");
+				enterDamn = true;
+
+			}
+			else {
+				mvaddstr(1, 0, "Please enter a name for the save file.");
+			}
+
+			enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
+			justEnter = true;
+		}
+	} while (justEnter);
 }
 
 void mode_title()
 {
-   title();
+	title();
 
-   int c=0;
+	int c = 0;
 
-   vector<string> savefiles;
+	vector<string> savefiles;
 
-   do {
+	do {
 
-      if(c=='h') {
-         viewhighscores();
-         getkey();
-         title();
-      }
+		if (c == 'h') {
+			viewhighscores();
+			getkey();
+			title();
+		}
 
-      if(c=='m') music.enableIf(!music.isEnabled());
-      if(music.isEnabled()) strcpy(str,"Press M to turn off the Music. Press H to view your Liberal High Score.");
-      else strcpy(str,"Press M to turn on some Music. Press H to view your Liberal High Score.");
-      move(22,39-((len(str)-1)>>1));
-      addstr(str);
-      if(c==ESC||c=='x') end_game();
+		if (c == 'm') music.enableIf(!music.isEnabled());
+		if (music.isEnabled()) strcpy(str, "Press M to turn off the Music. Press H to view your Liberal High Score.");
+		else strcpy(str, "Press M to turn on some Music. Press H to view your Liberal High Score.");
+		move(22, 39 - ((len(str) - 1) >> 1));
+		addstr(str);
+		if (c == ESC || c == 'x') end_game();
 
-      c=getkey();
-   } while(c=='m'||c=='h'||c=='x'||c==ESC);
+		c = getkey();
+	} while (c == 'm' || c == 'h' || c == 'x' || c == ESC);
 
-   savefiles = std::move(LCSSaveFiles());
+	savefiles = std::move(LCSSaveFiles());
 
-   char loaded = savefiles.size() > 0;
-   bool to_delete = false;
+	char loaded = savefiles.size() > 0;
+	bool to_delete = false;
 
-   if(!loaded)
-   {
-      choose_savefile_name();
-      setup_newgame();
-      makecharacter();
-   } 
-   else
-   {      
-      int p=0, y=2, page=0;
+	if (!loaded)
+	{
+		choose_savefile_name();
+		setup_newgame();
+		makecharacter();
+	}
+	else
+	{
+		int p = 0, y = 2, page = 0;
+		// IsaacG This almost has to be redone
+		while (true)
+		{
+			erase();
+			if (to_delete)
+			{
+				set_color_easy(YELLOW_ON_RED);
+				mvaddstr(0, 0, "Delete a Save File");
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstr(0, 0, "Choose a Save File");
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstr(1, 0, "컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+			for (p = page * 19, y = 2; p<savefiles.size() && p<page * 19 + 19; p++, y++)
+			{
+				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
+				move(y, 0);
+				addchar(y + 'A' - 2); addstr(" - ");
 
-      while(true) 
-      {
-         erase();
-         if(to_delete) 
-         {
-            set_color(COLOR_YELLOW,COLOR_RED,1);
-            mvaddstr(0,0, "Delete a Save File");
-         }
-         else
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(0,0,"Choose a Save File");
-         }
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-         for(p=page*19,y=2;p<savefiles.size()&&p<page*19+19;p++,y++)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
-            move(y,0);
-            addchar(y+'A'-2);addstr(" - ");
+				string &strtemp = savefiles[y - 2];
+				addstr(strtemp.substr(0, strtemp.find(".dat")));
+			}
 
-			string &strtemp = savefiles[y-2];
-            addstr(strtemp.substr(0, strtemp.find(".dat")));
-         }
+			move(y, 0);
+			addchar(y + 'A' - 2); addstr(" - ");
+			addstr("NEW GAME");
 
-         move(y,0);
-         addchar(y+'A'-2);addstr(" - ");
-         addstr("NEW GAME");
+			set_color_easy(WHITE_ON_BLACK);
+			move(22, 0);
+			if (!to_delete) addstr("Press a Letter to Select a Save File");
+			else addstr("Press a Letter to Delete a Save File");
+			addstr(", V to switch, or X to quit");
+			move(23, 0);
+			addpagestr();
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(22,0);
-         if(!to_delete) addstr("Press a Letter to Select a Save File");
-         else addstr("Press a Letter to Delete a Save File");
-         addstr(", V to switch, or X to quit");
-         move(23,0);
-         addpagestr();
+			c = getkey();
 
-         c = getkey();
+			//PAGE UP
+			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+			//PAGE DOWN
+			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<savefiles.size())page++;
+			if (c >= 'a'&&c <= 's')
+			{
+				int p = page * 19 + c - 'a';
+				if (!to_delete)
+				{
+					if (p<savefiles.size()) { savefile_name = savefiles[p]; break; }
+					else if (p == savefiles.size())
+					{
+						choose_savefile_name();
+						setup_newgame();
+						makecharacter();
+						break;
+					}
+				}
+				else if (p<savefiles.size())
+				{
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					strcpy(str, "Are you sure you want to delete " + savefiles[p] + "? (y/n)");
+					move(10, 39 - ((len(str) - 1) >> 1));
+					addstr(str);
+					c = getkey();
+					if (c == 'y')
+					{
+						LCSDeleteFile(savefiles[p].c_str(), LCSIO_PRE_HOME);
+						savefiles = std::move(LCSSaveFiles());
+					}
+					continue;
+				}
 
-         //PAGE UP
-         if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
-         //PAGE DOWN
-         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<savefiles.size())page++;
-         if(c>='a'&&c<='s')
-         {
-            int p=page*19+c-'a';
-            if(!to_delete)
-            {
-               if(p<savefiles.size()) { savefile_name = savefiles[p]; break; }
-               else if(p == savefiles.size())
-               {
-                  choose_savefile_name();
-                  setup_newgame();
-                  makecharacter();
-                  break;
-               }
-            }
-            else if(p<savefiles.size())
-            {
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               strcpy(str,"Are you sure you want to delete " + savefiles[p] + "? (y/n)");
-               move(10,39-((len(str)-1)>>1));
-               addstr(str);
-               c=getkey();
-               if(c=='y')
-               {
-                  LCSDeleteFile(savefiles[p].c_str(), LCSIO_PRE_HOME);
-                  savefiles = std::move(LCSSaveFiles());
-               }
-               continue;
-            }
+			}
+			else if (c == 'v') to_delete = !to_delete;
+			if (c == ESC || c == 'x') end_game();
+		}
 
-         }
-         else if(c=='v') to_delete = !to_delete;
-         if(c==ESC||c=='x') end_game();
-      }
+		load(savefile_name);
 
-      load(savefile_name);
+	}
+	mode = GAMEMODE_BASE;
+	// Main Loop
+	mode_base();
 
-   }
-   mode=GAMEMODE_BASE;
-   mode_base();
-
-   savegame(savefile_name);
+	savegame(savefile_name);
 }
