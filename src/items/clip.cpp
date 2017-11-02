@@ -1,11 +1,13 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
 { }
-
 Clip::Clip(const std::string& inputXml) : Item(inputXml)
 {
    /*CMarkup xml;
@@ -17,7 +19,6 @@ Clip::Clip(const std::string& inputXml) : Item(inputXml)
       std::string tag=xml.GetTagName();
    }*/
 }
-
 string Clip::showXml() const
 {
    CMarkup xml;
@@ -26,7 +27,6 @@ string Clip::showXml() const
    addBaseValues(xml);
    return xml.GetDoc();
 }
-
 Clip* Clip::split(int number)
 {
    if(number>number_) number=number_;
@@ -35,7 +35,6 @@ Clip* Clip::split(int number)
    this->number_-=number;
    return newi;
 }
-
 bool Clip::merge(Item& i)
 {
    if(i.is_clip() && this->is_same_type(i))
@@ -46,7 +45,6 @@ bool Clip::merge(Item& i)
    }
    return false;
 }
-
 bool Clip::sort_compare_special(Item* other) const
 {
    if(other)
@@ -59,15 +57,11 @@ bool Clip::sort_compare_special(Item* other) const
    }
    else return false;
 }
-
 string Clip::equip_title() const
 { return cliptype[getcliptype(itemtypename())]->get_name(); }
-
 const string& Clip::get_name() const
 { return cliptype[getcliptype(itemtypename())]->get_name(); }
-
 long Clip::get_fencevalue() const
 { return cliptype[getcliptype(itemtypename())]->get_fencevalue(); }
-
 int Clip::get_ammoamount() const
 { return cliptype[getcliptype(itemtypename())]->get_ammoamount(); }

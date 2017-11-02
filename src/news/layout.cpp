@@ -1,8 +1,12 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern int year;
 void preparepage(newsstoryst& ns, bool liberalguardian)
 {
    set_color(COLOR_WHITE,COLOR_WHITE,0);
@@ -10,7 +14,6 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
       for(int y=0;y<25;y++)
          mvaddchar(y,x,' ');
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-
    if(ns.page==1||(liberalguardian&&ns.guardianpage==1))
    {
       //TOP
@@ -36,7 +39,6 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
             }
          }
       }
-
       if(!liberalguardian) // Liberal Guardian graphics don't support adding a date
       {
          //DATE
@@ -49,9 +51,9 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
          }
          move(3,66+(pday<10));
          addstr(getmonth(pmonth,true));
-         addstr(" ");
+         addstr(singleSpace);
          addstr(pday);
-         addstr(", ");
+         addstr(commaSpace);
          addstr(pyear);
       }
    }

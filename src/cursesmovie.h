@@ -19,10 +19,8 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software				//
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
-
 #include "common.h"
 #define PICMAX 1000
-
 struct filelistst
 {
    vector<char *> list;
@@ -32,9 +30,7 @@ struct filelistst
    void open_disksave(FILE *h);
    void smartappend(filelistst &list2);
 };
-
 #define CM_FRAMEFLAG_OVERLAY BIT1
-
 struct CursesMovie_framest
 {
    short frame;
@@ -43,7 +39,6 @@ struct CursesMovie_framest
    unsigned short flag;
    CursesMovie_framest() : frame(0),start(0),stop(0),sound(-1),song(-1),effect(-1),flag(0) { }
 };
-
 struct CursesMoviest
 {
    unsigned char picture[PICMAX][80][25][4];

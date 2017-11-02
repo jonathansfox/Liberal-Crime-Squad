@@ -1,11 +1,13 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern int year;
 int VehicleType::number_of_vehicletypes = 0;
-
-
 VehicleType::VehicleType(MCD_STR xmlstring)
  : /*idname_("UNDEFINED"), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
  year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
@@ -18,29 +20,22 @@ VehicleType::VehicleType(MCD_STR xmlstring)
  sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111)
 {
    id_ = number_of_vehicletypes++;
-
    CMarkup xmlfile;
    xmlfile.SetDoc(xmlstring);
    xmlfile.FindElem();
-
    idname_ = xmlfile.GetAttrib("idname");
    if (idname_ == "")
       idname_ = "LACKS IDNAME " + tostring(id_);
-
    xmlfile.IntoElem();
-
    while(xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
    {
       std::string element = xmlfile.GetTagName();
-
       if (element == "year")
       {
          xmlfile.IntoElem();
-
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "start_at_current_year")
             {
                int b = stringtobool(xmlfile.GetData());
@@ -73,7 +68,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
                std::cerr << "Unknown element for vehicle type " << idname << "::year: "
                          << element << std::endl;*/
          }
-
          xmlfile.OutOfElem();
       }
       else if (element == "colors")
@@ -83,7 +77,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "color")
             {
                color_.push_back(xmlfile.GetData());
@@ -111,7 +104,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "base")
                drivebonus_ = atoi(xmlfile.GetData());
             else if (element == "skillfactor")
@@ -132,7 +124,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "base")
                dodgebonus_ = atoi(xmlfile.GetData());
             else if (element == "skillfactor")
@@ -153,7 +144,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "driver")
                attackbonus_driver_ = atoi(xmlfile.GetData());
             else if (element == "passenger")
@@ -178,7 +168,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "difficulty_to_find")
                steal_difficultytofind_ = atoi(xmlfile.GetData());
             else if (element == "juice")
@@ -201,7 +190,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
-
             if (element == "low_armor_min")
                lowarmormin_ = atoi(xmlfile.GetData());
             else if (element == "low_armor_max")
@@ -237,36 +225,26 @@ VehicleType::VehicleType(MCD_STR xmlstring)
          std::cerr << "Unknown element for vehicle type " << idname << ": " << element
                    << std::endl;*/
    }
-
    if (len(color_) == 0)
       color_.push_back("Translucent"); //Default.
-
    //xmlfile.OutOfElem();
 }
-
 int VehicleType::makeyear() const
 {
    int myear = 0;
-
    if (year_startcurrent_)
       myear = year;
    else
       myear = year_start_;
-
    if (year_randomuptocurrent_)
       myear += LCSrandom(year-year_start_+1);
-
    if (year_addrandom_ > 0)
       myear += LCSrandom(year_addrandom_);
    else if (year_addrandom_ < 0)
       myear -= LCSrandom(-year_addrandom_);
-
    myear += year_add_;
-
    return myear;
 }
-
-
 int VehicleType::gethitlocation(int bodypart)
 {
    switch(bodypart)
@@ -284,7 +262,6 @@ int VehicleType::gethitlocation(int bodypart)
       return CARPART_BODY;
       break;
    }
-
    return CARPART_WINDOW;
 }
 string VehicleType::getpartname(int location)
@@ -302,11 +279,9 @@ int VehicleType::armorbonus(int location)
    }
    return 0;
 }
-
 int VehicleType::modifieddriveskill(int skillLevel)
-{//warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-	// floorf(...) is designed to assist conversion of a float into an int by truncation
-   int score = (int) floorf((skillLevel+drivebonus_)*drivebonus_factor_); 
+{
+   int score = (skillLevel+drivebonus_)*drivebonus_factor_;
    if (score < drivebonus_limit1_)
       return score;
    if (score > drivebonus_limit1_)
@@ -314,9 +289,8 @@ int VehicleType::modifieddriveskill(int skillLevel)
    return (score > drivebonus_limit2_) ? drivebonus_limit2_ : score;
 }
 int VehicleType::modifieddodgeskill(int skillLevel)
-{// warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-	// floorf(...) is designed to assist conversion of a float into an int by truncation
-   int score = (int) floorf((skillLevel+dodgebonus_)*dodgebonus_factor_); 
+{
+   int score = (skillLevel+dodgebonus_)*dodgebonus_factor_;
    if (score < dodgebonus_limit1_)
       return score;
    if (score > dodgebonus_limit1_)

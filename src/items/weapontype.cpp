@@ -1,8 +1,12 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern int year;
 WeaponType::WeaponType(MCD_STR xmlstring)
  : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
    name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
@@ -18,11 +22,9 @@ WeaponType::WeaponType(MCD_STR xmlstring)
    xml.SetDoc(xmlstring);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem()) //Loop over all the elements inside the weapontype element.
    {
       std::string element = xml.GetTagName();
-
       if (element == "shortname")
       {
          shortname_ = xml.GetData();
@@ -175,7 +177,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
       else if (element == "attack")
       {
          attackst* attack = new attackst(xml.GetSubDoc());
-
          int i;
          for(i=0;i<len(attacks_)&&attack->priority>=attacks_[i]->priority;i++);
          attacks_.insert(attacks_.begin()+i,attack);
@@ -184,7 +185,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
          errorlog << "Unknown element for weapon type " << idname()
                    << ": " << element << endl;*/
    }
-
    if (!shortname_defined_)
    {
       if ((uses_ammo() && len(name()) <= 9)
@@ -198,13 +198,11 @@ WeaponType::WeaponType(MCD_STR xmlstring)
       else if (len(shortname_) > 14)
          shortname_.resize(14);
    }
-
 }
-
 attackst::attackst(MCD_STR xmlstring)
  : priority(1), ranged(false), thrown(false), ammotype("UNDEF"), uses_ammo(false),
    attack_description("assaults"), hit_description("striking"),
-   always_describe_hit(false), can_backstab(false), hit_punctuation("."),
+   always_describe_hit(false), can_backstab(false), hit_punctuation(singleDot),
    skill(SKILL_CLUB), accuracy_bonus(0), number_attacks(1),
    successive_attacks_difficulty(0), strength_min(5), strength_max(10),
 	random_damage(1), fixed_damage(1), bruises(false), tears(false), cuts(false),
@@ -215,11 +213,9 @@ attackst::attackst(MCD_STR xmlstring)
    xml.SetDoc(xmlstring);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem()) //Loop over all the elements inside the vehicletype element.
    {
       std::string element = xml.GetTagName();
-
       if (element == "priority")
          priority = atoi(xml.GetData());
       else if (element == "ranged")
@@ -378,11 +374,9 @@ attackst::attackst(MCD_STR xmlstring)
       else if (element == "critical")
       {
          xml.IntoElem();
-
          while(xml.FindElem())
          {
             element = xml.GetTagName();
-
             if (element == "chance")
                critical.chance = atoi(xml.GetData());
             else if (element == "hits_required")
@@ -411,17 +405,14 @@ attackst::attackst(MCD_STR xmlstring)
             /*else
                errorlog << "Unknown element for attack::critical: " << element << endl; */
          }
-
          xml.OutOfElem();
       }
       else if (element == "fire")
       {
          xml.IntoElem();
-
          while(xml.FindElem())
          {
             element = xml.GetTagName();
-
             if (element == "chance")
                fire.chance = atoi(xml.GetData());
             else if (element == "chance_causes_debris")
@@ -429,35 +420,27 @@ attackst::attackst(MCD_STR xmlstring)
             /*else
                errorlog << "Unknown element for attack::fire: " << element << endl; */
          }
-
          xml.OutOfElem();
       }
       /*else
          errorlog << "Unknown element for attack: " << element << endl; */
    }
-
    if (!bruises && !tears && !cuts && !burns && !shoots)
       bruises = true; //If no type specified, then bruise.
 }
-
 attackst::criticalst::criticalst()
  : chance(0), hits_required(1), random_damage(1), random_damage_defined(false),
    fixed_damage(1), fixed_damage_defined(false), severtype(0), severtype_defined(false)
 {
-
 }
-
 attackst::firest::firest()
  : chance(0), chance_causes_debris(0)
 {
-
 }
-
 WeaponType::~WeaponType()
 {
    delete_and_clear(attacks_);
 }
-
 const string& WeaponType::get_name(unsigned subtype) const
 {
    if (subtype == 0)
@@ -483,7 +466,6 @@ const string& WeaponType::get_name(unsigned subtype) const
    else
       return get_name(); //return "INVALID SUBTYPE"; //Reference to temporary. -XML
 }
-
 const string& WeaponType::get_shortname(unsigned subtype) const
 {
    if (subtype > 2)
@@ -510,7 +492,6 @@ const string& WeaponType::get_shortname(unsigned subtype) const
       else if (name_sub_2_defined_ && len(name_sub_2_) <= 14) //Too long for ammo using weapons. -XML
          return name_sub_2_;
    }
-
    if (shortname_future_defined_ && year >= 2100)
       return shortname_future_;
    else if (year >= 2100 && name_future_defined() && len(name_future()) <= 14) //Too long for ammo using weapons. -XML
@@ -522,7 +503,6 @@ const string& WeaponType::get_shortname(unsigned subtype) const
    else
       return "UNDEF";*/
 }
-
 bool WeaponType::uses_ammo() const
 {
    for(int i=0;i<len(attacks_);i++)
@@ -530,7 +510,6 @@ bool WeaponType::uses_ammo() const
         return true;
    return false;
 }
-
 bool WeaponType::acceptable_ammo(const string& clipname) const
 {
    for(int i=0;i<len(attacks_);i++)
@@ -538,7 +517,6 @@ bool WeaponType::acceptable_ammo(const string& clipname) const
         return true;
    return false;
 }
-
 bool WeaponType::is_ranged() const
 {
    for(int i=0;i<len(attacks_);i++)
@@ -546,7 +524,6 @@ bool WeaponType::is_ranged() const
         return true;
    return false;
 }
-
 bool WeaponType::is_throwable() const
 {
    for(int i=0;i<len(attacks_);i++)
@@ -554,8 +531,7 @@ bool WeaponType::is_throwable() const
         return true;
    return false;
 }
-
 bool WeaponType::is_legal() const
 {
-   return legality_>=law[LAW_GUNCONTROL];
+   return legality_>=lawList[LAW_GUNCONTROL];
 }

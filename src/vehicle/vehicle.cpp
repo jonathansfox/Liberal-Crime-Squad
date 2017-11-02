@@ -1,10 +1,13 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern vector<Creature *> pool;
 long Vehicle::curcarid = 0;
-
 string Vehicle::showXml() const
 {
    CMarkup xml;
@@ -19,7 +22,6 @@ string Vehicle::showXml() const
    xml.AddElem("id", tostring(id_));
    return xml.GetDoc();
 }
-
 Vehicle::Vehicle(const std::string& inputXml)
 {
    CMarkup xml;
@@ -38,7 +40,6 @@ Vehicle::Vehicle(const std::string& inputXml)
       else if(tag=="id") id_=atoi(xml.GetData());
    }
 }
-
 void Vehicle::init(const VehicleType& seed, const string& color, int myear)
 {
    id_=curcarid++;
@@ -49,21 +50,18 @@ void Vehicle::init(const VehicleType& seed, const string& color, int myear)
    color_=color;
    myear_=myear;
 }
-
 void Vehicle::stop_riding_me() const
 {
    for(int p=0;p<len(pool);p++)
       if(pool[p]->carid==id_)
          pool[p]->carid=-1;
 }
-
 void Vehicle::stop_preferring_me() const
 {
    for(int p=0;p<len(pool);p++)
       if(pool[p]->pref_carid==id_)
          pool[p]->pref_carid=-1;
 }
-
 string Vehicle::fullname(bool halffull) const
 {
    string s;
@@ -75,17 +73,15 @@ string Vehicle::fullname(bool halffull) const
    }
    if(displayscolor())
    {
-      s+=color_+" ";
+      s+=color_+singleSpace;
       words++;
    }
    if (myear_!=-1&&words<2) //don't print year if that will make the name too long.
-      s+=tostring(myear_)+" ";
+      s+=tostring(myear_)+singleSpace;
    if(halffull) s+=shortname();
    else s+=longname();
-
    return s;
 }
-
 int Vehicle::modifieddriveskill(int skillLevel)
 {
    return vehicletype[getvehicletype(vtypeidname_)]->modifieddriveskill(skillLevel); // Todo - add bonus if car is upgraded with nitro

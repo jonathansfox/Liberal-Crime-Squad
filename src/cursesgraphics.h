@@ -19,7 +19,6 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
-
 /**
 * \file		cursesgraphics.h
 *
@@ -123,17 +122,13 @@
 *
 *
 */
-
 /* Add characters to the lists in CP437 numerical order.
  * Entries are needed for CP437, ASCII_HACK and UNICODE.
  * Entry should be added to the graphicschar array.
  * Bump CH_MAXIMUM.
  */
-
 #include "common.h" /* include this prior to checking if WIN32 is defined */
-
 #ifdef CH_USE_CP437
-
 // Range (0 .. 31), ASCII control characters:
     #define CH_NULL 0x00
     #define CH_START_OF_HEADING 0x01
@@ -167,7 +162,6 @@
     #define CH_GROUP_SEPARATOR 0x1d
     #define CH_RECORD_SEPARATOR 0x1e
     #define CH_UNIT_SEPARATOR 0x1f
-
 // Range (0 .. 31), CP437 display characters:
     #define CH_FIGURE_SPACE 0x00
     #define CH_WHITE_SMILING_FACE 0x01
@@ -201,7 +195,6 @@
     #define CH_LEFT_RIGHT_ARROW 0x1d
     #define CH_BLACK_UP_POINTING_TRIANGLE 0x1e
     #define CH_BLACK_DOWN_POINTING_TRIANGLE 0x1f
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
     #define CH_SPACE 0x20
     #define CH_EXCLAMATION_MARK 0x21
@@ -298,11 +291,9 @@
     #define CH_VERTICAL_LINE 0x7c
     #define CH_RIGHT_CURLY_BRACKET 0x7d
     #define CH_TILDE 0x7e
-
 // Character 127, Delete control character/House display character:
     #define CH_DELETE 0x7f
     #define CH_HOUSE 0x7f
-
 // Range (128 .. 255), CP437 extended characters:
     #define CH_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA 0x80
     #define CH_LATIN_SMALL_LETTER_U_WITH_DIAERESIS 0x81
@@ -433,9 +424,7 @@
     #define CH_BLACK_SQUARE 0xfe
     #define CH_NO_BREAK_SPACE 0xff
 #endif
-
 #if defined(CH_USE_ASCII_HACK) || defined(CH_USE_UNICODE)
-
 // Range (0 .. 31), ASCII control characters:
     #define CH_HACK_NULL 0x00
     #define CH_HACK_START_OF_HEADING 0x01
@@ -469,7 +458,6 @@
     #define CH_HACK_GROUP_SEPARATOR 0x1d
     #define CH_HACK_RECORD_SEPARATOR 0x1e
     #define CH_HACK_UNIT_SEPARATOR 0x1f
-
 // Range (0 .. 31), CP437 display characters:
     #define CH_HACK_FIGURE_SPACE 0x00
     #define CH_HACK_WHITE_SMILING_FACE '@'
@@ -503,7 +491,6 @@
     #define CH_HACK_LEFT_RIGHT_ARROW '-'
     #define CH_HACK_BLACK_UP_POINTING_TRIANGLE '^'
     #define CH_HACK_BLACK_DOWN_POINTING_TRIANGLE 'v'
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
     #define CH_HACK_SPACE ' '
     #define CH_HACK_EXCLAMATION_MARK '!'
@@ -600,11 +587,9 @@
     #define CH_HACK_VERTICAL_LINE '|'
     #define CH_HACK_RIGHT_CURLY_BRACKET '}'
     #define CH_HACK_TILDE '~'
-
 // Character 127, Delete control character/House display character:
     #define CH_HACK_DELETE 0x7f
     #define CH_HACK_HOUSE 'A'
-
 // Range (128 .. 255), CP437 extended characters:
     #define CH_HACK_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA 'C'
     #define CH_HACK_LATIN_SMALL_LETTER_U_WITH_DIAERESIS 'u'
@@ -735,9 +720,7 @@
     #define CH_HACK_BLACK_SQUARE '#'
     #define CH_HACK_NO_BREAK_SPACE ' '
 #endif
-
 #ifdef CH_USE_ASCII_HACK
-
 // Range (0 .. 31), ASCII control characters:
     #define CH_NULL CH_HACK_NULL
     #define CH_START_OF_HEADING CH_HACK_START_OF_HEADING
@@ -771,7 +754,6 @@
     #define CH_GROUP_SEPARATOR CH_HACK_GROUP_SEPARATOR
     #define CH_RECORD_SEPARATOR CH_HACK_RECORD_SEPARATOR
     #define CH_UNIT_SEPARATOR CH_HACK_UNIT_SEPARATOR
-
 // Range (0 .. 31), CP437 display characters:
     #define CH_FIGURE_SPACE CH_HACK_FIGURE_SPACE
     #define CH_WHITE_SMILING_FACE CH_HACK_WHITE_SMILING_FACE
@@ -805,7 +787,6 @@
     #define CH_LEFT_RIGHT_ARROW CH_HACK_LEFT_RIGHT_ARROW
     #define CH_BLACK_UP_POINTING_TRIANGLE CH_HACK_BLACK_UP_POINTING_TRIANGLE
     #define CH_BLACK_DOWN_POINTING_TRIANGLE CH_HACK_BLACK_DOWN_POINTING_TRIANGLE
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
     #define CH_SPACE CH_HACK_SPACE
     #define CH_EXCLAMATION_MARK CH_HACK_EXCLAMATION_MARK
@@ -902,11 +883,9 @@
     #define CH_VERTICAL_LINE CH_HACK_VERTICAL_LINE
     #define CH_RIGHT_CURLY_BRACKET CH_HACK_RIGHT_CURLY_BRACKET
     #define CH_TILDE CH_HACK_TILDE
-
 // Character 127, Delete control character/House display character:
     #define CH_DELETE CH_HACK_DELETE
     #define CH_HOUSE CH_HACK_HOUSE
-
 // Range (128 .. 255), CP437 extended characters:
     #define CH_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA CH_HACK_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA
     #define CH_LATIN_SMALL_LETTER_U_WITH_DIAERESIS CH_HACK_LATIN_SMALL_LETTER_U_WITH_DIAERESIS
@@ -1037,7 +1016,6 @@
     #define CH_BLACK_SQUARE CH_HACK_BLACK_SQUARE
     #define CH_NO_BREAK_SPACE CH_HACK_NO_BREAK_SPACE
 #endif
-
 #ifdef CH_USE_UNICODE
 // Range (0 .. 31), ASCII control characters:
     #define CH_NULL 0x0000
@@ -1072,7 +1050,6 @@
     #define CH_GROUP_SEPARATOR 0x001d
     #define CH_RECORD_SEPARATOR 0x001e
     #define CH_UNIT_SEPARATOR 0x001f
-
 // Range (0 .. 31), CP437 display characters:
     #define CH_FIGURE_SPACE 0x0000 // don't use 0x2007 even though that's "technically" correct, we need this to be zero to ACTUALLY work
     #define CH_WHITE_SMILING_FACE 0x263a
@@ -1106,7 +1083,6 @@
     #define CH_LEFT_RIGHT_ARROW 0x2194
     #define CH_BLACK_UP_POINTING_TRIANGLE 0x25b2
     #define CH_BLACK_DOWN_POINTING_TRIANGLE 0x25bc
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
     #define CH_SPACE 0x0020
     #define CH_EXCLAMATION_MARK 0x0021
@@ -1203,11 +1179,9 @@
     #define CH_VERTICAL_LINE 0x007c
     #define CH_RIGHT_CURLY_BRACKET 0x007d
     #define CH_TILDE 0x007e
-
 // Character 127, Delete control character/House display character:
     #define CH_DELETE 0x007f
     #define CH_HOUSE 0x2302
-
 // Range (128 .. 255), CP437 extended characters:
     #define CH_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA 0x00c7
     #define CH_LATIN_SMALL_LETTER_U_WITH_DIAERESIS 0x00fc
@@ -1337,16 +1311,13 @@
     #define CH_SUPERSCRIPT_TWO 0x00b2
     #define CH_BLACK_SQUARE 0x25a0
     #define CH_NO_BREAK_SPACE 0x00a0
-
 #ifdef CONSOLE_SUPPORT
 struct unicodechar
 {
 	int unicode_char;
 	int hack_char;
 };
-
 struct unicodechar unicode_hacks[] = {
-
 // Range (0 .. 31), ASCII control characters:
     {CH_NULL, CH_HACK_NULL},
     {CH_START_OF_HEADING, CH_HACK_START_OF_HEADING},
@@ -1380,7 +1351,6 @@ struct unicodechar unicode_hacks[] = {
     {CH_GROUP_SEPARATOR, CH_HACK_GROUP_SEPARATOR},
     {CH_RECORD_SEPARATOR, CH_HACK_RECORD_SEPARATOR},
     {CH_UNIT_SEPARATOR, CH_HACK_UNIT_SEPARATOR},
-
 // Range (0 .. 31), CP437 display characters:
     {CH_FIGURE_SPACE, CH_HACK_FIGURE_SPACE},
     {CH_WHITE_SMILING_FACE, CH_HACK_WHITE_SMILING_FACE},
@@ -1414,7 +1384,6 @@ struct unicodechar unicode_hacks[] = {
     {CH_LEFT_RIGHT_ARROW, CH_HACK_LEFT_RIGHT_ARROW},
     {CH_BLACK_UP_POINTING_TRIANGLE, CH_HACK_BLACK_UP_POINTING_TRIANGLE},
     {CH_BLACK_DOWN_POINTING_TRIANGLE, CH_HACK_BLACK_DOWN_POINTING_TRIANGLE},
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
     {CH_SPACE, CH_HACK_SPACE},
     {CH_EXCLAMATION_MARK, CH_HACK_EXCLAMATION_MARK},
@@ -1511,11 +1480,9 @@ struct unicodechar unicode_hacks[] = {
     {CH_VERTICAL_LINE, CH_HACK_VERTICAL_LINE},
     {CH_RIGHT_CURLY_BRACKET, CH_HACK_RIGHT_CURLY_BRACKET},
     {CH_TILDE, CH_HACK_TILDE},
-
 // Character 127, Delete control character/House display character:
     {CH_DELETE, CH_HACK_DELETE},
     {CH_HOUSE, CH_HACK_HOUSE},
-
 // Range (128 .. 255), CP437 extended characters:
     {CH_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA, CH_HACK_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA},
     {CH_LATIN_SMALL_LETTER_U_WITH_DIAERESIS, CH_HACK_LATIN_SMALL_LETTER_U_WITH_DIAERESIS},
@@ -1647,13 +1614,9 @@ struct unicodechar unicode_hacks[] = {
     {CH_NO_BREAK_SPACE, CH_HACK_NO_BREAK_SPACE},
 };
 #endif /* CONSOLE_SUPPORT */
-
 #endif /* CH_USE_UNICODE */
-
 #ifdef CURSES_GRAPHICS
-
 int gchar[] = {
-
 // Range (0 .. 31), CP437 display characters:
    CH_FIGURE_SPACE,
    CH_WHITE_SMILING_FACE,
@@ -1687,7 +1650,6 @@ int gchar[] = {
    CH_LEFT_RIGHT_ARROW,
    CH_BLACK_UP_POINTING_TRIANGLE,
    CH_BLACK_DOWN_POINTING_TRIANGLE,
-
 // Range (32 .. 126), ASCII 7-bit-clean characters:
    CH_SPACE,
    CH_EXCLAMATION_MARK,
@@ -1784,10 +1746,8 @@ int gchar[] = {
    CH_VERTICAL_LINE,
    CH_RIGHT_CURLY_BRACKET,
    CH_TILDE,
-
 // Character 127, House display character:
    CH_HOUSE,
-
 // Range (128 .. 255), CP437 extended characters:
    CH_LATIN_CAPITAL_LETTER_C_WITH_CEDILLA,
    CH_LATIN_SMALL_LETTER_U_WITH_DIAERESIS,
@@ -1918,20 +1878,16 @@ int gchar[] = {
    CH_BLACK_SQUARE,
    CH_NO_BREAK_SPACE
 };
-
 #else
 extern int gchar[];
 #endif
-
 #define CH_MAXIMUM 256
-
 #ifndef CH_USE_CP437
 /* Translate CP437 extended characters into the code page used by the console */
 inline int translateGraphicsChar(unsigned char c) { return gchar[c]; }
 #else // CH_USE_CP437
 inline int translateGraphicsChar(unsigned char c) { return c; }
 #endif // CH_USE_CP437
-
 #ifdef NCURSES
 /* Translate PDCurses' numerical color values to NCurses' corresponding
    numerical color values. */

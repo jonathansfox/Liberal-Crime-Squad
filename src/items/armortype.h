@@ -1,14 +1,11 @@
 #ifndef ARMORTYPE_H
 #define ARMORTYPE_H
-
 class ArmorType : public ItemType
 {
    public:
       explicit ArmorType(MCD_STR xmlstring);
       ArmorType(const ArmorType& base, MCD_STR xmlstring);
-      
       bool is_armor() const { return true; }
-      
       int get_make_difficulty() const { return make_difficulty_; }
       int get_make_price() const { return make_price_; }
       int get_quality_levels() const { return quality_levels_; }
@@ -17,10 +14,8 @@ class ArmorType : public ItemType
       // and police behavior laws are arch-conservative, ie when death squads
       // roam.
       bool deathsquad_legality() const { return deathsquad_legality_; }
-      
       bool can_get_bloody() const { return can_get_bloody_; }
       bool can_get_damaged() const { return can_get_damaged_; }
-
       // Returns armor (protection) provided by armor type on specified body
       // part. Use the bodyparts enum values for the parameter.
       int get_armor(int bodypart) const;
@@ -32,16 +27,12 @@ class ArmorType : public ItemType
       bool conceals_face() const { return conceal_face_; }
       // Returns the stealth bonus given by the armor
       int get_stealth_value() const { return stealth_value_; }
-
       const string& get_shortname() const;
-
       int get_interrogation_basepower() const { return interrogation_basepower_; }
       int get_interrogation_assaultbonus() const { return interrogation_assaultbonus_; }
       int get_interrogation_drugbonus() const { return interrogation_drugbonus_; }
-
       // Returns value for professional appearance. Used when soliciting donations.
       int get_professionalism() const { return professionalism_; }
-
       // Returns the largest weapon size concealed by the armor type.
       int get_weaponsize_concealment() const { return conceal_weaponsize_; }
       // Checks if the armor type conceals the given weapon.
@@ -49,26 +40,17 @@ class ArmorType : public ItemType
       bool conceals_weaponsize(int weaponsize) const;
       /*const vector<string>& get_appropriate_weapons() const { return appropriate_weapon_; }
       const string& get_appropriate_weapon(int index) const;*/
-      
-      
       //For masks:
       bool is_mask() const { return mask_; }
       bool is_surprise_mask() const { return surprise_mask_; }
       const string& get_description() const { return description_; }
-      
-      
-   
    private:
-      
       void init(const MCD_STR& xmlstring);
-      
       int make_difficulty_;
       int make_price_;
       bool deathsquad_legality_;
-      
       bool can_get_bloody_;
       bool can_get_damaged_;
-
       int stealth_value_;
       int armor_body_;
       int armor_head_;
@@ -79,29 +61,21 @@ class ArmorType : public ItemType
       bool cover_arms_;
       bool cover_legs_;
       bool conceal_face_;
-
       string shortname_;
       string shortname_future_;
       bool shortname_defined_;
       bool shortname_future_defined_;
-      
-
       int interrogation_basepower_;
       int interrogation_assaultbonus_;
       int interrogation_drugbonus_;
-
       int professionalism_;
-
       int conceal_weaponsize_;
       //vector<string> appropriate_weapon_;
-      
       //For masks:
       bool mask_;
       bool surprise_mask_;
       string description_;
-      
       int quality_levels_;
       int durability_;
 };
-
 #endif //ARMORTYPE_H

@@ -5,7 +5,6 @@
 #include <memory>
 #include <stdexcept>
 #include <xutility>
-
 #ifdef  _MSC_VER
 #pragma pack(push,8)
 #endif  // _MSC_VER
@@ -585,14 +584,11 @@ _STD_END
 #ifdef  _MSC_VER
 #pragma pack(pop)
 #endif  // _MSC_VER
-
 #endif // _NEWVECTOR_
-
 /*
  * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
  * Consult your license regarding permissions and restrictions.
  */
-
 /*
  * This file is derived from software bearing the following
  * restrictions:

@@ -1,6 +1,8 @@
 #ifndef AUGMENTATION_H
 #define AUGMENTATION_H
-
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 enum Augmentations
 {
    AUGMENTATION_HEAD,
@@ -10,7 +12,6 @@ enum Augmentations
    AUGMENTATION_SKIN,
    AUGMENTATIONNUM
 };
-
 class Augmentation
 {
    public:
@@ -26,5 +27,4 @@ class Augmentation
       static std::string get_name(int augmentation_type);
       static int get_associated_attribute(int augmentation_type);
 };
-
 #endif

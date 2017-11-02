@@ -1,8 +1,12 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern int year;
 ArmorType::ArmorType(MCD_STR xmlstring)
  : ItemType(xmlstring),
    make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
@@ -17,7 +21,6 @@ ArmorType::ArmorType(MCD_STR xmlstring)
 {
    init(xmlstring);
 }
-
 ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
  : ItemType(base, xmlstring),
    make_difficulty_(base.make_difficulty_), make_price_(base.make_price_), deathsquad_legality_(base.deathsquad_legality_),
@@ -29,23 +32,18 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
    professionalism_(base.professionalism_), conceal_weaponsize_(base.conceal_weaponsize_),
    mask_(base.mask_), surprise_mask_(base.surprise_mask_), description_(base.description_),
    quality_levels_(base.quality_levels_), durability_(base.durability_)
-
 {
    init(xmlstring);
 }
-
 void ArmorType::init(const MCD_STR& xmlstring)
 {
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-
    xml.IntoElem();
-
    while(xml.FindElem()) //Loop over all the elements inside the armortype element.
    {
       std::string element = xml.GetTagName();
-
       if (element == "make_difficulty")
          make_difficulty_ = atoi(xml.GetData());
       else if (element == "make_price")
@@ -80,11 +78,9 @@ void ArmorType::init(const MCD_STR& xmlstring)
       else if (element == "armor")
       {
          xml.IntoElem();
-
          while(xml.FindElem())
          {
             element = xml.GetTagName();
-
             if (element == "body")
                armor_body_ = atoi(xml.GetData());
             else if (element == "head")
@@ -111,11 +107,9 @@ void ArmorType::init(const MCD_STR& xmlstring)
       else if (element == "body_covering")
       {
          xml.IntoElem();
-
          while(xml.FindElem())
          {
             element = xml.GetTagName();
-
             if (element == "body")
             {
                int b = stringtobool(xml.GetData());
@@ -187,7 +181,6 @@ void ArmorType::init(const MCD_STR& xmlstring)
       else if (element == "interrogation")
       {
          xml.IntoElem();
-
          while(xml.FindElem())
          {
             if (element == "basepower")
@@ -200,7 +193,6 @@ void ArmorType::init(const MCD_STR& xmlstring)
              errorlog << "Unknown element for armor type " << idname()
                          << "::interrogation: " << element << endl;*/
          }
-
          xml.OutOfElem();
       }
       else if (element == "professionalism")
@@ -229,17 +221,14 @@ void ArmorType::init(const MCD_STR& xmlstring)
          description_ = xml.GetData();
       else if (element == "qualitylevels")
          quality_levels_ = max(1,atoi(xml.GetData()));
-
       else if (element == "durability")
          durability_ = max(0,atoi(xml.GetData()));
       /*else
          errorlog << "Unknown element for armor type " << idname() << ": " << element << endl;*/
    }
-
    if (!shortname_defined_ && len(name()) <= 14)
       shortname_ = name();
 }
-
 int ArmorType::get_armor(int bodypart) const
 {
    if(covers(bodypart))
@@ -248,23 +237,18 @@ int ArmorType::get_armor(int bodypart) const
       {
          case BODYPART_HEAD:
             return armor_head_;
-
          case BODYPART_BODY:
             return armor_body_;
-
          case BODYPART_ARM_RIGHT:
          case BODYPART_ARM_LEFT:
             return armor_limbs_;
-
          case BODYPART_LEG_RIGHT:
          case BODYPART_LEG_LEFT:
             return armor_limbs_;
       }
    }
-
    return 0;
 }
-
 bool ArmorType::covers(int bodypart) const
 {
    switch(bodypart)
@@ -276,10 +260,8 @@ bool ArmorType::covers(int bodypart) const
       case BODYPART_LEG_RIGHT:
       case BODYPART_LEG_LEFT: return cover_legs_;
    }
-
    return false;
 }
-
 const string& ArmorType::get_shortname() const
 {
    if (shortname_future_defined_ && year >= 2100)
@@ -293,12 +275,10 @@ const string& ArmorType::get_shortname() const
    else
       return "UNDEF";*/
 }
-
 bool ArmorType::conceals_weaponsize(int weaponsize) const
 {
    return (conceal_weaponsize_ >= weaponsize);
 }
-
 /*const string& get_appropriate_weapon(int index) const
 {
    if (index < len(appropriate_weapon_))

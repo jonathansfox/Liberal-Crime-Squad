@@ -16,16 +16,18 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 // Default constructor
 law::law()
 {
    return;
 }
-
 // Adds the lawtext to the screen
 void law::addlawtext(bool gameover)
 {
@@ -41,15 +43,13 @@ void law::addlawtext(bool gameover)
       addstr(lawtext[alignment+2]); // Alignment starts at -2, array starts at 0
    }
 }
-
 // Set law's alignment
-void law::changealignment(signed char align)
+void law::changealignment(Alignment align)
 {
    alignment = align;
 }
-
 // Set law's text for an alignment
-void law::setlawtext(signed char align,string text)
+void law::setlawtext(Alignment align,string text)
 {
    if(align==-3) // Defeat
       defeat_lawtext = text;

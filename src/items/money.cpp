@@ -1,8 +1,11 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 Money::Money(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;
@@ -11,7 +14,6 @@ Money::Money(const std::string& inputXml) : Item(inputXml)
    xml.IntoElem();
    while(xml.FindElem()) if(xml.GetTagName()=="amount") amount_=atoi(xml.GetData());
 }
-
 string Money::showXml() const
 {
    CMarkup xml;
@@ -21,7 +23,6 @@ string Money::showXml() const
    xml.AddElem("amount",tostring(amount_));
    return xml.GetDoc();
 }
-
 Money* Money::split(int number)
 {
    flatten();
@@ -31,7 +32,6 @@ Money* Money::split(int number)
    amount_-=number;
    return newi;
 }
-
 bool Money::merge(Item& i)
 {
    flatten();
@@ -45,9 +45,7 @@ bool Money::merge(Item& i)
    }
    else return false;
 }
-
 bool Money::sort_compare_special(Item* other) const
 { return other&&!other->is_money(); }
-
 string Money::equip_title() const
 { return "$"+tostring(amount_); }

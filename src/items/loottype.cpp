@@ -1,8 +1,11 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 LootType::LootType(MCD_STR xmlstring)
  : ItemType(xmlstring), stackable_(true),
    no_quick_fencing_(false), cloth_(false)
@@ -11,11 +14,9 @@ LootType::LootType(MCD_STR xmlstring)
    xml.SetDoc(xmlstring);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem()) //Loop over all the elements inside the loottype element.
    {
       std::string element = xml.GetTagName();
-
       if (element == "stackable")
       {
          int b = stringtobool(xml.GetData());

@@ -1,5 +1,4 @@
 /*
-
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
 This file is part of Liberal Crime Squad.                                             //
@@ -18,49 +17,42 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 #if defined(USE_NCURSES)
 #include <term.h>
 #elif defined(USE_NCURSES_W)
 #include <ncursesw/term.h>
 #endif
-
 // These 4 variables to keep track of the current color are for
 // this file only
 short curForeground=COLOR_WHITE,curBackground=COLOR_BLACK;
 bool isBright=false,isBlinking=false;
-
 //sets current color to desired setting
 void set_color(short f,short b,bool bright,bool blink)
 {
    // keep track of current color
    curForeground=f,curBackground=b,isBright=bright,isBlinking=blink;
-
    //color swap required for PDcurses
    if(f==7&&b==0) f=0,b=0;
    else if(f==0&&b==0) f=7,b=0;
-
    chtype blinky=(blink?A_BLINK:0), brighty=(bright?A_BOLD:0);
-
    //pick color pair based on foreground and background
    attrset(brighty | blinky | COLOR_PAIR(f*8+b));
 }
-
-
-
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
@@ -73,7 +65,6 @@ void translategetch(int &c)
    //if(c==-57)c='1';
    //if(c==-56)c='2';
    //if(c==-55)c='3';
-
    if(c== -6||c==0x1FA) c='0';
    if(c==-50||c==0x1CE) c='.';
    if(c==-53||c==0x1CB) c=ENTER;
@@ -81,14 +72,12 @@ void translategetch(int &c)
    if(c==-48||c==0x1D0) c='-';
    if(c==-49||c==0x1CF) c='*';
    if(c==-54||c==0x1CA) c='/';
-
    /*
    if(c==2)c='2';
    if(c==3)c='8';
    if(c==4)c='4';
    if(c==5)c='6';
    */
-
    // SPECIAL TRANSLATION for AZERTY keyboard
    if(interface_pgup=='.')
    {
@@ -105,19 +94,13 @@ void translategetch(int &c)
       if(c==0x87)c='9';
       if(c==0x85)c='0';
    }
-
    if(c>='A'&&c<='Z'){c+='a'-'A';}
-
    /* Support Cursor Keys...*/
    //if(c==KEY_LEFT)c='a';
    //if(c==KEY_RIGHT)c='d';
    //if(c==KEY_UP)c='w';
    //if(c==KEY_DOWN)c='x';
-
 }
-
-
-
 void translategetch_cap(int &c)
 {
    //if(c==-63)c='7';
@@ -129,7 +112,6 @@ void translategetch_cap(int &c)
    //if(c==-57)c='1';
    //if(c==-56)c='2';
    //if(c==-55)c='3';
-
    if(c== -6||c==0x1FA) c='0';
    if(c==-50||c==0x1CE) c='.';
    if(c==-53||c==0x1CB) c=ENTER;
@@ -137,7 +119,6 @@ void translategetch_cap(int &c)
    if(c==-48||c==0x1D0) c='-';
    if(c==-49||c==0x1CF) c='*';
    if(c==-54||c==0x1CA) c='/';
-
    /*
    if(c==2)c='2';
    if(c==3)c='8';
@@ -145,9 +126,6 @@ void translategetch_cap(int &c)
    if(c==5)c='6';
    */
 }
-
-
-
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
 int getkey()
 {
@@ -159,9 +137,6 @@ int getkey()
    translategetch(c);
    return c;
 }
-
-
-
 /* Variant of getkey() that doesn't make all letters lowercase */
 int getkey_cap()
 {
@@ -173,9 +148,6 @@ int getkey_cap()
    translategetch_cap(c);
    return c;
 }
-
-
-
 /* Empties the keyboard buffer, and returns most recent key pressed, if any */
 int checkkey()
 {
@@ -190,9 +162,6 @@ int checkkey()
    nodelay(stdscr,FALSE);
    return ret;
 }
-
-
-
 /* Variant of checkkey() that doesn't make all letters lowercase */
 int checkkey_cap()
 {
@@ -207,12 +176,8 @@ int checkkey_cap()
    nodelay(stdscr,FALSE);
    return ret;
 }
-
-
-
 #ifdef CH_USE_UNICODE
 bool unicode_enabled = false;
-
 bool setup_unicode() {
    #ifdef WIN32
    #ifdef PDC_WIDE
@@ -226,7 +191,6 @@ bool setup_unicode() {
    #endif
    return unicode_enabled;
 }
-
 int lookup_unicode_hack(int c) {
    for(int i=0;i<len(unicode_hacks);i++)
       if(unicode_hacks[i].unicode_char==c)
@@ -234,7 +198,6 @@ int lookup_unicode_hack(int c) {
    return '?';
 }
 #endif
-
 #ifndef CH_USE_CP437
 // This function's for both UTF-8 and the ASCII hack (only disabled in pure CP437 mode)
 int addch_unicode(int c) {
@@ -242,12 +205,10 @@ int addch_unicode(int c) {
 // This part here is for Unicode only, not the ASCII hack
    wchar_t wch;
    cchar_t cch;
-
    if (unicode_enabled) {
       // We can do this because we've already verified
       // that __STDC_ISO_10646__ is set.
       wch = c;
-
       setcchar(&cch, &wch, 0, 0, NULL);
       return add_wch(&cch);
    } else {
@@ -268,7 +229,6 @@ int addch_unicode(int c) {
 #endif
 }
 #endif
-
 void set_title(char *s)
 {
 #ifdef NCURSES
@@ -277,22 +237,18 @@ void set_title(char *s)
       char buf[255]={0};
       char *p=buf; // tgetstr modifies its second argument, let buf keep pointing to the beginning
       char *ok; // tgetstr's return value is apparently undocumented, except that it's NULL on errors
-
       ok=tgetstr("tsl",&p); // "to status line"
       if(!ok) return;
       strcpy(p-1,s); // tgetstr leaves us *after* the null, so skip back a bit
       p+=len(s)-1; // same here
-
       ok=tgetstr("fsl",&p); // "from status line"
       if(!ok) return;
-
       putp(buf);
    }
 #else // assume pdcurses
    PDC_set_title(s);
 #endif
 }
-
 // Initialize the console, depending on the OS and language/code page settings
 void init_console()
 {
@@ -317,22 +273,15 @@ void init_console()
    setup_unicode();
    #endif
 }
-
 #ifdef WIN32
-#undef FE_FONTSMOOTHINGSTANDARD
 #define  FE_FONTSMOOTHINGSTANDARD           1
-#undef FE_FONTSMOOTHINGCLEARTYPE
 #define  FE_FONTSMOOTHINGCLEARTYPE          2
 #define  SPI_GETFONTSMOOTHINGTYPE      0x200A
-#undef SPI_SETFONTSMOOTHINGTYPE
 #define  SPI_SETFONTSMOOTHINGTYPE      0X200B
-#undef SPI_GETFONTSMOOTHINGCONTRAST
 #define  SPI_GETFONTSMOOTHINGCONTRAST  0X200C
-#undef SPI_SETFONTSMOOTHINGCONTRAST
 #define  SPI_SETFONTSMOOTHINGCONTRAST  0X200D
 BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
-
 void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
 {
    if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
@@ -367,7 +316,6 @@ void begin_cleartype_fix() // execute this function after loading settings from 
       }
 	}
 }
-
 void end_cleartype_fix() // execute this function after the user is done playing the game, but before the program closes
 {
    if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later

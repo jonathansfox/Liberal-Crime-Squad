@@ -1,34 +1,14 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
-#define City(X)                  location.push_back(city = new Location(X)); \
-                                 city->id = id++;
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern vector<Location *> location;
+extern bool multipleCityMode;
 
-#define District(X, Y)           if(city) district = city->addchild(X); \
-                                 else location.push_back(district = new Location(X)); \
-                                 district->id = id++; \
-                                 district->area = Y;
-
-#define DistrictProperty(X, Y)   district->X = Y;
-#define DistrictName(Y)          strcpy(district->name, Y);
-#define DistrictShortname(Y)     strcpy(district->shortname, Y);
-
-#define Site(X)                  site = district->addchild(X); \
-                                 site->id = id++;
-
-#define SiteProperty(X, Y)       site->X = Y;
-#define SiteName(Y)              strcpy(site->name, Y);
-#define SiteShortname(Y)         strcpy(site->shortname, Y);
-
-Location* find_site_by_id(int id)
-{
-   for(int i=0;i<len(location);i++)
-      if(location[i]->id==id)
-         return location[i];
-   return NULL;
-}
 
 Location* find_site_in_city(int site_type, int city)
 {
@@ -36,7 +16,6 @@ Location* find_site_in_city(int site_type, int city)
    if(i!=-1) return location[i];
    else return NULL;
 }
-
 int find_site_index_in_city(int site_type, int city)
 {
    for(int i=0;i<len(location);i++)
@@ -44,7 +23,6 @@ int find_site_index_in_city(int site_type, int city)
          return i;
    return -1;
 }
-
 int find_site_index_in_same_city(int site_type, int site_index)
 {
    int city=-1;
@@ -54,281 +32,500 @@ int find_site_index_in_same_city(int site_type, int site_index)
 
 void make_classic_world(bool hasmaps)
 {
-   Location* city = NULL;
-   Location* district = NULL;
-   Location* site = NULL;
-   int id = 0;
-
-   District(SITE_DOWNTOWN, 0)
-      DistrictProperty(mapped, hasmaps) // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-      Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_GOVERNMENT_POLICESTATION)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_GOVERNMENT_COURTHOUSE)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_BUSINESS_BANK)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_GOVERNMENT_FIRESTATION)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_MEDIA_AMRADIO)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_MEDIA_CABLENEWS)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_BUSINESS_CIGARBAR)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_BUSINESS_LATTESTAND)
-         SiteProperty(mapped, hasmaps)
-      Site(SITE_BUSINESS_BARANDGRILL)
-         SiteProperty(renting, RENTING_CCS)
-         SiteProperty(hidden, true)
-         SiteProperty(mapped, false)
-   District(SITE_COMMERCIAL, 0)
-      Site(SITE_BUSINESS_DEPTSTORE)
-      Site(SITE_BUSINESS_PAWNSHOP)
-      Site(SITE_BUSINESS_HALLOWEEN)
-      Site(SITE_BUSINESS_CARDEALERSHIP)
-   District(SITE_UDISTRICT, 0)
-      Site(SITE_RESIDENTIAL_APARTMENT)
-      Site(SITE_HOSPITAL_UNIVERSITY)
-      Site(SITE_HOSPITAL_CLINIC)
-      Site(SITE_LABORATORY_GENETIC)
-      Site(SITE_LABORATORY_COSMETICS)
-      Site(SITE_BUSINESS_VEGANCOOP)
-      Site(SITE_BUSINESS_JUICEBAR)
-      Site(SITE_BUSINESS_INTERNETCAFE)
-      Site(SITE_OUTDOOR_PUBLICPARK)
-   District(SITE_INDUSTRIAL, 0)
-      Site(SITE_RESIDENTIAL_SHELTER)
-         SiteProperty(renting, RENTING_PERMANENT)
-      Site(SITE_INDUSTRY_WAREHOUSE)
-         SiteProperty(renting, RENTING_PERMANENT)
-         SiteProperty(upgradable, true)
-      Site(SITE_RESIDENTIAL_TENEMENT)
-      Site(SITE_INDUSTRY_POLLUTER)
-      Site(SITE_INDUSTRY_SWEATSHOP)
-      Site(SITE_BUSINESS_CRACKHOUSE)
-         SiteProperty(upgradable, true)
-      Site(SITE_RESIDENTIAL_BOMBSHELTER)
-         SiteProperty(renting, RENTING_CCS)
-         SiteProperty(hidden, true)
-   District(SITE_OUTOFTOWN, 1)
-      Site(SITE_GOVERNMENT_PRISON)
-      Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
-      Site(SITE_INDUSTRY_NUCLEAR)
-      Site(SITE_CORPORATE_HEADQUARTERS)
-      Site(SITE_CORPORATE_HOUSE)
-      Site(SITE_GOVERNMENT_ARMYBASE)
-      Site(SITE_OUTDOOR_BUNKER)
-         SiteProperty(renting, RENTING_CCS)
-         SiteProperty(hidden, true)
-   District(SITE_TRAVEL, 1)
-      Site(SITE_GOVERNMENT_WHITE_HOUSE)
+	Location* city = NULL;
+	Location* district = NULL;
+	Location* site = NULL;
+	//int id = 0;
+	if (city) district = city->addchild(SITE_DOWNTOWN);
+	else location.push_back(district = new Location(SITE_DOWNTOWN));
+	// = id++;
+	district->area = 0;
+	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_BANK);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_MEDIA_AMRADIO);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_MEDIA_CABLENEWS);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_CIGARBAR);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_LATTESTAND);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_BARANDGRILL);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	site->mapped = false;
+	if (city) district = city->addchild(SITE_COMMERCIAL);
+	else location.push_back(district = new Location(SITE_COMMERCIAL));
+	// = id++;
+	district->area = 0;
+	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	// = id++;
+	if (city) district = city->addchild(SITE_UDISTRICT);
+	else location.push_back(district = new Location(SITE_UDISTRICT));
+	// = id++;
+	district->area = 0;
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_CLINIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_GENETIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_COSMETICS);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_JUICEBAR);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	// = id++;
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	if (city) district = city->addchild(SITE_INDUSTRIAL);
+	else location.push_back(district = new Location(SITE_INDUSTRIAL));
+	// = id++;
+	district->area = 0;
+	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site->upgradable = true;
+	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_POLLUTER);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
+	// = id++;
+	site->upgradable = true;
+	site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	if (city) district = city->addchild(SITE_OUTOFTOWN);
+	else location.push_back(district = new Location(SITE_OUTOFTOWN));
+	// = id++;
+	district->area = 1;
+	site = district->addchild(SITE_GOVERNMENT_PRISON);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
+	// = id++;
+	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	// = id++;
+	site = district->addchild(SITE_CORPORATE_HOUSE);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	// = id++;
+	site = district->addchild(SITE_OUTDOOR_BUNKER);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	if (city) district = city->addchild(SITE_TRAVEL);
+	else location.push_back(district = new Location(SITE_TRAVEL));
+	// = id++;
+	district->area = 1;
+	site = district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
+	// = id++;
 }
-
 void make_world(bool hasmaps)
 {
-   if(!multipleCityMode)
-   {
-      make_classic_world(hasmaps);
-      return;
-   }
-
-   //MAKE LOCATIONS
-   Location* city = NULL;
-   Location* district = NULL;
-   Location* site = NULL;
-   int id = 0;
-
-   // Seattle
-   City(SITE_CITY_SEATTLE)
-      District(SITE_DOWNTOWN, 0)
-         DistrictProperty(mapped, hasmaps) // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-         Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_GOVERNMENT_POLICESTATION)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_GOVERNMENT_COURTHOUSE)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_BUSINESS_BANK)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_GOVERNMENT_FIRESTATION)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_MEDIA_AMRADIO)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_BUSINESS_CIGARBAR)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_BUSINESS_LATTESTAND)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_BUSINESS_DEPTSTORE)
-            SiteProperty(mapped, hasmaps)
-         Site(SITE_BUSINESS_BARANDGRILL)
-            SiteProperty(renting, RENTING_CCS)
-            SiteProperty(hidden, true)
-            SiteProperty(mapped, false)
-      District(SITE_UDISTRICT, 0)
-         Site(SITE_RESIDENTIAL_APARTMENT)
-         Site(SITE_HOSPITAL_UNIVERSITY)
-         Site(SITE_HOSPITAL_CLINIC)
-         Site(SITE_LABORATORY_GENETIC)
-         Site(SITE_LABORATORY_COSMETICS)
-         Site(SITE_BUSINESS_VEGANCOOP)
-         Site(SITE_BUSINESS_JUICEBAR)
-         Site(SITE_BUSINESS_INTERNETCAFE)
-         Site(SITE_OUTDOOR_PUBLICPARK)
-         Site(SITE_BUSINESS_HALLOWEEN)
-      District(SITE_INDUSTRIAL, 0)
-         Site(SITE_RESIDENTIAL_SHELTER)
-            SiteProperty(renting, RENTING_PERMANENT)
-         Site(SITE_INDUSTRY_WAREHOUSE)
-            SiteProperty(renting, RENTING_PERMANENT)
-            SiteProperty(upgradable, true)
-         Site(SITE_RESIDENTIAL_TENEMENT)
-         Site(SITE_INDUSTRY_POLLUTER)
-         Site(SITE_INDUSTRY_SWEATSHOP)
-         Site(SITE_BUSINESS_CRACKHOUSE)
-            SiteProperty(upgradable, true)
-         Site(SITE_BUSINESS_PAWNSHOP)
-         Site(SITE_BUSINESS_CARDEALERSHIP)
-      District(SITE_OUTOFTOWN, 1)
-         Site(SITE_GOVERNMENT_PRISON)
-         Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
-         //Site(SITE_INDUSTRY_NUCLEAR)
-         Site(SITE_CORPORATE_HEADQUARTERS)
-         //Site(SITE_CORPORATE_HOUSE)
-         Site(SITE_GOVERNMENT_ARMYBASE)
-   // New York City
-   City(SITE_CITY_NEW_YORK)
-      District(SITE_DOWNTOWN, 0)
-         DistrictName("Manhattan Island")
-         DistrictShortname("Manhattan")
-         //DistrictProperty(mapped, hasmaps)
-         Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
-         Site(SITE_GOVERNMENT_POLICESTATION)
-         Site(SITE_GOVERNMENT_COURTHOUSE)
-         Site(SITE_BUSINESS_BANK)
-         Site(SITE_CORPORATE_HEADQUARTERS)
-         Site(SITE_MEDIA_AMRADIO)
-         Site(SITE_MEDIA_CABLENEWS)
-         Site(SITE_BUSINESS_CIGARBAR)
-         //Site(SITE_CORPORATE_HOUSE)
-         //Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
-         Site(SITE_OUTDOOR_PUBLICPARK)
-         Site(SITE_BUSINESS_DEPTSTORE)
-         Site(SITE_GOVERNMENT_PRISON)
-      District(SITE_UDISTRICT, 0)
-         DistrictName("Brooklyn & Queens")
-         DistrictShortname("Long Island")
-         Site(SITE_INDUSTRY_WAREHOUSE)
-            SiteProperty(renting, RENTING_PERMANENT)
-            SiteProperty(upgradable, true)
-         Site(SITE_RESIDENTIAL_APARTMENT)
-         Site(SITE_GOVERNMENT_FIRESTATION)
-         Site(SITE_HOSPITAL_UNIVERSITY)
-         Site(SITE_HOSPITAL_CLINIC)
-         Site(SITE_BUSINESS_JUICEBAR)
-         Site(SITE_BUSINESS_INTERNETCAFE)
-         Site(SITE_INDUSTRY_POLLUTER)
-         Site(SITE_LABORATORY_GENETIC)
-         Site(SITE_GOVERNMENT_ARMYBASE)
-         Site(SITE_RESIDENTIAL_BOMBSHELTER)
-            SiteProperty(renting, RENTING_CCS)
-            SiteProperty(hidden, true)
-      District(SITE_INDUSTRIAL, 0)
-         DistrictName("The Bronx")
-         DistrictShortname("The Bronx")
-         Site(SITE_RESIDENTIAL_SHELTER)
-            SiteProperty(renting, RENTING_PERMANENT)
-         Site(SITE_RESIDENTIAL_TENEMENT)
-         Site(SITE_INDUSTRY_POLLUTER)
-         Site(SITE_INDUSTRY_SWEATSHOP)
-         Site(SITE_LABORATORY_COSMETICS)
-         Site(SITE_BUSINESS_VEGANCOOP)
-         Site(SITE_BUSINESS_PAWNSHOP)
-         Site(SITE_BUSINESS_CARDEALERSHIP)
-         Site(SITE_BUSINESS_CRACKHOUSE)
-            SiteProperty(upgradable, true)
-         Site(SITE_OUTDOOR_PUBLICPARK)
-      District(SITE_OUTOFTOWN, 1)
-         Site(SITE_INDUSTRY_NUCLEAR)
-   // Los Angeles
-   City(SITE_CITY_LOS_ANGELES)
-      District(SITE_DOWNTOWN, 0)
-         //DistrictProperty(mapped, hasmaps)
-         Site(SITE_RESIDENTIAL_SHELTER)
-            SiteProperty(renting, RENTING_PERMANENT)
-         Site(SITE_RESIDENTIAL_APARTMENT)
-         Site(SITE_GOVERNMENT_POLICESTATION)
-         Site(SITE_GOVERNMENT_COURTHOUSE)
-         Site(SITE_BUSINESS_BANK)
-         Site(SITE_GOVERNMENT_FIRESTATION)
-         Site(SITE_CORPORATE_HEADQUARTERS)
-         Site(SITE_HOSPITAL_UNIVERSITY)
-         Site(SITE_BUSINESS_DEPTSTORE)
-      District(SITE_UDISTRICT, 0)
-         DistrictName("Greater Hollywood")
-         DistrictShortname("Hollywood")
-         Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
-         Site(SITE_BUSINESS_VEGANCOOP)
-         Site(SITE_BUSINESS_HALLOWEEN)
-         Site(SITE_BUSINESS_CIGARBAR)
-         //Site(SITE_MEDIA_CABLENEWS)
-         Site(SITE_MEDIA_AMRADIO)
-         Site(SITE_OUTDOOR_PUBLICPARK)
-         Site(SITE_CORPORATE_HOUSE)
-      District(SITE_INDUSTRIAL, 0)
-         DistrictName("Seaport Area")
-         DistrictShortname("Seaport")
-         Site(SITE_INDUSTRY_WAREHOUSE)
-            SiteProperty(renting, RENTING_PERMANENT)
-            SiteProperty(upgradable, true)
-         Site(SITE_RESIDENTIAL_TENEMENT)
-         Site(SITE_HOSPITAL_CLINIC)
-         Site(SITE_LABORATORY_GENETIC)
-         Site(SITE_LABORATORY_COSMETICS)
-         Site(SITE_INDUSTRY_POLLUTER)
-         Site(SITE_BUSINESS_PAWNSHOP)
-         Site(SITE_INDUSTRY_SWEATSHOP)
-         Site(SITE_BUSINESS_CARDEALERSHIP)
-         Site(SITE_BUSINESS_CRACKHOUSE)
-            SiteProperty(upgradable, true)
-      District(SITE_OUTOFTOWN, 1)
-         DistrictName("Outskirts & Orange County")
-         Site(SITE_GOVERNMENT_PRISON)
-         //Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
-         Site(SITE_INDUSTRY_NUCLEAR)
-         Site(SITE_GOVERNMENT_ARMYBASE)
-         Site(SITE_OUTDOOR_BUNKER)
-            SiteProperty(renting, RENTING_CCS)
-            SiteProperty(hidden, true)
-   // Washington, DC
-   City(SITE_CITY_WASHINGTON_DC)
-      District(SITE_DOWNTOWN, 0)
-         DistrictName("Downtown")
-         //DistrictProperty(mapped, hasmaps)
-         Site(SITE_GOVERNMENT_POLICESTATION)
-         Site(SITE_GOVERNMENT_FIRESTATION)
-         Site(SITE_GOVERNMENT_COURTHOUSE)
-         Site(SITE_BUSINESS_BANK)
-         Site(SITE_BUSINESS_CARDEALERSHIP)
-         Site(SITE_HOSPITAL_CLINIC)
-         Site(SITE_HOSPITAL_UNIVERSITY)
-         Site(SITE_BUSINESS_DEPTSTORE)
-         Site(SITE_RESIDENTIAL_SHELTER)
-            SiteProperty(renting, RENTING_PERMANENT)
-      District(SITE_UDISTRICT, 0)
-         DistrictName("National Mall")
-         DistrictShortname("Mall")
-         Site(SITE_OUTDOOR_PUBLICPARK)
-         Site(SITE_GOVERNMENT_WHITE_HOUSE)
-      District(SITE_OUTOFTOWN, 1)
-         DistrictName("Arlington")
-         Site(SITE_GOVERNMENT_PRISON)
-         Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
-         Site(SITE_GOVERNMENT_ARMYBASE)
-
-   //City(SITE_CITY_CHICAGO);
-   //City(SITE_CITY_DETROIT);
-   //City(SITE_CITY_ATLANTA);
-   //City(SITE_CITY_MIAMI);
+	if (!multipleCityMode)
+	{
+		make_classic_world(hasmaps);
+		return;
+	}
+	//MAKE LOCATIONS
+	Location* city = NULL;
+	Location* district = NULL;
+	Location* site = NULL;
+	//int id = 0;
+	// Seattle
+	location.push_back(city = new Location(SITE_CITY_SEATTLE));
+	// = id++;
+	if (city) district = city->addchild(SITE_DOWNTOWN);
+	else location.push_back(district = new Location(SITE_DOWNTOWN));
+	// = id++;
+	district->area = 0;
+	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_BANK);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_MEDIA_AMRADIO);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_CIGARBAR);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_LATTESTAND);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
+	// = id++;
+	site->mapped = hasmaps;
+	site = district->addchild(SITE_BUSINESS_BARANDGRILL);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	site->mapped = false;
+	if (city) district = city->addchild(SITE_UDISTRICT);
+	else location.push_back(district = new Location(SITE_UDISTRICT));
+	// = id++;
+	district->area = 0;
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_CLINIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_GENETIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_COSMETICS);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_JUICEBAR);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	// = id++;
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
+	// = id++;
+	if (city) district = city->addchild(SITE_INDUSTRIAL);
+	else location.push_back(district = new Location(SITE_INDUSTRIAL));
+	// = id++;
+	district->area = 0;
+	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site->upgradable = true;
+	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_POLLUTER);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
+	// = id++;
+	site->upgradable = true;
+	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	// = id++;
+	if (city) district = city->addchild(SITE_OUTOFTOWN);
+	else location.push_back(district = new Location(SITE_OUTOFTOWN));
+	// = id++;
+	district->area = 1;
+	site = district->addchild(SITE_GOVERNMENT_PRISON);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	// = id++;
+	//site = district->addchild(SITE_INDUSTRY_NUCLEAR); 
+	//// = id++;
+	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	// = id++;
+	//site = district->addchild(SITE_CORPORATE_HOUSE); 
+	//// = id++;
+	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	// = id++;
+	// New York City
+	location.push_back(city = new Location(SITE_CITY_NEW_YORK));
+	// = id++;
+	if (city) district = city->addchild(SITE_DOWNTOWN);
+	else location.push_back(district = new Location(SITE_DOWNTOWN));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "Manhattan Island");
+	strcpy(district->shortname, "Manhattan");
+	//district->mapped = hasmaps;
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_BANK);
+	// = id++;
+	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	// = id++;
+	site = district->addchild(SITE_MEDIA_AMRADIO);
+	// = id++;
+	site = district->addchild(SITE_MEDIA_CABLENEWS);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CIGARBAR);
+	// = id++;
+	//site = district->addchild(SITE_CORPORATE_HOUSE); 
+	//// = id++;
+	//site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ); 
+	//// = id++;
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_PRISON);
+	// = id++;
+	if (city) district = city->addchild(SITE_UDISTRICT);
+	else location.push_back(district = new Location(SITE_UDISTRICT));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "Brooklyn & Queens");
+	strcpy(district->shortname, "Long Island");
+	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site->upgradable = true;
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_CLINIC);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_JUICEBAR);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_POLLUTER);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_GENETIC);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	// = id++;
+	site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	if (city) district = city->addchild(SITE_INDUSTRIAL);
+	else location.push_back(district = new Location(SITE_INDUSTRIAL));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "The Bronx");
+	strcpy(district->shortname, "The Bronx");
+	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_POLLUTER);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_COSMETICS);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
+	// = id++;
+	site->upgradable = true;
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	if (city) district = city->addchild(SITE_OUTOFTOWN);
+	else location.push_back(district = new Location(SITE_OUTOFTOWN));
+	// = id++;
+	district->area = 1;
+	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
+	// = id++;
+	// Los Angeles
+	location.push_back(city = new Location(SITE_CITY_LOS_ANGELES));
+	// = id++;
+	if (city) district = city->addchild(SITE_DOWNTOWN);
+	else location.push_back(district = new Location(SITE_DOWNTOWN));
+	// = id++;
+	district->area = 0;
+	//district->mapped = hasmaps;
+	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_BANK);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	// = id++;
+	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
+	// = id++;
+	if (city) district = city->addchild(SITE_UDISTRICT);
+	else location.push_back(district = new Location(SITE_UDISTRICT));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "Greater Hollywood");
+	strcpy(district->shortname, "Hollywood");
+	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CIGARBAR);
+	// = id++;
+	//site = district->addchild(SITE_MEDIA_CABLENEWS); 
+	//// = id++;
+	site = district->addchild(SITE_MEDIA_AMRADIO);
+	// = id++;
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	site = district->addchild(SITE_CORPORATE_HOUSE);
+	// = id++;
+	if (city) district = city->addchild(SITE_INDUSTRIAL);
+	else location.push_back(district = new Location(SITE_INDUSTRIAL));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "Seaport Area");
+	strcpy(district->shortname, "Seaport");
+	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	site->upgradable = true;
+	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_CLINIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_GENETIC);
+	// = id++;
+	site = district->addchild(SITE_LABORATORY_COSMETICS);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_POLLUTER);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
+	// = id++;
+	site->upgradable = true;
+	if (city) district = city->addchild(SITE_OUTOFTOWN);
+	else location.push_back(district = new Location(SITE_OUTOFTOWN));
+	// = id++;
+	district->area = 1;
+	strcpy(district->name, "Outskirts & Orange County");
+		site = district->addchild(SITE_GOVERNMENT_PRISON);
+	// = id++;
+	//site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ); 
+	// = id++;
+	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	// = id++;
+	site = district->addchild(SITE_OUTDOOR_BUNKER);
+	// = id++;
+	site->renting = RENTING_CCS;
+	site->hidden = true;
+	// Washington, DC
+	location.push_back(city = new Location(SITE_CITY_WASHINGTON_DC));
+	// = id++;
+	if (city) district = city->addchild(SITE_DOWNTOWN);
+	else location.push_back(district = new Location(SITE_DOWNTOWN));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "Downtown");
+	//district->mapped = hasmaps;
+	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_BANK);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_CLINIC);
+	// = id++;
+	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	// = id++;
+	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
+	// = id++;
+	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
+	// = id++;
+	site->renting = RENTING_PERMANENT;
+	if (city) district = city->addchild(SITE_UDISTRICT);
+	else location.push_back(district = new Location(SITE_UDISTRICT));
+	// = id++;
+	district->area = 0;
+	strcpy(district->name, "National Mall");
+	strcpy(district->shortname, "Mall");
+	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
+	// = id++;
+	if (city) district = city->addchild(SITE_OUTOFTOWN);
+	else location.push_back(district = new Location(SITE_OUTOFTOWN));
+	// = id++;
+	district->area = 1;
+	strcpy(district->name, "Arlington");
+	site = district->addchild(SITE_GOVERNMENT_PRISON);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	// = id++;
+	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	// = id++;
+	//location.push_back(city = new Location(SITE_CITY_CHICAGO));
+	//// = id++;;
+	//location.push_back(city = new Location(SITE_CITY_DETROIT));
+	//// = id++;;
+	//location.push_back(city = new Location(SITE_CITY_ATLANTA));
+	//// = id++;;
+	//location.push_back(city = new Location(SITE_CITY_MIAMI));
+	//// = id++;;
 }

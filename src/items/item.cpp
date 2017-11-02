@@ -1,14 +1,16 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 Item::Item(const ItemType& seed, int number) : number_(number)
 {
    itemtypename_=seed.get_idname();
    itemtypeid_=seed.get_id();
 }
-
 Item::Item(const std::string& inputXml)
 {
    CMarkup xml;
@@ -23,14 +25,12 @@ Item::Item(const std::string& inputXml)
       else if(tag=="number") number_=atoi(xml.GetData());
    }
 }
-
 void Item::addBaseValues(CMarkup& xml) const
 {
    xml.AddElem("itemtypename",itemtypename_);
    xml.AddElem("itemtypeid",itemtypeid_);
    xml.AddElem("number",tostring(number_));
 }
-
 /*Item* Item::split(int number)
 {
    if(amount>number_) amount=number_;
@@ -39,7 +39,6 @@ void Item::addBaseValues(CMarkup& xml) const
    this->number_-=amount;
    return newi;
 }*/
-
 /* compares two items (in descending order, hence the flipped arguments), used in sorting gear */
 bool Item::sort_compare(Item *b,Item *a)
 {
@@ -53,7 +52,6 @@ bool Item::sort_compare(Item *b,Item *a)
    else if(!a->is_loot()&&b->is_loot()) return true;
    else return a->sort_compare_special(b);
 }
-
 const char* Item::aan() const
 {
    switch(get_name()[0])

@@ -19,7 +19,6 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
-
 /**
 * cursesgraphics.cpp
 *
@@ -57,11 +56,7 @@
 *
 *
 */
-
 #define CURSES_GRAPHICS // define this BEFORE including anything
-
-#include <includes.h>
-
 #ifdef NCURSES
 /* Translates PDCurses' numerical color values to NCurses' corresponding
    numerical color values.

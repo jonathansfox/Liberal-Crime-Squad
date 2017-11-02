@@ -1,6 +1,5 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
-
 // OBJECTIVE: SUPPORT TAB-SEPARATED CONFIGURATION FILES
 //   TO MAKE LCS CONTENT HIGHLY MODDABLE AND DATA-DRIVEN,
 //   INCLUDING EQUIPMENT, LOCATIONS, MAPS, CREATURES,
@@ -71,9 +70,9 @@
 // ... and more?
 //
 // ~ Jonathan S. Fox
-
-#include "includes.h"
-
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 // - configurable is a base class object for anything
 //   that is implemented in the config file
 // - configurable objects implement a configure() method
@@ -84,7 +83,6 @@ public:
    void virtual configure(const std::string& command, const std::string& value) = 0;
 private:
 };
-
 // Reads in an entire configuration file
 // Returns 0 for read successful, returns -1 if failed read
 int readConfigFile(const std::string& filename);
@@ -92,8 +90,6 @@ int readConfigFile(const std::string& filename);
 int readLine(std::ifstream& file, std::string& command, std::string& value);
 // Constructs the new object, returns a pointer to it
 configurable* createObject(const std::string& objectType);
-
 // Reads in an entire map; returns true if and only if the read was successful
 bool readMap(const std::string& filename);
-
 #endif

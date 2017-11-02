@@ -1,34 +1,34 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+extern char homedir[MAX_PATH_SIZE];
+extern char artdir[MAX_PATH_SIZE];
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
    std::ifstream* file = new std::ifstream();
    addstr("Attempting to open filename: ");
    addstr(filename);
-   addstr(" ");
-
+   addstr(singleSpace);
    file->open((artdir+filename).c_str(), format);
-
    return file;
 }
-
 // Reads in an entire configuration file
 // Returns true for read successful, returns false if failed read
 int readConfigFile(const std::string& filename)
 {
    std::string command, value;
    configurable* object=0;
-
    std::ifstream* file = openFile(filename, ios::in);
    if(!file->is_open())
    {
       delete file;
       return false; // Unable to open; failed read
    }
-
    // loop through lines
    while(readLine(*file, command, value))
       // if COMMAND is OBJECT,
@@ -48,14 +48,11 @@ int readConfigFile(const std::string& filename)
    delete file;
    return true;
 }
-
-
 // readLine reads a line from the file, parses it
 int readLine(std::ifstream& file, std::string& command, std::string& value)
 {
    std::string line;
    int source=0;
-
    // Search for a non-comment, non-empty line
    do
    {
@@ -64,26 +61,19 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
       line.erase(std::remove(line.begin(),line.end(),'\r'),line.end());
       line.erase(std::remove(line.begin(),line.end(),'\n'),line.end());
    } while(!len(line)||line[0]=='#');
-
    // Parse the line
    command.clear();
    value.clear();
-
    // Leading whitespace
    for(;source<len(line)&&(line[source]==' '||line[source]=='\t');source++);
-
    // Command
    for(;source<len(line)&&(line[source]!=' '&&line[source]!='\t');command.push_back(line[source++]));
-
    // Delimiting whitespace
    for(;source<len(line)&&(line[source]==' '||line[source]=='\t');source++);
-
    // Value
    for(;source<len(line)&&(line[source]!=' '&&line[source]!='\t');value.push_back(line[source++]));
-
    return true;
 }
-
 // Constructs the new object, returns a pointer to it
 configurable* createObject(const std::string& objectType)
 {
@@ -92,7 +82,6 @@ configurable* createObject(const std::string& objectType)
       sitemaps.push_back(static_cast<configSiteMap*>(object=new configSiteMap));
    return object;
 }
-
 void readMapCBSpecials(int x, int y, int z, int i)
 {
    switch(i)
@@ -143,7 +132,6 @@ void readMapCBSpecials(int x, int y, int z, int i)
    case 42: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_SE; break;
    }
 }
-
 void makeDoor(int x,int y,int z,int flags=0)
 {
    levelmap[x][y][z].flag=SITEBLOCK_DOOR|flags;
@@ -151,7 +139,6 @@ void makeDoor(int x,int y,int z,int flags=0)
       (y>0&&(levelmap[x][y-1][z].flag&SITEBLOCK_RESTRICTED)))
       levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
 }
-
 void readMapCBTiles(int x, int y, int z, int i)
 {
    switch(i)
@@ -176,26 +163,22 @@ void readMapCBTiles(int x, int y, int z, int i)
    case 11: makeDoor(x,y,z,SITEBLOCK_LOCKED|SITEBLOCK_METAL); break;
    }
 }
-
 bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,int,int,int))
 {
    // open the file in question
    std::ifstream* file = openFile(filename, ios::in);
-
    // abort if the file couldn't be opened
    if(!file->is_open())
    {
       delete file;
       return false;
    }
-
    for(int y=0,z=zLevel;!file->eof();y++)
    {
       std::string line;
       getline(*file,line);
       line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
       line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
-
       for(int x=0,i=0,j=0;j<len(line);x++,i=++j)
       {
          for(;j<len(line)&&line[j]!=',';j++);
@@ -206,16 +189,13 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
          }
       }
    }
-
    file->close();
    delete file;
    return true;
 }
-
 bool readMap(const std::string& filename)
 {
    std::string prefix = std::string("mapCSV_");
-
    // clear any old map data
    for(int x=0;x<MAPX;x++)
    for(int y=0;y<MAPY;y++)
@@ -225,11 +205,9 @@ bool readMap(const std::string& filename)
       levelmap[x][y][z].special=SPECIAL_NONE;
       levelmap[x][y][z].siegeflag=0;
    }
-
    // Try first floor (eg "mapCSV_Bank_Tiles.csv"), abort this method if it doesn't exist
    if(!readMapFile(prefix+filename+"_Tiles.csv", 0, readMapCBTiles)) return false;
    if(!readMapFile(prefix+filename+"_Specials.csv", 0, readMapCBSpecials)) return false;
-
    // Try upper levels (eg "mapCSV_Bank2_Tiles.csv"), but don't sweat it if they don't exist
    for(int z=1;z<MAPZ;z++)
    {
@@ -237,6 +215,5 @@ bool readMap(const std::string& filename)
       if(!readMapFile(prefix+filename+str+"_Tiles.csv", z, readMapCBTiles)) break;
       if(!readMapFile(prefix+filename+str+"_Specials.csv", z, readMapCBSpecials)) break;
    }
-
    return true;
 }

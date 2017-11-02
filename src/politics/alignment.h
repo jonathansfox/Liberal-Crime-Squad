@@ -15,10 +15,8 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-
 #ifndef ALIGNMENT_H_INCLUDED
 #define ALIGNMENT_H_INCLUDED
-
 enum Alignment
 {
    ALIGN_ARCHCONSERVATIVE = -2,
@@ -28,5 +26,4 @@ enum Alignment
    ALIGN_ELITELIBERAL,
    ALIGN_STALINIST
 };
-
 #endif //ALIGNMENT_H_INCLUDED

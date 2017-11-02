@@ -15,27 +15,20 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-
-
 #ifndef LAW_H_INCLUDED
 #define LAW_H_INCLUDED
-
 #include "common.h"
-
+#include "alignment.h"
 class law
 {
 private:
    std::string lawtext[5];      // Describes the law for each alignment
    std::string defeat_lawtext;  // Describes the law when the game is lost
-
-   signed char alignment;
+   Alignment alignment;
 public:
    law();        // Default constructor
-
    void addlawtext(bool gameover=false); // Adds the lawtext to the screen
-   void changealignment(signed char align);
-
-   void setlawtext(signed char align,std::string text);
+   void changealignment(Alignment align);
+   void setlawtext(Alignment align,std::string text);
 };
-
 #endif //LAW_H_INCLUDED

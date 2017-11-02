@@ -20,26 +20,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 extern CursesMoviest movie;
-
 void filelistst::open_diskload(FILE* h)
 {
    int dummy;
    short dummy2;
-
    clean();
-
    fread(&dummy,sizeof(int),1,h);
    list.resize(dummy);
-
    for(int l=0;l<len(list);l++)
    {
       fread(&dummy2,sizeof(short),1,h);
-
       if(dummy2>0)
       {
          list[l]=new char[dummy2+1];
@@ -49,14 +47,11 @@ void filelistst::open_diskload(FILE* h)
       else list[l]=NULL;
    }
 }
-
 void filelistst::open_disksave(FILE *h)
 {
    int dummy=len(list);
    short dummy2;
-
    fwrite(&dummy,sizeof(int),1,h);
-
    for(int l=0;l<len(list);l++) if(list[l])
    {
       dummy2=len(list[l]);
@@ -65,21 +60,16 @@ void filelistst::open_disksave(FILE *h)
       else fwrite(&(dummy2=0),sizeof(short),1,h);
    }
 }
-
 void filelistst::smartappend(filelistst &list2)
 {
    char conf;
-
    for(int l2=0;l2<len(list2.list);l2++)
    {
       if(!list2.list[l2]) continue;
-
       conf=1;
-
       for(int l=0;l<len(list);l++)
          if(!strcmp(list2.list[l2],list[l]))
          {  conf=0; break; }
-
       if(conf&&len(list2.list[l2])>0)
       {
          char *news=new char[len(list2.list[l2])+1];
@@ -88,14 +78,11 @@ void filelistst::smartappend(filelistst &list2)
       }
    }
 }
-
 void CursesMoviest::savemovie(const char *filename,int flags=0)
 {
    FILE *h;
    h=LCSOpenFile(filename, "wb", flags);
-
    long dummy;
-
    if(h!=NULL)
    {
       fwrite(&picnum,sizeof(int),1,h);
@@ -114,23 +101,17 @@ void CursesMoviest::savemovie(const char *filename,int flags=0)
          fwrite(&frame[f]->effect,sizeof(short),1,h);
          fwrite(&frame[f]->flag,sizeof(short),1,h);
       }
-
       songlist.open_disksave(h);
       soundlist.open_disksave(h);
-
       LCSCloseFile(h);
    }
 }
-
 void CursesMoviest::loadmovie(const char *filename)
 {
    clean();
-
    FILE* h;
    h=LCSOpenFile(filename,"rb", LCSIO_PRE_ART);
-
    long dummy;
-
    if(h!=NULL)
    {
       fread(&picnum,sizeof(int),1,h);
@@ -150,21 +131,16 @@ void CursesMoviest::loadmovie(const char *filename)
          fread(&frame[f]->effect,sizeof(short),1,h);
          fread(&frame[f]->flag,sizeof(int short),1,h);
       }
-
       songlist.open_diskload(h);
       soundlist.open_diskload(h);
-
       LCSCloseFile(h);
    }
 }
-
 void CursesMoviest::convertindices_song(filelistst &master)
 {
    if(!len(songlist.list)) return;
-
    vector<int> convert;
    convert.resize(len(songlist.list));
-
    int s2;
    for(int s=0;s<len(songlist.list);s++)
    {
@@ -173,18 +149,14 @@ void CursesMoviest::convertindices_song(filelistst &master)
          {  convert[s]=s2; break; }
       if(s2==len(master.list))convert[s]=-1;
    }
-
    for(int f=0;f<len(frame);f++)
       if(frame[f]->song!=-1) frame[f]->song=convert[frame[f]->song];
 }
-
 void CursesMoviest::convertindices_sound(filelistst &master)
 {
    if(!len(soundlist.list)) return;
-
    vector<int> convert;
    convert.resize(len(soundlist.list));
-
    int s2;
    for(int s=0;s<len(soundlist.list);s++)
    {
@@ -193,23 +165,18 @@ void CursesMoviest::convertindices_sound(filelistst &master)
          {  convert[s]=s2; break; }
       if(s2==len(master.list)) convert[s]=-1;
    }
-
    for(int f=0;f<len(frame);f++)
       if(frame[f]->sound!=-1) frame[f]->sound=convert[frame[f]->sound];
 }
-
 void CursesMoviest::playmovie(int x,int y)
 {
    long timer=0,finalframe=0;
    bool cont,pted;
-
    do
    {
       //int time=GetTickCount();
       alarmset(10);
-
       cont=false,pted=false;
-
       //ASSUMES FRAME ORDERED BY STOP TIMER
       for(int f=0;f<len(frame);f++)
       {
@@ -233,7 +200,6 @@ void CursesMoviest::playmovie(int x,int y)
                      if((movie.picture[frame[f]->frame][fx][fy][0]==' '||
                          movie.picture[frame[f]->frame][fx][fy][0]==0)&&
                          frame[f]->flag & CM_FRAMEFLAG_OVERLAY) continue;
-
                      move(fy+y,fx+x);
                      set_color(translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][1]),
                                translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][2]),
@@ -245,16 +211,11 @@ void CursesMoviest::playmovie(int x,int y)
          }
          if(frame[f]->stop>=timer) cont=true;
       }
-
       if(pted) refresh();
-
       timer++;
       //while(time+10>GetTickCount);
       alarmwait();
-
       int c=checkkey();
-
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) timer=finalframe;
-
    } while(cont);
 }

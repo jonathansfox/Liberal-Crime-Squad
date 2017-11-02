@@ -19,7 +19,6 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software                //
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA         //
 //////////////////////////////////////////////////////////////////////////////////////////
-
 /**
 * compat.cpp
 *
@@ -62,10 +61,13 @@
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
 // This is strcmp() on lowercase versions of the string.
@@ -77,23 +79,18 @@ int stricmp(const char *str1,const char *str2)
    return lstr1.compare(lstr2);
 }
 #endif
-
 #ifdef __linux__ // BSD and SVr4 too
-
 int init_alarm=0; // Flag to indicate if alarmHandler() has been registered.
 struct itimerval timer_off,timer_on;
-
 void alarmHandler(int signal)
 {
    //WAKE UP and turn the timer off, this will un-pause().
    setitimer(ITIMER_REAL,&timer_off,NULL);
 }
-
 void setTimeval(struct timeval *value,long sec,long usec)
 {
    value->tv_sec=sec,value->tv_usec=usec;
 }
-
 void msToItimerval(int ms,struct itimerval *value)
 {
    long sec=0,usec=0;
@@ -102,7 +99,6 @@ void msToItimerval(int ms,struct itimerval *value)
    setTimeval(&value->it_interval,sec,usec);
    setTimeval(&value->it_value,sec,usec);
 }
-
 void initalarm()
 {
    signal(SIGALRM, &alarmHandler);
@@ -112,11 +108,9 @@ void initalarm()
    setTimeval(&timer_off.it_value,0,0);
 }
 #endif
-
 #ifdef WIN32
 int ptime=GetTickCount();
 #endif
-
 void alarmset(int t)
 {
    #ifdef WIN32
@@ -131,7 +125,6 @@ void alarmset(int t)
    setitimer(ITIMER_REAL,&timer_on,NULL);
    #endif
 }
-
 void alarmwait()
 {
    #ifdef WIN32
@@ -146,14 +139,12 @@ void alarmwait()
    if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec>100||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec>100) pause();
    #endif
 }
-
 void pause_ms(int t)
 {
    alarmset(t);
    refresh();
    alarmwait();
 }
-
 // FNV-1a 32-bit hash function (fast and effective) -- helper function for getSeed()
 void fnvHash(unsigned long &fnv_hash,unsigned long num)
 {
@@ -173,7 +164,6 @@ void fnvHash(unsigned long &fnv_hash,unsigned long num)
    fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
    fnv_hash^=(num&0xffUL); // xor together with number's 4th byte
 }
-
 // A high-quality RNG seed with multiple sources of entropy hashed together with FNV-1a hash
 unsigned long getSeed()
 {
@@ -199,7 +189,6 @@ unsigned long getSeed()
 #endif // WIN32
    return _seed;
 }
-
 // Return a random number from 1 to 0xffffffff (any 32-bit integer except 0), using all of seed[].
 // This is a 32-bit version of George Marsaglia's xorshift pseudorandom number generator with 128-bit state space.
 // 32-bit xorshift RNGs produce values in the range from 1 to 0xffffffff (any 32-bit integer except 0),
@@ -209,25 +198,23 @@ unsigned long getSeed()
 // It's a nice ultrafast 32-bit pseudorandom number generator with good randomness properties, small state space, and very short code.
 unsigned long r_num()
 {
-   while(true) // this loop is in case of error, so the recovery mechanism can work... it'll exit with a return value upon success
-   {
-      unsigned long t=seed[0]^((seed[0]<<11)&0xffffffff); // set temp variable and keep it within 32 bits
-#ifdef MORERANDOM
-      t^=getSeed(); // add entropy
-#endif // MORERANDOM
-      seed[0]=seed[1]; seed[1]=seed[2]; seed[2]=seed[3]; // shift variables
-      seed[3]=seed[3]^(seed[3]>>19)^t^(t>>8); // calculate random number
-      if(seed[3]) return seed[3]; // return a number unless it's zero, in which case it was initialized wrong
-      initMainRNG(); // recovery mechanism in case things were badly initialized
-   }
+	while (true) // this loop is in case of error, so the recovery mechanism can work... it'll exit with a return value upon success
+	{
+		unsigned long t = seed[0] ^ ((seed[0] << 11) & 0xffffffff); // set temp variable and keep it within 32 bits
+		if (MORERANDOM) {
+			t ^= getSeed(); // add entropy
+	}// MORERANDOM
+		seed[0] = seed[1]; seed[1] = seed[2]; seed[2] = seed[3]; // shift variables
+		seed[3] = seed[3] ^ (seed[3] >> 19) ^ t ^ (t >> 8); // calculate random number
+		if (seed[3]) return seed[3]; // return a number unless it's zero, in which case it was initialized wrong
+		initMainRNG(); // recovery mechanism in case things were badly initialized
 }
-
+}
 // Picks a random number from 0 to max-1
 long LCSrandom(long max)
 {  // This expects r_num() to return a random number between 1 and 0xffffffff (any 32-bit integer except 0)... which it does
    return (long)(max*(((long double)(r_num()-1))/((long double)0xffffffffUL)));
 }
-
 // Returns a random number from 0 to 0xffffffff (any 32-bit integer), only using seed[0].
 // This is a linear congruential generator using parameters suggested in a paper by Pierre L'Ecuyer
 // that has better randomness characteristics than most linear congruential generators (the simplest type of RNG).
@@ -236,20 +223,17 @@ unsigned long r_num2()
 {
    return seed[0]=(seed[0]*32310901UL+433494437UL)&0xffffffff; // return a random number, kept within 32 bits
 }
-
 // Initializes the xorshift Random Number Generator with help getSeed() and r_num2()
 void initMainRNG()
 {  // we got 4 integers to initialize, which we'll get from a well-seeded linear congruential generator
    seed[0]=getSeed(); // seed the linear congruential generator
    for(int i=RNG_SIZE-1;i>=0;i--) seed[i]=r_num2(); // initialize all the integers
 }
-
 // Copies a xorshift Random Number Generator from src to dest
 void copyRNG(unsigned long(&dest)[RNG_SIZE],unsigned long(&src)[RNG_SIZE])
 {
    for(int i=0;i<RNG_SIZE;i++) dest[i]=src[i]; // copy all the integers
 }
-
 // Sets up another xorshift Random Number Generator whose state space is passed as an argument
 void initOtherRNG(unsigned long(&rng)[RNG_SIZE])
 {

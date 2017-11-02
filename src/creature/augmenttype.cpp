@@ -1,18 +1,21 @@
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
+//The game log. All events and stuff are output here.
+//NO debugging out. Make a debugging log for that.
+extern Log xmllog;
 int AugmentType::number_of_augmenttypes = 0;
-
 AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
 {
    id_=number_of_augmenttypes++;
-
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-
    idname_=xml.GetAttrib("idname");
    if(!len(idname_))
    {
@@ -20,17 +23,15 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
       xmllog.log("Augment type "+tostring(id_)+" lacks idname.");
    }
    xml.IntoElem();
-
    while(xml.FindElem())
    {
       std::string element = xml.GetTagName();
-
       if(element=="name")
          name_=xml.GetData();
       else if(element=="type")
          type_=augment_string_to_enum(xml.GetData());
       else if(element=="attribute")
-         attribute_=attribute_string_to_enum(xml.GetData());
+         attribute_= (CreatureAttribute) attribute_string_to_enum(xml.GetData());
       else if(element=="effect")
          effect_=atoi(xml.GetData());
       else if(element=="description")
@@ -44,9 +45,7 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
       else if(element=="difficulty")
          difficulty_=atoi(xml.GetData());
    }
-
 }
-
 void AugmentType::make_augment(Augmentation& au)
 {
    au.name=get_name();

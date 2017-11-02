@@ -19,7 +19,6 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software                //
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA         //
 //////////////////////////////////////////////////////////////////////////////////////////
-
 /**
 * compat.h
 *
@@ -61,20 +60,17 @@
 * - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
-
+#include "common.h" /* include this prior to checking if WIN32 is defined */
 #ifdef __linux__
  // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
  // <http://msdn.microsoft.com/en-us/library/s3f49ktz.aspx>
-
 #if defined(__x86_64__) && !defined(_WIN64)
     #define LCS_WIN64
 #endif
-
 typedef signed int INT32;
 typedef long long __int64;
 typedef signed long long INT64;
 typedef unsigned long ULONG;
-
 #ifdef LCS_WIN64
     typedef long long LONG_PTR;
     typedef unsigned long long ULONG_PTR;
@@ -82,12 +78,10 @@ typedef unsigned long ULONG;
     typedef long LONG_PTR;
     typedef unsigned long ULONG_PTR;
 #endif
-
 #if defined(i386) || defined(i486) || \
         defined(intel) || defined(x86) || defined(i86pc)
     #define LCS_M_IX86
 #endif
-
 #ifndef LCS_M_IX86
     typedef long long LONGLONG;
     typedef unsigned long long ULONGLONG;
@@ -95,41 +89,29 @@ typedef unsigned long ULONG;
     typedef double LONGLONG;
     typedef double ULONGLONG;
 #endif
-
-
 typedef unsigned long DWORD;
 typedef ULONGLONG DWORDLONG; // ULONGLONG and ULONG_PTR vary depending on
 typedef ULONG_PTR DWORD_PTR; //  architecture
 typedef unsigned int DWORD32;
 typedef unsigned long long DWORD64;
-
 typedef void *PVOID;
 typedef PVOID HANDLE;
 #endif
-
-
-
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
 // This is strcmp() on lowercase versions of the string.
 int stricmp(const char *str1, const char *str2);
 #endif
-
 #ifdef __linux__ // BSD and SVr4 too
-
 extern int init_alarm;
 extern struct itimerval timer_off;
-
 void alarmHandler(int signal);
-
 void setTimeval(struct  timeval *value, long sec, long usec);
 void msToItimerval(int ms, struct  itimerval *value);
 #endif
-
 void pause_ms(int t);
 void alarmset(int t);
 void alarmwait();
-
 //#ifndef HAS_SNPRINTF // this was never defined, and the next line does the check for it anyway
 #if defined(__BORLANDC__) || defined(_MSC_VER)
 #define snprintf _snprintf

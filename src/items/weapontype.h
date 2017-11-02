@@ -1,8 +1,8 @@
 #ifndef WEAPONTYPE_H
 #define WEAPONTYPE_H
-
-#include "includes.h"
-
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 // Struct to hold all values related to an attack performable by the weapon type.
 struct attackst
 {
@@ -35,7 +35,6 @@ struct attackst
    bool damages_armor;
    int armorpiercing;
    int no_damage_reduction_for_limbs_chance;
-  
    struct criticalst
    {
       criticalst();
@@ -48,7 +47,6 @@ struct attackst
       int severtype;
       bool severtype_defined;
    } critical;
-   
    struct firest
    {
       firest();   
@@ -56,16 +54,13 @@ struct attackst
       int chance_causes_debris;
    } fire;
 };
-
 class WeaponType : public ItemType
 {
    public:
       // Constructor to create a weapon type from xml.
       explicit WeaponType(MCD_STR xmlstring);
       ~WeaponType();
-      
       bool is_weapon() const { return true; }
-   
       using ItemType::get_name;
       // Returns the name of the weapon type of given subtype, dependent on year.
       // Subtype may be 0, 1 or 2. Any other values will be the same as 0. If
@@ -74,15 +69,12 @@ class WeaponType : public ItemType
       const string& get_name(unsigned subtype) const;
       // Return the shorter name.
       const string& get_shortname(unsigned subtype = 0) const;   
-      
       // Returns if the weapon type can be used to take hostages without causing
       // alarm. 
       bool can_take_hostages() const { return can_take_hostages_; }
       // Returns if the weapon type can be used to threaten landlords.
       bool is_threatening() const { return threatening_; }
-      
       bool can_threaten_hostages() const { return can_threaten_hostages_; }
-      
       bool protects_against_kidnapping() const { return protects_against_kidnapping_; }
       // Returns if the weapon will use a musical attack in combat.
       bool has_musical_attack() const { return musical_attack_; }
@@ -116,8 +108,6 @@ class WeaponType : public ItemType
       bool auto_breaks_locks() const { return auto_break_lock_; }
       // Returns if the weapon type can be used to make graffiti.
       bool can_graffiti() const { return can_graffiti_; }
-      
-   
    private:
       string name_sub_1_;
       string name_sub_2_;
@@ -127,7 +117,6 @@ class WeaponType : public ItemType
       string name_future_sub_2_;
       bool name_future_sub_1_defined_;
       bool name_future_sub_2_defined_;
-      
       string shortname_;
       string shortname_future_;
       bool shortname_defined_;
@@ -140,7 +129,6 @@ class WeaponType : public ItemType
       string shortname_future_sub_2_;
       bool shortname_future_sub_1_defined_;
       bool shortname_future_sub_2_defined_;
-        
       bool can_take_hostages_;
       bool threatening_;
       bool can_threaten_hostages_;
@@ -153,9 +141,6 @@ class WeaponType : public ItemType
       int size_;
       bool can_graffiti_;
       bool auto_break_lock_;
-      
       vector<attackst*> attacks_;
-      
 };
-
 #endif //WEAPONTYPE_H

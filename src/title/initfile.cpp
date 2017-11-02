@@ -1,28 +1,26 @@
 /*
 This file handles the loading of init.txt
-
 This file is part of Liberal Crime Squad.
-
     Liberal Crime Squad is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-
     Liberal Crime Squad is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with Liberal Crime Squad; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
-
 */
 
-
 #include <includes.h>
-#include <externs.h>
 
+#include <cursesAlternative.h>
+#include <customMaps.h>
+#include <constant_strings.h>
+#include <gui_constants.h>
+#include <set_color_support.h>
 void setconfigoption(std::string name, std::string value)
 {
    transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -64,7 +62,6 @@ void setconfigoption(std::string name, std::string value)
    }
    #endif
 }
-
 void loadinitfile()
 {
    std::fstream file;
@@ -72,27 +69,21 @@ void loadinitfile()
    {
       std::string str;
       int posequal;
-
       while(getline(file,str))
       {
          str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
          str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
          str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
          str.erase(std::remove(str.begin(), str.end(), '\t'), str.end());
-
          if(!len(str)) continue;
-
          if(str[0] == '#') continue;
          if(str[0] == ';') continue;
-
          posequal=str.find('=');
          if(posequal==(int)string::npos) continue;
-
          setconfigoption(str.substr(0,posequal),str.substr(posequal+1));
       }
    }
    file.close();
-
    #ifdef WIN32
    begin_cleartype_fix(); // won't do anything unless fixcleartype is true
    #endif

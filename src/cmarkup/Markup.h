@@ -5,13 +5,10 @@
 // Go to www.firstobject.com for the latest CMarkup and EDOM documentation
 // Use in commercial applications requires written permission
 // This software is provided "as is", with no warranty.
-
 #if !defined(_MARKUP_H_INCLUDED_)
 #define _MARKUP_H_INCLUDED_
-
 #include <stdlib.h>
 #include <string.h> // memcpy, memset, strcmp...
-
 // Major build options
 // MARKUP_WCHAR wide char (2-byte UTF-16 on Windows, 4-byte UTF-32 on Linux and OS X)
 // MARKUP_MBCS ANSI/double-byte strings on Windows
@@ -63,7 +60,6 @@
 #if ! defined(MARKUP_FILEBLOCKSIZE)
 #define MARKUP_FILEBLOCKSIZE 16384
 #endif
-
 // Text type and function defines (compiler and build-option dependent)
 // 
 #define MCD_ACP 0
@@ -137,7 +133,6 @@
 #if _MSC_VER < 1000 // not VC++
 #define MCD_STRERROR strerror(errno)
 #endif // not VC++
-
 // String type and function defines (compiler and build-option dependent)
 // Define MARKUP_STL to use STL strings
 //
@@ -191,7 +186,6 @@
 #define MCD_BLDTRUNC(s,n) nL=n
 #endif // not STL
 #define MCD_STRTOINT(s) MCD_PSZTOL(MCD_2PCSZ(s),NULL,10)
-
 // Allow function args to accept string objects as constant string pointers
 struct MCD_CSTR
 {
@@ -201,7 +195,6 @@ struct MCD_CSTR
 	operator MCD_PCSZ() const { return pcsz; };
 	MCD_PCSZ pcsz;
 };
-
 // On Linux and OS X, filenames are not specified in wchar_t
 #if defined(MARKUP_WCHAR) && defined(__GNUC__)
 #undef MCD_FOPEN
@@ -221,7 +214,6 @@ struct MCD_CSTR_FILENAME
 #define MCD_T_FILENAME MCD_T
 #define MCD_PCSZ_FILENAME MCD_PCSZ
 #endif // not WCHAR GNUC
-
 // File fseek, ftell and offset type
 #if defined(__GNUC__) && ! defined(MARKUP_WINDOWS) // non-Windows GNUC
 #define MCD_FSEEK fseeko
@@ -240,7 +232,6 @@ extern "C" __int64 __cdecl _ftelli64(FILE *);
 #define MCD_FTELL ftell
 #define MCD_INTFILEOFFSET long
 #endif // not non-Windows GNUC or VC++ HUGEFILE
-
 // End of line choices: none, return, newline, or CRLF
 #define MARKUP_EOL_NONE
 #if defined(MARKUP_EOL_NONE)
@@ -255,14 +246,12 @@ extern "C" __int64 __cdecl _ftelli64(FILE *);
 #define MCD_EOL MCD_T("\n")
 #endif // not Windows and not otherwise specified
 #define MCD_EOLLEN (sizeof(MCD_EOL)/sizeof(MCD_CHAR)-1) // string length of MCD_EOL
-
 struct FilePos;
 struct TokenPos;
 struct NodePos;
 struct PathPos;
 struct SavedPosMapArray;
 struct ElemPosTree;
-
 class CMarkup
 {
 public:
@@ -272,7 +261,6 @@ public:
 	CMarkup( const CMarkup& markup ) { x_InitMarkup(); *this = markup; };
 	void operator=( const CMarkup& markup );
 	~CMarkup();
-
 	// Navigate
 	bool Load( MCD_CSTR_FILENAME szFileName );
 	bool SetDoc( MCD_PCSZ pDoc );
@@ -340,7 +328,6 @@ public:
 		MNT_LONE_END_TAG			= 128,  // 0x0080
 		MNT_NODE_ERROR              = 32768 // 0x8000
 	};
-
 	// Create
 	bool Save( MCD_CSTR_FILENAME szFileName );
 	const MCD_STR& GetDoc() const { return m_strDoc; };
@@ -364,7 +351,6 @@ public:
 	MCD_STR GetChildSubDoc() { return x_GetSubDoc(m_iPosChild); };
 	bool AddNode( int nType, MCD_CSTR szText ) { return x_AddNode(nType,szText,0); };
 	bool InsertNode( int nType, MCD_CSTR szText ) { return x_AddNode(nType,szText,MNF_INSERT); };
-
 	// Modify
 	bool RemoveElem();
 	bool RemoveChildElem();
@@ -378,8 +364,6 @@ public:
 	bool SetData( int nValue ) { return x_SetData(m_iPos,nValue); };
 	bool SetChildData( int nValue ) { return x_SetData(m_iPosChild,nValue); };
 	bool SetElemContent( MCD_CSTR szContent ) { return x_SetElemContent(szContent); };
-
-
 	// Utility
 	static bool ReadTextFile( MCD_CSTR_FILENAME szFileName, MCD_STR& strDoc, MCD_STR* pstrResult=NULL, int* pnDocFlags=NULL, MCD_STR* pstrEncoding=NULL );
 	static bool WriteTextFile( MCD_CSTR_FILENAME szFileName, const MCD_STR& strDoc, MCD_STR* pstrResult=NULL, int* pnDocFlags=NULL, MCD_STR* pstrEncoding=NULL );
@@ -396,17 +380,13 @@ public:
 	static bool DetectUTF8( const char* pText, int nTextLen, int* pnNonASCII = NULL, bool* bErrorAtEnd = NULL );
 	static MCD_STR GetDeclaredEncoding( MCD_CSTR szDoc );
 	static int GetEncodingCodePage( MCD_CSTR pszEncoding );
-
 protected:
-
 #if defined(_DEBUG)
 	MCD_PCSZ m_pDebugCur;
 	MCD_PCSZ m_pDebugPos;
 #endif // DEBUG
-
 	MCD_STR m_strDoc;
 	MCD_STR m_strResult;
-
 	int m_iPosParent;
 	int m_iPos;
 	int m_iPosChild;
@@ -416,24 +396,20 @@ protected:
 	int m_nNodeOffset;
 	int m_nNodeLength;
 	int m_nDocFlags;
-
 	FilePos* m_pFilePos;
 	SavedPosMapArray* m_pSavedPosMaps;
 	ElemPosTree* m_pElemPosTree;
-
 	enum MarkupNodeFlagsInternal
 	{
 		MNF_INSERT     = 0x002000,
 		MNF_CHILD      = 0x004000
 	};
-
 #if defined(_DEBUG) // DEBUG 
 	void x_SetDebugState();
 #define MARKUP_SETDEBUGSTATE x_SetDebugState()
 #else // not DEBUG
 #define MARKUP_SETDEBUGSTATE
 #endif // not DEBUG
-
 	void x_InitMarkup();
 	void x_SetPos( int iPosParent, int iPos, int iPosChild );
 	int x_GetFreePos();
@@ -472,5 +448,4 @@ protected:
 	bool x_SetElemContent( MCD_PCSZ szContent );
 	void x_DocChange( int nLeft, int nReplace, const MCD_STR& strInsert );
 };
-
 #endif // !defined(_MARKUP_H_INCLUDED_)
