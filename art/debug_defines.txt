@@ -1,0 +1,43 @@
+/*
+DEBUG DEFINES
+*/
+// inform player of activated debug codes
+//DISPLAYDEBUG
+// Don't save the game
+//NOSAVE
+// Enemies don't attack
+//NOENEMYATTACK
+// Laws start archconservative
+//SHITLAWS
+// Laws start elite liberal
+//PERFECTLAWS
+// Public opinion starts at 100% Liberal
+//REVOLUTIONNOW
+// Gives you bloody armor
+//GIVEBLOODYARMOR
+// Start with lots of money
+//HIGHFUNDS
+// Interrogation always enlightens
+//AUTOENLIGHTEN
+// Show polls when you can't see things
+//SHOWWAIT
+// Show die rolls, 100% accurate poll numbers
+//SHOWMECHANICS
+// Make the year 2100
+//THEFUTURE
+// Make the founder blind
+//BLIND
+// Make the founder unable to walk
+//NOWALK
+// Make the founder have no face
+//NOFACE
+// Make the founder have a severely injured spine
+//SPINE
+// Make the founder have severe internal damage
+//INTERNAL
+// Make age not matter for dating or prostitution
+//ZEROMORAL
+// Re-seed the Random Number Generator every time it's called
+//MORERANDOM
+// Allow Stalinist Comrade Squad mode to be chosen for new games
+ALLOWSTALIN
