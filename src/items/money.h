@@ -1,8 +1,5 @@
 #ifndef MONEY_H
-#define MONEY_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define MONEY_H0
 class Money : public Item
 {
    public:

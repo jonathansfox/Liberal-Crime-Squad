@@ -1,13 +1,22 @@
 
 #include <includes.h>
 
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/misc.h"
+//for sexdesc();
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+
+#include <news\\news.h>
 /* news - draws the specified block of text to the screen */
-void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e, int y);
+//void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e, int y);
 extern int year;
  vector<string> personalAds;
  vector<string> personalAdsLG;
@@ -15,6 +24,7 @@ extern string ampersandR;
  string ampersandC;
  vector<vector<string>> adListB;
  vector<vector<string>> adList;
+ extern string singleSpace;
 void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s, short* storyx_e, int& it2)
 {
 	int x, y;

@@ -53,6 +53,26 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/equipment.h"
+// own header
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/stringconversion.h"
+//for const char* toCstring(long) 
+
+#include "common/getnames.h"
+// for void enter_name(int,int,char *,int,const char *=NULL)
+
+#include "common/translateid.h"
+// for  int getweapontype(int)
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -62,13 +82,16 @@ extern vector<Location *> location;
 extern string spaceDashSpace;
 extern string enter_done;
 extern string chooseALiberalTo;
+extern short interface_pgup;
+extern short interface_pgdn;
+extern string singleSpace;
+extern squadst *activesquad;
 /* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)
 {
 	printparty();
-	moveAlt(8, 15);
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	addstrAlt("     How many?          ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8,  15, "     How many?          ");
 	char str[100];
 	enter_name(8, 30, str, 100, toCstring(max));
 	int amount = atoi(str);
@@ -87,15 +110,13 @@ void equip(vector<Item *> &loot, int loc)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt("Equip the Squad");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, "Equip the Squad");
 		printparty();
 		if (errmsg) {
-			moveAlt(8, 20);
-			set_color(COLOR_CYAN, COLOR_BLACK, 1);
-			addstrAlt(errmsg);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(8,  20, errmsg);
+			set_color_easy(WHITE_ON_BLACK);
 			errmsg = NULL;
 		}
 		int x = 1, y = 10;
@@ -110,48 +131,38 @@ void equip(vector<Item *> &loot, int loc)
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace);
 			strcat(str, s);
-			moveAlt(y, x);
-			addstrAlt(str);
+			mvaddstrAlt(y,  x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;
 		}
 		//PAGE UP
 		if (page > 0)
 		{
-			moveSeventeenOne();
-			addprevpagestr();
+			mvaddstrAlt(17, 1, addprevpagestr());
 		}
 		//PAGE DOWN
 		if ((page + 1) * 18 < len(loot))
 		{
-			moveAlt(17, 53);
-			addnextpagestr();
+			mvaddstrAlt(17, 53, addnextpagestr());
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(19, 1);
-		addstrAlt("Press a letter to equip a Liberal item");
-		moveAlt(20, 1);
-		addstrAlt("Press a number to drop that Squad member's Conservative weapon");
-		moveAlt(21, 1);
-		addstrAlt("S - Liberally Strip a Squad member");
-		moveAlt(22, 1);
-		addstrAlt("Cursors - Increase or decrease ammo allocation");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(19,  1, "Press a letter to equip a Liberal item");
+		mvaddstrAlt(20,  1, "Press a number to drop that Squad member's Conservative weapon");
+		mvaddstrAlt(21,  1, "S - Liberally Strip a Squad member");
+		mvaddstrAlt(22,  1, "Cursors - Increase or decrease ammo allocation");
 		if (loc != -1)
 		{
-			if (len(location[loc]->loot)) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(23, 1);
-			addstrAlt("Y - Get things from ");
+			if (len(location[loc]->loot)) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(23,  1, "Y - Get things from ");
 			addstrAlt(location[loc]->getname(true));
-			if (len(loot)) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(23, 40);
-			addstrAlt("Z - Stash things at ");
+			if (len(loot)) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(23,  40, "Z - Stash things at ");
 			addstrAlt(location[loc]->getname(true));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(24, 1);
-		addstrAlt(enter_done);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(24,  1, enter_done);
 		int c = getkey();
 		bool increaseammo = (c == KEY_UP), decreaseammo = (c == KEY_DOWN);
 		if ((c >= 'a'&&c <= 'r') || increaseammo || decreaseammo)
@@ -183,8 +194,8 @@ void equip(vector<Item *> &loot, int loc)
 			int c = '1';
 			if (choice)
 			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				moveAlt(8, 20);
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
 				if (increaseammo)
 					addstrAlt(chooseALiberalTo + "receive a clip.");
 				else if (decreaseammo)
@@ -314,9 +325,8 @@ void equip(vector<Item *> &loot, int loc)
 			int c = '1';
 			if (choice)
 			{
-				moveAlt(8, 20);
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				addstrAlt(chooseALiberalTo + "strip down.");
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  20, chooseALiberalTo + "strip down.");
 				c = getkey();
 			}
 			if (c >= '1'&&c <= '6')
@@ -355,16 +365,15 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt("Select Objects");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, "Select Objects");
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
 		for (int l = page * 18; l < len(source) && l < page * 18 + 18; l++)
 		{
-			if (selected[l]) set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (selected[l]) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			string s = source[l]->equip_title();
 			if (source[l]->get_number() > 1)
 			{
@@ -377,29 +386,24 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace);
 			strcat(str, s);
-			moveAlt(y, x);
-			addstrAlt(str);
+			mvaddstrAlt(y,  x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;
 		}
 		//PAGE UP
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		if (page > 0)
 		{
-			moveSeventeenOne();
-			addprevpagestr();
+			mvaddstrAlt(17, 1, addprevpagestr());
 		}
 		//PAGE DOWN
 		if ((page + 1) * 18 < len(source))
 		{
-			moveAlt(17, 53);
-			addnextpagestr();
+			mvaddstrAlt(17, 53, addnextpagestr());
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(23, 1);
-		addstrAlt("Press a letter to select an item.");
-		moveAlt(24, 1);
-		addstrAlt(enter_done);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(23,  1, "Press a letter to select an item.");
+		mvaddstrAlt(24,  1, enter_done);
 		int c = getkey();
 		if (c >= 'a'&&c <= 'r')
 		{
@@ -455,18 +459,15 @@ void equipmentbaseassign()
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Moving Equipment");
-		moveOneZero();
-		addstrAlt("컴컴ITEM컴컴컴컴컴컴컴컴횮URRENT LOCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-		moveAlt(1, 51);
-		addstrAlt("NEW LOCATION");
+		mvaddstrAlt(0,  0, "Moving Equipment");
+		mvaddstrAlt(1,  0, "컴컴ITEM컴컴컴컴컴컴컴컴횮URRENT LOCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+		mvaddstrAlt(1,  51, "NEW LOCATION");
 		int y = 2;
 		for (p = page_loot * 19; p < len(temploot) && p < page_loot * 19 + 19; p++, y++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temploot[p]->equip_title());
@@ -475,15 +476,14 @@ void equipmentbaseassign()
 		y = 2;
 		for (p = page_loc * 9; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
 		{
-			if (p == selectedbase)set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (p == selectedbase)set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 51);
 			addcharAlt(y + '1' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(location[temploc[p]]->getname(true, true));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(22, 0);
-		addstrAlt("Press a Letter to assign a base.  Press a Number to select a base.");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22,  0, "Press a Letter to assign a base.  Press a Number to select a base.");
 		moveAlt(23, 0);
 		if (sortbytype) addstrAlt("T to sort by location.");
 		else addstrAlt("T to sort by type.");
@@ -495,7 +495,7 @@ void equipmentbaseassign()
 			moveAlt(24, 34); // we have base pages, so different location for viewing other loot pages
 		}
 		if (len(temploot) > 19)
-			addpagestr();
+			addstrAlt(addpagestr());
 		int c = getkey();
 		//PAGE UP (items)
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_loot>0) page_loot--;

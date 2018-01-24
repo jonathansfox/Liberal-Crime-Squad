@@ -1,6 +1,14 @@
 
 #include <includes.h>
 
+//#include "items/itemtype.h"
+//own header currently inside includes.h
+//own header
+
+#include "common/stringconversion.h"
+//for string conversion
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

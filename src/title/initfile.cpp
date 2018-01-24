@@ -16,11 +16,25 @@ This file is part of Liberal Crime Squad.
 
 #include <includes.h>
 
+#include "title/initfile.h"
+
+#include "common/stringconversion.h"
+//for int stringtobool(std::string boolstr);
+
+#include "common/consolesupport.h"
+// for void begin_cleartype_fix();
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern short interface_pgup;
+extern short interface_pgdn;
+extern bool autosave;
+extern bool fixcleartype;
 void setconfigoption(std::string name, std::string value)
 {
    transform(name.begin(), name.end(), name.begin(), ::tolower);

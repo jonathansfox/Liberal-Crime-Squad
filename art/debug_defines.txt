@@ -1,5 +1,5 @@
 /*
-DEBUG DEFINES
+//DEBUG DEFINES
 */
 // inform player of activated debug codes
 //DISPLAYDEBUG
@@ -40,4 +40,9 @@ DEBUG DEFINES
 // Re-seed the Random Number Generator every time it's called
 //MORERANDOM
 // Allow Stalinist Comrade Squad mode to be chosen for new games
-ALLOWSTALIN
+//ALLOWSTALIN
+// Store savefiles in plaintext, making it human readable and editable
+//VERBOSESAVEFILE
+// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
+// Remove almost all automatically generated comments from verbose savefiles
+//NOVERBOSECOMMENTS

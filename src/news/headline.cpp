@@ -1,6 +1,13 @@
 
 #include <includes.h>
 
+#include "news/news.h"
+// for displaycenterednewsfont
+
+#include "common/commonactions.h"
+// for void change_public_opinion(int,int,char =1,char =100);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

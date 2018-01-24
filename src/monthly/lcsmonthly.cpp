@@ -26,6 +26,32 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "items/loottype.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/equipment.h"
+//for void consolidateloot(vector<Item *> &)
+
+#include "common/translateid.h"
+// for  int getloottype(int id);
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/commonactions.h"
+// for void change_public_opinion(int,int,char =1,char=100);
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -37,6 +63,17 @@ extern vector<LootType *> loottype;
 extern MusicClass music;
 extern string spaceDashSpace;
 extern string closeParenthesis;
+extern vector<squadst *> squad;
+extern class Ledger ledger;
+extern short interface_pgup;
+extern short interface_pgdn;
+extern char disbanding;
+extern short offended_firemen;
+extern short lawList[LAWNUM];
+extern short offended_corps;
+extern short offended_cia;
+extern short offended_amradio;
+extern short offended_cablenews;
 typedef map<short, string > shortAndString;
  string bound_to_rile_up;
  string major_news_take_it_up;
@@ -49,7 +86,7 @@ void guardianupdate(char size, int power)
 	music.play(MUSIC_NEWSPAPER);
 
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	moveAlt(5, 2);
 	if (size)
 
@@ -106,8 +143,7 @@ void guardianupdate(char size, int power)
 
 	{
 		addstrAlt("The response is electric. Everyone is talking about this month's ", gamelog);
-		moveAlt(8, 2);
-		addstrAlt("Liberal Guardian.", gamelog);
+		mvaddstrAlt(8,  2, "Liberal Guardian.", gamelog);
 
 	}
 	gamelog.nextMessage();
@@ -192,10 +228,9 @@ int choosespecialedition(char &clearformess)
 		music.play(MUSIC_NEWSPAPER);
 
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 
-		moveZeroZero();
-		addstrAlt("Do you want to run a special edition?");
+		mvaddstrAlt(0,  0, "Do you want to run a special edition?");
 		int x = 1, y = 10;
 		char str[200];
 		for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
@@ -207,8 +242,7 @@ int choosespecialedition(char &clearformess)
 			strcat(str, loottype[loottypeindex[l]]->get_name());
 
 
-			moveAlt(y, x);
-			addstrAlt(str);
+			mvaddstrAlt(y,  x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;
 
@@ -218,20 +252,17 @@ int choosespecialedition(char &clearformess)
 
 
 		{
-			moveSeventeenOne();
-			addprevpagestr();
+			mvaddstrAlt(17, 1, addprevpagestr());
 
 		}
 		//PAGE DOWN
 		if ((page + 1) * 18 < len(loottype))
 
 		{
-			moveAlt(17, 53);
-			addnextpagestr();
+			mvaddstrAlt(17, 53,addnextpagestr());
 
 		}
-		moveAlt(24, 1);
-		addstrAlt("Enter - Not in this month's Liberal Guardian");
+		mvaddstrAlt(24,  1, "Enter - Not in this month's Liberal Guardian");
 		int c = getkey();
 		if (c >= 'a'&&c <= 'r')
 
@@ -305,13 +336,12 @@ void printnews(short li, short newspaper)
 	if (lawList[LAW_FREESPEECH] == -2)offended_firemen = 1;
 
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (loottype[li]->get_idname() == tag_LOOT_CEOPHOTOS) // Tmp -XML
 
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring photos of a major CEO ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring photos of a major CEO ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -349,13 +379,9 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-
-		addstrAlt(bound_to_rile_up, gamelog);
+		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -365,8 +391,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_CEOLOVELETTERS)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring love letters from a major CEO ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring love letters from a major CEO ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -405,13 +430,9 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-
-		addstrAlt(bound_to_rile_up, gamelog);
+		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -421,8 +442,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_CEOTAXPAPERS)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring a major CEO's tax papers ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring a major CEO's tax papers ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -437,13 +457,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-
-		addstrAlt(bound_to_rile_up, gamelog);
+		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -453,8 +469,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_CORPFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring Corporate files ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring Corporate files ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, newspaper * 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
@@ -489,13 +504,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-
-		addstrAlt(bound_to_rile_up, gamelog);
+		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -505,48 +516,34 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_CCS_BACKERLIST)
 
 	{
-		moveAlt(5, 1);
-		addstrAlt("The Liberal Guardian runs more than one thousand pages of documents about ", gamelog);
+		mvaddstrAlt(5,  1, "The Liberal Guardian runs more than one thousand pages of documents about ", gamelog);
 		gamelog.newline();
-		moveAlt(6, 1);
-		addstrAlt("the CCS organization, also revealing in extreme detail the names and ", gamelog);
+		mvaddstrAlt(6,  1, "the CCS organization, also revealing in extreme detail the names and ", gamelog);
 		gamelog.newline();
-		moveAlt(7, 1);
-		addstrAlt("responsibilities of Conservative Crime Squad sympathizers and supporters", gamelog);
+		mvaddstrAlt(7,  1, "responsibilities of Conservative Crime Squad sympathizers and supporters", gamelog);
 		gamelog.newline();
-		moveAlt(8, 1);
-		addstrAlt("in the state and federal governments. Sections precisely document the", gamelog);
+		mvaddstrAlt(8,  1, "in the state and federal governments. Sections precisely document the", gamelog);
 		gamelog.newline();
-		moveAlt(9, 1);
-		addstrAlt("extensive planning to create an extra-judicial death squad that would be", gamelog);
+		mvaddstrAlt(9,  1, "extensive planning to create an extra-judicial death squad that would be", gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-		addstrAlt("above prosecution, and could hunt down law-abiding Liberals and act", gamelog);
+		mvaddstrAlt(10,  1, "above prosecution, and could hunt down law-abiding Liberals and act", gamelog);
 		gamelog.newline();
-		moveAlt(11, 1);
-		addstrAlt("as a foil when no other enemies were present to direct public energy", gamelog);
+		mvaddstrAlt(11,  1, "as a foil when no other enemies were present to direct public energy", gamelog);
 		gamelog.newline();
-		moveAlt(12, 1);
-		addstrAlt("against.", gamelog);
-		moveAlt(14, 1);
-		addstrAlt("The scandal reaches into the heart of the Conservative leadership in the", gamelog);
+		mvaddstrAlt(12,  1, "against.", gamelog);
+		mvaddstrAlt(14,  1, "The scandal reaches into the heart of the Conservative leadership in the", gamelog);
 		gamelog.newline();
-		moveAlt(15, 1);
-		addstrAlt("country, and the full ramifications of this revelation may not be felt", gamelog);
+		mvaddstrAlt(15,  1, "country, and the full ramifications of this revelation may not be felt", gamelog);
 		gamelog.newline();
 
-		moveSixteenOne();
-		addstrAlt("for months. One thing is clear, however, from the immediate public reaction", gamelog);
+		mvaddstrAlt(16,  1, "for months. One thing is clear, however, from the immediate public reaction", gamelog);
 		gamelog.newline();
 
-		moveSeventeenOne();
-		addstrAlt("toward the revelations, and the speed with which even AM Radio and Cable", gamelog);
+		mvaddstrAlt(17,  1, "toward the revelations, and the speed with which even AM Radio and Cable", gamelog);
 		gamelog.newline();
-		moveAlt(18, 1);
-		addstrAlt("News denounce the CCS.", gamelog);
+		mvaddstrAlt(18,  1, "News denounce the CCS.", gamelog);
 		gamelog.newline();
-		moveAlt(20, 1);
-		addstrAlt("This is the beginning of the end for the Conservative Crime Squad.", gamelog);
+		mvaddstrAlt(20,  1, "This is the beginning of the end for the Conservative Crime Squad.", gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_INTELLIGENCE, 50);
 		change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
@@ -557,8 +554,7 @@ void printnews(short li, short newspaper)
 		|| loottype[li]->get_idname() == tag_LOOT_SECRETDOCUMENTS)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring CIA and other intelligence files ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring CIA and other intelligence files ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -590,12 +586,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-		addstrAlt("This is bound to get the Government a little riled up.", gamelog);
+		mvaddstrAlt(10,  1, "This is bound to get the Government a little riled up.", gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_INTELLIGENCE, 50);
 		offended_cia = 1;
@@ -604,8 +597,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_POLICERECORDS)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring police records ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring police records ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -654,8 +646,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_JUDGEFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story with evidence of a Conservative judge ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story with evidence of a Conservative judge ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -667,9 +658,7 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(8, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(8,  1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_JUSTICES, 50);
 
@@ -677,8 +666,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_RESEARCHFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring research papers ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring research papers ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -696,17 +684,14 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 
 	}
 	else if (loottype[li]->get_idname() == tag_LOOT_PRISONFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring prison documents ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring prison documents ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -726,9 +711,7 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_DEATHPENALTY, 50);
 
@@ -736,8 +719,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_CABLENEWSFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring cable news memos ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring cable news memos ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -753,12 +735,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-		addstrAlt("This is bound to get the Conservative masses a little riled up.", gamelog);
+		mvaddstrAlt(10,  1, "This is bound to get the Conservative masses a little riled up.", gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CABLENEWS, 50);
 		offended_cablenews = 1;
@@ -767,8 +746,7 @@ void printnews(short li, short newspaper)
 	else if (loottype[li]->get_idname() == tag_LOOT_AMRADIOFILES)
 
 	{
-		moveAlt(6, 1);
-		addstrAlt("The Liberal Guardian runs a story featuring AM radio plans ", gamelog);
+		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring AM radio plans ", gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -781,12 +759,9 @@ void printnews(short li, short newspaper)
 
 		}
 		gamelog.newline();
-		moveAlt(9, 1);
-
-		addstrAlt(major_news_take_it_up, gamelog);
+		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		moveAlt(10, 1);
-		addstrAlt("This is bound to get the Conservative masses a little riled up.", gamelog);
+		mvaddstrAlt(10,  1, "This is bound to get the Conservative masses a little riled up.", gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_AMRADIO, 50);
 		offended_amradio = 1;
@@ -814,9 +789,8 @@ void fundreport(char &clearformess)
 	{
 		eraseAlt();
 		int y = 2, totalmoney = 0, dailymoney = 0, numpages = 1;
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Liberal Crime Squad: Funding Report");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Liberal Crime Squad: Funding Report");
 		for (int i = 0; i < INCOMETYPENUM; i++)
 
 		{
@@ -827,9 +801,9 @@ void fundreport(char &clearformess)
 				if (page == numpages - 1)
 
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(y, 0, dotdotdot);
-					set_color(COLOR_GREEN, COLOR_BLACK, 0);
+					set_color_easy(GREEN_ON_BLACK);
 					num = "+$" + tostring(ledger.income[i]);
 					mvaddstrAlt(y, 60 - len(num), num);
 					if (ledger.dailyIncome[i])
@@ -838,13 +812,13 @@ void fundreport(char &clearformess)
 
 					else
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 0);
+						set_color_easy(WHITE_ON_BLACK);
 
 
 						num = " ($0)";
 					}
 					mvaddstrAlt(y, 73 - len(num), num);
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 
 
 
@@ -889,9 +863,9 @@ void fundreport(char &clearformess)
 				if (page == numpages - 1)
 
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(y, 0, dotdotdot);
-					set_color(COLOR_RED, COLOR_BLACK, 0);
+					set_color_easy(RED_ON_BLACK);
 					num = "-$" + tostring(ledger.expense[i]);
 					mvaddstrAlt(y, 60 - len(num), num);
 					if (ledger.dailyExpense[i])
@@ -900,13 +874,13 @@ void fundreport(char &clearformess)
 
 					else
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 0);
+						set_color_easy(WHITE_ON_BLACK);
 
 
 						num = " ($0)";
 					}
 					mvaddstrAlt(y, 73 - len(num), num);
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 
 
 
@@ -950,24 +924,24 @@ void fundreport(char &clearformess)
 			if (page == numpages - 1)
 
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "Net Change This Month (Day):");
-				if (totalmoney > 0) { set_color(COLOR_GREEN, COLOR_BLACK, 1); num = "+"; }
-				else if (totalmoney < 0) { set_color(COLOR_RED, COLOR_BLACK, 1); num = "-"; }
-				else { set_color(COLOR_WHITE, COLOR_BLACK, 1); num = ""; }
+				if (totalmoney > 0) { set_color_easy(GREEN_ON_BLACK_BRIGHT); num = "+"; }
+				else if (totalmoney < 0) { set_color_easy(RED_ON_BLACK_BRIGHT); num = "-"; }
+				else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = ""; }
 				num += "$" + tostring(abs(totalmoney));
 				mvaddstrAlt(y, 60 - len(num), num);
 				if (dailymoney > 0)
 
 				{
-					set_color(COLOR_GREEN, COLOR_BLACK, 1);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
 					num = " (+$" + tostring(abs(dailymoney)) + closeParenthesis;
 
 				}
 				else if (dailymoney < 0)
 
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
 					num = " (-$" + tostring(abs(dailymoney)) + closeParenthesis;
 
 
@@ -975,7 +949,7 @@ void fundreport(char &clearformess)
 				}
 				else
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 
 
 					num = " ($0)";
@@ -1004,7 +978,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Cash");
 			set_color(ledger.get_funds() ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
@@ -1016,7 +990,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Tools and Weapons");
 			set_color(weaponValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
@@ -1028,7 +1002,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Clothing and Armor");
 			set_color(armorValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
@@ -1040,7 +1014,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Ammunition");
 			set_color(clipValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
@@ -1052,7 +1026,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Miscellaneous Loot");
 			set_color(lootValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
@@ -1066,7 +1040,7 @@ void fundreport(char &clearformess)
 		if (page == numpages - 1)
 
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 0, "Total Liquid Assets:");
 			long netWorth = ledger.get_funds() + weaponValue + armorValue + clipValue + lootValue;
 			set_color(netWorth ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 1);
@@ -1074,12 +1048,11 @@ void fundreport(char &clearformess)
 			mvaddstrAlt(y, 60 - len(num), num);
 
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		if (numpages > 1)
 
 		{
-			mvaddstrAlt(24, 0, "Press Enter to reflect on the report.  ");
-			addpagestr();
+			mvaddstrAlt(24, 0, "Press Enter to reflect on the report.  " +			addpagestr());
 			while (true)
 
 			{

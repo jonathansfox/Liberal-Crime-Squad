@@ -26,11 +26,44 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "common/commonactions.h"
+
+#include "common/translateid.h"
+// for  int getsquad(int)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for makedelimeter
+
+#include "common/stringconversion.h"
+//for string attribute_enum_to_string(int)
+
+#include "title/highscore.h"       
+//for void savehighscore(char endtype)
+
+#include "title/saveload.h"       
+//for void reset();
+
+#include "politics/politics.h"
+//for int publicmood(int l)
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+/* end the game and clean up */
+void end_game(int err = EXIT_SUCCESS);
+
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
@@ -40,6 +73,21 @@ extern char endgamestate;
 extern short mode;
 extern string spaceDashSpace;
 extern string singleDot;
+extern short interface_pgup;
+extern short interface_pgdn;
+extern squadst *activesquad;
+extern short cursite;
+extern string singleSpace;
+extern vector<squadst *> squad;
+extern vector<Vehicle *> vehicle;
+extern short attitude[VIEWNUM];
+extern short public_interest[VIEWNUM];
+extern short background_liberal_influence[VIEWNUM];
+extern vector<datest *> date;
+extern vector<recruitst *> recruit;
+extern short activesortingchoice[SORTINGCHOICENUM];
+extern class Ledger ledger;
+
 /* common - test for possible game over */
 char endcheck(char cause)
 {
@@ -108,9 +156,8 @@ void hospitalize(int loc, Creature &patient)
 		patient.location = loc;
 		// Inform about the hospitalization
 		makedelimiter();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(8, 1);
-		addstrAlt(patient.name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  1, patient.name, gamelog);
 		addstrAlt(" will be at ", gamelog);
 		addstrAlt(location[loc]->name, gamelog);
 		addstrAlt(" for ", gamelog);
@@ -545,14 +592,12 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 	bool selection = false;
 	while (true)
 	{
-		moveAlt(y, 0);
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		addstrAlt("In what capacity will ");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y,  0, "In what capacity will ");
 		addstrAlt(converted.name);
 		addstrAlt(" best serve the Liberal cause?");
-		moveAlt(y + 2, 0);
 		set_color(COLOR_WHITE, COLOR_BLACK, !selection);
-		addstrAlt(selection ? "   " : "-> ");
+		mvaddstrAlt(y + 2,  0, selection ? "   " : "-> ");
 		addstrAlt("Come to ");
 		addstrAlt(location[recruiter.location]->getname(-1, true));
 		addstrAlt(" as a ");
@@ -560,9 +605,8 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 		addstrAlt("regular member");
 		set_color(COLOR_WHITE, COLOR_BLACK, !selection);
 		addstrAlt(singleDot);
-		moveAlt(y + 3, 0);
 		set_color(COLOR_WHITE, COLOR_BLACK, selection);
-		addstrAlt(selection ? "-> " : "   ");
+		mvaddstrAlt(y + 3,  0, selection ? "-> " : "   ");
 		addstrAlt("Stay at ");
 		addstrAlt(location[converted.worklocation]->getname(-1, true));
 		addstrAlt(" as a ");
@@ -642,9 +686,8 @@ vector<string> methodOfSorting;
 void sorting_prompt(short listforsorting)
 {
 	eraseAlt();
-	moveAlt(1, 1);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	addstrAlt("Choose how to sort list of ");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1,  1, "Choose how to sort list of ");
 	if (trainingActivitySorting.count(listforsorting)) {
 		addstrAlt(trainingActivitySorting[listforsorting]);
 	}
@@ -652,8 +695,7 @@ void sorting_prompt(short listforsorting)
 		addstrAlt(trainingActivitySorting[SORTINGCHOICENUM]);
 	}
 	for (int i = 0; i < len(methodOfSorting); i++) {
-		moveAlt(3 + i, 2);
-		addstrAlt(methodOfSorting[i]);
+		mvaddstrAlt(3 + i,  2, methodOfSorting[i]);
 	}
 	while (true)
 	{
@@ -706,19 +748,17 @@ int choiceprompt(const string &firstline, const string &secondline,
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt(firstline);
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveOneZero();
-		addstrAlt(secondline);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, firstline);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1,  0, secondline);
 		//Write options
 		for (int p = page * 19, y = 2; p < len(option) && p < page * 19 + 19; p++, y++)
 		{
 			mvaddcharAlt(y, 0, 'A' + y - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(option[p]);
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(22, 0);
 		switch (optiontypename[0])
 		{
@@ -728,8 +768,7 @@ int choiceprompt(const string &firstline, const string &secondline,
 		default:
 			addstrAlt(selectA + optiontypename); break;
 		}
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0,		addpagestr());
 		moveAlt(24, 0);
 		if (allowexitwochoice) addstrAlt(enterDash + exitstring);
 		int c = getkey();
@@ -756,23 +795,21 @@ int buyprompt(const string &firstline, const string &secondline,
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt(firstline);
-		moveOneZero();
-		addstrAlt(secondline);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, firstline);
+		mvaddstrAlt(1,  0, secondline);
 		//Write wares and prices
 		for (int p = page * 19, y = 2; p < len(nameprice) && p < page * 19 + 19; p++)
 		{
 			if (nameprice[p].second > ledger.get_funds())
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, 'A' + y - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(nameprice[p].first);
 			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg "A - ".
 			addstrAlt("$" + tostring(nameprice[p].second));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(22, 0);
 		switch (producttype[0])
 		{
@@ -782,10 +819,8 @@ int buyprompt(const string &firstline, const string &secondline,
 		default:
 			addstrAlt(selectA + producttype); break;
 		}
-		moveAlt(23, 0);
-		addpagestr();
-		moveAlt(24, 0);
-		addstrAlt(enterDash + exitstring);
+		mvaddstrAlt(23, 0, addpagestr());
+		mvaddstrAlt(24,  0, enterDash + exitstring);
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;

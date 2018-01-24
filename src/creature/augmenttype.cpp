@@ -1,6 +1,16 @@
 
 #include <includes.h>
 
+#include "augmenttype.h"
+//own header
+
+#include "log/log.h"
+// for log
+
+#include "common/stringconversion.h"
+//for int augment_string_to_enum(string)
+//for atoi redefinition
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

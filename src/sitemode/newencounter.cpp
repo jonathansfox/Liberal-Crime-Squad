@@ -26,6 +26,9 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/newencounter.h"
+// own header (for getrandomcreaturetype)
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -37,6 +40,15 @@ extern char endgamestate;
 extern short sitetype;
 extern short mode;
 extern short postalarmtimer;
+extern short lawList[LAWNUM];
+extern short siteonfire;
+extern short cursite;
+extern Creature encounter[ENCMAX];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern short sitealarm;
 void fillEncounter(CreatureTypes c, int numleft);
 void emptyEncounter();
 /* generates a new random encounter */

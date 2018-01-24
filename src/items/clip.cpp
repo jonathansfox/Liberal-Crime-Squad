@@ -1,11 +1,22 @@
 
 #include <includes.h>
 
+//#include "items/clip.h"
+//own header currently inside includes.h
+//own header
+
+#include "common/translateid.h"
+// for  int getcliptype
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern vector<ClipType *> cliptype;
+
 Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
 { }
 Clip::Clip(const std::string& inputXml) : Item(inputXml)

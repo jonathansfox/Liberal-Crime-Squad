@@ -521,11 +521,11 @@ void make_world(bool hasmaps)
 	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
 	// = id++;
 	//location.push_back(city = new Location(SITE_CITY_CHICAGO));
-	//// = id++;;
+	//// = id++;
 	//location.push_back(city = new Location(SITE_CITY_DETROIT));
-	//// = id++;;
+	//// = id++;
 	//location.push_back(city = new Location(SITE_CITY_ATLANTA));
-	//// = id++;;
+	//// = id++;
 	//location.push_back(city = new Location(SITE_CITY_MIAMI));
-	//// = id++;;
+	//// = id++;
 }

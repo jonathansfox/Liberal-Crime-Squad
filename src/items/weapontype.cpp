@@ -1,12 +1,22 @@
 
 #include <includes.h>
 
+//#include "items/weapontype.h"
+//own header currently inside includes.h
+//own header
+
+#include "common/stringconversion.h"
+//for stringtobool
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
 extern int year;
+extern string singleDot;
+extern short lawList[LAWNUM];
 WeaponType::WeaponType(MCD_STR xmlstring)
  : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
    name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),

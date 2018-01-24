@@ -1,8 +1,5 @@
 #ifndef ARMOR_H
-#define ARMOR_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define ARMOR_H0
 class Armor : public Item
 {
    public:
@@ -43,8 +40,8 @@ class Armor : public Item
       int get_interrogation_drugbonus() const;
       int get_professionalism() const;
       int get_weaponsize_concealment() const;
-      bool conceals_weapon(const Weapon& weapon) const;
-      bool conceals_weapon(const WeaponType& weapon) const;
+      //bool conceals_weapon(const Weapon& weapon) const;
+      //bool conceals_weapon(const WeaponType& weapon) const;
       bool conceals_weaponsize(int weaponsize) const;
       int get_durability() const;
       /*const vector<string>& get_appropriate_weapons() const

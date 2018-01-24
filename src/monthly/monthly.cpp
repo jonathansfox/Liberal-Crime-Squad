@@ -53,11 +53,61 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "basemode/liberalagenda.h"
+// for liberalagenda
+
+#include "items/loottype.h"
+
+#include "common/commonactions.h"
+// for char endcheck(char cause=-1)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/translateid.h"
+// for  int getpoolcreature(int id);
+
+#include "title/saveload.h"
+// for void reset;
+
+#include "title/highscore.h"
+// for viewhighscores;
+
+#include "monthly/monthly.h"
+//own header
+
+#include "politics/politics.h"
+//for publicmood
+
+#include "monthly/lcsmonthly.h"
+//for void printnews(short l,short newspaper);
+
+#include "monthly/sleeper_update.h"
+//for void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+
+#include "monthly/justice.h"
+//for void trial(Creature &g);
+
+#include "daily/daily.h"
+//for void initlocation(Location &loc);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+#include <common\\getnames.h>
+/* end the game and clean up */
+void end_game(int err = EXIT_SUCCESS);
+
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
@@ -67,6 +117,18 @@ extern int year;
 extern char endgamestate;
 extern string singleDot;
 extern char newscherrybusted;
+extern int day;
+extern int month;
+extern short lawList[LAWNUM];
+extern char disbanding;
+extern short attitude[VIEWNUM];
+extern short public_interest[VIEWNUM];
+extern short background_liberal_influence[VIEWNUM];
+extern vector<ArmorType *> armortype;
+extern class Ledger ledger;
+extern bool stalinmode;
+extern int disbandtime;
+
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
 {
@@ -260,7 +322,7 @@ void passmonth(char &clearformess, char canseethings)
 		{
 			music.play(MUSIC_ELECTIONS);
 			eraseAlt();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 23, "LCS MONTHLY INTELLIGENCE REPORT");
 			mvaddstrAlt(2, 27, "CURRENT POLITICAL TRENDS");
 			int numviews = (endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2) ? VIEWNUM - 1 : VIEWNUM;
@@ -280,25 +342,25 @@ void passmonth(char &clearformess, char canseethings)
 				mvaddstrAlt(y, x, getview(v, false));
 				mvaddcharAlt(y++, x + 23 + pip, 'O');
 			}
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(23, 0, "Elite Liberal ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt("-  ");
-			set_color(COLOR_CYAN, COLOR_BLACK, 1);
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			addstrAlt("Liberal  ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt("-  ");
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			addstrAlt("moderate  ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt("-  ");
-			set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			addstrAlt("Conservative  ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt("-  ");
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt("Arch-Conservative");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(24, 0, "Press any key to reflect on these poll numbers.");
 			clearformess = 1;
 			getkey();
@@ -327,22 +389,19 @@ void passmonth(char &clearformess, char canseethings)
 	if (disbanding&&year - disbandtime >= 50)
 	{
 		music.play(MUSIC_DEFEAT);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		eraseAlt();
-		moveAlt(12, 10);
-		addstrAlt("The Liberal Crime Squad is now just a memory.", gamelog);
+		mvaddstrAlt(12,  10, "The Liberal Crime Squad is now just a memory.", gamelog);
 		gamelog.newline();
 		getkey();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		eraseAlt();
-		moveAlt(12, 12);
-		addstrAlt("The last LCS members have all been hunted down.", gamelog);
+		mvaddstrAlt(12,  12, "The last LCS members have all been hunted down.", gamelog);
 		gamelog.newline();
 		getkey();
-		set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		eraseAlt();
-		moveAlt(12, 14);
-		addstrAlt("They will never see the utopia they dreamed of...", gamelog);
+		mvaddstrAlt(12,  14, "They will never see the utopia they dreamed of...", gamelog);
 		gamelog.newline();
 		gamelog.nextMessage();
 		getkey();
@@ -366,9 +425,8 @@ void passmonth(char &clearformess, char canseethings)
 			else makedelimiter();
 			if (pool[p]->flag & CREATUREFLAG_MISSING)
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt("Cops re-polluted ", gamelog);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, "Cops re-polluted ", gamelog);
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt("'s mind with Conservatism!", gamelog);
 				gamelog.nextMessage();
@@ -379,9 +437,8 @@ void passmonth(char &clearformess, char canseethings)
 			}
 			else if (pool[p]->flag & CREATUREFLAG_ILLEGALALIEN && lawList[LAW_IMMIGRATION] != 2)
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(pool[p]->name, gamelog);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 				addstrAlt(" has been shipped out to the INS to face ", gamelog);
 				if (lawList[LAW_IMMIGRATION] == -2 && lawList[LAW_DEATHPENALTY] == -2)
 					addstrAlt("execution.", gamelog);
@@ -418,15 +475,13 @@ void passmonth(char &clearformess, char canseethings)
 					if (!nullify)
 					{  //Issue a raid on this guy's base!
 						if (pool[p]->base >= 0)location[pool[p]->base]->heat += 300;
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(8, 1);
-						addstrAlt(pool[p]->name, gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 						addstrAlt(" has broken under the pressure and ratted you out!", gamelog);
 						gamelog.newline();
 						getkey();
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(9, 1);
-						addstrAlt("The traitor will testify in court, and safehouses may be compromised.", gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(9,  1, "The traitor will testify in court, and safehouses may be compromised.", gamelog);
 						gamelog.nextMessage();
 						getkey();
 						removesquadinfo(*pool[p]);
@@ -435,13 +490,12 @@ void passmonth(char &clearformess, char canseethings)
 					}
 					//else continue to trial
 				}
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(pool[p]->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 				addstrAlt(" is moved to the courthouse for trial.", gamelog);
 				gamelog.nextMessage();
 				getkey();
-				pool[p]->location = find_courthouse(*pool[p]);
+				pool[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, pool[p]->location);
 				Armor prisoner(*armortype[getarmortype(tag_ARMOR_PRISONER)]);
 				pool[p]->give_armor(prisoner, NULL);
 			}
@@ -525,13 +579,12 @@ void passmonth(char &clearformess, char canseethings)
 				pool[p]->location > -1 &&
 				location[pool[p]->location]->type == SITE_HOSPITAL_CLINIC)
 			{
-				int hospital = find_hospital(*pool[p]);
+				int hospital = find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY, pool[p]->location);
 				if (hospital != -1)
 				{
 					pool[p]->location = hospital;
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt(pool[p]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" has been transferred to ", gamelog);
 					addstrAlt(location[hospital]->name, gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -545,14 +598,13 @@ void passmonth(char &clearformess, char canseethings)
 				pool[p]->blood = 100;
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(pool[p]->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 				addstrAlt(" has left ", gamelog);
 				addstrAlt(location[pool[p]->location]->name, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				int hs = find_homeless_shelter(*pool[p]);
+				int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 				if (hs == -1) hs = 0; //TODO: Error unable to find location
 				if (location[pool[p]->base]->siege.siege ||
 					location[pool[p]->base]->renting == RENTING_NOCONTROL)

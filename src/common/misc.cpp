@@ -1,6 +1,23 @@
 
 #include <includes.h>
 
+#include "common/ledger.h"
+#include "common/interval.h"
+
+#include "common/misc.h"
+//own header
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addchar
+
+#include "common/consolesupport.h"
+// for getkey
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -119,30 +136,7 @@ string romannumeral(int amendnum)
 	}
 	return roman;
 }
-// Sets the interval according to a string that is either a number or two
-// number separated by a dash. Returns false and does not change the
-// interval if the given string is not a valid interval.
-bool Interval::set_interval(const string& interval)
-{
-	if (!len(interval) ||
-		interval.find_first_not_of("1234567890-") != string::npos)
-		return false;
-	size_t dashpos = interval.find('-', 1);
-	if (dashpos == string::npos) // Just a constant.
-	{
-		if (!valid(interval)) return false;
-		max = min = atoi(interval);
-	}
-	else
-	{
-		string smin = interval.substr(0, dashpos), smax = interval.substr(dashpos + 1);
-		if (!valid(smin) || !valid(smax)) return false;
-		int tmin = atoi(smin), tmax = atoi(smax);
-		if (tmin > tmax) return false;
-		min = tmin, max = tmax;
-	}
-	return true;
-}
+
 #ifndef DONT_INCLUDE_SDL
 /* helper function for initsongs() */
 void MusicClass::loadsong(int i, const char* filename)
@@ -172,7 +166,7 @@ void MusicClass::init()
 	if (songsinitialized) return; // only initialize once
 	if (SDL_Init(SDL_INIT_AUDIO) != 0) // initialize what we need from SDL for audio
 	{  // SDL failed to initialize, so log it and exit
-		addstr(string("Unable to initialize SDL:  ") + SDL_GetError(), gamelog);
+		addstrAlt(string("Unable to initialize SDL:  ") + SDL_GetError(), gamelog);
 		gamelog.nextMessage();
 
 		getkey();
@@ -182,7 +176,7 @@ void MusicClass::init()
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) != 0) // initialize the audio mixer at 44.1 kHz with a large buffer size, since we're just playing music not sound effects
 	{  // SDL_mixer failed to initialize, so log it and exit
-		addstr(string("Unable to initialize SDL_mixer:  ") + Mix_GetError(), gamelog);
+		addstrAlt(string("Unable to initialize SDL_mixer:  ") + Mix_GetError(), gamelog);
 		gamelog.nextMessage();
 
 		getkey();
@@ -313,3 +307,90 @@ void MusicClass::play(int _musicmode)
 	enableIf(isEnabled());
 #endif // DONT_INCLUDE_SDL
 }
+
+
+	Interval::Interval() : min(0), max(0) { }
+	Interval::Interval(int value) : min(value), max(value) { }
+	Interval::Interval(int low, int high) : min(low), max(high) { }
+	void Interval::set_interval(int low, int high) { min = low, max = high; }
+	// Sets the interval according to a string that is either a number or two
+	// number separated by a dash. Returns false and does not change the
+	// interval if the given string is not a valid interval.
+	// Sets the interval according to a string that is either a number or two
+	// number separated by a dash. Returns false and does not change the
+	// interval if the given string is not a valid interval.
+	bool Interval::set_interval(const string& interval)
+	{
+		if (!len(interval) ||
+			interval.find_first_not_of("1234567890-") != string::npos)
+			return false;
+		size_t dashpos = interval.find('-', 1);
+		if (dashpos == string::npos) // Just a constant.
+		{
+			if (!valid(interval)) return false;
+			max = min = atoi(interval);
+		}
+		else
+		{
+			string smin = interval.substr(0, dashpos), smax = interval.substr(dashpos + 1);
+			if (!valid(smin) || !valid(smax)) return false;
+			int tmin = atoi(smin), tmax = atoi(smax);
+			if (tmin > tmax) return false;
+			min = tmin, max = tmax;
+		}
+		return true;
+	}
+	int Interval::roll() const { return LCSrandom(max - min + 1) + min; }
+	bool Interval::valid(const string& v)
+	{
+		return len(v) &&                       // Blank string is invalid.
+			(len(v) != 1 || v[0] != '-') &&        // Just a dash is invalid.
+			v.find('-', 1) == string::npos;
+	} 
+
+
+	Ledger::Ledger() : funds(7), total_income(0), total_expense(0)
+	{
+		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0, dailyIncome[i] = 0;
+		for (int e = 0; e<EXPENSETYPENUM; e++) expense[e] = 0, dailyExpense[e] = 0;
+	}
+	int Ledger::get_funds() { return funds; }
+	void Ledger::force_funds(int amount) { funds = amount; }
+	void Ledger::add_funds(int amount, int incometype)
+	{
+		funds += amount,
+			income[incometype] += amount,
+			dailyIncome[incometype] += amount,
+			total_income += amount;
+	}
+	void Ledger::subtract_funds(int amount, int expensetype)
+	{
+		funds -= amount,
+			expense[expensetype] += amount,
+			dailyExpense[expensetype] += amount,
+			total_expense += amount;
+	}
+	void Ledger::resetMonthlyAmounts()
+	{
+		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0;
+		for (int e = 0; e<EXPENSETYPENUM; e++) expense[e] = 0;
+	}
+	void Ledger::resetDailyAmounts()
+	{
+		for (int i = 0; i<INCOMETYPENUM; i++) dailyIncome[i] = 0;
+		for (int e = 0; e<EXPENSETYPENUM; e++) dailyExpense[e] = 0;
+	}
+
+#ifndef DONT_INCLUDE_SDL
+	MusicClass::MusicClass() : enabled(true), songsinitialized(false), oggsupport(true), musicmode(MUSIC_OFF), previous(MUSIC_OFF) { }
+#else
+	MusicClass::MusicClass() : enabled(true) { }
+#endif // DONT_INCLUDE_SDL
+	bool MusicClass::isEnabled() { return enabled; }
+	void MusicClass::enableIf(bool e)
+	{
+		enabled = e;
+#ifndef DONT_INCLUDE_SDL
+		Mix_VolumeMusic(enabled*(MIX_MAX_VOLUME / 2)); // half volume if music enabled, muted if music disabled
+#endif // DONT_INCLUDE_SDL
+	}

@@ -1,5 +1,5 @@
-#ifndef CONFIG_H_INCLUDED
-#define CONFIG_H_INCLUDED
+#ifndef CONFIG_FILE_H
+#define CONFIG_FILE_H0
 // OBJECTIVE: SUPPORT TAB-SEPARATED CONFIGURATION FILES
 //   TO MAKE LCS CONTENT HIGHLY MODDABLE AND DATA-DRIVEN,
 //   INCLUDING EQUIPMENT, LOCATIONS, MAPS, CREATURES,
@@ -70,9 +70,6 @@
 // ... and more?
 //
 // ~ Jonathan S. Fox
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
 // - configurable is a base class object for anything
 //   that is implemented in the config file
 // - configurable objects implement a configure() method

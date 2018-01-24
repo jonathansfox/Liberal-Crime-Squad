@@ -26,6 +26,28 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for  addstr
+
+#include "common/commonactions.h"
+// for int loveslavesleft(const Creature&)
+
+#include "common/getnames.h"
+// for void enter_name(int,int,char *,int,const char *=NULL)
+
+#include "common/translateid.h"
+// for  int getarmortype(const string &);
+        // a bit obscure, i think --Schmel924
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -39,6 +61,11 @@ extern int stat_recruits;
 extern int stat_kidnappings;
 extern string singleDot;
  vector<string> date_fail;
+ extern short lawList[LAWNUM];
+ extern string commaSpace;
+ extern string singleSpace;
+ extern class Ledger ledger;
+ extern vector<ArmorType *> armortype;
 enum DateResults
 {
    DATERESULT_MEETTOMORROW,
@@ -54,7 +81,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 	std::string s = "";
 	if (aroll > troll)
 	{
-		set_color(COLOR_CYAN, COLOR_BLACK, 1);
+		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		moveAlt(y, 0); y++;
 		addstrAlt(d.date[e]->name, gamelog);
 		addstrAlt(" is quite taken with ", gamelog);
@@ -64,9 +91,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		getkey();
 		if (loveslavesleft(*pool[p]) <= 0)
 		{
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveAlt(y++, 0);
-			addstrAlt("But ", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y++,  0, "But ", gamelog);
 			addstrAlt(pool[p]->name, gamelog);
 			addstrAlt(" is already dating ", gamelog);
 			int num_relationships = loveslaves(*pool[p]);
@@ -74,17 +100,15 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			if (num_relationships == 1) addstrAlt("someone!", gamelog);
 			else addstrAlt(tostring(num_relationships) + " people!", gamelog);
 			gamelog.newline();
-			moveAlt(y++, 0);
-			addstrAlt(pool[p]->name, gamelog);
+			mvaddstrAlt(y++,  0, pool[p]->name, gamelog);
 			addstrAlt(" isn't seductive enough to juggle ", gamelog);
 			if (num_relationships == 1) addstrAlt("another", gamelog);
 			else addstrAlt("yet another", gamelog);
 			addstrAlt(" relationship.", gamelog);
 			gamelog.newline();
 			getkey();
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(y++, 0);
-			addstrAlt("It was fun though. They agree to part ways amicably.", gamelog);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y++,  0, "It was fun though. They agree to part ways amicably.", gamelog);
 			gamelog.nextMessage();
 			getkey();
 			delete_and_remove(d.date, e);
@@ -92,7 +116,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		}
 		if (LCSrandom((aroll - troll) / 2) > d.date[e]->get_attribute(ATTRIBUTE_WISDOM, true))
 		{
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			moveAlt(y, 0); y++;
 			addstrAlt("In fact, ", gamelog);
 			addstrAlt(d.date[e]->name, gamelog);
@@ -107,17 +131,14 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			d.date[e]->flag |= CREATUREFLAG_LOVESLAVE;
 			d.date[e]->hireid = pool[p]->id;
 			eraseAlt();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("The Self-Nullifying Infatuation of ");
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "The Self-Nullifying Infatuation of ");
 			addstrAlt(d.date[e]->propername);
-			moveAlt(2, 0);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			addstrAlt("What name will you use for this ");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(2,  0, "What name will you use for this ");
 			addstrAlt(d.date[e]->get_type_name());
 			addstrAlt(" in its presence?");
-			moveAlt(3, 0);
-			addstrAlt("If you do not enter anything, their real name will be used.");
+			mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
 			enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 			sleeperize_prompt(*d.date[e], *pool[p], 8);
 			pool.push_back(d.date[e]);
@@ -129,10 +150,9 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		{
 			if (d.date[e]->align == ALIGN_CONSERVATIVE && d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false) > 3)
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				y++;
-				moveAlt(y++, 0);
-				addstrAlt(s + pool[p]->name + " is slowly warming " + d.date[e]->name + "'s frozen Conservative heart.", gamelog);
+				mvaddstrAlt(y++,  0, s + pool[p]->name + " is slowly warming " + d.date[e]->name + "'s frozen Conservative heart.", gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
 				d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM, -1);
@@ -146,8 +166,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			else if (location[d.date[e]->worklocation]->mapped == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
 			{
 				y++;
-				moveAlt(y++, 0);
-				addstrAlt(s + d.date[e]->name + " turns the topic of discussion to the "
+				mvaddstrAlt(y++,  0, s + d.date[e]->name + " turns the topic of discussion to the "
 					+ location[d.date[e]->worklocation]->name + singleDot, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
@@ -168,9 +187,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				location[d.date[e]->worklocation]->mapped = 1;
 				location[d.date[e]->worklocation]->hidden = 0;
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(y++, 0);
-			addstrAlt("They'll meet again tomorrow.", gamelog);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
 			gamelog.nextMessage();
 			getkey();
 			return DATERESULT_MEETTOMORROW;
@@ -178,9 +196,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 	}
 	else if (aroll == troll)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(y++, 0);
-		addstrAlt(d.date[e]->name, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 		addstrAlt(" seemed to have fun, but left early", gamelog);
 		moveAlt(y++, 0);
 		switch (LCSrandom(7))
@@ -202,8 +219,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		case 5: addstrAlt(" to go to a birthday party.", gamelog); break;
 		case 6: addstrAlt(s + " to recharge " + d.date[e]->hisher() + " cell phone.", gamelog); break;
 		}
-		moveAlt(y++, 0);
-		addstrAlt("They'll meet again tomorrow.", gamelog);
+		mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
 		gamelog.nextMessage();
 		getkey();
 		return DATERESULT_MEETTOMORROW;
@@ -213,9 +229,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		//WISDOM POSSIBLE INCREASE
 		if (d.date[e]->align == -1 && aroll < troll / 2)
 		{
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			moveAlt(y++, 0);
-			addstrAlt("Talking with ", gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y++,  0, "Talking with ", gamelog);
 			addstrAlt(d.date[e]->name, gamelog);
 			addstrAlt(" actually curses ", gamelog);
 			addstrAlt(pool[p]->name, gamelog);
@@ -237,9 +252,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		if ((iscriminal(*pool[p])) &&
 			(!LCSrandom(50) || (LCSrandom(2) && (d.date[e]->kidnap_resistant()))))
 		{
-			moveAlt(y++, 0);
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			addstrAlt(d.date[e]->name, gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 			addstrAlt(" was leaking information to the police the whole time!", gamelog);
 			getkey();
 			moveAlt(y++, 0);
@@ -248,8 +262,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			if ((pool[p]->juice < 50 && LCSrandom(2)) || LCSrandom(2))
 			{
 				// Find the police station
-				long ps = find_police_station(*pool[p]);
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				long ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt(" has been arrested.", gamelog);
 				gamelog.nextMessage();
@@ -264,7 +278,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			}
 			else
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				addstrAlt("But ", gamelog);
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt(" escapes the police ambush!", gamelog);
@@ -276,11 +290,9 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			int ls = loveslaves(*pool[p]);
 			if (ls > 0 && LCSrandom(2))
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-				moveAlt(y++, 0);
-				addstrAlt(s + "The date starts well, but goes horribly wrong when " + d.date[e]->name, gamelog);
-				moveAlt(y++, 0);
-				addstrAlt(s + "notices " + pool[p]->name + "'s ", gamelog);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++,  0, s + "The date starts well, but goes horribly wrong when " + d.date[e]->name, gamelog);
+				mvaddstrAlt(y++,  0, s + "notices " + pool[p]->name + "'s ", gamelog);
 				switch (ls)
 				{
 				case 5:
@@ -329,9 +341,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			}
 			else
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-				moveAlt(y++, 0);
-				addstrAlt(d.date[e]->name, gamelog);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 				addstrAlt(" can sense that things just aren't working out.", gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
@@ -351,9 +362,8 @@ char completevacation(datest &d, int p, char &clearformess)
 	int e = 0;
 	clearformess = 1;
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt(pool[p]->name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
 	addstrAlt(" is back from vacation.", gamelog);
 	gamelog.nextMessage();
 	// Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
@@ -409,9 +419,8 @@ char completedate(datest &d, int p, char &clearformess)
 	int e;
 	clearformess = 1;
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt(pool[p]->name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
 	addstrAlt(" has ", gamelog);
 	if (len(d.date) == 1)
 	{
@@ -444,8 +453,7 @@ char completedate(datest &d, int p, char &clearformess)
 			moveAlt(2, 0);
 			if (len(d.date) > 2) addstrAlt("Unfortunately, they all know each other and had been discussing", gamelog);
 			else addstrAlt("Unfortunately, they know each other and had been discussing", gamelog);
-			moveAlt(3, 0);
-			addstrAlt(pool[p]->name, gamelog);
+			mvaddstrAlt(3,  0, pool[p]->name, gamelog);
 			addstrAlt(".  An ambush was set for the lying dog...", gamelog);
 			gamelog.newline();
 			getkey();
@@ -455,14 +463,12 @@ char completedate(datest &d, int p, char &clearformess)
 			if (len(d.date) > 2) addstrAlt("Unfortunately, they all turn up at the same time.", gamelog);
 			else addstrAlt("Unfortunately, they turn up at the same time.", gamelog);
 			gamelog.newline();
-			moveAlt(3, 0);
-			addstrAlt("Ruh roh...", gamelog);
+			mvaddstrAlt(3,  0, "Ruh roh...", gamelog);
 			gamelog.newline();
 			getkey();
 			break;
 		default:
-			moveAlt(2, 0);
-			addstrAlt(pool[p]->name, gamelog);
+			mvaddstrAlt(2,  0, pool[p]->name, gamelog);
 			if (len(d.date) > 2)
 				addstr_fl(gamelog, " realizes %s has committed to eating %d meals at once.", pool[p]->heshe(), len(d.date));
 			else
@@ -473,14 +479,12 @@ char completedate(datest &d, int p, char &clearformess)
 				addstrAlt(d.date[1]->name, gamelog);
 				gamelog.newline();
 			}
-			moveAlt(3, 0);
-			addstrAlt("Things go downhill fast.", gamelog);
+			mvaddstrAlt(3,  0, "Things go downhill fast.", gamelog);
 			gamelog.newline();
 			getkey();
 			break;
 		}
-		moveAlt(5, 0);
-		addstrAlt(pool[p]->name, gamelog);
+		mvaddstrAlt(5,  0, pool[p]->name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		addstrAlt(pickrandom(date_fail), gamelog);
 		addjuice(*pool[p], -5, -50);
@@ -491,16 +495,15 @@ char completedate(datest &d, int p, char &clearformess)
 	for (e = len(d.date) - 1; e >= 0; e--)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Seeing ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Seeing ");
 		addstrAlt(d.date[e]->name, gamelog);
 		addstrAlt(commaSpace, gamelog);
 		addstrAlt(d.date[e]->get_type_name(), gamelog);
 		addstrAlt(commaSpace, gamelog);
 		addstrAlt(location[d.date[e]->worklocation]->getname(false, true), gamelog);
 		gamelog.newline();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
 		//Others come to dates unarmed and wearing normal
 		//clothing
@@ -520,30 +523,25 @@ char completedate(datest &d, int p, char &clearformess)
 				d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())), temp.back()->get_number());
 			delete_and_remove(temp, len(temp) - 1);
 		}
-		moveAlt(10, 0);
-		addstrAlt("How should ");
+		mvaddstrAlt(10,  0, "How should ");
 		addstrAlt(pool[p]->name);
 		addstrAlt(" approach the situation?");
-		if (ledger.get_funds() >= 100 && !pool[p]->clinic)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(11, 0);
-		addstrAlt("A - Spend a hundred bucks tonight to get the ball rolling.");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(12, 0);
-		addstrAlt("B - Try to get through the evening without spending a penny.");
-		if (!pool[p]->clinic&&pool[p]->blood == 100)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		if (ledger.get_funds() >= 100 && !pool[p]->clinic)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(11,  0, "A - Spend a hundred bucks tonight to get the ball rolling.");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12,  0, "B - Try to get through the evening without spending a penny.");
+		if (!pool[p]->clinic&&pool[p]->blood == 100)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(13, 0);
 		if (pool[p]->blood == 100) addstrAlt("C - Spend a week on a cheap vacation (stands up any other dates).");
 		else addstrAlt("C - Spend a week on a cheap vacation (must be uninjured).");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(14, 0);
-		addstrAlt("D - Break it off.");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(14,  0, "D - Break it off.");
 		if (d.date[e]->align == -1 && !pool[p]->clinic)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(15, 0);
-			addstrAlt("E - Just kidnap the Conservative bitch.");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(15,  0, "E - Just kidnap the Conservative bitch.");
 		}
 		int thingsincommon = 0;
 		for (int s = 0; s < SKILLNUM; s++)
@@ -624,16 +622,14 @@ char completedate(datest &d, int p, char &clearformess)
 			}
 			if (c == 'e'&&d.date[e]->align == -1 && !pool[p]->clinic)
 			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				int bonus = 0;
-				moveAlt(17, 0);
-				addstrAlt(pool[p]->name, gamelog);
+				mvaddstrAlt(17,  0, pool[p]->name, gamelog);
 				if (pool[p]->get_weapon().is_ranged())
 				{
 					addstrAlt(" comes back from the bathroom toting the ", gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					moveAlt(18, 0);
-					addstrAlt("and threatens to blow the Conservative's brains out!", gamelog);
+					mvaddstrAlt(18,  0, "and threatens to blow the Conservative's brains out!", gamelog);
 					gamelog.newline();
 					bonus = 5;
 				}
@@ -641,8 +637,7 @@ char completedate(datest &d, int p, char &clearformess)
 				{
 					addstrAlt(" grabs the Conservative from behind, holding the ", gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					moveAlt(18, 0);
-					addstrAlt("to the corporate slave's throat!", gamelog);
+					mvaddstrAlt(18,  0, "to the corporate slave's throat!", gamelog);
 					gamelog.newline();
 					if (pool[p]->get_weapon().can_take_hostages())
 						bonus = 5;
@@ -666,9 +661,8 @@ char completedate(datest &d, int p, char &clearformess)
 					LCSrandom(15)) ||
 					LCSrandom(2 + bonus))
 				{
-					set_color(COLOR_GREEN, COLOR_BLACK, 1);
-					moveAlt(20, 0);
-					addstrAlt(d.date[e]->name, gamelog);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					mvaddstrAlt(20,  0, d.date[e]->name, gamelog);
 					if (bonus)
 					{
 						addstrAlt(" doesn't resist.", gamelog);
@@ -680,8 +674,7 @@ char completedate(datest &d, int p, char &clearformess)
 						gamelog.newline();
 					}
 					getkey();
-					moveAlt(22, 0);
-					addstrAlt(pool[p]->name, gamelog);
+					mvaddstrAlt(22,  0, pool[p]->name, gamelog);
 					addstrAlt(" kidnaps the Conservative!", gamelog);
 					gamelog.nextMessage();
 					getkey();
@@ -697,17 +690,14 @@ char completedate(datest &d, int p, char &clearformess)
 					//Create interrogation data
 					d.date[e]->activity.intr() = new interrogation;
 					eraseAlt();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveZeroZero();
-					addstrAlt("The Education of ");
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(0,  0, "The Education of ");
 					addstrAlt(d.date[e]->propername);
-					moveAlt(2, 0);
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
-					addstrAlt("What name will you use for this ");
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(2,  0, "What name will you use for this ");
 					addstrAlt(d.date[e]->get_type_name());
 					addstrAlt(" in its presence?");
-					moveAlt(3, 0);
-					addstrAlt("If you do not enter anything, their real name will be used.");
+					mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
 					enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 					pool.push_back(d.date[e]);
 					stat_kidnappings++;
@@ -719,14 +709,12 @@ char completedate(datest &d, int p, char &clearformess)
 					int y = 20;
 					if (LCSrandom(2))
 					{
-						set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-						moveAlt(y++, 0);
-						addstrAlt(d.date[e]->name, gamelog);
+						set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 						addstrAlt(" manages to get away on the way back to the safehouse!", gamelog);
 						gamelog.newline();
 						getkey();
-						moveAlt((++y)++, 0);
-						addstrAlt(pool[p]->name, gamelog);
+						mvaddstrAlt((++y)++,  0, pool[p]->name, gamelog);
 						addstrAlt(" has failed to kidnap the Conservative.", gamelog);
 						gamelog.nextMessage();
 						// Charge with kidnapping
@@ -737,19 +725,17 @@ char completedate(datest &d, int p, char &clearformess)
 					}
 					else
 					{
-						set_color(COLOR_RED, COLOR_BLACK, 1);
-						moveAlt(y++, 0);
-						addstrAlt(d.date[e]->name, gamelog);
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 						addstrAlt("'s fist is the last thing ", gamelog);
 						addstrAlt(pool[p]->name, gamelog);
 						addstrAlt(" remembers seeing!", gamelog);
 						gamelog.newline();
 						getkey();
-						moveAlt((++y)++, 0);
-						addstrAlt("The Liberal wakes up in the police station...", gamelog);
+						mvaddstrAlt((++y)++,  0, "The Liberal wakes up in the police station...", gamelog);
 						gamelog.nextMessage();
 						// Find the police station
-						int ps = find_police_station(*pool[p]);
+						int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location); 
 						// Arrest the Liberal
 						removesquadinfo(*pool[p]);
 						pool[p]->carid = -1;

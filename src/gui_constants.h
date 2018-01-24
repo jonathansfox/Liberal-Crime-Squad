@@ -1,4 +1,3 @@
-#pragma once
 struct MOVE_CONSTANT {
 	int y;
 	int x;

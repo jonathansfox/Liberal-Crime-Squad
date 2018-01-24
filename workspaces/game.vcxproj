@@ -18,6 +18,7 @@
     <ProjectGuid>{CA438C67-7A74-4797-BC09-8C866F965240}</ProjectGuid>
     <RootNamespace>game</RootNamespace>
     <ProjectName>crimesquad</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'" Label="Configuration">
@@ -178,8 +179,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\04IncludesPrimatives.cpp" />
-    <ClCompile Include="..\src\11IncludesPrimatives.cpp" />
+    <ClCompile Include="..\src\externallyStoredText.cpp" />
+    <ClCompile Include="..\src\externallyStoredData.cpp" />
     <ClCompile Include="..\src\basemode\activate.cpp" />
     <ClCompile Include="..\src\basemode\activate_sleepers.cpp" />
     <ClCompile Include="..\src\basemode\baseactions.cpp" />
@@ -244,7 +245,6 @@
     <ClCompile Include="..\src\news\majorevent.cpp" />
     <ClCompile Include="..\src\news\news.cpp" />
     <ClCompile Include="..\src\news\squadstory_text.cpp" />
-    <ClCompile Include="..\src\politics\law.cpp" />
     <ClCompile Include="..\src\politics\politics.cpp" />
     <ClCompile Include="..\src\sitemode\advance.cpp" />
     <ClCompile Include="..\src\sitemode\mapspecials.cpp" />
@@ -267,6 +267,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\basemode\activate.h" />
     <ClInclude Include="..\src\basemode\activate_sleepers.h" />
+    <ClInclude Include="..\src\basemode\liberalagenda.h" />
     <ClInclude Include="..\src\basemode\reviewmode.h" />
     <ClInclude Include="..\src\cmarkup\Markup.h" />
     <ClInclude Include="..\src\combat\chase.h" />
@@ -276,11 +277,13 @@
     <ClInclude Include="..\src\common\commonactions.h" />
     <ClInclude Include="..\src\common\commondisplay.h" />
     <ClInclude Include="..\src\common\consolesupport.h" />
-    <ClInclude Include="..\src\common\creature.h" />
     <ClInclude Include="..\src\common\equipment.h" />
     <ClInclude Include="..\src\common\getnames.h" />
     <ClInclude Include="..\src\common\help.h" />
-    <ClInclude Include="..\src\common\stringconversion.h" />
+    <ClInclude Include="..\src\common\interval.h" />
+    <ClInclude Include="..\src\common\ledger.h" />
+    <ClInclude Include="..\src\common\misc.h" />
+    <ClInclude Include="..\src\common\musicClass.h" />
     <ClInclude Include="..\src\common\translateid.h" />
     <ClInclude Include="..\src\compat.h" />
     <ClInclude Include="..\src\configfile.h" />
@@ -292,13 +295,21 @@
     <ClInclude Include="..\src\cursesAlternative.h" />
     <ClInclude Include="..\src\cursesgraphics.h" />
     <ClInclude Include="..\src\cursesmovie.h" />
-    <ClInclude Include="..\src\cursesmoviest.h" />
     <ClInclude Include="..\src\customMaps.h" />
     <ClInclude Include="..\src\daily\activities.h" />
     <ClInclude Include="..\src\daily\daily.h" />
     <ClInclude Include="..\src\daily\siege.h" />
     <ClInclude Include="..\src\gui_constants.h" />
     <ClInclude Include="..\src\includes.h" />
+    <ClInclude Include="..\src\politics\politics.h" />
+    <ClInclude Include="..\src\sitemode\advance.h" />
+    <ClInclude Include="..\src\sitemode\mapspecials.h" />
+    <ClInclude Include="..\src\sitemode\miscactions.h" />
+    <ClInclude Include="..\src\sitemode\sitedisplay.h" />
+    <ClInclude Include="..\src\title\initfile.h" />
+    <ClInclude Include="..\src\title\newgame.h" />
+    <ClInclude Include="..\src\title\saveload.h" />
+    <ClInclude Include="..\src\title\titlescreen.h" />
     <ClInclude Include="..\src\vehicle\vehicle.h" />
     <ClInclude Include="..\src\vehicle\vehicletype.h" />
     <CustomBuildStep Include="..\src\compat.h" />
@@ -319,9 +330,7 @@
     <ClInclude Include="..\src\items\weapon.h" />
     <ClInclude Include="..\src\items\weapontype.h" />
     <ClInclude Include="..\src\lcsio.h" />
-    <ClInclude Include="..\src\locationdef.h" />
     <ClInclude Include="..\src\locations\locations.h" />
-    <ClInclude Include="..\src\log.h" />
     <ClInclude Include="..\src\log\log.h" />
     <ClInclude Include="..\src\monthly\justice.h" />
     <ClInclude Include="..\src\monthly\lcsmonthly.h" />
@@ -329,11 +338,6 @@
     <ClInclude Include="..\src\monthly\sleeper_update.h" />
     <ClInclude Include="..\src\news\news.h" />
     <ClInclude Include="..\src\pdcurses\curses.h" />
-    <ClInclude Include="..\src\politics\alignment.h" />
-    <ClInclude Include="..\src\politics\law.h" />
-    <ClInclude Include="..\src\sandbox\globals.h" />
-    <ClInclude Include="..\src\sandbox\lcscommon.h" />
-    <ClInclude Include="..\src\sandbox\location_test.h" />
     <ClInclude Include="..\src\set_color_support.h" />
     <ClInclude Include="..\src\sitemode\newencounter.h" />
     <ClInclude Include="..\src\sitemode\shop.h" />

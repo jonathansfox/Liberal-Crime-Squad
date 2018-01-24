@@ -26,6 +26,40 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/mapspecials.h"
+
+#include "sitemode/advance.h"
+
+#include "sitemode/miscactions.h"
+
+#include "sitemode/sitedisplay.h"
+
+#include "sitemode/stealth.h"
+
+#include "items/loottype.h"
+
+#include "items/loot.h"
+
+#include "items/money.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/commonactions.h"
+// for void juiceparty(long juice,long cap);
+
+#include "common/translateid.h"
+// for  int getloottype(int id);
+
+#include "combat/fight.h"
+//for void enemyattack();
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -41,6 +75,25 @@ extern char endgamestate;
 extern short sitetype;
 extern string string_sleeper;
 extern string singleDot;
+extern short cursite;
+extern short sitealarm;
+extern Creature encounter[ENCMAX];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern squadst *activesquad;
+extern newsstoryst *sitestory; 
+extern short lawList[LAWNUM];
+extern short sitealarmtimer;
+extern int sitecrime;
+extern short sitealienate;
+extern bool deagle;
+extern vector<WeaponType *> weapontype;
+extern vector<ClipType *> cliptype;
+extern bool m249;
+extern vector<ArmorType *> armortype;
+extern UniqueCreatures uniqueCreatures;
 enum bouncer_reject_reason
 {
 	REJECTED_CCS,
@@ -121,8 +174,8 @@ void special_bouncer_assess_squad()
 		}
 	}
 	//clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(16, 1);
 	if (autoadmit)
 	{
 		addstrAlt(string_sleeper, gamelog);
@@ -196,35 +249,35 @@ void special_bouncer_assess_squad()
 					rejected = REJECTED_CCS;
 			}
 		}
-		moveSeventeenOne();
+		moveAlt(17, 1);
 		switch (rejected)
 		{
 		case REJECTED_CCS:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedByCCS), gamelog);
 			break;
 		case REJECTED_NUDE:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseNude), gamelog);
 			break;
 		case REJECTED_UNDERAGE:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseUnderage), gamelog);
 			break;
 		case REJECTED_FEMALE:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseFemale), gamelog);
 			break;
 		case REJECTED_FEMALEISH:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseFemaleish), gamelog);
 			break;
 		case REJECTED_DRESSCODE:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseDresscode), gamelog);
 			break;
 		case REJECTED_SMELLFUNNY:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			if (!LCSrandom(len(rejectedBecauseSmellFunny) - 1)) {
 				if (lawList[LAW_FREESPEECH] == -2)addstrAlt("\"Get the [heck] out of here.\"", gamelog);
 				else if (lawList[LAW_FREESPEECH] == 2)addstrAlt("\"Get the fuck out of here.\"", gamelog);
@@ -235,27 +288,27 @@ void special_bouncer_assess_squad()
 			}
 			break;
 		case REJECTED_BLOODYCLOTHES:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseBloodyClothes), gamelog);
 			break;
 		case REJECTED_DAMAGEDCLOTHES:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseBloodyClothes), gamelog);
 			break;
 		case REJECTED_SECONDRATECLOTHES:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseSecondRateClothes), gamelog);
 			break;
 		case REJECTED_WEAPONS:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseWeapons), gamelog);
 			break;
 		case REJECTED_GUESTLIST:
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(rejectedBecauseGuestList), gamelog);
 			break;
 		case NOT_REJECTED:
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(notRejected), gamelog);
 			break;
 		}
@@ -263,7 +316,7 @@ void special_bouncer_assess_squad()
 		getkey();
 	}
 	else encounter[0].exists = 0;
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
 		{
@@ -284,12 +337,10 @@ void special_lab_cosmetics_cagedanimals()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see fluffy white rabbits in a locked cage.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see fluffy white rabbits in a locked cage.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Free them? (Yes or No)");
+		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -318,29 +369,24 @@ void special_lab_cosmetics_cagedanimals()
 void special_readsign(int sign)
 {
 	clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	switch (sign) //TODO: Log these?
 	{
 	case SPECIAL_SIGN_ONE:
 		switch (location[cursite]->type)
 		{
 		default:
-			moveSixteenOne();
-			addstrAlt("\"The best way not to fail is to succeed.\"");
+			mvaddstrAlt(16,  1, "\"The best way not to fail is to succeed.\"");
 			break;
 		case SITE_INDUSTRY_NUCLEAR:
-			moveSixteenOne();
-			addstrAlt("Welcome to the NPP Nuclear Plant. Please enjoy");
-			moveSeventeenOne();
-			addstrAlt("the museum displays in the gift shop.");
+			mvaddstrAlt(16,  1, "Welcome to the NPP Nuclear Plant. Please enjoy");
+			mvaddstrAlt(17,  1, "the museum displays in the gift shop.");
 			break;
 		case SITE_RESIDENTIAL_TENEMENT:
 		case SITE_RESIDENTIAL_APARTMENT:
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			moveSixteenOne();
-			addstrAlt("The landlord's office is the first door");
-			moveSeventeenOne();
-			addstrAlt("on the left.");
+			mvaddstrAlt(16,  1, "The landlord's office is the first door");
+			mvaddstrAlt(17,  1, "on the left.");
 			break;
 		}
 		break;
@@ -348,8 +394,7 @@ void special_readsign(int sign)
 		switch (location[cursite]->type)
 		{
 		default:
-			moveSixteenOne();
-			addstrAlt("\"Great work is done by people who do great work.\"");
+			mvaddstrAlt(16,  1, "\"Great work is done by people who do great work.\"");
 			break;
 		}
 		break;
@@ -357,8 +402,7 @@ void special_readsign(int sign)
 		switch (location[cursite]->type)
 		{
 		default:
-			moveSixteenOne();
-			addstrAlt("Employees Only");
+			mvaddstrAlt(16,  1, "Employees Only");
 			break;
 		}
 		break;
@@ -370,22 +414,18 @@ void special_nuclear_onoff()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (lawList[LAW_NUCLEARPOWER] == 2)
 		{
-			moveSixteenOne();
-			addstrAlt("You see the nuclear waste center control room.", gamelog);
+			mvaddstrAlt(16,  1, "You see the nuclear waste center control room.", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("Attempt to release nuclear waste? (Yes or No)");
+			mvaddstrAlt(17,  1, "Attempt to release nuclear waste? (Yes or No)");
 		}
 		else
 		{
-			moveSixteenOne();
-			addstrAlt("You see the nuclear power plant control room.", gamelog);
+			mvaddstrAlt(16,  1, "You see the nuclear power plant control room.", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("Mess with the reactor settings? (Yes or No)");
+			mvaddstrAlt(17,  1, "Mess with the reactor settings? (Yes or No)");
 		}
 		int c = getkey();
 		if (c == 'y')
@@ -407,14 +447,12 @@ void special_nuclear_onoff()
 			}
 			if (maxs)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(maxs->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, maxs->name, gamelog);
 				addstrAlt(" presses the big red button!", gamelog);
 				gamelog.newline();
 				getkey();
-				moveSeventeenOne();
-				addstrAlt(singleDot, gamelog);
+				mvaddstrAlt(17,  1, singleDot, gamelog);
 				getkey();
 				addstrAlt(singleDot, gamelog);
 				getkey();
@@ -422,8 +460,7 @@ void special_nuclear_onoff()
 				getkey();
 				if (lawList[LAW_NUCLEARPOWER] == 2)
 				{
-					moveSeventeenOne();
-					addstrAlt("The nuclear waste gets released into the state's water supply!", gamelog);
+					mvaddstrAlt(17,  1, "The nuclear waste gets released into the state's water supply!", gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
 					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, -50, 0, 0);
@@ -434,12 +471,10 @@ void special_nuclear_onoff()
 				}
 				else
 				{
-					moveSixteenOne();
-					addstrAlt("A deafening alarm sounds!", gamelog);
+					mvaddstrAlt(16,  1, "A deafening alarm sounds!", gamelog);
 					gamelog.newline();
 					addstrAlt("                "); // Remove remaining part of previous text.
-					moveSeventeenOne();
-					addstrAlt("The reactor is overheating!", gamelog);
+					mvaddstrAlt(17,  1, "The reactor is overheating!", gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
 					getkey();
@@ -450,11 +485,9 @@ void special_nuclear_onoff()
 			}
 			else
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("After some failed attempts, and a very loud alarm, ", gamelog);
-				moveSeventeenOne();
-				addstrAlt("the Squad resigns to just leaving a threatening note.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "After some failed attempts, and a very loud alarm, ", gamelog);
+				mvaddstrAlt(17,  1, "the Squad resigns to just leaving a threatening note.", gamelog);
 				gamelog.newline();
 				getkey();
 				juiceparty(15, 500);
@@ -475,12 +508,10 @@ void special_lab_genetic_cagedanimals()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see horrible misshapen creatures in a sealed cage.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see horrible misshapen creatures in a sealed cage.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Free them? (Yes or No)");
+		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -497,9 +528,8 @@ void special_lab_genetic_cagedanimals()
 				if (!LCSrandom(2))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("Uh, maybe that idea was Conservative in retrospect...", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "Uh, maybe that idea was Conservative in retrospect...", gamelog);
 					gamelog.newline();
 					int numleft = LCSrandom(6) + 1;
 					fillEncounter(CREATURE_GENETIC, numleft);
@@ -533,12 +563,10 @@ void special_policestation_lockup()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see prisoners in the detention room.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see prisoners in the detention room.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Free them? (Yes or No)");
+		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -577,12 +605,10 @@ void special_courthouse_lockup()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see prisoners in the Courthouse jail.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see prisoners in the Courthouse jail.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Free them? (Yes or No)");
+		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -622,11 +648,9 @@ void special_courthouse_jury()
 	if (sitealarm || sitealienate)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("It appears as if this room has been ", gamelog);
-		moveSeventeenOne();
-		addstrAlt("vacated in a hurry.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "It appears as if this room has been ", gamelog);
+		mvaddstrAlt(17,  1, "vacated in a hurry.", gamelog);
 		gamelog.newline();
 		getkey();
 		return;
@@ -634,12 +658,10 @@ void special_courthouse_jury()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found a Jury in deliberations!", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found a Jury in deliberations!", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Attempt to influence them? (Yes or No)");
+		mvaddstrAlt(17,  1, "Attempt to influence them? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -677,12 +699,10 @@ void special_courthouse_jury()
 				if (succeed)
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt(activesquad->squad[p]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 					addstrAlt(" works the room like in Twelve Angry Men, and the jury ", gamelog);
-					moveSeventeenOne();
-					addstrAlt("concludes that ", gamelog);//XXX: This is very awkward grammar.
+					mvaddstrAlt(17,  1, "concludes that ", gamelog);//XXX: This is very awkward grammar.
 					addstrAlt(pickrandom(randomCrime), gamelog);
 					addstrAlt(" wasn't really wrong here.", gamelog);
 					gamelog.newline();
@@ -695,9 +715,8 @@ void special_courthouse_jury()
 				else
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt(activesquad->squad[p]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 					addstrAlt(" wasn't quite convincing...", gamelog);
 					gamelog.newline();
 					getkey();
@@ -724,9 +743,8 @@ void special_prison_control(short prison_control_type)
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found the ", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found the ", gamelog);
 		if (prison_control_type == SPECIAL_PRISON_CONTROL_LOW)
 			addstrAlt("low security ", gamelog);
 		else if (prison_control_type == SPECIAL_PRISON_CONTROL_MEDIUM)
@@ -735,8 +753,7 @@ void special_prison_control(short prison_control_type)
 			addstrAlt("high security ", gamelog);
 		addstrAlt("prison control room.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Free the prisoners? (Yes or No)");
+		mvaddstrAlt(17,  1, "Free the prisoners? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -793,11 +810,9 @@ void special_intel_supercomputer()
 	if (sitealarm || sitealienate)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The security alert has caused the ", gamelog);
-		moveSeventeenOne();
-		addstrAlt("computer to shut down.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The security alert has caused the ", gamelog);
+		mvaddstrAlt(17,  1, "computer to shut down.", gamelog);
 		gamelog.newline();
 		getkey();
 		return;
@@ -805,12 +820,10 @@ void special_intel_supercomputer()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found the Intelligence Supercomputer.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found the Intelligence Supercomputer.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Hack it? (Yes or No)");
+		mvaddstrAlt(17,  1, "Hack it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -819,14 +832,12 @@ void special_intel_supercomputer()
 			{
 				clearmessagearea();
 				//char *loot;
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The Squad obtains sensitive information", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The Squad obtains sensitive information", gamelog);
 				if (endgamestate >= ENDGAME_CCS_APPEARANCE && endgamestate < ENDGAME_CCS_DEFEATED && ccsexposure < CCSEXPOSURE_LCSGOTDATA)
 				{
 					addstrAlt(",", gamelog);
-					moveSeventeenOne();
-					addstrAlt("including a list of government backers of the CCS.", gamelog);
+					mvaddstrAlt(17,  1, "including a list of government backers of the CCS.", gamelog);
 					Item *it = new Loot(*loottype[getloottype(tag_LOOT_CCS_BACKERLIST)]);
 					activesquad->loot.push_back(it);
 					ccsexposure = CCSEXPOSURE_LCSGOTDATA;
@@ -861,9 +872,8 @@ void special_intel_supercomputer()
 void special_graffiti()
 {
 	clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
-	addstrAlt("The squad sprays Liberal Graffiti!", gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "The squad sprays Liberal Graffiti!", gamelog);
 	gamelog.newline();
 	if (!sitestory->claimed)
 		sitestory->claimed = 1;
@@ -910,12 +920,10 @@ void special_sweatshop_equipment()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see some textile equipment.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see some textile equipment.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Destroy it? (Yes or No)");
+		mvaddstrAlt(17,  1, "Destroy it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -940,12 +948,10 @@ void special_polluter_equipment()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see some industrial equipment.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see some industrial equipment.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Destroy it? (Yes or No)");
+		mvaddstrAlt(17,  1, "Destroy it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -971,12 +977,10 @@ void special_house_photos()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found a safe.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found a safe.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Open it? (Yes or No)");
+		mvaddstrAlt(17,  1, "Open it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -988,9 +992,8 @@ void special_house_photos()
 				if (deagle == false)
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("The squad has found a Desert Eagle.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "The squad has found a Desert Eagle.", gamelog);
 					gamelog.newline();
 					getkey();
 					Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_DESERT_EAGLE)]);
@@ -1005,9 +1008,8 @@ void special_house_photos()
 				if (LCSrandom(2))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("This guy sure had a lot of $100 bills.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "This guy sure had a lot of $100 bills.", gamelog);
 					gamelog.newline();
 					getkey();
 					it = new Money(1000 * (1 + LCSrandom(10)));
@@ -1017,9 +1019,8 @@ void special_house_photos()
 				if (LCSrandom(2))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("The squad Liberates some expensive jewelery.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "The squad Liberates some expensive jewelery.", gamelog);
 					gamelog.newline();
 					getkey();
 					it = new Loot(*loottype[getloottype(tag_LOOT_EXPENSIVEJEWELERY)], 3);
@@ -1029,9 +1030,8 @@ void special_house_photos()
 				if (!LCSrandom(3))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("There are some... very compromising photos here.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "There are some... very compromising photos here.", gamelog);
 					gamelog.newline();
 					getkey();
 					it = new Loot(*loottype[getloottype(tag_LOOT_CEOPHOTOS)]);
@@ -1041,9 +1041,8 @@ void special_house_photos()
 				if (!LCSrandom(3))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("There are some drugs here.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "There are some drugs here.", gamelog);
 					gamelog.newline();
 					getkey();
 					empty = false;
@@ -1051,11 +1050,9 @@ void special_house_photos()
 				if (!LCSrandom(3))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("Wow, get a load of these love letters. ", gamelog);
-					moveSeventeenOne();
-					addstrAlt("The squad will take those.");
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "Wow, get a load of these love letters. ", gamelog);
+					mvaddstrAlt(17,  1, "The squad will take those.");
 					gamelog.newline();
 					getkey();
 					it = new Loot(*loottype[getloottype(tag_LOOT_CEOLOVELETTERS)]);
@@ -1065,9 +1062,8 @@ void special_house_photos()
 				if (!LCSrandom(3))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("These documents show serious tax evasion.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "These documents show serious tax evasion.", gamelog);
 					gamelog.newline();
 					getkey();
 					it = new Loot(*loottype[getloottype(tag_LOOT_CEOTAXPAPERS)]);
@@ -1077,9 +1073,8 @@ void special_house_photos()
 				if (empty)
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("Wow, it's empty.  That sucks.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "Wow, it's empty.  That sucks.", gamelog);
 					gamelog.newline();
 					getkey();
 				}
@@ -1110,20 +1105,17 @@ void special_armory()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found the armory.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found the armory.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Break in? (Yes or No)");
+		mvaddstrAlt(17,  1, "Break in? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
 			clearmessagearea();
 			sitealarm = 1;
-			moveSixteenOne();
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			addstrAlt("Alarms go off!", gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "Alarms go off!", gamelog);
 			gamelog.newline();
 			getkey();
 			bool empty = true;
@@ -1131,9 +1123,8 @@ void special_armory()
 			if (m249 == false && location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("Jackpot! The squad found a M249 Machine Gun!", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "Jackpot! The squad found a M249 Machine Gun!", gamelog);
 				gamelog.newline();
 				getkey();
 				Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_M249_MACHINEGUN)]);
@@ -1148,9 +1139,8 @@ void special_armory()
 			if (LCSrandom(2))
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The squad finds some M16 Assault Rifles.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The squad finds some M16 Assault Rifles.", gamelog);
 				gamelog.newline();
 				getkey();
 				int num = 0;
@@ -1169,9 +1159,8 @@ void special_armory()
 			if (LCSrandom(2))
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The squad finds some M4 Carbines.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The squad finds some M4 Carbines.", gamelog);
 				gamelog.newline();
 				getkey();
 				int num = 0;
@@ -1190,9 +1179,8 @@ void special_armory()
 			if (LCSrandom(2))
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The squad finds some body armor.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The squad finds some body armor.", gamelog);
 				gamelog.newline();
 				getkey();
 				int num = 0;
@@ -1212,9 +1200,8 @@ void special_armory()
 			{
 				criminalizeparty(LAWFLAG_TREASON);
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("It's a trap!  The armory is empty.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "It's a trap!  The armory is empty.", gamelog);
 				gamelog.newline();
 				getkey();
 				int numleft = LCSrandom(8) + 2;
@@ -1236,9 +1223,8 @@ void special_armory()
 				if (time < 1)time = 1;
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("Guards are everywhere!", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "Guards are everywhere!", gamelog);
 				gamelog.newline();
 				getkey();
 				int numleft = LCSrandom(4) + 2;
@@ -1262,12 +1248,10 @@ void special_corporate_files()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You've found a safe.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You've found a safe.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Open it? (Yes or No)");
+		mvaddstrAlt(17,  1, "Open it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -1275,9 +1259,8 @@ void special_corporate_files()
 			if (unlock(UNLOCK_SAFE, actual))
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The Squad has found some very interesting files.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The Squad has found some very interesting files.", gamelog);
 				gamelog.newline();
 				Item *it = new Loot(*loottype[getloottype(tag_LOOT_CORPFILES)]);
 				activesquad->loot.push_back(it);
@@ -1309,23 +1292,19 @@ void special_radio_broadcaststudio()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (sitealarm || sitealienate)
 		{
-			moveSixteenOne();
-			addstrAlt("The radio broadcasters left the equipment on in ", gamelog);
-			moveSeventeenOne();
-			addstrAlt("their rush to get out.", gamelog);
+			mvaddstrAlt(16,  1, "The radio broadcasters left the equipment on in ", gamelog);
+			mvaddstrAlt(17,  1, "their rush to get out.", gamelog);
 			gamelog.newline();
 			addstrAlt(" Take over the studio? (Yes or No)");
 		}
 		else
 		{
-			moveSixteenOne();
-			addstrAlt("You've found a radio broadcasting room.", gamelog);
+			mvaddstrAlt(16,  1, "You've found a radio broadcasting room.", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("Interrupt this evening's programming? (Yes or No)");
+			mvaddstrAlt(17,  1, "Interrupt this evening's programming? (Yes or No)");
 		}
 		int c = getkey();
 		if (c == 'y')
@@ -1345,22 +1324,18 @@ void special_news_broadcaststudio()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (sitealarm || sitealienate)
 		{
-			moveSixteenOne();
-			addstrAlt("The Cable News broadcasters left the equipment on in", gamelog);
-			moveSeventeenOne();
-			addstrAlt("their rush to get out.");
+			mvaddstrAlt(16,  1, "The Cable News broadcasters left the equipment on in", gamelog);
+			mvaddstrAlt(17,  1, "their rush to get out.");
 			gamelog.newline();
 			addstrAlt(" Take over the studio? (Yes or No)");
 		}
 		else
 		{
-			moveSixteenOne();
-			addstrAlt("You've found a Cable News broadcasting studio.", gamelog);
-			moveSeventeenOne();
-			addstrAlt("Start an impromptu news program? (Yes or No)");
+			mvaddstrAlt(16,  1, "You've found a Cable News broadcasting studio.", gamelog);
+			mvaddstrAlt(17,  1, "Start an impromptu news program? (Yes or No)");
 		}
 		int c = getkey();
 		if (c == 'y')
@@ -1380,11 +1355,9 @@ void special_display_case()
 	while (true)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You see a display case.", gamelog);
-		moveSeventeenOne();
-		addstrAlt("Smash it? (Yes or No)");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You see a display case.", gamelog);
+		mvaddstrAlt(17,  1, "Smash it? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
@@ -1480,8 +1453,8 @@ void special_security(bool metaldetect)
 		}
 	}
 	//clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(16, 1);
 	if (sitealarm)
 	{
 		addstrAlt("The security checkpoint is abandoned.", gamelog);
@@ -1534,47 +1507,47 @@ void special_security(bool metaldetect)
 				if (rejected>REJECTED_UNDERAGE)rejected = REJECTED_UNDERAGE;
 		}
 	}
-	moveSeventeenOne();
+	moveAlt(17, 1);
 	switch (rejected)
 	{
 	case REJECTED_NUDE:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (autoadmit) addstrAlt("\"Jesus! Put some clothes on!\"", gamelog);
 		else addstrAlt(pickrandom(caseREJECTED_NUDE), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_UNDERAGE:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_UNDERAGE), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_DRESSCODE:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_DRESSCODE), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_SMELLFUNNY:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_SMELLFUNNY), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_BLOODYCLOTHES:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_BLOODYCLOTHES), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_DAMAGEDCLOTHES:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_DAMAGEDCLOTHES), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_SECONDRATECLOTHES:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseREJECTED_SECONDRATECLOTHES), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_WEAPONS:
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (metaldetect)
 		{
 			addstrAlt("-BEEEP- -BEEEP- -BEEEP-", gamelog);
@@ -1584,13 +1557,13 @@ void special_security(bool metaldetect)
 		gamelog.newline();
 		break;
 	case NOT_REJECTED:
-		set_color(COLOR_GREEN, COLOR_BLACK, 1);
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseNOT_REJECTED), gamelog);
 		gamelog.newline();
 		break;
 	}
 	getkey();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
 		{
@@ -1621,17 +1594,13 @@ void special_security_secondvisit()
 void special_bank_vault()
 {
 	clearmessagearea();
-	moveSixteenOne();
-	addstrAlt("The vault door has three layers: A combo lock, ", gamelog);
-	moveSeventeenOne();
-	addstrAlt("an electronic lock, and a biometric lock.", gamelog);
+	mvaddstrAlt(16,  1, "The vault door has three layers: A combo lock, ", gamelog);
+	mvaddstrAlt(17,  1, "an electronic lock, and a biometric lock.", gamelog);
 	gamelog.newline();
 	getkey();
 	clearmessagearea();
-	moveSixteenOne();
-	addstrAlt("You will need a security expert, a computer ", gamelog);
-	moveSeventeenOne();
-	addstrAlt("expert, and one of the bank managers.", gamelog);
+	mvaddstrAlt(16,  1, "You will need a security expert, a computer ", gamelog);
+	mvaddstrAlt(17,  1, "expert, and one of the bank managers.", gamelog);
 	gamelog.newline();
 	getkey();
 	for (int p = 0; p < len(pool); p++)
@@ -1641,12 +1610,10 @@ void special_bank_vault()
 			pool[p]->base == cursite)
 		{
 			clearmessagearea();
-			moveSixteenOne();
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(16,  1, string_sleeper, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
 			addstrAlt(" can handle the biometrics, ", gamelog);
-			moveSeventeenOne();
-			addstrAlt("but you'll still have to crack the other locks.", gamelog);
+			mvaddstrAlt(17,  1, "but you'll still have to crack the other locks.", gamelog);
 			gamelog.newline();
 			getkey();
 			break;
@@ -1655,28 +1622,23 @@ void special_bank_vault()
 	while (true)
 	{
 		clearmessagearea();
-		moveSixteenOne();
-		addstrAlt("Open the bank vault? (Yes or No)");
+		mvaddstrAlt(16,  1, "Open the bank vault? (Yes or No)");
 		int c = getkey();
 		if (c == 'y')
 		{
 			char actual;
 			clearmessagearea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("First is the combo lock that will have ", gamelog);
-			moveSeventeenOne();
-			addstrAlt("be cracked by a security expert.", gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "First is the combo lock that will have ", gamelog);
+			mvaddstrAlt(17,  1, "be cracked by a security expert.", gamelog);
 			gamelog.newline();
 			getkey();
 			if (!unlock(UNLOCK_VAULT, actual))
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("The squad can only dream of the money ", gamelog);
-				moveSeventeenOne();
-				addstrAlt("on the other side of this door...", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "The squad can only dream of the money ", gamelog);
+				mvaddstrAlt(17,  1, "on the other side of this door...", gamelog);
 				gamelog.newline();
 				getkey();
 				levelmap[locx][locy][locz].special = -1;
@@ -1684,19 +1646,16 @@ void special_bank_vault()
 			else
 			{
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt("Next is the electronic lock that will have ", gamelog);
-				moveSeventeenOne();
-				addstrAlt("be bypassed by a computer expert.", gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "Next is the electronic lock that will have ", gamelog);
+				mvaddstrAlt(17,  1, "be bypassed by a computer expert.", gamelog);
 				gamelog.newline();
 				getkey();
 				if (!hack(HACK_VAULT, actual))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("The money was so close the squad could taste it!", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "The money was so close the squad could taste it!", gamelog);
 					gamelog.newline();
 					getkey();
 					levelmap[locx][locy][locz].special = -1;
@@ -1704,11 +1663,9 @@ void special_bank_vault()
 				else
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("Last is the biometric lock that keyed only ", gamelog);
-					moveSeventeenOne();
-					addstrAlt("to the bank's managers.", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "Last is the biometric lock that keyed only ", gamelog);
+					mvaddstrAlt(17,  1, "to the bank's managers.", gamelog);
 					gamelog.newline();
 					getkey();
 					Creature *manager = 0;
@@ -1724,9 +1681,8 @@ void special_bank_vault()
 								if (c->joindays < 30 && !(c->flag & CREATUREFLAG_KIDNAPPED))
 								{
 									clearmessagearea();
-									set_color(COLOR_WHITE, COLOR_BLACK, 1);
-									moveSixteenOne();
-									addstrAlt(c->name, gamelog);
+									set_color_easy(WHITE_ON_BLACK_BRIGHT);
+									mvaddstrAlt(16,  1, c->name, gamelog);
 									addstrAlt(" opens the vault.", gamelog);
 									gamelog.newline();
 									getkey();
@@ -1737,9 +1693,8 @@ void special_bank_vault()
 							if (c->prisoner && c->prisoner->type == CREATURE_BANK_MANAGER)
 							{
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-								addstrAlt("The hostage is forced to open the vault.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The hostage is forced to open the vault.", gamelog);
 								gamelog.newline();
 								getkey();
 								canbreakin = true;
@@ -1754,13 +1709,11 @@ void special_bank_vault()
 							if (pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
 							{
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-								addstrAlt(string_sleeper, gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, string_sleeper, gamelog);
 								addstrAlt(pool[p]->name, gamelog);
 								addstrAlt(" opens the vault, ", gamelog);
-								moveSeventeenOne();
-								addstrAlt("and will join the active LCS to avoid arrest.", gamelog);
+								mvaddstrAlt(17,  1, "and will join the active LCS to avoid arrest.", gamelog);
 								gamelog.newline();
 								getkey();
 								canbreakin = true;
@@ -1788,9 +1741,8 @@ void special_bank_vault()
 						if (manager)
 						{
 							clearmessagearea();
-							set_color(COLOR_WHITE, COLOR_BLACK, 1);
-							moveSixteenOne();
-							addstrAlt(manager->name, gamelog);
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
+							mvaddstrAlt(16,  1, manager->name, gamelog);
 							addstrAlt(" is no longer recognized.", gamelog);
 							gamelog.newline();
 							getkey();
@@ -1798,9 +1750,8 @@ void special_bank_vault()
 						else
 						{
 							clearmessagearea();
-							set_color(COLOR_WHITE, COLOR_BLACK, 1);
-							moveSixteenOne();
-							addstrAlt("The squad has nobody that can do the job.", gamelog);
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
+							mvaddstrAlt(16,  1, "The squad has nobody that can do the job.", gamelog);
 							gamelog.newline();
 							getkey();
 						}
@@ -1823,9 +1774,8 @@ void special_bank_teller()
 		location[cursite]->siege.siege)
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The teller window is empty.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The teller window is empty.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
 		getkey();
@@ -1833,9 +1783,8 @@ void special_bank_teller()
 	else
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("A bank teller is available.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "A bank teller is available.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
 		getkey();
@@ -1847,9 +1796,8 @@ void special_bank_money()
 {
 	static int swat_counter = 0;
 	clearmessagearea(false);
-	set_color(COLOR_GREEN, COLOR_BLACK, 1);
-	moveSixteenOne();
-	addstrAlt("The squad loads bricks of cash into a duffel bag.", gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "The squad loads bricks of cash into a duffel bag.", gamelog);
 	gamelog.newline();
 	levelmap[locx][locy][locz].special = -1;
 	activesquad->loot.push_back(new Money(20000));
@@ -1862,11 +1810,10 @@ void special_bank_money()
 	else if (sitealarm && postalarmtimer > 80 && LCSrandom(2) && swat_counter < 2)
 	{
 		getkey();
-		moveSeventeenOne();
 		if (swat_counter > 0)
-			addstrAlt("Another SWAT team moves in!!", gamelog);
+			mvaddstrAlt(17, 1, "Another SWAT team moves in!!", gamelog);
 		else
-			addstrAlt("A SWAT team storms the vault!!", gamelog);
+			mvaddstrAlt(17, 1, "A SWAT team storms the vault!!", gamelog);
 		gamelog.newline();
 		swat_counter++;
 		int swatnum = 9;
@@ -1892,13 +1839,11 @@ void special_oval_office()
 	{
 		emptyEncounter();
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The President isn't here... ", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The President isn't here... ", gamelog);
 		printsitemap(locx, locy, locz);
 		getkey();
-		moveSeventeenOne();
-		addstrAlt("Secret Service agents ambush the squad!", gamelog);
+		mvaddstrAlt(17,  1, "Secret Service agents ambush the squad!", gamelog);
 		gamelog.newline();
 		for (int e = 0; e < 6; e++)makecreature(encounter[e], CREATURE_SECRET_SERVICE);
 		printencounter();
@@ -1910,9 +1855,8 @@ void special_oval_office()
 	{
 		emptyEncounter();
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The President is in the Oval Office.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The President is in the Oval Office.", gamelog);
 		gamelog.newline();
 		printsitemap(locx, locy, locz);
 		for (int e = 0; e < 2; e++)makecreature(encounter[e], CREATURE_SECRET_SERVICE);
@@ -1927,9 +1871,8 @@ void special_ccs_boss()
 		location[cursite]->siege.siege)
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The CCS leader is ready for you!", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The CCS leader is ready for you!", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
 		getkey();
@@ -1944,9 +1887,8 @@ void special_ccs_boss()
 	else
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The CCS leader is here.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The CCS leader is here.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
 		getkey();

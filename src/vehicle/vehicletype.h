@@ -1,33 +1,30 @@
-#ifndef VEHICLE_TYPE_H
-#define VEHICLE_TYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#ifndef VEHICLETYPE_H
+#define VEHICLETYPE_H0
 class VehicleType
 {
    public:
       explicit VehicleType(MCD_STR xmlstring);
-      const string& idname() const { return idname_; }
-      long id() const { return id_; }
+	  const string& idname() const;// { return idname_; }
+      long id() const;// { return id_; }
       int makeyear() const;
-      const vector<string>& color() const { return color_; }
-      bool displayscolor() const { return displaycolor_; }
-      const string& longname() const { return longname_; }
-      const string& shortname() const { return shortname_; }
+      const vector<string>& color() const;// { return color_; }
+      bool displayscolor() const;// { return displaycolor_; }
+      const string& longname() const;// { return longname_; }
+      const string& shortname() const;// { return shortname_; }
       int modifieddriveskill(int skillLevel);
       int modifieddodgeskill(int skillLevel);
-      int attackbonus(bool isDriving) const { return isDriving?attackbonus_driver_:attackbonus_passenger_; }
+      int attackbonus(bool isDriving) const;// { return isDriving?attackbonus_driver_:attackbonus_passenger_; }
       int gethitlocation(int bodypart);
       string getpartname(int location);
       int armorbonus(int location);
-      int steal_difficultytofind() const { return steal_difficultytofind_; }
-      int steal_juice() const { return steal_juice_; }
-      int steal_extraheat() const { return steal_extraheat_; }
-      int sensealarmchance() const { return sensealarmchance_; }
-      int touchalarmchance() const { return touchalarmchance_; }
-      bool availableatshop() const { return availableatshop_; }
-      int price() const { return price_; }
-      int sleeperprice() const { return sleeperprice_; }
+      int steal_difficultytofind() const;// { return steal_difficultytofind_; }
+      int steal_juice() const;// { return steal_juice_; }
+      int steal_extraheat() const;// { return steal_extraheat_; }
+      int sensealarmchance() const;// { return sensealarmchance_; }
+      int touchalarmchance() const;// { return touchalarmchance_; }
+      bool availableatshop() const;// { return availableatshop_; }
+      int price() const;// { return price_; }
+      int sleeperprice() const;// { return sleeperprice_; }
       static int number_of_vehicletypes;
    private:
       string idname_;
@@ -65,4 +62,4 @@ class VehicleType
       int price_;
       int sleeperprice_;
 };
-#endif //VEHICLE_TYPE_H
+#endif

@@ -10,7 +10,7 @@
     All code released under GNU GPL.
 */
 #ifndef COMMON_H_INCLUDED
-#define COMMON_H_INCLUDED
+#define COMMON_H_INCLUDED0
 #ifdef __linux__
 #define NCURSES
 #endif
@@ -59,6 +59,7 @@
          #include "map.h"
       #endif
    #endif
+#include <algorithm>
    //#define PDC_WIDE // uncomment this if and only if you want to use UTF-8 version of PDCurses (from pdc34dllu.zip instead of pdc34dllw.zip)... the "U" version
    #include <curses.h>
    //undo PDCurses macros that break vector class
@@ -151,7 +152,7 @@
       #include <signal.h>
    #endif
 #endif
-#include <string.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -159,7 +160,6 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <deque>
-#include <algorithm>
 #include <queue>
 #include <math.h>
 #include <cstring>
@@ -180,6 +180,9 @@
 #include "sdl/SDL.h"
 #include "sdl/SDL_mixer.h"
 #endif // DONT_INCLUDE_SDL
+
+#include <string.h>
+
 #ifndef WIN32_PRE_DOTNET
 using namespace std;
 #endif
@@ -227,40 +230,40 @@ inline int raw_output(bool bf)
    // difference between 2 numbers (absolute value of subtracting one from the other)
    #define DIFF(x,y) ((x)<(y)?((y)-(x)):((x)-(y)))
 #endif
-#define BIT1  (1<<0 )
-#define BIT2  (1<<1 )
-#define BIT3  (1<<2 )
-#define BIT4  (1<<3 )
-#define BIT5  (1<<4 )
-#define BIT6  (1<<5 )
-#define BIT7  (1<<6 )
-#define BIT8  (1<<7 )
-#define BIT9  (1<<8 )
-#define BIT10 (1<<9 )
-#define BIT11 (1<<10)
-#define BIT12 (1<<11)
-#define BIT13 (1<<12)
-#define BIT14 (1<<13)
-#define BIT15 (1<<14)
-#define BIT16 (1<<15)
-#define BIT17 (1<<16)
-#define BIT18 (1<<17)
-#define BIT19 (1<<18)
-#define BIT20 (1<<19)
-#define BIT21 (1<<20)
-#define BIT22 (1<<21)
-#define BIT23 (1<<22)
-#define BIT24 (1<<23)
-#define BIT25 (1<<24)
-#define BIT26 (1<<25)
-#define BIT27 (1<<26)
-#define BIT28 (1<<27)
-#define BIT29 (1<<28)
-#define BIT30 (1<<29)
-#define BIT31 (1<<30)
-#define BIT32 (1<<31)
-#define MAX_PATH_SIZE 2048
-#define RNG_SIZE 4
+const int BIT1 = (1 << 0);
+const int BIT2 = (1 << 1);
+const int BIT3 = (1 << 2);
+const int BIT4 = (1 << 3);
+const int BIT5 = (1 << 4);
+const int BIT6 = (1 << 5);
+const int BIT7 = (1 << 6);
+const int BIT8 = (1 << 7);
+const int BIT9 = (1 << 8);
+const int BIT10 = (1 << 9);
+const int BIT11 = (1 << 10);
+const int BIT12 = (1 << 11);
+const int BIT13 = (1 << 12);
+const int BIT14 = (1 << 13);
+const int BIT15 = (1 << 14);
+const int BIT16 = (1 << 15);
+const int BIT17 = (1 << 16);
+const int BIT18 = (1 << 17);
+const int BIT19 = (1 << 18);
+const int BIT20 = (1 << 19);
+const int BIT21 = (1 << 20);
+const int BIT22 = (1 << 21);
+const int BIT23 = (1 << 22);
+const int BIT24 = (1 << 23);
+const int BIT25 = (1 << 24);
+const int BIT26 = (1 << 25);
+const int BIT27 = (1 << 26);
+const int BIT28 = (1 << 27);
+const int BIT29 = (1 << 28);
+const int BIT30 = (1 << 29);
+const int BIT31 = (1 << 30);
+const int BIT32 = (1 << 31);
+const int MAX_PATH_SIZE = 2048;
+const int RNG_SIZE = 4;
 /* These 6 random number generator functions are implemented in compat.cpp */
 unsigned long getSeed();
 unsigned long r_num();

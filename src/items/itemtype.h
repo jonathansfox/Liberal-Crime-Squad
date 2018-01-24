@@ -1,8 +1,5 @@
-#ifndef ITEMTYPE_H
-#define ITEMTYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#ifndef ITEM_TYPE_H
+#define ITEM_TYPE_H0
 class ItemType
 {
    public:

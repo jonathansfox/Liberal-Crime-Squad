@@ -1,6 +1,15 @@
 
 #include <includes.h>
 
+#include "items/loottype.h"
+
+#include "items/loot.h"
+//own header
+
+#include "common/translateid.h"
+// for  int getloottype
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

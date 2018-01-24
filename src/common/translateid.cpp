@@ -26,13 +26,29 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/interval.h"
+
+#include "vehicle/vehicle.h"
+
+#include "creature/creaturetype.h"
+
+#include "items/loottype.h"
+
+#include "common/translateid.h"
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern vector<squadst *> squad;
 extern vector<Creature *> pool;
 extern vector<LootType *> loottype;
+extern vector<Vehicle *> vehicle;
+extern vector<ClipType *> cliptype;
+extern vector<WeaponType *> weapontype;
+extern vector<ArmorType *> armortype;
+extern vector<CreatureType *> creaturetype;
 /* transforms a squad id number into the index of that squad in the global vector */
 int getsquad(int id)
 {

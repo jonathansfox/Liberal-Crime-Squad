@@ -1,3 +1,6 @@
+#ifndef GET_NAMES_H
+#define GET_NAMES_H0
+
 std::string getactivity(activityst &act);
 std::string gettitle(Creature &cr);
 std::string getview(short view, bool shortname);
@@ -8,3 +11,5 @@ void enter_name(int y, int x, char *name, int len, const char *defname = NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month, bool shortname = false);
 std::string getalign(short alignment, bool capitalize = false);
+
+#endif

@@ -1,6 +1,8 @@
 
 #include <includes.h>
 
+#include "common/stringconversion.h"
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

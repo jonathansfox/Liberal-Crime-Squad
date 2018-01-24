@@ -1,4 +1,3 @@
-#pragma once
 struct ColorSetup {
 	short letter;
 	short background;
@@ -6,7 +5,7 @@ struct ColorSetup {
 	bool blink;
 //	ColorSetup(int first_, int second_) : {first(first_), second(second_), bright(false), blink(false)};
 };
-extern const ColorSetup 	BLACK_ON_BLACK ;
+extern const ColorSetup BLACK_ON_BLACK ;
 extern const ColorSetup BLACK_ON_BLACK_BRIGHT ;
 extern const ColorSetup BLACK_ON_WHITE ;
 extern const ColorSetup BLUE_ON_BLACK_BRIGHT ;

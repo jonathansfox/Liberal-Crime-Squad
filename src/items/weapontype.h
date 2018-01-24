@@ -1,9 +1,5 @@
 #ifndef WEAPONTYPE_H
-#define WEAPONTYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
-// Struct to hold all values related to an attack performable by the weapon type.
+#define WEAPONTYPE_H0
 struct attackst
 {
    attackst(MCD_STR xmlstring);

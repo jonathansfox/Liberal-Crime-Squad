@@ -26,6 +26,33 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "basemode/baseactions.h"
+
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "common/getnames.h"
+// for std::string getactivity(activityst)
+     //void enter_name(int,int,char*,int,char*)
+
+#include "common/commonactions.h"
+// for int squadsize(const squadst)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printparty(void)
+
+#include "common/stringconversion.h"
+//for char* strcat(char*, const std::string&)
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -50,6 +77,18 @@ extern MusicClass music;
  string closedDown;
  string enemySafeHouse;
  string safeHouse;
+
+ extern char slogan[SLOGAN_LEN];
+ extern short party_status;
+ extern squadst *activesquad;
+ extern class Ledger ledger;
+ extern short interface_pgup;
+ extern short interface_pgdn;
+ extern int selectedsiege;
+ extern short lawList[LAWNUM];
+ extern string singleSpace;
+ extern vector<Vehicle *> vehicle;
+
 /* base - burn the flag */
 void burnflag()
 {
@@ -170,12 +209,13 @@ void burnflag()
 	}
 }
 /* base - new slogan */
+extern vector<string> default_slogans;
 void getslogan()
 {
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(16, 0, "What is your new slogan?");
 	mvaddstrAlt(17, 0, "                                                                                          "); // 80 spaces
-	enter_name(17, 0, slogan, SLOGAN_LEN, "We need a slogan!");
+	enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).data());
 }
 /* base - reorder party */
 void orderparty()
@@ -186,19 +226,17 @@ void orderparty()
 	while (true)
 	{
 		printparty();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 26, "Choose squad member to move");
 		int oldPos = getkey();
 		if (oldPos<'1' || oldPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		makedelimiter();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		std::string str = "Choose squad member to replace ";
 		str += activesquad->squad[oldPos - '1']->name;
 		str += " in Spot ";
 		str += (char)oldPos;
-		int x = 39 - ((len(str) - 1) >> 1);
-		if (x < 0) x = 0;
-		mvaddstrAlt(8, x, str);
+		mvaddstrCenter(8, str);
 		int newPos = getkey();
 		if (newPos<'1' || newPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
@@ -245,13 +283,12 @@ void stopevil()
 	{
 		music.play(MUSIC_STOPEVIL);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt("Where will the Squad go?");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, "Where will the Squad go?");
 		printparty();
 		if (loc != -1)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(8, 0, location[loc]->getname(-1, true));
 		}
 		temploc.clear();
@@ -266,112 +303,108 @@ void stopevil()
 		{
 			if (p == -1) break;
 			Location* this_location = location[temploc[p]];
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y - 10 + 'A');
 			addstrAlt(spaceDashSpace);
 			addstrAlt(location[temploc[p]]->getname());
 			bool show_safehouse_info = false;
 			if (this_location == squad_location) {
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				addstrAlt(currentLocation);
 				show_safehouse_info = true;
 			}
 			else if (this_location->renting >= 0) {
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				addstrAlt(safeHouse);
 				show_safehouse_info = true;
 			}
 			else if (this_location->renting == RENTING_CCS) {
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(enemySafeHouse);
 			}
 			else if (this_location->closed) {
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(closedDown);
 			}
 			else if (this_location->highsecurity) {
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				addstrAlt(highSecurity);
 			}
 			else if (multipleCityMode && this_location->type == squad_location->city) {
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				addstrAlt(currentLocation);
 			}
 			else if (this_location->area != squad_location->area && !havecar) {
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				addstrAlt(needCar);
 			}
 			else if (this_location->type == SITE_TRAVEL) {
 				if (ledger.get_funds() < ticketprice)
-					set_color(COLOR_RED, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
 				else
-					set_color(COLOR_GREEN, COLOR_BLACK, 1);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
 			}
 			if (this_location->siege.siege > 0) {
-				set_color(COLOR_RED, COLOR_BLACK, 0);
+				set_color_easy(RED_ON_BLACK);
 				addstrAlt(underSiege);
 			}
 			if (show_safehouse_info)
 			{
 				this_location->update_heat_protection();
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(y, 54, heatLevel);
 				if (this_location->heat > this_location->heat_protection)
-					set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				addstrAlt(this_location->heat);
 				addstrAlt(percentSign);
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(y, 66);
-				addstrAlt(secrecyLevel);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(y,  66, secrecyLevel);
 				if (this_location->heat > this_location->heat_protection)
-					set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				addstrAlt(this_location->heat_protection);
 				addstrAlt(percentSign);
 			}
 			if (multipleCityMode && this_location->city == this_location->type)
 			{
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 50, this_location->city_description());
 			}
 			y++;
 		}
 		if (multipleCityMode && loc != -1 && location[loc]->type == location[loc]->city)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y + 1, 0, y - 10 + 'A');
 			addstrAlt(travelDifCity);
 			if (!havecar) {
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				addstrAlt(needCar);
 			}
 			else {
 				if (ledger.get_funds() < ticketprice)
-					set_color(COLOR_RED, COLOR_BLACK, 1);
-				else set_color(COLOR_GREEN, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+				else set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
 			}
 			temploc.push_back(-1);
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		//PAGE UP
 		if (page > 0)
 		{
-			moveAlt(10, 60);
-			addprevpagestr();
+			mvaddstrAlt(10, 60, addprevpagestr());
 		}
 		//PAGE DOWN
 		if ((page + 1) * 11 < len(temploc))
 		{
-			moveAlt(20, 60);
-			addnextpagestr();
+			mvaddstrAlt(20, 60, addnextpagestr());
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(24, 1);
-		if ((loc == -1) || (multipleCityMode && location[loc]->type == squad_location->city)) addstrAlt("Enter - The squad is not yet Liberal enough.");
-		else addstrAlt("Enter - Back one step.");
+		set_color_easy(WHITE_ON_BLACK);
+		if ((loc == -1) || (multipleCityMode && location[loc]->type == squad_location->city)) mvaddstrAlt(24, 1, "Enter - The squad is not yet Liberal enough.");
+		else mvaddstrAlt(24, 1, "Enter - Back one step.");
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -437,80 +470,69 @@ void investlocation()
 		printlocation(loc);
 		if (location[loc]->can_be_fortified())
 		{
-			if (ledger.get_funds() >= 2000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(8, 1);
+			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			if (location[loc]->type == SITE_OUTDOOR_BUNKER)
-				addstrAlt("W - Repair the Bunker Fortifications ($2000)");
+				mvaddstrAlt(8, 1, "W - Repair the Bunker Fortifications ($2000)");
 			else if (location[loc]->type == SITE_RESIDENTIAL_BOMBSHELTER)
-				addstrAlt("W - Fortify the Bomb Shelter Entrances ($2000)");
+				mvaddstrAlt(8, 1, "W - Fortify the Bomb Shelter Entrances ($2000)");
 			else
-				addstrAlt("W - Fortify the Compound for a Siege ($2000)");
+				mvaddstrAlt(8, 1, "W - Fortify the Compound for a Siege ($2000)");
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_CAMERAS))
 		{
-			if (ledger.get_funds() >= 2000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(9, 1);
-			addstrAlt("C - Place Security Cameras around the Compound ($2000)");
+			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  1, "C - Place Security Cameras around the Compound ($2000)");
 		}
 		if (location[loc]->can_be_trapped())
 		{
-			if (ledger.get_funds() >= 3000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(10, 1);
-			addstrAlt("B - Place Booby Traps throughout the Compound ($3000)");
+			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10,  1, "B - Place Booby Traps throughout the Compound ($3000)");
 		}
 		if (location[loc]->can_install_tanktraps())
 		{
-			if (ledger.get_funds() >= 3000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(11, 1);
-			addstrAlt("T - Ring the Compound with Tank Traps ($3000)");
+			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11,  1, "T - Ring the Compound with Tank Traps ($3000)");
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_GENERATOR))
 		{
-			if (ledger.get_funds() >= 3000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(12, 1);
-			addstrAlt("G - Buy a Generator for emergency electricity ($3000)");
+			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(12,  1, "G - Buy a Generator for emergency electricity ($3000)");
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_AAGUN))
 		{
 			if (lawList[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
 			{
-				if (ledger.get_funds() >= 35000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(13, 1);
-				addstrAlt("A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
+				if (ledger.get_funds() >= 35000) set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(13,  1, "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
 			}
 			else
 			{
-				if (ledger.get_funds() >= 200000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				moveAlt(13, 1);
-				addstrAlt("A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)");
+				if (ledger.get_funds() >= 200000) set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(13,  1, "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)");
 			}
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
 		{
-			if (ledger.get_funds() >= 3000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(14, 1);
-			addstrAlt("P - Buy a Printing Press to start your own newspaper ($3000)");
+			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14,  1, "P - Buy a Printing Press to start your own newspaper ($3000)");
 		}
 		if (location[loc]->can_have_businessfront())
 		{
-			if (ledger.get_funds() >= 3000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(15, 1);
-			addstrAlt("F - Setup a Business Front to ward off suspicion ($3000)");
+			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(15,  1, "F - Setup a Business Front to ward off suspicion ($3000)");
 		}
-		if (ledger.get_funds() >= 150) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("R - Stockpile 20 daily rations of food ($150)");
-		moveSeventeenOne();
-		addstrAlt(enter_done);
+		if (ledger.get_funds() >= 150) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "R - Stockpile 20 daily rations of food ($150)");
+		mvaddstrAlt(17,  1, enter_done);
 		int c = getkey();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == 'w')
@@ -588,7 +610,7 @@ void investlocation()
 				do
 				{
 					location[loc]->front_business = LCSrandom(BUSINESSFRONTNUM);
-					lastname(location[loc]->front_name, true);
+					strcpy(location[loc]->front_name, lastname(true));
 					strcat(location[loc]->front_name, singleSpace);
 					int selection;
 					switch (location[loc]->front_business)
@@ -630,9 +652,8 @@ void setvehicles()
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Choosing the Right Liberal Vehicle");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Choosing the Right Liberal Vehicle");
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
@@ -659,13 +680,13 @@ void setvehicles()
 				}
 			}
 			if (this_squad&&another_squad)
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (another_squad)
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			else if (this_squad)
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			else
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 			str[0] = l - page * 18 + 'A';
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace);
@@ -674,18 +695,16 @@ void setvehicles()
 			x += 26;
 			if (x > 53) x = 1, y++;
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		//PAGE UP
 		if (page > 0)
 		{
-			moveSeventeenOne();
-			addprevpagestr();
+			mvaddstrAlt(17, 1, addprevpagestr());
 		}
 		//PAGE DOWN
 		if ((page + 1) * 18 < len(vehicle))
 		{
-			moveAlt(17, 53);
-			addnextpagestr();
+			mvaddstrAlt(17, 53, addnextpagestr());
 		}
 		for (int i = 0; i < len(vehicleParagraph); i++) {
 			mvaddstrAlt(18 + i, 1, vehicleParagraph[i]);
@@ -712,7 +731,7 @@ void setvehicles()
 				int c = '1';
 				if (choice)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 20, chooseALiberalTo + "drive it.");
 					c = getkey();
 				}
@@ -749,7 +768,7 @@ void setvehicles()
 				int c = '1';
 				if (choice)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 20, chooseALiberalTo + "be a passenger.");
 					c = getkey();
 				}

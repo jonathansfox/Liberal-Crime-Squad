@@ -1,6 +1,13 @@
 
 #include <includes.h>
 
+#include "items/loottype.h"
+//own header
+
+#include "common/stringconversion.h"
+//for stringtobool
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

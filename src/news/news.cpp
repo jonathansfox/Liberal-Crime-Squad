@@ -27,11 +27,56 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "news/news.h"
+//own header
+
+#include "common/commonactions.h"
+// for void change_public_opinion(int v,int power,char affect=1,char cap=100);
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addchar
+
+#include "common/getnames.h"
+// for std::string cityname()
+
+#include "news/headline.h"
+// for  void displaystory(newsstoryst &ns,bool liberalguardian,int header);
+
+#include "news/majorevent.h"
+//for  run_television_news_stories();
+
+#include "combat/fight.h"
+//for  void capturecreature(Creature &t);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int header);
+extern string singleSpace;
+
+extern vector<newsstoryst *> newsstory;
+extern short attitude[VIEWNUM];
+extern char lcityname[CITY_NAMELEN];
+extern short lawList[LAWNUM];
+extern string commaSpace;
+extern char slogan[SLOGAN_LEN];
+extern unsigned char bigletters[27][5][7][4];
+extern unsigned char newstops[6][80][5][4];
+extern unsigned char newspic[20][78][18][4];
+extern short public_interest[VIEWNUM];
+extern short house[HOUSENUM];
+extern short senate[SENATENUM];
 /* news - draws the specified block of text to the screen */
 void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e, int y);
 extern vector<Creature *> pool;
@@ -163,6 +208,7 @@ void generate_random_event_news_stories()
 		newsstory.push_back(new_major_event());
 	}
 }
+newsstoryst* ccs_exposure_story();
 void advance_ccs_defeat_storyline()
 {
 	switch (ccsexposure)
@@ -1601,7 +1647,7 @@ void displaycenterednewsfont(const std::string& str, int y)
 #endif
 				if (x2 == 5)
 				{
-					set_color(COLOR_WHITE, COLOR_WHITE, 0);
+					set_color_easy(WHITE_ON_WHITE);
 					addcharAlt(' ');
 				}
 				else
@@ -1616,7 +1662,7 @@ void displaycenterednewsfont(const std::string& str, int y)
 		}
 		else
 		{
-			set_color(COLOR_WHITE, COLOR_WHITE, 0);
+			set_color_easy(WHITE_ON_WHITE);
 			for (int x2 = 0; x2 < 3; x2++) for (int y2 = 0; y2 < 7; y2++)
 			{
 				moveAlt(y + y2, x + x2);
@@ -1628,10 +1674,8 @@ void displaycenterednewsfont(const std::string& str, int y)
 }
 void displaycenteredsmallnews(const std::string& str, int y)
 {
-	int x = 39 - ((len(str) - 1) >> 1);
-	moveAlt(y, x);
-	set_color(COLOR_BLACK, COLOR_WHITE, 0);
-	addstrAlt(str);
+	set_color_easy(BLACK_ON_WHITE);
+	mvaddstrCenter(y, str);
 }
 void displaynewspicture(int p, int y)
 {
@@ -1639,10 +1683,10 @@ void displaynewspicture(int p, int y)
 		for (int y2 = 0; y2 < 15; y2++)
 		{
 			if (y + y2 > 24) break;
-			moveAlt(y + y2, 1 + x2);
 			set_color(translateGraphicsColor(newspic[p][x2][y2][1]),
 				translateGraphicsColor(newspic[p][x2][y2][2]),
 				newspic[p][x2][y2][3]);
+			moveAlt(y + y2, 1 + x2);
 			addcharAlt(newspic[p][x2][y2][0]);
 		}
 }
@@ -1747,7 +1791,7 @@ void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e,
 		}
 		curpos = i;
 	}
-	set_color(COLOR_BLACK, COLOR_WHITE, 0);
+	set_color_easy(BLACK_ON_WHITE);
 	for (int t = 0; t < len(text); t++)
 	{
 		if (y + t >= 25) break;

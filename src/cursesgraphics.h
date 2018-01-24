@@ -127,7 +127,7 @@
  * Entry should be added to the graphicschar array.
  * Bump CH_MAXIMUM.
  */
-#include "common.h" /* include this prior to checking if WIN32 is defined */
+//#include "common.h" /* include this prior to checking if WIN32 is defined */
 #ifdef CH_USE_CP437
 // Range (0 .. 31), ASCII control characters:
     #define CH_NULL 0x00

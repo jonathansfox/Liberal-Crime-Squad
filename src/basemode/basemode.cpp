@@ -53,6 +53,57 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "basemode/liberalagenda.h"
+// for liberalagenda
+
+#include "basemode/baseactions.h"
+
+#include "basemode/activate_sleepers.h"
+
+#include "basemode/activate.h"
+// for activate
+
+#include "basemode/reviewmode.h"
+// for review
+
+#include "common/translateid.h"
+// for  int getsquad(int)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "common/getnames.h"
+// for std::string getmonth(int)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+//for int mvaddstr(int, int, const char*)
+
+#include "common/commonactions.h"
+// for int squadsize(const squadst *)
+
+#include "common/equipment.h"
+//for void equip(vector<Item *>&,int)
+
+#include "politics/politics.h"
+//for bool stalinview(short view,bool islaw)
+
+#include "monthly/monthly.h"
+//for  void passmonth(char &clearformess,char canseethings);
+
+#include "daily/daily.h"
+//for int monthday();
+
+#include "daily/siege.h"
+//for giveup()
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -67,12 +118,34 @@ extern int stat_burns;
 extern int year;
 extern short exec[EXECNUM];
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern int month;
+extern int disbandtime;
  string tag_Sta;
  string tag_Libp;
  string tag_Lib;
  string tag_Mod;
  string tag_Cons;
  string tag_Consp;
+ extern string commaSpace;
+ extern string singleSpace;
+ extern short execterm;
+ extern short house[HOUSENUM];
+ extern short senate[SENATENUM];
+extern short court[COURTNUM];
+ extern bool stalinmode;
+ extern short lawList[LAWNUM];
+ extern short attitude[VIEWNUM];
+ extern char cantseereason;
+ extern char disbanding;
+ extern vector<squadst *> squad;
+extern squadst *activesquad;
+extern int selectedsiege;
+extern vector<Vehicle *> vehicle;
+extern class Ledger ledger;
+extern int day;
+extern char slogan[SLOGAN_LEN];
+extern short party_status;
+
 bool show_disbanding_screen(int& oldforcemonth)
 {
 	if (oldforcemonth == month) return true;
@@ -86,14 +159,12 @@ bool show_disbanding_screen(int& oldforcemonth)
 	}
 	oldforcemonth = month;
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt(getmonth(month) + singleSpace);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, getmonth(month) + singleSpace);
 	addstrAlt(year);
 	signed char align = exec[EXEC_PRESIDENT];
 	set_alignment_color(align, true);
-	moveOneZero();
-	addstrAlt("President: ");
+	mvaddstrAlt(1,  0, "President: ");
 	addstrAlt(execname[EXEC_PRESIDENT]); addstrAlt(commaSpace);
 	addstrAlt(getalign(align));
 	if (execterm == 1)addstrAlt(", 1st Term");
@@ -167,20 +238,19 @@ bool show_disbanding_screen(int& oldforcemonth)
 		else align = ALIGN_ARCHCONSERVATIVE;
 		set_alignment_color(align, true);
 		mvaddstrAlt(17, 33, "Public Mood");
-		set_color(COLOR_RED, COLOR_BLACK, 1);
-		moveSeventeenOne();
-		addstrAlt("Stalinist");
-		set_color(COLOR_GREEN, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17,  1, "Stalinist");
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17, 68, "Libertarian");
-		set_color(COLOR_RED, COLOR_BLACK, 1);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-		set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+		set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 16, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-		set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 32, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-		set_color(COLOR_CYAN, COLOR_BLACK, 1);
+		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 48, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-		set_color(COLOR_GREEN, COLOR_BLACK, 1);
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 		set_alignment_color(align, true);
 		mvaddcharAlt(18, stalin, 'O');
@@ -195,23 +265,23 @@ bool show_disbanding_screen(int& oldforcemonth)
 	else align = ALIGN_ELITELIBERAL;
 	set_alignment_color(align, true);
 	mvaddstrAlt(stalinmode ? 21 : 20, 33, "Public Mood");
-	set_color(COLOR_GREEN, COLOR_BLACK, 1);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(21, 1, "Liberal");
-	set_color(COLOR_RED, COLOR_BLACK, 1);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(21, 67, "Conservative");
-	set_color(COLOR_GREEN, COLOR_BLACK, 1);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-	set_color(COLOR_CYAN, COLOR_BLACK, 1);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 16, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-	set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 32, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-	set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 48, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
-	set_color(COLOR_RED, COLOR_BLACK, 1);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 	set_alignment_color(align, true);
 	mvaddcharAlt(22, mood, 'O');
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
 	return(getkey() != 'r');
 }
@@ -272,8 +342,8 @@ void mode_base()
 				else if (nonsighttime >= 365 * 8)
 					strcpy(str, "It has been a long time.  A lot must have changed...");
 				else strcpy(str, "It sure has been a while.  Things might have changed a bit.");
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				mvaddstrAlt(12, 39 - ((len(str) - 1) >> 1), str, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrCenter(12, str, gamelog);
 				gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 				getkey();
 			}
@@ -336,7 +406,7 @@ void mode_base()
 				if (location[selectedsiege]->can_be_upgraded() &&
 					!location[selectedsiege]->siege.siege)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(8, 1, "I - Invest in this location");
 				}
 			}
@@ -346,12 +416,12 @@ void mode_base()
 			{
 				if (underattack)
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, "Under Attack");
 				}
 				else
 				{
-					set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, "Under Siege");
 					int stock = 1;
 					if (loc)stock = loc->compound_stores;
@@ -360,52 +430,51 @@ void mode_base()
 			}
 			if (haveflag) for (int y = 0; y < 7; y++)
 			{
-				moveAlt(y + 10, 31);
 				if (y < 6)
 				{
 					set_color(COLOR_WHITE, y < 4 ? COLOR_BLUE : COLOR_RED, 1);
-					if (y == 0) addstrAlt(":.:.:.:.:");
-					else if (y < 3) addstrAlt(":::::::::");
-					else for (int x = 0; x < 9; x++) addchAlt(CH_LOWER_HALF_BLOCK);
-					set_color(COLOR_WHITE, COLOR_RED, 1);
+					if (y == 0) mvaddstrAlt(y + 10, 31, ":.:.:.:.:");
+					else if (y < 3) mvaddstrAlt(y + 10, 31, ":::::::::");
+					else for (int x = 0; x < 9; x++) mvaddchAlt(y + 10, 31 + x, CH_LOWER_HALF_BLOCK);
+					set_color_easy(WHITE_ON_RED_BRIGHT);
 					for (int x = 9; x < 18; x++) addchAlt(CH_LOWER_HALF_BLOCK);
 				}
 				else
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 0);
-					for (int x = 0; x < 18; x++) addchAlt(CH_UPPER_HALF_BLOCK);
+					set_color_easy(RED_ON_BLACK);
+					for (int x = 0; x < 18; x++) mvaddchAlt(y + 10, 31 + x, CH_UPPER_HALF_BLOCK);
 				}
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(18, 10, "ÄÄÄ ACTIVISM ÄÄÄ");
 			mvaddstrAlt(18, 51, "ÄÄÄ PLANNING ÄÄÄ");
-			if (partysize&&!underattack) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (partysize&&!underattack) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 40, "E - Equip Squad");
-			if (len(vehicle) && partysize) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (len(vehicle) && partysize) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 60, "V - Vehicles");
-			if (len(pool)) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (len(pool)) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(20, 40, "R - Review Assets and Form Squads");
-			if (partysize > 1) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			if (partysize&&!sieged) mvaddstrAlt(8, 30, "O - Reorder");
 			if (activesquad&&!sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(8, 1, activesquad->name);
 				addchAlt(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL); //in case of overlap, at least make it clear where the name ends.
 			}
-			if (len(squad) > 1 || (!activesquad&&len(squad))) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (len(squad) > 1 || (!activesquad&&len(squad))) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 43, "TAB - Next Squad");
-			if (safenumber > 0) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			if (safenumber > 0) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 62, "Z - Next Location");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(21, 40, "L - The Status of the Liberal Agenda");
-			set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			for (int p = 0; p < len(pool); p++) if (pool[p]->is_active_liberal())
 			{
 				if (pool[p]->squadid != -1)
@@ -413,59 +482,59 @@ void mode_base()
 					int sq = getsquad(pool[p]->squadid);
 					if (sq != -1) if (squad[sq]->activity.type != ACTIVITY_NONE) continue;
 				}
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				break;
 			}
 			mvaddstrAlt(21, 1, "A - Activate Liberals");
-			set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			for (int p = 0; p < len(pool); p++)
 				if (pool[p]->is_lcs_sleeper())
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					break;
 				}
 			mvaddstrAlt(21, 25, "B - Sleepers");
 			if (partysize)
 			{
-				if (activesquad->activity.type != ACTIVITY_NONE) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				if (activesquad->activity.type != ACTIVITY_NONE) set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			}
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(20, 1, "C - Cancel this Squad's Departure");
 			if (sieged)
 			{
-				if (partysize) set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				if (partysize) set_color_easy(WHITE_ON_BLACK);
 				else
 				{
-					set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					for (int p = 0; p < len(pool); p++)
 					{
 						if (pool[p]->location == selectedsiege)
 						{
-							set_color(COLOR_WHITE, COLOR_BLACK, 0);
+							set_color_easy(WHITE_ON_BLACK);
 							break;
 						}
 					}
 				}
 				mvaddstrAlt(19, 1, "F - Escape/Engage");
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(19, 23, "G - Give Up");
 			}
 			else
 			{
-				if (partysize) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				if (partysize) set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(19, 1, "F - Go forth to stop EVIL");
 			}
-			//if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+			//if(partysize>0&&(party_status==-1||partysize>1))set_color_easy(WHITE_ON_BLACK);
 			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
 			//mvaddstrAlt(19,40,check_status_of_squad_liberal);
-			//if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+			//if(party_status!=-1)set_color_easy(WHITE_ON_BLACK);
 			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
 			//mvaddstrAlt(18,40,show_squad_liberal_status);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(23, 40, "X - Live to fight EVIL another day");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			if (cannotwait) mvaddstrAlt(23, 1, "Cannot Wait until Siege Resolved");
 			else
 			{
@@ -473,24 +542,24 @@ void mode_base()
 				else mvaddstrAlt(23, 1, "W - Wait a day");
 				if (day == monthday()) addstrAlt(" (next month)");
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(22, 40, "S - FREE SPEECH: the Liberal Slogan");
 			if (haveflag)
 			{
-				if (sieged) set_color(COLOR_GREEN, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(22, 1, "P - PROTEST: burn the flag");
 			}
 			else
 			{
 				if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(22, 1, "P - PATRIOTISM: fly a flag here ($20)");
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			if (haveflag) mvaddstrAlt(17, 39 - ((len(slogan) - 1) >> 1), slogan);
-			else mvaddstrAlt(13, 39 - ((len(slogan) - 1) >> 1), slogan);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (haveflag) mvaddstrCenter(17, slogan);
+			else mvaddstrCenter(13, slogan);
 		}
 		switch (int c = forcewait ? 'w' : getkey())
 		{
@@ -540,7 +609,7 @@ void mode_base()
 			if (forcewait&&day == 1)
 			{
 				eraseAlt();
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(7, 5, "Time passes...", gamelog);
 				mvaddstrAlt(9, 12, getmonth(month, true) + singleSpace, gamelog);
 				mvaddstrAlt(9, 17, tostring(day) + commaSpace, gamelog);

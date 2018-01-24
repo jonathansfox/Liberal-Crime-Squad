@@ -1,8 +1,6 @@
 #ifndef CREATURE_TYPE_H
-#define CREATURE_TYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define CREATURE_TYPE_H0
+
 class CreatureType
 {
    public:
@@ -57,10 +55,10 @@ class CreatureType
       Interval money_;
       Interval skills_[SKILLNUM];
 };
-// This declaration is necessary for the inline function Creature::get_type_name() below it to work.
+/* transforms a CreatureTypes value into a pointer to that creature type */
+const CreatureType* getcreaturetype(short crtype);
+// This declaration is necessary for the function Creature::get_type_name() to work.
 // It isn't part of the CreatureType class or creaturetype.cpp file, it's implemented elsewhere.
+/* transforms a creature type name into a pointer to that creature type */
 const CreatureType* getcreaturetype(const std::string& crtype);
-// This would normally be inlined inside the Creature class in creature.h, but the Creature class
-// has to be declared prior to the CreatureType class so we have to inline it here instead.
-inline std::string Creature::get_type_name() const { return getcreaturetype(type_idname)->get_type_name(); }
 #endif //CREATURE_TYPE_H

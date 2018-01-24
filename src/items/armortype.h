@@ -1,5 +1,5 @@
 #ifndef ARMORTYPE_H
-#define ARMORTYPE_H
+#define ARMORTYPE_H0
 class ArmorType : public ItemType
 {
    public:
@@ -36,7 +36,7 @@ class ArmorType : public ItemType
       // Returns the largest weapon size concealed by the armor type.
       int get_weaponsize_concealment() const { return conceal_weaponsize_; }
       // Checks if the armor type conceals the given weapon.
-      bool conceals_weapon(const WeaponType& weapon) const { return conceals_weaponsize(weapon.get_size()); }
+      //bool conceals_weapon(const WeaponType& weapon) const { return conceals_weaponsize(weapon.get_size()); }
       bool conceals_weaponsize(int weaponsize) const;
       /*const vector<string>& get_appropriate_weapons() const { return appropriate_weapon_; }
       const string& get_appropriate_weapon(int index) const;*/

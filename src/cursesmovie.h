@@ -19,7 +19,10 @@
 //    along with Liberal Crime Squad; if not, write to the Free Software				//
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
-#include "common.h"
+#ifndef CURSES_MOVIE_H
+#define CURSES_MOVIE_H0
+
+//#include "common.h"
 #define PICMAX 1000
 struct filelistst
 {
@@ -54,3 +57,5 @@ struct CursesMoviest
    void convertindices_sound(filelistst &master);
    void playmovie(int x,int y);
 };
+
+#endif

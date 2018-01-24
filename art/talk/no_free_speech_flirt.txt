@@ -9,13 +9,13 @@
 # all 3 of the rejection lines are from Darth Vader
 # (the 3rd one from back when he's a little kid)
 # These are the "no free speech" pickup lines
-"[What church do you go to?]\"
+"[What church do you go to?]"
 
 "[I go to your church.]"
-"I find your lack of faith disturbing.\"
+"I find your lack of faith disturbing."
 
 #
-"[Will you marry me?]\"
+"[Will you marry me?]"
 
 "[Yes.]"
 "No.  I am your father."

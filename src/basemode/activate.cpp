@@ -53,6 +53,39 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "basemode/activate.h"
+
+#include "creature/augmenttype.h"
+
+#include "common/translateid.h"
+// for  int getsquad(int)
+
+#include "common/commonactions.h"
+// for void sortliberals(std::vector<Creature *>&,short,bool)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/getnames.h"
+// for std::string getactivity(activityst)
+
+#include "common/equipment.h"
+//for void equip(vector<Item *>&,int)
+
+#include "common/help.h"
+//for void HelpActivities(int)
+
+#include "common/stringconversion.h"
+//for string attribute_enum_to_string(int)
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -71,6 +104,19 @@ extern string closeParenthesis;
  charToVector activate_menu_items;
  vector<recruitData> recruitable_creatures;
 extern string spaceParanthesisDollar;
+extern vector<squadst *> squad;
+extern short activesortingchoice[SORTINGCHOICENUM];
+extern short interface_pgup;
+extern short interface_pgdn;
+extern int selectedsiege;
+extern squadst *activesquad;
+extern long cursquadid;
+extern string singleSpace;
+extern short lawList[LAWNUM];
+extern string commaSpace;
+extern vector<AugmentType *> augmenttype;
+extern class Ledger ledger;
+extern vector<ArmorType *> armortype;
 vector<Creature *> activatable_liberals()
 {
 	vector<Creature *> temppool;
@@ -99,17 +145,15 @@ void activate()
 	{
 		music.play(MUSIC_ACTIVATE);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Activate Uninvolved Liberals");
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+		mvaddstrAlt(0,  0, "Activate Uninvolved Liberals");
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 		mvaddstrAlt(1, 57, "ACTIVITY");
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
@@ -124,18 +168,17 @@ void activate()
 			set_color(COLOR_WHITE, COLOR_BLACK, bright);
 			mvaddstrAlt(y, 25, skill);
 			printhealthstat(*temppool[p], y, 33, TRUE);
-			if (mode == REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, location[temppool[p]->location]->getname(true, true));
 			moveAlt(y, 57);
 			// Let's add some color here...
 			set_activity_color(temppool[p]->activity.type);
 			addstrAlt(getactivity(temppool[p]->activity));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to Assign an Activity.");
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0, addpagestr());
 		addstrAlt(" T to sort people.");
 		mvaddstrAlt(24, 0, "Press Z to assign simple tasks in bulk.");
 		int c = getkey();
@@ -157,11 +200,38 @@ void activate()
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
 }
+vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
+// this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
+vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
+// this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
+vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
+// this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
+Activity getDefaultActivityTeaching(Creature *cr) {
+	for (CreatureTypes type : ACTIVITY_TEACH_FIGHTING_DEFAULT) {
+		if (cr->type == type) {
+			return ACTIVITY_TEACH_FIGHTING;
+		}
+	}
+		for (CreatureTypes type : ACTIVITY_TEACH_COVERT_DEFAULT) {
+			if (cr->type == type) {
+				return ACTIVITY_TEACH_COVERT;
+			}
+		}
+
+		for (CreatureTypes type : ACTIVITY_TEACH_POLITICS_DEFAULT) {
+			if (cr->type == type) {
+				return ACTIVITY_TEACH_POLITICS;
+			}
+		}
+
+		return ACTIVITY_TEACH_POLITICS;
+	
+}
 // These two functions handle listing and updating class choices
 int classlist = 0;
 void listclasses(Creature *cr)
 {
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 40, "Classes cost $60 a day. Study what?");
 	for (int i = 0; i < 5; ++i)
 	{
@@ -172,7 +242,7 @@ void listclasses(Creature *cr)
 			addstrAlt(spaceDashSpace); addstrAlt(data_lessons[i + classlist].str);
 		}
 	}
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(17, 40, "6 - Other classes");
 }
 void updateclasschoice(Creature *cr, char choice)
@@ -191,6 +261,135 @@ void updateclasschoice(Creature *cr, char choice)
 		listclasses(cr);
 	}
 }
+char incrementChar(char c, int i) {
+	return c + i;
+}
+
+vector<string> standard_activities_and_data;
+
+void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
+	int choice = choiceChar - '1';
+	switch (c) {
+	case 'a':
+		switch (choiceChar)
+		{
+		case '1':
+		case '2':
+		case '4':
+			//case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;
+		case '5':
+		case '6':
+			cr->activity.type = activate_menu_items[c][choice].activity;
+			break;
+		case '3':cr->activity.type = ACTIVITY_GRAFFITI;
+			cr->activity.arg = -1;
+			break;
+		case '7':
+			if (cr->location != -1 &&
+				location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
+			{
+				cr->activity.type = ACTIVITY_WRITE_GUARDIAN; break;
+			}
+		default:
+			if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 7 || cr->juice < 0)
+				cr->activity.type = ACTIVITY_COMMUNITYSERVICE;
+			else if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
+				cr->activity.type = ACTIVITY_TROUBLE;
+			else
+			{
+				if (cr->get_skill(SKILL_COMPUTERS) > 2)
+					cr->activity.type = ACTIVITY_HACKING;
+				else if (cr->get_skill(SKILL_ART) > 1)
+				{
+					cr->activity.type = ACTIVITY_GRAFFITI;
+					cr->activity.arg = -1;
+				}
+				else
+					cr->activity.type = ACTIVITY_TROUBLE;
+			}
+		}
+		break;
+	case 'b':
+		switch (choiceChar)
+		{
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+			cr->activity.type = activate_menu_items[c][choice].activity;
+			break;
+		default:
+			if (cr->get_weapon().is_instrument())
+				cr->activity.type = ACTIVITY_SELL_MUSIC;
+			else if (cr->get_skill(SKILL_ART) > 1)
+				cr->activity.type = ACTIVITY_SELL_ART;
+			else if (cr->get_skill(SKILL_TAILORING) > 1)
+				cr->activity.type = ACTIVITY_SELL_TSHIRTS;
+			else if (cr->get_skill(SKILL_MUSIC) > 1)
+				cr->activity.type = ACTIVITY_SELL_MUSIC;
+			else cr->activity.type = ACTIVITY_DONATIONS;
+		}
+		break;
+	case 'c':
+		switch (choiceChar)
+		{
+		case '1':
+		case '3':
+			//case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
+			cr->activity.type = activate_menu_items[c][choice].activity;
+			break;
+		case '2':
+			if (ZEROMORAL || cr->age >= 18)
+				cr->activity.type = ACTIVITY_PROSTITUTION; break;
+		default:
+			if (cr->get_skill(SKILL_COMPUTERS) > 1)
+				cr->activity.type = ACTIVITY_CCFRAUD;
+			else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
+				cr->activity.type = ACTIVITY_PROSTITUTION;
+			else cr->activity.type = ACTIVITY_SELL_DRUGS;
+		}
+		break;
+	case 'd':
+		switch (choiceChar)
+		{
+		case '1': { // Pick type to recruit
+			activityst oact = cr->activity;
+			cr->activity.type = ACTIVITY_NONE;
+			recruitSelect(*cr);
+			if (cr->activity.type == ACTIVITY_RECRUITING) break;
+			else cr->activity = oact;
+			break; }
+		case '2': { // Pick clothing to make
+			activityst oact = cr->activity;
+			cr->activity.type = ACTIVITY_NONE;
+			select_makeclothing(cr);
+			if (cr->activity.type == ACTIVITY_MAKE_ARMOR) break;
+			else cr->activity = oact;
+			break; }
+		case '3':
+			cr->activity.type = activate_menu_items[c][choice].activity;
+			break;
+		case '4':
+			cr->activity.type = ACTIVITY_STEALCARS;
+			break;
+		case '5':
+			if(!cr->canwalk() && !(cr->flag & CREATUREFLAG_WHEELCHAIR))
+			cr->activity.type = ACTIVITY_WHEELCHAIR;
+			break;
+		case '6': {
+			if (cr->get_skill(SKILL_SCIENCE) != 0) {
+				activityst oact = cr->activity;
+				cr->activity.type = ACTIVITY_NONE;
+				select_augmentation(cr);
+				if (cr->activity.type == ACTIVITY_AUGMENT) break;
+				else cr->activity = oact;
+			}
+			break; }
+		}
+		break;
+	}
+}
+
 void activate(Creature *cr)
 {
 	int hostagecount = 0, state = 0, oldstate = 0, choice = 0;
@@ -203,9 +402,9 @@ void activate(Creature *cr)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
+		moveAlt(0, 0);
 		if (cr->income)
 		{
 			addstrAlt(cr->name);
@@ -228,31 +427,27 @@ void activate(Creature *cr)
 				state = activity.key;
 		}
 		oldstate = state;
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'a');
-		mvaddstrAlt(10, 1, "A - Engaging in Liberal Activism");
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'b');
-		mvaddstrAlt(11, 1, "B - Legal Fundraising");
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'c');
-		mvaddstrAlt(12, 1, "C - Illegal Fundraising");
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'd');
-		mvaddstrAlt(13, 1, "D - Recruitment and Acquisition");
+		for (int i = 0; i < len(standard_activities_and_data); i++) {
+		set_color(COLOR_WHITE, COLOR_BLACK, state == 'a' + i);
+		mvaddstrAlt(10 + i, 1, incrementChar('A', i) + spaceDashSpace + standard_activities_and_data[i]);
+	}
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 't');
 		mvaddstrAlt(14, 1, "T - Teaching Other Liberals");
 		if (hostagecount > 0)set_color(COLOR_WHITE, COLOR_BLACK, state == 'i');
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(15, 1, "I - Tend to a Conservative hostage");
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 'l');
 		mvaddstrAlt(16, 1, "L - Learn in the University District");
 		if (clinictime(*cr)) set_color(COLOR_WHITE, COLOR_BLACK, state == 'm');
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17, 1, "M - Move to the Free Clinic");
 		if (cr->get_skill(SKILL_FIRSTAID) != 0)
 			set_color(COLOR_WHITE, COLOR_BLACK, state == 'h');
 		else
-			set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 1, "H - Heal Liberals");
 		if (havedead)set_color(COLOR_WHITE, COLOR_BLACK, state == 'z');
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(19, 1, "Z - Dispose of bodies");
 		siegest *siege = NULL;
 		if (selectedsiege != -1) siege = &location[selectedsiege]->siege;
@@ -262,16 +457,16 @@ void activate(Creature *cr)
 		/*char underattack=0;
 		if(siege&&sieged) underattack=siege->underattack;*/
 		if (!sieged)
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 		else
-			set_color(COLOR_BLACK, COLOR_BLACK, 1);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(20, 1, "E - Equip this Liberal");
-		if (state == 'a' || state == 'b' || state == 'c' || state == 'd')
+		if (state >= 'a' && state < 'a' + len(standard_activities_and_data))
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(19, 40, "? - Help");
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(20, 40, "Enter - Confirm Selection");
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 'x');
 		mvaddstrAlt(21, 1, "X - Nothing for Now");
@@ -304,7 +499,7 @@ void activate(Creature *cr)
 				addstrAlt(outputString);
 			}
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(22, 3);
 		if (activity.show_name)
 		{
@@ -322,120 +517,10 @@ void activate(Creature *cr)
 			switch (state)
 			{
 			case 'a':
-				switch (choice)
-				{
-				case '1':
-				case '2':
-				case '4':
-					//case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;
-				case '5':
-				case '6':
-					cr->activity.type = activate_menu_items['a'][choice - '1'].activity;
-					break;
-				case '3':cr->activity.type = ACTIVITY_GRAFFITI;
-					cr->activity.arg = -1;
-					break;
-				case '7':
-					if (cr->location != -1 &&
-						location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
-					{
-						cr->activity.type = ACTIVITY_WRITE_GUARDIAN; break;
-					}
-				default:
-					if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 7 || cr->juice < 0)
-						cr->activity.type = ACTIVITY_COMMUNITYSERVICE;
-					else if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
-						cr->activity.type = ACTIVITY_TROUBLE;
-					else
-					{
-						if (cr->get_skill(SKILL_COMPUTERS) > 2)
-							cr->activity.type = ACTIVITY_HACKING;
-						else if (cr->get_skill(SKILL_ART) > 1)
-						{
-							cr->activity.type = ACTIVITY_GRAFFITI;
-							cr->activity.arg = -1;
-						}
-						else
-							cr->activity.type = ACTIVITY_TROUBLE;
-					}
-				}
-				break;
 			case 'b':
-				switch (choice)
-				{
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-					cr->activity.type = activate_menu_items['b'][choice - '1'].activity;
-					break;
-				default:
-					if (cr->get_weapon().is_instrument())
-						cr->activity.type = ACTIVITY_SELL_MUSIC;
-					else if (cr->get_skill(SKILL_ART) > 1)
-						cr->activity.type = ACTIVITY_SELL_ART;
-					else if (cr->get_skill(SKILL_TAILORING) > 1)
-						cr->activity.type = ACTIVITY_SELL_TSHIRTS;
-					else if (cr->get_skill(SKILL_MUSIC) > 1)
-						cr->activity.type = ACTIVITY_SELL_MUSIC;
-					else cr->activity.type = ACTIVITY_DONATIONS;
-				}
-				break;
 			case 'c':
-				switch (choice)
-				{
-				case '1':
-				case '3':
-					//case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
-					cr->activity.type = activate_menu_items['c'][choice - '1'].activity;
-					break;
-				case '2':
-					if (ZEROMORAL || cr->age >= 18)
-						cr->activity.type = ACTIVITY_PROSTITUTION; break;
-				default:
-					if (cr->get_skill(SKILL_COMPUTERS) > 1)
-						cr->activity.type = ACTIVITY_CCFRAUD;
-					else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
-						cr->activity.type = ACTIVITY_PROSTITUTION;
-					else cr->activity.type = ACTIVITY_SELL_DRUGS;
-				}
-				break;
 			case 'd':
-				switch (choice)
-				{
-				case '1': { // Pick type to recruit
-					activityst oact = cr->activity;
-					cr->activity.type = ACTIVITY_NONE;
-					recruitSelect(*cr);
-					if (cr->activity.type == ACTIVITY_RECRUITING) break;
-					else cr->activity = oact;
-					break; }
-				case '2': { // Pick clothing to make
-					activityst oact = cr->activity;
-					cr->activity.type = ACTIVITY_NONE;
-					select_makeclothing(cr);
-					if (cr->activity.type == ACTIVITY_MAKE_ARMOR) break;
-					else cr->activity = oact;
-					break; }
-				case '3':
-					cr->activity.type = activate_menu_items['d'][choice - '1'].activity;
-					break;
-				case '4':
-					if (cr->canwalk())
-						cr->activity.type = ACTIVITY_STEALCARS;
-					else if (!(cr->flag & CREATUREFLAG_WHEELCHAIR))
-						cr->activity.type = ACTIVITY_WHEELCHAIR;
-					break;
-				case '5': {
-					if (cr->get_skill(SKILL_SCIENCE) != 0) {
-						activityst oact = cr->activity;
-						cr->activity.type = ACTIVITY_NONE;
-						select_augmentation(cr);
-						if (cr->activity.type == ACTIVITY_AUGMENT) break;
-						else cr->activity = oact;
-					}
-					break; }
-				}
+				selectOneOfStandardActivities(state, choice, cr);
 				break;
 			case 't':
 				switch (choice)
@@ -448,125 +533,7 @@ void activate(Creature *cr)
 					cr->activity.type = activate_menu_items['t'][(choice - '1') + 1].activity;
 					break;
 				default:
-					switch (cr->type)
-					{
-						// this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
-					case CREATURE_ATHLETE:
-					case CREATURE_BOUNCER: // for fighting skills
-					case CREATURE_COP: // for fighting skills
-					case CREATURE_CCS_ARCHCONSERVATIVE: // for fighting skills
-					case CREATURE_CCS_MOLOTOV: // for fighting skills
-					case CREATURE_CCS_SNIPER: // for fighting skills
-					case CREATURE_CCS_VIGILANTE: // for fighting skills
-					case CREATURE_DEATHSQUAD: // for fighting skills
-					case CREATURE_DOCTOR: // for First Aid
-					case CREATURE_FIREFIGHTER: // for fighting skills
-					case CREATURE_GANGMEMBER: // for fighting skills
-					case CREATURE_GANGUNIT: // for fighting skills
-					case CREATURE_GUARDDOG:
-					case CREATURE_GENETIC:
-					case CREATURE_HARDENED_VETERAN: // for fighting skills
-					case CREATURE_HICK:
-					case CREATURE_MARTIALARTIST: // for fighting skills
-					case CREATURE_MERC: // for fighting skills
-					case CREATURE_MILITARYOFFICER: // for fighting skills
-					case CREATURE_MILITARYPOLICE: // for fighting skills
-					case CREATURE_MUTANT:
-					case CREATURE_NURSE: // for First Aid
-					case CREATURE_PRISONGUARD: // for fighting skills
-					case CREATURE_SEAL: // for fighting skills
-					case CREATURE_SECURITYGUARD: // for fighting skills
-					case CREATURE_SOLDIER: // for fighting skills
-					case CREATURE_SWAT: // for fighting skills
-					case CREATURE_TANK: // fpr fighting skills
-					case CREATURE_VETERAN: // for fighting skills
-						cr->activity.type = ACTIVITY_TEACH_FIGHTING;
-						break;
-						// this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
-					case CREATURE_ACTOR: // for Disguise
-					case CREATURE_AGENT: // for Driving & Psychology
-					case CREATURE_AMATEURMAGICIAN:
-					case CREATURE_BIKER: // for Driving
-					case CREATURE_BUM:
-					case CREATURE_CONSTRUCTIONWORKER: // for Driving
-					case CREATURE_CRACKHEAD:
-					case CREATURE_EDUCATOR: // for Psychology & Driving
-					case CREATURE_FASHIONDESIGNER: // for Tailoring
-					case CREATURE_GARBAGEMAN: // for Driving
-					case CREATURE_HSDROPOUT:
-					case CREATURE_LOCKSMITH: // for Security
-					case CREATURE_MAILMAN:
-					case CREATURE_PLUMBER:
-					case CREATURE_PRISONER:
-					case CREATURE_PROGRAMMER: // for Computers
-					case CREATURE_PROSTITUTE: // for Seduction
-					case CREATURE_PSYCHOLOGIST: // for Psychology
-					case CREATURE_SECRET_SERVICE: // for Driving & Psychology
-					case CREATURE_SEWERWORKER:
-					case CREATURE_TAXIDRIVER: // for Driving
-					case CREATURE_THIEF: // for Disguise, Security, & Stealth
-					case CREATURE_TRUCKER: // for Driving
-					case CREATURE_WORKER_FACTORY_CHILD:
-					case CREATURE_WORKER_SERVANT:
-					case CREATURE_WORKER_SWEATSHOP: // for Tailoring
-						cr->activity.type = ACTIVITY_TEACH_COVERT;
-						break;
-						// this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
-					case CREATURE_AUTHOR: // for Writing & Persuasion
-					case CREATURE_BANK_MANAGER: // for Business
-					case CREATURE_BANK_TELLER:
-					case CREATURE_CAMERAMAN: // for Art
-					case CREATURE_CARSALESMAN: // for Business & Persuasion
-					case CREATURE_CHEF:
-					case CREATURE_CLERK:
-					case CREATURE_COLLEGESTUDENT: // for Art, Music, Science, & Writing
-					case CREATURE_CORPORATE_CEO: // for Business
-					case CREATURE_CORPORATE_MANAGER: // for Business
-					case CREATURE_CRITIC_ART: // for Writing, Persuasion, & Art
-					case CREATURE_CRITIC_MUSIC: // for Writing, Persuasion, & Music
-					case CREATURE_DANCER: // for Art & Music
-					case CREATURE_ENGINEER: // for Science
-					case CREATURE_FASTFOODWORKER:
-					case CREATURE_BAKER:
-					case CREATURE_BARISTA:
-					case CREATURE_BARTENDER:
-					case CREATURE_FOOTBALLCOACH: // for Persuasion
-					case CREATURE_HAIRSTYLIST: // for Art
-					case CREATURE_HIPPIE: // for Art & Music
-					case CREATURE_JOURNALIST: // for Writing & Persuasion
-					case CREATURE_JUDGE_CONSERVATIVE: // for Law & Writing
-					case CREATURE_JUDGE_LIBERAL: // for Law & Writing
-					case CREATURE_JUROR:
-					case CREATURE_LANDLORD: // for Business
-					case CREATURE_LAWYER: // for Law & Persuasion
-					case CREATURE_MATHEMATICIAN: // for Science
-					case CREATURE_MUSICIAN: // for Music
-					case CREATURE_NEWSANCHOR:
-					case CREATURE_NUN: // for Religion
-					case CREATURE_OFFICEWORKER: // for Business
-					case CREATURE_PAINTER: // for Art
-					case CREATURE_PHOTOGRAPHER: // for Art
-					case CREATURE_POLITICALACTIVIST: // for Persuasion, Law, & Writing
-					case CREATURE_POLITICIAN: // for Law & Persuasion
-					case CREATURE_PRIEST: // for Religion
-					case CREATURE_RADIOPERSONALITY: // for Persuasion
-					case CREATURE_RETIREE:
-					case CREATURE_SCIENTIST_EMINENT: // for Science
-					case CREATURE_SCIENTIST_LABTECH: // for Science
-					case CREATURE_SCULPTOR: // for Art
-					case CREATURE_SOCIALITE: // for Persuasion, Art, & Music
-					case CREATURE_TEACHER:
-					case CREATURE_TEENAGER:
-					case CREATURE_TELEMARKETER: // for Persuasion
-					case CREATURE_WORKER_FACTORY_NONUNION:
-					case CREATURE_WORKER_FACTORY_UNION:
-					case CREATURE_WORKER_JANITOR:
-					case CREATURE_WORKER_SECRETARY: // for Writing
-					case CREATURE_YOGAINSTRUCTOR:
-					default:
-						cr->activity.type = ACTIVITY_TEACH_POLITICS;
-						break;
-					}
+					cr->activity.type = getDefaultActivityTeaching(cr);
 					break;
 				}
 				break;
@@ -616,20 +583,6 @@ void activate(Creature *cr)
 				}
 				state = oldstate;
 				break;
-				/*case 'w':
-				if(location[cr->location]->compound_walls==COMPOUND_PRINTINGPRESS)
-				{
-				activityst oact=cr->activity;
-				cr->activity.type=ACTIVITY_NONE;
-				if(select_view(cr,cr->activity.arg))
-				{
-				cr->activity.type=ACTIVITY_WRITE_GUARDIAN;
-				break;
-				}
-				else cr->activity=oact;
-				}
-				state=oldstate;
-				break;*/
 			case 'x':
 				cr->activity.type = ACTIVITY_NONE;
 				break;
@@ -646,6 +599,46 @@ void activate(Creature *cr)
 				HelpActivities(cr->activity.type); // Call activity help pages
 	}
 }
+//Activism
+Activity getDefaultActivityActivism(Creature *cr) {
+	if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 7 || cr->juice < 0)
+		return ACTIVITY_COMMUNITYSERVICE;
+	else if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
+		return ACTIVITY_TROUBLE;
+	else
+	{
+		if (cr->get_skill(SKILL_COMPUTERS) > 2)
+			return ACTIVITY_HACKING;
+		else if (cr->get_skill(SKILL_ART) > 1)
+		{
+			return ACTIVITY_GRAFFITI;
+			cr->activity.arg = -1;
+		}
+		else return ACTIVITY_TROUBLE;
+	}
+}
+//Fundraising
+Activity getDefaultActivityFundraising(Creature *cr) {
+	if (cr->get_weapon().is_instrument())
+		return ACTIVITY_SELL_MUSIC;
+	else if (cr->get_skill(SKILL_ART) > 1)
+		return ACTIVITY_SELL_ART;
+	else if (cr->get_skill(SKILL_TAILORING) > 1)
+		return ACTIVITY_SELL_TSHIRTS;
+	else if (cr->get_skill(SKILL_MUSIC) > 1)
+		return ACTIVITY_SELL_MUSIC;
+	else return ACTIVITY_DONATIONS;
+}
+//Illegal Fundraising
+Activity getDefaultActivityIllegalFundraising(Creature *cr) {	
+	if (cr->get_skill(SKILL_COMPUTERS) > 1)
+		return ACTIVITY_CCFRAUD;
+	else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
+		return ACTIVITY_PROSTITUTION;
+	else
+		return ACTIVITY_SELL_DRUGS;
+}
+vector<string> bulkActivityString;
 void activatebulk()
 {
 	vector<Creature *> temppool = activatable_liberals();
@@ -654,35 +647,20 @@ void activatebulk()
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Activate Uninvolved Liberals");
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+		mvaddstrAlt(0,  0, "Activate Uninvolved Liberals");
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
 		mvaddstrAlt(1, 51, "BULK ACTIVITY");
-		if (selectedactivity == 0) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(2, 51, "1 - Liberal Activism");
-		if (selectedactivity == 1) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(3, 51, "2 - Legal Fundraising");
-		if (selectedactivity == 2) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(4, 51, "3 - Illegal Fundraising");
-		if (selectedactivity == 3) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(5, 51, "4 - Checking Polls");
-		if (selectedactivity == 4) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(6, 51, "5 - Stealing Cars");
-		if (selectedactivity == 5) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(7, 51, "6 - Community Service");
+		
+		for (int i = 0; i < len(bulkActivityString); i++) {
+			set_color(COLOR_WHITE, COLOR_BLACK, selectedactivity == i);
+			mvaddstrAlt(2 + i, 51, incrementChar('1', i) + spaceDashSpace + bulkActivityString[i]);
+		}
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
@@ -696,10 +674,9 @@ void activatebulk()
 			addstrAlt(closeParenthesis);
 			}*/
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to Assign an Activity.  Press a Number to select an Activity.");
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0, 		addpagestr());
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -713,40 +690,13 @@ void activatebulk()
 				switch (selectedactivity)
 				{
 				case 0: //Activism
-					if (temppool[p]->get_attribute(ATTRIBUTE_WISDOM, true)>7 || temppool[p]->juice < 0)
-						temppool[p]->activity.type = ACTIVITY_COMMUNITYSERVICE;
-					else if (temppool[p]->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
-						temppool[p]->activity.type = ACTIVITY_TROUBLE;
-					else
-					{
-						if (temppool[p]->get_skill(SKILL_COMPUTERS) > 2)
-							temppool[p]->activity.type = ACTIVITY_HACKING;
-						else if (temppool[p]->get_skill(SKILL_ART) > 1)
-						{
-							temppool[p]->activity.type = ACTIVITY_GRAFFITI;
-							temppool[p]->activity.arg = -1;
-						}
-						else temppool[p]->activity.type = ACTIVITY_TROUBLE;
-					}
+					temppool[p]->activity.type = getDefaultActivityActivism(temppool[p]);
 					break;
 				case 1: //Fundraising
-					if (temppool[p]->get_weapon().is_instrument())
-						temppool[p]->activity.type = ACTIVITY_SELL_MUSIC;
-					else if (temppool[p]->get_skill(SKILL_ART) > 1)
-						temppool[p]->activity.type = ACTIVITY_SELL_ART;
-					else if (temppool[p]->get_skill(SKILL_TAILORING) > 1)
-						temppool[p]->activity.type = ACTIVITY_SELL_TSHIRTS;
-					else if (temppool[p]->get_skill(SKILL_MUSIC) > 1)
-						temppool[p]->activity.type = ACTIVITY_SELL_MUSIC;
-					else temppool[p]->activity.type = ACTIVITY_DONATIONS;
+					temppool[p]->activity.type = getDefaultActivityFundraising(temppool[p]);
 					break;
 				case 2: //Illegal Fundraising
-					if (temppool[p]->get_skill(SKILL_COMPUTERS) > 1)
-						temppool[p]->activity.type = ACTIVITY_CCFRAUD;
-					else if (temppool[p]->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || temppool[p]->age >= 18))
-						temppool[p]->activity.type = ACTIVITY_PROSTITUTION;
-					else
-						temppool[p]->activity.type = ACTIVITY_SELL_DRUGS;
+					temppool[p]->activity.type = getDefaultActivityIllegalFundraising(temppool[p]);
 					break;
 				case 3: //Check polls
 					temppool[p]->activity.type = ACTIVITY_POLLS;
@@ -757,10 +707,13 @@ void activatebulk()
 				case 5: //Volunteer
 					temppool[p]->activity.type = ACTIVITY_COMMUNITYSERVICE;
 					break;
+				case 6: //Repair Clothing
+					temppool[p]->activity.type = ACTIVITY_REPAIR_ARMOR;
+					break;
 				}
 			}
 		}
-		if (c >= '1'&&c <= '6')
+		if (c >= '1'&&c <= '7')
 			selectedactivity = c - '1';
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
@@ -789,18 +742,16 @@ void select_tendhostage(Creature *cr)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt("Which hostage will ");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, "Which hostage will ");
 		addstrAlt(cr->name);
 		addstrAlt(" be watching over?");
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 		mvaddstrAlt(1, 57, "DAYS IN CAPTIVITY");
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
@@ -815,19 +766,18 @@ void select_tendhostage(Creature *cr)
 			set_color(COLOR_WHITE, COLOR_BLACK, bright);
 			mvaddstrAlt(y, 25, skill);
 			printhealthstat(*temppool[p], y, 33, TRUE);
-			if (mode == REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, location[temppool[p]->location]->getname(true, true));
-			set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 57, temppool[p]->joindays);
 			addstrAlt(singleSpace);
 			if (temppool[p]->joindays > 1)addstrAlt("Days");
 			else addstrAlt("Day");
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to select a Conservative");
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0,		addpagestr());
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -845,46 +795,6 @@ void select_tendhostage(Creature *cr)
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
-}
-long select_hostagefundinglevel(Creature *cr, Creature *hs)
-{
-	long flevel = -1;
-	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	printfunds();
-	moveZeroZero();
-	addstrAlt("Select a Funding Level for this Operation:");
-	mvaddstrAlt(2, 0, "A - Don't spend anything.  ");
-	addstrAlt(cr->name);
-	addstrAlt(" is just on watch duty.");
-	mvaddstrAlt(3, 0, "B - Don't spend anything.  ");
-	addstrAlt(cr->name);
-	addstrAlt(" will turn the prisoner over time.");
-	mvaddstrAlt(4, 0, "C - $20 per day.  Enough for some props.");
-	mvaddstrAlt(5, 0, "D - $50 per day.  ");
-	addstrAlt(cr->name);
-	addstrAlt(" will go for a thrifty indoctrination.");
-	mvaddstrAlt(6, 0, "E - $100 per day.  ");
-	addstrAlt(cr->name);
-	addstrAlt(" needs enough freedom to be creative.");
-	mvaddstrAlt(7, 0, "F - $500 per day.  It is imperative that the Conservative be turned quickly.");
-	mvaddstrAlt(8, 0, "K - This Conservative has become a liability and needs to be terminated.");
-	mvaddstrAlt(10, 0, "Enter - On second thought, this isn't a job for ");
-	addstrAlt(cr->name);
-	addstrAlt(singleDot);
-	do
-	{
-		int c = getkey();
-		if (c == 'a')flevel = 0;
-		if (c == 'b')flevel = 1;
-		if (c == 'c')flevel = 20;
-		if (c == 'd')flevel = 50;
-		if (c == 'e')flevel = 100;
-		if (c == 'f')flevel = 500;
-		if (c == 'k')flevel = 666;
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	} while (flevel == -1);
-	return flevel;
 }
 // Return the difficulty of tracking this character type down, for the
 // purpose of the activation menu. 0 is trivial, 10 is impossible.
@@ -923,18 +833,16 @@ void recruitSelect(Creature &cr)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("What type of person will ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "What type of person will ");
 		addstrAlt(cr.name);
 		addstrAlt(" try to meet and recruit today?");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveOneZero();
-		addstrAlt("컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1,  0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
 		int y = 2, difficulty;
 		for (int p = page * 19; p < options&&p < page * 19 + 19; p++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(recruitable_creatures[p].name);
@@ -943,10 +851,9 @@ void recruitSelect(Creature &cr)
 			displayDifficulty(difficulty);
 			y++;
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to select a Profession");
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0,		addpagestr());
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
@@ -968,11 +875,11 @@ void recruitSelect(Creature &cr)
 }
 void show_victim_status(Creature *victim)
 {
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 55, "Status:");
 	printhealthstat(*victim, 2, 66, true);
 	printwoundstat(*victim, 4, 55);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(11, 55, "Heart: "); mvaddstrAlt(11, 66, victim->get_attribute(ATTRIBUTE_HEART, true));
 	mvaddstrAlt(12, 55, "Age: "); mvaddstrAlt(12, 66, victim->age);
 }
@@ -1017,15 +924,13 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 		int y, p;
 		switch (cur_step) {
 		case 0: //PAGE 0, selecting a liberal
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("Select a Liberal to perform experiments on");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveOneZero();
-			addstrAlt("컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "Select a Liberal to perform experiments on");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(1,  0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
 			for (p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0); //c==y+'a'-2);
+				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 				moveAlt(y, 0);
 				addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 				addstrAlt(temppool[p]->name);
@@ -1033,11 +938,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 				mvaddstrAlt(y, 62, temppool[p]->age);
 				printhealthstat(*temppool[p], y, 31, TRUE);
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(22, 0);
-			addstrAlt("Press a Letter to select a Liberal");
-			moveAlt(23, 0);
-			addpagestr();
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(22, 0, "Press a Letter to select a Liberal");
+			mvaddstrAlt(23, 0,			addpagestr());
 			c = getkey();
 			//PAGE UP
 			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
@@ -1057,10 +960,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			if (c == 'x' || c == ESC || c == SPACEBAR || c == ENTER) return;
 			break;
 		case 1: //PAGE 1, selecting an augmentation
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("Subject: ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "Subject: ");
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
 			//mvaddstrAlt(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 			show_victim_status(victim);
@@ -1068,7 +970,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			for (p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
 			{
 				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
-				if (already_augmented) set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				if (already_augmented) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				else set_color(COLOR_WHITE, COLOR_BLACK, aug_c == y + 'a' - 4);
 				moveAlt(y, 1);
 				addcharAlt(y + 'A' - 4); addstrAlt(spaceDashSpace);
@@ -1090,7 +992,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 					}
 				}
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			for (int x = 0, y = 4; x < aug_type.size(); x++, y++)
 			{
 				//set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
@@ -1110,32 +1012,31 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			else if (c == 'x' || c == SPACEBAR || c == ENTER) { cur_step = 0; aug_type.clear(); aug_c = 0; }
 			break;
 		case 2: //PAGE 2, confirm your choices
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("Subject: ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "Subject: ");
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(2, 0, "Augmentation: ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(selected_aug->get_name());
 			show_victim_status(victim);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(4, 0, "Effect: ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
 			addstrAlt((char)(toupper(selected_attribute.at(0))) +
 				selected_attribute.substr(1) +
 				(selected_aug->get_effect() >= 0 ? " +" : singleSpace) +
 				tostring(selected_aug->get_effect()));
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(5, 0, "Chance at Success: ");
 			int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
 			int difficulty = selected_aug->get_difficulty();
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(to_string(100 * skills / difficulty));
 			mvaddstrAlt(7, 0, "Description");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(8, 0, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 			vector<string> desc;
 			split_string(selected_aug->get_description(), ' ', desc);
@@ -1167,7 +1068,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			c = getkey();
 			if (c == 'y')
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(23, 1, "Press any key to return");
 				moveAlt(21, 1);
 				int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
@@ -1212,7 +1113,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 					*wound |= WOUND_NASTYOFF;
 					if (victim->blood > 0)
 					{
-						set_color(COLOR_RED, COLOR_BLACK, 1);
+						set_color_easy(RED_ON_BLACK_BRIGHT);
 						addstrAlt(string(victim->name) + " has been horribly disfigured", gamelog);
 					}
 				}
@@ -1249,12 +1150,12 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 					victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
 					cr->train(SKILL_SCIENCE, 15);
 					addjuice(*cr, 10, 1000);
-					set_color(COLOR_GREEN, COLOR_BLACK, 1);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
 					addstrAlt(string(victim->name) + " has been augmented with " + selected_aug->get_name(), gamelog);
 				}
 				if (victim->blood <= 0) //Lost too much blood, you killed 'em
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
 					victim->die();
 					addstrAlt(string(victim->name) + " has been brutally murdered by " + cr->name, gamelog);
 				}
@@ -1286,33 +1187,30 @@ void select_makeclothing(Creature *cr)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Which will ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Which will ");
 		addstrAlt(cr->name);
 		addstrAlt(" try to make?   (Note: Half Cost if you have cloth)");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveOneZero();
-		addstrAlt("컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1,  0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
 		int y = 2, difficulty;
 		for (int p = page * 19; p < len(armortypei) && p < page * 19 + 19; p++, y++)
 		{
 			difficulty = armor_makedifficulty(*armortype[armortypei[p]], cr);
 			if (difficulty < 0) difficulty = 0;
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(armortype[armortypei[p]]->get_name());
 			moveAlt(y, 37);
 			displayDifficulty(difficulty);
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			string price = '$' + tostring(armortype[armortypei[p]]->get_make_price());
 			mvaddstrAlt(y, 64 - len(price), price);
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to select a Type of Clothing");
-		moveAlt(23, 0);
-		addpagestr();
+		mvaddstrAlt(23, 0, 		addpagestr());
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
@@ -1335,113 +1233,8 @@ int armor_makedifficulty(Armor& type, Creature *cr)
 {
 	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
 }
-#include <algorithm>
 int armor_makedifficulty(ArmorType& type, Creature *cr) //Make class method? -XML
 {
 	int basedif = type.get_make_difficulty() - cr->get_skill(SKILL_TAILORING) + 3;
 	return max(basedif, 0);
-}
-/* base - activate - trouble */
-long select_troublefundinglevel(Creature *cr)
-{
-	long flevel = -1;
-	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	printfunds();
-	moveZeroZero();
-	addstrAlt("Select a Funding Level for this Operation:");
-	mvaddstrAlt(2, 0, "A - Don't spend anything.  ");
-	addstrAlt(cr->name);
-	addstrAlt(" just needs something constructive to do.");
-	mvaddstrAlt(3, 0, "B - $20 per day.  Some minor purchases are needed.");
-	mvaddstrAlt(4, 0, "C - $50 per day.  Disobedience costs money.");
-	mvaddstrAlt(5, 0, "D - $100 per day.  Enough to be really disobedient.");
-	mvaddstrAlt(6, 0, "E - $500 per day.  The Machine will buckle under the weight of");
-	mvaddstrAlt(7, 0, "    ");
-	addstrAlt(cr->name);
-	addstrAlt("'s Numerous and Varied Liberal Acts.");
-	mvaddstrAlt(9, 0, "Enter - On second thought, this isn't a job for ");
-	addstrAlt(cr->name);
-	addstrAlt(singleDot);
-	do
-	{
-		int c = getkey();
-		if (c == 'a')flevel = 0;
-		if (c == 'b')flevel = 20;
-		if (c == 'c')flevel = 50;
-		if (c == 'd')flevel = 100;
-		if (c == 'e')flevel = 500;
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	} while (flevel == -1);
-	return flevel;
-}
-/* base - activate - select a topic to write about */
-char select_view(Creature *cr, int &v)
-{
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Write a news story if the LCS makes the news on the selected topic today, or");
-		moveOneZero();
-		addstrAlt("write editorials if there is no current news but there is public interest.");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(2, 0, "컴컴TOPIC컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횵NTEREST컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-		int y = 3, x = 0;
-		for (int p = page * 18; p < VIEWNUM - 3 && p < page * 18 + 18; p++, y++)
-		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(y, x);
-			addcharAlt((p - page * 18) + 'A'); addstrAlt(spaceDashSpace);
-			addstrAlt(getview(p, false));
-			moveAlt(y, 44);
-			if (public_interest[p] > 100)
-			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				addstrAlt("Extremely Controversial");
-			}
-			else if (public_interest[p] > 50)
-			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				addstrAlt("Dinner Table Topic");
-			}
-			else if (public_interest[p] > 10)
-			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				addstrAlt("Significant Interest");
-			}
-			else if (public_interest[p] > 0)
-			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				addstrAlt("Minor Discussion");
-			}
-			else
-			{
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				addstrAlt("Exhausted");
-			}
-		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		mvaddstrAlt(22, 0, "Press a Letter to select a Topic");
-		moveAlt(23, 0);
-		addpagestr();
-		int c = getkey();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 16<VIEWNUM - 3) page++;
-		if (c >= 'a'&&c <= 'a' + 18)
-		{
-			int p = page * 18 + c - 'a';
-			if (p < VIEWNUM - 3)
-			{
-				v = p;
-				return 1;
-			}
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-	return 0;
 }

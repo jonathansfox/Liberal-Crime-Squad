@@ -27,6 +27,8 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/consolesupport.h"
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -37,6 +39,8 @@ This file is part of Liberal Crime Squad.                                       
 #elif defined(USE_NCURSES_W)
 #include <ncursesw/term.h>
 #endif
+extern short interface_pgup;
+extern short interface_pgdn;
 // These 4 variables to keep track of the current color are for
 // this file only
 short curForeground=COLOR_WHITE,curBackground=COLOR_BLACK;
@@ -282,6 +286,7 @@ void init_console()
 #define  SPI_SETFONTSMOOTHINGCONTRAST  0X200D
 BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
+extern bool fixcleartype;
 void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
 {
    if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later

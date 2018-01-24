@@ -1,9 +1,9 @@
-#ifndef SITEMAP_H_INCLUDED
-#define SITEMAP_H_INCLUDED
 //#include <includeDefault.h>
 //#include "tinydir.h"
-#define SITEMAP_ADDTYPE_OR     1
-#define SITEMAP_ADDTYPE_ANDNOT 2
+#ifndef SITEMAP_H
+#define SITEMAP_H0
+const int SITEMAP_ADDTYPE_OR = 1;
+const int SITEMAP_ADDTYPE_ANDNOT = 2;
 enum sitemapscripts
 {
    SITEMAPSCRIPT_ROOM,

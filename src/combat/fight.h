@@ -1,3 +1,6 @@
+#ifndef FIGHT_H
+#define FIGHT_H0
+
 /* attack handling for each side as a whole */
 void youattack();
 void enemyattack();
@@ -26,3 +29,5 @@ char incapacitated(Creature &a, char noncombat, char &printed);
 void adddeathmessage(Creature &cr);
 /* pushes people into the current squad (used in a siege) */
 void autopromote(int loc);
+
+#endif

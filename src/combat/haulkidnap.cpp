@@ -30,6 +30,36 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/advance.h"
+// for creatureadvance
+
+#include "sitemode/stealth.h"
+#include "sitemode/sitedisplay.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "common/stringconversion.h"
+//for mvaddchar
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for printparty
+
+#include "common/commonactions.h"
+// for void criminalizeparty(short)
+
+#include "common/getnames.h"
+// for void enter_name(int,int,char *,int,const char *defname=NULL);
+
+#include "combat/haulkidnap.h"
+//own header
+
+#include "combat/fight.h"
+//for void enemyattack();
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -44,6 +74,17 @@ extern string spaceDashSpace;
 extern string singleDot;
 extern int stat_kidnappings;
 extern short mode;
+extern squadst *activesquad;
+extern short party_status;
+extern Creature encounter[ENCMAX];
+extern short lawList[LAWNUM];
+extern short sitealarm;
+extern short sitealarmtimer;
+extern int sitecrime;
+extern short offended_amradio;
+extern short offended_cablenews;
+extern string singleSpace;
+extern vector<Item *> groundloot;
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()
 {
@@ -60,20 +101,17 @@ void kidnapattempt()
 			}
 	if (!available)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("No one can do the job.            ");
-		moveSeventeenOne();
-		addstrAlt("                                  ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "No one can do the job.            ");
+		mvaddstrAlt(17,  1, "                                  ");
 		getkey();
 		return;
 	}
 	do
 	{
 		printparty();
-		moveAlt(8, 20);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		addstrAlt(chooseALiberalTo + "do the job.");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  20, chooseALiberalTo + "do the job.");
 		int c = getkey();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -95,9 +133,8 @@ void kidnapattempt()
 			clearcommandarea();
 			clearmessagearea();
 			clearmaparea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveAlt(9, 1);
-			addstrAlt("Kidnap whom?");
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  1, "Kidnap whom?");
 			int x = 1, y = 11;
 			for (int t2 = 0; t2 < len(target); t2++)
 			{
@@ -155,11 +192,9 @@ void kidnapattempt()
 	}
 	else
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("All of the targets are too dangerous.                ");
-		moveSeventeenOne();
-		addstrAlt("                                                     ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "All of the targets are too dangerous.                ");
+		mvaddstrAlt(17,  1, "                                                     ");
 		getkey();
 	}
 }
@@ -176,20 +211,17 @@ void releasehostage()
 				available++, availslot[p] = 1;
 	if (!available)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("No hostages are being held.       ");
-		moveSeventeenOne();
-		addstrAlt("                                  ");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "No hostages are being held.       ");
+		mvaddstrAlt(17,  1, "                                  ");
 		getkey();
 		return;
 	}
 	do
 	{
 		printparty();
-		moveAlt(8, 20);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		addstrAlt(chooseALiberalTo + "release their hostage.");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  20, chooseALiberalTo + "release their hostage.");
 		int c = getkey();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -200,12 +232,10 @@ void releasehostage()
 	freehostage(*(activesquad->squad[kidnapper]), 2);
 	if (!sitealarm)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The hostage shouts for help!      ", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The hostage shouts for help!      ", gamelog);
 		gamelog.nextMessage(); //Next message.
-		moveSeventeenOne();
-		addstrAlt("                                  ");
+		mvaddstrAlt(17,  1, "                                  ");
 		getkey();
 		sitealarm = 1;
 		alienationcheck(1);
@@ -225,9 +255,8 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		//HIT!
 		if (aroll > droll)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(a.name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, a.name, gamelog);
 			addstrAlt(" snatches ", gamelog);
 			addstrAlt(t.name, gamelog);
 			addstrAlt("!", gamelog);
@@ -235,9 +264,8 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 			a.prisoner = new Creature;
 			*a.prisoner = t;
 			getkey();
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			moveSeventeenOne();
-			addstrAlt(t.name, gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(17,  1, t.name, gamelog);
 			addstrAlt(" is struggling and screaming!", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
@@ -246,14 +274,12 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		}
 		else
 		{
-			set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(a.name, gamelog);
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, a.name, gamelog);
 			addstrAlt(" grabs at ", gamelog);
 			addstrAlt(t.name, gamelog);
 			gamelog.newline(); //New line.
-			moveSeventeenOne();
-			addstrAlt("but ", gamelog);
+			mvaddstrAlt(17,  1, "but ", gamelog);
 			addstrAlt(t.name, gamelog);
 			addstrAlt(" writhes away!", gamelog);
 			gamelog.newline(); //New line.
@@ -265,17 +291,15 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 	else
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt(a.name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, a.name, gamelog);
 		addstrAlt(" shows ", gamelog);
 		addstrAlt(t.name, gamelog);
 		addstrAlt(" the ", gamelog);
 		addstrAlt(a.get_weapon().get_name(2), gamelog);
 		addstrAlt(singleSpace, gamelog);
-		moveSeventeenOne();
-		addstrAlt("and says, ", gamelog);
-		set_color(COLOR_GREEN, COLOR_BLACK, 1);
+		mvaddstrAlt(17,  1, "and says, ", gamelog);
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		if (lawList[LAW_FREESPEECH] == -2)addstrAlt("\"[Please], be cool.\"", gamelog);
 		else addstrAlt("\"Bitch, be cool.\"", gamelog);
 		a.prisoner = new Creature;
@@ -306,12 +330,11 @@ void freehostage(Creature &cr, char situation)
 		else if (situation == 1)
 		{
 			clearmessagearea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			if (cr.prisoner->squadid == -1)addstrAlt("A hostage escapes!", gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, "A hostage escapes!", gamelog);
 			else
 			{
-				addstrAlt(cr.prisoner->name, gamelog);
+				mvaddstrAlt(16, 1, cr.prisoner->name, gamelog);
 				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured.", gamelog);
 				else addstrAlt(" is captured.", gamelog);
 			}
@@ -375,9 +398,8 @@ void squadgrab_immobile(char dead)
 				activesquad->squad[p]->prisoner != NULL)
 			{
 				clearmessagearea();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(" can no longer handle ", gamelog);
 				addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 				addstrAlt(singleDot, gamelog);
@@ -401,9 +423,8 @@ void squadgrab_immobile(char dead)
 					if (!activesquad->squad[p]->alive)
 					{
 						clearmessagearea();
-						set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-						moveSixteenOne();
-						addstrAlt("Nobody can carry Martyr ", gamelog);
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, "Nobody can carry Martyr ", gamelog);
 						addstrAlt(activesquad->squad[p]->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
@@ -415,9 +436,8 @@ void squadgrab_immobile(char dead)
 					else
 					{
 						clearmessagearea();
-						set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-						moveSixteenOne();
-						addstrAlt(activesquad->squad[p]->name, gamelog);
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 						addstrAlt(" is left to be captured.", gamelog);
 						gamelog.newline(); //New line.
 						capturecreature(*activesquad->squad[p]);
@@ -437,9 +457,8 @@ void squadgrab_immobile(char dead)
 							{
 								activesquad->squad[p2]->prisoner = activesquad->squad[p];
 								clearmessagearea();
-								set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-								moveSixteenOne();
-								addstrAlt(activesquad->squad[p2]->name, gamelog);
+								set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, activesquad->squad[p2]->name, gamelog);
 								addstrAlt(" hauls ", gamelog);
 								addstrAlt(activesquad->squad[p]->name, gamelog);
 								addstrAlt(singleDot, gamelog);
@@ -479,17 +498,14 @@ void kidnaptransfer(Creature &cr)
 	//Create interrogation data
 	newcr->activity.intr() = new interrogation;
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt("The Education of ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, "The Education of ");
 	addstrAlt(newcr->propername);
-	moveAlt(2, 0);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	addstrAlt("What name will you use for this ");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(2,  0, "What name will you use for this ");
 	addstrAlt(newcr->get_type_name());
 	addstrAlt(" in its presence?");
-	moveAlt(3, 0);
-	addstrAlt("If you do not enter anything, their real name will be used.");
+	mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
 	enter_name(4, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	pool.push_back(newcr);
 	stat_kidnappings++;

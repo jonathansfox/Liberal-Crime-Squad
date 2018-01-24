@@ -53,6 +53,13 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 
+#include "common/getnames.h"
+//own header
+
+#include "common/translateid.h"
+// for  int getpoolcreature(int)
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -63,6 +70,9 @@ extern vector<Location *> location;
  vector<string> city_names;
 typedef map<short, string > shortAndString;
  shortAndString getActivityString;
+
+ extern short lawList[LAWNUM];
+ extern vector<ArmorType *> armortype;
 std::string getactivity(activityst &act)
 {
 	if (getActivityString.count(act.type)) {

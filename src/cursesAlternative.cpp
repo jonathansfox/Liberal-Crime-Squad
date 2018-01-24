@@ -1,11 +1,43 @@
 
 #include <includes.h>
 
+#include "log/log.h"
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
+#include <common\\consolesupport.h>
 #include <set_color_support.h>
+
+extern string singleSpace;
+
+/* Variants of addch and mvaddch that work on chars and use translateGraphicsChar(), fixing display of extended characters */
+inline int addchar(char ch) { return addch(translateGraphicsChar(ch)); }
+inline int mvaddchar(int y, int x, char ch) { return mvaddch(y, x, translateGraphicsChar(ch)); }
+inline int addchar(char ch, Log &log) { log.record(ch); return addchar(ch); }
+inline int mvaddchar(int y, int x, char ch, Log &log) { log.record(ch); return mvaddchar(y, x, ch); }
+/* Redefining addstr() and mvaddstr() so they use addchar() and mvaddchar(), fixing display of extended characters */
+#undef addstr
+inline int addstr(const char* text) { int ret = ERR; for (int i = 0; i<len(text); i++) ret = addchar(text[i]); return ret; }
+#undef mvaddstr
+inline int mvaddstr(int y, int x, const char* text) { int ret = move(y, x); if (ret != ERR) ret = addstr(text); return ret; }
+/* Various wrappers to addstr() and mvaddstr() which handle permutations of:
+- Including or not including the gamelog for external message logging
+- std::string or c-style char arrays */
+inline int addstr(const char *text, Log &log) { log.record(text); return addstr(text); }
+inline int mvaddstr(int y, int x, const char *text, Log &log) { log.record(text); return mvaddstr(y, x, text); }
+inline int addstr(const std::string& text) { int ret = ERR; for (int i = 0; i<len(text); i++) ret = addchar(text[i]); return ret; }
+inline int addstr(const std::string& text, Log &log) { log.record(text); return addstr(text); }
+inline int mvaddstr(int y, int x, const std::string& text) { int ret = move(y, x); if (ret != ERR) ret = addstr(text); return ret; }
+inline int mvaddstr(int y, int x, const std::string& text, Log &log) { log.record(text); return mvaddstr(y, x, text); }
+/* These wrappers convert numbers to text */
+inline int addstr(long num) { return addstr(tostring(num)); }
+inline int addstr(long num, Log &log) { return addstr(tostring(num), log); }
+inline int mvaddstr(int y, int x, long num) { return mvaddstr(y, x, tostring(num)); }
+inline int mvaddstr(int y, int x, long num, Log &log) { return mvaddstr(y, x, tostring(num), log); }
+
+
 void    PDC_set_titleAlt(const char *ch) {
 	   PDC_set_title(ch);
 }
@@ -39,8 +71,8 @@ int     mvgetnstrAlt(int x, int y, char *ch, int z) {
 	return mvgetnstr(x, y, ch, z);
 }
 int moveAlt(const int x, const int y) { return move(x, y); }
-int		mvaddstrAlt(const int x, const int y, const string z) { return mvaddstr(x, y, z.data()); }
-int		mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y, z); }
+int	mvaddstrAlt(const int x, const int y, const string z) { return mvaddstr(x, y, z.data()); }
+int	mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y, z); }
 //int		mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y, z); }
 //int addstrAlt(const char* x, Log y) { return addstr(x,y); }
 //int addstrAlt(const string x) { return addstr(x); }
@@ -50,8 +82,8 @@ int addstrAlt(const string &text) { int ret = ERR; for (int i = 0; i<strlen(text
 int addstrAlt(const string &text, Log &log){ log.record(text); return addstr(text.data()); }
 int addstrAlt(const long num) { return addstr(tostring(num).data()); }
 int addstrAlt(const long num, Log &log) { return addstrAlt(tostring(num).data(), log); }
-int		 mvaddstrAlt(const int x, const  int y, const int z) { return mvaddstr(x, y, tostring(z).data()); }
-int		 mvaddstrAlt(const int x, const int y, const string z, Log &a) {
+int	mvaddstrAlt(const int x, const  int y, const int z) { return mvaddstr(x, y, tostring(z).data()); }
+int	mvaddstrAlt(const int x, const int y, const string z, Log &a) {
 	a.record(z);
 	return mvaddstr(x, y, z.data());
 }
@@ -110,7 +142,7 @@ int     clearAlt(void) {
 int     refreshAlt(void) {
 	return refresh();
 }
-const ColorSetup 	BLACK_ON_BLACK = { COLOR_BLACK, COLOR_BLACK };
+const ColorSetup BLACK_ON_BLACK = { COLOR_BLACK, COLOR_BLACK };
 const ColorSetup BLACK_ON_BLACK_BRIGHT = { COLOR_BLACK, COLOR_BLACK, 1 };
 const ColorSetup BLACK_ON_WHITE = { COLOR_BLACK, COLOR_WHITE };
 const ColorSetup BLUE_ON_BLACK_BRIGHT = { COLOR_BLUE, COLOR_BLACK, 1 };
@@ -152,21 +184,6 @@ void displayDifficulty(int difficulty)
 	case 9: set_color_easy(RED_ON_BLACK);	break;
 	default:set_color_easy(RED_ON_BLACK_BRIGHT);	break;
 	}
-	/*
-	switch (difficulty)
-	{
-	case 0:	set_color(COLOR_GREEN, COLOR_BLACK, 1); break;
-	case 1: set_color(COLOR_CYAN, COLOR_BLACK, 1); break;
-	case 2: set_color(COLOR_CYAN, COLOR_BLACK, 0); break;
-	case 3: set_color(COLOR_BLUE, COLOR_BLACK, 1); break;
-	case 4: set_color(COLOR_WHITE, COLOR_BLACK, 1); break;
-	case 5: set_color(COLOR_WHITE, COLOR_BLACK, 0); break;
-	case 6: set_color(COLOR_YELLOW, COLOR_BLACK, 1); break;
-	case 7: set_color(COLOR_MAGENTA, COLOR_BLACK, 0); break;
-	case 8: set_color(COLOR_MAGENTA, COLOR_BLACK, 1); break;
-	case 9: set_color(COLOR_RED, COLOR_BLACK, 0);	break;
-	default:set_color(COLOR_RED, COLOR_BLACK, 1);	break;
-	}*/
 	if (difficulty >= 0 && difficulty < 10) addstrAlt(_difficulty[difficulty]); else addstrAlt(_difficulty[10]);
 }
 // IsaacG Various functions that are the single time
@@ -195,22 +212,20 @@ void printfunds(int y, int offsetx, const char* prefix, long funds)
 	bool dim = (attrs & WA_DIM) != 0;
 	pair_content(colorpair, &front, &back);
 	//Move, set color, and write.
-	moveAlt(y, 80 - strlen(moneystr) - strlen(prefixbuffer) - offsetx);
-	addstrAlt(prefixbuffer);
+	mvaddstrAlt(y, 80 - strlen(moneystr) - strlen(prefixbuffer) - offsetx, prefixbuffer);
 	addstrAlt(moneystr);
 	//Recover old settings
-	moveAlt(begy, begx);
 	set_color(front, back, dim);
+	moveAlt(begy, begx);
 }
-int     moveSixteenOne() {
-	return moveAlt(16, 1);
+
+int mvaddstrCenter(int i, string str) {
+	int x = 39 - ((len(str) - 1) >> 1);
+	if (x < 0) x = 0;
+	return mvaddstrAlt(i, x, str);
 }
-int     moveSeventeenOne() {
-	return moveAlt(17, 1);
-}
-int     moveZeroZero() {
-	return moveAlt(0, 0);
-}
-int     moveOneZero() {
-	return moveAlt(1, 0);
+int mvaddstrCenter(int i, string str, Log &log) {
+	int x = 39 - ((len(str) - 1) >> 1);
+	if (x < 0) x = 0;
+	return mvaddstrAlt(i, x, str, log);
 }

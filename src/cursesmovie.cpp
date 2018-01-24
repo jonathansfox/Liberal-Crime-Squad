@@ -22,6 +22,19 @@
 
 #include <includes.h>
 
+#include "cursesmovie.h"
+//own header
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addchar
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -200,11 +213,10 @@ void CursesMoviest::playmovie(int x,int y)
                      if((movie.picture[frame[f]->frame][fx][fy][0]==' '||
                          movie.picture[frame[f]->frame][fx][fy][0]==0)&&
                          frame[f]->flag & CM_FRAMEFLAG_OVERLAY) continue;
-                     move(fy+y,fx+x);
                      set_color(translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][1]),
                                translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][2]),
                                movie.picture[frame[f]->frame][fx][fy][3]);
-                     addchar(movie.picture[frame[f]->frame][fx][fy][0]);
+					 mvaddstrAlt(fy + y, fx + x, (movie.picture[frame[f]->frame][fx][fy][0]));
                   }
                pted=true;
             }

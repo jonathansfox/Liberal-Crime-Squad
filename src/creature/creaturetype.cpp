@@ -1,13 +1,41 @@
 
 #include <includes.h>
 
+#include "common/interval.h"
+
+#include "creaturetype.h"
+//own header
+
+#include "log/log.h"
+// for LOG
+
+#include "common/translateid.h"
+// for  int getweapontype(int)
+
+#include "common/stringconversion.h"
+//for creaturetype_string_to_enum
+
+#include "politics/politics.h"
+//for int publicmood(int l);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
 extern string tag_type;
+extern Log xmllog;
+extern vector<WeaponType *> weapontype;
+extern vector<ArmorType *> armortype;
+extern vector<ClipType *> cliptype;
+extern short lawList[LAWNUM];
  string singleDot;
+
+ // This would normally be inlined inside the Creature class in creature.h, but the Creature class
+ // has to be before creaturetype
+ std::string Creature::get_type_name() const { return getcreaturetype(type_idname)->get_type_name(); }
+
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
 	const std::string& owner, const std::string& element)
@@ -201,7 +229,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 			if (getarmortype(xml.GetData()) != -1)
 				armortypes_.push_back(xml.GetData());
 			else
-				xmllog.log("Invalid armor type for " + idname_ + ": " + xml.GetData());;
+				xmllog.log("Invalid armor type for " + idname_ + ": " + xml.GetData());
 		}
 		else if (element == "weapon")
 		{

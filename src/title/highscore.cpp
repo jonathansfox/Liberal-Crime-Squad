@@ -26,6 +26,27 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/getnames.h"
+// for getmonth
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "title/highscore.h"
+//own header
+      //does not compile without it --Schmel924
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -47,6 +68,52 @@ extern int year;
 extern int stat_dead;
 extern int stat_kills;
 extern int stat_recruits;
+
+string univer;
+string numRecruit;
+string numMartyr;
+string numKills;
+string numKidnap;
+string cashTaxed;
+string cashSpent;
+string flagsBought;
+string flagsBurned;
+string noValid;
+string heLiElite;
+string heLiLiber;
+string heLiBrought;
+string heLiBlot;
+string heLiMob;
+string heLiDownsized;
+string heLiKIA;
+string hecoReag;
+string heLiDie;
+string heLiExec;
+string heLiVaca;
+string heLiHide;
+string heLiHunted;
+string heLiScattered;
+string heLiOutCrime;
+string heLiBurned;
+string hecoStalinized;
+string dotSpace;
+
+struct highscorest
+{
+	char valid, endtype, slogan[SLOGAN_LEN];
+	int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
+};
+
+extern highscorest score[SCORENUM];
+extern string singleSpace;
+extern int yourscore;
+extern class Ledger ledger;
+extern int month;
+extern char slogan[SLOGAN_LEN];
+
+MusicModes getEndingMusic(EndTypes e);
+string getEndingString(EndTypes e);
+
 /* displays the high score board */
 void viewhighscores(int musicoverride)
 {
@@ -59,155 +126,184 @@ void viewhighscores(int musicoverride)
 		if (score[s].valid)validsum++;
 	}
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, validsum ? heLiElite : noValid);
 	if (!validsum)
 	{
-		addstrAlt("No valid scores, press any button to return.");
 		return;
 	}
-	addstrAlt("The Liberal ELITE");
 	int y = 2;
 	for (s = 0; s < SCORENUM; s++)
 	{
 		if (score[s].valid)
 		{
-			if (yourscore == s&&score[s].endtype == END_WON)set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			else if (yourscore == s)set_color(COLOR_RED, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveAlt(y, 0);
-			addstrAlt(score[s].slogan);
-			if (yourscore == s&&score[s].endtype == END_WON)set_color(COLOR_GREEN, COLOR_BLACK, 0);
-			else if (yourscore == s)set_color(COLOR_RED, COLOR_BLACK, 0);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(y + 1, 0);
-			switch (score[s].endtype)
-			{
-			case END_WON:
-				addstrAlt("The Liberal Crime Squad liberalized the country in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_VICTORY);
-				break;
-			case END_POLICE:
-				addstrAlt("The Liberal Crime Squad was brought to justice in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_CIA:
-				addstrAlt("The Liberal Crime Squad was blotted out in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_HICKS:
-				addstrAlt("The Liberal Crime Squad was mobbed in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_CORP:
-				addstrAlt("The Liberal Crime Squad was downsized in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_DEAD:
-				addstrAlt("The Liberal Crime Squad was KIA in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_REAGAN:
-				addstrAlt("The country was Reaganified in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_REAGANIFIED);
-				break;
-			case END_PRISON:
-				addstrAlt("The Liberal Crime Squad died in prison in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_EXECUTED:
-				addstrAlt("The Liberal Crime Squad was executed in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_DATING:
-				addstrAlt("The Liberal Crime Squad was on vacation in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_HIDING:
-				addstrAlt("The Liberal Crime Squad was in permanent hiding in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_DISBANDLOSS:
-				addstrAlt("The Liberal Crime Squad was hunted down in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_DISPERSED:
-				addstrAlt("The Liberal Crime Squad was scattered in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_CCS:
-				addstrAlt("The Liberal Crime Squad was out-Crime Squadded in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_FIREMEN:
-				addstrAlt("The Liberal Crime Squad was burned in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_DEFEAT);
-				break;
-			case END_STALIN:
-				addstrAlt("The country was Stalinized in ");
-				if (yourscore == s&&musicoverride == MUSIC_OFF) music.play(MUSIC_STALINIZED);
-				break;
-			}
+			if (yourscore == s&&score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else if (yourscore == s)set_color_easy(RED_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y,  0, score[s].slogan);
+			if (yourscore == s&&score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK);
+			else if (yourscore == s)set_color_easy(RED_ON_BLACK);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y + 1, 0, getEndingString((EndTypes) score[s].endtype));
+			if (yourscore == s&&musicoverride == MUSIC_OFF) { music.play(getEndingMusic((EndTypes) score[s].endtype)); }
+
 			addstrAlt(getmonth(score[s].month));
 			addstrAlt(singleSpace);
 			addstrAlt(score[s].year);
-			addstrAlt(". ");
-			moveAlt(y + 2, 0);
-			addstrAlt("Recruits: ");
+			addstrAlt(dotSpace);
+			mvaddstrAlt(y + 2,  0, numRecruit);
 			addstrAlt(score[s].stat_recruits);
-			moveAlt(y + 3, 0);
-			addstrAlt("Martyrs: ");
+			mvaddstrAlt(y + 3,  0, numMartyr);
 			addstrAlt(score[s].stat_dead);
-			moveAlt(y + 2, 20);
-			addstrAlt("Kills: ");
+			mvaddstrAlt(y + 2,  20, numKills);
 			addstrAlt(score[s].stat_kills);
-			moveAlt(y + 3, 20);
-			addstrAlt("Kidnappings: ");
+			mvaddstrAlt(y + 3,  20, numKidnap);
 			addstrAlt(score[s].stat_kidnappings);
-			moveAlt(y + 2, 40);
-			addstrAlt("$ Taxed: ");
+			mvaddstrAlt(y + 2,  40, cashTaxed);
 			addstrAlt(score[s].stat_funds);
-			moveAlt(y + 3, 40);
-			addstrAlt("$ Spent: ");
+			mvaddstrAlt(y + 3,  40, cashSpent);
 			addstrAlt(score[s].stat_spent);
-			moveAlt(y + 2, 60);
-			addstrAlt("Flags Bought: ");
+			mvaddstrAlt(y + 2,  60, flagsBought);
 			addstrAlt(score[s].stat_buys);
-			moveAlt(y + 3, 60);
-			addstrAlt("Flags Burned: ");
+			mvaddstrAlt(y + 3,  60, flagsBurned);
 			addstrAlt(score[s].stat_burns);
 			y += 4;
 		}
 	}
-	set_color(COLOR_GREEN, COLOR_BLACK, 1);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	//UNIVERSAL STATS
-	moveAlt(22, 0);
-	addstrAlt("Universal Liberal Statistics:");
-	moveAlt(23, 0);
-	addstrAlt("Recruits: ");
+	mvaddstrAlt(22,  0, univer);
+	mvaddstrAlt(23,  0, numRecruit);
 	addstrAlt(ustat_recruits);
-	moveAlt(24, 0);
-	addstrAlt("Martyrs: ");
+	mvaddstrAlt(24,  0, numMartyr);
 	addstrAlt(ustat_dead);
-	moveAlt(23, 20);
-	addstrAlt("Kills: ");
+	mvaddstrAlt(23,  20, numKills);
 	addstrAlt(ustat_kills);
-	moveAlt(24, 20);
-	addstrAlt("Kidnappings: ");
+	mvaddstrAlt(24,  20, numKidnap);
 	addstrAlt(ustat_kidnappings);
-	moveAlt(23, 40);
-	addstrAlt("$ Taxed: ");
+	mvaddstrAlt(23,  40, cashTaxed);
 	addstrAlt(ustat_funds);
-	moveAlt(24, 40);
-	addstrAlt("$ Spent: ");
+	mvaddstrAlt(24,  40, cashSpent);
 	addstrAlt(ustat_spent);
-	moveAlt(23, 60);
-	addstrAlt("Flags Bought: ");
+	mvaddstrAlt(23,  60, flagsBought);
 	addstrAlt(ustat_buys);
-	moveAlt(24, 60);
-	addstrAlt("Flags Burned: ");
+	mvaddstrAlt(24,  60, flagsBurned);
 	addstrAlt(ustat_burns);
 	//getkey();
+}
+MusicModes getEndingMusic(EndTypes e) {
+	switch (e)
+	{
+	case END_WON:
+		return (MUSIC_VICTORY);
+		break;
+	case END_POLICE:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_CIA:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_HICKS:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_CORP:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_DEAD:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_REAGAN:
+		return (MUSIC_REAGANIFIED);
+		break;
+	case END_PRISON:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_EXECUTED:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_DATING:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_HIDING:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_DISBANDLOSS:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_DISPERSED:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_CCS:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_FIREMEN:
+		return (MUSIC_DEFEAT);
+		break;
+	case END_STALIN:
+		return (MUSIC_STALINIZED);
+		break;
+	default:
+		return MUSIC_RANDOM;
+		break;
+	}
+}
+
+string getEndingString(EndTypes e) {
+
+	switch (e)
+	{
+	case END_WON:
+		return(heLiLiber);
+		break;
+	case END_POLICE:
+		return(heLiBrought);
+		break;
+	case END_CIA:
+		return(heLiBlot);
+		break;
+	case END_HICKS:
+		return(heLiMob);
+		break;
+	case END_CORP:
+		return(heLiDownsized);
+		break;
+	case END_DEAD:
+		return(heLiKIA);
+		break;
+	case END_REAGAN:
+		return(hecoReag);
+		break;
+	case END_PRISON:
+		return(heLiDie);
+		break;
+	case END_EXECUTED:
+		return(heLiExec);
+		break;
+	case END_DATING:
+		return(heLiVaca);
+		break;
+	case END_HIDING:
+		return(heLiHide);
+		break;
+	case END_DISBANDLOSS:
+		return(heLiHunted);
+		break;
+	case END_DISPERSED:
+		return(heLiScattered);
+		break;
+	case END_CCS:
+		return(heLiOutCrime);
+		break;
+	case END_FIREMEN:
+		return(heLiBurned);
+		break;
+	case END_STALIN:
+		return(hecoStalinized);
+		break;
+	default:
+		return blankString;
+		break;
+	}
 }
 struct  saveLoadChunk {
 	void * Buffer;

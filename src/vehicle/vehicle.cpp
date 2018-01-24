@@ -1,6 +1,13 @@
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+//own header
+
+#include "common/stringconversion.h"
+//for atoi
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -8,6 +15,8 @@
 #include <set_color_support.h>
 extern vector<Creature *> pool;
 long Vehicle::curcarid = 0;
+extern string singleSpace;
+
 string Vehicle::showXml() const
 {
    CMarkup xml;
@@ -90,3 +99,30 @@ int Vehicle::modifieddodgeskill(int skillLevel)
 {
    return vehicletype[getvehicletype(vtypeidname_)]->modifieddodgeskill(skillLevel); // Todo - add bonus if car is upgraded
 }
+Vehicle::Vehicle(const VehicleType& seed) { init(seed, pickrandom(seed.color()), seed.makeyear()); }
+Vehicle::Vehicle(const VehicleType& seed, const string& color, int myear) { init(seed, color, myear); }
+Vehicle::~Vehicle() { stop_riding_me(); stop_preferring_me(); }
+short Vehicle::get_heat() const { return heat_; }
+void Vehicle::add_heat(short heat) { heat_ += heat; }
+long Vehicle::get_location() const { return location_; }
+void Vehicle::set_location(long new_location) { location_ = new_location; }
+const string& Vehicle::vtypeidname() const { return vtypeidname_; }
+long Vehicle::vtypeid() const { return vtypeid_; }
+const string& Vehicle::color() const { return color_; }
+bool Vehicle::displayscolor() const { return vehicletype[getvehicletype(vtypeidname_)]->displayscolor(); }
+int Vehicle::myear() const { return myear_; }
+long Vehicle::id() const { return id_; }
+int Vehicle::attackbonus(bool isDriver) const { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
+int Vehicle::gethitlocation(int bodypart) { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
+string Vehicle::getpartname(int hitlocation) { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
+int Vehicle::armorbonus(int hitlocation) const { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
+const string& Vehicle::longname() const { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
+const string& Vehicle::shortname() const { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }
+int Vehicle::steal_difficultytofind() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_difficultytofind(); }
+int Vehicle::steal_juice() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_juice(); }
+int Vehicle::steal_extraheat() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_extraheat(); }
+int Vehicle::sensealarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->sensealarmchance(); }
+int Vehicle::touchalarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->touchalarmchance(); }
+bool Vehicle::availableatshop() const { return vehicletype[getvehicletype(vtypeidname_)]->availableatshop(); }
+int Vehicle::price() const { return vehicletype[getvehicletype(vtypeidname_)]->price(); }
+int Vehicle::sleeperprice() const { return vehicletype[getvehicletype(vtypeidname_)]->sleeperprice(); }

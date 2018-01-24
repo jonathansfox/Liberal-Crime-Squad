@@ -1,11 +1,24 @@
 
 #include <includes.h>
 
+//#include "items/weapon.h"
+//own header currently inside includes.h
+//own header
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/translateid.h"
+// for getweapontype
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern vector<WeaponType *> weapontype;
+
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)

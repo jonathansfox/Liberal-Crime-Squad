@@ -1,8 +1,5 @@
 #ifndef AUGMENT_TYPE_H
-#define AUGMENT_TYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define AUGMENT_TYPE_H0
 class AugmentType {
    public:
       explicit AugmentType(const std::string& xmlstring);

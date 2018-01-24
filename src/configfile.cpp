@@ -1,19 +1,40 @@
 
 #include <includes.h>
 
+#include "configfile.h"
+//own header
+// needed for something contained in sitemap.h
+
+#include "sitemode/sitemap.h"
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/stringconversion.h"
+//for atoi redefinition
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern string singleSpace;
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
+extern vector<configSiteMap *> sitemaps;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+
+string attemptingToOpenFile = "Attempting to open filename: ";
+
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
    std::ifstream* file = new std::ifstream();
-   addstr("Attempting to open filename: ");
-   addstr(filename);
-   addstr(singleSpace);
+   addstrAlt(attemptingToOpenFile);
+   addstrAlt(filename);
+   addstrAlt(singleSpace);
    file->open((artdir+filename).c_str(), format);
    return file;
 }

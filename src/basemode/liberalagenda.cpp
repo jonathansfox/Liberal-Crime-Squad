@@ -28,10 +28,31 @@
 
 #include <includes.h>
 
+#include "basemode/liberalagenda.h"
+
+//#include "common/consolesupport.h"
+// for void set_color(short,short,bool) currently inside includes.h
+
+#include "common/stringconversion.h"
+//for string attribute_enum_to_string(int)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void set_alignment_color(signed char,bool extended_range=false);
+
+#include "common/getnames.h"
+// for std::string getlaw(int)
+
+#include "common/commonactions.h"
+// for void removesquadinfo(Creature &);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
+#include <common\\consolesupport.h>
 #include <set_color_support.h>
 extern vector<Creature *> pool;
 extern MusicClass music;
@@ -44,8 +65,21 @@ extern string tag_Lib;
 extern string tag_Mod;
 extern string tag_Cons;
 extern string tag_Consp;
- vector<char> supremeChars;
- vector<char> courtChars;
+
+extern short interface_pgup;
+extern short interface_pgdn;
+extern short lawList[LAWNUM];
+extern short house[HOUSENUM];
+extern short senate[SENATENUM];
+extern short court[COURTNUM];
+extern bool stalinmode;
+extern short execterm;
+extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+extern short wincondition;
+extern int disbandtime;
+
+ vector<string> supremeChars;
+ vector<string> courtChars;
 string pressLToViewHighScores;
 typedef map<short, vector<string>> shortAndTwoStrings;
 shortAndTwoStrings endgameLawStrings;
@@ -67,24 +101,21 @@ bool liberalagenda(signed char won)
 		eraseAlt();
 		if (won == 1)
 		{
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("The Triumph of the Liberal Agenda");
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "The Triumph of the Liberal Agenda");
 			music.play(MUSIC_VICTORY);
 		}
 		else if (won == -1 || won == -2)
 		{
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("The Abject Failure of the Liberal Agenda");
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "The Abject Failure of the Liberal Agenda");
 			if (won == -1) music.play(MUSIC_REAGANIFIED);
 			if (won == -2) music.play(MUSIC_STALINIZED);
 		}
 		else
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("The Status of the Liberal Agenda");
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "The Status of the Liberal Agenda");
 			music.play(MUSIC_LIBERALAGENDA);
 		}
 		if (page < 0) page = PAGENUM - 1;
@@ -93,12 +124,9 @@ bool liberalagenda(signed char won)
 		{
 		case PAGE_LEADERS:
 		{
-			moveOneZero();
-			addstrAlt("ษอออออออออออออออออปฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟ");
-			moveAlt(2, 0);
-			addstrAlt("บ GENERAL SUMMARY บ ISSUES A ณ ISSUES B ณ");
-			moveAlt(3, 0);
-			addstrAlt("ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
+			mvaddstrAlt(1,  0, "ษอออออออออออออออออปฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟ");
+			mvaddstrAlt(2,  0, "บ GENERAL SUMMARY บ ISSUES A ณ ISSUES B ณ");
+			mvaddstrAlt(3,  0, "ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
 			signed char align = exec[EXEC_PRESIDENT];
 			set_alignment_color(align, true);
 			moveAlt(5, 0);
@@ -111,8 +139,7 @@ bool liberalagenda(signed char won)
 				else addstrAlt("(2nd Term):");
 			}
 			if (won == -2) moveAlt(5, 30);
-			else moveAlt(5, 25);
-			addstrAlt(execname[EXEC_PRESIDENT]);
+			else mvaddstrAlt(5,  25, execname[EXEC_PRESIDENT]);
 			align = exec[EXEC_VP];
 			set_alignment_color(align, true);
 			moveAlt(6, 0);
@@ -120,8 +147,7 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt("Premier: ");
 			else addstrAlt("Vice President: ");
 			if (won == -2) moveAlt(6, 30);
-			else moveAlt(6, 25);
-			addstrAlt(execname[EXEC_VP]);
+			else mvaddstrAlt(6,  25, execname[EXEC_VP]);
 			align = exec[EXEC_STATE];
 			set_alignment_color(align, true);
 			moveAlt(7, 0);
@@ -129,8 +155,7 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt("Foreign Affairs Commissar: ");
 			else addstrAlt("Secretary of State: ");
 			if (won == -2) moveAlt(7, 30);
-			else moveAlt(7, 25);
-			addstrAlt(execname[EXEC_STATE]);
+			else mvaddstrAlt(7,  25, execname[EXEC_STATE]);
 			align = exec[EXEC_ATTORNEY];
 			set_alignment_color(align, true);
 			moveAlt(8, 0);
@@ -138,19 +163,16 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt("Internal Affairs Commissar: ");
 			else addstrAlt("Attorney General: ");
 			if (won == -2) moveAlt(8, 30);
-			else moveAlt(8, 25);
-			addstrAlt(execname[EXEC_ATTORNEY]);
+			else mvaddstrAlt(8,  25, execname[EXEC_ATTORNEY]);
 			if (won == -1)
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveAlt(10, 0);
-				addstrAlt("The Congress consists of CEOs and televangelists.");
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(10,  0, "The Congress consists of CEOs and televangelists.");
 			}
 			else if (won == -2)
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveAlt(10, 0);
-				addstrAlt("The Congress consists of Stalinist Party loyalists.");
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(10,  0, "The Congress consists of Stalinist Party loyalists.");
 			}
 			else
 			{
@@ -189,8 +211,8 @@ bool liberalagenda(signed char won)
 				addstrAlt(tostring(senatemake[1]) + tag_Cons);
 				addstrAlt(tostring(senatemake[0]) + tag_Consp);
 			}
-			if (won == -1 || won == -2) set_color(COLOR_RED, COLOR_BLACK, 1);
-			else if (won == 1) set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			if (won == -1 || won == -2) set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (won == 1) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			else
 			{
 				int courtmake[6] = { 0,0,0,0,0,0 };
@@ -204,10 +226,10 @@ bool liberalagenda(signed char won)
 				set_alignment_color(align, true);
 			}
 			for (int i = 0; i < len(supremeChars); i++) {
-				mvaddcharAlt(5 + i, 56, supremeChars[i]);
+				mvaddstrAlt(5 + i, 56, supremeChars[i]);
 			}
 			for (int i = 0; i < len(courtChars); i++) {
-				mvaddcharAlt(6 + i, 58, courtChars[i]);
+				mvaddstrAlt(6 + i, 58, courtChars[i]);
 			}
 			if (won == -1)
 			{
@@ -236,7 +258,7 @@ bool liberalagenda(signed char won)
 					set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
 				else if (won == 1 && wincondition == WINCONDITION_ELITE)
 					set_alignment_color(ALIGN_ELITELIBERAL, true);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ฤฤฤฤฤ\x10");
 				if (won == -1 || won == -2)
 					set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
@@ -251,21 +273,15 @@ bool liberalagenda(signed char won)
 		{
 			if (page == PAGE_ISSUES_A)
 			{
-				moveOneZero();
-				addstrAlt("ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤษออออออออออปฤฤฤฤฤฤฤฤฤฤฟ");
-				moveAlt(2, 0);
-				addstrAlt("ณ GENERAL SUMMARY บ ISSUES A บ ISSUES B ณ");
-				moveAlt(3, 0);
-				addstrAlt("ฯอออออออออออออออออผ          ศออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
+				mvaddstrAlt(1,  0, "ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤษออออออออออปฤฤฤฤฤฤฤฤฤฤฟ");
+				mvaddstrAlt(2,  0, "ณ GENERAL SUMMARY บ ISSUES A บ ISSUES B ณ");
+				mvaddstrAlt(3,  0, "ฯอออออออออออออออออผ          ศออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
 			}
 			else
 			{
-				moveOneZero();
-				addstrAlt("ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤษออออออออออป");
-				moveAlt(2, 0);
-				addstrAlt("ณ GENERAL SUMMARY ณ ISSUES A บ ISSUES B บ");
-				moveAlt(3, 0);
-				addstrAlt("ฯอออออออออออออออออฯออออออออออผ          ศอออออออออออออออออออออออออออออออออออออออ");
+				mvaddstrAlt(1,  0, "ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤษออออออออออป");
+				mvaddstrAlt(2,  0, "ณ GENERAL SUMMARY ณ ISSUES A บ ISSUES B บ");
+				mvaddstrAlt(3,  0, "ฯอออออออออออออออออฯออออออออออผ          ศอออออออออออออออออออออออออออออออออออออออ");
 			}
 			int y = 4, startinglaw = 0;
 			if (page == PAGE_ISSUES_B) startinglaw = 18;
@@ -290,7 +306,7 @@ bool liberalagenda(signed char won)
 		}
 		if (won == 1)
 		{
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			if (wincondition == WINCONDITION_EASY)
 				mvaddstrAlt(23, 0, "The country has achieved Liberal status!");
 			else mvaddstrAlt(23, 0, "The country has achieved Elite Liberal status!");
@@ -302,7 +318,7 @@ bool liberalagenda(signed char won)
 		}
 		else if (won == -1)
 		{
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(23, 0, "The country has been Reaganified.");
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkey();
@@ -312,7 +328,7 @@ bool liberalagenda(signed char won)
 		}
 		else if (won == -2)
 		{
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(23, 0, "The country has been Stalinized.");
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkey();
@@ -325,40 +341,40 @@ bool liberalagenda(signed char won)
 			moveAlt(23, 0);
 			if (stalinmode)
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt("Stalinist  ");
 			}
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			addstrAlt("Elite Liberal  ");
 			if (!stalinmode)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				addstrAlt("-  ");
 			}
-			set_color(COLOR_CYAN, COLOR_BLACK, 1);
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			addstrAlt("Liberal  ");
 			if (!stalinmode)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				addstrAlt("-  ");
 			}
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			addstrAlt("moderate  ");
 			if (!stalinmode)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				addstrAlt("-  ");
 			}
-			set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			addstrAlt("Conservative  ");
 			if (!stalinmode)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				addstrAlt("-  ");
 			}
-			set_color(COLOR_RED, COLOR_BLACK, 1);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
 			addstrAlt("Arch-Conservative");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			//mvaddstrAlt(23,0,"Once these are Green, the country will have achieved Elite Liberal status.");
 			mvaddstrAlt(24, 0, "Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
 			int c = getkey();
@@ -379,20 +395,19 @@ bool confirmdisband()
 	for (int pos = 0; pos < len(word);)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Are you sure you want to disband?");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Are you sure you want to disband?");
+		set_color_easy(WHITE_ON_BLACK);
 		for (int i = 0; i < len(disbandingMessage); i++) {
 			mvaddstrAlt(i + 2, 0, disbandingMessage[i]);
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 0, "Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 		for (int x = 0; x < len(word); x++)
 		{
-			if (x == pos) set_color(COLOR_GREEN, COLOR_BLACK, 0);
-			else if (x < pos) set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (x == pos) set_color_easy(GREEN_ON_BLACK);
+			else if (x < pos) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(15, x, word[x]);
 		}
 		if (getkey() == ::tolower(word[pos]))

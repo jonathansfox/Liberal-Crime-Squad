@@ -60,7 +60,7 @@
 * - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
-#include "common.h" /* include this prior to checking if WIN32 is defined */
+//#include "common.h" /* include this prior to checking if WIN32 is defined */
 #ifdef __linux__
  // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
  // <http://msdn.microsoft.com/en-us/library/s3f49ktz.aspx>

@@ -26,11 +26,41 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "title/newgame.h"
+
+#include "define_includes.h"
+//for ALLOWSTALIN
+
+
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/stringconversion.h"
+//for string attribute_enum_to_string(int)
+
+#include "common/getnames.h"
+// for cityname
+
+#include "common/translateid.h"
+// for  getarmortype
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+
+
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
@@ -40,13 +70,121 @@ extern int year;
 extern char endgamestate;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern string tag_ARMOR;
- vector<string> founderQuestions;
- typedef map<string, short> stringAndShort;
- typedef map<short, string > shortAndString;
- stringAndShort getSkillEnumFromString;
- shortAndString enumToCreature;
- stringAndShort getBaseEnumFromString;
- stringAndShort getSpecialWoundEnumFromString;
+
+
+string theLCS;
+string notASkill;
+string notAnAttribute;
+
+string vehicleSportsCar;
+
+string aNewConEra;
+string theYearIs;
+string conservativePresident;
+string endsSecondTerm;
+string highSeventiesApprovePres;
+string conMajorityHouse;
+string senateConMajority;
+string beginningOfNew;
+string conEra;
+string thePresident;
+string hasAskedCongressBeQuick;
+string rubberStampArchCon;
+string theLeftSeems;
+string powerlessToStop;
+string inThisDarkTime;
+string whatIsYourName;
+string pressEnterToBeRealName;
+
+string invalidTag;
+string theDocSaid;
+string aBoy;
+string aGirl;
+string intersex;
+string myParents;
+string insistedOtherwise;
+string they;
+string namedMe;
+
+string error;
+
+string theFounder;
+string firstName;
+string pressAtoReconsider;
+string lastName;
+string pressBtoBeReborn;
+string sexIs;
+string male;
+string female;
+string itsComplicated;
+string pressCtoChangeSex;
+string history;
+string letMeChoose;
+string letFateDecide;
+string pressDtoToggle;
+string city;
+string pressEtoRelocate;
+string pressAnyKey;
+string allOptions;
+
+string unSelected;
+string isSelected;
+string pressAnyOtherKey;
+
+string notCreature;
+string notValidMap;
+string notSpecialWound;
+string newGameAdvanced;
+string a_classicMode;
+string b_weDidntStartIt;
+string c_nightmareMode;
+string d_nationalLCS;
+string e_marathonMode;
+string f_stalinistMode;
+string newGameYourAgenda;
+string a_noComprimise;
+string b_democrat;
+string newGameFieldLearn;
+string affectsTheseSkills;
+string a_fastSkills;
+string b_classic;
+string c_hardMode;
+
+extern string spaceDashSpace;
+
+extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+extern bool nocourtpurge;
+extern bool stalinmode;
+extern short lawList[LAWNUM];
+extern short house[HOUSENUM];
+extern short senate[SENATENUM];
+extern short court[COURTNUM];
+extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+extern short wincondition;
+extern short fieldskillrate;
+extern vector<ArmorType *> armortype;
+extern char lcityname[CITY_NAMELEN];
+extern string singleSpace;
+extern int day;
+extern int month;
+extern class Ledger ledger;
+extern vector<ClipType *> cliptype;
+extern vector<WeaponType *> weapontype;
+extern vector<Vehicle *> vehicle;
+extern string singleDot;
+extern long cursquadid;
+extern vector<squadst *> squad;
+extern squadst *activesquad;
+extern UniqueCreatures uniqueCreatures;
+extern short attitude[VIEWNUM];
+vector<string> founderQuestions;
+typedef map<string, short> stringAndShort;
+typedef map<short, string > shortAndString;
+stringAndShort getSkillEnumFromString;
+shortAndString enumToCreature;
+stringAndShort getBaseEnumFromString;
+stringAndShort getSpecialWoundEnumFromString;
+
 bool getSetValue(const string s) {
 	int j = -1;
 	for (int i = 0; i < s.size(); i++) {
@@ -68,10 +206,8 @@ int getMagnitudeFromString(const string s) {
 	}
 	if (spaceUnfound) {
 		clearAlt();
-		moveZeroZero();
-		addstrAlt("ERROR");
-		moveOneZero();
-		addstrAlt(s);
+		mvaddstrAlt(0,  0, error);
+		mvaddstrAlt(1,  0, s);
 		getkey();
 	}
 	return atoi(s.substr(j).data());
@@ -95,9 +231,9 @@ int getSkillFromString(const string s) {
 		return output;
 	}
 	else {// ERROR
-		addstrAlt("ERROR");
+		addstrAlt(error);
 		addstrAlt(s);
-		addstrAlt("Not a skill");
+		addstrAlt(notASkill);
 		getkey();
 		return -1;
 	}
@@ -109,9 +245,9 @@ int getAttributeFromString(const string s) {
 		return output;
 	}
 	else {// ERROR
-		addstrAlt("ERROR");
+		addstrAlt(error);
 		addstrAlt(s);
-		addstrAlt("Not an attribute");
+		addstrAlt(notAnAttribute);
 		getkey();
 		return -1;
 	}
@@ -124,9 +260,9 @@ int getCreatureFromString(const string s) {
 	}
 	else
 	{// ERROR
-		addstrAlt("ERROR");
+		addstrAlt(error);
 		addstrAlt(s);
-		addstrAlt("Not a creature");
+		addstrAlt(notCreature);
 		getkey();
 		return -1;
 	}
@@ -136,7 +272,7 @@ string enumToCreatureString(const int i) {
 		return enumToCreature[i];
 	}
 	else {
-		return "";
+		return blankString;
 	}
 }
 int getBaseFromString(const string s) {
@@ -146,9 +282,9 @@ int getBaseFromString(const string s) {
 		return output;
 	}
 	else {// ERROR
-		addstrAlt("ERROR");
+		addstrAlt(error);
 		addstrAlt(s);
-		addstrAlt("Not a valid mappable site");
+		addstrAlt(notValidMap);
 		getkey();
 		return -1;
 	}
@@ -159,17 +295,18 @@ int getSpecialWoundFromString(const string s) {
 		return output;
 	}
 	else {// ERROR
-		addstrAlt("ERROR");
+		addstrAlt(error);
 		addstrAlt(s);
-		addstrAlt("Not a special wound");
+		addstrAlt(notSpecialWound);
 		getkey();
 		return -1;
 	}
 }
+
 /* select new game options */
 void setup_newgame()
 {
-	//TODO IsaacG Get rid of these "while(true) break;" loops
+	//TODO IsaacG Get rid of these while(true) break; loops
 	music.play(MUSIC_NEWGAME);
 	bool classicmode = false;
 	bool strongccs = false;
@@ -180,51 +317,59 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(4, 6);
-		addstrAlt("New Game of Liberal Crime Squad: Advanced Gameplay Options");
-		moveAlt(7, 0);
+		mvaddstrAlt(4,  6, newGameAdvanced);
 		set_color_easy(WHITE_ON_BLACK);
-		if (classicmode)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" A - Classic Mode: No Conservative Crime Squad.");
-		moveAlt(9, 0);
-		if (!classicmode)
+		{
+			string isThisSelected;
+			if (classicmode)
+				isThisSelected = (isSelected);
+			else isThisSelected = (unSelected);
+			mvaddstrAlt(7, 0, isThisSelected);
+			addstrAlt(a_classicMode);
+
+			if (!classicmode)
+				set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			if (strongccs)
+				isThisSelected = (isSelected);
+			else isThisSelected = (unSelected);
+			mvaddstrAlt(9, 0, isThisSelected);
+			addstrAlt(b_weDidntStartIt);
+
 			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		if (strongccs)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" B - We Didn't Start The Fire: The CCS starts active and extremely strong.");
-		moveAlt(11, 0);
-		set_color_easy(WHITE_ON_BLACK);
-		if (nightmarelaws)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
-		moveAlt(13, 0);
-		set_color_easy(WHITE_ON_BLACK);
-		if (multipleCityMode)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" D - National LCS: Advanced play across multiple cities.");
-		moveAlt(15, 0);
-		if (nocourtpurge)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" E - Marathon Mode: Prevent Liberals from amending the Constitution.");
-		if (ALLOWSTALIN) {
-			moveAlt(17, 0);
-			if (stalinmode)
-				addstrAlt("[X]");
-			else addstrAlt("[ ]");
-			addstrAlt(" F - Stalinist Mode: Enable Stalinist Comrade Squad (not fully implemented).");
-			moveAlt(21, 4);
+			if (nightmarelaws)
+				isThisSelected = (isSelected);
+			else isThisSelected = (unSelected);
+			mvaddstrAlt(11, 0, isThisSelected);
+			addstrAlt(c_nightmareMode);
+
+			set_color_easy(WHITE_ON_BLACK);
+			if (multipleCityMode)
+				isThisSelected = (isSelected);
+			else isThisSelected = (unSelected);
+			mvaddstrAlt(13, 0, isThisSelected);
+			addstrAlt(d_nationalLCS);
+
+			if (nocourtpurge)
+				isThisSelected = (isSelected);
+			else isThisSelected = (unSelected);
+			mvaddstrAlt(15, 0, isThisSelected);
+			addstrAlt(e_marathonMode);
+
+			int bottomRow;
+			if (ALLOWSTALIN) {
+				if (stalinmode)
+					isThisSelected = (isSelected);
+				else isThisSelected = (unSelected);
+				mvaddstrAlt(17, 0, isThisSelected);
+				addstrAlt(f_stalinistMode);
+				bottomRow = 21;
+			}
+			else {// ALLOWSTALIN
+				bottomRow = 19;
+			}// ALLOWSTALIN
+			mvaddstrAlt(bottomRow, 4, pressAnyOtherKey);
 		}
-		else {// ALLOWSTALIN
-			moveAlt(19, 4);
-		}// ALLOWSTALIN
-		addstrAlt("Press any other key to continue...");
 		const int c = getkey();
 		if (c == 'a')
 		{
@@ -309,25 +454,29 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(4, 6);
-		addstrAlt("New Game of Liberal Crime Squad: Your Agenda");
-		moveAlt(7, 0);
+		mvaddstrAlt(4,  6, newGameYourAgenda);
+
 		set_color_easy(WHITE_ON_BLACK);
+		string isThisSelected;
 		if (wincondition == WINCONDITION_ELITE)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" A - No Compromise Classic - I will make all our laws Elite Liberal!");
-		moveAlt(9, 0);
+			isThisSelected = (isSelected);
+		else isThisSelected = (unSelected);
+		mvaddstrAlt(7, 0, isThisSelected);
+		addstrAlt(a_noComprimise);
+
+		ColorSetup useThisColor;
 		if (!classicmode)
-			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			useThisColor = (WHITE_ON_BLACK);
+		else useThisColor = (BLACK_ON_BLACK_BRIGHT);
+		set_color_easy(useThisColor);
 		if (wincondition == WINCONDITION_EASY)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" B - Democrat Mode - Most laws must be Elite Liberal, some can be Liberal.");
-		moveAlt(13, 4);
+			isThisSelected = (isSelected);
+		else isThisSelected = (unSelected);
+		mvaddstrAlt(9, 0, isThisSelected);
+		addstrAlt(b_democrat);
+
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt("Press any other key to continue...");
+		mvaddstrAlt(13,  4, pressAnyOtherKey);
 		const int c = getkey();
 		if (c == 'a')
 		{
@@ -345,29 +494,31 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(4, 6);
-		addstrAlt("New Game of Liberal Crime Squad: Field Learning");
+		mvaddstrAlt(4,  6, newGameFieldLearn);
 		set_color_easy(WHITE_ON_BLACK);
-		moveAlt(5, 6);
-		addstrAlt("(affects Security, Stealth, Disguise, & Driving)");
-		moveAlt(8, 0);
+		mvaddstrAlt(5,  6, affectsTheseSkills);
+		string isThisSelected;
+
 		if (fieldskillrate == FIELDSKILLRATE_FAST)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" A - Fast skills - Grinding is Conservative!");
-		moveAlt(10, 0);
+			isThisSelected = (isSelected);
+		else isThisSelected = (unSelected);
+		mvaddstrAlt(8, 0, isThisSelected);
+		addstrAlt(a_fastSkills);
+
 		if (fieldskillrate == FIELDSKILLRATE_CLASSIC)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" B - Classic - Excellence requires practice.");
-		moveAlt(12, 0);
+			isThisSelected = (isSelected);
+		else isThisSelected = (unSelected);
+		mvaddstrAlt(10, 0, isThisSelected);
+		addstrAlt(b_classic);
+
 		if (fieldskillrate == FIELDSKILLRATE_HARD)
-			addstrAlt("[X]");
-		else addstrAlt("[ ]");
-		addstrAlt(" C - Hard Mode - Learn from the best, or face arrest!");
-		moveAlt(16, 4);
+			isThisSelected = (isSelected);
+		else isThisSelected = (unSelected);
+		mvaddstrAlt(12, 0, isThisSelected);
+		addstrAlt(c_hardMode);
+
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt("Press any other key to continue...");
+		mvaddstrAlt(16,  4, pressAnyOtherKey);
 		const int c = getkey();
 		if (c == 'a')
 		{
@@ -392,7 +543,51 @@ enum recruits
 	RECRUITS_GANG,
 	RECRUITS_NONE
 };
-extern string spaceDashSpace;
+enum Stat_Or_Attribute {
+	SKILL,
+	ATTRIBUTE,
+	OTHER
+};
+enum Other_Influence {
+	BIRTH_MONTH,
+	BIRTH_DAY,
+	BIRTH_YEAR,
+	STARTING_MONTH,
+	STARTING_DAY,
+	STARTING_YEAR,
+	GAY,
+	DATING_LAWYER,
+	DATING,
+	HAS_MAPS,
+	JUICE,
+	SPORTS_CAR,
+	ASSAULT_RIFLE,
+	MONEY,
+	BASE,
+	CREATURE,
+	ARMOR,
+	RECRUITS
+};
+struct Impact {
+	Stat_Or_Attribute type;
+	int item_to_influcence;
+	int magnitude;
+	bool set_value;
+};
+struct Choice {
+	string ANSWER;
+	string ANSWER_2;
+	vector<Impact> impact;
+};
+struct Question {
+	string HEADER;
+	string HEADER_2;
+	string QUESTION;
+	string QUESTION_2;
+	vector<Choice> choices;
+};
+const int MAX_CHOICES = 10;
+
 /* creates your founder */
 void makecharacter()
 {
@@ -438,13 +633,13 @@ void makecharacter()
 	}
 	char first[3][80];
 	char last[80];
-	const bool male = LCSrandom(2); // whether or not starting gender is male
-	char gender = newcr->gender_liberal = newcr->gender_conservative = (male ? GENDER_MALE : GENDER_FEMALE);
+	const bool is_male = LCSrandom(2); // whether or not starting gender is male
+	char gender = newcr->gender_liberal = newcr->gender_conservative = (is_male ? GENDER_MALE : GENDER_FEMALE);
 	do {
 		firstname(first[0], GENDER_NEUTRAL);
 		firstname(first[1], GENDER_MALE);
 		firstname(first[2], GENDER_FEMALE);
-		lastname(last);
+		strcpy(last, lastname());
 	} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
 	{
 		Armor a(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
@@ -455,71 +650,59 @@ void makecharacter()
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(4, 6);
-		addstrAlt("The Founder of the Liberal Crime Squad");
-		moveAlt(7, 2);
-		addstrAlt("FIRST NAME: ");
+		mvaddstrAlt(4,  6, theFounder);
+		mvaddstrAlt(7,  2, firstName);
 		addstrAlt(first[(int)gender]);
-		moveAlt(7, 30);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(" (Press A to have your parents reconsider)");
-		moveAlt(9, 2);
+		mvaddstrAlt(7,  30, pressAtoReconsider);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		addstrAlt("LAST NAME: ");
+		mvaddstrAlt(9,  2, lastName);
 		addstrAlt(last);
-		moveAlt(9, 30);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(" (Press B to be born to a different family)");
-		moveAlt(11, 2);
+		mvaddstrAlt(9,  30, pressBtoBeReborn);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		addstrAlt("SEX: ");
+		mvaddstrAlt(11,  2, sexIs);
 		if (newcr->gender_conservative == GENDER_MALE)
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			addstrAlt("Male");
+			addstrAlt(male);
 		}
 		else if (newcr->gender_conservative == GENDER_FEMALE)
 		{
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			addstrAlt("Female");
+			addstrAlt(female);
 		}
 		else
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			addstrAlt("It's Complicated");
+			addstrAlt(itsComplicated);
 		}
-		moveAlt(11, 30);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(" (Press C to change your sex at birth)");
-		moveAlt(13, 2);
+		mvaddstrAlt(11,  30, pressCtoChangeSex);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		addstrAlt("HISTORY: ");
+		mvaddstrAlt(13,  2, history);
 		if (choices)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			addstrAlt("Let Me Choose");
+			addstrAlt(letMeChoose);
 		}
 		else
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt("Let Fate Decide");
+			addstrAlt(letFateDecide);
 		}
-		moveAlt(13, 30);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(" (Press D to toggle childhood)");
+		mvaddstrAlt(13,  30, pressDtoToggle);
 		if (!multipleCityMode)
 		{
-			moveAlt(15, 2);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt("CITY: ");
+			mvaddstrAlt(15,  2, city);
 			addstrAlt(lcityname);
-			moveAlt(15, 30);
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			addstrAlt(" (Press E to relocate)");
+			mvaddstrAlt(15,  30, pressEtoRelocate);
 		}
-		moveAlt(19 - multipleCityMode * 2, 4);
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt("Press any other key when ready to begin...");
+		mvaddstrAlt(19 - multipleCityMode * 2,  4, pressAnyKey);
 		const int c = getkey();
 		if (c == 'a')
 		{
@@ -531,17 +714,17 @@ void makecharacter()
 		if (c == 'b')
 		{
 			do {
-				lastname(last);
+				strcpy(last, lastname());
 			} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
 			continue;
 		}
 		if (c == 'c')
 		{
-			if ((newcr->gender_conservative == GENDER_FEMALE && !male) ||
-				(newcr->gender_conservative == GENDER_NEUTRAL && male))
+			if ((newcr->gender_conservative == GENDER_FEMALE && !is_male) ||
+				(newcr->gender_conservative == GENDER_NEUTRAL && is_male))
 				newcr->gender_conservative = GENDER_MALE;
-			else if ((newcr->gender_conservative == GENDER_MALE && !male) ||
-				(newcr->gender_conservative == GENDER_FEMALE && male))
+			else if ((newcr->gender_conservative == GENDER_MALE && !is_male) ||
+				(newcr->gender_conservative == GENDER_FEMALE && is_male))
 				newcr->gender_conservative = GENDER_NEUTRAL;
 			else
 				newcr->gender_conservative = GENDER_FEMALE;
@@ -573,82 +756,39 @@ void makecharacter()
 	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
 	bool assault_rifle = false;
 	bool sports_car = false;
-	string allOptions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	enum Stat_Or_Attribute {
-		SKILL,
-		ATTRIBUTE,
-		OTHER
-	};
-	enum Other_Influence {
-		BIRTH_MONTH,
-		BIRTH_DAY,
-		BIRTH_YEAR,
-		STARTING_MONTH,
-		STARTING_DAY,
-		STARTING_YEAR,
-		GAY,
-		DATING_LAWYER,
-		DATING,
-		HAS_MAPS,
-		JUICE,
-		SPORTS_CAR,
-		ASSAULT_RIFLE,
-		MONEY,
-		BASE,
-		CREATURE,
-		ARMOR,
-		RECRUITS
-	};
-	struct Impact {
-		Stat_Or_Attribute type;
-		int item_to_influcence;
-		int magnitude;
-		bool set_value;
-	};
-	struct Choice {
-		string ANSWER;
-		string ANSWER_2;
-		vector<Impact> impact;
-	};
-	struct Question {
-		string HEADER;
-		string HEADER_2;
-		string QUESTION;
-		string QUESTION_2;
-		vector<Choice> choices;
-	};
-	const int MAX_CHOICES = 10;
+	
 	vector<Question> allQuestions;
 	bool firstQuestion = true;
 	bool firstAnswer = true;
 	Question currentQuestion;
 	Choice currentChoice;
-	string header = "";
-	string header_2 = "";
-	string answer = "";
-	string answer_2 = "";
+	string header = blankString;
+	string header_2 = blankString;
+	string answer = blankString;
+	string answer_2 = blankString;
 	int birth_year = 1984; // default birth year, month, and day in case left undefined
 	int birth_month = 1;
 	int birth_day = 1;
+	//IsaacG This loop needs a rewrite
 	for (int i = 0; i < founderQuestions.size(); i++) {
 		const string first = founderQuestions[i];
-		if (first.substr(0, 6) == "HEADER") {
+		if (first.substr(0, 6) == tag_HEADER) {
 			if (first.substr(6, 1) == singleSpace) {
 				header = first.substr(7);
-				header_2 = "";
+				header_2 = blankString;
 			}
-			else  if (first.substr(6, 2) == "_2") {
+			else  if (first.substr(6, 2) == tag__2) {
 				header_2 = first.substr(9);
 			}
 		}
-		else if (first.substr(0, 6) == "ANSWER") {
+		else if (first.substr(0, 6) == tag_ANSWER) {
 			if (firstAnswer) {
 				if (first.substr(6, 1) == singleSpace) {
 					answer = first.substr(7);
-					answer_2 = "";
+					answer_2 = blankString;
 					firstAnswer = false;
 				}
-				else  if (first.substr(6, 2) == "_2") {
+				else  if (first.substr(6, 2) == tag__2) {
 					answer_2 = first.substr(9);
 				}
 			}
@@ -661,14 +801,14 @@ void makecharacter()
 					}
 					currentChoice.impact.clear();
 					answer = first.substr(7);
-					answer_2 = "";
+					answer_2 = blankString;
 				}
-				else  if (first.substr(6, 2) == "_2") {
+				else  if (first.substr(6, 2) == tag__2) {
 					answer_2 = first.substr(9);
 				}
 			}
 		}
-		else if (first.substr(0, 8) == "QUESTION") {
+		else if (first.substr(0, 8) == tag_QUESTION) {
 			if (!firstQuestion) {
 				if (first.substr(8, 1) == singleSpace) {
 					currentChoice.ANSWER = answer;
@@ -677,33 +817,33 @@ void makecharacter()
 					allQuestions.push_back(currentQuestion);
 					currentQuestion.choices.clear();
 					currentChoice.impact.clear();
-					currentChoice.ANSWER = "";
-					currentChoice.ANSWER_2 = "";
+					currentChoice.ANSWER = blankString;
+					currentChoice.ANSWER_2 = blankString;
 					currentQuestion.HEADER = header;
 					currentQuestion.HEADER_2 = header_2;
 					currentQuestion.QUESTION = first.substr(9);
-					currentQuestion.QUESTION_2 = "";
+					currentQuestion.QUESTION_2 = blankString;
 					firstAnswer = true;
 				}
-				else if (first.substr(8, 2) == "_2") {
+				else if (first.substr(8, 2) == tag__2) {
 					currentQuestion.QUESTION_2 = first.substr(12);
 				}
 			}
 			else {
 				firstQuestion = false;
 				firstAnswer = true;
-				currentChoice.ANSWER = "";
-				currentChoice.ANSWER_2 = "";
+				currentChoice.ANSWER = blankString;
+				currentChoice.ANSWER_2 = blankString;
 				currentQuestion.HEADER = header;
 				currentQuestion.HEADER_2 = header_2;
 				currentQuestion.QUESTION = first.substr(9);
-				currentQuestion.QUESTION_2 = "";
+				currentQuestion.QUESTION_2 = blankString;
 			}
 		}
 		else {
 			bool invalidTag = false;
 			Impact currentImpact;
-			if (first.substr(0, 6) == "SKILL_") {
+			if (first.substr(0, 6) == tag_SKILL_) {
 				currentImpact.type = SKILL;
 				currentImpact.item_to_influcence = getSkillFromString(founderQuestions[i]);
 				currentImpact.set_value = getSetValue(founderQuestions[i]);
@@ -712,7 +852,7 @@ void makecharacter()
 					invalidTag = true;
 				}
 			}
-			else if (first.substr(0, 10) == "ATTRIBUTE_") {
+			else if (first.substr(0, 10) == tag_ATTRIBUTE_) {
 				currentImpact.type = ATTRIBUTE;
 				currentImpact.item_to_influcence = getAttributeFromString(founderQuestions[i]);
 				currentImpact.set_value = getSetValue(founderQuestions[i]);
@@ -721,72 +861,72 @@ void makecharacter()
 					invalidTag = true;
 				}
 			}
-			else if (first.substr(0, 9) == "STARTING_") {
+			else if (first.substr(0, 9) == tag_STARTING_) {
 				currentImpact.type = OTHER;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (first.substr(9, 5) == "MONTH") {
+				if (first.substr(9, 5) == tag_MONTH) {
 					currentImpact.item_to_influcence = STARTING_MONTH;
 				}
-				else if (first.substr(9, 3) == "DAY") {
+				else if (first.substr(9, 3) == tag_DAY) {
 					currentImpact.item_to_influcence = STARTING_DAY;
 				}
-				else if (first.substr(9, 4) == "YEAR") {
+				else if (first.substr(9, 4) == tag_YEAR) {
 					currentImpact.item_to_influcence = STARTING_YEAR;
 				}
 				else {
 					invalidTag = true;
 				}
 			}
-			else if (first.substr(0, 9) == "BIRTHDAY_") {
+			else if (first.substr(0, 9) == tag_BIRTHDAY_) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = 0;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (first.substr(9, 5) == "MONTH") {
+				if (first.substr(9, 5) == tag_MONTH) {
 					currentImpact.item_to_influcence = BIRTH_MONTH;
 				}
-				else if (first.substr(9, 3) == "DAY") {
+				else if (first.substr(9, 3) == tag_DAY) {
 					currentImpact.item_to_influcence = BIRTH_DAY;
 				}
-				else if (first.substr(9, 4) == "YEAR") {
+				else if (first.substr(9, 4) == tag_YEAR) {
 					currentImpact.item_to_influcence = BIRTH_YEAR;
 				}
 				else {
 					invalidTag = true;
 				}
 			}
-			else if (first.substr(0, 5) == "MONEY") {
+			else if (first.substr(0, 5) == tag_MONEY) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = MONEY;
 				currentImpact.set_value = getSetValue(founderQuestions[i]);
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 13) == "DATING_LAWYER") {
+			else if (first.substr(0, 13) == tag_DATING_LAWYER) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = DATING_LAWYER;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 3) == "GAY") {
+			else if (first.substr(0, 3) == tag_GAY) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = GAY;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 7) == "HASMAPS") {
+			else if (first.substr(0, 7) == tag_HASMAPS) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = HAS_MAPS;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 8) == "CREATURE") {
+			else if (first.substr(0, 8) == tag_CREATURE) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = CREATURE;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getCreatureFromString(founderQuestions[i].substr(9));
 			}
-			else if (first.substr(0, 4) == "BASE") {
+			else if (first.substr(0, 4) == tag_BASE) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = BASE;
 				currentImpact.set_value = true;
@@ -801,25 +941,25 @@ void makecharacter()
 				currentImpact.set_value = true;
 				invalidTag = true;
 			}
-			else if (first.substr(0, 5) == "JUICE") {
+			else if (first.substr(0, 5) == tag_JUICE) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = JUICE;
 				currentImpact.set_value = getSetValue(founderQuestions[i]);
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 13) == "RECRUITS_GANG") {
+			else if (first.substr(0, 13) == tag_RECRUITS_GANG) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = RECRUITS;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 13) == "ASSAULT_RIFLE") {
+			else if (first.substr(0, 13) == tag_ASSAULT_RIFLE) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = ASSAULT_RIFLE;
 				currentImpact.set_value = true;
 				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
 			}
-			else if (first.substr(0, 10) == "SPORTS_CAR") {
+			else if (first.substr(0, 10) == tag_SPORTS_CAR) {
 				currentImpact.type = OTHER;
 				currentImpact.item_to_influcence = SPORTS_CAR;
 				currentImpact.set_value = true;
@@ -827,14 +967,14 @@ void makecharacter()
 			}
 			else {
 				clearAlt();
-				addstrAlt("INVALID TAG ");
+				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
 				getkey();
 				clearAlt();
 			}
 			if (invalidTag) {
 				clearAlt();
-				addstrAlt("INVALID TAG ");
+				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
 				getkey();
 				clearAlt();
@@ -853,39 +993,32 @@ void makecharacter()
 	for (int i = 0; i < allQuestions.size(); i++) {
 		clearAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveZeroZero();
-		addstrAlt(allQuestions[i].HEADER);
-		moveOneZero();
-		addstrAlt(allQuestions[i].HEADER_2);
+		mvaddstrAlt(0,  0, allQuestions[i].HEADER);
+		mvaddstrAlt(1,  0, allQuestions[i].HEADER_2);
 		set_color_easy(WHITE_ON_BLACK);
-		moveAlt(2, 0);
-		addstrAlt(allQuestions[i].QUESTION);
-		moveAlt(3, 0);
-		addstrAlt(allQuestions[i].QUESTION_2);
+		mvaddstrAlt(2,  0, allQuestions[i].QUESTION);
+		mvaddstrAlt(3,  0, allQuestions[i].QUESTION_2);
 		if (i == 0) {
-			moveAlt(17, 0);
-			addstrAlt("The doctor said I was ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			mvaddstrAlt(17,  0, theDocSaid);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			if (newcr->gender_conservative == GENDER_MALE)
-				addstrAlt("a boy");
+				addstrAlt(aBoy);
 			else if (newcr->gender_conservative == GENDER_FEMALE)
-				addstrAlt("a girl");
+				addstrAlt(aGirl);
 			else
-				addstrAlt("an intersex baby");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				addstrAlt(intersex);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
-			moveAlt(19, 0);
-			addstrAlt("My parents ");
+			mvaddstrAlt(19,  0, myParents);
 			if (newcr->gender_conservative == GENDER_NEUTRAL)
 			{
-				addstrAlt("insisted otherwise.");
-				moveAlt(20, 0);
-				addstrAlt("They ");
+				addstrAlt(insistedOtherwise);
+				mvaddstrAlt(20,  0, they);
 			}
-			addstrAlt("named me ");
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			addstrAlt(namedMe);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(newcr->propername);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
 		}
 
@@ -895,23 +1028,15 @@ void makecharacter()
 			int offset = LCSrandom(allQuestions[i].choices.size());
 			selection = 'a' + offset;
 			string currentOption = spaceDashSpace;
-			moveAlt(5 + 2 * offset, 0);
-			addstrAlt(allOptions.substr(offset, 1));
-			addstrAlt(currentOption);
-			addstrAlt(allQuestions[i].choices[offset].ANSWER);
-			moveAlt(6 + 2 * offset, 0);
-			addstrAlt(allQuestions[i].choices[offset].ANSWER_2);
+			mvaddstrAlt(5 + 2 * offset, 0, allOptions.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
+			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
 			getkey();
 		}
 		else {
 			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
 				string currentOption = spaceDashSpace;
-				moveAlt(5 + 2 * j, 0);
-				addstrAlt(allOptions.substr(j, 1));
-				addstrAlt(currentOption);
-				addstrAlt(allQuestions[i].choices[j].ANSWER);
-				moveAlt(6 + 2 * j, 0);
-				addstrAlt(allQuestions[i].choices[j].ANSWER_2);
+				mvaddstrAlt(5 + 2 * j, 0, allOptions.substr(j, 1) + currentOption + allQuestions[i].choices[j].ANSWER);
+				mvaddstrAlt(6 + 2 * j, 0, allQuestions[i].choices[j].ANSWER_2);
 			}
 			selection = getkey();
 		}
@@ -1018,19 +1143,15 @@ void makecharacter()
 				break;
 			default:
 				clearAlt();
-				moveZeroZero();
-				addstrAlt("ERROR");
-				moveOneZero();
-				addstrAlt(currentImpact.item_to_influcence);
+				mvaddstrAlt(0,  0, error);
+				mvaddstrAlt(1,  0, currentImpact.item_to_influcence);
 				break;
 			}
 			break;
 		default:
 			clearAlt();
-			moveZeroZero();
-			addstrAlt("ERROR");
-			moveOneZero();
-			addstrAlt(currentImpact.type);
+			mvaddstrAlt(0,  0, error);
+			mvaddstrAlt(1,  0, currentImpact.type);
 			break;
 		}
 	}
@@ -1051,73 +1172,58 @@ void makecharacter()
 		newcr->take_clips(newc, 9);
 	}
 	if (sports_car) {
-		startcar = new Vehicle(*vehicletype[getvehicletype("SPORTSCAR")]);
+		startcar = new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
 		startcar->add_heat(10);
 		vehicle.push_back(startcar);
 		newcr->pref_carid = startcar->id();
 	}
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveAlt(2, 2);
-	addstrAlt("A NEW CONSERVATIVE ERA", gamelog);
+	mvaddstrAlt(2,  2, aNewConEra, gamelog);
 	gamelog.newline();
 	set_color_easy(WHITE_ON_BLACK);
-	moveAlt(4, 2);
-	addstrAlt("The Year is ", gamelog);
+	mvaddstrAlt(4,  2, theYearIs, gamelog);
 	addstrAlt(year, gamelog);
 	addstrAlt(singleDot, gamelog);
-	moveAlt(6, 2);
 	gamelog.newline();
-	addstrAlt("Conservative President ", gamelog);
+	mvaddstrAlt(6, 2, conservativePresident, gamelog);
 	char president[80];
 	generate_name(president, GENDER_WHITEMALEPATRIARCH);
 	addstrAlt(president, gamelog);
-	addstrAlt(" ends his second term with approval", gamelog);
-	moveAlt(7, 2);
+	addstrAlt(endsSecondTerm, gamelog);
 	gamelog.newline();
-	addstrAlt("ratings in the high 70s, and is succeeded by hardcore Arch-Conservative", gamelog);
-	moveAlt(8, 2);
+	mvaddstrAlt(7, 2, highSeventiesApprovePres, gamelog);
 	gamelog.newline();
-	addstrAlt(execname[EXEC_PRESIDENT], gamelog);
+	mvaddstrAlt(8, 2, execname[EXEC_PRESIDENT], gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.nextMessage();
-	moveAlt(10, 2);
-	addstrAlt("With Conservatives sweeping into power in the House of Representatives", gamelog);
-	moveAlt(11, 2);
+	mvaddstrAlt(10,  2, conMajorityHouse, gamelog);
 	gamelog.newline();
-	addstrAlt("and Senate, and a Conservative majority in the Supreme Court of the", gamelog);
-	moveAlt(12, 2);
+	mvaddstrAlt(11, 2, senateConMajority, gamelog);
 	gamelog.newline();
-	addstrAlt("United States, commentators are hailing it as the beginning of a new", gamelog);
-	moveAlt(13, 2);
+	mvaddstrAlt(12, 2, beginningOfNew, gamelog);
 	gamelog.newline();
-	addstrAlt("Conservative era.", gamelog);
+	mvaddstrAlt(13, 2, conEra, gamelog);
 	gamelog.nextMessage();
-	moveAlt(15, 2);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	addstrAlt("President ", gamelog);
+	mvaddstrAlt(15,  2, thePresident, gamelog);
 	addstrAlt(execname[EXEC_PRESIDENT], gamelog);
-	addstrAlt(" has asked the new Congress to move quickly", gamelog);
-	moveAlt(16, 2);
+	addstrAlt(hasAskedCongressBeQuick, gamelog);
 	gamelog.newline();
-	addstrAlt("to rubber stamp his radical Arch-Conservative agenda. ", gamelog);
+	mvaddstrAlt(16, 2, rubberStampArchCon, gamelog);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt("The left seems", gamelog);
+	addstrAlt(theLeftSeems, gamelog);
 	gamelog.newline();
-	moveAlt(17, 2);
-	addstrAlt("powerless to stop this imminent trampling of Liberal Sanity and Justice.", gamelog);
+	mvaddstrAlt(17,  2, powerlessToStop, gamelog);
 	gamelog.nextMessage();
-	moveAlt(19, 2);
-	addstrAlt("In this dark time, the Liberal Crime Squad is born...", gamelog);
+	mvaddstrAlt(19,  2, inThisDarkTime, gamelog);
 	gamelog.nextMessage();
 	getkey();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveZeroZero();
-	addstrAlt("What is your name to the People?");
+	mvaddstrAlt(0,  0, whatIsYourName);
 	set_color_easy(WHITE_ON_BLACK);
-	moveOneZero();
-	addstrAlt("Press enter to be known by your real name instead.");
+	mvaddstrAlt(1,  0, pressEnterToBeRealName);
 	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	pool.push_back(newcr);
 	make_world(hasmaps);
@@ -1125,7 +1231,7 @@ void makecharacter()
 	newsq->id = 0; cursquadid++;
 	newsq->squad[0] = newcr;
 	newcr->squadid = 0;
-	strcpy(newsq->name, "The Liberal Crime Squad");
+	strcpy(newsq->name, theLCS);
 	for (int l = 0; l < len(location); l++)
 	{
 		if (location[l]->type == base)

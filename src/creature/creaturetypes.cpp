@@ -1,6 +1,19 @@
 
 #include <includes.h>
 
+#include "common/interval.h"
+
+#include "sitemode/stealth.h"
+// for disguisesite
+
+#include "creature/creaturetype.h"
+#include "common/translateid.h"
+//either of this should work for local stringconversions
+
+#include "common/stringconversion.h"
+//for strcpy
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -11,6 +24,16 @@ extern bool multipleCityMode;
 extern short mode;
 extern char endgamestate;
 extern short sitetype;
+extern short cursite;
+extern vector<ClipType *> cliptype;
+extern vector<WeaponType *> weapontype;
+//extern vector<ArmorType *> armortype;
+extern short lawList[LAWNUM];
+extern short sitealarm;
+extern char ccs_kills;
+extern short sitealienate;
+extern vector<ArmorType *> armortype;
+
  vector<string> words_meaning_hick;
  vector<string> genetic_monster;
 /* Age macros for characters */

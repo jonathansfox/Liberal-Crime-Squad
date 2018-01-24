@@ -1,11 +1,23 @@
 
 #include <includes.h>
 
+//#include "items/armor.h"
+//own header currently inside includes.h
+
+#include "common/stringconversion.h"
+//for int stringtobool(std::string)
+
+#include "common/translateid.h"
+// for  int getarmortype
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern vector<ArmorType *> armortype;
+
 Armor::Armor(const ArmorType& seed, int quality, int number)
  : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
 { }
@@ -152,10 +164,6 @@ int Armor::get_stealth_value() const
 { return armortype[getarmortype(itemtypename())]->get_stealth_value(); }
 int Armor::get_weaponsize_concealment() const
 { return armortype[getarmortype(itemtypename())]->get_weaponsize_concealment(); }
-bool Armor::conceals_weapon(const Weapon& weapon) const
-{ return armortype[getarmortype(itemtypename())]->conceals_weaponsize(weapon.get_size()); }
-bool Armor::conceals_weapon(const WeaponType& weapon) const
-{ return armortype[getarmortype(itemtypename())]->conceals_weapon(weapon); }
 bool Armor::conceals_weaponsize(int weaponsize) const
 { return armortype[getarmortype(itemtypename())]->conceals_weaponsize(weaponsize); }
 bool Armor::is_mask() const

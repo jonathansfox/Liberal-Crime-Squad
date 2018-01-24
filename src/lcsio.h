@@ -23,8 +23,8 @@ This file is part of Liberal Crime Squad.
     The entire system is being rewritten
 */
 #ifndef LCSIO_H_INCLUDED
-#define LCSIO_H_INCLUDED
-#include "common.h" /* include this prior to checking if WIN32 is defined */
+#define LCSIO_H_INCLUDED0
+//#include "common.h" /* include this prior to checking if WIN32 is defined */
 /**
     I/O Flags for the LCS I/O System.
 */

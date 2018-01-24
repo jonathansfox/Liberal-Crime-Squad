@@ -28,22 +28,30 @@
 
 #include <includes.h>
 
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-	 vector<string> male_first_names;
-	 vector<string> female_first_names;
-	 vector<string> gender_neutral_first_names;
-	 vector<string> great_white_male_patriarch_first_names;
-	 vector<string> regular_last_names;
-	 vector<string> archconservative_last_names;
-	extern string closeParenthesis;
-	// Add an age estimate to a person's name
-	void add_age(Creature& person)
-	{
-		// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
+
+vector<string> male_first_names;
+vector<string> female_first_names;
+vector<string> gender_neutral_first_names;
+vector<string> great_white_male_patriarch_first_names;
+vector<string> regular_last_names;
+vector<string> archconservative_last_names;
+extern string closeParenthesis;
+extern string singleSpace;
+// Add an age estimate to a person's name
+void add_age(Creature& person)
+{
+	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
 		if (person.animalgloss != ANIMALGLOSS_NONE)
 		{
 			addstrAlt(" (?)");
@@ -109,7 +117,7 @@
 		char last[80];
 		generate_name(first, last, gender);
 		strcpy(str, first);
-		strcat(str, singleSpace);
+		strcat(str, singleSpace.data());
 		strcat(str, last);
 	}
 	/* get a first and last name for the same person */
@@ -117,7 +125,7 @@
 	{
 		do {
 			firstname(first, gender);
-			lastname(last, gender == GENDER_WHITEMALEPATRIARCH);
+			strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
 		} while (strcmp(first, last) == 0);
 	}
 	/* get a first, middle, and last name for the same person */
@@ -131,8 +139,8 @@
 			if (LCSrandom(2)) // middle name is a first name
 				firstname(middle, (gender == GENDER_WHITEMALEPATRIARCH || LCSrandom(2) ? gender : GENDER_NEUTRAL)); // 25% chance for middle name of other gender unless white male patriarch
 			else // middle name is a last name
-				lastname(middle, gender == GENDER_WHITEMALEPATRIARCH);
-			lastname(last, gender == GENDER_WHITEMALEPATRIARCH);
+				strcpy(middle, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
+			strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
 		} while (strcmp(first, middle) == 0 && strcmp(first, last) == 0 && strcmp(middle, last) == 0);
 	}
 	/* gets a random first name */
@@ -187,10 +195,10 @@
 		else
 			strcat(str, "Errol");
 	}
-	/* gets a random last name */
-	void lastname(char *str, bool archconservative)
+	string lastname(bool archconservative)
 		//{{{ Last Name
 	{
+		char str[80];
 		strcpy(str, "");
 		// For non-Arch-Conservatives, pick from ALL last names
 		if (!archconservative)
@@ -211,4 +219,6 @@
 			strcat(str, pickrandom(archconservative_last_names).data());
 		else
 			strcat(str, pickrandom(regular_last_names).data());
+
+		return str;
 	}

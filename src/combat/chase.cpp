@@ -26,6 +26,48 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+
+#include "basemode/baseactions.h"
+// for orderparty
+
+#include "sitemode/advance.h"
+
+#include "sitemode/sitedisplay.h"
+
+#include "sitemode/miscactions.h"
+
+#include "log/log.h"
+// for gamelog
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)      
+
+#include "common/translateid.h"
+// for  int id_getcar(int)
+
+#include "common/stringconversion.h"
+//for addstr
+
+#include "common/commondisplay.h"
+// for addstr (with log)
+
+#include "common/commonactions.h"
+// for int squadsize(const squadst *);
+
+#include "common/equipment.h"
+//for void equip(vector<Item *>&,int)
+
+#include "combat/chase.h"
+//own header
+
+#include "combat/fight.h"
+// for void youattack();
+
+#include "combat/haulkidnap.h"
+// for  void kidnaptransfer(Creature &cr);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -42,6 +84,18 @@ extern int stat_dead;
 extern string change_squad_order;
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
+extern Creature encounter[ENCMAX];
+extern chaseseqst chaseseq;
+extern squadst *activesquad;
+extern vector<Vehicle *> vehicle;
+extern short party_status;
+extern newsstoryst *sitestory;
+extern short fieldskillrate;
+extern string singleSpace;
+extern short lawList[LAWNUM];
+extern vector<squadst *> squad;
+extern long cursquadid;
+
 void fillEncounter();
 void fillEncounter(CreatureTypes c, int numleft) {
 	for (int e = 0; e < ENCMAX; e++)
@@ -113,11 +167,9 @@ bool chasesequence()
 	mode = GAMEMODE_CHASECAR;
 	music.play(MUSIC_CARCHASE);
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt("As you pull away from the site, you notice that you are ", gamelog);
-	moveOneZero();
-	addstrAlt(beingFollowedBySwine, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, "As you pull away from the site, you notice that you are ", gamelog);
+	mvaddstrAlt(1,  0, beingFollowedBySwine, gamelog);
 	gamelog.newline(); //New line.
 	getkey();
 	if (location[chaseseq.location]->parent != -1)
@@ -128,55 +180,43 @@ bool chasesequence()
 		int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), encsize = 0;
 		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encsize++;
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt(location[chaseseq.location]->getname());
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, location[chaseseq.location]->getname());
 		//PRINT PARTY
 		if (partyalive == 0) party_status = -1;
 		printparty();
 		if (partyalive > 0)
 		{
 			//PRINT DRIVING SITUATION AND INSTRUCTIONS
-			if (partysize > 1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(9, 40);
-			addstrAlt(change_squad_order);
-			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(10, 40);
-			addstrAlt(check_status_of_squad_liberal);
-			if (party_status != -1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(11, 40);
-			addstrAlt(show_squad_liberal_status);
+			if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  40, change_squad_order);
+			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10,  40, check_status_of_squad_liberal);
+			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11,  40, show_squad_liberal_status);
 			int y = 12;
 			if (obstacle == -1)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(9, 1);
-				addstrAlt("D - Try to lose them!");
-				moveAlt(10, 1);
-				addstrAlt("E - Equip");
-				moveAlt(11, 1);
-				addstrAlt("F - Fight!");
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(9,  1, "D - Try to lose them!");
+				mvaddstrAlt(10,  1, "E - Equip");
+				mvaddstrAlt(11,  1, "F - Fight!");
 			}
 			else
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-				moveAlt(9, 1);
-				addstrAlt(carchaseObstacles[obstacle][0]);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				mvaddstrAlt(9,  1, carchaseObstacles[obstacle][0]);
 				gamelog.newline();
-				moveAlt(10, 1);
-				addstrAlt(carchaseObstacles[obstacle][1]);
-				moveAlt(11, 1);
-				addstrAlt(carchaseObstacles[obstacle][2]);
+				mvaddstrAlt(10,  1, carchaseObstacles[obstacle][1]);
+				mvaddstrAlt(11,  1, carchaseObstacles[obstacle][2]);
 			}
-			moveAlt(y, 1);
-			addstrAlt("B - Bail out and run!");
+			mvaddstrAlt(y,  1, "B - Bail out and run!");
 			if (chaseseq.canpullover)
 			{
-				moveAlt(y + 1, 1);
-				addstrAlt("P - Pull over");
+				mvaddstrAlt(y + 1,  1, "P - Pull over");
 			}
 		}
 		else
@@ -191,9 +231,8 @@ bool chasesequence()
 				activesquad->squad[p] = NULL;
 			}
 			endcheck(-2); // play the right music in case we're dead
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 1);
-			addstrAlt("C - Reflect on your lack of skill.");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  1, "C - Reflect on your lack of skill.");
 		}
 		//PRINT ENEMIES
 		printchaseencounter();
@@ -326,10 +365,9 @@ bool chasesequence()
 			}
 			if (partyalive > 0 && baddiecount == 0)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				clearmessagearea();
-				moveSixteenOne();
-				addstrAlt(lostThem, gamelog);
+				mvaddstrAlt(16,  1, lostThem, gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 				for (int p = 0; p < len(pool); p++)
@@ -369,10 +407,9 @@ bool footchase()
 	mode = GAMEMODE_CHASEFOOT;
 	music.play(MUSIC_FOOTCHASE);
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt("As you exit the site, you notice that you are ", gamelog);
-	moveOneZero();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, "As you exit the site, you notice that you are ", gamelog);
+	moveAlt(1, 0);
 	gamelog.newline(); //New line. I'd rather it be continuous but whatever.
 	addstrAlt(beingFollowedBySwine, gamelog);
 	gamelog.newline(); //New line.
@@ -382,38 +419,30 @@ bool footchase()
 		int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), encsize = 0;
 		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encsize++;
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt(location[chaseseq.location]->getname());
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, location[chaseseq.location]->getname());
 		//PRINT PARTY
 		if (partyalive == 0) party_status = -1;
 		printparty();
 		if (partyalive > 0)
 		{
 			//PRINT DRIVING SITUATION AND INSTRUCTIONS
-			if (partysize > 1) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(9, 40);
-			addstrAlt(change_squad_order);
-			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(10, 40);
-			addstrAlt(check_status_of_squad_liberal);
-			if (party_status != -1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(11, 40);
-			addstrAlt(show_squad_liberal_status);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 1);
-			addstrAlt("D - Try to lose them!");
-			moveAlt(10, 1);
-			addstrAlt("E - Equip");
-			moveAlt(11, 1);
-			addstrAlt("F - Fight!");
+			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  40, change_squad_order);
+			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10,  40, check_status_of_squad_liberal);
+			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11,  40, show_squad_liberal_status);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  1, "D - Try to lose them!");
+			mvaddstrAlt(10,  1, "E - Equip");
+			mvaddstrAlt(11,  1, "F - Fight!");
 			if (chaseseq.canpullover)
 			{
-				moveAlt(12, 1);
-				addstrAlt("G - Give Up");
+				mvaddstrAlt(12,  1, "G - Give Up");
 			}
 		}
 		else
@@ -428,9 +457,8 @@ bool footchase()
 				activesquad->squad[p] = NULL;
 			}
 			endcheck(-2); // play the right music in case we're dead
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 1);
-			addstrAlt("C - Reflect on your lack of skill.");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  1, "C - Reflect on your lack of skill.");
 		}
 		//PRINT ENEMIES
 		printchaseencounter();
@@ -506,10 +534,9 @@ bool footchase()
 			}
 			if (partyalive > 0 && baddiecount == 0)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				clearmessagearea();
-				moveSixteenOne();
-				addstrAlt(lostThem, gamelog);
+				mvaddstrAlt(16,  1, lostThem, gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 				for (int p = 0; p < len(pool); p++)
@@ -574,8 +601,8 @@ void evasivedrive()
 		else if (encounter[e].carid == -1) encounter[e].exists = false;
 	}
 	clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(16, 1);
 	switch (LCSrandom(car_speed.size() + 1))
 	{
 	case 0:
@@ -598,8 +625,8 @@ void evasivedrive()
 		if (theirrolls[i] < cnt)
 		{
 			clearmessagearea();
-			set_color(COLOR_CYAN, COLOR_BLACK, 1);
-			moveSixteenOne();
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			moveAlt(16, 1);
 			for (e = 0; e < ENCMAX; e++)
 			{
 				if (encounter[e].id == theirrolls_drv[i])
@@ -651,8 +678,8 @@ void evasivedrive()
 		else
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			moveAlt(16, 1);
 			for (int e = 0; e < ENCMAX; e++)
 			{
 				if (encounter[e].id == theirrolls_drv[i])
@@ -697,8 +724,8 @@ void evasiverun()
 	{
 		yourworst += LCSrandom(5);
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		moveAlt(16, 1);
 		switch (LCSrandom(yourworst / 5))
 		{
 		default:
@@ -730,9 +757,8 @@ void evasiverun()
 		if (encounter[e].type == CREATURE_TANK && LCSrandom(10))
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(encounter[e].name, gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 			addstrAlt(singleSpace, gamelog);
 			addstrAlt(pickrandom(car_plows_through), gamelog);
 			getkey();
@@ -740,9 +766,8 @@ void evasiverun()
 		else if (chaser < yourworst)
 		{
 			clearmessagearea();
-			set_color(COLOR_CYAN, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(encounter[e].name, gamelog);
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 			if (encounter[e].type == CREATURE_TANK)
 			{
 				addstrAlt(" tips into a pool. The tank is trapped!", gamelog);
@@ -760,9 +785,8 @@ void evasiverun()
 		else
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(encounter[e].name, gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 			addstrAlt(" is still on your tail!", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
@@ -782,9 +806,8 @@ void evasiverun()
 			{
 				if (p == 0 && othersleft == 0) break;
 				clearmessagearea();
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(" breaks away!", gamelog);
 				gamelog.newline(); //New line.
 				getkey();
@@ -814,9 +837,8 @@ void evasiverun()
 			else if (yourspeed[p] < theirbest - 10)
 			{
 				clearmessagearea();
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				switch (encounter[0].type)
 				{
 				case CREATURE_COP:
@@ -991,9 +1013,8 @@ bool drivingupdate(short &obstacle)
 				activesquad->squad[p]->is_driver = 1;
 				driver = p;
 				clearmessagearea();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(" takes over the wheel.", gamelog);
 				gamelog.newline(); //New line.
 				printparty();
@@ -1037,11 +1058,25 @@ bool drivingupdate(short &obstacle)
 	return 0;
 }
 extern string singleDot;
-void makechasers(long sitetype, long sitecrime)
+void makechasers(long sitetype, const long sitecriminality)
 {
+	// 
+	long sitecrime_chasers;
+	if (sitecriminality > 10) {
+		sitecrime_chasers = 0;
+		long sitecrime_log = sitecriminality;
+		while (sitecrime_log > 10) {
+			sitecrime_log /= 2;
+			sitecrime_chasers += 10;
+		}
+		sitecrime_chasers += sitecrime_log;
+	}
+	else {
+		sitecrime_chasers = sitecriminality;
+	}
 	emptyEncounter();
-	if (!sitecrime) return;
-	short encslot = 0;
+	if (!sitecrime_chasers) return;
+	//short encslot = 0;
 	int n;
 	string cartype; //Temporary (transitionally) solution. -XML
 	long pnum;
@@ -1049,15 +1084,17 @@ void makechasers(long sitetype, long sitecrime)
 	// 50% of CCS harassing your teams once they reach the
 	// "attacks" stage (but not for activities, which are
 	// law enforcement response specific)
-	if (endgamestate < ENDGAME_CCS_DEFEATED&&
-		endgamestate >= ENDGAME_CCS_ATTACKS&&
-		LCSrandom(2) && sitetype != -1)
+	int crime_ratio;
+	CreatureTypes chasing_enemy;
+	int min_enemies;
+	int max_enemies;
+	if (sitetype != -1 && (endgamestate == ENDGAME_CCS_SIEGES || endgamestate == ENDGAME_CCS_ATTACKS) && LCSrandom(2))
 	{
 		cartype = "SUV"; //A CCS property, not a vehicle property. Temporary solution -XML
-		pnum = LCSrandom(sitecrime / 5 + 1) + 1;
-		if (pnum > 12) pnum = 12;
-		for (n = 0; n < pnum; n++)
-			makecreature(encounter[encslot++], CREATURE_CCS_VIGILANTE);
+		crime_ratio =  5;
+		min_enemies = 1;
+		max_enemies = 12;
+		chasing_enemy = CREATURE_CCS_VIGILANTE;
 	}
 	else
 	{
@@ -1065,66 +1102,74 @@ void makechasers(long sitetype, long sitecrime)
 		{
 		case SITE_GOVERNMENT_ARMYBASE:
 			cartype = "HMMWV"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 5 + 1) + 3;
-			if (pnum > 6)pnum = 6;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_SOLDIER);
+			crime_ratio =  5;
+			min_enemies = 3;
+			max_enemies = 6;
+			chasing_enemy = CREATURE_SOLDIER;
 			break;
 		case SITE_GOVERNMENT_WHITE_HOUSE:
 			cartype = "AGENTCAR"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 5 + 1) + 1;
-			if (pnum > 6)pnum = 6;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_SECRET_SERVICE);
+			crime_ratio =  5;
+			min_enemies = 1;
+			max_enemies = 6;
+			chasing_enemy = CREATURE_SECRET_SERVICE;
 			break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
 			cartype = "AGENTCAR"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 5 + 1) + 1;
-			if (pnum > 6)pnum = 6;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_AGENT);
+			crime_ratio =  5;
+			min_enemies = 1;
+			max_enemies = 6;
+			chasing_enemy = CREATURE_AGENT;
 			break;
 		case SITE_CORPORATE_HEADQUARTERS:
 		case SITE_CORPORATE_HOUSE:
 			if (LCSrandom(2))cartype = "SUV"; //Site property? Temporary solution. -XML
 			else cartype = "JEEP"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 5 + 1) + 1;
-			if (pnum > 6)pnum = 6;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_MERC);
+			crime_ratio =  5;
+			min_enemies = 1;
+			max_enemies = 6;
+			chasing_enemy = CREATURE_MERC;
 			break;
 		case SITE_MEDIA_AMRADIO:
 		case SITE_MEDIA_CABLENEWS:
 			cartype = "PICKUP"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 3 + 1) + 1;
-			if (pnum > 18)pnum = 18;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_HICK);
+			crime_ratio =  3;
+			min_enemies = 1;
+			max_enemies = 18;
+			chasing_enemy = CREATURE_HICK;
 			break;
 		case SITE_BUSINESS_CRACKHOUSE:
 			cartype = "STATIONWAGON"; //Site property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 3 + 1) + 1;
-			if (pnum > 18)pnum = 18;
-			for (n = 0; n < pnum; n++)
-				makecreature(encounter[encslot++], CREATURE_GANGMEMBER);
+			crime_ratio =  3;
+			min_enemies = 1;
+			max_enemies = 18;
+			chasing_enemy = CREATURE_GANGMEMBER;
 			break;
 		default:
 			chaseseq.canpullover = 1;
 			cartype = "POLICECAR"; //Police property? Temporary solution. -XML
-			pnum = LCSrandom(sitecrime / 5 + 1) + 1;
-			if (pnum > 6)pnum = 6;
-			for (n = 0; n < pnum; n++)
-			{
-				if (lawList[LAW_DEATHPENALTY] == -2 &&
-					lawList[LAW_POLICEBEHAVIOR] == -2) {
-					makecreature(encounter[encslot++], CREATURE_DEATHSQUAD); chaseseq.canpullover = 0;
-				}
-				else if (lawList[LAW_POLICEBEHAVIOR] <= -1)makecreature(encounter[encslot++], CREATURE_GANGUNIT);
-				else makecreature(encounter[encslot++], CREATURE_COP);
+			crime_ratio =  5;
+			min_enemies = 1;
+			max_enemies = 6;
+			if (lawList[LAW_DEATHPENALTY] == -2 &&
+				lawList[LAW_POLICEBEHAVIOR] == -2) {
+				chasing_enemy = CREATURE_DEATHSQUAD;
+				chaseseq.canpullover = 0;
 			}
+			else if (lawList[LAW_POLICEBEHAVIOR] <= -1)
+			{ chasing_enemy = CREATURE_GANGUNIT; }
+			else 
+			{ chasing_enemy = CREATURE_COP; }
 			break;
 		}
 	}
+
+	pnum = LCSrandom((sitecrime_chasers / crime_ratio) + 1) + min_enemies;
+	if (pnum > max_enemies) pnum = max_enemies;
+	for (n = 0; n < pnum; n++) {
+		makecreature(encounter[n], chasing_enemy);
+	}
+
 	for (n = 0; n < pnum; n++) conservatise(encounter[n]);
 	//ASSIGN CARS TO CREATURES
 	int carnum;
@@ -1171,16 +1216,14 @@ bool obstacledrive(short obstacle, char choice)
 		else if (choice == 1)
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("You slow down, and turn the corner.", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "You slow down, and turn the corner.", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
 			if (!LCSrandom(3))
 			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSeventeenOne();
-				addstrAlt(hereTheyCome, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(17,  1, hereTheyCome, gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 				enemyattack();
@@ -1196,16 +1239,14 @@ bool obstacledrive(short obstacle, char choice)
 		else if (choice == 1)
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("You slow down, and carefully evade the truck.", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "You slow down, and carefully evade the truck.", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
 			if (!LCSrandom(3))
 			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSeventeenOne();
-				addstrAlt(hereTheyCome, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(17,  1, hereTheyCome, gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 				enemyattack();
@@ -1221,16 +1262,14 @@ bool obstacledrive(short obstacle, char choice)
 		else if (choice == 1)
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("Fruit smashes all over the windshield!", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "Fruit smashes all over the windshield!", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
 			if (!LCSrandom(5))
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveSeventeenOne();
-				addstrAlt("The fruit seller is squashed!", gamelog);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(17,  1, "The fruit seller is squashed!", gamelog);
 				gamelog.newline(); //All this logging and lining...
 				getkey();
 				criminalizeparty(LAWFLAG_MURDER);
@@ -1245,16 +1284,14 @@ bool obstacledrive(short obstacle, char choice)
 		else if (choice == 1)
 		{
 			clearmessagearea();
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("You slow down and carefully avoid the kid.", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "You slow down and carefully avoid the kid.", gamelog);
 			gamelog.newline(); //New line.
 			getkey();
 			if (!LCSrandom(3))
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveSeventeenOne();
-				addstrAlt("The Conservative bastards unleash a hail of gunfire!", gamelog);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(17,  1, "The Conservative bastards unleash a hail of gunfire!", gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 				enemyattack();
@@ -1262,9 +1299,8 @@ bool obstacledrive(short obstacle, char choice)
 			}
 			else
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
-				moveSeventeenOne();
-				addstrAlt("Both sides refrain from endangering the child...", gamelog);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(17,  1, "Both sides refrain from endangering the child...", gamelog);
 				gamelog.newline(); //New line.
 				getkey();
 			}
@@ -1277,9 +1313,8 @@ bool dodgedrive()
 {
 	int v;
 	clearmessagearea();
-	set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-	moveSixteenOne();
-	addstrAlt("You swerve to avoid the obstacle!", gamelog);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "You swerve to avoid the obstacle!", gamelog);
 	gamelog.newline(); //New line.
 	getkey();
 	int driver;
@@ -1336,9 +1371,8 @@ void crashfriendlycar(int v)
 {
 	//CRASH CAR
 	clearmessagearea();
-	set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-	moveSixteenOne();
-	addstrAlt("Your ", gamelog);
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "Your ", gamelog);
 	addstrAlt(chaseseq.friendcar[v]->fullname(), gamelog);
 	addstrAlt(pickrandom(car_crash_modes), gamelog);
 	gamelog.newline(); //New line it.
@@ -1379,9 +1413,8 @@ void crashfriendlycar(int v)
 				if (activesquad->squad[p]->prisoner->alive)
 				{
 					clearmessagearea();
-					set_color(COLOR_RED, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					gamelog.newline(); //New line.
 					printparty();
@@ -1407,9 +1440,8 @@ void crashfriendlycar(int v)
 			{
 				// Inform the player
 				clearmessagearea();
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				switch (LCSrandom(die_in_car.size() + 1))
 				{
 					//TODO IsaacG Migrate Strings
@@ -1436,9 +1468,8 @@ void crashfriendlycar(int v)
 			{
 				// Inform the player of character survival
 				clearmessagearea();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				switch (LCSrandom(3))
 				{
 				case 0:
@@ -1498,16 +1529,15 @@ void crashenemycar(int v)
 	}
 	//CRASH CAR
 	clearmessagearea();
-	set_color(COLOR_CYAN, COLOR_BLACK, 1);
-	moveSixteenOne();
-	addstrAlt("The ", gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "The ", gamelog);
 	addstrAlt(chaseseq.enemycar[v]->fullname(), gamelog);
 	switch (LCSrandom(3))
 	{
 	case 0:addstrAlt(" slams into a building.", gamelog); break;
 	case 1:
 		addstrAlt(" spins out and crashes.", gamelog);
-		moveSeventeenOne();
+		moveAlt(17, 1);
 		if (victimsum > 1)addstrAlt("Everyone inside is peeled off against the pavement.", gamelog);
 		else if (victimsum == 1)addstrAlt("The person inside is squashed into a cube.", gamelog);
 		break;
@@ -1521,7 +1551,7 @@ void crashenemycar(int v)
 void chase_giveup()
 {
 	int p;
-	int ps = find_police_station(chaseseq.location);
+	int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, chaseseq.location);
 	delete_and_clear(chaseseq.friendcar, vehicle);
 	int hostagefreed = 0;
 	for (p = 0; p < 6; p++)
@@ -1544,15 +1574,14 @@ void chase_giveup()
 			pool[p]->wound[w] &= ~WOUND_BLEEDING;
 	clearmessagearea();
 	clearcommandarea();
-	set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	moveAlt(16, 1);
 	if (mode != GAMEMODE_CHASECAR)addstrAlt("You stop and are arrested.", gamelog);
 	else addstrAlt("You pull over and are arrested.", gamelog);
 	gamelog.newline(); //New line.
 	if (hostagefreed)
 	{
-		moveSeventeenOne();
-		addstrAlt("Your hostage", gamelog);
+		mvaddstrAlt(17,  1, "Your hostage", gamelog);
 		if (hostagefreed > 1)
 			addstrAlt("s are free.", gamelog);
 		else addstrAlt(" is free.", gamelog);

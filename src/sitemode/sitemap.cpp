@@ -26,6 +26,19 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/sitemode.h"
+// for generateroom
+
+#include "configfile.h"
+// needed for something contained in sitemap.h
+#include "sitemode/sitemap.h"
+        //own header
+
+#include "common/stringconversion.h"
+//for atoi
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -33,11 +46,20 @@ This file is part of Liberal Crime Squad.                                       
 #include <set_color_support.h>
 extern string tag_LOOT;
 void emptyEncounter();
+extern squadst *activesquad;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern vector<Item *> groundloot;
 typedef map<short, string> shortAndString;
 shortAndString siteReadMap;
 shortAndString buildThisSite;
 typedef map<string, short> stringAndShort;
 typedef map<string, string> stringAndString;
+extern unsigned long seed[RNG_SIZE];
+extern int oldMapMode;
+extern vector<configSiteMap *> sitemaps;
  stringAndShort getUnique;
  stringAndString getLootString;
  stringAndShort getSpecial;

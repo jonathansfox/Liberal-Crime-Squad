@@ -20,6 +20,23 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printhealthstat(Creature &,int,int,char);
+
+ #include "common/getnames.h"
+// for std::string getview(short ,bool );
+
+#include "common/commonactions.h"
+// for  void sleeperize_prompt(Creature &,Creature &,int);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -31,6 +48,8 @@ extern vector<Location *> location;
 extern MusicClass music;
 extern int stat_recruits;
 extern int stat_kills;
+extern class Ledger ledger;
+extern short lawList[LAWNUM];
  vector<string> execution;
  vector<string> feels_sick;
  vector<string> low_heart_torture_props;
@@ -68,7 +87,8 @@ extern int stat_kills;
  string feels_sick_and;
 extern string singleDot;
 extern string AND;
-#include "set_color_support.h"
+extern string singleSpace;
+extern string commaSpace;
 enum InterrogationTechnqiues
 {
    TECHNIQUE_TALK,
@@ -91,47 +111,39 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 	clear_interrogation_sidebar();
 	int y = 4;
 	map<long, struct float_zero>& rapport = cr->activity.intr()->rapport;
-	moveAlt(y, 40);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	addstrAlt("Prisoner: ");
-	set_color(COLOR_RED, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(y,  40, "Prisoner: ");
+	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(cr->name);
 	moveAlt(y += 2, 40);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt("Health: ");
 	printhealthstat(*cr, y, 48, 0);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	moveAlt(++y, 40);
-	addstrAlt("Heart: ");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(++y,  40, "Heart: ");
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	moveAlt(++y, 40);
-	addstrAlt("Wisdom: ");
+	mvaddstrAlt(++y,  40, "Wisdom: ");
 	addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	moveAlt(++y, 40);
-	addstrAlt("Health: ");
+	mvaddstrAlt(++y,  40, "Health: ");
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
 	moveAlt(y = 13, 40);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt("Lead Interrogator: ");
-	set_color(COLOR_GREEN, COLOR_BLACK, 1);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	addstrAlt(a->name);
 	moveAlt(y += 2, 40);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt("Health: ");
 	printhealthstat(*a, y, 48, 0);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	moveAlt(++y, 40);
-	addstrAlt("Psychology Skill: ");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(++y,  40, "Psychology Skill: ");
 	addstrAlt(a->get_skill(SKILL_PSYCHOLOGY));
-	moveAlt(++y, 40);
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	addstrAlt("Heart: ");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(++y,  40, "Heart: ");
 	addstrAlt(a->get_attribute(ATTRIBUTE_HEART, true));
-	moveAlt(++y, 40);
-	addstrAlt("Wisdom: ");
+	mvaddstrAlt(++y,  40, "Wisdom: ");
 	addstrAlt(a->get_attribute(ATTRIBUTE_WISDOM, true));
-	moveAlt(++y, 40);
-	addstrAlt("Outfit: ");
+	mvaddstrAlt(++y,  40, "Outfit: ");
 	addstrAlt(a->get_armor().get_name());
 	moveAlt(y += 2, 40);
 	// What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
@@ -173,8 +185,7 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 	}
 	addstrAlt(line_one);
 	if (len(line_two)) {
-		moveAlt(++y, 40);
-		addstrAlt(line_two);
+		mvaddstrAlt(++y,  40, line_two);
 	}
 }
 /* hostage tending */
@@ -224,8 +235,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(8, 1);
-					addstrAlt(cr->name, gamelog);
+					mvaddstrAlt(8,  1, cr->name, gamelog);
 					addstrAlt(" has escaped!", gamelog);
 					gamelog.nextMessage();
 					location[cr->location]->siege.timeuntillocated = 3;
@@ -250,8 +260,7 @@ void tendhostage(Creature *cr, char &clearformess)
 	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveZeroZero();
-	addstrAlt("The Education of ");
+	mvaddstrAlt(0,  0, "The Education of ");
 	addstrAlt(cr->name);
 	addstrAlt(": Day ");
 	addstrAlt(cr->joindays);
@@ -314,25 +323,24 @@ void tendhostage(Creature *cr, char &clearformess)
 			}
 			if (techniques[TECHNIQUE_KILL])set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			else set_color_easy(techniques[TECHNIQUE_TALK] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			moveAlt(y++, 0); addstrAlt("A - ");
+			mvaddstrAlt(y++,  0, "A - ");
 			if (!techniques[TECHNIQUE_TALK]) addstrAlt("No Verbal Contact     ");
 			else addstrAlt("Attempt to Convert");
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_RESTRAIN] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			moveAlt(y++, 0); addstrAlt("B - ");
+			mvaddstrAlt(y++,  0, "B - ");
 			if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt("No ");
 			addstrAlt("Physical Restraints   ");
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_BEAT] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			moveAlt(y++, 0); addstrAlt("C - ");
+			mvaddstrAlt(y++,  0, "C - ");
 			if (!techniques[TECHNIQUE_BEAT]) addstrAlt("Not ");
 			addstrAlt("Violently Beaten    ");
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_PROPS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			moveAlt(y, 0); addstrAlt("D - ");
+			mvaddstrAlt(y,  0, "D - ");
 			if (!techniques[TECHNIQUE_PROPS])addstrAlt("No ");
 			addstrAlt("Expensive Props     ");
-			moveAlt(y++, 27);
-			addstrAlt("($250)");
+			mvaddstrAlt(y++,  27, "($250)");
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_DRUGS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			moveAlt(y, 0); addstrAlt("E - ");
+			mvaddstrAlt(y,  0, "E - ");
 			if (!techniques[TECHNIQUE_DRUGS])addstrAlt("No ");
 			addstrAlt("Hallucinogenic Drugs    ");
 			moveAlt(y, 28); y += 2;
@@ -341,7 +349,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0); y += 2; addstrAlt("K - Kill the Hostage");
 			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y++, 0); addstrAlt("Press Enter to Confirm the Plan");
+			mvaddstrAlt(y++,  0, "Press Enter to Confirm the Plan");
 			show_interrogation_sidebar(cr, a);
 			int c = getkey();
 			if (c >= 'a'&&c <= 'e') techniques[c - 'a'] = !techniques[c - 'a'];
@@ -358,8 +366,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			moveZeroZero();
-			addstrAlt("The Final Education of ", gamelog);
+			mvaddstrAlt(0,  0, "The Final Education of ", gamelog);
 			addstrAlt(cr->name, gamelog);
 			addstrAlt(": Day ", gamelog);
 			addstrAlt(cr->joindays, gamelog);
@@ -378,8 +385,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				set_color_easy(MAGENTA_ON_BLACK);
 				cr->die();
 				stat_kills++;
-				moveAlt(y++, 0);
-				addstrAlt(a->name, gamelog);
+				mvaddstrAlt(y++,  0, a->name, gamelog);
 				addstrAlt(" executes ", gamelog);
 				addstrAlt(cr->name, gamelog);
 				addstrAlt(" by ", gamelog);
@@ -390,19 +396,16 @@ void tendhostage(Creature *cr, char &clearformess)
 				{
 					gamelog.newline();
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					moveAlt(y++, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(y++,  0, a->name, gamelog);
 					addstrAlt(feels_sick_and, gamelog);
 					a->adjust_attribute(ATTRIBUTE_HEART, -1);
-					moveAlt(y++, 0);
-					addstrAlt(pickrandom(feels_sick), gamelog);
+					mvaddstrAlt(y++,  0, pickrandom(feels_sick), gamelog);
 				}
 				else if (!LCSrandom(3))
 				{
 					gamelog.newline();
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
-					moveAlt(y++, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(y++,  0, a->name, gamelog);
 					addstrAlt(" grows colder.", gamelog);
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				}
@@ -411,10 +414,8 @@ void tendhostage(Creature *cr, char &clearformess)
 			else
 			{
 				set_color_easy(YELLOW_ON_BLACK);
-				moveAlt(y++, 0);
-				addstrAlt("There is no one able to get up the nerve to ", gamelog);
-				moveAlt(y++, 0);
-				addstrAlt("execute ", gamelog);
+				mvaddstrAlt(y++,  0, "There is no one able to get up the nerve to ", gamelog);
+				mvaddstrAlt(y++,  0, "execute ", gamelog);
 				addstrAlt(cr->name, gamelog);
 				addstrAlt(" in cold blood.", gamelog);
 				gamelog.nextMessage();
@@ -428,8 +429,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			//show_interrogation_sidebar(cr,a);
 			getkey();
 			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(24, 0);
-			addstrAlt("Press any key to reflect on this.");
+			mvaddstrAlt(24,  0, "Press any key to reflect on this.");
 			getkey();
 			if (!cr->alive)
 			{
@@ -445,8 +445,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		}
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveZeroZero();
-		addstrAlt("The Education of ", gamelog);
+		mvaddstrAlt(0,  0, "The Education of ", gamelog);
 		addstrAlt(cr->name, gamelog);
 		addstrAlt(": Day ", gamelog);
 		addstrAlt(cr->joindays, gamelog);
@@ -456,24 +455,21 @@ void tendhostage(Creature *cr, char &clearformess)
 		if (techniques[TECHNIQUE_RESTRAIN]) // Restraint
 		{
 			addstrAlt(" is tied hands and feet to a metal chair", gamelog);
-			moveAlt(y++, 0);
-			addstrAlt("in the middle of a back room.", gamelog);
+			mvaddstrAlt(y++,  0, "in the middle of a back room.", gamelog);
 			gamelog.newline();
 			attack += 5;
 		}
 		else
 		{
 			addstrAlt(" is locked in a back room ", gamelog);
-			moveAlt(y++, 0);
-			addstrAlt("converted into a makeshift cell.", gamelog);
+			mvaddstrAlt(y++,  0, "converted into a makeshift cell.", gamelog);
 			gamelog.newline();
 		}
 		//show_interrogation_sidebar(cr,a);
 		getkey();
 		if (techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
 		{
-			moveAlt(++y, 0);
-			addstrAlt("It is subjected to dangerous hallucinogens.", gamelog);
+			mvaddstrAlt(++y,  0, "It is subjected to dangerous hallucinogens.", gamelog);
 			gamelog.newline();
 			int drugbonus = 10 + a->get_armor().get_interrogation_drugbonus(); // we won't apply this JUST yet
 																			   //Possible permanent health damage
@@ -599,8 +595,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				addstrAlt(singleSpace, gamelog);
 				addstrAlt(pickrandom(low_heart_torture_props), gamelog);
 				addstrAlt(commaSpace, gamelog);
-				moveAlt(++y, 0);
-				addstrAlt("screaming \"", gamelog);
+				mvaddstrAlt(++y,  0, "screaming \"", gamelog);
 				addstrAlt(pickrandom(screaming), gamelog);
 				addstrAlt("! ", gamelog);
 				addstrAlt(pickrandom(screaming), gamelog);
@@ -635,8 +630,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					addstrAlt(pickrandom(beat_with_props), gamelog);
 				}
 				addstrAlt(commaSpace, gamelog);
-				moveAlt(++y, 0);
-				addstrAlt(pickrandom(words_meaning_screaming), gamelog);
+				mvaddstrAlt(++y,  0, pickrandom(words_meaning_screaming), gamelog);
 				for (int i = 0; i < 3; i++)
 				{
 					addstrAlt(pickrandom(words_to_scream), gamelog);
@@ -653,8 +647,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			{
 				if (cr->skill_check(SKILL_RELIGION, forceroll))
 				{
-					moveAlt(y++, 0);
-					addstrAlt(cr->name, gamelog);
+					mvaddstrAlt(y++,  0, cr->name, gamelog);
 					if (!techniques[TECHNIQUE_DRUGS])
 					{
 						addstrAlt(singleSpace, gamelog);
@@ -673,8 +666,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					cr->get_attribute(ATTRIBUTE_HEART, true) * 3 +
 					cr->get_attribute(ATTRIBUTE_HEALTH, true) * 3)
 				{
-					moveAlt(y++, 0);
-					addstrAlt(cr->name, gamelog);
+					mvaddstrAlt(y++,  0, cr->name, gamelog);
 					switch (LCSrandom(4))
 					{
 					case 0:addstrAlt(" screams helplessly for ", gamelog);
@@ -705,8 +697,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					{
 						//show_interrogation_sidebar(cr,a);
 						getkey();
-						moveAlt(y++, 0);
-						addstrAlt(a->name, gamelog);
+						mvaddstrAlt(y++,  0, a->name, gamelog);
 						addstrAlt(" beats information out of the pathetic thing.", gamelog);
 						gamelog.newline();
 						moveAlt(y++, 0);
@@ -726,8 +717,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				}
 				else
 				{
-					moveAlt(y++, 0);
-					addstrAlt(cr->name, gamelog);
+					mvaddstrAlt(y++,  0, cr->name, gamelog);
 					addstrAlt(" seems to be getting the message.", gamelog);
 					gamelog.newline();
 					if (cr->juice > 0) if ((cr->juice -= forceroll) < 0) cr->juice = 0;
@@ -761,8 +751,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			}
 			else
 			{
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				addstrAlt(" takes it well.", gamelog);
 				gamelog.newline();
 			}
@@ -773,19 +762,16 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 				{
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					moveAlt(y++, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(y++,  0, a->name, gamelog);
 					addstrAlt(feels_sick_and, gamelog);
 					a->adjust_attribute(ATTRIBUTE_HEART, -1);
-					moveAlt(y++, 0);
-					addstrAlt(pickrandom(feels_sick), gamelog);
+					mvaddstrAlt(y++,  0, pickrandom(feels_sick), gamelog);
 					gamelog.newline();
 				}
 				else if (!LCSrandom(3))
 				{
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
-					moveAlt(y++, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(y++,  0, a->name, gamelog);
 					addstrAlt(" grows colder.", gamelog);
 					gamelog.newline();
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
@@ -799,8 +785,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			float rapport_temp = rapport[a->id];
 			if (!techniques[TECHNIQUE_RESTRAIN])attack += 5;
 			attack += int(rapport[a->id] * 3);
-			moveAlt((++y)++, 0);
-			addstrAlt(a->name, gamelog);
+			mvaddstrAlt((++y)++,  0, a->name, gamelog);
 			if (techniques[TECHNIQUE_PROPS])//props
 			{
 				attack += 10;
@@ -914,8 +899,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			getkey();
 			if (cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
 			{
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				int which_smarter = LCSrandom(smarter_than_you.size() + smarter_than_you_one_line.size());
 				if (which_smarter < smarter_than_you.size()) {
 					addstrAlt(smarter_than_you[which_smarter][0], gamelog);
@@ -930,8 +914,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			//just alienate them and make them cynical
 			else if (techniques[TECHNIQUE_BEAT] || rapport_temp < -2)
 			{
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				int which_hatred = LCSrandom(develops_hatred.size() + develops_hatred_one_line.size());
 				if (which_hatred < develops_hatred.size())
 				{
@@ -947,8 +930,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				{
 					//show_interrogation_sidebar(cr,a);
 					getkey();
-					moveAlt(y++, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(y++,  0, a->name, gamelog);
 					int which_compassion = LCSrandom(interrogater_shows_compassion.size() + interrogater_shows_compassion_one_line.size());
 					if (which_compassion < interrogater_shows_compassion.size()) {
 						addstrAlt(interrogater_shows_compassion[which_compassion][0], gamelog);
@@ -964,8 +946,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					{
 						//show_interrogation_sidebar(cr,a);
 						getkey();
-						moveAlt(y++, 0);
-						addstrAlt(cr->name, gamelog);
+						mvaddstrAlt(y++,  0, cr->name, gamelog);
 						int which_cling = LCSrandom(cling_to_interrogater.size() + clinging_one_line.size());
 						if (which_cling < cling_to_interrogater.size()) {
 							addstrAlt(cling_to_interrogater[which_cling][0], gamelog);
@@ -1053,14 +1034,12 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (cr->get_attribute(ATTRIBUTE_HEART, true) > cr->get_attribute(ATTRIBUTE_WISDOM, true) + 4) turned = 1;
 				//2) They were befriended
 				if (rapport[a->id]>4) turned = 1;
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				addstrAlt(pickrandom(partial_conversion), gamelog);
 				gamelog.newline();
 				if (location[cr->worklocation]->mapped == 0 && !LCSrandom(5))
 				{
-					moveAlt((++y)++, 0);
-					addstrAlt(cr->name, gamelog);
+					mvaddstrAlt((++y)++,  0, cr->name, gamelog);
 					addstrAlt(" reveals details about the ", gamelog);
 					addstrAlt(location[cr->worklocation]->name, gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -1086,8 +1065,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			{
 				//Not completely unproductive; builds rapport
 				rapport[a->id] += 0.2f;
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				addstrAlt(" holds firm.", gamelog);
 				gamelog.newline();
 			}
@@ -1099,16 +1077,14 @@ void tendhostage(Creature *cr, char &clearformess)
 				//liberal more
 				rapport[a->id] += 0.5f;
 				a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
-				moveAlt(y++, 0);
-				addstrAlt(cr->name, gamelog);
+				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				addstrAlt(" turns the tables on ", gamelog);
 				addstrAlt(a->name, gamelog);
 				addstrAlt("!", gamelog);
 				gamelog.newline();
 				//show_interrogation_sidebar(cr,a);
 				getkey();
-				moveAlt(y++, 0);
-				addstrAlt(a->name, gamelog);
+				mvaddstrAlt(y++,  0, a->name, gamelog);
 				addstrAlt(" has been tainted with wisdom!", gamelog);
 				gamelog.newline();
 			}
@@ -1160,9 +1136,8 @@ void tendhostage(Creature *cr, char &clearformess)
 			delete intr;
 			cr->die();
 			stat_kills++;
-			moveAlt(++y, 0);
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(cr->name, gamelog);
+			mvaddstrAlt(++y,  0, cr->name, gamelog);
 			addstrAlt(" is dead", gamelog);
 			if (a)
 			{
@@ -1181,19 +1156,16 @@ void tendhostage(Creature *cr, char &clearformess)
 				{
 					gamelog.newline();
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					moveAlt(++y, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(++y,  0, a->name, gamelog);
 					addstrAlt(feels_sick_and, gamelog);
 					a->adjust_attribute(ATTRIBUTE_HEART, -1);
-					moveAlt(++y, 0);
-					addstrAlt(pickrandom(feels_sick), gamelog);
+					mvaddstrAlt(++y,  0, pickrandom(feels_sick), gamelog);
 				}
 				else if (!LCSrandom(3))
 				{
 					gamelog.newline();
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
-					moveAlt(++y, 0);
-					addstrAlt(a->name, gamelog);
+					mvaddstrAlt(++y,  0, a->name, gamelog);
 					addstrAlt(" grows colder.", gamelog);
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				}
@@ -1211,8 +1183,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		//delete interrogation information
 		delete intr;
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(++y, 0);
-		addstrAlt("The Automaton has been Enlightened!   Your Liberal ranks are swelling!", gamelog);
+		mvaddstrAlt(++y,  0, "The Automaton has been Enlightened!   Your Liberal ranks are swelling!", gamelog);
 		if (cr->get_attribute(ATTRIBUTE_HEART, true) > 7 &&
 			cr->get_attribute(ATTRIBUTE_WISDOM, true) > 2 &&
 			!LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
@@ -1235,8 +1206,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		if (location[cr->worklocation]->mapped == 0 || location[cr->worklocation]->hidden == 1)
 		{
 			gamelog.newline();
-			moveAlt(y, 0);
-			addstrAlt(cr->name, gamelog);
+			mvaddstrAlt(y,  0, cr->name, gamelog);
 			addstrAlt(" reveals details about the ", gamelog);
 			addstrAlt(location[cr->worklocation]->name, gamelog);
 			addstrAlt(singleDot, gamelog);
@@ -1276,7 +1246,6 @@ void tendhostage(Creature *cr, char &clearformess)
 	}
 	gamelog.nextMessage();
 	set_color_easy(WHITE_ON_BLACK);
-	moveAlt(24, 0);
-	addstrAlt("Press any key to reflect on this.");
+	mvaddstrAlt(24,  0, "Press any key to reflect on this.");
 	getkey();
 }

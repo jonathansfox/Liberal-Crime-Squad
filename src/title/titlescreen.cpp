@@ -53,93 +53,133 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "title/titlescreen.h"
+
+void mode_base();
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/getnames.h"
+// for enter_name
+
+#include "define_includes.h"
+//for PACKAGE_VERSION
+
+#include "title/highscore.h"
+//for void viewhighscores
+
+#include "title/newgame.h"
+//for void setup_newgame();
+
+#include "title/saveload.h"
+//for void savegame(const string& filename);
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+/* end the game and clean up */
+void end_game(int err = EXIT_SUCCESS);
+
 extern short mode;
 extern MusicClass music;
  vector<vector<string>> real_quote;
-char str[100];
+//char str[100];
 extern string spaceDashSpace;
+extern string savefile_name;
+extern short interface_pgup;
+extern short interface_pgdn;
+string deleteSave;
+string chooseSave;
+string titleScreenLine;
+string newGame;
+string pressToSelectSave;
+string pressToDeleteSave;
+string vToSwitchXToQuit;
+
+string areYouSureDelte;
+string questionYSlashN;
+string pressMtoTurnOffMusic;
+string pressMtoTurnOnMusic;
+
+string inWhatWorld;
+string enterNameForSave;
+string pleaseEnterName;
+string prettyPlease;
+string justEnterName;
+
+string liberalCrimeSquad;
+string inspiredByOubliette;
+string copyrightTarn;
+string bayTwelveProductions;
+string lcsHyperlink;
+string vChar;
+string maintainedByOpenSource;
+string kingDrakeHyperlink;
+string lcsForumHyperlink;
+string lcsWikiHyperlink;
+string pressESCToQuit;
+string pressAnyKeyToPursue;
+string plusChar;
+
+string dotDat;
+
 void title() {
 	//title screen
 
 	eraseAlt();
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	strcpy(str, "Liberal Crime Squad");
-	moveAlt(2, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
+	mvaddstrCenter(2, liberalCrimeSquad);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	strcpy(str, "Inspired by the 1983 version of Oubliette");
-	moveAlt(4, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
+	mvaddstrCenter(4, inspiredByOubliette);
 	vector<string> quote = pickrandom(real_quote);
-	strcpy(str, quote[0]);
-	moveAlt(6, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, quote[1]);
-	moveAlt(7, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, quote[2]);
-	moveAlt(8, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, quote[3]);
-	moveAlt(9, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "v3.9 Copyright (C) 2002-4, Tarn Adams");
-	moveAlt(11, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "A Bay 12 Games Production");
-	moveAlt(12, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "http://bay12games.com/lcs/");
-	moveAlt(13, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "v");
-	strcat(str, PACKAGE_VERSION);
-	strcat(str, " Maintained by the Open Source Community");
-	moveAlt(15, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "https://github.com/King-Drake/Liberal-Crime-Squad");
-	moveAlt(16, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
+	mvaddstrCenter(6, quote[0]);
+	mvaddstrCenter(7, quote[1]);
+	mvaddstrCenter(8, quote[2]);
+	mvaddstrCenter(9, quote[3]);
+	mvaddstrCenter(11, copyrightTarn);
+	mvaddstrCenter(12, bayTwelveProductions);
+	mvaddstrCenter(13, lcsHyperlink);
+	mvaddstrCenter(15, vChar + PACKAGE_VERSION + maintainedByOpenSource);
+	mvaddstrCenter(16, kingDrakeHyperlink);
 
 
 
-	strcpy(str, "http://www.bay12games.com/forum/index.php?board=3.0");
-	moveAlt(17, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "http://lcs.wikidot.com/");
-	moveAlt(18, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "Press ESC now to quit. Quitting later causes your progress to be saved.");
-	moveAlt(20, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	strcpy(str, "Press any other key to pursue your Liberal Agenda!");
-	moveAlt(22, 39 - ((len(str) - 1) >> 1));
-	addstrAlt(str);
-	moveAlt(24, 79);
-	addstrAlt("+");
+	mvaddstrCenter(17, lcsForumHyperlink);
+	mvaddstrCenter(18, lcsWikiHyperlink);
+	mvaddstrCenter(20, pressESCToQuit);
+	mvaddstrCenter(22, pressAnyKeyToPursue);
+	mvaddstrAlt(24, 79, plusChar);
 }
+
+
 void choose_savefile_name()
 {
 
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveZeroZero();
-	addstrAlt("In what world will you pursue your Liberal Agenda?");
+	mvaddstrAlt(0,  0, inWhatWorld);
 	set_color_easy(WHITE_ON_BLACK);
-	moveOneZero();
-	addstrAlt("Enter a name for the save file.");
+	mvaddstrAlt(1,  0, enterNameForSave);
 	char savefile_temp[21];
 	enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
 	bool justEnter = false;
 	bool enterDamn = false;
 	do {
 		if (strcmp(savefile_temp, "") != 0) {
-			savefile_name = string(savefile_temp) + ".dat";
+			savefile_name = string(savefile_temp) + dotDat;
 			justEnter = false;
 
 		}
@@ -147,28 +187,30 @@ void choose_savefile_name()
 
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			moveZeroZero();
-			addstrAlt("In what world will you pursue your Liberal Agenda?");
-			set_color_easy(WHITE_ON_BLACK);
-			moveOneZero();
+			mvaddstrAlt(0,  0, inWhatWorld);
+			string enterTheName;
 			if (enterDamn) {
-				addstrAlt("Just enter a [darn] name for the save file.");
+				enterTheName = (justEnterName);
 			}
 			else if (justEnter) {
-				addstrAlt("Pretty please enter a name for the save file.");
+				enterTheName = (prettyPlease);
 				enterDamn = true;
 
 			}
 			else {
-				addstrAlt("Please enter a name for the save file.");
+				enterTheName = (pleaseEnterName);
 
 			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(1, 0, enterTheName);
+
 			enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
 			justEnter = true;
 
 		}
 	} while (justEnter);
 }
+
 void mode_title()
 {
 	title();
@@ -182,11 +224,14 @@ void mode_title()
 
 		}
 		if (c == 'm') music.enableIf(!music.isEnabled());
-		if (music.isEnabled()) strcpy(str, "Press M to turn off the Music. Press H to view your Liberal High Score.");
-		else strcpy(str, "Press M to turn on some Music. Press H to view your Liberal High Score.");
-		moveAlt(22, 39 - ((len(str) - 1) >> 1));
+		string str;
+		if (music.isEnabled()) {
+			(str = pressMtoTurnOffMusic); 
+		} else { 
+			(str = pressMtoTurnOnMusic); 
+		}
 
-		addstrAlt(str);
+		mvaddstrCenter(22, str);
 		if (c == ESC || c == 'x') end_game();
 		c = getkey();
 	} while (c == 'm' || c == 'h' || c == 'x' || c == ESC);
@@ -215,8 +260,7 @@ void mode_title()
 
 			{
 				set_color_easy(YELLOW_ON_RED);
-				moveZeroZero();
-				addstrAlt("Delete a Save File");
+				mvaddstrAlt(0,  0, deleteSave);
 
 
 
@@ -224,37 +268,30 @@ void mode_title()
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveZeroZero();
-				addstrAlt("Choose a Save File");
+				mvaddstrAlt(0,  0, chooseSave);
 
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			moveOneZero();
-			addstrAlt("컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+			mvaddstrAlt(1,  0, titleScreenLine);
 			for (p = page * 19, y = 2; p < savefiles.size() && p < page * 19 + 19; p++, y++)
 
 			{
 				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 
 
-				moveAlt(y, 0);
-				addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+				mvaddchAlt(y, 0, y + 'A' - 2);
+				addstrAlt(spaceDashSpace);
 				const string &strtemp = savefiles[y - 2];
-				addstrAlt(strtemp.substr(0, strtemp.find(".dat")));
+				addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
 
 
 
 			}
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt("NEW GAME");
+			mvaddstrAlt(y, 0, (char (y + 'A' - 2)) + spaceDashSpace + newGame);
+
 			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(22, 0);
-			if (!to_delete) addstrAlt("Press a Letter to Select a Save File");
-			else addstrAlt("Press a Letter to Delete a Save File");
-			addstrAlt(", V to switch, or X to quit");
-			moveAlt(23, 0);
-			addpagestr();
+			mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
+			mvaddstrAlt(23, 0, addpagestr());
 			c = getkey();
 			//PAGE UP
 			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
@@ -284,10 +321,7 @@ void mode_title()
 
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					strcpy(str, "Are you sure you want to delete " + savefiles[p] + "? (y/n)");
-					moveAlt(10, 39 - ((len(str) - 1) >> 1));
-
-					addstrAlt(str);
+					mvaddstrCenter(10, areYouSureDelte + savefiles[p] + questionYSlashN);
 					c = getkey();
 
 
@@ -298,7 +332,6 @@ void mode_title()
 
 					}
 					continue;
-
 
 				}
 			}

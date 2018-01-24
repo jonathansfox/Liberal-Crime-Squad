@@ -1,6 +1,13 @@
 
 #include <includes.h>
 
+#include "items/money.h"
+//own header
+
+#include "common/stringconversion.h"
+//for string conversion
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

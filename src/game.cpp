@@ -62,12 +62,75 @@
 
 #include <includes.h>
 
+#include "common/interval.h"
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "news/news.h"
+// for loadgraphics
+
+#include "creature/creaturetype.h"
+
+#include "items/loottype.h"
+
+#include "creature/augmenttype.h"
+
+#include "configfile.h"
+// needed for something contained in sitemap.h
+
+#include "sitemode/sitemap.h"
+
+#include "log/log.h"
+//for the gamelog
+
+#include "cursesmovie.h"
+//for cursesmoviest
+
+#include "common/consolesupport.h"
+// for init_console
+
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/getnames.h"
+// for std::string cityname()
+
+#include "common/translateid.h"
+// for  getarmortype 
+
+#include "define_includes.h"
+//for PACKAGE_VERSION
+
+#include "title/initfile.h"
+//for void loadinitfile();
+
+#include "title/titlescreen.h"
+//for void mode_title();
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
 #include <ctime>
+
+/* end the game and clean up */
+void end_game(int err = EXIT_SUCCESS);
+
+string failedToLoadSitemaps;
+string debugCode;
+string activated;
+string failedToLoad;
+string exclamationPoint;
+string defaultMissingForMask;
+string defaultUnknownForMask;
+
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
 CursesMoviest movie;
@@ -190,7 +253,12 @@ vector<datest *> date;
 vector<recruitst *> recruit;
 vector<newsstoryst *> newsstory;
 newsstoryst *sitestory=NULL;
-#define SCORENUM 5
+struct highscorest
+{
+	char valid, endtype, slogan[SLOGAN_LEN];
+	int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
+};
+
 highscorest score[SCORENUM];
 int yourscore=-1;
 #ifdef WIN32
@@ -240,6 +308,11 @@ bool ZEROMORAL = false;
 bool MORERANDOM = false;
 // Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
 bool ALLOWSTALIN = false;
+// Store savefiles in plaintext, making it human readable and editable
+bool VERBOSESAVEFILE = false;
+// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
+// Remove almost all automatically generated comments from verbose savefiles
+bool NOVERBOSECOMMENTS = false;
 
 struct pointerAndString {
 	bool *super_collection;
@@ -247,7 +320,8 @@ struct pointerAndString {
 	pointerAndString(bool *super_, string file_) : fileName(file_), super_collection(super_) {}
 
 };
-extern vector<pointerAndString> debug_defines;
+
+extern vector<pointerAndString> debug_defines;
 
 void mainOne();
 void mainTwo();
@@ -308,23 +382,23 @@ void mainFour() {
 	//begin the game loop
 	keypad(stdscr, TRUE);
 	raw_output(TRUE);
-	//addstrAlt("Loading Graphics... ");
+	//Loading Graphics...
 	//getkey();
 	loadgraphics();
-	//addstrAlt("Loading Init File Options... ");
+	//Loading Init File Options...
 	//getkey();
 	loadinitfile();
-	//addstrAlt("Loading sitemaps.txt... ");
+	//Loading sitemaps.txt...
 	//getkey();
 	oldMapMode = !readConfigFile("sitemaps.txt"); // load site map data
 	if (oldMapMode)
 	{
-		addstrAlt("Failed to load sitemaps.txt! Reverting to old map mode.", gamelog);
+		addstrAlt(failedToLoadSitemaps, gamelog);
 		gamelog.nextMessage();
 		getkey();
 	}
-	//moveAlt(1,0);
-	//addstrAlt("Setting initial game data... ");
+
+	//Setting initial game data...
 	//getkey();
 	////
 }
@@ -407,8 +481,8 @@ bool initialize_txt() {
 			loaded &= populate_from_txt(*f.collection, f.fileName);
 		}
 	}
-	initialize_incomplete_txt();
-	initialize_more_incomplete_txt();
+	loaded &= initialize_incomplete_txt();
+	loaded &= initialize_more_incomplete_txt();
 	return loaded;
 }
 extern char artdir[];
@@ -424,7 +498,6 @@ void initialize_debug_defines() {
 	}
 	else {
 		clearAlt();
-		moveZeroZero();
 		int y = 0;
 		while (!txtFile.eof()) {
 			txtFile.getline(currentLine, 800);
@@ -433,8 +506,7 @@ void initialize_debug_defines() {
 				for (pointerAndString p : debug_defines) {
 					if (currentLine == p.fileName) {
 						*(p.super_collection) = true;
-						addstrAlt("debug code " + p.fileName + " activated");
-						moveAlt(++y, 0);
+						mvaddstrAlt(y++, 0, debugCode + p.fileName + activated);
 					}
 				}
 			}
@@ -454,7 +526,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string fileName, c
 	char currentLine[line_length];
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		cout << "Failed to load " + fileName + "!" << endl;
+		cout << failedToLoad + fileName + exclamationPoint << endl;
 		getkey();
 	}
 	else {
@@ -488,7 +560,7 @@ bool populate_from_txt(vector<string> & types, const string fileName)
 	char currentLine[line_length];
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		cout << "Failed to load " + fileName + "!" << endl;
+		cout << failedToLoad + fileName + exclamationPoint << endl;
 		getkey();
 	}
 	else {
@@ -570,9 +642,9 @@ int mainSeven(bool xml_loaded_ok) {
 	xml_loaded_ok &= populate_from_xml(creaturetype, "creatures.xml", xmllog);
 	xml_loaded_ok &= populate_from_xml(augmenttype, "augmentations.xml", xmllog);
 	if (!xml_loaded_ok) end_game(EXIT_FAILURE);
-	//addstrAlt("Attempting to load saved game... ");
+	//Attempting to load saved game...
 	//getkey();
-	//addstrAlt("Setup complete!");
+	//Setup complete!
 	//getkey();
 	clearAlt();
 	mode_title();
@@ -586,7 +658,7 @@ bool populate_from_xml(vector<Type*>& types, string file, Log& log)
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ // File is missing or not valid XML.
-		addstrAlt("Failed to load " + file + "!", log);
+		addstrAlt(failedToLoad + file + exclamationPoint, log);
 		getkey();
 		// Will cause abort here or else if file is missing all unrecognized types
 		// loaded from a saved game will be deleted. Also, you probably don't want
@@ -606,6 +678,10 @@ int main(int argc, char* argv[])
 	mainTwo();
 	initialize_debug_defines();
 	bool xml_loaded_ok = initialize_txt();
+	if (!xml_loaded_ok) {
+		mvaddstrAlt(0,0,"Unspecified error with custom text");
+		getkey();
+	}
 	mainThree();
 	mainFour();
 	mainFive();
@@ -647,7 +723,7 @@ bool populate_from_txt(vector< vector<string> >& types, string fileName, int dim
 	char currentLine[90];
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		addstr("Failed to load " + fileName + "!", log);
+		addstrAlt(failedToLoad + fileName + exclamationPoint, log);
 		cout << endl;
 		getkey();
 		return false;
@@ -682,6 +758,7 @@ bool populate_from_txt(vector< vector<string> >& types, string fileName, int dim
 			types.push_back(line);
 		}
 	}
+	txtFile.close();
 	return true;
 	}
 bool populate_from_txt(vector<string> & types, string fileName, Log& log)
@@ -690,11 +767,11 @@ bool populate_from_txt(vector<string> & types, string fileName, Log& log)
 	char currentLine[90];
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		addstr("Failed to load " + fileName + "!", log);
+		addstrAlt(failedToLoad + fileName + exclamationPoint, log);
 		getkey();
 		return false;
 	}
-	cout << endl;
+	//cout << endl;
 	while (!txtFile.eof()) {
 		txtFile.getline(currentLine, 90, '\n');
 		/*if (!currentLine[0]) {
@@ -708,6 +785,7 @@ bool populate_from_txt(vector<string> & types, string fileName, Log& log)
 			types.push_back(currentLine);
 		}
 	}
+	txtFile.close();
 	return true;
 }
 bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
@@ -715,7 +793,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
    CMarkup xml;
    if(!xml.Load(string(artdir)+file))
    { //File is missing or not valid XML.
-      addstr("Failed to load "+file+"!",log);
+	   addstrAlt(failedToLoad+file+exclamationPoint,log);
       getkey();
       return false; //Abort.
    }
@@ -725,13 +803,13 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
    if(xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
    else
    {
-      addstr("Default missing for masks!",log);
+	   addstrAlt(defaultMissingForMask,log);
       getkey();
       return false; //Abort.
    }
    if(defaultindex==-1)
    {
-      addstr("Default for masks is not a known armor type!",log);
+	   addstrAlt(defaultUnknownForMask,log);
       getkey();
       return false; //Abort.
    }

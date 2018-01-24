@@ -1,6 +1,6 @@
 #ifndef LOCATIONS_H_INCLUDED
-#define LOCATIONS_H_INCLUDED
-#include "common.h"
+#define LOCATIONS_H_INCLUDED0
+//#include "common.h"
 enum SiteTypes
 {
    SITE_CITY_SEATTLE, // first are the cities
@@ -59,29 +59,29 @@ enum SiteTypes
    SITE_GOVERNMENT_WHITE_HOUSE,
    SITENUM // this comes last
 };
-#define SITEBLOCK_EXIT BIT1
-#define SITEBLOCK_BLOCK BIT2
-#define SITEBLOCK_DOOR BIT3
-#define SITEBLOCK_KNOWN BIT4
-#define SITEBLOCK_LOOT BIT5
-#define SITEBLOCK_LOCKED BIT6
-#define SITEBLOCK_KLOCK BIT7
-#define SITEBLOCK_CLOCK BIT8
-#define SITEBLOCK_RESTRICTED BIT9
-#define SITEBLOCK_BLOODY BIT10
-#define SITEBLOCK_BLOODY2 BIT11
-#define SITEBLOCK_GRASSY BIT12
-#define SITEBLOCK_OUTDOOR BIT13
-#define SITEBLOCK_DEBRIS BIT14
-#define SITEBLOCK_GRAFFITI BIT15
-#define SITEBLOCK_GRAFFITI_CCS BIT16
-#define SITEBLOCK_GRAFFITI_OTHER BIT17
-#define SITEBLOCK_FIRE_START BIT18
-#define SITEBLOCK_FIRE_PEAK BIT19
-#define SITEBLOCK_FIRE_END BIT20
-#define SITEBLOCK_CHAINLINK BIT21
-#define SITEBLOCK_ALARMED BIT22
-#define SITEBLOCK_METAL BIT23
+const int SITEBLOCK_EXIT = BIT1;
+const int SITEBLOCK_BLOCK = BIT2;
+const int SITEBLOCK_DOOR = BIT3;
+const int SITEBLOCK_KNOWN = BIT4;
+const int SITEBLOCK_LOOT = BIT5;
+const int SITEBLOCK_LOCKED = BIT6;
+const int SITEBLOCK_KLOCK = BIT7;
+const int SITEBLOCK_CLOCK = BIT8;
+const int SITEBLOCK_RESTRICTED = BIT9;
+const int SITEBLOCK_BLOODY = BIT10;
+const int SITEBLOCK_BLOODY2 = BIT11;
+const int SITEBLOCK_GRASSY = BIT12;
+const int SITEBLOCK_OUTDOOR = BIT13;
+const int SITEBLOCK_DEBRIS = BIT14;
+const int SITEBLOCK_GRAFFITI = BIT15;
+const int SITEBLOCK_GRAFFITI_CCS = BIT16;
+const int SITEBLOCK_GRAFFITI_OTHER = BIT17;
+const int SITEBLOCK_FIRE_START = BIT18;
+const int SITEBLOCK_FIRE_PEAK = BIT19;
+const int SITEBLOCK_FIRE_END = BIT20;
+const int SITEBLOCK_CHAINLINK = BIT21;
+const int SITEBLOCK_ALARMED = BIT22;
+const int SITEBLOCK_METAL = BIT23;
 enum SpecialBlocks
 {
    SPECIAL_NONE=-1,
@@ -129,10 +129,10 @@ enum SpecialBlocks
    SPECIAL_OVAL_OFFICE_SE,
    SPECIALNUM
 };
-#define SIEGEFLAG_UNIT BIT1
-#define SIEGEFLAG_TRAP BIT2
-#define SIEGEFLAG_HEAVYUNIT BIT3
-#define SIEGEFLAG_UNIT_DAMAGED BIT4
+const int SIEGEFLAG_UNIT = BIT1;
+const int SIEGEFLAG_TRAP = BIT2;
+const int SIEGEFLAG_HEAVYUNIT = BIT3;
+const int SIEGEFLAG_UNIT_DAMAGED = BIT4;
 enum SiegeTypes
 {
    SIEGE_POLICE,
@@ -177,16 +177,16 @@ struct sitechangest
    sitechangest() { }
    sitechangest(char x_, char y_, char z_, int flag_) :  x(x_), y(y_), z(z_), flag(flag_) { }
 };
-#define MAPX 70
-#define MAPY 23
-#define MAPZ 10
-#define COMPOUND_BASIC BIT1
-#define COMPOUND_CAMERAS BIT2
-#define COMPOUND_TANKTRAPS BIT3
-#define COMPOUND_TRAPS BIT4
-#define COMPOUND_GENERATOR BIT5
-#define COMPOUND_PRINTINGPRESS BIT6
-#define COMPOUND_AAGUN BIT7
+const int MAPX = 70;
+const int MAPY = 23;
+const int MAPZ = 10;
+const int COMPOUND_BASIC = BIT1;
+const int COMPOUND_CAMERAS = BIT2;
+const int COMPOUND_TANKTRAPS = BIT3;
+const int COMPOUND_TRAPS = BIT4;
+const int COMPOUND_GENERATOR = BIT5;
+const int COMPOUND_PRINTINGPRESS = BIT6;
+const int COMPOUND_AAGUN = BIT7;
 enum RentingTypes
 {
    RENTING_CCS=-2,
@@ -194,9 +194,9 @@ enum RentingTypes
    RENTING_PERMANENT=0
    // positive values of renting are considered monthly rent prices
 };
-#define CITY_NAMELEN 80
-#define LOCATION_NAMELEN 40
-#define LOCATION_SHORTNAMELEN 20
+const int CITY_NAMELEN = 80;
+const int LOCATION_NAMELEN = 40;
+const int LOCATION_SHORTNAMELEN = 20;
 class Location
 {
 public:
@@ -266,6 +266,7 @@ Location* find_site_in_city(int site_type, int city);
 int find_site_index_in_city(int site_type, int city);
 /* find local versions of these locations */
 int find_site_index_in_same_city(int site_type, int site_index);
+/*
 inline int find_site_index_in_same_city(int site_type, const Creature& cr) { return find_site_index_in_same_city(site_type,cr.location); }
 inline int find_police_station(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION,site_index); }
 inline int find_police_station(const Creature& cr) { return find_police_station(cr.location); }

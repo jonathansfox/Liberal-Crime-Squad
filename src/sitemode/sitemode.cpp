@@ -26,6 +26,66 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+
+#include "basemode/baseactions.h"
+// for orderparty
+
+#include "basemode/reviewmode.h"
+
+#include "sitemode/advance.h"
+
+#include "sitemode/mapspecials.h"
+
+#include "sitemode/stealth.h"
+
+#include "sitemode/miscactions.h"
+
+#include "sitemode/sitedisplay.h"
+
+#include "sitemode/newencounter.h"
+
+#include "sitemode/sitemode.h"
+// own header
+
+#include "items/loottype.h"
+
+#include "items/loot.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addchar
+
+#include "common/commonactions.h"
+// for squadsize
+
+#include "common/translateid.h"
+// for  id_getcar
+
+#include "common/equipment.h"
+//for void equip(vector<Item *>&,int)
+
+#include "daily/daily.h"
+//for char securityable(int type);
+
+#include "daily/siege.h"
+//for void conquertext();
+
+#include "combat/fight.h"
+//for void enemyattack();
+
+#include "combat/haulkidnap.h"
+//for void kidnapattempt();
+
+#include "combat/chase.h"
+//for void makechasers(long sitetype,long sitecrime);
+
+char talk(Creature &a, const int t);
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -69,6 +129,42 @@ extern string spaceParanthesisDollar;
 extern string string_sleeper;
 typedef map<short, string> shortAndString;
 void emptyEncounter();
+extern squadst *activesquad;
+extern short sitealarmtimer;
+extern short siteonfire;
+extern short cursite;
+extern short sitealarm;
+extern int sitecrime;
+extern squadst *activesquad;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern Creature encounter[ENCMAX];
+extern short party_status;
+extern vector<Item *> groundloot;
+//extern vector<Location *> location;
+extern vector<Vehicle *> vehicle;
+extern chaseseqst chaseseq;
+extern short sitealienate;
+extern vector<newsstoryst *> newsstory;
+extern newsstoryst *sitestory;
+extern char showcarprefs;
+extern short lawList[LAWNUM];
+extern short sitealienate;
+extern short offended_corps;
+extern short offended_cia;
+extern short offended_amradio;
+extern short offended_cablenews;
+extern short offended_firemen;
+extern vector<ClipType *> cliptype;
+extern vector<WeaponType *> weapontype;
+extern vector<ArmorType *> armortype;
+extern vector<LootType *> loottype;
+extern string singleSpace;
+extern short fieldskillrate;
+extern char ccs_kills;
+extern UniqueCreatures uniqueCreatures;
 
 void fight_subdued()
 {
@@ -93,21 +189,16 @@ void fight_subdued()
 			pool[p]->wound[w] &= ~WOUND_BLEEDING;
 	clearmessagearea();
 	clearcommandarea();
-	set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-	moveSixteenOne();
-
-	addstrAlt("The police subdue and arrest the squad.", gamelog);
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16,  1, "The police subdue and arrest the squad.", gamelog);
 	gamelog.newline();
 	if (hostagefreed > 0)
 	{
-		moveSeventeenOne();
-
-
 		if (hostagefreed > 1) {
-			addstrAlt("Your hostages are free.", gamelog);
+			mvaddstrAlt(17, 1, "Your hostages are free.", gamelog);
 		}
 		else {
-			addstrAlt("Your hostage is free.", gamelog);
+			mvaddstrAlt(17, 1, "Your hostage is free.", gamelog);
 		}
 	}
 	gamelog.newline();
@@ -329,10 +420,8 @@ void mode_site() {
 		{
 
 			music.play(MUSIC_DEFENSE);
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			moveZeroZero();
-
-			addstrAlt(location[cursite]->getname(-1, true));
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, location[cursite]->getname(-1, true));
 			addstrAlt(", Level ");
 			addstrAlt(locz + 1);
 			addstrAlt(": Escape or Engage");
@@ -341,12 +430,10 @@ void mode_site() {
 		else
 		{
 
-			if (postalarmtimer > 80) set_color(COLOR_RED, COLOR_BLACK, 1);
-			else if (postalarmtimer > 60) set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveZeroZero();
-
-			addstrAlt(location[cursite]->getname(-1, true));
+			if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(0,  0, location[cursite]->getname(-1, true));
 			addstrAlt(", Level ");
 			addstrAlt(locz + 1);
 			if (postalarmtimer > 80)
@@ -407,54 +494,43 @@ void mode_site() {
 		if (partyalive > 0)
 		{
 
-			if (!enemy || !sitealarm)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(9, 1);
-			addstrAlt("W,A,D,X - Move");
-			if (partysize > 1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(11, 1);
-			addstrAlt(change_squad_order);
+			if (!enemy || !sitealarm)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  1, "W,A,D,X - Move");
+			if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11,  1, change_squad_order);
 
-			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(12, 1);
-			addstrAlt(check_status_of_squad_liberal);
+			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(12,  1, check_status_of_squad_liberal);
 
-			if (party_status != -1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(13, 1);
-			addstrAlt(show_squad_liberal_status);
+			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(13,  1, show_squad_liberal_status);
 
 			if (len(groundloot) || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(9, 17);
-			addstrAlt("G - Get Loot");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(10, 17);
-			addstrAlt("N - Options");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 32);
-			addstrAlt("M - Map");
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(10, 32);
-			addstrAlt("S - Wait");
-			if (!enemy || !sitealarm) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(10, 42);
-			addstrAlt("L - Reload");
-			if (enemy) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(13, 42);
-			addstrAlt("K - Kidnap");
-			if (talkers) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(14, 17);
-			addstrAlt("T - Talk");
+				set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9,  17, "G - Get Loot");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(10,  17, "N - Options");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  32, "M - Map");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(10,  32, "S - Wait");
+			if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10,  42, "L - Reload");
+			if (enemy) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(13,  42, "K - Kidnap");
+			if (talkers) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14,  17, "T - Talk");
 			bool graffiti = 0;
 			if (levelmap[locx][locy][locz].special != -1 &&
-				levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
 			else if (!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
 			{
 
@@ -472,29 +548,27 @@ void mode_site() {
 						else if (activesquad->squad[i]->get_weapon().can_graffiti())
 						{
 
-							set_color(COLOR_WHITE, COLOR_BLACK, 0);
+							set_color_easy(WHITE_ON_BLACK);
 							graffiti = 1;
 							break;
 						}
 					}
 
 
-					if (i == 6) set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					if (i == 6) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				}
 
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			}
 
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(11, 42);
-			if (graffiti)addstrAlt("U - Graffiti");
-			else addstrAlt("U - Use");
-			moveAlt(12, 42);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			if (graffiti)mvaddstrAlt(11, 42, "U - Graffiti");
+			else mvaddstrAlt(11, 42, "U - Use");
 			if (enemy&&sitealarm)
 			{
 
 				bool evade = false;
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				for (int e = 0; e < ENCMAX; e++)
 				{
 
@@ -511,43 +585,39 @@ void mode_site() {
 
 
 				if (!evade)
-					addstrAlt("V - Sneak");
+					mvaddstrAlt(12, 42, "V - Sneak");
 				else
-					addstrAlt("V - Run");
+					mvaddstrAlt(12, 42, "V - Run");
 			}
 
 			else
 			{
 
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				addstrAlt("V - Evade");
 			}
 
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 42);
-			addstrAlt("E - Equip");
-			if (enemy)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			moveAlt(14, 1);
-			addstrAlt("F - Fight!");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  42, "E - Equip");
+			if (enemy)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14,  1, "F - Fight!");
 			if (!location[cursite]->siege.siege)
 			{
 
 				if (freeable && (!enemy || !sitealarm))
 				{
 
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
-					moveAlt(14, 32);
-					addstrAlt("R - Release oppressed");
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(14,  32, "R - Release oppressed");
 				}
 
 				else
 				{
 
-					if (hostages) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-					else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-					moveAlt(14, 32);
-					addstrAlt("R - Release hostage");
+					if (hostages) set_color_easy(WHITE_ON_BLACK);
+					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					mvaddstrAlt(14,  32, "R - Release hostage");
 				}
 			}
 
@@ -555,10 +625,9 @@ void mode_site() {
 			else
 			{
 
-				if (libnum > 6)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				moveAlt(14, 32);
-				addstrAlt("R - Reorganize");
+				if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(14,  32, "R - Reorganize");
 			}
 		}
 
@@ -590,9 +659,8 @@ void mode_site() {
 			}
 
 			endcheck(-2); // play the right music in case we're dead
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(9, 1);
-			addstrAlt("C - Reflect on your Conservative ineptitude");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9,  1, "C - Reflect on your Conservative ineptitude");
 		}
 
 		//PRINT SITE MAP
@@ -702,10 +770,8 @@ void mode_site() {
 			{
 
 				clearmessagearea();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveSixteenOne();
-
-				addstrAlt("Which way?  (W,A,D, and X to move, ENTER to abort)");
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, "Which way?  (W,A,D, and X to move, ENTER to abort)");
 				while (true)
 				{
 
@@ -893,19 +959,11 @@ void mode_site() {
 						clearcommandarea();
 						clearmessagearea();
 						clearmaparea();
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(9, 1);
-
-						addstrAlt("Which Liberal will speak?");
-						moveAlt(9, 50);
-
-						addstrAlt("Issues");
-						moveAlt(9, 60);
-
-						addstrAlt("Dating");
-						moveAlt(9, 70);
-
-						addstrAlt("Bluff");
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(9,  1, "Which Liberal will speak?");
+						mvaddstrAlt(9,  50, "Issues");
+						mvaddstrAlt(9,  60, "Dating");
+						mvaddstrAlt(9,  70, "Bluff");
 						int y = 11;
 						for (int p = 0; p < 6; p++)
 						{
@@ -915,24 +973,18 @@ void mode_site() {
 
 								if (activesquad->squad[p]->alive)
 								{
-									moveAlt(y, 1);
-									addcharAlt(p + '1');
+									mvaddcharAlt(y, 1, p + '1');
 									addstrAlt(spaceDashSpace);
 
 
 
 
 									addstrAlt(activesquad->squad[p]->name);
-									moveAlt(y, 50);
-
-									addstrAlt(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+									mvaddstrAlt(y,  50, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
 										activesquad->squad[p]->get_skill(SKILL_PERSUASION));
-									moveAlt(y, 60);
-
-									addstrAlt(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+									mvaddstrAlt(y,  60, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
 										activesquad->squad[p]->get_skill(SKILL_SEDUCTION));
-									moveAlt(y++, 70);
-									addstrAlt(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+									mvaddstrAlt(y++,  70, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
 										activesquad->squad[p]->get_skill(SKILL_DISGUISE));
 								}
 							}
@@ -970,10 +1022,8 @@ void mode_site() {
 								clearcommandarea();
 								clearmessagearea();
 								clearmaparea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveAlt(9, 1);
-
-								addstrAlt("To whom?");
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(9,  1, "To whom?");
 								int x = 1, y = 11;
 								for (int t = 0; t < ENCMAX; t++)
 								{
@@ -984,9 +1034,8 @@ void mode_site() {
 										if (encounter[t].cantbluff != 1)
 										{
 
-											set_color(COLOR_WHITE, COLOR_BLACK, 1);
-											moveAlt(y, x);
-											addcharAlt(t + 'A');
+											set_color_easy(WHITE_ON_BLACK_BRIGHT);
+											mvaddcharAlt(y, x, t + 'A');
 											addstrAlt(spaceDashSpace);
 
 
@@ -995,15 +1044,15 @@ void mode_site() {
 											{
 
 											case ALIGN_CONSERVATIVE:
-												set_color(COLOR_RED, COLOR_BLACK, 1);
+												set_color_easy(RED_ON_BLACK_BRIGHT);
 												break;
 
 											case ALIGN_LIBERAL:
-												set_color(COLOR_GREEN, COLOR_BLACK, 1);
+												set_color_easy(GREEN_ON_BLACK_BRIGHT);
 												break;
 
 											case ALIGN_MODERATE:
-												set_color(COLOR_WHITE, COLOR_BLACK, 1);
+												set_color_easy(WHITE_ON_BLACK_BRIGHT);
 												break;
 											}
 
@@ -1067,10 +1116,8 @@ void mode_site() {
 													clearcommandarea();
 													clearmessagearea();
 													clearmaparea();
-													set_color(COLOR_WHITE, COLOR_BLACK, 1);
-													moveAlt(9, 1);
-
-													addstrAlt(encounter[tk].name);
+													set_color_easy(WHITE_ON_BLACK_BRIGHT);
+													mvaddstrAlt(9,  1, encounter[tk].name);
 													addstrAlt(" won't talk to you.");
 													getkey();
 												}
@@ -1081,10 +1128,8 @@ void mode_site() {
 													clearcommandarea();
 													clearmessagearea();
 													clearmaparea();
-													set_color(COLOR_WHITE, COLOR_BLACK, 1);
-													moveAlt(9, 1);
-
-													addstrAlt("You have to deal with the enemies first.");
+													set_color_easy(WHITE_ON_BLACK_BRIGHT);
+													mvaddstrAlt(9,  1, "You have to deal with the enemies first.");
 													getkey();
 												}
 
@@ -1148,23 +1193,22 @@ void mode_site() {
 						if (levelmap[x][y][locz].flag & SITEBLOCK_KNOWN)
 						{
 
-							moveAlt(y + 1, x + 5);
 							if (x == locx&&y == locy)
 							{
 
-								set_color(COLOR_GREEN, COLOR_BLACK, 1);
-								addchAlt(CH_WHITE_SMILING_FACE);
+								set_color_easy(GREEN_ON_BLACK_BRIGHT);
+								mvaddchAlt(y + 1, x + 5, CH_WHITE_SMILING_FACE);
 							}
 
 							else
 							{
 
-								set_color(COLOR_WHITE, COLOR_BLACK, 0);
+								set_color_easy(WHITE_ON_BLACK);
 								if (levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)
 								{
 
-									set_color(COLOR_WHITE, COLOR_WHITE, 0);
-									addcharAlt(' ');
+									set_color_easy(WHITE_ON_WHITE);
+									mvaddchAlt(y + 1, x + 5, ' ');
 								}
 
 
@@ -1174,78 +1218,78 @@ void mode_site() {
 										set_color(COLOR_WHITE, COLOR_WHITE, 1);
 									else if (levelmap[x][y][locz].flag & SITEBLOCK_CLOCK
 										&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
-										set_color(COLOR_RED, COLOR_BLACK, 0);
+										set_color_easy(RED_ON_BLACK);
 									else if (levelmap[x][y][locz].flag & SITEBLOCK_KLOCK
 										&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
-										set_color(COLOR_BLACK, COLOR_BLACK, 1);
+										set_color_easy(BLACK_ON_BLACK_BRIGHT);
 									else set_color(COLOR_YELLOW, COLOR_BLACK, 0);
 									if ((levelmap[x + 1][y][locz].flag & SITEBLOCK_BLOCK) ||
 										(levelmap[x - 1][y][locz].flag & SITEBLOCK_BLOCK))
-										addchAlt(CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
-									else addchAlt(CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
+										mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
+									else mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
 								}
 
 								else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT) &&
 									(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
 								{
 
-									set_color(COLOR_RED, COLOR_BLACK, 1);
-									addchAlt(CH_YEN_SIGN);
+									set_color_easy(RED_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, CH_YEN_SIGN);
 								}
 
 								else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT) &&
 									(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
 								{
 
-									set_color(COLOR_RED, COLOR_BLACK, 1);
-									addchAlt(CH_BLACK_SMILING_FACE);
+									set_color_easy(RED_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
 								}
 
 								else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED) &&
 									(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
 								{
 
-									set_color(COLOR_RED, COLOR_BLACK, 0);
-									addchAlt(CH_BLACK_SMILING_FACE);
+									set_color_easy(RED_ON_BLACK);
+									mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
 								}
 
 								else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_UP)
 								{
 
-									set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-									addchAlt(CH_UPWARDS_ARROW);
+									set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, CH_UPWARDS_ARROW);
 								}
 
 								else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_DOWN)
 								{
 
-									set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-									addchAlt(CH_DOWNWARDS_ARROW);
+									set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, CH_DOWNWARDS_ARROW);
 								}
 
 								else if (levelmap[x][y][locz].special != -1)
 								{
 
-									set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-									addcharAlt('!');
+									set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, '!');
 								}
 
 
 								else if (levelmap[x][y][locz].siegeflag & SIEGEFLAG_TRAP)
 								{
 
-									set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-									addcharAlt('!');
+									set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, '!');
 								}
 
 
 								else if (levelmap[x][y][locz].flag & SITEBLOCK_LOOT)
 								{
 
-									set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
-									addcharAlt('$');
+									set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+									mvaddchAlt(y + 1, x + 5, '$');
 								}
-								else addcharAlt(' ');
+								else mvaddchAlt(y + 1, x + 5, ' ');
 							}
 						}
 
@@ -1256,9 +1300,8 @@ void mode_site() {
 						else
 						{
 
-							set_color(COLOR_BLACK, COLOR_BLACK, 1);
-							moveAlt(y + 1, x + 5);
-							addchAlt(CH_FULL_BLOCK);
+							set_color_easy(BLACK_ON_BLACK_BRIGHT);
+							mvaddchAlt(y + 1, x + 5, CH_FULL_BLOCK);
 						}
 					}
 				}
@@ -1418,10 +1461,8 @@ void mode_site() {
 				{
 
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-
-					addstrAlt("You free ", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "You free ", gamelog);
 					if (followers > 1)addstrAlt("some Oppressed Liberals", gamelog);
 					else addstrAlt("an Oppressed Liberal", gamelog);
 					addstrAlt(" from the Conservatives.", gamelog);
@@ -1431,13 +1472,12 @@ void mode_site() {
 
 						getkey();
 						clearmessagearea();
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveSixteenOne();
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 
-						if (actgot == 0 && followers>1)addstrAlt("They all leave", gamelog);
-						else if (followers - actgot > 1)addstrAlt("Some leave", gamelog);
-						else if (actgot == 0)addstrAlt("The Liberal leaves", gamelog);
-						else addstrAlt("One Liberal leaves", gamelog);
+						if (actgot == 0 && followers>1)mvaddstrAlt(16, 1, "They all leave", gamelog);
+						else if (followers - actgot > 1)mvaddstrAlt(16, 1, "Some leave", gamelog);
+						else if (actgot == 0)mvaddstrAlt(16, 1, "The Liberal leaves", gamelog);
+						else mvaddstrAlt(16, 1, "One Liberal leaves", gamelog);
 						addstrAlt(" you, feeling safer getting out alone.", gamelog);
 						gamelog.newline();
 					}
@@ -1812,13 +1852,9 @@ void mode_site() {
 
 							string s = item->equip_title();
 							clearmessagearea();
-							set_color(COLOR_WHITE, COLOR_BLACK, 0);
-							moveSixteenOne();
-
-							addstrAlt("You find: ", gamelog);
-							moveSeventeenOne();
-
-							addstrAlt(s, gamelog);
+							set_color_easy(WHITE_ON_BLACK);
+							mvaddstrAlt(16,  1, "You find: ", gamelog);
+							mvaddstrAlt(17,  1, s, gamelog);
 							gamelog.newline();
 							getkey(); //wait for key press before clearing.
 						}
@@ -1858,19 +1894,14 @@ void mode_site() {
 				mapshowing = false;
 				eraseAlt();
 
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveZeroZero();
-
-				addstrAlt("Site mode options");
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(0,  0, "Site mode options");
 				printparty();
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(10, 1);
-				addstrAlt("[ ] E - Encounter warnings");
-				moveAlt(11, 1);
-				addstrAlt("[ ] M - Music");
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(24, 1);
-				addstrAlt(enter_done);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(10,  1, "[ ] E - Encounter warnings");
+				mvaddstrAlt(11,  1, "[ ] M - Music");
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(24,  1, enter_done);
 
 				int c = 0;
 				while (true)
@@ -1879,16 +1910,14 @@ void mode_site() {
 					if (c == 'e') encounterwarnings = !encounterwarnings;
 					if (c == 'm') music.enableIf(!music.isEnabled());
 					if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
-					moveAlt(10, 2);
 					if (encounterwarnings)
-						addstrAlt("X");
+						mvaddstrAlt(10, 2, "X");
 
-					else addstrAlt(singleSpace);
-					moveAlt(11, 2);
+					else mvaddstrAlt(10, 2, singleSpace);
 					if (music.isEnabled())
-						addstrAlt("X");
+						mvaddstrAlt(11, 2, "X");
 
-					else addstrAlt(singleSpace);
+					else mvaddstrAlt(11, 2, singleSpace);
 					c = getkey();
 				}
 
@@ -1986,10 +2015,8 @@ void mode_site() {
 
 
 						clearmessagearea();
-						set_color(COLOR_CYAN, COLOR_BLACK, 1);
-						moveSixteenOne();
-
-						addstrAlt("The squad sneaks past the conservatives!", gamelog);
+						set_color_easy(CYAN_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, "The squad sneaks past the conservatives!", gamelog);
 						gamelog.newline();
 						getkey();
 					}
@@ -2276,10 +2303,8 @@ void mode_site() {
 
 						//INFORM
 						clearmessagearea();
-						set_color(COLOR_GREEN, COLOR_BLACK, 1);
-						moveSixteenOne();
-
-						addstrAlt("The CCS has been broken!", gamelog);
+						set_color_easy(GREEN_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, "The CCS has been broken!", gamelog);
 						gamelog.newline();
 						getkey();
 						location[cursite]->renting = RENTING_PERMANENT;
@@ -2617,13 +2642,9 @@ void mode_site() {
 
 							//INFORM
 							clearmessagearea();
-							set_color(COLOR_GREEN, COLOR_BLACK, 1);
-							moveSixteenOne();
-
-							addstrAlt("The Conservatives have shrunk back under ", gamelog);
-							moveSeventeenOne();
-
-							addstrAlt("the power of your Liberal Convictions!", gamelog);
+							set_color_easy(GREEN_ON_BLACK_BRIGHT);
+							mvaddstrAlt(16,  1, "The Conservatives have shrunk back under ", gamelog);
+							mvaddstrAlt(17,  1, "the power of your Liberal Convictions!", gamelog);
 							gamelog.newline();
 							getkey();
 							conquertext();
@@ -2647,10 +2668,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The computer has been unplugged.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The computer has been unplugged.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2660,10 +2679,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The computer is occupied.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The computer is occupied.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2678,10 +2695,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("Some people are hiding under the table.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "Some people are hiding under the table.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2692,10 +2707,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The table is occupied.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The table is occupied.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2708,10 +2721,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The bench is empty.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The bench is empty.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2721,10 +2732,8 @@ void mode_site() {
 							{
 
 								clearmessagearea();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("There are people sitting here.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "There are people sitting here.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2753,14 +2762,13 @@ void mode_site() {
 							{
 
 								clearmessagearea(false);
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
 
 								if (lawList[LAW_FREESPEECH] != ALIGN_ARCHCONSERVATIVE)
-									addstrAlt("Damn! ", gamelog);
+									mvaddstrAlt(16, 1, "Damn! ", gamelog);
 								else
 
-									addstrAlt("[Rats!] ", gamelog);
+									mvaddstrAlt(16, 1, "[Rats!] ", gamelog);
 								addstrAlt("The CEO must have fled to a panic room.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
@@ -2775,10 +2783,8 @@ void mode_site() {
 
 								case UNIQUECREATURE_ALIVE:
 									clearmessagearea(false);
-									set_color(COLOR_WHITE, COLOR_BLACK, 1);
-									moveSixteenOne();
-
-									addstrAlt("The CEO is in his study.", gamelog);
+									set_color_easy(WHITE_ON_BLACK_BRIGHT);
+									mvaddstrAlt(16,  1, "The CEO is in his study.", gamelog);
 									gamelog.newline();
 									levelmap[locx][locy][locz].special = -1;
 									getkey();
@@ -2790,10 +2796,8 @@ void mode_site() {
 								case UNIQUECREATURE_DEAD:
 								case UNIQUECREATURE_LIBERAL:
 									clearmessagearea(false);
-									set_color(COLOR_WHITE, COLOR_BLACK, 1);
-									moveSixteenOne();
-
-									addstrAlt("The CEO's study lies empty.", gamelog);
+									set_color_easy(WHITE_ON_BLACK_BRIGHT);
+									mvaddstrAlt(16,  1, "The CEO's study lies empty.", gamelog);
 									gamelog.newline();
 									levelmap[locx][locy][locz].special = -1;
 									getkey();
@@ -2809,10 +2813,8 @@ void mode_site() {
 							{
 
 								clearmessagearea(false);
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The landlord is out of the office.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The landlord is out of the office.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2822,10 +2824,8 @@ void mode_site() {
 							{
 
 								clearmessagearea(false);
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
-
-								addstrAlt("The landlord is in.", gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(16,  1, "The landlord is in.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
 								getkey();
@@ -2872,8 +2872,7 @@ void mode_site() {
 							if (encounterwarnings&&numenc > 0)
 							{  // show an encounter warning, based on whether the squad moved or not and the size of the encounter
 								clearmessagearea(false);
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveSixteenOne();
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
 								string weMoved;
 								string weDidntMove;
 
@@ -2906,10 +2905,10 @@ void mode_site() {
 									weDidntMove = "There is a crowd of people passing by.";
 								}
 								if (squadmoved) {
-									addstrAlt(weMoved, gamelog);
+									mvaddstrAlt(16, 1, weMoved, gamelog);
 								}
 								else {
-									addstrAlt(weDidntMove, gamelog);
+									mvaddstrAlt(16, 1, weDidntMove, gamelog);
 								}
 
 								gamelog.newline();
@@ -2991,16 +2990,14 @@ void resolvesite()
 
 					pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 					eraseAlt();
-					moveAlt(8, 1);
-					addstrAlt(string_sleeper, gamelog);
+					mvaddstrAlt(8,  1, string_sleeper, gamelog);
 
 
 
 					addstrAlt(pool[p]->name, gamelog);
 					addstrAlt(" has been outed by your bold attack!", gamelog);
 					gamelog.newline();
-					moveAlt(10, 1);
-					addstrAlt("The Liberal is now at your command as a normal squad member.", gamelog);
+					mvaddstrAlt(10,  1, "The Liberal is now at your command as a normal squad member.", gamelog);
 					gamelog.newline();
 					pool[p]->base = activesquad->squad[0]->base;
 					pool[p]->location = pool[p]->base;
@@ -3040,9 +3037,8 @@ void open_door(bool restricted)
 	{
 		// Vault door, not usable by bumping
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The vault door is impenetrable.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The vault door is impenetrable.", gamelog);
 		gamelog.newline();
 		getkey();
 		return;
@@ -3061,15 +3057,13 @@ void open_door(bool restricted)
 	{
 		// Unlocked but alarmed door, clearly marked as such
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (locked)
-			addstrAlt("This door appears to be wired up to an alarm.", gamelog);
+			mvaddstrAlt(16, 1, "This door appears to be wired up to an alarm.", gamelog);
 		else
-			addstrAlt("EMERGENCY EXIT ONLY. ALARM WILL SOUND.", gamelog);
+			mvaddstrAlt(16, 1, "EMERGENCY EXIT ONLY. ALARM WILL SOUND.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("Try the door anyway? (Yes or No)");
+		mvaddstrAlt(17,  1, "Try the door anyway? (Yes or No)");
 		while (true)
 		{
 			int c = getkey();
@@ -3083,12 +3077,10 @@ void open_door(bool restricted)
 		while (true)
 		{
 			clearmessagearea(false);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("You try the door, but it is locked.", gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "You try the door, but it is locked.", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("Try to pick the lock? (Yes or No)");
+			mvaddstrAlt(17,  1, "Try to pick the lock? (Yes or No)");
 			int c = getkey();
 			clearmessagearea(false);
 			if (c == 'y')
@@ -3109,9 +3101,8 @@ void open_door(bool restricted)
 					levelmap[locx][locy][locz].flag |= SITEBLOCK_CLOCK;
 					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveSeventeenOne();
-						addstrAlt("Your tampering sets off the alarm!", gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(17,  1, "Your tampering sets off the alarm!", gamelog);
 						gamelog.newline();
 						sitealarm = 1;
 						getkey();
@@ -3133,18 +3124,16 @@ void open_door(bool restricted)
 		while (true)
 		{
 			clearmessagearea(false);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			if (locked)
 			{
-				addstrAlt("You shake the handle but it is ", gamelog);
+				mvaddstrAlt(16, 1, "You shake the handle but it is ", gamelog);
 				if (has_security) addstrAlt("still ", gamelog);
 				addstrAlt("locked.", gamelog);
 			}
-			else addstrAlt("It's locked from the other side.", gamelog);
+			else mvaddstrAlt(16, 1, "It's locked from the other side.", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("Force it open? (Yes or No)");
+			mvaddstrAlt(17,  1, "Force it open? (Yes or No)");
 			int c = getkey();
 			if (c == 'y')
 			{
@@ -3157,9 +3146,8 @@ void open_door(bool restricted)
 					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
 					{
 						clearmessagearea(false);
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveSixteenOne();
-						addstrAlt("The alarm goes off!", gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, "The alarm goes off!", gamelog);
 						gamelog.newline();
 						sitealarm = 1;
 						getkey();
@@ -3185,9 +3173,8 @@ void open_door(bool restricted)
 		{
 			// Opened an unlocked but clearly marked emergency exit door
 			clearmessagearea(false);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("It opens easily. The alarm goes off!", gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "It opens easily. The alarm goes off!", gamelog);
 			gamelog.newline();
 			sitealarm = 1;
 			getkey();

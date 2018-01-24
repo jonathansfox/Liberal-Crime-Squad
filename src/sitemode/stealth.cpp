@@ -26,6 +26,22 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/sitedisplay.h"
+#include "sitemode/stealth.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addchar
+
+#include "common/commonactions.h"
+// for int squadsize(const squadst *st);
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -35,7 +51,19 @@ extern Log gamelog;
 extern vector<Location *> location;
 extern short mode;
 extern short sitetype;
+extern short sitealarm;
+extern short sitealienate;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern short sitealarmtimer;
+extern squadst *activesquad;
  vector<string> blew_stealth_check;
+ extern short cursite;
+ extern short fieldskillrate;
+ extern Creature encounter[ENCMAX];
+ extern short lawList[LAWNUM];
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude, int difficulty)
 {
@@ -50,14 +78,12 @@ void noticecheck(int exclude, int difficulty)
 		else
 		{
 			clearmessagearea();
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(encounter[e].name, gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
 			addstrAlt(" observes your Liberal activity ", gamelog);
-			moveSeventeenOne();
 			if (encounter[e].align == ALIGN_CONSERVATIVE)
-				addstrAlt("and lets forth a piercing Conservative alarm cry!", gamelog);
-			else addstrAlt("and shouts for help!", gamelog);
+				mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
+			else mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
 			gamelog.newline();
 			sitealarm = 1;
 			getkey();
@@ -98,13 +124,11 @@ char alienationcheck(char mistake)
 		if (alienate&&sitealienate != 2) sitealienate = 1;
 		if (oldsitealienate < sitealienate)
 		{
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveSixteenOne();
-			if (sitealienate == 1)addstrAlt("We've alienated the masses here!              ", gamelog);
-			else addstrAlt("We've alienated absolutely everyone here!               ", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			if (sitealienate == 1)mvaddstrAlt(16, 1, "We've alienated the masses here!              ", gamelog);
+			else mvaddstrAlt(16, 1, "We've alienated absolutely everyone here!               ", gamelog);
 			gamelog.newline();
-			moveSeventeenOne();
-			addstrAlt("                                                        ");
+			mvaddstrAlt(17, 1, "                                                        ");
 			sitealarm = 1;
 			for (int i = 0; i < ENCMAX; i++)
 				if (encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
@@ -135,6 +159,19 @@ void disguisecheck(int timer)
 		if (thisweapon > weapon)weapon = thisweapon;
 		//if(thisweapon==2)weaponar[i]=1;
 	}
+	// TODO if a weapon is "holstered"
+	// meaning if it is within the squad inventory but not equipped by a squad member
+	// not even metal detectors can detect it
+	// This line checks all such weapons
+	// but does nothing with the information
+	// pending an overhaul of weapon concealment
+	for (Item *l : activesquad->loot) {
+		if (l->is_weapon()) {
+			int thisweapon = static_cast <Weapon*> (l)->is_suspicious();
+			//if (thisweapon > weapon)weapon = thisweapon;
+		}
+
+	}
 	// Nothing suspicious going on here
 	if (sitealarmtimer == -1 && weapon < 1 && !forcecheck)
 	{
@@ -164,47 +201,8 @@ void disguisecheck(int timer)
 			int disguise_difficulty;
 			//// TODO Move to XML
 			// Determine difficulty based on enemy type
-			switch (encounter[n].type)
-			{
-			default:
-				stealth_difficulty = DIFFICULTY_VERYEASY;
-				disguise_difficulty = DIFFICULTY_VERYEASY;
-				break;
-			case CREATURE_SWAT:
-			case CREATURE_COP:
-			case CREATURE_GANGUNIT:
-			case CREATURE_DEATHSQUAD:
-				stealth_difficulty = DIFFICULTY_EASY;
-				disguise_difficulty = DIFFICULTY_EASY;
-				break;
-			case CREATURE_PRISONGUARD:
-			case CREATURE_BOUNCER:
-			case CREATURE_SECURITYGUARD:
-				stealth_difficulty = DIFFICULTY_AVERAGE;
-				disguise_difficulty = DIFFICULTY_EASY;
-				break;
-			case CREATURE_AGENT:
-				stealth_difficulty = DIFFICULTY_AVERAGE;
-				disguise_difficulty = DIFFICULTY_AVERAGE;
-				break;
-			case CREATURE_NEWSANCHOR:
-			case CREATURE_RADIOPERSONALITY:
-			case CREATURE_CORPORATE_CEO:
-			case CREATURE_JUDGE_CONSERVATIVE:
-			case CREATURE_CCS_ARCHCONSERVATIVE:
-			case CREATURE_SCIENTIST_EMINENT:
-				stealth_difficulty = DIFFICULTY_EASY;
-				disguise_difficulty = DIFFICULTY_HARD;
-				break;
-			case CREATURE_GUARDDOG:
-				stealth_difficulty = DIFFICULTY_HEROIC;
-				disguise_difficulty = DIFFICULTY_AVERAGE;
-				break;
-			case CREATURE_SECRET_SERVICE:
-				stealth_difficulty = DIFFICULTY_FORMIDABLE;
-				disguise_difficulty = DIFFICULTY_FORMIDABLE;
-				break;
-			}
+			stealth_difficulty = encounter[n].get_stealth_difficulty();
+			disguise_difficulty = encounter[n].get_disguise_difficulty();
 			// Increase difficulty if Conservatives suspicious...
 			if (sitealarmtimer == 1)
 			{
@@ -281,12 +279,11 @@ void disguisecheck(int timer)
 			}
 			if (timer == 0)
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
-				moveSixteenOne();
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (partysize > 1)
-					addstrAlt("The squad", gamelog);
+					mvaddstrAlt(16, 1, "The squad", gamelog);
 				else
-					addstrAlt(activesquad->squad[0]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
 				addstrAlt(" fades into the shadows.", gamelog);
 				gamelog.newline();
 				getkey();
@@ -317,21 +314,19 @@ void disguisecheck(int timer)
 			}
 			if (blew_it != -1 && LCSrandom(2))
 			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(activesquad->squad[blew_it]->name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 1, activesquad->squad[blew_it]->name, gamelog);
 				addstrAlt(pickrandom(blew_stealth_check), gamelog);
 				gamelog.newline();
 				getkey();
 			}
 			else if (!noticed)
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
-				moveSixteenOne();
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (partysize > 1)
-					addstrAlt("The squad", gamelog);
+					mvaddstrAlt(16, 1, "The squad", gamelog);
 				else
-					addstrAlt(activesquad->squad[0]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
 				addstrAlt(" acts natural.", gamelog);
 				gamelog.newline();
 				getkey();
@@ -339,9 +334,8 @@ void disguisecheck(int timer)
 		}
 		if (!noticed)return;
 		clearmessagearea();
-		set_color(COLOR_RED, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt(encounter[n].name, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[n].name, gamelog);
 		if (sitealarmtimer != 0 && weapon < 1 && encounter[n].type != CREATURE_GUARDDOG)
 		{
 			if ((sitetype == SITE_RESIDENTIAL_TENEMENT ||
@@ -372,11 +366,10 @@ void disguisecheck(int timer)
 			if (weapon&&encounter[n].type != CREATURE_GUARDDOG)
 			{
 				addstrAlt(" sees the Squad's Liberal Weapons ", gamelog);
-				moveSeventeenOne();
 				if (encounter[n].align == ALIGN_CONSERVATIVE)
-					addstrAlt("and lets forth a piercing Conservative alarm cry!", gamelog);
+					mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
 				else
-					addstrAlt("and shouts for help!", gamelog);
+					mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
 				for (int i = 0; i < 6; i++)
 				{
 					if (activesquad->squad[i] == NULL)break;
@@ -390,16 +383,15 @@ void disguisecheck(int timer)
 			else
 			{
 				addstrAlt(" looks at the Squad with Intolerance ", gamelog);
-				moveSeventeenOne();
 				if (encounter[n].align == ALIGN_CONSERVATIVE)
 				{
 					if (encounter[n].type == CREATURE_GUARDDOG)
-						addstrAlt("and launches into angry Conservative barking!", gamelog);
+						mvaddstrAlt(17, 1, "and launches into angry Conservative barking!", gamelog);
 					else
-						addstrAlt("and lets forth a piercing Conservative alarm cry!", gamelog);
+						mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
 				}
 				else
-					addstrAlt("and shouts for help!", gamelog);
+					mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
 			}
 			gamelog.newline();
 			sitealarm = 1;

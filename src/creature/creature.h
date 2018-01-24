@@ -1,23 +1,31 @@
+#ifndef CREATURE_H
+#define CREATURE_H0
+
+#include "items/itemtype.h"
+#include "items/cliptype.h"
+#include "items/weapontype.h"
+#include "items/armortype.h"
+#include "items/item.h"
+#include "items/clip.h"
+#include "items/weapon.h"
+#include "items/armor.h"
+#include "creature/augmentation.h"
 
 // Please do not directly include this file. Include includes.h instead.
 // You will get compiler errors otherwise.
-#ifndef CREATURE_H_INCLUDED
-#define CREATURE_H_INCLUDED
-#include "common.h"
-#include "augmentation.h"
-#define CREATUREFLAG_WHEELCHAIR BIT1
-#define CREATUREFLAG_JUSTESCAPED BIT2
-#define CREATUREFLAG_MISSING BIT3
-#define CREATUREFLAG_KIDNAPPED BIT4
-#define CREATUREFLAG_SLEEPER BIT5
-#define CREATUREFLAG_ILLEGALALIEN BIT6
-#define CREATUREFLAG_LOVESLAVE BIT7
-#define CREATUREFLAG_BRAINWASHED BIT8
-#define CREATUREFLAG_CONVERTED BIT9
-#define CREATURE_NAMELEN 40
-#define MAXSUBORDINATES 30
+const int CREATUREFLAG_WHEELCHAIR = BIT1;
+const int CREATUREFLAG_JUSTESCAPED = BIT2;
+const int CREATUREFLAG_MISSING = BIT3;
+const int CREATUREFLAG_KIDNAPPED = BIT4;
+const int CREATUREFLAG_SLEEPER = BIT5;
+const int CREATUREFLAG_ILLEGALALIEN = BIT6;
+const int CREATUREFLAG_LOVESLAVE = BIT7;
+const int CREATUREFLAG_BRAINWASHED = BIT8;
+const int CREATUREFLAG_CONVERTED = BIT9;
+const int CREATURE_NAMELEN = 40;
+const int MAXSUBORDINATES = 30;
 // MAXATTRIBUTE is maximum value for both attributes & skills, set to 99 to limit it to 2 digits on screen
-#define MAXATTRIBUTE 99
+const int MAXATTRIBUTE = 99;
 enum CreatureGender
 {
    GENDER_NEUTRAL,
@@ -232,16 +240,16 @@ enum SpecialWounds
    SPECIALWOUND_LOWERSPINE,
    SPECIALWOUNDNUM
 };
-#define RIBNUM 10
-#define TOOTHNUM 32
-#define WOUND_SHOT BIT1
-#define WOUND_CUT BIT2
-#define WOUND_BRUISED BIT3
-#define WOUND_BURNED BIT4
-#define WOUND_BLEEDING BIT5
-#define WOUND_TORN BIT6
-#define WOUND_NASTYOFF BIT7
-#define WOUND_CLEANOFF BIT8
+const int RIBNUM = 10;
+const int TOOTHNUM = 32;
+const int WOUND_SHOT = BIT1;
+const int WOUND_CUT = BIT2;
+const int WOUND_BRUISED = BIT3;
+const int WOUND_BURNED = BIT4;
+const int WOUND_BLEEDING = BIT5;
+const int WOUND_TORN = BIT6;
+const int WOUND_NASTYOFF = BIT7;
+const int WOUND_CLEANOFF = BIT8;
 class Skill
 {
 private:
@@ -282,7 +290,15 @@ private:
    static Armor& armor_none();
    Weapon* weapon;
    Armor* armor;
+   int seethroughdisguise;
+   int seethroughstealth;
+   bool istalkreceptive;
+   bool iskidnap_resistant;
+   bool isreports_to_police;
+
 public:
+	int get_disguise_difficulty();
+	int	get_stealth_difficulty();
    void set_attribute(int attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
    int get_attribute(int attribute, bool use_juice) const;
    void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
@@ -356,7 +372,7 @@ public:
    void give_armor(Armor& a, vector<Item*>* lootpile);
    void give_armor(const ArmorType& at, vector<Item*>* lootpile);
    void strip(vector<Item*>* lootpile);
-   bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weapon(*weapon); }
+   bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weaponsize(weapon->get_size()); }
    string get_weapon_string(int subtype) const;
    string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
    int money;
@@ -433,4 +449,92 @@ public:
    Creature& President() { if(Pres_ID==-1) newPresident(); return Pres_; }
    void initialize() { newCEO(); newPresident(); }
 };
-#endif //CREATURE_H_INCLUDED
+
+
+// brutally ripped from includes.h --Schmel924
+//From here up to void nameCCSMember(Creature &cr);
+/*
+implementations should be in creature.cpp
+*/
+// Add an age estimate to a person's name
+void add_age(Creature& person);
+/* rolls up a creature's stats and equipment */
+void makecreature(Creature &cr,short type);
+/* fills a string with a proper name */
+void generate_name(char *str, char gender = GENDER_NEUTRAL);
+/* get a first and last name for the same person */
+void generate_name(char *first, char *last, char gender = GENDER_NEUTRAL);
+/* get a first, middle, and last name for the same person */
+void generate_long_name(char *first, char *middle, char *last, char gender = GENDER_NEUTRAL);
+/* gets a random first name */
+void firstname(char *str, char gender = GENDER_NEUTRAL);
+/* gets a random last name */
+string lastname(bool archconservative=false);
+/* ensures that the creature's work location is appropriate to its type */
+bool verifyworklocation(Creature &cr, char test_location=-1, char test_type=-1);
+/* turns a creature into a conservative */
+void conservatise(Creature &cr);
+/* turns a creature into a liberal */
+void liberalize(Creature &cr,bool rename=true);
+/* gives a cover name to CCS members */
+void nameCCSMember(Creature &cr);
+//end of ripped part
+
+
+struct datest
+{
+	long mac_id;
+	vector<Creature *> date;
+	short timeleft;
+	int city;
+	datest() : timeleft(0) { }
+	~datest() { delete_and_clear(date); }
+};
+
+struct recruitst
+{
+	long recruiter_id;
+	Creature* recruit;
+	short timeleft;
+	char level, eagerness1, task;
+	recruitst();
+	~recruitst();
+	char eagerness();
+};
+
+struct newsstoryst
+{
+	short type, view;
+	char claimed;
+	short politics_level, violence_level;
+	Creature *cr;
+	vector<int> crime;
+	long loc, priority, page, guardianpage;
+	char positive;
+	short siegetype;
+	newsstoryst() : claimed(1), politics_level(0), violence_level(0), cr(NULL), loc(-1) { }
+};
+
+
+struct squadst
+{
+	char name[SQUAD_NAMELEN];
+	Creature *squad[6];
+	activityst activity;
+	int id;
+	vector<Item *> loot;
+
+	char stance; // Squad's site action stance: high profile, low profile, etc.
+
+	squadst()
+	{
+		for (int p = 0; p<6; p++) squad[p] = NULL;
+		strcpy(name, "");
+		activity.type = ACTIVITY_NONE, id = -1, stance = SQUADSTANCE_STANDARD;
+	}
+	~squadst() { delete_and_clear(loot); }
+};
+
+#include "locations/locations.h"
+
+#endif

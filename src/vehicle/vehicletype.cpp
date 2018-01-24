@@ -1,6 +1,12 @@
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+
+#include "common/stringconversion.h"
+//for atoi
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -297,3 +303,19 @@ int VehicleType::modifieddodgeskill(int skillLevel)
       score = (score + dodgebonus_limit1_)/2; // half credit after limit1
    return (score > dodgebonus_limit2_) ? dodgebonus_limit2_ : score;
 }
+
+const string& VehicleType::idname() const { return idname_; }
+long VehicleType::id() const { return id_; }
+const vector<string>& VehicleType::color() const { return color_; }
+bool VehicleType::displayscolor() const { return displaycolor_; }
+const string& VehicleType::longname() const { return longname_; }
+const string& VehicleType::shortname() const { return shortname_; }
+int VehicleType::attackbonus(bool isDriving) const { return isDriving ? attackbonus_driver_ : attackbonus_passenger_; }
+int VehicleType::steal_difficultytofind() const { return steal_difficultytofind_; }
+int VehicleType::steal_juice() const { return steal_juice_; }
+int VehicleType::steal_extraheat() const { return steal_extraheat_; }
+int VehicleType::sensealarmchance() const { return sensealarmchance_; }
+int VehicleType::touchalarmchance() const { return touchalarmchance_; }
+bool VehicleType::availableatshop() const { return availableatshop_; }
+int VehicleType::price() const { return price_; }
+int VehicleType::sleeperprice() const { return sleeperprice_; }

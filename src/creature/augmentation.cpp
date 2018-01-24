@@ -1,6 +1,12 @@
 
 #include <includes.h>
 
+//#include "augmentation.h"
+//own header currently inside includes.h
+
+#include "common/stringconversion.h"
+//for atoi redefinition
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

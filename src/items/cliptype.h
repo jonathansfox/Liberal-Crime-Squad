@@ -1,8 +1,5 @@
-#ifndef CLIPTYPE_H
-#define CLIPTYPE_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#ifndef CLIP_TYPE_H
+#define CLIP_TYPE_H0
 class ClipType : public ItemType
 {
    public:
@@ -12,4 +9,4 @@ class ClipType : public ItemType
    private:
       int ammo_;
 };
-#endif //CLIPTYPE_H
+#endif //CLIP_TYPE_H

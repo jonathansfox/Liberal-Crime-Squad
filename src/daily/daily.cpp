@@ -26,6 +26,59 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "news/news.h"
+// for majornewspaper
+
+#include "sitemode/sitemode.h"
+// for mode_site
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for makedelimeter
+
+#include "common/getnames.h"
+// for std::string getactivity(activityst)
+
+#include "common/translateid.h"
+// for  int getsquad(int)
+
+#include "common/commonactions.h"
+// for void basesquad(squadst *,long)
+
+#include "title/saveload.h"
+// for void savegame(const string& filename);
+
+#include "daily/daily.h"
+//own header
+
+#include "daily/shopsnstuff.h"
+//for void halloweenstore(int loc);
+
+#include "daily/activities.h"
+//for void repairarmor(Creature &cr,char &clearformess);
+
+#include "daily/siege.h"        
+//for fooddaysleft
+
+#include "daily/recruit.h"
+//for char completerecruitmeeting(recruitst &d,int p,char &clearformess);
+
+#include "daily/date.h"
+//for char completevacation(datest &d,int p,char &clearformess);
+
+#include "combat/chase.h"
+//for int driveskill(Creature &cr,Vehicle &v);
+        //hmm --Schmel924
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -37,6 +90,21 @@ extern vector<Location *> location;
 extern int year;
 extern string singleDot;
 extern string savefile_name;
+extern char showcarprefs;
+extern char disbanding;
+extern bool autosave;
+extern class Ledger ledger;
+extern squadst *activesquad;
+extern vector<squadst *> squad;
+
+extern vector<Vehicle *> vehicle;
+extern short fieldskillrate;
+extern vector<newsstoryst *> newsstory;
+extern int day;
+extern vector<recruitst *> recruit;
+extern vector<datest *> date;
+extern int month;
+
 void advanceday(char &clearformess, char canseethings)
 {
 	int p;
@@ -59,7 +127,7 @@ void advanceday(char &clearformess, char canseethings)
 		if (pool[p]->location != pool[p]->base &&
 			location[pool[p]->base]->siege.siege)
 		{
-			pool[p]->base = find_homeless_shelter(*pool[p]);
+			pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location); //find_homeless_shelter(*pool[p]);
 		}
 		pool[p]->location = pool[p]->base;
 	}
@@ -79,9 +147,8 @@ void advanceday(char &clearformess, char canseethings)
 					{
 						if (clearformess) eraseAlt();
 						else makedelimiter();
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(8, 1);
-						addstrAlt(squad[sq]->squad[p]->name, gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8,  1, squad[sq]->squad[p]->name, gamelog);
 						addstrAlt(" acted with ", gamelog);
 						addstrAlt(squad[sq]->name, gamelog);
 						addstrAlt(" instead of ", gamelog);
@@ -103,9 +170,8 @@ void advanceday(char &clearformess, char canseethings)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(squad[sq]->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" decided ", gamelog);
 				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(" was too hot to risk.", gamelog);
@@ -136,9 +202,8 @@ void advanceday(char &clearformess, char canseethings)
 							{
 								if (clearformess) eraseAlt();
 								else makedelimiter();
-								set_color(COLOR_WHITE, COLOR_BLACK, 1);
-								moveAlt(8, 1);
-								addstrAlt(squad[sq]->name, gamelog);
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 								addstrAlt(" couldn't use the ", gamelog);
 								addstrAlt(vehicle[v]->fullname(), gamelog);
 								addstrAlt(singleDot, gamelog);
@@ -247,9 +312,8 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt(squad[sq]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 					addstrAlt(" didn't have a car to get to ", gamelog);
 					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -290,19 +354,18 @@ void advanceday(char &clearformess, char canseethings)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				moveAlt(8, 1);
 				int price;
 				for (price = 0; price < 6; price++) if (!squad[sq]->squad[price]) break;
 				price *= 100;
 				if (ledger.get_funds() < price)
 				{
-					addstr_fl(gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
+					mvaddstr_fl(8, 1, gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
 					canDepart = false;
 				}
 				else
 				{
 					ledger.subtract_funds(price, EXPENSE_TRAVEL);
-					addstr_fl(gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, location[squad[sq]->activity.arg]->getname().c_str());
+					mvaddstr_fl(8, 1, gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, location[squad[sq]->activity.arg]->getname().c_str());
 				}
 				getkey();
 			}
@@ -318,15 +381,14 @@ void advanceday(char &clearformess, char canseethings)
 			case SITE_CITY_WASHINGTON_DC:
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				moveAlt(8, 1);
-				addstrAlt(squad[sq]->name, gamelog);
+				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" arrives in ", gamelog);
 				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
 				getkey();
 				{
-					int l = find_homeless_shelter(squad[sq]->activity.arg);
+					int l = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, squad[sq]->activity.arg);
 					// Base at new city's homeless shelter
 					basesquad(squad[sq], l);
 					locatesquad(squad[sq], l);
@@ -340,9 +402,8 @@ void advanceday(char &clearformess, char canseethings)
 			case SITE_BUSINESS_ARMSDEALER:
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(squad[sq]->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
 				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
@@ -377,9 +438,8 @@ void advanceday(char &clearformess, char canseethings)
 			case SITE_HOSPITAL_CLINIC:
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(squad[sq]->name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
 				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
@@ -394,11 +454,10 @@ void advanceday(char &clearformess, char canseethings)
 			default:
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				if (squad[sq]->squad[0]->base == squad[sq]->activity.arg)
 				{
-					addstrAlt(squad[sq]->name, gamelog);
+					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" looks around ", gamelog);
 					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -406,7 +465,7 @@ void advanceday(char &clearformess, char canseethings)
 				}
 				else
 				{
-					addstrAlt(squad[sq]->name, gamelog);
+					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" has arrived at ", gamelog);
 					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -422,9 +481,8 @@ void advanceday(char &clearformess, char canseethings)
 				else if (location[squad[sq]->activity.arg]->renting >= 0 &&
 					squad[sq]->squad[0]->base != squad[sq]->activity.arg)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
 					do c = getkey(); while (c != 's'&&c != 'b'&&c != 't');
 				}
 				if (c == 's' || c == 'b') basesquad(squad[sq], squad[sq]->activity.arg);
@@ -511,9 +569,8 @@ void advanceday(char &clearformess, char canseethings)
 		case ACTIVITY_POLLS:
 			if (clearformess) eraseAlt();
 			else makedelimiter();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveAlt(8, 1);
-			addstrAlt(pool[p]->name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 			addstrAlt(" surfs the Net for recent opinion polls.", gamelog);
 			gamelog.nextMessage();
 			getkey();
@@ -594,9 +651,8 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					moveAlt(8, 1);
 					pool[p]->die();
-					addstrAlt(pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
 					addstrAlt(" has died of injuries.", gamelog);
 					gamelog.nextMessage();
 				}
@@ -710,9 +766,8 @@ void advanceday(char &clearformess, char canseethings)
 					location[pool[p]->location]->renting != RENTING_NOCONTROL&&
 					location[pool[p]->location]->type != SITE_HOSPITAL_UNIVERSITY)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt(pool[p]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt("'s injuries require professional treatment.", gamelog);
 					gamelog.nextMessage();
 					pool[p]->activity.type = ACTIVITY_CLINIC;
@@ -752,15 +807,14 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt("EVICTION NOTICE: ", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, "EVICTION NOTICE: ", gamelog);
 					addstrAlt(location[l]->name, gamelog);
 					addstrAlt(".  Possessions go to the shelter.", gamelog);
 					gamelog.nextMessage();
 					getkey();
 					location[l]->renting = RENTING_NOCONTROL;
-					int hs = find_homeless_shelter(l);
+					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, l);
 					//MOVE ALL ITEMS AND SQUAD MEMBERS
 					for (int p = 0; p < len(pool); p++)
 					{
@@ -822,7 +876,7 @@ void advanceday(char &clearformess, char canseethings)
 				pool[p]->dating = --date[d]->timeleft;
 				if (date[d]->timeleft == 0)
 				{
-					int hs = find_homeless_shelter(date[d]->city);
+					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city);
 					if (location[pool[p]->base]->siege.siege)
 						pool[p]->base = hs;
 					pool[p]->location = pool[p]->base;
@@ -900,9 +954,8 @@ void advanceday(char &clearformess, char canseethings)
 							pool[p]->die();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							set_color(COLOR_WHITE, COLOR_BLACK, 1);
-							moveAlt(8, 1);
-							addstrAlt(pool[p]->name, gamelog);
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
+							mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 							addstrAlt(" has passed away at the age of ", gamelog);
 							addstrAlt(pool[p]->age, gamelog);
 							addstrAlt(". The Liberal will be missed.", gamelog);
@@ -946,9 +999,8 @@ void advanceday(char &clearformess, char canseethings)
 					pool[p]->location = pool[p]->base;
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveAlt(8, 1);
-					addstrAlt(pool[p]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" regains contact with the LCS.", gamelog);
 					gamelog.nextMessage();
 					getkey();
@@ -1155,32 +1207,28 @@ void dispersalcheck(char &clearformess)
 				{
 					if (!pool[p]->hiding&&dispersal_status[p] == DISPERSAL_HIDING)
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(8, 1);
-						addstrAlt(pool[p]->name, gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 						addstrAlt(" has lost touch with the Liberal Crime Squad.", gamelog);
 						gamelog.nextMessage();
 						getkey();
-						set_color(COLOR_GREEN, COLOR_BLACK, 1);
-						moveAlt(9, 1);
-						addstrAlt("The Liberal has gone into hiding...", gamelog);
+						set_color_easy(GREEN_ON_BLACK_BRIGHT);
+						mvaddstrAlt(9,  1, "The Liberal has gone into hiding...", gamelog);
 						gamelog.nextMessage();
 						getkey();
 					}
 					else if (dispersal_status[p] == DISPERSAL_ABANDONLCS)
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(8, 1);
-						addstrAlt(pool[p]->name, gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 						addstrAlt(" has abandoned the LCS.", gamelog);
 						gamelog.nextMessage();
 						getkey();
 					}
 					else if (dispersal_status[p] == DISPERSAL_NOCONTACT)
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveAlt(8, 1);
-						addstrAlt(pool[p]->name, gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 						addstrAlt(" has lost touch with the Liberal Crime Squad.", gamelog);
 						gamelog.nextMessage();
 						getkey();
@@ -1193,7 +1241,7 @@ void dispersalcheck(char &clearformess)
 				{
 					pool[p]->location = -1;
 					if (!(pool[p]->flag & CREATUREFLAG_SLEEPER)) //Sleepers end up in shelter otherwise.
-						pool[p]->base = find_homeless_shelter(*pool[p]);
+						pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 					pool[p]->activity.type = ACTIVITY_NONE;
 					pool[p]->hiding = -1; // Hide indefinitely
 				}
@@ -1251,14 +1299,12 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 		{
 			if (clearformess) eraseAlt();
 			else makedelimiter();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveAlt(8, 1);
-			addstrAlt(cr.name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(8,  1, cr.name, gamelog);
 			addstrAlt(" has died.", gamelog);
 			gamelog.newline();
 			getkey();
-			moveAlt(10, 1);
-			addstrAlt("There are none left with the courage and conviction to lead....", gamelog);
+			mvaddstrAlt(10,  1, "There are none left with the courage and conviction to lead....", gamelog);
 			gamelog.nextMessage();
 			getkey();
 		}
@@ -1285,20 +1331,17 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 	else makedelimiter();
 	if (bigboss != -1) // Normal promotion
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(8, 1);
-		addstrAlt(pool[bigboss]->name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  1, pool[bigboss]->name, gamelog);
 		addstrAlt(" has promoted ", gamelog);
 		addstrAlt(pool[newboss]->name, gamelog);
-		moveAlt(9, 1);
-		addstrAlt("due to the death of ", gamelog);
+		mvaddstrAlt(9,  1, "due to the death of ", gamelog);
 		addstrAlt(cr.name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		if (subordinates > 1)
 		{
 			gamelog.newline();
-			moveAlt(11, 1);
-			addstrAlt(pool[newboss]->name, gamelog);
+			mvaddstrAlt(11,  1, pool[newboss]->name, gamelog);
 			addstrAlt(" will take over for ", gamelog);
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(" in the command chain.", gamelog);
@@ -1308,14 +1351,12 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 	}
 	else // Founder level promotion
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(8, 1);
-		addstrAlt(cr.name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  1, cr.name, gamelog);
 		addstrAlt(" has died.", gamelog);
 		gamelog.newline();
 		getkey();
-		moveAlt(10, 1);
-		addstrAlt(pool[newboss]->name, gamelog);
+		mvaddstrAlt(10,  1, pool[newboss]->name, gamelog);
 		addstrAlt(" is the new leader of the Liberal Crime Squad!", gamelog);
 		gamelog.nextMessage();
 		getkey();

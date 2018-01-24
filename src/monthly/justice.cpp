@@ -26,6 +26,31 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+
+#include "common/commonactions.h"
+// for  bool iscriminal(Creature &)
+
+#include "common/translateid.h"
+// for  int getarmortype
+
+#include "monthly/justice.h"
+// own header
+        //does not compile without --Schmel924
+
+#include "politics/politics.h"
+//for publicmood
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -34,6 +59,8 @@ This file is part of Liberal Crime Squad.                                       
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
+extern short lawList[LAWNUM];
+extern class Ledger ledger;
  vector<string> liberal_jury;
  vector<string> conservative_jury;
  vector<string> cruel_and_unusual_execution_methods;
@@ -50,6 +77,11 @@ extern int stat_dead;
 extern string string_sleeper;
 extern string singleDot;
 extern string AND;
+extern unsigned long attorneyseed[RNG_SIZE];
+extern unsigned long seed[RNG_SIZE];
+extern string commaSpace;
+extern vector<ArmorType *> armortype;
+extern string singleSpace;
  string execution_in_three_months;
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
@@ -57,17 +89,16 @@ void trial(Creature &g)
 	music.play(MUSIC_TRIAL);
 	// If their old base is no longer under LCS control, wander back to the
 	// homeless shelter instead.
-	if (location[g.base]->renting < 0) g.base = find_homeless_shelter(g);
+	if (location[g.base]->renting < 0) g.base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
 	g.location = g.base;
 	bool breaker[LAWFLAGNUM] = { 0 };
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveAlt(1, 1);
-	addstrAlt(g.name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1,  1, g.name, gamelog);
 	addstrAlt(" is standing trial.", gamelog);
 	gamelog.newline();
 	getkey();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	if (!iscriminal(g)) criminalize(g, LAWFLAG_LOITERING);
 	int typenum = 0, scarefactor = 0;
 	// *JDS* Scarefactor is the severity of the case against you; if you're a really
@@ -97,7 +128,7 @@ void trial(Creature &g)
 				}
 		}
 	//STATE CHARGES
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	moveAlt(3, 1);
 	if (sleeperjudge)
 	{
@@ -108,9 +139,8 @@ void trial(Creature &g)
 	}
 	else addstrAlt("The judge reads the charges:", gamelog);
 	gamelog.newline();
-	set_color(COLOR_RED, COLOR_BLACK, 1);
-	moveAlt(5, 1);
-	addstrAlt("The defendant, ", gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(5,  1, "The defendant, ", gamelog);
 	addstrAlt(g.propername, gamelog);
 	addstrAlt(", is charged with ", gamelog);
 	int x = 2, y = 5;
@@ -470,9 +500,8 @@ void trial(Creature &g)
 		getkey();
 	}
 	//CHOOSE DEFENSE
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	moveAlt(y + 2, 1);
-	addstrAlt("How will you conduct the defense?");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(y + 2,  1, "How will you conduct the defense?");
 	char attorneyname[200];
 	unsigned long oldseed[RNG_SIZE];
 	copyRNG(oldseed, seed);
@@ -480,42 +509,32 @@ void trial(Creature &g)
 	generate_name(attorneyname);
 	copyRNG(seed, oldseed);
 	y += 4;
-	moveAlt(y++, 1);
-	addstrAlt("A - Use a court-appointed attorney.");
-	moveAlt(y++, 1);
-	addstrAlt("B - Defend self!");
-	moveAlt(y++, 1);
-	addstrAlt("C - Plead guilty.");
-	if (ledger.get_funds() < 5000) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-	moveAlt(y++, 1);
-	addstrAlt("D - Pay $5000 to hire ace Liberal attorney ");
+	mvaddstrAlt(y++,  1, "A - Use a court-appointed attorney.");
+	mvaddstrAlt(y++,  1, "B - Defend self!");
+	mvaddstrAlt(y++,  1, "C - Plead guilty.");
+	if (ledger.get_funds() < 5000) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y++,  1, "D - Pay $5000 to hire ace Liberal attorney ");
 	addstrAlt(attorneyname);
 	addstrAlt(singleDot);
 	if (sleeperlawyer)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(y++, 1);
-		addstrAlt("E - Accept sleeper ");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y++,  1, "E - Accept sleeper ");
 		addstrAlt(sleeperlawyer->name);
 		addstrAlt("'s offer to assist pro bono.");
 	}
-	if (ledger.get_funds() < 5000) set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	if (ledger.get_funds() < 5000) set_color_easy(WHITE_ON_BLACK);
 	//SAV - added in display of skills and relevant attributes to help
 	// decide when to defend self.
-	moveAlt(++y, 5);
-	addstrAlt("Heart: ");
+	mvaddstrAlt(++y,  5, "Heart: ");
 	addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
-	moveAlt(y, 25);
-	addstrAlt("Persuasion: ");
+	mvaddstrAlt(y,  25, "Persuasion: ");
 	addstrAlt(g.get_skill(SKILL_PERSUASION));
-	moveAlt(++y, 5);
-	addstrAlt("Charisma: ");
+	mvaddstrAlt(++y,  5, "Charisma: ");
 	addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
-	moveAlt(y++, 25);
-	addstrAlt("Law: ");
+	mvaddstrAlt(y++,  25, "Law: ");
 	addstrAlt(g.get_skill(SKILL_LAW));
-	moveAlt(y++, 5);
-	addstrAlt("Intelligence: ");
+	mvaddstrAlt(y++,  5, "Intelligence: ");
 	addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	// End SAV's adds
 	short defense;
@@ -544,18 +563,16 @@ void trial(Creature &g)
 	{
 		int prosecution = 0;
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(1, 1);
-		addstrAlt(g.name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(1,  1, g.name, gamelog);
 		addstrAlt(" is standing trial.");
 		//TRIAL MESSAGE
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(3, 1);
-		addstrAlt("The trial proceeds.  Jury selection is first.", gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(3,  1, "The trial proceeds.  Jury selection is first.", gamelog);
 		gamelog.newline();
 		getkey();
 		//JURY MAKEUP MESSAGE
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5, 1);
 		int jury = LCSrandom(61) - (60 * publicmood(-1)) / 100; // Political leanings of the population determine your jury
 		if (sleeperjudge) jury -= 20;
@@ -573,7 +590,7 @@ void trial(Creature &g)
 			}
 			else
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(attorneyname, gamelog);
 				addstrAlt("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!", gamelog);
 				gamelog.newline();
@@ -583,7 +600,7 @@ void trial(Creature &g)
 		}
 		else if (jury <= -29)
 		{
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			switch (LCSrandom(liberal_jury.size() + 1))
 			{
 			case 0:addstrAlt(g.name); addstrAlt("'s best friend from childhood is a juror.", gamelog); break;
@@ -596,7 +613,7 @@ void trial(Creature &g)
 		else if (jury < 29) addstrAlt("The jury is a bit Conservative.", gamelog);
 		else
 		{
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(conservative_jury), gamelog);
 		}
 		gamelog.newline();
@@ -614,7 +631,7 @@ void trial(Creature &g)
 		prosecution += 40 + LCSrandom(101) + scarefactor + (20 * g.confessions);
 		if (sleeperjudge) prosecution >>= 1;
 		if (defense == 3) prosecution -= 60;
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(7, 1);
 		if (autoconvict)
 		{
@@ -644,7 +661,7 @@ void trial(Creature &g)
 		getkey();
 		jury += LCSrandom(prosecution / 2 + 1) + prosecution / 2;
 		//DEFENSE MESSAGE
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(9, 1);
 		int defensepower = 0;
 		if (defense == 0 || defense == 3 || defense == 4)
@@ -683,8 +700,7 @@ void trial(Creature &g)
 					{
 						addstrAlt(attorneyname, gamelog);
 						addstrAlt("'s arguments made several of the jurors stand up ", gamelog);
-						moveAlt(10, 1);
-						addstrAlt("and shout \"NOT GUILTY!\" before deliberations even began.", gamelog);
+						mvaddstrAlt(10,  1, "and shout \"NOT GUILTY!\" before deliberations even began.", gamelog);
 						if (defense == 4) addjuice(*sleeperlawyer, 10, 500); // Bow please
 					}
 					else
@@ -741,57 +757,50 @@ void trial(Creature &g)
 		}
 		getkey();
 		//DELIBERATION MESSAGE
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(12, 1);
-		addstrAlt("The jury leaves to consider the case.", gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12,  1, "The jury leaves to consider the case.", gamelog);
 		gamelog.newline();
 		getkey();
 		//JURY RETURN MESSAGE
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(1, 1);
-		addstrAlt("The jury has returned from deliberations.", gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1,  1, "The jury has returned from deliberations.", gamelog);
 		gamelog.newline();
 		getkey();
 		bool keeplawflags = false;
 		//HUNG JURY
 		if (defensepower == jury)
 		{
-			set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			moveAlt(3, 1);
-			addstrAlt("But they can't reach a verdict!", gamelog);
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(3,  1, "But they can't reach a verdict!", gamelog);
 			gamelog.newline();
 			getkey();
 			//RE-TRY
 			if (LCSrandom(2) || scarefactor >= 10 || g.confessions)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(5, 1);
-				addstrAlt("The case will be re-tried next month.", gamelog);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(5,  1, "The case will be re-tried next month.", gamelog);
 				gamelog.newline();
 				getkey();
-				g.location = find_courthouse(g);
+				g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
 				keeplawflags = true;
 			}
 			//NO RE-TRY
 			else
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(5, 1);
-				addstrAlt("The prosecution declines to re-try the case.", gamelog);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(5,  1, "The prosecution declines to re-try the case.", gamelog);
 				gamelog.newline();
 				if (g.sentence == 0)
 				{
-					set_color(COLOR_GREEN, COLOR_BLACK, 1);
-					moveAlt(7, 1);
-					addstrAlt(g.name, gamelog);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					mvaddstrAlt(7,  1, g.name, gamelog);
 					addstrAlt(" is free!", gamelog);
 				}
 				else
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
-					moveAlt(7, 1);
-					addstrAlt(g.name, gamelog);
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(7,  1, g.name, gamelog);
 					addstrAlt(" will be returned to prison to resume an earlier sentence", gamelog);
 					if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 					{
@@ -802,8 +811,7 @@ void trial(Creature &g)
 					if (g.deathpenalty)
 					{
 						g.sentence = 3;
-						moveAlt(9, 1);
-						addstrAlt(execution_in_three_months, gamelog);
+						mvaddstrAlt(9,  1, execution_in_three_months, gamelog);
 					}
 				}
 				gamelog.nextMessage();
@@ -813,23 +821,20 @@ void trial(Creature &g)
 		//ACQUITTAL!
 		else if (!autoconvict&&defensepower > jury)
 		{
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			moveAlt(3, 1);
-			addstrAlt("NOT GUILTY!", gamelog);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(3,  1, "NOT GUILTY!", gamelog);
 			gamelog.newline();
 			getkey();
 			if (g.sentence == 0)
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
-				moveAlt(5, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(5,  1, g.name, gamelog);
 				addstrAlt(" is free!", gamelog);
 			}
 			else
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(5, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(5,  1, g.name, gamelog);
 				addstrAlt(" will be returned to prison to resume an earlier sentence", gamelog);
 				if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 				{
@@ -840,8 +845,7 @@ void trial(Creature &g)
 				if (g.deathpenalty)
 				{
 					g.sentence = 3;
-					moveAlt(7, 1);
-					addstrAlt(execution_in_three_months, gamelog);
+					mvaddstrAlt(7,  1, execution_in_three_months, gamelog);
 				}
 			}
 			gamelog.nextMessage();
@@ -880,9 +884,8 @@ void trial(Creature &g)
 	else
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(1, 1);
-		addstrAlt("The court accepts the plea.", gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1,  1, "The court accepts the plea.", gamelog);
 		gamelog.nextMessage();
 		getkey();
 		// Check for lenience; sleeper judge will always be merciful
@@ -904,9 +907,8 @@ void trial(Creature &g)
 /* monthly - sentence a liberal */
 void penalize(Creature &g, char lenient)
 {
-	set_color(COLOR_RED, COLOR_BLACK, 1);
-	moveAlt(3, 1);
-	addstrAlt("GUILTY!", gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(3,  1, "GUILTY!", gamelog);
 	gamelog.newline();
 	getkey();
 	short oldsentence = g.sentence;
@@ -990,9 +992,8 @@ void penalize(Creature &g, char lenient)
 	//MENTION LENIENCY
 	if (lenient)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(5, 1);
-		addstrAlt("During sentencing, the judge grants some leniency.", gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(5,  1, "During sentencing, the judge grants some leniency.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
@@ -1001,29 +1002,25 @@ void penalize(Creature &g, char lenient)
 	{
 		g.deathpenalty = 1;
 		g.sentence = 3;
-		set_color(COLOR_RED, COLOR_BLACK, 1);
-		moveAlt(7, 1);
-		addstrAlt(g.propername, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(7,  1, g.propername, gamelog);
 		addstrAlt(", you will be returned to prison to carry out your death sentence.", gamelog);
 		gamelog.newline();
 		getkey();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(9, 1);
-		addstrAlt(execution_in_three_months, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(9,  1, execution_in_three_months, gamelog);
 		getkey();
 	}
 	else if (g.deathpenalty)
 	{
 		g.sentence = 3;
 		set_color(COLOR_YELLOW, COLOR_RED, 1);
-		moveAlt(7, 1);
-		addstrAlt(g.propername, gamelog);
+		mvaddstrAlt(7,  1, g.propername, gamelog);
 		addstrAlt(", you are sentenced to DEATH!", gamelog);
 		gamelog.newline();
 		getkey();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(9, 1);
-		addstrAlt(execution_in_three_months, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(9,  1, execution_in_three_months, gamelog);
 		getkey();
 	}
 	// Don't give a time-limited sentence if they already have a life sentence.
@@ -1031,12 +1028,10 @@ void penalize(Creature &g, char lenient)
 		(g.sentence == 0 && oldsentence>0))
 	{
 		g.sentence = oldsentence;
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(7, 1);
-		addstrAlt(g.propername, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7,  1, g.propername, gamelog);
 		addstrAlt(", the court sees no need to add to your existing sentence.", gamelog);
-		moveAlt(8, 1);
-		addstrAlt("You will be returned to prison to resume it", gamelog);
+		mvaddstrAlt(8,  1, "You will be returned to prison to resume it", gamelog);
 		if (g.sentence > 1 && lenient)
 		{
 			g.sentence--;
@@ -1047,18 +1042,16 @@ void penalize(Creature &g, char lenient)
 	}
 	else if (g.sentence == 0)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(7, 1);
-		addstrAlt(g.propername, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7,  1, g.propername, gamelog);
 		addstrAlt(", consider this a warning.  You are free to go.", gamelog);
 		getkey();
 	}
 	else
 	{
 		if (g.sentence >= 36)g.sentence -= g.sentence % 12;
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(7, 1);
-		addstrAlt(g.propername, gamelog);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7,  1, g.propername, gamelog);
 		addstrAlt(", you are sentenced to ", gamelog);
 		if (g.sentence > 1200) g.sentence /= -1200;
 		if (g.sentence <= -1)
@@ -1075,8 +1068,7 @@ void penalize(Creature &g, char lenient)
 				{
 					addstrAlt(singleDot, gamelog);
 					getkey();
-					moveAlt(9, 1);
-					addstrAlt("Have a nice day, ", gamelog);
+					mvaddstrAlt(9,  1, "Have a nice day, ", gamelog);
 					addstrAlt(g.propername, gamelog);
 				}
 			}
@@ -1160,12 +1152,10 @@ char prison(Creature &g)
 		if (g.deathpenalty&&lawList[LAW_DEATHPENALTY] == 2)
 		{
 			eraseAlt();
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			moveAlt(8, 1);
-			addstrAlt(g.name, gamelog);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(8,  1, g.name, gamelog);
 			addstrAlt("'s death sentence has been commuted to life, ", gamelog);
-			moveAlt(9, 1);
-			addstrAlt("due to the abolition of the death penalty.", gamelog);
+			mvaddstrAlt(9,  1, "due to the abolition of the death penalty.", gamelog);
 			gamelog.nextMessage();
 			getkey();
 			g.sentence = -1;
@@ -1180,16 +1170,13 @@ char prison(Creature &g)
 			if (g.deathpenalty)
 			{
 				eraseAlt();
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt("FOR SHAME:", gamelog);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, "FOR SHAME:", gamelog);
 				gamelog.newline();
-				moveAlt(9, 1);
-				addstrAlt("Today, the Conservative Machine executed ", gamelog);
+				mvaddstrAlt(9,  1, "Today, the Conservative Machine executed ", gamelog);
 				addstrAlt(g.name, gamelog);
 				gamelog.record(singleSpace); //Log this for formatting purposes.
-				moveAlt(10, 1);
-				addstrAlt("by ", gamelog);
+				mvaddstrAlt(10,  1, "by ", gamelog);
 				if (lawList[LAW_DEATHPENALTY] == -2)
 					addstrAlt(pickrandom(cruel_and_unusual_execution_methods), gamelog);
 				else if (lawList[LAW_DEATHPENALTY] == -1 || lawList[LAW_DEATHPENALTY] == 0)
@@ -1203,13 +1190,11 @@ char prison(Creature &g)
 				if (boss != -1)
 				{
 					gamelog.newline();
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
-					moveAlt(12, 1);
-					addstrAlt(pool[boss]->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(12,  1, pool[boss]->name, gamelog);
 					addstrAlt(" has failed the Liberal Crime Squad.", gamelog);
 					gamelog.newline();
-					moveAlt(14, 1);
-					addstrAlt("If you can't protect your own people, who can you protect?", gamelog);
+					mvaddstrAlt(14,  1, "If you can't protect your own people, who can you protect?", gamelog);
 					getkey();
 					addjuice(*pool[boss], -50, -50);
 				}
@@ -1222,20 +1207,18 @@ char prison(Creature &g)
 			else
 			{
 				eraseAlt();
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(8, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(8,  1, g.name, gamelog);
 				addstrAlt(" has been released from prison.", gamelog);
 				gamelog.newline();
-				moveAlt(9, 1);
-				addstrAlt("No doubt there are some mental scars, but the Liberal is back.", gamelog);
+				mvaddstrAlt(9,  1, "No doubt there are some mental scars, but the Liberal is back.", gamelog);
 				gamelog.nextMessage();
 				getkey();
 				Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
 				g.give_armor(clothes, NULL);
 				// If their old base is no longer under LCS control, wander back to the
 				// homeless shelter instead.
-				if (location[g.base]->renting < 0) g.base = find_homeless_shelter(g);
+				if (location[g.base]->renting < 0) g.base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location); 
 				g.location = g.base;
 				showed = 1;
 			}
@@ -1246,9 +1229,8 @@ char prison(Creature &g)
 			if (g.deathpenalty)
 			{
 				eraseAlt();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, g.name, gamelog);
 				addstrAlt(" is due to be executed next month.", gamelog);
 				gamelog.nextMessage();
 				getkey();
@@ -1257,9 +1239,8 @@ char prison(Creature &g)
 			else
 			{
 				eraseAlt();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, g.name, gamelog);
 				addstrAlt(" is due to be released next month.", gamelog);
 				gamelog.nextMessage();
 				getkey();
@@ -1271,9 +1252,8 @@ char prison(Creature &g)
 			if (g.deathpenalty)
 			{
 				eraseAlt();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveAlt(8, 1);
-				addstrAlt(g.name, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8,  1, g.name, gamelog);
 				addstrAlt(" is due to be executed in ", gamelog);
 				addstrAlt(g.sentence, gamelog);
 				addstrAlt(" months.", gamelog);
@@ -1288,9 +1268,8 @@ char prison(Creature &g)
 void reeducation(Creature &g)
 {
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveAlt(8, 1);
-	addstrAlt(g.name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8,  1, g.name, gamelog);
 	addstrAlt(pickrandom(reeducation_experiences), gamelog);
 	gamelog.newline();
 	getkey();
@@ -1370,9 +1349,8 @@ void laborcamp(Creature &g)
 	}
 	if (!escaped)experience = (singleSpace + pickrandom(labor_camp_experiences)).data();
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveAlt(8, 1);
-	addstrAlt(g.name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8,  1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
 	getkey();
@@ -1384,7 +1362,7 @@ void laborcamp(Creature &g)
 		addstrAlt(" escaped from prison!", gamelog);
 		addjuice(g, 50, 1000);
 		criminalize(g, LAWFLAG_ESCAPED);
-		g.location = find_homeless_shelter(g);
+		g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
 		if (escaped == 2)
 		{
 			int num_escaped = 0;
@@ -1489,9 +1467,8 @@ void prisonscene(Creature &g)
 		}
 	}
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveAlt(8, 1);
-	addstrAlt(g.name, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8,  1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
 	getkey();
@@ -1503,7 +1480,7 @@ void prisonscene(Creature &g)
 		addstrAlt(" escaped from prison!", gamelog);
 		addjuice(g, 50, 1000);
 		criminalize(g, LAWFLAG_ESCAPED);
-		g.location = find_homeless_shelter(g);
+		g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location); 
 		if (escaped == 2)
 		{
 			int num_escaped = 0;

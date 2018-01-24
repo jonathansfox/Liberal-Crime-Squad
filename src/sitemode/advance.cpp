@@ -26,11 +26,50 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/advance.h"
+// own header
+#include "sitemode/sitedisplay.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/commonactions.h"
+// for void criminalizeparty(short crime)
+
+#include "combat/fight.h"
+//for void makeloot(Creature &cr,vector<Item *> &loot);
+
+#include "combat/haulkidnap.h"
+//for void squadgrab_immobile(char dead);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+//#include <common.h>
+
+extern squadst *activesquad;
+extern vector<Item *> groundloot;
+extern int sitecrime;
+extern newsstoryst *sitestory;
+extern short cursite;
+extern short sitealarm;
+extern Creature encounter[ENCMAX];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern int locx;
+extern int locy;
+extern int locz;
+extern short sitealarmtimer;
+extern short siteonfire;
+extern short lawList[LAWNUM];
+
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
@@ -41,6 +80,14 @@ extern int stat_kills;
 extern int ccs_siege_kills;
 extern int ccs_boss_kills;
 string smellsPanic;
+
+
+string ableToStopBleed;
+string sWounds;
+string isBurned;
+string drops;
+string sBody;
+
 /* handles end of round stuff for everyone */
 void creatureadvance()
 {
@@ -58,12 +105,11 @@ void creatureadvance()
 				if (activesquad->squad[p]->prisoner->squadid == -1)
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt(activesquad->squad[p]->name, gamelog);
-					addstrAlt(" drops ", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
+					addstrAlt(drops, gamelog);
 					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
-					addstrAlt("'s body.", gamelog);
+					addstrAlt(sBody, gamelog);
 					gamelog.newline();
 					makeloot(*activesquad->squad[p]->prisoner, groundloot);
 					getkey();
@@ -120,9 +166,8 @@ void creatureadvance()
 			{
 				sitealarmtimer = 0;
 				clearmessagearea();
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(smellsPanic, gamelog);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, smellsPanic, gamelog);
 				gamelog.newline();
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
@@ -267,13 +312,11 @@ void advancecreature(Creature &cr)
 			else if (cr.squadid != -1 && topmedical&&topmedical->skill_check(SKILL_FIRSTAID, DIFFICULTY_FORMIDABLE))
 			{
 				clearmessagearea();
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
-				moveSixteenOne();
-				addstrAlt(topmedical->name, gamelog);
-				addstrAlt(" was able to slow the bleeding of", gamelog);
-				moveSeventeenOne();
-				addstrAlt(cr.name, gamelog);
-				addstrAlt("'s wounds.", gamelog);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16,  1, topmedical->name, gamelog);
+				addstrAlt(ableToStopBleed, gamelog);
+				mvaddstrAlt(17,  1, cr.name, gamelog);
+				addstrAlt(sWounds, gamelog);
 				gamelog.newline();
 				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
 				cr.wound[w] ^= WOUND_BLEEDING;
@@ -333,10 +376,9 @@ void advancecreature(Creature &cr)
 		}
 		else
 		{
-			set_color(COLOR_RED, COLOR_BLACK, 0);
-			moveSixteenOne();
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(" is burned!", gamelog);
+			set_color_easy(RED_ON_BLACK);
+			mvaddstrAlt(16,  1, cr.name, gamelog);
+			addstrAlt(isBurned, gamelog);
 			gamelog.newline(); //Next message?
 			getkey();
 		}
@@ -376,13 +418,5 @@ void advancecreature(Creature &cr)
 			getkey();
 			if (cr.prisoner != NULL) freehostage(cr, 1);
 		}
-		/*else
-		{
-		set_color(COLOR_RED,COLOR_BLACK,0);
-		moveAlt(16,1);
-		addstrAlt(cr.name);
-		addstrAlt(" bleeds.");
-		getkey();
-		}*/
 	}
 }

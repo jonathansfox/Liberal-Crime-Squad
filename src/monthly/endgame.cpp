@@ -26,16 +26,61 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "basemode/liberalagenda.h"
+// for liberalagenda
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/misc.h"
+// for char* statename(int)
+         //shouldn't be in getnames? --Schmel924
+// for romannumeral (int)
+         //only usage here --Schmel924
+
+
+#include "title/saveload.h"
+// for void reset;
+
+#include "title/highscore.h"
+// for void savehighscore(char endtype);
+
+#include "monthly/endgame.h"
+//own header
+        //does not compile without --Schmel924
+
+#include "politics/politics.h"
+//for publicmood
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+/* end the game and clean up */
+void end_game(int err = EXIT_SUCCESS);
+
 extern MusicClass music;
  string pressKeyToReflect;
  string they_ll_round_you_up;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern short exec[EXECNUM];
+extern short court[COURTNUM];
+extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+extern int amendnum;
+extern bool termlimits;
+extern vector<string> finalCabinet;
+extern short lawList[LAWNUM];
+extern char cantseereason;
+extern short house[HOUSENUM];
+extern short senate[SENATENUM];
+extern short attitude[VIEWNUM];
 /*
     TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
        that the country has become arch-conservative... --Addictgamer
@@ -48,9 +93,8 @@ void tossjustices(char canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(12, 6);
-		addstrAlt("The Elite Liberal Congress is proposing an ELITE LIBERAL AMENDMENT!");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(12,  6, "The Elite Liberal Congress is proposing an ELITE LIBERAL AMENDMENT!");
 		getkey();
 	}
 	//STATE THE AMENDMENT
@@ -59,41 +103,32 @@ void tossjustices(char canseethings)
 		int tossnum = 0;
 		for (j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL) tossnum++;
 		amendmentheading();
-		moveAlt(2, 5);
-		addstrAlt("The following former citizen");
+		mvaddstrAlt(2,  5, "The following former citizen");
 		if (tossnum != 1)addstrAlt("s are");
 		else addstrAlt(" is");
 		addstrAlt(" branded Arch-Conservative:");
 		int y = 4;
 		for (j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL)
 		{
-			moveAlt(y++, 0);
-			addstrAlt(courtname[j]);
+			mvaddstrAlt(y++,  0, courtname[j]);
 		}
-		moveAlt(y + 1, 5);
-		addstrAlt("In particular, the aforementioned former citizen");
+		mvaddstrAlt(y + 1,  5, "In particular, the aforementioned former citizen");
 		if (tossnum != 1)addstrAlt("s");
 		addstrAlt(" may");
-		moveAlt(y + 2, 0);
-		addstrAlt("not serve on the Supreme Court.  Said former citizen");
+		mvaddstrAlt(y + 2,  0, "not serve on the Supreme Court.  Said former citizen");
 		if (tossnum != 1)addstrAlt("s");
 		addstrAlt(" will");
-		moveAlt(y + 3, 0);
-		addstrAlt("be deported to ");
+		mvaddstrAlt(y + 3,  0, "be deported to ");
 		if (tossnum != 1)addstrAlt("Conservative countries");
 		else addstrAlt("a Conservative country");
 		addstrAlt(" of the President's");
-		moveAlt(y + 4, 0);
-		addstrAlt("choosing to be replaced by ");
+		mvaddstrAlt(y + 4,  0, "choosing to be replaced by ");
 		if (tossnum != 1)addstrAlt("Proper Justices");
 		else addstrAlt("a Proper Justice");
 		addstrAlt(", also of");
-		moveAlt(y + 5, 0);
-		addstrAlt("the President's choosing with the advice and consent of");
-		moveAlt(y + 6, 0);
-		addstrAlt("the Senate.");
-		moveAlt(24, 0);
-		addstrAlt("Press 'C' to watch the ratification process unfold.");
+		mvaddstrAlt(y + 5,  0, "the President's choosing with the advice and consent of");
+		mvaddstrAlt(y + 6,  0, "the Senate.");
+		mvaddstrAlt(24,  0, "Press 'C' to watch the ratification process unfold.");
 		while (getkey() != 'c');
 	}
 	if (ratify(2, -1, -1, 1, canseethings))
@@ -108,8 +143,7 @@ void tossjustices(char canseethings)
 	}
 	if (canseethings)
 	{
-		moveAlt(24, 0);
-		addstrAlt(pressKeyToReflect);
+		mvaddstrAlt(24,  0, pressKeyToReflect);
 		getkey();
 	}
 }
@@ -122,9 +156,8 @@ void amendment_termlimits(char canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveAlt(12, 6);
-		addstrAlt("A National Convention has proposed an ELITE LIBERAL AMENDMENT!");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(12,  6, "A National Convention has proposed an ELITE LIBERAL AMENDMENT!");
 		getkey();
 	}
 	//STATE THE AMENDMENT
@@ -134,13 +167,11 @@ void amendment_termlimits(char canseethings)
 		{
 			int i = 2;
 			for (string s : amendmentPass) {
-				moveAlt(i, 0);
-				addstrAlt(s);
+				mvaddstrAlt(i,  0, s);
 				i++;
 			}
 		}
-		moveAlt(24, 0);
-		addstrAlt("Press 'C' to watch the ratification process unfold.");
+		mvaddstrAlt(24,  0, "Press 'C' to watch the ratification process unfold.");
 		while (getkey() != 'c');
 	}
 	if (ratify(2, -1, -1, 0, canseethings))
@@ -148,8 +179,7 @@ void amendment_termlimits(char canseethings)
 		termlimits = true;
 		if (canseethings)
 		{
-			moveAlt(24, 0);
-			addstrAlt("Press any key to hold new elections!                           ");
+			mvaddstrAlt(24,  0, "Press any key to hold new elections!                           ");
 			getkey();
 		}
 		elections_senate(0, canseethings);
@@ -160,8 +190,7 @@ void amendment_termlimits(char canseethings)
 	}
 	else if (canseethings)
 	{
-		moveAlt(24, 0);
-		addstrAlt(pressKeyToReflect);
+		mvaddstrAlt(24,  0, pressKeyToReflect);
 		getkey();
 	}
 }
@@ -169,20 +198,17 @@ void amendment_termlimits(char canseethings)
  string stalinistsRemakeWorld;
 void badEndRemakeWorld(string str, string str2, string str3, EndTypes end);
 void badEndRemakeWorld(string str, string str2, string str3, EndTypes end) {
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	eraseAlt();
-	moveAlt(12, 10);
-	addstrAlt(str);
+	mvaddstrAlt(12,  10, str);
 	getkey();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	eraseAlt();
-	moveAlt(12, 12);
-	addstrAlt(str2);
+	mvaddstrAlt(12,  12, str2);
 	getkey();
-	set_color(COLOR_BLACK, COLOR_BLACK, 1);
+	set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	eraseAlt();
-	moveAlt(12, 14);
-	addstrAlt(str3);
+	mvaddstrAlt(12,  14, str3);
 	getkey();
 	savehighscore(end);
 }
@@ -235,7 +261,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		eraseAlt();
 		getkey();
 		//STATE THE AMENDMENT
@@ -243,13 +269,11 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		{
 			int i = 2;
 			for (string s : output) {
-				moveAlt(i, 0);
-				addstrAlt(s);
+				mvaddstrAlt(i,  0, s);
 				i++;
 			}
 		}
-		moveAlt(24, 0);
-		addstrAlt("Press 'C' to watch the ratification process unfold.");
+		mvaddstrAlt(24,  0, "Press 'C' to watch the ratification process unfold.");
 		while (getkey() != 'c');
 	}
 	if (ratify(ratificationNumbers[0], ratificationNumbers[1], ratificationNumbers[2], ratificationNumbers[3], canseethings))
@@ -257,17 +281,16 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		music.play(endMusic);
 		if (canseethings)
 		{
-			moveAlt(24, 0);
-			addstrAlt("Press any key to reflect on what has happened ONE LAST TIME.");
+			mvaddstrAlt(24,  0, "Press any key to reflect on what has happened ONE LAST TIME.");
 			getkey();
 		}
 		amendnum = 1; // Constitution repealed...
 		if (canseethings)
 		{
-			strcpy(execname[EXEC_PRESIDENT], finalCabinet[0]);
-			strcpy(execname[EXEC_VP], finalCabinet[1]);
-			strcpy(execname[EXEC_STATE], finalCabinet[2]);
-			strcpy(execname[EXEC_ATTORNEY], finalCabinet[3]);
+			strcpy(execname[EXEC_PRESIDENT], finalCabinet[0].data());
+			strcpy(execname[EXEC_VP], finalCabinet[1].data());
+			strcpy(execname[EXEC_STATE], finalCabinet[2].data());
+			strcpy(execname[EXEC_ATTORNEY], finalCabinet[3].data());
 			for (int e = 0; e < EXECNUM; e++) exec[e] = enforcedAlignment;
 			if (enforcedAlignment == ALIGN_ARCHCONSERVATIVE) {
 				for (int l = 0; l < LAWNUM; l++) lawList[l] = enforcedAlignment;
@@ -349,8 +372,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 	{
 		if (canseethings)
 		{
-			moveAlt(24, 0);
-			addstrAlt("Press any key to breathe a sigh of relief.                   ");
+			mvaddstrAlt(24,  0, "Press any key to breathe a sigh of relief.                   ");
 			getkey();
 		}
 	}
@@ -363,9 +385,8 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("The Ratification Process:");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "The Ratification Process:");
 	}
 	//THE STATE VOTE WILL BE BASED ON VIEW OF LAW
 	int mood = publicmood(lawview);
@@ -379,12 +400,9 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 		ratified = true;
 		if (canseethings)
 		{
-			moveAlt(0, 62);
-			addstrAlt("House");
-			moveAlt(0, 70);
-			addstrAlt("Senate");
-			moveAlt(24, 0);
-			addstrAlt("Press any key to watch the Congressional votes unfold.     ");
+			mvaddstrAlt(0,  62, "House");
+			mvaddstrAlt(0,  70, "Senate");
+			mvaddstrAlt(24,  0, "Press any key to watch the Congressional votes unfold.     ");
 			getkey();
 		}
 		bool yeswin_h = false, yeswin_s = false;
@@ -397,17 +415,15 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			if (l == HOUSENUM - 1) if (yesvotes_h >= HOUSESUPERMAJORITY) yeswin_h = true;
 			if (canseethings)
 			{
-				if (l == HOUSENUM - 1 && yeswin_h) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (l == HOUSENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(2, 62);
-				addstrAlt(yesvotes_h);
+				if (l == HOUSENUM - 1 && yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(2,  62, yesvotes_h);
 				addstrAlt(YEA);
-				if (l == HOUSENUM - 1 && !yeswin_h) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (l == HOUSENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(3, 62);
-				addstrAlt(l + 1 - yesvotes_h);
+				if (l == HOUSENUM - 1 && !yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(3,  62, l + 1 - yesvotes_h);
 				addstrAlt(NAY);
 			}
 			if (l % 4 == 0 && s < SENATENUM)
@@ -419,17 +435,15 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			if (l == HOUSENUM - 1 && yesvotes_s >= SENATESUPERMAJORITY) yeswin_s = true;
 			if (canseethings)
 			{
-				if (l == HOUSENUM - 1 && yeswin_s) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (l == HOUSENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(2, 70);
-				addstrAlt(yesvotes_s);
+				if (l == HOUSENUM - 1 && yeswin_s) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(2,  70, yesvotes_s);
 				addstrAlt(YEA);
-				if (l == HOUSENUM - 1 && !yeswin_s) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (l == HOUSENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(3, 70);
-				addstrAlt(s - yesvotes_s);
+				if (l == HOUSENUM - 1 && !yeswin_s) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(3,  70, s - yesvotes_s);
 				addstrAlt(NAY);
 				if (l % 5 == 0) pause_ms(10);
 			}
@@ -446,16 +460,14 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 		int yesstate = 0;
 		if (canseethings)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			for (int s = 0; s < 50; s++)
 			{
 				if (s < 17) moveAlt(5 + s, 0);
 				else if (s < 34) moveAlt(5 + s - 17, 27);
-				else moveAlt(5 + s - 34, 54);
-				addstrAlt(statename(s));
+				else mvaddstrAlt(5 + s - 34,  54, statename(s));
 			}
-			moveAlt(24, 0);
-			addstrAlt("Press any key to watch the State votes unfold.              ");
+			mvaddstrAlt(24,  0, "Press any key to watch the State votes unfold.              ");
 			getkey();
 		}
 		int vote, smood;
@@ -474,7 +486,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			if (vote == -1 && !LCSrandom(2)) vote = -2;
 			if (canseethings)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				if (s < 17) moveAlt(5 + s, 22);
 				else if (s < 34) moveAlt(5 + s - 17, 49);
 				else moveAlt(5 + s - 34, 76);
@@ -487,17 +499,15 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			else if (canseethings) addstrAlt("Nay");
 			if (canseethings)
 			{
-				if (s == STATENUM - 1 && yesstate >= STATESUPERMAJORITY) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (s == STATENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(23, 50);
-				addstrAlt(yesstate);
+				if (s == STATENUM - 1 && yesstate >= STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(23,  50, yesstate);
 				addstrAlt(YEA);
-				if (s == STATENUM - 1 && yesstate < STATESUPERMAJORITY) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else if (s == STATENUM - 1) set_color(COLOR_BLACK, COLOR_BLACK, 1);
-				else set_color(COLOR_WHITE, COLOR_BLACK, 0);
-				moveAlt(23, 60);
-				addstrAlt(s + 1 - yesstate);
+				if (s == STATENUM - 1 && yesstate < STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(23,  60, s + 1 - yesstate);
 				addstrAlt(NAY);
 				pause_ms(50);
 			}
@@ -506,7 +516,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 	}
 	if (canseethings)
 	{
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(23, 0);
 		if (ratified) addstrAlt("AMENDMENT ADOPTED.");
 		else addstrAlt("AMENDMENT REJECTED.");
@@ -519,9 +529,8 @@ std::string romannumeral(int amendnum);
 void amendmentheading()
 {
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
-	addstrAlt("Proposed Amendment ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0,  0, "Proposed Amendment ");
 	addstrAlt(romannumeral(amendnum));
 	addstrAlt(" to the United States Constitution:");
 }

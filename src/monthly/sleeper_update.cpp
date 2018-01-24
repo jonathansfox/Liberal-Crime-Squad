@@ -19,6 +19,33 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "sitemode/newencounter.h"
+// for prepareencounter
+
+#include "items/loottype.h"
+
+#include "items/loot.h"
+
+#include "common/commonactions.h"
+// for void change_public_opinion(int,int ,char =1,char =100);
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "common/consolesupport.h"
+// for int getkey();
+
+#include "common/translateid.h"
+// for  int getloottype(int id);
+
+#include "monthly/sleeper_update.h"
+//own header
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -32,6 +59,40 @@ extern int stat_recruits;
 extern string string_sleeper;
  string they_are_stashed;
 extern string singleDot;
+
+string hasBeenCaughtSnooping;
+string isNowHomeless;
+string hasLeakedIntelligence;
+string hasLeakedPolice;
+string hasLeakedCorporate;
+string hasLeakedPrison;
+string hasLeakedCableNews;
+string hasLeakedAMRadio;
+string hasLeakedAnimalResearch;
+string hasLeakedJudiciary;
+string papersAreStashed;
+string hasLeakedCCS;
+string diskIsStashed;
+
+string arrestedWhileEmbezzling;
+string arrestedWhileStealing;
+
+string droppedOffPackage;
+string itemNotFound;
+string lostStolenItem;
+string contactModAuthor;
+
+string hasRecruited;
+string looksForwardToServing;
+
+extern short lawList[LAWNUM];
+extern char disbanding;
+extern short attitude[VIEWNUM];
+extern class Ledger ledger;
+extern vector<ArmorType *> armortype;
+extern Log xmllog;
+extern Creature encounter[ENCMAX];
+extern vector<WeaponType *> weapontype;
 
 /**********************************************************************
 ** *JDS*
@@ -328,20 +389,18 @@ void sleeper_influence(Creature &cr, char &clearformess, char canseethings, int(
 **********************************/
 void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	int homes = find_homeless_shelter(cr);
+	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
 		cr.juice -= 1;
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has been caught snooping around.", gamelog);
+			addstrAlt(hasBeenCaughtSnooping, gamelog);
 			gamelog.newline();
-			moveAlt(8, 1);
-			addstrAlt("The Liberal is now homeless and jobless...", gamelog);
+			mvaddstrAlt(8,  1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
 			getkey();
 			removesquadinfo(cr);
@@ -373,13 +432,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_SECRETDOCUMENTS)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked secret intelligence files.", gamelog);
+			addstrAlt(hasLeakedIntelligence, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt(they_are_stashed, gamelog);
+			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -395,13 +452,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_POLICERECORDS)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked secret police records.", gamelog);
+			addstrAlt(hasLeakedPolice, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt(they_are_stashed, gamelog);
+			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -415,13 +470,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CORPFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked secret corporate documents.", gamelog);
+			addstrAlt(hasLeakedCorporate, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt(they_are_stashed, gamelog);
+			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -434,13 +487,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_PRISONFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked internal prison records.", gamelog);
+			addstrAlt(hasLeakedPrison, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt(they_are_stashed, gamelog);
+			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -455,13 +506,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CABLENEWSFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked proof of systemic Cable News bias.", gamelog);
+			addstrAlt(hasLeakedCableNews, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt("The papers are stashed at the homeless shelter.", gamelog);
+			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -476,13 +525,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_AMRADIOFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked proof of systemic AM Radio bias.", gamelog);
+			addstrAlt(hasLeakedAMRadio, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt("The papers are stashed at the homeless shelter.", gamelog);
+			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -495,13 +542,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_RESEARCHFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked internal animal research reports.", gamelog);
+			addstrAlt(hasLeakedAnimalResearch, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt(they_are_stashed, gamelog);
+			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -513,13 +558,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_JUDGEFILES)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked proof of corruption in the judiciary.", gamelog);
+			addstrAlt(hasLeakedJudiciary, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt("The papers are stashed at the homeless shelter.", gamelog);
+			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 		}
@@ -531,13 +574,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CCS_BACKERLIST)]);
 			location[homes]->loot.push_back(it);
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has leaked a list of the CCS's government backers.", gamelog);
+			addstrAlt(hasLeakedCCS, gamelog);
 			gamelog.newline();
-			moveAlt(7, 1);
-			addstrAlt("The disk is stashed at the homeless shelter.", gamelog);
+			mvaddstrAlt(7,  1, diskIsStashed, gamelog);
 			gamelog.nextMessage();
 			pause = true;
 			ccsexposure = CCSEXPOSURE_LCSGOTDATA;
@@ -559,15 +600,14 @@ void sleeper_embezzle(Creature &cr, char &clearformess, char canseethings, int(&
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has been arrested while embezzling funds.", gamelog);
+			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
 			getkey();
 			cr.crimes_suspected[LAWFLAG_COMMERCE]++;
 			removesquadinfo(cr);
-			cr.location = find_police_station(cr);
+			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
 			cr.drop_weapons_and_clips(NULL);
 			cr.activity.type = ACTIVITY_NONE;
 			cr.flag &= ~CREATUREFLAG_SLEEPER;
@@ -627,15 +667,14 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			moveAlt(6, 1);
-			addstrAlt(string_sleeper, gamelog);
+			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
-			addstrAlt(" has been arrested while stealing things.", gamelog);
+			addstrAlt(arrestedWhileStealing, gamelog);
 			gamelog.nextMessage();
 			getkey();
 			cr.crimes_suspected[LAWFLAG_THEFT]++;
 			removesquadinfo(cr);
-			cr.location = find_police_station(cr);
+			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
 			cr.drop_weapons_and_clips(NULL);
 			cr.activity.type = ACTIVITY_NONE;
 			cr.flag &= ~CREATUREFLAG_SLEEPER;
@@ -651,7 +690,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 	cr.infiltration -= LCSrandom(10)*0.01f - 0.02f; //No effectiveness drop before? -Niel
 													//Item *item;
 	string item;
-	Location *shelter = location[find_homeless_shelter(cr)];
+	Location *shelter = location[find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location)];
 	int number_of_items = LCSrandom(10) + 1;
 	int itemindex = -1; // have to check case item not found to avoid brave modders segfaults.
 	int numberofxmlfails = 0; // Tell them how many fails
@@ -848,21 +887,17 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		}
 	}
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);   moveAlt(6, 1);
-	addstrAlt(string_sleeper, gamelog);
+	set_color_easy(WHITE_ON_BLACK);   mvaddstrAlt(6,  1, string_sleeper, gamelog);
 	addstrAlt(cr.name, gamelog);
-	addstrAlt(" has dropped a package off at the homeless shelter.", gamelog);
+	addstrAlt(droppedOffPackage, gamelog);
 	gamelog.nextMessage();
 	if (numberofxmlfails > 0) {
-		moveAlt(8, 1);
 		set_color(COLOR_RED, COLOR_BLUE, 1);
-		addstrAlt("Items not found in XML files led to ", xmllog);
-		moveAlt(9, 1);
-		addstrAlt(numberofxmlfails, xmllog);
-		addstrAlt(" lost stolen items! ", xmllog);
-		moveAlt(11, 1);
+		mvaddstrAlt(8,  1, itemNotFound, xmllog);
+		mvaddstrAlt(9,  1, numberofxmlfails, xmllog);
+		addstrAlt(lostStolenItem, xmllog);
 		set_color(COLOR_RED, COLOR_GREEN, 1);
-		addstrAlt("Contact the mod author (or DevTeam if playing the vanilla game) at once!", xmllog);
+		mvaddstrAlt(11,  1, contactModAuthor, xmllog);
 		xmllog.nextMessage();
 	}
 	getkey();
@@ -907,16 +942,14 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 				location[recruit->worklocation]->hidden = 0;
 				pool.push_back(recruit);
 				eraseAlt();
-				moveAlt(6, 1);
-				addstrAlt(string_sleeper, gamelog);
+				mvaddstrAlt(6,  1, string_sleeper, gamelog);
 				addstrAlt(cr.name, gamelog);
-				addstrAlt(" has recruited a new ", gamelog);
+				addstrAlt(hasRecruited, gamelog);
 				addstrAlt(recruit->get_type_name(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-				moveAlt(8, 1);
-				addstrAlt(recruit->name, gamelog);
-				addstrAlt(" looks forward serving the Liberal cause!", gamelog);
+				mvaddstrAlt(8,  1, recruit->name, gamelog);
+				addstrAlt(looksForwardToServing, gamelog);
 				gamelog.nextMessage();
 				getkey();
 				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
@@ -927,3 +960,5 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 	}
 	return;
 }
+
+

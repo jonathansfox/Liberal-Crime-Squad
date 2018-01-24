@@ -68,6 +68,7 @@
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+extern unsigned long seed[RNG_SIZE];
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
 // This is strcmp() on lowercase versions of the string.

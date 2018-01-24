@@ -26,6 +26,27 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "vehicle/vehicle.h"
+
+#include "common/commonactions.h"
+// for locatesquad(activesquad,loc)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)        
+
+#include "daily/shopsnstuff.h"
+//own header
+#include "sitemode/shop.h"
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -54,6 +75,28 @@ extern string show_squad_liberal_status;
 extern string enter_done;
 extern string chooseALiberalTo;
 extern string spaceParanthesisDollar;
+
+extern squadst *activesquad;
+extern short party_status;
+extern vector<Vehicle *> vehicle;
+extern class Ledger ledger;
+
+string toSpend;
+string chooseAColor;
+string theseColorsAreCon;
+string thisColor;
+string notEnoughMoney;
+string chooseVehicle;
+string thisVehicle;
+string weDontNeedCar;
+
+string enterLeave;
+string b_chooseBuyer;
+string s_sellCar;
+string s_sellThe;
+string g_getCar;
+string f_fixWounds;
+
 /* active squad visits the hospital */
 void hospital(int loc)
 {
@@ -65,20 +108,16 @@ void hospital(int loc)
 		eraseAlt();
 		locheader();
 		printparty();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(10, 1);
-		addstrAlt("F - Go in and fix up Conservative wounds");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(12, 1);
-		addstrAlt("Enter - Leave");
-		if (partysize > 0 && (party_status == -1 || partysize > 1)) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(13, 1);
-		addstrAlt(check_status_of_squad_liberal);
-		if (party_status != -1) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(14, 1);
-		addstrAlt(show_squad_liberal_status);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(10,  1, f_fixWounds);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12,  1, enterLeave);
+		if (partysize > 0 && (party_status == -1 || partysize > 1)) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13,  1, check_status_of_squad_liberal);
+		if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(14,  1, show_squad_liberal_status);
 		int c = getkey();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == '0') party_status = -1;
@@ -141,45 +180,38 @@ void dealership(int loc)
 		for (int v = len(vehicle) - 1; v >= 0; v--)
 			if (vehicle[v]->id() == activesquad->squad[buyer]->carid)
 				car_to_sell = vehicle[v];
-		if (!car_to_sell) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(10, 1);
-		addstrAlt("G - Get a Liberal car");
-		moveAlt(11, 1);
+		if (!car_to_sell) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(10,  1, g_getCar);
 		if (car_to_sell)
 		{
 			price = static_cast<int>(0.8*car_to_sell->price());
 			if (car_to_sell->get_heat())
 				price /= 10;
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			addstrAlt("S - Sell the " + car_to_sell->fullname() + spaceParanthesisDollar + tostring(price) + closeParenthesis);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(11, 1, s_sellThe + car_to_sell->fullname() + spaceParanthesisDollar + tostring(price) + closeParenthesis);
 		}
 		else
 		{
-			set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			addstrAlt("S - Sell a car");
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11, 1, s_sellCar);
 		}
 		/*if(car_to_sell && car_to_sell->heat>1 && ledger.get_funds()>=500)
-		set_color(COLOR_WHITE,COLOR_BLACK,0);
+		set_color_easy(WHITE_ON_BLACK);
 		else
 		set_color(COLOR_BLACK,COLOR_BLACK,1);
-		moveAlt(12,1);
-		addstrAlt("P - Repaint car, replace plates and tags ($500)");*/
-		if (partysize >= 2)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("B - Choose a buyer");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(16, 40);
-		addstrAlt("Enter - Leave");
-		if (party_status != -1)set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(15, 1);
-		addstrAlt(show_squad_liberal_status);
-		if (partysize > 0 && (party_status == -1 || partysize > 1))set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(15, 40);
-		addstrAlt(check_status_of_squad_liberal);
+		mvaddstrAlt(12, 1, "P - Repaint car, replace plates and tags ($500)");*/
+		if (partysize >= 2)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, b_chooseBuyer);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(16,  40, enterLeave);
+		if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(15,  1, show_squad_liberal_status);
+		if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(15,  40, check_status_of_squad_liberal);
 		int c = getkey();
 		// Leave
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
@@ -209,14 +241,13 @@ void dealership(int loc)
 				}
 			while (true)
 			{
-				carchoice = choiceprompt("Choose a vehicle", "", vehicleoption, "Vehicle",
-					true, "We don't need a Conservative car");
+				carchoice = choiceprompt(chooseVehicle, blankString, vehicleoption, thisVehicle,
+					true, weDontNeedCar);
 				if (carchoice != -1 && (sleepercarsalesman ? vehicletype[availablevehicle[carchoice]]->sleeperprice() :
 					vehicletype[availablevehicle[carchoice]]->price()) > ledger.get_funds())
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 0);
-					moveAlt(1, 1);
-					addstrAlt("You don't have enough money!");
+					set_color_easy(RED_ON_BLACK);
+					mvaddstrAlt(1,  1, notEnoughMoney);
 					getkey();
 				}
 				else break;
@@ -226,8 +257,8 @@ void dealership(int loc)
 			int colorchoice;
 			//if(len(vehicletype[availablevehicle[choice]]->color())>1) //Allow to back out if you don't like single colour? -XML
 			//{
-			colorchoice = choiceprompt("Choose a color", "", vehicletype[availablevehicle[carchoice]]->color(),
-				"Color", true, "These colors are Conservative");
+			colorchoice = choiceprompt(chooseAColor, blankString, vehicletype[availablevehicle[carchoice]]->color(),
+				thisColor, true, theseColorsAreCon);
 			//}
 			//else
 			//   colorchoice = 0;
@@ -284,9 +315,8 @@ void choose_buyer(short &buyer)
 	while (true)
 	{
 		printparty();
-		moveAlt(8, 20);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		addstrAlt(chooseALiberalTo + "SPEND.");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8,  20, chooseALiberalTo + toSpend);
 		int c = getkey();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= partysize + '1' - 1)

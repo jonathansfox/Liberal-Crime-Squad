@@ -26,6 +26,38 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+
+#include "sitemode/stealth.h"
+// for hasdisguise
+
+//#include "augmentation.h"
+//#include "creature.h"
+//own header
+
+#include "common/stringconversion.h"
+//for atoi redefinition
+
+#include "common/translateid.h"
+// for  int getweapontype(int )
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for addstr
+
+#include "politics/politics.h"
+//for  void promoteVP()
+        //only use here. --Schmel924
+
+#include "combat/chase.h"
+//for Vehicle* getChaseVehicle(const Creature &c);
+        //hmm --Schmel924
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -40,6 +72,13 @@ extern char oldPresidentName[POLITICIAN_NAMELEN];
  vector<string> ccs_covername_other;
 extern short exec[EXECNUM];
 typedef map<short, string > shortAndString;
+extern long curcreatureid;
+extern UniqueCreatures uniqueCreatures;
+extern string commaSpace;
+
+extern vector<ArmorType *> armortype;
+extern vector<WeaponType *> weapontype;
+
 Skill::Skill(const std::string& inputXml)
 {
 	CMarkup xml;
@@ -165,6 +204,14 @@ Creature& Creature::operator=(const Creature& rhs)
 	}
 	return *this;
 }
+
+int Creature::get_disguise_difficulty() {
+	return seethroughdisguise;
+}
+int	Creature::get_stealth_difficulty() {
+	return seethroughstealth;
+}
+
 void Creature::copy(const Creature& org)
 {
 	for (int i = 0; i < ATTNUM; i++)
@@ -237,6 +284,11 @@ void Creature::copy(const Creature& org)
 	flag = org.flag;
 	dontname = org.dontname;
 	prisoner = NULL; //Not copying prisoner.
+	seethroughdisguise = org.seethroughdisguise;
+	seethroughstealth = org.seethroughstealth;
+	istalkreceptive = org.istalkreceptive;
+	iskidnap_resistant = org.iskidnap_resistant;
+	isreports_to_police = org.isreports_to_police;
 }
 Creature::~Creature()
 {
@@ -255,7 +307,8 @@ Creature::~Creature()
 }
 bool Creature::kidnap_resistant() const
 {
-	switch (type)
+	return iskidnap_resistant;
+	/*switch (type)
 	{
 	case CREATURE_AGENT:
 	case CREATURE_COP:
@@ -278,11 +331,12 @@ bool Creature::kidnap_resistant() const
 	case CREATURE_EDUCATOR:
 		return true;
 	}
-	return false;
+	return false;*/
 }
 bool Creature::reports_to_police() const
 {
-	switch (type)
+	return isreports_to_police;
+/*	switch (type)
 	{
 	case CREATURE_AGENT:
 	case CREATURE_COP:
@@ -294,7 +348,7 @@ bool Creature::reports_to_police() const
 	case CREATURE_EDUCATOR:
 		return true;
 	}
-	return false;
+	return false;*/
 }
 bool Creature::is_lcs_sleeper() const
 {
@@ -417,13 +471,19 @@ void Creature::creatureinit()
 	special[SPECIALWOUND_NECK] = 1;
 	special[SPECIALWOUND_UPPERSPINE] = 1;
 	special[SPECIALWOUND_LOWERSPINE] = 1;
+	seethroughstealth = 3;
+	seethroughdisguise = 3;
+	istalkreceptive = 0;
+	iskidnap_resistant = 0;
+	isreports_to_police = 0;
 	forceinc = 0;
 	sentence = 0;
 	deathpenalty = 0;
 	money = 0;
 	income = 0;
 	exists = true;
-	align = LCSrandom(3) - 1;
+	vector<int> randomAlignments = { Alignment::ALIGN_CONSERVATIVE, Alignment::ALIGN_MODERATE, Alignment::ALIGN_LIBERAL };
+	align = pickrandom(randomAlignments);
 	infiltration = 0.0f;
 	type = CREATURE_WORKER_JANITOR;
 	type_idname = "CREATURE_WORKER_JANITOR";
@@ -592,6 +652,17 @@ Creature::Creature(const std::string& inputXml)
 			flag = atoi(xml.GetData());
 		else if (tag == "dontname")
 			dontname = atoi(xml.GetData());
+		else if (tag == "seethroughdisguise")
+			seethroughdisguise = atoi(xml.GetData());
+		else if (tag == "seethroughstealth")
+			seethroughstealth = atoi(xml.GetData());
+		else if (tag == "talkreceptive")
+			istalkreceptive = atoi(xml.GetData());
+		else if (tag == "kidnap_resistant")
+			iskidnap_resistant = atoi(xml.GetData());
+		else if (tag == "reports_to_police")
+			isreports_to_police = atoi(xml.GetData());
+
 	}
 }
  string tag_creature;
@@ -738,6 +809,11 @@ string Creature::showXml() const
 	xml.AddElem(tag_pref_is_driver, pref_is_driver);
 	xml.AddElem(tag_flag, flag);
 	xml.AddElem(tag_dontname, dontname);
+	xml.AddElem("seethroughdisguise", seethroughdisguise);
+	xml.AddElem("seethroughstealth", seethroughdisguise);
+	xml.AddElem( "talkreceptive",		istalkreceptive);
+	xml.AddElem( "kidnap_resistant",		iskidnap_resistant );
+	xml.AddElem("reports_to_police", isreports_to_police);
 	return xml.GetDoc();
 }
 int Creature::get_attribute(int attribute, bool usejuice) const
@@ -1103,7 +1179,7 @@ void Creature::train(int trainedskill, int experience, int upto)
 	// Do we allow animals to gain skills? Right now, yes
 	//if(animalgloss==ANIMALGLOSS_ANIMAL)return;
 	// Don't give experience if already maxed out or requested to give none
-	if (skill_cap(trainedskill, true) <= skills[trainedskill].value || upto <= skills[trainedskill].value || experience == 0) {}
+	if (skill_cap(trainedskill, true) <= skills[trainedskill].value || upto <= skills[trainedskill].value || experience == 0) { return; }
 	else {
 		// Skill gain scaled by ability in the area
 		skill_experience[trainedskill] += max(1, static_cast<int>(experience * skill_cap(trainedskill, false) / 6.0));
@@ -1198,7 +1274,8 @@ void nameCCSMember(Creature &cr)
 /* are they interested in talking about the issues? */
 bool Creature::talkreceptive() const
 {
-	switch (type)
+	return !enemy() && istalkreceptive;
+	/*switch (type)
 	{
 	case CREATURE_WORKER_SERVANT:
 	case CREATURE_WORKER_JANITOR:
@@ -1230,7 +1307,7 @@ bool Creature::talkreceptive() const
 	case CREATURE_MUTANT:
 		return !enemy();
 	default: return false;
-	}
+	}*/
 }
 /* are the characters close enough in age to date? */
 bool Creature::can_date(const Creature &a) const

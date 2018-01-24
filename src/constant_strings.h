@@ -101,3 +101,30 @@ const string tag_ARMOR_OVERALLS = "ARMOR_OVERALLS";
 const string tag_ARMOR_PRISONGUARD = "ARMOR_PRISONGUARD";
 const string tag_ARMOR_WIFEBEATER = "ARMOR_WIFEBEATER";
 const string tag_WEAPON_MP5_SMG = "WEAPON_MP5_SMG";
+
+const string tag_JUICE = "JUICE";
+const string tag_RECRUITS_GANG = "RECRUITS_GANG";
+const string tag_ASSAULT_RIFLE = "ASSAULT_RIFLE";
+const string tag_SPORTS_CAR = "SPORTS_CAR";
+
+const string tag_MONEY = "MONEY";
+const string tag_DATING_LAWYER = "DATING_LAWYER";
+const string tag_GAY = "GAY";
+const string tag_HASMAPS = "HASMAPS";
+const string tag_CREATURE = "CREATURE";
+const string tag_BASE = "BASE";
+
+const string tag_ATTRIBUTE_ = "ATTRIBUTE_";
+const string tag_STARTING_ = "STARTING_";
+const string tag_MONTH = "MONTH";
+const string tag_DAY = "DAY";
+const string tag_YEAR = "YEAR";
+const string tag_BIRTHDAY_ = "BIRTHDAY_";
+const string tag_SKILL_ = "SKILL_";
+
+const string blankString = "";
+
+const string tag__2 = "_2";
+const string tag_QUESTION = "QUESTION";
+const string tag_ANSWER = "ANSWER";
+const string tag_HEADER = "HEADER";

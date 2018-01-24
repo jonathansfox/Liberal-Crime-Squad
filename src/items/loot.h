@@ -1,8 +1,5 @@
 #ifndef LOOT_H
-#define LOOT_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define LOOT_H0
 class Loot : public Item
 {
    public:

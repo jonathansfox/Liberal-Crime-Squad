@@ -53,6 +53,34 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 
+#include "basemode/reviewmode.h"
+// own header
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/getnames.h"
+// for std::string getactivity(activityst)
+
+#include "common/equipment.h"
+//for void consolidateloot(vector<Item *>&)
+
+#include "common/commonactions.h"
+// for short reviewmodeenum_to_sortingchoiceenum(short)
+
+#include "common/translateid.h"
+// for  int getsquad(int)
+
+#include "monthly/lcsmonthly.h"
+//for  void fundreport(char &clearformess);
+
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -66,6 +94,13 @@ extern MusicClass music;
 extern short mode;
 extern int stat_kills;
 extern string spaceDashSpace;
+extern squadst *activesquad;
+extern string singleSpace;
+extern vector<squadst *> squad;
+extern short interface_pgup;
+extern short interface_pgdn;
+extern long cursquadid;
+extern short activesortingchoice[SORTINGCHOICENUM];
 
 typedef map<short, string > shortAndString;
  vector<string> methodOfExecution;
@@ -88,11 +123,9 @@ void review()
 	{
 		music.play(MUSIC_REVIEWMODE);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt("Review your Liberals and Assemble Squads");
-		moveOneZero();
-		addstrAlt("컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, "Review your Liberals and Assemble Squads");
+		mvaddstrAlt(1,  0, "컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
 		int n[8] = { 0,0,0,0,0,0,0,0 }, y = 2;
 		for (int p = 0; p < len(pool); p++)
 		{
@@ -143,7 +176,7 @@ void review()
 						if (multipleact)
 						{
 							str = "Acting Individually";
-							set_color(COLOR_WHITE, COLOR_BLACK, 1);
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						}
 					}
 					mvaddstrAlt(y, 51, str);
@@ -151,57 +184,53 @@ void review()
 			}
 			else if (p == len(squad))
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "1 - Active Liberals (" + tostring(n[0]) + ')');
 			}
 			else if (p == len(squad) + 1)
 			{
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "2 - Hostages (" + tostring(n[1]) + ')');
 			}
 			else if (p == len(squad) + 2)
 			{
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "3 - Hospital (" + tostring(n[2]) + ')');
 			}
 			else if (p == len(squad) + 3)
 			{
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "4 - Justice System (" + tostring(n[3]) + ')');
 			}
 			else if (p == len(squad) + 4)
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "5 - Sleepers (" + tostring(n[4]) + ')');
 			}
 			else if (p == len(squad) + 5)
 			{
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "6 - The Dead (" + tostring(n[5]) + ')');
 			}
 			else if (p == len(squad) + 6)
 			{
-				set_color(COLOR_BLUE, COLOR_BLACK, 1);
+				set_color_easy(BLUE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "7 - Away (" + tostring(n[6]) + ')');
 			}
 			else if (p == len(squad) + 7)
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y, 0, "8 - Review and Move Equipment (" + tostring(n[7]) + ')');
 			}
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(21, 0, "Press V to Inspect Liberal finances.");
 		if (music.isEnabled())
 			mvaddstrAlt(21, 38, "Press Y to turn off the Music.");
 		else mvaddstrAlt(21, 38, "Press Y to turn on some Music.");
-		moveAlt(22, 0);
-		addstrAlt("Press a Letter to select a squad.  1-7 to view Liberal groups.");
-		moveAlt(23, 0);
-		addpagestr();
-		addstrAlt("  Press U to Promote Liberals.");
-		moveAlt(24, 0);
-		addstrAlt("Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
+		mvaddstrAlt(22,  0, "Press a Letter to select a squad.  1-7 to view Liberal groups.");
+		mvaddstrAlt(23, 0,		addpagestr() + "  Press U to Promote Liberals.");
+		mvaddstrAlt(24,  0, "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
 		int c = getkey();
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(squad) + REVIEWMODENUM) page++;
@@ -279,17 +308,14 @@ void review_mode(short mode)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
-		addstrAlt(reviewStrings[mode]);
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
-		moveAlt(1, 57);
-		addstrAlt(reviewStringsSecondLine[mode]);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0,  0, reviewStrings[mode]);
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
+		mvaddstrAlt(1,  57, reviewStringsSecondLine[mode]);
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
 			char bright = 0;
@@ -301,11 +327,10 @@ void review_mode(short mode)
 					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
 			}
 			set_color(COLOR_WHITE, COLOR_BLACK, bright);
-			moveAlt(y, 25);
-			addstrAlt(skill);
+			mvaddstrAlt(y,  25, skill);
 			printhealthstat(*temppool[p], y, 33, TRUE);
-			if (mode == REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 42);
 			if (temppool[p]->location == -1) addstrAlt("Away");
 			else addstrAlt(location[temppool[p]->location]->getname(true, true));
@@ -322,7 +347,7 @@ void review_mode(short mode)
 					{
 						if (squad[sq]->activity.type != ACTIVITY_NONE)
 						{
-							set_color(COLOR_GREEN, COLOR_BLACK, 1);
+							set_color_easy(GREEN_ON_BLACK_BRIGHT);
 							addstrAlt("SQUAD");
 							usepers = 0;
 						}
@@ -337,7 +362,7 @@ void review_mode(short mode)
 			}
 			case REVIEWMODE_HOSTAGES:
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				addstrAlt(temppool[p]->joindays);
 				addstrAlt(singleSpace);
 				if (temppool[p]->joindays > 1)addstrAlt("Days");
@@ -349,7 +374,7 @@ void review_mode(short mode)
 				if (temppool[p]->deathpenalty&&temppool[p]->sentence != 0 &&
 					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 1);
+					set_color_easy(RED_ON_BLACK_BRIGHT);
 					addstrAlt("DEATH ROW: ");
 					addstrAlt(temppool[p]->sentence);
 					addstrAlt(singleSpace);
@@ -359,7 +384,7 @@ void review_mode(short mode)
 				else if (temppool[p]->sentence <= -1 &&
 					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
 				{
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					if (temppool[p]->sentence < -1)
 					{
 						addstrAlt(-(temppool[p]->sentence));
@@ -371,7 +396,7 @@ void review_mode(short mode)
 				else if (temppool[p]->sentence != 0 &&
 					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
 				{
-					set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					addstrAlt(temppool[p]->sentence);
 					addstrAlt(singleSpace);
 					if (temppool[p]->sentence > 1)addstrAlt("Months");
@@ -379,14 +404,14 @@ void review_mode(short mode)
 				}
 				else
 				{
-					set_color(COLOR_BLACK, COLOR_BLACK, 1);
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					addstrAlt("컴컴컴�"); // 7 characters
 				}
 				break;
 			}
 			case REVIEWMODE_CLINIC:
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				addstrAlt("Out in ");
 				addstrAlt(temppool[p]->clinic);
 				addstrAlt(singleSpace);
@@ -396,15 +421,15 @@ void review_mode(short mode)
 			}
 			case REVIEWMODE_SLEEPERS:
 			{
-				if (temppool[p]->align == -1)set_color(COLOR_RED, COLOR_BLACK, 1);
-				else if (temppool[p]->align == 0)set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				else set_color(COLOR_GREEN, COLOR_BLACK, 1);
+				if (temppool[p]->align == -1)set_color_easy(RED_ON_BLACK_BRIGHT);
+				else if (temppool[p]->align == 0)set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				addstrAlt(temppool[p]->get_type_name());
 				break;
 			}
 			case REVIEWMODE_DEAD:
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				addstrAlt(temppool[p]->deathdays);
 				addstrAlt(singleSpace);
 				if (temppool[p]->deathdays > 1)addstrAlt("Days");
@@ -413,7 +438,7 @@ void review_mode(short mode)
 			}
 			case REVIEWMODE_AWAY:
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (temppool[p]->hiding != -1)
 				{
 					addstrAlt(temppool[p]->dating + temppool[p]->hiding);
@@ -428,14 +453,11 @@ void review_mode(short mode)
 			}
 			y++;
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(22, 0);
-		addstrAlt("Press a Letter to View Status.        Z - ");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22,  0, "Press a Letter to View Status.        Z - ");
 		if (swap) { addstrAlt("Place "); addstrAlt(swap->name); }
 		else addstrAlt("Reorder Liberals");
-		moveAlt(23, 0);
-		addpagestr();
-		addstrAlt(" T to sort people.");
+		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -451,15 +473,15 @@ void review_mode(short mode)
 				while (true)
 				{
 					eraseAlt();
-					moveZeroZero();
+					moveAlt(0, 0);
 					if (temppool[p]->align != 1)
 					{
-						set_color(COLOR_RED, COLOR_BLACK, 1);
+						set_color_easy(RED_ON_BLACK_BRIGHT);
 						addstrAlt("Profile of an Automaton");
 					}
 					else
 					{
-						set_color(COLOR_GREEN, COLOR_BLACK, 1);
+						set_color_easy(GREEN_ON_BLACK_BRIGHT);
 						addstrAlt("Profile of a Liberal");
 					}
 					if (page == 0) printliberalstats(*temppool[p]);
@@ -479,8 +501,7 @@ void review_mode(short mode)
 					if (temppool[p]->align != 1) addstrAlt("Press N to change this Automaton's Code Name");
 					else addstrAlt("N - Change Code Name      G - Fix Gender Label");
 					if (len(temppool) > 1) addstrAlt("    LEFT/RIGHT - View Others");
-					moveAlt(24, 0);
-					addstrAlt("Press any other key to continue the Struggle");
+					mvaddstrAlt(24,  0, "Press any other key to continue the Struggle");
 					addstrAlt("    UP/DOWN  - More Info");
 					int c = getkey();
 					if (len(temppool)>1 && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
@@ -504,7 +525,7 @@ void review_mode(short mode)
 					}
 					if (c == 'n')
 					{
-						set_color(COLOR_WHITE, COLOR_BLACK, 0);
+						set_color_easy(WHITE_ON_BLACK);
 						mvaddstrAlt(23, 0, "What is the new code name?                                                      "); // 80 characters
 						mvaddstrAlt(24, 0, "                                                                                "); // 80 spaces
 						enter_name(24, 0, temppool[p]->name, CREATURE_NAMELEN, temppool[p]->propername);
@@ -519,25 +540,20 @@ void review_mode(short mode)
 						temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
 					{
 						int boss = getpoolcreature(temppool[p]->hireid);
-						moveAlt(22, 0);
-						set_color(COLOR_WHITE, COLOR_BLACK, 0);
-						addstrAlt("Do you want to permanently release this squad member from the LCS?              "); // 80 characters
-						moveAlt(23, 0);
-						addstrAlt("If the member has low heart they may go to the police.                          "); // 80 characters
-						moveAlt(24, 0);
-						addstrAlt("  C - Confirm       Any other key to continue                                   "); // 80 characters
+						set_color_easy(WHITE_ON_BLACK);
+						mvaddstrAlt(22,  0, "Do you want to permanently release this squad member from the LCS?              "); // 80 characters
+						mvaddstrAlt(23,  0, "If the member has low heart they may go to the police.                          "); // 80 characters
+						mvaddstrAlt(24,  0, "  C - Confirm       Any other key to continue                                   "); // 80 characters
 						int c = getkey();
 						if (c == 'c')
 						{
 							// Release squad member
-							moveAlt(22, 0);
-							addstrAlt(temppool[p]->name, gamelog);
+							mvaddstrAlt(22,  0, temppool[p]->name, gamelog);
 							addstrAlt(" has been released.                                                             ", gamelog); // 80 characters
 							moveAlt(23, 0);
 							gamelog.newline(); //New line.
 							addstrAlt("                                                                                "); // 80 spaces
-							moveAlt(24, 0);
-							addstrAlt("                                                                                "); // 80 spaces
+							mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 							getkey();
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
@@ -545,9 +561,8 @@ void review_mode(short mode)
 							if (temppool[p]->get_attribute(ATTRIBUTE_HEART, true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM, true) + LCSrandom(5)
 								&& iscriminal(*pool[boss]))
 							{
-								set_color(COLOR_CYAN, COLOR_BLACK, 1);
-								moveAlt(22, 0);
-								addstrAlt("A Liberal friend tips you off on ", gamelog);
+								set_color_easy(CYAN_ON_BLACK_BRIGHT);
+								mvaddstrAlt(22,  0, "A Liberal friend tips you off on ", gamelog);
 								addstrAlt(temppool[p]->name, gamelog);
 								addstrAlt("'s whereabouts.", gamelog);
 								moveAlt(24, 0);
@@ -580,38 +595,32 @@ void review_mode(short mode)
 						// Kill squad member
 						int boss = getpoolcreature(temppool[p]->hireid);
 						if (pool[boss]->location != temppool[p]->location) break;
-						moveAlt(22, 0);
-						set_color(COLOR_WHITE, COLOR_BLACK, 0);
-						addstrAlt("Confirm you want to have "); // 25 characters (25+55=80)
+						set_color_easy(WHITE_ON_BLACK);
+						mvaddstrAlt(22,  0, "Confirm you want to have "); // 25 characters (25+55=80)
 						addstrAlt(pool[boss]->name);
 						addstrAlt(" kill this squad member?                               "); // 55 characters (25+55=80)
-						moveAlt(23, 0);
-						addstrAlt("Killing your squad members is Not a Liberal Act.                                "); // 80 characters
-						moveAlt(24, 0);
-						addstrAlt("  C - Confirm       Any other key to continue                                   "); // 80 characters
+						mvaddstrAlt(23,  0, "Killing your squad members is Not a Liberal Act.                                "); // 80 characters
+						mvaddstrAlt(24,  0, "  C - Confirm       Any other key to continue                                   "); // 80 characters
 						int c = getkey();
 						if (c == 'c')
 						{
 							temppool[p]->die();
 							cleangonesquads();
 							stat_kills++;
-							moveAlt(22, 0);
-							addstrAlt(pool[boss]->name, gamelog);
+							mvaddstrAlt(22,  0, pool[boss]->name, gamelog);
 							addstrAlt(" executes ", gamelog); // 10 characters (10+4+66=80)
 							addstrAlt(temppool[p]->name, gamelog);
 							addstrAlt(" by ", gamelog); // 4 characters (10+4+66=80)
 							addstrAlt(pickrandom(methodOfExecution), gamelog);
-							moveAlt(23, 0);
-							addstrAlt("                                                                                "); // 80 spaces
-							moveAlt(24, 0);
-							addstrAlt("                                                                                "); // 80 spaces
+							mvaddstrAlt(23,  0, "                                                                                "); // 80 spaces
+							mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 							getkey();
 							moveAlt(22, 0);
 							if (boss != -1)
 							{
 								if (LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 								{
-									set_color(COLOR_GREEN, COLOR_BLACK, 1);
+									set_color_easy(GREEN_ON_BLACK_BRIGHT);
 									gamelog.newline(); //New line.
 									addstrAlt(pool[boss]->name, gamelog);
 									addstrAlt(" feels sick to the stomach afterward and                                        ", gamelog); // 80 characters
@@ -628,7 +637,7 @@ void review_mode(short mode)
 								else if (!LCSrandom(3))
 								{
 									gamelog.newline(); //New line here too.
-									set_color(COLOR_CYAN, COLOR_BLACK, 1);
+									set_color_easy(CYAN_ON_BLACK_BRIGHT);
 									addstrAlt(pool[boss]->name, gamelog);
 									addstrAlt(" grows colder.                                                                  ", gamelog); // 80 characters
 									pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
@@ -656,13 +665,10 @@ void review_mode(short mode)
 		if (c == 'z')
 		{
 			if (len(temppool) <= 1) continue;
-			moveAlt(22, 0);
-			addstrAlt("                                                                                "); // 80 spaces
-			moveAlt(23, 0);
-			addstrAlt("                                                                                "); // 80 spaces
-			moveAlt(22, 8);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			addstrAlt("Choose squad member to replace ");
+			mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
+			mvaddstrAlt(23,  0, "                                                                                "); // 80 spaces
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(22,  8, "Choose squad member to replace ");
 			if (!swap) {
 				int c = getkey();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -739,27 +745,24 @@ void assemblesquad(squadst *cursquad)
 	{
 		partysize = squadsize(cursquad);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveZeroZero();
+		set_color_easy(WHITE_ON_BLACK);
+		moveAlt(0, 0);
 		if (partysize < 6)addstrAlt("Assemble the squad!");
 		else addstrAlt("The squad is full.");
 		if (newsquad)
 		{
-			moveAlt(0, 71);
-			addstrAlt("New Squad");
+			mvaddstrAlt(0,  71, "New Squad");
 		}
 		else
 		{
-			moveAlt(0, 73 - len(cursquad->name));
-			addstrAlt("Squad: ");
+			mvaddstrAlt(0,  73 - len(cursquad->name), "Squad: ");
 			addstrAlt(cursquad->name);
 		}
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴"); // 80 characters
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴"); // 80 characters
 		int y = 2;
 		for (p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
 			char bright = 0;
@@ -771,52 +774,42 @@ void assemblesquad(squadst *cursquad)
 					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true)) bright = 1;
 			}
 			set_color(COLOR_WHITE, COLOR_BLACK, bright);
-			moveAlt(y, 25);
-			addstrAlt(skill);
+			mvaddstrAlt(y,  25, skill);
 			printhealthstat(*temppool[p], y, 33, FALSE);
 			if (temppool[p]->squadid == cursquad->id)
 			{
-				set_color(COLOR_GREEN, COLOR_BLACK, 1);
-				moveAlt(y, 75);
-				addstrAlt("SQUAD");
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y,  75, "SQUAD");
 			}
 			else if (temppool[p]->squadid != -1)
 			{
 				set_color(COLOR_YELLOW, COLOR_BLACK, 0);
-				moveAlt(y, 75);
-				addstrAlt("SQUAD");
+				mvaddstrAlt(y,  75, "SQUAD");
 			}
 			else if (cursquad->squad[0] != NULL)
 			{
 				if (cursquad->squad[0]->location != temppool[p]->location)
 				{
-					set_color(COLOR_BLACK, COLOR_BLACK, 1);
-					moveAlt(y, 75);
-					addstrAlt("AWAY");
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					mvaddstrAlt(y,  75, "AWAY");
 				}
 			}
-			if (temppool[p]->align == -1) set_color(COLOR_RED, COLOR_BLACK, 1);
-			else if (temppool[p]->align == 0) set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			else set_color(COLOR_GREEN, COLOR_BLACK, 1);
-			moveAlt(y, 50);
-			addstrAlt(temppool[p]->get_type_name());
+			if (temppool[p]->align == -1) set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (temppool[p]->align == 0) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			else set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y,  50, temppool[p]->get_type_name());
 			y++;
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(22, 0);
-		addstrAlt("Press a Letter to add or remove a Liberal from the squad.");
-		moveAlt(23, 0);
-		addpagestr();
-		addstrAlt(" T to sort people.");
-		moveAlt(23, 50);
-		addstrAlt("V - View a Liberal");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22,  0, "Press a Letter to add or remove a Liberal from the squad.");
+		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
+		mvaddstrAlt(23,  50, "V - View a Liberal");
 		moveAlt(24, 0);
 		if (partysize > 0) addstrAlt("Enter - The squad is ready.");
 		else addstrAlt("Enter - I need no squad!");
-		if (partysize > 0) set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		else set_color(COLOR_BLACK, COLOR_BLACK, 1);
-		moveAlt(24, 40);
-		addstrAlt("9 - Dissolve the squad.");
+		if (partysize > 0) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(24,  40, "9 - Dissolve the squad.");
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -832,13 +825,10 @@ void assemblesquad(squadst *cursquad)
 				{
 					if (cursquad->squad[0]->location != temppool[p]->location)
 					{
-						set_color(COLOR_RED, COLOR_BLACK, 1);
-						moveAlt(22, 0);
-						addstrAlt("                                                                                "); // 80 spaces
-						moveAlt(23, 0);
-						addstrAlt("           Liberals must be in the same location to form a Squad.               "); // 80 characters
-						moveAlt(24, 0);
-						addstrAlt("                                                                                "); // 80 spaces
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
+						mvaddstrAlt(23,  0, "           Liberals must be in the same location to form a Squad.               "); // 80 characters
+						mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 						getkey();
 						conf = 0;
 					}
@@ -846,13 +836,10 @@ void assemblesquad(squadst *cursquad)
 				if (!temppool[p]->canwalk() &&
 					!(temppool[p]->flag & CREATUREFLAG_WHEELCHAIR))
 				{
-					set_color(COLOR_RED, COLOR_BLACK, 1);
-					moveAlt(22, 0);
-					addstrAlt("                                                                                "); // 80 spaces
-					moveAlt(23, 0);
-					addstrAlt("                Squad Liberals must be able to move around.                     "); // 80 characters
-					moveAlt(24, 0);
-					addstrAlt("                                                                                "); // 80 spaces
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
+					mvaddstrAlt(23,  0, "                Squad Liberals must be able to move around.                     "); // 80 characters
+					mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 					getkey();
 					conf = 0;
 				}
@@ -895,13 +882,10 @@ void assemblesquad(squadst *cursquad)
 		}
 		if (c == 'v')
 		{
-			moveAlt(22, 0);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			addstrAlt("Press a Letter to view Liberal details.                                         "); // 80 characters
-			moveAlt(23, 0);
-			addstrAlt("                                                                                "); // 80 spaces
-			moveAlt(24, 0);
-			addstrAlt("                                                                                "); // 80 spaces
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(22,  0, "Press a Letter to view Liberal details.                                         "); // 80 characters
+			mvaddstrAlt(23,  0, "                                                                                "); // 80 spaces
+			mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 			int c2 = getkey();
 			if (c2 >= 'a'&&c2 <= 's')
 			{
@@ -940,13 +924,10 @@ void assemblesquad(squadst *cursquad)
 			if (good) break;
 			else
 			{  // At this point we have a non-empty squad, none of whose members are Liberal
-				set_color(COLOR_RED, COLOR_BLACK, 1);
-				moveAlt(22, 0);
-				addstrAlt("                                                                                "); // 80 spaces
-				moveAlt(23, 0);
-				addstrAlt("You cannot form a Squad with only Conservatives!                                "); // 80 characters
-				moveAlt(24, 0);
-				addstrAlt("                                                                                "); // 80 spaces
+				set_color_easy(RED_ON_BLACK_BRIGHT);
+				mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
+				mvaddstrAlt(23,  0, "You cannot form a Squad with only Conservatives!                                "); // 80 characters
+				mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 				getkey();
 			}
 		}
@@ -968,12 +949,9 @@ void assemblesquad(squadst *cursquad)
 	{
 		if (hasmembers)
 		{
-			moveAlt(22, 0);
-			addstrAlt("                                                                                "); // 80 spaces
-			moveAlt(23, 0);
-			addstrAlt("What shall we designate this Liberal squad?                                     "); // 80 characters
-			moveAlt(24, 0);
-			addstrAlt("                                                                                "); // 80 spaces
+			mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
+			mvaddstrAlt(23,  0, "What shall we designate this Liberal squad?                                     "); // 80 characters
+			mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
 			enter_name(24, 0, cursquad->name, SQUAD_NAMELEN, "The Liberal Crime Squad");
 			squad.push_back(cursquad);
 		}
@@ -1011,24 +989,21 @@ void squadlessbaseassign()
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("New Bases for Squadless Liberals");
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
-		moveAlt(1, 51);
-		addstrAlt("NEW BASE");
+		mvaddstrAlt(0,  0, "New Bases for Squadless Liberals");
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
+		mvaddstrAlt(1,  51, "NEW BASE");
 		int y = 2;
 		for (p = page_lib * 19; p < len(temppool) && p < page_lib * 19 + 19; p++, y++)
 		{
 			// Red name if location under siege
 			if (temppool[p]->base == temppool[p]->location &&
 				location[temppool[p]->base]->siege.siege)
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city)
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
-			else set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
 			mvaddstrAlt(y, 25, location[temppool[p]->base]->getname(true, true));
@@ -1044,21 +1019,18 @@ void squadlessbaseassign()
 			mvaddcharAlt(y, 51, y + '1' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(location[temploc[p]]->getname(true, true));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(21, 0, "Press a Letter to assign a Base.  Press a Number to select a Base.");
 		mvaddstrAlt(22, 0, "Liberals must be moved in squads to transfer between cities.");
 		if (len(temppool) > 19)
 		{
-			moveAlt(23, 0);
-			addpagestr();
+			mvaddstrAlt(23, 0, 			addpagestr());
 		}
 		if (len(temploc) > 9)
 		{
-			moveAlt(24, 0);
-			addstrAlt(",. to view other Base pages.");
+			mvaddstrAlt(24,  0, ",. to view other Base pages.");
 		}
-		moveAlt(23, 35);
-		addstrAlt("T to sort people.");
+		mvaddstrAlt(23,  35, "T to sort people.");
 		int c = getkey();
 		//PAGE UP (people)
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_lib>0) page_lib--;
@@ -1135,7 +1107,7 @@ static void printname(Creature &cr)
 	}
 	if (cr.flag & CREATUREFLAG_SLEEPER)
 	{
-		set_color(COLOR_BLUE, COLOR_BLACK, 1);
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
 		addstrAlt("[");
 	}
 	// add name
@@ -1144,7 +1116,7 @@ static void printname(Creature &cr)
 	// add close bracket (if used)
 	if (cr.flag & CREATUREFLAG_SLEEPER)
 	{
-		set_color(COLOR_BLUE, COLOR_BLACK, 1);
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
 		addstrAlt("]");
 	}
 	if (bracketcolor != -1)
@@ -1152,7 +1124,7 @@ static void printname(Creature &cr)
 		set_color(bracketcolor, COLOR_BLACK, 1);
 		addstrAlt("]");
 	}
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 }
 /* base - review - promote liberals */
 void promoteliberals()
@@ -1171,18 +1143,15 @@ void promoteliberals()
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Promote the Elite Liberals");
-		moveOneZero();
-		addstrAlt("컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
-		moveAlt(1, 54);
-		addstrAlt("CONTACT AFTER PROMOTION");
+		mvaddstrAlt(0,  0, "Promote the Elite Liberals");
+		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
+		mvaddstrAlt(1,  54, "CONTACT AFTER PROMOTION");
 		int y = 2;
 		for (int p = page*PAGELENGTH; p < len(temppool) && p < page*PAGELENGTH + PAGELENGTH; p++)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			moveAlt(y, 27);
 			int p2 = 0;
@@ -1218,15 +1187,12 @@ void promoteliberals()
 			set_color_easy(s.type);
 			addstrAlt(s.str);
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(22, 0);
-		addstrAlt("Press a letter to promote a Liberal. You cannot promote Liberals in hiding.");
-		moveAlt(23, 0);
-		addstrAlt("Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22,  0, "Press a letter to promote a Liberal. You cannot promote Liberals in hiding.");
+		mvaddstrAlt(23,  0, "Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.");
 		if (len(temppool) > PAGELENGTH)
 		{
-			moveAlt(24, 0);
-			addpagestr();
+			mvaddstrAlt(24, 0,			addpagestr());
 		}
 		int c = getkey();
 		//PAGE UP

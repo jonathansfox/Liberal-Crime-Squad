@@ -1,8 +1,5 @@
 #ifndef CLIP_H
-#define CLIP_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define CLIP_H0
 class Clip : public Item
 {
    public:

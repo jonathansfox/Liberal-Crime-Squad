@@ -28,12 +28,32 @@
 
 #include <includes.h>
 
+
+#include "common/stringconversion.h"
+//for string conversion
+
+#include "common/getnames.h"
+// for std::string cityname();
+
+#include "common/misc.h"
+// for statename
+
+#include "cursesmovie.h"
+extern CursesMoviest movie;
+//ouch. Backfire
+
+#include "common/consolesupport.h"
+// for getkey
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e, int y);
+#include <news\\news.h>
+/* news - draws the specified block of text to the screen */
+//void displaynewsstory(char *story, const short *storyx_s, const short *storyx_e, int y);
 extern short presparty;
 extern MusicClass music;
 extern int year;
@@ -104,6 +124,12 @@ extern int year;
  vector <string> cable_city_2;
 extern string spaceDashSpace;
 extern string ampersandR;
+extern short lawList[LAWNUM];
+extern string singleSpace;
+extern string singleDot;
+extern string commaSpace;
+extern int month;
+extern vector<newsstoryst *> newsstory;
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story, const short view, const char positive)
 {
@@ -123,7 +149,8 @@ void constructeventstory(char *story, const short view, const char positive)
 			else if (lawList[LAW_ABORTION] == 0) strcat(story, "A doctor that routinely performed semi-legal abortions was ruthlessly ");
 			else strcat(story, "A doctor that routinely performed abortions was ruthlessly ");
 			strcat(story, "gunned down outside of the ");
-			lastname(str, true); strcat(story, str);
+			strcpy(str, lastname(true).data());
+			strcat(story, str);
 			strcat(story, " Clinic yesterday.  ");
 			strcat(story, "Dr. ");
 			char dstr[200], dstr2[200];
@@ -256,7 +283,7 @@ void constructeventstory(char *story, const short view, const char positive)
 			strcat(story, pickrandom(AMorPM));
 			strcat(story, " yesterday at the ");
 			char jstr[200];
-			lastname(jstr, true);
+			strcpy(jstr, lastname(true).data());
 			strcat(story, jstr);
 			strcat(story, " Correctional Facility.&r");
 			strcat(story, "  ");
@@ -346,7 +373,7 @@ void constructeventstory(char *story, const short view, const char positive)
 			c[0] = 'A' + LCSrandom(26);
 			strcat(story, c);
 			strcat(story, ". ");
-			lastname(dstr);
+			strcpy(dstr, lastname());
 			strcat(story, dstr);
 			strcat(story, ".  ");
 			strcat(story, "Although the series is adored by children worldwide, ");
@@ -536,7 +563,7 @@ void constructeventstory(char *story, const short view, const char positive)
 			else strcat(story, "mow down");
 			strcat(story, " more than a dozen classmates and two teachers at ");
 			char jstr[200];
-			lastname(jstr, true);
+			strcpy(jstr, lastname(true).data());
 			strcat(story, jstr);
 			switch (schtype)
 			{
@@ -830,7 +857,7 @@ void constructeventstory(char *story, const short view, const char positive)
 			strcat(story, dstr3);
 			strcat(story, " was convicted of the now-infamous ");
 			char sstr[200];
-			lastname(sstr);
+			strcpy(sstr, lastname());
 			strcat(story, sstr);
 			strcat(story, " slayings.  ");
 			strcat(story, "After an intensive manhunt, ");
@@ -1022,7 +1049,7 @@ void constructeventstory(char *story, const short view, const char positive)
 			strcpy(story, cityname());
 			strcat(story, " - The hostage crisis at the ");
 			char jstr[200];
-			lastname(jstr, true);
+			strcpy(jstr, lastname(true).data());
 			strcat(story, jstr);
 			strcat(story, " Correctional Facility ended tragically yesterday with the ");
 			strcat(story, "death of both the prison guard being held hostage and ");
@@ -1400,16 +1427,11 @@ void run_television_news_stories()
 					movie.loadmovie("lacops.cmv");
 					movie.playmovie(0, 0);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(19, 13);
-					addstrAlt("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
-					moveAlt(20, 13);
-					addstrAlt("บ     The  police  have  beaten  a  black  man  in   บ");
-					moveAlt(21, 13);
-					addstrAlt("บ   Los Angeles again.  This time, the incident is   บ");
-					moveAlt(22, 13);
-					addstrAlt("บ   taped by  a passerby  and saturates  the news.   บ");
-					moveAlt(23, 13);
-					addstrAlt("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+					mvaddstrAlt(19,  13, "ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
+					mvaddstrAlt(20,  13, "บ     The  police  have  beaten  a  black  man  in   บ");
+					mvaddstrAlt(21,  13, "บ   Los Angeles again.  This time, the incident is   บ");
+					mvaddstrAlt(22,  13, "บ   taped by  a passerby  and saturates  the news.   บ");
+					mvaddstrAlt(23,  13, "ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 					getkey();
 					del = 1;
 					break;
@@ -1427,30 +1449,21 @@ void run_television_news_stories()
 					strcat(str, bname);
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(0, 39 - ((len(str) - 1) >> 1));
-					addstrAlt(str);
-					moveAlt(16, 20);
-					addstrAlt(bname);
-					moveAlt(17, 20);
-					addstrAlt(pickrandom(cable_city).data());
+					mvaddstrCenter(0, str);
+					mvaddstrAlt(16,  20, bname);
+					mvaddstrAlt(17,  20, pickrandom(cable_city).data());
 					moveAlt(16, 41);
 					generate_name(bname);
 					addstrAlt(bname);
-					moveAlt(17, 41);
-					addstrAlt(pickrandom(cable_city_2).data());
+					mvaddstrAlt(17,  41, pickrandom(cable_city_2).data());
 					movie.loadmovie("newscast.cmv");
 					movie.playmovie(1, 1);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(19, 13);
-					addstrAlt("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
-					moveAlt(20, 13);
-					addstrAlt("บ     A  Cable  News  anchor  accidentally  let  a   บ");
-					moveAlt(21, 13);
-					addstrAlt("บ   bright Liberal guest  finish a sentence.  Many   บ");
-					moveAlt(22, 13);
-					addstrAlt("บ   viewers  across  the  nation  were  listening.   บ");
-					moveAlt(23, 13);
-					addstrAlt("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+					mvaddstrAlt(19,  13, "ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
+					mvaddstrAlt(20,  13, "บ     A  Cable  News  anchor  accidentally  let  a   บ");
+					mvaddstrAlt(21,  13, "บ   bright Liberal guest  finish a sentence.  Many   บ");
+					mvaddstrAlt(22,  13, "บ   viewers  across  the  nation  were  listening.   บ");
+					mvaddstrAlt(23,  13, "ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 					getkey();
 					del = 1;
 					break;
@@ -1466,16 +1479,11 @@ void run_television_news_stories()
 					movie.loadmovie("glamshow.cmv");
 					movie.playmovie(0, 0);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(19, 13);
-					addstrAlt("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
-					moveAlt(20, 13);
-					addstrAlt("บ     A new show glamorizing the lives of the rich   บ");
-					moveAlt(21, 13);
-					addstrAlt("บ   begins airing  this week.  With the nationwide   บ");
-					moveAlt(22, 13);
-					addstrAlt("บ   advertising  blitz, it's bound  to be popular.   บ");
-					moveAlt(23, 13);
-					addstrAlt("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+					mvaddstrAlt(19,  13, "ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
+					mvaddstrAlt(20,  13, "บ     A new show glamorizing the lives of the rich   บ");
+					mvaddstrAlt(21,  13, "บ   begins airing  this week.  With the nationwide   บ");
+					mvaddstrAlt(22,  13, "บ   advertising  blitz, it's bound  to be popular.   บ");
+					mvaddstrAlt(23,  13, "ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 					getkey();
 					del = 1;
 					break;
@@ -1484,16 +1492,11 @@ void run_television_news_stories()
 					movie.loadmovie("anchor.cmv");
 					movie.playmovie(0, 0);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(19, 13);
-					addstrAlt("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
-					moveAlt(20, 13);
-					addstrAlt("บ     A major Cable News channel has hired a slick   บ");
-					moveAlt(21, 13);
-					addstrAlt("บ   new anchor for  one of its news shows.  Guided   บ");
-					moveAlt(22, 13);
-					addstrAlt("บ   by impressive  advertising, America  tunes in.   บ");
-					moveAlt(23, 13);
-					addstrAlt("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+					mvaddstrAlt(19,  13, "ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
+					mvaddstrAlt(20,  13, "บ     A major Cable News channel has hired a slick   บ");
+					mvaddstrAlt(21,  13, "บ   new anchor for  one of its news shows.  Guided   บ");
+					mvaddstrAlt(22,  13, "บ   by impressive  advertising, America  tunes in.   บ");
+					mvaddstrAlt(23,  13, "ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 					getkey();
 					del = 1;
 					break;
@@ -1503,16 +1506,11 @@ void run_television_news_stories()
 					movie.loadmovie("abort.cmv");
 					movie.playmovie(0, 0);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					moveAlt(19, 13);
-					addstrAlt("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
-					moveAlt(20, 13);
-					addstrAlt("บ     A  failed partial  birth abortion  goes on a   บ");
-					moveAlt(21, 13);
-					addstrAlt("บ   popular  afternoon  talk  show.    The  studio   บ");
-					moveAlt(22, 13);
-					addstrAlt("บ   audience and viewers nationwide feel its pain.   บ");
-					moveAlt(23, 13);
-					addstrAlt("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
+					mvaddstrAlt(19,  13, "ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
+					mvaddstrAlt(20,  13, "บ     A  failed partial  birth abortion  goes on a   บ");
+					mvaddstrAlt(21,  13, "บ   popular  afternoon  talk  show.    The  studio   บ");
+					mvaddstrAlt(22,  13, "บ   audience and viewers nationwide feel its pain.   บ");
+					mvaddstrAlt(23,  13, "ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 					getkey();
 					del = 1;
 					break;

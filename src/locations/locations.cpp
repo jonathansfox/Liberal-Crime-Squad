@@ -20,6 +20,18 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "items/money.h"
+
+#include "daily/daily.h"
+//for void initlocation(Location &loc);
+
+//#include "locations/locations.h"
+//own header currently inside includes.h
+//own header
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -28,6 +40,12 @@ This file is part of Liberal Crime Squad.                                       
 extern vector<Creature *> pool;
 extern vector<Location *> location;
 extern bool multipleCityMode;
+
+extern string singleSpace;
+extern string commaSpace;
+extern short lawList[LAWNUM];
+extern class Ledger ledger;
+
 typedef map<short, string> shortAndString;
 typedef map<short, vector<string>> shortAndTwoStrings;
 // Finds a location with the corresponding type and returns
@@ -341,14 +359,14 @@ void initlocation(Location &loc)
 		if (lawList[LAW_PRISONS] == -2)
 		{
 			strcpy(loc.name, pickrandom(labor_camp_name).data());
-			strcat(loc.name, singleSpace);
+			strcat(loc.name, singleSpace.data());
 			strcat(loc.name, pickrandom(labor_camp_name_2).data());
 			strcat(loc.name, " Forced Labor Camp");
 			strcpy(loc.shortname, "Joycamp");
 		}
 		else
 		{
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcat(loc.name, " Prison");
 			strcpy(loc.shortname, "Prison");
 		}
@@ -372,7 +390,7 @@ void initlocation(Location &loc)
 			loc.rename("Ministry of Peace", "Minipax");
 		}
 		else {
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcat(loc.name, " Army Base");
 			strcpy(loc.shortname, "Army Base");
 		} break;
@@ -386,7 +404,7 @@ void initlocation(Location &loc)
 		loc.rename("American Bank Corp", "Bank");
 		break;
 	case SITE_BUSINESS_PAWNSHOP:
-		lastname(loc.name, true);
+		strcpy(loc.name, lastname(true).data());
 		if (lawList[LAW_GUNCONTROL] == ALIGN_ELITELIBERAL)
 			strcat(loc.name, "'s Pawnshop");
 		else
@@ -480,7 +498,7 @@ void initlocation(Location &loc)
 		break;
 	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 		do {
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcpy(loc.shortname, loc.name);
 			strcat(loc.name, " Condominiums");
 			strcat(loc.shortname, " Condos");
@@ -488,7 +506,7 @@ void initlocation(Location &loc)
 		break;
 	case SITE_RESIDENTIAL_APARTMENT:
 		do {
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcpy(loc.shortname, loc.name);
 			strcat(loc.name, " Apartments");
 			strcat(loc.shortname, " Apts");
@@ -497,7 +515,7 @@ void initlocation(Location &loc)
 	case SITE_RESIDENTIAL_TENEMENT:
 		do {
 			do {
-				lastname(loc.name, true);
+				strcpy(loc.name, lastname(true).data());
 			} while (len(loc.name) > 7);
 			strcat(loc.name, " St. Housing Projects");
 			strcpy(loc.shortname, "Projects");
@@ -510,12 +528,12 @@ void initlocation(Location &loc)
 		loc.rename("The Free Clinic", "Clinic");
 		break;
 	case SITE_LABORATORY_GENETIC:
-		lastname(loc.name, true);
+		strcpy(loc.name, lastname(true).data());
 		strcat(loc.name, " Genetics");
 		strcpy(loc.shortname, "Genetics Lab");
 		break;
 	case SITE_LABORATORY_COSMETICS:
-		lastname(loc.name, true);
+		strcpy(loc.name, lastname(true).data());
 		strcat(loc.name, " Cosmetics");
 		strcpy(loc.shortname, "Cosmetics Lab");
 		break;
@@ -525,7 +543,7 @@ void initlocation(Location &loc)
 		strcpy(loc.shortname, "Used Cars");
 		break;
 	case SITE_BUSINESS_DEPTSTORE:
-		lastname(loc.name, true);
+		strcpy(loc.name, lastname(true).data());
 		strcat(loc.name, "'s Department Store");
 		strcpy(loc.shortname, "Dept. Store");
 		break;
@@ -533,13 +551,13 @@ void initlocation(Location &loc)
 		loc.rename("The Oubliette", "Oubliette");
 		break;
 	case SITE_INDUSTRY_SWEATSHOP:
-		lastname(loc.name, true);
+		strcpy(loc.name, lastname(true).data());
 		strcat(loc.name, " Garment Makers");
 		strcpy(loc.shortname, "Sweatshop");
 		break;
 	case SITE_BUSINESS_CRACKHOUSE:
 		do {
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcat(loc.name, " St. ");
 			if (lawList[LAW_DRUGS] == 2)
 			{
@@ -573,7 +591,7 @@ void initlocation(Location &loc)
 		break; case SITE_BUSINESS_JUICEBAR:
 			strcpy(loc.name, "");
 			strcat(loc.name, pickrandom(juice_name).data());
-			strcat(loc.name, singleSpace);
+			strcat(loc.name, singleSpace.data());
 			strcat(loc.name, pickrandom(juice_name_2).data());
 			strcat(loc.name, " Juice Bar");
 			strcpy(loc.shortname, "Juice Bar");
@@ -581,7 +599,7 @@ void initlocation(Location &loc)
 		case SITE_BUSINESS_VEGANCOOP:
 			strcpy(loc.name, "");
 			strcat(loc.name, pickrandom(vegan_name).data());
-			strcat(loc.name, singleSpace);
+			strcat(loc.name, singleSpace.data());
 			strcat(loc.name, pickrandom(vegan_name_2).data());
 			strcat(loc.name, " Vegan Co-op");
 			strcpy(loc.shortname, "Vegan Co-op");
@@ -589,13 +607,13 @@ void initlocation(Location &loc)
 		case SITE_BUSINESS_INTERNETCAFE:
 			strcpy(loc.name, "");
 			strcat(loc.name, pickrandom(cafe_name).data());
-			strcat(loc.name, singleSpace);
+			strcat(loc.name, singleSpace.data());
 			strcat(loc.name, pickrandom(cafe_name_2).data());
 			strcat(loc.name, " Internet Cafe");
 			strcpy(loc.shortname, "Net Cafe");
 			break;
 		case SITE_BUSINESS_CIGARBAR:
-			lastname(str, true);
+			strcpy(loc.name, lastname(true).data());
 			strcpy(loc.name, "The ");
 			strcat(loc.name, str);
 			strcat(loc.name, " Gentlemen's Club");
@@ -604,13 +622,13 @@ void initlocation(Location &loc)
 		case SITE_BUSINESS_LATTESTAND:
 			strcpy(loc.name, "");
 			strcat(loc.name, pickrandom(latte_name).data());
-			strcat(loc.name, singleSpace);
+			strcat(loc.name, singleSpace.data());
 			strcat(loc.name, pickrandom(latte_name_2).data());
 			strcat(loc.name, " Latte Stand");
 			strcpy(loc.shortname, "Latte Stand");
 			break;
 		case SITE_OUTDOOR_PUBLICPARK:
-			lastname(loc.name, true);
+			strcpy(loc.name, lastname(true).data());
 			strcat(loc.name, " Park");
 			strcpy(loc.shortname, "Park");
 			break;

@@ -26,6 +26,44 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "vehicle/vehicle.h"
+
+#include "sitemode/stealth.h"
+#include "sitemode/sitedisplay.h"
+
+#include "items/money.h"
+
+#include "log/log.h"
+// for gamelog
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)      
+
+#include "common/translateid.h"
+// for  int id_getcar(int)
+
+#include "common/stringconversion.h"
+//for addstr
+
+#include "common/commondisplay.h"
+// for addstr (with log)
+
+#include "common/commonactions.h"
+// for int squadsize(const squadst *);
+
+#include "common/equipment.h"
+//for void equip(vector<Item *>&,int)
+
+#include "combat/fight.h"       
+//own header
+
+#include "combat/chase.h"
+//for Vehicle* getChaseVehicle(const Creature &c);
+
+#include "combat/haulkidnap.h"
+// for void freehostage(Creature &cr,char situation);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -63,6 +101,24 @@ extern string tag_ARMOR;
  vector<vector<string>> double_line_death;
  vector<string> body_falls_apart;
 
+ extern string singleSpace;
+ extern short sitealarm;
+ extern squadst *activesquad;
+ extern Creature encounter[ENCMAX];
+ extern newsstoryst *sitestory;
+ extern int sitecrime;
+ extern short cursite;
+ extern int locx;
+extern int locy;
+ extern int locz;
+ extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+ extern vector<Item *> groundloot;
+ extern short sitealarmtimer;
+ extern string singleDot;
+ extern string commaSpace;
+ extern short lawList[LAWNUM];
+ extern vector<ArmorType *> armortype;
+ extern char slogan[SLOGAN_LEN];
 
   vector<string> evasionStringsAlt;
   vector<string> evasionStrings;
@@ -148,9 +204,17 @@ void youattack()
 		// Else, we skipped a "super enemy" because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
 		else target = pickrandom(super_enemies);
 		char mistake = 0;
-		// Changed from 1% chance to being based on weapon skill
-		if (len(non_enemies) && activesquad->squad[p]->get_weapon_skill() < 8 &&
-			!LCSrandom(10 + 10 * activesquad->squad[p]->get_weapon_skill()))
+
+		// Mistaken attack
+		/*
+		Mistakenly attacking innocents: if skill is 8 or higher, there is no chance of mistakenly hitting innocents (except when used as a human shield).
+		If skill is 7 or lower, the odds are based on skill, with a maximum of 10% chance at skill = 0;
+		Melee weapons only require a skill of 4.
+		If skill is 3 or lower, the odds are based on skill, with a maximum of 5% chance at skill = 0;
+		*/
+		if (len(non_enemies) && activesquad->squad[p]->get_weapon_skill() < (4 + (activesquad->squad[p]->get_weapon().is_ranged() * 4)) &&
+			!LCSrandom(10 + 2 * (5 + 5 * activesquad->squad[p]->get_weapon().is_ranged()) * activesquad->squad[p]->get_weapon_skill()))
+			// Mistaken attack
 		{
 			target = pickrandom(non_enemies);
 			mistake = 1;
@@ -237,7 +301,15 @@ void youattack()
 					if (!len(goodtarg)) return;
 					int target = pickrandom(goodtarg);
 					char mistake = 0;
-					if (len(badtarg) && !LCSrandom(10))
+					// Mistaken attack
+					/*
+					Mistakenly attacking innocents: if skill is 8 or higher, there is no chance of mistakenly hitting innocents (except when used as a human shield).
+					If skill is 7 or lower, the odds are based on skill, with a maximum of 10% chance at skill = 0;
+					Melee weapons only require a skill of 4.
+					If skill is 3 or lower, the odds are based on skill, with a maximum of 5% chance at skill = 0;
+					*/
+					if(len(badtarg) && pool[p]->get_weapon_skill() < ( 4 + (pool[p]->get_weapon().is_ranged() * 4) ) &&
+						!LCSrandom(10 + 2 * (5 + 5 * pool[p]->get_weapon().is_ranged()) * pool[p]->get_weapon_skill()))
 					{
 						target = pickrandom(badtarg);
 						mistake = 1;
@@ -319,8 +391,7 @@ void enemyattack()
 							getkey();
 						}
 						clearmessagearea();
-						moveSixteenOne();
-						addstrAlt(encounter[e].name, gamelog);
+						mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 						if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
 							(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
 							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
@@ -387,6 +458,7 @@ void enemyattack()
 			{
 				if (activesquad->squad[target]->prisoner != NULL && !LCSrandom(2))
 				{
+					// Mistaken attack
 					actual = attack(encounter[e], *activesquad->squad[target]->prisoner, 1);
 					if (!activesquad->squad[target]->prisoner->alive)
 					{
@@ -394,8 +466,7 @@ void enemyattack()
 						{
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							moveSixteenOne();
-							addstrAlt(activesquad->squad[target]->name, gamelog);
+							mvaddstrAlt(16,  1, activesquad->squad[target]->name, gamelog);
 							addstrAlt(" drops ", gamelog);
 							addstrAlt(activesquad->squad[target]->prisoner->name, gamelog);
 							addstrAlt("'s body.", gamelog);
@@ -416,11 +487,20 @@ void enemyattack()
 					continue;
 				}
 			}
-			if (!LCSrandom(10) && len(badtarg))
+			// Mistaken attack
+			/*
+			Mistakenly attacking innocents: if skill is 8 or higher, there is no chance of mistakenly hitting innocents (except when used as a human shield).
+			If skill is 7 or lower, the odds are based on skill, with a maximum of 20% chance at skill = 0;
+			Melee weapons only require a skill of 4.
+			If skill is 3 or lower, the odds are based on skill, with a maximum of 10% chance at skill = 0;
+			*/
+			if(len(badtarg) && encounter[e].get_weapon_skill() < (4 + (encounter[e].get_weapon().is_ranged() * 4)) &&
+				!LCSrandom(10 + 2 * (5 + 5 * encounter[e].get_weapon().is_ranged()) * encounter[e].get_weapon_skill()))
 			{
 				target = pickrandom(badtarg);
 				if (encounter[target].flag & CREATUREFLAG_CONVERTED)
 					actual = attack(encounter[e], encounter[target], 0);
+				// Mistaken Attack
 				else actual = attack(encounter[e], encounter[target], 1);
 				if (!encounter[target].alive) delenc(target, 1);
 				continue;
@@ -510,8 +590,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			strcat(str, a.get_weapon().get_name());
 			strcat(str, singleDot);
 		}
-		moveSixteenOne();
-		addstrAlt(str, gamelog);
+		mvaddstrAlt(16,  1, str, gamelog);
 		gamelog.newline();
 		printparty();
 		if (mode == GAMEMODE_CHASECAR
@@ -583,8 +662,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	}
 	strcat(str, singleSpace);
 	strcat(str, t.name);
-	moveSixteenOne();
-	addstrAlt(str, gamelog);
+	mvaddstrAlt(16,  1, str, gamelog);
 	strcpy(str, "");
 	if (a.is_armed() && !attack_used->thrown)
 	{
@@ -917,8 +995,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		{
 			char str[200];
 			clearmessagearea();
-			moveSixteenOne();
-			addstr_f("(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)", aroll, droll, mod, damamount, armorpiercing);
+			mvaddstr_f(16, 1, "(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)", aroll, droll, mod, damamount, armorpiercing);
 			getkey();
 		}
 		// Bullets caught by armor should bruise instead of poke holes.
@@ -945,8 +1022,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 						target = activesquad->squad[i];
 						clearmessagearea();
 						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						moveSixteenOne();
-						addstrAlt(target->name, gamelog);
+						mvaddstrAlt(16,  1, target->name, gamelog);
 						if (!t.alive) addstrAlt(" misguidedly", gamelog);
 						else addstrAlt(" heroically", gamelog);
 						addstrAlt(" shields ", gamelog);
@@ -1037,11 +1113,10 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				else if (w == BODYPART_BODY && target->wound[w] & WOUND_NASTYOFF)
 					(hit_punctuation = " BLOWING IT IN HALF!");
 				strcat(str, hit_punctuation);
-				moveSeventeenOne();
 				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				addstrAlt(str, gamelog);
+				mvaddstrAlt(17, 1, str, gamelog);
 				gamelog.newline();
 				getkey();
 				if (!alreadydead)
@@ -1062,9 +1137,8 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				if (target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
 				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				moveSeventeenOne();
 				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				addstrAlt(str, gamelog);
+				mvaddstrAlt(17, 1, str, gamelog);
 				gamelog.newline();
 				printparty();
 				if (mode == GAMEMODE_CHASECAR ||
@@ -1099,8 +1173,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 							clearmessagearea();
 							if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 							else set_color_easy(RED_ON_BLACK_BRIGHT);
-							moveSixteenOne();
-							addstrAlt(damageDescription, gamelog);
+							mvaddstrAlt(16,  1, damageDescription, gamelog);
 							gamelog.newline();
 							getkey();
 						}
@@ -1118,8 +1191,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 							//set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 							if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 							else set_color_easy(RED_ON_BLACK_BRIGHT);
-							moveSixteenOne();
-							addstrAlt(damageDescription, gamelog);
+							mvaddstrAlt(16,  1, damageDescription, gamelog);
 							gamelog.newline();
 							getkey();
 						}
@@ -1133,8 +1205,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			strcat(str, " to no effect.");
-			moveSeventeenOne();
-			addstrAlt(str, gamelog);
+			mvaddstrAlt(17,  1, str, gamelog);
 			gamelog.newline();
 			printparty();
 			if (mode == GAMEMODE_CHASECAR ||
@@ -1151,8 +1222,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		{
 			strcpy(str, t.name);
 			strcat(str, " knocks the blow aside and counters!");
-			moveSeventeenOne();
-			addstrAlt(str, gamelog);
+			mvaddstrAlt(17,  1, str, gamelog);
 			gamelog.newline();
 			getkey();
 			goodguyattack = !goodguyattack;
@@ -1202,8 +1272,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 					}
 				}
 			}
-			moveSeventeenOne();
-			addstrAlt(str, gamelog);
+			mvaddstrAlt(17,  1, str, gamelog);
 			gamelog.newline();
 			printparty();
 			if (mode == GAMEMODE_CHASECAR ||
@@ -1732,19 +1801,16 @@ void specialattack(Creature &a, Creature &t)
 		}
 		break;
 	}
-	moveSixteenOne();
-	addstrAlt(str, gamelog);
+	mvaddstrAlt(16,  1, str, gamelog);
 	gamelog.newline();
 	if ((t.animalgloss == ANIMALGLOSS_TANK || (t.animalgloss == ANIMALGLOSS_ANIMAL&&lawList[LAW_ANIMALRESEARCH] != 2))
 		|| (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
 	{
-		moveSeventeenOne();
-		addstrAlt(t.name + (string) " is immune to the attack!", gamelog);
+		mvaddstrAlt(17,  1, t.name + (string) " is immune to the attack!", gamelog);
 	}
 	else if (a.align == t.align)
 	{
-		moveSeventeenOne();
-		addstrAlt(t.name + (string)  " already agrees with " + a.name + singleDot);
+		mvaddstrAlt(17,  1, t.name + (string)  " already agrees with " + a.name + singleDot);
 	}
 	else if (attack > resist)
 	{
@@ -1753,27 +1819,23 @@ void specialattack(Creature &a, Creature &t)
 		{
 			if (t.juice > 100)
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string)  " loses juice!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string)  " loses juice!", gamelog);
 				addjuice(t, -50, 100);
 			}
 			else if (LCSrandom(15) > t.get_attribute(ATTRIBUTE_WISDOM, true) || t.get_attribute(ATTRIBUTE_WISDOM, true) < t.get_attribute(ATTRIBUTE_HEART, true))
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string) " is tainted with Wisdom!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string) " is tainted with Wisdom!", gamelog);
 				t.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 			}
 			else if (t.align == ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string)  " can't bear to leave!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string)  " can't bear to leave!", gamelog);
 			}
 			else
 			{
 				if (a.align == -1)
 				{
-					moveSeventeenOne();
-					addstrAlt(t.name + (string)  " is turned Conservative", gamelog);
+					mvaddstrAlt(17,  1, t.name + (string)  " is turned Conservative", gamelog);
 					t.stunned = 0;
 					if (t.prisoner != NULL)
 						freehostage(t, 0);
@@ -1781,8 +1843,7 @@ void specialattack(Creature &a, Creature &t)
 				}
 				else
 				{
-					moveSeventeenOne();
-					addstrAlt(t.name + (string) " doesn't want to fight anymore", gamelog);
+					mvaddstrAlt(17,  1, t.name + (string) " doesn't want to fight anymore", gamelog);
 					t.stunned = 0;
 					if (t.prisoner != NULL)
 						freehostage(t, 0);
@@ -1819,21 +1880,18 @@ void specialattack(Creature &a, Creature &t)
 		{
 			if (t.juice >= 100)
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string)  " seems less badass!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string)  " seems less badass!", gamelog);
 				addjuice(t, -50, 99);
 			}
 			else if (!t.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_AVERAGE) ||
 				t.get_attribute(ATTRIBUTE_HEART, true) < t.get_attribute(ATTRIBUTE_WISDOM, true))
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string) "'s Heart swells!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string) "'s Heart swells!", gamelog);
 				t.adjust_attribute(ATTRIBUTE_HEART, +1);
 			}
 			else
 			{
-				moveSeventeenOne();
-				addstrAlt(t.name + (string) " has turned Liberal!", gamelog);
+				mvaddstrAlt(17,  1, t.name + (string) " has turned Liberal!", gamelog);
 				t.stunned = 0;
 				liberalize(t);
 				t.infiltration /= 2;
@@ -1844,8 +1902,7 @@ void specialattack(Creature &a, Creature &t)
 	}
 	else
 	{
-		moveSeventeenOne();
-		addstrAlt(t.name + (string)  " remains strong.", gamelog);
+		mvaddstrAlt(17,  1, t.name + (string)  " remains strong.", gamelog);
 	}
 	gamelog.newline();
 	printparty();
@@ -1869,12 +1926,10 @@ void severloot(Creature &cr, vector<Item *> &loot)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		moveSixteenOne();
-		addstrAlt("The ", gamelog);
+		mvaddstrAlt(16,  1, "The ", gamelog);
 		addstrAlt(cr.get_weapon().get_name(1), gamelog);
 		addstrAlt(" slips from", gamelog);
-		moveSeventeenOne();
-		addstrAlt(cr.name, gamelog);
+		mvaddstrAlt(17,  1, cr.name, gamelog);
 		addstrAlt("'s grasp.", gamelog);
 		gamelog.newline();
 		getkey();
@@ -1889,8 +1944,7 @@ void severloot(Creature &cr, vector<Item *> &loot)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		moveSixteenOne();
-		addstrAlt(cr.name, gamelog);
+		mvaddstrAlt(16,  1, cr.name, gamelog);
 		addstrAlt("'s ", gamelog);
 		addstrAlt(cr.get_armor().get_name(), gamelog);
 		addstrAlt(" has been destroyed.", gamelog);
@@ -1998,7 +2052,7 @@ void capturecreature(Creature &t)
 		}
 	}
 	else
-		t.location = find_police_station(cursite);
+		t.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cursite);
 	t.squadid = -1;
 }
 /* checks if the creature can fight and prints flavor text if they can't */
@@ -2015,8 +2069,7 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveSixteenOne();
-				addstrAlt("The ", gamelog);
+				mvaddstrAlt(16,  1, "The ", gamelog);
 				addstrAlt(a.name, gamelog);
 				addstrAlt(singleSpace + pickrandom(paralyzed_tank));
 				gamelog.newline();
@@ -2035,8 +2088,7 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveSixteenOne();
-				addstrAlt("The ", gamelog);
+				mvaddstrAlt(16,  1, "The ", gamelog);
 				addstrAlt(a.name);
 				switch (LCSrandom(3))
 				{
@@ -2060,8 +2112,7 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveSixteenOne();
-				addstrAlt(a.name);
+				mvaddstrAlt(16,  1, a.name);
 				switch (LCSrandom(54))
 				{
 					//TODO IsaacG Complete Migration of Strings
@@ -2105,8 +2156,7 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 				a.stunned--;
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveSixteenOne();
-				addstrAlt(a.name, gamelog);
+				mvaddstrAlt(16,  1, a.name, gamelog);
 				addstrAlt(singleSpace + pickrandom(stunned_text));
 				gamelog.newline();
 				printed = 1;
@@ -2119,8 +2169,7 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveSixteenOne();
-				addstrAlt(a.name, gamelog);
+				mvaddstrAlt(16,  1, a.name, gamelog);
 				addstrAlt(singleSpace + pickrandom(paralyzed_text));
 				gamelog.newline();
 				printed = 1;
@@ -2134,7 +2183,6 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 void adddeathmessage(Creature &cr)
 {
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	moveSixteenOne();
 	char str[200];
 	char secondLine[200];
 	bool hasSecondLine = false;
@@ -2213,10 +2261,9 @@ void adddeathmessage(Creature &cr)
 			break;
 		}
 	}
-	addstrAlt(str, gamelog);
+	mvaddstrAlt(16, 1, str, gamelog);
 	if (hasSecondLine) {
-		moveSeventeenOne();
-		addstrAlt(secondLine, gamelog);
+		mvaddstrAlt(17,  1, secondLine, gamelog);
 	}
 	gamelog.newline();
 }

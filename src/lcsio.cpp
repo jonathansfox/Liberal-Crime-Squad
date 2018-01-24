@@ -18,6 +18,14 @@ This file is part of Liberal Crime Squad.
 
 #include <includes.h>
 
+
+//#include "lcsio.h"
+//own header, currently inside includes.h
+
+#include "common/stringconversion.h"
+//for string   conversion   
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

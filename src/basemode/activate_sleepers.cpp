@@ -18,6 +18,24 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "basemode/activate_sleepers.h"
+
+
+#include "common/commonactions.h"
+// for void sortliberals(std::vector<Creature *>&,short,bool)
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)    
+
+#include "common/getnames.h"
+// for std::string getactivity(activityst)
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -28,6 +46,9 @@ extern vector<Location *> location;
 extern MusicClass music;
 extern string spaceDashSpace;
 extern string percentSign;
+extern short activesortingchoice[SORTINGCHOICENUM];
+extern short interface_pgup;
+extern short interface_pgdn;
 /* base - activate sleepers */
 void activate_sleepers()
 {
@@ -53,56 +74,45 @@ void activate_sleepers()
 	{
 		music.play(MUSIC_SLEEPERS);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Activate Sleeper Agents");
+		mvaddstrAlt(0,  0, "Activate Sleeper Agents");
 		makedelimiter(1);
-		moveAlt(1, 4);
-		addstrAlt("CODE NAME");
-		moveAlt(1, 25);
-		addstrAlt("JOB");
-		moveAlt(1, 42);
-		addstrAlt("SITE");
-		moveAlt(1, 57);
-		addstrAlt("ACTIVITY");
+		mvaddstrAlt(1,  4, "CODE NAME");
+		mvaddstrAlt(1,  25, "JOB");
+		mvaddstrAlt(1,  42, "SITE");
+		mvaddstrAlt(1,  57, "ACTIVITY");
 		int y = 2;
 		for (int p = page * 9; p < len(temppool) && p < page * 9 + 9; p++, y += 2)
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, (y - 2) / 2 + 'A'); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
-			moveAlt(y, 25);
-			addstrAlt(temppool[p]->get_type_name());
-			moveAlt(y + 1, 6);
-			addstrAlt("Effectiveness: ");
+			mvaddstrAlt(y,  25, temppool[p]->get_type_name());
+			mvaddstrAlt(y + 1,  6, "Effectiveness: ");
 			if (temppool[p]->infiltration > 0.8f)
-				set_color(COLOR_RED, COLOR_BLACK, 1);
+				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.6f)
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.4f)
-				set_color(COLOR_YELLOW, COLOR_BLACK, 1);
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.2f)
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.1f)
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
-			else set_color(COLOR_GREEN, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(GREEN_ON_BLACK);
 			addstrAlt(static_cast<long>(temppool[p]->infiltration * 100 + 0.5)); // gets rounded to nearest integer
 			addstrAlt(percentSign);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, location[temppool[p]->worklocation]->getname(true, true));
-			moveAlt(y, 57);
 			// Let's add some color here...
 			set_activity_color(temppool[p]->activity.type);
-			addstrAlt(getactivity(temppool[p]->activity));
+			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(22, 0);
-		addstrAlt("Press a Letter to Assign an Activity.");
-		moveAlt(23, 0);
-		addpagestr();
-		addstrAlt(" T to sort people.");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22,  0, "Press a Letter to Assign an Activity.");
+		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
+		set_color_easy(WHITE_ON_BLACK);
 		int c = getkey();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -128,95 +138,78 @@ void activate_sleeper(Creature *cr)
 	while (true)
 	{
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		moveZeroZero();
-		addstrAlt("Taking Undercover Action:   What will ");
+		mvaddstrAlt(0,  0, "Taking Undercover Action:   What will ");
 		addstrAlt(cr->name);
 		addstrAlt(" focus on?");
 		printcreatureinfo(cr);
 		makedelimiter();
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 'a');
-		moveAlt(10, 1);
-		addstrAlt("A - Communication and Advocacy");
+		mvaddstrAlt(10,  1, "A - Communication and Advocacy");
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 'b');
-		moveAlt(11, 1);
-		addstrAlt("B - Espionage");
+		mvaddstrAlt(11,  1, "B - Espionage");
 		set_color(COLOR_WHITE, COLOR_BLACK, state == 'c');
-		moveAlt(12, 1);
-		addstrAlt("C - Join the Active LCS");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
-		moveAlt(20, 40);
-		addstrAlt("Enter - Confirm Selection");
+		mvaddstrAlt(12,  1, "C - Join the Active LCS");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(20,  40, "Enter - Confirm Selection");
 		switch (state)
 		{
 		case 'a':
 			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_NONE);
-			moveAlt(10, 40);
-			addstrAlt("1 - Lay Low");
+			mvaddstrAlt(10,  40, "1 - Lay Low");
 			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_SLEEPER_LIBERAL);
-			moveAlt(11, 40);
-			addstrAlt("2 - Advocate Liberalism");
-			moveAlt(12, 40);
+			mvaddstrAlt(11,  40, "2 - Advocate Liberalism");
 			if (subordinatesleft(*cr))
 			{
 				set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_SLEEPER_RECRUIT);
-				addstrAlt("3 - Expand Sleeper Network");
+				mvaddstrAlt(12, 40, "3 - Expand Sleeper Network");
 			}
 			else
 			{
-				set_color(COLOR_BLACK, COLOR_BLACK, 1);
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				if (cr->flag & CREATUREFLAG_BRAINWASHED)
-					addstrAlt("3 - [Enlightened Can't Recruit]");
-				else addstrAlt("3 - [Need More Juice to Recruit]");
+					mvaddstrAlt(12, 40, "3 - [Enlightened Can't Recruit]");
+				else mvaddstrAlt(12, 40, "3 - [Need More Juice to Recruit]");
 			}
 			break;
 		case 'b':
 			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_SLEEPER_SPY);
-			moveAlt(10, 40);
-			addstrAlt("1 - Uncover Secrets");
+			mvaddstrAlt(10,  40, "1 - Uncover Secrets");
 			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_SLEEPER_EMBEZZLE);
-			moveAlt(11, 40);
-			addstrAlt("2 - Embezzle Funds");
+			mvaddstrAlt(11,  40, "2 - Embezzle Funds");
 			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == ACTIVITY_SLEEPER_STEAL);
-			moveAlt(12, 40);
-			addstrAlt("3 - Steal Equipment");
+			mvaddstrAlt(12,  40, "3 - Steal Equipment");
 			break;
 		}
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		switch (cr->activity.type)
 		{
 		case ACTIVITY_NONE:
-			moveAlt(22, 3);
-			addstrAlt(cr->name);
+			mvaddstrAlt(22,  3, cr->name);
 			addstrAlt(" will stay out of trouble.");
 			break;
 		case ACTIVITY_SLEEPER_LIBERAL:
-			moveAlt(22, 3);
-			addstrAlt(cr->name);
+			mvaddstrAlt(22,  3, cr->name);
 			addstrAlt(" will build support for Liberal causes.");
 			break;
 		case ACTIVITY_SLEEPER_RECRUIT:
 			if (subordinatesleft(*cr))
 			{
-				moveAlt(22, 3);
-				addstrAlt(cr->name);
+				mvaddstrAlt(22,  3, cr->name);
 				addstrAlt(" will try to recruit additional sleeper agents.");
 			}
 			break;
 		case ACTIVITY_SLEEPER_SPY:
-			moveAlt(22, 3);
-			addstrAlt(cr->name);
+			mvaddstrAlt(22,  3, cr->name);
 			addstrAlt(" will snoop around for secrets and enemy plans.");
 			break;
 		case ACTIVITY_SLEEPER_EMBEZZLE:
-			moveAlt(22, 3);
-			addstrAlt(cr->name);
+			mvaddstrAlt(22,  3, cr->name);
 			addstrAlt(" will embezzle money for the LCS.");
 			break;
 		case ACTIVITY_SLEEPER_STEAL:
-			moveAlt(22, 3);
-			addstrAlt(cr->name);
+			mvaddstrAlt(22,  3, cr->name);
 			addstrAlt(" will steal equipment and send it to the Shelter.");
 			break;
 		}

@@ -19,6 +19,10 @@ This file is part of Liberal Crime Squad.
 */
 #include <includes.h>
 
+#include "log/log.h"
+//own header
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>

@@ -1,8 +1,5 @@
 #ifndef ITEM_H
-#define ITEM_H
-//#include <includeDefault.h>
-//#include "configfile.h"
-//#include "tinydir.h"
+#define ITEM_H0
 class Item
 {
    public:

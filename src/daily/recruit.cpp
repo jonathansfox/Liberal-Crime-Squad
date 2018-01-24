@@ -20,6 +20,31 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledger.h"
+
+#include "basemode/activate.h"
+// for recruitFindDifficulty and recruitName
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printcreatureinfo(Creature *,unsigned char=255)
+
+#include "common/getnames.h"
+// for getview
+
+#include "common/commonactions.h"
+// for subordinatesleft
+
+#include "combat/fight.h"
+//for void delenc(short e,char loot);
+
+char talk(Creature &a, const int t);
+
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -30,6 +55,11 @@ extern Log gamelog;
 extern vector<Location *> location;
 extern MusicClass music;
 extern int stat_recruits;
+extern short cursite;
+extern short attitude[VIEWNUM];
+extern Creature encounter[ENCMAX];
+extern string commaSpace;
+extern class Ledger ledger;
 typedef map<short, string> shortAndString;
 /* recruit struct constructor */
 recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)
@@ -61,7 +91,7 @@ char recruitst::eagerness()
  shortAndString issueEventString;
 static void getissueeventstring(char* str)
 {
-	strcat(str, issueEventString[LCSrandom(VIEWNUM - 3)]);
+	strcat(str, issueEventString[LCSrandom(VIEWNUM - 3)].data());
 }
 extern string singleDot;
 /* recruiting */
@@ -78,12 +108,11 @@ char recruitment_activity(Creature &cr, char &clearformess)
 		music.play(MUSIC_RECRUITING);
 		cr.train(SKILL_STREETSENSE, 5);
 		eraseAlt();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveZeroZero();
-		addstrAlt("Adventures in Liberal Recruitment");
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
 		printcreatureinfo(&cr);
 		makedelimiter();
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 		mvaddstr_f(10, 0, "%s asks around for a %s...", cr.name, name);
 		getkey();
 		int recruitCount = 0;
@@ -109,13 +138,12 @@ char recruitment_activity(Creature &cr, char &clearformess)
 			set_alignment_color(encounter[0].align);
 			addstrAlt(encounter[0].name);
 			add_age(encounter[0]);
-			set_color(COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
 			getkey();
 			eraseAlt();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveZeroZero();
-			addstrAlt("Adventures in Liberal Recruitment");
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
 			printcreatureinfo(&encounter[0]);
 			makedelimiter();
 			talk(cr, 0);
@@ -124,21 +152,20 @@ char recruitment_activity(Creature &cr, char &clearformess)
 			while (true)
 			{
 				eraseAlt();
-				set_color(COLOR_WHITE, COLOR_BLACK, 1);
-				moveZeroZero();
-				addstrAlt("Adventures in Liberal Recruitment");
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
 				printcreatureinfo(&cr);
 				makedelimiter();
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstr_f(10, 0, "%s was able to get information on multiple people.", cr.name);
 				for (int i = 0; i < recruitCount; i++) {
-					set_color(COLOR_WHITE, COLOR_BLACK, 0);
+					set_color_easy(WHITE_ON_BLACK);
 					mvaddstr_f(12 + i, 0, "%c - ", 'a' + i);
 					set_alignment_color(encounter[i].align);
 					addstrAlt(encounter[i].name);
 					add_age(encounter[i]);
 				}
-				set_color(COLOR_WHITE, COLOR_BLACK, 0);
+				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(12 + recruitCount + 1, 0, "Press enter or escape to call it a day.");
 				int c = getkey();
 				if (c == ENTER || c == ESC) break;
@@ -147,9 +174,8 @@ char recruitment_activity(Creature &cr, char &clearformess)
 				{
 					int id = encounter[c].id;
 					eraseAlt();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveZeroZero();
-					addstrAlt("Adventures in Liberal Recruitment");
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
 					printcreatureinfo(&encounter[c]);
 					makedelimiter();
 					talk(cr, c);
@@ -169,18 +195,16 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 	music.play(MUSIC_RECRUITING);
 	clearformess = 1;
 	eraseAlt();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveZeroZero();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(0, 0);
 	if (pool[p]->meetings++ > 5 && LCSrandom(pool[p]->meetings - 5))
 	{
 		addstrAlt(pool[p]->name, gamelog);
 		addstrAlt(" accidentally missed the meeting with ", gamelog);
 		addstrAlt(r.recruit->name, gamelog);
-		moveOneZero();
-		addstrAlt("due to multiple booking of recruitment sessions.", gamelog);
+		mvaddstrAlt(1,  0, "due to multiple booking of recruitment sessions.", gamelog);
 		gamelog.newline();
-		moveAlt(3, 0);
-		addstrAlt("Get it together, ", gamelog);
+		mvaddstrAlt(3,  0, "Get it together, ", gamelog);
 		addstrAlt(pool[p]->name, gamelog);
 		addstrAlt("!", gamelog);
 		gamelog.nextMessage();
@@ -194,12 +218,11 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 	addstrAlt(commaSpace, gamelog);
 	addstrAlt(location[r.recruit->location]->name, gamelog);
 	gamelog.newline();
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
+	set_color_easy(WHITE_ON_BLACK);
 	printfunds();
 	printcreatureinfo(r.recruit);
 	makedelimiter();
-	moveAlt(10, 0);
-	addstrAlt(r.recruit->name);
+	mvaddstrAlt(10,  0, r.recruit->name);
 	switch (r.eagerness())
 	{
 	case 1: addstrAlt(" will take a lot of persuading."); break;
@@ -208,16 +231,14 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 	default: if (r.eagerness() >= 4) addstrAlt(" is ready to fight for the Liberal Cause.");
 			 else addstrAlt(" kind of regrets agreeing to this."); break;
 	}
-	moveAlt(11, 0);
-	addstrAlt("How should ");
+	mvaddstrAlt(11,  0, "How should ");
 	addstrAlt(pool[p]->name);
 	addstrAlt(" approach the situation?");
 	moveAlt(13, 0);
-	if (ledger.get_funds() < 50) set_color(COLOR_BLACK, COLOR_BLACK, 1);
+	if (ledger.get_funds() < 50) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	addstrAlt("A - Spend $50 on props and a book for them to keep afterward.");
-	set_color(COLOR_WHITE, COLOR_BLACK, 0);
-	moveAlt(14, 0);
-	addstrAlt("B - Just casually chat with them and discuss politics.");
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(14,  0, "B - Just casually chat with them and discuss politics.");
 	moveAlt(15, 0);
 	if (subordinatesleft(*pool[p]) && r.eagerness() >= 4)
 	{
@@ -227,36 +248,34 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 	}
 	else if (!subordinatesleft(*pool[p]))
 	{
-		set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		addstrAlt("C - ");
 		addstrAlt(pool[p]->name);
 		addstrAlt(" needs more Juice to recruit.");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 	}
 	else
 	{
-		set_color(COLOR_BLACK, COLOR_BLACK, 1);
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		addstrAlt("C - ");
 		addstrAlt(r.recruit->name);
 		addstrAlt(" isn't ready to join the LCS.");
-		set_color(COLOR_WHITE, COLOR_BLACK, 0);
+		set_color_easy(WHITE_ON_BLACK);
 	}
-	moveAlt(16, 0);
-	addstrAlt("D - Break off the meetings.");
+	mvaddstrAlt(16,  0, "D - Break off the meetings.");
 	int y = 18;
 	while (true)
 	{
 		int c = getkey();
 		if (c == 'c' && subordinatesleft(*pool[p]) && r.eagerness() >= 4)
 		{
-			moveAlt(y, 0);
-			addstrAlt(pool[p]->name, gamelog);
+			mvaddstrAlt(y,  0, pool[p]->name, gamelog);
 			addstrAlt(" offers to let ", gamelog);
 			addstrAlt(r.recruit->name, gamelog);
 			addstrAlt(" join the Liberal Crime Squad.", gamelog);
 			gamelog.newline();
 			getkey();
-			set_color(COLOR_GREEN, COLOR_BLACK, 1);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			moveAlt(y += 2, 0);
 			addstrAlt(r.recruit->name, gamelog);
 			addstrAlt(" accepts, and is eager to get started.", gamelog);
@@ -306,8 +325,7 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 			if (c == 'a')
 			{
 				difficulty -= 5;
-				moveAlt(y++, 0);
-				addstrAlt(pool[p]->name, gamelog);
+				mvaddstrAlt(y++,  0, pool[p]->name, gamelog);
 				addstrAlt(" shares ", gamelog);
 				getissueeventstring(str);
 				addstrAlt(str, gamelog);
@@ -317,8 +335,7 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 			}
 			else
 			{
-				moveAlt(y++, 0);
-				addstrAlt(pool[p]->name, gamelog);
+				mvaddstrAlt(y++,  0, pool[p]->name, gamelog);
 				addstrAlt(" explains ", gamelog);
 				addstrAlt(pool[p]->hisher(), gamelog);
 				addstrAlt(" views on ", gamelog);
@@ -346,36 +363,32 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 			if (difficulty > 18) difficulty = 18; // difficulty above 18 is impossible, we don't want that
 			if (pool[p]->skill_check(SKILL_PERSUASION, difficulty))
 			{
-				set_color(COLOR_CYAN, COLOR_BLACK, 1);
+				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (r.level < 127) r.level++;
 				if (r.eagerness1 < 127) r.eagerness1++;
-				moveAlt(y++, 0);
-				addstrAlt(r.recruit->name, gamelog);
+				mvaddstrAlt(y++,  0, r.recruit->name, gamelog);
 				addstrAlt(" found ", gamelog);
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt("'s views to be insightful.", gamelog);
 				gamelog.newline();
-				moveAlt(y++, 0);
-				addstrAlt("They'll definitely meet again tomorrow.", gamelog);
+				mvaddstrAlt(y++,  0, "They'll definitely meet again tomorrow.", gamelog);
 				gamelog.nextMessage();
 			}
 			else if (pool[p]->skill_check(SKILL_PERSUASION, difficulty)) // Second chance to not fail horribly
 			{
 				if (r.level < 127) r.level++;
 				if (r.eagerness1 > -128) r.eagerness1--;
-				moveAlt(y++, 0);
-				addstrAlt(r.recruit->name, gamelog);
+				mvaddstrAlt(y++,  0, r.recruit->name, gamelog);
 				addstrAlt(" is skeptical about some of ", gamelog);
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt("'s arguments.", gamelog);
 				gamelog.newline();
-				moveAlt(y++, 0);
-				addstrAlt("They'll meet again tomorrow.", gamelog);
+				mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
 				gamelog.nextMessage();
 			}
 			else
 			{
-				set_color(COLOR_MAGENTA, COLOR_BLACK, 1);
+				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				moveAlt(y++, 0);
 				if (r.recruit->talkreceptive() && r.recruit->align == ALIGN_LIBERAL)
 				{
@@ -384,8 +397,7 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 					addstrAlt(pool[p]->name, gamelog);
 					addstrAlt(" really understands the problem.", gamelog);
 					gamelog.newline();
-					moveAlt(y++, 0);
-					addstrAlt("Maybe ", gamelog);
+					mvaddstrAlt(y++,  0, "Maybe ", gamelog);
 					addstrAlt(pool[p]->name, gamelog);
 					addstrAlt(" needs more experience.", gamelog);
 					gamelog.nextMessage();
@@ -395,8 +407,7 @@ char completerecruitmeeting(recruitst &r, int p, char &clearformess)
 					addstrAlt(pool[p]->name, gamelog);
 					addstrAlt(" comes off as slightly insane.", gamelog);
 					gamelog.newline();
-					moveAlt(y++, 0);
-					addstrAlt("This whole thing was a mistake. There won't be another meeting.", gamelog);
+					mvaddstrAlt(y++,  0, "This whole thing was a mistake. There won't be another meeting.", gamelog);
 					gamelog.nextMessage();
 				}
 				getkey();

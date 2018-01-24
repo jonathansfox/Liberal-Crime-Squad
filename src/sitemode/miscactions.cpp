@@ -26,6 +26,25 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "sitemode/sitedisplay.h"
+
+#include "sitemode/miscactions.h"
+
+#include "common/consolesupport.h"
+// for void set_color(short,short,bool)s
+
+#include "log/log.h"
+// for commondisplay.h
+#include "common/commondisplay.h"
+// for void printfunds(int,int,char*)
+
+#include "common/commonactions.h"
+// for void criminalizeparty
+
+#include "daily/daily.h"
+//for char securityable(int type);
+   
+
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
@@ -35,11 +54,21 @@ extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
  vector<string> was_abused;
+ extern short cursite;
+ extern squadst *activesquad;
+ extern string singleSpace;
 void fillEncounter(CreatureTypes c, int numleft);
 extern string singleDot;
+extern short fieldskillrate;
 typedef map<short, string > shortAndString;
 shortAndString discussIssues;
 shortAndString discussesIssues;
+
+extern short sitealarmtimer;
+extern short sitealarm;
+extern Creature encounter[ENCMAX];
+extern short sitealienate;
+
 /* unlock attempt */
 char unlock(short type, char &actual)
 {
@@ -110,9 +139,8 @@ char unlock(short type, char &actual)
 				}
 			}
 			clearmessagearea(false);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(activesquad->squad[p]->name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 			addstrAlt(singleSpace, gamelog);
 			switch (type)
 			{
@@ -154,8 +182,7 @@ char unlock(short type, char &actual)
 		else
 		{
 			clearmessagearea(false);
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			int i;
 			//gain some experience for failing only if you could have succeeded.
 			for (i = 0; i < 3; i++)
@@ -171,7 +198,7 @@ char unlock(short type, char &actual)
 					case FIELDSKILLRATE_HARD:
 						activesquad->squad[p]->train(SKILL_SECURITY, 10); break;
 					}
-					addstrAlt(activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 					addstrAlt(" is close, but can't quite get the lock open.", gamelog);
 					gamelog.newline();
 					break;
@@ -179,7 +206,7 @@ char unlock(short type, char &actual)
 			}
 			if (i == 3)
 			{
-				addstrAlt(activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(" can't figure the lock out.", gamelog);
 				gamelog.newline();
 			}
@@ -191,9 +218,8 @@ char unlock(short type, char &actual)
 	else
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You can't find anyone to do the job.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You can't find anyone to do the job.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
@@ -277,9 +303,8 @@ char bash(short type, char &actual)
 	if (crowable || activesquad->squad[maxp]->attribute_check(ATTRIBUTE_STRENGTH, difficulty))
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt(activesquad->squad[maxp]->name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, activesquad->squad[maxp]->name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		switch (type)
 		{
@@ -306,9 +331,8 @@ char bash(short type, char &actual)
 			sitealarm == 0)
 		{
 			sitealarm = 1;
-			moveSeventeenOne();
-			set_color(COLOR_RED, COLOR_BLACK, 1);
-			addstrAlt("Alarms go off!", gamelog);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(17,  1, "Alarms go off!", gamelog);
 			gamelog.newline();
 			getkey();
 		}
@@ -318,9 +342,8 @@ char bash(short type, char &actual)
 	else
 	{
 		clearmessagearea(false);
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt(activesquad->squad[maxp]->name, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, activesquad->squad[maxp]->name, gamelog);
 		switch (type)
 		{
 		case BASH_DOOR:
@@ -376,9 +399,8 @@ char hack(short type, char &actual)
 		if (maxattack > difficulty)
 		{
 			clearmessagearea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(activesquad->squad[hacker]->name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, activesquad->squad[hacker]->name, gamelog);
 			if (!blind) addstrAlt(" has", gamelog);
 			switch (type)
 			{
@@ -396,9 +418,8 @@ char hack(short type, char &actual)
 		else
 		{
 			clearmessagearea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt(activesquad->squad[hacker]->name, gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, activesquad->squad[hacker]->name, gamelog);
 			addstrAlt(" couldn't", gamelog);
 			if (blind) addstrAlt(" see how to", gamelog);
 			switch (type)
@@ -415,15 +436,13 @@ char hack(short type, char &actual)
 	else
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("You can't find anyone to do the job.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "You can't find anyone to do the job.", gamelog);
 		gamelog.newline();
 		if (blind)
 		{  // your only hacker was blind and had a skill roll, after the handicap, of 0 or less
 			getkey();
-			moveSeventeenOne();
-			addstrAlt("Including the BLIND HACKER you brought.", gamelog);
+			mvaddstrAlt(17,  1, "Including the BLIND HACKER you brought.", gamelog);
 			gamelog.newline();
 		}
 		getkey();
@@ -446,32 +465,28 @@ char run_broadcast(bool tv_broadcase)
 	if (enemy > 0)
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("The Conservatives in the room hurry the Squad, so ", gamelog);
-		moveSeventeenOne();
-		addstrAlt("the broadcast never happens.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "The Conservatives in the room hurry the Squad, so ", gamelog);
+		mvaddstrAlt(17,  1, "the broadcast never happens.", gamelog);
 		gamelog.newline();
 		getkey();
 		return 0;
 	}
 	criminalizeparty(LAWFLAG_DISTURBANCE);
 	clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (tv_broadcase) {
-		addstrAlt("The Squad steps in front of the cameras and ", gamelog);
+		mvaddstrAlt(16, 1, "The Squad steps in front of the cameras and ", gamelog);
 	}
 	else {
-		addstrAlt("The Squad takes control of the microphone and ", gamelog);
+		mvaddstrAlt(16, 1, "The Squad takes control of the microphone and ", gamelog);
 	}
-	moveSeventeenOne();
 	int viewhit = LCSrandom(VIEWNUM);
 	if (discussesIssues.count(viewhit)) {
-		addstrAlt(discussesIssues[viewhit], gamelog);
+		mvaddstrAlt(17, 1, discussesIssues[viewhit], gamelog);
 	}
 	else {
-		addstrAlt(discussesIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
+		mvaddstrAlt(17, 1, discussesIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
 	}
 	gamelog.newline();
 	getkey();
@@ -501,27 +516,26 @@ char run_broadcast(bool tv_broadcase)
 	if (partysize > 1)segmentpower /= partysize;
 	segmentpower += segmentbonus;
 	clearmessagearea();
-	set_color(COLOR_WHITE, COLOR_BLACK, 1);
-	moveSixteenOne();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (tv_broadcase) {
-		if (segmentpower < 25)addstrAlt("The Squad looks completely insane.", gamelog);
-		else if (segmentpower < 35)addstrAlt("The show really sucks.", gamelog);
-		else if (segmentpower < 45)addstrAlt("It is a very boring hour.", gamelog);
-		else if (segmentpower < 55)addstrAlt("It is mediocre TV.", gamelog);
-		else if (segmentpower < 70)addstrAlt("The show was all right.", gamelog);
-		else if (segmentpower < 85)addstrAlt("The Squad put on a good show.", gamelog);
-		else if (segmentpower < 100)addstrAlt("It was thought-provoking, even humorous.", gamelog);
-		else addstrAlt("It was the best hour of Cable TV EVER.", gamelog);
+		if (segmentpower < 25)mvaddstrAlt(16, 1, "The Squad looks completely insane.", gamelog);
+		else if (segmentpower < 35)mvaddstrAlt(16, 1, "The show really sucks.", gamelog);
+		else if (segmentpower < 45)mvaddstrAlt(16, 1, "It is a very boring hour.", gamelog);
+		else if (segmentpower < 55)mvaddstrAlt(16, 1, "It is mediocre TV.", gamelog);
+		else if (segmentpower < 70)mvaddstrAlt(16, 1, "The show was all right.", gamelog);
+		else if (segmentpower < 85)mvaddstrAlt(16, 1, "The Squad put on a good show.", gamelog);
+		else if (segmentpower < 100)mvaddstrAlt(16, 1, "It was thought-provoking, even humorous.", gamelog);
+		else mvaddstrAlt(16, 1, "It was the best hour of Cable TV EVER.", gamelog);
 	}
 	else {
-		if (segmentpower < 25)addstrAlt("The Squad sounds wholly insane.", gamelog);
-		else if (segmentpower < 35)addstrAlt("The show really sucks.", gamelog);
-		else if (segmentpower < 45)addstrAlt("It is a very boring hour.", gamelog);
-		else if (segmentpower < 55)addstrAlt("It is mediocre radio.", gamelog);
-		else if (segmentpower < 70)addstrAlt("The show was all right.", gamelog);
-		else if (segmentpower < 85)addstrAlt("The Squad put on a good show.", gamelog);
-		else if (segmentpower < 100)addstrAlt("It was thought-provoking, even humorous.", gamelog);
-		else addstrAlt("It was the best hour of AM radio EVER.", gamelog);
+		if (segmentpower < 25)mvaddstrAlt(16, 1, "The Squad sounds wholly insane.", gamelog);
+		else if (segmentpower < 35)mvaddstrAlt(16, 1, "The show really sucks.", gamelog);
+		else if (segmentpower < 45)mvaddstrAlt(16, 1, "It is a very boring hour.", gamelog);
+		else if (segmentpower < 55)mvaddstrAlt(16, 1, "It is mediocre radio.", gamelog);
+		else if (segmentpower < 70)mvaddstrAlt(16, 1, "The show was all right.", gamelog);
+		else if (segmentpower < 85)mvaddstrAlt(16, 1, "The Squad put on a good show.", gamelog);
+		else if (segmentpower < 100)mvaddstrAlt(16, 1, "It was thought-provoking, even humorous.", gamelog);
+		else mvaddstrAlt(16, 1, "It was the best hour of AM radio EVER.", gamelog);
 	}
 	gamelog.newline();
 	getkey();
@@ -547,18 +561,16 @@ char run_broadcast(bool tv_broadcase)
 				if (((activesquad->squad[p]->prisoner->type == CREATURE_NEWSANCHOR) && tv_broadcase) || ((activesquad->squad[p]->prisoner->type == CREATURE_RADIOPERSONALITY) && !tv_broadcase))
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt("The hostage ", gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, "The hostage ", gamelog);
 					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(" is forced on to ", gamelog);
-					moveSeventeenOne();
 					viewhit = LCSrandom(VIEWNUM);
 					if (discussIssues.count(viewhit)) {
-						addstrAlt(discussIssues[viewhit], gamelog);
+						mvaddstrAlt(17, 1, discussIssues[viewhit], gamelog);
 					}
 					else {
-						addstrAlt(discussIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
+						mvaddstrAlt(17, 1, discussIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
 					}
 					gamelog.newline();
 					int usegmentpower = 10; //FAME BONUS
@@ -580,9 +592,8 @@ char run_broadcast(bool tv_broadcase)
 				else
 				{
 					clearmessagearea();
-					set_color(COLOR_WHITE, COLOR_BLACK, 1);
-					moveSixteenOne();
-					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16,  1, activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(", the hostage, is kept off-air.", gamelog);
 					gamelog.newline();
 					getkey();
@@ -594,12 +605,10 @@ char run_broadcast(bool tv_broadcase)
 	{
 		sitealienate = 0;
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("Moderates at the station appreciated the show.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "Moderates at the station appreciated the show.", gamelog);
 		gamelog.newline();
-		moveSeventeenOne();
-		addstrAlt("They no longer feel alienated.", gamelog);
+		mvaddstrAlt(17,  1, "They no longer feel alienated.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
@@ -607,11 +616,9 @@ char run_broadcast(bool tv_broadcase)
 	if (((segmentpower < 85 && segmentpower >= 25) && tv_broadcase) || ((segmentpower < 90) && !tv_broadcase))
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("Security is waiting for the Squad ", gamelog);
-		moveSeventeenOne();
-		addstrAlt("after the show!", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "Security is waiting for the Squad ", gamelog);
+		mvaddstrAlt(17,  1, "after the show!", gamelog);
 		gamelog.newline();
 		getkey();
 		int numleft = LCSrandom(8) + 2;
@@ -620,10 +627,9 @@ char run_broadcast(bool tv_broadcase)
 	else
 	{
 		clearmessagearea();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSixteenOne();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (tv_broadcase) {
-			addstrAlt("The show was so ", gamelog);
+			mvaddstrAlt(16, 1, "The show was so ", gamelog);
 			if (segmentpower < 50)
 				addstrAlt("hilarious", gamelog);
 			else
@@ -631,10 +637,9 @@ char run_broadcast(bool tv_broadcase)
 			addstrAlt(" that security watched it ", gamelog);
 		}
 		else {
-			addstrAlt("The show was so good that security listened to it ", gamelog);
+			mvaddstrAlt(16, 1, "The show was so good that security listened to it ", gamelog);
 		}
-		moveSeventeenOne();
-		addstrAlt("at their desks.  The Squad might yet escape.", gamelog);
+		mvaddstrAlt(17,  1, "at their desks.  The Squad might yet escape.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
@@ -687,9 +692,8 @@ void partyrescue(short special)
 			hostslots++;
 			freeslots--;
 			clearmessagearea();
-			set_color(COLOR_WHITE, COLOR_BLACK, 1);
-			moveSixteenOne();
-			addstrAlt("You've rescued ", gamelog);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16,  1, "You've rescued ", gamelog);
 			addstrAlt(waiting_for_rescue[pl]->name, gamelog);
 			addstrAlt(" from the Conservatives.", gamelog);
 			gamelog.newline();
@@ -716,20 +720,17 @@ void partyrescue(short special)
 						criminalize(*waiting_for_rescue[pl], LAWFLAG_ESCAPED);
 						waiting_for_rescue[pl]->flag |= CREATUREFLAG_JUSTESCAPED;
 						clearmessagearea();
-						set_color(COLOR_WHITE, COLOR_BLACK, 1);
-						moveSixteenOne();
-						addstrAlt("You've rescued ", gamelog);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16,  1, "You've rescued ", gamelog);
 						addstrAlt(waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(" from the Conservatives.", gamelog);
 						gamelog.newline();
 						getkey();
 						clearmessagearea();
-						moveSixteenOne();
-						addstrAlt(waiting_for_rescue[pl]->name, gamelog);
+						mvaddstrAlt(16,  1, waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(singleSpace, gamelog);
 						addstrAlt(pickrandom(was_abused), gamelog);
-						moveSeventeenOne();
-						addstrAlt("so ", gamelog);
+						mvaddstrAlt(17,  1, "so ", gamelog);
 						addstrAlt(activesquad->squad[p]->name, gamelog);
 						addstrAlt(" will have to haul a Liberal.", gamelog);
 						gamelog.newline();
@@ -750,28 +751,24 @@ void partyrescue(short special)
 	if (len(waiting_for_rescue) == 1)
 	{
 		clearmessagearea();
-		set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("There's nobody left to carry ", gamelog);
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "There's nobody left to carry ", gamelog);
 		addstrAlt(waiting_for_rescue[0]->name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSeventeenOne();
-		addstrAlt("You'll have to come back later.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17,  1, "You'll have to come back later.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
 	else if (len(waiting_for_rescue) > 1)
 	{
 		clearmessagearea();
-		set_color(COLOR_YELLOW, COLOR_BLACK, 1);
-		moveSixteenOne();
-		addstrAlt("There's nobody left to carry the others.", gamelog);
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16,  1, "There's nobody left to carry the others.", gamelog);
 		gamelog.newline();
-		set_color(COLOR_WHITE, COLOR_BLACK, 1);
-		moveSeventeenOne();
-		addstrAlt("You'll have to come back later.", gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17,  1, "You'll have to come back later.", gamelog);
 		gamelog.newline();
 		getkey();
 	}
