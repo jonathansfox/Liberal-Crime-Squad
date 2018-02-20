@@ -1,5 +1,6 @@
 
 #include <includes.h>
+#include "creature/creature.h"
 
 #include "common/interval.h"
 
@@ -19,7 +20,7 @@
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
 extern bool multipleCityMode;
 extern short mode;
 extern char endgamestate;
@@ -85,7 +86,7 @@ void makecreature(Creature &cr, short type)
 	switch (type)
 	{
 	case CREATURE_BOUNCER:
-		if (mode == GAMEMODE_SITE && location[cursite]->highsecurity)
+		if (mode == GAMEMODE_SITE && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 		{
 			strcpy(cr.name, "Enforcer");
 			cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
@@ -342,7 +343,7 @@ void makecreature(Creature &cr, short type)
 			nameCCSMember(cr);
 		break;
 	case CREATURE_CCS_ARCHCONSERVATIVE:
-		strcpy(cr.name, (location[cursite]->siege.siege ? "CCS Team Leader" : (ccs_kills < 2 ? "CCS Lieutenant" : "CCS Founder")));
+		strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? "CCS Team Leader" : (ccs_kills < 2 ? "CCS Lieutenant" : "CCS Founder")));
 		break;
 	case CREATURE_PRISONGUARD:
 		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
@@ -375,7 +376,7 @@ void makecreature(Creature &cr, short type)
 		cr.reload(false);
 		break;
 	case CREATURE_GENETIC:
-		if (location[cursite]->type == SITE_CORPORATE_HOUSE)
+		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_CORPORATE_HOUSE)
 		{
 			strcpy(cr.name, "Pet ");
 			attcap[ATTRIBUTE_CHARISMA] = 10;
@@ -487,7 +488,7 @@ void makecreature(Creature &cr, short type)
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
 		cr.reload(false);
 		// We'll make the crack house a bit dicey
-		if (location[cursite]->type == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
+		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
 		if (!LCSrandom(2))switch (LCSrandom(3))
 		{
 		case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
@@ -1189,7 +1190,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 	if (test_type != -1) return okaysite[(int)test_location];
 	char swap = 0;
 	if (cr.worklocation == -1) swap = 1;
-	else if (!okaysite[(int)location[(int)cr.worklocation]->type]) swap = 1;
+	else if (!okaysite[(int)LocationsPool::getInstance().getLocationType((int)cr.worklocation)]) swap = 1;
 	if (swap)
 	{
 		//int city = location[cr.location]->city;
@@ -1198,9 +1199,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 		//FIND ONE OF THESE
 		vector<int> goodlist;
 		//find_site_index_in_city(cr.worklocation, location[cr.location]->city);
-		for (int l = 0; l < len(location); l++)
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 			//if(location[l]->type==cr.worklocation && (!multipleCityMode || location[l]->city == cr.location))
-			if (okaysite[(int)location[l]->type] && (!multipleCityMode || location[l]->city == location[(int)cr.location]->city))
+			if (okaysite[(int)LocationsPool::getInstance().getLocationType(l)] && (!multipleCityMode || LocationsPool::getInstance().getLocationCity(l) == LocationsPool::getInstance().getLocationCity(cr.location)))
 				goodlist.push_back(l);
 		// Sadler - This line sometimes causes a memory fault
 		//               Only thing I can think of is if loop above didn't

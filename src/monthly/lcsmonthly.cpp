@@ -25,27 +25,24 @@ the bottom of includes.h in the top src folder.
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
-#include "items/loottype.h"
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
+#include "items/itemPool.h"
+#include "items/lootTypePool.h"
 
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
-// for addstr
+// for addpage and delimiter
 
-#include "common/equipment.h"
-//for void consolidateloot(vector<Item *> &)
+//#include "common/equipment.h"
+void consolidateloot(vector<Item *> &loot);
 
-#include "common/translateid.h"
-// for  int getloottype(int id);
-
-#include "common/stringconversion.h"
-//for string conversion
+//#include "common/translateid.h"
+int getloottype(const string &idname);
 
 #include "common/commonactions.h"
 // for void change_public_opinion(int,int,char =1,char=100);
@@ -53,13 +50,12 @@ the bottom of includes.h in the top src folder.
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
+#include <cursesAlternativeConstants.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 extern Log gamelog;
-extern vector<Location *> location;
-extern vector<LootType *> loottype;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern string spaceDashSpace;
 extern string closeParenthesis;
@@ -147,7 +143,7 @@ void guardianupdate(char size, int power)
 
 	}
 	gamelog.nextMessage();
-	getkey();
+	getkeyAlt();
 	return;
 }
 /* monthly - lets the player choose a special edition for the guardian */
@@ -175,30 +171,9 @@ int choosespecialedition(char &clearformess)
 	int page = 0;
 	//char havetype[LOOTNUM];
 	//for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-	vector<bool> havetype(len(loottype), false);
+	vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
 	vector<int> loottypeindex;
-	//FIND ALL LOOT TYPES
-	for (int loc = 0; loc < len(location); loc++)
-
-	{
-		if (location[loc]->renting == RENTING_NOCONTROL) continue;
-		consolidateloot(location[loc]->loot);
-		for (int l = 0; l < len(location[loc]->loot); l++)
-
-		{
-			if (!location[loc]->loot[l]->is_loot()) continue;
-			if (!binary_search(dox.begin(), dox.end(), location[loc]->loot[l]->get_itemtypename())) continue;
-			if (!havetype[getloottype(location[loc]->loot[l]->get_itemtypename())])
-
-			{
-				loottypeindex.push_back(getloottype(location[loc]->loot[l]->get_itemtypename()));
-				havetype[getloottype(location[loc]->loot[l]->get_itemtypename())] = true;
-
-
-
-			}
-		}
-	}
+	LocationsPool::getInstance().findAllLootTypes(havetype, loottypeindex, dox);
 	for (int sq = 0; sq < len(squad); sq++)
 
 	{
@@ -238,8 +213,8 @@ int choosespecialedition(char &clearformess)
 		{
 			str[0] = l - page * 18 + 'A';
 			str[1] = '\x0';
-			strcat(str, spaceDashSpace);
-			strcat(str, loottype[loottypeindex[l]]->get_name());
+			strcat(str, spaceDashSpace.c_str());
+			strcat(str, LootTypePool::getInstance().getIdName(loottypeindex[l]).c_str());
 
 
 			mvaddstrAlt(y,  x, str);
@@ -256,14 +231,14 @@ int choosespecialedition(char &clearformess)
 
 		}
 		//PAGE DOWN
-		if ((page + 1) * 18 < len(loottype))
+		if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
 
 		{
 			mvaddstrAlt(17, 53,addnextpagestr());
 
 		}
 		mvaddstrAlt(24,  1, "Enter - Not in this month's Liberal Guardian");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'r')
 
 		{
@@ -271,28 +246,12 @@ int choosespecialedition(char &clearformess)
 			if (slot >= 0 && slot < len(loottypeindex))
 
 			{
-				//DELETE THE ITEM
-				for (int loc = 0; loc < len(location); loc++)
-
-				{
-					if (location[loc]->renting == RENTING_NOCONTROL) continue;
-					for (int l = 0; l < len(location[loc]->loot); l++)
-
-					{
-						if (!location[loc]->loot[l]->is_loot()) continue;
-						if (getloottype(location[loc]->loot[l]->get_itemtypename()) == loottypeindex[slot])
-
-						{
-							location[loc]->loot[l]->decrease_number(1);
-							if (location[loc]->loot[l]->empty())
-								delete_and_remove(location[loc]->loot, l);
-							return loottypeindex[slot];
-
-
-
-						}
-					}
+				// remove item from location
+				int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
+				if (output != -1) {
+					return output;
 				}
+				// if not in location, remove item from squad
 				for (int sq = 0; sq < len(squad); sq++)
 
 				{
@@ -323,7 +282,7 @@ int choosespecialedition(char &clearformess)
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<len(loottype)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<LootTypePool::getInstance().lenpool()) page++;
 
 	}
 	return -1;
@@ -334,10 +293,10 @@ void printnews(short li, short newspaper)
 	//// TODO Move to XML
 	music.play(MUSIC_NEWSPAPER);
 	if (lawList[LAW_FREESPEECH] == -2)offended_firemen = 1;
-
+	string lootIDName = LootTypePool::getInstance().getIdName(li);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	if (loottype[li]->get_idname() == tag_LOOT_CEOPHOTOS) // Tmp -XML
+	if (lootIDName == tag_LOOT_CEOPHOTOS) // Tmp -XML
 
 
 	{
@@ -388,7 +347,7 @@ void printnews(short li, short newspaper)
 		offended_corps = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_CEOLOVELETTERS)
+	else if (lootIDName == tag_LOOT_CEOLOVELETTERS)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring love letters from a major CEO ", gamelog);
@@ -439,7 +398,7 @@ void printnews(short li, short newspaper)
 		offended_corps = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_CEOTAXPAPERS)
+	else if (lootIDName == tag_LOOT_CEOTAXPAPERS)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring a major CEO's tax papers ", gamelog);
@@ -466,7 +425,7 @@ void printnews(short li, short newspaper)
 		offended_corps = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_CORPFILES)
+	else if (lootIDName == tag_LOOT_CORPFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring Corporate files ", gamelog);
@@ -513,7 +472,7 @@ void printnews(short li, short newspaper)
 		offended_corps = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_CCS_BACKERLIST)
+	else if (lootIDName == tag_LOOT_CCS_BACKERLIST)
 
 	{
 		mvaddstrAlt(5,  1, "The Liberal Guardian runs more than one thousand pages of documents about ", gamelog);
@@ -550,8 +509,8 @@ void printnews(short li, short newspaper)
 		ccsexposure = CCSEXPOSURE_EXPOSED;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_INTHQDISK
-		|| loottype[li]->get_idname() == tag_LOOT_SECRETDOCUMENTS)
+	else if (lootIDName == tag_LOOT_INTHQDISK
+		|| lootIDName == tag_LOOT_SECRETDOCUMENTS)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring CIA and other intelligence files ", gamelog);
@@ -594,7 +553,7 @@ void printnews(short li, short newspaper)
 		offended_cia = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_POLICERECORDS)
+	else if (lootIDName == tag_LOOT_POLICERECORDS)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring police records ", gamelog);
@@ -643,7 +602,7 @@ void printnews(short li, short newspaper)
 		change_public_opinion(VIEW_POLICEBEHAVIOR, 50);
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_JUDGEFILES)
+	else if (lootIDName == tag_LOOT_JUDGEFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story with evidence of a Conservative judge ", gamelog);
@@ -663,7 +622,7 @@ void printnews(short li, short newspaper)
 		change_public_opinion(VIEW_JUSTICES, 50);
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_RESEARCHFILES)
+	else if (lootIDName == tag_LOOT_RESEARCHFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring research papers ", gamelog);
@@ -688,7 +647,7 @@ void printnews(short li, short newspaper)
 		gamelog.nextMessage();
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_PRISONFILES)
+	else if (lootIDName == tag_LOOT_PRISONFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring prison documents ", gamelog);
@@ -716,7 +675,7 @@ void printnews(short li, short newspaper)
 		change_public_opinion(VIEW_DEATHPENALTY, 50);
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_CABLENEWSFILES)
+	else if (lootIDName == tag_LOOT_CABLENEWSFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring cable news memos ", gamelog);
@@ -743,7 +702,7 @@ void printnews(short li, short newspaper)
 		offended_cablenews = 1;
 
 	}
-	else if (loottype[li]->get_idname() == tag_LOOT_AMRADIOFILES)
+	else if (lootIDName == tag_LOOT_AMRADIOFILES)
 
 	{
 		mvaddstrAlt(6,  1, "The Liberal Guardian runs a story featuring AM radio plans ", gamelog);
@@ -767,7 +726,7 @@ void printnews(short li, short newspaper)
 		offended_amradio = 1;
 
 	}
-	getkey();
+	getkeyAlt();
 }
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
@@ -964,24 +923,15 @@ void fundreport(char &clearformess)
 		if (y + 7 >= 23) y = 2, numpages++; //Start a new page if the liquid assets won't fit on the rest of the current page.
 											// tally up liquid assets
 		long weaponValue = 0, armorValue = 0, clipValue = 0, lootValue = 0;
-		for (int j = 0; j < len(location); j++)
-			for (int i = 0; i < len(location[j]->loot); i++)
-
-			{
-				Item* item = location[j]->loot[i];
-				if (item->is_weapon()) weaponValue += item->get_fencevalue()*item->get_number();
-				if (item->is_armor()) armorValue += item->get_fencevalue()*item->get_number();
-				if (item->is_clip()) clipValue += item->get_fencevalue()*item->get_number();
-				if (item->is_loot()) lootValue += item->get_fencevalue()*item->get_number();
-
-			}
+		LocationsPool::getInstance().getAssetValues(weaponValue, armorValue, clipValue, lootValue);
+		
 		if (page == numpages - 1)
 
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Cash");
-			set_color(ledger.get_funds() ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(ledger.get_funds() ? GREEN_ON_BLACK : WHITE_ON_BLACK);
 			num = "$" + tostring(ledger.get_funds());
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -993,7 +943,7 @@ void fundreport(char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Tools and Weapons");
-			set_color(weaponValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(weaponValue ? GREEN_ON_BLACK : WHITE_ON_BLACK);
 			num = "$" + tostring(weaponValue);
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -1005,7 +955,7 @@ void fundreport(char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Clothing and Armor");
-			set_color(armorValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(armorValue ? GREEN_ON_BLACK : WHITE_ON_BLACK);
 			num = "$" + tostring(armorValue);
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -1017,7 +967,7 @@ void fundreport(char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Ammunition");
-			set_color(clipValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(clipValue ? GREEN_ON_BLACK : WHITE_ON_BLACK);
 			num = "$" + tostring(clipValue);
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -1029,7 +979,7 @@ void fundreport(char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 0, dotdotdot);
 			mvaddstrAlt(y, 0, "Miscellaneous Loot");
-			set_color(lootValue ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 0);
+			set_color_easy(lootValue ? GREEN_ON_BLACK : WHITE_ON_BLACK);
 			num = "$" + tostring(lootValue);
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -1043,7 +993,7 @@ void fundreport(char &clearformess)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 0, "Total Liquid Assets:");
 			long netWorth = ledger.get_funds() + weaponValue + armorValue + clipValue + lootValue;
-			set_color(netWorth ? COLOR_GREEN : COLOR_WHITE, COLOR_BLACK, 1);
+			set_color_easy(netWorth ? GREEN_ON_BLACK_BRIGHT : WHITE_ON_BLACK_BRIGHT);
 			num = "$" + tostring(netWorth);
 			mvaddstrAlt(y, 60 - len(num), num);
 
@@ -1056,7 +1006,7 @@ void fundreport(char &clearformess)
 			while (true)
 
 			{
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)
 
 				{
@@ -1077,7 +1027,7 @@ void fundreport(char &clearformess)
 
 		{
 			mvaddstrAlt(24, 0, "Press any key to reflect on the report.");
-			getkey();
+			getkeyAlt();
 			music.play(MUSIC_PREVIOUS);
 			return;
 

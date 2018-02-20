@@ -27,7 +27,9 @@
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
 #include "items/loottype.h"
@@ -40,31 +42,25 @@
 #include "common/stringconversion.h"
 //for string conversion
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-#include "log/log.h"
-// for commondisplay.h
 #include "common/commondisplay.h"
 // for void printfunds(int,int,char*)
 
 #include "common/equipment.h"
 //for void equip(vector<Item *> &loot,int loc);
 
-#include "common/commonactions.h"
-// for  int squadsize(const squadst *st);
+//#include "common/commonactions.h"
+int squadsize(const squadst *st);
 
 #include "common/translateid.h"
 // for  int getweapontype
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
+#include <cursesAlternativeConstants.h>
 #include <set_color_support.h>
 extern vector<Location *> location;
-extern vector<LootType *> loottype;
+//extern vector<LootType *> loottype;
+#include "common/musicClass.h"
 extern MusicClass music;
 #include <functional>
 extern string spaceDashSpace;
@@ -314,7 +310,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(y,  40, "Enter - ");
 		addstrAlt(exit_);
-		int c = getkey();
+		int c = getkeyAlt();
 		for (int i = 0; i < len(available_options); i++)
 			if (c == available_options[i]->letter_)
 			{
@@ -382,7 +378,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 		mvaddstrAlt(22,  0, "Press a Letter to select an option"); //allow customize "option"? -XML
 		mvaddstrAlt(23, 0,		addpagestr());
 		mvaddstrAlt(24,  0, "Enter - " + std::string(customers.squad[buyer]->name) + singleSpace + exit_);
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -442,7 +438,7 @@ void Shop::sell_loot(squadst& customers) const
 		mvaddstrAlt(15,  40, check_status_of_squad_liberal);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(16,  40, "Enter - Done pawning");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == 'e'&&customers.squad[0]->base != -1)
 			equip(location[customers.squad[0]->base]->loot, -1);
@@ -458,7 +454,7 @@ void Shop::sell_loot(squadst& customers) const
 			case 'c': mvaddstrAlt(18, 1, "Really sell all clothes? (Y)es to confirm.           "); break;
 
 			}
-			if (getkey() != 'y') c = 0; //no sale
+			if (getkeyAlt() != 'y') c = 0; //no sale
 
 
 		}
@@ -529,7 +525,7 @@ void Shop::sell_loot(squadst& customers) const
 				mvaddstrAlt(8,  1, "You add $");
 				addstrAlt(fenceamount);
 				addstrAlt(" to Liberal Funds.");
-				getkey();
+				getkeyAlt();
 				ledger.add_funds(fenceamount, INCOME_PAWN);
 
 
@@ -605,7 +601,7 @@ int Shop::fenceselect(squadst& customers) const
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(23,  1, "Press a letter to select an item to sell.");
 		mvaddstrAlt(24,  1, enter_done);
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c >= 'a' && c <= 'r')
 
 		{
@@ -635,7 +631,7 @@ int Shop::fenceselect(squadst& customers) const
 
 
 
-						getkey();
+						getkeyAlt();
 					}
 					else
 					{
@@ -687,7 +683,7 @@ void Shop::choose_buyer(squadst& customers, int& buyer) const
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  20, chooseALiberalTo + "SPEND.");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= partysize + '1' - 1)
 
@@ -742,7 +738,7 @@ void Shop::maskselect(Creature &buyer) const
 		mvaddstrAlt(24,  0, "Z - Surprise ");
 		addstrAlt(buyer.name);
 		addstrAlt(" With a Random Mask");
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -849,6 +845,7 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 		}
 	}
 }
+#include "items/lootTypePoolItem.h"
 void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 {
 	if (!is_available()) return;
@@ -875,8 +872,7 @@ void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 		else location[customers.squad[0]->base]->loot.push_back(i);
 		break; }
 	case LOOT: {
-		Loot* i = new Loot(*loottype[getloottype(itemtypename_)]);
-		location[customers.squad[0]->base]->loot.push_back(i);
+		location[customers.squad[0]->base]->loot.push_back(getNewLoot(itemtypename_));
 		break; }
 
 	}
@@ -952,7 +948,9 @@ int Shop::ShopItem::adjusted_price() const
 			p *= 2;
 	return p;
 }
-const std::string& Shop::ShopItem::get_description() const
+#include "items/itemPool.h"
+#include "items/lootTypePool.h"
+const std::string Shop::ShopItem::get_description() const
 {
 	if (description_defined_) return description_;
 	else switch (itemclass_)
@@ -961,7 +959,7 @@ const std::string& Shop::ShopItem::get_description() const
 	case WEAPON: return weapontype[getweapontype(itemtypename_)]->get_name();
 	case CLIP:   return cliptype[getcliptype(itemtypename_)]->get_name();
 	case ARMOR:  return armortype[getarmortype(itemtypename_)]->get_name();
-	case LOOT:   return loottype[getloottype(itemtypename_)]->get_name();
+	case LOOT:   return LootTypePool::getInstance().getName(itemtypename_); // loottype[getloottype(itemtypename_)]->get_name();
 	default:     return description_; // Will be undefined
 
 	}

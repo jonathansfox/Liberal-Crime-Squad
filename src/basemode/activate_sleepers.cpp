@@ -17,19 +17,24 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
 #include "basemode/activate_sleepers.h"
+void activate_sleeper(Creature *cr);
 
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for void printfunds(int,int,char*)    
 
 #include "common/getnames.h"
@@ -37,36 +42,27 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern string spaceDashSpace;
 extern string percentSign;
 extern short activesortingchoice[SORTINGCHOICENUM];
 extern short interface_pgup;
 extern short interface_pgdn;
+
+#include "common/creaturePoolCreature.h"
+
 /* base - activate sleepers */
 void activate_sleepers()
 {
 	vector<Creature *> temppool;
-	// Comb the pool of Liberals for sleeper agents
-	for (int p = 0; p < len(pool); p++)
-	{
-		// Select only sleepers that can work
-		if (pool[p]->alive == true &&
-			pool[p]->flag & CREATUREFLAG_SLEEPER&&
-			pool[p]->align == ALIGN_LIBERAL&&
-			pool[p]->hiding == false &&
-			pool[p]->clinic == false &&
-			pool[p]->dating == false)
-		{
-			temppool.push_back(pool[p]);
-		}
-	}
+	selectOnlySleepersThatCanWork(temppool);
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS]);
 	int page = 0;
@@ -104,7 +100,7 @@ void activate_sleepers()
 			addstrAlt(static_cast<long>(temppool[p]->infiltration * 100 + 0.5)); // gets rounded to nearest integer
 			addstrAlt(percentSign);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y, 42, location[temppool[p]->worklocation]->getname(true, true));
+			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->worklocation, true, true));
 			// Let's add some color here...
 			set_activity_color(temppool[p]->activity.type);
 			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
@@ -113,7 +109,7 @@ void activate_sleepers()
 		mvaddstrAlt(22,  0, "Press a Letter to Assign an Activity.");
 		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
 		set_color_easy(WHITE_ON_BLACK);
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -213,7 +209,7 @@ void activate_sleeper(Creature *cr)
 			addstrAlt(" will steal equipment and send it to the Shelter.");
 			break;
 		}
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'z') state = c;
 		if ((c >= 'a'&&c <= 'z') || (c >= '1'&&c <= '9'))
 		{

@@ -11,278 +11,42 @@
 #include "items/armor.h"
 #include "creature/augmentation.h"
 
-// Please do not directly include this file. Include includes.h instead.
-// You will get compiler errors otherwise.
-const int CREATUREFLAG_WHEELCHAIR = BIT1;
-const int CREATUREFLAG_JUSTESCAPED = BIT2;
-const int CREATUREFLAG_MISSING = BIT3;
-const int CREATUREFLAG_KIDNAPPED = BIT4;
-const int CREATUREFLAG_SLEEPER = BIT5;
-const int CREATUREFLAG_ILLEGALALIEN = BIT6;
-const int CREATUREFLAG_LOVESLAVE = BIT7;
-const int CREATUREFLAG_BRAINWASHED = BIT8;
-const int CREATUREFLAG_CONVERTED = BIT9;
-const int CREATURE_NAMELEN = 40;
-const int MAXSUBORDINATES = 30;
-// MAXATTRIBUTE is maximum value for both attributes & skills, set to 99 to limit it to 2 digits on screen
-const int MAXATTRIBUTE = 99;
-enum CreatureGender
-{
-   GENDER_NEUTRAL,
-   GENDER_MALE,
-   GENDER_FEMALE,
-   // Used to get some more specific names.
-   GENDER_WHITEMALEPATRIARCH,
-   // Used in creature creation.
-   GENDER_MALE_BIAS,
-   GENDER_FEMALE_BIAS,
-   GENDER_RANDOM
-};
-enum CheckDifficulty
-{
-   DIFFICULTY_AUTOMATIC    = 1,
-   DIFFICULTY_VERYEASY     = 3,
-   DIFFICULTY_EASY         = 5,
-   DIFFICULTY_AVERAGE      = 7,
-   DIFFICULTY_CHALLENGING  = 9,
-   DIFFICULTY_HARD         = 11,
-   DIFFICULTY_FORMIDABLE   = 13,
-   DIFFICULTY_HEROIC       = 15,
-   DIFFICULTY_SUPERHEROIC  = 17,
-   DIFFICULTY_IMPOSSIBLE   = 19
-};
-enum CreatureAttribute
-{
-   ATTRIBUTE_STRENGTH,
-   ATTRIBUTE_INTELLIGENCE,
-   ATTRIBUTE_WISDOM,
-   ATTRIBUTE_AGILITY,
-   ATTRIBUTE_HEALTH,
-   ATTRIBUTE_CHARISMA,
-   ATTRIBUTE_HEART,
-   ATTNUM
-};
-enum CreatureSkill
-{
-   PSEUDOSKILL_ESCAPEDRIVE = -2,
-   PSEUDOSKILL_DODGEDRIVE,
-   SKILL_ART = 0,
-   SKILL_AXE,
-   SKILL_BUSINESS,
-   SKILL_CLUB,
-   SKILL_COMPUTERS,
-   SKILL_DISGUISE,
-   SKILL_DODGE,
-   SKILL_DRIVING,
-   SKILL_FIRSTAID,
-   SKILL_HEAVYWEAPONS,
-   SKILL_KNIFE,
-   SKILL_LAW,
-   SKILL_HANDTOHAND, // actually this is called "Martial Arts"
-   SKILL_MUSIC,
-   SKILL_PERSUASION,
-   SKILL_PISTOL,
-   SKILL_PSYCHOLOGY,
-   SKILL_RELIGION,
-   SKILL_RIFLE,
-   SKILL_SCIENCE,
-   SKILL_SECURITY,
-   SKILL_SEDUCTION,
-   SKILL_SHOTGUN,
-   SKILL_SMG,
-   SKILL_STEALTH,
-   SKILL_STREETSENSE,
-   SKILL_SWORD,
-   SKILL_TAILORING,
-   SKILL_TEACHING,
-   SKILL_THROWING,
-   SKILL_WRITING,
-   SKILLNUM
-};
-enum CreatureTypes
-{
-   CREATURE_BOUNCER,
-   CREATURE_SECURITYGUARD,
-   CREATURE_SCIENTIST_LABTECH,
-   CREATURE_SCIENTIST_EMINENT,
-   CREATURE_CORPORATE_MANAGER,
-   CREATURE_CORPORATE_CEO,
-   CREATURE_WORKER_SERVANT,
-   CREATURE_WORKER_JANITOR,
-   CREATURE_WORKER_SWEATSHOP,
-   CREATURE_WORKER_FACTORY_NONUNION,
-   CREATURE_WORKER_FACTORY_CHILD,
-   CREATURE_WORKER_SECRETARY,
-   CREATURE_WORKER_FACTORY_UNION,
-   CREATURE_LANDLORD,
-   CREATURE_TEENAGER,
-   CREATURE_COP,
-   CREATURE_SWAT,
-   CREATURE_DEATHSQUAD,
-   CREATURE_FIREFIGHTER,
-   CREATURE_EDUCATOR,
-   CREATURE_GANGUNIT,
-   CREATURE_JUDGE_LIBERAL,
-   CREATURE_JUDGE_CONSERVATIVE,
-   CREATURE_AGENT,
-   CREATURE_RADIOPERSONALITY,
-   CREATURE_NEWSANCHOR,
-   CREATURE_GENETIC,
-   CREATURE_GUARDDOG,
-   CREATURE_PRISONER,
-   CREATURE_JUROR,
-   CREATURE_LAWYER,
-   CREATURE_SEWERWORKER,
-   CREATURE_COLLEGESTUDENT,
-   CREATURE_MUSICIAN,
-   CREATURE_MATHEMATICIAN,
-   CREATURE_TEACHER,
-   CREATURE_HSDROPOUT,
-   CREATURE_BUM,
-   CREATURE_GANGMEMBER,
-   CREATURE_CRACKHEAD,
-   CREATURE_PRIEST,
-   CREATURE_ENGINEER,
-   CREATURE_FASTFOODWORKER,
-   CREATURE_BAKER,
-   CREATURE_BARISTA,
-   CREATURE_BARTENDER,
-   CREATURE_TELEMARKETER,
-   CREATURE_CARSALESMAN,
-   CREATURE_OFFICEWORKER,
-   CREATURE_FOOTBALLCOACH,
-   CREATURE_PROSTITUTE,
-   CREATURE_MAILMAN,
-   CREATURE_GARBAGEMAN,
-   CREATURE_PLUMBER,
-   CREATURE_CHEF,
-   CREATURE_CONSTRUCTIONWORKER,
-   CREATURE_AMATEURMAGICIAN,
-   CREATURE_TANK,
-   CREATURE_MERC,
-   CREATURE_HICK,
-   CREATURE_SOLDIER,
-   CREATURE_VETERAN,
-   CREATURE_HARDENED_VETERAN,
-   CREATURE_PRISONGUARD,
-   CREATURE_HIPPIE,
-   CREATURE_CRITIC_ART,
-   CREATURE_CRITIC_MUSIC,
-   CREATURE_SOCIALITE,
-   CREATURE_PROGRAMMER,
-   CREATURE_RETIREE,
-   CREATURE_PAINTER,
-   CREATURE_SCULPTOR,
-   CREATURE_AUTHOR,
-   CREATURE_JOURNALIST,
-   CREATURE_DANCER,
-   CREATURE_PHOTOGRAPHER,
-   CREATURE_CAMERAMAN,
-   CREATURE_HAIRSTYLIST,
-   CREATURE_FASHIONDESIGNER,
-   CREATURE_CLERK,
-   CREATURE_THIEF,
-   CREATURE_ACTOR,
-   CREATURE_YOGAINSTRUCTOR,
-   CREATURE_MARTIALARTIST,
-   CREATURE_ATHLETE,
-   CREATURE_BIKER,
-   CREATURE_TRUCKER,
-   CREATURE_TAXIDRIVER,
-   CREATURE_NUN,
-   CREATURE_MUTANT,
-   CREATURE_DOCTOR,
-   CREATURE_NURSE,
-   CREATURE_CCS_VIGILANTE,
-   CREATURE_CCS_ARCHCONSERVATIVE,
-   CREATURE_POLITICALACTIVIST,
-   CREATURE_CCS_MOLOTOV,
-   CREATURE_CCS_SNIPER,
-   CREATURE_PSYCHOLOGIST,
-   CREATURE_LOCKSMITH,
-   CREATURE_MILITARYPOLICE,
-   CREATURE_SEAL,
-   CREATURE_MILITARYOFFICER,
-   CREATURE_BANK_TELLER,
-   CREATURE_BANK_MANAGER,
-   CREATURE_SECRET_SERVICE,
-   CREATURE_POLITICIAN,
-   CREATURENUM
-};
-enum Bodyparts
-{
-   BODYPART_HEAD,
-   BODYPART_BODY,
-   BODYPART_ARM_RIGHT,
-   BODYPART_ARM_LEFT,
-   BODYPART_LEG_RIGHT,
-   BODYPART_LEG_LEFT,
-   BODYPARTNUM
-};
-enum SpecialWounds
-{
-   SPECIALWOUND_TEETH,
-   SPECIALWOUND_RIGHTEYE,
-   SPECIALWOUND_LEFTEYE,
-   SPECIALWOUND_NOSE,
-   SPECIALWOUND_TONGUE,
-   SPECIALWOUND_RIGHTLUNG,
-   SPECIALWOUND_LEFTLUNG,
-   SPECIALWOUND_HEART,
-   SPECIALWOUND_LIVER,
-   SPECIALWOUND_STOMACH,
-   SPECIALWOUND_RIGHTKIDNEY,
-   SPECIALWOUND_LEFTKIDNEY,
-   SPECIALWOUND_SPLEEN,
-   SPECIALWOUND_RIBS,
-   SPECIALWOUND_NECK,
-   SPECIALWOUND_UPPERSPINE,
-   SPECIALWOUND_LOWERSPINE,
-   SPECIALWOUNDNUM
-};
-const int RIBNUM = 10;
-const int TOOTHNUM = 32;
-const int WOUND_SHOT = BIT1;
-const int WOUND_CUT = BIT2;
-const int WOUND_BRUISED = BIT3;
-const int WOUND_BURNED = BIT4;
-const int WOUND_BLEEDING = BIT5;
-const int WOUND_TORN = BIT6;
-const int WOUND_NASTYOFF = BIT7;
-const int WOUND_CLEANOFF = BIT8;
+#include "creature/creatureEnums.h"
+
+int get_XML_value(const std::string& inputXml);
+/*
 class Skill
 {
-private:
-	int associated_attribute;
-	int skill;
 public:
-   Skill() { }
-   Skill(const std::string& inputXml);
-   string showXml() const;
-   int value;
-   int get_attribute() const { return associated_attribute; }
-   static std::string get_name(int skill_type);
+   static string showXml(int skill_, int value_) {
+	   CMarkup xml;
+	   xml.AddElem("skill");
+	   xml.IntoElem();
+	   xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	   return xml.GetDoc();
+   };
+   //static std::string get_name(int skill_type);
    static CreatureAttribute get_associated_attribute(int skill_type);
-   void set_type(int skill_type) { skill=skill_type,associated_attribute=get_associated_attribute(skill); }
 };
 class Attribute
 {
-private:
-	int attribute;
 public:
-   Attribute() { }
-   Attribute(const std::string& inputXml);
-   string showXml() const;
-   int value;
-   void set_type(int attribute_type) { attribute=attribute_type; }
-   static std::string get_name(int attribute_type);
+   static string showXml(int attribute_, int value_) {
+	   CMarkup xml;
+	   xml.AddElem("attribute");
+	   xml.IntoElem();
+	   xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	   return xml.GetDoc();
+   };
+   //static std::string get_name(int attribute_type);
 };
+*/
 class Creature  
 {
 private:
    void copy(const Creature& org);
-   class Attribute attributes[ATTNUM];
-   class Skill skills[SKILLNUM];
+   int attributes[ATTNUM];
+   int skills[SKILLNUM];
    class Augmentation augmentations[AUGMENTATIONNUM];
    int skill_experience[SKILLNUM];
    static int roll_check(int skill);
@@ -299,13 +63,13 @@ private:
 public:
 	int get_disguise_difficulty();
 	int	get_stealth_difficulty();
-   void set_attribute(int attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
+   void set_attribute(int attribute, int amount) { attributes[attribute]=MIN(amount,MAXATTRIBUTE); }
    int get_attribute(int attribute, bool use_juice) const;
-   void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
+   void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute]+amount); }
    int attribute_roll(int attribute) const;
    bool attribute_check(int attribute, int difficulty) const;
-   void set_skill(int skill, int amount) { skills[skill].value=MIN(amount,MAXATTRIBUTE); }
-   int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
+   void set_skill(int skill, int amount) { skills[skill]=MIN(amount,MAXATTRIBUTE); }
+   int get_skill(int skill) const { return MIN(skills[skill],MAXATTRIBUTE); }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
    int get_weapon_skill() const;
@@ -419,11 +183,40 @@ public:
    bool kidnap_resistant() const;
    bool reports_to_police() const;
    /* returns the creature's maximum level in the given skill */
-   int skill_cap(int skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute((CreatureSkill)skill),use_juice); }
+   int skill_cap(int skill, bool use_juice) const { return get_attribute(get_associated_attribute((CreatureSkill)skill),use_juice); }
    const char* heshe(bool capitalize=false) const;
    const char* hisher(bool capitalize=false) const;
    const char* himher(bool capitalize=false) const;
 };
+
+// this data struct is for activities, it relates to their info text and a couple of other things to avoid needing big switches in the code
+struct data_activity
+{
+	bool show_name;
+	char key;
+	CreatureSkill skill;
+	string line;
+	string line2;
+	string line3;
+	data_activity(char _key, bool _show_name, string _line0, string _line1 = "", string _line2 = "", CreatureSkill _skill = SKILLNUM) : key(_key), show_name(_show_name), skill(_skill), line(_line0), line2(_line1), line3(_line2) {}
+	data_activity() : data_activity('x', false, "") {}
+	string lineAttempt(int row, Creature *cr)
+	{
+		if (skill == SKILLNUM) {
+			string output = row == 0 ? line : row == 1 ? line2 : line3;
+			return output;
+		}
+		else
+		{
+			if (row > 0) return "";
+			if (cr->get_skill(skill) >= 8) return line3;
+			if (cr->get_skill(skill) >= 4) return line2;
+			return line;
+		}
+	}
+};
+typedef map<Activity, data_activity> ActivityToData;
+
 enum uniqueCreatureData
 {
    UNIQUECREATURE_ALIVE,

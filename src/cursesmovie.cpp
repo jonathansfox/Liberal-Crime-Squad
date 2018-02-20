@@ -25,22 +25,9 @@
 #include "cursesmovie.h"
 //own header
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-
-#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addchar
-
-
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
-extern CursesMoviest movie;
+
+CursesMoviest movie;
 void filelistst::open_diskload(FILE* h)
 {
    int dummy;
@@ -213,8 +200,8 @@ void CursesMoviest::playmovie(int x,int y)
                      if((movie.picture[frame[f]->frame][fx][fy][0]==' '||
                          movie.picture[frame[f]->frame][fx][fy][0]==0)&&
                          frame[f]->flag & CM_FRAMEFLAG_OVERLAY) continue;
-                     set_color(translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][1]),
-                               translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][2]),
+                     set_colorAlt((movie.picture[frame[f]->frame][fx][fy][1]),
+                               (movie.picture[frame[f]->frame][fx][fy][2]),
                                movie.picture[frame[f]->frame][fx][fy][3]);
 					 mvaddstrAlt(fy + y, fx + x, (movie.picture[frame[f]->frame][fx][fy][0]));
                   }
@@ -223,11 +210,12 @@ void CursesMoviest::playmovie(int x,int y)
          }
          if(frame[f]->stop>=timer) cont=true;
       }
-      if(pted) refresh();
+      if(pted) refreshAlt();
       timer++;
       //while(time+10>GetTickCount);
       alarmwait();
-      int c=checkkey();
+	  // TODO this is the only instance in entire program using checkkey()
+      int c=checkkeyAlt();
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) timer=finalframe;
    } while(cont);
 }

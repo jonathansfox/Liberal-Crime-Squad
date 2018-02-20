@@ -26,32 +26,16 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-#include "common/stringconversion.h"
-//for string conversion
 
 #include "common/getnames.h"
 // for getmonth
 
-#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
-
-#include "title/highscore.h"
-//own header
-      //does not compile without it --Schmel924
-
-
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
+#include "common/musicClass.h"
 extern MusicClass music;
 extern int ustat_recruits;
 extern int ustat_kidnappings;
@@ -113,7 +97,45 @@ extern char slogan[SLOGAN_LEN];
 
 MusicModes getEndingMusic(EndTypes e);
 string getEndingString(EndTypes e);
+struct  saveLoadChunk {
+	void * Buffer;
+	size_t      ElementSize;
+	size_t      ElementCount;
+	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
+};
+vector<saveLoadChunk> highScoreSaveLoad = {
+	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
+	saveLoadChunk(&ustat_dead, sizeof(int), 1),
+	saveLoadChunk(&ustat_kills, sizeof(int), 1),
+	saveLoadChunk(&ustat_kidnappings, sizeof(int), 1),
+	saveLoadChunk(&ustat_funds, sizeof(int), 1),
+	saveLoadChunk(&ustat_spent, sizeof(int), 1),
+	saveLoadChunk(&ustat_buys, sizeof(int), 1),
+	saveLoadChunk(&ustat_burns, sizeof(int), 1),
+	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
+};
 
+/* loads the high scores file */
+void loadhighscores()
+{
+	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
+	//LOAD FILE
+	int loadversion;
+	FILE *h = LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
+	if (h != NULL)
+	{
+		fread(&loadversion, sizeof(int), 1, h);
+		if (loadversion < lowestloadscoreversion)
+		{
+			LCSCloseFile(h);
+			return;
+		}
+		for (saveLoadChunk s : highScoreSaveLoad) {
+			fread(s.Buffer, s.ElementSize, s.ElementCount, h);
+		}
+		LCSCloseFile(h);
+	}
+}
 /* displays the high score board */
 void viewhighscores(int musicoverride)
 {
@@ -189,62 +211,45 @@ void viewhighscores(int musicoverride)
 	addstrAlt(ustat_buys);
 	mvaddstrAlt(24,  60, flagsBurned);
 	addstrAlt(ustat_burns);
-	//getkey();
+	getkeyAlt();
 }
 MusicModes getEndingMusic(EndTypes e) {
 	switch (e)
 	{
 	case END_WON:
 		return (MUSIC_VICTORY);
-		break;
 	case END_POLICE:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_CIA:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_HICKS:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_CORP:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_DEAD:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_REAGAN:
 		return (MUSIC_REAGANIFIED);
-		break;
 	case END_PRISON:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_EXECUTED:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_DATING:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_HIDING:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_DISBANDLOSS:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_DISPERSED:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_CCS:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_FIREMEN:
 		return (MUSIC_DEFEAT);
-		break;
 	case END_STALIN:
 		return (MUSIC_STALINIZED);
-		break;
 	default:
 		return MUSIC_RANDOM;
-		break;
 	}
 }
 
@@ -305,44 +310,7 @@ string getEndingString(EndTypes e) {
 		break;
 	}
 }
-struct  saveLoadChunk {
-	void * Buffer;
-	size_t      ElementSize;
-	size_t      ElementCount;
-	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
-};
-vector<saveLoadChunk> highScoreSaveLoad = {
-	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
-	saveLoadChunk(&ustat_dead, sizeof(int), 1),
-	saveLoadChunk(&ustat_kills, sizeof(int), 1),
-	saveLoadChunk(&ustat_kidnappings, sizeof(int), 1),
-	saveLoadChunk(&ustat_funds, sizeof(int), 1),
-	saveLoadChunk(&ustat_spent, sizeof(int), 1),
-	saveLoadChunk(&ustat_buys, sizeof(int), 1),
-	saveLoadChunk(&ustat_burns, sizeof(int), 1),
-	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
-};
-/* loads the high scores file */
-void loadhighscores()
-{
-	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
-	//LOAD FILE
-	int loadversion;
-	FILE *h = LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
-	if (h != NULL)
-	{
-		fread(&loadversion, sizeof(int), 1, h);
-		if (loadversion < lowestloadscoreversion)
-		{
-			LCSCloseFile(h);
-			return;
-		}
-		for (saveLoadChunk s : highScoreSaveLoad) {
-			fread(s.Buffer, s.ElementSize, s.ElementCount, h);
-		}
-		LCSCloseFile(h);
-	}
-}
+
 /* saves a new high score */
 void savehighscore(char endtype)
 {

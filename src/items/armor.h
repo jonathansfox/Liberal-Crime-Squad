@@ -51,7 +51,7 @@ class Armor : public Item
       //For masks:
       bool is_mask() const;
       bool is_surprise_mask() const; //Should perhaps be decided by the shop and not the mask. -XML
-      const string& get_description() const;
+      const string get_description() const;
    private:
       bool bloody_;
       bool damaged_;

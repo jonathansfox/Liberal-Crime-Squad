@@ -25,9 +25,14 @@ the bottom of includes.h in the top src folder.
 */
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
+#include "cursesgraphics.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/baseactions.h"
@@ -43,7 +48,7 @@ the bottom of includes.h in the top src folder.
 #include "common/commonactions.h"
 // for int squadsize(const squadst)
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for void printparty(void)
@@ -54,29 +59,16 @@ the bottom of includes.h in the top src folder.
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Location *> location;
-extern vector<Creature *> pool;
+#include "locations/locationsPool.h"
 extern bool multipleCityMode;
-extern MusicClass music;
- string closeParenthesis;
- string spaceParanthesisDollar;
- string needCar;
- string travelDifCity;
- string spaceDashSpace;
- string secrecyLevel;
- string percentSign;
- string heatLevel;
- string underSiege;
- string enter_done;
- string currentLocation;
- string highSecurity;
- string closedDown;
- string enemySafeHouse;
- string safeHouse;
+//extern MusicClass music;
+string enter_done;
+string spaceDashSpace;
 
  extern char slogan[SLOGAN_LEN];
  extern short party_status;
@@ -88,6 +80,8 @@ extern MusicClass music;
  extern short lawList[LAWNUM];
  extern string singleSpace;
  extern vector<Vehicle *> vehicle;
+
+#include "common/creaturePool.h"
 
 /* base - burn the flag */
 void burnflag()
@@ -228,7 +222,7 @@ void orderparty()
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 26, "Choose squad member to move");
-		int oldPos = getkey();
+		int oldPos = getkeyAlt();
 		if (oldPos<'1' || oldPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -237,410 +231,13 @@ void orderparty()
 		str += " in Spot ";
 		str += (char)oldPos;
 		mvaddstrCenter(8, str);
-		int newPos = getkey();
+		int newPos = getkeyAlt();
 		if (newPos<'1' || newPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
 	}
 }
-/* base - go forth to stop evil */
-void stopevil()
-{
-	int l = 0, p = 0;
-	if (!activesquad) return;
-	bool havecar = false;
-	for (p = 0; p < 6; p++) if (activesquad->squad[p]) if (activesquad->squad[p]->pref_carid != -1)
-	{
-		havecar = true;
-		break;
-	}
-	Location* squad_location = location[activesquad->squad[0]->location];
-	int page = 0, loc = -1;
-	// Start at the city level, rather than the absolute top
-	if (multipleCityMode) {
-		for (l = 0; l < len(location); l++) {
-			if (location[l]->type == squad_location->city) {
-				loc = l;
-				break;
-			}
-		}
-	}
-	vector<long> temploc;
-	// 1. LCS safe houses
-	for (l = 0; l < len(location); l++)
-		if (location[l]->parent == loc && location[l]->renting >= 0 && !location[l]->hidden)
-			temploc.push_back(l);
-	// 2. CCS safe houses
-	for (l = 0; l < len(location); l++)
-		if (location[l]->parent == loc && location[l]->renting == RENTING_CCS && !location[l]->hidden)
-			temploc.push_back(l);
-	// 3. Other sites
-	for (l = 0; l < len(location); l++)
-		if (location[l]->parent == loc && location[l]->renting == RENTING_NOCONTROL && !location[l]->hidden)
-			temploc.push_back(l);
-	// Determine cost of tickets for travel
-	int ticketprice = 100 * squadsize(activesquad);
-	while (true)
-	{
-		music.play(MUSIC_STOPEVIL);
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, "Where will the Squad go?");
-		printparty();
-		if (loc != -1)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8, 0, location[loc]->getname(-1, true));
-		}
-		temploc.clear();
-		for (l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting >= 0 && !location[l]->hidden)temploc.push_back(l);
-		for (l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting == RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
-		for (l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting == RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
-		int y = 10;
-		for (p = page * 11; p < len(temploc) && p < page * 11 + 11; p++)
-		{
-			if (p == -1) break;
-			Location* this_location = location[temploc[p]];
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y, 0, y - 10 + 'A');
-			addstrAlt(spaceDashSpace);
-			addstrAlt(location[temploc[p]]->getname());
-			bool show_safehouse_info = false;
-			if (this_location == squad_location) {
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				addstrAlt(currentLocation);
-				show_safehouse_info = true;
-			}
-			else if (this_location->renting >= 0) {
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt(safeHouse);
-				show_safehouse_info = true;
-			}
-			else if (this_location->renting == RENTING_CCS) {
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				addstrAlt(enemySafeHouse);
-			}
-			else if (this_location->closed) {
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				addstrAlt(closedDown);
-			}
-			else if (this_location->highsecurity) {
-				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				addstrAlt(highSecurity);
-			}
-			else if (multipleCityMode && this_location->type == squad_location->city) {
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				addstrAlt(currentLocation);
-			}
-			else if (this_location->area != squad_location->area && !havecar) {
-				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				addstrAlt(needCar);
-			}
-			else if (this_location->type == SITE_TRAVEL) {
-				if (ledger.get_funds() < ticketprice)
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-				else
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
-			}
-			if (this_location->siege.siege > 0) {
-				set_color_easy(RED_ON_BLACK);
-				addstrAlt(underSiege);
-			}
-			if (show_safehouse_info)
-			{
-				this_location->update_heat_protection();
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(y, 54, heatLevel);
-				if (this_location->heat > this_location->heat_protection)
-					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				addstrAlt(this_location->heat);
-				addstrAlt(percentSign);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(y,  66, secrecyLevel);
-				if (this_location->heat > this_location->heat_protection)
-					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				addstrAlt(this_location->heat_protection);
-				addstrAlt(percentSign);
-			}
-			if (multipleCityMode && this_location->city == this_location->type)
-			{
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y, 50, this_location->city_description());
-			}
-			y++;
-		}
-		if (multipleCityMode && loc != -1 && location[loc]->type == location[loc]->city)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y + 1, 0, y - 10 + 'A');
-			addstrAlt(travelDifCity);
-			if (!havecar) {
-				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				addstrAlt(needCar);
-			}
-			else {
-				if (ledger.get_funds() < ticketprice)
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-				else set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
-			}
-			temploc.push_back(-1);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		//PAGE UP
-		if (page > 0)
-		{
-			mvaddstrAlt(10, 60, addprevpagestr());
-		}
-		//PAGE DOWN
-		if ((page + 1) * 11 < len(temploc))
-		{
-			mvaddstrAlt(20, 60, addnextpagestr());
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		if ((loc == -1) || (multipleCityMode && location[loc]->type == squad_location->city)) mvaddstrAlt(24, 1, "Enter - The squad is not yet Liberal enough.");
-		else mvaddstrAlt(24, 1, "Enter - Back one step.");
-		int c = getkey();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 11<len(temploc)) page++;
-		if (c >= 'a'&&c <= 'k')
-		{
-			int sq = page * 11 + c - 'a';
-			if (sq < len(temploc) && sq >= 0)
-			{
-				int oldloc = loc;
-				loc = temploc[sq];
-				if ((loc == -1 || (multipleCityMode && location[loc]->city != squad_location->city)) && !havecar)
-					loc = oldloc;
-				int subcount = 0;
-				for (l = 0; l < len(location); l++)
-					if (location[l]->parent == loc)
-						subcount++;
-				if (subcount == 0 || (multipleCityMode && loc >= 0 && location[loc]->city != squad_location->city))
-				{
-					if (!location[loc]->closed &&
-						((location[loc]->area == squad_location->area&&location[loc]->city == squad_location->city) || havecar))
-					{
-						activesquad->activity.type = ACTIVITY_VISIT;
-						activesquad->activity.arg = loc;
-						return;
-					}
-					else loc = oldloc;
-				}
-			}
-		}
-		/*if(c=='z')
-		{
-		activesquad->stance++;
-		if(activesquad->stance>SQUADSTANCE_STANDARD)
-		activesquad->stance=0;
-		}*/
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)
-		{
-			if (loc != -1 && (location[loc]->city != location[loc]->type || location[loc]->city != squad_location->city))
-				loc = location[loc]->parent;
-			else
-			{
-				activesquad->activity.type = ACTIVITY_NONE; // Clear squad activity
-				break;
-			}
-		}
-	}
-}
- vector<string> caseBUSINESSFRONT_INSURANCE;
- vector<string> caseBUSINESSFRONT_TEMPAGENCY;
- vector<string> caseBUSINESSFRONT_RESTAURANT;
- vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
- string chooseALiberalTo;
-/* base - invest in this location */
-void investlocation()
-{
-	int loc = selectedsiege;
-	while (true)
-	{
-		eraseAlt();
-		locheader();
-		printlocation(loc);
-		if (location[loc]->can_be_fortified())
-		{
-			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			if (location[loc]->type == SITE_OUTDOOR_BUNKER)
-				mvaddstrAlt(8, 1, "W - Repair the Bunker Fortifications ($2000)");
-			else if (location[loc]->type == SITE_RESIDENTIAL_BOMBSHELTER)
-				mvaddstrAlt(8, 1, "W - Fortify the Bomb Shelter Entrances ($2000)");
-			else
-				mvaddstrAlt(8, 1, "W - Fortify the Compound for a Siege ($2000)");
-		}
-		if (!(location[loc]->compound_walls & COMPOUND_CAMERAS))
-		{
-			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9,  1, "C - Place Security Cameras around the Compound ($2000)");
-		}
-		if (location[loc]->can_be_trapped())
-		{
-			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10,  1, "B - Place Booby Traps throughout the Compound ($3000)");
-		}
-		if (location[loc]->can_install_tanktraps())
-		{
-			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11,  1, "T - Ring the Compound with Tank Traps ($3000)");
-		}
-		if (!(location[loc]->compound_walls & COMPOUND_GENERATOR))
-		{
-			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12,  1, "G - Buy a Generator for emergency electricity ($3000)");
-		}
-		if (!(location[loc]->compound_walls & COMPOUND_AAGUN))
-		{
-			if (lawList[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
-			{
-				if (ledger.get_funds() >= 35000) set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(13,  1, "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
-			}
-			else
-			{
-				if (ledger.get_funds() >= 200000) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13,  1, "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)");
-			}
-		}
-		if (!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
-		{
-			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(14,  1, "P - Buy a Printing Press to start your own newspaper ($3000)");
-		}
-		if (location[loc]->can_have_businessfront())
-		{
-			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15,  1, "F - Setup a Business Front to ward off suspicion ($3000)");
-		}
-		if (ledger.get_funds() >= 150) set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "R - Stockpile 20 daily rations of food ($150)");
-		mvaddstrAlt(17,  1, enter_done);
-		int c = getkey();
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-		if (c == 'w')
-		{
-			if (location[loc]->can_be_fortified() && ledger.get_funds() >= 2000)
-			{
-				ledger.subtract_funds(2000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_BASIC;
-			}
-		}
-		if (c == 'c')
-		{
-			if (!(location[loc]->compound_walls & COMPOUND_CAMERAS) && ledger.get_funds() >= 2000)
-			{
-				ledger.subtract_funds(2000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_CAMERAS;
-			}
-		}
-		if (c == 'b')
-		{
-			if (location[loc]->can_be_trapped() && ledger.get_funds() >= 3000)
-			{
-				ledger.subtract_funds(3000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_TRAPS;
-			}
-		}
-		if (c == 't')
-		{
-			if (location[loc]->can_install_tanktraps() && ledger.get_funds() >= 3000)
-			{
-				ledger.subtract_funds(3000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_TANKTRAPS;
-			}
-		}
-		if (c == 'g')
-		{
-			if (!(location[loc]->compound_walls & COMPOUND_GENERATOR) && ledger.get_funds() >= 3000)
-			{
-				ledger.subtract_funds(3000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_GENERATOR;
-			}
-		}
-		if (c == 'a')
-		{
-			int aagunPrice = 200000;
-			if (lawList[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
-				aagunPrice = 35000;
-			if (!(location[loc]->compound_walls & COMPOUND_AAGUN) && ledger.get_funds() >= aagunPrice)
-			{
-				ledger.subtract_funds(aagunPrice, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_AAGUN;
-			}
-		}
-		if (c == 'p')
-		{
-			if (!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS) && ledger.get_funds() >= 3000)
-			{
-				ledger.subtract_funds(3000, EXPENSE_COMPOUND);
-				location[loc]->compound_walls |= COMPOUND_PRINTINGPRESS;
-			}
-		}
-		if (c == 'r')
-		{
-			if (ledger.get_funds() >= 150)
-			{
-				ledger.subtract_funds(150, EXPENSE_COMPOUND);
-				location[loc]->compound_stores += 20;
-			}
-		}
-		if (c == 'f')
-		{
-			if (location[loc]->can_have_businessfront() && ledger.get_funds() >= 3000)
-			{
-				ledger.subtract_funds(3000, EXPENSE_COMPOUND);
-				do
-				{
-					location[loc]->front_business = LCSrandom(BUSINESSFRONTNUM);
-					strcpy(location[loc]->front_name, lastname(true));
-					strcat(location[loc]->front_name, singleSpace);
-					int selection;
-					switch (location[loc]->front_business)
-					{
-					case BUSINESSFRONT_INSURANCE:
-						selection = LCSrandom(len(caseBUSINESSFRONT_INSURANCE) / 2);
-						strcat(location[loc]->front_name, caseBUSINESSFRONT_INSURANCE[selection * 2]);
-						strcpy(location[loc]->front_shortname, caseBUSINESSFRONT_INSURANCE[selection * 2 + 1]);
-						break;
-					case BUSINESSFRONT_TEMPAGENCY:
-						selection = LCSrandom(len(caseBUSINESSFRONT_TEMPAGENCY) / 2);
-						strcat(location[loc]->front_name, caseBUSINESSFRONT_TEMPAGENCY[selection * 2]);
-						strcpy(location[loc]->front_shortname, caseBUSINESSFRONT_TEMPAGENCY[selection * 2 + 1]);
-						break;
-					case BUSINESSFRONT_RESTAURANT:
-						selection = LCSrandom(len(caseBUSINESSFRONT_RESTAURANT) / 2);
-						strcat(location[loc]->front_name, caseBUSINESSFRONT_RESTAURANT[selection * 2]);
-						strcpy(location[loc]->front_shortname, caseBUSINESSFRONT_RESTAURANT[selection * 2 + 1]);
-						break;
-					case BUSINESSFRONT_MISCELLANEOUS:
-						selection = LCSrandom(len(caseBUSINESSFRONT_MISCELLANEOUS) / 2);
-						strcat(location[loc]->front_name, caseBUSINESSFRONT_MISCELLANEOUS[selection * 2]);
-						strcpy(location[loc]->front_shortname, caseBUSINESSFRONT_MISCELLANEOUS[selection * 2 + 1]);
-						break;
-					}
-				} while (location[loc]->duplicatelocation());
-			}
-		}
-	}
-}
+
+string chooseALiberalTo;
  string string_sleeper;
  vector<string> vehicleParagraph;
 /* base - assign a vehicle to this squad */
@@ -659,7 +256,7 @@ void setvehicles()
 		char str[200];
 		for (l = page * 18; l < len(vehicle) && l < page * 18 + 18; l++)
 		{
-			bool this_squad = false, another_squad = false;
+			bool this_squad = false;
 			for (p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
@@ -670,15 +267,7 @@ void setvehicles()
 					break;
 				}
 			}
-			for (p = 0; p < len(pool); p++)
-			{
-				if (pool[p]->squadid != -1 && pool[p]->alive&&
-					pool[p]->pref_carid == vehicle[l]->id() && pool[p]->squadid != activesquad->id)
-				{
-					another_squad = true;
-					break;
-				}
-			}
+			bool another_squad = CreaturePool::getInstance().isThisCarWantedByAnotherSquad(vehicle[l]->id(), activesquad->id);
 			if (this_squad&&another_squad)
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (another_squad)
@@ -709,6 +298,7 @@ void setvehicles()
 		for (int i = 0; i < len(vehicleParagraph); i++) {
 			mvaddstrAlt(18 + i, 1, vehicleParagraph[i]);
 		}
+		// TODO this is the only instance in entire program using getkey_cap()
 		int c = getkey_cap();
 		if (c >= 'A'&&c <= 'R')
 		{
@@ -733,7 +323,7 @@ void setvehicles()
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 20, chooseALiberalTo + "drive it.");
-					c = getkey();
+					c = getkeyAlt();
 				}
 				if (c >= '1'&&c <= '6')
 				{
@@ -770,7 +360,7 @@ void setvehicles()
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 20, chooseALiberalTo + "be a passenger.");
-					c = getkey();
+					c = getkeyAlt();
 				}
 				if (c >= '1'&&c <= '6')
 				{

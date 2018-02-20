@@ -25,16 +25,19 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#include "news/news.h"
-// for majornewspaper
+//#include "news/news.h"
+void majornewspaper(char &clearformess, char canseethings);
 
-#include "sitemode/sitemode.h"
-// for mode_site
+//#include "sitemode/sitemode.h"
+void mode_site(short loc);
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
@@ -51,6 +54,7 @@ This file is part of Liberal Crime Squad.                                       
 // for  int getsquad(int)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void basesquad(squadst *,long)
 
 #include "title/saveload.h"
@@ -75,6 +79,7 @@ This file is part of Liberal Crime Squad.                                       
 //for char completevacation(datest &d,int p,char &clearformess);
 
 #include "combat/chase.h"
+#include "combat/chaseCreature.h"
 //for int driveskill(Creature &cr,Vehicle &v);
         //hmm --Schmel924
 
@@ -84,15 +89,18 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+
+#include "title/titlescreen.h"
+
+extern title_screen *TitleScreen;
+
 extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
 extern int year;
 extern string singleDot;
-extern string savefile_name;
 extern char showcarprefs;
 extern char disbanding;
-extern bool autosave;
 extern class Ledger ledger;
 extern squadst *activesquad;
 extern vector<squadst *> squad;
@@ -104,7 +112,10 @@ extern int day;
 extern vector<recruitst *> recruit;
 extern vector<datest *> date;
 extern int month;
+void autosavegame();
 
+#include "common/creaturePool.h"
+void determineMedicalSupportAtEachLocation(bool clearformess);
 void advanceday(char &clearformess, char canseethings)
 {
 	int p;
@@ -112,20 +123,20 @@ void advanceday(char &clearformess, char canseethings)
 	int w = 0;
 	//int l2;
 	//*JDS* Save the game to save.dat each day. :)
-	if (!disbanding&&autosave) savegame(savefile_name);
+	if (!disbanding) TitleScreen->autosavegame();
 	ledger.resetDailyAmounts();
 	//CLEAR CAR STATES
 	vector<long> caridused;
-	for (p = 0; p < len(pool); p++) pool[p]->carid = -1;
+	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) pool[p]->carid = -1;
 	// Move squadless Liberals to their bases if not under siege
-	if (!disbanding) for (p = 0; p < len(pool); p++)
+	if (!disbanding) for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
 			continue;
 		// Prevent moving people to a sieged location,
 		// but don't evacuate people already under siege. - wisq
 		if (pool[p]->location != pool[p]->base &&
-			location[pool[p]->base]->siege.siege)
+			LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
 		{
 			pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location); //find_homeless_shelter(*pool[p]);
 		}
@@ -155,7 +166,7 @@ void advanceday(char &clearformess, char canseethings)
 						addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 					}
 					squad[sq]->squad[p]->activity.type = ACTIVITY_VISIT;
 					squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
@@ -165,18 +176,18 @@ void advanceday(char &clearformess, char canseethings)
 		if (squad[sq]->activity.type == ACTIVITY_VISIT)
 		{
 			//TURN AWAY SQUADS FROM RECENTLY CLOSED OR SIEGED SITES
-			if (location[squad[sq]->activity.arg]->closed ||
-				location[squad[sq]->activity.arg]->siege.siege)
+			if (LocationsPool::getInstance().isThisSiteClosed(squad[sq]->activity.arg) ||
+				LocationsPool::getInstance().isThereASiegeHere(squad[sq]->activity.arg))
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" decided ", gamelog);
-				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 				addstrAlt(" was too hot to risk.", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				//ON TO THE NEXT SQUAD
 				squad[sq]->activity.type = ACTIVITY_NONE;
 				continue;
@@ -208,7 +219,7 @@ void advanceday(char &clearformess, char canseethings)
 								addstrAlt(vehicle[v]->fullname(), gamelog);
 								addstrAlt(singleDot, gamelog);
 								gamelog.nextMessage();
-								getkey();
+								getkeyAlt();
 							}
 							wantcar.erase(wantcar.begin() + c);
 							break;
@@ -307,7 +318,7 @@ void advanceday(char &clearformess, char canseethings)
 			}
 			//IF NEED CAR AND DON'T HAVE ONE...
 			//NOTE: SQUADS DON'T TAKE FREE CARS
-			if (location[squad[sq]->activity.arg]->needcar&&squad[sq]->squad[0])
+			if (LocationsPool::getInstance().doesThisPlaceNeedACar(squad[sq]->activity.arg)&&squad[sq]->squad[0])
 				if (squad[sq]->squad[0]->carid == -1)
 				{
 					if (clearformess) eraseAlt();
@@ -315,10 +326,10 @@ void advanceday(char &clearformess, char canseethings)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 					addstrAlt(" didn't have a car to get to ", gamelog);
-					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					//ON TO THE NEXT SQUAD
 					squad[sq]->activity.type = ACTIVITY_NONE;
 					continue;
@@ -341,16 +352,10 @@ void advanceday(char &clearformess, char canseethings)
 			//GO PLACES
 			// Identify the "travel location" -- top level in multi-city play,
 			// a particular district in one-city play
-			int travelLocation = -1;
-			for (int i = 0; i < len(location); i++)
-				if (location[i]->type == SITE_TRAVEL)
-				{
-					travelLocation = i;
-					break;
-				}
+			int travelLocation = LocationsPool::getInstance().findTravelLocation();
 			// Verify travellers can afford the cost, and charge them
 			bool canDepart = true;
-			if (location[squad[sq]->activity.arg]->parent == travelLocation)
+			if (LocationsPool::getInstance().getLocationParent(squad[sq]->activity.arg) == travelLocation)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
@@ -359,17 +364,17 @@ void advanceday(char &clearformess, char canseethings)
 				price *= 100;
 				if (ledger.get_funds() < price)
 				{
-					mvaddstr_fl(8, 1, gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
+					mvaddstr_fl(8, 1, gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg));
 					canDepart = false;
 				}
 				else
 				{
 					ledger.subtract_funds(price, EXPENSE_TRAVEL);
-					mvaddstr_fl(8, 1, gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, location[squad[sq]->activity.arg]->getname().c_str());
+					mvaddstr_fl(8, 1, gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg));
 				}
-				getkey();
+				getkeyAlt();
 			}
-			if (canDepart) switch (location[squad[sq]->activity.arg]->type)
+			if (canDepart) switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
 			{
 			case SITE_CITY_NEW_YORK:
 			case SITE_CITY_SEATTLE:
@@ -383,10 +388,10 @@ void advanceday(char &clearformess, char canseethings)
 				else makedelimiter();
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" arrives in ", gamelog);
-				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				{
 					int l = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, squad[sq]->activity.arg);
 					// Base at new city's homeless shelter
@@ -405,13 +410,13 @@ void advanceday(char &clearformess, char canseethings)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
-				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				activesquad = squad[sq];
 				showcarprefs = -1;
-				switch (location[squad[sq]->activity.arg]->type)
+				switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
 				{
 				case SITE_BUSINESS_DEPTSTORE:
 					deptstore(squad[sq]->activity.arg);
@@ -441,10 +446,10 @@ void advanceday(char &clearformess, char canseethings)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
-				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				activesquad = squad[sq];
 				hospital(squad[sq]->activity.arg);
 				if (activesquad->squad[0] != NULL)
@@ -459,7 +464,7 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" looks around ", gamelog);
-					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 				}
@@ -467,23 +472,23 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" has arrived at ", gamelog);
-					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 				}
-				getkey();
+				getkeyAlt();
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				int c = 't';
-				if (location[squad[sq]->activity.arg]->renting >= 0 &&
-					location[squad[sq]->activity.arg]->type == SITE_INDUSTRY_WAREHOUSE)
+				if (LocationsPool::getInstance().getRentingType(squad[sq]->activity.arg) >= 0 &&
+					LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg) == SITE_INDUSTRY_WAREHOUSE)
 					c = 's';
-				else if (location[squad[sq]->activity.arg]->renting >= 0 &&
+				else if (LocationsPool::getInstance().getRentingType(squad[sq]->activity.arg) >= 0 &&
 					squad[sq]->squad[0]->base != squad[sq]->activity.arg)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
-					do c = getkey(); while (c != 's'&&c != 'b'&&c != 't');
+					do c = getkeyAlt(); while (c != 's'&&c != 'b'&&c != 't');
 				}
 				if (c == 's' || c == 'b') basesquad(squad[sq], squad[sq]->activity.arg);
 				if (c == 't' || c == 'b')
@@ -506,14 +511,14 @@ void advanceday(char &clearformess, char canseethings)
 	}
 	activesquad = oactivesquad;
 	//HOSTAGES
-	if (!disbanding) for (p = len(pool) - 1; p >= 0; p--)
+	if (!disbanding) for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (!pool[p]->alive) continue;
 		if (pool[p]->align != 1)
 			tendhostage(pool[p], clearformess);
 	}
 	//ACTIVITIES FOR INDIVIDUALS
-	if (!disbanding) for (p = 0; p < len(pool); p++)
+	if (!disbanding) for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		pool[p]->income = 0;
 		if (!pool[p]->alive) continue;
@@ -527,7 +532,7 @@ void advanceday(char &clearformess, char canseethings)
 			pool[p]->location = pool[p]->base;
 		}
 		//CLEAR ACTIONS FOR PEOPLE UNDER SIEGE
-		if (location[pool[p]->location]->siege.siege)
+		if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
 		{
 			switch (pool[p]->activity.type)
 			{
@@ -563,7 +568,7 @@ void advanceday(char &clearformess, char canseethings)
 		case ACTIVITY_STEALCARS:
 			if (stealcar(*pool[p], clearformess))
 				pool[p]->activity.type = ACTIVITY_NONE;
-			else if (pool[p]->location != -1 && location[pool[p]->location]->type == SITE_GOVERNMENT_POLICESTATION)
+			else if (pool[p]->location != -1 && LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
 				criminalize(*pool[p], LAWFLAG_CARTHEFT);
 			break;
 		case ACTIVITY_POLLS:
@@ -573,7 +578,7 @@ void advanceday(char &clearformess, char canseethings)
 			mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 			addstrAlt(" surfs the Net for recent opinion polls.", gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			pool[p]->train(SKILL_COMPUTERS, max(3 - pool[p]->get_skill(SKILL_COMPUTERS), 1));
 			survey(pool[p]);
 			//pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
@@ -589,258 +594,39 @@ void advanceday(char &clearformess, char canseethings)
 		}
 	}
 	funds_and_trouble(clearformess);
-	// Healing - determine medical support at each location
-	int *healing = new int[len(location)];
-	int *healing2 = new int[len(location)];
-	for (p = 0; p < len(location); p++)
-	{
-		// Clinic is equal to a skill 6 liberal
-		if (location[p]->type == SITE_HOSPITAL_CLINIC) healing[p] = 6;
-		// Hospital is equal to a skill 12 liberal
-		else if (location[p]->type == SITE_HOSPITAL_UNIVERSITY) healing[p] = 12;
-		else healing[p] = 0;
-		healing2[p] = 0;
-	}
-	if (!disbanding) for (p = 0; p<len(pool); p++)
-	{
-		if (!pool[p]->alive) continue;
-		if (pool[p]->hiding) continue;
-		if (pool[p]->flag&CREATUREFLAG_SLEEPER) continue;
-		// People will help heal even if they aren't specifically assigned to do so
-		// Having a specific healing activity helps bookkeeping for the player, though
-		// Only the highest medical skill is considered
-		if (pool[p]->activity.type == ACTIVITY_HEAL || pool[p]->activity.type == ACTIVITY_NONE)
-			if (pool[p]->location>-1 &&
-				healing[pool[p]->location] < pool[p]->get_skill(SKILL_FIRSTAID))
-			{
-				healing[pool[p]->location] = pool[p]->get_skill(SKILL_FIRSTAID);
-				pool[p]->activity.type = ACTIVITY_HEAL;
-			}
-	}
-	// Don't let starving locations heal
-	for (p = 0; p < len(location); p++)
-		if (location[p]->type != SITE_HOSPITAL_CLINIC && location[p]->type != SITE_HOSPITAL_UNIVERSITY)
-			if (!fooddaysleft(p))
-				if (location[p]->siege.siege)
-					healing[p] = 0;
-	//HEAL NON-CLINIC PEOPLE AND TRAIN
-	if (!disbanding) for (p = 0; p < len(pool); p++)
-	{
-		if (!(pool[p]->alive)) continue;
-		if (clinictime(*pool[p]))
-		{
-			// For people in LCS home treatment
-			if (pool[p]->clinic == false)
-			{
-				int damage = 0; // Amount health degrades
-								//int release=1;
-				int transfer = 0;
-				// Give experience to caretakers
-				if (pool[p]->location > -1) healing2[pool[p]->location] += 100 - pool[p]->blood;
-				// Cap blood at 100-injurylevel*20
-				if (pool[p]->blood < 100 - (clinictime(*pool[p]) - 1) * 20)
-				{
-					// Add health
-					if (pool[p]->location > -1)pool[p]->blood += 1 + healing[pool[p]->location] / 3;
-					if (pool[p]->blood > 100 - (clinictime(*pool[p]) - 1) * 20)
-						pool[p]->blood = 100 - (clinictime(*pool[p]) - 1) * 20;
-					if (pool[p]->blood > 100)
-						pool[p]->blood = 100;
-				}
-				if (pool[p]->alive&&pool[p]->blood < 0)
-				{
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					pool[p]->die();
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
-					addstrAlt(" has died of injuries.", gamelog);
-					gamelog.nextMessage();
-				}
-				for (int w = 0; w < BODYPARTNUM; w++)
-				{
-					// Limbs blown off
-					if (pool[p]->wound[w] & WOUND_NASTYOFF)
-					{
-						// Chance to stabilize/amputate wound
-						// Difficulty 12 (Will die if not treated)
-						if (pool[p]->location > -1 && healing[pool[p]->location] + LCSrandom(10)>12)
-							pool[p]->wound[w] = WOUND_CLEANOFF;
-						// Else take bleed damage (4)
-						else
-						{
-							damage += 4;
-							//release=0;
-							if (pool[p]->location > -1 && healing[pool[p]->location] + 9 <= 12)
-								transfer = 1;
-						}
-					}
-					// Bleeding wounds
-					else if (pool[p]->wound[w] & WOUND_BLEEDING)
-					{
-						// Chance to stabilize wound
-						// Difficulty 8 (1 in 10 of happening naturally)
-						if (pool[p]->location > -1 && healing[pool[p]->location] + LCSrandom(10) > 8)
-							// Toggle bleeding off
-							pool[p]->wound[w] &= ~WOUND_BLEEDING;
-						// Else take bleed damage (1)
-						else
-						{
-							damage += 1;
-							//release=0;
-						}
-					}
-					// Non-bleeding wounds
-					else
-					{  // Erase wound if almost fully healed, but preserve loss of limbs.
-						if (pool[p]->blood >= 95)
-							pool[p]->wound[w] &= WOUND_CLEANOFF;
-					}
-				}
-				// Critical hit wounds
-				for (int i = SPECIALWOUND_RIGHTLUNG; i < SPECIALWOUNDNUM; ++i)
-				{
-					int healdiff = 14, permdamage = 0, bleed = 0, healed = 0;
-					// Specific treatment information on wounds
-					switch (i)
-					{
-					case SPECIALWOUND_HEART:
-						healdiff = 16;
-						bleed = 8;
-					case SPECIALWOUND_RIGHTLUNG:
-					case SPECIALWOUND_LEFTLUNG:
-						permdamage = 1;
-					case SPECIALWOUND_LIVER:
-					case SPECIALWOUND_STOMACH:
-					case SPECIALWOUND_RIGHTKIDNEY:
-					case SPECIALWOUND_LEFTKIDNEY:
-					case SPECIALWOUND_SPLEEN:
-						healed = 1;
-						bleed++;
-						break;
-					case SPECIALWOUND_RIBS:
-						healed = RIBNUM;
-						break;
-					case SPECIALWOUND_NECK:
-					case SPECIALWOUND_UPPERSPINE:
-					case SPECIALWOUND_LOWERSPINE:
-						healed = 2;
-						break;
-					}
-					// If wounded
-					if (pool[p]->special[i] != healed && (i == SPECIALWOUND_RIBS || pool[p]->special[i] != 1))
-					{
-						// Chance to stabilize wound
-						if (pool[p]->location > -1 && healing[pool[p]->location] + LCSrandom(10) > healdiff)
-						{
-							// Remove wound
-							pool[p]->special[i] = healed;
-							if (permdamage)
-							{
-								// May take permanent health damage depending on
-								// quality of care
-								if (LCSrandom(20) > healing[pool[p]->location])
-								{
-									pool[p]->adjust_attribute(ATTRIBUTE_HEALTH, -1);
-									if (pool[p]->get_attribute(ATTRIBUTE_HEALTH, false) <= 0)
-									{
-										pool[p]->set_attribute(ATTRIBUTE_HEALTH, 1);
-									}
-								}
-							}
-						}
-						// Else take bleed damage
-						else
-						{
-							damage += bleed;
-							//release=0;
-							if (healing[pool[p]->location] + 9 <= healdiff)
-								transfer = 1;
-						}
-					}
-				}
-				// Apply damage
-				pool[p]->blood -= damage;
-				if (transfer&&pool[p]->location > -1 &&
-					pool[p]->alive == 1 &&
-					pool[p]->align == 1 &&
-					location[pool[p]->location]->renting != RENTING_NOCONTROL&&
-					location[pool[p]->location]->type != SITE_HOSPITAL_UNIVERSITY)
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
-					addstrAlt("'s injuries require professional treatment.", gamelog);
-					gamelog.nextMessage();
-					pool[p]->activity.type = ACTIVITY_CLINIC;
-					getkey();
-				}
-			}
-		}
-	}
-	//Give experience to medics
-	for (int p = 0; p < len(pool); p++)
-	{
-		//If present, qualified to heal, and doing so
-		if (pool[p]->location >= 0 && pool[p]->activity.type == ACTIVITY_HEAL)
-		{
-			//Clear activity if their location doesn't have healing work to do
-			if (healing2[pool[p]->location] == 0)
-				pool[p]->activity.type = ACTIVITY_NONE;
-			//Give experience based on work done and current skill
-			else
-				pool[p]->train(SKILL_FIRSTAID, max(0, healing2[pool[p]->location] / 5 - pool[p]->get_skill(SKILL_FIRSTAID) * 2));
-		}
-	}
-	delete[] healing;
-	delete[] healing2;
+	determineMedicalSupportAtEachLocation(clearformess);
 	//DISPERSAL CHECK
 	dispersalcheck(clearformess);
 	//DO RENT
 	if (day == 3 && !disbanding)
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->renting>0 &&
-				!location[l]->newrental)
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getRentingType(l)>0 &&
+				!LocationsPool::getInstance().isNewRental(l))
 			{  // if rent >= 1000000 this means you get should kicked out automatically
-				if (ledger.get_funds() >= location[l]->renting&&location[l]->renting < 1000000)
-					ledger.subtract_funds(location[l]->renting, EXPENSE_RENT);
+				if (ledger.get_funds() >= LocationsPool::getInstance().getRentingType(l) && LocationsPool::getInstance().getRentingType(l) < 1000000)
+					ledger.subtract_funds(LocationsPool::getInstance().getRentingType(l), EXPENSE_RENT);
 				//EVICTED!!!!!!!!!
 				else
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "EVICTION NOTICE: ", gamelog);
-					addstrAlt(location[l]->name, gamelog);
-					addstrAlt(".  Possessions go to the shelter.", gamelog);
-					gamelog.nextMessage();
-					getkey();
-					location[l]->renting = RENTING_NOCONTROL;
-					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, l);
-					//MOVE ALL ITEMS AND SQUAD MEMBERS
-					for (int p = 0; p < len(pool); p++)
-					{
-						if (pool[p]->location == l) pool[p]->location = hs;
-						if (pool[p]->base == l) pool[p]->base = hs;
-					}
-					location[hs]->getloot(location[l]->loot);
-					location[l]->compound_walls = 0;
-					location[l]->compound_stores = 0;
-					location[l]->front_business = -1;
+					LocationsPool::getInstance().evictLCSFrom(l);
 				}
 			}
 	//MEET WITH POTENTIAL RECRUITS
-	for (int i = len(pool) - 1; i >= 0; i--)
+	for (int i = CreaturePool::getInstance().lenpool() - 1; i >= 0; i--)
 		pool[i]->meetings = 0;
 	if (!disbanding) for (int r = len(recruit) - 1; r >= 0; r--)
 	{
 		int p = getpoolcreature(recruit[r]->recruiter_id);
 		// Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
 		// or 3) recruiter is dead.
-		if (p != -1 && ((pool[p]->location != -1 && location[pool[p]->location]->renting != RENTING_NOCONTROL&&pool[p]->alive&&
-			location[pool[p]->location]->city == location[recruit[r]->recruit->location]->city) || recruit[r]->timeleft > 0))
+		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL&&pool[p]->alive&&
+			LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(recruit[r]->recruit->location)) || recruit[r]->timeleft > 0))
 		{
 			//MEET WITH RECRUIT
 			//TERMINATE NULL RECRUIT MEETINGS
-			if (location[pool[p]->location]->siege.siege)
+			if (LocationsPool::getInstance().getLocationCity(pool[p]->location))
 			{
 				delete_and_remove(recruit, r);
 				continue;
@@ -864,10 +650,10 @@ void advanceday(char &clearformess, char canseethings)
 		int p = getpoolcreature(date[d]->mac_id);
 		// Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
 		if (p != -1 && ((pool[p]->location != -1 &&
-			(location[pool[p]->location]->renting != RENTING_NOCONTROL ||
-				location[pool[p]->location]->type == SITE_HOSPITAL_CLINIC ||
-				location[pool[p]->location]->type == SITE_HOSPITAL_UNIVERSITY) &&
-			location[pool[p]->location]->city == date[d]->city) ||
+			(LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL ||
+				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_CLINIC ||
+				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_UNIVERSITY) &&
+			LocationsPool::getInstance().getLocationCity(pool[p]->location) == date[d]->city) ||
 			date[d]->timeleft))
 		{
 			//VACATION
@@ -877,7 +663,7 @@ void advanceday(char &clearformess, char canseethings)
 				if (date[d]->timeleft == 0)
 				{
 					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city);
-					if (location[pool[p]->base]->siege.siege)
+					if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
 						pool[p]->base = hs;
 					pool[p]->location = pool[p]->base;
 					if (completevacation(*date[d], p, clearformess))
@@ -891,7 +677,7 @@ void advanceday(char &clearformess, char canseethings)
 			else
 			{
 				//TERMINATE NULL DATES
-				if (location[pool[p]->location]->siege.siege)
+				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
 				{
 					delete_and_remove(date, d);
 					continue;
@@ -925,7 +711,7 @@ void advanceday(char &clearformess, char canseethings)
 	int pday = day, pmonth = month; // Find out if it's next month already.
 	if (pday > monthday()) // Day counter has increased but end-of-month has not yet been
 		pday = 1, pmonth = (pmonth % 12) + 1; // checked so it has to be accounted for here.
-	for (p = 0; p < len(pool); p++)
+	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		pool[p]->stunned = 0; // For lack of a better place, make stunning expire here
 							  // Increment number of days since joined/kidnapped
@@ -960,7 +746,7 @@ void advanceday(char &clearformess, char canseethings)
 							addstrAlt(pool[p]->age, gamelog);
 							addstrAlt(". The Liberal will be missed.", gamelog);
 							gamelog.nextMessage();
-							getkey();
+							getkeyAlt();
 							break;
 						}
 					}
@@ -992,7 +778,7 @@ void advanceday(char &clearformess, char canseethings)
 		{
 			if ((--pool[p]->hiding) == 0)
 			{
-				if (location[pool[p]->base]->siege.siege)
+				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
 					pool[p]->hiding = 1;
 				else
 				{
@@ -1003,7 +789,7 @@ void advanceday(char &clearformess, char canseethings)
 					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" regains contact with the LCS.", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 		}
@@ -1035,363 +821,7 @@ void advanceday(char &clearformess, char canseethings)
 	cleangonesquads();
 	showcarprefs = 1;
 }
-enum DispersalTypes
-{
-	DISPERSAL_SAFE = -1,
-	DISPERSAL_BOSSSAFE,
-	DISPERSAL_NOCONTACT,
-	DISPERSAL_BOSSINPRISON,
-	DISPERSAL_HIDING,
-	DISPERSAL_BOSSINHIDING,
-	DISPERSAL_ABANDONLCS
-};
-/* squad members with no chain of command lose contact */
-void dispersalcheck(char &clearformess)
-{
-	int p = 0;
-	//NUKE DISPERSED SQUAD MEMBERS WHOSE MASTERS ARE NOT AVAILABLE
-	if (len(pool))
-	{
-		// *JDS* I'm documenting this algorithm carefully because it
-		// took me awhile to figure out what exactly was going on here.
-		//
-		// dispersal_status tracks whether each person has a secure chain of command.
-		//
-		// if dispersal_status == NOCONTACT, no confirmation of contact has been made
-		// if dispersal_status == BOSSSAFE, confirmation that THEY are safe is given,
-		//    but it is still needed to check whether their subordinates
-		//    can reach them.
-		// if dispersal_status == SAFE, confirmation has been made that this squad
-		//    member is safe, and their immediate subordinates have also
-		//    checked.
-		//
-		// The way the algorithm works, everyone starts at dispersal_status = NOCONTACT.
-		// Then we start at the top of the chain of command and walk
-		// down it slowly, marking people BOSSSAFE and then SAFE as we sweep
-		// down the chain. If someone is dead or in an unreachable state,
-		// they block progression down the chain to their subordinates,
-		// preventing everyone who requires contact with that person
-		// from being marked safe. After everyone reachable has been
-		// reached and marked safe, all remaining squad members are nuked.
-		vector<int> dispersal_status;
-		dispersal_status.resize(len(pool));
-		bool promotion;
-		do
-		{
-			promotion = 0;
-			for (p = 0; p < len(pool); p++)
-			{
-				// Default: members are marked dispersal_status = NOCONTACT
-				//(no contact verified)
-				dispersal_status[p] = DISPERSAL_NOCONTACT;
-				// If member has no boss (founder level), mark
-				// them dispersal_status = BOSSSAFE, using them as a starting point
-				// at the top of the chain.
-				if (pool[p]->hireid == -1)
-				{
-					if (!disbanding)
-					{
-						dispersal_status[p] = DISPERSAL_BOSSSAFE;
-						if (pool[p]->hiding == -1)
-							pool[p]->hiding = LCSrandom(10) + 5;
-					}
-					else dispersal_status[p] = DISPERSAL_BOSSINHIDING;
-				}
-				// If they're dead, mark them dispersal_status = SAFE, so they
-				// don't ever have their subordinates checked
-				// and aren't lost themselves (they're a corpse,
-				// corpses don't lose contact)
-				if (!pool[p]->alive&&!disbanding)
-				{
-					dispersal_status[p] = DISPERSAL_SAFE;
-					//Attempt to promote their subordinates
-					if (promotesubordinates(*pool[p], clearformess)) promotion = 1;
-					if (pool[p]->location == -1 || location[pool[p]->location]->renting == RENTING_NOCONTROL)
-						delete_and_remove(pool, p--);
-				}
-			}
-		} while (promotion);
-		char changed;
-		do // while(changed)
-		{
-			changed = 0;
-			char inprison;
-			// Go through the entire pool to locate people at dispersal_status = BOSSSAFE,
-			// so we can verify that their subordinates can reach them.
-			for (p = len(pool) - 1; p >= 0; p--)
-			{
-				if (!pool[p]->alive) continue;
-				if (pool[p]->location != -1 &&
-					location[pool[p]->location]->type == SITE_GOVERNMENT_PRISON&&
-					!(pool[p]->flag & CREATUREFLAG_SLEEPER))
-				{
-					inprison = 1;
-				}
-				else inprison = 0;
-				// If your boss is in hiding
-				if (dispersal_status[p] == DISPERSAL_BOSSINHIDING)
-				{
-					dispersal_status[p] = DISPERSAL_HIDING;
-					for (int p2 = len(pool) - 1; p2 >= 0; p2--)
-					{
-						if (pool[p2]->hireid == pool[p]->id && pool[p2]->alive)
-						{
-							dispersal_status[p2] = DISPERSAL_BOSSINHIDING; // Mark them as unreachable
-							changed = 1; // Need another iteration
-						}
-					}
-				}
-				// If in prison or unreachable due to a member of the command structure
-				// above being in prison
-				else if ((dispersal_status[p] == DISPERSAL_BOSSSAFE&&inprison) || dispersal_status[p] == DISPERSAL_BOSSINPRISON)
-				{
-					int dispersalval = DISPERSAL_SAFE;
-					if (pool[p]->flag&CREATUREFLAG_LOVESLAVE)
-					{
-						if ((dispersal_status[p] == DISPERSAL_BOSSINPRISON&&!inprison) ||
-							(dispersal_status[p] == DISPERSAL_BOSSSAFE    && inprison))
-						{
-							pool[p]->juice--; // Love slaves bleed juice when not in prison with their lover
-							if (pool[p]->juice < -50) dispersalval = DISPERSAL_ABANDONLCS;
-						}
-					}
-					dispersal_status[p] = dispersalval; // Guaranteed contactable in prison
-														// Find all subordinates
-					for (int p2 = len(pool) - 1; p2 >= 0; p2--)
-					{
-						if (pool[p2]->hireid == pool[p]->id && pool[p2]->alive)
-						{
-							if (inprison) dispersal_status[p2] = DISPERSAL_BOSSINPRISON;
-							else dispersal_status[p2] = DISPERSAL_BOSSSAFE;
-							changed = 1; // Need another iteration
-						}
-					}
-				}
-				// Otherwise, if they're reachable
-				else if (dispersal_status[p] == DISPERSAL_BOSSSAFE&&!inprison)
-				{
-					// Start looking through the pool again.
-					for (int p2 = len(pool) - 1; p2 >= 0; p2--)
-					{
-						// Locate each of this person's subordinates.
-						if (pool[p2]->hireid == pool[p]->id)
-						{
-							// Protect them from being dispersed -- their boss is
-							// safe. Their own subordinates will then be considered
-							// in the next loop iteration.
-							dispersal_status[p2] = DISPERSAL_BOSSSAFE;
-							// If they're hiding indefinitely and their boss isn't
-							// hiding at all, then have them discreetly return in a
-							// couple of weeks
-							if (pool[p2]->hiding == -1 && !pool[p]->hiding)
-								pool[p2]->hiding = LCSrandom(10) + 3;
-							changed = 1; // Take note that another iteration is needed.
-						}
-					}
-					// Now that we've dealt with this person's subordinates, mark
-					// them so that we don't look at them again in this loop.
-					dispersal_status[p] = DISPERSAL_SAFE;
-				}
-			}
-		} while (changed); // If another iteration is needed, continue the loop.
-						   // After checking through the entire command structure, proceed
-						   // to nuke all squad members who are unable to make contact with
-						   // the LCS.
-		for (p = len(pool) - 1; p >= 0; p--)
-		{
-			if (dispersal_status[p] == DISPERSAL_NOCONTACT || dispersal_status[p] == DISPERSAL_HIDING || dispersal_status[p] == DISPERSAL_ABANDONLCS)
-			{
-				if (clearformess) eraseAlt();
-				else makedelimiter();
-				if (!disbanding)
-				{
-					if (!pool[p]->hiding&&dispersal_status[p] == DISPERSAL_HIDING)
-					{
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
-						addstrAlt(" has lost touch with the Liberal Crime Squad.", gamelog);
-						gamelog.nextMessage();
-						getkey();
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						mvaddstrAlt(9,  1, "The Liberal has gone into hiding...", gamelog);
-						gamelog.nextMessage();
-						getkey();
-					}
-					else if (dispersal_status[p] == DISPERSAL_ABANDONLCS)
-					{
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
-						addstrAlt(" has abandoned the LCS.", gamelog);
-						gamelog.nextMessage();
-						getkey();
-					}
-					else if (dispersal_status[p] == DISPERSAL_NOCONTACT)
-					{
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
-						addstrAlt(" has lost touch with the Liberal Crime Squad.", gamelog);
-						gamelog.nextMessage();
-						getkey();
-					}
-				}
-				removesquadinfo(*pool[p]);
-				if (dispersal_status[p] == DISPERSAL_NOCONTACT || dispersal_status[p] == DISPERSAL_ABANDONLCS)
-					delete_and_remove(pool, p);
-				else
-				{
-					pool[p]->location = -1;
-					if (!(pool[p]->flag & CREATUREFLAG_SLEEPER)) //Sleepers end up in shelter otherwise.
-						pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
-					pool[p]->activity.type = ACTIVITY_NONE;
-					pool[p]->hiding = -1; // Hide indefinitely
-				}
-			}
-		}
-	}
-	//MUST DO AN END OF GAME CHECK HERE BECAUSE OF DISPERSAL
-	endcheck(END_DISPERSED);
-	cleangonesquads();
-}
-/* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(Creature &cr, char &clearformess)
-{
-	int p;
-	int newboss = -1;
-	int bigboss = -2;
-	if (cr.hireid == -1)bigboss = -1;//Special: Founder
-	int maxjuice = 0; //Need more than 0 juice to get promoted
-	int subordinates = 0;
-	//Need REVOLUTIONARY (100+) juice to take over founder role
-	if (cr.hireid == -1)maxjuice = 99;
-	//Identify big boss and top subordinate
-	for (p = 0; p < len(pool); p++)
-	{
-		if (pool[p]->id == cr.id)continue;
-		if (pool[p]->id == cr.hireid)bigboss = p;
-		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->align == 1)
-		{
-			subordinates++;
-			//Brainwashed people inelligible for promotion to founder
-			if (bigboss == -1 && pool[p]->flag & CREATUREFLAG_BRAINWASHED)continue;
-			//Loveslaves inelligible for promotion to anything unless juice is high
-			//in which case they get over it and continue to serve as a normal member
-			if (pool[p]->flag & CREATUREFLAG_LOVESLAVE)
-			{
-				if (pool[p]->juice < 100)continue;
-				else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
-			}
-			// Highest juice liberal not a sleeper or subject to a life sentence gets promoted
-			if (pool[p]->juice > maxjuice&&
-				!(pool[p]->flag & CREATUREFLAG_SLEEPER) &&
-				(pool[p]->location == -1 ||
-					(location[pool[p]->location]->type != SITE_GOVERNMENT_PRISON || pool[p]->sentence >= 0)))
-			{
-				maxjuice = pool[p]->juice;
-				newboss = p;
-			}
-		}
-	}
-	//No subordinates or none with sufficient juice to carry on
-	if (subordinates == 0 || newboss == -1)
-	{
-		if (cr.hireid != -1)return 0;
-		if (subordinates > 0) // Disintegration of the LCS
-		{
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, cr.name, gamelog);
-			addstrAlt(" has died.", gamelog);
-			gamelog.newline();
-			getkey();
-			mvaddstrAlt(10,  1, "There are none left with the courage and conviction to lead....", gamelog);
-			gamelog.nextMessage();
-			getkey();
-		}
-		return 0;
-	}
-	//Chain of command totally destroyed if dead person's boss also dead
-	if (bigboss == -2 || (cr.hireid != -1 && bigboss != -1 && !pool[bigboss]->alive))return 0;
-	//Promote the new boss
-	pool[newboss]->hireid = cr.hireid;
-	//Order secondary subordinates to follow the new boss
-	if (subordinates > 1)
-	{
-		for (p = 0; p < len(pool); p++)
-		{
-			if (pool[p]->hireid == cr.id && // recruited by old boss that died
-				p != newboss &&             // not the new boss
-				!(pool[p]->flag & CREATUREFLAG_LOVESLAVE)) // is not a love slave
-			{
-				pool[p]->hireid = pool[newboss]->id; // promote
-			}
-		}
-	}
-	if (clearformess) eraseAlt();
-	else makedelimiter();
-	if (bigboss != -1) // Normal promotion
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, pool[bigboss]->name, gamelog);
-		addstrAlt(" has promoted ", gamelog);
-		addstrAlt(pool[newboss]->name, gamelog);
-		mvaddstrAlt(9,  1, "due to the death of ", gamelog);
-		addstrAlt(cr.name, gamelog);
-		addstrAlt(singleDot, gamelog);
-		if (subordinates > 1)
-		{
-			gamelog.newline();
-			mvaddstrAlt(11,  1, pool[newboss]->name, gamelog);
-			addstrAlt(" will take over for ", gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(" in the command chain.", gamelog);
-		}
-		gamelog.nextMessage();
-		getkey();
-	}
-	else // Founder level promotion
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, cr.name, gamelog);
-		addstrAlt(" has died.", gamelog);
-		gamelog.newline();
-		getkey();
-		mvaddstrAlt(10,  1, pool[newboss]->name, gamelog);
-		addstrAlt(" is the new leader of the Liberal Crime Squad!", gamelog);
-		gamelog.nextMessage();
-		getkey();
-		cr.hireid = -2; // Make dead founder not founder.
-	}
-	return 1;
-}
-/* daily - manages too hot timer and when a site map should be re-seeded and renamed */
-void advancelocations()
-{
-	//ADVANCE LOCATIONS
-	for (int l = 0; l < len(location); l++)
-	{
-		if (location[l]->closed > 0)
-		{
-			location[l]->closed--;
-			if (location[l]->closed == 0)
-			{  //Clean up graffiti, patch up walls, restore fire damage
-				location[l]->changes.clear();
-				//If high security is supported, chance to throw guards everywhere
-				if (securityable(location[l]->type) && LCSrandom(2))
-					location[l]->highsecurity = 60;
-				//Else remodel the location, invalidate maps
-				else initlocation(*location[l]);
-			}
-		}
-		else if (location[l]->highsecurity > 0)
-		{  // Bank will remain on high security much longer
-			if (location[l]->type != SITE_BUSINESS_BANK)
-				location[l]->highsecurity--;
-			else if (!LCSrandom(5))
-				location[l]->highsecurity--;
-		}
-	}
-}
+
 /* daily - returns true if the site type supports high security */
 char securityable(int type)
 {

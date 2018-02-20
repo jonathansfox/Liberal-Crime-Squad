@@ -95,7 +95,7 @@ class Shop : public ShopOption
 			bool only_sell_legal_;
             bool increase_price_with_illegality_;
             bool description_defined_;
-            const std::string& get_description() const;
+            const std::string get_description() const;
             //Item* make_item() const;
       };
 };

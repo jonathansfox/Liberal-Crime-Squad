@@ -18,43 +18,35 @@ This file is part of Liberal Crime Squad.                                       
 /* monthly - sleeper behavior */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
-#include "sitemode/newencounter.h"
-// for prepareencounter
+//#include "sitemode/newencounter.h"
+void prepareencounter(short type, char sec);
 
-#include "items/loottype.h"
-
-#include "items/loot.h"
-
-#include "common/commonactions.h"
+#include "items/lootTypePoolItem.h"
+//#include "common/commonactions.h"
+void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
+#include "common/commonactionsCreature.h"
 // for void change_public_opinion(int,int ,char =1,char =100);
 
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
-
-#include "common/consolesupport.h"
-// for int getkey();
 
 #include "common/translateid.h"
 // for  int getloottype(int id);
 
-#include "monthly/sleeper_update.h"
-//own header
-
-
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
-extern Log gamelog;
+#include "common/creaturePoolCreature.h"
+#include "locations/locationsPool.h"
+
+Log gamelog; //The gamelog.
+Log xmllog; // Log for xml errors or bad values.
+
 extern vector<Location *> location;
-extern vector<LootType *> loottype;
 extern int stat_recruits;
 extern string string_sleeper;
  string they_are_stashed;
@@ -90,69 +82,10 @@ extern char disbanding;
 extern short attitude[VIEWNUM];
 extern class Ledger ledger;
 extern vector<ArmorType *> armortype;
-extern Log xmllog;
 extern Creature encounter[ENCMAX];
 extern vector<WeaponType *> weapontype;
 
-/**********************************************************************
-** *JDS*
-** ----- The sleeper system has been completely reworked.
-** - Sleepers no longer directly influence the issues. They now affect
-** the broad "liberal power" stats across many issues, which are used
-** as a kind of monthly liberal roll akin to AM Radio and Cable News.
-** - Each sleeper can affect one or more issue, throwing their power
-** into the "abstracted debate" on that issue.
-** - After all of the sleepers have contributed to the liberal power
-** stats, a roll is made on each issue to see whether the liberals
-** make background progress on those issues.
-** - Several sleepers have special abilities. Lawyers and Judges, as
-** always, can aid your people in the legal system. Police officers,
-** corporate managers, CEOs, and agents can all now leak secret
-** documents of the appropriate types, and they will make a check
-** each month. This will only happen if the homeless shelter is not
-** under siege, and "canseethings" is enabled (eg, you're not in prison
-** or disbanded or some other situation where your sleeper can't get
-** in touch with anyone in your squad).
-** - News Anchors and Radio Personalities remain the two most powerful
-** sleepers.
-**********************************************************************/
-void sleepereffect(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
-{
-	if (disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
-	int infiltrate = 1;
-	switch (cr.activity.type)
-	{
-	case ACTIVITY_SLEEPER_LIBERAL:
-		sleeper_influence(cr, clearformess, canseethings, libpower);
-		cr.infiltration -= 0.02f;
-		break;
-	case ACTIVITY_SLEEPER_EMBEZZLE:
-		sleeper_embezzle(cr, clearformess, canseethings, libpower);
-		break;
-	case ACTIVITY_SLEEPER_STEAL:
-		sleeper_steal(cr, clearformess, canseethings, libpower);
-		infiltrate = 0;
-		break;
-	case ACTIVITY_SLEEPER_RECRUIT:
-		sleeper_recruit(cr, clearformess, canseethings, libpower);
-		break;
-	case ACTIVITY_SLEEPER_SPY:
-		sleeper_spy(cr, clearformess, canseethings, libpower);
-		break;
-	case ACTIVITY_SLEEPER_SCANDAL:
-		sleeper_scandal(cr, clearformess, canseethings, libpower);
-		break;
-	case ACTIVITY_NONE:
-	case ACTIVITY_SLEEPER_JOINLCS:
-	default:
-		break;
-	}
-	if (infiltrate) cr.infiltration += LCSrandom(8)*0.01f - 0.02f;
-	if (cr.infiltration >= 1)
-		cr.infiltration = 1;
-	if (cr.infiltration <= 0)
-		cr.infiltration = 0;
-}
+
 /*********************************
 **
 **   SLEEPERS INFLUENCING
@@ -402,7 +335,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			gamelog.newline();
 			mvaddstrAlt(8,  1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			removesquadinfo(cr);
 			cr.location = homes;
 			cr.base = homes;
@@ -418,7 +351,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		cr.juice += 10;
 		if (cr.juice > 100) cr.juice = 100;
 	}
-	location[cr.base]->mapped = 1;
+	LocationsPool::getInstance().setLocationMappedAndUnhidden(cr.base);
 	bool pause = false;
 	switch (cr.type)
 	{
@@ -429,8 +362,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_PRIVACY] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_SECRETDOCUMENTS)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_SECRETDOCUMENTS));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -449,8 +381,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_POLICERECORDS)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_POLICERECORDS));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -467,8 +398,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && cr.type != CREATURE_CORPORATE_CEO) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CORPFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CORPFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -484,8 +414,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_PRISONFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_PRISONFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -503,8 +432,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			// free speech is -- because the more free the society, the
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CABLENEWSFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CABLENEWSFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -522,8 +450,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			// free speech is -- because the more free the society, the
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_AMRADIOFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_AMRADIOFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -539,8 +466,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_ANIMALRESEARCH] + 3)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_RESEARCHFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_RESEARCHFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -555,8 +481,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (LCSrandom(5)) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_JUDGEFILES)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_JUDGEFILES));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -571,8 +496,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (!location[homes]->siege.siege&&canseethings)
 		{
 			if (ccsexposure >= CCSEXPOSURE_LCSGOTDATA) break;
-			Item *it = new Loot(*loottype[getloottype(tag_LOOT_CCS_BACKERLIST)]);
-			location[homes]->loot.push_back(it);
+			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CCS_BACKERLIST));
 			eraseAlt();
 			mvaddstrAlt(6,  1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
@@ -585,7 +509,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		}
 		break;
 	}
-	if (pause) getkey();
+	if (pause) getkeyAlt();
 }
 /*********************************
 **
@@ -604,7 +528,7 @@ void sleeper_embezzle(Creature &cr, char &clearformess, char canseethings, int(&
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			cr.crimes_suspected[LAWFLAG_COMMERCE]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -671,7 +595,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileStealing, gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			cr.crimes_suspected[LAWFLAG_THEFT]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -869,7 +793,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		}
 		if (loot) {
 			itemindex = getloottype(item);
-			if (itemindex > -1) { shelter->loot.push_back(new Loot(*loottype[itemindex])); }
+			if (itemindex > -1) { shelter->loot.push_back(getNewLoot(item)); }
 			else { numberofxmlfails++; }
 		}
 		else if (armor) {
@@ -892,15 +816,15 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 	addstrAlt(droppedOffPackage, gamelog);
 	gamelog.nextMessage();
 	if (numberofxmlfails > 0) {
-		set_color(COLOR_RED, COLOR_BLUE, 1);
+		set_color_easy(RED_ON_BLUE_BRIGHT);
 		mvaddstrAlt(8,  1, itemNotFound, xmllog);
 		mvaddstrAlt(9,  1, numberofxmlfails, xmllog);
 		addstrAlt(lostStolenItem, xmllog);
-		set_color(COLOR_RED, COLOR_GREEN, 1);
+		set_color_easy(RED_ON_GREEN_BRIGHT);
 		mvaddstrAlt(11,  1, contactModAuthor, xmllog);
 		xmllog.nextMessage();
 	}
-	getkey();
+	getkeyAlt();
 }
 /*********************************
 **
@@ -940,7 +864,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 				recruit->flag |= CREATUREFLAG_SLEEPER;
 				location[recruit->worklocation]->mapped = 1;
 				location[recruit->worklocation]->hidden = 0;
-				pool.push_back(recruit);
+				addCreature(recruit);
 				eraseAlt();
 				mvaddstrAlt(6,  1, string_sleeper, gamelog);
 				addstrAlt(cr.name, gamelog);
@@ -951,7 +875,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 				mvaddstrAlt(8,  1, recruit->name, gamelog);
 				addstrAlt(looksForwardToServing, gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
 				stat_recruits++;
 				break;
@@ -962,3 +886,62 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 }
 
 
+/**********************************************************************
+** *JDS*
+** ----- The sleeper system has been completely reworked.
+** - Sleepers no longer directly influence the issues. They now affect
+** the broad "liberal power" stats across many issues, which are used
+** as a kind of monthly liberal roll akin to AM Radio and Cable News.
+** - Each sleeper can affect one or more issue, throwing their power
+** into the "abstracted debate" on that issue.
+** - After all of the sleepers have contributed to the liberal power
+** stats, a roll is made on each issue to see whether the liberals
+** make background progress on those issues.
+** - Several sleepers have special abilities. Lawyers and Judges, as
+** always, can aid your people in the legal system. Police officers,
+** corporate managers, CEOs, and agents can all now leak secret
+** documents of the appropriate types, and they will make a check
+** each month. This will only happen if the homeless shelter is not
+** under siege, and "canseethings" is enabled (eg, you're not in prison
+** or disbanded or some other situation where your sleeper can't get
+** in touch with anyone in your squad).
+** - News Anchors and Radio Personalities remain the two most powerful
+** sleepers.
+**********************************************************************/
+void sleepereffect(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+{
+	if (disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
+	int infiltrate = 1;
+	switch (cr.activity.type)
+	{
+	case ACTIVITY_SLEEPER_LIBERAL:
+		sleeper_influence(cr, clearformess, canseethings, libpower);
+		cr.infiltration -= 0.02f;
+		break;
+	case ACTIVITY_SLEEPER_EMBEZZLE:
+		sleeper_embezzle(cr, clearformess, canseethings, libpower);
+		break;
+	case ACTIVITY_SLEEPER_STEAL:
+		sleeper_steal(cr, clearformess, canseethings, libpower);
+		infiltrate = 0;
+		break;
+	case ACTIVITY_SLEEPER_RECRUIT:
+		sleeper_recruit(cr, clearformess, canseethings, libpower);
+		break;
+	case ACTIVITY_SLEEPER_SPY:
+		sleeper_spy(cr, clearformess, canseethings, libpower);
+		break;
+	case ACTIVITY_SLEEPER_SCANDAL:
+		sleeper_scandal(cr, clearformess, canseethings, libpower);
+		break;
+	case ACTIVITY_NONE:
+	case ACTIVITY_SLEEPER_JOINLCS:
+	default:
+		break;
+	}
+	if (infiltrate) cr.infiltration += LCSrandom(8)*0.01f - 0.02f;
+	if (cr.infiltration >= 1)
+		cr.infiltration = 1;
+	if (cr.infiltration <= 0)
+		cr.infiltration = 0;
+}

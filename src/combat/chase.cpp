@@ -25,7 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/baseactions.h"
@@ -35,7 +37,8 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "sitemode/sitedisplay.h"
 
-#include "sitemode/miscactions.h"
+//#include "sitemode/miscactions.h"
+void reloadparty(bool wasteful = false);
 
 #include "log/log.h"
 // for gamelog
@@ -53,18 +56,22 @@ This file is part of Liberal Crime Squad.                                       
 // for addstr (with log)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for int squadsize(const squadst *);
 
 #include "common/equipment.h"
 //for void equip(vector<Item *>&,int)
 
 #include "combat/chase.h"
+#include "combat/chaseCreature.h"
 //own header
 
 #include "combat/fight.h"
+#include "combat/fightCreature.h"  
 // for void youattack();
 
-#include "combat/haulkidnap.h"
+//#include "combat/haulkidnap.h"
+#include "combat/haulkidnapCreature.h"
 // for  void kidnaptransfer(Creature &cr);
 
 
@@ -73,9 +80,9 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern char endgamestate;
 extern short mode;
@@ -95,6 +102,8 @@ extern string singleSpace;
 extern short lawList[LAWNUM];
 extern vector<squadst *> squad;
 extern long cursquadid;
+
+#include "common/creaturePool.h"
 
 void fillEncounter();
 void fillEncounter(CreatureTypes c, int numleft) {
@@ -171,9 +180,9 @@ bool chasesequence()
 	mvaddstrAlt(0,  0, "As you pull away from the site, you notice that you are ", gamelog);
 	mvaddstrAlt(1,  0, beingFollowedBySwine, gamelog);
 	gamelog.newline(); //New line.
-	getkey();
-	if (location[chaseseq.location]->parent != -1)
-		chaseseq.location = location[chaseseq.location]->parent;
+	getkeyAlt();
+	if (LocationsPool::getInstance().getLocationParent(chaseseq.location) != -1)
+		chaseseq.location = LocationsPool::getInstance().getLocationParent(chaseseq.location);
 	short obstacle = -1;
 	while (true)
 	{
@@ -181,7 +190,7 @@ bool chasesequence()
 		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encsize++;
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, location[chaseseq.location]->getname());
+		mvaddstrAlt(0,  0, LocationsPool::getInstance().getLocationName(chaseseq.location));
 		//PRINT PARTY
 		if (partyalive == 0) party_status = -1;
 		printparty();
@@ -236,7 +245,7 @@ bool chasesequence()
 		}
 		//PRINT ENEMIES
 		printchaseencounter();
-		int c = getkey();
+		int c = getkeyAlt();
 		if (partyalive == 0 && c == 'c')
 		{
 			if (!endcheck())
@@ -369,10 +378,8 @@ bool chasesequence()
 				clearmessagearea();
 				mvaddstrAlt(16,  1, lostThem, gamelog);
 				gamelog.newline(); //New line.
-				getkey();
-				for (int p = 0; p < len(pool); p++)
-					for (int w = 0; w < BODYPARTNUM; w++)
-						pool[p]->wound[w] &= ~WOUND_BLEEDING;
+				getkeyAlt();
+			 CreaturePool::getInstance().stopAllBleeding();
 				mode = GAMEMODE_BASE;
 				//Make sure all possible exits of the chase have the nextMessage() call
 				//to ensure that the gamelog is split properly into blocks.
@@ -413,14 +420,14 @@ bool footchase()
 	gamelog.newline(); //New line. I'd rather it be continuous but whatever.
 	addstrAlt(beingFollowedBySwine, gamelog);
 	gamelog.newline(); //New line.
-	getkey();
+	getkeyAlt();
 	while (true)
 	{
 		int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), encsize = 0;
 		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encsize++;
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, location[chaseseq.location]->getname());
+		mvaddstrAlt(0,  0, LocationsPool::getInstance().getLocationName(chaseseq.location));
 		//PRINT PARTY
 		if (partyalive == 0) party_status = -1;
 		printparty();
@@ -465,7 +472,7 @@ bool footchase()
 		// check if we fought the previous loop; if so, add a blank gamelog line
 		if (foughtthisround)gamelog.newline();
 		foughtthisround = 0;
-		int c = getkey();
+		int c = getkeyAlt();
 		if (partyalive == 0 && c == 'c')
 		{
 			if (!endcheck())
@@ -538,10 +545,8 @@ bool footchase()
 				clearmessagearea();
 				mvaddstrAlt(16,  1, lostThem, gamelog);
 				gamelog.newline(); //New line.
-				getkey();
-				for (int p = 0; p < len(pool); p++)
-					for (int w = 0; w < BODYPARTNUM; w++)
-						pool[p]->wound[w] &= ~WOUND_BLEEDING;
+				getkeyAlt();
+			 CreaturePool::getInstance().stopAllBleeding();
 				mode = GAMEMODE_BASE;
 				gamelog.newline();
 				return 1;
@@ -617,7 +622,7 @@ void evasivedrive()
 		gamelog.newline(); //new line.
 		break;
 	}
-	getkey();
+	getkeyAlt();
 	int cnt;
 	for (int i = 0; i < len(theirrolls); i++)
 	{
@@ -673,7 +678,7 @@ void evasivedrive()
 				}
 			}
 			printchaseencounter();
-			getkey();
+			getkeyAlt();
 		}
 		else
 		{
@@ -690,7 +695,7 @@ void evasivedrive()
 			}
 			addstrAlt(" is still on your tail!", gamelog);
 			gamelog.newline(); //Blarg. Newline.
-			getkey();
+			getkeyAlt();
 		}
 	}
 }
@@ -744,7 +749,7 @@ void evasiverun()
 			addstrAlt("You scale a small building and leap between rooftops!", gamelog);
 			gamelog.newline(); //New line.
 		}
-		getkey();
+		getkeyAlt();
 	}
 	for (int e = 0; e < ENCMAX; e++)
 	{
@@ -761,7 +766,7 @@ void evasiverun()
 			mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 			addstrAlt(singleSpace, gamelog);
 			addstrAlt(pickrandom(car_plows_through), gamelog);
-			getkey();
+			getkeyAlt();
 		}
 		else if (chaser < yourworst)
 		{
@@ -780,7 +785,7 @@ void evasiverun()
 			}
 			delenc(e--, 0);
 			printchaseencounter();
-			getkey();
+			getkeyAlt();
 		}
 		else
 		{
@@ -789,7 +794,7 @@ void evasiverun()
 			mvaddstrAlt(16,  1, encounter[e].name, gamelog);
 			addstrAlt(" is still on your tail!", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 		}
 	}
 	//This last loop can be used to have fast people in
@@ -810,7 +815,7 @@ void evasiverun()
 				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(" breaks away!", gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 				//Unload hauled hostage or body when they get back to the safehouse
 				if (activesquad->squad[p]->prisoner != NULL)
 				{
@@ -901,7 +906,7 @@ void evasiverun()
 					encounter[0].type != CREATURE_TANK)delenc(0, 0);
 				printparty();
 				printchaseencounter();
-				getkey();
+				getkeyAlt();
 			}
 			else othersleft++;
 		}
@@ -1018,7 +1023,7 @@ bool drivingupdate(short &obstacle)
 				addstrAlt(" takes over the wheel.", gamelog);
 				gamelog.newline(); //New line.
 				printparty();
-				getkey();
+				getkeyAlt();
 			}
 		}
 		if (driver == -1)
@@ -1219,13 +1224,13 @@ bool obstacledrive(short obstacle, char choice)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, "You slow down, and turn the corner.", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			if (!LCSrandom(3))
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17,  1, hereTheyCome, gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 				enemyattack();
 				youattack();
 			}
@@ -1242,13 +1247,13 @@ bool obstacledrive(short obstacle, char choice)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, "You slow down, and carefully evade the truck.", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			if (!LCSrandom(3))
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17,  1, hereTheyCome, gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 				enemyattack();
 				youattack();
 			}
@@ -1265,13 +1270,13 @@ bool obstacledrive(short obstacle, char choice)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, "Fruit smashes all over the windshield!", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			if (!LCSrandom(5))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17,  1, "The fruit seller is squashed!", gamelog);
 				gamelog.newline(); //All this logging and lining...
-				getkey();
+				getkeyAlt();
 				criminalizeparty(LAWFLAG_MURDER);
 			}
 		}
@@ -1287,13 +1292,13 @@ bool obstacledrive(short obstacle, char choice)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, "You slow down and carefully avoid the kid.", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			if (!LCSrandom(3))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17,  1, "The Conservative bastards unleash a hail of gunfire!", gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 				enemyattack();
 				youattack();
 			}
@@ -1302,7 +1307,7 @@ bool obstacledrive(short obstacle, char choice)
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17,  1, "Both sides refrain from endangering the child...", gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 			}
 		}
 		break;
@@ -1316,7 +1321,7 @@ bool dodgedrive()
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16,  1, "You swerve to avoid the obstacle!", gamelog);
 	gamelog.newline(); //New line.
-	getkey();
+	getkeyAlt();
 	int driver;
 	for (v = len(chaseseq.friendcar) - 1; v >= 0; v--)
 	{
@@ -1377,7 +1382,7 @@ void crashfriendlycar(int v)
 	addstrAlt(pickrandom(car_crash_modes), gamelog);
 	gamelog.newline(); //New line it.
 	printparty();
-	getkey();
+	getkeyAlt();
 	int victimsum = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -1418,7 +1423,7 @@ void crashfriendlycar(int v)
 					addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					gamelog.newline(); //New line.
 					printparty();
-					getkey();
+					getkeyAlt();
 				}
 				activesquad->squad[p]->prisoner->die();
 				activesquad->squad[p]->prisoner->location = -1;
@@ -1454,7 +1459,7 @@ void crashfriendlycar(int v)
 				}
 				gamelog.newline(); //New line.
 				printparty();
-				getkey();
+				getkeyAlt();
 				// Mark as dead
 				activesquad->squad[p]->die();
 				activesquad->squad[p]->location = -1;
@@ -1492,7 +1497,7 @@ void crashfriendlycar(int v)
 				}
 				gamelog.newline(); //New line.
 				printparty();
-				getkey();
+				getkeyAlt();
 			}
 		}
 	}
@@ -1546,7 +1551,7 @@ void crashenemycar(int v)
 	gamelog.newline(); //New line.
 	delete_and_remove(chaseseq.enemycar, v);
 	printchaseencounter();
-	getkey();
+	getkeyAlt();
 }
 void chase_giveup()
 {
@@ -1569,9 +1574,7 @@ void chase_giveup()
 		}
 		activesquad->squad[p] = NULL;
 	}
-	for (p = 0; p < len(pool); p++)
-		for (int w = 0; w < BODYPARTNUM; w++)
-			pool[p]->wound[w] &= ~WOUND_BLEEDING;
+ CreaturePool::getInstance().stopAllBleeding();
 	clearmessagearea();
 	clearcommandarea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -1587,7 +1590,7 @@ void chase_giveup()
 		else addstrAlt(" is free.", gamelog);
 		gamelog.newline(); //New line.
 	}
-	getkey();
+	getkeyAlt();
 }
 /* the next two functions force a chase sequence with a specific liberal */
 bool footchase(Creature &cr)

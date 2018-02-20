@@ -43,7 +43,7 @@ class ArmorType : public ItemType
       //For masks:
       bool is_mask() const { return mask_; }
       bool is_surprise_mask() const { return surprise_mask_; }
-      const string& get_description() const { return description_; }
+      const string get_description() const { return description_; }
    private:
       void init(const MCD_STR& xmlstring);
       int make_difficulty_;

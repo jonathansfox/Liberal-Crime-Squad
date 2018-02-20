@@ -1,5 +1,6 @@
 
 #include <includes.h>
+//#include "creature/creature.h"
 
 
 #include "common/help.h"
@@ -10,6 +11,7 @@
 
 
 #include <cursesAlternative.h>
+#include "creature/creatureEnums.h"
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
@@ -51,5 +53,5 @@ void HelpActivities(int activityType)
 	}
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(23,  0, pressAnyKeyToReturn);
-	getkey();
+	getkeyAlt();
 }

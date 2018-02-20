@@ -25,8 +25,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
-
-#include "sitemode/mapspecials.h"
+#include "creature/creature.h"
 
 #include "sitemode/advance.h"
 
@@ -42,33 +41,30 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "items/money.h"
 
-#include "common/consolesupport.h"
+//#include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for void printfunds(int,int,char*)
 
 #include "common/commonactions.h"
-// for void juiceparty(long juice,long cap);
+
+#include "common/commonactionsCreature.h"
+// for void addjuice(Creature &cr, long juice, long cap);
+
 
 #include "common/translateid.h"
 // for  int getloottype(int id);
 
-#include "combat/fight.h"
-//for void enemyattack();
+//#include "combat/fight.h"
+void enemyattack();
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
+#include "locations/locationsPool.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
-extern vector<LootType *> loottype;
 extern short postalarmtimer;
 extern short mode;
 extern char endgamestate;
@@ -94,30 +90,41 @@ extern vector<ClipType *> cliptype;
 extern bool m249;
 extern vector<ArmorType *> armortype;
 extern UniqueCreatures uniqueCreatures;
-enum bouncer_reject_reason
-{
-	REJECTED_CCS,
-	REJECTED_NUDE,
-	REJECTED_WEAPONS,
-	REJECTED_UNDERAGE,
-	REJECTED_FEMALEISH,
-	REJECTED_FEMALE,
-	REJECTED_BLOODYCLOTHES,
-	REJECTED_DAMAGEDCLOTHES,
-	REJECTED_CROSSDRESSING,
-	REJECTED_GUESTLIST,
-	REJECTED_DRESSCODE,
-	REJECTED_SECONDRATECLOTHES,
-	REJECTED_SMELLFUNNY,
-	NOT_REJECTED
-};
 char run_broadcast(bool tv_broadcast);
+
+#include "common/creaturePool.h"
+
+string itemClassClip;
+string itemClassWeapon;
+string itemClassArmor;
+string itemClassLoot;
+string itemClassMoney;
+/* Used by load() to create items of the correct class. */
+Item* create_item(const std::string& inputXml)
+{
+	Item* it = NULL;
+	CMarkup xml;
+	xml.SetDoc(inputXml);
+	xml.FindElem();
+	string itemclass = xml.GetTagName();
+	if (itemclass == itemClassClip)
+		it = new Clip(inputXml);
+	else if (itemclass == itemClassWeapon)
+		it = new Weapon(inputXml);
+	else if (itemclass == itemClassArmor)
+		it = new Armor(inputXml);
+	else if (itemclass == itemClassLoot)
+		it = new Loot(inputXml);
+	else if (itemclass == itemClassMoney)
+		it = new Money(inputXml);
+	return it;
+}
 void special_bouncer_greet_squad()
 {
 	// add a bouncer if there isn't one in the first slot
-	if (!sitealarm && location[cursite]->renting != RENTING_PERMANENT)
+	if (!sitealarm && LocationsPool::getInstance().getRentingType(cursite) != RENTING_PERMANENT)
 	{
-		if (location[cursite]->renting == RENTING_CCS)
+		if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 		{
 			makecreature(encounter[0], CREATURE_CCS_VIGILANTE);
 			makecreature(encounter[1], CREATURE_CCS_VIGILANTE);
@@ -130,39 +137,29 @@ void special_bouncer_greet_squad()
 	}
 }
 void emptyEncounter();
- vector<string> rejectedByCCS;
- vector<string> rejectedBecauseNude;
- vector<string> rejectedBecauseUnderage;
- vector<string> rejectedBecauseFemale;
- vector<string> rejectedBecauseFemaleish;
- vector<string> rejectedBecauseDresscode;
- vector<string> rejectedBecauseSmellFunny;
- vector<string> rejectedBecauseBloodyClothes;
- vector<string> rejectedBecauseDamagedClothes;
- vector<string> rejectedBecauseSecondRateClothes;
- vector<string> rejectedBecauseWeapons;
- vector<string> rejectedBecauseGuestList;
- vector<string> notRejected;
- vector<string> randomCrime;
+
+intAndStringVector rejectionReasons;
+intAndStringVector caseRejectionReasons;
+
  // the vector<string> 'caseREJECTED' and 'rejected' are similar but not identicle.
  // TODO the precise differences should be made more apparant
+vector<string> rejectedBecauseSmellFunny;
+vector<string> notRejected;
+
+ vector<string> randomCrime;
+
  vector<string> caseREJECTED_NUDE;
- vector<string> caseREJECTED_UNDERAGE;
- vector<string> caseREJECTED_DRESSCODE;
- vector<string> caseREJECTED_SMELLFUNNY;
- vector<string> caseREJECTED_BLOODYCLOTHES;
- vector<string> caseREJECTED_DAMAGEDCLOTHES;
- vector<string> caseREJECTED_SECONDRATECLOTHES;
  vector<string> caseREJECTED_WEAPONS;
  vector<string> caseNOT_REJECTED;
+
 void special_bouncer_assess_squad()
 {
-	if (location[cursite]->renting == RENTING_PERMANENT) return;
+	if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT) return;
 	bool autoadmit = 0;
 	char sleepername[80];
 	emptyEncounter();
 	special_bouncer_greet_squad();
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->base == cursite&&pool[p]->type == CREATURE_BOUNCER)
 		{
@@ -186,7 +183,7 @@ void special_bouncer_assess_squad()
 	}
 	else
 	{
-		if (location[cursite]->renting == RENTING_CCS)
+		if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 			addstrAlt("The Conservative scum block the door.", gamelog);
 		else
 			addstrAlt("The bouncer assesses your squad.", gamelog);
@@ -194,7 +191,7 @@ void special_bouncer_assess_squad()
 		levelmap[locx][locy][locz].special = SPECIAL_CLUB_BOUNCER_SECONDVISIT;
 	}
 	printencounter();
-	getkey();
+	getkeyAlt();
 	char rejected = NOT_REJECTED;
 	// Size up the squad for entry
 	if (!autoadmit)
@@ -243,39 +240,19 @@ void special_bouncer_assess_squad()
 					}
 				}
 				// High security in gentleman's club? Gone
-				if (sitetype == SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
+				if (sitetype == SITE_BUSINESS_CIGARBAR && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 					if (rejected > REJECTED_GUESTLIST)rejected = REJECTED_GUESTLIST;
-				if (location[cursite]->renting == RENTING_CCS && location[cursite]->type != SITE_BUSINESS_BARANDGRILL)
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS && LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_BARANDGRILL)
 					rejected = REJECTED_CCS;
 			}
 		}
 		moveAlt(17, 1);
+		if (rejectionReasons.count(rejected)) {
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			addstrAlt(pickrandom(rejectionReasons[rejected]), gamelog);
+		}else
 		switch (rejected)
 		{
-		case REJECTED_CCS:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedByCCS), gamelog);
-			break;
-		case REJECTED_NUDE:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseNude), gamelog);
-			break;
-		case REJECTED_UNDERAGE:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseUnderage), gamelog);
-			break;
-		case REJECTED_FEMALE:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseFemale), gamelog);
-			break;
-		case REJECTED_FEMALEISH:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseFemaleish), gamelog);
-			break;
-		case REJECTED_DRESSCODE:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseDresscode), gamelog);
-			break;
 		case REJECTED_SMELLFUNNY:
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			if (!LCSrandom(len(rejectedBecauseSmellFunny) - 1)) {
@@ -287,33 +264,13 @@ void special_bouncer_assess_squad()
 				addstrAlt(pickrandom(rejectedBecauseSmellFunny), gamelog);
 			}
 			break;
-		case REJECTED_BLOODYCLOTHES:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseBloodyClothes), gamelog);
-			break;
-		case REJECTED_DAMAGEDCLOTHES:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseBloodyClothes), gamelog);
-			break;
-		case REJECTED_SECONDRATECLOTHES:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseSecondRateClothes), gamelog);
-			break;
-		case REJECTED_WEAPONS:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseWeapons), gamelog);
-			break;
-		case REJECTED_GUESTLIST:
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(pickrandom(rejectedBecauseGuestList), gamelog);
-			break;
 		case NOT_REJECTED:
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			addstrAlt(pickrandom(notRejected), gamelog);
 			break;
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 	else encounter[0].exists = 0;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -341,7 +298,7 @@ void special_lab_cosmetics_cagedanimals()
 		mvaddstrAlt(16,  1, "You see fluffy white rabbits in a locked cage.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -373,7 +330,7 @@ void special_readsign(int sign)
 	switch (sign) //TODO: Log these?
 	{
 	case SPECIAL_SIGN_ONE:
-		switch (location[cursite]->type)
+		switch (LocationsPool::getInstance().getLocationType(cursite))
 		{
 		default:
 			mvaddstrAlt(16,  1, "\"The best way not to fail is to succeed.\"");
@@ -391,7 +348,7 @@ void special_readsign(int sign)
 		}
 		break;
 	case SPECIAL_SIGN_TWO:
-		switch (location[cursite]->type)
+		switch (LocationsPool::getInstance().getLocationType(cursite))
 		{
 		default:
 			mvaddstrAlt(16,  1, "\"Great work is done by people who do great work.\"");
@@ -399,7 +356,7 @@ void special_readsign(int sign)
 		}
 		break;
 	case SPECIAL_SIGN_THREE:
-		switch (location[cursite]->type)
+		switch (LocationsPool::getInstance().getLocationType(cursite))
 		{
 		default:
 			mvaddstrAlt(16,  1, "Employees Only");
@@ -407,7 +364,7 @@ void special_readsign(int sign)
 		}
 		break;
 	}
-	getkey();
+	getkeyAlt();
 }
 void special_nuclear_onoff()
 {
@@ -427,7 +384,7 @@ void special_nuclear_onoff()
 			gamelog.newline();
 			mvaddstrAlt(17,  1, "Mess with the reactor settings? (Yes or No)");
 		}
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			clearmessagearea();
@@ -451,20 +408,20 @@ void special_nuclear_onoff()
 				mvaddstrAlt(16,  1, maxs->name, gamelog);
 				addstrAlt(" presses the big red button!", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				mvaddstrAlt(17,  1, singleDot, gamelog);
-				getkey();
+				getkeyAlt();
 				addstrAlt(singleDot, gamelog);
-				getkey();
+				getkeyAlt();
 				addstrAlt(singleDot, gamelog);
-				getkey();
+				getkeyAlt();
 				if (lawList[LAW_NUCLEARPOWER] == 2)
 				{
 					mvaddstrAlt(17,  1, "The nuclear waste gets released into the state's water supply!", gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
 					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, -50, 0, 0);
-					getkey();
+					getkeyAlt();
 					juiceparty(40, 1000); // Instant juice!
 					sitecrime += 25; //Shutdown Site
 					sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
@@ -477,7 +434,7 @@ void special_nuclear_onoff()
 					mvaddstrAlt(17,  1, "The reactor is overheating!", gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
-					getkey();
+					getkeyAlt();
 					juiceparty(100, 1000); // Instant juice!
 					sitecrime += 50; //Shutdown Site
 					sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
@@ -489,7 +446,7 @@ void special_nuclear_onoff()
 				mvaddstrAlt(16,  1, "After some failed attempts, and a very loud alarm, ", gamelog);
 				mvaddstrAlt(17,  1, "the Squad resigns to just leaving a threatening note.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				juiceparty(15, 500);
 			}
 			sitealarm = 1;
@@ -512,7 +469,7 @@ void special_lab_genetic_cagedanimals()
 		mvaddstrAlt(16,  1, "You see horrible misshapen creatures in a sealed cage.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -536,7 +493,7 @@ void special_lab_genetic_cagedanimals()
 					if (mode == GAMEMODE_CHASECAR ||
 						mode == GAMEMODE_CHASEFOOT)printchaseencounter();
 					else printencounter();
-					getkey();
+					getkeyAlt();
 					sitealarm = 1;
 					alienationcheck(1);
 				}
@@ -567,7 +524,7 @@ void special_policestation_lockup()
 		mvaddstrAlt(16,  1, "You see prisoners in the detention room.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -609,7 +566,7 @@ void special_courthouse_lockup()
 		mvaddstrAlt(16,  1, "You see prisoners in the Courthouse jail.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Free them? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -652,7 +609,7 @@ void special_courthouse_jury()
 		mvaddstrAlt(16,  1, "It appears as if this room has been ", gamelog);
 		mvaddstrAlt(17,  1, "vacated in a hurry.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return;
 	}
 	while (true)
@@ -662,7 +619,7 @@ void special_courthouse_jury()
 		mvaddstrAlt(16,  1, "You've found a Jury in deliberations!", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Attempt to influence them? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			levelmap[locx][locy][locz].special = -1;
@@ -706,7 +663,7 @@ void special_courthouse_jury()
 					addstrAlt(pickrandom(randomCrime), gamelog);
 					addstrAlt(" wasn't really wrong here.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					alienationcheck(0);
 					noticecheck(-1);
 					//INSTANT JUICE BONUS
@@ -719,7 +676,7 @@ void special_courthouse_jury()
 					mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
 					addstrAlt(" wasn't quite convincing...", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					int numleft = 12;
 					fillEncounter(CREATURE_JUROR, numleft);
 					if (mode == GAMEMODE_CHASECAR ||
@@ -738,6 +695,7 @@ void special_courthouse_jury()
 		else if (c == 'n')return;
 	}
 }
+#include "items/lootTypePoolItem.h"
 void special_prison_control(short prison_control_type)
 {
 	while (true)
@@ -754,7 +712,7 @@ void special_prison_control(short prison_control_type)
 		addstrAlt("prison control room.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Free the prisoners? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			int numleft = LCSrandom(8) + 2;
@@ -814,7 +772,7 @@ void special_intel_supercomputer()
 		mvaddstrAlt(16,  1, "The security alert has caused the ", gamelog);
 		mvaddstrAlt(17,  1, "computer to shut down.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return;
 	}
 	while (true)
@@ -824,7 +782,7 @@ void special_intel_supercomputer()
 		mvaddstrAlt(16,  1, "You've found the Intelligence Supercomputer.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Hack it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -838,8 +796,7 @@ void special_intel_supercomputer()
 				{
 					addstrAlt(",", gamelog);
 					mvaddstrAlt(17,  1, "including a list of government backers of the CCS.", gamelog);
-					Item *it = new Loot(*loottype[getloottype(tag_LOOT_CCS_BACKERLIST)]);
-					activesquad->loot.push_back(it);
+					activesquad->loot.push_back(getNewLoot(tag_LOOT_CCS_BACKERLIST));
 					ccsexposure = CCSEXPOSURE_LCSGOTDATA;
 				}
 				else
@@ -848,9 +805,8 @@ void special_intel_supercomputer()
 				}
 				gamelog.newline();
 				juiceparty(50, 1000);
-				Item *it = new Loot(*loottype[getloottype(tag_LOOT_INTHQDISK)]);
-				activesquad->loot.push_back(it);
-				getkey();
+				activesquad->loot.push_back(getNewLoot(tag_LOOT_INTHQDISK));
+				getkeyAlt();
 			}
 			if (actual)
 			{
@@ -877,7 +833,7 @@ void special_graffiti()
 	gamelog.newline();
 	if (!sitestory->claimed)
 		sitestory->claimed = 1;
-	getkey();
+	getkeyAlt();
 	int time = 20 + LCSrandom(10);
 	if (time < 1)time = 1;
 	if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
@@ -885,25 +841,9 @@ void special_graffiti()
 	noticecheck(-1, DIFFICULTY_HARD);
 	levelmap[locx][locy][locz].flag |= SITEBLOCK_GRAFFITI;
 	levelmap[locx][locy][locz].flag &= ~(SITEBLOCK_GRAFFITI_CCS | SITEBLOCK_GRAFFITI_OTHER);
-	if (!location[cursite]->highsecurity)
+	if (!LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 	{
-		// Erase any previous semi-permanent graffiti here
-		for (int i = 0; i < len(location[cursite]->changes); i++)
-		{
-			if ((location[cursite]->changes[i].x == locx) &&
-				(location[cursite]->changes[i].y == locy) &&
-				(location[cursite]->changes[i].z == locz) &&
-				((location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI) ||
-					(location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_CCS) ||
-					(location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_OTHER)))
-			{
-				location[cursite]->changes.erase(location[cursite]->changes.begin() + i);
-				break;
-			}
-		}
-		// Add new semi-permanent graffiti
-		struct sitechangest change(locx, locy, locz, SITEBLOCK_GRAFFITI);
-		location[cursite]->changes.push_back(change);
+		LocationsPool::getInstance().eraseAndReplaceGraffiti(cursite, locx, locy, locz);
 	}
 	sitecrime++;
 	for (int i = 0; i < 6; i++)
@@ -924,7 +864,7 @@ void special_sweatshop_equipment()
 		mvaddstrAlt(16,  1, "You see some textile equipment.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Destroy it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			int time = 20 + LCSrandom(10);
@@ -952,7 +892,7 @@ void special_polluter_equipment()
 		mvaddstrAlt(16,  1, "You see some industrial equipment.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Destroy it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			int time = 20 + LCSrandom(10);
@@ -981,26 +921,25 @@ void special_house_photos()
 		mvaddstrAlt(16,  1, "You've found a safe.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Open it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
 			if (unlock(UNLOCK_SAFE, actual))
 			{
 				bool empty = true;
-				Item *it;
 				if (deagle == false)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "The squad has found a Desert Eagle.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_DESERT_EAGLE)]);
 					Clip r(*cliptype[getcliptype(tag_CLIP_50AE)]);
 					de->reload(r);
 					activesquad->loot.push_back(de);
-					it = new Clip(*cliptype[getcliptype(tag_CLIP_50AE)], 9);
+					Item *it = new Clip(*cliptype[getcliptype(tag_CLIP_50AE)], 9);
 					activesquad->loot.push_back(it);
 					deagle = true;
 					empty = false;
@@ -1011,8 +950,8 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "This guy sure had a lot of $100 bills.", gamelog);
 					gamelog.newline();
-					getkey();
-					it = new Money(1000 * (1 + LCSrandom(10)));
+					getkeyAlt();
+					Item *it = new Money(1000 * (1 + LCSrandom(10)));
 					activesquad->loot.push_back(it);
 					empty = false;
 				}
@@ -1022,9 +961,8 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "The squad Liberates some expensive jewelery.", gamelog);
 					gamelog.newline();
-					getkey();
-					it = new Loot(*loottype[getloottype(tag_LOOT_EXPENSIVEJEWELERY)], 3);
-					activesquad->loot.push_back(it);
+					getkeyAlt();
+					activesquad->loot.push_back(getNewLoot(tag_LOOT_EXPENSIVEJEWELERY, 3));
 					empty = false;
 				}
 				if (!LCSrandom(3))
@@ -1033,9 +971,8 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "There are some... very compromising photos here.", gamelog);
 					gamelog.newline();
-					getkey();
-					it = new Loot(*loottype[getloottype(tag_LOOT_CEOPHOTOS)]);
-					activesquad->loot.push_back(it);
+					getkeyAlt();
+					activesquad->loot.push_back(getNewLoot(tag_LOOT_CEOPHOTOS));
 					empty = false;
 				}
 				if (!LCSrandom(3))
@@ -1044,7 +981,7 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "There are some drugs here.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					empty = false;
 				}
 				if (!LCSrandom(3))
@@ -1054,9 +991,8 @@ void special_house_photos()
 					mvaddstrAlt(16,  1, "Wow, get a load of these love letters. ", gamelog);
 					mvaddstrAlt(17,  1, "The squad will take those.");
 					gamelog.newline();
-					getkey();
-					it = new Loot(*loottype[getloottype(tag_LOOT_CEOLOVELETTERS)]);
-					activesquad->loot.push_back(it);
+					getkeyAlt();
+					activesquad->loot.push_back(getNewLoot(tag_LOOT_CEOLOVELETTERS));
 					empty = false;
 				}
 				if (!LCSrandom(3))
@@ -1065,9 +1001,8 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "These documents show serious tax evasion.", gamelog);
 					gamelog.newline();
-					getkey();
-					it = new Loot(*loottype[getloottype(tag_LOOT_CEOTAXPAPERS)]);
-					activesquad->loot.push_back(it);
+					getkeyAlt();
+					activesquad->loot.push_back(getNewLoot(tag_LOOT_CEOTAXPAPERS));
 					empty = false;
 				}
 				if (empty)
@@ -1076,7 +1011,7 @@ void special_house_photos()
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "Wow, it's empty.  That sucks.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 				}
 				else
 				{
@@ -1109,7 +1044,7 @@ void special_armory()
 		mvaddstrAlt(16,  1, "You've found the armory.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Break in? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			clearmessagearea();
@@ -1117,16 +1052,16 @@ void special_armory()
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, "Alarms go off!", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			bool empty = true;
 			Item *it;
-			if (m249 == false && location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
+			if (m249 == false && LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "Jackpot! The squad found a M249 Machine Gun!", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_M249_MACHINEGUN)]);
 				Clip r(*cliptype[getcliptype(tag_CLIP_DRUM)]);
 				de->reload(r);
@@ -1142,7 +1077,7 @@ void special_armory()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "The squad finds some M16 Assault Rifles.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int num = 0;
 				do
 				{
@@ -1162,7 +1097,7 @@ void special_armory()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "The squad finds some M4 Carbines.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int num = 0;
 				do
 				{
@@ -1182,12 +1117,12 @@ void special_armory()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "The squad finds some body armor.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int num = 0;
 				do
 				{
 					Armor* de;
-					if (location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
+					if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE)
 						de = new Armor(*armortype[getarmortype(tag_ARMOR_ARMYARMOR)]);
 					else
 						de = new Armor(*armortype[getarmortype(tag_ARMOR_CIVILLIANARMOR)]);
@@ -1203,9 +1138,9 @@ void special_armory()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "It's a trap!  The armory is empty.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int numleft = LCSrandom(8) + 2;
-				if (location[cursite]->type == SITE_GOVERNMENT_ARMYBASE) {
+				if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE) {
 					fillEncounter(CREATURE_SOLDIER, numleft);
 				}
 				else {
@@ -1226,9 +1161,9 @@ void special_armory()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "Guards are everywhere!", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int numleft = LCSrandom(4) + 2;
-				if (location[cursite]->type == SITE_GOVERNMENT_ARMYBASE) {
+				if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE) {
 					fillEncounter(CREATURE_SOLDIER, numleft);
 				}
 				else {
@@ -1252,7 +1187,7 @@ void special_corporate_files()
 		mvaddstrAlt(16,  1, "You've found a safe.", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "Open it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -1262,16 +1197,14 @@ void special_corporate_files()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, "The Squad has found some very interesting files.", gamelog);
 				gamelog.newline();
-				Item *it = new Loot(*loottype[getloottype(tag_LOOT_CORPFILES)]);
-				activesquad->loot.push_back(it);
-				it = new Loot(*loottype[getloottype(tag_LOOT_CORPFILES)]);
-				activesquad->loot.push_back(it);
+				activesquad->loot.push_back(getNewLoot(tag_LOOT_CORPFILES));
+				activesquad->loot.push_back(getNewLoot(tag_LOOT_CORPFILES));
 				juiceparty(50, 1000);
 				sitecrime += 40;
 				int time = 20 + LCSrandom(10);
 				if (time < 1)time = 1;
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-				getkey();
+				getkeyAlt();
 			}
 			if (actual)
 			{
@@ -1306,7 +1239,7 @@ void special_radio_broadcaststudio()
 			gamelog.newline();
 			mvaddstrAlt(17,  1, "Interrupt this evening's programming? (Yes or No)");
 		}
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			if (run_broadcast(false))
@@ -1337,7 +1270,7 @@ void special_news_broadcaststudio()
 			mvaddstrAlt(16,  1, "You've found a Cable News broadcasting studio.", gamelog);
 			mvaddstrAlt(17,  1, "Start an impromptu news program? (Yes or No)");
 		}
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			if (run_broadcast(true))
@@ -1358,7 +1291,7 @@ void special_display_case()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "You see a display case.", gamelog);
 		mvaddstrAlt(17,  1, "Smash it? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			int time = 20 + LCSrandom(10);
@@ -1382,7 +1315,7 @@ void spawn_security()
 	// add a bouncer if there isn't one in the first slot
 	if (!sitealarm && !encounter[0].exists)
 	{
-		switch (location[cursite]->type)
+		switch (LocationsPool::getInstance().getLocationType(cursite))
 		{
 		default:
 		case SITE_CORPORATE_HEADQUARTERS:
@@ -1422,7 +1355,7 @@ void spawn_security()
 		case SITE_BUSINESS_BARANDGRILL:
 		case SITE_RESIDENTIAL_BOMBSHELTER:
 		case SITE_OUTDOOR_BUNKER:
-			if (location[cursite]->renting == RENTING_CCS)
+			if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 			{
 				makecreature(encounter[0], CREATURE_CCS_VIGILANTE);
 				makecreature(encounter[1], CREATURE_CCS_VIGILANTE);
@@ -1436,7 +1369,7 @@ void special_security(bool metaldetect)
 	char sleepername[80];
 	emptyEncounter();
 	spawn_security();
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->base == cursite)
 		{
@@ -1477,7 +1410,7 @@ void special_security(bool metaldetect)
 		levelmap[locx][locy][locz].special = SPECIAL_SECURITY_SECONDVISIT;
 	}
 	printencounter();
-	getkey();
+	getkeyAlt();
 	char rejected = NOT_REJECTED;
 	// Size up the squad for entry
 	for (int s = 0; s<6; s++)
@@ -1506,44 +1439,20 @@ void special_security(bool metaldetect)
 			if (autoadmit < 1 && activesquad->squad[s]->age<18)
 				if (rejected>REJECTED_UNDERAGE)rejected = REJECTED_UNDERAGE;
 		}
-	}
+	}   
 	moveAlt(17, 1);
+
+	if (caseRejectionReasons.count(rejected)) {
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		addstrAlt(pickrandom(caseRejectionReasons[rejected]), gamelog);
+	}
+	else
 	switch (rejected)
 	{
 	case REJECTED_NUDE:
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (autoadmit) addstrAlt("\"Jesus! Put some clothes on!\"", gamelog);
 		else addstrAlt(pickrandom(caseREJECTED_NUDE), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_UNDERAGE:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_UNDERAGE), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_DRESSCODE:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_DRESSCODE), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_SMELLFUNNY:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_SMELLFUNNY), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_BLOODYCLOTHES:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_BLOODYCLOTHES), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_DAMAGEDCLOTHES:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_DAMAGEDCLOTHES), gamelog);
-		gamelog.newline();
-		break;
-	case REJECTED_SECONDRATECLOTHES:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(pickrandom(caseREJECTED_SECONDRATECLOTHES), gamelog);
 		gamelog.newline();
 		break;
 	case REJECTED_WEAPONS:
@@ -1562,7 +1471,7 @@ void special_security(bool metaldetect)
 		gamelog.newline();
 		break;
 	}
-	getkey();
+	getkeyAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
@@ -1597,13 +1506,13 @@ void special_bank_vault()
 	mvaddstrAlt(16,  1, "The vault door has three layers: A combo lock, ", gamelog);
 	mvaddstrAlt(17,  1, "an electronic lock, and a biometric lock.", gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	clearmessagearea();
 	mvaddstrAlt(16,  1, "You will need a security expert, a computer ", gamelog);
 	mvaddstrAlt(17,  1, "expert, and one of the bank managers.", gamelog);
 	gamelog.newline();
-	getkey();
-	for (int p = 0; p < len(pool); p++)
+	getkeyAlt();
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->type == CREATURE_BANK_MANAGER &&
 			pool[p]->flag & CREATUREFLAG_SLEEPER &&
@@ -1615,7 +1524,7 @@ void special_bank_vault()
 			addstrAlt(" can handle the biometrics, ", gamelog);
 			mvaddstrAlt(17,  1, "but you'll still have to crack the other locks.", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			break;
 		}
 	}
@@ -1623,7 +1532,7 @@ void special_bank_vault()
 	{
 		clearmessagearea();
 		mvaddstrAlt(16,  1, "Open the bank vault? (Yes or No)");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			char actual;
@@ -1632,7 +1541,7 @@ void special_bank_vault()
 			mvaddstrAlt(16,  1, "First is the combo lock that will have ", gamelog);
 			mvaddstrAlt(17,  1, "be cracked by a security expert.", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			if (!unlock(UNLOCK_VAULT, actual))
 			{
 				clearmessagearea();
@@ -1640,7 +1549,7 @@ void special_bank_vault()
 				mvaddstrAlt(16,  1, "The squad can only dream of the money ", gamelog);
 				mvaddstrAlt(17,  1, "on the other side of this door...", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				levelmap[locx][locy][locz].special = -1;
 			}
 			else
@@ -1650,14 +1559,14 @@ void special_bank_vault()
 				mvaddstrAlt(16,  1, "Next is the electronic lock that will have ", gamelog);
 				mvaddstrAlt(17,  1, "be bypassed by a computer expert.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				if (!hack(HACK_VAULT, actual))
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16,  1, "The money was so close the squad could taste it!", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					levelmap[locx][locy][locz].special = -1;
 				}
 				else
@@ -1667,7 +1576,7 @@ void special_bank_vault()
 					mvaddstrAlt(16,  1, "Last is the biometric lock that keyed only ", gamelog);
 					mvaddstrAlt(17,  1, "to the bank's managers.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					Creature *manager = 0;
 					bool canbreakin = false;
 					for (int s = 0; s < 6; s++)
@@ -1685,7 +1594,7 @@ void special_bank_vault()
 									mvaddstrAlt(16,  1, c->name, gamelog);
 									addstrAlt(" opens the vault.", gamelog);
 									gamelog.newline();
-									getkey();
+									getkeyAlt();
 									canbreakin = true;
 									break;
 								}
@@ -1696,7 +1605,7 @@ void special_bank_vault()
 								set_color_easy(WHITE_ON_BLACK_BRIGHT);
 								mvaddstrAlt(16,  1, "The hostage is forced to open the vault.", gamelog);
 								gamelog.newline();
-								getkey();
+								getkeyAlt();
 								canbreakin = true;
 								break;
 							}
@@ -1704,7 +1613,7 @@ void special_bank_vault()
 					}
 					if (!canbreakin)
 					{
-						for (int p = 0; p < len(pool); p++)
+						for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 						{
 							if (pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
 							{
@@ -1715,7 +1624,7 @@ void special_bank_vault()
 								addstrAlt(" opens the vault, ", gamelog);
 								mvaddstrAlt(17,  1, "and will join the active LCS to avoid arrest.", gamelog);
 								gamelog.newline();
-								getkey();
+								getkeyAlt();
 								canbreakin = true;
 								pool[p]->location = pool[p]->base = activesquad->squad[0]->base;
 								pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
@@ -1745,7 +1654,7 @@ void special_bank_vault()
 							mvaddstrAlt(16,  1, manager->name, gamelog);
 							addstrAlt(" is no longer recognized.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 						else
 						{
@@ -1753,7 +1662,7 @@ void special_bank_vault()
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(16,  1, "The squad has nobody that can do the job.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 					}
 				}
@@ -1771,14 +1680,14 @@ void special_bank_vault()
 void special_bank_teller()
 {
 	if (sitealarm || sitealienate ||
-		location[cursite]->siege.siege)
+		LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "The teller window is empty.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
-		getkey();
+		getkeyAlt();
 	}
 	else
 	{
@@ -1787,7 +1696,7 @@ void special_bank_teller()
 		mvaddstrAlt(16,  1, "A bank teller is available.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
-		getkey();
+		getkeyAlt();
 		emptyEncounter();
 		makecreature(encounter[0], CREATURE_BANK_TELLER);
 	}
@@ -1809,7 +1718,7 @@ void special_bank_money()
 	else if (sitealarm && postalarmtimer <= 80 && LCSrandom(2)) postalarmtimer = 81;
 	else if (sitealarm && postalarmtimer > 80 && LCSrandom(2) && swat_counter < 2)
 	{
-		getkey();
+		getkeyAlt();
 		if (swat_counter > 0)
 			mvaddstrAlt(17, 1, "Another SWAT team moves in!!", gamelog);
 		else
@@ -1819,7 +1728,7 @@ void special_bank_money()
 		int swatnum = 9;
 		fillEncounter(CREATURE_SWAT, swatnum);
 	}
-	getkey();
+	getkeyAlt();
 }
 void special_oval_office()
 {
@@ -1842,12 +1751,12 @@ void special_oval_office()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "The President isn't here... ", gamelog);
 		printsitemap(locx, locy, locz);
-		getkey();
+		getkeyAlt();
 		mvaddstrAlt(17,  1, "Secret Service agents ambush the squad!", gamelog);
 		gamelog.newline();
 		for (int e = 0; e < 6; e++)makecreature(encounter[e], CREATURE_SECRET_SERVICE);
 		printencounter();
-		getkey();
+		getkeyAlt();
 		enemyattack();
 		creatureadvance();
 	}
@@ -1862,20 +1771,20 @@ void special_oval_office()
 		for (int e = 0; e < 2; e++)makecreature(encounter[e], CREATURE_SECRET_SERVICE);
 		encounter[2] = uniqueCreatures.President();
 		printencounter();
-		getkey();
+		getkeyAlt();
 	}
 }
 void special_ccs_boss()
 {
 	if (sitealarm || sitealienate ||
-		location[cursite]->siege.siege)
+		LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "The CCS leader is ready for you!", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
-		getkey();
+		getkeyAlt();
 		emptyEncounter();
 		makecreature(encounter[0], CREATURE_CCS_ARCHCONSERVATIVE);
 		makecreature(encounter[1], CREATURE_CCS_VIGILANTE);
@@ -1891,7 +1800,7 @@ void special_ccs_boss()
 		mvaddstrAlt(16,  1, "The CCS leader is here.", gamelog);
 		gamelog.newline();
 		levelmap[locx][locy][locz].special = -1;
-		getkey();
+		getkeyAlt();
 		emptyEncounter();
 		makecreature(encounter[0], CREATURE_CCS_ARCHCONSERVATIVE);
 	}

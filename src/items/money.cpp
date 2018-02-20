@@ -1,5 +1,8 @@
 
 #include <includes.h>
+#include "creature/creatureEnums.h"
+#include "items/itemtype.h"
+#include "items/item.h"
 
 #include "items/money.h"
 //own header

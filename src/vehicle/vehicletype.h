@@ -1,5 +1,32 @@
 #ifndef VEHICLETYPE_H
 #define VEHICLETYPE_H0
+enum carparts
+{
+	CARPART_BODY,
+	CARPART_WINDOW,
+	CARPARTNUM
+};
+enum SpecialCarDamage
+{  // TODO
+	SPECIALCARDAMAGE_LIGHTS, // Reduced visibility, penalty to road hazards.
+	SPECIALCARDAMAGE_FUELTANK, // Starts countdown timer on chase - forced bail out if out of gas
+	SPECIALCARDAMAGE_ENGINE, // Lose drivebonus, or forced bail out
+	SPECIALCARDAMAGE_TIRES, // Extra drive check each turn or crash
+	SPECIALCARDAMAGE_WINDOWS, // Lose upper armor protection
+	SPECIALCARDAMAGE_COSMETIC, // Extra hassling by conservatives when driving around town.
+	SPECIALCARDAMAGENUM
+};
+enum CarUpgrades
+{  // TODO
+	CARUPGRADE_BODYARMOR, // ++ to body protection, -- drivebonus
+	CARUPGRADE_BULLETPROOFGLASS, // ++ to window protection, -- drivebonus
+	CARUPGRADE_NITRO, // ++ escape chance on open-road chase event
+	CARUPGRADE_WHEELS, // chance to avoid losing tires when shot.
+	CARUPGRADE_ROLLCAGE, // reduced passenger injuries when the car crashes.
+	CARUPGRADE_PAINTJOB, // -- to conservative hassling during car trips.
+	CARUPGRADE_TINTEDWINDOWS, // -- to conservative hassling when carrying weapons
+	CARUPGRADESNUM
+};
 class VehicleType
 {
    public:

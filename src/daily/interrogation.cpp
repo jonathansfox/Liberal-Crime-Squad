@@ -19,7 +19,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
 #include "common/consolesupport.h"
@@ -28,12 +30,14 @@ This file is part of Liberal Crime Squad.                                       
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for void printhealthstat(Creature &,int,int,char);
 
  #include "common/getnames.h"
 // for std::string getview(short ,bool );
 
-#include "common/commonactions.h"
+//#include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for  void sleeperize_prompt(Creature &,Creature &,int);
 
 
@@ -42,9 +46,10 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "common/creaturePoolCreature.h"
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern Log gamelog;
-extern vector<Location *> location;
 extern MusicClass music;
 extern int stat_recruits;
 extern int stat_kills;
@@ -98,7 +103,8 @@ enum InterrogationTechnqiues
    TECHNIQUE_DRUGS,
    TECHNIQUE_KILL
 };
-#include "cursesAlternative.h"
+
+
 // Clear sidebar
 void clear_interrogation_sidebar()
 {
@@ -199,20 +205,7 @@ void tendhostage(Creature *cr, char &clearformess)
 	bool(&techniques)[6] = intr->techniques;
 	int& druguse = intr->druguse;
 	map<long, struct float_zero>& rapport = intr->rapport;
-	//Find all tenders who are set to this hostage
-	for (p = 0; p < len(pool); p++)
-	{
-		if (!pool[p]->alive) continue;
-		if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg == cr->id)
-		{
-			//If they're in the same location as the hostage,
-			//include them in the interrogation
-			if (pool[p]->location == cr->location&&pool[p]->location != -1)
-				temppool.push_back(pool[p]);
-			//If they're someplace else, take them off the job
-			else pool[p]->activity.type = ACTIVITY_NONE;
-		}
-	}
+	findAllTendersToThisHostage(cr, temppool);
 	if (cr->location == -1)
 	{
 		delete cr;
@@ -228,31 +221,10 @@ void tendhostage(Creature *cr, char &clearformess)
 			cr->get_attribute(ATTRIBUTE_STRENGTH, true) &&
 			cr->joindays >= 5)
 		{
-			for (int p = 0; p < len(pool); p++)
-			{
-				if (pool[p] == cr)
-				{
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, cr->name, gamelog);
-					addstrAlt(" has escaped!", gamelog);
-					gamelog.nextMessage();
-					location[cr->location]->siege.timeuntillocated = 3;
-					getkey();
-					//clear activities for tenders
-					for (int i = 0; i < len(pool); i++)
-					{
-						if (!pool[i]->alive) continue;
-						if (pool[i]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[i]->activity.arg == cr->id)
-							pool[i]->activity.type = ACTIVITY_NONE;
-					}
-					//delete interrogation data
-					delete intr;
-					delete_and_remove(pool, p);
-					break;
-				}
-			}
+			hostageEscapes(cr, clearformess);
+			//delete interrogation data
+			delete intr;
+
 			return;
 		}
 		if (!len(temppool)) return;
@@ -264,7 +236,7 @@ void tendhostage(Creature *cr, char &clearformess)
 	addstrAlt(cr->name);
 	addstrAlt(": Day ");
 	addstrAlt(cr->joindays);
-	getkey();
+	getkeyAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	char turned = 0;
 	int y = 3;
@@ -351,7 +323,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y++,  0, "Press Enter to Confirm the Plan");
 			show_interrogation_sidebar(cr, a);
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c >= 'a'&&c <= 'e') techniques[c - 'a'] = !techniques[c - 'a'];
 			if (c == 'k') techniques[TECHNIQUE_KILL] = !techniques[TECHNIQUE_KILL];
 			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -391,7 +363,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				addstrAlt(" by ", gamelog);
 				addstrAlt(pickrandom(execution), gamelog);
 				//show_interrogation_sidebar(cr,a);
-				getkey();
+				getkeyAlt();
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 				{
 					gamelog.newline();
@@ -427,18 +399,14 @@ void tendhostage(Creature *cr, char &clearformess)
 												 //Food and restraint settings will be applied as normal
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(24,  0, "Press any key to reflect on this.");
-			getkey();
+			getkeyAlt();
 			if (!cr->alive)
 			{
-				for (int p = 0; p < len(pool); p++)
-				{
-					if (!pool[p]->alive) continue;
-					if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg == cr->id)
-						pool[p]->activity.type = ACTIVITY_NONE;
-				}
+
+				setAllCreatureActivities(ACTIVITY_NONE, temppool);
 				delete[] _attack;
 				return;
 			}
@@ -466,7 +434,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			gamelog.newline();
 		}
 		//show_interrogation_sidebar(cr,a);
-		getkey();
+		getkeyAlt();
 		if (techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
 		{
 			mvaddstrAlt(++y,  0, "It is subjected to dangerous hallucinogens.", gamelog);
@@ -477,12 +445,12 @@ void tendhostage(Creature *cr, char &clearformess)
 			{
 				cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 				moveAlt(++y, 0);
-				getkey();
+				getkeyAlt();
 				addstrAlt(cr->name, gamelog);
 				addstrAlt(" foams at the mouth and its eyes roll back in its skull.", gamelog);
 				gamelog.newline();
 				moveAlt(++y, 0);
-				getkey();
+				getkeyAlt();
 				Creature* doctor = a; // the lead interrogator is doctor by default
 				int maxskill = doctor->get_skill(SKILL_FIRSTAID);
 				for (int i = 0; i<len(temppool); i++) // search for the best doctor
@@ -511,7 +479,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					}
 					gamelog.newline();
 					moveAlt(++y, 0);
-					getkey();
+					getkeyAlt();
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					if (maxskill)
 					{
@@ -538,7 +506,7 @@ void tendhostage(Creature *cr, char &clearformess)
 						addstrAlt(" deftly rescues it from cardiac arrest with a defibrillator.", gamelog); // not long enough for near-death experience
 						gamelog.newline();
 						moveAlt(++y, 0);
-						getkey();
+						getkeyAlt();
 						addstrAlt(doctor->name, gamelog);
 						addstrAlt(" skillfully saves ", gamelog);
 						addstrAlt(cr->name, gamelog);
@@ -552,7 +520,7 @@ void tendhostage(Creature *cr, char &clearformess)
 						addstrAlt(" clumsily rescues it from cardiac arrest with a defibrillator.", gamelog);
 						gamelog.newline();
 						moveAlt(++y, 0);
-						getkey();
+						getkeyAlt();
 						addstrAlt(cr->name, gamelog);
 						if (cr->get_skill(SKILL_RELIGION)) // the patient was out long enough to have a near-death experience
 							addstrAlt(" had a near-death experience and met God in heaven.", gamelog);
@@ -566,7 +534,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			attack += drugbonus; // now we finally apply the drug bonus
 			moveAlt(++y, 0);
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 		}
 		if (techniques[TECHNIQUE_BEAT] && !turned&&cr->alive) // Beating
 		{
@@ -642,7 +610,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			y++;
 			cr->blood -= (5 + LCSrandom(5)) * (1 + techniques[TECHNIQUE_PROPS]);
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 			if (!(cr->attribute_check(ATTRIBUTE_HEALTH, forceroll)))
 			{
 				if (cr->skill_check(SKILL_RELIGION, forceroll))
@@ -693,26 +661,25 @@ void tendhostage(Creature *cr, char &clearformess)
 						cr->set_attribute(ATTRIBUTE_WISDOM, cr->get_attribute(ATTRIBUTE_WISDOM, false) - (forceroll / 10));
 						if (cr->get_attribute(ATTRIBUTE_WISDOM, false) < 1) cr->set_attribute(ATTRIBUTE_WISDOM, 1);
 					}
-					if (location[cr->worklocation]->mapped == 0 && !LCSrandom(5))
+					if (LocationsPool::getInstance().isLocationMapped(cr->worklocation) == 0 && !LCSrandom(5))
 					{
 						//show_interrogation_sidebar(cr,a);
-						getkey();
+						getkeyAlt();
 						mvaddstrAlt(y++,  0, a->name, gamelog);
 						addstrAlt(" beats information out of the pathetic thing.", gamelog);
 						gamelog.newline();
 						moveAlt(y++, 0);
-						getkey();
-						if (location[cr->worklocation]->type <= SITE_RESIDENTIAL_SHELTER)
+						getkeyAlt();
+						if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
 							addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
 						else
 						{
 							addstrAlt("A detailed map has been created of ", gamelog);
-							addstrAlt(location[cr->worklocation]->name, gamelog);
+							addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 							addstrAlt(singleDot, gamelog);
 						}
 						gamelog.newline();
-						location[cr->worklocation]->mapped = 1;
-						location[cr->worklocation]->hidden = 0;
+						LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 					}
 				}
 				else
@@ -730,7 +697,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (!(cr->attribute_check(ATTRIBUTE_HEALTH, forceroll / 3)))
 				{
 					//show_interrogation_sidebar(cr,a);
-					getkey();
+					getkeyAlt();
 					moveAlt(y++, 0);
 					if (cr->get_attribute(ATTRIBUTE_HEALTH, false) > 1)
 					{
@@ -756,7 +723,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				gamelog.newline();
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 			if (tortured && cr->alive)
 			{
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
@@ -813,7 +780,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			if (techniques[TECHNIQUE_DRUGS])
 			{
 				//show_interrogation_sidebar(cr,a);
-				getkey();
+				getkeyAlt();
 				moveAlt(y++, 0);
 				if (cr->skill_check(SKILL_PSYCHOLOGY, DIFFICULTY_CHALLENGING))
 				{
@@ -896,7 +863,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				}
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 			if (cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
 			{
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
@@ -929,7 +896,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (a->skill_check(SKILL_SEDUCTION, DIFFICULTY_CHALLENGING))
 				{
 					//show_interrogation_sidebar(cr,a);
-					getkey();
+					getkeyAlt();
 					mvaddstrAlt(y++,  0, a->name, gamelog);
 					int which_compassion = LCSrandom(interrogater_shows_compassion.size() + interrogater_shows_compassion_one_line.size());
 					if (which_compassion < interrogater_shows_compassion.size()) {
@@ -945,7 +912,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (rapport[a->id]>3)
 					{
 						//show_interrogation_sidebar(cr,a);
-						getkey();
+						getkeyAlt();
 						mvaddstrAlt(y++,  0, cr->name, gamelog);
 						int which_cling = LCSrandom(cling_to_interrogater.size() + clinging_one_line.size());
 						if (which_cling < cling_to_interrogater.size()) {
@@ -1037,15 +1004,15 @@ void tendhostage(Creature *cr, char &clearformess)
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
 				addstrAlt(pickrandom(partial_conversion), gamelog);
 				gamelog.newline();
-				if (location[cr->worklocation]->mapped == 0 && !LCSrandom(5))
+				if (LocationsPool::getInstance().isLocationMapped(cr->worklocation) == 0 && !LCSrandom(5))
 				{
 					mvaddstrAlt((++y)++,  0, cr->name, gamelog);
 					addstrAlt(" reveals details about the ", gamelog);
-					addstrAlt(location[cr->worklocation]->name, gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.newline();
 					moveAlt(y++, 0);
-					if (location[cr->worklocation]->type <= SITE_RESIDENTIAL_SHELTER)
+					if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
 					{
 						addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
 					}
@@ -1054,9 +1021,8 @@ void tendhostage(Creature *cr, char &clearformess)
 						addstrAlt(a->name, gamelog);
 						addstrAlt(" was able to create a map of the site with this information.", gamelog);
 					}
-					gamelog.newline();
-					location[cr->worklocation]->mapped = 1;
-					location[cr->worklocation]->hidden = 0;
+					gamelog.newline(); 
+					LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 				}
 			}
 			//Target is not sold on the LCS arguments and holds firm
@@ -1083,13 +1049,13 @@ void tendhostage(Creature *cr, char &clearformess)
 				addstrAlt("!", gamelog);
 				gamelog.newline();
 				//show_interrogation_sidebar(cr,a);
-				getkey();
+				getkeyAlt();
 				mvaddstrAlt(y++,  0, a->name, gamelog);
 				addstrAlt(" has been tainted with wisdom!", gamelog);
 				gamelog.newline();
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 		}
 		//Lead interrogator gets bonus experience
 		if (!techniques[TECHNIQUE_KILL])
@@ -1127,7 +1093,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			}
 			y++;
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 		}
 		//Death
 		if (cr->alive == 0 || cr->blood < 1)
@@ -1149,7 +1115,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			set_color_easy(WHITE_ON_BLACK);
 			y++;
 			//show_interrogation_sidebar(cr,a);
-			getkey();
+			getkeyAlt();
 			if (a)
 			{
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)))
@@ -1196,36 +1162,35 @@ void tendhostage(Creature *cr, char &clearformess)
 			cr->flag &= ~CREATUREFLAG_KIDNAPPED;
 		}
 		cr->flag |= CREATUREFLAG_BRAINWASHED;
-		for (int p = 0; p < len(pool); p++)
-			if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg == cr->id)
-				pool[p]->activity.type = ACTIVITY_NONE;
+
+		setAllCreatureActivities(ACTIVITY_NONE, temppool);
+
 		y += 2;
 		liberalize(*cr, false);
 		cr->hireid = a->id;
 		stat_recruits++;
-		if (location[cr->worklocation]->mapped == 0 || location[cr->worklocation]->hidden == 1)
+		if (LocationsPool::getInstance().isLocationMapped(cr->worklocation) == 0 || LocationsPool::getInstance().isLocationHidden(cr->worklocation) == 1)
 		{
 			gamelog.newline();
 			mvaddstrAlt(y,  0, cr->name, gamelog);
 			addstrAlt(" reveals details about the ", gamelog);
-			addstrAlt(location[cr->worklocation]->name, gamelog);
+			addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.newline();
 			moveAlt(++y, 0);
-			if (location[cr->worklocation]->type <= SITE_RESIDENTIAL_SHELTER)
+			if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
 				addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
 			else
 			{
 				addstrAlt(a->name, gamelog);
 				addstrAlt(" was able to create a map of the site with this information.", gamelog);
 			}
-			location[cr->worklocation]->mapped = 1;
-			location[cr->worklocation]->hidden = 0;
+			LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 			y += 2;
 		}
 		if (cr->flag & CREATUREFLAG_MISSING && !(cr->flag & CREATUREFLAG_KIDNAPPED))
 		{
-			getkey();
+			getkeyAlt();
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			moveAlt(y = 1, 0);
@@ -1238,14 +1203,11 @@ void tendhostage(Creature *cr, char &clearformess)
 			return;
 		}
 	}
-	if (cr->align == 1 || !cr->alive) for (int p = 0; p < len(pool); p++)
-	{
-		if (!pool[p]->alive) continue;
-		if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg == cr->id)
-			pool[p]->activity.type = ACTIVITY_NONE;
+	if (cr->align == 1 || !cr->alive) {
+		setAllCreatureActivities(ACTIVITY_NONE, temppool);
 	}
 	gamelog.nextMessage();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24,  0, "Press any key to reflect on this.");
-	getkey();
+	getkeyAlt();
 }

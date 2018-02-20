@@ -1,6 +1,9 @@
 
 #include <includes.h>
+//#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 #include "common/interval.h"
 
@@ -19,6 +22,7 @@
 // for getkey
 
 #include <cursesAlternative.h>
+#include "creature/creatureEnums.h"
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
@@ -27,6 +31,7 @@ typedef map<short, string > shortAndString;
 extern Log gamelog;
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
+#include "common/musicClass.h"
 extern MusicClass music;
 /* pick a descriptor acronym */
  vector<string> sexdescAcronym;
@@ -169,9 +174,9 @@ void MusicClass::init()
 		addstrAlt(string("Unable to initialize SDL:  ") + SDL_GetError(), gamelog);
 		gamelog.nextMessage();
 
-		getkey();
+		getkeyAlt();
 
-		endwin();
+		endwinAlt();
 		exit(EXIT_FAILURE);
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) != 0) // initialize the audio mixer at 44.1 kHz with a large buffer size, since we're just playing music not sound effects
@@ -179,10 +184,10 @@ void MusicClass::init()
 		addstrAlt(string("Unable to initialize SDL_mixer:  ") + Mix_GetError(), gamelog);
 		gamelog.nextMessage();
 
-		getkey();
+		getkeyAlt();
 
 		SDL_Quit();
-		endwin();
+		endwinAlt();
 		exit(EXIT_FAILURE);
 	}
 	if ((Mix_Init(MIX_INIT_OGG | MIX_INIT_FLUIDSYNTH)&MIX_INIT_OGG) != MIX_INIT_OGG) // initialize Ogg Vorbis support (and FluidSynth if it's there for better MIDI quality)

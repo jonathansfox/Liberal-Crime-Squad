@@ -52,12 +52,13 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
 #include "common/getnames.h"
+std::string gettitle(Creature &cr);
 //own header
 
-#include "common/translateid.h"
-// for  int getpoolcreature(int)
 
 
 #include <cursesAlternative.h>
@@ -65,37 +66,9 @@ the bottom of includes.h in the top src folder.
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
-extern vector<Location *> location;
  vector<string> city_names;
-typedef map<short, string > shortAndString;
- shortAndString getActivityString;
 
  extern short lawList[LAWNUM];
- extern vector<ArmorType *> armortype;
-std::string getactivity(activityst &act)
-{
-	if (getActivityString.count(act.type)) {
-		return getActivityString[act.type];
-	}
-	else
-		switch (act.type)
-		{
-		case ACTIVITY_HOSTAGETENDING:
-		{
-			std::string str = "Tending to ";
-			int pl = getpoolcreature(act.arg);
-			if (pl != -1) return str + pool[pl]->name;
-			else return str + "a bug";
-		}
-		case ACTIVITY_MAKE_ARMOR:
-			return "Making " + armortype[act.arg]->get_shortname();
-		case ACTIVITY_VISIT:
-			return "Going to " + location[act.arg]->getname(!location[act.arg]->is_city());
-		default:
-			return "Reporting Bugs to the Dev Team";
-		}
-}
 std::string gettitle(Creature &cr)
 {
 	if (cr.align == -1)
@@ -179,6 +152,7 @@ std::string getview(short view, bool shortname)
 			return "Buggy Software";
 	}
 }
+typedef map<short, string > shortAndString;
  shortAndString getLawString;
 std::string getlaw(int l)
 {
@@ -242,15 +216,15 @@ std::string getalign(short alignment, bool capitalize)
 void enter_name(int y, int x, char *name, int len, const char* defname)
 {
 	refreshAlt();
-	keypad(stdscr, FALSE);
-	raw_output(FALSE);
-	echo();
-	curs_set(1);
+	keypadAlt(FALSE);
+	raw_outputAlt(FALSE);
+	echoAlt();
+	curs_setAlt(1);
 	mvgetnstrAlt(y, x, name, len - 1); //-1 because 'len' is normally the full space available and we need one for a terminator.
-	curs_set(0);
-	noecho();
-	raw_output(TRUE);
-	keypad(stdscr, TRUE);
+	curs_setAlt(0);
+	noechoAlt();
+	raw_outputAlt(TRUE);
+	keypadAlt(TRUE);
 	if ((defname != NULL) && (strncmp(name, "", len - 1) == 0)) strncpy(name, defname, len - 1);
 	name[len - 1] = '\0';
 }

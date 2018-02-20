@@ -25,7 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
 #include "common/consolesupport.h"
@@ -34,9 +36,11 @@ This file is part of Liberal Crime Squad.                                       
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for  addstr
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for int loveslavesleft(const Creature&)
 
 #include "common/getnames.h"
@@ -54,8 +58,10 @@ This file is part of Liberal Crime Squad.                                       
 #include <gui_constants.h>
 #include <set_color_support.h>
 extern vector<Creature *> pool;
+#include "common/creaturePoolCreature.h"
 extern Log gamelog;
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern int stat_recruits;
 extern int stat_kidnappings;
@@ -88,7 +94,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		addstrAlt(pool[p]->name, gamelog);
 		addstrAlt("'s unique life philosophy...", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		if (loveslavesleft(*pool[p]) <= 0)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -106,11 +112,11 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			else addstrAlt("yet another", gamelog);
 			addstrAlt(" relationship.", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y++,  0, "It was fun though. They agree to part ways amicably.", gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			delete_and_remove(d.date, e);
 			return DATERESULT_BREAKUP;
 		}
@@ -125,9 +131,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			addstrAlt("'s totally unconditional love-slave!", gamelog);
 			gamelog.nextMessage();
 			//Get map of their workplace
-			location[d.date[e]->worklocation]->mapped = 1;
-			location[d.date[e]->worklocation]->hidden = 0;
-			getkey();
+			LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
+			getkeyAlt();
 			d.date[e]->flag |= CREATUREFLAG_LOVESLAVE;
 			d.date[e]->hireid = pool[p]->id;
 			eraseAlt();
@@ -141,7 +146,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
 			enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 			sleeperize_prompt(*d.date[e], *pool[p], 8);
-			pool.push_back(d.date[e]);
+			addCreature(d.date[e]);
 			stat_recruits++;
 			d.date.erase(d.date.begin() + e);
 			return DATERESULT_JOINED;
@@ -163,14 +168,14 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM, -1);
 			}
 			//Possibly date reveals map of location
-			else if (location[d.date[e]->worklocation]->mapped == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
+			else if (LocationsPool::getInstance().isLocationMapped(d.date[e]->worklocation) == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
 			{
 				y++;
 				mvaddstrAlt(y++,  0, s + d.date[e]->name + " turns the topic of discussion to the "
-					+ location[d.date[e]->worklocation]->name + singleDot, gamelog);
+					+ LocationsPool::getInstance().getLocationName(d.date[e]->worklocation) + singleDot, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
-				if (!(location[d.date[e]->worklocation]->type <= SITE_RESIDENTIAL_SHELTER))
+				if (!(LocationsPool::getInstance().getLocationType(d.date[e]->worklocation) <= SITE_RESIDENTIAL_SHELTER))
 				{
 					addstrAlt(pool[p]->name, gamelog);
 					addstrAlt(" was able to create a map of the site with this information.", gamelog);
@@ -184,13 +189,12 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 					gamelog.newline();
 					y++;
 				}
-				location[d.date[e]->worklocation]->mapped = 1;
-				location[d.date[e]->worklocation]->hidden = 0;
+				LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
 			}
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 			return DATERESULT_MEETTOMORROW;
 		}
 	}
@@ -221,7 +225,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		}
 		mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 		return DATERESULT_MEETTOMORROW;
 	}
 	else
@@ -243,7 +247,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				pool[p]->train(SKILL_SCIENCE, 20 * (d.date[e]->get_skill(SKILL_SCIENCE) - pool[p]->get_skill(SKILL_SCIENCE)));
 			if (d.date[e]->get_skill(SKILL_BUSINESS) > pool[p]->get_skill(SKILL_BUSINESS))
 				pool[p]->train(SKILL_BUSINESS, 20 * (d.date[e]->get_skill(SKILL_BUSINESS) - pool[p]->get_skill(SKILL_BUSINESS)));
-			getkey();
+			getkeyAlt();
 		}
 		//BREAK UP
 		// If your squad member is wanted by the police, a conservative who breaks up with
@@ -255,7 +259,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 			addstrAlt(" was leaking information to the police the whole time!", gamelog);
-			getkey();
+			getkeyAlt();
 			moveAlt(y++, 0);
 			// 3/4 chance of being arrested if less than 50 juice,
 			// 1/2 chance of being arrested if more than 50 juice
@@ -272,7 +276,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				pool[p]->location = ps;
 				pool[p]->drop_weapons_and_clips(NULL);
 				pool[p]->activity.type = ACTIVITY_NONE;
-				getkey();
+				getkeyAlt();
 				delete_and_remove(d.date, e);
 				return DATERESULT_ARRESTED;
 			}
@@ -350,7 +354,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			addstrAlt("This relationship is over.", gamelog);
 			gamelog.nextMessage();
 		}
-		getkey();
+		getkeyAlt();
 		delete_and_remove(d.date, e);
 		return DATERESULT_BREAKUP;
 	}
@@ -438,13 +442,13 @@ char completedate(datest &d, int p, char &clearformess)
 			if (pool[p]->clinic>0)
 			{
 				addstrAlt(" at ", gamelog);
-				addstrAlt(location[pool[p]->location]->name, gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(pool[p]->location), gamelog);
 			}
 			addstrAlt(singleDot, gamelog);
 		}
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	if (len(d.date) > 1 && !LCSrandom(len(d.date) > 2 ? 4 : 6))
 	{
 		switch (LCSrandom(3))
@@ -456,7 +460,7 @@ char completedate(datest &d, int p, char &clearformess)
 			mvaddstrAlt(3,  0, pool[p]->name, gamelog);
 			addstrAlt(".  An ambush was set for the lying dog...", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			break;
 		case 1:
 			moveAlt(2, 0);
@@ -465,7 +469,7 @@ char completedate(datest &d, int p, char &clearformess)
 			gamelog.newline();
 			mvaddstrAlt(3,  0, "Ruh roh...", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			break;
 		default:
 			mvaddstrAlt(2,  0, pool[p]->name, gamelog);
@@ -481,7 +485,7 @@ char completedate(datest &d, int p, char &clearformess)
 			}
 			mvaddstrAlt(3,  0, "Things go downhill fast.", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			break;
 		}
 		mvaddstrAlt(5,  0, pool[p]->name, gamelog);
@@ -489,7 +493,7 @@ char completedate(datest &d, int p, char &clearformess)
 		addstrAlt(pickrandom(date_fail), gamelog);
 		addjuice(*pool[p], -5, -50);
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	for (e = len(d.date) - 1; e >= 0; e--)
@@ -501,7 +505,7 @@ char completedate(datest &d, int p, char &clearformess)
 		addstrAlt(commaSpace, gamelog);
 		addstrAlt(d.date[e]->get_type_name(), gamelog);
 		addstrAlt(commaSpace, gamelog);
-		addstrAlt(location[d.date[e]->worklocation]->getname(false, true), gamelog);
+		addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(d.date[e]->worklocation,false, true), gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
@@ -551,7 +555,7 @@ char completedate(datest &d, int p, char &clearformess)
 					thingsincommon++;
 		while (true)
 		{
-			int c = getkey();
+			int c = getkeyAlt();
 			short aroll = pool[p]->skill_roll(SKILL_SEDUCTION);
 			short troll = d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
 			if (d.date[e]->align == ALIGN_CONSERVATIVE)
@@ -654,7 +658,7 @@ char completedate(datest &d, int p, char &clearformess)
 					gamelog.newline();
 					bonus += pool[p]->get_skill(SKILL_HANDTOHAND) - 1;
 				}
-				getkey();
+				getkeyAlt();
 				// Kidnap probably succeeds if the conservative isn't very dangerous,
 				// but fails 15 times as often if the conservative is tough stuff.
 				if ((!d.date[e]->kidnap_resistant() &&
@@ -673,11 +677,11 @@ char completedate(datest &d, int p, char &clearformess)
 						addstrAlt(" struggles and yells for help, but nobody comes.", gamelog);
 						gamelog.newline();
 					}
-					getkey();
+					getkeyAlt();
 					mvaddstrAlt(22,  0, pool[p]->name, gamelog);
 					addstrAlt(" kidnaps the Conservative!", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					d.date[e]->namecreature();
 					strcpy(d.date[e]->propername, d.date[e]->name);
 					d.date[e]->location = pool[p]->location;
@@ -699,7 +703,7 @@ char completedate(datest &d, int p, char &clearformess)
 					addstrAlt(" in its presence?");
 					mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
 					enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
-					pool.push_back(d.date[e]);
+					addCreature(d.date[e]);
 					stat_kidnappings++;
 					d.date.erase(d.date.begin() + e);
 					break;
@@ -713,13 +717,13 @@ char completedate(datest &d, int p, char &clearformess)
 						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
 						addstrAlt(" manages to get away on the way back to the safehouse!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						mvaddstrAlt((++y)++,  0, pool[p]->name, gamelog);
 						addstrAlt(" has failed to kidnap the Conservative.", gamelog);
 						gamelog.nextMessage();
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-						getkey();
+						getkeyAlt();
 						delete_and_remove(d.date, e);
 						break;
 					}
@@ -731,7 +735,7 @@ char completedate(datest &d, int p, char &clearformess)
 						addstrAlt(pool[p]->name, gamelog);
 						addstrAlt(" remembers seeing!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						mvaddstrAlt((++y)++,  0, "The Liberal wakes up in the police station...", gamelog);
 						gamelog.nextMessage();
 						// Find the police station
@@ -744,7 +748,7 @@ char completedate(datest &d, int p, char &clearformess)
 						pool[p]->activity.type = ACTIVITY_NONE;
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-						getkey();
+						getkeyAlt();
 						delete_and_remove(d.date, e);
 						return 1;
 					}

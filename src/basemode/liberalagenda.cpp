@@ -27,6 +27,8 @@
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
 #include "basemode/liberalagenda.h"
 
@@ -36,7 +38,7 @@
 #include "common/stringconversion.h"
 //for string attribute_enum_to_string(int)
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for void set_alignment_color(signed char,bool extended_range=false);
@@ -45,16 +47,18 @@
 // for std::string getlaw(int)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void removesquadinfo(Creature &);
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <common\\consolesupport.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "common/musicClass.h"
 extern MusicClass music;
 extern int year;
 extern short exec[EXECNUM];
@@ -83,6 +87,9 @@ extern int disbandtime;
 string pressLToViewHighScores;
 typedef map<short, vector<string>> shortAndTwoStrings;
 shortAndTwoStrings endgameLawStrings;
+
+#include "common/creaturePool.h"
+
 enum Pages
 {
 	PAGE_LEADERS,
@@ -311,7 +318,7 @@ bool liberalagenda(signed char won)
 				mvaddstrAlt(23, 0, "The country has achieved Liberal status!");
 			else mvaddstrAlt(23, 0, "The country has achieved Elite Liberal status!");
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
 			else if (c == 'l') break;
@@ -321,7 +328,7 @@ bool liberalagenda(signed char won)
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(23, 0, "The country has been Reaganified.");
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
 			else if (c == 'l') break;
@@ -331,7 +338,7 @@ bool liberalagenda(signed char won)
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(23, 0, "The country has been Stalinized.");
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
 			else if (c == 'l') break;
@@ -377,7 +384,7 @@ bool liberalagenda(signed char won)
 			set_color_easy(WHITE_ON_BLACK);
 			//mvaddstrAlt(23,0,"Once these are Green, the country will have achieved Elite Liberal status.");
 			mvaddstrAlt(24, 0, "Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
 			else if (c == 'd') return confirmdisband();
@@ -410,7 +417,7 @@ bool confirmdisband()
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(15, x, word[x]);
 		}
-		if (getkey() == ::tolower(word[pos]))
+		if (getkeyAlt() == ::tolower(word[pos]))
 		{
 			pos++;
 			if (word[pos] == ' ' || word[pos] == '\'' || word[pos] == '-') pos++;
@@ -418,15 +425,7 @@ bool confirmdisband()
 		else return false;
 	}
 	//SET UP THE DISBAND
-	for (int p = len(pool) - 1; p >= 0; p--)
-	{
-		if (!pool[p]->alive || pool[p]->flag&CREATUREFLAG_KIDNAPPED || pool[p]->flag&CREATUREFLAG_MISSING) delete_and_remove(pool, p);
-		else if (!(pool[p]->flag&CREATUREFLAG_SLEEPER))
-		{
-			removesquadinfo(*pool[p]);
-			pool[p]->hiding = -1;
-		}
-	}
+ CreaturePool::getInstance().setupDisband();
 	cleangonesquads();
 	disbandtime = year;
 	return true;

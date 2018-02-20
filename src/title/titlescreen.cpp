@@ -57,22 +57,15 @@ This file is part of Liberal Crime Squad.                                       
 
 void mode_base();
 
-#include "common/stringconversion.h"
-//for string conversion
-
 #include "common/consolesupport.h"
-// for void set_color(short,short,bool)
+// for void getkeyAlt()
 
-#include "log/log.h"
-// for commondisplay.h
 #include "common/commondisplay.h"
 // for addstr
 
 #include "common/getnames.h"
 // for enter_name
 
-#include "define_includes.h"
-//for PACKAGE_VERSION
 
 #include "title/highscore.h"
 //for void viewhighscores
@@ -86,19 +79,17 @@ void mode_base();
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
+#include <cursesAlternativeConstants.h>
 #include <set_color_support.h>
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 
 extern short mode;
+#include "common/musicClass.h"
 extern MusicClass music;
  vector<vector<string>> real_quote;
 //char str[100];
 extern string spaceDashSpace;
-extern string savefile_name;
 extern short interface_pgup;
 extern short interface_pgdn;
 string deleteSave;
@@ -135,215 +126,241 @@ string pressAnyKeyToPursue;
 string plusChar;
 
 string dotDat;
+// private
+string title_screen::savefile_name;
+	void title_screen::title() {
+		//title screen
 
-void title() {
-	//title screen
-
-	eraseAlt();
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrCenter(2, liberalCrimeSquad);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrCenter(4, inspiredByOubliette);
-	vector<string> quote = pickrandom(real_quote);
-	mvaddstrCenter(6, quote[0]);
-	mvaddstrCenter(7, quote[1]);
-	mvaddstrCenter(8, quote[2]);
-	mvaddstrCenter(9, quote[3]);
-	mvaddstrCenter(11, copyrightTarn);
-	mvaddstrCenter(12, bayTwelveProductions);
-	mvaddstrCenter(13, lcsHyperlink);
-	mvaddstrCenter(15, vChar + PACKAGE_VERSION + maintainedByOpenSource);
-	mvaddstrCenter(16, kingDrakeHyperlink);
-
-
-
-	mvaddstrCenter(17, lcsForumHyperlink);
-	mvaddstrCenter(18, lcsWikiHyperlink);
-	mvaddstrCenter(20, pressESCToQuit);
-	mvaddstrCenter(22, pressAnyKeyToPursue);
-	mvaddstrAlt(24, 79, plusChar);
-}
+		eraseAlt();
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrCenter(2, liberalCrimeSquad);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrCenter(4, inspiredByOubliette);
+		vector<string> quote = pickrandom(real_quote);
+		mvaddstrCenter(6, quote[0]);
+		mvaddstrCenter(7, quote[1]);
+		mvaddstrCenter(8, quote[2]);
+		mvaddstrCenter(9, quote[3]);
+		mvaddstrCenter(11, copyrightTarn);
+		mvaddstrCenter(12, bayTwelveProductions);
+		mvaddstrCenter(13, lcsHyperlink);
+		mvaddstrCenter(15, vChar + PACKAGE_VERSION + maintainedByOpenSource);
+		mvaddstrCenter(16, kingDrakeHyperlink);
 
 
-void choose_savefile_name()
-{
 
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, inWhatWorld);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1,  0, enterNameForSave);
-	char savefile_temp[21];
-	enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
-	bool justEnter = false;
-	bool enterDamn = false;
-	do {
-		if (strcmp(savefile_temp, "") != 0) {
-			savefile_name = string(savefile_temp) + dotDat;
-			justEnter = false;
+		mvaddstrCenter(17, lcsForumHyperlink);
+		mvaddstrCenter(18, lcsWikiHyperlink);
+		mvaddstrCenter(20, pressESCToQuit);
+		mvaddstrCenter(22, pressAnyKeyToPursue);
+		mvaddstrAlt(24, 79, plusChar);
+	}
+	void title_screen::choose_savefile_name()
+	{
 
-		}
-		else {
-
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, inWhatWorld);
-			string enterTheName;
-			if (enterDamn) {
-				enterTheName = (justEnterName);
-			}
-			else if (justEnter) {
-				enterTheName = (prettyPlease);
-				enterDamn = true;
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, inWhatWorld);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1, 0, enterNameForSave);
+		char savefile_temp[21];
+		enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
+		bool justEnter = false;
+		bool enterDamn = false;
+		do {
+			if (strcmp(savefile_temp, "") != 0) {
+				savefile_name = string(savefile_temp) + dotDat;
+				justEnter = false;
 
 			}
 			else {
-				enterTheName = (pleaseEnterName);
+
+				eraseAlt();
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(0, 0, inWhatWorld);
+				string enterTheName;
+				if (enterDamn) {
+					enterTheName = (justEnterName);
+				}
+				else if (justEnter) {
+					enterTheName = (prettyPlease);
+					enterDamn = true;
+
+				}
+				else {
+					enterTheName = (pleaseEnterName);
+
+				}
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(1, 0, enterTheName);
+
+				enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
+				justEnter = true;
 
 			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1, 0, enterTheName);
-
-			enter_name(2, 0, savefile_temp, sizeof(savefile_temp) / sizeof(savefile_temp[0]), "");
-			justEnter = true;
-
-		}
-	} while (justEnter);
-}
-
-void mode_title()
-{
-	title();
-	int c = 0;
-	vector<string> savefiles;
-	do {
-		if (c == 'h') {
-			viewhighscores();
-			getkey();
-			title();
-
-		}
-		if (c == 'm') music.enableIf(!music.isEnabled());
-		string str;
-		if (music.isEnabled()) {
-			(str = pressMtoTurnOffMusic); 
-		} else { 
-			(str = pressMtoTurnOnMusic); 
-		}
-
-		mvaddstrCenter(22, str);
-		if (c == ESC || c == 'x') end_game();
-		c = getkey();
-	} while (c == 'm' || c == 'h' || c == 'x' || c == ESC);
-	savefiles = move(LCSSaveFiles());
-	char loaded = savefiles.size() > 0;
-	bool to_delete = false;
-	if (!loaded)
-
-	{
-		choose_savefile_name();
+		} while (justEnter);
 		setup_newgame();
 		makecharacter();
-
 	}
-	else
-
-	{
-		int p = 0, y = 2, page = 0;
-		// IsaacG This almost has to be redone
-		while (true)
-
+	void title_screen::selectAndLoadSaveFile() {
+		vector<string> savefiles;
+		savefiles = move(LCSSaveFiles());
+		char loaded = savefiles.size() > 0;
+		if (!loaded)
 
 		{
-			eraseAlt();
-			if (to_delete)
-
-			{
-				set_color_easy(YELLOW_ON_RED);
-				mvaddstrAlt(0,  0, deleteSave);
-
-
-
-			}
-			else
-			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0,  0, chooseSave);
-
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1,  0, titleScreenLine);
-			for (p = page * 19, y = 2; p < savefiles.size() && p < page * 19 + 19; p++, y++)
-
-			{
-				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
-
-
-				mvaddchAlt(y, 0, y + 'A' - 2);
-				addstrAlt(spaceDashSpace);
-				const string &strtemp = savefiles[y - 2];
-				addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
-
-
-
-			}
-			mvaddstrAlt(y, 0, (char (y + 'A' - 2)) + spaceDashSpace + newGame);
-
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
-			mvaddstrAlt(23, 0, addpagestr());
-			c = getkey();
-			//PAGE UP
-			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
-			//PAGE DOWN
-			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<savefiles.size())page++;
-			if (c >= 'a'&&c <= 's')
-
-			{
-				const int p = page * 19 + c - 'a';
-				if (!to_delete)
-
-				{
-					if (p < savefiles.size()) { savefile_name = savefiles[p]; break; }
-					else if (p == savefiles.size())
-
-					{
-						choose_savefile_name();
-						setup_newgame();
-						makecharacter();
-
-
-
-						break;
-					}
-				}
-				else if (p < savefiles.size())
-
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrCenter(10, areYouSureDelte + savefiles[p] + questionYSlashN);
-					c = getkey();
-
-
-					if (c == 'y')
-					{
-						LCSDeleteFile(savefiles[p].c_str(), LCSIO_PRE_HOME);
-						savefiles = move(LCSSaveFiles());
-
-					}
-					continue;
-
-				}
-			}
-			else if (c == 'v') to_delete = !to_delete;
-			if (c == ESC || c == 'x') end_game();
+			choose_savefile_name();
 
 		}
-		load(savefile_name);
+		else {
+			bool to_delete = false;
+			int p = 0, y = 2, page = 0;
+			// IsaacG This almost has to be redone
+			while (true)
 
+
+			{
+				eraseAlt();
+				if (to_delete)
+
+				{
+					set_color_easy(YELLOW_ON_RED);
+					mvaddstrAlt(0, 0, deleteSave);
+
+
+
+				}
+				else
+				{
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(0, 0, chooseSave);
+
+				}
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(1, 0, titleScreenLine);
+				for (p = page * 19, y = 2; p < savefiles.size() && p < page * 19 + 19; p++, y++)
+
+				{
+					set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
+
+
+					mvaddchAlt(y, 0, y + 'A' - 2);
+					addstrAlt(spaceDashSpace);
+					const string &strtemp = savefiles[y - 2];
+					addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
+
+
+
+				}
+				mvaddstrAlt(y, 0, (char(y + 'A' - 2)) + spaceDashSpace + newGame);
+
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
+				mvaddstrAlt(23, 0, addpagestr());
+				int c = getkeyAlt();
+				//PAGE UP
+				if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)page--;
+				//PAGE DOWN
+				if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < savefiles.size())page++;
+				if (c >= 'a'&&c <= 's')
+
+				{
+					const int p = page * 19 + c - 'a';
+					if (!to_delete)
+
+					{
+						if (p < savefiles.size()) { savefile_name = savefiles[p]; break; }
+						else if (p == savefiles.size())
+
+						{
+							choose_savefile_name();
+
+
+
+							break;
+						}
+					}
+					else if (p < savefiles.size())
+
+					{
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrCenter(10, areYouSureDelte + savefiles[p] + questionYSlashN);
+						c = getkeyAlt();
+
+
+						if (c == 'y')
+						{
+							LCSDeleteFile(savefiles[p].c_str(), LCSIO_PRE_HOME);
+							savefiles = move(LCSSaveFiles());
+
+						}
+						continue;
+
+					}
+				}
+				else if (c == 'v') to_delete = !to_delete;
+				if (c == ESC || c == 'x') end_game();
+
+			}
+			load(savefile_name);
+		}
 	}
-	mode = GAMEMODE_BASE;
-	// Main Loop
-	mode_base();
-	savegame(savefile_name);
-}
+	title_screen title_singleton;
+	bool title_screen::titleInitiated = false;
+	title_screen title_screen::getInstance()
+	{
+		if (!titleInitiated) {
+			titleInitiated = true;
+			title_singleton = title_screen();
+		}
+		return title_singleton;
+	}
+
+	// public
+	void title_screen::mode_title()
+	{
+		title();
+		int c = 0;
+		do {
+			if (c == 'h') {
+				viewhighscores();
+				getkeyAlt();
+				title();
+
+			}
+			if (c == 'm') music.enableIf(!music.isEnabled());
+			string str;
+			if (music.isEnabled()) {
+				(str = pressMtoTurnOffMusic);
+			}
+			else {
+				(str = pressMtoTurnOnMusic);
+			}
+
+			mvaddstrCenter(22, str);
+			if (c == ESC || c == 'x') end_game();
+			c = getkeyAlt();
+		} while (c == 'm' || c == 'h' || c == 'x' || c == ESC);
+
+		selectAndLoadSaveFile();
+
+		mode = GAMEMODE_BASE;
+		// Main Loop
+		mode_base();
+		savegame(savefile_name);
+	}
+	bool title_screen::autosave = true;
+	/* deletes save.dat (used on endgame and for invalid save version) */
+	//extern string savefile_name;
+	void title_screen::reset()
+	{
+		if (file_exists(savefile_name)) LCSDeleteFile(savefile_name.c_str(), LCSIO_PRE_HOME);
+	}
+	void title_screen::setautosaveoption(bool shouldautosave) {
+		autosave = shouldautosave;
+	}
+	void title_screen::autosavegame() {
+		if (autosave) {
+			savegame(savefile_name);
+		}
+	}

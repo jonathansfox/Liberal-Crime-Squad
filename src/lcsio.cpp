@@ -18,19 +18,6 @@ This file is part of Liberal Crime Squad.
 
 #include <includes.h>
 
-
-//#include "lcsio.h"
-//own header, currently inside includes.h
-
-#include "common/stringconversion.h"
-//for string   conversion   
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 #include <tinydir.h>
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
@@ -75,7 +62,7 @@ bool LCSInitHomeDir()
    #ifndef WIN32
    str+=".lcs/";
    #endif
-   strncpy(homedir,str,MAX_PATH_SIZE);
+   strncpy(homedir,str.c_str(),MAX_PATH_SIZE);
    if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
    {
       #ifdef WIN32

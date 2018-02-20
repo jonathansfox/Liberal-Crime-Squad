@@ -1,6 +1,7 @@
 
 #include <includes.h>
-
+#include "creature/creatureEnums.h"
+#include "items/itemtype.h"
 #include "items/loottype.h"
 //own header
 

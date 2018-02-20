@@ -25,44 +25,35 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
+// for renting
 
 #include "sitemode/sitedisplay.h"
 
 #include "items/money.h"
 
-#include "common/stringconversion.h"
-//for string conversion
-
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for  addstr
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void basesquad(squadst *st,long loc);
 
 #include "daily/shopsnstuff.h"
 //for  void armsdealer(int loc);
 
-//#include "combat/fight.h"
-// currently inside includes.h
-//for void delenc(short e,char loot);
-
 #include "combat/fight.h"
+// for void delenc(short e,char loot);
+#include "combat/fightCreature.h"  
 //for void capturecreature(Creature &t);
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "locations/locationsPool.h"
 extern Log gamelog;
 extern char newscherrybusted;
 extern vector<Location *> location;
@@ -305,7 +296,7 @@ char talk(Creature &a, const int t)
 		return heyMisterMonster(a, tk);
 	}
 	// BLUFFING
-	if ((sitealarm || location[cursite]->siege.siege) && tk.enemy())
+	if ((sitealarm || LocationsPool::getInstance().isThereASiegeHere(cursite)) && tk.enemy())
 	{
 		return talkInCombat(a, tk);
 	}
@@ -328,7 +319,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
 	int c;
-	do c = getkey(); while (c<'a'&&c>'c');
+	do c = getkeyAlt(); while (c<'a'&&c>'c');
 	switch (c)
 	{
 	case 'a':
@@ -339,15 +330,15 @@ char talkToBankTeller(Creature &a, Creature &tk)
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(10,  1, pickrandom(robbing_bank), gamelog);
 		gamelog.newline();
-		getkey();
-		if (location[cursite]->highsecurity)
+		getkeyAlt();
+		if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(11,  1, unnamed_String_Talk_cpp_005, gamelog);
 			addstrAlt(pickrandom(teller_gestures), gamelog);
 			mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_006, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			sitealarm = 1;
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
@@ -364,7 +355,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			addstrAlt(pickrandom(teller_complies), gamelog);
 			mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_008, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
 			sitecrime += 30;
@@ -394,7 +385,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			clearmessagearea();
 		}
 		mvaddstrAlt(10,  1, a.name, gamelog);
@@ -405,12 +396,12 @@ char talkToBankTeller(Creature &a, Creature &tk)
 		gamelog.record(singleSpace);
 		mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_011, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		const int roll = a.skill_roll(SKILL_PERSUASION);
 		int difficulty = DIFFICULTY_VERYEASY;
 		if (armed_liberal == NULL)
 			difficulty += 12;
-		if (location[cursite]->highsecurity > 0)
+		if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 			difficulty += 12;
 		clearcommandarea(); clearmessagearea(); clearmaparea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -420,14 +411,14 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			mvaddstrAlt(9,  1, unnamed_String_Talk_cpp_012, gamelog);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_013, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			sitealarm = 1;
 			sitealienate = 2;
 			criminalizeparty(LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKSTICKUP);
 			sitecrime += 50;
 			CreatureTypes guard = CREATURE_SECURITYGUARD;
-			if (location[cursite]->highsecurity>0) guard = CREATURE_MERC;
+			if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) guard = CREATURE_MERC;
 			makecreature(encounter[0], guard);
 			makecreature(encounter[1], guard);
 			makecreature(encounter[2], guard);
@@ -440,10 +431,10 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(9,  1, unnamed_String_Talk_cpp_014, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_015, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			criminalizeparty(LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKSTICKUP);
 			sitecrime += 50;
@@ -503,13 +494,13 @@ char talkToGeneric(Creature &a, Creature &tk)
 	mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_020);
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
-	if (tk.type == CREATURE_LANDLORD&&location[cursite]->renting == -1)
+	if (tk.type == CREATURE_LANDLORD&&LocationsPool::getInstance().getRentingType(cursite) == -1)
 	{
 		mvaddstrAlt(14,  1, unnamed_String_Talk_cpp_021);
 		if (is_naked)addstrAlt(while_naked);
 		addstrAlt(singleDot);
 	}
-	else if (tk.type == CREATURE_LANDLORD&&location[cursite]->renting > 0)
+	else if (tk.type == CREATURE_LANDLORD&&LocationsPool::getInstance().getRentingType(cursite) > 0)
 	{
 		mvaddstrAlt(14,  1, unnamed_String_Talk_cpp_022);
 		if (is_naked)addstrAlt(while_naked);
@@ -529,7 +520,7 @@ char talkToGeneric(Creature &a, Creature &tk)
 	}
 	while (true)
 	{
-		const int c = getkey();
+		const int c = getkeyAlt();
 		switch (c)
 		{
 		case 'a':
@@ -540,9 +531,9 @@ char talkToGeneric(Creature &a, Creature &tk)
 		case 'c':
 			return 0;
 		case 'd':
-			if (tk.type == CREATURE_LANDLORD&&location[cursite]->renting == -1)
+			if (tk.type == CREATURE_LANDLORD&&LocationsPool::getInstance().getRentingType(cursite) == -1)
 				return heyIWantToRentARoom(a, tk);
-			else if (tk.type == CREATURE_LANDLORD && location[cursite]->renting > 0)
+			else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().getRentingType(cursite) > 0)
 				return heyIWantToCancelMyRoom(a, tk);
 			else if (tk.type == CREATURE_GANGMEMBER || tk.type == CREATURE_MERC)
 				return heyINeedAGun(a, tk);
@@ -552,6 +543,9 @@ char talkToGeneric(Creature &a, Creature &tk)
 		}
 	}
 }
+
+#include "common/creaturePool.h"
+
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 {
 	clearcommandarea();
@@ -563,7 +557,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_025, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -573,7 +567,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_026, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -582,19 +576,15 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_027, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(15,  1, unnamed_String_Talk_cpp_028, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	location[cursite]->renting = RENTING_NOCONTROL;
 	//MOVE ALL ITEMS AND SQUAD MEMBERS
 	const int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cursite);
-	for (int p = 0; p < len(pool); p++)
-	{
-		if (pool[p]->location == cursite)pool[p]->location = hs;
-		if (pool[p]->base == cursite)pool[p]->base = hs;
-	}
+	CreaturePool::getInstance().moveEverythingFrom(cursite, hs);
 	location[hs]->getloot(location[cursite]->loot);
 	location[cursite]->compound_walls = 0;
 	location[cursite]->compound_stores = 0;
@@ -609,7 +599,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_029, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -618,11 +608,11 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_030, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	int rent;
-	switch (location[cursite]->type)
+	switch (LocationsPool::getInstance().getLocationType(cursite))
 	{
 	default:rent = 200; break;
 	case SITE_RESIDENTIAL_APARTMENT:rent = 650; break;
@@ -639,7 +629,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 	addstrAlt(rent, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_034, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	while (true)
 	{
@@ -649,7 +639,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_036);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_037);
-		c = getkey();
+		c = getkeyAlt();
 		switch (c)
 		{
 		case 'a': // Accept rent deal
@@ -660,7 +650,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_038, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(12,  1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -670,7 +660,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			gamelog.newline();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_041);
-			getkey();
+			getkeyAlt();
 			ledger.subtract_funds(rent, EXPENSE_RENT);
 			location[cursite]->renting = rent;
 			location[cursite]->newrental = 1;
@@ -683,7 +673,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_042, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(12,  1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -691,7 +681,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_044, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			return 1;
 		case 'c': // Threaten landlord
 			clearcommandarea(); clearmessagearea(); clearmaparea();
@@ -713,7 +703,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				clearmessagearea();
 			}
 			mvaddstrAlt(9,  1, a.name, gamelog);
@@ -721,7 +711,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_046, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			const int roll = a.skill_roll(SKILL_PERSUASION);
 			int difficulty = DIFFICULTY_FORMIDABLE;
 			if (newscherrybusted == false)
@@ -737,7 +727,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				addstrAlt(unnamed_String_Talk_cpp_048, gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				tk.cantbluff = 1;
 				return 1;
 			}
@@ -748,7 +738,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_049, gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int rent;
 				// Either he calls the cops...
 				if (roll < difficulty)
@@ -777,7 +767,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_050, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -786,7 +776,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_051, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	// IsaacG Migrate Strings
@@ -801,7 +791,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_052, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	if (sitealarm != 0)
@@ -811,10 +801,10 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_053, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
-	switch (location[cursite]->type)
+	switch (LocationsPool::getInstance().getLocationType(cursite))
 	{
 	case SITE_OUTDOOR_BUNKER:
 	case SITE_BUSINESS_CRACKHOUSE:
@@ -828,7 +818,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_054, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		armsdealer(cursite);
 		return 1;
 	default:
@@ -837,7 +827,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_055, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 }
@@ -849,7 +839,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_056, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	bool interested = tk.talkreceptive();
 	if (!interested && a.skill_check(SKILL_PERSUASION, DIFFICULTY_AVERAGE))
 		interested = true;
@@ -865,7 +855,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		default: addstrAlt(unnamed_String_Talk_cpp_059, gamelog); break;
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	else if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) != 0 && interested)
@@ -875,7 +865,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_061, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return talkAboutIssues(a, tk);
 	}
 	else
@@ -896,7 +886,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(unnamed_String_Talk_cpp_065, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 }
@@ -927,7 +917,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		mvaddstrAlt(11, 1, selected_flirt[1], gamelog);
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	bool succeeded = false;
 	int difficulty = DIFFICULTY_HARD;
 	if (tk.type == CREATURE_CORPORATE_CEO)
@@ -964,7 +954,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 			addstrAlt(unnamed_String_Talk_cpp_067, gamelog);
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 1;
 	}
 	a.train(SKILL_SEDUCTION, LCSrandom(5) + 2);
@@ -981,7 +971,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++,  1, unnamed_String_Talk_cpp_068, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		tk.cantbluff = 1;
 	}
 	else if (succeeded)
@@ -991,7 +981,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++,  1, selected_flirt[2], gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		++y;
 		mvaddstrAlt(y++,  1, a.name, gamelog);
@@ -1011,7 +1001,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		}
 		addstrAlt(unnamed_String_Talk_cpp_073, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		datest *newd = NULL;
 		for (int d = 0; d < len(date); d++)
 		{
@@ -1058,7 +1048,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 			}
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		tk.cantbluff = 1;
 	}
 	return 1;
@@ -1111,7 +1101,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		}
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	int difficulty = DIFFICULTY_VERYEASY;
 	if (tk.align == ALIGN_CONSERVATIVE)
 		difficulty += 7;
@@ -1138,7 +1128,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 			switch (LCSrandom(10))
 			{
 			case 0: mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_083, gamelog);
-				getkey();
+				getkeyAlt();
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y++,  1, unnamed_String_Talk_cpp_084, gamelog);
 				break;
@@ -1152,13 +1142,13 @@ char talkAboutIssues(Creature &a, Creature &tk)
 			}
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(++y,  1, unnamed_String_Talk_cpp_087, gamelog);
 		addstrAlt(tk.name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_088, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		Creature *newcr = new Creature;
 		*newcr = tk;
 		newcr->namecreature();
@@ -1205,7 +1195,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		tk.cantbluff = 1;
 		return 1;
 	}
@@ -1268,7 +1258,7 @@ char talkInCombat(Creature &a, Creature &tk)
 	set_color_easy(WHITE_ON_BLACK);
 	while (true)
 	{
-		c = getkey();
+		c = getkeyAlt();
 		if (c == 'a')break;
 		if (c == 'b' && hostages)break;
 		if (c == 'c' && tk.cantbluff != 2)break;
@@ -1298,7 +1288,7 @@ char talkInCombat(Creature &a, Creature &tk)
 			mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
 			break;
 		}
-		getkey();
+		getkeyAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		for (int e = 0; e < ENCMAX; e++)
 		{
@@ -1325,7 +1315,7 @@ char talkInCombat(Creature &a, Creature &tk)
 					addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
 					delenc(e, 0);
 					addjuice(a, 2, 200); // Instant juice!
-					getkey();
+					getkeyAlt();
 				}
 			}
 		}
@@ -1355,7 +1345,7 @@ char talkInCombat(Creature &a, Creature &tk)
 		sitecrime += 5;
 		criminalizeparty(LAWFLAG_KIDNAPPING);
 		addjuice(a, -2, -10); // DE-juice for this shit
-		getkey();
+		getkeyAlt();
 		bool noretreat = false;
 		if (weaponhostage)
 		{
@@ -1414,7 +1404,7 @@ char talkInCombat(Creature &a, Creature &tk)
 							}
 						}
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						noretreat = true;
 						break;
 					}
@@ -1435,7 +1425,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						delenc(i, 0);
 					}
 				}
-				getkey();
+				getkeyAlt();
 			}
 			else
 			{
@@ -1451,7 +1441,7 @@ char talkInCombat(Creature &a, Creature &tk)
 				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_112);
 				while (true)
 				{
-					c = getkey();
+					c = getkeyAlt();
 					if (c == 'a' || c == 'b')break; // TODO: something to happen if you press 'c'
 				}
 				if (c == 'a')
@@ -1486,7 +1476,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
 					}
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(17,  1, executer->name, gamelog);
 					addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
@@ -1503,7 +1493,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						executer->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
 						executer->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
 					makeloot(*executer->prisoner, groundloot);
-					getkey();
+					getkeyAlt();
 					delete_and_nullify(executer->prisoner);
 					if (hostages > 1 && LCSrandom(2))
 					{
@@ -1518,7 +1508,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						for (int i = ENCMAX; i >= 0; i--)
 							if (encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
 								delenc(i, 0);
-						getkey();
+						getkeyAlt();
 					}
 				}
 				else if (c == 'b')
@@ -1541,7 +1531,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						mvaddstrAlt(17, 1, nameHostages, gamelog);
 					}
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					if (((encounter[e].type == CREATURE_DEATHSQUAD ||
 						encounter[e].type == CREATURE_AGENT ||
 						encounter[e].type == CREATURE_MERC ||
@@ -1556,7 +1546,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(17,  1, pickrandom(go_ahead_and_die), gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 					}
 					else
 					{
@@ -1567,7 +1557,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(17,  1, pickrandom(agree_to_release_hostages), gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						for (int i = ENCMAX; i >= 0; i--)
 							if (encounter[i].exists&&encounter[i].enemy() && encounter[i].alive)
 								delenc(i, 0);
@@ -1585,7 +1575,7 @@ char talkInCombat(Creature &a, Creature &tk)
 								delete_and_nullify(activesquad->squad[i]->prisoner);
 							}
 						}
-						getkey();
+						getkeyAlt();
 					}
 				}
 			}
@@ -1597,17 +1587,17 @@ char talkInCombat(Creature &a, Creature &tk)
 			mvaddstrAlt(16,  1, tk.name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 		}
 	}
 	else if (c == 'c')
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (location[cursite]->siege.siege)
+		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
 			mvaddstrAlt(16, 1, a.name, gamelog);
 			addstrAlt(singleSpace, gamelog);
-			switch (location[cursite]->siege.siegetype)
+			switch (LocationsPool::getInstance().getSiegeType(cursite))
 			{
 			case SIEGE_POLICE:
 				addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
@@ -1683,7 +1673,7 @@ char talkInCombat(Creature &a, Creature &tk)
 			
 		}
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		bool fooled = true;
 		int e;
 		for (e = 0; e < ENCMAX; e++)
@@ -1725,14 +1715,14 @@ char talkInCombat(Creature &a, Creature &tk)
 					addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
 				else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
 			}
-			getkey();
+			getkeyAlt();
 		}
 		else
 		{
 			clearmessagearea();
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, unnamed_String_Talk_cpp_148, gamelog);
-			getkey();
+			getkeyAlt();
 			for (int e = ENCMAX - 1; e >= 0; e--)
 				if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
 					delenc(e, 0);
@@ -1744,7 +1734,7 @@ char talkInCombat(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(14,  1, unnamed_String_Talk_cpp_149, gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		int stolen = 0;
 		// Police assess stolen goods in inventory
 		for (int l = 0; l < len(activesquad->loot); l++)
@@ -1759,7 +1749,7 @@ char talkInCombat(Creature &a, Creature &tk)
 			}
 			activesquad->squad[i] = NULL;
 		}
-		location[cursite]->siege.siege = 0;
+		LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
 	}
 	return 1;
 }
@@ -1803,14 +1793,14 @@ char heyMisterDog(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11,  1, pitch, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, tk.name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14,  1, response, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	if (success)
 		for (int i = 0; i < ENCMAX; i++)
 			if (encounter[i].type == CREATURE_GUARDDOG)
@@ -1857,14 +1847,14 @@ char heyMisterMonster(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11,  1, pitch, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, tk.name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14,  1, response, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	if (success)
 		for (int i = 0; i < ENCMAX; i++)
 			if (encounter[i].type == CREATURE_GENETIC)

@@ -29,6 +29,7 @@ class Item
       virtual bool is_clip() const { return false; }
       virtual bool is_loot() const { return false; }
       virtual bool is_money() const { return false; }
+	  virtual bool is_cloth() const { return false; }
       virtual const string& get_name() const=0;
       const char* aan() const;
       virtual long get_fencevalue() const=0;

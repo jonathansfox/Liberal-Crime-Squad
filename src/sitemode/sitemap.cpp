@@ -25,25 +25,13 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
-
-#include "sitemode/sitemode.h"
-// for generateroom
+#include "creature/creature.h"
 
 #include "configfile.h"
 // needed for something contained in sitemap.h
 #include "sitemode/sitemap.h"
         //own header
 
-#include "common/stringconversion.h"
-//for atoi
-
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern string tag_LOOT;
 void emptyEncounter();
 extern squadst *activesquad;
@@ -59,10 +47,55 @@ typedef map<string, short> stringAndShort;
 typedef map<string, string> stringAndString;
 extern unsigned long seed[RNG_SIZE];
 extern int oldMapMode;
-extern vector<configSiteMap *> sitemaps;
+ vector<configSiteMap *> sitemaps;
  stringAndShort getUnique;
  stringAndString getLootString;
  stringAndShort getSpecial;
+ void delete_and_clear_sitemaps() {
+	 delete_and_clear(sitemaps);
+ }
+
+ // Constructs the new object, returns a pointer to it
+ configurable* createObject(const std::string& objectType)
+ {
+	 configurable* object = 0;
+	 if (objectType == "SITEMAP")
+		 sitemaps.push_back(static_cast<configSiteMap*>(object = new configSiteMap));
+	 return object;
+ }
+ /* recursive dungeon-generating algorithm */
+ void generateroom(int rx, int ry, int dx, int dy, int z)
+ {
+	 for (int x = rx; x < rx + dx; x++)
+		 for (int y = ry; y < ry + dy; y++)
+			 levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
+	 if ((dx <= 3 || dy <= 3) && !LCSrandom(2))return;
+	 if (dx <= 2 && dy <= 2)return;
+	 //LAY DOWN WALL AND ITERATE
+	 if ((!LCSrandom(2) || dy <= 2) && dx>2)
+	 {
+		 int wx = rx + LCSrandom(dx - 2) + 1;
+		 for (int wy = 0; wy < dy; wy++)levelmap[wx][ry + wy][z].flag |= SITEBLOCK_BLOCK;
+		 int rny = LCSrandom(dy);
+		 levelmap[wx][ry + rny][z].flag &= ~SITEBLOCK_BLOCK;
+		 levelmap[wx][ry + rny][z].flag |= SITEBLOCK_DOOR;
+		 if (!LCSrandom(3))levelmap[wx][ry + rny][z].flag |= SITEBLOCK_LOCKED;
+		 generateroom(rx, ry, wx - rx, dy, z);
+		 generateroom(wx + 1, ry, rx + dx - wx - 1, dy, z);
+	 }
+	 else
+	 {
+		 int wy = ry + LCSrandom(dy - 2) + 1;
+		 for (int wx = 0; wx < dx; wx++)levelmap[rx + wx][wy][z].flag |= SITEBLOCK_BLOCK;
+		 int rnx = LCSrandom(dx);
+		 levelmap[rx + rnx][wy][z].flag &= ~SITEBLOCK_BLOCK;
+		 levelmap[rx + rnx][wy][z].flag |= SITEBLOCK_DOOR;
+		 if (!LCSrandom(3))levelmap[rx + rnx][wy][z].flag |= SITEBLOCK_LOCKED;
+		 generateroom(rx, ry, dx, wy - ry, z);
+		 generateroom(rx, wy + 1, dx, ry + dy - wy - 1, z);
+	 }
+ }
+
 /* re-create site from seed before squad arrives */
 void initsite(Location &loc)
 {  //PREP
@@ -438,18 +471,21 @@ void initsite(Location &loc)
 			levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
 			levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
 			levelmap[freex][freey][freez].special != -1) && count > 0);
-		switch (loc.type)
-		{
-		case SITE_INDUSTRY_NUCLEAR:          levelmap[freex][freey][freez].special = SPECIAL_NUCLEAR_ONOFF;         break;
-		case SITE_GOVERNMENT_POLICESTATION:  levelmap[freex][freey][freez].special = SPECIAL_POLICESTATION_LOCKUP;  break;
-		case SITE_GOVERNMENT_COURTHOUSE:     levelmap[freex][freey][freez].special = SPECIAL_COURTHOUSE_LOCKUP;     break;
-		case SITE_GOVERNMENT_PRISON:         levelmap[freex][freey][freez].special = SPECIAL_PRISON_CONTROL;        break;
-		case SITE_GOVERNMENT_INTELLIGENCEHQ: levelmap[freex][freey][freez].special = SPECIAL_INTEL_SUPERCOMPUTER;   break;
-		case SITE_CORPORATE_HEADQUARTERS:    levelmap[freex][freey][freez].special = SPECIAL_CORPORATE_FILES;       break;
-		case SITE_CORPORATE_HOUSE:           levelmap[freex][freey][freez].special = SPECIAL_HOUSE_PHOTOS;          break;
-		case SITE_GOVERNMENT_ARMYBASE:       levelmap[freex][freey][freez].special = SPECIAL_ARMORY;                break;
-		case SITE_MEDIA_AMRADIO:             levelmap[freex][freey][freez].special = SPECIAL_RADIO_BROADCASTSTUDIO; break;
-		case SITE_MEDIA_CABLENEWS:           levelmap[freex][freey][freez].special = SPECIAL_NEWS_BROADCASTSTUDIO;  break;
+		typedef map<int, int> intAndInt;
+		intAndInt site_special_list = {
+			intAndInt::value_type(SITE_INDUSTRY_NUCLEAR,           SPECIAL_NUCLEAR_ONOFF),
+			intAndInt::value_type(SITE_GOVERNMENT_POLICESTATION,   SPECIAL_POLICESTATION_LOCKUP),
+			intAndInt::value_type(SITE_GOVERNMENT_COURTHOUSE,      SPECIAL_COURTHOUSE_LOCKUP),
+			intAndInt::value_type(SITE_GOVERNMENT_PRISON,          SPECIAL_PRISON_CONTROL),
+			intAndInt::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,  SPECIAL_INTEL_SUPERCOMPUTER),
+			intAndInt::value_type(SITE_CORPORATE_HEADQUARTERS,     SPECIAL_CORPORATE_FILES),
+			intAndInt::value_type(SITE_CORPORATE_HOUSE,            SPECIAL_HOUSE_PHOTOS),
+			intAndInt::value_type(SITE_GOVERNMENT_ARMYBASE,        SPECIAL_ARMORY),
+			intAndInt::value_type(SITE_MEDIA_AMRADIO,              SPECIAL_RADIO_BROADCASTSTUDIO),
+			intAndInt::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
+		};
+		if (site_special_list.count(loc.type)) {
+			levelmap[freex][freey][freez].special = site_special_list[loc.type];
 		}
 		count = 100000;
 		//ADD SECOND SPECIAL
@@ -601,63 +637,7 @@ void initsite(Location &loc)
 			}
 	}
 }
-/* recursive dungeon-generating algorithm */
-void generateroom(int rx, int ry, int dx, int dy, int z)
-{
-	for (int x = rx; x < rx + dx; x++)
-		for (int y = ry; y < ry + dy; y++)
-			levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
-	if ((dx <= 3 || dy <= 3) && !LCSrandom(2))return;
-	if (dx <= 2 && dy <= 2)return;
-	//LAY DOWN WALL AND ITERATE
-	if ((!LCSrandom(2) || dy <= 2) && dx>2)
-	{
-		int wx = rx + LCSrandom(dx - 2) + 1;
-		for (int wy = 0; wy < dy; wy++)levelmap[wx][ry + wy][z].flag |= SITEBLOCK_BLOCK;
-		int rny = LCSrandom(dy);
-		levelmap[wx][ry + rny][z].flag &= ~SITEBLOCK_BLOCK;
-		levelmap[wx][ry + rny][z].flag |= SITEBLOCK_DOOR;
-		if (!LCSrandom(3))levelmap[wx][ry + rny][z].flag |= SITEBLOCK_LOCKED;
-		generateroom(rx, ry, wx - rx, dy, z);
-		generateroom(wx + 1, ry, rx + dx - wx - 1, dy, z);
-	}
-	else
-	{
-		int wy = ry + LCSrandom(dy - 2) + 1;
-		for (int wx = 0; wx < dx; wx++)levelmap[rx + wx][wy][z].flag |= SITEBLOCK_BLOCK;
-		int rnx = LCSrandom(dx);
-		levelmap[rx + rnx][wy][z].flag &= ~SITEBLOCK_BLOCK;
-		levelmap[rx + rnx][wy][z].flag |= SITEBLOCK_DOOR;
-		if (!LCSrandom(3))levelmap[rx + rnx][wy][z].flag |= SITEBLOCK_LOCKED;
-		generateroom(rx, ry, dx, wy - ry, z);
-		generateroom(rx, wy + 1, dx, ry + dy - wy - 1, z);
-	}
-}
-/* marks the area around the specified tile as explored */
-void knowmap(int locx, int locy, int locz)
-{
-	levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0)levelmap[locx - 1][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1)levelmap[locx + 1][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locy > 0)levelmap[locx][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locy < MAPY - 1)levelmap[locx][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0 && locy > 0)
-		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx - 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1 && locy>0)
-		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx + 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0 && locy < MAPY - 1)
-		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx - 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1 && locy < MAPY - 1)
-		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx + 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
-}
+
 /////////////
 /////////////
 ///////////// NEW SITEMAP BASED ON CONFIG FILE CODE:
@@ -715,42 +695,26 @@ void configSiteMap::build()
 	if (len(parent)) build_site(parent);
 	for (int step = 0; step < len(commands); step++) commands[step]->build();
 }
+typedef map<string, short> stringAndShort;
+stringAndShort site_tile_list;
 configSiteTile::configSiteTile(const std::string& value)
 	: xstart(0), xend(0), ystart(0), yend(0), zstart(0), zend(0), addtype(0)
 {
-	if (value == "EXIT")tile = SITEBLOCK_EXIT;
-	else if (value == "BLOCK")tile = SITEBLOCK_BLOCK;
-	else if (value == "DOOR")tile = SITEBLOCK_DOOR;
-	else if (value == "KNOWN")tile = SITEBLOCK_KNOWN;
-	else if (value == tag_LOOT)tile = SITEBLOCK_LOOT;
-	else if (value == "LOCKED")tile = SITEBLOCK_LOCKED;
-	else if (value == "KLOCK")tile = SITEBLOCK_KLOCK;
-	else if (value == "CLOCK")tile = SITEBLOCK_CLOCK;
-	else if (value == "RESTRICTED")tile = SITEBLOCK_RESTRICTED;
-	else if (value == "BLOODY")tile = SITEBLOCK_BLOODY;
-	else if (value == "BLOODY2")tile = SITEBLOCK_BLOODY2;
-	else if (value == "GRASSY")tile = SITEBLOCK_GRASSY;
-	else if (value == "OUTDOOR")tile = SITEBLOCK_OUTDOOR;
-	else if (value == "DEBRIS")tile = SITEBLOCK_DEBRIS;
-	else if (value == "GRAFFITI")tile = SITEBLOCK_GRAFFITI;
-	else if (value == "GRAFFITI_CCS")tile = SITEBLOCK_GRAFFITI_CCS;
-	else if (value == "GRAFFITI_OTHER")tile = SITEBLOCK_GRAFFITI_OTHER;
-	else if (value == "FIRE_START")tile = SITEBLOCK_FIRE_START;
-	else if (value == "FIRE_PEAK")tile = SITEBLOCK_FIRE_PEAK;
-	else if (value == "FIRE_END")tile = SITEBLOCK_FIRE_END;
-	else if (value == "OPEN")tile = 0;
+	if (site_tile_list.count(value)) {
+		tile = site_tile_list[value];
+	}
 }
 void configSiteTile::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value) + (MAPX >> 1);
-	else if (command == "X")xstart = xend = atoi(value) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value);
-	else if (command == "YEND")yend = atoi(value);
-	else if (command == "Y")ystart = yend = atoi(value);
-	else if (command == "ZSTART")zstart = atoi(value);
-	else if (command == "ZEND")zend = atoi(value);
-	else if (command == "Z")zstart = zend = atoi(value);
+	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "X")xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "YSTART")ystart = atoi(value.c_str());
+	else if (command == "YEND")yend = atoi(value.c_str());
+	else if (command == "Y")ystart = yend = atoi(value.c_str());
+	else if (command == "ZSTART")zstart = atoi(value.c_str());
+	else if (command == "ZEND")zend = atoi(value.c_str());
+	else if (command == "Z")zstart = zend = atoi(value.c_str());
 	else if (command == "NOTE")
 	{
 		if (value == "ADD")addtype = SITEMAP_ADDTYPE_OR;
@@ -776,12 +740,12 @@ configSiteScript::configSiteScript(const std::string& value)
 }
 void configSiteScript::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value);
-	else if (command == "YEND")yend = atoi(value);
-	else if (command == "ZSTART")zstart = atoi(value);
-	else if (command == "ZEND")zend = atoi(value);
+	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "YSTART")ystart = atoi(value.c_str());
+	else if (command == "YEND")yend = atoi(value.c_str());
+	else if (command == "ZSTART")zstart = atoi(value.c_str());
+	else if (command == "ZEND")zend = atoi(value.c_str());
 }
 void configSiteScript::build()
 {
@@ -993,16 +957,16 @@ configSiteSpecial::configSiteSpecial(const std::string& value)
 }
 void configSiteSpecial::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value) + (MAPX >> 1);
-	else if (command == "X")xstart = xend = atoi(value) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value);
-	else if (command == "YEND")yend = atoi(value);
-	else if (command == "Y")ystart = yend = atoi(value);
-	else if (command == "ZSTART")zstart = atoi(value);
-	else if (command == "ZEND")zend = atoi(value);
-	else if (command == "Z")zstart = zend = atoi(value);
-	else if (command == "FREQ")freq = atoi(value);
+	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "X")xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == "YSTART")ystart = atoi(value.c_str());
+	else if (command == "YEND")yend = atoi(value.c_str());
+	else if (command == "Y")ystart = yend = atoi(value.c_str());
+	else if (command == "ZSTART")zstart = atoi(value.c_str());
+	else if (command == "ZEND")zend = atoi(value.c_str());
+	else if (command == "Z")zstart = zend = atoi(value.c_str());
+	else if (command == "FREQ")freq = atoi(value.c_str());
 }
 void configSiteSpecial::build()
 {
@@ -1020,7 +984,7 @@ configSiteUnique::configSiteUnique(const std::string& value)
 }
 void configSiteUnique::configure(const std::string& command, const std::string& value)
 {
-	if (command == "Z")zstart = zend = atoi(value);
+	if (command == "Z")zstart = zend = atoi(value.c_str());
 }
 struct coordinates
 {
@@ -1128,7 +1092,7 @@ configSiteLoot::configSiteLoot(const std::string& value)
 }
 void configSiteLoot::configure(const std::string& command, const std::string& value)
 {
-	if (command == "WEIGHT")weight = atoi(value);
+	if (command == "WEIGHT")weight = atoi(value.c_str());
 }
 void configSiteLoot::build()
 {

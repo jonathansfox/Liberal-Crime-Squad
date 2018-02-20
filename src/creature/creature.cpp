@@ -25,7 +25,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "sitemode/stealth.h"
@@ -44,7 +47,7 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for addstr
@@ -54,6 +57,7 @@ This file is part of Liberal Crime Squad.                                       
         //only use here. --Schmel924
 
 #include "combat/chase.h"
+#include "combat/chaseCreature.h"
 //for Vehicle* getChaseVehicle(const Creature &c);
         //hmm --Schmel924
 
@@ -63,9 +67,8 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+
 extern Log gamelog;
-extern vector<Location *> location;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern char oldPresidentName[POLITICIAN_NAMELEN];
  vector<string> ccs_covername_shotgun;
@@ -79,119 +82,6 @@ extern string commaSpace;
 extern vector<ArmorType *> armortype;
 extern vector<WeaponType *> weapontype;
 
-Skill::Skill(const std::string& inputXml)
-{
-	CMarkup xml;
-	xml.SetDoc(inputXml);
-	xml.FindElem();
-	xml.IntoElem();
-	while (xml.FindElem())
-	{
-		std::string tag = xml.GetTagName();
-		if (tag == "associated_attribute")
-			associated_attribute = atoi(xml.GetData());
-		else if (tag == "skill")
-			skill = atoi(xml.GetData());
-		else if (tag == "value")
-			value = min(atoi(xml.GetData()), MAXATTRIBUTE);
-	}
-}
-string Skill::showXml() const
-{
-	CMarkup xml;
-	xml.AddElem("skill");
-	xml.IntoElem();
-	xml.AddElem("associated_attribute", associated_attribute);
-	xml.AddElem("skill", skill);
-	xml.AddElem("value", min(value, MAXATTRIBUTE));
-	return xml.GetDoc();
-}
-CreatureAttribute Skill::get_associated_attribute(int skill_type)
-{
-	// Initialize associated attribute
-	switch (skill_type)
-	{
-	case SKILL_CLUB:
-	case SKILL_AXE:
-	case SKILL_HEAVYWEAPONS:
-		return ATTRIBUTE_STRENGTH;
-	case SKILL_HANDTOHAND:
-	case SKILL_KNIFE:
-	case SKILL_SWORD:
-	case SKILL_PISTOL:
-	case SKILL_RIFLE:
-	case SKILL_SMG:
-	case SKILL_SHOTGUN:
-	case SKILL_DRIVING:
-	case SKILL_STEALTH:
-	case SKILL_THROWING:
-	case SKILL_DODGE:
-		return ATTRIBUTE_AGILITY;
-	case SKILL_DISGUISE:
-	case SKILL_SEDUCTION:
-	case SKILL_PERSUASION:
-		return ATTRIBUTE_CHARISMA;
-	case SKILL_ART:
-	case SKILL_MUSIC:
-		return ATTRIBUTE_HEART;
-	case SKILL_RELIGION:
-	case SKILL_BUSINESS:
-	case SKILL_WRITING:
-	case SKILL_PSYCHOLOGY:
-	case SKILL_SECURITY:
-	case SKILL_TAILORING:
-	case SKILL_TEACHING:
-	case SKILL_FIRSTAID:
-	case SKILL_SCIENCE:
-	case SKILL_LAW:
-	case SKILL_COMPUTERS:
-	case SKILL_STREETSENSE:
-	default:
-		return ATTRIBUTE_INTELLIGENCE;
-	}
-}
- shortAndString skillEnumToString;
-std::string Skill::get_name(int skill_type)
-{
-	if (skillEnumToString.count(skill_type)) {
-		return skillEnumToString[skill_type];
-	}
-	else
-		return "Error Skill Name";
-}
-Attribute::Attribute(const std::string& inputXml)
-{
-	CMarkup xml;
-	xml.SetDoc(inputXml);
-	xml.FindElem();
-	xml.IntoElem();
-	while (xml.FindElem())
-	{
-		std::string tag = xml.GetTagName();
-		if (tag == "attribute")
-			attribute = atoi(xml.GetData());
-		else if (tag == "value")
-			value = min(atoi(xml.GetData()), MAXATTRIBUTE);
-	}
-}
-string Attribute::showXml() const
-{
-	CMarkup xml;
-	xml.AddElem("attribute");
-	xml.IntoElem();
-	xml.AddElem("attribute", attribute);
-	xml.AddElem("value", min(value, MAXATTRIBUTE));
-	return xml.GetDoc();
-}
- shortAndString attEnumToString;
-std::string Attribute::get_name(int attribute_type)
-{
-	if (attEnumToString.count(attribute_type)) {
-		return attEnumToString[attribute_type];
-	}
-	else
-		return "Error Attribute Name";
-}
 Creature& Creature::operator=(const Creature& rhs)
 {
 	if (this != &rhs)
@@ -290,82 +180,19 @@ void Creature::copy(const Creature& org)
 	iskidnap_resistant = org.iskidnap_resistant;
 	isreports_to_police = org.isreports_to_police;
 }
-Creature::~Creature()
-{
-	delete weapon;
-	delete armor;
-	delete_and_clear(clips);
-	delete_and_clear(extra_throwing_weapons);
-	if (prisoner)
-	{
-		int p;
-		for (p = 0; p < len(pool); p++)
-			if (prisoner == pool[p]) { delete_and_remove(pool, p); break; }
-	}
-	// Clean up hostage situation
-	stop_hauling_me();
-}
+
 bool Creature::kidnap_resistant() const
 {
 	return iskidnap_resistant;
-	/*switch (type)
-	{
-	case CREATURE_AGENT:
-	case CREATURE_COP:
-	case CREATURE_GANGUNIT:
-	case CREATURE_SWAT:
-	case CREATURE_MERC:
-	case CREATURE_SOLDIER:
-	case CREATURE_VETERAN:
-	case CREATURE_HARDENED_VETERAN:
-	case CREATURE_CCS_VIGILANTE:
-	case CREATURE_CCS_ARCHCONSERVATIVE:
-	case CREATURE_CCS_MOLOTOV:
-	case CREATURE_CCS_SNIPER:
-	case CREATURE_MILITARYPOLICE:
-	case CREATURE_SEAL:
-	case CREATURE_MILITARYOFFICER:
-	case CREATURE_SECRET_SERVICE:
-	case CREATURE_DEATHSQUAD:
-	case CREATURE_PRISONGUARD:
-	case CREATURE_EDUCATOR:
-		return true;
-	}
-	return false;*/
 }
 bool Creature::reports_to_police() const
 {
 	return isreports_to_police;
-/*	switch (type)
-	{
-	case CREATURE_AGENT:
-	case CREATURE_COP:
-	case CREATURE_GANGUNIT:
-	case CREATURE_SWAT:
-	case CREATURE_SECRET_SERVICE:
-	case CREATURE_DEATHSQUAD:
-	case CREATURE_PRISONGUARD:
-	case CREATURE_EDUCATOR:
-		return true;
-	}
-	return false;*/
 }
 bool Creature::is_lcs_sleeper() const
 {
 	return(alive && align == ALIGN_LIBERAL && clinic == 0 &&
 		dating == 0 && hiding == 0 && (flag & CREATUREFLAG_SLEEPER));
-}
-bool Creature::is_imprisoned() const
-{
-	return(alive && clinic == 0 && dating == 0 && hiding == 0 &&
-		!(flag & CREATUREFLAG_SLEEPER) &&
-		::location[this->location]->part_of_justice_system());
-}
-bool Creature::is_active_liberal() const
-{
-	return(alive && align == ALIGN_LIBERAL && clinic == 0 && dating == 0 &&
-		hiding == 0 && !(flag & CREATUREFLAG_SLEEPER) &&
-		!::location[this->location]->part_of_justice_system());
 }
 bool Creature::canwalk() const
 {
@@ -396,7 +223,7 @@ void Creature::creatureinit()
 		birthday_day = LCSrandom(30) + 1;
 		break;
 	case 2:
-		birthday_day = LCSrandom(28) + 1;
+		birthday_day = LCSrandom(28) + 1;  //TODO Allow birthday to be leap year
 		break;
 	default:
 		birthday_day = LCSrandom(31) + 1;
@@ -435,23 +262,23 @@ void Creature::creatureinit()
 	armor = NULL;//new Armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)]); //Causes crash for global uniqueCreature -XML
 	for (int a = 0; a < ATTNUM; a++)
 	{
-		attributes[a].set_type(a);
-		attributes[a].value = 1;
+		//attributes[a].set_type(a);
+		attributes[a] = 1;
 	}
 	int attnum = 32;
 	while (attnum > 0)
 	{
 		int a = LCSrandom(ATTNUM);
-		if (attributes[a].value < 10)
+		if (attributes[a] < 10)
 		{
-			attributes[a].value++;
+			attributes[a]++;
 			attnum--;
 		}
 	}
 	for (int s = 0; s < SKILLNUM; s++)
 	{
-		skills[s].set_type(s);
-		skills[s].value = 0;
+		//skills[s].set_type(s);
+		skills[s] = 0;
 		skill_experience[s] = 0;
 	}
 	special[SPECIALWOUND_TEETH] = TOOTHNUM;
@@ -492,9 +319,123 @@ void Creature::creatureinit()
 	strcpy(propername, "Scruffy");
 }
 extern string tag_type;
+
+string tag_creature;
+string tag_skill_experience;
+string tag_name;
+string tag_propername;
+string tag_gender_conservative;
+string tag_gender_liberal;
+string tag_squadid;
+string tag_age;
+string tag_birthday_month;
+string tag_birthday_day;
+string tag_exists;
+string tag_align;
+string tag_alive;
+string tag_type;
+string tag_type_idname;
+string tag_infiltration;
+string tag_animalgloss;
+string tag_specialattack;
+string tag_clinic;
+string tag_dating;
+string tag_hiding;
+string tag_trainingtime;
+string tag_trainingsubject;
+string tag_prisoner;
+string tag_sentence;
+string tag_confessions;
+string tag_deathpenalty;
+string tag_joindays;
+string tag_deathdays;
+string tag_id;
+string tag_hireid;
+string tag_meetings;
+string tag_forceinc;
+string tag_stunned;
+string tag_has_thrown_weapon;
+string tag_money;
+string tag_juice;
+string tag_income;
+string tag_wound;
+string tag_blood;
+string tag_special;
+string tag_crimes_suspected;
+string tag_heat;
+string tag_location;
+string tag_worklocation;
+string tag_cantbluff;
+string tag_base;
+string tag_activity;
+string tag_arg;
+string tag_arg2;
+string tag_carid;
+string tag_is_driver;
+string tag_pref_carid;
+string tag_pref_is_driver;
+string tag_flag;
+string tag_dontname;
 Creature::Creature(const std::string& inputXml)
 	: weapon(NULL), armor(NULL), prisoner(NULL)
 {
+	XML_and_Char_Pointer creature_XML_Chars = {
+		XML_and_Char_Pointer::value_type(tag_gender_conservative, &gender_conservative),
+		XML_and_Char_Pointer::value_type(tag_gender_liberal, &gender_liberal),
+		XML_and_Char_Pointer::value_type(tag_animalgloss, &animalgloss),
+		XML_and_Char_Pointer::value_type(tag_confessions, &confessions),
+		XML_and_Char_Pointer::value_type(tag_deathpenalty, &deathpenalty),
+		XML_and_Char_Pointer::value_type(tag_forceinc, &forceinc),
+		XML_and_Char_Pointer::value_type(tag_cantbluff, &cantbluff),
+		XML_and_Char_Pointer::value_type(tag_is_driver, &is_driver),
+		XML_and_Char_Pointer::value_type(tag_pref_is_driver, &pref_is_driver),
+	};
+	XML_and_Integer_Pointer creature_XML_Integers = {
+
+		XML_and_Integer_Pointer::value_type(tag_flag, &flag),
+		XML_and_Integer_Pointer::value_type("seethroughdisguise", &seethroughdisguise),
+		XML_and_Integer_Pointer::value_type("seethroughstealth", &seethroughstealth),
+		XML_and_Integer_Pointer::value_type(tag_pref_carid, &pref_carid),
+		XML_and_Integer_Pointer::value_type(tag_base, &base),
+		XML_and_Integer_Pointer::value_type(tag_carid, &carid),
+		XML_and_Integer_Pointer::value_type(tag_stunned, &stunned),
+		XML_and_Integer_Pointer::value_type(tag_money, &money),
+		XML_and_Integer_Pointer::value_type(tag_juice, &juice),
+		XML_and_Integer_Pointer::value_type(tag_income, &income),
+		XML_and_Integer_Pointer::value_type(tag_blood, &blood),
+		XML_and_Integer_Pointer::value_type(tag_heat, &heat),
+		XML_and_Integer_Pointer::value_type(tag_location, &location),
+		XML_and_Integer_Pointer::value_type(tag_worklocation, &worklocation),
+		XML_and_Integer_Pointer::value_type(tag_squadid, &squadid),
+		XML_and_Integer_Pointer::value_type(tag_age, &age),
+		XML_and_Integer_Pointer::value_type(tag_birthday_month, &birthday_month),
+		XML_and_Integer_Pointer::value_type(tag_birthday_day, &birthday_day),
+		XML_and_Integer_Pointer::value_type(tag_align, &align),
+		XML_and_Integer_Pointer::value_type(tag_type, &type),
+		XML_and_Integer_Pointer::value_type(tag_specialattack, &specialattack),
+		XML_and_Integer_Pointer::value_type(tag_clinic, &clinic),
+		XML_and_Integer_Pointer::value_type(tag_dating, &dating),
+		XML_and_Integer_Pointer::value_type(tag_hiding, &hiding),
+		XML_and_Integer_Pointer::value_type(tag_trainingtime, &trainingtime),
+		XML_and_Integer_Pointer::value_type(tag_trainingsubject, &trainingsubject),
+		XML_and_Integer_Pointer::value_type(tag_sentence, &sentence),
+		XML_and_Integer_Pointer::value_type(tag_joindays, &joindays),
+		XML_and_Integer_Pointer::value_type(tag_deathdays, &deathdays),
+		XML_and_Integer_Pointer::value_type(tag_id, &id),
+		XML_and_Integer_Pointer::value_type(tag_hireid, &hireid),
+		XML_and_Integer_Pointer::value_type(tag_meetings, &meetings),
+	};
+
+	XML_and_Bool_Pointer creature_XML_Bools = {
+
+		XML_and_Bool_Pointer::value_type(tag_alive, &alive),
+		XML_and_Bool_Pointer::value_type(tag_exists, &exists),
+		XML_and_Bool_Pointer::value_type(tag_has_thrown_weapon, &has_thrown_weapon),
+		XML_and_Bool_Pointer::value_type(tag_dontname, &dontname),
+		XML_and_Bool_Pointer::value_type("talkreceptive", &istalkreceptive),
+		XML_and_Bool_Pointer::value_type("kidnap_resistant", &iskidnap_resistant),
+		XML_and_Bool_Pointer::value_type("reports_to_police", &isreports_to_police),
+	};
 	CMarkup xml;
 	xml.SetDoc(inputXml);
 	xml.FindElem();
@@ -503,11 +444,18 @@ Creature::Creature(const std::string& inputXml)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == "attribute" && attributesi < ATTNUM)
-			attributes[attributesi++] = Attribute(xml.GetSubDoc());
+		if (creature_XML_Integers.count(tag)) {
+			*creature_XML_Integers[tag] = atoi(xml.GetData());
+		}else if (creature_XML_Chars.count(tag)) {
+			*creature_XML_Chars[tag] = atoi(xml.GetData());
+		}else if (creature_XML_Bools.count(tag)) {
+			*creature_XML_Bools[tag] = atoi(xml.GetData());
+		}
+		else if (tag == "attribute" && attributesi < ATTNUM)
+			attributes[attributesi++] = get_XML_value(xml.GetSubDoc());
 		else if (tag == "skill" && skillsi < SKILLNUM)
-			skills[skillsi++] = Skill(xml.GetSubDoc());
-		else if (tag == "skill_experience" && skill_experiencei < SKILLNUM)
+			skills[skillsi++] = get_XML_value(xml.GetSubDoc());
+		else if (tag == tag_skill_experience && skill_experiencei < SKILLNUM)
 			skill_experience[skill_experiencei++] = atoi(xml.GetData());
 		else if (tag == "weapon")
 		{
@@ -523,74 +471,20 @@ Creature::Creature(const std::string& inputXml)
 		}
 		else if (tag == "augmentation")
 			augmentations[augi++] = Augmentation(xml.GetSubDoc());
-		else if (tag == "name")
+		else if (tag == tag_name)
 			strcpy(name, xml.GetData());
-		else if (tag == "propername")
+		else if (tag == tag_propername)
 			strcpy(propername, xml.GetData());
-		else if (tag == "gender_conservative")
-			gender_conservative = atoi(xml.GetData());
-		else if (tag == "gender_liberal")
-			gender_liberal = atoi(xml.GetData());
-		else if (tag == "squadid")
-			squadid = atoi(xml.GetData());
-		else if (tag == "age")
-			age = atoi(xml.GetData());
-		else if (tag == "birthday_month")
-			birthday_month = atoi(xml.GetData());
-		else if (tag == "birthday_day")
-			birthday_day = atoi(xml.GetData());
-		else if (tag == "exists")
-			exists = atoi(xml.GetData());
-		else if (tag == "align")
-			align = atoi(xml.GetData());
-		else if (tag == "alive")
-			alive = atoi(xml.GetData());
-		else if (tag == tag_type)
-			type = atoi(xml.GetData());
-		else if (tag == "type_idname")
+		else if (tag == tag_type_idname)
 			type_idname = xml.GetData();
-		else if (tag == "infiltration")
+		else if (tag == tag_infiltration)
 			infiltration = atof(xml.GetData());
-		else if (tag == "animalgloss")
-			animalgloss = atoi(xml.GetData());
-		else if (tag == "specialattack")
-			specialattack = atoi(xml.GetData());
-		else if (tag == "clinic")
-			clinic = atoi(xml.GetData());
-		else if (tag == "dating")
-			dating = atoi(xml.GetData());
-		else if (tag == "hiding")
-			hiding = atoi(xml.GetData());
-		else if (tag == "trainingtime")
-			trainingtime = atoi(xml.GetData());
-		else if (tag == "trainingsubject")
-			trainingsubject = atoi(xml.GetData());
-		else if (tag == "prisoner")
+		else if (tag == tag_prisoner)
 		{
 			xml.IntoElem();
 			prisoner = new Creature(xml.GetSubDoc());
 			xml.OutOfElem();
 		}
-		else if (tag == "sentence")
-			sentence = atoi(xml.GetData());
-		else if (tag == "confessions")
-			confessions = atoi(xml.GetData());
-		else if (tag == "deathpenalty")
-			deathpenalty = atoi(xml.GetData());
-		else if (tag == "joindays")
-			joindays = atoi(xml.GetData());
-		else if (tag == "deathdays")
-			deathdays = atoi(xml.GetData());
-		else if (tag == "id")
-			id = atoi(xml.GetData());
-		else if (tag == "hireid")
-			hireid = atoi(xml.GetData());
-		else if (tag == "meetings")
-			meetings = atoi(xml.GetData());
-		else if (tag == "forceinc")
-			forceinc = atoi(xml.GetData());
-		else if (tag == "stunned")
-			stunned = atoi(xml.GetData());
 		else if (tag == "clip")
 		{
 			Clip* c = new Clip(xml.GetSubDoc());
@@ -599,33 +493,7 @@ Creature::Creature(const std::string& inputXml)
 			else
 				delete c;
 		}
-		else if (tag == "has_thrown_weapon")
-			has_thrown_weapon = atoi(xml.GetData());
-		else if (tag == "money")
-			money = atoi(xml.GetData());
-		else if (tag == "juice")
-			juice = atoi(xml.GetData());
-		else if (tag == "income")
-			income = atoi(xml.GetData());
-		else if (tag == "wound" && woundi < BODYPARTNUM)
-			wound[woundi++] = atoi(xml.GetData());
-		else if (tag == "blood")
-			blood = atoi(xml.GetData());
-		else if (tag == "special" && speciali < SPECIALWOUNDNUM)
-			special[speciali++] = atoi(xml.GetData());
-		else if (tag == "crimes_suspected" && crimesi < LAWFLAGNUM)
-			crimes_suspected[crimesi++] = atoi(xml.GetData());
-		else if (tag == "heat")
-			heat = atoi(xml.GetData());
-		else if (tag == "location")
-			location = atoi(xml.GetData());
-		else if (tag == "worklocation")
-			worklocation = atoi(xml.GetData());
-		else if (tag == "cantbluff")
-			cantbluff = atoi(xml.GetData());
-		else if (tag == "base")
-			base = atoi(xml.GetData());
-		else if (tag == "activity")
+		else if (tag == tag_activity)
 		{
 			xml.IntoElem();
 			while (xml.FindElem())
@@ -633,94 +501,22 @@ Creature::Creature(const std::string& inputXml)
 				tag = xml.GetTagName();
 				if (tag == tag_type)
 					activity.type = atoi(xml.GetData());
-				else if (tag == "arg")
+				else if (tag == tag_arg)
 					activity.arg = atoi(xml.GetData());
-				else if (tag == "arg2")
+				else if (tag == tag_arg2)
 					activity.arg2 = atoi(xml.GetData());
 			}
 			xml.OutOfElem();
 		}
-		else if (tag == "carid")
-			carid = atoi(xml.GetData());
-		else if (tag == "is_driver")
-			is_driver = atoi(xml.GetData());
-		else if (tag == "pref_carid")
-			pref_carid = atoi(xml.GetData());
-		else if (tag == "pref_is_driver")
-			pref_is_driver = atoi(xml.GetData());
-		else if (tag == "flag")
-			flag = atoi(xml.GetData());
-		else if (tag == "dontname")
-			dontname = atoi(xml.GetData());
-		else if (tag == "seethroughdisguise")
-			seethroughdisguise = atoi(xml.GetData());
-		else if (tag == "seethroughstealth")
-			seethroughstealth = atoi(xml.GetData());
-		else if (tag == "talkreceptive")
-			istalkreceptive = atoi(xml.GetData());
-		else if (tag == "kidnap_resistant")
-			iskidnap_resistant = atoi(xml.GetData());
-		else if (tag == "reports_to_police")
-			isreports_to_police = atoi(xml.GetData());
+		else if (tag == tag_wound && woundi < BODYPARTNUM)
+			wound[woundi++] = atoi(xml.GetData());
+		else if (tag == tag_special && speciali < SPECIALWOUNDNUM)
+			special[speciali++] = atoi(xml.GetData());
+		else if (tag == tag_crimes_suspected && crimesi < LAWFLAGNUM)
+			crimes_suspected[crimesi++] = atoi(xml.GetData());
 
 	}
 }
- string tag_creature;
- string tag_skill_experience;
- string tag_name;
- string tag_propername;
- string tag_gender_conservative;
- string tag_gender_liberal;
- string tag_squadid;
- string tag_age;
- string tag_birthday_month;
- string tag_birthday_day;
- string tag_exists;
- string tag_align;
- string tag_alive;
- string tag_type;
- string tag_type_idname;
- string tag_infiltration;
- string tag_animalgloss;
- string tag_specialattack;
- string tag_clinic;
- string tag_dating;
- string tag_hiding;
- string tag_trainingtime;
- string tag_trainingsubject;
- string tag_prisoner;
- string tag_sentence;
- string tag_confessions;
- string tag_deathpenalty;
- string tag_joindays;
- string tag_deathdays;
- string tag_id;
- string tag_hireid;
- string tag_meetings;
- string tag_forceinc;
- string tag_stunned;
- string tag_has_thrown_weapon;
- string tag_money;
- string tag_juice;
- string tag_income;
- string tag_wound;
- string tag_blood;
- string tag_special;
- string tag_crimes_suspected;
- string tag_heat;
- string tag_location;
- string tag_worklocation;
- string tag_cantbluff;
- string tag_base;
- string tag_activity;
- string tag_arg;
- string tag_arg2;
- string tag_carid;
- string tag_is_driver;
- string tag_pref_carid;
- string tag_pref_is_driver;
- string tag_flag;
- string tag_dontname;
 extern string closeParenthesis;
 string Creature::showXml() const
 {
@@ -728,9 +524,9 @@ string Creature::showXml() const
 	xml.AddElem(tag_creature);
 	xml.IntoElem();
 	for (int i = 0; i < ATTNUM; i++)
-		xml.AddSubDoc(attributes[i].showXml());
+		xml.AddSubDoc(showXmlAttribute(i, attributes[i]));
 	for (int i = 0; i < SKILLNUM; i++)
-		xml.AddSubDoc(skills[i].showXml());
+		xml.AddSubDoc(showXmlSkill(i, skills[i]));
 	for (int i = 0; i < SKILLNUM; i++)
 		xml.AddElem(tag_skill_experience, skill_experience[i]); //Bad, relies on their order in the xml file. -XML 
 	if (weapon) xml.AddSubDoc(weapon->showXml());
@@ -818,7 +614,7 @@ string Creature::showXml() const
 }
 int Creature::get_attribute(int attribute, bool usejuice) const
 {
-	int ret = attributes[attribute].value;
+	int ret = attributes[attribute];
 	// Special modifications to attributes based on age
 	switch (attribute)
 	{
@@ -988,13 +784,13 @@ int Creature::attribute_roll(int attribute) const
 	int return_value = roll_check(get_attribute(attribute, true));
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, " AttributeRoll(");
-		addstrAlt(Attribute::get_name(attribute));
+		addstrAlt(attribute_enum_to_string(attribute));
 		addstrAlt(", Attribute Level ");
 		addstrAlt(get_attribute(attribute, true));
 		addstrAlt(", Outcome of ");
 		addstrAlt(return_value);
 		addstrAlt(closeParenthesis);
-		getkey();
+		getkeyAlt();
 	}
 	// Roll on the attribute value
 	return return_value;
@@ -1003,7 +799,7 @@ bool Creature::attribute_check(int attribute, int difficulty) const
 {
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, " AttributeCheck(");
-		addstrAlt(Attribute::get_name(attribute));
+		addstrAlt(attribute_enum_to_string(attribute));
 		if (difficulty < 21)
 		{
 			addstrAlt(", Difficulty ");
@@ -1011,7 +807,7 @@ bool Creature::attribute_check(int attribute, int difficulty) const
 		}
 		else addstrAlt(", IMPOSSIBLE");
 		addstrAlt(closeParenthesis);
-		getkey();
+		getkeyAlt();
 	}
 	return(attribute_roll(attribute) >= difficulty);
 }
@@ -1024,10 +820,9 @@ int Creature::skill_roll(int skill) const
 		switch (skill)
 		{
 		default:
-			set_color(COLOR_YELLOW, COLOR_RED, 1);
+			set_color_easy(YELLOW_ON_RED_BRIGHT);
 			addstrAlt("-=ILLEGAL SKILL ROLL=-", gamelog);
-			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			break;
 		case PSEUDOSKILL_ESCAPEDRIVE:
 		case PSEUDOSKILL_DODGEDRIVE:
@@ -1037,9 +832,9 @@ int Creature::skill_roll(int skill) const
 		}
 	}
 	// Take skill strength
-	int skill_value = skills[skill].value;
+	int skill_value = skills[skill];
 	// plus the skill's associate attribute
-	int attribute_value = get_attribute(skills[skill].get_attribute(), true);
+	int attribute_value = get_attribute(get_associated_attribute(skill), true);
 	int adjusted_attribute_value;
 	switch (skill)
 	{
@@ -1096,7 +891,7 @@ int Creature::skill_roll(int skill) const
 	case SKILL_BUSINESS:
 	case SKILL_TEACHING:
 	case SKILL_FIRSTAID:
-		if (skills[skill].value == 0)
+		if (skills[skill] == 0)
 		{
 			return_value = 0; // Automatic failure
 			break;
@@ -1136,9 +931,9 @@ int Creature::skill_roll(int skill) const
 	}
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, " SkillRoll(");
-		addstrAlt(Skill::get_name(skill));
+		addstrAlt(skill_enum_to_string(skill));
 		addstrAlt(", Skill Value ");
-		addstrAlt(skills[skill].value);
+		addstrAlt(skills[skill]);
 		addstrAlt(commaSpace);
 		if (return_value == 0)
 			addstrAlt("automatic failure");
@@ -1150,7 +945,7 @@ int Creature::skill_roll(int skill) const
 			addstrAlt(return_value);
 		}
 		addstrAlt(closeParenthesis);
-		getkey();
+		getkeyAlt();
 	}
 	return return_value;
 }
@@ -1158,7 +953,7 @@ bool Creature::skill_check(int skill, int difficulty) const
 {
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, " SkillCheck(");
-		addstrAlt(Skill::get_name(skill));
+		addstrAlt(skill_enum_to_string(skill));
 		if (difficulty < 21)
 		{
 			addstrAlt(", Difficulty ");
@@ -1166,64 +961,49 @@ bool Creature::skill_check(int skill, int difficulty) const
 		}
 		else addstrAlt(", IMPOSSIBLE");
 		addstrAlt(closeParenthesis);
-		getkey();
+		getkeyAlt();
 	}
 	return(skill_roll(skill) >= difficulty);
 }
-void Creature::stop_hauling_me()
-{
-	for (int p = 0; p < len(pool); p++) if (pool[p]->prisoner == this) pool[p]->prisoner = NULL;
-}
+
 void Creature::train(int trainedskill, int experience, int upto)
 {
 	// Do we allow animals to gain skills? Right now, yes
 	//if(animalgloss==ANIMALGLOSS_ANIMAL)return;
 	// Don't give experience if already maxed out or requested to give none
-	if (skill_cap(trainedskill, true) <= skills[trainedskill].value || upto <= skills[trainedskill].value || experience == 0) { return; }
+	if (skill_cap(trainedskill, true) <= skills[trainedskill] || upto <= skills[trainedskill] || experience == 0) { return; }
 	else {
 		// Skill gain scaled by ability in the area
 		skill_experience[trainedskill] += max(1, static_cast<int>(experience * skill_cap(trainedskill, false) / 6.0));
 		int abovenextlevel;
 		// only allow gaining experience on the new level if it doesn't put us over a level limit
-		if (skills[trainedskill].value >= (upto - 1) ||
-			skills[trainedskill].value >= (skill_cap(trainedskill, true) - 1))
+		if (skills[trainedskill] >= (upto - 1) ||
+			skills[trainedskill] >= (skill_cap(trainedskill, true) - 1))
 		{
 			abovenextlevel = 0;
 		}
 		else
 		{
-			abovenextlevel = 50 + 5 * (1 + skills[trainedskill].value);
+			abovenextlevel = 50 + 5 * (1 + skills[trainedskill]);
 		} // enough skill points to get halfway through the next skill level
-		skill_experience[trainedskill] = min(skill_experience[trainedskill], 100 + 10 * skills[trainedskill].value + abovenextlevel);
+		skill_experience[trainedskill] = min(skill_experience[trainedskill], 100 + 10 * skills[trainedskill] + abovenextlevel);
 	}
 }
 void Creature::skill_up()
 {
 	for (int s = 0; s < SKILLNUM; s++)
 	{
-		while (skill_experience[s] >= 100 + 10 * skills[s].value&&
-			skills[s].value < skill_cap(s, true))
+		while (skill_experience[s] >= 100 + 10 * skills[s]&&
+			skills[s] < skill_cap(s, true))
 		{
-			skill_experience[s] -= 100 + 10 * skills[s].value;
-			skills[s].value++;
+			skill_experience[s] -= 100 + 10 * skills[s];
+			skills[s]++;
 		}
-		if (skills[s].value == skill_cap(s, true))
+		if (skills[s] == skill_cap(s, true))
 			skill_experience[s] = 0;
 	}
 }
-bool Creature::enemy() const
-{
-	if (align == ALIGN_CONSERVATIVE)
-		return true;
-	else if (type == CREATURE_COP && align == ALIGN_MODERATE)
-	{
-		for (int i = 0; i < len(pool); i++)
-			if (pool[i] == this)
-				return false;
-		return true;
-	}
-	else return false;
-}
+
 /* turns a creature into a conservative */
 void conservatise(Creature &cr)
 {
@@ -1275,39 +1055,6 @@ void nameCCSMember(Creature &cr)
 bool Creature::talkreceptive() const
 {
 	return !enemy() && istalkreceptive;
-	/*switch (type)
-	{
-	case CREATURE_WORKER_SERVANT:
-	case CREATURE_WORKER_JANITOR:
-	case CREATURE_WORKER_SWEATSHOP:
-	case CREATURE_WORKER_FACTORY_CHILD:
-	case CREATURE_TEENAGER:
-	case CREATURE_SEWERWORKER:
-	case CREATURE_COLLEGESTUDENT:
-	case CREATURE_MUSICIAN:
-	case CREATURE_MATHEMATICIAN:
-	case CREATURE_TEACHER:
-	case CREATURE_HSDROPOUT:
-	case CREATURE_BUM:
-	case CREATURE_POLITICALACTIVIST:
-	case CREATURE_GANGMEMBER:
-	case CREATURE_CRACKHEAD:
-	case CREATURE_FASTFOODWORKER:
-	case CREATURE_BARISTA:
-	case CREATURE_BARTENDER:
-	case CREATURE_TELEMARKETER:
-	case CREATURE_PROSTITUTE:
-	case CREATURE_GARBAGEMAN:
-	case CREATURE_PLUMBER:
-	case CREATURE_AMATEURMAGICIAN:
-	case CREATURE_HIPPIE:
-	case CREATURE_RETIREE:
-	case CREATURE_HAIRSTYLIST:
-	case CREATURE_CLERK:
-	case CREATURE_MUTANT:
-		return !enemy();
-	default: return false;
-	}*/
 }
 /* are the characters close enough in age to date? */
 bool Creature::can_date(const Creature &a) const
@@ -1700,4 +1447,82 @@ string Creature::get_weapon_string(int subtype) const
 	}
 	else r = "None";
 	return r;
+}
+
+int get_XML_value(const std::string& inputXml) {
+	int value;
+	CMarkup xml;
+	xml.SetDoc(inputXml);
+	xml.FindElem();
+	xml.IntoElem();
+	while (xml.FindElem())
+	{
+		std::string tag = xml.GetTagName();
+		if (tag == "value")
+			value = min(atoi(xml.GetData().data()), MAXATTRIBUTE);
+	}
+	return value;
+
+}
+// Add an age estimate to a person's name
+void add_age(Creature& person)
+{
+	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
+	if (person.animalgloss != ANIMALGLOSS_NONE)
+	{
+		addstrAlt(" (?)");
+		return;
+	}
+	// For humans, estimate their age and gender
+	addstrAlt(" (");
+	// Almost precise estimates of child and teen ages
+	if (person.age<20)
+	{
+		// Inaccuracy in estimating age should be the same every
+		// time a character is queried. I'm using the day of the
+		// month the character was born on to determine this.
+		addstrAlt(person.age + person.birthday_day % 3 - 1);
+		addstrAlt("?");
+	}
+	// More rough estimates of everyone else
+	else
+	{
+		if (person.age<30)
+			addstrAlt("20s");
+		else if (person.age<40)
+			addstrAlt("30s");
+		else if (person.age<50)
+			addstrAlt("40s");
+		else if (person.age<60)
+			addstrAlt("50s");
+		else if (person.age<70)
+			addstrAlt("60s");
+		else if (person.age<80)
+			addstrAlt("70s");
+		else if (person.age<90)
+			addstrAlt("80s");
+		else
+			addstrAlt("Very Old");
+	}
+	// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
+	if (person.gender_liberal == GENDER_MALE)
+		addstrAlt(", Male");
+	else if (person.gender_liberal == GENDER_FEMALE)
+		addstrAlt(", Female");
+	else
+		addstrAlt(", Ambiguous");
+	// Note if there's some conflict with Conservative society's perceptions
+	if (person.gender_liberal != person.gender_conservative && person.gender_liberal != GENDER_NEUTRAL)
+		addstrAlt("?");
+	addstrAlt(closeParenthesis);
+}
+/* rolls up a proper name for a creature */
+void Creature::namecreature()
+{
+	if (!dontname)
+	{
+		generate_name(name, gender_liberal);
+		strcpy(propername, name);
+		dontname = true;
+	}
 }

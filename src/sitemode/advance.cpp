@@ -25,35 +25,32 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
-#include "sitemode/advance.h"
-// own header
 #include "sitemode/sitedisplay.h"
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
+
+//#include "common/commondisplay.h"
+void printparty();
 
 #include "common/commonactions.h"
 // for void criminalizeparty(short crime)
 
 #include "combat/fight.h"
+#include "combat/fightCreature.h"  
 //for void makeloot(Creature &cr,vector<Item *> &loot);
 
-#include "combat/haulkidnap.h"
-//for void squadgrab_immobile(char dead);
-
+//#include "combat/haulkidnap.h"
+void squadgrab_immobile(char dead);
+//#include "combat/haulkidnapCreature.h"
+void freehostage(Creature &cr, char situation);
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-//#include <common.h>
+
+#include "locations/locationsPool.h"
+#include "common/creaturePool.h"
 
 extern squadst *activesquad;
 extern vector<Item *> groundloot;
@@ -70,7 +67,6 @@ extern short sitealarmtimer;
 extern short siteonfire;
 extern short lawList[LAWNUM];
 
-extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
 extern short mode;
@@ -87,6 +83,149 @@ string sWounds;
 string isBurned;
 string drops;
 string sBody;
+
+/* handles end of round stuff for one creature */
+void advancecreature(Creature &cr)
+{
+	if (!cr.alive) return;
+	char incaprint;
+	if (incapacitated(cr, 1, incaprint))
+	{
+		if (incaprint)
+		{
+			printparty();
+			if (mode == GAMEMODE_CHASECAR ||
+				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+			else printencounter();
+			getkeyAlt();
+		}
+	}
+	int bleed = 0, topmedicalskill = 0;
+	Creature* topmedical = NULL;
+	for (int i = 0; i < 6; i++) if (activesquad->squad[i] &&
+		activesquad->squad[i]->alive&&
+		activesquad->squad[i]->stunned == 0 &&
+		activesquad->squad[i]->blood>40 &&
+		activesquad->squad[i]->id != cr.id&&
+		activesquad->squad[i]->get_skill(SKILL_FIRSTAID) > topmedicalskill)
+		topmedicalskill = (topmedical = activesquad->squad[i])->get_skill(SKILL_FIRSTAID);
+	for (int w = 0; w < BODYPARTNUM; w++)
+	{
+		if (cr.wound[w] & WOUND_BLEEDING)
+		{
+			if (LCSrandom(500) < cr.get_attribute(ATTRIBUTE_HEALTH, true))
+				cr.wound[w] ^= WOUND_BLEEDING;
+			else if (cr.squadid != -1 && topmedical&&topmedical->skill_check(SKILL_FIRSTAID, DIFFICULTY_FORMIDABLE))
+			{
+				clearmessagearea();
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 1, topmedical->name, gamelog);
+				addstrAlt(ableToStopBleed, gamelog);
+				mvaddstrAlt(17, 1, cr.name, gamelog);
+				addstrAlt(sWounds, gamelog);
+				gamelog.newline();
+				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
+				cr.wound[w] ^= WOUND_BLEEDING;
+				getkeyAlt();
+			}
+			else bleed++;
+		}
+	}
+	if (mode == GAMEMODE_SITE && LCSrandom(3) &&
+		((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+			(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
+	{
+		int burndamage = (levelmap[locx][locy][locz].flag&SITEBLOCK_FIRE_PEAK) ? LCSrandom(40) : LCSrandom(20);
+		clearmessagearea();
+		// Firefighter's bunker gear reduces burn damage
+		if (cr.get_armor().has_fireprotection())
+		{
+			// Base effect is 3/4 damage reduction, the denominator
+			// increases with low quality or damaged gear
+			int denom = 4;
+			// Damaged gear
+			if (cr.get_armor().is_damaged()) denom += 2;
+			// Shoddy quality gear
+			denom += cr.get_armor().get_quality() - 1;
+			// Apply damage reduction
+			burndamage = static_cast<int>(burndamage * (1 - (3.0 / denom)));
+		}
+		cr.blood -= burndamage;
+		if (cr.blood <= 0)
+		{
+			cr.die();
+			if (cr.squadid != -1)
+			{
+				if (cr.align == 1) stat_dead++;
+			}
+			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
+			{
+				stat_kills++;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite)) location[cursite]->siege.kills++;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+				{
+					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
+					ccs_siege_kills++;
+				}
+			}
+			if (cr.squadid == -1)
+			{
+				sitecrime += 10;
+				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+				criminalizeparty(LAWFLAG_MURDER);
+				//<-- people dying in fire? probably your fault for starting it
+			}
+			adddeathmessage(cr);
+			getkeyAlt();
+			if (cr.prisoner != NULL) freehostage(cr, 1);
+		}
+		else
+		{
+			set_color_easy(RED_ON_BLACK);
+			mvaddstrAlt(16, 1, cr.name, gamelog);
+			addstrAlt(isBurned, gamelog);
+			gamelog.newline(); //Next message?
+			getkeyAlt();
+		}
+	}
+	if (bleed > 0)
+	{
+		clearmessagearea();
+		cr.blood -= bleed;
+		levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
+		cr.get_armor().set_bloody(true);
+		if (cr.blood <= 0)
+		{
+			cr.die();
+			if (cr.squadid != -1)
+			{
+				if (cr.align == 1) stat_dead++;
+			}
+			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
+			{
+				stat_kills++;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite))location[cursite]->siege.kills++;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK)location[cursite]->siege.tanks--;
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+				{
+					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
+					ccs_siege_kills++;
+				}
+			}
+			if (cr.squadid == -1)
+			{
+				sitecrime += 10;
+				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+				//criminalizeparty(LAWFLAG_MURDER);
+				//^-- might not die from squad attacking
+			}
+			adddeathmessage(cr);
+			getkeyAlt();
+			if (cr.prisoner != NULL) freehostage(cr, 1);
+		}
+	}
+}
 
 /* handles end of round stuff for everyone */
 void creatureadvance()
@@ -112,7 +251,7 @@ void creatureadvance()
 					addstrAlt(sBody, gamelog);
 					gamelog.newline();
 					makeloot(*activesquad->squad[p]->prisoner, groundloot);
-					getkey();
+					getkeyAlt();
 					sitecrime += 10;
 					sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 					//criminalizeparty(LAWFLAG_MURDER);
@@ -127,15 +266,9 @@ void creatureadvance()
 			}
 		}
 	}
-	if (location[cursite]->siege.siege)
+	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
-		for (int p = 0; p < len(pool); p++)
-		{
-			if (!pool[p]->alive) continue;
-			if (pool[p]->squadid != -1) continue;
-			if (pool[p]->location != cursite) continue;
-			advancecreature(*pool[p]);
-		}
+		CreaturePool::getInstance().advanceCreaturesAtLocation(cursite);
 		autopromote(cursite);
 	}
 	for (e = 0; e < ENCMAX; e++)
@@ -172,7 +305,7 @@ void creatureadvance()
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
 				else printencounter();
-				getkey();
+				getkeyAlt();
 			}
 		}
 		for (int z = 0; z < MAPZ; z++)
@@ -277,146 +410,4 @@ void creatureadvance()
 	//moving around with no mishaps). In other words, it only does nexMessage if
 	//something was logged this round.
 	if (gamelog.hasMessage()) gamelog.nextMessage();
-}
-/* handles end of round stuff for one creature */
-void advancecreature(Creature &cr)
-{
-	if (!cr.alive) return;
-	char incaprint;
-	if (incapacitated(cr, 1, incaprint))
-	{
-		if (incaprint)
-		{
-			printparty();
-			if (mode == GAMEMODE_CHASECAR ||
-				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-			else printencounter();
-			getkey();
-		}
-	}
-	int bleed = 0, topmedicalskill = 0;
-	Creature* topmedical = NULL;
-	for (int i = 0; i < 6; i++) if (activesquad->squad[i] &&
-		activesquad->squad[i]->alive&&
-		activesquad->squad[i]->stunned == 0 &&
-		activesquad->squad[i]->blood>40 &&
-		activesquad->squad[i]->id != cr.id&&
-		activesquad->squad[i]->get_skill(SKILL_FIRSTAID) > topmedicalskill)
-		topmedicalskill = (topmedical = activesquad->squad[i])->get_skill(SKILL_FIRSTAID);
-	for (int w = 0; w < BODYPARTNUM; w++)
-	{
-		if (cr.wound[w] & WOUND_BLEEDING)
-		{
-			if (LCSrandom(500) < cr.get_attribute(ATTRIBUTE_HEALTH, true))
-				cr.wound[w] ^= WOUND_BLEEDING;
-			else if (cr.squadid != -1 && topmedical&&topmedical->skill_check(SKILL_FIRSTAID, DIFFICULTY_FORMIDABLE))
-			{
-				clearmessagearea();
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16,  1, topmedical->name, gamelog);
-				addstrAlt(ableToStopBleed, gamelog);
-				mvaddstrAlt(17,  1, cr.name, gamelog);
-				addstrAlt(sWounds, gamelog);
-				gamelog.newline();
-				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
-				cr.wound[w] ^= WOUND_BLEEDING;
-				getkey();
-			}
-			else bleed++;
-		}
-	}
-	if (mode == GAMEMODE_SITE && LCSrandom(3) &&
-		((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
-			(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
-	{
-		int burndamage = (levelmap[locx][locy][locz].flag&SITEBLOCK_FIRE_PEAK) ? LCSrandom(40) : LCSrandom(20);
-		clearmessagearea();
-		// Firefighter's bunker gear reduces burn damage
-		if (cr.get_armor().has_fireprotection())
-		{
-			// Base effect is 3/4 damage reduction, the denominator
-			// increases with low quality or damaged gear
-			int denom = 4;
-			// Damaged gear
-			if (cr.get_armor().is_damaged()) denom += 2;
-			// Shoddy quality gear
-			denom += cr.get_armor().get_quality() - 1;
-			// Apply damage reduction
-			burndamage = static_cast<int>(burndamage * (1 - (3.0 / denom)));
-		}
-		cr.blood -= burndamage;
-		if (cr.blood <= 0)
-		{
-			cr.die();
-			if (cr.squadid != -1)
-			{
-				if (cr.align == 1) stat_dead++;
-			}
-			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
-			{
-				stat_kills++;
-				if (location[cursite]->siege.siege) location[cursite]->siege.kills++;
-				if (location[cursite]->siege.siege && cr.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
-				if (location[cursite]->renting == RENTING_CCS)
-				{
-					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
-					ccs_siege_kills++;
-				}
-			}
-			if (cr.squadid == -1)
-			{
-				sitecrime += 10;
-				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-				criminalizeparty(LAWFLAG_MURDER);
-				//<-- people dying in fire? probably your fault for starting it
-			}
-			adddeathmessage(cr);
-			getkey();
-			if (cr.prisoner != NULL) freehostage(cr, 1);
-		}
-		else
-		{
-			set_color_easy(RED_ON_BLACK);
-			mvaddstrAlt(16,  1, cr.name, gamelog);
-			addstrAlt(isBurned, gamelog);
-			gamelog.newline(); //Next message?
-			getkey();
-		}
-	}
-	if (bleed > 0)
-	{
-		clearmessagearea();
-		cr.blood -= bleed;
-		levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
-		cr.get_armor().set_bloody(true);
-		if (cr.blood <= 0)
-		{
-			cr.die();
-			if (cr.squadid != -1)
-			{
-				if (cr.align == 1) stat_dead++;
-			}
-			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
-			{
-				stat_kills++;
-				if (location[cursite]->siege.siege)location[cursite]->siege.kills++;
-				if (location[cursite]->siege.siege && cr.animalgloss == ANIMALGLOSS_TANK)location[cursite]->siege.tanks--;
-				if (location[cursite]->renting == RENTING_CCS)
-				{
-					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
-					ccs_siege_kills++;
-				}
-			}
-			if (cr.squadid == -1)
-			{
-				sitecrime += 10;
-				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-				//criminalizeparty(LAWFLAG_MURDER);
-				//^-- might not die from squad attacking
-			}
-			adddeathmessage(cr);
-			getkey();
-			if (cr.prisoner != NULL) freehostage(cr, 1);
-		}
-	}
 }

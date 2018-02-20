@@ -7,4 +7,3 @@ void assemblesquad(squadst *cursquad);
 void squadlessbaseassign();
 /* base - review - promote liberals */
 void promoteliberals();
-void sortbyhire(vector<Creature *> &temppool, vector<int> &level);

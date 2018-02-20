@@ -1,6 +1,9 @@
 
 #include <includes.h>
 
+#include "creature/creatureEnums.h"
+#include "items/itemtype.h"
+
 //#include "items/itemtype.h"
 //own header currently inside includes.h
 //own header

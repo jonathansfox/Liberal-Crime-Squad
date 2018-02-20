@@ -25,34 +25,28 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
-#include "sitemode/sitedisplay.h"
-
-#include "sitemode/miscactions.h"
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)s
+//#include "sitemode/sitedisplay.h"
+void clearmessagearea(bool redrawmaparea = true);
 
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for void printfunds(int,int,char*)
+
+//#include "common/commondisplay.h"
+void printparty();
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void criminalizeparty
 
-#include "daily/daily.h"
-//for char securityable(int type);
+//#include "daily/daily.h"
+char securityable(int type);
    
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "locations/locationsPool.h"
 extern Log gamelog;
-extern vector<Location *> location;
  vector<string> was_abused;
  extern short cursite;
  extern squadst *activesquad;
@@ -69,7 +63,6 @@ extern short sitealarm;
 extern Creature encounter[ENCMAX];
 extern short sitealienate;
 
-/* unlock attempt */
 char unlock(short type, char &actual)
 {
 	int p;
@@ -77,9 +70,9 @@ char unlock(short type, char &actual)
 	switch (type)
 	{
 	case UNLOCK_DOOR:
-		if (securityable(location[cursite]->type) == 1)
+		if (securityable(LocationsPool::getInstance().getLocationType(cursite)) == 1)
 			difficulty = DIFFICULTY_CHALLENGING;
-		else if (securityable(location[cursite]->type) > 1)
+		else if (securityable(LocationsPool::getInstance().getLocationType(cursite)) > 1)
 			difficulty = DIFFICULTY_HARD;
 		else
 			difficulty = DIFFICULTY_EASY;
@@ -175,7 +168,7 @@ char unlock(short type, char &actual)
 					}
 				}
 			}
-			getkey();
+			getkeyAlt();
 			actual = 1;
 			return 1;
 		}
@@ -210,7 +203,7 @@ char unlock(short type, char &actual)
 				addstrAlt(" can't figure the lock out.", gamelog);
 				gamelog.newline();
 			}
-			getkey();
+			getkeyAlt();
 			actual = 1;
 			return 0;
 		}
@@ -221,7 +214,7 @@ char unlock(short type, char &actual)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "You can't find anyone to do the job.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 	actual = 0;
 	return 0;
@@ -234,13 +227,13 @@ char bash(short type, char &actual)
 	switch (type)
 	{
 	case BASH_DOOR:
-		if (!securityable(location[cursite]->type))
+		if (!securityable(LocationsPool::getInstance().getLocationType(cursite)))
 		{
 			difficulty = DIFFICULTY_EASY; // Run down dump
 			crowable = true;
 		}
-		else if (location[cursite]->type != SITE_GOVERNMENT_PRISON&&
-			location[cursite]->type != SITE_GOVERNMENT_INTELLIGENCEHQ)
+		else if (LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_PRISON&&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_INTELLIGENCEHQ)
 		{
 			difficulty = DIFFICULTY_CHALLENGING; // Respectable place
 			crowable = true;
@@ -319,22 +312,22 @@ char bash(short type, char &actual)
 		}
 		addstrAlt("!", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		int timer = 5;
 		if (crowable) timer = 20;
 		if (sitealarmtimer<0 || sitealarmtimer>timer)
 			sitealarmtimer = timer;
 		else sitealarmtimer = 0;
 		//Bashing doors in secure areas sets off alarms
-		if ((location[cursite]->type == SITE_GOVERNMENT_PRISON ||
-			location[cursite]->type == SITE_GOVERNMENT_INTELLIGENCEHQ) &&
+		if ((LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_PRISON ||
+			LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_INTELLIGENCEHQ) &&
 			sitealarm == 0)
 		{
 			sitealarm = 1;
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(17,  1, "Alarms go off!", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 		}
 		actual = 1;
 		return 1;
@@ -354,7 +347,7 @@ char bash(short type, char &actual)
 		}
 		addstrAlt("!", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		if (sitealarmtimer < 0) sitealarmtimer = 25;
 		else if (sitealarmtimer>10) sitealarmtimer -= 10;
 		else sitealarmtimer = 0;
@@ -411,7 +404,7 @@ char hack(short type, char &actual)
 				addstrAlt(" despite being blind", gamelog);
 			addstrAlt("!", gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			actual = 1;
 			return 1;
 		}
@@ -428,7 +421,7 @@ char hack(short type, char &actual)
 			case HACK_VAULT:addstrAlt(" bypass the vault's electronic lock.", gamelog); break;
 			}
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			actual = 1;
 			return 0;
 		}
@@ -441,11 +434,11 @@ char hack(short type, char &actual)
 		gamelog.newline();
 		if (blind)
 		{  // your only hacker was blind and had a skill roll, after the handicap, of 0 or less
-			getkey();
+			getkeyAlt();
 			mvaddstrAlt(17,  1, "Including the BLIND HACKER you brought.", gamelog);
 			gamelog.newline();
 		}
-		getkey();
+		getkeyAlt();
 	}
 	actual = 0;
 	return 0;
@@ -469,7 +462,7 @@ char run_broadcast(bool tv_broadcase)
 		mvaddstrAlt(16,  1, "The Conservatives in the room hurry the Squad, so ", gamelog);
 		mvaddstrAlt(17,  1, "the broadcast never happens.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		return 0;
 	}
 	criminalizeparty(LAWFLAG_DISTURBANCE);
@@ -489,7 +482,7 @@ char run_broadcast(bool tv_broadcase)
 		mvaddstrAlt(17, 1, discussesIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	int segmentpower = 0, partysize = squadalive(activesquad);
 	for (int p = 0; p < 6; p++)
 	{
@@ -538,7 +531,7 @@ char run_broadcast(bool tv_broadcase)
 		else mvaddstrAlt(16, 1, "It was the best hour of AM radio EVER.", gamelog);
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	//CHECK PUBLIC OPINION
 	change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	if (tv_broadcase) {
@@ -587,7 +580,7 @@ char run_broadcast(bool tv_broadcase)
 						else change_public_opinion(viewhit, usegmentpower / 2);
 					}
 					segmentpower += usegmentpower;
-					getkey();
+					getkeyAlt();
 				}
 				else
 				{
@@ -596,7 +589,7 @@ char run_broadcast(bool tv_broadcase)
 					mvaddstrAlt(16,  1, activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(", the hostage, is kept off-air.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 				}
 			}
 		}
@@ -610,7 +603,7 @@ char run_broadcast(bool tv_broadcase)
 		gamelog.newline();
 		mvaddstrAlt(17,  1, "They no longer feel alienated.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 	//POST-SECURITY BLITZ IF IT SUCKED
 	if (((segmentpower < 85 && segmentpower >= 25) && tv_broadcase) || ((segmentpower < 90) && !tv_broadcase))
@@ -620,7 +613,7 @@ char run_broadcast(bool tv_broadcase)
 		mvaddstrAlt(16,  1, "Security is waiting for the Squad ", gamelog);
 		mvaddstrAlt(17,  1, "after the show!", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		int numleft = LCSrandom(8) + 2;
 		fillEncounter(CREATURE_SECURITYGUARD, numleft);
 	}
@@ -641,10 +634,11 @@ char run_broadcast(bool tv_broadcase)
 		}
 		mvaddstrAlt(17,  1, "at their desks.  The Squad might yet escape.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 	return 1;
 }
+#include "common/creaturePoolCreature.h"
 /* rescues people held at the activeparty's current location */
 void partyrescue(short special)
 {
@@ -665,15 +659,9 @@ void partyrescue(short special)
 		}
 	}
 	vector<Creature*> waiting_for_rescue;
-	for (int pl = 0; pl < len(pool); pl++)
-	{
-		if (pool[pl]->location == cursite&&
-			!(pool[pl]->flag & CREATUREFLAG_SLEEPER) &&
-			!(special == SPECIAL_PRISON_CONTROL_LOW&&!(pool[pl]->sentence>0 && !pool[pl]->deathpenalty)) && //Low is for normal time-limited sentences.
-			!(special == SPECIAL_PRISON_CONTROL_MEDIUM&&!(pool[pl]->sentence < 0 && !pool[pl]->deathpenalty)) && //Medium is for life sentences.
-			!(special == SPECIAL_PRISON_CONTROL_HIGH&&!pool[pl]->deathpenalty)) //High is for death sentences.
-			waiting_for_rescue.push_back(pool[pl]);
-	}
+	
+	whoAreWaitingForRescue(waiting_for_rescue, cursite, special);
+
 	for (int pl = 0; pl < len(waiting_for_rescue); pl++)
 	{
 		if (LCSrandom(2) && freeslots)
@@ -698,7 +686,7 @@ void partyrescue(short special)
 			addstrAlt(" from the Conservatives.", gamelog);
 			gamelog.newline();
 			printparty();
-			getkey();
+			getkeyAlt();
 			waiting_for_rescue[pl]->location = -1;
 			waiting_for_rescue[pl]->base = activesquad->squad[0]->base;
 			waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
@@ -725,7 +713,7 @@ void partyrescue(short special)
 						addstrAlt(waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(" from the Conservatives.", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						clearmessagearea();
 						mvaddstrAlt(16,  1, waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(singleSpace, gamelog);
@@ -737,7 +725,7 @@ void partyrescue(short special)
 						waiting_for_rescue[pl]->location = -1;
 						waiting_for_rescue[pl]->base = activesquad->squad[p]->base;
 						printparty();
-						getkey();
+						getkeyAlt();
 						waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
 						--pl;
 						break;
@@ -759,7 +747,7 @@ void partyrescue(short special)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17,  1, "You'll have to come back later.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 	else if (len(waiting_for_rescue) > 1)
 	{
@@ -770,7 +758,7 @@ void partyrescue(short special)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17,  1, "You'll have to come back later.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 	}
 }
 /* everybody reload! */

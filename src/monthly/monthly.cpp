@@ -52,36 +52,34 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
 #include "basemode/liberalagenda.h"
 // for liberalagenda
 
-#include "items/loottype.h"
+#include "items/itemPool.h"
+#include "items/lootTypePool.h"
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for char endcheck(char cause=-1)
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 #include "log/log.h"
-// for commondisplay.h
+
 #include "common/commondisplay.h"
-// for addstr
+// for set_alignment_color and delimiter
 
 #include "common/translateid.h"
 // for  int getpoolcreature(int id);
 
-#include "title/saveload.h"
+#include "title/titlescreen.h"
 // for void reset;
 
 #include "title/highscore.h"
-// for viewhighscores;
-
-#include "monthly/monthly.h"
-//own header
+// for viewhighscores, in event of endgame
 
 #include "politics/politics.h"
 //for publicmood
@@ -89,29 +87,34 @@ This file is part of Liberal Crime Squad.                                       
 #include "monthly/lcsmonthly.h"
 //for void printnews(short l,short newspaper);
 
-#include "monthly/sleeper_update.h"
-//for void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+//#include "monthly/sleeper_update.h"
+void sleepereffect(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
 
-#include "monthly/justice.h"
-//for void trial(Creature &g);
+//#include "monthly/justice.h"
+void trial(Creature &g);
+char prison(Creature &g);
 
 #include "daily/daily.h"
-//for void initlocation(Location &loc);
-
+//for dispersalcheck and securitytable
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-#include <common\\getnames.h>
+
+//#include <common\\getnames.h>
+std::string getview(short view, bool shortname);
+
+#include "locations/locationsPool.h"
+#include "common/creaturePool.h"
+
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 
+//extern title_screen *TitleScreen;
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
-extern vector<LootType *> loottype;
+#include "common/musicClass.h"
 extern MusicClass music;
 extern int year;
 extern char endgamestate;
@@ -125,9 +128,70 @@ extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
 extern vector<ArmorType *> armortype;
-extern class Ledger ledger;
+class Ledger ledger;
 extern bool stalinmode;
 extern int disbandtime;
+/* rename various buildings according to the new laws */
+void updateworld_laws(short *law, short *oldlaw)
+{  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
+	if (((law[LAW_POLICEBEHAVIOR] == -2 && law[LAW_DEATHPENALTY] == -2) ||
+		(oldlaw[LAW_POLICEBEHAVIOR] == -2 && oldlaw[LAW_DEATHPENALTY] == -2)) &&
+		(law[LAW_POLICEBEHAVIOR] != oldlaw[LAW_POLICEBEHAVIOR] ||
+			law[LAW_DEATHPENALTY] != oldlaw[LAW_DEATHPENALTY]))
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_DEATHPENALTY] == -2 || oldlaw[LAW_DEATHPENALTY] == -2) &&
+		law[LAW_DEATHPENALTY] != oldlaw[LAW_DEATHPENALTY])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_FREESPEECH] == -2 || oldlaw[LAW_FREESPEECH] == -2) &&
+		law[LAW_FREESPEECH] != oldlaw[LAW_FREESPEECH])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_PRISONS] == -2 || oldlaw[LAW_PRISONS] == -2) &&
+		law[LAW_PRISONS] != oldlaw[LAW_PRISONS])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_NUCLEARPOWER] == 2 || oldlaw[LAW_NUCLEARPOWER] == 2) &&
+		law[LAW_NUCLEARPOWER] != oldlaw[LAW_NUCLEARPOWER])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
+				LocationsPool::getInstance().initSite(l);
+	if (((law[LAW_PRIVACY] == -2 && law[LAW_POLICEBEHAVIOR] == -2) ||
+		(oldlaw[LAW_PRIVACY] == -2 && oldlaw[LAW_POLICEBEHAVIOR] == -2)) &&
+		(law[LAW_PRIVACY] != oldlaw[LAW_PRIVACY] ||
+			law[LAW_POLICEBEHAVIOR] != oldlaw[LAW_POLICEBEHAVIOR]))
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_MILITARY] == -2 || oldlaw[LAW_MILITARY] == -2) &&
+		law[LAW_MILITARY] != oldlaw[LAW_MILITARY])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_GUNCONTROL] == 2 || oldlaw[LAW_GUNCONTROL] == 2) &&
+		law[LAW_GUNCONTROL] != oldlaw[LAW_GUNCONTROL])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
+				LocationsPool::getInstance().initSite(l);
+	if (((law[LAW_CORPORATE] == -2 && law[LAW_TAX] == -2) ||
+		(oldlaw[LAW_CORPORATE] == -2 && oldlaw[LAW_TAX] == -2)) &&
+		(law[LAW_CORPORATE] != oldlaw[LAW_CORPORATE] ||
+			law[LAW_TAX] != oldlaw[LAW_TAX]))
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
+				LocationsPool::getInstance().initSite(l);
+	if ((law[LAW_DRUGS] == 2 || oldlaw[LAW_DRUGS] == 2) &&
+		law[LAW_DRUGS] != oldlaw[LAW_DRUGS])
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+			if (LocationsPool::getInstance().getLocationType(l) == SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
+				&&LocationsPool::getInstance().getRentingType(l) < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
+				LocationsPool::getInstance().initSite(l);
+}
 
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
@@ -167,10 +231,10 @@ void passmonth(char &clearformess, char canseethings)
 		break;
 	}
 	//CLEAR RENT EXEMPTIONS
-	for (l = 0; l < len(location); l++) location[l]->newrental = 0;
+	for (l = 0; l < LocationsPool::getInstance().lenpool(); l++) location[l]->newrental = 0;
 	//YOUR PAPER AND PUBLIC OPINION AND STUFF
 	vector<int> nploc;
-	for (l = 0; l < len(location); l++)
+	for (l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 	{
 		if ((location[l]->compound_walls & COMPOUND_PRINTINGPRESS) &&
 			!location[l]->siege.siege&&
@@ -188,8 +252,8 @@ void passmonth(char &clearformess, char canseethings)
 		{
 			guardianpower += 10 * len(nploc);
 			printnews(loottypeindex, len(nploc));
-			if (loottype[loottypeindex]->get_idname() == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
-				loottype[loottypeindex]->get_idname() == tag_LOOT_SECRETDOCUMENTS)
+			if (LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
+				LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_SECRETDOCUMENTS)
 			{
 				for (int l = 0; l < len(nploc); l++)
 					criminalizepool(LAWFLAG_TREASON, -1, nploc[l]);
@@ -201,11 +265,11 @@ void passmonth(char &clearformess, char canseethings)
 	for (v = 0; v < VIEWNUM; v++)public_interest[v] /= 2;
 	int conspower = 200 - attitude[VIEW_AMRADIO] - attitude[VIEW_CABLENEWS];
 	//HAVING SLEEPERS
-	for (int pl = len(pool) - 1; pl > 0; pl--)
+	for (int pl = CreaturePool::getInstance().lenpool() - 1; pl > 0; pl--)
 		if (pool[pl]->alive && (pool[pl]->flag & CREATUREFLAG_SLEEPER))
 			sleepereffect(*pool[pl], clearformess, canseethings, libpower);
 	//Manage graffiti
-	for (int l = 0; l < len(location); l++) // Check each location
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) // Check each location
 	{
 		for (int c = len(location[l]->changes) - 1; c >= 0; c--) // Each change to the map
 		{
@@ -219,7 +283,7 @@ void passmonth(char &clearformess, char canseethings)
 				//Purge graffiti from more secure sites (or from non-secure
 				//sites about once every five years), but these will
 				//influence people more for the current month
-				if (securityable(location[l]->type))
+				if (securityable(LocationsPool::getInstance().getLocationType(l)))
 				{
 					location[l]->changes.erase(location[l]->changes.begin() + c);
 					power = 5;
@@ -306,7 +370,7 @@ void passmonth(char &clearformess, char canseethings)
 	// Seduction monthly experience stipends for those liberals
 	// who have been getting it on with their love slaves/masters
 	// in the background
-	for (int s = 0; s < len(pool); s++)
+	for (int s = 0; s < CreaturePool::getInstance().lenpool(); s++)
 	{
 		pool[s]->train(SKILL_SEDUCTION, loveslaves(*pool[s]) * 5);
 		if (pool[s]->flag & CREATUREFLAG_LOVESLAVE)
@@ -363,7 +427,7 @@ void passmonth(char &clearformess, char canseethings)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(24, 0, "Press any key to reflect on these poll numbers.");
 			clearformess = 1;
-			getkey();
+			getkeyAlt();
 		}
 	/*******************************************************
 	*                                                      *
@@ -381,7 +445,7 @@ void passmonth(char &clearformess, char canseethings)
 	{
 		liberalagenda(1);
 		savehighscore(END_WON);
-		reset();
+		title_screen::getInstance().reset();
 		viewhighscores();
 		end_game();
 	}
@@ -393,33 +457,33 @@ void passmonth(char &clearformess, char canseethings)
 		eraseAlt();
 		mvaddstrAlt(12,  10, "The Liberal Crime Squad is now just a memory.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		eraseAlt();
 		mvaddstrAlt(12,  12, "The last LCS members have all been hunted down.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		eraseAlt();
 		mvaddstrAlt(12,  14, "They will never see the utopia they dreamed of...", gamelog);
 		gamelog.newline();
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 		savehighscore(END_DISBANDLOSS);
-		reset();
+		title_screen::getInstance().reset();
 		viewhighscores();
 		end_game();
 	}
 	//UPDATE THE WORLD IN CASE THE LAWS HAVE CHANGED
 	updateworld_laws(lawList, oldlaw);
 	//THE SYSTEM!
-	for (p = len(pool) - 1; p >= 0; p--)
+	for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (disbanding) break;
 		if (!pool[p]->alive) continue;
 		if (pool[p]->flag & CREATUREFLAG_SLEEPER) continue;
 		if (pool[p]->location == -1) continue;
-		if (location[pool[p]->location]->type == SITE_GOVERNMENT_POLICESTATION)
+		if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
 		{
 			if (clearformess) eraseAlt();
 			else makedelimiter();
@@ -430,7 +494,7 @@ void passmonth(char &clearformess, char canseethings)
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt("'s mind with Conservatism!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				removesquadinfo(*pool[p]);
 				delete_and_remove(pool, p);
 				continue;
@@ -444,7 +508,7 @@ void passmonth(char &clearformess, char canseethings)
 					addstrAlt("execution.", gamelog);
 				else addstrAlt("deportation.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				removesquadinfo(*pool[p]);
 				delete_and_remove(pool, p);
 				continue;
@@ -466,7 +530,7 @@ void passmonth(char &clearformess, char canseethings)
 				{
 					int nullify = 0;
 					int p2 = getpoolcreature(pool[p]->hireid);
-					if (pool[p2]->alive && (pool[p2]->location == -1 || location[pool[p2]->location]->type != SITE_GOVERNMENT_PRISON))
+					if (pool[p2]->alive && (pool[p2]->location == -1 || LocationsPool::getInstance().getLocationType(pool[p2]->location) != SITE_GOVERNMENT_PRISON))
 					{  //Charge the boss with racketeering!
 						criminalize(*pool[p2], LAWFLAG_RACKETEERING);
 						//Rack up testimonies against the boss in court!
@@ -474,16 +538,16 @@ void passmonth(char &clearformess, char canseethings)
 					}
 					if (!nullify)
 					{  //Issue a raid on this guy's base!
-						if (pool[p]->base >= 0)location[pool[p]->base]->heat += 300;
+						if (pool[p]->base >= 0)LocationsPool::getInstance().addHeat(pool[p]->base, 300);
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 						addstrAlt(" has broken under the pressure and ratted you out!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(9,  1, "The traitor will testify in court, and safehouses may be compromised.", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 						removesquadinfo(*pool[p]);
 						delete_and_remove(pool, p);
 						continue; //no trial for this person; skip to next person
@@ -494,24 +558,24 @@ void passmonth(char &clearformess, char canseethings)
 				mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 				addstrAlt(" is moved to the courthouse for trial.", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				pool[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, pool[p]->location);
 				Armor prisoner(*armortype[getarmortype(tag_ARMOR_PRISONER)]);
 				pool[p]->give_armor(prisoner, NULL);
 			}
 		}
-		else if (location[pool[p]->location]->type == SITE_GOVERNMENT_COURTHOUSE)
+		else if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_COURTHOUSE)
 		{
 			trial(*pool[p]); clearformess = 1;
 		}
-		else if (location[pool[p]->location]->type == SITE_GOVERNMENT_PRISON)
+		else if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON)
 			if (prison(*pool[p])) clearformess = 1;
 	}
 	//NUKE EXECUTION VICTIMS
-	for (p = len(pool) - 1; p >= 0; p--)
+	for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location == -1) continue;
-		if (location[pool[p]->location]->type == SITE_GOVERNMENT_PRISON&&!pool[p]->alive)
+		if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON&&!pool[p]->alive)
 		{
 			removesquadinfo(*pool[p]);
 			pool[p]->die();
@@ -527,7 +591,7 @@ void passmonth(char &clearformess, char canseethings)
 	ledger.resetMonthlyAmounts();
 	if (clearformess) eraseAlt();
 	//HEAL CLINIC PEOPLE
-	for (p = 0; p < len(pool); p++)
+	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (disbanding) break;
 		if (!(pool[p]->alive)) continue;
@@ -577,7 +641,7 @@ void passmonth(char &clearformess, char canseethings)
 			// If at clinic and in critical condition, transfer to university hospital
 			if (pool[p]->clinic > 2 &&
 				pool[p]->location > -1 &&
-				location[pool[p]->location]->type == SITE_HOSPITAL_CLINIC)
+				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_CLINIC)
 			{
 				int hospital = find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY, pool[p]->location);
 				if (hospital != -1)
@@ -586,10 +650,10 @@ void passmonth(char &clearformess, char canseethings)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" has been transferred to ", gamelog);
-					addstrAlt(location[hospital]->name, gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(hospital), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			// End treatment
@@ -601,78 +665,17 @@ void passmonth(char &clearformess, char canseethings)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 				addstrAlt(" has left ", gamelog);
-				addstrAlt(location[pool[p]->location]->name, gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(pool[p]->location), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
 				int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 				if (hs == -1) hs = 0; //TODO: Error unable to find location
-				if (location[pool[p]->base]->siege.siege ||
-					location[pool[p]->base]->renting == RENTING_NOCONTROL)
+				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base) ||
+					LocationsPool::getInstance().getRentingType(pool[p]->base) == RENTING_NOCONTROL)
 					pool[p]->base = hs;
 				pool[p]->location = pool[p]->base;
-				getkey();
+				getkeyAlt();
 			}
 		}
 	}
-}
-/* rename various buildings according to the new laws */
-void updateworld_laws(short *law, short *oldlaw)
-{  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
-	if (((law[LAW_POLICEBEHAVIOR] == -2 && law[LAW_DEATHPENALTY] == -2) ||
-		(oldlaw[LAW_POLICEBEHAVIOR] == -2 && oldlaw[LAW_DEATHPENALTY] == -2)) &&
-		(law[LAW_POLICEBEHAVIOR] != oldlaw[LAW_POLICEBEHAVIOR] ||
-			law[LAW_DEATHPENALTY] != oldlaw[LAW_DEATHPENALTY]))
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
-				initlocation(*location[l]);
-	if ((law[LAW_DEATHPENALTY] == -2 || oldlaw[LAW_DEATHPENALTY] == -2) &&
-		law[LAW_DEATHPENALTY] != oldlaw[LAW_DEATHPENALTY])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
-				initlocation(*location[l]);
-	if ((law[LAW_FREESPEECH] == -2 || oldlaw[LAW_FREESPEECH] == -2) &&
-		law[LAW_FREESPEECH] != oldlaw[LAW_FREESPEECH])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
-				initlocation(*location[l]);
-	if ((law[LAW_PRISONS] == -2 || oldlaw[LAW_PRISONS] == -2) &&
-		law[LAW_PRISONS] != oldlaw[LAW_PRISONS])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
-				initlocation(*location[l]);
-	if ((law[LAW_NUCLEARPOWER] == 2 || oldlaw[LAW_NUCLEARPOWER] == 2) &&
-		law[LAW_NUCLEARPOWER] != oldlaw[LAW_NUCLEARPOWER])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
-				initlocation(*location[l]);
-	if (((law[LAW_PRIVACY] == -2 && law[LAW_POLICEBEHAVIOR] == -2) ||
-		(oldlaw[LAW_PRIVACY] == -2 && oldlaw[LAW_POLICEBEHAVIOR] == -2)) &&
-		(law[LAW_PRIVACY] != oldlaw[LAW_PRIVACY] ||
-			law[LAW_POLICEBEHAVIOR] != oldlaw[LAW_POLICEBEHAVIOR]))
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
-				initlocation(*location[l]);
-	if ((law[LAW_MILITARY] == -2 || oldlaw[LAW_MILITARY] == -2) &&
-		law[LAW_MILITARY] != oldlaw[LAW_MILITARY])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
-				initlocation(*location[l]);
-	if ((law[LAW_GUNCONTROL] == 2 || oldlaw[LAW_GUNCONTROL] == 2) &&
-		law[LAW_GUNCONTROL] != oldlaw[LAW_GUNCONTROL])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
-				initlocation(*location[l]);
-	if (((law[LAW_CORPORATE] == -2 && law[LAW_TAX] == -2) ||
-		(oldlaw[LAW_CORPORATE] == -2 && oldlaw[LAW_TAX] == -2)) &&
-		(law[LAW_CORPORATE] != oldlaw[LAW_CORPORATE] ||
-			law[LAW_TAX] != oldlaw[LAW_TAX]))
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
-				initlocation(*location[l]);
-	if ((law[LAW_DRUGS] == 2 || oldlaw[LAW_DRUGS] == 2) &&
-		law[LAW_DRUGS] != oldlaw[LAW_DRUGS])
-		for (int l = 0; l < len(location); l++)
-			if (location[l]->type == SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
-				&&location[l]->renting < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
-				initlocation(*location[l]);
 }

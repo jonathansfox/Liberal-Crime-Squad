@@ -12,38 +12,22 @@ void locheader();
 void printparty();
 /* location info at top of screen */
 void printlocation(long loc);
-/* character info at top of screen */
-void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p);
-/* full screen character sheet, just skills */
-void printliberalskills(Creature &cr);
-/* full screen character sheet */
-void printliberalstats(Creature &cr);
-/* Full screen character sheet, crime sheet */
-void printliberalcrimes(Creature &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y = 8, int x = 0);
-/* prints a character's general health description (One Leg, Liberal, NearDETH...) */
-void printhealthstat(Creature &g, int y, int x, char smll);
-/* prints a character's health description for each bodypart (Head, Body...) */
-void printwoundstat(Creature &cr, int y, int x);
 /* prints amount of money the player has, with optional formatting */
 void printfunds(int y = 0, int offset = 1, const char* prefix = "Money: ");
-/* prints a short blurb showing how to page forward */
+/* returns a short blurb showing how to page forward */
 string addnextpagestr();
-/* prints a short blurb showing how to page back */
+/* returns a short blurb showing how to page back */
 string addprevpagestr();
-/* prints a long blurb showing how to page forward and back */
+/* returns a long blurb showing how to page forward and back */
 string addpagestr();
 
 /* addstr with formatted output */
 int addstr_f(const char * format, ...);
 /* mvaddstr with formatted output */
 int mvaddstr_f(int y, int x, const char * format, ...);
-/* addstr with formatted output and logging */
-int addstr_fl(Log &log, const char * format, ...);
-/* mvaddstr with formatted output and logging */
-int mvaddstr_fl(int y, int x, Log &log, const char * format, ...);
 
 #endif

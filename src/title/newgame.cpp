@@ -25,25 +25,18 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#include "title/newgame.h"
-
-#include "define_includes.h"
-//for ALLOWSTALIN
-
-
-
 #include "common/consolesupport.h"
-// for void set_color(short,short,bool)
+// for getkey
 
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for void printfunds(int,int,char*)
 
 #include "common/stringconversion.h"
 //for string attribute_enum_to_string(int)
@@ -55,16 +48,14 @@ This file is part of Liberal Crime Squad.                                       
 // for  getarmortype
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 
+#include "common/creaturePoolCreature.h"
 
-extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
 extern bool multipleCityMode;
+#include "common/musicClass.h"
 extern MusicClass music;
 extern int year;
 extern char endgamestate;
@@ -208,7 +199,7 @@ int getMagnitudeFromString(const string s) {
 		clearAlt();
 		mvaddstrAlt(0,  0, error);
 		mvaddstrAlt(1,  0, s);
-		getkey();
+		getkeyAlt();
 	}
 	return atoi(s.substr(j).data());
 }
@@ -234,7 +225,7 @@ int getSkillFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notASkill);
-		getkey();
+		getkeyAlt();
 		return -1;
 	}
 }
@@ -248,7 +239,7 @@ int getAttributeFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notAnAttribute);
-		getkey();
+		getkeyAlt();
 		return -1;
 	}
 }
@@ -263,7 +254,7 @@ int getCreatureFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notCreature);
-		getkey();
+		getkeyAlt();
 		return -1;
 	}
 }
@@ -285,7 +276,7 @@ int getBaseFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notValidMap);
-		getkey();
+		getkeyAlt();
 		return -1;
 	}
 }
@@ -298,7 +289,7 @@ int getSpecialWoundFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notSpecialWound);
-		getkey();
+		getkeyAlt();
 		return -1;
 	}
 }
@@ -370,7 +361,7 @@ void setup_newgame()
 			}// ALLOWSTALIN
 			mvaddstrAlt(bottomRow, 4, pressAnyOtherKey);
 		}
-		const int c = getkey();
+		const int c = getkeyAlt();
 		if (c == 'a')
 		{
 			classicmode = !classicmode;
@@ -477,7 +468,7 @@ void setup_newgame()
 
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(13,  4, pressAnyOtherKey);
-		const int c = getkey();
+		const int c = getkeyAlt();
 		if (c == 'a')
 		{
 			wincondition = WINCONDITION_ELITE;
@@ -519,7 +510,7 @@ void setup_newgame()
 
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(16,  4, pressAnyOtherKey);
-		const int c = getkey();
+		const int c = getkeyAlt();
 		if (c == 'a')
 		{
 			fieldskillrate = FIELDSKILLRATE_FAST;
@@ -587,7 +578,7 @@ struct Question {
 	vector<Choice> choices;
 };
 const int MAX_CHOICES = 10;
-
+#include "locations/locationsPoolVehicle.h"
 /* creates your founder */
 void makecharacter()
 {
@@ -703,7 +694,7 @@ void makecharacter()
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(19 - multipleCityMode * 2,  4, pressAnyKey);
-		const int c = getkey();
+		const int c = getkeyAlt();
 		if (c == 'a')
 		{
 			do {
@@ -969,14 +960,14 @@ void makecharacter()
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-				getkey();
+				getkeyAlt();
 				clearAlt();
 			}
 			if (invalidTag) {
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-				getkey();
+				getkeyAlt();
 				clearAlt();
 			}
 			else {
@@ -1030,7 +1021,7 @@ void makecharacter()
 			string currentOption = spaceDashSpace;
 			mvaddstrAlt(5 + 2 * offset, 0, allOptions.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
 			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
-			getkey();
+			getkeyAlt();
 		}
 		else {
 			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
@@ -1038,7 +1029,7 @@ void makecharacter()
 				mvaddstrAlt(5 + 2 * j, 0, allOptions.substr(j, 1) + currentOption + allQuestions[i].choices[j].ANSWER);
 				mvaddstrAlt(6 + 2 * j, 0, allQuestions[i].choices[j].ANSWER_2);
 			}
-			selection = getkey();
+			selection = getkeyAlt();
 		}
 		if (selection >= 'a' && selection < 'a' + allQuestions[i].choices.size()) {
 			//IsaacG I assume there's a way to combine vectors that is easier and/or
@@ -1218,120 +1209,16 @@ void makecharacter()
 	gamelog.nextMessage();
 	mvaddstrAlt(19,  2, inThisDarkTime, gamelog);
 	gamelog.nextMessage();
-	getkey();
+	getkeyAlt();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0,  0, whatIsYourName);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1,  0, pressEnterToBeRealName);
 	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
-	pool.push_back(newcr);
+	addCreature(newcr);
 	make_world(hasmaps);
-	squadst *newsq = new squadst;
-	newsq->id = 0; cursquadid++;
-	newsq->squad[0] = newcr;
-	newcr->squadid = 0;
-	strcpy(newsq->name, theLCS);
-	for (int l = 0; l < len(location); l++)
-	{
-		if (location[l]->type == base)
-		{
-			newcr->base = l;
-			newcr->location = l;
-			if (startcar) startcar->set_location(l);
-			switch (base)
-			{
-			case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting = 500; break;
-			case SITE_RESIDENTIAL_APARTMENT:location[l]->renting = 200; break;
-			case SITE_RESIDENTIAL_TENEMENT:location[l]->renting = 100; break;
-			case SITE_BUSINESS_CRACKHOUSE:
-				location[l]->renting = RENTING_PERMANENT;
-				location[l]->compound_stores += 100;
-				break;
-			}
-			location[l]->newrental = 1;
-			switch (recruits)
-			{
-			case RECRUITS_GANG:
-				for (int i = 0; i < 4; i++)
-				{
-					Creature* recruit = new Creature;
-					makecreature(*recruit, CREATURE_GANGMEMBER);
-					if (recruit->get_weapon().get_itemtypename() == tag_WEAPON_AUTORIFLE_AK47 ||
-						recruit->get_weapon().get_itemtypename() == tag_WEAPON_SMG_MP5 ||
-						!recruit->is_armed())
-					{
-						Weapon w(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)]);
-						recruit->give_weapon(w, NULL);
-						Clip c(*cliptype[getcliptype(tag_CLIP_9)], 4);
-						recruit->take_clips(c, 4);
-						recruit->reload(false);
-					}
-					recruit->align = ALIGN_LIBERAL;
-					recruit->set_attribute(ATTRIBUTE_HEART,
-						recruit->get_attribute(ATTRIBUTE_HEART, false) +
-						recruit->get_attribute(ATTRIBUTE_WISDOM, false) / 2);
-					recruit->set_attribute(ATTRIBUTE_WISDOM,
-						recruit->get_attribute(ATTRIBUTE_WISDOM, false) / 2);
-					recruit->namecreature();
-					strcpy(recruit->name, recruit->propername);
-					recruit->location = l;
-					recruit->base = l;
-					recruit->hireid = newcr->id;
-					newsq->squad[i + 1] = recruit;
-					recruit->squadid = newsq->id;
-					pool.push_back(recruit);
-				}
-				break;
-			}
-			if (GIVEBLOODYARMOR) {
-				Armor *newa = new Armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
-				newa->set_bloody(true);
-				location[l]->loot.push_back(newa);
-			}
-			if (HIGHFUNDS) {
-				ledger.force_funds(100000);
-			}
-			break;
-		}
-	}
-	//newcr->juice=0;
-	squad.push_back(newsq);
-	activesquad = newsq;
-	if (makelawyer)
-	{
-		Creature* lawyer = new Creature;
-		makecreature(*lawyer, CREATURE_LAWYER);
-		// Make sure lawyer is of the appropriate gender for dating the main character;
-		// opposite sex by default, same sex if the option was chosen that mentions
-		// homosexuality
-		if (gaylawyer)
-		{
-			lawyer->gender_conservative = lawyer->gender_liberal = newcr->gender_conservative;
-			// neutral founder gets neutral partner
-		}
-		else
-		{
-			if (newcr->gender_conservative == GENDER_MALE)
-				lawyer->gender_liberal = lawyer->gender_conservative = GENDER_FEMALE;
-			if (newcr->gender_conservative == GENDER_FEMALE)
-				lawyer->gender_liberal = lawyer->gender_conservative = GENDER_MALE;
-			// neutral founder gets random partner
-		}
-		// Ensure the lawyer has good heart/wisdom stats
-		if (lawyer->get_attribute(ATTRIBUTE_HEART, false) < newcr->get_attribute(ATTRIBUTE_HEART, false) - 2)
-			lawyer->adjust_attribute(ATTRIBUTE_HEART, -2);
-		lawyer->set_attribute(ATTRIBUTE_WISDOM, 1);
-		lawyer->namecreature();
-		lawyer->flag |= CREATUREFLAG_SLEEPER;
-		lawyer->flag |= CREATUREFLAG_LOVESLAVE;
-		lawyer->align = ALIGN_LIBERAL;
-		lawyer->infiltration = 0.3f;
-		lawyer->age = 28;
-		location[lawyer->worklocation]->mapped = 1;
-		lawyer->hireid = newcr->id;
-		pool.push_back(lawyer);
-		lawyer->location = lawyer->base = lawyer->worklocation;
-	}
+	//extern LocationsPool LocationPool;
+	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
 	uniqueCreatures.initialize();
 }

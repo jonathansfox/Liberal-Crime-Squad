@@ -25,7 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "sitemode/stealth.h"
@@ -49,18 +51,22 @@ This file is part of Liberal Crime Squad.                                       
 // for addstr (with log)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for int squadsize(const squadst *);
 
 #include "common/equipment.h"
 //for void equip(vector<Item *>&,int)
 
 #include "combat/fight.h"       
+#include "combat/fightCreature.h"    
 //own header
 
 #include "combat/chase.h"
+#include "combat/chaseCreature.h"
 //for Vehicle* getChaseVehicle(const Creature &c);
 
-#include "combat/haulkidnap.h"
+//#include "combat/haulkidnap.h"
+#include "combat/haulkidnapCreature.h"
 // for void freehostage(Creature &cr,char situation);
 
 
@@ -72,6 +78,7 @@ This file is part of Liberal Crime Squad.                                       
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
+#include "locations/locationsPool.h"
 extern short mode;
 extern short sitetype;
 extern char foughtthisround;
@@ -122,6 +129,9 @@ extern int locy;
 
   vector<string> evasionStringsAlt;
   vector<string> evasionStrings;
+
+#include "common/creaturePool.h"
+
 /* attack handling for an individual creature and its target */
 // returns a boolean representing whether it was the intended target or "actual"
 // so bool actual does not need to be passed by reference
@@ -268,9 +278,9 @@ void youattack()
 		}
 	}
 	//COVER FIRE
-	if (location[cursite]->siege.siege)
+	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			if (!pool[p]->alive) continue;
 			if (pool[p]->align != 1) continue;
@@ -388,7 +398,7 @@ void enemyattack()
 							if (mode == GAMEMODE_CHASECAR ||
 								mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 							else printencounter();
-							getkey();
+							getkeyAlt();
 						}
 						clearmessagearea();
 						mvaddstrAlt(16,  1, encounter[e].name, gamelog);
@@ -406,7 +416,7 @@ void enemyattack()
 						if (mode == GAMEMODE_CHASECAR ||
 							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 						else printencounter();
-						getkey();
+						getkeyAlt();
 					}
 					continue;
 				}
@@ -480,7 +490,7 @@ void enemyattack()
 								prisonerType == CREATURE_JUDGE_CONSERVATIVE ||
 								prisonerType == CREATURE_MILITARYOFFICER) sitecrime += 30;
 							makeloot(*activesquad->squad[target]->prisoner, groundloot);
-							getkey();
+							getkeyAlt();
 							delete_and_nullify(activesquad->squad[target]->prisoner);
 						}
 					}
@@ -544,7 +554,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-			getkey();
+			getkeyAlt();
 		}
 		a.forceinc = 1;
 		return actual;
@@ -552,7 +562,8 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	//SPECIAL ATTACK!
 	int encnum = 0;
 	for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encnum++;
-	if (!force_melee &&
+
+	bool specialAttackIsPossible = (!force_melee &&
 		(((a.type == CREATURE_COP&&a.align == ALIGN_MODERATE&&a.enemy()) ||
 			a.type == CREATURE_SCIENTIST_EMINENT ||
 			a.type == CREATURE_JUDGE_LIBERAL ||
@@ -563,7 +574,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			a.type == CREATURE_NEWSANCHOR ||
 			a.type == CREATURE_MILITARYOFFICER ||
 			a.get_weapon().has_musical_attack()) &&
-			(a.get_weapon().has_musical_attack() || !a.is_armed() || a.align != 1)))
+			(a.get_weapon().has_musical_attack() || !a.is_armed() || a.align != 1)));
+
+	if (specialAttackIsPossible)
 	{
 		if (a.align == 1 || encnum < ENCMAX)
 		{
@@ -596,7 +609,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		if (mode == GAMEMODE_CHASECAR
 			|| mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		else printencounter();
-		getkey();
+		getkeyAlt();
 		return actual;
 	}
 	else if (a.has_thrown_weapon) a.has_thrown_weapon = false;
@@ -672,7 +685,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	strcat(str, "!");
 	addstrAlt(str, gamelog);
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 	strcpy(str, a.heshe(true)); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
@@ -783,28 +796,33 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				sitestory->crime.push_back(CRIME_ARSON);
 			}
 		}
-		for (int i = 0; i < attack_used->number_attacks; i++)
+		int num_attacks = attack_used->number_attacks;
+		
+		if (sneak_attack) {
+			num_attacks = 1;
+			bursthits = 1;
+		}
+		if (attack_used->thrown)
 		{
-			if (attack_used->uses_ammo)
-			{
-				if (a.get_weapon().get_ammoamount() > 0)
-					a.get_weapon().decrease_ammo(1);
-				else break;
+			thrownweapons = num_attacks;
+			if (thrownweapons > a.count_weapons()) {
+				thrownweapons = a.count_weapons();
+				num_attacks = thrownweapons;
 			}
-			else if (attack_used->thrown)
-			{
-				if (a.count_weapons() - thrownweapons > 0)
-					thrownweapons++;
-				else break;
+		}else
+		if (attack_used->uses_ammo) {
+			if (a.get_weapon().get_ammoamount() < num_attacks) {
+				num_attacks = a.get_weapon().get_ammoamount();
 			}
-			if (sneak_attack)
+			a.get_weapon().decrease_ammo(num_attacks);
+		}
+		if (!sneak_attack) {
+			for (int i = 0; i < num_attacks; i++)
 			{
-				bursthits = 1; // Backstab only hits once
-				break;
+				// Each shot in a burst is increasingly less likely to hit
+				if (aroll + bonus - i*attack_used->successive_attacks_difficulty > droll)
+					bursthits++;
 			}
-			// Each shot in a burst is increasingly less likely to hit
-			if (aroll + bonus - i*attack_used->successive_attacks_difficulty > droll)
-				bursthits++;
 		}
 	}
 	//HIT!
@@ -996,7 +1014,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			char str[200];
 			clearmessagearea();
 			mvaddstr_f(16, 1, "(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)", aroll, droll, mod, damamount, armorpiercing);
-			getkey();
+			getkeyAlt();
 		}
 		// Bullets caught by armor should bruise instead of poke holes.
 		if (damamount < 4 && damtype & WOUND_SHOT)
@@ -1031,7 +1049,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 						addstrAlt("!", gamelog);
 						gamelog.newline();
 						addjuice(*target, 10, 1000);//Instant juice!! Way to take the bullet!!
-						getkey();
+						getkeyAlt();
 						break;
 					}
 				}
@@ -1086,9 +1104,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 					else if (target->enemy() && (t.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 					{
 						stat_kills++;
-						if (location[cursite]->siege.siege) location[cursite]->siege.kills++;
-						if (location[cursite]->siege.siege && t.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
-						if (location[cursite]->renting == RENTING_CCS)
+						if (LocationsPool::getInstance().isThereASiegeHere(cursite)) location[cursite]->siege.kills++;
+						if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
+						if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 						{
 							if (target->type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 							ccs_siege_kills++;
@@ -1118,13 +1136,13 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
 				mvaddstrAlt(17, 1, str, gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				if (!alreadydead)
 				{
 					severloot(t, groundloot);
 					clearmessagearea();
 					adddeathmessage(*target);
-					getkey();
+					getkeyAlt();
 					if (target->prisoner != NULL) freehostage(t, 1);
 				}
 			}
@@ -1144,7 +1162,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 				else printencounter();
-				getkey();
+				getkeyAlt();
 				//SPECIAL WOUNDS
 				if (!(target->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
 					!target->animalgloss)
@@ -1175,7 +1193,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 							else set_color_easy(RED_ON_BLACK_BRIGHT);
 							mvaddstrAlt(16,  1, damageDescription, gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 					}
 					if (w == BODYPART_BODY)
@@ -1193,7 +1211,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 							else set_color_easy(RED_ON_BLACK_BRIGHT);
 							mvaddstrAlt(16,  1, damageDescription, gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 					}
 					severloot(*target, groundloot);
@@ -1211,7 +1229,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-			getkey();
+			getkeyAlt();
 		}
 	}
 	else
@@ -1224,7 +1242,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			strcat(str, " knocks the blow aside and counters!");
 			mvaddstrAlt(17,  1, str, gamelog);
 			gamelog.newline();
-			getkey();
+			getkeyAlt();
 			goodguyattack = !goodguyattack;
 			bool actual_dummy;
 			actual_dummy = attack(t, a, 0, true);
@@ -1278,7 +1296,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-			getkey();
+			getkeyAlt();
 		}
 	}
 	for (; thrownweapons > 0; thrownweapons--)
@@ -1297,8 +1315,8 @@ string specialWoundPossibilityBody(
 	Creature &t,
 	const char breakdam,
 	const char pokedam,
-	const char damtype
-	) {
+	const char damtype	) 
+{
 	Creature* target = &t;
 	string damageDescription = "";
 	switch (LCSrandom(11))
@@ -1909,7 +1927,7 @@ void specialattack(Creature &a, Creature &t)
 	if (mode == GAMEMODE_CHASECAR ||
 		mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 	else printencounter();
-	getkey();
+	getkeyAlt();
 	return;
 }
 /* destroys armor, masks, drops weapons based on severe damage */
@@ -1932,7 +1950,7 @@ void severloot(Creature &cr, vector<Item *> &loot)
 		mvaddstrAlt(17,  1, cr.name, gamelog);
 		addstrAlt("'s grasp.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		if (mode == GAMEMODE_SITE) cr.drop_weapons_and_clips(&loot);
 		else cr.drop_weapons_and_clips(NULL);
 	}
@@ -1949,7 +1967,7 @@ void severloot(Creature &cr, vector<Item *> &loot)
 		addstrAlt(cr.get_armor().get_name(), gamelog);
 		addstrAlt(" has been destroyed.", gamelog);
 		gamelog.newline();
-		getkey();
+		getkeyAlt();
 		cr.strip(NULL);
 	}
 }
@@ -2274,7 +2292,7 @@ void autopromote(const int loc)
 	const int partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
 	int libnum = 0;
 	if (partyalive == 6) return;
-	for (int pl = 0; pl < len(pool); pl++)
+	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 	{
 		if (pool[pl]->location != loc) continue;
 		if (pool[pl]->alive&&pool[pl]->align == 1) libnum++;
@@ -2288,7 +2306,7 @@ void autopromote(const int loc)
 		else if (!activesquad->squad[p]->alive) conf = 1;
 		if (conf)
 		{
-			for (int pl = 0; pl < len(pool); pl++)
+			for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 			{
 				if (pool[pl]->location != loc) continue;
 				if (pool[pl]->alive&&pool[pl]->squadid == -1 &&

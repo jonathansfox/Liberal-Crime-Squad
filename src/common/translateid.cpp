@@ -25,14 +25,14 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
 #include "common/interval.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "creature/creaturetype.h"
-
-#include "items/loottype.h"
 
 #include "common/translateid.h"
 
@@ -43,12 +43,14 @@ This file is part of Liberal Crime Squad.                                       
 #include <set_color_support.h>
 extern vector<squadst *> squad;
 extern vector<Creature *> pool;
-extern vector<LootType *> loottype;
 extern vector<Vehicle *> vehicle;
 extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
 extern vector<CreatureType *> creaturetype;
+
+#include "common/creaturePool.h"
+
 /* transforms a squad id number into the index of that squad in the global vector */
 int getsquad(int id)
 {
@@ -64,7 +66,7 @@ int id_getcar(int id)
 /* transforms a creature id number into the index of that person in the pool */
 int getpoolcreature(int id)
 {
-   for(int i=0;i<len(pool);i++) if(pool[i]->id==id) return i;
+   for(int i=0;i<CreaturePool::getInstance().lenpool();i++) if(pool[i]->id==id) return i;
    return -1;
 }
 /* transforms a vehicle type id into the index of that vehicle type in the global vector */
@@ -113,18 +115,6 @@ int getarmortype(int id)
 int getarmortype(const string &idname)
 {
    for(int i=0;i<len(armortype);i++) if(armortype[i]->get_idname()==idname) return i;
-   return -1;
-}
-/* transforms a loot type id into the index of that loot type in the global vector */
-int getloottype(int id)
-{
-   for(int i=0;i<len(loottype);i++) if(loottype[i]->get_id()==id) return i;
-   return -1;
-}
-/* transforms a loot type name into the index of that loot type in the global vector */
-int getloottype(const string &idname)
-{
-   for(int i=0;i<len(loottype);i++) if(loottype[i]->get_idname()==idname) return i;
    return -1;
 }
 /* transforms a CreatureTypes value into a pointer to that creature type */

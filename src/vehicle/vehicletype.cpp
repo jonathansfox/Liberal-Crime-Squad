@@ -1,17 +1,12 @@
 
 #include <includes.h>
+#include "creature/creatureEnums.h"
 
-#include "vehicle/vehicle.h"
+#include "vehicle/vehicletype.h"
 
 #include "common/stringconversion.h"
 //for atoi
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern int year;
 int VehicleType::number_of_vehicletypes = 0;
 VehicleType::VehicleType(MCD_STR xmlstring)
@@ -257,18 +252,16 @@ int VehicleType::gethitlocation(int bodypart)
    {
    case BODYPART_HEAD:
       return CARPART_WINDOW;
-      break;
    case BODYPART_BODY:
    case BODYPART_ARM_RIGHT:
    case BODYPART_ARM_LEFT:
       return (LCSrandom(100) < armormidpoint_) ? CARPART_BODY : CARPART_WINDOW;
-      break;
    case BODYPART_LEG_RIGHT:
    case BODYPART_LEG_LEFT:
       return CARPART_BODY;
-      break;
+   default:
+	   return CARPART_WINDOW;
    }
-   return CARPART_WINDOW;
 }
 string VehicleType::getpartname(int location)
 {
@@ -282,12 +275,13 @@ int VehicleType::armorbonus(int location)
       return LCSrandom(lowarmormax_-lowarmormin_+1)+lowarmormin_;
    case CARPART_WINDOW:
       return LCSrandom(higharmormax_-higharmormin_+1)+higharmormin_;
+   default:
+	   return 0;
    }
-   return 0;
 }
 int VehicleType::modifieddriveskill(int skillLevel)
 {
-   int score = (skillLevel+drivebonus_)*drivebonus_factor_;
+   int score = (int) floor((skillLevel+drivebonus_)*drivebonus_factor_);
    if (score < drivebonus_limit1_)
       return score;
    if (score > drivebonus_limit1_)
@@ -296,7 +290,7 @@ int VehicleType::modifieddriveskill(int skillLevel)
 }
 int VehicleType::modifieddodgeskill(int skillLevel)
 {
-   int score = (skillLevel+dodgebonus_)*dodgebonus_factor_;
+   int score = (int) floor((skillLevel+dodgebonus_)*dodgebonus_factor_);
    if (score < dodgebonus_limit1_)
       return score;
    if (score > dodgebonus_limit1_)

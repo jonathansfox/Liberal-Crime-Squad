@@ -22,6 +22,6 @@ class Augmentation
       int effect;
       int value;
       static std::string get_name(int augmentation_type);
-      static int get_associated_attribute(int augmentation_type);
+      //static int get_associated_attribute(int augmentation_type);
 };
 #endif

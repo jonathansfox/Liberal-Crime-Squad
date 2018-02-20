@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 //to come back here and finish the job.
 
 #include <includes.h>
+#include "creature/creature.h"
 
 #include "sitemode/advance.h"
 // for creatureadvance
@@ -48,15 +49,18 @@ This file is part of Liberal Crime Squad.                                       
 // for printparty
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void criminalizeparty(short)
 
 #include "common/getnames.h"
 // for void enter_name(int,int,char *,int,const char *defname=NULL);
 
 #include "combat/haulkidnap.h"
+#include "combat/haulkidnapCreature.h"
 //own header
 
 #include "combat/fight.h"
+#include "combat/fightCreature.h"  
 //for void enemyattack();
 
 
@@ -65,9 +69,8 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "common/creaturePoolCreature.h"
 extern Log gamelog;
-extern vector<Location *> location;
 extern string chooseALiberalTo;
 extern string AND;
 extern string spaceDashSpace;
@@ -104,7 +107,7 @@ void kidnapattempt()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "No one can do the job.            ");
 		mvaddstrAlt(17,  1, "                                  ");
-		getkey();
+		getkeyAlt();
 		return;
 	}
 	do
@@ -112,7 +115,7 @@ void kidnapattempt()
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  20, chooseALiberalTo + "do the job.");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
 			if (availslot[c - '1'])
@@ -145,7 +148,7 @@ void kidnapattempt()
 			}
 			do
 			{
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c >= 'a'&&c < ('a' + ENCMAX))
 				{
 					t = c - 'a';
@@ -195,7 +198,7 @@ void kidnapattempt()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "All of the targets are too dangerous.                ");
 		mvaddstrAlt(17,  1, "                                                     ");
-		getkey();
+		getkeyAlt();
 	}
 }
 /* prompt after you've said you want to release someone */
@@ -214,7 +217,7 @@ void releasehostage()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, "No hostages are being held.       ");
 		mvaddstrAlt(17,  1, "                                  ");
-		getkey();
+		getkeyAlt();
 		return;
 	}
 	do
@@ -222,7 +225,7 @@ void releasehostage()
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  20, chooseALiberalTo + "release their hostage.");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
 			if (availslot[c - '1'])
@@ -236,7 +239,7 @@ void releasehostage()
 		mvaddstrAlt(16,  1, "The hostage shouts for help!      ", gamelog);
 		gamelog.nextMessage(); //Next message.
 		mvaddstrAlt(17,  1, "                                  ");
-		getkey();
+		getkeyAlt();
 		sitealarm = 1;
 		alienationcheck(1);
 	}
@@ -263,12 +266,12 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 			gamelog.newline(); //New line.
 			a.prisoner = new Creature;
 			*a.prisoner = t;
-			getkey();
+			getkeyAlt();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(17,  1, t.name, gamelog);
 			addstrAlt(" is struggling and screaming!", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			gamelog.newline();
 			return 1;
 		}
@@ -283,7 +286,7 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 			addstrAlt(t.name, gamelog);
 			addstrAlt(" writhes away!", gamelog);
 			gamelog.newline(); //New line.
-			getkey();
+			getkeyAlt();
 			gamelog.newline();
 			return 0;
 		}
@@ -304,7 +307,7 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		else addstrAlt("\"Bitch, be cool.\"", gamelog);
 		a.prisoner = new Creature;
 		*a.prisoner = t;
-		getkey();
+		getkeyAlt();
 		gamelog.newline();
 		return 1;
 	}
@@ -376,7 +379,7 @@ void freehostage(Creature &cr, char situation)
 		if (mode == GAMEMODE_CHASECAR ||
 			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		else printencounter();
-		getkey();
+		getkeyAlt();
 	}
 }
 /* haul dead/paralyzed */
@@ -404,7 +407,7 @@ void squadgrab_immobile(char dead)
 				addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline(); //New line.
-				getkey();
+				getkeyAlt();
 				freehostage(*activesquad->squad[p]->prisoner, 1);
 			}
 		}
@@ -479,34 +482,8 @@ void squadgrab_immobile(char dead)
 				}
 				if (flipstart) activesquad->squad[5] = NULL;
 				printparty();
-				getkey();
+				getkeyAlt();
 			}
 		}
 	}
-}
-/* names the new hostage and stashes them in your base */
-void kidnaptransfer(Creature &cr)
-{
-	Creature *newcr = new Creature;
-	*newcr = cr;
-	newcr->namecreature();
-	newcr->location = activesquad->squad[0]->base;
-	newcr->base = activesquad->squad[0]->base;
-	newcr->flag |= CREATUREFLAG_MISSING;
-	//disarm them and stash their weapon back at the base
-	newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
-	//Create interrogation data
-	newcr->activity.intr() = new interrogation;
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, "The Education of ");
-	addstrAlt(newcr->propername);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2,  0, "What name will you use for this ");
-	addstrAlt(newcr->get_type_name());
-	addstrAlt(" in its presence?");
-	mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
-	enter_name(4, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
-	pool.push_back(newcr);
-	stat_kidnappings++;
 }

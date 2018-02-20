@@ -26,6 +26,8 @@ This file is part of Liberal Crime Squad.                                       
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 
 #include <includes.h>
+#include "creature/creatureEnums.h"
+#include "pdcurses/curses.h"
 
 #include "common/consolesupport.h"
 
@@ -167,6 +169,7 @@ int checkkey()
    return ret;
 }
 /* Variant of checkkey() that doesn't make all letters lowercase */
+// UNUSED
 int checkkey_cap()
 {
    int c=ERR,ret=ERR;
@@ -250,7 +253,7 @@ void set_title(char *s)
       putp(buf);
    }
 #else // assume pdcurses
-   PDC_set_title(s);
+   PDC_set_titleAlt(s);
 #endif
 }
 // Initialize the console, depending on the OS and language/code page settings
@@ -278,12 +281,6 @@ void init_console()
    #endif
 }
 #ifdef WIN32
-#define  FE_FONTSMOOTHINGSTANDARD           1
-#define  FE_FONTSMOOTHINGCLEARTYPE          2
-#define  SPI_GETFONTSMOOTHINGTYPE      0x200A
-#define  SPI_SETFONTSMOOTHINGTYPE      0X200B
-#define  SPI_GETFONTSMOOTHINGCONTRAST  0X200C
-#define  SPI_SETFONTSMOOTHINGCONTRAST  0X200D
 BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
 extern bool fixcleartype;

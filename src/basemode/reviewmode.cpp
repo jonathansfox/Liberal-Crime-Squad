@@ -52,8 +52,11 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
 #include "basemode/reviewmode.h"
+void sortbyhire(vector<Creature *> &temppool, vector<int> &level);
 // own header
 
 #include "common/consolesupport.h"
@@ -62,6 +65,7 @@ the bottom of includes.h in the top src folder.
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for void printfunds(int,int,char*)
 
 #include "common/getnames.h"
@@ -71,6 +75,7 @@ the bottom of includes.h in the top src folder.
 //for void consolidateloot(vector<Item *>&)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for short reviewmodeenum_to_sortingchoiceenum(short)
 
 #include "common/translateid.h"
@@ -82,12 +87,15 @@ the bottom of includes.h in the top src folder.
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
 extern vector<Creature *> pool;
 extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern Log gamelog;
 extern bool multipleCityMode;
 extern MusicClass music;
@@ -105,6 +113,9 @@ extern short activesortingchoice[SORTINGCHOICENUM];
 typedef map<short, string > shortAndString;
  vector<string> methodOfExecution;
  vector<string> getsSick;
+
+#include "common/creaturePool.h"
+
 struct stringAndColor
 {
 	string str;
@@ -127,7 +138,7 @@ void review()
 		mvaddstrAlt(0,  0, "Review your Liberals and Assemble Squads");
 		mvaddstrAlt(1,  0, "컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
 		int n[8] = { 0,0,0,0,0,0,0,0 }, y = 2;
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			if (pool[p]->is_active_liberal()) n[0]++; // Active Liberals
 			if (pool[p]->align != ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
@@ -231,7 +242,7 @@ void review()
 		mvaddstrAlt(22,  0, "Press a Letter to select a squad.  1-7 to view Liberal groups.");
 		mvaddstrAlt(23, 0,		addpagestr() + "  Press U to Promote Liberals.");
 		mvaddstrAlt(24,  0, "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
-		int c = getkey();
+		int c = getkeyAlt();
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(squad) + REVIEWMODENUM) page++;
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
@@ -268,7 +279,7 @@ void review_mode(short mode)
 	vector<Creature *> temppool;
 	Creature *swap = NULL;
 	int swapPos = 0;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		switch (mode)
 		{
@@ -333,7 +344,7 @@ void review_mode(short mode)
 			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 42);
 			if (temppool[p]->location == -1) addstrAlt("Away");
-			else addstrAlt(location[temppool[p]->location]->getname(true, true));
+			else addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
 			moveAlt(y, 57);
 			switch (mode)
 			{
@@ -372,7 +383,7 @@ void review_mode(short mode)
 			case REVIEWMODE_JUSTICE:
 			{
 				if (temppool[p]->deathpenalty&&temppool[p]->sentence != 0 &&
-					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
+					LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 				{
 					set_color_easy(RED_ON_BLACK_BRIGHT);
 					addstrAlt("DEATH ROW: ");
@@ -458,7 +469,7 @@ void review_mode(short mode)
 		if (swap) { addstrAlt("Place "); addstrAlt(swap->name); }
 		else addstrAlt("Reorder Liberals");
 		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -503,7 +514,7 @@ void review_mode(short mode)
 					if (len(temppool) > 1) addstrAlt("    LEFT/RIGHT - View Others");
 					mvaddstrAlt(24,  0, "Press any other key to continue the Struggle");
 					addstrAlt("    UP/DOWN  - More Info");
-					int c = getkey();
+					int c = getkeyAlt();
 					if (len(temppool)>1 && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
 					{
 						int sx = 1;
@@ -544,7 +555,7 @@ void review_mode(short mode)
 						mvaddstrAlt(22,  0, "Do you want to permanently release this squad member from the LCS?              "); // 80 characters
 						mvaddstrAlt(23,  0, "If the member has low heart they may go to the police.                          "); // 80 characters
 						mvaddstrAlt(24,  0, "  C - Confirm       Any other key to continue                                   "); // 80 characters
-						int c = getkey();
+						int c = getkeyAlt();
 						if (c == 'c')
 						{
 							// Release squad member
@@ -554,7 +565,7 @@ void review_mode(short mode)
 							gamelog.newline(); //New line.
 							addstrAlt("                                                                                "); // 80 spaces
 							mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-							getkey();
+							getkeyAlt();
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
 							// TODO: Do law check against other members?
@@ -601,7 +612,7 @@ void review_mode(short mode)
 						addstrAlt(" kill this squad member?                               "); // 55 characters (25+55=80)
 						mvaddstrAlt(23,  0, "Killing your squad members is Not a Liberal Act.                                "); // 80 characters
 						mvaddstrAlt(24,  0, "  C - Confirm       Any other key to continue                                   "); // 80 characters
-						int c = getkey();
+						int c = getkeyAlt();
 						if (c == 'c')
 						{
 							temppool[p]->die();
@@ -614,7 +625,7 @@ void review_mode(short mode)
 							addstrAlt(pickrandom(methodOfExecution), gamelog);
 							mvaddstrAlt(23,  0, "                                                                                "); // 80 spaces
 							mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-							getkey();
+							getkeyAlt();
 							moveAlt(22, 0);
 							if (boss != -1)
 							{
@@ -632,7 +643,7 @@ void review_mode(short mode)
 									gamelog.newline(); //New line.
 									addstrAlt(pool[boss]->name, gamelog);
 									addstrAlt(" has lost heart.                                                                ", gamelog); // 80 characters
-									getkey();
+									getkeyAlt();
 								}
 								else if (!LCSrandom(3))
 								{
@@ -645,7 +656,7 @@ void review_mode(short mode)
 									gamelog.newline(); //New line.
 									addstrAlt(pool[boss]->name, gamelog);
 									addstrAlt(" has gained wisdom.                                                             ", gamelog); // 80 characters
-									getkey();
+									getkeyAlt();
 								}
 							}
 							gamelog.nextMessage(); //Write buffer out to prepare for next message.
@@ -670,7 +681,7 @@ void review_mode(short mode)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(22,  8, "Choose squad member to replace ");
 			if (!swap) {
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 				if (c<'a' || c>'s') continue; // Not within correct range
 											  // Get first member to swap
@@ -680,7 +691,7 @@ void review_mode(short mode)
 			else { // non-null swap
 				addstrAlt(swap->name);
 				addstrAlt(" with");
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 				if (c<'a' || c>'s') continue; // Not within correct range
 				Creature *swap2 = NULL;
@@ -688,13 +699,13 @@ void review_mode(short mode)
 				if (p < len(temppool) && temppool[p] != swap)
 				{
 					swap2 = temppool[p];
-					for (int i = 0; i < len(pool); i++)
+					for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 						if (pool[i]->id == swap->id)
 						{
 							pool.erase(pool.begin() + i);
 							break;
 						}
-					for (int i = 0; i < len(pool); i++)
+					for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 						if (pool[i]->id == swap2->id)
 						{
 							pool.insert(pool.begin() + i + (swapPos < p), swap);
@@ -723,7 +734,7 @@ void assemblesquad(squadst *cursquad)
 		newsquad = 1;
 	}
 	vector<Creature *> temppool;
-	for (p = 0; p < len(pool); p++)
+	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		if (pool[p]->is_active_liberal() &&
 			(pool[p]->location == culloc || culloc == -1))
 		{
@@ -737,7 +748,7 @@ void assemblesquad(squadst *cursquad)
 	for (int sl = 0; sl < len(squad); sl++)
 	{
 		squadloc[sl] = squad[sl]->squad[0]->location;
-		if (squadloc[sl] != -1) if (location[squadloc[sl]]->renting == RENTING_NOCONTROL)
+		if (squadloc[sl] != -1) if (LocationsPool::getInstance().getRentingType(squadloc[sl]) == RENTING_NOCONTROL)
 			squadloc[sl] = -1;
 	}
 	int page = 0, partysize;
@@ -810,7 +821,7 @@ void assemblesquad(squadst *cursquad)
 		if (partysize > 0) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(24,  40, "9 - Dissolve the squad.");
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -829,7 +840,7 @@ void assemblesquad(squadst *cursquad)
 						mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
 						mvaddstrAlt(23,  0, "           Liberals must be in the same location to form a Squad.               "); // 80 characters
 						mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-						getkey();
+						getkeyAlt();
 						conf = 0;
 					}
 				}
@@ -840,7 +851,7 @@ void assemblesquad(squadst *cursquad)
 					mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
 					mvaddstrAlt(23,  0, "                Squad Liberals must be able to move around.                     "); // 80 characters
 					mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-					getkey();
+					getkeyAlt();
 					conf = 0;
 				}
 				if (conf)
@@ -886,7 +897,7 @@ void assemblesquad(squadst *cursquad)
 			mvaddstrAlt(22,  0, "Press a Letter to view Liberal details.                                         "); // 80 characters
 			mvaddstrAlt(23,  0, "                                                                                "); // 80 spaces
 			mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-			int c2 = getkey();
+			int c2 = getkeyAlt();
 			if (c2 >= 'a'&&c2 <= 's')
 			{
 				int p = page * 19 + c2 - 'a';
@@ -928,7 +939,7 @@ void assemblesquad(squadst *cursquad)
 				mvaddstrAlt(22,  0, "                                                                                "); // 80 spaces
 				mvaddstrAlt(23,  0, "You cannot form a Squad with only Conservatives!                                "); // 80 characters
 				mvaddstrAlt(24,  0, "                                                                                "); // 80 spaces
-				getkey();
+				getkeyAlt();
 			}
 		}
 		if (c == '9')
@@ -980,7 +991,7 @@ void squadlessbaseassign()
 {
 	int p = 0, l = 0, page_lib = 0, page_loc = 0, selectedbase = 0;
 	vector<Creature *> temppool;
-	for (p = 0; p < len(pool); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
+	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_BASEASSIGN]);
 	vector<int> temploc;
@@ -1031,7 +1042,7 @@ void squadlessbaseassign()
 			mvaddstrAlt(24,  0, ",. to view other Base pages.");
 		}
 		mvaddstrAlt(23,  35, "T to sort people.");
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP (people)
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_lib>0) page_lib--;
 		//PAGE DOWN (people)
@@ -1073,7 +1084,7 @@ static void printname(Creature &cr)
 	// Determine bracket color, if any, based on location
 	if (cr.location != -1)
 	{
-		switch (location[cr.location]->type)
+		switch (LocationsPool::getInstance().getLocationType(cr.location))
 		{
 		case SITE_GOVERNMENT_POLICESTATION:
 		case SITE_GOVERNMENT_COURTHOUSE:
@@ -1132,7 +1143,7 @@ void promoteliberals()
 #define PAGELENGTH 19
 	vector<Creature *> temppool;
 	vector<int> level;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		if (pool[p]->alive&&pool[p]->align == 1)
 			temppool.push_back(pool[p]);
 	if (!len(temppool)) return;
@@ -1155,14 +1166,14 @@ void promoteliberals()
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			moveAlt(y, 27);
 			int p2 = 0;
-			for (p2 = 0; p2 < len(pool); p2++)
+			for (p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
 			{
 				int p3 = 0;
 				if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
 				{
 					printname(*pool[p2]);
 					moveAlt(y, 54);
-					for (p3 = 0; p3 < len(pool); p3++)
+					for (p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 					{
 						if (pool[p3]->alive == 1 && pool[p3]->id == pool[p2]->hireid)
 						{
@@ -1178,7 +1189,7 @@ void promoteliberals()
 					break;
 				}
 			}
-			if (p2 == len(pool)) addstrAlt("<LCS Leader>");
+			if (p2 == CreaturePool::getInstance().lenpool()) addstrAlt("<LCS Leader>");
 			moveAlt(y++, 4 + level[p]);
 			printname(*temppool[p]);
 		}
@@ -1194,7 +1205,7 @@ void promoteliberals()
 		{
 			mvaddstrAlt(24, 0,			addpagestr());
 		}
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -1205,12 +1216,12 @@ void promoteliberals()
 			// *JDS* can't promote liberals in hiding OR loveslaves
 			if (p < len(temppool) && !temppool[p]->hiding&&!(temppool[p]->flag&CREATUREFLAG_LOVESLAVE))
 			{
-				for (int p2 = 0; p2 < len(pool); p2++)
+				for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
 				{
 					if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
 					{
 						addstrAlt(pool[p2]->name);
-						for (int p3 = 0; p3 < len(pool); p3++)
+						for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 						{
 							// Can't promote if new boss can't accept more subordinates
 							if (pool[p3]->alive == 1 && pool[p3]->id == pool[p2]->hireid &&

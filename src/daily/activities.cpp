@@ -52,9 +52,13 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/activate.h"
@@ -62,11 +66,12 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "items/loottype.h"
 
-#include "items/loot.h"
+//#include "items/loot.h"
 
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for addstr
 
 #include "common/translateid.h"
@@ -76,6 +81,7 @@ This file is part of Liberal Crime Squad.                                       
 // for void set_color(short,short,bool)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void criminalize(Creature &,short);
 
 #include "common/getnames.h"
@@ -88,14 +94,17 @@ This file is part of Liberal Crime Squad.                                       
 //own header
 
 #include "combat/chase.h"
+#include "combat/chaseCreature.h"
 //for void makechasers(long sitetype,long sitecrime);
 
 #include "combat/fight.h"
+#include "combat/fightCreature.h"  
 //for void makeloot(Creature &cr,vector<Item *> &loot);
         
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
@@ -105,7 +114,8 @@ extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
 extern vector<Location *> location;
-extern vector<LootType *> loottype;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern short mode;
@@ -267,7 +277,7 @@ void repairarmor(Creature &cr, char &clearformess)
 			cr.train(o.whichSkill, o.experience, o.maxLevel);
 		}
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 	}
 	else
 	{
@@ -365,7 +375,7 @@ void repairarmor(Creature &cr, char &clearformess)
 				delete_and_remove(*pilelist, pileindex);
 			}
 		}
-		getkey();
+		getkeyAlt();
 	}
 }
 /* armor manufacture */
@@ -383,7 +393,7 @@ void makearmor(Creature &cr, char &clearformess)
 		mvaddstrAlt(8,  1, cr.name, gamelog);
 		addstrAlt(" cannot afford material for clothing.", gamelog);
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 		return;
 	}
 	else
@@ -394,7 +404,7 @@ void makearmor(Creature &cr, char &clearformess)
 			int sq = getsquad(cr.squadid);
 			for (int l = 0; l < len(squad[sq]->loot); l++)
 				if (squad[sq]->loot[l]->is_loot() &&
-					static_cast<Loot*>(squad[sq]->loot[l])->is_cloth()) //cast -XML
+					(squad[sq]->loot[l])->is_cloth()) //cast -XML
 				{
 					if (squad[sq]->loot[l]->get_number() == 1)
 						delete_and_remove(squad[sq]->loot, l);
@@ -405,7 +415,7 @@ void makearmor(Creature &cr, char &clearformess)
 		}
 		if (!foundcloth) for (int l = 0; l < len(location[cr.location]->loot); l++)
 			if (location[cr.location]->loot[l]->is_loot() &&
-				static_cast<Loot*>(location[cr.location]->loot[l])->is_cloth()) //cast -XML
+				(location[cr.location]->loot[l])->is_cloth()) //cast -XML
 			{
 				if (location[cr.location]->loot[l]->get_number() == 1)
 					delete_and_remove(location[cr.location]->loot, l);
@@ -421,7 +431,7 @@ void makearmor(Creature &cr, char &clearformess)
 			mvaddstrAlt(8,  1, cr.name, gamelog);
 			addstrAlt(" cannot find enough cloth to reduce clothing costs.", gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 		}
 		else
 		{
@@ -457,7 +467,7 @@ void makearmor(Creature &cr, char &clearformess)
 			addstrAlt(armortype[at]->get_name(), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 		}
 	}
 }
@@ -637,7 +647,7 @@ void survey(Creature *cr)
 		}
 		while (true)
 		{
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) { page--; break; }
 			else if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) { page++; break; }
@@ -657,7 +667,7 @@ void attemptarrest(Creature & liberal, const char* string, int clearformess)
 		addstrAlt(string, gamelog);
 		addstrAlt("!", gamelog);
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 	}
 	// Chase sequence! Wee!
 	makechasers(-1, 5);
@@ -670,7 +680,7 @@ void attemptarrest(Creature & liberal, const char* string, int clearformess)
 		sitestory = ns;
 	}
 	chaseseq.clean();
-	chaseseq.location = location[liberal.location]->parent;
+	chaseseq.location = LocationsPool::getInstance().getLocationParent(liberal.location);
 	footchase(liberal);
 }
 // While galavanting in public, your liberals may be ambushed by police
@@ -702,12 +712,15 @@ int checkforarrest(Creature & liberal, const char* string, int clearformess)
 	if (arrest) attemptarrest(liberal, string, clearformess);
 	return arrest;
 }
+
+#include "common/creaturePool.h"
+
 /* misc activation related things */
 // *JDSRETURN*
 void funds_and_trouble(char &clearformess)
 {  //ACTIVITIES FOR INDIVIDUALS
 	vector<Creature *> trouble, hack, bury, solicit, tshirts, art, music, graffiti, brownies, prostitutes, teachers, students;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive) continue;
 		if (pool[p]->location == -1)
@@ -784,7 +797,7 @@ void funds_and_trouble(char &clearformess)
 			students.push_back(pool[p]);
 			break;
 		case ACTIVITY_SLEEPER_JOINLCS:
-			if (!location[find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location)]->siege.siege)
+			if (!LocationsPool::getInstance().isThereASiegeHere(find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location)))
 			{
 				pool[p]->activity.type = ACTIVITY_NONE;
 				pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
@@ -945,6 +958,7 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
 	}
 }
  vector<activityData> hackingActivities;
+#include "items/lootTypePoolItem.h"
 void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 {
 	if (len(hack))
@@ -990,8 +1004,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 			crime = currentActivity.crime;
 			juiceval = currentActivity.juiceval;
 			if (len(currentActivity.lootType) > 0) {
-				Item *it = new Loot(*loottype[getloottype(pickrandom(currentActivity.lootType))]);
-				location[hack[0]->location]->loot.push_back(it);
+				location[hack[0]->location]->loot.push_back(getNewLoot(pickrandom(currentActivity.lootType)));
 			}
 			for (ChangeOfOpinion o : currentActivity.opinion) {
 				change_public_opinion(o.view, o.x, o.y, o.z);
@@ -1028,7 +1041,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 			mvaddstrAlt(8,  1, msg, gamelog);
 			gamelog.nextMessage();
 			msg[0] = 0;
-			getkey();
+			getkeyAlt();
 		}
 		//CREDIT CARD FRAUD
 		for (int h = 0; h < len(cc); h++)
@@ -1062,7 +1075,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 				mvaddstrAlt(8,  1, msg, gamelog); //TODO: Log this?
 				gamelog.nextMessage();
 				msg[0] = 0;
-				getkey();
+				getkeyAlt();
 			}
 		}
 	}
@@ -1094,7 +1107,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 							addstrAlt(" from ", gamelog);
 							addstrAlt(location[graffiti[s]->base]->getname()); //TODO: Explicitly log it, or will the game log it?
 							addstrAlt(singleDot, gamelog);
-							getkey();
+							getkeyAlt();
 							graffiti[s]->give_weapon(*w, &(location[graffiti[s]->base]->loot));
 							if (location[graffiti[s]->base]->loot[i]->empty())
 								delete_and_remove(location[graffiti[s]->base]->loot, i);
@@ -1107,7 +1120,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				{
 					ledger.subtract_funds(20, EXPENSE_SHOPPING);
 					addstrAlt(" bought spraypaint for graffiti.", gamelog);
-					getkey();
+					getkeyAlt();
 					Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
 					graffiti[s]->give_weapon(spray, &location[graffiti[s]->base]->loot);
 				}
@@ -1115,7 +1128,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				{
 					addstrAlt(" needs a spraycan equipped to do graffiti.", gamelog);
 					graffiti[s]->activity.type = ACTIVITY_NONE;
-					getkey();
+					getkeyAlt();
 				}
 				gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
 			}
@@ -1145,7 +1158,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				ns->positive = 0;
 				newsstory.push_back(ns);
 				sitestory = ns;
-				getkey();
+				getkeyAlt();
 				attemptarrest(*graffiti[s], NULL, clearformess);
 			}
 			else if (graffiti[s]->activity.arg != -1)
@@ -1167,7 +1180,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 					addjuice(*graffiti[s], power, power * 20);
 					change_public_opinion(issue, power);
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-					getkey();
+					getkeyAlt();
 				}
 				else
 				{
@@ -1177,7 +1190,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 					addstrAlt(" works through the night on a large mural.", gamelog);
 					gamelog.nextMessage();
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-					getkey();
+					getkeyAlt();
 				}
 			}
 			else if (!LCSrandom(max(30 - graffiti[s]->get_skill(SKILL_ART) * 2, 5)))
@@ -1192,7 +1205,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				graffiti[s]->activity.arg = issue;
 				power = 0;
 				graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-				getkey();
+				getkeyAlt();
 			}
 			graffiti[s]->train(SKILL_ART, max(4 - graffiti[s]->get_skill(SKILL_ART), 0));
 			if (issue == VIEW_LIBERALCRIMESQUAD)
@@ -1246,7 +1259,7 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 				addstrAlt(" has been arrested in a prostitution sting.", gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], -7, -30);
-				getkey();
+				getkeyAlt();
 				caught = 1;
 				removesquadinfo(*prostitutes[p]);
 				prostitutes[p]->carid = -1;
@@ -1264,7 +1277,7 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 				addstrAlt(" was nearly caught in a prostitution sting.", gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], 5, 0);
-				getkey();
+				getkeyAlt();
 			}
 		}
 		if (!caught)
@@ -1304,7 +1317,7 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
 			addstrAlt(students[s]->heshe(), gamelog);
 			addstrAlt(" can.", gamelog);
 			gamelog.nextMessage();
-			getkey();
+			getkeyAlt();
 		}
 	}
 }
@@ -1476,7 +1489,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 			}
 		} while (!done);
 		gamelog.nextMessage(); //Do this now so that it doesn't have to be done in every case up there.
-		getkey();
+		getkeyAlt();
 		if (crime != 0)
 		{
 			for (int t = 0; t < len(trouble); t++)
@@ -1502,7 +1515,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 						mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
 						addstrAlt(" is cornered by a mob of angry rednecks.", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 						bool wonfight = false;
 						if (trouble[t]->get_weapon().is_threatening())
 						{
@@ -1514,13 +1527,13 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 							addstrAlt(trouble[t]->get_weapon().get_name(), gamelog);
 							addstrAlt("!", gamelog);
 							gamelog.nextMessage();
-							getkey();
+							getkeyAlt();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(8,  1, "The mob scatters!", gamelog);
 							gamelog.nextMessage();
-							getkey();
+							getkeyAlt();
 							addjuice(*trouble[t], 5, 20);
 							wonfight = true;
 						}
@@ -1537,7 +1550,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 									addstrAlt(singleSpace, gamelog);
 									addstrAlt(pickrandom(win_hand_to_hand), gamelog);
 									gamelog.nextMessage();
-									getkey();
+									getkeyAlt();
 									wonfight = true;
 								}
 								else
@@ -1547,7 +1560,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 									addstrAlt(singleSpace, gamelog);
 									addstrAlt(pickrandom(lose_hand_to_hand), gamelog);
 									gamelog.nextMessage();
-									getkey();
+									getkeyAlt();
 									count++; // fight goes faster when you're losing
 									wonfight = false;
 								}
@@ -1564,7 +1577,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 								else addstrAlt("shit", gamelog);
 								addstrAlt(" out of everyone who got close!", gamelog);
 								gamelog.nextMessage();
-								getkey();
+								getkeyAlt();
 								addjuice(*trouble[t], 30, 300);
 								if (trouble[t]->blood > 70)trouble[t]->blood = 70;
 							}
@@ -1578,7 +1591,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 							addstrAlt(" is severely beaten before the mob is broken up.", gamelog);
 							gamelog.nextMessage();
 							trouble[t]->activity.type = ACTIVITY_CLINIC;
-							getkey();
+							getkeyAlt();
 							addjuice(*trouble[t], -10, -50);
 							if (trouble[t]->blood > 10)trouble[t]->blood = 10;
 							if (!LCSrandom(5))
@@ -1594,7 +1607,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										addstrAlt("'s lower spine has been broken!", gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_LOWERSPINE] = 0;
-										getkey();
+										getkeyAlt();
 									}
 									break;
 								case 1:
@@ -1604,7 +1617,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										addstrAlt("'s upper spine has been broken!", gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_UPPERSPINE] = 0;
-										getkey();
+										getkeyAlt();
 									}
 									break;
 								case 2:
@@ -1614,7 +1627,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										addstrAlt("'s neck has been broken!", gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_NECK] = 0;
-										getkey();
+										getkeyAlt();
 									}
 									break;
 								case 3:
@@ -1625,7 +1638,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										else addstrAlt("'s tooth has been pulled out with pliers!", gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_TEETH] = 0;
-										getkey();
+										getkeyAlt();
 									}
 									break;
 								default:
@@ -1657,7 +1670,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										}
 										addstrAlt("broken!", gamelog);
 										gamelog.nextMessage();
-										getkey();
+										getkeyAlt();
 										trouble[t]->special[SPECIALWOUND_RIBS] -= ribminus;
 									}
 									break;
@@ -1727,7 +1740,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 			break;
 		}
 		//Count potential students for this teacher to get an idea of efficiency
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			//If they're at the location
 			if (pool[p]->location == teachers[t]->location &&
@@ -1755,7 +1768,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 		if (ledger.get_funds() < min(students, 10)*cost)
 			continue; //Can't afford to teach them. Continue with next teacher.
 					  //Walk through and train people
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			//If they're at the location
 			if (pool[p]->location == teachers[t]->location &&
@@ -1809,7 +1822,7 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 {
 	if (len(bury))
 	{
-		for (int p = len(pool) - 1; p >= 0; p--)
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->alive) continue;
 			bool arrest_attempted = false;
@@ -1863,7 +1876,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10,  0, cr.name, gamelog);
 		addstrAlt(" looks around for an accessible vehicle...", gamelog);
-		getkey();
+		getkeyAlt();
 		//ROUGH DAY
 		if (!cr.skill_check(SKILL_STREETSENSE, diff))
 			do cartype = LCSrandom(len(vehicletype));
@@ -1880,7 +1893,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		addstrAlt(v->longname(), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
-		getkey();
+		getkeyAlt();
 		//APPROACH?
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1897,7 +1910,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		mvaddstrAlt(13,  0, "Enter - Call it a day.");
 		while (true)
 		{
-			int c = getkey();
+			int c = getkeyAlt();
 			if (c == 'a')break;
 			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { delete v; return false; }
 		}
@@ -1964,7 +1977,7 @@ bool stealcar(Creature &cr, char &clearformess)
 			char method = -1;
 			while (method == -1)
 			{
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c == 'a')method = 0;
 				if (c == 'b')method = 1;
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { delete v; return false; } /* try again tomorrow */
@@ -1987,7 +2000,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					mvaddstrAlt(16,  0, cr.name, gamelog);
 					addstrAlt(" jimmies the car door open.", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					entered = true;
 				}
 				else
@@ -1996,7 +2009,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					mvaddstrAlt(16,  0, cr.name, gamelog);
 					addstrAlt(" fiddles with the lock with no luck.", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			//BREAK WINDOW
@@ -2016,7 +2029,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 					windowdamage = 10;
-					getkey();
+					getkeyAlt();
 					entered = true;
 				}
 				else
@@ -2032,7 +2045,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(" but it is still somewhat intact.", gamelog);
 					gamelog.nextMessage();
 					windowdamage++;
-					getkey();
+					getkeyAlt();
 				}
 			}
 			//ALARM CHECK
@@ -2044,7 +2057,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					mvaddstrAlt(y++,  0, "An alarm suddenly starts blaring!", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					alarmon = true;
 				}
 			}
@@ -2055,10 +2068,10 @@ bool stealcar(Creature &cr, char &clearformess)
 				mvaddstrAlt(y++,  0, cr.name, gamelog);
 				addstrAlt(" has been spotted by a passerby!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				//FOOT CHASE
 				chaseseq.clean();
-				chaseseq.location = location[cr.location]->parent;
+				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
 				newsstoryst *ns = new newsstoryst;
 				ns->type = NEWSSTORY_CARTHEFT;
 				newsstory.push_back(ns);
@@ -2115,7 +2128,7 @@ bool stealcar(Creature &cr, char &clearformess)
 			char method = -1;
 			while (method == -1)
 			{
-				int c = getkey();
+				int c = getkeyAlt();
 				if (c == 'a') method = 0;
 				if (c == 'b') method = 1;
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { delete v; return false; } // Call it a day and try again tomorrow
@@ -2138,7 +2151,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					mvaddstrAlt(y++,  0, cr.name, gamelog);
 					addstrAlt(" hotwires the car!", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					started = true;
 				}
 				else
@@ -2157,7 +2170,7 @@ bool stealcar(Creature &cr, char &clearformess)
 						}
 					}
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			//KEYS
@@ -2204,7 +2217,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(" found the keys ", gamelog);
 					addstrAlt(location, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					started = true;
 				}
 				else
@@ -2234,7 +2247,7 @@ bool stealcar(Creature &cr, char &clearformess)
 						}
 					}
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			//NOTICE CHECK
@@ -2244,10 +2257,10 @@ bool stealcar(Creature &cr, char &clearformess)
 				mvaddstrAlt(y++,  0, cr.name, gamelog);
 				addstrAlt(" has been spotted by a passerby!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				//FOOT CHASE
 				chaseseq.clean();
-				chaseseq.location = location[cr.location]->parent;
+				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
 				newsstoryst *ns = new newsstoryst;
 				ns->type = NEWSSTORY_CARTHEFT;
 				newsstory.push_back(ns);
@@ -2272,7 +2285,7 @@ bool stealcar(Creature &cr, char &clearformess)
 				addstrAlt(singleSpace, gamelog);
 				addstrAlt(pickrandom(gets_nervous), gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 			}
 		}
 		//CHASE SEQUENCE
@@ -2288,7 +2301,7 @@ bool stealcar(Creature &cr, char &clearformess)
 			cr.pref_is_driver = true;
 		}
 		chaseseq.clean();
-		chaseseq.location = location[cr.location]->parent;
+		chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
 		int chaselev = !LCSrandom(13 - windowdamage);
 		if (chaselev > 0 || (v->vtypeidname() == "POLICECAR"&&LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
 		{
@@ -2337,7 +2350,7 @@ bool carselect(Creature &cr, short &cartype)
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22,  0, "Press a Letter to select a Type of Car");
 		mvaddstrAlt(23, 0, 		addpagestr());
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -2378,6 +2391,6 @@ void getwheelchair(Creature &cr, char &clearformess)
 		addstrAlt(" was unable to get a wheelchair.  Maybe tomorrow...", gamelog);
 	}
 	gamelog.nextMessage();
-	getkey();
+	getkeyAlt();
 }
 

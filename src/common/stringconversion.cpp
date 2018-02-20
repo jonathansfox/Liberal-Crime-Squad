@@ -1,5 +1,7 @@
 
 #include <includes.h>
+#include "creature/augmentation.h"
+#include "creature/creatureEnums.h"
 
 #include "common/stringconversion.h"
 
@@ -32,8 +34,41 @@ short creaturetype_string_to_enum(const string& ctname)
 	else
 		return -1;
 }
+string showXmlSkill(int skill_, int value_) {
+
+	CMarkup xml;
+	xml.AddElem("skill");
+	xml.IntoElem();
+	xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	return xml.GetDoc();
+}
+string showXmlAttribute(int attribute_, int value_) {
+
+	CMarkup xml;
+	xml.AddElem("attribute");
+	xml.IntoElem();
+	xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	return xml.GetDoc();
+}
+typedef map< short, string > shortAndString;
+shortAndString skillEnumToString;
+shortAndString attEnumToString;
+string skill_enum_to_string(int skill_type) {
+
+	if (skillEnumToString.count(skill_type)) {
+		return skillEnumToString[skill_type];
+	}
+	else
+		return "";
+}
 string attribute_enum_to_string(int attribute)
 {
+	if (attEnumToString.count(attribute)) {
+		return attEnumToString[attribute];
+	}
+	else
+		return "";
+	/*
 	if (attribute == ATTRIBUTE_STRENGTH)
 		return "strength";
 	else if (attribute == ATTRIBUTE_INTELLIGENCE)
@@ -49,7 +84,7 @@ string attribute_enum_to_string(int attribute)
 	else if (attribute == ATTRIBUTE_HEART)
 		return "heart";
 	else
-		return "";
+		return "";*/
 }
 int attribute_string_to_enum(const string& attribute)
 {
@@ -183,4 +218,49 @@ int skill_string_to_enum(string skillname)
 		return SKILL_HEAVYWEAPONS;
 	else
 		return -1;
+}
+
+int get_associated_attribute(int skill_type)
+{
+	// Initialize associated attribute
+	switch (skill_type)
+	{
+	case SKILL_CLUB:
+	case SKILL_AXE:
+	case SKILL_HEAVYWEAPONS:
+		return ATTRIBUTE_STRENGTH;
+	case SKILL_HANDTOHAND:
+	case SKILL_KNIFE:
+	case SKILL_SWORD:
+	case SKILL_PISTOL:
+	case SKILL_RIFLE:
+	case SKILL_SMG:
+	case SKILL_SHOTGUN:
+	case SKILL_DRIVING:
+	case SKILL_STEALTH:
+	case SKILL_THROWING:
+	case SKILL_DODGE:
+		return ATTRIBUTE_AGILITY;
+	case SKILL_DISGUISE:
+	case SKILL_SEDUCTION:
+	case SKILL_PERSUASION:
+		return ATTRIBUTE_CHARISMA;
+	case SKILL_ART:
+	case SKILL_MUSIC:
+		return ATTRIBUTE_HEART;
+	case SKILL_RELIGION:
+	case SKILL_BUSINESS:
+	case SKILL_WRITING:
+	case SKILL_PSYCHOLOGY:
+	case SKILL_SECURITY:
+	case SKILL_TAILORING:
+	case SKILL_TEACHING:
+	case SKILL_FIRSTAID:
+	case SKILL_SCIENCE:
+	case SKILL_LAW:
+	case SKILL_COMPUTERS:
+	case SKILL_STREETSENSE:
+	default:
+		return ATTRIBUTE_INTELLIGENCE;
+	}
 }

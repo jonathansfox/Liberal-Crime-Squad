@@ -52,10 +52,10 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
-
-#include "basemode/activate.h"
 
 #include "creature/augmenttype.h"
 
@@ -63,17 +63,18 @@ the bottom of includes.h in the top src folder.
 // for  int getsquad(int)
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
-#include "log/log.h"
-// for commondisplay.h
 #include "common/commondisplay.h"
+#include "common/commondisplayCreature.h"
 // for void printfunds(int,int,char*)
 
 #include "common/getnames.h"
+std::string gettitle(Creature &cr);
 // for std::string getactivity(activityst)
 
 #include "common/equipment.h"
@@ -87,10 +88,13 @@ the bottom of includes.h in the top src folder.
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
+
 #include <set_color_support.h>
+#include "locations/locationsPool.h"
+#include "common/creaturePool.h"
+#include "common/musicClass.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
@@ -117,10 +121,13 @@ extern string commaSpace;
 extern vector<AugmentType *> augmenttype;
 extern class Ledger ledger;
 extern vector<ArmorType *> armortype;
+
+
+extern CreaturePool Pool;
 vector<Creature *> activatable_liberals()
 {
 	vector<Creature *> temppool;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->is_active_liberal())
 		{
@@ -134,72 +141,7 @@ vector<Creature *> activatable_liberals()
 	}
 	return temppool;
 }
-/* base - activate the uninvolved */
-void activate()
-{
-	vector<Creature *> temppool = activatable_liberals();
-	if (!len(temppool)) return;
-	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE]);
-	int page = 0;
-	while (true)
-	{
-		music.play(MUSIC_ACTIVATE);
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		printfunds();
-		mvaddstrAlt(0,  0, "Activate Uninvolved Liberals");
-		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-		mvaddstrAlt(1, 57, "ACTIVITY");
-		int y = 2;
-		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
-			char bright = 0;
-			int skill = 0;
-			for (int sk = 0; sk < SKILLNUM; sk++)
-			{
-				skill += temppool[p]->get_skill(sk);
-				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
-			}
-			set_color(COLOR_WHITE, COLOR_BLACK, bright);
-			mvaddstrAlt(y, 25, skill);
-			printhealthstat(*temppool[p], y, 33, TRUE);
-			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y, 42, location[temppool[p]->location]->getname(true, true));
-			moveAlt(y, 57);
-			// Let's add some color here...
-			set_activity_color(temppool[p]->activity.type);
-			addstrAlt(getactivity(temppool[p]->activity));
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, "Press a Letter to Assign an Activity.");
-		mvaddstrAlt(23, 0, addpagestr());
-		addstrAlt(" T to sort people.");
-		mvaddstrAlt(24, 0, "Press Z to assign simple tasks in bulk.");
-		int c = getkey();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
-		if (c >= 'a'&&c <= 's')
-		{
-			int p = page * 19 + c - 'a';
-			if (p < len(temppool)) activate(temppool[p]);
-		}
-		if (c == 't')
-		{
-			sorting_prompt(SORTINGCHOICE_ACTIVATE);
-			sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE], true);
-		}
-		if (c == 'z') activatebulk();
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-}
+
 vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
 // this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
 vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
@@ -265,6 +207,437 @@ char incrementChar(char c, int i) {
 	return c + i;
 }
 
+void recruitSelect(Creature &cr)
+{
+	// Number of recruitable creatures
+	int options = len(recruitable_creatures);
+	for (int i = 0; i < options; i++)
+	{
+		// Dynamic difficulty for certain creatures, recalculated each time the function is called
+		if (recruitable_creatures[i].type == CREATURE_MUTANT)
+		{
+			if (lawList[LAW_NUCLEARPOWER] == -2 && lawList[LAW_POLLUTION] == -2)
+				recruitable_creatures[i].difficulty = 2;
+			else if (lawList[LAW_NUCLEARPOWER] == -2 || lawList[LAW_POLLUTION] == -2)
+				recruitable_creatures[i].difficulty = 6;
+			else
+				recruitable_creatures[i].difficulty = 9;
+		}
+	}
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, "What type of person will ");
+		addstrAlt(cr.name);
+		addstrAlt(" try to meet and recruit today?");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1, 0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
+		int y = 2, difficulty;
+		for (int p = page * 19; p < options&&p < page * 19 + 19; p++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(y, 0);
+			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+			addstrAlt(recruitable_creatures[p].name);
+			moveAlt(y, 49);
+			difficulty = recruitable_creatures[p].difficulty;
+			displayDifficulty(difficulty);
+			y++;
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, "Press a Letter to select a Profession");
+		mvaddstrAlt(23, 0, addpagestr());
+		int c = getkeyAlt();
+		//PAGE UP
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+		//PAGE DOWN
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<options)page++;
+		if (c >= 'a'&&c <= 's')
+		{
+			int p = page * 19 + (int)(c - 'a');
+			if (p < options)
+			{
+				cr.activity.type = ACTIVITY_RECRUITING;
+				cr.activity.arg = recruitable_creatures[p].type;
+				break;
+			}
+		}
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	}
+	return;
+}
+void show_victim_status(Creature *victim)
+{
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(2, 55, "Status:");
+	printhealthstat(*victim, 2, 66, true);
+	printwoundstat(*victim, 4, 55);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(11, 55, "Heart: "); mvaddstrAlt(11, 66, victim->get_attribute(ATTRIBUTE_HEART, true));
+	mvaddstrAlt(12, 55, "Age: "); mvaddstrAlt(12, 66, victim->age);
+}
+#include <sstream>
+vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
+	ostringstream oss;
+	for (char c : s) {
+		if (c == ' ')
+		{
+			elems.push_back(oss.str());
+			oss.str(string());
+		}
+		else if (c == '\n')
+		{
+			elems.push_back(oss.str());
+			elems.push_back("");
+			oss.str(string());
+		}
+		else oss << c;
+	}
+	elems.push_back(oss.str());
+	return elems;
+}
+
+void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
+{
+	Creature *victim = 0;
+
+	vector<Creature *> temppool;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) {
+		if (pool[p] == cr) continue;
+		if (pool[p]->is_active_liberal() && (pool[p]->location == cr->location))
+		{
+			temppool.push_back(pool[p]);
+		}
+	}
+	int cur_step = 0, page = 0, c = 0, aug_c = 0;
+	vector<AugmentType *> aug_type;
+	AugmentType *selected_aug;
+	while (true)
+	{
+		eraseAlt();
+		int y, p;
+		switch (cur_step) {
+		case 0: //PAGE 0, selecting a liberal
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0, 0, "Select a Liberal to perform experiments on");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(1, 0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
+			for (p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
+			{
+				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
+				moveAlt(y, 0);
+				addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+				addstrAlt(temppool[p]->name);
+				mvaddstrAlt(y, 49, temppool[p]->get_attribute(ATTRIBUTE_HEART, true));
+				mvaddstrAlt(y, 62, temppool[p]->age);
+				printhealthstat(*temppool[p], y, 31, TRUE);
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(22, 0, "Press a Letter to select a Liberal");
+			mvaddstrAlt(23, 0, addpagestr());
+			c = getkeyAlt();
+			//PAGE UP
+			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+			//PAGE DOWN
+			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool))page++;
+			if (c >= 'a'&&c <= 's')
+			{
+				int p = page * 19 + c - 'a';
+				if (p < len(temppool))
+				{
+					victim = temppool[p];
+					cur_step = 1;
+				}
+				else
+					victim = 0;
+			}
+			if (c == 'x' || c == ESC || c == SPACEBAR || c == ENTER) return;
+			break;
+		case 1: //PAGE 1, selecting an augmentation
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0, 0, "Subject: ");
+			set_color_easy(WHITE_ON_BLACK);
+			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
+			//mvaddstrAlt(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+			show_victim_status(victim);
+			mvaddstrAlt(2, 1, "Select an Augmentation");
+			for (p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
+			{
+				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
+				if (already_augmented) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color(COLOR_WHITE, COLOR_BLACK, aug_c == y + 'a' - 4);
+				moveAlt(y, 1);
+				addcharAlt(y + 'A' - 4); addstrAlt(spaceDashSpace);
+				addstrAlt(Augmentation::get_name(y - 4));
+			}
+			if (aug_c >= 'a'&&aug_c <= 'e'&&c >= 'a'&&c <= 'e')
+			{
+				aug_type.clear();
+				if (victim->get_augmentation(aug_c - 'a').type == -1) //False if already augmented on that bodypart.
+				{
+					y = 5;
+					for (int x = 0; x < augmenttype.size(); x++)
+					{
+						if (augmenttype[x]->get_type() == aug_c - 'a' &&
+							(augmenttype[x]->get_max_age() == -1 || victim->age <= augmenttype[x]->get_max_age()) &&
+							(augmenttype[x]->get_min_age() == -1 || victim->age >= augmenttype[x]->get_min_age()) &&
+							augmenttype[x]->get_cost() <= ledger.get_funds())
+							//TODO: Make it so that if you don't have money, it just grays it out, not just not show it
+							aug_type.push_back(augmenttype[x]);
+					}
+				}
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			y = 4;
+			for (int x = 0; x < aug_type.size(); x++, y++)
+			{
+				//set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
+				mvaddcharAlt(y, 26, y + '1' - 4); addstrAlt(spaceDashSpace);
+				addstrAlt(aug_type[x]->get_name());
+			}
+			//Checks to see if valid input, and moves to next screen
+			if (aug_c >= 'a'&&aug_c <= 'e'&&c >= '1'&&c <= '0' + aug_type.size())
+			{
+				cur_step = 2;
+				selected_aug = aug_type[c - '1'];
+				break;
+			}
+			c = getkeyAlt();
+			if (c >= 'a'&&c <= 'e') aug_c = c;
+			else if (c == ESC)return;
+			else if (c == 'x' || c == SPACEBAR || c == ENTER) { cur_step = 0; aug_type.clear(); aug_c = 0; }
+			break;
+		case 2: //PAGE 2, confirm your choices
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0, 0, "Subject: ");
+			set_color_easy(WHITE_ON_BLACK);
+			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(2, 0, "Augmentation: ");
+			set_color_easy(WHITE_ON_BLACK);
+			addstrAlt(selected_aug->get_name());
+			show_victim_status(victim);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(4, 0, "Effect: ");
+			set_color_easy(WHITE_ON_BLACK);
+			string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
+			addstrAlt((char)(toupper(selected_attribute.at(0))) +
+				selected_attribute.substr(1) +
+				(selected_aug->get_effect() >= 0 ? " +" : singleSpace) +
+				tostring(selected_aug->get_effect()));
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(5, 0, "Chance at Success: ");
+			int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
+			int difficulty = selected_aug->get_difficulty();
+			set_color_easy(WHITE_ON_BLACK);
+			addstrAlt(to_string(100 * skills / difficulty));
+			mvaddstrAlt(7, 0, "Description");
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(8, 0, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+			vector<string> desc;
+			split_string(selected_aug->get_description(), ' ', desc);
+			int chars_left = 50;
+			int line = 9;
+			for (int i = 0; i < desc.size(); i++)
+			{
+				if (desc[i].length()>50) continue;
+				else if (desc[i] == "")
+				{
+					line++;
+					chars_left = 50;
+					continue;
+				}
+				else if (chars_left<0 || desc[i].length()>chars_left)
+				{
+					line++;
+					chars_left = 50;
+					i--;
+					continue;
+				}
+				else if (desc[i].length() <= chars_left)
+				{
+					mvaddstrAlt(line, 50 - chars_left, desc[i]);
+					chars_left -= (desc[i].length() + 1);
+				}
+			}
+			mvaddstrAlt(23, 1, "Are you sure? (y/n)");
+			c = getkeyAlt();
+			if (c == 'y')
+			{
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(23, 1, "Press any key to return");
+				moveAlt(21, 1);
+				int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
+				if (blood_saved > 100) blood_saved = 100;
+				victim->blood -= 100 - blood_saved;
+				if (skills < difficulty &&
+					LCSrandom((100 * difficulty) / skills) < 100)
+				{
+					unsigned char* wound = nullptr;
+					switch (selected_aug->get_type())
+					{
+					case AUGMENTATION_HEAD:
+						wound = &victim->wound[BODYPART_HEAD];
+						victim->blood -= 100;
+						break;
+					case AUGMENTATION_BODY:
+						wound = &victim->wound[BODYPART_BODY];
+						victim->blood -= 100;
+						break;
+					case AUGMENTATION_ARMS:
+						if (LCSrandom(2))
+							wound = &victim->wound[BODYPART_ARM_LEFT];
+						else
+							wound = &victim->wound[BODYPART_ARM_RIGHT];
+						victim->blood -= 25;
+						break;
+					case AUGMENTATION_LEGS:
+						if (LCSrandom(2))
+							wound = &victim->wound[BODYPART_LEG_LEFT];
+						else
+							wound = &victim->wound[BODYPART_LEG_RIGHT];
+						victim->blood -= 25;
+						break;
+					case AUGMENTATION_SKIN:
+						if (LCSrandom(2))
+							wound = &victim->wound[BODYPART_HEAD];
+						else
+							wound = &victim->wound[BODYPART_BODY];
+						victim->blood -= 50;
+						break;
+					}
+					*wound |= WOUND_NASTYOFF;
+					if (victim->blood > 0)
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						addstrAlt(string(victim->name) + " has been horribly disfigured", gamelog);
+					}
+				}
+				else //It was successful... but not without some injuries
+				{
+					unsigned char* wound = nullptr;
+					switch (selected_aug->get_type())
+					{
+					case AUGMENTATION_HEAD:
+						wound = &victim->wound[BODYPART_HEAD];
+						break;
+					case AUGMENTATION_BODY:
+						wound = &victim->wound[BODYPART_BODY];
+						break;
+					case AUGMENTATION_ARMS:
+						if (LCSrandom(2))
+							wound = &victim->wound[BODYPART_ARM_RIGHT];
+						else
+							wound = &victim->wound[BODYPART_ARM_LEFT];
+						break;
+					case AUGMENTATION_LEGS:
+						if (LCSrandom(2))
+							wound = &victim->wound[BODYPART_LEG_RIGHT];
+						else
+							wound = &victim->wound[BODYPART_LEG_LEFT];
+						break;
+					case AUGMENTATION_SKIN:
+						wound = &victim->wound[BODYPART_HEAD];
+						break;
+					}
+					*wound |= WOUND_BLEEDING;
+					*wound |= WOUND_BRUISED;
+					selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
+					victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
+					cr->train(SKILL_SCIENCE, 15);
+					addjuice(*cr, 10, 1000);
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					addstrAlt(string(victim->name) + " has been augmented with " + selected_aug->get_name(), gamelog);
+				}
+				if (victim->blood <= 0) //Lost too much blood, you killed 'em
+				{
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					victim->die();
+					addstrAlt(string(victim->name) + " has been brutally murdered by " + cr->name, gamelog);
+				}
+				show_victim_status(victim);
+				getkeyAlt();
+				return;
+			}
+			else if (c == ESC)return;
+			else if (c == 'x' || c == SPACEBAR || c == ENTER || c == 'n') { cur_step = 1; selected_aug = nullptr; }
+			break;
+		}
+	}
+}
+
+int armor_makedifficulty(ArmorType& type, Creature *cr) //Make class method? -XML
+{
+	int basedif = type.get_make_difficulty() - cr->get_skill(SKILL_TAILORING) + 3;
+	return max(basedif, 0);
+}
+int armor_makedifficulty(Armor& type, Creature *cr)
+{
+	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
+}
+
+/* base - activate - make clothing */
+void select_makeclothing(Creature *cr)
+{
+	vector<int> armortypei;
+	for (int a = 0; a < len(armortype); a++)
+	{
+		if (armortype[a]->get_make_difficulty() == 0)
+			continue;
+		if (armortype[a]->deathsquad_legality()
+			&& (lawList[LAW_POLICEBEHAVIOR] != -2 || lawList[LAW_DEATHPENALTY] != -2))
+			continue;
+		armortypei.push_back(a);
+	}
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, "Which will ");
+		addstrAlt(cr->name);
+		addstrAlt(" try to make?   (Note: Half Cost if you have cloth)");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1, 0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
+		int y = 2, difficulty;
+		for (int p = page * 19; p < len(armortypei) && p < page * 19 + 19; p++, y++)
+		{
+			difficulty = armor_makedifficulty(*armortype[armortypei[p]], cr);
+			if (difficulty < 0) difficulty = 0;
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(y, 0);
+			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+			addstrAlt(armortype[armortypei[p]]->get_name());
+			moveAlt(y, 37);
+			displayDifficulty(difficulty);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			string price = '$' + tostring(armortype[armortypei[p]]->get_make_price());
+			mvaddstrAlt(y, 64 - len(price), price);
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, "Press a Letter to select a Type of Clothing");
+		mvaddstrAlt(23, 0, addpagestr());
+		int c = getkeyAlt();
+		//PAGE UP
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+		//PAGE DOWN
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(armortypei))page++;
+		if (c >= 'a'&&c <= 's')
+		{
+			int p = page * 19 + c - 'a';
+			if (p < len(armortypei))
+			{
+				cr->activity.type = ACTIVITY_MAKE_ARMOR;
+				cr->activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
+				return;
+			}
+		}
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	}
+}
+
 vector<string> standard_activities_and_data;
 
 void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
@@ -286,7 +659,7 @@ void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
 			break;
 		case '7':
 			if (cr->location != -1 &&
-				location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
+				LocationsPool::getInstance().getCompoundWalls(cr->location) & COMPOUND_PRINTINGPRESS)
 			{
 				cr->activity.type = ACTIVITY_WRITE_GUARDIAN; break;
 			}
@@ -389,12 +762,89 @@ void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
 		break;
 	}
 }
-
+/* base - activate - hostages */
+void select_tendhostage(Creature *cr)
+{
+	vector<Creature *> temppool;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (pool[p]->align != 1 &&
+			pool[p]->alive&&
+			pool[p]->location == cr->location)
+		{
+			temppool.push_back(pool[p]);
+		}
+	}
+	if (!len(temppool))return;
+	if (len(temppool) == 1)
+	{
+		cr->activity.type = ACTIVITY_HOSTAGETENDING;
+		cr->activity.arg = temppool[0]->id;
+		return;
+	}
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0, 0, "Which hostage will ");
+		addstrAlt(cr->name);
+		addstrAlt(" be watching over?");
+		mvaddstrAlt(1, 0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+		mvaddstrAlt(1, 57, "DAYS IN CAPTIVITY");
+		int y = 2;
+		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(y, 0);
+			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+			addstrAlt(temppool[p]->name);
+			char bright = 0;
+			int skill = 0;
+			for (int sk = 0; sk < SKILLNUM; sk++)
+			{
+				skill += temppool[p]->get_skill(sk);
+				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
+			}
+			set_color(COLOR_WHITE, COLOR_BLACK, bright);
+			mvaddstrAlt(y, 25, skill);
+			printhealthstat(*temppool[p], y, 33, TRUE);
+			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y, 57, temppool[p]->joindays);
+			addstrAlt(singleSpace);
+			if (temppool[p]->joindays > 1)addstrAlt("Days");
+			else addstrAlt("Day");
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, "Press a Letter to select a Conservative");
+		mvaddstrAlt(23, 0, addpagestr());
+		int c = getkeyAlt();
+		//PAGE UP
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		//PAGE DOWN
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if (c >= 'a'&&c <= 's')
+		{
+			int p = page * 19 + (int)(c - 'a');
+			if (p < len(temppool))
+			{
+				cr->activity.type = ACTIVITY_HOSTAGETENDING;
+				cr->activity.arg = temppool[p]->id;
+				return;
+			}
+		}
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	}
+}
 void activate(Creature *cr)
 {
 	int hostagecount = 0, state = 0, oldstate = 0, choice = 0;
 	char havedead = 0;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->alive&&pool[p]->align != 1 && pool[p]->location == cr->location) hostagecount++;
 		if (!pool[p]->alive) havedead = 1;
@@ -509,7 +959,7 @@ void activate(Creature *cr)
 		addstrAlt(activity.lineAttempt(0, cr));
 		mvaddstrAlt(23, 3, activity.lineAttempt(1, cr));
 		mvaddstrAlt(24, 3, activity.lineAttempt(2, cr));
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'z') state = c;
 		if ((c >= 'a'&&c <= 'z') || (c >= '0'&&c <= '9'))
 		{
@@ -611,8 +1061,8 @@ Activity getDefaultActivityActivism(Creature *cr) {
 			return ACTIVITY_HACKING;
 		else if (cr->get_skill(SKILL_ART) > 1)
 		{
-			return ACTIVITY_GRAFFITI;
 			cr->activity.arg = -1;
+			return ACTIVITY_GRAFFITI;
 		}
 		else return ACTIVITY_TROUBLE;
 	}
@@ -677,7 +1127,7 @@ void activatebulk()
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, "Press a Letter to Assign an Activity.  Press a Number to select an Activity.");
 		mvaddstrAlt(23, 0, 		addpagestr());
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -718,36 +1168,40 @@ void activatebulk()
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
 }
-/* base - activate - hostages */
-void select_tendhostage(Creature *cr)
+
+// Return the difficulty of tracking this character type down, for the
+// purpose of the activation menu. 0 is trivial, 10 is impossible.
+int recruitFindDifficulty(int creatureType)
 {
-	vector<Creature *> temppool;
-	for (int p = 0; p < len(pool); p++)
-	{
-		if (pool[p]->align != 1 &&
-			pool[p]->alive&&
-			pool[p]->location == cr->location)
-		{
-			temppool.push_back(pool[p]);
-		}
-	}
-	if (!len(temppool))return;
-	if (len(temppool) == 1)
-	{
-		cr->activity.type = ACTIVITY_HOSTAGETENDING;
-		cr->activity.arg = temppool[0]->id;
-		return;
-	}
+	for (int i = 0; i < len(recruitable_creatures); i++)
+		if (recruitable_creatures[i].type == creatureType)
+			return recruitable_creatures[i].difficulty;
+	return 10; // No recruitData; assume impossible to recruit
+}
+char* recruitName(int creatureType)
+{
+	for (int i = 0; i < len(recruitable_creatures); i++)
+		if (recruitable_creatures[i].type == creatureType)
+			return recruitable_creatures[i].name;
+	return (char*)"missingno";
+}
+
+/* base - activate the uninvolved */
+void activate()
+{
+	vector<Creature *> temppool = activatable_liberals();
+	if (!len(temppool)) return;
+	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE]);
 	int page = 0;
 	while (true)
 	{
+		music.play(MUSIC_ACTIVATE);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, "Which hostage will ");
-		addstrAlt(cr->name);
-		addstrAlt(" be watching over?");
-		mvaddstrAlt(1,  0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-		mvaddstrAlt(1, 57, "DAYS IN CAPTIVITY");
+		printfunds();
+		mvaddstrAlt(0, 0, "Activate Uninvolved Liberals");
+		mvaddstrAlt(1, 0, "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+		mvaddstrAlt(1, 57, "ACTIVITY");
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
@@ -768,473 +1222,33 @@ void select_tendhostage(Creature *cr)
 			printhealthstat(*temppool[p], y, 33, TRUE);
 			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y, 42, location[temppool[p]->location]->getname(true, true));
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y, 57, temppool[p]->joindays);
-			addstrAlt(singleSpace);
-			if (temppool[p]->joindays > 1)addstrAlt("Days");
-			else addstrAlt("Day");
+			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
+			moveAlt(y, 57);
+			// Let's add some color here...
+			set_activity_color(temppool[p]->activity.type);
+			addstrAlt(getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, "Press a Letter to select a Conservative");
-		mvaddstrAlt(23, 0,		addpagestr());
-		int c = getkey();
+		mvaddstrAlt(22, 0, "Press a Letter to Assign an Activity.");
+		mvaddstrAlt(23, 0, addpagestr());
+		addstrAlt(" T to sort people.");
+		mvaddstrAlt(24, 0, "Press Z to assign simple tasks in bulk.");
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
 		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
-			int p = page * 19 + (int)(c - 'a');
-			if (p < len(temppool))
-			{
-				cr->activity.type = ACTIVITY_HOSTAGETENDING;
-				cr->activity.arg = temppool[p]->id;
-				return;
-			}
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-}
-// Return the difficulty of tracking this character type down, for the
-// purpose of the activation menu. 0 is trivial, 10 is impossible.
-int recruitFindDifficulty(int creatureType)
-{
-	for (int i = 0; i < len(recruitable_creatures); i++)
-		if (recruitable_creatures[i].type == creatureType)
-			return recruitable_creatures[i].difficulty;
-	return 10; // No recruitData; assume impossible to recruit
-}
-char* recruitName(int creatureType)
-{
-	for (int i = 0; i < len(recruitable_creatures); i++)
-		if (recruitable_creatures[i].type == creatureType)
-			return recruitable_creatures[i].name;
-	return (char*)"missingno";
-}
-void recruitSelect(Creature &cr)
-{
-	// Number of recruitable creatures
-	int options = len(recruitable_creatures);
-	for (int i = 0; i < options; i++)
-	{
-		// Dynamic difficulty for certain creatures, recalculated each time the function is called
-		if (recruitable_creatures[i].type == CREATURE_MUTANT)
-		{
-			if (lawList[LAW_NUCLEARPOWER] == -2 && lawList[LAW_POLLUTION] == -2)
-				recruitable_creatures[i].difficulty = 2;
-			else if (lawList[LAW_NUCLEARPOWER] == -2 || lawList[LAW_POLLUTION] == -2)
-				recruitable_creatures[i].difficulty = 6;
-			else
-				recruitable_creatures[i].difficulty = 9;
-		}
-	}
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "What type of person will ");
-		addstrAlt(cr.name);
-		addstrAlt(" try to meet and recruit today?");
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴");
-		int y = 2, difficulty;
-		for (int p = page * 19; p < options&&p < page * 19 + 19; p++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(recruitable_creatures[p].name);
-			moveAlt(y, 49);
-			difficulty = recruitable_creatures[p].difficulty;
-			displayDifficulty(difficulty);
-			y++;
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, "Press a Letter to select a Profession");
-		mvaddstrAlt(23, 0,		addpagestr());
-		int c = getkey();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<options)page++;
-		if (c >= 'a'&&c <= 's')
-		{
-			int p = page * 19 + (int)(c - 'a');
-			if (p < options)
-			{
-				cr.activity.type = ACTIVITY_RECRUITING;
-				cr.activity.arg = recruitable_creatures[p].type;
-				break;
-			}
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-	return;
-}
-void show_victim_status(Creature *victim)
-{
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2, 55, "Status:");
-	printhealthstat(*victim, 2, 66, true);
-	printwoundstat(*victim, 4, 55);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(11, 55, "Heart: "); mvaddstrAlt(11, 66, victim->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(12, 55, "Age: "); mvaddstrAlt(12, 66, victim->age);
-}
-#include <sstream>
-vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
-	ostringstream oss;
-	for (char c : s) {
-		if (c == ' ')
-		{
-			elems.push_back(oss.str());
-			oss.str(string());
-		}
-		else if (c == '\n')
-		{
-			elems.push_back(oss.str());
-			elems.push_back("");
-			oss.str(string());
-		}
-		else oss << c;
-	}
-	elems.push_back(oss.str());
-	return elems;
-}
-void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
-{
-	Creature *victim = 0;
-	int culloc = cr->location;
-	vector<Creature *> temppool;
-	for (int p = 0; p < len(pool); p++) {
-		if (pool[p] == cr) continue;
-		if (pool[p]->is_active_liberal() && (pool[p]->location == culloc))
-		{
-			temppool.push_back(pool[p]);
-		}
-	}
-	int cur_step = 0, page = 0, c = 0, aug_c = 0;
-	vector<AugmentType *> aug_type;
-	AugmentType *selected_aug;
-	while (true)
-	{
-		eraseAlt();
-		int y, p;
-		switch (cur_step) {
-		case 0: //PAGE 0, selecting a liberal
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "Select a Liberal to perform experiments on");
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1,  0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
-			for (p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
-			{
-				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
-				moveAlt(y, 0);
-				addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-				addstrAlt(temppool[p]->name);
-				mvaddstrAlt(y, 49, temppool[p]->get_attribute(ATTRIBUTE_HEART, true));
-				mvaddstrAlt(y, 62, temppool[p]->age);
-				printhealthstat(*temppool[p], y, 31, TRUE);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(22, 0, "Press a Letter to select a Liberal");
-			mvaddstrAlt(23, 0,			addpagestr());
-			c = getkey();
-			//PAGE UP
-			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
-			//PAGE DOWN
-			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool))page++;
-			if (c >= 'a'&&c <= 's')
-			{
-				int p = page * 19 + c - 'a';
-				if (p < len(temppool))
-				{
-					victim = temppool[p];
-					cur_step = 1;
-				}
-				else
-					victim = 0;
-			}
-			if (c == 'x' || c == ESC || c == SPACEBAR || c == ENTER) return;
-			break;
-		case 1: //PAGE 1, selecting an augmentation
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "Subject: ");
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
-			//mvaddstrAlt(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-			show_victim_status(victim);
-			mvaddstrAlt(2, 1, "Select an Augmentation");
-			for (p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
-			{
-				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
-				if (already_augmented) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				else set_color(COLOR_WHITE, COLOR_BLACK, aug_c == y + 'a' - 4);
-				moveAlt(y, 1);
-				addcharAlt(y + 'A' - 4); addstrAlt(spaceDashSpace);
-				addstrAlt(Augmentation::get_name(y - 4));
-			}
-			if (aug_c >= 'a'&&aug_c <= 'e'&&c >= 'a'&&c <= 'e')
-			{
-				aug_type.clear();
-				if (victim->get_augmentation(aug_c - 'a').type == -1) //False if already augmented on that bodypart.
-				{
-					for (int x = 0, y = 5; x < augmenttype.size(); x++)
-					{
-						if (augmenttype[x]->get_type() == aug_c - 'a' &&
-							(augmenttype[x]->get_max_age() == -1 || victim->age <= augmenttype[x]->get_max_age()) &&
-							(augmenttype[x]->get_min_age() == -1 || victim->age >= augmenttype[x]->get_min_age()) &&
-							augmenttype[x]->get_cost() <= ledger.get_funds())
-							//TODO: Make it so that if you don't have money, it just grays it out, not just not show it
-							aug_type.push_back(augmenttype[x]);
-					}
-				}
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			for (int x = 0, y = 4; x < aug_type.size(); x++, y++)
-			{
-				//set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
-				mvaddcharAlt(y, 26, y + '1' - 4); addstrAlt(spaceDashSpace);
-				addstrAlt(aug_type[x]->get_name());
-			}
-			//Checks to see if valid input, and moves to next screen
-			if (aug_c >= 'a'&&aug_c <= 'e'&&c >= '1'&&c <= '0' + aug_type.size())
-			{
-				cur_step = 2;
-				selected_aug = aug_type[c - '1'];
-				break;
-			}
-			c = getkey();
-			if (c >= 'a'&&c <= 'e') aug_c = c;
-			else if (c == ESC)return;
-			else if (c == 'x' || c == SPACEBAR || c == ENTER) { cur_step = 0; aug_type.clear(); aug_c = 0; }
-			break;
-		case 2: //PAGE 2, confirm your choices
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "Subject: ");
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 0, "Augmentation: ");
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(selected_aug->get_name());
-			show_victim_status(victim);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 0, "Effect: ");
-			set_color_easy(WHITE_ON_BLACK);
-			string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
-			addstrAlt((char)(toupper(selected_attribute.at(0))) +
-				selected_attribute.substr(1) +
-				(selected_aug->get_effect() >= 0 ? " +" : singleSpace) +
-				tostring(selected_aug->get_effect()));
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 0, "Chance at Success: ");
-			int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
-			int difficulty = selected_aug->get_difficulty();
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(to_string(100 * skills / difficulty));
-			mvaddstrAlt(7, 0, "Description");
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8, 0, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
-			vector<string> desc;
-			split_string(selected_aug->get_description(), ' ', desc);
-			int chars_left = 50;
-			int line = 9;
-			for (int i = 0; i < desc.size(); i++)
-			{
-				if (desc[i].length()>50) continue;
-				else if (desc[i] == "")
-				{
-					line++;
-					chars_left = 50;
-					continue;
-				}
-				else if (chars_left<0 || desc[i].length()>chars_left)
-				{
-					line++;
-					chars_left = 50;
-					i--;
-					continue;
-				}
-				else if (desc[i].length() <= chars_left)
-				{
-					mvaddstrAlt(line, 50 - chars_left, desc[i]);
-					chars_left -= (desc[i].length() + 1);
-				}
-			}
-			mvaddstrAlt(23, 1, "Are you sure? (y/n)");
-			c = getkey();
-			if (c == 'y')
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(23, 1, "Press any key to return");
-				moveAlt(21, 1);
-				int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
-				if (blood_saved > 100) blood_saved = 100;
-				victim->blood -= 100 - blood_saved;
-				if (skills < difficulty &&
-					LCSrandom((100 * difficulty) / skills) < 100)
-				{
-					unsigned char* wound = nullptr;
-					switch (selected_aug->get_type())
-					{
-					case AUGMENTATION_HEAD:
-						wound = &victim->wound[BODYPART_HEAD];
-						victim->blood -= 100;
-						break;
-					case AUGMENTATION_BODY:
-						wound = &victim->wound[BODYPART_BODY];
-						victim->blood -= 100;
-						break;
-					case AUGMENTATION_ARMS:
-						if (LCSrandom(2))
-							wound = &victim->wound[BODYPART_ARM_LEFT];
-						else
-							wound = &victim->wound[BODYPART_ARM_RIGHT];
-						victim->blood -= 25;
-						break;
-					case AUGMENTATION_LEGS:
-						if (LCSrandom(2))
-							wound = &victim->wound[BODYPART_LEG_LEFT];
-						else
-							wound = &victim->wound[BODYPART_LEG_RIGHT];
-						victim->blood -= 25;
-						break;
-					case AUGMENTATION_SKIN:
-						if (LCSrandom(2))
-							wound = &victim->wound[BODYPART_HEAD];
-						else
-							wound = &victim->wound[BODYPART_BODY];
-						victim->blood -= 50;
-						break;
-					}
-					*wound |= WOUND_NASTYOFF;
-					if (victim->blood > 0)
-					{
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						addstrAlt(string(victim->name) + " has been horribly disfigured", gamelog);
-					}
-				}
-				else //It was successful... but not without some injuries
-				{
-					unsigned char* wound = nullptr;
-					switch (selected_aug->get_type())
-					{
-					case AUGMENTATION_HEAD:
-						wound = &victim->wound[BODYPART_HEAD];
-						break;
-					case AUGMENTATION_BODY:
-						wound = &victim->wound[BODYPART_BODY];
-						break;
-					case AUGMENTATION_ARMS:
-						if (LCSrandom(2))
-							wound = &victim->wound[BODYPART_ARM_RIGHT];
-						else
-							wound = &victim->wound[BODYPART_ARM_LEFT];
-						break;
-					case AUGMENTATION_LEGS:
-						if (LCSrandom(2))
-							wound = &victim->wound[BODYPART_LEG_RIGHT];
-						else
-							wound = &victim->wound[BODYPART_LEG_LEFT];
-						break;
-					case AUGMENTATION_SKIN:
-						wound = &victim->wound[BODYPART_HEAD];
-						break;
-					}
-					*wound |= WOUND_BLEEDING;
-					*wound |= WOUND_BRUISED;
-					selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
-					victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
-					cr->train(SKILL_SCIENCE, 15);
-					addjuice(*cr, 10, 1000);
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					addstrAlt(string(victim->name) + " has been augmented with " + selected_aug->get_name(), gamelog);
-				}
-				if (victim->blood <= 0) //Lost too much blood, you killed 'em
-				{
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-					victim->die();
-					addstrAlt(string(victim->name) + " has been brutally murdered by " + cr->name, gamelog);
-				}
-				gamelog.nextMessage();
-				show_victim_status(victim);
-				getkey();
-				return;
-			}
-			else if (c == ESC)return;
-			else if (c == 'x' || c == SPACEBAR || c == ENTER || c == 'n') { cur_step = 1; selected_aug = nullptr; }
-			break;
-		}
-	}
-}
-/* base - activate - make clothing */
-void select_makeclothing(Creature *cr)
-{
-	vector<int> armortypei;
-	for (int a = 0; a < len(armortype); a++)
-	{
-		if (armortype[a]->get_make_difficulty() == 0)
-			continue;
-		if (armortype[a]->deathsquad_legality()
-			&& (lawList[LAW_POLICEBEHAVIOR] != -2 || lawList[LAW_DEATHPENALTY] != -2))
-			continue;
-		armortypei.push_back(a);
-	}
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Which will ");
-		addstrAlt(cr->name);
-		addstrAlt(" try to make?   (Note: Half Cost if you have cloth)");
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  0, "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
-		int y = 2, difficulty;
-		for (int p = page * 19; p < len(armortypei) && p < page * 19 + 19; p++, y++)
-		{
-			difficulty = armor_makedifficulty(*armortype[armortypei[p]], cr);
-			if (difficulty < 0) difficulty = 0;
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(armortype[armortypei[p]]->get_name());
-			moveAlt(y, 37);
-			displayDifficulty(difficulty);
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			string price = '$' + tostring(armortype[armortypei[p]]->get_make_price());
-			mvaddstrAlt(y, 64 - len(price), price);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, "Press a Letter to select a Type of Clothing");
-		mvaddstrAlt(23, 0, 		addpagestr());
-		int c = getkey();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(armortypei))page++;
-		if (c >= 'a'&&c <= 's')
-		{
 			int p = page * 19 + c - 'a';
-			if (p < len(armortypei))
-			{
-				cr->activity.type = ACTIVITY_MAKE_ARMOR;
-				cr->activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
-				return;
-			}
+			if (p < len(temppool)) activate(temppool[p]);
 		}
+		if (c == 't')
+		{
+			sorting_prompt(SORTINGCHOICE_ACTIVATE);
+			sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE], true);
+		}
+		if (c == 'z') activatebulk();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
-}
-int armor_makedifficulty(Armor& type, Creature *cr)
-{
-	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
-}
-int armor_makedifficulty(ArmorType& type, Creature *cr) //Make class method? -XML
-{
-	int basedif = type.get_make_difficulty() - cr->get_skill(SKILL_TAILORING) + 3;
-	return max(basedif, 0);
 }

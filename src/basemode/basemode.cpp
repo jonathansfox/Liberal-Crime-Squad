@@ -52,9 +52,14 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
+#include "cursesgraphics.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/liberalagenda.h"
@@ -105,10 +110,12 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
+#include "common/musicClass.h"
 extern vector<Creature *> pool;
 extern vector<Location *> location;
 extern Log gamelog;
@@ -146,11 +153,13 @@ extern int day;
 extern char slogan[SLOGAN_LEN];
 extern short party_status;
 
+#include "common/creaturePool.h"
+
 bool show_disbanding_screen(int& oldforcemonth)
 {
 	if (oldforcemonth == month) return true;
 	music.play(MUSIC_DISBANDED);
-	for (int p = len(pool) - 1; p >= 0; p--)
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		int targetjuice = LCSrandom(100 * (year - disbandtime + 1));
 		if (targetjuice > 1000) targetjuice = 1000;
@@ -283,7 +292,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 	mvaddcharAlt(22, mood, 'O');
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
-	return(getkey() != 'r');
+	return(getkeyAlt() != 'r');
 }
  string change_squad_order;
 enum CantSeeReason
@@ -309,7 +318,7 @@ void mode_base()
 		}
 		else
 		{
-			for (int p = 0; p<len(pool); p++)
+			for (int p = 0; p< CreaturePool::getInstance().lenpool(); p++)
 			{
 				if (pool[p]->alive&&
 					pool[p]->align == 1 &&
@@ -345,7 +354,7 @@ void mode_base()
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrCenter(12, str, gamelog);
 				gamelog.nextMessage(); //Write out buffer to prepare for the next message.
-				getkey();
+				getkeyAlt();
 			}
 			nonsighttime = 0;
 		}
@@ -378,7 +387,7 @@ void mode_base()
 		// Count people at each location
 		int* num_present = new int[len(location)];
 		for (int i = 0; i < len(location); i++) num_present[i] = 0;
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{  // Dead people, non-liberals, and vacationers don't count
 			if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location == -1) continue;
 			num_present[pool[p]->location]++;
@@ -454,7 +463,7 @@ void mode_base()
 			if (len(vehicle) && partysize) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 60, "V - Vehicles");
-			if (len(pool)) set_color_easy(WHITE_ON_BLACK);
+			if (CreaturePool::getInstance().lenpool()) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(20, 40, "R - Review Assets and Form Squads");
 			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
@@ -475,7 +484,7 @@ void mode_base()
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(21, 40, "L - The Status of the Liberal Agenda");
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			for (int p = 0; p < len(pool); p++) if (pool[p]->is_active_liberal())
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal())
 			{
 				if (pool[p]->squadid != -1)
 				{
@@ -487,7 +496,7 @@ void mode_base()
 			}
 			mvaddstrAlt(21, 1, "A - Activate Liberals");
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			for (int p = 0; p < len(pool); p++)
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 				if (pool[p]->is_lcs_sleeper())
 				{
 					set_color_easy(WHITE_ON_BLACK);
@@ -507,7 +516,7 @@ void mode_base()
 				else
 				{
 					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					for (int p = 0; p < len(pool); p++)
+					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 					{
 						if (pool[p]->location == selectedsiege)
 						{
@@ -561,7 +570,7 @@ void mode_base()
 			if (haveflag) mvaddstrCenter(17, slogan);
 			else mvaddstrCenter(13, slogan);
 		}
-		switch (int c = forcewait ? 'w' : getkey())
+		switch (int c = forcewait ? 'w' : getkeyAlt())
 		{
 		case 'x': return;
 		case 'i': if (selectedsiege != -1)
@@ -599,7 +608,7 @@ void mode_base()
 			equip(location[activesquad->squad[0]->location]->loot, -1);
 			party_status = ops;
 		} break;
-		case 'r': if (len(pool)) review(); break;
+		case 'r': if (CreaturePool::getInstance().lenpool()) review(); break;
 		case 'w': if (forcewait || !cannotwait) {
 			char clearformess = forcewait;
 			if (!canseethings) nonsighttime++;

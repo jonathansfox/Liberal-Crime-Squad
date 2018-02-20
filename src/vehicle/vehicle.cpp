@@ -1,21 +1,15 @@
 
 #include <includes.h>
 
+
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 //own header
 
-#include "common/stringconversion.h"
-//for atoi
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
-extern vector<Creature *> pool;
 long Vehicle::curcarid = 0;
 extern string singleSpace;
+
+#include "common/creaturePool.h"
 
 string Vehicle::showXml() const
 {
@@ -41,12 +35,12 @@ Vehicle::Vehicle(const std::string& inputXml)
    {
       std::string tag=xml.GetTagName();
       if(tag=="vtypeidname") vtypeidname_=xml.GetData();
-      else if(tag=="vtypeid") vtypeid_=atoi(xml.GetData());
+      else if(tag=="vtypeid") vtypeid_=atoi(xml.GetData().c_str());
       else if(tag=="color") color_=xml.GetData();
-      else if(tag=="heat") heat_=atoi(xml.GetData());
-      else if(tag=="location") location_=atoi(xml.GetData());
-      else if(tag=="myear") myear_=atoi(xml.GetData());
-      else if(tag=="id") id_=atoi(xml.GetData());
+      else if(tag=="heat") heat_=atoi(xml.GetData().c_str());
+      else if(tag=="location") location_=atoi(xml.GetData().c_str());
+      else if(tag=="myear") myear_=atoi(xml.GetData().c_str());
+      else if(tag=="id") id_=atoi(xml.GetData().c_str());
    }
 }
 void Vehicle::init(const VehicleType& seed, const string& color, int myear)
@@ -61,15 +55,11 @@ void Vehicle::init(const VehicleType& seed, const string& color, int myear)
 }
 void Vehicle::stop_riding_me() const
 {
-   for(int p=0;p<len(pool);p++)
-      if(pool[p]->carid==id_)
-         pool[p]->carid=-1;
+	CreaturePool::getInstance().stop_riding_me(id_);
 }
 void Vehicle::stop_preferring_me() const
 {
-   for(int p=0;p<len(pool);p++)
-      if(pool[p]->pref_carid==id_)
-         pool[p]->pref_carid=-1;
+	CreaturePool::getInstance().stop_preferring_me(id_);
 }
 string Vehicle::fullname(bool halffull) const
 {

@@ -25,7 +25,19 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+//#include "cursesgraphics.h"
+#define CH_FULL_BLOCK 0xdb
+#define CH_UPWARDS_ARROW 0x18
+#define CH_DOWNWARDS_ARROW 0x19
+#define CH_BLACK_SMILING_FACE 0x02
+#define CH_YEN_SIGN 0x9d
+#define CH_BOX_DRAWINGS_DOUBLE_VERTICAL 0xba
+#define CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL 0xcd
+#define CH_WHITE_SMILING_FACE 0x01
+
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/baseactions.h"
@@ -35,50 +47,78 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "sitemode/advance.h"
 
-#include "sitemode/mapspecials.h"
+//#include "sitemode/mapspecials.h"
+void special_bouncer_assess_squad();
+void special_bouncer_greet_squad();
+void special_lab_cosmetics_cagedanimals();
+void special_readsign(int sign);
+void special_nuclear_onoff();
+void special_lab_genetic_cagedanimals();
+void special_policestation_lockup();
+void special_courthouse_lockup();
+void special_courthouse_jury();
+void special_prison_control(short prison_control_type);
+void special_intel_supercomputer();
+void special_sweatshop_equipment();
+void special_polluter_equipment();
+void special_house_photos();
+void special_corporate_files();
+void special_radio_broadcaststudio();
+void special_news_broadcaststudio();
+void special_graffiti();
+void special_armory();
+void special_display_case();
+void special_security_checkpoint();
+void special_security_metaldetectors();
+void special_security_secondvisit();
+void special_bank_teller();
+void special_bank_money();
+void special_bank_vault();
+void special_ccs_boss();
+void special_oval_office();
 
 #include "sitemode/stealth.h"
 
 #include "sitemode/miscactions.h"
+void reloadparty(bool wasteful = false);
 
 #include "sitemode/sitedisplay.h"
 
-#include "sitemode/newencounter.h"
+//#include "sitemode/newencounter.h"
+void prepareencounter(short type, char sec);
+char addsiegeencounter(char type);
 
-#include "sitemode/sitemode.h"
-// own header
-
-#include "items/loottype.h"
-
-#include "items/loot.h"
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
+#include "items/lootTypePoolItem.h"
 
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
-// for addchar
+// for printparty()
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for squadsize
 
 #include "common/translateid.h"
 // for  id_getcar
 
-#include "common/equipment.h"
-//for void equip(vector<Item *>&,int)
+//#include "common/equipment.h"
+/* review squad equipment */
+void equip(vector<Item *> &loot, int loc);
 
-#include "daily/daily.h"
-//for char securityable(int type);
+//#include "daily/daily.h"
+/* daily - returns true if the site type supports high security */
+char securityable(int type);
 
 #include "daily/siege.h"
 //for void conquertext();
 
 #include "combat/fight.h"
+#include "combat/fightCreature.h"  
 //for void enemyattack();
 
 #include "combat/haulkidnap.h"
+#include "combat/haulkidnapCreature.h"
 //for void kidnapattempt();
 
 #include "combat/chase.h"
@@ -87,14 +127,15 @@ This file is part of Liberal Crime Squad.                                       
 char talk(Creature &a, const int t);
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
+#include <cursesAlternativeConstants.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
+#include "common/creaturePoolCreature.h"
+#include "locations/locationsPool.h"
+#include "common/creaturePool.h"
 extern Log gamelog;
 extern vector<Location *> location;
-extern vector<LootType *> loottype;
+#include "common/musicClass.h"
 extern MusicClass music;
 extern short mode;
 extern short postalarmtimer;
@@ -126,7 +167,6 @@ extern string spaceDashSpace;
 extern string singleDot;
 extern string change_squad_order;
 extern string spaceParanthesisDollar;
-extern string string_sleeper;
 typedef map<short, string> shortAndString;
 void emptyEncounter();
 extern squadst *activesquad;
@@ -143,7 +183,6 @@ extern int locz;
 extern Creature encounter[ENCMAX];
 extern short party_status;
 extern vector<Item *> groundloot;
-//extern vector<Location *> location;
 extern vector<Vehicle *> vehicle;
 extern chaseseqst chaseseq;
 extern short sitealienate;
@@ -160,11 +199,11 @@ extern short offended_firemen;
 extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
-extern vector<LootType *> loottype;
 extern string singleSpace;
 extern short fieldskillrate;
 extern char ccs_kills;
 extern UniqueCreatures uniqueCreatures;
+
 
 void fight_subdued()
 {
@@ -184,9 +223,7 @@ void fight_subdued()
 		capturecreature(*(activesquad->squad[p]));
 		activesquad->squad[p] = NULL;
 	}
-	for (p = 0; p < len(pool); p++)
-		for (int w = 0; w < BODYPARTNUM; w++)
-			pool[p]->wound[w] &= ~WOUND_BLEEDING;
+	CreaturePool::getInstance().stopAllBleeding();
 	clearmessagearea();
 	clearcommandarea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -202,160 +239,240 @@ void fight_subdued()
 		}
 	}
 	gamelog.newline();
-	getkey();
+	getkeyAlt();
 }
-void mode_site(short loc)
+/* marks the area around the specified tile as explored */
+void knowmap(int locx, int locy, int locz)
 {
-	sitetype = location[loc]->type;
-	cursite = loc;
-	sitealarm = 0;
-	sitealarmtimer = -1;
-	postalarmtimer = 0;
-	siteonfire = 0;
-	sitealienate = 0;
-	sitecrime = 0;
-	initsite(*location[loc]);
-	sitestory = newsstory[len(newsstory) - 1];
-	mode = GAMEMODE_SITE;
-	if (!location[loc]->siege.siege)
+	levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx > 0)levelmap[locx - 1][locy][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx < MAPX - 1)levelmap[locx + 1][locy][locz].flag |= SITEBLOCK_KNOWN;
+	if (locy > 0)levelmap[locx][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
+	if (locy < MAPY - 1)levelmap[locx][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx > 0 && locy > 0)
+		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
+			levelmap[locx - 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx < MAPX - 1 && locy>0)
+		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
+			levelmap[locx + 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx > 0 && locy < MAPY - 1)
+		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
+			levelmap[locx - 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
+	if (locx < MAPX - 1 && locy < MAPY - 1)
+		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
+			levelmap[locx + 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
+}
+/* site - determines spin on site news story, "too hot" timer */
+void resolvesite()
+{
+	if (sitealienate) sitestory->positive = 0;
+	//removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably
+	//notice later on that all their stuff has been stolen or whatever.
+	if (/*sitealarm==1&&*/sitecrime > 5 + LCSrandom(95))//was 100 but that meant I could still steal everything from a building every day without anyone caring...
 	{
-		music.play(MUSIC_SITEMODE);
-		ccs_siege_kills = 0;
-		ccs_boss_kills = 0;
-		//Low profile site action?
-		if (activesquad->stance == SQUADSTANCE_ANONYMOUS)
-			sitestory->claimed = 0;
-		//Start at entrance to map
-		locx = MAPX >> 1;
-		locy = 1;
-		locz = 0;
-		// Second floor start of White House
-		if (location[loc]->type == SITE_GOVERNMENT_WHITE_HOUSE && levelmap[locx][locy][locz].flag & SITEBLOCK_BLOCK)
-			locz++;
-		//check for sleeper infiltration or map knowledge
-		for (int p = 0; p < len(pool); p++)
-			if (pool[p]->base == loc || location[loc]->mapped)
+		if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_NOCONTROL)
+		{
+
+			// Capture a warehouse or crack den?
+			if (LocationsPool::getInstance().getLocationType(cursite) == SITE_INDUSTRY_WAREHOUSE ||
+				LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)
 			{
 
-				//make entire site known
-				for (int x = 0; x < MAPX; x++)
-					for (int y = 0; y < MAPY; y++)
-						for (int z = 0; z < MAPZ; z++)
-							levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
-				break;
+				location[cursite]->renting = RENTING_PERMANENT; // Capture safehouse for the glory of the LCS!
+				location[cursite]->closed = 0;
+				location[cursite]->heat = 100;
 			}
 
+			else location[cursite]->closed = sitecrime / 10; // Close down site
+		}
+
+		// Out sleepers
+		if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+		{
+			CreaturePool::getInstance().outSleepers(cursite, activesquad->squad[0]->base);
+
+		}
+
+
+
+	}
+	else if (sitecrime > 10 && (LocationsPool::getInstance().getRentingType(cursite) == RENTING_NOCONTROL || LocationsPool::getInstance().getRentingType(cursite) > 500))
+	{
+		if (LocationsPool::getInstance().getLocationType(cursite) != SITE_RESIDENTIAL_BOMBSHELTER&&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_BARANDGRILL&&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_OUTDOOR_BUNKER&&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_INDUSTRY_WAREHOUSE&&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_CRACKHOUSE)
+		{
+
+			if (securityable(LocationsPool::getInstance().getLocationType(cursite)))
+				LocationsPool::getInstance().isThisPlaceHighSecurity(cursite, sitecrime);
+			else location[cursite]->closed = 7;
+		}
+
+	}
+}
+/* behavior when the player bumps into a door in sitemode */
+void open_door(bool restricted)
+{
+	bool locked = levelmap[locx][locy][locz].flag&SITEBLOCK_LOCKED,
+		alarmed = levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED,
+		vault_door = levelmap[locx][locy][locz].flag&SITEBLOCK_METAL,
+		//   known_locked=levelmap[locx][locy][locz].flag&SITEBLOCK_KLOCK,
+		cant_unlock = levelmap[locx][locy][locz].flag&SITEBLOCK_CLOCK;
+	if (vault_door)
+	{
+		// Vault door, not usable by bumping
+		clearmessagearea(false);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, "The vault door is impenetrable.", gamelog);
+		gamelog.newline();
+		getkeyAlt();
+		return;
+	}
+	bool has_security = false;
+	for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i] &&
+			activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
+		{
+			has_security = true;
+			break;
+		}
+	}
+	if (alarmed)
+	{
+		// Unlocked but alarmed door, clearly marked as such
+		clearmessagearea(false);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		if (locked)
+			mvaddstrAlt(16, 1, "This door appears to be wired up to an alarm.", gamelog);
+		else
+			mvaddstrAlt(16, 1, "EMERGENCY EXIT ONLY. ALARM WILL SOUND.", gamelog);
+		gamelog.newline();
+		mvaddstrAlt(17, 1, "Try the door anyway? (Yes or No)");
+		while (true)
+		{
+			int c = getkeyAlt();
+			if (c == 'y') break;
+			else if (c == 'n') return;
+		}
+	}
+	if (locked && !cant_unlock && has_security)
+	{
+		levelmap[locx][locy][locz].flag |= SITEBLOCK_KLOCK;
+		while (true)
+		{
+			clearmessagearea(false);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, "You try the door, but it is locked.", gamelog);
+			gamelog.newline();
+			mvaddstrAlt(17, 1, "Try to pick the lock? (Yes or No)");
+			int c = getkeyAlt();
+			clearmessagearea(false);
+			if (c == 'y')
+			{
+				char actual; // 1 if an actual attempt was made, 0 otherwise
+							 // If the unlock was successful
+				if (unlock(UNLOCK_DOOR, actual))
+				{
+					// Unlock the door
+					levelmap[locx][locy][locz].flag &= ~(SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
+					sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
+					if (sitealarmtimer < 0 || sitealarmtimer>50) sitealarmtimer = 50;
+					//criminalizeparty(LAWFLAG_BREAKING);
+				}
+				// Else perma-lock it if an attempt was made
+				else if (actual)
+				{
+					levelmap[locx][locy][locz].flag |= SITEBLOCK_CLOCK;
+					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+					{
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(17, 1, "Your tampering sets off the alarm!", gamelog);
+						gamelog.newline();
+						sitealarm = 1;
+						getkeyAlt();
+					}
+				}
+				// Check for people noticing you fiddling with the lock
+				if (actual)
+				{
+					alienationcheck(0);
+					noticecheck(-1);
+				}
+				return;
+			}
+			else if (c == 'n') return;
+		}
+	}
+	else if (locked || (!restricted && alarmed))
+	{
+		while (true)
+		{
+			clearmessagearea(false);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (locked)
+			{
+				mvaddstrAlt(16, 1, "You shake the handle but it is ", gamelog);
+				if (has_security) addstrAlt("still ", gamelog);
+				addstrAlt("locked.", gamelog);
+			}
+			else mvaddstrAlt(16, 1, "It's locked from the other side.", gamelog);
+			gamelog.newline();
+			mvaddstrAlt(17, 1, "Force it open? (Yes or No)");
+			int c = getkeyAlt();
+			if (c == 'y')
+			{
+				char actual;
+				if (bash(BASH_DOOR, actual))
+				{
+					levelmap[locx][locy][locz].flag &= ~SITEBLOCK_DOOR;
+					int time = 0;
+					if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
+					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+					{
+						clearmessagearea(false);
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(16, 1, "The alarm goes off!", gamelog);
+						gamelog.newline();
+						sitealarm = 1;
+						getkeyAlt();
+					}
+					sitecrime++;
+					sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
+					criminalizeparty(LAWFLAG_BREAKING);
+				}
+				if (actual)
+				{
+					alienationcheck(1);
+					noticecheck(-1, DIFFICULTY_HEROIC);
+				}
+				break;
+			}
+			else if (c == 'n')break;
+		}
 	}
 	else
 	{
-		music.play(MUSIC_DEFENSE);
-		sitealarm = 1;
-		location[loc]->siege.attacktime = 0;
-		location[loc]->siege.kills = 0;
-		location[loc]->siege.tanks = 0;
-		//PLACE YOU
-		//int maxy=0;
-		for (int x = 0; x < MAPX; x++)
-			for (int y = 0; y < MAPY; y++)
-			{
-
-				for (int z = 0; z < MAPZ; z++)
-				{
-
-					if (!(location[loc]->siege.lights_off))levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
-					levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
-					levelmap[x][y][z].flag &= ~SITEBLOCK_LOOT;
-				}
-
-				//if(!(levelmap[x][y][0].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)))maxy=y;
-			}
-
-		//Cops have tanks; firemen have fire.
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
+		levelmap[locx][locy][locz].flag &= ~SITEBLOCK_DOOR;
+		if (alarmed)
 		{
-
-			int firesstarted = 0, firex, firey;
-			do
-			{
-
-				firex = LCSrandom(MAPX), firey = LCSrandom(MAPY);
-				firesstarted++;
-				levelmap[firex][firey][0].flag |= SITEBLOCK_FIRE_START;
-			} while (!(levelmap[firex][firey][0].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT)) &&
-				firesstarted < 4);
+			// Opened an unlocked but clearly marked emergency exit door
+			clearmessagearea(false);
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, "It opens easily. The alarm goes off!", gamelog);
+			gamelog.newline();
+			sitealarm = 1;
+			getkeyAlt();
 		}
-
-		do
-		{
-
-			// Some bugs with degenerate spawn outside the map are occurring
-			// Unknown why, but hard-coding limits to spawn location should help
-			//locx=LCSrandom(MAPX);
-			//locy=maxy-LCSrandom(3);
-			locx = MAPX / 2 + LCSrandom(25) - 12;
-			locy = 15 - LCSrandom(3);
-			//if(locy<3) locy=3;
-			locz = 0;
-		} while (levelmap[locx][locy][locz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR |
-			SITEBLOCK_FIRE_START | SITEBLOCK_FIRE_PEAK | SITEBLOCK_FIRE_END));
-		//PLACE LOOT
-		int lootnum = len(location[loc]->loot);
-		if (lootnum>10) lootnum = 10;
-		int lx, ly, lz;
-		for (int l = 0; l < lootnum; l++)
-		{
-
-			do lx = LCSrandom(MAPX), ly = LCSrandom(MAPY), lz = 0;
-			while (levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT));
-			levelmap[lx][ly][lz].flag |= SITEBLOCK_LOOT;
-		}
-
-		//PLACE TRAPS
-		if (location[loc]->compound_walls&COMPOUND_TRAPS)
-		{
-
-			int trapnum = 30;
-			for (int t = 0; t < trapnum; t++)
-			{
-
-				do lx = LCSrandom(MAPX), ly = LCSrandom(MAPY), lz = 0;
-				while (levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT | SITEBLOCK_LOOT));
-				levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_TRAP;
-			}
-		}
-
-
-		//PLACE UNITS
-		int unitnum = 6;
-		int count = 50000;
-		for (int t = 0; t < unitnum; t++)
-		{
-
-			do
-			{
-
-				lx = LCSrandom(11) + (MAPX / 2) - 5;
-				ly = LCSrandom(8);
-				lz = 0;
-				count--;
-				if (count == 0) break;
-			} while ((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT)) ||
-				(levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT | SIEGEFLAG_TRAP)));
-			levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_UNIT;
-		}
-
-		if (!(location[loc]->compound_walls & COMPOUND_TANKTRAPS) &&
-			location[loc]->siege.siegetype == SIEGE_POLICE&&
-			location[loc]->siege.escalationstate >= 2)
-		{
-
-			levelmap[MAPX / 2][1][0].siegeflag |= SIEGEFLAG_HEAVYUNIT;
-			location[loc]->siege.tanks = 1;
-		}
-
 	}
-	mode_site();
 }
+
 void mode_site() {
 
 	int p, u, x;
@@ -406,17 +523,12 @@ void mode_site() {
 					if (encounter[e].enemy() && (encounter[e].cantbluff == 0 || encounter[e].animalgloss == ANIMALGLOSS_ANIMAL)) talkers++;
 		}
 
-		int libnum = 0;
-		for (p = 0; p < len(pool); p++)
-			if (pool[p]->align == 1 &&
-				pool[p]->alive&&
-				pool[p]->location == cursite&&
-				!(pool[p]->flag&CREATUREFLAG_SLEEPER)) libnum++;
+		int libnum = CreaturePool::getInstance().countLiberals(cursite);
 		// Let the squad stop stressing out over the encounter if there are no enemies this round
 		if (!enemy) encounter_timer = 0;
 		eraseAlt();
 
-		if (location[cursite]->siege.siege)
+		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
 
 			music.play(MUSIC_DEFENSE);
@@ -439,7 +551,7 @@ void mode_site() {
 			if (postalarmtimer > 80)
 			{
 
-				switch (location[cursite]->type)
+				switch (LocationsPool::getInstance().getLocationType(cursite))
 				{
 
 				case SITE_GOVERNMENT_ARMYBASE:
@@ -464,7 +576,7 @@ void mode_site() {
 					break;
 				case SITE_GOVERNMENT_POLICESTATION:
 				default:
-					if (location[cursite]->renting == RENTING_CCS)
+					if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 					{
 
 						addstrAlt(": CCS VIGILANTIES RESPONDING");
@@ -602,7 +714,7 @@ void mode_site() {
 			if (enemy)set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(14,  1, "F - Fight!");
-			if (!location[cursite]->siege.siege)
+			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
 			{
 
 				if (freeable && (!enemy || !sitealarm))
@@ -636,7 +748,7 @@ void mode_site() {
 		{
 
 			//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-			if (!location[cursite]->siege.siege)
+			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
 			{
 
 				for (int p = 0; p < 6; p++)
@@ -719,11 +831,11 @@ void mode_site() {
 		if (levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
 		{
 
-			if (location[cursite]->renting == RENTING_PERMANENT)
+			if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT)
 			{
 
 				levelmap[locx][locy][locz].special = SPECIAL_NONE;
-				c = getkey();
+				c = getkeyAlt();
 			}
 
 			else
@@ -731,7 +843,7 @@ void mode_site() {
 		}
 
 
-		else c = getkey();
+		else c = getkeyAlt();
 		if (partyalive == 0 && c == 'c')
 		{
 
@@ -739,7 +851,7 @@ void mode_site() {
 			if (!endcheck())
 			{
 
-				if (location[cursite]->siege.siege)
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 				{
 
 					if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
@@ -747,7 +859,7 @@ void mode_site() {
 				}
 
 				else
-					if (!location[cursite]->siege.siege)
+					if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
 					{
 
 						sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
@@ -775,7 +887,7 @@ void mode_site() {
 				while (true)
 				{
 
-					int c2 = getkey();
+					int c2 = getkeyAlt();
 					if (c2 == 'w' || c2 == 'a' || c2 == 'd' || c2 == 'x' ||
 						c2 == KEY_LEFT || c2 == KEY_RIGHT || c2 == KEY_UP || c2 == KEY_DOWN)
 					{
@@ -995,7 +1107,7 @@ void mode_site() {
 						while (true)
 						{
 
-							int c = getkey();
+							int c = getkeyAlt();
 							if (c >= '1'&&c <= '6')
 							{
 								sp = c - '1';
@@ -1092,7 +1204,7 @@ void mode_site() {
 
 
 
-								int c = getkey();
+								int c = getkeyAlt();
 								if (c >= 'a'&&c <= 'z')
 								{
 									tk = c - 'a';
@@ -1119,7 +1231,7 @@ void mode_site() {
 													set_color_easy(WHITE_ON_BLACK_BRIGHT);
 													mvaddstrAlt(9,  1, encounter[tk].name);
 													addstrAlt(" won't talk to you.");
-													getkey();
+													getkeyAlt();
 												}
 
 												else if (!encounter[tk].enemy() && sitealarm&&enemy)
@@ -1130,7 +1242,7 @@ void mode_site() {
 													clearmaparea();
 													set_color_easy(WHITE_ON_BLACK_BRIGHT);
 													mvaddstrAlt(9,  1, "You have to deal with the enemies first.");
-													getkey();
+													getkeyAlt();
 												}
 
 												else break;
@@ -1215,14 +1327,14 @@ void mode_site() {
 								else if (levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
 								{  // Pick color
 									if (levelmap[x][y][locz].flag & SITEBLOCK_METAL)
-										set_color(COLOR_WHITE, COLOR_WHITE, 1);
+										set_color_easy(WHITE_ON_WHITE_BRIGHT);
 									else if (levelmap[x][y][locz].flag & SITEBLOCK_CLOCK
 										&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
 										set_color_easy(RED_ON_BLACK);
 									else if (levelmap[x][y][locz].flag & SITEBLOCK_KLOCK
 										&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
 										set_color_easy(BLACK_ON_BLACK_BRIGHT);
-									else set_color(COLOR_YELLOW, COLOR_BLACK, 0);
+									else set_color_easy(YELLOW_ON_BLACK);
 									if ((levelmap[x + 1][y][locz].flag & SITEBLOCK_BLOCK) ||
 										(levelmap[x - 1][y][locz].flag & SITEBLOCK_BLOCK))
 										mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
@@ -1308,7 +1420,7 @@ void mode_site() {
 
 
 
-				getkey();
+				getkeyAlt();
 			}
 
 			if (enemy&&c == 'f')
@@ -1366,14 +1478,14 @@ void mode_site() {
 			}
 
 
-			if (c == 'r'&&location[cursite]->siege.siege&&libnum > 6)
+			if (c == 'r'&&LocationsPool::getInstance().isThereASiegeHere(cursite)&&libnum > 6)
 			{
 
 				assemblesquad(activesquad);
 				autopromote(cursite);
 			}
 
-			else if (freeable && (!enemy || !sitealarm) && c == 'r'&&!location[cursite]->siege.siege)
+			else if (freeable && (!enemy || !sitealarm) && c == 'r'&&!LocationsPool::getInstance().isThereASiegeHere(cursite))
 			{
 
 				short followers = 0, actgot = 0;
@@ -1421,7 +1533,7 @@ void mode_site() {
 									newcr->location = activesquad->squad[i]->location;
 									newcr->base = activesquad->squad[i]->base;
 									newcr->hireid = activesquad->squad[i]->id;
-									pool.push_back(newcr);
+									addCreature(newcr);
 									stat_recruits++;
 									for (int p = 0; p < 6; p++)
 									{
@@ -1470,7 +1582,7 @@ void mode_site() {
 					if (actgot < followers)
 					{
 
-						getkey();
+						getkeyAlt();
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 
@@ -1482,7 +1594,7 @@ void mode_site() {
 						gamelog.newline();
 					}
 
-					getkey();
+					getkeyAlt();
 				}
 			}
 
@@ -1517,7 +1629,7 @@ void mode_site() {
 				{
 
 					levelmap[locx][locy][locz].flag &= ~SITEBLOCK_LOOT;
-					if (location[cursite]->siege.siege)
+					if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 					{
 
 						//GRAB SOME OF THE BASE LOOT
@@ -1803,7 +1915,7 @@ void mode_site() {
 						if (len(newLootType))
 						{
 
-							item = new Loot(*loottype[getloottype(newLootType)]);
+							item = getNewLoot(newLootType); 
 							activesquad->loot.push_back(item);
 						}
 
@@ -1856,7 +1968,7 @@ void mode_site() {
 							mvaddstrAlt(16,  1, "You find: ", gamelog);
 							mvaddstrAlt(17,  1, s, gamelog);
 							gamelog.newline();
-							getkey(); //wait for key press before clearing.
+							getkeyAlt(); //wait for key press before clearing.
 						}
 					}
 
@@ -1918,7 +2030,7 @@ void mode_site() {
 						mvaddstrAlt(11, 2, "X");
 
 					else mvaddstrAlt(11, 2, singleSpace);
-					c = getkey();
+					c = getkeyAlt();
 				}
 
 				mapshowing = true;
@@ -2018,7 +2130,7 @@ void mode_site() {
 						set_color_easy(CYAN_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16,  1, "The squad sneaks past the conservatives!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 					}
 
 					else
@@ -2041,7 +2153,7 @@ void mode_site() {
 					locx = nlocx, locy = nlocy, locz = nlocz;
 					//CHECK FOR EXIT
 					if ((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT) ||
-						(cbase == cursite&&!location[cursite]->siege.siege&&
+						(cbase == cursite&&!LocationsPool::getInstance().isThereASiegeHere(cursite)&&
 							bail_on_base))
 					{
 
@@ -2066,7 +2178,7 @@ void mode_site() {
 						if (postalarmtimer < 10 + (int)LCSrandom(20))level = 0;
 						else if (postalarmtimer < 20 + (int)LCSrandom(20) && LCSrandom(3))level = 0;
 						else if (postalarmtimer < 40 + (int)LCSrandom(20) && !LCSrandom(3))level = 0;
-						if (location[cursite]->siege.siege)level = 1000;
+						if (LocationsPool::getInstance().isThereASiegeHere(cursite))level = 1000;
 						//MAKE SURE YOU ARE GUILTY OF SOMETHING
 						bool guilty = 0;
 						for (p = 0; p < 6; p++)
@@ -2142,22 +2254,12 @@ void mode_site() {
 								}
 							}
 
-
 							//Clear all bleeding and prison escape flags
-							for (p = 0; p < len(pool); p++)
-							{
-
-								pool[p]->flag &= ~CREATUREFLAG_JUSTESCAPED;
-								for (int w = 0; w < BODYPARTNUM; w++)
-								{
-
-									pool[p]->wound[w] &= ~WOUND_BLEEDING;
-								}
-							}
+							CreaturePool::getInstance().clearAllBleedingAndEscapeFlags();
 
 
 							//END SITE MODE
-							if (location[cursite]->siege.siege)
+							if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 							{
 
 								//Special handling for escaping siege
@@ -2176,13 +2278,13 @@ void mode_site() {
 						else if (!endcheck())
 						{
 
-							if (location[cursite]->siege.siege)
+							if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 							{
 
 								//Report on squad killed during siege
 								if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
 								else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
-								location[cursite]->siege.siege = 0;
+								LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
 							}
 
 							else
@@ -2206,7 +2308,7 @@ void mode_site() {
 					// 10% chance of encounter normally (100% if waiting)
 					// 20% chance of encounter after massive response
 					// 0% chance of encounter during sieges
-					if (!location[cursite]->siege.siege)
+					if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
 					{
 
 						if (postalarmtimer > 80) { if (!LCSrandom(5)) newenc = 1; }
@@ -2252,8 +2354,8 @@ void mode_site() {
 
 					//BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
 					if (ccs_boss_kills >= 1 &&
-						!location[cursite]->siege.siege &&
-						location[cursite]->renting == RENTING_CCS)
+						!LocationsPool::getInstance().isThereASiegeHere(cursite) &&
+						LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 					{
 
 						music.play(MUSIC_CONQUER);
@@ -2289,16 +2391,9 @@ void mode_site() {
 						}
 
 
-						for (p = 0; p < len(pool); p++)
-						{
 
-							pool[p]->flag &= ~CREATUREFLAG_JUSTESCAPED;
-							for (int w = 0; w < BODYPARTNUM; w++)
-							{
-
-								pool[p]->wound[w] &= ~WOUND_BLEEDING;
-							}
-						}
+						//Clear all bleeding and prison escape flags
+						CreaturePool::getInstance().clearAllBleedingAndEscapeFlags();
 
 
 						//INFORM
@@ -2306,14 +2401,14 @@ void mode_site() {
 						set_color_easy(GREEN_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16,  1, "The CCS has been broken!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						location[cursite]->renting = RENTING_PERMANENT;
 						location[cursite]->closed = 0;
 						location[cursite]->heat = 100;
 						// CCS Safehouse killed?
-						if (location[cursite]->type == SITE_RESIDENTIAL_BOMBSHELTER ||
-							location[cursite]->type == SITE_BUSINESS_BARANDGRILL ||
-							location[cursite]->type == SITE_OUTDOOR_BUNKER)
+						if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_BOMBSHELTER ||
+							LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_BARANDGRILL ||
+							LocationsPool::getInstance().getLocationType(cursite) == SITE_OUTDOOR_BUNKER)
 						{
 
 							ccs_kills++;
@@ -2328,7 +2423,7 @@ void mode_site() {
 						return;
 					}
 
-					if (location[cursite]->siege.siege) // *JDS* police response added
+					if (LocationsPool::getInstance().isThereASiegeHere(cursite)) // *JDS* police response added
 					{
 
 						if (locx != olocx || locy != olocy || locz != olocz)
@@ -2412,66 +2507,6 @@ void mode_site() {
 
 
 						unitx.clear(), unity.clear(), unitz.clear();
-						/*
-
-						//MOVE HEAVY UNITS
-						for(x=0;x<MAPX;x++) for(int y=0;y<MAPY;y++) for(int z=0;z<MAPZ;z++)
-						if(levelmap[x][y][z].siegeflag&SIEGEFLAG_HEAVYUNIT)
-						unitx.push_back(x),unity.push_back(y),unitz.push_back(z);
-						for(u=0;u<len(unitx);u++)
-						{
-
-						sz=0;
-						switch(LCSrandom(4))
-						{
-
-						case 0: sx=-1,sy=0; break;
-						case 1: sx=1,sy=0; break;
-						case 2: sx=0,sy=1; break;
-						case 3: sx=0,sy=-1; break;
-						}
-
-						sx+=unitx[u],sy+=unity[u],sz+=unitz[u];
-						if(sx>=0&&sx<MAPX&&sy>=0&&sy<MAPY&&sz>=0&&sz<MAPZ)
-						{
-
-						if(!(levelmap[sx][sy][sz].flag&SITEBLOCK_BLOCK))
-						{
-
-						if((levelmap[sx][sy][sz].flag&SITEBLOCK_DOOR))
-						levelmap[sx][sy][sz].flag&=~(SITEBLOCK_DOOR|SITEBLOCK_LOCKED|SITEBLOCK_KLOCK|SITEBLOCK_CLOCK);
-						else
-						{  //BLOCK PASSAGE
-						if(!(levelmap[sx][sy][sz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT)))
-						{
-
-						levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_HEAVYUNIT;
-						levelmap[sx][sy][sz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
-						//BLOW (DIFFUSE) TRAPS
-						levelmap[sx][sy][sz].siegeflag&=~SIEGEFLAG_TRAP;
-						}
-						}
-						}
-
-
-
-						else if(sy>=3&&sx>0&&sx<MAPX-1&&sy<MAPY-1) //BREAK WALLS
-						{
-
-						sitechangest change(sx,sy,sz,SITEBLOCK_DEBRIS);
-						location[cursite]->changes.push_back(change);
-						levelmap[sx][sy][sz].flag&=~SITEBLOCK_BLOCK;
-						levelmap[sx][sy][sz].flag|=SITEBLOCK_DEBRIS;
-						}
-						}
-						}
-
-
-
-						unitx.clear(),unity.clear(),unitz.clear();
-						// End Heavy Units
-						*/
-
 						for (u = 0; u < len(unitx); u++)
 						{
 
@@ -2529,8 +2564,8 @@ void mode_site() {
 							}
 
 							if (!(location[cursite]->compound_walls&COMPOUND_TANKTRAPS) &&
-								location[cursite]->siege.siegetype == SIEGE_POLICE&&
-								location[cursite]->siege.escalationstate >= 2)
+								LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE&&
+								LocationsPool::getInstance().getSiegeEscalationState(cursite) >= 2)
 							{
 
 								count = 10000;
@@ -2580,23 +2615,23 @@ void mode_site() {
 						//BAIL UPON VICTORY
 						if (location[cursite]->siege.kills >= 10 &&
 							location[cursite]->siege.tanks < 1 &&
-							location[cursite]->siege.siege)
+							LocationsPool::getInstance().isThereASiegeHere(cursite))
 						{
 
 							music.play(MUSIC_CONQUER);
 							if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_DEFENDED;
 							else sitestory->type = NEWSSTORY_SQUAD_BROKESIEGE;
-							if (location[cursite]->siege.siegetype == SIEGE_CCS)
+							if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_CCS)
 							{
 
 								// CCS DOES NOT capture the warehouse -- reverse earlier assumption of your defeat!
-								if (location[cursite]->type == SITE_INDUSTRY_WAREHOUSE || SITE_BUSINESS_CRACKHOUSE)
+								if (LocationsPool::getInstance().getLocationType(cursite) == SITE_INDUSTRY_WAREHOUSE || SITE_BUSINESS_CRACKHOUSE)
 									location[cursite]->renting = RENTING_PERMANENT;
-								else if (location[cursite]->type == SITE_RESIDENTIAL_TENEMENT)
+								else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_TENEMENT)
 									location[cursite]->renting = 200;
-								else if (location[cursite]->type == SITE_RESIDENTIAL_APARTMENT)
+								else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT)
 									location[cursite]->renting = 650;
-								else if (location[cursite]->type == SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+								else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT_UPSCALE)
 									location[cursite]->renting = 1500;
 							}
 
@@ -2632,13 +2667,9 @@ void mode_site() {
 							}
 
 
-							for (p = 0; p < len(pool); p++)
-							{
+							//Clear all bleeding and prison escape flags
+							CreaturePool::getInstance().clearAllBleedingAndEscapeFlags();
 
-								pool[p]->flag &= ~CREATUREFLAG_JUSTESCAPED;
-								for (int w = 0; w < BODYPARTNUM; w++)
-									pool[p]->wound[w] &= ~WOUND_BLEEDING;
-							}
 
 							//INFORM
 							clearmessagearea();
@@ -2646,7 +2677,7 @@ void mode_site() {
 							mvaddstrAlt(16,  1, "The Conservatives have shrunk back under ", gamelog);
 							mvaddstrAlt(17,  1, "the power of your Liberal Convictions!", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							conquertext();
 							escapesiege(1);
 							//RESET MODE
@@ -2657,7 +2688,7 @@ void mode_site() {
 					}
 
 
-					if (!location[cursite]->siege.siege&&newenc)
+					if (!LocationsPool::getInstance().isThereASiegeHere(cursite)&&newenc)
 					{
 
 						switch (makespecial)
@@ -2672,7 +2703,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The computer has been unplugged.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 							}
 
 							else
@@ -2683,7 +2714,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The computer is occupied.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 								prepareencounter(sitetype, 0);
 								emptyEncounter();
 							}
@@ -2699,7 +2730,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "Some people are hiding under the table.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 								prepareencounter(sitetype, 0);
 							}
 
@@ -2711,7 +2742,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The table is occupied.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 								prepareencounter(sitetype, 0);
 							}
 
@@ -2725,7 +2756,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The bench is empty.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 							}
 
 							else
@@ -2736,7 +2767,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "There are people sitting here.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 								prepareencounter(sitetype, 0);
 							}
 
@@ -2757,7 +2788,7 @@ void mode_site() {
 							special_bouncer_greet_squad();
 							break;
 						case SPECIAL_HOUSE_CEO:
-							if ((sitealarm || sitealienate || location[cursite]->siege.siege) &&
+							if ((sitealarm || sitealienate || LocationsPool::getInstance().isThereASiegeHere(cursite)) &&
 								uniqueCreatures.CEO_state == UNIQUECREATURE_ALIVE)
 							{
 
@@ -2772,7 +2803,7 @@ void mode_site() {
 								addstrAlt("The CEO must have fled to a panic room.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 							}
 
 							else
@@ -2787,7 +2818,7 @@ void mode_site() {
 									mvaddstrAlt(16,  1, "The CEO is in his study.", gamelog);
 									gamelog.newline();
 									levelmap[locx][locy][locz].special = -1;
-									getkey();
+									getkeyAlt();
 									emptyEncounter();
 
 									encounter[0] = uniqueCreatures.CEO();
@@ -2800,7 +2831,7 @@ void mode_site() {
 									mvaddstrAlt(16,  1, "The CEO's study lies empty.", gamelog);
 									gamelog.newline();
 									levelmap[locx][locy][locz].special = -1;
-									getkey();
+									getkeyAlt();
 									break;
 								}
 							}
@@ -2809,7 +2840,7 @@ void mode_site() {
 							break;
 						case SPECIAL_APARTMENT_LANDLORD:
 							if (sitealarm || sitealienate ||
-								location[cursite]->siege.siege)
+								LocationsPool::getInstance().isThereASiegeHere(cursite))
 							{
 
 								clearmessagearea(false);
@@ -2817,7 +2848,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The landlord is out of the office.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 							}
 
 							else
@@ -2828,7 +2859,7 @@ void mode_site() {
 								mvaddstrAlt(16,  1, "The landlord is in.", gamelog);
 								gamelog.newline();
 								levelmap[locx][locy][locz].special = -1;
-								getkey();
+								getkeyAlt();
 								emptyEncounter();
 
 								makecreature(encounter[0], CREATURE_LANDLORD);
@@ -2850,15 +2881,15 @@ void mode_site() {
 						default:
 							bool squadmoved = (olocx != locx || olocy != locy || olocz != locz);
 							if (squadmoved &&
-								(location[cursite]->type == SITE_RESIDENTIAL_APARTMENT ||
-									location[cursite]->type == SITE_RESIDENTIAL_TENEMENT ||
-									location[cursite]->type == SITE_RESIDENTIAL_APARTMENT_UPSCALE))
+								(LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT ||
+									LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_TENEMENT ||
+									LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT_UPSCALE))
 							{
 
 								if (LCSrandom(3))break; // Rarely encounter someone in apartments.
 							}
 
-							prepareencounter(sitetype, location[cursite]->highsecurity);
+							prepareencounter(sitetype, LocationsPool::getInstance().isThisPlaceHighSecurity(cursite));
 							int numenc = 0;
 							// TODO This is bizarre
 							// the for loop breaks if it finds an empty encounter
@@ -2912,7 +2943,7 @@ void mode_site() {
 								}
 
 								gamelog.newline();
-								getkey();
+								getkeyAlt();
 							}
 
 							break;
@@ -2921,7 +2952,7 @@ void mode_site() {
 						hostcheck = 1;
 					}
 
-					if (!location[cursite]->siege.siege)
+					if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
 						if ((locx != olocx || locy != olocy || locz != olocz) && !newenc)
 							//PUT BACK SPECIALS
 							for (int e = 0; e < ENCMAX; e++)
@@ -2953,231 +2984,182 @@ void mode_site() {
 
 	}
 }
-/* site - determines spin on site news story, "too hot" timer */
-void resolvesite()
+
+void mode_site(short loc)
 {
-	if (sitealienate) sitestory->positive = 0;
-	//removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably
-	//notice later on that all their stuff has been stolen or whatever.
-	if (/*sitealarm==1&&*/sitecrime > 5 + LCSrandom(95))//was 100 but that meant I could still steal everything from a building every day without anyone caring...
+	sitetype = LocationsPool::getInstance().getLocationType(loc);
+	cursite = loc;
+	sitealarm = 0;
+	sitealarmtimer = -1;
+	postalarmtimer = 0;
+	siteonfire = 0;
+	sitealienate = 0;
+	sitecrime = 0;
+	LocationsPool::getInstance().initSite(loc);
+	sitestory = newsstory[len(newsstory) - 1];
+	mode = GAMEMODE_SITE;
+	if (!LocationsPool::getInstance().isThereASiegeHere(loc))
 	{
-		if (location[cursite]->renting == RENTING_NOCONTROL)
+		music.play(MUSIC_SITEMODE);
+		ccs_siege_kills = 0;
+		ccs_boss_kills = 0;
+		//Low profile site action?
+		if (activesquad->stance == SQUADSTANCE_ANONYMOUS)
+			sitestory->claimed = 0;
+		//Start at entrance to map
+		locx = MAPX >> 1;
+		locy = 1;
+		locz = 0;
+		// Second floor start of White House
+		if (LocationsPool::getInstance().getLocationType(loc) == SITE_GOVERNMENT_WHITE_HOUSE && levelmap[locx][locy][locz].flag & SITEBLOCK_BLOCK)
+			locz++;
+		//check for sleeper infiltration or map knowledge
+		if (CreaturePool::getInstance().doesAnyoneLiveHere(loc) || location[loc]->mapped)
 		{
 
-			// Capture a warehouse or crack den?
-			if (location[cursite]->type == SITE_INDUSTRY_WAREHOUSE ||
-				location[cursite]->type == SITE_BUSINESS_CRACKHOUSE)
-			{
+			//make entire site known
+			for (int x = 0; x < MAPX; x++)
+				for (int y = 0; y < MAPY; y++)
+					for (int z = 0; z < MAPZ; z++)
+						levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
 
-				location[cursite]->renting = RENTING_PERMANENT; // Capture safehouse for the glory of the LCS!
-				location[cursite]->closed = 0;
-				location[cursite]->heat = 100;
-			}
-
-			else location[cursite]->closed = sitecrime / 10; // Close down site
 		}
 
-		// Out sleepers
-		if (location[cursite]->renting == RENTING_CCS)
-		{
-
-			for (int p = 0; p < len(pool); p++)
-			{
-
-				if (pool[p]->flag&CREATUREFLAG_SLEEPER &&
-					pool[p]->location == cursite)
-				{
-
-					pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-					eraseAlt();
-					mvaddstrAlt(8,  1, string_sleeper, gamelog);
-
-
-
-					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(" has been outed by your bold attack!", gamelog);
-					gamelog.newline();
-					mvaddstrAlt(10,  1, "The Liberal is now at your command as a normal squad member.", gamelog);
-					gamelog.newline();
-					pool[p]->base = activesquad->squad[0]->base;
-					pool[p]->location = pool[p]->base;
-					getkey();
-				}
-			}
-		}
-
-
-
-	}
-	else if (sitecrime > 10 && (location[cursite]->renting == RENTING_NOCONTROL || location[cursite]->renting > 500))
-	{
-		if (location[cursite]->type != SITE_RESIDENTIAL_BOMBSHELTER&&
-			location[cursite]->type != SITE_BUSINESS_BARANDGRILL&&
-			location[cursite]->type != SITE_OUTDOOR_BUNKER&&
-			location[cursite]->type != SITE_INDUSTRY_WAREHOUSE&&
-			location[cursite]->type != SITE_BUSINESS_CRACKHOUSE)
-		{
-
-			if (securityable(location[cursite]->type))
-				location[cursite]->highsecurity = sitecrime;
-			else location[cursite]->closed = 7;
-		}
-
-	}
-}
-/* behavior when the player bumps into a door in sitemode */
-void open_door(bool restricted)
-{
-	bool locked = levelmap[locx][locy][locz].flag&SITEBLOCK_LOCKED,
-		alarmed = levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED,
-		vault_door = levelmap[locx][locy][locz].flag&SITEBLOCK_METAL,
-		//   known_locked=levelmap[locx][locy][locz].flag&SITEBLOCK_KLOCK,
-		cant_unlock = levelmap[locx][locy][locz].flag&SITEBLOCK_CLOCK;
-	if (vault_door)
-	{
-		// Vault door, not usable by bumping
-		clearmessagearea(false);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "The vault door is impenetrable.", gamelog);
-		gamelog.newline();
-		getkey();
-		return;
-	}
-	bool has_security = false;
-	for (int i = 0; i < 6; i++)
-	{
-		if (activesquad->squad[i] &&
-			activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
-		{
-			has_security = true;
-			break;
-		}
-	}
-	if (alarmed)
-	{
-		// Unlocked but alarmed door, clearly marked as such
-		clearmessagearea(false);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (locked)
-			mvaddstrAlt(16, 1, "This door appears to be wired up to an alarm.", gamelog);
-		else
-			mvaddstrAlt(16, 1, "EMERGENCY EXIT ONLY. ALARM WILL SOUND.", gamelog);
-		gamelog.newline();
-		mvaddstrAlt(17,  1, "Try the door anyway? (Yes or No)");
-		while (true)
-		{
-			int c = getkey();
-			if (c == 'y') break;
-			else if (c == 'n') return;
-		}
-	}
-	if (locked && !cant_unlock && has_security)
-	{
-		levelmap[locx][locy][locz].flag |= SITEBLOCK_KLOCK;
-		while (true)
-		{
-			clearmessagearea(false);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, "You try the door, but it is locked.", gamelog);
-			gamelog.newline();
-			mvaddstrAlt(17,  1, "Try to pick the lock? (Yes or No)");
-			int c = getkey();
-			clearmessagearea(false);
-			if (c == 'y')
-			{
-				char actual; // 1 if an actual attempt was made, 0 otherwise
-							 // If the unlock was successful
-				if (unlock(UNLOCK_DOOR, actual))
-				{
-					// Unlock the door
-					levelmap[locx][locy][locz].flag &= ~(SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
-					sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
-					if (sitealarmtimer < 0 || sitealarmtimer>50) sitealarmtimer = 50;
-					//criminalizeparty(LAWFLAG_BREAKING);
-				}
-				// Else perma-lock it if an attempt was made
-				else if (actual)
-				{
-					levelmap[locx][locy][locz].flag |= SITEBLOCK_CLOCK;
-					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
-					{
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(17,  1, "Your tampering sets off the alarm!", gamelog);
-						gamelog.newline();
-						sitealarm = 1;
-						getkey();
-					}
-				}
-				// Check for people noticing you fiddling with the lock
-				if (actual)
-				{
-					alienationcheck(0);
-					noticecheck(-1);
-				}
-				return;
-			}
-			else if (c == 'n') return;
-		}
-	}
-	else if (locked || (!restricted && alarmed))
-	{
-		while (true)
-		{
-			clearmessagearea(false);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (locked)
-			{
-				mvaddstrAlt(16, 1, "You shake the handle but it is ", gamelog);
-				if (has_security) addstrAlt("still ", gamelog);
-				addstrAlt("locked.", gamelog);
-			}
-			else mvaddstrAlt(16, 1, "It's locked from the other side.", gamelog);
-			gamelog.newline();
-			mvaddstrAlt(17,  1, "Force it open? (Yes or No)");
-			int c = getkey();
-			if (c == 'y')
-			{
-				char actual;
-				if (bash(BASH_DOOR, actual))
-				{
-					levelmap[locx][locy][locz].flag &= ~SITEBLOCK_DOOR;
-					int time = 0;
-					if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-					if (levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
-					{
-						clearmessagearea(false);
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16,  1, "The alarm goes off!", gamelog);
-						gamelog.newline();
-						sitealarm = 1;
-						getkey();
-					}
-					sitecrime++;
-					sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
-					criminalizeparty(LAWFLAG_BREAKING);
-				}
-				if (actual)
-				{
-					alienationcheck(1);
-					noticecheck(-1, DIFFICULTY_HEROIC);
-				}
-				break;
-			}
-			else if (c == 'n')break;
-		}
 	}
 	else
 	{
-		levelmap[locx][locy][locz].flag &= ~SITEBLOCK_DOOR;
-		if (alarmed)
+		music.play(MUSIC_DEFENSE);
+		sitealarm = 1;
+		location[loc]->siege.attacktime = 0;
+		location[loc]->siege.kills = 0;
+		location[loc]->siege.tanks = 0;
+		//PLACE YOU
+		//int maxy=0;
+		for (int x = 0; x < MAPX; x++)
+			for (int y = 0; y < MAPY; y++)
+			{
+
+				for (int z = 0; z < MAPZ; z++)
+				{
+
+					if (!(location[loc]->siege.lights_off))levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
+					levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
+					levelmap[x][y][z].flag &= ~SITEBLOCK_LOOT;
+				}
+
+				//if(!(levelmap[x][y][0].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)))maxy=y;
+			}
+
+		//Cops have tanks; firemen have fire.
+		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
 		{
-			// Opened an unlocked but clearly marked emergency exit door
-			clearmessagearea(false);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, "It opens easily. The alarm goes off!", gamelog);
-			gamelog.newline();
-			sitealarm = 1;
-			getkey();
+
+			int firesstarted = 0, firex, firey;
+			do
+			{
+
+				firex = LCSrandom(MAPX), firey = LCSrandom(MAPY);
+				firesstarted++;
+				levelmap[firex][firey][0].flag |= SITEBLOCK_FIRE_START;
+			} while (!(levelmap[firex][firey][0].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT)) &&
+				firesstarted < 4);
 		}
+
+		do
+		{
+
+			// Some bugs with degenerate spawn outside the map are occurring
+			// Unknown why, but hard-coding limits to spawn location should help
+			//locx=LCSrandom(MAPX);
+			//locy=maxy-LCSrandom(3);
+			locx = MAPX / 2 + LCSrandom(25) - 12;
+			locy = 15 - LCSrandom(3);
+			//if(locy<3) locy=3;
+			locz = 0;
+		} while (levelmap[locx][locy][locz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR |
+			SITEBLOCK_FIRE_START | SITEBLOCK_FIRE_PEAK | SITEBLOCK_FIRE_END));
+		//PLACE LOOT
+		int lootnum = len(location[loc]->loot);
+		if (lootnum>10) lootnum = 10;
+		int lx, ly, lz;
+		for (int l = 0; l < lootnum; l++)
+		{
+
+			do lx = LCSrandom(MAPX), ly = LCSrandom(MAPY), lz = 0;
+			while (levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT));
+			levelmap[lx][ly][lz].flag |= SITEBLOCK_LOOT;
+		}
+
+		//PLACE TRAPS
+		if (location[loc]->compound_walls&COMPOUND_TRAPS)
+		{
+
+			int trapnum = 30;
+			for (int t = 0; t < trapnum; t++)
+			{
+
+				do lx = LCSrandom(MAPX), ly = LCSrandom(MAPY), lz = 0;
+				while (levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT | SITEBLOCK_LOOT));
+				levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_TRAP;
+			}
+		}
+
+
+		//PLACE UNITS
+		int unitnum = 6;
+		int count = 50000;
+		for (int t = 0; t < unitnum; t++)
+		{
+
+			do
+			{
+
+				lx = LCSrandom(11) + (MAPX / 2) - 5;
+				ly = LCSrandom(8);
+				lz = 0;
+				count--;
+				if (count == 0) break;
+			} while ((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT)) ||
+				(levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT | SIEGEFLAG_TRAP)));
+			levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_UNIT;
+		}
+
+		if (!(location[loc]->compound_walls & COMPOUND_TANKTRAPS) &&
+			location[loc]->siege.siegetype == SIEGE_POLICE&&
+			LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2)
+		{
+
+			levelmap[MAPX / 2][1][0].siegeflag |= SIEGEFLAG_HEAVYUNIT;
+			location[loc]->siege.tanks = 1;
+		}
+
 	}
+	mode_site();
+}
+
+
+/* prints the names of creatures you see in car chases */
+void printchaseencounter()
+{
+	for (int i = 19; i <= 24; i++)
+		mvaddstrAlt(i, 0, "                                                                                "); // 80 spaces
+	if (len(chaseseq.enemycar))
+	{
+		int carsy[4] = { 20,20,20,20 };
+		for (int v = 0; v<len(chaseseq.enemycar); v++)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(19, v * 20 + 1, chaseseq.enemycar[v]->fullname(true));
+		}
+		for (int e = 0; e<ENCMAX; e++) if (encounter[e].exists)
+			for (int v = 0; v<len(chaseseq.enemycar); v++)
+				if (chaseseq.enemycar[v]->id() == encounter[e].carid)
+				{
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					mvaddstrAlt(carsy[v], v * 20 + 1, encounter[e].name);
+					if (encounter[e].is_driver) addstrAlt("-D");
+					carsy[v]++;
+				}
+	}
+	else printencounter();
 }

@@ -52,9 +52,13 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "sitemode/stealth.h"
@@ -64,11 +68,14 @@ the bottom of includes.h in the top src folder.
 // Pretty wrong. Should be reworked --Schmel924
 
 #include "common/commondisplay.h" // Local header. Should not be removed --Schmel924
+#include "common/commondisplayLog.h"
+#include "common/commondisplayCreature.h"
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
 #include "common/getnames.h"
+std::string gettitle(Creature &cr);
 // for getmonth
 
 #include "common/stringconversion.h"
@@ -77,19 +84,21 @@ the bottom of includes.h in the top src folder.
 #include "common/translateid.h"
 // for  int getcar(int)
 
-#include "common/commonactions.h"
+//#include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
 
 #include "daily/siege.h"
-// for int numbereating(int loc);
+// for statebrokenlaws(cr);
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
 extern int year;
 extern short mode;
 extern bool mapshowing;
@@ -97,7 +106,6 @@ extern string closeParenthesis;
 extern string commaSpace;
 extern string tag_ARMOR;
 extern squadst *activesquad;
-extern int selectedsiege;
 extern int day;
 extern int month;
 extern string singleSpace;
@@ -255,85 +263,7 @@ void set_activity_color(long activity_type)
 		break;
 	}
 }
-/* location and squad header */
-void locheader()
-{
-	if (activesquad != NULL && activesquad->squad[0]->location != -1)
-	{
-		if (location[activesquad->squad[0]->location]->siege.siege)
-		{
-			if (location[activesquad->squad[0]->location]->siege.underattack)set_color_easy(RED_ON_BLACK_BRIGHT);
-			else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		}
-		else set_color_easy(WHITE_ON_BLACK);
-	}
-	else if (selectedsiege != -1)
-	{
-		if (location[selectedsiege]->siege.siege)
-		{
-			if (location[selectedsiege]->siege.underattack)set_color_easy(RED_ON_BLACK_BRIGHT);
-			else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		}
-		else set_color_easy(WHITE_ON_BLACK);
-	}
-	else set_color_easy(WHITE_ON_BLACK);
-	moveAlt(0, 0);
-	if (activesquad != NULL && activesquad->squad[0]->location != -1)
-	{
-		addstrAlt(location[activesquad->squad[0]->location]->getname(false, true));
-		addstrAlt(commaSpace);
-	}
-	else
-	{
-		if (selectedsiege == -1)
-		{
-			addstrAlt("No Squad Selected");
-			addstrAlt(commaSpace);
-		}
-		else
-		{
-			addstrAlt(location[selectedsiege]->getname(false, true));
-			addstrAlt(commaSpace);
-		}
-	}
-	addstrAlt(getmonth(month, true));
-	addstrAlt(singleSpace);
-	addstrAlt(day);
-	addstrAlt(commaSpace);
-	addstrAlt(year);
-	if (activesquad == NULL && selectedsiege == -1)
-	{
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(3,  6, "To form a new squad:");
-		mvaddstrAlt(4,  6, "1) R - Review Assets and Form Squads");
-		mvaddstrAlt(5,  6, "2) Press Z to Assemble a New Squad");
-		set_color_easy(WHITE_ON_BLACK);
-	}
-	printfunds();
-	if (activesquad != NULL)
-	{
-		string str = getactivity(activesquad->activity);
-		set_activity_color(activesquad->activity.type);
-		if (activesquad->activity.type == ACTIVITY_NONE)
-		{
-			bool haveact = false, multipleact = false;
-			for (int p = 0; p<6; p++)
-			{
-				if (activesquad->squad[p] == NULL) continue;
-				const string str2 = getactivity(activesquad->squad[p]->activity);
-				set_activity_color(activesquad->squad[p]->activity.type);
-				if (haveact&&str != str2) multipleact = true;
-				str = str2, haveact = true;
-			}
-			if (multipleact)
-			{
-				str = "Acting Individually";
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			}
-		}
-		mvaddstrAlt(0, 41, str);
-	}
-}
+
 /* party info at top of screen */
 void printparty()
 {
@@ -489,140 +419,6 @@ void printparty()
 		}
 	}
 	makedelimiter();
-}
-/* location info at top of screen */
-void printlocation(long loc)
-{
-	if (location[loc]->siege.siege)
-	{
-		if (!location[loc]->siege.underattack)
-		{
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 1, "The police have surrounded this location.");
-		}
-		else
-		{
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			switch (location[loc]->siege.siegetype)
-			{
-			case SIEGE_POLICE:
-				mvaddstrAlt(2, 1, "The police are raiding this location!"); break;
-			case SIEGE_CIA:
-				mvaddstrAlt(2, 1, "The CIA is raiding this location!"); break;
-			case SIEGE_HICKS:
-				mvaddstrAlt(2, 1, "The masses are storming this location!"); break;
-			case SIEGE_CORPORATE:
-				mvaddstrAlt(2, 1, "The Corporations are raiding this location!"); break;
-			case SIEGE_CCS:
-				mvaddstrAlt(2, 1, "The CCS is raiding this location!"); break;
-			case SIEGE_FIREMEN:
-				mvaddstrAlt(2, 1, "Firemen are raiding this location!"); break;
-			}
-		}
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(2, 1, "You are not under siege...  yet.");
-	}
-	if (location[loc]->can_be_upgraded())
-	{
-		if (numbereating(loc)>0)
-		{
-			if (fooddaysleft(loc))
-			{
-				if (fooddaysleft(loc)<4)
-				{
-					if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
-					else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(3, 1, "This location has food for only a few days.");
-				}
-			}
-			else
-			{
-				if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(3, 1, "This location has insufficient food stores.");
-			}
-		}
-		if (location[loc]->compound_walls & COMPOUND_BASIC)
-		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 1, "FORTIFIED COMPOUND");
-		}
-		if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
-		{
-			set_color_easy(BLUE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 31, "PRINTING PRESS");
-		}
-		if (location[loc]->front_business != -1)
-		{
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 54, "BUSINESS FRONT");
-		}
-		if (location[loc]->compound_walls & COMPOUND_CAMERAS)
-		{
-			if (location[loc]->siege.siege&&location[loc]->siege.cameras_off)
-			{
-				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(5, 1, "CAMERAS OFF");
-			}
-			else
-			{
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(5, 1, "CAMERAS ON");
-			}
-		}
-		if (location[loc]->compound_walls & COMPOUND_TRAPS)
-		{
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 16, "BOOBY TRAPS");
-		}
-		if (location[loc]->compound_walls & COMPOUND_AAGUN)
-		{
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 33, "AA GUN");
-		}
-		if (location[loc]->compound_walls & COMPOUND_TANKTRAPS)
-		{
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 46, "TANK TRAPS");
-		}
-		if (location[loc]->siege.siege&&location[loc]->siege.lights_off)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(5, 60, "LIGHTS OUT");
-		}
-		else if (location[loc]->compound_walls & COMPOUND_GENERATOR)
-		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 61, "GENERATOR");
-		}
-		int eaters = numbereating(loc), days = fooddaysleft(loc);
-		if (eaters>0)
-		{
-			if (days >= 1)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(6, 50, days);
-				addstrAlt(" Day");
-				if (days != 1)addcharAlt('s');
-				addstrAlt(" of Food Left");
-			}
-			else if (days == 0)
-			{
-				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(6, 50, "Not Enough Food");
-			}
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(6, 1, location[loc]->compound_stores);
-		addstrAlt(" Daily Ration");
-		if (location[loc]->compound_stores != 1)addstrAlt("s");
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(6, 30, eaters);
-		addstrAlt(" Eating");
-	}
 }
 /* character info at top of screen */
 void printcreatureinfo(Creature *cr, unsigned char knowledge)
@@ -788,7 +584,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(3 + 5 - snum, 31);
 			if (knowledge>5 - snum)
-				addstrAlt(Skill::get_name(maxs));
+				addstrAlt(skill_enum_to_string(maxs));
 			else addstrAlt("???????");
 			addstrAlt(": ");
 			if (knowledge>7 - snum)
@@ -869,7 +665,7 @@ void fullstatus(int p)
 			addstrAlt("    LEFT/RIGHT - Other Liberals");
 		mvaddstrAlt(24,  0, "Press any other key to continue the Struggle");
 		addstrAlt("    UP/DOWN  - More Info");
-		int c = getkey();
+		int c = getkeyAlt();
 		if (activesquad->squad[1] != NULL && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
 		{
 			int sx = (c == KEY_LEFT) ? -1 : 1;
@@ -940,7 +736,7 @@ void printliberalskills(Creature &cr)
 		// >=1 skills are light gray
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5 + s / 3, 27 * (s % 3));
-		addstrAlt(Skill::get_name(s));
+		addstrAlt(skill_enum_to_string(s));
 		addstrAlt(": ");
 		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
 		addstr_f("%2d.", cr.get_skill(s));
@@ -1072,7 +868,7 @@ void printliberalstats(Creature &cr)
 			else if (cr.get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			// >=1 skills are light gray
 			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(6 + skills_shown,  28, Skill::get_name(maxs));
+			mvaddstrAlt(6 + skills_shown,  28, skill_enum_to_string(maxs));
 			addstrAlt(": ");
 			moveAlt(6 + skills_shown, 42);
 			addstr_f("%2d.", cr.get_skill(maxs));
@@ -1268,21 +1064,21 @@ void printliberalcrimes(Creature &cr)
 	if (cr.deathpenalty)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (location[cr.location]->type == SITE_GOVERNMENT_PRISON)
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
 			mvaddstrAlt(3, 0, "On DEATH ROW");
 		else mvaddstrAlt(3, 0, "Sentenced to DEATH");
 	}
 	else if (cr.sentence<0)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (location[cr.location]->type == SITE_GOVERNMENT_PRISON)
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
 			mvaddstrAlt(3, 0, "Serving life in prison");
 		else mvaddstrAlt(3, 0, "Sentenced to life in prison");
 	}
 	else if (cr.sentence>0)
 	{
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		if (location[cr.location]->type == SITE_GOVERNMENT_PRISON)
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
 			mvaddstrAlt(3, 0, "Serving ");
 		else mvaddstrAlt(3, 0, "Sentenced to ");
 		addstrAlt(cr.sentence);

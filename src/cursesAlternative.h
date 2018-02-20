@@ -1,6 +1,4 @@
 
-inline int translateGraphicsChar(const unsigned char c);
-inline short translateGraphicsColor(const short c);
 int clearAlt(void);
 int refreshAlt(void);
 int moveAlt(const int, const int);
@@ -37,3 +35,17 @@ void PDC_set_titleAlt(const char *);
 int endwinAlt();
 int mvaddstrCenter(int i, string str);
 int mvaddstrCenter(int i, string str, Log &log);
+
+
+void noechoAlt();
+void start_colorAlt();
+void curs_setAlt(int i);
+void keypadAlt(bool i);
+void raw_outputAlt(bool i);
+void init_pairAlt(short x, short y, short z);
+void initscrAlt();
+void set_colorAlt(short f, short b, bool bright, bool blink = false);
+int checkkeyAlt();
+void echoAlt();
+
+int getkeyAlt();

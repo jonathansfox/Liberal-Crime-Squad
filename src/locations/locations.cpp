@@ -19,26 +19,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
-#include "common/ledger.h"
-
-#include "items/money.h"
-
-#include "daily/daily.h"
-//for void initlocation(Location &loc);
-
-//#include "locations/locations.h"
-//own header currently inside includes.h
-//own header
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
-extern vector<Creature *> pool;
-extern vector<Location *> location;
+#include "common/creaturePool.h"
 extern bool multipleCityMode;
 
 extern string singleSpace;
@@ -60,36 +43,8 @@ typedef map<short, vector<string>> shortAndTwoStrings;
  vector<string> cafe_name_2;
  vector<string> latte_name;
  vector<string> latte_name_2;
-// Finds a location with the corresponding type and returns
-// its index in the location array
-int findlocation(int type, int city = -1)
-{
-	if (!multipleCityMode) city = -1;
-	for (int i = 0; i < len(location); i++)
-		if (location[i]->type == type && (location[i]->city == city || city == -1)) return i;
-	return -1;
-}
-// Locations - Construct a new location with the specified parameters
-Location::Location(char type_, int parent_)
-	: type(type_), city(-1), parent(parent_), renting(RENTING_NOCONTROL), needcar(false), hidden(false), upgradable(false)
-{
-	if (this->parent != -1)
-	{
-		this->needcar = location[this->parent]->needcar;
-		this->mapped = location[this->parent]->mapped;
-		this->area = location[this->parent]->area;
-		this->city = location[this->parent]->city;
-	}
-	if (this->city < 0 && multipleCityMode)
-		this->city = this->type;
-	initlocation(*this);
-}
-Location* Location::addchild(char type_)
-{
-	Location *newloc = new Location(type_, findlocation(this->type, this->city));
-	location.push_back(newloc);
-	return newloc;
-}
+
+
 void Location::init()
 {
 	haveflag = 0;
@@ -105,46 +60,7 @@ void Location::init()
 	compound_stores = 0;
 	front_business = -1;
 }
-/* Settings for shortname_ (true is 1 and false is 0, by the way):
-* -1: entire name is long, no matter what
-*  0: first part of place name is long, and if there's a city at the end it's short
-*  1: first part of the name is short unless the place itself is a city in which case it's long, and if there's a city at the end it's short
-*  2: entire name is short, no matter what */
-string Location::getname(signed char shortname_, bool include_city)
-{
-	string str;
-	if (!multipleCityMode) include_city = false;
-	if ((shortname_ >= 1 && type != city) || shortname_ >= 2) {
-		if (this->front_business != -1)
-			str = this->front_shortname;
-		else
-			str = this->shortname;
-	}
-	else {
-		if (this->front_business != -1)
-			str = this->front_name;
-		else
-			str = this->name;
-	}
-	if (include_city&&type != city) {
-		string cityname = location[findlocation(city, city)]->getname(shortname_ + 2);
-		if (str == "Downtown")
-			return str + singleSpace + cityname;
-		if (str == "University District" || str == "U-District" || str == "Industrial District" || str == "I-District" ||
-			str == "Shopping" || str == "Outskirts" || str == "Seaport Area" || str == "Seaport" || str == "Outskirts & Orange County")
-			return cityname + singleSpace + str;
-		if (str == "City Outskirts")
-			return cityname + " Outskirts";
-		if (str == "Arlington")
-			return str + (shortname_ < 0 ? ", Virginia" : ", VA");
-		if (str == "Hollywood" || str == "Greater Hollywood")
-			return str + (shortname_ < 0 ? ", California" : ", CA");
-		if (str == "Manhattan" || str == "Manhattan Island" || str == "Brooklyn & Queens" || str == "Long Island" || str == "The Bronx")
-			return str + (shortname_ < 0 ? ", New York" : ", NY");
-		str += commaSpace + cityname;
-	}
-	return str;
-}
+
  shortAndString getCityDescription;
 string Location::city_description()
 {
@@ -234,75 +150,7 @@ bool Location::part_of_justice_system()
 		type == SITE_GOVERNMENT_COURTHOUSE ||
 		type == SITE_GOVERNMENT_PRISON;
 }
-bool Location::duplicatelocation()
-{
-	for (int l = 0; l < len(location); l++)
-	{
-		if (location[l] == this)
-			continue;
-		if (type != SITE_RESIDENTIAL_SHELTER&&!strcmp(location[l]->name, this->name))
-			return true;
-		if (location[l]->front_business != -1 && this->front_business != -1 &&
-			!strcmp(location[l]->front_shortname, this->front_shortname))
-			return true;
-	}
-	return 0;
-}
-void Location::update_heat_protection()
-{
-	int l;
-	for (l = 0; l < len(location); l++)
-	{
-		if (location[l] == this)
-			break;
-	}
-	if (l == len(location))
-	{
-		heat_protection = 0;
-		return;
-	}
-	int numpres = 0;
-	heat_protection = 0;
-	for (int p = 0; p < len(pool); p++)
-	{
-		if (pool[p]->location != l) continue; // People not at this base don't count
-		if (!pool[p]->alive) continue; // Dead people don't count
-		numpres++;
-	}
-	// Determine how effective your current safehouse
-	// is at keeping the police confused
-	switch (location[l]->type)
-	{
-	case SITE_INDUSTRY_WAREHOUSE:
-		if (location[l]->front_business != -1)
-			heat_protection += 12; // Business front -- high protection
-		else
-			heat_protection += 0; // Abandoned warehouse -- no protection
-		break;
-	case SITE_RESIDENTIAL_SHELTER:
-		heat_protection += 0; // Homeless shelter -- no protection
-		break;
-	case SITE_RESIDENTIAL_TENEMENT:
-		heat_protection += 4; // Lower class housing -- low protection
-		break;
-	case SITE_RESIDENTIAL_APARTMENT:
-		heat_protection += 8; // Middle class housing -- medium protection
-		break;
-	case SITE_RESIDENTIAL_BOMBSHELTER:
-	case SITE_OUTDOOR_BUNKER:
-	case SITE_BUSINESS_BARANDGRILL:
-	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-		heat_protection += 12; // Upper class housing -- high protection
-		break;
-	}
-	if (lawList[LAW_FLAGBURNING] == -2 && location[l]->haveflag) heat_protection += 6; // More protection if the flag is sacred
-	else if (lawList[LAW_FLAGBURNING] != -2 && location[l]->haveflag) heat_protection += 2; // Some if the flag isn't
-	else if (lawList[LAW_FLAGBURNING] == -2 && !(location[l]->haveflag)) heat_protection -= 2; // Lose some if it is and you have no flag
-	else {} // None if it isn't and you have no flag
-	if (heat_protection < 0) heat_protection = 0;
-	heat_protection *= 5;
-	if (heat_protection > 95) heat_protection = 95;
-}
+
 void Location::rename(const char* name_, const char* shortname_)
 {
 	strcpy(this->name, name_);
@@ -645,20 +493,4 @@ void initlocation(Location &loc)
 			loc.rename("Black Market", "Black Market");
 			break;
 	}
-}
-/* transfer all loot from some source (such as a squad or another location) to a location, and deal with money properly */
-void Location::getloot(vector<Item *>& loot)
-{
-	for (int l = len(loot) - 1; l >= 0; l--)
-		if (loot[l]->is_money())
-		{
-			Money* m = static_cast<Money*>(loot[l]); //cast -XML
-			ledger.add_funds(m->get_amount(), INCOME_THIEVERY);
-			delete loot[l];
-		}
-		else
-		{  // Empty squad inventory into base inventory
-			this->loot.push_back(loot[l]);
-		}
-	loot.clear();
 }

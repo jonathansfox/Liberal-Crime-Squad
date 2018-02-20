@@ -2,7 +2,6 @@
 #define GET_NAMES_H0
 
 std::string getactivity(activityst &act);
-std::string gettitle(Creature &cr);
 std::string getview(short view, bool shortname);
 std::string getlaw(int l);
 std::string cityname(); /* random city name */

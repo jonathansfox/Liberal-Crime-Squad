@@ -1,30 +1,18 @@
 
 #include <includes.h>
 
+#include "items/itemtype.h"
+#include "items/item.h"
+// needed for locations
+#include "locations/locations.h"
+
 #include "configfile.h"
 //own header
-// needed for something contained in sitemap.h
-
-#include "sitemode/sitemap.h"
-
-#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
-
-#include "common/stringconversion.h"
-//for atoi redefinition
-
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern string singleSpace;
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
-extern vector<configSiteMap *> sitemaps;
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 string attemptingToOpenFile = "Attempting to open filename: ";
@@ -94,14 +82,6 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
    // Value
    for(;source<len(line)&&(line[source]!=' '&&line[source]!='\t');value.push_back(line[source++]));
    return true;
-}
-// Constructs the new object, returns a pointer to it
-configurable* createObject(const std::string& objectType)
-{
-   configurable* object=0;
-   if(objectType=="SITEMAP")
-      sitemaps.push_back(static_cast<configSiteMap*>(object=new configSiteMap));
-   return object;
 }
 void readMapCBSpecials(int x, int y, int z, int i)
 {
@@ -206,7 +186,7 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
          if(j<len(line))
          {
             line[j]=0;
-            (*callback)(x,y,z,atoi(line.substr(i)));
+            (*callback)(x,y,z,atoi(line.substr(i).c_str()));
          }
       }
    }

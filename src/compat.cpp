@@ -64,86 +64,22 @@
 #include <includes.h>
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern unsigned long seed[RNG_SIZE];
-#ifndef HAS_STRICMP
-// Portable equivalent of Windows stricmp() function.
-// This is strcmp() on lowercase versions of the string.
-int stricmp(const char *str1,const char *str2)
-{
-   std::string lstr1=str1,lstr2=str2;
-   std::transform(lstr1.begin(), lstr1.end(), lstr1.begin(), ::tolower);
-   std::transform(lstr2.begin(), lstr2.end(), lstr2.begin(), ::tolower);
-   return lstr1.compare(lstr2);
-}
-#endif
-#ifdef __linux__ // BSD and SVr4 too
-int init_alarm=0; // Flag to indicate if alarmHandler() has been registered.
-struct itimerval timer_off,timer_on;
-void alarmHandler(int signal)
-{
-   //WAKE UP and turn the timer off, this will un-pause().
-   setitimer(ITIMER_REAL,&timer_off,NULL);
-}
-void setTimeval(struct timeval *value,long sec,long usec)
-{
-   value->tv_sec=sec,value->tv_usec=usec;
-}
-void msToItimerval(int ms,struct itimerval *value)
-{
-   long sec=0,usec=0;
-   if(ms>999)sec=(long)(ms/1000),usec=(long)((ms%1000)*1000);
-   else usec=(long)(ms*1000);
-   setTimeval(&value->it_interval,sec,usec);
-   setTimeval(&value->it_value,sec,usec);
-}
-void initalarm()
-{
-   signal(SIGALRM, &alarmHandler);
-   init_alarm=1;
-   /* Initialise a zero value itimerval that will turn the timer off.*/
-   setTimeval(&timer_off.it_interval,0,0);
-   setTimeval(&timer_off.it_value,0,0);
-}
-#endif
-#ifdef WIN32
+
 int ptime=GetTickCount();
-#endif
+
 void alarmset(int t)
 {
-   #ifdef WIN32
    ptime=GetTickCount()+t;
-   #else
-   /* If the signal handler is not set up set it up now */
-   if(!init_alarm) initalarm();
-   // setitimer() will start a timer, pause() will stop the process until a
-   // SGIALRM from the timer is recieved. This will be caught be alarmHandler()
-   // which will turn off the timer and the process will resume.
-   msToItimerval(t,&timer_on);
-   setitimer(ITIMER_REAL,&timer_on,NULL);
-   #endif
 }
 void alarmwait()
 {
-   #ifdef WIN32
    while(ptime>(int)GetTickCount());
-   #else
-   struct itimerval timer_now;
-   getitimer(ITIMER_REAL,&timer_now);
-   //If the timer is on we will wait for it to complete...
-   //Make sure the usecs are at least enough that execution is sure
-   //to reach the pause before the timer expires or we will wait forever
-   //VM on netbook needed this to prevent elections from occasionally locking up.
-   if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec>100||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec>100) pause();
-   #endif
 }
 void pause_ms(int t)
 {
    alarmset(t);
-   refresh();
+   refreshAlt();
    alarmwait();
 }
 // FNV-1a 32-bit hash function (fast and effective) -- helper function for getSeed()

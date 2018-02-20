@@ -25,16 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
-#include "sitemode/newencounter.h"
-// own header (for getrandomcreaturetype)
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
 extern short exec[EXECNUM];
 extern char endgamestate;
 extern short sitetype;
@@ -51,6 +44,20 @@ extern int locz;
 extern short sitealarm;
 void fillEncounter(CreatureTypes c, int numleft);
 void emptyEncounter();
+/* rolls up a random creature type according to the passed weighting array */
+int getrandomcreaturetype(int cr[CREATURENUM])
+{
+	int sum = 0;
+	for (int c = 0; c < CREATURENUM; c++)sum += cr[c];
+	if (sum > 0)
+	{
+		int roll = LCSrandom(sum);
+		int sel = 0;
+		while (roll >= 0) { roll -= cr[sel]; sel++; }
+		return sel - 1;
+	}
+	else return -1;
+}
 /* generates a new random encounter */
 void prepareencounter(short type, char sec)
 {
@@ -101,7 +108,7 @@ void prepareencounter(short type, char sec)
 		}
 		if (siteonfire && lawList[LAW_FREESPEECH] != -2)creaturearray[CREATURE_FIREFIGHTER] = 1000;
 	}
-	if (location[cursite]->renting == RENTING_CCS)
+	if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 	{
 		creaturearray[CREATURE_CCS_VIGILANTE] += 50;
 		//creaturearray[CREATURE_CCS_ARCHCONSERVATIVE]+=endgamestate;
@@ -1224,16 +1231,16 @@ char addsiegeencounter(char type)
 	{
 		if (freeslots < 6)return 0;
 		num = LCSrandom(3) + 4;
-		if (location[cursite]->siege.siege)
+		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
-			switch (location[cursite]->siege.siegetype)
+			switch (LocationsPool::getInstance().getSiegeType(cursite))
 			{
 			case SIEGE_POLICE:
-				if (location[cursite]->siege.escalationstate == 0)
+				if (LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)
 					fillEncounter(CREATURE_SWAT, num);
 				else
 				{
-					if (location[cursite]->siege.escalationstate < 3) fillEncounter(CREATURE_SOLDIER, num);
+					if (LocationsPool::getInstance().getSiegeEscalationState(cursite) < 3) fillEncounter(CREATURE_SOLDIER, num);
 					else fillEncounter(CREATURE_SEAL, num);
 				}
 				break;
@@ -1301,7 +1308,7 @@ char addsiegeencounter(char type)
 				}
 				break;
 			default:
-				if (location[cursite]->renting == RENTING_CCS)
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 				{
 					for (int e = 0; e < ENCMAX && num > 0; e++) {
 						if (!LCSrandom(11))
@@ -1335,18 +1342,4 @@ char addsiegeencounter(char type)
 	}
 	}
 	return 1;
-}
-/* rolls up a random creature type according to the passed weighting array */
-int getrandomcreaturetype(int cr[CREATURENUM])
-{
-	int sum = 0;
-	for (int c = 0; c < CREATURENUM; c++)sum += cr[c];
-	if (sum > 0)
-	{
-		int roll = LCSrandom(sum);
-		int sel = 0;
-		while (roll >= 0) { roll -= cr[sel]; sel++; }
-		return sel - 1;
-	}
-	else return -1;
 }

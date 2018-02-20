@@ -18,16 +18,10 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
 #include <includes.h>
-
+#include "creature/creatureEnums.h"
 #include "log/log.h"
 //own header
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 //Constructor.
 Log::Log()
 {

@@ -1,6 +1,12 @@
 
 #include <includes.h>
-
+#include "creature/creatureEnums.h"
+#include "items/itemtype.h"
+#include "items/item.h"
+#include "items/cliptype.h"
+#include "items/clip.h"
+#include "items/weapontype.h"
+#include "items/weapon.h"
 //#include "items/weapon.h"
 //own header currently inside includes.h
 //own header

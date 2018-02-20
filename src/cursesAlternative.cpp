@@ -1,5 +1,7 @@
 
 #include <includes.h>
+#include "creature/creatureEnums.h"
+#include "pdcurses/curses.h"
 
 #include "log/log.h"
 
@@ -12,6 +14,8 @@
 
 extern string singleSpace;
 
+inline int translateGraphicsChar(unsigned char c) { return c; }
+inline short translateGraphicsColor(short c) { return c; }
 /* Variants of addch and mvaddch that work on chars and use translateGraphicsChar(), fixing display of extended characters */
 inline int addchar(char ch) { return addch(translateGraphicsChar(ch)); }
 inline int mvaddchar(int y, int x, char ch) { return mvaddch(y, x, translateGraphicsChar(ch)); }
@@ -95,7 +99,6 @@ int		 mvaddstrAlt(const int x, const int y, const  int z, Log &a){
 	a.record(tostring(z));
 	return mvaddstr(x, y, tostring(z).data());
 }
-//#include "includesAlt06Primatives.h"
 int		mvaddstr_const(const MOVE_CONSTANT movement, const char *string) {
 	return mvaddstrAlt(movement.y, movement.x, string);
 }
@@ -228,4 +231,43 @@ int mvaddstrCenter(int i, string str, Log &log) {
 	int x = 39 - ((len(str) - 1) >> 1);
 	if (x < 0) x = 0;
 	return mvaddstrAlt(i, x, str, log);
+}
+
+void noechoAlt() {
+	noecho();
+}
+//initialize curses color
+void start_colorAlt() {
+	start_color();
+}
+void curs_setAlt(int i) {
+	curs_set(i);
+
+}
+//begin the game loop
+void keypadAlt(bool i) {
+	keypad(stdscr, i);
+
+}
+void raw_outputAlt(bool i) {
+	raw_output(i);
+
+}
+void init_pairAlt(short x, short y, short z) {
+	init_pair(x, y, z);
+}
+void initscrAlt() {
+	initscr();
+}
+void set_colorAlt(short f, short b, bool bright, bool blink) {
+	set_color(f, b, bright, blink);
+}
+int checkkeyAlt() {
+	return checkkey();
+}
+void echoAlt() {
+	echo();
+}
+int getkeyAlt() {
+	return getkey();
 }

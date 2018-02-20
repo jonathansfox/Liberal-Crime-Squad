@@ -1,13 +1,15 @@
 
 #include <includes.h>
+//#include "creature/creature.h"
 
-//#include "augmentation.h"
+#include "augmentation.h"
 //own header currently inside includes.h
 
 #include "common/stringconversion.h"
 //for atoi redefinition
 
 #include <cursesAlternative.h>
+#include "creature/creatureEnums.h"
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>

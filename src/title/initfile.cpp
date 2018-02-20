@@ -15,25 +15,17 @@ This file is part of Liberal Crime Squad.
 */
 
 #include <includes.h>
-
-#include "title/initfile.h"
-
 #include "common/stringconversion.h"
 //for int stringtobool(std::string boolstr);
 
 #include "common/consolesupport.h"
 // for void begin_cleartype_fix();
 
+#include "title/titlescreen.h"
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern short interface_pgup;
 extern short interface_pgdn;
-extern bool autosave;
+void setautosaveoption(bool shouldautosave);
 extern bool fixcleartype;
 void setconfigoption(std::string name, std::string value)
 {
@@ -60,7 +52,7 @@ void setconfigoption(std::string name, std::string value)
    else if(name == "autosave")
    {
       if(stringtobool(value)==0)
-         autosave=false;
+		  title_screen::getInstance().setautosaveoption(false);
    }
    #ifdef WIN32
    else if(name == "fixcleartype") // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false

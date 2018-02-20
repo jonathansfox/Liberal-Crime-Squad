@@ -52,9 +52,12 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "basemode/baseactions.h"
@@ -65,12 +68,14 @@ This file is part of Liberal Crime Squad.                                       
 #include "sitemode/advance.h"
 // for creatureadvance
 
-#include "sitemode/miscactions.h"
+//#include "sitemode/miscactions.h"
+void reloadparty(bool wasteful = false);
 
-#include "sitemode/sitemode.h"
-// for mode_site
+//#include "sitemode/sitemode.h"
+void mode_site(short loc);
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for void cleangonesquads();
 
 #include "common/consolesupport.h"
@@ -114,6 +119,8 @@ This file is part of Liberal Crime Squad.                                       
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern short mode;
 extern char endgamestate;
@@ -161,6 +168,9 @@ extern char ccs_kills;
 
 void emptyEncounter();
 void fillEncounter(CreatureTypes c, int numleft);
+
+#include "common/creaturePool.h"
+
 /* TODO
 make it less likely to be raided based on:
 - the number of sleepers.
@@ -176,9 +186,9 @@ make it more likely to be raided:
 /* Currently, it only works when you confront a siege and then fail. */
 void resolvesafehouses()
 {
-	for (int l = 0; l < len(location); l++)
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 	{
-		if (location[l]->renting >= 0 && location[l]->siege.siege)
+		if (LocationsPool::getInstance().getRentingType(l)>= 0 && LocationsPool::getInstance().isThereASiegeHere(l))
 		{
 			cleangonesquads();
 			selectedsiege = l; // hack for calling giveup()
@@ -193,7 +203,7 @@ void siegecheck(char canseethings)
 	// Upkeep - even base-less should be considered.
 	// XXX - candidate to create nice function?
 	// Cleanse record on things that aren't illegal right now
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (lawList[LAW_FLAGBURNING] > 0)pool[p]->crimes_suspected[LAWFLAG_BURNFLAG] = 0;
 		if (lawList[LAW_DRUGS] > 0)pool[p]->crimes_suspected[LAWFLAG_BROWNIES] = 0;
@@ -203,14 +213,14 @@ void siegecheck(char canseethings)
 	if (lawList[LAW_FREESPEECH] > -2)offended_firemen = 0;
 	//FIRST, THE COPS
 	int numpres;
-	for (int l = 0; l < len(location); l++)
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 	{
-		if (location[find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, l)]->closed)
+		if (LocationsPool::getInstance().isThisSiteClosed(find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, l)))
 		{
 			location[l]->heat = static_cast<int>(location[l]->heat * 0.95);
 		}
-		if (location[l]->siege.siege)continue;
-		if (location[l]->renting == RENTING_NOCONTROL)continue;
+		if (LocationsPool::getInstance().isThereASiegeHere(l))continue;
+		if (LocationsPool::getInstance().getRentingType(l) == RENTING_NOCONTROL)continue;
 		numpres = 0;
 		if (location[l]->siege.timeuntillocated == -2)
 		{
@@ -241,7 +251,7 @@ void siegecheck(char canseethings)
 			//CHECK FOR CRIMINALS AT THIS BASE
 			int crimes = 0;
 			//int heatprotection=0;
-			for (int p = 0; p < len(pool); p++)
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 			{
 				// Sleepers and people not at this base don't count
 				if (pool[p]->location != l || pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
@@ -291,7 +301,7 @@ void siegecheck(char canseethings)
 			if (location[l]->siege.timeuntillocated == 1)
 			{
 				int policesleeperwarning = 0;
-				for (int pl = 0; pl < len(pool); pl++)
+				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 				{
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 						pool[pl]->location != -1 &&
@@ -330,7 +340,7 @@ void siegecheck(char canseethings)
 					gamelog.nextMessage(); //Write out buffer to prepare for next message.
 					mvaddstrAlt(15,  1, "Press Esc to ponder the situation...");
 					int c;
-					do c = getkey(); while (c != 'x'&&c != ESC);
+					do c = getkeyAlt(); while (c != 'x'&&c != ESC);
 				}
 			}
 			//COPS RAID THIS LOCATION
@@ -348,13 +358,13 @@ void siegecheck(char canseethings)
 					addstrAlt("!", gamelog);
 					gamelog.newline();
 					location[l]->siege.underattack = 0;
-					getkey();
+					getkeyAlt();
 					//MENTION ESCALATION STATE
 					if (location[l]->siege.escalationstate >= 1)
 					{
 						mvaddstrAlt(9,  1, "National Guard troops are replacing normal SWAT units.", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 					}
 					if (location[l]->siege.escalationstate >= 2)
 					{
@@ -363,13 +373,13 @@ void siegecheck(char canseethings)
 							addstrAlt("An M1 Abrams Tank is stopped by the tank traps.", gamelog);
 						else addstrAlt("An M1 Abrams Tank takes up position outside the compound.", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 					}
 					if (location[l]->siege.escalationstate >= 3)
 					{
 						mvaddstrAlt(11,  1, "You hear jet bombers streak overhead.", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 					}
 					// "You are wanted for blahblah and other crimes."
 					statebrokenlaws(l);
@@ -386,9 +396,9 @@ void siegecheck(char canseethings)
 					addstrAlt(location[l]->getname(), gamelog);
 					addstrAlt(", an unoccupied safehouse.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					int y = 9;
-					for (int p = len(pool) - 1; p >= 0; p--)
+					for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 					{
 						if (pool[p]->location != l) continue;
 						if (!pool[p]->alive)
@@ -396,7 +406,7 @@ void siegecheck(char canseethings)
 							mvaddstrAlt(y,  1, pool[p]->name, gamelog);
 							addstrAlt("'s corpse has been recovered.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							delete_and_remove(pool, p);
 							y++;
 							continue;
@@ -406,7 +416,7 @@ void siegecheck(char canseethings)
 							mvaddstrAlt(y,  1, pool[p]->name, gamelog);
 							addstrAlt(" has been rescued.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							delete_and_remove(pool, p);
 							y++;
 							continue;
@@ -426,7 +436,7 @@ void siegecheck(char canseethings)
 				location[l]->siege.timeuntilcorps = LCSrandom(3) + 1;
 				// *JDS* CEO sleepers may give a warning before corp raids
 				int ceosleepercount = 0;
-				for (int pl = 0; pl < len(pool); pl++)
+				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 				{
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER&&
 						pool[pl]->type == CREATURE_CORPORATE_CEO)
@@ -447,7 +457,7 @@ void siegecheck(char canseethings)
 					else addstrAlt("the LCS", gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			else if (location[l]->siege.timeuntilcorps > 0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
@@ -462,7 +472,7 @@ void siegecheck(char canseethings)
 				addstrAlt(location[l]->getname(), gamelog);
 				addstrAlt("!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_CORPORATE;
 				location[l]->siege.underattack = 1;
@@ -481,7 +491,7 @@ void siegecheck(char canseethings)
 					location[l]->siege.timeuntilccs = LCSrandom(3) + 1;
 					// CCS sleepers may give a warning before raids
 					int ccssleepercount = 0;
-					for (int pl = 0; pl < len(pool); pl++)
+					for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 					{
 						if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 							(pool[pl]->type == CREATURE_CCS_VIGILANTE || pool[pl]->type == CREATURE_CCS_ARCHCONSERVATIVE ||
@@ -500,7 +510,7 @@ void siegecheck(char canseethings)
 						addstrAlt(location[l]->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 					}
 				}
 				else if (location[l]->siege.timeuntilccs > 0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
@@ -515,7 +525,7 @@ void siegecheck(char canseethings)
 					addstrAlt(location[l]->getname(), gamelog);
 					addstrAlt("!", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					if (!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
 						!LCSrandom(5))
 					{
@@ -524,7 +534,7 @@ void siegecheck(char canseethings)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8,  1, "The truck plows into the building and explodes!", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 						eraseAlt();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(0,  1, "CCS CAR BOMBING CASUALTY REPORT");
@@ -534,7 +544,7 @@ void siegecheck(char canseethings)
 						mvaddstrAlt(6,  1, "INJURED: ");
 						int injured_y = 6;
 						int injured_x = 10;
-						for (int i = 0; i < len(pool); i++)
+						for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 						{
 							if (pool[i]->location == l)
 							{
@@ -576,7 +586,7 @@ void siegecheck(char canseethings)
 								}
 							}
 						}
-						getkey();
+						getkeyAlt();
 					}
 					else
 					{
@@ -585,7 +595,7 @@ void siegecheck(char canseethings)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8,  1, "CCS members pour out of the truck and shoot in the front doors!", gamelog);
 						gamelog.nextMessage();
-						getkey();
+						getkeyAlt();
 						location[l]->siege.siege = 1;
 						location[l]->siege.siegetype = SIEGE_CCS;
 						location[l]->siege.underattack = 1;
@@ -601,7 +611,7 @@ void siegecheck(char canseethings)
 				location[l]->siege.timeuntilcia = LCSrandom(3) + 1;
 				// *JDS* agent sleepers may give a warning before cia raids
 				int agentsleepercount = 0;
-				for (int pl = 0; pl < len(pool); pl++)
+				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 				{
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER&&
 						pool[pl]->type == CREATURE_AGENT)
@@ -622,7 +632,7 @@ void siegecheck(char canseethings)
 					addstrAlt(location[l]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			else if (location[l]->siege.timeuntilcia > 0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
@@ -654,7 +664,7 @@ void siegecheck(char canseethings)
 					mvaddstrAlt(9,  1, "They've shut off the lights!", gamelog);
 					gamelog.nextMessage();
 				}
-				getkey();
+				getkeyAlt();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_CIA;
 				location[l]->siege.underattack = 1;
@@ -673,7 +683,7 @@ void siegecheck(char canseethings)
 				addstrAlt(location[l]->getname(), gamelog);
 				addstrAlt("!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_HICKS;
 				location[l]->siege.underattack = 1;
@@ -691,7 +701,7 @@ void siegecheck(char canseethings)
 				addstrAlt(location[l]->getname(), gamelog);
 				addstrAlt("!", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_HICKS;
 				location[l]->siege.underattack = 1;
@@ -706,7 +716,7 @@ void siegecheck(char canseethings)
 				location[l]->siege.timeuntilfiremen = LCSrandom(3) + 1;
 				// Sleeper Firemen can warn you of an impending raid
 				int firemensleepercount = 0;
-				for (int pl = 0; pl < len(pool); pl++)
+				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 						pool[pl]->type == CREATURE_FIREFIGHTER &&
 						location[pool[pl]->location]->city == location[l]->city)
@@ -722,7 +732,7 @@ void siegecheck(char canseethings)
 					addstrAlt(location[l]->name, gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			else if (location[l]->siege.timeuntilfiremen > 0) location[l]->siege.timeuntilfiremen--;
@@ -739,7 +749,7 @@ void siegecheck(char canseethings)
 				gamelog.newline();
 				mvaddstrAlt(9,  1, "Armored firemen swarm out, pilot lights burning.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(1,  1, "You hear a screeching voice over the sound of fire engine sirens:", gamelog);
@@ -750,7 +760,7 @@ void siegecheck(char canseethings)
 				gamelog.newline();
 				mvaddstrAlt(6,  1, "Come quietly and you will not be harmed.", gamelog);
 				gamelog.nextMessage();
-				getkey();
+				getkeyAlt();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_FIREMEN;
 				location[l]->siege.underattack = 1;
@@ -767,9 +777,9 @@ void siegecheck(char canseethings)
 				addstrAlt(location[l]->getname(), gamelog);
 				addstrAlt(", an unoccupied safehouse.", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				int y = 9;
-				for (int p = len(pool) - 1; p >= 0; p--)
+				for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 				{
 					if (pool[p]->location != l)continue;
 					if (!pool[p]->alive)
@@ -777,7 +787,7 @@ void siegecheck(char canseethings)
 						mvaddstrAlt(y++,  1, pool[p]->name, gamelog);
 						addstrAlt("'s corpse has been recovered.", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						delete_and_remove(pool, p);
 						continue;
 					}
@@ -786,7 +796,7 @@ void siegecheck(char canseethings)
 						mvaddstrAlt(y++,  1, pool[p]->name, gamelog);
 						addstrAlt(" has been rescued.", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						delete_and_remove(pool, p);
 						continue;
 					}
@@ -824,7 +834,7 @@ void siegeturn(char clearformess)
 	// Clear food_prep and liberalcount lists
 	std::memset(food_prep, 0, len(location));
 	std::memset(liberalcount, 0, sizeof(int)*len(location));
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive)continue; // Dead people don't count
 		if (pool[p]->align != 1)continue; // Non-liberals don't count
@@ -844,9 +854,9 @@ void siegeturn(char clearformess)
 			gamelog.newline();
 			if (location[l]->siege.siegetype == SIEGE_CCS&&location[l]->type == SITE_INDUSTRY_WAREHOUSE)
 				location[l]->renting = RENTING_CCS; // CCS Captures warehouse
-			getkey();
+			getkeyAlt();
 			int y = 9;
-			for (int p = len(pool) - 1; p >= 0; p--)
+			for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 			{
 				if (pool[p]->location != l) continue;
 				if (!pool[p]->alive)
@@ -854,7 +864,7 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(y++,  1, pool[p]->name);
 					addstrAlt("'s corpse has been recovered.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					delete_and_remove(pool, p);
 					continue;
 				}
@@ -863,7 +873,7 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(y++,  1, pool[p]->name);
 					addstrAlt(" has been rescued.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					delete_and_remove(pool, p);
 					continue;
 				}
@@ -889,13 +899,13 @@ void siegeturn(char clearformess)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, "Your Liberals are starving!", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 			}
 			if (location[l]->compound_stores >= eaters) location[l]->compound_stores -= eaters;
 			else location[l]->compound_stores = 0;
 			//ATTACK!
 			char attack = 0;
-			for (int p = 0; p < len(pool); p++)
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 			{
 				if (!pool[p]->alive || pool[p]->location != l) continue;
 				if (starving) pool[p]->blood -= LCSrandom(8) + 4;
@@ -909,7 +919,7 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" has starved to death.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 				}
 			}
 			if (!LCSrandom(12))attack = 1;
@@ -920,7 +930,7 @@ void siegeturn(char clearformess)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, "The cops are coming!", gamelog);
 				gamelog.newline();
-				getkey();
+				getkeyAlt();
 				location[l]->siege.underattack = 1;
 			}
 			else
@@ -936,7 +946,7 @@ void siegeturn(char clearformess)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, "The police have cut the lights!", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					location[l]->siege.lights_off = 1;
 				}
 				//SNIPER
@@ -944,7 +954,7 @@ void siegeturn(char clearformess)
 				{
 					no_bad = 0;
 					vector<int> pol;
-					for (int p = 0; p<len(pool); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+					for (int p = 0; p<CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
 					if (len(pol))
 					{
 						if (clearformess) eraseAlt();
@@ -969,7 +979,7 @@ void siegeturn(char clearformess)
 							addstrAlt("!", gamelog);
 							gamelog.newline();
 						}
-						getkey();
+						getkeyAlt();
 					}
 				}
 				if (location[l]->siege.escalationstate >= 3 && !LCSrandom(3))
@@ -982,7 +992,7 @@ void siegeturn(char clearformess)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, "You hear planes streak overhead!", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					bool hasAAGun = location[l]->compound_walls & COMPOUND_AAGUN;
 					bool hasGenerator = location[l]->compound_walls & COMPOUND_GENERATOR;
 					if (hasAAGun)
@@ -991,7 +1001,7 @@ void siegeturn(char clearformess)
 						else makedelimiter();
 						mvaddstrAlt(8,  1, "The thunder of the anti-aircraft gun shakes the compound!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						if (clearformess) eraseAlt();
 						else makedelimiter();
 						moveAlt(8, 1);
@@ -1003,20 +1013,20 @@ void siegeturn(char clearformess)
 							{
 								addstrAlt("Hit! One of the bombers slams into to the ground.", gamelog);
 								gamelog.newline();
-								getkey();
+								getkeyAlt();
 								if (clearformess) eraseAlt();
 								else makedelimiter();
 								mvaddstrAlt(8,  1, "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!", gamelog);
-								for (int p = 0; p < len(pool); p++) addjuice(*pool[p], 20, 1000);
+								for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
 							}
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 						else
 						{
 							addstrAlt("A skilled pilot gets through!", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 					}
 					if (hit)
@@ -1025,19 +1035,19 @@ void siegeturn(char clearformess)
 						else makedelimiter();
 						mvaddstrAlt(8,  1, "Explosions rock the compound!", gamelog);
 						gamelog.newline();
-						getkey();
+						getkeyAlt();
 						if (hasAAGun && !LCSrandom(3))
 						{
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							mvaddstrAlt(8,  1, "The anti-aircraft gun takes a direct hit!", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							mvaddstrAlt(8,  1, "There's nothing left but smoking wreckage...", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							location[l]->compound_walls &= ~COMPOUND_AAGUN;
 						}
 						else if (hasGenerator && !LCSrandom(3))
@@ -1046,19 +1056,19 @@ void siegeturn(char clearformess)
 							else makedelimiter();
 							mvaddstrAlt(8,  1, "The generator has been destroyed!", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							mvaddstrAlt(8,  1, "The lights fade and all is dark.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 							location[l]->compound_walls &= ~COMPOUND_GENERATOR;
 							location[l]->siege.lights_off = 1;
 						}
 						if (!LCSrandom(2))
 						{
 							vector<int> pol;
-							for (int p = 0; p<len(pool); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+							for (int p = 0; p<CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
 							if (len(pol))
 							{
 								if (clearformess) eraseAlt();
@@ -1081,7 +1091,7 @@ void siegeturn(char clearformess)
 									addstrAlt(" narrowly avoided death!", gamelog);
 									gamelog.newline();
 								}
-								getkey();
+								getkeyAlt();
 							}
 						}
 						else
@@ -1090,7 +1100,7 @@ void siegeturn(char clearformess)
 							else makedelimiter();
 							mvaddstrAlt(8,  1, "Fortunately, no one is hurt.", gamelog);
 							gamelog.newline();
-							getkey();
+							getkeyAlt();
 						}
 					}
 				}
@@ -1104,7 +1114,7 @@ void siegeturn(char clearformess)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, "Army engineers have removed your tank traps.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					if (clearformess) moveAlt(9, 1);
 					else
 					{
@@ -1113,7 +1123,7 @@ void siegeturn(char clearformess)
 					}
 					addstrAlt("The tank moves forward to your compound entrance.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					location[l]->compound_walls &= ~COMPOUND_TANKTRAPS;
 				}
 				//NEED GOOD THINGS TO BALANCE THE BAD
@@ -1134,9 +1144,9 @@ void siegeturn(char clearformess)
 					addstrAlt(pickrandom(newspaper_last_name), gamelog);
 					mvaddstrAlt(2,  1, "got into the compound somehow!", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					int best = 0;
-					for (int p = 0, bestvalue = -1000; p < len(pool); p++)
+					for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
 					{
 						if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location != l) continue;
 						int sum = pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
@@ -1148,10 +1158,10 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(4,  1, pool[best]->name, gamelog);
 					addstrAlt(" decides to give an interview.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					mvaddstrAlt(6,  1, "The interview is wide-ranging, covering a variety of topics.", gamelog);
 					gamelog.newline();
-					getkey();
+					getkeyAlt();
 					int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
 						+ pool[best]->attribute_roll(ATTRIBUTE_HEART)
 						+ pool[best]->skill_roll(SKILL_PERSUASION)
@@ -1218,7 +1228,7 @@ void siegeturn(char clearformess)
 						addstrAlt("'s words.", gamelog);
 						gamelog.newline();
 					}
-					getkey();
+					getkeyAlt();
 					//CHECK PUBLIC OPINION
 					change_public_opinion(VIEW_LIBERALCRIMESQUAD, 20);
 					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, (segmentpower - 25) / 2, segmentpower + 50);
@@ -1238,10 +1248,10 @@ void giveup()
 	if (selectedsiege != -1)loc = selectedsiege;
 	if (activesquad != NULL)loc = activesquad->squad[0]->location;
 	if (loc == -1)return;
-	if (location[loc]->renting > 1)location[loc]->renting = RENTING_NOCONTROL;
+	if (LocationsPool::getInstance().getRentingType(loc) > 1)location[loc]->renting = RENTING_NOCONTROL;
 	//IF POLICE, END SIEGE
-	if (location[loc]->siege.siegetype == SIEGE_POLICE ||
-		location[loc]->siege.siegetype == SIEGE_FIREMEN)
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
+		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 	{
 		music.play(MUSIC_SIEGE);
 		int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
@@ -1249,16 +1259,16 @@ void giveup()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(1, 1);
-		if (location[loc]->siege.siegetype == SIEGE_POLICE && location[loc]->siege.escalationstate == 0)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
 			addstrAlt("The police", gamelog);
-		else if (location[loc]->siege.siegetype == SIEGE_POLICE && location[loc]->siege.escalationstate >= 1)
+		else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
 			addstrAlt("The soldiers", gamelog);
 		else addstrAlt("The firemen", gamelog);
 		addstrAlt(" confiscate everything, including Squad weapons.", gamelog);
 		gamelog.newline();
 		int kcount = 0, pcount = 0, icount = 0, p;
 		char kname[100], pname[100], pcname[100];
-		for (p = len(pool) - 1; p >= 0; p--)
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc || !pool[p]->alive) continue;
 			if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
@@ -1275,10 +1285,10 @@ void giveup()
 		//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
 		if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
 		if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN&&location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN&&location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
 			criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
 													  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
-		for (p = len(pool) - 1; p >= 0; p--)
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc || !pool[p]->alive) continue;
 			if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1))
@@ -1359,10 +1369,10 @@ void giveup()
 			gamelog.newline();
 			location[loc]->front_business = -1;
 		}
-		getkey();
+		getkeyAlt();
 		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
 			offended_firemen = 0; // Firemen do not hold grudges
-		for (p = len(pool) - 1; p >= 0; p--)
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc) continue;
 			//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
@@ -1370,7 +1380,7 @@ void giveup()
 				!pool[p]->alive)
 			{
 				// Clear actions for anybody who was tending to this person
-				for (int i = 0; i < len(pool); i++)
+				for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 					if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[i]->activity.arg == pool[p]->id)
 						pool[i]->activity.type = ACTIVITY_NONE;
 				removesquadinfo(*pool[p]);
@@ -1397,7 +1407,7 @@ void giveup()
 	{
 		//OTHERWISE IT IS SUICIDE
 		int killnumber = 0;
-		for (int p = len(pool) - 1; p >= 0; p--)
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc) continue;
 			if (pool[p]->alive&&pool[p]->align == 1) stat_dead++;
@@ -1406,20 +1416,20 @@ void giveup()
 			pool[p]->die();
 			pool[p]->location = -1;
 		}
-		if (location[loc]->siege.siegetype == SIEGE_CCS&&location[loc]->type == SITE_INDUSTRY_WAREHOUSE)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 			location[loc]->renting = RENTING_CCS; // CCS Captures warehouse
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(1,  1, "Everyone in the ", gamelog);
-		addstrAlt(location[loc]->getname(), gamelog);
+		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
 		addstrAlt(" is slain.", gamelog);
 		gamelog.newline();
 		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
-		getkey();
+		getkeyAlt();
 		newsstoryst *ns = new newsstoryst;
 		ns->type = NEWSSTORY_MASSACRE;
 		ns->loc = loc;
-		ns->crime.push_back(location[loc]->siege.siegetype);
+		ns->crime.push_back(LocationsPool::getInstance().getSiegeType(loc));
 		ns->crime.push_back(killnumber);
 		newsstory.push_back(ns);
 		//MUST SET cursite TO SATISFY endcheck() CODE
@@ -1447,7 +1457,7 @@ int fooddaysleft(int loc)
 int numbereating(int loc)
 {
 	int eaters = 0;
-	for (int p = 0; p < len(pool); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
 		if (pool[p]->location == loc&&pool[p]->alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
 	return eaters;
 }
@@ -1488,7 +1498,7 @@ char sally_forth_aux(int loc)
 	{
 		// Count heroes
 		int partysize = 0, partyalive = 0;
-		for (p = 0; p < len(pool); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+		for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
 		{
 			partysize++;
 			if (pool[p]->alive) partyalive++;
@@ -1533,7 +1543,7 @@ char sally_forth_aux(int loc)
 		// check if we fought the previous loop; if so, add a blank gamelog line
 		if (foughtthisround) gamelog.newline();
 		foughtthisround = 0;
-		int c = getkey();
+		int c = getkeyAlt();
 		// Reflecting on your poor judgment
 		if (partyalive == 0 && c == 'c'&&!endcheck())
 		{
@@ -1577,7 +1587,7 @@ char sally_forth_aux(int loc)
 			if (c == 'e') equip(location[loc]->loot, -1);
 			// Check for victory
 			partysize = 0, partyalive = 0;
-			for (p = 0; p < len(pool); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+			for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
 			{
 				partysize++;
 				if (pool[p]->alive) partyalive++;
@@ -1586,7 +1596,7 @@ char sally_forth_aux(int loc)
 			for (int e = 0; e < ENCMAX; e++) if (encounter[e].enemy() && encounter[e].alive&&encounter[e].exists) baddiecount++;
 			if (partyalive&&!baddiecount)
 			{
-				for (int p = 0; p < len(pool); p++) for (int w = 0; w < BODYPARTNUM; w++) pool[p]->wound[w] &= ~WOUND_BLEEDING;
+				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) for (int w = 0; w < BODYPARTNUM; w++) pool[p]->wound[w] &= ~WOUND_BLEEDING;
 				mode = GAMEMODE_BASE;
 				if (ranaway)
 				{
@@ -1595,7 +1605,7 @@ char sally_forth_aux(int loc)
 					clearmessagearea();
 					mvaddstrAlt(16,  1, "You're free!", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					escapesiege(false);
 					return 1;
 				}
@@ -1606,7 +1616,7 @@ char sally_forth_aux(int loc)
 					clearmessagearea();
 					mvaddstrAlt(16,  1, "The siege is broken!", gamelog);
 					gamelog.nextMessage();
-					getkey();
+					getkeyAlt();
 					conquertext();
 					escapesiege(true);
 					return 2;
@@ -1642,11 +1652,11 @@ void sally_forth()
 	mvaddstrAlt(23,  11, "Press any key to Confront the Conservative Aggressors");
 	// Seperate logging text
 	gamelog.log("Your Liberals sally forth to confront the siege.");
-	getkey();
-	if (location[loc]->siege.siegetype == SIEGE_CCS&&location[loc]->type == SITE_INDUSTRY_WAREHOUSE)
+	getkeyAlt();
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
-	if (location[loc]->siege.siegetype == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
 	//DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 		if (squad[sq] != activesquad&&squad[sq]->squad[0])
@@ -1671,7 +1681,7 @@ void sally_forth()
 		strcpy(squad.back()->name, location[selectedsiege]->getname(true));
 		strcat(squad.back()->name, " Defense");
 		int i = 0;
-		for (int p = 0; p < len(pool); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 			if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
 			{
 				squad.back()->squad[i] = pool[p];
@@ -1687,7 +1697,7 @@ void sally_forth()
 	ns->type = NEWSSTORY_SQUAD_ESCAPED;
 	ns->positive = 1;
 	ns->loc = loc;
-	ns->siegetype = location[loc]->siege.siegetype;
+	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
 	newsstory.push_back(ns);
 	sitestory = ns;
 	char result = sally_forth_aux(loc);
@@ -1730,8 +1740,8 @@ void escape_engage()
 	mvaddstrAlt(23,  11, "Press any key to Confront the Conservative Aggressors");
 	// Seperate logging text
 	gamelog.log("Your Liberals confront the Conservatives within the safehouse.");
-	getkey();
-	if (location[loc]->siege.siegetype == SIEGE_CCS&&location[loc]->type == SITE_INDUSTRY_WAREHOUSE)
+	getkeyAlt();
+	if (location[loc]->siege.siegetype == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
 	if (location[loc]->siege.siegetype == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
@@ -1759,7 +1769,7 @@ void escape_engage()
 		strcpy(squad.back()->name, location[selectedsiege]->getname(true));
 		strcat(squad.back()->name, " Defense");
 		int i = 0;
-		for (int p = 0; p < len(pool); p++) if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
 		{
 			squad.back()->squad[i] = pool[p];
 			pool[p]->squadid = squad.back()->id;
@@ -1805,14 +1815,14 @@ void escapesiege(char won)
 		mvaddstrAlt(yLevel + 1,  11, "Press any key to split up and lay low for a few days");
 		// Seperate logging text
 		gamelog.log("Your Liberals split up and lay low for a few days.");
-		getkey();
+		getkeyAlt();
 		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
 		if (activesquad&&homes != -1) location[homes]->getloot(activesquad->loot);
 		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
 							//but we need to disband current squad as the people are going to be 'away'.
 							//GET RID OF DEAD, etc.
-		if (location[cursite]->renting > 1)location[cursite]->renting = RENTING_NOCONTROL;
-		for (int p = len(pool) - 1; p >= 0; p--)
+		if (LocationsPool::getInstance().getRentingType(cursite) > 1)location[cursite]->renting = RENTING_NOCONTROL;
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != cursite) continue;
 			if (!pool[p]->alive)
@@ -1840,7 +1850,7 @@ void escapesiege(char won)
 	}
 	//SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
 	location[cursite]->siege.siege = 0;
-	if (won&&location[cursite]->siege.siegetype == SIEGE_POLICE)
+	if (won&&LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 	{
 		location[cursite]->siege.timeuntillocated = LCSrandom(4) + 4;
 		location[cursite]->siege.escalationstate++;
@@ -1856,7 +1866,7 @@ void conquertext()
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(1,  26, "* * * * *   VICTORY   * * * * *", gamelog);
 	gamelog.newline();
-	if (location[cursite]->siege.siegetype == SIEGE_POLICE)
+	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(3,  16, "The Conservative automatons have been driven back ÄÄ for ", gamelog);
@@ -1872,7 +1882,7 @@ void conquertext()
 	}
 	gamelog.nextMessage();
 	mvaddstrAlt(7,  19, "Press C to Continue Liberally.");
-	while (getkey() != 'c');
+	while (getkeyAlt() != 'c');
 }
 /* siege - flavor text when you crush a CCS safe house */
 void conquertextccs()
@@ -1923,11 +1933,11 @@ void conquertextccs()
 		mvaddstrAlt(10,  16, "revolution to attend to?", gamelog);
 		gamelog.newline();
 		mvaddstrAlt(12,  5, "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD", gamelog);
-		for (int p = 0; p < len(pool); p++) addjuice(*pool[p], 200, 1000);
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 200, 1000);
 	}
 	gamelog.nextMessage();
 	mvaddstrAlt(15,  19, "Press C to Continue Liberally.");
-	while (getkey() != 'c');
+	while (getkeyAlt() != 'c');
 }
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc)
@@ -1936,7 +1946,7 @@ void statebrokenlaws(int loc)
 	short breakercount[LAWFLAGNUM] = { 0 };
 	int typenum = 0, criminalcount = 0, kidnapped = 0;
 	char kname[100];
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive || pool[p]->location != loc) continue;
 		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
@@ -1955,7 +1965,7 @@ void statebrokenlaws(int loc)
 	else addstrAlt("You hear a blaring voice on a loudspeaker:", gamelog);
 	gamelog.newline();
 	moveAlt(3, 1);
-	if (location[loc]->siege.escalationstate >= 2 && publicmood(-1) < 20)
+	if (LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2 && publicmood(-1) < 20)
 		addstrAlt("In the name of God, your campaign of terror ends here!", gamelog);
 	else addstrAlt("Surrender yourselves!", gamelog);
 	gamelog.newline();
@@ -2076,7 +2086,7 @@ void statebrokenlaws(int loc)
 		addstrAlt(singleDot, gamelog);
 	}
 	gamelog.nextMessage();
-	getkey();
+	getkeyAlt();
 }
 void statebrokenlaws(Creature & cr)
 {

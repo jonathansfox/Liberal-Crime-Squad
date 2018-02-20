@@ -8,7 +8,7 @@ class AugmentType {
       std::string get_name() const { return name_; }
       long get_id() const { return id_; }
       short get_type() const { return type_; }
-      CreatureAttribute get_attribute() const { return attribute_; }
+      short get_attribute() const { return attribute_; }
       int get_effect() const { return effect_; }
       int get_max_age() const { return max_age_; }
       int get_min_age() const { return min_age_; }
@@ -19,7 +19,7 @@ class AugmentType {
    private:
       std::string idname_;
       std::string name_;
-      CreatureAttribute attribute_;
+      short attribute_;
       int effect_;
       int max_age_;
       int min_age_;

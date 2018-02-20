@@ -1,5 +1,10 @@
 
 #include <includes.h>
+#include "items/itemtype.h"
+#include "items/item.h"
+#include "items/armortype.h"
+#include "items/armor.h"
+#include "creature/creatureEnums.h"
 
 //#include "items/armor.h"
 //own header currently inside includes.h
@@ -170,7 +175,7 @@ bool Armor::is_mask() const
 { return armortype[getarmortype(itemtypename())]->is_mask(); }
 bool Armor::is_surprise_mask() const
 { return armortype[getarmortype(itemtypename())]->is_surprise_mask(); }
-const string& Armor::get_description() const
+const string Armor::get_description() const
 { return armortype[getarmortype(itemtypename())]->get_description(); }
 int Armor::get_durability() const
 { return armortype[getarmortype(itemtypename())]->get_durability(); }

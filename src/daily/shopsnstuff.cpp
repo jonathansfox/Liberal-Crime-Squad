@@ -25,19 +25,23 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 // for locatesquad(activesquad,loc)
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
 
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for void printfunds(int,int,char*)        
@@ -52,8 +56,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
-extern vector<Creature *> pool;
-extern vector<Location *> location;
+#include "common/musicClass.h"
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 extern MusicClass music;
@@ -97,6 +100,7 @@ string s_sellThe;
 string g_getCar;
 string f_fixWounds;
 
+
 /* active squad visits the hospital */
 void hospital(int loc)
 {
@@ -118,7 +122,7 @@ void hospital(int loc)
 		if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(14,  1, show_squad_liberal_status);
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == '0') party_status = -1;
 		if (c >= '1'&&c <= '6'&&activesquad != NULL)
@@ -159,6 +163,7 @@ void pawnshop(int loc)
 	pawnshop.enter(*activesquad);
 }
 /* active squad visits the car dealership */
+#include "common/creaturePoolCreature.h"
 void dealership(int loc)
 {
 	music.play(MUSIC_SHOPPING);
@@ -170,11 +175,7 @@ void dealership(int loc)
 		eraseAlt();
 		locheader();
 		printparty();
-		Creature *sleepercarsalesman = NULL;
-		for (int p = 0; p < len(pool); p++)
-			if (pool[p]->alive && (pool[p]->flag & CREATUREFLAG_SLEEPER) &&
-				pool[p]->type == CREATURE_CARSALESMAN&&location[pool[p]->location]->city == location[loc]->city)
-				sleepercarsalesman = pool[p];
+		Creature *sleepercarsalesman = findSleeperCarSalesman(loc);
 		Vehicle* car_to_sell = 0;
 		int price = 0;
 		for (int v = len(vehicle) - 1; v >= 0; v--)
@@ -212,7 +213,7 @@ void dealership(int loc)
 		if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(15,  40, check_status_of_squad_liberal);
-		int c = getkey();
+		int c = getkeyAlt();
 		// Leave
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
 		//Sell the car
@@ -248,7 +249,7 @@ void dealership(int loc)
 				{
 					set_color_easy(RED_ON_BLACK);
 					mvaddstrAlt(1,  1, notEnoughMoney);
-					getkey();
+					getkeyAlt();
 				}
 				else break;
 			}
@@ -317,7 +318,7 @@ void choose_buyer(short &buyer)
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  20, chooseALiberalTo + toSpend);
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= partysize + '1' - 1)
 		{

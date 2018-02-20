@@ -25,12 +25,17 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
+//#include "pdcurses/curses.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "common/commonactions.h"
+#include "common/commonactionsCreature.h"
 
 #include "common/translateid.h"
 // for  int getsquad(int)
@@ -49,7 +54,7 @@ This file is part of Liberal Crime Squad.                                       
 #include "title/highscore.h"       
 //for void savehighscore(char endtype)
 
-#include "title/saveload.h"       
+#include "title/titlescreen.h"       
 //for void reset();
 
 #include "politics/politics.h"
@@ -57,17 +62,20 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
+#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
 #include <gui_constants.h>
 #include <set_color_support.h>
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
+extern title_screen *TitleScreen;
 
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
-extern vector<Location *> location;
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
 extern MusicClass music;
 extern char endgamestate;
 extern short mode;
@@ -88,11 +96,13 @@ extern vector<recruitst *> recruit;
 extern short activesortingchoice[SORTINGCHOICENUM];
 extern class Ledger ledger;
 
+#include "common/creaturePool.h"
+
 /* common - test for possible game over */
 char endcheck(char cause)
 {
 	bool dead = true;
-	for (int p = 0; p < len(pool) && dead; p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
 		if (pool[p]->alive&&pool[p]->align == 1 &&
 			!(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid != -1)) // Allow sleepers to lead LCS without losing
 			dead = false;
@@ -106,9 +116,9 @@ char endcheck(char cause)
 		// OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
 		if (cause == -1)
 		{  // got killed, possibly in a siege but maybe not, find out the reason we lost
-			if (location[cursite]->siege.siege)
+			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 			{
-				switch (location[cursite]->siege.siegetype)
+				switch (LocationsPool::getInstance().getSiegeType(cursite))
 				{
 				case SIEGE_POLICE: savehighscore(END_POLICE); break;
 				case SIEGE_CIA: savehighscore(END_CIA); break;
@@ -122,7 +132,7 @@ char endcheck(char cause)
 		}
 		else savehighscore(cause); // the reason we lost was specified in the function call
 								   // You just lost the game!
-		reset();
+		TitleScreen->reset();
 		viewhighscores();
 		end_game();
 		return true;
@@ -159,7 +169,7 @@ void hospitalize(int loc, Creature &patient)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  1, patient.name, gamelog);
 		addstrAlt(" will be at ", gamelog);
-		addstrAlt(location[loc]->name, gamelog);
+		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
 		addstrAlt(" for ", gamelog);
 		addstrAlt(time, gamelog);
 		addstrAlt(singleSpace, gamelog);
@@ -167,7 +177,7 @@ void hospitalize(int loc, Creature &patient)
 		else addstrAlt("month", gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage(); //Time for the next message.
-		getkey();
+		getkeyAlt();
 		if (patientsquad)
 		{  // Reorganize patient's former squad
 			bool flipstart = 0;
@@ -222,26 +232,78 @@ void criminalizeparty(short crime)
 /* common - applies a crime to everyone in a location, or the entire LCS */
 void criminalizepool(short crime, long exclude, short loc)
 {
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (p == exclude) continue;
 		if (loc != -1 && pool[p]->location != loc) continue;
 		criminalize(*pool[p], crime);
 	}
 }
+/* returns the amount of heat associated with a given crime */
+int lawflagheat(int lawflag)
+{
+	// Note that for the purposes of this function, we're not looking at how severe the crime is,
+	// but how vigorously it is pursued by law enforcement. This determines how quickly they raid
+	// you for it, and how much of a penalty you get in court for it. Some crimes are inflated
+	// heat, others are deflated (such as the violent crimes).
+	//
+	// - Jonathan S. Fox
+	switch (lawflag)
+	{
+	case LAWFLAG_TREASON:return 100;
+	case LAWFLAG_TERRORISM:return 100;
+	case LAWFLAG_MURDER:return 20;
+	case LAWFLAG_KIDNAPPING:return 20;
+	case LAWFLAG_BANKROBBERY:return 20;
+	case LAWFLAG_ARSON:return 50;
+	case LAWFLAG_BURNFLAG:return 0;
+	case LAWFLAG_SPEECH:return 0;
+	case LAWFLAG_BROWNIES:return 50;
+	case LAWFLAG_ESCAPED:return 50;
+	case LAWFLAG_HELPESCAPE:return 50;
+	case LAWFLAG_JURY:return 0;
+	case LAWFLAG_RACKETEERING:return 50;
+	case LAWFLAG_EXTORTION:return 20;
+	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as "harmful speech"?
+	case LAWFLAG_ASSAULT:return 0;        // Fox: Yes. You get too many assault charges to put heat on it.
+	case LAWFLAG_CARTHEFT:return 0;
+	case LAWFLAG_CCFRAUD:return 20;
+	case LAWFLAG_THEFT:return 0;
+	case LAWFLAG_PROSTITUTION:return 0;
+	case LAWFLAG_HIREILLEGAL:return 10;
+		//case LAWFLAG_GUNUSE:return 1;
+		//case LAWFLAG_GUNCARRY:return 0;
+	case LAWFLAG_COMMERCE:return 20;
+	case LAWFLAG_INFORMATION:return 50;
+	case LAWFLAG_BURIAL:return 0;
+	case LAWFLAG_BREAKING:return 0;
+	case LAWFLAG_VANDALISM:return 0;
+	case LAWFLAG_RESIST:return 10;
+	case LAWFLAG_DISTURBANCE:return 0;
+	case LAWFLAG_PUBLICNUDITY:return 0;
+	case LAWFLAG_LOITERING:return 0;
+	default:return 0;
+	}
+}
+// *JDS* Scarefactor is the severity of the case against you; if you're a really
+// nasty person with a wide variety of major charges against you, then scarefactor
+// can get up there
+int scare_factor(int lawflag, int crimenumber) {
+	return lawflagheat(lawflag) * crimenumber;
+}
 /* common - applies a crime to a person */
 void criminalize(Creature &cr, short crime)
 {
 	if (mode == GAMEMODE_SITE)
 	{
-		if (location[cursite]->siege.siege)
+		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
 			// Do not criminalize the LCS for self-defense against
 			// extrajudicial raids
-			if (location[cursite]->siege.siegetype != SIEGE_POLICE)
+			if (LocationsPool::getInstance().getSiegeType(cursite) != SIEGE_POLICE)
 				return;
 		}
-		else if (location[cursite]->renting == RENTING_CCS)
+		else if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 			// Do not criminalize the LCS for crimes against the CCS
 			return;
 	}
@@ -270,7 +332,7 @@ void addjuice(Creature &cr, long juice, long cap)
 	cr.juice += juice;
 	// Pyramid scheme of juice trickling up the chain
 	if (cr.hireid != -1)
-		for (int i = 0; i < len(pool); i++)
+		for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 			if (pool[i]->id == cr.hireid)
 			{
 				addjuice(*pool[i], juice / 5, cr.juice);
@@ -299,33 +361,7 @@ void removesquadinfo(Creature &cr)
 		cr.squadid = -1;
 	}
 }
-/* common - purges empty squads from existence */
-void cleangonesquads()
-{
-	for (int sq = len(squad) - 1; sq >= 0; sq--)
-	{  //NUKE SQUAD IF IT IS GONE
-		bool hasmembers = false;
-		for (int p = 0; p < 6; p++)
-			if (squad[sq]->squad[p] != NULL)
-			{  // Let's do a bit of housekeeping here
-			   // And see if we can't gracefully eliminate that
-			   // pesky dead liberal in my squad bug
-				if (squad[sq]->squad[p]->alive == false)
-				{
-					removesquadinfo(*squad[sq]->squad[p]);
-					p = -1; // restart this for loop
-				}
-				else hasmembers = true;
-			}
-		if (!hasmembers)
-		{  //SQUAD LOOT WILL BE DESTROYED
-			if (activesquad == squad[sq]) activesquad = NULL;
-			delete_and_remove(squad, sq);
-		}
-		//OTHERWISE YOU CAN TAKE ITS MONEY (and other gear)
-		else location[squad[sq]->squad[0]->base]->getloot(squad[sq]->loot);
-	}
-}
+
 /* common - moves all squad members and their cars to a new location */
 void locatesquad(squadst *st, long loc)
 {
@@ -453,52 +489,6 @@ void change_public_opinion(int v, int power, char affect, char cap)
 	if (attitude[v] < 0)attitude[v] = 0;
 	if (attitude[v] > 100)attitude[v] = 100;
 }
-/* returns the amount of heat associated with a given crime */
-int lawflagheat(int lawflag)
-{
-	// Note that for the purposes of this function, we're not looking at how severe the crime is,
-	// but how vigorously it is pursued by law enforcement. This determines how quickly they raid
-	// you for it, and how much of a penalty you get in court for it. Some crimes are inflated
-	// heat, others are deflated (such as the violent crimes).
-	//
-	// - Jonathan S. Fox
-	switch (lawflag)
-	{
-	case LAWFLAG_TREASON:return 100;
-	case LAWFLAG_TERRORISM:return 100;
-	case LAWFLAG_MURDER:return 20;
-	case LAWFLAG_KIDNAPPING:return 20;
-	case LAWFLAG_BANKROBBERY:return 20;
-	case LAWFLAG_ARSON:return 50;
-	case LAWFLAG_BURNFLAG:return 0;
-	case LAWFLAG_SPEECH:return 0;
-	case LAWFLAG_BROWNIES:return 50;
-	case LAWFLAG_ESCAPED:return 50;
-	case LAWFLAG_HELPESCAPE:return 50;
-	case LAWFLAG_JURY:return 0;
-	case LAWFLAG_RACKETEERING:return 50;
-	case LAWFLAG_EXTORTION:return 20;
-	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as "harmful speech"?
-	case LAWFLAG_ASSAULT:return 0;        // Fox: Yes. You get too many assault charges to put heat on it.
-	case LAWFLAG_CARTHEFT:return 0;
-	case LAWFLAG_CCFRAUD:return 20;
-	case LAWFLAG_THEFT:return 0;
-	case LAWFLAG_PROSTITUTION:return 0;
-	case LAWFLAG_HIREILLEGAL:return 10;
-		//case LAWFLAG_GUNUSE:return 1;
-		//case LAWFLAG_GUNCARRY:return 0;
-	case LAWFLAG_COMMERCE:return 20;
-	case LAWFLAG_INFORMATION:return 50;
-	case LAWFLAG_BURIAL:return 0;
-	case LAWFLAG_BREAKING:return 0;
-	case LAWFLAG_VANDALISM:return 0;
-	case LAWFLAG_RESIST:return 10;
-	case LAWFLAG_DISTURBANCE:return 0;
-	case LAWFLAG_PUBLICNUDITY:return 0;
-	case LAWFLAG_LOITERING:return 0;
-	default:return 0;
-	}
-}
 // Determines the number of subordinates a creature may command
 int maxsubordinates(const Creature& cr)
 {
@@ -519,7 +509,7 @@ int maxsubordinates(const Creature& cr)
 int subordinatesleft(const Creature& cr)
 {
 	int recruitcap = maxsubordinates(cr);
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		// ignore seduced and brainwashed characters
 		if (pool[p]->hireid == cr.id&&pool[p]->alive&&!(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
 			recruitcap--;
@@ -530,7 +520,7 @@ int subordinatesleft(const Creature& cr)
 int loveslaves(const Creature& cr)
 {
 	int loveslaves = 0;
-	for (int p = 0; p < len(pool); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		// If subordinate and a love slave
 		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
 			loveslaves++;
@@ -586,56 +576,7 @@ int randomissue(bool core_only)
 	for (int i = 0; i < numviews; i++) if (roll < interest_array[i]) return i;
 	return VIEW_MOOD;
 }
-// Prompt to turn new recruit into a sleeper
-void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
-{
-	bool selection = false;
-	while (true)
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y,  0, "In what capacity will ");
-		addstrAlt(converted.name);
-		addstrAlt(" best serve the Liberal cause?");
-		set_color(COLOR_WHITE, COLOR_BLACK, !selection);
-		mvaddstrAlt(y + 2,  0, selection ? "   " : "-> ");
-		addstrAlt("Come to ");
-		addstrAlt(location[recruiter.location]->getname(-1, true));
-		addstrAlt(" as a ");
-		set_color(COLOR_GREEN, COLOR_BLACK, !selection);
-		addstrAlt("regular member");
-		set_color(COLOR_WHITE, COLOR_BLACK, !selection);
-		addstrAlt(singleDot);
-		set_color(COLOR_WHITE, COLOR_BLACK, selection);
-		mvaddstrAlt(y + 3,  0, selection ? "-> " : "   ");
-		addstrAlt("Stay at ");
-		addstrAlt(location[converted.worklocation]->getname(-1, true));
-		addstrAlt(" as a ");
-		set_color(COLOR_CYAN, COLOR_BLACK, selection);
-		addstrAlt("sleeper agent");
-		set_color(COLOR_WHITE, COLOR_BLACK, selection);
-		addstrAlt(singleDot);
-		int c = getkey();
-		if ((c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) && selection)
-		{
-			converted.flag |= CREATUREFLAG_SLEEPER;
-			converted.location = converted.worklocation;
-			location[converted.worklocation]->mapped = 1;
-			location[converted.worklocation]->hidden = 0;
-			converted.base = converted.worklocation;
-			liberalize(converted, false);
-			break;
-		}
-		else if ((c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) && !selection)
-		{
-			converted.location = recruiter.location;
-			converted.base = recruiter.base;
-			liberalize(converted, false);
-			break;
-		}
-		else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT ||
-			c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) selection = !selection;
-	}
-}
+
 /* common - Sort a list of creatures.*/
 void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone)
 {
@@ -652,7 +593,7 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
 before second in the list. */
 bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
 {
-	for (int j = 0; j < len(pool); j++)
+	for (int j = 0; j < CreaturePool::getInstance().lenpool(); j++)
 		if (pool[j] == first) return true;
 		else if (pool[j] == second) return false;
 		return false;
@@ -699,7 +640,7 @@ void sorting_prompt(short listforsorting)
 	}
 	while (true)
 	{
-		int c = getkey();
+		int c = getkeyAlt();
 		if (c == 'a')
 		{
 			activesortingchoice[listforsorting] = SORTING_NONE; break;
@@ -771,7 +712,7 @@ int choiceprompt(const string &firstline, const string &secondline,
 		mvaddstrAlt(23, 0,		addpagestr());
 		moveAlt(24, 0);
 		if (allowexitwochoice) addstrAlt(enterDash + exitstring);
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
@@ -821,7 +762,7 @@ int buyprompt(const string &firstline, const string &secondline,
 		}
 		mvaddstrAlt(23, 0, addpagestr());
 		mvaddstrAlt(24,  0, enterDash + exitstring);
-		int c = getkey();
+		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN

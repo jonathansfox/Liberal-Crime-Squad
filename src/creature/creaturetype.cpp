@@ -1,5 +1,6 @@
 
 #include <includes.h>
+#include "creature/creature.h"
 
 #include "common/interval.h"
 

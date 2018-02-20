@@ -25,24 +25,13 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <includes.h>
+#include "creature/creature.h"
 
+#include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
-
-#include "title/saveload.h"
-
-#include "common/stringconversion.h"
-
-#include "items/loottype.h"
-// for loot class definition
-
-#include "items/loot.h"
-
-#include "items/money.h"
-
-#include "common/getnames.h"
-// for getview()
 
 #include "common/equipment.h"
 //for void consolidateloot(vector<Item *> &loot);
@@ -50,22 +39,11 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/translateid.h"
 // for  getloottype
 
-#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
-
-#include "title/saveload.h"
-//own header
-        //does not compile without --Schmel924
-
-
+#include "title/titlescreen.h"
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
+
+#include "common/creaturePool.h"
 
 string itemType;
 string doesNotExistItem;
@@ -73,11 +51,7 @@ string vehicleType;
 string doesNotExistVehicle;
 string couldNotLoad;
 
-string itemClassClip;
-string itemClassWeapon;
-string itemClassArmor;
-string itemClassLoot;
-string itemClassMoney;
+Item* create_item(const std::string& inputXml);
 
 extern vector<Creature *> pool;
 extern Log gamelog;
@@ -87,6 +61,7 @@ extern bool multipleCityMode;
 extern int stat_buys;
 extern int stat_burns;
 extern short presparty;
+#include "common/musicClass.h"
 extern MusicClass music;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern int stat_kidnappings;
@@ -147,6 +122,7 @@ extern vector<datest *> date;
 extern vector<recruitst *> recruit;
 extern vector<newsstoryst *> newsstory;
 extern squadst *activesquad;
+
 
 // TODO: It would be really cool to be able to "export" characters.
 /* handles saving */
@@ -297,9 +273,9 @@ void savegame(const string& filename)
 			fwrite(vehicleStr.c_str(), vehicleSize, 1, h);
 		}
 		//POOL
-		dummy = len(pool);
+		dummy = CreaturePool::getInstance().lenpool();
 		fwrite(&dummy, sizeof(int), 1, h);
-		for (int pl = 0; pl < len(pool); pl++)
+		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		{
 			std::string creatureStr = pool[pl]->showXml();
 			int creatureSize = len(creatureStr);
@@ -429,26 +405,6 @@ void savegame(const string& filename)
 	}
 }
 
-/* Used by load() to create items of the correct class. */
-Item* create_item(const std::string& inputXml)
-{
-	Item* it = NULL;
-	CMarkup xml;
-	xml.SetDoc(inputXml);
-	xml.FindElem();
-	string itemclass = xml.GetTagName();
-	if (itemclass == itemClassClip)
-		it = new Clip(inputXml);
-	else if (itemclass == itemClassWeapon)
-		it = new Weapon(inputXml);
-	else if (itemclass == itemClassArmor)
-		it = new Armor(inputXml);
-	else if (itemclass == itemClassLoot)
-		it = new Loot(inputXml);
-	else if (itemclass == itemClassMoney)
-		it = new Money(inputXml);
-	return it;
-}
 /* loads the game from save.dat */
 char load(const string& filename)
 {
@@ -467,7 +423,7 @@ char load(const string& filename)
 		if (loadversion < lowestloadversion)
 		{
 			LCSCloseFile(h);
-			reset();
+			title_screen::getInstance().reset();
 			return 0;
 		}
 		for (saveLoadChunk s : firstChunk) {
@@ -560,7 +516,7 @@ char load(const string& filename)
 		//POOL
 		fread(&dummy, sizeof(int), 1, h);
 		pool.resize(dummy);
-		for (int pl = 0; pl < len(pool); pl++)
+		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		{
 			int creatureSize;
 			fread(&creatureSize, sizeof(int), 1, h);
@@ -615,7 +571,7 @@ char load(const string& filename)
 				{
 					int dummy_i;
 					fread(&dummy_i, sizeof(int), 1, h);
-					for (int pl = 0; pl < len(pool); pl++)
+					for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 						if (pool[pl]->id == dummy_i)
 							squad[sq]->squad[pos] = pool[pl];
 				}
@@ -725,7 +681,7 @@ char load(const string& filename)
 			if (dummy_b)
 			{
 				fread(&dummy_l, sizeof(long), 1, h);
-				for (int pl = 0; pl < len(pool); pl++)
+				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 					if (pool[pl]->id == dummy_l)
 					{
 						newsstory[ns]->cr = pool[pl];
@@ -757,15 +713,7 @@ char load(const string& filename)
 		
 		return 1;
 	}
-	gamelog.log(couldNotLoad);
 	return 0;
-}
-/* deletes save.dat (used on endgame and for invalid save version) */
-void reset()
-{
-	for (string filename : LCSSaveFiles()) {
-		if (file_exists(filename)) LCSDeleteFile(filename.c_str(), LCSIO_PRE_HOME);
-	}
 }
 extern char homedir[MAX_PATH_SIZE];
 void useData(vector<string> types);
@@ -931,7 +879,7 @@ void writeVerbose(string filename) {
 		outClientFile <<  party_status << endl;
 		outClientFile << "# Attitude" << endl;
 		for (int i = 0; i < len(attitude); i++) {
-			outClientFile << "# Concerning " + getview(i, false) << endl;
+			//outClientFile << "# Concerning " + getview(i, false) << endl;
 
 			outClientFile <<  attitude[i] << endl;
 		}
@@ -976,7 +924,7 @@ void writeVerbose(string filename) {
 		outClientFile << "# oldPresidentName" << endl;
 		outClientFile << oldPresidentName << endl;
 		*/
-		for (int pl = 0; pl < len(pool); pl++)
+		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		{
 			outClientFile << "# Next Creature" << endl;
 			if (!NOVERBOSECOMMENTS)
@@ -1009,8 +957,8 @@ void writeVerbose(string filename) {
 				outClientFile << "# Juice" << endl;
 			outClientFile <<  pool[pl]->juice << endl;
 			for (int i = 0; i < ATTNUM; i++) {
-				if (!NOVERBOSECOMMENTS)
-					outClientFile << "# " + attribute_enum_to_string(i) << endl;
+				//if (!NOVERBOSECOMMENTS)
+					//outClientFile << "# " + attribute_enum_to_string(i) << endl;
 				outClientFile <<  pool[pl]->get_attribute(i, false) << endl;
 
 			}
@@ -1308,7 +1256,7 @@ void useData(vector<string> types) {
 		return;
 	}
 
-	for (int pl = 0; pl < len(pool); pl++)
+	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 	{
 
 

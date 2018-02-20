@@ -27,8 +27,9 @@
 // it out for yourself.
 
 #include <includes.h>
+#include "creature/creatureEnums.h"
 
-#include "log/log.h"
+//#include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for addstr
@@ -48,68 +49,9 @@ vector<string> regular_last_names;
 vector<string> archconservative_last_names;
 extern string closeParenthesis;
 extern string singleSpace;
-// Add an age estimate to a person's name
-void add_age(Creature& person)
-{
-	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
-		if (person.animalgloss != ANIMALGLOSS_NONE)
-		{
-			addstrAlt(" (?)");
-			return;
-		}
-		// For humans, estimate their age and gender
-		addstrAlt(" (");
-		// Almost precise estimates of child and teen ages
-		if (person.age<20)
-		{
-			// Inaccuracy in estimating age should be the same every
-			// time a character is queried. I'm using the day of the
-			// month the character was born on to determine this.
-			addstrAlt(person.age + person.birthday_day % 3 - 1);
-			addstrAlt("?");
-		}
-		// More rough estimates of everyone else
-		else
-		{
-			if (person.age<30)
-				addstrAlt("20s");
-			else if (person.age<40)
-				addstrAlt("30s");
-			else if (person.age<50)
-				addstrAlt("40s");
-			else if (person.age<60)
-				addstrAlt("50s");
-			else if (person.age<70)
-				addstrAlt("60s");
-			else if (person.age<80)
-				addstrAlt("70s");
-			else if (person.age<90)
-				addstrAlt("80s");
-			else
-				addstrAlt("Very Old");
-		}
-		// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
-		if (person.gender_liberal == GENDER_MALE)
-			addstrAlt(", Male");
-		else if (person.gender_liberal == GENDER_FEMALE)
-			addstrAlt(", Female");
-		else
-			addstrAlt(", Ambiguous");
-		// Note if there's some conflict with Conservative society's perceptions
-		if (person.gender_liberal != person.gender_conservative && person.gender_liberal != GENDER_NEUTRAL)
-			addstrAlt("?");
-		addstrAlt(closeParenthesis);
-	}
-	/* rolls up a proper name for a creature */
-	void Creature::namecreature()
-	{
-		if (!dontname)
-		{
-			generate_name(name, gender_liberal);
-			strcpy(propername, name);
-			dontname = true;
-		}
-	}
+void generate_name(char *first, char *last, char gender);
+void firstname(char *str, char gender);
+string lastname(bool archconservative);
 	/* fills a string with a proper name */
 	void generate_name(char *str, char gender)
 	{
