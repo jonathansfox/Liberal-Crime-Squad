@@ -389,7 +389,7 @@ bool populate_from_txt(vector<string> & types, const string fileName)
 		while (!txtFile.eof()) {
 			//txtFile.read(currentLine, line_length);
 			txtFile.getline(currentLine, line_length);
-			const bool notComment = (currentLine[0] && currentLine[0] != '#');
+			const bool notComment = (currentLine[0] != '#');
 			if (notComment) {
 				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 				types.push_back(currentLine);
@@ -407,47 +407,47 @@ string fixLineSpecialCharacter(char * toFix) {
 			i++;
 			char c;
 			switch (toFix[i]) {
-			case -87: // 'é'
+			case -87: // 'Ã©'
 				c = (char) 0x82;
 				break;
-			case -74: // 'ö'
+			case -74: // 'Ã¶'
 				c = (char) 0x94;
 				break;
-			case -95: // 'á'
+			case -95: // 'Ã¡'
 				c = (char) 0xa0;
 				break;
-			case -83: // 'í'
+			case -83: // 'Ã­'
 				c = (char) 0xa1;
 				break;
-			case -77: // 'ó'
+			case -77: // 'Ã³'
 				c = (char) 0xa2;
 				break;
-			case -70: // 'ú'
+			case -70: // 'Ãº'
 				c = (char) 0xa3;
 				break;
-			case (int) '¼':
-				// 'ü'
+			case (int) 'Â¼':
+				// 'Ã¼'
 				c = (char) 0x81;
 				break;
-			case (int) '«':
-				// 'ë'
+			case (int) 'Â«':
+				// 'Ã«'
 				c = (char) 0x89;
 				break;
-			case (int) '²':
-				// 'ò'
+			case (int) 'Â²':
+				// 'Ã²'
 				c = (char) 0x95;
 				break;
-			case (int) '¢':
-				// 'â'
+			case (int) 'Â¢':
+				// 'Ã¢'
 				c = (char) 0x83;
 				break;
-			case (int) '´':
-				// 'ô'
+			case (int) 'Â´':
+				// 'Ã´'
 				c = (char) 0x93;
 				break;
 				/*
-			case (int) 'Â':
-				// '¢' 
+			case (int) 'Ã‚':
+				// 'Â¢' 
 				// This letter does not use the escape character '-61'
 				// meaning it would need its own switch statement
 				// in addition to the hassle of determining what escape character is used
