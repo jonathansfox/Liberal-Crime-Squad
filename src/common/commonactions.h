@@ -1,5 +1,5 @@
 /* common - test for possible game over */
-char endcheck(char cause = -1);
+char endcheck(char cause = END_OTHER);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */

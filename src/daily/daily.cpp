@@ -57,9 +57,6 @@ void mode_site(short loc);
 #include "common/commonactionsCreature.h"
 // for void basesquad(squadst *,long)
 
-#include "title/saveload.h"
-// for void savegame(const string& filename);
-
 #include "daily/daily.h"
 //own header
 
@@ -92,8 +89,6 @@ void mode_site(short loc);
 
 #include "title/titlescreen.h"
 
-extern title_screen *TitleScreen;
-
 extern vector<Creature *> pool;
 extern Log gamelog;
 #include "locations/locationsPool.h"
@@ -123,7 +118,7 @@ void advanceday(char &clearformess, char canseethings)
 	int w = 0;
 	//int l2;
 	//*JDS* Save the game to save.dat each day. :)
-	if (!disbanding) TitleScreen->autosavegame();
+	if (!disbanding) title_screen::getInstance().autosavegame();
 	ledger.resetDailyAmounts();
 	//CLEAR CAR STATES
 	vector<long> caridused;

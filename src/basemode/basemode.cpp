@@ -308,6 +308,7 @@ void mode_base()
 {
 	char forcewait, canseethings;
 	int nonsighttime = 0, oldforcemonth = month, l = 0;
+	// FIXME This while(true) loop does not have an exit point  It relies on end_game(); to be called at some point
 	while (true)
 	{
 		forcewait = 1, canseethings = 0, cantseereason = CANTSEE_OTHER;

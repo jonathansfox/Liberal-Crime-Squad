@@ -73,10 +73,13 @@ void mode_base();
 #include "title/newgame.h"
 //for void setup_newgame();
 
-#include "title/saveload.h"
-//for void savegame(const string& filename);
+//#include "title/saveload.h"
+bool file_exists(const std::string& filename);
+char load(const string& filename);
+void savegame(const string& filename);
 
-
+string title_screen::savefile_name;
+vector<string> title_screen::savefiles;
 
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
@@ -127,7 +130,6 @@ string plusChar;
 
 string dotDat;
 // private
-string title_screen::savefile_name;
 	void title_screen::title() {
 		//title screen
 
@@ -168,12 +170,7 @@ string title_screen::savefile_name;
 		bool justEnter = false;
 		bool enterDamn = false;
 		do {
-			if (strcmp(savefile_temp, "") != 0) {
-				savefile_name = string(savefile_temp) + dotDat;
-				justEnter = false;
-
-			}
-			else {
+			if (strcmp(savefile_temp, "") == 0) {
 
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -198,12 +195,16 @@ string title_screen::savefile_name;
 				justEnter = true;
 
 			}
+			else {
+				savefile_name = string(savefile_temp) + dotDat;
+				justEnter = false;
+
+			}
 		} while (justEnter);
 		setup_newgame();
 		makecharacter();
 	}
 	void title_screen::selectAndLoadSaveFile() {
-		vector<string> savefiles;
 		savefiles = move(LCSSaveFiles());
 		char loaded = savefiles.size() > 0;
 		if (!loaded)
@@ -221,21 +222,9 @@ string title_screen::savefile_name;
 
 			{
 				eraseAlt();
-				if (to_delete)
+				set_color_easy(to_delete ? YELLOW_ON_RED : WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(0, 0, to_delete ? deleteSave : chooseSave);
 
-				{
-					set_color_easy(YELLOW_ON_RED);
-					mvaddstrAlt(0, 0, deleteSave);
-
-
-
-				}
-				else
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0, 0, chooseSave);
-
-				}
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(1, 0, titleScreenLine);
 				for (p = page * 19, y = 2; p < savefiles.size() && p < page * 19 + 19; p++, y++)
@@ -269,14 +258,13 @@ string title_screen::savefile_name;
 					if (!to_delete)
 
 					{
-						if (p < savefiles.size()) { savefile_name = savefiles[p]; break; }
-						else if (p == savefiles.size())
-
-						{
-							choose_savefile_name();
-
-
-
+						if (p <= savefiles.size()) {
+							if (p < savefiles.size()) {
+								savefile_name = savefiles[p];
+							}
+							else {
+								choose_savefile_name();
+							}
 							break;
 						}
 					}
@@ -305,7 +293,7 @@ string title_screen::savefile_name;
 			load(savefile_name);
 		}
 	}
-	title_screen title_singleton;
+	title_screen title_screen::title_singleton;
 	bool title_screen::titleInitiated = false;
 	title_screen title_screen::getInstance()
 	{
@@ -352,9 +340,13 @@ string title_screen::savefile_name;
 	bool title_screen::autosave = true;
 	/* deletes save.dat (used on endgame and for invalid save version) */
 	//extern string savefile_name;
+	void deleteVerbose(const string& filename);
 	void title_screen::reset()
 	{
-		if (file_exists(savefile_name)) LCSDeleteFile(savefile_name.c_str(), LCSIO_PRE_HOME);
+		//LCSDeleteFile(savefile_name.c_str(), LCSIO_PRE_HOME);
+		LCSDeleteFile(savefile_name.c_str(), LCSIO_PRE_HOME);
+		
+		//deleteVerbose(savefile_name);
 	}
 	void title_screen::setautosaveoption(bool shouldautosave) {
 		autosave = shouldautosave;

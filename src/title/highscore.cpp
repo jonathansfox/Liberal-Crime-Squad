@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
+#include "title/titlescreen.h"
 #include "common/getnames.h"
 // for getmonth
 
@@ -370,4 +371,5 @@ void savehighscore(char endtype)
 		}
 		LCSCloseFile(h);
 	}
+	title_screen::getInstance().reset();
 }

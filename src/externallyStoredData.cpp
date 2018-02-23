@@ -10,9 +10,9 @@
 
 extern Log gamelog;
 
- char* PACKAGE_VERSION = "4.12.09";
+ char* PACKAGE_VERSION = "4.12.11";
 
-  int version = 41209;
+  int version = 41211;
   int lowestloadversion = 40100;
   int lowestloadscoreversion = 31203;
 

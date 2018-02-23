@@ -24,8 +24,8 @@ Allen
 Alphonse
 Alvaro
 Alvin
-Andr s
-Andr
+András
+André
 Andrei
 Andrew
 Andy
@@ -38,7 +38,7 @@ Archibald
 Archie
 Ari
 Arnold
-Arp d
+Arpád
 Art
 Arthur
 Attila
@@ -56,7 +56,7 @@ Barry
 Bart
 Bartholomew
 Beau
-B‚la
+Béla
 Ben
 Benedict
 Benito
@@ -96,7 +96,7 @@ Carlos
 Casimir
 Cassius
 Cecil
-C‚sar
+César
 Chad
 Chaim
 Charles
@@ -107,7 +107,7 @@ Chuck
 Chuckie
 Christian
 Christopher
-Ciar n
+Ciarán
 Cid
 Claude
 Claudius
@@ -218,7 +218,7 @@ Fred
 Freddy
 Frederick
 Fritz
-G bor
+Gábor
 Gabriel
 Garett
 Garreth
@@ -227,7 +227,7 @@ Gary
 George
 Gerald
 Geraldo
-G‚za
+Géza
 Gilbert
 Giovanni
 Glen
@@ -238,7 +238,7 @@ Gregory
 Gus
 Gustav
 Guy
-Gy”rgy
+György
 Gyula
 Hafez
 Hagar
@@ -272,7 +272,7 @@ Ira
 Irving
 Isaac
 Israel
-Istv n
+István
 Ivan
 Jack
 Jacob
@@ -280,7 +280,7 @@ Jacobo
 Jake
 Jamel
 James
-J nos
+János
 Jared
 Jason
 Javier
@@ -296,7 +296,7 @@ Jeroen
 Jerome
 Jerry
 Jesse
-Jes£s
+Jesús
 Jim
 Jimbo
 Jimi
@@ -311,13 +311,13 @@ Johnny
 Jon
 Jonathan
 Jorge
-Jos
+José
 Josef
 Joseph
 Josh
 Joshua
 Jowar
-J¢zsef
+József
 Juan
 Judas
 Jude
@@ -328,7 +328,7 @@ Kaelen
 Kamel
 Kane
 Karl
-K roly
+Károly
 Keith
 Ken
 Kenny
@@ -348,7 +348,7 @@ Lamar
 Lance
 Lancelot
 Larry
-L szl
+László
 Lawrence
 Lenny
 Leo
@@ -370,7 +370,7 @@ Lucifer
 Lucius
 Ludwig
 Luigi
-Lu¡s
+Luís
 Luke
 Luther
 Lyle
@@ -387,13 +387,13 @@ Mark
 Markos
 Mario
 Martin
-M rton
+Márton
 Marty
 Mason
 Matt
 Matthew
 Matteo
-M ty s
+Mátyás
 Maurice
 Maury
 Maximilian
@@ -477,7 +477,7 @@ Randy
 Rane
 Ransom
 Raphael
-Ra£l
+Raúl
 Ray
 Raymond
 Reginald
@@ -516,10 +516,10 @@ Sambor
 Samson
 Samuel
 Sander
-S ndor
+Sándor
 Sanford
 Scott
-Se n
+Seán
 Sebastian
 Serge
 Sergei
@@ -547,7 +547,7 @@ Steven
 Stewart
 Stu
 Stuart
-Tam s
+Tamás
 Ted
 Teddy
 Terence
@@ -616,5 +616,5 @@ Zaid
 Zbigniew
 Zebulon
 Zeke
-Zolt n
+Zoltán
 Zsigmond

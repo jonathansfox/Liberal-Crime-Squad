@@ -38,7 +38,7 @@ Baird
 Baldwin
 Balgos
 Balogh
-B r ny
+Bárány
 Barrow
 Barwick
 Beaumont
@@ -90,7 +90,7 @@ Chang
 Channing
 Chao
 Chau
-Ch vez
+Chávez
 Chen
 Cheng
 Childress
@@ -148,9 +148,9 @@ Dench
 De Niro
 Dent
 Dentz
-D¡az
+Díaz
 DiMeo
-Dom¡nguez
+Domínguez
 Dorgan
 Dorsey
 Doucette
@@ -186,7 +186,7 @@ Filler
 Fimple
 Fingleton
 Finn
-Fl¢rez
+Flórez
 Fortmuller
 France
 Frank
@@ -199,7 +199,7 @@ Furley
 Fushimi
 Galindo
 Gao
-Garc¡a
+García
 Garnier
 Gatien
 Gelbart
@@ -213,8 +213,8 @@ Godwin
 Gleaves
 Goldberg
 Goldstein
-G¢mez
-Gonz lez
+Gómez
+González
 Goodman
 Gore
 Gorbachev
@@ -228,9 +228,9 @@ Grover
 Gu
 Guo
 Gupta
-Guti‚rrez
+Gutiérrez
 Guy
-Hal sz
+Halász
 Hall
 Hammond
 Han
@@ -265,7 +265,7 @@ Hooker
 Hope
 Hopper
 Hornberger
-Horv th
+Horváth
 Houghton
 Houseman
 Howard
@@ -286,7 +286,7 @@ Irvin
 Irving
 Iscariot
 Issacson
-It
+Itô
 Ivanson
 Ives
 Jang
@@ -296,7 +296,7 @@ Jimison
 Jolie
 Jordan
 Joyce
-Juh sz
+Juhász
 Justice
 Kagan
 Kaltenbrunner
@@ -304,7 +304,7 @@ Kang
 Kao
 Kardashian
 Karzai
-Kat
+Katô
 Keaton
 Keats
 Keene
@@ -323,7 +323,7 @@ Kitchen
 Kobayashi
 Kokernot
 Koprowski
-Kov cs
+Kovács
 Krasow
 Krieger
 Krishna
@@ -359,7 +359,7 @@ Loeb
 Logsdon
 Lombard
 London
-L¢pez
+López
 Lovecraft
 Lowcourt
 Lowerly
@@ -422,16 +422,16 @@ McQueen
 Meek
 Meffert
 Meir
-Mel‚ndez
-Men‚ndez
-M‚sz ros
+Meléndez
+Menéndez
+Mészáros
 Metzger
 Mifune
 Milburn
 Miyamoto
 Mizrahi
 Mohammed
-Moln r
+Molnár
 Mondale
 Montag
 Montalvo
@@ -443,7 +443,7 @@ Morrison
 Morrow
 Morton
 Mosley
-Mller
+Müller
 Murrell
 Muscat
 Musharraf
@@ -462,7 +462,7 @@ Nance
 Nash
 Nathanson
 Necker
-N‚meth
+Németh
 Nettles
 Neuwirth
 Nevinson
@@ -478,7 +478,7 @@ Oberlander
 Ochs
 Ogden
 Oh
-Ol h
+Oláh
 Olbermann
 Olde
 Olds
@@ -505,7 +505,7 @@ Pelton
 Pendergrass
 Penn
 Peretz
-P‚rez
+Pérez
 Pert
 Petermann
 Pfeiffer
@@ -538,10 +538,10 @@ Quinn
 Quirk
 Rabban
 Rackard
-R cz
+Rácz
 Radman
 Rainey
-Ram¡rez
+Ramírez
 Ramos
 Randell
 Rangel
@@ -572,7 +572,7 @@ Riffle
 Rivera
 Rivers
 Rodham
-Rodr¡guez
+Rodríguez
 Rojo
 Roland
 Roosevelt
@@ -592,21 +592,21 @@ Ryman
 Sabella
 Saddler
 Sadler
-Sait
-S nchez
+Saitô
+Sánchez
 Sanders
 Sansome
 Santiago
 Santos
 Sasaki
-Sat
+Satô
 Savedra
 Saxton
 Scales
 Scardino
 Schmitt
 Schneider
-Schr”der
+Schröder
 Schmidt
 Schumacher
 Schumer
@@ -672,7 +672,7 @@ Smyth
 Snead
 Snook
 Snowden
-Sol¡s
+Solís
 Sommer
 Somner
 Song
@@ -716,10 +716,10 @@ Swift
 Swit
 Symington
 Symonds
-Szab
+Szabó
 Tabb
 Tailboys
-Tak cs
+Takács
 Takahashi
 Takayoshi
 Talbert
@@ -768,7 +768,7 @@ Tonelli
 Toogood
 Tooke
 Toole
-T¢th
+Tóth
 Towne
 Townsend
 Trafford

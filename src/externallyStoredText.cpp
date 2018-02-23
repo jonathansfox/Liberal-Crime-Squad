@@ -788,7 +788,7 @@ extern string while_naked;
 extern string respondsComma;
 extern string colonSpace;
 
-string singleSpace;
+string singleSpace = " ";
 string commaSpace;
 
 extern string theLCS;
@@ -1642,8 +1642,8 @@ vector<string*> allTextString = {
 bool initialize_incomplete_txt();
 bool initialize_incomplete_txt() {
 	int i = 0;
-	singleSpace = " "; allText[i++];
-	check_status_of_squad_liberal = "# " + allText[i++];
+	check_status_of_squad_liberal.append("# ");
+	check_status_of_squad_liberal.append(allText[i++]);
 	for (string* str : allTextString) {
 		*str = allText[i++];
 	}

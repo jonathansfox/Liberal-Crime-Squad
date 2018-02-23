@@ -752,6 +752,8 @@ const int SCORENUM = 5;
 
 enum EndTypes
 {
+	END_BUT_NOT_END = -2,
+	END_OTHER = -1,
    END_WON,
    END_HICKS,
    END_CIA,

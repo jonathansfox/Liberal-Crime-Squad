@@ -122,7 +122,9 @@ extern vector<datest *> date;
 extern vector<recruitst *> recruit;
 extern vector<newsstoryst *> newsstory;
 extern squadst *activesquad;
+extern char homedir[MAX_PATH_SIZE];
 
+typedef map<short, string > shortAndString;
 
 // TODO: It would be really cool to be able to "export" characters.
 /* handles saving */
@@ -195,9 +197,640 @@ vector<saveLoadChunk> firstChunk =
 	saveLoadChunk(oldPresidentName, sizeof(char), POLITICIAN_NAMELEN)
 };
 
-void readVerbose(string str);
-void writeVerbose(string str);
-void deleteVerbose(string str);
+
+void writeVerbose(string filename) {
+
+	string filepath = homedir;
+	int position = filename.find(".");
+	filename.erase(position);
+	filename += ".verbose";
+	filepath.append(filename);
+	//FILE *h;
+	//h = LCSOpenFile((filename).c_str(), "wb", LCSIO_PRE_HOME);
+
+	//LCSCloseFile(h);
+
+
+	ofstream outClientFile(filename, ios::out);
+	if (!outClientFile) {
+		cerr << "Verbose File Could Not Be Opened" << endl;
+	}
+	else {
+		if (NOVERBOSECOMMENTS) {
+			outClientFile << "# Autocomments disabled" << endl;
+			outClientFile << "# remove NOVERBOSECOMMENTS to activate autocomments" << endl;
+		}
+		else {
+			outClientFile << "# All lines beginning with # are comments" << endl << "# and are thereby ignored" << endl;
+			outClientFile << "# Since the purpose of verbose savefiles is to make them human readable and editable," << endl;
+			outClientFile << "# There will be quite a few comments generated automatically" << endl;
+			outClientFile << "# If these comments are more trouble than they're worth, add to the debug_defines.txt file" << endl;
+			outClientFile << "# NOVERBOSECOMMENTS to remove them (almost) entirely" << endl;
+			outClientFile << "# LCS Funding level (max value 2147483647) can be negative" << endl;
+		}
+		outClientFile << ledger.get_funds() << endl;
+
+		/*
+		outClientFile << "# seed" << endl;
+		outClientFile <<  seed[0] << endl;
+		outClientFile <<  seed[1] << endl;
+		outClientFile <<  seed[2] << endl;
+		outClientFile <<  seed[3] << endl;
+		outClientFile << "# mode" << endl;
+		outClientFile <<  mode << endl;
+		outClientFile << "# wincondition" << endl;
+		outClientFile <<  wincondition << endl;
+		outClientFile << "# fieldskillrate" << endl;
+		outClientFile <<  fieldskillrate << endl;
+		*/
+		outClientFile << "# day" << endl;
+		outClientFile << day << endl;
+		outClientFile << "# month" << endl;
+		outClientFile << month << endl;
+		outClientFile << "# year" << endl;
+		outClientFile << year << endl;
+		outClientFile << "# execterm" << endl;
+		outClientFile << execterm << endl;
+		outClientFile << "# presparty" << endl;
+		outClientFile << presparty << endl;
+		outClientFile << "# amendnum" << endl;
+		outClientFile << amendnum << endl;
+		outClientFile << "# multipleCityMode" << endl;
+		outClientFile << multipleCityMode << endl;
+		outClientFile << "# termlimits" << endl;
+		outClientFile << termlimits << endl;
+		outClientFile << "# deagle" << endl;
+		outClientFile << deagle << endl;
+		outClientFile << "# m249" << endl;
+		outClientFile << m249 << endl;
+		outClientFile << "# notermlimit" << endl;
+		outClientFile << notermlimit << endl;
+		outClientFile << "# nocourtpurge" << endl;
+		outClientFile << nocourtpurge << endl;
+		outClientFile << "# stalinmode" << endl;
+		outClientFile << stalinmode << endl;
+		outClientFile << "# stat_recruits" << endl;
+		outClientFile << stat_recruits << endl;
+		outClientFile << "# stat_dead" << endl;
+		outClientFile << stat_dead << endl;
+		outClientFile << "# stat_kills" << endl;
+		outClientFile << stat_kills << endl;
+		outClientFile << "# stat_kidnappings" << endl;
+		outClientFile << stat_kidnappings << endl;
+		outClientFile << "# stat_buys" << endl;
+		outClientFile << stat_buys << endl;
+		outClientFile << "# stat_burns" << endl;
+		outClientFile << stat_burns << endl;
+		/*
+		outClientFile << "# endgamestate" << endl;
+		outClientFile <<  endgamestate << endl;
+		outClientFile << "# ccsexposure" << endl;
+		outClientFile <<  ccsexposure << endl;
+		outClientFile << "# ccs_kills" << endl;
+		outClientFile <<  ccs_kills << endl;
+		*/
+		outClientFile << "# Police Heat" << endl;
+		outClientFile << police_heat << endl;
+		outClientFile << "# Offended Corps" << endl;
+		outClientFile << offended_corps << endl;
+		outClientFile << "# Offended CIA" << endl;
+		outClientFile << offended_cia << endl;
+		outClientFile << "# Offended Amradio" << endl;
+		outClientFile << offended_amradio << endl;
+		outClientFile << "# Offended Cablenews" << endl;
+		outClientFile << offended_cablenews << endl;
+		outClientFile << "# Offended Firemen" << endl;
+		outClientFile << offended_firemen << endl;
+		/*
+		outClientFile << "# attorneyseed" << endl;
+		outClientFile <<  attorneyseed[0] << endl;
+		outClientFile <<  attorneyseed[1] << endl;
+		outClientFile <<  attorneyseed[2] << endl;
+		outClientFile <<  attorneyseed[3] << endl;
+		*/
+		outClientFile << "# L City Name" << endl;
+		outClientFile << lcityname << endl;
+		/*
+		outClientFile << "# Liberal Guardian Published" << endl;
+		outClientFile <<  newscherrybusted << endl;
+		*/
+		outClientFile << "# Slogan" << endl;
+		outClientFile << slogan << endl;
+
+		outClientFile << "# Party Status" << endl;
+		outClientFile << party_status << endl;
+		outClientFile << "# Attitude" << endl;
+		for (int i = 0; i < len(attitude); i++) {
+			//outClientFile << "# Concerning " + getview(i, false) << endl;
+
+			outClientFile << attitude[i] << endl;
+		}
+		extern shortAndString getLawString;
+		outClientFile << "# Law List" << endl;
+		for (int i = 0; i < len(lawList); i++) {
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# " + getLawString[i] << endl;
+			outClientFile << lawList[i] << endl;
+		}
+
+		outClientFile << "# House" << endl;
+		for (int i = 0; i < len(house); i++) {
+			outClientFile << house[i] << endl;
+		}
+
+		outClientFile << "# Senate" << endl;
+		for (int i = 0; i < len(senate); i++) {
+			outClientFile << senate[i] << endl;
+		}
+
+		outClientFile << "# Supreme Court" << endl;
+		for (int i = 0; i < len(court); i++) {
+			outClientFile << court[i] << endl;
+		}
+
+		outClientFile << "# Supreme Court Names" << endl;
+		for (int i = 0; i < len(courtname); i++) {
+			outClientFile << courtname[i] << endl;
+		}
+
+		outClientFile << "# exec" << endl;
+		for (int i = 0; i < len(exec); i++) {
+			outClientFile << exec[i] << endl;
+		}
+
+		outClientFile << "# execname" << endl;
+		for (int i = 0; i < len(execname); i++) {
+			outClientFile << execname[i] << endl;
+		}
+		/*
+		outClientFile << "# oldPresidentName" << endl;
+		outClientFile << oldPresidentName << endl;
+		*/
+		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
+		{
+			outClientFile << "# Next Creature" << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Name" << endl;
+			outClientFile << pool[pl]->name << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Proper Name" << endl;
+			outClientFile << pool[pl]->propername << endl;
+			/*
+			if (!NOVERBOSECOMMENTS)
+			outClientFile << "# Gender (Conservative)" << endl;
+			outClientFile <<  pool[pl]->gender_conservative << endl;
+			if (!NOVERBOSECOMMENTS)
+			outClientFile << "# Gender (Liberal)" << endl;
+			outClientFile <<  pool[pl]->gender_liberal << endl;
+			*/
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Age" << endl;
+			outClientFile << pool[pl]->age << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Birthday Month" << endl;
+			outClientFile << pool[pl]->birthday_month << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Birthday Day" << endl;
+			outClientFile << pool[pl]->birthday_day << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Alignment" << endl;
+			outClientFile << pool[pl]->align << endl;
+			if (!NOVERBOSECOMMENTS)
+				outClientFile << "# Juice" << endl;
+			outClientFile << pool[pl]->juice << endl;
+			for (int i = 0; i < ATTNUM; i++) {
+				//if (!NOVERBOSECOMMENTS)
+				//outClientFile << "# " + attribute_enum_to_string(i) << endl;
+				outClientFile << pool[pl]->get_attribute(i, false) << endl;
+
+			}
+			extern shortAndString skillEnumToString;
+			outClientFile << "# Skills" << endl;
+			for (int i = 0; i < SKILLNUM; i++) {
+				if (!NOVERBOSECOMMENTS)
+					outClientFile << "# " + skillEnumToString[i] << endl;
+				outClientFile << pool[pl]->get_skill(i) << endl;
+
+			}
+			/*
+			for (int i = 0; i < AUGMENTATIONNUM; i++) {
+			outClientFile <<  pool[pl]->get_augmentation(i) << endl;
+
+			}
+
+			for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
+			if (!NOVERBOSECOMMENTS)
+			outClientFile << "# Next Creature" << endl;
+			outClientFile <<  pool[pl]->wound[i] << endl;
+			}
+			for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
+			if (!NOVERBOSECOMMENTS)
+			outClientFile << "# Next Creature" << endl;
+			outClientFile <<  pool[pl]->special[i] << endl;
+			}
+			*/
+			extern shortAndString getLawFlagString;
+			typedef map<short, shortAndString > shortAndShortAndString;
+			extern shortAndShortAndString getLawFlagStringFull;
+			outClientFile << "# Crimes" << endl;
+			for (int i = 0; i < LAWFLAGNUM; i++) {//Bad, relies on their order in the xml file. -XML
+												  // 6
+												  // 20
+				if (!NOVERBOSECOMMENTS)
+					outClientFile << "# " << ((i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
+				outClientFile << pool[pl]->crimes_suspected[i] << endl;
+			}
+
+		}
+
+		/*
+		outClientFile << "# Vehicle::curcarid" << endl;
+		outClientFile << Vehicle::curcarid << endl;
+		outClientFile << "# curcreatureid" << endl;
+		outClientFile << curcreatureid << endl;
+		outClientFile << "# cursquadid" << endl;
+		outClientFile << cursquadid << endl;
+		*/
+
+	}
+	outClientFile.close();
+}
+
+
+void useData(vector<string> types) {
+	//TODO
+	int maxJindex = len(types);
+	maxJindex--;
+	int jindex = 0;
+	ledger.force_funds(atoi(types[jindex].data()));
+	jindex++;
+
+	if (jindex > maxJindex) {
+		return;
+	}
+	/*
+	seed[0] = atoi(types[jindex].data());
+	jindex++;
+
+	seed[1] = atoi(types[jindex].data());
+	jindex++;
+
+	seed[2] = atoi(types[jindex].data());
+	jindex++;
+
+	seed[3] = atoi(types[jindex].data());
+	jindex++;
+
+
+	mode = atoi(types[jindex].data());
+	jindex++;
+
+
+	wincondition = atoi(types[jindex].data());
+	jindex++;
+
+
+	fieldskillrate = atoi(types[jindex].data());
+	jindex++;
+	*/
+
+	day = atoi(types[jindex].data());
+	jindex++;
+
+
+	month = atoi(types[jindex].data());
+	jindex++;
+
+
+	year = atoi(types[jindex].data());
+	jindex++;
+
+
+	execterm = atoi(types[jindex].data());
+	jindex++;
+
+
+	presparty = atoi(types[jindex].data());
+	jindex++;
+
+
+	amendnum = atoi(types[jindex].data());
+	jindex++;
+
+
+	multipleCityMode = atoi(types[jindex].data());
+	jindex++;
+
+
+	termlimits = atoi(types[jindex].data());
+	jindex++;
+
+
+	deagle = atoi(types[jindex].data());
+	jindex++;
+
+
+	m249 = atoi(types[jindex].data());
+	jindex++;
+
+
+	notermlimit = atoi(types[jindex].data());
+	jindex++;
+
+
+	nocourtpurge = atoi(types[jindex].data());
+	jindex++;
+
+
+	stalinmode = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_recruits = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_dead = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_kills = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_kidnappings = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_buys = atoi(types[jindex].data());
+	jindex++;
+
+
+	stat_burns = atoi(types[jindex].data());
+	jindex++;
+	/*
+
+	endgamestate = atoi(types[jindex].data());
+	jindex++;
+
+
+	ccsexposure = atoi(types[jindex].data());
+	jindex++;
+
+
+	ccs_kills = atoi(types[jindex].data());
+	jindex++;
+	*/
+
+	police_heat = atoi(types[jindex].data());
+	jindex++;
+
+
+	offended_corps = atoi(types[jindex].data());
+	jindex++;
+
+
+	offended_cia = atoi(types[jindex].data());
+	jindex++;
+
+
+	offended_amradio = atoi(types[jindex].data());
+	jindex++;
+
+
+	offended_cablenews = atoi(types[jindex].data());
+	jindex++;
+
+
+	offended_firemen = atoi(types[jindex].data());
+	jindex++;
+
+	/*
+	attorneyseed[0] = atoi(types[jindex].data());
+	jindex++;
+
+	attorneyseed[1] = atoi(types[jindex].data());
+	jindex++;
+
+	attorneyseed[2] = atoi(types[jindex].data());
+	jindex++;
+
+	attorneyseed[3] = atoi(types[jindex].data());
+	jindex++;
+	*/
+	strcpy(lcityname, types[jindex].data());
+	jindex++;
+	/*
+	newscherrybusted = atoi(types[jindex].data());
+	jindex++;
+	*/
+	if (jindex > maxJindex) {
+		return;
+	}
+
+	strcpy(slogan, types[jindex].data());
+	jindex++;
+
+	party_status = atoi(types[jindex].data());
+	jindex++;
+
+	for (int i = 0; i < len(attitude); i++) {
+
+
+		attitude[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+	for (int i = 0; i < len(lawList); i++) {
+
+
+		lawList[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+
+	for (int i = 0; i < len(house); i++) {
+		house[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+
+	for (int i = 0; i < len(senate); i++) {
+		senate[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+
+	for (int i = 0; i < len(court); i++) {
+		court[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+
+	for (int i = 0; i < len(courtname); i++) {
+		strcpy(courtname[i], types[jindex].data());
+		jindex++;
+	}
+
+
+	for (int i = 0; i < len(exec); i++) {
+		exec[i] = atoi(types[jindex].data());
+		jindex++;
+
+	}
+
+
+	for (int i = 0; i < len(execname); i++) {
+		strcpy(execname[i], types[jindex].data());
+		jindex++;
+	}
+
+	/*
+	strcpy(oldPresidentName, types[jindex].data());
+	jindex++;
+	*/
+	if (jindex > maxJindex) {
+		return;
+	}
+
+	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
+	{
+
+
+		strcpy(pool[pl]->name, types[jindex].data());
+		jindex++;
+
+		strcpy(pool[pl]->propername, types[jindex].data());
+		jindex++;
+		/*
+		pool[pl]->gender_conservative = atoi(types[jindex].data());
+		jindex++;
+
+
+
+		pool[pl]->gender_liberal = atoi(types[jindex].data());
+		jindex++;
+
+		*/
+
+		pool[pl]->age = atoi(types[jindex].data());
+		jindex++;
+
+
+
+		pool[pl]->birthday_month = atoi(types[jindex].data());
+		jindex++;
+
+
+
+		pool[pl]->birthday_day = atoi(types[jindex].data());
+		jindex++;
+
+
+
+		pool[pl]->align = atoi(types[jindex].data());
+		jindex++;
+
+
+
+		pool[pl]->juice = atoi(types[jindex].data());
+		jindex++;
+
+		for (int i = 0; i < ATTNUM; i++) {
+
+
+			pool[pl]->set_attribute(i, atoi(types[jindex].data()));
+			jindex++;
+
+
+		}
+		for (int i = 0; i < SKILLNUM; i++) {
+
+
+			pool[pl]->set_skill(i, atoi(types[jindex].data()));
+			jindex++;
+
+
+		}
+		/*
+		for (int i = 0; i < AUGMENTATIONNUM; i++) {
+		pool[pl]->get_augmentation(i = atoi(types[jindex].data());
+		jindex++;
+
+
+		}
+
+		for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
+
+
+		pool[pl]->wound[i] = atoi(types[jindex].data());
+		jindex++;
+
+		}
+		for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
+
+
+		pool[pl]->special[i] = atoi(types[jindex].data());
+		jindex++;
+
+		}
+		*/
+		for (int i = 0; i < LAWFLAGNUM; i++) {
+			pool[pl]->crimes_suspected[i] = atoi(types[jindex].data());
+			jindex++;
+
+		}
+
+		if (jindex > maxJindex) {
+			return;
+		}
+	}
+
+
+}
+
+void readVerbose(string filename) {
+
+	string filepath = homedir;
+	int position = filename.find(".");
+	filename.erase(position);
+	filename += ".verbose";
+	FILE *h;
+	h = LCSOpenFile((filename).c_str(), "rb", LCSIO_PRE_HOME);
+	if (h != NULL) {
+		LCSCloseFile(h);
+
+		ifstream txtFile;
+		char currentLine[2048];
+		txtFile.open(filepath + filename);
+		vector<string> types;
+		while (!txtFile.eof()) {
+			txtFile.getline(currentLine, 2048, '\n');
+			bool notComment = (currentLine[0] != '#');
+			if (notComment) {
+				types.push_back(currentLine);
+			}
+		}
+		txtFile.close();
+		useData(types);
+
+	}
+}
+void deleteVerbose(const string& filename) {
+	string verboseFilename = filename;
+
+	int position = verboseFilename.find(".");
+
+	verboseFilename.erase(position);
+	verboseFilename += ".verbose";
+
+	LCSDeleteFile(verboseFilename.c_str(), LCSIO_PRE_HOME);
+}
 void savegame(const string& filename)
 {
 	if (NOSAVE) {
@@ -400,7 +1033,7 @@ void savegame(const string& filename)
 			writeVerbose(filename.c_str());
 		}
 		else {
-			deleteVerbose(filename.c_str());
+			deleteVerbose(filename);
 		}
 	}
 }
@@ -714,640 +1347,4 @@ char load(const string& filename)
 		return 1;
 	}
 	return 0;
-}
-extern char homedir[MAX_PATH_SIZE];
-void useData(vector<string> types);
-void readVerbose(string filename) {
-
-	string filepath = homedir;
-	int position = filename.find(".");
-	filename.erase(position);
-	filename += ".verbose";
-	FILE *h;
-	h = LCSOpenFile((filename).c_str(), "rb", LCSIO_PRE_HOME);
-	if (h != NULL) {
-		LCSCloseFile(h);
-		
-		ifstream txtFile;
-		char currentLine[2048];
-		txtFile.open(filepath + filename);
-		vector<string> types;
-		while (!txtFile.eof()) {
-			txtFile.getline(currentLine, 2048, '\n');
-			bool notComment = (currentLine[0] && currentLine[0] != '#');
-			if (notComment) {
-				types.push_back(currentLine);
-			}
-		}
-		txtFile.close();
-		useData(types);
-		
-	}
-}
-void deleteVerbose(string filename) {
-
-	int position = filename.find(".");
-	filename.erase(position);
-	filename += ".verbose";
-
-	LCSDeleteFile(filename.c_str(), LCSIO_PRE_HOME);
-}
-
-typedef map<short, string > shortAndString;
-
-string convertToString(void *, int, int);
-void writeVerbose(string filename) {
-
-	string filepath = homedir;
-	int position = filename.find(".");
-	filename.erase(position);
-	filename += ".verbose";
-	filepath.append(filename);
-	//FILE *h;
-	//h = LCSOpenFile((filename).c_str(), "wb", LCSIO_PRE_HOME);
-
-	//LCSCloseFile(h);
-
-
-	ofstream outClientFile(filename, ios::out);
-	if (!outClientFile) {
-		cerr << "Verbose File Could Not Be Opened" << endl;
-	}
-	else {
-		if (NOVERBOSECOMMENTS) {
-			outClientFile << "# Autocomments disabled" << endl;
-			outClientFile << "# remove NOVERBOSECOMMENTS to activate autocomments" << endl;
-		}
-		else {
-			outClientFile << "# All lines beginning with # are comments" << endl << "# and are thereby ignored" << endl;
-			outClientFile << "# Since the purpose of verbose savefiles is to make them human readable and editable," << endl;
-			outClientFile << "# There will be quite a few comments generated automatically" << endl;
-			outClientFile << "# If these comments are more trouble than they're worth, add to the debug_defines.txt file" << endl;
-			outClientFile << "# NOVERBOSECOMMENTS to remove them (almost) entirely" << endl;
-			outClientFile << "# LCS Funding level (max value 2147483647) can be negative" << endl;
-		}
-		outClientFile << ledger.get_funds() << endl;
-
-		/*
-		outClientFile << "# seed" << endl;
-		outClientFile <<  seed[0] << endl;
-		outClientFile <<  seed[1] << endl;
-		outClientFile <<  seed[2] << endl;
-		outClientFile <<  seed[3] << endl;
-		outClientFile << "# mode" << endl;
-		outClientFile <<  mode << endl;
-		outClientFile << "# wincondition" << endl;
-		outClientFile <<  wincondition << endl;
-		outClientFile << "# fieldskillrate" << endl;
-		outClientFile <<  fieldskillrate << endl;
-		*/
-		outClientFile << "# day" << endl;
-		outClientFile <<  day << endl;
-		outClientFile << "# month" << endl;
-		outClientFile <<  month << endl;
-		outClientFile << "# year" << endl;
-		outClientFile <<  year << endl;
-		outClientFile << "# execterm" << endl;
-		outClientFile <<  execterm << endl;
-		outClientFile << "# presparty" << endl;
-		outClientFile <<  presparty << endl;
-		outClientFile << "# amendnum" << endl;
-		outClientFile <<  amendnum << endl;
-		outClientFile << "# multipleCityMode" << endl;
-		outClientFile <<  multipleCityMode << endl;
-		outClientFile << "# termlimits" << endl;
-		outClientFile <<  termlimits << endl;
-		outClientFile << "# deagle" << endl;
-		outClientFile <<  deagle << endl;
-		outClientFile << "# m249" << endl;
-		outClientFile <<  m249 << endl;
-		outClientFile << "# notermlimit" << endl;
-		outClientFile <<  notermlimit << endl;
-		outClientFile << "# nocourtpurge" << endl;
-		outClientFile <<  nocourtpurge << endl;
-		outClientFile << "# stalinmode" << endl;
-		outClientFile <<  stalinmode << endl;
-		outClientFile << "# stat_recruits" << endl;
-		outClientFile <<  stat_recruits << endl;
-		outClientFile << "# stat_dead" << endl;
-		outClientFile <<  stat_dead << endl;
-		outClientFile << "# stat_kills" << endl;
-		outClientFile <<  stat_kills << endl;
-		outClientFile << "# stat_kidnappings" << endl;
-		outClientFile <<  stat_kidnappings << endl;
-		outClientFile << "# stat_buys" << endl;
-		outClientFile <<  stat_buys << endl;
-		outClientFile << "# stat_burns" << endl;
-		outClientFile <<  stat_burns << endl;
-		/*
-		outClientFile << "# endgamestate" << endl;
-		outClientFile <<  endgamestate << endl;
-		outClientFile << "# ccsexposure" << endl;
-		outClientFile <<  ccsexposure << endl;
-		outClientFile << "# ccs_kills" << endl;
-		outClientFile <<  ccs_kills << endl;
-		*/
-		outClientFile << "# Police Heat" << endl;
-		outClientFile <<  police_heat << endl;
-		outClientFile << "# Offended Corps" << endl;
-		outClientFile <<  offended_corps << endl;
-		outClientFile << "# Offended CIA" << endl;
-		outClientFile <<  offended_cia << endl;
-		outClientFile << "# Offended Amradio" << endl;
-		outClientFile <<  offended_amradio << endl;
-		outClientFile << "# Offended Cablenews" << endl;
-		outClientFile <<  offended_cablenews << endl;
-		outClientFile << "# Offended Firemen" << endl;
-		outClientFile <<  offended_firemen << endl;
-		/*
-		outClientFile << "# attorneyseed" << endl;
-		outClientFile <<  attorneyseed[0] << endl;
-		outClientFile <<  attorneyseed[1] << endl;
-		outClientFile <<  attorneyseed[2] << endl;
-		outClientFile <<  attorneyseed[3] << endl;
-		*/
-		outClientFile << "# L City Name" << endl;
-		outClientFile << lcityname << endl;
-		/*
-		outClientFile << "# Liberal Guardian Published" << endl;
-		outClientFile <<  newscherrybusted << endl;
-		*/
-		outClientFile << "# Slogan" << endl;
-		outClientFile << slogan << endl;
-
-		outClientFile << "# Party Status" << endl;
-		outClientFile <<  party_status << endl;
-		outClientFile << "# Attitude" << endl;
-		for (int i = 0; i < len(attitude); i++) {
-			//outClientFile << "# Concerning " + getview(i, false) << endl;
-
-			outClientFile <<  attitude[i] << endl;
-		}
-		extern shortAndString getLawString;
-		outClientFile << "# Law List" << endl;
-		for (int i = 0; i < len(lawList); i++) {
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# " + getLawString[i] << endl;
-			outClientFile <<  lawList[i] << endl;
-		}
-
-		outClientFile << "# House" << endl;
-		for (int i = 0; i < len(house); i++){
-			outClientFile <<  house[i] << endl;
-		}
-
-		outClientFile << "# Senate" << endl;
-			for (int i = 0; i < len(senate); i++) {
-				outClientFile <<  senate[i] << endl;
-			}
-
-		outClientFile << "# Supreme Court" << endl;
-		for (int i = 0; i < len(court); i++) {
-			outClientFile <<  court[i] << endl;
-		}
-
-		outClientFile << "# Supreme Court Names" << endl;
-		for (int i = 0; i < len(courtname); i++) {
-			outClientFile << courtname[i] << endl;
-		}
-
-		outClientFile << "# exec" << endl;
-		for (int i = 0; i < len(exec); i++) {
-			outClientFile <<  exec[i] << endl;
-		}
-
-		outClientFile << "# execname" << endl;
-		for (int i = 0; i < len(execname); i++) {
-			outClientFile << execname[i] << endl;
-		}
-		/*
-		outClientFile << "# oldPresidentName" << endl;
-		outClientFile << oldPresidentName << endl;
-		*/
-		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
-		{
-			outClientFile << "# Next Creature" << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Name" << endl;
-			outClientFile << pool[pl]->name << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Proper Name" << endl;
-			outClientFile << pool[pl]->propername << endl;
-			/*
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Gender (Conservative)" << endl;
-			outClientFile <<  pool[pl]->gender_conservative << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Gender (Liberal)" << endl;
-			outClientFile <<  pool[pl]->gender_liberal << endl;
-			*/
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Age" << endl;
-			outClientFile <<  pool[pl]->age << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Birthday Month" << endl;
-			outClientFile <<  pool[pl]->birthday_month << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Birthday Day" << endl;
-			outClientFile <<  pool[pl]->birthday_day << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Alignment" << endl;
-			outClientFile <<  pool[pl]->align << endl;
-			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Juice" << endl;
-			outClientFile <<  pool[pl]->juice << endl;
-			for (int i = 0; i < ATTNUM; i++) {
-				//if (!NOVERBOSECOMMENTS)
-					//outClientFile << "# " + attribute_enum_to_string(i) << endl;
-				outClientFile <<  pool[pl]->get_attribute(i, false) << endl;
-
-			}
-			extern shortAndString skillEnumToString;
-			outClientFile << "# Skills" << endl;
-			for (int i = 0; i < SKILLNUM; i++) {
-				if (!NOVERBOSECOMMENTS)
-					outClientFile << "# " + skillEnumToString[i] << endl;
-				outClientFile <<  pool[pl]->get_skill(i) << endl;
-
-			}
-			/*
-			for (int i = 0; i < AUGMENTATIONNUM; i++) {
-			outClientFile <<  pool[pl]->get_augmentation(i) << endl;
-
-			}
-
-			for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
-			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Next Creature" << endl;
-			outClientFile <<  pool[pl]->wound[i] << endl;
-			}
-			for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
-			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Next Creature" << endl;
-			outClientFile <<  pool[pl]->special[i] << endl;
-			}
-			*/
-			extern shortAndString getLawFlagString;
-			typedef map<short, shortAndString > shortAndShortAndString;
-			extern shortAndShortAndString getLawFlagStringFull;
-			outClientFile << "# Crimes" << endl;
-			for (int i = 0; i < LAWFLAGNUM; i++) {//Bad, relies on their order in the xml file. -XML
-												  // 6
-												  // 20
-				if (!NOVERBOSECOMMENTS)
-					outClientFile << "# " << ( (i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
-				outClientFile <<  pool[pl]->crimes_suspected[i] << endl;
-			}
-
-		}
-
-		/*
-		outClientFile << "# Vehicle::curcarid" << endl;
-		outClientFile << Vehicle::curcarid << endl;
-		outClientFile << "# curcreatureid" << endl;
-		outClientFile << curcreatureid << endl;
-		outClientFile << "# cursquadid" << endl;
-		outClientFile << cursquadid << endl;
-		*/
-
-	}
-	outClientFile.close();
-}
-
-
-void useData(vector<string> types) {
-	//TODO
-	int maxJindex = len(types);
-	maxJindex--;
-	int jindex = 0;
-	ledger.force_funds(atoi(types[jindex].data()));
-	jindex++;
-
-	if (jindex > maxJindex) {
-		return;
-	}
-	/*
-	seed[0] = atoi(types[jindex].data());
-	jindex++;
-
-	seed[1] = atoi(types[jindex].data());
-	jindex++;
-
-	seed[2] = atoi(types[jindex].data());
-	jindex++;
-
-	seed[3] = atoi(types[jindex].data());
-	jindex++;
-
-
-	mode = atoi(types[jindex].data());
-	jindex++;
-
-
-	wincondition = atoi(types[jindex].data());
-	jindex++;
-
-
-	fieldskillrate = atoi(types[jindex].data());
-	jindex++;
-	*/
-
-	day = atoi(types[jindex].data());
-	jindex++;
-
-
-	month = atoi(types[jindex].data());
-	jindex++;
-
-
-	year = atoi(types[jindex].data());
-	jindex++;
-
-
-	execterm = atoi(types[jindex].data());
-	jindex++;
-
-
-	presparty = atoi(types[jindex].data());
-	jindex++;
-
-
-	amendnum = atoi(types[jindex].data());
-	jindex++;
-
-
-	multipleCityMode = atoi(types[jindex].data());
-	jindex++;
-
-
-	termlimits = atoi(types[jindex].data());
-	jindex++;
-
-
-	deagle = atoi(types[jindex].data());
-	jindex++;
-
-
-	m249 = atoi(types[jindex].data());
-	jindex++;
-
-
-	notermlimit = atoi(types[jindex].data());
-	jindex++;
-
-
-	nocourtpurge = atoi(types[jindex].data());
-	jindex++;
-
-
-	stalinmode = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_recruits = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_dead = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_kills = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_kidnappings = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_buys = atoi(types[jindex].data());
-	jindex++;
-
-
-	stat_burns = atoi(types[jindex].data());
-	jindex++;
-	/*
-
-	endgamestate = atoi(types[jindex].data());
-	jindex++;
-
-
-	ccsexposure = atoi(types[jindex].data());
-	jindex++;
-
-
-	ccs_kills = atoi(types[jindex].data());
-	jindex++;
-	*/
-
-	police_heat = atoi(types[jindex].data());
-	jindex++;
-
-
-	offended_corps = atoi(types[jindex].data());
-	jindex++;
-
-
-	offended_cia = atoi(types[jindex].data());
-	jindex++;
-
-
-	offended_amradio = atoi(types[jindex].data());
-	jindex++;
-
-
-	offended_cablenews = atoi(types[jindex].data());
-	jindex++;
-
-
-	offended_firemen = atoi(types[jindex].data());
-	jindex++;
-
-	/*
-	attorneyseed[0] = atoi(types[jindex].data());
-	jindex++;
-
-	attorneyseed[1] = atoi(types[jindex].data());
-	jindex++;
-
-	attorneyseed[2] = atoi(types[jindex].data());
-	jindex++;
-
-	attorneyseed[3] = atoi(types[jindex].data());
-	jindex++;
-	*/
-	strcpy(lcityname, types[jindex].data());
-	jindex++;
-	/*
-	newscherrybusted = atoi(types[jindex].data());
-	jindex++;
-	*/
-	if (jindex > maxJindex) {
-		return;
-	}
-
-	strcpy(slogan, types[jindex].data());
-	jindex++;
-
-	party_status = atoi(types[jindex].data());
-	jindex++;
-	
-	for (int i = 0; i < len(attitude); i++) {
-
-
-		attitude[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-	for (int i = 0; i < len(lawList); i++) {
-
-
-		lawList[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-
-	for (int i = 0; i < len(house); i++) {
-		house[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-
-	for (int i = 0; i < len(senate); i++) {
-		senate[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-
-	for (int i = 0; i < len(court); i++) {
-		court[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-
-	for (int i = 0; i < len(courtname); i++) {
-		strcpy(courtname[i], types[jindex].data());
-		jindex++;
-	}
-
-
-	for (int i = 0; i < len(exec); i++) {
-		exec[i] = atoi(types[jindex].data());
-		jindex++;
-
-	}
-
-
-	for (int i = 0; i < len(execname); i++) {
-		strcpy(execname[i], types[jindex].data());
-		jindex++;
-	}
-
-	/*
-	strcpy(oldPresidentName, types[jindex].data());
-	jindex++;
-	*/
-	if (jindex > maxJindex) {
-		return;
-	}
-
-	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
-	{
-
-
-		strcpy(pool[pl]->name, types[jindex].data());
-		jindex++;
-
-		strcpy(pool[pl]->propername, types[jindex].data());
-		jindex++;
-		/*
-		pool[pl]->gender_conservative = atoi(types[jindex].data());
-		jindex++;
-
-
-
-		pool[pl]->gender_liberal = atoi(types[jindex].data());
-		jindex++;
-
-		*/
-
-		pool[pl]->age = atoi(types[jindex].data());
-		jindex++;
-
-
-
-		pool[pl]->birthday_month = atoi(types[jindex].data());
-		jindex++;
-
-
-
-		pool[pl]->birthday_day = atoi(types[jindex].data());
-		jindex++;
-
-
-
-		pool[pl]->align = atoi(types[jindex].data());
-		jindex++;
-
-
-
-		pool[pl]->juice = atoi(types[jindex].data());
-		jindex++;
-
-		for (int i = 0; i < ATTNUM; i++) {
-
-
-			pool[pl]->set_attribute(i, atoi(types[jindex].data()));
-			jindex++;
-
-
-		}
-		for (int i = 0; i < SKILLNUM; i++) {
-
-
-			pool[pl]->set_skill(i, atoi(types[jindex].data()));
-			jindex++;
-
-
-		}
-		/*
-		for (int i = 0; i < AUGMENTATIONNUM; i++) {
-		pool[pl]->get_augmentation(i = atoi(types[jindex].data());
-		jindex++;
-
-
-		}
-
-		for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
-
-
-		pool[pl]->wound[i] = atoi(types[jindex].data());
-		jindex++;
-
-		}
-		for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
-
-
-		pool[pl]->special[i] = atoi(types[jindex].data());
-		jindex++;
-
-		}
-		*/
-		for (int i = 0; i < LAWFLAGNUM; i++) {
-			pool[pl]->crimes_suspected[i] = atoi(types[jindex].data());
-			jindex++;
-
-		}
-
-		if (jindex > maxJindex) {
-			return;
-		}
-	}
-
-
 }

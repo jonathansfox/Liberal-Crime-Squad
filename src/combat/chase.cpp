@@ -239,7 +239,7 @@ bool chasesequence()
 				activesquad->squad[p]->location = -1;
 				activesquad->squad[p] = NULL;
 			}
-			endcheck(-2); // play the right music in case we're dead
+			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(9,  1, "C - Reflect on your lack of skill.");
 		}
@@ -463,7 +463,7 @@ bool footchase()
 				activesquad->squad[p]->location = -1;
 				activesquad->squad[p] = NULL;
 			}
-			endcheck(-2); // play the right music in case we're dead
+			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(9,  1, "C - Reflect on your lack of skill.");
 		}

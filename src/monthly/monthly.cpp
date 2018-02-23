@@ -65,7 +65,7 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "common/commonactions.h"
 #include "common/commonactionsCreature.h"
-// for char endcheck(char cause=-1)
+// for char endcheck(char cause=END_OTHER)
 
 #include "log/log.h"
 
@@ -110,7 +110,6 @@ std::string getview(short view, bool shortname);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 
-//extern title_screen *TitleScreen;
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
@@ -445,7 +444,6 @@ void passmonth(char &clearformess, char canseethings)
 	{
 		liberalagenda(1);
 		savehighscore(END_WON);
-		title_screen::getInstance().reset();
 		viewhighscores();
 		end_game();
 	}
@@ -470,7 +468,6 @@ void passmonth(char &clearformess, char canseethings)
 		gamelog.nextMessage();
 		getkeyAlt();
 		savehighscore(END_DISBANDLOSS);
-		title_screen::getInstance().reset();
 		viewhighscores();
 		end_game();
 	}

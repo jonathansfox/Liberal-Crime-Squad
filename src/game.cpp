@@ -136,13 +136,7 @@ struct pointerAndString {
 };
 
 
-void mainOne();
-void mainTwo();
-void mainThree();
-void mainFour();
-void mainFive();
-void mainSix();
-int mainSeven(bool xml_loaded_ok);
+//int mainSeven(bool xml_loaded_ok);
 void init_console();
 extern Log gamelog; //The gamelog.
 void initialize_debug_defines();
@@ -299,11 +293,24 @@ bool initialize_txt() {
 		}
 	}
 	loaded &= initialize_incomplete_txt();
-	loaded &= initialize_more_incomplete_txt();
+	if (!loaded) {
+		addstrAlt("File Error: InitiateIncompleteText" );
+		getkeyAlt();
+	}
+	else {
+		loaded &= initialize_more_incomplete_txt();
+		if (!loaded) {
+			addstrAlt("File Error: InitiateMoreIncompleteText");
+			getkeyAlt();
+		}
+	}
 	return loaded;
 }
 extern char artdir[];
-void initialize_debug_defines();
+
+bool isThisNotComment(char* currentLine) {
+	return currentLine[0] != '#' && currentLine[1] != '#';
+}
 void initialize_debug_defines() {
 	extern vector<pointerAndString> debug_defines;
 	string fileName = "debug_defines.txt";
@@ -319,7 +326,7 @@ void initialize_debug_defines() {
 		int y = 0;
 		while (!txtFile.eof()) {
 			txtFile.getline(currentLine, 800);
-			const bool notComment = (currentLine[0] && currentLine[0] != '#');
+			const bool notComment = isThisNotComment(currentLine);
 			if (notComment) {
 				for (pointerAndString p : debug_defines) {
 					if (currentLine == p.fileName) {
@@ -351,7 +358,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string fileName, c
 	else {
 		while (!txtFile.eof()) {
 			txtFile.getline(currentLine, line_length);
-			const bool notComment = (currentLine[0] && currentLine[0] != '#');
+			const bool notComment = isThisNotComment(currentLine);
 			if (notComment) {
 				vector<string> line;
 				line.push_back(currentLine);
@@ -361,7 +368,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string fileName, c
 					txtFile.getline(currentLine, line_length);
 					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 					line.push_back(currentLine);
-					if (currentLine[0] == '#') {
+					if (!isThisNotComment(currentLine)) {
 						cout << "Comment Found" << endl << currentLine << endl;
 						getkeyAlt();
 					}
@@ -371,6 +378,10 @@ bool populate_from_txt(vector< vector<string> >& types, const string fileName, c
 		}
 	}
 	success = types.size() > 0;
+	if (!success) {
+		addstrAlt("File Error: " + fileName);
+		getkeyAlt();
+	}
 	return success;
 }
 bool populate_from_txt(vector<string> & types, const string fileName)
@@ -389,7 +400,7 @@ bool populate_from_txt(vector<string> & types, const string fileName)
 		while (!txtFile.eof()) {
 			//txtFile.read(currentLine, line_length);
 			txtFile.getline(currentLine, line_length);
-			const bool notComment = (currentLine[0] != '#');
+			const bool notComment = isThisNotComment(currentLine);
 			if (notComment) {
 				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 				types.push_back(currentLine);
@@ -397,6 +408,10 @@ bool populate_from_txt(vector<string> & types, const string fileName)
 		}
 	}
 	success = types.size() > 0;
+	if (!success) {
+		addstrAlt("File Error: " + fileName);
+		getkeyAlt();
+	}
 	return success;
 }
 string fixLineSpecialCharacter(char * toFix) {
@@ -407,47 +422,47 @@ string fixLineSpecialCharacter(char * toFix) {
 			i++;
 			char c;
 			switch (toFix[i]) {
-			case -87: // 'Ã©'
+			case -87: // 'é'
 				c = (char) 0x82;
 				break;
-			case -74: // 'Ã¶'
+			case -74: // 'ö'
 				c = (char) 0x94;
 				break;
-			case -95: // 'Ã¡'
+			case -95: // 'á'
 				c = (char) 0xa0;
 				break;
-			case -83: // 'Ã­'
+			case -83: // 'í'
 				c = (char) 0xa1;
 				break;
-			case -77: // 'Ã³'
+			case -77: // 'ó'
 				c = (char) 0xa2;
 				break;
-			case -70: // 'Ãº'
+			case -70: // 'ú'
 				c = (char) 0xa3;
 				break;
-			case (int) 'Â¼':
-				// 'Ã¼'
+			case (int) '¼':
+				// 'ü'
 				c = (char) 0x81;
 				break;
-			case (int) 'Â«':
-				// 'Ã«'
+			case (int) '«':
+				// 'ë'
 				c = (char) 0x89;
 				break;
-			case (int) 'Â²':
-				// 'Ã²'
+			case (int) '²':
+				// 'ò'
 				c = (char) 0x95;
 				break;
-			case (int) 'Â¢':
-				// 'Ã¢'
+			case (int) '¢':
+				// 'â'
 				c = (char) 0x83;
 				break;
-			case (int) 'Â´':
-				// 'Ã´'
+			case (int) '´':
+				// 'ô'
 				c = (char) 0x93;
 				break;
 				/*
-			case (int) 'Ã‚':
-				// 'Â¢' 
+			case (int) 'Â':
+				// '¢' 
 				// This letter does not use the escape character '-61'
 				// meaning it would need its own switch statement
 				// in addition to the hassle of determining what escape character is used
@@ -523,7 +538,7 @@ void mainSix() {
 template<class Type>
 bool populate_from_xml(vector<Type*>& types, string file, Log& log);
 bool populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log);
-int mainSeven(bool xml_loaded_ok) {
+bool mainSeven(bool xml_loaded_ok) {
 	extern Log xmllog;
 	xmllog.initialize("xmllog", true, 1);
 	extern vector<ClipType *> cliptype;
@@ -541,16 +556,7 @@ int mainSeven(bool xml_loaded_ok) {
 	xml_loaded_ok &= populate_from_xml(loottype, "loot.xml", xmllog);
 	xml_loaded_ok &= populate_from_xml(creaturetype, "creatures.xml", xmllog);
 	xml_loaded_ok &= populate_from_xml(augmenttype, "augmentations.xml", xmllog);
-	if (!xml_loaded_ok) end_game(EXIT_FAILURE);
-	//Attempting to load saved game...
-	//getkeyAlt();
-	//Setup complete!
-	//getkeyAlt();
-	clearAlt();
-	title_screen::getInstance().mode_title();
-	//deinitialize curses
-	end_game();
-	return EXIT_SUCCESS;
+	return xml_loaded_ok;
 }
 template<class Type>
 bool populate_from_xml(vector<Type*>& types, string file, Log& log)
@@ -579,14 +585,23 @@ int main(int argc, char* argv[])
 	initialize_debug_defines();
 	bool xml_loaded_ok = initialize_txt();
 	if (!xml_loaded_ok) {
-		mvaddstrAlt(0,0,"Unspecified error with custom text");
+		mvaddstrAlt(0, 0, "Unspecified error with custom text");
 		getkeyAlt();
 	}
 	mainThree();
 	mainFour();
 	mainFive();
 	mainSix();
-	return mainSeven(xml_loaded_ok);
+	// Main Loop
+	if (!mainSeven(xml_loaded_ok)) {
+		// This function closes the entire program, and can be called anywhere
+		end_game(EXIT_FAILURE);
+	}
+	else {
+
+		clearAlt();
+		title_screen::getInstance().mode_title();
+	}
 }
 
 bool populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log)

@@ -25,7 +25,7 @@ Amanda
 Amber
 Amelia
 Amelie
-Am‚rica
+América
 Amy
 Ana
 Anastasia
@@ -120,7 +120,7 @@ Chastity
 Chelsea
 Cherry
 Cheryl
-Chlo
+Chloë
 Christina
 Christine
 Christy
@@ -154,7 +154,7 @@ Debra
 Delilah
 Denielle
 Denise
-Desir‚e
+Desirée
 Diana
 Diane
 Dimitra
@@ -189,7 +189,7 @@ Erika
 Erin
 Eris
 Erma
-Erzs‚bet
+Erzsébet
 Esmerelda
 Esther
 Eudora
@@ -434,7 +434,7 @@ Miranda
 Molly
 Monica
 Monique
-M•rag
+Mòrag
 Nadezhda
 Nadia
 Nadine
@@ -495,7 +495,7 @@ Raquel
 Raylene
 Rebecca
 Regina
-Ren‚e
+Renée
 Rita
 Romi
 Rosa
@@ -534,7 +534,7 @@ Shenna
 Sherry
 Shirley
 Shyann
-Siƒn
+Siân
 Silvia
 Sofia
 Sofy
@@ -614,7 +614,7 @@ Zahwa
 Zarina
 Zeenat
 Zelda
-Zo
+Zoë
 Zofia
-Zs¢fia
+Zsófia
 Zuzana

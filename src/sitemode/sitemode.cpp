@@ -706,7 +706,7 @@ void mode_site() {
 			{
 
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				addstrAlt("V - Evade");
+				mvaddstrAlt(12, 42, "V - Evade");
 			}
 
 			set_color_easy(WHITE_ON_BLACK);
@@ -770,7 +770,7 @@ void mode_site() {
 				activesquad->squad[p] = NULL;
 			}
 
-			endcheck(-2); // play the right music in case we're dead
+			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(9,  1, "C - Reflect on your Conservative ineptitude");
 		}

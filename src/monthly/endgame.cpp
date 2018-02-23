@@ -522,7 +522,6 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 			}
 			badEndRemakeWorld(endingOne, endingTwo, endingThree, ending);
 		}
-		title_screen::getInstance().reset();
 		viewhighscores(endMusic);
 		end_game();
 	}

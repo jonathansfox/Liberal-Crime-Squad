@@ -4,7 +4,9 @@
 class title_screen {
 
 private:
-	string static savefile_name;
+	static title_screen title_singleton;
+	static vector<string> savefiles;
+	static string savefile_name;
 	bool static autosave;
 	static bool titleInitiated;
 	void title();

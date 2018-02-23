@@ -54,9 +54,6 @@ This file is part of Liberal Crime Squad.                                       
 #include "title/highscore.h"       
 //for void savehighscore(char endtype)
 
-#include "title/titlescreen.h"       
-//for void reset();
-
 #include "politics/politics.h"
 //for int publicmood(int l)
 
@@ -69,7 +66,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <set_color_support.h>
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern title_screen *TitleScreen;
 
 extern vector<Creature *> pool;
 extern Log gamelog;
@@ -108,13 +104,13 @@ char endcheck(char cause)
 			dead = false;
 	if (dead) // Did we just lose the game?
 	{  // Game Over
-		if (cause == -2)
+		if (cause == END_BUT_NOT_END)
 		{  // just checking for game over ahead of time but going back to the code for more stuff
 			music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
 			return true; // go back to code, it has more text to display before we REALLY end the game
 		}
 		// OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
-		if (cause == -1)
+		if (cause == END_OTHER)
 		{  // got killed, possibly in a siege but maybe not, find out the reason we lost
 			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 			{
@@ -132,7 +128,6 @@ char endcheck(char cause)
 		}
 		else savehighscore(cause); // the reason we lost was specified in the function call
 								   // You just lost the game!
-		TitleScreen->reset();
 		viewhighscores();
 		end_game();
 		return true;

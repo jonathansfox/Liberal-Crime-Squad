@@ -1534,7 +1534,7 @@ char sally_forth_aux(int loc)
 		}
 		else
 		{
-			endcheck(-2); // play the right music in case we're dead
+			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(9,  1, "C - Reflect on your Conservative judgment.");
 		}

@@ -14,8 +14,6 @@
 
 #include "common/consolesupport.h"
 // for end_cleartype_fix()
-#include "title/titlescreen.h"
-//for void mode_title();
 
 ///
 /*
@@ -182,21 +180,19 @@ newsstoryst *sitestory = NULL;
 
 int yourscore = -1;
 
-title_screen *TitleScreen;
-
 #include "common/creaturePool.h"
 #include "locations/locationsPool.h"
 #include "items/itemPool.h"
 #include "items/lootTypePool.h"
 void delete_and_clear_sitemaps();
 int endwinAlt(void);
-/* Free memory and exit the game */
+/* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
 {
 #ifdef WIN32
 	end_cleartype_fix(); // won't do anything unless fixcleartype is true
 #endif
-	delete TitleScreen;
+	// title_screen::getInstance().delete_screen();
 	LocationsPool::getInstance().delete_and_clear_pool();
 	delete_and_clear(squad);
 	delete_and_clear(weapontype);
