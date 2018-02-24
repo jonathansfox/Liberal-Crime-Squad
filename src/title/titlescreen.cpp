@@ -338,9 +338,6 @@ string dotDat;
 		savegame(savefile_name);
 	}
 	bool title_screen::autosave = true;
-	/* deletes save.dat (used on endgame and for invalid save version) */
-	//extern string savefile_name;
-	void deleteVerbose(const string& filename);
 	void title_screen::reset()
 	{
 		//LCSDeleteFile(savefile_name.c_str(), LCSIO_PRE_HOME);

@@ -400,7 +400,7 @@ bool populate_from_txt(vector<string> & types, const string fileName)
 		while (!txtFile.eof()) {
 			//txtFile.read(currentLine, line_length);
 			txtFile.getline(currentLine, line_length);
-			const bool notComment = isThisNotComment(currentLine);
+			const bool notComment = (currentLine[0] && currentLine[0] != '#');
 			if (notComment) {
 				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 				types.push_back(currentLine);

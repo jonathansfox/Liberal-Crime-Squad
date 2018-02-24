@@ -78,7 +78,7 @@ void mode_site(short loc);
 #include "combat/chase.h"
 #include "combat/chaseCreature.h"
 //for int driveskill(Creature &cr,Vehicle &v);
-        //hmm --Schmel924
+//hmm --Schmel924
 
 
 #include <cursesAlternative.h>
@@ -90,6 +90,7 @@ void mode_site(short loc);
 #include "title/titlescreen.h"
 
 extern vector<Creature *> pool;
+extern vector<Location *> location;
 extern Log gamelog;
 #include "locations/locationsPool.h"
 extern int year;
@@ -122,18 +123,18 @@ void advanceday(char &clearformess, char canseethings)
 	ledger.resetDailyAmounts();
 	//CLEAR CAR STATES
 	vector<long> caridused;
-	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) pool[p]->carid = -1;
+	for (p = 0; p < len(pool); p++) pool[p]->carid = -1;
 	// Move squadless Liberals to their bases if not under siege
-	if (!disbanding) for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	if (!disbanding) for (p = 0; p < len(pool); p++)
 	{
 		if (!pool[p]->alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
 			continue;
 		// Prevent moving people to a sieged location,
 		// but don't evacuate people already under siege. - wisq
 		if (pool[p]->location != pool[p]->base &&
-			LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
+			location[pool[p]->base]->siege.siege)
 		{
-			pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location); //find_homeless_shelter(*pool[p]);
+			pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location); //find_homeless_shelter(*pool[p]);pool[p]->base = find_homeless_shelter(*pool[p]);
 		}
 		pool[p]->location = pool[p]->base;
 	}
@@ -161,7 +162,7 @@ void advanceday(char &clearformess, char canseethings)
 						addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+						getkey();
 					}
 					squad[sq]->squad[p]->activity.type = ACTIVITY_VISIT;
 					squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
@@ -171,18 +172,18 @@ void advanceday(char &clearformess, char canseethings)
 		if (squad[sq]->activity.type == ACTIVITY_VISIT)
 		{
 			//TURN AWAY SQUADS FROM RECENTLY CLOSED OR SIEGED SITES
-			if (LocationsPool::getInstance().isThisSiteClosed(squad[sq]->activity.arg) ||
-				LocationsPool::getInstance().isThereASiegeHere(squad[sq]->activity.arg))
+			if (location[squad[sq]->activity.arg]->closed ||
+				location[squad[sq]->activity.arg]->siege.siege)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" decided ", gamelog);
-				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(" was too hot to risk.", gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+				getkey();
 				//ON TO THE NEXT SQUAD
 				squad[sq]->activity.type = ACTIVITY_NONE;
 				continue;
@@ -214,7 +215,7 @@ void advanceday(char &clearformess, char canseethings)
 								addstrAlt(vehicle[v]->fullname(), gamelog);
 								addstrAlt(singleDot, gamelog);
 								gamelog.nextMessage();
-								getkeyAlt();
+								getkey();
 							}
 							wantcar.erase(wantcar.begin() + c);
 							break;
@@ -313,7 +314,7 @@ void advanceday(char &clearformess, char canseethings)
 			}
 			//IF NEED CAR AND DON'T HAVE ONE...
 			//NOTE: SQUADS DON'T TAKE FREE CARS
-			if (LocationsPool::getInstance().doesThisPlaceNeedACar(squad[sq]->activity.arg)&&squad[sq]->squad[0])
+			if (location[squad[sq]->activity.arg]->needcar&&squad[sq]->squad[0])
 				if (squad[sq]->squad[0]->carid == -1)
 				{
 					if (clearformess) eraseAlt();
@@ -321,10 +322,10 @@ void advanceday(char &clearformess, char canseethings)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 					addstrAlt(" didn't have a car to get to ", gamelog);
-					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+					getkey();
 					//ON TO THE NEXT SQUAD
 					squad[sq]->activity.type = ACTIVITY_NONE;
 					continue;
@@ -347,10 +348,16 @@ void advanceday(char &clearformess, char canseethings)
 			//GO PLACES
 			// Identify the "travel location" -- top level in multi-city play,
 			// a particular district in one-city play
-			int travelLocation = LocationsPool::getInstance().findTravelLocation();
+			int travelLocation = -1;
+			for (int i = 0; i < len(location); i++)
+				if (location[i]->type == SITE_TRAVEL)
+				{
+					travelLocation = i;
+					break;
+				}
 			// Verify travellers can afford the cost, and charge them
 			bool canDepart = true;
-			if (LocationsPool::getInstance().getLocationParent(squad[sq]->activity.arg) == travelLocation)
+			if (location[squad[sq]->activity.arg]->parent == travelLocation)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
@@ -359,17 +366,17 @@ void advanceday(char &clearformess, char canseethings)
 				price *= 100;
 				if (ledger.get_funds() < price)
 				{
-					mvaddstr_fl(8, 1, gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg));
+					mvaddstr_fl(8, 1, gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
 					canDepart = false;
 				}
 				else
 				{
 					ledger.subtract_funds(price, EXPENSE_TRAVEL);
-					mvaddstr_fl(8, 1, gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg));
+					mvaddstr_fl(8, 1, gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, price, location[squad[sq]->activity.arg]->getname().c_str());
 				}
-				getkeyAlt();
+				getkey();
 			}
-			if (canDepart) switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
+			if (canDepart) switch (location[squad[sq]->activity.arg]->type)
 			{
 			case SITE_CITY_NEW_YORK:
 			case SITE_CITY_SEATTLE:
@@ -383,12 +390,12 @@ void advanceday(char &clearformess, char canseethings)
 				else makedelimiter();
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" arrives in ", gamelog);
-				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+				getkey();
 				{
-					int l = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, squad[sq]->activity.arg);
+					int l = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, squad[sq]->activity.arg); //int l = find_homeless_shelter(squad[sq]->activity.arg);
 					// Base at new city's homeless shelter
 					basesquad(squad[sq], l);
 					locatesquad(squad[sq], l);
@@ -405,13 +412,13 @@ void advanceday(char &clearformess, char canseethings)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
-				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+				getkey();
 				activesquad = squad[sq];
 				showcarprefs = -1;
-				switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
+				switch (location[squad[sq]->activity.arg]->type)
 				{
 				case SITE_BUSINESS_DEPTSTORE:
 					deptstore(squad[sq]->activity.arg);
@@ -441,10 +448,10 @@ void advanceday(char &clearformess, char canseethings)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, squad[sq]->name, gamelog);
 				addstrAlt(" has arrived at ", gamelog);
-				addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+				addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+				getkey();
 				activesquad = squad[sq];
 				hospital(squad[sq]->activity.arg);
 				if (activesquad->squad[0] != NULL)
@@ -459,7 +466,7 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" looks around ", gamelog);
-					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 				}
@@ -467,23 +474,23 @@ void advanceday(char &clearformess, char canseethings)
 				{
 					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 					addstrAlt(" has arrived at ", gamelog);
-					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+					addstrAlt(location[squad[sq]->activity.arg]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 				}
-				getkeyAlt();
+				getkey();
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				int c = 't';
-				if (LocationsPool::getInstance().getRentingType(squad[sq]->activity.arg) >= 0 &&
-					LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg) == SITE_INDUSTRY_WAREHOUSE)
+				if (location[squad[sq]->activity.arg]->renting >= 0 &&
+					location[squad[sq]->activity.arg]->type == SITE_INDUSTRY_WAREHOUSE)
 					c = 's';
-				else if (LocationsPool::getInstance().getRentingType(squad[sq]->activity.arg) >= 0 &&
+				else if (location[squad[sq]->activity.arg]->renting >= 0 &&
 					squad[sq]->squad[0]->base != squad[sq]->activity.arg)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
-					do c = getkeyAlt(); while (c != 's'&&c != 'b'&&c != 't');
+					do c = getkey(); while (c != 's'&&c != 'b'&&c != 't');
 				}
 				if (c == 's' || c == 'b') basesquad(squad[sq], squad[sq]->activity.arg);
 				if (c == 't' || c == 'b')
@@ -506,14 +513,14 @@ void advanceday(char &clearformess, char canseethings)
 	}
 	activesquad = oactivesquad;
 	//HOSTAGES
-	if (!disbanding) for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	if (!disbanding) for (p = len(pool) - 1; p >= 0; p--)
 	{
 		if (!pool[p]->alive) continue;
 		if (pool[p]->align != 1)
 			tendhostage(pool[p], clearformess);
 	}
 	//ACTIVITIES FOR INDIVIDUALS
-	if (!disbanding) for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	if (!disbanding) for (p = 0; p < len(pool); p++)
 	{
 		pool[p]->income = 0;
 		if (!pool[p]->alive) continue;
@@ -527,7 +534,7 @@ void advanceday(char &clearformess, char canseethings)
 			pool[p]->location = pool[p]->base;
 		}
 		//CLEAR ACTIONS FOR PEOPLE UNDER SIEGE
-		if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
+		if (location[pool[p]->location]->siege.siege)
 		{
 			switch (pool[p]->activity.type)
 			{
@@ -563,7 +570,7 @@ void advanceday(char &clearformess, char canseethings)
 		case ACTIVITY_STEALCARS:
 			if (stealcar(*pool[p], clearformess))
 				pool[p]->activity.type = ACTIVITY_NONE;
-			else if (pool[p]->location != -1 && LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
+			else if (pool[p]->location != -1 && location[pool[p]->location]->type == SITE_GOVERNMENT_POLICESTATION)
 				criminalize(*pool[p], LAWFLAG_CARTHEFT);
 			break;
 		case ACTIVITY_POLLS:
@@ -573,7 +580,7 @@ void advanceday(char &clearformess, char canseethings)
 			mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 			addstrAlt(" surfs the Net for recent opinion polls.", gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+			getkey();
 			pool[p]->train(SKILL_COMPUTERS, max(3 - pool[p]->get_skill(SKILL_COMPUTERS), 1));
 			survey(pool[p]);
 			//pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
@@ -589,17 +596,17 @@ void advanceday(char &clearformess, char canseethings)
 		}
 	}
 	funds_and_trouble(clearformess);
-	determineMedicalSupportAtEachLocation(clearformess);
+determineMedicalSupportAtEachLocation(clearformess);
 	//DISPERSAL CHECK
 	dispersalcheck(clearformess);
 	//DO RENT
 	if (day == 3 && !disbanding)
-		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
-			if (LocationsPool::getInstance().getRentingType(l)>0 &&
-				!LocationsPool::getInstance().isNewRental(l))
+		for (int l = 0; l < len(location); l++)
+			if (location[l]->renting>0 &&
+				!location[l]->newrental)
 			{  // if rent >= 1000000 this means you get should kicked out automatically
-				if (ledger.get_funds() >= LocationsPool::getInstance().getRentingType(l) && LocationsPool::getInstance().getRentingType(l) < 1000000)
-					ledger.subtract_funds(LocationsPool::getInstance().getRentingType(l), EXPENSE_RENT);
+				if (ledger.get_funds() >= location[l]->renting&&location[l]->renting < 1000000)
+					ledger.subtract_funds(location[l]->renting, EXPENSE_RENT);
 				//EVICTED!!!!!!!!!
 				else
 				{
@@ -609,19 +616,19 @@ void advanceday(char &clearformess, char canseethings)
 				}
 			}
 	//MEET WITH POTENTIAL RECRUITS
-	for (int i = CreaturePool::getInstance().lenpool() - 1; i >= 0; i--)
+	for (int i = len(pool) - 1; i >= 0; i--)
 		pool[i]->meetings = 0;
 	if (!disbanding) for (int r = len(recruit) - 1; r >= 0; r--)
 	{
 		int p = getpoolcreature(recruit[r]->recruiter_id);
 		// Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
 		// or 3) recruiter is dead.
-		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL&&pool[p]->alive&&
-			LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(recruit[r]->recruit->location)) || recruit[r]->timeleft > 0))
+		if (p != -1 && ((pool[p]->location != -1 && location[pool[p]->location]->renting != RENTING_NOCONTROL&&pool[p]->alive&&
+			location[pool[p]->location]->city == location[recruit[r]->recruit->location]->city) || recruit[r]->timeleft > 0))
 		{
 			//MEET WITH RECRUIT
 			//TERMINATE NULL RECRUIT MEETINGS
-			if (LocationsPool::getInstance().getLocationCity(pool[p]->location))
+			if (location[pool[p]->location]->siege.siege)
 			{
 				delete_and_remove(recruit, r);
 				continue;
@@ -645,10 +652,10 @@ void advanceday(char &clearformess, char canseethings)
 		int p = getpoolcreature(date[d]->mac_id);
 		// Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
 		if (p != -1 && ((pool[p]->location != -1 &&
-			(LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL ||
-				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_CLINIC ||
-				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_UNIVERSITY) &&
-			LocationsPool::getInstance().getLocationCity(pool[p]->location) == date[d]->city) ||
+			(location[pool[p]->location]->renting != RENTING_NOCONTROL ||
+				location[pool[p]->location]->type == SITE_HOSPITAL_CLINIC ||
+				location[pool[p]->location]->type == SITE_HOSPITAL_UNIVERSITY) &&
+			location[pool[p]->location]->city == date[d]->city) ||
 			date[d]->timeleft))
 		{
 			//VACATION
@@ -657,8 +664,8 @@ void advanceday(char &clearformess, char canseethings)
 				pool[p]->dating = --date[d]->timeleft;
 				if (date[d]->timeleft == 0)
 				{
-					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city);
-					if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
+					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city); //int hs = find_homeless_shelter(date[d]->city);
+					if (location[pool[p]->base]->siege.siege)
 						pool[p]->base = hs;
 					pool[p]->location = pool[p]->base;
 					if (completevacation(*date[d], p, clearformess))
@@ -672,7 +679,7 @@ void advanceday(char &clearformess, char canseethings)
 			else
 			{
 				//TERMINATE NULL DATES
-				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
+				if (location[pool[p]->location]->siege.siege)
 				{
 					delete_and_remove(date, d);
 					continue;
@@ -706,7 +713,7 @@ void advanceday(char &clearformess, char canseethings)
 	int pday = day, pmonth = month; // Find out if it's next month already.
 	if (pday > monthday()) // Day counter has increased but end-of-month has not yet been
 		pday = 1, pmonth = (pmonth % 12) + 1; // checked so it has to be accounted for here.
-	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	for (p = 0; p < len(pool); p++)
 	{
 		pool[p]->stunned = 0; // For lack of a better place, make stunning expire here
 							  // Increment number of days since joined/kidnapped
@@ -741,7 +748,7 @@ void advanceday(char &clearformess, char canseethings)
 							addstrAlt(pool[p]->age, gamelog);
 							addstrAlt(". The Liberal will be missed.", gamelog);
 							gamelog.nextMessage();
-							getkeyAlt();
+							getkey();
 							break;
 						}
 					}
@@ -773,7 +780,7 @@ void advanceday(char &clearformess, char canseethings)
 		{
 			if ((--pool[p]->hiding) == 0)
 			{
-				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
+				if (location[pool[p]->base]->siege.siege)
 					pool[p]->hiding = 1;
 				else
 				{
@@ -784,7 +791,7 @@ void advanceday(char &clearformess, char canseethings)
 					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
 					addstrAlt(" regains contact with the LCS.", gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+					getkey();
 				}
 			}
 		}
@@ -816,6 +823,16 @@ void advanceday(char &clearformess, char canseethings)
 	cleangonesquads();
 	showcarprefs = 1;
 }
+enum DispersalTypes
+{
+	DISPERSAL_SAFE = -1,
+	DISPERSAL_BOSSSAFE,
+	DISPERSAL_NOCONTACT,
+	DISPERSAL_BOSSINPRISON,
+	DISPERSAL_HIDING,
+	DISPERSAL_BOSSINHIDING,
+	DISPERSAL_ABANDONLCS
+};
 
 /* daily - returns true if the site type supports high security */
 char securityable(int type)
