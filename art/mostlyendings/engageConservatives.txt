@@ -1,0 +1,15 @@
+     You are about to engage Conservative forces in battle.
+You will find yourself in the Liberal safehouse, and it will
+be swarming with Conservative units.  The Liberal Crime
+Squad will be located far from the entrance to the safehouse.
+It is your task to bring your squad out to safety, or fight
+off the Conservatives within the perimeter.  Either way you
+choose, any equipment from the safehouse which isn't held by a
+Liberal will be scattered about the compound.  Save what
+you can.  You might notice your Squad has filled out to
+six members if any were available.  If you have a larger pool
+of Liberals, they will be traveling behind the Squad.
+There is a new button, (R)eorganize, which reflects this.
+Squad members in the back with firearms can provide cover
+fire.  If you have at least six people total, then six must
+be in the Squad.  If less than six, then they all must.

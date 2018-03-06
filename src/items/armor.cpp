@@ -4,23 +4,13 @@
 #include "items/item.h"
 #include "items/armortype.h"
 #include "items/armor.h"
-#include "creature/creatureEnums.h"
-
-//#include "items/armor.h"
-//own header currently inside includes.h
-
+//own header
 #include "common/stringconversion.h"
 //for int stringtobool(std::string)
 
 #include "common/translateid.h"
 // for  int getarmortype
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern vector<ArmorType *> armortype;
 
 Armor::Armor(const ArmorType& seed, int quality, int number)
@@ -37,7 +27,7 @@ Armor::Armor(const std::string& inputXml) : Item(inputXml)
       std::string tag=xml.GetTagName();
       if(tag=="bloody") bloody_=stringtobool(xml.GetData())==1;
       else if(tag == "damaged") damaged_=stringtobool(xml.GetData())==1;
-      else if(tag=="quality") quality_=atoi(xml.GetData());
+      else if(tag=="quality") quality_=atoi(xml.GetData().c_str());
    }
 }
 string Armor::showXml() const

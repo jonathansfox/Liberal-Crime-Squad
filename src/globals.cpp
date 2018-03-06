@@ -86,6 +86,13 @@ vector<AugmentType *> augmenttype;
 vector<VehicleType *> vehicletype;
 long curcreatureid = 0;
 vector<string> default_slogans;
+
+
+#include <customMaps.h>
+vector<file_and_text_collection> globals_text_file_collection = {
+	customText(&default_slogans, "default_slogans.txt"),
+};
+
 vector<Item *> groundloot;
 vector<Vehicle *> vehicle;
 char showcarprefs = 1;

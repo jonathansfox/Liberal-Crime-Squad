@@ -5,19 +5,11 @@
 #include "items/itemtype.h"
 //#include "items/armor.h"
 #include "items/armortype.h"
-
-//#include "items/armortype.h"
-//own header currently inside includes.h
+//own header
 
 #include "common/stringconversion.h"
-//for string conversion
+//for stringtobool
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern int year;
 ArmorType::ArmorType(MCD_STR xmlstring)
  : ItemType(xmlstring),

@@ -1,32 +1,15 @@
 
 #include <includes.h>
-//#include "creature/creature.h"
-//#include "pdcurses/curses.h"
 
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
 #include "common/interval.h"
 
-#include "common/misc.h"
-//own header
-
-#include "common/stringconversion.h"
-//for string conversion
-
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addchar
-
-#include "common/consolesupport.h"
-// for getkey
 
 #include <cursesAlternative.h>
 #include "creature/creatureEnums.h"
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 typedef map<short, string > shortAndString;
 extern Log gamelog;
 extern char homedir[MAX_PATH_SIZE];
@@ -41,24 +24,35 @@ extern MusicClass music;
  vector<string> sexseekAcronym;
 /* what type of sex? */
  vector<string> sextypeAcronym;
+
  shortAndString musicList;
 void sexdesc(char *str)
 {
-	strcpy(str, pickrandom(sexdescAcronym));
+	strcpy(str, pickrandom(sexdescAcronym).c_str());
 }
 void sexwho(char *str)
 {
-	strcpy(str, pickrandom(sexwhoAcronym));
+	strcpy(str, pickrandom(sexwhoAcronym).c_str());
 }
 void sexseek(char *str)
 {
-	strcpy(str, pickrandom(sexseekAcronym));
+	strcpy(str, pickrandom(sexseekAcronym).c_str());
 }
 void sextype(char *str)
 {
-	strcpy(str, pickrandom(sextypeAcronym));
+	strcpy(str, pickrandom(sextypeAcronym).c_str());
 }
  vector<string> listOfStates;
+
+ const string mostlyendings = "mostlyendings\\";
+ vector<file_and_text_collection> misc_text_file_collection = {
+	 customText(&sexdescAcronym, mostlyendings + "sexdescAcronym.txt"),
+	 customText(&sexwhoAcronym, mostlyendings + "sexwhoAcronym.txt"),
+	 customText(&sexseekAcronym, mostlyendings + "sexseekAcronym.txt"),
+	 customText(&sextypeAcronym, mostlyendings + "sextypeAcronym.txt"),
+
+	 customText(&listOfStates, mostlyendings + "listOfStates.txt"),
+ };
 const char* statename(int i)
 {
 	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(50);
@@ -333,13 +327,13 @@ void MusicClass::play(int _musicmode)
 		if (dashpos == string::npos) // Just a constant.
 		{
 			if (!valid(interval)) return false;
-			max = min = atoi(interval);
+			max = min = atoi(interval.c_str());
 		}
 		else
 		{
 			string smin = interval.substr(0, dashpos), smax = interval.substr(dashpos + 1);
 			if (!valid(smin) || !valid(smax)) return false;
-			int tmin = atoi(smin), tmax = atoi(smax);
+			int tmin = atoi(smin.c_str()), tmax = atoi(smax.c_str());
 			if (tmin > tmax) return false;
 			min = tmin, max = tmax;
 		}

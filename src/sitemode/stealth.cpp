@@ -52,6 +52,12 @@ extern int locz;
 extern short sitealarmtimer;
 extern squadst *activesquad;
  vector<string> blew_stealth_check;
+
+#include <customMaps.h>
+ const string stealth = "stealth\\";
+ vector<file_and_text_collection> stealth_text_file_collection = {
+	 customText(&blew_stealth_check, stealth + "blew_stealth_check.txt"),
+ };
  extern short cursite;
  extern short fieldskillrate;
  extern Creature encounter[ENCMAX];

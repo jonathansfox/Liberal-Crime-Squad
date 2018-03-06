@@ -29,17 +29,8 @@
 #include <includes.h>
 #include "creature/creatureEnums.h"
 
-//#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
 
-
-#include <cursesAlternative.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 
 vector<string> male_first_names;
 vector<string> female_first_names;
@@ -47,6 +38,19 @@ vector<string> gender_neutral_first_names;
 vector<string> great_white_male_patriarch_first_names;
 vector<string> regular_last_names;
 vector<string> archconservative_last_names;
+
+const string names = "names\\";
+vector<file_and_text_collection> names_text_file_collection = {
+	/*creaturenames.cpp*/
+	customText(&male_first_names, names + "male_first_names.txt"),
+	customText(&female_first_names, names + "female_first_names.txt"),
+	customText(&gender_neutral_first_names, names + "gender_neutral_first_names.txt"),
+	customText(&great_white_male_patriarch_first_names, names + "great_white_male_patriarch_first_names.txt"),
+	customText(&regular_last_names, names + "regular_last_names.txt"),
+	customText(&archconservative_last_names, names + "archconservative_last_names.txt"),
+};
+
+
 extern string closeParenthesis;
 extern string singleSpace;
 void generate_name(char *first, char *last, char gender);

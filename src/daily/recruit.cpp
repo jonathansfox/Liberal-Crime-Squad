@@ -50,9 +50,6 @@ char talk(Creature &a, const int t);
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "common/musicClass.h"
 extern MusicClass music;

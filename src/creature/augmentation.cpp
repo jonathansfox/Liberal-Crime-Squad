@@ -1,19 +1,8 @@
 
 #include <includes.h>
-//#include "creature/creature.h"
 
 #include "augmentation.h"
-//own header currently inside includes.h
 
-#include "common/stringconversion.h"
-//for atoi redefinition
-
-#include <cursesAlternative.h>
-#include "creature/creatureEnums.h"
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 std::string Augmentation::get_name(int au)
 {
    switch(au)
@@ -50,13 +39,28 @@ Augmentation::Augmentation(const std::string& inputXml)
       if(tag == "name")
          name = xml.GetData();
       else if(tag == "type")
-         type = atoi(xml.GetData());
+         type = atoi(xml.GetData().c_str());
       else if(tag == "attribute")
-         attribute = atoi(xml.GetData());
+         attribute = atoi(xml.GetData().c_str());
       else if(tag == "effect")
-         effect = atoi(xml.GetData());
+         effect = atoi(xml.GetData().c_str());
       else if(tag == "value")
-         value = atoi(xml.GetData());
+         value = atoi(xml.GetData().c_str());
    }
 }
 
+int augment_string_to_enum(const string& augmentname)
+{
+	if (augmentname == "head")
+		return AUGMENTATION_HEAD;
+	else if (augmentname == "body")
+		return AUGMENTATION_BODY;
+	else if (augmentname == "arms")
+		return AUGMENTATION_ARMS;
+	else if (augmentname == "legs")
+		return AUGMENTATION_LEGS;
+	else if (augmentname == "skin")
+		return AUGMENTATION_SKIN;
+	else
+		return -1;
+}

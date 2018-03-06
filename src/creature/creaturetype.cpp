@@ -20,11 +20,7 @@
 //for int publicmood(int l);
 
 
-#include <cursesAlternative.h>
-#include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern string tag_type;
 extern Log xmllog;
 extern vector<WeaponType *> weapontype;
@@ -32,6 +28,7 @@ extern vector<ArmorType *> armortype;
 extern vector<ClipType *> cliptype;
 extern short lawList[LAWNUM];
  string singleDot;
+
 
  // This would normally be inlined inside the Creature class in creature.h, but the Creature class
  // has to be before creaturetype

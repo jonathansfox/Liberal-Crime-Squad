@@ -10,9 +10,9 @@
 
 extern Log gamelog;
 
- char* PACKAGE_VERSION = "4.12.12";
+ char* PACKAGE_VERSION = "4.12.14";
 
-  int version = 41212;
+  int version = 41214;
   int lowestloadversion = 40100;
   int lowestloadscoreversion = 31203;
 
@@ -35,9 +35,25 @@ file_and_text_collection customText(vector<string>  *collection_, string fileNam
 	newWound.superCollection = false;
 	return newWound;
 }
+file_and_text_collection customText(string fileName_) {
+	file_and_text_collection newWound;
+	vector<string> vsr;
+	vsr.push_back(" ");
+	newWound.collection = &vsr;
+	newWound.fileName = fileName_;
+	newWound.superCollection = false;
+	return newWound;
+}
 file_and_text_collection customText(vector<vector<string>>  *collection_, string fileName_, int dimensions_) {
 	file_and_text_collection newWound;
 	newWound.super_collection = collection_;
+	newWound.fileName = fileName_;
+	newWound.dimensions = dimensions_;
+	newWound.superCollection = true;
+	return newWound;
+}
+file_and_text_collection customText(string fileName_, int dimensions_) {
+	file_and_text_collection newWound;
 	newWound.fileName = fileName_;
 	newWound.dimensions = dimensions_;
 	newWound.superCollection = true;
@@ -129,22 +145,22 @@ extern vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
 extern vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
 extern vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
 
-extern vector<string> conservativeLegalArgumentUnprocessed;
-extern vector<string> youAreStupidTalkAboutIssuesUnprocessed;
-extern vector<string> issueTooLiberalUnprocessed;
-extern vector<string> issueEventStringUnprocessed;
-extern vector<string> conservatiseLawUnprocessed;
-extern vector<string> liberalizeLawUnprocessed;
-extern vector<string> discussIssuesUnprocessed;
-extern vector<string> discussesIssuesUnprocessed;
+ vector<string> conservativeLegalArgumentUnprocessed;
+ vector<string> youAreStupidTalkAboutIssuesUnprocessed;
+ vector<string> issueTooLiberalUnprocessed;
+ vector<string> issueEventStringUnprocessed;
+ vector<string> conservatiseLawUnprocessed;
+ vector<string> liberalizeLawUnprocessed;
+ vector<string> discussIssuesUnprocessed;
+ vector<string> discussesIssuesUnprocessed;
 
-extern vector<string> talkAboutTheIssuesUnprocessed;
-extern vector<string> endgameLawStringsUnprocessed;
+ vector<string> talkAboutTheIssuesUnprocessed;
+ vector<string> endgameLawStringsUnprocessed;
 
-extern vector<string> helpTopicUnprocessed;
+ vector<string> helpTopicUnprocessed;
 extern shortAndTwoStrings helpTopics;
 extern vector<string> theGreatUnknown;
-extern vector<string> state_biases_Unprocessed;
+ vector<string> state_biases_Unprocessed;
 stringAndShort string_to_activity = {
 
 	stringAndShort::value_type("ACTIVITY_NONE", ACTIVITY_NONE),
@@ -184,7 +200,6 @@ stringAndShort string_to_activity = {
 	stringAndShort::value_type("ACTIVITY_STUDY_DISGUISE", ACTIVITY_STUDY_DISGUISE),
 	stringAndShort::value_type("ACTIVITY_STUDY_SCIENCE", ACTIVITY_STUDY_SCIENCE),
 	stringAndShort::value_type("ACTIVITY_STUDY_BUSINESS", ACTIVITY_STUDY_BUSINESS),
-	//ACTIVITY_STUDY_COOKING
 	stringAndShort::value_type("ACTIVITY_STUDY_GYMNASTICS", ACTIVITY_STUDY_GYMNASTICS),
 	stringAndShort::value_type("ACTIVITY_STUDY_MUSIC", ACTIVITY_STUDY_MUSIC),
 	stringAndShort::value_type("ACTIVITY_STUDY_ART", ACTIVITY_STUDY_ART),
@@ -192,9 +207,11 @@ stringAndShort string_to_activity = {
 	stringAndShort::value_type("ACTIVITY_STUDY_WRITING", ACTIVITY_STUDY_WRITING),
 	stringAndShort::value_type("ACTIVITY_STUDY_LOCKSMITHING", ACTIVITY_STUDY_LOCKSMITHING),
 	stringAndShort::value_type("ACTIVITY_STUDY_COMPUTERS", ACTIVITY_STUDY_COMPUTERS),
+	//ACTIVITY_STUDY_COOKING
 	stringAndShort::value_type("ACTIVITY_STUDY_FENCING", ACTIVITY_STUDY_FENCING),
 	stringAndShort::value_type("ACTIVITY_STUDY_WEAVING", ACTIVITY_STUDY_WEAVING),
 	stringAndShort::value_type("ACTIVITY_STUDY_RELIGION", ACTIVITY_STUDY_RELIGION),
+	//ACTIVITY_STUDY_MAGIC
 	stringAndShort::value_type("ACTIVITY_STUDY_CLUB", ACTIVITY_STUDY_CLUB),
 	stringAndShort::value_type("ACTIVITY_STUDY_STREETSENSE", ACTIVITY_STUDY_STREETSENSE),
 	stringAndShort::value_type("ACTIVITY_STUDY_THROWING", ACTIVITY_STUDY_THROWING),
@@ -310,10 +327,48 @@ vector<string> caseREJECTED_DAMAGEDCLOTHES;
 vector<string> caseREJECTED_SECONDRATECLOTHES;
 
 
+const string talky = "talk\\";
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> externally_stored_data_text_file_collection = {
+	customText(&rejectedByCCS, mostlyendings + "rejectedByCCS.txt"),
+	customText(&rejectedBecauseNude, mostlyendings + "rejectedBecauseNude.txt"),
+	customText(&rejectedBecauseUnderage, mostlyendings + "rejectedBecauseUnderage.txt"),
+	customText(&rejectedBecauseFemale, mostlyendings + "rejectedBecauseFemale.txt"),
+	customText(&rejectedBecauseFemaleish, mostlyendings + "rejectedBecauseFemaleish.txt"),
+	customText(&rejectedBecauseDresscode, mostlyendings + "rejectedBecauseDresscode.txt"),
+	customText(&rejectedBecauseBloodyClothes, mostlyendings + "rejectedBecauseBloodyClothes.txt"),
+	customText(&rejectedBecauseDamagedClothes, mostlyendings + "rejectedBecauseDamagedClothes.txt"),
+	customText(&rejectedBecauseSecondRateClothes, mostlyendings + "rejectedBecauseSecondRateClothes.txt"),
+	customText(&rejectedBecauseWeapons, mostlyendings + "rejectedBecauseWeapons.txt"),
+	customText(&rejectedBecauseGuestList, mostlyendings + "rejectedBecauseGuestList.txt"),
+	customText(&caseREJECTED_UNDERAGE, mostlyendings + "caseREJECTED_UNDERAGE.txt"),
+	customText(&caseREJECTED_DRESSCODE, mostlyendings + "caseREJECTED_DRESSCODE.txt"),
+	customText(&caseREJECTED_SMELLFUNNY, mostlyendings + "caseREJECTED_SMELLFUNNY.txt"),
+	customText(&caseREJECTED_BLOODYCLOTHES, mostlyendings + "caseREJECTED_BLOODYCLOTHES.txt"),
+	customText(&caseREJECTED_DAMAGEDCLOTHES, mostlyendings + "caseREJECTED_DAMAGEDCLOTHES.txt"),
+	customText(&caseREJECTED_SECONDRATECLOTHES, mostlyendings + "caseREJECTED_SECONDRATECLOTHES.txt"),
+
+
+	customText(&conservativeLegalArgumentUnprocessed, talky + "conservativeLegalArgument.txt"),
+	customText(&youAreStupidTalkAboutIssuesUnprocessed, talky + "youAreStupidTalkAboutIssues.txt"),
+	customText(&issueTooLiberalUnprocessed, talky + "issueTooLiberal.txt"),
+	customText(&issueEventStringUnprocessed, talky + "issueEventString.txt"),
+	customText(&conservatiseLawUnprocessed, talky + "conservatiseLaw.txt"),
+	customText(&liberalizeLawUnprocessed, talky + "liberalizeLaw.txt"),
+	customText(&discussIssuesUnprocessed, talky + "discussIssues.txt"),
+	customText(&discussesIssuesUnprocessed, talky + "discussesIssues.txt"),
+	customText(&talkAboutTheIssuesUnprocessed, talky + "talkAboutTheIssues.txt"),
+	customText(&endgameLawStringsUnprocessed, talky + "endgameLawStrings.txt"),
+	customText(&state_biases_Unprocessed, mostlyendings + "state_biases.txt"),
+
+	customText(&helpTopicUnprocessed, "helpTopics.txt"),
+
+};
 bool initialize_more_incomplete_txt();
 bool initialize_more_incomplete_txt() {
 
-	// this is the string data for activities. they write up to three lines of text about the activity
+
+	// this is the string data for activities. they write up to three lines of text about the activity
 	// the ones with a skill on the end (e.g. ACTIVITY_SELL_ART, ACTIVITY_SELL_MUSIC) pick one of the three lines of text based on the skill in question
 	data_activities =
 	{
@@ -355,7 +410,6 @@ bool initialize_more_incomplete_txt() {
 		ActivityToData::value_type(ACTIVITY_STUDY_DISGUISE, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_SCIENCE, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_BUSINESS, data_activity('l', true, study_string1, study_string2)),
-		// ActivityToData::value_type(ACTIVITY_STUDY_COOKING, data_activity'l', true,study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_GYMNASTICS, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_WRITING, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_ART, data_activity('l', true, study_string1, study_string2)),
@@ -363,9 +417,11 @@ bool initialize_more_incomplete_txt() {
 		ActivityToData::value_type(ACTIVITY_STUDY_TEACHING, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_LOCKSMITHING, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_COMPUTERS, data_activity('l', true, study_string1, study_string2)),
+		// ActivityToData::value_type(ACTIVITY_STUDY_COOKING, data_activity'l', true,study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_FENCING, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_WEAVING, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_RELIGION, data_activity('l', true, study_string1, study_string2)),
+		// ActivityToData::value_type(ACTIVITY_STUDY_MAGIC, data_activity'l', true,study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_CLUB, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_STREETSENSE, data_activity('l', true, study_string1, study_string2)),
 		ActivityToData::value_type(ACTIVITY_STUDY_THROWING, data_activity('l', true, study_string1, study_string2)),
@@ -415,10 +471,11 @@ bool initialize_more_incomplete_txt() {
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_TEACHING, SKILL_TEACHING),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_WRITING, SKILL_WRITING),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_COMPUTERS, SKILL_COMPUTERS),
+		//ActivityAndSkill::value_type(ACTIVITY_STUDY_COOKING,SKILL_COOKING),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_FENCING, SKILL_SWORD),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_WEAVING, SKILL_TAILORING),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_RELIGION, SKILL_RELIGION),
-		//ActivityAndSkill::value_type(ACTIVITY_STUDY_COOKING,SKILL_COOKING)
+		//ActivityAndSkill::value_type(ACTIVITY_STUDY_MAGIC,SKILL_MAGIC),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_CLUB, SKILL_CLUB),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_STREETSENSE, SKILL_STREETSENSE),
 		ActivityAndSkill::value_type(ACTIVITY_STUDY_THROWING, SKILL_THROWING),
@@ -523,7 +580,8 @@ bool initialize_more_incomplete_txt() {
 		recruitData(CREATURE_TAXIDRIVER, "Taxi Driver", 4),
 		recruitData(CREATURE_TEACHER, "Teacher", 4)
 	};
-	trainingActivitySorting = {
+
+	trainingActivitySorting = {
 		shortAndString::value_type(SORTINGCHOICE_LIBERALS, "active Liberals."),
 		shortAndString::value_type(SORTINGCHOICE_HOSTAGES, "hostages."),
 		shortAndString::value_type(SORTINGCHOICE_CLINIC, "Liberals in hospital."),
@@ -724,7 +782,8 @@ bool initialize_more_incomplete_txt() {
 		stringAndString::value_type("SILVERWARE",tag_LOOT_SILVERWARE),
 		stringAndString::value_type("TRINKET",tag_LOOT_TRINKET)
 	};
-	reviewStrings = {
+
+	reviewStrings = {
 		shortAndString::value_type(REVIEWMODE_LIBERALS, "Active Liberals"),
 		shortAndString::value_type(REVIEWMODE_HOSTAGES,	"Conservative Automatons in Captivity"),
 		shortAndString::value_type(REVIEWMODE_CLINIC,	"Liberals in CLINICS"),
@@ -742,7 +801,8 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(REVIEWMODE_DEAD,	"DAYS SINCE PASSING"),
 		shortAndString::value_type(REVIEWMODE_AWAY,	"DAYS UNTIL RETURN")
 	};
-	 liberalListAndColor = {
+
+	 liberalListAndColor = {
 		stringAndColor(WHITE_ON_BLACK,	"Recruited/"),
 		stringAndColor(MAGENTA_ON_BLACK,	"Seduced"),
 		stringAndColor(WHITE_ON_BLACK,	"/"),
@@ -823,7 +883,6 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(ACTIVITY_STUDY_DISGUISE,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_SCIENCE,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_BUSINESS,"Attending Classes"),
-		//shortAndString::value_type( ACTIVITY_STUDY_COOKING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_GYMNASTICS,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_ART,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_MUSIC,"Attending Classes"),
@@ -831,9 +890,16 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(ACTIVITY_STUDY_WRITING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_LOCKSMITHING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_COMPUTERS,	"Attending Classes"),
+		//shortAndString::value_type( ACTIVITY_STUDY_COOKING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_FENCING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_WEAVING,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_STUDY_RELIGION,	"Attending Classes"),
+		//shortAndString::value_type(ACTIVITY_STUDY_MAGIC,	"Attending Classes"),
+		shortAndString::value_type(ACTIVITY_STUDY_CLUB,"Attending Classes"),
+		shortAndString::value_type(ACTIVITY_STUDY_STREETSENSE,"Attending Classes"),
+		shortAndString::value_type(ACTIVITY_STUDY_THROWING,"Attending Classes"),
+		shortAndString::value_type(ACTIVITY_STUDY_STEALTH,"Attending Classes"),
+		shortAndString::value_type(ACTIVITY_STUDY_SEDUCTION,"Attending Classes"),
 		shortAndString::value_type(ACTIVITY_SLEEPER_LIBERAL,	"Promoting Liberalism"),
 		shortAndString::value_type(ACTIVITY_SLEEPER_CONSERVATIVE,	"Spouting Conservatism"),
 		shortAndString::value_type(ACTIVITY_SLEEPER_SPY,	"Snooping Around"),
@@ -952,7 +1018,8 @@ bool initialize_more_incomplete_txt() {
 		}
 			)
 	};
-	enumToCreature = {
+
+	enumToCreature = {
 		shortAndString::value_type(CREATURE_BOUNCER,	"CREATURE_BOUNCER"),
 		shortAndString::value_type(CREATURE_SECURITYGUARD,	"CREATURE_SECURITYGUARD"),
 		shortAndString::value_type(CREATURE_SCIENTIST_LABTECH,	"CREATURE_SCIENTIST_LABTECH"),
@@ -1288,7 +1355,8 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(BODYPART_LEG_RIGHT, "right leg"),
 		shortAndString::value_type(BODYPART_LEG_LEFT, "left leg")
 	};
-	supportsLiberalLaw = {
+
+	supportsLiberalLaw = {
 		shortAndString::value_type(VIEW_GAY, "were in favor of equal rights for homosexuals"),
 		shortAndString::value_type(VIEW_DEATHPENALTY, "opposed the death penalty"),
 		shortAndString::value_type(VIEW_TAXES, "were against cutting taxes"),
@@ -1351,7 +1419,8 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(SITE_CITY_WASHINGTON_DC,  "Washington, DC"),
 	};
 
-	carchaseObstacles = {
+
+	carchaseObstacles = {
 		shortAndTwoStrings::value_type(CARCHASE_OBSTACLE_FRUITSTAND,
 		//LIMIT :------------------------------------:
 		{ "You are speeding toward a flimsy fruit stand!",
@@ -1415,7 +1484,8 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(ATTRIBUTE_HEALTH,         "HLTH"),
 		shortAndString::value_type(ATTRIBUTE_CHARISMA,       "CHA")
 	};
-	getAlignString = {
+
+	getAlignString = {
 		shortAndString::value_type(ALIGN_ARCHCONSERVATIVE,  "Arch-Conservative"),
 		shortAndString::value_type(ALIGN_CONSERVATIVE,  "Conservative"),
 		shortAndString::value_type(ALIGN_MODERATE,  "Moderate"),
@@ -1423,7 +1493,8 @@ bool initialize_more_incomplete_txt() {
 		shortAndString::value_type(ALIGN_ELITELIBERAL,  "Elite Liberal"),
 		shortAndString::value_type(ALIGN_STALINIST,  "Stalinist")
 	};
-	 musicList = {
+
+	 musicList = {
 		// titlemode.ogg or .mid - Also sprach Zarathustra, introduction by Richard Strauss
 		shortAndString::value_type(MUSIC_TITLEMODE, "titlemode"), // load title mode music
 																  // newgame.ogg or .mid- The Liberty Bell March by John Philip Sousa

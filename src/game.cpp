@@ -277,19 +277,84 @@ void mainFive() {
 
 bool populate_from_txt(vector<string> & types, string fileName);
 bool populate_from_txt(vector< vector<string> >& types, string fileName, int dimension);
-
 bool initialize_incomplete_txt();
 bool initialize_more_incomplete_txt();
 bool initialize_txt();
 bool initialize_txt() {
+	extern vector<file_and_text_collection> activate_text_file_collection;
+	extern vector<file_and_text_collection> activities_text_file_collection;
+	extern vector<file_and_text_collection> baseactions_text_file_collection;
+	extern vector<file_and_text_collection> chase_text_file_collection;
+	extern vector<file_and_text_collection> common_text_file_collection;
+	extern vector<file_and_text_collection> creature_text_file_collection;
+	extern vector<file_and_text_collection> creaturetypes_text_file_collection;
+	extern vector<file_and_text_collection> date_text_file_collection;
+	extern vector<file_and_text_collection> endgame_text_file_collection;
+	extern vector<file_and_text_collection> externally_stored_data_text_file_collection;
+	extern vector<file_and_text_collection> fighty_text_file_collection;
+	extern vector<file_and_text_collection> get_names_text_file_collection;
+	extern vector<file_and_text_collection> globals_text_file_collection;
+	extern vector<file_and_text_collection> interrogate_text_file_collection;
+	extern vector<file_and_text_collection> justice_text_file_collection;
+	extern vector<file_and_text_collection> liberl_agenda_text_file_collection;
+	extern vector<file_and_text_collection> locations_text_file_collection;
+	extern vector<file_and_text_collection> locationspool_text_file_collection;
+	extern vector<file_and_text_collection> majorevent_text_file_collection;
+	extern vector<file_and_text_collection> map_specials_text_file_collection;
+	extern vector<file_and_text_collection> misc_activities_text_file_collection;
+	extern vector<file_and_text_collection> misc_text_file_collection;
+	extern vector<file_and_text_collection> names_text_file_collection;
+	extern vector<file_and_text_collection> newgame_file_collection;
+	extern vector<file_and_text_collection> politics_text_file_collection;
+	extern vector<file_and_text_collection> talk_file_collection;
 	extern vector<file_and_text_collection> text_file_collection;
+	extern vector<file_and_text_collection> title_screen_text_files;
+	extern vector<file_and_text_collection> reviewmode_text_file_collection;
+	extern vector<file_and_text_collection> siege_text_file_collection;
+	extern vector<file_and_text_collection> stealth_text_file_collection;
+	vector<vector<file_and_text_collection>> vast_text_collection = { 
+		activate_text_file_collection,
+		activities_text_file_collection,
+		baseactions_text_file_collection,
+		chase_text_file_collection,
+		common_text_file_collection,
+		creature_text_file_collection,
+		creaturetypes_text_file_collection,
+		date_text_file_collection,
+		endgame_text_file_collection,
+		externally_stored_data_text_file_collection,
+		fighty_text_file_collection,
+		get_names_text_file_collection,
+		globals_text_file_collection,
+		interrogate_text_file_collection,
+		justice_text_file_collection,
+		liberl_agenda_text_file_collection,
+		locations_text_file_collection,
+		locationspool_text_file_collection,
+		majorevent_text_file_collection,
+		map_specials_text_file_collection,
+		misc_activities_text_file_collection,
+		misc_text_file_collection,
+		names_text_file_collection,
+		newgame_file_collection,
+		politics_text_file_collection,
+		talk_file_collection,
+		text_file_collection,
+		title_screen_text_files,
+		reviewmode_text_file_collection,
+		siege_text_file_collection,
+		stealth_text_file_collection,
+	};
 	bool loaded = true;
-	for (file_and_text_collection f : text_file_collection) {
-		if (f.superCollection) {
-			loaded &= populate_from_txt(*f.super_collection, f.fileName, f.dimensions);
-		}
-		else {
-			loaded &= populate_from_txt(*f.collection, f.fileName);
+	
+	for (vector<file_and_text_collection> file : vast_text_collection) {
+		for (file_and_text_collection f : file) {
+			if (f.superCollection) {
+				loaded &= populate_from_txt(*f.super_collection, f.fileName, f.dimensions);
+			}
+			else {
+				loaded &= populate_from_txt(*f.collection, f.fileName);
+			}
 		}
 	}
 	loaded &= initialize_incomplete_txt();
@@ -346,6 +411,7 @@ void initialize_debug_defines() {
 string fixLineSpecialCharacter(char * toFix);
 bool populate_from_txt(vector< vector<string> >& types, const string fileName, const int dimension)
 {
+	types.clear();
 	const int line_length = 2048;
 	bool success = false;
 	ifstream txtFile;
@@ -386,6 +452,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string fileName, c
 }
 bool populate_from_txt(vector<string> & types, const string fileName)
 {
+	types.clear();
 	const int line_length = 2048;
 	bool success = false;
 	ifstream txtFile;

@@ -225,6 +225,9 @@ void LocationsPool::setLocationMappedAndUnhidden(int cursite)
 	location[cursite]->mapped = 1;
 	location[cursite]->hidden = 0;
 }
+string LocationsPool::getLocationNameWithGetnameMethod(int cursite, bool a) {
+	return getLocationNameWithGetnameMethod(cursite, a, false);
+}
 string LocationsPool::getLocationNameWithGetnameMethod(int cursite, bool a, bool b)
 {
 	return location[cursite]->getname(a, b);
@@ -325,6 +328,16 @@ void LocationsPool::getAssetValues(long & weaponValue, long & armorValue, long &
 bool LocationsPool::canBeFortified(int cursite)
 {
 	return location[cursite]->can_be_fortified();
+}
+/* daily - seeds and names a site (will re-seed and rename if used after start) */
+void initlocation(Location &loc);
+void LocationsPool::initLocation(int cursite)
+{
+	initlocation(*location[cursite]);
+}
+void LocationsPool::equipLoc(int loc, int y)
+{
+	equip(location[loc]->loot, y);
 }
 void LocationsPool::delete_and_clear_pool()
 {
@@ -2184,6 +2197,14 @@ vector<string> caseBUSINESSFRONT_INSURANCE;
 vector<string> caseBUSINESSFRONT_TEMPAGENCY;
 vector<string> caseBUSINESSFRONT_RESTAURANT;
 vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
+const string mostlyendings = "mostlyendings\\";
+#include <customMaps.h>
+vector<file_and_text_collection> locationspool_text_file_collection = {
+	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + "caseBUSINESSFRONT_INSURANCE.txt"),
+	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + "caseBUSINESSFRONT_TEMPAGENCY.txt"),
+	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + "caseBUSINESSFRONT_RESTAURANT.txt"),
+	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + "caseBUSINESSFRONT_MISCELLANEOUS.txt"),
+};
 /* base - invest in this location */
 void investlocation()
 {

@@ -62,6 +62,11 @@ extern string NAY;
 vector<string> corporateSuffix;
  shortAndString winnerOfElection;
 
+ const string mostlyendings = "mostlyendings\\";
+#include <customMaps.h>
+ vector<file_and_text_collection> politics_text_file_collection = {
+	 customText(&corporateSuffix, mostlyendings + "corporateSuffix.txt"),
+ };
  extern short execterm;
  extern short attitude[VIEWNUM];
  extern bool stalinmode;

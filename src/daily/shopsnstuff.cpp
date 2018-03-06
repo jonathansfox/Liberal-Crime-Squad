@@ -37,12 +37,6 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/commonactionsCreature.h"
 // for locatesquad(activesquad,loc)
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-
-//#include "log/log.h"
-// for commondisplay.h
 #include "common/commondisplay.h"
 // for void printfunds(int,int,char*)        
 
@@ -52,11 +46,11 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
+//#include <constant_strings.h>
+const string blankString = "";
 #include <set_color_support.h>
 #include "common/musicClass.h"
+#include "common/creaturePoolCreature.h"
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 extern MusicClass music;
@@ -163,7 +157,6 @@ void pawnshop(int loc)
 	pawnshop.enter(*activesquad);
 }
 /* active squad visits the car dealership */
-#include "common/creaturePoolCreature.h"
 void dealership(int loc)
 {
 	music.play(MUSIC_SHOPPING);

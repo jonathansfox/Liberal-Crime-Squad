@@ -26,7 +26,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include "creature/creature.h"
-//#include "pdcurses/curses.h"
 
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
@@ -34,29 +33,17 @@ This file is part of Liberal Crime Squad.                                       
 #include "sitemode/stealth.h"
 // for hasdisguise
 
-//#include "augmentation.h"
-//#include "creature.h"
-//own header
-
-#include "common/stringconversion.h"
-//for atoi redefinition
+//#include "common/stringconversion.h"
+string attribute_enum_to_string(int attribute);
 
 #include "common/translateid.h"
 // for  int getweapontype(int )
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-//#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for addstr
-
-#include "politics/politics.h"
-//for  void promoteVP()
+//#include "politics/politics.h"
+/* politics -- promotes the Vice President to President, and replaces VP */
+void promoteVP();
         //only use here. --Schmel924
 
-#include "combat/chase.h"
 #include "combat/chaseCreature.h"
 //for Vehicle* getChaseVehicle(const Creature &c);
         //hmm --Schmel924
@@ -65,7 +52,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 
 extern Log gamelog;
@@ -73,6 +59,17 @@ extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern char oldPresidentName[POLITICIAN_NAMELEN];
  vector<string> ccs_covername_shotgun;
  vector<string> ccs_covername_other;
+
+
+ const string creature = "creature\\";
+ vector<file_and_text_collection> creature_text_file_collection = {
+
+
+	 /*creature.cpp*/
+	 customText(&ccs_covername_shotgun, creature + "ccs_covername_shotgun.txt"),
+	 customText(&ccs_covername_other, creature + "ccs_covername_other.txt"),
+ };
+
 extern short exec[EXECNUM];
 typedef map<short, string > shortAndString;
 extern long curcreatureid;
@@ -445,18 +442,18 @@ Creature::Creature(const std::string& inputXml)
 	{
 		std::string tag = xml.GetTagName();
 		if (creature_XML_Integers.count(tag)) {
-			*creature_XML_Integers[tag] = atoi(xml.GetData());
+			*creature_XML_Integers[tag] = atoi(xml.GetData().c_str());
 		}else if (creature_XML_Chars.count(tag)) {
-			*creature_XML_Chars[tag] = atoi(xml.GetData());
+			*creature_XML_Chars[tag] = atoi(xml.GetData().c_str());
 		}else if (creature_XML_Bools.count(tag)) {
-			*creature_XML_Bools[tag] = atoi(xml.GetData());
+			*creature_XML_Bools[tag] = atoi(xml.GetData().c_str());
 		}
 		else if (tag == "attribute" && attributesi < ATTNUM)
 			attributes[attributesi++] = get_XML_value(xml.GetSubDoc());
 		else if (tag == "skill" && skillsi < SKILLNUM)
 			skills[skillsi++] = get_XML_value(xml.GetSubDoc());
 		else if (tag == tag_skill_experience && skill_experiencei < SKILLNUM)
-			skill_experience[skill_experiencei++] = atoi(xml.GetData());
+			skill_experience[skill_experiencei++] = atoi(xml.GetData().c_str());
 		else if (tag == "weapon")
 		{
 			Weapon w(xml.GetSubDoc());
@@ -472,13 +469,13 @@ Creature::Creature(const std::string& inputXml)
 		else if (tag == "augmentation")
 			augmentations[augi++] = Augmentation(xml.GetSubDoc());
 		else if (tag == tag_name)
-			strcpy(name, xml.GetData());
+			strcpy(name, xml.GetData().c_str());
 		else if (tag == tag_propername)
-			strcpy(propername, xml.GetData());
+			strcpy(propername, xml.GetData().c_str());
 		else if (tag == tag_type_idname)
 			type_idname = xml.GetData();
 		else if (tag == tag_infiltration)
-			infiltration = atof(xml.GetData());
+			infiltration = atof(xml.GetData().c_str());
 		else if (tag == tag_prisoner)
 		{
 			xml.IntoElem();
@@ -500,20 +497,20 @@ Creature::Creature(const std::string& inputXml)
 			{
 				tag = xml.GetTagName();
 				if (tag == tag_type)
-					activity.type = atoi(xml.GetData());
+					activity.type = atoi(xml.GetData().c_str());
 				else if (tag == tag_arg)
-					activity.arg = atoi(xml.GetData());
+					activity.arg = atoi(xml.GetData().c_str());
 				else if (tag == tag_arg2)
-					activity.arg2 = atoi(xml.GetData());
+					activity.arg2 = atoi(xml.GetData().c_str());
 			}
 			xml.OutOfElem();
 		}
 		else if (tag == tag_wound && woundi < BODYPARTNUM)
-			wound[woundi++] = atoi(xml.GetData());
+			wound[woundi++] = atoi(xml.GetData().c_str());
 		else if (tag == tag_special && speciali < SPECIALWOUNDNUM)
-			special[speciali++] = atoi(xml.GetData());
+			special[speciali++] = atoi(xml.GetData().c_str());
 		else if (tag == tag_crimes_suspected && crimesi < LAWFLAGNUM)
-			crimes_suspected[crimesi++] = atoi(xml.GetData());
+			crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
 
 	}
 }
@@ -1095,7 +1092,7 @@ void UniqueCreatures::newPresident()
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
-	strcpy(Pres_.name, "President " + pres_name.substr(pres_name.find(' ') + 1));
+	strcpy(Pres_.name, (((string) "President ") + pres_name.substr(pres_name.find(' ') + 1)).c_str());
 	strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
 	switch (exec[EXEC_PRESIDENT])
 	{ // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
@@ -1132,13 +1129,13 @@ UniqueCreatures::UniqueCreatures(const std::string& inputXml)
 			xml.OutOfElem();
 		}
 		else if (tag == "CEO_ID")
-			CEO_ID = atoi(xml.GetData());
+			CEO_ID = atoi(xml.GetData().c_str());
 		else if (tag == "CEO_state")
-			CEO_state = atoi(xml.GetData());
+			CEO_state = atoi(xml.GetData().c_str());
 		else if (tag == "Pres_ID")
-			Pres_ID = atoi(xml.GetData());
+			Pres_ID = atoi(xml.GetData().c_str());
 		else if (tag == "Pres_state")
-			Pres_state = atoi(xml.GetData());
+			Pres_state = atoi(xml.GetData().c_str());
 	}
 }
 string UniqueCreatures::showXml() const

@@ -1,22 +1,8 @@
 
 #include <includes.h>
 
-#include "creature/creatureEnums.h"
 #include "items/itemtype.h"
 
-//#include "items/itemtype.h"
-//own header currently inside includes.h
-//own header
-
-#include "common/stringconversion.h"
-//for string conversion
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern int year;
 int ItemType::number_of_itemtypes = 0;
 ItemType::ItemType(MCD_STR xmlstring)
@@ -55,7 +41,7 @@ void ItemType::init(const MCD_STR& xmlstring)
          name_future_defined_ = true;
       }
       else if (element == "fencevalue")
-         fencevalue_ = atoi(xml.GetData());
+         fencevalue_ = atoi(xml.GetData().c_str());
       /*else
          errorlog << "Unknown element for item type << idname_ << ": " << element << endl;*/
    }

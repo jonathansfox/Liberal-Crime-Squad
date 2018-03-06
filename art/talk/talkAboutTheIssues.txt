@@ -1,0 +1,63 @@
+LAW_ABORTION
+"The government is systematically trying to rob women of the right 
+to control their own destinies."
+LAW_ANIMALRESEARCH
+"Animals are routinely subjected to inhumane treatment in labs in this
+country."
+LAW_POLICEBEHAVIOR
+"The police regularly torture minority suspects during interrogations."
+
+LAW_PRIVACY
+"Files are being kept on innocent citizens whose only crime is to 
+speak out against a system that is trying to farm them like beasts."
+LAW_DEATHPENALTY
+"Over thirty innocent people have been executed over the past decade."
+
+LAW_NUCLEARPOWER
+"Radioactive waste is being stored all over the country, and it poses 
+a serious threat to many families, even in this neighborhood."
+LAW_LABOR
+"Have you noticed how people are working more and more hours for less and 
+less money?  It's all part of a plan to keep you enslaved, man."
+LAW_GAY
+"Homosexuals are people like anyone else, and yet they are treated in this 
+country as if they are deviants fit only for cheap entertainment."
+LAW_CORPORATE
+"Corporate executives use giant corporations as a means to become parasites 
+that suck wealth out of this country and put it into their pockets."
+LAW_FREESPEECH
+"Protests and demonstrations are regularly and often brutally suppressed in 
+this country.  People have to watch what they write -- even what they read."
+LAW_FLAGBURNING
+"Burning a piece of cloth is actually stigmatized in this country. 
+You can love freedom and still hate what our government stands for."
+LAW_TAX
+"The tax code has been designed to perpetuate an unjust class 
+structure that is keeping you oppressed."
+LAW_GUNCONTROL
+"We live in such a backwards country right now that people think it's 
+a right to walk around with the power to murder at any moment."
+LAW_WOMEN
+"Sexism is still pervasive, in subtle ways, and women make much less 
+than they deserve for their labor."
+LAW_CIVILRIGHTS
+"Despite our progress, this society is still strangled by its continuing 
+legacy of racial discrimination and inequality."
+LAW_DRUGS
+"The government's drug policy is a mess.  We need to stop filling 
+prisons with drug users, and only intervene when people really need help."
+LAW_IMMIGRATION
+"Millions of people are doing jobs most folks don't even want, and 
+saving their families from poverty, but we just try to kick them out."
+LAW_ELECTIONS
+"Political favors are bought and sold for campaign contributions, 
+and the voting system enforces two party dominance."
+LAW_MILITARY
+"Take a breath and think about the world we live in, that we're spending 
+hundreds of billions on new ways to kill people.  This has to stop!"
+LAW_TORTURE
+"In the name of the war on terror, we've sacrificed our soul by letting 
+the government torture and abuse human beings on our behalf."
+LAW_PRISONS
+"The prison system doesn't help criminals by providing rehabilitation, so 
+when they get released, they mostly become criminals again."

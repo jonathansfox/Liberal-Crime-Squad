@@ -37,27 +37,15 @@ This file is part of Liberal Crime Squad.                                       
 #include "sitemode/stealth.h"
 #include "sitemode/sitedisplay.h"
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
-#include "common/stringconversion.h"
-//for mvaddchar
-
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for printparty
 
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
-// for void criminalizeparty(short)
-
-#include "common/getnames.h"
-// for void enter_name(int,int,char *,int,const char *defname=NULL);
-
-#include "combat/haulkidnap.h"
-#include "combat/haulkidnapCreature.h"
-//own header
+//#include "common/commonactions.h"
+void criminalizeparty(short crime);
+//#include "common/commonactionsCreature.h"
+void removesquadinfo(Creature &cr);
 
 #include "combat/fight.h"
 #include "combat/fightCreature.h"  
@@ -65,9 +53,6 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "common/creaturePoolCreature.h"
 extern Log gamelog;
@@ -88,6 +73,144 @@ extern short offended_amradio;
 extern short offended_cablenews;
 extern string singleSpace;
 extern vector<Item *> groundloot;
+/* roll on the kidnap attempt and show the results */
+bool kidnap(Creature &a, Creature &t, bool &amateur)
+{
+	if (!a.get_weapon().can_take_hostages())
+	{
+		amateur = 1;
+		//BASIC ROLL
+		int aroll = a.skill_roll(SKILL_HANDTOHAND);
+		int droll = t.attribute_check(ATTRIBUTE_AGILITY, true);
+		a.train(SKILL_HANDTOHAND, droll);
+		clearmessagearea();
+		//HIT!
+		if (aroll > droll)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, a.name, gamelog);
+			addstrAlt(" snatches ", gamelog);
+			addstrAlt(t.name, gamelog);
+			addstrAlt("!", gamelog);
+			gamelog.newline(); //New line.
+			a.prisoner = new Creature;
+			*a.prisoner = t;
+			getkeyAlt();
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(17, 1, t.name, gamelog);
+			addstrAlt(" is struggling and screaming!", gamelog);
+			gamelog.newline(); //New line.
+			getkeyAlt();
+			gamelog.newline();
+			return 1;
+		}
+		else
+		{
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, a.name, gamelog);
+			addstrAlt(" grabs at ", gamelog);
+			addstrAlt(t.name, gamelog);
+			gamelog.newline(); //New line.
+			mvaddstrAlt(17, 1, "but ", gamelog);
+			addstrAlt(t.name, gamelog);
+			addstrAlt(" writhes away!", gamelog);
+			gamelog.newline(); //New line.
+			getkeyAlt();
+			gamelog.newline();
+			return 0;
+		}
+	}
+	else
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, a.name, gamelog);
+		addstrAlt(" shows ", gamelog);
+		addstrAlt(t.name, gamelog);
+		addstrAlt(" the ", gamelog);
+		addstrAlt(a.get_weapon().get_name(2), gamelog);
+		addstrAlt(singleSpace, gamelog);
+		mvaddstrAlt(17, 1, "and says, ", gamelog);
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		if (lawList[LAW_FREESPEECH] == -2)addstrAlt("\"[Please], be cool.\"", gamelog);
+		else addstrAlt("\"Bitch, be cool.\"", gamelog);
+		a.prisoner = new Creature;
+		*a.prisoner = t;
+		getkeyAlt();
+		gamelog.newline();
+		return 1;
+	}
+}
+/* hostage freed due to host unable to haul */
+void freehostage(Creature &cr, char situation)
+{
+	if (cr.prisoner == NULL)return;
+	if (cr.prisoner->alive)
+	{
+		if (situation == 0)
+		{
+			if (cr.prisoner->squadid == -1)addstrAlt(" and a hostage is freed", gamelog);
+			else
+			{
+				addstrAlt(AND, gamelog);
+				addstrAlt(cr.prisoner->name, gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured", gamelog);
+				else addstrAlt(" is captured", gamelog);
+			}
+			gamelog.newline(); //New line.
+		}
+		else if (situation == 1)
+		{
+			clearmessagearea();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, "A hostage escapes!", gamelog);
+			else
+			{
+				mvaddstrAlt(16, 1, cr.prisoner->name, gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured.", gamelog);
+				else addstrAlt(" is captured.", gamelog);
+			}
+			gamelog.newline(); //New line.
+		}
+		else if (situation == 2)
+		{
+			//Don't print anything.
+		}
+		if (cr.prisoner->squadid == -1)
+		{
+			for (int e = 0; e < ENCMAX; e++)
+			{
+				if (encounter[e].exists == 0)
+				{
+					encounter[e] = *cr.prisoner;
+					encounter[e].exists = 1;
+					conservatise(encounter[e]);
+					break;
+				}
+			}
+			delete cr.prisoner;
+		}
+		else capturecreature(*cr.prisoner);
+	}
+	else
+	{
+		if (cr.prisoner->squadid != -1)
+		{
+			removesquadinfo(*cr.prisoner);
+			cr.prisoner->die();
+			cr.prisoner->location = -1;
+		}
+	}
+	cr.prisoner = NULL;
+	if (situation == 1)
+	{
+		printparty();
+		if (mode == GAMEMODE_CHASECAR ||
+			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+		else printencounter();
+		getkeyAlt();
+	}
+}
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()
 {
@@ -244,144 +367,7 @@ void releasehostage()
 		alienationcheck(1);
 	}
 }
-/* roll on the kidnap attempt and show the results */
-bool kidnap(Creature &a, Creature &t, bool &amateur)
-{
-	if (!a.get_weapon().can_take_hostages())
-	{
-		amateur = 1;
-		//BASIC ROLL
-		int aroll = a.skill_roll(SKILL_HANDTOHAND);
-		int droll = t.attribute_check(ATTRIBUTE_AGILITY, true);
-		a.train(SKILL_HANDTOHAND, droll);
-		clearmessagearea();
-		//HIT!
-		if (aroll > droll)
-		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, a.name, gamelog);
-			addstrAlt(" snatches ", gamelog);
-			addstrAlt(t.name, gamelog);
-			addstrAlt("!", gamelog);
-			gamelog.newline(); //New line.
-			a.prisoner = new Creature;
-			*a.prisoner = t;
-			getkeyAlt();
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(17,  1, t.name, gamelog);
-			addstrAlt(" is struggling and screaming!", gamelog);
-			gamelog.newline(); //New line.
-			getkeyAlt();
-			gamelog.newline();
-			return 1;
-		}
-		else
-		{
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, a.name, gamelog);
-			addstrAlt(" grabs at ", gamelog);
-			addstrAlt(t.name, gamelog);
-			gamelog.newline(); //New line.
-			mvaddstrAlt(17,  1, "but ", gamelog);
-			addstrAlt(t.name, gamelog);
-			addstrAlt(" writhes away!", gamelog);
-			gamelog.newline(); //New line.
-			getkeyAlt();
-			gamelog.newline();
-			return 0;
-		}
-	}
-	else
-	{
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, a.name, gamelog);
-		addstrAlt(" shows ", gamelog);
-		addstrAlt(t.name, gamelog);
-		addstrAlt(" the ", gamelog);
-		addstrAlt(a.get_weapon().get_name(2), gamelog);
-		addstrAlt(singleSpace, gamelog);
-		mvaddstrAlt(17,  1, "and says, ", gamelog);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		if (lawList[LAW_FREESPEECH] == -2)addstrAlt("\"[Please], be cool.\"", gamelog);
-		else addstrAlt("\"Bitch, be cool.\"", gamelog);
-		a.prisoner = new Creature;
-		*a.prisoner = t;
-		getkeyAlt();
-		gamelog.newline();
-		return 1;
-	}
-}
-/* hostage freed due to host unable to haul */
-void freehostage(Creature &cr, char situation)
-{
-	if (cr.prisoner == NULL)return;
-	if (cr.prisoner->alive)
-	{
-		if (situation == 0)
-		{
-			if (cr.prisoner->squadid == -1)addstrAlt(" and a hostage is freed", gamelog);
-			else
-			{
-				addstrAlt(AND, gamelog);
-				addstrAlt(cr.prisoner->name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured", gamelog);
-				else addstrAlt(" is captured", gamelog);
-			}
-			gamelog.newline(); //New line.
-		}
-		else if (situation == 1)
-		{
-			clearmessagearea();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, "A hostage escapes!", gamelog);
-			else
-			{
-				mvaddstrAlt(16, 1, cr.prisoner->name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured.", gamelog);
-				else addstrAlt(" is captured.", gamelog);
-			}
-			gamelog.newline(); //New line.
-		}
-		else if (situation == 2)
-		{
-			//Don't print anything.
-		}
-		if (cr.prisoner->squadid == -1)
-		{
-			for (int e = 0; e < ENCMAX; e++)
-			{
-				if (encounter[e].exists == 0)
-				{
-					encounter[e] = *cr.prisoner;
-					encounter[e].exists = 1;
-					conservatise(encounter[e]);
-					break;
-				}
-			}
-			delete cr.prisoner;
-		}
-		else capturecreature(*cr.prisoner);
-	}
-	else
-	{
-		if (cr.prisoner->squadid != -1)
-		{
-			removesquadinfo(*cr.prisoner);
-			cr.prisoner->die();
-			cr.prisoner->location = -1;
-		}
-	}
-	cr.prisoner = NULL;
-	if (situation == 1)
-	{
-		printparty();
-		if (mode == GAMEMODE_CHASECAR ||
-			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-		else printencounter();
-		getkeyAlt();
-	}
-}
+
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {

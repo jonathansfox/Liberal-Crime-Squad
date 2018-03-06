@@ -53,19 +53,9 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 #include "creature/creature.h"
-//#include "pdcurses/curses.h"
-
-#include "common/getnames.h"
-std::string gettitle(Creature &cr);
-//own header
-
-
 
 #include <cursesAlternative.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
  vector<string> city_names;
 
  extern short lawList[LAWNUM];
@@ -197,6 +187,15 @@ std::string getmonth(int month, bool shortname)
 		return getMonth[22 + (shortname ? 0 : 1)];
 	}
 }
+
+const string names = "names\\";
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> get_names_text_file_collection = {
+
+	/*getnames.cpp*/
+	customText(&city_names, names + "city_names.txt"),
+	customText(&getMonth, mostlyendings + "getMonth.txt"),
+};
  shortAndString getAlignString;
  string moderateLC;
  string buggyString;
@@ -211,20 +210,4 @@ std::string getalign(short alignment, bool capitalize)
 	else {
 		return buggyString;
 	}
-}
-/* Allow the player to enter a name with an optional default */
-void enter_name(int y, int x, char *name, int len, const char* defname)
-{
-	refreshAlt();
-	keypadAlt(FALSE);
-	raw_outputAlt(FALSE);
-	echoAlt();
-	curs_setAlt(1);
-	mvgetnstrAlt(y, x, name, len - 1); //-1 because 'len' is normally the full space available and we need one for a terminator.
-	curs_setAlt(0);
-	noechoAlt();
-	raw_outputAlt(TRUE);
-	keypadAlt(TRUE);
-	if ((defname != NULL) && (strncmp(name, "", len - 1) == 0)) strncpy(name, defname, len - 1);
-	name[len - 1] = '\0';
 }

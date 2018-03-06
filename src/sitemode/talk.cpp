@@ -58,19 +58,24 @@ extern Log gamelog;
 extern char newscherrybusted;
 extern vector<Location *> location;
 extern short exec[EXECNUM];
+#include "customMaps.h"
  vector<vector<string>> no_free_speech_flirt;
  vector<vector<string>> pickupLines;
+ vector<vector<string>> lovingly_talk_to_mutant;
+ vector<vector<string>> normal_talk_to_mutant;
+ vector<vector<string>> lovingly_talk_to_dog;
+ vector<vector<string>> normal_talk_to_dog;
  vector<string> dog_rejection;
  vector<string> mutant_rejection;
  vector<string> that_is_disturbing;
  vector<string> that_is_not_disturbing;
- vector<vector<string>> lovingly_talk_to_dog;
- vector<vector<string>> normal_talk_to_dog;
- vector<vector<string>> lovingly_talk_to_mutant;
- vector<vector<string>> normal_talk_to_mutant;
  vector<string> robbing_bank;
  vector<string> teller_gestures;
  vector<string> teller_complies;
+ const string talky = "talk\\";
+ const int PICKUP_LINE_SIZE = 5;
+ const int DOUBLE_LINE = 2;
+
  vector<string> come_at_me_bro;
  vector<string> backs_off;
  vector<string> threaten_hostage;
@@ -81,6 +86,37 @@ extern short exec[EXECNUM];
  vector<string> let_hostages_go;
  vector<string> go_ahead_and_die;
  vector<string> agree_to_release_hostages;
+ const string talk_combat = "talk_combat\\";
+ vector<file_and_text_collection> talk_file_collection = {
+
+	 /*talk.cpp*/
+	 customText(&no_free_speech_flirt, talky + "no_free_speech_flirt.txt", PICKUP_LINE_SIZE),
+	 customText(&pickupLines, talky + "pickupLines.txt", PICKUP_LINE_SIZE),
+	 customText(&lovingly_talk_to_mutant, talky + "lovingly_talk_to_mutant.txt", DOUBLE_LINE),
+	 customText(&normal_talk_to_mutant, talky + "normal_talk_to_mutant.txt", DOUBLE_LINE),
+	 customText(&lovingly_talk_to_dog, talky + "lovingly_talk_to_dog.txt", DOUBLE_LINE),
+	 customText(&normal_talk_to_dog, talky + "normal_talk_to_dog.txt", DOUBLE_LINE),
+	 customText(&dog_rejection, talky + "dog_rejection.txt"),
+	 customText(&mutant_rejection, talky + "mutant_rejection.txt"),
+	 customText(&that_is_disturbing, talky + "that_is_disturbing.txt"),
+	 customText(&that_is_not_disturbing, talky + "that_is_not_disturbing.txt"),
+	 customText(&robbing_bank, talky + "robbing_bank.txt"),
+	 customText(&teller_gestures, talky + "teller_gestures.txt"),
+	 customText(&teller_complies, talky + "teller_complies.txt"),
+	 //talk in combat
+	 customText(&come_at_me_bro, talk_combat + "come_at_me_bro.txt"),
+	 customText(&backs_off, talk_combat + "backs_off.txt"),
+	 customText(&threaten_hostage, talk_combat + "threaten_hostage.txt"),
+	 customText(&please_spare_hostage, talk_combat + "please_spare_hostage.txt"),
+	 customText(&who_cares_about_hostage, talk_combat + "who_cares_about_hostage.txt"),
+	 customText(&hostage_negotiation, talk_combat + "hostage_negotiation.txt"),
+	 customText(&please_no_more, talk_combat + "please_no_more.txt"),
+	 customText(&let_hostages_go, talk_combat + "let_hostages_go.txt"),
+	 customText(&go_ahead_and_die, talk_combat + "go_ahead_and_die.txt"),
+	 customText(&agree_to_release_hostages, talk_combat + "agree_to_release_hostages.txt"),
+ };
+
+
 string while_naked;
 char heyMisterDog(Creature &a, Creature &tk);
 char heyMisterMonster(Creature &a, Creature &tk);
@@ -1860,4 +1896,879 @@ char heyMisterMonster(Creature &a, Creature &tk)
 			if (encounter[i].type == CREATURE_GENETIC)
 				encounter[i].align = ALIGN_LIBERAL;
 	return 1;
+}
+
+
+
+
+extern string findingBugs;
+extern string undefined;
+extern string NONE;
+extern string YEA;
+extern string NAY;
+extern string AND;
+extern string counts_of;
+extern string feels_sick_and;
+extern string check_status_of_squad_liberal;
+extern string show_squad_liberal_status;
+extern string change_squad_order;
+extern string string_sleeper;
+extern string execution_in_three_months;
+extern string major_news_take_it_up;
+extern string they_are_stashed;
+extern string they_ll_round_you_up;
+extern string conservativesRemakeWorld;
+extern string bound_to_rile_up;
+extern string establishPrisonReform;
+extern string improvePrisonConditions;
+extern string stalinistsRemakeWorld;
+extern string chooseALiberalTo;
+extern string youWentOnVacation;
+extern string youWentIntoHiding;
+extern string whileYouWereInPrison;
+extern string youDisappearedSafely;
+
+extern string proposeConservative;
+extern string proposeStalinist;
+
+extern string tag_creature;
+extern string tag_skill_experience;
+extern string tag_name;
+extern string tag_propername;
+extern string tag_gender_conservative;
+extern string tag_gender_liberal;
+extern string tag_squadid;
+extern string tag_age;
+extern string tag_birthday_month;
+extern string tag_birthday_day;
+extern string tag_exists;
+extern string tag_align;
+extern string tag_alive;
+extern string tag_type_idname;
+extern string tag_infiltration;
+extern string tag_animalgloss;
+extern string tag_specialattack;
+extern string tag_clinic;
+extern string tag_dating;
+extern string tag_hiding;
+extern string tag_trainingtime;
+extern string tag_trainingsubject;
+extern string tag_prisoner;
+extern string tag_sentence;
+extern string tag_confessions;
+extern string tag_deathpenalty;
+extern string tag_joindays;
+extern string tag_deathdays;
+extern string tag_id;
+extern string tag_hireid;
+extern string tag_meetings;
+extern string tag_forceinc;
+extern string tag_stunned;
+extern string tag_has_thrown_weapon;
+extern string tag_money;
+extern string tag_juice;
+extern string tag_income;
+extern string tag_wound;
+extern string tag_blood;
+extern string tag_special;
+extern string tag_crimes_suspected;
+extern string tag_heat;
+extern string tag_location;
+extern string tag_worklocation;
+extern string tag_cantbluff;
+extern string tag_base;
+extern string tag_activity;
+extern string tag_arg;
+extern string tag_arg2;
+extern string tag_carid;
+extern string tag_is_driver;
+extern string tag_pref_carid;
+extern string tag_pref_is_driver;
+extern string tag_flag;
+extern string tag_dontname;
+extern string enter_done;
+extern string beingFollowedBySwine;
+extern string lostThem;
+extern string hereTheyCome;
+extern string spaceDashSpace;
+extern string currentLocation;
+extern string safeHouse;
+extern string enemySafeHouse;
+extern string closedDown;
+extern string highSecurity;
+extern string needCar;
+extern string spaceParanthesisDollar;
+extern string paranthesisDollar;
+extern string closeParenthesis;
+extern string underSiege;
+extern string percentSign;
+extern string secrecyLevel;
+extern string heatLevel;
+extern string travelDifCity;
+extern string tag_class;
+extern string tag_WEAPON;
+extern string tag_CLIP;
+extern string tag_ARMOR;
+extern string tag_LOOT;
+extern string tag_type;
+extern string tag_description;
+extern string tag_price;
+extern string tag_sleeperprice;
+extern string tag_letter;
+extern string smellsPanic;
+extern string tag_Sta;
+extern string tag_Libp;
+extern string tag_Lib;
+extern string tag_Mod;
+extern string tag_Cons;
+extern string tag_Consp;
+
+extern string moderateLC;
+extern string buggyString;
+
+
+extern string isSeized;
+
+extern string selectA;
+extern string selectAn;
+extern string enterDash;
+
+
+extern string accordingToSourcesAtScene;
+extern string accordingToPoliceSources;
+extern string ampersandR;
+extern string singleDot;
+
+extern string membersOfLCS;
+extern string lcsSpokeseperson;
+extern string policeSpokesperson;
+extern string pressKeyToReflect;
+
+
+extern string pressLToViewHighScores;
+extern string ampersandC;
+extern string saysComma;
+extern string while_naked;
+extern string respondsComma;
+extern string colonSpace;
+
+string singleSpace = " ";
+string commaSpace;
+
+extern string theLCS;
+extern string notASkill;
+extern string notAnAttribute;
+
+extern string vehicleSportsCar;
+
+extern string aNewConEra;
+extern string theYearIs;
+extern string conservativePresident;
+extern string endsSecondTerm;
+extern string highSeventiesApprovePres;
+extern string conMajorityHouse;
+extern string senateConMajority;
+extern string beginningOfNew;
+extern string conEra;
+extern string thePresident;
+extern string hasAskedCongressBeQuick;
+extern string rubberStampArchCon;
+extern string theLeftSeems;
+extern string powerlessToStop;
+extern string inThisDarkTime;
+extern string whatIsYourName;
+extern string pressEnterToBeRealName;
+
+extern string invalidTag;
+extern string theDocSaid;
+extern string aBoy;
+extern string aGirl;
+extern string intersex;
+extern string myParents;
+extern string insistedOtherwise;
+extern string they;
+extern string namedMe;
+
+extern string error;
+
+extern string theFounder;
+extern string firstName;
+extern string pressAtoReconsider;
+extern string lastName;
+extern string pressBtoBeReborn;
+extern string sexIs;
+extern string male;
+extern string female;
+extern string itsComplicated;
+extern string pressCtoChangeSex;
+extern string history;
+extern string letMeChoose;
+extern string letFateDecide;
+extern string pressDtoToggle;
+extern string city;
+extern string pressEtoRelocate;
+extern string pressAnyKey;
+extern string allOptions;
+
+extern string unSelected;
+extern string isSelected;
+extern string pressAnyOtherKey;
+
+extern string notCreature;
+extern string notValidMap;
+extern string notSpecialWound;
+extern string newGameAdvanced;
+extern string a_classicMode;
+extern string b_weDidntStartIt;
+extern string c_nightmareMode;
+extern string d_nationalLCS;
+extern string e_marathonMode;
+extern string f_stalinistMode;
+extern string newGameYourAgenda;
+extern string a_noComprimise;
+extern string b_democrat;
+extern string newGameFieldLearn;
+extern string affectsTheseSkills;
+extern string a_fastSkills;
+extern string b_classic;
+extern string c_hardMode;
+
+
+extern string deleteSave;
+extern string chooseSave;
+extern string titleScreenLine;
+extern string newGame;
+extern string pressToSelectSave;
+extern string pressToDeleteSave;
+extern string vToSwitchXToQuit;
+
+extern string areYouSureDelte;
+extern string questionYSlashN;
+extern string pressMtoTurnOffMusic;
+extern string pressMtoTurnOnMusic;
+
+extern string inWhatWorld;
+extern string enterNameForSave;
+extern string pleaseEnterName;
+extern string prettyPlease;
+extern string justEnterName;
+
+extern string liberalCrimeSquad;
+extern string inspiredByOubliette;
+extern string copyrightTarn;
+extern string bayTwelveProductions;
+extern string lcsHyperlink;
+extern string vChar;
+extern string maintainedByOpenSource;
+extern string kingDrakeHyperlink;
+extern string lcsForumHyperlink;
+extern string lcsWikiHyperlink;
+extern string pressESCToQuit;
+extern string pressAnyKeyToPursue;
+extern string plusChar;
+
+extern string dotDat;
+
+extern string itemType;
+extern string doesNotExistItem;
+extern string vehicleType;
+extern string doesNotExistVehicle;
+extern string couldNotLoad;
+
+extern string itemClassClip;
+extern string itemClassWeapon;
+extern string itemClassArmor;
+extern string itemClassLoot;
+extern string itemClassMoney;
+
+extern string failedToLoadSitemaps;
+extern string debugCode;
+extern string activated;
+extern string failedToLoad;
+extern string exclamationPoint;
+extern string defaultMissingForMask;
+extern string defaultUnknownForMask;
+
+extern string ableToStopBleed;
+extern string sWounds;
+extern string isBurned;
+extern string drops;
+extern string sBody;
+
+
+extern string hasBeenCaughtSnooping;
+extern string isNowHomeless;
+extern string hasLeakedIntelligence;
+extern string hasLeakedPolice;
+extern string hasLeakedCorporate;
+extern string hasLeakedPrison;
+extern string hasLeakedCableNews;
+extern string hasLeakedAMRadio;
+extern string hasLeakedAnimalResearch;
+extern string hasLeakedJudiciary;
+extern string papersAreStashed;
+extern string hasLeakedCCS;
+extern string diskIsStashed;
+
+extern string arrestedWhileEmbezzling;
+extern string arrestedWhileStealing;
+
+extern string droppedOffPackage;
+extern string itemNotFound;
+extern string lostStolenItem;
+extern string contactModAuthor;
+
+extern string hasRecruited;
+extern string looksForwardToServing;
+
+extern string toSpend;
+extern string chooseAColor;
+extern string theseColorsAreCon;
+extern string thisColor;
+extern string notEnoughMoney;
+extern string chooseVehicle;
+extern string thisVehicle;
+extern string weDontNeedCar;
+
+extern string enterLeave;
+extern string b_chooseBuyer;
+extern string s_sellCar;
+extern string s_sellThe;
+extern string g_getCar;
+extern string f_fixWounds;
+
+extern string univer;
+extern string numRecruit;
+extern string numMartyr;
+extern string numKills;
+extern string numKidnap;
+extern string cashTaxed;
+extern string cashSpent;
+extern string flagsBought;
+extern string flagsBurned;
+extern string noValid;
+extern string heLiElite;
+extern string heLiLiber;
+extern string heLiBrought;
+extern string heLiBlot;
+extern string heLiMob;
+extern string heLiDownsized;
+extern string heLiKIA;
+extern string hecoReag;
+extern string heLiDie;
+extern string heLiExec;
+extern string heLiVaca;
+extern string heLiHide;
+extern string heLiHunted;
+extern string heLiScattered;
+extern string heLiOutCrime;
+extern string heLiBurned;
+extern string hecoStalinized;
+extern string dotSpace;
+
+extern string liberalHelpOn;
+extern string pressAnyKeyToReturn;
+
+string study_string1;
+string study_string2;
+
+vector<string> allText;
+
+vector<file_and_text_collection> text_file_collection = {
+
+	customText(&allText, "allText.txt"),
+
+};
+
+vector<string*> allTextString = {
+	&respondsComma,
+	&saysComma,
+	&while_naked,
+	&colonSpace,
+	&pressLToViewHighScores,
+	&ampersandC,
+	&commaSpace,
+	&findingBugs,
+	&undefined,
+	&NONE,
+	&YEA,
+	&NAY,
+	&AND,
+	&counts_of,
+	&feels_sick_and,
+	&show_squad_liberal_status,
+	&change_squad_order,
+	&string_sleeper,
+	&execution_in_three_months,
+	&major_news_take_it_up,
+	&they_are_stashed,
+	&they_ll_round_you_up,
+	&conservativesRemakeWorld,
+	&bound_to_rile_up,
+	&establishPrisonReform,
+	&improvePrisonConditions,
+	&stalinistsRemakeWorld,
+	&chooseALiberalTo,
+	&youWentOnVacation,
+	&youWentIntoHiding,
+	&whileYouWereInPrison,
+	&youDisappearedSafely,
+	&proposeConservative,
+	&proposeStalinist,
+	&tag_creature,
+	&tag_skill_experience,
+	&tag_name,
+	&tag_propername,
+	&tag_gender_conservative,
+	&tag_gender_liberal,
+	&tag_squadid,
+	&tag_age,
+	&tag_birthday_month,
+	&tag_birthday_day,
+	&tag_exists,
+	&tag_align,
+	&tag_alive,
+	&tag_type_idname,
+	&tag_infiltration,
+	&tag_animalgloss,
+	&tag_specialattack,
+	&tag_clinic,
+	&tag_dating,
+	&tag_hiding,
+	&tag_trainingtime,
+	&tag_trainingsubject,
+	&tag_prisoner,
+	&tag_sentence,
+	&tag_confessions,
+	&tag_deathpenalty,
+	&tag_joindays,
+	&tag_deathdays,
+	&tag_id,
+	&tag_hireid,
+	&tag_meetings,
+	&tag_forceinc,
+	&tag_stunned,
+	&tag_has_thrown_weapon,
+	&tag_money,
+	&tag_juice,
+	&tag_income,
+	&tag_wound,
+	&tag_blood,
+	&tag_special,
+	&tag_crimes_suspected,
+	&tag_heat,
+	&tag_location,
+	&tag_worklocation,
+	&tag_cantbluff,
+	&tag_base,
+	&tag_activity,
+	&tag_arg,
+	&tag_arg2,
+	&tag_carid,
+	&tag_is_driver,
+	&tag_pref_carid,
+	&tag_pref_is_driver,
+	&tag_flag,
+	&tag_dontname,
+	&enter_done,
+	&beingFollowedBySwine,
+	&lostThem,
+	&hereTheyCome,
+	&spaceDashSpace,
+	&currentLocation,
+	&safeHouse,
+	&enemySafeHouse,
+	&closedDown,
+	&highSecurity,
+	&needCar,
+	&spaceParanthesisDollar,
+	&paranthesisDollar,
+	&closeParenthesis,
+	&underSiege,
+	&percentSign,
+	&secrecyLevel,
+	&heatLevel,
+	&travelDifCity,
+	&tag_class,
+	&tag_WEAPON,
+	&tag_CLIP,
+	&tag_ARMOR,
+	&tag_LOOT,
+	&tag_type,
+	&tag_description,
+	&tag_price,
+	&tag_sleeperprice,
+	&tag_letter,
+	&smellsPanic,
+	&tag_Sta,
+	&tag_Libp,
+	&tag_Lib,
+	&tag_Mod,
+	&tag_Cons,
+	&tag_Consp,
+	&moderateLC,
+	&buggyString,
+	&isSeized,
+	&selectA,
+	&selectAn,
+	&enterDash,
+	&accordingToSourcesAtScene,
+	&accordingToPoliceSources,
+	&ampersandR,
+	&singleDot,
+	&membersOfLCS,
+	&lcsSpokeseperson,
+	&policeSpokesperson,
+	&pressKeyToReflect,
+	&theLCS,
+	&notASkill,
+	&notAnAttribute,
+	&vehicleSportsCar,
+	&aNewConEra,
+	&theYearIs,
+	&conservativePresident,
+	&endsSecondTerm,
+	&highSeventiesApprovePres,
+	&conMajorityHouse,
+	&senateConMajority,
+	&beginningOfNew,
+	&conEra,
+	&thePresident,
+	&hasAskedCongressBeQuick,
+	&rubberStampArchCon,
+	&theLeftSeems,
+	&powerlessToStop,
+	&inThisDarkTime,
+	&whatIsYourName,
+	&pressEnterToBeRealName,
+	&invalidTag,
+	&theDocSaid,
+	&aBoy,
+	&aGirl,
+	&intersex,
+	&myParents,
+	&insistedOtherwise,
+	&they,
+	&namedMe,
+	&error,
+	&theFounder,
+	&firstName,
+	&pressAtoReconsider,
+	&lastName,
+	&pressBtoBeReborn,
+	&sexIs,
+	&male,
+	&female,
+	&itsComplicated,
+	&pressCtoChangeSex,
+	&history,
+	&letMeChoose,
+	&letFateDecide,
+	&pressDtoToggle,
+	&city,
+	&pressEtoRelocate,
+	&pressAnyKey,
+	&allOptions,
+	&unSelected,
+	&isSelected,
+	&pressAnyOtherKey,
+	&notCreature,
+	&notValidMap,
+	&notSpecialWound,
+	&newGameAdvanced,
+	&a_classicMode,
+	&b_weDidntStartIt,
+	&c_nightmareMode,
+	&d_nationalLCS,
+	&e_marathonMode,
+	&f_stalinistMode,
+	&newGameYourAgenda,
+	&a_noComprimise,
+	&b_democrat,
+	&newGameFieldLearn,
+	&affectsTheseSkills,
+	&a_fastSkills,
+	&b_classic,
+	&c_hardMode,
+	&deleteSave,
+	&chooseSave,
+	&titleScreenLine,
+	&newGame,
+	&pressToSelectSave,
+	&pressToDeleteSave,
+	&vToSwitchXToQuit,
+	&areYouSureDelte,
+	&questionYSlashN,
+	&pressMtoTurnOffMusic,
+	&pressMtoTurnOnMusic,
+	&inWhatWorld,
+	&enterNameForSave,
+	&pleaseEnterName,
+	&prettyPlease,
+	&justEnterName,
+	&liberalCrimeSquad,
+	&inspiredByOubliette,
+	&copyrightTarn,
+	&bayTwelveProductions,
+	&lcsHyperlink,
+	&vChar,
+	&maintainedByOpenSource,
+	&kingDrakeHyperlink,
+	&lcsForumHyperlink,
+	&lcsWikiHyperlink,
+	&pressESCToQuit,
+	&pressAnyKeyToPursue,
+	&plusChar,
+	&dotDat,
+	&itemType,
+	&doesNotExistItem,
+	&vehicleType,
+	&doesNotExistVehicle,
+	&couldNotLoad,
+	&itemClassClip,
+	&itemClassWeapon,
+	&itemClassArmor,
+	&itemClassLoot,
+	&itemClassMoney,
+	&failedToLoadSitemaps,
+	&debugCode,
+	&activated,
+	&failedToLoad,
+	&exclamationPoint,
+	&defaultMissingForMask,
+	&defaultUnknownForMask,
+	&ableToStopBleed,
+	&sWounds,
+	&isBurned,
+	&drops,
+	&sBody,
+	&hasBeenCaughtSnooping,
+	&isNowHomeless,
+	&hasLeakedIntelligence,
+	&hasLeakedPolice,
+	&hasLeakedCorporate,
+	&hasLeakedPrison,
+	&hasLeakedCableNews,
+	&hasLeakedAMRadio,
+	&hasLeakedAnimalResearch,
+	&hasLeakedJudiciary,
+	&papersAreStashed,
+	&hasLeakedCCS,
+	&diskIsStashed,
+	&arrestedWhileEmbezzling,
+	&arrestedWhileStealing,
+	&droppedOffPackage,
+	&itemNotFound,
+	&lostStolenItem,
+	&contactModAuthor,
+	&hasRecruited,
+	&looksForwardToServing,
+	&toSpend,
+	&chooseAColor,
+	&theseColorsAreCon,
+	&thisColor,
+	&notEnoughMoney,
+	&chooseVehicle,
+	&thisVehicle,
+	&weDontNeedCar,
+	&enterLeave,
+	&b_chooseBuyer,
+	&s_sellCar,
+	&s_sellThe,
+	&g_getCar,
+	&f_fixWounds,
+	&univer,
+	&numRecruit,
+	&numMartyr,
+	&numKills,
+	&numKidnap,
+	&cashTaxed,
+	&cashSpent,
+	&flagsBought,
+	&flagsBurned,
+	&noValid,
+	&heLiElite,
+	&heLiLiber,
+	&heLiBrought,
+	&heLiBlot,
+	&heLiMob,
+	&heLiDownsized,
+	&heLiKIA,
+	&hecoReag,
+	&heLiDie,
+	&heLiExec,
+	&heLiVaca,
+	&heLiHide,
+	&heLiHunted,
+	&heLiScattered,
+	&heLiOutCrime,
+	&heLiBurned,
+	&hecoStalinized,
+	&dotSpace,
+	&unnamed_String_Talk_cpp_000,
+	&unnamed_String_Talk_cpp_001,
+	&unnamed_String_Talk_cpp_002,
+	&unnamed_String_Talk_cpp_003,
+	&unnamed_String_Talk_cpp_004,
+	&unnamed_String_Talk_cpp_005,
+	&unnamed_String_Talk_cpp_006,
+	&unnamed_String_Talk_cpp_007,
+	&unnamed_String_Talk_cpp_008,
+	&unnamed_String_Talk_cpp_009,
+	&unnamed_String_Talk_cpp_010,
+	&unnamed_String_Talk_cpp_011,
+	&unnamed_String_Talk_cpp_012,
+	&unnamed_String_Talk_cpp_013,
+	&unnamed_String_Talk_cpp_014,
+	&unnamed_String_Talk_cpp_015,
+	&unnamed_String_Talk_cpp_016,
+	&unnamed_String_Talk_cpp_017,
+	&unnamed_String_Talk_cpp_018,
+	&unnamed_String_Talk_cpp_019,
+	&unnamed_String_Talk_cpp_020,
+	&unnamed_String_Talk_cpp_021,
+	&unnamed_String_Talk_cpp_022,
+	&unnamed_String_Talk_cpp_023,
+	&unnamed_String_Talk_cpp_024,
+	&unnamed_String_Talk_cpp_025,
+	&unnamed_String_Talk_cpp_026,
+	&unnamed_String_Talk_cpp_027,
+	&unnamed_String_Talk_cpp_028,
+	&unnamed_String_Talk_cpp_029,
+	&unnamed_String_Talk_cpp_030,
+	&unnamed_String_Talk_cpp_031,
+	&unnamed_String_Talk_cpp_032,
+	&unnamed_String_Talk_cpp_033,
+	&unnamed_String_Talk_cpp_034,
+	&unnamed_String_Talk_cpp_035,
+	&unnamed_String_Talk_cpp_036,
+	&unnamed_String_Talk_cpp_037,
+	&unnamed_String_Talk_cpp_038,
+	&unnamed_String_Talk_cpp_039,
+	&unnamed_String_Talk_cpp_040,
+	&unnamed_String_Talk_cpp_041,
+	&unnamed_String_Talk_cpp_042,
+	&unnamed_String_Talk_cpp_043,
+	&unnamed_String_Talk_cpp_044,
+	&unnamed_String_Talk_cpp_045,
+	&unnamed_String_Talk_cpp_046,
+	&unnamed_String_Talk_cpp_047,
+	&unnamed_String_Talk_cpp_048,
+	&unnamed_String_Talk_cpp_049,
+	&unnamed_String_Talk_cpp_050,
+	&unnamed_String_Talk_cpp_051,
+	&unnamed_String_Talk_cpp_052,
+	&unnamed_String_Talk_cpp_053,
+	&unnamed_String_Talk_cpp_054,
+	&unnamed_String_Talk_cpp_055,
+	&unnamed_String_Talk_cpp_056,
+	&unnamed_String_Talk_cpp_057,
+	&unnamed_String_Talk_cpp_058,
+	&unnamed_String_Talk_cpp_059,
+	&unnamed_String_Talk_cpp_060,
+	&unnamed_String_Talk_cpp_061,
+	&unnamed_String_Talk_cpp_062,
+	&unnamed_String_Talk_cpp_063,
+	&unnamed_String_Talk_cpp_064,
+	&unnamed_String_Talk_cpp_065,
+	&unnamed_String_Talk_cpp_066,
+	&unnamed_String_Talk_cpp_067,
+	&unnamed_String_Talk_cpp_068,
+	&unnamed_String_Talk_cpp_069,
+	&unnamed_String_Talk_cpp_070,
+	&unnamed_String_Talk_cpp_071,
+	&unnamed_String_Talk_cpp_072,
+	&unnamed_String_Talk_cpp_073,
+	&unnamed_String_Talk_cpp_074,
+	&unnamed_String_Talk_cpp_075,
+	&unnamed_String_Talk_cpp_076,
+	&unnamed_String_Talk_cpp_077,
+	&unnamed_String_Talk_cpp_078,
+	&unnamed_String_Talk_cpp_079,
+	&unnamed_String_Talk_cpp_080,
+	&unnamed_String_Talk_cpp_081,
+	&unnamed_String_Talk_cpp_082,
+	&unnamed_String_Talk_cpp_083,
+	&unnamed_String_Talk_cpp_084,
+	&unnamed_String_Talk_cpp_085,
+	&unnamed_String_Talk_cpp_086,
+	&unnamed_String_Talk_cpp_087,
+	&unnamed_String_Talk_cpp_088,
+	&unnamed_String_Talk_cpp_089,
+	&unnamed_String_Talk_cpp_090,
+	&unnamed_String_Talk_cpp_091,
+	&unnamed_String_Talk_cpp_092,
+	&unnamed_String_Talk_cpp_093,
+	&unnamed_String_Talk_cpp_094,
+	&unnamed_String_Talk_cpp_095,
+	&unnamed_String_Talk_cpp_096,
+	&unnamed_String_Talk_cpp_097,
+	&unnamed_String_Talk_cpp_098,
+	&unnamed_String_Talk_cpp_099,
+	&unnamed_String_Talk_cpp_100,
+	&unnamed_String_Talk_cpp_101,
+	&unnamed_String_Talk_cpp_102,
+	&unnamed_String_Talk_cpp_103,
+	&unnamed_String_Talk_cpp_104,
+	&unnamed_String_Talk_cpp_105,
+	&unnamed_String_Talk_cpp_106,
+	&unnamed_String_Talk_cpp_107,
+	&unnamed_String_Talk_cpp_108,
+	&unnamed_String_Talk_cpp_109,
+	&unnamed_String_Talk_cpp_110,
+	&unnamed_String_Talk_cpp_111,
+	&unnamed_String_Talk_cpp_112,
+	&unnamed_String_Talk_cpp_113,
+	&unnamed_String_Talk_cpp_114,
+	&unnamed_String_Talk_cpp_115,
+	&unnamed_String_Talk_cpp_116,
+	&unnamed_String_Talk_cpp_117,
+	&unnamed_String_Talk_cpp_118,
+	&unnamed_String_Talk_cpp_119,
+	&unnamed_String_Talk_cpp_120,
+	&unnamed_String_Talk_cpp_121,
+	&unnamed_String_Talk_cpp_122,
+	&unnamed_String_Talk_cpp_123,
+	&unnamed_String_Talk_cpp_124,
+	&unnamed_String_Talk_cpp_125,
+	&unnamed_String_Talk_cpp_126,
+	&unnamed_String_Talk_cpp_127,
+	&unnamed_String_Talk_cpp_128,
+	&unnamed_String_Talk_cpp_129,
+	&unnamed_String_Talk_cpp_130,
+	&unnamed_String_Talk_cpp_131,
+	&unnamed_String_Talk_cpp_132,
+	&unnamed_String_Talk_cpp_133,
+	&unnamed_String_Talk_cpp_134,
+	&unnamed_String_Talk_cpp_135,
+	&unnamed_String_Talk_cpp_136,
+	&unnamed_String_Talk_cpp_137,
+	&unnamed_String_Talk_cpp_138,
+	&unnamed_String_Talk_cpp_139,
+	&unnamed_String_Talk_cpp_140,
+	&unnamed_String_Talk_cpp_141,
+	&unnamed_String_Talk_cpp_142,
+	&unnamed_String_Talk_cpp_143,
+	&unnamed_String_Talk_cpp_144,
+	&unnamed_String_Talk_cpp_145,
+	&unnamed_String_Talk_cpp_146,
+	&unnamed_String_Talk_cpp_147,
+	&unnamed_String_Talk_cpp_148,
+	&unnamed_String_Talk_cpp_149,
+	&liberalHelpOn,
+	&pressAnyKeyToReturn,
+	&study_string1,
+	&study_string2,
+};
+
+
+bool initialize_incomplete_txt();
+bool initialize_incomplete_txt() {
+	int i = 0;
+	check_status_of_squad_liberal.append("# ");
+	check_status_of_squad_liberal.append(allText[i++]);
+	for (string* str : allTextString) {
+		*str = allText[i++];
+	}
+	return i == len(allText);
 }

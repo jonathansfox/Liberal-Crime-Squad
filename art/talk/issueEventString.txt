@@ -1,0 +1,48 @@
+VIEW_DRUGS
+a collection of studies on the health effects of marijuana
+VIEW_MILITARY
+a book on the history of military atrocities
+VIEW_IMMIGRATION
+a reality TV episode on the lives of immigrants
+VIEW_CIVILRIGHTS
+a documentary on the civil rights struggle
+VIEW_WOMEN
+a documentary on the women's rights struggle
+VIEW_GAY
+a documentary on the gay rights struggle
+VIEW_DEATHPENALTY
+a research paper on abuses of the death penalty
+VIEW_TAXES
+an economic paper on the flaws of trickle-down
+VIEW_NUCLEARPOWER
+a video tour of the Chernobyl dead zone
+VIEW_ANIMALRESEARCH
+a documentary on animal research
+VIEW_POLICEBEHAVIOR
+a hand-recorded video of police brutality
+VIEW_TORTURE
+a government inquiry into military interrogations
+VIEW_PRISONS
+a documentary on the prisoners' suffering
+VIEW_INTELLIGENCE
+a documentary on privacy rights
+VIEW_FREESPEECH
+a collection of banned books
+VIEW_GENETICS
+a video about genetic engineering accidents
+VIEW_JUSTICES
+a Liberal policy paper inquiring into judicial decisions
+VIEW_GUNCONTROL
+a book profiling school shootings
+VIEW_SWEATSHOPS
+a hand-recorded video of unregulated sweatshops
+VIEW_POLLUTION
+a leaked government paper on environmental conditions
+VIEW_CORPORATECULTURE
+a documentary on life under corporate culture
+VIEW_CEOSALARY
+a Liberal think-tank survey of top CEO salaries
+VIEW_AMRADIO
+a collection of Conservative radio host rants
+VIEW_CABLENEWS
+a collection of leaked Conservative cable news memos

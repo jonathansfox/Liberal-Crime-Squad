@@ -26,45 +26,38 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 #include "creature/creature.h"
-//#include "pdcurses/curses.h"
-#include "cursesgraphics.h"
 
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
+//#include "cursesgraphics.h"
+#define CH_BOX_DRAWINGS_LIGHT_VERTICAL 0xb3
+#define CH_UPPER_HALF_BLOCK 0xdf
+#define CH_LOWER_HALF_BLOCK 0xdc
+#define CH_BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL 0xc5
+#define CH_FULL_BLOCK 0xdb
+#define CH_LIGHT_SHADE 0xb0
+#define CH_MEDIUM_SHADE 0xb1
+#define CH_DARK_SHADE 0xb2
 
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#include "basemode/baseactions.h"
-
-
 #include "common/consolesupport.h"
-// for void set_color(short,short,bool)
 
-#include "common/getnames.h"
-// for std::string getactivity(activityst)
-     //void enter_name(int,int,char*,int,char*)
+//#include "common/getnames.h"
+void enter_name(int, int, char*, int, const char*);
 
-#include "common/commonactions.h"
-// for int squadsize(const squadst)
+//#include "common/commonactions.h"
+int squadsize(const squadst *st);
 
-//#include "log/log.h"
-// for commondisplay.h
 #include "common/commondisplay.h"
 // for void printparty(void)
-
-#include "common/stringconversion.h"
-//for char* strcat(char*, const std::string&)
-
 
 
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "locations/locationsPool.h"
+#include "common/creaturePool.h"
 extern bool multipleCityMode;
 //extern MusicClass music;
 string enter_done;
@@ -81,7 +74,15 @@ string spaceDashSpace;
  extern string singleSpace;
  extern vector<Vehicle *> vehicle;
 
-#include "common/creaturePool.h"
+
+ string chooseALiberalTo;
+ string string_sleeper;
+ vector<string> vehicleParagraph;
+
+ const string mostlyendings = "mostlyendings\\";
+ vector<file_and_text_collection> baseactions_text_file_collection = {
+	 customText(&vehicleParagraph, mostlyendings + "vehicleParagraph.txt"),
+ };
 
 /* base - burn the flag */
 void burnflag()
@@ -209,7 +210,7 @@ void getslogan()
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(16, 0, "What is your new slogan?");
 	mvaddstrAlt(17, 0, "                                                                                          "); // 80 spaces
-	enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).data());
+	enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).c_str());
 }
 /* base - reorder party */
 void orderparty()
@@ -237,9 +238,6 @@ void orderparty()
 	}
 }
 
-string chooseALiberalTo;
- string string_sleeper;
- vector<string> vehicleParagraph;
 /* base - assign a vehicle to this squad */
 void setvehicles()
 {
@@ -278,8 +276,8 @@ void setvehicles()
 				set_color_easy(WHITE_ON_BLACK);
 			str[0] = l - page * 18 + 'A';
 			str[1] = '\x0';
-			strcat(str, spaceDashSpace);
-			strcat(str, vehicle[l]->fullname(true));
+			strcat(str, spaceDashSpace.c_str());
+			strcat(str, vehicle[l]->fullname(true).c_str());
 			mvaddstrAlt(y, x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;

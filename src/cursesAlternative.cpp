@@ -1,6 +1,6 @@
 
 #include <includes.h>
-#include "creature/creatureEnums.h"
+#include "creature/creature.h"
 #include "pdcurses/curses.h"
 
 #include "log/log.h"
@@ -163,6 +163,7 @@ const ColorSetup RED_ON_RED = { COLOR_RED, COLOR_RED };
 const ColorSetup WHITE_ON_BLACK = { COLOR_WHITE, COLOR_BLACK };
 const ColorSetup WHITE_ON_BLACK_BRIGHT = { COLOR_WHITE, COLOR_BLACK, 1 };
 const ColorSetup WHITE_ON_RED_BRIGHT = { COLOR_WHITE, COLOR_RED, 1 };
+const ColorSetup WHITE_ON_BLUE_BRIGHT = { COLOR_WHITE, COLOR_BLUE, 1 };
 const ColorSetup WHITE_ON_WHITE = { COLOR_WHITE, COLOR_WHITE };
 const ColorSetup WHITE_ON_WHITE_BRIGHT = { COLOR_WHITE, COLOR_WHITE, 1 };
 const ColorSetup YELLOW_ON_BLACK = { COLOR_YELLOW, COLOR_BLACK };
@@ -196,7 +197,13 @@ This function prints the cash the player has with optional prefix as
 well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
+*//*
+This function prints the cash the player has with optional prefix as
+well as screen coordinates.
+Please note that offsetx is the offset from the right of the screen, y is
+the offset from the top as always.
 */
+
 void printfunds(int y, int offsetx, const char* prefix, long funds);
 void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
@@ -270,4 +277,168 @@ void echoAlt() {
 }
 int getkeyAlt() {
 	return getkey();
+}
+
+/* Allow the player to enter a name with an optional default */
+void enter_name(int y, int x, char *name, int len, const char* defname)
+{
+	refreshAlt();
+	keypadAlt(FALSE);
+	raw_outputAlt(FALSE);
+	echoAlt();
+	curs_setAlt(1);
+	mvgetnstrAlt(y, x, name, len - 1); //-1 because 'len' is normally the full space available and we need one for a terminator.
+	curs_setAlt(0);
+	noechoAlt();
+	raw_outputAlt(TRUE);
+	keypadAlt(TRUE);
+	if ((defname != NULL) && (strncmp(name, "", len - 1) == 0)) strncpy(name, defname, len - 1);
+	name[len - 1] = '\0';
+}
+// Removed from consolesupport.cpp
+// These 4 variables to keep track of the current color are for
+// this file only
+short curForeground = COLOR_WHITE, curBackground = COLOR_BLACK;
+bool isBright = false, isBlinking = false;
+//sets current color to desired setting
+void set_color(short f, short b, bool bright, bool blink)
+{
+	// keep track of current color
+	curForeground = f, curBackground = b, isBright = bright, isBlinking = blink;
+	//color swap required for PDcurses
+	if (f == 7 && b == 0) f = 0, b = 0;
+	else if (f == 0 && b == 0) f = 7, b = 0;
+	chtype blinky = (blink ? A_BLINK : 0), brighty = (bright ? A_BOLD : 0);
+	//pick color pair based on foreground and background
+	attrset(brighty | blinky | COLOR_PAIR(f * 8 + b));
+}
+
+/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
+int getkey()
+{
+	refresh();
+	nodelay(stdscr, TRUE);
+	while (getch() != ERR);
+	nodelay(stdscr, FALSE);
+	int c = getch();
+	translategetch(c);
+	return c;
+}
+/* Variant of getkey() that doesn't make all letters lowercase */
+int getkey_cap()
+{
+	refresh();
+	nodelay(stdscr, TRUE);
+	while (getch() != ERR);
+	nodelay(stdscr, FALSE);
+	int c = getch();
+	translategetch_cap(c);
+	return c;
+}
+/* Empties the keyboard buffer, and returns most recent key pressed, if any */
+int checkkey()
+{
+	int c = ERR, ret = ERR;
+	nodelay(stdscr, TRUE);
+	do
+	{
+		ret = c;
+		c = getch();
+		translategetch(c);
+	} while (c != ERR);
+	nodelay(stdscr, FALSE);
+	return ret;
+}
+/* Variant of checkkey() that doesn't make all letters lowercase */
+// UNUSED
+int checkkey_cap()
+{
+	int c = ERR, ret = ERR;
+	nodelay(stdscr, TRUE);
+	do
+	{
+		ret = c;
+		c = getch();
+		translategetch_cap(c);
+	} while (c != ERR);
+	nodelay(stdscr, FALSE);
+	return ret;
+}
+
+/*
+This function prints the cash the player has with optional prefix as
+well as screen coordinates.
+Please note that offsetx is the offset from the right of the screen, y is
+the offset from the top as always.
+*/
+#include "common/ledgerEnums.h"
+#include "common/ledger.h"
+extern class Ledger ledger;
+void printfunds(int y, int offsetx, const char* prefix)
+{
+	printfunds(y, offsetx, prefix, ledger.get_funds());
+}
+
+#include "locations/locationsPool.h"
+// prints a formatted name, used by promoteliberals
+void printname(Creature &cr)
+{
+	int bracketcolor = -1, namecolor, brightness;
+	if (cr.hiding)
+		bracketcolor = COLOR_BLACK;
+	// Determine bracket color, if any, based on location
+	if (cr.location != -1)
+	{
+		switch (LocationsPool::getInstance().getLocationType(cr.location))
+		{
+		case SITE_GOVERNMENT_POLICESTATION:
+		case SITE_GOVERNMENT_COURTHOUSE:
+			if (!(cr.flag & CREATUREFLAG_SLEEPER))
+				bracketcolor = COLOR_YELLOW;
+			break;
+		case SITE_GOVERNMENT_PRISON:
+			if (!(cr.flag & CREATUREFLAG_SLEEPER))
+				bracketcolor = COLOR_RED;
+			break;
+		default:
+			break;
+		}
+	}
+	// Determine name color, based on recruitment style
+	if (cr.flag & CREATUREFLAG_LOVESLAVE)
+		namecolor = COLOR_MAGENTA;
+	else if (cr.flag & CREATUREFLAG_BRAINWASHED)
+		namecolor = COLOR_YELLOW;
+	else namecolor = COLOR_WHITE;
+	// Determine name brightness, based on subordinates left
+	/*if(subordinatesleft(cr))
+	brightness=1;
+	else*/
+	brightness = 0;
+	// add bracket (if used)
+	if (bracketcolor != -1)
+	{
+		set_color(bracketcolor, COLOR_BLACK, 1);
+		addstrAlt("[");
+	}
+	if (cr.flag & CREATUREFLAG_SLEEPER)
+	{
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
+		addstrAlt("[");
+	}
+	// add name
+	set_color(namecolor, COLOR_BLACK, brightness);
+	addstrAlt(cr.name);
+	// add close bracket (if used)
+	if (cr.flag & CREATUREFLAG_SLEEPER)
+	{
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
+		addstrAlt("]");
+	}
+	if (bracketcolor != -1)
+	{
+		set_color(bracketcolor, COLOR_BLACK, 1);
+		addstrAlt("]");
+	}
+	set_color_easy(WHITE_ON_BLACK);
 }

@@ -48,6 +48,13 @@ char securityable(int type);
 #include "locations/locationsPool.h"
 extern Log gamelog;
  vector<string> was_abused;
+
+#include <customMaps.h>
+ const string activities = "activities\\";
+ vector<file_and_text_collection> misc_activities_text_file_collection = {
+	 /*miscactions.cpp*/
+	 customText(&was_abused, activities + "was_abused.txt"),
+ };
  extern short cursite;
  extern squadst *activesquad;
  extern string singleSpace;

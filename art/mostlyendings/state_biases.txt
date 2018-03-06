@@ -1,0 +1,100 @@
+# Alabama
+-3
+# Alaska
+-4
+# Arkansas
+-1
+# Arizona
+-2
+# California
++4
+# Colorado
+0
+# Connecticut
++3
+# Delaware
++3
+# Florida
+0
+# Georgia
+-2
+# Hawaii
++4
+# Idaho
+-5
+# Illinois
++4
+# Indiana
+-1
+# Iowa
++1
+# Kansas
+-3
+# Kentucky
+-3
+# Louisiana
+-1
+# Maine
++2
+# Maryland
++3
+# Massachusetts
++6
+# Michigan
++2
+# Minnesota
++2
+# Mississippi
+-4
+# Missouri
+-1
+# Montana
+-2
+# Nebraska
+-3
+# Nevada
+0
+# New Hampshire
++1
+# New Jersey
++3
+# New Mexico
++1
+# New York
++5
+# North Carolina
+-1
+# North Dakota
+-3
+# Ohio
+0
+# Oklahoma
+-4
+# Oregon
++3
+# Pennsylvania
++2
+# Rhode Island
++4
+# South Carolina
+-5
+# South Dakota
+-3
+# Tennessee
+-2
+# Texas
+-4
+# Utah
+-6
+# Vermont
++5
+# Virginia
+0
+# Washington
++3
+# West Virginia
+-2
+# Wisconsin
++2
+# Wyoming
+-5

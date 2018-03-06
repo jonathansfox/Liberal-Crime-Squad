@@ -62,35 +62,32 @@ the bottom of includes.h in the top src folder.
 #include "common/translateid.h"
 // for  int getsquad(int)
 
-#include "common/commonactions.h"
+//#include "common/commonactions.h"
+void sorting_prompt(short listforsorting);
 #include "common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
 
 #include "common/commondisplay.h"
 #include "common/commondisplayCreature.h"
 // for void printfunds(int,int,char*)
 
-#include "common/getnames.h"
-std::string gettitle(Creature &cr);
-// for std::string getactivity(activityst)
+//#include "common/getnames.h"
+string gettitle(Creature &cr);
+string getactivity(activityst &act);
 
-#include "common/equipment.h"
-//for void equip(vector<Item *>&,int)
+//#include "common/equipment.h"
+void equip(vector<Item *>&, int);
 
-#include "common/help.h"
-//for void HelpActivities(int)
+//#include "common/help.h"
+void HelpActivities(int);
 
-#include "common/stringconversion.h"
-//for string attribute_enum_to_string(int)
+//#include "common/stringconversion.h"
+string attribute_enum_to_string(int);
 
 
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-
 #include <set_color_support.h>
 #include "locations/locationsPool.h"
 #include "common/creaturePool.h"
@@ -179,7 +176,7 @@ void listclasses(Creature *cr)
 	{
 		if (i + classlist < len(data_lessons))
 		{
-			set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == data_lessons[i + classlist].activity);
+			set_color_easy(cr->activity.type == data_lessons[i + classlist].activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(12 + i, 40, to_string(i + 1).c_str());
 			addstrAlt(spaceDashSpace); addstrAlt(data_lessons[i + classlist].str);
 		}
@@ -367,7 +364,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			{
 				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
 				if (already_augmented) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				else set_color(COLOR_WHITE, COLOR_BLACK, aug_c == y + 'a' - 4);
+				else set_color_easy(aug_c == y + 'a' - 4 ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				moveAlt(y, 1);
 				addcharAlt(y + 'A' - 4); addstrAlt(spaceDashSpace);
 				addstrAlt(Augmentation::get_name(y - 4));
@@ -807,7 +804,7 @@ void select_tendhostage(Creature *cr)
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
 					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, bright);
+			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
 			printhealthstat(*temppool[p], y, 33, TRUE);
 			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -878,25 +875,25 @@ void activate(Creature *cr)
 		}
 		oldstate = state;
 		for (int i = 0; i < len(standard_activities_and_data); i++) {
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'a' + i);
+			set_color_easy(state == 'a' + i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		mvaddstrAlt(10 + i, 1, incrementChar('A', i) + spaceDashSpace + standard_activities_and_data[i]);
 	}
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 't');
-		mvaddstrAlt(14, 1, "T - Teaching Other Liberals");
-		if (hostagecount > 0)set_color(COLOR_WHITE, COLOR_BLACK, state == 'i');
+		set_color_easy(state == 't' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+		mvaddstrAlt(14, 1, "T - Teaching Other Liberals");		
+		if (hostagecount > 0)set_color_easy(state == 'i' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(15, 1, "I - Tend to a Conservative hostage");
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'l');
-		mvaddstrAlt(16, 1, "L - Learn in the University District");
-		if (clinictime(*cr)) set_color(COLOR_WHITE, COLOR_BLACK, state == 'm');
+		set_color_easy(state == 'l' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+		mvaddstrAlt(16, 1, "L - Learn in the University District");		
+		if (clinictime(*cr))set_color_easy(state == 'm' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17, 1, "M - Move to the Free Clinic");
 		if (cr->get_skill(SKILL_FIRSTAID) != 0)
-			set_color(COLOR_WHITE, COLOR_BLACK, state == 'h');
+			set_color_easy(state == 'h' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(18, 1, "H - Heal Liberals");
-		if (havedead)set_color(COLOR_WHITE, COLOR_BLACK, state == 'z');
+		if (havedead)set_color_easy(state == 'z' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(19, 1, "Z - Dispose of bodies");
 		siegest *siege = NULL;
@@ -918,7 +915,7 @@ void activate(Creature *cr)
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(20, 40, "Enter - Confirm Selection");
-		set_color(COLOR_WHITE, COLOR_BLACK, state == 'x');
+		set_color_easy(state == 'x' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		mvaddstrAlt(21, 1, "X - Nothing for Now");
 		if (state == 'l')
 		{
@@ -928,7 +925,7 @@ void activate(Creature *cr)
 		{
 			int ypos = 10;
 			for (ActivityAndString current_item : activate_menu_items[state]) {
-				set_color(COLOR_WHITE, COLOR_BLACK, cr->activity.type == current_item.activity);
+				set_color_easy(cr->activity.type == current_item.activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				moveAlt(ypos, 40);
 				if (current_item.i > 0)
 				{
@@ -1089,6 +1086,11 @@ Activity getDefaultActivityIllegalFundraising(Creature *cr) {
 		return ACTIVITY_SELL_DRUGS;
 }
 vector<string> bulkActivityString;
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> activate_text_file_collection = {
+customText(&bulkActivityString, mostlyendings + "bulkActivityString.txt"),
+customText(&standard_activities_and_data, mostlyendings + "standard_activities_and_data.txt"),
+};
 void activatebulk()
 {
 	vector<Creature *> temppool = activatable_liberals();
@@ -1104,7 +1106,8 @@ void activatebulk()
 		mvaddstrAlt(1, 51, "BULK ACTIVITY");
 		
 		for (int i = 0; i < len(bulkActivityString); i++) {
-			set_color(COLOR_WHITE, COLOR_BLACK, selectedactivity == i);
+
+			set_color_easy(selectedactivity == i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(2 + i, 51, incrementChar('1', i) + spaceDashSpace + bulkActivityString[i]);
 		}
 		int y = 2;
@@ -1217,7 +1220,7 @@ void activate()
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
 					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
 			}
-			set_color(COLOR_WHITE, COLOR_BLACK, bright);
+			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
 			printhealthstat(*temppool[p], y, 33, TRUE);
 			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);

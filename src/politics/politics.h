@@ -11,8 +11,7 @@ int presidentapproval();
 int getswingvoter(bool stalin);
 /* politics -- gets the leaning of a partyline voter for an election */
 int getsimplevoter(int leaning);
-/* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP();
+
 /* politics -- appoints a figure to an executive office, based on the President's alignment */
 void fillCabinetPost(int position);
 /* politics - causes the people to vote (presidential, congressional, propositions) */

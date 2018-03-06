@@ -1,0 +1,3 @@
+A truck pulls out in your path!
+D - Speed around it!
+F - Slow down!

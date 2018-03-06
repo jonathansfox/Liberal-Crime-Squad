@@ -11,15 +11,8 @@
 #include "common/translateid.h"
 //either of this should work for local stringconversions
 
-#include "common/stringconversion.h"
-//for strcpy
-
-
-#include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 #include "locations/locationsPool.h"
 extern bool multipleCityMode;
 extern short mode;
@@ -37,6 +30,15 @@ extern vector<ArmorType *> armortype;
 
  vector<string> words_meaning_hick;
  vector<string> genetic_monster;
+
+ const string creature = "creature\\";
+ vector<file_and_text_collection> creaturetypes_text_file_collection = {
+
+
+	 /*creaturetypes.cpp*/
+	 customText(&words_meaning_hick, creature + "words_meaning_hick.txt"),
+	 customText(&genetic_monster, creature + "genetic_monster.txt"),
+ };
 /* Age macros for characters */
 #define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
 #define AGE_CHILD       7+LCSrandom(4)   /* child laborer */
@@ -438,7 +440,7 @@ void makecreature(Creature &cr, short type)
 		cr.money = crtype->money_.roll();
 		cr.juice = crtype->juice_.roll();
 		cr.gender_liberal = cr.gender_conservative = crtype->roll_gender();
-		strcpy(cr.name, crtype->get_encounter_name());
+		strcpy(cr.name, crtype->get_encounter_name().c_str());
 		if (cr.align == ALIGN_CONSERVATIVE)
 			cr.align = LCSrandom(2);
 		break;
@@ -533,11 +535,11 @@ void makecreature(Creature &cr, short type)
 	case CREATURE_THIEF:
 		switch (LCSrandom(5))
 		{
-		case 0:strcpy(cr.name, getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name()); break;
-		case 1:strcpy(cr.name, getcreaturetype(CREATURE_CLERK)->get_encounter_name()); break;
-		case 2:strcpy(cr.name, getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name()); break;
-		case 3:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name()); break;
-		case 4:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name()); break;
+		case 0:strcpy(cr.name, getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name().c_str()); break;
+		case 1:strcpy(cr.name, getcreaturetype(CREATURE_CLERK)->get_encounter_name().c_str()); break;
+		case 2:strcpy(cr.name, getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name().c_str()); break;
+		case 3:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name().c_str()); break;
+		case 4:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name().c_str()); break;
 		}
 		if (!LCSrandom(10))cr.crimes_suspected[(LCSrandom(2) ? LAWFLAG_BREAKING : LAWFLAG_THEFT)]++;
 		break;

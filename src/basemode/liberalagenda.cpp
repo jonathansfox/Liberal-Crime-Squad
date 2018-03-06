@@ -27,36 +27,21 @@
 // it out for yourself.
 
 #include <includes.h>
-#include "creature/creature.h"
-//#include "pdcurses/curses.h"
+#include "creature/creatureEnums.h"
 
-#include "basemode/liberalagenda.h"
+//#include "common/commondisplay.h"
+void set_alignment_color(short alignment, bool extended_range = false);
 
-//#include "common/consolesupport.h"
-// for void set_color(short,short,bool) currently inside includes.h
+//#include "common/getnames.h"
+string getlaw(int l);
 
-#include "common/stringconversion.h"
-//for string attribute_enum_to_string(int)
-
-//#include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
-// for void set_alignment_color(signed char,bool extended_range=false);
-
-#include "common/getnames.h"
-// for std::string getlaw(int)
-
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
-// for void removesquadinfo(Creature &);
+//#include "common/commonactions.h"
+void cleangonesquads();
 
 
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <common\\consolesupport.h>
 #include <set_color_support.h>
 #include "common/musicClass.h"
 extern MusicClass music;
@@ -99,6 +84,54 @@ enum Pages
 	//PAGE_POLLS_B
 	PAGENUM
 };
+vector<string> disbandingMessage;
+vector<string> issue_phrases;
+
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> liberl_agenda_text_file_collection = {
+	customText(&disbandingMessage, mostlyendings + "disbandingMessage.txt"),
+	customText(&issue_phrases, mostlyendings + "issue_phrases.txt"),
+	customText(&supremeChars, mostlyendings + "supremeChars.txt"),
+	customText(&courtChars, mostlyendings + "courtChars.txt"),
+};
+
+
+/* base - liberal agenda - disband */
+bool confirmdisband()
+{
+	string word = pickrandom(issue_phrases);
+	for (int pos = 0; pos < len(word);)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, "Are you sure you want to disband?");
+		set_color_easy(WHITE_ON_BLACK);
+		for (int i = 0; i < len(disbandingMessage); i++) {
+			mvaddstrAlt(i + 2, 0, disbandingMessage[i]);
+		}
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13, 0, "Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
+		for (int x = 0; x < len(word); x++)
+		{
+			if (x == pos) set_color_easy(GREEN_ON_BLACK);
+			else if (x < pos) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddcharAlt(15, x, word[x]);
+		}
+		if (getkeyAlt() == ::tolower(word[pos]))
+		{
+			pos++;
+			if (word[pos] == ' ' || word[pos] == '\'' || word[pos] == '-') pos++;
+		}
+		else return false;
+	}
+	//SET UP THE DISBAND
+	CreaturePool::getInstance().setupDisband();
+	cleangonesquads();
+	disbandtime = year;
+	return true;
+}
+
 /* base - liberal agenda */
 bool liberalagenda(signed char won)
 {
@@ -392,41 +425,4 @@ bool liberalagenda(signed char won)
 		}
 	}
 	return false;
-}
-vector<string> disbandingMessage;
-vector<string> issue_phrases;
-/* base - liberal agenda - disband */
-bool confirmdisband()
-{
-	string word = pickrandom(issue_phrases);
-	for (int pos = 0; pos < len(word);)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Are you sure you want to disband?");
-		set_color_easy(WHITE_ON_BLACK);
-		for (int i = 0; i < len(disbandingMessage); i++) {
-			mvaddstrAlt(i + 2, 0, disbandingMessage[i]);
-		}
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 0, "Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
-		for (int x = 0; x < len(word); x++)
-		{
-			if (x == pos) set_color_easy(GREEN_ON_BLACK);
-			else if (x < pos) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(15, x, word[x]);
-		}
-		if (getkeyAlt() == ::tolower(word[pos]))
-		{
-			pos++;
-			if (word[pos] == ' ' || word[pos] == '\'' || word[pos] == '-') pos++;
-		}
-		else return false;
-	}
-	//SET UP THE DISBAND
- CreaturePool::getInstance().setupDisband();
-	cleangonesquads();
-	disbandtime = year;
-	return true;
 }

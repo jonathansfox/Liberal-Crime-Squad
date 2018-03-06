@@ -43,7 +43,22 @@ typedef map<short, vector<string>> shortAndTwoStrings;
  vector<string> cafe_name_2;
  vector<string> latte_name;
  vector<string> latte_name_2;
+#include <customMaps.h>
 
+ const string locations = "locations\\";
+ vector<file_and_text_collection> locations_text_file_collection = {
+	 /*locations.cpp*/
+	 customText(&labor_camp_name, locations + "labor_camp_name.txt"),
+	 customText(&labor_camp_name_2, locations + "labor_camp_name_2.txt"),
+	 customText(&juice_name, locations + "juice_name.txt"),
+	 customText(&juice_name_2, locations + "juice_name_2.txt"),
+	 customText(&vegan_name, locations + "vegan_name.txt"),
+	 customText(&vegan_name_2, locations + "vegan_name_2.txt"),
+	 customText(&cafe_name, locations + "cafe_name.txt"),
+	 customText(&cafe_name_2, locations + "cafe_name_2.txt"),
+	 customText(&latte_name, locations + "latte_name.txt"),
+	 customText(&latte_name_2, locations + "latte_name_2.txt"),
+ };
 
 void Location::init()
 {

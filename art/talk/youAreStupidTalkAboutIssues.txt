@@ -1,0 +1,42 @@
+LAW_ABORTION
+"Conservatives make women turn to coat hangers."
+LAW_ANIMALRESEARCH
+"Richard Gere put a gerbil in his butt!"
+LAW_PRIVACY
+"The government, like, knows things about you."
+LAW_DEATHPENALTY
+"They executed this one dude, and like, his head caught on fire."
+LAW_NUCLEARPOWER
+"Have you seen Godzilla?  Nuclear power is bad, yo."
+LAW_POLLUTION
+"You wanna look like the Toxic Avenger?  Oppose pollution!"
+LAW_LABOR
+"Bad people wanna make babies work and stuff."
+LAW_GAY
+"Lots of people don't like homosexuals."
+LAW_CORPORATE
+"The corporations are putting you down, dude."
+LAW_FREESPEECH
+"Better watch what you say.  They've got ears everywhere."
+LAW_FLAGBURNING
+"The flag is stupid."
+LAW_TAX
+"Rich people, like, have money, man."
+LAW_GUNCONTROL
+"People like, think they need lots of guns."
+LAW_WOMEN
+"We need more women!"
+LAW_CIVILRIGHTS
+"Conservatives are all racists!"
+LAW_DRUGS
+"Dude, the government won't let you do drugs."
+LAW_IMMIGRATION
+"They're all trying to keep people out of the country."
+LAW_ELECTIONS
+"The politicians are just tools of the corporations!"
+LAW_MILITARY
+"Patriots are idiots! Give peace a chance!"
+LAW_TORTURE
+"Torture is bad!"
+LAW_PRISONS
+"Prisoners don't have freedom!"

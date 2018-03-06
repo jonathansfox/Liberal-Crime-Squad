@@ -30,32 +30,26 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 #include "common/commondisplayCreature.h"
 // for  addstr
 
-#include "common/commonactions.h"
 #include "common/commonactionsCreature.h"
 // for int loveslavesleft(const Creature&)
 
 #include "common/getnames.h"
 // for void enter_name(int,int,char *,int,const char *=NULL)
 
-#include "common/translateid.h"
-// for  int getarmortype(const string &);
-        // a bit obscure, i think --Schmel924
+//#include "common/translateid.h"
+int getarmortype(const string &idname);
 
 
 
 #include <cursesAlternative.h>
 #include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 extern vector<Creature *> pool;
 #include "common/creaturePoolCreature.h"
@@ -67,6 +61,14 @@ extern int stat_recruits;
 extern int stat_kidnappings;
 extern string singleDot;
  vector<string> date_fail;
+
+ const string datey = "date\\";
+ vector<file_and_text_collection> date_text_file_collection = {
+
+	 /*date.cpp*/
+	 customText(&date_fail, datey + "date_fail.txt"),
+ };
+
  extern short lawList[LAWNUM];
  extern string commaSpace;
  extern string singleSpace;

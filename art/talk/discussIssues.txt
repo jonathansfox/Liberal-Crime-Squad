@@ -1,0 +1,52 @@
+VIEW_GAY
+discuss homosexual rights.
+VIEW_DEATHPENALTY
+examine the death penalty.
+VIEW_TAXES
+discuss the tax code.
+VIEW_NUCLEARPOWER
+run down nuclear power.
+VIEW_ANIMALRESEARCH
+discuss the horrors of animal research.
+VIEW_POLICEBEHAVIOR
+go over cases of police brutality.
+VIEW_TORTURE
+discuss prisoner abuse and torture.
+VIEW_PRISONS
+discuss the prison system's flaws.
+VIEW_INTELLIGENCE
+debate privacy law.
+VIEW_FREESPEECH
+talk about free speech.
+VIEW_GENETICS
+discuss the implications of genetic research.
+VIEW_JUSTICES
+talk about the record of a Conservative judge.
+VIEW_GUNCONTROL
+talk about gun control.
+VIEW_SWEATSHOPS
+bring details about sweatshops to light.
+VIEW_POLLUTION
+do a show on industrial pollution.
+VIEW_CORPORATECULTURE
+joke about corporate culture.
+VIEW_CEOSALARY
+give examples of CEO excesses.
+VIEW_WOMEN
+discuss abortion.
+VIEW_DRUGS
+have a frank talk about drugs.
+VIEW_IMMIGRATION
+examine the issue of immigration.
+VIEW_MILITARY
+talk about militarism in modern culture.
+VIEW_AMRADIO
+discuss other AM radio shows.
+VIEW_CABLENEWS
+talk about Cable News.
+VIEW_LIBERALCRIMESQUAD
+let people know about the Liberal Crime Squad.
+VIEW_LIBERALCRIMESQUADPOS
+extol the virtues of the Liberal Crime Squad.
+VIEW_CONSERVATIVECRIMESQUAD
+demonize the Conservative Crime Squad.

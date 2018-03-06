@@ -90,8 +90,14 @@ void end_game(int err = EXIT_SUCCESS);
 extern short mode;
 #include "common/musicClass.h"
 extern MusicClass music;
- vector<vector<string>> real_quote;
-//char str[100];
+#include "creature/creatureEnums.h"
+#include "customMaps.h"
+const string titley = "titlescreen\\";
+const int REAL_QUOTE_SIZE = 4;
+vector<vector<string>> real_quote;
+vector<file_and_text_collection> title_screen_text_files = {
+	customText(&real_quote, titley + "real_quote.txt", REAL_QUOTE_SIZE),
+};
 extern string spaceDashSpace;
 extern short interface_pgup;
 extern short interface_pgdn;

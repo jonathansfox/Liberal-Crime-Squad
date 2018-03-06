@@ -1,0 +1,180 @@
+debug without recompiling
+debug_defines.txt
+
+lines (including comments) cannot be longer than 80 characters or LCS freezes on startup
+all lines are ultimately ignored unless the correspond to a specific debug command.
+
+New for 4.12.5
+(Almost) Fully Editable Save Files
+Change names, code names, all attributes, all skills, all outstanding crimes, for all LCS members
+Change the political party of all executives, presidents, senators, congressmen, and supreme court members, and some of their names
+Change date and year to whatever you want
+Change a few other options
+
+Back up your save before editing .verbose files
+
+4.12.6
+stealth.cpp
+2)
+added a suspicion check for weapons that have been "holstered", meaning weapons carried in the squad inventory, but not equipped
+Since weapons (including ammunition) cannot be taken to a site without being equipped to a squad member, this was an exploit (Unimplemented)
+TODO Weapon concealment overhaul
+currently basically all handguns are size 5, rifles size 15, and shotguns/smgs size 10.  Default value is 15.
+All armors have a concealment rating of 5 except naked (0) and trenchcoat(10)
+Dufflebag of guns seems worth considering.
+
+3)
+Car chase unit quantity is now based on logarithmic progression instead of linear.  Tweaking is likely necessary, but still.
+
+6)
+Mistakenly attacking innocents: if skill is 8 or higher, there is no chance of mistakenly hitting innocents (except when used as a human shield).
+If skill is 7 or lower, the odds are based on skill, with a maximum of 10% chance at skill = 0;
+Melee weapons only require a skill of 4.
+If skill is 3 or lower, the odds are based on skill, with a maximum of 5% chance at skill = 0;
+
+26)
+Able to repair clothing in bulk (and tend hostages)
+
+34)
+Skills not trainable in university
+   SKILL_AXE,
+   SKILL_HEAVYWEAPONS,
+   SKILL_KNIFE,
+   SKILL_PISTOL,
+   SKILL_RIFLE,
+   SKILL_SHOTGUN,
+   SKILL_SMG,
+
+new skills trainable in university
+
+++   SKILL_CLUB, 
+++   SKILL_SEDUCTION, 
+++   SKILL_STEALTH, 
+++   SKILL_STREETSENSE, 
+++   SKILL_THROWING, 
+   
+ ++  SKILL_COMPUTERS,
+ ++  SKILL_RELIGION,
+ ++  SKILL_SWORD,
+ ++  SKILL_TAILORING,
+
+4.12.7
+More creature characteristics moved to XML for easier modding
+
+	<seethroughstealth> (interval)
+	how difficult it is to fool through stealth
+	default:		3
+	<seethroughdisguise> (interval)
+	how difficult it is to fool through disguise
+	default:		3
+	
+	<talkreceptive>(0 or 1)
+		is receptive to talking and persuasion
+	<kidnap_resistant>(0 or 1)
+		is especially difficult to kidnap
+	<reports_to_police>(0 or 1)
+		reports to the police if attempted to datenap
+HUGE Bugfix:
+The states were listed in the wrong order.
+Correction:
+"
+Arizona
+Arkansas
+"
+not
+"
+Arkansas
+Arizona
+"
+Unfortunately, the state_bias of -2 for Arizona and -1 for Arkansas will only be corrected in new save files.  Old save files will continue to have them flipped around.
+
+
+Another 78 external txt files
+As a placeholder the new folder mostlyendings contains almost all of them.
+
+Added external txt file "allText.txt"
+It contains 476 lines from throughout LCS, meant to help facilitate translation without recompiling.
+
+Transferred string data from help.cpp to externallyStoredData
+
+transferred all ingame help information to helpTopics.txt
+
+The remaining new files make up the bulk of the issue-based text now within art/talk/
+
+This brings total external txt files to 285.
+
+Substantial internal restructuring of includes.h
+based on the work by Schmel924
+
+Minor bugfixes:
+newgames did not give the player a last name, along with certain newsstories
+BUG CAUSED BY THE ABSENSE OF TYPE-SAFETY IN C++
+Just when I was starting to like C++ it does this.
+
+4.12.08 
+Fixed usage of certain characters for names.
+These six characters.
+áéöúóí
+
+TODO: random crashing when recruiting?  I have been unable to replicate the bug, it may be limited to Windows 10 or other unknowns.
+
+4.12.09
+üëòâô
+Five more characters added to usable characters for names.
+'¢' (which only appears in the name of a Puerto Rican city) is buggy in a way that requires an entirely separate fix from the other 11 characters
+Otherwise, this amounts to all special characters currently present in LCS names.
+
+Rolled back some changes in sneak attacks.
+
+Note to self: If a character is given a name that starts with '#' and verbose save files are turned on, LCS will crash when the verbose save file is loaded.
+This is because '#' is used at the beginning of a line to indicate a comment in human readable files.
+
+HUGE Bugfix (no joke)
+It seems that, upon game over, all save files are deleted (not just the current one).  This has been in place since before I got involved.
+Still, fixed.
+
+Fixed autosave problem.  Autosave was hard-coded to remain off, now it depends on init.txt
+
+new class
+title_screen
+Handles most characteristics of new games, controls automatic savefile deletion and autosaving
+This is part of an intitiative to eliminate most usages of the extern keyword
+
+General housecleaning, reducing the number of times "creature.h" appears, as it is currently a massive cluster of interrelated header files.
+
+Partial implementation of class CreaturePool, meant to replace all references to vector<Creature *> pool
+For many files, vector<Creature *> pool is the only location where "creature.h" is required, and can therefore be removed once CreaturePool is implemented.
+Partial implementation of class LocationsPool, meant to replace all references to vector<Location *> location
+For many files, vector<Location *> location is the only location where "location.h" is required, and can therefore be removed once LocationsPool is implemented.
+
+Got rid of 14 largely unnecessary files, mostly header files.  Consolidated the entire news folder into news.cpp
+Since nearly all those functions were used exclusively within news.cpp, splitting them into separate files, separate headers, did nothing to reduce complexity, but bogged down compile time.  (clean build hovers at 2m 10s, down from 2m 15s, small enough that it could be a measurement error, but coupled with a reduced filesize of almost the exact same proportion.  Most likely coincidental, but academically interesting.)
+
+
+4.12.10
+Fixed cause of frequent crashes.  Blank multiline text was treated as single line text.
+
+4.12.11
+Fixed bug where files would not be deleted upon defeat.  (This bug was introduced when the "defeat deletes all savefiles" bug was fixed)
+Fixed typo where "# - Check status of liberal" contained unusual characters.  It seems the txt file had some sort of metadata.  I do not know how to detect if this problem exists elsewhere.
+Fixed bug where "V - Evade" appeared on the wrong line.
+
+4.12.12
+Rush job, reverted code to earlier version to finally fix the recruitment bug.
+
+4.12.13
+Fixed the missing personal ads.  Appears to have been an old bug.
+Completed restructuring that was started in 4.12.09
+(primarily the removal of unused header files and include statements)
+Curiously, this has resulted in a substantial reduction in filesize.
+'Upgraded' to VS 2017
+New compile time 2m 40s, up from 2m 15s
+New filesize 1515 KB, down from 1926 KB
+Notably Visual Studio 2017 keeps a hidden folder .vs with a filesize of just under 2 GB.  It seems to accumulate size over time, as 4.12.12 has the same folder at 600 MB.  The fact it keeps crashing my PC makes more sense, as the SSD I keep Visual Studio on is... unreliable.
+Minimum size for the folder appears to be 40 MB.
+Microsoft is making it very hard not to hate them.
+
+4.12.14
+Fixed the university bug, where the new studies weren't fully implemented.
+namely ACTIVITY_STUDY_CLUB, ACTIVITY_STUDY_STREETSENSE, ACTIVITY_STUDY_THROWING, ACTIVITY_STUDY_STEALTH, ACTIVITY_STUDY_SEDUCTION,
+LCS is now considered Stable.

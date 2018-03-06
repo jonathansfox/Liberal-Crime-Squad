@@ -53,7 +53,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include "creature/creature.h"
-//#include "pdcurses/curses.h"
 
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
@@ -65,8 +64,6 @@ This file is part of Liberal Crime Squad.                                       
 // for armor_makedifficulty
 
 #include "items/loottype.h"
-
-//#include "items/loot.h"
 
 #include "log/log.h"
 // for commondisplay.h
@@ -90,14 +87,10 @@ This file is part of Liberal Crime Squad.                                       
 #include "politics/politics.h"
 //for int publicmood(int l);
 
-#include "daily/activities.h"
-//own header
-
 #include "combat/chase.h"
 #include "combat/chaseCreature.h"
 //for void makechasers(long sitetype,long sitecrime);
 
-#include "combat/fight.h"
 #include "combat/fightCreature.h"  
 //for void makeloot(Creature &cr,vector<Item *> &loot);
         
@@ -107,7 +100,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <cursesAlternativeConstants.h>
 #include <customMaps.h>
 #include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 
 extern vector<Creature *> pool;
@@ -157,6 +149,26 @@ extern vector<Vehicle *> vehicle;
  vector<string> cant_find_keys_no_free_speech;
  ViewAndStrings pollingData;
  ActivityAndSkill trainingActivity;
+
+ const string activities = "activities\\";
+ vector<file_and_text_collection> activities_text_file_collection = {
+	 /*activities.cpp*/
+	 customText(&quality_0, activities + "quality_0.txt"),
+	 customText(&quality_20, activities + "quality_20.txt"),
+	 customText(&quality_35, activities + "quality_35.txt"),
+	 customText(&quality_50, activities + "quality_50.txt"),
+	 customText(&words_meaning_hacked, activities + "words_meaning_hacked.txt"),
+	 customText(&enemy_website, activities + "enemy_website.txt"),
+	 customText(&win_hand_to_hand, activities + "win_hand_to_hand.txt"),
+	 customText(&lose_hand_to_hand, activities + "lose_hand_to_hand.txt"),
+	 customText(&car_wont_start, activities + "car_wont_start.txt"),
+	 customText(&gets_nervous, activities + "gets_nervous.txt"),
+	 customText(&cant_hotwire_car, activities + "cant_hotwire_car.txt"),
+	 customText(&almost_hotwire_car, activities + "almost_hotwire_car.txt"),
+	 customText(&cant_find_keys, activities + "cant_find_keys.txt"),
+	 customText(&cant_find_keys_no_free_speech, activities + "cant_find_keys_no_free_speech.txt"),
+ };
+
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);
 void doActivitySellArt(vector<Creature *> &art, char &clearformess);
@@ -794,6 +806,15 @@ void funds_and_trouble(char &clearformess)
 		case ACTIVITY_STUDY_WRITING:
 		case ACTIVITY_STUDY_LOCKSMITHING:
 		case ACTIVITY_STUDY_COMPUTERS:
+		case ACTIVITY_STUDY_FENCING:
+		case ACTIVITY_STUDY_WEAVING:
+		case ACTIVITY_STUDY_RELIGION:
+			//case ACTIVITY_STUDY_MAGIC:
+		case ACTIVITY_STUDY_CLUB:
+		case ACTIVITY_STUDY_STREETSENSE:
+		case ACTIVITY_STUDY_THROWING:
+		case ACTIVITY_STUDY_STEALTH:
+		case ACTIVITY_STUDY_SEDUCTION:
 			students.push_back(pool[p]);
 			break;
 		case ACTIVITY_SLEEPER_JOINLCS:
@@ -1854,6 +1875,58 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 		}
 	}
 }
+bool carselect(Creature &cr, short &cartype)
+{
+	cartype = -1;
+	vector<int> cart;
+	for (int a = 0; a < len(vehicletype); a++)
+		if (vehicletype[a]->steal_difficultytofind() < 10) cart.push_back(a);
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, "What type of car will ");
+		addstrAlt(cr.name);
+		addstrAlt(" try to find and steal today?");
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1, 0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO FIND UNATTENDED컴");
+		int y = 2, difficulty;
+		for (int p = page * 19; p < len(cart) && p < page * 19 + 19; p++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(y, 0);
+			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+			addstrAlt(vehicletype[cart[p]]->longname());
+			moveAlt(y++, 49);
+			difficulty = vehicletype[cart[p]]->steal_difficultytofind();
+			displayDifficulty(difficulty);
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, "Press a Letter to select a Type of Car");
+		mvaddstrAlt(23, 0, addpagestr());
+		int c = getkeyAlt();
+		//PAGE UP
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		//PAGE DOWN
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(cart)) page++;
+		if (c >= 'a'&&c <= 's')
+		{
+			int p = page * 19 + c - 'a';
+			if (p < len(cart))
+			{
+				cartype = cart[p];
+				return true;
+			}
+		}
+		// Too easy to accidentally back out
+		// Not a big problem if this page isn't skippable
+		// (There's no immediate risk in picking a car)
+		// - JDS
+		//if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+	}
+	return false;
+}
 /* steal a car */
 bool stealcar(Creature &cr, char &clearformess)
 {
@@ -2319,59 +2392,7 @@ bool stealcar(Creature &cr, char &clearformess)
 	}
 	return 0;
 }
-void displayDifficulty(int difficulty);
-bool carselect(Creature &cr, short &cartype)
-{
-	cartype = -1;
-	vector<int> cart;
-	for (int a = 0; a < len(vehicletype); a++)
-		if (vehicletype[a]->steal_difficultytofind() < 10) cart.push_back(a);
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "What type of car will ");
-		addstrAlt(cr.name);
-		addstrAlt(" try to find and steal today?");
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  0, "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO FIND UNATTENDED컴");
-		int y = 2, difficulty;
-		for (int p = page * 19; p < len(cart) && p < page * 19 + 19; p++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(vehicletype[cart[p]]->longname());
-			moveAlt(y++, 49);
-			difficulty = vehicletype[cart[p]]->steal_difficultytofind();
-			displayDifficulty(difficulty);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22,  0, "Press a Letter to select a Type of Car");
-		mvaddstrAlt(23, 0, 		addpagestr());
-		int c = getkeyAlt();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(cart)) page++;
-		if (c >= 'a'&&c <= 's')
-		{
-			int p = page * 19 + c - 'a';
-			if (p < len(cart))
-			{
-				cartype = cart[p];
-				return true;
-			}
-		}
-		// Too easy to accidentally back out
-		// Not a big problem if this page isn't skippable
-		// (There's no immediate risk in picking a car)
-		// - JDS
-		//if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
-	}
-	return false;
-}
+
 /* get a wheelchair */
 void getwheelchair(Creature &cr, char &clearformess)
 {

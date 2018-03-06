@@ -91,6 +91,8 @@ string proposeConservative;
 string proposeStalinist;
 vector<string> archConservativeAmendment;
 vector<string> stalinAmendment;
+
+
 string YEA;
 string NAY;
 string youWentOnVacation;
@@ -99,6 +101,19 @@ string whileYouWereInPrison;
 string youDisappearedSafely;
 vector<string> conservativePrison;
 vector<string> stalinistPrison;
+
+vector<string> amendmentPass;
+const string mostlyendings = "mostlyendings\\";
+#include <customMaps.h>
+vector<file_and_text_collection> endgame_text_file_collection = {
+	customText(&stalinAmendment, mostlyendings + "stalinAmendment.txt"),
+	customText(&archConservativeAmendment, mostlyendings + "archConservativeAmendment.txt"),
+	customText(&amendmentPass, mostlyendings + "amendmentPass.txt"),
+	customText(&conservativePrison, mostlyendings + "conservativePrison.txt"),
+	customText(&stalinistPrison, mostlyendings + "stalinistPrison.txt"),
+	customText(&reaganifiedCabinet, mostlyendings + "reaganifiedCabinet.txt"),
+	customText(&stalinizedCabinet, mostlyendings + "stalinizedCabinet.txt"),
+};
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level, int lawview, int view, char congress, char canseethings)
 {
@@ -320,7 +335,6 @@ void tossjustices(char canseethings)
 		getkeyAlt();
 	}
 }
- vector<string> amendmentPass;
 /* endgame - attempts to pass a constitutional amendment to help win the game */
 void amendment_termlimits(char canseethings)
 {

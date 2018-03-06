@@ -53,23 +53,11 @@ the bottom of includes.h in the top src folder.
 
 #include <includes.h>
 #include "creature/creature.h"
-//#include "pdcurses/curses.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
 
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
 #include "sitemode/stealth.h"
-
-#include "log/log.h"
-// for class log in header 
-// Pretty wrong. Should be reworked --Schmel924
-
-#include "common/commondisplay.h" // Local header. Should not be removed --Schmel924
-#include "common/commondisplayLog.h"
-#include "common/commondisplayCreature.h"
 
 #include "common/consolesupport.h"
 // for void set_color(short,short,bool)
@@ -78,13 +66,9 @@ the bottom of includes.h in the top src folder.
 std::string gettitle(Creature &cr);
 // for getmonth
 
-#include "common/stringconversion.h"
-//for string attribute_enum_to_string(int)
-
 #include "common/translateid.h"
 // for  int getcar(int)
 
-//#include "common/commonactions.h"
 #include "common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
 
@@ -94,9 +78,6 @@ std::string gettitle(Creature &cr);
 
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "locations/locationsPool.h"
 extern int year;
@@ -147,7 +128,7 @@ void set_alignment_color(short alignment, bool extended_range)
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		break;
 	default: // This should not happen! Set a strange color to indicate an error!
-		set_color(COLOR_YELLOW, COLOR_RED, 1, 1); // blinking yellow on red background
+		set_color_easy(YELLOW_ON_RED_BRIGHT_BLINK);
 		break;
 	}
 }
@@ -180,7 +161,7 @@ void set_activity_color(long activity_type)
 	case ACTIVITY_SLEEPER_STEAL:
 	case ACTIVITY_WHEELCHAIR:
 	case ACTIVITY_STEALCARS:
-		set_color(COLOR_CYAN, COLOR_BLACK, 0);
+		set_color_easy(CYAN_ON_BLACK);
 		break;
 		// Illegal fundraising
 	case ACTIVITY_SLEEPER_EMBEZZLE:
@@ -200,7 +181,7 @@ void set_activity_color(long activity_type)
 		// Clothing/garment stuff
 	case ACTIVITY_REPAIR_ARMOR:
 	case ACTIVITY_MAKE_ARMOR:
-		set_color(COLOR_CYAN, COLOR_BLACK, 0);
+		set_color_easy(CYAN_ON_BLACK);
 		break;
 		// Teaching
 	case ACTIVITY_TEACH_POLITICS:
@@ -216,7 +197,6 @@ void set_activity_color(long activity_type)
 	case ACTIVITY_STUDY_DISGUISE:
 	case ACTIVITY_STUDY_SCIENCE:
 	case ACTIVITY_STUDY_BUSINESS:
-		//case ACTIVITY_STUDY_COOKING:
 	case ACTIVITY_STUDY_GYMNASTICS:
 	case ACTIVITY_STUDY_ART:
 	case ACTIVITY_STUDY_MUSIC:
@@ -224,6 +204,16 @@ void set_activity_color(long activity_type)
 	case ACTIVITY_STUDY_WRITING:
 	case ACTIVITY_STUDY_LOCKSMITHING:
 	case ACTIVITY_STUDY_COMPUTERS:
+		//case ACTIVITY_STUDY_COOKING:
+	case ACTIVITY_STUDY_FENCING:
+	case ACTIVITY_STUDY_WEAVING:
+	case ACTIVITY_STUDY_RELIGION:
+		//case ACTIVITY_STUDY_MAGIC:
+	case ACTIVITY_STUDY_CLUB:
+	case ACTIVITY_STUDY_STREETSENSE:
+	case ACTIVITY_STUDY_THROWING:
+	case ACTIVITY_STUDY_STEALTH:
+	case ACTIVITY_STUDY_SEDUCTION:
 		set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 		break;
 		// Interrogating
@@ -259,900 +249,20 @@ void set_activity_color(long activity_type)
 		set_color_easy(BLUE_ON_BLACK_BRIGHT);
 		break;
 	default: // This should not happen! Set a strange color to indicate an error!
-		set_color(COLOR_YELLOW, COLOR_RED, 1); // yellow on red background
+		set_color_easy(YELLOW_ON_RED_BRIGHT);
 		break;
 	}
 }
-
-/* party info at top of screen */
-void printparty()
-{
-	Creature *party[6] = { NULL,NULL,NULL,NULL,NULL,NULL };
-	if (activesquad != NULL)
-		for (int p = 0; p<6; p++)party[p] = activesquad->squad[p];
-	set_color_easy(WHITE_ON_BLACK);
-	for (int i = 2; i<8; i++)
-	{
-		mvaddstrAlt(i,  0, "                                                                                "); // 80 spaces
-	}
-	if (party_status != -1 && party[party_status] == NULL)party_status = -1;
-	if (party_status != -1)
-	{
-		printcreatureinfo(party[party_status]);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1,  0, party_status + 1);
-	}
-	else
-	{
-		char str[200];
-		mvaddstrAlt(1,  0, "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�"); // 80 characters
-		for (int p = 0; p<6; p++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(p + 2,  0, "                                                                                "); // 80 spaces
-			mvaddcharAlt(p + 2, 0, '1' + p);
-			if (party[p] != NULL)
-			{
-				if (party[p]->prisoner != NULL)set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(p + 2,  2, party[p]->name);
-				if (party[p]->prisoner != NULL)addstrAlt("+H");
-				int skill = 0;
-				char bright = 0;
-				for (int sk = 0; sk<SKILLNUM; sk++)
-				{
-					skill += (int)party[p]->get_skill(sk);
-					if (party[p]->get_skill_ip(sk) >= 100 + (10 * party[p]->get_skill(sk)) &&
-						party[p]->get_skill(sk)<party[p]->skill_cap(sk, true))bright = 1;
-				}
-				set_color(COLOR_WHITE, COLOR_BLACK, bright);
-				mvaddstrAlt(p + 2,  23, skill);
-				addstrAlt("/");
-				addstrAlt(party[p]->get_weapon_skill());
-				moveAlt(p + 2, 31);
-				if (mode != GAMEMODE_SITE)set_color_easy(WHITE_ON_BLACK);
-				else switch (weaponcheck(*party[p]))
-				{
-				case -1:
-				case 0:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-				case 1:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
-				case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
-				}
-				if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
-					addstrAlt(party[p]->extra_throwing_weapons[0]->get_shortname(0));
-				else addstrAlt(party[p]->get_weapon().get_shortname(0));
-				//set_color_easy(WHITE_ON_BLACK);
-				if (party[p]->get_weapon().get_ammoamount()>0)
-				{
-					//set_color_easy(WHITE_ON_BLACK);
-					addstrAlt(" (");
-					addstrAlt(party[p]->get_weapon().get_ammoamount());
-					addstrAlt(closeParenthesis);
-				}
-				else if (party[p]->get_weapon().uses_ammo())
-				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					if (len(party[p]->clips))
-					{
-						addstrAlt(" (");
-						addstrAlt(party[p]->count_clips());
-						addstrAlt(closeParenthesis);
-					}
-					else
-						addstrAlt(" (XX)");
-				}
-				else if (party[p]->get_weapon().is_throwable() && !party[p]->has_thrown_weapon)
-					addstrAlt(" (1)");
-				else if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
-				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					addstrAlt(" (");
-					addstrAlt(party[p]->count_weapons() - party[p]->is_armed());
-					addstrAlt(closeParenthesis);
-				}
-				if (mode != GAMEMODE_SITE)
-				{
-					int fg = COLOR_WHITE;
-					int bg = COLOR_BLACK;
-					int in = 1;
-					if (party[p]->get_armor().is_bloody())
-					{
-						bg = COLOR_RED;  in = 1;
-					}
-					if (party[p]->get_armor().get_quality() > party[p]->get_armor().get_quality_levels())
-					{
-						fg = COLOR_BLACK;
-					}
-					else if (party[p]->get_armor().is_damaged())
-					{
-						fg = COLOR_YELLOW; in = 1;
-					}
-					else if (party[p]->get_armor().get_quality() >1)
-					{
-						fg = COLOR_YELLOW; in = (bg == COLOR_RED);
-					}
-					if (fg == COLOR_WHITE && bg == COLOR_BLACK)
-						in = 0;
-					set_color(fg, bg, in);
-				}
-				else
-				{
-					switch (hasdisguise(*party[p]))
-					{
-					case 1:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-					case 2:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
-					default:
-						if (party[p]->get_armor().get_stealth_value() > 1)
-							set_color_easy(BLACK_ON_BLACK_BRIGHT);
-						else set_color_easy(RED_ON_BLACK_BRIGHT);
-						break;
-					}
-					if (sitealarmtimer >= 0 || sitealarm == 1)
-						if (party[p]->get_armor().get_stealth_value() > 1)
-							set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				}
-				mvaddstrAlt(p + 2, 46, party[p]->get_armor().get_shortname());
-				printhealthstat(*party[p], p + 2, 61, TRUE);
-				set_color_easy(WHITE_ON_BLACK);
-				moveAlt(p + 2, 70);
-				long v = -1;
-				if (showcarprefs == 1)v = id_getcar(party[p]->pref_carid);
-				else v = id_getcar(party[p]->carid);
-				if (v != -1 && showcarprefs != -1)
-				{
-					strcpy(str, vehicle[v]->shortname());
-					if (showcarprefs == 1 ? party[p]->pref_is_driver : party[p]->is_driver)strcat(str, "-D");
-				}
-				else
-				{
-					int legok = 2;
-					if ((party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-						(party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-					if ((party[p]->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-						(party[p]->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-					if (party[p]->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, "Wheelchair");
-					else if (legok >= 1)strcpy(str, "On Foot");
-					else strcpy(str, "On \"Foot\"");
-				}
-				addstrAlt(str);
-			}
-		}
-	}
-	makedelimiter();
-}
-/* character info at top of screen */
-void printcreatureinfo(Creature *cr, unsigned char knowledge)
-{
-	char str[200];
-	makedelimiter(1);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 2, cr->name);
-	addstrAlt(commaSpace);
-	addstrAlt(gettitle(*cr));
-	if (cr->prisoner != NULL)
-	{
-		addstrAlt(", holding ");
-		switch (cr->prisoner->type)
-		{
-		case CREATURE_POLITICIAN:addstrAlt("a cursing Politician"); break;
-		case CREATURE_CORPORATE_CEO:addstrAlt("a squirming CEO"); break;
-		case CREATURE_RADIOPERSONALITY:addstrAlt("a crying Radio Personality"); break;
-		case CREATURE_NEWSANCHOR:addstrAlt("a smarmy News Anchor"); break;
-		case CREATURE_SCIENTIST_EMINENT:addstrAlt("a frightened Eminent Scientist"); break;
-		case CREATURE_JUDGE_CONSERVATIVE:addstrAlt("an angry Hangin' Judge"); break;
-		default:
-			addstrAlt(cr->prisoner->name);
-			break;
-		}
-	}
-	mvaddstrAlt(2, 0, "Hrt:    ");
-	if (knowledge>0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	else addstrAlt("?");
-	mvaddstrAlt(3, 0, "Int:    ");
-	if (knowledge>0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_INTELLIGENCE, true));
-	else addstrAlt("?");
-	mvaddstrAlt(4, 0, "Wis:    ");
-	if (knowledge>0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	else addstrAlt("?");
-	mvaddstrAlt(5, 0, "Hlth:   ");
-	if (knowledge>1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
-	else addstrAlt("?");
-	mvaddstrAlt(2, 11, "Agi:    ");
-	if (knowledge>1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_AGILITY, true));
-	else addstrAlt("?");
-	mvaddstrAlt(3, 11, "Str:    ");
-	if (knowledge>1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_STRENGTH, true));
-	else addstrAlt("?");
-	mvaddstrAlt(4, 11, "Char:   ");
-	if (knowledge>0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_CHARISMA, true));
-	else addstrAlt("?");
-	mvaddstrAlt(5, 11, "Trans: ");
-	long v = -1;
-	if (showcarprefs == 1)v = id_getcar(cr->pref_carid);
-	else v = id_getcar(cr->carid);
-	if (v != -1 && showcarprefs != -1)
-	{
-		strcpy(str, vehicle[v]->shortname());
-		char d;
-		if (showcarprefs == 1)d = cr->pref_is_driver;
-		else d = cr->is_driver;
-		if (d)strcat(str, "-D");
-	}
-	else
-	{
-		int legok = 2;
-		if ((cr->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-			(cr->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-		if ((cr->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-			(cr->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-		if (cr->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, "Wheelchair");
-		else if (legok >= 1)strcpy(str, "On Foot");
-		else strcpy(str, "On \"Foot\"");
-	}
-	addstrAlt(str);
-	moveAlt(6, 0);
-	if (mode != GAMEMODE_SITE) set_color_easy(WHITE_ON_BLACK);
-	else switch (weaponcheck(*cr))
-	{
-	case -1:
-	case 0:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-	case 1:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
-	case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
-	}
-	addstrAlt("Weapon: ");
-	addstrAlt(cr->get_weapon_string(1));
-	moveAlt(7, 0);
-	if (mode != GAMEMODE_SITE)
-	{
-		int fg = COLOR_WHITE;
-		int bg = COLOR_BLACK;
-		int in = 1;
-		if (cr->get_armor().is_bloody())
-		{
-			bg = COLOR_RED;  in = 0;
-		}
-		if (cr->get_armor().get_quality() > cr->get_armor().get_quality_levels())
-		{
-			fg = COLOR_BLACK;
-		}
-		else if (cr->get_armor().is_damaged())
-		{
-			fg = COLOR_YELLOW; in = 1;
-		}
-		else if (cr->get_armor().get_quality() >1)
-		{
-			fg = COLOR_YELLOW; in = (bg == COLOR_RED);
-		}
-		if (fg == COLOR_WHITE && bg == COLOR_BLACK)
-			in = 0;
-		set_color(fg, bg, in);
-	}
-	else
-	{
-		switch (hasdisguise(*cr))
-		{
-		case 1:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-		case 2:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
-		default:
-			if (cr->get_armor().get_stealth_value() > 1)
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			else set_color_easy(RED_ON_BLACK_BRIGHT);
-		}
-		if (sitealarmtimer >= 0 || sitealarm == 1)
-			if (cr->get_armor().get_stealth_value() > 1)
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	}
-	addstrAlt("Clothes: ");
-	addstrAlt(cr->get_armor_string(false));
-	set_color_easy(WHITE_ON_BLACK);
-	char used[SKILLNUM];
-	memset(used, 0, sizeof(char)*SKILLNUM);
-	int snum = 5;
-	char printed = 1;
-	while (snum>0 && printed)
-	{
-		printed = 0;
-		int max = 0;
-		long maxs = -1;
-		for (int s = 0; s<SKILLNUM; s++)
-		{
-			if ((cr->get_skill(s) * 10000 + cr->get_skill_ip(s))>max && !used[s])
-			{
-				max = (cr->get_skill(s) * 10000 + cr->get_skill_ip(s));
-				maxs = s;
-			}
-		}
-		if (maxs != -1)
-		{
-			used[maxs] = 1;
-			printed = 1;
-			// Maxed skills are cyan
-			if (cr->skill_cap(maxs, true) != 0 && cr->get_skill(maxs) >= cr->skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			// About to level up skills are white
-			else if (cr->get_skill_ip(maxs) >= 100 + (10 * cr->get_skill(maxs)) &&
-				cr->get_skill(maxs)<cr->skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			// <1 skills are dark gray
-			else if (cr->get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			// >=1 skills are light gray
-			else set_color_easy(WHITE_ON_BLACK);
-			moveAlt(3 + 5 - snum, 31);
-			if (knowledge>5 - snum)
-				addstrAlt(skill_enum_to_string(maxs));
-			else addstrAlt("???????");
-			addstrAlt(": ");
-			if (knowledge>7 - snum)
-				addstrAlt(cr->get_skill(maxs));
-			else addcharAlt('?');
-			if (snum == 5 && printed)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(2,  31, "Top Skills:");
-			}
-		}
-		snum--;
-	}
-	int woundsum = 0;
-	for (int w = 0; w<BODYPARTNUM; w++)
-		if (cr->wound[w] != 0)woundsum++;
-	printhealthstat(*cr, 1, 49, FALSE);
-	if (woundsum>0)
-	{
-		for (int w = 0; w<BODYPARTNUM; w++)
-		{
-			if (cr->wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			moveAlt(2 + w, 49);
-			switch (w)
-			{
-			case BODYPART_HEAD:addstrAlt("Head:"); break;
-			case BODYPART_BODY:addstrAlt("Body:"); break;
-			case BODYPART_ARM_RIGHT:addstrAlt("Right Arm:"); break;
-			case BODYPART_ARM_LEFT:addstrAlt("Left Arm:"); break;
-			case BODYPART_LEG_RIGHT:addstrAlt("Right Leg:"); break;
-			case BODYPART_LEG_LEFT:addstrAlt("Left Leg:"); break;
-			}
-			moveAlt(2 + w, 61);
-			if (cr->wound[w] & WOUND_NASTYOFF)addstrAlt("Ripped off");
-			else if (cr->wound[w] & WOUND_CLEANOFF)addstrAlt("Clean sever");
-			else
-			{
-				int sum = 0;
-				if (cr->wound[w] & WOUND_SHOT)sum++;
-				if (cr->wound[w] & WOUND_CUT)sum++;
-				if (cr->wound[w] & WOUND_BRUISED)sum++;
-				if (cr->wound[w] & WOUND_BURNED)sum++;
-				if (cr->wound[w] & WOUND_TORN)sum++;
-				if (sum == 0)
-				{
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					if (cr->animalgloss == ANIMALGLOSS_ANIMAL)
-						addstrAlt("Animal");
-					else addstrAlt("Liberal");
-				}
-				if (cr->wound[w] & WOUND_SHOT) { addstrAlt("Sht"); sum--; if (sum>0)addstrAlt(","); }
-				if (cr->wound[w] & WOUND_BRUISED) { addstrAlt("Brs"); sum--; if (sum>0)addstrAlt(","); }
-				if (cr->wound[w] & WOUND_CUT) { addstrAlt("Cut"); sum--; if (sum>0)addstrAlt(","); }
-				if (cr->wound[w] & WOUND_TORN) { addstrAlt("Trn"); sum--; if (sum>0)addstrAlt(","); }
-				if (cr->wound[w] & WOUND_BURNED) { addstrAlt("Brn"); sum--; if (sum>0)addstrAlt(","); }
-			}
-		}
-		set_color_easy(WHITE_ON_BLACK);
-	}
-}
-/* full character sheet (with surrounding interface) */
-void fullstatus(int p)
-{
-	if (activesquad == NULL)return;
-	const int pagenum = 3;
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Profile of a Liberal");
-		if (page == 0) printliberalstats(*activesquad->squad[p]);
-		else if (page == 1) printliberalskills(*activesquad->squad[p]);
-		else if (page == 2) printliberalcrimes(*activesquad->squad[p]);
-		mvaddstrAlt(23,  0, "N - Change Code Name      G - Fix Gender Label");
-		if (activesquad->squad[1] != NULL)
-			addstrAlt("    LEFT/RIGHT - Other Liberals");
-		mvaddstrAlt(24,  0, "Press any other key to continue the Struggle");
-		addstrAlt("    UP/DOWN  - More Info");
-		int c = getkeyAlt();
-		if (activesquad->squad[1] != NULL && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
-		{
-			int sx = (c == KEY_LEFT) ? -1 : 1;
-			do p = (p + 6 + sx) % 6; while (activesquad->squad[p] == NULL);
-		}
-		else if (c == KEY_DOWN)
-		{
-			page++;
-			page %= pagenum;
-		}
-		else if (c == KEY_UP)
-		{
-			page--;
-			if (page<0) page = pagenum - 1;
-			page %= pagenum;
-		}
-		else if (c == 'n')
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(23, 0, "What is the new code name?                                                      "); // 80 characters
-			mvaddstrAlt(24, 0, "                                                                                "); // 80 spaces
-			enter_name(24, 0, activesquad->squad[p]->name, CREATURE_NAMELEN, activesquad->squad[p]->propername);
-		}
-		else if (c == 'g')
-		{
-			activesquad->squad[p]->gender_liberal++;
-			if (activesquad->squad[p]->gender_liberal>2)
-				activesquad->squad[p]->gender_liberal = 0;
-		}
-		else break;
-	}
-}
-/* Full screen character sheet, skills only edition */
-void printliberalskills(Creature &cr)
-{
-	// Add name
-	set_color_easy(WHITE_ON_BLACK);
-	moveAlt(2, 0);
-	if (strcmp(cr.propername, cr.name) != 0)
-		addstrAlt("Code name: ");
-	else addstrAlt("Name: ");
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(cr.name);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
-	addstrAlt(" (");
-	addstrAlt(cr.get_type_name());
-	addstrAlt(closeParenthesis);
-	// Add all skills
-	for (int s = 0; s<SKILLNUM; s++)
-	{
-		if (s % 3 == 0 && s<9)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(4, 27 * (s / 3));
-			addstrAlt("SKILL");
-			moveAlt(4, 15 + 27 * (s / 3));
-			addstrAlt("NOW   MAX");
-		}
-		// Maxed skills are cyan
-		if (cr.skill_cap(s, true) != 0 && cr.get_skill(s) >= cr.skill_cap(s, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		// About to level up skills are white
-		else if (cr.get_skill_ip(s) >= 100 + (10 * cr.get_skill(s)) &&
-			cr.get_skill(s)<cr.skill_cap(s, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		// <1 skills are dark gray
-		else if (cr.get_skill(s)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		// >=1 skills are light gray
-		else set_color_easy(WHITE_ON_BLACK);
-		moveAlt(5 + s / 3, 27 * (s % 3));
-		addstrAlt(skill_enum_to_string(s));
-		addstrAlt(": ");
-		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
-		addstr_f("%2d.", cr.get_skill(s));
-		if (cr.get_skill_ip(s)<100 + (10 * cr.get_skill(s)))
-		{
-			if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) != 0)
-			{
-				if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s)))<10)
-					addstrAlt("0");
-				addstrAlt((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))));
-			}
-			else addstrAlt("00");
-		}
-		else addstrAlt("99+");
-		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s)<cr.skill_cap(s, true))
-			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		moveAlt(5 + s / 3, 20 + 27 * (s % 3));
-		addstr_f("%2d.00", cr.skill_cap(s, true));
-	}
-	set_color_easy(WHITE_ON_BLACK);
-}
-/* full screen character sheet */
-void printliberalstats(Creature &cr)
-{
-	set_color_easy(WHITE_ON_BLACK);
-	// Add name
-	mvaddstrAlt(2,  0, "Name: ");
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(cr.name);
-	set_color_easy(WHITE_ON_BLACK);
-	if (strcmp(cr.propername, cr.name) != 0)
-	{
-		//The names do not match, print real name as well
-		addstrAlt(" (");
-		addstrAlt(cr.propername);
-		addstrAlt(closeParenthesis);
-	}
-	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
-	addstrAlt(" (");
-	addstrAlt(cr.get_type_name());
-	addstrAlt(closeParenthesis);
-	moveAlt(3, 0);
-	// Add birthdate
-	addstrAlt("Born ");
-	addstrAlt(getmonth(cr.birthday_month));
-	addstrAlt(singleSpace);
-	addstrAlt(cr.birthday_day);
-	addstrAlt(commaSpace);
-	if (cr.birthday_month < month ||
-		(cr.birthday_month == month && cr.birthday_day <= day))
-		addstrAlt(year - cr.age);
-	else addstrAlt(year - 1 - cr.age);
-	// Add age
-	addstrAlt(" (Age ");
-	addstrAlt(cr.age);
-	// Assess their gender in an Elite Liberal way
-	if (cr.gender_liberal == GENDER_MALE)
-		addstrAlt(", Male");
-	else if (cr.gender_liberal == GENDER_FEMALE)
-		addstrAlt(", Female");
-	else addstrAlt(", Genderqueer");
-	// DON'T Note if there's some conflict with Conservative society's perceptions
-	//if(cr.gender_liberal != cr.gender_conservative && cr.gender_liberal != GENDER_NEUTRAL)
-	//   addstrAlt("*");
-	addstrAlt(closeParenthesis);
-	moveAlt(3, 46);
-	statebrokenlaws(cr);
-	set_color_easy(WHITE_ON_BLACK);
-	// Add juice
-	mvaddstrAlt(10,  16, "Juice: ");
-	addstrAlt(cr.juice);
-	if (cr.juice<1000)
-	{
-		mvaddstrAlt(11,  16, "Next:  ");
-		if (cr.juice<0)addstrAlt("0");
-		else if (cr.juice<10)addstrAlt("10");
-		else if (cr.juice<50)addstrAlt("50");
-		else if (cr.juice<100)addstrAlt("100");
-		else if (cr.juice<200)addstrAlt("200");
-		else if (cr.juice<500)addstrAlt("500");
-		else addstrAlt("1000");
-	}
-	// Add attributes
-	mvaddstrAlt(5,  0, "Heart: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(6,  0, "Intelligence: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
-	mvaddstrAlt(7,  0, "Wisdom: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(8,  0, "Health: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_HEALTH, true));
-	mvaddstrAlt(9,  0, "Agility: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_AGILITY, true));
-	mvaddstrAlt(10,  0, "Strength: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_STRENGTH, true));
-	mvaddstrAlt(11,  0, "Charisma: ");
-	addstrAlt(cr.get_attribute(ATTRIBUTE_CHARISMA, true));
-	// Add highest skills
-	char used[SKILLNUM];
-	memset(used, 0, sizeof(char)*SKILLNUM);
-	int skills_max = 16;
-	char printed = 1;
-	mvaddstrAlt(5,  28, "SKILL");
-	mvaddstrAlt(5,  43, "NOW   MAX");
-	for (int skills_shown = 0; skills_shown<skills_max&&printed; skills_shown++)
-	{
-		printed = 0;
-		int max = 0;
-		long maxs = -1;
-		for (int s = 0; s<SKILLNUM; s++)
-		{
-			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s))>max && !used[s])
-			{
-				max = (cr.get_skill(s) * 10000 + cr.get_skill_ip(s));
-				maxs = s;
-			}
-		}
-		if (maxs != -1)
-		{
-			used[maxs] = 1;
-			printed = 1;
-			// Maxed skills are cyan
-			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			// About to level up skills are white
-			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
-				cr.get_skill(maxs)<cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			// <1 skills are dark gray
-			else if (cr.get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			// >=1 skills are light gray
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(6 + skills_shown,  28, skill_enum_to_string(maxs));
-			addstrAlt(": ");
-			moveAlt(6 + skills_shown, 42);
-			addstr_f("%2d.", cr.get_skill(maxs));
-			if (cr.get_skill_ip(maxs)<100 + (10 * cr.get_skill(maxs)))
-			{
-				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
-				{
-					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs)))<10)
-						addcharAlt('0');
-					addstrAlt((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))));
-				}
-				else addstrAlt("00");
-			}
-			else addstrAlt("99+");
-			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs)<cr.skill_cap(maxs, true))
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			moveAlt(6 + skills_shown, 48);
-			addstr_f("%2d.00", cr.skill_cap(maxs, true));
-		}
-	}
-	set_color_easy(WHITE_ON_BLACK);
-	// Add weapon
-	mvaddstrAlt(13,  0, "Weapon: ");
-	addstrAlt(cr.get_weapon_string(0));
-	// Add clothing
-	mvaddstrAlt(14,  0, "Clothes: ");
-	addstrAlt(cr.get_armor_string(true));
-	// Add vehicle
-	mvaddstrAlt(15,  0, "Car: ");
-	long v = -1;
-	if (showcarprefs == 1)v = id_getcar(cr.pref_carid);
-	else v = id_getcar(cr.carid);
-	if (v != -1 && showcarprefs != -1)
-	{
-		addstrAlt(vehicle[v]->shortname());
-		char d;
-		if (showcarprefs == 1)d = cr.pref_is_driver;
-		else d = cr.is_driver;
-		if (d)addstrAlt("-D");
-	}
-	else
-	{
-		int legok = 2;
-		if ((cr.wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-			(cr.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-		if ((cr.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-			(cr.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-		if (cr.flag & CREATUREFLAG_WHEELCHAIR)addstrAlt("Wheelchair");
-		else if (legok >= 1)addstrAlt("On Foot");
-		else addstrAlt("On \"Foot\"");
-	}
-	// Add recruit stats
-	if (cr.flag != CREATUREFLAG_BRAINWASHED)
-	{
-		mvaddstrAlt(18,  55, maxsubordinates(cr) - subordinatesleft(cr));
-		addstrAlt(" Recruits / ");
-		addstrAlt(maxsubordinates(cr));
-		addstrAlt(" Max");
-	}
-	else
-	{
-		mvaddstrAlt(18,  55, "Enlightened ");
-		addstrAlt("Can't Recruit");
-	}
-	// Any meetings with potential recruits scheduled?
-	if (scheduledmeetings(cr))
-	{
-		mvaddstrAlt(20,  55, "Scheduled Meetings: ");
-		addstrAlt(scheduledmeetings(cr));
-	}
-	// Add seduction stats
-	moveAlt(19, 55);
-	int lovers = loveslaves(cr);
-	if (cr.flag & CREATUREFLAG_LOVESLAVE)
-		lovers++;
-	if (lovers)
-	{
-		addstrAlt(lovers);
-		addstrAlt(" Romantic Interest");
-		if (lovers>1)addstrAlt("s");
-	}
-	// Any dates with potential love interests scheduled?
-	if (scheduleddates(cr))
-	{
-		mvaddstrAlt(21,  55, "Scheduled Dates:    ");
-		addstrAlt(scheduleddates(cr));
-	}
-	printwoundstat(cr, 5, 55);
-	//SPECIAL WOUNDS
-	set_color_easy(RED_ON_BLACK);
-	int y = 17;
-	int x = 0;
-	if (cr.special[SPECIALWOUND_HEART] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Heart Punctured");
-	}
-	if (cr.special[SPECIALWOUND_RIGHTLUNG] != 1)
-	{
-		mvaddstrAlt(y++,  x, "R. Lung Collapsed");
-	}
-	if (cr.special[SPECIALWOUND_LEFTLUNG] != 1)
-	{
-		mvaddstrAlt(y++,  x, "L. Lung Collapsed");
-	}
-	if (cr.special[SPECIALWOUND_NECK] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Broken Neck");
-	}
-	if (cr.special[SPECIALWOUND_UPPERSPINE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Broken Up Spine");
-	}
-	if (cr.special[SPECIALWOUND_LOWERSPINE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Broken Lw Spine");
-	}
-	if (cr.special[SPECIALWOUND_RIGHTEYE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "No Right Eye");
-	}
-	if (cr.special[SPECIALWOUND_LEFTEYE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "No Left Eye");
-	}
-	if (cr.special[SPECIALWOUND_NOSE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "No Nose");
-	}
-	if (cr.special[SPECIALWOUND_TONGUE] != 1)
-	{
-		mvaddstrAlt(y++,  x, "No Tongue");
-	}
-	if (cr.special[SPECIALWOUND_TEETH] != TOOTHNUM)
-	{
-		moveAlt(y++, x);
-		if (cr.special[SPECIALWOUND_TEETH] == 0)addstrAlt("No Teeth");
-		else if (cr.special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)addstrAlt("Missing a Tooth");
-		else if (cr.special[SPECIALWOUND_TEETH]<TOOTHNUM)addstrAlt("Missing Teeth");
-	}
-	if (cr.special[SPECIALWOUND_LIVER] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Liver Damaged");
-	}
-	if (cr.special[SPECIALWOUND_RIGHTKIDNEY] != 1)
-	{
-		mvaddstrAlt(y++,  x, "R. Kidney Damaged");
-	}
-	if (cr.special[SPECIALWOUND_LEFTKIDNEY] != 1)
-	{
-		mvaddstrAlt(y++,  x, "L. Kidney Damaged");
-	}
-	if (cr.special[SPECIALWOUND_STOMACH] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Stomach Injured");
-	}
-	if (cr.special[SPECIALWOUND_SPLEEN] != 1)
-	{
-		mvaddstrAlt(y++,  x, "Busted Spleen");
-	}
-	if (cr.special[SPECIALWOUND_RIBS] != RIBNUM)
-	{
-		moveAlt(y++, x);
-		if (cr.special[SPECIALWOUND_RIBS] == 0)addstrAlt("All Ribs Broken");
-		else if (cr.special[SPECIALWOUND_RIBS] == RIBNUM - 1)addstrAlt("Broken Rib");
-		else if (cr.special[SPECIALWOUND_RIBS]<RIBNUM)addstrAlt("Broken Ribs");
-	}
-	set_color_easy(WHITE_ON_BLACK);
-	for (int i = 0, y = 12; i<AUGMENTATIONNUM; i++, y++)
-	{
-		if (cr.get_augmentation(i).type == -1) continue;
-		mvaddstrAlt(y, 55, Augmentation::get_name(i));
-		addstrAlt(": ");
-		addstrAlt(cr.get_augmentation(i).name);
-	}
-}
-/* Full screen character sheet, crime sheet */
-void printliberalcrimes(Creature &cr)
-{
-	// Add name
-	set_color_easy(WHITE_ON_BLACK);
-	if (strcmp(cr.propername, cr.name) != 0)
-		mvaddstrAlt(2, 0, "Code name: ");
-	else mvaddstrAlt(2, 0, "Name: ");
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(cr.name);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
-	addstrAlt(" (");
-	addstrAlt(cr.get_type_name());
-	addstrAlt(closeParenthesis);
-	// Show outstanding convictions in addition to untried crimes
-	if (cr.deathpenalty)
-	{
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
-			mvaddstrAlt(3, 0, "On DEATH ROW");
-		else mvaddstrAlt(3, 0, "Sentenced to DEATH");
-	}
-	else if (cr.sentence<0)
-	{
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
-			mvaddstrAlt(3, 0, "Serving life in prison");
-		else mvaddstrAlt(3, 0, "Sentenced to life in prison");
-	}
-	else if (cr.sentence>0)
-	{
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
-			mvaddstrAlt(3, 0, "Serving ");
-		else mvaddstrAlt(3, 0, "Sentenced to ");
-		addstrAlt(cr.sentence);
-		addstrAlt(" months in prison.");
-	}
-	// Add all crimes
-	for (int i = 0; i < LAWFLAGNUM; i++)
-	{
-		if (i % 2 == 0 && i<4)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(4, 40 * (i / 2), "CRIME");
-			mvaddstrAlt(4, 30 + 40 * (i / 2), "NUM");
-		}
-		// Commited crimes are yellow
-		if (cr.crimes_suspected[i] > 0)
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(5 + i / 2, 40 * (i % 2), getlawflag(i) + ": ");
-		mvaddstr_f(5 + i / 2, 30 + 40 * (i % 2), "%2d", cr.crimes_suspected[i]);
-	}
-	set_color_easy(WHITE_ON_BLACK);
-}
+/* draws a horizontal line across the screen */
+void makedelimiter(int y = 8, int x = 0);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y, int x)
 {
 	set_color_easy(WHITE_ON_BLACK);
-	if (mode == GAMEMODE_SITE&&y == 8 && x == 0 && mapshowing) // special case: there is a map on the right in site mode
+	if (mode == GAMEMODE_SITE && y == 8 && x == 0 && mapshowing) // special case: there is a map on the right in site mode
 		mvaddstrAlt(y, x, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫"); // 80 characters
 	else // normal delimiter
 		mvaddstrAlt(y, x, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
-}
-void printwoundstat(Creature &cr, int y, int x)
-{
-	// Add wound status
-	for (int w = 0; w<BODYPARTNUM; w++)
-	{
-		if (cr.wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
-		else set_color_easy(WHITE_ON_BLACK);
-		moveAlt(y + w, x);
-		switch (w)
-		{
-		case BODYPART_HEAD:addstrAlt("Head:"); break;
-		case BODYPART_BODY:addstrAlt("Body:"); break;
-		case BODYPART_ARM_RIGHT:addstrAlt("Right Arm:"); break;
-		case BODYPART_ARM_LEFT:addstrAlt("Left Arm:"); break;
-		case BODYPART_LEG_RIGHT:addstrAlt("Right Leg:"); break;
-		case BODYPART_LEG_LEFT:addstrAlt("Left Leg:"); break;
-		}
-		moveAlt(y + w, x + 11);
-		if (cr.wound[w] & WOUND_NASTYOFF)addstrAlt("Ripped off");
-		else if (cr.wound[w] & WOUND_CLEANOFF)addstrAlt("Severed");
-		else
-		{
-			int sum = 0;
-			if (cr.wound[w] & WOUND_SHOT)sum++;
-			if (cr.wound[w] & WOUND_CUT)sum++;
-			if (cr.wound[w] & WOUND_BRUISED)sum++;
-			if (cr.wound[w] & WOUND_BURNED)sum++;
-			if (cr.wound[w] & WOUND_TORN)sum++;
-			if (sum == 0)
-			{
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				if (cr.animalgloss == ANIMALGLOSS_ANIMAL)
-					addstrAlt("Animal");
-				else addstrAlt("Liberal");
-			}
-			if (cr.wound[w] & WOUND_SHOT) { addstrAlt("Shot"); sum--; if (sum>0)addstrAlt(","); }
-			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt("Bruised"); sum--; if (sum>0)addstrAlt(","); }
-			if (cr.wound[w] & WOUND_CUT) { addstrAlt("Cut"); sum--; if (sum>0)addstrAlt(","); }
-			if (cr.wound[w] & WOUND_TORN) { addstrAlt("Torn"); sum--; if (sum>0)addstrAlt(","); }
-			if (cr.wound[w] & WOUND_BURNED) { addstrAlt("Burned"); sum--; if (sum>0)addstrAlt(","); }
-		}
-	}
 }
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g, int y, int x, char smll)
@@ -1328,17 +438,894 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 		}
 	}
 }
-/*
-This function prints the cash the player has with optional prefix as
-well as screen coordinates.
-Please note that offsetx is the offset from the right of the screen, y is
-the offset from the top as always.
-*/
-void printfunds(int y, int offsetx, const char* prefix, long funds);
-void printfunds(int y, int offsetx, const char* prefix)
+void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
+/* character info at top of screen */
+void printcreatureinfo(Creature *cr, unsigned char knowledge)
 {
-	printfunds(y, offsetx, prefix, ledger.get_funds());
+	char str[200];
+	makedelimiter(1);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 2, cr->name);
+	addstrAlt(commaSpace);
+	addstrAlt(gettitle(*cr));
+	if (cr->prisoner != NULL)
+	{
+		addstrAlt(", holding ");
+		switch (cr->prisoner->type)
+		{
+		case CREATURE_POLITICIAN:addstrAlt("a cursing Politician"); break;
+		case CREATURE_CORPORATE_CEO:addstrAlt("a squirming CEO"); break;
+		case CREATURE_RADIOPERSONALITY:addstrAlt("a crying Radio Personality"); break;
+		case CREATURE_NEWSANCHOR:addstrAlt("a smarmy News Anchor"); break;
+		case CREATURE_SCIENTIST_EMINENT:addstrAlt("a frightened Eminent Scientist"); break;
+		case CREATURE_JUDGE_CONSERVATIVE:addstrAlt("an angry Hangin' Judge"); break;
+		default:
+			addstrAlt(cr->prisoner->name);
+			break;
+		}
+	}
+	mvaddstrAlt(2, 0, "Hrt:    ");
+	if (knowledge>0)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
+	else addstrAlt("?");
+	mvaddstrAlt(3, 0, "Int:    ");
+	if (knowledge>0)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_INTELLIGENCE, true));
+	else addstrAlt("?");
+	mvaddstrAlt(4, 0, "Wis:    ");
+	if (knowledge>0)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
+	else addstrAlt("?");
+	mvaddstrAlt(5, 0, "Hlth:   ");
+	if (knowledge>1)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
+	else addstrAlt("?");
+	mvaddstrAlt(2, 11, "Agi:    ");
+	if (knowledge>1)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_AGILITY, true));
+	else addstrAlt("?");
+	mvaddstrAlt(3, 11, "Str:    ");
+	if (knowledge>1)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_STRENGTH, true));
+	else addstrAlt("?");
+	mvaddstrAlt(4, 11, "Char:   ");
+	if (knowledge>0)
+		addstrAlt(cr->get_attribute(ATTRIBUTE_CHARISMA, true));
+	else addstrAlt("?");
+	mvaddstrAlt(5, 11, "Trans: ");
+	long v = -1;
+	if (showcarprefs == 1)v = id_getcar(cr->pref_carid);
+	else v = id_getcar(cr->carid);
+	if (v != -1 && showcarprefs != -1)
+	{
+		strcpy(str, vehicle[v]->shortname().c_str());
+		char d;
+		if (showcarprefs == 1)d = cr->pref_is_driver;
+		else d = cr->is_driver;
+		if (d)strcat(str, "-D");
+	}
+	else
+	{
+		int legok = 2;
+		if ((cr->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+			(cr->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+		if ((cr->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+			(cr->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+		if (cr->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, "Wheelchair");
+		else if (legok >= 1)strcpy(str, "On Foot");
+		else strcpy(str, "On \"Foot\"");
+	}
+	addstrAlt(str);
+	moveAlt(6, 0);
+	if (mode != GAMEMODE_SITE) set_color_easy(WHITE_ON_BLACK);
+	else switch (weaponcheck(*cr))
+	{
+	case -1:
+	case 0:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+	case 1:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
+	case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
+	}
+	addstrAlt("Weapon: ");
+	addstrAlt(cr->get_weapon_string(1));
+	moveAlt(7, 0);
+	if (mode != GAMEMODE_SITE)
+	{
+		int fg = COLOR_WHITE;
+		int bg = COLOR_BLACK;
+		int in = 1;
+		if (cr->get_armor().is_bloody())
+		{
+			bg = COLOR_RED;  in = 0;
+		}
+		if (cr->get_armor().get_quality() > cr->get_armor().get_quality_levels())
+		{
+			fg = COLOR_BLACK;
+		}
+		else if (cr->get_armor().is_damaged())
+		{
+			fg = COLOR_YELLOW; in = 1;
+		}
+		else if (cr->get_armor().get_quality() >1)
+		{
+			fg = COLOR_YELLOW; in = (bg == COLOR_RED);
+		}
+		if (fg == COLOR_WHITE && bg == COLOR_BLACK)
+			in = 0;
+		set_color(fg, bg, in);
+	}
+	else
+	{
+		switch (hasdisguise(*cr))
+		{
+		case 1:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+		case 2:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
+		default:
+			if (cr->get_armor().get_stealth_value() > 1)
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			else set_color_easy(RED_ON_BLACK_BRIGHT);
+		}
+		if (sitealarmtimer >= 0 || sitealarm == 1)
+			if (cr->get_armor().get_stealth_value() > 1)
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	addstrAlt("Clothes: ");
+	addstrAlt(cr->get_armor_string(false));
+	set_color_easy(WHITE_ON_BLACK);
+	char used[SKILLNUM];
+	memset(used, 0, sizeof(char)*SKILLNUM);
+	int snum = 5;
+	char printed = 1;
+	while (snum>0 && printed)
+	{
+		printed = 0;
+		int max = 0;
+		long maxs = -1;
+		for (int s = 0; s<SKILLNUM; s++)
+		{
+			if ((cr->get_skill(s) * 10000 + cr->get_skill_ip(s))>max && !used[s])
+			{
+				max = (cr->get_skill(s) * 10000 + cr->get_skill_ip(s));
+				maxs = s;
+			}
+		}
+		if (maxs != -1)
+		{
+			used[maxs] = 1;
+			printed = 1;
+			// Maxed skills are cyan
+			if (cr->skill_cap(maxs, true) != 0 && cr->get_skill(maxs) >= cr->skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			// About to level up skills are white
+			else if (cr->get_skill_ip(maxs) >= 100 + (10 * cr->get_skill(maxs)) &&
+				cr->get_skill(maxs)<cr->skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			// <1 skills are dark gray
+			else if (cr->get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			// >=1 skills are light gray
+			else set_color_easy(WHITE_ON_BLACK);
+			moveAlt(3 + 5 - snum, 31);
+			if (knowledge>5 - snum)
+				addstrAlt(skill_enum_to_string(maxs));
+			else addstrAlt("???????");
+			addstrAlt(": ");
+			if (knowledge>7 - snum)
+				addstrAlt(cr->get_skill(maxs));
+			else addcharAlt('?');
+			if (snum == 5 && printed)
+			{
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(2, 31, "Top Skills:");
+			}
+		}
+		snum--;
+	}
+	int woundsum = 0;
+	for (int w = 0; w<BODYPARTNUM; w++)
+		if (cr->wound[w] != 0)woundsum++;
+	printhealthstat(*cr, 1, 49, FALSE);
+	if (woundsum>0)
+	{
+		for (int w = 0; w<BODYPARTNUM; w++)
+		{
+			if (cr->wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			moveAlt(2 + w, 49);
+			switch (w)
+			{
+			case BODYPART_HEAD:addstrAlt("Head:"); break;
+			case BODYPART_BODY:addstrAlt("Body:"); break;
+			case BODYPART_ARM_RIGHT:addstrAlt("Right Arm:"); break;
+			case BODYPART_ARM_LEFT:addstrAlt("Left Arm:"); break;
+			case BODYPART_LEG_RIGHT:addstrAlt("Right Leg:"); break;
+			case BODYPART_LEG_LEFT:addstrAlt("Left Leg:"); break;
+			}
+			moveAlt(2 + w, 61);
+			if (cr->wound[w] & WOUND_NASTYOFF)addstrAlt("Ripped off");
+			else if (cr->wound[w] & WOUND_CLEANOFF)addstrAlt("Clean sever");
+			else
+			{
+				int sum = 0;
+				if (cr->wound[w] & WOUND_SHOT)sum++;
+				if (cr->wound[w] & WOUND_CUT)sum++;
+				if (cr->wound[w] & WOUND_BRUISED)sum++;
+				if (cr->wound[w] & WOUND_BURNED)sum++;
+				if (cr->wound[w] & WOUND_TORN)sum++;
+				if (sum == 0)
+				{
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					if (cr->animalgloss == ANIMALGLOSS_ANIMAL)
+						addstrAlt("Animal");
+					else addstrAlt("Liberal");
+				}
+				if (cr->wound[w] & WOUND_SHOT) { addstrAlt("Sht"); sum--; if (sum>0)addstrAlt(","); }
+				if (cr->wound[w] & WOUND_BRUISED) { addstrAlt("Brs"); sum--; if (sum>0)addstrAlt(","); }
+				if (cr->wound[w] & WOUND_CUT) { addstrAlt("Cut"); sum--; if (sum>0)addstrAlt(","); }
+				if (cr->wound[w] & WOUND_TORN) { addstrAlt("Trn"); sum--; if (sum>0)addstrAlt(","); }
+				if (cr->wound[w] & WOUND_BURNED) { addstrAlt("Brn"); sum--; if (sum>0)addstrAlt(","); }
+			}
+		}
+		set_color_easy(WHITE_ON_BLACK);
+	}
 }
+/* party info at top of screen */
+void printparty()
+{
+	Creature *party[6] = { NULL,NULL,NULL,NULL,NULL,NULL };
+	if (activesquad != NULL)
+		for (int p = 0; p<6; p++)party[p] = activesquad->squad[p];
+	set_color_easy(WHITE_ON_BLACK);
+	for (int i = 2; i<8; i++)
+	{
+		mvaddstrAlt(i,  0, "                                                                                "); // 80 spaces
+	}
+	if (party_status != -1 && party[party_status] == NULL)party_status = -1;
+	if (party_status != -1)
+	{
+		printcreatureinfo(party[party_status]);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(1,  0, party_status + 1);
+	}
+	else
+	{
+		char str[200];
+		mvaddstrAlt(1,  0, "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�"); // 80 characters
+		for (int p = 0; p<6; p++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(p + 2,  0, "                                                                                "); // 80 spaces
+			mvaddcharAlt(p + 2, 0, '1' + p);
+			if (party[p] != NULL)
+			{
+				if (party[p]->prisoner != NULL)set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(p + 2,  2, party[p]->name);
+				if (party[p]->prisoner != NULL)addstrAlt("+H");
+				int skill = 0;
+				char bright = 0;
+				for (int sk = 0; sk<SKILLNUM; sk++)
+				{
+					skill += (int)party[p]->get_skill(sk);
+					if (party[p]->get_skill_ip(sk) >= 100 + (10 * party[p]->get_skill(sk)) &&
+						party[p]->get_skill(sk)<party[p]->skill_cap(sk, true))bright = 1;
+				}
+				set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+				mvaddstrAlt(p + 2,  23, skill);
+				addstrAlt("/");
+				addstrAlt(party[p]->get_weapon_skill());
+				moveAlt(p + 2, 31);
+				if (mode != GAMEMODE_SITE)set_color_easy(WHITE_ON_BLACK);
+				else switch (weaponcheck(*party[p]))
+				{
+				case -1:
+				case 0:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+				case 1:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
+				case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
+				}
+				if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
+					addstrAlt(party[p]->extra_throwing_weapons[0]->get_shortname(0));
+				else addstrAlt(party[p]->get_weapon().get_shortname(0));
+				//set_color_easy(WHITE_ON_BLACK);
+				if (party[p]->get_weapon().get_ammoamount()>0)
+				{
+					//set_color_easy(WHITE_ON_BLACK);
+					addstrAlt(" (");
+					addstrAlt(party[p]->get_weapon().get_ammoamount());
+					addstrAlt(closeParenthesis);
+				}
+				else if (party[p]->get_weapon().uses_ammo())
+				{
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					if (len(party[p]->clips))
+					{
+						addstrAlt(" (");
+						addstrAlt(party[p]->count_clips());
+						addstrAlt(closeParenthesis);
+					}
+					else
+						addstrAlt(" (XX)");
+				}
+				else if (party[p]->get_weapon().is_throwable() && !party[p]->has_thrown_weapon)
+					addstrAlt(" (1)");
+				else if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
+				{
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					addstrAlt(" (");
+					addstrAlt(party[p]->count_weapons() - party[p]->is_armed());
+					addstrAlt(closeParenthesis);
+				}
+				if (mode != GAMEMODE_SITE)
+				{
+					int fg = COLOR_WHITE;
+					int bg = COLOR_BLACK;
+					int in = 1;
+					if (party[p]->get_armor().is_bloody())
+					{
+						bg = COLOR_RED;  in = 1;
+					}
+					if (party[p]->get_armor().get_quality() > party[p]->get_armor().get_quality_levels())
+					{
+						fg = COLOR_BLACK;
+					}
+					else if (party[p]->get_armor().is_damaged())
+					{
+						fg = COLOR_YELLOW; in = 1;
+					}
+					else if (party[p]->get_armor().get_quality() >1)
+					{
+						fg = COLOR_YELLOW; in = (bg == COLOR_RED);
+					}
+					if (fg == COLOR_WHITE && bg == COLOR_BLACK)
+						in = 0;
+					set_color(fg, bg, in);
+				}
+				else
+				{
+					switch (hasdisguise(*party[p]))
+					{
+					case 1:set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+					case 2:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
+					default:
+						if (party[p]->get_armor().get_stealth_value() > 1)
+							set_color_easy(BLACK_ON_BLACK_BRIGHT);
+						else set_color_easy(RED_ON_BLACK_BRIGHT);
+						break;
+					}
+					if (sitealarmtimer >= 0 || sitealarm == 1)
+						if (party[p]->get_armor().get_stealth_value() > 1)
+							set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				}
+				mvaddstrAlt(p + 2, 46, party[p]->get_armor().get_shortname());
+				printhealthstat(*party[p], p + 2, 61, TRUE);
+				set_color_easy(WHITE_ON_BLACK);
+				moveAlt(p + 2, 70);
+				long v = -1;
+				if (showcarprefs == 1)v = id_getcar(party[p]->pref_carid);
+				else v = id_getcar(party[p]->carid);
+				if (v != -1 && showcarprefs != -1)
+				{
+					strcpy(str, vehicle[v]->shortname().c_str());
+					if (showcarprefs == 1 ? party[p]->pref_is_driver : party[p]->is_driver)strcat(str, "-D");
+				}
+				else
+				{
+					int legok = 2;
+					if ((party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+						(party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+					if ((party[p]->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+						(party[p]->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+					if (party[p]->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, "Wheelchair");
+					else if (legok >= 1)strcpy(str, "On Foot");
+					else strcpy(str, "On \"Foot\"");
+				}
+				addstrAlt(str);
+			}
+		}
+	}
+	makedelimiter();
+}
+
+void printwoundstat(Creature &cr, int y, int x)
+{
+	// Add wound status
+	for (int w = 0; w<BODYPARTNUM; w++)
+	{
+		if (cr.wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
+		else set_color_easy(WHITE_ON_BLACK);
+		moveAlt(y + w, x);
+		switch (w)
+		{
+		case BODYPART_HEAD:addstrAlt("Head:"); break;
+		case BODYPART_BODY:addstrAlt("Body:"); break;
+		case BODYPART_ARM_RIGHT:addstrAlt("Right Arm:"); break;
+		case BODYPART_ARM_LEFT:addstrAlt("Left Arm:"); break;
+		case BODYPART_LEG_RIGHT:addstrAlt("Right Leg:"); break;
+		case BODYPART_LEG_LEFT:addstrAlt("Left Leg:"); break;
+		}
+		moveAlt(y + w, x + 11);
+		if (cr.wound[w] & WOUND_NASTYOFF)addstrAlt("Ripped off");
+		else if (cr.wound[w] & WOUND_CLEANOFF)addstrAlt("Severed");
+		else
+		{
+			int sum = 0;
+			if (cr.wound[w] & WOUND_SHOT)sum++;
+			if (cr.wound[w] & WOUND_CUT)sum++;
+			if (cr.wound[w] & WOUND_BRUISED)sum++;
+			if (cr.wound[w] & WOUND_BURNED)sum++;
+			if (cr.wound[w] & WOUND_TORN)sum++;
+			if (sum == 0)
+			{
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				if (cr.animalgloss == ANIMALGLOSS_ANIMAL)
+					addstrAlt("Animal");
+				else addstrAlt("Liberal");
+			}
+			if (cr.wound[w] & WOUND_SHOT) { addstrAlt("Shot"); sum--; if (sum>0)addstrAlt(","); }
+			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt("Bruised"); sum--; if (sum>0)addstrAlt(","); }
+			if (cr.wound[w] & WOUND_CUT) { addstrAlt("Cut"); sum--; if (sum>0)addstrAlt(","); }
+			if (cr.wound[w] & WOUND_TORN) { addstrAlt("Torn"); sum--; if (sum>0)addstrAlt(","); }
+			if (cr.wound[w] & WOUND_BURNED) { addstrAlt("Burned"); sum--; if (sum>0)addstrAlt(","); }
+		}
+	}
+}
+
+/* full screen character sheet */
+void printliberalstats(Creature &cr)
+{
+	set_color_easy(WHITE_ON_BLACK);
+	// Add name
+	mvaddstrAlt(2, 0, "Name: ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(cr.name);
+	set_color_easy(WHITE_ON_BLACK);
+	if (strcmp(cr.propername, cr.name) != 0)
+	{
+		//The names do not match, print real name as well
+		addstrAlt(" (");
+		addstrAlt(cr.propername);
+		addstrAlt(closeParenthesis);
+	}
+	addstrAlt(commaSpace);
+	addstrAlt(gettitle(cr));
+	addstrAlt(" (");
+	addstrAlt(cr.get_type_name());
+	addstrAlt(closeParenthesis);
+	moveAlt(3, 0);
+	// Add birthdate
+	addstrAlt("Born ");
+	addstrAlt(getmonth(cr.birthday_month));
+	addstrAlt(singleSpace);
+	addstrAlt(cr.birthday_day);
+	addstrAlt(commaSpace);
+	if (cr.birthday_month < month ||
+		(cr.birthday_month == month && cr.birthday_day <= day))
+		addstrAlt(year - cr.age);
+	else addstrAlt(year - 1 - cr.age);
+	// Add age
+	addstrAlt(" (Age ");
+	addstrAlt(cr.age);
+	// Assess their gender in an Elite Liberal way
+	if (cr.gender_liberal == GENDER_MALE)
+		addstrAlt(", Male");
+	else if (cr.gender_liberal == GENDER_FEMALE)
+		addstrAlt(", Female");
+	else addstrAlt(", Genderqueer");
+	// DON'T Note if there's some conflict with Conservative society's perceptions
+	//if(cr.gender_liberal != cr.gender_conservative && cr.gender_liberal != GENDER_NEUTRAL)
+	//   addstrAlt("*");
+	addstrAlt(closeParenthesis);
+	moveAlt(3, 46);
+	statebrokenlaws(cr);
+	set_color_easy(WHITE_ON_BLACK);
+	// Add juice
+	mvaddstrAlt(10, 16, "Juice: ");
+	addstrAlt(cr.juice);
+	if (cr.juice<1000)
+	{
+		mvaddstrAlt(11, 16, "Next:  ");
+		if (cr.juice<0)addstrAlt("0");
+		else if (cr.juice<10)addstrAlt("10");
+		else if (cr.juice<50)addstrAlt("50");
+		else if (cr.juice<100)addstrAlt("100");
+		else if (cr.juice<200)addstrAlt("200");
+		else if (cr.juice<500)addstrAlt("500");
+		else addstrAlt("1000");
+	}
+	// Add attributes
+	mvaddstrAlt(5, 0, "Heart: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
+	mvaddstrAlt(6, 0, "Intelligence: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
+	mvaddstrAlt(7, 0, "Wisdom: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_WISDOM, true));
+	mvaddstrAlt(8, 0, "Health: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_HEALTH, true));
+	mvaddstrAlt(9, 0, "Agility: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_AGILITY, true));
+	mvaddstrAlt(10, 0, "Strength: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_STRENGTH, true));
+	mvaddstrAlt(11, 0, "Charisma: ");
+	addstrAlt(cr.get_attribute(ATTRIBUTE_CHARISMA, true));
+	// Add highest skills
+	char used[SKILLNUM];
+	memset(used, 0, sizeof(char)*SKILLNUM);
+	int skills_max = 16;
+	char printed = 1;
+	mvaddstrAlt(5, 28, "SKILL");
+	mvaddstrAlt(5, 43, "NOW   MAX");
+	for (int skills_shown = 0; skills_shown<skills_max&&printed; skills_shown++)
+	{
+		printed = 0;
+		int max = 0;
+		long maxs = -1;
+		for (int s = 0; s<SKILLNUM; s++)
+		{
+			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s))>max && !used[s])
+			{
+				max = (cr.get_skill(s) * 10000 + cr.get_skill_ip(s));
+				maxs = s;
+			}
+		}
+		if (maxs != -1)
+		{
+			used[maxs] = 1;
+			printed = 1;
+			// Maxed skills are cyan
+			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			// About to level up skills are white
+			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
+				cr.get_skill(maxs)<cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			// <1 skills are dark gray
+			else if (cr.get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			// >=1 skills are light gray
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
+			addstrAlt(": ");
+			moveAlt(6 + skills_shown, 42);
+			addstr_f("%2d.", cr.get_skill(maxs));
+			if (cr.get_skill_ip(maxs)<100 + (10 * cr.get_skill(maxs)))
+			{
+				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
+				{
+					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs)))<10)
+						addcharAlt('0');
+					addstrAlt((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))));
+				}
+				else addstrAlt("00");
+			}
+			else addstrAlt("99+");
+			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs)<cr.skill_cap(maxs, true))
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			moveAlt(6 + skills_shown, 48);
+			addstr_f("%2d.00", cr.skill_cap(maxs, true));
+		}
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	// Add weapon
+	mvaddstrAlt(13, 0, "Weapon: ");
+	addstrAlt(cr.get_weapon_string(0));
+	// Add clothing
+	mvaddstrAlt(14, 0, "Clothes: ");
+	addstrAlt(cr.get_armor_string(true));
+	// Add vehicle
+	mvaddstrAlt(15, 0, "Car: ");
+	long v = -1;
+	if (showcarprefs == 1)v = id_getcar(cr.pref_carid);
+	else v = id_getcar(cr.carid);
+	if (v != -1 && showcarprefs != -1)
+	{
+		addstrAlt(vehicle[v]->shortname());
+		char d;
+		if (showcarprefs == 1)d = cr.pref_is_driver;
+		else d = cr.is_driver;
+		if (d)addstrAlt("-D");
+	}
+	else
+	{
+		int legok = 2;
+		if ((cr.wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+			(cr.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+		if ((cr.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+			(cr.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+		if (cr.flag & CREATUREFLAG_WHEELCHAIR)addstrAlt("Wheelchair");
+		else if (legok >= 1)addstrAlt("On Foot");
+		else addstrAlt("On \"Foot\"");
+	}
+	// Add recruit stats
+	if (cr.flag != CREATUREFLAG_BRAINWASHED)
+	{
+		mvaddstrAlt(18, 55, maxsubordinates(cr) - subordinatesleft(cr));
+		addstrAlt(" Recruits / ");
+		addstrAlt(maxsubordinates(cr));
+		addstrAlt(" Max");
+	}
+	else
+	{
+		mvaddstrAlt(18, 55, "Enlightened ");
+		addstrAlt("Can't Recruit");
+	}
+	// Any meetings with potential recruits scheduled?
+	if (scheduledmeetings(cr))
+	{
+		mvaddstrAlt(20, 55, "Scheduled Meetings: ");
+		addstrAlt(scheduledmeetings(cr));
+	}
+	// Add seduction stats
+	moveAlt(19, 55);
+	int lovers = loveslaves(cr);
+	if (cr.flag & CREATUREFLAG_LOVESLAVE)
+		lovers++;
+	if (lovers)
+	{
+		addstrAlt(lovers);
+		addstrAlt(" Romantic Interest");
+		if (lovers>1)addstrAlt("s");
+	}
+	// Any dates with potential love interests scheduled?
+	if (scheduleddates(cr))
+	{
+		mvaddstrAlt(21, 55, "Scheduled Dates:    ");
+		addstrAlt(scheduleddates(cr));
+	}
+	printwoundstat(cr, 5, 55);
+	//SPECIAL WOUNDS
+	set_color_easy(RED_ON_BLACK);
+	int y = 17;
+	int x = 0;
+	if (cr.special[SPECIALWOUND_HEART] != 1)
+	{
+		mvaddstrAlt(y++, x, "Heart Punctured");
+	}
+	if (cr.special[SPECIALWOUND_RIGHTLUNG] != 1)
+	{
+		mvaddstrAlt(y++, x, "R. Lung Collapsed");
+	}
+	if (cr.special[SPECIALWOUND_LEFTLUNG] != 1)
+	{
+		mvaddstrAlt(y++, x, "L. Lung Collapsed");
+	}
+	if (cr.special[SPECIALWOUND_NECK] != 1)
+	{
+		mvaddstrAlt(y++, x, "Broken Neck");
+	}
+	if (cr.special[SPECIALWOUND_UPPERSPINE] != 1)
+	{
+		mvaddstrAlt(y++, x, "Broken Up Spine");
+	}
+	if (cr.special[SPECIALWOUND_LOWERSPINE] != 1)
+	{
+		mvaddstrAlt(y++, x, "Broken Lw Spine");
+	}
+	if (cr.special[SPECIALWOUND_RIGHTEYE] != 1)
+	{
+		mvaddstrAlt(y++, x, "No Right Eye");
+	}
+	if (cr.special[SPECIALWOUND_LEFTEYE] != 1)
+	{
+		mvaddstrAlt(y++, x, "No Left Eye");
+	}
+	if (cr.special[SPECIALWOUND_NOSE] != 1)
+	{
+		mvaddstrAlt(y++, x, "No Nose");
+	}
+	if (cr.special[SPECIALWOUND_TONGUE] != 1)
+	{
+		mvaddstrAlt(y++, x, "No Tongue");
+	}
+	if (cr.special[SPECIALWOUND_TEETH] != TOOTHNUM)
+	{
+		moveAlt(y++, x);
+		if (cr.special[SPECIALWOUND_TEETH] == 0)addstrAlt("No Teeth");
+		else if (cr.special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)addstrAlt("Missing a Tooth");
+		else if (cr.special[SPECIALWOUND_TEETH]<TOOTHNUM)addstrAlt("Missing Teeth");
+	}
+	if (cr.special[SPECIALWOUND_LIVER] != 1)
+	{
+		mvaddstrAlt(y++, x, "Liver Damaged");
+	}
+	if (cr.special[SPECIALWOUND_RIGHTKIDNEY] != 1)
+	{
+		mvaddstrAlt(y++, x, "R. Kidney Damaged");
+	}
+	if (cr.special[SPECIALWOUND_LEFTKIDNEY] != 1)
+	{
+		mvaddstrAlt(y++, x, "L. Kidney Damaged");
+	}
+	if (cr.special[SPECIALWOUND_STOMACH] != 1)
+	{
+		mvaddstrAlt(y++, x, "Stomach Injured");
+	}
+	if (cr.special[SPECIALWOUND_SPLEEN] != 1)
+	{
+		mvaddstrAlt(y++, x, "Busted Spleen");
+	}
+	if (cr.special[SPECIALWOUND_RIBS] != RIBNUM)
+	{
+		moveAlt(y++, x);
+		if (cr.special[SPECIALWOUND_RIBS] == 0)addstrAlt("All Ribs Broken");
+		else if (cr.special[SPECIALWOUND_RIBS] == RIBNUM - 1)addstrAlt("Broken Rib");
+		else if (cr.special[SPECIALWOUND_RIBS]<RIBNUM)addstrAlt("Broken Ribs");
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	for (int i = 0, y = 12; i<AUGMENTATIONNUM; i++, y++)
+	{
+		if (cr.get_augmentation(i).type == -1) continue;
+		mvaddstrAlt(y, 55, Augmentation::get_name(i));
+		addstrAlt(": ");
+		addstrAlt(cr.get_augmentation(i).name);
+	}
+}
+/* Full screen character sheet, skills only edition */
+void printliberalskills(Creature &cr)
+{
+	// Add name
+	set_color_easy(WHITE_ON_BLACK);
+	moveAlt(2, 0);
+	if (strcmp(cr.propername, cr.name) != 0)
+		addstrAlt("Code name: ");
+	else addstrAlt("Name: ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(cr.name);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(commaSpace);
+	addstrAlt(gettitle(cr));
+	addstrAlt(" (");
+	addstrAlt(cr.get_type_name());
+	addstrAlt(closeParenthesis);
+	// Add all skills
+	for (int s = 0; s<SKILLNUM; s++)
+	{
+		if (s % 3 == 0 && s<9)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(4, 27 * (s / 3));
+			addstrAlt("SKILL");
+			moveAlt(4, 15 + 27 * (s / 3));
+			addstrAlt("NOW   MAX");
+		}
+		// Maxed skills are cyan
+		if (cr.skill_cap(s, true) != 0 && cr.get_skill(s) >= cr.skill_cap(s, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+		// About to level up skills are white
+		else if (cr.get_skill_ip(s) >= 100 + (10 * cr.get_skill(s)) &&
+			cr.get_skill(s)<cr.skill_cap(s, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		// <1 skills are dark gray
+		else if (cr.get_skill(s)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		// >=1 skills are light gray
+		else set_color_easy(WHITE_ON_BLACK);
+		moveAlt(5 + s / 3, 27 * (s % 3));
+		addstrAlt(skill_enum_to_string(s));
+		addstrAlt(": ");
+		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
+		addstr_f("%2d.", cr.get_skill(s));
+		if (cr.get_skill_ip(s)<100 + (10 * cr.get_skill(s)))
+		{
+			if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) != 0)
+			{
+				if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s)))<10)
+					addstrAlt("0");
+				addstrAlt((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))));
+			}
+			else addstrAlt("00");
+		}
+		else addstrAlt("99+");
+		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s)<cr.skill_cap(s, true))
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		moveAlt(5 + s / 3, 20 + 27 * (s % 3));
+		addstr_f("%2d.00", cr.skill_cap(s, true));
+	}
+	set_color_easy(WHITE_ON_BLACK);
+}
+
+/* Full screen character sheet, crime sheet */
+void printliberalcrimes(Creature &cr)
+{
+	// Add name
+	set_color_easy(WHITE_ON_BLACK);
+	if (strcmp(cr.propername, cr.name) != 0)
+		mvaddstrAlt(2, 0, "Code name: ");
+	else mvaddstrAlt(2, 0, "Name: ");
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(cr.name);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(commaSpace);
+	addstrAlt(gettitle(cr));
+	addstrAlt(" (");
+	addstrAlt(cr.get_type_name());
+	addstrAlt(closeParenthesis);
+	// Show outstanding convictions in addition to untried crimes
+	if (cr.deathpenalty)
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
+			mvaddstrAlt(3, 0, "On DEATH ROW");
+		else mvaddstrAlt(3, 0, "Sentenced to DEATH");
+	}
+	else if (cr.sentence<0)
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
+			mvaddstrAlt(3, 0, "Serving life in prison");
+		else mvaddstrAlt(3, 0, "Sentenced to life in prison");
+	}
+	else if (cr.sentence>0)
+	{
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
+			mvaddstrAlt(3, 0, "Serving ");
+		else mvaddstrAlt(3, 0, "Sentenced to ");
+		addstrAlt(cr.sentence);
+		addstrAlt(" months in prison.");
+	}
+	// Add all crimes
+	for (int i = 0; i < LAWFLAGNUM; i++)
+	{
+		if (i % 2 == 0 && i<4)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(4, 40 * (i / 2), "CRIME");
+			mvaddstrAlt(4, 30 + 40 * (i / 2), "NUM");
+		}
+		// Commited crimes are yellow
+		if (cr.crimes_suspected[i] > 0)
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(5 + i / 2, 40 * (i % 2), getlawflag(i) + ": ");
+		mvaddstr_f(5 + i / 2, 30 + 40 * (i % 2), "%2d", cr.crimes_suspected[i]);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+}
+
+/* full character sheet (with surrounding interface) */
+void fullstatus(int p)
+{
+	if (activesquad == NULL)return;
+	const int pagenum = 3;
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0,  0, "Profile of a Liberal");
+		if (page == 0) printliberalstats(*activesquad->squad[p]);
+		else if (page == 1) printliberalskills(*activesquad->squad[p]);
+		else if (page == 2) printliberalcrimes(*activesquad->squad[p]);
+		mvaddstrAlt(23,  0, "N - Change Code Name      G - Fix Gender Label");
+		if (activesquad->squad[1] != NULL)
+			addstrAlt("    LEFT/RIGHT - Other Liberals");
+		mvaddstrAlt(24,  0, "Press any other key to continue the Struggle");
+		addstrAlt("    UP/DOWN  - More Info");
+		int c = getkeyAlt();
+		if (activesquad->squad[1] != NULL && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
+		{
+			int sx = (c == KEY_LEFT) ? -1 : 1;
+			do p = (p + 6 + sx) % 6; while (activesquad->squad[p] == NULL);
+		}
+		else if (c == KEY_DOWN)
+		{
+			page++;
+			page %= pagenum;
+		}
+		else if (c == KEY_UP)
+		{
+			page--;
+			if (page<0) page = pagenum - 1;
+			page %= pagenum;
+		}
+		else if (c == 'n')
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(23, 0, "What is the new code name?                                                      "); // 80 characters
+			mvaddstrAlt(24, 0, "                                                                                "); // 80 spaces
+			enter_name(24, 0, activesquad->squad[p]->name, CREATURE_NAMELEN, activesquad->squad[p]->propername);
+		}
+		else if (c == 'g')
+		{
+			activesquad->squad[p]->gender_liberal++;
+			if (activesquad->squad[p]->gender_liberal>2)
+				activesquad->squad[p]->gender_liberal = 0;
+		}
+		else break;
+	}
+}
+
+
 /* prints a short blurb showing how to page forward */
 string addnextpagestr()
 {

@@ -1,0 +1,44 @@
+LAW_ABORTION
+"Conservatives don't like abortion."
+LAW_ANIMALRESEARCH
+"Animals are denied the right to vote."
+LAW_POLICEBEHAVIOR
+"The police are still out there."
+LAW_PRIVACY
+"The government runs intelligence agencies."
+LAW_DEATHPENALTY
+"You can go to prison for life for serious crimes."
+LAW_NUCLEARPOWER
+"Some people support legalizing nuclear power."
+LAW_POLLUTION
+"We're still polluting a little bit."
+LAW_LABOR
+"Corporate bosses don't always give in to unions."
+LAW_GAY
+"Not everybody likes gay people."
+LAW_CORPORATE
+"There are corporations."
+LAW_FREESPEECH
+"People get mad if you swear a lot in public."
+LAW_FLAGBURNING
+"The flag code says you shouldn't make it into clothing."
+LAW_TAX
+"There's still inequality in this country."
+LAW_GUNCONTROL
+"We need to repeal the second amendment."
+LAW_WOMEN
+"Some people are sexist."
+LAW_CIVILRIGHTS
+"I knew some people that were pretty racist."
+LAW_DRUGS
+"Drugs are expensive."
+LAW_IMMIGRATION
+"All the immigrants, not everybody likes them."
+LAW_ELECTIONS
+"Some of these politicians rub me the wrong way."
+LAW_MILITARY
+"We still have a military."
+LAW_TORTURE
+"Some conservatives support torture."
+LAW_PRISONS
+"Prisons still exist."

@@ -1,0 +1,4 @@
+A - No sorting.
+B - Sort by name.
+C - Sort by location and name.
+D - Sort by squad or name.

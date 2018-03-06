@@ -1,0 +1,479 @@
+- Check the status of a squad Liberal
+ responds, 
+ says, 
+ while naked
+: 
+Press 'L' to view the high score list.
+&c
+, 
+Finding bugs
+UNDEFINED
+NONE
+ Yea
+ Nay
+ and 
+ counts of 
+ feels sick to the stomach afterward and 
+0 - Show the squad's Liberal status
+O - Change the squad's Liberal order
+Sleeper 
+The execution is scheduled to occur three months from now.
+The major networks and publications take it up and run it for weeks.
+They are stashed at the homeless shelter.
+They'll round up the last of you up eventually.  All is lost.
+The Conservatives have made the world in their image.
+This is bound to get the Corporations a little riled up.
+Establish Prison Rehabilitation
+Improve Prison Conditions
+The Stalinists have made the world in their image.
+Choose a Liberal squad member to 
+You went on vacation when the country was on the verge of collapse.
+You went into hiding when the country was on the verge of collapse.
+While you were on the inside, the country degenerated...
+You disappeared safely, but you hadn't done enough.
+The Arch-Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!
+The Stalinist Congress is proposing a STALINIST AMENDMENT!
+creature
+skill_experience
+name
+propername
+gender_conservative
+gender_liberal
+squadid
+age
+birthday_month
+birthday_day
+exists
+align
+alive
+type_idname
+infiltration
+animalgloss
+specialattack
+clinic
+dating
+hiding
+trainingtime
+trainingsubject
+prisoner
+sentence
+confessions
+deathpenalty
+joindays
+deathdays
+id
+hireid
+meetings
+forceinc
+stunned
+has_thrown_weapon
+money
+juice
+income
+wound
+blood
+special
+crimes_suspected
+heat
+location
+worklocation
+cantbluff
+base
+activity
+arg
+arg2
+carid
+is_driver
+pref_carid
+pref_is_driver
+flag
+dontname
+Enter - Done
+being followed by Conservative swine!
+It looks like you've lost them!
+Here they come!
+ - 
+ (Current Location)
+ (Safe House)
+ (Enemy Safe House)
+ (Closed Down)
+ (High Security)
+ (Need Car)
+ ($
+($
+)
+ (Under Siege)
+%
+Secrecy: 
+Heat: 
+ - Travel to a Different City
+class
+WEAPON
+CLIP
+ARMOR
+LOOT
+type
+description
+price
+sleeperprice
+letter
+The Squad smells Conservative panic.
+Sta, 
+Lib+, 
+Lib, 
+Mod, 
+Cons, 
+Cons+
+moderate
+Buggy
+ is seized, 
+Press a Letter to select a 
+Press a Letter to select an 
+Enter - 
+  According to sources that were at the scene, 
+  According to police sources that were at the scene, 
+&r
+.
+Members of the Liberal Crime Squad 
+to a Liberal Crime Squad spokesperson.
+to a spokesperson from the police department.
+Press any key to reflect on what has happened.
+The Liberal Crime Squad
+Not a skill
+Not an attribute
+SPORTSCAR
+A NEW CONSERVATIVE ERA
+The Year is 
+Conservative President 
+ ends his second term with approval
+ratings in the high 70s, and is succeeded by hardcore Arch-Conservative
+With Conservatives sweeping into power in the House of Representatives
+and Senate, and a Conservative majority in the Supreme Court of the
+United States, commentators are hailing it as the beginning of a new
+Conservative era.
+President 
+ has asked the new Congress to move quickly
+to rubber stamp his radical Arch-Conservative agenda. 
+The left seems
+powerless to stop this imminent trampling of Liberal Sanity and Justice.
+In this dark time, the Liberal Crime Squad is born...
+What is your name to the People?
+Press enter to be known by your real name instead.
+INVALID TAG 
+The doctor said I was 
+a boy
+a girl
+an intersex baby
+My parents 
+insisted otherwise.
+They 
+named me 
+ERROR
+The Founder of the Liberal Crime Squad
+FIRST NAME: 
+ (Press A to have your parents reconsider)
+LAST NAME: 
+ (Press B to be born to a different family)
+SEX: 
+Male
+Female
+It's Complicated
+ (Press C to change your sex at birth)
+HISTORY: 
+Let Me Choose
+Let Fate Decide
+ (Press D to toggle childhood)
+CITY: 
+ (Press E to relocate)
+Press any other key when ready to begin...
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+[ ]
+[X]
+Press any other key to continue...
+Not a creature
+Not a valid mappable site
+Not a special wound
+New Game of Liberal Crime Squad: Advanced Gameplay Options
+ A - Classic Mode: No Conservative Crime Squad.
+ B - We Didn't Start The Fire: The CCS starts active and extremely strong.
+ C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?
+ D - National LCS: Advanced play across multiple cities.
+ E - Marathon Mode: Prevent Liberals from amending the Constitution.
+ F - Stalinist Mode: Enable Stalinist Comrade Squad (not fully implemented).
+New Game of Liberal Crime Squad: Your Agenda
+ A - No Compromise Classic - I will make all our laws Elite Liberal!
+ B - Democrat Mode - Most laws must be Elite Liberal, some can be Liberal.
+New Game of Liberal Crime Squad: Field Learning
+(affects Security, Stealth, Disguise, & Driving)
+ A - Fast skills - Grinding is Conservative!
+ B - Classic - Excellence requires practice.
+ C - Hard Mode - Learn from the best, or face arrest!
+Delete a Save File
+Choose a Save File
+----Title-----------------------------------------------------------------------
+NEW GAME
+Press a Letter to Select a Save File
+Press a Letter to Delete a Save File
+, V to switch, or X to quit
+Are you sure you want to delete 
+? (y/n)
+Press M to turn off the Music. Press H to view your Liberal High Score.
+Press M to turn on some Music. Press H to view your Liberal High Score.
+In what world will you pursue your Liberal Agenda?
+Enter a name for the save file.
+Please enter a name for the save file.
+Pretty please enter a name for the save file.
+Just enter a [darn] name for the save file.
+Liberal Crime Squad
+Inspired by the 1983 version of Oubliette
+v3.9 Copyright (C) 2002-4, Tarn Adams
+A Bay 12 Games Production
+http://bay12games.com/lcs/
+v
+ Maintained by the Open Source Community
+https://github.com/King-Drake/Liberal-Crime-Squad
+http://www.bay12games.com/forum/index.php?board=3.0
+http://lcs.wikidot.com/
+Press ESC now to quit. Quitting later causes your progress to be saved.
+Press any other key to pursue your Liberal Agenda!
++
+.dat
+Item type 
+ does not exist. Deleting item.
+Vehicle type 
+ does not exist. Deleting vehicle.
+Could not load
+clip
+weapon
+armor
+loot
+money
+Failed to load sitemaps.txt! Reverting to old map mode.
+debug code 
+ activated
+Failed to load 
+!
+Default missing for masks!
+Default for masks is not a known armor type!
+ was able to slow the bleeding of
+'s wounds.
+ is burned!
+ drops 
+'s body.
+ has been caught snooping around.
+The Liberal is now homeless and jobless...
+ has leaked secret intelligence files.
+ has leaked secret police records.
+ has leaked secret corporate documents.
+ has leaked internal prison records.
+ has leaked proof of systemic Cable News bias.
+ has leaked proof of systemic AM Radio bias.
+ has leaked internal animal research reports.
+ has leaked proof of corruption in the judiciary.
+The papers are stashed at the homeless shelter.
+ has leaked a list of the CCS's government backers.
+The disk is stashed at the homeless shelter.
+ has been arrested while embezzling funds.
+ has been arrested while stealing things.
+ has dropped a package off at the homeless shelter.
+Items not found in XML files led to 
+ lost stolen items! 
+Contact the mod author (or DevTeam if playing the vanilla game) at once!
+ has recruited a new 
+ looks forward serving the Liberal cause!
+SPEND.
+Choose a color
+These colors are Conservative
+Color
+You don't have enough money!
+Choose a vehicle
+Vehicle
+We don't need a Conservative car
+Enter - Leave
+B - Choose a buyer
+S - Sell a car
+S - Sell the 
+G - Get a Liberal car
+F - Go in and fix up Conservative wounds
+Universal Liberal Statistics:
+Recruits: 
+Martyrs: 
+Kills: 
+Kidnappings: 
+$ Taxed: 
+$ Spent: 
+Flags Bought: 
+Flags Burned: 
+No valid scores, press any button to return.
+The Liberal ELITE
+The Liberal Crime Squad liberalized the country in 
+The Liberal Crime Squad was brought to justice in 
+The Liberal Crime Squad was blotted out in 
+The Liberal Crime Squad was mobbed in 
+The Liberal Crime Squad was downsized in 
+The Liberal Crime Squad was KIA in 
+The country was Reaganified in 
+The Liberal Crime Squad died in prison in 
+The Liberal Crime Squad was executed in 
+The Liberal Crime Squad was on vacation in 
+The Liberal Crime Squad was in permanent hiding in 
+The Liberal Crime Squad was hunted down in 
+The Liberal Crime Squad was scattered in 
+The Liberal Crime Squad was out-Crime Squadded in 
+The Liberal Crime Squad was burned in 
+The country was Stalinized in 
+. 
+ prepares to rob the bank:
+A - Quietly pass the teller a robbery note
+B - Threaten bystanders and demand access to the vault
+C - On second thought, don't rob the bank
+ slips the teller a note: 
+The bank teller reads the note, 
+and dives for cover as the guards move in on the squad!
+The bank teller reads the note, 
+and slips several bricks of cash into the squad's bag.
+ brandishes the 
+"
+OPEN THE VAULT, NOW!"
+The bank teller and dives for cover as 
+guards move in on the squad!
+The bank employees hesitantly cooperate!
+The vault is open!
+ talks to 
+:
+A - Strike up a conversation about politics
+B - Drop a pickup line
+C - On second thought, don't say anything
+D - Rent a room
+D - Stop renting a room
+D - Buy weapons
+D - Rob the bank
+"I'd like cancel my room."
+"Put some clothes on before I call the cops."
+"Alright. Please clear out your room."
+<Your possessions at this location have been moved to the shelter.>
+"I'd like to rent a room."
+"Put some clothes on before I call the cops."
+"It'll be $
+ a month.
+I'll need $
+ now as a security deposit."
+A - Accept.
+B - Decline.
+C - Threaten the landlord.
+"I'll take it."
+"Rent is due by the third of every month.
+We'll start next month."
+ <turns away>
+"Whoa, I was looking for something cheaper."
+"Not my problem..."
+ <turns away>
+ brandishes the 
+"What's the price for the Liberal Crime Squad?"
+"I think you'd better leave."
+ <crosses arms>
+"Jesus... it's yours..."
+"Hey, I need a gun."
+"Jesus..."
+"I don't sell guns, officer."
+"We can talk when things are calm."
+"What exactly do you need?"
+"Uhhh... not a good place for this."
+"Do you want to hear something disturbing?"
+ rumbles disinterestedly.
+ barks.
+ doesn't understand.
+Prisoner
+"What?"
+"Now's not the time!"
+"Leave me alone."
+"No."
+ <turns away>
+ shakes its turret a firm 'no'.
+ doesn't quite pick up on the subtext.
+"Dirty. You know that's illegal, officer."
+ and 
+ make plans for tonight
+, and 
+ breaks for the exit
+. 
+"I'm a happily married man, sweetie."
+"This ain't Brokeback Mountain, son."
+"[The police are not doing their job very well!]"
+"The cops suck!"
+"Industries that stop at nothing to become more profitable are polluting 
+the environment in ways that hurt not only humans, but animals too.
+the environment in ways that hurt not only animals, but people too.
+Prisoner
+"Aaaahhh..."
+"Oh, really?"
+"Yeah, really!"
+"You got anything to smoke on you?"
+*cough*
+After more discussion, 
+ agrees to come by later tonight.
+"Ugh. Pfft."
+"Do you want me to arrest you?"
+"If you don't shut up, I'm going to shoot you."
+"Whatever."
+ <turns away>
+ talks to 
+:
+A - Intimidate
+B - Threaten hostages
+C - Bluff
+D - Surrender to authorities
+"Don't push the LCS!"
+"Don't [play] with me!"
+"Don't fuck with me!"
+"Release your hostages, and nobody gets hurt."
+"Let the hostage go, and nobody gets hurt."
+The ploy works! The Conservatives back off.
+How should 
+ respond?
+A - Execute a hostage
+A - Execute the hostage
+B - Offer to trade the hostages for freedom
+B - Offer to trade the hostage for freedom
+C - No reply
+BLAM!
+CRUNCH!
+ drops 
+'s body.
+"Fuck! 
+"[No!] 
+"Back off and we'll let the hostages go."
+"Back off and the hostage goes free."
+The squad releases all hostages in the trade.
+The squad releases the hostage in the trade.
+ isn't interested in your pathetic threats.
+pretends to be part of a police raid.
+pretends to be a Secret Agent.
+pretends to be Mountain 
+like Patrick Swayze in Next of Kin.
+squeals like Ned Beatty 
+in Deliverance.
+pretends to be a mercenary.
+lights a match and throws it on the ground. 
+The carpet smolders, then bursts into flame.
+Perhaps that was a bad idea...
+"The situation is under control."
+"Fire! Evacuate immediately!"
+"Everything's in check."
+"Make way, I'm a doctor!"
+"Non-targets please leave the site."
+ engraves 
+Elbereth
+ on the floor.
+ talks like a Conservative 
+and pretends to belong here.
+But 
+ weren't born yesterday.
+ is not fooled by that [act].
+ is not fooled by that crap.
+The Enemy is fooled and departs.
+The Squad is arrested.
+Liberal help on:
+   Press any key - Return to previous screen
+attend classes in the University District
+at a cost of $60 a day.

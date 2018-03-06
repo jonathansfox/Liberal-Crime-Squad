@@ -60,6 +60,24 @@ extern class Ledger ledger;
  vector<string> good_experiences;
  vector<string> bad_experiences;
  vector<string> general_experiences;
+
+#include <customMaps.h>
+ const string justice = "justice\\";
+ vector<file_and_text_collection> justice_text_file_collection = {
+
+	 /*justice.cpp*/
+	 customText(&liberal_jury, justice + "liberal_jury.txt"),
+	 customText(&conservative_jury, justice + "conservative_jury.txt"),
+	 customText(&cruel_and_unusual_execution_methods, justice + "cruel_and_unusual_execution_methods.txt"),
+	 customText(&standard_execution_methods, justice + "standard_execution_methods.txt"),
+	 customText(&supposedly_painless_execution_method, justice + "supposedly_painless_execution_method.txt"),
+	 customText(&reeducation_experiences, justice + "reeducation_experiences.txt"),
+	 customText(&labor_camp_experiences, justice + "labor_camp_experiences.txt"),
+	 customText(&good_experiences, justice + "good_experiences.txt"),
+	 customText(&bad_experiences, justice + "bad_experiences.txt"),
+	 customText(&general_experiences, justice + "general_experiences.txt"),
+ };
+
 #include "common/musicClass.h"
 extern MusicClass music;
 extern int stat_dead;

@@ -9,7 +9,7 @@ char incapacitated(Creature &a, char noncombat, char &printed);
 /* describes a character's death */
 void adddeathmessage(Creature &cr);
 /* attack handling for an individual creature and its target */
-void attack(Creature &a, Creature &t, char mistake, char &actual, bool force_melee = false);
+//void attack(Creature &a, Creature &t, char mistake, char &actual, bool force_melee = false);
 void specialattack(Creature &a, Creature &t);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll, Creature &a);

@@ -30,4 +30,5 @@ extern const ColorSetup YELLOW_ON_BLACK_BRIGHT ;
 extern const ColorSetup YELLOW_ON_RED ;
 extern const ColorSetup YELLOW_ON_RED_BRIGHT ;
 extern const ColorSetup YELLOW_ON_RED_BRIGHT_BLINK ;
+extern const ColorSetup WHITE_ON_BLUE_BRIGHT;
 void set_color_easy(ColorSetup color);

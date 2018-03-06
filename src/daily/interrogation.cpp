@@ -24,27 +24,19 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 #include "log/log.h"
-// for commondisplay.h
-#include "common/commondisplay.h"
 #include "common/commondisplayCreature.h"
 // for void printhealthstat(Creature &,int,int,char);
 
  #include "common/getnames.h"
 // for std::string getview(short ,bool );
 
-//#include "common/commonactions.h"
 #include "common/commonactionsCreature.h"
 // for  void sleeperize_prompt(Creature &,Creature &,int);
 
 
 #include <cursesAlternative.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "common/creaturePoolCreature.h"
 #include "locations/locationsPool.h"
@@ -69,9 +61,9 @@ extern short lawList[LAWNUM];
  vector<string> partial_conversion;
  vector<string> broods_over_death;
  vector<string> self_wounding;
+ vector<string> good_trip;
  vector<vector<string>> fall_in_love;
  vector<vector<string>> bad_trip;
- vector<string> good_trip;
  vector<vector<string>> good_trip_companion;
  vector<string> smarter_than_you_one_line;
  vector<vector<string>> smarter_than_you;
@@ -86,10 +78,54 @@ extern short lawList[LAWNUM];
  vector<vector<string>> discuss;
  vector<string> vanilla_recruit;
  vector<vector<string>> cling_to_business;
- vector<string> cling_to_business_one_line;
  vector<vector<string>> cling_to_science;
+ vector<string> cling_to_business_one_line;
  vector<string> cling_to_science_one_line;
+
+
+ const string interrogate = "interrogation\\";
+ const int DOUBLE_LINE = 2;
+ vector<file_and_text_collection> interrogate_text_file_collection = {
+
+	 /*interrogation.cpp*/
+	 customText(&execution, interrogate + "execution.txt"),
+	 customText(&feels_sick, interrogate + "feels_sick.txt"),
+	 customText(&low_heart_torture_props, interrogate + "low_heart_torture_props.txt"),
+	 customText(&screaming, interrogate + "screaming.txt"),
+	 customText(&beat_with_props, interrogate + "beat_with_props.txt"),
+	 customText(&words_meaning_screaming, interrogate + "words_meaning_screaming.txt"),
+	 customText(&words_to_scream, interrogate + "words_to_scream.txt"),
+	 customText(&prays, interrogate + "prays.txt"),
+	 customText(&prays_on_drugs, interrogate + "prays_on_drugs.txt"),
+	 customText(&use_props, interrogate + "use_props.txt"),
+	 customText(&resist_drugs, interrogate + "resist_drugs.txt"),
+	 customText(&partial_conversion, interrogate + "partial_conversion.txt"),
+	 customText(&broods_over_death, interrogate + "broods_over_death.txt"),
+	 customText(&self_wounding, interrogate + "self_wounding.txt"),
+	 customText(&good_trip, interrogate + "good_trip.txt"),
+	 customText(&fall_in_love, interrogate + "fall_in_love.txt", DOUBLE_LINE),
+	 customText(&bad_trip, interrogate + "bad_trip.txt", DOUBLE_LINE),
+	 customText(&good_trip_companion, interrogate + "good_trip_companion.txt", DOUBLE_LINE),
+	 customText(&smarter_than_you_one_line, interrogate + "smarter_than_you_one_line.txt"),
+	 customText(&smarter_than_you, interrogate + "smarter_than_you.txt", DOUBLE_LINE),
+	 customText(&develops_hatred_one_line, interrogate + "develops_hatred_one_line.txt"),
+	 customText(&develops_hatred, interrogate + "develops_hatred.txt", DOUBLE_LINE),
+	 customText(&interrogater_shows_compassion_one_line, interrogate + "interrogater_shows_compassion_one_line.txt"),
+	 customText(&interrogater_shows_compassion, interrogate + "interrogater_shows_compassion.txt", DOUBLE_LINE),
+	 customText(&cling_to_interrogater, interrogate + "cling_to_interrogater.txt", DOUBLE_LINE),
+	 customText(&clinging_one_line, interrogate + "clinging_one_line.txt"),
+	 customText(&cling_to_religion, interrogate + "cling_to_religion.txt", DOUBLE_LINE),
+	 customText(&cling_to_religion_one_line, interrogate + "cling_to_religion_one_line.txt"),
+	 customText(&discuss, interrogate + "discuss.txt", DOUBLE_LINE),
+	 customText(&vanilla_recruit, interrogate + "vanilla_recruit.txt"),
+	 customText(&cling_to_business_one_line, interrogate + "cling_to_business_one_line.txt"),
+	 customText(&cling_to_science_one_line, interrogate + "cling_to_science_one_line.txt"),
+	 customText(&cling_to_business, interrogate + "cling_to_business.txt", DOUBLE_LINE),
+	 customText(&cling_to_science, interrogate + "cling_to_science.txt", DOUBLE_LINE),
+ };
+
  string feels_sick_and;
+
 extern string singleDot;
 extern string AND;
 extern string singleSpace;

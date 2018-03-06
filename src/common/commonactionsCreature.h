@@ -31,6 +31,6 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
 void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone = false);
 /* common - Functions used when sorting vectors of creatures. */
 bool sort_none(const Creature* first, const Creature* second);
-inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name)<0; }
+
 bool sort_locationandname(const Creature* first, const Creature* second);
 bool sort_squadorname(const Creature* first, const Creature* second);

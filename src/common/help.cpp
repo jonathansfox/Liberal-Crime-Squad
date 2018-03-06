@@ -1,20 +1,7 @@
 
 #include <includes.h>
-//#include "creature/creature.h"
-
-
-#include "common/help.h"
-//own header
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 
 #include <cursesAlternative.h>
-#include "creature/creatureEnums.h"
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 // {{{ Various voids
 // Help pages are drawn here.

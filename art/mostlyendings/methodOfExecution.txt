@@ -1,0 +1,6 @@
+strangling to death.                                              
+# // 66 characters (10+4+customText(&66, mostlyendings + "66.txt"),80)
+beating to death.                                                 
+# // 66 characters (10+4+customText(&66, mostlyendings + "66.txt"),80)
+cold execution.                                                   
+# // 66 characters (10+4+customText(&66, mostlyendings + "66.txt"),80)

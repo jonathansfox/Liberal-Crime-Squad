@@ -4,19 +4,8 @@
 #include "creature/creatureEnums.h"
 #include "items/itemtype.h"
 #include "items/item.h"
-//#include "items/item.h"
-//own header currently inside includes.h
 //own header
 
-#include "common/stringconversion.h"
-//for string conversion
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 Item::Item(const ItemType& seed, int number) : number_(number)
 {
    itemtypename_=seed.get_idname();
@@ -32,8 +21,8 @@ Item::Item(const std::string& inputXml)
    {
       std::string tag=xml.GetTagName();
       if(tag=="itemtypename") itemtypename_=xml.GetData();
-      else if(tag=="itemtypeid") itemtypeid_=atoi(xml.GetData());
-      else if(tag=="number") number_=atoi(xml.GetData());
+      else if(tag=="itemtypeid") itemtypeid_=atoi(xml.GetData().c_str());
+      else if(tag=="number") number_=atoi(xml.GetData().c_str());
    }
 }
 void Item::addBaseValues(CMarkup& xml) const

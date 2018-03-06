@@ -7,22 +7,13 @@
 #include "items/money.h"
 //own header
 
-#include "common/stringconversion.h"
-//for string conversion
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 Money::Money(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-   while(xml.FindElem()) if(xml.GetTagName()=="amount") amount_=atoi(xml.GetData());
+   while(xml.FindElem()) if(xml.GetTagName()=="amount") amount_=atoi(xml.GetData().c_str());
 }
 string Money::showXml() const
 {

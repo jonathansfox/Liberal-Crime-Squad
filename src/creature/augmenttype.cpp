@@ -35,17 +35,17 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
       else if(element=="attribute")
          attribute_= attribute_string_to_enum(xml.GetData());
       else if(element=="effect")
-         effect_=atoi(xml.GetData());
+         effect_=atoi(xml.GetData().c_str());
       else if(element=="description")
          description_=xml.GetData();
       else if(element=="max_age")
-         max_age_=atoi(xml.GetData());
+         max_age_=atoi(xml.GetData().c_str());
       else if(element=="min_age")
-         min_age_=atoi(xml.GetData());
+         min_age_=atoi(xml.GetData().c_str());
       else if(element=="cost")
-         cost_=atoi(xml.GetData());
+         cost_=atoi(xml.GetData().c_str());
       else if(element=="difficulty")
-         difficulty_=atoi(xml.GetData());
+         difficulty_=atoi(xml.GetData().c_str());
    }
 }
 void AugmentType::make_augment(Augmentation& au)

@@ -62,24 +62,21 @@ This file is part of Liberal Crime Squad.                                       
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#include "basemode/liberalagenda.h"
-// for liberalagenda
+//#include "basemode/liberalagenda.h"
+bool liberalagenda(signed char won);
 
 #include "basemode/baseactions.h"
 
-#include "basemode/activate_sleepers.h"
+//#include "basemode/activate_sleepers.h"
+void activate_sleepers();
+//#include "basemode/activate.h"
+void activate();
 
-#include "basemode/activate.h"
-// for activate
-
-#include "basemode/reviewmode.h"
-// for review
+//#include "basemode/reviewmode.h"
+void review();
 
 #include "common/translateid.h"
 // for  int getsquad(int)
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
 
 #include "common/getnames.h"
 // for std::string getmonth(int)
@@ -92,14 +89,14 @@ This file is part of Liberal Crime Squad.                                       
 #include "common/commonactions.h"
 // for int squadsize(const squadst *)
 
-#include "common/equipment.h"
-//for void equip(vector<Item *>&,int)
+//#include "common/equipment.h"
+void equip(vector<Item *> &loot, int loc);
 
-#include "politics/politics.h"
-//for bool stalinview(short view,bool islaw)
+//#include "politics/politics.h"
+bool stalinview(short view, bool islaw);
 
-#include "monthly/monthly.h"
-//for  void passmonth(char &clearformess,char canseethings);
+//#include "monthly/monthly.h"
+void passmonth(char &clearformess,char canseethings);
 
 #include "daily/daily.h"
 //for int monthday();
@@ -110,12 +107,10 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include <cursesAlternative.h>
-#include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 #include "common/musicClass.h"
+#include "common/creaturePool.h"
 extern vector<Creature *> pool;
 extern vector<Location *> location;
 extern Log gamelog;
@@ -153,7 +148,17 @@ extern int day;
 extern char slogan[SLOGAN_LEN];
 extern short party_status;
 
-#include "common/creaturePool.h"
+
+string change_squad_order;
+enum CantSeeReason
+{
+	CANTSEE_DATING = 1,
+	CANTSEE_HIDING = 2,
+	CANTSEE_OTHER = 3,
+	CANTSEE_DISBANDING = 4
+};
+string check_status_of_squad_liberal;
+string show_squad_liberal_status;
 
 bool show_disbanding_screen(int& oldforcemonth)
 {
@@ -294,16 +299,6 @@ bool show_disbanding_screen(int& oldforcemonth)
 	mvaddstrAlt(24, 0, "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
 	return(getkeyAlt() != 'r');
 }
- string change_squad_order;
-enum CantSeeReason
-{
-	CANTSEE_DATING = 1,
-	CANTSEE_HIDING = 2,
-	CANTSEE_OTHER = 3,
-	CANTSEE_DISBANDING = 4
-};
- string check_status_of_squad_liberal;
- string show_squad_liberal_status;
 void mode_base()
 {
 	char forcewait, canseethings;
@@ -442,7 +437,7 @@ void mode_base()
 			{
 				if (y < 6)
 				{
-					set_color(COLOR_WHITE, y < 4 ? COLOR_BLUE : COLOR_RED, 1);
+					set_color_easy(y < 4 ? WHITE_ON_BLUE_BRIGHT : WHITE_ON_RED_BRIGHT);
 					if (y == 0) mvaddstrAlt(y + 10, 31, ":.:.:.:.:");
 					else if (y < 3) mvaddstrAlt(y + 10, 31, ":::::::::");
 					else for (int x = 0; x < 9; x++) mvaddchAlt(y + 10, 31 + x, CH_LOWER_HALF_BLOCK);

@@ -2,14 +2,16 @@
 typedef map< int, string > StringPairs;
 
 typedef struct {
-	vector<vector<string>> *super_collection;
-	vector<string> *collection;
+	vector<vector<string>>* super_collection;
+	vector<string>* collection;
 	int dimensions;
 	string fileName;
 	bool superCollection;
 } file_and_text_collection;
 file_and_text_collection customText(vector<string>  *, string);
 file_and_text_collection customText(vector<vector<string>> *, string, int);
+file_and_text_collection customText(string);
+file_and_text_collection customText(string, int);
 // The usage of the default constructor stringConnectedToView() is discouraged
 // Currently it exists only because its current usage as an element of a map requires it
 // When a map is given an unused key it creates a new reference for use with that key

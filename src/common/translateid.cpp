@@ -34,13 +34,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "creature/creaturetype.h"
 
-#include "common/translateid.h"
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern vector<squadst *> squad;
 extern vector<Creature *> pool;
 extern vector<Vehicle *> vehicle;

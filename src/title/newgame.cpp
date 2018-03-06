@@ -169,6 +169,12 @@ extern squadst *activesquad;
 extern UniqueCreatures uniqueCreatures;
 extern short attitude[VIEWNUM];
 vector<string> founderQuestions;
+
+#include <customMaps.h>
+vector<file_and_text_collection> newgame_file_collection = {
+	/*newgame.cpp*/
+	customText(&founderQuestions, "newgame\\founderQuestions.txt"),
+};
 typedef map<string, short> stringAndShort;
 typedef map<short, string > shortAndString;
 stringAndShort getSkillEnumFromString;

@@ -1,0 +1,42 @@
+LAW_ABORTION
+Strengthen Reproductive Freedom
+LAW_ANIMALRESEARCH
+Limit Animal Cruelty
+LAW_POLICEBEHAVIOR
+Curtail Police Misconduct
+LAW_PRIVACY
+Enhance Privacy Protection
+LAW_DEATHPENALTY
+Stop Barbaric Executions
+LAW_NUCLEARPOWER
+Prevent Nuclear Meltdowns
+LAW_POLLUTION
+Protect our Environment
+LAW_LABOR
+Protect Workers' Rights
+LAW_GAY
+Fight Homophobic Bigotry in our Laws
+LAW_CORPORATE
+Stop Corporate Criminals
+LAW_FREESPEECH
+Protect Free Speech
+LAW_TAX
+Fight Income Inequality
+LAW_FLAGBURNING
+Limit Prohibitions on Flag Burning
+LAW_GUNCONTROL
+Prevent Mass Shootings
+LAW_WOMEN
+Promote Gender Equality
+LAW_CIVILRIGHTS
+Promote Racial Equality
+LAW_DRUGS
+Repeal Oppressive Drug Laws
+LAW_IMMIGRATION
+Protect Immigrant Rights
+LAW_ELECTIONS
+Fight Political Corruption
+LAW_MILITARY
+Shrink the Military-Industrial Complex
+LAW_TORTURE
+Protect Human Rights from Torture

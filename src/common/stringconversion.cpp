@@ -1,15 +1,8 @@
 
 #include <includes.h>
-#include "creature/augmentation.h"
 #include "creature/creatureEnums.h"
 
-#include "common/stringconversion.h"
 
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 std::string tostring(long i)
 {
    std::ostringstream os;
@@ -105,21 +98,7 @@ int attribute_string_to_enum(const string& attribute)
 	else
 		return -1;
 }
-int augment_string_to_enum(const string& augmentname)
-{
-	if (augmentname == "head")
-		return AUGMENTATION_HEAD;
-	else if (augmentname == "body")
-		return AUGMENTATION_BODY;
-	else if (augmentname == "arms")
-		return AUGMENTATION_ARMS;
-	else if (augmentname == "legs")
-		return AUGMENTATION_LEGS;
-	else if (augmentname == "skin")
-		return AUGMENTATION_SKIN;
-	else
-		return -1;
-}
+
 int gender_string_to_enum(const string& gender)
 {
 	if (gender == "NEUTRAL")

@@ -1,0 +1,44 @@
+LAW_ABORTION
+"Abortion is murder."
+LAW_ANIMALRESEARCH
+"Don't pretend animals are human."
+LAW_POLICEBEHAVIOR
+"Only criminals have reason to fear police."
+LAW_PRIVACY
+"National security is important."
+LAW_DEATHPENALTY
+"Some people deserve to die."
+LAW_NUCLEARPOWER
+"Nuclear power is clean."
+LAW_POLLUTION
+"It's not that bad."
+LAW_LABOR
+"Trust the free market, it hasn't failed us yet."
+LAW_GAY
+"Homosexuality is a sin."
+LAW_CORPORATE
+"Corporations are part of capitalism."
+LAW_FREESPEECH
+"Don't be offensive and you'll be fine."
+LAW_FLAGBURNING
+"That flag is the sacred symbol of our country."
+LAW_TAX
+"I want to pay lower taxes."
+LAW_GUNCONTROL
+"Without guns, we're slaves to the Government."
+LAW_WOMEN
+"Why don't you go burn a bra or something?"
+LAW_CIVILRIGHTS
+"Reverse discrimination is still discrimination."
+LAW_DRUGS
+"Drugs are a terrible influence on society."
+LAW_IMMIGRATION
+"Immigration undermines our economy and culture."
+LAW_ELECTIONS
+"Unregulated campaigning is a matter of free speech."
+LAW_MILITARY
+"The military protects us and enables our way of life."
+LAW_TORTURE
+"The terrorists would do worse to us."
+LAW_PRISONS
+"Criminals deserve what they get in prison."

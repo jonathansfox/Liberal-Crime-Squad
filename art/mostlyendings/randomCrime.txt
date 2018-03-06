@@ -1,0 +1,16 @@
+murder
+assault
+theft
+mugging
+burglary
+property destruction
+vandalism
+libel
+slander
+sodomy
+obstruction of justice
+breaking and entering
+public indecency
+arson
+resisting arrest
+tax evasion

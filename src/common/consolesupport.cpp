@@ -26,16 +26,11 @@ This file is part of Liberal Crime Squad.                                       
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 
 #include <includes.h>
-#include "creature/creatureEnums.h"
-#include "pdcurses/curses.h"
+#include <cursesAlternativeConstants.h>
 
-#include "common/consolesupport.h"
+//#include <cursesAlternative.h>
+void    PDC_set_titleAlt(const char *ch);
 
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 #if defined(USE_NCURSES)
 #include <term.h>
 #elif defined(USE_NCURSES_W)
@@ -43,22 +38,7 @@ This file is part of Liberal Crime Squad.                                       
 #endif
 extern short interface_pgup;
 extern short interface_pgdn;
-// These 4 variables to keep track of the current color are for
-// this file only
-short curForeground=COLOR_WHITE,curBackground=COLOR_BLACK;
-bool isBright=false,isBlinking=false;
-//sets current color to desired setting
-void set_color(short f,short b,bool bright,bool blink)
-{
-   // keep track of current color
-   curForeground=f,curBackground=b,isBright=bright,isBlinking=blink;
-   //color swap required for PDcurses
-   if(f==7&&b==0) f=0,b=0;
-   else if(f==0&&b==0) f=7,b=0;
-   chtype blinky=(blink?A_BLINK:0), brighty=(bright?A_BOLD:0);
-   //pick color pair based on foreground and background
-   attrset(brighty | blinky | COLOR_PAIR(f*8+b));
-}
+
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
@@ -132,57 +112,7 @@ void translategetch_cap(int &c)
    if(c==5)c='6';
    */
 }
-/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
-int getkey()
-{
-   refresh();
-   nodelay(stdscr,TRUE);
-   while(getch()!=ERR);
-   nodelay(stdscr,FALSE);
-   int c=getch();
-   translategetch(c);
-   return c;
-}
-/* Variant of getkey() that doesn't make all letters lowercase */
-int getkey_cap()
-{
-   refresh();
-   nodelay(stdscr,TRUE);
-   while(getch()!=ERR);
-   nodelay(stdscr,FALSE);
-   int c=getch();
-   translategetch_cap(c);
-   return c;
-}
-/* Empties the keyboard buffer, and returns most recent key pressed, if any */
-int checkkey()
-{
-   int c=ERR,ret=ERR;
-   nodelay(stdscr,TRUE);
-   do
-   {
-      ret=c;
-      c=getch();
-      translategetch(c);
-   } while(c!=ERR);
-   nodelay(stdscr,FALSE);
-   return ret;
-}
-/* Variant of checkkey() that doesn't make all letters lowercase */
-// UNUSED
-int checkkey_cap()
-{
-   int c=ERR,ret=ERR;
-   nodelay(stdscr,TRUE);
-   do
-   {
-      ret=c;
-      c=getch();
-      translategetch_cap(c);
-   } while(c!=ERR);
-   nodelay(stdscr,FALSE);
-   return ret;
-}
+
 #ifdef CH_USE_UNICODE
 bool unicode_enabled = false;
 bool setup_unicode() {

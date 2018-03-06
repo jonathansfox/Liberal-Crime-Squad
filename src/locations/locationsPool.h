@@ -24,6 +24,7 @@ public:
 	bool isLocationHidden(int cursite);
 	void setLocationMappedAndUnhidden(int cursite);
 	string getLocationNameWithGetnameMethod(int cursite, bool a, bool b);
+	string getLocationNameWithGetnameMethod(int cursite, bool a);
 	int getCompoundWalls(int cursite);
 	void setTimeUntilSiege(int cursite, int time);
 	bool isNewRental(int cursite);
@@ -35,4 +36,6 @@ public:
 	int deleteSpecialItem(int slot, vector<int> loottypeindex);
 	void getAssetValues(long & weaponValue, long & armorValue, long & clipValue, long & lootValue);
 	bool canBeFortified(int cursite);
+	void initLocation(int cursite);
+	void equipLoc(int, int);
 };

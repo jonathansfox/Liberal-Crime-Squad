@@ -34,22 +34,13 @@ This file is part of Liberal Crime Squad.                                       
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
-
 #include "common/translateid.h"
 // for  int getsquad(int)
-
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
 
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
 // for makedelimeter
-
-#include "common/stringconversion.h"
-//for string attribute_enum_to_string(int)
 
 #include "title/highscore.h"       
 //for void savehighscore(char endtype)
@@ -57,21 +48,19 @@ This file is part of Liberal Crime Squad.                                       
 #include "politics/politics.h"
 //for int publicmood(int l)
 
-
 #include <cursesAlternative.h>
 #include <cursesAlternativeConstants.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
+#include "locations/locationsPool.h"
+#include "common/musicClass.h"
+#include "common/creaturePool.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
 extern MusicClass music;
 extern char endgamestate;
 extern short mode;
@@ -92,7 +81,6 @@ extern vector<recruitst *> recruit;
 extern short activesortingchoice[SORTINGCHOICENUM];
 extern class Ledger ledger;
 
-#include "common/creaturePool.h"
 
 /* common - test for possible game over */
 char endcheck(char cause)
@@ -140,6 +128,30 @@ bool iscriminal(Creature &cr)
 {
 	for (int i = 0; i < LAWFLAGNUM; i++) if (cr.crimes_suspected[i]) return true;
 	return false;
+}
+/* common - determines how long a creature's injuries will take to heal */
+int clinictime(Creature &g)
+{
+	int time = 0;
+	for (int w = 0; w < BODYPARTNUM; w++)
+		if ((g.wound[w] & WOUND_NASTYOFF) && (g.blood < 100))
+			time++;
+	if (g.blood <= 10)time++;
+	if (g.blood <= 50)time++;
+	if (g.blood < 100)time++;
+	if (!g.special[SPECIALWOUND_RIGHTLUNG])time++;
+	if (!g.special[SPECIALWOUND_LEFTLUNG])time++;
+	if (!g.special[SPECIALWOUND_HEART])time += 2;
+	if (!g.special[SPECIALWOUND_LIVER])time++;
+	if (!g.special[SPECIALWOUND_STOMACH])time++;
+	if (!g.special[SPECIALWOUND_RIGHTKIDNEY])time++;
+	if (!g.special[SPECIALWOUND_LEFTKIDNEY])time++;
+	if (!g.special[SPECIALWOUND_SPLEEN])time++;
+	if (g.special[SPECIALWOUND_RIBS] < RIBNUM)time++;
+	if (!g.special[SPECIALWOUND_NECK])time++;
+	if (!g.special[SPECIALWOUND_UPPERSPINE])time++;
+	if (!g.special[SPECIALWOUND_LOWERSPINE])time++;
+	return time;
 }
 /* common - sends somebody to the hospital */
 /***************************************************
@@ -189,51 +201,6 @@ void hospitalize(int loc, Creature &patient)
 		}
 	}
 }
-/* common - determines how long a creature's injuries will take to heal */
-int clinictime(Creature &g)
-{
-	int time = 0;
-	for (int w = 0; w < BODYPARTNUM; w++)
-		if ((g.wound[w] & WOUND_NASTYOFF) && (g.blood < 100))
-			time++;
-	if (g.blood <= 10)time++;
-	if (g.blood <= 50)time++;
-	if (g.blood < 100)time++;
-	if (!g.special[SPECIALWOUND_RIGHTLUNG])time++;
-	if (!g.special[SPECIALWOUND_LEFTLUNG])time++;
-	if (!g.special[SPECIALWOUND_HEART])time += 2;
-	if (!g.special[SPECIALWOUND_LIVER])time++;
-	if (!g.special[SPECIALWOUND_STOMACH])time++;
-	if (!g.special[SPECIALWOUND_RIGHTKIDNEY])time++;
-	if (!g.special[SPECIALWOUND_LEFTKIDNEY])time++;
-	if (!g.special[SPECIALWOUND_SPLEEN])time++;
-	if (g.special[SPECIALWOUND_RIBS] < RIBNUM)time++;
-	if (!g.special[SPECIALWOUND_NECK])time++;
-	if (!g.special[SPECIALWOUND_UPPERSPINE])time++;
-	if (!g.special[SPECIALWOUND_LOWERSPINE])time++;
-	return time;
-}
-/* common - applies a crime to everyone in the active party */
-void criminalizeparty(short crime)
-{
-	if (!activesquad) return;
-	for (int p = 0; p < 6; p++)
-		if (activesquad->squad[p])
-		{
-			if (!activesquad->squad[p]->alive) continue;
-			criminalize(*(activesquad->squad[p]), crime);
-		}
-}
-/* common - applies a crime to everyone in a location, or the entire LCS */
-void criminalizepool(short crime, long exclude, short loc)
-{
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (p == exclude) continue;
-		if (loc != -1 && pool[p]->location != loc) continue;
-		criminalize(*pool[p], crime);
-	}
-}
 /* returns the amount of heat associated with a given crime */
 int lawflagheat(int lawflag)
 {
@@ -280,12 +247,6 @@ int lawflagheat(int lawflag)
 	default:return 0;
 	}
 }
-// *JDS* Scarefactor is the severity of the case against you; if you're a really
-// nasty person with a wide variety of major charges against you, then scarefactor
-// can get up there
-int scare_factor(int lawflag, int crimenumber) {
-	return lawflagheat(lawflag) * crimenumber;
-}
 /* common - applies a crime to a person */
 void criminalize(Creature &cr, short crime)
 {
@@ -305,14 +266,33 @@ void criminalize(Creature &cr, short crime)
 	cr.crimes_suspected[crime]++;
 	cr.heat += lawflagheat(crime);
 }
-/* common - gives juice to everyone in the active party */
-void juiceparty(long juice, long cap)
+/* common - applies a crime to everyone in the active party */
+void criminalizeparty(short crime)
 {
-	if (activesquad != NULL)
-		for (int p = 0; p < 6; p++)
-			if (activesquad->squad[p] != NULL)
-				if (activesquad->squad[p]->alive)
-					addjuice(*activesquad->squad[p], juice, cap);
+	if (!activesquad) return;
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p])
+		{
+			if (!activesquad->squad[p]->alive) continue;
+			criminalize(*(activesquad->squad[p]), crime);
+		}
+}
+/* common - applies a crime to everyone in a location, or the entire LCS */
+void criminalizepool(short crime, long exclude, short loc)
+{
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (p == exclude) continue;
+		if (loc != -1 && pool[p]->location != loc) continue;
+		criminalize(*pool[p], crime);
+	}
+}
+
+// *JDS* Scarefactor is the severity of the case against you; if you're a really
+// nasty person with a wide variety of major charges against you, then scarefactor
+// can get up there
+int scare_factor(int lawflag, int crimenumber) {
+	return lawflagheat(lawflag) * crimenumber;
 }
 /* common - gives juice to a given creature */
 void addjuice(Creature &cr, long juice, long cap)
@@ -337,6 +317,16 @@ void addjuice(Creature &cr, long juice, long cap)
 	if (cr.juice > 1000)cr.juice = 1000;
 	if (cr.juice < -50)cr.juice = -50;
 }
+/* common - gives juice to everyone in the active party */
+void juiceparty(long juice, long cap)
+{
+	if (activesquad != NULL)
+		for (int p = 0; p < 6; p++)
+			if (activesquad->squad[p] != NULL)
+				if (activesquad->squad[p]->alive)
+					addjuice(*activesquad->squad[p], juice, cap);
+}
+
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr)
 {
@@ -571,19 +561,6 @@ int randomissue(bool core_only)
 	for (int i = 0; i < numviews; i++) if (roll < interest_array[i]) return i;
 	return VIEW_MOOD;
 }
-
-/* common - Sort a list of creatures.*/
-void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone)
-{
-	if (!dosortnone&&sortingchoice == SORTING_NONE) return;
-	switch (sortingchoice)
-	{
-	case SORTING_NONE: sort(liberals.begin(), liberals.end(), sort_none); break;
-	case SORTING_NAME: sort(liberals.begin(), liberals.end(), sort_name); break;
-	case SORTING_LOCATION_AND_NAME: sort(liberals.begin(), liberals.end(), sort_locationandname); break;
-	case SORTING_SQUAD_OR_NAME: sort(liberals.begin(), liberals.end(), sort_squadorname); break;
-	}
-}
 /* The following boolean functions will return true if first is supposed to be
 before second in the list. */
 bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
@@ -593,6 +570,9 @@ bool sort_none(const Creature* first, const Creature* second) //This will sort s
 		else if (pool[j] == second) return false;
 		return false;
 }
+/* common - Sort a list of creatures.*/
+inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name)<0; }
+
 bool sort_locationandname(const Creature* first, const Creature* second)
 {
 	return first->location < second->location
@@ -615,9 +595,26 @@ bool sort_squadorname(const Creature* first, const Creature* second)
 			else if (squad[getsquad(first->squadid)]->squad[j]->id == second->id) return false;
 			return a;
 }
+void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone)
+{
+	if (!dosortnone&&sortingchoice == SORTING_NONE) return;
+	switch (sortingchoice)
+	{
+	case SORTING_NONE: sort(liberals.begin(), liberals.end(), sort_none); break;
+	case SORTING_NAME: sort(liberals.begin(), liberals.end(), sort_name); break;
+	case SORTING_LOCATION_AND_NAME: sort(liberals.begin(), liberals.end(), sort_locationandname); break;
+	case SORTING_SQUAD_OR_NAME: sort(liberals.begin(), liberals.end(), sort_squadorname); break;
+	}
+}
+
 typedef map<short, string > shortAndString;
  shortAndString trainingActivitySorting;
 vector<string> methodOfSorting;
+
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> common_text_file_collection = {
+customText(&methodOfSorting, mostlyendings + "methodOfSorting.txt"),
+};
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)
 {

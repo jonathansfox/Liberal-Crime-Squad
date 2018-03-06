@@ -152,6 +152,16 @@ vector<string> notRejected;
  vector<string> caseREJECTED_WEAPONS;
  vector<string> caseNOT_REJECTED;
 
+ const string mostlyendings = "mostlyendings\\";
+#include <customMaps.h>
+ vector<file_and_text_collection> map_specials_text_file_collection = {
+ customText(&rejectedBecauseSmellFunny, mostlyendings + "rejectedBecauseSmellFunny.txt"),
+	 customText(&notRejected, mostlyendings + "notRejected.txt"),
+	 customText(&randomCrime, mostlyendings + "randomCrime.txt"),
+	 customText(&caseREJECTED_NUDE, mostlyendings + "caseREJECTED_NUDE.txt"),
+	 customText(&caseREJECTED_WEAPONS, mostlyendings + "caseREJECTED_WEAPONS.txt"),
+	 customText(&caseNOT_REJECTED, mostlyendings + "caseNOT_REJECTED.txt"),
+	 };
 void special_bouncer_assess_squad()
 {
 	if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT) return;

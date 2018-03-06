@@ -1,0 +1,6 @@
+# /* pick a descriptor acronym */
+DTE
+ND
+NS
+VGL
+# //"FOO"

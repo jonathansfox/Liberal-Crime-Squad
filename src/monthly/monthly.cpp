@@ -96,6 +96,7 @@ char prison(Creature &g);
 
 #include "daily/daily.h"
 //for dispersalcheck and securitytable
+void dispersalcheck(char &clearformess);
 
 #include <cursesAlternative.h>
 #include <constant_strings.h>

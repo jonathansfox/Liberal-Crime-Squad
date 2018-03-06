@@ -1,0 +1,25 @@
+&cWant Organic?&r&r
+&cVisit The Vegan&r
+&cCo-Op&r
+ 
+# needs to be in four line sections
+# so three-line ads need a blank line at the end
+&cAbortion Clinic&r&r
+&cWalk-in, No&r
+&cQuestions Asked&r
+&cOpen 24/7&r
+#
+&cMarijuana Dispensary&r&r
+&cNo ID Or Prescription Needed!&r
+&cPlease Pay In Cash.&r
+ 
+#
+&cGot Slack?&r&r
+&cVisit Your Local&r
+&cSubGenius Clench&r
+&cFor More Info&r
+# The last element indicates a bug
+&cDebuggers Needed&r&r
+&cIt Seems&r
+&cYou've Found&r
+&cA Bug!&r

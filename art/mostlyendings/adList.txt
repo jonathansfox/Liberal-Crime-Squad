@@ -1,0 +1,20 @@
+&cNo Fee&r
+&cConsignment Program&r&r
+&cCall for Details&r
+ 
+# needs to be in four line sections
+# so three-line ads need a blank line at the end
+&cParis Flea Market&r&r
+&cSale&r
+&c50% Off&r
+ 
+#
+&cSpa&r
+&cHealth, Beauty&r
+&cand Fitness&r&r
+&c7 Days a Week&r
+# The last element indicates a bug
+&cDebuggers Needed&r&r
+&cIt Seems&r
+&cYou've Found&r
+&cA Bug!&r

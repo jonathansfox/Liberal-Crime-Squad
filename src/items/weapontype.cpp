@@ -12,11 +12,6 @@
 //for stringtobool
 
 
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 extern int year;
 extern string singleDot;
 extern short lawList[LAWNUM];

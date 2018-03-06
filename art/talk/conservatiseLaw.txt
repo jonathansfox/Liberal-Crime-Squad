@@ -1,0 +1,44 @@
+LAW_ABORTION
+Protect the Unborn Child
+LAW_ANIMALRESEARCH
+Help Scientists Cure Diseases
+LAW_POLICEBEHAVIOR
+Help Police Fight Crime
+LAW_PRIVACY
+Promote Transparency and Accountability
+LAW_DEATHPENALTY
+Deter Criminals via Capital Punishment
+LAW_NUCLEARPOWER
+Promote Alternative Energy Sources
+LAW_POLLUTION
+Support American Manufacturing
+LAW_LABOR
+Fight Corrupt Union Thugs
+LAW_GAY
+Support the Sanctity of Marriage
+LAW_CORPORATE
+Help Small Businesses Expand
+LAW_FREESPEECH
+Limit Hate Speech
+LAW_TAX
+Cut Job-Killing Taxes
+LAW_FLAGBURNING
+Protect the Symbol of Our Nation
+LAW_GUNCONTROL
+Protect our Second Amendment Rights
+LAW_WOMEN
+Preserve Traditional Gender Roles
+LAW_CIVILRIGHTS
+Fight Reverse Discrimination
+LAW_DRUGS
+Fight Drug Trafficking
+LAW_IMMIGRATION
+Protect our Borders
+LAW_ELECTIONS
+Limit Regulation of Political Speech
+LAW_MILITARY
+Support our Troops in Defending America
+LAW_TORTURE
+Enhance Interrogations to Fight Terrorism
+LAW_PRISONS
+Enhance Prison Security

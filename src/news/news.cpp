@@ -84,13 +84,7 @@ extern char endgamestate;
  extern string spaceDashSpace;
  extern string singleDot;
 
-vector<string> ccs_adjective;
-vector<string> ccs_adjective_2;
-vector<string> ccs_adjective_3;
-vector<string> ccs_noun;
 
-vector<string> caseNEWSSTORY_CCS_DEFEATED;
-vector<string> caseNEWSSTORY_CCS_NOBACKERS;
 string membersOfLCS;
 string lcsSpokeseperson;
 string policeSpokesperson;
@@ -101,83 +95,175 @@ shortAndTwoStrings newsStories;
 shortAndString cityNames;
 string accordingToSourcesAtScene;
 string accordingToPoliceSources;
-
-vector<string> personalAds;
-vector<string> personalAdsLG;
 string ampersandC;
-vector<vector<string>> adListB;
-vector<vector<string>> adList;
+
 
 extern int day;
 extern int month;
 extern int year;
 
 extern short presparty;
+vector<string> liberalCrime;
+vector<string> AMorPM;
+vector<string> book_title;
+vector<string> book_title_2;
+vector<string> random_nationality;
+vector<string> conservative_oppose_book;
+vector<string> radio_name;
+vector<string> radio_name_2;
+vector<string> vigilante_murder;
+vector<string> why_chase_ended;
+vector<string> crazy_conservative_act;
+vector<string> bribe_officers;
+vector<string> my_idol;
+vector<string> prison_book_title;
+vector<string> prison_book_title_2;
+vector<string> mutilated_corpse;
+vector<string> evidence_of_child_murder;
+vector<string> break_in_murder_case;
+vector<string> animal_research_country;
+vector<string> drug_name;
+vector<string> drug_name_2;
+vector<string> chimp_drug_impact;
+vector<string> chimp_drug_horror;
+vector<string> terrorist_group;
+vector<string> terrorist_plot;
+vector<string> terrorist_plot_no_free_speech;
+vector<string> gene_corp_name;
+vector<string> gene_corp_name_2;
+vector<string> gene_product_name;
+vector<string> gene_product_name_2;
+vector<string> gene_product_benefit;
+vector<string> gene_product_cost;
+vector<string> bullshit_no_free_speech;
+vector<string> bullshit;
+vector<string> petty_violence;
+vector<string> his_her;
+vector<string> older_younger;
+vector<string> brother_sister;
+vector<string> judge_with_prostitute;
+vector<string> judge_with_prostitute_no_free_speech;
+vector<string> judge_with_prostitute_full_free_speech;
+vector<string> radio_host_crazy_quote;
+vector<string> radio_host_lost_mind;
+vector<string> family_values_company_name;
+vector<string> family_values_company_name_2;
+vector<string> family_values_company_name_3;
+vector<string> pollution_consumption;
+vector<string> pollution_consumption_2;
+vector<string> i_like_polution;
+vector<string> distrust_liberals;
+vector<string> tech_giant_name;
+vector<string> tech_giant_name_2;
+vector<string> fm_radio_name;
+vector<string> fm_radio_name_2;
+vector<string> public_place;
+vector<string> reagan_bad;
+vector<string> reagan_bad_2;
+vector<string> ceo_behaving_badly;
+vector<string> reagan_good;
+vector<string> reagan_good_2;
+vector<string> cable_name;
+vector<string> cable_name_2;
+vector<string> cable_city;
+vector<string> cable_city_2;
+vector<string> ccs_adjective;
+vector<string> ccs_adjective_2;
+vector<string> ccs_adjective_3;
+vector<string> ccs_noun;
+vector<string> personalAds;
+vector<string> personalAdsLG;
+vector<string> caseNEWSSTORY_CCS_DEFEATED;
+vector<string> caseNEWSSTORY_CCS_NOBACKERS;
+vector<vector<string>> adListB;
+vector<vector<string>> adList;
+const int AD_LENGTH = 4;
+const string majorevent = "majorevent\\";
+const string mostlyendings = "mostlyendings\\";
+#include <customMaps.h>
+vector<file_and_text_collection> majorevent_text_file_collection = {
 
-vector <string> liberalCrime;
-vector <string> AMorPM;
-vector <string> book_title;
-vector <string> book_title_2;
-vector <string> random_nationality;
-vector <string> conservative_oppose_book;
-vector <string> radio_name;
-vector <string> radio_name_2;
-vector <string> vigilante_murder;
-vector <string> why_chase_ended;
-vector <string> crazy_conservative_act;
-vector <string> bribe_officers;
-vector <string> my_idol;
-vector <string> prison_book_title;
-vector <string> prison_book_title_2;
-vector <string> mutilated_corpse;
-vector <string> evidence_of_child_murder;
-vector <string> break_in_murder_case;
-vector <string> animal_research_country;
-vector <string> drug_name;
-vector <string> drug_name_2;
-vector <string> chimp_drug_impact;
-vector <string> chimp_drug_horror;
-vector <string> terrorist_group;
-vector <string> terrorist_plot;
-vector <string> terrorist_plot_no_free_speech;
-vector <string> gene_corp_name;
-vector <string> gene_corp_name_2;
-vector <string> gene_product_name;
-vector <string> gene_product_name_2;
-vector <string> gene_product_benefit;
-vector <string> gene_product_cost;
-vector <string> bullshit_no_free_speech;
-vector <string> bullshit;
-vector <string> petty_violence;
-vector <string> his_her;
-vector <string> older_younger;
-vector <string> brother_sister;
-vector <string> judge_with_prostitute;
-vector <string> judge_with_prostitute_no_free_speech;
-vector <string> judge_with_prostitute_full_free_speech;
-vector <string> radio_host_crazy_quote;
-vector <string> radio_host_lost_mind;
-vector <string> family_values_company_name;
-vector <string> family_values_company_name_2;
-vector <string> family_values_company_name_3;
-vector <string> pollution_consumption;
-vector <string> pollution_consumption_2;
-vector <string> i_like_polution;
-vector <string> distrust_liberals;
-vector <string> tech_giant_name;
-vector <string> tech_giant_name_2;
-vector <string> fm_radio_name;
-vector <string> fm_radio_name_2;
-vector <string> public_place;
-vector <string> reagan_bad;
-vector <string> reagan_bad_2;
-vector <string> ceo_behaving_badly;
-vector <string> reagan_good;
-vector <string> reagan_good_2;
-vector <string> cable_name;
-vector <string> cable_name_2;
-vector <string> cable_city;
-vector <string> cable_city_2;
+
+	/*majorevent.cpp*/
+	customText(&liberalCrime, majorevent + "liberalCrime.txt"),
+	customText(&AMorPM, majorevent + "AMorPM.txt"),
+	customText(&book_title, majorevent + "book_title.txt"),
+	customText(&book_title_2, majorevent + "book_title_2.txt"),
+	customText(&random_nationality, majorevent + "random_nationality.txt"),
+	customText(&conservative_oppose_book, majorevent + "conservative_oppose_book.txt"),
+	customText(&radio_name, majorevent + "radio_name.txt"),
+	customText(&radio_name_2, majorevent + "radio_name_2.txt"),
+	customText(&vigilante_murder, majorevent + "vigilante_murder.txt"),
+	customText(&why_chase_ended, majorevent + "why_chase_ended.txt"),
+	customText(&crazy_conservative_act, majorevent + "crazy_conservative_act.txt"),
+	customText(&bribe_officers, majorevent + "bribe_officers.txt"),
+	customText(&my_idol, majorevent + "my_idol.txt"),
+	customText(&prison_book_title, majorevent + "prison_book_title.txt"),
+	customText(&prison_book_title_2, majorevent + "prison_book_title_2.txt"),
+	customText(&mutilated_corpse, majorevent + "mutilated_corpse.txt"),
+	customText(&evidence_of_child_murder, majorevent + "evidence_of_child_murder.txt"),
+	customText(&break_in_murder_case, majorevent + "break_in_murder_case.txt"),
+	customText(&animal_research_country, majorevent + "animal_research_country.txt"),
+	customText(&drug_name, majorevent + "drug_name.txt"),
+	customText(&drug_name_2, majorevent + "drug_name_2.txt"),
+	customText(&chimp_drug_impact, majorevent + "chimp_drug_impact.txt"),
+	customText(&chimp_drug_horror, majorevent + "chimp_drug_horror.txt"),
+	customText(&terrorist_group, majorevent + "terrorist_group.txt"),
+	customText(&terrorist_plot, majorevent + "terrorist_plot.txt"),
+	customText(&terrorist_plot_no_free_speech, majorevent + "terrorist_plot_no_free_speech.txt"),
+	customText(&gene_corp_name, majorevent + "gene_corp_name.txt"),
+	customText(&gene_corp_name_2, majorevent + "gene_corp_name_2.txt"),
+	customText(&gene_product_name, majorevent + "gene_product_name.txt"),
+	customText(&gene_product_name_2, majorevent + "gene_product_name_2.txt"),
+	customText(&gene_product_benefit, majorevent + "gene_product_benefit.txt"),
+	customText(&gene_product_cost, majorevent + "gene_product_cost.txt"),
+	customText(&bullshit_no_free_speech, majorevent + "bullshit_no_free_speech.txt"),
+	customText(&bullshit, majorevent + "bullshit.txt"),
+	customText(&petty_violence, majorevent + "petty_violence.txt"),
+	customText(&his_her, majorevent + "his_her.txt"),
+	customText(&older_younger, majorevent + "older_younger.txt"),
+	customText(&brother_sister, majorevent + "brother_sister.txt"),
+	customText(&judge_with_prostitute, majorevent + "judge_with_prostitute.txt"),
+	customText(&judge_with_prostitute_no_free_speech, majorevent + "judge_with_prostitute_no_free_speech.txt"),
+	customText(&judge_with_prostitute_full_free_speech, majorevent + "judge_with_prostitute_full_free_speech.txt"),
+	customText(&radio_host_crazy_quote, majorevent + "radio_host_crazy_quote.txt"),
+	customText(&radio_host_lost_mind, majorevent + "radio_host_lost_mind.txt"),
+	customText(&family_values_company_name, majorevent + "family_values_company_name.txt"),
+	customText(&family_values_company_name_2, majorevent + "family_values_company_name_2.txt"),
+	customText(&family_values_company_name_3, majorevent + "family_values_company_name_3.txt"),
+	customText(&pollution_consumption, majorevent + "pollution_consumption.txt"),
+	customText(&pollution_consumption_2, majorevent + "pollution_consumption_2.txt"),
+	customText(&i_like_polution, majorevent + "i_like_polution.txt"),
+	customText(&distrust_liberals, majorevent + "distrust_liberals.txt"),
+	customText(&tech_giant_name, majorevent + "tech_giant_name.txt"),
+	customText(&tech_giant_name_2, majorevent + "tech_giant_name_2.txt"),
+	customText(&fm_radio_name, majorevent + "fm_radio_name.txt"),
+	customText(&fm_radio_name_2, majorevent + "fm_radio_name_2.txt"),
+	customText(&public_place, majorevent + "public_place.txt"),
+	customText(&reagan_bad, majorevent + "reagan_bad.txt"),
+	customText(&reagan_bad_2, majorevent + "reagan_bad_2.txt"),
+	customText(&ceo_behaving_badly, majorevent + "ceo_behaving_badly.txt"),
+	customText(&reagan_good, majorevent + "reagan_good.txt"),
+	customText(&reagan_good_2, majorevent + "reagan_good_2.txt"),
+	customText(&cable_name, majorevent + "cable_name.txt"),
+	customText(&cable_name_2, majorevent + "cable_name_2.txt"),
+	customText(&cable_city, majorevent + "cable_city.txt"),
+	customText(&cable_city_2, majorevent + "cable_city_2.txt"),
+	/*squadstory_text.cpp*/
+	customText(&ccs_adjective, majorevent + "ccs_adjective.txt"),
+	customText(&ccs_adjective_2, majorevent + "ccs_adjective_2.txt"),
+	customText(&ccs_adjective_3, majorevent + "ccs_adjective_3.txt"),
+	customText(&ccs_noun, majorevent + "ccs_noun.txt"),
+
+
+	customText(&personalAds, mostlyendings + "personalAds.txt"),
+	customText(&personalAdsLG, mostlyendings + "personalAdsLG.txt"),
+
+	customText(&adList, mostlyendings + "adList.txt", AD_LENGTH),
+	customText(&adListB, mostlyendings + "adListB.txt", AD_LENGTH),
+	customText(&caseNEWSSTORY_CCS_DEFEATED, mostlyendings + "caseNEWSSTORY_CCS_DEFEATED.txt"),
+	customText(&caseNEWSSTORY_CCS_NOBACKERS, mostlyendings + "caseNEWSSTORY_CCS_NOBACKERS.txt"),
+};
 
 newsstoryst* ccs_strikes_story()
 {

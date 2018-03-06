@@ -8,12 +8,6 @@
 #include "common/stringconversion.h"
 //for stringtobool
 
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
-#include <set_color_support.h>
 LootType::LootType(MCD_STR xmlstring)
  : ItemType(xmlstring), stackable_(true),
    no_quick_fencing_(false), cloth_(false)

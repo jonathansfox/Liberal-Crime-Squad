@@ -65,8 +65,8 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "sitemode/sitedisplay.h"
 
-#include "sitemode/advance.h"
-// for creatureadvance
+//#include "sitemode/advance.h"
+void creatureadvance();
 
 //#include "sitemode/miscactions.h"
 void reloadparty(bool wasteful = false);
@@ -78,9 +78,6 @@ void mode_site(short loc);
 #include "common/commonactionsCreature.h"
 // for void cleangonesquads();
 
-#include "common/consolesupport.h"
-// for void set_color(short,short,bool)
-
 #include "log/log.h"
 // for commondisplay.h
 #include "common/commondisplay.h"
@@ -89,21 +86,9 @@ void mode_site(short loc);
 #include "common/translateid.h"
 // for  int getsquad(int)
 
-#include "common/stringconversion.h"
-//for string conversion
-
-#include "common/equipment.h"
-//for void equip(vector<Item *>&,int)
-
 #include "politics/politics.h"
 //for  int publicmood(int l);
 
-#include "daily/siege.h"
-//own header
-
-#include "daily/daily.h"
-//for void initlocation(Location &loc);
-     
 #include "combat/fight.h"   
 //for void autopromote(int loc);
 
@@ -113,8 +98,6 @@ void mode_site(short loc);
 
 #include <cursesAlternative.h>
 #include <customMaps.h>
-#include <constant_strings.h>
-#include <gui_constants.h>
 #include <set_color_support.h>
 extern vector<Creature *> pool;
 extern Log gamelog;
@@ -132,6 +115,7 @@ extern int ccs_siege_kills;
  vector<string> newspaper_last_name;
  vector<string> insult_for_liberal;
  vector<string> word_replacing_liberal;
+
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
 extern string singleDot;
@@ -140,6 +124,24 @@ vector<string> engageConservativesEscape;
 vector<string> engageConservatives;
 vector<string> nextSiegeAgain;
 vector<string> nextSiege;
+
+const string siege = "siege\\";
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> siege_text_file_collection = {
+
+	/*siege.cpp*/
+	customText(&words_meaning_news, siege + "words_meaning_news.txt"),
+	customText(&newspaper_first_name, siege + "newspaper_first_name.txt"),
+	customText(&newspaper_last_name, siege + "newspaper_last_name.txt"),
+	customText(&insult_for_liberal, siege + "insult_for_liberal.txt"),
+	customText(&word_replacing_liberal, siege + "word_replacing_liberal.txt"),
+
+	customText(&nextSiege, mostlyendings + "nextSiege.txt"),
+	customText(&nextSiegeAgain, mostlyendings + "nextSiegeAgain.txt"),
+	customText(&engageConservatives, mostlyendings + "engageConservatives.txt"),
+	customText(&engageConservativesEscape, mostlyendings + "engageConservativesEscape.txt"),
+};
+
 extern int selectedsiege;
 extern short offended_corps;
 extern short offended_cia;
@@ -184,6 +186,211 @@ make it more likely to be raided:
 /* siege - gives up on sieges with empty locations */
 /* Work in progress. It works, but needs to be called in more places. */
 /* Currently, it only works when you confront a siege and then fail. */
+/* siege - handles giving up */
+void giveup()
+{
+	int loc = -1;
+	if (selectedsiege != -1)loc = selectedsiege;
+	if (activesquad != NULL)loc = activesquad->squad[0]->location;
+	if (loc == -1)return;
+	if (LocationsPool::getInstance().getRentingType(loc) > 1)location[loc]->renting = RENTING_NOCONTROL;
+	//IF POLICE, END SIEGE
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
+		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
+	{
+		music.play(MUSIC_SIEGE);
+		int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
+		//END SIEGE
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		moveAlt(1, 1);
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
+			addstrAlt("The police", gamelog);
+		else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
+			addstrAlt("The soldiers", gamelog);
+		else addstrAlt("The firemen", gamelog);
+		addstrAlt(" confiscate everything, including Squad weapons.", gamelog);
+		gamelog.newline();
+		int kcount = 0, pcount = 0, icount = 0, p;
+		char kname[100], pname[100], pcname[100];
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		{
+			if (pool[p]->location != loc || !pool[p]->alive) continue;
+			if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
+			if (pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1)
+			{
+				kcount++;
+				strcpy(kname, pool[p]->propername);
+				if (pool[p]->type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
+				if (pool[p]->type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
+				//clear interrogation data if deleted
+				delete pool[p]->activity.intr();
+			}
+		}
+		//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
+		if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
+		if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN && location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
+			criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
+													  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		{
+			if (pool[p]->location != loc || !pool[p]->alive) continue;
+			if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1))
+			{
+				pcount++;
+				strcpy(pname, pool[p]->propername);
+				strcpy(pcname, pool[p]->name);
+			}
+		}
+		if (kcount == 1)
+		{
+			mvaddstrAlt(3, 1, kname);
+			addstrAlt(" is rehabilitated and freed.", gamelog);
+			gamelog.newline();
+		}
+		if (kcount > 1)
+		{
+			mvaddstrAlt(3, 1, "The kidnap victims are rehabilitated and freed.", gamelog);
+			gamelog.newline();
+		}
+		if (pcount == 1)
+		{
+			mvaddstrAlt(5, 1, pname, gamelog);
+			if (strcmp(pname, pcname))
+			{
+				addstrAlt(", aka ", gamelog);
+				addstrAlt(pcname, gamelog);
+				addstrAlt(",", gamelog);
+			}
+			mvaddstrAlt(6, 1, "is taken to the police station.", gamelog);
+			gamelog.newline();
+		}
+		if (pcount > 1)
+		{
+			mvaddstrAlt(5, 1, pcount, gamelog);
+			addstrAlt(" Liberals are taken to the police station.", gamelog);
+			gamelog.newline();
+		}
+		if (ledger.get_funds() > 0)
+		{
+			if (ledger.get_funds() <= 2000 || location[loc]->siege.siegetype == SIEGE_FIREMEN)
+			{
+				mvaddstrAlt(8, 1, "Fortunately, your funds remain intact.", gamelog);
+				gamelog.newline();
+			}
+			else
+			{
+				moveAlt(8, 1);
+				int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
+				if (ledger.get_funds() - confiscated > 50000)
+					confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
+				addstr_fl(gamelog, "Law enforcement has confiscated $%d in LCS funds.", confiscated);
+				gamelog.newline();
+				ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
+			}
+		}
+		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
+		{
+			if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
+			{
+				mvaddstrAlt(10, 1, "The printing press is dismantled and burned.", gamelog);
+				gamelog.newline();
+				location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+			}
+		}
+		else
+		{
+			if (location[loc]->compound_walls)
+			{
+				mvaddstrAlt(10, 1, "The compound is dismantled.", gamelog);
+				gamelog.newline();
+				location[loc]->compound_walls = 0;
+			}
+		}
+		if (location[loc]->front_business != -1)
+		{
+			mvaddstrAlt(12, 1, "Materials relating to the business front have been taken.", gamelog);
+			gamelog.newline();
+			location[loc]->front_business = -1;
+		}
+		getkeyAlt();
+		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
+			offended_firemen = 0; // Firemen do not hold grudges
+		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		{
+			if (pool[p]->location != loc) continue;
+			//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
+			if ((pool[p]->flag & CREATUREFLAG_MISSING) ||
+				!pool[p]->alive)
+			{
+				// Clear actions for anybody who was tending to this person
+				for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
+					if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
+						pool[i]->activity.type = ACTIVITY_NONE;
+				removesquadinfo(*pool[p]);
+				delete_and_remove(pool, p);
+				continue;
+			}
+			//TAKE SQUAD EQUIPMENT
+			if (pool[p]->squadid != -1)
+			{
+				int sq = getsquad(pool[p]->squadid);
+				if (sq != -1)delete_and_clear(squad[sq]->loot);
+			}
+			pool[p]->drop_weapons_and_clips(NULL);
+			if (iscriminal(*pool[p]))
+			{
+				removesquadinfo(*pool[p]);
+				pool[p]->location = polsta;
+				pool[p]->activity.type = ACTIVITY_NONE;
+			}
+		}
+		location[loc]->siege.siege = 0;
+	}
+	else
+	{
+		//OTHERWISE IT IS SUICIDE
+		int killnumber = 0;
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		{
+			if (pool[p]->location != loc) continue;
+			if (pool[p]->alive&&pool[p]->align == 1) stat_dead++;
+			killnumber++;
+			removesquadinfo(*pool[p]);
+			pool[p]->die();
+			pool[p]->location = -1;
+		}
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
+			location[loc]->renting = RENTING_CCS; // CCS Captures warehouse
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(1, 1, "Everyone in the ", gamelog);
+		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
+		addstrAlt(" is slain.", gamelog);
+		gamelog.newline();
+		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
+		getkeyAlt();
+		newsstoryst *ns = new newsstoryst;
+		ns->type = NEWSSTORY_MASSACRE;
+		ns->loc = loc;
+		ns->crime.push_back(LocationsPool::getInstance().getSiegeType(loc));
+		ns->crime.push_back(killnumber);
+		newsstory.push_back(ns);
+		//MUST SET cursite TO SATISFY endcheck() CODE
+		int tmp = cursite;
+		cursite = loc;
+		endcheck();
+		cursite = tmp;
+		location[loc]->siege.siege = 0;
+	}
+	//CONFISCATE MATERIAL
+	delete_and_clear(location[loc]->loot);
+	for (int v = len(vehicle) - 1; v >= 0; v--)
+		if (vehicle[v]->get_location() == loc)
+			delete_and_remove(vehicle, v);
+	gamelog.newline();
+}
 void resolvesafehouses()
 {
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
@@ -195,6 +402,264 @@ void resolvesafehouses()
 			giveup();
 		}
 	}
+}
+/* siege - "you are wanted for _______ and other crimes..." */
+void statebrokenlaws(int loc)
+{
+	music.play(MUSIC_SIEGE);
+	short breakercount[LAWFLAGNUM] = { 0 };
+	int typenum = 0, criminalcount = 0, kidnapped = 0;
+	char kname[100];
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (!pool[p]->alive || pool[p]->location != loc) continue;
+		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
+		{
+			strcpy(kname, pool[p]->propername);
+			kidnapped++;
+		}
+		if (iscriminal(*pool[p])) criminalcount++;
+		for (int i = 0; i < LAWFLAGNUM; i++) if (pool[p]->crimes_suspected[i]) breakercount[i]++;
+	}
+	for (int i = 0; i < LAWFLAGNUM; i++) if (breakercount[i]) typenum++;
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(1, 1);
+	if (location[loc]->siege.underattack) addstrAlt("You hear shouts:", gamelog);
+	else addstrAlt("You hear a blaring voice on a loudspeaker:", gamelog);
+	gamelog.newline();
+	moveAlt(3, 1);
+	if (LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2 && publicmood(-1) < 20)
+		addstrAlt("In the name of God, your campaign of terror ends here!", gamelog);
+	else addstrAlt("Surrender yourselves!", gamelog);
+	gamelog.newline();
+	moveAlt(4, 1);
+	//KIDNAP VICTIM
+	if (kidnapped)
+	{
+		addstrAlt("Release ", gamelog);
+		addstrAlt(kname, gamelog);
+		if (kidnapped > 1) addstrAlt(" and the others", gamelog);
+		addstrAlt(" unharmed!", gamelog);
+	}
+	//TREASON
+	else if (breakercount[LAWFLAG_TREASON])
+		addstrAlt("You are wanted for treason", gamelog);
+	//TERRORISM
+	else if (breakercount[LAWFLAG_TERRORISM])
+		addstrAlt("You are wanted for terrorism", gamelog);
+	//MURDERER
+	else if (breakercount[LAWFLAG_MURDER])
+		addstrAlt("You are wanted for first degree murder", gamelog);
+	//KIDNAPPER
+	else if (breakercount[LAWFLAG_KIDNAPPING])
+		addstrAlt("You are wanted for kidnapping", gamelog);
+	//BANK ROBBER
+	else if (breakercount[LAWFLAG_BANKROBBERY])
+		addstrAlt("You are wanted for bank robbery", gamelog);
+	//ARSONIST
+	else if (breakercount[LAWFLAG_ARSON])
+		addstrAlt("You are wanted for arson", gamelog);
+	//BURN FLAG
+	else if (breakercount[LAWFLAG_BURNFLAG])
+	{
+		if (lawList[LAW_FLAGBURNING] == -2)addstrAlt("You are wanted for Flag Murder", gamelog);
+		else if (lawList[LAW_FLAGBURNING] == -1)addstrAlt("You are wanted for felony flag burning", gamelog);
+		else addstrAlt("You are wanted for flag burning", gamelog);
+	}
+	//SPEECH
+	else if (breakercount[LAWFLAG_SPEECH])
+		addstrAlt("You are wanted for sedition", gamelog);
+	//BROWNIES
+	else if (breakercount[LAWFLAG_BROWNIES])
+		addstrAlt("You are wanted for sale and distribution of a controlled substance", gamelog);
+	//ESCAPED
+	else if (breakercount[LAWFLAG_ESCAPED])
+		addstrAlt("You are wanted for escaping prison", gamelog);
+	//HELP ESCAPED
+	else if (breakercount[LAWFLAG_HELPESCAPE])
+		addstrAlt("You are wanted for aiding a prison escape", gamelog);
+	//JURY
+	else if (breakercount[LAWFLAG_JURY])
+		addstrAlt("You are wanted for jury tampering", gamelog);
+	//RACKETEERING
+	else if (breakercount[LAWFLAG_RACKETEERING])
+		addstrAlt("You are wanted for racketeering", gamelog);
+	//EXTORTION
+	else if (breakercount[LAWFLAG_EXTORTION])
+		addstrAlt("You are wanted for extortion", gamelog);
+	//ASSAULT
+	else if (breakercount[LAWFLAG_ARMEDASSAULT])
+		addstrAlt("You are wanted for assault with a deadly weapon", gamelog);
+	//ASSAULT
+	else if (breakercount[LAWFLAG_ASSAULT])
+		addstrAlt("You are wanted for misdemeanor assault", gamelog);
+	//CAR THEFT
+	else if (breakercount[LAWFLAG_CARTHEFT])
+		addstrAlt("You are wanted for grand theft auto", gamelog);
+	//CC FRAUD
+	else if (breakercount[LAWFLAG_CCFRAUD])
+		addstrAlt("You are wanted for credit card fraud", gamelog);
+	//THIEF
+	else if (breakercount[LAWFLAG_THEFT])
+		addstrAlt("You are wanted for petty larceny", gamelog);
+	//PROSTITUTION
+	else if (breakercount[LAWFLAG_PROSTITUTION])
+		addstrAlt("You are wanted for prostitution", gamelog);
+	//HIRE ILLEGAL
+	else if (breakercount[LAWFLAG_HIREILLEGAL])
+		addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? "You are wanted for hiring an illegal alien" : "You are wanted for hiring an undocumented worker"), gamelog);
+	//GUN USE
+	/*else if(breakercount[LAWFLAG_GUNUSE])
+	addstrAlt("You are wanted for firing an illegal weapon", gamelog);
+	//GUN CARRY
+	else if(breakercount[LAWFLAG_GUNCARRY])
+	addstrAlt("You are wanted for possession of an illegal weapon", gamelog);*/
+	//COMMERCE
+	else if (breakercount[LAWFLAG_COMMERCE])
+		addstrAlt("You are wanted for interference with interstate commerce", gamelog);
+	//INFORMATION
+	else if (breakercount[LAWFLAG_INFORMATION])
+		addstrAlt("You are wanted for unlawful access of an information system", gamelog);
+	//UNLAWFUL BURIAL
+	else if (breakercount[LAWFLAG_BURIAL])
+		addstrAlt("You are wanted for unlawful burial", gamelog);
+	//BREAKING
+	else if (breakercount[LAWFLAG_BREAKING])
+		addstrAlt("You are wanted for breaking and entering", gamelog);
+	//VANDALISM
+	else if (breakercount[LAWFLAG_VANDALISM])
+		addstrAlt("You are wanted for vandalism", gamelog);
+	//RESIST
+	else if (breakercount[LAWFLAG_RESIST])
+		addstrAlt("You are wanted for resisting arrest", gamelog);
+	//DISTURBANCE
+	else if (breakercount[LAWFLAG_DISTURBANCE])
+		addstrAlt("You are wanted for disturbing the peace", gamelog);
+	//PUBLIC NUDITY
+	else if (breakercount[LAWFLAG_PUBLICNUDITY])
+		addstrAlt("You are wanted for indecent exposure", gamelog);
+	//LOITERING
+	else if (breakercount[LAWFLAG_LOITERING])
+		addstrAlt("You are wanted for loitering", gamelog);
+	//THEY WERE LOOKING FOR SOMEONE ELSE
+	else addstrAlt("You are wanted for harboring a fugitive from justice", gamelog);
+	if (!kidnapped)
+	{
+		if (typenum > 1) addstrAlt(" and other crimes", gamelog);
+		addstrAlt(singleDot, gamelog);
+	}
+	gamelog.nextMessage();
+	getkeyAlt();
+}
+void statebrokenlaws(Creature & cr)
+{
+	bool kidnapped = (cr.flag&CREATUREFLAG_KIDNAPPED), criminal = false, breakercount[LAWFLAGNUM];
+	for (int i = 0; i < LAWFLAGNUM; i++)
+		if (cr.crimes_suspected[i]) breakercount[i] = true, criminal = true;
+		else breakercount[i] = false;
+		if (!criminal && !kidnapped) return;
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		addstrAlt("WANTED FOR ");
+		//KIDNAP VICTIM
+		if (kidnapped)
+			addstrAlt("REHABILITATION");
+		//TREASON
+		else if (breakercount[LAWFLAG_TREASON])
+			addstrAlt("TREASON");
+		//TERRORISM
+		else if (breakercount[LAWFLAG_TERRORISM])
+			addstrAlt("TERRORISM");
+		//MURDERER
+		else if (breakercount[LAWFLAG_MURDER])
+			addstrAlt("MURDER");
+		//KIDNAPPER
+		else if (breakercount[LAWFLAG_KIDNAPPING])
+			addstrAlt("KIDNAPPING");
+		//BANK ROBBER
+		else if (breakercount[LAWFLAG_BANKROBBERY])
+			addstrAlt("BANK ROBBERY");
+		//ARSONIST
+		else if (breakercount[LAWFLAG_BANKROBBERY])
+			addstrAlt("ARSON");
+		//BURN FLAG
+		else if (breakercount[LAWFLAG_BURNFLAG])
+			addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? "FLAG MURDER" : "FLAG BURNING");
+		//SPEECH
+		else if (breakercount[LAWFLAG_SPEECH])
+			addstrAlt("HARMFUL SPEECH");
+		//BROWNIES
+		else if (breakercount[LAWFLAG_BROWNIES])
+			addstrAlt("DRUG DEALING");
+		//ESCAPED
+		else if (breakercount[LAWFLAG_ESCAPED])
+			addstrAlt("ESCAPING PRISON");
+		//HELP ESCAPED
+		else if (breakercount[LAWFLAG_HELPESCAPE])
+			addstrAlt("RELEASING PRISONERS");
+		//JURY
+		else if (breakercount[LAWFLAG_JURY])
+			addstrAlt("JURY TAMPERING");
+		//RACKETEERING
+		else if (breakercount[LAWFLAG_RACKETEERING])
+			addstrAlt("RACKETEERING");
+		//EXTORTION
+		else if (breakercount[LAWFLAG_EXTORTION])
+			addstrAlt("EXTORTION");
+		//ASSAULT
+		else if (breakercount[LAWFLAG_ARMEDASSAULT])
+			addstrAlt("ARMED ASSAULT");
+		//ASSAULT
+		else if (breakercount[LAWFLAG_ASSAULT])
+			addstrAlt("ASSAULT");
+		//CAR THEFT
+		else if (breakercount[LAWFLAG_CARTHEFT])
+			addstrAlt("GRAND THEFT AUTO");
+		//CC FRAUD
+		else if (breakercount[LAWFLAG_CCFRAUD])
+			addstrAlt("CREDIT CARD FRAUD");
+		//THIEF
+		else if (breakercount[LAWFLAG_THEFT])
+			addstrAlt("THEFT");
+		//PROSTITUTION
+		else if (breakercount[LAWFLAG_PROSTITUTION])
+			addstrAlt("PROSTITUTION");
+		//HIRE ILLEGAL
+		else if (breakercount[LAWFLAG_HIREILLEGAL])
+			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? "HIRING ILLEGAL ALIENS" : "HIRING UNDOCUMENTED WORKERS");
+		//GUN USE
+		/*else if(breakercount[LAWFLAG_GUNUSE])
+		addstrAlt("FIRING ILLEGAL WEAPONS");
+		//GUN CARRY
+		else if(breakercount[LAWFLAG_GUNCARRY])
+		addstrAlt("CARRYING ILLEGAL WEAPONS");*/
+		//COMMERCE
+		else if (breakercount[LAWFLAG_COMMERCE])
+			addstrAlt("ELECTRONIC SABOTAGE");
+		//INFORMATION
+		else if (breakercount[LAWFLAG_INFORMATION])
+			addstrAlt("HACKING");
+		//UNLAWFUL BURIAL
+		else if (breakercount[LAWFLAG_BURIAL])
+			addstrAlt("UNLAWFUL BURIAL");
+		//BREAKING
+		else if (breakercount[LAWFLAG_BREAKING])
+			addstrAlt("BREAKING AND ENTERING");
+		//VANDALISM
+		else if (breakercount[LAWFLAG_VANDALISM])
+			addstrAlt("VANDALISM");
+		//RESIST
+		else if (breakercount[LAWFLAG_RESIST])
+			addstrAlt("RESISTING ARREST");
+		//DISTURBANCE
+		else if (breakercount[LAWFLAG_DISTURBANCE])
+			addstrAlt("DISTURBING THE PEACE");
+		//PUBLIC NUDITY
+		else if (breakercount[LAWFLAG_PUBLICNUDITY])
+			addstrAlt("PUBLIC NUDITY");
+		//LOITERING
+		else if (breakercount[LAWFLAG_LOITERING])
+			addstrAlt("LOITERING");
 }
 /* siege - updates upcoming sieges */
 void siegecheck(char canseethings)
@@ -822,6 +1287,14 @@ void siegecheck(char canseethings)
 		}
 	}
 }
+/* siege - checks how many people are eating at the site */
+int numbereating(int loc)
+{
+	int eaters = 0;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
+		if (pool[p]->location == loc && pool[p]->alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
+	return eaters;
+}
 /* siege - updates sieges in progress */
 void siegeturn(char clearformess)
 {
@@ -1241,211 +1714,7 @@ void siegeturn(char clearformess)
 	delete[] liberalcount;
 	delete[] food_prep;
 }
-/* siege - handles giving up */
-void giveup()
-{
-	int loc = -1;
-	if (selectedsiege != -1)loc = selectedsiege;
-	if (activesquad != NULL)loc = activesquad->squad[0]->location;
-	if (loc == -1)return;
-	if (LocationsPool::getInstance().getRentingType(loc) > 1)location[loc]->renting = RENTING_NOCONTROL;
-	//IF POLICE, END SIEGE
-	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
-		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
-	{
-		music.play(MUSIC_SIEGE);
-		int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
-		//END SIEGE
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		moveAlt(1, 1);
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
-			addstrAlt("The police", gamelog);
-		else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
-			addstrAlt("The soldiers", gamelog);
-		else addstrAlt("The firemen", gamelog);
-		addstrAlt(" confiscate everything, including Squad weapons.", gamelog);
-		gamelog.newline();
-		int kcount = 0, pcount = 0, icount = 0, p;
-		char kname[100], pname[100], pcname[100];
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc || !pool[p]->alive) continue;
-			if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
-			if (pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1)
-			{
-				kcount++;
-				strcpy(kname, pool[p]->propername);
-				if (pool[p]->type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
-				if (pool[p]->type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
-				//clear interrogation data if deleted
-				delete pool[p]->activity.intr();
-			}
-		}
-		//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
-		if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
-		if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN&&location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
-			criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
-													  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc || !pool[p]->alive) continue;
-			if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1))
-			{
-				pcount++;
-				strcpy(pname, pool[p]->propername);
-				strcpy(pcname, pool[p]->name);
-			}
-		}
-		if (kcount == 1)
-		{
-			mvaddstrAlt(3,  1, kname);
-			addstrAlt(" is rehabilitated and freed.", gamelog);
-			gamelog.newline();
-		}
-		if (kcount > 1)
-		{
-			mvaddstrAlt(3,  1, "The kidnap victims are rehabilitated and freed.", gamelog);
-			gamelog.newline();
-		}
-		if (pcount == 1)
-		{
-			mvaddstrAlt(5,  1, pname, gamelog);
-			if (strcmp(pname, pcname))
-			{
-				addstrAlt(", aka ", gamelog);
-				addstrAlt(pcname, gamelog);
-				addstrAlt(",", gamelog);
-			}
-			mvaddstrAlt(6,  1, "is taken to the police station.", gamelog);
-			gamelog.newline();
-		}
-		if (pcount > 1)
-		{
-			mvaddstrAlt(5,  1, pcount, gamelog);
-			addstrAlt(" Liberals are taken to the police station.", gamelog);
-			gamelog.newline();
-		}
-		if (ledger.get_funds() > 0)
-		{
-			if (ledger.get_funds() <= 2000 || location[loc]->siege.siegetype == SIEGE_FIREMEN)
-			{
-				mvaddstrAlt(8,  1, "Fortunately, your funds remain intact.", gamelog);
-				gamelog.newline();
-			}
-			else
-			{
-				moveAlt(8, 1);
-				int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
-				if (ledger.get_funds() - confiscated > 50000)
-					confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
-				addstr_fl(gamelog, "Law enforcement has confiscated $%d in LCS funds.", confiscated);
-				gamelog.newline();
-				ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
-			}
-		}
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
-		{
-			if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
-			{
-				mvaddstrAlt(10,  1, "The printing press is dismantled and burned.", gamelog);
-				gamelog.newline();
-				location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
-			}
-		}
-		else
-		{
-			if (location[loc]->compound_walls)
-			{
-				mvaddstrAlt(10,  1, "The compound is dismantled.", gamelog);
-				gamelog.newline();
-				location[loc]->compound_walls = 0;
-			}
-		}
-		if (location[loc]->front_business != -1)
-		{
-			mvaddstrAlt(12,  1, "Materials relating to the business front have been taken.", gamelog);
-			gamelog.newline();
-			location[loc]->front_business = -1;
-		}
-		getkeyAlt();
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
-			offended_firemen = 0; // Firemen do not hold grudges
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc) continue;
-			//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
-			if ((pool[p]->flag & CREATUREFLAG_MISSING) ||
-				!pool[p]->alive)
-			{
-				// Clear actions for anybody who was tending to this person
-				for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
-					if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[i]->activity.arg == pool[p]->id)
-						pool[i]->activity.type = ACTIVITY_NONE;
-				removesquadinfo(*pool[p]);
-				delete_and_remove(pool, p);
-				continue;
-			}
-			//TAKE SQUAD EQUIPMENT
-			if (pool[p]->squadid != -1)
-			{
-				int sq = getsquad(pool[p]->squadid);
-				if (sq != -1)delete_and_clear(squad[sq]->loot);
-			}
-			pool[p]->drop_weapons_and_clips(NULL);
-			if (iscriminal(*pool[p]))
-			{
-				removesquadinfo(*pool[p]);
-				pool[p]->location = polsta;
-				pool[p]->activity.type = ACTIVITY_NONE;
-			}
-		}
-		location[loc]->siege.siege = 0;
-	}
-	else
-	{
-		//OTHERWISE IT IS SUICIDE
-		int killnumber = 0;
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc) continue;
-			if (pool[p]->alive&&pool[p]->align == 1) stat_dead++;
-			killnumber++;
-			removesquadinfo(*pool[p]);
-			pool[p]->die();
-			pool[p]->location = -1;
-		}
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
-			location[loc]->renting = RENTING_CCS; // CCS Captures warehouse
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1,  1, "Everyone in the ", gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-		addstrAlt(" is slain.", gamelog);
-		gamelog.newline();
-		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
-		getkeyAlt();
-		newsstoryst *ns = new newsstoryst;
-		ns->type = NEWSSTORY_MASSACRE;
-		ns->loc = loc;
-		ns->crime.push_back(LocationsPool::getInstance().getSiegeType(loc));
-		ns->crime.push_back(killnumber);
-		newsstory.push_back(ns);
-		//MUST SET cursite TO SATISFY endcheck() CODE
-		int tmp = cursite;
-		cursite = loc;
-		endcheck();
-		cursite = tmp;
-		location[loc]->siege.siege = 0;
-	}
-	//CONFISCATE MATERIAL
-	delete_and_clear(location[loc]->loot);
-	for (int v = len(vehicle) - 1; v >= 0; v--)
-		if (vehicle[v]->get_location() == loc)
-			delete_and_remove(vehicle, v);
-	gamelog.newline();
-}
+
 /* siege - checks how many days of food left at the site */
 int fooddaysleft(int loc)
 {
@@ -1453,13 +1722,100 @@ int fooddaysleft(int loc)
 	if (eaters == 0) return -1;
 	return location[loc]->compound_stores / eaters + ((location[loc]->compound_stores%eaters) > eaters / 2);
 }
-/* siege - checks how many people are eating at the site */
-int numbereating(int loc)
+/* siege - what happens when you escaped the siege */
+void escapesiege(char won)
 {
-	int eaters = 0;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
-		if (pool[p]->location == loc&&pool[p]->alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
-	return eaters;
+	//TEXT IF DIDN'T WIN
+	if (!won)
+	{
+		music.play(MUSIC_CONQUER);
+		//GIVE INFO SCREEN
+		eraseAlt();
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		mvaddstrAlt(1, 32, "You have escaped!", gamelog);
+		gamelog.nextMessage();
+		set_color_easy(WHITE_ON_BLACK);
+		int yLevel = 3;
+		for (int i = 0; i < len(engageConservativesEscape); i++) {
+			mvaddstrAlt(yLevel + i, 11, engageConservativesEscape[i]);
+		}
+		yLevel += len(engageConservativesEscape);
+		int homes = -1;
+		if (activesquad)
+			if (activesquad->squad[0] != NULL)
+				homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, activesquad->squad[0]->location);
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		mvaddstrAlt(yLevel + 1, 11, "Press any key to split up and lay low for a few days");
+		// Seperate logging text
+		gamelog.log("Your Liberals split up and lay low for a few days.");
+		getkeyAlt();
+		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
+		if (activesquad&&homes != -1) location[homes]->getloot(activesquad->loot);
+		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
+							//but we need to disband current squad as the people are going to be 'away'.
+							//GET RID OF DEAD, etc.
+		if (LocationsPool::getInstance().getRentingType(cursite) > 1)location[cursite]->renting = RENTING_NOCONTROL;
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		{
+			if (pool[p]->location != cursite) continue;
+			if (!pool[p]->alive)
+			{
+				delete_and_remove(pool, p);
+				continue;
+			}
+			//BASE EVERYONE LEFT AT HOMELESS SHELTER
+			removesquadinfo(*pool[p]);
+			pool[p]->hiding = LCSrandom(3) + 2;
+			if (pool[p]->align == 1) // not a hostage
+				pool[p]->location = -1;
+			else // hostages don't go into hiding, just shove em into the homeless shelter
+				pool[p]->location = homes;
+			pool[p]->base = homes;
+		}
+		delete_and_clear(location[cursite]->loot);
+		for (int v = len(vehicle) - 1; v >= 0; v--)
+			if (vehicle[v]->get_location() == cursite)
+				delete_and_remove(vehicle, v);
+		location[cursite]->compound_walls = 0;
+		location[cursite]->compound_stores = 0;
+		location[cursite]->front_business = -1;
+		LocationsPool::getInstance().initLocation(cursite);
+	}
+	//SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
+	location[cursite]->siege.siege = 0;
+	if (won&&LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
+	{
+		location[cursite]->siege.timeuntillocated = LCSrandom(4) + 4;
+		location[cursite]->siege.escalationstate++;
+		if (police_heat < 4) police_heat++;
+	}
+}
+/* siege - flavor text when you fought off the raid */
+void conquertext()
+{
+	//GIVE INFO SCREEN
+	music.play(MUSIC_CONQUER);
+	eraseAlt();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 26, "* * * * *   VICTORY   * * * * *", gamelog);
+	gamelog.newline();
+	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(3, 16, "The Conservative automatons have been driven back ÄÄ for ", gamelog);
+		mvaddstrAlt(4, 11, "the time being.  While they are regrouping, you might consider ", gamelog);
+		mvaddstrAlt(5, 11, "abandoning this safe house for a safer location.", gamelog);
+	}
+	else
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(3, 16, "The Conservative automatons have been driven back.  ", gamelog);
+		mvaddstrAlt(4, 11, "Unfortunately, you will never truly be safe from ", gamelog);
+		mvaddstrAlt(5, 11, "this filth until the Liberal Agenda is realized.", gamelog);
+	}
+	gamelog.nextMessage();
+	mvaddstrAlt(7, 19, "Press C to Continue Liberally.");
+	while (getkeyAlt() != 'c');
 }
 // Siege -- Mass combat outside safehouse
 char sally_forth_aux(int loc)
@@ -1584,7 +1940,7 @@ char sally_forth_aux(int loc)
 				enemyattack();
 				creatureadvance();
 			}
-			if (c == 'e') equip(location[loc]->loot, -1);
+			if (c == 'e') LocationsPool::getInstance().equipLoc(loc, -1);
 			// Check for victory
 			partysize = 0, partyalive = 0;
 			for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
@@ -1678,7 +2034,7 @@ void sally_forth()
 	{
 		squad.push_back(new squadst);
 		squad.back()->id = cursquadid++;
-		strcpy(squad.back()->name, location[selectedsiege]->getname(true));
+		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
 		strcat(squad.back()->name, " Defense");
 		int i = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
@@ -1766,7 +2122,7 @@ void escape_engage()
 	{
 		squad.push_back(new squadst);
 		squad.back()->id = cursquadid++;
-		strcpy(squad.back()->name, location[selectedsiege]->getname(true));
+		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
 		strcat(squad.back()->name, " Defense");
 		int i = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
@@ -1789,101 +2145,7 @@ void escape_engage()
 	newsstory.push_back(ns);
 	mode_site(loc);
 }
-/* siege - what happens when you escaped the siege */
-void escapesiege(char won)
-{
-	//TEXT IF DIDN'T WIN
-	if (!won)
-	{
-		music.play(MUSIC_CONQUER);
-		//GIVE INFO SCREEN
-		eraseAlt();
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1,  32, "You have escaped!", gamelog);
-		gamelog.nextMessage();
-		set_color_easy(WHITE_ON_BLACK);
-		int yLevel = 3;
-		for (int i = 0; i < len(engageConservativesEscape); i++) {
-			mvaddstrAlt(yLevel + i,  11, engageConservativesEscape[i]);
-		}
-		yLevel += len(engageConservativesEscape);
-		int homes = -1;
-		if (activesquad)
-			if (activesquad->squad[0] != NULL)
-				homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, activesquad->squad[0]->location);
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(yLevel + 1,  11, "Press any key to split up and lay low for a few days");
-		// Seperate logging text
-		gamelog.log("Your Liberals split up and lay low for a few days.");
-		getkeyAlt();
-		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
-		if (activesquad&&homes != -1) location[homes]->getloot(activesquad->loot);
-		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
-							//but we need to disband current squad as the people are going to be 'away'.
-							//GET RID OF DEAD, etc.
-		if (LocationsPool::getInstance().getRentingType(cursite) > 1)location[cursite]->renting = RENTING_NOCONTROL;
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != cursite) continue;
-			if (!pool[p]->alive)
-			{
-				delete_and_remove(pool, p);
-				continue;
-			}
-			//BASE EVERYONE LEFT AT HOMELESS SHELTER
-			removesquadinfo(*pool[p]);
-			pool[p]->hiding = LCSrandom(3) + 2;
-			if (pool[p]->align == 1) // not a hostage
-				pool[p]->location = -1;
-			else // hostages don't go into hiding, just shove em into the homeless shelter
-				pool[p]->location = homes;
-			pool[p]->base = homes;
-		}
-		delete_and_clear(location[cursite]->loot);
-		for (int v = len(vehicle) - 1; v >= 0; v--)
-			if (vehicle[v]->get_location() == cursite)
-				delete_and_remove(vehicle, v);
-		location[cursite]->compound_walls = 0;
-		location[cursite]->compound_stores = 0;
-		location[cursite]->front_business = -1;
-		initlocation(*location[cursite]);
-	}
-	//SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
-	location[cursite]->siege.siege = 0;
-	if (won&&LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
-	{
-		location[cursite]->siege.timeuntillocated = LCSrandom(4) + 4;
-		location[cursite]->siege.escalationstate++;
-		if (police_heat < 4) police_heat++;
-	}
-}
-/* siege - flavor text when you fought off the raid */
-void conquertext()
-{
-	//GIVE INFO SCREEN
-	music.play(MUSIC_CONQUER);
-	eraseAlt();
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1,  26, "* * * * *   VICTORY   * * * * *", gamelog);
-	gamelog.newline();
-	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3,  16, "The Conservative automatons have been driven back ÄÄ for ", gamelog);
-		mvaddstrAlt(4,  11, "the time being.  While they are regrouping, you might consider ", gamelog);
-		mvaddstrAlt(5,  11, "abandoning this safe house for a safer location.", gamelog);
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3,  16, "The Conservative automatons have been driven back.  ", gamelog);
-		mvaddstrAlt(4,  11, "Unfortunately, you will never truly be safe from ", gamelog);
-		mvaddstrAlt(5,  11, "this filth until the Liberal Agenda is realized.", gamelog);
-	}
-	gamelog.nextMessage();
-	mvaddstrAlt(7,  19, "Press C to Continue Liberally.");
-	while (getkeyAlt() != 'c');
-}
+
 /* siege - flavor text when you crush a CCS safe house */
 void conquertextccs()
 {
@@ -1938,262 +2200,4 @@ void conquertextccs()
 	gamelog.nextMessage();
 	mvaddstrAlt(15,  19, "Press C to Continue Liberally.");
 	while (getkeyAlt() != 'c');
-}
-/* siege - "you are wanted for _______ and other crimes..." */
-void statebrokenlaws(int loc)
-{
-	music.play(MUSIC_SIEGE);
-	short breakercount[LAWFLAGNUM] = { 0 };
-	int typenum = 0, criminalcount = 0, kidnapped = 0;
-	char kname[100];
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (!pool[p]->alive || pool[p]->location != loc) continue;
-		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
-		{
-			strcpy(kname, pool[p]->propername);
-			kidnapped++;
-		}
-		if (iscriminal(*pool[p])) criminalcount++;
-		for (int i = 0; i < LAWFLAGNUM; i++) if (pool[p]->crimes_suspected[i]) breakercount[i]++;
-	}
-	for (int i = 0; i < LAWFLAGNUM; i++) if (breakercount[i]) typenum++;
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveAlt(1, 1);
-	if (location[loc]->siege.underattack) addstrAlt("You hear shouts:", gamelog);
-	else addstrAlt("You hear a blaring voice on a loudspeaker:", gamelog);
-	gamelog.newline();
-	moveAlt(3, 1);
-	if (LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2 && publicmood(-1) < 20)
-		addstrAlt("In the name of God, your campaign of terror ends here!", gamelog);
-	else addstrAlt("Surrender yourselves!", gamelog);
-	gamelog.newline();
-	moveAlt(4, 1);
-	//KIDNAP VICTIM
-	if (kidnapped)
-	{
-		addstrAlt("Release ", gamelog);
-		addstrAlt(kname, gamelog);
-		if (kidnapped > 1) addstrAlt(" and the others", gamelog);
-		addstrAlt(" unharmed!", gamelog);
-	}
-	//TREASON
-	else if (breakercount[LAWFLAG_TREASON])
-		addstrAlt("You are wanted for treason", gamelog);
-	//TERRORISM
-	else if (breakercount[LAWFLAG_TERRORISM])
-		addstrAlt("You are wanted for terrorism", gamelog);
-	//MURDERER
-	else if (breakercount[LAWFLAG_MURDER])
-		addstrAlt("You are wanted for first degree murder", gamelog);
-	//KIDNAPPER
-	else if (breakercount[LAWFLAG_KIDNAPPING])
-		addstrAlt("You are wanted for kidnapping", gamelog);
-	//BANK ROBBER
-	else if (breakercount[LAWFLAG_BANKROBBERY])
-		addstrAlt("You are wanted for bank robbery", gamelog);
-	//ARSONIST
-	else if (breakercount[LAWFLAG_ARSON])
-		addstrAlt("You are wanted for arson", gamelog);
-	//BURN FLAG
-	else if (breakercount[LAWFLAG_BURNFLAG])
-	{
-		if (lawList[LAW_FLAGBURNING] == -2)addstrAlt("You are wanted for Flag Murder", gamelog);
-		else if (lawList[LAW_FLAGBURNING] == -1)addstrAlt("You are wanted for felony flag burning", gamelog);
-		else addstrAlt("You are wanted for flag burning", gamelog);
-	}
-	//SPEECH
-	else if (breakercount[LAWFLAG_SPEECH])
-		addstrAlt("You are wanted for sedition", gamelog);
-	//BROWNIES
-	else if (breakercount[LAWFLAG_BROWNIES])
-		addstrAlt("You are wanted for sale and distribution of a controlled substance", gamelog);
-	//ESCAPED
-	else if (breakercount[LAWFLAG_ESCAPED])
-		addstrAlt("You are wanted for escaping prison", gamelog);
-	//HELP ESCAPED
-	else if (breakercount[LAWFLAG_HELPESCAPE])
-		addstrAlt("You are wanted for aiding a prison escape", gamelog);
-	//JURY
-	else if (breakercount[LAWFLAG_JURY])
-		addstrAlt("You are wanted for jury tampering", gamelog);
-	//RACKETEERING
-	else if (breakercount[LAWFLAG_RACKETEERING])
-		addstrAlt("You are wanted for racketeering", gamelog);
-	//EXTORTION
-	else if (breakercount[LAWFLAG_EXTORTION])
-		addstrAlt("You are wanted for extortion", gamelog);
-	//ASSAULT
-	else if (breakercount[LAWFLAG_ARMEDASSAULT])
-		addstrAlt("You are wanted for assault with a deadly weapon", gamelog);
-	//ASSAULT
-	else if (breakercount[LAWFLAG_ASSAULT])
-		addstrAlt("You are wanted for misdemeanor assault", gamelog);
-	//CAR THEFT
-	else if (breakercount[LAWFLAG_CARTHEFT])
-		addstrAlt("You are wanted for grand theft auto", gamelog);
-	//CC FRAUD
-	else if (breakercount[LAWFLAG_CCFRAUD])
-		addstrAlt("You are wanted for credit card fraud", gamelog);
-	//THIEF
-	else if (breakercount[LAWFLAG_THEFT])
-		addstrAlt("You are wanted for petty larceny", gamelog);
-	//PROSTITUTION
-	else if (breakercount[LAWFLAG_PROSTITUTION])
-		addstrAlt("You are wanted for prostitution", gamelog);
-	//HIRE ILLEGAL
-	else if (breakercount[LAWFLAG_HIREILLEGAL])
-		addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? "You are wanted for hiring an illegal alien" : "You are wanted for hiring an undocumented worker"), gamelog);
-	//GUN USE
-	/*else if(breakercount[LAWFLAG_GUNUSE])
-	addstrAlt("You are wanted for firing an illegal weapon", gamelog);
-	//GUN CARRY
-	else if(breakercount[LAWFLAG_GUNCARRY])
-	addstrAlt("You are wanted for possession of an illegal weapon", gamelog);*/
-	//COMMERCE
-	else if (breakercount[LAWFLAG_COMMERCE])
-		addstrAlt("You are wanted for interference with interstate commerce", gamelog);
-	//INFORMATION
-	else if (breakercount[LAWFLAG_INFORMATION])
-		addstrAlt("You are wanted for unlawful access of an information system", gamelog);
-	//UNLAWFUL BURIAL
-	else if (breakercount[LAWFLAG_BURIAL])
-		addstrAlt("You are wanted for unlawful burial", gamelog);
-	//BREAKING
-	else if (breakercount[LAWFLAG_BREAKING])
-		addstrAlt("You are wanted for breaking and entering", gamelog);
-	//VANDALISM
-	else if (breakercount[LAWFLAG_VANDALISM])
-		addstrAlt("You are wanted for vandalism", gamelog);
-	//RESIST
-	else if (breakercount[LAWFLAG_RESIST])
-		addstrAlt("You are wanted for resisting arrest", gamelog);
-	//DISTURBANCE
-	else if (breakercount[LAWFLAG_DISTURBANCE])
-		addstrAlt("You are wanted for disturbing the peace", gamelog);
-	//PUBLIC NUDITY
-	else if (breakercount[LAWFLAG_PUBLICNUDITY])
-		addstrAlt("You are wanted for indecent exposure", gamelog);
-	//LOITERING
-	else if (breakercount[LAWFLAG_LOITERING])
-		addstrAlt("You are wanted for loitering", gamelog);
-	//THEY WERE LOOKING FOR SOMEONE ELSE
-	else addstrAlt("You are wanted for harboring a fugitive from justice", gamelog);
-	if (!kidnapped)
-	{
-		if (typenum > 1) addstrAlt(" and other crimes", gamelog);
-		addstrAlt(singleDot, gamelog);
-	}
-	gamelog.nextMessage();
-	getkeyAlt();
-}
-void statebrokenlaws(Creature & cr)
-{
-	bool kidnapped = (cr.flag&CREATUREFLAG_KIDNAPPED), criminal = false, breakercount[LAWFLAGNUM];
-	for (int i = 0; i < LAWFLAGNUM; i++)
-		if (cr.crimes_suspected[i]) breakercount[i] = true, criminal = true;
-		else breakercount[i] = false;
-		if (!criminal&&!kidnapped) return;
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		addstrAlt("WANTED FOR ");
-		//KIDNAP VICTIM
-		if (kidnapped)
-			addstrAlt("REHABILITATION");
-		//TREASON
-		else if (breakercount[LAWFLAG_TREASON])
-			addstrAlt("TREASON");
-		//TERRORISM
-		else if (breakercount[LAWFLAG_TERRORISM])
-			addstrAlt("TERRORISM");
-		//MURDERER
-		else if (breakercount[LAWFLAG_MURDER])
-			addstrAlt("MURDER");
-		//KIDNAPPER
-		else if (breakercount[LAWFLAG_KIDNAPPING])
-			addstrAlt("KIDNAPPING");
-		//BANK ROBBER
-		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt("BANK ROBBERY");
-		//ARSONIST
-		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt("ARSON");
-		//BURN FLAG
-		else if (breakercount[LAWFLAG_BURNFLAG])
-			addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? "FLAG MURDER" : "FLAG BURNING");
-		//SPEECH
-		else if (breakercount[LAWFLAG_SPEECH])
-			addstrAlt("HARMFUL SPEECH");
-		//BROWNIES
-		else if (breakercount[LAWFLAG_BROWNIES])
-			addstrAlt("DRUG DEALING");
-		//ESCAPED
-		else if (breakercount[LAWFLAG_ESCAPED])
-			addstrAlt("ESCAPING PRISON");
-		//HELP ESCAPED
-		else if (breakercount[LAWFLAG_HELPESCAPE])
-			addstrAlt("RELEASING PRISONERS");
-		//JURY
-		else if (breakercount[LAWFLAG_JURY])
-			addstrAlt("JURY TAMPERING");
-		//RACKETEERING
-		else if (breakercount[LAWFLAG_RACKETEERING])
-			addstrAlt("RACKETEERING");
-		//EXTORTION
-		else if (breakercount[LAWFLAG_EXTORTION])
-			addstrAlt("EXTORTION");
-		//ASSAULT
-		else if (breakercount[LAWFLAG_ARMEDASSAULT])
-			addstrAlt("ARMED ASSAULT");
-		//ASSAULT
-		else if (breakercount[LAWFLAG_ASSAULT])
-			addstrAlt("ASSAULT");
-		//CAR THEFT
-		else if (breakercount[LAWFLAG_CARTHEFT])
-			addstrAlt("GRAND THEFT AUTO");
-		//CC FRAUD
-		else if (breakercount[LAWFLAG_CCFRAUD])
-			addstrAlt("CREDIT CARD FRAUD");
-		//THIEF
-		else if (breakercount[LAWFLAG_THEFT])
-			addstrAlt("THEFT");
-		//PROSTITUTION
-		else if (breakercount[LAWFLAG_PROSTITUTION])
-			addstrAlt("PROSTITUTION");
-		//HIRE ILLEGAL
-		else if (breakercount[LAWFLAG_HIREILLEGAL])
-			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? "HIRING ILLEGAL ALIENS" : "HIRING UNDOCUMENTED WORKERS");
-		//GUN USE
-		/*else if(breakercount[LAWFLAG_GUNUSE])
-		addstrAlt("FIRING ILLEGAL WEAPONS");
-		//GUN CARRY
-		else if(breakercount[LAWFLAG_GUNCARRY])
-		addstrAlt("CARRYING ILLEGAL WEAPONS");*/
-		//COMMERCE
-		else if (breakercount[LAWFLAG_COMMERCE])
-			addstrAlt("ELECTRONIC SABOTAGE");
-		//INFORMATION
-		else if (breakercount[LAWFLAG_INFORMATION])
-			addstrAlt("HACKING");
-		//UNLAWFUL BURIAL
-		else if (breakercount[LAWFLAG_BURIAL])
-			addstrAlt("UNLAWFUL BURIAL");
-		//BREAKING
-		else if (breakercount[LAWFLAG_BREAKING])
-			addstrAlt("BREAKING AND ENTERING");
-		//VANDALISM
-		else if (breakercount[LAWFLAG_VANDALISM])
-			addstrAlt("VANDALISM");
-		//RESIST
-		else if (breakercount[LAWFLAG_RESIST])
-			addstrAlt("RESISTING ARREST");
-		//DISTURBANCE
-		else if (breakercount[LAWFLAG_DISTURBANCE])
-			addstrAlt("DISTURBING THE PEACE");
-		//PUBLIC NUDITY
-		else if (breakercount[LAWFLAG_PUBLICNUDITY])
-			addstrAlt("PUBLIC NUDITY");
-		//LOITERING
-		else if (breakercount[LAWFLAG_LOITERING])
-			addstrAlt("LOITERING");
 }
