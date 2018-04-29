@@ -1,3 +1,47 @@
+
+#include "../includes.h"
+const string CONST_sitemapC043 = "Export";
+
+const string CONST_sitemapB042 = "mapCSV_ApartmentIndustrial2_Tiles.csv";
+const string CONST_sitemapB041 = "3";
+const string CONST_sitemapB040 = "csv";
+const string CONST_sitemap039 = "ApartmentIndustrial2";
+const string CONST_sitemap038 = "2";
+const string CONST_sitemap037 = "mapCSV_ApartmentIndustrial_Tiles.csv";
+const string CONST_sitemap036 = "ApartmentIndustrial";
+const string CONST_sitemap035 = "mapCSV_[NAMEHERE]_Specials.csv";
+const string CONST_sitemap034 = "mapCSV_[NAMEHERE]_Tiles.csv";
+const string CONST_sitemap033 = "../art";
+const string CONST_sitemap032 = "csvTilemap.lua";
+const string CONST_sitemap031 = "Deadly Alien Map Editor";
+const string CONST_sitemap030 = "GENERIC_UNSECURE";
+
+const string tag_WEIGHT = "WEIGHT";
+const string tag_Z = "Z";
+const string tag_FREQ = "FREQ";
+const string tag_ZEND = "ZEND";
+const string tag_ZSTART = "ZSTART";
+const string tag_Y = "Y";
+const string tag_YEND = "YEND";
+const string tag_YSTART = "YSTART";
+const string tag_X = "X";
+const string tag_XEND = "XEND";
+const string tag_XSTART = "XSTART";
+const string tag_STAIRS_RANDOM = "STAIRS_RANDOM";
+const string tag_STAIRS = "STAIRS";
+const string tag_HALLWAY_YAXIS = "HALLWAY_YAXIS";
+const string tag_ROOM = "ROOM";
+const string tag_SUBTRACT = "SUBTRACT";
+const string tag_ADD = "ADD";
+const string tag_NOTE = "NOTE";
+const string tag_LOOT = "LOOT";
+const string tag_UNIQUE = "UNIQUE";
+const string tag_SPECIAL = "SPECIAL";
+const string tag_SCRIPT = "SCRIPT";
+const string tag_TILE = "TILE";
+const string tag_USE = "USE";
+const string tag_NAME = "NAME";
+const string tag_SITEMAP = "SITEMAP";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,43 +67,38 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "configfile.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../configfile.h"
 // needed for something contained in sitemap.h
-#include "sitemode/sitemap.h"
+#include "../sitemode/sitemap.h"
         //own header
-
-extern string tag_LOOT;
 void emptyEncounter();
 extern squadst *activesquad;
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 extern int locx;
 extern int locy;
 extern int locz;
-extern vector<Item *> groundloot;
-typedef map<short, string> shortAndString;
-shortAndString siteReadMap;
-shortAndString buildThisSite;
-typedef map<string, short> stringAndShort;
-typedef map<string, string> stringAndString;
+void delete_and_clear_groundloot();
+map<short, string> siteReadMap;
+map<short, string> buildThisSite;
 extern unsigned long seed[RNG_SIZE];
 extern int oldMapMode;
  vector<configSiteMap *> sitemaps;
- stringAndShort getUnique;
- stringAndString getLootString;
- stringAndShort getSpecial;
+ map<string, short> getUnique;
+ map<string, string> getLootString;
+ map<string, short> getSpecial;
  void delete_and_clear_sitemaps() {
 	 delete_and_clear(sitemaps);
  }
-
  // Constructs the new object, returns a pointer to it
  configurable* createObject(const std::string& objectType)
  {
 	 configurable* object = 0;
-	 if (objectType == "SITEMAP")
+	 if (objectType == tag_SITEMAP)
 		 sitemaps.push_back(static_cast<configSiteMap*>(object = new configSiteMap));
 	 return object;
  }
@@ -95,189 +134,323 @@ extern int oldMapMode;
 		 generateroom(rx, wy + 1, dx, ry + dy - wy - 1, z);
 	 }
  }
-
-/* re-create site from seed before squad arrives */
-void initsite(Location &loc)
-{  //PREP
-	if (activesquad == NULL)return;
-	emptyEncounter();
-	for (int p = 0; p < 6; p++)
-		if (activesquad->squad[p] != NULL)
-			activesquad->squad[p]->forceinc = 0;
-	delete_and_clear(groundloot);
-	//MAKE MAP
-	unsigned long oldseed[RNG_SIZE];
-	copyRNG(oldseed, seed);
-	copyRNG(seed, loc.mapseed);
-	// A short guide to how the new maps work...
-	//
-	//   Edit maps using DAME, the "Deadly Alien Map Editor". You can find a maps.dam file
-	// to open with DAME in the /dev directory. You can find DAME here (try search engine if link
-	// is out of date):
-	//   http://dambots.com/dame-editor/
-	//
-	//   Open up the maps.dam file in DAME. On one side, in the layers listing, you'll see the existing
-	// maps. Use the check boxes to hide and show maps. You can create new maps by copying the old ones;
-	// right click a top-level group (like NuclearPlant) and select Duplicate. Rename the new map based
-	// on the conventions described below.
-	//   Editing using the Paint tool ('B') is easy; click the tile you want in the tiles panel, then click
-	// the map view to paint with that tile. You may need to experiment a bit to figure out what the
-	// specials icons represent, but I've tried to make it pretty self-explanatory. Box-drawing to fill
-	// large areas is possible, but a little clunky -- use the Tile Matrix tool ('M') and fill the entire
-	// matrix with the tile you want to use by dragging tiles from the tiles panel. You can then box-drag
-	// to fill large areas.
-	//   When you're done editing, save maps.dam and use File->Export to create the map source files the
-	// game can run. In the Export Project dialog, use "csvTilemap.lua" for the LUA exporter. CSV dir should
-	// be "../art" and File Extension should be "csv". These are probably the defaults. Press "Export" and
-	// it will automagically build the map source files. You're done -- run the game and visit that
-	// location to view the results in-game. You don't even need to make a new game.
-	//   To remove a map from the game and go back to the old map generation modes, just delete the .csv
-	// files. You may also want to clean up the maps.dam file, removing any old maps you don't want, since
-	// it'll try to generate them again next time you export.
-	//
-	//   Map naming conventions:
-	// "mapCSV_[NAMEHERE]_Tiles.csv" - Tile map
-	// "mapCSV_[NAMEHERE]_Specials.csv" - Special locations (vault, equipment, lockup, etc.)
-	//   [NAMEHERE] is the name in quotes below, and it's what the maps are called in the DAME layer list.
-	// For example, for the industrial apartment, the DAME name is "ApartmentIndustrial", and the
-	// exported file name is "mapCSV_ApartmentIndustrial_Tiles.csv". DAME should add the prefix and suffix
-	// to the exported files automatically.
-	//
-	//   Additional Notes:
-	// 1. All maps MUST have both a tile map and a special map, even if the special map is blank. This
-	// goes for both first floor maps and otherwise.
-	// 2. For multi-floor maps, add up stairs to the special map, then create a new set of maps for
-	// each additional floor, appending "2" to the location name for the second floor, "3" for
-	// third floor, and so on. For example, a second floor to the industrial apartments would have the
-	// name "ApartmentIndustrial2" in DAME, and export as "mapCSV_ApartmentIndustrial2_Tiles.csv".
-	//
-	// With love,
-	//   Fox
-	// Try to load from a map file
-	bool loaded = false;
-	if (siteReadMap.count(loc.type)) {
-		loaded = readMap(siteReadMap[loc.type]);
-	}
-	else {
-	}
-	int x, y, z;
-	if (!loaded)
-	{
-		for (x = 0; x < MAPX; x++)
-			for (y = 0; y < MAPY; y++)
-				for (z = 0; z < MAPZ; z++)
-				{
-					levelmap[x][y][z].flag = SITEBLOCK_BLOCK;
-					levelmap[x][y][z].special = -1;
-					levelmap[x][y][z].siegeflag = 0;
-				}
-	}
-	if (loaded)
-	{
-		if (loc.renting == RENTING_PERMANENT && loc.type != SITE_RESIDENTIAL_APARTMENT &&
-			loc.type != SITE_RESIDENTIAL_APARTMENT_UPSCALE && loc.type != SITE_RESIDENTIAL_TENEMENT)
+ /////////////
+ /////////////
+ ///////////// NEW SITEMAP BASED ON CONFIG FILE CODE:
+ /////////////
+ /////////////
+ // Builds a site based on the name provided
+ void build_site(const std::string& name)
+ {
+	 for (int i = 0; i < len(sitemaps); i++)
+		 if (*sitemaps[i] == name)
+		 {
+			 sitemaps[i]->build();
+			 return;
+		 }
+	 // Backup: use a generic
+	 build_site(CONST_sitemap030);
+ }
+ void addSemiPermanentChanges(Location &loc) {
+	 /*******************************************************
+	 * Add semi-permanent changes inflicted by LCS and others
+	 *******************************************************/
+	 // Some sites need a minimum amount of graffiti
+	 int graffitiquota = 0;
+	 if (loc.type == SITE_OUTDOOR_PUBLICPARK)graffitiquota = 5;
+	 if (loc.type == SITE_BUSINESS_CRACKHOUSE)graffitiquota = 30;
+	 if (loc.type == SITE_RESIDENTIAL_TENEMENT)graffitiquota = 10;
+	 for (int i = 0; i < len(loc.changes); i++)
+	 {
+		 int x = loc.changes[i].x, y = loc.changes[i].y, z = loc.changes[i].z;
+		 switch (loc.changes[i].flag)
+		 {
+		 case SITEBLOCK_GRAFFITI_OTHER: // Other tags
+		 case SITEBLOCK_GRAFFITI_CCS: // CCS tags
+		 case SITEBLOCK_GRAFFITI: // LCS tags
+			 graffitiquota--;
+			 break;
+		 case SITEBLOCK_DEBRIS: // Smashed walls, ash
+			 levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
+			 levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
+			 break;
+		 }
+		 levelmap[x][y][z].flag |= loc.changes[i].flag;
+	 }
+	 // If there isn't enough graffiti for this site type, add some
+	 while (graffitiquota > 0)
+	 {
+		 int x = LCSrandom(MAPX - 2) + 1, y = LCSrandom(MAPY - 2) + 1, z = 0;
+		 if (loc.type == SITE_RESIDENTIAL_TENEMENT)z = LCSrandom(6);
+		 if (!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
+			 (!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED) || loc.type == SITE_BUSINESS_CRACKHOUSE) &&
+			 !(levelmap[x][y][z].flag & SITEBLOCK_EXIT) &&
+			 !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI) &&
+			 !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) &&
+			 !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS))
+			 if (levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK ||
+				 levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK ||
+				 levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK ||
+				 levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)
+			 {
+				 sitechangest change(x, y, z, SITEBLOCK_GRAFFITI_OTHER);
+				 loc.changes.push_back(change);
+				 levelmap[x][y][z].flag |= SITEBLOCK_GRAFFITI_OTHER;
+				 graffitiquota--;
+			 }
+	 }
+ }
+ void addLootToLocation(Location &loc) {
+	 for (int x = 2; x < MAPX - 2; x++)
+		 for (int y = 2; y < MAPY - 2; y++)
+			 for (int z = 0; z < MAPZ; z++)
+				 if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
+					 !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
+					 (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED) &&
+					 !LCSrandom(10))
+					 switch (loc.type)
+					 {
+					 case SITE_BUSINESS_BANK:
+					 case SITE_RESIDENTIAL_SHELTER:
+					 case SITE_BUSINESS_CRACKHOUSE:
+					 case SITE_BUSINESS_JUICEBAR:
+					 case SITE_BUSINESS_CIGARBAR:
+					 case SITE_BUSINESS_LATTESTAND:
+					 case SITE_BUSINESS_VEGANCOOP:
+					 case SITE_BUSINESS_INTERNETCAFE:
+					 case SITE_INDUSTRY_WAREHOUSE:
+					 case SITE_BUSINESS_BARANDGRILL:
+					 case SITE_OUTDOOR_BUNKER:
+					 case SITE_RESIDENTIAL_BOMBSHELTER:               break;
+					 default: levelmap[x][y][z].flag |= SITEBLOCK_LOOT; break;
+					 }
+ }
+void clearOutRestrictions(Location &loc) {
+	 //Clear out restrictions
+	 char acted;
+	 do
+	 {
+		 acted = 0;
+		 for (int x = 2; x < MAPX - 2; x++)
+			 for (int y = 2; y < MAPY - 2; y++)
+				 for (int z = 0; z < MAPZ; z++)
+				 {  //Un-restrict blocks if they have neighboring
+					//unrestricted blocks
+					 if (!(levelmap[x][y][z].flag & SITEBLOCK_DOOR) &&
+						 !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
+						 (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
+					 {
+						 if ((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) &&
+							 !(levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK)) ||
+							 (!(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) &&
+								 !(levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK)) ||
+								 (!(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) &&
+									 !(levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)) ||
+									 (!(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED) &&
+										 !(levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK)))
+						 {
+							 levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
+							 acted = 1;
+							 continue;
+						 }
+					 }
+					 //Un-restrict and unlock doors if they lead between two
+					 //unrestricted sections. If they lead between one
+					 //unrestricted section and a restricted section, lock
+					 //them instead.
+					 else if ((levelmap[x][y][z].flag & SITEBLOCK_DOOR) &&
+						 !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
+						 (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
+					 {  //Unrestricted on two opposite sides?
+						 if (((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK)) &&
+							 (!(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK))) ||
+							 ((!(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)) &&
+							 (!(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK))))
+						 {  //Unlock and unrestrict
+							 levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
+							 levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
+							 acted = 1;
+							 continue;
+						 }
+						 //Unrestricted on at least one side and I'm not locked?
+						 else if ((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) ||
+							 !(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) ||
+							 !(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) ||
+							 !(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED)) &&
+							 !(levelmap[x][y][z].flag   & SITEBLOCK_LOCKED))
+						 {  //Lock doors leading to restricted areas
+							 levelmap[x][y][z].flag |= SITEBLOCK_LOCKED;
+							 acted = 1;
+							 continue;
+						 }
+					 }
+				 }
+	 } while (acted);
+ }
+void useOldMapMode(Location &loc) {
+	  //ADD RESTRICTIONS
+	   //bool restricted=0;
+		switch (loc.type)
 		{
-			for (x = 0; x < MAPX; x++)
-				for (y = 0; y < MAPY; y++)
-					for (z = 0; z < MAPZ; z++)
-					{  // Clear high security, locked doors, alarms, and site specials
-					   // from LCS non-apartment safehouses
-						levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
-						levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
-						levelmap[x][y][z].flag &= ~SITEBLOCK_ALARMED;
-						levelmap[x][y][z].special = -1;
-					}
+		case SITE_LABORATORY_COSMETICS:
+		case SITE_LABORATORY_GENETIC:
+		case SITE_GOVERNMENT_POLICESTATION:
+		case SITE_GOVERNMENT_COURTHOUSE:
+		case SITE_GOVERNMENT_PRISON:
+		case SITE_GOVERNMENT_INTELLIGENCEHQ:
+		case SITE_GOVERNMENT_ARMYBASE:
+		case SITE_GOVERNMENT_WHITE_HOUSE:
+		case SITE_MEDIA_AMRADIO:
+		case SITE_MEDIA_CABLENEWS:
+			//restricted=1;
+			for (int x = 2; x < MAPX - 2; x++)
+				for (int y = 2; y < MAPY - 2; y++)
+					for (int z = 0; z < MAPZ; z++)
+						levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
+			break;
 		}
-	}
-	else if (!oldMapMode) // Try to load from the sitemaps
-	{
-		if (buildThisSite.count(loc.type)) {
-			build_site(buildThisSite[loc.type]);
-		}
-	}
-	else {
-		// Last resort -- generate random map
-		levelmap[MAPX >> 1][0][0].flag = SITEBLOCK_EXIT;
-		levelmap[(MAPX >> 1) + 1][0][0].flag = SITEBLOCK_EXIT;
-		levelmap[(MAPX >> 1) + 1][1][0].flag = SITEBLOCK_EXIT;
-		levelmap[(MAPX >> 1) - 1][0][0].flag = SITEBLOCK_EXIT;
-		levelmap[(MAPX >> 1) - 1][1][0].flag = SITEBLOCK_EXIT;
-		levelmap[MAPX >> 1][1][0].flag = 0;
-		levelmap[MAPX >> 1][2][0].flag = SITEBLOCK_DOOR;
-		if (loc.type == SITE_RESIDENTIAL_APARTMENT_UPSCALE ||
-			loc.type == SITE_RESIDENTIAL_APARTMENT ||
-			loc.type == SITE_RESIDENTIAL_TENEMENT)
-		{
-			levelmap[MAPX >> 1][1][0].special = SPECIAL_SIGN_ONE;
-			short height;
-			int floors = LCSrandom(6) + 1, swap;
-			for (int z = 0; z < floors; z++)
+		
+}
+void useOldMapModeP2(Location &loc) {
+	//ADD ACCESSORIES
+	for (int x = 2; x < MAPX - 2; x++)
+		for (int y = 2; y < MAPY - 2; y++)
+			for (int z = 0; z < MAPZ; z++)
 			{
-				for (int y = 3; y < MAPY - 3; y++)
+				if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
+					!(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
+					!LCSrandom(10))
 				{
-					levelmap[MAPX >> 1][y][z].flag = 0;
-					if (y % 4 == 0)
+					switch (loc.type)
 					{
-						height = y + LCSrandom(3) - 1;
-						levelmap[(MAPX >> 1) - 1][height][z].flag = SITEBLOCK_DOOR;
-						generateroom((MAPX >> 1) - 8, y - 1, 7, 3, z);
-						height = y + LCSrandom(3) - 1;
-						levelmap[(MAPX >> 1) + 1][height][z].flag = SITEBLOCK_DOOR;
-						generateroom((MAPX >> 1) + 2, y - 1, 7, 3, z);
-						if (y == 4 && z == 0)
-						{
-							levelmap[(MAPX >> 1) + 2][height][z].flag = 0;
-							levelmap[(MAPX >> 1) + 2][height][z].special = SPECIAL_APARTMENT_LANDLORD;
-						}
+					case SITE_BUSINESS_BANK: // the valuables are in the vault
+					case SITE_RESIDENTIAL_SHELTER:
+					case SITE_BUSINESS_CRACKHOUSE:
+					case SITE_BUSINESS_JUICEBAR:
+					case SITE_BUSINESS_CIGARBAR:
+					case SITE_BUSINESS_LATTESTAND:
+					case SITE_BUSINESS_VEGANCOOP:
+					case SITE_BUSINESS_INTERNETCAFE:
+					case SITE_INDUSTRY_WAREHOUSE:
+						//seem to be weird things happening with loot in CCS bases - would the CCS call the police on you for stealing?
+						//and shouldn't you be able to loot everything from there anyway once you've won?
+						//removing the loot.
+					case SITE_BUSINESS_BARANDGRILL:
+					case SITE_OUTDOOR_BUNKER:
+					case SITE_RESIDENTIAL_BOMBSHELTER:               break;
+					default: levelmap[x][y][z].flag |= SITEBLOCK_LOOT; break;
 					}
 				}
-				swap = (z % 2) * 2 - 1;
-				if (z > 0)levelmap[(MAPX >> 1) + 1 * swap][MAPY - 4][z].flag = 0, levelmap[(MAPX >> 1) + 1 * swap][MAPY - 4][z].special = SPECIAL_STAIRS_DOWN;
-				if (z < floors - 1)levelmap[(MAPX >> 1) - 1 * swap][MAPY - 4][z].flag = 0, levelmap[(MAPX >> 1) - 1 * swap][MAPY - 4][z].special = SPECIAL_STAIRS_UP;
+				if (!(levelmap[x][y][0].flag&SITEBLOCK_DOOR) &&
+					!(levelmap[x][y][0].flag&SITEBLOCK_BLOCK) &&
+					!(levelmap[x][y][0].flag&SITEBLOCK_LOOT) &&
+					(levelmap[x][y][0].flag&SITEBLOCK_RESTRICTED) &&
+					loc.type == SITE_LABORATORY_COSMETICS && !LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_LAB_COSMETICS_CAGEDANIMALS;
+				if (!(levelmap[x][y][0].flag&SITEBLOCK_DOOR) &&
+					!(levelmap[x][y][0].flag&SITEBLOCK_BLOCK) &&
+					!(levelmap[x][y][0].flag&SITEBLOCK_LOOT) &&
+					(levelmap[x][y][0].flag&SITEBLOCK_RESTRICTED) &&
+					loc.type == SITE_LABORATORY_GENETIC && !LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_LAB_GENETIC_CAGEDANIMALS;
+				if (levelmap[x][y][0].flag == 0 &&
+					loc.type == SITE_INDUSTRY_SWEATSHOP && !LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_SWEATSHOP_EQUIPMENT;
+				if (levelmap[x][y][0].flag == 0 &&
+					loc.type == SITE_INDUSTRY_POLLUTER && !LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_POLLUTER_EQUIPMENT;
+				if (levelmap[x][y][0].flag == 0 &&
+					(loc.type == SITE_BUSINESS_JUICEBAR ||
+						loc.type == SITE_BUSINESS_CIGARBAR ||
+						loc.type == SITE_BUSINESS_LATTESTAND ||
+						loc.type == SITE_BUSINESS_INTERNETCAFE) &&
+					!LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_RESTAURANT_TABLE;
+				if (levelmap[x][y][z].flag == 0 && loc.type == SITE_BUSINESS_INTERNETCAFE &&
+					!LCSrandom(10))
+					levelmap[x][y][z].special = SPECIAL_CAFE_COMPUTER;
 			}
-		}
-		else
-		{
-			switch (loc.type)
-			{
-			case SITE_BUSINESS_LATTESTAND:
-				for (int x = (MAPX >> 1) - 4; x <= (MAPX >> 1) + 4; x++)
-					for (int y = 0; y < 7; y++)
-						levelmap[x][y][0].flag = (x == (MAPX >> 1) - 4 || x == (MAPX >> 1) + 4 || y == 0 || y == 6 ? SITEBLOCK_EXIT : 0), levelmap[x][y][0].special = -1, levelmap[x][y][0].siegeflag = 0;
-				break;
-			case SITE_BUSINESS_JUICEBAR:
-			case SITE_BUSINESS_CIGARBAR:
-			case SITE_BUSINESS_VEGANCOOP:
-			case SITE_BUSINESS_INTERNETCAFE:
-				for (int x = (MAPX >> 1) - 4; x <= (MAPX >> 1) + 4; x++)
-					for (int y = 3; y < 10; y++)
-						levelmap[x][y][0].flag = 0, levelmap[x][y][0].special = -1, levelmap[x][y][0].siegeflag = 0;
-				break;
-			case SITE_BUSINESS_CRACKHOUSE:
-			{
-				int dx = LCSrandom(5) * 2 + 19, dy = LCSrandom(3) * 2 + 7, rx = (MAPX >> 1) - (dx >> 1), ry = 3;
-				generateroom(rx, ry, dx, dy, 0);
-				break;
-			}
-			default:
-			{
-				int dx = LCSrandom(5) * 2 + 35, dy = LCSrandom(3) * 2 + 15, rx = (MAPX >> 1) - (dx >> 1), ry = 3;
-				generateroom(rx, ry, dx, dy, 0);
-				break;
-			}
-			}
-		}
-		// End of old build code. SAV
+	int freex, freey, freez = 0;
+	//ADD FIRST SPECIAL
+	int count = 100000;
+	do
+	{
+		freex = LCSrandom(MAPX - 4) + 2, freey = LCSrandom(MAPY - 4) + 2;
+		if (freex >= (MAPX >> 1) - 2 && freex <= (MAPX >> 1) + 2)freey = LCSrandom(MAPY - 6) + 4;
+		count--;
+	} while ((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR ||
+		levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+		levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
+		levelmap[freex][freey][freez].special != -1) && count > 0);
+	map<int, int>  site_special_list = {
+		map<int, int> ::value_type(SITE_INDUSTRY_NUCLEAR,           SPECIAL_NUCLEAR_ONOFF),
+		map<int, int> ::value_type(SITE_GOVERNMENT_POLICESTATION,   SPECIAL_POLICESTATION_LOCKUP),
+		map<int, int> ::value_type(SITE_GOVERNMENT_COURTHOUSE,      SPECIAL_COURTHOUSE_LOCKUP),
+		map<int, int> ::value_type(SITE_GOVERNMENT_PRISON,          SPECIAL_PRISON_CONTROL),
+		map<int, int> ::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,  SPECIAL_INTEL_SUPERCOMPUTER),
+		map<int, int> ::value_type(SITE_CORPORATE_HEADQUARTERS,     SPECIAL_CORPORATE_FILES),
+		map<int, int> ::value_type(SITE_CORPORATE_HOUSE,            SPECIAL_HOUSE_PHOTOS),
+		map<int, int> ::value_type(SITE_GOVERNMENT_ARMYBASE,        SPECIAL_ARMORY),
+		map<int, int> ::value_type(SITE_MEDIA_AMRADIO,              SPECIAL_RADIO_BROADCASTSTUDIO),
+		map<int, int> ::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
+	};
+	if (site_special_list.count(loc.type)) {
+		levelmap[freex][freey][freez].special = site_special_list[loc.type];
 	}
+	count = 100000;
+	//ADD SECOND SPECIAL
+	do
+	{
+		freex = LCSrandom(MAPX - 4) + 2, freey = LCSrandom(MAPY - 4) + 2;
+		if (freex >= (MAPX >> 1) - 2 && freex <= (MAPX >> 1) + 2)freey = LCSrandom(MAPY - 6) + 4;
+		count--;
+	} while ((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR ||
+		levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+		levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
+		levelmap[freex][freey][freez].special != -1) && count > 0);
+	switch (loc.type)
+	{
+	case SITE_GOVERNMENT_COURTHOUSE: levelmap[freex][freey][freez].special = SPECIAL_COURTHOUSE_JURYROOM; break;
+	}
+
+}
+void clearBlockedStairwells(Location &loc) {
+	//CLEAR BLOCKED STAIRWELLS
+	for (int x = 0; x < MAPX; x++)
+		for (int y = 0; y < MAPY; y++)
+			for (int z = 0; z < MAPZ; z++)
+				if (levelmap[x][y][z].flag & SITEBLOCK_BLOCK && levelmap[x][y][z].special == SPECIAL_STAIRS_DOWN)
+				{
+					levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
+				}
+}
+void deleteNonDoors(Location &loc) {
+	//DELETE NON-DOORS
+	for (int x = 0; x < MAPX; x++)
+		for (int y = 0; y < MAPY; y++)
+			for (int z = 0; z < MAPZ; z++)
+				if (levelmap[x][y][z].flag & SITEBLOCK_DOOR)
+				{
+					char block = BIT1 | BIT2 | BIT3 | BIT4;
+					if (x > 0)if (!(levelmap[x - 1][y][z].flag&SITEBLOCK_BLOCK))block &= ~BIT2;
+					if (x < MAPX - 1)if (!(levelmap[x + 1][y][z].flag&SITEBLOCK_BLOCK))block &= ~BIT3;
+					if (y > 0)if (!(levelmap[x][y - 1][z].flag&SITEBLOCK_BLOCK))block &= ~BIT1;
+					if (y < MAPY - 1)if (!(levelmap[x][y + 1][z].flag&SITEBLOCK_BLOCK))block &= ~BIT4;
+					if ((block & BIT1) && (block & BIT4))continue;
+					if ((block & BIT2) && (block & BIT3))continue;
+					levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
+					levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
+				}
+}
+void clearBlockedDoorways(Location &loc) {
 	//CLEAR AWAY BLOCKED DOORWAYS
-	char block, opennum;
-	for (x = 0; x < MAPX; x++)
+	for (int x = 0; x < MAPX; x++)
 		for (int y = 0; y < MAPY; y++)
 			for (int z = 0; z < MAPZ; z++)
 				if (levelmap[x][y][z].flag & SITEBLOCK_DOOR)
 				{  // Check what sides are blocked around the door
-					block = BIT1 | BIT2 | BIT3 | BIT4;
-					opennum = 0;
+					char block = BIT1 | BIT2 | BIT3 | BIT4;
+					char opennum = 0;
 					if (x > 0)if (!(levelmap[x - 1][y][z].flag&SITEBLOCK_BLOCK)) { block &= ~BIT2; opennum++; }
 					if (x < MAPX - 1)if (!(levelmap[x + 1][y][z].flag&SITEBLOCK_BLOCK)) { block &= ~BIT3; opennum++; }
 					if (y > 0)if (!(levelmap[x][y - 1][z].flag&SITEBLOCK_BLOCK)) { block &= ~BIT1; opennum++; }
@@ -354,306 +527,198 @@ void initsite(Location &loc)
 						else levelmap[x][y][z].flag |= SITEBLOCK_BLOCK;
 					}
 				}
-	//DELETE NON-DOORS
-	for (x = 0; x < MAPX; x++)
-		for (int y = 0; y < MAPY; y++)
-			for (int z = 0; z < MAPZ; z++)
-				if (levelmap[x][y][z].flag & SITEBLOCK_DOOR)
+}
+void generateRandomMap(Location &loc) {
+	// Last resort -- generate random map
+	levelmap[MAPX >> 1][0][0].flag = SITEBLOCK_EXIT;
+	levelmap[(MAPX >> 1) + 1][0][0].flag = SITEBLOCK_EXIT;
+	levelmap[(MAPX >> 1) + 1][1][0].flag = SITEBLOCK_EXIT;
+	levelmap[(MAPX >> 1) - 1][0][0].flag = SITEBLOCK_EXIT;
+	levelmap[(MAPX >> 1) - 1][1][0].flag = SITEBLOCK_EXIT;
+	levelmap[MAPX >> 1][1][0].flag = 0;
+	levelmap[MAPX >> 1][2][0].flag = SITEBLOCK_DOOR;
+	if (loc.type == SITE_RESIDENTIAL_APARTMENT_UPSCALE ||
+		loc.type == SITE_RESIDENTIAL_APARTMENT ||
+		loc.type == SITE_RESIDENTIAL_TENEMENT)
+	{
+		levelmap[MAPX >> 1][1][0].special = SPECIAL_SIGN_ONE;
+		short height;
+		int floors = LCSrandom(6) + 1;
+		for (int z = 0; z < floors; z++)
+		{
+			for (int y = 3; y < MAPY - 3; y++)
+			{
+				levelmap[MAPX >> 1][y][z].flag = 0;
+				if (y % 4 == 0)
 				{
-					block = BIT1 | BIT2 | BIT3 | BIT4;
-					if (x > 0)if (!(levelmap[x - 1][y][z].flag&SITEBLOCK_BLOCK))block &= ~BIT2;
-					if (x < MAPX - 1)if (!(levelmap[x + 1][y][z].flag&SITEBLOCK_BLOCK))block &= ~BIT3;
-					if (y > 0)if (!(levelmap[x][y - 1][z].flag&SITEBLOCK_BLOCK))block &= ~BIT1;
-					if (y < MAPY - 1)if (!(levelmap[x][y + 1][z].flag&SITEBLOCK_BLOCK))block &= ~BIT4;
-					if ((block & BIT1) && (block & BIT4))continue;
-					if ((block & BIT2) && (block & BIT3))continue;
-					levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
-					levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
+					height = y + LCSrandom(3) - 1;
+					levelmap[(MAPX >> 1) - 1][height][z].flag = SITEBLOCK_DOOR;
+					generateroom((MAPX >> 1) - 8, y - 1, 7, 3, z);
+					height = y + LCSrandom(3) - 1;
+					levelmap[(MAPX >> 1) + 1][height][z].flag = SITEBLOCK_DOOR;
+					generateroom((MAPX >> 1) + 2, y - 1, 7, 3, z);
+					if (y == 4 && z == 0)
+					{
+						levelmap[(MAPX >> 1) + 2][height][z].flag = 0;
+						levelmap[(MAPX >> 1) + 2][height][z].special = SPECIAL_APARTMENT_LANDLORD;
+					}
 				}
-	//CLEAR BLOCKED STAIRWELLS
-	for (x = 0; x < MAPX; x++)
-		for (int y = 0; y < MAPY; y++)
-			for (int z = 0; z < MAPZ; z++)
-				if (levelmap[x][y][z].flag & SITEBLOCK_BLOCK && levelmap[x][y][z].special == SPECIAL_STAIRS_DOWN)
-				{
-					levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
-				}
-	if (oldMapMode)
-	{  //ADD RESTRICTIONS
-	   //bool restricted=0;
+			}
+			int swap = (z % 2) * 2 - 1;
+			if (z > 0)levelmap[(MAPX >> 1) + 1 * swap][MAPY - 4][z].flag = 0, levelmap[(MAPX >> 1) + 1 * swap][MAPY - 4][z].special = SPECIAL_STAIRS_DOWN;
+			if (z < floors - 1)levelmap[(MAPX >> 1) - 1 * swap][MAPY - 4][z].flag = 0, levelmap[(MAPX >> 1) - 1 * swap][MAPY - 4][z].special = SPECIAL_STAIRS_UP;
+		}
+	}
+	else
+	{
 		switch (loc.type)
 		{
-		case SITE_LABORATORY_COSMETICS:
-		case SITE_LABORATORY_GENETIC:
-		case SITE_GOVERNMENT_POLICESTATION:
-		case SITE_GOVERNMENT_COURTHOUSE:
-		case SITE_GOVERNMENT_PRISON:
-		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-		case SITE_GOVERNMENT_ARMYBASE:
-		case SITE_GOVERNMENT_WHITE_HOUSE:
-		case SITE_MEDIA_AMRADIO:
-		case SITE_MEDIA_CABLENEWS:
-			//restricted=1;
-			for (x = 2; x < MAPX - 2; x++)
-				for (int y = 2; y < MAPY - 2; y++)
-					for (int z = 0; z < MAPZ; z++)
-						levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
+		case SITE_BUSINESS_LATTESTAND:
+			for (int x = (MAPX >> 1) - 4; x <= (MAPX >> 1) + 4; x++)
+				for (int y = 0; y < 7; y++)
+					levelmap[x][y][0].flag = (x == (MAPX >> 1) - 4 || x == (MAPX >> 1) + 4 || y == 0 || y == 6 ? SITEBLOCK_EXIT : 0), levelmap[x][y][0].special = -1, levelmap[x][y][0].siegeflag = 0;
+			break;
+		case SITE_BUSINESS_JUICEBAR:
+		case SITE_BUSINESS_CIGARBAR:
+		case SITE_BUSINESS_VEGANCOOP:
+		case SITE_BUSINESS_INTERNETCAFE:
+			for (int x = (MAPX >> 1) - 4; x <= (MAPX >> 1) + 4; x++)
+				for (int y = 3; y < 10; y++)
+					levelmap[x][y][0].flag = 0, levelmap[x][y][0].special = -1, levelmap[x][y][0].siegeflag = 0;
+			break;
+		case SITE_BUSINESS_CRACKHOUSE:
+		{
+			int dx = LCSrandom(5) * 2 + 19, dy = LCSrandom(3) * 2 + 7, rx = (MAPX >> 1) - (dx >> 1), ry = 3;
+			generateroom(rx, ry, dx, dy, 0);
 			break;
 		}
-		//ADD ACCESSORIES
-		copyRNG(seed, oldseed);
-		for (x = 2; x < MAPX - 2; x++)
-			for (int y = 2; y < MAPY - 2; y++)
-				for (int z = 0; z < MAPZ; z++)
+		default:
+		{
+			int dx = LCSrandom(5) * 2 + 35, dy = LCSrandom(3) * 2 + 15, rx = (MAPX >> 1) - (dx >> 1), ry = 3;
+			generateroom(rx, ry, dx, dy, 0);
+			break;
+		}
+		}
+	}
+	// End of old build code. SAV
+}
+/* re-create site from seed before squad arrives */
+void initsite(Location &loc)
+{  //PREP
+	if (activesquad == NULL)return;
+	emptyEncounter();
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p] != NULL)
+			activesquad->squad[p]->forceinc = 0;
+	delete_and_clear_groundloot();
+	
+	//MAKE MAP
+	unsigned long oldseed[RNG_SIZE];
+	copyRNG(oldseed, seed);
+	copyRNG(seed, loc.mapseed);
+	// A short guide to how the new maps work...
+	//
+	//   Edit maps using DAME, the CONST_sitemap031. You can find a maps.dam file
+	// to open with DAME in the /dev directory. You can find DAME here (try search engine if link
+	// is out of date):
+	//   http://dambots.com/dame-editor/
+	//
+	//   Open up the maps.dam file in DAME. On one side, in the layers listing, you'll see the existing
+	// maps. Use the check boxes to hide and show maps. You can create new maps by copying the old ones;
+	// right click a top-level group (like NuclearPlant) and select Duplicate. Rename the new map based
+	// on the conventions described below.
+	//   Editing using the Paint tool ('B') is easy; click the tile you want in the tiles panel, then click
+	// the map view to paint with that tile. You may need to experiment a bit to figure out what the
+	// specials icons represent, but I've tried to make it pretty self-explanatory. Box-drawing to fill
+	// large areas is possible, but a little clunky -- use the Tile Matrix tool ('M') and fill the entire
+	// matrix with the tile you want to use by dragging tiles from the tiles panel. You can then box-drag
+	// to fill large areas.
+	//   When you're done editing, save maps.dam and use File->Export to create the map source files the
+	// game can run. In the Export Project dialog, use CONST_sitemap032 for the LUA exporter. CSV dir should
+	// be CONST_sitemap033 and File Extension should be CONST_sitemapB040. These are probably the defaults. Press CONST_sitemapC043 and
+	// it will automagically build the map source files. You're done -- run the game and visit that
+	// location to view the results in-game. You don't even need to make a new game.
+	//   To remove a map from the game and go back to the old map generation modes, just delete the .csv
+	// files. You may also want to clean up the maps.dam file, removing any old maps you don't want, since
+	// it'll try to generate them again next time you export.
+	//
+	//   Map naming conventions:
+	// CONST_sitemap034 - Tile map
+	// CONST_sitemap035 - Special locations (vault, equipment, lockup, etc.)
+	//   [NAMEHERE] is the name in quotes below, and it's what the maps are called in the DAME layer list.
+	// For example, for the industrial apartment, the DAME name is CONST_sitemap036, and the
+	// exported file name is CONST_sitemap037. DAME should add the prefix and suffix
+	// to the exported files automatically.
+	//
+	//   Additional Notes:
+	// 1. All maps MUST have both a tile map and a special map, even if the special map is blank. This
+	// goes for both first floor maps and otherwise.
+	// 2. For multi-floor maps, add up stairs to the special map, then create a new set of maps for
+	// each additional floor, appending CONST_sitemap038 to the location name for the second floor, CONST_sitemapB041 for
+	// third floor, and so on. For example, a second floor to the industrial apartments would have the
+	// name CONST_sitemap039 in DAME, and export as CONST_sitemapB042.
+	//
+	// With love,
+	//   Fox
+	// Try to load from a map file
+	bool loaded = false;
+	if (siteReadMap.count(loc.type)) {
+		loaded = readMap(siteReadMap[loc.type]);
+	}
+	else {
+	}
+	int x, y, z;
+	if (!loaded)
+	{
+		for (x = 0; x < MAPX; x++)
+			for (y = 0; y < MAPY; y++)
+				for (z = 0; z < MAPZ; z++)
 				{
-					if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
-						!(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
-						!LCSrandom(10))
-					{
-						switch (loc.type)
-						{
-						case SITE_BUSINESS_BANK: // the valuables are in the vault
-						case SITE_RESIDENTIAL_SHELTER:
-						case SITE_BUSINESS_CRACKHOUSE:
-						case SITE_BUSINESS_JUICEBAR:
-						case SITE_BUSINESS_CIGARBAR:
-						case SITE_BUSINESS_LATTESTAND:
-						case SITE_BUSINESS_VEGANCOOP:
-						case SITE_BUSINESS_INTERNETCAFE:
-						case SITE_INDUSTRY_WAREHOUSE:
-							//seem to be weird things happening with loot in CCS bases - would the CCS call the police on you for stealing?
-							//and shouldn't you be able to loot everything from there anyway once you've won?
-							//removing the loot.
-						case SITE_BUSINESS_BARANDGRILL:
-						case SITE_OUTDOOR_BUNKER:
-						case SITE_RESIDENTIAL_BOMBSHELTER:               break;
-						default: levelmap[x][y][z].flag |= SITEBLOCK_LOOT; break;
-						}
-					}
-					if (!(levelmap[x][y][0].flag&SITEBLOCK_DOOR) &&
-						!(levelmap[x][y][0].flag&SITEBLOCK_BLOCK) &&
-						!(levelmap[x][y][0].flag&SITEBLOCK_LOOT) &&
-						(levelmap[x][y][0].flag&SITEBLOCK_RESTRICTED) &&
-						loc.type == SITE_LABORATORY_COSMETICS&&!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_LAB_COSMETICS_CAGEDANIMALS;
-					if (!(levelmap[x][y][0].flag&SITEBLOCK_DOOR) &&
-						!(levelmap[x][y][0].flag&SITEBLOCK_BLOCK) &&
-						!(levelmap[x][y][0].flag&SITEBLOCK_LOOT) &&
-						(levelmap[x][y][0].flag&SITEBLOCK_RESTRICTED) &&
-						loc.type == SITE_LABORATORY_GENETIC&&!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_LAB_GENETIC_CAGEDANIMALS;
-					if (levelmap[x][y][0].flag == 0 &&
-						loc.type == SITE_INDUSTRY_SWEATSHOP&&!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_SWEATSHOP_EQUIPMENT;
-					if (levelmap[x][y][0].flag == 0 &&
-						loc.type == SITE_INDUSTRY_POLLUTER&&!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_POLLUTER_EQUIPMENT;
-					if (levelmap[x][y][0].flag == 0 &&
-						(loc.type == SITE_BUSINESS_JUICEBAR ||
-							loc.type == SITE_BUSINESS_CIGARBAR ||
-							loc.type == SITE_BUSINESS_LATTESTAND ||
-							loc.type == SITE_BUSINESS_INTERNETCAFE) &&
-						!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_RESTAURANT_TABLE;
-					if (levelmap[x][y][z].flag == 0 && loc.type == SITE_BUSINESS_INTERNETCAFE&&
-						!LCSrandom(10))
-						levelmap[x][y][z].special = SPECIAL_CAFE_COMPUTER;
+					levelmap[x][y][z].flag = SITEBLOCK_BLOCK;
+					levelmap[x][y][z].special = -1;
+					levelmap[x][y][z].siegeflag = 0;
 				}
-		int freex, freey, freez = 0;
-		//ADD FIRST SPECIAL
-		int count = 100000;
-		do
+	}
+	if (loaded)
+	{
+		if (loc.renting == RENTING_PERMANENT && loc.type != SITE_RESIDENTIAL_APARTMENT &&
+			loc.type != SITE_RESIDENTIAL_APARTMENT_UPSCALE && loc.type != SITE_RESIDENTIAL_TENEMENT)
 		{
-			freex = LCSrandom(MAPX - 4) + 2, freey = LCSrandom(MAPY - 4) + 2;
-			if (freex >= (MAPX >> 1) - 2 && freex <= (MAPX >> 1) + 2)freey = LCSrandom(MAPY - 6) + 4;
-			count--;
-		} while ((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR ||
-			levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-			levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
-			levelmap[freex][freey][freez].special != -1) && count > 0);
-		typedef map<int, int> intAndInt;
-		intAndInt site_special_list = {
-			intAndInt::value_type(SITE_INDUSTRY_NUCLEAR,           SPECIAL_NUCLEAR_ONOFF),
-			intAndInt::value_type(SITE_GOVERNMENT_POLICESTATION,   SPECIAL_POLICESTATION_LOCKUP),
-			intAndInt::value_type(SITE_GOVERNMENT_COURTHOUSE,      SPECIAL_COURTHOUSE_LOCKUP),
-			intAndInt::value_type(SITE_GOVERNMENT_PRISON,          SPECIAL_PRISON_CONTROL),
-			intAndInt::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,  SPECIAL_INTEL_SUPERCOMPUTER),
-			intAndInt::value_type(SITE_CORPORATE_HEADQUARTERS,     SPECIAL_CORPORATE_FILES),
-			intAndInt::value_type(SITE_CORPORATE_HOUSE,            SPECIAL_HOUSE_PHOTOS),
-			intAndInt::value_type(SITE_GOVERNMENT_ARMYBASE,        SPECIAL_ARMORY),
-			intAndInt::value_type(SITE_MEDIA_AMRADIO,              SPECIAL_RADIO_BROADCASTSTUDIO),
-			intAndInt::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
-		};
-		if (site_special_list.count(loc.type)) {
-			levelmap[freex][freey][freez].special = site_special_list[loc.type];
+			for (x = 0; x < MAPX; x++)
+				for (y = 0; y < MAPY; y++)
+					for (z = 0; z < MAPZ; z++)
+					{  // Clear high security, locked doors, alarms, and site specials
+					   // from LCS non-apartment safehouses
+						levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
+						levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
+						levelmap[x][y][z].flag &= ~SITEBLOCK_ALARMED;
+						levelmap[x][y][z].special = -1;
+					}
 		}
-		count = 100000;
-		//ADD SECOND SPECIAL
-		do
-		{
-			freex = LCSrandom(MAPX - 4) + 2, freey = LCSrandom(MAPY - 4) + 2;
-			if (freex >= (MAPX >> 1) - 2 && freex <= (MAPX >> 1) + 2)freey = LCSrandom(MAPY - 6) + 4;
-			count--;
-		} while ((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR ||
-			levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-			levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
-			levelmap[freex][freey][freez].special != -1) && count > 0);
-		switch (loc.type)
-		{
-		case SITE_GOVERNMENT_COURTHOUSE: levelmap[freex][freey][freez].special = SPECIAL_COURTHOUSE_JURYROOM; break;
+	}
+	else if (!oldMapMode) // Try to load from the sitemaps
+	{
+		if (buildThisSite.count(loc.type)) {
+			build_site(buildThisSite[loc.type]);
 		}
+	}
+	else {
+		generateRandomMap(loc);
+	}
+	clearBlockedDoorways(loc);
+	deleteNonDoors(loc);
+	clearBlockedStairwells(loc);
+	if (oldMapMode) {
+		useOldMapMode(loc);
+		copyRNG(seed, oldseed);
+		useOldMapModeP2(loc);
 	}
 	// SAV - End more old map stuff.
-	//Clear out restrictions
-	char acted;
-	do
-	{
-		acted = 0;
-		for (int x = 2; x < MAPX - 2; x++)
-			for (int y = 2; y < MAPY - 2; y++)
-				for (int z = 0; z < MAPZ; z++)
-				{  //Un-restrict blocks if they have neighboring
-				   //unrestricted blocks
-					if (!(levelmap[x][y][z].flag & SITEBLOCK_DOOR) &&
-						!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
-						(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
-					{
-						if ((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) &&
-							!(levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK)) ||
-							(!(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) &&
-								!(levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK)) ||
-							(!(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) &&
-								!(levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)) ||
-							(!(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED) &&
-								!(levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK)))
-						{
-							levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
-							acted = 1;
-							continue;
-						}
-					}
-					//Un-restrict and unlock doors if they lead between two
-					//unrestricted sections. If they lead between one
-					//unrestricted section and a restricted section, lock
-					//them instead.
-					else if ((levelmap[x][y][z].flag & SITEBLOCK_DOOR) &&
-						!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
-						(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
-					{  //Unrestricted on two opposite sides?
-						if (((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK)) &&
-							(!(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK))) ||
-							((!(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)) &&
-								(!(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK))))
-						{  //Unlock and unrestrict
-							levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
-							levelmap[x][y][z].flag &= ~SITEBLOCK_RESTRICTED;
-							acted = 1;
-							continue;
-						}
-						//Unrestricted on at least one side and I'm not locked?
-						else if ((!(levelmap[x - 1][y][z].flag & SITEBLOCK_RESTRICTED) ||
-							!(levelmap[x + 1][y][z].flag & SITEBLOCK_RESTRICTED) ||
-							!(levelmap[x][y - 1][z].flag & SITEBLOCK_RESTRICTED) ||
-							!(levelmap[x][y + 1][z].flag & SITEBLOCK_RESTRICTED)) &&
-							!(levelmap[x][y][z].flag   & SITEBLOCK_LOCKED))
-						{  //Lock doors leading to restricted areas
-							levelmap[x][y][z].flag |= SITEBLOCK_LOCKED;
-							acted = 1;
-							continue;
-						}
-					}
-				}
-	} while (acted);
+	clearOutRestrictions(loc);
 	//ADD LOOT
 	copyRNG(seed, oldseed);
-	for (x = 2; x < MAPX - 2; x++)
-		for (int y = 2; y < MAPY - 2; y++)
-			for (int z = 0; z < MAPZ; z++)
-				if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
-					!(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
-					(levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED) &&
-					!LCSrandom(10))
-					switch (loc.type)
-					{
-					case SITE_BUSINESS_BANK:
-					case SITE_RESIDENTIAL_SHELTER:
-					case SITE_BUSINESS_CRACKHOUSE:
-					case SITE_BUSINESS_JUICEBAR:
-					case SITE_BUSINESS_CIGARBAR:
-					case SITE_BUSINESS_LATTESTAND:
-					case SITE_BUSINESS_VEGANCOOP:
-					case SITE_BUSINESS_INTERNETCAFE:
-					case SITE_INDUSTRY_WAREHOUSE:
-					case SITE_BUSINESS_BARANDGRILL:
-					case SITE_OUTDOOR_BUNKER:
-					case SITE_RESIDENTIAL_BOMBSHELTER:               break;
-					default: levelmap[x][y][z].flag |= SITEBLOCK_LOOT; break;
-					}
-	/*******************************************************
-	* Add semi-permanent changes inflicted by LCS and others
-	*******************************************************/
-	// Some sites need a minimum amount of graffiti
-	int graffitiquota = 0;
-	if (loc.type == SITE_OUTDOOR_PUBLICPARK)graffitiquota = 5;
-	if (loc.type == SITE_BUSINESS_CRACKHOUSE)graffitiquota = 30;
-	if (loc.type == SITE_RESIDENTIAL_TENEMENT)graffitiquota = 10;
-	for (int i = 0; i < len(loc.changes); i++)
-	{
-		int x = loc.changes[i].x, y = loc.changes[i].y, z = loc.changes[i].z;
-		switch (loc.changes[i].flag)
-		{
-		case SITEBLOCK_GRAFFITI_OTHER: // Other tags
-		case SITEBLOCK_GRAFFITI_CCS: // CCS tags
-		case SITEBLOCK_GRAFFITI: // LCS tags
-			graffitiquota--;
-			break;
-		case SITEBLOCK_DEBRIS: // Smashed walls, ash
-			levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
-			levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
-			break;
-		}
-		levelmap[x][y][z].flag |= loc.changes[i].flag;
-	}
-	// If there isn't enough graffiti for this site type, add some
-	while (graffitiquota > 0)
-	{
-		int x = LCSrandom(MAPX - 2) + 1, y = LCSrandom(MAPY - 2) + 1, z = 0;
-		if (loc.type == SITE_RESIDENTIAL_TENEMENT)z = LCSrandom(6);
-		if (!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK) &&
-			(!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED) || loc.type == SITE_BUSINESS_CRACKHOUSE) &&
-			!(levelmap[x][y][z].flag & SITEBLOCK_EXIT) &&
-			!(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI) &&
-			!(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) &&
-			!(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS))
-			if (levelmap[x + 1][y][z].flag & SITEBLOCK_BLOCK ||
-				levelmap[x - 1][y][z].flag & SITEBLOCK_BLOCK ||
-				levelmap[x][y + 1][z].flag & SITEBLOCK_BLOCK ||
-				levelmap[x][y - 1][z].flag & SITEBLOCK_BLOCK)
-			{
-				sitechangest change(x, y, z, SITEBLOCK_GRAFFITI_OTHER);
-				loc.changes.push_back(change);
-				levelmap[x][y][z].flag |= SITEBLOCK_GRAFFITI_OTHER;
-				graffitiquota--;
-			}
-	}
-}
-
-/////////////
-/////////////
-///////////// NEW SITEMAP BASED ON CONFIG FILE CODE:
-/////////////
-/////////////
-// Builds a site based on the name provided
-void build_site(std::string name)
-{
-	for (int i = 0; i < len(sitemaps); i++)
-		if (*sitemaps[i] == name)
-		{
-			sitemaps[i]->build();
-			return;
-		}
-	// Backup: use a generic
-	build_site("GENERIC_UNSECURE");
+	addLootToLocation(loc);
+	addSemiPermanentChanges(loc);
 }
 configSiteMap::~configSiteMap()
 {
@@ -661,24 +726,24 @@ configSiteMap::~configSiteMap()
 }
 void configSiteMap::configure(const std::string& command, const std::string& value)
 {
-	if (command == "NAME")name = value;
-	else if (command == "USE")parent = value;
-	else if (command == "TILE")
+	if (command == tag_NAME)name = value;
+	else if (command == tag_USE)parent = value;
+	else if (command == tag_TILE)
 	{
 		current_command = new configSiteTile(value);
 		commands.push_back(current_command);
 	}
-	else if (command == "SCRIPT")
+	else if (command == tag_SCRIPT)
 	{
 		current_command = new configSiteScript(value);
 		commands.push_back(current_command);
 	}
-	else if (command == "SPECIAL")
+	else if (command == tag_SPECIAL)
 	{
 		current_command = new configSiteSpecial(value);
 		commands.push_back(current_command);
 	}
-	else if (command == "UNIQUE")
+	else if (command == tag_UNIQUE)
 	{
 		current_command = new configSiteUnique(value);
 		commands.push_back(current_command);
@@ -695,8 +760,7 @@ void configSiteMap::build()
 	if (len(parent)) build_site(parent);
 	for (int step = 0; step < len(commands); step++) commands[step]->build();
 }
-typedef map<string, short> stringAndShort;
-stringAndShort site_tile_list;
+map<string, short> site_tile_list;
 configSiteTile::configSiteTile(const std::string& value)
 	: xstart(0), xend(0), ystart(0), yend(0), zstart(0), zend(0), addtype(0)
 {
@@ -706,19 +770,19 @@ configSiteTile::configSiteTile(const std::string& value)
 }
 void configSiteTile::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "X")xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value.c_str());
-	else if (command == "YEND")yend = atoi(value.c_str());
-	else if (command == "Y")ystart = yend = atoi(value.c_str());
-	else if (command == "ZSTART")zstart = atoi(value.c_str());
-	else if (command == "ZEND")zend = atoi(value.c_str());
-	else if (command == "Z")zstart = zend = atoi(value.c_str());
-	else if (command == "NOTE")
+	if (command == tag_XSTART)xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_XEND)xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_X)xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_YSTART)ystart = atoi(value.c_str());
+	else if (command == tag_YEND)yend = atoi(value.c_str());
+	else if (command == tag_Y)ystart = yend = atoi(value.c_str());
+	else if (command == tag_ZSTART)zstart = atoi(value.c_str());
+	else if (command == tag_ZEND)zend = atoi(value.c_str());
+	else if (command == tag_Z)zstart = zend = atoi(value.c_str());
+	else if (command == tag_NOTE)
 	{
-		if (value == "ADD")addtype = SITEMAP_ADDTYPE_OR;
-		else if (value == "SUBTRACT")addtype = SITEMAP_ADDTYPE_ANDNOT;
+		if (value == tag_ADD)addtype = SITEMAP_ADDTYPE_OR;
+		else if (value == tag_SUBTRACT)addtype = SITEMAP_ADDTYPE_ANDNOT;
 	}
 }
 void configSiteTile::build()
@@ -733,19 +797,19 @@ void configSiteTile::build()
 configSiteScript::configSiteScript(const std::string& value)
 	: xstart(0), xend(0), ystart(0), yend(0), zstart(0), zend(0)
 {
-	if (value == "ROOM")script = SITEMAPSCRIPT_ROOM;
-	else if (value == "HALLWAY_YAXIS")script = SITEMAPSCRIPT_HALLWAY_YAXIS;
-	else if (value == "STAIRS")script = SITEMAPSCRIPT_STAIRS;
-	else if (value == "STAIRS_RANDOM")script = SITEMAPSCRIPT_STAIRS_RANDOM;
+	if (value == tag_ROOM)script = SITEMAPSCRIPT_ROOM;
+	else if (value == tag_HALLWAY_YAXIS)script = SITEMAPSCRIPT_HALLWAY_YAXIS;
+	else if (value == tag_STAIRS)script = SITEMAPSCRIPT_STAIRS;
+	else if (value == tag_STAIRS_RANDOM)script = SITEMAPSCRIPT_STAIRS_RANDOM;
 }
 void configSiteScript::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value.c_str());
-	else if (command == "YEND")yend = atoi(value.c_str());
-	else if (command == "ZSTART")zstart = atoi(value.c_str());
-	else if (command == "ZEND")zend = atoi(value.c_str());
+	if (command == tag_XSTART)xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_XEND)xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_YSTART)ystart = atoi(value.c_str());
+	else if (command == tag_YEND)yend = atoi(value.c_str());
+	else if (command == tag_ZSTART)zstart = atoi(value.c_str());
+	else if (command == tag_ZEND)zend = atoi(value.c_str());
 }
 void configSiteScript::build()
 {
@@ -957,16 +1021,16 @@ configSiteSpecial::configSiteSpecial(const std::string& value)
 }
 void configSiteSpecial::configure(const std::string& command, const std::string& value)
 {
-	if (command == "XSTART")xstart = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "XEND")xend = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "X")xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
-	else if (command == "YSTART")ystart = atoi(value.c_str());
-	else if (command == "YEND")yend = atoi(value.c_str());
-	else if (command == "Y")ystart = yend = atoi(value.c_str());
-	else if (command == "ZSTART")zstart = atoi(value.c_str());
-	else if (command == "ZEND")zend = atoi(value.c_str());
-	else if (command == "Z")zstart = zend = atoi(value.c_str());
-	else if (command == "FREQ")freq = atoi(value.c_str());
+	if (command == tag_XSTART)xstart = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_XEND)xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_X)xstart = xend = atoi(value.c_str()) + (MAPX >> 1);
+	else if (command == tag_YSTART)ystart = atoi(value.c_str());
+	else if (command == tag_YEND)yend = atoi(value.c_str());
+	else if (command == tag_Y)ystart = yend = atoi(value.c_str());
+	else if (command == tag_ZSTART)zstart = atoi(value.c_str());
+	else if (command == tag_ZEND)zend = atoi(value.c_str());
+	else if (command == tag_Z)zstart = zend = atoi(value.c_str());
+	else if (command == tag_FREQ)freq = atoi(value.c_str());
 }
 void configSiteSpecial::build()
 {
@@ -984,7 +1048,7 @@ configSiteUnique::configSiteUnique(const std::string& value)
 }
 void configSiteUnique::configure(const std::string& command, const std::string& value)
 {
-	if (command == "Z")zstart = zend = atoi(value.c_str());
+	if (command == tag_Z)zstart = zend = atoi(value.c_str());
 }
 struct coordinates
 {
@@ -1092,7 +1156,7 @@ configSiteLoot::configSiteLoot(const std::string& value)
 }
 void configSiteLoot::configure(const std::string& command, const std::string& value)
 {
-	if (command == "WEIGHT")weight = atoi(value.c_str());
+	if (command == tag_WEIGHT)weight = atoi(value.c_str());
 }
 void configSiteLoot::build()
 {

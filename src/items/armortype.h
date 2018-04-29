@@ -4,6 +4,7 @@ class ArmorType : public ItemType
 {
    public:
       explicit ArmorType(MCD_STR xmlstring);
+	  virtual thisItemIs whatIsThis() const { return THIS_IS_ARMOR; }
       ArmorType(const ArmorType& base, MCD_STR xmlstring);
       bool is_armor() const { return true; }
       int get_make_difficulty() const { return make_difficulty_; }

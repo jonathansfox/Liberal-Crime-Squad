@@ -1,22 +1,24 @@
+#include "includes.h"
+const string CONST_configfile008 = "_Specials.csv";
+const string CONST_configfile007 = "_Tiles.csv";
+const string CONST_configfile006 = "mapCSV_Bank2_Tiles.csv";
+const string CONST_configfile003 = "mapCSV_Bank_Tiles.csv";
+const string CONST_configfile002 = "mapCSV_";
+const string CONST_configfile001 = "OBJECT";
+const string CONST_configfile000 = "Attempting to open filename: ";
 
-#include <includes.h>
-
-#include "items/itemtype.h"
-#include "items/item.h"
+#include "../items/itemtype.h"
+#include "../items/item.h"
 // needed for locations
-#include "locations/locations.h"
-
-#include "configfile.h"
+#include "../locations/locations.h"
+#include "../configfile.h"
 //own header
-
-#include <cursesAlternative.h>
+#include "../cursesAlternative.h"
 extern string singleSpace;
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-string attemptingToOpenFile = "Attempting to open filename: ";
-
+string attemptingToOpenFile = CONST_configfile000;
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
    std::ifstream* file = new std::ifstream();
@@ -43,7 +45,7 @@ int readConfigFile(const std::string& filename)
       // if COMMAND is OBJECT,
       // call a object creator factory, passing VALUE
       // (record pointer to that object)
-      if(command=="OBJECT") object=createObject(value);
+      if(command==CONST_configfile001) object=createObject(value);
       // if I have an object,
       // pass COMMAND and VALUE to the object
       else if(object) object->configure(command, value);
@@ -196,7 +198,7 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
 }
 bool readMap(const std::string& filename)
 {
-   std::string prefix = std::string("mapCSV_");
+   std::string prefix = std::string(CONST_configfile002);
    // clear any old map data
    for(int x=0;x<MAPX;x++)
    for(int y=0;y<MAPY;y++)
@@ -206,15 +208,15 @@ bool readMap(const std::string& filename)
       levelmap[x][y][z].special=SPECIAL_NONE;
       levelmap[x][y][z].siegeflag=0;
    }
-   // Try first floor (eg "mapCSV_Bank_Tiles.csv"), abort this method if it doesn't exist
-   if(!readMapFile(prefix+filename+"_Tiles.csv", 0, readMapCBTiles)) return false;
-   if(!readMapFile(prefix+filename+"_Specials.csv", 0, readMapCBSpecials)) return false;
-   // Try upper levels (eg "mapCSV_Bank2_Tiles.csv"), but don't sweat it if they don't exist
+   // Try first floor (eg CONST_configfile003), abort this method if it doesn't exist
+   if(!readMapFile(prefix+filename+CONST_configfile007, 0, readMapCBTiles)) return false;
+   if(!readMapFile(prefix+filename+CONST_configfile008, 0, readMapCBSpecials)) return false;
+   // Try upper levels (eg CONST_configfile006), but don't sweat it if they don't exist
    for(int z=1;z<MAPZ;z++)
    {
       std::string str=tostring(z+1);
-      if(!readMapFile(prefix+filename+str+"_Tiles.csv", z, readMapCBTiles)) break;
-      if(!readMapFile(prefix+filename+str+"_Specials.csv", z, readMapCBSpecials)) break;
+      if(!readMapFile(prefix+filename+str+CONST_configfile007, z, readMapCBTiles)) break;
+      if(!readMapFile(prefix+filename+str+CONST_configfile008, z, readMapCBSpecials)) break;
    }
    return true;
 }

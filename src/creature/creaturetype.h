@@ -25,15 +25,15 @@ class CreatureType
       void give_weapon_civilian(Creature& cr) const;
       // Gives the creature one of the creature type's possible armors.
       void give_armor(Creature& cr) const;
-      static int number_of_creaturetypes;
+      static int s_number_of_creaturetypes;
    private:
       std::string idname_;
       long id_;
       short type_; // This is a CreatureTypes enum value.
       struct WeaponsAndClips
       {
-         WeaponsAndClips(std::string weapon, int weapons, std::string clip, int clips);
-         WeaponsAndClips(CMarkup& xml, const string& owner);
+		 WeaponsAndClips(const std::string & weapon, int weapons, const std::string & clip, int clips);
+		 WeaponsAndClips(CMarkup& xml, const string& owner);
          std::string weapontype;
          Interval number_weapons;
          std::string cliptype;

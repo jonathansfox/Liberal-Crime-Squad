@@ -6,16 +6,19 @@ LAW_ANIMALRESEARCH
 country."
 LAW_POLICEBEHAVIOR
 "The police regularly torture minority suspects during interrogations."
-
+ 
 LAW_PRIVACY
 "Files are being kept on innocent citizens whose only crime is to 
 speak out against a system that is trying to farm them like beasts."
 LAW_DEATHPENALTY
 "Over thirty innocent people have been executed over the past decade."
-
+ 
 LAW_NUCLEARPOWER
 "Radioactive waste is being stored all over the country, and it poses 
 a serious threat to many families, even in this neighborhood."
+LAW_POLLUTION
+"ERROR LW06
+CURRENTLY HANDLED AS EXCEPTION"
 LAW_LABOR
 "Have you noticed how people are working more and more hours for less and 
 less money?  It's all part of a plan to keep you enslaved, man."

@@ -1,3 +1,11 @@
+#include "../includes.h"
+const string CONST_shopsnstuff008 = "oubliette.xml";
+const string CONST_shopsnstuff007 = "deptstore.xml";
+const string CONST_shopsnstuff006 = "P - Repaint car, replace plates and tags ($500)";
+const string CONST_shopsnstuff005 = "pawnshop.xml";
+const string CONST_shopsnstuff004 = "armsdealer.xml";
+
+const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,61 +31,42 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+extern vector<VehicleType *> vehicletype;
+#include "../vehicle/vehicle.h"
+#include "../common/commonactions.h"
+#include "../common/commonactionsCreature.h"
 // for locatesquad(activesquad,loc)
-
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for void printfunds(int,int,char*)        
-
-#include "daily/shopsnstuff.h"
+#include "shopsnstuff.h"
 //own header
-#include "sitemode/shop.h"
-
-
-#include <cursesAlternative.h>
-//#include <constant_strings.h>
-const string blankString = "";
-#include <set_color_support.h>
-#include "common/musicClass.h"
-#include "common/creaturePoolCreature.h"
+#include "../sitemode/shop.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/musicClass.h"
+#include "../common/creaturePoolCreature.h"
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 extern MusicClass music;
 extern int year;
 extern string closeParenthesis;
 extern string undefined;
-extern string tag_class;
-extern string tag_WEAPON;
-extern string tag_CLIP;
-extern string tag_ARMOR;
-extern string tag_LOOT;
-extern string tag_type;
-extern string tag_description;
-extern string tag_price;
-extern string tag_sleeperprice;
-extern string tag_letter;
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
 extern string enter_done;
 extern string chooseALiberalTo;
 extern string spaceParanthesisDollar;
-
 extern squadst *activesquad;
 extern short party_status;
 extern vector<Vehicle *> vehicle;
 extern class Ledger ledger;
-
 string toSpend;
 string chooseAColor;
 string theseColorsAreCon;
@@ -86,15 +75,12 @@ string notEnoughMoney;
 string chooseVehicle;
 string thisVehicle;
 string weDontNeedCar;
-
 string enterLeave;
 string b_chooseBuyer;
 string s_sellCar;
 string s_sellThe;
 string g_getCar;
 string f_fixWounds;
-
-
 /* active squad visits the hospital */
 void hospital(int loc)
 {
@@ -142,7 +128,7 @@ void armsdealer(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + "armsdealer.xml");
+	xml.Load(string(artdir) + CONST_shopsnstuff004);
 	Shop armsdealer(xml.GetDoc());
 	armsdealer.enter(*activesquad);
 }
@@ -152,7 +138,7 @@ void pawnshop(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + "pawnshop.xml");
+	xml.Load(string(artdir) + CONST_shopsnstuff005);
 	Shop pawnshop(xml.GetDoc());
 	pawnshop.enter(*activesquad);
 }
@@ -194,7 +180,7 @@ void dealership(int loc)
 		set_color_easy(WHITE_ON_BLACK);
 		else
 		set_color(COLOR_BLACK,COLOR_BLACK,1);
-		mvaddstrAlt(12, 1, "P - Repaint car, replace plates and tags ($500)");*/
+		mvaddstrAlt(12, 1, CONST_shopsnstuff006);*/
 		if (partysize >= 2)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16,  1, b_chooseBuyer);
@@ -242,7 +228,7 @@ void dealership(int loc)
 				{
 					set_color_easy(RED_ON_BLACK);
 					mvaddstrAlt(1,  1, notEnoughMoney);
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 				else break;
 			}
@@ -286,7 +272,7 @@ void deptstore(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + "deptstore.xml");
+	xml.Load(string(artdir) + CONST_shopsnstuff007);
 	Shop deptstore(xml.GetDoc());
 	deptstore.enter(*activesquad);
 }
@@ -296,7 +282,7 @@ void halloweenstore(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml;
-	xml.Load(string(artdir) + "oubliette.xml");
+	xml.Load(string(artdir) + CONST_shopsnstuff008);
 	Shop oubliette(xml.GetDoc());
 	oubliette.enter(*activesquad);
 }

@@ -1,17 +1,20 @@
+
+
+
 #ifndef CREATURE_H
 #define CREATURE_H0
 
-#include "items/itemtype.h"
-#include "items/cliptype.h"
-#include "items/weapontype.h"
-#include "items/armortype.h"
-#include "items/item.h"
-#include "items/clip.h"
-#include "items/weapon.h"
-#include "items/armor.h"
-#include "creature/augmentation.h"
+#include "../items/itemtype.h"
+#include "../items/cliptype.h"
+#include "../items/weapontype.h"
+#include "../items/armortype.h"
+#include "../items/item.h"
+#include "../items/clip.h"
+#include "../items/weapon.h"
+#include "../items/armor.h"
+#include "augmentation.h"
 
-#include "creature/creatureEnums.h"
+#include "creatureEnums.h"
 
 int get_XML_value(const std::string& inputXml);
 /*
@@ -20,9 +23,9 @@ class Skill
 public:
    static string showXml(int skill_, int value_) {
 	   CMarkup xml;
-	   xml.AddElem("skill");
+	   xml.AddElem(tag_skill);
 	   xml.IntoElem();
-	   xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	   xml.AddElem(tag_value, min(value_, MAXATTRIBUTE));
 	   return xml.GetDoc();
    };
    //static std::string get_name(int skill_type);
@@ -33,9 +36,9 @@ class Attribute
 public:
    static string showXml(int attribute_, int value_) {
 	   CMarkup xml;
-	   xml.AddElem("attribute");
+	   xml.AddElem(tag_attribute);
 	   xml.IntoElem();
-	   xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	   xml.AddElem(tag_value, min(value_, MAXATTRIBUTE));
 	   return xml.GetDoc();
    };
    //static std::string get_name(int attribute_type);
@@ -44,16 +47,17 @@ public:
 class Creature  
 {
 private:
+	class Augmentation augmentations[AUGMENTATIONNUM];
+	static Weapon& weapon_none();
+	static Armor& armor_none();
+	Weapon* weapon;
+	Armor* armor;
+
    void copy(const Creature& org);
    int attributes[ATTNUM];
    int skills[SKILLNUM];
-   class Augmentation augmentations[AUGMENTATIONNUM];
    int skill_experience[SKILLNUM];
    static int roll_check(int skill);
-   static Weapon& weapon_none();
-   static Armor& armor_none();
-   Weapon* weapon;
-   Armor* armor;
    int seethroughdisguise;
    int seethroughstealth;
    bool istalkreceptive;
@@ -61,9 +65,27 @@ private:
    bool isreports_to_police;
 
 public:
+	Augmentation& get_augmentation(int aug_num) { return augmentations[aug_num]; }
+	deque<Weapon*> extra_throwing_weapons;
+	deque<Clip*> clips;
+	Weapon& get_weapon() const { return is_armed() ? *weapon : weapon_none(); }
+	Armor& get_armor() const { return is_naked() ? armor_none() : *armor; }
+	bool take_clips(Item& clip, int number);
+	bool take_clips(Clip& clip, int number);
+	bool take_clips(const ClipType& ct, int number);
+	void give_weapon(Weapon& w, vector<Item*>* lootpile);
+	void give_weapon(const WeaponType& wt, vector<Item*>* lootpile);
+	void drop_weapon(vector<Item*>* lootpile);
+	void drop_weapons_and_clips(vector<Item*>* lootpile);
+	void give_armor(Armor& a, vector<Item*>* lootpile);
+	void give_armor(const ArmorType& at, vector<Item*>* lootpile);
+	void strip(vector<Item*>* lootpile);
+	ActivityST activity;
+
 	int get_disguise_difficulty();
 	int	get_stealth_difficulty();
    void set_attribute(int attribute, int amount) { attributes[attribute]=MIN(amount,MAXATTRIBUTE); }
+   int get_true_attribute(int attribute) const;
    int get_attribute(int attribute, bool use_juice) const;
    void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute]+amount); }
    int attribute_roll(int attribute) const;
@@ -73,7 +95,6 @@ public:
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
    int get_weapon_skill() const;
-   Augmentation& get_augmentation(int aug_num) { return augmentations[aug_num]; }
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
    char gender_conservative;
@@ -112,30 +133,16 @@ public:
    std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after Creature)
    bool enemy() const;
    int stunned;
-   deque<Weapon*> extra_throwing_weapons;
-   deque<Clip*> clips;
    bool has_thrown_weapon;
    bool is_armed() const { return weapon; }
    bool is_naked() const { return !armor; }
-   Weapon& get_weapon() const { return is_armed()?*weapon:weapon_none(); }
-   Armor& get_armor() const { return is_naked()?armor_none():*armor; }
    bool will_do_ranged_attack(bool force_ranged,bool force_melee) const; //force_melee is likely unnecessary. -XML
    bool can_reload() const;
    bool will_reload(bool force_ranged, bool force_melee) const;
    bool reload(bool wasteful);
    bool ready_another_throwing_weapon();
-   bool take_clips(Item& clip, int number);
-   bool take_clips(Clip& clip, int number);
-   bool take_clips(const ClipType& ct, int number);
    int count_clips() const;
-   void give_weapon(Weapon& w, vector<Item*>* lootpile);
-   void give_weapon(const WeaponType& wt, vector<Item*>* lootpile);
-   void drop_weapon(vector<Item*>* lootpile);
-   void drop_weapons_and_clips(vector<Item*>* lootpile);
    int count_weapons() const;
-   void give_armor(Armor& a, vector<Item*>* lootpile);
-   void give_armor(const ArmorType& at, vector<Item*>* lootpile);
-   void strip(vector<Item*>* lootpile);
    bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weaponsize(weapon->get_size()); }
    string get_weapon_string(int subtype) const;
    string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
@@ -153,7 +160,6 @@ public:
    int worklocation;
    char cantbluff;
    int base;
-   activityst activity;
    int carid;
    char is_driver;
    int pref_carid;
@@ -190,7 +196,7 @@ public:
 };
 
 // this data struct is for activities, it relates to their info text and a couple of other things to avoid needing big switches in the code
-struct data_activity
+struct Data_Activity
 {
 	bool show_name;
 	char key;
@@ -198,8 +204,8 @@ struct data_activity
 	string line;
 	string line2;
 	string line3;
-	data_activity(char _key, bool _show_name, string _line0, string _line1 = "", string _line2 = "", CreatureSkill _skill = SKILLNUM) : key(_key), show_name(_show_name), skill(_skill), line(_line0), line2(_line1), line3(_line2) {}
-	data_activity() : data_activity('x', false, "") {}
+	Data_Activity(char _key, bool _show_name, string _line0, string _line1 = blankString, string _line2 = blankString, CreatureSkill _skill = SKILLNUM) : key(_key), show_name(_show_name), skill(_skill), line(_line0), line2(_line1), line3(_line2) {}
+	Data_Activity() : Data_Activity('x', false, blankString) {}
 	string lineAttempt(int row, Creature *cr)
 	{
 		if (skill == SKILLNUM) {
@@ -208,16 +214,15 @@ struct data_activity
 		}
 		else
 		{
-			if (row > 0) return "";
+			if (row > 0) return blankString;
 			if (cr->get_skill(skill) >= 8) return line3;
 			if (cr->get_skill(skill) >= 4) return line2;
 			return line;
 		}
 	}
 };
-typedef map<Activity, data_activity> ActivityToData;
 
-enum uniqueCreatureData
+enum UniqueCreatureData
 {
    UNIQUECREATURE_ALIVE,
    UNIQUECREATURE_DEAD,
@@ -290,7 +295,8 @@ struct recruitst
 	Creature* recruit;
 	short timeleft;
 	char level, eagerness1, task;
-	recruitst();
+	//recruitst();
+	recruitst(Creature * cr, int id);
 	~recruitst();
 	char eagerness();
 };
@@ -313,7 +319,7 @@ struct squadst
 {
 	char name[SQUAD_NAMELEN];
 	Creature *squad[6];
-	activityst activity;
+	ActivityST activity;
 	int id;
 	vector<Item *> loot;
 
@@ -322,12 +328,12 @@ struct squadst
 	squadst()
 	{
 		for (int p = 0; p<6; p++) squad[p] = NULL;
-		strcpy(name, "");
+		strcpy(name, blankString.c_str());
 		activity.type = ACTIVITY_NONE, id = -1, stance = SQUADSTANCE_STANDARD;
 	}
 	~squadst() { delete_and_clear(loot); }
 };
 
-#include "locations/locations.h"
+#include "../locations/locations.h"
 
 #endif

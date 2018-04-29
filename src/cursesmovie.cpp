@@ -1,3 +1,6 @@
+#include "includes.h"
+const string CONST_cursesmovie001 = "rb";
+const string CONST_cursesmovie000 = "wb";
 //////////////////////////////////////////////////////////////////////////////////////////
 //																						//
 //Copyright (c) 2002,2003,2004 by Tarn Adams											//
@@ -20,13 +23,9 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include <includes.h>
-
-#include "cursesmovie.h"
+#include "../cursesmovie.h"
 //own header
-
-#include <cursesAlternative.h>
-
+#include "../cursesAlternative.h"
 CursesMoviest movie;
 void filelistst::open_diskload(FILE* h)
 {
@@ -81,7 +80,7 @@ void filelistst::smartappend(filelistst &list2)
 void CursesMoviest::savemovie(const char *filename,int flags=0)
 {
    FILE *h;
-   h=LCSOpenFile(filename, "wb", flags);
+   h=LCSOpenFile(filename, CONST_cursesmovie000.c_str(), flags);
    long dummy;
    if(h!=NULL)
    {
@@ -110,7 +109,7 @@ void CursesMoviest::loadmovie(const char *filename)
 {
    clean();
    FILE* h;
-   h=LCSOpenFile(filename,"rb", LCSIO_PRE_ART);
+   h=LCSOpenFile(filename,CONST_cursesmovie001.c_str(), LCSIO_PRE_ART);
    long dummy;
    if(h!=NULL)
    {

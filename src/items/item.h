@@ -1,5 +1,14 @@
 #ifndef ITEM_H
 #define ITEM_H0
+/*enum thisItemIs {
+	THIS_IS_WEAPON,
+	THIS_IS_ARMOR,
+	THIS_IS_CLIP,
+	THIS_IS_LOOT,
+	THIS_IS_MONEY,
+	THIS_IS_CLOTH,
+	THIS_IS_NUM
+};*/
 class Item
 {
    public:
@@ -24,11 +33,7 @@ class Item
       static bool sort_compare(Item* a, Item* b);
       virtual bool sort_compare_special(Item* other) const=0;
       virtual bool is_same_type(const Item& i) const { return itemtypename_==i.itemtypename_; }
-      virtual bool is_weapon() const { return false; }
-      virtual bool is_armor() const { return false; }
-      virtual bool is_clip() const { return false; }
-      virtual bool is_loot() const { return false; }
-      virtual bool is_money() const { return false; }
+	  virtual thisItemIs whatIsThis() const = 0;
 	  virtual bool is_cloth() const { return false; }
       virtual const string& get_name() const=0;
       const char* aan() const;
@@ -42,10 +47,10 @@ class Item
       const string& get_itemtypename() const { return itemtypename_; }
       long get_itemtypeid() const { return itemtypeid_; }
    protected:
-      //string& itemtypename() { return itemtypename_; }
-      const string& itemtypename() const { return itemtypename_; }
+      //string& get_itemtypename() { return itemtypename_; }
+      //const string& get_itemtypename() const { return itemtypename_; }
       //long& itemtypeid() { return itemtypeid_; }
-      const long& itemtypeid() const { return itemtypeid_; }
+      //const long& itemtypeid() const { return itemtypeid_; }
       long number_;
    private:
       string itemtypename_;

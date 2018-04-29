@@ -1,3 +1,108 @@
+
+#include "../includes.h"
+const string CONST_dateB104 = "'s ";
+const string CONST_dateB103 = " cell phone.";
+const string CONST_dateB102 = " pet";
+const string CONST_dateB101 = " favourite TV show.";
+const string CONST_dateB100 = " hair.";
+const string CONST_dateB099 = "'s frozen Conservative heart.";
+const string CONST_date103 = "The Liberal wakes up in the police station...";
+const string CONST_date102 = " remembers seeing!";
+const string CONST_date101 = "'s fist is the last thing ";
+const string CONST_date100 = " has failed to kidnap the Conservative.";
+const string CONST_date099 = " manages to get away on the way back to the safehouse!";
+const string CONST_date098 = "If you do not enter anything, their real name will be used.";
+const string CONST_date097 = " in its presence?";
+const string CONST_date096 = "What name will you use for this ";
+const string CONST_date095 = "The Education of ";
+const string CONST_date094 = " kidnaps the Conservative!";
+const string CONST_date093 = " struggles and yells for help, but nobody comes.";
+const string CONST_date092 = " doesn't resist.";
+const string CONST_date091 = "not to [resist]!";
+const string CONST_date090 = "not to fuck around!";
+const string CONST_date089 = " seizes the Conservative swine from behind and warns it";
+const string CONST_date088 = "to the corporate slave's throat!";
+const string CONST_date087 = " grabs the Conservative from behind, holding the ";
+const string CONST_date086 = "and threatens to blow the Conservative's brains out!";
+const string CONST_date085 = " comes back from the bathroom toting the ";
+const string CONST_date084 = "E - Just kidnap the Conservative bitch.";
+const string CONST_date083 = "D - Break it off.";
+const string CONST_date082 = "C - Spend a week on a cheap vacation (must be uninjured).";
+const string CONST_date081 = "C - Spend a week on a cheap vacation (stands up any other dates).";
+const string CONST_date080 = "B - Try to get through the evening without spending a penny.";
+const string CONST_date079 = "A - Spend a hundred bucks tonight to get the ball rolling.";
+const string CONST_date078 = " approach the situation?";
+const string CONST_date077 = "How should ";
+const string CONST_date076 = "Seeing ";
+const string CONST_date075 = "Things go downhill fast.";
+const string CONST_date074 = " mixes up the names of ";
+const string CONST_date073 = " realizes %s has committed to eating %d meals at once.";
+const string CONST_date072 = "Ruh roh...";
+const string CONST_date071 = "Unfortunately, they turn up at the same time.";
+const string CONST_date070 = "Unfortunately, they all turn up at the same time.";
+const string CONST_date069 = ".  An ambush was set for the lying dog...";
+const string CONST_date068 = "Unfortunately, they know each other and had been discussing";
+const string CONST_date067 = "Unfortunately, they all know each other and had been discussing";
+const string CONST_date066 = " at ";
+const string CONST_date065 = "dates to manage with ";
+const string CONST_date064 = "a hot date with ";
+const string CONST_date063 = "a \"hot\" date with ";
+const string CONST_date062 = " has ";
+const string CONST_date061 = " is back from vacation.";
+const string CONST_date060 = "This relationship is over.";
+const string CONST_date059 = " can sense that things just aren't working out.";
+const string CONST_date058 = " from meeting ";
+const string CONST_date057 = "schedule for keeping ";
+const string CONST_date056 = "mind-bending ";
+const string CONST_date055 = "detailed ";
+const string CONST_date054 = "complicated ";
+const string CONST_date053 = "intricate ";
+const string CONST_date052 = "awe-inspiring ";
+const string CONST_date051 = "notices ";
+const string CONST_date050 = "The date starts well, but goes horribly wrong when ";
+const string CONST_date049 = " escapes the police ambush!";
+const string CONST_date048 = "But ";
+const string CONST_date047 = " has been arrested.";
+const string CONST_date046 = " was leaking information to the police the whole time!";
+const string CONST_date045 = "'s mind with wisdom!!!";
+const string CONST_date044 = " actually curses ";
+const string CONST_date043 = "Talking with ";
+const string CONST_date042 = "They'll meet again tomorrow.";
+const string CONST_date041 = " to recharge ";
+const string CONST_date040 = " to go to a birthday party.";
+const string CONST_date039 = " six-legged pig.";
+const string CONST_date038 = " fish.";
+const string CONST_date037 = " dog.";
+const string CONST_date036 = " cat.";
+const string CONST_date035 = " to take care of ";
+const string CONST_date034 = " to catch ";
+const string CONST_date033 = " due to an early meeting tomorrow.";
+const string CONST_date032 = " due to an allergy attack.";
+const string CONST_date031 = " to wash ";
+const string CONST_date030 = " seemed to have fun, but left early";
+const string CONST_date028 = " knows all about that already.";
+const string CONST_date027 = " was able to create a map of the site with this information.";
+const string CONST_date026 = " turns the topic of discussion to the ";
+const string CONST_date025 = " is slowly warming ";
+const string CONST_date021 = "The Self-Nullifying Infatuation of ";
+const string CONST_date020 = "'s totally unconditional love-slave!";
+const string CONST_date019 = " is ";
+const string CONST_date018 = "In fact, ";
+const string CONST_date017 = "It was fun though. They agree to part ways amicably.";
+const string CONST_date016 = " relationship.";
+const string CONST_date015 = "yet another";
+const string CONST_date014 = "another";
+const string CONST_date013 = " isn't seductive enough to juggle ";
+const string CONST_date012 = " people!";
+const string CONST_date011 = "someone!";
+const string CONST_date010 = " is already dating ";
+const string CONST_date008 = "'s unique life philosophy...";
+const string CONST_date007 = " is quite taken with ";
+const string CONST_date006 = "date_fail.txt";
+
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,52 +128,41 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "log/log.h"
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../log/log.h"
 // for commondisplay.h
-#include "common/commondisplay.h"
-#include "common/commondisplayCreature.h"
+#include "../common/commondisplay.h"
+#include "../common/commondisplayCreature.h"
 // for  addstr
-
-#include "common/commonactionsCreature.h"
+#include "../common/commonactionsCreature.h"
 // for int loveslavesleft(const Creature&)
-
-#include "common/getnames.h"
+#include "../common/getnames.h"
 // for void enter_name(int,int,char *,int,const char *=NULL)
-
-//#include "common/translateid.h"
+//#include "../common/translateid.h"
 int getarmortype(const string &idname);
-
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
 extern vector<Creature *> pool;
-#include "common/creaturePoolCreature.h"
+#include "../common/creaturePoolCreature.h"
 extern Log gamelog;
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern int stat_recruits;
 extern int stat_kidnappings;
 extern string singleDot;
  vector<string> date_fail;
-
  const string datey = "date\\";
  vector<file_and_text_collection> date_text_file_collection = {
-
 	 /*date.cpp*/
-	 customText(&date_fail, datey + "date_fail.txt"),
+	 customText(&date_fail, datey + CONST_date006),
  };
-
  extern short lawList[LAWNUM];
  extern string commaSpace;
  extern string singleSpace;
@@ -86,39 +180,39 @@ extern string AND;
 static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 {
 	music.play(MUSIC_DATING);
-	std::string s = "";
+	std::string s = blankString;
 	if (aroll > troll)
 	{
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		moveAlt(y, 0); y++;
 		addstrAlt(d.date[e]->name, gamelog);
-		addstrAlt(" is quite taken with ", gamelog);
+		addstrAlt(CONST_date007, gamelog);
 		addstrAlt(pool[p]->name, gamelog);
-		addstrAlt("'s unique life philosophy...", gamelog);
+		addstrAlt(CONST_date008, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		if (loveslavesleft(*pool[p]) <= 0)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y++,  0, "But ", gamelog);
+			mvaddstrAlt(y++,  0, CONST_date048, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
-			addstrAlt(" is already dating ", gamelog);
+			addstrAlt(CONST_date010, gamelog);
 			int num_relationships = loveslaves(*pool[p]);
 			if (pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
-			if (num_relationships == 1) addstrAlt("someone!", gamelog);
-			else addstrAlt(tostring(num_relationships) + " people!", gamelog);
+			if (num_relationships == 1) addstrAlt(CONST_date011, gamelog);
+			else addstrAlt(tostring(num_relationships) + CONST_date012, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(y++,  0, pool[p]->name, gamelog);
-			addstrAlt(" isn't seductive enough to juggle ", gamelog);
-			if (num_relationships == 1) addstrAlt("another", gamelog);
-			else addstrAlt("yet another", gamelog);
-			addstrAlt(" relationship.", gamelog);
+			addstrAlt(CONST_date013, gamelog);
+			if (num_relationships == 1) addstrAlt(CONST_date014, gamelog);
+			else addstrAlt(CONST_date015, gamelog);
+			addstrAlt(CONST_date016, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "It was fun though. They agree to part ways amicably.", gamelog);
+			mvaddstrAlt(y++,  0, CONST_date017, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			delete_and_remove(d.date, e);
 			return DATERESULT_BREAKUP;
 		}
@@ -126,26 +220,26 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			moveAlt(y, 0); y++;
-			addstrAlt("In fact, ", gamelog);
+			addstrAlt(CONST_date018, gamelog);
 			addstrAlt(d.date[e]->name, gamelog);
-			addstrAlt(" is ", gamelog);
+			addstrAlt(CONST_date019, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
-			addstrAlt("'s totally unconditional love-slave!", gamelog);
+			addstrAlt(CONST_date020, gamelog);
 			gamelog.nextMessage();
 			//Get map of their workplace
 			LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
-			getkeyAlt();
+	 	pressAnyKey();
 			d.date[e]->flag |= CREATUREFLAG_LOVESLAVE;
 			d.date[e]->hireid = pool[p]->id;
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "The Self-Nullifying Infatuation of ");
+			mvaddstrAlt(0,  0, CONST_date021);
 			addstrAlt(d.date[e]->propername);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(2,  0, "What name will you use for this ");
+			mvaddstrAlt(2,  0, CONST_date096);
 			addstrAlt(d.date[e]->get_type_name());
-			addstrAlt(" in its presence?");
-			mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
+			addstrAlt(CONST_date097);
+			mvaddstrAlt(3,  0, CONST_date098);
 			enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 			sleeperize_prompt(*d.date[e], *pool[p], 8);
 			addCreature(d.date[e]);
@@ -159,7 +253,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				y++;
-				mvaddstrAlt(y++,  0, s + pool[p]->name + " is slowly warming " + d.date[e]->name + "'s frozen Conservative heart.", gamelog);
+				mvaddstrAlt(y++,  0, s + pool[p]->name + CONST_date025 + d.date[e]->name + CONST_dateB099, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
 				d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM, -1);
@@ -173,30 +267,30 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			else if (LocationsPool::getInstance().isLocationMapped(d.date[e]->worklocation) == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
 			{
 				y++;
-				mvaddstrAlt(y++,  0, s + d.date[e]->name + " turns the topic of discussion to the "
+				mvaddstrAlt(y++,  0, s + d.date[e]->name + CONST_date026
 					+ LocationsPool::getInstance().getLocationName(d.date[e]->worklocation) + singleDot, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
 				if (!(LocationsPool::getInstance().getLocationType(d.date[e]->worklocation) <= SITE_RESIDENTIAL_SHELTER))
 				{
 					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(" was able to create a map of the site with this information.", gamelog);
+					addstrAlt(CONST_date027, gamelog);
 					gamelog.newline();
 					y++;
 				}
 				else
 				{
 					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(" knows all about that already.", gamelog);
+					addstrAlt(CONST_date028, gamelog);
 					gamelog.newline();
 					y++;
 				}
 				LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
+			mvaddstrAlt(y++,  0, CONST_date042, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			return DATERESULT_MEETTOMORROW;
 		}
 	}
@@ -204,30 +298,30 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
-		addstrAlt(" seemed to have fun, but left early", gamelog);
+		addstrAlt(CONST_date030, gamelog);
 		moveAlt(y++, 0);
 		switch (LCSrandom(7))
 		{
-		case 0: addstrAlt(s + " to wash " + d.date[e]->hisher() + " hair.", gamelog); break;
-		case 1: addstrAlt(" due to an allergy attack.", gamelog); break;
-		case 2: addstrAlt(" due to an early meeting tomorrow.", gamelog); break;
-		case 3: addstrAlt(s + " to catch " + d.date[e]->hisher() + " favourite TV show.", gamelog); break;
+		case 0: addstrAlt(s + CONST_date031 + d.date[e]->hisher() + CONST_dateB100, gamelog); break;
+		case 1: addstrAlt(CONST_date032, gamelog); break;
+		case 2: addstrAlt(CONST_date033, gamelog); break;
+		case 3: addstrAlt(s + CONST_date034 + d.date[e]->hisher() + CONST_dateB101, gamelog); break;
 		case 4:
-			addstrAlt(s + " to take care of " + d.date[e]->hisher() + " pet", gamelog);
+			addstrAlt(s + CONST_date035 + d.date[e]->hisher() + CONST_dateB102, gamelog);
 			switch (LCSrandom(3 + (lawList[LAW_ANIMALRESEARCH] == -2)))
 			{
-			case 0: addstrAlt(" cat.", gamelog); break;
-			case 1: addstrAlt(" dog.", gamelog); break;
-			case 2: addstrAlt(" fish.", gamelog); break;
-			case 3: addstrAlt(" six-legged pig.", gamelog); break;
+			case 0: addstrAlt(CONST_date036, gamelog); break;
+			case 1: addstrAlt(CONST_date037, gamelog); break;
+			case 2: addstrAlt(CONST_date038, gamelog); break;
+			case 3: addstrAlt(CONST_date039, gamelog); break;
 			}
 			break;
-		case 5: addstrAlt(" to go to a birthday party.", gamelog); break;
-		case 6: addstrAlt(s + " to recharge " + d.date[e]->hisher() + " cell phone.", gamelog); break;
+		case 5: addstrAlt(CONST_date040, gamelog); break;
+		case 6: addstrAlt(s + CONST_date041 + d.date[e]->hisher() + CONST_dateB103, gamelog); break;
 		}
-		mvaddstrAlt(y++,  0, "They'll meet again tomorrow.", gamelog);
+		mvaddstrAlt(y++,  0, CONST_date042, gamelog);
 		gamelog.nextMessage();
-		getkeyAlt();
+ 	pressAnyKey();
 		return DATERESULT_MEETTOMORROW;
 	}
 	else
@@ -236,11 +330,11 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		if (d.date[e]->align == -1 && aroll < troll / 2)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y++,  0, "Talking with ", gamelog);
+			mvaddstrAlt(y++,  0, CONST_date043, gamelog);
 			addstrAlt(d.date[e]->name, gamelog);
-			addstrAlt(" actually curses ", gamelog);
+			addstrAlt(CONST_date044, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
-			addstrAlt("'s mind with wisdom!!!", gamelog);
+			addstrAlt(CONST_date045, gamelog);
 			gamelog.newline();
 			pool[p]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 			if (d.date[e]->get_skill(SKILL_RELIGION) > pool[p]->get_skill(SKILL_RELIGION))
@@ -249,7 +343,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				pool[p]->train(SKILL_SCIENCE, 20 * (d.date[e]->get_skill(SKILL_SCIENCE) - pool[p]->get_skill(SKILL_SCIENCE)));
 			if (d.date[e]->get_skill(SKILL_BUSINESS) > pool[p]->get_skill(SKILL_BUSINESS))
 				pool[p]->train(SKILL_BUSINESS, 20 * (d.date[e]->get_skill(SKILL_BUSINESS) - pool[p]->get_skill(SKILL_BUSINESS)));
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		//BREAK UP
 		// If your squad member is wanted by the police, a conservative who breaks up with
@@ -260,8 +354,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
-			addstrAlt(" was leaking information to the police the whole time!", gamelog);
-			getkeyAlt();
+			addstrAlt(CONST_date046, gamelog);
+	 	pressAnyKey();
 			moveAlt(y++, 0);
 			// 3/4 chance of being arrested if less than 50 juice,
 			// 1/2 chance of being arrested if more than 50 juice
@@ -271,23 +365,23 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				long ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location);
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				addstrAlt(pool[p]->name, gamelog);
-				addstrAlt(" has been arrested.", gamelog);
+				addstrAlt(CONST_date047, gamelog);
 				gamelog.nextMessage();
 				removesquadinfo(*pool[p]);
 				pool[p]->carid = -1;
 				pool[p]->location = ps;
 				pool[p]->drop_weapons_and_clips(NULL);
 				pool[p]->activity.type = ACTIVITY_NONE;
-				getkeyAlt();
+		 	pressAnyKey();
 				delete_and_remove(d.date, e);
 				return DATERESULT_ARRESTED;
 			}
 			else
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt("But ", gamelog);
+				addstrAlt(CONST_date048, gamelog);
 				addstrAlt(pool[p]->name, gamelog);
-				addstrAlt(" escapes the police ambush!", gamelog);
+				addstrAlt(CONST_date049, gamelog);
 				gamelog.nextMessage();
 			}
 		}
@@ -297,29 +391,29 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			if (ls > 0 && LCSrandom(2))
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++,  0, s + "The date starts well, but goes horribly wrong when " + d.date[e]->name, gamelog);
-				mvaddstrAlt(y++,  0, s + "notices " + pool[p]->name + "'s ", gamelog);
+				mvaddstrAlt(y++,  0, s + CONST_date050 + d.date[e]->name, gamelog);
+				mvaddstrAlt(y++,  0, s + CONST_date051 + pool[p]->name + CONST_dateB104, gamelog);
 				switch (ls)
 				{
 				case 5:
-					addstrAlt("awe-inspiring ", gamelog);
+					addstrAlt(CONST_date052, gamelog);
 					break;
 				case 4:
-					addstrAlt("intricate ", gamelog);
+					addstrAlt(CONST_date053, gamelog);
 					break;
 				case 3:
-					addstrAlt("complicated ", gamelog);
+					addstrAlt(CONST_date054, gamelog);
 					break;
 				case 2:
-					addstrAlt("detailed ", gamelog);
+					addstrAlt(CONST_date055, gamelog);
 					break;
 				case 1:
 					break;
 				default:
-					addstrAlt("mind-bending ", gamelog);
+					addstrAlt(CONST_date056, gamelog);
 				}
-				addstrAlt(s + "schedule for keeping " + d.date[e]->himher(), gamelog);
-				addstrAlt(s + " from meeting ", gamelog);
+				addstrAlt(s + CONST_date057 + d.date[e]->himher(), gamelog);
+				addstrAlt(s + CONST_date058, gamelog);
 				moveAlt(y++, 0);
 				int lsfound = 0;
 				for (int q = 0; q < (int)pool.size(); q++)
@@ -349,28 +443,27 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
-				addstrAlt(" can sense that things just aren't working out.", gamelog);
+				addstrAlt(CONST_date059, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
 			}
-			addstrAlt("This relationship is over.", gamelog);
+			addstrAlt(CONST_date060, gamelog);
 			gamelog.nextMessage();
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		delete_and_remove(d.date, e);
 		return DATERESULT_BREAKUP;
 	}
 }
 /* daily - date - dater p gets back from vacation */
-char completevacation(datest &d, int p, char &clearformess)
+char completevacation(datest &d, int p)
 {
 	music.play(MUSIC_DATING);
 	int e = 0;
-	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
-	addstrAlt(" is back from vacation.", gamelog);
+	addstrAlt(CONST_date061, gamelog);
 	gamelog.nextMessage();
 	// Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
 	int datealignment = d.date[e]->align;
@@ -419,21 +512,20 @@ char completevacation(datest &d, int p, char &clearformess)
 }
 extern string pressKeyToReflect;
 /* daily - date - dater p goes on some dates */
-char completedate(datest &d, int p, char &clearformess)
+char completedate(datest &d, int p)
 {
 	music.play(MUSIC_DATING);
 	int e;
-	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
-	addstrAlt(" has ", gamelog);
+	addstrAlt(CONST_date062, gamelog);
 	if (len(d.date) == 1)
 	{
-		if (pool[p]->clinic) addstrAlt("a \"hot\" date with ", gamelog);
-		else addstrAlt("a hot date with ", gamelog);
+		if (pool[p]->clinic) addstrAlt(CONST_date063, gamelog);
+		else addstrAlt(CONST_date064, gamelog);
 	}
-	else addstrAlt("dates to manage with ", gamelog);
+	else addstrAlt(CONST_date065, gamelog);
 	for (e = 0; e < len(d.date); e++)
 	{
 		addstrAlt(d.date[e]->name, gamelog);
@@ -443,51 +535,51 @@ char completedate(datest &d, int p, char &clearformess)
 		{
 			if (pool[p]->clinic>0)
 			{
-				addstrAlt(" at ", gamelog);
+				addstrAlt(CONST_date066, gamelog);
 				addstrAlt(LocationsPool::getInstance().getLocationName(pool[p]->location), gamelog);
 			}
 			addstrAlt(singleDot, gamelog);
 		}
 	}
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	if (len(d.date) > 1 && !LCSrandom(len(d.date) > 2 ? 4 : 6))
 	{
 		switch (LCSrandom(3))
 		{
 		case 0:
 			moveAlt(2, 0);
-			if (len(d.date) > 2) addstrAlt("Unfortunately, they all know each other and had been discussing", gamelog);
-			else addstrAlt("Unfortunately, they know each other and had been discussing", gamelog);
+			if (len(d.date) > 2) addstrAlt(CONST_date067, gamelog);
+			else addstrAlt(CONST_date068, gamelog);
 			mvaddstrAlt(3,  0, pool[p]->name, gamelog);
-			addstrAlt(".  An ambush was set for the lying dog...", gamelog);
+			addstrAlt(CONST_date069, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			break;
 		case 1:
 			moveAlt(2, 0);
-			if (len(d.date) > 2) addstrAlt("Unfortunately, they all turn up at the same time.", gamelog);
-			else addstrAlt("Unfortunately, they turn up at the same time.", gamelog);
+			if (len(d.date) > 2) addstrAlt(CONST_date070, gamelog);
+			else addstrAlt(CONST_date071, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(3,  0, "Ruh roh...", gamelog);
+			mvaddstrAlt(3,  0, CONST_date072, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			break;
 		default:
 			mvaddstrAlt(2,  0, pool[p]->name, gamelog);
 			if (len(d.date) > 2)
-				addstr_fl(gamelog, " realizes %s has committed to eating %d meals at once.", pool[p]->heshe(), len(d.date));
+				addstr_fl(gamelog, CONST_date073.c_str(), pool[p]->heshe(), len(d.date));
 			else
 			{
-				addstrAlt(" mixes up the names of ", gamelog);
+				addstrAlt(CONST_date074, gamelog);
 				addstrAlt(d.date[0]->name, gamelog);
 				addstrAlt(AND, gamelog);
 				addstrAlt(d.date[1]->name, gamelog);
 				gamelog.newline();
 			}
-			mvaddstrAlt(3,  0, "Things go downhill fast.", gamelog);
+			mvaddstrAlt(3,  0, CONST_date075, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			break;
 		}
 		mvaddstrAlt(5,  0, pool[p]->name, gamelog);
@@ -495,14 +587,14 @@ char completedate(datest &d, int p, char &clearformess)
 		addstrAlt(pickrandom(date_fail), gamelog);
 		addjuice(*pool[p], -5, -50);
 		gamelog.nextMessage();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	for (e = len(d.date) - 1; e >= 0; e--)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Seeing ");
+		mvaddstrAlt(0,  0, CONST_date076);
 		addstrAlt(d.date[e]->name, gamelog);
 		addstrAlt(commaSpace, gamelog);
 		addstrAlt(d.date[e]->get_type_name(), gamelog);
@@ -521,33 +613,33 @@ char completedate(datest &d, int p, char &clearformess)
 		makedelimiter();
 		while (len(temp))
 		{
-			if (temp.back()->is_weapon())
+			if (temp.back()->whatIsThis() == THIS_IS_WEAPON)
 				d.date[e]->give_weapon(*(static_cast<Weapon*>(temp.back())), NULL); //casts -XML
-			else if (temp.back()->is_armor())
+			else if (temp.back()->whatIsThis() == THIS_IS_ARMOR)
 				d.date[e]->give_armor(*(static_cast<Armor*>(temp.back())), NULL);
-			else if (temp.back()->is_clip())
+			else if (temp.back()->whatIsThis() == THIS_IS_CLIP)
 				d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())), temp.back()->get_number());
 			delete_and_remove(temp, len(temp) - 1);
 		}
-		mvaddstrAlt(10,  0, "How should ");
+		mvaddstrAlt(10,  0, CONST_date077);
 		addstrAlt(pool[p]->name);
-		addstrAlt(" approach the situation?");
+		addstrAlt(CONST_date078);
 		if (ledger.get_funds() >= 100 && !pool[p]->clinic)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11,  0, "A - Spend a hundred bucks tonight to get the ball rolling.");
+		mvaddstrAlt(11,  0, CONST_date079);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12,  0, "B - Try to get through the evening without spending a penny.");
+		mvaddstrAlt(12,  0, CONST_date080);
 		if (!pool[p]->clinic&&pool[p]->blood == 100)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(13, 0);
-		if (pool[p]->blood == 100) addstrAlt("C - Spend a week on a cheap vacation (stands up any other dates).");
-		else addstrAlt("C - Spend a week on a cheap vacation (must be uninjured).");
+		if (pool[p]->blood == 100) addstrAlt(CONST_date081);
+		else addstrAlt(CONST_date082);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(14,  0, "D - Break it off.");
+		mvaddstrAlt(14,  0, CONST_date083);
 		if (d.date[e]->align == -1 && !pool[p]->clinic)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(15,  0, "E - Just kidnap the Conservative bitch.");
+			mvaddstrAlt(15,  0, CONST_date084);
 		}
 		int thingsincommon = 0;
 		for (int s = 0; s < SKILLNUM; s++)
@@ -633,17 +725,17 @@ char completedate(datest &d, int p, char &clearformess)
 				mvaddstrAlt(17,  0, pool[p]->name, gamelog);
 				if (pool[p]->get_weapon().is_ranged())
 				{
-					addstrAlt(" comes back from the bathroom toting the ", gamelog);
+					addstrAlt(CONST_date085, gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					mvaddstrAlt(18,  0, "and threatens to blow the Conservative's brains out!", gamelog);
+					mvaddstrAlt(18,  0, CONST_date086, gamelog);
 					gamelog.newline();
 					bonus = 5;
 				}
 				else if (pool[p]->is_armed())
 				{
-					addstrAlt(" grabs the Conservative from behind, holding the ", gamelog);
+					addstrAlt(CONST_date087, gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					mvaddstrAlt(18,  0, "to the corporate slave's throat!", gamelog);
+					mvaddstrAlt(18,  0, CONST_date088, gamelog);
 					gamelog.newline();
 					if (pool[p]->get_weapon().can_take_hostages())
 						bonus = 5;
@@ -651,16 +743,16 @@ char completedate(datest &d, int p, char &clearformess)
 				}                 // to kidnap them with a gavel or some shit like that
 				else
 				{
-					addstrAlt(" seizes the Conservative swine from behind and warns it", gamelog);
+					addstrAlt(CONST_date089, gamelog);
 					moveAlt(18, 0);
 					if (lawList[LAW_FREESPEECH] != -2)
-						addstrAlt("not to fuck around!", gamelog);
+						addstrAlt(CONST_date090, gamelog);
 					else
-						addstrAlt("not to [resist]!", gamelog);
+						addstrAlt(CONST_date091, gamelog);
 					gamelog.newline();
 					bonus += pool[p]->get_skill(SKILL_HANDTOHAND) - 1;
 				}
-				getkeyAlt();
+		 	pressAnyKey();
 				// Kidnap probably succeeds if the conservative isn't very dangerous,
 				// but fails 15 times as often if the conservative is tough stuff.
 				if ((!d.date[e]->kidnap_resistant() &&
@@ -671,19 +763,19 @@ char completedate(datest &d, int p, char &clearformess)
 					mvaddstrAlt(20,  0, d.date[e]->name, gamelog);
 					if (bonus)
 					{
-						addstrAlt(" doesn't resist.", gamelog);
+						addstrAlt(CONST_date092, gamelog);
 						gamelog.newline();
 					}
 					else
 					{
-						addstrAlt(" struggles and yells for help, but nobody comes.", gamelog);
+						addstrAlt(CONST_date093, gamelog);
 						gamelog.newline();
 					}
-					getkeyAlt();
+			 	pressAnyKey();
 					mvaddstrAlt(22,  0, pool[p]->name, gamelog);
-					addstrAlt(" kidnaps the Conservative!", gamelog);
+					addstrAlt(CONST_date094, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 					d.date[e]->namecreature();
 					strcpy(d.date[e]->propername, d.date[e]->name);
 					d.date[e]->location = pool[p]->location;
@@ -693,17 +785,17 @@ char completedate(datest &d, int p, char &clearformess)
 					d.date[e]->drop_weapons_and_clips(NULL);
 					Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
 					d.date[e]->give_armor(clothes, NULL);
-					//Create interrogation data
-					d.date[e]->activity.intr() = new interrogation;
+					//Create InterrogationST data
+					d.date[e]->activity.intr() = new InterrogationST;
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0,  0, "The Education of ");
+					mvaddstrAlt(0,  0, CONST_date095);
 					addstrAlt(d.date[e]->propername);
 					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(2,  0, "What name will you use for this ");
+					mvaddstrAlt(2,  0, CONST_date096);
 					addstrAlt(d.date[e]->get_type_name());
-					addstrAlt(" in its presence?");
-					mvaddstrAlt(3,  0, "If you do not enter anything, their real name will be used.");
+					addstrAlt(CONST_date097);
+					mvaddstrAlt(3,  0, CONST_date098);
 					enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 					addCreature(d.date[e]);
 					stat_kidnappings++;
@@ -717,15 +809,15 @@ char completedate(datest &d, int p, char &clearformess)
 					{
 						set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
-						addstrAlt(" manages to get away on the way back to the safehouse!", gamelog);
+						addstrAlt(CONST_date099, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						mvaddstrAlt((++y)++,  0, pool[p]->name, gamelog);
-						addstrAlt(" has failed to kidnap the Conservative.", gamelog);
+						addstrAlt(CONST_date100, gamelog);
 						gamelog.nextMessage();
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-						getkeyAlt();
+				 	pressAnyKey();
 						delete_and_remove(d.date, e);
 						break;
 					}
@@ -733,12 +825,12 @@ char completedate(datest &d, int p, char &clearformess)
 					{
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
-						addstrAlt("'s fist is the last thing ", gamelog);
+						addstrAlt(CONST_date101, gamelog);
 						addstrAlt(pool[p]->name, gamelog);
-						addstrAlt(" remembers seeing!", gamelog);
+						addstrAlt(CONST_date102, gamelog);
 						gamelog.newline();
-						getkeyAlt();
-						mvaddstrAlt((++y)++,  0, "The Liberal wakes up in the police station...", gamelog);
+				 	pressAnyKey();
+						mvaddstrAlt((++y)++,  0, CONST_date103, gamelog);
 						gamelog.nextMessage();
 						// Find the police station
 						int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location); 
@@ -750,7 +842,7 @@ char completedate(datest &d, int p, char &clearformess)
 						pool[p]->activity.type = ACTIVITY_NONE;
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-						getkeyAlt();
+				 	pressAnyKey();
 						delete_and_remove(d.date, e);
 						return 1;
 					}

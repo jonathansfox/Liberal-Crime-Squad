@@ -2,6 +2,8 @@ LAW_ABORTION
 "Conservatives make women turn to coat hangers."
 LAW_ANIMALRESEARCH
 "Richard Gere put a gerbil in his butt!"
+LAW_POLICEBEHAVIOR
+"ERROR LW02 CURRENTLY HANDLED AS EXCEPTION"
 LAW_PRIVACY
 "The government, like, knows things about you."
 LAW_DEATHPENALTY

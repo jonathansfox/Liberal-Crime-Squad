@@ -1,3 +1,13 @@
+#include "../includes.h"
+const string CONST_baseactions012 = "be a passenger.";
+const string CONST_baseactions011 = "drive it.";
+const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
+const string CONST_baseactions009 = " in Spot ";
+const string CONST_baseactions008 = "Choose squad member to replace ";
+const string CONST_baseactions007 = "Choose squad member to move";
+const string CONST_baseactions006 = "                                                                                          ";
+const string CONST_baseactions005 = "What is your new slogan?";
+const string CONST_baseactions004 = "vehicleParagraph.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -24,10 +34,12 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include "creature/creature.h"
-
-//#include "cursesgraphics.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+//#include "../cursesgraphics.h"
 #define CH_BOX_DRAWINGS_LIGHT_VERTICAL 0xb3
 #define CH_UPPER_HALF_BLOCK 0xdf
 #define CH_LOWER_HALF_BLOCK 0xdc
@@ -36,33 +48,25 @@ the bottom of includes.h in the top src folder.
 #define CH_LIGHT_SHADE 0xb0
 #define CH_MEDIUM_SHADE 0xb1
 #define CH_DARK_SHADE 0xb2
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "common/consolesupport.h"
-
-//#include "common/getnames.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../common/consolesupport.h"
+//#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
-
-//#include "common/commonactions.h"
+//#include "../common/commonactionsCreature.h"
 int squadsize(const squadst *st);
-
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for void printparty(void)
-
-
-#include <cursesAlternative.h>
-#include <cursesAlternativeConstants.h>
-#include <customMaps.h>
-#include <set_color_support.h>
-#include "locations/locationsPool.h"
-#include "common/creaturePool.h"
+#include "../cursesAlternative.h"
+#include "../cursesAlternativeConstants.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
+#include "../locations/locationsPool.h"
+#include "../common/creaturePool.h"
 extern bool multipleCityMode;
 //extern MusicClass music;
 string enter_done;
 string spaceDashSpace;
-
  extern char slogan[SLOGAN_LEN];
  extern short party_status;
  extern squadst *activesquad;
@@ -73,17 +77,13 @@ string spaceDashSpace;
  extern short lawList[LAWNUM];
  extern string singleSpace;
  extern vector<Vehicle *> vehicle;
-
-
  string chooseALiberalTo;
  string string_sleeper;
  vector<string> vehicleParagraph;
-
  const string mostlyendings = "mostlyendings\\";
  vector<file_and_text_collection> baseactions_text_file_collection = {
-	 customText(&vehicleParagraph, mostlyendings + "vehicleParagraph.txt"),
+	 customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
  };
-
 /* base - burn the flag */
 void burnflag()
 {
@@ -94,7 +94,7 @@ void burnflag()
 		{
 			switch (y)
 			{
-			case 0: flag[x][y][0] = (x % 2 ? '.' : ':'); break;
+			case 0: flag[x][y][0] = ((x % 2) ? '.' : ':'); break;
 			default: flag[x][y][0] = ':'; break;
 			case 3: flag[x][y][0] = CH_LOWER_HALF_BLOCK; break;
 			}
@@ -160,9 +160,10 @@ void burnflag()
 		while (!gotnew&&flagparts > 3)
 		{
 			x = LCSrandom(18), y = LCSrandom(7);
-			bool conf = false;
+			
 			if (flag[x][y][0] == ':' || flag[x][y][0] == '.' || flag[x][y][0] == CH_UPPER_HALF_BLOCK || flag[x][y][0] == CH_LOWER_HALF_BLOCK)
 			{
+				bool conf = false;
 				if (x > 0)
 				{
 					if (flag[x - 1][y][0] != ':'&&
@@ -208,8 +209,8 @@ extern vector<string> default_slogans;
 void getslogan()
 {
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(16, 0, "What is your new slogan?");
-	mvaddstrAlt(17, 0, "                                                                                          "); // 80 spaces
+	mvaddstrAlt(16, 0, CONST_baseactions005);
+	mvaddstrAlt(17, 0, CONST_baseactions006); // 80 spaces
 	enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).c_str());
 }
 /* base - reorder party */
@@ -222,14 +223,14 @@ void orderparty()
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 26, "Choose squad member to move");
+		mvaddstrAlt(8, 26, CONST_baseactions007);
 		int oldPos = getkeyAlt();
 		if (oldPos<'1' || oldPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		std::string str = "Choose squad member to replace ";
+		std::string str = CONST_baseactions008;
 		str += activesquad->squad[oldPos - '1']->name;
-		str += " in Spot ";
+		str += CONST_baseactions009;
 		str += (char)oldPos;
 		mvaddstrCenter(8, str);
 		int newPos = getkeyAlt();
@@ -237,7 +238,6 @@ void orderparty()
 		swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
 	}
 }
-
 /* base - assign a vehicle to this squad */
 void setvehicles()
 {
@@ -248,7 +248,7 @@ void setvehicles()
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Choosing the Right Liberal Vehicle");
+		mvaddstrAlt(0,  0, CONST_baseactions010);
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
@@ -320,7 +320,7 @@ void setvehicles()
 				if (choice)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 20, chooseALiberalTo + "drive it.");
+					mvaddstrAlt(8, 20, chooseALiberalTo + CONST_baseactions011);
 					c = getkeyAlt();
 				}
 				if (c >= '1'&&c <= '6')
@@ -357,7 +357,7 @@ void setvehicles()
 				if (choice)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 20, chooseALiberalTo + "be a passenger.");
+					mvaddstrAlt(8, 20, chooseALiberalTo + CONST_baseactions012);
 					c = getkeyAlt();
 				}
 				if (c >= '1'&&c <= '6')

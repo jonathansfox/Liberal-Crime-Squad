@@ -1,28 +1,31 @@
+#include "../includes.h"
+const string CONST_vehicle007 = "Stolen ";
 
-#include <includes.h>
-
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
+const string tag_id = "id";
+const string tag_myear = "myear";
+const string tag_location = "location";
+const string tag_color = "color";
+const string tag_vtypeid = "vtypeid";
+const string tag_vtypeidname = "vtypeidname";
+const string tag_vehicle = "vehicle";
+#include "vehicletype.h"
+#include "vehicle.h"
 //own header
-
 long Vehicle::curcarid = 0;
 extern string singleSpace;
-
 #include "common/creaturePool.h"
-
 string Vehicle::showXml() const
 {
    CMarkup xml;
-   xml.AddElem("vehicle");
+   xml.AddElem(tag_vehicle);
    xml.IntoElem();
-   xml.AddElem("vtypeidname", vtypeidname_);
-   xml.AddElem("vtypeid", tostring(vtypeid_));
-   xml.AddElem("color", color_);
-   xml.AddElem("heat", tostring(heat_));
-   xml.AddElem("location", tostring(location_));
-   xml.AddElem("myear", tostring(myear_));
-   xml.AddElem("id", tostring(id_));
+   xml.AddElem(tag_vtypeidname, vtypeidname_);
+   xml.AddElem(tag_vtypeid, tostring(vtypeid_));
+   xml.AddElem(tag_color, color_);
+   xml.AddElem(tag_heat, tostring(heat_));
+   xml.AddElem(tag_location, tostring(location_));
+   xml.AddElem(tag_myear, tostring(myear_));
+   xml.AddElem(tag_id, tostring(id_));
    return xml.GetDoc();
 }
 Vehicle::Vehicle(const std::string& inputXml)
@@ -34,13 +37,13 @@ Vehicle::Vehicle(const std::string& inputXml)
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
-      if(tag=="vtypeidname") vtypeidname_=xml.GetData();
-      else if(tag=="vtypeid") vtypeid_=atoi(xml.GetData().c_str());
-      else if(tag=="color") color_=xml.GetData();
-      else if(tag=="heat") heat_=atoi(xml.GetData().c_str());
-      else if(tag=="location") location_=atoi(xml.GetData().c_str());
-      else if(tag=="myear") myear_=atoi(xml.GetData().c_str());
-      else if(tag=="id") id_=atoi(xml.GetData().c_str());
+      if(tag==tag_vtypeidname) vtypeidname_=xml.GetData();
+      else if(tag==tag_vtypeid) vtypeid_=atoi(xml.GetData().c_str());
+      else if(tag==tag_color) color_=xml.GetData();
+      else if(tag==tag_heat) heat_=atoi(xml.GetData().c_str());
+      else if(tag==tag_location) location_=atoi(xml.GetData().c_str());
+      else if(tag==tag_myear) myear_=atoi(xml.GetData().c_str());
+      else if(tag==tag_id) id_=atoi(xml.GetData().c_str());
    }
 }
 void Vehicle::init(const VehicleType& seed, const string& color, int myear)
@@ -67,7 +70,7 @@ string Vehicle::fullname(bool halffull) const
    int words=0;
    if(heat_)
    {
-      s="Stolen ";
+      s=CONST_vehicle007;
       words++;
    }
    if(displayscolor())

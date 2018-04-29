@@ -1,2 +1,2 @@
 
-Item* getNewLoot(string newLootType, int num = 1);
+Item* getNewLoot(const string& newLootType, int num = 1);

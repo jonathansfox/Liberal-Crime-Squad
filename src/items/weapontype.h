@@ -53,10 +53,10 @@ struct attackst
 class WeaponType : public ItemType
 {
    public:
+	   virtual thisItemIs whatIsThis() const { return THIS_IS_WEAPON; }
       // Constructor to create a weapon type from xml.
       explicit WeaponType(MCD_STR xmlstring);
       ~WeaponType();
-      bool is_weapon() const { return true; }
       using ItemType::get_name;
       // Returns the name of the weapon type of given subtype, dependent on year.
       // Subtype may be 0, 1 or 2. Any other values will be the same as 0. If

@@ -1,7 +1,7 @@
 #ifndef LOCATIONS_H_INCLUDED
 #define LOCATIONS_H_INCLUDED0
 //#include "common.h"
-#include "locations/locationsEnums.h"
+#include "locationsEnums.h"
 
 
 const int SITEBLOCK_EXIT = BIT1;

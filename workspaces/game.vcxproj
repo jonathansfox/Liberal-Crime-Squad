@@ -18,7 +18,7 @@
     <ProjectGuid>{CA438C67-7A74-4797-BC09-8C866F965240}</ProjectGuid>
     <RootNamespace>game</RootNamespace>
     <ProjectName>crimesquad</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'" Label="Configuration">
@@ -31,7 +31,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -179,6 +179,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\automatedDataTests.cpp" />
     <ClCompile Include="..\src\common\creaturePool.cpp" />
     <ClCompile Include="..\src\externallyStoredText.cpp" />
     <ClCompile Include="..\src\externallyStoredData.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="..\src\common\consolesupport.h" />
     <ClInclude Include="..\src\common\creaturePool.h" />
     <ClInclude Include="..\src\common\creaturePoolCreature.h" />
+    <ClInclude Include="..\src\common\creaturePoolHeader.h" />
     <ClInclude Include="..\src\common\equipment.h" />
     <ClInclude Include="..\src\common\getnames.h" />
     <ClInclude Include="..\src\common\help.h" />
@@ -289,7 +291,6 @@
     <ClInclude Include="..\src\common\stringconversion.h" />
     <ClInclude Include="..\src\common\translateid.h" />
     <ClInclude Include="..\src\configfile.h" />
-    <ClInclude Include="..\src\constant_strings.h" />
     <ClInclude Include="..\src\creature\augmentation.h" />
     <ClInclude Include="..\src\creature\augmenttype.h" />
     <ClInclude Include="..\src\creature\creature.h" />
@@ -310,6 +311,7 @@
     <ClInclude Include="..\src\items\lootTypePoolItem.h" />
     <ClInclude Include="..\src\locations\locationsEnums.h" />
     <ClInclude Include="..\src\locations\locationsPool.h" />
+    <ClInclude Include="..\src\locations\locationsPoolHeader.h" />
     <ClInclude Include="..\src\locations\locationsPoolVehicle.h" />
     <ClInclude Include="..\src\news\news.h" />
     <ClInclude Include="..\src\politics\politics.h" />
@@ -340,7 +342,6 @@
     <ClInclude Include="..\src\items\weapontype.h" />
     <ClInclude Include="..\src\locations\locations.h" />
     <ClInclude Include="..\src\log\log.h" />
-    <ClInclude Include="..\src\monthly\lcsmonthly.h" />
     <ClInclude Include="..\src\monthly\monthly.h" />
     <ClInclude Include="..\src\pdcurses\curses.h" />
     <ClInclude Include="..\src\set_color_support.h" />

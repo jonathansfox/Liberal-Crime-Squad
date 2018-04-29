@@ -1,3 +1,170 @@
+
+#include "../includes.h"
+const string CONST_creatureD162 = "z";
+
+const string CONST_creatureC161 = "x";
+
+const string CONST_creatureB162 = "/";
+const string CONST_creatureB161 = "selves";
+const string CONST_creatureB160 = "them";
+const string CONST_creatureB159 = "her";
+const string CONST_creatureB158 = "themself";
+const string CONST_creatureB157 = "hers";
+const string CONST_creatureB154 = "heANDshe";
+const string CONST_creatureB153 = "xyr";
+const string CONST_creatureB066 = "xem";
+const string CONST_creature151 = "?";
+const string CONST_creature150 = ", Ambiguous";
+const string CONST_creature149 = ", Female";
+const string CONST_creature148 = ", Male";
+const string CONST_creature147 = "Very Old";
+const string CONST_creature146 = "80s";
+const string CONST_creature145 = "70s";
+const string CONST_creature144 = "60s";
+const string CONST_creature143 = "50s";
+const string CONST_creature142 = "40s";
+const string CONST_creature141 = "30s";
+const string CONST_creature140 = "20s";
+const string CONST_creature138 = " (";
+const string CONST_creature137 = " (?)";
+const string CONST_creature136 = "None";
+const string CONST_creature135 = " (0/";
+const string CONST_creature134 = " (1/";
+const string CONST_creature132 = "self";
+const string CONST_creature131 = "xemself";
+const string CONST_creature130 = "Xem";
+const string CONST_creature129 = "Her";
+const string CONST_creature128 = "Him";
+const string CONST_creature127 = "s";
+const string CONST_creature126 = "xyrs";
+const string CONST_creature125 = "Xyr";
+const string CONST_creature123 = "His";
+const string CONST_creature122 = "zemself";
+const string CONST_creature121 = "zurz";
+const string CONST_creature120 = "zem";
+const string CONST_creature119 = "zur";
+const string CONST_creature118 = "zee";
+const string CONST_creature117 = "xe";
+const string CONST_creature116 = "Xe";
+const string CONST_creature115 = "She";
+const string CONST_creature114 = "He";
+const string CONST_creature113 = "President ";
+const string CONST_creature112 = "CCS Heavy";
+const string CONST_creature111 = "Soldier";
+const string CONST_creature110 = "Elite Security";
+const string CONST_creature109 = "Enlightened Judge";
+const string CONST_creature108 = "New Union Worker";
+const string CONST_creature107 = "Jaded Liberal Judge";
+const string CONST_creature106 = "Ex-Union Worker";
+const string CONST_creature105 = ", IMPOSSIBLE";
+const string CONST_creature104 = ", Difficulty ";
+const string CONST_creature103 = " SkillCheck(";
+const string CONST_creature102 = ", Outcome of ";
+const string CONST_creature101 = "Adjusted Attribute Value ";
+const string CONST_creature100 = "automatic failure";
+const string CONST_creature099 = ", Skill Value ";
+const string CONST_creature098 = " SkillRoll(";
+const string CONST_creature097 = "-=ILLEGAL SKILL ROLL=-";
+const string CONST_creature094 = " AttributeCheck(";
+const string CONST_creature092 = ", Attribute Level ";
+const string CONST_creature091 = " AttributeRoll(";
+const string CONST_creature090 = "%f";
+const string CONST_creature089 = "Scruffy";
+const string CONST_creature087 = "CREATURE_WORKER_JANITOR";
+const string CONST_creature086 = "ccs_covername_other.txt";
+const string CONST_creature085 = "ccs_covername_shotgun.txt";
+const string CONST_creatureX01 = "he";
+const string CONST_creatureX02 = "she";
+const string CONST_creatureX03 = "his";
+const string CONST_creatureX04 = "her";
+const string CONST_creatureX05 = "xyr";
+const string CONST_creatureX06 = "him";
+const string CONST_creatureX07 = "xem";
+
+const string tag_value = "value";
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_NONE = "ARMOR_NONE";
+const string tag_WEAPON = "WEAPON";
+const string tag_WEAPON_NONE = "WEAPON_NONE";
+const string tag_Pres = "Pres";
+const string tag_Pres_state = "Pres_state";
+const string tag_Pres_ID = "Pres_ID";
+const string tag_CEO = "CEO";
+const string tag_CEO_state = "CEO_state";
+const string tag_CEO_ID = "CEO_ID";
+const string tag_uniquecreatures = "uniquecreatures";
+const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
+const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
+const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
+const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
+const string tag_reports_to_police = "reports_to_police";
+const string tag_kidnap_resistant = "kidnap_resistant";
+const string tag_talkreceptive = "talkreceptive";
+const string tag_seethroughstealth = "seethroughstealth";
+const string tag_seethroughdisguise = "seethroughdisguise";
+const string tag_dontname = "dontname";
+const string tag_flag = "flag";
+const string tag_pref_is_driver = "pref_is_driver";
+const string tag_pref_carid = "pref_carid";
+const string tag_is_driver = "is_driver";
+const string tag_carid = "carid";
+const string tag_arg = "arg";
+const string tag_arg2 = "arg2";
+const string tag_type = "type";
+const string tag_activity = "activity";
+const string tag_base = "base";
+const string tag_cantbluff = "cantbluff";
+const string tag_worklocation = "worklocation";
+const string tag_location = "location";
+const string tag_crimes_suspected = "crimes_suspected";
+const string tag_special = "special";
+const string tag_blood = "blood";
+const string tag_wound = "wound";
+const string tag_income = "income";
+const string tag_juice = "juice";
+const string tag_money = "money";
+const string tag_has_thrown_weapon = "has_thrown_weapon";
+const string tag_stunned = "stunned";
+const string tag_forceinc = "forceinc";
+const string tag_meetings = "meetings";
+const string tag_hireid = "hireid";
+const string tag_id = "id";
+const string tag_deathdays = "deathdays";
+const string tag_joindays = "joindays";
+const string tag_deathpenalty = "deathpenalty";
+const string tag_confessions = "confessions";
+const string tag_sentence = "sentence";
+const string tag_prisoner = "prisoner";
+const string tag_trainingsubject = "trainingsubject";
+const string tag_trainingtime = "trainingtime";
+const string tag_hiding = "hiding";
+const string tag_dating = "dating";
+const string tag_clinic = "clinic";
+const string tag_specialattack = "specialattack";
+const string tag_animalgloss = "animalgloss";
+const string tag_infiltration = "infiltration";
+const string tag_type_idname = "type_idname";
+const string tag_alive = "alive";
+const string tag_align = "align";
+const string tag_exists = "exists";
+const string tag_birthday_day = "birthday_day";
+const string tag_birthday_month = "birthday_month";
+const string tag_age = "age";
+const string tag_squadid = "squadid";
+const string tag_gender = "gender";
+const string tag_gender_liberal = "gender_liberal";
+const string tag_gender_conservative = "gender_conservative";
+const string tag_propername = "propername";
+const string tag_name = "name";
+const string tag_skill_experience = "skill_experience";
+const string tag_skill = "skill";
+const string tag_creature = "creature";
+const string tag_clip = "clip";
+const string tag_augmentation = "augmentation";
+const string tag_armor = "armor";
+const string tag_weapon = "weapon";
+const string tag_attribute = "attribute";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,62 +190,43 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "sitemode/stealth.h"
+const string blankString = "";
+#include "../creature/creature.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../sitemode/stealth.h"
 // for hasdisguise
-
-//#include "common/stringconversion.h"
+//#include "../common/stringconversion.h"
 string attribute_enum_to_string(int attribute);
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  int getweapontype(int )
-
-//#include "politics/politics.h"
+//#include "../politics/politics.h"
 /* politics -- promotes the Vice President to President, and replaces VP */
 void promoteVP();
         //only use here. --Schmel924
-
-#include "combat/chaseCreature.h"
+#include "../combat/chaseCreature.h"
 //for Vehicle* getChaseVehicle(const Creature &c);
         //hmm --Schmel924
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
 extern Log gamelog;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern char oldPresidentName[POLITICIAN_NAMELEN];
  vector<string> ccs_covername_shotgun;
  vector<string> ccs_covername_other;
-
-
  const string creature = "creature\\";
  vector<file_and_text_collection> creature_text_file_collection = {
-
-
 	 /*creature.cpp*/
-	 customText(&ccs_covername_shotgun, creature + "ccs_covername_shotgun.txt"),
-	 customText(&ccs_covername_other, creature + "ccs_covername_other.txt"),
+	 customText(&ccs_covername_shotgun, creature + CONST_creature085),
+	 customText(&ccs_covername_other, creature + CONST_creature086),
  };
-
 extern short exec[EXECNUM];
-typedef map<short, string > shortAndString;
 extern long curcreatureid;
 extern UniqueCreatures uniqueCreatures;
 extern string commaSpace;
-
 extern vector<ArmorType *> armortype;
 extern vector<WeaponType *> weapontype;
-
 Creature& Creature::operator=(const Creature& rhs)
 {
 	if (this != &rhs)
@@ -91,14 +239,12 @@ Creature& Creature::operator=(const Creature& rhs)
 	}
 	return *this;
 }
-
 int Creature::get_disguise_difficulty() {
 	return seethroughdisguise;
 }
 int	Creature::get_stealth_difficulty() {
 	return seethroughstealth;
 }
-
 void Creature::copy(const Creature& org)
 {
 	for (int i = 0; i < ATTNUM; i++)
@@ -177,7 +323,6 @@ void Creature::copy(const Creature& org)
 	iskidnap_resistant = org.iskidnap_resistant;
 	isreports_to_police = org.isreports_to_police;
 }
-
 bool Creature::kidnap_resistant() const
 {
 	return iskidnap_resistant;
@@ -310,128 +455,67 @@ void Creature::creatureinit()
 	align = pickrandom(randomAlignments);
 	infiltration = 0.0f;
 	type = CREATURE_WORKER_JANITOR;
-	type_idname = "CREATURE_WORKER_JANITOR";
+	type_idname = CONST_creature087;
 	meetings = 0;
-	strcpy(name, "Scruffy");
-	strcpy(propername, "Scruffy");
+	strcpy(name, CONST_creature089.c_str());
+	strcpy(propername, CONST_creature089.c_str());
 }
-extern string tag_type;
-
-string tag_creature;
-string tag_skill_experience;
-string tag_name;
-string tag_propername;
-string tag_gender_conservative;
-string tag_gender_liberal;
-string tag_squadid;
-string tag_age;
-string tag_birthday_month;
-string tag_birthday_day;
-string tag_exists;
-string tag_align;
-string tag_alive;
-string tag_type;
-string tag_type_idname;
-string tag_infiltration;
-string tag_animalgloss;
-string tag_specialattack;
-string tag_clinic;
-string tag_dating;
-string tag_hiding;
-string tag_trainingtime;
-string tag_trainingsubject;
-string tag_prisoner;
-string tag_sentence;
-string tag_confessions;
-string tag_deathpenalty;
-string tag_joindays;
-string tag_deathdays;
-string tag_id;
-string tag_hireid;
-string tag_meetings;
-string tag_forceinc;
-string tag_stunned;
-string tag_has_thrown_weapon;
-string tag_money;
-string tag_juice;
-string tag_income;
-string tag_wound;
-string tag_blood;
-string tag_special;
-string tag_crimes_suspected;
-string tag_heat;
-string tag_location;
-string tag_worklocation;
-string tag_cantbluff;
-string tag_base;
-string tag_activity;
-string tag_arg;
-string tag_arg2;
-string tag_carid;
-string tag_is_driver;
-string tag_pref_carid;
-string tag_pref_is_driver;
-string tag_flag;
-string tag_dontname;
 Creature::Creature(const std::string& inputXml)
 	: weapon(NULL), armor(NULL), prisoner(NULL)
 {
-	XML_and_Char_Pointer creature_XML_Chars = {
-		XML_and_Char_Pointer::value_type(tag_gender_conservative, &gender_conservative),
-		XML_and_Char_Pointer::value_type(tag_gender_liberal, &gender_liberal),
-		XML_and_Char_Pointer::value_type(tag_animalgloss, &animalgloss),
-		XML_and_Char_Pointer::value_type(tag_confessions, &confessions),
-		XML_and_Char_Pointer::value_type(tag_deathpenalty, &deathpenalty),
-		XML_and_Char_Pointer::value_type(tag_forceinc, &forceinc),
-		XML_and_Char_Pointer::value_type(tag_cantbluff, &cantbluff),
-		XML_and_Char_Pointer::value_type(tag_is_driver, &is_driver),
-		XML_and_Char_Pointer::value_type(tag_pref_is_driver, &pref_is_driver),
+	map<string, char *> creature_XML_Chars = {
+		map<string, char *>::value_type(tag_gender_conservative, &gender_conservative),
+		map<string, char *>::value_type(tag_gender_liberal, &gender_liberal),
+		map<string, char *>::value_type(tag_animalgloss, &animalgloss),
+		map<string, char *>::value_type(tag_confessions, &confessions),
+		map<string, char *>::value_type(tag_deathpenalty, &deathpenalty),
+		map<string, char *>::value_type(tag_forceinc, &forceinc),
+		map<string, char *>::value_type(tag_cantbluff, &cantbluff),
+		map<string, char *>::value_type(tag_is_driver, &is_driver),
+		map<string, char *>::value_type(tag_pref_is_driver, &pref_is_driver),
 	};
-	XML_and_Integer_Pointer creature_XML_Integers = {
-
-		XML_and_Integer_Pointer::value_type(tag_flag, &flag),
-		XML_and_Integer_Pointer::value_type("seethroughdisguise", &seethroughdisguise),
-		XML_and_Integer_Pointer::value_type("seethroughstealth", &seethroughstealth),
-		XML_and_Integer_Pointer::value_type(tag_pref_carid, &pref_carid),
-		XML_and_Integer_Pointer::value_type(tag_base, &base),
-		XML_and_Integer_Pointer::value_type(tag_carid, &carid),
-		XML_and_Integer_Pointer::value_type(tag_stunned, &stunned),
-		XML_and_Integer_Pointer::value_type(tag_money, &money),
-		XML_and_Integer_Pointer::value_type(tag_juice, &juice),
-		XML_and_Integer_Pointer::value_type(tag_income, &income),
-		XML_and_Integer_Pointer::value_type(tag_blood, &blood),
-		XML_and_Integer_Pointer::value_type(tag_heat, &heat),
-		XML_and_Integer_Pointer::value_type(tag_location, &location),
-		XML_and_Integer_Pointer::value_type(tag_worklocation, &worklocation),
-		XML_and_Integer_Pointer::value_type(tag_squadid, &squadid),
-		XML_and_Integer_Pointer::value_type(tag_age, &age),
-		XML_and_Integer_Pointer::value_type(tag_birthday_month, &birthday_month),
-		XML_and_Integer_Pointer::value_type(tag_birthday_day, &birthday_day),
-		XML_and_Integer_Pointer::value_type(tag_align, &align),
-		XML_and_Integer_Pointer::value_type(tag_type, &type),
-		XML_and_Integer_Pointer::value_type(tag_specialattack, &specialattack),
-		XML_and_Integer_Pointer::value_type(tag_clinic, &clinic),
-		XML_and_Integer_Pointer::value_type(tag_dating, &dating),
-		XML_and_Integer_Pointer::value_type(tag_hiding, &hiding),
-		XML_and_Integer_Pointer::value_type(tag_trainingtime, &trainingtime),
-		XML_and_Integer_Pointer::value_type(tag_trainingsubject, &trainingsubject),
-		XML_and_Integer_Pointer::value_type(tag_sentence, &sentence),
-		XML_and_Integer_Pointer::value_type(tag_joindays, &joindays),
-		XML_and_Integer_Pointer::value_type(tag_deathdays, &deathdays),
-		XML_and_Integer_Pointer::value_type(tag_id, &id),
-		XML_and_Integer_Pointer::value_type(tag_hireid, &hireid),
-		XML_and_Integer_Pointer::value_type(tag_meetings, &meetings),
+	map<string, int *> creature_XML_Integers = {
+		map<string, int *>::value_type(tag_flag, &flag),
+		map<string, int *>::value_type(tag_seethroughdisguise, &seethroughdisguise),
+		map<string, int *>::value_type(tag_seethroughstealth, &seethroughstealth),
+		map<string, int *>::value_type(tag_pref_carid, &pref_carid),
+		map<string, int *>::value_type(tag_base, &base),
+		map<string, int *>::value_type(tag_carid, &carid),
+		map<string, int *>::value_type(tag_stunned, &stunned),
+		map<string, int *>::value_type(tag_money, &money),
+		map<string, int *>::value_type(tag_juice, &juice),
+		map<string, int *>::value_type(tag_income, &income),
+		map<string, int *>::value_type(tag_blood, &blood),
+		map<string, int *>::value_type(tag_heat, &heat),
+		map<string, int *>::value_type(tag_location, &location),
+		map<string, int *>::value_type(tag_worklocation, &worklocation),
+		map<string, int *>::value_type(tag_squadid, &squadid),
+		map<string, int *>::value_type(tag_age, &age),
+		map<string, int *>::value_type(tag_birthday_month, &birthday_month),
+		map<string, int *>::value_type(tag_birthday_day, &birthday_day),
+		map<string, int *>::value_type(tag_align, &align),
+		map<string, int *>::value_type(tag_type, &type),
+		map<string, int *>::value_type(tag_specialattack, &specialattack),
+		map<string, int *>::value_type(tag_clinic, &clinic),
+		map<string, int *>::value_type(tag_dating, &dating),
+		map<string, int *>::value_type(tag_hiding, &hiding),
+		map<string, int *>::value_type(tag_trainingtime, &trainingtime),
+		map<string, int *>::value_type(tag_trainingsubject, &trainingsubject),
+		map<string, int *>::value_type(tag_sentence, &sentence),
+		map<string, int *>::value_type(tag_joindays, &joindays),
+		map<string, int *>::value_type(tag_deathdays, &deathdays),
+		map<string, int *>::value_type(tag_id, &id),
+		map<string, int *>::value_type(tag_hireid, &hireid),
+		map<string, int *>::value_type(tag_meetings, &meetings),
 	};
-
-	XML_and_Bool_Pointer creature_XML_Bools = {
-
-		XML_and_Bool_Pointer::value_type(tag_alive, &alive),
-		XML_and_Bool_Pointer::value_type(tag_exists, &exists),
-		XML_and_Bool_Pointer::value_type(tag_has_thrown_weapon, &has_thrown_weapon),
-		XML_and_Bool_Pointer::value_type(tag_dontname, &dontname),
-		XML_and_Bool_Pointer::value_type("talkreceptive", &istalkreceptive),
-		XML_and_Bool_Pointer::value_type("kidnap_resistant", &iskidnap_resistant),
-		XML_and_Bool_Pointer::value_type("reports_to_police", &isreports_to_police),
+	map<string, bool *> creature_XML_Bools = {
+		map<string, bool *>::value_type(tag_alive, &alive),
+		map<string, bool *>::value_type(tag_exists, &exists),
+		map<string, bool *>::value_type(tag_has_thrown_weapon, &has_thrown_weapon),
+		map<string, bool *>::value_type(tag_dontname, &dontname),
+		map<string, bool *>::value_type(tag_talkreceptive, &istalkreceptive),
+		map<string, bool *>::value_type(tag_kidnap_resistant, &iskidnap_resistant),
+		map<string, bool *>::value_type(tag_reports_to_police, &isreports_to_police),
 	};
 	CMarkup xml;
 	xml.SetDoc(inputXml);
@@ -448,25 +532,25 @@ Creature::Creature(const std::string& inputXml)
 		}else if (creature_XML_Bools.count(tag)) {
 			*creature_XML_Bools[tag] = atoi(xml.GetData().c_str());
 		}
-		else if (tag == "attribute" && attributesi < ATTNUM)
+		else if (tag == tag_attribute && attributesi < ATTNUM)
 			attributes[attributesi++] = get_XML_value(xml.GetSubDoc());
-		else if (tag == "skill" && skillsi < SKILLNUM)
+		else if (tag == tag_skill && skillsi < SKILLNUM)
 			skills[skillsi++] = get_XML_value(xml.GetSubDoc());
 		else if (tag == tag_skill_experience && skill_experiencei < SKILLNUM)
 			skill_experience[skill_experiencei++] = atoi(xml.GetData().c_str());
-		else if (tag == "weapon")
+		else if (tag == tag_weapon)
 		{
 			Weapon w(xml.GetSubDoc());
 			if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
 				give_weapon(w, NULL);
 		}
-		else if (tag == "armor")
+		else if (tag == tag_armor)
 		{
 			armor = new Armor(xml.GetSubDoc());
 			if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
 				delete_and_nullify(armor);
 		}
-		else if (tag == "augmentation")
+		else if (tag == tag_augmentation)
 			augmentations[augi++] = Augmentation(xml.GetSubDoc());
 		else if (tag == tag_name)
 			strcpy(name, xml.GetData().c_str());
@@ -482,7 +566,7 @@ Creature::Creature(const std::string& inputXml)
 			prisoner = new Creature(xml.GetSubDoc());
 			xml.OutOfElem();
 		}
-		else if (tag == "clip")
+		else if (tag == tag_clip)
 		{
 			Clip* c = new Clip(xml.GetSubDoc());
 			if (getcliptype(c->get_itemtypename()) != -1)
@@ -511,7 +595,6 @@ Creature::Creature(const std::string& inputXml)
 			special[speciali++] = atoi(xml.GetData().c_str());
 		else if (tag == tag_crimes_suspected && crimesi < LAWFLAGNUM)
 			crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
-
 	}
 }
 extern string closeParenthesis;
@@ -544,7 +627,7 @@ string Creature::showXml() const
 	xml.AddElem(tag_type, type);
 	xml.AddElem(tag_type_idname, type_idname);
 	char buf[256];
-	snprintf(buf, 255, "%f", infiltration);
+	snprintf(buf, 255, CONST_creature090.c_str(), infiltration);
 	xml.AddElem(tag_infiltration, buf);
 	xml.AddElem(tag_animalgloss, animalgloss);
 	xml.AddElem(tag_specialattack, specialattack);
@@ -602,12 +685,15 @@ string Creature::showXml() const
 	xml.AddElem(tag_pref_is_driver, pref_is_driver);
 	xml.AddElem(tag_flag, flag);
 	xml.AddElem(tag_dontname, dontname);
-	xml.AddElem("seethroughdisguise", seethroughdisguise);
-	xml.AddElem("seethroughstealth", seethroughdisguise);
-	xml.AddElem( "talkreceptive",		istalkreceptive);
-	xml.AddElem( "kidnap_resistant",		iskidnap_resistant );
-	xml.AddElem("reports_to_police", isreports_to_police);
+	xml.AddElem(tag_seethroughdisguise, seethroughdisguise);
+	xml.AddElem(tag_seethroughstealth, seethroughdisguise);
+	xml.AddElem(tag_talkreceptive,		istalkreceptive);
+	xml.AddElem(tag_kidnap_resistant,		iskidnap_resistant );
+	xml.AddElem(tag_reports_to_police, isreports_to_police);
 	return xml.GetDoc();
+}
+int Creature::get_true_attribute(int attribute) const {
+	return attributes[attribute];
 }
 int Creature::get_attribute(int attribute, bool usejuice) const
 {
@@ -780,14 +866,14 @@ int Creature::attribute_roll(int attribute) const
 {
 	int return_value = roll_check(get_attribute(attribute, true));
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, " AttributeRoll(");
+		mvaddstrAlt(8, 1, CONST_creature091);
 		addstrAlt(attribute_enum_to_string(attribute));
-		addstrAlt(", Attribute Level ");
+		addstrAlt(CONST_creature092);
 		addstrAlt(get_attribute(attribute, true));
-		addstrAlt(", Outcome of ");
+		addstrAlt(CONST_creature102);
 		addstrAlt(return_value);
 		addstrAlt(closeParenthesis);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	// Roll on the attribute value
 	return return_value;
@@ -795,16 +881,16 @@ int Creature::attribute_roll(int attribute) const
 bool Creature::attribute_check(int attribute, int difficulty) const
 {
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, " AttributeCheck(");
+		mvaddstrAlt(8, 1, CONST_creature094);
 		addstrAlt(attribute_enum_to_string(attribute));
 		if (difficulty < 21)
 		{
-			addstrAlt(", Difficulty ");
+			addstrAlt(CONST_creature104);
 			addstrAlt(difficulty);
 		}
-		else addstrAlt(", IMPOSSIBLE");
+		else addstrAlt(CONST_creature105);
 		addstrAlt(closeParenthesis);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	return(attribute_roll(attribute) >= difficulty);
 }
@@ -818,8 +904,8 @@ int Creature::skill_roll(int skill) const
 		{
 		default:
 			set_color_easy(YELLOW_ON_RED_BRIGHT);
-			addstrAlt("-=ILLEGAL SKILL ROLL=-", gamelog);
-			getkeyAlt();
+			addstrAlt(CONST_creature097, gamelog);
+	 	pressAnyKey();
 			break;
 		case PSEUDOSKILL_ESCAPEDRIVE:
 		case PSEUDOSKILL_DODGEDRIVE:
@@ -927,42 +1013,41 @@ int Creature::skill_roll(int skill) const
 	}
 	}
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, " SkillRoll(");
+		mvaddstrAlt(8, 1, CONST_creature098);
 		addstrAlt(skill_enum_to_string(skill));
-		addstrAlt(", Skill Value ");
+		addstrAlt(CONST_creature099);
 		addstrAlt(skills[skill]);
 		addstrAlt(commaSpace);
 		if (return_value == 0)
-			addstrAlt("automatic failure");
+			addstrAlt(CONST_creature100);
 		else
 		{
-			addstrAlt("Adjusted Attribute Value ");
+			addstrAlt(CONST_creature101);
 			addstrAlt(adjusted_attribute_value);
-			addstrAlt(", Outcome of ");
+			addstrAlt(CONST_creature102);
 			addstrAlt(return_value);
 		}
 		addstrAlt(closeParenthesis);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	return return_value;
 }
 bool Creature::skill_check(int skill, int difficulty) const
 {
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, " SkillCheck(");
+		mvaddstrAlt(8, 1, CONST_creature103);
 		addstrAlt(skill_enum_to_string(skill));
 		if (difficulty < 21)
 		{
-			addstrAlt(", Difficulty ");
+			addstrAlt(CONST_creature104);
 			addstrAlt(difficulty);
 		}
-		else addstrAlt(", IMPOSSIBLE");
+		else addstrAlt(CONST_creature105);
 		addstrAlt(closeParenthesis);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	return(skill_roll(skill) >= difficulty);
 }
-
 void Creature::train(int trainedskill, int experience, int upto)
 {
 	// Do we allow animals to gain skills? Right now, yes
@@ -1000,7 +1085,6 @@ void Creature::skill_up()
 			skill_experience[s] = 0;
 	}
 }
-
 /* turns a creature into a conservative */
 void conservatise(Creature &cr)
 {
@@ -1009,10 +1093,10 @@ void conservatise(Creature &cr)
 	switch (cr.type)
 	{
 	case CREATURE_WORKER_FACTORY_UNION:
-		strcpy(cr.name, "Ex-Union Worker");
+		strcpy(cr.name, CONST_creature106.c_str());
 		break;
 	case CREATURE_JUDGE_LIBERAL:
-		strcpy(cr.name, "Jaded Liberal Judge");
+		strcpy(cr.name, CONST_creature107.c_str());
 		break;
 	}
 }
@@ -1027,10 +1111,10 @@ void liberalize(Creature &cr, bool rename)
 		switch (cr.type)
 		{
 		case CREATURE_WORKER_FACTORY_NONUNION:
-			strcpy(cr.name, "New Union Worker");
+			strcpy(cr.name, CONST_creature108.c_str());
 			break;
 			//    case CREATURE_JUDGE_CONSERVATIVE:
-			//       strcpy(cr.name,"Enlightened Judge");
+			//       strcpy(cr.name,CONST_creature109.c_str());
 			//       break;
 		}
 }
@@ -1038,11 +1122,11 @@ void liberalize(Creature &cr, bool rename)
 void nameCCSMember(Creature &cr)
 {
 	if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)
-		strcpy(cr.name, "Elite Security");
+		strcpy(cr.name, CONST_creature110.c_str());
 	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)
-		strcpy(cr.name, "Soldier");
+		strcpy(cr.name, CONST_creature111.c_str());
 	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR)
-		strcpy(cr.name, "CCS Heavy");
+		strcpy(cr.name, CONST_creature112.c_str());
 	else if (cr.get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2))
 		strcpy(cr.name, pickrandom(ccs_covername_shotgun).data());
 	else
@@ -1092,7 +1176,7 @@ void UniqueCreatures::newPresident()
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
-	strcpy(Pres_.name, (((string) "President ") + pres_name.substr(pres_name.find(' ') + 1)).c_str());
+	strcpy(Pres_.name, (((string) CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)).c_str());
 	strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
 	switch (exec[EXEC_PRESIDENT])
 	{ // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
@@ -1118,38 +1202,38 @@ UniqueCreatures::UniqueCreatures(const std::string& inputXml)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == "CEO" || tag == "Pres")
+		if (tag == tag_CEO || tag == tag_Pres)
 		{
 			xml.IntoElem();
 			xml.FindElem();
-			if (tag == "CEO")
+			if (tag == tag_CEO)
 				CEO_ = Creature(xml.GetSubDoc());
 			else
 				Pres_ = Creature(xml.GetSubDoc());
 			xml.OutOfElem();
 		}
-		else if (tag == "CEO_ID")
+		else if (tag == tag_CEO_ID)
 			CEO_ID = atoi(xml.GetData().c_str());
-		else if (tag == "CEO_state")
+		else if (tag == tag_CEO_state)
 			CEO_state = atoi(xml.GetData().c_str());
-		else if (tag == "Pres_ID")
+		else if (tag == tag_Pres_ID)
 			Pres_ID = atoi(xml.GetData().c_str());
-		else if (tag == "Pres_state")
+		else if (tag == tag_Pres_state)
 			Pres_state = atoi(xml.GetData().c_str());
 	}
 }
 string UniqueCreatures::showXml() const
 {
 	CMarkup xml;
-	xml.AddElem("uniquecreatures");
+	xml.AddElem(tag_uniquecreatures);
 	xml.IntoElem();
-	xml.AddElem("CEO_ID", CEO_ID);
-	xml.AddElem("CEO_state", CEO_state);
-	xml.AddElem("CEO");
+	xml.AddElem(tag_CEO_ID, CEO_ID);
+	xml.AddElem(tag_CEO_state, CEO_state);
+	xml.AddElem(tag_CEO);
 	xml.AddChildSubDoc(CEO_.showXml());
-	xml.AddElem("Pres_ID", CEO_ID);
-	xml.AddElem("Pres_state", CEO_state);
-	xml.AddElem("Pres");
+	xml.AddElem(tag_Pres_ID, CEO_ID);
+	xml.AddElem(tag_Pres_state, CEO_state);
+	xml.AddElem(tag_Pres);
 	xml.AddChildSubDoc(Pres_.showXml());
 	return xml.GetDoc();
 }
@@ -1157,18 +1241,18 @@ const char* Creature::heshe(bool capitalize) const
 {  // subject pronoun (nominative case)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? "He" : "he";
-	case GENDER_FEMALE: return capitalize ? "She" : "she";
-	default: return capitalize ? "Xe" : "xe"; // Elite Liberal gender-neutral pronoun... it is pronounced "zee" rhyming with "heANDshe"
+	case GENDER_MALE: return capitalize ? CONST_creature114.c_str() : CONST_creatureX01.c_str();
+	case GENDER_FEMALE: return capitalize ? CONST_creature115.c_str() : CONST_creatureX02.c_str();
+	default: return capitalize ? CONST_creature116.c_str() : CONST_creature117.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature118 rhyming with CONST_creatureB154
 											  // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
 											  // or http://en.wiktionary.org/wiki/xe or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
 											  // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-											  // full conjugation of "xe"/"xyr"/"xem" (the "x"es are pronounced like "z"s):
-											  // subject prononoun (nominative case):          xe      (pronounced "zee" rhyming with "heANDshe")
-											  // pronominal adjective (possessive determiner): xyr     (pronounced "zur" rhyming with "her")
-											  // object pronoun (oblique case);                xem     (pronounced "zem" rhyming with "them")
-											  // possessive pronoun:                           xyrs    (pronounced "zurz" rhyming with "hers")
-											  // reflexive pronoun:                            xemself (pronounced "zemself" rhyming with "themself")
+											  // full conjugation of CONST_creature117/CONST_creatureB153/CONST_creatureB066 (the CONST_creatureC161es are pronounced like CONST_creatureD162s):
+											  // subject prononoun (nominative case):          xe      (pronounced CONST_creature118 rhyming with CONST_creatureB154)
+											  // pronominal adjective (possessive determiner): xyr     (pronounced CONST_creature119 rhyming with CONST_creatureB159)
+											  // object pronoun (oblique case);                xem     (pronounced CONST_creature120 rhyming with CONST_creatureB160)
+											  // possessive pronoun:                           xyrs    (pronounced CONST_creature121 rhyming with CONST_creatureB157)
+											  // reflexive pronoun:                            xemself (pronounced CONST_creature122 rhyming with CONST_creatureB158)
 											  // public schools in Vancouver, British Columbia in Canada officially use these pronouns:
 											  // http://news.nationalpost.com/2014/06/17/vancouver-school-boards-genderless-pronouns-not-likely-to-stick-if-history-is-any-indication/
 	}
@@ -1177,28 +1261,28 @@ const char* Creature::hisher(bool capitalize) const
 {  // pronominal adjective (possessive determiner)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? "His" : "his";
-	case GENDER_FEMALE: return capitalize ? "Her" : "her";
-	default: return capitalize ? "Xyr" : "xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
+	case GENDER_MALE: return capitalize ? CONST_creature123.c_str() : CONST_creatureX03.c_str();
+	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
+	default: return capitalize ? CONST_creature125.c_str() : CONST_creatureX05.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature119 rhyming with CONST_creatureB159
 												// see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
 												// or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
 												// or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-												// the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so "xyrs" is correct):
-												// his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end if it doesn't already have an "s" at the end
+												// the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so CONST_creature126 is correct):
+												// his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add CONST_creature127 at the end if it doesn't already have an CONST_creature127 at the end
 	}
 }
 const char* Creature::himher(bool capitalize) const
 {  // object pronoun (oblique case)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? "Him" : "him";
-	case GENDER_FEMALE: return capitalize ? "Her" : "her";
-	default: return capitalize ? "Xem" : "xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
+	case GENDER_MALE: return capitalize ? CONST_creature128.c_str() : CONST_creatureX06.c_str();
+	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
+	default: return capitalize ? CONST_creature130.c_str() : CONST_creatureX07.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature120 rhyming with CONST_creatureB160
 												// see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
 												// or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
 												// or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-												// the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so "xemself" is correct):
-												// him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add "self" unless plural in which case add "selves"
+												// the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so CONST_creature131 is correct):
+												// him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add CONST_creature132 unless plural in which case add CONST_creatureB161
 												// some people mistakenly use xyrself instead of xemself but this is wrong as it doesn't follow the pattern used by ALL standard third-person pronouns,
 												// instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
 	}
@@ -1274,7 +1358,7 @@ int Creature::count_clips() const
 }
 bool Creature::take_clips(Item& clip, int number)
 {
-	if (clip.is_clip())
+	if (clip.whatIsThis() == THIS_IS_CLIP)
 		return take_clips(static_cast<Clip&>(clip), number); //cast -XML
 	else return false;
 }
@@ -1433,19 +1517,18 @@ string Creature::get_weapon_string(int subtype) const
 	{
 		r = weapon->get_name(subtype);
 		if (weapon->uses_ammo())
-			r += " (" + tostring(weapon->get_ammoamount()) + "/" + tostring(count_clips()) + closeParenthesis;
+			r += CONST_creature138 + tostring(weapon->get_ammoamount()) + CONST_creatureB162 + tostring(count_clips()) + closeParenthesis;
 		else if (weapon->is_throwable())
-			r += " (1/" + tostring(count_weapons() - 1) + closeParenthesis; // -1 so not to count weapon in hands.
+			r += CONST_creature134 + tostring(count_weapons() - 1) + closeParenthesis; // -1 so not to count weapon in hands.
 	}
 	else if (len(extra_throwing_weapons))
 	{
 		r = extra_throwing_weapons[0]->get_name(subtype);
-		r += " (0/" + tostring(count_weapons()) + closeParenthesis;
+		r += CONST_creature135 + tostring(count_weapons()) + closeParenthesis;
 	}
-	else r = "None";
+	else r = CONST_creature136;
 	return r;
 }
-
 int get_XML_value(const std::string& inputXml) {
 	int value;
 	CMarkup xml;
@@ -1455,11 +1538,10 @@ int get_XML_value(const std::string& inputXml) {
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == "value")
+		if (tag == tag_value)
 			value = min(atoi(xml.GetData().data()), MAXATTRIBUTE);
 	}
 	return value;
-
 }
 // Add an age estimate to a person's name
 void add_age(Creature& person)
@@ -1467,11 +1549,11 @@ void add_age(Creature& person)
 	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
 	if (person.animalgloss != ANIMALGLOSS_NONE)
 	{
-		addstrAlt(" (?)");
+		addstrAlt(CONST_creature137);
 		return;
 	}
 	// For humans, estimate their age and gender
-	addstrAlt(" (");
+	addstrAlt(CONST_creature138);
 	// Almost precise estimates of child and teen ages
 	if (person.age<20)
 	{
@@ -1479,38 +1561,38 @@ void add_age(Creature& person)
 		// time a character is queried. I'm using the day of the
 		// month the character was born on to determine this.
 		addstrAlt(person.age + person.birthday_day % 3 - 1);
-		addstrAlt("?");
+		addstrAlt(CONST_creature151);
 	}
 	// More rough estimates of everyone else
 	else
 	{
 		if (person.age<30)
-			addstrAlt("20s");
+			addstrAlt(CONST_creature140);
 		else if (person.age<40)
-			addstrAlt("30s");
+			addstrAlt(CONST_creature141);
 		else if (person.age<50)
-			addstrAlt("40s");
+			addstrAlt(CONST_creature142);
 		else if (person.age<60)
-			addstrAlt("50s");
+			addstrAlt(CONST_creature143);
 		else if (person.age<70)
-			addstrAlt("60s");
+			addstrAlt(CONST_creature144);
 		else if (person.age<80)
-			addstrAlt("70s");
+			addstrAlt(CONST_creature145);
 		else if (person.age<90)
-			addstrAlt("80s");
+			addstrAlt(CONST_creature146);
 		else
-			addstrAlt("Very Old");
+			addstrAlt(CONST_creature147);
 	}
 	// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
 	if (person.gender_liberal == GENDER_MALE)
-		addstrAlt(", Male");
+		addstrAlt(CONST_creature148);
 	else if (person.gender_liberal == GENDER_FEMALE)
-		addstrAlt(", Female");
+		addstrAlt(CONST_creature149);
 	else
-		addstrAlt(", Ambiguous");
+		addstrAlt(CONST_creature150);
 	// Note if there's some conflict with Conservative society's perceptions
 	if (person.gender_liberal != person.gender_conservative && person.gender_liberal != GENDER_NEUTRAL)
-		addstrAlt("?");
+		addstrAlt(CONST_creature151);
 	addstrAlt(closeParenthesis);
 }
 /* rolls up a proper name for a creature */

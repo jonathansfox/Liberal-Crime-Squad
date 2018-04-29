@@ -1,3 +1,7 @@
+#include "../includes.h"
+const string CONST_log001 = "last message";
+
+const string blankString = "";
 /*
     log.cpp
     Ciprian Ilies
@@ -17,11 +21,9 @@ This file is part of Liberal Crime Squad.
     along with Liberal Crime Squad; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
-#include <includes.h>
-#include "creature/creatureEnums.h"
-#include "log/log.h"
+#include "../creature/creatureEnums.h"
+#include "../log/log.h"
 //own header
-
 //Constructor.
 Log::Log()
 {
@@ -30,9 +32,9 @@ Log::Log()
    //(some compiler in windows) murdered me if I didn't do this. And I want to live.
    //Besides, it's good practice to always explicitly initialize a variable.
    //You never know what a compiler's going to initialize something as :)
-   filename="";
+   filename=blankString;
    newline_mode=NEWLINEMODE_LOGFILES_DEFAULT; //Set this to whatever the default has been defined as.
-   buffer=""; //Same situation as with filename.
+   buffer=blankString; //Same situation as with filename.
    logged_since_last_message=false; //Well, this starts out false for obvious reasons.
 }
 //The initialization function.
@@ -59,7 +61,7 @@ bool Log::initialize(const string& _filename, bool overwrite_existing, int _newl
 //This is the actual logging function.
 bool Log::log(const string& text)
 {
-   if(text=="") //Check if no text given.
+   if(text==blankString) //Check if no text given.
    {
       //No text given. No reason to continue.
       //Also, it acts as a guard to the len(text) < 2 function.
@@ -107,11 +109,11 @@ bool Log::log(const string& text)
 void Log::nextMessage()
 {  //This check makes sure the log is formatted correctly even when there is
    //nothing in the buffer (a result of using newline());
-   if(buffer=="") for(int i=0;i<newline_mode;i++)
+   if(buffer==blankString) for(int i=0;i<newline_mode;i++)
       buffer+="\n"; //Add as many newlines as the game calls for.
    log(buffer); //Write out the current text.
-   buffer=""; //Clear the buffer.
-   logged_since_last_message=false; //Reset this, since this is the "last message".
+   buffer=blankString; //Clear the buffer.
+   logged_since_last_message=false; //Reset this, since this is the CONST_log001.
 }
 void Log::newline()
 {

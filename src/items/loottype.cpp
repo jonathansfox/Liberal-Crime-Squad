@@ -1,13 +1,19 @@
+#include "../includes.h"
+const string CONST_loottype009 = "::cloth: ";
+const string CONST_loottype008 = "Invalid boolean value for loot type ";
+const string CONST_loottype007 = "::no_quick_fencing: ";
+const string CONST_loottype005 = "::stackable: ";
 
-#include <includes.h>
-#include "creature/creatureEnums.h"
-#include "items/itemtype.h"
-#include "items/loottype.h"
+const string tag_cloth = "cloth";
+const string tag_no = "no";
+const string tag_no_quick_fencing = "no_quick_fencing";
+const string tag_stackable = "stackable";
+#include "../creature/creatureEnums.h"
+#include "../items/itemtype.h"
+#include "../items/loottype.h"
 //own header
-
-#include "common/stringconversion.h"
+#include "../common/stringconversion.h"
 //for stringtobool
-
 LootType::LootType(MCD_STR xmlstring)
  : ItemType(xmlstring), stackable_(true),
    no_quick_fencing_(false), cloth_(false)
@@ -19,7 +25,7 @@ LootType::LootType(MCD_STR xmlstring)
    while(xml.FindElem()) //Loop over all the elements inside the loottype element.
    {
       std::string element = xml.GetTagName();
-      if (element == "stackable")
+      if (element == tag_stackable)
       {
          int b = stringtobool(xml.GetData());
          if (b == 1)
@@ -27,10 +33,10 @@ LootType::LootType(MCD_STR xmlstring)
          else if (b == 0)
             stackable_ = false;
          /*else
-            errorlog << "Invalid boolean value for loot type " << idname
-                      << "::stackable: " << xml.GetData() << std::endl;*/
+            errorlog << CONST_loottype008 << idname
+                      << CONST_loottype005 << xml.GetData() << std::endl;*/
       }
-      else if (element == "no_quick_fencing")
+      else if (element == tag_no_quick_fencing)
       {
          int b = stringtobool(xml.GetData());
          if (b == 1)
@@ -38,10 +44,10 @@ LootType::LootType(MCD_STR xmlstring)
          else if (b == 0)
             no_quick_fencing_ = false;
          /*else
-            errorlog << "Invalid boolean value for loot type " << idname
-                      << "::no_quick_fencing: " << xml.GetData() << std::endl;*/
+            errorlog << CONST_loottype008 << idname
+                      << CONST_loottype007 << xml.GetData() << std::endl;*/
       }
-      else if (element == "cloth")
+      else if (element == tag_cloth)
       {
          int b = stringtobool(xml.GetData());
          if (b == 1)
@@ -49,8 +55,8 @@ LootType::LootType(MCD_STR xmlstring)
          else if (b == 0)
             cloth_ = false;
          /*else
-            errorlog << "Invalid boolean value for loot type " << idname
-                      << "::cloth: " << xml.GetData() << std::endl;*/
+            errorlog << CONST_loottype008 << idname
+                      << CONST_loottype009 << xml.GetData() << std::endl;*/
       }
    }
 }

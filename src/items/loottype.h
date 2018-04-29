@@ -3,8 +3,8 @@
 class LootType : public ItemType
 {
    public:
+	   virtual thisItemIs whatIsThis() const { return THIS_IS_LOOT; }
       explicit LootType(MCD_STR xmlstring);
-      bool is_loot() const { return true; }
       // Returns if the loot type should be stacked or not.
       bool is_stackable() const { return stackable_; }
       // Returns if the loot should be skipped when quick fencing all loot.

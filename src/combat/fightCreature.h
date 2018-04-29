@@ -1,7 +1,7 @@
 
 
 /* generates the loot dropped by a creature when it dies */
-void makeloot(Creature &cr, vector<Item *> &loot);
+void makeloot(Creature &cr);
 /* abandoned liberal is captured by conservatives */
 void capturecreature(Creature &t);
 /* checks if the creature can fight and prints flavor text if they can't */
@@ -13,10 +13,8 @@ void adddeathmessage(Creature &cr);
 void specialattack(Creature &a, Creature &t);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll, Creature &a);
-/* adjusts attack damage based on armor, other factors */
-void damagemod(Creature &t, const char &damtype, int &damamount, const char hitlocation, const char armorpenetration, int mod, const int extraarmor);
 /* destroys armor, masks, drops weapons based on severe damage */
-void severloot(Creature &cr, vector<Item *> &loot);
+void severloot(Creature &cr);
 /* damages the selected armor if it covers the body part specified */
 void armordamage(Armor &armor, int bp, int damamount);
 /* blood explosions */

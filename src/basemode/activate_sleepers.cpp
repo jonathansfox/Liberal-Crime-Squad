@@ -1,3 +1,32 @@
+#include "../includes.h"
+const string CONST_activate_sleepers031 = " T to sort people.";
+const string CONST_activate_sleepers030 = "Press a Letter to Assign an Activity.";
+const string CONST_activate_sleepers029 = "Effectiveness: ";
+const string CONST_activate_sleepers028 = "ACTIVITY";
+const string CONST_activate_sleepers027 = "SITE";
+const string CONST_activate_sleepers026 = "JOB";
+const string CONST_activate_sleepers025 = "CODE NAME";
+const string CONST_activate_sleepers024 = "Activate Sleeper Agents";
+const string CONST_activate_sleepers023 = " will steal equipment and send it to the Shelter.";
+const string CONST_activate_sleepers022 = " will embezzle money for the LCS.";
+const string CONST_activate_sleepers021 = " will snoop around for secrets and enemy plans.";
+const string CONST_activate_sleepers020 = " will try to recruit additional sleeper agents.";
+const string CONST_activate_sleepers019 = " will build support for Liberal causes.";
+const string CONST_activate_sleepers018 = " will stay out of trouble.";
+const string CONST_activate_sleepers017 = "3 - Steal Equipment";
+const string CONST_activate_sleepers016 = "2 - Embezzle Funds";
+const string CONST_activate_sleepers015 = "1 - Uncover Secrets";
+const string CONST_activate_sleepers014 = "3 - [Need More Juice to Recruit]";
+const string CONST_activate_sleepers013 = "3 - [Enlightened Can't Recruit]";
+const string CONST_activate_sleepers012 = "3 - Expand Sleeper Network";
+const string CONST_activate_sleepers011 = "2 - Advocate Liberalism";
+const string CONST_activate_sleepers010 = "1 - Lay Low";
+const string CONST_activate_sleepers009 = "Enter - Confirm Selection";
+const string CONST_activate_sleepers008 = "C - Join the Active LCS";
+const string CONST_activate_sleepers007 = "B - Espionage";
+const string CONST_activate_sleepers006 = "A - Communication and Advocacy";
+const string CONST_activate_sleepers005 = " focus on?";
+const string CONST_activate_sleepers004 = "Taking Undercover Action:   What will ";
 /*
 This file is part of Liberal Crime Squad.                                           //
                                                                                     //
@@ -16,31 +45,28 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-#include <includes.h>
-#include "creature/creature.h"
-
-//#include "common/commonactions.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+//#include "../common/commonactions.h"
 void sorting_prompt(short listforsorting);
-#include "common/commonactionsCreature.h"
+#include "../common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
-
-//#include "common/consolesupport.h"
+//#include "../common/consolesupport.h"
 // for void set_color(short,short,bool)
-
-#include "common/commondisplay.h"
-//#include "common/commondisplayCreature.h"
+#include "../common/commondisplay.h"
+//#include "../common/commondisplayCreature.h"
 void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
-
-//#include "common/getnames.h"
-string getactivity(activityst &act);
-
-
-#include <cursesAlternative.h>
-#include <cursesAlternativeConstants.h>
-#include <set_color_support.h>
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
-#include "common/creaturePoolCreature.h"
+//#include "../common/getnames.h"
+string getactivity(ActivityST &act);
+#include "../cursesAlternative.h"
+#include "../cursesAlternativeConstants.h"
+#include "../set_color_support.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
+#include "../common/creaturePoolCreature.h"
 extern MusicClass music;
 extern string spaceDashSpace;
 extern string percentSign;
@@ -55,46 +81,46 @@ void activate_sleeper(Creature *cr)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, "Taking Undercover Action:   What will ");
+		mvaddstrAlt(0, 0, CONST_activate_sleepers004);
 		addstrAlt(cr->name);
-		addstrAlt(" focus on?");
+		addstrAlt(CONST_activate_sleepers005);
 		printcreatureinfo(cr);
 		makedelimiter();
 		set_color_easy(state == 'a' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(10, 1, "A - Communication and Advocacy");
+		mvaddstrAlt(10, 1, CONST_activate_sleepers006);
 		set_color_easy(state == 'b' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(11, 1, "B - Espionage");
+		mvaddstrAlt(11, 1, CONST_activate_sleepers007);
 		set_color_easy(state == 'c' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(12, 1, "C - Join the Active LCS");
+		mvaddstrAlt(12, 1, CONST_activate_sleepers008);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(20, 40, "Enter - Confirm Selection");
+		mvaddstrAlt(20, 40, CONST_activate_sleepers009);
 		switch (state)
 		{
 		case 'a':
 			set_color_easy(cr->activity.type == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, "1 - Lay Low");
+			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
 			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(11, 40, "2 - Advocate Liberalism");
+			mvaddstrAlt(11, 40, CONST_activate_sleepers011);
 			if (subordinatesleft(*cr))
 			{
 				set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-				mvaddstrAlt(12, 40, "3 - Expand Sleeper Network");
+				mvaddstrAlt(12, 40, CONST_activate_sleepers012);
 			}
 			else
 			{
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				if (cr->flag & CREATUREFLAG_BRAINWASHED)
-					mvaddstrAlt(12, 40, "3 - [Enlightened Can't Recruit]");
-				else mvaddstrAlt(12, 40, "3 - [Need More Juice to Recruit]");
+					mvaddstrAlt(12, 40, CONST_activate_sleepers013);
+				else mvaddstrAlt(12, 40, CONST_activate_sleepers014);
 			}
 			break;
 		case 'b':
 			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, "1 - Uncover Secrets");
+			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
 			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(11, 40, "2 - Embezzle Funds");
+			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
 			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(12, 40, "3 - Steal Equipment");
+			mvaddstrAlt(12, 40, CONST_activate_sleepers017);
 			break;
 		}
 		set_color_easy(WHITE_ON_BLACK);
@@ -102,30 +128,30 @@ void activate_sleeper(Creature *cr)
 		{
 		case ACTIVITY_NONE:
 			mvaddstrAlt(22, 3, cr->name);
-			addstrAlt(" will stay out of trouble.");
+			addstrAlt(CONST_activate_sleepers018);
 			break;
 		case ACTIVITY_SLEEPER_LIBERAL:
 			mvaddstrAlt(22, 3, cr->name);
-			addstrAlt(" will build support for Liberal causes.");
+			addstrAlt(CONST_activate_sleepers019);
 			break;
 		case ACTIVITY_SLEEPER_RECRUIT:
 			if (subordinatesleft(*cr))
 			{
 				mvaddstrAlt(22, 3, cr->name);
-				addstrAlt(" will try to recruit additional sleeper agents.");
+				addstrAlt(CONST_activate_sleepers020);
 			}
 			break;
 		case ACTIVITY_SLEEPER_SPY:
 			mvaddstrAlt(22, 3, cr->name);
-			addstrAlt(" will snoop around for secrets and enemy plans.");
+			addstrAlt(CONST_activate_sleepers021);
 			break;
 		case ACTIVITY_SLEEPER_EMBEZZLE:
 			mvaddstrAlt(22, 3, cr->name);
-			addstrAlt(" will embezzle money for the LCS.");
+			addstrAlt(CONST_activate_sleepers022);
 			break;
 		case ACTIVITY_SLEEPER_STEAL:
 			mvaddstrAlt(22, 3, cr->name);
-			addstrAlt(" will steal equipment and send it to the Shelter.");
+			addstrAlt(CONST_activate_sleepers023);
 			break;
 		}
 		int c = getkeyAlt();
@@ -159,7 +185,7 @@ void activate_sleeper(Creature *cr)
 		}
 		if (state == 'c')
 		{
-			//activityst oact=cr->activity;
+			//ActivityST oact=cr->activity;
 			cr->activity.type = ACTIVITY_SLEEPER_JOINLCS;
 		}
 		if (c == 'x')
@@ -171,8 +197,6 @@ void activate_sleeper(Creature *cr)
 			if (c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
 }
-
-
 /* base - activate sleepers */
 void activate_sleepers()
 {
@@ -187,12 +211,12 @@ void activate_sleepers()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0,  0, "Activate Sleeper Agents");
+		mvaddstrAlt(0,  0, CONST_activate_sleepers024);
 		makedelimiter(1);
-		mvaddstrAlt(1,  4, "CODE NAME");
-		mvaddstrAlt(1,  25, "JOB");
-		mvaddstrAlt(1,  42, "SITE");
-		mvaddstrAlt(1,  57, "ACTIVITY");
+		mvaddstrAlt(1,  4, CONST_activate_sleepers025);
+		mvaddstrAlt(1,  25, CONST_activate_sleepers026);
+		mvaddstrAlt(1,  42, CONST_activate_sleepers027);
+		mvaddstrAlt(1,  57, CONST_activate_sleepers028);
 		int y = 2;
 		for (int p = page * 9; p < len(temppool) && p < page * 9 + 9; p++, y += 2)
 		{
@@ -200,7 +224,7 @@ void activate_sleepers()
 			mvaddcharAlt(y, 0, (y - 2) / 2 + 'A'); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
 			mvaddstrAlt(y,  25, temppool[p]->get_type_name());
-			mvaddstrAlt(y + 1,  6, "Effectiveness: ");
+			mvaddstrAlt(y + 1,  6, CONST_activate_sleepers029);
 			if (temppool[p]->infiltration > 0.8f)
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.6f)
@@ -221,8 +245,8 @@ void activate_sleepers()
 			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22,  0, "Press a Letter to Assign an Activity.");
-		mvaddstrAlt(23, 0, 		addpagestr() + " T to sort people.");
+		mvaddstrAlt(22,  0, CONST_activate_sleepers030);
+		mvaddstrAlt(23, 0, 		addpagestr() + CONST_activate_sleepers031);
 		set_color_easy(WHITE_ON_BLACK);
 		int c = getkeyAlt();
 		//PAGE UP

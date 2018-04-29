@@ -24,36 +24,43 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include "creature/creature.h"
+#include "../includes.h"
 
-#include "sitemode/sitedisplay.h"
+const string blankString = "";
+const string tag_value = "value";
 
-#include "log/log.h"
+const string tag_attribute = "attribute";
+
+
+const string tag_skill = "skill";
+
+#include "../creature/creature.h"
+
+#include "sitedisplay.h"
+
+#include "../log/log.h"
 
 //#include "common/commondisplay.h"
 void printparty();
 
-#include "common/commonactions.h"
+#include "../common/commonactions.h"
 // for void criminalizeparty(short crime)
 
-#include "combat/fight.h"
-#include "combat/fightCreature.h"  
-//for void makeloot(Creature &cr,vector<Item *> &loot);
+#include "../combat/fight.h"
+#include "../combat/fightCreature.h"  
 
 //#include "combat/haulkidnap.h"
 void squadgrab_immobile(char dead);
 //#include "combat/haulkidnapCreature.h"
 void freehostage(Creature &cr, char situation);
 
-#include <cursesAlternative.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
 
-#include "locations/locationsPool.h"
-#include "common/creaturePool.h"
+#include "../locations/locationsPool.h"
+#include "../common/creaturePool.h"
 
 extern squadst *activesquad;
-extern vector<Item *> groundloot;
 extern int sitecrime;
 extern newsstoryst *sitestory;
 extern short cursite;
@@ -68,7 +75,7 @@ extern short siteonfire;
 extern short lawList[LAWNUM];
 
 extern Log gamelog;
-extern vector<Location *> location;
+void addLocationChange(int cursite, sitechangest change);
 extern short mode;
 extern short postalarmtimer;
 extern int stat_dead;
@@ -97,7 +104,7 @@ void advancecreature(Creature &cr)
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 	}
 	int bleed = 0, topmedicalskill = 0;
@@ -126,7 +133,7 @@ void advancecreature(Creature &cr)
 				gamelog.newline();
 				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
 				cr.wound[w] ^= WOUND_BLEEDING;
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 			else bleed++;
 		}
@@ -161,8 +168,8 @@ void advancecreature(Creature &cr)
 			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite)) location[cursite]->siege.kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
 				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 				{
 					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
@@ -177,7 +184,7 @@ void advancecreature(Creature &cr)
 				//<-- people dying in fire? probably your fault for starting it
 			}
 			adddeathmessage(cr);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (cr.prisoner != NULL) freehostage(cr, 1);
 		}
 		else
@@ -186,7 +193,7 @@ void advancecreature(Creature &cr)
 			mvaddstrAlt(16, 1, cr.name, gamelog);
 			addstrAlt(isBurned, gamelog);
 			gamelog.newline(); //Next message?
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 	}
 	if (bleed > 0)
@@ -205,8 +212,8 @@ void advancecreature(Creature &cr)
 			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite))location[cursite]->siege.kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK)location[cursite]->siege.tanks--;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite))LocationsPool::getInstance().addSiegeKill(cursite);
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK)LocationsPool::getInstance().removeTank(cursite);
 				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 				{
 					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
@@ -221,7 +228,7 @@ void advancecreature(Creature &cr)
 				//^-- might not die from squad attacking
 			}
 			adddeathmessage(cr);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (cr.prisoner != NULL) freehostage(cr, 1);
 		}
 	}
@@ -250,8 +257,8 @@ void creatureadvance()
 					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(sBody, gamelog);
 					gamelog.newline();
-					makeloot(*activesquad->squad[p]->prisoner, groundloot);
-					getkeyAlt();
+					makeloot(*activesquad->squad[p]->prisoner);
+			 	pressAnyKey();
 					sitecrime += 10;
 					sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 					//criminalizeparty(LAWFLAG_MURDER);
@@ -305,7 +312,7 @@ void creatureadvance()
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
 				else printencounter();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 		}
 		for (int z = 0; z < MAPZ; z++)
@@ -390,7 +397,7 @@ void creatureadvance()
 						if (!LCSrandom(5))
 						{
 							sitechangest change(x, y, z, SITEBLOCK_DEBRIS);
-							location[cursite]->changes.push_back(change);
+							addLocationChange(cursite, change);
 							levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
 							levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
 							levelmap[x][y][z].flag &= ~SITEBLOCK_FIRE_START;

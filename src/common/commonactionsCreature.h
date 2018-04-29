@@ -1,4 +1,9 @@
 
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const squadst *st);
+/* tells how many members a squad has who are alive */
+int squadalive(const squadst *st);
+
 /* common - tests if the person is a wanted criminal */
 bool iscriminal(Creature &cr);
 /* common - sends somebody to the hospital */

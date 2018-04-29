@@ -1,3 +1,4 @@
+
 /* common - test for possible game over */
 char endcheck(char cause = END_OTHER);
 /* common - applies a crime to everyone in the active party */
@@ -22,7 +23,7 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
 /* common - Display a list of options and return choice. */
 int choiceprompt(const string &firstline, const string &secondline,
 	const vector<string> &option, const string &optiontypename,
-	bool allowexitwochoice, const string &exitstring = "");
+	bool allowexitwochoice, const string &exitstring = blankString);
 /* common - Displays a list of things to buy and returns an int corresponding
 to the index of the chosen thing in the nameprice vector. */
 int buyprompt(const string &firstline, const string &secondline,
@@ -33,9 +34,3 @@ int buyprompt(const string &firstline, const string &secondline,
 void locatesquad(squadst *st, long loc);
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st, long loc);
-
-
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const squadst *st);
-/* tells how many members a squad has who are alive */
-int squadalive(const squadst *st);

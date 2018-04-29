@@ -1,3 +1,43 @@
+
+#include "../includes.h"
+const string CONST_getnamesB037 = "C++ Source Code Editor (with encoding)";
+const string CONST_getnames045 = "getMonth.txt";
+const string CONST_getnames044 = "city_names.txt";
+const string CONST_getnames043 = "Software Bugs";
+const string CONST_getnames042 = "Buggy Software";
+const string CONST_getnames041 = "bugs";
+const string CONST_getnames040 = "Elite Liberal";
+const string CONST_getnames039 = "Liberal Guardian";
+const string CONST_getnames038 = "Urban Commando";
+const string CONST_getnames037 = "Revolutionary";
+const string CONST_getnames036 = "Socialist Threat";
+const string CONST_getnames035 = "Activist";
+const string CONST_getnames034 = "Civilian";
+const string CONST_getnames033 = "Punk";
+const string CONST_getnames032 = "Society's Dregs";
+const string CONST_getnames031 = "Damn Worthless";
+const string CONST_getnames030 = "[Darn] Worthless";
+const string CONST_getnames029 = "Peace Prize Winner";
+const string CONST_getnames028 = "Peacemaker";
+const string CONST_getnames027 = "Great Person";
+const string CONST_getnames026 = "Upstanding Citizen";
+const string CONST_getnames025 = "Respected";
+const string CONST_getnames024 = "Hard Working";
+const string CONST_getnames023 = "Non-Liberal";
+const string CONST_getnames022 = "Non-Liberal Punk";
+const string CONST_getnames018 = "Evil Incarnate";
+const string CONST_getnames017 = "Arch-Conservative";
+const string CONST_getnames016 = "Insane Vigilante";
+const string CONST_getnames015 = "Heartless Bastard";
+const string CONST_getnames014 = "Heartless [Jerk]";
+const string CONST_getnames013 = "Stubborn as Hell";
+const string CONST_getnames012 = "Stubborn as [Heck]";
+const string CONST_getnames011 = "Wrong-Thinker";
+const string CONST_getnames010 = "Mindless Conservative";
+const string CONST_getnames009 = "Conservative Punk";
+const string CONST_getnames008 = "Conservative Dregs";
+const string CONST_getnames001 = "OEM United States - Codepage 437";
+const string CONST_getnames000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -38,8 +78,8 @@ the bottom of includes.h in the top src folder.
 // when it opens the file and it can't be changed after that; what we changed was
 // how it detects encoding for files it opens in the future, not files already open).
 // In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select "Open With...", choose "C++ Source Code Editor (with encoding)",
-// then choose "OEM United States - Codepage 437".
+// select CONST_getnames000, choose CONST_getnamesB037,
+// then choose CONST_getnames001.
 // In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
 // the codepage will be correct already since it's running in a console window just
 // like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
@@ -51,13 +91,14 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
  vector<string> city_names;
-
  extern short lawList[LAWNUM];
 std::string gettitle(Creature &cr)
 {
@@ -65,64 +106,63 @@ std::string gettitle(Creature &cr)
 	{
 		if (cr.juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return "[Darn] Worthless";
-			else return "Damn Worthless";
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
+			else return CONST_getnames031;
 		}
-		else if (cr.juice <= -10) return "Conservative Dregs";
-		else if (cr.juice < 0) return "Conservative Punk";
-		else if (cr.juice < 10) return "Mindless Conservative";
-		else if (cr.juice < 50) return "Wrong-Thinker";
+		else if (cr.juice <= -10) return CONST_getnames008;
+		else if (cr.juice < 0) return CONST_getnames009;
+		else if (cr.juice < 10) return CONST_getnames010;
+		else if (cr.juice < 50) return CONST_getnames011;
 		else if (cr.juice < 100)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return "Stubborn as [Heck]";
-			else return "Stubborn as Hell";
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames012;
+			else return CONST_getnames013;
 		}
 		else if (cr.juice < 200)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return "Heartless [Jerk]";
-			else return "Heartless Bastard";
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames014;
+			else return CONST_getnames015;
 		}
-		else if (cr.juice < 500) return "Insane Vigilante";
-		else if (cr.juice < 1000) return "Arch-Conservative";
-		else return "Evil Incarnate";
+		else if (cr.juice < 500) return CONST_getnames016;
+		else if (cr.juice < 1000) return CONST_getnames017;
+		else return CONST_getnames018;
 	}
 	else if (cr.align == 0)
 	{
 		if (cr.juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return "[Darn] Worthless";
-			else return "Damn Worthless";
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
+			else return CONST_getnames031;
 		}
-		else if (cr.juice <= -10) return "Society's Dregs";
-		else if (cr.juice < 0) return "Non-Liberal Punk";
-		else if (cr.juice < 10) return "Non-Liberal";
-		else if (cr.juice < 50) return "Hard Working";
-		else if (cr.juice < 100) return "Respected";
-		else if (cr.juice < 200) return "Upstanding Citizen";
-		else if (cr.juice < 500) return "Great Person";
-		else if (cr.juice < 1000) return "Peacemaker";
-		else return "Peace Prize Winner";
+		else if (cr.juice <= -10) return CONST_getnames032;
+		else if (cr.juice < 0) return CONST_getnames022;
+		else if (cr.juice < 10) return CONST_getnames023;
+		else if (cr.juice < 50) return CONST_getnames024;
+		else if (cr.juice < 100) return CONST_getnames025;
+		else if (cr.juice < 200) return CONST_getnames026;
+		else if (cr.juice < 500) return CONST_getnames027;
+		else if (cr.juice < 1000) return CONST_getnames028;
+		else return CONST_getnames029;
 	}
 	else
 	{
 		if (cr.juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return "[Darn] Worthless";
-			else return "Damn Worthless";
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
+			else return CONST_getnames031;
 		}
-		else if (cr.juice <= -10) return "Society's Dregs";
-		else if (cr.juice < 0) return "Punk";
-		else if (cr.juice < 10) return "Civilian";
-		else if (cr.juice < 50) return "Activist";
-		else if (cr.juice < 100) return "Socialist Threat";
-		else if (cr.juice < 200) return "Revolutionary";
-		else if (cr.juice < 500) return "Urban Commando";
-		else if (cr.juice < 1000) return "Liberal Guardian";
-		else return "Elite Liberal";
+		else if (cr.juice <= -10) return CONST_getnames032;
+		else if (cr.juice < 0) return CONST_getnames033;
+		else if (cr.juice < 10) return CONST_getnames034;
+		else if (cr.juice < 50) return CONST_getnames035;
+		else if (cr.juice < 100) return CONST_getnames036;
+		else if (cr.juice < 200) return CONST_getnames037;
+		else if (cr.juice < 500) return CONST_getnames038;
+		else if (cr.juice < 1000) return CONST_getnames039;
+		else return CONST_getnames040;
 	}
 }
-typedef map<short, vector<string>> shortAndTwoStrings;
- shortAndTwoStrings getViewString;
+ map<short, vector<string> > getViewString;
 std::string getview(short view, bool shortname)
 {
 	if (shortname)
@@ -131,7 +171,7 @@ std::string getview(short view, bool shortname)
 			return getViewString[view][0];
 		}
 		else
-			return "bugs";
+			return CONST_getnames041;
 	}
 	else
 	{
@@ -139,27 +179,25 @@ std::string getview(short view, bool shortname)
 			return getViewString[view][1];
 		}
 		else
-			return "Buggy Software";
+			return CONST_getnames042;
 	}
 }
-typedef map<short, string > shortAndString;
- shortAndString getLawString;
+ map<short, string> getLawString;
 std::string getlaw(int l)
 {
 	if (getLawString.count(l)) {
 		return getLawString[l];
 	}
 	else {
-		return "Software Bugs";
+		return CONST_getnames043;
 	}
 }
 std::string cityname()
 {
 	return pickrandom(city_names);
 }
- shortAndString getLawFlagString;
-typedef map<short, shortAndString > shortAndShortAndString;
- shortAndShortAndString getLawFlagStringFull;
+ map<short, string> getLawFlagString;
+ map<short, map<short, string> > getLawFlagStringFull;
 int getLawFromFlag(int type);
  string findingBugs;
 std::string getlawflag(int type)
@@ -187,16 +225,14 @@ std::string getmonth(int month, bool shortname)
 		return getMonth[22 + (shortname ? 0 : 1)];
 	}
 }
-
 const string names = "names\\";
 const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> get_names_text_file_collection = {
-
 	/*getnames.cpp*/
-	customText(&city_names, names + "city_names.txt"),
-	customText(&getMonth, mostlyendings + "getMonth.txt"),
+	customText(&city_names, names + CONST_getnames044),
+	customText(&getMonth, mostlyendings + CONST_getnames045),
 };
- shortAndString getAlignString;
+ map<short, string> getAlignString;
  string moderateLC;
  string buggyString;
 std::string getalign(short alignment, bool capitalize)

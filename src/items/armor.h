@@ -4,10 +4,10 @@ class Armor : public Item
 {
    public:
       explicit Armor(const ArmorType& seed, int quality = 1, int number = 1);
+	  virtual thisItemIs whatIsThis() const { return THIS_IS_ARMOR; }
       virtual Armor* clone() const { return new Armor(*this); }
       explicit Armor(const std::string& inputXml);
       string showXml() const;
-      virtual bool is_armor() const { return true; }
       virtual string equip_title() const;
       string equip_title(bool full) const;
       virtual Armor* split(int number);
@@ -45,9 +45,9 @@ class Armor : public Item
       bool conceals_weaponsize(int weaponsize) const;
       int get_durability() const;
       /*const vector<string>& get_appropriate_weapons() const
-         { return armortype[getarmortype(itemtypename())]->get_appropriate_weapons(); }
+         { return armortype[getarmortype(get_itemtypename())]->get_appropriate_weapons(); }
       const string& get_appropriate_weapon(int index) const
-         { return armortype[getarmortype(itemtypename())]->get_appropriate_weapon(index); }*/
+         { return armortype[getarmortype(get_itemtypename())]->get_appropriate_weapon(index); }*/
       //For masks:
       bool is_mask() const;
       bool is_surprise_mask() const; //Should perhaps be decided by the shop and not the mask. -XML

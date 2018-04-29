@@ -1,3 +1,68 @@
+
+#include "../includes.h"
+const string tag_CLIP = "CLIP";
+
+const string tag_CLIP_ASSAULT = "CLIP_ASSAULT";
+
+const string tag_WEAPON = "WEAPON";
+
+const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
+
+const string tag_SPORTS_CAR = "SPORTS_CAR";
+
+const string tag_ASSAULT_RIFLE = "ASSAULT_RIFLE";
+
+const string tag_RECRUITS_GANG = "RECRUITS_GANG";
+
+const string tag_JUICE = "JUICE";
+
+const string tag_ARMOR = "ARMOR";
+
+const string tag_B = "B";
+
+const string tag_BASE = "BASE";
+
+const string tag_CREATURE = "CREATURE";
+
+const string tag_HASMAPS = "HASMAPS";
+
+const string tag_GAY = "GAY";
+
+const string tag_D = "D";
+
+const string tag_DATING_LAWYER = "DATING_LAWYER";
+
+const string tag_MONEY = "MONEY";
+
+const string tag_YEAR = "YEAR";
+
+const string tag_Y = "Y";
+
+const string tag_DAY = "DAY";
+
+const string tag_MONTH = "MONTH";
+
+const string tag_BIRTHDAY_ = "BIRTHDAY_";
+
+const string tag_STARTING_ = "STARTING_";
+
+const string tag_ATTRIBUTE_ = "ATTRIBUTE_";
+
+const string tag_SKILL_ = "SKILL_";
+
+const string blankString = "";
+
+const string tag__2 = "_2";
+
+const string tag_QUESTION = "QUESTION";
+
+const string tag_ANSWER = "ANSWER";
+
+const string tag_HEADER = "HEADER";
+
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,51 +88,54 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+const string tag_value = "value";
 
-#include <includes.h>
-#include "creature/creature.h"
+const string tag_attribute = "attribute";
 
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
 
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
+const string tag_skill = "skill";
 
-#include "common/consolesupport.h"
+#include "../creature/creature.h"
+
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+
+#include "../common/consolesupport.h"
 // for getkey
 
-#include "log/log.h"
+#include "../log/log.h"
 
-#include "common/stringconversion.h"
+#include "../common/stringconversion.h"
 //for string attribute_enum_to_string(int)
 
-#include "common/getnames.h"
+#include "../common/getnames.h"
 // for cityname
 
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  getarmortype
 
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
 
-#include "common/creaturePoolCreature.h"
+#include "../common/creaturePoolCreature.h"
 
 extern Log gamelog;
 extern bool multipleCityMode;
-#include "common/musicClass.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern int year;
 extern char endgamestate;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern string tag_ARMOR;
 
 
 string theLCS;
 string notASkill;
 string notAnAttribute;
 
-string vehicleSportsCar;
+Vehicle* newSportsCar();
 
 string aNewConEra;
 string theYearIs;
@@ -115,7 +183,7 @@ string letFateDecide;
 string pressDtoToggle;
 string city;
 string pressEtoRelocate;
-string pressAnyKey;
+string pressAnyKeyString;
 string allOptions;
 
 string unSelected;
@@ -161,28 +229,24 @@ extern int month;
 extern class Ledger ledger;
 extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
-extern vector<Vehicle *> vehicle;
+void newVehicle(Vehicle *startcar);
 extern string singleDot;
 extern long cursquadid;
-extern vector<squadst *> squad;
-extern squadst *activesquad;
 extern UniqueCreatures uniqueCreatures;
 extern short attitude[VIEWNUM];
 vector<string> founderQuestions;
 
-#include <customMaps.h>
+#include "../customMaps.h"
 vector<file_and_text_collection> newgame_file_collection = {
 	/*newgame.cpp*/
 	customText(&founderQuestions, "newgame\\founderQuestions.txt"),
 };
-typedef map<string, short> stringAndShort;
-typedef map<short, string > shortAndString;
-stringAndShort getSkillEnumFromString;
-shortAndString enumToCreature;
-stringAndShort getBaseEnumFromString;
-stringAndShort getSpecialWoundEnumFromString;
+map<string, short> getSkillEnumFromString;
+map<short, string> enumToCreature;
+map<string, short> getBaseEnumFromString;
+map<string, short> getSpecialWoundEnumFromString;
 
-bool getSetValue(const string s) {
+bool getSetValue(const string& s) {
 	int j = -1;
 	for (int i = 0; i < s.size(); i++) {
 		if (s[i] == ' ') {
@@ -192,7 +256,7 @@ bool getSetValue(const string s) {
 	}
 	return j > -1 && (s[j] == '-' || s[j] == '+');
 }
-int getMagnitudeFromString(const string s) {
+int getMagnitudeFromString(const string& s) {
 	bool spaceUnfound = true;
 	int j = 0;
 	for (int i = s.size() - 2; i > 0 && spaceUnfound; i--) {
@@ -205,14 +269,13 @@ int getMagnitudeFromString(const string s) {
 		clearAlt();
 		mvaddstrAlt(0,  0, error);
 		mvaddstrAlt(1,  0, s);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	return atoi(s.substr(j).data());
 }
 // IsaacG Brute force substring matching
 // suboptimal, but very very easy to code.
-short findSubstring(stringAndShort str, string s);
-short findSubstring(stringAndShort str, string s) {
+short findSubstring(map<string, short> str, const string& s) {
 	for (int i = strlen(s.data()); i >= 0; i--) {
 		for (int j = 0; j <= strlen(s.data() - i); j++) {
 			if (str.count(s.substr(j, i))) {
@@ -222,7 +285,7 @@ short findSubstring(stringAndShort str, string s) {
 	}
 	return -1;
 }
-int getSkillFromString(const string s) {
+int getSkillFromString(const string& s) {
 	int output = findSubstring(getSkillEnumFromString, s);
 	if (output >= 0) {
 		return output;
@@ -231,12 +294,12 @@ int getSkillFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notASkill);
-		getkeyAlt();
+ 	pressAnyKey();
 		return -1;
 	}
 }
- stringAndShort getAttributeEnumFromString;
-int getAttributeFromString(const string s) {
+ map<string, short> getAttributeEnumFromString;
+int getAttributeFromString(const string& s) {
 	int output = findSubstring(getAttributeEnumFromString, s);
 	if (output >= 0) {
 		return output;
@@ -245,12 +308,12 @@ int getAttributeFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notAnAttribute);
-		getkeyAlt();
+ 	pressAnyKey();
 		return -1;
 	}
 }
- stringAndShort getCreatureEnumFromString;
-int getCreatureFromString(const string s) {
+ map<string, short> getCreatureEnumFromString;
+int getCreatureFromString(const string& s) {
 	int output = findSubstring(getCreatureEnumFromString, s);
 	if (output >= 0) {
 		return output;
@@ -260,7 +323,7 @@ int getCreatureFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notCreature);
-		getkeyAlt();
+ 	pressAnyKey();
 		return -1;
 	}
 }
@@ -272,7 +335,7 @@ string enumToCreatureString(const int i) {
 		return blankString;
 	}
 }
-int getBaseFromString(const string s) {
+int getBaseFromString(const string& s) {
 	const string baseString = s.substr(5);
 	int output = findSubstring(getBaseEnumFromString, baseString);
 	if (output >= 0) {
@@ -282,11 +345,11 @@ int getBaseFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notValidMap);
-		getkeyAlt();
+ 	pressAnyKey();
 		return -1;
 	}
 }
-int getSpecialWoundFromString(const string s) {
+int getSpecialWoundFromString(const string& s) {
 	int output = findSubstring(getSpecialWoundEnumFromString, s);
 	if (output >= 0) {
 		return output;
@@ -295,7 +358,7 @@ int getSpecialWoundFromString(const string s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notSpecialWound);
-		getkeyAlt();
+ 	pressAnyKey();
 		return -1;
 	}
 }
@@ -535,11 +598,7 @@ void setup_newgame()
 		break;
 	}
 }
-enum recruits
-{
-	RECRUITS_GANG,
-	RECRUITS_NONE
-};
+
 enum Stat_Or_Attribute {
 	SKILL,
 	ATTRIBUTE,
@@ -584,7 +643,7 @@ struct Question {
 	vector<Choice> choices;
 };
 const int MAX_CHOICES = 10;
-#include "locations/locationsPoolVehicle.h"
+#include "../locations/locationsPoolVehicle.h"
 /* creates your founder */
 void makecharacter()
 {
@@ -699,7 +758,7 @@ void makecharacter()
 			mvaddstrAlt(15,  30, pressEtoRelocate);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19 - multipleCityMode * 2,  4, pressAnyKey);
+		mvaddstrAlt(19 - multipleCityMode * 2,  4, pressAnyKeyString);
 		const int c = getkeyAlt();
 		if (c == 'a')
 		{
@@ -748,6 +807,7 @@ void makecharacter()
 	bool makelawyer = false;
 	bool gaylawyer = false;
 	Vehicle * startcar = NULL;
+#include "../recruits.h"
 	char recruits = RECRUITS_NONE;
 	char base = SITE_RESIDENTIAL_SHELTER;
 	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
@@ -966,14 +1026,14 @@ void makecharacter()
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-				getkeyAlt();
+		 	pressAnyKey();
 				clearAlt();
 			}
 			if (invalidTag) {
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-				getkeyAlt();
+		 	pressAnyKey();
 				clearAlt();
 			}
 			else {
@@ -1027,7 +1087,7 @@ void makecharacter()
 			string currentOption = spaceDashSpace;
 			mvaddstrAlt(5 + 2 * offset, 0, allOptions.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
 			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		else {
 			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
@@ -1169,9 +1229,10 @@ void makecharacter()
 		newcr->take_clips(newc, 9);
 	}
 	if (sports_car) {
-		startcar = new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
+		startcar = newSportsCar();
 		startcar->add_heat(10);
-		vehicle.push_back(startcar);
+		newVehicle(startcar);
+		
 		newcr->pref_carid = startcar->id();
 	}
 	eraseAlt();
@@ -1215,7 +1276,7 @@ void makecharacter()
 	gamelog.nextMessage();
 	mvaddstrAlt(19,  2, inThisDarkTime, gamelog);
 	gamelog.nextMessage();
-	getkeyAlt();
+ 	pressAnyKey();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0,  0, whatIsYourName);

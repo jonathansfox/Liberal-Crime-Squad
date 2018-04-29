@@ -6,5 +6,5 @@ public:
 	int lenpool();
 	const string getIdName(int i);
 	void delete_and_clear_pool();
-	const string getName(string str);
+	const string getName(const string& str);
 };

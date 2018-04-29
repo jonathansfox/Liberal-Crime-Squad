@@ -1,3 +1,256 @@
+
+#include "../includes.h"
+const string CONST_siegeB254 = "HIRING UNDOCUMENTED WORKERS";
+const string CONST_siegeB253 = "FLAG BURNING";
+const string CONST_siegeB252 = "You are wanted for hiring an undocumented worker";
+const string CONST_siegeB247 = "C++ Source Code Editor (with encoding)";
+const string CONST_siege274 = "Press C to Continue Liberally.";
+const string CONST_siege273 = "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD";
+const string CONST_siege272 = "revolution to attend to?";
+const string CONST_siege271 = "The CCS has been completely destroyed.  Now wasn't there a ";
+const string CONST_siege270 = "the last of the enemy's morale and confidence is shattered.";
+const string CONST_siege269 = "With its Founder killed in the heart of their own base, ";
+const string CONST_siege268 = "slips away.  ";
+const string CONST_siege267 = "The CCS Founder lying dead at their feet, the squad ";
+const string CONST_siege266 = "it is increasingly clear that this was the CCS's last safehouse.";
+const string CONST_siege265 = "As your Liberals pick through the remains of the safehouse, ";
+const string CONST_siege264 = "their final victory.  ";
+const string CONST_siege263 = "Gunfire still ringing in their ears, the squad revels in ";
+const string CONST_siege262 = "this will make a fine base for future Liberal operations.";
+const string CONST_siege261 = "power has been severely weakened.  Once the safehouse cools off, ";
+const string CONST_siege260 = "The CCS Founder wasn't here, but for now, their ";
+const string CONST_siege258 = "The CCS Lieutenant lying dead at their feet, the squad ";
+const string CONST_siege257 = "their victory.  ";
+const string CONST_siege255 = "* * * * *   VICTORY   * * * * *";
+const string CONST_siege254 = " Defense";
+const string CONST_siege253 = "Your Liberals confront the Conservatives within the safehouse.";
+const string CONST_siege252 = "Press any key to Confront the Conservative Aggressors";
+const string CONST_siege251 = "Your traps will harass the enemy, but not the Squad.";
+const string CONST_siege250 = "Your security cameras let you see units on the (M)ap.";
+const string CONST_siege249 = "UNDER ATTACK: ESCAPE OR ENGAGE";
+const string CONST_siege248 = "You have been defeated.";
+const string CONST_siege247 = "give up";
+const string CONST_siege245 = "Your Liberals sally forth to confront the siege.";
+const string CONST_siege243 = "UNDER SIEGE: ESCAPE OR ENGAGE";
+const string CONST_siege242 = "The siege is broken!";
+const string CONST_siege241 = "You're free!";
+const string CONST_siege240 = "C - Reflect on your Conservative judgment.";
+const string CONST_siege239 = "G - Surrender";
+const string CONST_siege238 = "F - Fight!";
+const string CONST_siege237 = "E - Equip";
+const string CONST_siege236 = "D - Escape";
+const string CONST_siege234 = "this filth until the Liberal Agenda is realized.";
+const string CONST_siege233 = "Unfortunately, you will never truly be safe from ";
+const string CONST_siege232 = "The Conservative automatons have been driven back.  ";
+const string CONST_siege231 = "abandoning this safe house for a safer location.";
+const string CONST_siege230 = "the time being.  While they are regrouping, you might consider ";
+const string CONST_siege229 = "The Conservative automatons have been driven back ÄÄ for ";
+const string CONST_siege227 = "Your Liberals split up and lay low for a few days.";
+const string CONST_siege226 = "Press any key to split up and lay low for a few days";
+const string CONST_siege225 = "You have escaped!";
+const string CONST_siege224 = "'s words.";
+const string CONST_siege223 = "Virtually everyone in America was moved by ";
+const string CONST_siege222 = " later went on to win a Pulitzer for it.";
+const string CONST_siege221 = "Even the Cable News and AM Radio spend days talking about it.";
+const string CONST_siege220 = "The discussion was exciting and dynamic.";
+const string CONST_siege219 = " represents the LCS well.";
+const string CONST_siege218 = "'s verbal finesse leaves something to be desired.";
+const string CONST_siege217 = " stutters nervously the whole time.";
+const string CONST_siege216 = "But ";
+const string CONST_siege215 = " falls asleep.";
+const string CONST_siege214 = "But the interview is so boring that ";
+const string CONST_siege213 = "Retarded";
+const string CONST_siege212 = "Dumb";
+const string CONST_siege211 = "and later used the material for a Broadway play called";
+const string CONST_siege210 = " canceled the interview halfway through";
+const string CONST_siege209 = "The interview is wide-ranging, covering a variety of topics.";
+const string CONST_siege208 = " decides to give an interview.";
+const string CONST_siege207 = "got into the compound somehow!";
+const string CONST_siege206 = " from the ";
+const string CONST_siege205 = "Elitist ";
+const string CONST_siege204 = "The tank moves forward to your compound entrance.";
+const string CONST_siege203 = "Army engineers have removed your tank traps.";
+const string CONST_siege202 = "Fortunately, no one is hurt.";
+const string CONST_siege201 = " narrowly avoided death!";
+const string CONST_siege200 = " was killed in the bombing!";
+const string CONST_siege199 = "The lights fade and all is dark.";
+const string CONST_siege198 = "The generator has been destroyed!";
+const string CONST_siege197 = "There's nothing left but smoking wreckage...";
+const string CONST_siege196 = "The anti-aircraft gun takes a direct hit!";
+const string CONST_siege195 = "Explosions rock the compound!";
+const string CONST_siege194 = "A skilled pilot gets through!";
+const string CONST_siege193 = "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!";
+const string CONST_siege192 = "Hit! One of the bombers slams into to the ground.";
+const string CONST_siege191 = "You didn't shoot any down, but you've made them think twice!";
+const string CONST_siege190 = "The thunder of the anti-aircraft gun shakes the compound!";
+const string CONST_siege189 = "You hear planes streak overhead!";
+const string CONST_siege188 = "!";
+const string CONST_siege187 = "A sniper nearly hits ";
+const string CONST_siege185 = "A sniper takes out ";
+const string CONST_siege184 = "The police have cut the lights!";
+const string CONST_siege183 = "The cops are coming!";
+const string CONST_siege182 = " has starved to death.";
+const string CONST_siege181 = "Your Liberals are starving!";
+const string CONST_siege180 = "A day passes while under siege...";
+const string CONST_siege179 = " has been rescued.";
+const string CONST_siege178 = "'s corpse has been recovered.";
+const string CONST_siege177 = ", an unoccupied safehouse.";
+const string CONST_siege176 = "Conservatives have raided the ";
+const string CONST_siege175 = "Materials relating to the business front have been destroyed.";
+const string CONST_siege174 = "The printing press is dismantled and burned.";
+const string CONST_siege170 = "The Firemen have raided the ";
+const string CONST_siege169 = "Come quietly and you will not be harmed.";
+const string CONST_siege168 = "Unacceptable Speech has occurred at this location.";
+const string CONST_siege167 = "Surrender yourselves!";
+const string CONST_siege166 = "You hear a screeching voice over the sound of fire engine sirens:";
+const string CONST_siege165 = "Armored firemen swarm out, pilot lights burning.";
+const string CONST_siege163 = "Screaming fire engines pull up to the ";
+const string CONST_siege162 = "the Firemen are planning to burn ";
+const string CONST_siege161 = "Word in the underground is that ";
+const string CONST_siege160 = "A sleeper Fireman has informed you that ";
+const string CONST_siege158 = "are storming the ";
+const string CONST_siege157 = "Masses dissatisfied with your lack of respect for Cable News ";
+const string CONST_siege154 = "Masses dissatisfied with your lack of respect for AM Radio ";
+const string CONST_siege153 = "They've shut off the lights!";
+const string CONST_siege152 = "to shut off the lights!";
+const string CONST_siege151 = "Through some form of high technology, they've managed ";
+const string CONST_siege150 = "to shut off the lights and the cameras!";
+const string CONST_siege147 = "Unmarked black vans are surrounding the ";
+const string CONST_siege146 = "to launch an attack on ";
+const string CONST_siege145 = "A sleeper agent has reported that the CIA is planning ";
+const string CONST_siege144 = "CCS members pour out of the truck and shoot in the front doors!";
+const string CONST_siege143 = "INJURED: ";
+const string CONST_siege142 = "KILLED: ";
+const string CONST_siege141 = "CCS CAR BOMBING CASUALTY REPORT";
+const string CONST_siege140 = "The truck plows into the building and explodes!";
+const string CONST_siege138 = "A screeching truck pulls up to ";
+const string CONST_siege137 = " is gearing up to attack ";
+const string CONST_siege136 = "You have received a sleeper warning that the CCS ";
+const string CONST_siege134 = "Corporate mercenaries are raiding the ";
+const string CONST_siege133 = "the LCS";
+const string CONST_siege132 = "are hiring mercenaries to attack ";
+const string CONST_siege131 = " that the Corporations ";
+const string CONST_siege130 = "an anonymous tip";
+const string CONST_siege129 = "your sleeper CEO's warning";
+const string CONST_siege128 = "You have received ";
+const string CONST_siege124 = "The cops have raided the ";
+const string CONST_siege123 = "You are wanted for blahblah and other crimes.";
+const string CONST_siege122 = "You hear jet bombers streak overhead.";
+const string CONST_siege121 = "An M1 Abrams Tank takes up position outside the compound.";
+const string CONST_siege120 = "An M1 Abrams Tank is stopped by the tank traps.";
+const string CONST_siege119 = "National Guard troops are replacing normal SWAT units.";
+const string CONST_siege117 = "The police have surrounded the ";
+const string CONST_siege116 = "Press Esc to ponder the situation...";
+const string CONST_siege115 = "attack will be carried out by SEAL Team 6.";
+const string CONST_siege114 = "Planes will bomb the compound during the siege, and the final ";
+const string CONST_siege113 = "A tank will cover the entrance to the compound.";
+const string CONST_siege112 = "The fighting force will be composed of national guard troops.";
+const string CONST_siege111 = "an imminent police raid on ";
+const string CONST_siege110 = "You have received advance warning from your sleepers regarding ";
+const string CONST_siege109 = "LOITERING";
+const string CONST_siege108 = "PUBLIC NUDITY";
+const string CONST_siege107 = "DISTURBING THE PEACE";
+const string CONST_siege106 = "RESISTING ARREST";
+const string CONST_siege105 = "VANDALISM";
+const string CONST_siege104 = "BREAKING AND ENTERING";
+const string CONST_siege103 = "UNLAWFUL BURIAL";
+const string CONST_siege102 = "HACKING";
+const string CONST_siege101 = "ELECTRONIC SABOTAGE";
+const string CONST_siege100 = "CARRYING ILLEGAL WEAPONS";
+const string CONST_siege099 = "FIRING ILLEGAL WEAPONS";
+const string CONST_siege098 = "HIRING ILLEGAL ALIENS";
+const string CONST_siege097 = "PROSTITUTION";
+const string CONST_siege096 = "THEFT";
+const string CONST_siege095 = "CREDIT CARD FRAUD";
+const string CONST_siege094 = "GRAND THEFT AUTO";
+const string CONST_siege093 = "ASSAULT";
+const string CONST_siege092 = "ARMED ASSAULT";
+const string CONST_siege091 = "EXTORTION";
+const string CONST_siege090 = "RACKETEERING";
+const string CONST_siege089 = "JURY TAMPERING";
+const string CONST_siege088 = "RELEASING PRISONERS";
+const string CONST_siege087 = "ESCAPING PRISON";
+const string CONST_siege086 = "DRUG DEALING";
+const string CONST_siege085 = "HARMFUL SPEECH";
+const string CONST_siege084 = "FLAG MURDER";
+const string CONST_siege083 = "ARSON";
+const string CONST_siege082 = "BANK ROBBERY";
+const string CONST_siege081 = "KIDNAPPING";
+const string CONST_siege080 = "MURDER";
+const string CONST_siege079 = "TERRORISM";
+const string CONST_siege078 = "TREASON";
+const string CONST_siege077 = "REHABILITATION";
+const string CONST_siege076 = "WANTED FOR ";
+const string CONST_siege075 = " and other crimes";
+const string CONST_siege074 = "You are wanted for harboring a fugitive from justice";
+const string CONST_siege073 = "You are wanted for loitering";
+const string CONST_siege072 = "You are wanted for indecent exposure";
+const string CONST_siege071 = "You are wanted for disturbing the peace";
+const string CONST_siege070 = "You are wanted for resisting arrest";
+const string CONST_siege069 = "You are wanted for vandalism";
+const string CONST_siege068 = "You are wanted for breaking and entering";
+const string CONST_siege067 = "You are wanted for unlawful burial";
+const string CONST_siege066 = "You are wanted for unlawful access of an information system";
+const string CONST_siege065 = "You are wanted for interference with interstate commerce";
+const string CONST_siege064 = "You are wanted for possession of an illegal weapon";
+const string CONST_siege063 = "You are wanted for firing an illegal weapon";
+const string CONST_siege062 = "You are wanted for hiring an illegal alien";
+const string CONST_siege061 = "You are wanted for prostitution";
+const string CONST_siege060 = "You are wanted for petty larceny";
+const string CONST_siege059 = "You are wanted for credit card fraud";
+const string CONST_siege058 = "You are wanted for grand theft auto";
+const string CONST_siege057 = "You are wanted for misdemeanor assault";
+const string CONST_siege056 = "You are wanted for assault with a deadly weapon";
+const string CONST_siege055 = "You are wanted for extortion";
+const string CONST_siege054 = "You are wanted for racketeering";
+const string CONST_siege053 = "You are wanted for jury tampering";
+const string CONST_siege052 = "You are wanted for aiding a prison escape";
+const string CONST_siege051 = "You are wanted for escaping prison";
+const string CONST_siege050 = "You are wanted for sale and distribution of a controlled substance";
+const string CONST_siege049 = "You are wanted for sedition";
+const string CONST_siege048 = "You are wanted for flag burning";
+const string CONST_siege047 = "You are wanted for felony flag burning";
+const string CONST_siege046 = "You are wanted for Flag Murder";
+const string CONST_siege045 = "You are wanted for arson";
+const string CONST_siege044 = "You are wanted for bank robbery";
+const string CONST_siege043 = "You are wanted for kidnapping";
+const string CONST_siege042 = "You are wanted for first degree murder";
+const string CONST_siege041 = "You are wanted for terrorism";
+const string CONST_siege040 = "You are wanted for treason";
+const string CONST_siege039 = " unharmed!";
+const string CONST_siege038 = " and the others";
+const string CONST_siege037 = "Release ";
+const string CONST_siege035 = "In the name of God, your campaign of terror ends here!";
+const string CONST_siege034 = "You hear a blaring voice on a loudspeaker:";
+const string CONST_siege033 = "You hear shouts:";
+const string CONST_siege032 = "you are wanted for _______ and other crimes...";
+const string CONST_siege031 = " is slain.";
+const string CONST_siege030 = "Everyone in the ";
+const string CONST_siege029 = "Materials relating to the business front have been taken.";
+const string CONST_siege028 = "The compound is dismantled.";
+const string CONST_siege026 = "Law enforcement has confiscated $%d in LCS funds.";
+const string CONST_siege025 = "Fortunately, your funds remain intact.";
+const string CONST_siege024 = " Liberals are taken to the police station.";
+const string CONST_siege023 = "is taken to the police station.";
+const string CONST_siege022 = ",";
+const string CONST_siege021 = ", aka ";
+const string CONST_siege020 = "The kidnap victims are rehabilitated and freed.";
+const string CONST_siege019 = " is rehabilitated and freed.";
+const string CONST_siege018 = " confiscate everything, including Squad weapons.";
+const string CONST_siege017 = "The firemen";
+const string CONST_siege016 = "The soldiers";
+const string CONST_siege015 = "The police";
+const string CONST_siege014 = "engageConservativesEscape.txt";
+const string CONST_siege013 = "engageConservatives.txt";
+const string CONST_siege012 = "nextSiegeAgain.txt";
+const string CONST_siege011 = "nextSiege.txt";
+const string CONST_siege010 = "word_replacing_liberal.txt";
+const string CONST_siege009 = "insult_for_liberal.txt";
+const string CONST_siege008 = "newspaper_last_name.txt";
+const string CONST_siege007 = "newspaper_first_name.txt";
+const string CONST_siege006 = "words_meaning_news.txt";
+const string CONST_siege001 = "OEM United States - Codepage 437";
+const string CONST_siege000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -38,8 +291,8 @@ This file is part of Liberal Crime Squad.                                       
 // when it opens the file and it can't be changed after that; what we changed was
 // how it detects encoding for files it opens in the future, not files already open).
 // In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select "Open With...", choose "C++ Source Code Editor (with encoding)",
-// then choose "OEM United States - Codepage 437".
+// select CONST_siege000, choose CONST_siegeB247,
+// then choose CONST_siege001.
 // In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
 // the codepage will be correct already since it's running in a console window just
 // like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
@@ -51,59 +304,47 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "basemode/baseactions.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../basemode/baseactions.h"
 // for orderparty
-
-#include "sitemode/sitedisplay.h"
-
-//#include "sitemode/advance.h"
+#include "../sitemode/sitedisplay.h"
+//#include "../sitemode/advance.h"
 void creatureadvance();
-
-//#include "sitemode/miscactions.h"
+//#include "../sitemode/miscactions.h"
 void reloadparty(bool wasteful = false);
-
-//#include "sitemode/sitemode.h"
+//#include "../sitemode/sitemode.h"
 void mode_site(short loc);
-
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
+#include "../common/commonactions.h"
+#include "../common/commonactionsCreature.h"
 // for void cleangonesquads();
-
-#include "log/log.h"
+#include "../log/log.h"
 // for commondisplay.h
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for void printfunds(int,int,char*)
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  int getsquad(int)
-
-#include "politics/politics.h"
+#include "../politics/politics.h"
 //for  int publicmood(int l);
-
-#include "combat/fight.h"   
+#include "../combat/fight.h"   
 //for void autopromote(int loc);
-
-#include "combat/chase.h"
+#include "../combat/chase.h"
 //for void evasiverun();
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern vector<Location *> location;
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern short mode;
 extern char endgamestate;
@@ -115,7 +356,6 @@ extern int ccs_siege_kills;
  vector<string> newspaper_last_name;
  vector<string> insult_for_liberal;
  vector<string> word_replacing_liberal;
-
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
 extern string singleDot;
@@ -124,24 +364,20 @@ vector<string> engageConservativesEscape;
 vector<string> engageConservatives;
 vector<string> nextSiegeAgain;
 vector<string> nextSiege;
-
 const string siege = "siege\\";
 const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> siege_text_file_collection = {
-
 	/*siege.cpp*/
-	customText(&words_meaning_news, siege + "words_meaning_news.txt"),
-	customText(&newspaper_first_name, siege + "newspaper_first_name.txt"),
-	customText(&newspaper_last_name, siege + "newspaper_last_name.txt"),
-	customText(&insult_for_liberal, siege + "insult_for_liberal.txt"),
-	customText(&word_replacing_liberal, siege + "word_replacing_liberal.txt"),
-
-	customText(&nextSiege, mostlyendings + "nextSiege.txt"),
-	customText(&nextSiegeAgain, mostlyendings + "nextSiegeAgain.txt"),
-	customText(&engageConservatives, mostlyendings + "engageConservatives.txt"),
-	customText(&engageConservativesEscape, mostlyendings + "engageConservativesEscape.txt"),
+	customText(&words_meaning_news, siege + CONST_siege006),
+	customText(&newspaper_first_name, siege + CONST_siege007),
+	customText(&newspaper_last_name, siege + CONST_siege008),
+	customText(&insult_for_liberal, siege + CONST_siege009),
+	customText(&word_replacing_liberal, siege + CONST_siege010),
+	customText(&nextSiege, mostlyendings + CONST_siege011),
+	customText(&nextSiegeAgain, mostlyendings + CONST_siege012),
+	customText(&engageConservatives, mostlyendings + CONST_siege013),
+	customText(&engageConservativesEscape, mostlyendings + CONST_siege014),
 };
-
 extern int selectedsiege;
 extern short offended_corps;
 extern short offended_cia;
@@ -152,7 +388,6 @@ extern short lawList[LAWNUM];
 extern vector<Vehicle *> vehicle;
 extern short attitude[VIEWNUM];
 extern string commaSpace;
-
 extern char disbanding;
 extern string singleSpace;
 extern squadst *activesquad;
@@ -163,16 +398,12 @@ extern vector<newsstoryst *> newsstory;
 extern Creature encounter[ENCMAX];
 extern short party_status;
 extern newsstoryst *sitestory;
-
 extern long cursquadid;
 extern int police_heat;
 extern char ccs_kills;
-
 void emptyEncounter();
 void fillEncounter(CreatureTypes c, int numleft);
-
-#include "common/creaturePool.h"
-
+#include "../common/creaturePool.h"
 /* TODO
 make it less likely to be raided based on:
 - the number of sleepers.
@@ -205,11 +436,11 @@ void giveup()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(1, 1);
 		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
-			addstrAlt("The police", gamelog);
+			addstrAlt(CONST_siege015, gamelog);
 		else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
-			addstrAlt("The soldiers", gamelog);
-		else addstrAlt("The firemen", gamelog);
-		addstrAlt(" confiscate everything, including Squad weapons.", gamelog);
+			addstrAlt(CONST_siege016, gamelog);
+		else addstrAlt(CONST_siege017, gamelog);
+		addstrAlt(CONST_siege018, gamelog);
 		gamelog.newline();
 		int kcount = 0, pcount = 0, icount = 0, p;
 		char kname[100], pname[100], pcname[100];
@@ -223,7 +454,7 @@ void giveup()
 				strcpy(kname, pool[p]->propername);
 				if (pool[p]->type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
 				if (pool[p]->type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
-				//clear interrogation data if deleted
+				//clear InterrogationST data if deleted
 				delete pool[p]->activity.intr();
 			}
 		}
@@ -246,12 +477,12 @@ void giveup()
 		if (kcount == 1)
 		{
 			mvaddstrAlt(3, 1, kname);
-			addstrAlt(" is rehabilitated and freed.", gamelog);
+			addstrAlt(CONST_siege019, gamelog);
 			gamelog.newline();
 		}
 		if (kcount > 1)
 		{
-			mvaddstrAlt(3, 1, "The kidnap victims are rehabilitated and freed.", gamelog);
+			mvaddstrAlt(3, 1, CONST_siege020, gamelog);
 			gamelog.newline();
 		}
 		if (pcount == 1)
@@ -259,24 +490,24 @@ void giveup()
 			mvaddstrAlt(5, 1, pname, gamelog);
 			if (strcmp(pname, pcname))
 			{
-				addstrAlt(", aka ", gamelog);
+				addstrAlt(CONST_siege021, gamelog);
 				addstrAlt(pcname, gamelog);
-				addstrAlt(",", gamelog);
+				addstrAlt(CONST_siege022, gamelog);
 			}
-			mvaddstrAlt(6, 1, "is taken to the police station.", gamelog);
+			mvaddstrAlt(6, 1, CONST_siege023, gamelog);
 			gamelog.newline();
 		}
 		if (pcount > 1)
 		{
 			mvaddstrAlt(5, 1, pcount, gamelog);
-			addstrAlt(" Liberals are taken to the police station.", gamelog);
+			addstrAlt(CONST_siege024, gamelog);
 			gamelog.newline();
 		}
 		if (ledger.get_funds() > 0)
 		{
 			if (ledger.get_funds() <= 2000 || location[loc]->siege.siegetype == SIEGE_FIREMEN)
 			{
-				mvaddstrAlt(8, 1, "Fortunately, your funds remain intact.", gamelog);
+				mvaddstrAlt(8, 1, CONST_siege025, gamelog);
 				gamelog.newline();
 			}
 			else
@@ -285,7 +516,7 @@ void giveup()
 				int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
 				if (ledger.get_funds() - confiscated > 50000)
 					confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
-				addstr_fl(gamelog, "Law enforcement has confiscated $%d in LCS funds.", confiscated);
+				addstr_fl(gamelog, CONST_siege026.c_str(), confiscated);
 				gamelog.newline();
 				ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
 			}
@@ -294,7 +525,7 @@ void giveup()
 		{
 			if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
 			{
-				mvaddstrAlt(10, 1, "The printing press is dismantled and burned.", gamelog);
+				mvaddstrAlt(10, 1, CONST_siege174, gamelog);
 				gamelog.newline();
 				location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
 			}
@@ -303,18 +534,18 @@ void giveup()
 		{
 			if (location[loc]->compound_walls)
 			{
-				mvaddstrAlt(10, 1, "The compound is dismantled.", gamelog);
+				mvaddstrAlt(10, 1, CONST_siege028, gamelog);
 				gamelog.newline();
 				location[loc]->compound_walls = 0;
 			}
 		}
 		if (location[loc]->front_business != -1)
 		{
-			mvaddstrAlt(12, 1, "Materials relating to the business front have been taken.", gamelog);
+			mvaddstrAlt(12, 1, CONST_siege029, gamelog);
 			gamelog.newline();
 			location[loc]->front_business = -1;
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
 			offended_firemen = 0; // Firemen do not hold grudges
 		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
@@ -365,12 +596,12 @@ void giveup()
 			location[loc]->renting = RENTING_CCS; // CCS Captures warehouse
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1, 1, "Everyone in the ", gamelog);
+		mvaddstrAlt(1, 1, CONST_siege030, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-		addstrAlt(" is slain.", gamelog);
+		addstrAlt(CONST_siege031, gamelog);
 		gamelog.newline();
 		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
-		getkeyAlt();
+ 	pressAnyKey();
 		newsstoryst *ns = new newsstoryst;
 		ns->type = NEWSSTORY_MASSACRE;
 		ns->loc = loc;
@@ -403,7 +634,7 @@ void resolvesafehouses()
 		}
 	}
 }
-/* siege - "you are wanted for _______ and other crimes..." */
+/* siege - CONST_siege032 */
 void statebrokenlaws(int loc)
 {
 	music.play(MUSIC_SIEGE);
@@ -425,132 +656,132 @@ void statebrokenlaws(int loc)
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	moveAlt(1, 1);
-	if (location[loc]->siege.underattack) addstrAlt("You hear shouts:", gamelog);
-	else addstrAlt("You hear a blaring voice on a loudspeaker:", gamelog);
+	if (location[loc]->siege.underattack) addstrAlt(CONST_siege033, gamelog);
+	else addstrAlt(CONST_siege034, gamelog);
 	gamelog.newline();
 	moveAlt(3, 1);
 	if (LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2 && publicmood(-1) < 20)
-		addstrAlt("In the name of God, your campaign of terror ends here!", gamelog);
-	else addstrAlt("Surrender yourselves!", gamelog);
+		addstrAlt(CONST_siege035, gamelog);
+	else addstrAlt(CONST_siege167, gamelog);
 	gamelog.newline();
 	moveAlt(4, 1);
 	//KIDNAP VICTIM
 	if (kidnapped)
 	{
-		addstrAlt("Release ", gamelog);
+		addstrAlt(CONST_siege037, gamelog);
 		addstrAlt(kname, gamelog);
-		if (kidnapped > 1) addstrAlt(" and the others", gamelog);
-		addstrAlt(" unharmed!", gamelog);
+		if (kidnapped > 1) addstrAlt(CONST_siege038, gamelog);
+		addstrAlt(CONST_siege039, gamelog);
 	}
 	//TREASON
 	else if (breakercount[LAWFLAG_TREASON])
-		addstrAlt("You are wanted for treason", gamelog);
+		addstrAlt(CONST_siege040, gamelog);
 	//TERRORISM
 	else if (breakercount[LAWFLAG_TERRORISM])
-		addstrAlt("You are wanted for terrorism", gamelog);
+		addstrAlt(CONST_siege041, gamelog);
 	//MURDERER
 	else if (breakercount[LAWFLAG_MURDER])
-		addstrAlt("You are wanted for first degree murder", gamelog);
+		addstrAlt(CONST_siege042, gamelog);
 	//KIDNAPPER
 	else if (breakercount[LAWFLAG_KIDNAPPING])
-		addstrAlt("You are wanted for kidnapping", gamelog);
+		addstrAlt(CONST_siege043, gamelog);
 	//BANK ROBBER
 	else if (breakercount[LAWFLAG_BANKROBBERY])
-		addstrAlt("You are wanted for bank robbery", gamelog);
+		addstrAlt(CONST_siege044, gamelog);
 	//ARSONIST
 	else if (breakercount[LAWFLAG_ARSON])
-		addstrAlt("You are wanted for arson", gamelog);
+		addstrAlt(CONST_siege045, gamelog);
 	//BURN FLAG
 	else if (breakercount[LAWFLAG_BURNFLAG])
 	{
-		if (lawList[LAW_FLAGBURNING] == -2)addstrAlt("You are wanted for Flag Murder", gamelog);
-		else if (lawList[LAW_FLAGBURNING] == -1)addstrAlt("You are wanted for felony flag burning", gamelog);
-		else addstrAlt("You are wanted for flag burning", gamelog);
+		if (lawList[LAW_FLAGBURNING] == -2)addstrAlt(CONST_siege046, gamelog);
+		else if (lawList[LAW_FLAGBURNING] == -1)addstrAlt(CONST_siege047, gamelog);
+		else addstrAlt(CONST_siege048, gamelog);
 	}
 	//SPEECH
 	else if (breakercount[LAWFLAG_SPEECH])
-		addstrAlt("You are wanted for sedition", gamelog);
+		addstrAlt(CONST_siege049, gamelog);
 	//BROWNIES
 	else if (breakercount[LAWFLAG_BROWNIES])
-		addstrAlt("You are wanted for sale and distribution of a controlled substance", gamelog);
+		addstrAlt(CONST_siege050, gamelog);
 	//ESCAPED
 	else if (breakercount[LAWFLAG_ESCAPED])
-		addstrAlt("You are wanted for escaping prison", gamelog);
+		addstrAlt(CONST_siege051, gamelog);
 	//HELP ESCAPED
 	else if (breakercount[LAWFLAG_HELPESCAPE])
-		addstrAlt("You are wanted for aiding a prison escape", gamelog);
+		addstrAlt(CONST_siege052, gamelog);
 	//JURY
 	else if (breakercount[LAWFLAG_JURY])
-		addstrAlt("You are wanted for jury tampering", gamelog);
+		addstrAlt(CONST_siege053, gamelog);
 	//RACKETEERING
 	else if (breakercount[LAWFLAG_RACKETEERING])
-		addstrAlt("You are wanted for racketeering", gamelog);
+		addstrAlt(CONST_siege054, gamelog);
 	//EXTORTION
 	else if (breakercount[LAWFLAG_EXTORTION])
-		addstrAlt("You are wanted for extortion", gamelog);
+		addstrAlt(CONST_siege055, gamelog);
 	//ASSAULT
 	else if (breakercount[LAWFLAG_ARMEDASSAULT])
-		addstrAlt("You are wanted for assault with a deadly weapon", gamelog);
+		addstrAlt(CONST_siege056, gamelog);
 	//ASSAULT
 	else if (breakercount[LAWFLAG_ASSAULT])
-		addstrAlt("You are wanted for misdemeanor assault", gamelog);
+		addstrAlt(CONST_siege057, gamelog);
 	//CAR THEFT
 	else if (breakercount[LAWFLAG_CARTHEFT])
-		addstrAlt("You are wanted for grand theft auto", gamelog);
+		addstrAlt(CONST_siege058, gamelog);
 	//CC FRAUD
 	else if (breakercount[LAWFLAG_CCFRAUD])
-		addstrAlt("You are wanted for credit card fraud", gamelog);
+		addstrAlt(CONST_siege059, gamelog);
 	//THIEF
 	else if (breakercount[LAWFLAG_THEFT])
-		addstrAlt("You are wanted for petty larceny", gamelog);
+		addstrAlt(CONST_siege060, gamelog);
 	//PROSTITUTION
 	else if (breakercount[LAWFLAG_PROSTITUTION])
-		addstrAlt("You are wanted for prostitution", gamelog);
+		addstrAlt(CONST_siege061, gamelog);
 	//HIRE ILLEGAL
 	else if (breakercount[LAWFLAG_HIREILLEGAL])
-		addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? "You are wanted for hiring an illegal alien" : "You are wanted for hiring an undocumented worker"), gamelog);
+		addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_siege062 : CONST_siegeB252), gamelog);
 	//GUN USE
 	/*else if(breakercount[LAWFLAG_GUNUSE])
-	addstrAlt("You are wanted for firing an illegal weapon", gamelog);
+	addstrAlt(CONST_siege063, gamelog);
 	//GUN CARRY
 	else if(breakercount[LAWFLAG_GUNCARRY])
-	addstrAlt("You are wanted for possession of an illegal weapon", gamelog);*/
+	addstrAlt(CONST_siege064, gamelog);*/
 	//COMMERCE
 	else if (breakercount[LAWFLAG_COMMERCE])
-		addstrAlt("You are wanted for interference with interstate commerce", gamelog);
+		addstrAlt(CONST_siege065, gamelog);
 	//INFORMATION
 	else if (breakercount[LAWFLAG_INFORMATION])
-		addstrAlt("You are wanted for unlawful access of an information system", gamelog);
+		addstrAlt(CONST_siege066, gamelog);
 	//UNLAWFUL BURIAL
 	else if (breakercount[LAWFLAG_BURIAL])
-		addstrAlt("You are wanted for unlawful burial", gamelog);
+		addstrAlt(CONST_siege067, gamelog);
 	//BREAKING
 	else if (breakercount[LAWFLAG_BREAKING])
-		addstrAlt("You are wanted for breaking and entering", gamelog);
+		addstrAlt(CONST_siege068, gamelog);
 	//VANDALISM
 	else if (breakercount[LAWFLAG_VANDALISM])
-		addstrAlt("You are wanted for vandalism", gamelog);
+		addstrAlt(CONST_siege069, gamelog);
 	//RESIST
 	else if (breakercount[LAWFLAG_RESIST])
-		addstrAlt("You are wanted for resisting arrest", gamelog);
+		addstrAlt(CONST_siege070, gamelog);
 	//DISTURBANCE
 	else if (breakercount[LAWFLAG_DISTURBANCE])
-		addstrAlt("You are wanted for disturbing the peace", gamelog);
+		addstrAlt(CONST_siege071, gamelog);
 	//PUBLIC NUDITY
 	else if (breakercount[LAWFLAG_PUBLICNUDITY])
-		addstrAlt("You are wanted for indecent exposure", gamelog);
+		addstrAlt(CONST_siege072, gamelog);
 	//LOITERING
 	else if (breakercount[LAWFLAG_LOITERING])
-		addstrAlt("You are wanted for loitering", gamelog);
+		addstrAlt(CONST_siege073, gamelog);
 	//THEY WERE LOOKING FOR SOMEONE ELSE
-	else addstrAlt("You are wanted for harboring a fugitive from justice", gamelog);
+	else addstrAlt(CONST_siege074, gamelog);
 	if (!kidnapped)
 	{
-		if (typenum > 1) addstrAlt(" and other crimes", gamelog);
+		if (typenum > 1) addstrAlt(CONST_siege075, gamelog);
 		addstrAlt(singleDot, gamelog);
 	}
 	gamelog.nextMessage();
-	getkeyAlt();
+ 	pressAnyKey();
 }
 void statebrokenlaws(Creature & cr)
 {
@@ -560,106 +791,106 @@ void statebrokenlaws(Creature & cr)
 		else breakercount[i] = false;
 		if (!criminal && !kidnapped) return;
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		addstrAlt("WANTED FOR ");
+		addstrAlt(CONST_siege076);
 		//KIDNAP VICTIM
 		if (kidnapped)
-			addstrAlt("REHABILITATION");
+			addstrAlt(CONST_siege077);
 		//TREASON
 		else if (breakercount[LAWFLAG_TREASON])
-			addstrAlt("TREASON");
+			addstrAlt(CONST_siege078);
 		//TERRORISM
 		else if (breakercount[LAWFLAG_TERRORISM])
-			addstrAlt("TERRORISM");
+			addstrAlt(CONST_siege079);
 		//MURDERER
 		else if (breakercount[LAWFLAG_MURDER])
-			addstrAlt("MURDER");
+			addstrAlt(CONST_siege080);
 		//KIDNAPPER
 		else if (breakercount[LAWFLAG_KIDNAPPING])
-			addstrAlt("KIDNAPPING");
+			addstrAlt(CONST_siege081);
 		//BANK ROBBER
 		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt("BANK ROBBERY");
+			addstrAlt(CONST_siege082);
 		//ARSONIST
 		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt("ARSON");
+			addstrAlt(CONST_siege083);
 		//BURN FLAG
 		else if (breakercount[LAWFLAG_BURNFLAG])
-			addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? "FLAG MURDER" : "FLAG BURNING");
+			addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253);
 		//SPEECH
 		else if (breakercount[LAWFLAG_SPEECH])
-			addstrAlt("HARMFUL SPEECH");
+			addstrAlt(CONST_siege085);
 		//BROWNIES
 		else if (breakercount[LAWFLAG_BROWNIES])
-			addstrAlt("DRUG DEALING");
+			addstrAlt(CONST_siege086);
 		//ESCAPED
 		else if (breakercount[LAWFLAG_ESCAPED])
-			addstrAlt("ESCAPING PRISON");
+			addstrAlt(CONST_siege087);
 		//HELP ESCAPED
 		else if (breakercount[LAWFLAG_HELPESCAPE])
-			addstrAlt("RELEASING PRISONERS");
+			addstrAlt(CONST_siege088);
 		//JURY
 		else if (breakercount[LAWFLAG_JURY])
-			addstrAlt("JURY TAMPERING");
+			addstrAlt(CONST_siege089);
 		//RACKETEERING
 		else if (breakercount[LAWFLAG_RACKETEERING])
-			addstrAlt("RACKETEERING");
+			addstrAlt(CONST_siege090);
 		//EXTORTION
 		else if (breakercount[LAWFLAG_EXTORTION])
-			addstrAlt("EXTORTION");
+			addstrAlt(CONST_siege091);
 		//ASSAULT
 		else if (breakercount[LAWFLAG_ARMEDASSAULT])
-			addstrAlt("ARMED ASSAULT");
+			addstrAlt(CONST_siege092);
 		//ASSAULT
 		else if (breakercount[LAWFLAG_ASSAULT])
-			addstrAlt("ASSAULT");
+			addstrAlt(CONST_siege093);
 		//CAR THEFT
 		else if (breakercount[LAWFLAG_CARTHEFT])
-			addstrAlt("GRAND THEFT AUTO");
+			addstrAlt(CONST_siege094);
 		//CC FRAUD
 		else if (breakercount[LAWFLAG_CCFRAUD])
-			addstrAlt("CREDIT CARD FRAUD");
+			addstrAlt(CONST_siege095);
 		//THIEF
 		else if (breakercount[LAWFLAG_THEFT])
-			addstrAlt("THEFT");
+			addstrAlt(CONST_siege096);
 		//PROSTITUTION
 		else if (breakercount[LAWFLAG_PROSTITUTION])
-			addstrAlt("PROSTITUTION");
+			addstrAlt(CONST_siege097);
 		//HIRE ILLEGAL
 		else if (breakercount[LAWFLAG_HIREILLEGAL])
-			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? "HIRING ILLEGAL ALIENS" : "HIRING UNDOCUMENTED WORKERS");
+			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
 		//GUN USE
 		/*else if(breakercount[LAWFLAG_GUNUSE])
-		addstrAlt("FIRING ILLEGAL WEAPONS");
+		addstrAlt(CONST_siege099);
 		//GUN CARRY
 		else if(breakercount[LAWFLAG_GUNCARRY])
-		addstrAlt("CARRYING ILLEGAL WEAPONS");*/
+		addstrAlt(CONST_siege100);*/
 		//COMMERCE
 		else if (breakercount[LAWFLAG_COMMERCE])
-			addstrAlt("ELECTRONIC SABOTAGE");
+			addstrAlt(CONST_siege101);
 		//INFORMATION
 		else if (breakercount[LAWFLAG_INFORMATION])
-			addstrAlt("HACKING");
+			addstrAlt(CONST_siege102);
 		//UNLAWFUL BURIAL
 		else if (breakercount[LAWFLAG_BURIAL])
-			addstrAlt("UNLAWFUL BURIAL");
+			addstrAlt(CONST_siege103);
 		//BREAKING
 		else if (breakercount[LAWFLAG_BREAKING])
-			addstrAlt("BREAKING AND ENTERING");
+			addstrAlt(CONST_siege104);
 		//VANDALISM
 		else if (breakercount[LAWFLAG_VANDALISM])
-			addstrAlt("VANDALISM");
+			addstrAlt(CONST_siege105);
 		//RESIST
 		else if (breakercount[LAWFLAG_RESIST])
-			addstrAlt("RESISTING ARREST");
+			addstrAlt(CONST_siege106);
 		//DISTURBANCE
 		else if (breakercount[LAWFLAG_DISTURBANCE])
-			addstrAlt("DISTURBING THE PEACE");
+			addstrAlt(CONST_siege107);
 		//PUBLIC NUDITY
 		else if (breakercount[LAWFLAG_PUBLICNUDITY])
-			addstrAlt("PUBLIC NUDITY");
+			addstrAlt(CONST_siege108);
 		//LOITERING
 		else if (breakercount[LAWFLAG_LOITERING])
-			addstrAlt("LOITERING");
+			addstrAlt(CONST_siege109);
 }
 /* siege - updates upcoming sieges */
 void siegecheck(char canseethings)
@@ -784,28 +1015,27 @@ void siegecheck(char canseethings)
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "You have received advance warning from your sleepers regarding ", gamelog);
-					mvaddstrAlt(9,  1, "an imminent police raid on ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege110, gamelog);
+					mvaddstrAlt(9,  1, CONST_siege111, gamelog);
 					addstrAlt(location[l]->getname());
 					addstrAlt(singleDot, gamelog);
 					gamelog.newline();
 					if (location[l]->siege.escalationstate >= 1)
 					{
-						mvaddstrAlt(11,  1, "The fighting force will be composed of national guard troops.", gamelog);
+						mvaddstrAlt(11,  1, CONST_siege112, gamelog);
 					}
 					if (location[l]->siege.escalationstate >= 2)
 					{
-						mvaddstrAlt(12,  1, "A tank will cover the entrance to the compound.", gamelog);
+						mvaddstrAlt(12,  1, CONST_siege113, gamelog);
 					}
 					if (location[l]->siege.escalationstate >= 3)
 					{
-						mvaddstrAlt(13,  1, "Planes will bomb the compound during the siege, and the final ", gamelog);
-						mvaddstrAlt(14,  1, "attack will be carried out by SEAL Team 6.", gamelog);
+						mvaddstrAlt(13,  1, CONST_siege114, gamelog);
+						mvaddstrAlt(14,  1, CONST_siege115, gamelog);
 					}
 					gamelog.nextMessage(); //Write out buffer to prepare for next message.
-					mvaddstrAlt(15,  1, "Press Esc to ponder the situation...");
-					int c;
-					do c = getkeyAlt(); while (c != 'x'&&c != ESC);
+					mvaddstrAlt(15,  1, CONST_siege116);
+					pressSpecificKey('x', ESC);
 				}
 			}
 			//COPS RAID THIS LOCATION
@@ -818,35 +1048,35 @@ void siegecheck(char canseethings)
 					music.play(MUSIC_SIEGE);
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "The police have surrounded the ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege117, gamelog);
 					addstrAlt(location[l]->getname(), gamelog);
-					addstrAlt("!", gamelog);
+					addstrAlt(CONST_siege188, gamelog);
 					gamelog.newline();
 					location[l]->siege.underattack = 0;
-					getkeyAlt();
+			 	pressAnyKey();
 					//MENTION ESCALATION STATE
 					if (location[l]->siege.escalationstate >= 1)
 					{
-						mvaddstrAlt(9,  1, "National Guard troops are replacing normal SWAT units.", gamelog);
+						mvaddstrAlt(9,  1, CONST_siege119, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 					if (location[l]->siege.escalationstate >= 2)
 					{
 						moveAlt(10, 1);
 						if (location[l]->compound_walls & COMPOUND_TANKTRAPS)
-							addstrAlt("An M1 Abrams Tank is stopped by the tank traps.", gamelog);
-						else addstrAlt("An M1 Abrams Tank takes up position outside the compound.", gamelog);
+							addstrAlt(CONST_siege120, gamelog);
+						else addstrAlt(CONST_siege121, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 					if (location[l]->siege.escalationstate >= 3)
 					{
-						mvaddstrAlt(11,  1, "You hear jet bombers streak overhead.", gamelog);
+						mvaddstrAlt(11,  1, CONST_siege122, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 					}
-					// "You are wanted for blahblah and other crimes."
+					// CONST_siege123
 					statebrokenlaws(l);
 					location[l]->siege.siege = 1;
 					location[l]->siege.siegetype = SIEGE_POLICE;
@@ -857,11 +1087,11 @@ void siegecheck(char canseethings)
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "The cops have raided the ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege124, gamelog);
 					addstrAlt(location[l]->getname(), gamelog);
-					addstrAlt(", an unoccupied safehouse.", gamelog);
+					addstrAlt(CONST_siege177, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					int y = 9;
 					for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 					{
@@ -869,9 +1099,9 @@ void siegecheck(char canseethings)
 						if (!pool[p]->alive)
 						{
 							mvaddstrAlt(y,  1, pool[p]->name, gamelog);
-							addstrAlt("'s corpse has been recovered.", gamelog);
+							addstrAlt(CONST_siege178, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							delete_and_remove(pool, p);
 							y++;
 							continue;
@@ -879,9 +1109,9 @@ void siegecheck(char canseethings)
 						if (pool[p]->align != 1)
 						{
 							mvaddstrAlt(y,  1, pool[p]->name, gamelog);
-							addstrAlt(" has been rescued.", gamelog);
+							addstrAlt(CONST_siege179, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							delete_and_remove(pool, p);
 							y++;
 							continue;
@@ -913,16 +1143,16 @@ void siegecheck(char canseethings)
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "You have received ", gamelog);
-					if (ceosleepercount)addstrAlt("your sleeper CEO's warning", gamelog);
-					else addstrAlt("an anonymous tip", gamelog);
-					addstrAlt(" that the Corporations ", gamelog);
-					mvaddstrAlt(9,  1, "are hiring mercenaries to attack ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege128, gamelog);
+					if (ceosleepercount)addstrAlt(CONST_siege129, gamelog);
+					else addstrAlt(CONST_siege130, gamelog);
+					addstrAlt(CONST_siege131, gamelog);
+					mvaddstrAlt(9,  1, CONST_siege132, gamelog);
 					if (ceosleepercount)addstrAlt(location[l]->getname(), gamelog);
-					else addstrAlt("the LCS", gamelog);
+					else addstrAlt(CONST_siege133, gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 			}
 			else if (location[l]->siege.timeuntilcorps > 0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
@@ -933,11 +1163,11 @@ void siegecheck(char canseethings)
 				// Corps raid!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Corporate mercenaries are raiding the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege134, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_CORPORATE;
 				location[l]->siege.underattack = 1;
@@ -970,12 +1200,12 @@ void siegecheck(char canseethings)
 					{
 						eraseAlt();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, "You have received a sleeper warning that the CCS ", gamelog);
-						mvaddstrAlt(9,  1, " is gearing up to attack ", gamelog);
+						mvaddstrAlt(8,  1, CONST_siege136, gamelog);
+						mvaddstrAlt(9,  1, CONST_siege137, gamelog);
 						addstrAlt(location[l]->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 				}
 				else if (location[l]->siege.timeuntilccs > 0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
@@ -986,27 +1216,27 @@ void siegecheck(char canseethings)
 					// CCS raid!
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "A screeching truck pulls up to ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege138, gamelog);
 					addstrAlt(location[l]->getname(), gamelog);
-					addstrAlt("!", gamelog);
+					addstrAlt(CONST_siege188, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					if (!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
 						!LCSrandom(5))
 					{
 						// CCS Carbombs safehouse!!
 						eraseAlt();
 						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, "The truck plows into the building and explodes!", gamelog);
+						mvaddstrAlt(8,  1, CONST_siege140, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 						eraseAlt();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(0,  1, "CCS CAR BOMBING CASUALTY REPORT");
-						mvaddstrAlt(2,  1, "KILLED: ");
+						mvaddstrAlt(0,  1, CONST_siege141);
+						mvaddstrAlt(2,  1, CONST_siege142);
 						int killed_y = 2;
 						int killed_x = 9;
-						mvaddstrAlt(6,  1, "INJURED: ");
+						mvaddstrAlt(6,  1, CONST_siege143);
 						int injured_y = 6;
 						int injured_x = 10;
 						for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
@@ -1051,16 +1281,16 @@ void siegecheck(char canseethings)
 								}
 							}
 						}
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 					else
 					{
 						// CCS Raids safehouse
 						eraseAlt();
 						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, "CCS members pour out of the truck and shoot in the front doors!", gamelog);
+						mvaddstrAlt(8,  1, CONST_siege144, gamelog);
 						gamelog.nextMessage();
-						getkeyAlt();
+				 	pressAnyKey();
 						location[l]->siege.siege = 1;
 						location[l]->siege.siegetype = SIEGE_CCS;
 						location[l]->siege.underattack = 1;
@@ -1092,12 +1322,12 @@ void siegecheck(char canseethings)
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "A sleeper agent has reported that the CIA is planning ", gamelog);
-					mvaddstrAlt(9,  1, "to launch an attack on ", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege145, gamelog);
+					mvaddstrAlt(9,  1, CONST_siege146, gamelog);
 					addstrAlt(location[l]->getname(), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 			}
 			else if (location[l]->siege.timeuntilcia > 0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
@@ -1108,28 +1338,28 @@ void siegecheck(char canseethings)
 				// CIA raids!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Unmarked black vans are surrounding the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege147, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_siege188, gamelog);
 				gamelog.newline();
 				if (location[l]->compound_walls & COMPOUND_CAMERAS)
 				{
-					mvaddstrAlt(9,  1, "Through some form of high technology, they've managed ", gamelog);
-					mvaddstrAlt(10,  1, "to shut off the lights and the cameras!", gamelog);
+					mvaddstrAlt(9,  1, CONST_siege151, gamelog);
+					mvaddstrAlt(10,  1, CONST_siege150, gamelog);
 					gamelog.nextMessage();
 				}
 				else if (location[l]->compound_walls & COMPOUND_GENERATOR)
 				{
-					mvaddstrAlt(9,  1, "Through some form of high technology, they've managed ", gamelog);
-					mvaddstrAlt(10,  1, "to shut off the lights!", gamelog);
+					mvaddstrAlt(9,  1, CONST_siege151, gamelog);
+					mvaddstrAlt(10,  1, CONST_siege152, gamelog);
 					gamelog.nextMessage();
 				}
 				else
 				{
-					mvaddstrAlt(9,  1, "They've shut off the lights!", gamelog);
+					mvaddstrAlt(9,  1, CONST_siege153, gamelog);
 					gamelog.nextMessage();
 				}
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_CIA;
 				location[l]->siege.underattack = 1;
@@ -1143,12 +1373,12 @@ void siegecheck(char canseethings)
 				music.play(MUSIC_SIEGE);
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Masses dissatisfied with your lack of respect for AM Radio ", gamelog);
-				mvaddstrAlt(9,  1, "are storming the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege154, gamelog);
+				mvaddstrAlt(9,  1, CONST_siege158, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_HICKS;
 				location[l]->siege.underattack = 1;
@@ -1161,12 +1391,12 @@ void siegecheck(char canseethings)
 				music.play(MUSIC_SIEGE);
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Masses dissatisfied with your lack of respect for Cable News ", gamelog);
-				mvaddstrAlt(9,  1, "are storming the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege157, gamelog);
+				mvaddstrAlt(9,  1, CONST_siege158, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_HICKS;
 				location[l]->siege.underattack = 1;
@@ -1191,13 +1421,13 @@ void siegecheck(char canseethings)
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					moveAlt(8, 1);
-					if (firemensleepercount) addstrAlt("A sleeper Fireman has informed you that ", gamelog);
-					else addstrAlt("Word in the underground is that ", gamelog);
-					mvaddstrAlt(9,  1, "the Firemen are planning to burn ", gamelog);
+					if (firemensleepercount) addstrAlt(CONST_siege160, gamelog);
+					else addstrAlt(CONST_siege161, gamelog);
+					mvaddstrAlt(9,  1, CONST_siege162, gamelog);
 					addstrAlt(location[l]->name, gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 			}
 			else if (location[l]->siege.timeuntilfiremen > 0) location[l]->siege.timeuntilfiremen--;
@@ -1208,24 +1438,24 @@ void siegecheck(char canseethings)
 				// Firemen raid!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Screaming fire engines pull up to the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege163, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_siege188, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(9,  1, "Armored firemen swarm out, pilot lights burning.", gamelog);
+				mvaddstrAlt(9,  1, CONST_siege165, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(1,  1, "You hear a screeching voice over the sound of fire engine sirens:", gamelog);
+				mvaddstrAlt(1,  1, CONST_siege166, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(3,  1, "Surrender yourselves!", gamelog);
+				mvaddstrAlt(3,  1, CONST_siege167, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(4,  1, "Unacceptable Speech has occurred at this location.", gamelog);
+				mvaddstrAlt(4,  1, CONST_siege168, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(6,  1, "Come quietly and you will not be harmed.", gamelog);
+				mvaddstrAlt(6,  1, CONST_siege169, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.siege = 1;
 				location[l]->siege.siegetype = SIEGE_FIREMEN;
 				location[l]->siege.underattack = 1;
@@ -1238,11 +1468,11 @@ void siegecheck(char canseethings)
 				location[l]->siege.timeuntilfiremen = -1;
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "The Firemen have raided the ", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege170, gamelog);
 				addstrAlt(location[l]->getname(), gamelog);
-				addstrAlt(", an unoccupied safehouse.", gamelog);
+				addstrAlt(CONST_siege177, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				int y = 9;
 				for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 				{
@@ -1250,18 +1480,18 @@ void siegecheck(char canseethings)
 					if (!pool[p]->alive)
 					{
 						mvaddstrAlt(y++,  1, pool[p]->name, gamelog);
-						addstrAlt("'s corpse has been recovered.", gamelog);
+						addstrAlt(CONST_siege178, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						delete_and_remove(pool, p);
 						continue;
 					}
 					if (pool[p]->align != 1)
 					{
 						mvaddstrAlt(y++,  1, pool[p]->name, gamelog);
-						addstrAlt(" has been rescued.", gamelog);
+						addstrAlt(CONST_siege179, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						delete_and_remove(pool, p);
 						continue;
 					}
@@ -1269,14 +1499,14 @@ void siegecheck(char canseethings)
 				delete_and_clear(location[l]->loot);
 				if (location[l]->compound_walls & COMPOUND_PRINTINGPRESS)
 				{
-					mvaddstrAlt(10,  1, "The printing press is dismantled and burned.", gamelog);
+					mvaddstrAlt(10,  1, CONST_siege174, gamelog);
 					gamelog.newline();
 					location[l]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
 					offended_firemen = 0;
 				}
 				if (location[l]->front_business != -1)
 				{
-					mvaddstrAlt(12,  1, "Materials relating to the business front have been destroyed.", gamelog);
+					mvaddstrAlt(12,  1, CONST_siege175, gamelog);
 					gamelog.newline();
 					location[l]->front_business = -1;
 				}
@@ -1321,13 +1551,13 @@ void siegeturn(char clearformess)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, "Conservatives have raided the ", gamelog);
+			mvaddstrAlt(8,  1, CONST_siege176, gamelog);
 			addstrAlt(location[l]->getname(), gamelog);
-			addstrAlt(", an unoccupied safehouse.", gamelog);
+			addstrAlt(CONST_siege177, gamelog);
 			gamelog.newline();
 			if (location[l]->siege.siegetype == SIEGE_CCS&&location[l]->type == SITE_INDUSTRY_WAREHOUSE)
 				location[l]->renting = RENTING_CCS; // CCS Captures warehouse
-			getkeyAlt();
+	 	pressAnyKey();
 			int y = 9;
 			for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 			{
@@ -1335,18 +1565,18 @@ void siegeturn(char clearformess)
 				if (!pool[p]->alive)
 				{
 					mvaddstrAlt(y++,  1, pool[p]->name);
-					addstrAlt("'s corpse has been recovered.", gamelog);
+					addstrAlt(CONST_siege178, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					delete_and_remove(pool, p);
 					continue;
 				}
 				if (pool[p]->align != 1)
 				{
 					mvaddstrAlt(y++,  1, pool[p]->name);
-					addstrAlt(" has been rescued.", gamelog);
+					addstrAlt(CONST_siege179, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					delete_and_remove(pool, p);
 					continue;
 				}
@@ -1359,7 +1589,7 @@ void siegeturn(char clearformess)
 		if (!location[l]->siege.underattack)
 		{
 			// Seperate logging message.
-			gamelog.record("A day passes while under siege...");
+			gamelog.record(CONST_siege180);
 			gamelog.newline();
 			//EAT
 			bool starving = false;
@@ -1370,9 +1600,9 @@ void siegeturn(char clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "Your Liberals are starving!", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege181, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 			if (location[l]->compound_stores >= eaters) location[l]->compound_stores -= eaters;
 			else location[l]->compound_stores = 0;
@@ -1390,9 +1620,9 @@ void siegeturn(char clearformess)
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, pool[p]->name, gamelog);
-					addstrAlt(" has starved to death.", gamelog);
+					addstrAlt(CONST_siege182, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 			}
 			if (!LCSrandom(12))attack = 1;
@@ -1401,9 +1631,9 @@ void siegeturn(char clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "The cops are coming!", gamelog);
+				mvaddstrAlt(8,  1, CONST_siege183, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				location[l]->siege.underattack = 1;
 			}
 			else
@@ -1417,9 +1647,9 @@ void siegeturn(char clearformess)
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "The police have cut the lights!", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege184, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					location[l]->siege.lights_off = 1;
 				}
 				//SNIPER
@@ -1437,9 +1667,9 @@ void siegeturn(char clearformess)
 						int targ = pickrandom(pol);
 						if ((int)LCSrandom(50)>pool[targ]->juice)
 						{
-							addstrAlt("A sniper takes out ", gamelog);
+							addstrAlt(CONST_siege185, gamelog);
 							addstrAlt(pool[targ]->name, gamelog);
-							addstrAlt("!", gamelog);
+							addstrAlt(CONST_siege188, gamelog);
 							gamelog.newline();
 							if (pool[targ]->align == 1) stat_dead++, liberalcount[l]--;
 							removesquadinfo(*pool[targ]);
@@ -1447,12 +1677,12 @@ void siegeturn(char clearformess)
 						}
 						else
 						{
-							addstrAlt("A sniper nearly hits ", gamelog);
+							addstrAlt(CONST_siege187, gamelog);
 							addstrAlt(pool[targ]->name, gamelog);
-							addstrAlt("!", gamelog);
+							addstrAlt(CONST_siege188, gamelog);
 							gamelog.newline();
 						}
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 				}
 				if (location[l]->siege.escalationstate >= 3 && !LCSrandom(3))
@@ -1463,78 +1693,78 @@ void siegeturn(char clearformess)
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "You hear planes streak overhead!", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege189, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					bool hasAAGun = location[l]->compound_walls & COMPOUND_AAGUN;
 					bool hasGenerator = location[l]->compound_walls & COMPOUND_GENERATOR;
 					if (hasAAGun)
 					{
 						if (clearformess) eraseAlt();
 						else makedelimiter();
-						mvaddstrAlt(8,  1, "The thunder of the anti-aircraft gun shakes the compound!", gamelog);
+						mvaddstrAlt(8,  1, CONST_siege190, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						if (clearformess) eraseAlt();
 						else makedelimiter();
 						moveAlt(8, 1);
 						if (LCSrandom(5))
 						{
 							hit = false;
-							if (LCSrandom(2)) addstrAlt("You didn't shoot any down, but you've made them think twice!", gamelog);
+							if (LCSrandom(2)) addstrAlt(CONST_siege191, gamelog);
 							else
 							{
-								addstrAlt("Hit! One of the bombers slams into to the ground.", gamelog);
+								addstrAlt(CONST_siege192, gamelog);
 								gamelog.newline();
-								getkeyAlt();
+						 	pressAnyKey();
 								if (clearformess) eraseAlt();
 								else makedelimiter();
-								mvaddstrAlt(8,  1, "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!", gamelog);
+								mvaddstrAlt(8,  1, CONST_siege193, gamelog);
 								for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
 							}
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 						}
 						else
 						{
-							addstrAlt("A skilled pilot gets through!", gamelog);
+							addstrAlt(CONST_siege194, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 						}
 					}
 					if (hit)
 					{
 						if (clearformess) eraseAlt();
 						else makedelimiter();
-						mvaddstrAlt(8,  1, "Explosions rock the compound!", gamelog);
+						mvaddstrAlt(8,  1, CONST_siege195, gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						if (hasAAGun && !LCSrandom(3))
 						{
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							mvaddstrAlt(8,  1, "The anti-aircraft gun takes a direct hit!", gamelog);
+							mvaddstrAlt(8,  1, CONST_siege196, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							mvaddstrAlt(8,  1, "There's nothing left but smoking wreckage...", gamelog);
+							mvaddstrAlt(8,  1, CONST_siege197, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							location[l]->compound_walls &= ~COMPOUND_AAGUN;
 						}
 						else if (hasGenerator && !LCSrandom(3))
 						{
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							mvaddstrAlt(8,  1, "The generator has been destroyed!", gamelog);
+							mvaddstrAlt(8,  1, CONST_siege198, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							mvaddstrAlt(8,  1, "The lights fade and all is dark.", gamelog);
+							mvaddstrAlt(8,  1, CONST_siege199, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 							location[l]->compound_walls &= ~COMPOUND_GENERATOR;
 							location[l]->siege.lights_off = 1;
 						}
@@ -1552,7 +1782,7 @@ void siegeturn(char clearformess)
 								if ((int)LCSrandom(100)>pool[targ]->juice)
 								{
 									addstrAlt(pool[targ]->name, gamelog);
-									addstrAlt(" was killed in the bombing!", gamelog);
+									addstrAlt(CONST_siege200, gamelog);
 									gamelog.newline();
 									if (pool[targ]->align == 1) stat_dead++, liberalcount[l]--;
 									removesquadinfo(*pool[targ]);
@@ -1561,19 +1791,19 @@ void siegeturn(char clearformess)
 								else
 								{
 									addstrAlt(pool[targ]->name, gamelog);
-									addstrAlt(" narrowly avoided death!", gamelog);
+									addstrAlt(CONST_siege201, gamelog);
 									gamelog.newline();
 								}
-								getkeyAlt();
+						 	pressAnyKey();
 							}
 						}
 						else
 						{
 							if (clearformess) eraseAlt();
 							else makedelimiter();
-							mvaddstrAlt(8,  1, "Fortunately, no one is hurt.", gamelog);
+							mvaddstrAlt(8,  1, CONST_siege202, gamelog);
 							gamelog.newline();
-							getkeyAlt();
+					 	pressAnyKey();
 						}
 					}
 				}
@@ -1585,18 +1815,18 @@ void siegeturn(char clearformess)
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, "Army engineers have removed your tank traps.", gamelog);
+					mvaddstrAlt(8,  1, CONST_siege203, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					if (clearformess) moveAlt(9, 1);
 					else
 					{
 						makedelimiter();
 						moveAlt(8, 1);
 					}
-					addstrAlt("The tank moves forward to your compound entrance.", gamelog);
+					addstrAlt(CONST_siege204, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					location[l]->compound_walls &= ~COMPOUND_TANKTRAPS;
 				}
 				//NEED GOOD THINGS TO BALANCE THE BAD
@@ -1607,17 +1837,17 @@ void siegeturn(char clearformess)
 					generate_name(repname);
 					set_color_easy(WHITE_ON_BLACK);
 					eraseAlt();
-					mvaddstrAlt(1,  1, "Elitist ", gamelog);
+					mvaddstrAlt(1,  1, CONST_siege205, gamelog);
 					addstrAlt(repname, gamelog);
-					addstrAlt(" from the ", gamelog);
+					addstrAlt(CONST_siege206, gamelog);
 					addstrAlt(pickrandom(words_meaning_news), gamelog);
 					addstrAlt(singleSpace);
 					addstrAlt(pickrandom(newspaper_first_name), gamelog);
 					addstrAlt(singleSpace, gamelog);
 					addstrAlt(pickrandom(newspaper_last_name), gamelog);
-					mvaddstrAlt(2,  1, "got into the compound somehow!", gamelog);
+					mvaddstrAlt(2,  1, CONST_siege207, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					int best = 0;
 					for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
 					{
@@ -1629,12 +1859,12 @@ void siegeturn(char clearformess)
 						if (sum > bestvalue) best = p, bestvalue = sum;
 					}
 					mvaddstrAlt(4,  1, pool[best]->name, gamelog);
-					addstrAlt(" decides to give an interview.", gamelog);
+					addstrAlt(CONST_siege208, gamelog);
 					gamelog.newline();
-					getkeyAlt();
-					mvaddstrAlt(6,  1, "The interview is wide-ranging, covering a variety of topics.", gamelog);
+			 	pressAnyKey();
+					mvaddstrAlt(6,  1, CONST_siege209, gamelog);
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
 						+ pool[best]->attribute_roll(ATTRIBUTE_HEART)
 						+ pool[best]->skill_roll(SKILL_PERSUASION)
@@ -1644,13 +1874,13 @@ void siegeturn(char clearformess)
 					if (segmentpower < 15)
 					{
 						addstrAlt(repname, gamelog);
-						addstrAlt(" canceled the interview halfway through", gamelog);
-						mvaddstrAlt(9,  1, "and later used the material for a Broadway play called", gamelog);
+						addstrAlt(CONST_siege210, gamelog);
+						mvaddstrAlt(9,  1, CONST_siege211, gamelog);
 						moveAlt(10, 1);
 						switch (LCSrandom(insult_for_liberal.size() + 1))
 						{
-						case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt("Dumb", gamelog);
-								else addstrAlt("Retarded", gamelog); break;
+						case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_siege212, gamelog);
+								else addstrAlt(CONST_siege213, gamelog); break;
 						default:
 							addstrAlt(pickrandom(insult_for_liberal));
 							break;
@@ -1662,46 +1892,46 @@ void siegeturn(char clearformess)
 					}
 					else if (segmentpower < 20)
 					{
-						addstrAlt("But the interview is so boring that ", gamelog);
+						addstrAlt(CONST_siege214, gamelog);
 						addstrAlt(repname, gamelog);
-						addstrAlt(" falls asleep.", gamelog);
+						addstrAlt(CONST_siege215, gamelog);
 						gamelog.newline();
 					}
 					else if (segmentpower < 25)
 					{
-						addstrAlt("But ", gamelog);
+						addstrAlt(CONST_siege216, gamelog);
 						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt(" stutters nervously the whole time.", gamelog);
+						addstrAlt(CONST_siege217, gamelog);
 						gamelog.newline();
 					}
 					else if (segmentpower < 30)
 					{
 						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt("'s verbal finesse leaves something to be desired.", gamelog);
+						addstrAlt(CONST_siege218, gamelog);
 						gamelog.newline();
 					}
 					else if (segmentpower < 45)
 					{
 						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt(" represents the LCS well.", gamelog);
+						addstrAlt(CONST_siege219, gamelog);
 						gamelog.newline();
 					}
 					else if (segmentpower < 60)
 					{
-						addstrAlt("The discussion was exciting and dynamic.", gamelog);
-						mvaddstrAlt(9,  1, "Even the Cable News and AM Radio spend days talking about it.", gamelog);
+						addstrAlt(CONST_siege220, gamelog);
+						mvaddstrAlt(9,  1, CONST_siege221, gamelog);
 						gamelog.newline();
 					}
 					else
 					{
 						addstrAlt(repname);
-						addstrAlt(" later went on to win a Pulitzer for it.", gamelog);
-						mvaddstrAlt(9,  1, "Virtually everyone in America was moved by ", gamelog);
+						addstrAlt(CONST_siege222, gamelog);
+						mvaddstrAlt(9,  1, CONST_siege223, gamelog);
 						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt("'s words.", gamelog);
+						addstrAlt(CONST_siege224, gamelog);
 						gamelog.newline();
 					}
-					getkeyAlt();
+			 	pressAnyKey();
 					//CHECK PUBLIC OPINION
 					change_public_opinion(VIEW_LIBERALCRIMESQUAD, 20);
 					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, (segmentpower - 25) / 2, segmentpower + 50);
@@ -1714,7 +1944,6 @@ void siegeturn(char clearformess)
 	delete[] liberalcount;
 	delete[] food_prep;
 }
-
 /* siege - checks how many days of food left at the site */
 int fooddaysleft(int loc)
 {
@@ -1732,7 +1961,7 @@ void escapesiege(char won)
 		//GIVE INFO SCREEN
 		eraseAlt();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1, 32, "You have escaped!", gamelog);
+		mvaddstrAlt(1, 32, CONST_siege225, gamelog);
 		gamelog.nextMessage();
 		set_color_easy(WHITE_ON_BLACK);
 		int yLevel = 3;
@@ -1745,10 +1974,10 @@ void escapesiege(char won)
 			if (activesquad->squad[0] != NULL)
 				homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, activesquad->squad[0]->location);
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(yLevel + 1, 11, "Press any key to split up and lay low for a few days");
+		mvaddstrAlt(yLevel + 1, 11, CONST_siege226);
 		// Seperate logging text
-		gamelog.log("Your Liberals split up and lay low for a few days.");
-		getkeyAlt();
+		gamelog.log(CONST_siege227);
+ 	pressAnyKey();
 		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
 		if (activesquad&&homes != -1) location[homes]->getloot(activesquad->loot);
 		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
@@ -1797,24 +2026,24 @@ void conquertext()
 	music.play(MUSIC_CONQUER);
 	eraseAlt();
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 26, "* * * * *   VICTORY   * * * * *", gamelog);
+	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
 	gamelog.newline();
 	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3, 16, "The Conservative automatons have been driven back ÄÄ for ", gamelog);
-		mvaddstrAlt(4, 11, "the time being.  While they are regrouping, you might consider ", gamelog);
-		mvaddstrAlt(5, 11, "abandoning this safe house for a safer location.", gamelog);
+		mvaddstrAlt(3, 16, CONST_siege229, gamelog);
+		mvaddstrAlt(4, 11, CONST_siege230, gamelog);
+		mvaddstrAlt(5, 11, CONST_siege231, gamelog);
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3, 16, "The Conservative automatons have been driven back.  ", gamelog);
-		mvaddstrAlt(4, 11, "Unfortunately, you will never truly be safe from ", gamelog);
-		mvaddstrAlt(5, 11, "this filth until the Liberal Agenda is realized.", gamelog);
+		mvaddstrAlt(3, 16, CONST_siege232, gamelog);
+		mvaddstrAlt(4, 11, CONST_siege233, gamelog);
+		mvaddstrAlt(5, 11, CONST_siege234, gamelog);
 	}
 	gamelog.nextMessage();
-	mvaddstrAlt(7, 19, "Press C to Continue Liberally.");
+	mvaddstrAlt(7, 19, CONST_siege274);
 	while (getkeyAlt() != 'c');
 }
 // Siege -- Mass combat outside safehouse
@@ -1883,16 +2112,16 @@ char sally_forth_aux(int loc)
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(11,  40, show_squad_liberal_status);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9,  1, "D - Escape");
-			mvaddstrAlt(10,  1, "E - Equip");
-			mvaddstrAlt(11,  1, "F - Fight!");
-			mvaddstrAlt(12,  1, "G - Surrender");
+			mvaddstrAlt(9,  1, CONST_siege236);
+			mvaddstrAlt(10,  1, CONST_siege237);
+			mvaddstrAlt(11,  1, CONST_siege238);
+			mvaddstrAlt(12,  1, CONST_siege239);
 		}
 		else
 		{
 			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9,  1, "C - Reflect on your Conservative judgment.");
+			mvaddstrAlt(9,  1, CONST_siege240);
 		}
 		// Enemies
 		printencounter();
@@ -1959,9 +2188,9 @@ char sally_forth_aux(int loc)
 					music.play(MUSIC_CONQUER);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					clearmessagearea();
-					mvaddstrAlt(16,  1, "You're free!", gamelog);
+					mvaddstrAlt(16,  1, CONST_siege241, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 					escapesiege(false);
 					return 1;
 				}
@@ -1970,9 +2199,9 @@ char sally_forth_aux(int loc)
 					music.play(MUSIC_CONQUER);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					clearmessagearea();
-					mvaddstrAlt(16,  1, "The siege is broken!", gamelog);
+					mvaddstrAlt(16,  1, CONST_siege242, gamelog);
 					gamelog.nextMessage();
-					getkeyAlt();
+			 	pressAnyKey();
 					conquertext();
 					escapesiege(true);
 					return 2;
@@ -1989,7 +2218,7 @@ void sally_forth()
 	music.play(MUSIC_DEFENSE);
 	eraseAlt();
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1,  26, "UNDER SIEGE: ESCAPE OR ENGAGE");
+	mvaddstrAlt(1,  26, CONST_siege243);
 	set_color_easy(WHITE_ON_BLACK);
 	int yLevel = 3;
 	for (int i = 0; i < len(nextSiege); i++) {
@@ -2005,10 +2234,10 @@ void sally_forth()
 	if (activesquad != NULL)loc = activesquad->squad[0]->location;
 	if (loc == -1)return;
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23,  11, "Press any key to Confront the Conservative Aggressors");
+	mvaddstrAlt(23,  11, CONST_siege252);
 	// Seperate logging text
-	gamelog.log("Your Liberals sally forth to confront the siege.");
-	getkeyAlt();
+	gamelog.log(CONST_siege245);
+ 	pressAnyKey();
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
@@ -2035,7 +2264,7 @@ void sally_forth()
 		squad.push_back(new squadst);
 		squad.back()->id = cursquadid++;
 		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
-		strcat(squad.back()->name, " Defense");
+		strcat(squad.back()->name, CONST_siege254.c_str());
 		int i = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 			if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
@@ -2059,10 +2288,10 @@ void sally_forth()
 	char result = sally_forth_aux(loc);
 	if (result == 2) ns->type = NEWSSTORY_SQUAD_BROKESIEGE;
 	// If you fail, make sure the safehouse isn't under siege anymore by
-	// forcing you to "give up".
+	// forcing you to CONST_siege247.
 	if (result == 0)
 	{
-		gamelog.log("You have been defeated.");
+		gamelog.log(CONST_siege248);
 		resolvesafehouses();
 	}
 }
@@ -2073,7 +2302,7 @@ void escape_engage()
 	//GIVE INFO SCREEN
 	eraseAlt();
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1,  26, "UNDER ATTACK: ESCAPE OR ENGAGE");
+	mvaddstrAlt(1,  26, CONST_siege249);
 	set_color_easy(WHITE_ON_BLACK);
 	int yLevel = 3;
 	for (int i = 0; i < len(engageConservatives); i++) {
@@ -2086,17 +2315,17 @@ void escape_engage()
 	if (loc == -1) return;
 	if (location[loc]->compound_walls&COMPOUND_CAMERAS)
 	{
-		mvaddstrAlt(yLevel,  16, "Your security cameras let you see units on the (M)ap.");
+		mvaddstrAlt(yLevel,  16, CONST_siege250);
 	}
 	if (location[loc]->compound_walls&COMPOUND_TRAPS)
 	{
-		mvaddstrAlt(yLevel + 1,  16, "Your traps will harass the enemy, but not the Squad.");
+		mvaddstrAlt(yLevel + 1,  16, CONST_siege251);
 	}
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23,  11, "Press any key to Confront the Conservative Aggressors");
+	mvaddstrAlt(23,  11, CONST_siege252);
 	// Seperate logging text
-	gamelog.log("Your Liberals confront the Conservatives within the safehouse.");
-	getkeyAlt();
+	gamelog.log(CONST_siege253);
+ 	pressAnyKey();
 	if (location[loc]->siege.siegetype == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
@@ -2123,7 +2352,7 @@ void escape_engage()
 		squad.push_back(new squadst);
 		squad.back()->id = cursquadid++;
 		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
-		strcat(squad.back()->name, " Defense");
+		strcat(squad.back()->name, CONST_siege254.c_str());
 		int i = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege&&pool[p]->alive&&pool[p]->align == 1)
 		{
@@ -2145,7 +2374,6 @@ void escape_engage()
 	newsstory.push_back(ns);
 	mode_site(loc);
 }
-
 /* siege - flavor text when you crush a CCS safe house */
 void conquertextccs()
 {
@@ -2153,7 +2381,7 @@ void conquertextccs()
 	//GIVE INFO SCREEN
 	eraseAlt();
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1,  26, "* * * * *   VICTORY   * * * * *", gamelog);
+	mvaddstrAlt(1,  26, CONST_siege255, gamelog);
 	gamelog.newline();
 	if (ccs_kills < 3)
 	{
@@ -2161,43 +2389,43 @@ void conquertextccs()
 		moveAlt(3, 16);
 		if (ccs_siege_kills > 10)
 		{
-			addstrAlt("Gunfire still ringing in their ears, the squad revels in ", gamelog);
-			mvaddstrAlt(4,  11, "their victory.  ", gamelog);
+			addstrAlt(CONST_siege263, gamelog);
+			mvaddstrAlt(4,  11, CONST_siege257, gamelog);
 		}
 		else
 		{
-			addstrAlt("The CCS Lieutenant lying dead at their feet, the squad ", gamelog);
-			mvaddstrAlt(4,  11, "slips away.  ");
+			addstrAlt(CONST_siege258, gamelog);
+			mvaddstrAlt(4,  11, CONST_siege268);
 		}
-		addstrAlt("The CCS Founder wasn't here, but for now, their ", gamelog);
-		mvaddstrAlt(5,  11, "power has been severely weakened.  Once the safehouse cools off, ", gamelog);
-		mvaddstrAlt(6,  11, "this will make a fine base for future Liberal operations.", gamelog);
+		addstrAlt(CONST_siege260, gamelog);
+		mvaddstrAlt(5,  11, CONST_siege261, gamelog);
+		mvaddstrAlt(6,  11, CONST_siege262, gamelog);
 	}
 	else
 	{
 		moveAlt(3, 16);
 		if (ccs_siege_kills > 10)
 		{
-			addstrAlt("Gunfire still ringing in their ears, the squad revels in ", gamelog);
-			mvaddstrAlt(4,  11, "their final victory.  ", gamelog);
-			mvaddstrAlt(6,  16, "As your Liberals pick through the remains of the safehouse, ", gamelog);
-			mvaddstrAlt(7,  11, "it is increasingly clear that this was the CCS's last safehouse.", gamelog);
+			addstrAlt(CONST_siege263, gamelog);
+			mvaddstrAlt(4,  11, CONST_siege264, gamelog);
+			mvaddstrAlt(6,  16, CONST_siege265, gamelog);
+			mvaddstrAlt(7,  11, CONST_siege266, gamelog);
 		}
 		else
 		{
-			addstrAlt("The CCS Founder lying dead at their feet, the squad ", gamelog);
-			mvaddstrAlt(4,  11, "slips away.  ", gamelog);
-			mvaddstrAlt(6,  16, "With its Founder killed in the heart of their own base, ", gamelog);
-			mvaddstrAlt(7,  11, "the last of the enemy's morale and confidence is shattered.", gamelog);
+			addstrAlt(CONST_siege267, gamelog);
+			mvaddstrAlt(4,  11, CONST_siege268, gamelog);
+			mvaddstrAlt(6,  16, CONST_siege269, gamelog);
+			mvaddstrAlt(7,  11, CONST_siege270, gamelog);
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  16, "The CCS has been completely destroyed.  Now wasn't there a ", gamelog);
-		mvaddstrAlt(10,  16, "revolution to attend to?", gamelog);
+		mvaddstrAlt(9,  16, CONST_siege271, gamelog);
+		mvaddstrAlt(10,  16, CONST_siege272, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(12,  5, "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD", gamelog);
+		mvaddstrAlt(12,  5, CONST_siege273, gamelog);
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 200, 1000);
 	}
 	gamelog.nextMessage();
-	mvaddstrAlt(15,  19, "Press C to Continue Liberally.");
+	mvaddstrAlt(15,  19, CONST_siege274);
 	while (getkeyAlt() != 'c');
 }

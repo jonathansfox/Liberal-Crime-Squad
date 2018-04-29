@@ -34,6 +34,8 @@ VIEW_CEOSALARY
 gives examples of CEO excesses.
 VIEW_WOMEN
 discusses abortion.
+VIEW_CIVILRIGHTS
+discusses civil rights.
 VIEW_DRUGS
 has a frank talk about drugs.
 VIEW_IMMIGRATION

@@ -1,3 +1,40 @@
+#include "../includes.h"
+const string CONST_talk040 = "# ";
+const string CONST_talk039 = "allText.txt";
+const string CONST_talk038 = " ";
+const string CONST_talk034 = "agree_to_release_hostages.txt";
+const string CONST_talk033 = "go_ahead_and_die.txt";
+const string CONST_talk032 = "let_hostages_go.txt";
+const string CONST_talk031 = "please_no_more.txt";
+const string CONST_talk030 = "hostage_negotiation.txt";
+const string CONST_talk029 = "who_cares_about_hostage.txt";
+const string CONST_talk028 = "please_spare_hostage.txt";
+const string CONST_talk027 = "threaten_hostage.txt";
+const string CONST_talk026 = "backs_off.txt";
+const string CONST_talk025 = "come_at_me_bro.txt";
+const string CONST_talk024 = "teller_complies.txt";
+const string CONST_talk023 = "teller_gestures.txt";
+const string CONST_talk022 = "robbing_bank.txt";
+const string CONST_talk021 = "that_is_not_disturbing.txt";
+const string CONST_talk020 = "that_is_disturbing.txt";
+const string CONST_talk019 = "mutant_rejection.txt";
+const string CONST_talk018 = "dog_rejection.txt";
+const string CONST_talk017 = "normal_talk_to_dog.txt";
+const string CONST_talk016 = "lovingly_talk_to_dog.txt";
+const string CONST_talk015 = "normal_talk_to_mutant.txt";
+const string CONST_talk014 = "lovingly_talk_to_mutant.txt";
+const string CONST_talk013 = "pickupLines.txt";
+const string CONST_talk012 = "no_free_speech_flirt.txt";
+
+const string tag_ARMOR_MITHRIL = "ARMOR_MITHRIL";
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
+const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
+const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
+const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
+const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
+const string blankString = "";
+const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,48 +60,40 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
 // for renting
-
-#include "sitemode/sitedisplay.h"
-
-#include "items/money.h"
-
-#include "log/log.h"
-
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
+#include "../sitemode/sitedisplay.h"
+#include "../items/money.h"
+#include "../log/log.h"
+#include "../common/commonactions.h"
+#include "../common/commonactionsCreature.h"
 // for void basesquad(squadst *st,long loc);
-
-#include "daily/shopsnstuff.h"
+#include "../daily/shopsnstuff.h"
 //for  void armsdealer(int loc);
-
-#include "combat/fight.h"
+#include "../combat/fight.h"
 // for void delenc(short e,char loot);
-#include "combat/fightCreature.h"  
+#include "../combat/fightCreature.h"  
 //for void capturecreature(Creature &t);
-
-
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-#include "locations/locationsPool.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../locations/locationsPool.h"
+void moveEverythingAwayFromSite(int cursite);
 extern Log gamelog;
 extern char newscherrybusted;
 extern vector<Location *> location;
 extern short exec[EXECNUM];
-#include "customMaps.h"
- vector<vector<string>> no_free_speech_flirt;
- vector<vector<string>> pickupLines;
- vector<vector<string>> lovingly_talk_to_mutant;
- vector<vector<string>> normal_talk_to_mutant;
- vector<vector<string>> lovingly_talk_to_dog;
- vector<vector<string>> normal_talk_to_dog;
+#include "../customMaps.h"
+ vector<vector<string> > no_free_speech_flirt;
+ vector<vector<string> > pickupLines;
+ vector<vector<string> > lovingly_talk_to_mutant;
+ vector<vector<string> > normal_talk_to_mutant;
+ vector<vector<string> > lovingly_talk_to_dog;
+ vector<vector<string> > normal_talk_to_dog;
  vector<string> dog_rejection;
  vector<string> mutant_rejection;
  vector<string> that_is_disturbing;
@@ -75,7 +104,6 @@ extern short exec[EXECNUM];
  const string talky = "talk\\";
  const int PICKUP_LINE_SIZE = 5;
  const int DOUBLE_LINE = 2;
-
  vector<string> come_at_me_bro;
  vector<string> backs_off;
  vector<string> threaten_hostage;
@@ -88,35 +116,32 @@ extern short exec[EXECNUM];
  vector<string> agree_to_release_hostages;
  const string talk_combat = "talk_combat\\";
  vector<file_and_text_collection> talk_file_collection = {
-
 	 /*talk.cpp*/
-	 customText(&no_free_speech_flirt, talky + "no_free_speech_flirt.txt", PICKUP_LINE_SIZE),
-	 customText(&pickupLines, talky + "pickupLines.txt", PICKUP_LINE_SIZE),
-	 customText(&lovingly_talk_to_mutant, talky + "lovingly_talk_to_mutant.txt", DOUBLE_LINE),
-	 customText(&normal_talk_to_mutant, talky + "normal_talk_to_mutant.txt", DOUBLE_LINE),
-	 customText(&lovingly_talk_to_dog, talky + "lovingly_talk_to_dog.txt", DOUBLE_LINE),
-	 customText(&normal_talk_to_dog, talky + "normal_talk_to_dog.txt", DOUBLE_LINE),
-	 customText(&dog_rejection, talky + "dog_rejection.txt"),
-	 customText(&mutant_rejection, talky + "mutant_rejection.txt"),
-	 customText(&that_is_disturbing, talky + "that_is_disturbing.txt"),
-	 customText(&that_is_not_disturbing, talky + "that_is_not_disturbing.txt"),
-	 customText(&robbing_bank, talky + "robbing_bank.txt"),
-	 customText(&teller_gestures, talky + "teller_gestures.txt"),
-	 customText(&teller_complies, talky + "teller_complies.txt"),
+	 customText(&no_free_speech_flirt, talky + CONST_talk012, PICKUP_LINE_SIZE),
+	 customText(&pickupLines, talky + CONST_talk013, PICKUP_LINE_SIZE),
+	 customText(&lovingly_talk_to_mutant, talky + CONST_talk014, DOUBLE_LINE),
+	 customText(&normal_talk_to_mutant, talky + CONST_talk015, DOUBLE_LINE),
+	 customText(&lovingly_talk_to_dog, talky + CONST_talk016, DOUBLE_LINE),
+	 customText(&normal_talk_to_dog, talky + CONST_talk017, DOUBLE_LINE),
+	 customText(&dog_rejection, talky + CONST_talk018),
+	 customText(&mutant_rejection, talky + CONST_talk019),
+	 customText(&that_is_disturbing, talky + CONST_talk020),
+	 customText(&that_is_not_disturbing, talky + CONST_talk021),
+	 customText(&robbing_bank, talky + CONST_talk022),
+	 customText(&teller_gestures, talky + CONST_talk023),
+	 customText(&teller_complies, talky + CONST_talk024),
 	 //talk in combat
-	 customText(&come_at_me_bro, talk_combat + "come_at_me_bro.txt"),
-	 customText(&backs_off, talk_combat + "backs_off.txt"),
-	 customText(&threaten_hostage, talk_combat + "threaten_hostage.txt"),
-	 customText(&please_spare_hostage, talk_combat + "please_spare_hostage.txt"),
-	 customText(&who_cares_about_hostage, talk_combat + "who_cares_about_hostage.txt"),
-	 customText(&hostage_negotiation, talk_combat + "hostage_negotiation.txt"),
-	 customText(&please_no_more, talk_combat + "please_no_more.txt"),
-	 customText(&let_hostages_go, talk_combat + "let_hostages_go.txt"),
-	 customText(&go_ahead_and_die, talk_combat + "go_ahead_and_die.txt"),
-	 customText(&agree_to_release_hostages, talk_combat + "agree_to_release_hostages.txt"),
+	 customText(&come_at_me_bro, talk_combat + CONST_talk025),
+	 customText(&backs_off, talk_combat + CONST_talk026),
+	 customText(&threaten_hostage, talk_combat + CONST_talk027),
+	 customText(&please_spare_hostage, talk_combat + CONST_talk028),
+	 customText(&who_cares_about_hostage, talk_combat + CONST_talk029),
+	 customText(&hostage_negotiation, talk_combat + CONST_talk030),
+	 customText(&please_no_more, talk_combat + CONST_talk031),
+	 customText(&let_hostages_go, talk_combat + CONST_talk032),
+	 customText(&go_ahead_and_die, talk_combat + CONST_talk033),
+	 customText(&agree_to_release_hostages, talk_combat + CONST_talk034),
  };
-
-
 string while_naked;
 char heyMisterDog(Creature &a, Creature &tk);
 char heyMisterMonster(Creature &a, Creature &tk);
@@ -129,22 +154,17 @@ char doYouComeHereOften(Creature &a, Creature &tk);
 char heyINeedAGun(Creature &a, Creature &tk);
 char heyIWantToRentARoom(Creature &a, Creature &tk);
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk);
-typedef map<short, string> shortAndString;
-shortAndString conservativeLegalArgument;
-typedef map<short, vector<string>> shortAndTwoStrings;
- shortAndTwoStrings talkAboutTheIssues;
- shortAndString youAreStupidTalkAboutIssues;
- shortAndString issueTooLiberal;
+map<short, string> conservativeLegalArgument;
+ map<short, vector<string> > talkAboutTheIssues;
+ map<short, string> youAreStupidTalkAboutIssues;
+ map<short, string> issueTooLiberal;
  string saysComma;
  string respondsComma;
  string colonSpace;
  extern string singleDot;
-
  extern short cursite;
  extern short sitealarm;
  extern Creature encounter[ENCMAX];
-
-
  extern newsstoryst *sitestory;
  extern int sitecrime;
  extern squadst *activesquad;
@@ -157,15 +177,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
  extern vector<datest *> date;
  extern vector<recruitst *> recruit;
  extern short attitude[VIEWNUM];
-
  extern short sitealarmtimer;
- extern vector<Item *> groundloot;
  extern int locx;
  extern int locy;
  extern int locz;
  extern short siteonfire;
  extern short fieldskillrate;
-
  string unnamed_String_Talk_cpp_000;
  string unnamed_String_Talk_cpp_001;
  string unnamed_String_Talk_cpp_002;
@@ -316,7 +333,6 @@ typedef map<short, vector<string>> shortAndTwoStrings;
  string unnamed_String_Talk_cpp_147;
  string unnamed_String_Talk_cpp_148;
  string unnamed_String_Talk_cpp_149;
-
 /* bluff, date, issues */
 char talk(Creature &a, const int t)
 {
@@ -354,8 +370,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 	mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_003);
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
-	int c;
-	do c = getkeyAlt(); while (c<'a'&&c>'c');
+	int c = pressSpecificKey('a', 'b', 'c');
 	switch (c)
 	{
 	case 'a':
@@ -366,7 +381,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(10,  1, pickrandom(robbing_bank), gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -374,7 +389,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			addstrAlt(pickrandom(teller_gestures), gamelog);
 			mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_006, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			sitealarm = 1;
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
@@ -391,7 +406,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			addstrAlt(pickrandom(teller_complies), gamelog);
 			mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_008, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
 			sitecrime += 30;
@@ -421,7 +436,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			clearmessagearea();
 		}
 		mvaddstrAlt(10,  1, a.name, gamelog);
@@ -432,7 +447,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 		gamelog.record(singleSpace);
 		mvaddstrAlt(12,  1, unnamed_String_Talk_cpp_011, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		const int roll = a.skill_roll(SKILL_PERSUASION);
 		int difficulty = DIFFICULTY_VERYEASY;
 		if (armed_liberal == NULL)
@@ -447,7 +462,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			mvaddstrAlt(9,  1, unnamed_String_Talk_cpp_012, gamelog);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_013, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			sitealarm = 1;
 			sitealienate = 2;
 			criminalizeparty(LAWFLAG_BANKROBBERY);
@@ -467,10 +482,10 @@ char talkToBankTeller(Creature &a, Creature &tk)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(9,  1, unnamed_String_Talk_cpp_014, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_015, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			criminalizeparty(LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKSTICKUP);
 			sitecrime += 50;
@@ -579,9 +594,7 @@ char talkToGeneric(Creature &a, Creature &tk)
 		}
 	}
 }
-
-#include "common/creaturePool.h"
-
+#include "../common/creaturePool.h"
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 {
 	clearcommandarea();
@@ -593,7 +606,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_025, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -603,7 +616,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_026, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -612,19 +625,14 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_027, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(15,  1, unnamed_String_Talk_cpp_028, gamelog);
 	gamelog.newline();
-	getkeyAlt();
-	location[cursite]->renting = RENTING_NOCONTROL;
-	//MOVE ALL ITEMS AND SQUAD MEMBERS
-	const int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cursite);
-	CreaturePool::getInstance().moveEverythingFrom(cursite, hs);
-	location[hs]->getloot(location[cursite]->loot);
-	location[cursite]->compound_walls = 0;
-	location[cursite]->compound_stores = 0;
-	location[cursite]->front_business = -1;
+ 	pressAnyKey();
+	
+	moveEverythingAwayFromSite(cursite);
+	
 	return 1;
 }
 char heyIWantToRentARoom(Creature &a, Creature &tk)
@@ -635,7 +643,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_029, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -644,7 +652,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_030, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	int rent;
@@ -665,7 +673,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 	addstrAlt(rent, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_034, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	while (true)
 	{
@@ -686,7 +694,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_038, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(12,  1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -696,7 +704,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			gamelog.newline();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_041);
-			getkeyAlt();
+	 	pressAnyKey();
 			ledger.subtract_funds(rent, EXPENSE_RENT);
 			location[cursite]->renting = rent;
 			location[cursite]->newrental = 1;
@@ -709,7 +717,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_042, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(12,  1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -717,7 +725,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_044, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			return 1;
 		case 'c': // Threaten landlord
 			clearcommandarea(); clearmessagearea(); clearmaparea();
@@ -739,7 +747,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				clearmessagearea();
 			}
 			mvaddstrAlt(9,  1, a.name, gamelog);
@@ -747,10 +755,10 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_046, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			const int roll = a.skill_roll(SKILL_PERSUASION);
 			int difficulty = DIFFICULTY_FORMIDABLE;
-			if (newscherrybusted == false)
+			if (!newscherrybusted)
 				difficulty += 6;
 			if (armed_liberal == NULL)
 				difficulty += 6;
@@ -763,7 +771,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				addstrAlt(unnamed_String_Talk_cpp_048, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				tk.cantbluff = 1;
 				return 1;
 			}
@@ -774,7 +782,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_049, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				int rent;
 				// Either he calls the cops...
 				if (roll < difficulty)
@@ -803,7 +811,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_050, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
@@ -812,7 +820,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_051, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	// IsaacG Migrate Strings
@@ -827,7 +835,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_052, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	if (sitealarm != 0)
@@ -837,7 +845,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_053, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	switch (LocationsPool::getInstance().getLocationType(cursite))
@@ -854,7 +862,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_054, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		armsdealer(cursite);
 		return 1;
 	default:
@@ -863,7 +871,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_055, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 }
@@ -875,7 +883,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10,  1, unnamed_String_Talk_cpp_056, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	bool interested = tk.talkreceptive();
 	if (!interested && a.skill_check(SKILL_PERSUASION, DIFFICULTY_AVERAGE))
 		interested = true;
@@ -891,7 +899,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		default: addstrAlt(unnamed_String_Talk_cpp_059, gamelog); break;
 		}
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	else if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) != 0 && interested)
@@ -901,7 +909,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13,  1, unnamed_String_Talk_cpp_061, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return talkAboutIssues(a, tk);
 	}
 	else
@@ -922,7 +930,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(unnamed_String_Talk_cpp_065, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 }
@@ -953,7 +961,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		mvaddstrAlt(11, 1, selected_flirt[1], gamelog);
 	}
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	bool succeeded = false;
 	int difficulty = DIFFICULTY_HARD;
 	if (tk.type == CREATURE_CORPORATE_CEO)
@@ -990,7 +998,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 			addstrAlt(unnamed_String_Talk_cpp_067, gamelog);
 		}
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		return 1;
 	}
 	a.train(SKILL_SEDUCTION, LCSrandom(5) + 2);
@@ -1007,7 +1015,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++,  1, unnamed_String_Talk_cpp_068, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		tk.cantbluff = 1;
 	}
 	else if (succeeded)
@@ -1017,14 +1025,13 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++,  1, selected_flirt[2], gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		++y;
 		mvaddstrAlt(y++,  1, a.name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_069, gamelog);
 		addstrAlt(tk.name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_070, gamelog);
-
 		// IsaacG the reuse of string_60 is because a formatting error in the automatically generated code
 		// because string_60 is identicle to the strings that broke
 		// Aside from this, all unnamed_strings are in exact alphanumeric order, awaiting proper names
@@ -1037,7 +1044,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		}
 		addstrAlt(unnamed_String_Talk_cpp_073, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		datest *newd = NULL;
 		for (int d = 0; d < len(date); d++)
 		{
@@ -1084,7 +1091,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 			}
 		}
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		tk.cantbluff = 1;
 	}
 	return 1;
@@ -1137,7 +1144,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		}
 	}
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	int difficulty = DIFFICULTY_VERYEASY;
 	if (tk.align == ALIGN_CONSERVATIVE)
 		difficulty += 7;
@@ -1164,7 +1171,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 			switch (LCSrandom(10))
 			{
 			case 0: mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_083, gamelog);
-				getkeyAlt();
+		 	pressAnyKey();
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y++,  1, unnamed_String_Talk_cpp_084, gamelog);
 				break;
@@ -1178,19 +1185,17 @@ char talkAboutIssues(Creature &a, Creature &tk)
 			}
 		}
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(++y,  1, unnamed_String_Talk_cpp_087, gamelog);
 		addstrAlt(tk.name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_088, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		Creature *newcr = new Creature;
 		*newcr = tk;
 		newcr->namecreature();
-		recruitst *newrst = new recruitst;
-		newrst->recruit = newcr;
-		newrst->recruiter_id = a.id;
+		recruitst *newrst = new recruitst(newcr, a.id);
 		recruit.push_back(newrst);
 		// TODO this is a pointer subtracting another pointer in order to calculate the index, change it
 		delenc(&tk - encounter, 0);
@@ -1231,7 +1236,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		tk.cantbluff = 1;
 		return 1;
 	}
@@ -1324,7 +1329,7 @@ char talkInCombat(Creature &a, Creature &tk)
 			mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
 			break;
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		for (int e = 0; e < ENCMAX; e++)
 		{
@@ -1351,7 +1356,7 @@ char talkInCombat(Creature &a, Creature &tk)
 					addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
 					delenc(e, 0);
 					addjuice(a, 2, 200); // Instant juice!
-					getkeyAlt();
+			 	pressAnyKey();
 				}
 			}
 		}
@@ -1381,12 +1386,12 @@ char talkInCombat(Creature &a, Creature &tk)
 		sitecrime += 5;
 		criminalizeparty(LAWFLAG_KIDNAPPING);
 		addjuice(a, -2, -10); // DE-juice for this shit
-		getkeyAlt();
+ 	pressAnyKey();
 		bool noretreat = false;
 		if (weaponhostage)
 		{
-			int e;
-			for (e = 0; e < ENCMAX; e++)
+			int e = 0;
+			for (; e < ENCMAX; e++)
 			{
 				if (encounter[e].exists&&encounter[e].alive&&
 					encounter[e].enemy() && encounter[e].blood>70)
@@ -1429,7 +1434,6 @@ char talkInCombat(Creature &a, Creature &tk)
 							{
 								string moreHostageQuestions;
 								if (LCSrandom(5)) {
-
 									moreHostageQuestions = (pickrandom(hostage_negotiation));
 								}else{
 									if (hostages > 1)
@@ -1440,19 +1444,20 @@ char talkInCombat(Creature &a, Creature &tk)
 							}
 						}
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 						noretreat = true;
 						break;
 					}
 				}
 			}
+			if (e == ENCMAX) { e--; }
 			if (noretreat == false)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				clearmessagearea();
 				mvaddstrAlt(16,  1, unnamed_String_Talk_cpp_105, gamelog);
 				gamelog.newline();
-				for (int i = ENCMAX; i >= 0; i--)
+				for (int i = ENCMAX-1; i >= 0; i--)
 				{
 					if (encounter[i].exists&&
 						encounter[i].alive&&
@@ -1461,7 +1466,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						delenc(i, 0);
 					}
 				}
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 			else
 			{
@@ -1512,7 +1517,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
 					}
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(17,  1, executer->name, gamelog);
 					addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
@@ -1528,8 +1533,8 @@ char talkInCombat(Creature &a, Creature &tk)
 						executer->prisoner->type == CREATURE_NEWSANCHOR ||
 						executer->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
 						executer->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
-					makeloot(*executer->prisoner, groundloot);
-					getkeyAlt();
+					makeloot(*executer->prisoner);
+			 	pressAnyKey();
 					delete_and_nullify(executer->prisoner);
 					if (hostages > 1 && LCSrandom(2))
 					{
@@ -1541,10 +1546,10 @@ char talkInCombat(Creature &a, Creature &tk)
 						mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
 						addstrAlt(pickrandom(please_no_more), gamelog);
 						gamelog.newline();
-						for (int i = ENCMAX; i >= 0; i--)
+						for (int i = ENCMAX-1; i >= 0; i--)
 							if (encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
 								delenc(i, 0);
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 				}
 				else if (c == 'b')
@@ -1562,12 +1567,11 @@ char talkInCombat(Creature &a, Creature &tk)
 						}
 						else {
 							nameHostages = (pickrandom(let_hostages_go));
-
 						}
 						mvaddstrAlt(17, 1, nameHostages, gamelog);
 					}
 					gamelog.newline();
-					getkeyAlt();
+			 	pressAnyKey();
 					if (((encounter[e].type == CREATURE_DEATHSQUAD ||
 						encounter[e].type == CREATURE_AGENT ||
 						encounter[e].type == CREATURE_MERC ||
@@ -1582,7 +1586,7 @@ char talkInCombat(Creature &a, Creature &tk)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(17,  1, pickrandom(go_ahead_and_die), gamelog);
 						gamelog.newline();
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 					else
 					{
@@ -1593,8 +1597,8 @@ char talkInCombat(Creature &a, Creature &tk)
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						mvaddstrAlt(17,  1, pickrandom(agree_to_release_hostages), gamelog);
 						gamelog.newline();
-						getkeyAlt();
-						for (int i = ENCMAX; i >= 0; i--)
+				 	pressAnyKey();
+						for (int i = ENCMAX -1; i >= 0; i--)
 							if (encounter[i].exists&&encounter[i].enemy() && encounter[i].alive)
 								delenc(i, 0);
 						clearmessagearea();
@@ -1611,7 +1615,7 @@ char talkInCombat(Creature &a, Creature &tk)
 								delete_and_nullify(activesquad->squad[i]->prisoner);
 							}
 						}
-						getkeyAlt();
+				 	pressAnyKey();
 					}
 				}
 			}
@@ -1623,7 +1627,7 @@ char talkInCombat(Creature &a, Creature &tk)
 			mvaddstrAlt(16,  1, tk.name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 	}
 	else if (c == 'c')
@@ -1709,10 +1713,10 @@ char talkInCombat(Creature &a, Creature &tk)
 			
 		}
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		bool fooled = true;
-		int e;
-		for (e = 0; e < ENCMAX; e++)
+		int e = 0;
+		for ( ; e < ENCMAX; e++)
 		{
 			if (encounter[e].exists&&encounter[e].alive&&
 				encounter[e].enemy())
@@ -1725,6 +1729,7 @@ char talkInCombat(Creature &a, Creature &tk)
 				if (!fooled) break;
 			}
 		}
+		if (e == ENCMAX) { e--; }
 		switch (fieldskillrate)
 		{
 		case FIELDSKILLRATE_FAST:
@@ -1751,14 +1756,14 @@ char talkInCombat(Creature &a, Creature &tk)
 					addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
 				else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
 			}
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		else
 		{
 			clearmessagearea();
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16,  1, unnamed_String_Talk_cpp_148, gamelog);
-			getkeyAlt();
+	 	pressAnyKey();
 			for (int e = ENCMAX - 1; e >= 0; e--)
 				if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
 					delenc(e, 0);
@@ -1770,11 +1775,11 @@ char talkInCombat(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(14,  1, unnamed_String_Talk_cpp_149, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		int stolen = 0;
 		// Police assess stolen goods in inventory
 		for (int l = 0; l < len(activesquad->loot); l++)
-			if (activesquad->loot[l]->is_loot())
+			if (activesquad->loot[l]->whatIsThis() == THIS_IS_LOOT)
 				stolen++;
 		for (int i = 0; i < 6; i++)
 		{
@@ -1829,14 +1834,14 @@ char heyMisterDog(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11,  1, pitch, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, tk.name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14,  1, response, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	if (success)
 		for (int i = 0; i < ENCMAX; i++)
 			if (encounter[i].type == CREATURE_GUARDDOG)
@@ -1883,24 +1888,20 @@ char heyMisterMonster(Creature &a, Creature &tk)
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11,  1, pitch, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13,  1, tk.name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14,  1, response, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	if (success)
 		for (int i = 0; i < ENCMAX; i++)
 			if (encounter[i].type == CREATURE_GENETIC)
 				encounter[i].align = ALIGN_LIBERAL;
 	return 1;
 }
-
-
-
-
 extern string findingBugs;
 extern string undefined;
 extern string NONE;
@@ -1927,65 +1928,8 @@ extern string youWentOnVacation;
 extern string youWentIntoHiding;
 extern string whileYouWereInPrison;
 extern string youDisappearedSafely;
-
 extern string proposeConservative;
 extern string proposeStalinist;
-
-extern string tag_creature;
-extern string tag_skill_experience;
-extern string tag_name;
-extern string tag_propername;
-extern string tag_gender_conservative;
-extern string tag_gender_liberal;
-extern string tag_squadid;
-extern string tag_age;
-extern string tag_birthday_month;
-extern string tag_birthday_day;
-extern string tag_exists;
-extern string tag_align;
-extern string tag_alive;
-extern string tag_type_idname;
-extern string tag_infiltration;
-extern string tag_animalgloss;
-extern string tag_specialattack;
-extern string tag_clinic;
-extern string tag_dating;
-extern string tag_hiding;
-extern string tag_trainingtime;
-extern string tag_trainingsubject;
-extern string tag_prisoner;
-extern string tag_sentence;
-extern string tag_confessions;
-extern string tag_deathpenalty;
-extern string tag_joindays;
-extern string tag_deathdays;
-extern string tag_id;
-extern string tag_hireid;
-extern string tag_meetings;
-extern string tag_forceinc;
-extern string tag_stunned;
-extern string tag_has_thrown_weapon;
-extern string tag_money;
-extern string tag_juice;
-extern string tag_income;
-extern string tag_wound;
-extern string tag_blood;
-extern string tag_special;
-extern string tag_crimes_suspected;
-extern string tag_heat;
-extern string tag_location;
-extern string tag_worklocation;
-extern string tag_cantbluff;
-extern string tag_base;
-extern string tag_activity;
-extern string tag_arg;
-extern string tag_arg2;
-extern string tag_carid;
-extern string tag_is_driver;
-extern string tag_pref_carid;
-extern string tag_pref_is_driver;
-extern string tag_flag;
-extern string tag_dontname;
 extern string enter_done;
 extern string beingFollowedBySwine;
 extern string lostThem;
@@ -2005,62 +1949,33 @@ extern string percentSign;
 extern string secrecyLevel;
 extern string heatLevel;
 extern string travelDifCity;
-extern string tag_class;
-extern string tag_WEAPON;
-extern string tag_CLIP;
-extern string tag_ARMOR;
-extern string tag_LOOT;
-extern string tag_type;
-extern string tag_description;
-extern string tag_price;
-extern string tag_sleeperprice;
-extern string tag_letter;
 extern string smellsPanic;
-extern string tag_Sta;
-extern string tag_Libp;
-extern string tag_Lib;
-extern string tag_Mod;
-extern string tag_Cons;
-extern string tag_Consp;
-
 extern string moderateLC;
 extern string buggyString;
-
-
 extern string isSeized;
-
 extern string selectA;
 extern string selectAn;
 extern string enterDash;
-
-
 extern string accordingToSourcesAtScene;
 extern string accordingToPoliceSources;
 extern string ampersandR;
 extern string singleDot;
-
 extern string membersOfLCS;
 extern string lcsSpokeseperson;
 extern string policeSpokesperson;
 extern string pressKeyToReflect;
-
-
 extern string pressLToViewHighScores;
 extern string ampersandC;
 extern string saysComma;
 extern string while_naked;
 extern string respondsComma;
 extern string colonSpace;
-
-string singleSpace = " ";
+string singleSpace = CONST_talk038;
 string commaSpace;
-
 extern string theLCS;
 extern string notASkill;
 extern string notAnAttribute;
-
 extern string vehicleSportsCar;
-
 extern string aNewConEra;
 extern string theYearIs;
 extern string conservativePresident;
@@ -2078,7 +1993,6 @@ extern string powerlessToStop;
 extern string inThisDarkTime;
 extern string whatIsYourName;
 extern string pressEnterToBeRealName;
-
 extern string invalidTag;
 extern string theDocSaid;
 extern string aBoy;
@@ -2088,9 +2002,7 @@ extern string myParents;
 extern string insistedOtherwise;
 extern string they;
 extern string namedMe;
-
 extern string error;
-
 extern string theFounder;
 extern string firstName;
 extern string pressAtoReconsider;
@@ -2107,13 +2019,11 @@ extern string letFateDecide;
 extern string pressDtoToggle;
 extern string city;
 extern string pressEtoRelocate;
-extern string pressAnyKey;
+extern string pressAnyKeyString;
 extern string allOptions;
-
 extern string unSelected;
 extern string isSelected;
 extern string pressAnyOtherKey;
-
 extern string notCreature;
 extern string notValidMap;
 extern string notSpecialWound;
@@ -2132,8 +2042,6 @@ extern string affectsTheseSkills;
 extern string a_fastSkills;
 extern string b_classic;
 extern string c_hardMode;
-
-
 extern string deleteSave;
 extern string chooseSave;
 extern string titleScreenLine;
@@ -2141,18 +2049,15 @@ extern string newGame;
 extern string pressToSelectSave;
 extern string pressToDeleteSave;
 extern string vToSwitchXToQuit;
-
 extern string areYouSureDelte;
 extern string questionYSlashN;
 extern string pressMtoTurnOffMusic;
 extern string pressMtoTurnOnMusic;
-
 extern string inWhatWorld;
 extern string enterNameForSave;
 extern string pleaseEnterName;
 extern string prettyPlease;
 extern string justEnterName;
-
 extern string liberalCrimeSquad;
 extern string inspiredByOubliette;
 extern string copyrightTarn;
@@ -2166,21 +2071,17 @@ extern string lcsWikiHyperlink;
 extern string pressESCToQuit;
 extern string pressAnyKeyToPursue;
 extern string plusChar;
-
 extern string dotDat;
-
 extern string itemType;
 extern string doesNotExistItem;
 extern string vehicleType;
 extern string doesNotExistVehicle;
 extern string couldNotLoad;
-
 extern string itemClassClip;
 extern string itemClassWeapon;
 extern string itemClassArmor;
 extern string itemClassLoot;
 extern string itemClassMoney;
-
 extern string failedToLoadSitemaps;
 extern string debugCode;
 extern string activated;
@@ -2188,14 +2089,11 @@ extern string failedToLoad;
 extern string exclamationPoint;
 extern string defaultMissingForMask;
 extern string defaultUnknownForMask;
-
 extern string ableToStopBleed;
 extern string sWounds;
 extern string isBurned;
 extern string drops;
 extern string sBody;
-
-
 extern string hasBeenCaughtSnooping;
 extern string isNowHomeless;
 extern string hasLeakedIntelligence;
@@ -2209,18 +2107,14 @@ extern string hasLeakedJudiciary;
 extern string papersAreStashed;
 extern string hasLeakedCCS;
 extern string diskIsStashed;
-
 extern string arrestedWhileEmbezzling;
 extern string arrestedWhileStealing;
-
 extern string droppedOffPackage;
 extern string itemNotFound;
 extern string lostStolenItem;
 extern string contactModAuthor;
-
 extern string hasRecruited;
 extern string looksForwardToServing;
-
 extern string toSpend;
 extern string chooseAColor;
 extern string theseColorsAreCon;
@@ -2229,14 +2123,12 @@ extern string notEnoughMoney;
 extern string chooseVehicle;
 extern string thisVehicle;
 extern string weDontNeedCar;
-
 extern string enterLeave;
 extern string b_chooseBuyer;
 extern string s_sellCar;
 extern string s_sellThe;
 extern string g_getCar;
 extern string f_fixWounds;
-
 extern string univer;
 extern string numRecruit;
 extern string numMartyr;
@@ -2265,21 +2157,14 @@ extern string heLiOutCrime;
 extern string heLiBurned;
 extern string hecoStalinized;
 extern string dotSpace;
-
 extern string liberalHelpOn;
 extern string pressAnyKeyToReturn;
-
 string study_string1;
 string study_string2;
-
 vector<string> allText;
-
 vector<file_and_text_collection> text_file_collection = {
-
-	customText(&allText, "allText.txt"),
-
+	customText(&allText, CONST_talk039),
 };
-
 vector<string*> allTextString = {
 	&respondsComma,
 	&saysComma,
@@ -2315,61 +2200,7 @@ vector<string*> allTextString = {
 	&youDisappearedSafely,
 	&proposeConservative,
 	&proposeStalinist,
-	&tag_creature,
-	&tag_skill_experience,
-	&tag_name,
-	&tag_propername,
-	&tag_gender_conservative,
-	&tag_gender_liberal,
-	&tag_squadid,
-	&tag_age,
-	&tag_birthday_month,
-	&tag_birthday_day,
-	&tag_exists,
-	&tag_align,
-	&tag_alive,
-	&tag_type_idname,
-	&tag_infiltration,
-	&tag_animalgloss,
-	&tag_specialattack,
-	&tag_clinic,
-	&tag_dating,
-	&tag_hiding,
-	&tag_trainingtime,
-	&tag_trainingsubject,
-	&tag_prisoner,
-	&tag_sentence,
-	&tag_confessions,
-	&tag_deathpenalty,
-	&tag_joindays,
-	&tag_deathdays,
-	&tag_id,
-	&tag_hireid,
-	&tag_meetings,
-	&tag_forceinc,
-	&tag_stunned,
-	&tag_has_thrown_weapon,
-	&tag_money,
-	&tag_juice,
-	&tag_income,
-	&tag_wound,
-	&tag_blood,
-	&tag_special,
-	&tag_crimes_suspected,
-	&tag_heat,
-	&tag_location,
-	&tag_worklocation,
-	&tag_cantbluff,
-	&tag_base,
-	&tag_activity,
-	&tag_arg,
-	&tag_arg2,
-	&tag_carid,
-	&tag_is_driver,
-	&tag_pref_carid,
-	&tag_pref_is_driver,
-	&tag_flag,
-	&tag_dontname,
+	
 	&enter_done,
 	&beingFollowedBySwine,
 	&lostThem,
@@ -2389,23 +2220,7 @@ vector<string*> allTextString = {
 	&secrecyLevel,
 	&heatLevel,
 	&travelDifCity,
-	&tag_class,
-	&tag_WEAPON,
-	&tag_CLIP,
-	&tag_ARMOR,
-	&tag_LOOT,
-	&tag_type,
-	&tag_description,
-	&tag_price,
-	&tag_sleeperprice,
-	&tag_letter,
-	&smellsPanic,
-	&tag_Sta,
-	&tag_Libp,
-	&tag_Lib,
-	&tag_Mod,
-	&tag_Cons,
-	&tag_Consp,
+	&smellsPanic,	
 	&moderateLC,
 	&buggyString,
 	&isSeized,
@@ -2467,7 +2282,7 @@ vector<string*> allTextString = {
 	&pressDtoToggle,
 	&city,
 	&pressEtoRelocate,
-	&pressAnyKey,
+	&pressAnyKeyString,
 	&allOptions,
 	&unSelected,
 	&isSelected,
@@ -2760,12 +2575,10 @@ vector<string*> allTextString = {
 	&study_string1,
 	&study_string2,
 };
-
-
 bool initialize_incomplete_txt();
 bool initialize_incomplete_txt() {
 	int i = 0;
-	check_status_of_squad_liberal.append("# ");
+	check_status_of_squad_liberal.append(CONST_talk040);
 	check_status_of_squad_liberal.append(allText[i++]);
 	for (string* str : allTextString) {
 		*str = allText[i++];

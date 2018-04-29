@@ -1,15 +1,14 @@
 
-typedef map< int, string > StringPairs;
 
 typedef struct {
-	vector<vector<string>>* super_collection;
+	vector<vector<string> >* super_collection;
 	vector<string>* collection;
 	int dimensions;
 	string fileName;
 	bool superCollection;
 } file_and_text_collection;
 file_and_text_collection customText(vector<string>  *, string);
-file_and_text_collection customText(vector<vector<string>> *, string, int);
+file_and_text_collection customText(vector<vector<string> > *, string, int);
 file_and_text_collection customText(string);
 file_and_text_collection customText(string, int);
 // The usage of the default constructor stringConnectedToView() is discouraged
@@ -21,15 +20,13 @@ struct stringConnectedToView {
 	const string belowFifty;
 	const string belowFiftyLiberalLaw;
 	const string belowFiftyEliteLiberalLaw;
-	stringConnectedToView() : stringConnectedToView("","") {}
+	stringConnectedToView() : stringConnectedToView(blankString,blankString) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFifty_), belowFiftyEliteLiberalLaw(belowFifty_) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_, string belowFiftyEliteLiberalLaw_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFifty_), belowFiftyEliteLiberalLaw(belowFiftyEliteLiberalLaw_) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_, string belowFiftyEliteLiberalLaw_, string belowFiftyLiberalLaw_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFiftyLiberalLaw_), belowFiftyEliteLiberalLaw(belowFiftyEliteLiberalLaw_) {}
 };
 
 
-typedef map< Views, stringConnectedToView > ViewAndStrings;
-typedef map<char, vector<ActivityAndString>> charToVector;
 struct ChangeOfOpinion
 {
 	Views view;

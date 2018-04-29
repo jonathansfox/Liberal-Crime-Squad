@@ -1,3 +1,20 @@
+#include "../includes.h"
+const string CONST_lcsio014 = ".dat";
+const string CONST_lcsio013 = ".";
+const string CONST_lcsio012 = ".lcs/";
+const string CONST_lcsio011 = "/";
+const string CONST_lcsio010 = "./";
+const string CONST_lcsio009 = "HOME";
+const string CONST_lcsio008 = "../art/";
+const string CONST_lcsio007 = "./art/";
+const string CONST_lcsio006 = "/usr/games/lcs/art/";
+const string CONST_lcsio005 = "/usr/games/share/lcs/art/";
+const string CONST_lcsio004 = "/usr/share/lcs/art/";
+const string CONST_lcsio003 = "/usr/local/share/lcs/art/";
+const string CONST_lcsio002 = "/lcs/art/";
+const string CONST_lcsioX01 = "score";
+
+const string blankString = "";
 /*
 This file is a complete rewrite of the LCS I/O system.
 The original lcsio.h can be found in lcsio-old.h in the sourceforge Subversion
@@ -15,9 +32,6 @@ This file is part of Liberal Crime Squad.
     along with Liberal Crime Squad; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
-
-#include <includes.h>
-
 #include <tinydir.h>
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
@@ -26,16 +40,16 @@ bool initialized=false;
 const char *art_search_paths[]=
 {
    #ifdef INSTALL_DATA_DIR
-   INSTALL_DATA_DIR "/lcs/art/",
+   INSTALL_DATA_DIR CONST_lcsio002,
    #endif
    #ifndef WIN32
-   "/usr/local/share/lcs/art/",
-   "/usr/share/lcs/art/",
-   "/usr/games/share/lcs/art/",
-   "/usr/games/lcs/art/",
+   CONST_lcsio003.c_str(),
+   CONST_lcsio004.c_str(),
+   CONST_lcsio005.c_str(),
+   CONST_lcsio006.c_str(),
    #endif
-   "./art/",
-   "../art/",
+   CONST_lcsio007.c_str(),
+   CONST_lcsio008.c_str(),
    NULL
 };
 //Check if filename exists on the system.
@@ -51,19 +65,19 @@ bool LCSFileExists(const char* filename)
 bool LCSInitHomeDir()
 {
    #ifndef WIN32
-   char* homeenv=getenv("HOME");
+   char* homeenv=getenv(CONST_lcsio009.c_str());
    #else
-   char* homeenv=(char*)"./";
+   char* homeenv=(char*)CONST_lcsio010.c_str();
    #endif
    //Do everything using STL String, it is safer that way.
    std::string str=homeenv;
    if(str[len(str)-1]!='/')
-      str+="/";
+      str+=CONST_lcsio011;
    #ifndef WIN32
-   str+=".lcs/";
+   str+=CONST_lcsio012;
    #endif
    strncpy(homedir,str.c_str(),MAX_PATH_SIZE);
-   if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
+   if((!LCSFileExists(homedir)) && (strncmp(homedir,CONST_lcsio013.c_str(),1)!=0))
    {
       #ifdef WIN32
       if(_mkdir(homedir)!=0)
@@ -138,7 +152,7 @@ vector<string> LCSSaveFiles()
    {
       tinydir_file file;
       tinydir_readfile(&dir, &file);
-      if(strstr(file.name, ".dat") != NULL &&strstr(file.name, "score") == NULL)
+      if(strstr(file.name, CONST_lcsio014.c_str()) != NULL &&strstr(file.name, CONST_lcsioX01.c_str()) == NULL)
          save_files.push_back(file.name);
       tinydir_next(&dir);
    }
@@ -154,7 +168,7 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
       LCSInitArtDir(); //Initialize the art dir.
       initialized = true; //Initialized.
    }
-   std::string filepath = ""; //The actual path to the file.
+   std::string filepath = blankString; //The actual path to the file.
    //This ifelse block decides which directory the file gets saved to.
    if(flags & LCSIO_PRE_ART) //Art dir specified.
       filepath = artdir; //Set the filepath to the artdir.

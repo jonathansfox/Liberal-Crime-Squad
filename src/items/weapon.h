@@ -4,6 +4,7 @@ class Weapon : public Item
 {
    public:
       explicit Weapon(const WeaponType& seed, int number = 1);
+	  virtual thisItemIs whatIsThis() const { return THIS_IS_WEAPON; }
       virtual Weapon* clone() const { return new Weapon(*this); }
       explicit Weapon(const std::string& inputXml);
       string showXml() const;
@@ -42,7 +43,6 @@ class Weapon : public Item
       void decrease_ammo(int d) { ammo_ -= d; }
       const string& get_loaded_cliptypename() const { return loaded_cliptype_; }
       const attackst* get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const;
-      virtual bool is_weapon() const { return true; }
    private:
       string loaded_cliptype_;
       int ammo_;

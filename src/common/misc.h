@@ -21,7 +21,7 @@ void chooseLetterOrNumber(char *str,int type);
 void plate(char *str);
 /* name of a state (random state, by default) */
 const char* statename(int state=-1);
-/* endgame - converts an integer into a roman numeral for amendments */
+/* EndGameStatus - converts an integer into a roman numeral for amendments */
 std::string romannumeral(int amendnum);
 /* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 

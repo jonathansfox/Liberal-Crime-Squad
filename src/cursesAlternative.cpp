@@ -1,19 +1,25 @@
+#include "includes.h"
+const string CONST_cursesAlternative013 = "]";
+const string CONST_cursesAlternative011 = "[";
+const string CONST_cursesAlternative008 = " times";
+const string CONST_cursesAlternative007 = " five times";
+const string CONST_cursesAlternative006 = " four times";
+const string CONST_cursesAlternative005 = " three times";
+const string CONST_cursesAlternative004 = " twice";
 
-#include <includes.h>
-#include "creature/creature.h"
-#include "pdcurses/curses.h"
-
-#include "log/log.h"
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <constant_strings.h>
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../pdcurses/curses.h"
+#include "../log/log.h"
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
 #include <gui_constants.h>
 #include <common\\consolesupport.h>
-#include <set_color_support.h>
-
+#include "../set_color_support.h"
 extern string singleSpace;
-
 inline int translateGraphicsChar(unsigned char c) { return c; }
 inline short translateGraphicsColor(short c) { return c; }
 /* Variants of addch and mvaddch that work on chars and use translateGraphicsChar(), fixing display of extended characters */
@@ -40,8 +46,9 @@ inline int addstr(long num) { return addstr(tostring(num)); }
 inline int addstr(long num, Log &log) { return addstr(tostring(num), log); }
 inline int mvaddstr(int y, int x, long num) { return mvaddstr(y, x, tostring(num)); }
 inline int mvaddstr(int y, int x, long num, Log &log) { return mvaddstr(y, x, tostring(num), log); }
-
-
+void pressAnyKey() {
+ 	getkeyAlt();
+}
 void    PDC_set_titleAlt(const char *ch) {
 	   PDC_set_title(ch);
 }
@@ -118,11 +125,11 @@ void set_color_easy(const ColorSetup color) {
 }
 string burstToString(const int bursthits) {
 	switch (bursthits) {
-	case 2: return " twice";
-	case 3: return " three times";
-	case 4: return " four times";
-	case 5: return  " five times";
-	default: return singleSpace + tostring(bursthits) + " times";
+	case 2: return CONST_cursesAlternative004;
+	case 3: return CONST_cursesAlternative005;
+	case 4: return CONST_cursesAlternative006;
+	case 5: return  CONST_cursesAlternative007;
+	default: return singleSpace + tostring(bursthits) + CONST_cursesAlternative008;
 	}
 }
 string qualifiedFailure(const int droll, const string name, vector<string> stringCollection) {
@@ -130,7 +137,7 @@ string qualifiedFailure(const int droll, const string name, vector<string> strin
 }
 string qualifiedFailure(const int droll, vector<string> stringCollection) {
 	if (stringCollection.size() == 0) {
-		return "";
+		return blankString;
 	}
 	if (droll < stringCollection.size() && droll >= 0) {
 		return stringCollection[droll];
@@ -203,13 +210,12 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
-
 void printfunds(int y, int offsetx, const char* prefix, long funds);
 void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
 	char moneystr[50], prefixbuffer[50];
 	if (prefix == NULL)
-		strncpy(prefixbuffer, "", 50);
+		strncpy(prefixbuffer, blankString.c_str(), 50);
 	else strncpy(prefixbuffer, prefix, 50);
 	strcpy(moneystr, tostring(funds).data());
 	//Save screen coordinates for later.
@@ -228,7 +234,6 @@ void printfunds(int y, int offsetx, const char* prefix, long funds)
 	set_color(front, back, dim);
 	moveAlt(begy, begx);
 }
-
 int mvaddstrCenter(int i, string str) {
 	int x = 39 - ((len(str) - 1) >> 1);
 	if (x < 0) x = 0;
@@ -239,7 +244,6 @@ int mvaddstrCenter(int i, string str, Log &log) {
 	if (x < 0) x = 0;
 	return mvaddstrAlt(i, x, str, log);
 }
-
 void noechoAlt() {
 	noecho();
 }
@@ -249,16 +253,13 @@ void start_colorAlt() {
 }
 void curs_setAlt(int i) {
 	curs_set(i);
-
 }
 //begin the game loop
 void keypadAlt(bool i) {
 	keypad(stdscr, i);
-
 }
 void raw_outputAlt(bool i) {
 	raw_output(i);
-
 }
 void init_pairAlt(short x, short y, short z) {
 	init_pair(x, y, z);
@@ -278,7 +279,6 @@ void echoAlt() {
 int getkeyAlt() {
 	return getkey();
 }
-
 /* Allow the player to enter a name with an optional default */
 void enter_name(int y, int x, char *name, int len, const char* defname)
 {
@@ -292,7 +292,7 @@ void enter_name(int y, int x, char *name, int len, const char* defname)
 	noechoAlt();
 	raw_outputAlt(TRUE);
 	keypadAlt(TRUE);
-	if ((defname != NULL) && (strncmp(name, "", len - 1) == 0)) strncpy(name, defname, len - 1);
+	if ((defname != NULL) && (strncmp(name, blankString.c_str(), len - 1) == 0)) strncpy(name, defname, len - 1);
 	name[len - 1] = '\0';
 }
 // Removed from consolesupport.cpp
@@ -312,7 +312,6 @@ void set_color(short f, short b, bool bright, bool blink)
 	//pick color pair based on foreground and background
 	attrset(brighty | blinky | COLOR_PAIR(f * 8 + b));
 }
-
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
 int getkey()
 {
@@ -364,22 +363,20 @@ int checkkey_cap()
 	nodelay(stdscr, FALSE);
 	return ret;
 }
-
 /*
 This function prints the cash the player has with optional prefix as
 well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
 extern class Ledger ledger;
 void printfunds(int y, int offsetx, const char* prefix)
 {
 	printfunds(y, offsetx, prefix, ledger.get_funds());
 }
-
-#include "locations/locationsPool.h"
+#include "../locations/locationsPool.h"
 // prints a formatted name, used by promoteliberals
 void printname(Creature &cr)
 {
@@ -419,12 +416,12 @@ void printname(Creature &cr)
 	if (bracketcolor != -1)
 	{
 		set_color(bracketcolor, COLOR_BLACK, 1);
-		addstrAlt("[");
+		addstrAlt(CONST_cursesAlternative011);
 	}
 	if (cr.flag & CREATUREFLAG_SLEEPER)
 	{
 		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		addstrAlt("[");
+		addstrAlt(CONST_cursesAlternative011);
 	}
 	// add name
 	set_color(namecolor, COLOR_BLACK, brightness);
@@ -433,12 +430,35 @@ void printname(Creature &cr)
 	if (cr.flag & CREATUREFLAG_SLEEPER)
 	{
 		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		addstrAlt("]");
+		addstrAlt(CONST_cursesAlternative013);
 	}
 	if (bracketcolor != -1)
 	{
 		set_color(bracketcolor, COLOR_BLACK, 1);
-		addstrAlt("]");
+		addstrAlt(CONST_cursesAlternative013);
 	}
 	set_color_easy(WHITE_ON_BLACK);
+}
+
+void pressSpecificKey(const char x, const char y) {
+	int c;
+	do {
+		c = getkeyAlt();
+
+	} while (c != x && c != y);
+}
+void pressSpecificKey(const char x, const char y, const char z, const char w) {
+	int c;
+	do {
+		c = getkeyAlt();
+
+	} while (c != x && c != y && c != z && c != w);
+}
+char pressSpecificKey(const char x, const char y, const char z) {
+	int c;
+	do {
+		c = getkeyAlt();
+
+	} while (c != x && c != y && c != z);
+	return c;
 }

@@ -1,3 +1,17 @@
+
+#include "../includes.h"
+const string CONST_creaturenamesB010 = "C++ Source Code Editor (with encoding)";
+const string CONST_creaturenames009 = "Errol";
+const string CONST_creaturenames008 = "archconservative_last_names.txt";
+const string CONST_creaturenames007 = "regular_last_names.txt";
+const string CONST_creaturenames006 = "great_white_male_patriarch_first_names.txt";
+const string CONST_creaturenames005 = "gender_neutral_first_names.txt";
+const string CONST_creaturenames004 = "female_first_names.txt";
+const string CONST_creaturenames003 = "male_first_names.txt";
+const string CONST_creaturenames002 = "OEM United States - Codepage 437";
+const string CONST_creaturenames001 = "Open With...";
+
+const string blankString = "";
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -13,8 +27,8 @@
 // when it opens the file and it can't be changed after that; what we changed was
 // how it detects encoding for files it opens in the future, not files already open).
 // In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select "Open With...", choose "C++ Source Code Editor (with encoding)",
-// then choose "OEM United States - Codepage 437".
+// select CONST_creaturenames001, choose CONST_creaturenamesB010,
+// then choose CONST_creaturenames002.
 // In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
 // the codepage will be correct already since it's running in a console window just
 // like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
@@ -25,32 +39,24 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-
-#include <includes.h>
-#include "creature/creatureEnums.h"
-
-
-#include <customMaps.h>
-
+#include "../creature/creatureEnums.h"
+#include "../customMaps.h"
 vector<string> male_first_names;
 vector<string> female_first_names;
 vector<string> gender_neutral_first_names;
 vector<string> great_white_male_patriarch_first_names;
 vector<string> regular_last_names;
 vector<string> archconservative_last_names;
-
 const string names = "names\\";
 vector<file_and_text_collection> names_text_file_collection = {
 	/*creaturenames.cpp*/
-	customText(&male_first_names, names + "male_first_names.txt"),
-	customText(&female_first_names, names + "female_first_names.txt"),
-	customText(&gender_neutral_first_names, names + "gender_neutral_first_names.txt"),
-	customText(&great_white_male_patriarch_first_names, names + "great_white_male_patriarch_first_names.txt"),
-	customText(&regular_last_names, names + "regular_last_names.txt"),
-	customText(&archconservative_last_names, names + "archconservative_last_names.txt"),
+	customText(&male_first_names, names + CONST_creaturenames003),
+	customText(&female_first_names, names + CONST_creaturenames004),
+	customText(&gender_neutral_first_names, names + CONST_creaturenames005),
+	customText(&great_white_male_patriarch_first_names, names + CONST_creaturenames006),
+	customText(&regular_last_names, names + CONST_creaturenames007),
+	customText(&archconservative_last_names, names + CONST_creaturenames008),
 };
-
-
 extern string closeParenthesis;
 extern string singleSpace;
 void generate_name(char *first, char *last, char gender);
@@ -92,7 +98,7 @@ string lastname(bool archconservative);
 	/* gets a random first name */
 	void firstname(char *str, char gender)
 	{
-		strcpy(str, "");
+		strcpy(str, blankString.c_str());
 		int roll, nametable;
 		// If we don't care if the name is male or female, pick one randomly
 		// This ensures gender balance in the names chosen
@@ -139,13 +145,13 @@ string lastname(bool archconservative);
 			strcat(str, pickrandom(great_white_male_patriarch_first_names).data());
 		}
 		else
-			strcat(str, "Errol");
+			strcat(str, CONST_creaturenames009.c_str());
 	}
 	string lastname(bool archconservative)
 		//{{{ Last Name
 	{
 		char str[80];
-		strcpy(str, "");
+		strcpy(str, blankString.c_str());
 		// For non-Arch-Conservatives, pick from ALL last names
 		if (!archconservative)
 		{
@@ -165,6 +171,5 @@ string lastname(bool archconservative);
 			strcat(str, pickrandom(archconservative_last_names).data());
 		else
 			strcat(str, pickrandom(regular_last_names).data());
-
 		return str;
 	}

@@ -1,21 +1,24 @@
 
-#include <includes.h>
-#include "creature/creatureEnums.h"
-#include "items/itemtype.h"
-#include "items/item.h"
-#include "items/cliptype.h"
-#include "items/clip.h"
-#include "items/weapontype.h"
-#include "items/weapon.h"
-//#include "items/weapon.h"
+#include "../includes.h"
+const string CONST_weaponB004 = ")";
+const string CONST_weapon003 = " (";
+
+const string tag_ammo = "ammo";
+const string tag_loaded_cliptype = "loaded_cliptype";
+const string tag_weapon = "weapon";
+#include "../creature/creatureEnums.h"
+#include "../items/itemtype.h"
+#include "../items/item.h"
+#include "../items/cliptype.h"
+#include "../items/clip.h"
+#include "../items/weapontype.h"
+#include "../items/weapon.h"
+//#include "../items/weapon.h"
 //own header currently inside includes.h
 //own header
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for getweapontype
-
 extern vector<WeaponType *> weapontype;
-
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
@@ -27,26 +30,26 @@ Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
-      if(tag=="loaded_cliptype")
+      if(tag==tag_loaded_cliptype)
          loaded_cliptype_=xml.GetData();
-      else if(tag=="ammo")
+      else if(tag==tag_ammo)
          ammo_=atoi(xml.GetData().c_str());
    }
 }
 string Weapon::showXml() const
 {
    CMarkup xml;
-   xml.AddElem("weapon");
+   xml.AddElem(tag_weapon);
    xml.IntoElem();
    addBaseValues(xml);
-   xml.AddElem("loaded_cliptype",loaded_cliptype_);
-   xml.AddElem("ammo",tostring(ammo_));
+   xml.AddElem(tag_loaded_cliptype,loaded_cliptype_);
+   xml.AddElem(tag_ammo,tostring(ammo_));
    return xml.GetDoc();
 }
 string Weapon::equip_title() const
 {
    string et=get_name();
-   if(ammo_>0) et+=" ("+tostring(ammo_)+")";
+   if(ammo_>0) et+=CONST_weapon003+tostring(ammo_)+CONST_weaponB004;
    return et;
 }
 bool Weapon::reload(Clip& clip)
@@ -85,7 +88,7 @@ Weapon* Weapon::split(int number)
 }
 bool Weapon::merge(Item& i)
 {
-   if(i.is_weapon()&&is_same_type(i))
+   if(i.whatIsThis() == THIS_IS_WEAPON &&is_same_type(i))
    {
       Weapon& w=static_cast<Weapon&>(i); //cast -XML
       if((loaded_cliptype_==w.loaded_cliptype_&&ammo_==w.ammo_)||(ammo_==0&&w.ammo_==0))
@@ -101,11 +104,11 @@ bool Weapon::sort_compare_special(Item* other) const
 {
    if(other)
    {
-      int thisi=getweapontype(itemtypename());
+      int thisi=getweapontype(get_itemtypename());
       int otheri=getweapontype(other->get_itemtypename());
       if(thisi<otheri||otheri==-1) return false;
       else if(thisi>otheri&&otheri!=-1) return true;
-      else if(other->is_weapon())
+      else if(other->whatIsThis() == THIS_IS_WEAPON)
       {
          Weapon* w=static_cast<Weapon*>(other); //cast -XML
          return ammo_<w->ammo_;
@@ -116,7 +119,7 @@ bool Weapon::sort_compare_special(Item* other) const
 }
 const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
 {
-   const vector<attackst*>& attacks=weapontype[getweapontype(itemtypename())]->get_attacks();
+   const vector<attackst*>& attacks=weapontype[getweapontype(get_itemtypename())]->get_attacks();
    for(int i=0;i<len(attacks);i++)
    {
       if(force_ranged&&!attacks[i]->ranged) continue;
@@ -128,48 +131,48 @@ const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool for
    return NULL;
 }
 bool Weapon::acceptable_ammo(const Item& c) const
-{ return c.is_clip()&&weapontype[getweapontype(itemtypename())]->acceptable_ammo(c.get_itemtypename()); }
+{ return c.whatIsThis() == THIS_IS_CLIP&&weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename()); }
 const string& Weapon::get_name() const
-{ return weapontype[getweapontype(itemtypename())]->get_name(); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_name(); }
 const string& Weapon::get_name(unsigned subtype) const
-{ return weapontype[getweapontype(itemtypename())]->get_name(subtype); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_name(subtype); }
 const string& Weapon::get_shortname(unsigned subtype) const
-{ return weapontype[getweapontype(itemtypename())]->get_shortname(subtype); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_shortname(subtype); }
 long Weapon::get_fencevalue() const
-{ return weapontype[getweapontype(itemtypename())]->get_fencevalue(); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_fencevalue(); }
 bool Weapon::can_take_hostages() const
-{ return weapontype[getweapontype(itemtypename())]->can_take_hostages(); }
+{ return weapontype[getweapontype(get_itemtypename())]->can_take_hostages(); }
 bool Weapon::is_threatening() const
-{ return weapontype[getweapontype(itemtypename())]->is_threatening(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_threatening(); }
 bool Weapon::can_threaten_hostages() const
-{ return weapontype[getweapontype(itemtypename())]->can_threaten_hostages(); }
+{ return weapontype[getweapontype(get_itemtypename())]->can_threaten_hostages(); }
 bool Weapon::protects_against_kidnapping() const
-{ return weapontype[getweapontype(itemtypename())]->protects_against_kidnapping(); }
+{ return weapontype[getweapontype(get_itemtypename())]->protects_against_kidnapping(); }
 bool Weapon::has_musical_attack() const
-{ return weapontype[getweapontype(itemtypename())]->has_musical_attack(); }
+{ return weapontype[getweapontype(get_itemtypename())]->has_musical_attack(); }
 bool Weapon::is_instrument() const
-{ return weapontype[getweapontype(itemtypename())]->is_instrument(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_instrument(); }
 int Weapon::get_legality() const
-{ return weapontype[getweapontype(itemtypename())]->get_legality(); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_legality(); }
 float Weapon::get_bashstrengthmod() const
-{ return weapontype[getweapontype(itemtypename())]->get_bashstrengthmod(); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_bashstrengthmod(); }
 bool Weapon::is_suspicious() const
-{ return weapontype[getweapontype(itemtypename())]->is_suspicious(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_suspicious(); }
 int Weapon::get_size() const
-{ return weapontype[getweapontype(itemtypename())]->get_size(); }
+{ return weapontype[getweapontype(get_itemtypename())]->get_size(); }
 bool Weapon::can_graffiti() const
-{ return weapontype[getweapontype(itemtypename())]->can_graffiti(); }
+{ return weapontype[getweapontype(get_itemtypename())]->can_graffiti(); }
 bool Weapon::uses_ammo() const
-{ return weapontype[getweapontype(itemtypename())]->uses_ammo(); }
+{ return weapontype[getweapontype(get_itemtypename())]->uses_ammo(); }
 bool Weapon::acceptable_ammo(const Clip& c) const
-{ return weapontype[getweapontype(itemtypename())]->acceptable_ammo(c.get_itemtypename()); }
+{ return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename()); }
 bool Weapon::acceptable_ammo(const ClipType& c) const
-{ return weapontype[getweapontype(itemtypename())]->acceptable_ammo(c); }
+{ return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c); }
 bool Weapon::is_ranged() const
-{ return weapontype[getweapontype(itemtypename())]->is_ranged(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_ranged(); }
 bool Weapon::is_throwable() const
-{ return weapontype[getweapontype(itemtypename())]->is_throwable(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_throwable(); }
 bool Weapon::auto_breaks_locks() const
-{ return weapontype[getweapontype(itemtypename())]->auto_breaks_locks(); }
+{ return weapontype[getweapontype(get_itemtypename())]->auto_breaks_locks(); }
 bool Weapon::is_legal() const
-{ return weapontype[getweapontype(itemtypename())]->is_legal(); }
+{ return weapontype[getweapontype(get_itemtypename())]->is_legal(); }

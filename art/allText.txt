@@ -33,61 +33,6 @@ While you were on the inside, the country degenerated...
 You disappeared safely, but you hadn't done enough.
 The Arch-Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!
 The Stalinist Congress is proposing a STALINIST AMENDMENT!
-creature
-skill_experience
-name
-propername
-gender_conservative
-gender_liberal
-squadid
-age
-birthday_month
-birthday_day
-exists
-align
-alive
-type_idname
-infiltration
-animalgloss
-specialattack
-clinic
-dating
-hiding
-trainingtime
-trainingsubject
-prisoner
-sentence
-confessions
-deathpenalty
-joindays
-deathdays
-id
-hireid
-meetings
-forceinc
-stunned
-has_thrown_weapon
-money
-juice
-income
-wound
-blood
-special
-crimes_suspected
-heat
-location
-worklocation
-cantbluff
-base
-activity
-arg
-arg2
-carid
-is_driver
-pref_carid
-pref_is_driver
-flag
-dontname
 Enter - Done
 being followed by Conservative swine!
 It looks like you've lost them!
@@ -107,23 +52,7 @@ Here they come!
 Secrecy: 
 Heat: 
  - Travel to a Different City
-class
-WEAPON
-CLIP
-ARMOR
-LOOT
-type
-description
-price
-sleeperprice
-letter
 The Squad smells Conservative panic.
-Sta, 
-Lib+, 
-Lib, 
-Mod, 
-Cons, 
-Cons+
 moderate
 Buggy
  is seized, 

@@ -178,3 +178,87 @@ Microsoft is making it very hard not to hate them.
 Fixed the university bug, where the new studies weren't fully implemented.
 namely ACTIVITY_STUDY_CLUB, ACTIVITY_STUDY_STREETSENSE, ACTIVITY_STUDY_THROWING, ACTIVITY_STUDY_STEALTH, ACTIVITY_STUDY_SEDUCTION,
 LCS is now considered Stable.
+
+4.12.15
+Fixed the ever evasive "stats changing during interrogation" bug.
+Turns out it had nothing to do with interrogation.
+Creature::get_attribute() modifies the attribute based on Juice and Age.  Not knowing about the Age part of the equation, age modifiers were being reapplied to creatures every time the game was saved.  (Ironically not including "Health", because Age modifiers for Health are aplied elsewhere in the code).
+
+Also, shifted around some of the internal code.  Removing more usage of the keyword "extern", and all non-standard header files are now #included using relative paths instead of absolute paths.  (i.e. replacing #include <header.h> with #include "header.h" or #include "../header.h" etc.)  I'm excited about this change because it makes LCS easier to compile using g++, and once I can get LCS to compile with g++ I won't need to use Visual Studio anymore and I will finally be able to actually help other people compile the damn thing.
+
+4.12.16
+Used the software "CppDepend" for the first time.  Great stuff, detects all sorts of code smells, all sorts of everything.
+Helped me fix bugs that hadn't even been reported, since, for example, it detects if statements that are always true.  This meant that a prison break would not report if more than one LCS member escaped in the process.  Pretty darn arcane, can't imagine a situation where that was ever going to be found.
+
+The various key pressing in mode_site() have been relegated to individual methods.  If the player presses a movement or wait key, the method moveOrWaitThenCheckForExit() is called.  This method is far from optimal, as it currently requires ten parameters, three of which are passed by reference and potentially modified.
+
+All instances of getkeyAlt() where the value is not stored or used have been replaced with a new method void pressAnyKey().  This amounted to 574 replacements, leaving only 123 times getkeyAlt() is actually needed.
+
+Returned to using Visual Studio 2015.  Unable to get g++ to compile, but got closer than last time.
+
+Removed most usage of keyword typedef.  Since they were just renamed map< , > the usage of "typedef" did not make the code clearer, I originally added those instances of keyword typdef because I didn't know how to use maps directly.
+
+Removed tags from "allText.txt", as these are better off as constant strings.
+Replaced a very large number of string literals with const strings.  This has resulted in most files #include "constant_strings.h"
+Usage of blankString = "" is perhaps going overboard, and constitutes many of the instances.  Many header files now require constant_strings.h, especially because of blankString = "".
+The file crimesquad.exe has significantly increased in size, from 1512 kB to 3148 kB.  It is assumed to also run slower, at least on startup, but this remains outside the perceptive abilities of the naked eye.
+Pretty much for the hell of it, removed the file constant_strings.h and all references to it.  Resulted in new filesize of 1440 kB.  There is now some redundancy with "const string tag_... = ...;"  Many should probably be moved to header files.
+All known instances of comparisons against string literals have been replaced with constants.  This is some 950+ const declarations, all with at least one replacement.
+1211 lines with const string ... "
+929 lines with #include "
+190 lines with const char
+8147 lines with "
+Thus approximately 6000 string literals remain.
+Terra Vitae 1.32 has 14000 lines with "
+Measured TV because I don't have a copy of 4.10 on hand.
+I have thereby removed an estimated 6000 ~ 8000 string literals from LCS during my tenure.  At this time I plan to automate the removal of the remaining string literals in one single endeavor.  The hardest part will be inspecting the files to ensure no side effects.
+
+Fixed the "crash on recruit" bug.
+
+4.12.17
+
+5999 lines with const string ... "
+931 lines with #include "
+191 lines with const char
+7704 lines with "
+Extracted another 4788 string literals into constants.  Filesize increased to 1681 kB.
+Changes in numbers of "const char" and "#include" are side-effect free mistakes on my part.
+Decrease in "lines with \"" is due to removal of redundant strings, and some instances of multiple strings in a line becoming multiple constants.
+Small number of string literals remain due to error in algorithm meant to remove them (mostly either multiple string literals on a single line or string literals that included multiple '"' characters).  Will likely remove manually.
+Tweaked and ran the algorithm a few more times, 
+Filesize 1689 kB
+6209 lines with const string ... "
+931 lines with #include "
+191 lines with const char
+104 lines with const std::string
+7700 lines with "
+Header files were not run through the algorithm.
+About twenty strings had to be removed manually.
+in sitemode folder
+grafitti = {"    ", "    ", "    ", "    "}
+Can't immediately replace with const strings, something about initializing a char* with const char*
+Considered inconsequential.
+
+Thus, nearly all string literals have been extracted.  Near enough that I will continue to the next stage.
+
+Fixed the "unable to obtain loot" bug.
+
+4.12.18
+
+Reduced complexity of prepareencounter() method.  Moved most of its data to a map<int, vector<int> >, eliminating roughly 600 lines of code.
+Split up some of news.cpp
+char story[5000] is now declared only on the scope it is needed, resulting in a few methods returning a string instead of modifying one by reference.
+Altered damagemod() in fight.cpp
+Split apart attack() - Needs more work, subroutine has 8 parameters
+Split apart initsite()
+
+Split apart advanceday()
+Changed several function signatures to no longer require char &clearformess (whatever in the hell it even is.  these functions immediately changed its value without using it, now the value is changed before calling the function.  Thus &clearformess does not need to be passed at all, let alone by reference)
+deleted daily/date.h
+deleted daily/recruit.h
+new function pressSpecificKey(...)
+repeatedly calls getKey() until the specified key is pressed, for times when pressAnyKey() is not quite usable.
+
+Bugfix:
+Squads visiting apartments (that have been rented) are correctly prompted "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?"  So, no more disbanding the squad in order to reassign their safehouse.
+Weird friggin bug.

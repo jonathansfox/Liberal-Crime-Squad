@@ -1,3 +1,48 @@
+#include "../includes.h"
+const string CONST_sleeper_update046 = "canseethings";
+const string CONST_sleeper_update045 = "abstracted debate";
+const string CONST_sleeper_update044 = "liberal power";
+
+const string tag_LOOT = "LOOT";
+const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
+const string tag_LOOT_PDA = "LOOT_PDA";
+const string tag_LOOT_CELLPHONE = "LOOT_CELLPHONE";
+const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
+const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
+const string tag_ARMOR = "ARMOR";
+const string tag_WEAPON = "WEAPON";
+const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
+const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
+const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
+const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
+const string tag_LOOT_SILVERWARE = "LOOT_SILVERWARE";
+const string tag_LOOT_CHEMICAL = "LOOT_CHEMICAL";
+const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
+const string tag_LOOT_POLICERECORDS = "LOOT_POLICERECORDS";
+const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
+const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
+const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
+const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
+const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
+const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
+const string tag_LOOT_MICROPHONE = "LOOT_MICROPHONE";
+const string tag_LOOT_CABLENEWSFILES = "LOOT_CABLENEWSFILES";
+const string tag_LOOT_AMRADIOFILES = "LOOT_AMRADIOFILES";
+const string tag_LOOT_FAMILYPHOTO = "LOOT_FAMILYPHOTO";
+const string tag_LOOT_CHEAPJEWELERY = "LOOT_CHEAPJEWELERY";
+const string tag_LOOT_WATCH = "LOOT_WATCH";
+const string tag_LOOT_TRINKET = "LOOT_TRINKET";
+const string tag_LOOT_CORPFILES = "LOOT_CORPFILES";
+const string tag_LOOT_FINECLOTH = "LOOT_FINECLOTH";
+const string tag_WEAPON_SHANK = "WEAPON_SHANK";
+const string tag_LOOT_JUDGEFILES = "LOOT_JUDGEFILES";
+const string tag_LOOT_LABEQUIPMENT = "LOOT_LABEQUIPMENT";
+const string tag_LOOT_RESEARCHFILES = "LOOT_RESEARCHFILES";
+const string tag_LOOT_EXPENSIVEJEWELERY = "LOOT_EXPENSIVEJEWELERY";
+const string tag_LOOT_DIRTYSOCK = "LOOT_DIRTYSOCK";
+const string tag_LOOT_KIDART = "LOOT_KIDART";
+const string tag_LOOT_CCS_BACKERLIST = "LOOT_CCS_BACKERLIST";
+const string tag_LOOT_PRISONFILES = "LOOT_PRISONFILES";
 /*
 This file is part of Liberal Crime Squad.                                           //
                                                                                     //
@@ -16,42 +61,32 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /* monthly - sleeper behavior */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
 //#include "sitemode/newencounter.h"
 void prepareencounter(short type, char sec);
-
-#include "items/lootTypePoolItem.h"
+#include "../items/lootTypePoolItem.h"
 //#include "common/commonactions.h"
 void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
-#include "common/commonactionsCreature.h"
-// for void change_public_opinion(int,int ,char =1,char =100);
-
-#include "log/log.h"
-
-#include "common/translateid.h"
+#include "../common/commonactionsCreature.h"
+#include "../log/log.h"
+#include "../common/translateid.h"
 // for  int getloottype(int id);
-
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-#include "common/creaturePoolCreature.h"
-#include "locations/locationsPool.h"
-
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/creaturePoolCreature.h"
+#include "../locations/locationsPool.h"
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
-
-extern vector<Location *> location;
 extern int stat_recruits;
 extern string string_sleeper;
  string they_are_stashed;
 extern string singleDot;
-
 string hasBeenCaughtSnooping;
 string isNowHomeless;
 string hasLeakedIntelligence;
@@ -65,27 +100,19 @@ string hasLeakedJudiciary;
 string papersAreStashed;
 string hasLeakedCCS;
 string diskIsStashed;
-
 string arrestedWhileEmbezzling;
 string arrestedWhileStealing;
-
 string droppedOffPackage;
 string itemNotFound;
 string lostStolenItem;
 string contactModAuthor;
-
 string hasRecruited;
 string looksForwardToServing;
-
 extern short lawList[LAWNUM];
 extern char disbanding;
 extern short attitude[VIEWNUM];
 extern class Ledger ledger;
-extern vector<ArmorType *> armortype;
 extern Creature encounter[ENCMAX];
-extern vector<WeaponType *> weapontype;
-
-
 /*********************************
 **
 **   SLEEPERS INFLUENCING
@@ -320,6 +347,15 @@ void sleeper_influence(Creature &cr, char &clearformess, char canseethings, int(
 **   SLEEPERS SNOOPING AROUND
 **
 **********************************/
+void creatureLeaksIntel(Creature cr, const string& leak, const string& stashed) {
+	eraseAlt();
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(cr.name, gamelog);
+	addstrAlt(leak, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(7, 1, stashed, gamelog);
+	gamelog.nextMessage();
+}
 void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
 	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
@@ -335,7 +371,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 			gamelog.newline();
 			mvaddstrAlt(8,  1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			removesquadinfo(cr);
 			cr.location = homes;
 			cr.base = homes;
@@ -359,17 +395,11 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	case CREATURE_AGENT:
 	case CREATURE_POLITICIAN:
 		// Agents can leak intelligence files to you
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_PRIVACY] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_SECRETDOCUMENTS));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedIntelligence, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_SECRETDOCUMENTS, homes);
+			creatureLeaksIntel(cr, hasLeakedIntelligence, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -378,132 +408,84 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	case CREATURE_COP:
 	case CREATURE_GANGUNIT:
 		// Cops can leak police files to you
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_POLICERECORDS));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedPolice, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_POLICERECORDS, homes);
+			creatureLeaksIntel(cr, hasLeakedPolice, they_are_stashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_CORPORATE_MANAGER:
 	case CREATURE_CORPORATE_CEO:
 		// Can leak corporate files to you
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && cr.type != CREATURE_CORPORATE_CEO) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CORPFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedCorporate, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CORPFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedCorporate, they_are_stashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_EDUCATOR:
 	case CREATURE_PRISONGUARD:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_PRISONFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedPrison, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_PRISONFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedPrison, they_are_stashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_NEWSANCHOR:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
 		{
 			// More likely to leak these documents the more restrictive
 			// free speech is -- because the more free the society, the
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CABLENEWSFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedCableNews, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CABLENEWSFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedCableNews, papersAreStashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_RADIOPERSONALITY:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
 		{
 			// More likely to leak these documents the more restrictive
 			// free speech is -- because the more free the society, the
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_AMRADIOFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedAMRadio, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_AMRADIOFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedAMRadio, papersAreStashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_SCIENTIST_LABTECH:
 	case CREATURE_SCIENTIST_EMINENT:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
 		{
 			if (LCSrandom(lawList[LAW_ANIMALRESEARCH] + 3)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_RESEARCHFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedAnimalResearch, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, they_are_stashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_RESEARCHFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedAnimalResearch, they_are_stashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_JUDGE_CONSERVATIVE:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
 		{
 			if (LCSrandom(5)) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_JUDGEFILES));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedJudiciary, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, papersAreStashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_JUDGEFILES, homes);
+			creatureLeaksIntel(cr, hasLeakedJudiciary, papersAreStashed);
 			pause = true;
 		}
 		break;
 	case CREATURE_CCS_ARCHCONSERVATIVE:
-		if (!location[homes]->siege.siege&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
 		{
 			if (ccsexposure >= CCSEXPOSURE_LCSGOTDATA) break;
-			location[homes]->loot.push_back(getNewLoot(tag_LOOT_CCS_BACKERLIST));
-			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
-			addstrAlt(hasLeakedCCS, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(7,  1, diskIsStashed, gamelog);
-			gamelog.nextMessage();
+			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CCS_BACKERLIST, homes);
+			creatureLeaksIntel(cr, hasLeakedCCS, diskIsStashed);
 			pause = true;
 			ccsexposure = CCSEXPOSURE_LCSGOTDATA;
 		}
@@ -528,7 +510,7 @@ void sleeper_embezzle(Creature &cr, char &clearformess, char canseethings, int(&
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			cr.crimes_suspected[LAWFLAG_COMMERCE]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -566,8 +548,8 @@ struct stringAndInt
 {
 	string str;
 	int integer;
-	stringAndInt(string str_, int integer_) : str(str_), integer(integer_) {}
-	stringAndInt(int integer_, string str_) : str(str_), integer(integer_) {}
+	stringAndInt(const string& str_, int integer_) : str(str_), integer(integer_) {}
+	stringAndInt(int integer_, const string& str_) : str(str_), integer(integer_) {}
 };
 string randomString(vector<stringAndInt>);
 string randomString(vector<stringAndInt> outputList) {
@@ -595,7 +577,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileStealing, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			cr.crimes_suspected[LAWFLAG_THEFT]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -614,7 +596,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 	cr.infiltration -= LCSrandom(10)*0.01f - 0.02f; //No effectiveness drop before? -Niel
 													//Item *item;
 	string item;
-	Location *shelter = location[find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location)];
+	int shelter = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 	int number_of_items = LCSrandom(10) + 1;
 	int itemindex = -1; // have to check case item not found to avoid brave modders segfaults.
 	int numberofxmlfails = 0; // Tell them how many fails
@@ -623,7 +605,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		bool loot = false;
 		bool armor = false;
 		bool weapon = false;
-		switch (location[cr.location]->type) //Temporary (transitionally) solution until sites are done. -XML
+		switch (LocationsPool::getInstance().getLocationType(cr.location)) //Temporary (transitionally) solution until sites are done. -XML
 		{
 		case SITE_RESIDENTIAL_TENEMENT:
 			item = randomString({ stringAndInt(3, tag_LOOT_KIDART),
@@ -793,17 +775,18 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		}
 		if (loot) {
 			itemindex = getloottype(item);
-			if (itemindex > -1) { shelter->loot.push_back(getNewLoot(item)); }
+			if (itemindex > -1) { LocationsPool::getInstance().stashThisLootHere(item, shelter);}
 			else { numberofxmlfails++; }
 		}
 		else if (armor) {
 			itemindex = getarmortype(item);
-			if (itemindex > -1) { shelter->loot.push_back(new Armor(*armortype[itemindex])); }
+			if (itemindex > -1) {
+				LocationsPool::getInstance().stashThisArmorHere( itemindex,  shelter);}
 			else { numberofxmlfails++; }
 		}
 		else if (weapon) {
 			itemindex = getweapontype(item);
-			if (itemindex > -1) { shelter->loot.push_back(new Weapon(*weapontype[itemindex])); }
+			if (itemindex > -1) { LocationsPool::getInstance().stashThisWeaponHere( itemindex, shelter);}
 			else { numberofxmlfails++; }
 		}
 		else {
@@ -824,7 +807,7 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		mvaddstrAlt(11,  1, contactModAuthor, xmllog);
 		xmllog.nextMessage();
 	}
-	getkeyAlt();
+ 	pressAnyKey();
 }
 /*********************************
 **
@@ -845,7 +828,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 {
 	if (subordinatesleft(cr))
 	{
-		prepareencounter(location[cr.worklocation]->type, 0);
+		prepareencounter(LocationsPool::getInstance().getLocationType(cr.worklocation), 0);
 		for (int e = 0; e < 18; e++)
 		{
 			if (encounter[e].exists == false)
@@ -862,8 +845,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 					recruit->infiltration = cr.infiltration;
 				}
 				recruit->flag |= CREATUREFLAG_SLEEPER;
-				location[recruit->worklocation]->mapped = 1;
-				location[recruit->worklocation]->hidden = 0;
+				LocationsPool::getInstance().setLocationMappedAndUnhidden(recruit->worklocation);
 				addCreature(recruit);
 				eraseAlt();
 				mvaddstrAlt(6,  1, string_sleeper, gamelog);
@@ -875,7 +857,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 				mvaddstrAlt(8,  1, recruit->name, gamelog);
 				addstrAlt(looksForwardToServing, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
 				stat_recruits++;
 				break;
@@ -884,16 +866,14 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 	}
 	return;
 }
-
-
 /**********************************************************************
 ** *JDS*
 ** ----- The sleeper system has been completely reworked.
 ** - Sleepers no longer directly influence the issues. They now affect
-** the broad "liberal power" stats across many issues, which are used
+** the broad CONST_sleeper_update044 stats across many issues, which are used
 ** as a kind of monthly liberal roll akin to AM Radio and Cable News.
 ** - Each sleeper can affect one or more issue, throwing their power
-** into the "abstracted debate" on that issue.
+** into the CONST_sleeper_update045 on that issue.
 ** - After all of the sleepers have contributed to the liberal power
 ** stats, a roll is made on each issue to see whether the liberals
 ** make background progress on those issues.
@@ -902,7 +882,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 ** corporate managers, CEOs, and agents can all now leak secret
 ** documents of the appropriate types, and they will make a check
 ** each month. This will only happen if the homeless shelter is not
-** under siege, and "canseethings" is enabled (eg, you're not in prison
+** under siege, and CONST_sleeper_update046 is enabled (eg, you're not in prison
 ** or disbanded or some other situation where your sleeper can't get
 ** in touch with anyone in your squad).
 ** - News Anchors and Radio Personalities remain the two most powerful

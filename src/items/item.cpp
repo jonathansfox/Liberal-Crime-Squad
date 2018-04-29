@@ -1,11 +1,14 @@
+#include "../includes.h"
+const string CONST_item007 = "a";
+const string CONST_item006 = "an";
+const string CONST_item005 = "number";
+const string CONST_item004 = "itemtypeid";
+const string CONST_item003 = "itemtypename";
 
-#include <includes.h>
-
-#include "creature/creatureEnums.h"
-#include "items/itemtype.h"
-#include "items/item.h"
+#include "../creature/creatureEnums.h"
+#include "../items/itemtype.h"
+#include "../items/item.h"
 //own header
-
 Item::Item(const ItemType& seed, int number) : number_(number)
 {
    itemtypename_=seed.get_idname();
@@ -20,16 +23,16 @@ Item::Item(const std::string& inputXml)
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
-      if(tag=="itemtypename") itemtypename_=xml.GetData();
-      else if(tag=="itemtypeid") itemtypeid_=atoi(xml.GetData().c_str());
-      else if(tag=="number") number_=atoi(xml.GetData().c_str());
+      if(tag==CONST_item003) itemtypename_=xml.GetData();
+      else if(tag==CONST_item004) itemtypeid_=atoi(xml.GetData().c_str());
+      else if(tag==CONST_item005) number_=atoi(xml.GetData().c_str());
    }
 }
 void Item::addBaseValues(CMarkup& xml) const
 {
-   xml.AddElem("itemtypename",itemtypename_);
-   xml.AddElem("itemtypeid",itemtypeid_);
-   xml.AddElem("number",tostring(number_));
+   xml.AddElem(CONST_item003,itemtypename_);
+   xml.AddElem(CONST_item004,itemtypeid_);
+   xml.AddElem(CONST_item005,tostring(number_));
 }
 /*Item* Item::split(int number)
 {
@@ -42,14 +45,14 @@ void Item::addBaseValues(CMarkup& xml) const
 /* compares two items (in descending order, hence the flipped arguments), used in sorting gear */
 bool Item::sort_compare(Item *b,Item *a)
 {
-   if(a->is_weapon()&&!b->is_weapon()) return false;
-   else if(!a->is_weapon()&&b->is_weapon()) return true;
-   else if(a->is_armor()&&!b->is_armor()) return false;
-   else if(!a->is_armor()&&b->is_armor()) return true;
-   else if(a->is_clip()&&!b->is_clip()) return false;
-   else if(!a->is_clip()&&b->is_clip()) return true;
-   else if(a->is_loot()&&!b->is_loot()) return false;
-   else if(!a->is_loot()&&b->is_loot()) return true;
+   if(a->whatIsThis() == THIS_IS_WEAPON &&!(b->whatIsThis() == THIS_IS_WEAPON)) return false;
+   else if(!(a->whatIsThis() == THIS_IS_WEAPON) &&b->whatIsThis() == THIS_IS_WEAPON) return true;
+   else if(a->whatIsThis() == THIS_IS_ARMOR &&!(b->whatIsThis() == THIS_IS_ARMOR)) return false;
+   else if(!(a->whatIsThis() == THIS_IS_ARMOR) &&b->whatIsThis() == THIS_IS_ARMOR) return true;
+   else if(a->whatIsThis() == THIS_IS_CLIP&&!(b->whatIsThis() == THIS_IS_CLIP)) return false;
+   else if(!(a->whatIsThis() == THIS_IS_CLIP)&&b->whatIsThis() == THIS_IS_CLIP) return true;
+   else if(a->whatIsThis() == THIS_IS_LOOT&&!(b->whatIsThis() == THIS_IS_LOOT)) return false;
+   else if(!(a->whatIsThis() == THIS_IS_LOOT)&&b->whatIsThis() == THIS_IS_LOOT) return true;
    else return a->sort_compare_special(b);
 }
 const char* Item::aan() const
@@ -61,8 +64,8 @@ const char* Item::aan() const
    case 'i': case 'I':
    case 'o': case 'O':
    case 'u': case 'U':
-      return "an";
+      return CONST_item006.c_str();
    default:
-      return "a";
+      return CONST_item007.c_str();
    }
 }

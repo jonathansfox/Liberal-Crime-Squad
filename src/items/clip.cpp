@@ -1,18 +1,19 @@
 
-#include <includes.h>
+#include "../includes.h"
+const string CONST_clipB003 = ": ";
+const string CONST_clip002 = "Unknown element for clip type ";
 
-#include "creature/creatureEnums.h"
-#include "items/itemtype.h"
-#include "items/item.h"
-#include "items/cliptype.h"
-#include "items/clip.h"
+const string tag_ammo = "ammo";
+const string tag_clip = "clip";
+#include "../creature/creatureEnums.h"
+#include "../items/itemtype.h"
+#include "../items/item.h"
+#include "../items/cliptype.h"
+#include "../items/clip.h"
 //own header
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  int getcliptype
-
 extern vector<ClipType *> cliptype;
-
 Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
 { }
 Clip::Clip(const std::string& inputXml) : Item(inputXml)
@@ -29,7 +30,7 @@ Clip::Clip(const std::string& inputXml) : Item(inputXml)
 string Clip::showXml() const
 {
    CMarkup xml;
-   xml.AddElem("clip");
+   xml.AddElem(tag_clip);
    xml.IntoElem();
    addBaseValues(xml);
    return xml.GetDoc();
@@ -44,7 +45,7 @@ Clip* Clip::split(int number)
 }
 bool Clip::merge(Item& i)
 {
-   if(i.is_clip() && this->is_same_type(i))
+   if(i.whatIsThis() == THIS_IS_CLIP && this->is_same_type(i))
    {
       this->increase_number(i.get_number());
       i.set_number(0);
@@ -56,7 +57,7 @@ bool Clip::sort_compare_special(Item* other) const
 {
    if(other)
    {
-      int thisi=getcliptype(itemtypename());
+      int thisi=getcliptype(get_itemtypename());
       int otheri=getcliptype(other->get_itemtypename());
       if(thisi<otheri||otheri==-1) return false;
       else if(thisi>otheri&&otheri!=-1) return true;
@@ -65,13 +66,13 @@ bool Clip::sort_compare_special(Item* other) const
    else return false;
 }
 string Clip::equip_title() const
-{ return cliptype[getcliptype(itemtypename())]->get_name(); }
+{ return cliptype[getcliptype(get_itemtypename())]->get_name(); }
 const string& Clip::get_name() const
-{ return cliptype[getcliptype(itemtypename())]->get_name(); }
+{ return cliptype[getcliptype(get_itemtypename())]->get_name(); }
 long Clip::get_fencevalue() const
-{ return cliptype[getcliptype(itemtypename())]->get_fencevalue(); }
+{ return cliptype[getcliptype(get_itemtypename())]->get_fencevalue(); }
 int Clip::get_ammoamount() const
-{ return cliptype[getcliptype(itemtypename())]->get_ammoamount(); }
+{ return cliptype[getcliptype(get_itemtypename())]->get_ammoamount(); }
 ClipType::ClipType(MCD_STR xmlstring) : ItemType(xmlstring), ammo_(1)
 {
 	CMarkup xml;
@@ -81,9 +82,9 @@ ClipType::ClipType(MCD_STR xmlstring) : ItemType(xmlstring), ammo_(1)
 	while (xml.FindElem()) //Loop over all the elements inside the cliptype element.
 	{
 		std::string element = xml.GetTagName();
-		if (element == "ammo")
+		if (element == tag_ammo)
 			ammo_ = atoi(xml.GetData().c_str());
 		/*else
-		errorlog << "Unknown element for clip type " << idname() << ": " << element << endl;*/
+		errorlog << CONST_clip002 << idname() << CONST_clipB003 << element << endl;*/
 	}
 }

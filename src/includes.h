@@ -1,3 +1,6 @@
+
+
+
 /*
     File created by Chris Johnson.
     These were previously all in game.cpp.
@@ -59,7 +62,6 @@ extern bool VERBOSESAVEFILE;
 extern bool NOVERBOSECOMMENTS;
 
 extern char* PACKAGE_VERSION;
-
 extern int version;
 extern int lowestloadversion;
 extern int lowestloadscoreversion;
@@ -95,6 +97,8 @@ extern int lowestloadscoreversion;
 #include "sdl/SDL_mixer.h"
 
 #include <string.h>
+
+const std::string tag_heat = "heat";
 
 using namespace std;
 
@@ -334,7 +338,7 @@ enum SpecialAttacks
    ATTACKNUM
 };
 
-enum endgame
+enum EndGameStatus
 {
    ENDGAME_NONE,
    ENDGAME_CCS_APPEARANCE,
@@ -402,7 +406,7 @@ enum Lawflags
 };
 
 /* *JDS* In addition to laws being an array,
- * each law will be associated with a "heat" value,
+ * each law will be associated with a tag_heat value,
  * indicating how much that particular crime draws
  * police attention to the wanted person, and to the
  * LCS as a whole. This is a global array, available
@@ -411,15 +415,6 @@ enum Lawflags
  * needed at runtime.
  */
 
-
-enum BusinessFronts
-{
-   BUSINESSFRONT_INSURANCE,
-   BUSINESSFRONT_TEMPAGENCY,
-   BUSINESSFRONT_RESTAURANT,
-   BUSINESSFRONT_MISCELLANEOUS,
-   BUSINESSFRONTNUM
-};
 
 enum AnimalGlosses
 {
@@ -660,17 +655,6 @@ enum Laws
    LAWNUM
 };
 
-enum RecruitTasks
-{
-   TASK_NONE,
-   TASK_COMMUNITYSERVICE,
-   TASK_ACTIVISM,
-   TASK_CRIMES,
-   TASK_BUYWEAPON,
-   TASK_ARRESTED,
-   TASKNUM
-};
-
 enum Crimes
 {
    CRIME_STOLEGROUND,
@@ -773,14 +757,6 @@ enum EndTypes
    ENDNUM
 };
 
-enum ReportTypes
-{
-   REPORT_NEWS,
-   REPORT_OPINION,
-   REPORT_ATTACK,
-   REPORTNUM
-};
-
 enum Execs
 {
    EXEC_PRESIDENT,
@@ -826,14 +802,6 @@ const int  STATENUM = 50;
 const int  STATESUPERMAJORITY = 38;
 
 const int  POLITICIAN_NAMELEN = 80;
-
-enum TalkModes
-{
-   TALKMODE_START,
-   TALKMODE_RENTING,
-   TALKMODE_ISSUES,
-   TALKMODENUM
-};
 
 enum ReviewModes
 {
@@ -888,44 +856,39 @@ std::string tostring(long i);
 
 
 //just a float that is initialized to 0
-struct float_zero
+struct Float_Zero
 {
-	float_zero() : n(0.0f) { }
+	Float_Zero() : n(0.0f) { }
 	operator float&() { return n; }
 	float n;
 };
-//Interrogation information for the interrogation system, to be
-//dynamically created on capture and deleted when interrogation ends,
+//Interrogation information for the InterrogationST system, to be
+//dynamically created on capture and deleted when InterrogationST ends,
 //referenced using a pointer typecast into one of the arguments
 //of the target's current action.
-struct interrogation
+struct InterrogationST
 {
-	interrogation() : druguse(0) { techniques[0] = 1, techniques[1] = 1, techniques[2] = 0, techniques[3] = 0, techniques[4] = 0, techniques[5] = 0; }
-	bool techniques[6]; //yesterday's interrogation plan
+	InterrogationST() : druguse(0) { techniques[0] = 1, techniques[1] = 1, techniques[2] = 0, techniques[3] = 0, techniques[4] = 0, techniques[5] = 0; }
+	bool techniques[6]; //yesterday's InterrogationST plan
 	int druguse; //total days of drug use
 				 //Maps individual characters to the rapport built with them
-	map<long, struct float_zero> rapport;
+	map<long, struct Float_Zero> rapport;
 };
 
-struct activityst
+struct ActivityST
 {
-	activityst() : type(0), arg(0), arg2(0) { }
+	ActivityST() : type(0), arg(0), arg2(0) { }
 	int type;
 	long arg, arg2;
-	// return a reference to arg, with arg typecast as a pointer to an object of type interrogation,
-	// allowing us to easily access and modify the interrogation data without typecasting outside this function
-	interrogation* &intr() { interrogation** i = reinterpret_cast<interrogation**>(&arg); return *i; }
+	// return a reference to arg, with arg typecast as a pointer to an object of type InterrogationST,
+	// allowing us to easily access and modify the InterrogationST data without typecasting outside this function
+	InterrogationST* &intr() { InterrogationST** i = reinterpret_cast<InterrogationST**>(&arg); return *i; }
 };
 
 int get_associated_attribute(int skill_type);
 
 
-typedef map<string, char *> XML_and_Char_Pointer;
-typedef map<string, int *> XML_and_Integer_Pointer;
-typedef map<string, bool *> XML_and_Bool_Pointer;
-typedef map<string, float *> XML_and_Float_Pointer;
-typedef map<int, vector<string>> intAndStringVector;
-enum bouncer_reject_reason
+enum Bouncer_Reject_Reason
 {
 	REJECTED_CCS,
 	REJECTED_NUDE,
@@ -945,5 +908,5 @@ enum bouncer_reject_reason
 string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
-
+using namespace std;
 #endif // INCLUDES_H_INCLUDED

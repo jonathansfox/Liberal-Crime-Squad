@@ -1,14 +1,13 @@
 
-#include <includes.h>
+#include "../includes.h"
 
-#include <cursesAlternative.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
 // {{{ Various voids
 // Help pages are drawn here.
 // NOTE: This will probably need updating if there are any fundamental code
 // changes that will change gameplay.
-typedef map<short, vector<string>> shortAndTwoStrings;
-shortAndTwoStrings helpTopics;
+map<short, vector<string> > helpTopics;
 string liberalHelpOn;
 string pressAnyKeyToReturn;
 void help(const char* string)
@@ -40,5 +39,5 @@ void HelpActivities(int activityType)
 	}
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(23,  0, pressAnyKeyToReturn);
-	getkeyAlt();
+ 	pressAnyKey();
 }

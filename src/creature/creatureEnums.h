@@ -87,7 +87,7 @@ enum CreatureSkill
 	SKILL_WRITING,
 	SKILLNUM
 };
-enum activityMenuChecks // these codes are used to add special checks to what you're allowed to pick in activity menus
+enum ActivityMenuChecks // these codes are used to add special checks to what you're allowed to pick in activity menus
 {
 	ACTIVITIY_MENU_CHECK_NONE,
 	ACTIVITIY_MENU_CHECK_PRESS,
@@ -96,7 +96,6 @@ enum activityMenuChecks // these codes are used to add special checks to what yo
 	ACTIVITIY_MENU_CHECK_WHEELCHAIR,
 	ACTIVITIY_MENU_CHECK_CAN_AUGMENT
 };
-typedef map< Activity, CreatureSkill> ActivityAndSkill;
 //typedef map< Activity, string> ActivityToString;
 struct ActivityAndString {
 	int i;
@@ -104,11 +103,11 @@ struct ActivityAndString {
 	string str;
 	string str2;
 	string str3;
-	activityMenuChecks check;
+	ActivityMenuChecks check;
 	CreatureSkill skill;
 	ActivityAndString(Activity activity_, string str_) : i(0), activity(activity_), str(str_), skill(SKILLNUM) {}
 	ActivityAndString(int i_, Activity activity_, string str_) : i(i_), activity(activity_), str(str_), skill(SKILLNUM) {}
-	ActivityAndString(int i_, Activity activity_, string str_, activityMenuChecks check_) : i(i_), activity(activity_), str(str_), skill(SKILLNUM), check(check_) {}
+	ActivityAndString(int i_, Activity activity_, string str_, ActivityMenuChecks check_) : i(i_), activity(activity_), str(str_), skill(SKILLNUM), check(check_) {}
 	ActivityAndString(int i_, Activity activity_, string str_, string str2_, string str3_, CreatureSkill skill_) : i(i_), activity(activity_), str(str_), str2(str2_), str3(str3_), skill(skill_) {}
 };
 
@@ -223,12 +222,13 @@ enum CreatureTypes
 	CREATURENUM
 };
 
-struct recruitData
+struct RecruitData
 {
 	CreatureTypes type;
-	char* name;
+	char name[CREATURE_NAMELEN];
 	int difficulty;
-	recruitData(CreatureTypes type_, char* name_, int difficulty_) : type(type_), name(name_), difficulty(difficulty_) { }
+	RecruitData(CreatureTypes type_, const char* name_, int difficulty_) : type(type_), difficulty(difficulty_) { strcpy(name, name_); }
+	RecruitData(CreatureTypes type_, const string name_, int difficulty_) : type(type_), difficulty(difficulty_) { strcpy(name, name_.c_str()); }
 };
 enum Bodyparts
 {
@@ -261,20 +261,9 @@ enum SpecialWounds
 	SPECIALWOUND_LOWERSPINE,
 	SPECIALWOUNDNUM
 };
-enum bodypartBreakType {
+enum BodypartBreakType {
 	HEAVY, POKE, BREAK, ANY
 };
-typedef struct {
-	bodypartBreakType breakType;
-	string shot;
-	string burned;
-	string torn;
-	string cut;
-	string defaultString;
-	vector<SpecialWounds> specialWounds;
-	int maxBlood;
-} special_wound_structure;
-special_wound_structure customWound(bodypartBreakType, string, string, string, string, string, vector<SpecialWounds>, int);
 
 const int RIBNUM = 10;
 const int TOOTHNUM = 32;

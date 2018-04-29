@@ -1,3 +1,17 @@
+#include "includes.h"
+const string CONST_game015 = "masktype";
+const string CONST_game014 = "default";
+const string CONST_game013 = "Unspecified error with custom text";
+const string CONST_game012 = "We need a slogan!";
+const string CONST_game011 = "debug_defines.txt";
+const string CONST_game010 = "File Error: InitiateMoreIncompleteText";
+const string CONST_game009 = "File Error: InitiateIncompleteText";
+const string CONST_game008 = "File Error: ";
+const string CONST_game006 = "Comment Found";
+const string CONST_game005 = "sitemaps.txt";
+const string CONST_game004 = "Liberal Crime Squad ";
+
+const string blankString = "";
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -59,83 +73,56 @@
 //possible bug with hauling people
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
-
-#include <includes.h>
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
 #include "creature/creature.h"
-
 #include "common/interval.h"
-
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
-
 //#include "news/news.h"
 void loadgraphics();
-
 #include "creature/creaturetype.h"
-
 #include "items/loottype.h"
-
 #include "creature/augmenttype.h"
-
 //#include "configfile.h"
 // Reads in an entire configuration file
 // Returns 0 for read successful, returns -1 if failed read
 int readConfigFile(const std::string& filename);
-
 #include "log/log.h"
 //for the gamelog
-
 #include "common/consolesupport.h"
 // for getkey
-
 #include "common/stringconversion.h"
 //for string conversion
-
 //#include "common/getnames.h"
 std::string cityname();
-
 #include "common/translateid.h"
 // for  getarmortype 
-
 #include "title/initfile.h"
 //for void loadinitfile();
-
 #include "title/titlescreen.h"
 //for void mode_title();
 #include "common/creaturePool.h"
 #include "locations/locationsPool.h"
-
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-
-template<class Type>
-bool populate_from_xml(vector<Type*>& types, string file, Log& log);
-bool populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log);
-
+#include "cursesAlternative.h"
+#include "customMaps.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-
 struct highscorest
 {
 	char valid, endtype, slogan[SLOGAN_LEN];
 	int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
 };
-
 highscorest score[SCORENUM];
 #ifdef WIN32
 bool fixcleartype=false;
 #endif
-
 struct pointerAndString {
 	bool *super_collection;
 	string fileName;
-	pointerAndString(bool *super_, string file_) : fileName(file_), super_collection(super_) {}
-
+	pointerAndString(bool *super_, const string& file_) : fileName(file_), super_collection(super_) {}
 };
-
-
 //int mainSeven(bool xml_loaded_ok);
 void init_console();
 extern Log gamelog; //The gamelog.
@@ -150,14 +137,12 @@ void mainOne() {
 	LocationsPool::getInstance();
 }
 void mainTwo() {
-
 	time_t t = time(0);
 	struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
 	char datetime[41];
 	sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n",
 		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
 	gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
-
 }
 #include "common/musicClass.h"
 void mainThree() {
@@ -165,13 +150,11 @@ void mainThree() {
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 								 // set window title
 	char wtitle[50];
-	strcpy(wtitle, "Liberal Crime Squad ");
+	strcpy(wtitle, CONST_game004);
 	strcat(wtitle, PACKAGE_VERSION);
 	set_title(wtitle);
-
 }
 string failedToLoadSitemaps;
-
 string debugCode;
 string activated;
 string failedToLoad;
@@ -179,7 +162,6 @@ string exclamationPoint;
 string defaultMissingForMask;
 string defaultUnknownForMask;
 int oldMapMode = 0; // -1 if we're using the old map generation functions.
-
 void mainFour() {
 	noechoAlt();
 	//initialize curses color
@@ -203,23 +185,19 @@ void mainFour() {
 	keypadAlt(TRUE);
 	raw_outputAlt(TRUE);
 	//Loading Graphics...
-
 	loadgraphics();
 	//Loading Init File Options...
 	loadinitfile();
 	//Loading sitemaps.txt...
-
-	oldMapMode = !readConfigFile("sitemaps.txt"); // load site map data
+	oldMapMode = !readConfigFile(CONST_game005); // load site map data
 	if (oldMapMode)
 	{
 		addstrAlt(failedToLoadSitemaps, gamelog);
 		gamelog.nextMessage();
-		getkeyAlt();
+ 	pressAnyKey();
 	}
-
 	//Setting initial game data...
 }
-
 void mainFive() {
 	extern short activesortingchoice[];
 	extern short attitude[];
@@ -272,11 +250,151 @@ void mainFive() {
 		lawList[LAW_PRISONS] = 0;
 		lawList[LAW_TORTURE] = -1;
 	}
-
 }
-
-bool populate_from_txt(vector<string> & types, string fileName);
-bool populate_from_txt(vector< vector<string> >& types, string fileName, int dimension);
+string fixLineSpecialCharacter(char * toFix) {
+	string str = blankString;
+	for (int i = 0; i < len(toFix); i++) {
+		bool special = (static_cast<int> (toFix[i])) == -61;
+		if (special) {
+			i++;
+			char c;
+			switch (toFix[i]) {
+			case -87: // 'é'
+				c = (char)0x82;
+				break;
+			case -74: // 'ö'
+				c = (char)0x94;
+				break;
+			case -95: // 'á'
+				c = (char)0xa0;
+				break;
+			case -83: // 'í'
+				c = (char)0xa1;
+				break;
+			case -77: // 'ó'
+				c = (char)0xa2;
+				break;
+			case -70: // 'ú'
+				c = (char)0xa3;
+				break;
+			case (int) '¼':
+				// 'ü'
+				c = (char)0x81;
+				break;
+			case (int) '«':
+				// 'ë'
+				c = (char)0x89;
+				break;
+			case (int) '²':
+				// 'ò'
+				c = (char)0x95;
+				break;
+			case (int) '¢':
+				// 'â'
+				c = (char)0x83;
+				break;
+			case (int) '´':
+				// 'ô'
+				c = (char)0x93;
+				break;
+				/*
+				case (int) 'Â':
+				// '¢'
+				// This letter does not use the escape character '-61'
+				// meaning it would need its own switch statement
+				// in addition to the hassle of determining what escape character is used
+				c = (char) 0x9b;
+				break;
+				*/
+			default:
+				c = toFix[i];
+				break;
+			}
+			str += c;
+		}
+		else {
+			str += toFix[i];
+		}
+	}
+	return str;
+}
+extern char artdir[];
+bool isThisNotComment(char* currentLine) {
+	return currentLine[0] != '#' && currentLine[1] != '#';
+}
+// populate_from_text extracts plaintext and puts it in a two dimensional vector of strings.
+// returns true if file loads, false if not.
+bool populate_from_txt(vector< vector<string> >& types, const string& fileName, const int dimension)
+{
+	types.clear();
+	const int line_length = 2048;
+	bool success = false;
+	ifstream txtFile;
+	txtFile.open(string(artdir) + fileName);
+	if (txtFile.fail()) {
+		cout << failedToLoad + fileName + exclamationPoint << endl;
+ 	pressAnyKey();
+	}
+	else {
+		while (!txtFile.eof()) {
+			char currentLine[line_length];
+			txtFile.getline(currentLine, line_length);
+			const bool notComment = isThisNotComment(currentLine);
+			if (notComment) {
+				vector<string> line;
+				line.push_back(currentLine);
+				for (int i = 0; i < dimension - 1 && !txtFile.eof(); i++) {
+					// whether the line is not a comment, and is also the line whose contents are optional
+					// Testing until obtain proper data from file
+					txtFile.getline(currentLine, line_length);
+					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
+					line.push_back(currentLine);
+					if (!isThisNotComment(currentLine)) {
+						cout << CONST_game006 << endl << currentLine << endl;
+				 	pressAnyKey();
+					}
+				}
+				types.push_back(line);
+			}
+		}
+	}
+	success = types.size() > 0;
+	if (!success) {
+		addstrAlt(CONST_game008 + fileName);
+ 	pressAnyKey();
+	}
+	return success;
+}
+bool populate_from_txt(vector<string> & types, const string& fileName)
+{
+	types.clear();
+	const int line_length = 2048;
+	bool success = false;
+	ifstream txtFile;
+	txtFile.open(string(artdir) + fileName);
+	if (txtFile.fail()) {
+		cout << failedToLoad + fileName + exclamationPoint << endl;
+ 	pressAnyKey();
+	}
+	else {
+		cout << endl;
+		while (!txtFile.eof()) {
+			char currentLine[line_length];
+			txtFile.getline(currentLine, line_length);
+			const bool notComment = (currentLine[0] && currentLine[0] != '#');
+			if (notComment) {
+				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
+				types.push_back(currentLine);
+			}
+		}
+	}
+	success = types.size() > 0;
+	if (!success) {
+		addstrAlt(CONST_game008 + fileName);
+ 	pressAnyKey();
+	}
+	return success;
+}
 bool initialize_incomplete_txt();
 bool initialize_more_incomplete_txt();
 bool initialize_txt();
@@ -312,7 +430,7 @@ bool initialize_txt() {
 	extern vector<file_and_text_collection> reviewmode_text_file_collection;
 	extern vector<file_and_text_collection> siege_text_file_collection;
 	extern vector<file_and_text_collection> stealth_text_file_collection;
-	vector<vector<file_and_text_collection>> vast_text_collection = { 
+	vector<vector<file_and_text_collection> > vast_text_collection = { 
 		activate_text_file_collection,
 		activities_text_file_collection,
 		baseactions_text_file_collection,
@@ -359,30 +477,24 @@ bool initialize_txt() {
 	}
 	loaded &= initialize_incomplete_txt();
 	if (!loaded) {
-		addstrAlt("File Error: InitiateIncompleteText" );
-		getkeyAlt();
+		addstrAlt(CONST_game009 );
+ 	pressAnyKey();
 	}
 	else {
 		loaded &= initialize_more_incomplete_txt();
 		if (!loaded) {
-			addstrAlt("File Error: InitiateMoreIncompleteText");
-			getkeyAlt();
+			addstrAlt(CONST_game010);
+	 	pressAnyKey();
 		}
 	}
 	return loaded;
 }
-extern char artdir[];
-
-bool isThisNotComment(char* currentLine) {
-	return currentLine[0] != '#' && currentLine[1] != '#';
-}
 void initialize_debug_defines() {
 	extern vector<pointerAndString> debug_defines;
-	string fileName = "debug_defines.txt";
+	string fileName = CONST_game011;
 	ifstream txtFile;
-	char currentLine[800];
 	txtFile.open(string(artdir) + fileName);
-	int debug_codes = 0;
+	//int debug_codes = 0;
 	if (txtFile.fail()) {
 		// debug file not found, don't do anything
 	}
@@ -390,6 +502,7 @@ void initialize_debug_defines() {
 		clearAlt();
 		int y = 0;
 		while (!txtFile.eof()) {
+			char currentLine[800];
 			txtFile.getline(currentLine, 800);
 			const bool notComment = isThisNotComment(currentLine);
 			if (notComment) {
@@ -402,151 +515,9 @@ void initialize_debug_defines() {
 			}
 		}
 		if (DISPLAYDEBUG) {
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 	}
-}
-// populate_from_text extracts plaintext and puts it in a two dimensional vector of strings.
-// returns true if file loads, false if not.
-string fixLineSpecialCharacter(char * toFix);
-bool populate_from_txt(vector< vector<string> >& types, const string fileName, const int dimension)
-{
-	types.clear();
-	const int line_length = 2048;
-	bool success = false;
-	ifstream txtFile;
-	char currentLine[line_length];
-	txtFile.open(string(artdir) + fileName);
-	if (txtFile.fail()) {
-		cout << failedToLoad + fileName + exclamationPoint << endl;
-		getkeyAlt();
-	}
-	else {
-		while (!txtFile.eof()) {
-			txtFile.getline(currentLine, line_length);
-			const bool notComment = isThisNotComment(currentLine);
-			if (notComment) {
-				vector<string> line;
-				line.push_back(currentLine);
-				for (int i = 0; i < dimension - 1 && !txtFile.eof(); i++) {
-					// whether the line is not a comment, and is also the line whose contents are optional
-					// Testing until obtain proper data from file
-					txtFile.getline(currentLine, line_length);
-					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
-					line.push_back(currentLine);
-					if (!isThisNotComment(currentLine)) {
-						cout << "Comment Found" << endl << currentLine << endl;
-						getkeyAlt();
-					}
-				}
-				types.push_back(line);
-			}
-		}
-	}
-	success = types.size() > 0;
-	if (!success) {
-		addstrAlt("File Error: " + fileName);
-		getkeyAlt();
-	}
-	return success;
-}
-bool populate_from_txt(vector<string> & types, const string fileName)
-{
-	types.clear();
-	const int line_length = 2048;
-	bool success = false;
-	ifstream txtFile;
-	char currentLine[line_length];
-	txtFile.open(string(artdir) + fileName);
-	if (txtFile.fail()) {
-		cout << failedToLoad + fileName + exclamationPoint << endl;
-		getkeyAlt();
-	}
-	else {
-		cout << endl;
-		while (!txtFile.eof()) {
-			//txtFile.read(currentLine, line_length);
-			txtFile.getline(currentLine, line_length);
-			const bool notComment = (currentLine[0] && currentLine[0] != '#');
-			if (notComment) {
-				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
-				types.push_back(currentLine);
-			}
-		}
-	}
-	success = types.size() > 0;
-	if (!success) {
-		addstrAlt("File Error: " + fileName);
-		getkeyAlt();
-	}
-	return success;
-}
-string fixLineSpecialCharacter(char * toFix) {
-	string str = "";
-	for (int i = 0; i < len(toFix); i++) {
-		bool special = (static_cast<int> (toFix[i])) == -61;
-		if (special) {
-			i++;
-			char c;
-			switch (toFix[i]) {
-			case -87: // 'é'
-				c = (char) 0x82;
-				break;
-			case -74: // 'ö'
-				c = (char) 0x94;
-				break;
-			case -95: // 'á'
-				c = (char) 0xa0;
-				break;
-			case -83: // 'í'
-				c = (char) 0xa1;
-				break;
-			case -77: // 'ó'
-				c = (char) 0xa2;
-				break;
-			case -70: // 'ú'
-				c = (char) 0xa3;
-				break;
-			case (int) '¼':
-				// 'ü'
-				c = (char) 0x81;
-				break;
-			case (int) '«':
-				// 'ë'
-				c = (char) 0x89;
-				break;
-			case (int) '²':
-				// 'ò'
-				c = (char) 0x95;
-				break;
-			case (int) '¢':
-				// 'â'
-				c = (char) 0x83;
-				break;
-			case (int) '´':
-				// 'ô'
-				c = (char) 0x93;
-				break;
-				/*
-			case (int) 'Â':
-				// '¢' 
-				// This letter does not use the escape character '-61'
-				// meaning it would need its own switch statement
-				// in addition to the hassle of determining what escape character is used
-				c = (char) 0x9b;
-				break;
-				*/
-			default:
-				c = toFix[i];
-				break;
-			}
-			str += c;
-		}
-		else {
-			str += toFix[i];
-		}
-	}
-	return str;
 }
 void mainSix() {
 	extern char slogan[];
@@ -557,7 +528,7 @@ void mainSix() {
 	extern short  exec[];
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	extern vector<string> default_slogans;
-	strcpy(slogan, "We need a slogan!");
+	strcpy(slogan, CONST_game012);
 	if (!LCSrandom(20))
 	{
 		strcpy(slogan, pickrandom(default_slogans));
@@ -601,50 +572,7 @@ void mainSix() {
 	extern char lcityname[];
 	strcpy(lcityname, cityname());
 }
-
-template<class Type>
-bool populate_from_xml(vector<Type*>& types, string file, Log& log);
-bool populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log);
-bool mainSeven(bool xml_loaded_ok) {
-	extern Log xmllog;
-	xmllog.initialize("xmllog", true, 1);
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<ArmorType *> armortype;
-	extern vector<LootType *> loottype;
-	extern vector<CreatureType *> creaturetype;
-	extern vector<AugmentType *> augmenttype;
-	extern vector<VehicleType *> vehicletype;
-	xml_loaded_ok &= populate_from_xml(vehicletype, "vehicles.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(cliptype, "clips.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(weapontype, "weapons.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(armortype, "armors.xml", xmllog);
-	xml_loaded_ok &= populate_masks_from_xml(armortype, "masks.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(loottype, "loot.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(creaturetype, "creatures.xml", xmllog);
-	xml_loaded_ok &= populate_from_xml(augmenttype, "augmentations.xml", xmllog);
-	return xml_loaded_ok;
-}
-template<class Type>
-bool populate_from_xml(vector<Type*>& types, string file, Log& log)
-{
-	CMarkup xml;
-	if (!xml.Load(string(artdir) + file))
-	{ // File is missing or not valid XML.
-		addstrAlt(failedToLoad + file + exclamationPoint, log);
-		getkeyAlt();
-		// Will cause abort here or else if file is missing all unrecognized types
-		// loaded from a saved game will be deleted. Also, you probably don't want
-		// to play with a whole category of things missing anyway. If the file
-		// does not have valid xml, then behaviour is kind of undefined so it's
-		// best to abort then too.
-		return false;
-	}
-	xml.FindElem();
-	xml.IntoElem();
-	while (xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
-	return true;
-}
+bool mainSeven(bool xml_loaded_ok);
 int main(int argc, char* argv[])
 {
 	mainOne();
@@ -652,8 +580,8 @@ int main(int argc, char* argv[])
 	initialize_debug_defines();
 	bool xml_loaded_ok = initialize_txt();
 	if (!xml_loaded_ok) {
-		mvaddstrAlt(0, 0, "Unspecified error with custom text");
-		getkeyAlt();
+		mvaddstrAlt(0, 0, CONST_game013);
+ 	pressAnyKey();
 	}
 	mainThree();
 	mainFour();
@@ -665,38 +593,36 @@ int main(int argc, char* argv[])
 		end_game(EXIT_FAILURE);
 	}
 	else {
-
 		clearAlt();
 		title_screen::getInstance().mode_title();
 	}
 }
-
-bool populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log)
+bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log)
 {
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ //File is missing or not valid XML.
 		addstrAlt(failedToLoad + file + exclamationPoint, log);
-		getkeyAlt();
+ 	pressAnyKey();
 		return false; //Abort.
 	}
 	xml.FindElem();
 	xml.IntoElem();
 	int defaultindex;
-	if (xml.FindElem("default")) defaultindex = getarmortype(xml.GetData());
+	if (xml.FindElem(CONST_game014)) defaultindex = getarmortype(xml.GetData());
 	else
 	{
 		addstrAlt(defaultMissingForMask, log);
-		getkeyAlt();
+ 	pressAnyKey();
 		return false; //Abort.
 	}
 	if (defaultindex == -1)
 	{
 		addstrAlt(defaultUnknownForMask, log);
-		getkeyAlt();
+ 	pressAnyKey();
 		return false; //Abort.
 	}
 	xml.ResetMainPos();
-	while (xml.FindElem("masktype")) masks.push_back(new ArmorType(*masks[defaultindex], xml.GetSubDoc()));
+	while (xml.FindElem(CONST_game015)) masks.push_back(new ArmorType(*masks[defaultindex], xml.GetSubDoc()));
 	return true;
 }

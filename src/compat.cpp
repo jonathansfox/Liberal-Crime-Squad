@@ -1,3 +1,5 @@
+#include "includes.h"
+const string CONST_compat000 = "%d";
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2004 by Kevin Sadler                                                    //
@@ -57,17 +59,13 @@
 * itoa() removed 2014/07/01 yetisyny
 * - it's unnecessary, use tostring() or toCstring() instead
 * - for exact same functionality as itoa(value,str,10) use strcpy(str,value)
-* - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
+* - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with CONST_compat000
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
-#include <includes.h>
-
-#include <cursesAlternative.h>
+#include "../cursesAlternative.h"
 extern unsigned long seed[RNG_SIZE];
-
 int ptime=GetTickCount();
-
 void alarmset(int t)
 {
    ptime=GetTickCount()+t;

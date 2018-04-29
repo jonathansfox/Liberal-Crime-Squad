@@ -11,7 +11,7 @@ enum sitemapscripts
    SITEMAPSCRIPT_STAIRS,
    SITEMAPSCRIPT_STAIRS_RANDOM
 };
-void build_site(std::string name);
+//void build_site(std::string name);
 // configSiteCommand is anything the configSiteMap stores in its array of stuff to build
 class configSiteCommand : public configurable
 {

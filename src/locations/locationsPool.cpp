@@ -1,38 +1,173 @@
-#include <includes.h>
-#include "creature/creature.h"
 
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
+#include "../includes.h"
+const string CONST_locationsPoolB146 = ", NY";
+const string CONST_locationsPoolB145 = ", CA";
+const string CONST_locationsPoolB144 = ", VA";
+const string CONST_locationsPool145 = "Temporary Squad";
+const string CONST_locationsPool144 = "If you do not enter anything, their real name will be used.";
+const string CONST_locationsPool143 = " in its presence?";
+const string CONST_locationsPool142 = "What name will you use for this ";
+const string CONST_locationsPool141 = "The Education of ";
+const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
+const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
+const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
+const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
+const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
+const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
+const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
+const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
+const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
+const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
+const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
+const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
+const string CONST_locationsPool128 = "caseBUSINESSFRONT_MISCELLANEOUS.txt";
+const string CONST_locationsPool127 = "caseBUSINESSFRONT_RESTAURANT.txt";
+const string CONST_locationsPool126 = "caseBUSINESSFRONT_TEMPAGENCY.txt";
+const string CONST_locationsPool125 = "caseBUSINESSFRONT_INSURANCE.txt";
+const string CONST_locationsPool124 = "Enter - Back one step.";
+const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
+const string CONST_locationsPool122 = "Where will the Squad go?";
+const string CONST_locationsPool121 = "Acting Individually";
+const string CONST_locationsPool120 = "2) Press Z to Assemble a New Squad";
+const string CONST_locationsPool119 = "1) R - Review Assets and Form Squads";
+const string CONST_locationsPool118 = "To form a new squad:";
+const string CONST_locationsPool117 = "No Squad Selected";
+const string CONST_locationsPool116 = " Eating";
+const string CONST_locationsPool115 = "s";
+const string CONST_locationsPool114 = " Daily Ration";
+const string CONST_locationsPool113 = "Not Enough Food";
+const string CONST_locationsPool112 = " of Food Left";
+const string CONST_locationsPool111 = " Day";
+const string CONST_locationsPool110 = "GENERATOR";
+const string CONST_locationsPool109 = "LIGHTS OUT";
+const string CONST_locationsPool108 = "TANK TRAPS";
+const string CONST_locationsPool107 = "AA GUN";
+const string CONST_locationsPool106 = "BOOBY TRAPS";
+const string CONST_locationsPool105 = "CAMERAS ON";
+const string CONST_locationsPool104 = "CAMERAS OFF";
+const string CONST_locationsPool103 = "BUSINESS FRONT";
+const string CONST_locationsPool102 = "PRINTING PRESS";
+const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
+const string CONST_locationsPool100 = "This location has insufficient food stores.";
+const string CONST_locationsPool099 = "This location has food for only a few days.";
+const string CONST_locationsPool098 = "You are not under siege...  yet.";
+const string CONST_locationsPool097 = "Firemen are raiding this location!";
+const string CONST_locationsPool096 = "The CCS is raiding this location!";
+const string CONST_locationsPool095 = "The Corporations are raiding this location!";
+const string CONST_locationsPool094 = "The masses are storming this location!";
+const string CONST_locationsPool093 = "The CIA is raiding this location!";
+const string CONST_locationsPool092 = "The police are raiding this location!";
+const string CONST_locationsPool091 = "The police have surrounded this location.";
+const string CONST_locationsPool089 = ",. to view other base pages.";
+const string CONST_locationsPool088 = "  Shift and a Number will move ALL items!";
+const string CONST_locationsPool087 = "T to sort by type.";
+const string CONST_locationsPool086 = "T to sort by location.";
+const string CONST_locationsPool085 = "Press a Letter to assign a base.  Press a Number to select a base.";
+const string CONST_locationsPool084 = "NEW LOCATION";
+const string CONST_locationsPool083 = "----ITEM----------------CURRENT LOCATION---------------------------------------";
+const string CONST_locationsPool082 = "Moving Equipment";
+const string CONST_locationsPool081 = "Press a letter to select an item.";
+const string CONST_locationsPool080 = "x";
+const string CONST_locationsPool079 = "/";
+const string CONST_locationsPool078 = "Select Objects";
+const string CONST_locationsPool077 = "strip down.";
+const string CONST_locationsPool076 = "Can't carry any more ammo.";
+const string CONST_locationsPool075 = "That ammo doesn't fit.";
+const string CONST_locationsPool074 = "Can't carry ammo without a gun.";
+const string CONST_locationsPool073 = "No ammo available!";
+const string CONST_locationsPool072 = "No ammo required!";
+const string CONST_locationsPool071 = "No spare clips!";
+const string CONST_locationsPool070 = "No ammo to drop!";
+const string CONST_locationsPool069 = "receive it.";
+const string CONST_locationsPool068 = "drop a clip.";
+const string CONST_locationsPool067 = "receive a clip.";
+const string CONST_locationsPool066 = "You can't equip that.";
+const string CONST_locationsPool065 = "Z - Stash things at ";
+const string CONST_locationsPool064 = "Y - Get things from ";
+const string CONST_locationsPool063 = "Cursors - Increase or decrease ammo allocation";
+const string CONST_locationsPool062 = "S - Liberally Strip a Squad member";
+const string CONST_locationsPool061 = "Press a number to drop that Squad member's Conservative weapon";
+const string CONST_locationsPool060 = "Press a letter to equip a Liberal item";
+const string CONST_locationsPool059 = " x";
+const string CONST_locationsPool058 = "Equip the Squad";
+const string CONST_locationsPool057 = "     How many?          ";
+const string CONST_locationsPool056 = "Reporting Bugs to the Dev Team";
+const string CONST_locationsPool055 = "Going to ";
+const string CONST_locationsPool054 = "Making ";
+const string CONST_locationsPool053 = "a bug";
+const string CONST_locationsPool052 = "Tending to ";
+const string CONST_locationsPool051 = ", New York";
+const string CONST_locationsPool050 = ", California";
+const string CONST_locationsPool049 = ", Virginia";
+const string CONST_locationsPool048 = " Outskirts";
+const string CONST_locationsPool047 = "Mall";
+const string CONST_locationsPool046 = "sleeper agent";
+const string CONST_locationsPool045 = " as a ";
+const string CONST_locationsPool044 = "Stay at ";
+const string CONST_locationsPool043 = "-> ";
+const string CONST_locationsPool042 = "regular member";
+const string CONST_locationsPool040 = "Come to ";
+const string CONST_locationsPool039 = "   ";
+const string CONST_locationsPool038 = " best serve the Liberal cause?";
+const string CONST_locationsPool037 = "In what capacity will ";
+const string CONST_locationsPool036 = ".  Possessions go to the shelter.";
+const string CONST_locationsPool035 = "EVICTION NOTICE: ";
 
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "common/commondisplay.h"
+const string tag_LOOT = "LOOT";
+const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
+const string tag_LOOT_INTHQDISK = "LOOT_INTHQDISK";
+const string tag_The_Bronx = "The Bronx";
+const string tag_Long_Island = "Long Island";
+const string tag_Brooklyn_ampersand_Queens = "Brooklyn & Queens";
+const string tag_B = "B";
+const string tag_Manhattan = "Manhattan";
+const string tag_The = "The ";
+const string tag_Manhattan_Island = "Manhattan Island";
+const string tag_Greater_Hollywood = "Greater Hollywood";
+const string tag_Hollywood = "Hollywood";
+const string tag_Arlington = "Arlington";
+const string tag_City_Outskirts = "City Outskirts";
+const string tag_Seaport_Area = "Seaport Area";
+const string tag_Shopping = "Shopping";
+const string tag_Seaport = "Seaport";
+const string tag_Outskirts_amp_Orange_County = "Outskirts & Orange County";
+const string tag_Outskirts = "Outskirts";
+const string tag_University_District = "University District";
+const string tag_i_District = "I-District";
+const string tag_Industrial_District = "Industrial District";
+const string tag_u_District = "U-District";
+const string tag_D = "D";
+const string tag_Downtown = "Downtown";
+const string tag_National_Mall = "National Mall";
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+const string tag_CLIP = "CLIP";
+const string tag_CLIP_9 = "CLIP_9";
+const string tag_WEAPON = "WEAPON";
+const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
+const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
+const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
+const string blankString = "";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../common/commondisplay.h"
 // for void printfunds(int,int,char*)
-
-#include "common/stringconversion.h"
+#include "../common/stringconversion.h"
 //for string attribute_enum_to_string(int)
-
-#include "common/getnames.h"
+#include "../common/getnames.h"
 // for cityname
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  getarmortype
-
-#include <cursesAlternative.h>
-#include <cursesAlternativeConstants.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-
-#include "locations/locationsPool.h"
-#include "common/creaturePoolCreature.h"
-#include "items/money.h"
-
-enum recruits
-{
-	RECRUITS_GANG,
-	RECRUITS_NONE
-};
+#include "../cursesAlternative.h"
+#include "../cursesAlternativeConstants.h"
+#include "../set_color_support.h"
+#include "locationsPool.h"
+#include "../common/creaturePoolCreature.h"
+#include "../items/money.h"
+#include "../recruits.h"
 vector<Location *> location;
 void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr) {
 	squadst *newsq = new squadst;
@@ -160,7 +295,6 @@ LocationsPool LocationsPool::getInstance()
 	}
 	return lPool;
 }
-
 int LocationsPool::lenpool()
 {
 	return len(location);
@@ -170,7 +304,6 @@ int LocationsPool::getLocationCity(int cursite) {
 }
 void LocationsPool::hideCCSSafehouses()
 {
-
 	// hide ccs safehouses
 	for (int l = 0; l < lenpool(); l++)
 	{
@@ -185,29 +318,22 @@ void LocationsPool::addHeat(int cursite, int heat)
 {
 	location[cursite]->heat += heat;
 }
-#include "common/equipment.h"
-void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string> dox)
+#include "../common/equipment.h"
+void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox)
 {
-
 	//FIND ALL LOOT TYPES
 	for (int loc = 0; loc < LocationsPool::getInstance().lenpool(); loc++)
-
 	{
 		if (LocationsPool::getInstance().getRentingType(loc) == RENTING_NOCONTROL) continue;
 		consolidateloot(location[loc]->loot);
 		for (int l = 0; l < len(location[loc]->loot); l++)
-
 		{
-			if (!location[loc]->loot[l]->is_loot()) continue;
+			if (!(location[loc]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
 			if (!binary_search(dox.begin(), dox.end(), location[loc]->loot[l]->get_itemtypename())) continue;
 			if (!havetype[getloottype(location[loc]->loot[l]->get_itemtypename())])
-
 			{
 				loottypeindex.push_back(getloottype(location[loc]->loot[l]->get_itemtypename()));
 				havetype[getloottype(location[loc]->loot[l]->get_itemtypename())] = true;
-
-
-
 			}
 		}
 	}
@@ -225,10 +351,10 @@ void LocationsPool::setLocationMappedAndUnhidden(int cursite)
 	location[cursite]->mapped = 1;
 	location[cursite]->hidden = 0;
 }
-string LocationsPool::getLocationNameWithGetnameMethod(int cursite, bool a) {
+string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a) {
 	return getLocationNameWithGetnameMethod(cursite, a, false);
 }
-string LocationsPool::getLocationNameWithGetnameMethod(int cursite, bool a, bool b)
+string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a, bool b)
 {
 	return location[cursite]->getname(a, b);
 }
@@ -244,15 +370,14 @@ bool LocationsPool::isNewRental(int cursite)
 {
 	return location[cursite]->newrental;
 }
-#include "common/creaturePool.h"
+#include "../common/creaturePool.h"
 void LocationsPool::evictLCSFrom(int l)
 {
-
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, "EVICTION NOTICE: ");
+	mvaddstrAlt(8, 1, CONST_locationsPool035);
 	addstrAlt(LocationsPool::getInstance().getLocationName(l));
-	addstrAlt(".  Possessions go to the shelter.");
-	getkeyAlt();
+	addstrAlt(CONST_locationsPool036);
+ 	pressAnyKey();
 	location[l]->renting = RENTING_NOCONTROL;
 	CreaturePool::getInstance().moveAllSquadMembers(l);
 	int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, l);
@@ -261,11 +386,11 @@ void LocationsPool::evictLCSFrom(int l)
 	location[l]->compound_stores = 0;
 	location[l]->front_business = -1;
 }
-bool LocationsPool::isThisSiteClosed(int cursite)
+int LocationsPool::isThisSiteClosed(int cursite)
 {
 	return location[cursite]->closed;
 }
-bool LocationsPool::doesThisPlaceNeedACar(int cursite)
+char LocationsPool::doesThisPlaceNeedACar(int cursite)
 {
 	return location[cursite]->needcar;
 }
@@ -289,23 +414,17 @@ int LocationsPool::deleteSpecialItem(int slot, vector<int> loottypeindex)
 {
 	//DELETE THE ITEM
 	for (int loc = 0; loc < LocationsPool::getInstance().lenpool(); loc++)
-
 	{
 		if (LocationsPool::getInstance().getRentingType(loc) == RENTING_NOCONTROL) continue;
 		for (int l = 0; l < len(location[loc]->loot); l++)
-
 		{
-			if (!location[loc]->loot[l]->is_loot()) continue;
+			if (!(location[loc]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
 			if (getloottype(location[loc]->loot[l]->get_itemtypename()) == loottypeindex[slot])
-
 			{
 				location[loc]->loot[l]->decrease_number(1);
 				if (location[loc]->loot[l]->empty())
 					delete_and_remove(location[loc]->loot, l);
 				return loottypeindex[slot];
-
-
-
 			}
 		}
 	}
@@ -315,14 +434,12 @@ void LocationsPool::getAssetValues(long & weaponValue, long & armorValue, long &
 {
 	for (int j = 0; j < LocationsPool::getInstance().lenpool(); j++)
 		for (int i = 0; i < len(location[j]->loot); i++)
-
 		{
 			Item* item = location[j]->loot[i];
-			if (item->is_weapon()) weaponValue += item->get_fencevalue()*item->get_number();
-			if (item->is_armor()) armorValue += item->get_fencevalue()*item->get_number();
-			if (item->is_clip()) clipValue += item->get_fencevalue()*item->get_number();
-			if (item->is_loot()) lootValue += item->get_fencevalue()*item->get_number();
-
+			if (item->whatIsThis() == THIS_IS_WEAPON) weaponValue += item->get_fencevalue()*item->get_number();
+			if (item->whatIsThis() == THIS_IS_ARMOR) armorValue += item->get_fencevalue()*item->get_number();
+			if (item->whatIsThis() == THIS_IS_CLIP) clipValue += item->get_fencevalue()*item->get_number();
+			if (item->whatIsThis() == THIS_IS_LOOT) lootValue += item->get_fencevalue()*item->get_number();
 		}
 }
 bool LocationsPool::canBeFortified(int cursite)
@@ -335,6 +452,18 @@ void LocationsPool::initLocation(int cursite)
 {
 	initlocation(*location[cursite]);
 }
+#include "../items/lootTypePoolItem.h"
+void LocationsPool::stashThisLootHere(const string& tag, int homes) {
+	location[homes]->loot.push_back(getNewLoot(tag));
+}
+extern vector<WeaponType *> weapontype;
+void LocationsPool::stashThisWeaponHere(int itemindex, int shelter) {
+	location[shelter]->loot.push_back(new Weapon(*weapontype[itemindex]));
+}
+extern vector<ArmorType *> armortype;
+void LocationsPool::stashThisArmorHere(int itemindex, int shelter) {
+	location[shelter]->loot.push_back(new Armor(*armortype[itemindex]));
+}
 void LocationsPool::equipLoc(int loc, int y)
 {
 	equip(location[loc]->loot, y);
@@ -343,43 +472,35 @@ void LocationsPool::delete_and_clear_pool()
 {
 	delete_and_clear(location);
 }
-
-bool LocationsPool::isThereASiegeHere(int cursite)
+char LocationsPool::isThereASiegeHere(int cursite)
 {
 	return location[cursite]->siege.siege;
 }
-
-bool LocationsPool::isThisPlaceHighSecurity(int cursite)
+int LocationsPool::isThisPlaceHighSecurity(int cursite)
 {
 	return location[cursite]->highsecurity;
 }
-
-void LocationsPool::isThereASiegeHere(int cursite, bool newCondition)
+void LocationsPool::isThereASiegeHere(int cursite, char newCondition)
 {
 	location[cursite]->siege.siege = newCondition;
 }
-
 void LocationsPool::isThisPlaceHighSecurity(int cursite, int newCondition)
 {
 	location[cursite]->highsecurity = newCondition;
 }
-
 char LocationsPool::getLocationType(int cursite)
 {
 	return location[cursite]->type;
 }
-
-char LocationsPool::getSiegeType(int cursite)
+short LocationsPool::getSiegeType(int cursite)
 {
 	return location[cursite]->siege.siegetype;
 }
-
-char LocationsPool::getSiegeEscalationState(int cursite)
+short LocationsPool::getSiegeEscalationState(int cursite)
 {
 	return location[cursite]->siege.escalationstate;
 }
-
-char LocationsPool::getRentingType(int cursite)
+int LocationsPool::getRentingType(int cursite)
 {
 	return location[cursite]->renting;
 }
@@ -389,10 +510,8 @@ void LocationsPool::initSite(int loc)
 {
 	initsite(*location[loc]);
 }
-
 void LocationsPool::eraseAndReplaceGraffiti(int cursite, int locx, int locy, int locz)
 {
-
 	// Erase any previous semi-permanent graffiti here
 	for (int i = 0; i < len(location[cursite]->changes); i++)
 	{
@@ -411,12 +530,11 @@ void LocationsPool::eraseAndReplaceGraffiti(int cursite, int locx, int locy, int
 	struct sitechangest change(locx, locy, locz, SITEBLOCK_GRAFFITI);
 	location[cursite]->changes.push_back(change);
 }
-
 string LocationsPool::getLocationName(int cursite)
 {
 	return location[cursite]->getname();
 }
-#include "common/commonactionsCreature.h"
+#include "../common/commonactionsCreature.h"
 extern squadst *activesquad;
 extern vector<squadst *> squad;
 /* common - purges empty squads from existence */
@@ -457,25 +575,25 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y, 0, "In what capacity will ");
+		mvaddstrAlt(y, 0, CONST_locationsPool037);
 		addstrAlt(converted.name);
-		addstrAlt(" best serve the Liberal cause?");
+		addstrAlt(CONST_locationsPool038);
 		set_color_easy(selection ? WHITE_ON_BLACK : WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y + 2, 0, selection ? "   " : "-> ");
-		addstrAlt("Come to ");
+		mvaddstrAlt(y + 2, 0, selection ? CONST_locationsPool039 : CONST_locationsPool043);
+		addstrAlt(CONST_locationsPool040);
 		addstrAlt(location[recruiter.location]->getname(-1, true));
-		addstrAlt(" as a ");
+		addstrAlt(CONST_locationsPool045);
 		set_color_easy(selection ? GREEN_ON_BLACK : GREEN_ON_BLACK_BRIGHT);
-		addstrAlt("regular member");
+		addstrAlt(CONST_locationsPool042);
 		set_color_easy(selection ? WHITE_ON_BLACK : WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(singleDot);
 		set_color_easy(selection ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(y + 3, 0, selection ? "-> " : "   ");
-		addstrAlt("Stay at ");
+		mvaddstrAlt(y + 3, 0, selection ? CONST_locationsPool043 : CONST_locationsPool039);
+		addstrAlt(CONST_locationsPool044);
 		addstrAlt(location[converted.worklocation]->getname(-1, true));
-		addstrAlt(" as a ");
+		addstrAlt(CONST_locationsPool045);
 		set_color_easy(selection ? CYAN_ON_BLACK_BRIGHT : CYAN_ON_BLACK);
-		addstrAlt("sleeper agent");
+		addstrAlt(CONST_locationsPool046);
 		set_color_easy(selection ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		addstrAlt(singleDot);
 		int c = getkeyAlt();
@@ -500,10 +618,7 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 			c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) selection = !selection;
 	}
 }
-
-
 extern bool multipleCityMode;
-
 Location* find_site_in_city(int site_type, int city)
 {
 	int i = find_site_index_in_city(site_type, city);
@@ -523,134 +638,79 @@ int find_site_index_in_same_city(int site_type, int site_index)
 	if (site_index >= 0) city = location[site_index]->city;
 	return find_site_index_in_city(site_type, city);
 }
-
 void make_classic_world(bool hasmaps)
 {
-	Location* city = NULL;
 	Location* district = NULL;
-	Location* site = NULL;
-	//int id = 0;
-	if (city) district = city->addchild(SITE_DOWNTOWN);
-	else location.push_back(district = new Location(SITE_DOWNTOWN));
-	// = id++;
+	location.push_back(district = new Location(SITE_DOWNTOWN));
 	district->area = 0;
 	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_BANK);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_MEDIA_AMRADIO);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_MEDIA_CABLENEWS);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_CIGARBAR);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_LATTESTAND);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_BARANDGRILL);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	site->mapped = false;
-	if (city) district = city->addchild(SITE_COMMERCIAL);
-	else location.push_back(district = new Location(SITE_COMMERCIAL));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_POLICESTATION)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_COURTHOUSE)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_BANK)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_FIRESTATION)->mapped = hasmaps;
+	district->addchild(SITE_MEDIA_AMRADIO)->mapped = hasmaps;
+	district->addchild(SITE_MEDIA_CABLENEWS)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_CIGARBAR)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_LATTESTAND)->mapped = hasmaps;
+	{
+		Location* site = district->addchild(SITE_BUSINESS_BARANDGRILL);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+		site->mapped = false;
+	}
+	location.push_back(district = new Location(SITE_COMMERCIAL));
 	district->area = 0;
-	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	// = id++;
-	if (city) district = city->addchild(SITE_UDISTRICT);
-	else location.push_back(district = new Location(SITE_UDISTRICT));
-	// = id++;
+	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	district->addchild(SITE_BUSINESS_PAWNSHOP);
+	district->addchild(SITE_BUSINESS_HALLOWEEN);
+	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	
+	location.push_back(district = new Location(SITE_UDISTRICT));
 	district->area = 0;
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_CLINIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_GENETIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_COSMETICS);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_JUICEBAR);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	// = id++;
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	if (city) district = city->addchild(SITE_INDUSTRIAL);
-	else location.push_back(district = new Location(SITE_INDUSTRIAL));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	district->addchild(SITE_HOSPITAL_CLINIC);
+	district->addchild(SITE_LABORATORY_GENETIC);
+	district->addchild(SITE_LABORATORY_COSMETICS);
+	district->addchild(SITE_BUSINESS_VEGANCOOP);
+	district->addchild(SITE_BUSINESS_JUICEBAR);
+	district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	
+	location.push_back(district = new Location(SITE_INDUSTRIAL));
 	district->area = 0;
-	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site->upgradable = true;
-	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_POLLUTER);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
-	// = id++;
-	site->upgradable = true;
-	site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	if (city) district = city->addchild(SITE_OUTOFTOWN);
-	else location.push_back(district = new Location(SITE_OUTOFTOWN));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
+	{
+		Location* site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+		site->renting = RENTING_PERMANENT;
+		site->upgradable = true;
+	}
+	district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	district->addchild(SITE_INDUSTRY_POLLUTER);
+	district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	district->addchild(SITE_BUSINESS_CRACKHOUSE)->upgradable = true;
+	{
+		Location* site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+	}
+	location.push_back(district = new Location(SITE_OUTOFTOWN));
 	district->area = 1;
-	site = district->addchild(SITE_GOVERNMENT_PRISON);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
-	// = id++;
-	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	// = id++;
-	site = district->addchild(SITE_CORPORATE_HOUSE);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
-	// = id++;
-	site = district->addchild(SITE_OUTDOOR_BUNKER);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	if (city) district = city->addchild(SITE_TRAVEL);
-	else location.push_back(district = new Location(SITE_TRAVEL));
-	// = id++;
+	district->addchild(SITE_GOVERNMENT_PRISON);
+	district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	district->addchild(SITE_INDUSTRY_NUCLEAR);
+	district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	district->addchild(SITE_CORPORATE_HOUSE);
+	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	{
+		Location* site = district->addchild(SITE_OUTDOOR_BUNKER);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+	}
+	location.push_back(district = new Location(SITE_TRAVEL));
 	district->area = 1;
-	site = district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
-	// = id++;
+	district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
 }
 void make_world(bool hasmaps)
 {
@@ -662,369 +722,196 @@ void make_world(bool hasmaps)
 	//MAKE LOCATIONS
 	Location* city = NULL;
 	Location* district = NULL;
-	Location* site = NULL;
-	//int id = 0;
-	// Seattle
+	//Location* site = NULL;
 	location.push_back(city = new Location(SITE_CITY_SEATTLE));
-	// = id++;
-	if (city) district = city->addchild(SITE_DOWNTOWN);
-	else location.push_back(district = new Location(SITE_DOWNTOWN));
-	// = id++;
+	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
 	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_BANK);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_MEDIA_AMRADIO);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_CIGARBAR);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_LATTESTAND);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
-	// = id++;
-	site->mapped = hasmaps;
-	site = district->addchild(SITE_BUSINESS_BARANDGRILL);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	site->mapped = false;
-	if (city) district = city->addchild(SITE_UDISTRICT);
-	else location.push_back(district = new Location(SITE_UDISTRICT));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_POLICESTATION)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_COURTHOUSE)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_BANK)->mapped = hasmaps;
+	district->addchild(SITE_GOVERNMENT_FIRESTATION)->mapped = hasmaps;
+	district->addchild(SITE_MEDIA_AMRADIO)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_CIGARBAR)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_LATTESTAND)->mapped = hasmaps;
+	district->addchild(SITE_BUSINESS_DEPTSTORE)->mapped = hasmaps;
+	{
+		Location* site = district->addchild(SITE_BUSINESS_BARANDGRILL);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+		site->mapped = false;
+	}
+	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_CLINIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_GENETIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_COSMETICS);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_JUICEBAR);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	// = id++;
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
-	// = id++;
-	if (city) district = city->addchild(SITE_INDUSTRIAL);
-	else location.push_back(district = new Location(SITE_INDUSTRIAL));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	district->addchild(SITE_HOSPITAL_CLINIC);
+	district->addchild(SITE_LABORATORY_GENETIC);
+	district->addchild(SITE_LABORATORY_COSMETICS);
+	district->addchild(SITE_BUSINESS_VEGANCOOP);
+	district->addchild(SITE_BUSINESS_JUICEBAR);
+	district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	district->addchild(SITE_BUSINESS_HALLOWEEN);
+	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
-	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site->upgradable = true;
-	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_POLLUTER);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
-	// = id++;
-	site->upgradable = true;
-	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	// = id++;
-	if (city) district = city->addchild(SITE_OUTOFTOWN);
-	else location.push_back(district = new Location(SITE_OUTOFTOWN));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
+	{
+		Location* site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+		site->renting = RENTING_PERMANENT;
+		site->upgradable = true;
+	}
+	district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	district->addchild(SITE_INDUSTRY_POLLUTER);
+	district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	district->addchild(SITE_BUSINESS_CRACKHOUSE)->upgradable = true;
+	district->addchild(SITE_BUSINESS_PAWNSHOP);
+	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
-	site = district->addchild(SITE_GOVERNMENT_PRISON);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
-	// = id++;
-	//site = district->addchild(SITE_INDUSTRY_NUCLEAR); 
-	//// = id++;
-	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	// = id++;
-	//site = district->addchild(SITE_CORPORATE_HOUSE); 
-	//// = id++;
-	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
-	// = id++;
-	// New York City
+	district->addchild(SITE_GOVERNMENT_PRISON);
+	district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	district->addchild(SITE_GOVERNMENT_ARMYBASE);
 	location.push_back(city = new Location(SITE_CITY_NEW_YORK));
-	// = id++;
-	if (city) district = city->addchild(SITE_DOWNTOWN);
-	else location.push_back(district = new Location(SITE_DOWNTOWN));
-	// = id++;
+	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
-	strcpy(district->name, "Manhattan Island");
-	strcpy(district->shortname, "Manhattan");
-	//district->mapped = hasmaps;
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_BANK);
-	// = id++;
-	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	// = id++;
-	site = district->addchild(SITE_MEDIA_AMRADIO);
-	// = id++;
-	site = district->addchild(SITE_MEDIA_CABLENEWS);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CIGARBAR);
-	// = id++;
-	//site = district->addchild(SITE_CORPORATE_HOUSE); 
-	//// = id++;
-	//site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ); 
-	//// = id++;
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_PRISON);
-	// = id++;
-	if (city) district = city->addchild(SITE_UDISTRICT);
-	else location.push_back(district = new Location(SITE_UDISTRICT));
-	// = id++;
+	strcpy(district->name, tag_Manhattan_Island);
+	strcpy(district->shortname, tag_Manhattan);
+	
+	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
+	district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	district->addchild(SITE_BUSINESS_BANK);
+	district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	district->addchild(SITE_MEDIA_AMRADIO);
+	district->addchild(SITE_MEDIA_CABLENEWS);
+	district->addchild(SITE_BUSINESS_CIGARBAR);
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	district->addchild(SITE_GOVERNMENT_PRISON);
+	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
-	strcpy(district->name, "Brooklyn & Queens");
-	strcpy(district->shortname, "Long Island");
-	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site->upgradable = true;
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_CLINIC);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_JUICEBAR);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_POLLUTER);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_GENETIC);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
-	// = id++;
-	site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	if (city) district = city->addchild(SITE_INDUSTRIAL);
-	else location.push_back(district = new Location(SITE_INDUSTRIAL));
-	// = id++;
+	strcpy(district->name, tag_Brooklyn_ampersand_Queens);
+	strcpy(district->shortname, tag_Long_Island);
+	{
+		Location* site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+		site->renting = RENTING_PERMANENT;
+		site->upgradable = true;
+	}
+	district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	district->addchild(SITE_HOSPITAL_CLINIC);
+	district->addchild(SITE_BUSINESS_JUICEBAR);
+	district->addchild(SITE_BUSINESS_INTERNETCAFE);
+	district->addchild(SITE_INDUSTRY_POLLUTER);
+	district->addchild(SITE_LABORATORY_GENETIC);
+	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	{
+		Location* site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+	}
+	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
-	strcpy(district->name, "The Bronx");
-	strcpy(district->shortname, "The Bronx");
-	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_POLLUTER);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_COSMETICS);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
-	// = id++;
-	site->upgradable = true;
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	if (city) district = city->addchild(SITE_OUTOFTOWN);
-	else location.push_back(district = new Location(SITE_OUTOFTOWN));
-	// = id++;
+	strcpy(district->name, tag_The_Bronx);
+	strcpy(district->shortname, tag_The_Bronx);
+	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
+	district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	district->addchild(SITE_INDUSTRY_POLLUTER);
+	district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	district->addchild(SITE_LABORATORY_COSMETICS);
+	district->addchild(SITE_BUSINESS_VEGANCOOP);
+	district->addchild(SITE_BUSINESS_PAWNSHOP);
+	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	district->addchild(SITE_BUSINESS_CRACKHOUSE)->upgradable = true;
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
-	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
-	// = id++;
-	// Los Angeles
+	district->addchild(SITE_INDUSTRY_NUCLEAR);
 	location.push_back(city = new Location(SITE_CITY_LOS_ANGELES));
-	// = id++;
-	if (city) district = city->addchild(SITE_DOWNTOWN);
-	else location.push_back(district = new Location(SITE_DOWNTOWN));
-	// = id++;
+	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
-	//district->mapped = hasmaps;
-	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_BANK);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	// = id++;
-	site = district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
-	// = id++;
-	if (city) district = city->addchild(SITE_UDISTRICT);
-	else location.push_back(district = new Location(SITE_UDISTRICT));
-	// = id++;
+	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
+	
+	district->addchild(SITE_RESIDENTIAL_APARTMENT);
+	district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	district->addchild(SITE_BUSINESS_BANK);
+	district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	district->addchild(SITE_CORPORATE_HEADQUARTERS);
+	district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	
+	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
-	strcpy(district->name, "Greater Hollywood");
-	strcpy(district->shortname, "Hollywood");
-	site = district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_VEGANCOOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_HALLOWEEN);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CIGARBAR);
-	// = id++;
-	//site = district->addchild(SITE_MEDIA_CABLENEWS); 
-	//// = id++;
-	site = district->addchild(SITE_MEDIA_AMRADIO);
-	// = id++;
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	site = district->addchild(SITE_CORPORATE_HOUSE);
-	// = id++;
-	if (city) district = city->addchild(SITE_INDUSTRIAL);
-	else location.push_back(district = new Location(SITE_INDUSTRIAL));
-	// = id++;
+	strcpy(district->name, tag_Greater_Hollywood);
+	strcpy(district->shortname, tag_Hollywood);
+	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);	
+	district->addchild(SITE_BUSINESS_VEGANCOOP);
+	district->addchild(SITE_BUSINESS_HALLOWEEN);
+	district->addchild(SITE_BUSINESS_CIGARBAR);
+	district->addchild(SITE_MEDIA_AMRADIO);
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	district->addchild(SITE_CORPORATE_HOUSE);
+	
+	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
-	strcpy(district->name, "Seaport Area");
-	strcpy(district->shortname, "Seaport");
-	site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	site->upgradable = true;
-	site = district->addchild(SITE_RESIDENTIAL_TENEMENT);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_CLINIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_GENETIC);
-	// = id++;
-	site = district->addchild(SITE_LABORATORY_COSMETICS);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_POLLUTER);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_PAWNSHOP);
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_SWEATSHOP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CRACKHOUSE);
-	// = id++;
-	site->upgradable = true;
-	if (city) district = city->addchild(SITE_OUTOFTOWN);
-	else location.push_back(district = new Location(SITE_OUTOFTOWN));
-	// = id++;
+	strcpy(district->name, tag_Seaport_Area);
+	strcpy(district->shortname, tag_Seaport);
+	{
+		Location* site = district->addchild(SITE_INDUSTRY_WAREHOUSE);
+		site->renting = RENTING_PERMANENT;
+		site->upgradable = true;
+	}
+	district->addchild(SITE_RESIDENTIAL_TENEMENT);
+	district->addchild(SITE_HOSPITAL_CLINIC);
+	district->addchild(SITE_LABORATORY_GENETIC);
+	district->addchild(SITE_LABORATORY_COSMETICS);
+	district->addchild(SITE_INDUSTRY_POLLUTER);
+	district->addchild(SITE_BUSINESS_PAWNSHOP);
+	district->addchild(SITE_INDUSTRY_SWEATSHOP);
+	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	district->addchild(SITE_BUSINESS_CRACKHOUSE)->upgradable = true;
+	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
-	strcpy(district->name, "Outskirts & Orange County");
-	site = district->addchild(SITE_GOVERNMENT_PRISON);
-	// = id++;
-	//site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ); 
-	// = id++;
-	site = district->addchild(SITE_INDUSTRY_NUCLEAR);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
-	// = id++;
-	site = district->addchild(SITE_OUTDOOR_BUNKER);
-	// = id++;
-	site->renting = RENTING_CCS;
-	site->hidden = true;
-	// Washington, DC
+	strcpy(district->name, tag_Outskirts_amp_Orange_County);
+	district->addchild(SITE_GOVERNMENT_PRISON);
+	district->addchild(SITE_INDUSTRY_NUCLEAR);
+	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	{
+		Location* site = district->addchild(SITE_OUTDOOR_BUNKER);
+		site->renting = RENTING_CCS;
+		site->hidden = true;
+	}
 	location.push_back(city = new Location(SITE_CITY_WASHINGTON_DC));
-	// = id++;
-	if (city) district = city->addchild(SITE_DOWNTOWN);
-	else location.push_back(district = new Location(SITE_DOWNTOWN));
-	// = id++;
+	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
-	strcpy(district->name, "Downtown");
-	//district->mapped = hasmaps;
-	site = district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_BANK);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_CLINIC);
-	// = id++;
-	site = district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	// = id++;
-	site = district->addchild(SITE_BUSINESS_DEPTSTORE);
-	// = id++;
-	site = district->addchild(SITE_RESIDENTIAL_SHELTER);
-	// = id++;
-	site->renting = RENTING_PERMANENT;
-	if (city) district = city->addchild(SITE_UDISTRICT);
-	else location.push_back(district = new Location(SITE_UDISTRICT));
-	// = id++;
+	strcpy(district->name, tag_Downtown);
+	district->addchild(SITE_GOVERNMENT_POLICESTATION);
+	district->addchild(SITE_GOVERNMENT_FIRESTATION);
+	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
+	district->addchild(SITE_BUSINESS_BANK);
+	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	district->addchild(SITE_HOSPITAL_CLINIC);
+	district->addchild(SITE_HOSPITAL_UNIVERSITY);
+	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
+	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
-	strcpy(district->name, "National Mall");
-	strcpy(district->shortname, "Mall");
-	site = district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
-	// = id++;
-	if (city) district = city->addchild(SITE_OUTOFTOWN);
-	else location.push_back(district = new Location(SITE_OUTOFTOWN));
-	// = id++;
+	strcpy(district->name, tag_National_Mall);
+	strcpy(district->shortname, CONST_locationsPool047);
+	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
+	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
-	strcpy(district->name, "Arlington");
-	site = district->addchild(SITE_GOVERNMENT_PRISON);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
-	// = id++;
-	site = district->addchild(SITE_GOVERNMENT_ARMYBASE);
-	// = id++;
-	//location.push_back(city = new Location(SITE_CITY_CHICAGO));
-	//// = id++;
-	//location.push_back(city = new Location(SITE_CITY_DETROIT));
-	//// = id++;
-	//location.push_back(city = new Location(SITE_CITY_ATLANTA));
-	//// = id++;
-	//location.push_back(city = new Location(SITE_CITY_MIAMI));
-	//// = id++;
+	strcpy(district->name, tag_Arlington);
+	district->addchild(SITE_GOVERNMENT_PRISON);
+	district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
+	district->addchild(SITE_GOVERNMENT_ARMYBASE);
 }
-
-
 // Finds a location with the corresponding type and returns
 // its index in the location array
 int findlocation(int type, int city = -1)
@@ -1035,7 +922,7 @@ int findlocation(int type, int city = -1)
 	return -1;
 }
 // Locations - Construct a new location with the specified parameters
-#include "daily/daily.h"
+#include "../daily/daily.h"
 Location::Location(char type_, int parent_)
 	: type(type_), city(-1), parent(parent_), renting(RENTING_NOCONTROL), needcar(false), hidden(false), upgradable(false)
 {
@@ -1081,19 +968,19 @@ string Location::getname(signed char shortname_, bool include_city)
 	}
 	if (include_city&&type != city) {
 		string cityname = location[findlocation(city, city)]->getname(shortname_ + 2);
-		if (str == "Downtown")
+		if (str == tag_Downtown)
 			return str + singleSpace + cityname;
-		if (str == "University District" || str == "U-District" || str == "Industrial District" || str == "I-District" ||
-			str == "Shopping" || str == "Outskirts" || str == "Seaport Area" || str == "Seaport" || str == "Outskirts & Orange County")
+		if (str == tag_University_District || str == tag_u_District || str == tag_Industrial_District || str == tag_i_District ||
+			str == tag_Shopping || str == tag_Outskirts || str == tag_Seaport_Area || str == tag_Seaport || str == tag_Outskirts_amp_Orange_County)
 			return cityname + singleSpace + str;
-		if (str == "City Outskirts")
-			return cityname + " Outskirts";
-		if (str == "Arlington")
-			return str + (shortname_ < 0 ? ", Virginia" : ", VA");
-		if (str == "Hollywood" || str == "Greater Hollywood")
-			return str + (shortname_ < 0 ? ", California" : ", CA");
-		if (str == "Manhattan" || str == "Manhattan Island" || str == "Brooklyn & Queens" || str == "Long Island" || str == "The Bronx")
-			return str + (shortname_ < 0 ? ", New York" : ", NY");
+		if (str == tag_City_Outskirts)
+			return cityname + CONST_locationsPool048;
+		if (str == tag_Arlington)
+			return str + (shortname_ < 0 ? CONST_locationsPool049 : CONST_locationsPoolB144);
+		if (str == tag_Hollywood || str == tag_Greater_Hollywood)
+			return str + (shortname_ < 0 ? CONST_locationsPool050 : CONST_locationsPoolB145);
+		if (str == tag_Manhattan || str == tag_Manhattan_Island || str == tag_Brooklyn_ampersand_Queens || str == tag_Long_Island || str == tag_The_Bronx)
+			return str + (shortname_ < 0 ? CONST_locationsPool051 : CONST_locationsPoolB146);
 		str += commaSpace + cityname;
 	}
 	return str;
@@ -1162,11 +1049,9 @@ void Location::update_heat_protection()
 	heat_protection *= 5;
 	if (heat_protection > 95) heat_protection = 95;
 }
-typedef map<short, string > shortAndString;
-shortAndString getActivityString;
+map<short, string> getActivityString;
 extern vector<ArmorType *> armortype;
-
-std::string getactivity(activityst &act)
+std::string getactivity(ActivityST &act)
 {
 	if (getActivityString.count(act.type)) {
 		return getActivityString[act.type];
@@ -1176,17 +1061,17 @@ std::string getactivity(activityst &act)
 		{
 		case ACTIVITY_HOSTAGETENDING:
 		{
-			std::string str = "Tending to ";
+			std::string str = CONST_locationsPool052;
 			int pl = getpoolcreature(act.arg);
 			if (pl != -1) return str + CreaturePool::getInstance().getName(pl);
-			else return str + "a bug";
+			else return str + CONST_locationsPool053;
 		}
 		case ACTIVITY_MAKE_ARMOR:
-			return "Making " + armortype[act.arg]->get_shortname();
+			return CONST_locationsPool054 + armortype[act.arg]->get_shortname();
 		case ACTIVITY_VISIT:
-			return "Going to " + location[act.arg]->getname(!location[act.arg]->is_city());
+			return CONST_locationsPool055 + location[act.arg]->getname(!location[act.arg]->is_city());
 		default:
-			return "Reporting Bugs to the Dev Team";
+			return CONST_locationsPool056;
 		}
 }
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
@@ -1217,8 +1102,6 @@ void advancelocations()
 		}
 	}
 }
-
-
 bool Creature::is_imprisoned() const
 {
 	return(alive && clinic == 0 && dating == 0 && hiding == 0 &&
@@ -1231,13 +1114,12 @@ bool Creature::is_active_liberal() const
 		hiding == 0 && !(flag & CREATUREFLAG_SLEEPER) &&
 		!::location[this->location]->part_of_justice_system());
 }
-
 /* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)
 {
 	printparty();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 15, "     How many?          ");
+	mvaddstrAlt(8, 15, CONST_locationsPool057);
 	char str[100];
 	enter_name(8, 30, str, 100, toCstring(max));
 	int amount = atoi(str);
@@ -1260,7 +1142,7 @@ void equip(vector<Item *> &loot, int loc)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, "Equip the Squad");
+		mvaddstrAlt(0, 0, CONST_locationsPool058);
 		printparty();
 		if (errmsg) {
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -1275,7 +1157,7 @@ void equip(vector<Item *> &loot, int loc)
 		{
 			string s = loot[l]->equip_title();
 			if (loot[l]->get_number() > 1)
-				s += " x" + tostring(loot[l]->get_number());
+				s += CONST_locationsPool059 + tostring(loot[l]->get_number());
 			str[0] = l - page * 18 + 'A';
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace);
@@ -1295,19 +1177,19 @@ void equip(vector<Item *> &loot, int loc)
 			mvaddstrAlt(17, 53, addnextpagestr());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19, 1, "Press a letter to equip a Liberal item");
-		mvaddstrAlt(20, 1, "Press a number to drop that Squad member's Conservative weapon");
-		mvaddstrAlt(21, 1, "S - Liberally Strip a Squad member");
-		mvaddstrAlt(22, 1, "Cursors - Increase or decrease ammo allocation");
+		mvaddstrAlt(19, 1, CONST_locationsPool060);
+		mvaddstrAlt(20, 1, CONST_locationsPool061);
+		mvaddstrAlt(21, 1, CONST_locationsPool062);
+		mvaddstrAlt(22, 1, CONST_locationsPool063);
 		if (loc != -1)
 		{
 			if (len(location[loc]->loot)) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 1, "Y - Get things from ");
+			mvaddstrAlt(23, 1, CONST_locationsPool064);
 			addstrAlt(location[loc]->getname(true));
 			if (len(loot)) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 40, "Z - Stash things at ");
+			mvaddstrAlt(23, 40, CONST_locationsPool065);
 			addstrAlt(location[loc]->getname(true));
 		}
 		set_color_easy(WHITE_ON_BLACK);
@@ -1321,11 +1203,11 @@ void equip(vector<Item *> &loot, int loc)
 			else
 			{
 				if (slot < 0 || slot >= len(loot)) continue; // Out of range.
-				else if (!loot[slot]->is_weapon()
-					&& !loot[slot]->is_armor()
-					&& !loot[slot]->is_clip())
+				else if (!(loot[slot]->whatIsThis() == THIS_IS_WEAPON)
+					&& !(loot[slot]->whatIsThis() == THIS_IS_ARMOR)
+					&& !(loot[slot]->whatIsThis() == THIS_IS_CLIP))
 				{
-					errmsg = "You can't equip that.";
+					errmsg = CONST_locationsPool066.c_str();
 					continue;
 				}
 			}
@@ -1346,10 +1228,10 @@ void equip(vector<Item *> &loot, int loc)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				moveAlt(8, 20);
 				if (increaseammo)
-					addstrAlt(chooseALiberalTo + "receive a clip.");
+					addstrAlt(chooseALiberalTo + CONST_locationsPool067);
 				else if (decreaseammo)
-					addstrAlt(chooseALiberalTo + "drop a clip.");
-				else addstrAlt(chooseALiberalTo + "receive it.");
+					addstrAlt(chooseALiberalTo + CONST_locationsPool068);
+				else addstrAlt(chooseALiberalTo + CONST_locationsPool069);
 				c = getkeyAlt();
 			}
 			if (c >= '1'&&c <= '6')
@@ -1369,12 +1251,12 @@ void equip(vector<Item *> &loot, int loc)
 						}
 						else if (!squaddie->get_weapon().uses_ammo())
 						{
-							errmsg = "No ammo to drop!";
+							errmsg = CONST_locationsPool070.c_str();
 							continue;
 						}
 						else
 						{
-							errmsg = "No spare clips!";
+							errmsg = CONST_locationsPool071.c_str();
 							continue;
 						}
 						consolidateloot(loot);
@@ -1384,18 +1266,18 @@ void equip(vector<Item *> &loot, int loc)
 					{
 						if (!squaddie->get_weapon().uses_ammo())
 						{
-							errmsg = "No ammo required!";
+							errmsg = CONST_locationsPool072.c_str();
 							continue;
 						}
 						slot = -1;
 						for (int sl = 0; sl < len(loot); sl++)
 						{
-							if (loot[sl]->is_clip() && squaddie->get_weapon().acceptable_ammo(*loot[sl]))
+							if (loot[sl]->whatIsThis() == THIS_IS_CLIP && squaddie->get_weapon().acceptable_ammo(*loot[sl]))
 							{
 								slot = sl;
 								break;
 							}
-							else if (loot[sl]->is_weapon() && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
+							else if (loot[sl]->whatIsThis() == THIS_IS_WEAPON && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
 							{
 								Weapon* w = static_cast<Weapon*>(loot[sl]); //cast -XML
 								if (w->is_throwable())
@@ -1407,7 +1289,7 @@ void equip(vector<Item *> &loot, int loc)
 						}
 						if (slot == -1)
 						{
-							errmsg = "No ammo available!";
+							errmsg = CONST_locationsPool073.c_str();
 							continue;
 						}
 					}
@@ -1418,34 +1300,34 @@ void equip(vector<Item *> &loot, int loc)
 						(squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
 					if (squaddie->special[SPECIALWOUND_NECK] != 1) armok = 0;
 					if (squaddie->special[SPECIALWOUND_UPPERSPINE] != 1) armok = 0;
-					if (loot[slot]->is_weapon() && armok)
+					if (loot[slot]->whatIsThis() == THIS_IS_WEAPON && armok)
 					{
 						Weapon* w = static_cast<Weapon*>(loot[slot]); //cast -XML
 						squaddie->give_weapon(*w, &loot);
 						if (loot[slot]->empty()) delete_and_remove(loot, slot);
 						if (page * 18 >= len(loot) && page != 0) page--;
 					}
-					else if (loot[slot]->is_armor())
+					else if (loot[slot]->whatIsThis() == THIS_IS_ARMOR)
 					{
 						Armor* a = static_cast<Armor*>(loot[slot]); //cast -XML
 						squaddie->give_armor(*a, &loot);
 						if (loot[slot]->empty()) delete_and_remove(loot, slot);
 						if (page * 18 >= len(loot) && page != 0) page--;
 					}
-					else if (loot[slot]->is_clip() && armok)
+					else if (loot[slot]->whatIsThis() == THIS_IS_CLIP && armok)
 					{
 						int space = 9 - squaddie->count_clips();
 						if (!squaddie->get_weapon().uses_ammo())
 						{
-							errmsg = "Can't carry ammo without a gun."; continue;
+							errmsg = CONST_locationsPool074.c_str(); continue;
 						}
 						else if (!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
 						{
-							errmsg = "That ammo doesn't fit."; continue;
+							errmsg = CONST_locationsPool075.c_str(); continue;
 						}
 						else if (space < 1)
 						{
-							errmsg = "Can't carry any more ammo."; continue;
+							errmsg = CONST_locationsPool076.c_str(); continue;
 						}
 						else
 						{
@@ -1477,7 +1359,7 @@ void equip(vector<Item *> &loot, int loc)
 			if (choice)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 20, chooseALiberalTo + "strip down.");
+				mvaddstrAlt(8, 20, chooseALiberalTo + CONST_locationsPool077);
 				c = getkeyAlt();
 			}
 			if (c >= '1'&&c <= '6')
@@ -1517,7 +1399,7 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, "Select Objects");
+		mvaddstrAlt(0, 0, CONST_locationsPool078);
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
@@ -1529,8 +1411,8 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			if (source[l]->get_number() > 1)
 			{
 				s += singleSpace;
-				if (selected[l] > 0) s += tostring(selected[l]) + "/";
-				else s += "x";
+				if (selected[l] > 0) s += tostring(selected[l]) + CONST_locationsPool079;
+				else s += CONST_locationsPool080;
 				s += tostring(source[l]->get_number());
 			}
 			str[0] = l - page * 18 + 'A';
@@ -1553,7 +1435,7 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			mvaddstrAlt(17, 53, addnextpagestr());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23, 1, "Press a letter to select an item.");
+		mvaddstrAlt(23, 1, CONST_locationsPool081);
 		mvaddstrAlt(24, 1, enter_done);
 		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'r')
@@ -1612,9 +1494,9 @@ void equipmentbaseassign()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, "Moving Equipment");
-		mvaddstrAlt(1, 0, "컴컴ITEM컴컴컴컴컴컴컴컴횮URRENT LOCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-		mvaddstrAlt(1, 51, "NEW LOCATION");
+		mvaddstrAlt(0, 0, CONST_locationsPool082);
+		mvaddstrAlt(1, 0, CONST_locationsPool083);
+		mvaddstrAlt(1, 51, CONST_locationsPool084);
 		int y = 2;
 		for (p = page_loot * 19; p < len(temploot) && p < page_loot * 19 + 19; p++, y++)
 		{
@@ -1634,15 +1516,15 @@ void equipmentbaseassign()
 			addstrAlt(location[temploc[p]]->getname(true, true));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, "Press a Letter to assign a base.  Press a Number to select a base.");
+		mvaddstrAlt(22, 0, CONST_locationsPool085);
 		moveAlt(23, 0);
-		if (sortbytype) addstrAlt("T to sort by location.");
-		else addstrAlt("T to sort by type.");
-		addstrAlt("  Shift and a Number will move ALL items!");
+		if (sortbytype) addstrAlt(CONST_locationsPool086);
+		else addstrAlt(CONST_locationsPool087);
+		addstrAlt(CONST_locationsPool088);
 		moveAlt(24, 0); // location for either viewing other base pages or loot pages
 		if (len(temploc) > 9)
 		{
-			addstrAlt(",. to view other base pages.");
+			addstrAlt(CONST_locationsPool089);
 			moveAlt(24, 34); // we have base pages, so different location for viewing other loot pages
 		}
 		if (len(temploot) > 19)
@@ -1740,11 +1622,11 @@ char squadhasitem(squadst &sq, const string& type)
 	for (int l = 0; l < len(sq.loot); l++)
 	{
 		if (sq.loot[l]->get_itemtypename() != type) continue;
-		if (sq.loot[l]->is_weapon() && sq.loot[l]->get_itemtypename() == type) return 1;
+		if (sq.loot[l]->whatIsThis() == THIS_IS_WEAPON && sq.loot[l]->get_itemtypename() == type) return 1;
 	}
 	return 0;
 }
-#include "daily/siege.h"
+#include "../daily/siege.h"
 /* location info at top of screen */
 void printlocation(long loc)
 {
@@ -1753,7 +1635,7 @@ void printlocation(long loc)
 		if (!location[loc]->siege.underattack)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 1, "The police have surrounded this location.");
+			mvaddstrAlt(2, 1, CONST_locationsPool091);
 		}
 		else
 		{
@@ -1761,24 +1643,24 @@ void printlocation(long loc)
 			switch (location[loc]->siege.siegetype)
 			{
 			case SIEGE_POLICE:
-				mvaddstrAlt(2, 1, "The police are raiding this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool092); break;
 			case SIEGE_CIA:
-				mvaddstrAlt(2, 1, "The CIA is raiding this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool093); break;
 			case SIEGE_HICKS:
-				mvaddstrAlt(2, 1, "The masses are storming this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool094); break;
 			case SIEGE_CORPORATE:
-				mvaddstrAlt(2, 1, "The Corporations are raiding this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool095); break;
 			case SIEGE_CCS:
-				mvaddstrAlt(2, 1, "The CCS is raiding this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool096); break;
 			case SIEGE_FIREMEN:
-				mvaddstrAlt(2, 1, "Firemen are raiding this location!"); break;
+				mvaddstrAlt(2, 1, CONST_locationsPool097); break;
 			}
 		}
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(2, 1, "You are not under siege...  yet.");
+		mvaddstrAlt(2, 1, CONST_locationsPool098);
 	}
 	if (location[loc]->can_be_upgraded())
 	{
@@ -1790,68 +1672,68 @@ void printlocation(long loc)
 				{
 					if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
 					else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(3, 1, "This location has food for only a few days.");
+					mvaddstrAlt(3, 1, CONST_locationsPool099);
 				}
 			}
 			else
 			{
 				if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(3, 1, "This location has insufficient food stores.");
+				mvaddstrAlt(3, 1, CONST_locationsPool100);
 			}
 		}
 		if (location[loc]->compound_walls & COMPOUND_BASIC)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 1, "FORTIFIED COMPOUND");
+			mvaddstrAlt(4, 1, CONST_locationsPool101);
 		}
 		if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
 		{
 			set_color_easy(BLUE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 31, "PRINTING PRESS");
+			mvaddstrAlt(4, 31, CONST_locationsPool102);
 		}
 		if (location[loc]->front_business != -1)
 		{
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 54, "BUSINESS FRONT");
+			mvaddstrAlt(4, 54, CONST_locationsPool103);
 		}
 		if (location[loc]->compound_walls & COMPOUND_CAMERAS)
 		{
 			if (location[loc]->siege.siege&&location[loc]->siege.cameras_off)
 			{
 				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(5, 1, "CAMERAS OFF");
+				mvaddstrAlt(5, 1, CONST_locationsPool104);
 			}
 			else
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(5, 1, "CAMERAS ON");
+				mvaddstrAlt(5, 1, CONST_locationsPool105);
 			}
 		}
 		if (location[loc]->compound_walls & COMPOUND_TRAPS)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 16, "BOOBY TRAPS");
+			mvaddstrAlt(5, 16, CONST_locationsPool106);
 		}
 		if (location[loc]->compound_walls & COMPOUND_AAGUN)
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 33, "AA GUN");
+			mvaddstrAlt(5, 33, CONST_locationsPool107);
 		}
 		if (location[loc]->compound_walls & COMPOUND_TANKTRAPS)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 46, "TANK TRAPS");
+			mvaddstrAlt(5, 46, CONST_locationsPool108);
 		}
 		if (location[loc]->siege.siege&&location[loc]->siege.lights_off)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(5, 60, "LIGHTS OUT");
+			mvaddstrAlt(5, 60, CONST_locationsPool109);
 		}
 		else if (location[loc]->compound_walls & COMPOUND_GENERATOR)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 61, "GENERATOR");
+			mvaddstrAlt(5, 61, CONST_locationsPool110);
 		}
 		int eaters = numbereating(loc), days = fooddaysleft(loc);
 		if (eaters>0)
@@ -1860,23 +1742,23 @@ void printlocation(long loc)
 			{
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(6, 50, days);
-				addstrAlt(" Day");
+				addstrAlt(CONST_locationsPool111);
 				if (days != 1)addcharAlt('s');
-				addstrAlt(" of Food Left");
+				addstrAlt(CONST_locationsPool112);
 			}
 			else if (days == 0)
 			{
 				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(6, 50, "Not Enough Food");
+				mvaddstrAlt(6, 50, CONST_locationsPool113);
 			}
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(6, 1, location[loc]->compound_stores);
-		addstrAlt(" Daily Ration");
-		if (location[loc]->compound_stores != 1)addstrAlt("s");
+		addstrAlt(CONST_locationsPool114);
+		if (location[loc]->compound_stores != 1)addstrAlt(CONST_locationsPool115);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(6, 30, eaters);
-		addstrAlt(" Eating");
+		addstrAlt(CONST_locationsPool116);
 	}
 }
 extern int selectedsiege;
@@ -1915,7 +1797,7 @@ void locheader()
 	{
 		if (selectedsiege == -1)
 		{
-			addstrAlt("No Squad Selected");
+			addstrAlt(CONST_locationsPool117);
 			addstrAlt(commaSpace);
 		}
 		else
@@ -1932,9 +1814,9 @@ void locheader()
 	if (activesquad == NULL && selectedsiege == -1)
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(3, 6, "To form a new squad:");
-		mvaddstrAlt(4, 6, "1) R - Review Assets and Form Squads");
-		mvaddstrAlt(5, 6, "2) Press Z to Assemble a New Squad");
+		mvaddstrAlt(3, 6, CONST_locationsPool118);
+		mvaddstrAlt(4, 6, CONST_locationsPool119);
+		mvaddstrAlt(5, 6, CONST_locationsPool120);
 		set_color_easy(WHITE_ON_BLACK);
 	}
 	printfunds();
@@ -1955,15 +1837,15 @@ void locheader()
 			}
 			if (multipleact)
 			{
-				str = "Acting Individually";
+				str = CONST_locationsPool121;
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			}
 		}
 		mvaddstrAlt(0, 41, str);
 	}
 }
-#include "common/commonactions.h"
-#include "common/musicClass.h"
+#include "../common/commonactions.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern Ledger ledger;
 string closeParenthesis;
@@ -2021,7 +1903,7 @@ void stopevil()
 		music.play(MUSIC_STOPEVIL);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, "Where will the Squad go?");
+		mvaddstrAlt(0, 0, CONST_locationsPool122);
 		printparty();
 		if (loc != -1)
 		{
@@ -2140,8 +2022,8 @@ void stopevil()
 			mvaddstrAlt(20, 60, addnextpagestr());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		if ((loc == -1) || (multipleCityMode && LocationsPool::getInstance().getLocationType(loc) == squad_location->city)) mvaddstrAlt(24, 1, "Enter - The squad is not yet Liberal enough.");
-		else mvaddstrAlt(24, 1, "Enter - Back one step.");
+		if ((loc == -1) || (multipleCityMode && LocationsPool::getInstance().getLocationType(loc) == squad_location->city)) mvaddstrAlt(24, 1, CONST_locationsPool123);
+		else mvaddstrAlt(24, 1, CONST_locationsPool124);
 		int c = getkeyAlt();
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
@@ -2191,19 +2073,25 @@ void stopevil()
 		}
 	}
 }
-
-
 vector<string> caseBUSINESSFRONT_INSURANCE;
 vector<string> caseBUSINESSFRONT_TEMPAGENCY;
 vector<string> caseBUSINESSFRONT_RESTAURANT;
 vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
 const string mostlyendings = "mostlyendings\\";
-#include <customMaps.h>
+#include "../customMaps.h"
 vector<file_and_text_collection> locationspool_text_file_collection = {
-	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + "caseBUSINESSFRONT_INSURANCE.txt"),
-	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + "caseBUSINESSFRONT_TEMPAGENCY.txt"),
-	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + "caseBUSINESSFRONT_RESTAURANT.txt"),
-	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + "caseBUSINESSFRONT_MISCELLANEOUS.txt"),
+	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + CONST_locationsPool125),
+	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + CONST_locationsPool126),
+	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + CONST_locationsPool127),
+	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + CONST_locationsPool128),
+};
+enum BusinessFronts
+{
+	BUSINESSFRONT_INSURANCE,
+	BUSINESSFRONT_TEMPAGENCY,
+	BUSINESSFRONT_RESTAURANT,
+	BUSINESSFRONT_MISCELLANEOUS,
+	BUSINESSFRONTNUM
 };
 /* base - invest in this location */
 void investlocation()
@@ -2219,65 +2107,65 @@ void investlocation()
 			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			if (LocationsPool::getInstance().getLocationType(loc) == SITE_OUTDOOR_BUNKER)
-				mvaddstrAlt(8, 1, "W - Repair the Bunker Fortifications ($2000)");
+				mvaddstrAlt(8, 1, CONST_locationsPool129);
 			else if (LocationsPool::getInstance().getLocationType(loc) == SITE_RESIDENTIAL_BOMBSHELTER)
-				mvaddstrAlt(8, 1, "W - Fortify the Bomb Shelter Entrances ($2000)");
+				mvaddstrAlt(8, 1, CONST_locationsPool130);
 			else
-				mvaddstrAlt(8, 1, "W - Fortify the Compound for a Siege ($2000)");
+				mvaddstrAlt(8, 1, CONST_locationsPool131);
 		}
 		if (!(LocationsPool::getInstance().getCompoundWalls(loc) & COMPOUND_CAMERAS))
 		{
 			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, "C - Place Security Cameras around the Compound ($2000)");
+			mvaddstrAlt(9, 1, CONST_locationsPool132);
 		}
 		if (location[loc]->can_be_trapped())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 1, "B - Place Booby Traps throughout the Compound ($3000)");
+			mvaddstrAlt(10, 1, CONST_locationsPool133);
 		}
 		if (location[loc]->can_install_tanktraps())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 1, "T - Ring the Compound with Tank Traps ($3000)");
+			mvaddstrAlt(11, 1, CONST_locationsPool134);
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_GENERATOR))
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, "G - Buy a Generator for emergency electricity ($3000)");
+			mvaddstrAlt(12, 1, CONST_locationsPool135);
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_AAGUN))
 		{
 			if (lawList[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
 			{
 				if (ledger.get_funds() >= 35000) set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(13, 1, "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
+				mvaddstrAlt(13, 1, CONST_locationsPool136);
 			}
 			else
 			{
 				if (ledger.get_funds() >= 200000) set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 1, "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)");
+				mvaddstrAlt(13, 1, CONST_locationsPool137);
 			}
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(14, 1, "P - Buy a Printing Press to start your own newspaper ($3000)");
+			mvaddstrAlt(14, 1, CONST_locationsPool138);
 		}
 		if (location[loc]->can_have_businessfront())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15, 1, "F - Setup a Business Front to ward off suspicion ($3000)");
+			mvaddstrAlt(15, 1, CONST_locationsPool139);
 		}
 		if (ledger.get_funds() >= 150) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, "R - Stockpile 20 daily rations of food ($150)");
+		mvaddstrAlt(16, 1, CONST_locationsPool140);
 		mvaddstrAlt(17, 1, enter_done);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -2387,7 +2275,6 @@ void investlocation()
 		}
 	}
 }
-
 extern int stat_kidnappings;
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(Creature &cr)
@@ -2400,17 +2287,17 @@ void kidnaptransfer(Creature &cr)
 	newcr->flag |= CREATUREFLAG_MISSING;
 	//disarm them and stash their weapon back at the base
 	newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
-	//Create interrogation data
-	newcr->activity.intr() = new interrogation;
+	//Create InterrogationST data
+	newcr->activity.intr() = new InterrogationST;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, "The Education of ");
+	mvaddstrAlt(0, 0, CONST_locationsPool141);
 	addstrAlt(newcr->propername);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2, 0, "What name will you use for this ");
+	mvaddstrAlt(2, 0, CONST_locationsPool142);
 	addstrAlt(newcr->get_type_name());
-	addstrAlt(" in its presence?");
-	mvaddstrAlt(3, 0, "If you do not enter anything, their real name will be used.");
+	addstrAlt(CONST_locationsPool143);
+	mvaddstrAlt(3, 0, CONST_locationsPool144);
 	enter_name(4, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	addCreature(newcr);
 	stat_kidnappings++;
@@ -2419,7 +2306,7 @@ void kidnaptransfer(Creature &cr)
 void Location::getloot(vector<Item *>& loot)
 {
 	for (int l = len(loot) - 1; l >= 0; l--)
-		if (loot[l]->is_money())
+		if (loot[l]->whatIsThis() == THIS_IS_MONEY)
 		{
 			Money* m = static_cast<Money*>(loot[l]); //cast -XML
 			ledger.add_funds(m->get_amount(), INCOME_THIEVERY);
@@ -2430,4 +2317,145 @@ void Location::getloot(vector<Item *>& loot)
 			this->loot.push_back(loot[l]);
 		}
 	loot.clear();
+}
+void clearRentExemptions() {
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) location[l]->newrental = 0;
+}
+/* monthly - lets the player choose a special edition for the guardian */
+int choosespecialedition(char &clearformess);
+/* monthly - guardian - prints liberal guardian special editions */
+void printnews(short l, short newspaper);
+#include "../items/itemPool.h"
+#include "../items/lootTypePool.h"
+void publishSpecialEditions(char &clearformess) {
+	//YOUR PAPER AND PUBLIC OPINION AND STUFF
+	vector<int> nploc;
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+	{
+		if ((location[l]->compound_walls & COMPOUND_PRINTINGPRESS) &&
+			!location[l]->siege.siege&&
+			location[l]->renting != RENTING_CCS) nploc.push_back(l);
+	}
+	if (len(nploc))
+	{
+		//DO SPECIAL EDITIONS
+		int loottypeindex = choosespecialedition(clearformess);
+		if (loottypeindex != -1)
+		{
+			printnews(loottypeindex, len(nploc));
+			if (LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
+				LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_SECRETDOCUMENTS)
+			{
+				for (int l = 0; l < len(nploc); l++)
+					criminalizepool(LAWFLAG_TREASON, -1, nploc[l]);
+			}
+		}
+	}
+}
+extern char endgamestate;
+extern short background_liberal_influence[VIEWNUM];
+void manageGrafiti() {
+	//Manage graffiti
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) // Check each location
+	{
+		for (int c = len(location[l]->changes) - 1; c >= 0; c--) // Each change to the map
+		{
+			if (location[l]->changes[c].flag == SITEBLOCK_GRAFFITI ||
+				location[l]->changes[c].flag == SITEBLOCK_GRAFFITI_CCS ||
+				location[l]->changes[c].flag == SITEBLOCK_GRAFFITI_OTHER) // Find changes that refer specifically to graffiti
+			{
+				int power = 0, align = 0;
+				if (location[l]->changes[c].flag == SITEBLOCK_GRAFFITI) align = 1;
+				if (location[l]->changes[c].flag == SITEBLOCK_GRAFFITI_CCS) align = -1;
+				//Purge graffiti from more secure sites (or from non-secure
+				//sites about once every five years), but these will
+				//influence people more for the current month
+				if (securityable(LocationsPool::getInstance().getLocationType(l)))
+				{
+					location[l]->changes.erase(location[l]->changes.begin() + c);
+					power = 5;
+				}
+				else
+				{
+					if (location[l]->renting == RENTING_CCS)
+						location[l]->changes[c].flag = SITEBLOCK_GRAFFITI_CCS; // Convert to CCS tags
+					else if (location[l]->renting == RENTING_PERMANENT)
+						location[l]->changes[c].flag = SITEBLOCK_GRAFFITI; // Convert to LCS tags
+					else
+					{
+						power = 1;
+						if (!LCSrandom(10))
+							location[l]->changes[c].flag = SITEBLOCK_GRAFFITI_OTHER; // Convert to other tags
+						if (!LCSrandom(10) && endgamestate < ENDGAME_CCS_DEFEATED&&endgamestate>0)
+							location[l]->changes[c].flag = SITEBLOCK_GRAFFITI_CCS; // Convert to CCS tags
+						if (!LCSrandom(30))
+							location[l]->changes.erase(location[l]->changes.begin() + c); // Clean up
+					}
+				}
+				if (align == 1)
+				{
+					background_liberal_influence[VIEW_LIBERALCRIMESQUAD] += power;
+					background_liberal_influence[VIEW_CONSERVATIVECRIMESQUAD] += power;
+				}
+				else if (align == -1)
+				{
+					background_liberal_influence[VIEW_LIBERALCRIMESQUAD] -= power;
+					background_liberal_influence[VIEW_CONSERVATIVECRIMESQUAD] -= power;
+				}
+			}
+		}
+	}
+}
+siegest* getseigestFromLocation(int secondaryLocation) {
+	siegest* siege = NULL;
+	int primaryLocation = activesquad ? activesquad->squad[0]->location : -1;
+	if (primaryLocation != -1) {
+		siege = &location[primaryLocation]->siege;
+	}
+	else if (secondaryLocation != -1) {
+		siege = &location[secondaryLocation]->siege;
+	}
+	return siege;
+}
+void gotoEquipmentScreen(int loc) {
+	equip(location[loc]->loot, -1);
+}
+void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid) {
+	//create a temp squad containing just this liberal
+	int oldsquadid = cr->squadid;
+	squadst *oldactivesquad = activesquad;
+	activesquad = new squadst;
+	strcpy(activesquad->name, CONST_locationsPool145);
+	activesquad->id = cursquadid;
+	activesquad->squad[0] = cr;
+	cr->squadid = activesquad->id;
+	//go to equipment screen
+	gotoEquipmentScreen(activesquad->squad[0]->location);
+	//once you're done, restore original squad status.
+	delete activesquad;
+	activesquad = oldactivesquad;
+	cr->squadid = oldsquadid;
+}
+extern vector<Vehicle *> vehicle;
+void newVehicle(Vehicle *startcar) {
+	vehicle.push_back(startcar);
+}
+void moveEverythingAwayFromSite(int cursite) {
+	location[cursite]->renting = RENTING_NOCONTROL;
+	//MOVE ALL ITEMS AND SQUAD MEMBERS
+	const int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cursite);
+	CreaturePool::getInstance().moveEverythingFrom(cursite, hs);
+	location[hs]->getloot(location[cursite]->loot);
+	location[cursite]->compound_walls = 0;
+	location[cursite]->compound_stores = 0;
+	location[cursite]->front_business = -1;
+}
+void LocationsPool::addSiegeKill(int cursite) {
+	location[cursite]->siege.kills++;
+}
+void LocationsPool::removeTank(int cursite) {
+	location[cursite]->siege.tanks--;
+}
+void addLocationChange(int cursite, sitechangest change) {
+	location[cursite]->changes.push_back(change);
 }

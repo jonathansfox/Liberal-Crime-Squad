@@ -1,27 +1,28 @@
+#include "../includes.h"
+const string CONST_money003 = "$";
+const string CONST_money002 = "amount";
 
-#include <includes.h>
-#include "creature/creatureEnums.h"
-#include "items/itemtype.h"
-#include "items/item.h"
-
-#include "items/money.h"
+const string tag_money = "money";
+#include "../creature/creatureEnums.h"
+#include "../items/itemtype.h"
+#include "../items/item.h"
+#include "../items/money.h"
 //own header
-
 Money::Money(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-   while(xml.FindElem()) if(xml.GetTagName()=="amount") amount_=atoi(xml.GetData().c_str());
+   while(xml.FindElem()) if(xml.GetTagName()==CONST_money002) amount_=atoi(xml.GetData().c_str());
 }
 string Money::showXml() const
 {
    CMarkup xml;
-   xml.AddElem("money");
+   xml.AddElem(tag_money);
    xml.IntoElem();
    addBaseValues(xml);
-   xml.AddElem("amount",tostring(amount_));
+   xml.AddElem(CONST_money002,tostring(amount_));
    return xml.GetDoc();
 }
 Money* Money::split(int number)
@@ -36,7 +37,7 @@ Money* Money::split(int number)
 bool Money::merge(Item& i)
 {
    flatten();
-   if(i.is_money()&&is_same_type(i))
+   if(i.whatIsThis() == THIS_IS_MONEY &&is_same_type(i))
    {
       Money& m=static_cast<Money&>(i); //cast -XML
       m.flatten();
@@ -47,6 +48,6 @@ bool Money::merge(Item& i)
    else return false;
 }
 bool Money::sort_compare_special(Item* other) const
-{ return other&&!other->is_money(); }
+{ return other&&!(other->whatIsThis() == THIS_IS_MONEY); }
 string Money::equip_title() const
-{ return "$"+tostring(amount_); }
+{ return CONST_money003+tostring(amount_); }

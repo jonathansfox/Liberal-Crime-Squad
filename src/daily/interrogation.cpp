@@ -1,3 +1,154 @@
+
+#include "../includes.h"
+const string CONST_interrogationB150 = "hugs ";
+const string CONST_interrogation167 = "Press any key to reflect on this.";
+const string CONST_interrogation166 = "'s disappearance has not yet been reported.";
+const string CONST_interrogation165 = " was able to create a map of the site with this information.";
+const string CONST_interrogation164 = "Unfortunately, none of it is useful to the LCS.";
+const string CONST_interrogation163 = " reveals details about the ";
+const string CONST_interrogation162 = "The conversion is convincing enough that the police no longer consider it a kidnapping.";
+const string CONST_interrogation161 = "The Automaton has been Enlightened!   Your Liberal ranks are swelling!";
+const string CONST_interrogation160 = " grows colder.";
+const string CONST_interrogation159 = "'s interrogation.";
+const string CONST_interrogation158 = " under ";
+const string CONST_interrogation157 = " is dead";
+const string CONST_interrogation156 = " has committed suicide.";
+const string CONST_interrogation155 = " has been tainted with wisdom!";
+const string CONST_interrogation154 = "!";
+const string CONST_interrogation153 = " turns the tables on ";
+const string CONST_interrogation152 = " holds firm.";
+const string CONST_interrogation148 = " begs for the nightmare to end.";
+const string CONST_interrogation147 = " curls up and";
+const string CONST_interrogation146 = " to stop looking like Hitler.";
+const string CONST_interrogation145 = " screams for ";
+const string CONST_interrogation144 = " begs Hitler to stay and kill ";
+const string CONST_interrogation143 = "talks about hugging ";
+const string CONST_interrogation142 = " stammers and ";
+const string CONST_interrogation140 = " takes it well.";
+const string CONST_interrogation139 = "'s weakened body crumbles under the brutal assault.";
+const string CONST_interrogation138 = " is badly hurt.";
+const string CONST_interrogation137 = " seems to be getting the message.";
+const string CONST_interrogation136 = "A detailed map has been created of ";
+const string CONST_interrogation134 = " beats information out of the pathetic thing.";
+const string CONST_interrogation133 = " wonders about death.";
+const string CONST_interrogation132 = " wonders about apples.";
+const string CONST_interrogation131 = " cries helplessly.";
+const string CONST_interrogation130 = " barks helplessly.";
+const string CONST_interrogation129 = " curls up in the corner and doesn't move.";
+const string CONST_interrogation128 = " goes limp in the restraints.";
+const string CONST_interrogation127 = "mommy.";
+const string CONST_interrogation126 = "God's mercy.";
+const string CONST_interrogation125 = "John Lennon's mercy.";
+const string CONST_interrogation124 = " screams helplessly for ";
+const string CONST_interrogation123 = "!\" in its face.";
+const string CONST_interrogation122 = "! ";
+const string CONST_interrogation121 = " the Automaton";
+const string CONST_interrogation120 = "'s guards beat";
+const string CONST_interrogation119 = " beat";
+const string CONST_interrogation118 = " beats";
+const string CONST_interrogation115 = "screaming \"";
+const string CONST_interrogation114 = " had a near-death experience and met John Lennon.";
+const string CONST_interrogation113 = " had a near-death experience and met God in heaven.";
+const string CONST_interrogation112 = " clumsily rescues it from cardiac arrest with a defibrillator.";
+const string CONST_interrogation111 = " from any health damage.";
+const string CONST_interrogation110 = " skillfully saves ";
+const string CONST_interrogation109 = " deftly rescues it from cardiac arrest with a defibrillator.";
+const string CONST_interrogation108 = "'s incompetence at first aid.";
+const string CONST_interrogation107 = " dies due to ";
+const string CONST_interrogation106 = "'s weakened state.";
+const string CONST_interrogation105 = "It is a lethal overdose in ";
+const string CONST_interrogation104 = " pants.";
+const string CONST_interrogation103 = " has a panic attack and shits ";
+const string CONST_interrogation102 = " has a panic attack and [makes a stinky].";
+const string CONST_interrogation101 = " flatlines.";
+const string CONST_interrogation100 = " uses a defibrillator repeatedly but ";
+const string CONST_interrogation099 = " foams at the mouth and its eyes roll back in its skull.";
+const string CONST_interrogation098 = "It is subjected to dangerous hallucinogens.";
+const string CONST_interrogation097 = "converted into a makeshift cell.";
+const string CONST_interrogation096 = " is locked in a back room ";
+const string CONST_interrogation095 = "in the middle of a back room.";
+const string CONST_interrogation094 = " is tied hands and feet to a metal chair";
+const string CONST_interrogation093 = "The Automaton";
+const string CONST_interrogation092 = ": Day ";
+const string CONST_interrogation091 = "The Education of ";
+const string CONST_interrogation089 = " in cold blood.";
+const string CONST_interrogation088 = "execute ";
+const string CONST_interrogation087 = "There is no one able to get up the nerve to ";
+const string CONST_interrogation085 = " by ";
+const string CONST_interrogation084 = " executes ";
+const string CONST_interrogation082 = "The Final Education of ";
+const string CONST_interrogation081 = "Press Enter to Confirm the Plan";
+const string CONST_interrogation080 = "K - Kill the Hostage";
+const string CONST_interrogation079 = "($50)";
+const string CONST_interrogation078 = "Hallucinogenic Drugs    ";
+const string CONST_interrogation077 = "No ";
+const string CONST_interrogation076 = "E - ";
+const string CONST_interrogation075 = "($250)";
+const string CONST_interrogation074 = "Expensive Props     ";
+const string CONST_interrogation072 = "D - ";
+const string CONST_interrogation071 = "Violently Beaten    ";
+const string CONST_interrogation070 = "Not ";
+const string CONST_interrogation069 = "C - ";
+const string CONST_interrogation068 = "Physical Restraints   ";
+const string CONST_interrogation066 = "B - ";
+const string CONST_interrogation065 = "Attempt to Convert";
+const string CONST_interrogation064 = "No Verbal Contact     ";
+const string CONST_interrogation063 = "A - ";
+const string CONST_interrogation062 = "Selecting a Liberal Interrogation Plan";
+const string CONST_interrogation061 = "The Execution of an Automaton         ";
+const string CONST_interrogation058 = "murder ";
+const string CONST_interrogation057 = "The Conservative would like to ";
+const string CONST_interrogation056 = "The Conservative hates ";
+const string CONST_interrogation055 = "toward ";
+const string CONST_interrogation054 = "The Conservative is uncooperative ";
+const string CONST_interrogation053 = "The Conservative likes ";
+const string CONST_interrogation052 = " as its only friend.";
+const string CONST_interrogation051 = "to ";
+const string CONST_interrogation050 = "The Conservative clings helplessly ";
+const string CONST_interrogation049 = "Outfit: ";
+const string CONST_interrogation048 = "Wisdom: ";
+const string CONST_interrogation047 = "Heart: ";
+const string CONST_interrogation046 = "Psychology Skill: ";
+const string CONST_interrogation045 = "Health: ";
+const string CONST_interrogation044 = "Lead Interrogator: ";
+const string CONST_interrogation039 = "Prisoner: ";
+const string CONST_interrogation038 = "                                  ";
+const string CONST_interrogation037 = "cling_to_science.txt";
+const string CONST_interrogation036 = "cling_to_business.txt";
+const string CONST_interrogation035 = "cling_to_science_one_line.txt";
+const string CONST_interrogation034 = "cling_to_business_one_line.txt";
+const string CONST_interrogation033 = "vanilla_recruit.txt";
+const string CONST_interrogation032 = "discuss.txt";
+const string CONST_interrogation031 = "cling_to_religion_one_line.txt";
+const string CONST_interrogation030 = "cling_to_religion.txt";
+const string CONST_interrogation029 = "clinging_one_line.txt";
+const string CONST_interrogation028 = "cling_to_interrogater.txt";
+const string CONST_interrogation027 = "interrogater_shows_compassion.txt";
+const string CONST_interrogation026 = "interrogater_shows_compassion_one_line.txt";
+const string CONST_interrogation025 = "develops_hatred.txt";
+const string CONST_interrogation024 = "develops_hatred_one_line.txt";
+const string CONST_interrogation023 = "smarter_than_you.txt";
+const string CONST_interrogation022 = "smarter_than_you_one_line.txt";
+const string CONST_interrogation021 = "good_trip_companion.txt";
+const string CONST_interrogation020 = "bad_trip.txt";
+const string CONST_interrogation019 = "fall_in_love.txt";
+const string CONST_interrogation018 = "good_trip.txt";
+const string CONST_interrogation017 = "self_wounding.txt";
+const string CONST_interrogation016 = "broods_over_death.txt";
+const string CONST_interrogation015 = "partial_conversion.txt";
+const string CONST_interrogation014 = "resist_drugs.txt";
+const string CONST_interrogation013 = "use_props.txt";
+const string CONST_interrogation012 = "prays_on_drugs.txt";
+const string CONST_interrogation011 = "prays.txt";
+const string CONST_interrogation010 = "words_to_scream.txt";
+const string CONST_interrogation009 = "words_meaning_screaming.txt";
+const string CONST_interrogation008 = "beat_with_props.txt";
+const string CONST_interrogation007 = "screaming.txt";
+const string CONST_interrogation006 = "low_heart_torture_props.txt";
+const string CONST_interrogation005 = "feels_sick.txt";
+const string CONST_interrogation004 = "execution.txt";
+
+const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -17,30 +168,25 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "log/log.h"
-#include "common/commondisplayCreature.h"
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../log/log.h"
+#include "../common/commondisplayCreature.h"
 // for void printhealthstat(Creature &,int,int,char);
-
- #include "common/getnames.h"
+ #include "../common/getnames.h"
 // for std::string getview(short ,bool );
-
-#include "common/commonactionsCreature.h"
+#include "../common/commonactionsCreature.h"
 // for  void sleeperize_prompt(Creature &,Creature &,int);
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <set_color_support.h>
-#include "common/creaturePoolCreature.h"
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
+#include "../common/creaturePoolCreature.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
 extern Log gamelog;
 extern MusicClass music;
 extern int stat_recruits;
@@ -62,70 +208,65 @@ extern short lawList[LAWNUM];
  vector<string> broods_over_death;
  vector<string> self_wounding;
  vector<string> good_trip;
- vector<vector<string>> fall_in_love;
- vector<vector<string>> bad_trip;
- vector<vector<string>> good_trip_companion;
+ vector<vector<string> > fall_in_love;
+ vector<vector<string> > bad_trip;
+ vector<vector<string> > good_trip_companion;
  vector<string> smarter_than_you_one_line;
- vector<vector<string>> smarter_than_you;
+ vector<vector<string> > smarter_than_you;
  vector<string> develops_hatred_one_line;
- vector<vector<string>> develops_hatred;
+ vector<vector<string> > develops_hatred;
  vector<string> interrogater_shows_compassion_one_line;
- vector<vector<string>> interrogater_shows_compassion;
- vector<vector<string>> cling_to_interrogater;
+ vector<vector<string> > interrogater_shows_compassion;
+ vector<vector<string> > cling_to_interrogater;
  vector<string> clinging_one_line;
- vector<vector<string>> cling_to_religion;
+ vector<vector<string> > cling_to_religion;
  vector<string> cling_to_religion_one_line;
- vector<vector<string>> discuss;
+ vector<vector<string> > discuss;
  vector<string> vanilla_recruit;
- vector<vector<string>> cling_to_business;
- vector<vector<string>> cling_to_science;
+ vector<vector<string> > cling_to_business;
+ vector<vector<string> > cling_to_science;
  vector<string> cling_to_business_one_line;
  vector<string> cling_to_science_one_line;
-
-
  const string interrogate = "interrogation\\";
  const int DOUBLE_LINE = 2;
  vector<file_and_text_collection> interrogate_text_file_collection = {
-
-	 /*interrogation.cpp*/
-	 customText(&execution, interrogate + "execution.txt"),
-	 customText(&feels_sick, interrogate + "feels_sick.txt"),
-	 customText(&low_heart_torture_props, interrogate + "low_heart_torture_props.txt"),
-	 customText(&screaming, interrogate + "screaming.txt"),
-	 customText(&beat_with_props, interrogate + "beat_with_props.txt"),
-	 customText(&words_meaning_screaming, interrogate + "words_meaning_screaming.txt"),
-	 customText(&words_to_scream, interrogate + "words_to_scream.txt"),
-	 customText(&prays, interrogate + "prays.txt"),
-	 customText(&prays_on_drugs, interrogate + "prays_on_drugs.txt"),
-	 customText(&use_props, interrogate + "use_props.txt"),
-	 customText(&resist_drugs, interrogate + "resist_drugs.txt"),
-	 customText(&partial_conversion, interrogate + "partial_conversion.txt"),
-	 customText(&broods_over_death, interrogate + "broods_over_death.txt"),
-	 customText(&self_wounding, interrogate + "self_wounding.txt"),
-	 customText(&good_trip, interrogate + "good_trip.txt"),
-	 customText(&fall_in_love, interrogate + "fall_in_love.txt", DOUBLE_LINE),
-	 customText(&bad_trip, interrogate + "bad_trip.txt", DOUBLE_LINE),
-	 customText(&good_trip_companion, interrogate + "good_trip_companion.txt", DOUBLE_LINE),
-	 customText(&smarter_than_you_one_line, interrogate + "smarter_than_you_one_line.txt"),
-	 customText(&smarter_than_you, interrogate + "smarter_than_you.txt", DOUBLE_LINE),
-	 customText(&develops_hatred_one_line, interrogate + "develops_hatred_one_line.txt"),
-	 customText(&develops_hatred, interrogate + "develops_hatred.txt", DOUBLE_LINE),
-	 customText(&interrogater_shows_compassion_one_line, interrogate + "interrogater_shows_compassion_one_line.txt"),
-	 customText(&interrogater_shows_compassion, interrogate + "interrogater_shows_compassion.txt", DOUBLE_LINE),
-	 customText(&cling_to_interrogater, interrogate + "cling_to_interrogater.txt", DOUBLE_LINE),
-	 customText(&clinging_one_line, interrogate + "clinging_one_line.txt"),
-	 customText(&cling_to_religion, interrogate + "cling_to_religion.txt", DOUBLE_LINE),
-	 customText(&cling_to_religion_one_line, interrogate + "cling_to_religion_one_line.txt"),
-	 customText(&discuss, interrogate + "discuss.txt", DOUBLE_LINE),
-	 customText(&vanilla_recruit, interrogate + "vanilla_recruit.txt"),
-	 customText(&cling_to_business_one_line, interrogate + "cling_to_business_one_line.txt"),
-	 customText(&cling_to_science_one_line, interrogate + "cling_to_science_one_line.txt"),
-	 customText(&cling_to_business, interrogate + "cling_to_business.txt", DOUBLE_LINE),
-	 customText(&cling_to_science, interrogate + "cling_to_science.txt", DOUBLE_LINE),
+	 /*InterrogationST.cpp*/
+	 customText(&execution, interrogate + CONST_interrogation004),
+	 customText(&feels_sick, interrogate + CONST_interrogation005),
+	 customText(&low_heart_torture_props, interrogate + CONST_interrogation006),
+	 customText(&screaming, interrogate + CONST_interrogation007),
+	 customText(&beat_with_props, interrogate + CONST_interrogation008),
+	 customText(&words_meaning_screaming, interrogate + CONST_interrogation009),
+	 customText(&words_to_scream, interrogate + CONST_interrogation010),
+	 customText(&prays, interrogate + CONST_interrogation011),
+	 customText(&prays_on_drugs, interrogate + CONST_interrogation012),
+	 customText(&use_props, interrogate + CONST_interrogation013),
+	 customText(&resist_drugs, interrogate + CONST_interrogation014),
+	 customText(&partial_conversion, interrogate + CONST_interrogation015),
+	 customText(&broods_over_death, interrogate + CONST_interrogation016),
+	 customText(&self_wounding, interrogate + CONST_interrogation017),
+	 customText(&good_trip, interrogate + CONST_interrogation018),
+	 customText(&fall_in_love, interrogate + CONST_interrogation019, DOUBLE_LINE),
+	 customText(&bad_trip, interrogate + CONST_interrogation020, DOUBLE_LINE),
+	 customText(&good_trip_companion, interrogate + CONST_interrogation021, DOUBLE_LINE),
+	 customText(&smarter_than_you_one_line, interrogate + CONST_interrogation022),
+	 customText(&smarter_than_you, interrogate + CONST_interrogation023, DOUBLE_LINE),
+	 customText(&develops_hatred_one_line, interrogate + CONST_interrogation024),
+	 customText(&develops_hatred, interrogate + CONST_interrogation025, DOUBLE_LINE),
+	 customText(&interrogater_shows_compassion_one_line, interrogate + CONST_interrogation026),
+	 customText(&interrogater_shows_compassion, interrogate + CONST_interrogation027, DOUBLE_LINE),
+	 customText(&cling_to_interrogater, interrogate + CONST_interrogation028, DOUBLE_LINE),
+	 customText(&clinging_one_line, interrogate + CONST_interrogation029),
+	 customText(&cling_to_religion, interrogate + CONST_interrogation030, DOUBLE_LINE),
+	 customText(&cling_to_religion_one_line, interrogate + CONST_interrogation031),
+	 customText(&discuss, interrogate + CONST_interrogation032, DOUBLE_LINE),
+	 customText(&vanilla_recruit, interrogate + CONST_interrogation033),
+	 customText(&cling_to_business_one_line, interrogate + CONST_interrogation034),
+	 customText(&cling_to_science_one_line, interrogate + CONST_interrogation035),
+	 customText(&cling_to_business, interrogate + CONST_interrogation036, DOUBLE_LINE),
+	 customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
  };
-
  string feels_sick_and;
-
 extern string singleDot;
 extern string AND;
 extern string singleSpace;
@@ -139,89 +280,87 @@ enum InterrogationTechnqiues
    TECHNIQUE_DRUGS,
    TECHNIQUE_KILL
 };
-
-
 // Clear sidebar
 void clear_interrogation_sidebar()
 {
 	for (int i = 4; i < 23; i++)
-		mvaddstrAlt(i, 40, "                                  "); // 34 spaces
+		mvaddstrAlt(i, 40, CONST_interrogation038); // 34 spaces
 }
-// Shows the interrogation data at the right side of the screen
+// Shows the InterrogationST data at the right side of the screen
 void show_interrogation_sidebar(Creature * cr, Creature * a)
 {
 	clear_interrogation_sidebar();
 	int y = 4;
-	map<long, struct float_zero>& rapport = cr->activity.intr()->rapport;
+	map<long, struct Float_Zero>& rapport = cr->activity.intr()->rapport;
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(y,  40, "Prisoner: ");
+	mvaddstrAlt(y,  40, CONST_interrogation039);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(cr->name);
 	moveAlt(y += 2, 40);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt("Health: ");
+	addstrAlt(CONST_interrogation045);
 	printhealthstat(*cr, y, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(++y,  40, "Heart: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation047);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(++y,  40, "Wisdom: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation048);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(++y,  40, "Health: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation045);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
 	moveAlt(y = 13, 40);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt("Lead Interrogator: ");
+	addstrAlt(CONST_interrogation044);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	addstrAlt(a->name);
 	moveAlt(y += 2, 40);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt("Health: ");
+	addstrAlt(CONST_interrogation045);
 	printhealthstat(*a, y, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(++y,  40, "Psychology Skill: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation046);
 	addstrAlt(a->get_skill(SKILL_PSYCHOLOGY));
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(++y,  40, "Heart: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation047);
 	addstrAlt(a->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(++y,  40, "Wisdom: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation048);
 	addstrAlt(a->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(++y,  40, "Outfit: ");
+	mvaddstrAlt(++y,  40, CONST_interrogation049);
 	addstrAlt(a->get_armor().get_name());
 	moveAlt(y += 2, 40);
 	// What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
 	// These are greater than and less than comparisons, so they are testing ranges -Fox
 	string line_one;
-	string line_two = "";
+	string line_two = blankString;
 	if (rapport[a->id] > 3)
 	{
-		line_one = "The Conservative clings helplessly ";
-		line_two = "to ";
+		line_one = CONST_interrogation050;
+		line_two = CONST_interrogation051;
 		line_two += string(a->name);
-		line_two += " as its only friend.";
+		line_two += CONST_interrogation052;
 	}
 	else if (rapport[a->id] > 1)
 	{
-		line_one = "The Conservative likes ";
+		line_one = CONST_interrogation053;
 		line_two += string(a->name);
 		line_one += singleDot;
 	}
 	else if (rapport[a->id] > -1)
 	{
-		line_one = "The Conservative is uncooperative ";
-		line_two = "toward ";
+		line_one = CONST_interrogation054;
+		line_two = CONST_interrogation055;
 		line_two += string(a->name);
 		line_two += singleDot;
 	}
 	else if (rapport[a->id] > -4)
 	{
-		line_one = "The Conservative hates ";
+		line_one = CONST_interrogation056;
 		line_two += string(a->name);
 		line_one += singleDot;
 	}
 	else
 	{
-		line_one = "The Conservative would like to ";
-		line_two, "murder ";
+		line_one = CONST_interrogation057;
+		line_two, CONST_interrogation058;
 		line_two += string(a->name);
 		line_two += singleDot;
 	}
@@ -237,10 +376,9 @@ void tendhostage(Creature *cr, char &clearformess)
 	vector<Creature *> temppool;
 	int p;
 	Creature *a = NULL;
-	interrogation* &intr = cr->activity.intr();
+	InterrogationST* &intr = cr->activity.intr();
 	bool(&techniques)[6] = intr->techniques;
-	int& druguse = intr->druguse;
-	map<long, struct float_zero>& rapport = intr->rapport;
+	map<long, struct Float_Zero>& rapport = intr->rapport;
 	findAllTendersToThisHostage(cr, temppool);
 	if (cr->location == -1)
 	{
@@ -258,9 +396,8 @@ void tendhostage(Creature *cr, char &clearformess)
 			cr->joindays >= 5)
 		{
 			hostageEscapes(cr, clearformess);
-			//delete interrogation data
+			//delete InterrogationST data
 			delete intr;
-
 			return;
 		}
 		if (!len(temppool)) return;
@@ -268,11 +405,11 @@ void tendhostage(Creature *cr, char &clearformess)
 	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, "The Education of ");
+	mvaddstrAlt(0,  0, CONST_interrogation091);
 	addstrAlt(cr->name);
-	addstrAlt(": Day ");
+	addstrAlt(CONST_interrogation092);
 	addstrAlt(cr->joindays);
-	getkeyAlt();
+ 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
 	char turned = 0;
 	int y = 3;
@@ -322,42 +459,42 @@ void tendhostage(Creature *cr, char &clearformess)
 			if (techniques[TECHNIQUE_KILL])
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				moveAlt(y, 0); y += 2; addstrAlt("The Execution of an Automaton         ");
+				moveAlt(y, 0); y += 2; addstrAlt(CONST_interrogation061);
 			}
 			else
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				moveAlt(y, 0); y += 2; addstrAlt("Selecting a Liberal Interrogation Plan");
+				moveAlt(y, 0); y += 2; addstrAlt(CONST_interrogation062);
 			}
 			if (techniques[TECHNIQUE_KILL])set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			else set_color_easy(techniques[TECHNIQUE_TALK] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "A - ");
-			if (!techniques[TECHNIQUE_TALK]) addstrAlt("No Verbal Contact     ");
-			else addstrAlt("Attempt to Convert");
+			mvaddstrAlt(y++,  0, CONST_interrogation063);
+			if (!techniques[TECHNIQUE_TALK]) addstrAlt(CONST_interrogation064);
+			else addstrAlt(CONST_interrogation065);
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_RESTRAIN] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "B - ");
-			if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt("No ");
-			addstrAlt("Physical Restraints   ");
+			mvaddstrAlt(y++,  0, CONST_interrogation066);
+			if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation077);
+			addstrAlt(CONST_interrogation068);
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_BEAT] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "C - ");
-			if (!techniques[TECHNIQUE_BEAT]) addstrAlt("Not ");
-			addstrAlt("Violently Beaten    ");
+			mvaddstrAlt(y++,  0, CONST_interrogation069);
+			if (!techniques[TECHNIQUE_BEAT]) addstrAlt(CONST_interrogation070);
+			addstrAlt(CONST_interrogation071);
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_PROPS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y,  0, "D - ");
-			if (!techniques[TECHNIQUE_PROPS])addstrAlt("No ");
-			addstrAlt("Expensive Props     ");
-			mvaddstrAlt(y++,  27, "($250)");
+			mvaddstrAlt(y,  0, CONST_interrogation072);
+			if (!techniques[TECHNIQUE_PROPS])addstrAlt(CONST_interrogation077);
+			addstrAlt(CONST_interrogation074);
+			mvaddstrAlt(y++,  27, CONST_interrogation075);
 			if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_DRUGS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y,  0, "E - ");
-			if (!techniques[TECHNIQUE_DRUGS])addstrAlt("No ");
-			addstrAlt("Hallucinogenic Drugs    ");
+			mvaddstrAlt(y,  0, CONST_interrogation076);
+			if (!techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_interrogation077);
+			addstrAlt(CONST_interrogation078);
 			moveAlt(y, 28); y += 2;
-			addstrAlt("($50)");
+			addstrAlt(CONST_interrogation079);
 			if (techniques[TECHNIQUE_KILL])set_color_easy(RED_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0); y += 2; addstrAlt("K - Kill the Hostage");
+			moveAlt(y, 0); y += 2; addstrAlt(CONST_interrogation080);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, "Press Enter to Confirm the Plan");
+			mvaddstrAlt(y++,  0, CONST_interrogation081);
 			show_interrogation_sidebar(cr, a);
 			int c = getkeyAlt();
 			if (c >= 'a'&&c <= 'e') techniques[c - 'a'] = !techniques[c - 'a'];
@@ -374,9 +511,9 @@ void tendhostage(Creature *cr, char &clearformess)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "The Final Education of ", gamelog);
+			mvaddstrAlt(0,  0, CONST_interrogation082, gamelog);
 			addstrAlt(cr->name, gamelog);
-			addstrAlt(": Day ", gamelog);
+			addstrAlt(CONST_interrogation092, gamelog);
 			addstrAlt(cr->joindays, gamelog);
 			gamelog.newline();
 			a = NULL;
@@ -388,18 +525,18 @@ void tendhostage(Creature *cr, char &clearformess)
 				}
 			if (a)
 			{
-				//delete interrogation information
+				//delete InterrogationST information
 				delete intr;
 				set_color_easy(MAGENTA_ON_BLACK);
 				cr->die();
 				stat_kills++;
 				mvaddstrAlt(y++,  0, a->name, gamelog);
-				addstrAlt(" executes ", gamelog);
+				addstrAlt(CONST_interrogation084, gamelog);
 				addstrAlt(cr->name, gamelog);
-				addstrAlt(" by ", gamelog);
+				addstrAlt(CONST_interrogation085, gamelog);
 				addstrAlt(pickrandom(execution), gamelog);
 				//show_interrogation_sidebar(cr,a);
-				getkeyAlt();
+		 	pressAnyKey();
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 				{
 					gamelog.newline();
@@ -414,7 +551,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					gamelog.newline();
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
 					mvaddstrAlt(y++,  0, a->name, gamelog);
-					addstrAlt(" grows colder.", gamelog);
+					addstrAlt(CONST_interrogation160, gamelog);
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				}
 				gamelog.nextMessage();
@@ -422,10 +559,10 @@ void tendhostage(Creature *cr, char &clearformess)
 			else
 			{
 				set_color_easy(YELLOW_ON_BLACK);
-				mvaddstrAlt(y++,  0, "There is no one able to get up the nerve to ", gamelog);
-				mvaddstrAlt(y++,  0, "execute ", gamelog);
+				mvaddstrAlt(y++,  0, CONST_interrogation087, gamelog);
+				mvaddstrAlt(y++,  0, CONST_interrogation088, gamelog);
 				addstrAlt(cr->name, gamelog);
-				addstrAlt(" in cold blood.", gamelog);
+				addstrAlt(CONST_interrogation089, gamelog);
 				gamelog.nextMessage();
 				//Interrogation will continue as planned, with
 				//these restrictions:
@@ -435,13 +572,12 @@ void tendhostage(Creature *cr, char &clearformess)
 												 //Food and restraint settings will be applied as normal
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(24,  0, "Press any key to reflect on this.");
-			getkeyAlt();
+			mvaddstrAlt(24,  0, CONST_interrogation167);
+	 	pressAnyKey();
 			if (!cr->alive)
 			{
-
 				setAllCreatureActivities(ACTIVITY_NONE, temppool);
 				delete[] _attack;
 				return;
@@ -449,44 +585,44 @@ void tendhostage(Creature *cr, char &clearformess)
 		}
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "The Education of ", gamelog);
+		mvaddstrAlt(0,  0, CONST_interrogation091, gamelog);
 		addstrAlt(cr->name, gamelog);
-		addstrAlt(": Day ", gamelog);
+		addstrAlt(CONST_interrogation092, gamelog);
 		addstrAlt(cr->joindays, gamelog);
 		gamelog.newline();
 		moveAlt((y = 2)++, 0);
-		addstrAlt("The Automaton", gamelog);
+		addstrAlt(CONST_interrogation093, gamelog);
 		if (techniques[TECHNIQUE_RESTRAIN]) // Restraint
 		{
-			addstrAlt(" is tied hands and feet to a metal chair", gamelog);
-			mvaddstrAlt(y++,  0, "in the middle of a back room.", gamelog);
+			addstrAlt(CONST_interrogation094, gamelog);
+			mvaddstrAlt(y++,  0, CONST_interrogation095, gamelog);
 			gamelog.newline();
 			attack += 5;
 		}
 		else
 		{
-			addstrAlt(" is locked in a back room ", gamelog);
-			mvaddstrAlt(y++,  0, "converted into a makeshift cell.", gamelog);
+			addstrAlt(CONST_interrogation096, gamelog);
+			mvaddstrAlt(y++,  0, CONST_interrogation097, gamelog);
 			gamelog.newline();
 		}
 		//show_interrogation_sidebar(cr,a);
-		getkeyAlt();
+ 	pressAnyKey();
 		if (techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
 		{
-			mvaddstrAlt(++y,  0, "It is subjected to dangerous hallucinogens.", gamelog);
+			mvaddstrAlt(++y,  0, CONST_interrogation098, gamelog);
 			gamelog.newline();
 			int drugbonus = 10 + a->get_armor().get_interrogation_drugbonus(); // we won't apply this JUST yet
 																			   //Possible permanent health damage
-			if (LCSrandom(50) < ++druguse)
+			if (LCSrandom(50) < ++intr->druguse)
 			{
 				cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 				moveAlt(++y, 0);
-				getkeyAlt();
+		 	pressAnyKey();
 				addstrAlt(cr->name, gamelog);
-				addstrAlt(" foams at the mouth and its eyes roll back in its skull.", gamelog);
+				addstrAlt(CONST_interrogation099, gamelog);
 				gamelog.newline();
 				moveAlt(++y, 0);
-				getkeyAlt();
+		 	pressAnyKey();
 				Creature* doctor = a; // the lead interrogator is doctor by default
 				int maxskill = doctor->get_skill(SKILL_FIRSTAID);
 				for (int i = 0; i<len(temppool); i++) // search for the best doctor
@@ -497,38 +633,38 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (maxskill)
 					{ // we have a real doctor but the patient is still dead anyway
 						addstrAlt(doctor->name, gamelog);
-						addstrAlt(" uses a defibrillator repeatedly but ", gamelog);
+						addstrAlt(CONST_interrogation100, gamelog);
 						addstrAlt(cr->name, gamelog);
-						addstrAlt(" flatlines.", gamelog);
+						addstrAlt(CONST_interrogation101, gamelog);
 					}
 					else
 					{
 						addstrAlt(doctor->name, gamelog);
 						if (lawList[LAW_FREESPEECH] == -2)
-							addstrAlt(" has a panic attack and [makes a stinky].", gamelog);
+							addstrAlt(CONST_interrogation102, gamelog);
 						else
 						{
-							addstrAlt(" has a panic attack and shits ", gamelog);
+							addstrAlt(CONST_interrogation103, gamelog);
 							addstrAlt(doctor->hisher(), gamelog);
-							addstrAlt(" pants.", gamelog);
+							addstrAlt(CONST_interrogation104, gamelog);
 						}
 					}
 					gamelog.newline();
 					moveAlt(++y, 0);
-					getkeyAlt();
+			 	pressAnyKey();
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					if (maxskill)
 					{
-						addstrAlt("It is a lethal overdose in ", gamelog);
+						addstrAlt(CONST_interrogation105, gamelog);
 						addstrAlt(cr->name, gamelog);
-						addstrAlt("'s weakened state.", gamelog);
+						addstrAlt(CONST_interrogation106, gamelog);
 					}
 					else
 					{
 						addstrAlt(cr->name, gamelog);
-						addstrAlt(" dies due to ", gamelog);
+						addstrAlt(CONST_interrogation107, gamelog);
 						addstrAlt(doctor->name, gamelog);
-						addstrAlt("'s incompetence at first aid.", gamelog);
+						addstrAlt(CONST_interrogation108, gamelog);
 					}
 					gamelog.newline();
 					cr->die();
@@ -539,28 +675,28 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (doctor->skill_check(SKILL_FIRSTAID, DIFFICULTY_CHALLENGING)) // is the doctor AWESOME?
 					{
 						doctor->train(SKILL_FIRSTAID, 5 * max(10 - doctor->get_skill(SKILL_FIRSTAID), 0), 10); // can train up to 10
-						addstrAlt(" deftly rescues it from cardiac arrest with a defibrillator.", gamelog); // not long enough for near-death experience
+						addstrAlt(CONST_interrogation109, gamelog); // not long enough for near-death experience
 						gamelog.newline();
 						moveAlt(++y, 0);
-						getkeyAlt();
+				 	pressAnyKey();
 						addstrAlt(doctor->name, gamelog);
-						addstrAlt(" skillfully saves ", gamelog);
+						addstrAlt(CONST_interrogation110, gamelog);
 						addstrAlt(cr->name, gamelog);
-						addstrAlt(" from any health damage.", gamelog);
+						addstrAlt(CONST_interrogation111, gamelog);
 						cr->adjust_attribute(ATTRIBUTE_HEALTH, +1); // no permanent health damage from a skilled doctor
-						techniques[TECHNIQUE_DRUGS] = (druguse = drugbonus = 0); // drugs eliminated from the system (zeroing out 3 variables with 1 line of code)
+						techniques[TECHNIQUE_DRUGS] = (intr->druguse = drugbonus = 0); // drugs eliminated from the system (zeroing out 3 variables with 1 line of code)
 					}
 					else
 					{
 						doctor->train(SKILL_FIRSTAID, 5 * max(5 - doctor->get_skill(SKILL_FIRSTAID), 0), 5); // can train up to 5
-						addstrAlt(" clumsily rescues it from cardiac arrest with a defibrillator.", gamelog);
+						addstrAlt(CONST_interrogation112, gamelog);
 						gamelog.newline();
 						moveAlt(++y, 0);
-						getkeyAlt();
+				 	pressAnyKey();
 						addstrAlt(cr->name, gamelog);
 						if (cr->get_skill(SKILL_RELIGION)) // the patient was out long enough to have a near-death experience
-							addstrAlt(" had a near-death experience and met God in heaven.", gamelog);
-						else addstrAlt(" had a near-death experience and met John Lennon.", gamelog);
+							addstrAlt(CONST_interrogation113, gamelog);
+						else addstrAlt(CONST_interrogation114, gamelog);
 						drugbonus *= 2; // the near-death experience doubles the drug bonus, since the hostage is spaced out afterwards
 					}
 					rapport[doctor->id] += 0.5f; // rapport bonus for having life saved by doctor
@@ -570,7 +706,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			attack += drugbonus; // now we finally apply the drug bonus
 			moveAlt(++y, 0);
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		if (techniques[TECHNIQUE_BEAT] && !turned&&cr->alive) // Beating
 		{
@@ -599,11 +735,11 @@ void tendhostage(Creature *cr, char &clearformess)
 				addstrAlt(singleSpace, gamelog);
 				addstrAlt(pickrandom(low_heart_torture_props), gamelog);
 				addstrAlt(commaSpace, gamelog);
-				mvaddstrAlt(++y,  0, "screaming \"", gamelog);
+				mvaddstrAlt(++y,  0, CONST_interrogation115, gamelog);
 				addstrAlt(pickrandom(screaming), gamelog);
-				addstrAlt("! ", gamelog);
+				addstrAlt(CONST_interrogation122, gamelog);
 				addstrAlt(pickrandom(screaming), gamelog);
-				addstrAlt("!\" in its face.", gamelog);
+				addstrAlt(CONST_interrogation123, gamelog);
 				gamelog.newline();
 				if (cr->get_attribute(ATTRIBUTE_HEART, true) > 1) cr->adjust_attribute(ATTRIBUTE_HEART, -1);
 				if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 1) cr->adjust_attribute(ATTRIBUTE_WISDOM, -1);
@@ -613,21 +749,21 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (len(temppool) == 1)
 				{
 					addstrAlt(temppool[0]->name, gamelog);
-					addstrAlt(" beats", gamelog);
+					addstrAlt(CONST_interrogation118, gamelog);
 				}
 				else if (len(temppool) == 2)
 				{
 					addstrAlt(temppool[0]->name, gamelog);
 					addstrAlt(AND, gamelog);
 					addstrAlt(temppool[1]->name, gamelog);
-					addstrAlt(" beat", gamelog);
+					addstrAlt(CONST_interrogation119, gamelog);
 				}
 				else
 				{
 					addstrAlt(cr->name);
-					addstrAlt("'s guards beat", gamelog);
+					addstrAlt(CONST_interrogation120, gamelog);
 				}
-				addstrAlt(" the Automaton", gamelog);
+				addstrAlt(CONST_interrogation121, gamelog);
 				if (techniques[TECHNIQUE_PROPS])
 				{
 					addstrAlt(singleSpace, gamelog);
@@ -638,15 +774,15 @@ void tendhostage(Creature *cr, char &clearformess)
 				for (int i = 0; i < 3; i++)
 				{
 					addstrAlt(pickrandom(words_to_scream), gamelog);
-					if (i < 2) addstrAlt("! ", gamelog);
+					if (i < 2) addstrAlt(CONST_interrogation122, gamelog);
 				}
-				addstrAlt("!\" in its face.", gamelog);
+				addstrAlt(CONST_interrogation123, gamelog);
 				gamelog.newline();
 			}
 			y++;
 			cr->blood -= (5 + LCSrandom(5)) * (1 + techniques[TECHNIQUE_PROPS]);
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (!(cr->attribute_check(ATTRIBUTE_HEALTH, forceroll)))
 			{
 				if (cr->skill_check(SKILL_RELIGION, forceroll))
@@ -673,20 +809,20 @@ void tendhostage(Creature *cr, char &clearformess)
 					mvaddstrAlt(y++,  0, cr->name, gamelog);
 					switch (LCSrandom(4))
 					{
-					case 0:addstrAlt(" screams helplessly for ", gamelog);
-						if (techniques[TECHNIQUE_DRUGS])addstrAlt("John Lennon's mercy.", gamelog);
-						else if (cr->get_skill(SKILL_RELIGION))addstrAlt("God's mercy.", gamelog);
-						else addstrAlt("mommy.", gamelog);
+					case 0:addstrAlt(CONST_interrogation124, gamelog);
+						if (techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_interrogation125, gamelog);
+						else if (cr->get_skill(SKILL_RELIGION))addstrAlt(CONST_interrogation126, gamelog);
+						else addstrAlt(CONST_interrogation127, gamelog);
 						break;
 					case 1:
-						if (techniques[TECHNIQUE_RESTRAIN]) addstrAlt(" goes limp in the restraints.", gamelog);
-						else addstrAlt(" curls up in the corner and doesn't move.", gamelog); break;
+						if (techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation128, gamelog);
+						else addstrAlt(CONST_interrogation129, gamelog); break;
 					case 2:
-						if (techniques[TECHNIQUE_DRUGS] && !LCSrandom(5)) addstrAlt(" barks helplessly.", gamelog);
-						else addstrAlt(" cries helplessly.", gamelog); break;
+						if (techniques[TECHNIQUE_DRUGS] && !LCSrandom(5)) addstrAlt(CONST_interrogation130, gamelog);
+						else addstrAlt(CONST_interrogation131, gamelog); break;
 					case 3:
-						if (techniques[TECHNIQUE_DRUGS] && !LCSrandom(3)) addstrAlt(" wonders about apples.", gamelog);
-						else addstrAlt(" wonders about death.", gamelog);
+						if (techniques[TECHNIQUE_DRUGS] && !LCSrandom(3)) addstrAlt(CONST_interrogation132, gamelog);
+						else addstrAlt(CONST_interrogation133, gamelog);
 						break;
 					}
 					gamelog.newline();
@@ -700,17 +836,17 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (LocationsPool::getInstance().isLocationMapped(cr->worklocation) == 0 && !LCSrandom(5))
 					{
 						//show_interrogation_sidebar(cr,a);
-						getkeyAlt();
+				 	pressAnyKey();
 						mvaddstrAlt(y++,  0, a->name, gamelog);
-						addstrAlt(" beats information out of the pathetic thing.", gamelog);
+						addstrAlt(CONST_interrogation134, gamelog);
 						gamelog.newline();
 						moveAlt(y++, 0);
-						getkeyAlt();
+				 	pressAnyKey();
 						if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
-							addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
+							addstrAlt(CONST_interrogation164, gamelog);
 						else
 						{
-							addstrAlt("A detailed map has been created of ", gamelog);
+							addstrAlt(CONST_interrogation136, gamelog);
 							addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 							addstrAlt(singleDot, gamelog);
 						}
@@ -721,7 +857,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				else
 				{
 					mvaddstrAlt(y++,  0, cr->name, gamelog);
-					addstrAlt(" seems to be getting the message.", gamelog);
+					addstrAlt(CONST_interrogation137, gamelog);
 					gamelog.newline();
 					if (cr->juice > 0) if ((cr->juice -= forceroll) < 0) cr->juice = 0;
 					if (cr->get_attribute(ATTRIBUTE_WISDOM, false) > 1)
@@ -733,20 +869,20 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (!(cr->attribute_check(ATTRIBUTE_HEALTH, forceroll / 3)))
 				{
 					//show_interrogation_sidebar(cr,a);
-					getkeyAlt();
+			 	pressAnyKey();
 					moveAlt(y++, 0);
 					if (cr->get_attribute(ATTRIBUTE_HEALTH, false) > 1)
 					{
 						cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 						addstrAlt(cr->name, gamelog);
-						addstrAlt(" is badly hurt.", gamelog);
+						addstrAlt(CONST_interrogation138, gamelog);
 						gamelog.newline();
 					}
 					else
 					{
 						cr->set_attribute(ATTRIBUTE_HEALTH, 0);
 						addstrAlt(cr->name, gamelog);
-						addstrAlt("'s weakened body crumbles under the brutal assault.", gamelog);
+						addstrAlt(CONST_interrogation139, gamelog);
 						gamelog.newline();
 						cr->die();
 					}
@@ -755,11 +891,11 @@ void tendhostage(Creature *cr, char &clearformess)
 			else
 			{
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
-				addstrAlt(" takes it well.", gamelog);
+				addstrAlt(CONST_interrogation140, gamelog);
 				gamelog.newline();
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (tortured && cr->alive)
 			{
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
@@ -775,7 +911,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				{
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
 					mvaddstrAlt(y++,  0, a->name, gamelog);
-					addstrAlt(" grows colder.", gamelog);
+					addstrAlt(CONST_interrogation160, gamelog);
 					gamelog.newline();
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				}
@@ -816,7 +952,7 @@ void tendhostage(Creature *cr, char &clearformess)
 			if (techniques[TECHNIQUE_DRUGS])
 			{
 				//show_interrogation_sidebar(cr,a);
-				getkeyAlt();
+		 	pressAnyKey();
 				moveAlt(y++, 0);
 				if (cr->skill_check(SKILL_PSYCHOLOGY, DIFFICULTY_CHALLENGING))
 				{
@@ -832,8 +968,8 @@ void tendhostage(Creature *cr, char &clearformess)
 					{
 					case 0:
 						addstrAlt(cr->name, gamelog);
-						addstrAlt(" stammers and ", gamelog);
-						techniques[TECHNIQUE_RESTRAIN] ? addstrAlt("talks about hugging ", gamelog) : addstrAlt("hugs ", gamelog);
+						addstrAlt(CONST_interrogation142, gamelog);
+						techniques[TECHNIQUE_RESTRAIN] ? addstrAlt(CONST_interrogation143, gamelog) : addstrAlt(CONST_interrogationB150, gamelog);
 						addstrAlt(a->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						break;
@@ -856,22 +992,22 @@ void tendhostage(Creature *cr, char &clearformess)
 						if (rapport[a->id] < -3)
 						{
 							addstrAlt(cr->name, gamelog);
-							addstrAlt(" begs Hitler to stay and kill ", gamelog);
+							addstrAlt(CONST_interrogation144, gamelog);
 							addstrAlt(a->name, gamelog);
 							addstrAlt(singleDot, gamelog);
 						}
 						else
 						{
 							addstrAlt(cr->name, gamelog);
-							addstrAlt(" screams for ", gamelog);
+							addstrAlt(CONST_interrogation145, gamelog);
 							addstrAlt(a->name, gamelog);
-							addstrAlt(" to stop looking like Hitler.", gamelog);
+							addstrAlt(CONST_interrogation146, gamelog);
 						}
 						break;
 					case 1:
 						addstrAlt(cr->name, gamelog);
-						if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(" curls up and", gamelog);
-						addstrAlt(" begs for the nightmare to end.", gamelog);
+						if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation147, gamelog);
+						addstrAlt(CONST_interrogation148, gamelog);
 						break;
 					default:
 						int which_trip = LCSrandom(bad_trip.size());
@@ -899,7 +1035,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				}
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
 			{
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
@@ -932,7 +1068,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (a->skill_check(SKILL_SEDUCTION, DIFFICULTY_CHALLENGING))
 				{
 					//show_interrogation_sidebar(cr,a);
-					getkeyAlt();
+			 	pressAnyKey();
 					mvaddstrAlt(y++,  0, a->name, gamelog);
 					int which_compassion = LCSrandom(interrogater_shows_compassion.size() + interrogater_shows_compassion_one_line.size());
 					if (which_compassion < interrogater_shows_compassion.size()) {
@@ -948,7 +1084,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					if (rapport[a->id]>3)
 					{
 						//show_interrogation_sidebar(cr,a);
-						getkeyAlt();
+				 	pressAnyKey();
 						mvaddstrAlt(y++,  0, cr->name, gamelog);
 						int which_cling = LCSrandom(cling_to_interrogater.size() + clinging_one_line.size());
 						if (which_cling < cling_to_interrogater.size()) {
@@ -1043,19 +1179,19 @@ void tendhostage(Creature *cr, char &clearformess)
 				if (LocationsPool::getInstance().isLocationMapped(cr->worklocation) == 0 && !LCSrandom(5))
 				{
 					mvaddstrAlt((++y)++,  0, cr->name, gamelog);
-					addstrAlt(" reveals details about the ", gamelog);
+					addstrAlt(CONST_interrogation163, gamelog);
 					addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.newline();
 					moveAlt(y++, 0);
 					if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
 					{
-						addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
+						addstrAlt(CONST_interrogation164, gamelog);
 					}
 					else
 					{
 						addstrAlt(a->name, gamelog);
-						addstrAlt(" was able to create a map of the site with this information.", gamelog);
+						addstrAlt(CONST_interrogation165, gamelog);
 					}
 					gamelog.newline(); 
 					LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
@@ -1068,7 +1204,7 @@ void tendhostage(Creature *cr, char &clearformess)
 				//Not completely unproductive; builds rapport
 				rapport[a->id] += 0.2f;
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
-				addstrAlt(" holds firm.", gamelog);
+				addstrAlt(CONST_interrogation152, gamelog);
 				gamelog.newline();
 			}
 			//Target actually wins the argument so successfully that the Liberal
@@ -1080,18 +1216,18 @@ void tendhostage(Creature *cr, char &clearformess)
 				rapport[a->id] += 0.5f;
 				a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				mvaddstrAlt(y++,  0, cr->name, gamelog);
-				addstrAlt(" turns the tables on ", gamelog);
+				addstrAlt(CONST_interrogation153, gamelog);
 				addstrAlt(a->name, gamelog);
-				addstrAlt("!", gamelog);
+				addstrAlt(CONST_interrogation154, gamelog);
 				gamelog.newline();
 				//show_interrogation_sidebar(cr,a);
-				getkeyAlt();
+		 	pressAnyKey();
 				mvaddstrAlt(y++,  0, a->name, gamelog);
-				addstrAlt(" has been tainted with wisdom!", gamelog);
+				addstrAlt(CONST_interrogation155, gamelog);
 				gamelog.newline();
 			}
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		//Lead interrogator gets bonus experience
 		if (!techniques[TECHNIQUE_KILL])
@@ -1123,35 +1259,35 @@ void tendhostage(Creature *cr, char &clearformess)
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(cr->name, gamelog);
-				addstrAlt(" has committed suicide.", gamelog);
+				addstrAlt(CONST_interrogation156, gamelog);
 				gamelog.newline(); //TODO: Next message?
 				cr->die();
 			}
 			y++;
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		//Death
 		if (cr->alive == 0 || cr->blood < 1)
 		{
-			//delete interrogation information
+			//delete InterrogationST information
 			delete intr;
 			cr->die();
 			stat_kills++;
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(++y,  0, cr->name, gamelog);
-			addstrAlt(" is dead", gamelog);
+			addstrAlt(CONST_interrogation157, gamelog);
 			if (a)
 			{
-				addstrAlt(" under ", gamelog);
+				addstrAlt(CONST_interrogation158, gamelog);
 				addstrAlt(a->name, gamelog);
-				addstrAlt("'s interrogation.", gamelog);
+				addstrAlt(CONST_interrogation159, gamelog);
 			}
 			else addstrAlt(singleDot, gamelog);
 			set_color_easy(WHITE_ON_BLACK);
 			y++;
 			//show_interrogation_sidebar(cr,a);
-			getkeyAlt();
+	 	pressAnyKey();
 			if (a)
 			{
 				if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)))
@@ -1168,7 +1304,7 @@ void tendhostage(Creature *cr, char &clearformess)
 					gamelog.newline();
 					set_color_easy(CYAN_ON_BLACK_BRIGHT);
 					mvaddstrAlt(++y,  0, a->name, gamelog);
-					addstrAlt(" grows colder.", gamelog);
+					addstrAlt(CONST_interrogation160, gamelog);
 					a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 				}
 			}
@@ -1182,25 +1318,23 @@ void tendhostage(Creature *cr, char &clearformess)
 	if (turned&&cr->alive)
 	{
 		//clear_interrogation_sidebar();
-		//delete interrogation information
+		//delete InterrogationST information
 		delete intr;
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(++y,  0, "The Automaton has been Enlightened!   Your Liberal ranks are swelling!", gamelog);
+		mvaddstrAlt(++y,  0, CONST_interrogation161, gamelog);
 		if (cr->get_attribute(ATTRIBUTE_HEART, true) > 7 &&
 			cr->get_attribute(ATTRIBUTE_WISDOM, true) > 2 &&
 			!LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
 		{
 			moveAlt(++y, 0);
 			gamelog.newline();
-			addstrAlt("The conversion is convincing enough that the police no longer consider it a kidnapping.", gamelog);
+			addstrAlt(CONST_interrogation162, gamelog);
 			//Actually liberalized -- they'll clean up the kidnapping story
 			cr->flag &= ~CREATUREFLAG_MISSING;
 			cr->flag &= ~CREATUREFLAG_KIDNAPPED;
 		}
 		cr->flag |= CREATUREFLAG_BRAINWASHED;
-
 		setAllCreatureActivities(ACTIVITY_NONE, temppool);
-
 		y += 2;
 		liberalize(*cr, false);
 		cr->hireid = a->id;
@@ -1209,30 +1343,30 @@ void tendhostage(Creature *cr, char &clearformess)
 		{
 			gamelog.newline();
 			mvaddstrAlt(y,  0, cr->name, gamelog);
-			addstrAlt(" reveals details about the ", gamelog);
+			addstrAlt(CONST_interrogation163, gamelog);
 			addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.newline();
 			moveAlt(++y, 0);
 			if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
-				addstrAlt("Unfortunately, none of it is useful to the LCS.", gamelog);
+				addstrAlt(CONST_interrogation164, gamelog);
 			else
 			{
 				addstrAlt(a->name, gamelog);
-				addstrAlt(" was able to create a map of the site with this information.", gamelog);
+				addstrAlt(CONST_interrogation165, gamelog);
 			}
 			LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 			y += 2;
 		}
 		if (cr->flag & CREATUREFLAG_MISSING && !(cr->flag & CREATUREFLAG_KIDNAPPED))
 		{
-			getkeyAlt();
+	 	pressAnyKey();
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			moveAlt(y = 1, 0);
 			gamelog.newline();
 			addstrAlt(cr->name, gamelog);
-			addstrAlt("'s disappearance has not yet been reported.", gamelog);
+			addstrAlt(CONST_interrogation166, gamelog);
 			sleeperize_prompt(*cr, *a, y += 2);
 			cr->flag &= ~CREATUREFLAG_MISSING;
 			gamelog.nextMessage();
@@ -1244,6 +1378,6 @@ void tendhostage(Creature *cr, char &clearformess)
 	}
 	gamelog.nextMessage();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24,  0, "Press any key to reflect on this.");
-	getkeyAlt();
+	mvaddstrAlt(24,  0, CONST_interrogation167);
+ 	pressAnyKey();
 }

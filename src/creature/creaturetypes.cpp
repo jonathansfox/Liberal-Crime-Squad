@@ -1,19 +1,67 @@
+#include "../includes.h"
+const string CONST_creaturetypes050 = "prisoners";
+const string CONST_creaturetypes049 = "Giant Mosquito";
+const string CONST_creaturetypes048 = "Flaming Rabbit";
+const string CONST_creaturetypes047 = "Pet ";
+const string CONST_creaturetypes046 = "CCS Team Leader";
+const string CONST_creaturetypes045 = "Firefighter";
+const string CONST_creaturetypes044 = "Fireman";
+const string CONST_creaturetypes043 = "Police Negotiator";
+const string CONST_creaturetypes042 = "CEO ";
+const string CONST_creaturetypes041 = "Enforcer";
+const string CONST_creaturetypes040 = "genetic_monster.txt";
+const string CONST_creaturetypes039 = "words_meaning_hick.txt";
+const string CONST_creaturetypesX01 = "CCS Lieutenant";
+const string CONST_creaturetypesX02 = "CCS Founder";
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/interval.h"
-
-#include "sitemode/stealth.h"
+const string tag_CLIP = "CLIP";
+const string tag_CLIP_9 = "CLIP_9";
+const string tag_WEAPON = "WEAPON";
+const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
+const string tag_ARMOR_EXPENSIVEDRESS = "ARMOR_EXPENSIVEDRESS";
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_EXPENSIVESUIT = "ARMOR_EXPENSIVESUIT";
+const string tag_WEAPON_SHANK = "WEAPON_SHANK";
+const string tag_WEAPON_COMBATKNIFE = "WEAPON_COMBATKNIFE";
+const string tag_CLIP_38 = "CLIP_38";
+const string tag_WEAPON_REVOLVER_38 = "WEAPON_REVOLVER_38";
+const string tag_CLIP_BUCKSHOT = "CLIP_BUCKSHOT";
+const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
+const string tag_CLIP_45 = "CLIP_45";
+const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
+const string tag_CLIP_SMG = "CLIP_SMG";
+const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
+const string tag_CLIP_ASSAULT = "CLIP_ASSAULT";
+const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
+const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
+const string tag_WEAPON_NIGHTSTICK = "WEAPON_NIGHTSTICK";
+const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
+const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
+const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
+const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
+const string tag_CLIP_44 = "CLIP_44";
+const string tag_WEAPON_REVOLVER_44 = "WEAPON_REVOLVER_44";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
+const string tag_WEAPON_AXE = "WEAPON_AXE";
+const string tag_CLIP_GASOLINE = "CLIP_GASOLINE";
+const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
+const string tag_WEAPON_TORCH = "WEAPON_TORCH";
+const string tag_WEAPON_PITCHFORK = "WEAPON_PITCHFORK";
+const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
+const string tag_ARMOR_CHEAPDRESS = "ARMOR_CHEAPDRESS";
+const string tag_ARMOR_CHEAPSUIT = "ARMOR_CHEAPSUIT";
+const string tag_WEAPON_GAVEL = "WEAPON_GAVEL";
+const string blankString = "";
+#include "../creature/creature.h"
+#include "../common/interval.h"
+#include "../sitemode/stealth.h"
 // for disguisesite
-
-#include "creature/creaturetype.h"
-#include "common/translateid.h"
+#include "../creature/creaturetype.h"
+#include "../common/translateid.h"
 //either of this should work for local stringconversions
-
-#include <customMaps.h>
-#include <constant_strings.h>
-#include "locations/locationsPool.h"
+#include "../customMaps.h"
+#include "../locations/locationsPool.h"
 extern bool multipleCityMode;
 extern short mode;
 extern char endgamestate;
@@ -27,17 +75,13 @@ extern short sitealarm;
 extern char ccs_kills;
 extern short sitealienate;
 extern vector<ArmorType *> armortype;
-
  vector<string> words_meaning_hick;
  vector<string> genetic_monster;
-
  const string creature = "creature\\";
  vector<file_and_text_collection> creaturetypes_text_file_collection = {
-
-
 	 /*creaturetypes.cpp*/
-	 customText(&words_meaning_hick, creature + "words_meaning_hick.txt"),
-	 customText(&genetic_monster, creature + "genetic_monster.txt"),
+	 customText(&words_meaning_hick, creature + CONST_creaturetypes039),
+	 customText(&genetic_monster, creature + CONST_creaturetypes040),
  };
 /* Age macros for characters */
 #define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
@@ -90,7 +134,7 @@ void makecreature(Creature &cr, short type)
 	case CREATURE_BOUNCER:
 		if (mode == GAMEMODE_SITE && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 		{
-			strcpy(cr.name, "Enforcer");
+			strcpy(cr.name, CONST_creaturetypes041.c_str());
 			cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
 		}
 		if (lawList[LAW_GUNCONTROL] == -2)
@@ -155,7 +199,7 @@ void makecreature(Creature &cr, short type)
 		break;
 	case CREATURE_CORPORATE_CEO:
 		generate_name(cr.propername, GENDER_WHITEMALEPATRIARCH);
-		strcpy(cr.name, "CEO ");
+		strcpy(cr.name, CONST_creaturetypes042.c_str());
 		strcat(cr.name, cr.propername);
 		cr.dontname = true;
 		break;
@@ -233,7 +277,7 @@ void makecreature(Creature &cr, short type)
 		if (lawList[LAW_POLICEBEHAVIOR] == 2 && cr.align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
 		{
 			cr.align = ALIGN_MODERATE;
-			strcpy(cr.name, "Police Negotiator");
+			strcpy(cr.name, CONST_creaturetypes043.c_str());
 			cr.set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
 			cr.set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
 			cr.set_attribute(ATTRIBUTE_HEART, 4);
@@ -273,14 +317,14 @@ void makecreature(Creature &cr, short type)
 			cr.take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
 			cr.reload(false);
 			cr.set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
-			strcpy(cr.name, "Fireman");
+			strcpy(cr.name, CONST_creaturetypes044.c_str());
 			cr.align = ALIGN_CONSERVATIVE;
 		}
 		else
 		{
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
 			cr.set_skill(SKILL_AXE, LCSrandom(3) + 2);
-			strcpy(cr.name, "Firefighter");
+			strcpy(cr.name, CONST_creaturetypes045.c_str());
 		}
 		if (sitealarm) // Respond to emergencies in bunker gear
 			cr.give_armor(*armortype[getarmortype(tag_ARMOR_BUNKERGEAR)], NULL);
@@ -345,7 +389,7 @@ void makecreature(Creature &cr, short type)
 			nameCCSMember(cr);
 		break;
 	case CREATURE_CCS_ARCHCONSERVATIVE:
-		strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? "CCS Team Leader" : (ccs_kills < 2 ? "CCS Lieutenant" : "CCS Founder")));
+		strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? CONST_creaturetypes046.c_str() : (ccs_kills < 2 ? CONST_creaturetypesX01.c_str() : CONST_creaturetypesX02.c_str())));
 		break;
 	case CREATURE_PRISONGUARD:
 		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
@@ -380,16 +424,16 @@ void makecreature(Creature &cr, short type)
 	case CREATURE_GENETIC:
 		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_CORPORATE_HOUSE)
 		{
-			strcpy(cr.name, "Pet ");
+			strcpy(cr.name, CONST_creaturetypes047.c_str());
 			attcap[ATTRIBUTE_CHARISMA] = 10;
 		}
 		else
-			strcpy(cr.name, "");
+			strcpy(cr.name, blankString.c_str());
 		switch (LCSrandom(11))
 		{
-		case 0:strcat(cr.name, "Flaming Rabbit");
+		case 0:strcat(cr.name, CONST_creaturetypes048.c_str());
 			cr.specialattack = ATTACK_FLAME; break;
-		case 1:strcat(cr.name, "Giant Mosquito");
+		case 1:strcat(cr.name, CONST_creaturetypes049.c_str());
 			cr.specialattack = ATTACK_SUCK; break;
 		default:
 			strcat(cr.name, pickrandom(genetic_monster).data());
@@ -403,7 +447,7 @@ void makecreature(Creature &cr, short type)
 		if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
 		break;
 	case CREATURE_PRISONER:
-		// Prisoners should not be "prisoners" after recruiting them,
+		// Prisoners should not be CONST_creaturetypes050 after recruiting them,
 		// they should be some brand of criminal
 		if (!LCSrandom(10))
 		{

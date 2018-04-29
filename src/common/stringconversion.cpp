@@ -1,6 +1,125 @@
 
-#include <includes.h>
-#include "creature/creatureEnums.h"
+#include "../includes.h"
+const string tag_heavyweapons = "heavyweapons";
+
+const string tag_dodge = "dodge";
+
+const string tag_firstaid = "firstaid";
+
+const string tag_seduction = "seduction";
+
+const string tag_streetsense = "streetsense";
+
+const string tag_teaching = "teaching";
+
+const string tag_stealth = "stealth";
+
+const string tag_business = "business";
+
+const string tag_science = "science";
+
+const string tag_religion = "religion";
+
+const string tag_art = "art";
+
+const string tag_music = "music";
+
+const string tag_writing = "writing";
+
+const string tag_driving = "driving";
+
+const string tag_tailoring = "tailoring";
+
+const string tag_computers = "computers";
+
+const string tag_disguise = "disguise";
+
+const string tag_security = "security";
+
+const string tag_law = "law";
+
+const string tag_psychology = "psychology";
+
+const string tag_persuasion = "persuasion";
+
+const string tag_shotgun = "shotgun";
+
+const string tag_smg = "smg";
+
+const string tag_rifle = "rifle";
+
+const string tag_pistol = "pistol";
+
+const string tag_throwing = "throwing";
+
+const string tag_axe = "axe";
+
+const string tag_club = "club";
+
+const string tag_sword = "sword";
+
+const string tag_knife = "knife";
+
+const string tag_handtohand = "handtohand";
+
+const string tag_CLEAN = "CLEAN";
+
+const string tag_NASTY = "NASTY";
+
+const string tag_RANDOM = "RANDOM";
+
+const string tag_FEMALE_BIAS = "FEMALE BIAS";
+
+const string tag_FEMALE = "FEMALE";
+
+const string tag_MALE_BIAS = "MALE BIAS";
+
+const string tag_MALE = "MALE";
+
+const string tag_GENDER_WHITEMALEPATRIARCH = "GENDER_WHITEMALEPATRIARCH";
+
+const string tag_NEUTRAL = "NEUTRAL";
+
+const string tag_heart = "heart";
+
+const string tag_charisma = "charisma";
+
+const string tag_health = "health";
+
+const string tag_agility = "agility";
+
+const string tag_wisdom = "wisdom";
+
+const string tag_intelligence = "intelligence";
+
+const string tag_strength = "strength";
+
+const string blankString = "";
+
+const string tag_value = "value";
+
+const string tag_attribute = "attribute";
+
+const string tag_skill = "skill";
+
+const string tag_no = "no";
+
+const string tag_false = "false";
+
+const string tag_0 = "0";
+
+const string tag_off = "off";
+
+const string tag_on = "on";
+
+const string tag_yes = "yes";
+
+const string tag_1 = "1";
+
+const string tag_true = "true";
+
+
+#include "../creature/creatureEnums.h"
 
 
 std::string tostring(long i)
@@ -13,12 +132,11 @@ using std::transform;
 int stringtobool(string boolstr)
 {
 	transform(boolstr.begin(), boolstr.end(), boolstr.begin(), ::tolower);
-	if (boolstr == "true" || boolstr == "1" || boolstr == "on" || boolstr == "yes") return 1;
-	else if (boolstr == "false" || boolstr == "0" || boolstr == "off" || boolstr == "no") return 0;
+	if (boolstr == tag_true || boolstr == tag_1 || boolstr == tag_on || boolstr == tag_yes) return 1;
+	else if (boolstr == tag_false || boolstr == tag_0 || boolstr == tag_off || boolstr == tag_no) return 0;
 	else return -1;
 }
-typedef map< string, short > stringAndShort;
-extern stringAndShort getCreatureEnumFromString;
+extern map<string, short> getCreatureEnumFromString;
 short creaturetype_string_to_enum(const string& ctname)
 {
 	if (getCreatureEnumFromString.count(ctname) > 0) {
@@ -30,29 +148,28 @@ short creaturetype_string_to_enum(const string& ctname)
 string showXmlSkill(int skill_, int value_) {
 
 	CMarkup xml;
-	xml.AddElem("skill");
+	xml.AddElem(tag_skill);
 	xml.IntoElem();
-	xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	xml.AddElem(tag_value, min(value_, MAXATTRIBUTE));
 	return xml.GetDoc();
 }
 string showXmlAttribute(int attribute_, int value_) {
 
 	CMarkup xml;
-	xml.AddElem("attribute");
+	xml.AddElem(tag_attribute);
 	xml.IntoElem();
-	xml.AddElem("value", min(value_, MAXATTRIBUTE));
+	xml.AddElem(tag_value, min(value_, MAXATTRIBUTE));
 	return xml.GetDoc();
 }
-typedef map< short, string > shortAndString;
-shortAndString skillEnumToString;
-shortAndString attEnumToString;
+map<short, string> skillEnumToString;
+map<short, string> attEnumToString;
 string skill_enum_to_string(int skill_type) {
 
 	if (skillEnumToString.count(skill_type)) {
 		return skillEnumToString[skill_type];
 	}
 	else
-		return "";
+		return blankString;
 }
 string attribute_enum_to_string(int attribute)
 {
@@ -60,40 +177,40 @@ string attribute_enum_to_string(int attribute)
 		return attEnumToString[attribute];
 	}
 	else
-		return "";
+		return blankString;
 	/*
 	if (attribute == ATTRIBUTE_STRENGTH)
-		return "strength";
+		return tag_strength;
 	else if (attribute == ATTRIBUTE_INTELLIGENCE)
-		return "intelligence";
+		return tag_intelligence;
 	else if (attribute == ATTRIBUTE_WISDOM)
-		return "wisdom";
+		return tag_wisdom;
 	else if (attribute == ATTRIBUTE_AGILITY)
-		return "agility";
+		return tag_agility;
 	else if (attribute == ATTRIBUTE_HEALTH)
-		return "health";
+		return tag_health;
 	else if (attribute == ATTRIBUTE_CHARISMA)
-		return "charisma";
+		return tag_charisma;
 	else if (attribute == ATTRIBUTE_HEART)
-		return "heart";
+		return tag_heart;
 	else
-		return "";*/
+		return blankString;*/
 }
 int attribute_string_to_enum(const string& attribute)
 {
-	if (attribute == "strength")
+	if (attribute == tag_strength)
 		return ATTRIBUTE_STRENGTH;
-	else if (attribute == "intelligence")
+	else if (attribute == tag_intelligence)
 		return ATTRIBUTE_INTELLIGENCE;
-	else if (attribute == "wisdom")
+	else if (attribute == tag_wisdom)
 		return ATTRIBUTE_WISDOM;
-	else if (attribute == "agility")
+	else if (attribute == tag_agility)
 		return ATTRIBUTE_AGILITY;
-	else if (attribute == "health")
+	else if (attribute == tag_health)
 		return ATTRIBUTE_HEALTH;
-	else if (attribute == "charisma")
+	else if (attribute == tag_charisma)
 		return ATTRIBUTE_CHARISMA;
-	else if (attribute == "heart")
+	else if (attribute == tag_heart)
 		return ATTRIBUTE_HEART;
 	else
 		return -1;
@@ -101,19 +218,19 @@ int attribute_string_to_enum(const string& attribute)
 
 int gender_string_to_enum(const string& gender)
 {
-	if (gender == "NEUTRAL")
+	if (gender == tag_NEUTRAL)
 		return GENDER_NEUTRAL;
-	else if (gender == "MALE")
+	else if (gender == tag_MALE)
 		return GENDER_MALE;
-	else if (gender == "FEMALE")
+	else if (gender == tag_FEMALE)
 		return GENDER_FEMALE;
-	else if (gender == "GENDER_WHITEMALEPATRIARCH")
+	else if (gender == tag_GENDER_WHITEMALEPATRIARCH)
 		return GENDER_WHITEMALEPATRIARCH;
-	else if (gender == "MALE BIAS")
+	else if (gender == tag_MALE_BIAS)
 		return GENDER_MALE_BIAS;
-	else if (gender == "FEMALE BIAS")
+	else if (gender == tag_FEMALE_BIAS)
 		return GENDER_FEMALE_BIAS;
-	else if (gender == "RANDOM")
+	else if (gender == tag_RANDOM)
 		return GENDER_RANDOM;
 	else
 		return -1;
@@ -121,9 +238,9 @@ int gender_string_to_enum(const string& gender)
  string NONE;
 int severtype_string_to_enum(const string& severtype)
 {
-	if (severtype == "NASTY")
+	if (severtype == tag_NASTY)
 		return WOUND_NASTYOFF;
-	else if (severtype == "CLEAN")
+	else if (severtype == tag_CLEAN)
 		return WOUND_CLEANOFF;
 	else if (severtype == NONE)
 		return 0;
@@ -133,67 +250,67 @@ int severtype_string_to_enum(const string& severtype)
 int skill_string_to_enum(string skillname)
 {
 	transform(skillname.begin(), skillname.end(), skillname.begin(), ::tolower);
-	if (skillname == "handtohand")
+	if (skillname == tag_handtohand)
 		return SKILL_HANDTOHAND;
-	else if (skillname == "knife")
+	else if (skillname == tag_knife)
 		return SKILL_KNIFE;
-	else if (skillname == "sword")
+	else if (skillname == tag_sword)
 		return SKILL_SWORD;
-	else if (skillname == "club")
+	else if (skillname == tag_club)
 		return SKILL_CLUB;
-	else if (skillname == "axe")
+	else if (skillname == tag_axe)
 		return SKILL_AXE;
-	else if (skillname == "throwing")
+	else if (skillname == tag_throwing)
 		return SKILL_THROWING;
-	else if (skillname == "pistol")
+	else if (skillname == tag_pistol)
 		return SKILL_PISTOL;
-	else if (skillname == "rifle")
+	else if (skillname == tag_rifle)
 		return SKILL_RIFLE;
-	else if (skillname == "smg")
+	else if (skillname == tag_smg)
 		return SKILL_SMG;
-	else if (skillname == "shotgun")
+	else if (skillname == tag_shotgun)
 		return SKILL_SHOTGUN;
-	else if (skillname == "persuasion")
+	else if (skillname == tag_persuasion)
 		return SKILL_PERSUASION;
-	else if (skillname == "psychology")
+	else if (skillname == tag_psychology)
 		return SKILL_PSYCHOLOGY;
-	else if (skillname == "law")
+	else if (skillname == tag_law)
 		return SKILL_LAW;
-	else if (skillname == "security")
+	else if (skillname == tag_security)
 		return SKILL_SECURITY;
-	else if (skillname == "disguise")
+	else if (skillname == tag_disguise)
 		return SKILL_DISGUISE;
-	else if (skillname == "computers")
+	else if (skillname == tag_computers)
 		return SKILL_COMPUTERS;
-	else if (skillname == "tailoring")
+	else if (skillname == tag_tailoring)
 		return SKILL_TAILORING;
-	else if (skillname == "driving")
+	else if (skillname == tag_driving)
 		return SKILL_DRIVING;
-	else if (skillname == "writing")
+	else if (skillname == tag_writing)
 		return SKILL_WRITING;
-	else if (skillname == "music")
+	else if (skillname == tag_music)
 		return SKILL_MUSIC;
-	else if (skillname == "art")
+	else if (skillname == tag_art)
 		return SKILL_ART;
-	else if (skillname == "religion")
+	else if (skillname == tag_religion)
 		return SKILL_RELIGION;
-	else if (skillname == "science")
+	else if (skillname == tag_science)
 		return SKILL_SCIENCE;
-	else if (skillname == "business")
+	else if (skillname == tag_business)
 		return SKILL_BUSINESS;
-	else if (skillname == "stealth")
+	else if (skillname == tag_stealth)
 		return SKILL_STEALTH;
-	else if (skillname == "teaching")
+	else if (skillname == tag_teaching)
 		return SKILL_TEACHING;
-	else if (skillname == "streetsense")
+	else if (skillname == tag_streetsense)
 		return SKILL_STREETSENSE;
-	else if (skillname == "seduction")
+	else if (skillname == tag_seduction)
 		return SKILL_SEDUCTION;
-	else if (skillname == "firstaid")
+	else if (skillname == tag_firstaid)
 		return SKILL_FIRSTAID;
-	else if (skillname == "dodge")
+	else if (skillname == tag_dodge)
 		return SKILL_DODGE;
-	else if (skillname == "heavyweapons")
+	else if (skillname == tag_heavyweapons)
 		return SKILL_HEAVYWEAPONS;
 	else
 		return -1;

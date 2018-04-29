@@ -1,3 +1,71 @@
+#include "../includes.h"
+const string CONST_stealth075 = "and shouts for help!";
+const string CONST_stealth074 = "and lets forth a piercing Conservative alarm cry!";
+const string CONST_stealth073 = "and launches into angry Conservative barking!";
+const string CONST_stealth072 = " looks at the Squad with Intolerance ";
+const string CONST_stealth069 = " sees the Squad's Liberal Weapons ";
+const string CONST_stealth068 = " looks at the Squad suspiciously.";
+const string CONST_stealth067 = " shouts in alarm at the squad's Liberal Trespassing!";
+const string CONST_stealth066 = " acts natural.";
+const string CONST_stealth065 = "The squad";
+const string CONST_stealth064 = " fades into the shadows.";
+const string CONST_stealth062 = "holstered";
+const string CONST_stealth061 = "                                                        ";
+const string CONST_stealth060 = "We've alienated absolutely everyone here!               ";
+const string CONST_stealth059 = "We've alienated the masses here!              ";
+const string CONST_stealth058 = "Prisoner";
+const string CONST_stealth055 = " observes your Liberal activity ";
+const string CONST_stealth053 = "blew_stealth_check.txt";
+
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
+const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
+const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
+const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
+const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
+const string tag_ARMOR_EXPENSIVEDRESS = "ARMOR_EXPENSIVEDRESS";
+const string tag_ARMOR_EXPENSIVESUIT = "ARMOR_EXPENSIVESUIT";
+const string tag_ARMOR_SECURITYUNIFORM = "ARMOR_SECURITYUNIFORM";
+const string tag_ARMOR_CHEAPDRESS = "ARMOR_CHEAPDRESS";
+const string tag_ARMOR_CHEAPSUIT = "ARMOR_CHEAPSUIT";
+const string tag_ARMOR_SEALSUIT = "ARMOR_SEALSUIT";
+const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
+const string tag_ARMOR_MILITARY = "ARMOR_MILITARY";
+const string tag_ARMOR_SERVANTUNIFORM = "ARMOR_SERVANTUNIFORM";
+const string tag_ARMOR_HARDHAT = "ARMOR_HARDHAT";
+const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
+const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
+const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
+const string tag_ARMOR_BLACKDRESS = "ARMOR_BLACKDRESS";
+const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
+const string tag_ARMOR_OVERALLS = "ARMOR_OVERALLS";
+const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
+const string tag_ARMOR_PRISONGUARD = "ARMOR_PRISONGUARD";
+const string tag_ARMOR_BLACKROBE = "ARMOR_BLACKROBE";
+const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
+const string tag_ARMOR_WIFEBEATER = "ARMOR_WIFEBEATER";
+const string tag_WEAPON = "WEAPON";
+const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
+const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
+const string tag_WEAPON_SHANK = "WEAPON_SHANK";
+const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
+const string tag_WEAPON_TORCH = "WEAPON_TORCH";
+const string tag_WEAPON_PITCHFORK = "WEAPON_PITCHFORK";
+const string tag_WEAPON_NIGHTSTICK = "WEAPON_NIGHTSTICK";
+const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
+const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
+const string tag_WEAPON_AXE = "WEAPON_AXE";
+const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
+const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
+const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
+const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
+const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
+const string tag_WEAPON_REVOLVER_38 = "WEAPON_REVOLVER_38";
+const string tag_WEAPON_REVOLVER_44 = "WEAPON_REVOLVER_44";
+const string tag_WEAPON_GAVEL = "WEAPON_GAVEL";
+const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+const string tag_WEAPON_MP5_SMG = "WEAPON_MP5_SMG";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,23 +91,18 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "sitemode/sitedisplay.h"
-
-#include "log/log.h"
-
-#include "common/commonactions.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../sitemode/sitedisplay.h"
+#include "../log/log.h"
+#include "../common/commonactionsCreature.h"
 // for int squadsize(const squadst *st);
-
-
-
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-#include "locations/locationsPool.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../locations/locationsPool.h"
 extern Log gamelog;
 extern short mode;
 extern short sitetype;
@@ -52,11 +115,10 @@ extern int locz;
 extern short sitealarmtimer;
 extern squadst *activesquad;
  vector<string> blew_stealth_check;
-
-#include <customMaps.h>
+#include "../customMaps.h"
  const string stealth = "stealth\\";
  vector<file_and_text_collection> stealth_text_file_collection = {
-	 customText(&blew_stealth_check, stealth + "blew_stealth_check.txt"),
+	 customText(&blew_stealth_check, stealth + CONST_stealth053),
  };
  extern short cursite;
  extern short fieldskillrate;
@@ -72,19 +134,19 @@ void noticecheck(int exclude, int difficulty)
 		sneak = activesquad->squad[i]->get_skill(SKILL_STEALTH), topi = i;
 	for (int e = 0; e < ENCMAX; e++)
 	{  //Prisoners shouldn't shout for help.
-		if (!strcmp(encounter[e].name, "Prisoner") || e == exclude || encounter[e].exists == false || activesquad->squad[topi]->skill_check(SKILL_STEALTH, difficulty)) continue;
+		if (!strcmp(encounter[e].name, CONST_stealth058.c_str()) || e == exclude || encounter[e].exists == false || activesquad->squad[topi]->skill_check(SKILL_STEALTH, difficulty)) continue;
 		else
 		{
 			clearmessagearea();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-			addstrAlt(" observes your Liberal activity ", gamelog);
+			addstrAlt(CONST_stealth055, gamelog);
 			if (encounter[e].align == ALIGN_CONSERVATIVE)
-				mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
-			else mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
+				mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
+			else mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
 			gamelog.newline();
 			sitealarm = 1;
-			getkeyAlt();
+	 	pressAnyKey();
 			break;
 		}
 	}
@@ -93,7 +155,8 @@ void noticecheck(int exclude, int difficulty)
 char alienationcheck(char mistake)
 {
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite))return 0;
-	char alienate = 0, alienatebig = 0;
+	char alienate = 0;
+	
 	int oldsitealienate = sitealienate;
 	vector<int> noticer;
 	for (int e = 0; e < ENCMAX; e++)
@@ -103,17 +166,17 @@ char alienationcheck(char mistake)
 		//if(encounter[e].type==CREATURE_PRISONER)continue;
 		// ...but Prisoners are now spawned with a variety of creature
 		// types, so we'll go by name instead
-		if (!strcmp(encounter[e].name, "Prisoner")) continue;
+		if (!strcmp(encounter[e].name, CONST_stealth058.c_str())) continue;
 		if (encounter[e].exists&&encounter[e].alive && (encounter[e].align == 0 || (encounter[e].align == 1 && mistake)))
 			noticer.push_back(e);
 	}
 	if (len(noticer))
 	{
-		int n, an;
+		char alienatebig = 0;
 		do
 		{
-			an = LCSrandom(len(noticer));
-			n = noticer[an];
+			int an = LCSrandom(len(noticer));
+			int n = noticer[an];
 			noticer.erase(noticer.begin() + an);
 			if (encounter[n].align == 1) alienatebig = 1;
 			else alienate = 1;
@@ -123,10 +186,10 @@ char alienationcheck(char mistake)
 		if (oldsitealienate < sitealienate)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			if (sitealienate == 1)mvaddstrAlt(16, 1, "We've alienated the masses here!              ", gamelog);
-			else mvaddstrAlt(16, 1, "We've alienated absolutely everyone here!               ", gamelog);
+			if (sitealienate == 1)mvaddstrAlt(16, 1, CONST_stealth059, gamelog);
+			else mvaddstrAlt(16, 1, CONST_stealth060, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(17, 1, "                                                        ");
+			mvaddstrAlt(17, 1, CONST_stealth061);
 			sitealarm = 1;
 			for (int i = 0; i < ENCMAX; i++)
 				if (encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
@@ -135,12 +198,11 @@ char alienationcheck(char mistake)
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 	}
 	return alienate;
 }
-
 char weapon_in_character(const string& wtype, const string& atype)
 {
 	//// TODO Move to XML
@@ -519,7 +581,6 @@ char hasdisguise(const Creature &cr)
 	}
 	return uniformed;
 }
-
 /* checks if a creature's weapon is suspicious */
 char weaponcheck(const Creature &cr, bool metaldetect)
 {
@@ -545,8 +606,10 @@ char weaponcheck(const Creature &cr, bool metaldetect)
 /* checks if conservatives see through your disguise */
 void disguisecheck(int timer)
 {
-	int weapon = 0, partysize = squadsize(activesquad), blew_it = -1;
-	bool forcecheck = false, spotted = false;
+	int weapon = 0, partysize = squadsize(activesquad);
+	
+	bool forcecheck = false;
+	
 	//int weaponar[6]={0};
 	// Only start to penalize the player's disguise/stealth checks after the first turn.
 	timer--;
@@ -559,18 +622,17 @@ void disguisecheck(int timer)
 		if (thisweapon > weapon)weapon = thisweapon;
 		//if(thisweapon==2)weaponar[i]=1;
 	}
-	// TODO if a weapon is "holstered"
+	// TODO if a weapon is CONST_stealth062
 	// meaning if it is within the squad inventory but not equipped by a squad member
 	// not even metal detectors can detect it
 	// This line checks all such weapons
 	// but does nothing with the information
 	// pending an overhaul of weapon concealment
 	for (Item *l : activesquad->loot) {
-		if (l->is_weapon()) {
+		if (l->whatIsThis() == THIS_IS_WEAPON) {
 			int thisweapon = static_cast <Weapon*> (l)->is_suspicious();
 			//if (thisweapon > weapon)weapon = thisweapon;
 		}
-
 	}
 	// Nothing suspicious going on here
 	if (sitealarmtimer == -1 && weapon < 1 && !forcecheck)
@@ -578,7 +640,6 @@ void disguisecheck(int timer)
 		if (!disguisesite(LocationsPool::getInstance().getLocationType(cursite)) &&
 			!(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))return;
 	}
-	char noticed = 0;
 	vector<int> noticer;
 	for (int e = 0; e < ENCMAX; e++)
 	{
@@ -592,6 +653,9 @@ void disguisecheck(int timer)
 	if (len(noticer))
 	{
 		int n, an;
+		int blew_it = -1;
+		bool spotted = false;
+		char noticed = 0;
 		do
 		{
 			an = LCSrandom(len(noticer));
@@ -681,12 +745,12 @@ void disguisecheck(int timer)
 			{
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (partysize > 1)
-					mvaddstrAlt(16, 1, "The squad", gamelog);
+					mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
 				else
 					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
-				addstrAlt(" fades into the shadows.", gamelog);
+				addstrAlt(CONST_stealth064, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 		}
 		else
@@ -718,18 +782,18 @@ void disguisecheck(int timer)
 				mvaddstrAlt(16, 1, activesquad->squad[blew_it]->name, gamelog);
 				addstrAlt(pickrandom(blew_stealth_check), gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 			else if (!noticed)
 			{
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				if (partysize > 1)
-					mvaddstrAlt(16, 1, "The squad", gamelog);
+					mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
 				else
 					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
-				addstrAlt(" acts natural.", gamelog);
+				addstrAlt(CONST_stealth066, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 		}
 		if (!noticed)return;
@@ -744,11 +808,11 @@ void disguisecheck(int timer)
 				levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 			{
 				sitealarm = 1;
-				addstrAlt(" shouts in alarm at the squad's Liberal Trespassing!", gamelog);
+				addstrAlt(CONST_stealth067, gamelog);
 			}
 			else
 			{
-				addstrAlt(" looks at the Squad suspiciously.", gamelog);
+				addstrAlt(CONST_stealth068, gamelog);
 				int time;
 				time = 20 + LCSrandom(10) - encounter[n].get_attribute(ATTRIBUTE_INTELLIGENCE, true)
 					- encounter[n].get_attribute(ATTRIBUTE_WISDOM, true);
@@ -765,11 +829,11 @@ void disguisecheck(int timer)
 		{
 			if (weapon&&encounter[n].type != CREATURE_GUARDDOG)
 			{
-				addstrAlt(" sees the Squad's Liberal Weapons ", gamelog);
+				addstrAlt(CONST_stealth069, gamelog);
 				if (encounter[n].align == ALIGN_CONSERVATIVE)
-					mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
+					mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
 				else
-					mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
+					mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
 				for (int i = 0; i < 6; i++)
 				{
 					if (activesquad->squad[i] == NULL)break;
@@ -782,20 +846,20 @@ void disguisecheck(int timer)
 			}
 			else
 			{
-				addstrAlt(" looks at the Squad with Intolerance ", gamelog);
+				addstrAlt(CONST_stealth072, gamelog);
 				if (encounter[n].align == ALIGN_CONSERVATIVE)
 				{
 					if (encounter[n].type == CREATURE_GUARDDOG)
-						mvaddstrAlt(17, 1, "and launches into angry Conservative barking!", gamelog);
+						mvaddstrAlt(17, 1, CONST_stealth073, gamelog);
 					else
-						mvaddstrAlt(17, 1, "and lets forth a piercing Conservative alarm cry!", gamelog);
+						mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
 				}
 				else
-					mvaddstrAlt(17, 1, "and shouts for help!", gamelog);
+					mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
 			}
 			gamelog.newline();
 			sitealarm = 1;
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 }

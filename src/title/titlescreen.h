@@ -4,8 +4,8 @@
 class title_screen {
 
 private:
-	static title_screen title_singleton;
-	static vector<string> savefiles;
+	static title_screen s_title_singleton;
+	static vector<string> s_savefiles;
 	static string savefile_name;
 	bool static autosave;
 	static bool titleInitiated;
@@ -16,7 +16,7 @@ public:
 	static title_screen getInstance();
 	void mode_title();
 	void reset();
-	void setautosaveoption(bool shouldautosave);
+	static void setautosaveoption(bool shouldautosave);
 	void autosavegame();
 };
 /*

@@ -1,3 +1,13 @@
+#include "../includes.h"
+const string CONST_commonactions012 = "$";
+const string CONST_commonactions011 = "A - ";
+const string CONST_commonactions010 = "Choose how to sort list of ";
+const string CONST_commonactions009 = "methodOfSorting.txt";
+const string CONST_commonactions008 = "harmful speech";
+const string CONST_commonactions007 = "month";
+const string CONST_commonactions006 = "months";
+const string CONST_commonactions005 = " for ";
+const string CONST_commonactions004 = " will be at ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -24,40 +34,35 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include "creature/creature.h"
-//#include "pdcurses/curses.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "common/translateid.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+//#include "../pdcurses/curses.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../common/translateid.h"
 // for  int getsquad(int)
-
-#include "log/log.h"
+#include "../log/log.h"
 // for commondisplay.h
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for makedelimeter
-
-#include "title/highscore.h"       
+#include "../title/highscore.h"       
 //for void savehighscore(char endtype)
-
-#include "politics/politics.h"
+#include "../politics/politics.h"
 //for int publicmood(int l)
-
-#include <cursesAlternative.h>
-#include <cursesAlternativeConstants.h>
-#include <customMaps.h>
-#include <set_color_support.h>
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
-#include "common/creaturePool.h"
+#include "../cursesAlternative.h"
+#include "../cursesAlternativeConstants.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
+#include "../common/creaturePool.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
@@ -80,8 +85,6 @@ extern vector<datest *> date;
 extern vector<recruitst *> recruit;
 extern short activesortingchoice[SORTINGCHOICENUM];
 extern class Ledger ledger;
-
-
 /* common - test for possible game over */
 char endcheck(char cause)
 {
@@ -175,16 +178,16 @@ void hospitalize(int loc, Creature &patient)
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  1, patient.name, gamelog);
-		addstrAlt(" will be at ", gamelog);
+		addstrAlt(CONST_commonactions004, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-		addstrAlt(" for ", gamelog);
+		addstrAlt(CONST_commonactions005, gamelog);
 		addstrAlt(time, gamelog);
 		addstrAlt(singleSpace, gamelog);
-		if (time > 1)addstrAlt("months", gamelog);
-		else addstrAlt("month", gamelog);
+		if (time > 1)addstrAlt(CONST_commonactions006, gamelog);
+		else addstrAlt(CONST_commonactions007, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage(); //Time for the next message.
-		getkeyAlt();
+ 	pressAnyKey();
 		if (patientsquad)
 		{  // Reorganize patient's former squad
 			bool flipstart = 0;
@@ -226,7 +229,7 @@ int lawflagheat(int lawflag)
 	case LAWFLAG_JURY:return 0;
 	case LAWFLAG_RACKETEERING:return 50;
 	case LAWFLAG_EXTORTION:return 20;
-	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as "harmful speech"?
+	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as CONST_commonactions008?
 	case LAWFLAG_ASSAULT:return 0;        // Fox: Yes. You get too many assault charges to put heat on it.
 	case LAWFLAG_CARTHEFT:return 0;
 	case LAWFLAG_CCFRAUD:return 20;
@@ -287,7 +290,6 @@ void criminalizepool(short crime, long exclude, short loc)
 		criminalize(*pool[p], crime);
 	}
 }
-
 // *JDS* Scarefactor is the severity of the case against you; if you're a really
 // nasty person with a wide variety of major charges against you, then scarefactor
 // can get up there
@@ -326,7 +328,6 @@ void juiceparty(long juice, long cap)
 				if (activesquad->squad[p]->alive)
 					addjuice(*activesquad->squad[p], juice, cap);
 }
-
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr)
 {
@@ -346,7 +347,6 @@ void removesquadinfo(Creature &cr)
 		cr.squadid = -1;
 	}
 }
-
 /* common - moves all squad members and their cars to a new location */
 void locatesquad(squadst *st, long loc)
 {
@@ -572,7 +572,6 @@ bool sort_none(const Creature* first, const Creature* second) //This will sort s
 }
 /* common - Sort a list of creatures.*/
 inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name)<0; }
-
 bool sort_locationandname(const Creature* first, const Creature* second)
 {
 	return first->location < second->location
@@ -606,21 +605,18 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
 	case SORTING_SQUAD_OR_NAME: sort(liberals.begin(), liberals.end(), sort_squadorname); break;
 	}
 }
-
-typedef map<short, string > shortAndString;
- shortAndString trainingActivitySorting;
+ map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
-
 const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> common_text_file_collection = {
-customText(&methodOfSorting, mostlyendings + "methodOfSorting.txt"),
+customText(&methodOfSorting, mostlyendings + CONST_commonactions009),
 };
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)
 {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1,  1, "Choose how to sort list of ");
+	mvaddstrAlt(1,  1, CONST_commonactions010);
 	if (trainingActivitySorting.count(listforsorting)) {
 		addstrAlt(trainingActivitySorting[listforsorting]);
 	}
@@ -739,8 +735,8 @@ int buyprompt(const string &firstline, const string &secondline,
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, 'A' + y - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(nameprice[p].first);
-			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg "A - ".
-			addstrAlt("$" + tostring(nameprice[p].second));
+			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg CONST_commonactions011.
+			addstrAlt(CONST_commonactions012 + tostring(nameprice[p].second));
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(22, 0);

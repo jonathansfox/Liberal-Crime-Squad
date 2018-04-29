@@ -49,15 +49,14 @@ class Shop : public ShopOption
       virtual void choose(squadst& customers, int& buyer) const;
       virtual bool is_available() const;
    private:
-      Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
-           bool increase_prices_with_illegality);
+      Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,           bool increase_prices_with_illegality);
       void init(const MCD_STR &xmlstring);
       void browse_fullscreen(squadst& customers, int& buyer) const;
       void browse_halfscreen(squadst& customers, int& buyer) const;
-      void sell_loot(squadst& customers) const;
-      int fenceselect(squadst& customers) const;
-      void choose_buyer(squadst& customers, int& buyer) const;
-      void maskselect(Creature &buyer) const;
+      //void sell_loot(squadst& customers) const;
+      //int fenceselect(squadst& customers) const;
+      //void choose_buyer(squadst& customers, int& buyer) const;
+      //void maskselect(Creature &buyer) const;
       bool allow_selling_;
       bool only_sell_legal_;
       bool increase_prices_with_illegality_;

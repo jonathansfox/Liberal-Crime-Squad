@@ -1,3 +1,18 @@
+
+#include "../includes.h"
+const string CONST_consolesupportB011 = "from status line";
+const string CONST_consolesupportB010 = "to status line";
+
+const string CONST_consolesupport011 = "rb";
+const string CONST_consolesupport012 = "wb";
+const string CONST_consolesupport010 = "cleartype.dat";
+const string CONST_consolesupport007 = "en_US.CP437";
+const string CONST_consolesupport005 = "en_US.UTF-8";
+const string CONST_consolesupport004 = "English_United States.437";
+const string CONST_consolesupport003 = "fsl";
+const string CONST_consolesupport002 = "tsl";
+const string CONST_consolesupport001 = "hs";
+const string CONST_consolesupport000 = "UTF-8";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -25,12 +40,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 
-#include <includes.h>
-#include <cursesAlternativeConstants.h>
-
-//#include <cursesAlternative.h>
+#include "../cursesAlternativeConstants.h"
+//#include "../cursesAlternative.h"
 void    PDC_set_titleAlt(const char *ch);
-
 #if defined(USE_NCURSES)
 #include <term.h>
 #elif defined(USE_NCURSES_W)
@@ -38,7 +50,6 @@ void    PDC_set_titleAlt(const char *ch);
 #endif
 extern short interface_pgup;
 extern short interface_pgdn;
-
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
@@ -112,7 +123,6 @@ void translategetch_cap(int &c)
    if(c==5)c='6';
    */
 }
-
 #ifdef CH_USE_UNICODE
 bool unicode_enabled = false;
 bool setup_unicode() {
@@ -124,7 +134,7 @@ bool setup_unicode() {
    #endif
    #else
    // Is it a UTF-8 locale?
-   unicode_enabled = !strcmp(nl_langinfo(CODESET), "UTF-8");
+   unicode_enabled = !strcmp(nl_langinfo(CODESET), CONST_consolesupport000);
    #endif
    return unicode_enabled;
 }
@@ -169,16 +179,16 @@ int addch_unicode(int c) {
 void set_title(char *s)
 {
 #ifdef NCURSES
-   if(tgetflag("hs"))
+   if(tgetflag(CONST_consolesupport001))
    { // terminal has status line support
       char buf[255]={0};
       char *p=buf; // tgetstr modifies its second argument, let buf keep pointing to the beginning
       char *ok; // tgetstr's return value is apparently undocumented, except that it's NULL on errors
-      ok=tgetstr("tsl",&p); // "to status line"
+      ok=tgetstr(CONST_consolesupport002,&p); // CONST_consolesupportB010
       if(!ok) return;
       strcpy(p-1,s); // tgetstr leaves us *after* the null, so skip back a bit
       p+=len(s)-1; // same here
-      ok=tgetstr("fsl",&p); // "from status line"
+      ok=tgetstr(CONST_consolesupport003,&p); // CONST_consolesupportB011
       if(!ok) return;
       putp(buf);
    }
@@ -193,17 +203,17 @@ void init_console()
    // This has to be set to Code Page 437 in Windows regardless of Unicode, that's just how PDCurses works on Windows, even the UTF-8 version of PDCurses
    SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output, regardless of anything else
    SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input, regardless of anything else
-   setlocale(LC_ALL,"English_United States.437");
+   setlocale(LC_ALL,CONST_consolesupport004.c_str());
    _setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page
    #else // WIN32
    #ifdef CH_USE_UNICODE
-   setlocale(LC_ALL,"en_US.UTF-8"); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
+   setlocale(LC_ALL,CONST_consolesupport005.c_str()); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
    #endif
    #ifdef CH_USE_CP437
-   setlocale(LC_ALL,"en_US.CP437");
+   setlocale(LC_ALL,CONST_consolesupport007.c_str());
    #endif
    #ifdef CH_USE_ASCII_HACK
-   setlocale(LC_ALL,"en_US.CP437");
+   setlocale(LC_ALL,CONST_consolesupport007.c_str());
    #endif
    #endif // WIN32
    #ifdef CH_USE_UNICODE
@@ -224,7 +234,7 @@ void begin_cleartype_fix() // execute this function after loading settings from 
       // now we see if the game crashed or exited prematurely the last time, and load the font smoothing parameters from the file if
       //     that is the case, to ensure that the user's original font smoothing settings will be restored when they exit the game
       FILE *h;
-      h=LCSOpenFile("cleartype.dat", "rb", LCSIO_PRE_HOME);
+      h=LCSOpenFile(CONST_consolesupport010.c_str(), CONST_consolesupport011.c_str(), LCSIO_PRE_HOME);
       if(h!=NULL)
       {
          fread(&FontSmoothingEnabled,sizeof(BOOL),1,h);
@@ -234,7 +244,7 @@ void begin_cleartype_fix() // execute this function after loading settings from 
       // now that we know for sure what the original settings were, and both the variables FontSmoothingEnabled and
       // TypeOfFontSmoothing are guaranteed to be the original settings prior to any modifications by this game, we can
       // back the original settings up to disk, in case the game crashes or is exited prematurely
-      h=LCSOpenFile("cleartype.dat", "wb", LCSIO_PRE_HOME);
+      h=LCSOpenFile(CONST_consolesupport010.c_str(), CONST_consolesupport012.c_str(), LCSIO_PRE_HOME);
       if(h!=NULL)
       {
          fwrite(&FontSmoothingEnabled,sizeof(BOOL),1,h);
@@ -256,7 +266,7 @@ void end_cleartype_fix() // execute this function after the user is done playing
       SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE, 0, (void*)TypeOfFontSmoothing, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
       SystemParametersInfo(SPI_SETFONTSMOOTHING, FontSmoothingEnabled, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
       // now that the settings are safely restored, it's time to delete the temporary backup of the font smoothing settings
-      LCSDeleteFile("cleartype.dat",LCSIO_PRE_HOME);
+      LCSDeleteFile(CONST_consolesupport010.c_str(),LCSIO_PRE_HOME);
    }
 }
 #endif

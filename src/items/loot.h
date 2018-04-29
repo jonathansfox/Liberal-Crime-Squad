@@ -4,10 +4,10 @@ class Loot : public Item
 {
    public:
       explicit Loot(const LootType& seed, int number = 1);
+	  virtual thisItemIs whatIsThis() const { return THIS_IS_LOOT; }
       virtual Loot* clone() const { return new Loot(*this); }
       explicit Loot(const std::string& inputXml);
       string showXml() const;
-      virtual bool is_loot() const { return true; }
       virtual Loot* split(int number);
       virtual bool merge(Item& i);
       virtual bool sort_compare_special(Item* other) const;

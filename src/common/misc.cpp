@@ -1,20 +1,44 @@
 
-#include <includes.h>
+#include "../includes.h"
+const string CONST_miscC026 = "): ";
 
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-#include "common/interval.h"
+const string CONST_miscB025 = ".mid:  ";
+const string CONST_miscB024 = ".mid";
+const string CONST_miscB023 = ".ogg:  ";
+const string CONST_miscB022 = ".ogg";
+const string CONST_miscB021 = "/";
+const string CONST_miscB020 = ".mid as MIDI fallback)";
+const string CONST_misc019 = "1234567890-";
+const string CONST_misc018 = "SDL_mixer function Mix_PlayMusic() failed:  ";
+const string CONST_misc017 = "Pastorale";
+const string CONST_misc016 = "Mars";
+const string CONST_misc015 = "Ogg Vorbis support failed to load. MIDI music will be used instead if possible.";
+const string CONST_misc014 = "Unable to initialize SDL_mixer:  ";
+const string CONST_misc013 = "Unable to initialize SDL:  ";
+const string CONST_misc012 = "SDL_mixer function Mix_LoadMUS() failed to load ";
+const string CONST_misc011 = "midi/";
+const string CONST_misc009 = "ogg/";
+const string CONST_misc008 = "Loading MIDI music (";
+const string CONST_misc007 = "(with ";
+const string CONST_misc006 = "Loading Ogg Vorbis music (";
+const string CONST_misc005 = "listOfStates.txt";
+const string CONST_misc004 = "sextypeAcronym.txt";
+const string CONST_misc003 = "sexseekAcronym.txt";
+const string CONST_misc002 = "sexwhoAcronym.txt";
+const string CONST_misc001 = "sexdescAcronym.txt";
 
-#include "log/log.h"
-
-#include <cursesAlternative.h>
-#include "creature/creatureEnums.h"
-#include <customMaps.h>
-typedef map<short, string > shortAndString;
+const string blankString = "";
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../common/interval.h"
+#include "../log/log.h"
+#include "../cursesAlternative.h"
+#include "../creature/creatureEnums.h"
+#include "../customMaps.h"
 extern Log gamelog;
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
-#include "common/musicClass.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 /* pick a descriptor acronym */
  vector<string> sexdescAcronym;
@@ -24,8 +48,7 @@ extern MusicClass music;
  vector<string> sexseekAcronym;
 /* what type of sex? */
  vector<string> sextypeAcronym;
-
- shortAndString musicList;
+ map<short, string> musicList;
 void sexdesc(char *str)
 {
 	strcpy(str, pickrandom(sexdescAcronym).c_str());
@@ -43,25 +66,23 @@ void sextype(char *str)
 	strcpy(str, pickrandom(sextypeAcronym).c_str());
 }
  vector<string> listOfStates;
-
  const string mostlyendings = "mostlyendings\\";
  vector<file_and_text_collection> misc_text_file_collection = {
-	 customText(&sexdescAcronym, mostlyendings + "sexdescAcronym.txt"),
-	 customText(&sexwhoAcronym, mostlyendings + "sexwhoAcronym.txt"),
-	 customText(&sexseekAcronym, mostlyendings + "sexseekAcronym.txt"),
-	 customText(&sextypeAcronym, mostlyendings + "sextypeAcronym.txt"),
-
-	 customText(&listOfStates, mostlyendings + "listOfStates.txt"),
+	 customText(&sexdescAcronym, mostlyendings + CONST_misc001),
+	 customText(&sexwhoAcronym, mostlyendings + CONST_misc002),
+	 customText(&sexseekAcronym, mostlyendings + CONST_misc003),
+	 customText(&sextypeAcronym, mostlyendings + CONST_misc004),
+	 customText(&listOfStates, mostlyendings + CONST_misc005),
  };
 const char* statename(int i)
 {
 	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(50);
 	return listOfStates[i].data();
 }
-/* endgame - converts an integer into a roman numeral for amendments */
+/* EndGameStatus - converts an integer into a roman numeral for amendments */
 string romannumeral(int amendnum)
 {
-	string roman = "";
+	string roman = blankString;
 	while (amendnum >= 1000)
 	{
 		amendnum -= 1000;
@@ -135,27 +156,31 @@ string romannumeral(int amendnum)
 	}
 	return roman;
 }
-
 #ifndef DONT_INCLUDE_SDL
+bool oggsupport = true;
+Mix_Music* songs[MUSIC_OFF];
+bool songsinitialized = false;
+int musicmode = MUSIC_OFF;
+int previous = MUSIC_OFF;
 /* helper function for initsongs() */
-void MusicClass::loadsong(int i, const char* filename)
+void loadsong(int i, const char* filename)
 {  // the reason it prints progress on the screen is because it might be a little slow sometimes so this reassures the user progress is being made
 	eraseAlt();
 	if (oggsupport)
 	{
-		mvaddstrAlt(12, 0, "Loading Ogg Vorbis music (" + tostring(i + 1) + "/" + tostring(MUSIC_OFF) + "): " + artdir + "ogg/" + filename + ".ogg");
-		mvaddstrAlt(13, 0, string("(with ") + artdir + "midi/" + filename + ".mid as MIDI fallback)");
+		mvaddstrAlt(12, 0, CONST_misc006 + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + CONST_miscC026 + artdir + CONST_misc009 + filename + CONST_miscB022);
+		mvaddstrAlt(13, 0, string(CONST_misc007) + artdir + CONST_misc011 + filename + CONST_miscB020);
 	}
-	else mvaddstrAlt(12, 0, "Loading MIDI music (" + tostring(i + 1) + "/" + tostring(MUSIC_OFF) + "): " + artdir + "midi/" + filename + ".mid");
+	else mvaddstrAlt(12, 0, CONST_misc008 + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + CONST_miscC026 + artdir + CONST_misc011 + filename + CONST_miscB024);
 	refreshAlt();
-	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + "ogg/" + filename + ".ogg").c_str()); // only attempt loading Ogg if we have Ogg support
+	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_misc009 + filename + CONST_miscB022).c_str()); // only attempt loading Ogg if we have Ogg support
 	if (!songs[i] || !oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead
 	{
-		if (oggsupport) gamelog.log(string("SDL_mixer function Mix_LoadMUS() failed to load ") + artdir + "ogg/" + filename + ".ogg:  " + Mix_GetError()); // Ogg Vorbis music failed to load
-		songs[i] = Mix_LoadMUS((string(artdir) + "midi/" + filename + ".mid").c_str());
+		if (oggsupport) gamelog.log(string(CONST_misc012) + artdir + CONST_misc009 + filename + CONST_miscB023 + Mix_GetError()); // Ogg Vorbis music failed to load
+		songs[i] = Mix_LoadMUS((string(artdir) + CONST_misc011 + filename + CONST_miscB024).c_str());
 	}
 	if (!songs[i]) // there was an error with Mix_LoadMUS() when called on the MIDI file
-		gamelog.log(string("SDL_mixer function Mix_LoadMUS() failed to load ") + artdir + "midi/" + filename + ".mid:  " + Mix_GetError()); // MIDI music failed to load
+		gamelog.log(string(CONST_misc012) + artdir + CONST_misc011 + filename + CONST_miscB025 + Mix_GetError()); // MIDI music failed to load
 }
 #endif // DONT_INCLUDE_SDL
 /* initialize SDL, SDL_mixer, and songs */
@@ -165,28 +190,24 @@ void MusicClass::init()
 	if (songsinitialized) return; // only initialize once
 	if (SDL_Init(SDL_INIT_AUDIO) != 0) // initialize what we need from SDL for audio
 	{  // SDL failed to initialize, so log it and exit
-		addstrAlt(string("Unable to initialize SDL:  ") + SDL_GetError(), gamelog);
+		addstrAlt(string(CONST_misc013) + SDL_GetError(), gamelog);
 		gamelog.nextMessage();
-
-		getkeyAlt();
-
+ 	pressAnyKey();
 		endwinAlt();
 		exit(EXIT_FAILURE);
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) != 0) // initialize the audio mixer at 44.1 kHz with a large buffer size, since we're just playing music not sound effects
 	{  // SDL_mixer failed to initialize, so log it and exit
-		addstrAlt(string("Unable to initialize SDL_mixer:  ") + Mix_GetError(), gamelog);
+		addstrAlt(string(CONST_misc014) + Mix_GetError(), gamelog);
 		gamelog.nextMessage();
-
-		getkeyAlt();
-
+ 	pressAnyKey();
 		SDL_Quit();
 		endwinAlt();
 		exit(EXIT_FAILURE);
 	}
 	if ((Mix_Init(MIX_INIT_OGG | MIX_INIT_FLUIDSYNTH)&MIX_INIT_OGG) != MIX_INIT_OGG) // initialize Ogg Vorbis support (and FluidSynth if it's there for better MIDI quality)
 	{  // Ogg Vorbis support failed to load, we'll use MIDI instead
-		gamelog.log("Ogg Vorbis support failed to load. MIDI music will be used instead if possible.");
+		gamelog.log(CONST_misc015);
 		gamelog.nextMessage();
 		oggsupport = false;
 	}
@@ -198,7 +219,7 @@ void MusicClass::init()
 		loadsong(MUSIC_NEWGAME, musicList[MUSIC_NEWGAME].data()), // load new game music
 																  // basemode.ogg or .mid - The Stars and Stripes Forever by John Philip Sousa
 		loadsong(MUSIC_BASEMODE, musicList[MUSIC_BASEMODE].data()), // load regular base mode music
-																	// siege.ogg or .mid- The Planets, 1st Movement "Mars" by Gustav Holst
+																	// siege.ogg or .mid- The Planets, 1st Movement CONST_misc016 by Gustav Holst
 		loadsong(MUSIC_SIEGE, musicList[MUSIC_SIEGE].data()), // load base mode while under siege music
 															  // activate.ogg or .mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
 		loadsong(MUSIC_ACTIVATE, musicList[MUSIC_ACTIVATE].data()), // load activate Liberals music
@@ -226,7 +247,7 @@ void MusicClass::init()
 		loadsong(MUSIC_SUSPICIOUS, musicList[MUSIC_SUSPICIOUS].data()), // load suspicious music
 																		// alarmed.ogg or .mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
 		loadsong(MUSIC_ALARMED, musicList[MUSIC_ALARMED].data()), // load alarmed music
-																  // heavycombat.ogg or .mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
+																  // heavycombat.ogg or .mid - 6th Symphony CONST_misc017, 4th Movement by Ludwig van Beethoven
 		loadsong(MUSIC_HEAVYCOMBAT, musicList[MUSIC_HEAVYCOMBAT].data()), // load massive Conservative response music
 																		  // defense.ogg or .mid - Danse Macabre by Camille Saint-Saens
 		loadsong(MUSIC_DEFENSE, musicList[MUSIC_DEFENSE].data()), // load escaping/engaging a siege music
@@ -236,8 +257,8 @@ void MusicClass::init()
 		loadsong(MUSIC_CARCHASE, musicList[MUSIC_CARCHASE].data()), // load car chase music
 																	// footchase.ogg or .mid - The Maple Leaf Rag by Scott Joplin
 		loadsong(MUSIC_FOOTCHASE, musicList[MUSIC_FOOTCHASE].data()), // load foot chase music
-																	  // interrogation.ogg or .mid - Night on Bald Mountain by Modest Mussorgsky
-		loadsong(MUSIC_INTERROGATION, musicList[MUSIC_INTERROGATION].data()), // load interrogation music
+																	  // InterrogationST.ogg or .mid - Night on Bald Mountain by Modest Mussorgsky
+		loadsong(MUSIC_INTERROGATION, musicList[MUSIC_INTERROGATION].data()), // load InterrogationST music
 																			  // trial.ogg or .mid - Hungarian Rhapsody #2 by Franz Liszt
 		loadsong(MUSIC_TRIAL, musicList[MUSIC_TRIAL].data()), // load trial music
 															  // recruiting.ogg or .mid - Dance of the Hours by Amilcare Ponchielli
@@ -302,12 +323,10 @@ void MusicClass::play(int _musicmode)
 	if (!songs[musicmode]) // there was an error with Mix_LoadMUS() back when it was called on this song
 		return; // we can't play music if it isn't loaded, might as well return
 	if (Mix_PlayMusic(songs[musicmode], -1) != 0) // start playing the music, and have it loop indefinitely
-		gamelog.log(string("SDL_mixer function Mix_PlayMusic() failed:  ") + Mix_GetError()); // Music failed to play
+		gamelog.log(string(CONST_misc018) + Mix_GetError()); // Music failed to play
 	enableIf(isEnabled());
 #endif // DONT_INCLUDE_SDL
 }
-
-
 	Interval::Interval() : min(0), max(0) { }
 	Interval::Interval(int value) : min(value), max(value) { }
 	Interval::Interval(int low, int high) : min(low), max(high) { }
@@ -318,10 +337,11 @@ void MusicClass::play(int _musicmode)
 	// Sets the interval according to a string that is either a number or two
 	// number separated by a dash. Returns false and does not change the
 	// interval if the given string is not a valid interval.
+	bool valid(const string& v);
 	bool Interval::set_interval(const string& interval)
 	{
 		if (!len(interval) ||
-			interval.find_first_not_of("1234567890-") != string::npos)
+			interval.find_first_not_of(CONST_misc019) != string::npos)
 			return false;
 		size_t dashpos = interval.find('-', 1);
 		if (dashpos == string::npos) // Just a constant.
@@ -340,14 +360,12 @@ void MusicClass::play(int _musicmode)
 		return true;
 	}
 	int Interval::roll() const { return LCSrandom(max - min + 1) + min; }
-	bool Interval::valid(const string& v)
+	bool valid(const string& v)
 	{
 		return len(v) &&                       // Blank string is invalid.
 			(len(v) != 1 || v[0] != '-') &&        // Just a dash is invalid.
 			v.find('-', 1) == string::npos;
 	} 
-
-
 	Ledger::Ledger() : funds(7), total_income(0), total_expense(0)
 	{
 		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0, dailyIncome[i] = 0;
@@ -379,12 +397,7 @@ void MusicClass::play(int _musicmode)
 		for (int i = 0; i<INCOMETYPENUM; i++) dailyIncome[i] = 0;
 		for (int e = 0; e<EXPENSETYPENUM; e++) dailyExpense[e] = 0;
 	}
-
-#ifndef DONT_INCLUDE_SDL
-	MusicClass::MusicClass() : enabled(true), songsinitialized(false), oggsupport(true), musicmode(MUSIC_OFF), previous(MUSIC_OFF) { }
-#else
 	MusicClass::MusicClass() : enabled(true) { }
-#endif // DONT_INCLUDE_SDL
 	bool MusicClass::isEnabled() { return enabled; }
 	void MusicClass::enableIf(bool e)
 	{

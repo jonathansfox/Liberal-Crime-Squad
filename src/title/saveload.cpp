@@ -1,3 +1,83 @@
+
+#include "../includes.h"
+const string CONST_saveloadB081 = "# and are thereby ignored";
+const string CONST_saveload091 = "rb";
+const string CONST_saveload090 = "wb";
+const string CONST_saveload089 = ".verbose";
+const string CONST_saveload088 = ".";
+const string CONST_saveload084 = "# cursquadid";
+const string CONST_saveload083 = "# curcreatureid";
+const string CONST_saveload082 = "# Vehicle::curcarid";
+const string CONST_saveload081 = "# ";
+const string CONST_saveload080 = "# Crimes";
+const string CONST_saveload079 = "# Next Creature";
+const string CONST_saveload076 = "# Skills";
+const string CONST_saveload074 = "# Juice";
+const string CONST_saveload073 = "# Alignment";
+const string CONST_saveload072 = "# Birthday Day";
+const string CONST_saveload071 = "# Birthday Month";
+const string CONST_saveload070 = "# Age";
+const string CONST_saveload069 = "# Gender (Liberal)";
+const string CONST_saveload068 = "# Gender (Conservative)";
+const string CONST_saveload067 = "# Proper Name";
+const string CONST_saveload066 = "# Name";
+const string CONST_saveload064 = "# oldPresidentName";
+const string CONST_saveload063 = "# execname";
+const string CONST_saveload062 = "# exec";
+const string CONST_saveload061 = "# Supreme Court Names";
+const string CONST_saveload060 = "# Supreme Court";
+const string CONST_saveload059 = "# Senate";
+const string CONST_saveload058 = "# House";
+const string CONST_saveload056 = "# Law List";
+const string CONST_saveload055 = "# Concerning ";
+const string CONST_saveload054 = "# Attitude";
+const string CONST_saveload053 = "# Party Status";
+const string CONST_saveload052 = "# Slogan";
+const string CONST_saveload051 = "# Liberal Guardian Published";
+const string CONST_saveload050 = "# L City Name";
+const string CONST_saveload049 = "# attorneyseed";
+const string CONST_saveload048 = "# Offended Firemen";
+const string CONST_saveload047 = "# Offended Cablenews";
+const string CONST_saveload046 = "# Offended Amradio";
+const string CONST_saveload045 = "# Offended CIA";
+const string CONST_saveload044 = "# Offended Corps";
+const string CONST_saveload043 = "# Police Heat";
+const string CONST_saveload042 = "# ccs_kills";
+const string CONST_saveload041 = "# ccsexposure";
+const string CONST_saveload040 = "# endgamestate";
+const string CONST_saveload039 = "# stat_burns";
+const string CONST_saveload038 = "# stat_buys";
+const string CONST_saveload037 = "# stat_kidnappings";
+const string CONST_saveload036 = "# stat_kills";
+const string CONST_saveload035 = "# stat_dead";
+const string CONST_saveload034 = "# stat_recruits";
+const string CONST_saveload033 = "# stalinmode";
+const string CONST_saveload032 = "# nocourtpurge";
+const string CONST_saveload031 = "# notermlimit";
+const string CONST_saveload030 = "# m249";
+const string CONST_saveload029 = "# deagle";
+const string CONST_saveload028 = "# termlimits";
+const string CONST_saveload027 = "# multipleCityMode";
+const string CONST_saveload026 = "# amendnum";
+const string CONST_saveload025 = "# presparty";
+const string CONST_saveload024 = "# execterm";
+const string CONST_saveload023 = "# year";
+const string CONST_saveload022 = "# month";
+const string CONST_saveload021 = "# day";
+const string CONST_saveload020 = "# fieldskillrate";
+const string CONST_saveload019 = "# wincondition";
+const string CONST_saveload018 = "# mode";
+const string CONST_saveload017 = "# seed";
+const string CONST_saveload016 = "# LCS Funding level (max value 2147483647) can be negative";
+const string CONST_saveload015 = "# NOVERBOSECOMMENTS to remove them (almost) entirely";
+const string CONST_saveload014 = "# If these comments are more trouble than they're worth, add to the debug_defines.txt file";
+const string CONST_saveload013 = "# There will be quite a few comments generated automatically";
+const string CONST_saveload012 = "# Since the purpose of verbose savefiles is to make them human readable and editable,";
+const string CONST_saveload011 = "# All lines beginning with # are comments";
+const string CONST_saveload010 = "# remove NOVERBOSECOMMENTS to activate autocomments";
+const string CONST_saveload009 = "# Autocomments disabled";
+const string CONST_saveload008 = "Verbose File Could Not Be Opened";
+const string CONST_saveload004 = "export";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
                                                                                     //
@@ -24,35 +104,28 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
-#include "common/equipment.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
+#include "../common/equipment.h"
 //for void consolidateloot(vector<Item *> &loot);
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  getloottype
-
-#include "title/titlescreen.h"
-
-#include <cursesAlternative.h>
-
-#include "common/creaturePool.h"
-
+#include "titlescreen.h"
+#include "../cursesAlternative.h"
+#include "../common/creaturePool.h"
 string itemType;
 string doesNotExistItem;
 string vehicleType;
 string doesNotExistVehicle;
 string couldNotLoad;
-
 Item* create_item(const std::string& inputXml);
-
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
@@ -61,7 +134,7 @@ extern bool multipleCityMode;
 extern int stat_buys;
 extern int stat_burns;
 extern short presparty;
-#include "common/musicClass.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern int stat_kidnappings;
@@ -74,8 +147,6 @@ extern int stat_dead;
 extern int stat_kills;
 extern int stat_recruits;
 extern char oldPresidentName[POLITICIAN_NAMELEN];
-
-
 extern vector<Vehicle *> vehicle;
 extern unsigned long seed[RNG_SIZE];
 extern short wincondition;
@@ -115,7 +186,6 @@ extern short senate[SENATENUM];
 extern short court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-
 extern UniqueCreatures uniqueCreatures;
 extern vector<squadst *> squad;
 extern vector<datest *> date;
@@ -123,10 +193,7 @@ extern vector<recruitst *> recruit;
 extern vector<newsstoryst *> newsstory;
 extern squadst *activesquad;
 extern char homedir[MAX_PATH_SIZE];
-
-typedef map<short, string > shortAndString;
-
-// TODO: It would be really cool to be able to "export" characters.
+// TODO: It would be really cool to be able to CONST_saveload004 characters.
 /* handles saving */
 bool file_exists(const std::string& filename)
 {
@@ -196,267 +263,242 @@ vector<saveLoadChunk> firstChunk =
 	saveLoadChunk(execname, sizeof(char)*POLITICIAN_NAMELEN, EXECNUM),
 	saveLoadChunk(oldPresidentName, sizeof(char), POLITICIAN_NAMELEN)
 };
-
-
 void writeVerbose(string filename) {
-
 	string filepath = homedir;
-	int position = filename.find(".");
+	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
-	filename += ".verbose";
+	filename += CONST_saveload089;
 	filepath.append(filename);
 	//FILE *h;
-	//h = LCSOpenFile((filename).c_str(), "wb", LCSIO_PRE_HOME);
-
+	//h = LCSOpenFile((filename).c_str(), CONST_saveload090, LCSIO_PRE_HOME);
 	//LCSCloseFile(h);
-
-
 	ofstream outClientFile(filename, ios::out);
 	if (!outClientFile) {
-		cerr << "Verbose File Could Not Be Opened" << endl;
+		cerr << CONST_saveload008 << endl;
 	}
 	else {
 		if (NOVERBOSECOMMENTS) {
-			outClientFile << "# Autocomments disabled" << endl;
-			outClientFile << "# remove NOVERBOSECOMMENTS to activate autocomments" << endl;
+			outClientFile << CONST_saveload009 << endl;
+			outClientFile << CONST_saveload010 << endl;
 		}
 		else {
-			outClientFile << "# All lines beginning with # are comments" << endl << "# and are thereby ignored" << endl;
-			outClientFile << "# Since the purpose of verbose savefiles is to make them human readable and editable," << endl;
-			outClientFile << "# There will be quite a few comments generated automatically" << endl;
-			outClientFile << "# If these comments are more trouble than they're worth, add to the debug_defines.txt file" << endl;
-			outClientFile << "# NOVERBOSECOMMENTS to remove them (almost) entirely" << endl;
-			outClientFile << "# LCS Funding level (max value 2147483647) can be negative" << endl;
+			outClientFile << CONST_saveload011 << endl << CONST_saveloadB081 << endl;
+			outClientFile << CONST_saveload012 << endl;
+			outClientFile << CONST_saveload013 << endl;
+			outClientFile << CONST_saveload014 << endl;
+			outClientFile << CONST_saveload015 << endl;
+			outClientFile << CONST_saveload016 << endl;
 		}
 		outClientFile << ledger.get_funds() << endl;
-
 		/*
-		outClientFile << "# seed" << endl;
+		outClientFile << CONST_saveload017 << endl;
 		outClientFile <<  seed[0] << endl;
 		outClientFile <<  seed[1] << endl;
 		outClientFile <<  seed[2] << endl;
 		outClientFile <<  seed[3] << endl;
-		outClientFile << "# mode" << endl;
+		outClientFile << CONST_saveload018 << endl;
 		outClientFile <<  mode << endl;
-		outClientFile << "# wincondition" << endl;
+		outClientFile << CONST_saveload019 << endl;
 		outClientFile <<  wincondition << endl;
-		outClientFile << "# fieldskillrate" << endl;
+		outClientFile << CONST_saveload020 << endl;
 		outClientFile <<  fieldskillrate << endl;
 		*/
-		outClientFile << "# day" << endl;
+		outClientFile << CONST_saveload021 << endl;
 		outClientFile << day << endl;
-		outClientFile << "# month" << endl;
+		outClientFile << CONST_saveload022 << endl;
 		outClientFile << month << endl;
-		outClientFile << "# year" << endl;
+		outClientFile << CONST_saveload023 << endl;
 		outClientFile << year << endl;
-		outClientFile << "# execterm" << endl;
+		outClientFile << CONST_saveload024 << endl;
 		outClientFile << execterm << endl;
-		outClientFile << "# presparty" << endl;
+		outClientFile << CONST_saveload025 << endl;
 		outClientFile << presparty << endl;
-		outClientFile << "# amendnum" << endl;
+		outClientFile << CONST_saveload026 << endl;
 		outClientFile << amendnum << endl;
-		outClientFile << "# multipleCityMode" << endl;
+		outClientFile << CONST_saveload027 << endl;
 		outClientFile << multipleCityMode << endl;
-		outClientFile << "# termlimits" << endl;
+		outClientFile << CONST_saveload028 << endl;
 		outClientFile << termlimits << endl;
-		outClientFile << "# deagle" << endl;
+		outClientFile << CONST_saveload029 << endl;
 		outClientFile << deagle << endl;
-		outClientFile << "# m249" << endl;
+		outClientFile << CONST_saveload030 << endl;
 		outClientFile << m249 << endl;
-		outClientFile << "# notermlimit" << endl;
+		outClientFile << CONST_saveload031 << endl;
 		outClientFile << notermlimit << endl;
-		outClientFile << "# nocourtpurge" << endl;
+		outClientFile << CONST_saveload032 << endl;
 		outClientFile << nocourtpurge << endl;
-		outClientFile << "# stalinmode" << endl;
+		outClientFile << CONST_saveload033 << endl;
 		outClientFile << stalinmode << endl;
-		outClientFile << "# stat_recruits" << endl;
+		outClientFile << CONST_saveload034 << endl;
 		outClientFile << stat_recruits << endl;
-		outClientFile << "# stat_dead" << endl;
+		outClientFile << CONST_saveload035 << endl;
 		outClientFile << stat_dead << endl;
-		outClientFile << "# stat_kills" << endl;
+		outClientFile << CONST_saveload036 << endl;
 		outClientFile << stat_kills << endl;
-		outClientFile << "# stat_kidnappings" << endl;
+		outClientFile << CONST_saveload037 << endl;
 		outClientFile << stat_kidnappings << endl;
-		outClientFile << "# stat_buys" << endl;
+		outClientFile << CONST_saveload038 << endl;
 		outClientFile << stat_buys << endl;
-		outClientFile << "# stat_burns" << endl;
+		outClientFile << CONST_saveload039 << endl;
 		outClientFile << stat_burns << endl;
 		/*
-		outClientFile << "# endgamestate" << endl;
+		outClientFile << CONST_saveload040 << endl;
 		outClientFile <<  endgamestate << endl;
-		outClientFile << "# ccsexposure" << endl;
+		outClientFile << CONST_saveload041 << endl;
 		outClientFile <<  ccsexposure << endl;
-		outClientFile << "# ccs_kills" << endl;
+		outClientFile << CONST_saveload042 << endl;
 		outClientFile <<  ccs_kills << endl;
 		*/
-		outClientFile << "# Police Heat" << endl;
+		outClientFile << CONST_saveload043 << endl;
 		outClientFile << police_heat << endl;
-		outClientFile << "# Offended Corps" << endl;
+		outClientFile << CONST_saveload044 << endl;
 		outClientFile << offended_corps << endl;
-		outClientFile << "# Offended CIA" << endl;
+		outClientFile << CONST_saveload045 << endl;
 		outClientFile << offended_cia << endl;
-		outClientFile << "# Offended Amradio" << endl;
+		outClientFile << CONST_saveload046 << endl;
 		outClientFile << offended_amradio << endl;
-		outClientFile << "# Offended Cablenews" << endl;
+		outClientFile << CONST_saveload047 << endl;
 		outClientFile << offended_cablenews << endl;
-		outClientFile << "# Offended Firemen" << endl;
+		outClientFile << CONST_saveload048 << endl;
 		outClientFile << offended_firemen << endl;
 		/*
-		outClientFile << "# attorneyseed" << endl;
+		outClientFile << CONST_saveload049 << endl;
 		outClientFile <<  attorneyseed[0] << endl;
 		outClientFile <<  attorneyseed[1] << endl;
 		outClientFile <<  attorneyseed[2] << endl;
 		outClientFile <<  attorneyseed[3] << endl;
 		*/
-		outClientFile << "# L City Name" << endl;
+		outClientFile << CONST_saveload050 << endl;
 		outClientFile << lcityname << endl;
 		/*
-		outClientFile << "# Liberal Guardian Published" << endl;
+		outClientFile << CONST_saveload051 << endl;
 		outClientFile <<  newscherrybusted << endl;
 		*/
-		outClientFile << "# Slogan" << endl;
+		outClientFile << CONST_saveload052 << endl;
 		outClientFile << slogan << endl;
-
-		outClientFile << "# Party Status" << endl;
+		outClientFile << CONST_saveload053 << endl;
 		outClientFile << party_status << endl;
-		outClientFile << "# Attitude" << endl;
+		outClientFile << CONST_saveload054 << endl;
 		for (int i = 0; i < len(attitude); i++) {
-			//outClientFile << "# Concerning " + getview(i, false) << endl;
-
+			//outClientFile << CONST_saveload055 + getview(i, false) << endl;
 			outClientFile << attitude[i] << endl;
 		}
-		extern shortAndString getLawString;
-		outClientFile << "# Law List" << endl;
+		extern map<short, string> getLawString;
+		outClientFile << CONST_saveload056 << endl;
 		for (int i = 0; i < len(lawList); i++) {
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# " + getLawString[i] << endl;
+				outClientFile << CONST_saveload081 + getLawString[i] << endl;
 			outClientFile << lawList[i] << endl;
 		}
-
-		outClientFile << "# House" << endl;
+		outClientFile << CONST_saveload058 << endl;
 		for (int i = 0; i < len(house); i++) {
 			outClientFile << house[i] << endl;
 		}
-
-		outClientFile << "# Senate" << endl;
+		outClientFile << CONST_saveload059 << endl;
 		for (int i = 0; i < len(senate); i++) {
 			outClientFile << senate[i] << endl;
 		}
-
-		outClientFile << "# Supreme Court" << endl;
+		outClientFile << CONST_saveload060 << endl;
 		for (int i = 0; i < len(court); i++) {
 			outClientFile << court[i] << endl;
 		}
-
-		outClientFile << "# Supreme Court Names" << endl;
+		outClientFile << CONST_saveload061 << endl;
 		for (int i = 0; i < len(courtname); i++) {
 			outClientFile << courtname[i] << endl;
 		}
-
-		outClientFile << "# exec" << endl;
+		outClientFile << CONST_saveload062 << endl;
 		for (int i = 0; i < len(exec); i++) {
 			outClientFile << exec[i] << endl;
 		}
-
-		outClientFile << "# execname" << endl;
+		outClientFile << CONST_saveload063 << endl;
 		for (int i = 0; i < len(execname); i++) {
 			outClientFile << execname[i] << endl;
 		}
 		/*
-		outClientFile << "# oldPresidentName" << endl;
+		outClientFile << CONST_saveload064 << endl;
 		outClientFile << oldPresidentName << endl;
 		*/
 		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		{
-			outClientFile << "# Next Creature" << endl;
+			outClientFile << CONST_saveload079 << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Name" << endl;
+				outClientFile << CONST_saveload066 << endl;
 			outClientFile << pool[pl]->name << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Proper Name" << endl;
+				outClientFile << CONST_saveload067 << endl;
 			outClientFile << pool[pl]->propername << endl;
 			/*
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Gender (Conservative)" << endl;
+			outClientFile << CONST_saveload068 << endl;
 			outClientFile <<  pool[pl]->gender_conservative << endl;
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Gender (Liberal)" << endl;
+			outClientFile << CONST_saveload069 << endl;
 			outClientFile <<  pool[pl]->gender_liberal << endl;
 			*/
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Age" << endl;
+				outClientFile << CONST_saveload070 << endl;
 			outClientFile << pool[pl]->age << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Birthday Month" << endl;
+				outClientFile << CONST_saveload071 << endl;
 			outClientFile << pool[pl]->birthday_month << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Birthday Day" << endl;
+				outClientFile << CONST_saveload072 << endl;
 			outClientFile << pool[pl]->birthday_day << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Alignment" << endl;
+				outClientFile << CONST_saveload073 << endl;
 			outClientFile << pool[pl]->align << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << "# Juice" << endl;
+				outClientFile << CONST_saveload074 << endl;
 			outClientFile << pool[pl]->juice << endl;
 			for (int i = 0; i < ATTNUM; i++) {
 				//if (!NOVERBOSECOMMENTS)
-				//outClientFile << "# " + attribute_enum_to_string(i) << endl;
-				outClientFile << pool[pl]->get_attribute(i, false) << endl;
-
+				//outClientFile << CONST_saveload081 + attribute_enum_to_string(i) << endl;
+				outClientFile << pool[pl]->get_true_attribute(i) << endl;
 			}
-			extern shortAndString skillEnumToString;
-			outClientFile << "# Skills" << endl;
+			extern map<short, string> skillEnumToString;
+			outClientFile << CONST_saveload076 << endl;
 			for (int i = 0; i < SKILLNUM; i++) {
 				if (!NOVERBOSECOMMENTS)
-					outClientFile << "# " + skillEnumToString[i] << endl;
+					outClientFile << CONST_saveload081 + skillEnumToString[i] << endl;
 				outClientFile << pool[pl]->get_skill(i) << endl;
-
 			}
 			/*
 			for (int i = 0; i < AUGMENTATIONNUM; i++) {
 			outClientFile <<  pool[pl]->get_augmentation(i) << endl;
-
 			}
-
 			for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Next Creature" << endl;
+			outClientFile << CONST_saveload079 << endl;
 			outClientFile <<  pool[pl]->wound[i] << endl;
 			}
 			for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << "# Next Creature" << endl;
+			outClientFile << CONST_saveload079 << endl;
 			outClientFile <<  pool[pl]->special[i] << endl;
 			}
 			*/
-			extern shortAndString getLawFlagString;
-			typedef map<short, shortAndString > shortAndShortAndString;
-			extern shortAndShortAndString getLawFlagStringFull;
-			outClientFile << "# Crimes" << endl;
+			extern map<short, string> getLawFlagString;
+			extern map<short, map<short, string> > getLawFlagStringFull;
+			outClientFile << CONST_saveload080 << endl;
 			for (int i = 0; i < LAWFLAGNUM; i++) {//Bad, relies on their order in the xml file. -XML
 												  // 6
 												  // 20
 				if (!NOVERBOSECOMMENTS)
-					outClientFile << "# " << ((i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
+					outClientFile << CONST_saveload081 << ((i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
 				outClientFile << pool[pl]->crimes_suspected[i] << endl;
 			}
-
 		}
-
 		/*
-		outClientFile << "# Vehicle::curcarid" << endl;
+		outClientFile << CONST_saveload082 << endl;
 		outClientFile << Vehicle::curcarid << endl;
-		outClientFile << "# curcreatureid" << endl;
+		outClientFile << CONST_saveload083 << endl;
 		outClientFile << curcreatureid << endl;
-		outClientFile << "# cursquadid" << endl;
+		outClientFile << CONST_saveload084 << endl;
 		outClientFile << cursquadid << endl;
 		*/
-
 	}
 	outClientFile.close();
 }
-
-
 void useData(vector<string> types) {
 	//TODO
 	int maxJindex = len(types);
@@ -464,157 +506,90 @@ void useData(vector<string> types) {
 	int jindex = 0;
 	ledger.force_funds(atoi(types[jindex].data()));
 	jindex++;
-
 	if (jindex > maxJindex) {
 		return;
 	}
 	/*
 	seed[0] = atoi(types[jindex].data());
 	jindex++;
-
 	seed[1] = atoi(types[jindex].data());
 	jindex++;
-
 	seed[2] = atoi(types[jindex].data());
 	jindex++;
-
 	seed[3] = atoi(types[jindex].data());
 	jindex++;
-
-
 	mode = atoi(types[jindex].data());
 	jindex++;
-
-
 	wincondition = atoi(types[jindex].data());
 	jindex++;
-
-
 	fieldskillrate = atoi(types[jindex].data());
 	jindex++;
 	*/
-
 	day = atoi(types[jindex].data());
 	jindex++;
-
-
 	month = atoi(types[jindex].data());
 	jindex++;
-
-
 	year = atoi(types[jindex].data());
 	jindex++;
-
-
 	execterm = atoi(types[jindex].data());
 	jindex++;
-
-
 	presparty = atoi(types[jindex].data());
 	jindex++;
-
-
 	amendnum = atoi(types[jindex].data());
 	jindex++;
-
-
 	multipleCityMode = atoi(types[jindex].data());
 	jindex++;
-
-
 	termlimits = atoi(types[jindex].data());
 	jindex++;
-
-
 	deagle = atoi(types[jindex].data());
 	jindex++;
-
-
 	m249 = atoi(types[jindex].data());
 	jindex++;
-
-
 	notermlimit = atoi(types[jindex].data());
 	jindex++;
-
-
 	nocourtpurge = atoi(types[jindex].data());
 	jindex++;
-
-
 	stalinmode = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_recruits = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_dead = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_kills = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_kidnappings = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_buys = atoi(types[jindex].data());
 	jindex++;
-
-
 	stat_burns = atoi(types[jindex].data());
 	jindex++;
 	/*
-
 	endgamestate = atoi(types[jindex].data());
 	jindex++;
-
-
 	ccsexposure = atoi(types[jindex].data());
 	jindex++;
-
-
 	ccs_kills = atoi(types[jindex].data());
 	jindex++;
 	*/
-
 	police_heat = atoi(types[jindex].data());
 	jindex++;
-
-
 	offended_corps = atoi(types[jindex].data());
 	jindex++;
-
-
 	offended_cia = atoi(types[jindex].data());
 	jindex++;
-
-
 	offended_amradio = atoi(types[jindex].data());
 	jindex++;
-
-
 	offended_cablenews = atoi(types[jindex].data());
 	jindex++;
-
-
 	offended_firemen = atoi(types[jindex].data());
 	jindex++;
-
 	/*
 	attorneyseed[0] = atoi(types[jindex].data());
 	jindex++;
-
 	attorneyseed[1] = atoi(types[jindex].data());
 	jindex++;
-
 	attorneyseed[2] = atoi(types[jindex].data());
 	jindex++;
-
 	attorneyseed[3] = atoi(types[jindex].data());
 	jindex++;
 	*/
@@ -627,69 +602,42 @@ void useData(vector<string> types) {
 	if (jindex > maxJindex) {
 		return;
 	}
-
 	strcpy(slogan, types[jindex].data());
 	jindex++;
-
 	party_status = atoi(types[jindex].data());
 	jindex++;
-
 	for (int i = 0; i < len(attitude); i++) {
-
-
 		attitude[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
 	for (int i = 0; i < len(lawList); i++) {
-
-
 		lawList[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
-
 	for (int i = 0; i < len(house); i++) {
 		house[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
-
 	for (int i = 0; i < len(senate); i++) {
 		senate[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
-
 	for (int i = 0; i < len(court); i++) {
 		court[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
-
 	for (int i = 0; i < len(courtname); i++) {
 		strcpy(courtname[i], types[jindex].data());
 		jindex++;
 	}
-
-
 	for (int i = 0; i < len(exec); i++) {
 		exec[i] = atoi(types[jindex].data());
 		jindex++;
-
 	}
-
-
 	for (int i = 0; i < len(execname); i++) {
 		strcpy(execname[i], types[jindex].data());
 		jindex++;
 	}
-
 	/*
 	strcpy(oldPresidentName, types[jindex].data());
 	jindex++;
@@ -697,114 +645,68 @@ void useData(vector<string> types) {
 	if (jindex > maxJindex) {
 		return;
 	}
-
 	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 	{
-
-
 		strcpy(pool[pl]->name, types[jindex].data());
 		jindex++;
-
 		strcpy(pool[pl]->propername, types[jindex].data());
 		jindex++;
 		/*
 		pool[pl]->gender_conservative = atoi(types[jindex].data());
 		jindex++;
-
-
-
 		pool[pl]->gender_liberal = atoi(types[jindex].data());
 		jindex++;
-
 		*/
-
 		pool[pl]->age = atoi(types[jindex].data());
 		jindex++;
-
-
-
 		pool[pl]->birthday_month = atoi(types[jindex].data());
 		jindex++;
-
-
-
 		pool[pl]->birthday_day = atoi(types[jindex].data());
 		jindex++;
-
-
-
 		pool[pl]->align = atoi(types[jindex].data());
 		jindex++;
-
-
-
 		pool[pl]->juice = atoi(types[jindex].data());
 		jindex++;
-
 		for (int i = 0; i < ATTNUM; i++) {
-
-
 			pool[pl]->set_attribute(i, atoi(types[jindex].data()));
 			jindex++;
-
-
 		}
 		for (int i = 0; i < SKILLNUM; i++) {
-
-
 			pool[pl]->set_skill(i, atoi(types[jindex].data()));
 			jindex++;
-
-
 		}
 		/*
 		for (int i = 0; i < AUGMENTATIONNUM; i++) {
 		pool[pl]->get_augmentation(i = atoi(types[jindex].data());
 		jindex++;
-
-
 		}
-
 		for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
-
-
 		pool[pl]->wound[i] = atoi(types[jindex].data());
 		jindex++;
-
 		}
 		for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
-
-
 		pool[pl]->special[i] = atoi(types[jindex].data());
 		jindex++;
-
 		}
 		*/
 		for (int i = 0; i < LAWFLAGNUM; i++) {
 			pool[pl]->crimes_suspected[i] = atoi(types[jindex].data());
 			jindex++;
-
 		}
-
 		if (jindex > maxJindex) {
 			return;
 		}
 	}
-
-
 }
-
 void readVerbose(string filename) {
-
 	string filepath = homedir;
-	int position = filename.find(".");
+	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
-	filename += ".verbose";
+	filename += CONST_saveload089;
 	FILE *h;
-	h = LCSOpenFile((filename).c_str(), "rb", LCSIO_PRE_HOME);
+	h = LCSOpenFile((filename).c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL) {
 		LCSCloseFile(h);
-
 		ifstream txtFile;
 		char currentLine[2048];
 		txtFile.open(filepath + filename);
@@ -818,17 +720,13 @@ void readVerbose(string filename) {
 		}
 		txtFile.close();
 		useData(types);
-
 	}
 }
 void deleteVerbose(const string& filename) {
 	string verboseFilename = filename;
-
-	int position = verboseFilename.find(".");
-
+	int position = verboseFilename.find(CONST_saveload088);
 	verboseFilename.erase(position);
-	verboseFilename += ".verbose";
-
+	verboseFilename += CONST_saveload089;
 	LCSDeleteFile(verboseFilename.c_str(), LCSIO_PRE_HOME);
 }
 void savegame(const string& filename)
@@ -840,12 +738,11 @@ void savegame(const string& filename)
 	int dummy;
 	FILE *h;
 	int l;
-	h = LCSOpenFile(filename.c_str(), "wb", LCSIO_PRE_HOME);
+	h = LCSOpenFile(filename.c_str(), CONST_saveload090.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		int lversion = version;
 		fwrite(&lversion, sizeof(int), 1, h);
-
 		for (saveLoadChunk s : firstChunk) {
 			fwrite(s.Buffer, s.ElementSize, s.ElementCount, h);
 		}
@@ -914,19 +811,19 @@ void savegame(const string& filename)
 			int creatureSize = len(creatureStr);
 			fwrite(&creatureSize, sizeof(int), 1, h);
 			fwrite(creatureStr.c_str(), creatureSize, 1, h);
-			// extra interrogation data if applicable
+			// extra InterrogationST data if applicable
 			if (pool[pl]->align == -1 && pool[pl]->alive)
 			{
-				interrogation* &intr = pool[pl]->activity.intr();
+				InterrogationST* &intr = pool[pl]->activity.intr();
 				fwrite(intr->techniques, sizeof(bool[6]), 1, h);
 				fwrite(&intr->druguse, sizeof(int), 1, h);
 				//deep write rapport map
 				int size = len(intr->rapport);
 				fwrite(&size, sizeof(int), 1, h);
-				for (map<long, float_zero>::iterator i = intr->rapport.begin(); i != intr->rapport.end(); i++)
+				for (map<long, Float_Zero>::iterator i = intr->rapport.begin(); i != intr->rapport.end(); i++)
 				{
 					fwrite(&i->first, sizeof(long), 1, h);
-					fwrite(&i->second, sizeof(float_zero), 1, h);
+					fwrite(&i->second, sizeof(Float_Zero), 1, h);
 				}
 			}
 		}
@@ -943,7 +840,7 @@ void savegame(const string& filename)
 		for (int sq = 0; sq < len(squad); sq++)
 		{
 			fwrite(squad[sq]->name, sizeof(char), SQUAD_NAMELEN, h);
-			fwrite(&squad[sq]->activity, sizeof(activityst), 1, h);
+			fwrite(&squad[sq]->activity, sizeof(ActivityST), 1, h);
 			fwrite(&squad[sq]->id, sizeof(int), 1, h);
 			for (int pos = 0; pos < 6; pos++)
 			{
@@ -1030,14 +927,13 @@ void savegame(const string& filename)
 		fwrite(&musicenabled, sizeof(bool), 1, h);
 		LCSCloseFile(h);
 		if (VERBOSESAVEFILE) {
-			writeVerbose(filename.c_str());
+			writeVerbose(filename);
 		}
 		else {
 			deleteVerbose(filename);
 		}
 	}
 }
-
 /* loads the game from save.dat */
 char load(const string& filename)
 {
@@ -1048,7 +944,7 @@ char load(const string& filename)
 	long dummy_l;
 	FILE *h;
 	int l;
-	h = LCSOpenFile(filename.c_str(), "rb", LCSIO_PRE_HOME);
+	h = LCSOpenFile(filename.c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		fread(&loadversion, sizeof(int), 1, h);
@@ -1085,13 +981,13 @@ char load(const string& filename)
 			for (int l2 = len(location[l]->loot) - 1; l2 >= 0; l2--)
 			{
 				bool del = false;
-				if (location[l]->loot[l2]->is_loot())
+				if (location[l]->loot[l2]->whatIsThis() == THIS_IS_LOOT)
 					del = (getloottype(location[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (location[l]->loot[l2]->is_clip())
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_CLIP)
 					del = (getcliptype(location[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (location[l]->loot[l2]->is_weapon())
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_WEAPON)
 					del = (getweapontype(location[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (location[l]->loot[l2]->is_armor())
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_ARMOR)
 					del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
 				if (del)
 				{
@@ -1101,8 +997,6 @@ char load(const string& filename)
 					delete_and_remove(location[l]->loot, l2);
 				}
 			}
-
-
 			consolidateloot(location[l]->loot); // consolidate loot after loading
 			fread(&dummy, sizeof(int), 1, h);
 			location[l]->changes.resize(dummy);
@@ -1157,11 +1051,11 @@ char load(const string& filename)
 			fread(&vec[0], creatureSize, 1, h);
 			vec[creatureSize] = '\0';
 			pool[pl] = new Creature(&vec[0]);
-			// extra interrogation data if applicable
+			// extra InterrogationST data if applicable
 			if (pool[pl]->align == -1 && pool[pl]->alive)
 			{
-				interrogation* &intr = pool[pl]->activity.intr();
-				intr = new interrogation;
+				InterrogationST* &intr = pool[pl]->activity.intr();
+				intr = new InterrogationST;
 				fread(intr->techniques, sizeof(bool[6]), 1, h);
 				fread(&intr->druguse, sizeof(int), 1, h);
 				intr->rapport.clear();
@@ -1170,9 +1064,9 @@ char load(const string& filename)
 				for (int i = 0; i < size; i++)
 				{
 					long id;
-					float_zero value;
+					Float_Zero value;
 					fread(&id, sizeof(long), 1, h);
-					fread(&value, sizeof(float_zero), 1, h);
+					fread(&value, sizeof(Float_Zero), 1, h);
 					intr->rapport[id] = value;
 				}
 			}
@@ -1193,7 +1087,7 @@ char load(const string& filename)
 		{
 			squad[sq] = new squadst;
 			fread(squad[sq]->name, sizeof(char), SQUAD_NAMELEN, h);
-			fread(&squad[sq]->activity, sizeof(activityst), 1, h);
+			fread(&squad[sq]->activity, sizeof(ActivityST), 1, h);
 			fread(&squad[sq]->id, sizeof(int), 1, h);
 			for (int pos = 0; pos < 6; pos++)
 			{
@@ -1225,13 +1119,13 @@ char load(const string& filename)
 			for (int l2 = len(squad[sq]->loot) - 1; l2 >= 0; l2--)
 			{
 				bool del = false;
-				if (squad[sq]->loot[l2]->is_loot())
+				if (squad[sq]->loot[l2]->whatIsThis() == THIS_IS_LOOT)
 					del = (getloottype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-				else if (squad[sq]->loot[l2]->is_clip())
+				else if (squad[sq]->loot[l2]->whatIsThis() == THIS_IS_CLIP)
 					del = (getcliptype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-				else if (squad[sq]->loot[l2]->is_weapon())
+				else if (squad[sq]->loot[l2]->whatIsThis() == THIS_IS_WEAPON)
 					del = (getweapontype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-				else if (squad[sq]->loot[l2]->is_armor())
+				else if (squad[sq]->loot[l2]->whatIsThis() == THIS_IS_ARMOR)
 					del = (getarmortype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
 				if (del)
 				{
@@ -1241,7 +1135,6 @@ char load(const string& filename)
 					delete_and_remove(squad[sq]->loot, l2);
 				}
 			}
-
 			consolidateloot(squad[sq]->loot); // consolidate loot after loading
 		}
 		activesquad = NULL;
@@ -1283,18 +1176,27 @@ char load(const string& filename)
 		recruit.resize(dummy);
 		for (int rt = 0; rt < len(recruit); rt++)
 		{
-			recruit[rt] = new recruitst;
-			fread(&recruit[rt]->recruiter_id, sizeof(long), 1, h);
-			fread(&recruit[rt]->timeleft, sizeof(short), 1, h);
-			fread(&recruit[rt]->level, sizeof(char), 1, h);
-			fread(&recruit[rt]->eagerness1, sizeof(char), 1, h);
-			fread(&recruit[rt]->task, sizeof(char), 1, h);
+			
+			long recruiter_id;
+			short timeleft;
+			char level;
+			char eagerness1;
+			char task;
+			fread(&recruiter_id, sizeof(long), 1, h);
+			fread(&timeleft, sizeof(short), 1, h);
+			fread(&level, sizeof(char), 1, h);
+			fread(&eagerness1, sizeof(char), 1, h);
+			fread(&task, sizeof(char), 1, h);
 			int creatureSize;
 			fread(&creatureSize, sizeof(int), 1, h);
 			vector<char> vec = vector<char>(creatureSize + 1);
 			fread(&vec[0], creatureSize, 1, h);
 			vec[creatureSize] = '\0';
-			recruit[rt]->recruit = new Creature(&vec[0]);
+			recruit[rt] = new recruitst(new Creature(&vec[0]), recruiter_id);
+			recruit[rt]->timeleft = timeleft;
+			recruit[rt]->level = level;
+			recruit[rt]->eagerness1 = eagerness1;
+			recruit[rt]->task = task;
 		}
 		//NEWS STORIES
 		fread(&dummy, sizeof(int), 1, h);
@@ -1341,8 +1243,7 @@ char load(const string& filename)
 				delete_and_remove(vehicle, v--);
 			}
 		}
-
-			readVerbose(filename.c_str());
+			readVerbose(filename);
 		
 		return 1;
 	}

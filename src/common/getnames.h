@@ -1,7 +1,7 @@
 #ifndef GET_NAMES_H
 #define GET_NAMES_H0
 
-std::string getactivity(activityst &act);
+std::string getactivity(ActivityST &act);
 std::string getview(short view, bool shortname);
 std::string getlaw(int l);
 std::string cityname(); /* random city name */

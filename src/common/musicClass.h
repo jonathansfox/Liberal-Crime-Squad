@@ -3,14 +3,6 @@ class MusicClass
 {
 private:
 	bool enabled;
-#ifndef DONT_INCLUDE_SDL
-	bool songsinitialized;
-	bool oggsupport;
-	int musicmode, previous;
-	Mix_Music* songs[MUSIC_OFF];
-	/* helper function for initsongs() ... implemented in misc.cpp */
-	void loadsong(int i, const char* filename);
-#endif // DONT_INCLUDE_SDL
 public:
 	MusicClass();
 	/* find out if music's enabled or disabled */

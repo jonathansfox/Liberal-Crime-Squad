@@ -1,3 +1,89 @@
+#include "../includes.h"
+const string CONST_chase094 = "STATIONWAGON";
+const string CONST_chase093 = "PICKUP";
+const string CONST_chase092 = "JEEP";
+const string CONST_chase091 = "SUV";
+const string CONST_chase090 = "AGENTCAR";
+const string CONST_chase088 = "HMMWV";
+const string CONST_chase086 = "attacks";
+const string CONST_chase085 = "  Found encounter driver %s in carID %d";
+const string CONST_chase084 = "  Found LCS driver %s in carID %d";
+const string CONST_chase083 = "Searching for %s's driver.  ";
+const string CONST_chase082 = "  Found enemycar with ID %d at index %d";
+const string CONST_chase081 = "  Found friendcar with ID %d at index %d";
+const string CONST_chase080 = "Searching for chase vehicle for ";
+const string CONST_chase079 = "C - Reflect on your lack of skill.";
+const string CONST_chase078 = "P - Pull over";
+const string CONST_chase077 = "B - Bail out and run!";
+const string CONST_chase076 = "F - Fight!";
+const string CONST_chase075 = "E - Equip";
+const string CONST_chase074 = "D - Try to lose them!";
+const string CONST_chase073 = "As you pull away from the site, you notice that you are ";
+const string CONST_chase072 = "Both sides refrain from endangering the child...";
+const string CONST_chase071 = "The Conservative bastards unleash a hail of gunfire!";
+const string CONST_chase070 = "You slow down and carefully avoid the kid.";
+const string CONST_chase069 = "The fruit seller is squashed!";
+const string CONST_chase068 = "Fruit smashes all over the windshield!";
+const string CONST_chase067 = "You slow down, and carefully evade the truck.";
+const string CONST_chase066 = "You slow down, and turn the corner.";
+const string CONST_chase065 = "You swerve to avoid the obstacle!";
+const string CONST_chase064 = " takes over the wheel.";
+const string CONST_chase063 = " hits a parked car and flips over.";
+const string CONST_chase062 = "The person inside is squashed into a cube.";
+const string CONST_chase061 = "Everyone inside is peeled off against the pavement.";
+const string CONST_chase060 = " spins out and crashes.";
+const string CONST_chase059 = " slams into a building.";
+const string CONST_chase058 = " crawls free of the car, shivering with pain.";
+const string CONST_chase057 = " gasps in pain, but lives, for now.";
+const string CONST_chase056 = " feet.";
+const string CONST_chase055 = " wheelchair.";
+const string CONST_chase054 = " and struggles to ";
+const string CONST_chase053 = "car frame";
+const string CONST_chase052 = " grips the ";
+const string CONST_chase051 = " seat, out cold, and dies.";
+const string CONST_chase050 = " slumps in ";
+const string CONST_chase049 = "Your ";
+const string CONST_chase048 = " is still on your tail!";
+const string CONST_chase047 = " brakes hard and nearly crashes!";
+const string CONST_chase046 = " backs off for safety.";
+const string CONST_chase045 = " skids out!";
+const string CONST_chase044 = " falls behind!";
+const string CONST_chase043 = "You make obscene gestures at the pursuers!";
+const string CONST_chase042 = "You boldly weave through oncoming traffic!";
+const string CONST_chase040 = "G - Give Up";
+const string CONST_chase036 = "As you exit the site, you notice that you are ";
+const string CONST_chase035 = "thrown to the ground, and beaten senseless!";
+const string CONST_chase034 = "thrown to the ground, and beaten to death!";
+const string CONST_chase033 = " crushed beneath the tank's treads!";
+const string CONST_chase032 = "thrown to the ground, and shot in the head!";
+const string CONST_chase031 = "thrown to the ground, and tazed repeatedly!";
+const string CONST_chase030 = "thrown to the ground, and tazed to death!";
+const string CONST_chase029 = "pushed to the ground, and handcuffed!";
+const string CONST_chase028 = " breaks away!";
+const string CONST_chase026 = " can't keep up!";
+const string CONST_chase025 = " tips into a pool. The tank is trapped!";
+const string CONST_chase024 = "You scale a small building and leap between rooftops!";
+const string CONST_chase023 = "You climb a fence in record time!";
+const string CONST_chase022 = "You run as fast as you can!";
+const string CONST_chase021 = "You suddenly dart into an alley!";
+const string CONST_chase020 = " is free.";
+const string CONST_chase019 = "s are free.";
+const string CONST_chase018 = "Your hostage";
+const string CONST_chase017 = "You pull over and are arrested.";
+const string CONST_chase016 = "You stop and are arrested.";
+const string CONST_chase015 = "carchase_obstacle_child.txt";
+const string CONST_chase014 = "carchase_obstacle_cross_traffic.txt";
+const string CONST_chase013 = "carchase_obstacle_truck_pulls_out.txt";
+const string CONST_chase012 = "carchase_obstacle_fruit_stand.txt";
+const string CONST_chase011 = "carchase_obstacle_none.txt";
+const string CONST_chase010 = "die_in_car.txt";
+const string CONST_chase009 = "car_crash_fatalities.txt";
+const string CONST_chase008 = "car_crash_modes.txt";
+const string CONST_chase007 = "car_plows_through.txt";
+const string CONST_chase006 = "car_speed.txt";
+
+const string tag_POLICECAR = "POLICECAR";
+const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,56 +109,44 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../vehicle/vehicletype.h"
+extern vector<VehicleType *> vehicletype;
+#include "../vehicle/vehicle.h"
 //#include "basemode/baseactions.h"
 void orderparty();
-
 //#include "sitemode/advance.h"
 void creatureadvance();
-
-#include "sitemode/sitedisplay.h"
-
+#include "../sitemode/sitedisplay.h"
 //#include "sitemode/miscactions.h"
 void reloadparty(bool wasteful = false);
-
-#include "log/log.h"
+#include "../log/log.h"
 // for gamelog
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  int id_getcar(int)
-
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for addstr (with log)
-
-#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
+#include "../common/commonactions.h"
+#include "../common/commonactionsCreature.h"
 // for int squadsize(const squadst *);
-
 //#include "common/equipment.h"
 void equip(vector<Item *> &loot, int loc);
-
-#include "combat/fight.h"
-#include "combat/fightCreature.h"  
+#include "fight.h"
+#include "fightCreature.h"  
 // for void youattack();
-
-
-#include "combat/haulkidnapCreature.h"
+#include "haulkidnapCreature.h"
 // for  void kidnaptransfer(Creature &cr);
-
-
-#include <cursesAlternative.h>
-#include <customMaps.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include "../set_color_support.h"
 extern Log gamelog;
-#include "locations/locationsPool.h"
-#include "common/musicClass.h"
-#include "common/creaturePool.h"
+#include "../locations/locationsPool.h"
+#include "../common/musicClass.h"
+#include "../common/creaturePool.h"
 extern MusicClass music;
 extern char endgamestate;
 extern short mode;
@@ -93,8 +167,6 @@ extern short lawList[LAWNUM];
 extern vector<squadst *> squad;
 extern long cursquadid;
 extern string singleDot;
-
-
 void fillEncounter(CreatureTypes c, int numleft) {
 	for (int e = 0; e < ENCMAX; e++)
 	{
@@ -110,14 +182,6 @@ void emptyEncounter();
 void emptyEncounter() {
 	for (int e = 0; e < ENCMAX; e++)encounter[e].exists = 0;
 }
-enum CarChaseStatus
-{
-	CARCHASE_CONTINUE,
-	CARCHASE_GOTOFOOTCHASE,
-	CARCHASE_SURRENDER,
-	CARCHASE_EVERYONEDEAD,
-	CARCHASE_ESCAPED
-};
  vector<string> car_speed;
  vector<string> car_plows_through;
  vector<string> car_crash_modes;
@@ -132,22 +196,18 @@ enum CarChaseStatus
  const string mostlyendings = "mostlyendings\\";
  vector<file_and_text_collection> chase_text_file_collection = {
 	 /*chase.cpp*/
-	 customText(&car_speed, chase + "car_speed.txt"),
-	 customText(&car_plows_through, chase + "car_plows_through.txt"),
-	 customText(&car_crash_modes, chase + "car_crash_modes.txt"),
-	 customText(&car_crash_fatalities, chase + "car_crash_fatalities.txt"),
-	 customText(&die_in_car, chase + "die_in_car.txt"),
-
-
-	 customText(&carchase_obstacle_none, mostlyendings + "carchase_obstacle_none.txt"),
-	 customText(&carchase_obstacle_fruit_stand, mostlyendings + "carchase_obstacle_fruit_stand.txt"),
-	 customText(&carchase_obstacle_truck_pulls_out, mostlyendings + "carchase_obstacle_truck_pulls_out.txt"),
-	 customText(&carchase_obstacle_cross_traffic, mostlyendings + "carchase_obstacle_cross_traffic.txt"),
-	 customText(&carchase_obstacle_child, mostlyendings + "carchase_obstacle_child.txt"),
+	 customText(&car_speed, chase + CONST_chase006),
+	 customText(&car_plows_through, chase + CONST_chase007),
+	 customText(&car_crash_modes, chase + CONST_chase008),
+	 customText(&car_crash_fatalities, chase + CONST_chase009),
+	 customText(&die_in_car, chase + CONST_chase010),
+	 customText(&carchase_obstacle_none, mostlyendings + CONST_chase011),
+	 customText(&carchase_obstacle_fruit_stand, mostlyendings + CONST_chase012),
+	 customText(&carchase_obstacle_truck_pulls_out, mostlyendings + CONST_chase013),
+	 customText(&carchase_obstacle_cross_traffic, mostlyendings + CONST_chase014),
+	 customText(&carchase_obstacle_child, mostlyendings + CONST_chase015),
  };
-
-typedef map<short, vector<string>> shortAndTwoStrings;
- shortAndTwoStrings carchaseObstacles;
+ map<short, vector<string> > carchaseObstacles;
  string beingFollowedBySwine;
  string lostThem;
  string hereTheyCome;
@@ -179,18 +239,18 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 clearcommandarea();
 	 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	 moveAlt(16, 1);
-	 if (mode != GAMEMODE_CHASECAR)addstrAlt("You stop and are arrested.", gamelog);
-	 else addstrAlt("You pull over and are arrested.", gamelog);
+	 if (mode != GAMEMODE_CHASECAR)addstrAlt(CONST_chase016, gamelog);
+	 else addstrAlt(CONST_chase017, gamelog);
 	 gamelog.newline(); //New line.
 	 if (hostagefreed)
 	 {
-		 mvaddstrAlt(17, 1, "Your hostage", gamelog);
+		 mvaddstrAlt(17, 1, CONST_chase018, gamelog);
 		 if (hostagefreed > 1)
-			 addstrAlt("s are free.", gamelog);
-		 else addstrAlt(" is free.", gamelog);
+			 addstrAlt(CONST_chase019, gamelog);
+		 else addstrAlt(CONST_chase020, gamelog);
 		 gamelog.newline(); //New line.
 	 }
-	 getkeyAlt();
+ 	pressAnyKey();
  }
  void evasiverun()
  {
@@ -227,22 +287,22 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 switch (LCSrandom(yourworst / 5))
 		 {
 		 default:
-			 addstrAlt("You suddenly dart into an alley!", gamelog);
+			 addstrAlt(CONST_chase021, gamelog);
 			 gamelog.newline(); //New line.
 			 break;
 		 case 1:
-			 addstrAlt("You run as fast as you can!", gamelog);
+			 addstrAlt(CONST_chase022, gamelog);
 			 gamelog.newline(); //New line.
 			 break;
 		 case 2:
-			 addstrAlt("You climb a fence in record time!", gamelog);
+			 addstrAlt(CONST_chase023, gamelog);
 			 gamelog.newline(); //New line.
 			 break;
 		 case 3:
-			 addstrAlt("You scale a small building and leap between rooftops!", gamelog);
+			 addstrAlt(CONST_chase024, gamelog);
 			 gamelog.newline(); //New line.
 		 }
-		 getkeyAlt();
+	 	pressAnyKey();
 	 }
 	 for (int e = 0; e < ENCMAX; e++)
 	 {
@@ -259,7 +319,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 			 mvaddstrAlt(16, 1, encounter[e].name, gamelog);
 			 addstrAlt(singleSpace, gamelog);
 			 addstrAlt(pickrandom(car_plows_through), gamelog);
-			 getkeyAlt();
+		 	pressAnyKey();
 		 }
 		 else if (chaser < yourworst)
 		 {
@@ -268,26 +328,26 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 			 mvaddstrAlt(16, 1, encounter[e].name, gamelog);
 			 if (encounter[e].type == CREATURE_TANK)
 			 {
-				 addstrAlt(" tips into a pool. The tank is trapped!", gamelog);
+				 addstrAlt(CONST_chase025, gamelog);
 				 gamelog.newline(); //New line.
 			 }
 			 else
 			 {
-				 addstrAlt(" can't keep up!", gamelog);
+				 addstrAlt(CONST_chase026, gamelog);
 				 gamelog.newline(); //Another new line.
 			 }
 			 delenc(e--, 0);
 			 printchaseencounter();
-			 getkeyAlt();
+		 	pressAnyKey();
 		 }
 		 else
 		 {
 			 clearmessagearea();
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-			 addstrAlt(" is still on your tail!", gamelog);
+			 addstrAlt(CONST_chase048, gamelog);
 			 gamelog.newline(); //New line.
-			 getkeyAlt();
+		 	pressAnyKey();
 		 }
 	 }
 	 //This last loop can be used to have fast people in
@@ -306,9 +366,9 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 clearmessagearea();
 				 set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
-				 addstrAlt(" breaks away!", gamelog);
+				 addstrAlt(CONST_chase028, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 				 //Unload hauled hostage or body when they get back to the safehouse
 				 if (activesquad->squad[p]->prisoner != NULL)
 				 {
@@ -343,19 +403,19 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 addstrAlt(isSeized, gamelog);
 					 if (lawList[LAW_POLICEBEHAVIOR] >= ALIGN_LIBERAL)
 					 {
-						 addstrAlt("pushed to the ground, and handcuffed!", gamelog);
+						 addstrAlt(CONST_chase029, gamelog);
 						 gamelog.newline(); //...Newline.
 					 }
 					 else
 					 {
 						 if (activesquad->squad[p]->blood <= 10)
 						 {
-							 addstrAlt("thrown to the ground, and tazed to death!", gamelog);
+							 addstrAlt(CONST_chase030, gamelog);
 							 gamelog.newline(); //Not another newline!
 						 }
 						 else
 						 {
-							 addstrAlt("thrown to the ground, and tazed repeatedly!", gamelog);
+							 addstrAlt(CONST_chase031, gamelog);
 							 gamelog.newline(); //Yet another newline...
 						 }
 						 activesquad->squad[p]->blood -= 10;
@@ -363,12 +423,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 break;
 				 case CREATURE_DEATHSQUAD:
 					 addstrAlt(isSeized, gamelog);
-					 addstrAlt("thrown to the ground, and shot in the head!", gamelog);
+					 addstrAlt(CONST_chase032, gamelog);
 					 gamelog.newline(); //New line.
 					 activesquad->squad[p]->blood = 0;
 					 break;
 				 case CREATURE_TANK:
-					 addstrAlt(" crushed beneath the tank's treads!", gamelog);
+					 addstrAlt(CONST_chase033, gamelog);
 					 gamelog.newline(); //New line.
 					 activesquad->squad[p]->blood = 0;
 					 break;
@@ -376,12 +436,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 addstrAlt(isSeized, gamelog);
 					 if (activesquad->squad[p]->blood <= 60)
 					 {
-						 addstrAlt("thrown to the ground, and beaten to death!", gamelog);
+						 addstrAlt(CONST_chase034, gamelog);
 						 gamelog.newline(); //New line.
 					 }
 					 else
 					 {
-						 addstrAlt("thrown to the ground, and beaten senseless!", gamelog);
+						 addstrAlt(CONST_chase035, gamelog);
 						 gamelog.newline(); //New line.
 					 }
 					 activesquad->squad[p]->blood -= 60;
@@ -399,7 +459,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 encounter[0].type != CREATURE_TANK)delenc(0, 0);
 				 printparty();
 				 printchaseencounter();
-				 getkeyAlt();
+			 	pressAnyKey();
 			 }
 			 else othersleft++;
 		 }
@@ -426,12 +486,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 music.play(MUSIC_FOOTCHASE);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, "As you exit the site, you notice that you are ", gamelog);
+	 mvaddstrAlt(0, 0, CONST_chase036, gamelog);
 	 moveAlt(1, 0);
 	 gamelog.newline(); //New line. I'd rather it be continuous but whatever.
 	 addstrAlt(beingFollowedBySwine, gamelog);
 	 gamelog.newline(); //New line.
-	 getkeyAlt();
+ 	pressAnyKey();
 	 while (true)
 	 {
 		 int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), encsize = 0;
@@ -455,12 +515,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 			 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(11, 40, show_squad_liberal_status);
 			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(9, 1, "D - Try to lose them!");
-			 mvaddstrAlt(10, 1, "E - Equip");
-			 mvaddstrAlt(11, 1, "F - Fight!");
+			 mvaddstrAlt(9, 1, CONST_chase074);
+			 mvaddstrAlt(10, 1, CONST_chase075);
+			 mvaddstrAlt(11, 1, CONST_chase076);
 			 if (chaseseq.canpullover)
 			 {
-				 mvaddstrAlt(12, 1, "G - Give Up");
+				 mvaddstrAlt(12, 1, CONST_chase040);
 			 }
 		 }
 		 else
@@ -476,7 +536,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 			 }
 			 endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(9, 1, "C - Reflect on your lack of skill.");
+			 mvaddstrAlt(9, 1, CONST_chase079);
 		 }
 		 //PRINT ENEMIES
 		 printchaseencounter();
@@ -556,7 +616,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 clearmessagearea();
 				 mvaddstrAlt(16, 1, lostThem, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 				 CreaturePool::getInstance().stopAllBleeding();
 				 mode = GAMEMODE_BASE;
 				 gamelog.newline();
@@ -569,7 +629,6 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 gamelog.nextMessage();
 	 return 1;
  }
-
  int driveskill(Creature &cr, Vehicle &v)
  {
 	 int driveskill = cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
@@ -631,9 +690,9 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 {
 	 case 0:
 		 if (yourworst > 15)
-			 addstrAlt("You boldly weave through oncoming traffic!", gamelog);
+			 addstrAlt(CONST_chase042, gamelog);
 		 else
-			 addstrAlt("You make obscene gestures at the pursuers!", gamelog);
+			 addstrAlt(CONST_chase043, gamelog);
 		 gamelog.newline(); //new line.
 		 break;
 	 default:
@@ -641,11 +700,10 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 gamelog.newline(); //new line.
 		 break;
 	 }
-	 getkeyAlt();
-	 int cnt;
+ 	pressAnyKey();
 	 for (int i = 0; i < len(theirrolls); i++)
 	 {
-		 cnt = pickrandom(yourrolls);
+		 int cnt = pickrandom(yourrolls);
 		 if (theirrolls[i] < cnt)
 		 {
 			 clearmessagearea();
@@ -662,19 +720,19 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 			 switch (LCSrandom(cnt / 5))
 			 {
 			 default:
-				 addstrAlt(" falls behind!", gamelog);
+				 addstrAlt(CONST_chase044, gamelog);
 				 gamelog.newline(); //New line.
 				 break;
 			 case 1:
-				 addstrAlt(" skids out!", gamelog);
+				 addstrAlt(CONST_chase045, gamelog);
 				 gamelog.newline(); //New line.
 				 break;
 			 case 2:
-				 addstrAlt(" backs off for safety.", gamelog);
+				 addstrAlt(CONST_chase046, gamelog);
 				 gamelog.newline(); //New line.
 				 break;
 			 case 3:
-				 addstrAlt(" brakes hard and nearly crashes!", gamelog);
+				 addstrAlt(CONST_chase047, gamelog);
 				 gamelog.newline(); //New line.
 				 break;
 			 }
@@ -697,7 +755,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 }
 			 }
 			 printchaseencounter();
-			 getkeyAlt();
+		 	pressAnyKey();
 		 }
 		 else
 		 {
@@ -712,9 +770,9 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 break;
 				 }
 			 }
-			 addstrAlt(" is still on your tail!", gamelog);
+			 addstrAlt(CONST_chase048, gamelog);
 			 gamelog.newline(); //Blarg. Newline.
-			 getkeyAlt();
+		 	pressAnyKey();
 		 }
 	 }
  }
@@ -723,12 +781,12 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 //CRASH CAR
 	 clearmessagearea();
 	 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(16, 1, "Your ", gamelog);
+	 mvaddstrAlt(16, 1, CONST_chase049, gamelog);
 	 addstrAlt(chaseseq.friendcar[v]->fullname(), gamelog);
 	 addstrAlt(pickrandom(car_crash_modes), gamelog);
 	 gamelog.newline(); //New line it.
 	 printparty();
-	 getkeyAlt();
+ 	pressAnyKey();
 	 int victimsum = 0;
 	 for (int p = 0; p < 6; p++)
 	 {
@@ -769,7 +827,7 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 					 addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					 gamelog.newline(); //New line.
 					 printparty();
-					 getkeyAlt();
+				 	pressAnyKey();
 				 }
 				 activesquad->squad[p]->prisoner->die();
 				 activesquad->squad[p]->prisoner->location = -1;
@@ -796,16 +854,16 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 switch (LCSrandom(die_in_car.size() + 1))
 				 {
 					 //TODO IsaacG Migrate Strings
-				 case 0:addstrAlt(" slumps in ", gamelog);
+				 case 0:addstrAlt(CONST_chase050, gamelog);
 					 addstrAlt(activesquad->squad[p]->hisher(), gamelog);
-					 addstrAlt(" seat, out cold, and dies.", gamelog); break;
+					 addstrAlt(CONST_chase051, gamelog); break;
 				 default:
 					 addstrAlt(pickrandom(die_in_car), gamelog);
 					 break;
 				 }
 				 gamelog.newline(); //New line.
 				 printparty();
-				 getkeyAlt();
+			 	pressAnyKey();
 				 // Mark as dead
 				 activesquad->squad[p]->die();
 				 activesquad->squad[p]->location = -1;
@@ -824,26 +882,26 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 switch (LCSrandom(3))
 				 {
 				 case 0:
-					 addstrAlt(" grips the ", gamelog);
+					 addstrAlt(CONST_chase052, gamelog);
 					 if (activesquad->squad[p]->is_armed())
 						 addstrAlt(activesquad->squad[p]->get_weapon().get_shortname(), gamelog);
-					 else addstrAlt("car frame", gamelog);
-					 addstrAlt(" and struggles to ", gamelog);
+					 else addstrAlt(CONST_chase053, gamelog);
+					 addstrAlt(CONST_chase054, gamelog);
 					 addstrAlt(activesquad->squad[p]->hisher(), gamelog);
 					 if (activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
-						 addstrAlt(" wheelchair.", gamelog);
-					 else addstrAlt(" feet.", gamelog);
+						 addstrAlt(CONST_chase055, gamelog);
+					 else addstrAlt(CONST_chase056, gamelog);
 					 break;
 				 case 1:
-					 addstrAlt(" gasps in pain, but lives, for now.", gamelog);
+					 addstrAlt(CONST_chase057, gamelog);
 					 break;
-				 case 2:addstrAlt(" crawls free of the car, shivering with pain.", gamelog);
+				 case 2:addstrAlt(CONST_chase058, gamelog);
 					 activesquad->squad[p]->drop_weapon(NULL);
 					 break;
 				 }
 				 gamelog.newline(); //New line.
 				 printparty();
-				 getkeyAlt();
+			 	pressAnyKey();
 			 }
 		 }
 	 }
@@ -881,25 +939,24 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 //CRASH CAR
 	 clearmessagearea();
 	 set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(16, 1, "The ", gamelog);
+	 mvaddstrAlt(16, 1, tag_The, gamelog);
 	 addstrAlt(chaseseq.enemycar[v]->fullname(), gamelog);
 	 switch (LCSrandom(3))
 	 {
-	 case 0:addstrAlt(" slams into a building.", gamelog); break;
+	 case 0:addstrAlt(CONST_chase059, gamelog); break;
 	 case 1:
-		 addstrAlt(" spins out and crashes.", gamelog);
+		 addstrAlt(CONST_chase060, gamelog);
 		 moveAlt(17, 1);
-		 if (victimsum > 1)addstrAlt("Everyone inside is peeled off against the pavement.", gamelog);
-		 else if (victimsum == 1)addstrAlt("The person inside is squashed into a cube.", gamelog);
+		 if (victimsum > 1)addstrAlt(CONST_chase061, gamelog);
+		 else if (victimsum == 1)addstrAlt(CONST_chase062, gamelog);
 		 break;
-	 case 2:addstrAlt(" hits a parked car and flips over.", gamelog); break;
+	 case 2:addstrAlt(CONST_chase063, gamelog); break;
 	 }
 	 gamelog.newline(); //New line.
 	 delete_and_remove(chaseseq.enemycar, v);
 	 printchaseencounter();
-	 getkeyAlt();
+ 	pressAnyKey();
  }
-
  bool drivingupdate(short &obstacle)
  {
 	 //CHECK TO SEE WHICH CARS ARE BEING DRIVEN
@@ -941,10 +998,10 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 				 clearmessagearea();
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
-				 addstrAlt(" takes over the wheel.", gamelog);
+				 addstrAlt(CONST_chase064, gamelog);
 				 gamelog.newline(); //New line.
 				 printparty();
-				 getkeyAlt();
+			 	pressAnyKey();
 			 }
 		 }
 		 if (driver == -1)
@@ -988,9 +1045,9 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 int v;
 	 clearmessagearea();
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(16, 1, "You swerve to avoid the obstacle!", gamelog);
+	 mvaddstrAlt(16, 1, CONST_chase065, gamelog);
 	 gamelog.newline(); //New line.
-	 getkeyAlt();
+ 	pressAnyKey();
 	 int driver;
 	 for (v = len(chaseseq.friendcar) - 1; v >= 0; v--)
 	 {
@@ -1041,7 +1098,6 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 	 }
 	 return 0;
  }
-
  bool obstacledrive(short obstacle, char choice)
  {
 	 switch (obstacle)
@@ -1055,15 +1111,15 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 {
 			 clearmessagearea();
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, "You slow down, and turn the corner.", gamelog);
+			 mvaddstrAlt(16, 1, CONST_chase066, gamelog);
 			 gamelog.newline(); //New line.
-			 getkeyAlt();
+		 	pressAnyKey();
 			 if (!LCSrandom(3))
 			 {
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(17, 1, hereTheyCome, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 				 enemyattack();
 				 youattack();
 			 }
@@ -1078,15 +1134,15 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 {
 			 clearmessagearea();
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, "You slow down, and carefully evade the truck.", gamelog);
+			 mvaddstrAlt(16, 1, CONST_chase067, gamelog);
 			 gamelog.newline(); //New line.
-			 getkeyAlt();
+		 	pressAnyKey();
 			 if (!LCSrandom(3))
 			 {
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(17, 1, hereTheyCome, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 				 enemyattack();
 				 youattack();
 			 }
@@ -1101,15 +1157,15 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 {
 			 clearmessagearea();
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, "Fruit smashes all over the windshield!", gamelog);
+			 mvaddstrAlt(16, 1, CONST_chase068, gamelog);
 			 gamelog.newline(); //New line.
-			 getkeyAlt();
+		 	pressAnyKey();
 			 if (!LCSrandom(5))
 			 {
 				 set_color_easy(RED_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(17, 1, "The fruit seller is squashed!", gamelog);
+				 mvaddstrAlt(17, 1, CONST_chase069, gamelog);
 				 gamelog.newline(); //All this logging and lining...
-				 getkeyAlt();
+			 	pressAnyKey();
 				 criminalizeparty(LAWFLAG_MURDER);
 			 }
 		 }
@@ -1123,24 +1179,24 @@ typedef map<short, vector<string>> shortAndTwoStrings;
 		 {
 			 clearmessagearea();
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, "You slow down and carefully avoid the kid.", gamelog);
+			 mvaddstrAlt(16, 1, CONST_chase070, gamelog);
 			 gamelog.newline(); //New line.
-			 getkeyAlt();
+		 	pressAnyKey();
 			 if (!LCSrandom(3))
 			 {
 				 set_color_easy(RED_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(17, 1, "The Conservative bastards unleash a hail of gunfire!", gamelog);
+				 mvaddstrAlt(17, 1, CONST_chase071, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 				 enemyattack();
 				 youattack();
 			 }
 			 else
 			 {
 				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(17, 1, "Both sides refrain from endangering the child...", gamelog);
+				 mvaddstrAlt(17, 1, CONST_chase072, gamelog);
 				 gamelog.newline(); //New line.
-				 getkeyAlt();
+			 	pressAnyKey();
 			 }
 		 }
 		 break;
@@ -1180,10 +1236,10 @@ bool chasesequence()
 	music.play(MUSIC_CARCHASE);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, "As you pull away from the site, you notice that you are ", gamelog);
+	mvaddstrAlt(0,  0, CONST_chase073, gamelog);
 	mvaddstrAlt(1,  0, beingFollowedBySwine, gamelog);
 	gamelog.newline(); //New line.
-	getkeyAlt();
+ 	pressAnyKey();
 	if (LocationsPool::getInstance().getLocationParent(chaseseq.location) != -1)
 		chaseseq.location = LocationsPool::getInstance().getLocationParent(chaseseq.location);
 	short obstacle = -1;
@@ -1213,9 +1269,9 @@ bool chasesequence()
 			if (obstacle == -1)
 			{
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(9,  1, "D - Try to lose them!");
-				mvaddstrAlt(10,  1, "E - Equip");
-				mvaddstrAlt(11,  1, "F - Fight!");
+				mvaddstrAlt(9,  1, CONST_chase074);
+				mvaddstrAlt(10,  1, CONST_chase075);
+				mvaddstrAlt(11,  1, CONST_chase076);
 			}
 			else
 			{
@@ -1225,10 +1281,10 @@ bool chasesequence()
 				mvaddstrAlt(10,  1, carchaseObstacles[obstacle][1]);
 				mvaddstrAlt(11,  1, carchaseObstacles[obstacle][2]);
 			}
-			mvaddstrAlt(y,  1, "B - Bail out and run!");
+			mvaddstrAlt(y,  1, CONST_chase077);
 			if (chaseseq.canpullover)
 			{
-				mvaddstrAlt(y + 1,  1, "P - Pull over");
+				mvaddstrAlt(y + 1,  1, CONST_chase078);
 			}
 		}
 		else
@@ -1244,7 +1300,7 @@ bool chasesequence()
 			}
 			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9,  1, "C - Reflect on your lack of skill.");
+			mvaddstrAlt(9,  1, CONST_chase079);
 		}
 		//PRINT ENEMIES
 		printchaseencounter();
@@ -1381,7 +1437,7 @@ bool chasesequence()
 				clearmessagearea();
 				mvaddstrAlt(16,  1, lostThem, gamelog);
 				gamelog.newline(); //New line.
-				getkeyAlt();
+		 	pressAnyKey();
 			 CreaturePool::getInstance().stopAllBleeding();
 				mode = GAMEMODE_BASE;
 				//Make sure all possible exits of the chase have the nextMessage() call
@@ -1397,27 +1453,24 @@ bool chasesequence()
 	gamelog.nextMessage();
 	return 1;
 }
-
-
 Vehicle* getChaseVehicle(const Creature &c)
 {
 	Vehicle* found = NULL;
-	int v2 = 0;
-	//addstrAlt("Searching for chase vehicle for ", gamelog);
+	//addstrAlt(CONST_chase080, gamelog);
 	//addstrAlt(c.name, gamelog);
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
-		for (v2 = 0; v2 < len(chaseseq.friendcar); v2++)
+		for (int v2 = 0; v2 < len(chaseseq.friendcar); v2++)
 			if (chaseseq.friendcar[v2]->id() == c.carid)
 			{
-				//addstr_fl(gamelog,"  Found friendcar with ID %d at index %d",c.carid, v2);
+				//addstr_fl(gamelog,CONST_chase081,c.carid, v2);
 				found = chaseseq.friendcar[v2];
 				break;
 			}
-		for (v2 = 0; v2 < len(chaseseq.enemycar); v2++)
+		for (int v2 = 0; v2 < len(chaseseq.enemycar); v2++)
 			if (chaseseq.enemycar[v2]->id() == c.carid)
 			{
-				//addstr_fl(gamelog,"  Found enemycar with ID %d at index %d",c.carid, v2);
+				//addstr_fl(gamelog,CONST_chase082,c.carid, v2);
 				found = chaseseq.enemycar[v2];
 				break;
 			}
@@ -1430,7 +1483,7 @@ Creature* getChaseDriver(const Creature &c)
 	Creature* found = NULL;
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
-		//addstr_fl(gamelog,"Searching for %s's driver.  ", c.name);
+		//addstr_fl(gamelog,CONST_chase083, c.name);
 		int v = c.carid;
 		// Check to see if the car we are in is being driven by an LCS member
 		for (int p = 0; p < 6; p++)
@@ -1439,7 +1492,7 @@ Creature* getChaseDriver(const Creature &c)
 			if (activesquad->squad[p]->carid == v
 				&& activesquad->squad[p]->is_driver)
 			{
-				//addstr_fl(gamelog,"  Found LCS driver %s in carID %d",activesquad->squad[p]->name, v);
+				//addstr_fl(gamelog,CONST_chase084,activesquad->squad[p]->name, v);
 				found = activesquad->squad[p];
 			}
 		}
@@ -1450,7 +1503,7 @@ Creature* getChaseDriver(const Creature &c)
 			if (encounter[p].carid == v
 				&& encounter[p].is_driver)
 			{
-				//addstr_fl(gamelog,"  Found encounter driver %s in carID %d",encounter[p].name, v);
+				//addstr_fl(gamelog,CONST_chase085,encounter[p].name, v);
 				found = &encounter[p];
 			}
 		}
@@ -1458,8 +1511,7 @@ Creature* getChaseDriver(const Creature &c)
 	//gamelog.newline();
 	return found;
 }
-
-void makechasers(long sitetype, const long sitecriminality)
+void makechasers(long type, const long sitecriminality)
 {
 	// 
 	long sitecrime_chasers;
@@ -1483,15 +1535,15 @@ void makechasers(long sitetype, const long sitecriminality)
 	long pnum;
 	chaseseq.canpullover = 0;
 	// 50% of CCS harassing your teams once they reach the
-	// "attacks" stage (but not for activities, which are
+	// CONST_chase086 stage (but not for activities, which are
 	// law enforcement response specific)
 	int crime_ratio;
 	CreatureTypes chasing_enemy;
 	int min_enemies;
 	int max_enemies;
-	if (sitetype != -1 && (endgamestate == ENDGAME_CCS_SIEGES || endgamestate == ENDGAME_CCS_ATTACKS) && LCSrandom(2))
+	if (type != -1 && (endgamestate == ENDGAME_CCS_SIEGES || endgamestate == ENDGAME_CCS_ATTACKS) && LCSrandom(2))
 	{
-		cartype = "SUV"; //A CCS property, not a vehicle property. Temporary solution -XML
+		cartype = CONST_chase091; //A CCS property, not a vehicle property. Temporary solution -XML
 		crime_ratio =  5;
 		min_enemies = 1;
 		max_enemies = 12;
@@ -1499,24 +1551,24 @@ void makechasers(long sitetype, const long sitecriminality)
 	}
 	else
 	{
-		switch (sitetype)
+		switch (type)
 		{
 		case SITE_GOVERNMENT_ARMYBASE:
-			cartype = "HMMWV"; //Site property? Temporary solution. -XML
+			cartype = CONST_chase088; //Site property? Temporary solution. -XML
 			crime_ratio =  5;
 			min_enemies = 3;
 			max_enemies = 6;
 			chasing_enemy = CREATURE_SOLDIER;
 			break;
 		case SITE_GOVERNMENT_WHITE_HOUSE:
-			cartype = "AGENTCAR"; //Site property? Temporary solution. -XML
+			cartype = CONST_chase090; //Site property? Temporary solution. -XML
 			crime_ratio =  5;
 			min_enemies = 1;
 			max_enemies = 6;
 			chasing_enemy = CREATURE_SECRET_SERVICE;
 			break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			cartype = "AGENTCAR"; //Site property? Temporary solution. -XML
+			cartype = CONST_chase090; //Site property? Temporary solution. -XML
 			crime_ratio =  5;
 			min_enemies = 1;
 			max_enemies = 6;
@@ -1524,8 +1576,8 @@ void makechasers(long sitetype, const long sitecriminality)
 			break;
 		case SITE_CORPORATE_HEADQUARTERS:
 		case SITE_CORPORATE_HOUSE:
-			if (LCSrandom(2))cartype = "SUV"; //Site property? Temporary solution. -XML
-			else cartype = "JEEP"; //Site property? Temporary solution. -XML
+			if (LCSrandom(2))cartype = CONST_chase091; //Site property? Temporary solution. -XML
+			else cartype = CONST_chase092; //Site property? Temporary solution. -XML
 			crime_ratio =  5;
 			min_enemies = 1;
 			max_enemies = 6;
@@ -1533,14 +1585,14 @@ void makechasers(long sitetype, const long sitecriminality)
 			break;
 		case SITE_MEDIA_AMRADIO:
 		case SITE_MEDIA_CABLENEWS:
-			cartype = "PICKUP"; //Site property? Temporary solution. -XML
+			cartype = CONST_chase093; //Site property? Temporary solution. -XML
 			crime_ratio =  3;
 			min_enemies = 1;
 			max_enemies = 18;
 			chasing_enemy = CREATURE_HICK;
 			break;
 		case SITE_BUSINESS_CRACKHOUSE:
-			cartype = "STATIONWAGON"; //Site property? Temporary solution. -XML
+			cartype = CONST_chase094; //Site property? Temporary solution. -XML
 			crime_ratio =  3;
 			min_enemies = 1;
 			max_enemies = 18;
@@ -1548,7 +1600,7 @@ void makechasers(long sitetype, const long sitecriminality)
 			break;
 		default:
 			chaseseq.canpullover = 1;
-			cartype = "POLICECAR"; //Police property? Temporary solution. -XML
+			cartype = tag_POLICECAR; //Police property? Temporary solution. -XML
 			crime_ratio =  5;
 			min_enemies = 1;
 			max_enemies = 6;
@@ -1564,13 +1616,11 @@ void makechasers(long sitetype, const long sitecriminality)
 			break;
 		}
 	}
-
 	pnum = LCSrandom((sitecrime_chasers / crime_ratio) + 1) + min_enemies;
 	if (pnum > max_enemies) pnum = max_enemies;
 	for (n = 0; n < pnum; n++) {
 		makecreature(encounter[n], chasing_enemy);
 	}
-
 	for (n = 0; n < pnum; n++) conservatise(encounter[n]);
 	//ASSIGN CARS TO CREATURES
 	int carnum;
@@ -1605,7 +1655,6 @@ void makechasers(long sitetype, const long sitecriminality)
 			load[v]++;
 		}
 }
-
 /* the next two functions force a chase sequence with a specific liberal */
 bool footchase(Creature &cr)
 {
@@ -1676,4 +1725,3 @@ bool chasesequence(Creature &cr, Vehicle &v)
 	gamelog.nextMessage(); //Next message.
 	return ret;
 }
-

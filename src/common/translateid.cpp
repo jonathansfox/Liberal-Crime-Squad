@@ -24,15 +24,26 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include "creature/creature.h"
+#include "../includes.h"
+const string blankString = "";
 
-#include "common/interval.h"
 
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
+const string tag_value = "value";
 
-#include "creature/creaturetype.h"
+const string tag_attribute = "attribute";
+
+
+const string tag_skill = "skill";
+
+#include "../creature/creature.h"
+
+#include "interval.h"
+
+#include "../vehicle/vehicletype.h"
+extern vector<VehicleType *> vehicletype;
+#include "../vehicle/vehicle.h"
+
+#include "../creature/creaturetype.h"
 
 extern vector<squadst *> squad;
 extern vector<Creature *> pool;
@@ -42,7 +53,7 @@ extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
 extern vector<CreatureType *> creaturetype;
 
-#include "common/creaturePool.h"
+#include "creaturePool.h"
 
 /* transforms a squad id number into the index of that squad in the global vector */
 int getsquad(int id)

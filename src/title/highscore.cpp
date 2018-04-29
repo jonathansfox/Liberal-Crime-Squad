@@ -1,3 +1,10 @@
+
+#include "../includes.h"
+const string CONST_highscoreB003 = "wb";
+const string CONST_highscoreB002 = "rb";
+const string CONST_highscore002 = "score.dat";
+
+const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,20 +30,14 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "title/titlescreen.h"
-#include "common/getnames.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../title/titlescreen.h"
+#include "../common/getnames.h"
 // for getmonth
-
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
-#include "common/musicClass.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern int ustat_recruits;
 extern int ustat_kidnappings;
@@ -53,7 +54,6 @@ extern int year;
 extern int stat_dead;
 extern int stat_kills;
 extern int stat_recruits;
-
 string univer;
 string numRecruit;
 string numMartyr;
@@ -82,20 +82,17 @@ string heLiOutCrime;
 string heLiBurned;
 string hecoStalinized;
 string dotSpace;
-
 struct highscorest
 {
 	char valid, endtype, slogan[SLOGAN_LEN];
 	int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
 };
-
 extern highscorest score[SCORENUM];
 extern string singleSpace;
 extern int yourscore;
 extern class Ledger ledger;
 extern int month;
 extern char slogan[SLOGAN_LEN];
-
 MusicModes getEndingMusic(EndTypes e);
 string getEndingString(EndTypes e);
 struct  saveLoadChunk {
@@ -115,14 +112,13 @@ vector<saveLoadChunk> highScoreSaveLoad = {
 	saveLoadChunk(&ustat_burns, sizeof(int), 1),
 	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
 };
-
 /* loads the high scores file */
 void loadhighscores()
 {
 	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
 	//LOAD FILE
 	int loadversion;
-	FILE *h = LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
+	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB002.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		fread(&loadversion, sizeof(int), 1, h);
@@ -169,7 +165,6 @@ void viewhighscores(int musicoverride)
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y + 1, 0, getEndingString((EndTypes) score[s].endtype));
 			if (yourscore == s&&musicoverride == MUSIC_OFF) { music.play(getEndingMusic((EndTypes) score[s].endtype)); }
-
 			addstrAlt(getmonth(score[s].month));
 			addstrAlt(singleSpace);
 			addstrAlt(score[s].year);
@@ -212,7 +207,7 @@ void viewhighscores(int musicoverride)
 	addstrAlt(ustat_buys);
 	mvaddstrAlt(24,  60, flagsBurned);
 	addstrAlt(ustat_burns);
-	getkeyAlt();
+ 	pressAnyKey();
 }
 MusicModes getEndingMusic(EndTypes e) {
 	switch (e)
@@ -253,9 +248,7 @@ MusicModes getEndingMusic(EndTypes e) {
 		return MUSIC_RANDOM;
 	}
 }
-
 string getEndingString(EndTypes e) {
-
 	switch (e)
 	{
 	case END_WON:
@@ -311,7 +304,6 @@ string getEndingString(EndTypes e) {
 		break;
 	}
 }
-
 /* saves a new high score */
 void savehighscore(char endtype)
 {
@@ -361,7 +353,7 @@ void savehighscore(char endtype)
 			break;
 		}
 	}
-	FILE *h = LCSOpenFile("score.dat", "wb", LCSIO_PRE_HOME);
+	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB003.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		int lversion = version;

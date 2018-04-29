@@ -1,3 +1,177 @@
+
+#include "../includes.h"
+const string CONST_justiceB174 = "hiring an undocumented worker";
+const string CONST_justiceB173 = "hiring undocumented workers";
+const string CONST_justice182 = " months.";
+const string CONST_justice181 = " is due to be executed in ";
+const string CONST_justice180 = " is due to be released next month.";
+const string CONST_justice179 = " is due to be executed next month.";
+const string CONST_justice178 = "No doubt there are some mental scars, but the Liberal is back.";
+const string CONST_justice177 = " has been released from prison.";
+const string CONST_justice176 = "If you can't protect your own people, who can you protect?";
+const string CONST_justice175 = " has failed the Liberal Crime Squad.";
+const string CONST_justice174 = "by ";
+const string CONST_justice173 = "Today, the Conservative Machine executed ";
+const string CONST_justice172 = "FOR SHAME:";
+const string CONST_justice171 = "due to the abolition of the death penalty.";
+const string CONST_justice170 = "'s death sentence has been commuted to life, ";
+const string CONST_justice169 = " seems to be mostly fine, though.";
+const string CONST_justice168 = " is kinda losing it in here. Juice, that is.";
+const string CONST_justice167 = " has become a more hardened, Juicier criminal.";
+const string CONST_justice166 = "The LCS will rise again! Multiple LCS members escape!";
+const string CONST_justice165 = "Another imprisoned LCS member also gets out!";
+const string CONST_justice164 = " escaped from prison!";
+const string CONST_justice163 = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
+const string CONST_justice162 = " jimmies the cell door and cuts the outer fence in the dead of night!";
+const string CONST_justice161 = " puts on smuggled street clothes and calmly walks out of prison.";
+const string CONST_justice160 = " codes a virus on a smuggled phone that opens all the prison doors!";
+const string CONST_justice159 = " leads a riot with dozens of prisoners chanting the LCS slogan!";
+const string CONST_justice158 = " managed to avoid lasting injury.";
+const string CONST_justice157 = " is found dead.";
+const string CONST_justice156 = " is badly hurt in the process.";
+const string CONST_justice152 = " consumes drugs that simulate death, and is thrown out with the trash!";
+const string CONST_justice151 = " picks the lock on their leg chains and then sneaks away!";
+const string CONST_justice150 = " wears an electrician's outfit and rides away with some contractors.";
+const string CONST_justice149 = " leads the oppressed prisoners and overwhelms the prison guards!";
+const string CONST_justice148 = " remains strong.";
+const string CONST_justice147 = " abandons the Liberal Crime Squad!";
+const string CONST_justice146 = " only stays loyal to the LCS for ";
+const string CONST_justice145 = " silently grows Wiser...";
+const string CONST_justice144 = " feels bad about LCS actions, and loses juice!";
+const string CONST_justice143 = "The court accepts the plea.";
+const string CONST_justice142 = "nolo";
+const string CONST_justice141 = ", less a month for time already served.";
+const string CONST_justice140 = " will be returned to prison to resume an earlier sentence";
+const string CONST_justice139 = " is free!";
+const string CONST_justice138 = "NOT GUILTY!";
+const string CONST_justice134 = "The prosecution declines to re-try the case.";
+const string CONST_justice133 = "The case will be re-tried next month.";
+const string CONST_justice132 = "But they can't reach a verdict!";
+const string CONST_justice131 = "The jury has returned from deliberations.";
+const string CONST_justice130 = "The jury leaves to consider the case.";
+const string CONST_justice129 = " to acquit)";
+const string CONST_justice128 = ", need ";
+const string CONST_justice127 = " (";
+const string CONST_justice126 = " had the jury, judge, and prosecution crying for freedom.";
+const string CONST_justice125 = " made a very powerful case.";
+const string CONST_justice124 = " worked the jury very well.";
+const string CONST_justice123 = "'s arguments were pretty good.";
+const string CONST_justice122 = " did all right, but made some mistakes.";
+const string CONST_justice121 = "'s case really sucked.";
+const string CONST_justice120 = " makes one horrible mistake after another.";
+const string CONST_justice119 = " conducts an incredible defense.";
+const string CONST_justice118 = "and shout \"NOT GUILTY!\" before deliberations even began.";
+const string CONST_justice117 = "'s arguments made several of the jurors stand up ";
+const string CONST_justice116 = "The defense is extremely compelling.";
+const string CONST_justice115 = "The defense makes the prosecution look like amateurs.";
+const string CONST_justice114 = "The defense was really slick.";
+const string CONST_justice113 = "Defense arguments were pretty good.";
+const string CONST_justice112 = "The defense was lackluster.";
+const string CONST_justice111 = "The defense is totally lame.";
+const string CONST_justice110 = "The defense attorney accidentally said \"My client is GUILTY!\" during closing.";
+const string CONST_justice109 = "The defense attorney rarely showed up.";
+const string CONST_justice108 = " to convict)";
+const string CONST_justice107 = " to +";
+const string CONST_justice106 = " (+";
+const string CONST_justice105 = "The prosecution is incredibly strong.";
+const string CONST_justice104 = "The prosecution makes an airtight case.";
+const string CONST_justice103 = "The prosecution's case is solid.";
+const string CONST_justice102 = "The prosecution gives a standard presentation.";
+const string CONST_justice101 = "The prosecution's presentation is terrible.";
+const string CONST_justice098 = "The jury is a bit Conservative.";
+const string CONST_justice097 = "The jury is quite moderate.";
+const string CONST_justice096 = "The jury is fairly Liberal.";
+const string CONST_justice095 = "'s best friend from childhood is a juror.";
+const string CONST_justice094 = "'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!";
+const string CONST_justice093 = "'s favor!";
+const string CONST_justice092 = " ensures the jury is stacked in ";
+const string CONST_justice091 = "The trial proceeds.  Jury selection is first.";
+const string CONST_justice090 = " is standing trial.";
+const string CONST_justice089 = "Intelligence: ";
+const string CONST_justice088 = "Law: ";
+const string CONST_justice087 = "Charisma: ";
+const string CONST_justice086 = "Persuasion: ";
+const string CONST_justice085 = "Heart: ";
+const string CONST_justice084 = "'s offer to assist pro bono.";
+const string CONST_justice083 = "E - Accept sleeper ";
+const string CONST_justice082 = "D - Pay $5000 to hire ace Liberal attorney ";
+const string CONST_justice081 = "C - Plead guilty.";
+const string CONST_justice080 = "B - Defend self!";
+const string CONST_justice079 = "A - Use a court-appointed attorney.";
+const string CONST_justice078 = "How will you conduct the defense?";
+const string CONST_justice077 = "A former LCS member will testify against ";
+const string CONST_justice076 = " former LCS members will testify against ";
+const string CONST_justice075 = "loitering";
+const string CONST_justice074 = "indecent exposure";
+const string CONST_justice073 = "disturbing the peace";
+const string CONST_justice072 = "resisting arrest";
+const string CONST_justice071 = "vandalism";
+const string CONST_justice070 = "breaking and entering";
+const string CONST_justice069 = "unlawful burial";
+const string CONST_justice068 = "unlawful access of an information system";
+const string CONST_justice067 = "interference with interstate commerce";
+const string CONST_justice066 = "possession of an illegal weapon";
+const string CONST_justice065 = "firing an illegal weapon";
+const string CONST_justice064 = "hiring an illegal alien";
+const string CONST_justice063 = "hiring illegal aliens";
+const string CONST_justice062 = "prostitution";
+const string CONST_justice061 = "petty larceny";
+const string CONST_justice060 = "credit card fraud";
+const string CONST_justice059 = "grand theft auto";
+const string CONST_justice058 = "misdemeanor assault";
+const string CONST_justice057 = "felony assault";
+const string CONST_justice056 = "extortion";
+const string CONST_justice055 = "racketeering";
+const string CONST_justice054 = "jury tampering";
+const string CONST_justice053 = "aiding a prison escape";
+const string CONST_justice052 = "escaping prison";
+const string CONST_justice051 = "drug dealing";
+const string CONST_justice050 = "sedition";
+const string CONST_justice049 = "flag burning";
+const string CONST_justice048 = "felony flag burning";
+const string CONST_justice047 = "Flag Murder";
+const string CONST_justice046 = "arson";
+const string CONST_justice045 = "bank robbery";
+const string CONST_justice044 = "kidnapping";
+const string CONST_justice043 = "murder";
+const string CONST_justice042 = "terrorism";
+const string CONST_justice041 = "treason";
+const string CONST_justice040 = ", is charged with ";
+const string CONST_justice039 = "The defendant, ";
+const string CONST_justice038 = "The judge reads the charges:";
+const string CONST_justice037 = " reads the charges, trying to hide a smile:";
+const string CONST_justice035 = "to be served consecutively";
+const string CONST_justice034 = "to be served concurrently";
+const string CONST_justice033 = ",";
+const string CONST_justice032 = " in prison";
+const string CONST_justice031 = "s";
+const string CONST_justice030 = " month";
+const string CONST_justice029 = " years in prison";
+const string CONST_justice028 = "life in prison";
+const string CONST_justice027 = "Have a nice day, ";
+const string CONST_justice026 = " consecutive life terms in prison";
+const string CONST_justice025 = ", you are sentenced to ";
+const string CONST_justice024 = ", consider this a warning.  You are free to go.";
+const string CONST_justice022 = "You will be returned to prison to resume it";
+const string CONST_justice021 = ", the court sees no need to add to your existing sentence.";
+const string CONST_justice020 = ", you are sentenced to DEATH!";
+const string CONST_justice019 = ", you will be returned to prison to carry out your death sentence.";
+const string CONST_justice018 = "During sentencing, the judge grants some leniency.";
+const string CONST_justice017 = "GUILTY!";
+const string CONST_justice016 = "general_experiences.txt";
+const string CONST_justice015 = "bad_experiences.txt";
+const string CONST_justice014 = "good_experiences.txt";
+const string CONST_justice013 = "labor_camp_experiences.txt";
+const string CONST_justice012 = "reeducation_experiences.txt";
+const string CONST_justice011 = "supposedly_painless_execution_method.txt";
+const string CONST_justice010 = "standard_execution_methods.txt";
+const string CONST_justice009 = "cruel_and_unusual_execution_methods.txt";
+const string CONST_justice008 = "conservative_jury.txt";
+const string CONST_justice007 = "liberal_jury.txt";
+
+const string tag_ARMOR = "ARMOR";
+const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
+const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -23,29 +197,25 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "log/log.h"
-
-//#include "common/commonactions.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../log/log.h"
+//#include "../common/commonactions.h"
 int scare_factor(int lawflag, int crimenumber);
-#include "common/commonactionsCreature.h"
+#include "../common/commonactionsCreature.h"
 // for  bool iscriminal(Creature &)
-
-#include "common/translateid.h"
+#include "../common/translateid.h"
 // for  int getarmortype
-
-#include "politics/politics.h"
+#include "../politics/politics.h"
 //for publicmood
-
-#include <cursesAlternative.h>
-#include <constant_strings.h>
-#include <set_color_support.h>
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/creaturePoolCreature.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern short lawList[LAWNUM];
@@ -60,25 +230,22 @@ extern class Ledger ledger;
  vector<string> good_experiences;
  vector<string> bad_experiences;
  vector<string> general_experiences;
-
-#include <customMaps.h>
+#include "../customMaps.h"
  const string justice = "justice\\";
  vector<file_and_text_collection> justice_text_file_collection = {
-
 	 /*justice.cpp*/
-	 customText(&liberal_jury, justice + "liberal_jury.txt"),
-	 customText(&conservative_jury, justice + "conservative_jury.txt"),
-	 customText(&cruel_and_unusual_execution_methods, justice + "cruel_and_unusual_execution_methods.txt"),
-	 customText(&standard_execution_methods, justice + "standard_execution_methods.txt"),
-	 customText(&supposedly_painless_execution_method, justice + "supposedly_painless_execution_method.txt"),
-	 customText(&reeducation_experiences, justice + "reeducation_experiences.txt"),
-	 customText(&labor_camp_experiences, justice + "labor_camp_experiences.txt"),
-	 customText(&good_experiences, justice + "good_experiences.txt"),
-	 customText(&bad_experiences, justice + "bad_experiences.txt"),
-	 customText(&general_experiences, justice + "general_experiences.txt"),
+	 customText(&liberal_jury, justice + CONST_justice007),
+	 customText(&conservative_jury, justice + CONST_justice008),
+	 customText(&cruel_and_unusual_execution_methods, justice + CONST_justice009),
+	 customText(&standard_execution_methods, justice + CONST_justice010),
+	 customText(&supposedly_painless_execution_method, justice + CONST_justice011),
+	 customText(&reeducation_experiences, justice + CONST_justice012),
+	 customText(&labor_camp_experiences, justice + CONST_justice013),
+	 customText(&good_experiences, justice + CONST_justice014),
+	 customText(&bad_experiences, justice + CONST_justice015),
+	 customText(&general_experiences, justice + CONST_justice016),
  };
-
-#include "common/musicClass.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern int stat_dead;
  string counts_of; 
@@ -91,16 +258,15 @@ extern string commaSpace;
 extern vector<ArmorType *> armortype;
 extern string singleSpace;
  string execution_in_three_months;
-
-#include "common/creaturePool.h"
-#include "locations/locationsPool.h"
+#include "../common/creaturePool.h"
+#include "../locations/locationsPool.h"
  /* monthly - sentence a liberal */
  void penalize(Creature &g, char lenient)
  {
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(3, 1, "GUILTY!", gamelog);
+	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
 	 gamelog.newline();
-	 getkeyAlt();
+ 	pressAnyKey();
 	 short oldsentence = g.sentence;
 	 char olddeathpenalty = g.deathpenalty;
 	 g.sentence = 0, g.deathpenalty = 0;
@@ -183,9 +349,9 @@ extern string singleSpace;
 	 if (lenient)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(5, 1, "During sentencing, the judge grants some leniency.", gamelog);
+		 mvaddstrAlt(5, 1, CONST_justice018, gamelog);
 		 gamelog.newline();
-		 getkeyAlt();
+	 	pressAnyKey();
 	 }
 	 //MENTION SENTENCE
 	 if (olddeathpenalty)
@@ -194,24 +360,24 @@ extern string singleSpace;
 		 g.sentence = 3;
 		 set_color_easy(RED_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(", you will be returned to prison to carry out your death sentence.", gamelog);
+		 addstrAlt(CONST_justice019, gamelog);
 		 gamelog.newline();
-		 getkeyAlt();
+	 	pressAnyKey();
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
-		 getkeyAlt();
+	 	pressAnyKey();
 	 }
 	 else if (g.deathpenalty)
 	 {
 		 g.sentence = 3;
 		 set_color_easy(YELLOW_ON_RED_BRIGHT);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(", you are sentenced to DEATH!", gamelog);
+		 addstrAlt(CONST_justice020, gamelog);
 		 gamelog.newline();
-		 getkeyAlt();
+	 	pressAnyKey();
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
-		 getkeyAlt();
+	 	pressAnyKey();
 	 }
 	 // Don't give a time-limited sentence if they already have a life sentence.
 	 else if ((g.sentence >= 0 && oldsentence < 0) ||
@@ -220,36 +386,36 @@ extern string singleSpace;
 		 g.sentence = oldsentence;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(", the court sees no need to add to your existing sentence.", gamelog);
-		 mvaddstrAlt(8, 1, "You will be returned to prison to resume it", gamelog);
+		 addstrAlt(CONST_justice021, gamelog);
+		 mvaddstrAlt(8, 1, CONST_justice022, gamelog);
 		 if (g.sentence > 1 && lenient)
 		 {
 			 g.sentence--;
-			 addstrAlt(", less a month for time already served.", gamelog);
+			 addstrAlt(CONST_justice141, gamelog);
 		 }
 		 else addstrAlt(singleDot, gamelog);
-		 getkeyAlt();
+	 	pressAnyKey();
 	 }
 	 else if (g.sentence == 0)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(", consider this a warning.  You are free to go.", gamelog);
-		 getkeyAlt();
+		 addstrAlt(CONST_justice024, gamelog);
+	 	pressAnyKey();
 	 }
 	 else
 	 {
 		 if (g.sentence >= 36)g.sentence -= g.sentence % 12;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(", you are sentenced to ", gamelog);
+		 addstrAlt(CONST_justice025, gamelog);
 		 if (g.sentence > 1200) g.sentence /= -1200;
 		 if (g.sentence <= -1)
 		 {
 			 if (g.sentence < -1)
 			 {
 				 addstrAlt(-(g.sentence), gamelog);
-				 addstrAlt(" consecutive life terms in prison", gamelog);
+				 addstrAlt(CONST_justice026, gamelog);
 				 gamelog.newline();
 				 // Don't bother saying this if the convicted already has one or
 				 // more life sentences. Makes the 'consecutively' and 'concurrently'
@@ -257,57 +423,50 @@ extern string singleSpace;
 				 if (oldsentence >= 0)
 				 {
 					 addstrAlt(singleDot, gamelog);
-					 getkeyAlt();
-					 mvaddstrAlt(9, 1, "Have a nice day, ", gamelog);
+				 	pressAnyKey();
+					 mvaddstrAlt(9, 1, CONST_justice027, gamelog);
 					 addstrAlt(g.propername, gamelog);
 				 }
 			 }
-			 else addstrAlt("life in prison", gamelog);
+			 else addstrAlt(CONST_justice028, gamelog);
 		 }
 		 else if (g.sentence >= 36)
 		 {
 			 addstrAlt(g.sentence / 12, gamelog);
-			 addstrAlt(" years in prison", gamelog);
+			 addstrAlt(CONST_justice029, gamelog);
 		 }
 		 else
 		 {
 			 addstrAlt(g.sentence, gamelog);
-			 addstrAlt(" month", gamelog);
-			 if (g.sentence > 1)addstrAlt("s", gamelog);
-			 addstrAlt(" in prison", gamelog);
+			 addstrAlt(CONST_justice030, gamelog);
+			 if (g.sentence > 1)addstrAlt(CONST_justice031, gamelog);
+			 addstrAlt(CONST_justice032, gamelog);
 		 }
 		 // Mash together compatible sentences.
 		 if ((g.sentence > 0 && oldsentence > 0) ||
 			 (g.sentence < 0 && oldsentence < 0))
 		 {
-			 addstrAlt(",", gamelog);
+			 addstrAlt(CONST_justice033, gamelog);
 			 moveAlt(8, 1);
 			 if (lenient)
 			 {
 				 if (abs(oldsentence) > abs(g.sentence))
 					 g.sentence = oldsentence;
-				 addstrAlt("to be served concurrently", gamelog);
+				 addstrAlt(CONST_justice034, gamelog);
 			 }
 			 else
 			 {
 				 g.sentence += oldsentence;
-				 addstrAlt("to be served consecutively", gamelog);
+				 addstrAlt(CONST_justice035, gamelog);
 			 }
 		 }
 		 addstrAlt(singleDot, gamelog);
 		 //dejuice boss
-		 int boss = getpoolcreature(g.hireid);
-		 if (boss != -1 && pool[boss]->juice > 50)
-		 {
-			 int juice = g.juice / 10;
-			 if (juice < 5) juice = 5;
-			 addjuice(*pool[boss], -juice, 0);
-		 }
-		 getkeyAlt();
+		 dejuiceBoss(g);
+	 	pressAnyKey();
 	 }
 	 gamelog.nextMessage();
  }
-
  /* monthly - move a liberal to jail */
  void imprison(Creature &g)
  {
@@ -325,9 +484,9 @@ void trial(Creature &g)
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(1,  1, g.name, gamelog);
-	addstrAlt(" is standing trial.", gamelog);
+	addstrAlt(CONST_justice090, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
 	if (!iscriminal(g)) criminalize(g, LAWFLAG_LOITERING);
 	int typenum = 0, scarefactor = 0;
@@ -341,22 +500,9 @@ void trial(Creature &g)
 		breaker[i] = 1;
 	}
 	//CHECK FOR SLEEPERS
-	bool autoconvict = 0;
-	Creature *sleeperjudge = NULL;
-	Creature *sleeperlawyer = NULL;
-	int maxsleeperskill = 0;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(g.location))
-		{
-			if (pool[p]->type == CREATURE_JUDGE_CONSERVATIVE || pool[p]->type == CREATURE_JUDGE_LIBERAL)
-				if (pool[p]->infiltration * 100 >= LCSrandom(100)) sleeperjudge = pool[p];
-			if (pool[p]->type == CREATURE_LAWYER)
-				if (pool[p]->get_skill(SKILL_LAW) + pool[p]->get_skill(SKILL_PERSUASION) >= maxsleeperskill)
-				{
-					sleeperlawyer = pool[p];
-					maxsleeperskill = pool[p]->get_skill(SKILL_LAW) + sleeperlawyer->get_skill(SKILL_PERSUASION);
-				}
-		}
+	Creature *sleeperjudge = getSleeperJudge(g);
+	Creature *sleeperlawyer = getSleeperLawyer(g);
+	
 	//STATE CHARGES
 	set_color_easy(WHITE_ON_BLACK);
 	moveAlt(3, 1);
@@ -364,15 +510,15 @@ void trial(Creature &g)
 	{
 		addstrAlt(string_sleeper, gamelog);
 		addstrAlt(sleeperjudge->name, gamelog);
-		addstrAlt(" reads the charges, trying to hide a smile:", gamelog);
+		addstrAlt(CONST_justice037, gamelog);
 		g.confessions = 0; //Made sleeper judge prevent these lunatics from testifying
 	}
-	else addstrAlt("The judge reads the charges:", gamelog);
+	else addstrAlt(CONST_justice038, gamelog);
 	gamelog.newline();
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(5,  1, "The defendant, ", gamelog);
+	mvaddstrAlt(5,  1, CONST_justice039, gamelog);
 	addstrAlt(g.propername, gamelog);
-	addstrAlt(", is charged with ", gamelog);
+	addstrAlt(CONST_justice040, gamelog);
 	int x = 2, y = 5;
 	while ((typenum--) > 0)
 	{
@@ -395,7 +541,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_TREASON], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("treason", gamelog);
+			addstrAlt(CONST_justice041, gamelog);
 			breaker[LAWFLAG_TREASON] = 0;
 		}
 		else if (breaker[LAWFLAG_TERRORISM])
@@ -405,7 +551,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_TERRORISM], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("terrorism", gamelog);
+			addstrAlt(CONST_justice042, gamelog);
 			breaker[LAWFLAG_TERRORISM] = 0;
 		}
 		else if (breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
@@ -417,7 +563,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_MURDER], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("murder", gamelog);
+			addstrAlt(CONST_justice043, gamelog);
 			breaker[LAWFLAG_MURDER] = 0;
 		}
 		else if (breaker[LAWFLAG_KIDNAPPING])
@@ -427,7 +573,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_KIDNAPPING], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("kidnapping", gamelog);
+			addstrAlt(CONST_justice044, gamelog);
 			breaker[LAWFLAG_KIDNAPPING] = 0;
 		}
 		else if (breaker[LAWFLAG_BANKROBBERY])
@@ -437,7 +583,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_BANKROBBERY], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("bank robbery", gamelog);
+			addstrAlt(CONST_justice045, gamelog);
 			breaker[LAWFLAG_BANKROBBERY] = 0;
 		}
 		else if (breaker[LAWFLAG_ARSON])
@@ -447,7 +593,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_ARSON], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("arson", gamelog);
+			addstrAlt(CONST_justice046, gamelog);
 			breaker[LAWFLAG_ARSON] = 0;
 		}
 		else if (breaker[LAWFLAG_BURNFLAG] && lawList[LAW_FLAGBURNING] <= 0)
@@ -458,11 +604,11 @@ void trial(Creature &g)
 				addstrAlt(counts_of, gamelog);
 			}
 			if (lawList[LAW_FLAGBURNING] == -2)
-				addstrAlt("Flag Murder", gamelog);
+				addstrAlt(CONST_justice047, gamelog);
 			else if (lawList[LAW_FLAGBURNING] == -1)
-				addstrAlt("felony flag burning", gamelog);
+				addstrAlt(CONST_justice048, gamelog);
 			else if (lawList[LAW_FLAGBURNING] == 0)
-				addstrAlt("flag burning", gamelog);
+				addstrAlt(CONST_justice049, gamelog);
 			breaker[LAWFLAG_BURNFLAG] = 0;
 		}
 		else if (breaker[LAWFLAG_SPEECH])
@@ -472,7 +618,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_SPEECH], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("sedition", gamelog);
+			addstrAlt(CONST_justice050, gamelog);
 			breaker[LAWFLAG_SPEECH] = 0;
 		}
 		else if (breaker[LAWFLAG_BROWNIES])
@@ -482,7 +628,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_BROWNIES], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("drug dealing", gamelog);
+			addstrAlt(CONST_justice051, gamelog);
 			breaker[LAWFLAG_BROWNIES] = 0;
 			//x=2;
 		}
@@ -493,9 +639,8 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_ESCAPED], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("escaping prison", gamelog);
+			addstrAlt(CONST_justice052, gamelog);
 			breaker[LAWFLAG_ESCAPED] = 0;
-			//autoconvict=1; // *Impossible* to beat this charge if this line isn't commented out
 		}
 		else if (breaker[LAWFLAG_HELPESCAPE])
 		{
@@ -504,7 +649,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_HELPESCAPE], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("aiding a prison escape", gamelog);
+			addstrAlt(CONST_justice053, gamelog);
 			breaker[LAWFLAG_HELPESCAPE] = 0;
 			x = 2;
 		}
@@ -515,12 +660,12 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_JURY], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("jury tampering", gamelog);
+			addstrAlt(CONST_justice054, gamelog);
 			breaker[LAWFLAG_JURY] = 0;
 		}
 		else if (breaker[LAWFLAG_RACKETEERING])
 		{
-			addstrAlt("racketeering", gamelog);
+			addstrAlt(CONST_justice055, gamelog);
 			breaker[LAWFLAG_RACKETEERING] = 0;
 		}
 		else if (breaker[LAWFLAG_EXTORTION])
@@ -530,7 +675,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_EXTORTION], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("extortion", gamelog);
+			addstrAlt(CONST_justice056, gamelog);
 			breaker[LAWFLAG_EXTORTION] = 0;
 		}
 		else if (breaker[LAWFLAG_ARMEDASSAULT])
@@ -540,7 +685,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_ARMEDASSAULT], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("felony assault", gamelog);
+			addstrAlt(CONST_justice057, gamelog);
 			breaker[LAWFLAG_ARMEDASSAULT] = 0;
 		}
 		else if (breaker[LAWFLAG_ASSAULT])
@@ -550,7 +695,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_ASSAULT], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("misdemeanor assault", gamelog);
+			addstrAlt(CONST_justice058, gamelog);
 			breaker[LAWFLAG_ASSAULT] = 0;
 		}
 		else if (breaker[LAWFLAG_CARTHEFT])
@@ -560,7 +705,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_CARTHEFT], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("grand theft auto", gamelog);// If chase lasts more than 20 `turns` then
+			addstrAlt(CONST_justice059, gamelog);// If chase lasts more than 20 `turns` then
 			breaker[LAWFLAG_CARTHEFT] = 0;// this should be `Grand Theft Auto` -- LK
 		}                              // We'll just make it grand theft auto anyway :) -Fox
 		else if (breaker[LAWFLAG_CCFRAUD])
@@ -570,7 +715,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_CCFRAUD], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("credit card fraud", gamelog);
+			addstrAlt(CONST_justice060, gamelog);
 			breaker[LAWFLAG_CCFRAUD] = 0;
 		}
 		else if (breaker[LAWFLAG_THEFT])
@@ -580,7 +725,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_THEFT], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("petty larceny", gamelog);
+			addstrAlt(CONST_justice061, gamelog);
 			breaker[LAWFLAG_THEFT] = 0;
 		}
 		else if (breaker[LAWFLAG_PROSTITUTION])
@@ -590,7 +735,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_PROSTITUTION], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("prostitution", gamelog);
+			addstrAlt(CONST_justice062, gamelog);
 			breaker[LAWFLAG_PROSTITUTION] = 0;
 		}
 		else if (breaker[LAWFLAG_HIREILLEGAL])
@@ -599,9 +744,9 @@ void trial(Creature &g)
 			{
 				addstrAlt(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
 				addstrAlt(counts_of, gamelog);
-				addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? "hiring illegal aliens" : "hiring undocumented workers"), gamelog);
+				addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice063 : CONST_justiceB173), gamelog);
 			}
-			else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? "hiring an illegal alien" : "hiring an undocumented worker"), gamelog);
+			else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice064 : CONST_justiceB174), gamelog);
 			breaker[LAWFLAG_HIREILLEGAL] = 0;
 			x = 2;
 		}
@@ -612,7 +757,7 @@ void trial(Creature &g)
 		addstrAlt(g.crimes_suspected[LAWFLAG_GUNUSE]);
 		addstrAlt(counts_of);
 		}
-		addstrAlt("firing an illegal weapon");
+		addstrAlt(CONST_justice065);
 		breaker[LAWFLAG_GUNUSE]=0;
 		x=2;
 		}
@@ -623,7 +768,7 @@ void trial(Creature &g)
 		addstrAlt(g.crimes_suspected[LAWFLAG_GUNCARRY]);
 		addstrAlt(counts_of);
 		}
-		addstrAlt("possession of an illegal weapon");
+		addstrAlt(CONST_justice066);
 		breaker[LAWFLAG_GUNCARRY]=0;
 		x=2;
 		}*/
@@ -634,7 +779,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_COMMERCE], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("interference with interstate commerce", gamelog);
+			addstrAlt(CONST_justice067, gamelog);
 			breaker[LAWFLAG_COMMERCE] = 0;
 			x = 2;
 		}
@@ -645,7 +790,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_INFORMATION], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("unlawful access of an information system", gamelog);
+			addstrAlt(CONST_justice068, gamelog);
 			breaker[LAWFLAG_INFORMATION] = 0;
 			x = 2;
 		}
@@ -656,7 +801,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_BURIAL], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("unlawful burial", gamelog);
+			addstrAlt(CONST_justice069, gamelog);
 			breaker[LAWFLAG_BURIAL] = 0;
 		}
 		else if (breaker[LAWFLAG_BREAKING])
@@ -666,7 +811,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_BREAKING], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("breaking and entering", gamelog);
+			addstrAlt(CONST_justice070, gamelog);
 			breaker[LAWFLAG_BREAKING] = 0;
 		}
 		else if (breaker[LAWFLAG_VANDALISM])
@@ -676,12 +821,12 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_VANDALISM], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("vandalism", gamelog);
+			addstrAlt(CONST_justice071, gamelog);
 			breaker[LAWFLAG_VANDALISM] = 0;
 		}
 		else if (breaker[LAWFLAG_RESIST])
 		{
-			addstrAlt("resisting arrest", gamelog);
+			addstrAlt(CONST_justice072, gamelog);
 			breaker[LAWFLAG_RESIST] = 0;
 		}
 		else if (breaker[LAWFLAG_DISTURBANCE])
@@ -691,7 +836,7 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_DISTURBANCE], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("disturbing the peace", gamelog);
+			addstrAlt(CONST_justice073, gamelog);
 			breaker[LAWFLAG_DISTURBANCE] = 0;
 		}
 		else if (breaker[LAWFLAG_PUBLICNUDITY])
@@ -701,18 +846,18 @@ void trial(Creature &g)
 				addstrAlt(g.crimes_suspected[LAWFLAG_PUBLICNUDITY], gamelog);
 				addstrAlt(counts_of, gamelog);
 			}
-			addstrAlt("indecent exposure", gamelog);
+			addstrAlt(CONST_justice074, gamelog);
 			breaker[LAWFLAG_PUBLICNUDITY] = 0;
 		}
 		else if (breaker[LAWFLAG_LOITERING])
 		{
-			addstrAlt("loitering", gamelog);
+			addstrAlt(CONST_justice075, gamelog);
 			breaker[LAWFLAG_LOITERING] = 0;
 		}
 		if (typenum > 1) addstrAlt(commaSpace, gamelog);
 		if (typenum == 1) addstrAlt(AND, gamelog);
 		if (typenum == 0) addstrAlt(singleDot, gamelog);
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	gamelog.newline();
 	if (g.confessions)
@@ -721,17 +866,17 @@ void trial(Creature &g)
 		if (g.confessions > 1)
 		{
 			addstrAlt(g.confessions, gamelog);
-			addstrAlt(" former LCS members will testify against ", gamelog);
+			addstrAlt(CONST_justice076, gamelog);
 		}
-		else addstrAlt("A former LCS member will testify against ", gamelog);
+		else addstrAlt(CONST_justice077, gamelog);
 		addstrAlt(g.name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 	//CHOOSE DEFENSE
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(y + 2,  1, "How will you conduct the defense?");
+	mvaddstrAlt(y + 2,  1, CONST_justice078);
 	char attorneyname[200];
 	unsigned long oldseed[RNG_SIZE];
 	copyRNG(oldseed, seed);
@@ -739,39 +884,38 @@ void trial(Creature &g)
 	generate_name(attorneyname);
 	copyRNG(seed, oldseed);
 	y += 4;
-	mvaddstrAlt(y++,  1, "A - Use a court-appointed attorney.");
-	mvaddstrAlt(y++,  1, "B - Defend self!");
-	mvaddstrAlt(y++,  1, "C - Plead guilty.");
+	mvaddstrAlt(y++,  1, CONST_justice079);
+	mvaddstrAlt(y++,  1, CONST_justice080);
+	mvaddstrAlt(y++,  1, CONST_justice081);
 	if (ledger.get_funds() < 5000) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(y++,  1, "D - Pay $5000 to hire ace Liberal attorney ");
+	mvaddstrAlt(y++,  1, CONST_justice082);
 	addstrAlt(attorneyname);
 	addstrAlt(singleDot);
 	if (sleeperlawyer)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y++,  1, "E - Accept sleeper ");
+		mvaddstrAlt(y++,  1, CONST_justice083);
 		addstrAlt(sleeperlawyer->name);
-		addstrAlt("'s offer to assist pro bono.");
+		addstrAlt(CONST_justice084);
 	}
 	if (ledger.get_funds() < 5000) set_color_easy(WHITE_ON_BLACK);
 	//SAV - added in display of skills and relevant attributes to help
 	// decide when to defend self.
-	mvaddstrAlt(++y,  5, "Heart: ");
+	mvaddstrAlt(++y,  5, CONST_justice085);
 	addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(y,  25, "Persuasion: ");
+	mvaddstrAlt(y,  25, CONST_justice086);
 	addstrAlt(g.get_skill(SKILL_PERSUASION));
-	mvaddstrAlt(++y,  5, "Charisma: ");
+	mvaddstrAlt(++y,  5, CONST_justice087);
 	addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
-	mvaddstrAlt(y++,  25, "Law: ");
+	mvaddstrAlt(y++,  25, CONST_justice088);
 	addstrAlt(g.get_skill(SKILL_LAW));
-	mvaddstrAlt(y++,  5, "Intelligence: ");
+	mvaddstrAlt(y++,  5, CONST_justice089);
 	addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	// End SAV's adds
 	short defense;
-	int c;
 	while (true)
 	{
-		c = getkeyAlt();
+		int c = getkeyAlt();
 		if (c == 'a') { defense = 0; break; }
 		if (c == 'b') { defense = 1; break; }
 		if (c == 'c') { defense = 2; break; }
@@ -795,12 +939,12 @@ void trial(Creature &g)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(1,  1, g.name, gamelog);
-		addstrAlt(" is standing trial.");
+		addstrAlt(CONST_justice090);
 		//TRIAL MESSAGE
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3,  1, "The trial proceeds.  Jury selection is first.", gamelog);
+		mvaddstrAlt(3,  1, CONST_justice091, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		//JURY MAKEUP MESSAGE
 		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5, 1);
@@ -811,9 +955,9 @@ void trial(Creature &g)
 			if (LCSrandom(10))
 			{
 				addstrAlt(attorneyname, gamelog);
-				addstrAlt(" ensures the jury is stacked in ", gamelog);
+				addstrAlt(CONST_justice092, gamelog);
 				addstrAlt(g.name, gamelog);
-				addstrAlt("'s favor!", gamelog);
+				addstrAlt(CONST_justice093, gamelog);
 				gamelog.newline();
 				if (jury > 0) jury = 0;
 				jury -= 30;
@@ -822,7 +966,7 @@ void trial(Creature &g)
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(attorneyname, gamelog);
-				addstrAlt("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!", gamelog);
+				addstrAlt(CONST_justice094, gamelog);
 				gamelog.newline();
 				jury = 0;
 				prosecution += 100; // DUN DUN DUN!!
@@ -833,14 +977,14 @@ void trial(Creature &g)
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			switch (LCSrandom(liberal_jury.size() + 1))
 			{
-			case 0:addstrAlt(g.name); addstrAlt("'s best friend from childhood is a juror.", gamelog); break;
+			case 0:addstrAlt(g.name); addstrAlt(CONST_justice095, gamelog); break;
 			default:addstrAlt(pickrandom(liberal_jury), gamelog); break;
 			}
 			gamelog.newline();
 		}
-		else if (jury <= -15) addstrAlt("The jury is fairly Liberal.", gamelog);
-		else if (jury < 15) addstrAlt("The jury is quite moderate.", gamelog);
-		else if (jury < 29) addstrAlt("The jury is a bit Conservative.", gamelog);
+		else if (jury <= -15) addstrAlt(CONST_justice096, gamelog);
+		else if (jury < 15) addstrAlt(CONST_justice097, gamelog);
+		else if (jury < 29) addstrAlt(CONST_justice098, gamelog);
 		else
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -850,12 +994,12 @@ void trial(Creature &g)
 		// Debug jury bias
 		if (SHOWMECHANICS)
 		{
-			addstrAlt(" (");
+			addstrAlt(CONST_justice127);
 			if (jury >= 0) addcharAlt('+');
 			addstrAlt(jury);
-			addstrAlt(" to convict)");
+			addstrAlt(CONST_justice108);
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		//PROSECUTION MESSAGE
 		// *JDS* The bigger your record, the stronger the evidence
 		prosecution += 40 + LCSrandom(101) + scarefactor + (20 * g.confessions);
@@ -863,32 +1007,25 @@ void trial(Creature &g)
 		if (defense == 3) prosecution -= 60;
 		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(7, 1);
-		if (autoconvict)
+		
 		{
-			addstrAlt("There is no question of ", gamelog);
-			addstrAlt(g.name, gamelog);
-			addstrAlt("'s guilt.", gamelog);
-			gamelog.newline();
-		}
-		else
-		{
-			if (prosecution <= 50) addstrAlt("The prosecution's presentation is terrible.", gamelog);
-			else if (prosecution <= 75) addstrAlt("The prosecution gives a standard presentation.", gamelog);
-			else if (prosecution <= 125) addstrAlt("The prosecution's case is solid.", gamelog);
-			else if (prosecution <= 175) addstrAlt("The prosecution makes an airtight case.", gamelog);
-			else addstrAlt("The prosecution is incredibly strong.", gamelog);
+			if (prosecution <= 50) addstrAlt(CONST_justice101, gamelog);
+			else if (prosecution <= 75) addstrAlt(CONST_justice102, gamelog);
+			else if (prosecution <= 125) addstrAlt(CONST_justice103, gamelog);
+			else if (prosecution <= 175) addstrAlt(CONST_justice104, gamelog);
+			else addstrAlt(CONST_justice105, gamelog);
 			gamelog.newline();
 		}
 		// Debug prosecution power
 		if (SHOWMECHANICS)
 		{
-			addstrAlt(" (+");
+			addstrAlt(CONST_justice106);
 			addstrAlt(prosecution / 2);
-			addstrAlt(" to +");
+			addstrAlt(CONST_justice107);
 			addstrAlt(prosecution);
-			addstrAlt(" to convict)");
+			addstrAlt(CONST_justice108);
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		jury += LCSrandom(prosecution / 2 + 1) + prosecution / 2;
 		//DEFENSE MESSAGE
 		set_color_easy(WHITE_ON_BLACK);
@@ -896,12 +1033,7 @@ void trial(Creature &g)
 		int defensepower = 0;
 		if (defense == 0 || defense == 3 || defense == 4)
 		{
-			if (autoconvict)
-			{
-				addstrAlt("The defense makes a noble attempt, but the outcome is inevitable.", gamelog);
-				gamelog.newline();
-			}
-			else
+			
 			{
 				if (defense == 0) defensepower = LCSrandom(71);    // Court-appointed attorney
 				else if (defense == 3) defensepower = LCSrandom(71) + 80; // Ace Liberal attorney
@@ -913,30 +1045,30 @@ void trial(Creature &g)
 					sleeperlawyer->train(SKILL_LAW, prosecution / 4);
 					sleeperlawyer->train(SKILL_PERSUASION, prosecution / 4);
 				}
-				if (defensepower <= 5) addstrAlt("The defense attorney rarely showed up.", gamelog);
-				else if (defensepower <= 15) addstrAlt("The defense attorney accidentally said \"My client is GUILTY!\" during closing.", gamelog);
-				else if (defensepower <= 25) addstrAlt("The defense is totally lame.", gamelog);
-				else if (defensepower <= 50) addstrAlt("The defense was lackluster.", gamelog);
-				else if (defensepower <= 75) addstrAlt("Defense arguments were pretty good.", gamelog);
-				else if (defensepower <= 100) addstrAlt("The defense was really slick.", gamelog);
+				if (defensepower <= 5) addstrAlt(CONST_justice109, gamelog);
+				else if (defensepower <= 15) addstrAlt(CONST_justice110, gamelog);
+				else if (defensepower <= 25) addstrAlt(CONST_justice111, gamelog);
+				else if (defensepower <= 50) addstrAlt(CONST_justice112, gamelog);
+				else if (defensepower <= 75) addstrAlt(CONST_justice113, gamelog);
+				else if (defensepower <= 100) addstrAlt(CONST_justice114, gamelog);
 				else if (defensepower <= 145)
 				{
-					if (prosecution < 100) addstrAlt("The defense makes the prosecution look like amateurs.", gamelog);
-					else addstrAlt("The defense is extremely compelling.", gamelog);
+					if (prosecution < 100) addstrAlt(CONST_justice115, gamelog);
+					else addstrAlt(CONST_justice116, gamelog);
 				}
 				else
 				{
 					if (prosecution < 100)
 					{
 						addstrAlt(attorneyname, gamelog);
-						addstrAlt("'s arguments made several of the jurors stand up ", gamelog);
-						mvaddstrAlt(10,  1, "and shout \"NOT GUILTY!\" before deliberations even began.", gamelog);
+						addstrAlt(CONST_justice117, gamelog);
+						mvaddstrAlt(10,  1, CONST_justice118, gamelog);
 						if (defense == 4) addjuice(*sleeperlawyer, 10, 500); // Bow please
 					}
 					else
 					{
 						addstrAlt(attorneyname, gamelog);
-						addstrAlt(" conducts an incredible defense.", gamelog);
+						addstrAlt(CONST_justice119, gamelog);
 					}
 				}
 				gamelog.newline();
@@ -960,18 +1092,18 @@ void trial(Creature &g)
 			addstrAlt(g.name, gamelog);
 			if (defensepower <= 0)
 			{
-				addstrAlt(" makes one horrible mistake after another.", gamelog);
+				addstrAlt(CONST_justice120, gamelog);
 				gamelog.newline();
 				addjuice(g, -10, -50); // You should be ashamed
 			}
-			else if (defensepower <= 25) addstrAlt("'s case really sucked.", gamelog);
-			else if (defensepower <= 50) addstrAlt(" did all right, but made some mistakes.", gamelog);
-			else if (defensepower <= 75) addstrAlt("'s arguments were pretty good.", gamelog);
-			else if (defensepower <= 100) addstrAlt(" worked the jury very well.", gamelog);
-			else if (defensepower <= 150) addstrAlt(" made a very powerful case.", gamelog);
+			else if (defensepower <= 25) addstrAlt(CONST_justice121, gamelog);
+			else if (defensepower <= 50) addstrAlt(CONST_justice122, gamelog);
+			else if (defensepower <= 75) addstrAlt(CONST_justice123, gamelog);
+			else if (defensepower <= 100) addstrAlt(CONST_justice124, gamelog);
+			else if (defensepower <= 150) addstrAlt(CONST_justice125, gamelog);
 			else
 			{
-				addstrAlt(" had the jury, judge, and prosecution crying for freedom.", gamelog);
+				addstrAlt(CONST_justice126, gamelog);
 				addjuice(g, 50, 1000); // That shit is legend
 			}
 			gamelog.newline();
@@ -979,39 +1111,39 @@ void trial(Creature &g)
 		// Debug defense power
 		if (SHOWMECHANICS)
 		{
-			addstrAlt(" (");
+			addstrAlt(CONST_justice127);
 			addstrAlt(defensepower);
-			addstrAlt(", need ");
+			addstrAlt(CONST_justice128);
 			addstrAlt(jury + 1);
-			addstrAlt(" to acquit)");
+			addstrAlt(CONST_justice129);
 		}
-		getkeyAlt();
+ 	pressAnyKey();
 		//DELIBERATION MESSAGE
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12,  1, "The jury leaves to consider the case.", gamelog);
+		mvaddstrAlt(12,  1, CONST_justice130, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		//JURY RETURN MESSAGE
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  1, "The jury has returned from deliberations.", gamelog);
+		mvaddstrAlt(1,  1, CONST_justice131, gamelog);
 		gamelog.newline();
-		getkeyAlt();
+ 	pressAnyKey();
 		bool keeplawflags = false;
 		//HUNG JURY
 		if (defensepower == jury)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(3,  1, "But they can't reach a verdict!", gamelog);
+			mvaddstrAlt(3,  1, CONST_justice132, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			//RE-TRY
 			if (LCSrandom(2) || scarefactor >= 10 || g.confessions)
 			{
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(5,  1, "The case will be re-tried next month.", gamelog);
+				mvaddstrAlt(5,  1, CONST_justice133, gamelog);
 				gamelog.newline();
-				getkeyAlt();
+		 	pressAnyKey();
 				g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
 				keeplawflags = true;
 			}
@@ -1019,23 +1151,23 @@ void trial(Creature &g)
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(5,  1, "The prosecution declines to re-try the case.", gamelog);
+				mvaddstrAlt(5,  1, CONST_justice134, gamelog);
 				gamelog.newline();
 				if (g.sentence == 0)
 				{
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
 					mvaddstrAlt(7,  1, g.name, gamelog);
-					addstrAlt(" is free!", gamelog);
+					addstrAlt(CONST_justice139, gamelog);
 				}
 				else
 				{
 					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(7,  1, g.name, gamelog);
-					addstrAlt(" will be returned to prison to resume an earlier sentence", gamelog);
+					addstrAlt(CONST_justice140, gamelog);
 					if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 					{
 						g.sentence--;
-						addstrAlt(", less a month for time already served.", gamelog);
+						addstrAlt(CONST_justice141, gamelog);
 					}
 					else addstrAlt(singleDot, gamelog);
 					if (g.deathpenalty)
@@ -1045,31 +1177,31 @@ void trial(Creature &g)
 					}
 				}
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 		}
 		//ACQUITTAL!
-		else if (!autoconvict&&defensepower > jury)
+		else if (defensepower > jury)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(3,  1, "NOT GUILTY!", gamelog);
+			mvaddstrAlt(3,  1, CONST_justice138, gamelog);
 			gamelog.newline();
-			getkeyAlt();
+	 	pressAnyKey();
 			if (g.sentence == 0)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(5,  1, g.name, gamelog);
-				addstrAlt(" is free!", gamelog);
+				addstrAlt(CONST_justice139, gamelog);
 			}
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(5,  1, g.name, gamelog);
-				addstrAlt(" will be returned to prison to resume an earlier sentence", gamelog);
+				addstrAlt(CONST_justice140, gamelog);
 				if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 				{
 					g.sentence--;
-					addstrAlt(", less a month for time already served.", gamelog);
+					addstrAlt(CONST_justice141, gamelog);
 				}
 				else addstrAlt(singleDot, gamelog);
 				if (g.deathpenalty)
@@ -1083,7 +1215,7 @@ void trial(Creature &g)
 			if (defense == 4) addjuice(*sleeperlawyer, 10, 100);
 			// Juice for self-defense
 			if (defense == 1) addjuice(g, 10, 100);
-			getkeyAlt();
+	 	pressAnyKey();
 		}
 		//LENIENCE
 		else
@@ -1109,15 +1241,15 @@ void trial(Creature &g)
 		}
 	}
 	//GUILTY PLEA
-	// How about "nolo" (Nolo contendere) -- LK
+	// How about CONST_justice142 (Nolo contendere) -- LK
 	// I would imagine this would disregard the strength of the defense. -- LK
 	else
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  1, "The court accepts the plea.", gamelog);
+		mvaddstrAlt(1,  1, CONST_justice143, gamelog);
 		gamelog.nextMessage();
-		getkeyAlt();
+ 	pressAnyKey();
 		// Check for lenience; sleeper judge will always be merciful
 		if (sleeperjudge || LCSrandom(2)) penalize(g, 1);
 		else penalize(g, 0);
@@ -1141,34 +1273,34 @@ void reeducation(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(pickrandom(reeducation_experiences), gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	moveAlt(10, 1);
 	if (!g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_FORMIDABLE))
 	{
 		if (g.juice > 0 && LCSrandom(2))
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" feels bad about LCS actions, and loses juice!", gamelog);
+			addstrAlt(CONST_justice144, gamelog);
 			addjuice(g, -50, 0);
 		}
 		else if (LCSrandom(15) > g.get_attribute(ATTRIBUTE_WISDOM, true)
 			|| g.get_attribute(ATTRIBUTE_WISDOM, true) < g.get_attribute(ATTRIBUTE_HEART, true))
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" silently grows Wiser...", gamelog);
+			addstrAlt(CONST_justice145, gamelog);
 			g.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		}
 		else if (g.align == ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" only stays loyal to the LCS for ", gamelog);
+			addstrAlt(CONST_justice146, gamelog);
 			addstrAlt(pool[g.hireid]->name, gamelog);
 			addstrAlt(singleDot, gamelog);
 		}
 		else
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" abandons the Liberal Crime Squad!", gamelog);
+			addstrAlt(CONST_justice147, gamelog);
 			//Rat out contact
 			int contact = getpoolcreature(g.hireid);
 			if (contact >= 0)
@@ -1183,10 +1315,10 @@ void reeducation(Creature &g)
 	else
 	{
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" remains strong.", gamelog);
+		addstrAlt(CONST_justice148, gamelog);
 	}
 	gamelog.nextMessage();
-	getkeyAlt();
+ 	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1198,23 +1330,23 @@ void laborcamp(Creature &g)
 	if (g.hireid == -1 && !LCSrandom(3))
 	{
 		escaped = 2;
-		experience = " leads the oppressed prisoners and overwhelms the prison guards!";
+		experience = CONST_justice149.c_str();
 	}
 	else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
 	{
 		escaped = 1;
-		experience = " wears an electrician's outfit and rides away with some contractors.";
+		experience = CONST_justice150.c_str();
 		g.give_armor(*armortype[getarmortype(tag_ARMOR_WORKCLOTHES)], NULL);
 	}
 	else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
 	{
 		escaped = 1;
-		experience = " picks the lock on their leg chains and then sneaks away!";
+		experience = CONST_justice151.c_str();
 	}
 	else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
 	{
 		escaped = 1;
-		experience = " consumes drugs that simulate death, and is thrown out with the trash!";
+		experience = CONST_justice152.c_str();
 	}
 	if (!escaped)experience = (singleSpace + pickrandom(labor_camp_experiences)).data();
 	eraseAlt();
@@ -1222,37 +1354,28 @@ void laborcamp(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	moveAlt(10, 1);
 	if (escaped)
 	{
 		int prison = g.location;
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" escaped from prison!", gamelog);
+		addstrAlt(CONST_justice164, gamelog);
 		addjuice(g, 50, 1000);
 		criminalize(g, LAWFLAG_ESCAPED);
 		g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
 		if (escaped == 2)
 		{
-			int num_escaped = 0;
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-			{
-				if (pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-				{
-					criminalize(*pool[p], LAWFLAG_ESCAPED);
-					pool[p]->location = g.location;
-					num_escaped++;
-				}
-			}
+			int num_escaped = otherPrisonersEscapeWithMe(g, prison);
 			if (num_escaped == 1)
 			{
 				gamelog.nextMessage();
-				mvaddstrAlt(11, 1, "Another imprisoned LCS member also gets out!", gamelog);
+				mvaddstrAlt(11, 1, CONST_justice165, gamelog);
 			}
 			else if (num_escaped > 1)
 			{
 				gamelog.nextMessage();
-				mvaddstrAlt(11, 1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+				mvaddstrAlt(11, 1, CONST_justice166, gamelog);
 			}
 		}
 	}
@@ -1261,14 +1384,14 @@ void laborcamp(Creature &g)
 		if (g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" is badly hurt in the process.", gamelog);
+			addstrAlt(CONST_justice156, gamelog);
 			addjuice(g, -40, 0);
 			addjuice(g, -10, -50);
 		}
 		else
 		{
 			addstrAlt(g.name, gamelog);
-			addstrAlt(" is found dead.", gamelog);
+			addstrAlt(CONST_justice157, gamelog);
 			g.die();
 			g.location = -1;
 		}
@@ -1276,10 +1399,10 @@ void laborcamp(Creature &g)
 	else
 	{
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" managed to avoid lasting injury.", gamelog);
+		addstrAlt(CONST_justice158, gamelog);
 	}
 	gamelog.nextMessage();
-	getkeyAlt();
+ 	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1294,28 +1417,28 @@ void prisonscene(Creature &g)
 		if (g.hireid == -1 && !LCSrandom(10))
 		{
 			escaped = 2;
-			experience = " leads a riot with dozens of prisoners chanting the LCS slogan!";
+			experience = CONST_justice159.c_str();
 		}
 		else if (g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
 		{
 			escaped = 2;
-			experience = " codes a virus on a smuggled phone that opens all the prison doors!";
+			experience = CONST_justice160.c_str();
 		}
 		else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
 		{
 			escaped = 1;
-			experience = " puts on smuggled street clothes and calmly walks out of prison.";
+			experience = CONST_justice161.c_str();
 			g.give_armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)], NULL);
 		}
 		else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
 		{
 			escaped = 1;
-			experience = " jimmies the cell door and cuts the outer fence in the dead of night!";
+			experience = CONST_justice162.c_str();
 		}
 		else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
 		{
 			escaped = 1;
-			experience = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
+			experience = CONST_justice163.c_str();
 		}
 	}
 	if (escaped == 0)
@@ -1340,13 +1463,13 @@ void prisonscene(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
-	getkeyAlt();
+ 	pressAnyKey();
 	moveAlt(10, 1);
 	if (escaped)
 	{
 		int prison = g.location;
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" escaped from prison!", gamelog);
+		addstrAlt(CONST_justice164, gamelog);
 		addjuice(g, 50, 1000);
 		criminalize(g, LAWFLAG_ESCAPED);
 		g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
@@ -1365,34 +1488,34 @@ void prisonscene(Creature &g)
 			if (num_escaped == 1)
 			{
 				gamelog.nextMessage();
-				mvaddstrAlt(11, 1, "Another imprisoned LCS member also gets out!", gamelog);
+				mvaddstrAlt(11, 1, CONST_justice165, gamelog);
 			}
 			else if (num_escaped > 1)
 			{
 				gamelog.nextMessage();
-				mvaddstrAlt(11, 1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+				mvaddstrAlt(11, 1, CONST_justice166, gamelog);
 			}
 		}
 	}
 	else if (effect > 0)
 	{
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" has become a more hardened, Juicier criminal.", gamelog);
+		addstrAlt(CONST_justice167, gamelog);
 		addjuice(g, 20, 1000);
 	}
 	else if (effect < 0)
 	{
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" is kinda losing it in here. Juice, that is.", gamelog);
+		addstrAlt(CONST_justice168, gamelog);
 		addjuice(g, -20, -30);
 	}
 	else
 	{
 		addstrAlt(g.name, gamelog);
-		addstrAlt(" seems to be mostly fine, though.", gamelog);
+		addstrAlt(CONST_justice169, gamelog);
 	}
 	gamelog.nextMessage();
-	getkeyAlt();
+ 	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1428,10 +1551,10 @@ char prison(Creature &g)
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(8,  1, g.name, gamelog);
-			addstrAlt("'s death sentence has been commuted to life, ", gamelog);
-			mvaddstrAlt(9,  1, "due to the abolition of the death penalty.", gamelog);
+			addstrAlt(CONST_justice170, gamelog);
+			mvaddstrAlt(9,  1, CONST_justice171, gamelog);
 			gamelog.nextMessage();
-			getkeyAlt();
+	 	pressAnyKey();
 			g.sentence = -1;
 			g.deathpenalty = 0;
 			return 1;
@@ -1445,12 +1568,12 @@ char prison(Creature &g)
 			{
 				eraseAlt();
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, "FOR SHAME:", gamelog);
+				mvaddstrAlt(8,  1, CONST_justice172, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(9,  1, "Today, the Conservative Machine executed ", gamelog);
+				mvaddstrAlt(9,  1, CONST_justice173, gamelog);
 				addstrAlt(g.name, gamelog);
 				gamelog.record(singleSpace); //Log this for formatting purposes.
-				mvaddstrAlt(10,  1, "by ", gamelog);
+				mvaddstrAlt(10,  1, CONST_justice174, gamelog);
 				if (lawList[LAW_DEATHPENALTY] == -2)
 					addstrAlt(pickrandom(cruel_and_unusual_execution_methods), gamelog);
 				else if (lawList[LAW_DEATHPENALTY] == -1 || lawList[LAW_DEATHPENALTY] == 0)
@@ -1458,7 +1581,7 @@ char prison(Creature &g)
 				else
 					addstrAlt(pickrandom(supposedly_painless_execution_method), gamelog);
 				addstrAlt(singleDot, gamelog);
-				getkeyAlt();
+		 	pressAnyKey();
 				//dejuice boss
 				int boss = getpoolcreature(g.hireid);
 				if (boss != -1)
@@ -1466,10 +1589,10 @@ char prison(Creature &g)
 					gamelog.newline();
 					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(12,  1, pool[boss]->name, gamelog);
-					addstrAlt(" has failed the Liberal Crime Squad.", gamelog);
+					addstrAlt(CONST_justice175, gamelog);
 					gamelog.newline();
-					mvaddstrAlt(14,  1, "If you can't protect your own people, who can you protect?", gamelog);
-					getkeyAlt();
+					mvaddstrAlt(14,  1, CONST_justice176, gamelog);
+			 	pressAnyKey();
 					addjuice(*pool[boss], -50, -50);
 				}
 				gamelog.nextMessage();
@@ -1483,11 +1606,11 @@ char prison(Creature &g)
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(8,  1, g.name, gamelog);
-				addstrAlt(" has been released from prison.", gamelog);
+				addstrAlt(CONST_justice177, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(9,  1, "No doubt there are some mental scars, but the Liberal is back.", gamelog);
+				mvaddstrAlt(9,  1, CONST_justice178, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
 				g.give_armor(clothes, NULL);
 				// If their old base is no longer under LCS control, wander back to the
@@ -1505,9 +1628,9 @@ char prison(Creature &g)
 				eraseAlt();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, g.name, gamelog);
-				addstrAlt(" is due to be executed next month.", gamelog);
+				addstrAlt(CONST_justice179, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				showed = 1;
 			}
 			else
@@ -1515,9 +1638,9 @@ char prison(Creature &g)
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, g.name, gamelog);
-				addstrAlt(" is due to be released next month.", gamelog);
+				addstrAlt(CONST_justice180, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				showed = 1;
 			}
 		}
@@ -1528,11 +1651,11 @@ char prison(Creature &g)
 				eraseAlt();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, g.name, gamelog);
-				addstrAlt(" is due to be executed in ", gamelog);
+				addstrAlt(CONST_justice181, gamelog);
 				addstrAlt(g.sentence, gamelog);
-				addstrAlt(" months.", gamelog);
+				addstrAlt(CONST_justice182, gamelog);
 				gamelog.nextMessage();
-				getkeyAlt();
+		 	pressAnyKey();
 				showed = 1;
 			}
 		}

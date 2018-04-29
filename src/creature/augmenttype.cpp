@@ -1,15 +1,27 @@
 
-#include <includes.h>
-#include "augmentation.h"
+#include "../includes.h"
+const string CONST_augmenttypeB014 = " lacks idname.";
+const string CONST_augmenttype013 = "Augment type ";
+const string CONST_augmenttype012 = "LACKS IDNAME ";
 
+const string tag_difficulty = "difficulty";
+const string tag_cost = "cost";
+const string tag_min_age = "min_age";
+const string tag_max_age = "max_age";
+const string tag_description = "description";
+const string tag_effect = "effect";
+const string tag_attribute = "attribute";
+const string tag_type = "type";
+const string tag_name = "name";
+const string tag_idname = "idname";
+const string tag_id = "id";
+const string blankString = "";
+#include "augmentation.h"
 #include "augmenttype.h"
 //own header
-
-#include "log/log.h"
+#include "../log/log.h"
 // for log
-
-#include "common/stringconversion.h"
-
+#include "../common/stringconversion.h"
 extern Log xmllog;
 int AugmentType::number_of_augmenttypes = 0;
 AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
@@ -18,33 +30,33 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-   idname_=xml.GetAttrib("idname");
+   idname_=xml.GetAttrib(tag_idname);
    if(!len(idname_))
    {
-      idname_ = "LACKS IDNAME "+tostring(id_);
-      xmllog.log("Augment type "+tostring(id_)+" lacks idname.");
+      idname_ = CONST_augmenttype012+tostring(id_);
+      xmllog.log(CONST_augmenttype013+tostring(id_)+CONST_augmenttypeB014);
    }
    xml.IntoElem();
    while(xml.FindElem())
    {
       std::string element = xml.GetTagName();
-      if(element=="name")
+      if(element==tag_name)
          name_=xml.GetData();
-      else if(element=="type")
+      else if(element==tag_type)
          type_=augment_string_to_enum(xml.GetData());
-      else if(element=="attribute")
+      else if(element==tag_attribute)
          attribute_= attribute_string_to_enum(xml.GetData());
-      else if(element=="effect")
+      else if(element==tag_effect)
          effect_=atoi(xml.GetData().c_str());
-      else if(element=="description")
+      else if(element==tag_description)
          description_=xml.GetData();
-      else if(element=="max_age")
+      else if(element==tag_max_age)
          max_age_=atoi(xml.GetData().c_str());
-      else if(element=="min_age")
+      else if(element==tag_min_age)
          min_age_=atoi(xml.GetData().c_str());
-      else if(element=="cost")
+      else if(element==tag_cost)
          cost_=atoi(xml.GetData().c_str());
-      else if(element=="difficulty")
+      else if(element==tag_difficulty)
          difficulty_=atoi(xml.GetData().c_str());
    }
 }

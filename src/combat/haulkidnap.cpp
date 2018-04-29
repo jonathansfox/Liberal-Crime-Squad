@@ -1,3 +1,34 @@
+#include "../includes.h"
+const string CONST_haulkidnap035 = " hauls ";
+const string CONST_haulkidnap034 = " is left to be captured.";
+const string CONST_haulkidnap033 = "Nobody can carry Martyr ";
+const string CONST_haulkidnap032 = " can no longer handle ";
+const string CONST_haulkidnap031 = "                                  ";
+const string CONST_haulkidnap030 = "The hostage shouts for help!      ";
+const string CONST_haulkidnap029 = "release their hostage.";
+const string CONST_haulkidnap027 = "No hostages are being held.       ";
+const string CONST_haulkidnap026 = "                                                     ";
+const string CONST_haulkidnap025 = "All of the targets are too dangerous.                ";
+const string CONST_haulkidnap024 = "Kidnap whom?";
+const string CONST_haulkidnap023 = "do the job.";
+const string CONST_haulkidnap021 = "No one can do the job.            ";
+const string CONST_haulkidnap020 = " is captured.";
+const string CONST_haulkidnap019 = " is recaptured.";
+const string CONST_haulkidnap018 = "A hostage escapes!";
+const string CONST_haulkidnap017 = " is captured";
+const string CONST_haulkidnap016 = " is recaptured";
+const string CONST_haulkidnap015 = " and a hostage is freed";
+const string CONST_haulkidnap012 = "and says, ";
+const string CONST_haulkidnap011 = " the ";
+const string CONST_haulkidnap010 = " shows ";
+const string CONST_haulkidnap009 = " writhes away!";
+const string CONST_haulkidnap008 = "but ";
+const string CONST_haulkidnap007 = " grabs at ";
+const string CONST_haulkidnap006 = " is struggling and screaming!";
+const string CONST_haulkidnap005 = "!";
+const string CONST_haulkidnap004 = " snatches ";
+const string CONST_haulkidnapX01 = "\"[Please], be cool.\"";
+const string CONST_haulkidnapX02 = "\"Bitch, be cool.\"";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -28,33 +59,29 @@ This file is part of Liberal Crime Squad.                                       
 //handles the squad moving around the site. For now, this'll do. I must remember
 //to come back here and finish the job.
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "sitemode/advance.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../sitemode/advance.h"
 // for creatureadvance
-
-#include "sitemode/stealth.h"
-#include "sitemode/sitedisplay.h"
-
-#include "log/log.h"
+#include "../sitemode/stealth.h"
+#include "../sitemode/sitedisplay.h"
+#include "../log/log.h"
 // for commondisplay.h
-#include "common/commondisplay.h"
+#include "../common/commondisplay.h"
 // for printparty
-
-//#include "common/commonactions.h"
+//#include "../common/commonactions.h"
 void criminalizeparty(short crime);
-//#include "common/commonactionsCreature.h"
+//#include "../common/commonactionsCreature.h"
 void removesquadinfo(Creature &cr);
-
-#include "combat/fight.h"
-#include "combat/fightCreature.h"  
+#include "../combat/fight.h"
+#include "../combat/fightCreature.h"  
 //for void enemyattack();
-
-
-#include <cursesAlternative.h>
-#include <set_color_support.h>
-#include "common/creaturePoolCreature.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/creaturePoolCreature.h"
 extern Log gamelog;
 extern string chooseALiberalTo;
 extern string AND;
@@ -72,7 +99,6 @@ extern int sitecrime;
 extern short offended_amradio;
 extern short offended_cablenews;
 extern string singleSpace;
-extern vector<Item *> groundloot;
 /* roll on the kidnap attempt and show the results */
 bool kidnap(Creature &a, Creature &t, bool &amateur)
 {
@@ -89,18 +115,18 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, a.name, gamelog);
-			addstrAlt(" snatches ", gamelog);
+			addstrAlt(CONST_haulkidnap004, gamelog);
 			addstrAlt(t.name, gamelog);
-			addstrAlt("!", gamelog);
+			addstrAlt(CONST_haulkidnap005, gamelog);
 			gamelog.newline(); //New line.
 			a.prisoner = new Creature;
 			*a.prisoner = t;
-			getkeyAlt();
+	 	pressAnyKey();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(17, 1, t.name, gamelog);
-			addstrAlt(" is struggling and screaming!", gamelog);
+			addstrAlt(CONST_haulkidnap006, gamelog);
 			gamelog.newline(); //New line.
-			getkeyAlt();
+	 	pressAnyKey();
 			gamelog.newline();
 			return 1;
 		}
@@ -108,14 +134,14 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		{
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, a.name, gamelog);
-			addstrAlt(" grabs at ", gamelog);
+			addstrAlt(CONST_haulkidnap007, gamelog);
 			addstrAlt(t.name, gamelog);
 			gamelog.newline(); //New line.
-			mvaddstrAlt(17, 1, "but ", gamelog);
+			mvaddstrAlt(17, 1, CONST_haulkidnap008, gamelog);
 			addstrAlt(t.name, gamelog);
-			addstrAlt(" writhes away!", gamelog);
+			addstrAlt(CONST_haulkidnap009, gamelog);
 			gamelog.newline(); //New line.
-			getkeyAlt();
+	 	pressAnyKey();
 			gamelog.newline();
 			return 0;
 		}
@@ -125,18 +151,18 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, a.name, gamelog);
-		addstrAlt(" shows ", gamelog);
+		addstrAlt(CONST_haulkidnap010, gamelog);
 		addstrAlt(t.name, gamelog);
-		addstrAlt(" the ", gamelog);
+		addstrAlt(CONST_haulkidnap011, gamelog);
 		addstrAlt(a.get_weapon().get_name(2), gamelog);
 		addstrAlt(singleSpace, gamelog);
-		mvaddstrAlt(17, 1, "and says, ", gamelog);
+		mvaddstrAlt(17, 1, CONST_haulkidnap012, gamelog);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		if (lawList[LAW_FREESPEECH] == -2)addstrAlt("\"[Please], be cool.\"", gamelog);
-		else addstrAlt("\"Bitch, be cool.\"", gamelog);
+		if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_haulkidnapX01, gamelog);
+		else addstrAlt(CONST_haulkidnapX02, gamelog);
 		a.prisoner = new Creature;
 		*a.prisoner = t;
-		getkeyAlt();
+ 	pressAnyKey();
 		gamelog.newline();
 		return 1;
 	}
@@ -149,13 +175,13 @@ void freehostage(Creature &cr, char situation)
 	{
 		if (situation == 0)
 		{
-			if (cr.prisoner->squadid == -1)addstrAlt(" and a hostage is freed", gamelog);
+			if (cr.prisoner->squadid == -1)addstrAlt(CONST_haulkidnap015, gamelog);
 			else
 			{
 				addstrAlt(AND, gamelog);
 				addstrAlt(cr.prisoner->name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured", gamelog);
-				else addstrAlt(" is captured", gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap016, gamelog);
+				else addstrAlt(CONST_haulkidnap017, gamelog);
 			}
 			gamelog.newline(); //New line.
 		}
@@ -163,12 +189,12 @@ void freehostage(Creature &cr, char situation)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, "A hostage escapes!", gamelog);
+			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, CONST_haulkidnap018, gamelog);
 			else
 			{
 				mvaddstrAlt(16, 1, cr.prisoner->name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(" is recaptured.", gamelog);
-				else addstrAlt(" is captured.", gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
+				else addstrAlt(CONST_haulkidnap020, gamelog);
 			}
 			gamelog.newline(); //New line.
 		}
@@ -208,7 +234,7 @@ void freehostage(Creature &cr, char situation)
 		if (mode == GAMEMODE_CHASECAR ||
 			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		else printencounter();
-		getkeyAlt();
+ 	pressAnyKey();
 	}
 }
 /* prompt after you've said you want to kidnap someone */
@@ -228,16 +254,16 @@ void kidnapattempt()
 	if (!available)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "No one can do the job.            ");
-		mvaddstrAlt(17,  1, "                                  ");
-		getkeyAlt();
+		mvaddstrAlt(16,  1, CONST_haulkidnap021);
+		mvaddstrAlt(17,  1, CONST_haulkidnap031);
+ 	pressAnyKey();
 		return;
 	}
 	do
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  20, chooseALiberalTo + "do the job.");
+		mvaddstrAlt(8,  20, chooseALiberalTo + CONST_haulkidnap023);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -260,7 +286,7 @@ void kidnapattempt()
 			clearmessagearea();
 			clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9,  1, "Kidnap whom?");
+			mvaddstrAlt(9,  1, CONST_haulkidnap024);
 			int x = 1, y = 11;
 			for (int t2 = 0; t2 < len(target); t2++)
 			{
@@ -319,9 +345,9 @@ void kidnapattempt()
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "All of the targets are too dangerous.                ");
-		mvaddstrAlt(17,  1, "                                                     ");
-		getkeyAlt();
+		mvaddstrAlt(16,  1, CONST_haulkidnap025);
+		mvaddstrAlt(17,  1, CONST_haulkidnap026);
+ 	pressAnyKey();
 	}
 }
 /* prompt after you've said you want to release someone */
@@ -338,16 +364,16 @@ void releasehostage()
 	if (!available)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "No hostages are being held.       ");
-		mvaddstrAlt(17,  1, "                                  ");
-		getkeyAlt();
+		mvaddstrAlt(16,  1, CONST_haulkidnap027);
+		mvaddstrAlt(17,  1, CONST_haulkidnap031);
+ 	pressAnyKey();
 		return;
 	}
 	do
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  20, chooseALiberalTo + "release their hostage.");
+		mvaddstrAlt(8,  20, chooseALiberalTo + CONST_haulkidnap029);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -359,15 +385,14 @@ void releasehostage()
 	if (!sitealarm)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, "The hostage shouts for help!      ", gamelog);
+		mvaddstrAlt(16,  1, CONST_haulkidnap030, gamelog);
 		gamelog.nextMessage(); //Next message.
-		mvaddstrAlt(17,  1, "                                  ");
-		getkeyAlt();
+		mvaddstrAlt(17,  1, CONST_haulkidnap031);
+ 	pressAnyKey();
 		sitealarm = 1;
 		alienationcheck(1);
 	}
 }
-
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
@@ -389,11 +414,11 @@ void squadgrab_immobile(char dead)
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
-				addstrAlt(" can no longer handle ", gamelog);
+				addstrAlt(CONST_haulkidnap032, gamelog);
 				addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline(); //New line.
-				getkeyAlt();
+		 	pressAnyKey();
 				freehostage(*activesquad->squad[p]->prisoner, 1);
 			}
 		}
@@ -413,12 +438,12 @@ void squadgrab_immobile(char dead)
 					{
 						clearmessagearea();
 						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16,  1, "Nobody can carry Martyr ", gamelog);
+						mvaddstrAlt(16,  1, CONST_haulkidnap033, gamelog);
 						addstrAlt(activesquad->squad[p]->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
 						//DROP LOOT
-						makeloot(*activesquad->squad[p], groundloot);
+						makeloot(*activesquad->squad[p]);
 						activesquad->squad[p]->die();
 						activesquad->squad[p]->location = -1;
 					}
@@ -427,7 +452,7 @@ void squadgrab_immobile(char dead)
 						clearmessagearea();
 						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
-						addstrAlt(" is left to be captured.", gamelog);
+						addstrAlt(CONST_haulkidnap034, gamelog);
 						gamelog.newline(); //New line.
 						capturecreature(*activesquad->squad[p]);
 					}
@@ -448,7 +473,7 @@ void squadgrab_immobile(char dead)
 								clearmessagearea();
 								set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 								mvaddstrAlt(16,  1, activesquad->squad[p2]->name, gamelog);
-								addstrAlt(" hauls ", gamelog);
+								addstrAlt(CONST_haulkidnap035, gamelog);
 								addstrAlt(activesquad->squad[p]->name, gamelog);
 								addstrAlt(singleDot, gamelog);
 								gamelog.newline(); //New line.
@@ -468,7 +493,7 @@ void squadgrab_immobile(char dead)
 				}
 				if (flipstart) activesquad->squad[5] = NULL;
 				printparty();
-				getkeyAlt();
+		 	pressAnyKey();
 			}
 		}
 	}

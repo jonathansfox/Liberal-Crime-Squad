@@ -1,20 +1,27 @@
-
-#include <includes.h>
+#include "includes.h"
+const string CONST_globals013 = "augmentations.xml";
+const string CONST_globals012 = "creatures.xml";
+const string CONST_globals011 = "loot.xml";
+const string CONST_globals010 = "masks.xml";
+const string CONST_globals009 = "armors.xml";
+const string CONST_globals008 = "weapons.xml";
+const string CONST_globals007 = "clips.xml";
+const string CONST_globals006 = "vehicles.xml";
+const string CONST_globals005 = "xmllog";
+const string CONST_globals004 = "default_slogans.txt";
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
 #include "creature/creature.h"
-
 #include "common/interval.h"
 // needed for creaturetype
-
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
-
 #include "creature/creaturetype.h"
-
 #include "creature/augmenttype.h"
-
 #include "common/consolesupport.h"
 // for end_cleartype_fix()
-
 ///
 /*
 DEBUG DEFINES
@@ -64,10 +71,6 @@ bool VERBOSESAVEFILE = false;
 // NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
 // Remove almost all automatically generated comments from verbose savefiles
 bool NOVERBOSECOMMENTS = false;
-
-
-
-
 unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
@@ -80,20 +83,19 @@ unsigned long seed[RNG_SIZE];
 vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;
 vector<ArmorType *> armortype;
-
 vector<CreatureType *> creaturetype;
 vector<AugmentType *> augmenttype;
 vector<VehicleType *> vehicletype;
+string vehicleSportsCar;
+Vehicle* newSportsCar() {
+	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
+}
 long curcreatureid = 0;
 vector<string> default_slogans;
-
-
-#include <customMaps.h>
+#include "customMaps.h"
 vector<file_and_text_collection> globals_text_file_collection = {
-	customText(&default_slogans, "default_slogans.txt"),
+	customText(&default_slogans, CONST_globals004),
 };
-
-vector<Item *> groundloot;
 vector<Vehicle *> vehicle;
 char showcarprefs = 1;
 siteblockst levelmap[MAPX][MAPY][MAPZ];
@@ -184,14 +186,13 @@ vector<datest *> date;
 vector<recruitst *> recruit;
 vector<newsstoryst *> newsstory;
 newsstoryst *sitestory = NULL;
-
 int yourscore = -1;
-
 #include "common/creaturePool.h"
 #include "locations/locationsPool.h"
 #include "items/itemPool.h"
 #include "items/lootTypePool.h"
 void delete_and_clear_sitemaps();
+void delete_and_clear_groundloot();
 int endwinAlt(void);
 /* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
@@ -214,8 +215,48 @@ void end_game(int err)
 	delete_and_clear_sitemaps();
 	delete_and_clear(recruit);
 	delete_and_clear(date);
-	delete_and_clear(groundloot);
+	delete_and_clear_groundloot();
 	music.quit(); // shut down music
 	endwinAlt();
 	exit(err);
+}
+#include "items/loottype.h"
+#include "log/log.h"
+#include "cursesAlternative.h"
+extern string failedToLoad;
+extern string exclamationPoint;
+template<class Type>
+bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
+{
+	CMarkup xml;
+	if (!xml.Load(string(artdir) + file))
+	{ // File is missing or not valid XML.
+		addstrAlt(failedToLoad + file + exclamationPoint, log);
+ 	pressAnyKey();
+		// Will cause abort here or else if file is missing all unrecognized types
+		// loaded from a saved game will be deleted. Also, you probably don't want
+		// to play with a whole category of things missing anyway. If the file
+		// does not have valid xml, then behaviour is kind of undefined so it's
+		// best to abort then too.
+		return false;
+	}
+	xml.FindElem();
+	xml.IntoElem();
+	while (xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
+	return true;
+}
+extern vector<LootType *> loottype;
+bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
+bool mainSeven(bool xml_loaded_ok) {
+	extern Log xmllog;
+	xmllog.initialize(CONST_globals005, true, 1);
+	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_globals006, xmllog);
+	xml_loaded_ok &= populate_from_xml(cliptype, CONST_globals007, xmllog);
+	xml_loaded_ok &= populate_from_xml(weapontype, CONST_globals008, xmllog);
+	xml_loaded_ok &= populate_from_xml(armortype, CONST_globals009, xmllog);
+	xml_loaded_ok &= populate_masks_from_xml(armortype, CONST_globals010, xmllog);
+	xml_loaded_ok &= populate_from_xml(loottype, CONST_globals011, xmllog);
+	xml_loaded_ok &= populate_from_xml(creaturetype, CONST_globals012, xmllog);
+	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_globals013, xmllog);
+	return xml_loaded_ok;
 }

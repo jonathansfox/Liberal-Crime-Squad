@@ -1,3 +1,11 @@
+#include "../includes.h"
+const string CONST_recruit013 = "Adventures in Liberal Recruitment";
+const string CONST_recruit012 = "Press enter or escape to call it a day.";
+const string CONST_recruit011 = "%c - ";
+const string CONST_recruit010 = "%s was able to get information on multiple people.";
+const string CONST_recruit007 = "%s managed to set up a meeting with ";
+const string CONST_recruit006 = "%s was unable to track down a %s.";
+const string CONST_recruit005 = "%s asks around for a %s...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -18,48 +26,42 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-#include <includes.h>
-#include "creature/creature.h"
-
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
-
-#include "basemode/activate.h"
+const string blankString = "";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+#include "../creature/creature.h"
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../basemode/activate.h"
 // for recruitFindDifficulty and recruitName
-
-#include "common/consolesupport.h"
+#include "../common/consolesupport.h"
 // for void set_color(short,short,bool)
-
-#include "log/log.h"
+#include "../log/log.h"
 // for commondisplay.h
-#include "common/commondisplay.h"
-#include "common/commondisplayCreature.h"
+#include "../common/commondisplay.h"
+#include "../common/commondisplayCreature.h"
 // for void printcreatureinfo(Creature *,unsigned char=255)
-
-#include "common/getnames.h"
+#include "../common/getnames.h"
 // for getview
-
-//#include "common/commonactions.h"
-#include "common/commonactionsCreature.h"
+//#include "../common/commonactions.h"
+#include "../common/commonactionsCreature.h"
 // for subordinatesleft
-
-#include "combat/fight.h"
+#include "../combat/fight.h"
 //for void delenc(short e,char loot);
-
 char talk(Creature &a, const int t);
-
-
-#include <cursesAlternative.h>
-#include <set_color_support.h>
-#include "common/musicClass.h"
+#include "../cursesAlternative.h"
+#include "../set_color_support.h"
+#include "../common/musicClass.h"
 extern MusicClass music;
 extern short cursite;
 extern short attitude[VIEWNUM];
 extern Creature encounter[ENCMAX];
 extern class Ledger ledger;
 /* recruit struct constructor */
-recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)
-{
+recruitst::recruitst(Creature *cr, int id) {
+	recruit = cr;
+	recruiter_id = id;
 	//Has heard of the LCS
 	if ((int)LCSrandom(100) < attitude[VIEW_LIBERALCRIMESQUAD])
 	{
@@ -86,9 +88,8 @@ char recruitst::eagerness()
 }
 extern string singleDot;
 /* recruiting */
-char recruitment_activity(Creature &cr, char &clearformess)
+char recruitment_activity(Creature &cr)
 {
-	clearformess = 1;
 	int ocursite = cursite;
 	cursite = cr.location;
 	int type = cr.activity.arg;
@@ -100,12 +101,12 @@ char recruitment_activity(Creature &cr, char &clearformess)
 		cr.train(SKILL_STREETSENSE, 5);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
+		mvaddstrAlt(0,  0, CONST_recruit013);
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstr_f(10, 0, "%s asks around for a %s...", cr.name, name);
-		getkeyAlt();
+		mvaddstr_f(10, 0, CONST_recruit005.c_str(), cr.name, name);
+ 	pressAnyKey();
 		int recruitCount = 0;
 		if (difficulty < 10)
 			// Generate recruitment candidates
@@ -119,22 +120,22 @@ char recruitment_activity(Creature &cr, char &clearformess)
 				else break;
 			}
 		if (recruitCount == 0) {
-			mvaddstr_f(11, 0, "%s was unable to track down a %s.", cr.name, name);
-			getkeyAlt();
+			mvaddstr_f(11, 0, CONST_recruit006.c_str(), cr.name, name);
+	 	pressAnyKey();
 			cursite = ocursite;
 			return 0;
 		}
 		else if (recruitCount == 1) {
-			mvaddstr_f(11, 0, "%s managed to set up a meeting with ", cr.name);
+			mvaddstr_f(11, 0, CONST_recruit007.c_str(), cr.name);
 			set_alignment_color(encounter[0].align);
 			addstrAlt(encounter[0].name);
 			add_age(encounter[0]);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
-			getkeyAlt();
+	 	pressAnyKey();
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
+			mvaddstrAlt(0,  0, CONST_recruit013);
 			printcreatureinfo(&encounter[0]);
 			makedelimiter();
 			talk(cr, 0);
@@ -144,20 +145,20 @@ char recruitment_activity(Creature &cr, char &clearformess)
 			{
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
+				mvaddstrAlt(0,  0, CONST_recruit013);
 				printcreatureinfo(&cr);
 				makedelimiter();
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstr_f(10, 0, "%s was able to get information on multiple people.", cr.name);
+				mvaddstr_f(10, 0, CONST_recruit010.c_str(), cr.name);
 				for (int i = 0; i < recruitCount; i++) {
 					set_color_easy(WHITE_ON_BLACK);
-					mvaddstr_f(12 + i, 0, "%c - ", 'a' + i);
+					mvaddstr_f(12 + i, 0, CONST_recruit011.c_str(), 'a' + i);
 					set_alignment_color(encounter[i].align);
 					addstrAlt(encounter[i].name);
 					add_age(encounter[i]);
 				}
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(12 + recruitCount + 1, 0, "Press enter or escape to call it a day.");
+				mvaddstrAlt(12 + recruitCount + 1, 0, CONST_recruit012);
 				int c = getkeyAlt();
 				if (c == ENTER || c == ESC) break;
 				c -= 'a';
@@ -166,7 +167,7 @@ char recruitment_activity(Creature &cr, char &clearformess)
 					int id = encounter[c].id;
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0,  0, "Adventures in Liberal Recruitment");
+					mvaddstrAlt(0,  0, CONST_recruit013);
 					printcreatureinfo(&encounter[c]);
 					makedelimiter();
 					talk(cr, c);
