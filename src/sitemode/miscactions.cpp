@@ -128,7 +128,6 @@ extern Creature encounter[ENCMAX];
 extern short sitealienate;
 char unlock(short type, char &actual)
 {
-	int p;
 	int difficulty = 0;
 	switch (type)
 	{
@@ -148,7 +147,7 @@ char unlock(short type, char &actual)
 	case UNLOCK_VAULT:      difficulty = DIFFICULTY_HEROIC; break;
 	}
 	int maxattack = -1;
-	for (p = 0; p<6; p++)
+	for (int p = 0; p<6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
@@ -162,7 +161,7 @@ char unlock(short type, char &actual)
 		}
 	}
 	vector<int> goodp;
-	for (p = 0; p < 6; p++)
+	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
@@ -423,14 +422,13 @@ char bash(short type, char &actual)
 char hack(short type, char &actual)
 {
 	int difficulty = 0;
-	int p;
 	switch (type)
 	{
 	case HACK_SUPERCOMPUTER:difficulty = DIFFICULTY_HEROIC; break;
 	case HACK_VAULT:difficulty = DIFFICULTY_CHALLENGING; break;
 	}
 	int maxattack = 0, maxblindattack = -3, hacker = -1, blind = -1;
-	for (p = 0; p < 6; p++) if (activesquad->squad[p] != NULL)
+	for (int p = 0; p < 6; p++) if (activesquad->squad[p] != NULL)
 		if (activesquad->squad[p]->alive && activesquad->squad[p]->get_skill(SKILL_COMPUTERS))
 		{
 			int roll = activesquad->squad[p]->skill_roll(SKILL_COMPUTERS);

@@ -282,7 +282,6 @@ void makeloot(Creature &cr,vector<Item *> &loot);
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
-extern vector<Location *> location;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 extern MusicClass music;
@@ -395,6 +394,7 @@ vector<stringAndMaybeTrain> cleanSafeHouse = {
 	stringAndMaybeTrain(CONST_activities025, vector<trainItem>({})),
 	stringAndMaybeTrain(CONST_activities026, vector<trainItem>({ trainItem(SKILL_TAILORING, 1,MAXATTRIBUTE) }))
 };
+void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > *pilelist, Creature cr);
 /* armor repair */
 void repairarmor(Creature &cr, char &clearformess)
 {
@@ -423,35 +423,10 @@ void repairarmor(Creature &cr, char &clearformess)
 			}
 	}
 	// Multiple passes, to find the best item to work on
-	bool dothis = false;
-	for (int passnum = 0; passnum < 3 && !dothis; passnum++)
-		if (armor == NULL&&cr.location != -1)
-			for (int l = 0; l < len(location[cr.location]->loot); l++)
-				if (location[cr.location]->loot[l]->whatIsThis() == THIS_IS_ARMOR)
-				{
-					Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
-					switch (passnum)
-					{
-					case 0: // Guaranteed to accomplish something
-						dothis = (a->is_bloody() && a->is_damaged());
-						break;
-					case 1: // Find something to clean if low skill, repair if high
-						dothis = (a->is_bloody() && armor_makedifficulty(*a, &cr)>4)
-							|| (a->is_damaged() && armor_makedifficulty(*a, &cr) <= 4);
-						break;
-					case 2: // Anything that needs work
-						dothis = (a->is_bloody() || a->is_damaged());
-						break;
-					}
-					if (dothis)
-					{
-						armor = a;
-						pile = location[cr.location]->loot[l];
-						pileindex = l;
-						pilelist = &location[cr.location]->loot;
-						break;
-					}
-				}
+	if (cr.location != -1 && armor == NULL) {
+		findArmorToRepair(armor, pile, pileindex, pilelist, cr);
+		
+	}
 	if (clearformess) eraseAlt();
 	else makedelimiter();
 	if (armor == NULL)
@@ -564,6 +539,8 @@ void repairarmor(Creature &cr, char &clearformess)
  	pressAnyKey();
 	}
 }
+void addLootToLoc(int loc, Item* it);
+char tryFindCloth(int cursite);
 /* armor manufacture */
 void makearmor(Creature &cr, char &clearformess)
 {
@@ -599,16 +576,7 @@ void makearmor(Creature &cr, char &clearformess)
 					break;
 				}
 		}
-		if (!foundcloth) for (int l = 0; l < len(location[cr.location]->loot); l++)
-			if (location[cr.location]->loot[l]->whatIsThis() == THIS_IS_LOOT &&
-				(location[cr.location]->loot[l])->is_cloth()) //cast -XML
-			{
-				if (location[cr.location]->loot[l]->get_number() == 1)
-					delete_and_remove(location[cr.location]->loot, l);
-				else location[cr.location]->loot[l]->decrease_number(1);
-				foundcloth = 1;
-				break;
-			}
+		if (!foundcloth) foundcloth = tryFindCloth(cr.location);
 		if (!foundcloth&&ledger.get_funds() < cost)
 		{
 			if (clearformess) eraseAlt();
@@ -643,7 +611,7 @@ void makearmor(Creature &cr, char &clearformess)
 				case 4:addstrAlt(CONST_activities040, gamelog); break;
 				default:addstrAlt(quality, gamelog); addstrAlt(CONST_activities041, gamelog); break;
 				}
-				location[cr.location]->loot.push_back(it);
+				addLootToLoc(cr.location, it);
 			}
 			else
 			{
@@ -663,7 +631,7 @@ void survey(Creature *cr)
 {
 	music.play(MUSIC_ELECTIONS);
 	static const char SURVEY_PAGE_SIZE = 14;
-	int v, creatureskill = cr->skill_roll(SKILL_COMPUTERS);
+	int creatureskill = cr->skill_roll(SKILL_COMPUTERS);
 	int misschance = 30 - creatureskill, noise;
 	if (misschance < 5)misschance = 5;
 	if (creatureskill < 1) noise = 18 + LCSrandom(3); // 18 to 20
@@ -680,7 +648,7 @@ void survey(Creature *cr)
 	else noise = 2;
 	int survey[VIEWNUM];
 	int maxview = -1;
-	for (v = 0; v < VIEWNUM; v++)
+	for (int v = 0; v < VIEWNUM; v++)
 	{
 		survey[v] = attitude[v];
 		if (v != VIEW_LIBERALCRIMESQUAD&&v != VIEW_LIBERALCRIMESQUADPOS/*&&v!=VIEW_POLITICALVIOLENCE*/)
@@ -780,7 +748,7 @@ void survey(Creature *cr)
 		//Start from the top
 		int y = 8;
 		//Draw each line
-		for (v = page*SURVEY_PAGE_SIZE; v < (page + 1)*SURVEY_PAGE_SIZE; v++, y++)
+		for (int v = page*SURVEY_PAGE_SIZE; v < (page + 1)*SURVEY_PAGE_SIZE; v++, y++)
 		{
 			if (v >= VIEWNUM || (v == VIEW_CONSERVATIVECRIMESQUAD && (endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2)))
 			{
@@ -1196,7 +1164,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 			crime = currentActivity.crime;
 			juiceval = currentActivity.juiceval;
 			if (len(currentActivity.lootType) > 0) {
-				location[hack[0]->location]->loot.push_back(getNewLoot(pickrandom(currentActivity.lootType)));
+				addLootToLoc(hack[0]->location, getNewLoot(pickrandom(currentActivity.lootType)));
 			}
 			for (ChangeOfOpinion o : currentActivity.opinion) {
 				change_public_opinion(o.view, o.x, o.y, o.z);
@@ -1272,6 +1240,9 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 		}
 	}
 }
+int lenloot(int cursite);
+string gimmeASprayCan(Creature* graffiti);
+void buyMeASprayCan(Creature* graffiti);
 void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 {
 	if (len(graffiti))
@@ -1286,34 +1257,23 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
 				//Check base inventory for a spraycan
 				bool foundone = false;
-				for (int i = 0; i < len(location[graffiti[s]->base]->loot); i++)
-				{
-					if (location[graffiti[s]->base]->loot[i]->whatIsThis() == THIS_IS_WEAPON)
-					{
-						Weapon *w = static_cast<Weapon*>(location[graffiti[s]->base]->loot[i]); //cast -XML
-						if (w->can_graffiti())
-						{
-							addstrAlt(CONST_activities089, gamelog);
-							addstrAlt(w->get_name(), gamelog);
-							addstrAlt(CONST_activities090, gamelog);
-							addstrAlt(location[graffiti[s]->base]->getname()); //TODO: Explicitly log it, or will the game log it?
-							addstrAlt(singleDot, gamelog);
-					 	pressAnyKey();
-							graffiti[s]->give_weapon(*w, &(location[graffiti[s]->base]->loot));
-							if (location[graffiti[s]->base]->loot[i]->empty())
-								delete_and_remove(location[graffiti[s]->base]->loot, i);
-							foundone = true;
-							break;
-						}
-					}
+				string gottaCan = gimmeASprayCan(graffiti[s]);
+				if (len(gottaCan)) {
+					foundone = true;
+					addstrAlt(CONST_activities089, gamelog);
+					addstrAlt(gottaCan, gamelog);
+					addstrAlt(CONST_activities090, gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(graffiti[s]->base)); //TODO: Explicitly log it, or will the game log it?
+					addstrAlt(singleDot, gamelog);
+					pressAnyKey();
 				}
+
 				if (!foundone && ledger.get_funds() >= 20)
 				{
 					ledger.subtract_funds(20, EXPENSE_SHOPPING);
 					addstrAlt(CONST_activities091, gamelog);
 			 	pressAnyKey();
-					Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
-					graffiti[s]->give_weapon(spray, &location[graffiti[s]->base]->loot);
+				buyMeASprayCan(graffiti[s]);
 				}
 				else if (!foundone)
 				{
@@ -2009,6 +1969,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 		teachers[t]->train(SKILL_TEACHING, min(students, 10));
 	}
 }
+void lootTheBody(Creature &cr, int base);
 void doActivityBury(vector<Creature *> &bury, char &clearformess)
 {
 	if (len(bury))
@@ -2017,8 +1978,8 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 		{
 			if (pool[p]->alive) continue;
 			bool arrest_attempted = false;
-			//MAKE BASE LOOT
-			makeloot(*pool[p], location[bury[0]->base]->loot);
+			lootTheBody(*pool[p], bury[0]->base);
+
 			for (int b = 0; b < len(bury); b++)
 			{
 				if (!arrest_attempted && !(bury[b]->skill_check(SKILL_STREETSENSE, DIFFICULTY_EASY)))

@@ -198,7 +198,7 @@ string dotDat;
 		}
 		else {
 			bool to_delete = false;
-			int p = 0, y = 2, page = 0;
+			int page = 0;
 			// IsaacG This almost has to be redone
 			while (true)
 			{
@@ -207,7 +207,8 @@ string dotDat;
 				mvaddstrAlt(0, 0, to_delete ? deleteSave : chooseSave);
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(1, 0, titleScreenLine);
-				for (p = page * 19, y = 2; p < s_savefiles.size() && p < page * 19 + 19; p++, y++)
+				int y = 2;
+				for (int p = page * 19; p < s_savefiles.size() && p < page * 19 + 19; p++, y++)
 				{
 					set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 					mvaddchAlt(y, 0, y + 'A' - 2);

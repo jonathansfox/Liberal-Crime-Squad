@@ -18,7 +18,7 @@
     <ProjectGuid>{CA438C67-7A74-4797-BC09-8C866F965240}</ProjectGuid>
     <RootNamespace>game</RootNamespace>
     <ProjectName>crimesquad</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'" Label="Configuration">
@@ -31,7 +31,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -311,8 +311,6 @@
     <ClInclude Include="..\src\items\lootTypePoolItem.h" />
     <ClInclude Include="..\src\locations\locationsEnums.h" />
     <ClInclude Include="..\src\locations\locationsPool.h" />
-    <ClInclude Include="..\src\locations\locationsPoolHeader.h" />
-    <ClInclude Include="..\src\locations\locationsPoolVehicle.h" />
     <ClInclude Include="..\src\news\news.h" />
     <ClInclude Include="..\src\politics\politics.h" />
     <ClInclude Include="..\src\sitemode\advance.h" />

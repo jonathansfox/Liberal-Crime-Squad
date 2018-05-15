@@ -652,13 +652,13 @@ void disguisecheck(int timer)
 	}
 	if (len(noticer))
 	{
-		int n, an;
+		int n;
 		int blew_it = -1;
 		bool spotted = false;
 		char noticed = 0;
 		do
 		{
-			an = LCSrandom(len(noticer));
+			int an = LCSrandom(len(noticer));
 			n = noticer[an];
 			noticer.erase(noticer.begin() + an);
 			int stealth_difficulty;
@@ -757,8 +757,7 @@ void disguisecheck(int timer)
 		{
 			if (blew_it == -1)
 			{
-				int i;
-				for (i = 0; i < 6; i++)
+				for (int i = 0; i < 6; i++)
 				{
 					if (activesquad->squad[i] == NULL) break;
 					if (hasdisguise(*(activesquad->squad[i])))

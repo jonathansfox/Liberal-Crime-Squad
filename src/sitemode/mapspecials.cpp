@@ -744,7 +744,6 @@ void special_courthouse_lockup()
 }
 void special_courthouse_jury()
 {
-	int p;
 	if (sitealarm || sitealienate)
 	{
 		clearmessagearea();
@@ -768,7 +767,7 @@ void special_courthouse_jury()
 			levelmap[locx][locy][locz].special = -1;
 			int maxattack = 0;
 			int maxp = -1;
-			for (p = 0; p<6; p++)
+			for (int p = 0; p<6; p++)
 			{
 				if (activesquad->squad[p] != NULL)
 				{

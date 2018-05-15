@@ -270,7 +270,6 @@ void freehostage(Creature &cr,char situation);
 #include "../common/creaturePool.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
 extern short mode;
 extern short sitetype;
 extern char foughtthisround;
@@ -1175,16 +1174,16 @@ int bodypartSeverAmount(const int w) {
 	return severamount;
 }
 int determineBodypartHit(Creature &t, const int aroll, const int droll, const bool sneak_attack) {
-	int w;
+	
 	bool canhit = false;
-	for (w = 0; w < BODYPARTNUM; w++)
+	for (int w = 0; w < BODYPARTNUM && !canhit; w++)
 	{
 		if (!(t.wound[w] & WOUND_CLEANOFF) && !(t.wound[w] & WOUND_NASTYOFF))
 		{
 			canhit = true;
-			break;
 		}
 	}
+	int w;
 	do
 	{
 		int offset = 0;
@@ -1326,6 +1325,7 @@ void unsuccessfulHit(Creature &a, Creature &t, char* str, const bool sneak_attac
 		pressAnyKey();
 	
 }
+void addLocationChange(int cursite, sitechangest change);
 /* attack handling for an individual creature and its target */
 bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee)
 {
@@ -1506,7 +1506,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance_causes_debris)
 		{// TODO - In a car chase, debris should make driving harder for one round, or require a drive skill check to avoid damage
 			sitechangest change(locx, locy, locz, SITEBLOCK_DEBRIS);
-			location[cursite]->changes.push_back(change);
+			addLocationChange(cursite, change);//  location[cursite]->changes.push_back(change);
 		}
 		if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance)
 		{// TODO - In a car chase, apply vehicle damage, with drive skill check to partially mitigate
@@ -1765,8 +1765,8 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 					else if (target->enemy() && (t.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 					{
 						stat_kills++;
-						if (LocationsPool::getInstance().isThereASiegeHere(cursite)) location[cursite]->siege.kills++;
-						if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) location[cursite]->siege.tanks--;
+						if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
+						if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
 						if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
 						{
 							if (target->type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
@@ -2089,9 +2089,8 @@ void enemyattack()
 	if (NOENEMYATTACK) {
 		return;
 	}
-	int e2, e;
 	char printed;
-	for (e = 0; e < ENCMAX; e++)
+	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (!encounter[e].exists) continue;
 		if (!encounter[e].alive) continue;
@@ -2165,7 +2164,7 @@ void enemyattack()
 		}
 		else
 		{
-			for (e2 = 0; e2 < ENCMAX; e2++)
+			for (int e2 = 0; e2 < ENCMAX; e2++)
 			{
 				if (!encounter[e2].exists) continue;
 				if (!encounter[e2].alive) continue;
@@ -2173,7 +2172,7 @@ void enemyattack()
 				goodtarg.push_back(e2);
 			}
 		}
-		for (e2 = 0; e2 < ENCMAX; e2++)
+		for (int e2 = 0; e2 < ENCMAX; e2++)
 		{
 			if (!encounter[e2].exists) continue;
 			if (!encounter[e2].alive) continue;
@@ -2184,7 +2183,7 @@ void enemyattack()
 		int target = pickrandom(goodtarg);
 		char canmistake = 1;
 		int encnum = 0;
-		for (e2 = 0; e2 < ENCMAX; e2++) if (encounter[e2].exists) encnum++;
+		for (int e2 = 0; e2 < ENCMAX; e2++) if (encounter[e2].exists) encnum++;
 		if ((encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
 			encounter[e].type == CREATURE_JUDGE_LIBERAL ||
 			encounter[e].type == CREATURE_JUDGE_CONSERVATIVE ||

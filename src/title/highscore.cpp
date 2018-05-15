@@ -137,10 +137,9 @@ void loadhighscores()
 void viewhighscores(int musicoverride)
 {
 	if (musicoverride != MUSIC_OFF) music.play(musicoverride);
-	int s;
 	loadhighscores();
 	short validsum = 0;
-	for (s = 0; s < SCORENUM; s++)
+	for (int s = 0; s < SCORENUM; s++)
 	{
 		if (score[s].valid)validsum++;
 	}
@@ -151,8 +150,7 @@ void viewhighscores(int musicoverride)
 	{
 		return;
 	}
-	int y = 2;
-	for (s = 0; s < SCORENUM; s++)
+	for (int s = 0, y = 2; s < SCORENUM; s++)
 	{
 		if (score[s].valid)
 		{

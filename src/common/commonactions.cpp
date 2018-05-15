@@ -363,17 +363,17 @@ void locatesquad(squadst *st, long loc)
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value)
 {
-	int weight_total = 0, option;
-	for (option = 0; option < number_of_options; option++)
+	int weight_total = 0;
+	for (int option = 0; option < number_of_options; option++)
 		weight_total += weight_list[option];
 	if (weight_total < 1) return default_value; // No acceptable results; use default
 	int choose = LCSrandom(weight_total);
-	for (option = 0; option < number_of_options; option++)
+	for (int option = 0; option < number_of_options; option++)
 	{
 		choose -= weight_list[option];
-		if (choose < 0)break;
+		if (choose < 0)return option;
 	}
-	return option;
+	return number_of_options;
 }
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st, long loc)

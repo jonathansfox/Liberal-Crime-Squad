@@ -264,8 +264,7 @@ void recruitSelect(Creature &cr)
 		addstrAlt(CONST_activate009);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(1, 0, CONST_activate010);
-		int y = 2;
-		for (int p = page * 19; p < options&&p < page * 19 + 19; p++)
+		for (int p = page * 19, y = 2; p < options&&p < page * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
@@ -273,7 +272,6 @@ void recruitSelect(Creature &cr)
 			addstrAlt(recruitable_creatures[p].name);
 			moveAlt(y, 49);
 			displayDifficulty(recruitable_creatures[p].difficulty);
-			y++;
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, CONST_activate011);
@@ -337,14 +335,14 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 	while (true)
 	{
 		eraseAlt();
-		int y, p;
+		
 		switch (cur_step) {
 		case 0: //PAGE 0, selecting a liberal
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_activate015);
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(1, 0, CONST_activate016);
-			for (p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
+			for (int p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
 			{
 				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 				moveAlt(y, 0);
@@ -383,7 +381,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			//mvaddstrAlt(1,0,CONST_activate019);
 			show_victim_status(victim);
 			mvaddstrAlt(2, 1, CONST_activate020);
-			for (p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
+			for (int p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
 			{
 				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
 				if (already_augmented) set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -397,7 +395,6 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 				aug_type.clear();
 				if (victim->get_augmentation(aug_c - 'a').type == -1) //False if already augmented on that bodypart.
 				{
-					y = 5;
 					for (int x = 0; x < augmenttype.size(); x++)
 					{
 						if (augmenttype[x]->get_type() == aug_c - 'a' &&
@@ -410,8 +407,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 				}
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			y = 4;
-			for (int x = 0; x < aug_type.size(); x++, y++)
+			for (int x = 0, y = 4; x < aug_type.size(); x++, y++)
 			{
 				//set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
 				mvaddcharAlt(y, 26, y + '1' - 4); addstrAlt(spaceDashSpace);

@@ -342,7 +342,6 @@ void mode_site(short loc);
 #include "../set_color_support.h"
 extern vector<Creature *> pool;
 extern Log gamelog;
-extern vector<Location *> location;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 extern MusicClass music;
@@ -418,13 +417,20 @@ make it more likely to be raided:
 /* Work in progress. It works, but needs to be called in more places. */
 /* Currently, it only works when you confront a siege and then fail. */
 /* siege - handles giving up */
+bool hasPrintingPress(int l);
+void deletePrintingPress(int loc);
+void deleteCompoundWalls(int loc);
+void deleteBusinessFront(int loc);
+void CCSCapturesSite(int loc);
+void endLocationSiege(int l);
+void deleteLocationLoot(int l);
 void giveup()
 {
 	int loc = -1;
 	if (selectedsiege != -1)loc = selectedsiege;
 	if (activesquad != NULL)loc = activesquad->squad[0]->location;
 	if (loc == -1)return;
-	if (LocationsPool::getInstance().getRentingType(loc) > 1)location[loc]->renting = RENTING_NOCONTROL;
+	if (LocationsPool::getInstance().getRentingType(loc) > 1)LocationsPool::getInstance().setRenting(loc, RENTING_NOCONTROL);
 	//IF POLICE, END SIEGE
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
 		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
@@ -442,9 +448,9 @@ void giveup()
 		else addstrAlt(CONST_siege017, gamelog);
 		addstrAlt(CONST_siege018, gamelog);
 		gamelog.newline();
-		int kcount = 0, pcount = 0, icount = 0, p;
+		int kcount = 0, pcount = 0, icount = 0;
 		char kname[100], pname[100], pcname[100];
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc || !pool[p]->alive) continue;
 			if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
@@ -461,10 +467,10 @@ void giveup()
 		//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
 		if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
 		if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN && location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN && hasPrintingPress(loc))
 			criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
 													  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc || !pool[p]->alive) continue;
 			if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1))
@@ -505,7 +511,7 @@ void giveup()
 		}
 		if (ledger.get_funds() > 0)
 		{
-			if (ledger.get_funds() <= 2000 || location[loc]->siege.siegetype == SIEGE_FIREMEN)
+			if (ledger.get_funds() <= 2000 || LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 			{
 				mvaddstrAlt(8, 1, CONST_siege025, gamelog);
 				gamelog.newline();
@@ -521,34 +527,34 @@ void giveup()
 				ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
 			}
 		}
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 		{
-			if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
+			if (hasPrintingPress(loc))
 			{
 				mvaddstrAlt(10, 1, CONST_siege174, gamelog);
 				gamelog.newline();
-				location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+				deletePrintingPress(loc);
 			}
 		}
 		else
 		{
-			if (location[loc]->compound_walls)
+			if (LocationsPool::getInstance().getCompoundWalls(loc))
 			{
 				mvaddstrAlt(10, 1, CONST_siege028, gamelog);
 				gamelog.newline();
-				location[loc]->compound_walls = 0;
+				deleteCompoundWalls(loc);
 			}
 		}
-		if (location[loc]->front_business != -1)
+		if (LocationsPool::getInstance().isThisAFront(loc) != -1)
 		{
 			mvaddstrAlt(12, 1, CONST_siege029, gamelog);
 			gamelog.newline();
-			location[loc]->front_business = -1;
+			deleteBusinessFront(loc);
 		}
  	pressAnyKey();
-		if (location[loc]->siege.siegetype == SIEGE_FIREMEN)
+		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 			offended_firemen = 0; // Firemen do not hold grudges
-		for (p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != loc) continue;
 			//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
@@ -577,7 +583,7 @@ void giveup()
 				pool[p]->activity.type = ACTIVITY_NONE;
 			}
 		}
-		location[loc]->siege.siege = 0;
+		endLocationSiege(loc);
 	}
 	else
 	{
@@ -593,7 +599,7 @@ void giveup()
 			pool[p]->location = -1;
 		}
 		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
-			location[loc]->renting = RENTING_CCS; // CCS Captures warehouse
+			CCSCapturesSite(loc);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(1, 1, CONST_siege030, gamelog);
@@ -613,10 +619,10 @@ void giveup()
 		cursite = loc;
 		endcheck();
 		cursite = tmp;
-		location[loc]->siege.siege = 0;
+		endLocationSiege(loc);
 	}
 	//CONFISCATE MATERIAL
-	delete_and_clear(location[loc]->loot);
+	deleteLocationLoot(loc);
 	for (int v = len(vehicle) - 1; v >= 0; v--)
 		if (vehicle[v]->get_location() == loc)
 			delete_and_remove(vehicle, v);
@@ -656,7 +662,7 @@ void statebrokenlaws(int loc)
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	moveAlt(1, 1);
-	if (location[loc]->siege.underattack) addstrAlt(CONST_siege033, gamelog);
+	if (LocationsPool::getInstance().isThisUnderAttack(loc)) addstrAlt(CONST_siege033, gamelog);
 	else addstrAlt(CONST_siege034, gamelog);
 	gamelog.newline();
 	moveAlt(3, 1);
@@ -893,6 +899,23 @@ void statebrokenlaws(Creature & cr)
 			addstrAlt(CONST_siege109);
 }
 /* siege - updates upcoming sieges */
+void dropHeatByFivePercent(int l);
+int getTimeUntilSiege(int l);
+void huntFasterIfSiteIncrediblyHot(int l);
+void updateLocationHeatProtection(int l);
+void letPlaceCoolOffUnlessCrime(int crimes, int l);
+void policeSiege(int l);
+void corporateSiege(int l);
+void CCSSiege(int l);
+void CIASiege(int l);
+void hicksSiege(int l);
+void firemanSiege(int l);
+bool hasCameras(int l);
+bool hasAGenerator(int l);
+bool hasBusinessFront(int l);
+bool siteHasAAGun(int l);
+void deleteAAGun(int l);
+//TODO There is an absurd amount of duplicated code here
 void siegecheck(char canseethings)
 {
 	if (disbanding)return;
@@ -913,35 +936,26 @@ void siegecheck(char canseethings)
 	{
 		if (LocationsPool::getInstance().isThisSiteClosed(find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, l)))
 		{
-			location[l]->heat = static_cast<int>(location[l]->heat * 0.95);
+			dropHeatByFivePercent(l);
 		}
 		if (LocationsPool::getInstance().isThereASiegeHere(l))continue;
 		if (LocationsPool::getInstance().getRentingType(l) == RENTING_NOCONTROL)continue;
 		numpres = 0;
-		if (location[l]->siege.timeuntillocated == -2)
+		if (getTimeUntilSiege(l) == -2)
 		{
 			//IF JUST SIEGED, BUY SOME TIME
-			location[l]->siege.timeuntillocated = -1;
+			LocationsPool::getInstance().setTimeUntilSiege(l, -1);
 		}
 		else
 		{
 			//HUNTING
-			if (location[l]->siege.timeuntillocated>0)
+			if (getTimeUntilSiege(l)>0)
 			{
-				if (location[l]->front_business == -1 || LCSrandom(2))
+				if (LocationsPool::getInstance().isThisAFront(l) == -1 || LCSrandom(2))
 				{
-					location[l]->siege.timeuntillocated--;
+					LocationsPool::getInstance().setTimeUntilSiege(l, getTimeUntilSiege(l) -1);
 					// Hunt faster if location is extremely hot
-					if (location[l]->heat > 100)
-					{
-						int hunt_speed;
-						hunt_speed = location[l]->heat / 50;
-						while (hunt_speed&&location[l]->siege.timeuntillocated > 1)
-						{
-							location[l]->siege.timeuntillocated--;
-							hunt_speed--;
-						}
-					}
+					huntFasterIfSiteIncrediblyHot(l);
 				}
 			}
 			//CHECK FOR CRIMINALS AT THIS BASE
@@ -972,37 +986,19 @@ void siegecheck(char canseethings)
 			}
 			// Determine how effective your current safehouse
 			// is at keeping the police confused
-			location[l]->update_heat_protection();
+			updateLocationHeatProtection(l);
 			// Let the place cool off if not accumulating heat
-			if (crimes < location[l]->heat)
-			{
-				location[l]->heat -= 1;
-				if (location[l]->heat < 0)
-					location[l]->heat = 0;
-			}
-			else
-			{
-				// Update location heat
-				if (crimes > location[l]->heat) location[l]->heat += (crimes - location[l]->heat) / 10 + 1;
-				// Begin planning siege if high heat on location
-				if (location[l]->heat > location[l]->heat_protection &&
-					LCSrandom(500) < location[l]->heat &&
-					!(location[l]->siege.timeuntillocated >= 0)) //Do not re-plan siege.
-				{
-					// Set time until siege is carried out
-					location[l]->siege.timeuntillocated += 2 + LCSrandom(6);
-				}
-			}
+			letPlaceCoolOffUnlessCrime(crimes, l);
 			// Sleepers at the police department may give a warning just before police raids
-			if (location[l]->siege.timeuntillocated == 1)
+			if (getTimeUntilSiege(l) == 1)
 			{
 				int policesleeperwarning = 0;
 				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 				{
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 						pool[pl]->location != -1 &&
-						location[pool[pl]->location]->type == SITE_GOVERNMENT_POLICESTATION &&
-						location[pool[pl]->location]->city == location[l]->city)
+						LocationsPool::getInstance().getLocationType(pool[pl]->location) == SITE_GOVERNMENT_POLICESTATION &&
+						LocationsPool::getInstance().getLocationCity(pool[pl]->location) == LocationsPool::getInstance().getLocationCity(l))
 					{
 						//if(pool[pl]->infiltration*100>LCSrandom(50))
 						{
@@ -1017,18 +1013,18 @@ void siegecheck(char canseethings)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, CONST_siege110, gamelog);
 					mvaddstrAlt(9,  1, CONST_siege111, gamelog);
-					addstrAlt(location[l]->getname());
+					addstrAlt(LocationsPool::getInstance().getLocationName(l));
 					addstrAlt(singleDot, gamelog);
 					gamelog.newline();
-					if (location[l]->siege.escalationstate >= 1)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 1)
 					{
 						mvaddstrAlt(11,  1, CONST_siege112, gamelog);
 					}
-					if (location[l]->siege.escalationstate >= 2)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 2)
 					{
 						mvaddstrAlt(12,  1, CONST_siege113, gamelog);
 					}
-					if (location[l]->siege.escalationstate >= 3)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3)
 					{
 						mvaddstrAlt(13,  1, CONST_siege114, gamelog);
 						mvaddstrAlt(14,  1, CONST_siege115, gamelog);
@@ -1039,38 +1035,38 @@ void siegecheck(char canseethings)
 				}
 			}
 			//COPS RAID THIS LOCATION
-			if (!location[l]->siege.timeuntillocated)
+			if (!getTimeUntilSiege(l))
 			{
-				location[l]->siege.timeuntillocated = -2;
-				location[l]->heat = 0;
+				LocationsPool::getInstance().setSiegetimeuntillocated(l, -2);
+				LocationsPool::getInstance().clearHeat(l);
 				if (numpres > 0)
 				{
 					music.play(MUSIC_SIEGE);
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, CONST_siege117, gamelog);
-					addstrAlt(location[l]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					addstrAlt(CONST_siege188, gamelog);
 					gamelog.newline();
-					location[l]->siege.underattack = 0;
+					LocationsPool::getInstance().clearunderattack(l);
 			 	pressAnyKey();
 					//MENTION ESCALATION STATE
-					if (location[l]->siege.escalationstate >= 1)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 1)
 					{
 						mvaddstrAlt(9,  1, CONST_siege119, gamelog);
 						gamelog.nextMessage();
 				 	pressAnyKey();
 					}
-					if (location[l]->siege.escalationstate >= 2)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 2)
 					{
 						moveAlt(10, 1);
-						if (location[l]->compound_walls & COMPOUND_TANKTRAPS)
+						if (LocationsPool::getInstance().doWeHaveTankTraps(l))
 							addstrAlt(CONST_siege120, gamelog);
 						else addstrAlt(CONST_siege121, gamelog);
 						gamelog.nextMessage();
 				 	pressAnyKey();
 					}
-					if (location[l]->siege.escalationstate >= 3)
+					if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3)
 					{
 						mvaddstrAlt(11,  1, CONST_siege122, gamelog);
 						gamelog.nextMessage();
@@ -1078,17 +1074,14 @@ void siegecheck(char canseethings)
 					}
 					// CONST_siege123
 					statebrokenlaws(l);
-					location[l]->siege.siege = 1;
-					location[l]->siege.siegetype = SIEGE_POLICE;
-					location[l]->siege.lights_off = 0;
-					location[l]->siege.cameras_off = 0;
+					policeSiege(l);
 				}
 				else
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, CONST_siege124, gamelog);
-					addstrAlt(location[l]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					addstrAlt(CONST_siege177, gamelog);
 					gamelog.newline();
 			 	pressAnyKey();
@@ -1118,7 +1111,7 @@ void siegecheck(char canseethings)
 						}
 					}
 					gamelog.newline();
-					delete_and_clear(location[l]->loot);
+					deleteLocationLoot(l);
 					for (int v = len(vehicle) - 1; v >= 0; v--)
 						if (vehicle[v]->get_location() == l)
 							delete_and_remove(vehicle, v);
@@ -1126,9 +1119,9 @@ void siegecheck(char canseethings)
 			}
 			//OTHER OFFENDABLE ENTITIES
 			//CORPS
-			if (location[l]->heat&&location[l]->siege.timeuntilcorps == -1 && !location[l]->siege.siege&&offended_corps&&!LCSrandom(600) && numpres > 0)
+			if (LocationsPool::getInstance().getHeat(l)&& LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l)&&offended_corps&&!LCSrandom(600) && numpres > 0)
 			{
-				location[l]->siege.timeuntilcorps = LCSrandom(3) + 1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, LCSrandom(3) + 1);
 				// *JDS* CEO sleepers may give a warning before corp raids
 				int ceosleepercount = 0;
 				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
@@ -1148,42 +1141,38 @@ void siegecheck(char canseethings)
 					else addstrAlt(CONST_siege130, gamelog);
 					addstrAlt(CONST_siege131, gamelog);
 					mvaddstrAlt(9,  1, CONST_siege132, gamelog);
-					if (ceosleepercount)addstrAlt(location[l]->getname(), gamelog);
+					if (ceosleepercount)addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					else addstrAlt(CONST_siege133, gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 			 	pressAnyKey();
 				}
 			}
-			else if (location[l]->siege.timeuntilcorps > 0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
-			else if (location[l]->siege.timeuntilcorps == 0 && !location[l]->siege.siege&&offended_corps&&numpres > 0)
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) -1); // Corp raid countdown!
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) &&offended_corps&&numpres > 0)
 			{
 				music.play(MUSIC_SIEGE);
-				location[l]->siege.timeuntilcorps = -1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1);
 				// Corps raid!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege134, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
 		 	pressAnyKey();
-				location[l]->siege.siege = 1;
-				location[l]->siege.siegetype = SIEGE_CORPORATE;
-				location[l]->siege.underattack = 1;
-				location[l]->siege.lights_off = 0;
-				location[l]->siege.cameras_off = 0;
+			corporateSiege(l);
 				offended_corps = 0;
 			}
-			else if (location[l]->siege.timeuntilcorps == 0)location[l]->siege.timeuntilcorps = -1; // Silently call off foiled corp raids
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1); // Silently call off foiled corp raids
 																									//CONSERVATIVE CRIME SQUAD
 			bool ccs_active = endgamestate >= ENDGAME_CCS_APPEARANCE && endgamestate < ENDGAME_CCS_DEFEATED;
-			bool target_interesting = endgamestate >= ENDGAME_CCS_SIEGES || location[l]->compound_walls & COMPOUND_PRINTINGPRESS;
+			bool target_interesting = endgamestate >= ENDGAME_CCS_SIEGES || hasPrintingPress(l);
 			if (ccs_active && target_interesting)
 			{
-				if (location[l]->heat&&location[l]->siege.timeuntilccs == -1 && !location[l]->siege.siege&&!LCSrandom(60) && numpres>0)
+				if (LocationsPool::getInstance().getHeat(l) && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) &&!LCSrandom(60) && numpres>0)
 				{
-					location[l]->siege.timeuntilccs = LCSrandom(3) + 1;
+					LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, LCSrandom(3) + 1);
 					// CCS sleepers may give a warning before raids
 					int ccssleepercount = 0;
 					for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
@@ -1202,26 +1191,26 @@ void siegecheck(char canseethings)
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8,  1, CONST_siege136, gamelog);
 						mvaddstrAlt(9,  1, CONST_siege137, gamelog);
-						addstrAlt(location[l]->name, gamelog);
+						addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.nextMessage();
 				 	pressAnyKey();
 					}
 				}
-				else if (location[l]->siege.timeuntilccs > 0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
-				else if (location[l]->siege.timeuntilccs == 0 && !location[l]->siege.siege&&numpres > 0)
+				else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) -1); // CCS raid countdown!
+				else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) &&numpres > 0)
 				{
 					music.play(MUSIC_SIEGE);
-					location[l]->siege.timeuntilccs = -1;
+					LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1);
 					// CCS raid!
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, CONST_siege138, gamelog);
-					addstrAlt(location[l]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					addstrAlt(CONST_siege188, gamelog);
 					gamelog.newline();
 			 	pressAnyKey();
-					if (!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
+					if (!(LocationsPool::getInstance().doWeHaveTankTraps(l)) &&
 						!LCSrandom(5))
 					{
 						// CCS Carbombs safehouse!!
@@ -1291,19 +1280,15 @@ void siegecheck(char canseethings)
 						mvaddstrAlt(8,  1, CONST_siege144, gamelog);
 						gamelog.nextMessage();
 				 	pressAnyKey();
-						location[l]->siege.siege = 1;
-						location[l]->siege.siegetype = SIEGE_CCS;
-						location[l]->siege.underattack = 1;
-						location[l]->siege.lights_off = 0;
-						location[l]->siege.cameras_off = 0;
+					CCSSiege(l);
 					}
 				}
-				else if (location[l]->siege.timeuntilccs == 0)location[l]->siege.timeuntilccs = -1; // Silently call off foiled ccs raids
+				else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1); // Silently call off foiled ccs raids
 			}
 			//CIA
-			if (location[l]->heat&&location[l]->siege.timeuntilcia == -1 && !location[l]->siege.siege&&offended_cia&&!LCSrandom(300) && numpres > 0)
+			if (LocationsPool::getInstance().getHeat(l) && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) &&offended_cia&&!LCSrandom(300) && numpres > 0)
 			{
-				location[l]->siege.timeuntilcia = LCSrandom(3) + 1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, LCSrandom(3) + 1);
 				// *JDS* agent sleepers may give a warning before cia raids
 				int agentsleepercount = 0;
 				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
@@ -1324,31 +1309,31 @@ void siegecheck(char canseethings)
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8,  1, CONST_siege145, gamelog);
 					mvaddstrAlt(9,  1, CONST_siege146, gamelog);
-					addstrAlt(location[l]->getname(), gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 			 	pressAnyKey();
 				}
 			}
-			else if (location[l]->siege.timeuntilcia > 0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
-			else if (location[l]->siege.timeuntilcia == 0 && !location[l]->siege.siege&&offended_cia&&numpres > 0)
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) - 1); // CIA raid countdown!
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) &&offended_cia&&numpres > 0)
 			{
 				music.play(MUSIC_SIEGE);
-				location[l]->siege.timeuntilcia = -1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, -1);
 				// CIA raids!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege147, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege188, gamelog);
 				gamelog.newline();
-				if (location[l]->compound_walls & COMPOUND_CAMERAS)
+				if (hasCameras(l))
 				{
 					mvaddstrAlt(9,  1, CONST_siege151, gamelog);
 					mvaddstrAlt(10,  1, CONST_siege150, gamelog);
 					gamelog.nextMessage();
 				}
-				else if (location[l]->compound_walls & COMPOUND_GENERATOR)
+				else if (hasAGenerator(l))
 				{
 					mvaddstrAlt(9,  1, CONST_siege151, gamelog);
 					mvaddstrAlt(10,  1, CONST_siege152, gamelog);
@@ -1360,61 +1345,49 @@ void siegecheck(char canseethings)
 					gamelog.nextMessage();
 				}
 		 	pressAnyKey();
-				location[l]->siege.siege = 1;
-				location[l]->siege.siegetype = SIEGE_CIA;
-				location[l]->siege.underattack = 1;
-				location[l]->siege.lights_off = 1;
-				location[l]->siege.cameras_off = 1;
+			CIASiege(l);
 			}
-			else if (location[l]->siege.timeuntilcia == 0)location[l]->siege.timeuntilcia = -1; // Silently call off foiled cia raids
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, -1); // Silently call off foiled cia raids
 																								//HICKS
-			if (!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO] <= 35 && !LCSrandom(600) && numpres > 0)
+			if (!LocationsPool::getInstance().isThereASiegeHere(l) &&offended_amradio&&attitude[VIEW_AMRADIO] <= 35 && !LCSrandom(600) && numpres > 0)
 			{
 				music.play(MUSIC_SIEGE);
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege154, gamelog);
 				mvaddstrAlt(9,  1, CONST_siege158, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
 		 	pressAnyKey();
-				location[l]->siege.siege = 1;
-				location[l]->siege.siegetype = SIEGE_HICKS;
-				location[l]->siege.underattack = 1;
-				location[l]->siege.lights_off = 0;
-				location[l]->siege.cameras_off = 0;
+			hicksSiege(l);
 				offended_amradio = 0;
 			}
-			if (!location[l]->siege.siege&&offended_cablenews&&attitude[VIEW_CABLENEWS] <= 35 && !LCSrandom(600) && numpres > 0)
+			if (!LocationsPool::getInstance().isThereASiegeHere(l) &&offended_cablenews&&attitude[VIEW_CABLENEWS] <= 35 && !LCSrandom(600) && numpres > 0)
 			{
 				music.play(MUSIC_SIEGE);
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege157, gamelog);
 				mvaddstrAlt(9,  1, CONST_siege158, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege188, gamelog);
 				gamelog.nextMessage();
 		 	pressAnyKey();
-				location[l]->siege.siege = 1;
-				location[l]->siege.siegetype = SIEGE_HICKS;
-				location[l]->siege.underattack = 1;
-				location[l]->siege.lights_off = 0;
-				location[l]->siege.cameras_off = 0;
+			hicksSiege(l);
 				offended_cablenews = 0;
 			}
 			//Firemen
-			if (lawList[LAW_FREESPEECH] == -2 && location[l]->siege.timeuntilfiremen == -1 && !location[l]->siege.siege &&
-				offended_firemen && numpres > 0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
+			if (lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) &&
+				offended_firemen && numpres > 0 && hasPrintingPress(l) && !LCSrandom(90))
 			{
-				location[l]->siege.timeuntilfiremen = LCSrandom(3) + 1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, LCSrandom(3) + 1);
 				// Sleeper Firemen can warn you of an impending raid
 				int firemensleepercount = 0;
 				for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 					if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 						pool[pl]->type == CREATURE_FIREFIGHTER &&
-						location[pool[pl]->location]->city == location[l]->city)
+						LocationsPool::getInstance().getLocationCity(pool[pl]->location) == LocationsPool::getInstance().getLocationCity(l))
 						firemensleepercount++;
 				if (LCSrandom(firemensleepercount + 1) > 0 || !LCSrandom(10))
 				{
@@ -1424,22 +1397,22 @@ void siegecheck(char canseethings)
 					if (firemensleepercount) addstrAlt(CONST_siege160, gamelog);
 					else addstrAlt(CONST_siege161, gamelog);
 					mvaddstrAlt(9,  1, CONST_siege162, gamelog);
-					addstrAlt(location[l]->name, gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 			 	pressAnyKey();
 				}
 			}
-			else if (location[l]->siege.timeuntilfiremen > 0) location[l]->siege.timeuntilfiremen--;
-			else if (lawList[LAW_FREESPEECH] == -2 && location[l]->siege.timeuntilfiremen == 0 && !location[l]->siege.siege&&numpres > 0)
+			else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) > 0) LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) -1);
+			else if (lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) &&numpres > 0)
 			{
 				music.play(MUSIC_SIEGE);
-				location[l]->siege.timeuntilfiremen = -1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
 				// Firemen raid!
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege163, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege188, gamelog);
 				gamelog.newline();
 				mvaddstrAlt(9,  1, CONST_siege165, gamelog);
@@ -1456,20 +1429,16 @@ void siegecheck(char canseethings)
 				mvaddstrAlt(6,  1, CONST_siege169, gamelog);
 				gamelog.nextMessage();
 		 	pressAnyKey();
-				location[l]->siege.siege = 1;
-				location[l]->siege.siegetype = SIEGE_FIREMEN;
-				location[l]->siege.underattack = 1;
-				location[l]->siege.lights_off = 0;
-				location[l]->siege.cameras_off = 0;
+			firemanSiege(l);
 				offended_firemen = 0;
 			}
-			else if (lawList[LAW_FREESPEECH] == -2 && location[l]->siege.timeuntilfiremen == 0)
+			else if (lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0)
 			{
-				location[l]->siege.timeuntilfiremen = -1;
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8,  1, CONST_siege170, gamelog);
-				addstrAlt(location[l]->getname(), gamelog);
+				addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 				addstrAlt(CONST_siege177, gamelog);
 				gamelog.newline();
 		 	pressAnyKey();
@@ -1496,24 +1465,25 @@ void siegecheck(char canseethings)
 						continue;
 					}
 				}
-				delete_and_clear(location[l]->loot);
-				if (location[l]->compound_walls & COMPOUND_PRINTINGPRESS)
+				deleteLocationLoot(l);
+				if (hasPrintingPress(l))
 				{
 					mvaddstrAlt(10,  1, CONST_siege174, gamelog);
 					gamelog.newline();
-					location[l]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+					deletePrintingPress(l);
 					offended_firemen = 0;
 				}
-				if (location[l]->front_business != -1)
+				if (hasBusinessFront(l))
 				{
 					mvaddstrAlt(12,  1, CONST_siege175, gamelog);
 					gamelog.newline();
-					location[l]->front_business = -1;
+					deleteBusinessFront(l);
 				}
 				gamelog.newline();
 			}
-			else if (lawList[LAW_FREESPEECH] <= -1 && location[l]->siege.timeuntilfiremen == 0)
-				location[l]->siege.timeuntilfiremen = -1, offended_firemen = 0;
+			else if (lawList[LAW_FREESPEECH] <= -1 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0)
+				LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
+				offended_firemen = 0;
 		}
 	}
 }
@@ -1526,17 +1496,23 @@ int numbereating(int loc)
 	return eaters;
 }
 /* siege - updates sieges in progress */
+void reduceCompoundStores(int loc, int amount);
+void emptyCompoundStores(int l);
+void deleteGeneratorLightsOff(int l);
+void setUnderAttack(int l);
+bool getLightsOff(int l);
+void setLightsOff(int l);
+bool hasBasicCompoundWalls(int l);
 void siegeturn(char clearformess)
 {
 	if (disbanding)return;
 	// Count people at each location
-	int l;
 	//int hs=-1;
-	int* liberalcount = new int[len(location)];
-	char* food_prep = new char[len(location)];
+	int* liberalcount = new int[LocationsPool::getInstance().lenpool()];
+	char* food_prep = new char[LocationsPool::getInstance().lenpool()];
 	// Clear food_prep and liberalcount lists
-	std::memset(food_prep, 0, len(location));
-	std::memset(liberalcount, 0, sizeof(int)*len(location));
+	std::memset(food_prep, 0, LocationsPool::getInstance().lenpool());
+	std::memset(liberalcount, 0, sizeof(int)*LocationsPool::getInstance().lenpool());
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive)continue; // Dead people don't count
@@ -1544,7 +1520,7 @@ void siegeturn(char clearformess)
 		if (pool[p]->location == -1)continue; // Vacationers don't count
 		liberalcount[pool[p]->location]++;
 	}
-	for (l = 0; l < len(location); l++) if (location[l]->siege.siege)
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) if (LocationsPool::getInstance().isThereASiegeHere(l))
 	{
 		//resolve sieges with no people
 		if (liberalcount[l] == 0)
@@ -1552,11 +1528,11 @@ void siegeturn(char clearformess)
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8,  1, CONST_siege176, gamelog);
-			addstrAlt(location[l]->getname(), gamelog);
+			addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
 			addstrAlt(CONST_siege177, gamelog);
 			gamelog.newline();
-			if (location[l]->siege.siegetype == SIEGE_CCS&&location[l]->type == SITE_INDUSTRY_WAREHOUSE)
-				location[l]->renting = RENTING_CCS; // CCS Captures warehouse
+			if (LocationsPool::getInstance().getSiegeType(l) == SIEGE_CCS&& LocationsPool::getInstance().getLocationType(l) == SITE_INDUSTRY_WAREHOUSE)
+				CCSCapturesSite(l);
 	 	pressAnyKey();
 			int y = 9;
 			for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
@@ -1581,12 +1557,12 @@ void siegeturn(char clearformess)
 					continue;
 				}
 			}
-			delete_and_clear(location[l]->loot);
+			deleteLocationLoot(l);
 			for (int v = len(vehicle) - 1; v >= 0; v--) if (vehicle[v]->get_location() == l) delete_and_remove(vehicle, v);
 			gamelog.newline();
-			location[l]->siege.siege = 0;
+			endLocationSiege(l);
 		}
-		if (!location[l]->siege.underattack)
+		if (!LocationsPool::getInstance().isThisUnderAttack(l))
 		{
 			// Seperate logging message.
 			gamelog.record(CONST_siege180);
@@ -1594,7 +1570,7 @@ void siegeturn(char clearformess)
 			//EAT
 			bool starving = false;
 			int eaters = numbereating(l);
-			if (location[l]->compound_stores == 0 && eaters > 0)
+			if (LocationsPool::getInstance().getStoresAmount(l) == 0 && eaters > 0)
 			{
 				starving = true;
 				if (clearformess) eraseAlt();
@@ -1604,8 +1580,8 @@ void siegeturn(char clearformess)
 				gamelog.newline();
 		 	pressAnyKey();
 			}
-			if (location[l]->compound_stores >= eaters) location[l]->compound_stores -= eaters;
-			else location[l]->compound_stores = 0;
+			if (LocationsPool::getInstance().getStoresAmount(l) >= eaters) reduceCompoundStores(l, eaters);
+			else emptyCompoundStores(l);
 			//ATTACK!
 			char attack = 0;
 			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
@@ -1634,14 +1610,14 @@ void siegeturn(char clearformess)
 				mvaddstrAlt(8,  1, CONST_siege183, gamelog);
 				gamelog.newline();
 		 	pressAnyKey();
-				location[l]->siege.underattack = 1;
+			setUnderAttack(l);
 			}
 			else
 			{
 				char no_bad = 1;
 				//CUT LIGHTS
-				if (!location[l]->siege.lights_off &&
-					!(location[l]->compound_walls & COMPOUND_GENERATOR) && !LCSrandom(10))
+				if (!getLightsOff(l) &&
+					!(hasAGenerator(l)) && !LCSrandom(10))
 				{
 					no_bad = 0;
 					if (clearformess) eraseAlt();
@@ -1650,10 +1626,10 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(8,  1, CONST_siege184, gamelog);
 					gamelog.newline();
 			 	pressAnyKey();
-					location[l]->siege.lights_off = 1;
+				setLightsOff(l);
 				}
 				//SNIPER
-				if (!(location[l]->compound_walls & COMPOUND_BASIC) && !LCSrandom(5))
+				if (!(hasBasicCompoundWalls(l)) && !LCSrandom(5))
 				{
 					no_bad = 0;
 					vector<int> pol;
@@ -1685,7 +1661,7 @@ void siegeturn(char clearformess)
 				 	pressAnyKey();
 					}
 				}
-				if (location[l]->siege.escalationstate >= 3 && !LCSrandom(3))
+				if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(3))
 				{
 					no_bad = 0;
 					//AIR STRIKE!
@@ -1696,8 +1672,8 @@ void siegeturn(char clearformess)
 					mvaddstrAlt(8,  1, CONST_siege189, gamelog);
 					gamelog.newline();
 			 	pressAnyKey();
-					bool hasAAGun = location[l]->compound_walls & COMPOUND_AAGUN;
-					bool hasGenerator = location[l]->compound_walls & COMPOUND_GENERATOR;
+				bool hasAAGun = siteHasAAGun(l);
+					bool hasGenerator = hasAGenerator(l);
 					if (hasAAGun)
 					{
 						if (clearformess) eraseAlt();
@@ -1751,7 +1727,7 @@ void siegeturn(char clearformess)
 							mvaddstrAlt(8,  1, CONST_siege197, gamelog);
 							gamelog.newline();
 					 	pressAnyKey();
-							location[l]->compound_walls &= ~COMPOUND_AAGUN;
+						deleteAAGun(l);
 						}
 						else if (hasGenerator && !LCSrandom(3))
 						{
@@ -1765,8 +1741,7 @@ void siegeturn(char clearformess)
 							mvaddstrAlt(8,  1, CONST_siege199, gamelog);
 							gamelog.newline();
 					 	pressAnyKey();
-							location[l]->compound_walls &= ~COMPOUND_GENERATOR;
-							location[l]->siege.lights_off = 1;
+						deleteGeneratorLightsOff(l);
 						}
 						if (!LCSrandom(2))
 						{
@@ -1807,8 +1782,8 @@ void siegeturn(char clearformess)
 						}
 					}
 				}
-				if ((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
-					location[l]->siege.escalationstate >= 3 && !LCSrandom(15))
+				if ((LocationsPool::getInstance().doWeHaveTankTraps(l)) &&
+					LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(15))
 				{
 					no_bad = 0;
 					//ENGINEERS
@@ -1827,7 +1802,7 @@ void siegeturn(char clearformess)
 					addstrAlt(CONST_siege204, gamelog);
 					gamelog.newline();
 			 	pressAnyKey();
-					location[l]->compound_walls &= ~COMPOUND_TANKTRAPS;
+				LocationsPool::getInstance().deleteTankTraps(l);
 				}
 				//NEED GOOD THINGS TO BALANCE THE BAD
 				// ELITE REPORTER SNEAKS IN
@@ -1939,8 +1914,8 @@ void siegeturn(char clearformess)
 				}
 			}
 			gamelog.newline(); // single blank line after every siege day
-		} // end if(!location[l]->siege.underattack)
-	} // end for(l=0;l<len(location);l++) if(location[l]->siege.siege)
+		} 
+	} 
 	delete[] liberalcount;
 	delete[] food_prep;
 }
@@ -1949,8 +1924,10 @@ int fooddaysleft(int loc)
 {
 	int eaters = numbereating(loc);
 	if (eaters == 0) return -1;
-	return location[loc]->compound_stores / eaters + ((location[loc]->compound_stores%eaters) > eaters / 2);
+	return LocationsPool::getInstance().getStoresAmount(loc) / eaters + ((LocationsPool::getInstance().getStoresAmount(loc)%eaters) > eaters / 2);
 }
+void escalateSite(int l);
+void dumpLootAtLocation(int homes, vector<Item *>& loot);
 /* siege - what happens when you escaped the siege */
 void escapesiege(char won)
 {
@@ -1979,11 +1956,11 @@ void escapesiege(char won)
 		gamelog.log(CONST_siege227);
  	pressAnyKey();
 		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
-		if (activesquad&&homes != -1) location[homes]->getloot(activesquad->loot);
+	if (activesquad&&homes != -1) dumpLootAtLocation(homes, activesquad->loot);
 		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
 							//but we need to disband current squad as the people are going to be 'away'.
 							//GET RID OF DEAD, etc.
-		if (LocationsPool::getInstance().getRentingType(cursite) > 1)location[cursite]->renting = RENTING_NOCONTROL;
+		if (LocationsPool::getInstance().getRentingType(cursite) > 1)LocationsPool::getInstance().setRenting(cursite, RENTING_NOCONTROL);
 		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
 			if (pool[p]->location != cursite) continue;
@@ -2001,21 +1978,20 @@ void escapesiege(char won)
 				pool[p]->location = homes;
 			pool[p]->base = homes;
 		}
-		delete_and_clear(location[cursite]->loot);
+		deleteLocationLoot(cursite);
 		for (int v = len(vehicle) - 1; v >= 0; v--)
 			if (vehicle[v]->get_location() == cursite)
 				delete_and_remove(vehicle, v);
-		location[cursite]->compound_walls = 0;
-		location[cursite]->compound_stores = 0;
-		location[cursite]->front_business = -1;
+		deleteCompoundWalls(cursite);
+		emptyCompoundStores(cursite);
+		deleteBusinessFront(cursite);
 		LocationsPool::getInstance().initLocation(cursite);
 	}
 	//SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
-	location[cursite]->siege.siege = 0;
+	endLocationSiege(cursite);
 	if (won&&LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 	{
-		location[cursite]->siege.timeuntillocated = LCSrandom(4) + 4;
-		location[cursite]->siege.escalationstate++;
+		escalateSite(cursite);
 		if (police_heat < 4) police_heat++;
 	}
 }
@@ -2046,12 +2022,12 @@ void conquertext()
 	mvaddstrAlt(7, 19, CONST_siege274);
 	while (getkeyAlt() != 'c');
 }
+siegest getWholeSiege(int l);
 // Siege -- Mass combat outside safehouse
 char sally_forth_aux(int loc)
 {
-	int p;
 	reloadparty();
-	siegest siege = location[loc]->siege;
+	siegest siege = getWholeSiege(loc);
 	cursite = loc;
 	emptyEncounter();
 	switch (siege.siegetype)
@@ -2072,7 +2048,7 @@ char sally_forth_aux(int loc)
 		else if (siege.escalationstate >= 1)
 			fillEncounter(CREATURE_SOLDIER, ENCMAX - 9);
 		// M1 Tank
-		if (siege.escalationstate >= 2 && !(location[loc]->compound_walls & COMPOUND_TANKTRAPS))
+		if (siege.escalationstate >= 2 && !(LocationsPool::getInstance().doWeHaveTankTraps(loc)))
 			makecreature(encounter[ENCMAX - 9], CREATURE_TANK);
 		break;
 	}
@@ -2083,7 +2059,7 @@ char sally_forth_aux(int loc)
 	{
 		// Count heroes
 		int partysize = 0, partyalive = 0;
-		for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
 		{
 			partysize++;
 			if (pool[p]->alive) partyalive++;
@@ -2095,7 +2071,7 @@ char sally_forth_aux(int loc)
 		autopromote(loc);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, location[loc]->getname());
+		mvaddstrAlt(0,  0, LocationsPool::getInstance().getLocationName(loc));
 		// Player's party
 		if (partyalive == 0) party_status = -1;
 		printparty();
@@ -2172,7 +2148,7 @@ char sally_forth_aux(int loc)
 			if (c == 'e') LocationsPool::getInstance().equipLoc(loc, -1);
 			// Check for victory
 			partysize = 0, partyalive = 0;
-			for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
 			{
 				partysize++;
 				if (pool[p]->alive) partyalive++;
@@ -2239,7 +2215,7 @@ void sally_forth()
 	gamelog.log(CONST_siege245);
  	pressAnyKey();
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
-		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
+		CCSCapturesSite(loc); // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
 	//DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
@@ -2313,11 +2289,11 @@ void escape_engage()
 	if (selectedsiege != -1) loc = selectedsiege;
 	if (activesquad != NULL) loc = activesquad->squad[0]->location;
 	if (loc == -1) return;
-	if (location[loc]->compound_walls&COMPOUND_CAMERAS)
+	if (LocationsPool::getInstance().siteHasCameras(loc))
 	{
 		mvaddstrAlt(yLevel,  16, CONST_siege250);
 	}
-	if (location[loc]->compound_walls&COMPOUND_TRAPS)
+	if (LocationsPool::getInstance().hasTraps(loc))
 	{
 		mvaddstrAlt(yLevel + 1,  16, CONST_siege251);
 	}
@@ -2326,10 +2302,10 @@ void escape_engage()
 	// Seperate logging text
 	gamelog.log(CONST_siege253);
  	pressAnyKey();
-	if (location[loc]->siege.siegetype == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
-		location[loc]->renting = RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS&&LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
+		CCSCapturesSite(loc); // CCS Captures warehouse -- this will be reversed if you fight them off
 											  //CRIMINALIZE
-	if (location[loc]->siege.siegetype == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE) criminalizepool(LAWFLAG_RESIST, -1, loc);
 	//DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 		if (squad[sq] != activesquad&&squad[sq]->squad[0])
@@ -2366,11 +2342,11 @@ void escape_engage()
 	autopromote(loc);
 	//START FIGHTING
 	newsstoryst *ns = new newsstoryst;
-	if (location[loc]->siege.underattack) ns->type = NEWSSTORY_SQUAD_FLEDATTACK;
+	if (LocationsPool::getInstance().isThisUnderAttack(loc)) ns->type = NEWSSTORY_SQUAD_FLEDATTACK;
 	else ns->type = NEWSSTORY_SQUAD_ESCAPED;
 	ns->positive = 1;
 	ns->loc = loc;
-	ns->siegetype = location[loc]->siege.siegetype;
+	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
 	newsstory.push_back(ns);
 	mode_site(loc);
 }

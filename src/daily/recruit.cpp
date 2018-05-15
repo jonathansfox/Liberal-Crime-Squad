@@ -106,7 +106,7 @@ char recruitment_activity(Creature &cr)
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstr_f(10, 0, CONST_recruit005.c_str(), cr.name, name);
- 	pressAnyKey();
+		pressAnyKey();
 		int recruitCount = 0;
 		if (difficulty < 10)
 			// Generate recruitment candidates

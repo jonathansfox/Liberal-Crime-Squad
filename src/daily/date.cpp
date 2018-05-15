@@ -515,7 +515,6 @@ extern string pressKeyToReflect;
 char completedate(datest &d, int p)
 {
 	music.play(MUSIC_DATING);
-	int e;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
@@ -526,7 +525,7 @@ char completedate(datest &d, int p)
 		else addstrAlt(CONST_date064, gamelog);
 	}
 	else addstrAlt(CONST_date065, gamelog);
-	for (e = 0; e < len(d.date); e++)
+	for (int e = 0; e < len(d.date); e++)
 	{
 		addstrAlt(d.date[e]->name, gamelog);
 		if (e <= len(d.date) - 3) addstrAlt(commaSpace, gamelog);
@@ -590,7 +589,7 @@ char completedate(datest &d, int p)
  	pressAnyKey();
 		return 1;
 	}
-	for (e = len(d.date) - 1; e >= 0; e--)
+	for (int e = len(d.date) - 1; e >= 0; e--)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

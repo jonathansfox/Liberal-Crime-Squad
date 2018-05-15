@@ -46,6 +46,7 @@ class Item
       bool empty() const { return number_<=0; }
       const string& get_itemtypename() const { return itemtypename_; }
       long get_itemtypeid() const { return itemtypeid_; }
+	  bool no_quick_fencing() const { return false;  } // Overridden in loot.h.  Try to never use at all.
    protected:
       //string& get_itemtypename() { return itemtypename_; }
       //const string& get_itemtypename() const { return itemtypename_; }

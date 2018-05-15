@@ -155,7 +155,7 @@ void passmonth(char &clearformess,char canseethings);
 #include "../common/musicClass.h"
 #include "../common/creaturePool.h"
 extern vector<Creature *> pool;
-extern vector<Location *> location;
+#include "../locations/locationsPool.h"
 extern Log gamelog;
 extern MusicClass music;
 extern int stat_buys;
@@ -333,9 +333,15 @@ bool show_disbanding_screen(int& oldforcemonth)
 	mvaddstrAlt(24, 0, CONST_basemode030);
 	return(getkeyAlt() != 'r');
 }
+int countSafeHouses();
+Location* getLocation();
+void equipLoot(int l, int loc);
+bool isPartOfJusticeSystem(int cursite);
+bool isThisSafehouse(int loc);
+void burnFlagAtLocation(int l);
 void mode_base()
 {
-	int nonsighttime = 0, oldforcemonth = month, l = 0;
+	int nonsighttime = 0, oldforcemonth = month;
 	// FIXME This while(true) loop does not have an exit point  It relies on end_game(); to be called at some point
 	while (true)
 	{
@@ -357,7 +363,7 @@ void mode_base()
 					pool[p]->hiding == 0 &&
 					!(pool[p]->flag & CREATUREFLAG_SLEEPER))
 				{
-					if (!location[pool[p]->location]->part_of_justice_system())
+					if (!isPartOfJusticeSystem(pool[p]->location))
 					{
 						canseethings = 1;
 						if (pool[p]->clinic == 0) { forcewait = 0; break; }
@@ -395,12 +401,8 @@ void mode_base()
 			delete_and_remove(squad, getsquad(activesquad->id));
 			activesquad = NULL;
 		}
-		int safenumber = 0;
-		for (l = 0; l < len(location); l++) if (location[l]->is_lcs_safehouse()) safenumber++;
-		Location *loc = NULL;
-		if (selectedsiege != -1) loc = location[selectedsiege];
-		if (activesquad) if (activesquad->squad[0]->location != -1)
-			loc = location[activesquad->squad[0]->location];
+		int safenumber = countSafeHouses();
+		Location *loc = getLocation();
 		siegest *siege = NULL;
 		if (loc) siege = &loc->siege;
 		char sieged = 0, underattack = 0;
@@ -416,18 +418,18 @@ void mode_base()
 		char haveflag = 0;
 		if (loc) haveflag = loc->haveflag;
 		// Count people at each location
-		int* num_present = new int[len(location)];
-		for (int i = 0; i < len(location); i++) num_present[i] = 0;
+		int* num_present = new int[LocationsPool::getInstance().lenpool()];
+		for (int i = 0; i < LocationsPool::getInstance().lenpool(); i++) num_present[i] = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{  // Dead people, non-liberals, and vacationers don't count
 			if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location == -1) continue;
 			num_present[pool[p]->location]++;
 		}
 		char cannotwait = 0;
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 		{
-			if (!location[l]->siege.siege) continue;
-			if (location[l]->siege.underattack)
+			if (!LocationsPool::getInstance().isThereASiegeHere(l)) continue;
+			if (LocationsPool::getInstance().isThisUnderAttack(l))
 			{
 				// Allow siege if no liberals present
 				if (num_present[l])cannotwait = 1;
@@ -443,8 +445,8 @@ void mode_base()
 			if (selectedsiege != -1)
 			{
 				printlocation(selectedsiege);
-				if (location[selectedsiege]->can_be_upgraded() &&
-					!location[selectedsiege]->siege.siege)
+				if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) &&
+					!LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
 				{
 					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(8, 1, CONST_basemode034);
@@ -605,7 +607,7 @@ void mode_base()
 		{
 		case 'x': return;
 		case 'i': if (selectedsiege != -1)
-			if (location[selectedsiege]->can_be_upgraded() && !location[selectedsiege]->siege.siege)
+			if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) && !LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
 				investlocation(); break;
 		case 'l': disbanding = liberalagenda(0); break;
 		case 'g': if (sieged) { giveup(); cleangonesquads(); } break;
@@ -628,15 +630,15 @@ void mode_base()
 		} break;
 		case 'z': if (safenumber) {
 			activesquad = NULL;
-			for (int l = (selectedsiege == -1 || selectedsiege + 1 >= len(location)) ? 0 : selectedsiege + 1;
-			l<len(location); l++)
-				if (location[l]->is_lcs_safehouse()) { selectedsiege = l; break; }
-				else if (l == len(location) - 1) l = -1;
+			for (int l = (selectedsiege == -1 || selectedsiege + 1 >= LocationsPool::getInstance().lenpool()) ? 0 : selectedsiege + 1;
+			l<LocationsPool::getInstance().lenpool(); l++)
+				if (isThisSafehouse(l)) { selectedsiege = l; break; }
+				else if (l == LocationsPool::getInstance().lenpool() - 1) l = -1;
 		} break;
 		case 'e': if (partysize&&!underattack&&activesquad->squad[0]->location != -1) {
 			short ops = party_status;
 			party_status = -1;
-			equip(location[activesquad->squad[0]->location]->loot, -1);
+			equipLoot(activesquad->squad[0]->location, -1);
 			party_status = ops;
 		} break;
 		case 'r': if (CreaturePool::getInstance().lenpool()) review(); break;
@@ -669,13 +671,13 @@ void mode_base()
 			stat_burns++;
 			if (selectedsiege != -1)
 			{
-				location[selectedsiege]->haveflag = 0;
+				burnFlagAtLocation(selectedsiege);
 				if (lawList[LAW_FLAGBURNING] < 1)
 					criminalizepool(LAWFLAG_BURNFLAG, -1, selectedsiege);
 			}
 			if (activesquad)
 			{
-				location[activesquad->squad[0]->base]->haveflag = 0;
+				burnFlagAtLocation(activesquad->squad[0]->base);
 				if (lawList[LAW_FLAGBURNING] < 1)
 					criminalizepool(LAWFLAG_BURNFLAG, -1, activesquad->squad[0]->base);
 			}

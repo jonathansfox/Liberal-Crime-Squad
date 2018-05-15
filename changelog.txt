@@ -1,4 +1,4 @@
-debug without recompiling
+﻿debug without recompiling
 debug_defines.txt
 
 lines (including comments) cannot be longer than 80 characters or LCS freezes on startup
@@ -262,3 +262,52 @@ repeatedly calls getKey() until the specified key is pressed, for times when pre
 Bugfix:
 Squads visiting apartments (that have been rented) are correctly prompted "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?"  So, no more disbanding the squad in order to reassign their safehouse.
 Weird friggin bug.
+
+4.12.19
+
+No changes in code, reinstalled operating system and then recompiled due to suspicion of virus on my computer.
+
+4.12.20
+
+Restructured much of the trial() method, extracted submethods pleadGuilty() and pleadInnocent()
+Restructured the tend_hostage() method.  Mostly reduced scope of local variables y and p.
+Minor changes to siege.cpp
+Identified 155 instances of for loops using iterators declared outside the loop.
+Found and removed the usage of displayads(... int &it2)
+it2 is used in displayads() to pass to displaysinglead(), which uses it as an iterator, whose value is immediately reassigned to 0.
+In other words, int &it2 isn't used for any reason.
+Fixing fragile code is its own reward.
+19 for loops with iterators declared outside remaining.  These ones, at least, have a reason to declare the iterator outside the loop.
+regular expression used:
+for\s*\(\w*\s*\=
+Found a for loop within talkInCombat() that has an iterator declared outside the loop, but is not found by the regular expression.
+			int e = 0;
+			for (; e < ENCMAX; e++)
+In this instance, this programming practice may be justified.
+
+Removed an unused variable "nullify" from creaturePool.cpp monthlyRunTheSystem()
+
+Removed extern vector<Locations*> from fight.cpp
+Removed extern vector<Locations*> from reviewmode.cpp
+Removed extern vector<Locations*> from sitemode.cpp
+REMOVED  \src\daily\activities.cpp(285):extern vector<Location *> location; (double check when players bury bodies)
+REMOVED  \src\basemode\basemode.cpp(158):extern vector<Location *> location;
+  \src\title\saveload.cpp(132):extern vector<Location *> location;
+  \src\sitemode\shop.cpp(113):extern vector<Location *> location; (Just about empty, last few instances are complicated)
+REMOVED  \src\daily\siege.cpp(345):extern vector<Location *> location; (TODO Tons of cleanup, especially duplicate code, but that's the case everywhere)
+REMOVED  \src\sitemode\talk.cpp(88):extern vector<Location *> location;
+The remaining files using extern vector<Location *> location;
+
+Discovered bug: Clothing suspicion level remains based on last location, making it red or whatever even after returning to base.
+No change for ingame behavior, mostly only shows up if player visits location that even outside one is considered suspicious.
+Low priority.
+
+Added a function from loot.h to item.h, had previously been a new method for Loot class.
+
+Deleted a few pointless header files.
+
+LocationsPool.cpp is now about 3_000 lines, and the LocationsPool class possesses over 60 methods.  They have gone from part of the solution to being part of the problem.
+This is especially the case with regards to siege.cpp, as my coding became increasingly redundant as fatigue wore on.
+
+Added new key 'J' to reload weapons, but only weapons that are empty.
+Not the best, but it does the job.

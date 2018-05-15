@@ -237,7 +237,6 @@ void advancecreature(Creature &cr)
 /* handles end of round stuff for everyone */
 void creatureadvance()
 {
-	int e;
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;
@@ -278,7 +277,7 @@ void creatureadvance()
 		CreaturePool::getInstance().advanceCreaturesAtLocation(cursite);
 		autopromote(cursite);
 	}
-	for (e = 0; e < ENCMAX; e++)
+	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (!encounter[e].exists) continue;
 		if (!encounter[e].alive) continue;
@@ -291,7 +290,7 @@ void creatureadvance()
 		//TAKE THE DEAD WITH YOU
 		squadgrab_immobile(1);
 	}
-	for (e = ENCMAX - 1; e >= 0; e--)
+	for (int e = ENCMAX - 1; e >= 0; e--)
 	{
 		if (!encounter[e].exists) continue;
 		if (!encounter[e].alive) delenc(e, 1);

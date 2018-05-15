@@ -295,11 +295,11 @@ LocationsPool LocationsPool::getInstance()
 	}
 	return lPool;
 }
-int LocationsPool::lenpool()
+const int LocationsPool::lenpool()
 {
 	return len(location);
 }
-int LocationsPool::getLocationCity(int cursite) {
+const int LocationsPool::getLocationCity(int cursite) {
 	return location[cursite]->city;
 }
 void LocationsPool::hideCCSSafehouses()
@@ -319,7 +319,7 @@ void LocationsPool::addHeat(int cursite, int heat)
 	location[cursite]->heat += heat;
 }
 #include "../common/equipment.h"
-void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox)
+const void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox)
 {
 	//FIND ALL LOOT TYPES
 	for (int loc = 0; loc < LocationsPool::getInstance().lenpool(); loc++)
@@ -338,11 +338,11 @@ void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& lootty
 		}
 	}
 }
-bool LocationsPool::isLocationMapped(int cursite)
+const bool LocationsPool::isLocationMapped(int cursite)
 {
 	return location[cursite]->mapped;
 }
-bool LocationsPool::isLocationHidden(int cursite)
+const bool LocationsPool::isLocationHidden(int cursite)
 {
 	return location[cursite]->hidden;
 }
@@ -351,22 +351,23 @@ void LocationsPool::setLocationMappedAndUnhidden(int cursite)
 	location[cursite]->mapped = 1;
 	location[cursite]->hidden = 0;
 }
-string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a) {
+const string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a) {
 	return getLocationNameWithGetnameMethod(cursite, a, false);
 }
-string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a, bool b)
+const string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a, bool b)
 {
 	return location[cursite]->getname(a, b);
 }
-int LocationsPool::getCompoundWalls(int cursite)
+const int LocationsPool::getCompoundWalls(int cursite)
 {
 	return location[cursite]->compound_walls;
 }
+// Redundant, carelessly, worry later TODO
 void LocationsPool::setTimeUntilSiege(int cursite, int time)
 {
-	location[cursite]->siege.timeuntillocated = time;
+	LocationsPool::getInstance().setSiegetimeuntillocated(cursite, time);
 }
-bool LocationsPool::isNewRental(int cursite)
+const bool LocationsPool::isNewRental(int cursite)
 {
 	return location[cursite]->newrental;
 }
@@ -386,15 +387,15 @@ void LocationsPool::evictLCSFrom(int l)
 	location[l]->compound_stores = 0;
 	location[l]->front_business = -1;
 }
-int LocationsPool::isThisSiteClosed(int cursite)
+const int LocationsPool::isThisSiteClosed(int cursite)
 {
 	return location[cursite]->closed;
 }
-char LocationsPool::doesThisPlaceNeedACar(int cursite)
+const char LocationsPool::doesThisPlaceNeedACar(int cursite)
 {
 	return location[cursite]->needcar;
 }
-int LocationsPool::findTravelLocation()
+const int LocationsPool::findTravelLocation()
 {
 	int travelLocation = -1;
 	for (int i = 0; i < len(location); i++) {
@@ -406,7 +407,7 @@ int LocationsPool::findTravelLocation()
 	}
 	return travelLocation;
 }
-int LocationsPool::getLocationParent(int cursite)
+const int LocationsPool::getLocationParent(int cursite)
 {
 	return location[cursite]->parent;
 }
@@ -442,7 +443,7 @@ void LocationsPool::getAssetValues(long & weaponValue, long & armorValue, long &
 			if (item->whatIsThis() == THIS_IS_LOOT) lootValue += item->get_fencevalue()*item->get_number();
 		}
 }
-bool LocationsPool::canBeFortified(int cursite)
+const bool LocationsPool::canBeFortified(int cursite)
 {
 	return location[cursite]->can_be_fortified();
 }
@@ -472,11 +473,11 @@ void LocationsPool::delete_and_clear_pool()
 {
 	delete_and_clear(location);
 }
-char LocationsPool::isThereASiegeHere(int cursite)
+const char LocationsPool::isThereASiegeHere(int cursite)
 {
 	return location[cursite]->siege.siege;
 }
-int LocationsPool::isThisPlaceHighSecurity(int cursite)
+const int LocationsPool::isThisPlaceHighSecurity(int cursite)
 {
 	return location[cursite]->highsecurity;
 }
@@ -488,19 +489,19 @@ void LocationsPool::isThisPlaceHighSecurity(int cursite, int newCondition)
 {
 	location[cursite]->highsecurity = newCondition;
 }
-char LocationsPool::getLocationType(int cursite)
+const char LocationsPool::getLocationType(int cursite)
 {
 	return location[cursite]->type;
 }
-short LocationsPool::getSiegeType(int cursite)
+const short LocationsPool::getSiegeType(int cursite)
 {
 	return location[cursite]->siege.siegetype;
 }
-short LocationsPool::getSiegeEscalationState(int cursite)
+const short LocationsPool::getSiegeEscalationState(int cursite)
 {
 	return location[cursite]->siege.escalationstate;
 }
-int LocationsPool::getRentingType(int cursite)
+const int LocationsPool::getRentingType(int cursite)
 {
 	return location[cursite]->renting;
 }
@@ -530,7 +531,8 @@ void LocationsPool::eraseAndReplaceGraffiti(int cursite, int locx, int locy, int
 	struct sitechangest change(locx, locy, locz, SITEBLOCK_GRAFFITI);
 	location[cursite]->changes.push_back(change);
 }
-string LocationsPool::getLocationName(int cursite)
+
+const string LocationsPool::getLocationName(int cursite)
 {
 	return location[cursite]->getname();
 }
@@ -1474,11 +1476,11 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 /* equipment - assign new bases to the equipment */
 void equipmentbaseassign()
 {
-	int p = 0, l = 0, page_loot = 0, page_loc = 0, selectedbase = 0;
+	int page_loot = 0, page_loc = 0, selectedbase = 0;
 	bool sortbytype = false;
 	vector<Item *> temploot;
 	map<Item *, Location *> temploot2;
-	for (l = 0; l < len(location); l++) for (int l2 = 0; l2 < len(location[l]->loot); l2++)
+	for (int l = 0; l < len(location); l++) for (int l2 = 0; l2 < len(location[l]->loot); l2++)
 		if (!location[l]->siege.siege)
 		{
 			temploot.push_back(location[l]->loot[l2]);
@@ -1486,7 +1488,7 @@ void equipmentbaseassign()
 		}
 	if (!len(temploot)) return;
 	vector<int> temploc;
-	for (l = 0; l < len(location); l++) if (location[l]->renting >= 0 && !location[l]->siege.siege)
+	for (int l = 0; l < len(location); l++) if (location[l]->renting >= 0 && !location[l]->siege.siege)
 		temploc.push_back(l);
 	if (!len(temploc)) return;
 	while (true)
@@ -1497,8 +1499,7 @@ void equipmentbaseassign()
 		mvaddstrAlt(0, 0, CONST_locationsPool082);
 		mvaddstrAlt(1, 0, CONST_locationsPool083);
 		mvaddstrAlt(1, 51, CONST_locationsPool084);
-		int y = 2;
-		for (p = page_loot * 19; p < len(temploot) && p < page_loot * 19 + 19; p++, y++)
+		for (int p = page_loot * 19, y = 2; p < len(temploot) && p < page_loot * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
@@ -1506,8 +1507,7 @@ void equipmentbaseassign()
 			addstrAlt(temploot[p]->equip_title());
 			mvaddstrAlt(y, 25, temploot2[temploot[p]]->getname(true, true));
 		}
-		y = 2;
-		for (p = page_loc * 9; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
+		for (int p = page_loc * 9, y = 2; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
 		{
 			if (p == selectedbase)set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
@@ -1546,7 +1546,7 @@ void equipmentbaseassign()
 			else
 			{  //Sort by location
 				temploot.clear();
-				for (l = 0; l < len(location); l++) for (int l2 = 0; l2 < len(location[l]->loot); l2++)
+				for (int l = 0; l < len(location); l++) for (int l2 = 0; l2 < len(location[l]->loot); l2++)
 					if (!location[l]->siege.siege) temploot.push_back(location[l]->loot[l2]);
 			}
 		}
@@ -1601,9 +1601,8 @@ void equipmentbaseassign()
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<Item *> &loot)
 {
-	int l, l2;
 	//PUT THINGS TOGETHER
-	for (l = len(loot) - 1; l >= 1; l--) for (l2 = l - 1; l2 >= 0; l2--)
+	for (int l = len(loot) - 1; l >= 1; l--) for (int l2 = l - 1; l2 >= 0; l2--)
 	{
 		loot[l2]->merge(*loot[l]);
 		if (loot[l]->empty())
@@ -1864,10 +1863,10 @@ string safeHouse;
 /* base - go forth to stop evil */
 void stopevil()
 {
-	int l = 0, p = 0;
+	//int l = 0, p = 0;
 	if (!activesquad) return;
 	bool havecar = false;
-	for (p = 0; p < 6; p++) if (activesquad->squad[p]) if (activesquad->squad[p]->pref_carid != -1)
+	for (int p = 0; p < 6; p++) if (activesquad->squad[p]) if (activesquad->squad[p]->pref_carid != -1)
 	{
 		havecar = true;
 		break;
@@ -1876,7 +1875,7 @@ void stopevil()
 	int page = 0, loc = -1;
 	// Start at the city level, rather than the absolute top
 	if (multipleCityMode) {
-		for (l = 0; l < len(location); l++) {
+		for (int l = 0; l < len(location); l++) {
 			if (location[l]->type == squad_location->city) {
 				loc = l;
 				break;
@@ -1885,15 +1884,15 @@ void stopevil()
 	}
 	vector<long> temploc;
 	// 1. LCS safe houses
-	for (l = 0; l < len(location); l++)
+	for (int l = 0; l < len(location); l++)
 		if (location[l]->parent == loc && location[l]->renting >= 0 && !location[l]->hidden)
 			temploc.push_back(l);
 	// 2. CCS safe houses
-	for (l = 0; l < len(location); l++)
+	for (int l = 0; l < len(location); l++)
 		if (location[l]->parent == loc && location[l]->renting == RENTING_CCS && !location[l]->hidden)
 			temploc.push_back(l);
 	// 3. Other sites
-	for (l = 0; l < len(location); l++)
+	for (int l = 0; l < len(location); l++)
 		if (location[l]->parent == loc && location[l]->renting == RENTING_NOCONTROL && !location[l]->hidden)
 			temploc.push_back(l);
 	// Determine cost of tickets for travel
@@ -1911,14 +1910,14 @@ void stopevil()
 			mvaddstrAlt(8, 0, location[loc]->getname(-1, true));
 		}
 		temploc.clear();
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < len(location); l++)
 			if (location[l]->parent == loc&&location[l]->renting >= 0 && !location[l]->hidden)temploc.push_back(l);
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < len(location); l++)
 			if (location[l]->parent == loc&&location[l]->renting == RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < len(location); l++)
 			if (location[l]->parent == loc&&location[l]->renting == RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
 		int y = 10;
-		for (p = page * 11; p < len(temploc) && p < page * 11 + 11; p++)
+		for (int p = page * 11; p < len(temploc) && p < page * 11 + 11; p++)
 		{
 			if (p == -1) break;
 			Location* this_location = location[temploc[p]];
@@ -2039,7 +2038,7 @@ void stopevil()
 				if ((loc == -1 || (multipleCityMode && location[loc]->city != squad_location->city)) && !havecar)
 					loc = oldloc;
 				int subcount = 0;
-				for (l = 0; l < len(location); l++)
+				for (int l = 0; l < len(location); l++)
 					if (location[l]->parent == loc)
 						subcount++;
 				if (subcount == 0 || (multipleCityMode && loc >= 0 && location[loc]->city != squad_location->city))
@@ -2458,4 +2457,554 @@ void LocationsPool::removeTank(int cursite) {
 }
 void addLocationChange(int cursite, sitechangest change) {
 	location[cursite]->changes.push_back(change);
+}
+const int LocationsPool::getHeat(int cursite) {
+	return location[cursite]->heat;
+}
+void LocationsPool::setSiegetimeuntillocated(int cursite, int timer) {
+	location[cursite]->siege.timeuntillocated = timer;
+}
+
+void LocationsPool::clearHeat(int cursite) {
+	location[cursite]->heat = 0;
+}
+void setColorBasedOnSiege(const int cursite, const int y, const bool p) {
+	Location *loc = location[cursite];
+	siegest *siege = &loc->siege;
+	if (siege ? siege->siege : false) set_color_easy(siege->underattack ? p ? RED_ON_BLACK_BRIGHT : RED_ON_BLACK : p ? YELLOW_ON_BLACK_BRIGHT : YELLOW_ON_BLACK);
+	mvaddstrAlt(y, 31, location[cursite]->getname(true, true));
+}
+
+int consolidateSiegeLoot() {
+	int k = 0;
+	for (int l = 0; l < len(location); l++)
+	{
+		consolidateloot(location[l]->loot);
+		if (!location[l]->siege.siege)
+			k += len(location[l]->loot); // Review and Move Equipment
+	}
+	return k;
+}
+
+void nukeAllEmptySquads(const vector<int> squadloc, const int mode) {
+	//NUKE ALL EMPTY SQUADS
+	for (int sq = len(squad) - 1; sq >= 0; sq--)
+	{
+		bool hasmembers = false;
+		for (int p = 0; p < 6; p++)
+			if (squad[sq]->squad[p] != NULL)
+			{
+				hasmembers = true; break;
+			}
+		// in the event a new squad is created squadloc[] will be one shorter than squad[]
+		// But since a new squad cannot be created without members, this should
+		// not ever break
+		if (!hasmembers && mode == GAMEMODE_BASE)
+		{
+			if (squadloc[sq] != -1)
+				location[squadloc[sq]]->getloot(squad[sq]->loot);
+			if (activesquad == squad[sq])activesquad = NULL;
+			delete_and_remove(squad, sq);
+		}
+	}
+}
+
+void consolidateLoot(const int l) {
+	consolidateloot(location[l]->loot);
+}
+int LocationsPool::lenloot(const int l) {
+	return len(location[l]->loot);
+}
+string getLootTitle(const int base, const int l) {
+	return location[base]->loot[l]->equip_title();
+}
+
+int getLootNumber(const int base, const int l) {
+	return location[base]->loot[l]->get_number();
+}
+
+void LocationsPool::captureSite(int cursite) {
+	location[cursite]->renting = RENTING_PERMANENT; // Capture safehouse for the glory of the LCS!
+	location[cursite]->closed = 0;
+	location[cursite]->heat = 100;
+}
+
+void LocationsPool::closeSite(int cursite, int sitecrime) {
+	location[cursite]->closed = sitecrime / 10; // Close down site
+}
+bool LocationsPool::siteHasCameras(int cursite) {
+	return (location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off;
+}
+
+void getRandomLoot(int cursite) {
+	int b = LCSrandom(len(location[cursite]->loot));
+	Item *it = location[cursite]->loot[b];
+	activesquad->loot.push_back(it);
+	location[cursite]->loot.erase(location[cursite]->loot.begin() + b);
+}
+// Redundancy.  TODO Candidate for culling
+int lenloot(int cursite) {
+	return LocationsPool::getInstance().lenloot(cursite);
+}
+
+char LocationsPool::isThisUnderAttack(int cursite) {
+	return location[cursite]->siege.underattack;
+}
+
+void LocationsPool::setRenting(int cursite, int renting) {
+	location[cursite]->renting = renting;
+}
+
+char LocationsPool::isThisAFront(int cursite) {
+	return location[cursite]->front_business;
+}
+string LocationsPool::getFrontName(int cursite) {
+	return location[cursite]->front_name;
+}
+
+void LocationsPool::tickAttackTime(int cursite) {
+	location[cursite]->siege.attacktime++;
+}
+int LocationsPool::getAttackTime(int cursite) {
+	return location[cursite]->siege.attacktime;
+}
+void LocationsPool::resetAttackTime(int cursite) {
+	location[cursite]->siege.attacktime = 0;
+}
+int LocationsPool::doWeHaveTankTraps(int cursite) {
+	return (location[cursite]->compound_walls&COMPOUND_TANKTRAPS);
+}
+void LocationsPool::deleteTankTraps(int l) {
+	location[l]->compound_walls &= ~COMPOUND_TANKTRAPS;
+}
+void LocationsPool::spawnATank(int cursite) {
+	location[cursite]->siege.tanks++;
+}
+
+void LocationsPool::spawnATank(int cursite, int num) {
+	location[cursite]->siege.tanks = num;
+}
+
+int LocationsPool::getSiegeKills(int cursite) {
+	return location[cursite]->siege.kills;
+}
+int LocationsPool::getSiegeTanks(int cursite) {
+	return location[cursite]->siege.tanks;
+}
+
+void LocationsPool::turnOffSiege(int loc) {
+	location[loc]->siege.attacktime = 0;
+	location[loc]->siege.kills = 0;
+	location[loc]->siege.tanks = 0;
+}
+
+bool LocationsPool::hasTraps(int loc) {
+	return location[loc]->compound_walls&COMPOUND_TRAPS;
+}
+
+bool LocationsPool::lightsOff(int loc) {
+	return location[loc]->siege.lights_off;
+}
+int armor_makedifficulty(Armor& type, Creature *cr);
+void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > *pilelist, Creature cr) {
+	for (int passnum = 0; passnum < 3 && armor == NULL; passnum++) {
+
+		for (int l = 0; l < lenloot(cr.location); l++) {
+
+			if (location[cr.location]->loot[l]->whatIsThis() == THIS_IS_ARMOR)
+			{
+				bool dothis = false;
+				Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
+				bool blood = a->is_bloody();
+				bool damage = a->is_damaged();
+				bool hard = armor_makedifficulty(*a, &cr) > 4;
+				bool easy = armor_makedifficulty(*a, &cr) <= 4;
+
+				switch (passnum)
+				{
+				case 0: // Guaranteed to accomplish something
+					dothis = (blood && damage);
+					break;
+				case 1: // Find something to clean if low skill, repair if high
+					dothis = (blood && hard)
+						|| (damage && easy);
+					break;
+				case 2: // Anything that needs work
+					dothis = (blood || damage);
+					break;
+				}
+				if (dothis)
+				{
+					armor = a;
+					pile = location[cr.location]->loot[l];
+					pileindex = l;
+					pilelist = &location[cr.location]->loot;
+					break;
+				}
+			}
+
+		}
+
+	}
+}
+char tryFindCloth(int cursite) {
+	for (int l = 0; l < len(location[cursite]->loot); l++) {
+		if (location[cursite]->loot[l]->whatIsThis() == THIS_IS_LOOT &&
+			(location[cursite]->loot[l])->is_cloth()) //cast -XML
+		{
+			if (location[cursite]->loot[l]->get_number() == 1)
+				delete_and_remove(location[cursite]->loot, l);
+			else location[cursite]->loot[l]->decrease_number(1);
+			return 1;
+			break;
+		}
+	}
+	return 0;
+}
+void addLootToLoc(int loc, Item* it) {
+	location[loc]->loot.push_back(it);
+}
+string gimmeASprayCan(Creature* graffiti) {
+	for (int i = 0; i < lenloot(graffiti->base); i++)
+	{
+		if (location[graffiti->base]->loot[i]->whatIsThis() == THIS_IS_WEAPON)
+		{
+			Weapon *w = static_cast<Weapon*>(location[graffiti->base]->loot[i]); //cast -XML
+			if (w->can_graffiti())
+			{
+				graffiti->give_weapon(*w, &(location[graffiti->base]->loot));
+				if (location[graffiti->base]->loot[i]->empty())
+					delete_and_remove(location[graffiti->base]->loot, i);
+				return w->get_name();
+				break;
+			}
+		}
+	}
+	return "";
+}
+const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
+void buyMeASprayCan(Creature* graffiti) {
+
+	Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
+	graffiti->give_weapon(spray, &location[graffiti->base]->loot);
+}
+void makeloot(Creature &cr, vector<Item *> &loot);
+void lootTheBody(Creature &cr, int base) {
+	//MAKE BASE LOOT
+	makeloot(cr, location[base]->loot);
+}
+int countSafeHouses() {
+	int safenumber = 0;
+	for (int l = 0; l < len(location); l++) if (location[l]->is_lcs_safehouse()) safenumber++;
+	return safenumber;
+}
+Location* getLocation() {
+	Location* loc = NULL;
+	if (selectedsiege != -1) loc = location[selectedsiege];
+	if (activesquad) if (activesquad->squad[0]->location != -1)
+		loc = location[activesquad->squad[0]->location];
+	return loc;
+}
+
+bool isPartOfJusticeSystem(int cursite) {
+	return location[cursite]->part_of_justice_system();
+}
+bool LocationsPool::canBeUpgraded(int cursite) {
+	return location[cursite]->can_be_upgraded();
+}
+
+void LocationsPool::clearunderattack(int cursite) {
+	location[cursite]->siege.underattack = 0;
+}
+bool isThisSafehouse(int loc) {
+	return location[loc]->is_lcs_safehouse();
+}
+void equipLoot(int l, int loc) {
+	equip(location[l]->loot, loc);
+}
+void burnFlagAtLocation(int l) {
+	location[l]->haveflag = 0;
+}
+void locationIsNowRented(int l, int rent) {
+	location[l]->renting = rent;
+	location[l]->newrental = 1;
+}
+
+int getCity(int l) {
+	return location[l]->city;
+}
+
+int getFenceValueLocation(int l, int slot) {
+	return location[l]->loot[slot]->get_fencevalue();
+}
+
+bool getCanBeSoldLocation(int l, int slot) {
+	return location[l]->loot[slot]->is_good_for_sale();
+}
+
+int getLocationLootNumber(int l, int slot) {
+	return location[l]->loot[slot]->get_number();
+}
+
+void decreateLocationLoot(int loc, int loot, int num) {
+	location[loc]->loot[loot]->decrease_number(num);
+	if (location[loc]->loot[loot]->empty())
+		delete_and_remove(location[loc]->loot, loot);
+}
+
+int whatIsThisItemInLocation(int loc, int l) {
+	return location[loc]->loot[l]->whatIsThis();
+}
+
+void deleteLocationLoot(int loc, int loot) {
+	delete_and_remove(location[loc]->loot, loot);
+}
+void deleteLocationLoot(int loc) {
+	delete_and_clear(location[loc]->loot);
+}
+bool noQuickFenceLocation(int loc, int l) {
+	return location[loc]->loot[l]->no_quick_fencing();
+}
+
+void CCSCapturesSite(int loc) {
+	location[loc]->renting = RENTING_CCS;
+}
+
+int LocationsPool::getStoresAmount(int l) {
+	return location[l]->compound_stores;
+}
+
+void endLocationSiege(int l) {
+	location[l]->siege.siege = 0;
+}
+
+void reduceCompoundStores(int loc, int amount) {
+	location[loc]->compound_stores -= amount;
+}
+void emptyCompoundStores(int l) {
+	location[l]->compound_stores = 0;
+}
+
+bool hasPrintingPress(int l) {
+	return location[l]->compound_walls&COMPOUND_PRINTINGPRESS;
+}
+
+void deletePrintingPress(int loc) {
+
+	location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+}
+
+siegest getWholeSiege(int l) {
+	return location[l]->siege;
+}
+
+void deleteBusinessFront(int l) {
+
+	location[l]->front_business = -1;
+}
+
+void deleteCompoundWalls(int loc) {
+
+	location[loc]->compound_walls = 0;
+}
+
+void dropHeatByFivePercent(int l) {
+	location[l]->heat = static_cast<int>(location[l]->heat * 0.95);
+}
+
+int getTimeUntilSiege(int l) {
+	return location[l]->siege.timeuntillocated;
+}
+
+void huntFasterIfSiteIncrediblyHot(int l) {
+	if (location[l]->heat > 100)
+	{
+		int hunt_speed;
+		hunt_speed = location[l]->heat / 50;
+		while (hunt_speed&&location[l]->siege.timeuntillocated > 1)
+		{
+			location[l]->siege.timeuntillocated--;
+			hunt_speed--;
+		}
+	}
+}
+
+void updateLocationHeatProtection(int l) {
+	location[l]->update_heat_protection();
+}
+
+void letPlaceCoolOffUnlessCrime(int crimes, int l) {
+	if (crimes < location[l]->heat)
+	{
+		location[l]->heat -= 1;
+		if (location[l]->heat < 0)
+			location[l]->heat = 0;
+	}
+	else
+	{
+		// Update location heat
+		if (crimes > location[l]->heat) location[l]->heat += (crimes - location[l]->heat) / 10 + 1;
+		// Begin planning siege if high heat on location
+		if (location[l]->heat > location[l]->heat_protection &&
+			LCSrandom(500) < location[l]->heat &&
+			!(location[l]->siege.timeuntillocated >= 0)) //Do not re-plan siege.
+		{
+			// Set time until siege is carried out
+			location[l]->siege.timeuntillocated += 2 + LCSrandom(6);
+		}
+	}
+}
+
+void policeSiege(int l) {
+
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_POLICE;
+	location[l]->siege.lights_off = 0;
+	location[l]->siege.cameras_off = 0;
+}
+void corporateSiege(int l) {
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_CORPORATE;
+	location[l]->siege.underattack = 1;
+	location[l]->siege.lights_off = 0;
+	location[l]->siege.cameras_off = 0;
+}
+
+void CCSSiege(int l) {
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_CCS;
+	location[l]->siege.underattack = 1;
+	location[l]->siege.lights_off = 0;
+	location[l]->siege.cameras_off = 0;
+}
+
+void CIASiege(int l) {
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_CIA;
+	location[l]->siege.underattack = 1;
+	location[l]->siege.lights_off = 1;
+	location[l]->siege.cameras_off = 1;
+}
+
+void hicksSiege(int l) {
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_HICKS;
+	location[l]->siege.underattack = 1;
+	location[l]->siege.lights_off = 0;
+	location[l]->siege.cameras_off = 0;
+}
+
+void firemanSiege(int l) {
+	location[l]->siege.siege = 1;
+	location[l]->siege.siegetype = SIEGE_FIREMEN;
+	location[l]->siege.underattack = 1;
+	location[l]->siege.lights_off = 0;
+	location[l]->siege.cameras_off = 0;
+
+}
+
+void escalateSite(int l) {
+	location[l]->siege.timeuntillocated = LCSrandom(4) + 4;
+	location[l]->siege.escalationstate++;
+}
+
+void dumpLootAtLocation(int homes, vector<Item *>& loot) {
+	location[homes]->getloot(loot);
+}
+
+void deleteGeneratorLightsOff(int l) {
+
+	location[l]->compound_walls &= ~COMPOUND_GENERATOR;
+	location[l]->siege.lights_off = 1;
+}
+
+int LocationsPool::getTimeUntilSiege(int loc, int type) {
+	switch (type) {
+	case SIEGE_POLICE:
+		return location[loc]->siege.timeuntillocated;
+		break;
+	case SIEGE_CIA:
+		return location[loc]->siege.timeuntilcia;
+		break;
+	case SIEGE_CORPORATE:
+		return location[loc]->siege.timeuntilcorps;
+		break;
+	case SIEGE_CCS:
+		return location[loc]->siege.timeuntilccs;
+		break;
+	case SIEGE_FIREMEN:
+		return location[loc]->siege.timeuntilfiremen;
+		break;
+	default:
+	case SIEGE_ORG:
+	case SIEGE_HICKS:
+	case SIEGENUM:
+		return 0;
+		break;
+
+	}
+}
+
+void LocationsPool::setTimeUntilSiege(int loc, int type, int time) {
+	switch (type) {
+	case SIEGE_POLICE:
+		location[loc]->siege.timeuntillocated = time;
+		break;
+	case SIEGE_CIA:
+		location[loc]->siege.timeuntilcia = time;
+		break;
+	case SIEGE_CORPORATE:
+		location[loc]->siege.timeuntilcorps = time;
+		break;
+	case SIEGE_CCS:
+		location[loc]->siege.timeuntilccs = time;
+		break;
+	case SIEGE_FIREMEN:
+		location[loc]->siege.timeuntilfiremen = time;
+		break;
+	default:
+	case SIEGE_ORG:
+	case SIEGE_HICKS:
+	case SIEGENUM:
+		;
+		break;
+	}
+}
+
+bool hasBusinessFront(int l) {
+	return location[l]->front_business != -1;
+}
+
+bool hasAGenerator(int l) {
+	return location[l]->compound_walls & COMPOUND_GENERATOR;
+}
+
+bool hasCameras(int l) {
+	return location[l]->compound_walls & COMPOUND_CAMERAS;
+}
+
+void deleteAAGun(int l) {
+	location[l]->compound_walls &= ~COMPOUND_AAGUN;
+}
+
+bool siteHasAAGun(int l) {
+	return location[l]->compound_walls & COMPOUND_AAGUN;
+}
+
+void setUnderAttack(int l) {
+
+	location[l]->siege.underattack = 1;
+}
+
+bool getLightsOff(int l) {
+	return location[l]->siege.lights_off;
+}
+
+void setLightsOff(int l) {
+
+	location[l]->siege.lights_off = 1;
+}
+
+bool hasBasicCompoundWalls(int l) {
+	return location[l]->compound_walls & COMPOUND_BASIC;
 }

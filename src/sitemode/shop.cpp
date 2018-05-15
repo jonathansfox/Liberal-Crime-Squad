@@ -110,7 +110,6 @@ int squadsize(const squadst *st);
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../set_color_support.h"
-extern vector<Location *> location;
 #include "../common/musicClass.h"
 extern MusicClass music;
 #include <functional>
@@ -265,11 +264,20 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
 }
+void consolidateLoot(const int l);
+int lenloot(const int l);
+string getLootTitle(const int base, const int l);
+int getFenceValueLocation(int l, int slot);
+int getLootNumber(const int base, const int l);
+int getLocationLootNumber(int l, int slot);
+bool getCanBeSoldLocation(int l, int slot);
+void decreateLocationLoot(int loc, int loot, int num);
 int fenceselect(squadst& customers)
 {
 	int ret = 0, page = 0;
-	consolidateloot(location[customers.squad[0]->base]->loot);
-	vector<int> selected(len(location[customers.squad[0]->base]->loot), 0);
+	consolidateLoot(customers.squad[0]->base);
+	
+	vector<int> selected(lenloot(customers.squad[0]->base), 0);
 	while (true)
 	{
 		eraseAlt();
@@ -282,20 +290,20 @@ int fenceselect(squadst& customers)
 		}
 		printparty();
 		int x = 1, y = 10;
-		std::string outstr, itemstr;
-		for (int l = page * 18; l < len(location[customers.squad[0]->base]->loot) && l < page * 18 + 18; l++)
+		for (int l = page * 18; l < lenloot(customers.squad[0]->base) && l < page * 18 + 18; l++)
 		{
 			if (selected[l])
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
-			itemstr = location[customers.squad[0]->base]->loot[l]->equip_title();
-			if (location[customers.squad[0]->base]->loot[l]->get_number() > 1)
+			string itemstr = getLootTitle(customers.squad[0]->base, l);
+			if (getLootNumber(customers.squad[0]->base, l) > 1)
 			{
 				if (selected[l])
 					itemstr += singleSpace + tostring(selected[l]) + CONST_shop033;
 				else itemstr += CONST_shop034;
-				itemstr += tostring(location[customers.squad[0]->base]->loot[l]->get_number());
+				itemstr += tostring(getLootNumber(customers.squad[0]->base, l));
 			}
+			string outstr;
 			outstr = static_cast<char>(l - page * 18 + 'A');
 			outstr += spaceDashSpace + itemstr;
 			mvaddstrAlt(y, x, outstr);
@@ -309,7 +317,7 @@ int fenceselect(squadst& customers)
 			mvaddstrAlt(17, 1, addprevpagestr());
 		}
 		//PAGE DOWN
-		if ((page + 1) * 18 < len(location[customers.squad[0]->base]->loot))
+		if ((page + 1) * 18 < lenloot(customers.squad[0]->base))
 		{
 			mvaddstrAlt(17, 53, addnextpagestr());
 		}
@@ -320,16 +328,16 @@ int fenceselect(squadst& customers)
 		if (c >= 'a' && c <= 'r')
 		{
 			int slot = c - 'a' + page * 18;
-			if (slot >= 0 && slot < len(location[customers.squad[0]->base]->loot))
+			if (slot >= 0 && slot < lenloot(customers.squad[0]->base))
 			{
 				if (selected[slot])
 				{
-					ret -= location[customers.squad[0]->base]->loot[slot]->get_fencevalue() * selected[slot];
+					ret -= getFenceValueLocation(customers.squad[0]->base, slot) * selected[slot];
 					selected[slot] = 0;
 				}
 				else
 				{
-					if (!location[customers.squad[0]->base]->loot[slot]->is_good_for_sale())
+					if (!getCanBeSoldLocation(customers.squad[0]->base, slot))
 					{
 						printparty();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -338,10 +346,10 @@ int fenceselect(squadst& customers)
 					}
 					else
 					{
-						if (location[customers.squad[0]->base]->loot[slot]->get_number() > 1)
-							selected[slot] = prompt_amount(0, location[customers.squad[0]->base]->loot[slot]->get_number());
+						if (getLocationLootNumber(customers.squad[0]->base, slot) > 1)
+							selected[slot] = prompt_amount(0, getLocationLootNumber(customers.squad[0]->base, slot));
 						else selected[slot] = 1;
-						ret += location[customers.squad[0]->base]->loot[slot]->get_fencevalue() * selected[slot];
+						ret += getFenceValueLocation(customers.squad[0]->base, slot) * selected[slot];
 					}
 				}
 			}
@@ -352,20 +360,23 @@ int fenceselect(squadst& customers)
 			page--;
 		//PAGE DOWN
 		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) &&
-			(page + 1) * 18 < len(location[customers.squad[0]->base]->loot))
+			(page + 1) * 18 < lenloot(customers.squad[0]->base))
 			page++;
 	}
-	for (int l = len(location[customers.squad[0]->base]->loot) - 1; l >= 0; l--)
+	for (int l = lenloot(customers.squad[0]->base) - 1; l >= 0; l--)
 	{
 		if (selected[l])
 		{
-			location[customers.squad[0]->base]->loot[l]->decrease_number(selected[l]);
-			if (location[customers.squad[0]->base]->loot[l]->empty())
-				delete_and_remove(location[customers.squad[0]->base]->loot, l);
+			decreateLocationLoot(customers.squad[0]->base, l, selected[l]);
+			
 		}
 	}
 	return ret;
 }
+void equipLoot(int l, int loc);
+void deleteLocationLoot(int loc, int loot);
+int whatIsThisItemInLocation(int loc, int l);
+bool noQuickFenceLocation(int loc, int l);
 void sell_loot(squadst& customers) 
 {
 	int partysize = squadsize(&customers);
@@ -376,25 +387,13 @@ void sell_loot(squadst& customers)
 		printparty();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10,  1, CONST_shop058);
-		if (len(location[customers.squad[0]->base]->loot))
+		if (lenloot(customers.squad[0]->base))
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(10,  40, CONST_shop038);
-		if (len(location[customers.squad[0]->base]->loot))
-			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(11,  1, CONST_shop039);
-		if (len(location[customers.squad[0]->base]->loot))
-			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(11,  40, CONST_shop040);
-		if (len(location[customers.squad[0]->base]->loot))
-			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(12,  1, CONST_shop041);
-		if (len(location[customers.squad[0]->base]->loot))
-			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(12,  40, CONST_shop042);
 		if (party_status != -1)
 			set_color_easy(WHITE_ON_BLACK);
@@ -409,7 +408,7 @@ void sell_loot(squadst& customers)
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == 'e'&&customers.squad[0]->base != -1)
-			equip(location[customers.squad[0]->base]->loot, -1);
+			equipLoot(customers.squad[0]->base, -1);
 		if (c == 'w' || c == 'a' || c == 'c')
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -422,44 +421,43 @@ void sell_loot(squadst& customers)
 			if (getkeyAlt() != 'y') c = 0; //no sale
 		}
 		if ((c == 'w' || c == 'c' || c == 'l' || c == 'a' || c == 'f') &&
-			len(location[customers.squad[0]->base]->loot))
+			lenloot(customers.squad[0]->base))
 		{
 			int fenceamount = 0;
 			if (c == 'f') fenceamount = fenceselect(customers);
 			else
 			{
-				for (int l = len(location[customers.squad[0]->base]->loot) - 1; l >= 0; l--)
+				for (int l = lenloot(customers.squad[0]->base) - 1; l >= 0; l--)
 				{
-					if (c == 'w' && location[customers.squad[0]->base]->loot[l]->whatIsThis() == THIS_IS_WEAPON
-						&& location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
+					if (c == 'w' && whatIsThisItemInLocation(customers.squad[0]->base, l) == THIS_IS_WEAPON
+						&& getCanBeSoldLocation(customers.squad[0]->base, l))
 					{
-						fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
-							* location[customers.squad[0]->base]->loot[l]->get_number();
-						delete_and_remove(location[customers.squad[0]->base]->loot, l);
+						fenceamount += getFenceValueLocation(customers.squad[0]->base, l)
+							* getLocationLootNumber(customers.squad[0]->base, l);
+						deleteLocationLoot(customers.squad[0]->base, l);
 					}
-					else if (c == 'c' && location[customers.squad[0]->base]->loot[l]->whatIsThis() == THIS_IS_ARMOR
-						&& location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
+					else if (c == 'c' && whatIsThisItemInLocation(customers.squad[0]->base, l) == THIS_IS_ARMOR
+						&& getCanBeSoldLocation(customers.squad[0]->base, l))
 					{
-						fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
-							* location[customers.squad[0]->base]->loot[l]->get_number();
-						delete_and_remove(location[customers.squad[0]->base]->loot, l);
+						fenceamount += getFenceValueLocation(customers.squad[0]->base, l)
+							* getLocationLootNumber(customers.squad[0]->base, l);
+						deleteLocationLoot(customers.squad[0]->base, l);
 					}
-					else if (c == 'a' && location[customers.squad[0]->base]->loot[l]->whatIsThis() == THIS_IS_CLIP
-						&& location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
+					else if (c == 'a' && whatIsThisItemInLocation(customers.squad[0]->base, l) == THIS_IS_CLIP
+						&& getCanBeSoldLocation(customers.squad[0]->base, l))
 					{
-						fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
-							* location[customers.squad[0]->base]->loot[l]->get_number();
-						delete_and_remove(location[customers.squad[0]->base]->loot, l);
+						fenceamount += getFenceValueLocation(customers.squad[0]->base, l)
+							* getLocationLootNumber(customers.squad[0]->base, l);
+						deleteLocationLoot(customers.squad[0]->base, l);
 					}
-					else if (c == 'l' && location[customers.squad[0]->base]->loot[l]->whatIsThis() == THIS_IS_LOOT
-						&& location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
+					else if (c == 'l' && whatIsThisItemInLocation(customers.squad[0]->base, l) == THIS_IS_LOOT
+						&& getCanBeSoldLocation(customers.squad[0]->base, l))
 					{
-						Loot* a = static_cast<Loot*>(location[customers.squad[0]->base]->loot[l]); //cast -XML
-						if (!a->no_quick_fencing())
+						if (!noQuickFenceLocation(customers.squad[0]->base, l))
 						{
-							fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
-								* location[customers.squad[0]->base]->loot[l]->get_number();
-							delete_and_remove(location[customers.squad[0]->base]->loot, l);
+							fenceamount += getFenceValueLocation(customers.squad[0]->base, l)
+								* getLocationLootNumber(customers.squad[0]->base, l);
+							deleteLocationLoot(customers.squad[0]->base, l);
 						}
 					}
 				}
@@ -495,72 +493,7 @@ void choose_buyer(squadst& customers, int& buyer)
 		}
 	}
 }
-void maskselect(Creature &buyer) 
-{
-	short maskindex = -1;
-	std::vector<int> masktype;
-	for (int a = 0; a < len(armortype); a++)
-	{
-		if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
-			masktype.push_back(a);
-	}
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_shop050);
-		addstrAlt(buyer.name);
-		addstrAlt(CONST_shop051);
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  0, CONST_shop052);
-		for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			
-			mvaddcharAlt(y, 0, y + 'A' - 2);
-			addstrAlt(spaceDashSpace);
-			addstrAlt(armortype[masktype[p]]->get_name());
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y,  39, armortype[masktype[p]]->get_description());
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22,  0, CONST_shop053);
-		mvaddstrAlt(23, 0,		addpagestr());
-		mvaddstrAlt(24,  0, CONST_shop054);
-		addstrAlt(buyer.name);
-		addstrAlt(CONST_shop055);
-		int c = getkeyAlt();
-		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(masktype)) page++;
-		if (c >= 'a'&&c <= 's')
-		{
-			int p = page * 19 + c - 'a';
-			if (p < len(masktype))
-			{
-				maskindex = masktype[p];
-				break;
-			}
-		}
-		if (c == 'z')
-		{
-			for (int i = 0; i < len(armortype); i++)
-				if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
-					masktype.push_back(i);
-			maskindex = pickrandom(masktype);
-			break;
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-	if (maskindex != -1 && ledger.get_funds() >= 15)
-	{
-		Armor a = Armor(*armortype[maskindex]);
-		buyer.give_armor(a, &location[buyer.base]->loot);
-		ledger.subtract_funds(15, EXPENSE_SHOPPING);
-	}
-}
+void maskselect(Creature &buyer);
 void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 {
 	int page = 0, partysize = squadsize(&customers);
@@ -635,7 +568,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 		mvaddstrAlt(y++, 1, CONST_shop058);
 		if (allow_selling_)
 		{
-			if (len(location[customers.squad[0]->base]->loot))
+			if (lenloot(customers.squad[0]->base))
 				set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y++, 1, CONST_shop059);
@@ -660,8 +593,8 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 				available_options[i]->choose(customers, buyer); break;
 			}
 		if (c == 'e' && customers.squad[0]->base != -1)
-			equip(location[customers.squad[0]->base]->loot, -1);
-		else if (c == 's'&&allow_selling_&&len(location[customers.squad[0]->base]->loot))
+			equipLoot(customers.squad[0]->base, -1);
+		else if (c == 's'&&allow_selling_&&lenloot(customers.squad[0]->base))
 			sell_loot(customers);
 		else if (c == 'm'&&sell_masks_&&ledger.get_funds() >= 15)
 			maskselect(*customers.squad[buyer]);
@@ -736,35 +669,7 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 	}
 }
 #include "../items/lootTypePoolItem.h"
-void Shop::ShopItem::choose(squadst& customers, int& buyer) const
-{
-	if (!is_available()) return;
-	ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
-	switch (itemclass_)
-	{
-	case WEAPON: {
-		Weapon* i = new Weapon(*weapontype[getweapontype(itemtypename_)]);
-		customers.squad[buyer]->give_weapon(*i, &location[customers.squad[0]->base]->loot);
-		if (i->empty()) delete i;
-		else location[customers.squad[0]->base]->loot.push_back(i);
-		break; }
-	case CLIP: {
-		Clip* i = new Clip(*cliptype[getcliptype(itemtypename_)]);
-		customers.squad[buyer]->take_clips(*i, 1);
-		if (i->empty()) delete i;
-		else location[customers.squad[0]->base]->loot.push_back(i);
-		break; }
-	case ARMOR: {
-		Armor* i = new Armor(*armortype[getarmortype(itemtypename_)]);
-		customers.squad[buyer]->give_armor(*i, &location[customers.squad[0]->base]->loot);
-		if (i->empty()) delete i;
-		else location[customers.squad[0]->base]->loot.push_back(i);
-		break; }
-	case LOOT: {
-		location[customers.squad[0]->base]->loot.push_back(getNewLoot(itemtypename_));
-		break; }
-	}
-}
+
 bool Shop::ShopItem::is_available() const
 {
 	return valid_item() && (!only_sell_legal_ || legal()) && can_afford();
@@ -827,7 +732,7 @@ bool Shop::ShopItem::valid_item() const
 int Shop::ShopItem::adjusted_price() const
 {
 	int p = price_;
-	if (increase_price_with_illegality_&&itemclass_ == WEAPON&&valid_item())
+	if (increase_price_with_illegality_&&itemclass_ == WEAPON && valid_item())
 		for (int i = weapontype[getweapontype(itemtypename_)]->get_legality(); i < lawList[LAW_GUNCONTROL]; i++)
 			p *= 2;
 	return p;
@@ -844,5 +749,103 @@ const std::string Shop::ShopItem::get_description() const
 	case ARMOR:  return armortype[getarmortype(itemtypename_)]->get_name();
 	case LOOT:   return LootTypePool::getInstance().getName(itemtypename_); // loottype[getloottype(itemtypename_)]->get_name();
 	default:     return description_; // Will be undefined
+	}
+}
+
+// Removing the subsequent references to location will be difficult.
+extern vector<Location *> location;
+void maskselect(Creature &buyer)
+{
+	short maskindex = -1;
+	std::vector<int> masktype;
+	for (int a = 0; a < len(armortype); a++)
+	{
+		if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
+			masktype.push_back(a);
+	}
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, CONST_shop050);
+		addstrAlt(buyer.name);
+		addstrAlt(CONST_shop051);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(1, 0, CONST_shop052);
+		for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+
+			mvaddcharAlt(y, 0, y + 'A' - 2);
+			addstrAlt(spaceDashSpace);
+			addstrAlt(armortype[masktype[p]]->get_name());
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y, 39, armortype[masktype[p]]->get_description());
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, CONST_shop053);
+		mvaddstrAlt(23, 0, addpagestr());
+		mvaddstrAlt(24, 0, CONST_shop054);
+		addstrAlt(buyer.name);
+		addstrAlt(CONST_shop055);
+		int c = getkeyAlt();
+		//PAGE UP
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		//PAGE DOWN
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(masktype)) page++;
+		if (c >= 'a'&&c <= 's')
+		{
+			int p = page * 19 + c - 'a';
+			if (p < len(masktype))
+			{
+				maskindex = masktype[p];
+				break;
+			}
+		}
+		if (c == 'z')
+		{
+			for (int i = 0; i < len(armortype); i++)
+				if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
+					masktype.push_back(i);
+			maskindex = pickrandom(masktype);
+			break;
+		}
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	}
+	if (maskindex != -1 && ledger.get_funds() >= 15)
+	{
+		Armor a = Armor(*armortype[maskindex]);
+		buyer.give_armor(a, &location[buyer.base]->loot);
+		ledger.subtract_funds(15, EXPENSE_SHOPPING);
+	}
+}
+void Shop::ShopItem::choose(squadst& customers, int& buyer) const
+{
+	if (!is_available()) return;
+	ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
+	switch (itemclass_)
+	{
+	case WEAPON: {
+		Weapon* i = new Weapon(*weapontype[getweapontype(itemtypename_)]);
+		customers.squad[buyer]->give_weapon(*i, &location[customers.squad[0]->base]->loot);
+		if (i->empty()) delete i;
+		else location[customers.squad[0]->base]->loot.push_back(i);
+		break; }
+	case CLIP: {
+		Clip* i = new Clip(*cliptype[getcliptype(itemtypename_)]);
+		customers.squad[buyer]->take_clips(*i, 1);
+		if (i->empty()) delete i;
+		else location[customers.squad[0]->base]->loot.push_back(i);
+		break; }
+	case ARMOR: {
+		Armor* i = new Armor(*armortype[getarmortype(itemtypename_)]);
+		customers.squad[buyer]->give_armor(*i, &location[customers.squad[0]->base]->loot);
+		if (i->empty()) delete i;
+		else location[customers.squad[0]->base]->loot.push_back(i);
+		break; }
+	case LOOT: {
+		location[customers.squad[0]->base]->loot.push_back(getNewLoot(itemtypename_));
+		break; }
 	}
 }

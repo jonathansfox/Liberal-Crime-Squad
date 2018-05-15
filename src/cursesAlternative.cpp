@@ -454,7 +454,15 @@ void pressSpecificKey(const char x, const char y, const char z, const char w) {
 
 	} while (c != x && c != y && c != z && c != w);
 }
-char pressSpecificKey(const char x, const char y, const char z) {
+int pressSpecificKey(const char x, const char y, const char z, const char w, const char u) {
+	int c;
+	do {
+		c = getkeyAlt();
+
+	} while (c != x && c != y && c != z && c != w && c != u);
+	return c;
+}
+int pressSpecificKey(const char x, const char y, const char z) {
 	int c;
 	do {
 		c = getkeyAlt();

@@ -98,7 +98,7 @@ void CreaturePool::stopAllBleeding()
 		for (int w = 0; w < BODYPARTNUM; w++)
 			pool[p]->wound[w] &= ~WOUND_BLEEDING;
 }
-bool CreaturePool::doesAnyoneLiveHere(int loc)
+const bool CreaturePool::doesAnyoneLiveHere(int loc)
 {
 	for (int p = 0; p < lenpool(); p++) {
 		if (pool[p]->base == loc) {
@@ -180,7 +180,7 @@ void CreaturePool::arrestOrKillCCSSleepers()
 	}
 }
 #include "../locations/locationsPool.h"
-int CreaturePool::liberal_guardian_writing_power()
+const int CreaturePool::liberal_guardian_writing_power()
 {
 	int power = 0;
 	for (int i = 0; i < lenpool(); i++)
@@ -199,7 +199,7 @@ int CreaturePool::liberal_guardian_writing_power()
 	}
 	return power;
 }
-int CreaturePool::howManyLivingPeopleAreHere(int l)
+const int CreaturePool::howManyLivingPeopleAreHere(int l)
 {
 	int numpres = 0;
 	for (int p = 0; p < lenpool(); p++)
@@ -210,7 +210,7 @@ int CreaturePool::howManyLivingPeopleAreHere(int l)
 	}
 	return numpres;
 }
-int CreaturePool::countLiberals(int cursite)
+const int CreaturePool::countLiberals(int cursite)
 {
 	int libnum = 0;
 	for (int p = 0; p < lenpool(); p++) {
@@ -246,7 +246,7 @@ void CreaturePool::setupDisband()
 		}
 	}
 }
-bool CreaturePool::isThisCarWantedByAnotherSquad(long vehicleID, int squadID)
+const bool CreaturePool::isThisCarWantedByAnotherSquad(long vehicleID, int squadID)
 {
 	for (int p = 0; p < lenpool(); p++)
 	{
@@ -258,7 +258,7 @@ bool CreaturePool::isThisCarWantedByAnotherSquad(long vehicleID, int squadID)
 	}
 	return false;
 }
-string CreaturePool::getName(int p)
+const string CreaturePool::getName(int p)
 {
 	return pool[p]->name;
 }
@@ -272,7 +272,7 @@ void CreaturePool::moveAllSquadMembers(int l)
 		if (pool[p]->base == l) pool[p]->base = hs;
 	}
 }
-int CreaturePool::lenpool() {
+const int CreaturePool::lenpool() {
 	return len(pool);
 }
 void whoAreWaitingForRescue(vector<Creature *>& waiting_for_rescue, int cursite, short special) {
@@ -594,8 +594,7 @@ Creature::~Creature()
 	delete_and_clear(extra_throwing_weapons);
 	if (prisoner)
 	{
-		int p;
-		for (p = 0; p < len(pool); p++)
+		for (int p = 0; p < len(pool); p++)
 			if (prisoner == pool[p]) { delete_and_remove(pool, p); break; }
 	}
 	// Clean up hostage situation
@@ -846,7 +845,6 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 /* promote a subordinate to maintain chain of command when boss is lost */
 bool promotesubordinates(Creature &cr, char &clearformess)
 {
-	int p;
 	int newboss = -1;
 	int bigboss = -2;
 	if (cr.hireid == -1)bigboss = -1;//Special: Founder
@@ -855,7 +853,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 	//Need REVOLUTIONARY (100+) juice to take over founder role
 	if (cr.hireid == -1)maxjuice = 99;
 	//Identify big boss and top subordinate
-	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->id == cr.id)continue;
 		if (pool[p]->id == cr.hireid)bigboss = p;
@@ -908,7 +906,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 	//Order secondary subordinates to follow the new boss
 	if (subordinates > 1)
 	{
-		for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			if (pool[p]->hireid == cr.id && // recruited by old boss that died
 				p != newboss &&             // not the new boss
@@ -1355,7 +1353,6 @@ void monthlyRunTheSystem(char &clearformess) {
 					pool[p]->get_attribute(ATTRIBUTE_WISDOM, true) * 5 + pool[p]->get_skill(SKILL_PSYCHOLOGY) * 5
 					/*+ pool[p]->get_skill(SKILL_SURVIVAL)*5*/ && pool[p]->hireid != -1)
 				{
-					int nullify = 0;
 					int p2 = getpoolcreature(pool[p]->hireid);
 					if (pool[p2]->alive && (pool[p2]->location == -1 || LocationsPool::getInstance().getLocationType(pool[p2]->location) != SITE_GOVERNMENT_PRISON))
 					{  //Charge the boss with racketeering!
@@ -1363,8 +1360,7 @@ void monthlyRunTheSystem(char &clearformess) {
 						//Rack up testimonies against the boss in court!
 						pool[p2]->confessions++;
 					}
-					if (!nullify)
-					{  //Issue a raid on this guy's base!
+					  //Issue a raid on this guy's base!
 						if (pool[p]->base >= 0)LocationsPool::getInstance().addHeat(pool[p]->base, 300);
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
@@ -1378,8 +1374,7 @@ void monthlyRunTheSystem(char &clearformess) {
 						removesquadinfo(*pool[p]);
 						delete_and_remove(pool, p);
 						continue; //no trial for this person; skip to next person
-					}
-					//else continue to trial
+					
 				}
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, pool[p]->name, gamelog);

@@ -186,7 +186,6 @@ void printname(Creature &cr);
 #include "../customMaps.h"
 #include "../set_color_support.h"
 extern vector<Creature *> pool;
-extern vector<Location *> location;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 #include "../common/creaturePool.h"
@@ -221,10 +220,11 @@ struct stringAndColor
 map<short, string> reviewStrings;
 map<short, string> reviewStringsSecondLine;
 vector<stringAndColor> liberalListAndColor;
+void nukeAllEmptySquads(const vector<int> squadloc, const int mode);
 /* base - review - assemble a squad */
 void assemblesquad(squadst *cursquad)
 {
-	int culloc = -1, p;
+	int culloc = -1;
 	if (cursquad != NULL) culloc = cursquad->squad[0]->location;
 	char newsquad = 0;
 	if (cursquad == NULL)
@@ -235,7 +235,7 @@ void assemblesquad(squadst *cursquad)
 		newsquad = 1;
 	}
 	vector<Creature *> temppool;
-	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		if (pool[p]->is_active_liberal() &&
 			(pool[p]->location == culloc || culloc == -1))
 		{
@@ -244,6 +244,8 @@ void assemblesquad(squadst *cursquad)
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ASSEMBLESQUAD]);
 	//BUILD LIST OF BASES FOR EACH SQUAD IN CASE IT ENDS UP EMPTY
 	//THEN WILL DROP ITS LOOT THERE
+	// Must be declared before new squads are formed
+	// In order to assure squadloc contains the locations of all current squads
 	vector<int> squadloc;
 	squadloc.resize(len(squad));
 	for (int sl = 0; sl < len(squad); sl++)
@@ -272,7 +274,7 @@ void assemblesquad(squadst *cursquad)
 		}
 		mvaddstrAlt(1, 0, CONST_reviewmode012); // 80 characters
 		int y = 2;
-		for (p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
+		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
@@ -456,9 +458,9 @@ void assemblesquad(squadst *cursquad)
 		}
 	}
 	//FINALIZE NEW SQUADS
-	bool hasmembers = squadsize(cursquad) > 0;
 	if (newsquad)
 	{
+		bool hasmembers = squadsize(cursquad) > 0;
 		if (hasmembers)
 		{
 			mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
@@ -469,23 +471,8 @@ void assemblesquad(squadst *cursquad)
 		}
 		else delete cursquad;
 	}
-	//NUKE ALL EMPTY SQUADS
-	for (int sq = len(squad) - 1; sq >= 0; sq--)
-	{
-		hasmembers = false;
-		for (int p = 0; p < 6; p++)
-			if (squad[sq]->squad[p] != NULL)
-			{
-				hasmembers = true; break;
-			}
-		if (!hasmembers && mode == GAMEMODE_BASE)
-		{
-			if (squadloc[sq] != -1)
-				location[squadloc[sq]]->getloot(squad[sq]->loot);
-			if (activesquad == squad[sq])activesquad = NULL;
-			delete_and_remove(squad, sq);
-		}
-	}
+	
+	nukeAllEmptySquads(squadloc, mode);
 }
 void review_mode(short mode)
 {
@@ -606,7 +593,7 @@ void review_mode(short mode)
 					else addstrAlt(CONST_reviewmode054);
 				}
 				else if (temppool[p]->sentence <= -1 &&
-					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
+					LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 				{
 					set_color_easy(WHITE_ON_BLACK);
 					if (temppool[p]->sentence < -1)
@@ -618,7 +605,7 @@ void review_mode(short mode)
 						addstrAlt(CONST_reviewmode048);
 				}
 				else if (temppool[p]->sentence != 0 &&
-					location[temppool[p]->location]->type == SITE_GOVERNMENT_PRISON)
+					LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 				{
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 					addstrAlt(temppool[p]->sentence);
@@ -800,10 +787,10 @@ void review_mode(short mode)
 								criminalize(*pool[boss], LAWFLAG_RACKETEERING);
 								pool[boss]->confessions++;
 								// TODO: Depending on the crime increase heat or make seige
-								if (location[pool[boss]->base]->heat > 20)
-									location[pool[boss]->base]->siege.timeuntillocated = 3;
+								if (LocationsPool::getInstance().getHeat(pool[boss]->base) > 20)
+									LocationsPool::getInstance().setSiegetimeuntillocated(pool[boss]->base, 3);
 								else
-									location[pool[boss]->base]->heat += 20;
+									LocationsPool::getInstance().addHeat(pool[boss]->base, 20);
 							}
 							gamelog.nextMessage(); //Write out buffer to prepare for next message.
 												   // Remove squad member
@@ -935,13 +922,13 @@ void review_mode(short mode)
 /* base - review - assign new bases to the squadless */
 void squadlessbaseassign()
 {
-	int p = 0, l = 0, page_lib = 0, page_loc = 0, selectedbase = 0;
+	int page_lib = 0, page_loc = 0, selectedbase = 0;
 	vector<Creature *> temppool;
-	for (p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_BASEASSIGN]);
 	vector<int> temploc;
-	for (l = 0; l < len(location); l++) if (location[l]->renting >= 0 && !location[l]->siege.siege) temploc.push_back(l);
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) if (LocationsPool::getInstance().getRentingType(l) >= 0 && !LocationsPool::getInstance().isThereASiegeHere(l)) temploc.push_back(l);
 	if (!len(temploc)) return;
 	while (true)
 	{
@@ -951,29 +938,27 @@ void squadlessbaseassign()
 		mvaddstrAlt(0, 0, CONST_reviewmode102);
 		mvaddstrAlt(1, 0, CONST_reviewmode103); // 80 characters
 		mvaddstrAlt(1, 51, CONST_reviewmode104);
-		int y = 2;
-		for (p = page_lib * 19; p < len(temppool) && p < page_lib * 19 + 19; p++, y++)
+		for (int p = page_lib * 19, y = 2; p < len(temppool) && p < page_lib * 19 + 19; p++, y++)
 		{
 			// Red name if location under siege
 			if (temppool[p]->base == temppool[p]->location &&
-				location[temppool[p]->base]->siege.siege)
+				LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city)
+			else if (multipleCityMode && LocationsPool::getInstance().getLocationCity(temppool[p]->base) != LocationsPool::getInstance().getLocationCity(temploc[selectedbase]))
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
-			mvaddstrAlt(y, 25, location[temppool[p]->base]->getname(true, true));
-			if (location[temppool[p]->base]->siege.siege)
+			mvaddstrAlt(y, 25, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->base, true, true));
+			if (LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
 				addstrAlt(CONST_reviewmode105);
 		}
-		y = 2;
-		for (p = page_loc * 9; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
+		for (int p = page_loc * 9, y = 2; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
 		{
 			if (p == selectedbase)set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 51, y + '1' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(location[temploc[p]]->getname(true, true));
+			addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(temploc[p], true, true));
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(21, 0, CONST_reviewmode106);
@@ -1001,8 +986,8 @@ void squadlessbaseassign()
 			int p = page_lib * 19 + c - 'a';
 			// Assign new base, IF the selected letter is a liberal, AND the Liberal is not under siege or in a different city
 			if (p < len(temppool)
-				&& !(temppool[p]->base == temppool[p]->location && location[temppool[p]->base]->siege.siege)
-				&& !(multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city))
+				&& !(temppool[p]->base == temppool[p]->location && LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
+				&& !(multipleCityMode && LocationsPool::getInstance().getLocationCity(temppool[p]->base) != LocationsPool::getInstance().getLocationCity(temploc[selectedbase])))
 			{
 				temppool[p]->base = temploc[selectedbase];
 			}
@@ -1077,8 +1062,8 @@ void promoteliberals()
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			moveAlt(y, 27);
-			int p2 = 0;
-			for (p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
+			bool iAmTheLeader = true;
+			for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool()  && iAmTheLeader; p2++)
 			{
 				if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
 				{
@@ -1097,10 +1082,10 @@ void promoteliberals()
 							break;
 						}
 					}
-					break;
+					iAmTheLeader = false;
 				}
 			}
-			if (p2 == CreaturePool::getInstance().lenpool()) addstrAlt(CONST_reviewmode115);
+			if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
 			moveAlt(y++, 4 + level[p]);
 			printname(*temppool[p]);
 		}
@@ -1151,6 +1136,8 @@ void promoteliberals()
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
 }
+void setColorBasedOnSiege(const int cursite, const int y, const bool p);
+int consolidateSiegeLoot();
 /* base - review and reorganize liberals */
 void review()
 {
@@ -1173,12 +1160,8 @@ void review()
 			if (!pool[p]->alive) n[5]++; // The Dead
 			if ((pool[p]->dating || pool[p]->hiding) && pool[p]->alive) n[6]++; // Away
 		}
-		for (int l = 0; l < len(location); l++)
-		{
-			consolidateloot(location[l]->loot);
-			if (!location[l]->siege.siege)
-				n[7] += len(location[l]->loot); // Review and Move Equipment
-		}
+		n[7] += consolidateSiegeLoot();
+
 		for (int p = page * 19; p < len(squad) + REVIEWMODENUM + 1 && p < page * 19 + 19; p++, y++)
 		{
 			if (p < len(squad))
@@ -1188,10 +1171,7 @@ void review()
 				addstrAlt(squad[p]->name);
 				if (squad[p]->squad[0] != NULL&&squad[p]->squad[0]->location != -1)
 				{
-					Location *loc = location[squad[p]->squad[0]->location];
-					siegest *siege = &loc->siege;
-					if (siege ? siege->siege : false) set_color_easy(siege->underattack ? activesquad == squad[p] ? RED_ON_BLACK_BRIGHT : RED_ON_BLACK : activesquad == squad[p] ? YELLOW_ON_BLACK_BRIGHT :YELLOW_ON_BLACK );
-					mvaddstrAlt(y, 31, loc->getname(true, true));
+					setColorBasedOnSiege(squad[p]->squad[0]->location, y, activesquad == squad[p]);
 					set_color_easy(activesquad == squad[p] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				}
 				if (squad[p]->squad[0] != NULL)

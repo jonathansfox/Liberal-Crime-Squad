@@ -299,8 +299,8 @@ int getswingvoter(bool stalin)
 int presidentapproval()
 {
 	//Calculate Presidential approval rating
-	int approval = 0, i;
-	for (i = 0; i < 1000; i++)
+	int approval = 0;
+	for (int i = 0; i < 1000; i++)
 	{
 		if (i % 2 == 0 && LCSrandom(2)) approval++;    // Partyline supporter (~25%)
 		else if (i % 2 == 1 && LCSrandom(2)) continue; // Partyline opponent  (~25%)
@@ -383,8 +383,8 @@ void elections_senate(int senmod, char canseethings)
 		mvaddstrAlt(0, 0, CONST_politics002);
 		addstrAlt(year);
 	}
-	int x = 0, y = 2, s = 0;
-	for (s = 0; s < SENATENUM; s++)
+	int x = 0, y = 2;
+	for (int s = 0; s < SENATENUM; s++)
 	{
 		if (senmod != -1 && s % 3 != senmod)continue;
 		if (canseethings)
@@ -403,7 +403,7 @@ void elections_senate(int senmod, char canseethings)
 	}
 	int vote, change[6] = { 0,0,0,0,0,0 };
 	x = 0, y = 2;
-	for (s = 0; s < SENATENUM; s++)
+	for (int s = 0; s < SENATENUM; s++)
 	{
 		if (senmod != -1 && s % 3 != senmod) continue;
 		vote = -2;
@@ -515,8 +515,8 @@ void elections_house(char canseethings)
 		mvaddstrAlt(0, 0, CONST_politics020);
 		addstrAlt(year);
 	}
-	int x = 0, y = 2, h = 0;
-	for (h = 0; h < HOUSENUM; h++)
+	int x = 0, y = 2;
+	for (int h = 0; h < HOUSENUM; h++)
 	{
 		if (canseethings)
 		{
@@ -563,7 +563,7 @@ void elections_house(char canseethings)
 	}
 	int change[6] = { 0,0,0,0,0,0 };
 	x = 0, y = 2;
-	for (h = 0; h < HOUSENUM; h++)
+	for (int h = 0; h < HOUSENUM; h++)
 	{
 		int vote = -2;
 		for (int i = 0; i<4; i++) if (mood>LCSrandom(100)) vote++;
@@ -1035,7 +1035,6 @@ void elections(char clearformess, char canseethings)
 /* politics - causes the supreme court to hand down decisions */
 void supremecourt(char clearformess, char canseethings)
 {
-	int c;
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -1060,7 +1059,7 @@ void supremecourt(char clearformess, char canseethings)
 	memset(lawtaken, 0, LAWNUM*sizeof(char));
 	scase.resize(cnum);
 	scasedir.resize(cnum);
-	for (c = 0; c < cnum; c++)
+	for (int c = 0; c < cnum; c++)
 	{
 		do
 		{
@@ -1120,7 +1119,7 @@ void supremecourt(char clearformess, char canseethings)
 		mvaddstrAlt(23,  0, CONST_politics080);
  	pressAnyKey();
 	}
-	for (c = 0; c < cnum; c++)
+	for (int c = 0; c < cnum; c++)
 	{
 		char yeswin = 0;
 		int yesvotes = 0;
@@ -1264,7 +1263,6 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
 /* politics - causes congress to act on legislation */
 void congress(char clearformess, char canseethings)
 {
-	int l, c;
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -1291,7 +1289,7 @@ void congress(char clearformess, char canseethings)
 	char lawdir[LAWNUM];
 	memset(lawdir, 0, LAWNUM*sizeof(char));
 	//DETERMINE BILLS
-	for (l = 0; l < LAWNUM; l++)
+	for (int l = 0; l < LAWNUM; l++)
 	{
 		int pup = 0;
 		int pdown = 0;
@@ -1341,14 +1339,14 @@ void congress(char clearformess, char canseethings)
 	bill.resize(cnum);
 	billdir.resize(cnum);
 	killbill.resize(cnum);
-	for (c = 0; c < cnum; c++)
+	for (int c = 0; c < cnum; c++)
 	{
 		killbill[c] = BILL_PASSED_CONGRESS;
 		int maxprior = 0;
-		for (l = 0; l<LAWNUM; l++)
+		for (int l = 0; l<LAWNUM; l++)
 			if (lawpriority[l]>maxprior&&!lawtaken[l])maxprior = lawpriority[l];
 		canlaw.clear();
-		for (l = 0; l < LAWNUM; l++)
+		for (int l = 0; l < LAWNUM; l++)
 			if (lawpriority[l] == maxprior&&!lawtaken[l])
 				canlaw.push_back(l);
 		bill[c] = pickrandom(canlaw);
@@ -1389,7 +1387,7 @@ void congress(char clearformess, char canseethings)
 		mvaddstrAlt(0,  62, CONST_politics099);
 		mvaddstrAlt(0,  70, CONST_politics100);
 	}
-	for (c = 0; c < cnum; c++)
+	for (int c = 0; c < cnum; c++)
 	{
 		char yeswin_h = 0, yeswin_s = 0;
 		int yesvotes_h = 0, yesvotes_s = 0;
@@ -1479,7 +1477,7 @@ void congress(char clearformess, char canseethings)
 		if (!yeswin_h || !yeswin_s) killbill[c] = BILL_FAILED;
 	}
 	int havebill = 0;
-	for (c = 0; c < cnum; c++) if (killbill[c] != BILL_FAILED) havebill++;
+	for (int c = 0; c < cnum; c++) if (killbill[c] != BILL_FAILED) havebill++;
 	if (havebill)
 	{
 		if (canseethings)

@@ -85,7 +85,6 @@ const string tag_skill = "skill";
 void moveEverythingAwayFromSite(int cursite);
 extern Log gamelog;
 extern char newscherrybusted;
-extern vector<Location *> location;
 extern short exec[EXECNUM];
 #include "../customMaps.h"
  vector<vector<string> > no_free_speech_flirt;
@@ -595,6 +594,7 @@ char talkToGeneric(Creature &a, Creature &tk)
 	}
 }
 #include "../common/creaturePool.h"
+void locationIsNowRented(int l, int rent);
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 {
 	clearcommandarea();
@@ -706,8 +706,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			addstrAlt(unnamed_String_Talk_cpp_041);
 	 	pressAnyKey();
 			ledger.subtract_funds(rent, EXPENSE_RENT);
-			location[cursite]->renting = rent;
-			location[cursite]->newrental = 1;
+			locationIsNowRented(cursite, rent);
 			basesquad(activesquad, cursite);
 			return 1;
 		case 'b': // Refuse rent deal
@@ -790,13 +789,12 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 					for (int i = 0; i < 6; i++)
 						if (activesquad->squad[i])
 							criminalize(*(activesquad->squad[i]), LAWFLAG_EXTORTION);
-					location[cursite]->siege.timeuntillocated = 2;
+					LocationsPool::getInstance().setSiegetimeuntillocated(cursite, 2);
 					rent = 10000000; // Yeah he's kicking you out next month
 				}
 				// ...or it's yours for free
 				else rent = 0;
-				location[cursite]->renting = rent;
-				location[cursite]->newrental = true;
+				locationIsNowRented(cursite, rent);
 				basesquad(activesquad, cursite);
 				return 1;
 			}
@@ -934,6 +932,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		return 1;
 	}
 }
+int getCity(int l);
 char doYouComeHereOften(Creature &a, Creature &tk)
 {
 	int y = 12;
@@ -1058,7 +1057,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		{
 			newd = new datest;
 			newd->mac_id = a.id;
-			newd->city = location[a.location]->city;
+			newd->city = getCity(a.location);
 			date.push_back(newd);
 		}
 		Creature *newcr = new Creature;
@@ -1386,10 +1385,10 @@ char talkInCombat(Creature &a, Creature &tk)
 		sitecrime += 5;
 		criminalizeparty(LAWFLAG_KIDNAPPING);
 		addjuice(a, -2, -10); // DE-juice for this shit
- 	pressAnyKey();
-		bool noretreat = false;
+		pressAnyKey();
 		if (weaponhostage)
 		{
+			bool noretreat = false;
 			int e = 0;
 			for (; e < ENCMAX; e++)
 			{

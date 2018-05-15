@@ -737,7 +737,6 @@ void savegame(const string& filename)
 	bool dummy_b;
 	int dummy;
 	FILE *h;
-	int l;
 	h = LCSOpenFile(filename.c_str(), CONST_saveload090.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
@@ -749,7 +748,7 @@ void savegame(const string& filename)
 		//LOCATIONS
 		dummy = len(location);
 		fwrite(&dummy, sizeof(int), 1, h);
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < len(location); l++)
 		{
 			consolidateloot(location[l]->loot); // consolidate loot before saving
 			dummy = len(location[l]->loot);
@@ -795,7 +794,7 @@ void savegame(const string& filename)
 		//VEHICLES
 		dummy = len(vehicle);
 		fwrite(&dummy, sizeof(int), 1, h);
-		for (l = 0; l < len(vehicle); l++)
+		for (int l = 0; l < len(vehicle); l++)
 		{
 			std::string vehicleStr = vehicle[l]->showXml();
 			int vehicleSize = len(vehicleStr);
@@ -943,7 +942,6 @@ char load(const string& filename)
 	int dummy;
 	long dummy_l;
 	FILE *h;
-	int l;
 	h = LCSOpenFile(filename.c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
@@ -961,7 +959,7 @@ char load(const string& filename)
 		//LOCATIONS
 		fread(&dummy, sizeof(int), 1, h);
 		location.resize(dummy);
-		for (l = 0; l < len(location); l++)
+		for (int l = 0; l < len(location); l++)
 		{
 			location[l] = new Location;
 			fread(&dummy, sizeof(int), 1, h);
@@ -1031,7 +1029,7 @@ char load(const string& filename)
 		//VEHICLES
 		fread(&dummy, sizeof(int), 1, h);
 		vehicle.resize(dummy);
-		for (l = 0; l < len(vehicle); l++)
+		for (int l = 0; l < len(vehicle); l++)
 		{
 			int vehicleSize;
 			fread(&vehicleSize, sizeof(int), 1, h);

@@ -396,8 +396,8 @@ void releasehostage()
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
-	int p, hostslots = 0; //DRAGGING PEOPLE OUT IF POSSIBLE
-	for (p = 0; p < 6; p++)
+	int hostslots = 0; //DRAGGING PEOPLE OUT IF POSSIBLE
+	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
@@ -423,7 +423,7 @@ void squadgrab_immobile(char dead)
 			}
 		}
 	}
-	for (p = 5; p >= 0; p--)
+	for (int p = 5; p >= 0; p--)
 	{
 		if (activesquad->squad[p] != NULL)
 		{

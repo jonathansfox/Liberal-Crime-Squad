@@ -643,7 +643,8 @@ struct Question {
 	vector<Choice> choices;
 };
 const int MAX_CHOICES = 10;
-#include "../locations/locationsPoolVehicle.h"
+
+void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
 /* creates your founder */
 void makecharacter()
 {

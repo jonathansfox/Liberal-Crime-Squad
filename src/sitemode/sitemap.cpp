@@ -667,12 +667,11 @@ void initsite(Location &loc)
 	}
 	else {
 	}
-	int x, y, z;
 	if (!loaded)
 	{
-		for (x = 0; x < MAPX; x++)
-			for (y = 0; y < MAPY; y++)
-				for (z = 0; z < MAPZ; z++)
+		for (int x = 0; x < MAPX; x++)
+			for (int y = 0; y < MAPY; y++)
+				for (int z = 0; z < MAPZ; z++)
 				{
 					levelmap[x][y][z].flag = SITEBLOCK_BLOCK;
 					levelmap[x][y][z].special = -1;
@@ -684,9 +683,9 @@ void initsite(Location &loc)
 		if (loc.renting == RENTING_PERMANENT && loc.type != SITE_RESIDENTIAL_APARTMENT &&
 			loc.type != SITE_RESIDENTIAL_APARTMENT_UPSCALE && loc.type != SITE_RESIDENTIAL_TENEMENT)
 		{
-			for (x = 0; x < MAPX; x++)
-				for (y = 0; y < MAPY; y++)
-					for (z = 0; z < MAPZ; z++)
+			for (int x = 0; x < MAPX; x++)
+				for (int y = 0; y < MAPY; y++)
+					for (int z = 0; z < MAPZ; z++)
 					{  // Clear high security, locked doors, alarms, and site specials
 					   // from LCS non-apartment safehouses
 						levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
@@ -949,9 +948,10 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
 				}
 		// Stairs in secure areas should only lead into secure areas.
 		// Removing secure tiles without secure tiles above them.
-		int i, j;
-		for (i = len(unsecure) - 1; i >= 0; i--)
+		//int i, j;
+		for (int i = len(unsecure) - 1; i >= 0; i--)
 		{
+			int j;
 			for (j = 0; j<len(secure_above); j++)
 			{
 				if (secure_above[j] == secure[i]) break;
@@ -965,8 +965,9 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
 		}
 		// Stairs in unsecure areas should only lead into unsecure areas.
 		// Removing unsecure tiles without unsecure tiles above them.
-		for (i = len(unsecure) - 1; i >= 0; i--)
+		for (int i = len(unsecure) - 1; i >= 0; i--)
 		{
+			int j;
 			for (j = 0; j<len(unsecure_above); j++)
 			{
 				if (unsecure_above[j] == unsecure[i]) break;
@@ -985,7 +986,7 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
 			x = choice.first, y = choice.second, z = zi - 1;
 			// The tile receiving the stairs down will not eligible for stairs
 			// up later.
-			for (j = 0; j < len(secure_above); j++)
+			for (int j = 0; j < len(secure_above); j++)
 				if (secure_above[j].first == x&&secure_above[j].second == y)
 				{
 					secure_above.erase(secure_above.begin() + j); break;
@@ -997,7 +998,7 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
 			x = choice.first, y = choice.second, z = zi - 1;
 			// The tile receiving the stairs down will not eligible for stairs
 			// up later.
-			for (j = 0; j < len(unsecure_above); j++)
+			for (int j = 0; j < len(unsecure_above); j++)
 				if (unsecure_above[j].first == x&&unsecure_above[j].second == y)
 				{
 					unsecure_above.erase(unsecure_above.begin() + j); break;
@@ -1057,7 +1058,6 @@ struct coordinates
 };
 void configSiteUnique::build()
 {
-	int x, y, z;
 	//int count=0;
 	vector<coordinates> secure, unsecure;
 	//Clear out restrictions
@@ -1123,9 +1123,9 @@ void configSiteUnique::build()
 				}
 	} while (acted);
 	// Place unique
-	for (x = xstart; x <= xend; x++)
-		for (y = ystart; y <= yend; y++)
-			for (z = zstart; z <= zend; z++)
+	for (int x = xstart; x <= xend; x++)
+		for (int y = ystart; y <= yend; y++)
+			for (int z = zstart; z <= zend; z++)
 				if (!(levelmap[x][y][z].flag & (SITEBLOCK_DOOR | SITEBLOCK_BLOCK | SITEBLOCK_EXIT | SITEBLOCK_OUTDOOR)) &&
 					levelmap[x][y][z].special == SPECIAL_NONE)
 				{
@@ -1133,18 +1133,17 @@ void configSiteUnique::build()
 						secure.push_back(coordinates(x, y, z));
 					else unsecure.push_back(coordinates(x, y, z));
 				}
+
 	if (len(secure))
 	{
 		coordinates &choice = pickrandom(secure);
-		x = choice.x, y = choice.y, z = choice.z;
+		levelmap[choice.x][choice.y][choice.z].special = unique;
 	}
 	else if (len(unsecure))
 	{
 		coordinates &choice = pickrandom(unsecure);
-		x = choice.x, y = choice.y, z = choice.z;
+		levelmap[choice.x][choice.y][choice.z].special = unique;
 	}
-	else return;
-	levelmap[x][y][z].special = unique;
 }
 // Adds a loot type during map creation
 configSiteLoot::configSiteLoot(const std::string& value)

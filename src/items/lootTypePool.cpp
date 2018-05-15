@@ -16,7 +16,7 @@ LootTypePool LootTypePool::getInstance()
 	}
 	return lPool;
 }
-int LootTypePool::lenpool()
+const int LootTypePool::lenpool()
 {
 	return len(loottype);
 }

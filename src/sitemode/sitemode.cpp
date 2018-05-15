@@ -19,6 +19,7 @@ const string CONST_sitemode163 = "S - Wait";
 const string CONST_sitemode162 = "M - Map";
 const string CONST_sitemode161 = "N - Options";
 const string CONST_sitemode160 = "G - Get Loot";
+const string CONST_sitemodeXRL = "J - Reload Empty";
 const string CONST_sitemode159 = "W,A,D,X - Move";
 const string CONST_sitemode158 = ": CONSERVATIVES SUSPICIOUS";
 const string CONST_sitemode157 = ": CONSERVATIVES ALARMED";
@@ -288,7 +289,6 @@ char talk(Creature &a, const int t);
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
 extern Log gamelog;
-extern vector<Location *> location;
 #include "../common/musicClass.h"
 extern MusicClass music;
 extern short mode;
@@ -349,11 +349,11 @@ extern char ccs_kills;
 extern UniqueCreatures uniqueCreatures;
 void fight_subdued()
 {
-	int p;
+	//int p;
 	//int ps=find_police_station(chaseseq.location);
 	delete_and_clear(chaseseq.friendcar, vehicle);
 	int hostages = 0;
-	for (p = 0; p < 6; p++)
+	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
 			if (activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
 				hostages++;
@@ -362,7 +362,7 @@ void fight_subdued()
 	for (int l = 0; l < len(activesquad->loot); l++)
 		if (activesquad->loot[l]->whatIsThis() == THIS_IS_LOOT)
 			stolen++;
-	for (p = 0; p < 6; p++)
+	for (int p = 0; p < 6; p++)
 	{
 		if (!activesquad->squad[p]) continue;
 		activesquad->squad[p]->crimes_suspected[LAWFLAG_THEFT] += stolen;
@@ -426,11 +426,9 @@ void resolvesite()
 			if (LocationsPool::getInstance().getLocationType(cursite) == SITE_INDUSTRY_WAREHOUSE ||
 				LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)
 			{
-				location[cursite]->renting = RENTING_PERMANENT; // Capture safehouse for the glory of the LCS!
-				location[cursite]->closed = 0;
-				location[cursite]->heat = 100;
+				LocationsPool::getInstance().captureSite(cursite);
 			}
-			else location[cursite]->closed = sitecrime / 10; // Close down site
+			else LocationsPool::getInstance().closeSite(cursite, sitecrime);
 		}
 		// Out sleepers
 		if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
@@ -448,7 +446,7 @@ void resolvesite()
 		{
 			if (securityable(LocationsPool::getInstance().getLocationType(cursite)))
 				LocationsPool::getInstance().isThisPlaceHighSecurity(cursite, sitecrime);
-			else location[cursite]->closed = 7;
+			else LocationsPool::getInstance().closeSite(cursite, 70);
 		}
 	}
 }
@@ -951,19 +949,19 @@ void pressedKeyM() {
 							else mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
 						}
 						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT) &&
-							(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
+							LocationsPool::getInstance().siteHasCameras(cursite))
 						{
 							set_color_easy(RED_ON_BLACK_BRIGHT);
 							mvaddchAlt(y + 1, x + 5, CH_YEN_SIGN);
 						}
 						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT) &&
-							(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
+							LocationsPool::getInstance().siteHasCameras(cursite))
 						{
 							set_color_easy(RED_ON_BLACK_BRIGHT);
 							mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
 						}
 						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED) &&
-							(location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off)
+							LocationsPool::getInstance().siteHasCameras(cursite))
 						{
 							set_color_easy(RED_ON_BLACK);
 							mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
@@ -1040,6 +1038,33 @@ void pressedKeyF(int& encounter_timer) {
 		}
 	
 }
+int checkForPeopleWhoCanRecruit() {
+	// Check for people who can recruit followers
+	for (int i = 0; i < 6; i++)
+		if (activesquad->squad[i] != NULL)
+			if (subordinatesleft(*activesquad->squad[i]))
+				return i;
+	return -1;
+}
+void addNewRecruit(int i, int e) {
+	Creature *newcr = new Creature;
+	*newcr = encounter[e];
+	newcr->namecreature();
+	newcr->location = activesquad->squad[i]->location;
+	newcr->base = activesquad->squad[i]->base;
+	newcr->hireid = activesquad->squad[i]->id;
+	addCreature(newcr);
+	stat_recruits++;
+	for (int p = 0; p < 6; p++)
+	{
+		if (activesquad->squad[p] == NULL)
+		{
+			activesquad->squad[p] = newcr;
+			newcr->squadid = activesquad->id;
+			break;
+		}
+	}
+}
 void pressedKeyR(const int freeable, const int libnum, const int enemy, const int hostages, int& partysize) {
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite) && libnum > 6)
 	{
@@ -1071,33 +1096,14 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 					followers++, flipstart = 1, freed = 1;
 					if (partysize < 6)
 					{
-						int i;
-						// Check for people who can recruit followers
-						for (i = 0; i < 6; i++)
-							if (activesquad->squad[i] != NULL)
-								if (subordinatesleft(*activesquad->squad[i]))
-									break;
+						int i = checkForPeopleWhoCanRecruit();
+						
 						// If someone can, add this person as a newly recruited Liberal!
-						if (i != 6)
+						if (i < 6 && i > -1)
 						{
-							Creature *newcr = new Creature;
-							*newcr = encounter[e];
-							newcr->namecreature();
-							newcr->location = activesquad->squad[i]->location;
-							newcr->base = activesquad->squad[i]->base;
-							newcr->hireid = activesquad->squad[i]->id;
-							addCreature(newcr);
-							stat_recruits++;
-							for (int p = 0; p < 6; p++)
-							{
-								if (activesquad->squad[p] == NULL)
-								{
-									activesquad->squad[p] = newcr;
-									newcr->squadid = activesquad->id;
-									break;
-								}
-							}
-							actgot++, partysize++;
+							addNewRecruit(i, e);
+							actgot++;
+							partysize++;
 						}
 					}
 				}
@@ -1139,6 +1145,7 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 	else if (hostages)
 		releasehostage();
 }
+void getRandomLoot(int cursite);
 void pressedKeyG(const int enemy, int& encounter_timer) {
 	if ((isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
 	{
@@ -1155,14 +1162,11 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 						for (int z = 0; z < MAPZ; z++)
 							if (levelmap[x][y][z].flag&SITEBLOCK_LOOT)
 								lcount++;
-				int lplus = len(location[cursite]->loot) / lcount;
-				if (lcount == 1) lplus = len(location[cursite]->loot);
+				int lplus = LocationsPool::getInstance().lenloot(cursite) / lcount;
+				if (lcount == 1) lplus = LocationsPool::getInstance().lenloot(cursite);
 				for (; lplus > 0; lplus--)
 				{
-					int b = LCSrandom(len(location[cursite]->loot));
-					Item *it = location[cursite]->loot[b];
-					activesquad->loot.push_back(it);
-					location[cursite]->loot.erase(location[cursite]->loot.begin() + b);
+					getRandomLoot(cursite);
 				}
 			}
 			else
@@ -1479,24 +1483,22 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 	//ENEMIES SHOULD GET FREE SHOTS NOW
 	if (sitealarm)
 	{
-		//bool snuck_away = true;
-		int e;
+		bool snuck_away = true;
 		// Try to sneak past
-		for (e = 0; e < ENCMAX; e++)
+		for (int e = 0; e < ENCMAX && snuck_away; e++)
 		{
 			if (encounter[e].exists &&
 				encounter[e].alive  &&
 				encounter[e].cantbluff == 2)
 			{
 				// You can't sneak past this person; they already know you're there
-				break;
+				snuck_away = false;
 			}
 		}
 		// If you can sneak past all enemies
-		if (e == ENCMAX)
+		if (snuck_away)
 		{
-			int breakout = false;
-			for (e = 0; e < ENCMAX; e++)
+			for (int e = 0; e < ENCMAX && snuck_away; e++)
 			{
 				if (!encounter[e].exists)continue;
 				for (int i = 0; i < 6; i++)
@@ -1508,16 +1510,15 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 							activesquad->squad[i]->train(SKILL_STEALTH, 10);
 						if (roll < DIFFICULTY_HARD)
 						{
-							breakout = true;
+							snuck_away = false;
 							break;
 						}
 					}
 				}
-				if (breakout) break;
 			}
 		}
 		// If snuck past everyone
-		if (e == ENCMAX)
+		if (snuck_away)
 		{
 			for (int i = 0; i < 6; i++)
 			{
@@ -1547,19 +1548,19 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 }
 void bailUponVictory() {
 	music.play(MUSIC_CONQUER);
-	if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_DEFENDED;
+	if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_DEFENDED;
 	else sitestory->type = NEWSSTORY_SQUAD_BROKESIEGE;
 	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_CCS)
 	{
 		// CCS DOES NOT capture the warehouse -- reverse earlier assumption of your defeat!
 		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_INDUSTRY_WAREHOUSE || LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)
-			location[cursite]->renting = RENTING_PERMANENT;
+			LocationsPool::getInstance().setRenting(cursite, RENTING_PERMANENT);
 		else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_TENEMENT)
-			location[cursite]->renting = 200;
+			LocationsPool::getInstance().setRenting(cursite, 200);
 		else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT)
-			location[cursite]->renting = 650;
+			LocationsPool::getInstance().setRenting(cursite, 650);
 		else if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_APARTMENT_UPSCALE)
-			location[cursite]->renting = 1500;
+			LocationsPool::getInstance().setRenting(cursite, 1500);
 	}
 	//DEAL WITH PRISONERS AND STOP BLEEDING
 	for (int p = 0; p < 6; p++)
@@ -1600,8 +1601,8 @@ void bailOnBase() {
 	// Seperate logging message.
 	gamelog.record(activesquad->name);
 	gamelog.record(CONST_sitemode116);
-	if (location[cursite]->front_business != -1)
-		gamelog.record(location[cursite]->front_name);
+	if (LocationsPool::getInstance().isThisAFront(cursite) != -1)
+		gamelog.record(LocationsPool::getInstance().getFrontName(cursite));
 	else
 		gamelog.record(LocationsPool::getInstance().getLocationName(cursite));
 	gamelog.record(singleDot);
@@ -1695,7 +1696,7 @@ void bailOnBase() {
 		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
 			//Report on squad killed during siege
-			if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+			if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
 			else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
 			LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
 		}
@@ -1741,9 +1742,7 @@ void bailUponDefeatCCS() {
 	mvaddstrAlt(16, 1, CONST_sitemode117, gamelog);
 	gamelog.newline();
 	pressAnyKey();
-	location[cursite]->renting = RENTING_PERMANENT;
-	location[cursite]->closed = 0;
-	location[cursite]->heat = 100;
+	LocationsPool::getInstance().captureSite(cursite);
 	// CCS Safehouse killed?
 	if (LocationsPool::getInstance().getLocationType(cursite) == SITE_RESIDENTIAL_BOMBSHELTER ||
 		LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_BARANDGRILL ||
@@ -1844,12 +1843,12 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 	//AND IT GETS WORSE AND WORSE
 	//but not as bad as it used to get,
 	//since the extra waves are small
-	location[cursite]->siege.attacktime++;
-	if ((location[cursite]->siege.attacktime >= 100 + LCSrandom(10) &&
+	LocationsPool::getInstance().tickAttackTime(cursite);
+	if ((LocationsPool::getInstance().getAttackTime(cursite) >= 100 + LCSrandom(10) &&
 		(locz != 0 || locx<(MAPX / 2 - 3) || locx>(MAPX / 2 + 3) ||
 			locy>5)))
 	{
-		location[cursite]->siege.attacktime = 0;
+		LocationsPool::getInstance().resetAttackTime(cursite);
 		int existingUnits = 0;
 		for (int x = 0; x < MAPX; x++) for (int y = 0; y < MAPY; y++) for (int z = 0; z < MAPZ; z++)
 			if (levelmap[x][y][z].siegeflag&(SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT))
@@ -1868,7 +1867,7 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 				(levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT | SIEGEFLAG_TRAP)));
 			levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_UNIT;
 		}
-		if (!(location[cursite]->compound_walls&COMPOUND_TANKTRAPS) &&
+		if (!LocationsPool::getInstance().doWeHaveTankTraps(cursite) &&
 			LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE &&
 			LocationsPool::getInstance().getSiegeEscalationState(cursite) >= 2)
 		{
@@ -1883,7 +1882,7 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 				} while ((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR | SITEBLOCK_EXIT)) ||
 					(levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT | SIEGEFLAG_TRAP)));
 				levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_HEAVYUNIT;
-				location[cursite]->siege.tanks++;
+				LocationsPool::getInstance().spawnATank(cursite);
 			}
 		}
 	}
@@ -1905,8 +1904,8 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 			levelmap[locx][locy][locz].siegeflag &= ~SIEGEFLAG_UNIT_DAMAGED;
 	}
 	//BAIL UPON VICTORY
-	if (location[cursite]->siege.kills >= 10 &&
-		location[cursite]->siege.tanks < 1 &&
+	if (LocationsPool::getInstance().getSiegeKills(cursite) >= 10 &&
+		LocationsPool::getInstance().getSiegeTanks(cursite) < 1 &&
 		LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
 		bailUponVictory();
@@ -2129,6 +2128,14 @@ void encounterSpecial(const int makespecial, const int olocx, const int olocy, c
 		}
 		break;
 	}
+}
+void pressedKeyShiftL() {
+
+	reloadparty();
+	printparty();
+	refreshAlt();
+	creatureadvance();
+
 }
 // return true if leaving site
 int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz, const char c, const int encsize, char& hostcheck) {
@@ -2359,6 +2366,7 @@ void mode_site() {
 				if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(10, 42, CONST_sitemode164);
+				mvaddstrAlt(10, 1, CONST_sitemodeXRL);
 				if (enemy) set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				mvaddstrAlt(13, 42, CONST_sitemode165);
@@ -2375,18 +2383,19 @@ void mode_site() {
 						(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK) ||
 						(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
 					{
-						int i;
-						for (i = 0; i < 6; i++)
+						bool can_graffiti = false;
+						for (int i = 0; i < 6 && !can_graffiti; i++)
 						{
 							if (!activesquad->squad[i]) i = 6;
-							else if (activesquad->squad[i]->get_weapon().can_graffiti())
-							{
+							else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
+							
+						}
+						if (can_graffiti) {
+							
 								set_color_easy(WHITE_ON_BLACK);
 								graffiti = 1;
-								break;
-							}
-						}
-						if (i == 6) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+							
+						}else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					}
 					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				}
@@ -2528,7 +2537,7 @@ void mode_site() {
 			{
 				if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 				{
-					if (location[cursite]->siege.underattack)sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+					if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
 					else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
 				}
 				else
@@ -2605,6 +2614,12 @@ void mode_site() {
 			case 'l':
 				if ((!enemy || !sitealarm)) {
 					pressedKeyL();
+					encounter_timer++;
+				}
+				break;
+			case 'j':
+				if ((!enemy || !sitealarm)) {
+					pressedKeyShiftL();
 					encounter_timer++;
 				}
 				break;
@@ -2715,9 +2730,7 @@ void mode_site(short loc)
 	{
 		music.play(MUSIC_DEFENSE);
 		sitealarm = 1;
-		location[loc]->siege.attacktime = 0;
-		location[loc]->siege.kills = 0;
-		location[loc]->siege.tanks = 0;
+		LocationsPool::getInstance().turnOffSiege(loc);
 		//PLACE YOU
 		//int maxy=0;
 		for (int x = 0; x < MAPX; x++)
@@ -2725,7 +2738,7 @@ void mode_site(short loc)
 			{
 				for (int z = 0; z < MAPZ; z++)
 				{
-					if (!(location[loc]->siege.lights_off))levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
+					if (!(LocationsPool::getInstance().lightsOff(loc)))levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
 					levelmap[x][y][z].flag &= ~SITEBLOCK_LOCKED;
 					levelmap[x][y][z].flag &= ~SITEBLOCK_LOOT;
 				}
@@ -2756,7 +2769,7 @@ void mode_site(short loc)
 		} while (levelmap[locx][locy][locz].flag&(SITEBLOCK_BLOCK | SITEBLOCK_DOOR |
 			SITEBLOCK_FIRE_START | SITEBLOCK_FIRE_PEAK | SITEBLOCK_FIRE_END));
 		//PLACE LOOT
-		int lootnum = len(location[loc]->loot);
+		int lootnum = LocationsPool::getInstance().lenloot(loc);
 		if (lootnum>10) lootnum = 10;
 		int lx, ly, lz;
 		for (int l = 0; l < lootnum; l++)
@@ -2766,7 +2779,8 @@ void mode_site(short loc)
 			levelmap[lx][ly][lz].flag |= SITEBLOCK_LOOT;
 		}
 		//PLACE TRAPS
-		if (location[loc]->compound_walls&COMPOUND_TRAPS)
+		
+		if (LocationsPool::getInstance().hasTraps(loc))
 		{
 			int trapnum = 30;
 			for (int t = 0; t < trapnum; t++)
@@ -2792,12 +2806,12 @@ void mode_site(short loc)
 				(levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT | SIEGEFLAG_HEAVYUNIT | SIEGEFLAG_TRAP)));
 			levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_UNIT;
 		}
-		if (!(location[loc]->compound_walls & COMPOUND_TANKTRAPS) &&
-			location[loc]->siege.siegetype == SIEGE_POLICE&&
+		if (!(LocationsPool::getInstance().doWeHaveTankTraps(loc)) &&
+			LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE&&
 			LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2)
 		{
 			levelmap[MAPX / 2][1][0].siegeflag |= SIEGEFLAG_HEAVYUNIT;
-			location[loc]->siege.tanks = 1;
+			LocationsPool::getInstance().spawnATank(loc, 1);
 		}
 	}
 	mode_site();

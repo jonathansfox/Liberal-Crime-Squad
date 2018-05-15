@@ -87,8 +87,8 @@ string spaceDashSpace;
 /* base - burn the flag */
 void burnflag()
 {
-	int flagparts = 126, flag[18][7][4], x, y;
-	for (y = 0; y < 7; y++) if (y < 6) for (x = 0; x < 18; x++)
+	int flagparts = 126, flag[18][7][4];
+	for (int y = 0; y < 7; y++) if (y < 6) for (int x = 0; x < 18; x++)
 	{
 		if (x < 9 && y < 4)
 		{
@@ -108,22 +108,23 @@ void burnflag()
 		flag[x][y][1] = COLOR_WHITE;
 		flag[x][y][3] = 1;
 	}
-	else for (x = 0; x < 18; x++)
+	else for (int x = 0; x < 18; x++)
 	{
 		flag[x][y][0] = CH_UPPER_HALF_BLOCK;
 		flag[x][y][1] = COLOR_RED;
 		flag[x][y][2] = COLOR_BLACK;
 		flag[x][y][3] = 0;
 	}
-	x = LCSrandom(18), y = LCSrandom(7);
-	flag[x][y][0] = CH_DARK_SHADE;
-	flag[x][y][1] = COLOR_YELLOW;
-	flag[x][y][2] = COLOR_BLACK;
-	flag[x][y][3] = 1;
+	int x1 = LCSrandom(18);
+	int y1 = LCSrandom(7);
+	flag[x1][y1][0] = CH_DARK_SHADE;
+	flag[x1][y1][1] = COLOR_YELLOW;
+	flag[x1][y1][2] = COLOR_BLACK;
+	flag[x1][y1][3] = 1;
 	bool first = true;
 	while (flagparts > 0)
 	{
-		if (!first) for (x = 0; x < 18; x++) for (y = 0; y < 7; y++)
+		if (!first) for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
 		{
 			if (flag[x][y][0] == CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0] = CH_DARK_SHADE;
 			else if (flag[x][y][0] == CH_DARK_SHADE)
@@ -150,7 +151,7 @@ void burnflag()
 			}
 		}
 		else first = false;
-		for (x = 0; x < 18; x++) for (y = 0; y < 7; y++)
+		for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
 		{
 			set_color(short(flag[x][y][1]), short(flag[x][y][2]), bool(flag[x][y][3]));
 			mvaddchAlt(y + 10, x + 31, flag[x][y][0]);
@@ -159,7 +160,8 @@ void burnflag()
 		bool gotnew = false;
 		while (!gotnew&&flagparts > 3)
 		{
-			x = LCSrandom(18), y = LCSrandom(7);
+			int x = LCSrandom(18);
+			int y = LCSrandom(7);
 			
 			if (flag[x][y][0] == ':' || flag[x][y][0] == '.' || flag[x][y][0] == CH_UPPER_HALF_BLOCK || flag[x][y][0] == CH_LOWER_HALF_BLOCK)
 			{
@@ -241,7 +243,6 @@ void orderparty()
 /* base - assign a vehicle to this squad */
 void setvehicles()
 {
-	int p, l;
 	if (!activesquad) return;
 	int page = 0;
 	while (true)
@@ -252,10 +253,10 @@ void setvehicles()
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
-		for (l = page * 18; l < len(vehicle) && l < page * 18 + 18; l++)
+		for (int l = page * 18; l < len(vehicle) && l < page * 18 + 18; l++)
 		{
 			bool this_squad = false;
-			for (p = 0; p < 6; p++)
+			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
 				if (activesquad->squad[p]->alive&&

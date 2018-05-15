@@ -215,11 +215,10 @@ void emptyEncounter() {
  const int DRIVING_RANDOMNESS = 13;
  void chase_giveup()
  {
-	 int p;
 	 int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, chaseseq.location);
 	 delete_and_clear(chaseseq.friendcar, vehicle);
 	 int hostagefreed = 0;
-	 for (p = 0; p < 6; p++)
+	 for (int p = 0; p < 6; p++)
 	 {
 		 if (!activesquad->squad[p]) continue;
 		 activesquad->squad[p]->squadid = -1;
@@ -470,7 +469,6 @@ void emptyEncounter() {
 	 //NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
 	 //IT SHOULD NOT DELETE SQUADS OR CREATURES
 	 //SQUADS MAY BE FICTITIOUS AND BOTH WILL BE DELETED LATER ANYWAY
-	 int p;
 	 reloadparty();
 	 //NUKE ALL CARS
 	 delete_and_clear(chaseseq.enemycar);
@@ -527,7 +525,7 @@ void emptyEncounter() {
 		 {
 			 //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
 			 delete_and_clear(chaseseq.friendcar, vehicle);
-			 for (p = 0; p < 6; p++)
+			 for (int p = 0; p < 6; p++)
 			 {
 				 if (activesquad->squad[p] == NULL)continue;
 				 activesquad->squad[p]->die();
@@ -639,7 +637,6 @@ void emptyEncounter() {
  }
  void evasivedrive()
  {
-	 int e;
 	 vector<long> yourrolls, theirrolls, theirrolls_id, theirrolls_drv;
 	 long yourworst = 10000;
 	 for (int p = 0; p < 6; p++)
@@ -663,7 +660,7 @@ void emptyEncounter() {
 		 }
 	 }
 	 if (!len(yourrolls)) yourrolls.push_back(0); //error -- and for this you get a 0
-	 for (e = 0; e < ENCMAX; e++)
+	 for (int e = 0; e < ENCMAX; e++)
 	 {
 		 if (encounter[e].carid != -1 &&
 			 encounter[e].enemy() &&
@@ -709,7 +706,7 @@ void emptyEncounter() {
 			 clearmessagearea();
 			 set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			 moveAlt(16, 1);
-			 for (e = 0; e < ENCMAX; e++)
+			 for (int e = 0; e < ENCMAX; e++)
 			 {
 				 if (encounter[e].id == theirrolls_drv[i])
 				 {
@@ -736,7 +733,7 @@ void emptyEncounter() {
 				 gamelog.newline(); //New line.
 				 break;
 			 }
-			 for (e = 0; e < ENCMAX; e++)
+			 for (int e = 0; e < ENCMAX; e++)
 			 {
 				 if (encounter[e].carid == theirrolls_id[i])
 				 {
@@ -961,12 +958,12 @@ void emptyEncounter() {
  {
 	 //CHECK TO SEE WHICH CARS ARE BEING DRIVEN
 	 vector<int> passenger;
-	 int driver, v, p;
-	 for (v = len(chaseseq.friendcar) - 1; v >= 0; v--)
+	 int driver;
+	 for (int v = len(chaseseq.friendcar) - 1; v >= 0; v--)
 	 {
 		 passenger.clear();
 		 driver = -1;
-		 for (p = 0; p < 6; p++)
+		 for (int p = 0; p < 6; p++)
 		 {
 			 if (activesquad->squad[p] == NULL) continue;
 			 if (activesquad->squad[p]->carid == chaseseq.friendcar[v]->id())
@@ -984,10 +981,10 @@ void emptyEncounter() {
 			 //MAKE BEST DRIVING PASSENGER INTO A DRIVER
 			 vector<int> goodp;
 			 int max = 0;
-			 for (p = 0; p<len(passenger); p++)
+			 for (int p = 0; p<len(passenger); p++)
 				 if (driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v])>max&&activesquad->squad[passenger[p]]->canwalk())
 					 max = driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v]);
-			 for (p = 0; p < len(passenger); p++)
+			 for (int p = 0; p < len(passenger); p++)
 				 if (driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v]) == max && activesquad->squad[passenger[p]]->canwalk())
 					 goodp.push_back(passenger[p]);
 			 if (len(goodp))
@@ -1011,11 +1008,11 @@ void emptyEncounter() {
 			 return 1;
 		 }
 	 }
-	 for (v = len(chaseseq.enemycar) - 1; v >= 0; v--)
+	 for (int v = len(chaseseq.enemycar) - 1; v >= 0; v--)
 	 {
 		 passenger.clear();
 		 driver = -1;
-		 for (p = 0; p < ENCMAX; p++)
+		 for (int p = 0; p < ENCMAX; p++)
 		 {
 			 if (!encounter[p].exists) continue;
 			 if (encounter[p].carid == chaseseq.enemycar[v]->id())
@@ -1042,14 +1039,13 @@ void emptyEncounter() {
  }
  bool dodgedrive()
  {
-	 int v;
 	 clearmessagearea();
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(16, 1, CONST_chase065, gamelog);
 	 gamelog.newline(); //New line.
  	pressAnyKey();
 	 int driver;
-	 for (v = len(chaseseq.friendcar) - 1; v >= 0; v--)
+	 for (int v = len(chaseseq.friendcar) - 1; v >= 0; v--)
 	 {
 		 driver = -1;
 		 for (int p = 0; p < 6; p++)
@@ -1074,7 +1070,7 @@ void emptyEncounter() {
 			 }
 		 }
 	 }
-	 for (v = len(chaseseq.enemycar) - 1; v >= 0; v--)
+	 for (int v = len(chaseseq.enemycar) - 1; v >= 0; v--)
 	 {
 		 driver = -1;
 		 for (int p = 0; p < ENCMAX; p++)
@@ -1206,7 +1202,7 @@ void emptyEncounter() {
  
 bool chasesequence()
 {
-	int p = 0, chasenum = 0, v2 = 0;
+	int chasenum = 0;
 	reloadparty();
 	//NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
 	//IT CAN DELETE CREATURES AND VEHICLES, BUT SHOULD NOT DELETE SQUADS
@@ -1219,7 +1215,7 @@ bool chasesequence()
 		return 1;
 	}
 	chaseseq.friendcar.clear();
-	for (p = 0; p < 6; p++)
+	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;
 		if (activesquad->squad[p]->carid != -1)
@@ -1227,6 +1223,7 @@ bool chasesequence()
 			int v = id_getcar(activesquad->squad[p]->carid);
 			if (v != -1)
 			{
+				int v2;
 				for (v2 = 0; v2 < len(chaseseq.friendcar); v2++) if (chaseseq.friendcar[v2]->id() == vehicle[v]->id()) break;
 				if (v2 == len(chaseseq.friendcar)) chaseseq.friendcar.push_back(vehicle[v]);
 			}
@@ -1265,7 +1262,6 @@ bool chasesequence()
 			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(11,  40, show_squad_liberal_status);
-			int y = 12;
 			if (obstacle == -1)
 			{
 				set_color_easy(WHITE_ON_BLACK);
@@ -1281,17 +1277,17 @@ bool chasesequence()
 				mvaddstrAlt(10,  1, carchaseObstacles[obstacle][1]);
 				mvaddstrAlt(11,  1, carchaseObstacles[obstacle][2]);
 			}
-			mvaddstrAlt(y,  1, CONST_chase077);
+			mvaddstrAlt(12,  1, CONST_chase077);
 			if (chaseseq.canpullover)
 			{
-				mvaddstrAlt(y + 1,  1, CONST_chase078);
+				mvaddstrAlt(13,  1, CONST_chase078);
 			}
 		}
 		else
 		{
 			//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
 			delete_and_clear(chaseseq.friendcar, vehicle);
-			for (p = 0; p < 6; p++)
+			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
 				activesquad->squad[p]->die();
@@ -1530,7 +1526,6 @@ void makechasers(long type, const long sitecriminality)
 	emptyEncounter();
 	if (!sitecrime_chasers) return;
 	//short encslot = 0;
-	int n;
 	string cartype; //Temporary (transitionally) solution. -XML
 	long pnum;
 	chaseseq.canpullover = 0;
@@ -1618,10 +1613,10 @@ void makechasers(long type, const long sitecriminality)
 	}
 	pnum = LCSrandom((sitecrime_chasers / crime_ratio) + 1) + min_enemies;
 	if (pnum > max_enemies) pnum = max_enemies;
-	for (n = 0; n < pnum; n++) {
+	for (int n = 0; n < pnum; n++) {
 		makecreature(encounter[n], chasing_enemy);
 	}
-	for (n = 0; n < pnum; n++) conservatise(encounter[n]);
+	for (int n = 0; n < pnum; n++) conservatise(encounter[n]);
 	//ASSIGN CARS TO CREATURES
 	int carnum;
 	if (pnum <= 2) carnum = 1;
@@ -1633,7 +1628,7 @@ void makechasers(long type, const long sitecriminality)
 	{
 		Vehicle *v = new Vehicle(*vehicletype[getvehicletype(cartype)]); //If car type is unknown, due to change in xml file, the game will crash here. -XML
 		chaseseq.enemycar.push_back(v);
-		for (n = 0; n < pnum; n++)
+		for (int n = 0; n < pnum; n++)
 			if (encounter[n].carid == -1)
 			{
 				encounter[n].carid = v->id();
@@ -1642,7 +1637,7 @@ void makechasers(long type, const long sitecriminality)
 			}
 	}
 	long load[4] = { 0,0,0,0 };
-	for (n = 0; n < pnum; n++)
+	for (int n = 0; n < pnum; n++)
 		if (encounter[n].carid == -1)
 		{
 			int v;

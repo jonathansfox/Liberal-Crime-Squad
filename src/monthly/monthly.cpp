@@ -105,7 +105,10 @@ std::string getview(short view, bool shortname);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 extern Log gamelog;
-#include "../locations/locationsPoolHeader.h"
+void clearRentExemptions();
+void publishSpecialEditions(char &clearformess);
+void manageGrafiti();
+
 #include "../common/musicClass.h"
 extern MusicClass music;
 extern int year;
@@ -188,7 +191,7 @@ void passmonth(char &clearformess, char canseethings)
 {
 	short oldlaw[LAWNUM];
 	memmove(oldlaw, lawList, sizeof(short)*LAWNUM);
-	int l, v, p;
+	int l, p;
 	//TIME ADVANCE
 	day = 1;
 	month++;
@@ -230,7 +233,7 @@ void passmonth(char &clearformess, char canseethings)
 	}
 	int libpower[VIEWNUM] = { 0 };
 	//STORIES STALE EVEN IF NOT PRINTED
-	for (v = 0; v < VIEWNUM; v++)public_interest[v] /= 2;
+	for (int v = 0; v < VIEWNUM; v++)public_interest[v] /= 2;
 	int conspower = 200 - attitude[VIEW_AMRADIO] - attitude[VIEW_CABLENEWS];
 	//HAVING SLEEPERS
 	havingSleepers(clearformess, canseethings, libpower);
@@ -241,7 +244,7 @@ void passmonth(char &clearformess, char canseethings)
 	//double cost=0;
 	//double tax=0;
 	//PUBLIC OPINION NATURAL MOVES
-	for (v = 0; v < VIEWNUM; v++)
+	for (int v = 0; v < VIEWNUM; v++)
 	{
 		// Liberal essays add their power to the effect of sleepers
 		libpower[v] += background_liberal_influence[v];
