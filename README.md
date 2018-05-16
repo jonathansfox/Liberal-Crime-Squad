@@ -27,9 +27,12 @@ Savefile Editor: art/debug_defines.txt
 //VERBOSESAVEFILE
 Remove the '//' from VERBOSESAVEFILE and every .dat save file will be accompanied by a .verbose save file, intended to be mostly human readable.
 
-The 196 files of custom strings have been sorted into 15 folders placed inside the art folder.
+The 287 files of custom strings have been sorted into 17 folders placed inside the art folder, and the art folder itself.
 
+.\allText.txt (something of a massive text dump)
+.\debug_defines.txt (used to alter debug options)
 .\defaultSlogans.txt (change the default slogans, but that only activates once in 20 anyway)
+.\helpTopics.txt (in-game help topics)
 
 activities (mostly have to do with personnel descriptions and hotwiring cars)
 
@@ -49,7 +52,11 @@ locations (customize the names of everything from vegan co-ops to forced labor c
 
 majorevent (news article customization)
 
+mostlyendings (something of a massive text dump)
+
 names (all names generated at random, including city names)
+
+newgame (new location for founderQuestions.txt)
 
 siege (Mostly random generated news programs, which was in siege.cpp for some reason)
 
