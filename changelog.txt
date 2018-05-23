@@ -311,3 +311,46 @@ This is especially the case with regards to siege.cpp, as my coding became incre
 
 Added new key 'J' to reload weapons, but only weapons that are empty.
 Not the best, but it does the job.
+
+4.12.21
+
+Deleted translateid.cpp, moved most of its guts over to globals.cpp, except the part that accessed vector<Creature *> pool, which was moved to creaturePool.cpp, and the part accessing vehicletypes, which was moved to vehicle.cpp
+That said, translateid.cpp would work well as a class API.
+
+globals.cpp is where most of the vector<...> are declared, and saveload.cpp has to access most everything, so if those are the only two references to a previously global vector, the work is basically done.
+
+Removed instances of extern vector<vehicletype *> vehicletype, all except in vehicle.cpp and globals.cpp
+Removed instances of extern vector<vehicle *> vehicle,  all except shopnstuff.cpp, saveload.cpp, and globals.cpp
+Removed vector<datest *> date from everywhere except saveload.cpp.  Moved most of the uses to date.cpp
+
+creaturetypes.cpp has a large switch statement of all creatures and their accepted work locations.
+// TODO this can be extracted to a table
+
+Moved the remains of creaturetypes.cpp to creaturetype.cpp
+If only to end the confusion of the two files.
+
+The #define AGE_SENIOR macros have been commented out, except for AGE_TEENAGER and AGE_YOUNGADULT, which are the only ones used.
+verifyworklocation(Creature &cr, char test_type); contains a large switch statement of all creatures and their appropriate work environments.   This can be converted to a table at a later date.
+
+removed vector<recruitst *> recruit from all except daily.cpp, globals.cpp and saveload.cpp
+
+extern Matching lines: 1288    Matching files: 71    Total files searched: 159
+down from Matching lines: 1327    Matching files: 75    Total files searched: 161
+extern vector< Matching lines: 109    Matching files: 29    Total files searched: 159
+down from Matching lines: 146    Matching files: 36    Total files searched: 161
+
+Deleted shopnstuff.h
+Deleted shopnstuff.cpp - Absorbed into daily.cpp
+
+Replaced the Armor constructor Armor(&ArmorType ...) with Armor(int ...), as well as the related Creature method give_armor(&ArmorType ...) with give_armor(int ...)
+This allows removal of nearly all instances of extern vector<ArmorType> armortype, except armor.cpp, activate.cpp,  activities.cpp, locationsPol.cpp, and shop.cpp
+All except armor.cpp and shop.cpp have had the extern scope reduced to the method(s) calling it.
+
+This allowed creature.h to stop calling armortype.h
+7 files #include armortype.h, rather than the 42 that #include creature.h
+
+#include locations.h removed from creatures.h
+#include locations.h is now in 29 files, rather than 42.  Not much of an improvement.
+#include locationsEnums.h is located in 8 files, in addition to those with #include locations.h
+
+extern vector< Matching lines: 99    Matching files: 27    Total files searched: 158
