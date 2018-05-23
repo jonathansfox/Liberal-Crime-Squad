@@ -132,6 +132,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../log/log.h"
@@ -166,8 +167,7 @@ extern string singleDot;
  extern short lawList[LAWNUM];
  extern string commaSpace;
  extern string singleSpace;
- extern class Ledger ledger;
- extern vector<ArmorType *> armortype;
+ vector<datest *> date;
 enum DateResults
 {
    DATERESULT_MEETTOMORROW,
@@ -510,6 +510,7 @@ char completevacation(datest &d, int p)
 	case DATERESULT_ARRESTED:    return 1;
 	}
 }
+extern class Ledger ledger;
 extern string pressKeyToReflect;
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d, int p)
@@ -606,7 +607,7 @@ char completedate(datest &d, int p)
 		//clothing
 		vector<Item*> temp;
 		d.date[e]->drop_weapons_and_clips(&temp);
-		Armor atmp(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+		Armor atmp(getarmortype(tag_ARMOR_CLOTHES));
 		d.date[e]->give_armor(atmp, &temp);
 		printcreatureinfo(d.date[e]);
 		makedelimiter();
@@ -782,7 +783,7 @@ char completedate(datest &d, int p)
 					d.date[e]->flag |= CREATUREFLAG_MISSING;
 					//Kidnapped wearing normal clothes and no weapon
 					d.date[e]->drop_weapons_and_clips(NULL);
-					Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+					Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
 					d.date[e]->give_armor(clothes, NULL);
 					//Create InterrogationST data
 					d.date[e]->activity.intr() = new InterrogationST;
@@ -855,4 +856,122 @@ char completedate(datest &d, int p)
 		return 0;
 	}
 	else return 1;
+}
+
+
+// Determines the number of dates a creature has scheduled
+int scheduleddates(const Creature& cr)
+{
+	int dates = 0;
+	for (int p = len(date) - 1; p >= 0; p--)
+		// Does this creature have a list of dates scheduled?
+		if (date[p]->mac_id == cr.id)
+		{
+			dates = len(date[p]->date); break;
+		}
+	return dates;
+}
+int getpoolcreature(int id);
+char completedate(datest &d, int p);
+void removesquadinfo(Creature &cr);
+char completevacation(datest &d, int p);
+void doDates(char &clearformess) {
+	for (int d = len(date) - 1; d >= 0; d--)
+	{
+		int p = getpoolcreature(date[d]->mac_id);
+		// Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
+		if (p != -1 && ((pool[p]->location != -1 &&
+			(LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL ||
+				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_CLINIC ||
+				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_UNIVERSITY) &&
+			LocationsPool::getInstance().getLocationCity(pool[p]->location) == date[d]->city) ||
+			date[d]->timeleft))
+		{
+			//VACATION
+			if (date[d]->timeleft > 0)
+			{
+				pool[p]->dating = --date[d]->timeleft;
+				if (date[d]->timeleft == 0)
+				{
+					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city); //int hs = find_homeless_shelter(date[d]->city);
+					if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
+						pool[p]->base = hs;
+					pool[p]->location = pool[p]->base;
+					clearformess = 1;
+					if (completevacation(*date[d], p))
+					{
+						delete_and_remove(date, d);
+						continue;
+					}
+				}
+			}
+			//DO A DATE
+			else
+			{
+				//TERMINATE NULL DATES
+				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
+				{
+					delete_and_remove(date, d);
+					continue;
+				}
+				//DO DATE
+				else {
+					clearformess = 1;
+					if (completedate(*date[d], p))
+					{
+						delete_and_remove(date, d);
+						continue;
+					}
+					else
+					{
+						pool[p]->dating = date[d]->timeleft;
+						if (pool[p]->dating > 0)
+						{
+							//NOW KICK THE DATER OUT OF THE SQUAD AND LOCATION
+							removesquadinfo(*pool[p]);
+							pool[p]->location = -1;
+						}
+					}
+				}
+
+			}
+		}
+		else
+		{
+			delete_and_remove(date, d);
+			continue;
+		}
+	}
+}
+void delenc(Creature &tk);
+int getCity(int l);
+void newDate(Creature &a, Creature &tk) {
+	datest *newd = NULL;
+	for (int d = 0; d < len(date); d++)
+	{
+		if (date[d]->mac_id == a.id)
+		{
+			newd = date[d];
+			break;
+		}
+	}
+	if (newd == NULL)
+	{
+		newd = new datest;
+		newd->mac_id = a.id;
+		newd->city = getCity(a.location);
+		date.push_back(newd);
+	}
+	Creature *newcr = new Creature;
+	*newcr = tk;
+	newcr->namecreature();
+	newcr->location = a.location;
+	newcr->base = a.base;
+	newd->date.push_back(newcr);
+	// TODO this is a pointer subtracting another pointer in order to calculate the index, change it
+	delenc(tk);
+}
+
+void delete_and_clear_date_pool() {
+	delete_and_clear(date);
 }

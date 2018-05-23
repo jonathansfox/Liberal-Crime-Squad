@@ -91,6 +91,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../items/loottype.h"
@@ -123,7 +125,6 @@ extern string undefined;
  extern short interface_pgup;
  extern short interface_pgdn;
  extern string singleSpace;
- extern class Ledger ledger;
  extern short party_status;
  extern vector<ArmorType *> armortype;
  extern vector<ClipType *> cliptype;
@@ -373,6 +374,7 @@ int fenceselect(squadst& customers)
 	}
 	return ret;
 }
+extern class Ledger ledger;
 void equipLoot(int l, int loc);
 void deleteLocationLoot(int loc, int loot);
 int whatIsThisItemInLocation(int loc, int l);
@@ -753,7 +755,6 @@ const std::string Shop::ShopItem::get_description() const
 }
 
 // Removing the subsequent references to location will be difficult.
-extern vector<Location *> location;
 void maskselect(Creature &buyer)
 {
 	short maskindex = -1;
@@ -813,9 +814,10 @@ void maskselect(Creature &buyer)
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
+	extern vector<Location *> location;
 	if (maskindex != -1 && ledger.get_funds() >= 15)
 	{
-		Armor a = Armor(*armortype[maskindex]);
+		Armor a = Armor(maskindex);
 		buyer.give_armor(a, &location[buyer.base]->loot);
 		ledger.subtract_funds(15, EXPENSE_SHOPPING);
 	}
@@ -824,6 +826,7 @@ void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 {
 	if (!is_available()) return;
 	ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
+	extern vector<Location *> location;
 	switch (itemclass_)
 	{
 	case WEAPON: {
@@ -839,7 +842,7 @@ void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 		else location[customers.squad[0]->base]->loot.push_back(i);
 		break; }
 	case ARMOR: {
-		Armor* i = new Armor(*armortype[getarmortype(itemtypename_)]);
+		Armor* i = new Armor(getarmortype(itemtypename_));
 		customers.squad[buyer]->give_armor(*i, &location[customers.squad[0]->base]->loot);
 		if (i->empty()) delete i;
 		else location[customers.squad[0]->base]->loot.push_back(i);

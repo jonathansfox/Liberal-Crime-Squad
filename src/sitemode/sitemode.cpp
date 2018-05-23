@@ -106,7 +106,6 @@ const string CONST_sitemode074 = "The police subdue and arrest the squad.";
 
 const string tag_WEAPON = "WEAPON";
 const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
 const string tag_LOOT = "LOOT";
 const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
 const string tag_LOOT_CHEAPJEWELERY = "LOOT_CHEAPJEWELERY";
@@ -204,6 +203,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 const string blankString = "";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 //#include "cursesgraphics.h"
 #define CH_FULL_BLOCK 0xdb
 #define CH_UPWARDS_ARROW 0x18
@@ -327,10 +327,8 @@ extern Creature encounter[ENCMAX];
 extern short party_status;
 void delete_and_clear_groundloot();
 bool isThereGroundLoot();
-extern vector<Vehicle *> vehicle;
 extern chaseseqst chaseseq;
 extern short sitealienate;
-extern vector<newsstoryst *> newsstory;
 extern newsstoryst *sitestory;
 extern char showcarprefs;
 extern short lawList[LAWNUM];
@@ -340,18 +338,17 @@ extern short offended_cia;
 extern short offended_amradio;
 extern short offended_cablenews;
 extern short offended_firemen;
-extern vector<ClipType *> cliptype;
-extern vector<WeaponType *> weapontype;
-extern vector<ArmorType *> armortype;
 extern string singleSpace;
 extern short fieldskillrate;
 extern char ccs_kills;
 extern UniqueCreatures uniqueCreatures;
+void deleteVehicle(int carid);
+void deleteVehicles(vector<Vehicle *>& carid);
 void fight_subdued()
 {
 	//int p;
 	//int ps=find_police_station(chaseseq.location);
-	delete_and_clear(chaseseq.friendcar, vehicle);
+	deleteVehicles(chaseseq.friendcar);
 	int hostages = 0;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
@@ -1146,6 +1143,8 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 		releasehostage();
 }
 void getRandomLoot(int cursite);
+Weapon* spawnNewWeapon(string newWeaponType);
+Armor* spawnNewArmor(string newArmorType);
 void pressedKeyG(const int enemy, int& encounter_timer) {
 	if ((isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
 	{
@@ -1402,34 +1401,13 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 				}
 				if (len(newArmorType))
 				{
-					int quality = 1;
-					if (!LCSrandom(3))
-						quality = 2;
-					Armor *a = new Armor(*armortype[getarmortype(newArmorType)], quality);
-					if (!LCSrandom(3))
-						a->set_damaged(true);
-					item = a;
+					item = spawnNewArmor(newArmorType);
 					activesquad->loot.push_back(item);
 				}
 				if (len(newWeaponType))
 				{
-					Weapon *w = new Weapon(*weapontype[getweapontype(newWeaponType)]);
-					if (w->uses_ammo())
-					{
-						if (LCSrandom(2) || //50% chance of being loaded...
-											//except for the most exotic weapons, which are always loaded.
-							w->get_itemtypename() == tag_WEAPON_DESERT_EAGLE ||
-							w->get_itemtypename() == tag_WEAPON_FLAMETHROWER) //Make weapon property? -XML
-						{
-							vector<int> cti;
-							for (int ct = 0; ct < len(cliptype); ct++)
-								if (w->acceptable_ammo(*cliptype[ct]))
-									cti.push_back(ct);
-							Clip c(*cliptype[pickrandom(cti)]);
-							w->reload(c);
-						}
-					}
-					item = w;
+					
+					item = spawnNewWeapon(newWeaponType);
 					activesquad->loot.push_back(item);
 				}
 				if (item)
@@ -2462,7 +2440,7 @@ void mode_site() {
 					{
 						if (!activesquad->squad[p]) continue;
 						if (activesquad->squad[p]->carid != -1)
-							delete_and_remove(vehicle, id_getcar(activesquad->squad[p]->carid));
+							deleteVehicle(id_getcar(activesquad->squad[p]->carid));
 					}
 				}
 				for (int p = 0; p < 6; p++)
@@ -2688,6 +2666,7 @@ void mode_site() {
 		}
 	}
 }
+newsstoryst* lastNewsStory();
 void mode_site(short loc)
 {
 	sitetype = LocationsPool::getInstance().getLocationType(loc);
@@ -2699,7 +2678,7 @@ void mode_site(short loc)
 	sitealienate = 0;
 	sitecrime = 0;
 	LocationsPool::getInstance().initSite(loc);
-	sitestory = newsstory[len(newsstory) - 1];
+	sitestory = lastNewsStory();
 	mode = GAMEMODE_SITE;
 	if (!LocationsPool::getInstance().isThereASiegeHere(loc))
 	{

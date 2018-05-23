@@ -18,7 +18,7 @@ const string tag_weapon = "weapon";
 //own header
 #include "../common/translateid.h"
 // for getweapontype
-extern vector<WeaponType *> weapontype;
+vector<WeaponType *> weapontype;
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
@@ -176,3 +176,20 @@ bool Weapon::auto_breaks_locks() const
 { return weapontype[getweapontype(get_itemtypename())]->auto_breaks_locks(); }
 bool Weapon::is_legal() const
 { return weapontype[getweapontype(get_itemtypename())]->is_legal(); }
+
+/* transforms a weapon type id into the index of that weapon type in the global vector */
+int getweapontype(int id)
+{
+	for (int i = 0; i<len(weapontype); i++) if (weapontype[i]->get_id() == id) return i;
+	return -1;
+}
+/* transforms a weapon type name into the index of that weapon type in the global vector */
+int getweapontype(const string &idname)
+{
+	for (int i = 0; i<len(weapontype); i++) if (weapontype[i]->get_idname() == idname) return i;
+	return -1;
+}
+
+void delete_and_clear_weapon_type(){
+	delete_and_clear(weapontype);
+}

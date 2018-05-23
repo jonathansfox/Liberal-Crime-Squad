@@ -9,6 +9,7 @@ const string tag_vtypeid = "vtypeid";
 const string tag_vtypeidname = "vtypeidname";
 const string tag_vehicle = "vehicle";
 #include "vehicletype.h"
+vector<VehicleType *> vehicletype;
 #include "vehicle.h"
 //own header
 long Vehicle::curcarid = 0;
@@ -119,3 +120,61 @@ int Vehicle::touchalarmchance() const { return vehicletype[getvehicletype(vtypei
 bool Vehicle::availableatshop() const { return vehicletype[getvehicletype(vtypeidname_)]->availableatshop(); }
 int Vehicle::price() const { return vehicletype[getvehicletype(vtypeidname_)]->price(); }
 int Vehicle::sleeperprice() const { return vehicletype[getvehicletype(vtypeidname_)]->sleeperprice(); }
+
+/* transforms a vehicle type id into the index of that vehicle type in the global vector */
+int getvehicletype(const int id)
+{
+	for (int i = 0; i<len(vehicletype); i++) if (vehicletype[i]->id() == id) return i;
+	return -1;
+}
+/* transforms a vehicle type idname into the index of that vehicle type in the global vector */
+int getvehicletype(const string &idname)
+{
+	for (int i = 0; i<len(vehicletype); i++) if (vehicletype[i]->idname() == idname) return i;
+	return -1;
+}
+
+int steal_difficultytofind(const int v) {
+	return vehicletype[v]->steal_difficultytofind();
+}
+int lenVehicleType() {
+	return len(vehicletype);
+}
+
+string vehicleTypelongname(const int p) {
+	return vehicletype[p]->longname();
+}
+
+Vehicle* getVehicleOfThisType(const int cartype) {
+	return new Vehicle(*vehicletype[cartype]);
+}
+
+Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year) {
+	return new Vehicle(*vehicletype[carchoice],
+		vehicletype[carchoice]->color()[colorchoice], year);
+}
+
+int getVehicleTypePrice(const int carchoice) {
+	return vehicletype[carchoice]->price();
+
+}
+
+int getVehicleTypeSleeperPrice(const int carchoice) {
+	return vehicletype[carchoice]->sleeperprice();
+}
+
+vector<string> getVehicleTypeColor(const int carchoice) {
+	return vehicletype[carchoice]->color();
+}
+
+bool vehicletypeavailableatshop(const int i) {
+	return vehicletype[i]->availableatshop();
+}
+string vehicleSportsCar;
+Vehicle* newSportsCar() {
+	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
+}
+
+void delete_and_clear_vehicle_types() {
+	delete_and_clear(vehicletype);
+}

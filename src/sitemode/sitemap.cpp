@@ -72,6 +72,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../configfile.h"
 // needed for something contained in sitemap.h
 #include "../sitemode/sitemap.h"

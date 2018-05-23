@@ -49,6 +49,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
@@ -71,8 +72,7 @@ void mode_site(short loc);
 #include "../daily/daily.h"
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess);
-#include "../daily/shopsnstuff.h"
-//for void halloweenstore(int loc);
+
 #include "../daily/activities.h"
 //for void repairarmor(Creature &cr,char &clearformess); and stealcar
 #include "../daily/siege.h"        
@@ -91,21 +91,300 @@ char completedate(datest &d, int p);
 #include "../title/titlescreen.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
+
+
+
+
+/*
+shopsnstuff.cpp
+*/
+
+const string CONST_shopsnstuff008 = "oubliette.xml";
+const string CONST_shopsnstuff007 = "deptstore.xml";
+const string CONST_shopsnstuff006 = "P - Repaint car, replace plates and tags ($500)";
+const string CONST_shopsnstuff005 = "pawnshop.xml";
+const string CONST_shopsnstuff004 = "armsdealer.xml";
+
+#include "../sitemode/shop.h"
+#include "../common/musicClass.h"
+extern char homedir[MAX_PATH_SIZE];
+extern char artdir[MAX_PATH_SIZE];
+extern MusicClass music;
+extern int year;
+extern string closeParenthesis;
+extern string undefined;
+extern string check_status_of_squad_liberal;
+extern string show_squad_liberal_status;
+extern string enter_done;
+extern string chooseALiberalTo;
+extern string spaceParanthesisDollar;
+extern squadst *activesquad;
+extern short party_status;
+extern vector<Vehicle *> vehicle;
+string toSpend;
+string chooseAColor;
+string theseColorsAreCon;
+string thisColor;
+string notEnoughMoney;
+string chooseVehicle;
+string thisVehicle;
+string weDontNeedCar;
+string enterLeave;
+string b_chooseBuyer;
+string s_sellCar;
+string s_sellThe;
+string g_getCar;
+string f_fixWounds;
+/* active squad visits the hospital */
+void hospital(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	locatesquad(activesquad, loc);
+	int partysize = squadsize(activesquad);
+	while (true)
+	{
+		eraseAlt();
+		locheader();
+		printparty();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(10, 1, f_fixWounds);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12, 1, enterLeave);
+		if (partysize > 0 && (party_status == -1 || partysize > 1)) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13, 1, check_status_of_squad_liberal);
+		if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(14, 1, show_squad_liberal_status);
+		int c = getkeyAlt();
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+		if (c == '0') party_status = -1;
+		if (c >= '1'&&c <= '6'&&activesquad != NULL)
+			if (activesquad->squad[c - '1'] != NULL)
+			{
+				if (party_status == c - '1')fullstatus(party_status);
+				else party_status = c - '1';
+			}
+		if (c == 'f')
+		{
+			for (int p = 5; p >= 0; p--)
+			{
+				if (activesquad->squad[p] == NULL)continue;
+				hospitalize(loc, *activesquad->squad[p]);
+			}
+			break;
+		}
+	}
+}
+/* active squad visits the arms dealer */
+void armsdealer(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	locatesquad(activesquad, loc);
+	CMarkup xml; // -XML
+	xml.Load(string(artdir) + CONST_shopsnstuff004);
+	Shop armsdealer(xml.GetDoc());
+	armsdealer.enter(*activesquad);
+}
+/* active squad visits the pawn shop */
+void pawnshop(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	locatesquad(activesquad, loc);
+	CMarkup xml; // -XML
+	xml.Load(string(artdir) + CONST_shopsnstuff005);
+	Shop pawnshop(xml.GetDoc());
+	pawnshop.enter(*activesquad);
+}
+/* choose buyer */
+void choose_buyer(short &buyer)
+{
+	party_status = -1;
+	int partysize = squadsize(activesquad);
+	if (partysize <= 1) return;
+	while (true)
+	{
+		printparty();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 20, chooseALiberalTo + toSpend);
+		int c = getkeyAlt();
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
+		if (c >= '1'&&c <= partysize + '1' - 1)
+		{
+			buyer = c - '1';
+			return;
+		}
+	}
+}
+int lenVehicleType();
+string vehicleTypelongname(const int p);
+Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year);
+int getVehicleTypePrice(const int carchoice);
+int getVehicleTypeSleeperPrice(const int carchoice);
+vector<string> getVehicleTypeColor(const int carchoice);
+bool vehicletypeavailableatshop(const int i);
+Creature* findSleeperCarSalesman(int loc);
+extern class Ledger ledger;
+/* active squad visits the car dealership */
+void dealership(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	short buyer = 0;
+	locatesquad(activesquad, loc);
+	int partysize = squadsize(activesquad);
+	while (true)
+	{
+		eraseAlt();
+		locheader();
+		printparty();
+		Creature *sleepercarsalesman = findSleeperCarSalesman(loc);
+		Vehicle* car_to_sell = 0;
+		int price = 0;
+		for (int v = len(vehicle) - 1; v >= 0; v--)
+			if (vehicle[v]->id() == activesquad->squad[buyer]->carid)
+				car_to_sell = vehicle[v];
+		if (!car_to_sell) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(10, 1, g_getCar);
+		if (car_to_sell)
+		{
+			price = static_cast<int>(0.8*car_to_sell->price());
+			if (car_to_sell->get_heat())
+				price /= 10;
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(11, 1, s_sellThe + car_to_sell->fullname() + spaceParanthesisDollar + tostring(price) + closeParenthesis);
+		}
+		else
+		{
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11, 1, s_sellCar);
+		}
+		/*if(car_to_sell && car_to_sell->heat>1 && ledger.get_funds()>=500)
+		set_color_easy(WHITE_ON_BLACK);
+		else
+		set_color(COLOR_BLACK,COLOR_BLACK,1);
+		mvaddstrAlt(12, 1, CONST_shopsnstuff006);*/
+		if (partysize >= 2)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, b_chooseBuyer);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(16, 40, enterLeave);
+		if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(15, 1, show_squad_liberal_status);
+		if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(15, 40, check_status_of_squad_liberal);
+		int c = getkeyAlt();
+		// Leave
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
+		//Sell the car
+		if (c == 's' && car_to_sell)
+		{
+			ledger.add_funds(price, INCOME_CARS);
+			for (int v = len(vehicle) - 1; v >= 0; v--)
+				if (vehicle[v] == car_to_sell)
+				{
+					delete_and_remove(vehicle, v);
+					break;
+				}
+		}
+		// Get a car
+		if (c == 'g' && !car_to_sell)
+		{
+			int carchoice;
+			vector<int> availablevehicle;
+			vector<string> vehicleoption;
+			for (int i = 0; i<lenVehicleType(); i++)
+				if (vehicletypeavailableatshop(i))
+				{
+					availablevehicle.push_back(i);
+					vehicleoption.push_back(vehicleTypelongname(i) + spaceParanthesisDollar +
+						tostring(sleepercarsalesman ? getVehicleTypeSleeperPrice(i) : getVehicleTypePrice(i)) + closeParenthesis);
+				}
+			while (true)
+			{
+				carchoice = choiceprompt(chooseVehicle, blankString, vehicleoption, thisVehicle,
+					true, weDontNeedCar);
+				if (carchoice != -1 && (sleepercarsalesman ? getVehicleTypeSleeperPrice(availablevehicle[carchoice]) :
+					getVehicleTypePrice(availablevehicle[carchoice])) > ledger.get_funds())
+				{
+					set_color_easy(RED_ON_BLACK);
+					mvaddstrAlt(1, 1, notEnoughMoney);
+					pressAnyKey();
+				}
+				else break;
+			}
+			if (carchoice == -1) continue;
+			//Picked a car, pick color
+			int colorchoice;
+			//if(len(vehicletype[availablevehicle[choice]]->color())>1) //Allow to back out if you don't like single colour? -XML
+			//{
+			colorchoice = choiceprompt(chooseAColor, blankString, getVehicleTypeColor(availablevehicle[carchoice]),
+				thisColor, true, theseColorsAreCon);
+			//}
+			//else
+			//   colorchoice = 0;
+			if (colorchoice == -1) continue;
+			Vehicle *v = getVehicleFromTypeYear(availablevehicle[carchoice], colorchoice, year);
+			activesquad->squad[buyer]->pref_carid = v->id();
+			vehicle.push_back(v);
+			ledger.subtract_funds((sleepercarsalesman ? v->sleeperprice() : v->price()), EXPENSE_CARS);
+		}
+		// Reduce heat
+		/*if(c=='p' && car_to_sell && car_to_sell->heat>1 && ledger.get_funds()>=500)
+		{
+		funds-=500;
+		moneylost_goods+=500;
+		car_to_sell->heat=1;
+		}*/
+		if (c == 'b')choose_buyer(buyer);
+		if (c == '0')party_status = -1;
+		if (c >= '1'&&c <= '6'&&activesquad != NULL)
+			if (activesquad->squad[c - '1'] != NULL)
+			{
+				if (party_status == c - '1')fullstatus(party_status);
+				else party_status = c - '1';
+			}
+	}
+}
+/* active squad visits the department store */
+void deptstore(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	locatesquad(activesquad, loc);
+	CMarkup xml; // -XML
+	xml.Load(string(artdir) + CONST_shopsnstuff007);
+	Shop deptstore(xml.GetDoc());
+	deptstore.enter(*activesquad);
+}
+/* active squad visits the oubliette */
+void halloweenstore(int loc)
+{
+	music.play(MUSIC_SHOPPING);
+	locatesquad(activesquad, loc);
+	CMarkup xml;
+	xml.Load(string(artdir) + CONST_shopsnstuff008);
+	Shop oubliette(xml.GetDoc());
+	oubliette.enter(*activesquad);
+}
+
+
+
+
+
+
 extern vector<Creature *> pool;
 extern Log gamelog;
-extern int year;
 extern string singleDot;
 extern char showcarprefs;
 extern char disbanding;
-extern class Ledger ledger;
 extern squadst *activesquad;
 extern vector<squadst *> squad;
-extern vector<Vehicle *> vehicle;
 extern short fieldskillrate;
 extern vector<newsstoryst *> newsstory;
 extern int day;
 extern vector<recruitst *> recruit;
-extern vector<datest *> date;
 extern int month;
 void determineMedicalSupportAtEachLocation(bool clearformess);
 /* daily - returns the number of days in the current month */
@@ -226,74 +505,6 @@ void ageThings(const char clearformess) {
 		pool[p]->skill_up();
 	}
 }
-void doDates(char &clearformess) {
-	for (int d = len(date) - 1; d >= 0; d--)
-	{
-		int p = getpoolcreature(date[d]->mac_id);
-		// Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
-		if (p != -1 && ((pool[p]->location != -1 &&
-			(LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL ||
-				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_CLINIC ||
-				LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_HOSPITAL_UNIVERSITY) &&
-			LocationsPool::getInstance().getLocationCity(pool[p]->location) == date[d]->city) ||
-			date[d]->timeleft))
-		{
-			//VACATION
-			if (date[d]->timeleft > 0)
-			{
-				pool[p]->dating = --date[d]->timeleft;
-				if (date[d]->timeleft == 0)
-				{
-					int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, date[d]->city); //int hs = find_homeless_shelter(date[d]->city);
-					if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
-						pool[p]->base = hs;
-					pool[p]->location = pool[p]->base;
-					clearformess = 1;
-					if (completevacation(*date[d], p))
-					{
-						delete_and_remove(date, d);
-						continue;
-					}
-				}
-			}
-			//DO A DATE
-			else
-			{
-				//TERMINATE NULL DATES
-				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
-				{
-					delete_and_remove(date, d);
-					continue;
-				}
-				//DO DATE
-				else {
-					clearformess = 1;
-					if (completedate(*date[d], p))
-					{
-						delete_and_remove(date, d);
-						continue;
-					}
-					else
-					{
-						pool[p]->dating = date[d]->timeleft;
-						if (pool[p]->dating > 0)
-						{
-							//NOW KICK THE DATER OUT OF THE SQUAD AND LOCATION
-							removesquadinfo(*pool[p]);
-							pool[p]->location = -1;
-						}
-					}
-				}
-				
-			}
-		}
-		else
-		{
-			delete_and_remove(date, d);
-			continue;
-		}
-	}
-}
 void meetWithPotentialRecruits(char &clearformess) {
 	for (int i = len(pool) - 1; i >= 0; i--)
 		pool[i]->meetings = 0;
@@ -329,6 +540,16 @@ void meetWithPotentialRecruits(char &clearformess) {
 		}
 	}
 }
+// Determines the number of recruitment meetings a creature has scheduled
+int scheduledmeetings(const Creature& cr)
+{
+	int meetings = 0;
+	for (int p = len(recruit) - 1; p >= 0; p--)
+		// If meeting is with this creature
+		if (recruit[p]->recruiter_id == cr.id) meetings++;
+	return meetings;
+}
+extern class Ledger ledger;
 void doRent(const char clearformess) {
 	if (day == 3 && !disbanding)
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
@@ -460,6 +681,8 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 		}
 	
 }
+int driveskill(Creature &cr, int v);
+string getVehicleFullname(int i);
 void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) {
 	//CAR UP AS NECESSARY
 	vector<long> wantcar;
@@ -486,7 +709,7 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 						addstrAlt(CONST_daily008, gamelog);
-						addstrAlt(vehicle[v]->fullname(), gamelog);
+						addstrAlt(getVehicleFullname(v), gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.nextMessage();
 						pressAnyKey();
@@ -497,18 +720,17 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 	//ASSIGN AVAILABLE CARS
 	if (len(wantcar))
 	{
-		vector<int> driver, passenger;
 		for (int w = 0; w < len(wantcar); w++)
 		{
-			driver.clear();
-			passenger.clear();
-			caridused.push_back(wantcar[w]);
+			vector<int> driver, passenger;
+			long currentPassenger = wantcar[w];
+			caridused.push_back(currentPassenger);
 			//FILL CAR WITH DESIGNATED DRIVERS AND PASSENGERS
 			for (int p = 0; p < 6; p++)
 				if (squad[sq]->squad[p])
-					if (squad[sq]->squad[p]->pref_carid == wantcar[w])
+					if (squad[sq]->squad[p]->pref_carid == currentPassenger)
 					{
-						squad[sq]->squad[p]->carid = wantcar[w];
+						squad[sq]->squad[p]->carid = currentPassenger;
 						squad[sq]->squad[p]->is_driver = squad[sq]->squad[p]->pref_is_driver&&
 							squad[sq]->squad[p]->canwalk();
 						if (squad[sq]->squad[p]->is_driver) driver.push_back(p);
@@ -523,18 +745,18 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 					int max = 0;
 					for (int p = 0; p<len(passenger); p++)
 					{
-						long v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
+						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (driveskill(*squad[sq]->squad[passenger[p]], *vehicle[v])>max&&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v)>max&&
 								squad[sq]->squad[passenger[p]]->canwalk())
-								max = driveskill(*squad[sq]->squad[passenger[p]], *vehicle[v]);
+								max = driveskill(*squad[sq]->squad[passenger[p]], v);
 					}
 					vector<int> goodp;
 					for (int p = 0; p < len(passenger); p++)
 					{
-						long v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
+						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (driveskill(*squad[sq]->squad[passenger[p]], *vehicle[v]) == max&&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v) == max&&
 								squad[sq]->squad[passenger[p]]->canwalk())
 								goodp.push_back(passenger[p]);
 					}
@@ -554,15 +776,15 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 				{
 					long v = id_getcar(squad[sq]->squad[driver[p]]->carid);
 					if (v >= 0)
-						if (driveskill(*squad[sq]->squad[driver[p]], *vehicle[v])>max)
-							max = driveskill(*squad[sq]->squad[driver[p]], *vehicle[v]);
+						if (driveskill(*squad[sq]->squad[driver[p]], v)>max)
+							max = driveskill(*squad[sq]->squad[driver[p]], v);
 				}
 				vector<int> goodp;
 				for (int p = 0; p < len(driver); p++)
 				{
 					long v = id_getcar(squad[sq]->squad[driver[p]]->carid);
 					if (v >= 0)
-						if (driveskill(*squad[sq]->squad[driver[p]], *vehicle[v]) == max)
+						if (driveskill(*squad[sq]->squad[driver[p]], v) == max)
 							goodp.push_back(p);
 				}
 				if (len(goodp))
@@ -849,6 +1071,7 @@ void moveSquadlessToBaseIfNotSiege() {
 	}
 
 }
+void doDates(char &clearformess);
 void advanceday(char &clearformess, char canseethings)
 {
 	showcarprefs = 0;

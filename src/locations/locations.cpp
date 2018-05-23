@@ -152,12 +152,12 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/creaturePool.h"
 extern bool multipleCityMode;
 extern string singleSpace;
 extern string commaSpace;
 extern short lawList[LAWNUM];
-extern class Ledger ledger;
 // Finds a location with the corresponding type and returns
 // its index in the location array
  vector<string> labor_camp_name;

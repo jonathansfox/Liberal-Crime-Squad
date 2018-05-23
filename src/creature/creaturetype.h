@@ -26,6 +26,14 @@ class CreatureType
       // Gives the creature one of the creature type's possible armors.
       void give_armor(Creature& cr) const;
       static int s_number_of_creaturetypes;
+
+
+	  Interval attribute_points_;
+	  Interval attributes_[ATTNUM];
+	  Interval juice_;
+	  Interval money_;
+
+
    private:
       std::string idname_;
       long id_;
@@ -46,13 +54,9 @@ class CreatureType
       Interval age_;
       bool alignment_public_mood_;
       Alignment alignment_;
-      Interval attribute_points_;
-      Interval attributes_[ATTNUM];
       int gender_liberal_;      // Only gender_liberal_ is used now determining
       int gender_conservative_; // starting gender.
       Interval infiltration_;
-      Interval juice_;
-      Interval money_;
       Interval skills_[SKILLNUM];
 };
 /* transforms a CreatureTypes value into a pointer to that creature type */

@@ -124,6 +124,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../creature/augmenttype.h"
@@ -172,9 +174,7 @@ extern long cursquadid;
 extern string singleSpace;
 extern short lawList[LAWNUM];
 extern string commaSpace;
-extern vector<AugmentType *> augmenttype;
-extern class Ledger ledger;
-extern vector<ArmorType *> armortype;
+//
 vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
 // this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
 vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
@@ -325,6 +325,7 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
 	elems.push_back(oss.str());
 	return elems;
 }
+void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 {
 	Creature *victim = 0;
@@ -395,15 +396,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 				aug_type.clear();
 				if (victim->get_augmentation(aug_c - 'a').type == -1) //False if already augmented on that bodypart.
 				{
-					for (int x = 0; x < augmenttype.size(); x++)
-					{
-						if (augmenttype[x]->get_type() == aug_c - 'a' &&
-							(augmenttype[x]->get_max_age() == -1 || victim->age <= augmenttype[x]->get_max_age()) &&
-							(augmenttype[x]->get_min_age() == -1 || victim->age >= augmenttype[x]->get_min_age()) &&
-							augmenttype[x]->get_cost() <= ledger.get_funds())
-							//TODO: Make it so that if you don't have money, it just grays it out, not just not show it
-							aug_type.push_back(augmenttype[x]);
-					}
+					selectAugmentType(aug_type, aug_c, victim->age);
 				}
 			}
 			set_color_easy(WHITE_ON_BLACK);
@@ -590,11 +583,13 @@ int armor_makedifficulty(ArmorType& type, Creature *cr) //Make class method? -XM
 }
 int armor_makedifficulty(Armor& type, Creature *cr)
 {
+	extern vector<ArmorType *> armortype;
 	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
 }
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr)
 {
+	extern vector<ArmorType *> armortype;
 	vector<int> armortypei;
 	for (int a = 0; a < len(armortype); a++)
 	{

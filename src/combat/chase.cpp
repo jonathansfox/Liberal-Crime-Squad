@@ -114,8 +114,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../vehicle/vehicletype.h"
-extern vector<VehicleType *> vehicletype;
 #include "../vehicle/vehicle.h"
 //#include "basemode/baseactions.h"
 void orderparty();
@@ -158,7 +158,6 @@ extern string show_squad_liberal_status;
 extern Creature encounter[ENCMAX];
 extern chaseseqst chaseseq;
 extern squadst *activesquad;
-extern vector<Vehicle *> vehicle;
 extern short party_status;
 extern newsstoryst *sitestory;
 extern short fieldskillrate;
@@ -213,10 +212,11 @@ void emptyEncounter() {
  string hereTheyCome;
  string isSeized;
  const int DRIVING_RANDOMNESS = 13;
+ void deleteVehicles(vector<Vehicle *>& carid);
  void chase_giveup()
  {
 	 int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, chaseseq.location);
-	 delete_and_clear(chaseseq.friendcar, vehicle);
+	 deleteVehicles(chaseseq.friendcar);
 	 int hostagefreed = 0;
 	 for (int p = 0; p < 6; p++)
 	 {
@@ -524,7 +524,7 @@ void emptyEncounter() {
 		 else
 		 {
 			 //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-			 delete_and_clear(chaseseq.friendcar, vehicle);
+			 deleteVehicles(chaseseq.friendcar);
 			 for (int p = 0; p < 6; p++)
 			 {
 				 if (activesquad->squad[p] == NULL)continue;
@@ -627,6 +627,7 @@ void emptyEncounter() {
 	 gamelog.nextMessage();
 	 return 1;
  }
+ int driveskill(Creature &cr, int v);
  int driveskill(Creature &cr, Vehicle &v)
  {
 	 int driveskill = cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
@@ -646,7 +647,7 @@ void emptyEncounter() {
 			 activesquad->squad[p]->is_driver)
 		 {
 			 int v = id_getcar(activesquad->squad[p]->carid);
-			 yourrolls.push_back(driveskill(*activesquad->squad[p], *(vehicle[v])) + LCSrandom(DRIVING_RANDOMNESS));
+			 yourrolls.push_back(driveskill(*activesquad->squad[p], v) + LCSrandom(DRIVING_RANDOMNESS));
 			 switch (fieldskillrate)
 			 {
 			 case FIELDSKILLRATE_FAST:
@@ -914,7 +915,7 @@ void emptyEncounter() {
 		 if (flipstart)activesquad->squad[5] = NULL;
 	 }
 	 //GET RID OF CARS
-	 delete_and_clear(chaseseq.friendcar, vehicle);
+	 deleteVehicles(chaseseq.friendcar);
 	 for (int p = 0; p < 6; p++)
 	 {
 		 if (!activesquad->squad[p]) continue;
@@ -1199,7 +1200,7 @@ void emptyEncounter() {
 	 }
 	 return 0;
  }
- 
+ void addCreatueVehiclesToCollection(Creature *cr[6], vector<Vehicle *> &veh);
 bool chasesequence()
 {
 	int chasenum = 0;
@@ -1215,20 +1216,7 @@ bool chasesequence()
 		return 1;
 	}
 	chaseseq.friendcar.clear();
-	for (int p = 0; p < 6; p++)
-	{
-		if (activesquad->squad[p] == NULL) continue;
-		if (activesquad->squad[p]->carid != -1)
-		{
-			int v = id_getcar(activesquad->squad[p]->carid);
-			if (v != -1)
-			{
-				int v2;
-				for (v2 = 0; v2 < len(chaseseq.friendcar); v2++) if (chaseseq.friendcar[v2]->id() == vehicle[v]->id()) break;
-				if (v2 == len(chaseseq.friendcar)) chaseseq.friendcar.push_back(vehicle[v]);
-			}
-		}
-	}
+	addCreatueVehiclesToCollection(activesquad->squad, chaseseq.friendcar);
 	mode = GAMEMODE_CHASECAR;
 	music.play(MUSIC_CARCHASE);
 	eraseAlt();
@@ -1286,7 +1274,7 @@ bool chasesequence()
 		else
 		{
 			//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-			delete_and_clear(chaseseq.friendcar, vehicle);
+			deleteVehicles(chaseseq.friendcar);
 			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
@@ -1324,7 +1312,7 @@ bool chasesequence()
 			}
 			if (c == 'b')
 			{
-				delete_and_clear(chaseseq.friendcar, vehicle);
+				deleteVehicles(chaseseq.friendcar);
 				for (int p = 0; p < 6; p++)
 				{
 					if (activesquad->squad[p] == NULL) continue;
@@ -1507,6 +1495,8 @@ Creature* getChaseDriver(const Creature &c)
 	//gamelog.newline();
 	return found;
 }
+
+Vehicle* getVehicleOfThisType(int cartype);
 void makechasers(long type, const long sitecriminality)
 {
 	// 
@@ -1626,7 +1616,7 @@ void makechasers(long type, const long sitecriminality)
 	else carnum = 4;
 	for (int c = 0; c < carnum; c++)
 	{
-		Vehicle *v = new Vehicle(*vehicletype[getvehicletype(cartype)]); //If car type is unknown, due to change in xml file, the game will crash here. -XML
+		Vehicle *v = getVehicleOfThisType(getvehicletype(cartype)); //If car type is unknown, due to change in xml file, the game will crash here. -XML
 		chaseseq.enemycar.push_back(v);
 		for (int n = 0; n < pnum; n++)
 			if (encounter[n].carid == -1)

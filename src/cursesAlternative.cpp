@@ -12,6 +12,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../pdcurses/curses.h"
 #include "../log/log.h"
 #include "../cursesAlternative.h"

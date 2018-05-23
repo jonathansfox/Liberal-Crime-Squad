@@ -35,6 +35,7 @@ const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 
 #include "sitedisplay.h"
 

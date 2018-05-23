@@ -2,7 +2,7 @@
 #define VEHICLE_H0
 // These 2 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
 // They're just needed by this header and implemented elsewhere.
-extern vector<VehicleType *> vehicletype;
+
 int getvehicletype(const string &idname);
 class Vehicle
 {

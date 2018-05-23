@@ -96,6 +96,7 @@ const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -221,12 +222,10 @@ extern short court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 extern short wincondition;
 extern short fieldskillrate;
-extern vector<ArmorType *> armortype;
 extern char lcityname[CITY_NAMELEN];
 extern string singleSpace;
 extern int day;
 extern int month;
-extern class Ledger ledger;
 extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 void newVehicle(Vehicle *startcar);
@@ -643,7 +642,7 @@ struct Question {
 	vector<Choice> choices;
 };
 const int MAX_CHOICES = 10;
-
+extern class Ledger ledger;
 void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
 /* creates your founder */
 void makecharacter()
@@ -699,7 +698,7 @@ void makecharacter()
 		strcpy(last, lastname());
 	} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
 	{
-		Armor a(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+		Armor a(getarmortype(tag_ARMOR_CLOTHES));
 		newcr->give_armor(a, NULL);
 	}
 	bool choices = true;

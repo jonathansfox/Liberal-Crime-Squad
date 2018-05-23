@@ -70,13 +70,11 @@ string spaceDashSpace;
  extern char slogan[SLOGAN_LEN];
  extern short party_status;
  extern squadst *activesquad;
- extern class Ledger ledger;
  extern short interface_pgup;
  extern short interface_pgdn;
  extern int selectedsiege;
  extern short lawList[LAWNUM];
  extern string singleSpace;
- extern vector<Vehicle *> vehicle;
  string chooseALiberalTo;
  string string_sleeper;
  vector<string> vehicleParagraph;
@@ -240,6 +238,9 @@ void orderparty()
 		swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
 	}
 }
+int lenVehiclePool();
+int getCarID(const int l);
+string getCarFullname(const int l);
 /* base - assign a vehicle to this squad */
 void setvehicles()
 {
@@ -253,20 +254,20 @@ void setvehicles()
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
-		for (int l = page * 18; l < len(vehicle) && l < page * 18 + 18; l++)
+		for (int l = page * 18; l < lenVehiclePool() && l < page * 18 + 18; l++)
 		{
 			bool this_squad = false;
 			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
 				if (activesquad->squad[p]->alive&&
-					activesquad->squad[p]->pref_carid == vehicle[l]->id())
+					activesquad->squad[p]->pref_carid == getCarID(l))
 				{
 					this_squad = true;
 					break;
 				}
 			}
-			bool another_squad = CreaturePool::getInstance().isThisCarWantedByAnotherSquad(vehicle[l]->id(), activesquad->id);
+			bool another_squad = CreaturePool::getInstance().isThisCarWantedByAnotherSquad(getCarID(l), activesquad->id);
 			if (this_squad&&another_squad)
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (another_squad)
@@ -278,7 +279,7 @@ void setvehicles()
 			str[0] = l - page * 18 + 'A';
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace.c_str());
-			strcat(str, vehicle[l]->fullname(true).c_str());
+			strcat(str, getCarFullname(l).c_str());
 			mvaddstrAlt(y, x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;
@@ -290,7 +291,7 @@ void setvehicles()
 			mvaddstrAlt(17, 1, addprevpagestr());
 		}
 		//PAGE DOWN
-		if ((page + 1) * 18 < len(vehicle))
+		if ((page + 1) * 18 < lenVehiclePool())
 		{
 			mvaddstrAlt(17, 53, addnextpagestr());
 		}
@@ -302,7 +303,7 @@ void setvehicles()
 		if (c >= 'A'&&c <= 'R')
 		{
 			int slot = c - 'A' + page * 18;
-			if (slot >= 0 && slot < len(vehicle))
+			if (slot >= 0 && slot < lenVehiclePool())
 			{
 				bool choice = true;
 				if (activesquad->squad[0])
@@ -328,7 +329,7 @@ void setvehicles()
 				{
 					if (activesquad->squad[c - '1'] != NULL)
 					{
-						activesquad->squad[c - '1']->pref_carid = vehicle[slot]->id();
+						activesquad->squad[c - '1']->pref_carid = getCarID(slot);
 						if (activesquad->squad[c - '1']->canwalk())
 							activesquad->squad[c - '1']->pref_is_driver = 1;
 						else activesquad->squad[c - '1']->pref_is_driver = 0;
@@ -339,7 +340,7 @@ void setvehicles()
 		if (c >= 'a'&&c <= 'r')
 		{
 			int slot = c - 'a' + page * 18;
-			if (slot >= 0 && slot < len(vehicle))
+			if (slot >= 0 && slot < lenVehiclePool())
 			{
 				bool choice = true;
 				if (activesquad->squad[0])
@@ -365,7 +366,7 @@ void setvehicles()
 				{
 					if (activesquad->squad[c - '1'])
 					{
-						activesquad->squad[c - '1']->pref_carid = vehicle[slot]->id();
+						activesquad->squad[c - '1']->pref_carid = getCarID(slot);
 						activesquad->squad[c - '1']->pref_is_driver = 0;
 					}
 				}
@@ -390,7 +391,7 @@ void setvehicles()
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<len(vehicle)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<lenVehiclePool()) page++;
 		if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	}
 }

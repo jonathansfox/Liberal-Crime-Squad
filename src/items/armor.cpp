@@ -22,9 +22,12 @@ const string tag_armor = "armor";
 #include "../common/translateid.h"
 // for  int getarmortype
 extern vector<ArmorType *> armortype;
-Armor::Armor(const ArmorType& seed, int quality, int number)
- : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
+Armor::Armor(const int seed, int quality, int number)
+	: Item(*armortype[seed], number), bloody_(false), damaged_(false), quality_(quality)
 { }
+/*Armor::Armor(const ArmorType& seed, int quality, int number)
+ : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
+{ }*/
 Armor::Armor(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;

@@ -1093,12 +1093,13 @@ const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
 
-char* PACKAGE_VERSION = "4.12.20";
-int version = 41220;
+char* PACKAGE_VERSION = "4.12.21";
+int version = 41221;
 int lowestloadversion = 40100;
 int lowestloadscoreversion = 31203;
 
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"

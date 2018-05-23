@@ -39,6 +39,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locationsEnums.h"
 //#include "../pdcurses/curses.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -63,7 +64,6 @@ const string tag_skill = "skill";
 #include "../common/creaturePool.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern vector<Creature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
 extern MusicClass music;
@@ -77,54 +77,11 @@ extern squadst *activesquad;
 extern short cursite;
 extern string singleSpace;
 extern vector<squadst *> squad;
-extern vector<Vehicle *> vehicle;
 extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
-extern vector<datest *> date;
-extern vector<recruitst *> recruit;
 extern short activesortingchoice[SORTINGCHOICENUM];
-extern class Ledger ledger;
-/* common - test for possible game over */
-char endcheck(char cause)
-{
-	bool dead = true;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
-		if (pool[p]->alive&&pool[p]->align == 1 &&
-			!(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid != -1)) // Allow sleepers to lead LCS without losing
-			dead = false;
-	if (dead) // Did we just lose the game?
-	{  // Game Over
-		if (cause == END_BUT_NOT_END)
-		{  // just checking for game over ahead of time but going back to the code for more stuff
-			music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
-			return true; // go back to code, it has more text to display before we REALLY end the game
-		}
-		// OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
-		if (cause == END_OTHER)
-		{  // got killed, possibly in a siege but maybe not, find out the reason we lost
-			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
-			{
-				switch (LocationsPool::getInstance().getSiegeType(cursite))
-				{
-				case SIEGE_POLICE: savehighscore(END_POLICE); break;
-				case SIEGE_CIA: savehighscore(END_CIA); break;
-				case SIEGE_HICKS: savehighscore(END_HICKS); break;
-				case SIEGE_CORPORATE: savehighscore(END_CORP); break;
-				case SIEGE_CCS: savehighscore(END_CCS); break;
-				case SIEGE_FIREMEN: savehighscore(END_FIREMEN); break;
-				}
-			}
-			else savehighscore(END_DEAD);
-		}
-		else savehighscore(cause); // the reason we lost was specified in the function call
-								   // You just lost the game!
-		viewhighscores();
-		end_game();
-		return true;
-	}
-	return false; // Hey, we're still alive! We get to keep playing!
-}
+
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
 bool iscriminal(Creature &cr)
@@ -280,45 +237,14 @@ void criminalizeparty(short crime)
 			criminalize(*(activesquad->squad[p]), crime);
 		}
 }
-/* common - applies a crime to everyone in a location, or the entire LCS */
-void criminalizepool(short crime, long exclude, short loc)
-{
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (p == exclude) continue;
-		if (loc != -1 && pool[p]->location != loc) continue;
-		criminalize(*pool[p], crime);
-	}
-}
+
 // *JDS* Scarefactor is the severity of the case against you; if you're a really
 // nasty person with a wide variety of major charges against you, then scarefactor
 // can get up there
 int scare_factor(int lawflag, int crimenumber) {
 	return lawflagheat(lawflag) * crimenumber;
 }
-/* common - gives juice to a given creature */
-void addjuice(Creature &cr, long juice, long cap)
-{
-	// Ignore zero changes
-	if (juice == 0) return;
-	// Check against cap
-	if ((juice > 0 && cr.juice >= cap) ||
-		(juice < 0 && cr.juice <= cap))
-		return;
-	// Apply juice gain
-	cr.juice += juice;
-	// Pyramid scheme of juice trickling up the chain
-	if (cr.hireid != -1)
-		for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
-			if (pool[i]->id == cr.hireid)
-			{
-				addjuice(*pool[i], juice / 5, cr.juice);
-				break;
-			}
-	// Bounds check
-	if (cr.juice > 1000)cr.juice = 1000;
-	if (cr.juice < -50)cr.juice = -50;
-}
+void addjuice(Creature &cr, long juice, long cap);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice, long cap)
 {
@@ -347,19 +273,7 @@ void removesquadinfo(Creature &cr)
 		cr.squadid = -1;
 	}
 }
-/* common - moves all squad members and their cars to a new location */
-void locatesquad(squadst *st, long loc)
-{
-	for (int p = 0; p < 6; p++) if (st->squad[p] != NULL)
-	{
-		st->squad[p]->location = loc;
-		if (st->squad[p]->carid != -1)
-		{
-			long v = id_getcar(st->squad[p]->carid);
-			if (v != -1) vehicle[v]->set_location(loc);
-		}
-	}
-}
+
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value)
 {
@@ -489,28 +403,7 @@ int maxsubordinates(const Creature& cr)
 	if (cr.hireid == -1 && cr.align == 1) recruitcap += 6;
 	return recruitcap;
 }
-// Determines the number of subordinates a creature may recruit,
-// based on their max and the number they already command
-int subordinatesleft(const Creature& cr)
-{
-	int recruitcap = maxsubordinates(cr);
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		// ignore seduced and brainwashed characters
-		if (pool[p]->hireid == cr.id&&pool[p]->alive&&!(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
-			recruitcap--;
-	if (recruitcap > 0) return recruitcap;
-	else return 0;
-}
-// Determines the number of love slaves a creature has
-int loveslaves(const Creature& cr)
-{
-	int loveslaves = 0;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		// If subordinate and a love slave
-		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
-			loveslaves++;
-	return loveslaves;
-}
+int loveslaves(const Creature& cr);
 // Determines the number of love slaves a creature may recruit,
 // based on max minus number they already command
 int loveslavesleft(const Creature& cr)
@@ -526,27 +419,7 @@ int loveslavesleft(const Creature& cr)
 	// If they're at 0 or less, return 0
 	else return 0;
 }
-// Determines the number of recruitment meetings a creature has scheduled
-int scheduledmeetings(const Creature& cr)
-{
-	int meetings = 0;
-	for (int p = len(recruit) - 1; p >= 0; p--)
-		// If meeting is with this creature
-		if (recruit[p]->recruiter_id == cr.id) meetings++;
-	return meetings;
-}
-// Determines the number of dates a creature has scheduled
-int scheduleddates(const Creature& cr)
-{
-	int dates = 0;
-	for (int p = len(date) - 1; p >= 0; p--)
-		// Does this creature have a list of dates scheduled?
-		if (date[p]->mac_id == cr.id)
-		{
-			dates = len(date[p]->date); break;
-		}
-	return dates;
-}
+
 /* common - random issue by public interest */
 int randomissue(bool core_only)
 {
@@ -561,15 +434,7 @@ int randomissue(bool core_only)
 	for (int i = 0; i < numviews; i++) if (roll < interest_array[i]) return i;
 	return VIEW_MOOD;
 }
-/* The following boolean functions will return true if first is supposed to be
-before second in the list. */
-bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
-{
-	for (int j = 0; j < CreaturePool::getInstance().lenpool(); j++)
-		if (pool[j] == first) return true;
-		else if (pool[j] == second) return false;
-		return false;
-}
+
 /* common - Sort a list of creatures.*/
 inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name)<0; }
 bool sort_locationandname(const Creature* first, const Creature* second)
@@ -594,6 +459,7 @@ bool sort_squadorname(const Creature* first, const Creature* second)
 			else if (squad[getsquad(first->squadid)]->squad[j]->id == second->id) return false;
 			return a;
 }
+bool sort_none(const Creature* first, const Creature* second);
 void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone)
 {
 	if (!dosortnone&&sortingchoice == SORTING_NONE) return;
@@ -714,6 +580,7 @@ int choiceprompt(const string &firstline, const string &secondline,
 	}
 	return -1;
 }
+extern class Ledger ledger;
 /* common - Displays a list of things to buy and returns an int corresponding
 to the index of the chosen thing in the nameprice vector. */
 int buyprompt(const string &firstline, const string &secondline,

@@ -3,7 +3,8 @@
 class Armor : public Item
 {
    public:
-      explicit Armor(const ArmorType& seed, int quality = 1, int number = 1);
+	   explicit Armor(const int a, int quality = 1, int number = 1);
+      //explicit Armor(const ArmorType& seed, int quality = 1, int number = 1);
 	  virtual thisItemIs whatIsThis() const { return THIS_IS_ARMOR; }
       virtual Armor* clone() const { return new Armor(*this); }
       explicit Armor(const std::string& inputXml);

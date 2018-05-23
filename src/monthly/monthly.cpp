@@ -122,7 +122,6 @@ extern char disbanding;
 extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
-class Ledger ledger;
 extern bool stalinmode;
 extern int disbandtime;
 /* rename various buildings according to the new laws */
@@ -186,6 +185,7 @@ void updateworld_laws(short *law, short *oldlaw)
 				&&LocationsPool::getInstance().getRentingType(l) < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
 				LocationsPool::getInstance().initSite(l);
 }
+extern class Ledger ledger;
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
 {

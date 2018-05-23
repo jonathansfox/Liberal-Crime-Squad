@@ -225,8 +225,6 @@ extern short exec[EXECNUM];
 extern long curcreatureid;
 extern UniqueCreatures uniqueCreatures;
 extern string commaSpace;
-extern vector<ArmorType *> armortype;
-extern vector<WeaponType *> weapontype;
 Creature& Creature::operator=(const Creature& rhs)
 {
 	if (this != &rhs)
@@ -1287,14 +1285,10 @@ const char* Creature::himher(bool capitalize) const
 												// instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
 	}
 }
-Weapon& Creature::weapon_none()
-{
-	static Weapon unarmed(*weapontype[getweapontype(tag_WEAPON_NONE)]);
-	return unarmed;
-}
+
 Armor& Creature::armor_none()
 {
-	static Armor naked(*armortype[getarmortype(tag_ARMOR_NONE)]);
+	static Armor naked(getarmortype(tag_ARMOR_NONE));
 	return naked;
 }
 bool Creature::will_do_ranged_attack(bool force_ranged, bool force_melee) const
@@ -1487,7 +1481,12 @@ void Creature::give_armor(Armor& a, vector<Item*>* lootpile)
 		armor = a.split(1);
 	}
 }
-void Creature::give_armor(const ArmorType& at, vector<Item*>* lootpile)
+/*void Creature::give_armor(const ArmorType& at, vector<Item*>* lootpile)
+{
+	Armor a(at);
+	give_armor(a, lootpile);
+}*/
+void Creature::give_armor(const int at, vector<Item*>* lootpile)
 {
 	Armor a(at);
 	give_armor(a, lootpile);

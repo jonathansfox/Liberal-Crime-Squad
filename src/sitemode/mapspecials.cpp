@@ -183,6 +183,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../sitemode/advance.h"
 #include "../sitemode/miscactions.h"
 #include "../sitemode/sitedisplay.h"
@@ -227,7 +228,6 @@ extern bool deagle;
 extern vector<WeaponType *> weapontype;
 extern vector<ClipType *> cliptype;
 extern bool m249;
-extern vector<ArmorType *> armortype;
 extern UniqueCreatures uniqueCreatures;
 char run_broadcast(bool tv_broadcast);
 #include "../common/creaturePool.h"
@@ -1263,9 +1263,9 @@ void special_armory()
 				{
 					Armor* de;
 					if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE)
-						de = new Armor(*armortype[getarmortype(tag_ARMOR_ARMYARMOR)]);
+						de = new Armor(getarmortype(tag_ARMOR_ARMYARMOR));
 					else
-						de = new Armor(*armortype[getarmortype(tag_ARMOR_CIVILLIANARMOR)]);
+						de = new Armor(getarmortype(tag_ARMOR_CIVILLIANARMOR));
 					activesquad->loot.push_back(de);
 					num++;
 				} while (num < 2 || (LCSrandom(2) && num < 5));

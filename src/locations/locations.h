@@ -75,13 +75,6 @@ const int COMPOUND_TRAPS = BIT4;
 const int COMPOUND_GENERATOR = BIT5;
 const int COMPOUND_PRINTINGPRESS = BIT6;
 const int COMPOUND_AAGUN = BIT7;
-enum RentingTypes
-{
-   RENTING_CCS=-2,
-   RENTING_NOCONTROL=-1,
-   RENTING_PERMANENT=0
-   // positive values of renting are considered monthly rent prices
-};
 const int CITY_NAMELEN = 80;
 const int LOCATION_NAMELEN = 40;
 const int LOCATION_SHORTNAMELEN = 20;

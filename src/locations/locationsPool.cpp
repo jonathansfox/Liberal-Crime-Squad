@@ -149,6 +149,8 @@ const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
 const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
 const string blankString = "";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
@@ -169,6 +171,7 @@ const string blankString = "";
 #include "../items/money.h"
 #include "../recruits.h"
 vector<Location *> location;
+extern class Ledger ledger;
 void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr) {
 	squadst *newsq = new squadst;
 	extern long cursquadid;
@@ -180,8 +183,6 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern vector<squadst *> squad;
-	extern class Ledger ledger;
-	extern vector<ArmorType *> armortype;
 	for (int l = 0; l < len(location); l++)
 	{
 		if (location[l]->type == base)
@@ -235,7 +236,7 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 				break;
 			}
 			if (GIVEBLOODYARMOR) {
-				Armor *newa = new Armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+				Armor *newa = new Armor(getarmortype(tag_ARMOR_CLOTHES));
 				newa->set_bloody(true);
 				location[l]->loot.push_back(newa);
 			}
@@ -461,9 +462,8 @@ extern vector<WeaponType *> weapontype;
 void LocationsPool::stashThisWeaponHere(int itemindex, int shelter) {
 	location[shelter]->loot.push_back(new Weapon(*weapontype[itemindex]));
 }
-extern vector<ArmorType *> armortype;
 void LocationsPool::stashThisArmorHere(int itemindex, int shelter) {
-	location[shelter]->loot.push_back(new Armor(*armortype[itemindex]));
+	location[shelter]->loot.push_back(new Armor(itemindex));
 }
 void LocationsPool::equipLoc(int loc, int y)
 {
@@ -1052,9 +1052,9 @@ void Location::update_heat_protection()
 	if (heat_protection > 95) heat_protection = 95;
 }
 map<short, string> getActivityString;
-extern vector<ArmorType *> armortype;
 std::string getactivity(ActivityST &act)
 {
+	extern vector<ArmorType *> armortype;
 	if (getActivityString.count(act.type)) {
 		return getActivityString[act.type];
 	}
@@ -1846,7 +1846,6 @@ void locheader()
 #include "../common/commonactions.h"
 #include "../common/musicClass.h"
 extern MusicClass music;
-extern Ledger ledger;
 string closeParenthesis;
 string spaceParanthesisDollar;
 string needCar;
@@ -2435,10 +2434,7 @@ void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid) {
 	activesquad = oldactivesquad;
 	cr->squadid = oldsquadid;
 }
-extern vector<Vehicle *> vehicle;
-void newVehicle(Vehicle *startcar) {
-	vehicle.push_back(startcar);
-}
+
 void moveEverythingAwayFromSite(int cursite) {
 	location[cursite]->renting = RENTING_NOCONTROL;
 	//MOVE ALL ITEMS AND SQUAD MEMBERS
@@ -2656,7 +2652,6 @@ char tryFindCloth(int cursite) {
 				delete_and_remove(location[cursite]->loot, l);
 			else location[cursite]->loot[l]->decrease_number(1);
 			return 1;
-			break;
 		}
 	}
 	return 0;
@@ -2676,7 +2671,6 @@ string gimmeASprayCan(Creature* graffiti) {
 				if (location[graffiti->base]->loot[i]->empty())
 					delete_and_remove(location[graffiti->base]->loot, i);
 				return w->get_name();
-				break;
 			}
 		}
 	}
@@ -2762,6 +2756,7 @@ void deleteLocationLoot(int loc, int loot) {
 void deleteLocationLoot(int loc) {
 	delete_and_clear(location[loc]->loot);
 }
+
 bool noQuickFenceLocation(int loc, int l) {
 	return location[loc]->loot[l]->no_quick_fencing();
 }

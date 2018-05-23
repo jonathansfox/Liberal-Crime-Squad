@@ -200,7 +200,6 @@
     <ClCompile Include="..\src\common\help.cpp" />
     <ClCompile Include="..\src\common\misc.cpp" />
     <ClCompile Include="..\src\common\stringconversion.cpp" />
-    <ClCompile Include="..\src\common\translateid.cpp" />
     <ClCompile Include="..\src\compat.cpp" />
     <ClCompile Include="..\src\configfile.cpp" />
     <ClCompile Include="..\src\creature\augmentation.cpp" />
@@ -208,7 +207,6 @@
     <ClCompile Include="..\src\creature\creature.cpp" />
     <ClCompile Include="..\src\creature\creaturenames.cpp" />
     <ClCompile Include="..\src\creature\creaturetype.cpp" />
-    <ClCompile Include="..\src\creature\creaturetypes.cpp" />
     <ClCompile Include="..\src\cursesAlternative.cpp" />
     <ClCompile Include="..\src\cursesmovie.cpp" />
     <ClCompile Include="..\src\daily\activities.cpp" />
@@ -216,7 +214,6 @@
     <ClCompile Include="..\src\daily\date.cpp" />
     <ClCompile Include="..\src\daily\interrogation.cpp" />
     <ClCompile Include="..\src\daily\recruit.cpp" />
-    <ClCompile Include="..\src\daily\shopsnstuff.cpp" />
     <ClCompile Include="..\src\daily\siege.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\globals.cpp" />

@@ -244,6 +244,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
 #include "../sitemode/stealth.h"
@@ -342,7 +343,6 @@ extern int locy;
  extern string singleDot;
  extern string commaSpace;
  extern short lawList[LAWNUM];
- extern vector<ArmorType *> armortype;
  extern char slogan[SLOGAN_LEN];
 std::string burstHitString(int bursthits) {
 	switch (bursthits)
@@ -389,6 +389,9 @@ void delenc(const short e, const char loot)
 		if (en < ENCMAX - 1) encounter[en] = encounter[en + 1];
 	}
 	encounter[ENCMAX - 1].exists = 0;
+}
+void delenc(Creature &tk) {
+	delenc(&tk - encounter, 0);
 }
 string specialWoundPossibilityBody(
 	Creature &target,
@@ -2539,7 +2542,7 @@ void capturecreature(Creature &t)
 	t.activity.type = ACTIVITY_NONE;
 	t.drop_weapons_and_clips(NULL);
 	//t.strip(NULL);
-	Armor clothes = Armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
 	t.give_armor(clothes, NULL);
 	freehostage(t, 2); // situation 2 = no message; this may want to be changed to 0 or 1
 	if (t.prisoner)
@@ -2554,7 +2557,7 @@ void capturecreature(Creature &t)
 		if (sitetype == SITE_GOVERNMENT_PRISON ||
 			sitetype == SITE_GOVERNMENT_COURTHOUSE)
 		{
-			Armor prisoner = Armor(*armortype[getarmortype(tag_ARMOR_PRISONER)]);
+			Armor prisoner = Armor(getarmortype(tag_ARMOR_PRISONER));
 			t.give_armor(prisoner, NULL);
 		}
 		if (sitetype == SITE_GOVERNMENT_PRISON)

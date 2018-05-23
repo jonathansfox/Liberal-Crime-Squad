@@ -66,6 +66,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 //#include "sitemode/newencounter.h"
@@ -111,7 +112,6 @@ string looksForwardToServing;
 extern short lawList[LAWNUM];
 extern char disbanding;
 extern short attitude[VIEWNUM];
-extern class Ledger ledger;
 extern Creature encounter[ENCMAX];
 /*********************************
 **
@@ -493,6 +493,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	}
 	if (pause) getkeyAlt();
 }
+extern class Ledger ledger;
 /*********************************
 **
 **   SLEEPERS EMBEZZLING FUNDS

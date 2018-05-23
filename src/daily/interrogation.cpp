@@ -172,6 +172,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locationsEnums.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../log/log.h"
@@ -191,7 +192,6 @@ extern Log gamelog;
 extern MusicClass music;
 extern int stat_recruits;
 extern int stat_kills;
-extern class Ledger ledger;
 extern short lawList[LAWNUM];
  vector<string> execution;
  vector<string> feels_sick;
@@ -364,6 +364,7 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 		mvaddstrAlt(23,  40, line_two);
 	}
 }
+extern class Ledger ledger;
 /* hostage tending */
 void tendhostage(Creature *cr, char &clearformess)
 {

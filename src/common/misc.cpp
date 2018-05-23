@@ -76,7 +76,7 @@ void sextype(char *str)
  };
 const char* statename(int i)
 {
-	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(50);
+	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(len(listOfStates));
 	return listOfStates[i].data();
 }
 /* EndGameStatus - converts an integer into a roman numeral for amendments */
@@ -371,6 +371,7 @@ void MusicClass::play(int _musicmode)
 		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0, dailyIncome[i] = 0;
 		for (int e = 0; e<EXPENSETYPENUM; e++) expense[e] = 0, dailyExpense[e] = 0;
 	}
+	class Ledger ledger;
 	int Ledger::get_funds() { return funds; }
 	void Ledger::force_funds(int amount) { funds = amount; }
 	void Ledger::add_funds(int amount, int incometype)

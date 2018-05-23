@@ -7,7 +7,6 @@
 #include "../items/itemtype.h"
 #include "../items/cliptype.h"
 #include "../items/weapontype.h"
-#include "../items/armortype.h"
 #include "../items/item.h"
 #include "../items/clip.h"
 #include "../items/weapon.h"
@@ -78,7 +77,7 @@ public:
 	void drop_weapon(vector<Item*>* lootpile);
 	void drop_weapons_and_clips(vector<Item*>* lootpile);
 	void give_armor(Armor& a, vector<Item*>* lootpile);
-	void give_armor(const ArmorType& at, vector<Item*>* lootpile);
+	void give_armor(const int at, vector<Item*>* lootpile);
 	void strip(vector<Item*>* lootpile);
 	ActivityST activity;
 
@@ -334,6 +333,5 @@ struct squadst
 	~squadst() { delete_and_clear(loot); }
 };
 
-#include "../locations/locations.h"
 
 #endif

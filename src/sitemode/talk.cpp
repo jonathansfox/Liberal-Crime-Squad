@@ -64,6 +64,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 // for renting
@@ -73,10 +74,16 @@ const string tag_skill = "skill";
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 // for void basesquad(squadst *st,long loc);
-#include "../daily/shopsnstuff.h"
-//for  void armsdealer(int loc);
+
+/*
+daily.cpp
+*/
+/* active squad visits the arms dealer */
+void armsdealer(int loc);
+
 #include "../combat/fight.h"
 // for void delenc(short e,char loot);
+void delenc(Creature &tk);
 #include "../combat/fightCreature.h"  
 //for void capturecreature(Creature &t);
 #include "../cursesAlternative.h"
@@ -171,10 +178,7 @@ map<short, string> conservativeLegalArgument;
  extern string singleSpace;
  extern short sitealienate;
  extern siteblockst levelmap[MAPX][MAPY][MAPZ];
- extern class Ledger ledger;
  extern short lawList[LAWNUM];
- extern vector<datest *> date;
- extern vector<recruitst *> recruit;
  extern short attitude[VIEWNUM];
  extern short sitealarmtimer;
  extern int locx;
@@ -635,6 +639,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	
 	return 1;
 }
+extern class Ledger ledger;
 char heyIWantToRentARoom(Creature &a, Creature &tk)
 {
 	clearcommandarea(); clearmessagearea(); clearmaparea();
@@ -705,7 +710,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_041);
 	 	pressAnyKey();
-			ledger.subtract_funds(rent, EXPENSE_RENT);
+		ledger.subtract_funds(rent, EXPENSE_RENT);
 			locationIsNowRented(cursite, rent);
 			basesquad(activesquad, cursite);
 			return 1;
@@ -933,6 +938,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 	}
 }
 int getCity(int l);
+void newDate(Creature &a, Creature &tk);
 char doYouComeHereOften(Creature &a, Creature &tk)
 {
 	int y = 12;
@@ -1044,30 +1050,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		addstrAlt(unnamed_String_Talk_cpp_073, gamelog);
 		gamelog.newline();
  	pressAnyKey();
-		datest *newd = NULL;
-		for (int d = 0; d < len(date); d++)
-		{
-			if (date[d]->mac_id == a.id)
-			{
-				newd = date[d];
-				break;
-			}
-		}
-		if (newd == NULL)
-		{
-			newd = new datest;
-			newd->mac_id = a.id;
-			newd->city = getCity(a.location);
-			date.push_back(newd);
-		}
-		Creature *newcr = new Creature;
-		*newcr = tk;
-		newcr->namecreature();
-		newcr->location = a.location;
-		newcr->base = a.base;
-		newd->date.push_back(newcr);
-		// TODO this is a pointer subtracting another pointer in order to calculate the index, change it
-		delenc(&tk - encounter, 0);
+	newDate(a, tk);
 	}
 	else
 	{
@@ -1095,6 +1078,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 	}
 	return 1;
 }
+void newRecruit(Creature *cr, int c);
 char talkAboutIssues(Creature &a, Creature &tk)
 {
 	const int lw = LCSrandom(LAWNUM); // pick a random law to talk about
@@ -1194,10 +1178,8 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		Creature *newcr = new Creature;
 		*newcr = tk;
 		newcr->namecreature();
-		recruitst *newrst = new recruitst(newcr, a.id);
-		recruit.push_back(newrst);
-		// TODO this is a pointer subtracting another pointer in order to calculate the index, change it
-		delenc(&tk - encounter, 0);
+		newRecruit(newcr, a.id);
+		delenc(tk);
 		return 1;
 	}
 	else

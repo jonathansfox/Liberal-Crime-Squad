@@ -202,6 +202,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../log/log.h"
@@ -219,7 +220,6 @@ int scare_factor(int lawflag, int crimenumber);
 extern vector<Creature *> pool;
 extern Log gamelog;
 extern short lawList[LAWNUM];
-extern class Ledger ledger;
  vector<string> liberal_jury;
  vector<string> conservative_jury;
  vector<string> cruel_and_unusual_execution_methods;
@@ -255,7 +255,6 @@ extern string AND;
 extern unsigned long attorneyseed[RNG_SIZE];
 extern unsigned long seed[RNG_SIZE];
 extern string commaSpace;
-extern vector<ArmorType *> armortype;
 extern string singleSpace;
  string execution_in_three_months;
 #include "../common/creaturePool.h"
@@ -1132,7 +1131,7 @@ extern string singleSpace;
 		 if (g.sentence != 0) imprison(g);
 		 else
 		 {
-			 Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+			 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
 			 g.give_armor(clothes, NULL);
 		 }
 	 
@@ -1156,11 +1155,12 @@ extern string singleSpace;
 		 if (g.sentence != 0) imprison(g);
 		 else
 		 {
-			 Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+			 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
 			 g.give_armor(clothes, NULL);
 		 }
 	 
  }
+ extern class Ledger ledger;
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
 {
@@ -1355,7 +1355,7 @@ void laborcamp(Creature &g)
 	{
 		escaped = 1;
 		experience = CONST_justice150.c_str();
-		g.give_armor(*armortype[getarmortype(tag_ARMOR_WORKCLOTHES)], NULL);
+		g.give_armor(getarmortype(tag_ARMOR_WORKCLOTHES), NULL);
 	}
 	else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
 	{
@@ -1447,7 +1447,7 @@ void prisonscene(Creature &g)
 		{
 			escaped = 1;
 			experience = CONST_justice161.c_str();
-			g.give_armor(*armortype[getarmortype(tag_ARMOR_CLOTHES)], NULL);
+			g.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
 		}
 		else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
 		{
@@ -1630,7 +1630,7 @@ char prison(Creature &g)
 				mvaddstrAlt(9,  1, CONST_justice178, gamelog);
 				gamelog.nextMessage();
 		 	pressAnyKey();
-				Armor clothes(*armortype[getarmortype(tag_ARMOR_CLOTHES)]);
+				Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
 				g.give_armor(clothes, NULL);
 				// If their old base is no longer under LCS control, wander back to the
 				// homeless shelter instead.

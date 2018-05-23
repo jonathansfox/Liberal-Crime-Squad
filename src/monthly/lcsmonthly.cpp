@@ -177,7 +177,6 @@ extern MusicClass music;
 extern string spaceDashSpace;
 extern string closeParenthesis;
 extern vector<squadst *> squad;
-extern class Ledger ledger;
 extern short interface_pgup;
 extern short interface_pgdn;
 extern char disbanding;
@@ -718,6 +717,7 @@ void printnews(short li, short newspaper)
 	}
  	pressAnyKey();
 }
+extern class Ledger ledger;
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
 {

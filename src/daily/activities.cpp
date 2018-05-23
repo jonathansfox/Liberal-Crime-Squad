@@ -51,7 +51,7 @@ const string CONST_activities149 = " but did find a ";
 const string CONST_activities148 = " was unable to find a ";
 const string CONST_activities147 = " looks around for an accessible vehicle...";
 const string CONST_activities145 = "Press a Letter to select a Type of Car";
-const string CONST_activities144 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴?IFFICULTY TO FIND UNATTENDED컴";
+const string CONST_activities144 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴DIFFICULTY TO FIND UNATTENDED컴";
 const string CONST_activities143 = " try to find and steal today?";
 const string CONST_activities142 = "What type of car will ";
 const string CONST_activities141 = "'s body";
@@ -245,10 +245,11 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
-extern vector<VehicleType *> vehicletype;
 #include "../vehicle/vehicle.h"
 #include "../basemode/activate.h"
 // for armor_makedifficulty
@@ -292,8 +293,6 @@ extern char endgamestate;
 extern string spaceDashSpace;
 extern string singleDot;
 extern vector<squadst *> squad;
-extern class Ledger ledger;
-extern vector<ArmorType *> armortype;
 extern string singleSpace;
 extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
@@ -305,9 +304,7 @@ extern newsstoryst *sitestory;
 extern chaseseqst chaseseq;
 extern short background_liberal_influence[VIEWNUM];
 extern string singleDot;
-extern vector<WeaponType *> weapontype;
 extern short fieldskillrate;
-extern vector<Vehicle *> vehicle;
  vector<string> quality_0;
  vector<string> quality_20;
  vector<string> quality_35;
@@ -541,9 +538,11 @@ void repairarmor(Creature &cr, char &clearformess)
 }
 void addLootToLoc(int loc, Item* it);
 char tryFindCloth(int cursite);
+extern class Ledger ledger;
 /* armor manufacture */
 void makearmor(Creature &cr, char &clearformess)
 {
+	extern vector<ArmorType *> armortype;
 	int at = cr.activity.arg;
 	int cost = armortype[at]->get_make_price();
 	int hcost = (cost >> 1) + 1;
@@ -597,7 +596,7 @@ void makearmor(Creature &cr, char &clearformess)
 				quality++;
 			if (clearformess) eraseAlt();
 			else makedelimiter();
-			Item *it = new Armor(*armortype[at], quality);
+			Item *it = new Armor(at, quality);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8,  1, cr.name, gamelog);
 			if (quality <= ((Armor*)it)->get_quality_levels())
@@ -2007,12 +2006,15 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 		}
 	}
 }
+int lenVehicleType();
+int steal_difficultytofind(const int v);
+string vehicleTypelongname(const int p);
 bool carselect(Creature &cr, short &cartype)
 {
 	cartype = -1;
 	vector<int> cart;
-	for (int a = 0; a < len(vehicletype); a++)
-		if (vehicletype[a]->steal_difficultytofind() < 10) cart.push_back(a);
+	for (int a = 0; a < lenVehicleType(); a++)
+		if (steal_difficultytofind(a) < 10) cart.push_back(a);
 	int page = 0;
 	while (true)
 	{
@@ -2029,9 +2031,9 @@ bool carselect(Creature &cr, short &cartype)
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(vehicletype[cart[p]]->longname());
+			addstrAlt(vehicleTypelongname(cart[p]));
 			moveAlt(y++, 49);
-			displayDifficulty(vehicletype[cart[p]]->steal_difficultytofind());
+			displayDifficulty(steal_difficultytofind(cart[p]));
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, CONST_activities145);
@@ -2058,6 +2060,8 @@ bool carselect(Creature &cr, short &cartype)
 	}
 	return false;
 }
+Vehicle* getVehicleOfThisType(int cartype);
+void newVehicle(Vehicle *startcar);
 /* steal a car */
 bool stealcar(Creature &cr, char &clearformess)
 {
@@ -2066,7 +2070,7 @@ bool stealcar(Creature &cr, char &clearformess)
 	short cartype;
 	if (carselect(cr, cartype))
 	{
-		int diff = vehicletype[cartype]->steal_difficultytofind() * 2;
+		int diff = steal_difficultytofind(cartype) * 2;
 		Vehicle *v = NULL;
 		int old = cartype;
 		cr.train(SKILL_STREETSENSE, 5);
@@ -2083,14 +2087,15 @@ bool stealcar(Creature &cr, char &clearformess)
  	pressAnyKey();
 		//ROUGH DAY
 		if (!cr.skill_check(SKILL_STREETSENSE, diff))
-			do cartype = LCSrandom(len(vehicletype));
-		while (cartype == old || LCSrandom(10) < vehicletype[cartype]->steal_difficultytofind());
-		string carname = (v = new Vehicle(*vehicletype[cartype]))->fullname();
+			do cartype = LCSrandom(lenVehicleType());
+		while (cartype == old || LCSrandom(10) < steal_difficultytofind(cartype));
+		v = getVehicleOfThisType(cartype);
+		string carname = v->fullname();
 		mvaddstrAlt(11,  0, cr.name, gamelog);
 		if (old != cartype)
 		{
 			addstrAlt(CONST_activities148, gamelog);
-			addstrAlt(vehicletype[old]->longname(), gamelog);
+			addstrAlt(vehicleTypelongname(old), gamelog);
 			addstrAlt(CONST_activities149, gamelog);
 		}
 		else addstrAlt(CONST_activities150, gamelog);
@@ -2495,7 +2500,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		//CHASE SEQUENCE
 		//CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
 		addjuice(cr, v->steal_juice(), 100);
-		vehicle.push_back(v);
+		newVehicle(v);
 		v->add_heat(14 + v->steal_extraheat());
 		v->set_location(cr.base);
 		// Automatically assign this car to this driver, if no other one is present

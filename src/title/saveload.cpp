@@ -109,6 +109,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
@@ -175,7 +176,6 @@ extern int police_heat;
 extern unsigned long attorneyseed[RNG_SIZE];
 extern char lcityname[CITY_NAMELEN];
 extern char slogan[SLOGAN_LEN];
-extern class Ledger ledger;
 extern short party_status;
 extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
@@ -210,6 +210,7 @@ struct  saveLoadChunk {
 	size_t      ElementCount;
 	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
 };
+extern class Ledger ledger;
 vector<saveLoadChunk> firstChunk =
 {
 	saveLoadChunk(seed, sizeof(unsigned long), RNG_SIZE),
@@ -745,6 +746,7 @@ void savegame(const string& filename)
 		for (saveLoadChunk s : firstChunk) {
 			fwrite(s.Buffer, s.ElementSize, s.ElementCount, h);
 		}
+
 		//LOCATIONS
 		dummy = len(location);
 		fwrite(&dummy, sizeof(int), 1, h);

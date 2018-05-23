@@ -114,3 +114,12 @@ enum SiegeTypes
 	SIEGE_ORG,
 	SIEGENUM
 };
+
+
+enum RentingTypes
+{
+	RENTING_CCS = -2,
+	RENTING_NOCONTROL = -1,
+	RENTING_PERMANENT = 0
+	// positive values of renting are considered monthly rent prices
+};

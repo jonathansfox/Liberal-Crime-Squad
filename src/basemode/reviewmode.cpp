@@ -162,6 +162,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locationsEnums.h"
 #include "../log/log.h"
 // for commondisplay.h
 #include "../common/commondisplay.h"

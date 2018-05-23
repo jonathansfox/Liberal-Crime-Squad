@@ -31,6 +31,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../basemode/activate.h"
@@ -57,7 +58,6 @@ extern MusicClass music;
 extern short cursite;
 extern short attitude[VIEWNUM];
 extern Creature encounter[ENCMAX];
-extern class Ledger ledger;
 /* recruit struct constructor */
 recruitst::recruitst(Creature *cr, int id) {
 	recruit = cr;

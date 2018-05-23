@@ -234,6 +234,7 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 const string blankString = "";
 #include "../creature/creature.h"
+#include "../locations/locationsEnums.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
 #include "../sitemode/stealth.h"
@@ -265,8 +266,6 @@ extern short party_status;
 extern short sitealarm;
 extern short sitealarmtimer;
 extern char showcarprefs;
-extern vector<Vehicle *> vehicle;
-extern class Ledger ledger;
 extern short interface_pgup;
 //extern char interface_pgdn;
 // Sets the text color to the thematic color for the given alignment
@@ -610,6 +609,7 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 	}
 }
 void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
+string getVehicleShortname(int i);
 /* character info at top of screen */
 void printcreatureinfo(Creature *cr, unsigned char knowledge)
 {
@@ -669,7 +669,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 	else v = id_getcar(cr->carid);
 	if (v != -1 && showcarprefs != -1)
 	{
-		strcpy(str, vehicle[v]->shortname().c_str());
+		strcpy(str, getVehicleShortname(v).c_str());
 		char d;
 		if (showcarprefs == 1)d = cr->pref_is_driver;
 		else d = cr->is_driver;
@@ -972,7 +972,7 @@ void printparty()
 				else v = id_getcar(party[p]->carid);
 				if (v != -1 && showcarprefs != -1)
 				{
-					strcpy(str, vehicle[v]->shortname().c_str());
+					strcpy(str, getVehicleShortname(v).c_str());
 					if (showcarprefs == 1 ? party[p]->pref_is_driver : party[p]->is_driver)strcat(str, CONST_commondisplay156.c_str());
 				}
 				else
@@ -1180,7 +1180,7 @@ void printliberalstats(Creature &cr)
 	else v = id_getcar(cr.carid);
 	if (v != -1 && showcarprefs != -1)
 	{
-		addstrAlt(vehicle[v]->shortname());
+		addstrAlt(getVehicleShortname(v));
 		char d;
 		if (showcarprefs == 1)d = cr.pref_is_driver;
 		else d = cr.is_driver;

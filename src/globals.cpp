@@ -14,6 +14,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "creature/creature.h"
+#include "../locations/locations.h"
+#include "../items/armortype.h"
 #include "common/interval.h"
 // needed for creaturetype
 #include "vehicle/vehicletype.h"
@@ -81,15 +83,10 @@ char artdir[MAX_PATH_SIZE];
 bool multipleCityMode;
 unsigned long seed[RNG_SIZE];
 vector<ClipType *> cliptype;
-vector<WeaponType *> weapontype;
 vector<ArmorType *> armortype;
 vector<CreatureType *> creaturetype;
 vector<AugmentType *> augmenttype;
-vector<VehicleType *> vehicletype;
-string vehicleSportsCar;
-Vehicle* newSportsCar() {
-	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
-}
+
 long curcreatureid = 0;
 vector<string> default_slogans;
 #include "customMaps.h"
@@ -97,6 +94,9 @@ vector<file_and_text_collection> globals_text_file_collection = {
 	customText(&default_slogans, CONST_globals004),
 };
 vector<Vehicle *> vehicle;
+void newVehicle(Vehicle *startcar) {
+	vehicle.push_back(startcar);
+}
 char showcarprefs = 1;
 siteblockst levelmap[MAPX][MAPY][MAPZ];
 chaseseqst chaseseq;
@@ -182,9 +182,7 @@ CCSexposure ccsexposure = CCSEXPOSURE_NONE;
 char ccs_kills = 0;
 int ccs_siege_kills = 0;
 int ccs_boss_kills = 0;
-vector<datest *> date;
 vector<recruitst *> recruit;
-vector<newsstoryst *> newsstory;
 newsstoryst *sitestory = NULL;
 int yourscore = -1;
 #include "common/creaturePool.h"
@@ -194,6 +192,9 @@ int yourscore = -1;
 void delete_and_clear_sitemaps();
 void delete_and_clear_groundloot();
 int endwinAlt(void);
+void delete_and_clear_vehicle_types();
+void delete_and_clear_date_pool();
+void delete_and_clear_weapon_type();
 /* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
 {
@@ -203,18 +204,18 @@ void end_game(int err)
 	// title_screen::getInstance().delete_screen();
 	LocationsPool::getInstance().delete_and_clear_pool();
 	delete_and_clear(squad);
-	delete_and_clear(weapontype);
+	delete_and_clear_weapon_type();
 	delete_and_clear(cliptype);
 	delete_and_clear(armortype);
 	LootTypePool::getInstance().delete_and_clear_pool();
 	delete_and_clear(creaturetype);
 	delete_and_clear(augmenttype);
-	delete_and_clear(vehicletype);
+	delete_and_clear_vehicle_types();
 	delete_and_clear(vehicle);
 	CreaturePool::getInstance().delete_and_clear_pool();
 	delete_and_clear_sitemaps();
 	delete_and_clear(recruit);
-	delete_and_clear(date);
+	delete_and_clear_date_pool();
 	delete_and_clear_groundloot();
 	music.quit(); // shut down music
 	endwinAlt();
@@ -245,7 +246,132 @@ bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
 	while (xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
 	return true;
 }
+string getVehicleShortname(int i) {
+	return vehicle[i]->shortname();
+}
+string getVehicleFullname(int i) {
+	return vehicle[i]->fullname();
+}
+int driveskill(Creature &cr, Vehicle &v);
+int driveskill(Creature &cr, int v) {
+	return driveskill(cr, *vehicle[v]);
+}
+
+/* transforms a squad id number into the index of that squad in the global vector */
+int getsquad(int id)
+{
+	for (int i = 0; i<len(squad); i++) if (squad[i]->id == id) return i;
+	return -1;
+}
+/* transforms a car id number into the index of that car in the global vector */
+int id_getcar(int id)
+{
+	for (int i = 0; i<len(vehicle); i++) if (vehicle[i]->id() == id) return i;
+	return -1;
+}
+
+/* transforms a clip type id into the index of that clip type in the global vector */
+int getcliptype(int id)
+{
+	for (int i = 0; i<len(cliptype); i++) if (cliptype[i]->get_id() == id) return i;
+	return -1;
+}
+/* transforms a clip type name into the index of that clip type in the global vector */
+int getcliptype(const string &idname)
+{
+	for (int i = 0; i<len(cliptype); i++) if (cliptype[i]->get_idname() == idname) return i;
+	return -1;
+}
+
+/* transforms a armor type id into the index of that armor type in the global vector */
+int getarmortype(int id)
+{
+	for (int i = 0; i<len(armortype); i++) if (armortype[i]->get_id() == id) return i;
+	return -1;
+}
+/* transforms a armor type name into the index of that armor type in the global vector */
+int getarmortype(const string &idname)
+{
+	for (int i = 0; i<len(armortype); i++) if (armortype[i]->get_idname() == idname) return i;
+	return -1;
+}
+/* transforms a CreatureTypes value into a pointer to that creature type */
+const CreatureType* getcreaturetype(short crtype)
+{
+	for (int i = 0; i<len(creaturetype); i++) if (crtype == creaturetype[i]->get_type()) return creaturetype[i];
+	return NULL;
+}
+/* transforms a creature type name into a pointer to that creature type  */
+const CreatureType* getcreaturetype(const std::string& crtype)
+{
+	for (int i = 0; i<len(creaturetype); i++) if (crtype == creaturetype[i]->get_idname()) return creaturetype[i];
+	return NULL;
+}
+
+/* common - moves all squad members and their cars to a new location */
+void locatesquad(squadst *st, long loc)
+{
+	for (int p = 0; p < 6; p++) if (st->squad[p] != NULL)
+	{
+		st->squad[p]->location = loc;
+		if (st->squad[p]->carid != -1)
+		{
+			long v = id_getcar(st->squad[p]->carid);
+			if (v != -1) vehicle[v]->set_location(loc);
+		}
+	}
+}
+
+int lenVehiclePool() {
+	return len(vehicle);
+}
+
+int getCarID(const int l) {
+	return vehicle[l]->id();
+}
+
+string getCarFullname(const int l) {
+	return vehicle[l]->fullname(true);
+}
+
+void deleteLocationVehicles(int loc) {
+	for (int v = len(vehicle) - 1; v >= 0; v--)
+		if (vehicle[v]->get_location() == loc)
+			delete_and_remove(vehicle, v);
+}
+
+void deleteVehicle(int carid) {
+	delete_and_remove(vehicle, carid);
+}
+
+void deleteVehicles(vector<Vehicle *>& carid) {
+	delete_and_clear(carid, vehicle);
+}
+
+void addCreatueVehiclesToCollection(Creature *cr[6], vector<Vehicle *> &veh) {
+	for (int p = 0; p < 6; p++)
+	{
+		if (cr[p] == NULL) continue;
+		if (cr[p]->carid != -1)
+		{
+			int v = id_getcar(cr[p]->carid);
+			if (v != -1)
+			{
+				int v2;
+				for (v2 = 0; v2 < len(veh); v2++) {
+					if (veh[v2]->id() == vehicle[v]->id()) {
+						break;
+					}
+				}
+				if (v2 == len(veh)) veh.push_back(vehicle[v]);
+			}
+		}
+	}
+}
+
 extern vector<LootType *> loottype;
+extern vector<WeaponType *> weapontype;
+extern vector<VehicleType *> vehicletype;
 bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
 bool mainSeven(bool xml_loaded_ok) {
 	extern Log xmllog;
@@ -259,4 +385,59 @@ bool mainSeven(bool xml_loaded_ok) {
 	xml_loaded_ok &= populate_from_xml(creaturetype, CONST_globals012, xmllog);
 	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_globals013, xmllog);
 	return xml_loaded_ok;
+}
+
+void newRecruit(Creature *newcr, int a) {
+
+	recruitst *newrst = new recruitst(newcr, a);
+	recruit.push_back(newrst);
+}
+
+const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
+const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
+int getweapontype(const string &idname);
+Weapon* spawnNewWeapon(string newWeaponType) {
+	Weapon *w = new Weapon(*weapontype[getweapontype(newWeaponType)]);
+	if (w->uses_ammo())
+	{
+		if (LCSrandom(2) || //50% chance of being loaded...
+							//except for the most exotic weapons, which are always loaded.
+			w->get_itemtypename() == tag_WEAPON_DESERT_EAGLE ||
+			w->get_itemtypename() == tag_WEAPON_FLAMETHROWER) //Make weapon property? -XML
+		{
+			vector<int> cti;
+			for (int ct = 0; ct < len(cliptype); ct++)
+				if (w->acceptable_ammo(*cliptype[ct]))
+					cti.push_back(ct);
+			Clip c(*cliptype[pickrandom(cti)]);
+			w->reload(c);
+		}
+	}
+	return w;
+}
+
+Armor* spawnNewArmor(string newArmorType) {
+
+	int quality = 1;
+	if (!LCSrandom(3))
+		quality = 2;
+	Armor *a = new Armor(getarmortype(newArmorType), quality);
+	if (!LCSrandom(3))
+		a->set_damaged(true);
+
+	return a;
+}
+#include "common/ledgerEnums.h"
+#include "common/ledger.h"
+extern class Ledger ledger;
+void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
+	for (int x = 0; x < augmenttype.size(); x++)
+	{
+		if (augmenttype[x]->get_type() == aug_c - 'a' &&
+			(augmenttype[x]->get_max_age() == -1 || age <= augmenttype[x]->get_max_age()) &&
+			(augmenttype[x]->get_min_age() == -1 || age >= augmenttype[x]->get_min_age()) &&
+			augmenttype[x]->get_cost() <= ledger.get_funds())
+			//TODO: Make it so that if you don't have money, it just grays it out, not just not show it
+			aug_type.push_back(augmenttype[x]);
+	}
 }

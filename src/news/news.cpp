@@ -984,6 +984,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 //TODO: Add logging for this file? --Addictgamer
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/commonactions.h"
 //#include "../common/stringconversion.h"
 inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest, src.c_str()); }
@@ -1008,7 +1009,10 @@ int monthday();
 #include "../cursesmovie.h"
 extern CursesMoviest movie;
 extern string singleSpace;
-extern vector<newsstoryst *> newsstory;
+vector<newsstoryst *> newsstory;
+newsstoryst* lastNewsStory() {
+	return  newsstory[len(newsstory) - 1];
+}
 extern short attitude[VIEWNUM];
 extern char lcityname[CITY_NAMELEN];
 extern short lawList[LAWNUM];

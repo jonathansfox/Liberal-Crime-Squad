@@ -70,6 +70,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolCreature.h"
 vector<Creature *> pool;
@@ -304,13 +305,13 @@ extern string commaSpace;
 #include "../common/commondisplayCreature.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
-extern class Ledger ledger;
 #include "../common/getnames.h"
 extern string singleDot;
 static void getissueeventstring(char* str)
 {
 	strcat(str, issueEventString[LCSrandom(VIEWNUM - 3)].data());
 }
+extern class Ledger ledger;
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(recruitst &r, int p)
 {
@@ -1300,7 +1301,6 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 //#include "../monthly/justice.h"
 void trial(Creature &g);
 char prison(Creature &g);
-extern vector<ArmorType *> armortype;
 void monthlyRunTheSystem(char &clearformess) {
 	extern short lawList[LAWNUM];
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
@@ -1382,7 +1382,7 @@ void monthlyRunTheSystem(char &clearformess) {
 				gamelog.nextMessage();
 		 	pressAnyKey();
 				pool[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, pool[p]->location);
-				Armor prisoner(*armortype[getarmortype(tag_ARMOR_PRISONER)]);
+				Armor prisoner(getarmortype(tag_ARMOR_PRISONER));
 				pool[p]->give_armor(prisoner, NULL);
 			}
 		}
@@ -1558,3 +1558,120 @@ int otherPrisonersEscapeWithMe(Creature g, int prison) {
 	}
 	return num_escaped;
 }
+
+/* transforms a creature id number into the index of that person in the pool */
+int getpoolcreature(int id)
+{
+	for (int i = 0; i<CreaturePool::getInstance().lenpool(); i++) if (pool[i]->id == id) return i;
+	return -1;
+}
+
+extern short cursite;
+void savehighscore(char endtype);
+void viewhighscores(int musicoverride = MUSIC_OFF);
+void end_game(int err = EXIT_SUCCESS);
+/* common - test for possible game over */
+char endcheck(char cause)
+{
+	bool dead = true;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
+		if (pool[p]->alive&&pool[p]->align == 1 &&
+			!(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid != -1)) // Allow sleepers to lead LCS without losing
+			dead = false;
+	if (dead) // Did we just lose the game?
+	{  // Game Over
+		if (cause == END_BUT_NOT_END)
+		{  // just checking for game over ahead of time but going back to the code for more stuff
+			music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
+			return true; // go back to code, it has more text to display before we REALLY end the game
+		}
+		// OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
+		if (cause == END_OTHER)
+		{  // got killed, possibly in a siege but maybe not, find out the reason we lost
+			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+			{
+				switch (LocationsPool::getInstance().getSiegeType(cursite))
+				{
+				case SIEGE_POLICE: savehighscore(END_POLICE); break;
+				case SIEGE_CIA: savehighscore(END_CIA); break;
+				case SIEGE_HICKS: savehighscore(END_HICKS); break;
+				case SIEGE_CORPORATE: savehighscore(END_CORP); break;
+				case SIEGE_CCS: savehighscore(END_CCS); break;
+				case SIEGE_FIREMEN: savehighscore(END_FIREMEN); break;
+				}
+			}
+			else savehighscore(END_DEAD);
+		}
+		else savehighscore(cause); // the reason we lost was specified in the function call
+								   // You just lost the game!
+		viewhighscores();
+		end_game();
+		return true;
+	}
+	return false; // Hey, we're still alive! We get to keep playing!
+}
+/* common - applies a crime to everyone in a location, or the entire LCS */
+void criminalizepool(short crime, long exclude, short loc)
+{
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (p == exclude) continue;
+		if (loc != -1 && pool[p]->location != loc) continue;
+		criminalize(*pool[p], crime);
+	}
+}
+/* common - gives juice to a given creature */
+void addjuice(Creature &cr, long juice, long cap)
+{
+	// Ignore zero changes
+	if (juice == 0) return;
+	// Check against cap
+	if ((juice > 0 && cr.juice >= cap) ||
+		(juice < 0 && cr.juice <= cap))
+		return;
+	// Apply juice gain
+	cr.juice += juice;
+	// Pyramid scheme of juice trickling up the chain
+	if (cr.hireid != -1)
+		for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
+			if (pool[i]->id == cr.hireid)
+			{
+				addjuice(*pool[i], juice / 5, cr.juice);
+				break;
+			}
+	// Bounds check
+	if (cr.juice > 1000)cr.juice = 1000;
+	if (cr.juice < -50)cr.juice = -50;
+}
+// Determines the number of subordinates a creature may recruit,
+// based on their max and the number they already command
+int subordinatesleft(const Creature& cr)
+{
+	int recruitcap = maxsubordinates(cr);
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+		// ignore seduced and brainwashed characters
+		if (pool[p]->hireid == cr.id&&pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
+			recruitcap--;
+	if (recruitcap > 0) return recruitcap;
+	else return 0;
+}
+// Determines the number of love slaves a creature has
+int loveslaves(const Creature& cr)
+{
+	int loveslaves = 0;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+		// If subordinate and a love slave
+		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+			loveslaves++;
+	return loveslaves;
+}
+/* The following boolean functions will return true if first is supposed to be
+before second in the list. */
+bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
+{
+	for (int j = 0; j < CreaturePool::getInstance().lenpool(); j++)
+		if (pool[j] == first) return true;
+		else if (pool[j] == second) return false;
+		return false;
+}
+

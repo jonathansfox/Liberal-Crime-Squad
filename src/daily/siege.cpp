@@ -309,6 +309,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
@@ -384,16 +385,36 @@ extern short offended_amradio;
 extern short offended_cablenews;
 extern short offended_firemen;
 extern short lawList[LAWNUM];
-extern vector<Vehicle *> vehicle;
 extern short attitude[VIEWNUM];
 extern string commaSpace;
 extern char disbanding;
 extern string singleSpace;
 extern squadst *activesquad;
-extern class Ledger ledger;
 extern vector<squadst *> squad;
 extern short cursite;
+
 extern vector<newsstoryst *> newsstory;
+void createNewStoryMassacre(const int loc, const int killnumber) {
+
+	newsstoryst *ns = new newsstoryst;
+	ns->type = NEWSSTORY_MASSACRE;
+	ns->loc = loc;
+	ns->crime.push_back(LocationsPool::getInstance().getSiegeType(loc));
+	ns->crime.push_back(killnumber);
+	newsstory.push_back(ns);
+}
+
+void createNewStoryFieldAttack(const int loc) {
+	newsstoryst *ns = new newsstoryst;
+	if (LocationsPool::getInstance().isThisUnderAttack(loc)) ns->type = NEWSSTORY_SQUAD_FLEDATTACK;
+	else ns->type = NEWSSTORY_SQUAD_ESCAPED;
+	ns->positive = 1;
+	ns->loc = loc;
+	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
+	newsstory.push_back(ns);
+}
+
+
 extern Creature encounter[ENCMAX];
 extern short party_status;
 extern newsstoryst *sitestory;
@@ -424,6 +445,8 @@ void deleteBusinessFront(int loc);
 void CCSCapturesSite(int loc);
 void endLocationSiege(int l);
 void deleteLocationLoot(int l);
+void deleteLocationVehicles(int loc);
+extern class Ledger ledger;
 void giveup()
 {
 	int loc = -1;
@@ -608,12 +631,7 @@ void giveup()
 		gamelog.newline();
 		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
  	pressAnyKey();
-		newsstoryst *ns = new newsstoryst;
-		ns->type = NEWSSTORY_MASSACRE;
-		ns->loc = loc;
-		ns->crime.push_back(LocationsPool::getInstance().getSiegeType(loc));
-		ns->crime.push_back(killnumber);
-		newsstory.push_back(ns);
+	createNewStoryMassacre(loc, killnumber);
 		//MUST SET cursite TO SATISFY endcheck() CODE
 		int tmp = cursite;
 		cursite = loc;
@@ -623,9 +641,7 @@ void giveup()
 	}
 	//CONFISCATE MATERIAL
 	deleteLocationLoot(loc);
-	for (int v = len(vehicle) - 1; v >= 0; v--)
-		if (vehicle[v]->get_location() == loc)
-			delete_and_remove(vehicle, v);
+	deleteLocationVehicles(loc);
 	gamelog.newline();
 }
 void resolvesafehouses()
@@ -640,6 +656,8 @@ void resolvesafehouses()
 		}
 	}
 }
+
+
 /* siege - CONST_siege032 */
 void statebrokenlaws(int loc)
 {
@@ -1112,9 +1130,7 @@ void siegecheck(char canseethings)
 					}
 					gamelog.newline();
 					deleteLocationLoot(l);
-					for (int v = len(vehicle) - 1; v >= 0; v--)
-						if (vehicle[v]->get_location() == l)
-							delete_and_remove(vehicle, v);
+					deleteLocationVehicles(l);
 				}
 			}
 			//OTHER OFFENDABLE ENTITIES
@@ -1558,7 +1574,7 @@ void siegeturn(char clearformess)
 				}
 			}
 			deleteLocationLoot(l);
-			for (int v = len(vehicle) - 1; v >= 0; v--) if (vehicle[v]->get_location() == l) delete_and_remove(vehicle, v);
+			deleteLocationVehicles(l);
 			gamelog.newline();
 			endLocationSiege(l);
 		}
@@ -1979,9 +1995,7 @@ void escapesiege(char won)
 			pool[p]->base = homes;
 		}
 		deleteLocationLoot(cursite);
-		for (int v = len(vehicle) - 1; v >= 0; v--)
-			if (vehicle[v]->get_location() == cursite)
-				delete_and_remove(vehicle, v);
+		deleteLocationVehicles(cursite);
 		deleteCompoundWalls(cursite);
 		emptyCompoundStores(cursite);
 		deleteBusinessFront(cursite);
@@ -2188,6 +2202,29 @@ char sally_forth_aux(int loc)
 	mode = GAMEMODE_BASE;
 	return 1;
 }
+
+void createNewStoryEscape(const int loc) {
+	newsstoryst *ns = new newsstoryst;
+	ns->type = NEWSSTORY_SQUAD_ESCAPED;
+	ns->positive = 1;
+	ns->loc = loc;
+	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
+	newsstory.push_back(ns);
+	sitestory = ns;
+
+	char result = sally_forth_aux(loc);
+
+	if (result == 2) ns->type = NEWSSTORY_SQUAD_BROKESIEGE;
+
+
+	// If you fail, make sure the safehouse isn't under siege anymore by
+	// forcing you to CONST_siege247.
+	if (result == 0)
+	{
+		gamelog.log(CONST_siege248);
+		resolvesafehouses();
+	}
+}
 /* siege - prepares for exiting the siege to fight the attackers head on */
 void sally_forth()
 {  //GIVE INFO SCREEN
@@ -2254,22 +2291,7 @@ void sally_forth()
 	//MAKE SURE PARTY IS ORGANIZED
 	autopromote(loc);
 	//START FIGHTING
-	newsstoryst *ns = new newsstoryst;
-	ns->type = NEWSSTORY_SQUAD_ESCAPED;
-	ns->positive = 1;
-	ns->loc = loc;
-	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
-	newsstory.push_back(ns);
-	sitestory = ns;
-	char result = sally_forth_aux(loc);
-	if (result == 2) ns->type = NEWSSTORY_SQUAD_BROKESIEGE;
-	// If you fail, make sure the safehouse isn't under siege anymore by
-	// forcing you to CONST_siege247.
-	if (result == 0)
-	{
-		gamelog.log(CONST_siege248);
-		resolvesafehouses();
-	}
+	createNewStoryEscape(loc);
 }
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage()
@@ -2341,13 +2363,7 @@ void escape_engage()
 	//MAKE SURE PARTY IS ORGANIZED
 	autopromote(loc);
 	//START FIGHTING
-	newsstoryst *ns = new newsstoryst;
-	if (LocationsPool::getInstance().isThisUnderAttack(loc)) ns->type = NEWSSTORY_SQUAD_FLEDATTACK;
-	else ns->type = NEWSSTORY_SQUAD_ESCAPED;
-	ns->positive = 1;
-	ns->loc = loc;
-	ns->siegetype = LocationsPool::getInstance().getSiegeType(loc);
-	newsstory.push_back(ns);
+	createNewStoryFieldAttack(loc);
 	mode_site(loc);
 }
 /* siege - flavor text when you crush a CCS safe house */

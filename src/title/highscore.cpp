@@ -90,7 +90,6 @@ struct highscorest
 extern highscorest score[SCORENUM];
 extern string singleSpace;
 extern int yourscore;
-extern class Ledger ledger;
 extern int month;
 extern char slogan[SLOGAN_LEN];
 MusicModes getEndingMusic(EndTypes e);
@@ -302,6 +301,7 @@ string getEndingString(EndTypes e) {
 		break;
 	}
 }
+extern class Ledger ledger;
 /* saves a new high score */
 void savehighscore(char endtype)
 {

@@ -113,6 +113,7 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+#include "../locations/locations.h"
 //#include "../pdcurses/curses.h"
 #include "../cursesgraphics.h"
 #include "../common/ledgerEnums.h"
@@ -179,8 +180,6 @@ extern short court[COURTNUM];
  extern vector<squadst *> squad;
 extern squadst *activesquad;
 extern int selectedsiege;
-extern vector<Vehicle *> vehicle;
-extern class Ledger ledger;
 extern int day;
 extern char slogan[SLOGAN_LEN];
 extern short party_status;
@@ -339,6 +338,8 @@ void equipLoot(int l, int loc);
 bool isPartOfJusticeSystem(int cursite);
 bool isThisSafehouse(int loc);
 void burnFlagAtLocation(int l);
+int lenVehiclePool();
+extern class Ledger ledger;
 void mode_base()
 {
 	int nonsighttime = 0, oldforcemonth = month;
@@ -493,7 +494,7 @@ void mode_base()
 			if (partysize&&!underattack) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 40, CONST_basemode042);
-			if (len(vehicle) && partysize) set_color_easy(WHITE_ON_BLACK);
+			if (lenVehiclePool() && partysize) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 60, CONST_basemode043);
 			if (CreaturePool::getInstance().lenpool()) set_color_easy(WHITE_ON_BLACK);
@@ -660,7 +661,7 @@ void mode_base()
 				refreshAlt();
 			}
 		} break;
-		case 'v': if (len(vehicle) && partysize) {
+		case 'v': if (lenVehiclePool() && partysize) {
 			short ops = party_status;
 			party_status = -1;
 			setvehicles();
