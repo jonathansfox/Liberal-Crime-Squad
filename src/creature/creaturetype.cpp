@@ -476,25 +476,153 @@ vector<file_and_text_collection> creaturetypes_text_file_collection = {
 	customText(&genetic_monster, creature + CONST_creaturetypes040),
 };
 char disguisesite(long type);
-void armCreature(Creature &cr, short type) {
+vector<CreatureTypes> armAsCivilian = {
+	// Curiously, CREATURE_CRACKHEAD has a chance to be armed with a shank, regardless of whether they are granted a civilian weapon
+	CREATURE_CRACKHEAD, CREATURE_MUTANT, CREATURE_BUM, CREATURE_WORKER_FACTORY_UNION, CREATURE_WORKER_FACTORY_NONUNION, CREATURE_SCIENTIST_EMINENT, CREATURE_SCIENTIST_LABTECH
+};
+
+map<short, vector<CreatureTypes> > replaceTheseCreatures = {
+	// The original code has a 1/10 chance to replace with CREATURE_THIEF
+	// Otherwise, random selection between the other five.
+	// This code changes this to a 1/11 chance to replace with CREATURE_THIEF
+	// Which is close enough.
+	map<CreatureTypes, vector<CreatureTypes> >::value_type(CREATURE_PRISONER,{ CREATURE_THIEF, CREATURE_GANGMEMBER, CREATURE_PROSTITUTE, CREATURE_CRACKHEAD, CREATURE_TEENAGER, CREATURE_HSDROPOUT, CREATURE_GANGMEMBER, CREATURE_PROSTITUTE, CREATURE_CRACKHEAD, CREATURE_TEENAGER, CREATURE_HSDROPOUT })
+
+};
+vector<CreatureTypes> doNotArmInThisFunction = {
+	CREATURE_JUDGE_LIBERAL,
+	CREATURE_POLITICIAN,
+	CREATURE_CORPORATE_MANAGER,
+	CREATURE_WORKER_SERVANT,
+	CREATURE_WORKER_JANITOR,
+	CREATURE_WORKER_SECRETARY,
+	CREATURE_LANDLORD,
+	CREATURE_BANK_TELLER,
+	CREATURE_BANK_MANAGER,
+	CREATURE_TEENAGER,
+	CREATURE_SOLDIER,
+	CREATURE_VETERAN,
+	CREATURE_HARDENED_VETERAN,
+	CREATURE_SWAT,
+	CREATURE_DEATHSQUAD,
+	CREATURE_GANGUNIT,
+	CREATURE_AGENT,
+	CREATURE_SECRET_SERVICE,
+	CREATURE_RADIOPERSONALITY,
+	CREATURE_NEWSANCHOR,
+	CREATURE_JUROR,
+	CREATURE_WORKER_FACTORY_CHILD,
+	CREATURE_SEWERWORKER,
+	CREATURE_COLLEGESTUDENT,
+	CREATURE_MUSICIAN,
+	CREATURE_MATHEMATICIAN,
+	CREATURE_TEACHER,
+	CREATURE_HSDROPOUT,
+	CREATURE_PRIEST,
+	CREATURE_ENGINEER,
+	CREATURE_TELEMARKETER,
+	CREATURE_CARSALESMAN,
+	CREATURE_OFFICEWORKER,
+	CREATURE_MAILMAN,
+	CREATURE_GARBAGEMAN,
+	CREATURE_PLUMBER,
+	CREATURE_CHEF,
+	CREATURE_CONSTRUCTIONWORKER,
+	CREATURE_AMATEURMAGICIAN,
+	CREATURE_AUTHOR,
+	CREATURE_JOURNALIST,
+	CREATURE_CRITIC_ART,
+	CREATURE_CRITIC_MUSIC,
+	CREATURE_BIKER,
+	CREATURE_TRUCKER,
+	CREATURE_TAXIDRIVER,
+	CREATURE_PROGRAMMER,
+	CREATURE_NUN,
+	CREATURE_RETIREE,
+	CREATURE_PAINTER,
+	CREATURE_SCULPTOR,
+	CREATURE_DANCER,
+	CREATURE_PHOTOGRAPHER,
+	CREATURE_CAMERAMAN,
+	CREATURE_HAIRSTYLIST,
+	CREATURE_FASHIONDESIGNER,
+	CREATURE_CLERK,
+	CREATURE_ACTOR,
+	CREATURE_YOGAINSTRUCTOR,
+	CREATURE_MARTIALARTIST,
+	CREATURE_ATHLETE,
+	CREATURE_LOCKSMITH,
+	CREATURE_MILITARYPOLICE,
+	CREATURE_SEAL,
+	// These are not used in the switch statement anymore, but appear in the defaultWeapons collection
+	//CREATURE_SECURITY_GUARD
+	//CRREATURE_MERC
+};
+struct weaponLayout {
+	string weaponTag;
+	string clipTag;
+	int ammunition;
+	weaponLayout(string whichSkill_, string experience_, int maxLevel_) :weaponTag(whichSkill_), clipTag(experience_), ammunition(maxLevel_) {}
+	weaponLayout(string whichSkill_) :weaponTag(whichSkill_), clipTag(""), ammunition(0) {}
+	weaponLayout() : weaponLayout(tag_WEAPON_NONE) {}
+};
+struct fullWeaponLayout {
+	weaponLayout cplus;
+	weaponLayout c;
+	weaponLayout moderate;
+	weaponLayout l;
+	weaponLayout lplus;
+	fullWeaponLayout() : cplus(weaponLayout()), c(weaponLayout()), moderate(weaponLayout()), l(weaponLayout()), lplus(weaponLayout()) {}
+	fullWeaponLayout(weaponLayout cplus_, weaponLayout c_, weaponLayout moderate_, weaponLayout l_, weaponLayout lplus_) : cplus(cplus_), c(c_), moderate(moderate_), l(l_), lplus(lplus_) {}
+
+};
+
+map<const short, const fullWeaponLayout> defaultWeapons = {
+	map<const short, const fullWeaponLayout>::value_type(CREATURE_BOUNCER, fullWeaponLayout(weaponLayout(tag_WEAPON_SMG_MP5, tag_CLIP_SMG, 4), weaponLayout(tag_WEAPON_REVOLVER_44, tag_CLIP_44, 4), weaponLayout(tag_WEAPON_REVOLVER_38, tag_CLIP_38, 4), weaponLayout(tag_WEAPON_NIGHTSTICK), weaponLayout(tag_WEAPON_NIGHTSTICK))),
+	map<const short, const fullWeaponLayout>::value_type(CREATURE_SECURITYGUARD, fullWeaponLayout(weaponLayout(tag_WEAPON_SMG_MP5, tag_CLIP_SMG, 4), weaponLayout(tag_WEAPON_NIGHTSTICK), weaponLayout(tag_WEAPON_NIGHTSTICK), weaponLayout(tag_WEAPON_NIGHTSTICK), weaponLayout(tag_WEAPON_REVOLVER_38, tag_CLIP_38, 4))),
+	map<const short, const fullWeaponLayout>::value_type(CREATURE_MERC, fullWeaponLayout(weaponLayout(tag_WEAPON_AUTORIFLE_M16, tag_CLIP_ASSAULT, 7), weaponLayout(tag_WEAPON_AUTORIFLE_M16, tag_CLIP_ASSAULT, 7), weaponLayout(tag_WEAPON_AUTORIFLE_M16, tag_CLIP_ASSAULT, 7), weaponLayout(tag_WEAPON_SEMIRIFLE_AR15, tag_CLIP_ASSAULT, 7), weaponLayout(tag_WEAPON_SEMIRIFLE_AR15, tag_CLIP_ASSAULT, 7))),
+
+};
+
+weaponLayout getWeaponLayout(const short type) {
+	extern short lawList[LAWNUM];
+	switch (lawList[LAW_GUNCONTROL]) {
+	case -2:
+		return defaultWeapons[type].cplus;
+	case -1:
+		return defaultWeapons[type].c;
+	case 0:
+		return defaultWeapons[type].moderate;
+	case 1:
+		return defaultWeapons[type].l;
+	case 2:
+		return defaultWeapons[type].lplus;
+	}
+	return weaponLayout(tag_WEAPON_NONE);
+}
+
+void giveDefaultWeapon(Creature &cr, const short type) {
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
+	if (defaultWeapons.count(type) >= 1) {
+		weaponLayout layout = getWeaponLayout(type);
+		cr.give_weapon(*weapontype[getweapontype(layout.weaponTag)], NULL);
+		if (layout.ammunition >= 1) {
+			cr.take_clips(*cliptype[getcliptype(layout.clipTag)], layout.ammunition);
+		}
+		cr.reload(false);
+	}
+}
+void armSpecificCreature(Creature &cr, const short type, const CreatureType* crtype, int (&attcap)[ATTNUM]) {
+	extern short mode;
+	extern short sitetype;
+	extern short lawList[LAWNUM];
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
 	extern short cursite;
 	extern char ccs_kills;
 	extern short sitealarm;
 	extern char endgamestate;
-	extern short mode;
-	extern short sitetype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	const CreatureType* crtype = getcreaturetype(type);
-	crtype->make_creature(cr);
-	int attnum = crtype->attribute_points_.roll();
-	int attcap[ATTNUM];
-	for (int i = 0; i < ATTNUM; i++)
-	{
-		cr.set_attribute(i, crtype->attributes_[i].min);
-		attcap[i] = crtype->attributes_[i].max;
-	}
 	switch (type)
 	{
 	case CREATURE_BOUNCER:
@@ -503,24 +631,6 @@ void armCreature(Creature &cr, short type) {
 			strcpy(cr.name, CONST_creaturetypes041.c_str());
 			cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
 		}
-		if (lawList[LAW_GUNCONTROL] == -2)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
-		}
-		else if (lawList[LAW_GUNCONTROL] == -1)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 4);
-		}
-		else if (lawList[LAW_GUNCONTROL] == 0)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
-		}
-		else
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
-		cr.reload(false);
 		if (disguisesite(sitetype))
 		{
 			cr.align = ALIGN_CONSERVATIVE;
@@ -528,23 +638,7 @@ void armCreature(Creature &cr, short type) {
 		}
 		else cr.align = ALIGN_MODERATE;
 		break;
-	case CREATURE_SECURITYGUARD:
-		if (lawList[LAW_GUNCONTROL] == -2)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
-		}
-		else if (lawList[LAW_GUNCONTROL] != 2)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
-		}
-		else
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
-		cr.reload(false);
-		break;
 	case CREATURE_SCIENTIST_LABTECH:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed() && !LCSrandom(2))
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
 		break;
@@ -559,7 +653,6 @@ void armCreature(Creature &cr, short type) {
 		cr.reload(false);
 		break;
 	case CREATURE_SCIENTIST_EMINENT:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed() && !LCSrandom(2))
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
 		break;
@@ -570,7 +663,6 @@ void armCreature(Creature &cr, short type) {
 		cr.dontname = true;
 		break;
 	case CREATURE_WORKER_FACTORY_NONUNION:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed())
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
 		if (cr.align == ALIGN_LIBERAL) cr.align = LCSrandom(2) - 1;
@@ -615,18 +707,12 @@ void armCreature(Creature &cr, short type) {
 		}
 		break;
 	case CREATURE_WORKER_FACTORY_UNION:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed())
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
 		break;
 	case CREATURE_TANK:
 		cr.animalgloss = ANIMALGLOSS_TANK;
 		cr.specialattack = ATTACK_CANNON;
-		break;
-	case CREATURE_MERC:
-		cr.give_weapon(*weapontype[getweapontype(lawList[LAW_GUNCONTROL] < 1 ? tag_WEAPON_AUTORIFLE_M16 : tag_WEAPON_SEMIRIFLE_AR15)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-		cr.reload(false);
 		break;
 	case CREATURE_HICK:
 		strcpy(cr.name, pickrandom(words_meaning_hick).data());
@@ -813,36 +899,6 @@ void armCreature(Creature &cr, short type) {
 		if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
 		break;
 	case CREATURE_PRISONER:
-		// Prisoners should not be prisoners after recruiting them,
-		// they should be some brand of criminal
-		if (!LCSrandom(10))
-		{
-			// Thief
-			makecreature(cr, CREATURE_THIEF);
-		}
-		else switch (LCSrandom(5))
-		{
-		case 0:
-			// Gang member
-			makecreature(cr, CREATURE_GANGMEMBER);
-			break;
-		case 1:
-			// Prostitute
-			makecreature(cr, CREATURE_PROSTITUTE);
-			break;
-		case 2:
-			// Crack head
-			makecreature(cr, CREATURE_CRACKHEAD);
-			break;
-		case 3:
-			// Teenager
-			makecreature(cr, CREATURE_TEENAGER);
-			break;
-		case 4:
-			// HS Dropout
-			makecreature(cr, CREATURE_HSDROPOUT);
-			break;
-		}
 		cr.drop_weapons_and_clips(NULL);
 		crtype->give_weapon(cr);
 		cr.strip(NULL);
@@ -855,13 +911,11 @@ void armCreature(Creature &cr, short type) {
 			cr.align = LCSrandom(2);
 		break;
 	case CREATURE_BUM:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed() && !LCSrandom(5))
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
 		if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
 		break;
 	case CREATURE_MUTANT:
-		crtype->give_weapon_civilian(cr);
 		if (!cr.is_armed() && !LCSrandom(5))
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
 		break;
@@ -912,7 +966,6 @@ void armCreature(Creature &cr, short type) {
 		}
 		break;
 	case CREATURE_CRACKHEAD:
-		crtype->give_weapon_civilian(cr);
 		if (!LCSrandom(5))
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
 		if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
@@ -961,73 +1014,41 @@ void armCreature(Creature &cr, short type) {
 			cr.reload(false);
 		}
 		break;
-	case CREATURE_JUDGE_LIBERAL:
-	case CREATURE_POLITICIAN:
-	case CREATURE_CORPORATE_MANAGER:
-	case CREATURE_WORKER_SERVANT:
-	case CREATURE_WORKER_JANITOR:
-	case CREATURE_WORKER_SECRETARY:
-	case CREATURE_LANDLORD:
-	case CREATURE_BANK_TELLER:
-	case CREATURE_BANK_MANAGER:
-	case CREATURE_TEENAGER:
-	case CREATURE_SOLDIER:
-	case CREATURE_VETERAN:
-	case CREATURE_HARDENED_VETERAN:
-	case CREATURE_SWAT:
-	case CREATURE_DEATHSQUAD:
-	case CREATURE_GANGUNIT:
-	case CREATURE_AGENT:
-	case CREATURE_SECRET_SERVICE:
-	case CREATURE_RADIOPERSONALITY:
-	case CREATURE_NEWSANCHOR:
-	case CREATURE_JUROR:
-	case CREATURE_WORKER_FACTORY_CHILD:
-	case CREATURE_SEWERWORKER:
-	case CREATURE_COLLEGESTUDENT:
-	case CREATURE_MUSICIAN:
-	case CREATURE_MATHEMATICIAN:
-	case CREATURE_TEACHER:
-	case CREATURE_HSDROPOUT:
-	case CREATURE_PRIEST:
-	case CREATURE_ENGINEER:
-	case CREATURE_TELEMARKETER:
-	case CREATURE_CARSALESMAN:
-	case CREATURE_OFFICEWORKER:
-	case CREATURE_MAILMAN:
-	case CREATURE_GARBAGEMAN:
-	case CREATURE_PLUMBER:
-	case CREATURE_CHEF:
-	case CREATURE_CONSTRUCTIONWORKER:
-	case CREATURE_AMATEURMAGICIAN:
-	case CREATURE_AUTHOR:
-	case CREATURE_JOURNALIST:
-	case CREATURE_CRITIC_ART:
-	case CREATURE_CRITIC_MUSIC:
-	case CREATURE_BIKER:
-	case CREATURE_TRUCKER:
-	case CREATURE_TAXIDRIVER:
-	case CREATURE_PROGRAMMER:
-	case CREATURE_NUN:
-	case CREATURE_RETIREE:
-	case CREATURE_PAINTER:
-	case CREATURE_SCULPTOR:
-	case CREATURE_DANCER:
-	case CREATURE_PHOTOGRAPHER:
-	case CREATURE_CAMERAMAN:
-	case CREATURE_HAIRSTYLIST:
-	case CREATURE_FASHIONDESIGNER:
-	case CREATURE_CLERK:
-	case CREATURE_ACTOR:
-	case CREATURE_YOGAINSTRUCTOR:
-	case CREATURE_MARTIALARTIST:
-	case CREATURE_ATHLETE:
-	case CREATURE_LOCKSMITH:
-	case CREATURE_MILITARYPOLICE:
-	case CREATURE_SEAL:
-		break;
 	}
 
+
+}
+void armCreature(Creature &cr, short type) {
+
+	const CreatureType* crtype = getcreaturetype(type);
+	crtype->make_creature(cr);
+	int attnum = crtype->attribute_points_.roll();
+	int attcap[ATTNUM];
+	for (int i = 0; i < ATTNUM; i++)
+	{
+		cr.set_attribute(i, crtype->attributes_[i].min);
+		attcap[i] = crtype->attributes_[i].max;
+	}
+	bool skipThisCreature = false;
+	for (CreatureTypes crt : doNotArmInThisFunction) {
+		if (crt == type) {
+			skipThisCreature = true;
+			break;
+		}
+	}
+	for (CreatureTypes crt : armAsCivilian) {
+		if (crt == type) {
+			crtype->give_weapon_civilian(cr);
+			break;
+		}
+	}
+	if(replaceTheseCreatures.count(type) >= 1){
+		CreatureTypes replacement = pickrandom(replaceTheseCreatures[type]);
+		makecreature(cr, replacement);
+	}
+	giveDefaultWeapon(cr, type);
+	if (!skipThisCreature)
+		armSpecificCreature(cr, type, crtype, attcap);
 
 	vector<int> possible;
 	for (int a = 0; a < ATTNUM; a++)

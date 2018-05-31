@@ -298,7 +298,6 @@ void initlocation(Location &loc)
 {  // NOTE: make sure to keep code here matching code in updateworld_laws() in monthly.cpp for when names are changed
 	extern short lawList[LAWNUM];
 	loc.init();
-	char str[80];
 	switch (loc.type)
 	{
 	case SITE_CITY_SEATTLE:
@@ -598,9 +597,8 @@ void initlocation(Location &loc)
 			strcpy(loc.shortname, CONST_locations104.c_str());
 			break;
 		case SITE_BUSINESS_CIGARBAR:
-			strcpy(loc.name, lastname(true).data());
 			strcpy(loc.name, tag_The.c_str());
-			strcat(loc.name, str);
+			strcat(loc.name, lastname(true).data());
 			strcat(loc.name, CONST_locations105.c_str());
 			strcpy(loc.shortname, CONST_locations106.c_str());
 			break;
