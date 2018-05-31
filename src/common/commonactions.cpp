@@ -1,13 +1,4 @@
 #include "../includes.h"
-const string CONST_commonactions012 = "$";
-const string CONST_commonactions011 = "A - ";
-const string CONST_commonactions010 = "Choose how to sort list of ";
-const string CONST_commonactions009 = "methodOfSorting.txt";
-const string CONST_commonactions008 = "harmful speech";
-const string CONST_commonactions007 = "month";
-const string CONST_commonactions006 = "months";
-const string CONST_commonactions005 = " for ";
-const string CONST_commonactions004 = " will be at ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -60,27 +51,12 @@ const string tag_skill = "skill";
 #include "../customMaps.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-#include "../common/musicClass.h"
 #include "../common/creaturePool.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern Log gamelog;
-extern char newscherrybusted;
-extern MusicClass music;
-extern char endgamestate;
-extern short mode;
+extern string singleSpace;
 extern string spaceDashSpace;
 extern string singleDot;
-extern short interface_pgup;
-extern short interface_pgdn;
-extern squadst *activesquad;
-extern short cursite;
-extern string singleSpace;
-extern vector<squadst *> squad;
-extern short attitude[VIEWNUM];
-extern short public_interest[VIEWNUM];
-extern short background_liberal_influence[VIEWNUM];
-extern short activesortingchoice[SORTINGCHOICENUM];
 
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
@@ -120,6 +96,13 @@ int clinictime(Creature &g)
 ***************************************************/
 void hospitalize(int loc, Creature &patient)
 {
+	const string CONST_commonactions008 = "harmful speech";
+	const string CONST_commonactions007 = "month";
+	const string CONST_commonactions006 = "months";
+	const string CONST_commonactions005 = " for ";
+	const string CONST_commonactions004 = " will be at ";
+	extern Log gamelog;
+	extern vector<squadst *> squad;
 	// He's dead, Jim
 	if (!patient.alive)return;
 	int time = clinictime(patient);
@@ -210,6 +193,8 @@ int lawflagheat(int lawflag)
 /* common - applies a crime to a person */
 void criminalize(Creature &cr, short crime)
 {
+	extern short mode;
+	extern short cursite;
 	if (mode == GAMEMODE_SITE)
 	{
 		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
@@ -229,6 +214,7 @@ void criminalize(Creature &cr, short crime)
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
 {
+	extern squadst *activesquad;
 	if (!activesquad) return;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p])
@@ -248,6 +234,7 @@ void addjuice(Creature &cr, long juice, long cap);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice, long cap)
 {
+	extern squadst *activesquad;
 	if (activesquad != NULL)
 		for (int p = 0; p < 6; p++)
 			if (activesquad->squad[p] != NULL)
@@ -257,6 +244,7 @@ void juiceparty(long juice, long cap)
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr)
 {
+	extern vector<squadst *> squad;
 	if (cr.squadid != -1)
 	{
 		long sq = getsquad(cr.squadid);
@@ -297,6 +285,9 @@ void basesquad(squadst *st, long loc)
 /* common - shifts public opinion on an issue */
 void change_public_opinion(int v, int power, char affect, char cap)
 {
+	extern short attitude[VIEWNUM];
+	extern short public_interest[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
 	// First note this in the liberal influence -- mostly for the
 	// sake of the nice visual intelligence report entry
 	if (v < VIEWNUM - 5)
@@ -423,6 +414,9 @@ int loveslavesleft(const Creature& cr)
 /* common - random issue by public interest */
 int randomissue(bool core_only)
 {
+	extern char newscherrybusted;
+	extern char endgamestate;
+	extern short public_interest[VIEWNUM];
 	int interest_array[VIEWNUM], total_interest = 0;
 	int numviews = core_only ? VIEWNUM - 5 : ((endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2) ? VIEWNUM - 1 : VIEWNUM);
 	for (int i = 0; i < numviews; i++)
@@ -444,7 +438,9 @@ bool sort_locationandname(const Creature* first, const Creature* second)
 			&&sort_name(first, second));
 }
 bool sort_squadorname(const Creature* first, const Creature* second)
-{  // Use getsquad to treat members of a new squad being assembled as if not in a squad.
+{
+	extern vector<squadst *> squad;
+	// Use getsquad to treat members of a new squad being assembled as if not in a squad.
 	bool first_in_squad = getsquad(first->squadid) != -1;
 	bool second_in_squad = getsquad(second->squadid) != -1;
 	bool a = ((first_in_squad && !second_in_squad) //Squad member should come before squadless.
@@ -474,12 +470,15 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
  map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
 const string mostlyendings = "mostlyendings\\";
+const string CONST_commonactions009 = "methodOfSorting.txt";
 vector<file_and_text_collection> common_text_file_collection = {
 customText(&methodOfSorting, mostlyendings + CONST_commonactions009),
 };
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)
 {
+	const string CONST_commonactions010 = "Choose how to sort list of ";
+	extern short activesortingchoice[SORTINGCHOICENUM];
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1,  1, CONST_commonactions010);
@@ -539,6 +538,8 @@ int choiceprompt(const string &firstline, const string &secondline,
 	const vector<string> &option, const string &optiontypename,
 	bool allowexitwochoice, const string &exitstring)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	int page = 0;
 	while (true)
 	{
@@ -580,13 +581,16 @@ int choiceprompt(const string &firstline, const string &secondline,
 	}
 	return -1;
 }
-extern class Ledger ledger;
 /* common - Displays a list of things to buy and returns an int corresponding
 to the index of the chosen thing in the nameprice vector. */
 int buyprompt(const string &firstline, const string &secondline,
 	const vector< pair<string, int> > &nameprice, int namepaddedlength,
 	const string &producttype, const string &exitstring)
 {
+	const string CONST_commonactions012 = "$";
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern class Ledger ledger;
 	int page = 0;
 	while (true)
 	{
@@ -602,7 +606,7 @@ int buyprompt(const string &firstline, const string &secondline,
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, 'A' + y - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(nameprice[p].first);
-			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg CONST_commonactions011.
+			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg A - .
 			addstrAlt(CONST_commonactions012 + tostring(nameprice[p].second));
 		}
 		set_color_easy(WHITE_ON_BLACK);

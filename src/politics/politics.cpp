@@ -120,12 +120,7 @@ void amendment_termlimits(char canseethings);
 #include <common\\getnames.h>
 map<short, string> conservatiseLaw;
 map<short, string> liberalizeLaw;
-extern short presparty;
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int year;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern short exec[EXECNUM];
  string establishPrisonReform;
  string improvePrisonConditions;
 extern string pressKeyToReflect;
@@ -134,25 +129,11 @@ extern string NAY;
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;
  const string mostlyendings = "mostlyendings\\";
+ extern string commaSpace;
 #include "../customMaps.h"
  vector<file_and_text_collection> politics_text_file_collection = {
 	 customText(&corporateSuffix, mostlyendings + CONST_politics001),
  };
- extern short execterm;
- extern short attitude[VIEWNUM];
- extern bool stalinmode;
- extern string commaSpace;
- extern char disbanding;
- extern short public_interest[VIEWNUM];
- extern short lawList[LAWNUM];
- extern short house[HOUSENUM];
- extern short senate[SENATENUM];
- extern short court[COURTNUM];
- extern bool termlimits;
- extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
- extern short wincondition;
- extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-extern bool nocourtpurge;
 /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
 * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
 bool stalinview(short view, bool islaw)
@@ -225,6 +206,7 @@ bool stalinview(short view, bool islaw)
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l)
 {
+	extern short attitude[VIEWNUM];
 	switch (l)
 	{  // All laws should be affected by exactly one issue if there is a direct
 	   // correlation between that law and an issue. For example, police behavior
@@ -279,6 +261,7 @@ int publicmood(int l)
 /* politics -- gets the leaning of an issue voter for an election */
 int getswingvoter(bool stalin)
 {
+	extern short attitude[VIEWNUM];
 	// Take a random voter, calculate how liberal or conservative they are
 	// If stalin parameter is true, it calculates how libertarian or Stalinist they are instead
 	int bias = publicmood(-1 - stalin) - LCSrandom(100), vote = -2;
@@ -298,6 +281,8 @@ int getswingvoter(bool stalin)
 /* politics - calculate presidential approval */
 int presidentapproval()
 {
+	extern short presparty;
+	extern short exec[EXECNUM];
 	//Calculate Presidential approval rating
 	int approval = 0;
 	for (int i = 0; i < 1000; i++)
@@ -323,7 +308,9 @@ int presidentapproval()
 }
 /* politics -- gets the leaning of a partyline voter for an election */
 int getsimplevoter(int leaning)
-{  // no need for this to deal with Stalinism, this function deliberately only deals with the liberal vs. conservative spectrum
+{
+	extern short attitude[VIEWNUM];
+	// no need for this to deal with Stalinism, this function deliberately only deals with the liberal vs. conservative spectrum
 	int vote = leaning - 1;
 	for (int i = 0; i < 2; i++) if (LCSrandom(100) < attitude[randomissue(true)]) vote++;
 	return vote;
@@ -331,6 +318,8 @@ int getsimplevoter(int leaning)
 /* politics -- appoints a figure to an executive office, based on the President's alignment */
 void fillCabinetPost(int position)
 {
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
 	// Set alignment
 	if (exec[EXEC_PRESIDENT] == ALIGN_ARCHCONSERVATIVE) exec[position] = ALIGN_ARCHCONSERVATIVE;
 	else if (exec[EXEC_PRESIDENT] == ALIGN_ELITELIBERAL) exec[position] = ALIGN_ELITELIBERAL;
@@ -344,6 +333,9 @@ void fillCabinetPost(int position)
 /* politics -- promotes the Vice President to President, and replaces VP */
 void promoteVP()
 {
+	extern short presparty;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
 	exec[EXEC_PRESIDENT] = exec[EXEC_VP]; // VP takes over as President
 	strcpy(execname[EXEC_PRESIDENT], execname[EXEC_VP]);
 	switch (exec[EXEC_PRESIDENT])
@@ -373,6 +365,13 @@ void promoteVP()
 }
 void elections_senate(int senmod, char canseethings)
 {
+	extern MusicClass music;
+	extern int year;
+	extern bool termlimits;
+	extern bool stalinmode;
+	extern char disbanding;
+	extern short lawList[LAWNUM];
+	extern short senate[SENATENUM];
 	int mood = publicmood(LAW_MOOD);
 	int stalinmood = publicmood(LAW_STALIN);
 	if (canseethings)
@@ -505,6 +504,13 @@ void elections_senate(int senmod, char canseethings)
 }
 void elections_house(char canseethings)
 {
+	extern MusicClass music;
+	extern int year;
+	extern bool termlimits;
+	extern bool stalinmode;
+	extern char disbanding;
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
 	int mood = publicmood(LAW_MOOD);
 	int stalinmood = publicmood(LAW_STALIN);
 	if (canseethings)
@@ -697,6 +703,16 @@ void elections_house(char canseethings)
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess, char canseethings)
 {
+	extern MusicClass music;
+	extern int year;
+	extern short presparty;
+	extern bool stalinmode;
+	extern char disbanding;
+	extern short execterm;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
+	extern short public_interest[VIEWNUM];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -1035,6 +1051,13 @@ void elections(char clearformess, char canseethings)
 /* politics - causes the supreme court to hand down decisions */
 void supremecourt(char clearformess, char canseethings)
 {
+	extern MusicClass music;
+	extern int year;
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -1263,6 +1286,16 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
 /* politics - causes congress to act on legislation */
 void congress(char clearformess, char canseethings)
 {
+	extern MusicClass music;
+	extern int year;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool nocourtpurge;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -1573,6 +1606,12 @@ void congress(char clearformess, char canseethings)
 /* politics - checks if the game is won */
 char wincheck()
 {
+	extern short wincondition;
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
 	for (int e = 0; e < EXECNUM; e++) if (exec[e] < ALIGN_ELITELIBERAL) return 0;
 	if (wincondition == WINCONDITION_ELITE) for (int l = 0; l < LAWNUM; l++) if (lawList[l] < ALIGN_ELITELIBERAL) return 0;
 	else

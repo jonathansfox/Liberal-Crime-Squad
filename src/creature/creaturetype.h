@@ -42,6 +42,7 @@ class CreatureType
       {
 		 WeaponsAndClips(const std::string & weapon, int weapons, const std::string & clip, int clips);
 		 WeaponsAndClips(CMarkup& xml, const string& owner);
+		 // TODO this name conflicts with the vector<WeaponType *> weapontype, which is interfering with refactor efforts
          std::string weapontype;
          Interval number_weapons;
          std::string cliptype;

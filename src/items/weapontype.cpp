@@ -93,6 +93,7 @@ const string tag_name_future_sub_2 = "name_future_sub_2";
 const string tag_name_future_sub_1 = "name_future_sub_1";
 const string tag_name_sub_2 = "name_sub_2";
 const string tag_name_sub_1 = "name_sub_1";
+const string singleDot = ".";
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/cliptype.h"
@@ -101,9 +102,6 @@ const string tag_name_sub_1 = "name_sub_1";
 //own header
 #include "../common/stringconversion.h"
 //for stringtobool
-extern int year;
-extern string singleDot;
-extern short lawList[LAWNUM];
 WeaponType::WeaponType(MCD_STR xmlstring)
  : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
    name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
@@ -540,6 +538,7 @@ WeaponType::~WeaponType()
 }
 const string& WeaponType::get_name(unsigned subtype) const
 {
+	extern int year;
    if (subtype == 0)
       return get_name();
    else if (subtype == 1)
@@ -565,6 +564,7 @@ const string& WeaponType::get_name(unsigned subtype) const
 }
 const string& WeaponType::get_shortname(unsigned subtype) const
 {
+	extern int year;
    if (subtype > 2)
       return shortname_; //return CONST_weapontype098; //Reference to temporary. -XML
    else if (subtype == 1)
@@ -630,5 +630,6 @@ bool WeaponType::is_throwable() const
 }
 bool WeaponType::is_legal() const
 {
+	extern short lawList[LAWNUM];
    return legality_>=lawList[LAW_GUNCONTROL];
 }

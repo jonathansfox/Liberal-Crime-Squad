@@ -171,9 +171,13 @@ const string blankString = "";
 #include "../items/money.h"
 #include "../recruits.h"
 vector<Location *> location;
-extern class Ledger ledger;
 void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr) {
+	// Gives you bloody armor
+	extern bool GIVEBLOODYARMOR;
+	// Start with lots of money
+	extern bool HIGHFUNDS;
 	squadst *newsq = new squadst;
+	extern class Ledger ledger;
 	extern long cursquadid;
 	newsq->id = 0; cursquadid++;
 	newsq->squad[0] = newcr;
@@ -458,8 +462,8 @@ void LocationsPool::initLocation(int cursite)
 void LocationsPool::stashThisLootHere(const string& tag, int homes) {
 	location[homes]->loot.push_back(getNewLoot(tag));
 }
-extern vector<WeaponType *> weapontype;
 void LocationsPool::stashThisWeaponHere(int itemindex, int shelter) {
+	extern vector<WeaponType *> weapontype;
 	location[shelter]->loot.push_back(new Weapon(*weapontype[itemindex]));
 }
 void LocationsPool::stashThisArmorHere(int itemindex, int shelter) {
@@ -537,11 +541,11 @@ const string LocationsPool::getLocationName(int cursite)
 	return location[cursite]->getname();
 }
 #include "../common/commonactionsCreature.h"
-extern squadst *activesquad;
-extern vector<squadst *> squad;
 /* common - purges empty squads from existence */
 void cleangonesquads()
 {
+	extern squadst *activesquad;
+	extern vector<squadst *> squad;
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 	{  //NUKE SQUAD IF IT IS GONE
 		bool hasmembers = false;
@@ -568,11 +572,11 @@ void cleangonesquads()
 }
 //#include "pdcurses/curses.h"
 extern string singleDot;
-extern short interface_pgup;
-extern short interface_pgdn;
 // Prompt to turn new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	bool selection = false;
 	while (true)
 	{
@@ -620,7 +624,6 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 			c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) selection = !selection;
 	}
 }
-extern bool multipleCityMode;
 Location* find_site_in_city(int site_type, int city)
 {
 	int i = find_site_index_in_city(site_type, city);
@@ -629,6 +632,7 @@ Location* find_site_in_city(int site_type, int city)
 }
 int find_site_index_in_city(int site_type, int city)
 {
+	extern bool multipleCityMode;
 	for (int i = 0; i<len(location); i++)
 		if (location[i]->type == site_type && (!multipleCityMode || city == -1 || location[i]->city == city))
 			return i;
@@ -716,6 +720,7 @@ void make_classic_world(bool hasmaps)
 }
 void make_world(bool hasmaps)
 {
+	extern bool multipleCityMode;
 	if (!multipleCityMode)
 	{
 		make_classic_world(hasmaps);
@@ -918,6 +923,7 @@ void make_world(bool hasmaps)
 // its index in the location array
 int findlocation(int type, int city = -1)
 {
+	extern bool multipleCityMode;
 	if (!multipleCityMode) city = -1;
 	for (int i = 0; i < len(location); i++)
 		if (location[i]->type == type && (location[i]->city == city || city == -1)) return i;
@@ -928,6 +934,7 @@ int findlocation(int type, int city = -1)
 Location::Location(char type_, int parent_)
 	: type(type_), city(-1), parent(parent_), renting(RENTING_NOCONTROL), needcar(false), hidden(false), upgradable(false)
 {
+	extern bool multipleCityMode;
 	if (this->parent != -1)
 	{
 		this->needcar = location[this->parent]->needcar;
@@ -954,6 +961,7 @@ extern string singleSpace;
 extern string commaSpace;
 string Location::getname(signed char shortname_, bool include_city)
 {
+	extern bool multipleCityMode;
 	string str;
 	if (!multipleCityMode) include_city = false;
 	if ((shortname_ >= 1 && type != city) || shortname_ >= 2) {
@@ -1001,9 +1009,9 @@ bool Location::duplicatelocation()
 	}
 	return 0;
 }
-extern short lawList[LAWNUM];
 void Location::update_heat_protection()
 {
+	extern short lawList[LAWNUM];
 	int l;
 	for (l = 0; l < len(location); l++)
 	{
@@ -1135,6 +1143,9 @@ extern string chooseALiberalTo;
 /* review squad equipment */
 void equip(vector<Item *> &loot, int loc)
 {
+	extern squadst *activesquad;
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	if (activesquad == NULL) return;
 	consolidateloot(loot);
 	if (loc != -1) consolidateloot(location[loc]->loot);
@@ -1395,6 +1406,8 @@ void equip(vector<Item *> &loot, int loc)
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<Item *> &dest, vector<Item *> &source)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	int page = 0;
 	vector<int> selected(len(source), 0);
 	while (true)
@@ -1476,6 +1489,8 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 /* equipment - assign new bases to the equipment */
 void equipmentbaseassign()
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	int page_loot = 0, page_loc = 0, selectedbase = 0;
 	bool sortbytype = false;
 	vector<Item *> temploot;
@@ -1760,13 +1775,14 @@ void printlocation(long loc)
 		addstrAlt(CONST_locationsPool116);
 	}
 }
-extern int selectedsiege;
-extern int day;
-extern int month;
-extern int year;
 /* location and squad header */
 void locheader()
 {
+	extern squadst *activesquad;
+	extern int selectedsiege;
+	extern int day;
+	extern int month;
+	extern int year;
 	if (activesquad != NULL && activesquad->squad[0]->location != -1)
 	{
 		if (location[activesquad->squad[0]->location]->siege.siege)
@@ -1845,7 +1861,6 @@ void locheader()
 }
 #include "../common/commonactions.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
 string closeParenthesis;
 string spaceParanthesisDollar;
 string needCar;
@@ -1862,6 +1877,12 @@ string safeHouse;
 /* base - go forth to stop evil */
 void stopevil()
 {
+	extern class Ledger ledger;
+	extern squadst *activesquad;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern bool multipleCityMode;
+	extern MusicClass music;
 	//int l = 0, p = 0;
 	if (!activesquad) return;
 	bool havecar = false;
@@ -2094,6 +2115,9 @@ enum BusinessFronts
 /* base - invest in this location */
 void investlocation()
 {
+	extern class Ledger ledger;
+	extern int selectedsiege;
+	extern short lawList[LAWNUM];
 	int loc = selectedsiege;
 	while (true)
 	{
@@ -2273,10 +2297,11 @@ void investlocation()
 		}
 	}
 }
-extern int stat_kidnappings;
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(Creature &cr)
 {
+	extern squadst *activesquad;
+	extern int stat_kidnappings;
 	Creature *newcr = new Creature;
 	*newcr = cr;
 	newcr->namecreature();
@@ -2303,6 +2328,7 @@ void kidnaptransfer(Creature &cr)
 /* transfer all loot from some source (such as a squad or another location) to a location, and deal with money properly */
 void Location::getloot(vector<Item *>& loot)
 {
+	extern class Ledger ledger;
 	for (int l = len(loot) - 1; l >= 0; l--)
 		if (loot[l]->whatIsThis() == THIS_IS_MONEY)
 		{
@@ -2350,9 +2376,9 @@ void publishSpecialEditions(char &clearformess) {
 		}
 	}
 }
-extern char endgamestate;
-extern short background_liberal_influence[VIEWNUM];
 void manageGrafiti() {
+	extern char endgamestate;
+	extern short background_liberal_influence[VIEWNUM];
 	//Manage graffiti
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) // Check each location
 	{
@@ -2405,6 +2431,7 @@ void manageGrafiti() {
 	}
 }
 siegest* getseigestFromLocation(int secondaryLocation) {
+	extern squadst *activesquad;
 	siegest* siege = NULL;
 	int primaryLocation = activesquad ? activesquad->squad[0]->location : -1;
 	if (primaryLocation != -1) {
@@ -2419,6 +2446,7 @@ void gotoEquipmentScreen(int loc) {
 	equip(location[loc]->loot, -1);
 }
 void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid) {
+	extern squadst *activesquad;
 	//create a temp squad containing just this liberal
 	int oldsquadid = cr->squadid;
 	squadst *oldactivesquad = activesquad;
@@ -2483,6 +2511,8 @@ int consolidateSiegeLoot() {
 }
 
 void nukeAllEmptySquads(const vector<int> squadloc, const int mode) {
+	extern squadst *activesquad;
+	extern vector<squadst *> squad;
 	//NUKE ALL EMPTY SQUADS
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 	{
@@ -2533,6 +2563,7 @@ bool LocationsPool::siteHasCameras(int cursite) {
 }
 
 void getRandomLoot(int cursite) {
+	extern squadst *activesquad;
 	int b = LCSrandom(len(location[cursite]->loot));
 	Item *it = location[cursite]->loot[b];
 	activesquad->loot.push_back(it);
@@ -2679,6 +2710,7 @@ string gimmeASprayCan(Creature* graffiti) {
 const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 void buyMeASprayCan(Creature* graffiti) {
 
+	extern vector<WeaponType *> weapontype;
 	Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
 	graffiti->give_weapon(spray, &location[graffiti->base]->loot);
 }
@@ -2693,6 +2725,8 @@ int countSafeHouses() {
 	return safenumber;
 }
 Location* getLocation() {
+	extern squadst *activesquad;
+	extern int selectedsiege;
 	Location* loc = NULL;
 	if (selectedsiege != -1) loc = location[selectedsiege];
 	if (activesquad) if (activesquad->squad[0]->location != -1)

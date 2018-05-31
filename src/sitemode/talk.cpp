@@ -90,9 +90,6 @@ void delenc(Creature &tk);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 void moveEverythingAwayFromSite(int cursite);
-extern Log gamelog;
-extern char newscherrybusted;
-extern short exec[EXECNUM];
 #include "../customMaps.h"
  vector<vector<string> > no_free_speech_flirt;
  vector<vector<string> > pickupLines;
@@ -168,24 +165,7 @@ map<short, string> conservativeLegalArgument;
  string respondsComma;
  string colonSpace;
  extern string singleDot;
- extern short cursite;
- extern short sitealarm;
- extern Creature encounter[ENCMAX];
- extern newsstoryst *sitestory;
- extern int sitecrime;
- extern squadst *activesquad;
- extern char slogan[SLOGAN_LEN];
  extern string singleSpace;
- extern short sitealienate;
- extern siteblockst levelmap[MAPX][MAPY][MAPZ];
- extern short lawList[LAWNUM];
- extern short attitude[VIEWNUM];
- extern short sitealarmtimer;
- extern int locx;
- extern int locy;
- extern int locz;
- extern short siteonfire;
- extern short fieldskillrate;
  string unnamed_String_Talk_cpp_000;
  string unnamed_String_Talk_cpp_001;
  string unnamed_String_Talk_cpp_002;
@@ -339,6 +319,9 @@ map<short, string> conservativeLegalArgument;
 /* bluff, date, issues */
 char talk(Creature &a, const int t)
 {
+	extern short cursite;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
 	Creature &tk = encounter[t];
 	// TALKING TO DOGS
 	if (tk.type == CREATURE_GUARDDOG && tk.align != ALIGN_LIBERAL)
@@ -359,6 +342,18 @@ char talk(Creature &a, const int t)
 }
 char talkToBankTeller(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern short cursite;
+	extern short sitealarm;
+	extern newsstoryst *sitestory;
+	extern int sitecrime;
+	extern squadst *activesquad;
+	extern short sitealienate;
+
+	extern Creature encounter[ENCMAX];
+	extern char slogan[SLOGAN_LEN];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short sitealarmtimer;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK);
 	/*mvaddstrAlt(9, 1, a.name);
@@ -514,6 +509,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 }
 char talkToGeneric(Creature &a, Creature &tk)
 {
+	extern short cursite;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9,  1, a.name);
@@ -601,6 +597,8 @@ char talkToGeneric(Creature &a, Creature &tk)
 void locationIsNowRented(int l, int rent);
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern short cursite;
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -639,9 +637,13 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 	
 	return 1;
 }
-extern class Ledger ledger;
 char heyIWantToRentARoom(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern char newscherrybusted;
+	extern short cursite;
+	extern squadst *activesquad;
+	extern class Ledger ledger;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9,  1, a.name, gamelog); addstrAlt(saysComma, gamelog);
@@ -808,6 +810,10 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 }
 char heyINeedAGun(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern short cursite;
+	extern short sitealarm;
+	extern short lawList[LAWNUM];
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9,  1, a.name, gamelog); addstrAlt(saysComma, gamelog);
@@ -880,6 +886,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
 }
 char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9,  1, a.name, gamelog); addstrAlt(saysComma, gamelog);
@@ -941,6 +948,8 @@ int getCity(int l);
 void newDate(Creature &a, Creature &tk);
 char doYouComeHereOften(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
 	int y = 12;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1081,6 +1090,9 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 void newRecruit(Creature *cr, int c);
 char talkAboutIssues(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern char newscherrybusted;
+	extern short lawList[LAWNUM];
 	const int lw = LCSrandom(LAWNUM); // pick a random law to talk about
 	bool succeeded = false;
 	bool you_are_stupid = false;
@@ -1224,6 +1236,23 @@ char talkAboutIssues(Creature &a, Creature &tk)
 }
 char talkInCombat(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern short cursite;
+	extern newsstoryst *sitestory;
+	extern int sitecrime;
+	extern squadst *activesquad;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short siteonfire;
+	extern short fieldskillrate;
+
+	extern short exec[EXECNUM];
+	extern Creature encounter[ENCMAX];
+	extern char slogan[SLOGAN_LEN];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
+	extern short attitude[VIEWNUM];
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -1777,6 +1806,9 @@ char talkInCombat(Creature &a, Creature &tk)
 }
 char heyMisterDog(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
 	bool success = false;
 	string pitch;
 	string response;
@@ -1831,6 +1863,9 @@ char heyMisterDog(Creature &a, Creature &tk)
 }
 char heyMisterMonster(Creature &a, Creature &tk)
 {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
 	bool success = false;
 	string pitch;
 	string response;

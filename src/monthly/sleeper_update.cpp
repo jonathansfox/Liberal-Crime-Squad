@@ -84,7 +84,6 @@ void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
 #include "../locations/locationsPool.h"
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
-extern int stat_recruits;
 extern string string_sleeper;
  string they_are_stashed;
 extern string singleDot;
@@ -109,10 +108,6 @@ string lostStolenItem;
 string contactModAuthor;
 string hasRecruited;
 string looksForwardToServing;
-extern short lawList[LAWNUM];
-extern char disbanding;
-extern short attitude[VIEWNUM];
-extern Creature encounter[ENCMAX];
 /*********************************
 **
 **   SLEEPERS INFLUENCING
@@ -121,6 +116,8 @@ extern Creature encounter[ENCMAX];
 **********************************/
 void sleeper_influence(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern short attitude[VIEWNUM];
+	extern short lawList[LAWNUM];
 	int power = (cr.get_attribute(ATTRIBUTE_CHARISMA, true) +
 		cr.get_attribute(ATTRIBUTE_HEART, true) +
 		cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true) +
@@ -358,6 +355,8 @@ void creatureLeaksIntel(Creature cr, const string& leak, const string& stashed) 
 }
 void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern CCSexposure ccsexposure;
+	extern short lawList[LAWNUM];
 	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
@@ -493,7 +492,6 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	}
 	if (pause) getkeyAlt();
 }
-extern class Ledger ledger;
 /*********************************
 **
 **   SLEEPERS EMBEZZLING FUNDS
@@ -501,6 +499,7 @@ extern class Ledger ledger;
 **********************************/
 void sleeper_embezzle(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern class Ledger ledger;
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
 		cr.juice -= 1;
@@ -568,6 +567,7 @@ string randomString(vector<stringAndInt> outputList) {
 **********************************/
 void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern short lawList[LAWNUM];
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
 		cr.juice -= 1;
@@ -827,6 +827,8 @@ void sleeper_scandal(Creature &cr, char &clearformess, char canseethings, int(&l
 **********************************/
 void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern int stat_recruits;
+	extern Creature encounter[ENCMAX];
 	if (subordinatesleft(cr))
 	{
 		prepareencounter(LocationsPool::getInstance().getLocationType(cr.worklocation), 0);
@@ -891,6 +893,7 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 **********************************************************************/
 void sleepereffect(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
+	extern char disbanding;
 	if (disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
 	int infiltrate = 1;
 	switch (cr.activity.type)

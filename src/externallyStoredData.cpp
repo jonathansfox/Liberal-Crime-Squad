@@ -1103,7 +1103,6 @@ int lowestloadscoreversion = 31203;
 #include "../common/ledgerEnums.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern Log gamelog;
 file_and_text_collection customText(vector<string>  *collection_, string fileName_) {
 	file_and_text_collection newWound;
 	newWound.collection = collection_;

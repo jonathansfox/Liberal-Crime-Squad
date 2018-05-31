@@ -170,22 +170,10 @@ int getloottype(const string &idname);
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../set_color_support.h"
-extern Log gamelog;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
 extern string spaceDashSpace;
 extern string closeParenthesis;
-extern vector<squadst *> squad;
-extern short interface_pgup;
-extern short interface_pgdn;
-extern char disbanding;
-extern short offended_firemen;
-extern short lawList[LAWNUM];
-extern short offended_corps;
-extern short offended_cia;
-extern short offended_amradio;
-extern short offended_cablenews;
  string bound_to_rile_up;
  string major_news_take_it_up;
   map<short, string> expenseTypes;
@@ -194,6 +182,8 @@ extern short offended_cablenews;
 /* monthly - reports the guardian's power to the player */
 void guardianupdate(char size, int power)
 {
+	extern Log gamelog;
+	extern MusicClass music;
 	music.play(MUSIC_NEWSPAPER);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
@@ -245,6 +235,10 @@ void guardianupdate(char size, int power)
 /* monthly - lets the player choose a special edition for the guardian */
 int choosespecialedition(char &clearformess)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern MusicClass music;
+	extern vector<squadst *> squad;
 	//Temporary, maybe put special edition definition into an xml file. -XML
 	static const string document_types[] =
 	{  // This list MUST be in alphabetical order for binary_search() to work right
@@ -356,6 +350,15 @@ int choosespecialedition(char &clearformess)
 /* monthly - guardian - prints liberal guardian special editions */
 void printnews(short li, short newspaper)
 {
+	extern CCSexposure ccsexposure;
+	extern short offended_firemen;
+	extern short offended_corps;
+	extern short offended_cia;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short lawList[LAWNUM];
 	//// TODO Move to XML
 	music.play(MUSIC_NEWSPAPER);
 	if (lawList[LAW_FREESPEECH] == -2)offended_firemen = 1;
@@ -717,10 +720,14 @@ void printnews(short li, short newspaper)
 	}
  	pressAnyKey();
 }
-extern class Ledger ledger;
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern char disbanding;
+	extern MusicClass music;
+	extern class Ledger ledger;
 	if (disbanding) return;
 	music.play(MUSIC_FINANCES);
 	clearformess = true;

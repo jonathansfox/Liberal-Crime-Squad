@@ -204,31 +204,8 @@ void enemyattack();
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-extern Log gamelog;
-extern short postalarmtimer;
-extern short mode;
-extern char endgamestate;
-extern short sitetype;
 extern string string_sleeper;
 extern string singleDot;
-extern short cursite;
-extern short sitealarm;
-extern Creature encounter[ENCMAX];
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
-extern squadst *activesquad;
-extern newsstoryst *sitestory; 
-extern short lawList[LAWNUM];
-extern short sitealarmtimer;
-extern int sitecrime;
-extern short sitealienate;
-extern bool deagle;
-extern vector<WeaponType *> weapontype;
-extern vector<ClipType *> cliptype;
-extern bool m249;
-extern UniqueCreatures uniqueCreatures;
 char run_broadcast(bool tv_broadcast);
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolHeader.h"
@@ -259,6 +236,9 @@ Item* create_item(const std::string& inputXml)
 }
 void special_bouncer_greet_squad()
 {
+	extern short cursite;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
 	// add a bouncer if there isn't one in the first slot
 	if (!sitealarm && LocationsPool::getInstance().getRentingType(cursite) != RENTING_PERMANENT)
 	{
@@ -298,6 +278,16 @@ vector<string> notRejected;
  
 void special_bouncer_assess_squad()
 {
+	extern short sitetype;
+	extern squadst *activesquad;
+	extern short cursite;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
 	if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT) return;
 	bool autoadmit = 0;
 	char sleepername[80];
@@ -434,6 +424,14 @@ void special_bouncer_assess_squad()
 }
 void special_lab_cosmetics_cagedanimals()
 {
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -468,6 +466,7 @@ void special_lab_cosmetics_cagedanimals()
 }
 void special_readsign(int sign)
 {
+	extern short cursite;
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	switch (sign) //TODO: Log these?
@@ -511,6 +510,16 @@ void special_readsign(int sign)
 }
 void special_nuclear_onoff()
 {
+	extern short sitealarm;
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	while (true)
 	{
 		clearmessagearea();
@@ -605,6 +614,16 @@ void special_nuclear_onoff()
 void fillEncounter(CreatureTypes c, int numleft);
 void special_lab_genetic_cagedanimals()
 {
+	extern short mode;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -660,6 +679,15 @@ void special_lab_genetic_cagedanimals()
 }
 void special_policestation_lockup()
 {
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short mode;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -702,6 +730,15 @@ void special_policestation_lockup()
 }
 void special_courthouse_lockup()
 {
+	extern short mode;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -744,6 +781,17 @@ void special_courthouse_lockup()
 }
 void special_courthouse_jury()
 {
+	extern short sitealarm;
+	extern short sitealienate;
+	extern short mode;
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (sitealarm || sitealienate)
 	{
 		clearmessagearea();
@@ -838,6 +886,16 @@ void special_courthouse_jury()
 #include "../items/lootTypePoolItem.h"
 void special_prison_control(short prison_control_type)
 {
+	extern short mode;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	while (true)
 	{
 		clearmessagearea();
@@ -905,6 +963,19 @@ void special_prison_control(short prison_control_type)
 }
 void special_intel_supercomputer()
 {
+	extern CCSexposure ccsexposure;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern squadst *activesquad;
+	extern char endgamestate;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (sitealarm || sitealienate)
 	{
 		clearmessagearea();
@@ -967,6 +1038,16 @@ void special_intel_supercomputer()
 }
 void special_graffiti()
 {
+	extern short cursite;
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16,  1, CONST_mapspecials084, gamelog);
@@ -997,6 +1078,14 @@ void special_graffiti()
 }
 void special_sweatshop_equipment()
 {
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1025,6 +1114,14 @@ void special_sweatshop_equipment()
 }
 void special_polluter_equipment()
 {
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1054,6 +1151,18 @@ void special_polluter_equipment()
 }
 void special_house_photos()
 {
+	extern bool deagle;
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
 	while (true)
 	{
 		clearmessagearea();
@@ -1177,6 +1286,20 @@ void special_house_photos()
 }
 void special_armory()
 {
+	extern bool m249;
+	extern short sitealarm;
+	extern short cursite;
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
 	while (true)
 	{
 		clearmessagearea();
@@ -1320,6 +1443,15 @@ void special_armory()
 }
 void special_corporate_files()
 {
+	extern squadst *activesquad;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1362,6 +1494,14 @@ void special_corporate_files()
 }
 void special_radio_broadcaststudio()
 {
+	extern short sitealarm;
+	extern short sitealienate;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1394,6 +1534,14 @@ void special_radio_broadcaststudio()
 }
 void special_news_broadcaststudio()
 {
+	extern short sitealarm;
+	extern short sitealienate;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1425,6 +1573,14 @@ void special_news_broadcaststudio()
 }
 void special_display_case()
 {
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1452,6 +1608,9 @@ void special_display_case()
 }
 void spawn_security()
 {
+	extern short cursite;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
 	// add a bouncer if there isn't one in the first slot
 	if (!sitealarm && !encounter[0].exists)
 	{
@@ -1505,6 +1664,16 @@ void spawn_security()
 }
 void special_security(bool metaldetect)
 {
+	extern squadst *activesquad;
+	extern short cursite;
+	extern short sitealarm;
+	extern short sitetype;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	char autoadmit = 0;
 	emptyEncounter();
 	spawn_security();
@@ -1634,6 +1803,15 @@ void special_security_secondvisit()
 }
 void special_bank_vault()
 {
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern short cursite;
+	extern int sitecrime;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	clearmessagearea();
 	mvaddstrAlt(16,  1, CONST_mapspecials130, gamelog);
 	mvaddstrAlt(17,  1, CONST_mapspecials131, gamelog);
@@ -1799,6 +1977,15 @@ void special_bank_vault()
 }
 void special_bank_teller()
 {
+	extern short cursite;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	if (sitealarm || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
@@ -1823,6 +2010,16 @@ void special_bank_teller()
 }
 void special_bank_money()
 {
+	extern squadst *activesquad;
+	extern short sitealarm;
+	extern short sitealarmtimer;
+	extern int sitecrime;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short postalarmtimer;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	static int swat_counter = 0;
 	clearmessagearea(false);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -1852,6 +2049,14 @@ void special_bank_money()
 }
 void special_oval_office()
 {
+	extern short sitealarm;
+	extern UniqueCreatures uniqueCreatures;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	// Clear entire Oval Office area
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
@@ -1896,6 +2101,15 @@ void special_oval_office()
 }
 void special_ccs_boss()
 {
+	extern Log gamelog;
+	extern short sitealarm;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short cursite;
+	extern short sitealienate;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	if (sitealarm || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{

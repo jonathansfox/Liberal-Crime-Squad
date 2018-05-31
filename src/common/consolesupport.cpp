@@ -48,11 +48,10 @@ void    PDC_set_titleAlt(const char *ch);
 #elif defined(USE_NCURSES_W)
 #include <ncursesw/term.h>
 #endif
-extern short interface_pgup;
-extern short interface_pgdn;
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
+	extern short interface_pgup;
    //if(c==-63)c='7';
    //if(c==-62)c='8';
    //if(c==-61)c='9';
@@ -223,9 +222,9 @@ void init_console()
 #ifdef WIN32
 BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
-extern bool fixcleartype;
 void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
 {
+	extern bool fixcleartype;
    if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
 	{
       // first we get the font smoothing parameters from Windows so that the old settings are backed up
@@ -260,6 +259,7 @@ void begin_cleartype_fix() // execute this function after loading settings from 
 }
 void end_cleartype_fix() // execute this function after the user is done playing the game, but before the program closes
 {
+	extern bool fixcleartype;
    if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
    {
       // restore the original settings the user had for font smoothing

@@ -93,15 +93,12 @@ const string tag_value = "value";
 //for creaturetype_string_to_enum
 #include "../politics/politics.h"
 //for int publicmood(int l);
-extern Log xmllog;
-extern vector<WeaponType *> weapontype;
 Weapon& Creature::weapon_none()
 {
+	extern vector<WeaponType *> weapontype;
 	static Weapon unarmed(*weapontype[getweapontype(tag_WEAPON_NONE)]);
 	return unarmed;
 }
-extern vector<ClipType *> cliptype;
-extern short lawList[LAWNUM];
  string singleDot;
  // This would normally be inlined inside the Creature class in creature.h, but the Creature class
  // has to be before creaturetype
@@ -110,6 +107,7 @@ extern short lawList[LAWNUM];
 void assign_interval(Interval& i, const std::string& value,
 	const std::string& owner, const std::string& element)
 {
+	extern Log xmllog;
 	if (!i.set_interval(value))
 		xmllog.log(CONST_creaturetype055 + element + CONST_creaturetypeB075 + owner + CONST_creaturetypeB086 + value);
 }
@@ -120,72 +118,6 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int we
 {
 }
 extern string NONE;
-CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
-	: number_weapons(1),
-	cliptype(tag_APPROPRIATE), number_clips(4)
-{ // The main position of the CMarkup object is expected not to be changed here.
-	weapontype = xml.GetData();
-	// Read in values.
-	if (!len(weapontype))
-	{
-		while (xml.FindChildElem())
-		{
-			std::string element = xml.GetChildTagName();
-			if (element == tag_type) weapontype = xml.GetChildData();
-			else if (element == tag_number_weapons)
-				assign_interval(number_weapons, xml.GetChildData(), owner, element);
-			else if (element == tag_cliptype) cliptype = xml.GetChildData();
-			else if (element == tag_number_clips)
-				assign_interval(number_clips, xml.GetChildData(), owner, element);
-			else xmllog.log(CONST_creaturetype056 + owner + CONST_creaturetypeB086 + element);
-		}
-	}
-	// Check values.
-	if (weapontype != tag_CIVILIAN)
-	{
-		if (getweapontype(weapontype) == -1)
-		{
-			xmllog.log(CONST_creaturetype057 + owner + CONST_creaturetypeB086 + weapontype);
-			weapontype = tag_WEAPON_NONE;
-			cliptype = NONE;
-		}
-		else
-		{
-			const vector<attackst*>& attacks = ::weapontype[getweapontype(weapontype)]->get_attacks();
-			// Find a usable clip type for the weapon.
-			if (cliptype == tag_APPROPRIATE)
-			{
-				cliptype = NONE;
-				for (int i = 0; i < len(attacks); i++)
-				{
-					if (attacks[i]->uses_ammo)
-					{
-						cliptype = attacks[i]->ammotype;
-						break;
-					}
-				}
-			}
-			// Check clip is usable by the weapon.
-			else if (getcliptype(cliptype) != -1) //Must be a clip type too.
-			{
-				int i;
-				for (i = 0; i < len(attacks) && cliptype != attacks[i]->ammotype; i++);
-				if (i == len(attacks))
-				{
-					xmllog.log(CONST_creaturetype058 + owner + CONST_creaturetypeB078 + cliptype +
-						CONST_creaturetype059 + weapontype + singleDot);
-					cliptype = NONE;
-				}
-			}
-			// Undefined clip type.
-			else
-			{
-				xmllog.log(CONST_creaturetype060 + owner + CONST_creaturetypeB086 + cliptype);
-				cliptype = NONE;
-			}
-		}
-	}
-}
  string undefined;
 CreatureType::CreatureType(const std::string& xmlstring)
 	: age_(18, 57), alignment_public_mood_(true),
@@ -193,6 +125,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
 	infiltration_(0), juice_(0), money_(20, 40)
 {
+	extern Log xmllog;
 	for (int i = 0; i < ATTNUM; i++)
 		attributes_[i].set_interval(1, 10);
 	id_ = s_number_of_creaturetypes++;
@@ -354,6 +287,7 @@ Alignment CreatureType::get_alignment() const
 }
 int CreatureType::roll_gender() const
 {
+	extern short lawList[LAWNUM];
 	int gender = LCSrandom(2) + 1; // Male or female.
 	switch (gender_liberal_)
 	{
@@ -387,6 +321,7 @@ std::string CreatureType::get_encounter_name() const
 }
 std::string CreatureType::get_type_name() const
 {
+	extern short lawList[LAWNUM];
 	switch (type_) // Hardcoded special cases.
 	{
 	case CREATURE_WORKER_SERVANT:
@@ -409,6 +344,8 @@ std::string CreatureType::get_type_name() const
 }
 void CreatureType::give_weapon(Creature& cr) const
 {
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
 	const WeaponsAndClips& wc = pickrandom(weapons_and_clips_);
 	if (wc.weapontype == tag_CIVILIAN)
 		give_weapon_civilian(cr);
@@ -427,6 +364,9 @@ void CreatureType::give_weapon(Creature& cr) const
 }
 void CreatureType::give_weapon_civilian(Creature& cr) const
 {
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	extern vector<ClipType *> cliptype;
 	if (lawList[LAW_GUNCONTROL] == -1 && !LCSrandom(30))
 	{
 		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
@@ -525,14 +465,6 @@ const string CONST_creaturetypesX02 = "CCS Founder";
 */
 #define AGE_TEENAGER    14+LCSrandom(4)  /* HS dropout, teenager, some fast food workers */
 #define AGE_YOUNGADULT  18+LCSrandom(18) /* young lads and ladies */
-extern bool multipleCityMode;
-extern short sitealienate;
-extern short mode;
-extern short cursite;
-extern short sitetype;
-extern char ccs_kills;
-extern short sitealarm;
-extern char endgamestate;
 vector<string> words_meaning_hick;
 vector<string> genetic_monster;
 #include "../customMaps.h"
@@ -545,6 +477,15 @@ vector<file_and_text_collection> creaturetypes_text_file_collection = {
 };
 char disguisesite(long type);
 void armCreature(Creature &cr, short type) {
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	extern short mode;
+	extern short sitetype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	extern vector<ClipType *> cliptype;
 	const CreatureType* crtype = getcreaturetype(type);
 	crtype->make_creature(cr);
 	int attnum = crtype->attribute_points_.roll();
@@ -1115,6 +1056,8 @@ void armCreature(Creature &cr, short type) {
 /* rolls up a creature's stats and equipment */
 void makecreature(Creature &cr, short type)
 {
+	extern short sitealienate;
+	extern short cursite;
 	cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
 	cr.strip(NULL);                  //
 	cr.creatureinit();
@@ -1188,6 +1131,8 @@ void makecreature(Creature &cr, short type)
 /* ensures that the creature's work location is appropriate to its type */
 bool verifyworklocation(Creature &cr, char test_location, char test_type)
 {
+	extern bool multipleCityMode;
+	extern char ccs_kills;
 	int okaysite[SITENUM];
 	memset(okaysite, 0, SITENUM * sizeof(int));
 	// If the caller sets test_type, they're just
@@ -1711,4 +1656,75 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 		else cr.worklocation = pickrandom(goodlist);
 	}
 	return false;
+}
+
+
+// IsaacG Cannot include within function due to namespace overlap
+extern vector<WeaponType *> weapontype;
+CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
+	: number_weapons(1),
+	cliptype(tag_APPROPRIATE), number_clips(4)
+{ // The main position of the CMarkup object is expected not to be changed here.
+	extern Log xmllog;
+	weapontype = xml.GetData();
+	// Read in values.
+	if (!len(weapontype))
+	{
+		while (xml.FindChildElem())
+		{
+			std::string element = xml.GetChildTagName();
+			if (element == tag_type) weapontype = xml.GetChildData();
+			else if (element == tag_number_weapons)
+				assign_interval(number_weapons, xml.GetChildData(), owner, element);
+			else if (element == tag_cliptype) cliptype = xml.GetChildData();
+			else if (element == tag_number_clips)
+				assign_interval(number_clips, xml.GetChildData(), owner, element);
+			else xmllog.log(CONST_creaturetype056 + owner + CONST_creaturetypeB086 + element);
+		}
+	}
+	// Check values.
+	if (weapontype != tag_CIVILIAN)
+	{
+		if (getweapontype(weapontype) == -1)
+		{
+			xmllog.log(CONST_creaturetype057 + owner + CONST_creaturetypeB086 + weapontype);
+			weapontype = tag_WEAPON_NONE;
+			cliptype = NONE;
+		}
+		else
+		{
+			const vector<attackst*>& attacks = ::weapontype[getweapontype(weapontype)]->get_attacks();
+			// Find a usable clip type for the weapon.
+			if (cliptype == tag_APPROPRIATE)
+			{
+				cliptype = NONE;
+				for (int i = 0; i < len(attacks); i++)
+				{
+					if (attacks[i]->uses_ammo)
+					{
+						cliptype = attacks[i]->ammotype;
+						break;
+					}
+				}
+			}
+			// Check clip is usable by the weapon.
+			else if (getcliptype(cliptype) != -1) //Must be a clip type too.
+			{
+				int i;
+				for (i = 0; i < len(attacks) && cliptype != attacks[i]->ammotype; i++);
+				if (i == len(attacks))
+				{
+					xmllog.log(CONST_creaturetype058 + owner + CONST_creaturetypeB078 + cliptype +
+						CONST_creaturetype059 + weapontype + singleDot);
+					cliptype = NONE;
+				}
+			}
+			// Undefined clip type.
+			else
+			{
+				xmllog.log(CONST_creaturetype060 + owner + CONST_creaturetypeB086 + cliptype);
+				cliptype = NONE;
+			}
+		}
+	}
 }

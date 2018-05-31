@@ -54,12 +54,9 @@ char talk(Creature &a, const int t);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern short cursite;
-extern short attitude[VIEWNUM];
-extern Creature encounter[ENCMAX];
 /* recruit struct constructor */
 recruitst::recruitst(Creature *cr, int id) {
+	extern short attitude[VIEWNUM];
 	recruit = cr;
 	recruiter_id = id;
 	//Has heard of the LCS
@@ -90,6 +87,9 @@ extern string singleDot;
 /* recruiting */
 char recruitment_activity(Creature &cr)
 {
+	extern MusicClass music;
+	extern short cursite;
+	extern Creature encounter[ENCMAX];
 	int ocursite = cursite;
 	cursite = cr.location;
 	int type = cr.activity.arg;

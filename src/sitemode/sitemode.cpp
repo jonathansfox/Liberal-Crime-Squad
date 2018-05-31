@@ -288,19 +288,7 @@ char talk(Creature &a, const int t);
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
-extern Log gamelog;
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern short mode;
-extern short postalarmtimer;
-extern char endgamestate;
-extern short sitetype;
-extern char foughtthisround;
-extern bool mapshowing;
-extern bool encounterwarnings;
-extern int ccs_siege_kills;
-extern int ccs_boss_kills;
-extern int stat_recruits;
 extern string closeParenthesis;
 extern string undefined;
 extern string check_status_of_squad_liberal;
@@ -312,40 +300,16 @@ extern string singleDot;
 extern string change_squad_order;
 extern string spaceParanthesisDollar;
 void emptyEncounter();
-extern squadst *activesquad;
-extern short sitealarmtimer;
-extern short siteonfire;
-extern short cursite;
-extern short sitealarm;
-extern int sitecrime;
-extern squadst *activesquad;
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
-extern Creature encounter[ENCMAX];
-extern short party_status;
 void delete_and_clear_groundloot();
 bool isThereGroundLoot();
-extern chaseseqst chaseseq;
-extern short sitealienate;
-extern newsstoryst *sitestory;
-extern char showcarprefs;
-extern short lawList[LAWNUM];
-extern short sitealienate;
-extern short offended_corps;
-extern short offended_cia;
-extern short offended_amradio;
-extern short offended_cablenews;
-extern short offended_firemen;
 extern string singleSpace;
-extern short fieldskillrate;
-extern char ccs_kills;
-extern UniqueCreatures uniqueCreatures;
 void deleteVehicle(int carid);
 void deleteVehicles(vector<Vehicle *>& carid);
 void fight_subdued()
 {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern chaseseqst chaseseq;
 	//int p;
 	//int ps=find_police_station(chaseseq.location);
 	deleteVehicles(chaseseq.friendcar);
@@ -387,6 +351,7 @@ void fight_subdued()
 /* marks the area around the specified tile as explored */
 void knowmap(int locx, int locy, int locz)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
 	if (locx > 0)levelmap[locx - 1][locy][locz].flag |= SITEBLOCK_KNOWN;
 	if (locx < MAPX - 1)levelmap[locx + 1][locy][locz].flag |= SITEBLOCK_KNOWN;
@@ -412,6 +377,11 @@ void knowmap(int locx, int locy, int locz)
 /* site - determines spin on site news story, CONST_sitemode077 timer */
 void resolvesite()
 {
+	extern squadst *activesquad;
+	extern short cursite;
+	extern int sitecrime;
+	extern newsstoryst *sitestory;
+	extern short sitealienate;
 	if (sitealienate) sitestory->positive = 0;
 	//removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably
 	//notice later on that all their stuff has been stolen or whatever.
@@ -450,6 +420,16 @@ void resolvesite()
 /* behavior when the player bumps into a door in sitemode */
 void open_door(bool restricted)
 {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short sitealarmtimer;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern newsstoryst *sitestory;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	bool locked = levelmap[locx][locy][locz].flag&SITEBLOCK_LOCKED,
 		alarmed = levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED,
 		vault_door = levelmap[locx][locy][locz].flag&SITEBLOCK_METAL,
@@ -622,6 +602,9 @@ int whichWay() {
 	return c;
 }
 void pressedKeyN() {
+	extern MusicClass music;
+	extern bool mapshowing;
+	extern bool encounterwarnings;
 	
 		mapshowing = false;
 		eraseAlt();
@@ -651,6 +634,12 @@ void pressedKeyN() {
 	
 }
 void pressedKeyU(const int enemy) {
+	extern squadst *activesquad;
+	extern short sitealarm;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	{
 		if (levelmap[locx][locy][locz].special != -1)
 		{
@@ -730,6 +719,9 @@ void pressedKeyL() {
 	
 }
 void pressedKeyT(const int enemy, int& encounter_timer) {
+	extern squadst *activesquad;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
 		int forcesp = -1;
 		int forcetk = -1;
 		for (int p = 0; p < 6; p++)
@@ -910,6 +902,11 @@ void pressedKeyT(const int enemy, int& encounter_timer) {
 	
 }
 void pressedKeyM() {
+	extern short cursite;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 		for (int x = 0; x < MAPX; x++)
 		{
 			for (int y = 0; y < MAPY; y++)
@@ -1002,6 +999,8 @@ void pressedKeyM() {
 	
 }
 void pressedKeyF(int& encounter_timer) {
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
 		// Don't subdue squad if someone is still in good condition.
 		bool cannotsubdue = false;
 		for (int j = 0; j < 6 && !cannotsubdue; j++)
@@ -1036,6 +1035,7 @@ void pressedKeyF(int& encounter_timer) {
 	
 }
 int checkForPeopleWhoCanRecruit() {
+	extern squadst *activesquad;
 	// Check for people who can recruit followers
 	for (int i = 0; i < 6; i++)
 		if (activesquad->squad[i] != NULL)
@@ -1044,6 +1044,9 @@ int checkForPeopleWhoCanRecruit() {
 	return -1;
 }
 void addNewRecruit(int i, int e) {
+	extern int stat_recruits;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
 	Creature *newcr = new Creature;
 	*newcr = encounter[e];
 	newcr->namecreature();
@@ -1063,6 +1066,12 @@ void addNewRecruit(int i, int e) {
 	}
 }
 void pressedKeyR(const int freeable, const int libnum, const int enemy, const int hostages, int& partysize) {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short sitealarmtimer;
+	extern short sitealarm;
+	extern short cursite;
+	extern Creature encounter[ENCMAX];
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite) && libnum > 6)
 	{
 		assemblesquad(activesquad);
@@ -1146,6 +1155,20 @@ void getRandomLoot(int cursite);
 Weapon* spawnNewWeapon(string newWeaponType);
 Armor* spawnNewArmor(string newArmorType);
 void pressedKeyG(const int enemy, int& encounter_timer) {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern newsstoryst *sitestory;
+	extern short lawList[LAWNUM];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern vector<Item *> groundloot;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarm;
+	extern short cursite;
+	extern short sitealarmtimer;
+	extern short sitetype;
+	extern int sitecrime;
 	if ((isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
 	{
 		bool tookground = 0;
@@ -1424,7 +1447,6 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 			tookground = 1;
 		}
 		//MAKE GROUND LOOT INTO MISSION LOOT
-		extern vector<Item *> groundloot;
 		for (int l = 0; l < len(groundloot); l++)
 			activesquad->loot.push_back(groundloot[l]);
 		groundloot.clear();
@@ -1446,6 +1468,8 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 	}
 }
 void putBackSpecials(const int olocx, const int olocy, const int olocz) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	//PUT BACK SPECIALS
 	for (int e = 0; e < ENCMAX; e++)
 		if (encounter[e].exists)
@@ -1458,6 +1482,11 @@ void putBackSpecials(const int olocx, const int olocy, const int olocz) {
 		}
 }
 void enemyAttemptsFreeShots(int& encounter_timer) {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short fieldskillrate;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
 	//ENEMIES SHOULD GET FREE SHOTS NOW
 	if (sitealarm)
 	{
@@ -1525,6 +1554,11 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 	else disguisecheck(encounter_timer);
 }
 void bailUponVictory() {
+	extern Log gamelog;
+	extern short cursite;
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern MusicClass music;
 	music.play(MUSIC_CONQUER);
 	if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_DEFENDED;
 	else sitestory->type = NEWSSTORY_SQUAD_BROKESIEGE;
@@ -1576,6 +1610,16 @@ void bailUponVictory() {
 	escapesiege(1);
 }
 void bailOnBase() {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short postalarmtimer;
+	extern short sitetype;
+	extern int sitecrime;
+	extern short sitealarm;
+	extern short cursite;
+	extern chaseseqst chaseseq;
+	extern char showcarprefs;
+	extern newsstoryst *sitestory;
 	// Seperate logging message.
 	gamelog.record(activesquad->name);
 	gamelog.record(CONST_sitemode116);
@@ -1688,6 +1732,12 @@ void bailOnBase() {
 	}
 }
 void bailUponDefeatCCS() {
+	extern Log gamelog;
+	extern short cursite;
+	extern char ccs_kills;
+	extern squadst *activesquad;
+	extern char endgamestate;
+	extern MusicClass music;
 	music.play(MUSIC_CONQUER);
 	//DEAL WITH PRISONERS AND STOP BLEEDING
 	for (int p = 0; p < 6; p++)
@@ -1733,6 +1783,11 @@ void bailUponDefeatCCS() {
 	conquertextccs();
 }
 int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short cursite;
 
 	if (locx != olocx || locy != olocy || locz != olocz)
 		emptyEncounter();
@@ -1892,6 +1947,19 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 	return 0;
 }
 void encounterSpecial(const int makespecial, const int olocx, const int olocy, const int olocz) {
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern bool encounterwarnings;
+	extern short sitetype;
+	extern short cursite;
+	extern short sitealienate;
+	extern short sitealarm;
+	extern UniqueCreatures uniqueCreatures;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
 	switch (makespecial)
 	{
 	case SPECIAL_CAFE_COMPUTER:
@@ -2117,7 +2185,16 @@ void pressedKeyShiftL() {
 }
 // return true if leaving site
 int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz, const char c, const int encsize, char& hostcheck) {
-	
+
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short postalarmtimer;
+	extern char showcarprefs;
+	extern short cursite;
+	extern int ccs_boss_kills;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	
 
 
@@ -2204,6 +2281,29 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 	return 0;
 }
 void mode_site() {
+	extern short cursite;
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short postalarmtimer;
+	extern short sitealarmtimer;
+	extern short mode;
+	extern bool mapshowing;
+	extern short party_status;
+	extern char foughtthisround;
+	extern int sitecrime;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern newsstoryst *sitestory;
+	extern char showcarprefs;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
 	if (activesquad == NULL)return;
 	reloadparty();
 	showcarprefs = -1;
@@ -2669,6 +2769,24 @@ void mode_site() {
 newsstoryst* lastNewsStory();
 void mode_site(short loc)
 {
+	extern short postalarmtimer;
+	extern short sitealarmtimer;
+	extern short siteonfire;
+	extern short cursite;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short sitetype;
+	extern short mode;
+	extern int ccs_siege_kills;
+	extern int ccs_boss_kills;
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealienate;
+	extern newsstoryst *sitestory;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	sitetype = LocationsPool::getInstance().getLocationType(loc);
 	cursite = loc;
 	sitealarm = 0;
@@ -2798,6 +2916,8 @@ void mode_site(short loc)
 /* prints the names of creatures you see in car chases */
 void printchaseencounter()
 {
+	extern chaseseqst chaseseq;
+	extern Creature encounter[ENCMAX];
 	for (int i = 19; i <= 24; i++)
 		mvaddstrAlt(i, 0, CONST_sitemode178); // 80 spaces
 	if (len(chaseseq.enemycar))

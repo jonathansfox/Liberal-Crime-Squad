@@ -101,21 +101,8 @@ void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 #include "../common/musicClass.h"
-extern MusicClass music;
  string pressKeyToReflect;
  string they_ll_round_you_up;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern short exec[EXECNUM];
-extern short court[COURTNUM];
-extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-extern int amendnum;
-extern bool termlimits;
-extern vector<string> finalCabinet;
-extern short lawList[LAWNUM];
-extern char cantseereason;
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short attitude[VIEWNUM];
 vector<int> state_biases;
 vector<string> reaganifiedCabinet;
 vector<string> stalinizedCabinet;
@@ -146,6 +133,10 @@ vector<file_and_text_collection> endgame_text_file_collection = {
 /* EndGameStatus - checks if a constitutional amendment is ratified */
 char ratify(int level, int lawview, int view, char congress, char canseethings)
 {
+	extern MusicClass music;
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short attitude[VIEWNUM];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -288,6 +279,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 /* EndGameStatus - header for announcing constitutional amendments */
 void amendmentheading()
 {
+	extern int amendnum;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, CONST_endgame017);
@@ -301,6 +293,10 @@ void amendmentheading()
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
 {
+	extern MusicClass music;
+	extern int amendnum;
+	extern short court[COURTNUM];
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -362,6 +358,9 @@ void tossjustices(char canseethings)
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
 void amendment_termlimits(char canseethings)
 {
+	extern MusicClass music;
+	extern int amendnum;
+	extern bool termlimits;
 	if (termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
 	if (canseethings)
 	{
@@ -425,6 +424,12 @@ void badEndRemakeWorld(const string& str, const string& str2, const string& str3
 /* EndGameStatus - attempts to pass a constitutional amendment to lose the game */
 void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 {
+	extern MusicClass music;
+	extern int amendnum;
+	extern char cantseereason;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
 	vector<string> output;
 	MusicModes endMusic;
 	vector<string> finalCabinet;

@@ -315,7 +315,7 @@ Not the best, but it does the job.
 4.12.21
 
 Deleted translateid.cpp, moved most of its guts over to globals.cpp, except the part that accessed vector<Creature *> pool, which was moved to creaturePool.cpp, and the part accessing vehicletypes, which was moved to vehicle.cpp
-That said, translateid.cpp would work well as a class API.
+That said, translateid.cpp might work well as a class API.
 
 globals.cpp is where most of the vector<...> are declared, and saveload.cpp has to access most everything, so if those are the only two references to a previously global vector, the work is basically done.
 
@@ -354,3 +354,33 @@ This allowed creature.h to stop calling armortype.h
 #include locationsEnums.h is located in 8 files, in addition to those with #include locations.h
 
 extern vector< Matching lines: 99    Matching files: 27    Total files searched: 158
+
+removed vector<squadst *> from chase.cpp
+
+Changed scope of various extern vector<...> from file to function level.
+Matching lines: 161    Matching files: 25    Total files searched: 158
+The extern vector<...> averaged less than two functions per file.
+
+ extern Creature encounter[ENCMAX];
+ extern short lawList[LAWNUM];
+and other extern arrays are getting the same treatment.
+extern\s*[\w\*\&]*\s*[\w\*\&]*\s*[\w\*\&]*\[
+Matching lines: 175    Matching files: 48    Total files searched: 158
+
+found numerous instances of extern char homedir[MAX_PATH_SIZE] being declared and not used.
+Matching lines: 384    Matching files: 48    Total files searched: 158
+
+Averaging barely more than 2 functions per file.
+
+Removed another twenty moveAlt(...), replaced with mvaddstrAlt(...)
+Only 165 left.
+
+Keyword extern appears in LCS
+Matching lines: 3770    Matching files: 70    Total files searched: 158
+I intend to reduce the scope from the file level to the function level on any of these that haven't already.  The various extern strings will likely have to be dealt with differently, though they only number 384 at this time.
+
+Matching lines: 4496    Matching files: 68    Total files searched: 158
+Increase of about 800.  Found and removed a number of unused externs, most notably unused extern MusicClass music, which allowed the #include musicClass.h to be removed.
+Apart from extern strings, about no extern usage on the global or file scope, save the aformentioned namespace conflict.
+
+Shifted a few const strings to be within the functions calling them.  Decided the usefulness of such actions are dubious, started extracting parts of the interrogation function.

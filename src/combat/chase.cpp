@@ -1,76 +1,4 @@
 #include "../includes.h"
-const string CONST_chase094 = "STATIONWAGON";
-const string CONST_chase093 = "PICKUP";
-const string CONST_chase092 = "JEEP";
-const string CONST_chase091 = "SUV";
-const string CONST_chase090 = "AGENTCAR";
-const string CONST_chase088 = "HMMWV";
-const string CONST_chase086 = "attacks";
-const string CONST_chase085 = "  Found encounter driver %s in carID %d";
-const string CONST_chase084 = "  Found LCS driver %s in carID %d";
-const string CONST_chase083 = "Searching for %s's driver.  ";
-const string CONST_chase082 = "  Found enemycar with ID %d at index %d";
-const string CONST_chase081 = "  Found friendcar with ID %d at index %d";
-const string CONST_chase080 = "Searching for chase vehicle for ";
-const string CONST_chase079 = "C - Reflect on your lack of skill.";
-const string CONST_chase078 = "P - Pull over";
-const string CONST_chase077 = "B - Bail out and run!";
-const string CONST_chase076 = "F - Fight!";
-const string CONST_chase075 = "E - Equip";
-const string CONST_chase074 = "D - Try to lose them!";
-const string CONST_chase073 = "As you pull away from the site, you notice that you are ";
-const string CONST_chase072 = "Both sides refrain from endangering the child...";
-const string CONST_chase071 = "The Conservative bastards unleash a hail of gunfire!";
-const string CONST_chase070 = "You slow down and carefully avoid the kid.";
-const string CONST_chase069 = "The fruit seller is squashed!";
-const string CONST_chase068 = "Fruit smashes all over the windshield!";
-const string CONST_chase067 = "You slow down, and carefully evade the truck.";
-const string CONST_chase066 = "You slow down, and turn the corner.";
-const string CONST_chase065 = "You swerve to avoid the obstacle!";
-const string CONST_chase064 = " takes over the wheel.";
-const string CONST_chase063 = " hits a parked car and flips over.";
-const string CONST_chase062 = "The person inside is squashed into a cube.";
-const string CONST_chase061 = "Everyone inside is peeled off against the pavement.";
-const string CONST_chase060 = " spins out and crashes.";
-const string CONST_chase059 = " slams into a building.";
-const string CONST_chase058 = " crawls free of the car, shivering with pain.";
-const string CONST_chase057 = " gasps in pain, but lives, for now.";
-const string CONST_chase056 = " feet.";
-const string CONST_chase055 = " wheelchair.";
-const string CONST_chase054 = " and struggles to ";
-const string CONST_chase053 = "car frame";
-const string CONST_chase052 = " grips the ";
-const string CONST_chase051 = " seat, out cold, and dies.";
-const string CONST_chase050 = " slumps in ";
-const string CONST_chase049 = "Your ";
-const string CONST_chase048 = " is still on your tail!";
-const string CONST_chase047 = " brakes hard and nearly crashes!";
-const string CONST_chase046 = " backs off for safety.";
-const string CONST_chase045 = " skids out!";
-const string CONST_chase044 = " falls behind!";
-const string CONST_chase043 = "You make obscene gestures at the pursuers!";
-const string CONST_chase042 = "You boldly weave through oncoming traffic!";
-const string CONST_chase040 = "G - Give Up";
-const string CONST_chase036 = "As you exit the site, you notice that you are ";
-const string CONST_chase035 = "thrown to the ground, and beaten senseless!";
-const string CONST_chase034 = "thrown to the ground, and beaten to death!";
-const string CONST_chase033 = " crushed beneath the tank's treads!";
-const string CONST_chase032 = "thrown to the ground, and shot in the head!";
-const string CONST_chase031 = "thrown to the ground, and tazed repeatedly!";
-const string CONST_chase030 = "thrown to the ground, and tazed to death!";
-const string CONST_chase029 = "pushed to the ground, and handcuffed!";
-const string CONST_chase028 = " breaks away!";
-const string CONST_chase026 = " can't keep up!";
-const string CONST_chase025 = " tips into a pool. The tank is trapped!";
-const string CONST_chase024 = "You scale a small building and leap between rooftops!";
-const string CONST_chase023 = "You climb a fence in record time!";
-const string CONST_chase022 = "You run as fast as you can!";
-const string CONST_chase021 = "You suddenly dart into an alley!";
-const string CONST_chase020 = " is free.";
-const string CONST_chase019 = "s are free.";
-const string CONST_chase018 = "Your hostage";
-const string CONST_chase017 = "You pull over and are arrested.";
-const string CONST_chase016 = "You stop and are arrested.";
 const string CONST_chase015 = "carchase_obstacle_child.txt";
 const string CONST_chase014 = "carchase_obstacle_cross_traffic.txt";
 const string CONST_chase013 = "carchase_obstacle_truck_pulls_out.txt";
@@ -81,6 +9,12 @@ const string CONST_chase009 = "car_crash_fatalities.txt";
 const string CONST_chase008 = "car_crash_modes.txt";
 const string CONST_chase007 = "car_plows_through.txt";
 const string CONST_chase006 = "car_speed.txt";
+
+const string CONST_chase048 = " is still on your tail!";
+const string CONST_chase079 = "C - Reflect on your lack of skill.";
+const string CONST_chase076 = "F - Fight!";
+const string CONST_chase075 = "E - Equip";
+const string CONST_chase074 = "D - Try to lose them!";
 
 const string tag_POLICECAR = "POLICECAR";
 const string tag_The = "The ";
@@ -143,30 +77,16 @@ void equip(vector<Item *> &loot, int loc);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern Log gamelog;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 #include "../common/creaturePool.h"
-extern MusicClass music;
-extern char endgamestate;
-extern short mode;
-extern char foughtthisround;
-extern int stat_dead;
 extern string change_squad_order;
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
-extern Creature encounter[ENCMAX];
-extern chaseseqst chaseseq;
-extern squadst *activesquad;
-extern short party_status;
-extern newsstoryst *sitestory;
-extern short fieldskillrate;
 extern string singleSpace;
-extern short lawList[LAWNUM];
-extern vector<squadst *> squad;
-extern long cursquadid;
 extern string singleDot;
 void fillEncounter(CreatureTypes c, int numleft) {
+	extern Creature encounter[ENCMAX];
 	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (!encounter[e].exists)
@@ -179,6 +99,7 @@ void fillEncounter(CreatureTypes c, int numleft) {
 }
 void emptyEncounter();
 void emptyEncounter() {
+	extern Creature encounter[ENCMAX];
 	for (int e = 0; e < ENCMAX; e++)encounter[e].exists = 0;
 }
  vector<string> car_speed;
@@ -215,6 +136,15 @@ void emptyEncounter() {
  void deleteVehicles(vector<Vehicle *>& carid);
  void chase_giveup()
  {
+	 const string CONST_chase020 = " is free.";
+	 const string CONST_chase019 = "s are free.";
+	 const string CONST_chase018 = "Your hostage";
+	 const string CONST_chase017 = "You pull over and are arrested.";
+	 const string CONST_chase016 = "You stop and are arrested.";
+	 extern chaseseqst chaseseq;
+	 extern short mode;
+	 extern squadst *activesquad;
+	 extern Log gamelog;
 	 int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, chaseseq.location);
 	 deleteVehicles(chaseseq.friendcar);
 	 int hostagefreed = 0;
@@ -253,6 +183,24 @@ void emptyEncounter() {
  }
  void evasiverun()
  {
+	 const string CONST_chase035 = "thrown to the ground, and beaten senseless!";
+	 const string CONST_chase034 = "thrown to the ground, and beaten to death!";
+	 const string CONST_chase033 = " crushed beneath the tank's treads!";
+	 const string CONST_chase032 = "thrown to the ground, and shot in the head!";
+	 const string CONST_chase031 = "thrown to the ground, and tazed repeatedly!";
+	 const string CONST_chase030 = "thrown to the ground, and tazed to death!";
+	 const string CONST_chase029 = "pushed to the ground, and handcuffed!";
+	 const string CONST_chase028 = " breaks away!";
+	 const string CONST_chase026 = " can't keep up!";
+	 const string CONST_chase025 = " tips into a pool. The tank is trapped!";
+	 const string CONST_chase024 = "You scale a small building and leap between rooftops!";
+	 const string CONST_chase023 = "You climb a fence in record time!";
+	 const string CONST_chase022 = "You run as fast as you can!";
+	 const string CONST_chase021 = "You suddenly dart into an alley!";
+	 extern squadst *activesquad;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
+	 extern short lawList[LAWNUM];
 	 vector<int> yourspeed;
 	 yourspeed.resize(6);
 	 int yourworst = 10000, yourbest = 0, wheelchair = 0, notwheelchair = 0, theirbest = 0, theirworst = 10000;
@@ -466,6 +414,17 @@ void emptyEncounter() {
  }
  bool footchase()
  {
+	 const string CONST_chase040 = "G - Give Up";
+	 const string CONST_chase036 = "As you exit the site, you notice that you are ";
+	 extern chaseseqst chaseseq;
+	 extern MusicClass music;
+	 extern short mode;
+	 extern char foughtthisround;
+	 extern squadst *activesquad;
+	 extern short party_status;
+	 extern newsstoryst *sitestory;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
 	 //NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
 	 //IT SHOULD NOT DELETE SQUADS OR CREATURES
 	 //SQUADS MAY BE FICTITIOUS AND BOTH WILL BE DELETED LATER ANYWAY
@@ -638,6 +597,17 @@ void emptyEncounter() {
  }
  void evasivedrive()
  {
+	 const string CONST_chase047 = " brakes hard and nearly crashes!";
+	 const string CONST_chase046 = " backs off for safety.";
+	 const string CONST_chase045 = " skids out!";
+	 const string CONST_chase044 = " falls behind!";
+	 const string CONST_chase043 = "You make obscene gestures at the pursuers!";
+	 const string CONST_chase042 = "You boldly weave through oncoming traffic!";
+	 extern chaseseqst chaseseq;
+	 extern squadst *activesquad;
+	 extern short fieldskillrate;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
 	 vector<long> yourrolls, theirrolls, theirrolls_id, theirrolls_drv;
 	 long yourworst = 10000;
 	 for (int p = 0; p < 6; p++)
@@ -776,6 +746,20 @@ void emptyEncounter() {
  }
  void crashfriendlycar(int v)
  {
+	 const string CONST_chase058 = " crawls free of the car, shivering with pain.";
+	 const string CONST_chase057 = " gasps in pain, but lives, for now.";
+	 const string CONST_chase056 = " feet.";
+	 const string CONST_chase055 = " wheelchair.";
+	 const string CONST_chase054 = " and struggles to ";
+	 const string CONST_chase053 = "car frame";
+	 const string CONST_chase052 = " grips the ";
+	 const string CONST_chase051 = " seat, out cold, and dies.";
+	 const string CONST_chase050 = " slumps in ";
+	 const string CONST_chase049 = "Your ";
+	 extern int stat_dead;
+	 extern chaseseqst chaseseq;
+	 extern squadst *activesquad;
+	 extern Log gamelog;
 	 //CRASH CAR
 	 clearmessagearea();
 	 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -924,6 +908,14 @@ void emptyEncounter() {
  }
  void crashenemycar(int v)
  {
+	 const string CONST_chase063 = " hits a parked car and flips over.";
+	 const string CONST_chase062 = "The person inside is squashed into a cube.";
+	 const string CONST_chase061 = "Everyone inside is peeled off against the pavement.";
+	 const string CONST_chase060 = " spins out and crashes.";
+	 const string CONST_chase059 = " slams into a building.";
+	 extern chaseseqst chaseseq;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
 	 int victimsum = 0;
 	 for (int p = ENCMAX - 1; p >= 0; p--)
 	 {
@@ -957,6 +949,12 @@ void emptyEncounter() {
  }
  bool drivingupdate(short &obstacle)
  {
+	 const string CONST_chase064 = " takes over the wheel.";
+	 extern chaseseqst chaseseq;
+	 extern squadst *activesquad;
+	 extern newsstoryst *sitestory;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
 	 //CHECK TO SEE WHICH CARS ARE BEING DRIVEN
 	 vector<int> passenger;
 	 int driver;
@@ -1040,6 +1038,12 @@ void emptyEncounter() {
  }
  bool dodgedrive()
  {
+	 const string CONST_chase065 = "You swerve to avoid the obstacle!";
+	 extern chaseseqst chaseseq;
+	 extern squadst *activesquad;
+	 extern newsstoryst *sitestory;
+	 extern Log gamelog;
+	 extern Creature encounter[ENCMAX];
 	 clearmessagearea();
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(16, 1, CONST_chase065, gamelog);
@@ -1097,6 +1101,14 @@ void emptyEncounter() {
  }
  bool obstacledrive(short obstacle, char choice)
  {
+	 const string CONST_chase072 = "Both sides refrain from endangering the child...";
+	 const string CONST_chase071 = "The Conservative bastards unleash a hail of gunfire!";
+	 const string CONST_chase070 = "You slow down and carefully avoid the kid.";
+	 const string CONST_chase069 = "The fruit seller is squashed!";
+	 const string CONST_chase068 = "Fruit smashes all over the windshield!";
+	 const string CONST_chase067 = "You slow down, and carefully evade the truck.";
+	 const string CONST_chase066 = "You slow down, and turn the corner.";
+	 extern Log gamelog;
 	 switch (obstacle)
 	 {
 	 case CARCHASE_OBSTACLE_CROSSTRAFFIC:
@@ -1203,6 +1215,24 @@ void emptyEncounter() {
  void addCreatueVehiclesToCollection(Creature *cr[6], vector<Vehicle *> &veh);
 bool chasesequence()
 {
+	const string CONST_chase086 = "attacks";
+	const string CONST_chase085 = "  Found encounter driver %s in carID %d";
+	const string CONST_chase084 = "  Found LCS driver %s in carID %d";
+	const string CONST_chase083 = "Searching for %s's driver.  ";
+	const string CONST_chase082 = "  Found enemycar with ID %d at index %d";
+	const string CONST_chase081 = "  Found friendcar with ID %d at index %d";
+	const string CONST_chase080 = "Searching for chase vehicle for ";
+	const string CONST_chase078 = "P - Pull over";
+	const string CONST_chase077 = "B - Bail out and run!";
+	const string CONST_chase073 = "As you pull away from the site, you notice that you are ";
+	extern MusicClass music;
+	extern short mode;
+	extern chaseseqst chaseseq;
+	extern squadst *activesquad;
+	extern short party_status;
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern Creature encounter[ENCMAX];
 	int chasenum = 0;
 	reloadparty();
 	//NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
@@ -1439,6 +1469,8 @@ bool chasesequence()
 }
 Vehicle* getChaseVehicle(const Creature &c)
 {
+	extern short mode;
+	extern chaseseqst chaseseq;
 	Vehicle* found = NULL;
 	//addstrAlt(CONST_chase080, gamelog);
 	//addstrAlt(c.name, gamelog);
@@ -1464,6 +1496,9 @@ Vehicle* getChaseVehicle(const Creature &c)
 }
 Creature* getChaseDriver(const Creature &c)
 {
+	extern short mode;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
 	Creature* found = NULL;
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
@@ -1499,6 +1534,16 @@ Creature* getChaseDriver(const Creature &c)
 Vehicle* getVehicleOfThisType(int cartype);
 void makechasers(long type, const long sitecriminality)
 {
+	const string CONST_chase094 = "STATIONWAGON";
+	const string CONST_chase093 = "PICKUP";
+	const string CONST_chase092 = "JEEP";
+	const string CONST_chase091 = "SUV";
+	const string CONST_chase090 = "AGENTCAR";
+	const string CONST_chase088 = "HMMWV";
+	extern char endgamestate;
+	extern chaseseqst chaseseq;
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
 	// 
 	long sitecrime_chasers;
 	if (sitecriminality > 10) {
@@ -1640,9 +1685,13 @@ void makechasers(long type, const long sitecriminality)
 			load[v]++;
 		}
 }
+void removeCreatureFromSquad(Creature &cr, int oldsqid);
 /* the next two functions force a chase sequence with a specific liberal */
 bool footchase(Creature &cr)
 {
+	extern squadst *activesquad;
+	extern short party_status;
+	extern long cursquadid;
 	long oldsqid = cr.squadid;
 	Creature *crp = &cr;
 	squadst *sq = new squadst;
@@ -1660,22 +1709,17 @@ bool footchase(Creature &cr)
 	if (ret) cr.squadid = oldsqid;
 	else if (oldsqid != -1)
 	{
-		activesquad = squad[getsquad(oldsqid)];
-		for (int i = 0; i < 6; i++)
-		{
-			if (activesquad->squad[i]) if (activesquad->squad[i] == crp)
-			{
-				for (int j = i + 1; j < 6; j++, i++) activesquad->squad[i] = activesquad->squad[j];
-				activesquad->squad[5] = NULL;
-				break;
-			}
-		}
+		removeCreatureFromSquad(*crp, oldsqid);
 	}
 	activesquad = oact;
 	return ret;
 }
 bool chasesequence(Creature &cr, Vehicle &v)
 {
+	extern squadst *activesquad;
+	extern short party_status;
+	extern long cursquadid;
+	extern Log gamelog;
 	long oldsqid = cr.squadid;
 	squadst *sq = new squadst;
 	sq->squad[0] = &cr;
@@ -1697,14 +1741,7 @@ bool chasesequence(Creature &cr, Vehicle &v)
 	}
 	else if (oldsqid != -1)
 	{
-		activesquad = squad[getsquad(oldsqid)];
-		for (int i = 0; i < 6; i++)
-			if (activesquad->squad[i]) if (activesquad->squad[i] == &cr)
-			{
-				for (int j = i + 1; j < 6; j++, i++) activesquad->squad[i] = activesquad->squad[j];
-				activesquad->squad[5] = NULL;
-				break;
-			}
+		removeCreatureFromSquad(cr, oldsqid);
 	}
 	activesquad = oact;
 	gamelog.nextMessage(); //Next message.

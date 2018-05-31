@@ -372,9 +372,9 @@ the offset from the top as always.
 */
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
-extern class Ledger ledger;
 void printfunds(int y, int offsetx, const char* prefix)
 {
+	extern class Ledger ledger;
 	printfunds(y, offsetx, prefix, ledger.get_funds());
 }
 #include "../locations/locationsPool.h"

@@ -99,9 +99,9 @@ const string tag_skill = "skill";
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
  vector<string> city_names;
- extern short lawList[LAWNUM];
 std::string gettitle(Creature &cr)
 {
+	extern short lawList[LAWNUM];
 	if (cr.align == -1)
 	{
 		if (cr.juice <= -50)
@@ -202,6 +202,7 @@ int getLawFromFlag(int type);
  string findingBugs;
 std::string getlawflag(int type)
 {
+	extern short lawList[LAWNUM];
 	if (getLawFlagStringFull.count(type)) {
 		return getLawFlagStringFull[type][lawList[getLawFromFlag(type)]];
 	}

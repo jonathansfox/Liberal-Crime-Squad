@@ -136,9 +136,9 @@ int stringtobool(string boolstr)
 	else if (boolstr == tag_false || boolstr == tag_0 || boolstr == tag_off || boolstr == tag_no) return 0;
 	else return -1;
 }
-extern map<string, short> getCreatureEnumFromString;
 short creaturetype_string_to_enum(const string& ctname)
 {
+	extern map<string, short> getCreatureEnumFromString;
 	if (getCreatureEnumFromString.count(ctname) > 0) {
 		return getCreatureEnumFromString[ctname];
 	}

@@ -1,73 +1,9 @@
 
 #include "../includes.h"
-const string CONST_activateB066 = "C++ Source Code Editor (with encoding)";
-const string CONST_activate071 = "Press Z to assign simple tasks in bulk.";
-const string CONST_activate070 = " T to sort people.";
-const string CONST_activate069 = "Press a Letter to Assign an Activity.";
-const string CONST_activate068 = "ACTIVITY";
-const string CONST_activate067 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_activate066 = "Activate Uninvolved Liberals";
-const string CONST_activate065 = "missingno";
-const string CONST_activate064 = "Press a Letter to Assign an Activity.  Press a Number to select an Activity.";
-const string CONST_activate063 = "BULK ACTIVITY";
-const string CONST_activate062 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
-const string CONST_activate060 = "standard_activities_and_data.txt";
-const string CONST_activate059 = "bulkActivityString.txt";
-const string CONST_activate058 = " will ";
-const string CONST_activate057 = "X - Nothing for Now";
-const string CONST_activate056 = "Enter - Confirm Selection";
-const string CONST_activate055 = "? - Help";
-const string CONST_activate054 = "E - Equip this Liberal";
-const string CONST_activate053 = "Z - Dispose of bodies";
-const string CONST_activate052 = "H - Heal Liberals";
-const string CONST_activate051 = "M - Move to the Free Clinic";
-const string CONST_activate050 = "L - Learn in the University District";
-const string CONST_activate049 = "I - Tend to a Conservative hostage";
-const string CONST_activate048 = "T - Teaching Other Liberals";
-const string CONST_activate047 = " be doing today?";
-const string CONST_activate046 = "Taking Action: What will ";
-const string CONST_activate045 = " yesterday. What now?";
-const string CONST_activate044 = " made $";
-const string CONST_activate043 = "Press a Letter to select a Conservative";
-const string CONST_activate042 = "Day";
-const string CONST_activate041 = "Days";
-const string CONST_activate040 = "DAYS IN CAPTIVITY";
-const string CONST_activate038 = " be watching over?";
-const string CONST_activate037 = "Which hostage will ";
-const string CONST_activate036 = "Press a Letter to select a Type of Clothing";
-const string CONST_activate035 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴";
-const string CONST_activate034 = " try to make?   (Note: Half Cost if you have cloth)";
-const string CONST_activate033 = "Which will ";
-const string CONST_activate032 = " has been brutally murdered by ";
-const string CONST_activate031 = " has been augmented with ";
-const string CONST_activate030 = " has been horribly disfigured";
-const string CONST_activate029 = "Press any key to return";
-const string CONST_activate028 = "Are you sure? (y/n)";
-const string CONST_activate027 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_activate026 = "Description";
-const string CONST_activate025 = "Chance at Success: ";
-const string CONST_activate024 = " +";
-const string CONST_activate023 = "Effect: ";
-const string CONST_activate022 = "Augmentation: ";
-const string CONST_activate021 = "Subject: ";
-const string CONST_activate020 = "Select an Augmentation";
-const string CONST_activate019 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_activate017 = "Press a Letter to select a Liberal";
-const string CONST_activate016 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�";
-const string CONST_activate015 = "Select a Liberal to perform experiments on";
-const string CONST_activate014 = "Age: ";
-const string CONST_activate013 = "Heart: ";
-const string CONST_activate012 = "Status:";
-const string CONST_activate011 = "Press a Letter to select a Profession";
-const string CONST_activate010 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴";
-const string CONST_activate009 = " try to meet and recruit today?";
-const string CONST_activate008 = "What type of person will ";
-const string CONST_activate007 = "6 - Other classes";
-const string CONST_activate006 = "Classes cost $60 a day. Study what?";
-const string CONST_activate002 = "OEM United States - Codepage 437";
-const string CONST_activate001 = "Open With...";
 
 const string blankString = "";
+const string CONST_activate066 = "Activate Uninvolved Liberals";
+const string CONST_activate067 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -155,10 +91,6 @@ void gotoEquipmentScreen(int loc);
 void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid);
 #include "../common/creaturePoolCreature.h"
 #include "../common/musicClass.h"
-extern Log gamelog;
-extern MusicClass music;
-extern short mode;
-extern bool ZEROMORAL;
 extern string spaceDashSpace;
 extern string closeParenthesis;
  vector<ActivityAndString> data_lessons;
@@ -166,13 +98,7 @@ extern string closeParenthesis;
  map<char, vector<ActivityAndString> > activate_menu_items;
  vector<RecruitData> recruitable_creatures;
 extern string spaceParanthesisDollar;
-extern short activesortingchoice[SORTINGCHOICENUM];
-extern short interface_pgup;
-extern short interface_pgdn;
-extern int selectedsiege;
-extern long cursquadid;
 extern string singleSpace;
-extern short lawList[LAWNUM];
 extern string commaSpace;
 //
 vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
@@ -204,6 +130,8 @@ Activity getDefaultActivityTeaching(Creature *cr) {
 int classlist = 0;
 void listclasses(Creature *cr)
 {
+	const string CONST_activate007 = "6 - Other classes";
+	const string CONST_activate006 = "Classes cost $60 a day. Study what?";
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 40, CONST_activate006);
 	for (int i = 0; i < 5; ++i)
@@ -239,6 +167,13 @@ char incrementChar(char c, int i) {
 }
 void recruitSelect(Creature &cr)
 {
+	const string CONST_activate011 = "Press a Letter to select a Profession";
+	const string CONST_activate010 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴";
+	const string CONST_activate009 = " try to meet and recruit today?";
+	const string CONST_activate008 = "What type of person will ";
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short lawList[LAWNUM];
 	// Number of recruitable creatures
 	int options = len(recruitable_creatures);
 	for (int i = 0; i < options; i++)
@@ -297,6 +232,9 @@ void recruitSelect(Creature &cr)
 }
 void show_victim_status(Creature *victim)
 {
+	const string CONST_activate014 = "Age: ";
+	const string CONST_activate013 = "Heart: ";
+	const string CONST_activate012 = "Status:";
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 55, CONST_activate012);
 	printhealthstat(*victim, 2, 66, true);
@@ -328,6 +266,26 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 {
+	const string CONST_activate032 = " has been brutally murdered by ";
+	const string CONST_activate031 = " has been augmented with ";
+	const string CONST_activate030 = " has been horribly disfigured";
+	const string CONST_activate029 = "Press any key to return";
+	const string CONST_activate028 = "Are you sure? (y/n)";
+	const string CONST_activate027 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+	const string CONST_activate026 = "Description";
+	const string CONST_activate025 = "Chance at Success: ";
+	const string CONST_activate024 = " +";
+	const string CONST_activate023 = "Effect: ";
+	const string CONST_activate022 = "Augmentation: ";
+	const string CONST_activate021 = "Subject: ";
+	const string CONST_activate020 = "Select an Augmentation";
+	const string CONST_activate019 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+	const string CONST_activate017 = "Press a Letter to select a Liberal";
+	const string CONST_activate016 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�";
+	const string CONST_activate015 = "Select a Liberal to perform experiments on";
+	extern Log gamelog;
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	Creature *victim = 0;
 	vector<Creature *> temppool = getLiberalsSharingLocation(cr);
 	int cur_step = 0, page = 0, c = 0, aug_c = 0;
@@ -589,6 +547,13 @@ int armor_makedifficulty(Armor& type, Creature *cr)
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr)
 {
+	const string CONST_activate036 = "Press a Letter to select a Type of Clothing";
+	const string CONST_activate035 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴";
+	const string CONST_activate034 = " try to make?   (Note: Half Cost if you have cloth)";
+	const string CONST_activate033 = "Which will ";
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short lawList[LAWNUM];
 	extern vector<ArmorType *> armortype;
 	vector<int> armortypei;
 	for (int a = 0; a < len(armortype); a++)
@@ -646,6 +611,7 @@ void select_makeclothing(Creature *cr)
 }
 vector<string> standard_activities_and_data;
 void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
+	extern bool ZEROMORAL;
 	int choice = choiceChar - '1';
 	switch (c) {
 	case 'a':
@@ -770,6 +736,15 @@ void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr)
 {
+	const string CONST_activate043 = "Press a Letter to select a Conservative";
+	const string CONST_activate042 = "Day";
+	const string CONST_activate041 = "Days";
+	const string CONST_activate040 = "DAYS IN CAPTIVITY";
+	const string CONST_activate038 = " be watching over?";
+	const string CONST_activate037 = "Which hostage will ";
+	extern short mode;
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	vector<Creature *> temppool = getHostagesSharingLocation(cr);
 	if (!len(temppool))return;
 	if (len(temppool) == 1)
@@ -838,6 +813,23 @@ void select_tendhostage(Creature *cr)
 }
 void activate(Creature *cr)
 {
+	const string CONST_activate058 = " will ";
+	const string CONST_activate057 = "X - Nothing for Now";
+	const string CONST_activate056 = "Enter - Confirm Selection";
+	const string CONST_activate055 = "? - Help";
+	const string CONST_activate054 = "E - Equip this Liberal";
+	const string CONST_activate053 = "Z - Dispose of bodies";
+	const string CONST_activate052 = "H - Heal Liberals";
+	const string CONST_activate051 = "M - Move to the Free Clinic";
+	const string CONST_activate050 = "L - Learn in the University District";
+	const string CONST_activate049 = "I - Tend to a Conservative hostage";
+	const string CONST_activate048 = "T - Teaching Other Liberals";
+	const string CONST_activate047 = " be doing today?";
+	const string CONST_activate046 = "Taking Action: What will ";
+	const string CONST_activate045 = " yesterday. What now?";
+	const string CONST_activate044 = " made $";
+	extern int selectedsiege;
+	extern long cursquadid;
 	int hostagecount = countHostagesSharingLocation(cr);
 	int state = 0, choice = 0;
 	char havedead = countDeadSharingLocation(cr);
@@ -1060,7 +1052,8 @@ Activity getDefaultActivityFundraising(Creature *cr) {
 	else return ACTIVITY_DONATIONS;
 }
 //Illegal Fundraising
-Activity getDefaultActivityIllegalFundraising(Creature *cr) {	
+Activity getDefaultActivityIllegalFundraising(Creature *cr) {
+	extern bool ZEROMORAL;
 	if (cr->get_skill(SKILL_COMPUTERS) > 1)
 		return ACTIVITY_CCFRAUD;
 	else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
@@ -1070,12 +1063,20 @@ Activity getDefaultActivityIllegalFundraising(Creature *cr) {
 }
 vector<string> bulkActivityString;
 const string mostlyendings = "mostlyendings\\";
+
+const string CONST_activate060 = "standard_activities_and_data.txt";
+const string CONST_activate059 = "bulkActivityString.txt";
 vector<file_and_text_collection> activate_text_file_collection = {
 customText(&bulkActivityString, mostlyendings + CONST_activate059),
 customText(&standard_activities_and_data, mostlyendings + CONST_activate060),
 };
 void activatebulk()
 {
+	const string CONST_activate064 = "Press a Letter to Assign an Activity.  Press a Number to select an Activity.";
+	const string CONST_activate063 = "BULK ACTIVITY";
+	const string CONST_activate062 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	vector<Creature *> temppool = activatable_liberals();
 	if (!len(temppool)) return;
 	int page = 0, selectedactivity = 0;
@@ -1164,6 +1165,7 @@ int recruitFindDifficulty(int creatureType)
 }
 char* recruitName(int creatureType)
 {
+	const string CONST_activate065 = "missingno";
 	for (int i = 0; i < len(recruitable_creatures); i++)
 		if (recruitable_creatures[i].type == creatureType)
 			return (char*)recruitable_creatures[i].name;
@@ -1172,6 +1174,15 @@ char* recruitName(int creatureType)
 /* base - activate the uninvolved */
 void activate()
 {
+	const string CONST_activate071 = "Press Z to assign simple tasks in bulk.";
+	const string CONST_activate070 = " T to sort people.";
+	const string CONST_activate069 = "Press a Letter to Assign an Activity.";
+	const string CONST_activate068 = "ACTIVITY";
+	extern MusicClass music;
+	extern short mode;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short activesortingchoice[SORTINGCHOICENUM];
 	vector<Creature *> temppool = activatable_liberals();
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE]);

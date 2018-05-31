@@ -126,9 +126,9 @@ struct pointerAndString {
 };
 //int mainSeven(bool xml_loaded_ok);
 void init_console();
-extern Log gamelog; //The gamelog.
 void initialize_debug_defines();
 void mainOne() {
+	extern Log gamelog; //The gamelog.
 	init_console(); // do this FIRST
 					//start curses
 	initscrAlt();
@@ -138,6 +138,7 @@ void mainOne() {
 	LocationsPool::getInstance();
 }
 void mainTwo() {
+	extern Log gamelog; //The gamelog.
 	time_t t = time(0);
 	struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
 	char datetime[41];
@@ -147,6 +148,7 @@ void mainTwo() {
 }
 #include "common/musicClass.h"
 void mainThree() {
+	extern char* PACKAGE_VERSION;
 	extern MusicClass music;
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 								 // set window title
@@ -164,6 +166,7 @@ string defaultMissingForMask;
 string defaultUnknownForMask;
 int oldMapMode = 0; // -1 if we're using the old map generation functions.
 void mainFour() {
+	extern Log gamelog; //The gamelog.
 	noechoAlt();
 	//initialize curses color
 	start_colorAlt();
@@ -200,6 +203,12 @@ void mainFour() {
 	//Setting initial game data...
 }
 void mainFive() {
+	// Laws start archconservative
+	extern bool SHITLAWS;
+	// Laws start elite liberal
+	extern bool PERFECTLAWS;
+	// Public opinion starts at 100% Liberal
+	extern bool REVOLUTIONNOW;
 	extern short activesortingchoice[];
 	extern short attitude[];
 	extern short public_interest[];
@@ -319,7 +328,6 @@ string fixLineSpecialCharacter(char * toFix) {
 	}
 	return str;
 }
-extern char artdir[];
 bool isThisNotComment(char* currentLine) {
 	return currentLine[0] != '#' && currentLine[1] != '#';
 }
@@ -327,6 +335,7 @@ bool isThisNotComment(char* currentLine) {
 // returns true if file loads, false if not.
 bool populate_from_txt(vector< vector<string> >& types, const string& fileName, const int dimension)
 {
+	extern char artdir[];
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
@@ -368,6 +377,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 }
 bool populate_from_txt(vector<string> & types, const string& fileName)
 {
+	extern char artdir[];
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
@@ -491,6 +501,9 @@ bool initialize_txt() {
 	return loaded;
 }
 void initialize_debug_defines() {
+	// inform player of activated debug codes
+	extern bool DISPLAYDEBUG;
+	extern char artdir[];
 	extern vector<pointerAndString> debug_defines;
 	string fileName = CONST_game011;
 	ifstream txtFile;
@@ -600,6 +613,7 @@ int main(int argc, char* argv[])
 }
 bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log)
 {
+	extern char artdir[];
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ //File is missing or not valid XML.

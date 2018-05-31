@@ -38,22 +38,6 @@ This file is part of Liberal Crime Squad.                                       
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int ustat_recruits;
-extern int ustat_kidnappings;
-extern int ustat_dead;
-extern int ustat_kills;
-extern int ustat_funds;
-extern int ustat_spent;
-extern int ustat_buys;
-extern int ustat_burns;
-extern int stat_buys;
-extern int stat_burns;
-extern int stat_kidnappings;
-extern int year;
-extern int stat_dead;
-extern int stat_kills;
-extern int stat_recruits;
 string univer;
 string numRecruit;
 string numMartyr;
@@ -89,9 +73,6 @@ struct highscorest
 };
 extern highscorest score[SCORENUM];
 extern string singleSpace;
-extern int yourscore;
-extern int month;
-extern char slogan[SLOGAN_LEN];
 MusicModes getEndingMusic(EndTypes e);
 string getEndingString(EndTypes e);
 struct  saveLoadChunk {
@@ -100,6 +81,21 @@ struct  saveLoadChunk {
 	size_t      ElementCount;
 	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
 };
+extern int ustat_recruits;
+extern int ustat_kidnappings;
+extern int ustat_dead;
+extern int ustat_kills;
+extern int ustat_funds;
+extern int ustat_spent;
+extern int ustat_buys;
+extern int ustat_burns;
+extern int stat_buys;
+extern int stat_burns;
+extern int stat_kidnappings;
+extern int year;
+extern int stat_dead;
+extern int stat_kills;
+extern int stat_recruits;
 vector<saveLoadChunk> highScoreSaveLoad = {
 	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
 	saveLoadChunk(&ustat_dead, sizeof(int), 1),
@@ -114,6 +110,7 @@ vector<saveLoadChunk> highScoreSaveLoad = {
 /* loads the high scores file */
 void loadhighscores()
 {
+	extern int lowestloadscoreversion;
 	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
 	//LOAD FILE
 	int loadversion;
@@ -135,6 +132,23 @@ void loadhighscores()
 /* displays the high score board */
 void viewhighscores(int musicoverride)
 {
+	extern int ustat_recruits;
+	extern int ustat_kidnappings;
+	extern int ustat_dead;
+	extern int ustat_kills;
+	extern int ustat_funds;
+	extern int ustat_spent;
+	extern int ustat_buys;
+	extern int ustat_burns;
+	extern int stat_buys;
+	extern int stat_burns;
+	extern int stat_kidnappings;
+	extern int year;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int stat_recruits;
+	extern MusicClass music;
+	extern int yourscore;
 	if (musicoverride != MUSIC_OFF) music.play(musicoverride);
 	loadhighscores();
 	short validsum = 0;
@@ -301,10 +315,29 @@ string getEndingString(EndTypes e) {
 		break;
 	}
 }
-extern class Ledger ledger;
 /* saves a new high score */
 void savehighscore(char endtype)
 {
+	extern int ustat_recruits;
+	extern int ustat_kidnappings;
+	extern int ustat_dead;
+	extern int ustat_kills;
+	extern int ustat_funds;
+	extern int ustat_spent;
+	extern int ustat_buys;
+	extern int ustat_burns;
+	extern int stat_buys;
+	extern int stat_burns;
+	extern int stat_kidnappings;
+	extern int year;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int stat_recruits;
+	extern int yourscore;
+	extern int month;
+	extern class Ledger ledger;
+	extern int version;
+	extern char slogan[SLOGAN_LEN];
 	loadhighscores();
 	//MERGE THE STATS
 	ustat_recruits += stat_recruits;

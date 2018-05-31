@@ -104,17 +104,6 @@ const string tag_skill = "skill";
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-extern Log gamelog;
-extern short mode;
-extern short sitetype;
-extern short sitealarm;
-extern short sitealienate;
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
-extern short sitealarmtimer;
-extern squadst *activesquad;
  vector<string> blew_stealth_check;
 #include "../customMaps.h"
  const string stealth = "stealth\\";
@@ -123,11 +112,13 @@ extern squadst *activesquad;
  };
  extern short cursite;
  extern short fieldskillrate;
- extern Creature encounter[ENCMAX];
- extern short lawList[LAWNUM];
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude, int difficulty)
 {
+	extern Log gamelog;
+	extern short sitealarm;
+	extern Creature encounter[ENCMAX];
+	extern squadst *activesquad;
 	if (sitealarm) return;
 	char sneak = 0;
 	int topi = 0;
@@ -155,6 +146,11 @@ void noticecheck(int exclude, int difficulty)
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake)
 {
+	extern Log gamelog;
+	extern short mode;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern Creature encounter[ENCMAX];
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite))return 0;
 	char alienate = 0;
 	
@@ -206,6 +202,7 @@ char alienationcheck(char mistake)
 }
 char weapon_in_character(const string& wtype, const string& atype)
 {
+	extern short lawList[LAWNUM];
 	//// TODO Move to XML
 	if (atype == tag_ARMOR_LABCOAT && wtype == tag_WEAPON_SYRINGE)
 		return CREATURE_SCIENTIST_LABTECH;
@@ -280,6 +277,11 @@ char disguisesite(long type)
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const Creature &cr)
 {
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	short type = -1;
 	if (cursite >= 0)type = LocationsPool::getInstance().getLocationType(cursite);
 	char uniformed = 0;
@@ -607,6 +609,16 @@ char weaponcheck(const Creature &cr, bool metaldetect)
 /* checks if conservatives see through your disguise */
 void disguisecheck(int timer)
 {
+	extern Log gamelog;
+	extern short sitetype;
+	extern short sitealarm;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarmtimer;
+	extern squadst *activesquad;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
 	int weapon = 0, partysize = squadsize(activesquad);
 	
 	bool forcecheck = false;

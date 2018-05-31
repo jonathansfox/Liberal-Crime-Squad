@@ -123,13 +123,7 @@ const string tag_skill = "skill";
 
 #include "../common/creaturePoolCreature.h"
 
-extern Log gamelog;
-extern bool multipleCityMode;
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int year;
-extern char endgamestate;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 
 string theLCS;
@@ -212,27 +206,10 @@ string c_hardMode;
 
 extern string spaceDashSpace;
 
-extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-extern bool nocourtpurge;
-extern bool stalinmode;
-extern short lawList[LAWNUM];
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short court[COURTNUM];
-extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-extern short wincondition;
-extern short fieldskillrate;
-extern char lcityname[CITY_NAMELEN];
+extern UniqueCreatures uniqueCreatures;
 extern string singleSpace;
-extern int day;
-extern int month;
-extern vector<ClipType *> cliptype;
-extern vector<WeaponType *> weapontype;
 void newVehicle(Vehicle *startcar);
 extern string singleDot;
-extern long cursquadid;
-extern UniqueCreatures uniqueCreatures;
-extern short attitude[VIEWNUM];
 vector<string> founderQuestions;
 
 #include "../customMaps.h"
@@ -365,6 +342,22 @@ int getSpecialWoundFromString(const string& s) {
 /* select new game options */
 void setup_newgame()
 {
+	// Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
+	extern bool ALLOWSTALIN;
+	extern char endgamestate;
+	extern short wincondition;
+	extern short fieldskillrate;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool nocourtpurge;
+	extern bool stalinmode;
+	extern bool multipleCityMode;
+	extern MusicClass music;
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern short attitude[VIEWNUM];
 	//TODO IsaacG Get rid of these while(true) break; loops
 	music.play(MUSIC_NEWGAME);
 	bool classicmode = false;
@@ -642,11 +635,31 @@ struct Question {
 	vector<Choice> choices;
 };
 const int MAX_CHOICES = 10;
-extern class Ledger ledger;
 void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
+#include "../recruits.h"
 /* creates your founder */
 void makecharacter()
 {
+	// Make the founder blind
+	extern bool BLIND;
+	// Make the founder unable to walk
+	extern bool NOWALK;
+	// Make the founder have no face
+	extern bool NOFACE;
+	// Make the founder have a severely injured spine
+	extern bool SPINE;
+	// Make the founder have severe internal damage
+	extern bool INTERNAL;
+	extern Log gamelog;
+	extern bool multipleCityMode;
+	extern int year;
+	extern int day;
+	extern int month;
+	extern class Ledger ledger;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern char lcityname[CITY_NAMELEN];
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
 	Creature *newcr = new Creature;
 	newcr->align = ALIGN_LIBERAL;
 	newcr->set_attribute(ATTRIBUTE_HEART, 0);
@@ -807,7 +820,6 @@ void makecharacter()
 	bool makelawyer = false;
 	bool gaylawyer = false;
 	Vehicle * startcar = NULL;
-#include "../recruits.h"
 	char recruits = RECRUITS_NONE;
 	char base = SITE_RESIDENTIAL_SHELTER;
 	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
@@ -1285,7 +1297,6 @@ void makecharacter()
 	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	addCreature(newcr);
 	make_world(hasmaps);
-	//extern LocationsPool LocationPool;
 	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
 	uniqueCreatures.initialize();
 }

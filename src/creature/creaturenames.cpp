@@ -1,15 +1,11 @@
 
 #include "../includes.h"
-const string CONST_creaturenamesB010 = "C++ Source Code Editor (with encoding)";
-const string CONST_creaturenames009 = "Errol";
 const string CONST_creaturenames008 = "archconservative_last_names.txt";
 const string CONST_creaturenames007 = "regular_last_names.txt";
 const string CONST_creaturenames006 = "great_white_male_patriarch_first_names.txt";
 const string CONST_creaturenames005 = "gender_neutral_first_names.txt";
 const string CONST_creaturenames004 = "female_first_names.txt";
 const string CONST_creaturenames003 = "male_first_names.txt";
-const string CONST_creaturenames002 = "OEM United States - Codepage 437";
-const string CONST_creaturenames001 = "Open With...";
 
 const string blankString = "";
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
@@ -98,6 +94,7 @@ string lastname(bool archconservative);
 	/* gets a random first name */
 	void firstname(char *str, char gender)
 	{
+		const string CONST_creaturenames009 = "Errol";
 		strcpy(str, blankString.c_str());
 		int roll, nametable;
 		// If we don't care if the name is male or female, pick one randomly

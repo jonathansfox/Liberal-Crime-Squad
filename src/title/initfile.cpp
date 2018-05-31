@@ -27,12 +27,11 @@ This file is part of Liberal Crime Squad.
 #include "../common/consolesupport.h"
 // for void begin_cleartype_fix();
 #include "../title/titlescreen.h"
-extern short interface_pgup;
-extern short interface_pgdn;
-void setautosaveoption(bool shouldautosave);
-extern bool fixcleartype;
 void setconfigoption(std::string name, std::string value)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern bool fixcleartype;
    transform(name.begin(), name.end(), name.begin(), ::tolower);
    transform(value.begin(), value.end(), value.begin(), ::tolower);
    if(name == tag_pagekeys)

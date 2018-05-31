@@ -104,26 +104,13 @@ std::string getview(short view, bool shortname);
 #include "../common/creaturePoolHeader.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern Log gamelog;
 void clearRentExemptions();
 void publishSpecialEditions(char &clearformess);
 void manageGrafiti();
 
-#include "../common/musicClass.h"
-extern MusicClass music;
-extern int year;
-extern char endgamestate;
 extern string singleDot;
-extern char newscherrybusted;
-extern int day;
-extern int month;
-extern short lawList[LAWNUM];
-extern char disbanding;
-extern short attitude[VIEWNUM];
-extern short public_interest[VIEWNUM];
-extern short background_liberal_influence[VIEWNUM];
-extern bool stalinmode;
-extern int disbandtime;
+
+#include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
 void updateworld_laws(short *law, short *oldlaw)
 {  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
@@ -185,10 +172,28 @@ void updateworld_laws(short *law, short *oldlaw)
 				&&LocationsPool::getInstance().getRentingType(l) < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
 				LocationsPool::getInstance().initSite(l);
 }
-extern class Ledger ledger;
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
 {
+	// Show polls when you can't see things
+	extern bool SHOWWAIT;
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern int year;
+	extern char endgamestate;
+	extern char newscherrybusted;
+	extern int day;
+	extern int month;
+	extern char disbanding;
+	extern bool stalinmode;
+	extern int disbandtime;
+	extern class Ledger ledger;
+	extern short lawList[LAWNUM];
+	extern short attitude[VIEWNUM];
+	extern short public_interest[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
 	short oldlaw[LAWNUM];
 	memmove(oldlaw, lawList, sizeof(short)*LAWNUM);
 	int l, p;

@@ -1,12 +1,4 @@
 #include "../includes.h"
-const string CONST_baseactions012 = "be a passenger.";
-const string CONST_baseactions011 = "drive it.";
-const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
-const string CONST_baseactions009 = " in Spot ";
-const string CONST_baseactions008 = "Choose squad member to replace ";
-const string CONST_baseactions007 = "Choose squad member to move";
-const string CONST_baseactions006 = "                                                                                          ";
-const string CONST_baseactions005 = "What is your new slogan?";
 const string CONST_baseactions004 = "vehicleParagraph.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -63,18 +55,9 @@ int squadsize(const squadst *st);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
-extern bool multipleCityMode;
-//extern MusicClass music;
+extern string singleSpace;
 string enter_done;
 string spaceDashSpace;
- extern char slogan[SLOGAN_LEN];
- extern short party_status;
- extern squadst *activesquad;
- extern short interface_pgup;
- extern short interface_pgdn;
- extern int selectedsiege;
- extern short lawList[LAWNUM];
- extern string singleSpace;
  string chooseALiberalTo;
  string string_sleeper;
  vector<string> vehicleParagraph;
@@ -205,9 +188,12 @@ void burnflag()
 	}
 }
 /* base - new slogan */
-extern vector<string> default_slogans;
 void getslogan()
 {
+	const string CONST_baseactions006 = "                                                                                          ";
+	const string CONST_baseactions005 = "What is your new slogan?";
+	extern char slogan[SLOGAN_LEN];
+	extern vector<string> default_slogans;
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(16, 0, CONST_baseactions005);
 	mvaddstrAlt(17, 0, CONST_baseactions006); // 80 spaces
@@ -216,6 +202,11 @@ void getslogan()
 /* base - reorder party */
 void orderparty()
 {
+	const string CONST_baseactions009 = " in Spot ";
+	const string CONST_baseactions008 = "Choose squad member to replace ";
+	const string CONST_baseactions007 = "Choose squad member to move";
+	extern short party_status;
+	extern squadst *activesquad;
 	party_status = -1;
 	int partysize = squadsize(activesquad);
 	if (partysize <= 1) return;
@@ -244,6 +235,12 @@ string getCarFullname(const int l);
 /* base - assign a vehicle to this squad */
 void setvehicles()
 {
+	const string CONST_baseactions012 = "be a passenger.";
+	const string CONST_baseactions011 = "drive it.";
+	const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
+	extern squadst *activesquad;
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	if (!activesquad) return;
 	int page = 0;
 	while (true)

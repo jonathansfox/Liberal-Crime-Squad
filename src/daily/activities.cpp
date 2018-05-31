@@ -1,194 +1,12 @@
 
 #include "../includes.h"
-const string CONST_activitiesB187 = "C++ Source Code Editor (with encoding)";
-const string CONST_activities204 = " was unable to get a wheelchair.  Maybe tomorrow...";
-const string CONST_activities203 = " has procured a wheelchair.";
-const string CONST_activities202 = " has been spotted by a passerby!";
-const string CONST_activities201 = "If they were here, I'd have found them by now.";
-const string CONST_activities200 = "I don't think they're in here...";
-const string CONST_activities199 = "Are they even in here?";
-const string CONST_activities198 = ": <rummaging> ";
-const string CONST_activities197 = " found the keys ";
-const string CONST_activities196 = "Holy shit!  ";
-const string CONST_activities195 = "Holy [Car Keys]!  ";
-const string CONST_activities194 = "under the back seat!";
-const string CONST_activities193 = "under the front seat!";
-const string CONST_activities192 = "in the glove compartment!";
-const string CONST_activities191 = "above the pull-down sunblock thingy!";
-const string CONST_activities190 = "in the ignition.  Damn.";
-const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
-const string CONST_activities188 = " hotwires the car!";
-const string CONST_activities187 = "Enter - The Viper has finally deterred ";
-const string CONST_activities186 = "Enter - Call it a day.";
-const string CONST_activities185 = "B - Desperately search for keys.";
-const string CONST_activities184 = "A - Hotwire the car.";
-const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
-const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
-const string CONST_activities181 = ":   ";
-const string CONST_activities180 = "THE VIPER";
-const string CONST_activities179 = " is behind the wheel of a ";
-const string CONST_activities178 = "Adventures in Liberal Car Theft";
-const string CONST_activities176 = "An alarm suddenly starts blaring!";
-const string CONST_activities175 = " but it is still somewhat intact.";
-const string CONST_activities174 = " with a ";
-const string CONST_activities173 = " cracks the window";
-const string CONST_activities171 = " smashes the window";
-const string CONST_activities170 = " fiddles with the lock with no luck.";
-const string CONST_activities169 = " jimmies the car door open.";
-const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
-const string CONST_activities167 = " is deterred.";
-const string CONST_activities166 = "Enter - The Viper?   ";
-const string CONST_activities164 = "B - Break the window.";
-const string CONST_activities163 = "A - Pick the lock.";
-const string CONST_activities162 = " stands by the ";
-const string CONST_activities161 = "THIS IS THE VIPER!   STAND AWAY!";
-const string CONST_activities160 = "THE VIPER:   ";
-const string CONST_activities158 = "STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
-const string CONST_activities153 = "A - Approach the driver's side door.";
-const string CONST_activities152 = " looks from a distance at an empty ";
-const string CONST_activities150 = " found a ";
-const string CONST_activities149 = " but did find a ";
-const string CONST_activities148 = " was unable to find a ";
-const string CONST_activities147 = " looks around for an accessible vehicle...";
-const string CONST_activities145 = "Press a Letter to select a Type of Car";
-const string CONST_activities144 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴DIFFICULTY TO FIND UNATTENDED컴";
-const string CONST_activities143 = " try to find and steal today?";
-const string CONST_activities142 = "What type of car will ";
-const string CONST_activities141 = "'s body";
-const string CONST_activities140 = "burying ";
-const string CONST_activities139 = "broken!";
-const string CONST_activities138 = "'s last unbroken rib is ";
-const string CONST_activities137 = "'s rib is ";
-const string CONST_activities136 = "One of ";
-const string CONST_activities135 = "'s ribs are ";
-const string CONST_activities134 = " of ";
-const string CONST_activities133 = "All ";
-const string CONST_activities132 = "'s tooth has been pulled out with pliers!";
-const string CONST_activities131 = "'s teeth have been smashed out on the curb.";
-const string CONST_activities130 = "'s neck has been broken!";
-const string CONST_activities129 = "'s upper spine has been broken!";
-const string CONST_activities128 = "'s lower spine has been broken!";
-const string CONST_activities127 = " is severely beaten before the mob is broken up.";
-const string CONST_activities126 = " out of everyone who got close!";
-const string CONST_activities125 = "shit";
-const string CONST_activities124 = "[tar]";
-const string CONST_activities123 = " beat the ";
-const string CONST_activities122 = "The mob scatters!";
-const string CONST_activities121 = "!";
-const string CONST_activities120 = " brandishes the ";
-const string CONST_activities119 = " is cornered by a mob of angry rednecks.";
-const string CONST_activities118 = "causing trouble";
-const string CONST_activities117 = "set up a mock sweatshop in the middle of the mall!";
-const string CONST_activities116 = "burned a corporate symbol and denounced capitalism!";
-const string CONST_activities115 = "distributed fliers graphically illustrating CIA torture!";
-const string CONST_activities114 = "distributed fliers graphically illustrating executions!";
-const string CONST_activities113 = "squirted business people with fake polluted water!";
-const string CONST_activities112 = "dressed up and pretended to be a radioactive mutant!";
-const string CONST_activities111 = "dressed up and pretended to be radioactive mutants!";
-const string CONST_activities110 = "gone downtown and reenacted a police beating!";
-const string CONST_activities109 = "posted horrifying dead abortion doctor pictures downtown!";
-const string CONST_activities108 = "disrupted a traditional wedding at a church!";
-const string CONST_activities107 = "run around uptown splashing paint on fur coats!";
-const string CONST_activities106 = " has ";
-const string CONST_activities105 = "Your Activists have ";
-const string CONST_activities104 = " can.";
-const string CONST_activities103 = " has learned as much as ";
-const string CONST_activities102 = " was nearly caught in a prostitution sting.";
-const string CONST_activities101 = " has been arrested in a prostitution sting.";
-const string CONST_activities100 = " has begun work on a large mural about ";
-const string CONST_activities099 = " works through the night on a large mural.";
-const string CONST_activities098 = " mural about ";
-const string CONST_activities097 = " beautiful";
-const string CONST_activities096 = " has completed a";
-const string CONST_activities095 = " while spraying an LCS tag!";
-const string CONST_activities094 = " while working on the mural!";
-const string CONST_activities093 = " was spotted by the police";
-const string CONST_activities092 = " needs a spraycan equipped to do graffiti.";
-const string CONST_activities091 = " bought spraypaint for graffiti.";
-const string CONST_activities090 = " from ";
-const string CONST_activities089 = " grabbed a ";
-const string CONST_activities088 = " a ";
-const string CONST_activities086 = "Your hackers have ";
-const string CONST_activities084 = "Your Hackers have ";
-const string CONST_activities083 = "selling brownies";
-const string CONST_activities082 = "playing music";
-const string CONST_activities081 = "sketching portraits";
-const string CONST_activities080 = "selling shirts";
-const string CONST_activities079 = "soliciting donations";
-const string CONST_activities077 = " is accosted by police while ";
-const string CONST_activities076 = "wanted amnesty for illegal immigrants";
-const string CONST_activities075 = "condemned unnecessary immigration regulations";
-const string CONST_activities074 = "believed in legalizing marijuana";
-const string CONST_activities073 = "supported keeping marijuana legal";
-const string CONST_activities072 = "% ";
-const string CONST_activities071 = "??";
-const string CONST_activities070 = "None     ";
-const string CONST_activities069 = "Low      ";
-const string CONST_activities068 = "Moderate ";
-const string CONST_activities067 = "High     ";
-const string CONST_activities066 = "Very High";
-const string CONST_activities063 = "Unknown  ";
-const string CONST_activities062 = "........................................................";
-const string CONST_activities061 = "                                                                                ";
-const string CONST_activities060 = "    ";
-const string CONST_activities059 = "Enter - Done";
-const string CONST_activities058 = " Liberal percentage points.";
-const string CONST_activities057 = "Results are +/- ";
-const string CONST_activities056 = "XX% Issue 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴?Public Interest";
-const string CONST_activities055 = "Additional notable findings:";
-const string CONST_activities054 = "The public is not concerned with politics right now.";
-const string CONST_activities053 = "Liberal Media Bias.";
-const string CONST_activities052 = "Conservative Media Bias.";
-const string CONST_activities051 = "the LCS terrorists.";
-const string CONST_activities050 = "the Liberal Crime Squad.";
-const string CONST_activities049 = "activist political groups.";
-const string CONST_activities048 = "political terrorism.";
-const string CONST_activities047 = "taking strong action.";
-const string CONST_activities046 = "The people are most concerned about ";
-const string CONST_activities045 = "President ";
-const string CONST_activities044 = "% had a favorable opinion of ";
-const string CONST_activities043 = "Survey of Public Opinion, According to Recent Polls";
-const string CONST_activities042 = " wasted the materials for a";
-const string CONST_activities041 = "th-rate";
-const string CONST_activities040 = "fourth-rate";
-const string CONST_activities039 = "third-rate";
-const string CONST_activities038 = "second-rate";
-const string CONST_activities037 = "first-rate";
-const string CONST_activities036 = " has made a ";
-const string CONST_activities035 = " cannot find enough cloth to reduce clothing costs.";
-const string CONST_activities034 = " cannot afford material for clothing.";
-const string CONST_activities033 = " ruined";
-const string CONST_activities032 = " repairs what little can be fixed of ";
-const string CONST_activities031 = " finds there is no hope of repairing ";
-const string CONST_activities030 = " repairs ";
-const string CONST_activities029 = " is working to repair ";
-const string CONST_activities028 = " cleans ";
-const string CONST_activities027 = " disposes of ";
-const string CONST_activities026 = " peruses some sewing magazines.";
-const string CONST_activities025 = " cleans the kitchen.";
-const string CONST_activities024 = " reorganizes the armor closet.";
-const string CONST_activities023 = " tidies up the safehouse.";
-const string CONST_activities022 = "cant_find_keys_no_free_speech.txt";
-const string CONST_activities021 = "cant_find_keys.txt";
-const string CONST_activities020 = "almost_hotwire_car.txt";
-const string CONST_activities019 = "cant_hotwire_car.txt";
-const string CONST_activities018 = "gets_nervous.txt";
-const string CONST_activities017 = "car_wont_start.txt";
-const string CONST_activities016 = "lose_hand_to_hand.txt";
-const string CONST_activities015 = "win_hand_to_hand.txt";
-const string CONST_activities014 = "enemy_website.txt";
-const string CONST_activities013 = "words_meaning_hacked.txt";
-const string CONST_activities012 = "quality_50.txt";
-const string CONST_activities011 = "quality_35.txt";
-const string CONST_activities010 = "quality_20.txt";
-const string CONST_activities009 = "quality_0.txt";
-const string CONST_activities005 = "OEM United States - Codepage 437";
-const string CONST_activities004 = "Open With...";
 
 const string tag_POLICECAR = "POLICECAR";
 const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 const string tag_WEAPON = "WEAPON";
 const string blankString = "";
+const string CONST_activities106 = " has ";
+const string CONST_activities121 = "!";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -280,31 +98,12 @@ void makeloot(Creature &cr,vector<Item *> &loot);
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern vector<Creature *> pool;
-extern Log gamelog;
-extern char newscherrybusted;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern short mode;
-extern short exec[EXECNUM];
-extern char endgamestate;
+extern string singleDot;
 extern string spaceDashSpace;
 extern string singleDot;
-extern vector<squadst *> squad;
 extern string singleSpace;
-extern short attitude[VIEWNUM];
-extern short public_interest[VIEWNUM];
-extern short lawList[LAWNUM];
-extern short interface_pgup;
-extern short interface_pgdn;
-extern vector<newsstoryst *> newsstory;
-extern newsstoryst *sitestory;
-extern chaseseqst chaseseq;
-extern short background_liberal_influence[VIEWNUM];
-extern string singleDot;
-extern short fieldskillrate;
  vector<string> quality_0;
  vector<string> quality_20;
  vector<string> quality_35;
@@ -322,6 +121,21 @@ extern short fieldskillrate;
  map< Views, stringConnectedToView > pollingData;
  map< Activity, CreatureSkill> trainingActivity;
  const string activities = "activities\\";
+
+ const string CONST_activities022 = "cant_find_keys_no_free_speech.txt";
+ const string CONST_activities021 = "cant_find_keys.txt";
+ const string CONST_activities020 = "almost_hotwire_car.txt";
+ const string CONST_activities019 = "cant_hotwire_car.txt";
+ const string CONST_activities018 = "gets_nervous.txt";
+ const string CONST_activities017 = "car_wont_start.txt";
+ const string CONST_activities016 = "lose_hand_to_hand.txt";
+ const string CONST_activities015 = "win_hand_to_hand.txt";
+ const string CONST_activities014 = "enemy_website.txt";
+ const string CONST_activities013 = "words_meaning_hacked.txt";
+ const string CONST_activities012 = "quality_50.txt";
+ const string CONST_activities011 = "quality_35.txt";
+ const string CONST_activities010 = "quality_20.txt";
+ const string CONST_activities009 = "quality_0.txt";
  vector<file_and_text_collection> activities_text_file_collection = {
 	 /*activities.cpp*/
 	 customText(&quality_0, activities + CONST_activities009),
@@ -385,6 +199,10 @@ struct stringAndMaybeTrain {
 	vector<trainItem> trainingItem;
 	stringAndMaybeTrain(const string& str_, const vector<trainItem>& trainingItem_) : str(str_), trainingItem(trainingItem_) {}
 };
+const string CONST_activities026 = " peruses some sewing magazines.";
+const string CONST_activities025 = " cleans the kitchen.";
+const string CONST_activities024 = " reorganizes the armor closet.";
+const string CONST_activities023 = " tidies up the safehouse.";
 vector<stringAndMaybeTrain> cleanSafeHouse = {
 	stringAndMaybeTrain(CONST_activities023, vector<trainItem>({})),
 	stringAndMaybeTrain(CONST_activities024, vector<trainItem>({})),
@@ -395,6 +213,15 @@ void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > 
 /* armor repair */
 void repairarmor(Creature &cr, char &clearformess)
 {
+	const string CONST_activities033 = " ruined";
+	const string CONST_activities032 = " repairs what little can be fixed of ";
+	const string CONST_activities031 = " finds there is no hope of repairing ";
+	const string CONST_activities030 = " repairs ";
+	const string CONST_activities029 = " is working to repair ";
+	const string CONST_activities028 = " cleans ";
+	const string CONST_activities027 = " disposes of ";
+	extern Log gamelog;
+	extern vector<squadst *> squad;
 	Armor *armor = NULL;
 	Item *pile = NULL;
 	vector<Item *> *pilelist = NULL;
@@ -538,10 +365,21 @@ void repairarmor(Creature &cr, char &clearformess)
 }
 void addLootToLoc(int loc, Item* it);
 char tryFindCloth(int cursite);
-extern class Ledger ledger;
 /* armor manufacture */
 void makearmor(Creature &cr, char &clearformess)
 {
+	const string CONST_activities042 = " wasted the materials for a";
+	const string CONST_activities041 = "th-rate";
+	const string CONST_activities040 = "fourth-rate";
+	const string CONST_activities039 = "third-rate";
+	const string CONST_activities038 = "second-rate";
+	const string CONST_activities037 = "first-rate";
+	const string CONST_activities036 = " has made a ";
+	const string CONST_activities035 = " cannot find enough cloth to reduce clothing costs.";
+	const string CONST_activities034 = " cannot afford material for clothing.";
+	extern Log gamelog;
+	extern class Ledger ledger;
+	extern vector<squadst *> squad;
 	extern vector<ArmorType *> armortype;
 	int at = cr.activity.arg;
 	int cost = armortype[at]->get_make_price();
@@ -628,6 +466,53 @@ void makearmor(Creature &cr, char &clearformess)
 			 map<short, string> supportsLiberalLaw;
 void survey(Creature *cr)
 {
+	const string CONST_activities076 = "wanted amnesty for illegal immigrants";
+	const string CONST_activities075 = "condemned unnecessary immigration regulations";
+	const string CONST_activities074 = "believed in legalizing marijuana";
+	const string CONST_activities073 = "supported keeping marijuana legal";
+	const string CONST_activities072 = "% ";
+	const string CONST_activities071 = "??";
+	const string CONST_activities070 = "None     ";
+	const string CONST_activities069 = "Low      ";
+	const string CONST_activities068 = "Moderate ";
+	const string CONST_activities067 = "High     ";
+	const string CONST_activities066 = "Very High";
+	const string CONST_activities063 = "Unknown  ";
+	const string CONST_activities062 = "........................................................";
+	const string CONST_activities061 = "                                                                                ";
+	const string CONST_activities060 = "    ";
+	const string CONST_activities059 = "Enter - Done";
+	const string CONST_activities058 = " Liberal percentage points.";
+	const string CONST_activities057 = "Results are +/- ";
+	const string CONST_activities056 = "XX% Issue 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴?Public Interest";
+	const string CONST_activities055 = "Additional notable findings:";
+	const string CONST_activities054 = "The public is not concerned with politics right now.";
+	const string CONST_activities053 = "Liberal Media Bias.";
+	const string CONST_activities052 = "Conservative Media Bias.";
+	const string CONST_activities051 = "the LCS terrorists.";
+	const string CONST_activities050 = "the Liberal Crime Squad.";
+	const string CONST_activities049 = "activist political groups.";
+	const string CONST_activities048 = "political terrorism.";
+	const string CONST_activities047 = "taking strong action.";
+	const string CONST_activities046 = "The people are most concerned about ";
+	const string CONST_activities045 = "President ";
+	const string CONST_activities044 = "% had a favorable opinion of ";
+	const string CONST_activities043 = "Survey of Public Opinion, According to Recent Polls";
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern Log gamelog;
+	extern char newscherrybusted;
+	extern char endgamestate;
+	extern newsstoryst *sitestory;
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
+	extern short attitude[VIEWNUM];
+	extern short public_interest[VIEWNUM];
+	extern short lawList[LAWNUM];
 	music.play(MUSIC_ELECTIONS);
 	static const char SURVEY_PAGE_SIZE = 14;
 	int creatureskill = cr->skill_roll(SKILL_COMPUTERS);
@@ -807,16 +692,23 @@ void survey(Creature *cr)
 	}
 }
 // Police accost your liberal!
-void attemptarrest(Creature & liberal, const char* string, int clearformess)
+void attemptarrest(Creature & liberal, const char* str, int clearformess)
 {
-	if (string)
+
+	const string CONST_activities077 = " is accosted by police while ";
+
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern chaseseqst chaseseq;
+	extern vector<newsstoryst *> newsstory;
+	if (str)
 	{
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8,  1, liberal.name, gamelog);
 		addstrAlt(CONST_activities077, gamelog);
-		addstrAlt(string, gamelog);
+		addstrAlt(str, gamelog);
 		addstrAlt(CONST_activities121, gamelog);
 		gamelog.nextMessage();
  	pressAnyKey();
@@ -838,6 +730,8 @@ void attemptarrest(Creature & liberal, const char* string, int clearformess)
 // While galavanting in public, your liberals may be ambushed by police
 int checkforarrest(Creature & liberal, const char* string, int clearformess)
 {
+	extern newsstoryst *sitestory;
+	extern vector<newsstoryst *> newsstory;
 	bool arrest = false;
 	if (!liberal.animalgloss && liberal.is_naked() && LCSrandom(2))
 	{
@@ -868,7 +762,10 @@ int checkforarrest(Creature & liberal, const char* string, int clearformess)
 /* misc activation related things */
 // *JDSRETURN*
 void funds_and_trouble(char &clearformess)
-{  //ACTIVITIES FOR INDIVIDUALS
+{
+	extern short background_liberal_influence[VIEWNUM];
+	//ACTIVITIES FOR INDIVIDUALS
+	extern vector<Creature *> pool;
 	vector<Creature *> trouble, hack, bury, solicit, tshirts, art, music, graffiti, brownies, prostitutes, teachers, students;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -994,6 +891,8 @@ void funds_and_trouble(char &clearformess)
 }
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess)
 {  //SOLICITORS
+	const string CONST_activities079 = "soliciting donations";
+	extern class Ledger ledger;
 	long total_income = 0;
 	for (int s = 0; s < len(solicit); s++)
 	{
@@ -1016,6 +915,9 @@ void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess)
 }
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess)
 {
+	const string CONST_activities080 = "selling shirts";
+	extern class Ledger ledger;
+	extern short background_liberal_influence[VIEWNUM];
 	for (int s = 0; s < len(tshirts); s++)
 	{
 		if (!checkforarrest(*tshirts[s], CONST_activities080.c_str(), clearformess))
@@ -1038,6 +940,9 @@ void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess)
 }
 void doActivitySellArt(vector<Creature *> &art, char &clearformess)
 {
+	const string CONST_activities081 = "sketching portraits";
+	extern class Ledger ledger;
+	extern short background_liberal_influence[VIEWNUM];
 	for (int s = 0; s < len(art); s++)
 	{
 		if (!checkforarrest(*art[s], CONST_activities081.c_str(), clearformess))
@@ -1058,6 +963,9 @@ void doActivitySellArt(vector<Creature *> &art, char &clearformess)
 }
 void doActivitySellMusic(vector<Creature *> &music, char &clearformess)
 {
+	const string CONST_activities082 = "playing music";
+	extern class Ledger ledger;
+	extern short background_liberal_influence[VIEWNUM];
 	for (int s = 0; s < len(music); s++)
 	{
 		if (!checkforarrest(*music[s], CONST_activities082.c_str(), clearformess))
@@ -1081,6 +989,11 @@ void doActivitySellMusic(vector<Creature *> &music, char &clearformess)
 }
 void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
 {
+	const string CONST_activities083 = "selling brownies";
+	extern newsstoryst *sitestory;
+	extern class Ledger ledger;
+	extern short lawList[LAWNUM];
+	extern vector<newsstoryst *> newsstory;
 	for (int s = 0; s < len(brownies); s++)
 	{
 		//Check for police search
@@ -1120,6 +1033,11 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
 #include "../items/lootTypePoolItem.h"
 void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 {
+	const string CONST_activities088 = " a ";
+	const string CONST_activities086 = "Your hackers have ";
+	const string CONST_activities084 = "Your Hackers have ";
+	extern Log gamelog;
+	extern class Ledger ledger;
 	if (len(hack))
 	{
 		vector<Creature *> cc,/*web,ddos,*/truehack;
@@ -1244,6 +1162,24 @@ string gimmeASprayCan(Creature* graffiti);
 void buyMeASprayCan(Creature* graffiti);
 void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 {
+	const string CONST_activities100 = " has begun work on a large mural about ";
+	const string CONST_activities099 = " works through the night on a large mural.";
+	const string CONST_activities098 = " mural about ";
+	const string CONST_activities097 = " beautiful";
+	const string CONST_activities096 = " has completed a";
+	const string CONST_activities095 = " while spraying an LCS tag!";
+	const string CONST_activities094 = " while working on the mural!";
+	const string CONST_activities093 = " was spotted by the police";
+	const string CONST_activities092 = " needs a spraycan equipped to do graffiti.";
+	const string CONST_activities091 = " bought spraypaint for graffiti.";
+	const string CONST_activities090 = " from ";
+	const string CONST_activities089 = " grabbed a ";
+	extern newsstoryst *sitestory;
+	extern Log gamelog;
+	extern class Ledger ledger;
+	extern short public_interest[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
+	extern vector<newsstoryst *> newsstory;
 	if (len(graffiti))
 	{
 		for (int s = 0; s < len(graffiti); s++)
@@ -1376,6 +1312,10 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 }
 void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 {
+	const string CONST_activities102 = " was nearly caught in a prostitution sting.";
+	const string CONST_activities101 = " has been arrested in a prostitution sting.";
+	extern Log gamelog;
+	extern class Ledger ledger;
 	for (int p = len(prostitutes) - 1; p >= 0; p--)
 	{
 		// Business once every three days or so
@@ -1440,6 +1380,10 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 }
 void doActivityLearn(vector<Creature *> &students, char &clearformess)
 {
+	const string CONST_activities104 = " can.";
+	const string CONST_activities103 = " has learned as much as ";
+	extern Log gamelog;
+	extern class Ledger ledger;
 	for (int s = len(students) - 1; s >= 0; s--)
 	{
 		if (ledger.get_funds() < 60) break;
@@ -1473,6 +1417,45 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
 }
 void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 {
+	const string CONST_activities139 = "broken!";
+	const string CONST_activities138 = "'s last unbroken rib is ";
+	const string CONST_activities137 = "'s rib is ";
+	const string CONST_activities136 = "One of ";
+	const string CONST_activities135 = "'s ribs are ";
+	const string CONST_activities134 = " of ";
+	const string CONST_activities133 = "All ";
+	const string CONST_activities132 = "'s tooth has been pulled out with pliers!";
+	const string CONST_activities131 = "'s teeth have been smashed out on the curb.";
+	const string CONST_activities130 = "'s neck has been broken!";
+	const string CONST_activities129 = "'s upper spine has been broken!";
+	const string CONST_activities128 = "'s lower spine has been broken!";
+	const string CONST_activities127 = " is severely beaten before the mob is broken up.";
+	const string CONST_activities126 = " out of everyone who got close!";
+	const string CONST_activities125 = "shit";
+	const string CONST_activities124 = "[tar]";
+	const string CONST_activities123 = " beat the ";
+	const string CONST_activities122 = "The mob scatters!";
+	const string CONST_activities120 = " brandishes the ";
+	const string CONST_activities119 = " is cornered by a mob of angry rednecks.";
+	const string CONST_activities118 = "causing trouble";
+	const string CONST_activities117 = "set up a mock sweatshop in the middle of the mall!";
+	const string CONST_activities116 = "burned a corporate symbol and denounced capitalism!";
+	const string CONST_activities115 = "distributed fliers graphically illustrating CIA torture!";
+	const string CONST_activities114 = "distributed fliers graphically illustrating executions!";
+	const string CONST_activities113 = "squirted business people with fake polluted water!";
+	const string CONST_activities112 = "dressed up and pretended to be a radioactive mutant!";
+	const string CONST_activities111 = "dressed up and pretended to be radioactive mutants!";
+	const string CONST_activities110 = "gone downtown and reenacted a police beating!";
+	const string CONST_activities109 = "posted horrifying dead abortion doctor pictures downtown!";
+	const string CONST_activities108 = "disrupted a traditional wedding at a church!";
+	const string CONST_activities107 = "run around uptown splashing paint on fur coats!";
+	const string CONST_activities105 = "Your Activists have ";
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern short public_interest[VIEWNUM];
+	extern short lawList[LAWNUM];
+	extern short background_liberal_influence[VIEWNUM];
+	extern vector<newsstoryst *> newsstory;
 	if (len(trouble))
 	{
 		long juiceval = 0;
@@ -1838,6 +1821,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 }
 void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 {
+	extern class Ledger ledger;
+	extern vector<Creature *> pool;
 	for (int t = 0; t < len(teachers); t++)
 	{
 		int skillarray[14];
@@ -1971,6 +1956,11 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 void lootTheBody(Creature &cr, int base);
 void doActivityBury(vector<Creature *> &bury, char &clearformess)
 {
+	const string CONST_activities141 = "'s body";
+	const string CONST_activities140 = "burying ";
+	extern newsstoryst *sitestory;
+	extern vector<Creature *> pool;
+	extern vector<newsstoryst *> newsstory;
 	if (len(bury))
 	{
 		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
@@ -2011,6 +2001,12 @@ int steal_difficultytofind(const int v);
 string vehicleTypelongname(const int p);
 bool carselect(Creature &cr, short &cartype)
 {
+	const string CONST_activities145 = "Press a Letter to select a Type of Car";
+	const string CONST_activities144 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴DIFFICULTY TO FIND UNATTENDED컴";
+	const string CONST_activities143 = " try to find and steal today?";
+	const string CONST_activities142 = "What type of car will ";
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	cartype = -1;
 	vector<int> cart;
 	for (int a = 0; a < lenVehicleType(); a++)
@@ -2065,6 +2061,63 @@ void newVehicle(Vehicle *startcar);
 /* steal a car */
 bool stealcar(Creature &cr, char &clearformess)
 {
+	const string CONST_activities202 = " has been spotted by a passerby!";
+	const string CONST_activities201 = "If they were here, I'd have found them by now.";
+	const string CONST_activities200 = "I don't think they're in here...";
+	const string CONST_activities199 = "Are they even in here?";
+	const string CONST_activities198 = ": <rummaging> ";
+	const string CONST_activities197 = " found the keys ";
+	const string CONST_activities196 = "Holy shit!  ";
+	const string CONST_activities195 = "Holy [Car Keys]!  ";
+	const string CONST_activities194 = "under the back seat!";
+	const string CONST_activities193 = "under the front seat!";
+	const string CONST_activities192 = "in the glove compartment!";
+	const string CONST_activities191 = "above the pull-down sunblock thingy!";
+	const string CONST_activities190 = "in the ignition.  Damn.";
+	const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
+	const string CONST_activities188 = " hotwires the car!";
+	const string CONST_activities187 = "Enter - The Viper has finally deterred ";
+	const string CONST_activities186 = "Enter - Call it a day.";
+	const string CONST_activities185 = "B - Desperately search for keys.";
+	const string CONST_activities184 = "A - Hotwire the car.";
+	const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
+	const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+	const string CONST_activities181 = ":   ";
+	const string CONST_activities180 = "THE VIPER";
+	const string CONST_activities179 = " is behind the wheel of a ";
+	const string CONST_activities178 = "Adventures in Liberal Car Theft";
+	const string CONST_activities176 = "An alarm suddenly starts blaring!";
+	const string CONST_activities175 = " but it is still somewhat intact.";
+	const string CONST_activities174 = " with a ";
+	const string CONST_activities173 = " cracks the window";
+	const string CONST_activities171 = " smashes the window";
+	const string CONST_activities170 = " fiddles with the lock with no luck.";
+	const string CONST_activities169 = " jimmies the car door open.";
+	const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
+	const string CONST_activities167 = " is deterred.";
+	const string CONST_activities166 = "Enter - The Viper?   ";
+	const string CONST_activities164 = "B - Break the window.";
+	const string CONST_activities163 = "A - Pick the lock.";
+	const string CONST_activities162 = " stands by the ";
+	const string CONST_activities161 = "THIS IS THE VIPER!   STAND AWAY!";
+	const string CONST_activities160 = "THE VIPER:   ";
+	const string CONST_activities158 = "STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+	const string CONST_activities153 = "A - Approach the driver's side door.";
+	const string CONST_activities152 = " looks from a distance at an empty ";
+	const string CONST_activities150 = " found a ";
+	const string CONST_activities149 = " but did find a ";
+	const string CONST_activities148 = " was unable to find a ";
+	const string CONST_activities147 = " looks around for an accessible vehicle...";
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short mode;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern newsstoryst *sitestory;
+	extern chaseseqst chaseseq;
+	extern short fieldskillrate;
+	extern short lawList[LAWNUM];
+	extern vector<newsstoryst *> newsstory;
 	music.play(MUSIC_CARTHEFT);
 	clearformess = 1;
 	short cartype;
@@ -2531,6 +2584,9 @@ bool stealcar(Creature &cr, char &clearformess)
 /* get a wheelchair */
 void getwheelchair(Creature &cr, char &clearformess)
 {
+	const string CONST_activities204 = " was unable to get a wheelchair.  Maybe tomorrow...";
+	const string CONST_activities203 = " has procured a wheelchair.";
+	extern Log gamelog;
 	if (clearformess) eraseAlt();
 	else makedelimiter();
 	if (LCSrandom(2))

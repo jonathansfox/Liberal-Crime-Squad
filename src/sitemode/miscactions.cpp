@@ -107,7 +107,6 @@ char securityable(int type);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-extern Log gamelog;
  vector<string> was_abused;
 #include "../customMaps.h"
  const string activities = "activities\\";
@@ -115,20 +114,17 @@ extern Log gamelog;
 	 /*miscactions.cpp*/
 	 customText(&was_abused, activities + CONST_miscactions004),
  };
- extern short cursite;
- extern squadst *activesquad;
+ extern string singleDot;
  extern string singleSpace;
 void fillEncounter(CreatureTypes c, int numleft);
-extern string singleDot;
-extern short fieldskillrate;
 map<short, string> discussIssues;
 map<short, string> discussesIssues;
-extern short sitealarmtimer;
-extern short sitealarm;
-extern Creature encounter[ENCMAX];
-extern short sitealienate;
 char unlock(short type, char &actual)
 {
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern short cursite;
+	extern short fieldskillrate;
 	int difficulty = 0;
 	switch (type)
 	{
@@ -285,6 +281,11 @@ char unlock(short type, char &actual)
 /* bash attempt */
 char bash(short type, char &actual)
 {
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern short sitealarmtimer;
+	extern short sitealarm;
+	extern short cursite;
 	int difficulty = 0;
 	bool crowable = false;
 	switch (type)
@@ -422,6 +423,8 @@ char bash(short type, char &actual)
 /* computer hack attempt */
 char hack(short type, char &actual)
 {
+	extern squadst *activesquad;
+	extern Log gamelog;
 	int difficulty = 0;
 	switch (type)
 	{
@@ -509,6 +512,11 @@ char hack(short type, char &actual)
 /* run a broadcast */
 char run_broadcast(bool tv_broadcase)
 {
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern Creature encounter[ENCMAX];
 	sitealarm = 1;
 	int enemy = 0;
 	for (int e = 0; e < ENCMAX; e++)
@@ -705,6 +713,9 @@ char run_broadcast(bool tv_broadcase)
 /* rescues people held at the activeparty's current location */
 void partyrescue(short special)
 {
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short cursite;
 	int freeslots = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -826,6 +837,7 @@ void partyrescue(short special)
 /* everybody reload! */
 void reloadparty(bool wasteful)
 {
+	extern squadst *activesquad;
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL)continue;

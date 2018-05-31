@@ -1,100 +1,22 @@
 
 #include "../includes.h"
-const string CONST_commondisplayB178 = "C++ Source Code Editor (with encoding)";
-const string CONST_commondisplay229 = "PGUP/PGDN to view other Liberal pages.";
-const string CONST_commondisplay228 = "; and : to view other Liberal pages.";
-const string CONST_commondisplay227 = "[] to view other Liberal pages.";
-const string CONST_commondisplay226 = "PGUP - Previous";
-const string CONST_commondisplay225 = "; - Previous";
-const string CONST_commondisplay224 = "[ - Previous";
-const string CONST_commondisplay223 = "PGDN - Next";
-const string CONST_commondisplay222 = ": - Next";
-const string CONST_commondisplay221 = "] - Next";
-const string CONST_commondisplay220 = "                                                                                ";
-const string CONST_commondisplay219 = "What is the new code name?                                                      ";
-const string CONST_commondisplay218 = "    UP/DOWN  - More Info";
-const string CONST_commondisplay217 = "Press any other key to continue the Struggle";
-const string CONST_commondisplay216 = "    LEFT/RIGHT - Other Liberals";
-const string CONST_commondisplay215 = "N - Change Code Name      G - Fix Gender Label";
-const string CONST_commondisplay214 = "Profile of a Liberal";
-const string CONST_commondisplay213 = "%2d";
-const string CONST_commondisplay212 = ": ";
-const string CONST_commondisplay211 = "NUM";
-const string CONST_commondisplay210 = "CRIME";
-const string CONST_commondisplay209 = " months in prison.";
-const string CONST_commondisplay208 = "Sentenced to ";
-const string CONST_commondisplay207 = "Serving ";
-const string CONST_commondisplay206 = "Sentenced to life in prison";
-const string CONST_commondisplay205 = "Serving life in prison";
-const string CONST_commondisplay204 = "Sentenced to DEATH";
-const string CONST_commondisplay203 = "On DEATH ROW";
+const string CONST_commondisplay000 = ",";
 const string CONST_commondisplay202 = " (";
 const string CONST_commondisplay201 = "Name: ";
 const string CONST_commondisplay200 = "Code name: ";
+const string CONST_commondisplay212 = ": ";
 const string CONST_commondisplay199 = "%2d.00";
 const string CONST_commondisplay198 = "99+";
 const string CONST_commondisplay197 = "00";
 const string CONST_commondisplay196 = "%2d.";
 const string CONST_commondisplay194 = "NOW   MAX";
 const string CONST_commondisplay193 = "SKILL";
-const string CONST_commondisplay188 = "Broken Ribs";
-const string CONST_commondisplay187 = "Broken Rib";
-const string CONST_commondisplay186 = "All Ribs Broken";
-const string CONST_commondisplay185 = "Busted Spleen";
-const string CONST_commondisplay184 = "Stomach Injured";
-const string CONST_commondisplay183 = "L. Kidney Damaged";
-const string CONST_commondisplay182 = "R. Kidney Damaged";
-const string CONST_commondisplay181 = "Liver Damaged";
-const string CONST_commondisplay180 = "Missing Teeth";
-const string CONST_commondisplay179 = "Missing a Tooth";
-const string CONST_commondisplay178 = "No Teeth";
-const string CONST_commondisplay177 = "No Tongue";
-const string CONST_commondisplay176 = "No Nose";
-const string CONST_commondisplay175 = "No Left Eye";
-const string CONST_commondisplay174 = "No Right Eye";
-const string CONST_commondisplay173 = "Broken Lw Spine";
-const string CONST_commondisplay172 = "Broken Up Spine";
-const string CONST_commondisplay171 = "Broken Neck";
-const string CONST_commondisplay170 = "L. Lung Collapsed";
-const string CONST_commondisplay169 = "R. Lung Collapsed";
-const string CONST_commondisplay168 = "Heart Punctured";
-const string CONST_commondisplay167 = "Scheduled Dates:    ";
-const string CONST_commondisplay166 = "s";
-const string CONST_commondisplay165 = " Romantic Interest";
-const string CONST_commondisplay164 = "Scheduled Meetings: ";
-const string CONST_commondisplay163 = "Can't Recruit";
-const string CONST_commondisplay162 = "Enlightened ";
-const string CONST_commondisplay161 = " Max";
-const string CONST_commondisplay160 = " Recruits / ";
+const string CONST_commondisplay003 = "On \"Foot\"";
 const string CONST_commondisplay158 = "On Foot";
 const string CONST_commondisplay157 = "Wheelchair";
 const string CONST_commondisplay156 = "-D";
-const string CONST_commondisplay155 = "Car: ";
-const string CONST_commondisplay154 = "Clothes: ";
+const string CONST_commondisplay220 = "                                                                                ";
 const string CONST_commondisplay153 = "Weapon: ";
-const string CONST_commondisplay145 = "Charisma: ";
-const string CONST_commondisplay144 = "Strength: ";
-const string CONST_commondisplay143 = "Agility: ";
-const string CONST_commondisplay142 = "Health: ";
-const string CONST_commondisplay141 = "Wisdom: ";
-const string CONST_commondisplay140 = "Intelligence: ";
-const string CONST_commondisplay139 = "Heart: ";
-const string CONST_commondisplay138 = "1000";
-const string CONST_commondisplay137 = "500";
-const string CONST_commondisplay136 = "200";
-const string CONST_commondisplay135 = "100";
-const string CONST_commondisplay134 = "50";
-const string CONST_commondisplay133 = "10";
-const string CONST_commondisplay132 = "Next:  ";
-const string CONST_commondisplay131 = "Juice: ";
-const string CONST_commondisplay130 = "*";
-const string CONST_commondisplay129 = ", Genderqueer";
-const string CONST_commondisplay128 = ", Female";
-const string CONST_commondisplay127 = ", Male";
-const string CONST_commondisplay126 = " (Age ";
-const string CONST_commondisplay125 = "Born ";
-const string CONST_commondisplay121 = "Burned";
-const string CONST_commondisplay120 = "Torn";
 const string CONST_commondisplay119 = "Cut";
 const string CONST_commondisplay118 = "Bruised";
 const string CONST_commondisplay117 = "Shot";
@@ -108,76 +30,12 @@ const string CONST_commondisplay110 = "Left Arm:";
 const string CONST_commondisplay109 = "Right Arm:";
 const string CONST_commondisplay108 = "Body:";
 const string CONST_commondisplay107 = "Head:";
-const string CONST_commondisplay101 = " (1)";
-const string CONST_commondisplay100 = " (XX)";
-const string CONST_commondisplay097 = "/";
-const string CONST_commondisplay096 = "+H";
-const string CONST_commondisplay094 = "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�";
-const string CONST_commondisplay092 = "Brn";
-const string CONST_commondisplay091 = "Trn";
-const string CONST_commondisplay089 = "Brs";
-const string CONST_commondisplay088 = "Sht";
-const string CONST_commondisplay085 = "Clean sever";
-const string CONST_commondisplay077 = "Top Skills:";
-const string CONST_commondisplay075 = "???????";
-const string CONST_commondisplay068 = "Trans: ";
-const string CONST_commondisplay067 = "?";
-const string CONST_commondisplay066 = "Char:   ";
-const string CONST_commondisplay064 = "Str:    ";
-const string CONST_commondisplay062 = "Agi:    ";
-const string CONST_commondisplay060 = "Hlth:   ";
-const string CONST_commondisplay058 = "Wis:    ";
-const string CONST_commondisplay056 = "Int:    ";
-const string CONST_commondisplay054 = "Hrt:    ";
-const string CONST_commondisplay053 = "an angry Hangin' Judge";
-const string CONST_commondisplay052 = "a frightened Eminent Scientist";
-const string CONST_commondisplay051 = "a smarmy News Anchor";
-const string CONST_commondisplay050 = "a crying Radio Personality";
-const string CONST_commondisplay049 = "a squirming CEO";
-const string CONST_commondisplay048 = "a cursing Politician";
-const string CONST_commondisplay047 = ", holding ";
-const string CONST_commondisplay044 = "Moderate";
-const string CONST_commondisplay043 = "Conservative";
-const string CONST_commondisplay042 = "Consrvtv";
-const string CONST_commondisplay040 = "MisTeeth";
-const string CONST_commondisplay037 = "NoTongue";
-const string CONST_commondisplay036 = "Missing Eye";
-const string CONST_commondisplay035 = "One Eye";
-const string CONST_commondisplay034 = "Missing Nose";
-const string CONST_commondisplay033 = "NoseGone";
-const string CONST_commondisplay032 = "Face Mutilated";
-const string CONST_commondisplay031 = "FaceMutl";
-const string CONST_commondisplay030 = "Blind";
-const string CONST_commondisplay029 = "One Leg";
-const string CONST_commondisplay028 = "One Arm";
-const string CONST_commondisplay027 = "One Arm, One Leg";
-const string CONST_commondisplay026 = "1Arm1Leg";
-const string CONST_commondisplay025 = "No Legs";
-const string CONST_commondisplay024 = "No Arms";
-const string CONST_commondisplay023 = "One Limb";
-const string CONST_commondisplay022 = "No Limbs";
-const string CONST_commondisplay021 = "Face Gone";
-const string CONST_commondisplay020 = "FaceGone";
-const string CONST_commondisplay019 = "Paraplegic";
-const string CONST_commondisplay018 = "Parapleg";
-const string CONST_commondisplay017 = "Quadraplegic";
-const string CONST_commondisplay016 = "Quadpleg";
-const string CONST_commondisplay015 = "Neck Broken";
-const string CONST_commondisplay014 = "NckBroke";
-const string CONST_commondisplay013 = "Lightly Wounded";
-const string CONST_commondisplay012 = "LtWound";
-const string CONST_commondisplay011 = "Wounded";
-const string CONST_commondisplay010 = "Badly Wounded";
-const string CONST_commondisplay009 = "BadWound";
-const string CONST_commondisplay008 = "Near Death";
-const string CONST_commondisplay007 = "NearDETH";
-const string CONST_commondisplay006 = "Deceased";
-const string CONST_commondisplay005 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_commondisplay004 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫";
-const string CONST_commondisplay003 = "On \"Foot\"";
-const string CONST_commondisplay002 = "OEM United States - Codepage 437";
-const string CONST_commondisplay001 = "Open With...";
-const string CONST_commondisplay000 = ",";
+const string CONST_commondisplay154 = "Clothes: ";
+const string CONST_commondisplay180 = "Missing Teeth";
+const string CONST_commondisplay178 = "No Teeth";
+const string CONST_commondisplay177 = "No Tongue";
+
+
 
 const string tag_0 = "0";
 /*
@@ -253,21 +111,9 @@ std::string gettitle(Creature &cr);
 #include "../cursesAlternativeConstants.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-extern int year;
-extern short mode;
-extern bool mapshowing;
-extern string closeParenthesis;
 extern string commaSpace;
-extern squadst *activesquad;
-extern int day;
-extern int month;
 extern string singleSpace;
-extern short party_status; 
-extern short sitealarm;
-extern short sitealarmtimer;
-extern char showcarprefs;
-extern short interface_pgup;
-//extern char interface_pgdn;
+extern string closeParenthesis;
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
@@ -428,6 +274,10 @@ void makedelimiter(int y = 8, int x = 0);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y, int x)
 {
+	const string CONST_commondisplay005 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+	const string CONST_commondisplay004 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫";
+	extern short mode;
+	extern bool mapshowing;
 	set_color_easy(WHITE_ON_BLACK);
 	if (mode == GAMEMODE_SITE && y == 8 && x == 0 && mapshowing) // special case: there is a map on the right in site mode
 		mvaddstrAlt(y, x, CONST_commondisplay004); // 80 characters
@@ -437,6 +287,42 @@ void makedelimiter(int y, int x)
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g, int y, int x, char smll)
 {
+	const string CONST_commondisplay044 = "Moderate";
+	const string CONST_commondisplay043 = "Conservative";
+	const string CONST_commondisplay042 = "Consrvtv";
+	const string CONST_commondisplay040 = "MisTeeth";
+	const string CONST_commondisplay037 = "NoTongue";
+	const string CONST_commondisplay036 = "Missing Eye";
+	const string CONST_commondisplay035 = "One Eye";
+	const string CONST_commondisplay034 = "Missing Nose";
+	const string CONST_commondisplay033 = "NoseGone";
+	const string CONST_commondisplay032 = "Face Mutilated";
+	const string CONST_commondisplay031 = "FaceMutl";
+	const string CONST_commondisplay030 = "Blind";
+	const string CONST_commondisplay029 = "One Leg";
+	const string CONST_commondisplay028 = "One Arm";
+	const string CONST_commondisplay027 = "One Arm, One Leg";
+	const string CONST_commondisplay026 = "1Arm1Leg";
+	const string CONST_commondisplay025 = "No Legs";
+	const string CONST_commondisplay024 = "No Arms";
+	const string CONST_commondisplay023 = "One Limb";
+	const string CONST_commondisplay022 = "No Limbs";
+	const string CONST_commondisplay021 = "Face Gone";
+	const string CONST_commondisplay020 = "FaceGone";
+	const string CONST_commondisplay019 = "Paraplegic";
+	const string CONST_commondisplay018 = "Parapleg";
+	const string CONST_commondisplay017 = "Quadraplegic";
+	const string CONST_commondisplay016 = "Quadpleg";
+	const string CONST_commondisplay015 = "Neck Broken";
+	const string CONST_commondisplay014 = "NckBroke";
+	const string CONST_commondisplay013 = "Lightly Wounded";
+	const string CONST_commondisplay012 = "LtWound";
+	const string CONST_commondisplay011 = "Wounded";
+	const string CONST_commondisplay010 = "Badly Wounded";
+	const string CONST_commondisplay009 = "BadWound";
+	const string CONST_commondisplay008 = "Near Death";
+	const string CONST_commondisplay007 = "NearDETH";
+	const string CONST_commondisplay006 = "Deceased";
 	short woundsum = 0;
 	bool bleeding = false;
 	for (int w = 0; w<BODYPARTNUM; w++)
@@ -613,6 +499,34 @@ string getVehicleShortname(int i);
 /* character info at top of screen */
 void printcreatureinfo(Creature *cr, unsigned char knowledge)
 {
+	const string CONST_commondisplay092 = "Brn";
+	const string CONST_commondisplay091 = "Trn";
+	const string CONST_commondisplay089 = "Brs";
+	const string CONST_commondisplay088 = "Sht";
+	const string CONST_commondisplay085 = "Clean sever";
+	const string CONST_commondisplay077 = "Top Skills:";
+	const string CONST_commondisplay075 = "???????";
+	const string CONST_commondisplay068 = "Trans: ";
+	const string CONST_commondisplay067 = "?";
+	const string CONST_commondisplay066 = "Char:   ";
+	const string CONST_commondisplay064 = "Str:    ";
+	const string CONST_commondisplay062 = "Agi:    ";
+	const string CONST_commondisplay060 = "Hlth:   ";
+	const string CONST_commondisplay058 = "Wis:    ";
+	const string CONST_commondisplay056 = "Int:    ";
+	const string CONST_commondisplay054 = "Hrt:    ";
+	const string CONST_commondisplay053 = "an angry Hangin' Judge";
+	const string CONST_commondisplay052 = "a frightened Eminent Scientist";
+	const string CONST_commondisplay051 = "a smarmy News Anchor";
+	const string CONST_commondisplay050 = "a crying Radio Personality";
+	const string CONST_commondisplay049 = "a squirming CEO";
+	const string CONST_commondisplay048 = "a cursing Politician";
+	const string CONST_commondisplay047 = ", holding ";
+	extern short sitealarm;
+	extern short sitealarmtimer;
+	extern int year;
+	extern short mode;
+	extern char showcarprefs;
 	char str[200];
 	makedelimiter(1);
 	set_color_easy(WHITE_ON_BLACK);
@@ -839,6 +753,18 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 /* party info at top of screen */
 void printparty()
 {
+	const string CONST_commondisplay101 = " (1)";
+	const string CONST_commondisplay100 = " (XX)";
+	const string CONST_commondisplay097 = "/";
+	const string CONST_commondisplay096 = "+H";
+	const string CONST_commondisplay094 = "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�";
+	extern squadst *activesquad;
+	extern short party_status;
+	extern char showcarprefs;
+	extern short mode;
+	extern bool mapshowing;
+	extern short sitealarm;
+	extern short sitealarmtimer;
 	Creature *party[6] = { NULL,NULL,NULL,NULL,NULL,NULL };
 	if (activesquad != NULL)
 		for (int p = 0; p<6; p++)party[p] = activesquad->squad[p];
@@ -994,6 +920,8 @@ void printparty()
 }
 void printwoundstat(Creature &cr, int y, int x)
 {
+	const string CONST_commondisplay121 = "Burned";
+	const string CONST_commondisplay120 = "Torn";
 	// Add wound status
 	for (int w = 0; w<BODYPARTNUM; w++)
 	{
@@ -1038,6 +966,58 @@ void printwoundstat(Creature &cr, int y, int x)
 /* full screen character sheet */
 void printliberalstats(Creature &cr)
 {
+	const string CONST_commondisplay188 = "Broken Ribs";
+	const string CONST_commondisplay187 = "Broken Rib";
+	const string CONST_commondisplay186 = "All Ribs Broken";
+	const string CONST_commondisplay185 = "Busted Spleen";
+	const string CONST_commondisplay184 = "Stomach Injured";
+	const string CONST_commondisplay183 = "L. Kidney Damaged";
+	const string CONST_commondisplay182 = "R. Kidney Damaged";
+	const string CONST_commondisplay181 = "Liver Damaged";
+	const string CONST_commondisplay179 = "Missing a Tooth";
+	const string CONST_commondisplay176 = "No Nose";
+	const string CONST_commondisplay175 = "No Left Eye";
+	const string CONST_commondisplay174 = "No Right Eye";
+	const string CONST_commondisplay173 = "Broken Lw Spine";
+	const string CONST_commondisplay172 = "Broken Up Spine";
+	const string CONST_commondisplay171 = "Broken Neck";
+	const string CONST_commondisplay170 = "L. Lung Collapsed";
+	const string CONST_commondisplay169 = "R. Lung Collapsed";
+	const string CONST_commondisplay168 = "Heart Punctured";
+	const string CONST_commondisplay167 = "Scheduled Dates:    ";
+	const string CONST_commondisplay166 = "s";
+	const string CONST_commondisplay165 = " Romantic Interest";
+	const string CONST_commondisplay164 = "Scheduled Meetings: ";
+	const string CONST_commondisplay163 = "Can't Recruit";
+	const string CONST_commondisplay162 = "Enlightened ";
+	const string CONST_commondisplay161 = " Max";
+	const string CONST_commondisplay160 = " Recruits / ";
+	const string CONST_commondisplay155 = "Car: ";
+	const string CONST_commondisplay145 = "Charisma: ";
+	const string CONST_commondisplay144 = "Strength: ";
+	const string CONST_commondisplay143 = "Agility: ";
+	const string CONST_commondisplay142 = "Health: ";
+	const string CONST_commondisplay141 = "Wisdom: ";
+	const string CONST_commondisplay140 = "Intelligence: ";
+	const string CONST_commondisplay139 = "Heart: ";
+	const string CONST_commondisplay138 = "1000";
+	const string CONST_commondisplay137 = "500";
+	const string CONST_commondisplay136 = "200";
+	const string CONST_commondisplay135 = "100";
+	const string CONST_commondisplay134 = "50";
+	const string CONST_commondisplay133 = "10";
+	const string CONST_commondisplay132 = "Next:  ";
+	const string CONST_commondisplay131 = "Juice: ";
+	const string CONST_commondisplay130 = "*";
+	const string CONST_commondisplay129 = ", Genderqueer";
+	const string CONST_commondisplay128 = ", Female";
+	const string CONST_commondisplay127 = ", Male";
+	const string CONST_commondisplay126 = " (Age ";
+	const string CONST_commondisplay125 = "Born ";
+	extern int year;
+	extern int day;
+	extern int month;
+	extern char showcarprefs;
 	set_color_easy(WHITE_ON_BLACK);
 	// Add name
 	mvaddstrAlt(2, 0, CONST_commondisplay201);
@@ -1384,6 +1364,16 @@ void printliberalskills(Creature &cr)
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(Creature &cr)
 {
+	const string CONST_commondisplay213 = "%2d";
+	const string CONST_commondisplay211 = "NUM";
+	const string CONST_commondisplay210 = "CRIME";
+	const string CONST_commondisplay209 = " months in prison.";
+	const string CONST_commondisplay208 = "Sentenced to ";
+	const string CONST_commondisplay207 = "Serving ";
+	const string CONST_commondisplay206 = "Sentenced to life in prison";
+	const string CONST_commondisplay205 = "Serving life in prison";
+	const string CONST_commondisplay204 = "Sentenced to DEATH";
+	const string CONST_commondisplay203 = "On DEATH ROW";
 	// Add name
 	set_color_easy(WHITE_ON_BLACK);
 	if (strcmp(cr.propername, cr.name) != 0)
@@ -1442,6 +1432,13 @@ void printliberalcrimes(Creature &cr)
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p)
 {
+	const string CONST_commondisplay219 = "What is the new code name?                                                      ";
+	const string CONST_commondisplay218 = "    UP/DOWN  - More Info";
+	const string CONST_commondisplay217 = "Press any other key to continue the Struggle";
+	const string CONST_commondisplay216 = "    LEFT/RIGHT - Other Liberals";
+	const string CONST_commondisplay215 = "N - Change Code Name      G - Fix Gender Label";
+	const string CONST_commondisplay214 = "Profile of a Liberal";
+	extern squadst *activesquad;
 	if (activesquad == NULL)return;
 	const int pagenum = 3;
 	int page = 0;
@@ -1494,6 +1491,10 @@ void fullstatus(int p)
 /* prints a short blurb showing how to page forward */
 string addnextpagestr()
 {
+	const string CONST_commondisplay223 = "PGDN - Next";
+	const string CONST_commondisplay222 = ": - Next";
+	const string CONST_commondisplay221 = "] - Next";
+	extern short interface_pgup;
 	if (interface_pgup == '[')
 		return (CONST_commondisplay221);
 	else if (interface_pgup == '.')
@@ -1503,6 +1504,10 @@ string addnextpagestr()
 /* prints a short blurb showing how to page back */
 string addprevpagestr()
 {
+	const string CONST_commondisplay226 = "PGUP - Previous";
+	const string CONST_commondisplay225 = "; - Previous";
+	const string CONST_commondisplay224 = "[ - Previous";
+	extern short interface_pgup;
 	if (interface_pgup == '[')
 		return (CONST_commondisplay224);
 	else if (interface_pgup == '.')
@@ -1512,6 +1517,10 @@ string addprevpagestr()
 /* prints a long blurb showing how to page forward and back */
 string addpagestr()
 {
+	const string CONST_commondisplay229 = "PGUP/PGDN to view other Liberal pages.";
+	const string CONST_commondisplay228 = "; and : to view other Liberal pages.";
+	const string CONST_commondisplay227 = "[] to view other Liberal pages.";
+	extern short interface_pgup;
 	if (interface_pgup == '[')
 		return (CONST_commondisplay227);
 	else if (interface_pgup == '.')

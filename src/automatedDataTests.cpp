@@ -1,6 +1,4 @@
 #include "includes.h"
-const string CONST_automatedDataTests013 = "TEST";
-const string CONST_automatedDataTests008 = "SUCCESS";
 
 #include "cursesAlternative.h"
 using namespace std;
@@ -27,6 +25,8 @@ extern map<short, vector<string> >  talkAboutTheIssues; // 0~1
 extern map<short, vector<string> >  endgameLawStrings; // 0~7
 //string_to_law;
 void automatedDataTests() {
+	const string CONST_automatedDataTests013 = "TEST";
+	const string CONST_automatedDataTests008 = "SUCCESS";
 	clearAlt();
 	for (int i = 0; i < LAWNUM; i++) {
 		int k = 0;

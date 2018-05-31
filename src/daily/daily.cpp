@@ -107,10 +107,6 @@ const string CONST_shopsnstuff004 = "armsdealer.xml";
 
 #include "../sitemode/shop.h"
 #include "../common/musicClass.h"
-extern char homedir[MAX_PATH_SIZE];
-extern char artdir[MAX_PATH_SIZE];
-extern MusicClass music;
-extern int year;
 extern string closeParenthesis;
 extern string undefined;
 extern string check_status_of_squad_liberal;
@@ -118,9 +114,6 @@ extern string show_squad_liberal_status;
 extern string enter_done;
 extern string chooseALiberalTo;
 extern string spaceParanthesisDollar;
-extern squadst *activesquad;
-extern short party_status;
-extern vector<Vehicle *> vehicle;
 string toSpend;
 string chooseAColor;
 string theseColorsAreCon;
@@ -138,6 +131,9 @@ string f_fixWounds;
 /* active squad visits the hospital */
 void hospital(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern short party_status;
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	int partysize = squadsize(activesquad);
@@ -179,6 +175,9 @@ void hospital(int loc)
 /* active squad visits the arms dealer */
 void armsdealer(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -189,6 +188,9 @@ void armsdealer(int loc)
 /* active squad visits the pawn shop */
 void pawnshop(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -199,6 +201,8 @@ void pawnshop(int loc)
 /* choose buyer */
 void choose_buyer(short &buyer)
 {
+	extern squadst *activesquad;
+	extern short party_status;
 	party_status = -1;
 	int partysize = squadsize(activesquad);
 	if (partysize <= 1) return;
@@ -224,10 +228,15 @@ int getVehicleTypeSleeperPrice(const int carchoice);
 vector<string> getVehicleTypeColor(const int carchoice);
 bool vehicletypeavailableatshop(const int i);
 Creature* findSleeperCarSalesman(int loc);
-extern class Ledger ledger;
 /* active squad visits the car dealership */
 void dealership(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern int year;
+	extern short party_status;
+	extern class Ledger ledger;
+	extern vector<Vehicle *> vehicle;
 	music.play(MUSIC_SHOPPING);
 	short buyer = 0;
 	locatesquad(activesquad, loc);
@@ -351,6 +360,9 @@ void dealership(int loc)
 /* active squad visits the department store */
 void deptstore(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -361,6 +373,9 @@ void deptstore(int loc)
 /* active squad visits the oubliette */
 void halloweenstore(int loc)
 {
+	extern squadst *activesquad;
+	extern MusicClass music;
+	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml;
@@ -374,22 +389,13 @@ void halloweenstore(int loc)
 
 
 
-extern vector<Creature *> pool;
-extern Log gamelog;
 extern string singleDot;
-extern char showcarprefs;
-extern char disbanding;
-extern squadst *activesquad;
-extern vector<squadst *> squad;
-extern short fieldskillrate;
-extern vector<newsstoryst *> newsstory;
-extern int day;
-extern vector<recruitst *> recruit;
-extern int month;
 void determineMedicalSupportAtEachLocation(bool clearformess);
 /* daily - returns the number of days in the current month */
 int monthday()
 {
+	extern int month;
+	extern int year;
 	switch (month)
 	{
 	case 2: return 28 + (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); // February
@@ -401,6 +407,11 @@ int monthday()
 	}
 }
 void ageThings(const char clearformess) {
+	extern int day;
+	extern int month;
+	extern Log gamelog;
+	extern vector<Creature *> pool;
+	extern vector<newsstoryst *> newsstory;
 	day++;
 	int pday = day, pmonth = month; // Find out if it's next month already.
 	if (pday > monthday()) // Day counter has increased but end-of-month has not yet been
@@ -506,6 +517,9 @@ void ageThings(const char clearformess) {
 	}
 }
 void meetWithPotentialRecruits(char &clearformess) {
+	extern char disbanding;
+	extern vector<recruitst *> recruit;
+	extern vector<Creature *> pool;
 	for (int i = len(pool) - 1; i >= 0; i--)
 		pool[i]->meetings = 0;
 	if (!disbanding) for (int r = len(recruit) - 1; r >= 0; r--)
@@ -543,14 +557,17 @@ void meetWithPotentialRecruits(char &clearformess) {
 // Determines the number of recruitment meetings a creature has scheduled
 int scheduledmeetings(const Creature& cr)
 {
+	extern vector<recruitst *> recruit;
 	int meetings = 0;
 	for (int p = len(recruit) - 1; p >= 0; p--)
 		// If meeting is with this creature
 		if (recruit[p]->recruiter_id == cr.id) meetings++;
 	return meetings;
 }
-extern class Ledger ledger;
 void doRent(const char clearformess) {
+	extern char disbanding;
+	extern int day;
+	extern class Ledger ledger;
 	if (day == 3 && !disbanding)
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 			if (LocationsPool::getInstance().getRentingType(l)>0 &&
@@ -568,6 +585,8 @@ void doRent(const char clearformess) {
 			}
 }
 void activitiesForIndividuals(char &clearformess) {
+	extern Log gamelog;
+	extern vector<Creature *> pool;
 	for (int p = 0; p < len(pool); p++)
 	{
 		pool[p]->income = 0;
@@ -646,6 +665,7 @@ void activitiesForIndividuals(char &clearformess) {
 	}
 }
 void tendAllHostages(char &clearformess) {
+	extern vector<Creature *> pool;
 	for (int p = len(pool) - 1; p >= 0; p--)
 	{
 		if (!pool[p]->alive) continue;
@@ -654,6 +674,8 @@ void tendAllHostages(char &clearformess) {
 	}
 }
 void squadOverrideIndividual(const int sq, const char clearformess) {
+	extern Log gamelog;
+	extern vector<squadst *> squad;
 	
 	
 		for (int p = 0; p < 6; p++)
@@ -684,6 +706,8 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 int driveskill(Creature &cr, int v);
 string getVehicleFullname(int i);
 void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) {
+	extern Log gamelog;
+	extern vector<squadst *> squad;
 	//CAR UP AS NECESSARY
 	vector<long> wantcar;
 	for (int p = 0; p < 6; p++) if (squad[sq]->squad[p])
@@ -810,6 +834,8 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 	}
 }
 void turnSquadAway(const int sq) {
+	extern Log gamelog;
+	extern vector<squadst *> squad;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 	addstrAlt(CONST_daily006, gamelog);
@@ -821,6 +847,8 @@ void turnSquadAway(const int sq) {
 	squad[sq]->activity.type = ACTIVITY_NONE;
 }
 void giveDriverExperience(const int sq) {
+	extern short fieldskillrate;
+	extern vector<squadst *> squad;
 	
 		for (int i = 0; i < 6; i++)
 			if (squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
@@ -837,6 +865,11 @@ void giveDriverExperience(const int sq) {
 			}
 }
 void squadDepart(const int sq, char &clearformess) {
+	extern char showcarprefs;
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern vector<squadst *> squad;
+	extern vector<newsstoryst *> newsstory;
 	switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
 	{
 	case SITE_CITY_NEW_YORK:
@@ -971,6 +1004,10 @@ void squadDepart(const int sq, char &clearformess) {
 	}
 }
 void advanceSquads(char &clearformess) {
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern vector<squadst *> squad;
+	extern class Ledger ledger;
 	vector<long> caridused;
 	//ADVANCE SQUADS
 	squadst *oactivesquad = activesquad;
@@ -1056,6 +1093,7 @@ void advanceSquads(char &clearformess) {
 	activesquad = oactivesquad;
 }
 void moveSquadlessToBaseIfNotSiege() {
+	extern vector<Creature *> pool;
 	for (int p = 0; p < len(pool); p++)
 	{
 		if (!pool[p]->alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
@@ -1074,6 +1112,10 @@ void moveSquadlessToBaseIfNotSiege() {
 void doDates(char &clearformess);
 void advanceday(char &clearformess, char canseethings)
 {
+	extern char showcarprefs;
+	extern char disbanding;
+	extern class Ledger ledger;
+	extern vector<Creature *> pool;
 	showcarprefs = 0;
 	//int w = 0;
 	//int l2;

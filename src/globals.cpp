@@ -369,11 +369,11 @@ void addCreatueVehiclesToCollection(Creature *cr[6], vector<Vehicle *> &veh) {
 	}
 }
 
-extern vector<LootType *> loottype;
-extern vector<WeaponType *> weapontype;
-extern vector<VehicleType *> vehicletype;
 bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
 bool mainSeven(bool xml_loaded_ok) {
+	extern vector<LootType *> loottype;
+	extern vector<WeaponType *> weapontype;
+	extern vector<VehicleType *> vehicletype;
 	extern Log xmllog;
 	xmllog.initialize(CONST_globals005, true, 1);
 	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_globals006, xmllog);
@@ -397,6 +397,7 @@ const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
 const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
 int getweapontype(const string &idname);
 Weapon* spawnNewWeapon(string newWeaponType) {
+	extern vector<WeaponType *> weapontype;
 	Weapon *w = new Weapon(*weapontype[getweapontype(newWeaponType)]);
 	if (w->uses_ammo())
 	{
@@ -429,8 +430,8 @@ Armor* spawnNewArmor(string newArmorType) {
 }
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
-extern class Ledger ledger;
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
+	extern class Ledger ledger;
 	for (int x = 0; x < augmenttype.size(); x++)
 	{
 		if (augmenttype[x]->get_type() == aug_c - 'a' &&
@@ -439,5 +440,18 @@ void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
 			augmenttype[x]->get_cost() <= ledger.get_funds())
 			//TODO: Make it so that if you don't have money, it just grays it out, not just not show it
 			aug_type.push_back(augmenttype[x]);
+	}
+}
+
+void removeCreatureFromSquad(Creature &cr, int oldsqid) {
+	activesquad = squad[getsquad(oldsqid)];
+	for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i]) if (activesquad->squad[i] == &cr)
+		{
+			for (int j = i + 1; j < 6; j++, i++) activesquad->squad[i] = activesquad->squad[j];
+			activesquad->squad[5] = NULL;
+			break;
+		}
 	}
 }

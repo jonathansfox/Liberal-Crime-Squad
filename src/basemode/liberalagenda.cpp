@@ -105,21 +105,6 @@ const string blankString = "";
 #include "../customMaps.h"
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int year;
-extern short exec[EXECNUM];
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern short interface_pgup;
-extern short interface_pgdn;
-extern short lawList[LAWNUM];
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short court[COURTNUM];
-extern bool stalinmode;
-extern short execterm;
-extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-extern short wincondition;
-extern int disbandtime;
  vector<string> supremeChars;
  vector<string> courtChars;
 string pressLToViewHighScores;
@@ -146,6 +131,8 @@ vector<file_and_text_collection> liberl_agenda_text_file_collection = {
 /* base - liberal agenda - disband */
 bool confirmdisband()
 {
+	extern int year;
+	extern int disbandtime;
 	string word = pickrandom(issue_phrases);
 	for (int pos = 0; pos < len(word);)
 	{
@@ -181,6 +168,19 @@ bool confirmdisband()
 /* base - liberal agenda */
 bool liberalagenda(signed char won)
 {
+	extern MusicClass music;
+	extern short execterm;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern bool stalinmode;
+	extern short wincondition;
+	extern short exec[EXECNUM];
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern short lawList[LAWNUM];
 	int page = 0, y;
 	while (true)
 	{

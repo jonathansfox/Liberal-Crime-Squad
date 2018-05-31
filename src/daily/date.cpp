@@ -149,14 +149,9 @@ int getarmortype(const string &idname);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern vector<Creature *> pool;
 #include "../common/creaturePoolCreature.h"
-extern Log gamelog;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int stat_recruits;
-extern int stat_kidnappings;
 extern string singleDot;
  vector<string> date_fail;
  const string datey = "date\\";
@@ -164,7 +159,6 @@ extern string singleDot;
 	 /*date.cpp*/
 	 customText(&date_fail, datey + CONST_date006),
  };
- extern short lawList[LAWNUM];
  extern string commaSpace;
  extern string singleSpace;
  vector<datest *> date;
@@ -179,6 +173,11 @@ extern string AND;
 // Handles the result of a date or vacation
 static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 {
+	extern MusicClass music;
+	extern int stat_recruits;
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	extern vector<Creature *> pool;
 	music.play(MUSIC_DATING);
 	std::string s = blankString;
 	if (aroll > troll)
@@ -458,6 +457,9 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 /* daily - date - dater p gets back from vacation */
 char completevacation(datest &d, int p)
 {
+	extern MusicClass music;
+	extern Log gamelog;
+	extern vector<Creature *> pool;
 	music.play(MUSIC_DATING);
 	int e = 0;
 	eraseAlt();
@@ -510,11 +512,16 @@ char completevacation(datest &d, int p)
 	case DATERESULT_ARRESTED:    return 1;
 	}
 }
-extern class Ledger ledger;
 extern string pressKeyToReflect;
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d, int p)
 {
+	extern MusicClass music;
+	extern int stat_kidnappings;
+	extern Log gamelog;
+	extern class Ledger ledger;
+	extern short lawList[LAWNUM];
+	extern vector<Creature *> pool;
 	music.play(MUSIC_DATING);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -876,6 +883,7 @@ char completedate(datest &d, int p);
 void removesquadinfo(Creature &cr);
 char completevacation(datest &d, int p);
 void doDates(char &clearformess) {
+	extern vector<Creature *> pool;
 	for (int d = len(date) - 1; d >= 0; d--)
 	{
 		int p = getpoolcreature(date[d]->mac_id);

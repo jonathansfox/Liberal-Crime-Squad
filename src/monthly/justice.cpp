@@ -217,9 +217,6 @@ int scare_factor(int lawflag, int crimenumber);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../common/creaturePoolCreature.h"
-extern vector<Creature *> pool;
-extern Log gamelog;
-extern short lawList[LAWNUM];
  vector<string> liberal_jury;
  vector<string> conservative_jury;
  vector<string> cruel_and_unusual_execution_methods;
@@ -246,14 +243,10 @@ extern short lawList[LAWNUM];
 	 customText(&general_experiences, justice + CONST_justice016),
  };
 #include "../common/musicClass.h"
-extern MusicClass music;
-extern int stat_dead;
  string counts_of; 
 extern string string_sleeper;
 extern string singleDot;
 extern string AND;
-extern unsigned long attorneyseed[RNG_SIZE];
-extern unsigned long seed[RNG_SIZE];
 extern string commaSpace;
 extern string singleSpace;
  string execution_in_three_months;
@@ -262,6 +255,8 @@ extern string singleSpace;
  /* monthly - sentence a liberal */
  void penalize(Creature &g, char lenient)
  {
+	 extern Log gamelog;
+	 extern short lawList[LAWNUM];
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
 	 gamelog.newline();
@@ -472,7 +467,9 @@ extern string singleSpace;
 	 g.location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().getLocationCity(g.location));
  }
  int listAllCrimes(Creature &g) {
-	 
+
+	 extern Log gamelog;
+	 extern short lawList[LAWNUM];
 		 int y = 5;
 		 bool breaker[LAWFLAGNUM] = { 0 };
 		 int typenum = 0;
@@ -829,6 +826,9 @@ extern string singleSpace;
  }
  void pleadInnocent(Creature &g, Creature &sleeperLawyer, const char attorneyname[200], const int defense, const bool sleeperjudge, const int scarefactor) {
 
+	 // Show die rolls, 100% accurate poll numbers
+	 extern bool SHOWMECHANICS;
+	 extern Log gamelog;
 	 Creature *sleeperlawyer = &sleeperLawyer;
 		 int prosecution = 0;
 		 eraseAlt();
@@ -1138,6 +1138,7 @@ extern string singleSpace;
  }
  void pleadGuilty(Creature &g, const bool sleeperjudge) {
 
+	 extern Log gamelog;
 	 
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK);
@@ -1160,10 +1161,14 @@ extern string singleSpace;
 		 }
 	 
  }
- extern class Ledger ledger;
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
 {
+	extern Log gamelog;
+	extern MusicClass music;
+	extern class Ledger ledger;
+	extern unsigned long attorneyseed[RNG_SIZE];
+	extern unsigned long seed[RNG_SIZE];
 	music.play(MUSIC_TRIAL);
 	// If their old base is no longer under LCS control, wander back to the
 	// homeless shelter instead.
@@ -1287,6 +1292,8 @@ void trial(Creature &g)
 }
 void reeducation(Creature &g)
 {
+	extern Log gamelog;
+	extern vector<Creature *> pool;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, g.name, gamelog);
@@ -1343,6 +1350,7 @@ void reeducation(Creature &g)
 }
 void laborcamp(Creature &g)
 {
+	extern Log gamelog;
 	int escaped = 0;
 	const char *experience;
 	// Escape attempt!
@@ -1427,6 +1435,8 @@ void laborcamp(Creature &g)
 }
 void prisonscene(Creature &g)
 {
+	extern Log gamelog;
+	extern vector<Creature *> pool;
 	int escaped = 0;
 	int effect = 0;
 	const char *experience;
@@ -1542,6 +1552,10 @@ void prisonscene(Creature &g)
 //RETURNS IF SCREEN WAS ERASED
 char prison(Creature &g)
 {
+	extern Log gamelog;
+	extern int stat_dead;
+	extern short lawList[LAWNUM];
+	extern vector<Creature *> pool;
 	char showed = 0;
 	// People not on death row or about to be released can have a scene in prison
 	if (!g.deathpenalty && g.sentence != 1)

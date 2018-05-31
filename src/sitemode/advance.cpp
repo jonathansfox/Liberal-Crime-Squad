@@ -61,28 +61,7 @@ void freehostage(Creature &cr, char situation);
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
 
-extern squadst *activesquad;
-extern int sitecrime;
-extern newsstoryst *sitestory;
-extern short cursite;
-extern short sitealarm;
-extern Creature encounter[ENCMAX];
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
-extern short sitealarmtimer;
-extern short siteonfire;
-extern short lawList[LAWNUM];
-
-extern Log gamelog;
 void addLocationChange(int cursite, sitechangest change);
-extern short mode;
-extern short postalarmtimer;
-extern int stat_dead;
-extern int stat_kills;
-extern int ccs_siege_kills;
-extern int ccs_boss_kills;
 string smellsPanic;
 
 
@@ -95,6 +74,21 @@ string sBody;
 /* handles end of round stuff for one creature */
 void advancecreature(Creature &cr)
 {
+	extern squadst *activesquad;
+	extern newsstoryst *sitestory;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern Log gamelog;
+	extern short mode;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int ccs_siege_kills;
+	extern int ccs_boss_kills;
+	extern short cursite;
+	extern int sitecrime;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	if (!cr.alive) return;
 	char incaprint;
 	if (incapacitated(cr, 1, incaprint))
@@ -238,6 +232,19 @@ void advancecreature(Creature &cr)
 /* handles end of round stuff for everyone */
 void creatureadvance()
 {
+	extern int sitecrime;
+	extern newsstoryst *sitestory;
+	extern short cursite;
+	extern short sitealarm;
+	extern short sitealarmtimer;
+	extern short siteonfire;
+	extern squadst *activesquad;
+	extern short siteonfire;
+	extern Log gamelog;
+	extern short mode;
+	extern short postalarmtimer;
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;

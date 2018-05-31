@@ -113,7 +113,6 @@ int squadsize(const squadst *st);
 #include "../cursesAlternativeConstants.h"
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
-extern MusicClass music;
 #include <functional>
 extern string spaceDashSpace;
 extern string closeParenthesis;
@@ -122,14 +121,7 @@ extern string undefined;
  extern string show_squad_liberal_status;
  extern string enter_done;
  extern string chooseALiberalTo;
- extern short interface_pgup;
- extern short interface_pgdn;
  extern string singleSpace;
- extern short party_status;
- extern vector<ArmorType *> armortype;
- extern vector<ClipType *> cliptype;
- extern vector<WeaponType *> weapontype;
- extern short lawList[LAWNUM];
  string paranthesisDollar;
 ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
 { }
@@ -210,6 +202,7 @@ Shop::~Shop()
 }
 void Shop::enter(squadst& customers) const
 {
+	extern MusicClass music;
 	music.play(MUSIC_SHOPPING);
 	int buyer = 0;
 	choose(customers, buyer);
@@ -221,6 +214,8 @@ void Shop::choose(squadst& customers, int& buyer) const
 }
 void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	int page = 0;
 	std::vector<ShopOption*> available_options = options_;
 	available_options.erase(remove_if(available_options.begin(),
@@ -275,6 +270,8 @@ bool getCanBeSoldLocation(int l, int slot);
 void decreateLocationLoot(int loc, int loot, int num);
 int fenceselect(squadst& customers)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
 	int ret = 0, page = 0;
 	consolidateLoot(customers.squad[0]->base);
 	
@@ -374,13 +371,14 @@ int fenceselect(squadst& customers)
 	}
 	return ret;
 }
-extern class Ledger ledger;
 void equipLoot(int l, int loc);
 void deleteLocationLoot(int loc, int loot);
 int whatIsThisItemInLocation(int loc, int l);
 bool noQuickFenceLocation(int loc, int l);
 void sell_loot(squadst& customers) 
 {
+	extern short party_status;
+	extern class Ledger ledger;
 	int partysize = squadsize(&customers);
 	while (true)
 	{
@@ -478,6 +476,7 @@ void sell_loot(squadst& customers)
 }
 void choose_buyer(squadst& customers, int& buyer) 
 {
+	extern short party_status;
 	party_status = -1;
 	int partysize = squadsize(&customers);
 	if (partysize <= 1) return;
@@ -498,6 +497,8 @@ void choose_buyer(squadst& customers, int& buyer)
 void maskselect(Creature &buyer);
 void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 {
+	extern short party_status;
+	extern class Ledger ledger;
 	int page = 0, partysize = squadsize(&customers);
 	std::vector<ShopOption*> available_options = options_;
 	available_options.erase(remove_if(available_options.begin(),
@@ -696,10 +697,12 @@ bool Shop::ShopItem::display() const
 }
 bool Shop::ShopItem::can_afford() const
 {
+	extern class Ledger ledger;
 	return(adjusted_price() <= ledger.get_funds());
 }
 bool Shop::ShopItem::legal() const
 {
+	extern vector<WeaponType *> weapontype;
 	bool r = true;
 	switch (itemclass_)
 	{
@@ -733,6 +736,8 @@ bool Shop::ShopItem::valid_item() const
 }
 int Shop::ShopItem::adjusted_price() const
 {
+	extern short lawList[LAWNUM];
+	extern vector<WeaponType *> weapontype;
 	int p = price_;
 	if (increase_price_with_illegality_&&itemclass_ == WEAPON && valid_item())
 		for (int i = weapontype[getweapontype(itemtypename_)]->get_legality(); i < lawList[LAW_GUNCONTROL]; i++)
@@ -743,6 +748,9 @@ int Shop::ShopItem::adjusted_price() const
 #include "../items/lootTypePool.h"
 const std::string Shop::ShopItem::get_description() const
 {
+	extern vector<ArmorType *> armortype;
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
 	if (description_defined_) return description_;
 	else switch (itemclass_)
 	{
@@ -757,6 +765,10 @@ const std::string Shop::ShopItem::get_description() const
 // Removing the subsequent references to location will be difficult.
 void maskselect(Creature &buyer)
 {
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern class Ledger ledger;
+	extern vector<ArmorType *> armortype;
 	short maskindex = -1;
 	std::vector<int> masktype;
 	for (int a = 0; a < len(armortype); a++)
@@ -824,6 +836,9 @@ void maskselect(Creature &buyer)
 }
 void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 {
+	extern class Ledger ledger;
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
 	if (!is_available()) return;
 	ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
 	extern vector<Location *> location;

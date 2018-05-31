@@ -210,9 +210,6 @@ void promoteVP();
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern Log gamelog;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern char oldPresidentName[POLITICIAN_NAMELEN];
  vector<string> ccs_covername_shotgun;
  vector<string> ccs_covername_other;
  const string creature = "creature\\";
@@ -221,9 +218,6 @@ extern char oldPresidentName[POLITICIAN_NAMELEN];
 	 customText(&ccs_covername_shotgun, creature + CONST_creature085),
 	 customText(&ccs_covername_other, creature + CONST_creature086),
  };
-extern short exec[EXECNUM];
-extern long curcreatureid;
-extern UniqueCreatures uniqueCreatures;
 extern string commaSpace;
 Creature& Creature::operator=(const Creature& rhs)
 {
@@ -346,6 +340,7 @@ bool Creature::canwalk() const
 }
 void Creature::creatureinit()
 {
+	extern long curcreatureid;
 	dontname = false;
 	hireid = -1;
 	worklocation = 0;
@@ -862,6 +857,8 @@ int Creature::roll_check(int skill)
 }
 int Creature::attribute_roll(int attribute) const
 {
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
 	int return_value = roll_check(get_attribute(attribute, true));
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature091);
@@ -878,6 +875,8 @@ int Creature::attribute_roll(int attribute) const
 }
 bool Creature::attribute_check(int attribute, int difficulty) const
 {
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature094);
 		addstrAlt(attribute_enum_to_string(attribute));
@@ -894,6 +893,9 @@ bool Creature::attribute_check(int attribute, int difficulty) const
 }
 int Creature::skill_roll(int skill) const
 {
+	extern Log gamelog;
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
 	int pseudoskill = 0;
 	// Handle Pseudoskills
 	if (skill < 0)
@@ -1032,6 +1034,8 @@ int Creature::skill_roll(int skill) const
 }
 bool Creature::skill_check(int skill, int difficulty) const
 {
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature103);
 		addstrAlt(skill_enum_to_string(skill));
@@ -1101,6 +1105,7 @@ void conservatise(Creature &cr)
 /* turns a creature into a liberal */
 void liberalize(Creature &cr, bool rename)
 {
+	extern UniqueCreatures uniqueCreatures;
 	if (cr.align == ALIGN_CONSERVATIVE && cr.juice > 0)cr.juice = 0;
 	cr.align = ALIGN_LIBERAL;
 	if (cr.id == uniqueCreatures.CEO().id)
@@ -1138,6 +1143,8 @@ bool Creature::talkreceptive() const
 /* are the characters close enough in age to date? */
 bool Creature::can_date(const Creature &a) const
 {
+	// Make age not matter for dating or prostitution
+	extern bool ZEROMORAL;
 	if (!ZEROMORAL) {
 		// Assume age appropriate for animals, tanks, etc.
 		// (use other restrictions for these, like humorous rejections)
@@ -1153,6 +1160,9 @@ bool Creature::can_date(const Creature &a) const
 }
 void Creature::die()
 {
+	extern UniqueCreatures uniqueCreatures;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern char oldPresidentName[POLITICIAN_NAMELEN];
 	alive = 0, blood = 0;
 	if (id == uniqueCreatures.CEO().id)
 		uniqueCreatures.newCEO();
@@ -1170,6 +1180,8 @@ void UniqueCreatures::newCEO()
 }
 void UniqueCreatures::newPresident()
 {
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
 	makecreature(Pres_, CREATURE_POLITICIAN);
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)

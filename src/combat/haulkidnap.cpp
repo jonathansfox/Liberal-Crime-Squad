@@ -82,26 +82,18 @@ void removesquadinfo(Creature &cr);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../common/creaturePoolCreature.h"
-extern Log gamelog;
+
+
+extern string singleSpace;
 extern string chooseALiberalTo;
 extern string AND;
 extern string spaceDashSpace;
 extern string singleDot;
-extern int stat_kidnappings;
-extern short mode;
-extern squadst *activesquad;
-extern short party_status;
-extern Creature encounter[ENCMAX];
-extern short lawList[LAWNUM];
-extern short sitealarm;
-extern short sitealarmtimer;
-extern int sitecrime;
-extern short offended_amradio;
-extern short offended_cablenews;
-extern string singleSpace;
 /* roll on the kidnap attempt and show the results */
 bool kidnap(Creature &a, Creature &t, bool &amateur)
 {
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
 	if (!a.get_weapon().can_take_hostages())
 	{
 		amateur = 1;
@@ -170,6 +162,9 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 /* hostage freed due to host unable to haul */
 void freehostage(Creature &cr, char situation)
 {
+	extern short mode;
+	extern Log gamelog;
+	extern Creature encounter[ENCMAX];
 	if (cr.prisoner == NULL)return;
 	if (cr.prisoner->alive)
 	{
@@ -240,6 +235,15 @@ void freehostage(Creature &cr, char situation)
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()
 {
+	extern int sitecrime;
+	extern short party_status;
+	extern short sitealarm;
+	extern short sitealarmtimer;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
 	short kidnapper = -1;
 	party_status = -1;
 	int available = 0;
@@ -353,6 +357,10 @@ void kidnapattempt()
 /* prompt after you've said you want to release someone */
 void releasehostage()
 {
+	extern short party_status;
+	extern short sitealarm;
+	extern squadst *activesquad;
+	extern Log gamelog;
 	short kidnapper = -1;
 	party_status = -1;
 	int available = 0;
@@ -396,6 +404,8 @@ void releasehostage()
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
+	extern squadst *activesquad;
+	extern Log gamelog;
 	int hostslots = 0; //DRAGGING PEOPLE OUT IF POSSIBLE
 	for (int p = 0; p < 6; p++)
 	{

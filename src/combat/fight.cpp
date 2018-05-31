@@ -269,15 +269,6 @@ void freehostage(Creature &cr,char situation);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
-extern vector<Creature *> pool;
-extern Log gamelog;
-extern short mode;
-extern short sitetype;
-extern char foughtthisround;
-extern int stat_dead;
-extern int stat_kills;
-extern int ccs_siege_kills;
-extern int ccs_boss_kills;
 bool goodguyattack = false;
  vector<string> escape_running;
  vector<string> escape_crawling;
@@ -328,22 +319,9 @@ bool goodguyattack = false;
 	 customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
  };
  extern string singleSpace;
- extern short sitealarm;
- extern squadst *activesquad;
- extern Creature encounter[ENCMAX];
- extern newsstoryst *sitestory;
- extern int sitecrime;
- extern short cursite;
- extern int locx;
-extern int locy;
- extern int locz;
- extern siteblockst levelmap[MAPX][MAPY][MAPZ];
- vector<Item *> groundloot;
- extern short sitealarmtimer;
  extern string singleDot;
  extern string commaSpace;
- extern short lawList[LAWNUM];
- extern char slogan[SLOGAN_LEN];
+ vector<Item *> groundloot;
 std::string burstHitString(int bursthits) {
 	switch (bursthits)
 	{
@@ -358,6 +336,7 @@ std::string burstHitString(int bursthits) {
 /* generates the loot dropped by a creature when it dies */
 void makeloot(Creature &cr, vector<Item *> &loot)
 {
+	extern short mode;
 	cr.drop_weapons_and_clips(&loot);
 	cr.strip(&loot);
 	if (cr.money>0 && mode == GAMEMODE_SITE)
@@ -380,6 +359,8 @@ void delete_and_clear_groundloot() {
 /* kills the specified creature from the encounter, dropping loot */
 void delenc(const short e, const char loot)
 {
+	extern short mode;
+	extern Creature encounter[ENCMAX];
 	//MAKE GROUND LOOT
 	if ((mode == GAMEMODE_SITE) && loot) makeloot(encounter[e]);
 	//BURY IT
@@ -391,6 +372,7 @@ void delenc(const short e, const char loot)
 	encounter[ENCMAX - 1].exists = 0;
 }
 void delenc(Creature &tk) {
+	extern Creature encounter[ENCMAX];
 	delenc(&tk - encounter, 0);
 }
 string specialWoundPossibilityBody(
@@ -408,6 +390,9 @@ string specialWoundPossibilityHead(
 /* checks if the creature can fight and prints flavor text if they can't */
 char incapacitated(Creature &a, const char noncombat, char &printed)
 {
+	extern short mode;
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
 	printed = 0;
 	switch (a.animalgloss) {
 	case ANIMALGLOSS_TANK:
@@ -531,6 +516,11 @@ char incapacitated(Creature &a, const char noncombat, char &printed)
 }
 void specialattack(Creature &a, Creature &t)
 {
+	extern short mode;
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short lawList[LAWNUM];
+	extern Creature encounter[ENCMAX];
 	int resist = 0;
 	char str[200];
 	clearmessagearea();
@@ -872,6 +862,13 @@ void armordamage(Armor &armor, const int bp, const int damamount)
 /* blood explosions */
 void bloodblast(Armor* armor)
 {
+	extern short mode;
+	extern squadst *activesquad;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//GENERAL
 	if (armor != NULL)
 		armor->set_bloody(true);
@@ -898,6 +895,8 @@ void bloodblast(Armor* armor)
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(Creature &cr)
 {
+	extern short mode;
+	extern Log gamelog;
 	int armok = 2;
 	if ((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
 		(cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
@@ -939,6 +938,10 @@ void severloot(Creature &cr)
 /* describes a character's death */
 void adddeathmessage(Creature &cr)
 {
+	extern short mode;
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	extern char slogan[SLOGAN_LEN];
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	char str[200];
 	char secondLine[200];
@@ -1030,6 +1033,7 @@ void adddeathmessage(Creature &cr)
 bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee = false);
 
 bool attemptSpecialAttack(Creature &a, Creature &t, const bool force_melee) {
+	extern Creature encounter[ENCMAX];
 	//SPECIAL ATTACK!
 	int encnum = 0;
 	for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encnum++;
@@ -1056,6 +1060,8 @@ bool attemptSpecialAttack(Creature &a, Creature &t, const bool force_melee) {
 	return false;
 }
 bool attemptReload(Creature &a, const bool force_melee) {
+	extern short mode;
+	extern Log gamelog;
 	//RELOAD
 	if ((a.will_reload(mode == GAMEMODE_CHASECAR, force_melee)
 		|| (a.has_thrown_weapon && len(a.extra_throwing_weapons)))
@@ -1089,6 +1095,7 @@ bool attemptReload(Creature &a, const bool force_melee) {
 	return false;
 }
 bool attemptIncapacitated(Creature &a) {
+	extern short mode;
 	//INCAPACITATED
 	char incaprint;
 	a.forceinc = 0;
@@ -1131,6 +1138,8 @@ string showMultipleHits(Creature &a, const int bursthits, const attackst* attack
 	return str;
 }
 Creature* takeBulletForLeader(Creature &t, const int damamount, const int w) {
+	extern Log gamelog;
+	extern squadst *activesquad;
 	Creature* target = 0;
 	if (t.squadid != -1 && t.hireid == -1 && //if the founder is hit...
 		(damamount > t.blood || damamount >= 10) && //and lethal or potentially crippling damage is done...
@@ -1226,6 +1235,7 @@ int determineBodypartHit(Creature &t, const int aroll, const int droll, const bo
 }
 void printSpecialWounds(Creature* target, const int w, const int damamount, const int damtype) {
 
+	extern Log gamelog;
 		char heavydam = 0, breakdam = 0, pokedam = 0;
 		if (damamount >= 12) //JDS -- 2x damage needed
 		{
@@ -1276,7 +1286,10 @@ void printSpecialWounds(Creature* target, const int w, const int damamount, cons
 	
 }
 void unsuccessfulHit(Creature &a, Creature &t, char* str, const bool sneak_attack, const int droll) {
-	
+
+	extern short mode;
+	extern Log gamelog;
+	extern short sitealarm;
 	
 		if (sneak_attack)
 		{
@@ -1332,6 +1345,22 @@ void addLocationChange(int cursite, sitechangest change);
 /* attack handling for an individual creature and its target */
 bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee)
 {
+	extern short mode;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int ccs_siege_kills;
+	extern int ccs_boss_kills;
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short cursite;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarmtimer;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	//char newActual = 0;
 	clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -1887,6 +1916,14 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 /* attack handling for each side as a whole */
 void youattack()
 {
+	extern char foughtthisround;
+	extern squadst *activesquad;
+	extern newsstoryst *sitestory;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short cursite;
+	extern Creature encounter[ENCMAX];
+	extern vector<Creature *> pool;
 	foughtthisround = 1;
 	const short wasalarm = sitealarm;
 	goodguyattack = true;
@@ -2081,6 +2118,19 @@ void youattack()
 }
 void enemyattack()
 {
+	extern short mode;
+	extern char foughtthisround;
+	extern Log gamelog;
+	extern squadst *activesquad;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	// Enemies don't attack
+	extern bool NOENEMYATTACK;
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	foughtthisround = 1;
 	goodguyattack = false;
 	bool armed = false;
@@ -2539,6 +2589,8 @@ string specialWoundPossibilityHead(
 /* abandoned liberal is captured by conservatives */
 void capturecreature(Creature &t)
 {
+	extern short sitetype;
+	extern short cursite;
 	t.activity.type = ACTIVITY_NONE;
 	t.drop_weapons_and_clips(NULL);
 	//t.strip(NULL);
@@ -2575,6 +2627,8 @@ void capturecreature(Creature &t)
 /* pushes people into the current squad (used in a siege) */
 void autopromote(const int loc)
 {
+	extern squadst *activesquad;
+	extern vector<Creature *> pool;
 	if (!activesquad) return;
 	const int partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
 	int libnum = 0;

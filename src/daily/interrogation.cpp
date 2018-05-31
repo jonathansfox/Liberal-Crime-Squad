@@ -188,11 +188,6 @@ const string tag_skill = "skill";
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
-extern Log gamelog;
-extern MusicClass music;
-extern int stat_recruits;
-extern int stat_kills;
-extern short lawList[LAWNUM];
  vector<string> execution;
  vector<string> feels_sick;
  vector<string> low_heart_torture_props;
@@ -364,10 +359,151 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 		mvaddstrAlt(23,  40, line_two);
 	}
 }
-extern class Ledger ledger;
+void printInterrogationMenu(bool techniques[6], Creature * cr, Creature * a) {
+	int c = -1;
+	do
+	{
+
+		if (techniques[TECHNIQUE_KILL])
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(2, 0, CONST_interrogation061);
+		}
+		else
+		{
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			mvaddstrAlt(2, 0, CONST_interrogation062);
+		}
+		if (techniques[TECHNIQUE_KILL])set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		else set_color_easy(techniques[TECHNIQUE_TALK] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+
+		mvaddstrAlt(4, 0, CONST_interrogation063);
+
+		if (!techniques[TECHNIQUE_TALK]) addstrAlt(CONST_interrogation064);
+		else addstrAlt(CONST_interrogation065);
+
+		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_RESTRAIN] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+
+		mvaddstrAlt(5, 0, CONST_interrogation066);
+		if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation077);
+
+		addstrAlt(CONST_interrogation068);
+		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_BEAT] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+
+		mvaddstrAlt(6, 0, CONST_interrogation069);
+
+		if (!techniques[TECHNIQUE_BEAT]) addstrAlt(CONST_interrogation070);
+
+		addstrAlt(CONST_interrogation071);
+
+		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_PROPS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+
+		mvaddstrAlt(7, 0, CONST_interrogation072);
+
+		if (!techniques[TECHNIQUE_PROPS])addstrAlt(CONST_interrogation077);
+
+		addstrAlt(CONST_interrogation074);
+		mvaddstrAlt(7, 27, CONST_interrogation075);
+
+		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_DRUGS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+
+		mvaddstrAlt(8, 0, CONST_interrogation076);
+
+		if (!techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_interrogation077);
+
+		addstrAlt(CONST_interrogation078);
+		mvaddstrAlt(8, 28, CONST_interrogation079);
+
+		if (techniques[TECHNIQUE_KILL])set_color_easy(RED_ON_BLACK_BRIGHT);
+		else set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(10, 0, CONST_interrogation080);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12, 0, CONST_interrogation081);
+		show_interrogation_sidebar(cr, a);
+		c = getkeyAlt();
+		if (c >= 'a'&&c <= 'e') { techniques[c - 'a'] = !techniques[c - 'a']; }
+		if (c == 'k') { techniques[TECHNIQUE_KILL] = !techniques[TECHNIQUE_KILL]; }
+	} while (c != 'x' && c != ENTER && c != ESC && c != SPACEBAR);
+}
+void attemptExecution(Creature * cr) {
+
+	extern Log gamelog;
+	vector<Creature *> temppool;
+	findAllTendersToThisHostage(cr, temppool);
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, CONST_interrogation082, gamelog);
+	addstrAlt(cr->name, gamelog);
+	addstrAlt(CONST_interrogation092, gamelog);
+	addstrAlt(cr->joindays, gamelog);
+	gamelog.newline();
+	Creature *a = NULL;
+	for (int i = 0; i < len(temppool); i++)
+		if (LCSrandom(50) < temppool[i]->juice ||
+			LCSrandom(9) + 1 >= temppool[i]->get_attribute(ATTRIBUTE_HEART, 0))
+		{
+			a = temppool[i]; break;
+		}
+	if (a)
+	{
+		set_color_easy(MAGENTA_ON_BLACK);
+		cr->die();
+		mvaddstrAlt(13, 0, a->name, gamelog);
+		addstrAlt(CONST_interrogation084, gamelog);
+		addstrAlt(cr->name, gamelog);
+		addstrAlt(CONST_interrogation085, gamelog);
+		addstrAlt(pickrandom(execution), gamelog);
+		//show_interrogation_sidebar(cr,a);
+		pressAnyKey();
+		if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
+		{
+			gamelog.newline();
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14, 0, a->name, gamelog);
+			addstrAlt(feels_sick_and, gamelog);
+			a->adjust_attribute(ATTRIBUTE_HEART, -1);
+			mvaddstrAlt(15, 0, pickrandom(feels_sick), gamelog);
+		}
+		else if (!LCSrandom(3))
+		{
+			gamelog.newline();
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14, 0, a->name, gamelog);
+			addstrAlt(CONST_interrogation160, gamelog);
+			a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
+		}
+		gamelog.nextMessage();
+	}
+	else
+	{
+		set_color_easy(YELLOW_ON_BLACK);
+		mvaddstrAlt(13, 0, CONST_interrogation087, gamelog);
+		mvaddstrAlt(14, 0, CONST_interrogation088, gamelog);
+		addstrAlt(cr->name, gamelog);
+		addstrAlt(CONST_interrogation089, gamelog);
+		gamelog.nextMessage();
+	}
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(24, 0, CONST_interrogation167);
+	pressAnyKey();
+}
 /* hostage tending */
 void tendhostage(Creature *cr, char &clearformess)
 {
+	// Interrogation always enlightens
+	extern bool AUTOENLIGHTEN;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern int stat_recruits;
+	extern int stat_kills;
+	extern class Ledger ledger;
+	extern short lawList[LAWNUM];
+	if (cr->location == -1)
+	{
+		delete cr;
+		return;
+	}
 	music.play(MUSIC_INTERROGATION);
 	vector<Creature *> temppool;
 	Creature *a = NULL;
@@ -375,11 +511,6 @@ void tendhostage(Creature *cr, char &clearformess)
 	bool(&techniques)[6] = intr->techniques;
 	map<long, struct Float_Zero>& rapport = intr->rapport;
 	findAllTendersToThisHostage(cr, temppool);
-	if (cr->location == -1)
-	{
-		delete cr;
-		return;
-	}
 	//possible hostage escape attempt if unattended or unrestrained
 	if (!len(temppool) || !techniques[TECHNIQUE_RESTRAIN])
 	{
@@ -395,8 +526,8 @@ void tendhostage(Creature *cr, char &clearformess)
 			delete intr;
 			return;
 		}
-		if (!len(temppool)) return;
 	}
+	if (!len(temppool)) return;
 	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -449,70 +580,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		attack -= cr->attribute_roll(ATTRIBUTE_WISDOM) * 2;
 		char turned = 0;
 		{
-			while (true)
-			{
-				
-				if (techniques[TECHNIQUE_KILL])
-				{
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(2, 0, CONST_interrogation061);
-				}
-				else
-				{
-					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(2, 0, CONST_interrogation062);
-				}
-				if (techniques[TECHNIQUE_KILL])set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				else set_color_easy(techniques[TECHNIQUE_TALK] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-
-				mvaddstrAlt(4, 0, CONST_interrogation063);
-
-				if (!techniques[TECHNIQUE_TALK]) addstrAlt(CONST_interrogation064);
-				else addstrAlt(CONST_interrogation065);
-
-				if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_RESTRAIN] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-
-				mvaddstrAlt(5, 0, CONST_interrogation066);
-				if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation077);
-
-				addstrAlt(CONST_interrogation068);
-				if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_BEAT] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-
-				mvaddstrAlt(6, 0, CONST_interrogation069);
-
-				if (!techniques[TECHNIQUE_BEAT]) addstrAlt(CONST_interrogation070);
-
-				addstrAlt(CONST_interrogation071);
-
-				if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_PROPS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-
-				mvaddstrAlt(7, 0, CONST_interrogation072);
-
-				if (!techniques[TECHNIQUE_PROPS])addstrAlt(CONST_interrogation077);
-
-				addstrAlt(CONST_interrogation074);
-				mvaddstrAlt(7, 27, CONST_interrogation075);
-
-				if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_DRUGS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-
-				mvaddstrAlt(8, 0, CONST_interrogation076);
-
-				if (!techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_interrogation077);
-
-				addstrAlt(CONST_interrogation078);
-				mvaddstrAlt(8, 28, CONST_interrogation079);
-				
-				if (techniques[TECHNIQUE_KILL])set_color_easy(RED_ON_BLACK_BRIGHT);
-				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 0, CONST_interrogation080);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(12, 0, CONST_interrogation081);
-				show_interrogation_sidebar(cr, a);
-				int c = getkeyAlt();
-				if (c >= 'a'&&c <= 'e') techniques[c - 'a'] = !techniques[c - 'a'];
-				if (c == 'k') techniques[TECHNIQUE_KILL] = !techniques[TECHNIQUE_KILL];
-				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-			}
+			printInterrogationMenu(techniques, cr, a);
 			if (techniques[TECHNIQUE_PROPS] && ledger.get_funds() >= 250)
 				ledger.subtract_funds(250, EXPENSE_HOSTAGE);
 			else techniques[TECHNIQUE_PROPS] = 0;
@@ -523,61 +591,8 @@ void tendhostage(Creature *cr, char &clearformess)
 
 			if (techniques[TECHNIQUE_KILL]) // Kill the Hostage
 			{
-				eraseAlt();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0, 0, CONST_interrogation082, gamelog);
-				addstrAlt(cr->name, gamelog);
-				addstrAlt(CONST_interrogation092, gamelog);
-				addstrAlt(cr->joindays, gamelog);
-				gamelog.newline();
-				a = NULL;
-				for (int i = 0; i < len(temppool); i++)
-					if (LCSrandom(50) < temppool[i]->juice ||
-						LCSrandom(9) + 1 >= temppool[i]->get_attribute(ATTRIBUTE_HEART, 0))
-					{
-						a = temppool[i]; break;
-					}
-				if (a)
-				{
-					//delete InterrogationST information
-					delete intr;
-					set_color_easy(MAGENTA_ON_BLACK);
-					cr->die();
-					stat_kills++;
-					mvaddstrAlt(13, 0, a->name, gamelog);
-					addstrAlt(CONST_interrogation084, gamelog);
-					addstrAlt(cr->name, gamelog);
-					addstrAlt(CONST_interrogation085, gamelog);
-					addstrAlt(pickrandom(execution), gamelog);
-					//show_interrogation_sidebar(cr,a);
-					pressAnyKey();
-					if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
-					{
-						gamelog.newline();
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						mvaddstrAlt(14, 0, a->name, gamelog);
-						addstrAlt(feels_sick_and, gamelog);
-						a->adjust_attribute(ATTRIBUTE_HEART, -1);
-						mvaddstrAlt(15, 0, pickrandom(feels_sick), gamelog);
-					}
-					else if (!LCSrandom(3))
-					{
-						gamelog.newline();
-						set_color_easy(CYAN_ON_BLACK_BRIGHT);
-						mvaddstrAlt(14, 0, a->name, gamelog);
-						addstrAlt(CONST_interrogation160, gamelog);
-						a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
-					}
-					gamelog.nextMessage();
-				}
-				else
-				{
-					set_color_easy(YELLOW_ON_BLACK);
-					mvaddstrAlt(13, 0, CONST_interrogation087, gamelog);
-					mvaddstrAlt(14, 0, CONST_interrogation088, gamelog);
-					addstrAlt(cr->name, gamelog);
-					addstrAlt(CONST_interrogation089, gamelog);
-					gamelog.nextMessage();
+				attemptExecution(cr);
+				if (cr->alive) {
 					//Interrogation will continue as planned, with
 					//these restrictions:
 					techniques[TECHNIQUE_TALK] = 0; //don't talk to them today
@@ -585,15 +600,15 @@ void tendhostage(Creature *cr, char &clearformess)
 					techniques[TECHNIQUE_DRUGS] = 0; //don't administer drugs
 													 //Food and restraint settings will be applied as normal
 				}
-				//show_interrogation_sidebar(cr,a);
-				pressAnyKey();
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(24, 0, CONST_interrogation167);
-				pressAnyKey();
-				if (!cr->alive)
-				{
+				else {
+
+					//delete InterrogationST information
+					delete intr;
+					stat_kills++;
+
 					setAllCreatureActivities(ACTIVITY_NONE, temppool);
 					delete[] _attack;
+
 					return;
 				}
 			}

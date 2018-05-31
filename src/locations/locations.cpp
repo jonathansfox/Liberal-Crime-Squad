@@ -154,10 +154,8 @@ const string tag_skill = "skill";
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/creaturePool.h"
-extern bool multipleCityMode;
 extern string singleSpace;
 extern string commaSpace;
-extern short lawList[LAWNUM];
 // Finds a location with the corresponding type and returns
 // its index in the location array
  vector<string> labor_camp_name;
@@ -298,6 +296,7 @@ void Location::rename(const char* name_, const char* shortname_)
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(Location &loc)
 {  // NOTE: make sure to keep code here matching code in updateworld_laws() in monthly.cpp for when names are changed
+	extern short lawList[LAWNUM];
 	loc.init();
 	char str[80];
 	switch (loc.type)

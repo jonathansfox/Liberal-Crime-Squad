@@ -39,20 +39,6 @@ const string tag_skill = "skill";
 #include "../locations/locations.h"
 
 #include "../locations/locationsPool.h"
-extern short exec[EXECNUM];
-extern char endgamestate;
-extern short sitetype;
-extern short mode;
-extern short postalarmtimer;
-extern short lawList[LAWNUM];
-extern short siteonfire;
-extern short cursite;
-extern Creature encounter[ENCMAX];
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
-extern short sitealarm;
 void fillEncounter(CreatureTypes c, int numleft);
 void emptyEncounter();
 /* rolls up a random creature type according to the passed weighting array */
@@ -70,6 +56,9 @@ int getrandomcreaturetype(int cr[CREATURENUM])
 	else return -1;
 }
 void addPoliceOrMilitary(int creaturearray[CREATURENUM]) {
+	extern short siteonfire;
+	extern short sitetype;
+	extern short lawList[LAWNUM];
 	switch (sitetype)
 	{
 	case SITE_GOVERNMENT_ARMYBASE:
@@ -845,6 +834,8 @@ void addCCS(int creaturearray[CREATURENUM]) {
 
 }
 void addCrackhouse(int creaturearray[CREATURENUM]) {
+	extern char endgamestate;
+	extern short lawList[LAWNUM];
 
 	if (lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 2;
 	if (lawList[LAW_POLLUTION] == -2)creaturearray[CREATURE_MUTANT] += 2;
@@ -854,6 +845,9 @@ void addCrackhouse(int creaturearray[CREATURENUM]) {
 		creaturearray[CREATURE_CCS_VIGILANTE] += 5;
 }
 void addCigarbar(int creaturearray[CREATURENUM], const char sec) {
+	extern char endgamestate;
+	extern short sitealarm;
+	extern short lawList[LAWNUM];
 	if (sec || sitealarm == 1)creaturearray[CREATURE_BOUNCER] += 100;
 	else creaturearray[CREATURE_BOUNCER] += 10;
 	if (sec)creaturearray[CREATURE_GUARDDOG] += 25;
@@ -866,6 +860,8 @@ void addCigarbar(int creaturearray[CREATURENUM], const char sec) {
 }
 void addWhitehouse(int creaturearray[CREATURENUM], const char sec) {
 
+	extern char endgamestate;
+	extern short exec[EXECNUM];
 
 
 	if (sec)creaturearray[CREATURE_SECRET_SERVICE] += 100;
@@ -874,6 +870,8 @@ void addWhitehouse(int creaturearray[CREATURENUM], const char sec) {
 		creaturearray[CREATURE_CCS_ARCHCONSERVATIVE] += 1;
 }
 void addLatteStandOrPark(int creaturearray[CREATURENUM]) {
+	extern short lawList[LAWNUM];
+	extern char endgamestate;
 
 
 
@@ -893,6 +891,7 @@ void addLatteStandOrPark(int creaturearray[CREATURENUM]) {
 	else creaturearray[CREATURE_PRISONGUARD] += 1;
 }
 void addVeganCoop(int creaturearray[CREATURENUM]) {
+	extern short lawList[LAWNUM];
 
 
 
@@ -903,6 +902,7 @@ void addVeganCoop(int creaturearray[CREATURENUM]) {
 }
 
 void addShelter(int creaturearray[CREATURENUM]) {
+	extern short lawList[LAWNUM];
 
 
 
@@ -912,6 +912,7 @@ void addShelter(int creaturearray[CREATURENUM]) {
 		lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 50;
 }
 void addTenement(int creaturearray[CREATURENUM]) {
+	extern short lawList[LAWNUM];
 
 
 
@@ -926,6 +927,7 @@ void addTenement(int creaturearray[CREATURENUM]) {
 	else creaturearray[CREATURE_PRISONGUARD] += 1;
 }
 void addApartment(int creaturearray[CREATURENUM]) {
+	extern short lawList[LAWNUM];
 
 
 	if (lawList[LAW_LABOR] < 2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
@@ -938,6 +940,12 @@ void addApartment(int creaturearray[CREATURENUM]) {
 	else creaturearray[CREATURE_PRISONGUARD] += 1;
 }
 void addBank(int creaturearray[CREATURENUM], const char sec) {
+	extern short mode;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
 	if (mode == GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
 	{
 		creaturearray[CREATURE_BANK_MANAGER] = 20;
@@ -1019,6 +1027,12 @@ void addBank(int creaturearray[CREATURENUM], const char sec) {
 	}
 }
 void addUpscaleApartment(int creaturearray[CREATURENUM], const char sec) {
+	extern short mode;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short lawList[LAWNUM];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 
 
@@ -1059,6 +1073,7 @@ void addLaboratoryGenetic(int creaturearray[CREATURENUM], const char sec) {
 	else creaturearray[CREATURE_SECURITYGUARD] += 3;
 }
 void addPoliceStation(int creaturearray[CREATURENUM], const char sec) {
+	extern short lawList[LAWNUM];
 	
 
 
@@ -1078,7 +1093,8 @@ void addPoliceStation(int creaturearray[CREATURENUM], const char sec) {
 	else creaturearray[CREATURE_PRISONGUARD] = 1;
 }
 void addCourthouse(int creaturearray[CREATURENUM], const char sec) {
-	
+
+	extern short lawList[LAWNUM];
 
 
 	if (sec)creaturearray[CREATURE_COP] = 2000;
@@ -1099,6 +1115,7 @@ void addCourthouse(int creaturearray[CREATURENUM], const char sec) {
 void addFirestation(int creaturearray[CREATURENUM], const char sec) {
 
 
+	extern short lawList[LAWNUM];
 
 	if (sec)
 	{
@@ -1109,6 +1126,11 @@ void addFirestation(int creaturearray[CREATURENUM], const char sec) {
 	}
 }
 void addPrison(int creaturearray[CREATURENUM], const char sec) {
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short lawList[LAWNUM];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 		creaturearray[CREATURE_PRISONER] = 8; // prisoners only in restricted areas
@@ -1145,6 +1167,7 @@ void addSweatShop(int creaturearray[CREATURENUM], const char sec) {
 	else creaturearray[CREATURE_SECURITYGUARD] += 100;
 }
 void addIndustryPolluter(int creaturearray[CREATURENUM], const char sec) {
+	extern short lawList[LAWNUM];
 	if (sec)creaturearray[CREATURE_SECURITYGUARD] += 100;
 
 	if (lawList[LAW_LABOR] == -2)
@@ -1198,6 +1221,14 @@ void addMediaCablenews(int creaturearray[CREATURENUM], const char sec) {
 /* generates a new random encounter */
 void prepareencounter(short type, char sec)
 {
+	extern short mode;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short postalarmtimer;
+	extern short cursite;
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int encslot = 0;
 	emptyEncounter();
 	int creaturearray[CREATURENUM];
@@ -1378,6 +1409,10 @@ void prepareencounter(short type, char sec)
 /* generates a new siege encounter */
 char addsiegeencounter(char type)
 {
+	extern short sitetype;
+	extern short cursite;
+	extern short lawList[LAWNUM];
+	extern Creature encounter[ENCMAX];
 	int num;
 	int freeslots = 0;
 	for (int e = 0; e < ENCMAX; e++)

@@ -1,5 +1,4 @@
 #include "includes.h"
-const string CONST_compat000 = "%d";
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2004 by Kevin Sadler                                                    //
@@ -64,7 +63,6 @@ const string CONST_compat000 = "%d";
 */
 
 #include "../cursesAlternative.h"
-extern unsigned long seed[RNG_SIZE];
 int ptime=GetTickCount();
 void alarmset(int t)
 {
@@ -133,6 +131,9 @@ unsigned long getSeed()
 // It's a nice ultrafast 32-bit pseudorandom number generator with good randomness properties, small state space, and very short code.
 unsigned long r_num()
 {
+	// Re-seed the Random Number Generator every time it's called
+	extern bool MORERANDOM;
+	extern unsigned long seed[RNG_SIZE];
 	while (true) // this loop is in case of error, so the recovery mechanism can work... it'll exit with a return value upon success
 	{
 		unsigned long t = seed[0] ^ ((seed[0] << 11) & 0xffffffff); // set temp variable and keep it within 32 bits
@@ -156,11 +157,14 @@ long LCSrandom(long max)
 // No linear congruential generators is very random though, so this is just used to help initialize the xorshift RNG.
 unsigned long r_num2()
 {
+	extern unsigned long seed[RNG_SIZE];
    return seed[0]=(seed[0]*32310901UL+433494437UL)&0xffffffff; // return a random number, kept within 32 bits
 }
 // Initializes the xorshift Random Number Generator with help getSeed() and r_num2()
 void initMainRNG()
-{  // we got 4 integers to initialize, which we'll get from a well-seeded linear congruential generator
+{
+	extern unsigned long seed[RNG_SIZE];
+	// we got 4 integers to initialize, which we'll get from a well-seeded linear congruential generator
    seed[0]=getSeed(); // seed the linear congruential generator
    for(int i=RNG_SIZE-1;i>=0;i--) seed[i]=r_num2(); // initialize all the integers
 }
@@ -172,6 +176,7 @@ void copyRNG(unsigned long(&dest)[RNG_SIZE],unsigned long(&src)[RNG_SIZE])
 // Sets up another xorshift Random Number Generator whose state space is passed as an argument
 void initOtherRNG(unsigned long(&rng)[RNG_SIZE])
 {
+	extern unsigned long seed[RNG_SIZE];
    r_num(); // randomize main xorshift RNG beforehand
    copyRNG(rng,seed); // copy main xorshift RNG to the one we're setting up
    r_num(); // randomize main xorshift RNG afterwards

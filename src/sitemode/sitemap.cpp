@@ -78,16 +78,9 @@ const string tag_skill = "skill";
 #include "../sitemode/sitemap.h"
         //own header
 void emptyEncounter();
-extern squadst *activesquad;
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern int locx;
-extern int locy;
-extern int locz;
 void delete_and_clear_groundloot();
 map<short, string> siteReadMap;
 map<short, string> buildThisSite;
-extern unsigned long seed[RNG_SIZE];
-extern int oldMapMode;
  vector<configSiteMap *> sitemaps;
  map<string, short> getUnique;
  map<string, string> getLootString;
@@ -106,6 +99,7 @@ extern int oldMapMode;
  /* recursive dungeon-generating algorithm */
  void generateroom(int rx, int ry, int dx, int dy, int z)
  {
+	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = rx; x < rx + dx; x++)
 		 for (int y = ry; y < ry + dy; y++)
 			 levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
@@ -153,6 +147,7 @@ extern int oldMapMode;
 	 build_site(CONST_sitemap030);
  }
  void addSemiPermanentChanges(Location &loc) {
+	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 /*******************************************************
 	 * Add semi-permanent changes inflicted by LCS and others
 	 *******************************************************/
@@ -202,6 +197,7 @@ extern int oldMapMode;
 	 }
  }
  void addLootToLocation(Location &loc) {
+	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = 2; x < MAPX - 2; x++)
 		 for (int y = 2; y < MAPY - 2; y++)
 			 for (int z = 0; z < MAPZ; z++)
@@ -227,6 +223,7 @@ extern int oldMapMode;
 					 }
  }
 void clearOutRestrictions(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //Clear out restrictions
 	 char acted;
 	 do
@@ -289,6 +286,7 @@ void clearOutRestrictions(Location &loc) {
 	 } while (acted);
  }
 void useOldMapMode(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	  //ADD RESTRICTIONS
 	   //bool restricted=0;
 		switch (loc.type)
@@ -313,6 +311,7 @@ void useOldMapMode(Location &loc) {
 		
 }
 void useOldMapModeP2(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//ADD ACCESSORIES
 	for (int x = 2; x < MAPX - 2; x++)
 		for (int y = 2; y < MAPY - 2; y++)
@@ -416,6 +415,7 @@ void useOldMapModeP2(Location &loc) {
 
 }
 void clearBlockedStairwells(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//CLEAR BLOCKED STAIRWELLS
 	for (int x = 0; x < MAPX; x++)
 		for (int y = 0; y < MAPY; y++)
@@ -426,6 +426,7 @@ void clearBlockedStairwells(Location &loc) {
 				}
 }
 void deleteNonDoors(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//DELETE NON-DOORS
 	for (int x = 0; x < MAPX; x++)
 		for (int y = 0; y < MAPY; y++)
@@ -444,6 +445,7 @@ void deleteNonDoors(Location &loc) {
 				}
 }
 void clearBlockedDoorways(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//CLEAR AWAY BLOCKED DOORWAYS
 	for (int x = 0; x < MAPX; x++)
 		for (int y = 0; y < MAPY; y++)
@@ -530,6 +532,7 @@ void clearBlockedDoorways(Location &loc) {
 				}
 }
 void generateRandomMap(Location &loc) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	// Last resort -- generate random map
 	levelmap[MAPX >> 1][0][0].flag = SITEBLOCK_EXIT;
 	levelmap[(MAPX >> 1) + 1][0][0].flag = SITEBLOCK_EXIT;
@@ -605,7 +608,12 @@ void generateRandomMap(Location &loc) {
 }
 /* re-create site from seed before squad arrives */
 void initsite(Location &loc)
-{  //PREP
+{
+	extern squadst *activesquad;
+	extern int oldMapMode;
+	//PREP
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern unsigned long seed[RNG_SIZE];
 	if (activesquad == NULL)return;
 	emptyEncounter();
 	for (int p = 0; p < 6; p++)
@@ -787,6 +795,7 @@ void configSiteTile::configure(const std::string& command, const std::string& va
 }
 void configSiteTile::build()
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int x = xstart; x <= xend; x++)
 		for (int y = ystart; y <= yend; y++)
 			for (int z = zstart; z <= zend; z++)
@@ -828,6 +837,7 @@ const int ROOMDIMENSION = 3;
 /* recursive dungeon-generating algorithm */
 void configSiteScript::generateroom(int rx, int ry, int dx, int dy, int z)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int x = rx; x < rx + dx; x++)
 		for (int y = ry; y < ry + dy; y++)
 			levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
@@ -865,6 +875,7 @@ void configSiteScript::generateroom(int rx, int ry, int dx, int dy, int z)
 /* generates a hallway with rooms on either side */
 void configSiteScript::generatehallway_y(int rx, int ry, int dx, int dy, int z)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int y = ry; y < ry + dy; y++)
 	{  // Clear hallway
 		levelmap[rx][y][z].flag = 0;
@@ -891,6 +902,7 @@ void configSiteScript::generatehallway_y(int rx, int ry, int dx, int dy, int z)
 /* generates a stairwell, must have (dx or dy) and dz at least 1 */
 void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, int dz)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int z = rz; z <= rz + dz; z++)
 	{
 		if (z > rz) // If not bottom floor, add down stairs
@@ -923,6 +935,7 @@ void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, in
 }
 void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int dy, int dz)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int x, y, z;
 	vector< std::pair<int, int> > secure, secure_above, unsecure, unsecure_above;
 	// Look through bottom level for secure and unsecure tiles.
@@ -1036,6 +1049,7 @@ void configSiteSpecial::configure(const std::string& command, const std::string&
 }
 void configSiteSpecial::build()
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int x = xstart; x <= xend; x++)
 		for (int y = ystart; y <= yend; y++)
 			for (int z = zstart; z <= zend; z++)
@@ -1059,6 +1073,7 @@ struct coordinates
 };
 void configSiteUnique::build()
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	//int count=0;
 	vector<coordinates> secure, unsecure;
 	//Clear out restrictions

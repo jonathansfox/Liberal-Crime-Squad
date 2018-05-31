@@ -22,10 +22,10 @@ const string blankString = "";
 #include "../log/log.h"
 // for log
 #include "../common/stringconversion.h"
-extern Log xmllog;
 int AugmentType::number_of_augmenttypes = 0;
 AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
 {
+	extern Log xmllog;
    id_=number_of_augmenttypes++;
    CMarkup xml;
    xml.SetDoc(xmlstring);

@@ -211,6 +211,7 @@ struct  saveLoadChunk {
 	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
 };
 extern class Ledger ledger;
+extern CCSexposure ccsexposure;
 vector<saveLoadChunk> firstChunk =
 {
 	saveLoadChunk(seed, sizeof(unsigned long), RNG_SIZE),
@@ -265,6 +266,9 @@ vector<saveLoadChunk> firstChunk =
 	saveLoadChunk(oldPresidentName, sizeof(char), POLITICIAN_NAMELEN)
 };
 void writeVerbose(string filename) {
+	// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
+	// Remove almost all automatically generated comments from verbose savefiles
+	extern bool NOVERBOSECOMMENTS;
 	string filepath = homedir;
 	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
@@ -732,6 +736,11 @@ void deleteVerbose(const string& filename) {
 }
 void savegame(const string& filename)
 {
+	// Store savefiles in plaintext, making it human readable and editable
+	extern bool VERBOSESAVEFILE;
+	// Don't save the game
+	extern bool NOSAVE;
+	extern int version;
 	if (NOSAVE) {
 		return;
 	}
@@ -938,6 +947,7 @@ void savegame(const string& filename)
 /* loads the game from save.dat */
 char load(const string& filename)
 {
+	extern int lowestloadversion;
 	//LOAD FILE
 	int loadversion;
 	bool dummy_b;

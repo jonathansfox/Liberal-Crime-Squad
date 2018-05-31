@@ -186,23 +186,12 @@ void printname(Creature &cr);
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
-extern vector<Creature *> pool;
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 #include "../common/creaturePool.h"
-extern Log gamelog;
-extern bool multipleCityMode;
-extern MusicClass music;
-extern short mode;
-extern int stat_kills;
+const int PAGELENGTH = 19;
 extern string spaceDashSpace;
-extern squadst *activesquad;
 extern string singleSpace;
-extern vector<squadst *> squad;
-extern short interface_pgup;
-extern short interface_pgdn;
-extern long cursquadid;
-extern short activesortingchoice[SORTINGCHOICENUM];
  vector<string> methodOfExecution;
  vector<string> getsSick;
  const string mostlyendings = "mostlyendings\\";
@@ -225,6 +214,14 @@ void nukeAllEmptySquads(const vector<int> squadloc, const int mode);
 /* base - review - assemble a squad */
 void assemblesquad(squadst *cursquad)
 {
+	extern short mode;
+	extern squadst *activesquad;
+	extern long cursquadid;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short activesortingchoice[SORTINGCHOICENUM];
+	extern vector<Creature *> pool;
+	extern vector<squadst *> squad;
 	int culloc = -1;
 	if (cursquad != NULL) culloc = cursquad->squad[0]->location;
 	char newsquad = 0;
@@ -477,6 +474,13 @@ void assemblesquad(squadst *cursquad)
 }
 void review_mode(short mode)
 {
+	extern Log gamelog;
+	extern int stat_kills;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short activesortingchoice[SORTINGCHOICENUM];
+	extern vector<Creature *> pool;
+	extern vector<squadst *> squad;
 	vector<Creature *> temppool;
 	Creature *swap = NULL;
 	int swapPos = 0;
@@ -762,9 +766,8 @@ void review_mode(short mode)
 							// Release squad member
 							mvaddstrAlt(22, 0, temppool[p]->name, gamelog);
 							addstrAlt(CONST_reviewmode078, gamelog); // 80 characters
-							moveAlt(23, 0);
 							gamelog.newline(); //New line.
-							addstrAlt(CONST_reviewmode099); // 80 spaces
+							mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
 							mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
 							pressAnyKey();
 							// Chance of member going to police if boss has criminal record and
@@ -777,12 +780,10 @@ void review_mode(short mode)
 								mvaddstrAlt(22, 0, CONST_reviewmode081, gamelog);
 								addstrAlt(temppool[p]->name, gamelog);
 								addstrAlt(CONST_reviewmode082, gamelog);
-								moveAlt(24, 0);
 								gamelog.newline(); //New line.
-								addstrAlt(CONST_reviewmode083, gamelog);
-								moveAlt(25, 0);
+								mvaddstrAlt(24, 0, CONST_reviewmode083, gamelog);
 								gamelog.newline(); //New line.
-								addstrAlt(CONST_reviewmode084, gamelog);
+								mvaddstrAlt(25, 0, CONST_reviewmode084, gamelog);
 								addstrAlt(pool[boss]->name, gamelog);
 								addstrAlt(CONST_reviewmode085, gamelog);
 								criminalize(*pool[boss], LAWFLAG_RACKETEERING);
@@ -827,22 +828,20 @@ void review_mode(short mode)
 							mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
 							mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
 							pressAnyKey();
-							moveAlt(22, 0);
 							if (boss != -1)
 							{
 								if (LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 								{
 									set_color_easy(GREEN_ON_BLACK_BRIGHT);
 									gamelog.newline(); //New line.
-									addstrAlt(pool[boss]->name, gamelog);
+									mvaddstrAlt(22, 0, pool[boss]->name, gamelog);
 									addstrAlt(CONST_reviewmode094, gamelog); // 80 characters
 									pool[boss]->adjust_attribute(ATTRIBUTE_HEART, -1);
-									moveAlt(23, 0); // this sentence probably takes more than 80 characters so use 2 lines and break it here
+									// this sentence probably takes more than 80 characters so use 2 lines and break it here
 									gamelog.newline(); //New line.
-									addstrAlt(pickrandom(getsSick), gamelog);
-									moveAlt(24, 0);
+									mvaddstrAlt(23, 0, pickrandom(getsSick), gamelog);
 									gamelog.newline(); //New line.
-									addstrAlt(pool[boss]->name, gamelog);
+									mvaddstrAlt(24, 0, pool[boss]->name, gamelog);
 									addstrAlt(CONST_reviewmode095, gamelog); // 80 characters
 									pressAnyKey();
 								}
@@ -850,12 +849,11 @@ void review_mode(short mode)
 								{
 									gamelog.newline(); //New line here too.
 									set_color_easy(CYAN_ON_BLACK_BRIGHT);
-									addstrAlt(pool[boss]->name, gamelog);
+									mvaddstrAlt(22, 0, pool[boss]->name, gamelog);
 									addstrAlt(CONST_reviewmode096, gamelog); // 80 characters
 									pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
-									moveAlt(24, 0);
 									gamelog.newline(); //New line.
-									addstrAlt(pool[boss]->name, gamelog);
+									mvaddstrAlt(24, 0, pool[boss]->name, gamelog);
 									addstrAlt(CONST_reviewmode097, gamelog); // 80 characters
 									pressAnyKey();
 								}
@@ -923,6 +921,11 @@ void review_mode(short mode)
 /* base - review - assign new bases to the squadless */
 void squadlessbaseassign()
 {
+	extern bool multipleCityMode;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short activesortingchoice[SORTINGCHOICENUM];
+	extern vector<Creature *> pool;
 	int page_lib = 0, page_loc = 0, selectedbase = 0;
 	vector<Creature *> temppool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
@@ -1038,7 +1041,9 @@ void sortbyhire(vector<Creature *> &temppool, vector<int> &level)
 /* base - review - promote liberals */
 void promoteliberals()
 {
-#define PAGELENGTH 19
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern vector<Creature *> pool;
 	vector<Creature *> temppool;
 	vector<int> level;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
@@ -1142,6 +1147,12 @@ int consolidateSiegeLoot();
 /* base - review and reorganize liberals */
 void review()
 {
+	extern MusicClass music;
+	extern squadst *activesquad;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern vector<Creature *> pool;
+	extern vector<squadst *> squad;
 	int page = 0;
 	while (true)
 	{

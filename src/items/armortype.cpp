@@ -54,7 +54,6 @@ const string tag_make_difficulty = "make_difficulty";
 //own header
 #include "../common/stringconversion.h"
 //for stringtobool
-extern int year;
 ArmorType::ArmorType(MCD_STR xmlstring)
  : ItemType(xmlstring),
    make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
@@ -312,6 +311,7 @@ bool ArmorType::covers(int bodypart) const
 }
 const string& ArmorType::get_shortname() const
 {
+	extern int year;
    if (shortname_future_defined_ && year >= 2100)
       return shortname_future_;
    else if (year >= 2100 && name_future_defined_ && len(name_future_) <= 14)

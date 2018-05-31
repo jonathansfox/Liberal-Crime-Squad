@@ -81,9 +81,7 @@ vector<string> title_screen::s_savefiles;
 #include "../set_color_support.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern short mode;
 #include "../common/musicClass.h"
-extern MusicClass music;
 #include "../creature/creatureEnums.h"
 #include "../customMaps.h"
 const string titley = "titlescreen\\";
@@ -92,9 +90,7 @@ vector<vector<string> > real_quote;
 vector<file_and_text_collection> title_screen_text_files = {
 	customText(&real_quote, titley + CONST_titlescreen003, REAL_QUOTE_SIZE),
 };
-extern string spaceDashSpace;
-extern short interface_pgup;
-extern short interface_pgdn;
+const string spaceDashSpace = " - ";
 string deleteSave;
 string chooseSave;
 string titleScreenLine;
@@ -127,6 +123,7 @@ string plusChar;
 string dotDat;
 // private
 	void title_screen::title() {
+		extern char* PACKAGE_VERSION;
 		//title screen
 		eraseAlt();
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -190,6 +187,8 @@ string dotDat;
 		makecharacter();
 	}
 	void title_screen::selectAndLoadSaveFile() {
+		extern short interface_pgup;
+		extern short interface_pgdn;
 		s_savefiles = move(LCSSaveFiles());
 		char loaded = s_savefiles.size() > 0;
 		if (!loaded)
@@ -273,6 +272,8 @@ string dotDat;
 	// public
 	void title_screen::mode_title()
 	{
+		extern short mode;
+		extern MusicClass music;
 		title();
 		int c = 0;
 		do {

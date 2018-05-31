@@ -8,12 +8,12 @@ const string tag_color = "color";
 const string tag_vtypeid = "vtypeid";
 const string tag_vtypeidname = "vtypeidname";
 const string tag_vehicle = "vehicle";
+const string singleSpace = " ";
 #include "vehicletype.h"
 vector<VehicleType *> vehicletype;
 #include "vehicle.h"
 //own header
 long Vehicle::curcarid = 0;
-extern string singleSpace;
 #include "common/creaturePool.h"
 string Vehicle::showXml() const
 {

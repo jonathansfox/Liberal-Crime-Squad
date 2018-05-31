@@ -1007,28 +1007,13 @@ int monthday();
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
 #include "../cursesmovie.h"
-extern CursesMoviest movie;
 extern string singleSpace;
 vector<newsstoryst *> newsstory;
 newsstoryst* lastNewsStory() {
 	return  newsstory[len(newsstory) - 1];
 }
-extern short attitude[VIEWNUM];
-extern char lcityname[CITY_NAMELEN];
-extern short lawList[LAWNUM];
 extern string commaSpace;
-extern char slogan[SLOGAN_LEN];
-extern unsigned char bigletters[27][5][7][4];
-extern unsigned char newstops[6][80][5][4];
-extern unsigned char newspic[20][78][18][4];
-extern short public_interest[VIEWNUM];
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern char newscherrybusted;
-extern char oldPresidentName[POLITICIAN_NAMELEN];
-extern bool multipleCityMode;
 #include "../common/musicClass.h"
-extern MusicClass music;
 extern char endgamestate;
  string ampersandR;
  extern string spaceDashSpace;
@@ -1042,10 +1027,6 @@ map<short, string> cityNames;
 string accordingToSourcesAtScene;
 string accordingToPoliceSources;
 string ampersandC;
-extern int day;
-extern int month;
-extern int year;
-extern short presparty;
 vector<string> liberalCrime;
 vector<string> AMorPM;
 vector<string> book_title;
@@ -1230,6 +1211,10 @@ newsstoryst* ccs_fbi_raid_story()
 }
 newsstoryst* ccs_exposure_story()
 {
+	extern CCSexposure ccsexposure;
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
 	newsstoryst* ns = new newsstoryst;
 	ns->type = NEWSSTORY_CCS_NOBACKERS;
 	ns->priority = 8000;
@@ -1265,6 +1250,7 @@ newsstoryst* ccs_exposure_story()
 }
 void advance_ccs_defeat_storyline()
 {
+	extern CCSexposure ccsexposure;
 	switch (ccsexposure)
 	{
 	default:
@@ -1281,6 +1267,8 @@ void advance_ccs_defeat_storyline()
 }
 newsstoryst* new_major_event()
 {
+	extern short lawList[LAWNUM];
+	extern short public_interest[VIEWNUM];
 	newsstoryst *ns = new newsstoryst;
 	ns->type = NEWSSTORY_MAJOREVENT;
 	while (true)
@@ -1323,6 +1311,7 @@ newsstoryst* new_major_event()
 }
 void generate_random_event_news_stories()
 {
+	extern CCSexposure ccsexposure;
 	//Conservative Crime Squad Strikes!
 	if (endgamestate < ENDGAME_CCS_DEFEATED &&
 		LCSrandom(30) < endgamestate)
@@ -1393,6 +1382,7 @@ void clean_up_empty_news_stories()
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns)
 {
+	extern short attitude[VIEWNUM];
 	// Priority is set differently based on the type of the news story
 	switch (ns.type)
 	{
@@ -1698,6 +1688,10 @@ void assign_page_numbers_to_newspaper_stories()
 /* news - show major news story */
 void preparepage(newsstoryst& ns, bool liberalguardian)
 {
+	extern int day;
+	extern int month;
+	extern int year;
+	extern unsigned char newstops[6][80][5][4];
 	set_color_easy(WHITE_ON_WHITE);
 	for (int x = 0; x<80; x++)
 		for (int y = 0; y<25; y++)
@@ -1864,6 +1858,7 @@ void displaynewsstory(const char *story, const short *storyx_s, const short *sto
 }
 void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s, short* storyx_e)
 {
+	extern int year;
 	int x, y;
 	do x = LCSrandom(2), y = LCSrandom(3); while (addplace[x][y]);
 	char choice = LCSrandom(6) + 1; // choose an ad from 1 to 6 that isn't already taken
@@ -2217,6 +2212,7 @@ void squadstory_text_location(newsstoryst& ns, bool liberalguardian, bool ccs, c
 }
 void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, char* story)
 {
+	extern char newscherrybusted;
 	if (ns.type == NEWSSTORY_SQUAD_SITE)
 	{
 		if (!newscherrybusted&&!liberalguardian)
@@ -2391,6 +2387,7 @@ void generatefiller(char *story, int amount)
 }
 void displaycenterednewsfont(const std::string& str, int y)
 {
+	extern unsigned char bigletters[27][5][7][4];
 	int width = -1;
 	for (int s = 0; s < len(str); s++)
 	{
@@ -2411,24 +2408,20 @@ void displaycenterednewsfont(const std::string& str, int y)
 			if (s == len(str) - 1) lim--;
 			for (int x2 = 0; x2 < lim; x2++) for (int y2 = 0; y2 < 7; y2++)
 			{
-				moveAlt(y + y2, x + x2);
-#ifdef NCURSES
 				// Clean the square first.
-				set_color(COLOR_BLACK, COLOR_BLACK, 0);
-				addcharAlt(' ');
-				moveAlt(y + y2, x + x2);
-#endif
+				set_color_easy(BLACK_ON_BLACK);
+				mvaddchAlt(y + y2, x + x2, ' ');
 				if (x2 == 5)
 				{
 					set_color_easy(WHITE_ON_WHITE);
-					addcharAlt(' ');
+					mvaddchAlt(y + y2, x + x2, ' ');
 				}
 				else
 				{
 					set_color((bigletters[p][x2][y2][1]),
 						(bigletters[p][x2][y2][2]),
 						bigletters[p][x2][y2][3]);
-					addcharAlt(bigletters[p][x2][y2][0]);
+					mvaddcharAlt(y + y2, x + x2, bigletters[p][x2][y2][0]);
 				}
 			}
 			x += lim;
@@ -2438,8 +2431,7 @@ void displaycenterednewsfont(const std::string& str, int y)
 			set_color_easy(WHITE_ON_WHITE);
 			for (int x2 = 0; x2 < 3; x2++) for (int y2 = 0; y2 < 7; y2++)
 			{
-				moveAlt(y + y2, x + x2);
-				addcharAlt(' ');
+				mvaddcharAlt(y + y2, x + x2, ' ');
 			}
 			x += 3;
 		}
@@ -2447,6 +2439,9 @@ void displaycenterednewsfont(const std::string& str, int y)
 }
 
 string constructPositiveEventStory(const short view) {
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
 
 	char story[5000];
 	strcpy(story, blankString);
@@ -3061,6 +3056,7 @@ string constructPositiveEventStory(const short view) {
 		return story;
 }
 string constructNegativeEventStory(const short view) {
+	extern short lawList[LAWNUM];
 	char story[5000];
 	strcpy(story, blankString);
 	switch (view)
@@ -3587,6 +3583,8 @@ const int PICTURE_KKK = 10;
 const int PICTURE_TSHIRT = 11;
 void run_television_news_stories()
 {
+	extern CursesMoviest movie;
+	extern MusicClass music;
 	vector<string> CONST_Woman_744 = {
 		CONST_news740, CONST_news741, CONST_news742, CONST_news743, CONST_news744
 	};
@@ -3729,6 +3727,8 @@ string getLastNameForHeadline(char* fullName)
 }
 void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int header)
 {
+	extern char newscherrybusted;
+	extern char oldPresidentName[POLITICIAN_NAMELEN];
 	switch (ns.type)
 	{
 	case NEWSSTORY_PRESIDENT_IMPEACHED:
@@ -4076,6 +4076,9 @@ void handle_public_opinion_impact(const newsstoryst &ns)
 /* news - graphics */
 void loadgraphics()
 {
+	extern unsigned char bigletters[27][5][7][4];
+	extern unsigned char newstops[6][80][5][4];
+	extern unsigned char newspic[20][78][18][4];
 	int picnum, dimx, dimy;
 	FILE *h;
 	if ((h = LCSOpenFile(CONST_news787.c_str(), CONST_newsB947.c_str(), LCSIO_PRE_ART)) != NULL)
@@ -4119,6 +4122,7 @@ void displaycenteredsmallnews(const std::string& str, int y)
 }
 void displaynewspicture(int p, int y)
 {
+	extern unsigned char newspic[20][78][18][4];
 	for (int x2 = 0; x2 < 78; x2++)
 		for (int y2 = 0; y2 < 15; y2++)
 		{
@@ -4153,6 +4157,8 @@ void displaynewsandpicture(const string news1, const string news2, const int pic
 }
 void displaymajoreventstory(newsstoryst& ns, const short* storyx_s, const short* storyx_e)
 {
+	extern int month;
+	extern short lawList[LAWNUM];
 	if (ns.positive)
 	{
 		switch (ns.view)
@@ -4302,7 +4308,9 @@ void displaymajoreventstory(newsstoryst& ns, const short* storyx_s, const short*
 	}
 }
 void displayMinorStory(const bool liberalguardian, newsstoryst ns,	char* story) {
+	extern short lawList[LAWNUM];
 	{
+		extern char slogan[SLOGAN_LEN];
 		
 		switch (ns.type)
 		{
@@ -4864,6 +4872,11 @@ void displayMinorStory(const bool liberalguardian, newsstoryst ns,	char* story) 
 }
 void displaystory(newsstoryst &ns, bool liberalguardian, int header)
 {
+	extern char newscherrybusted;
+	extern bool multipleCityMode;
+	extern MusicClass music;
+	extern char lcityname[CITY_NAMELEN];
+	extern short lawList[LAWNUM];
 	music.play(MUSIC_NEWSPAPER);
 	preparepage(ns, liberalguardian);
 	short storyx_s[25];

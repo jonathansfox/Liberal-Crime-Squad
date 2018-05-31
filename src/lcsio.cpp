@@ -33,8 +33,6 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
 #include <tinydir.h>
-extern char homedir[MAX_PATH_SIZE];
-extern char artdir[MAX_PATH_SIZE];
 const char* arttest="newspic.cpc";
 bool initialized=false;
 const char *art_search_paths[]=
@@ -64,6 +62,7 @@ bool LCSFileExists(const char* filename)
 //Create the home directory if it does not exist.
 bool LCSInitHomeDir()
 {
+	extern char homedir[MAX_PATH_SIZE];
    #ifndef WIN32
    char* homeenv=getenv(CONST_lcsio009.c_str());
    #else
@@ -92,6 +91,7 @@ bool LCSInitHomeDir()
 //Put the art directory prefix in artdir.
 bool LCSInitArtDir()
 {
+	extern char artdir[MAX_PATH_SIZE];
    const char* artprefix;
    artprefix=art_search_paths[0];
    std::string tester;
@@ -110,6 +110,8 @@ bool LCSInitArtDir()
 }
 void LCSRenameFile(const char* old_filename,const char* new_filename,int flags)
 {
+	extern char homedir[MAX_PATH_SIZE];
+	extern char artdir[MAX_PATH_SIZE];
    if(!initialized)
    {
       LCSInitHomeDir();
@@ -129,6 +131,8 @@ void LCSRenameFile(const char* old_filename,const char* new_filename,int flags)
 }
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 {
+	extern char homedir[MAX_PATH_SIZE];
+	extern char artdir[MAX_PATH_SIZE];
    if(!initialized)
    {
       LCSInitHomeDir();
@@ -145,6 +149,7 @@ FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 }
 vector<string> LCSSaveFiles()
 {
+	extern char homedir[MAX_PATH_SIZE];
    vector<string> save_files;
    tinydir_dir dir;
    tinydir_open(&dir, homedir);
@@ -162,6 +167,8 @@ vector<string> LCSSaveFiles()
 //C++ file i/o version of the above.
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file)
 {
+	extern char homedir[MAX_PATH_SIZE];
+	extern char artdir[MAX_PATH_SIZE];
    if(!initialized) //Check if the directories have not been initialized.
    {
       LCSInitHomeDir(); //Initialize the home directory of LCS. Where stuff like the save and score files are stored.
@@ -180,6 +187,8 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 }
 void LCSDeleteFile(const char* filename,int flags)
 {
+	extern char homedir[MAX_PATH_SIZE];
+	extern char artdir[MAX_PATH_SIZE];
    if(!initialized)
    {
       LCSInitHomeDir();

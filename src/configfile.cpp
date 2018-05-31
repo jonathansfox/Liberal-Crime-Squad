@@ -15,12 +15,10 @@ const string CONST_configfile000 = "Attempting to open filename: ";
 //own header
 #include "../cursesAlternative.h"
 extern string singleSpace;
-extern char homedir[MAX_PATH_SIZE];
-extern char artdir[MAX_PATH_SIZE];
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 string attemptingToOpenFile = CONST_configfile000;
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
+	extern char artdir[MAX_PATH_SIZE];
    std::ifstream* file = new std::ifstream();
    addstrAlt(attemptingToOpenFile);
    addstrAlt(filename);
@@ -87,6 +85,7 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
 }
 void readMapCBSpecials(int x, int y, int z, int i)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
    switch(i)
    {
    default:
@@ -137,6 +136,7 @@ void readMapCBSpecials(int x, int y, int z, int i)
 }
 void makeDoor(int x,int y,int z,int flags=0)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
    levelmap[x][y][z].flag=SITEBLOCK_DOOR|flags;
    if((x>0&&(levelmap[x-1][y][z].flag&SITEBLOCK_RESTRICTED))||
       (y>0&&(levelmap[x][y-1][z].flag&SITEBLOCK_RESTRICTED)))
@@ -144,6 +144,7 @@ void makeDoor(int x,int y,int z,int flags=0)
 }
 void readMapCBTiles(int x, int y, int z, int i)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
    switch(i)
    {
    default:
@@ -198,6 +199,7 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
 }
 bool readMap(const std::string& filename)
 {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
    std::string prefix = std::string(CONST_configfile002);
    // clear any old map data
    for(int x=0;x<MAPX;x++)

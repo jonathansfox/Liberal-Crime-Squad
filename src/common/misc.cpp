@@ -35,11 +35,7 @@ const string blankString = "";
 #include "../cursesAlternative.h"
 #include "../creature/creatureEnums.h"
 #include "../customMaps.h"
-extern Log gamelog;
-extern char homedir[MAX_PATH_SIZE];
-extern char artdir[MAX_PATH_SIZE];
 #include "../common/musicClass.h"
-extern MusicClass music;
 /* pick a descriptor acronym */
  vector<string> sexdescAcronym;
 /* what kind of person? */
@@ -164,7 +160,10 @@ int musicmode = MUSIC_OFF;
 int previous = MUSIC_OFF;
 /* helper function for initsongs() */
 void loadsong(int i, const char* filename)
-{  // the reason it prints progress on the screen is because it might be a little slow sometimes so this reassures the user progress is being made
+{
+	extern Log gamelog;
+	extern char artdir[MAX_PATH_SIZE];
+	// the reason it prints progress on the screen is because it might be a little slow sometimes so this reassures the user progress is being made
 	eraseAlt();
 	if (oggsupport)
 	{
@@ -187,6 +186,7 @@ void loadsong(int i, const char* filename)
 void MusicClass::init()
 {
 #ifndef DONT_INCLUDE_SDL
+	extern Log gamelog;
 	if (songsinitialized) return; // only initialize once
 	if (SDL_Init(SDL_INIT_AUDIO) != 0) // initialize what we need from SDL for audio
 	{  // SDL failed to initialize, so log it and exit
@@ -294,6 +294,7 @@ void MusicClass::init()
 void MusicClass::quit()
 {
 #ifndef DONT_INCLUDE_SDL
+	extern MusicClass music;
 	if (!songsinitialized) return; // only shut down once
 	music.play(MUSIC_OFF);
 	for (int c = 0; c < MUSIC_OFF; c++) if (songs[c]) Mix_FreeMusic(songs[c]);
@@ -307,6 +308,7 @@ void MusicClass::quit()
 void MusicClass::play(int _musicmode)
 {
 #ifndef DONT_INCLUDE_SDL
+	extern Log gamelog;
 	if (!songsinitialized) init(); // if it hasn't been initialized already, do it now
 	if (_musicmode == MUSIC_CURRENT) return; // keep playing current music if that's what's requested
 	if (_musicmode == MUSIC_RANDOM) _musicmode = LCSrandom(MUSIC_OFF); // play a random song if that's what's requested

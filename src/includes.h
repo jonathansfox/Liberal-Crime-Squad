@@ -12,60 +12,6 @@
 #ifndef INCLUDES_H_INCLUDED
 #define INCLUDES_H_INCLUDED0
 #define __USE_MINGW_ANSI_STDIO 0
-/*
-DEBUG DEFINES
-*/
-// inform player of activated debug codes
-extern bool DISPLAYDEBUG;
-// Don't save the game
-extern bool NOSAVE;
-// Enemies don't attack
-extern bool NOENEMYATTACK;
-// Laws start archconservative
-extern bool SHITLAWS;
-// Laws start elite liberal
-extern bool PERFECTLAWS;
-// Public opinion starts at 100% Liberal
-extern bool REVOLUTIONNOW;
-// Gives you bloody armor
-extern bool GIVEBLOODYARMOR;
-// Start with lots of money
-extern bool HIGHFUNDS;
-// Interrogation always enlightens
-extern bool AUTOENLIGHTEN;
-// Show polls when you can't see things
-extern bool SHOWWAIT;
-// Show die rolls, 100% accurate poll numbers
-extern bool SHOWMECHANICS;
-// Make the year 2100
-extern bool THEFUTURE;
-// Make the founder blind
-extern bool BLIND;
-// Make the founder unable to walk
-extern bool NOWALK;
-// Make the founder have no face
-extern bool NOFACE;
-// Make the founder have a severely injured spine
-extern bool SPINE;
-// Make the founder have severe internal damage
-extern bool INTERNAL;
-// Make age not matter for dating or prostitution
-extern bool ZEROMORAL;
-// Re-seed the Random Number Generator every time it's called
-extern bool MORERANDOM;
-// Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
-extern bool ALLOWSTALIN;
-// Store savefiles in plaintext, making it human readable and editable
-extern bool VERBOSESAVEFILE;
-// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
-// Remove almost all automatically generated comments from verbose savefiles
-extern bool NOVERBOSECOMMENTS;
-
-extern char* PACKAGE_VERSION;
-extern int version;
-extern int lowestloadversion;
-extern int lowestloadscoreversion;
-
 #include <windows.h>
 #include <io.h> //needed for unlink()
 #include <direct.h>
@@ -357,7 +303,6 @@ enum CCSexposure
    CCSEXPOSURE_NOBACKERS,
    CCSEXPOSURENUM
 };
-extern CCSexposure ccsexposure;
 
 const int ARMORFLAG_DAMAGED = BIT1;
 const int ARMORFLAG_BLOODY = BIT2;

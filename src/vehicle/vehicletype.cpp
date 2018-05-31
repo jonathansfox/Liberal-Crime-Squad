@@ -63,7 +63,6 @@ const string tag_id = "id";
 #include "vehicletype.h"
 #include "../common/stringconversion.h"
 //for atoi
-extern int year;
 int VehicleType::number_of_vehicletypes = 0;
 VehicleType::VehicleType(MCD_STR xmlstring)
  : /*idname_(CONST_vehicletype046), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
@@ -288,6 +287,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 }
 int VehicleType::makeyear() const
 {
+	extern int year;
    int myear = 0;
    if (year_startcurrent_)
       myear = year;
