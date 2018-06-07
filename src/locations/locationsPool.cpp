@@ -383,7 +383,7 @@ void LocationsPool::evictLCSFrom(int l)
 	mvaddstrAlt(8, 1, CONST_locationsPool035);
 	addstrAlt(LocationsPool::getInstance().getLocationName(l));
 	addstrAlt(CONST_locationsPool036);
- 	pressAnyKey();
+	pressAnyKey();
 	location[l]->renting = RENTING_NOCONTROL;
 	CreaturePool::getInstance().moveAllSquadMembers(l);
 	int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, l);
@@ -524,7 +524,7 @@ void LocationsPool::eraseAndReplaceGraffiti(int cursite, int locx, int locy, int
 			(location[cursite]->changes[i].y == locy) &&
 			(location[cursite]->changes[i].z == locz) &&
 			((location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI) ||
-				(location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_CCS) ||
+			(location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_CCS) ||
 				(location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_OTHER)))
 		{
 			location[cursite]->changes.erase(location[cursite]->changes.begin() + i);
@@ -633,7 +633,7 @@ Location* find_site_in_city(int site_type, int city)
 int find_site_index_in_city(int site_type, int city)
 {
 	extern bool multipleCityMode;
-	for (int i = 0; i<len(location); i++)
+	for (int i = 0; i < len(location); i++)
 		if (location[i]->type == site_type && (!multipleCityMode || city == -1 || location[i]->city == city))
 			return i;
 	return -1;
@@ -671,7 +671,7 @@ void make_classic_world(bool hasmaps)
 	district->addchild(SITE_BUSINESS_PAWNSHOP);
 	district->addchild(SITE_BUSINESS_HALLOWEEN);
 	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	
+
 	location.push_back(district = new Location(SITE_UDISTRICT));
 	district->area = 0;
 	district->addchild(SITE_RESIDENTIAL_APARTMENT);
@@ -683,7 +683,7 @@ void make_classic_world(bool hasmaps)
 	district->addchild(SITE_BUSINESS_JUICEBAR);
 	district->addchild(SITE_BUSINESS_INTERNETCAFE);
 	district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	
+
 	location.push_back(district = new Location(SITE_INDUSTRIAL));
 	district->area = 0;
 	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
@@ -786,7 +786,7 @@ void make_world(bool hasmaps)
 	district->area = 0;
 	strcpy(district->name, tag_Manhattan_Island);
 	strcpy(district->shortname, tag_Manhattan);
-	
+
 	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
 	district->addchild(SITE_GOVERNMENT_POLICESTATION);
 	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
@@ -842,7 +842,7 @@ void make_world(bool hasmaps)
 	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
 	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
-	
+
 	district->addchild(SITE_RESIDENTIAL_APARTMENT);
 	district->addchild(SITE_GOVERNMENT_POLICESTATION);
 	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
@@ -851,19 +851,19 @@ void make_world(bool hasmaps)
 	district->addchild(SITE_CORPORATE_HEADQUARTERS);
 	district->addchild(SITE_HOSPITAL_UNIVERSITY);
 	district->addchild(SITE_BUSINESS_DEPTSTORE);
-	
+
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
 	strcpy(district->name, tag_Greater_Hollywood);
 	strcpy(district->shortname, tag_Hollywood);
-	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);	
+	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
 	district->addchild(SITE_BUSINESS_VEGANCOOP);
 	district->addchild(SITE_BUSINESS_HALLOWEEN);
 	district->addchild(SITE_BUSINESS_CIGARBAR);
 	district->addchild(SITE_MEDIA_AMRADIO);
 	district->addchild(SITE_OUTDOOR_PUBLICPARK);
 	district->addchild(SITE_CORPORATE_HOUSE);
-	
+
 	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
 	strcpy(district->name, tag_Seaport_Area);
@@ -1001,7 +1001,7 @@ bool Location::duplicatelocation()
 	{
 		if (location[l] == this)
 			continue;
-		if (type != SITE_RESIDENTIAL_SHELTER&&!strcmp(location[l]->name, this->name))
+		if (type != SITE_RESIDENTIAL_SHELTER && !strcmp(location[l]->name, this->name))
 			return true;
 		if (location[l]->front_business != -1 && this->front_business != -1 &&
 			!strcmp(location[l]->front_shortname, this->front_shortname))
@@ -1345,7 +1345,7 @@ void equip(vector<Item *> &loot, int loc)
 						else
 						{
 							int amount = 1;
-							if (loot[slot]->get_number()>1 && !increaseammo)
+							if (loot[slot]->get_number() > 1 && !increaseammo)
 								amount = prompt_amount(0, min((int)loot[slot]->get_number(), space));
 							squaddie->take_clips(*loot[slot], amount);
 							if (loot[slot]->empty()) delete_and_remove(loot, slot);
@@ -1398,9 +1398,9 @@ void equip(vector<Item *> &loot, int loc)
 			}
 		}
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<len(loot)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < len(loot)) page++;
 	}
 }
 /* lets you pick stuff to stash/retrieve from one location to another */
@@ -1459,16 +1459,16 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			if (slot >= 0 && slot < len(source))
 			{
 				if (selected[slot]) selected[slot] = 0;
-				else if (source[slot]->get_number()>1)
+				else if (source[slot]->get_number() > 1)
 					selected[slot] = prompt_amount(0, source[slot]->get_number());
 				else selected[slot] = 1;
 			}
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<len(source)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < len(source)) page++;
 	}
 	for (int l = len(source) - 1; l >= 0; l--) if (selected[l] > 0)
 	{
@@ -1546,9 +1546,9 @@ void equipmentbaseassign()
 			addstrAlt(addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP (items)
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_loot>0) page_loot--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_loot > 0) page_loot--;
 		//PAGE DOWN (items)
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_loot + 1) * 19<len(temploot)) page_loot++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_loot + 1) * 19 < len(temploot)) page_loot++;
 		//PAGE UP (locations)
 		if (c == ','&&page_loc > 0) page_loc--;
 		//PAGE DOWN (locations)
@@ -1678,11 +1678,11 @@ void printlocation(long loc)
 	}
 	if (location[loc]->can_be_upgraded())
 	{
-		if (numbereating(loc)>0)
+		if (numbereating(loc) > 0)
 		{
 			if (fooddaysleft(loc))
 			{
-				if (fooddaysleft(loc)<4)
+				if (fooddaysleft(loc) < 4)
 				{
 					if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
 					else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -1750,7 +1750,7 @@ void printlocation(long loc)
 			mvaddstrAlt(5, 61, CONST_locationsPool110);
 		}
 		int eaters = numbereating(loc), days = fooddaysleft(loc);
-		if (eaters>0)
+		if (eaters > 0)
 		{
 			if (days >= 1)
 			{
@@ -1842,7 +1842,7 @@ void locheader()
 		if (activesquad->activity.type == ACTIVITY_NONE)
 		{
 			bool haveact = false, multipleact = false;
-			for (int p = 0; p<6; p++)
+			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
 				const string str2 = getactivity(activesquad->squad[p]->activity);
@@ -1931,11 +1931,11 @@ void stopevil()
 		}
 		temploc.clear();
 		for (int l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting >= 0 && !location[l]->hidden)temploc.push_back(l);
+			if (location[l]->parent == loc && location[l]->renting >= 0 && !location[l]->hidden)temploc.push_back(l);
 		for (int l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting == RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
+			if (location[l]->parent == loc && location[l]->renting == RENTING_CCS && !location[l]->hidden)temploc.push_back(l);
 		for (int l = 0; l < len(location); l++)
-			if (location[l]->parent == loc&&location[l]->renting == RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
+			if (location[l]->parent == loc && location[l]->renting == RENTING_NOCONTROL && !location[l]->hidden)temploc.push_back(l);
 		int y = 10;
 		for (int p = page * 11; p < len(temploc) && p < page * 11 + 11; p++)
 		{
@@ -2045,9 +2045,9 @@ void stopevil()
 		else mvaddstrAlt(24, 1, CONST_locationsPool124);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 11<len(temploc)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 11 < len(temploc)) page++;
 		if (c >= 'a'&&c <= 'k')
 		{
 			int sq = page * 11 + c - 'a';

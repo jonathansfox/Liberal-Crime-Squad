@@ -20,28 +20,28 @@ const string CONST_daily005 = " instead of ";
 const string CONST_daily004 = " acted with ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -54,7 +54,6 @@ const string tag_skill = "skill";
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
-//#include "../news/news.h"
 void majornewspaper(char &clearformess, char canseethings);
 //#include "../sitemode/sitemode.h"
 void mode_site(short loc);
@@ -304,7 +303,7 @@ void dealership(int loc)
 			int carchoice;
 			vector<int> availablevehicle;
 			vector<string> vehicleoption;
-			for (int i = 0; i<lenVehicleType(); i++)
+			for (int i = 0; i < lenVehicleType(); i++)
 				if (vehicletypeavailableatshop(i))
 				{
 					availablevehicle.push_back(i);
@@ -431,7 +430,7 @@ void ageThings(const char clearformess) {
 		//TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
 		if (!pool[p]->animalgloss)
 		{
-			if (pool[p]->age>60)
+			if (pool[p]->age > 60)
 			{
 				int decrement = 0;
 				while (pool[p]->age - decrement > 60)
@@ -527,7 +526,7 @@ void meetWithPotentialRecruits(char &clearformess) {
 		int p = getpoolcreature(recruit[r]->recruiter_id);
 		// Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
 		// or 3) recruiter is dead.
-		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL&&pool[p]->alive&&
+		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL && pool[p]->alive&&
 			LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(recruit[r]->recruit->location)) || recruit[r]->timeleft > 0))
 		{
 			//MEET WITH RECRUIT
@@ -570,7 +569,7 @@ void doRent(const char clearformess) {
 	extern class Ledger ledger;
 	if (day == 3 && !disbanding)
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
-			if (LocationsPool::getInstance().getRentingType(l)>0 &&
+			if (LocationsPool::getInstance().getRentingType(l) > 0 &&
 				!LocationsPool::getInstance().isNewRental(l))
 			{  // if rent >= 1000000 this means you get should kicked out automatically
 				if (ledger.get_funds() >= LocationsPool::getInstance().getRentingType(l) && LocationsPool::getInstance().getRentingType(l) < 1000000)
@@ -676,32 +675,32 @@ void tendAllHostages(char &clearformess) {
 void squadOverrideIndividual(const int sq, const char clearformess) {
 	extern Log gamelog;
 	extern vector<squadst *> squad;
-	
-	
-		for (int p = 0; p < 6; p++)
+
+
+	for (int p = 0; p < 6; p++)
+	{
+		if (squad[sq]->squad[p])
 		{
-			if (squad[sq]->squad[p])
+			if (squad[sq]->squad[p]->activity.type != ACTIVITY_NONE &&
+				squad[sq]->squad[p]->activity.type != ACTIVITY_VISIT)
 			{
-				if (squad[sq]->squad[p]->activity.type != ACTIVITY_NONE&&
-					squad[sq]->squad[p]->activity.type != ACTIVITY_VISIT)
-				{
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, squad[sq]->squad[p]->name, gamelog);
-					addstrAlt(CONST_daily004, gamelog);
-					addstrAlt(squad[sq]->name, gamelog);
-					addstrAlt(CONST_daily005, gamelog);
-					addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
-					addstrAlt(singleDot, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-				}
-				squad[sq]->squad[p]->activity.type = ACTIVITY_VISIT;
-				squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(8, 1, squad[sq]->squad[p]->name, gamelog);
+				addstrAlt(CONST_daily004, gamelog);
+				addstrAlt(squad[sq]->name, gamelog);
+				addstrAlt(CONST_daily005, gamelog);
+				addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
+				addstrAlt(singleDot, gamelog);
+				gamelog.newline();
+				pressAnyKey();
 			}
+			squad[sq]->squad[p]->activity.type = ACTIVITY_VISIT;
+			squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
 		}
-	
+	}
+
 }
 int driveskill(Creature &cr, int v);
 string getVehicleFullname(int i);
@@ -767,11 +766,11 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 				if (len(passenger))
 				{
 					int max = 0;
-					for (int p = 0; p<len(passenger); p++)
+					for (int p = 0; p < len(passenger); p++)
 					{
 						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (driveskill(*squad[sq]->squad[passenger[p]], v)>max&&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v) > max&&
 								squad[sq]->squad[passenger[p]]->canwalk())
 								max = driveskill(*squad[sq]->squad[passenger[p]], v);
 					}
@@ -780,7 +779,7 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 					{
 						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (driveskill(*squad[sq]->squad[passenger[p]], v) == max&&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v) == max &&
 								squad[sq]->squad[passenger[p]]->canwalk())
 								goodp.push_back(passenger[p]);
 					}
@@ -796,11 +795,11 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 			{
 				//TOSS ALL BUT THE BEST
 				int max = 0;
-				for (int p = 0; p<len(driver); p++)
+				for (int p = 0; p < len(driver); p++)
 				{
 					long v = id_getcar(squad[sq]->squad[driver[p]]->carid);
 					if (v >= 0)
-						if (driveskill(*squad[sq]->squad[driver[p]], v)>max)
+						if (driveskill(*squad[sq]->squad[driver[p]], v) > max)
 							max = driveskill(*squad[sq]->squad[driver[p]], v);
 				}
 				vector<int> goodp;
@@ -849,20 +848,20 @@ void turnSquadAway(const int sq) {
 void giveDriverExperience(const int sq) {
 	extern short fieldskillrate;
 	extern vector<squadst *> squad;
-	
-		for (int i = 0; i < 6; i++)
-			if (squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
+
+	for (int i = 0; i < 6; i++)
+		if (squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
+		{
+			switch (fieldskillrate)
 			{
-				switch (fieldskillrate)
-				{
-				case FIELDSKILLRATE_FAST:
-					squad[sq]->squad[i]->train(SKILL_DRIVING, 5); break;
-				case FIELDSKILLRATE_CLASSIC:
-					squad[sq]->squad[i]->train(SKILL_DRIVING, 5); break;
-				case FIELDSKILLRATE_HARD:
-					squad[sq]->squad[i]->train(SKILL_DRIVING, max(0, 5 - squad[sq]->squad[i]->get_skill(SKILL_DRIVING))); break;
-				}
+			case FIELDSKILLRATE_FAST:
+				squad[sq]->squad[i]->train(SKILL_DRIVING, 5); break;
+			case FIELDSKILLRATE_CLASSIC:
+				squad[sq]->squad[i]->train(SKILL_DRIVING, 5); break;
+			case FIELDSKILLRATE_HARD:
+				squad[sq]->squad[i]->train(SKILL_DRIVING, max(0, 5 - squad[sq]->squad[i]->get_skill(SKILL_DRIVING))); break;
 			}
+		}
 }
 void squadDepart(const int sq, char &clearformess) {
 	extern char showcarprefs;
@@ -1011,85 +1010,85 @@ void advanceSquads(char &clearformess) {
 	vector<long> caridused;
 	//ADVANCE SQUADS
 	squadst *oactivesquad = activesquad;
-		for (int sq = 0; sq < len(squad); sq++)
+	for (int sq = 0; sq < len(squad); sq++)
+	{
+		//MAKE SURE MEMBERS DON'T ACT IF SQUAD DOES
+		if (squad[sq]->activity.type != ACTIVITY_NONE) {
+			squadOverrideIndividual(sq, clearformess);
+		}
+		if (squad[sq]->activity.type == ACTIVITY_VISIT)
 		{
-			//MAKE SURE MEMBERS DON'T ACT IF SQUAD DOES
-			if (squad[sq]->activity.type != ACTIVITY_NONE) {
-				squadOverrideIndividual(sq, clearformess);
-			}
-			if (squad[sq]->activity.type == ACTIVITY_VISIT)
+			//TURN AWAY SQUADS FROM RECENTLY CLOSED OR SIEGED SITES
+			if (LocationsPool::getInstance().isThisSiteClosed(squad[sq]->activity.arg) ||
+				LocationsPool::getInstance().isThereASiegeHere(squad[sq]->activity.arg))
 			{
-				//TURN AWAY SQUADS FROM RECENTLY CLOSED OR SIEGED SITES
-				if (LocationsPool::getInstance().isThisSiteClosed(squad[sq]->activity.arg) ||
-					LocationsPool::getInstance().isThereASiegeHere(squad[sq]->activity.arg))
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				turnSquadAway(sq);
+				continue;
+			}
+			carUpSquad(sq, caridused, clearformess);
+			//IF NEED CAR AND DON'T HAVE ONE...
+			//NOTE: SQUADS DON'T TAKE FREE CARS
+			if (LocationsPool::getInstance().doesThisPlaceNeedACar(squad[sq]->activity.arg) && squad[sq]->squad[0])
+				if (squad[sq]->squad[0]->carid == -1)
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
-					turnSquadAway(sq);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
+					addstrAlt(CONST_daily009, gamelog);
+					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
+					addstrAlt(singleDot, gamelog);
+					gamelog.nextMessage();
+					pressAnyKey();
+					//ON TO THE NEXT SQUAD
+					squad[sq]->activity.type = ACTIVITY_NONE;
 					continue;
 				}
-				carUpSquad(sq, caridused, clearformess);
-				//IF NEED CAR AND DON'T HAVE ONE...
-				//NOTE: SQUADS DON'T TAKE FREE CARS
-				if (LocationsPool::getInstance().doesThisPlaceNeedACar(squad[sq]->activity.arg) && squad[sq]->squad[0])
-					if (squad[sq]->squad[0]->carid == -1)
-					{
-						if (clearformess) eraseAlt();
-						else makedelimiter();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-						addstrAlt(CONST_daily009, gamelog);
-						addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
-						addstrAlt(singleDot, gamelog);
-						gamelog.nextMessage();
-						pressAnyKey();
-						//ON TO THE NEXT SQUAD
-						squad[sq]->activity.type = ACTIVITY_NONE;
-						continue;
-					}
-				// Give drivers experience if they actually travel
-				if (squad[sq]->activity.arg != squad[sq]->squad[0]->base) {
-					giveDriverExperience(sq);
-				}
-				//GO PLACES
-				// Identify the CONST_daily010 -- top level in multi-city play,
-				// a particular district in one-city play
-				int travelLocation = -1;
-				for (int i = 0; i < LocationsPool::getInstance().lenpool(); i++)
-					if (LocationsPool::getInstance().getLocationType(i) == SITE_TRAVEL)
-					{
-						travelLocation = i;
-						break;
-					}
-				// Verify travellers can afford the cost, and charge them
-				bool canDepart = true;
-				if (LocationsPool::getInstance().getLocationParent(squad[sq]->activity.arg) == travelLocation)
-				{
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					int price;
-					for (price = 0; price < 6; price++) if (!squad[sq]->squad[price]) break;
-					price *= 100;
-					if (ledger.get_funds() < price)
-					{
-						mvaddstr_fl(8, 1, gamelog, CONST_daily011.c_str(), squad[sq]->name, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
-						canDepart = false;
-					}
-					else
-					{
-						ledger.subtract_funds(price, EXPENSE_TRAVEL);
-						mvaddstr_fl(8, 1, gamelog, CONST_daily012.c_str(), squad[sq]->name, price, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
-					}
-					pressAnyKey();
-				}
-				if (canDepart) {
-					squadDepart(sq, clearformess);
-				}
-				squad[sq]->activity.type = ACTIVITY_NONE;
+			// Give drivers experience if they actually travel
+			if (squad[sq]->activity.arg != squad[sq]->squad[0]->base) {
+				giveDriverExperience(sq);
 			}
+			//GO PLACES
+			// Identify the CONST_daily010 -- top level in multi-city play,
+			// a particular district in one-city play
+			int travelLocation = -1;
+			for (int i = 0; i < LocationsPool::getInstance().lenpool(); i++)
+				if (LocationsPool::getInstance().getLocationType(i) == SITE_TRAVEL)
+				{
+					travelLocation = i;
+					break;
+				}
+			// Verify travellers can afford the cost, and charge them
+			bool canDepart = true;
+			if (LocationsPool::getInstance().getLocationParent(squad[sq]->activity.arg) == travelLocation)
+			{
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				int price;
+				for (price = 0; price < 6; price++) if (!squad[sq]->squad[price]) break;
+				price *= 100;
+				if (ledger.get_funds() < price)
+				{
+					mvaddstr_fl(8, 1, gamelog, CONST_daily011.c_str(), squad[sq]->name, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
+					canDepart = false;
+				}
+				else
+				{
+					ledger.subtract_funds(price, EXPENSE_TRAVEL);
+					mvaddstr_fl(8, 1, gamelog, CONST_daily012.c_str(), squad[sq]->name, price, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
+				}
+				pressAnyKey();
+			}
+			if (canDepart) {
+				squadDepart(sq, clearformess);
+			}
+			squad[sq]->activity.type = ACTIVITY_NONE;
 		}
+	}
 
-	
+
 	activesquad = oactivesquad;
 }
 void moveSquadlessToBaseIfNotSiege() {
@@ -1120,8 +1119,8 @@ void advanceday(char &clearformess, char canseethings)
 	//int w = 0;
 	//int l2;
 	//*JDS* Save the game to save.dat each day. :)
-	if (!disbanding) { 
-		title_screen::getInstance().autosavegame(); 
+	if (!disbanding) {
+		title_screen::getInstance().autosavegame();
 	}
 	ledger.resetDailyAmounts();
 	//CLEAR CAR STATES
@@ -1142,8 +1141,8 @@ void advanceday(char &clearformess, char canseethings)
 	//MEET WITH POTENTIAL RECRUITS
 	meetWithPotentialRecruits(clearformess);
 	//DO DATES
-	if (!disbanding) { 
-		doDates(clearformess); 
+	if (!disbanding) {
+		doDates(clearformess);
 	}
 	//AGE THINGS
 	ageThings(clearformess);

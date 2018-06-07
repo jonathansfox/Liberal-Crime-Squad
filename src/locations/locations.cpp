@@ -131,22 +131,22 @@ const string blankString = "";
 const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 const string tag_value = "value";
 const string tag_attribute = "attribute";
@@ -158,31 +158,31 @@ extern string singleSpace;
 extern string commaSpace;
 // Finds a location with the corresponding type and returns
 // its index in the location array
- vector<string> labor_camp_name;
- vector<string> labor_camp_name_2;
- vector<string> juice_name;
- vector<string> juice_name_2;
- vector<string> vegan_name;
- vector<string> vegan_name_2;
- vector<string> cafe_name;
- vector<string> cafe_name_2;
- vector<string> latte_name;
- vector<string> latte_name_2;
+vector<string> labor_camp_name;
+vector<string> labor_camp_name_2;
+vector<string> juice_name;
+vector<string> juice_name_2;
+vector<string> vegan_name;
+vector<string> vegan_name_2;
+vector<string> cafe_name;
+vector<string> cafe_name_2;
+vector<string> latte_name;
+vector<string> latte_name_2;
 #include "../customMaps.h"
- const string locations = "locations\\";
- vector<file_and_text_collection> locations_text_file_collection = {
-	 /*locations.cpp*/
-	 customText(&labor_camp_name, locations + CONST_locations005),
-	 customText(&labor_camp_name_2, locations + CONST_locations006),
-	 customText(&juice_name, locations + CONST_locations007),
-	 customText(&juice_name_2, locations + CONST_locations008),
-	 customText(&vegan_name, locations + CONST_locations009),
-	 customText(&vegan_name_2, locations + CONST_locations010),
-	 customText(&cafe_name, locations + CONST_locations011),
-	 customText(&cafe_name_2, locations + CONST_locations012),
-	 customText(&latte_name, locations + CONST_locations013),
-	 customText(&latte_name_2, locations + CONST_locations014),
- };
+const string locations = "locations\\";
+vector<file_and_text_collection> locations_text_file_collection = {
+	/*locations.cpp*/
+	customText(&labor_camp_name, locations + CONST_locations005),
+	customText(&labor_camp_name_2, locations + CONST_locations006),
+	customText(&juice_name, locations + CONST_locations007),
+	customText(&juice_name_2, locations + CONST_locations008),
+	customText(&vegan_name, locations + CONST_locations009),
+	customText(&vegan_name_2, locations + CONST_locations010),
+	customText(&cafe_name, locations + CONST_locations011),
+	customText(&cafe_name_2, locations + CONST_locations012),
+	customText(&latte_name, locations + CONST_locations013),
+	customText(&latte_name_2, locations + CONST_locations014),
+};
 void Location::init()
 {
 	haveflag = 0;
@@ -198,7 +198,7 @@ void Location::init()
 	compound_stores = 0;
 	front_business = -1;
 }
- map<short, string> getCityDescription;
+map<short, string> getCityDescription;
 string Location::city_description()
 {
 	if (getCityDescription.count(type)) {
@@ -292,7 +292,7 @@ void Location::rename(const char* name_, const char* shortname_)
 	strcpy(this->name, name_);
 	strcpy(this->shortname, shortname_);
 }
- map<short, vector<string> > getSiteName;
+map<short, vector<string> > getSiteName;
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(Location &loc)
 {  // NOTE: make sure to keep code here matching code in updateworld_laws() in monthly.cpp for when names are changed
@@ -572,60 +572,60 @@ void initlocation(Location &loc)
 				strcpy(loc.shortname, CONST_locations098.c_str());
 			}
 		} while (loc.duplicatelocation());
-		break; case SITE_BUSINESS_JUICEBAR:
-			strcpy(loc.name, blankString.c_str());
-			strcat(loc.name, pickrandom(juice_name).data());
-			strcat(loc.name, singleSpace.data());
-			strcat(loc.name, pickrandom(juice_name_2).data());
-			strcat(loc.name, CONST_locations099.c_str());
-			strcpy(loc.shortname, CONST_locations100.c_str());
-			break;
-		case SITE_BUSINESS_VEGANCOOP:
-			strcpy(loc.name, blankString.c_str());
-			strcat(loc.name, pickrandom(vegan_name).data());
-			strcat(loc.name, singleSpace.data());
-			strcat(loc.name, pickrandom(vegan_name_2).data());
-			strcat(loc.name, CONST_locations101.c_str());
-			strcpy(loc.shortname, CONST_locations102.c_str());
-			break;
-		case SITE_BUSINESS_INTERNETCAFE:
-			strcpy(loc.name, blankString.c_str());
-			strcat(loc.name, pickrandom(cafe_name).data());
-			strcat(loc.name, singleSpace.data());
-			strcat(loc.name, pickrandom(cafe_name_2).data());
-			strcat(loc.name, CONST_locations103.c_str());
-			strcpy(loc.shortname, CONST_locations104.c_str());
-			break;
-		case SITE_BUSINESS_CIGARBAR:
-			strcpy(loc.name, tag_The.c_str());
-			strcat(loc.name, lastname(true).data());
-			strcat(loc.name, CONST_locations105.c_str());
-			strcpy(loc.shortname, CONST_locations106.c_str());
-			break;
-		case SITE_BUSINESS_LATTESTAND:
-			strcpy(loc.name, blankString.c_str());
-			strcat(loc.name, pickrandom(latte_name).data());
-			strcat(loc.name, singleSpace.data());
-			strcat(loc.name, pickrandom(latte_name_2).data());
-			strcat(loc.name, CONST_locations107.c_str());
-			strcpy(loc.shortname, CONST_locations108.c_str());
-			break;
-		case SITE_OUTDOOR_PUBLICPARK:
-			strcpy(loc.name, lastname(true).data());
-			strcat(loc.name, CONST_locations109.c_str());
-			strcpy(loc.shortname, CONST_locations110.c_str());
-			break;
-		case SITE_RESIDENTIAL_BOMBSHELTER:
-			loc.rename(CONST_locations111.c_str(), CONST_locationsB128.c_str());
-			break;
-		case SITE_BUSINESS_BARANDGRILL:
-			loc.rename(CONST_locations112.c_str(), CONST_locationsB129.c_str());
-			break;
-		case SITE_OUTDOOR_BUNKER:
-			loc.rename(CONST_locations113.c_str(), CONST_locationsB130.c_str());
-			break;
-		case SITE_BUSINESS_ARMSDEALER:
-			loc.rename(CONST_locations114.c_str(), CONST_locations114.c_str());
-			break;
+	break; case SITE_BUSINESS_JUICEBAR:
+		strcpy(loc.name, blankString.c_str());
+		strcat(loc.name, pickrandom(juice_name).data());
+		strcat(loc.name, singleSpace.data());
+		strcat(loc.name, pickrandom(juice_name_2).data());
+		strcat(loc.name, CONST_locations099.c_str());
+		strcpy(loc.shortname, CONST_locations100.c_str());
+		break;
+	case SITE_BUSINESS_VEGANCOOP:
+		strcpy(loc.name, blankString.c_str());
+		strcat(loc.name, pickrandom(vegan_name).data());
+		strcat(loc.name, singleSpace.data());
+		strcat(loc.name, pickrandom(vegan_name_2).data());
+		strcat(loc.name, CONST_locations101.c_str());
+		strcpy(loc.shortname, CONST_locations102.c_str());
+		break;
+	case SITE_BUSINESS_INTERNETCAFE:
+		strcpy(loc.name, blankString.c_str());
+		strcat(loc.name, pickrandom(cafe_name).data());
+		strcat(loc.name, singleSpace.data());
+		strcat(loc.name, pickrandom(cafe_name_2).data());
+		strcat(loc.name, CONST_locations103.c_str());
+		strcpy(loc.shortname, CONST_locations104.c_str());
+		break;
+	case SITE_BUSINESS_CIGARBAR:
+		strcpy(loc.name, tag_The.c_str());
+		strcat(loc.name, lastname(true).data());
+		strcat(loc.name, CONST_locations105.c_str());
+		strcpy(loc.shortname, CONST_locations106.c_str());
+		break;
+	case SITE_BUSINESS_LATTESTAND:
+		strcpy(loc.name, blankString.c_str());
+		strcat(loc.name, pickrandom(latte_name).data());
+		strcat(loc.name, singleSpace.data());
+		strcat(loc.name, pickrandom(latte_name_2).data());
+		strcat(loc.name, CONST_locations107.c_str());
+		strcpy(loc.shortname, CONST_locations108.c_str());
+		break;
+	case SITE_OUTDOOR_PUBLICPARK:
+		strcpy(loc.name, lastname(true).data());
+		strcat(loc.name, CONST_locations109.c_str());
+		strcpy(loc.shortname, CONST_locations110.c_str());
+		break;
+	case SITE_RESIDENTIAL_BOMBSHELTER:
+		loc.rename(CONST_locations111.c_str(), CONST_locationsB128.c_str());
+		break;
+	case SITE_BUSINESS_BARANDGRILL:
+		loc.rename(CONST_locations112.c_str(), CONST_locationsB129.c_str());
+		break;
+	case SITE_OUTDOOR_BUNKER:
+		loc.rename(CONST_locations113.c_str(), CONST_locationsB130.c_str());
+		break;
+	case SITE_BUSINESS_ARMSDEALER:
+		loc.rename(CONST_locations114.c_str(), CONST_locations114.c_str());
+		break;
 	}
 }

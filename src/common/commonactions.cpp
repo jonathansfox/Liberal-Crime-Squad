@@ -1,28 +1,28 @@
 #include "../includes.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -117,7 +117,7 @@ void hospitalize(int loc, Creature &patient)
 		// Inform about the hospitalization
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, patient.name, gamelog);
+		mvaddstrAlt(8, 1, patient.name, gamelog);
 		addstrAlt(CONST_commonactions004, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
 		addstrAlt(CONST_commonactions005, gamelog);
@@ -127,7 +127,7 @@ void hospitalize(int loc, Creature &patient)
 		else addstrAlt(CONST_commonactions007, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage(); //Time for the next message.
- 	pressAnyKey();
+		pressAnyKey();
 		if (patientsquad)
 		{  // Reorganize patient's former squad
 			bool flipstart = 0;
@@ -341,7 +341,7 @@ void change_public_opinion(int v, int power, char affect, char cap)
 	else if (affect == -1)
 	{
 		// Simplifed algorithm for affect by CCS respect
-		effpower = power*(100 - attitude[VIEW_CONSERVATIVECRIMESQUAD]) / 100;
+		effpower = power * (100 - attitude[VIEW_CONSERVATIVECRIMESQUAD]) / 100;
 	}
 	if (v == VIEW_LIBERALCRIMESQUAD)
 	{
@@ -361,14 +361,14 @@ void change_public_opinion(int v, int power, char affect, char cap)
 	//people are paying attention to the issue
 	effpower = (int)(effpower*(1 + (float)public_interest[v] / 50));
 	//Then affect public interest
-	if (public_interest[v]<cap || (v == VIEW_LIBERALCRIMESQUADPOS && public_interest[v] < 100))
+	if (public_interest[v] < cap || (v == VIEW_LIBERALCRIMESQUADPOS && public_interest[v] < 100))
 		public_interest[v] += abs(effpower);
 	if (effpower > 0)
 	{
 		//Some things will never persuade the last x% of the population.
 		//If there's a cap on how many people will be impressed, this
 		//is where that's handled.
-		if (attitude[v] + effpower>cap)
+		if (attitude[v] + effpower > cap)
 		{
 			if (attitude[v] > cap)effpower = 0;
 			else effpower = cap - attitude[v];
@@ -430,7 +430,7 @@ int randomissue(bool core_only)
 }
 
 /* common - Sort a list of creatures.*/
-inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name)<0; }
+inline bool sort_name(const Creature* first, const Creature* second) { return strcmp(first->name, second->name) < 0; }
 bool sort_locationandname(const Creature* first, const Creature* second)
 {
 	return first->location < second->location
@@ -467,7 +467,7 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
 	case SORTING_SQUAD_OR_NAME: sort(liberals.begin(), liberals.end(), sort_squadorname); break;
 	}
 }
- map<short, string> trainingActivitySorting;
+map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
 const string mostlyendings = "mostlyendings\\";
 const string CONST_commonactions009 = "methodOfSorting.txt";
@@ -481,7 +481,7 @@ void sorting_prompt(short listforsorting)
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1,  1, CONST_commonactions010);
+	mvaddstrAlt(1, 1, CONST_commonactions010);
 	if (trainingActivitySorting.count(listforsorting)) {
 		addstrAlt(trainingActivitySorting[listforsorting]);
 	}
@@ -489,7 +489,7 @@ void sorting_prompt(short listforsorting)
 		addstrAlt(trainingActivitySorting[SORTINGCHOICENUM]);
 	}
 	for (int i = 0; i < len(methodOfSorting); i++) {
-		mvaddstrAlt(3 + i,  2, methodOfSorting[i]);
+		mvaddstrAlt(3 + i, 2, methodOfSorting[i]);
 	}
 	while (true)
 	{
@@ -529,9 +529,9 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
 	default: return 0;//-1;
 	}
 }
- string selectA;
- string selectAn;
- string enterDash;
+string selectA;
+string selectAn;
+string enterDash;
 /* common - Displays options to choose from and returns an int corresponding
 to the index of the option in the vector. */
 int choiceprompt(const string &firstline, const string &secondline,
@@ -545,9 +545,9 @@ int choiceprompt(const string &firstline, const string &secondline,
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, firstline);
+		mvaddstrAlt(0, 0, firstline);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1,  0, secondline);
+		mvaddstrAlt(1, 0, secondline);
 		//Write options
 		for (int p = page * 19, y = 2; p < len(option) && p < page * 19 + 19; p++, y++)
 		{
@@ -564,14 +564,14 @@ int choiceprompt(const string &firstline, const string &secondline,
 		default:
 			addstrAlt(selectA + optiontypename); break;
 		}
-		mvaddstrAlt(23, 0,		addpagestr());
+		mvaddstrAlt(23, 0, addpagestr());
 		moveAlt(24, 0);
 		if (allowexitwochoice) addstrAlt(enterDash + exitstring);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(option)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(option)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -596,8 +596,8 @@ int buyprompt(const string &firstline, const string &secondline,
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, firstline);
-		mvaddstrAlt(1,  0, secondline);
+		mvaddstrAlt(0, 0, firstline);
+		mvaddstrAlt(1, 0, secondline);
 		//Write wares and prices
 		for (int p = page * 19, y = 2; p < len(nameprice) && p < page * 19 + 19; p++)
 		{
@@ -620,12 +620,12 @@ int buyprompt(const string &firstline, const string &secondline,
 			addstrAlt(selectA + producttype); break;
 		}
 		mvaddstrAlt(23, 0, addpagestr());
-		mvaddstrAlt(24,  0, enterDash + exitstring);
+		mvaddstrAlt(24, 0, enterDash + exitstring);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(nameprice)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(nameprice)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';

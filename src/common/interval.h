@@ -15,6 +15,6 @@ public:
 private:
 	// Checks if a string is a number. Assumes non-numeric characters other
 	// than dashes have already been checked for.
-	
+
 };
 

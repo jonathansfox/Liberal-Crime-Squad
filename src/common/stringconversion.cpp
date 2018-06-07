@@ -124,9 +124,9 @@ const string tag_true = "true";
 
 std::string tostring(long i)
 {
-   std::ostringstream os;
-   os << i;
-   return os.str();
+	std::ostringstream os;
+	os << i;
+	return os.str();
 }
 using std::transform;
 int stringtobool(string boolstr)
@@ -235,7 +235,7 @@ int gender_string_to_enum(const string& gender)
 	else
 		return -1;
 }
- string NONE;
+string NONE;
 int severtype_string_to_enum(const string& severtype)
 {
 	if (severtype == tag_NASTY)

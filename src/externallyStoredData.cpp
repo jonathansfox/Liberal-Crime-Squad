@@ -1092,9 +1092,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
-
-char* PACKAGE_VERSION = "4.12.21";
-int version = 41221;
+string PACKAGE_VERSION_STR = "4.12.22";
+int version = 41222;
 int lowestloadversion = 40100;
 int lowestloadscoreversion = 31203;
 
@@ -1211,20 +1210,20 @@ extern map<short, string> musicList;
 extern vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
 extern vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
 extern vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
- vector<string> conservativeLegalArgumentUnprocessed;
- vector<string> youAreStupidTalkAboutIssuesUnprocessed;
- vector<string> issueTooLiberalUnprocessed;
- vector<string> issueEventStringUnprocessed;
- vector<string> conservatiseLawUnprocessed;
- vector<string> liberalizeLawUnprocessed;
- vector<string> discussIssuesUnprocessed;
- vector<string> discussesIssuesUnprocessed;
- vector<string> talkAboutTheIssuesUnprocessed;
- vector<string> endgameLawStringsUnprocessed;
- vector<string> helpTopicUnprocessed;
+vector<string> conservativeLegalArgumentUnprocessed;
+vector<string> youAreStupidTalkAboutIssuesUnprocessed;
+vector<string> issueTooLiberalUnprocessed;
+vector<string> issueEventStringUnprocessed;
+vector<string> conservatiseLawUnprocessed;
+vector<string> liberalizeLawUnprocessed;
+vector<string> discussIssuesUnprocessed;
+vector<string> discussesIssuesUnprocessed;
+vector<string> talkAboutTheIssuesUnprocessed;
+vector<string> endgameLawStringsUnprocessed;
+vector<string> helpTopicUnprocessed;
 extern map<short, vector<string> > helpTopics;
 extern vector<string> theGreatUnknown;
- vector<string> state_biases_Unprocessed;
+vector<string> state_biases_Unprocessed;
 map<string, short> string_to_activity = {
 	map<string, short>::value_type(CONST_externallyStoredData057, ACTIVITY_NONE),
 	map<string, short>::value_type(CONST_externallyStoredData058, ACTIVITY_VISIT),
@@ -1463,17 +1462,17 @@ bool initialize_more_incomplete_txt() {
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_TEACHING, Data_Activity('l', true, study_string1, study_string2)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_LOCKSMITHING, Data_Activity('l', true, study_string1, study_string2)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COMPUTERS, Data_Activity('l', true, study_string1, study_string2)),
-		//  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COOKING, Data_Activity'l', true,study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FENCING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WEAVING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_RELIGION, Data_Activity('l', true, study_string1, study_string2)),
-		//  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MAGIC, Data_Activity'l', true,study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_CLUB, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STREETSENSE, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_THROWING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STEALTH, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SEDUCTION, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_NONE, Data_Activity('x', false, blankString))
+		 //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COOKING, Data_Activity'l', true,study_string1, study_string2)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FENCING, Data_Activity('l', true, study_string1, study_string2)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WEAVING, Data_Activity('l', true, study_string1, study_string2)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_RELIGION, Data_Activity('l', true, study_string1, study_string2)),
+		  //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MAGIC, Data_Activity'l', true,study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_CLUB, Data_Activity('l', true, study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STREETSENSE, Data_Activity('l', true, study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_THROWING, Data_Activity('l', true, study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STEALTH, Data_Activity('l', true, study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SEDUCTION, Data_Activity('l', true, study_string1, study_string2)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_NONE, Data_Activity('x', false, blankString))
 	};
 	pollingData = {
 		map< Views, stringConnectedToView >::value_type(VIEW_GAY,  stringConnectedToView(CONST_externallyStoredData236, CONST_externallyStoredDataB1016)),
@@ -1529,49 +1528,49 @@ bool initialize_more_incomplete_txt() {
 		map< Activity, CreatureSkill>::value_type(ACTIVITY_STUDY_SEDUCTION, SKILL_SEDUCTION)
 	};
 	// This is the lesson data for the University.
-	 data_lessons = {
-		ActivityAndString(ACTIVITY_STUDY_DEBATING,	CONST_externallyStoredData259),
-		ActivityAndString(ACTIVITY_STUDY_BUSINESS,	CONST_externallyStoredData260),
-		ActivityAndString(ACTIVITY_STUDY_PSYCHOLOGY,	CONST_externallyStoredData1107),
-		ActivityAndString(ACTIVITY_STUDY_LAW,	CONST_externallyStoredData262),
-		ActivityAndString(ACTIVITY_STUDY_SCIENCE,	CONST_externallyStoredData263),
-		ActivityAndString(ACTIVITY_STUDY_DRIVING,	CONST_externallyStoredData264),
-		ActivityAndString(ACTIVITY_STUDY_FIRST_AID,	CONST_externallyStoredData1124),
-		ActivityAndString(ACTIVITY_STUDY_ART,	CONST_externallyStoredData266),
-		ActivityAndString(ACTIVITY_STUDY_DISGUISE,	CONST_externallyStoredData267),
-		ActivityAndString(ACTIVITY_STUDY_MARTIAL_ARTS,CONST_externallyStoredData268),
-		ActivityAndString(ACTIVITY_STUDY_GYMNASTICS,	CONST_externallyStoredData269),
-		ActivityAndString(ACTIVITY_STUDY_WRITING,	CONST_externallyStoredData1114),
-		ActivityAndString(ACTIVITY_STUDY_TEACHING,	CONST_externallyStoredData271),
-		ActivityAndString(ACTIVITY_STUDY_MUSIC,	CONST_externallyStoredData1115),
-		ActivityAndString(ACTIVITY_STUDY_LOCKSMITHING,CONST_externallyStoredData273),
-		 // Terra Vitae
-		 ActivityAndString(ACTIVITY_STUDY_COMPUTERS, CONST_externallyStoredData274),
-		 ActivityAndString(ACTIVITY_STUDY_FENCING, CONST_externallyStoredData275),
-		 ActivityAndString(ACTIVITY_STUDY_WEAVING, CONST_externallyStoredData276),
-		 ActivityAndString(ACTIVITY_STUDY_RELIGION, CONST_externallyStoredData1117),
-		 //, ActivityAndString(ACTIVITY_STUDY_MAGIC, CONST_externallyStoredData278)
-		 // new for 4.12.6
-		 ActivityAndString(ACTIVITY_STUDY_CLUB,	CONST_externallyStoredData279),
-		 ActivityAndString(ACTIVITY_STUDY_STREETSENSE,	CONST_externallyStoredData280),
-		 ActivityAndString(ACTIVITY_STUDY_THROWING,	CONST_externallyStoredData281),
-		 ActivityAndString(ACTIVITY_STUDY_STEALTH,	CONST_externallyStoredData1120),
-		 ActivityAndString(ACTIVITY_STUDY_SEDUCTION,CONST_externallyStoredData283)
+	data_lessons = {
+	   ActivityAndString(ACTIVITY_STUDY_DEBATING,	CONST_externallyStoredData259),
+	   ActivityAndString(ACTIVITY_STUDY_BUSINESS,	CONST_externallyStoredData260),
+	   ActivityAndString(ACTIVITY_STUDY_PSYCHOLOGY,	CONST_externallyStoredData1107),
+	   ActivityAndString(ACTIVITY_STUDY_LAW,	CONST_externallyStoredData262),
+	   ActivityAndString(ACTIVITY_STUDY_SCIENCE,	CONST_externallyStoredData263),
+	   ActivityAndString(ACTIVITY_STUDY_DRIVING,	CONST_externallyStoredData264),
+	   ActivityAndString(ACTIVITY_STUDY_FIRST_AID,	CONST_externallyStoredData1124),
+	   ActivityAndString(ACTIVITY_STUDY_ART,	CONST_externallyStoredData266),
+	   ActivityAndString(ACTIVITY_STUDY_DISGUISE,	CONST_externallyStoredData267),
+	   ActivityAndString(ACTIVITY_STUDY_MARTIAL_ARTS,CONST_externallyStoredData268),
+	   ActivityAndString(ACTIVITY_STUDY_GYMNASTICS,	CONST_externallyStoredData269),
+	   ActivityAndString(ACTIVITY_STUDY_WRITING,	CONST_externallyStoredData1114),
+	   ActivityAndString(ACTIVITY_STUDY_TEACHING,	CONST_externallyStoredData271),
+	   ActivityAndString(ACTIVITY_STUDY_MUSIC,	CONST_externallyStoredData1115),
+	   ActivityAndString(ACTIVITY_STUDY_LOCKSMITHING,CONST_externallyStoredData273),
+	   // Terra Vitae
+	   ActivityAndString(ACTIVITY_STUDY_COMPUTERS, CONST_externallyStoredData274),
+	   ActivityAndString(ACTIVITY_STUDY_FENCING, CONST_externallyStoredData275),
+	   ActivityAndString(ACTIVITY_STUDY_WEAVING, CONST_externallyStoredData276),
+	   ActivityAndString(ACTIVITY_STUDY_RELIGION, CONST_externallyStoredData1117),
+	   //, ActivityAndString(ACTIVITY_STUDY_MAGIC, CONST_externallyStoredData278)
+	   // new for 4.12.6
+	   ActivityAndString(ACTIVITY_STUDY_CLUB,	CONST_externallyStoredData279),
+	   ActivityAndString(ACTIVITY_STUDY_STREETSENSE,	CONST_externallyStoredData280),
+	   ActivityAndString(ACTIVITY_STUDY_THROWING,	CONST_externallyStoredData281),
+	   ActivityAndString(ACTIVITY_STUDY_STEALTH,	CONST_externallyStoredData1120),
+	   ActivityAndString(ACTIVITY_STUDY_SEDUCTION,CONST_externallyStoredData283)
 	};
-	 hackingActivities = {
-		activityData(CONST_externallyStoredData284.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_IMMIGRATION,2,0,75), ChangeOfOpinion(VIEW_FREESPEECH,2,0,75) }), vector<string>({})),
-		//Scambaiting, except you're baiting a CEO
-		activityData(CONST_externallyStoredData285.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_CEOSALARY,2,0,75),	ChangeOfOpinion(VIEW_TAXES,2,0,75) }), vector<string>({})),
-		activityData(CONST_externallyStoredData286.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_POLICEBEHAVIOR,2,0,75),	ChangeOfOpinion(VIEW_CIVILRIGHTS,2,0,75) }), vector<string>({})),
-		// *JDS* Penetrated government networks; don't get any loot, but do scare the info community
-		activityData(CONST_externallyStoredData287.c_str(), DIFFICULTY_IMPOSSIBLE, 25, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_INTELLIGENCE,10,0,75) }), vector<string>({})),
-		activityData(CONST_externallyStoredData288.c_str(), DIFFICULTY_IMPOSSIBLE, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_LIBERALCRIMESQUAD,5,0,75) }), vector<string>({})),
-		activityData(CONST_externallyStoredData289.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_GAY,2,0,75),	ChangeOfOpinion(VIEW_WOMEN,2,0,75) }), vector<string>({})),
-		activityData(CONST_externallyStoredData290.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_GENETICS,2,0,75) }), vector<string>({})),
-		activityData(CONST_externallyStoredData291.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_JUDGEFILES })),
-		activityData(CONST_externallyStoredData292.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_RESEARCHFILES })),
-		activityData(CONST_externallyStoredData293.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_CORPFILES })),
-		activityData(CONST_externallyStoredData294.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_CABLENEWSFILES,tag_LOOT_AMRADIOFILES }))
+	hackingActivities = {
+	   activityData(CONST_externallyStoredData284.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_IMMIGRATION,2,0,75), ChangeOfOpinion(VIEW_FREESPEECH,2,0,75) }), vector<string>({})),
+	   //Scambaiting, except you're baiting a CEO
+	   activityData(CONST_externallyStoredData285.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_CEOSALARY,2,0,75),	ChangeOfOpinion(VIEW_TAXES,2,0,75) }), vector<string>({})),
+	   activityData(CONST_externallyStoredData286.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_POLICEBEHAVIOR,2,0,75),	ChangeOfOpinion(VIEW_CIVILRIGHTS,2,0,75) }), vector<string>({})),
+	   // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
+	   activityData(CONST_externallyStoredData287.c_str(), DIFFICULTY_IMPOSSIBLE, 25, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_INTELLIGENCE,10,0,75) }), vector<string>({})),
+	   activityData(CONST_externallyStoredData288.c_str(), DIFFICULTY_IMPOSSIBLE, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_LIBERALCRIMESQUAD,5,0,75) }), vector<string>({})),
+	   activityData(CONST_externallyStoredData289.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_GAY,2,0,75),	ChangeOfOpinion(VIEW_WOMEN,2,0,75) }), vector<string>({})),
+	   activityData(CONST_externallyStoredData290.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({ ChangeOfOpinion(VIEW_GENETICS,2,0,75) }), vector<string>({})),
+	   activityData(CONST_externallyStoredData291.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_JUDGEFILES })),
+	   activityData(CONST_externallyStoredData292.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_RESEARCHFILES })),
+	   activityData(CONST_externallyStoredData293.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_CORPFILES })),
+	   activityData(CONST_externallyStoredData294.c_str(), DIFFICULTY_SUPERHEROIC, 10, LAWFLAG_INFORMATION, vector<ChangeOfOpinion>({}), vector<string>({ tag_LOOT_CABLENEWSFILES,tag_LOOT_AMRADIOFILES }))
 	};
 	activate_menu_items =
 	{
@@ -1602,27 +1601,27 @@ bool initialize_more_incomplete_txt() {
 			ActivityAndString(2, ACTIVITY_TEACH_COVERT,	CONST_externallyStoredData319),
 			ActivityAndString(3, ACTIVITY_TEACH_FIGHTING,	CONST_externallyStoredData320) }))
 	};
-	 recruitable_creatures = {
-		RecruitData(CREATURE_VETERAN, CONST_externallyStoredData321, 4),
-		RecruitData(CREATURE_ATHLETE, CONST_externallyStoredData322, 4),
-		RecruitData(CREATURE_COLLEGESTUDENT, CONST_externallyStoredData323, 1),
-		RecruitData(CREATURE_PROGRAMMER, CONST_externallyStoredData324, 4),
-		RecruitData(CREATURE_DANCER, CONST_externallyStoredData325, 4),
-		RecruitData(CREATURE_DOCTOR, CONST_externallyStoredData326, 4),
-		RecruitData(CREATURE_FASHIONDESIGNER, CONST_externallyStoredData327, 6),
-		RecruitData(CREATURE_GANGMEMBER, CONST_externallyStoredData328, 2),
-		RecruitData(CREATURE_HIPPIE, CONST_externallyStoredData329, 1),
-		RecruitData(CREATURE_JOURNALIST, CONST_externallyStoredData330, 4),
-		RecruitData(CREATURE_JUDGE_LIBERAL, CONST_externallyStoredData331, 6),
-		RecruitData(CREATURE_LAWYER, CONST_externallyStoredData332.c_str(), 4),
-		RecruitData(CREATURE_LOCKSMITH, CONST_externallyStoredData333.c_str(), 6),
-		RecruitData(CREATURE_MARTIALARTIST, CONST_externallyStoredData334.c_str(), 4),
-		RecruitData(CREATURE_MUSICIAN, CONST_externallyStoredData335.c_str(), 4),
-		RecruitData(CREATURE_MUTANT, CONST_externallyStoredData336.c_str(), 4),
-		RecruitData(CREATURE_PROSTITUTE, CONST_externallyStoredData337.c_str(), 2),
-		RecruitData(CREATURE_PSYCHOLOGIST, CONST_externallyStoredData338.c_str(), 4),
-		RecruitData(CREATURE_TAXIDRIVER, CONST_externallyStoredData339.c_str(), 4),
-		RecruitData(CREATURE_TEACHER, CONST_externallyStoredData340.c_str(), 4)
+	recruitable_creatures = {
+	   RecruitData(CREATURE_VETERAN, CONST_externallyStoredData321, 4),
+	   RecruitData(CREATURE_ATHLETE, CONST_externallyStoredData322, 4),
+	   RecruitData(CREATURE_COLLEGESTUDENT, CONST_externallyStoredData323, 1),
+	   RecruitData(CREATURE_PROGRAMMER, CONST_externallyStoredData324, 4),
+	   RecruitData(CREATURE_DANCER, CONST_externallyStoredData325, 4),
+	   RecruitData(CREATURE_DOCTOR, CONST_externallyStoredData326, 4),
+	   RecruitData(CREATURE_FASHIONDESIGNER, CONST_externallyStoredData327, 6),
+	   RecruitData(CREATURE_GANGMEMBER, CONST_externallyStoredData328, 2),
+	   RecruitData(CREATURE_HIPPIE, CONST_externallyStoredData329, 1),
+	   RecruitData(CREATURE_JOURNALIST, CONST_externallyStoredData330, 4),
+	   RecruitData(CREATURE_JUDGE_LIBERAL, CONST_externallyStoredData331, 6),
+	   RecruitData(CREATURE_LAWYER, CONST_externallyStoredData332.c_str(), 4),
+	   RecruitData(CREATURE_LOCKSMITH, CONST_externallyStoredData333.c_str(), 6),
+	   RecruitData(CREATURE_MARTIALARTIST, CONST_externallyStoredData334.c_str(), 4),
+	   RecruitData(CREATURE_MUSICIAN, CONST_externallyStoredData335.c_str(), 4),
+	   RecruitData(CREATURE_MUTANT, CONST_externallyStoredData336.c_str(), 4),
+	   RecruitData(CREATURE_PROSTITUTE, CONST_externallyStoredData337.c_str(), 2),
+	   RecruitData(CREATURE_PSYCHOLOGIST, CONST_externallyStoredData338.c_str(), 4),
+	   RecruitData(CREATURE_TAXIDRIVER, CONST_externallyStoredData339.c_str(), 4),
+	   RecruitData(CREATURE_TEACHER, CONST_externallyStoredData340.c_str(), 4)
 	};
 	trainingActivitySorting = {
 		map<short, string>::value_type(SORTINGCHOICE_LIBERALS, CONST_externallyStoredData341),
@@ -1843,23 +1842,23 @@ bool initialize_more_incomplete_txt() {
 		map<short, string>::value_type(REVIEWMODE_DEAD,	CONST_externallyStoredData537),
 		map<short, string>::value_type(REVIEWMODE_AWAY,	CONST_externallyStoredData538)
 	};
-	 liberalListAndColor = {
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData539),
-		stringAndColor(MAGENTA_ON_BLACK,	CONST_externallyStoredData540),
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData541),
-		stringAndColor(YELLOW_ON_BLACK,	CONST_externallyStoredData542),
-		stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_externallyStoredData543),
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData544),
-		stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
-		stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData547),
-		stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
-		stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData550),
-		stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
-		stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
-		stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData553),
-		stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_externallyStoredData554)
+	liberalListAndColor = {
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData539),
+	   stringAndColor(MAGENTA_ON_BLACK,	CONST_externallyStoredData540),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData541),
+	   stringAndColor(YELLOW_ON_BLACK,	CONST_externallyStoredData542),
+	   stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_externallyStoredData543),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData544),
+	   stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData547),
+	   stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData550),
+	   stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_externallyStoredData552),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData553),
+	   stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_externallyStoredData554)
 	};
 	getCityDescription = {
 		map<short, string>::value_type(SITE_CITY_SEATTLE, CONST_externallyStoredData555),
@@ -2464,20 +2463,20 @@ bool initialize_more_incomplete_txt() {
 			CONST_externallyStoredData1084,
 			CONST_externallyStoredData1085 }),
 		map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_TRUCKPULLSOUT,
-			//LIMIT :------------------------------------:
-		{ CONST_externallyStoredData1086,
-			CONST_externallyStoredData1087,
-			CONST_externallyStoredData1088 }),
-		map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CROSSTRAFFIC,
-			//LIMIT :------------------------------------:
-		{ CONST_externallyStoredData1089,
-			CONST_externallyStoredData1090,
-			CONST_externallyStoredData1091 }),
-		map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
-			//LIMIT :------------------------------------:
-		{ CONST_externallyStoredData1092,
-			CONST_externallyStoredData1093,
-			CONST_externallyStoredData1094 })
+		//LIMIT :------------------------------------:
+	{ CONST_externallyStoredData1086,
+		CONST_externallyStoredData1087,
+		CONST_externallyStoredData1088 }),
+	map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CROSSTRAFFIC,
+	//LIMIT :------------------------------------:
+{ CONST_externallyStoredData1089,
+	CONST_externallyStoredData1090,
+	CONST_externallyStoredData1091 }),
+map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
+//LIMIT :------------------------------------:
+{ CONST_externallyStoredData1092,
+	CONST_externallyStoredData1093,
+	CONST_externallyStoredData1094 })
 	};
 	skillEnumToString = {
 		map<short, string>::value_type(SKILL_HANDTOHAND,      CONST_externallyStoredData1095),
@@ -2529,7 +2528,7 @@ bool initialize_more_incomplete_txt() {
 		map<short, string>::value_type(ALIGN_ELITELIBERAL,  CONST_externallyStoredData1137),
 		map<short, string>::value_type(ALIGN_STALINIST,  CONST_externallyStoredData1138)
 	};
-	 musicList = {
+	musicList = {
 		// titlemode.ogg or .mid - Also sprach Zarathustra, introduction by Richard Strauss
 		map<short, string>::value_type(MUSIC_TITLEMODE, CONST_externallyStoredData1139), // load title mode music
 																  // newgame.ogg or .mid- The Liberty Bell March by John Philip Sousa
@@ -2603,179 +2602,179 @@ bool initialize_more_incomplete_txt() {
 																	  // stalinized.ogg or .mid - The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov
 		map<short, string>::value_type(MUSIC_STALINIZED, CONST_externallyStoredData1173) // load Stalinized music
 	};
-	 ACTIVITY_TEACH_FIGHTING_DEFAULT =
-		 // this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
-	 { CREATURE_ATHLETE,
-		 CREATURE_BOUNCER,
-		 CREATURE_COP,
-		 CREATURE_CCS_ARCHCONSERVATIVE,
-		 CREATURE_CCS_MOLOTOV,
-		 CREATURE_CCS_SNIPER,
-		 CREATURE_CCS_VIGILANTE,
-		 CREATURE_DEATHSQUAD,
-		 CREATURE_DOCTOR,
-		 CREATURE_FIREFIGHTER,
-		 CREATURE_GANGMEMBER,
-		 CREATURE_GANGUNIT,
-		 CREATURE_GUARDDOG,
-		 CREATURE_GENETIC,
-		 CREATURE_HARDENED_VETERAN,
-		 CREATURE_HICK,
-		 CREATURE_MARTIALARTIST,
-		 CREATURE_MERC,
-		 CREATURE_MILITARYOFFICER,
-		 CREATURE_MILITARYPOLICE,
-		 CREATURE_MUTANT,
-		 CREATURE_NURSE,
-		 CREATURE_PRISONGUARD,
-		 CREATURE_SEAL,
-		 CREATURE_SECURITYGUARD,
-		 CREATURE_SOLDIER,
-		 CREATURE_SWAT,
-		 CREATURE_TANK,
-		 CREATURE_VETERAN };
-	 ACTIVITY_TEACH_COVERT_DEFAULT =
-		 // this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
-	 { CREATURE_ACTOR,
-		 CREATURE_AGENT,
-		 CREATURE_AMATEURMAGICIAN,
-		 CREATURE_BIKER,
-		 CREATURE_BUM,
-		 CREATURE_CONSTRUCTIONWORKER,
-		 CREATURE_CRACKHEAD,
-		 CREATURE_EDUCATOR,
-		 CREATURE_FASHIONDESIGNER,
-		 CREATURE_GARBAGEMAN,
-		 CREATURE_HSDROPOUT,
-		 CREATURE_LOCKSMITH,
-		 CREATURE_MAILMAN,
-		 CREATURE_PLUMBER,
-		 CREATURE_PRISONER,
-		 CREATURE_PROGRAMMER,
-		 CREATURE_PROSTITUTE,
-		 CREATURE_PSYCHOLOGIST,
-		 CREATURE_SECRET_SERVICE,
-		 CREATURE_SEWERWORKER,
-		 CREATURE_TAXIDRIVER,
-		 CREATURE_THIEF,
-		 CREATURE_TRUCKER,
-		 CREATURE_WORKER_FACTORY_CHILD,
-		 CREATURE_WORKER_SERVANT,
-		 CREATURE_WORKER_SWEATSHOP };
-	 ACTIVITY_TEACH_POLITICS_DEFAULT =
-		 // this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
-	 { CREATURE_AUTHOR,
-		 CREATURE_BANK_MANAGER,
-		 CREATURE_BANK_TELLER,
-		 CREATURE_CAMERAMAN,
-		 CREATURE_CARSALESMAN,
-		 CREATURE_CHEF,
-		 CREATURE_CLERK,
-		 CREATURE_COLLEGESTUDENT,
-		 CREATURE_CORPORATE_CEO,
-		 CREATURE_CORPORATE_MANAGER,
-		 CREATURE_CRITIC_ART,
-		 CREATURE_CRITIC_MUSIC,
-		 CREATURE_DANCER,
-		 CREATURE_ENGINEER,
-		 CREATURE_FASTFOODWORKER,
-		 CREATURE_BAKER,
-		 CREATURE_BARISTA,
-		 CREATURE_BARTENDER,
-		 CREATURE_FOOTBALLCOACH,
-		 CREATURE_HAIRSTYLIST,
-		 CREATURE_HIPPIE,
-		 CREATURE_JOURNALIST,
-		 CREATURE_JUDGE_CONSERVATIVE,
-		 CREATURE_JUDGE_LIBERAL,
-		 CREATURE_JUROR,
-		 CREATURE_LANDLORD,
-		 CREATURE_LAWYER,
-		 CREATURE_MATHEMATICIAN,
-		 CREATURE_MUSICIAN,
-		 CREATURE_NEWSANCHOR,
-		 CREATURE_NUN,
-		 CREATURE_OFFICEWORKER,
-		 CREATURE_PAINTER,
-		 CREATURE_PHOTOGRAPHER,
-		 CREATURE_POLITICALACTIVIST,
-		 CREATURE_POLITICIAN,
-		 CREATURE_PRIEST,
-		 CREATURE_RADIOPERSONALITY,
-		 CREATURE_RETIREE,
-		 CREATURE_SCIENTIST_EMINENT,
-		 CREATURE_SCIENTIST_LABTECH,
-		 CREATURE_SCULPTOR,
-		 CREATURE_SOCIALITE,
-		 CREATURE_TEACHER,
-		 CREATURE_TEENAGER,
-		 CREATURE_TELEMARKETER,
-		 CREATURE_WORKER_FACTORY_NONUNION,
-		 CREATURE_WORKER_FACTORY_UNION,
-		 CREATURE_WORKER_JANITOR,
-		 CREATURE_WORKER_SECRETARY,
-		 CREATURE_YOGAINSTRUCTOR };
-	 processTheUnprocessed(helpTopicUnprocessed, helpTopics, string_to_activity);
-	 processTheUnprocessed(conservativeLegalArgumentUnprocessed, conservativeLegalArgument, string_to_law);
-	 processTheUnprocessed(youAreStupidTalkAboutIssuesUnprocessed, youAreStupidTalkAboutIssues, string_to_law);
-	 processTheUnprocessed(issueTooLiberalUnprocessed, issueTooLiberal, string_to_law);
-	 processTheUnprocessed(issueEventStringUnprocessed, issueEventString, string_to_view);
-	 processTheUnprocessed(conservatiseLawUnprocessed, conservatiseLaw, string_to_law);
-	 processTheUnprocessed(liberalizeLawUnprocessed, liberalizeLaw, string_to_law);
-	 processTheUnprocessed(discussIssuesUnprocessed, discussIssues, string_to_view);
-	 processTheUnprocessed(discussesIssuesUnprocessed, discussesIssues, string_to_view);
-	 processTheUnprocessed(talkAboutTheIssuesUnprocessed, talkAboutTheIssues, string_to_law);
-	 processTheUnprocessed(endgameLawStringsUnprocessed, endgameLawStrings, string_to_law);
-	 for (string str : state_biases_Unprocessed) {
-		 state_biases.push_back(atoi(str.data()));
-	 }
-	 site_tile_list = {
-		 map<string, short>::value_type(CONST_externallyStoredData1174, SITEBLOCK_EXIT),
-		 map<string, short>::value_type(CONST_externallyStoredData1175, SITEBLOCK_BLOCK),
-		 map<string, short>::value_type(CONST_externallyStoredData1176, SITEBLOCK_DOOR),
-		 map<string, short>::value_type(CONST_externallyStoredData1177, SITEBLOCK_KNOWN),
-		 map<string, short>::value_type(tag_LOOT, SITEBLOCK_LOOT),
-		 map<string, short>::value_type(CONST_externallyStoredData1178, SITEBLOCK_LOCKED),
-		 map<string, short>::value_type(CONST_externallyStoredData1179, SITEBLOCK_KLOCK),
-		 map<string, short>::value_type(CONST_externallyStoredData1180, SITEBLOCK_CLOCK),
-		 map<string, short>::value_type(CONST_externallyStoredData1181, SITEBLOCK_RESTRICTED),
-		 map<string, short>::value_type(CONST_externallyStoredData1182, SITEBLOCK_BLOODY),
-		 map<string, short>::value_type(CONST_externallyStoredData1183, SITEBLOCK_BLOODY2),
-		 map<string, short>::value_type(CONST_externallyStoredData1184, SITEBLOCK_GRASSY),
-		 map<string, short>::value_type(CONST_externallyStoredData1185, SITEBLOCK_OUTDOOR),
-		 map<string, short>::value_type(CONST_externallyStoredData1186, SITEBLOCK_DEBRIS),
-		 map<string, short>::value_type(CONST_externallyStoredData1187, SITEBLOCK_GRAFFITI),
-		 map<string, short>::value_type(CONST_externallyStoredData1188, SITEBLOCK_GRAFFITI_CCS),
-		 map<string, short>::value_type(CONST_externallyStoredData1189, SITEBLOCK_GRAFFITI_OTHER),
-		 map<string, short>::value_type(CONST_externallyStoredData1190, SITEBLOCK_FIRE_START),
-		 map<string, short>::value_type(CONST_externallyStoredData1191, SITEBLOCK_FIRE_PEAK),
-		 map<string, short>::value_type(CONST_externallyStoredData1192, SITEBLOCK_FIRE_END),
-		 map<string, short>::value_type(CONST_externallyStoredData1193, 0),
-	 };
-	  rejectionReasons = {
-		  map<int, vector<string> >::value_type(REJECTED_CCS, rejectedByCCS),
-		 map<int, vector<string> >::value_type(REJECTED_NUDE, rejectedBecauseNude),
-		 map<int, vector<string> >::value_type(REJECTED_UNDERAGE, rejectedBecauseUnderage),
-		 map<int, vector<string> >::value_type(REJECTED_FEMALE, rejectedBecauseFemale),
-		 map<int, vector<string> >::value_type(REJECTED_FEMALEISH, rejectedBecauseFemaleish),
-		 map<int, vector<string> >::value_type(REJECTED_DRESSCODE, rejectedBecauseDresscode),
-		 map<int, vector<string> >::value_type(REJECTED_BLOODYCLOTHES, rejectedBecauseBloodyClothes),
-		 map<int, vector<string> >::value_type(REJECTED_DAMAGEDCLOTHES, rejectedBecauseDamagedClothes),
-		 map<int, vector<string> >::value_type(REJECTED_SECONDRATECLOTHES, rejectedBecauseSecondRateClothes),
-		 map<int, vector<string> >::value_type(REJECTED_WEAPONS, rejectedBecauseWeapons),
-		 map<int, vector<string> >::value_type(REJECTED_GUESTLIST, rejectedBecauseGuestList),
-	 };
-	  caseRejectionReasons = {
-		  map<int, vector<string> >::value_type(REJECTED_UNDERAGE, caseREJECTED_UNDERAGE),
-		 map<int, vector<string> >::value_type(REJECTED_DRESSCODE, caseREJECTED_DRESSCODE),
-		 map<int, vector<string> >::value_type(REJECTED_SMELLFUNNY, caseREJECTED_SMELLFUNNY),
-		 map<int, vector<string> >::value_type(REJECTED_BLOODYCLOTHES, caseREJECTED_BLOODYCLOTHES),
-		 map<int, vector<string> >::value_type(REJECTED_DAMAGEDCLOTHES, caseREJECTED_DAMAGEDCLOTHES),
-		 map<int, vector<string> >::value_type(REJECTED_SECONDRATECLOTHES, caseREJECTED_SECONDRATECLOTHES),
-	 };
+	ACTIVITY_TEACH_FIGHTING_DEFAULT =
+		// this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
+	{ CREATURE_ATHLETE,
+		CREATURE_BOUNCER,
+		CREATURE_COP,
+		CREATURE_CCS_ARCHCONSERVATIVE,
+		CREATURE_CCS_MOLOTOV,
+		CREATURE_CCS_SNIPER,
+		CREATURE_CCS_VIGILANTE,
+		CREATURE_DEATHSQUAD,
+		CREATURE_DOCTOR,
+		CREATURE_FIREFIGHTER,
+		CREATURE_GANGMEMBER,
+		CREATURE_GANGUNIT,
+		CREATURE_GUARDDOG,
+		CREATURE_GENETIC,
+		CREATURE_HARDENED_VETERAN,
+		CREATURE_HICK,
+		CREATURE_MARTIALARTIST,
+		CREATURE_MERC,
+		CREATURE_MILITARYOFFICER,
+		CREATURE_MILITARYPOLICE,
+		CREATURE_MUTANT,
+		CREATURE_NURSE,
+		CREATURE_PRISONGUARD,
+		CREATURE_SEAL,
+		CREATURE_SECURITYGUARD,
+		CREATURE_SOLDIER,
+		CREATURE_SWAT,
+		CREATURE_TANK,
+		CREATURE_VETERAN };
+	ACTIVITY_TEACH_COVERT_DEFAULT =
+		// this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
+	{ CREATURE_ACTOR,
+		CREATURE_AGENT,
+		CREATURE_AMATEURMAGICIAN,
+		CREATURE_BIKER,
+		CREATURE_BUM,
+		CREATURE_CONSTRUCTIONWORKER,
+		CREATURE_CRACKHEAD,
+		CREATURE_EDUCATOR,
+		CREATURE_FASHIONDESIGNER,
+		CREATURE_GARBAGEMAN,
+		CREATURE_HSDROPOUT,
+		CREATURE_LOCKSMITH,
+		CREATURE_MAILMAN,
+		CREATURE_PLUMBER,
+		CREATURE_PRISONER,
+		CREATURE_PROGRAMMER,
+		CREATURE_PROSTITUTE,
+		CREATURE_PSYCHOLOGIST,
+		CREATURE_SECRET_SERVICE,
+		CREATURE_SEWERWORKER,
+		CREATURE_TAXIDRIVER,
+		CREATURE_THIEF,
+		CREATURE_TRUCKER,
+		CREATURE_WORKER_FACTORY_CHILD,
+		CREATURE_WORKER_SERVANT,
+		CREATURE_WORKER_SWEATSHOP };
+	ACTIVITY_TEACH_POLITICS_DEFAULT =
+		// this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
+	{ CREATURE_AUTHOR,
+		CREATURE_BANK_MANAGER,
+		CREATURE_BANK_TELLER,
+		CREATURE_CAMERAMAN,
+		CREATURE_CARSALESMAN,
+		CREATURE_CHEF,
+		CREATURE_CLERK,
+		CREATURE_COLLEGESTUDENT,
+		CREATURE_CORPORATE_CEO,
+		CREATURE_CORPORATE_MANAGER,
+		CREATURE_CRITIC_ART,
+		CREATURE_CRITIC_MUSIC,
+		CREATURE_DANCER,
+		CREATURE_ENGINEER,
+		CREATURE_FASTFOODWORKER,
+		CREATURE_BAKER,
+		CREATURE_BARISTA,
+		CREATURE_BARTENDER,
+		CREATURE_FOOTBALLCOACH,
+		CREATURE_HAIRSTYLIST,
+		CREATURE_HIPPIE,
+		CREATURE_JOURNALIST,
+		CREATURE_JUDGE_CONSERVATIVE,
+		CREATURE_JUDGE_LIBERAL,
+		CREATURE_JUROR,
+		CREATURE_LANDLORD,
+		CREATURE_LAWYER,
+		CREATURE_MATHEMATICIAN,
+		CREATURE_MUSICIAN,
+		CREATURE_NEWSANCHOR,
+		CREATURE_NUN,
+		CREATURE_OFFICEWORKER,
+		CREATURE_PAINTER,
+		CREATURE_PHOTOGRAPHER,
+		CREATURE_POLITICALACTIVIST,
+		CREATURE_POLITICIAN,
+		CREATURE_PRIEST,
+		CREATURE_RADIOPERSONALITY,
+		CREATURE_RETIREE,
+		CREATURE_SCIENTIST_EMINENT,
+		CREATURE_SCIENTIST_LABTECH,
+		CREATURE_SCULPTOR,
+		CREATURE_SOCIALITE,
+		CREATURE_TEACHER,
+		CREATURE_TEENAGER,
+		CREATURE_TELEMARKETER,
+		CREATURE_WORKER_FACTORY_NONUNION,
+		CREATURE_WORKER_FACTORY_UNION,
+		CREATURE_WORKER_JANITOR,
+		CREATURE_WORKER_SECRETARY,
+		CREATURE_YOGAINSTRUCTOR };
+	processTheUnprocessed(helpTopicUnprocessed, helpTopics, string_to_activity);
+	processTheUnprocessed(conservativeLegalArgumentUnprocessed, conservativeLegalArgument, string_to_law);
+	processTheUnprocessed(youAreStupidTalkAboutIssuesUnprocessed, youAreStupidTalkAboutIssues, string_to_law);
+	processTheUnprocessed(issueTooLiberalUnprocessed, issueTooLiberal, string_to_law);
+	processTheUnprocessed(issueEventStringUnprocessed, issueEventString, string_to_view);
+	processTheUnprocessed(conservatiseLawUnprocessed, conservatiseLaw, string_to_law);
+	processTheUnprocessed(liberalizeLawUnprocessed, liberalizeLaw, string_to_law);
+	processTheUnprocessed(discussIssuesUnprocessed, discussIssues, string_to_view);
+	processTheUnprocessed(discussesIssuesUnprocessed, discussesIssues, string_to_view);
+	processTheUnprocessed(talkAboutTheIssuesUnprocessed, talkAboutTheIssues, string_to_law);
+	processTheUnprocessed(endgameLawStringsUnprocessed, endgameLawStrings, string_to_law);
+	for (string str : state_biases_Unprocessed) {
+		state_biases.push_back(atoi(str.data()));
+	}
+	site_tile_list = {
+		map<string, short>::value_type(CONST_externallyStoredData1174, SITEBLOCK_EXIT),
+		map<string, short>::value_type(CONST_externallyStoredData1175, SITEBLOCK_BLOCK),
+		map<string, short>::value_type(CONST_externallyStoredData1176, SITEBLOCK_DOOR),
+		map<string, short>::value_type(CONST_externallyStoredData1177, SITEBLOCK_KNOWN),
+		map<string, short>::value_type(tag_LOOT, SITEBLOCK_LOOT),
+		map<string, short>::value_type(CONST_externallyStoredData1178, SITEBLOCK_LOCKED),
+		map<string, short>::value_type(CONST_externallyStoredData1179, SITEBLOCK_KLOCK),
+		map<string, short>::value_type(CONST_externallyStoredData1180, SITEBLOCK_CLOCK),
+		map<string, short>::value_type(CONST_externallyStoredData1181, SITEBLOCK_RESTRICTED),
+		map<string, short>::value_type(CONST_externallyStoredData1182, SITEBLOCK_BLOODY),
+		map<string, short>::value_type(CONST_externallyStoredData1183, SITEBLOCK_BLOODY2),
+		map<string, short>::value_type(CONST_externallyStoredData1184, SITEBLOCK_GRASSY),
+		map<string, short>::value_type(CONST_externallyStoredData1185, SITEBLOCK_OUTDOOR),
+		map<string, short>::value_type(CONST_externallyStoredData1186, SITEBLOCK_DEBRIS),
+		map<string, short>::value_type(CONST_externallyStoredData1187, SITEBLOCK_GRAFFITI),
+		map<string, short>::value_type(CONST_externallyStoredData1188, SITEBLOCK_GRAFFITI_CCS),
+		map<string, short>::value_type(CONST_externallyStoredData1189, SITEBLOCK_GRAFFITI_OTHER),
+		map<string, short>::value_type(CONST_externallyStoredData1190, SITEBLOCK_FIRE_START),
+		map<string, short>::value_type(CONST_externallyStoredData1191, SITEBLOCK_FIRE_PEAK),
+		map<string, short>::value_type(CONST_externallyStoredData1192, SITEBLOCK_FIRE_END),
+		map<string, short>::value_type(CONST_externallyStoredData1193, 0),
+	};
+	rejectionReasons = {
+		map<int, vector<string> >::value_type(REJECTED_CCS, rejectedByCCS),
+	   map<int, vector<string> >::value_type(REJECTED_NUDE, rejectedBecauseNude),
+	   map<int, vector<string> >::value_type(REJECTED_UNDERAGE, rejectedBecauseUnderage),
+	   map<int, vector<string> >::value_type(REJECTED_FEMALE, rejectedBecauseFemale),
+	   map<int, vector<string> >::value_type(REJECTED_FEMALEISH, rejectedBecauseFemaleish),
+	   map<int, vector<string> >::value_type(REJECTED_DRESSCODE, rejectedBecauseDresscode),
+	   map<int, vector<string> >::value_type(REJECTED_BLOODYCLOTHES, rejectedBecauseBloodyClothes),
+	   map<int, vector<string> >::value_type(REJECTED_DAMAGEDCLOTHES, rejectedBecauseDamagedClothes),
+	   map<int, vector<string> >::value_type(REJECTED_SECONDRATECLOTHES, rejectedBecauseSecondRateClothes),
+	   map<int, vector<string> >::value_type(REJECTED_WEAPONS, rejectedBecauseWeapons),
+	   map<int, vector<string> >::value_type(REJECTED_GUESTLIST, rejectedBecauseGuestList),
+	};
+	caseRejectionReasons = {
+		map<int, vector<string> >::value_type(REJECTED_UNDERAGE, caseREJECTED_UNDERAGE),
+	   map<int, vector<string> >::value_type(REJECTED_DRESSCODE, caseREJECTED_DRESSCODE),
+	   map<int, vector<string> >::value_type(REJECTED_SMELLFUNNY, caseREJECTED_SMELLFUNNY),
+	   map<int, vector<string> >::value_type(REJECTED_BLOODYCLOTHES, caseREJECTED_BLOODYCLOTHES),
+	   map<int, vector<string> >::value_type(REJECTED_DAMAGEDCLOTHES, caseREJECTED_DAMAGEDCLOTHES),
+	   map<int, vector<string> >::value_type(REJECTED_SECONDRATECLOTHES, caseREJECTED_SECONDRATECLOTHES),
+	};
 	return true;
 }
-void processTheUnprocessed(vector<string> &unprocessed, map<short, vector<string> > &processed,  map<string, short> string_to_short) {
+void processTheUnprocessed(vector<string> &unprocessed, map<short, vector<string> > &processed, map<string, short> string_to_short) {
 	int nextHelp = -2;
 	vector<string> nextHelpStrings;
 	for (string str : unprocessed) {

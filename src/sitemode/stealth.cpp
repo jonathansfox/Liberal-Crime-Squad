@@ -68,28 +68,28 @@ const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 const string tag_WEAPON_MP5_SMG = "WEAPON_MP5_SMG";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string blankString = "";
 const string tag_value = "value";
@@ -104,14 +104,14 @@ const string tag_skill = "skill";
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
- vector<string> blew_stealth_check;
+vector<string> blew_stealth_check;
 #include "../customMaps.h"
- const string stealth = "stealth\\";
- vector<file_and_text_collection> stealth_text_file_collection = {
-	 customText(&blew_stealth_check, stealth + CONST_stealth053),
- };
- extern short cursite;
- extern short fieldskillrate;
+const string stealth = "stealth\\";
+vector<file_and_text_collection> stealth_text_file_collection = {
+	customText(&blew_stealth_check, stealth + CONST_stealth053),
+};
+extern short cursite;
+extern short fieldskillrate;
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude, int difficulty)
 {
@@ -122,7 +122,7 @@ void noticecheck(int exclude, int difficulty)
 	if (sitealarm) return;
 	char sneak = 0;
 	int topi = 0;
-	for (int i = 0; i<6; ++i) if (activesquad->squad[i] && activesquad->squad[i]->get_skill(SKILL_STEALTH)>sneak)
+	for (int i = 0; i < 6; ++i) if (activesquad->squad[i] && activesquad->squad[i]->get_skill(SKILL_STEALTH) > sneak)
 		sneak = activesquad->squad[i]->get_skill(SKILL_STEALTH), topi = i;
 	for (int e = 0; e < ENCMAX; e++)
 	{  //Prisoners shouldn't shout for help.
@@ -138,7 +138,7 @@ void noticecheck(int exclude, int difficulty)
 			else mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
 			gamelog.newline();
 			sitealarm = 1;
-	 	pressAnyKey();
+			pressAnyKey();
 			break;
 		}
 	}
@@ -153,7 +153,7 @@ char alienationcheck(char mistake)
 	extern Creature encounter[ENCMAX];
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite))return 0;
 	char alienate = 0;
-	
+
 	int oldsitealienate = sitealienate;
 	vector<int> noticer;
 	for (int e = 0; e < ENCMAX; e++)
@@ -195,7 +195,7 @@ char alienationcheck(char mistake)
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 	return alienate;
@@ -245,7 +245,7 @@ char weapon_in_character(const string& wtype, const string& atype)
 		return CREATURE_PRISONGUARD;
 	if ((atype == tag_ARMOR_OVERALLS || atype == tag_ARMOR_WIFEBEATER) &&
 		(wtype == tag_WEAPON_TORCH || wtype == tag_WEAPON_PITCHFORK ||
-			(lawList[LAW_GUNCONTROL] == -2 && wtype == tag_WEAPON_SHOTGUN_PUMP)))
+		(lawList[LAW_GUNCONTROL] == -2 && wtype == tag_WEAPON_SHOTGUN_PUMP)))
 		return CREATURE_HICK;
 	if (wtype == tag_WEAPON_SHANK && atype == tag_ARMOR_PRISONER)
 		return CREATURE_PRISONER;
@@ -322,13 +322,13 @@ char hasdisguise(const Creature &cr)
 		}
 		case SIEGE_POLICE:
 		{
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR&&
+			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY&&
+			if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR&&
+			if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT&&
+			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
 			break;
 		}
@@ -620,9 +620,9 @@ void disguisecheck(int timer)
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern Creature encounter[ENCMAX];
 	int weapon = 0, partysize = squadsize(activesquad);
-	
+
 	bool forcecheck = false;
-	
+
 	//int weaponar[6]={0};
 	// Only start to penalize the player's disguise/stealth checks after the first turn.
 	timer--;
@@ -763,7 +763,7 @@ void disguisecheck(int timer)
 					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
 				addstrAlt(CONST_stealth064, gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 		else
@@ -794,7 +794,7 @@ void disguisecheck(int timer)
 				mvaddstrAlt(16, 1, activesquad->squad[blew_it]->name, gamelog);
 				addstrAlt(pickrandom(blew_stealth_check), gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			else if (!noticed)
 			{
@@ -805,7 +805,7 @@ void disguisecheck(int timer)
 					mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
 				addstrAlt(CONST_stealth066, gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 		if (!noticed)return;
@@ -872,6 +872,6 @@ void disguisecheck(int timer)
 			gamelog.newline();
 			sitealarm = 1;
 		}
- 	pressAnyKey();
+		pressAnyKey();
 	}
 }

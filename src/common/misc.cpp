@@ -37,14 +37,14 @@ const string blankString = "";
 #include "../customMaps.h"
 #include "../common/musicClass.h"
 /* pick a descriptor acronym */
- vector<string> sexdescAcronym;
+vector<string> sexdescAcronym;
 /* what kind of person? */
- vector<string> sexwhoAcronym;
+vector<string> sexwhoAcronym;
 /* seeking acronym */
- vector<string> sexseekAcronym;
+vector<string> sexseekAcronym;
 /* what type of sex? */
- vector<string> sextypeAcronym;
- map<short, string> musicList;
+vector<string> sextypeAcronym;
+map<short, string> musicList;
 void sexdesc(char *str)
 {
 	strcpy(str, pickrandom(sexdescAcronym).c_str());
@@ -61,15 +61,15 @@ void sextype(char *str)
 {
 	strcpy(str, pickrandom(sextypeAcronym).c_str());
 }
- vector<string> listOfStates;
- const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> misc_text_file_collection = {
-	 customText(&sexdescAcronym, mostlyendings + CONST_misc001),
-	 customText(&sexwhoAcronym, mostlyendings + CONST_misc002),
-	 customText(&sexseekAcronym, mostlyendings + CONST_misc003),
-	 customText(&sextypeAcronym, mostlyendings + CONST_misc004),
-	 customText(&listOfStates, mostlyendings + CONST_misc005),
- };
+vector<string> listOfStates;
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> misc_text_file_collection = {
+	customText(&sexdescAcronym, mostlyendings + CONST_misc001),
+	customText(&sexwhoAcronym, mostlyendings + CONST_misc002),
+	customText(&sexseekAcronym, mostlyendings + CONST_misc003),
+	customText(&sextypeAcronym, mostlyendings + CONST_misc004),
+	customText(&listOfStates, mostlyendings + CONST_misc005),
+};
 const char* statename(int i)
 {
 	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(len(listOfStates));
@@ -192,7 +192,7 @@ void MusicClass::init()
 	{  // SDL failed to initialize, so log it and exit
 		addstrAlt(string(CONST_misc013) + SDL_GetError(), gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		endwinAlt();
 		exit(EXIT_FAILURE);
 	}
@@ -200,7 +200,7 @@ void MusicClass::init()
 	{  // SDL_mixer failed to initialize, so log it and exit
 		addstrAlt(string(CONST_misc014) + Mix_GetError(), gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		SDL_Quit();
 		endwinAlt();
 		exit(EXIT_FAILURE);
@@ -212,7 +212,7 @@ void MusicClass::init()
 		oggsupport = false;
 	}
 	else oggsupport = true; // we have Ogg Vorbis support!
-		
+
 	// titlemode.ogg or .mid - Also sprach Zarathustra, introduction by Richard Strauss
 	loadsong(MUSIC_TITLEMODE, musicList[MUSIC_TITLEMODE].data()), // load title mode music
 																  // newgame.ogg or .mid- The Liberty Bell March by John Philip Sousa
@@ -329,83 +329,83 @@ void MusicClass::play(int _musicmode)
 	enableIf(isEnabled());
 #endif // DONT_INCLUDE_SDL
 }
-	Interval::Interval() : min(0), max(0) { }
-	Interval::Interval(int value) : min(value), max(value) { }
-	Interval::Interval(int low, int high) : min(low), max(high) { }
-	void Interval::set_interval(int low, int high) { min = low, max = high; }
-	// Sets the interval according to a string that is either a number or two
-	// number separated by a dash. Returns false and does not change the
-	// interval if the given string is not a valid interval.
-	// Sets the interval according to a string that is either a number or two
-	// number separated by a dash. Returns false and does not change the
-	// interval if the given string is not a valid interval.
-	bool valid(const string& v);
-	bool Interval::set_interval(const string& interval)
+Interval::Interval() : min(0), max(0) { }
+Interval::Interval(int value) : min(value), max(value) { }
+Interval::Interval(int low, int high) : min(low), max(high) { }
+void Interval::set_interval(int low, int high) { min = low, max = high; }
+// Sets the interval according to a string that is either a number or two
+// number separated by a dash. Returns false and does not change the
+// interval if the given string is not a valid interval.
+// Sets the interval according to a string that is either a number or two
+// number separated by a dash. Returns false and does not change the
+// interval if the given string is not a valid interval.
+bool valid(const string& v);
+bool Interval::set_interval(const string& interval)
+{
+	if (!len(interval) ||
+		interval.find_first_not_of(CONST_misc019) != string::npos)
+		return false;
+	size_t dashpos = interval.find('-', 1);
+	if (dashpos == string::npos) // Just a constant.
 	{
-		if (!len(interval) ||
-			interval.find_first_not_of(CONST_misc019) != string::npos)
-			return false;
-		size_t dashpos = interval.find('-', 1);
-		if (dashpos == string::npos) // Just a constant.
-		{
-			if (!valid(interval)) return false;
-			max = min = atoi(interval.c_str());
-		}
-		else
-		{
-			string smin = interval.substr(0, dashpos), smax = interval.substr(dashpos + 1);
-			if (!valid(smin) || !valid(smax)) return false;
-			int tmin = atoi(smin.c_str()), tmax = atoi(smax.c_str());
-			if (tmin > tmax) return false;
-			min = tmin, max = tmax;
-		}
-		return true;
+		if (!valid(interval)) return false;
+		max = min = atoi(interval.c_str());
 	}
-	int Interval::roll() const { return LCSrandom(max - min + 1) + min; }
-	bool valid(const string& v)
+	else
 	{
-		return len(v) &&                       // Blank string is invalid.
-			(len(v) != 1 || v[0] != '-') &&        // Just a dash is invalid.
-			v.find('-', 1) == string::npos;
-	} 
-	Ledger::Ledger() : funds(7), total_income(0), total_expense(0)
-	{
-		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0, dailyIncome[i] = 0;
-		for (int e = 0; e<EXPENSETYPENUM; e++) expense[e] = 0, dailyExpense[e] = 0;
+		string smin = interval.substr(0, dashpos), smax = interval.substr(dashpos + 1);
+		if (!valid(smin) || !valid(smax)) return false;
+		int tmin = atoi(smin.c_str()), tmax = atoi(smax.c_str());
+		if (tmin > tmax) return false;
+		min = tmin, max = tmax;
 	}
-	class Ledger ledger;
-	int Ledger::get_funds() { return funds; }
-	void Ledger::force_funds(int amount) { funds = amount; }
-	void Ledger::add_funds(int amount, int incometype)
-	{
-		funds += amount,
-			income[incometype] += amount,
-			dailyIncome[incometype] += amount,
-			total_income += amount;
-	}
-	void Ledger::subtract_funds(int amount, int expensetype)
-	{
-		funds -= amount,
-			expense[expensetype] += amount,
-			dailyExpense[expensetype] += amount,
-			total_expense += amount;
-	}
-	void Ledger::resetMonthlyAmounts()
-	{
-		for (int i = 0; i<INCOMETYPENUM; i++) income[i] = 0;
-		for (int e = 0; e<EXPENSETYPENUM; e++) expense[e] = 0;
-	}
-	void Ledger::resetDailyAmounts()
-	{
-		for (int i = 0; i<INCOMETYPENUM; i++) dailyIncome[i] = 0;
-		for (int e = 0; e<EXPENSETYPENUM; e++) dailyExpense[e] = 0;
-	}
-	MusicClass::MusicClass() : enabled(true) { }
-	bool MusicClass::isEnabled() { return enabled; }
-	void MusicClass::enableIf(bool e)
-	{
-		enabled = e;
+	return true;
+}
+int Interval::roll() const { return LCSrandom(max - min + 1) + min; }
+bool valid(const string& v)
+{
+	return len(v) &&                       // Blank string is invalid.
+		(len(v) != 1 || v[0] != '-') &&        // Just a dash is invalid.
+		v.find('-', 1) == string::npos;
+}
+Ledger::Ledger() : funds(7), total_income(0), total_expense(0)
+{
+	for (int i = 0; i < INCOMETYPENUM; i++) income[i] = 0, dailyIncome[i] = 0;
+	for (int e = 0; e < EXPENSETYPENUM; e++) expense[e] = 0, dailyExpense[e] = 0;
+}
+class Ledger ledger;
+int Ledger::get_funds() { return funds; }
+void Ledger::force_funds(int amount) { funds = amount; }
+void Ledger::add_funds(int amount, int incometype)
+{
+	funds += amount,
+		income[incometype] += amount,
+		dailyIncome[incometype] += amount,
+		total_income += amount;
+}
+void Ledger::subtract_funds(int amount, int expensetype)
+{
+	funds -= amount,
+		expense[expensetype] += amount,
+		dailyExpense[expensetype] += amount,
+		total_expense += amount;
+}
+void Ledger::resetMonthlyAmounts()
+{
+	for (int i = 0; i < INCOMETYPENUM; i++) income[i] = 0;
+	for (int e = 0; e < EXPENSETYPENUM; e++) expense[e] = 0;
+}
+void Ledger::resetDailyAmounts()
+{
+	for (int i = 0; i < INCOMETYPENUM; i++) dailyIncome[i] = 0;
+	for (int e = 0; e < EXPENSETYPENUM; e++) dailyExpense[e] = 0;
+}
+MusicClass::MusicClass() : enabled(true) { }
+bool MusicClass::isEnabled() { return enabled; }
+void MusicClass::enableIf(bool e)
+{
+	enabled = e;
 #ifndef DONT_INCLUDE_SDL
-		Mix_VolumeMusic(enabled*(MIX_MAX_VOLUME / 2)); // half volume if music enabled, muted if music disabled
+	Mix_VolumeMusic(enabled*(MIX_MAX_VOLUME / 2)); // half volume if music enabled, muted if music disabled
 #endif // DONT_INCLUDE_SDL
-	}
+}

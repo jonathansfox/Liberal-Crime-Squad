@@ -30,7 +30,7 @@ inline int addchar(char ch, Log &log) { log.record(ch); return addchar(ch); }
 inline int mvaddchar(int y, int x, char ch, Log &log) { log.record(ch); return mvaddchar(y, x, ch); }
 /* Redefining addstr() and mvaddstr() so they use addchar() and mvaddchar(), fixing display of extended characters */
 #undef addstr
-inline int addstr(const char* text) { int ret = ERR; for (int i = 0; i<len(text); i++) ret = addchar(text[i]); return ret; }
+inline int addstr(const char* text) { int ret = ERR; for (int i = 0; i < len(text); i++) ret = addchar(text[i]); return ret; }
 #undef mvaddstr
 inline int mvaddstr(int y, int x, const char* text) { int ret = move(y, x); if (ret != ERR) ret = addstr(text); return ret; }
 /* Various wrappers to addstr() and mvaddstr() which handle permutations of:
@@ -38,7 +38,7 @@ inline int mvaddstr(int y, int x, const char* text) { int ret = move(y, x); if (
 - std::string or c-style char arrays */
 inline int addstr(const char *text, Log &log) { log.record(text); return addstr(text); }
 inline int mvaddstr(int y, int x, const char *text, Log &log) { log.record(text); return mvaddstr(y, x, text); }
-inline int addstr(const std::string& text) { int ret = ERR; for (int i = 0; i<len(text); i++) ret = addchar(text[i]); return ret; }
+inline int addstr(const std::string& text) { int ret = ERR; for (int i = 0; i < len(text); i++) ret = addchar(text[i]); return ret; }
 inline int addstr(const std::string& text, Log &log) { log.record(text); return addstr(text); }
 inline int mvaddstr(int y, int x, const std::string& text) { int ret = move(y, x); if (ret != ERR) ret = addstr(text); return ret; }
 inline int mvaddstr(int y, int x, const std::string& text, Log &log) { log.record(text); return mvaddstr(y, x, text); }
@@ -48,10 +48,10 @@ inline int addstr(long num, Log &log) { return addstr(tostring(num), log); }
 inline int mvaddstr(int y, int x, long num) { return mvaddstr(y, x, tostring(num)); }
 inline int mvaddstr(int y, int x, long num, Log &log) { return mvaddstr(y, x, tostring(num), log); }
 void pressAnyKey() {
- 	getkeyAlt();
+	getkeyAlt();
 }
 void    PDC_set_titleAlt(const char *ch) {
-	   PDC_set_title(ch);
+	PDC_set_title(ch);
 }
 int endwinAlt() {
 	return endwin();
@@ -90,8 +90,8 @@ int	mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y,
 //int addstrAlt(const string x) { return addstr(x); }
 int addstrAlt(const char *text) { return addstr(text); }
 int addstrAlt(const char *text, Log &log) { log.record(text); return addstr(text); }
-int addstrAlt(const string &text) { int ret = ERR; for (int i = 0; i<strlen(text.data()); i++) ret = addcharAlt(text[i]); return ret; }
-int addstrAlt(const string &text, Log &log){ log.record(text); return addstr(text.data()); }
+int addstrAlt(const string &text) { int ret = ERR; for (int i = 0; i < strlen(text.data()); i++) ret = addcharAlt(text[i]); return ret; }
+int addstrAlt(const string &text, Log &log) { log.record(text); return addstr(text.data()); }
 int addstrAlt(const long num) { return addstr(tostring(num).data()); }
 int addstrAlt(const long num, Log &log) { return addstrAlt(tostring(num).data(), log); }
 int	mvaddstrAlt(const int x, const  int y, const int z) { return mvaddstr(x, y, tostring(z).data()); }
@@ -100,10 +100,10 @@ int	mvaddstrAlt(const int x, const int y, const string z, Log &a) {
 	return mvaddstr(x, y, z.data());
 }
 int		 mvaddstrAlt(const int x, const int y, const char* z, Log &a) {
-	a.record( z);
+	a.record(z);
 	return mvaddstr(x, y, z);
 }
-int		 mvaddstrAlt(const int x, const int y, const  int z, Log &a){
+int		 mvaddstrAlt(const int x, const int y, const  int z, Log &a) {
 	a.record(tostring(z));
 	return mvaddstr(x, y, tostring(z).data());
 }
@@ -296,6 +296,7 @@ void enter_name(int y, int x, char *name, int len, const char* defname)
 	if ((defname != NULL) && (strncmp(name, blankString.c_str(), len - 1) == 0)) strncpy(name, defname, len - 1);
 	name[len - 1] = '\0';
 }
+
 // Removed from consolesupport.cpp
 // These 4 variables to keep track of the current color are for
 // this file only

@@ -178,28 +178,28 @@ const string tag_WEAPON_CROWBAR = "WEAPON_CROWBAR";
 const string tag_X = "X";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string blankString = "";
 #include "../creature/creature.h"
@@ -334,7 +334,7 @@ void fight_subdued()
 	clearmessagearea();
 	clearcommandarea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16,  1, CONST_sitemode074, gamelog);
+	mvaddstrAlt(16, 1, CONST_sitemode074, gamelog);
 	gamelog.newline();
 	if (hostages > 0)
 	{
@@ -346,8 +346,9 @@ void fight_subdued()
 		}
 	}
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 }
+
 /* marks the area around the specified tile as explored */
 void knowmap(int locx, int locy, int locz)
 {
@@ -373,6 +374,13 @@ void knowmap(int locx, int locy, int locz)
 		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
 			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
 			levelmap[locx + 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
+}
+
+void knowmap() {
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	knowmap(locx, locy, locz);
 }
 /* site - determines spin on site news story, CONST_sitemode077 timer */
 void resolvesite()
@@ -405,10 +413,10 @@ void resolvesite()
 	}
 	else if (sitecrime > 10 && (LocationsPool::getInstance().getRentingType(cursite) == RENTING_NOCONTROL || LocationsPool::getInstance().getRentingType(cursite) > 500))
 	{
-		if (LocationsPool::getInstance().getLocationType(cursite) != SITE_RESIDENTIAL_BOMBSHELTER&&
-			LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_BARANDGRILL&&
-			LocationsPool::getInstance().getLocationType(cursite) != SITE_OUTDOOR_BUNKER&&
-			LocationsPool::getInstance().getLocationType(cursite) != SITE_INDUSTRY_WAREHOUSE&&
+		if (LocationsPool::getInstance().getLocationType(cursite) != SITE_RESIDENTIAL_BOMBSHELTER &&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_BARANDGRILL &&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_OUTDOOR_BUNKER &&
+			LocationsPool::getInstance().getLocationType(cursite) != SITE_INDUSTRY_WAREHOUSE &&
 			LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_CRACKHOUSE)
 		{
 			if (securityable(LocationsPool::getInstance().getLocationType(cursite)))
@@ -442,7 +450,7 @@ void open_door(bool restricted)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode078, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		return;
 	}
 	bool has_security = false;
@@ -507,7 +515,7 @@ void open_door(bool restricted)
 						mvaddstrAlt(17, 1, CONST_sitemode084, gamelog);
 						gamelog.newline();
 						sitealarm = 1;
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 				}
 				// Check for people noticing you fiddling with the lock
@@ -552,7 +560,7 @@ void open_door(bool restricted)
 						mvaddstrAlt(16, 1, CONST_sitemode090, gamelog);
 						gamelog.newline();
 						sitealarm = 1;
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 					sitecrime++;
 					sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
@@ -579,7 +587,7 @@ void open_door(bool restricted)
 			mvaddstrAlt(16, 1, CONST_sitemode091, gamelog);
 			gamelog.newline();
 			sitealarm = 1;
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 }
@@ -605,33 +613,33 @@ void pressedKeyN() {
 	extern MusicClass music;
 	extern bool mapshowing;
 	extern bool encounterwarnings;
-	
-		mapshowing = false;
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, CONST_sitemode093);
-		printparty();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10, 1, CONST_sitemode094);
-		mvaddstrAlt(11, 1, CONST_sitemode095);
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(24, 1, enter_done);
-		int c = 0;
-		while (true)
-		{
-			if (c == 'e') encounterwarnings = !encounterwarnings;
-			if (c == 'm') music.enableIf(!music.isEnabled());
-			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
-			if (encounterwarnings)
-				mvaddstrAlt(10, 2, tag_X);
-			else mvaddstrAlt(10, 2, singleSpace);
-			if (music.isEnabled())
-				mvaddstrAlt(11, 2, tag_X);
-			else mvaddstrAlt(11, 2, singleSpace);
-			c = getkeyAlt();
-		}
-		mapshowing = true;
-	
+
+	mapshowing = false;
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_sitemode093);
+	printparty();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 1, CONST_sitemode094);
+	mvaddstrAlt(11, 1, CONST_sitemode095);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(24, 1, enter_done);
+	int c = 0;
+	while (true)
+	{
+		if (c == 'e') encounterwarnings = !encounterwarnings;
+		if (c == 'm') music.enableIf(!music.isEnabled());
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
+		if (encounterwarnings)
+			mvaddstrAlt(10, 2, tag_X);
+		else mvaddstrAlt(10, 2, singleSpace);
+		if (music.isEnabled())
+			mvaddstrAlt(11, 2, tag_X);
+		else mvaddstrAlt(11, 2, singleSpace);
+		c = getkeyAlt();
+	}
+	mapshowing = true;
+
 }
 void pressedKeyU(const int enemy) {
 	extern squadst *activesquad;
@@ -711,195 +719,195 @@ void pressedKeyU(const int enemy) {
 	}
 }
 void pressedKeyL() {
-	
-		reloadparty(true);
-		printparty();
-		refreshAlt();
-		creatureadvance();
-	
+
+	reloadparty(true);
+	printparty();
+	refreshAlt();
+	creatureadvance();
+
 }
 void pressedKeyT(const int enemy, int& encounter_timer) {
 	extern squadst *activesquad;
 	extern short sitealarm;
 	extern Creature encounter[ENCMAX];
-		int forcesp = -1;
-		int forcetk = -1;
-		for (int p = 0; p < 6; p++)
+	int forcesp = -1;
+	int forcetk = -1;
+	for (int p = 0; p < 6; p++)
+	{
+		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p] != NULL)
+			if (activesquad->squad[p]->alive)
 			{
-				if (activesquad->squad[p]->alive)
-				{
-					if (forcesp == -1)forcesp = p;
-					else forcesp = -2;
-				}
+				if (forcesp == -1)forcesp = p;
+				else forcesp = -2;
 			}
 		}
-		for (int e = 0; e < ENCMAX; e++)
+	}
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].exists&&encounter[e].alive &&
+			!(encounter[e].type == CREATURE_WORKER_SERVANT ||
+				encounter[e].type == CREATURE_WORKER_SWEATSHOP))
 		{
-			if (encounter[e].exists&&encounter[e].alive &&
-				!(encounter[e].type == CREATURE_WORKER_SERVANT ||
-					encounter[e].type == CREATURE_WORKER_SWEATSHOP))
+			if (encounter[e].cantbluff != 1 || sitealarm)
 			{
-				if (encounter[e].cantbluff != 1 || sitealarm)
-				{
-					if (forcetk == -1)forcetk = e;
-					else forcetk = -2;
-				}
+				if (forcetk == -1)forcetk = e;
+				else forcetk = -2;
 			}
 		}
-		if (forcetk != -1 && forcesp != -1)
+	}
+	if (forcetk != -1 && forcesp != -1)
+	{
+		int sp = -1;
+		if (forcesp == -2)
 		{
-			int sp = -1;
-			if (forcesp == -2)
+			clearcommandarea();
+			clearmessagearea();
+			clearmaparea();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9, 1, CONST_sitemode096);
+			mvaddstrAlt(9, 50, CONST_sitemode097);
+			mvaddstrAlt(9, 60, CONST_sitemode098);
+			mvaddstrAlt(9, 70, CONST_sitemode099);
+			int y = 11;
+			for (int p = 0; p < 6; p++)
 			{
-				clearcommandarea();
-				clearmessagearea();
-				clearmaparea();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(9, 1, CONST_sitemode096);
-				mvaddstrAlt(9, 50, CONST_sitemode097);
-				mvaddstrAlt(9, 60, CONST_sitemode098);
-				mvaddstrAlt(9, 70, CONST_sitemode099);
-				int y = 11;
-				for (int p = 0; p < 6; p++)
+				if (activesquad->squad[p] != NULL)
 				{
-					if (activesquad->squad[p] != NULL)
+					if (activesquad->squad[p]->alive)
 					{
-						if (activesquad->squad[p]->alive)
-						{
-							mvaddcharAlt(y, 1, p + '1');
-							addstrAlt(spaceDashSpace);
-							addstrAlt(activesquad->squad[p]->name);
-							mvaddstrAlt(y, 50, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-								activesquad->squad[p]->get_skill(SKILL_PERSUASION));
-							mvaddstrAlt(y, 60, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-								activesquad->squad[p]->get_skill(SKILL_SEDUCTION));
-							mvaddstrAlt(y++, 70, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-								activesquad->squad[p]->get_skill(SKILL_DISGUISE));
-						}
+						mvaddcharAlt(y, 1, p + '1');
+						addstrAlt(spaceDashSpace);
+						addstrAlt(activesquad->squad[p]->name);
+						mvaddstrAlt(y, 50, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+							activesquad->squad[p]->get_skill(SKILL_PERSUASION));
+						mvaddstrAlt(y, 60, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+							activesquad->squad[p]->get_skill(SKILL_SEDUCTION));
+						mvaddstrAlt(y++, 70, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
+							activesquad->squad[p]->get_skill(SKILL_DISGUISE));
 					}
 				}
+			}
+			while (true)
+			{
+				int c = getkeyAlt();
+				if (c >= '1'&&c <= '6')
+				{
+					sp = c - '1';
+					if (activesquad->squad[sp] != NULL) if (activesquad->squad[sp]->alive) break;
+				}
+				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { sp = -1; break; }
+			}
+		}
+		else sp = forcesp;
+		if (sp != -1)
+		{
+			int tk = -1;
+			if (forcetk == -2)
+			{
 				while (true)
 				{
-					int c = getkeyAlt();
-					if (c >= '1'&&c <= '6')
+					clearcommandarea();
+					clearmessagearea();
+					clearmaparea();
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(9, 1, CONST_sitemode100);
+					int x = 1, y = 11;
+					for (int t = 0; t < ENCMAX; t++)
 					{
-						sp = c - '1';
-						if (activesquad->squad[sp] != NULL) if (activesquad->squad[sp]->alive) break;
+						if (encounter[t].exists)
+						{
+							if (encounter[t].cantbluff != 1)
+							{
+								set_color_easy(WHITE_ON_BLACK_BRIGHT);
+								mvaddcharAlt(y, x, t + 'A');
+								addstrAlt(spaceDashSpace);
+								switch (encounter[t].align)
+								{
+								case ALIGN_CONSERVATIVE:
+									set_color_easy(RED_ON_BLACK_BRIGHT);
+									break;
+								case ALIGN_LIBERAL:
+									set_color_easy(GREEN_ON_BLACK_BRIGHT);
+									break;
+								case ALIGN_MODERATE:
+									set_color_easy(WHITE_ON_BLACK_BRIGHT);
+									break;
+								}
+								addstrAlt(encounter[t].name);
+								add_age(encounter[t]);
+								y++;
+								if (y == 17)
+								{
+									y = 11;
+									x += 30;
+								}
+							}
+							else
+							{
+								y++;
+								if (y == 17)
+								{
+									y = 11;
+									x += 30;
+								}
+							}
+						}
 					}
-					if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { sp = -1; break; }
+					int c = getkeyAlt();
+					if (c >= 'a'&&c <= 'z')
+					{
+						tk = c - 'a';
+						if (tk < ENCMAX)
+						{
+							if (encounter[tk].exists)
+							{
+								if (encounter[tk].alive &&
+									!(encounter[tk].type == CREATURE_WORKER_SERVANT ||
+										encounter[tk].type == CREATURE_WORKER_SWEATSHOP))
+								{
+									if (encounter[tk].cantbluff == 1 &&
+										(!sitealarm || encounter[tk].animalgloss == ANIMALGLOSS_ANIMAL))
+									{
+										clearcommandarea();
+										clearmessagearea();
+										clearmaparea();
+										set_color_easy(WHITE_ON_BLACK_BRIGHT);
+										mvaddstrAlt(9, 1, encounter[tk].name);
+										addstrAlt(CONST_sitemode101);
+										pressAnyKey();
+									}
+									else if (!encounter[tk].enemy() && sitealarm&&enemy)
+									{
+										clearcommandarea();
+										clearmessagearea();
+										clearmaparea();
+										set_color_easy(WHITE_ON_BLACK_BRIGHT);
+										mvaddstrAlt(9, 1, CONST_sitemode102);
+										pressAnyKey();
+									}
+									else break;
+								}
+							}
+						}
+					}
+					if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { tk = -1; break; }
 				}
 			}
-			else sp = forcesp;
-			if (sp != -1)
+			else tk = forcetk;
+			if (tk != -1)
 			{
-				int tk = -1;
-				if (forcetk == -2)
+				if (talk(*activesquad->squad[sp], tk))
 				{
-					while (true)
-					{
-						clearcommandarea();
-						clearmessagearea();
-						clearmaparea();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(9, 1, CONST_sitemode100);
-						int x = 1, y = 11;
-						for (int t = 0; t < ENCMAX; t++)
-						{
-							if (encounter[t].exists)
-							{
-								if (encounter[t].cantbluff != 1)
-								{
-									set_color_easy(WHITE_ON_BLACK_BRIGHT);
-									mvaddcharAlt(y, x, t + 'A');
-									addstrAlt(spaceDashSpace);
-									switch (encounter[t].align)
-									{
-									case ALIGN_CONSERVATIVE:
-										set_color_easy(RED_ON_BLACK_BRIGHT);
-										break;
-									case ALIGN_LIBERAL:
-										set_color_easy(GREEN_ON_BLACK_BRIGHT);
-										break;
-									case ALIGN_MODERATE:
-										set_color_easy(WHITE_ON_BLACK_BRIGHT);
-										break;
-									}
-									addstrAlt(encounter[t].name);
-									add_age(encounter[t]);
-									y++;
-									if (y == 17)
-									{
-										y = 11;
-										x += 30;
-									}
-								}
-								else
-								{
-									y++;
-									if (y == 17)
-									{
-										y = 11;
-										x += 30;
-									}
-								}
-							}
-						}
-						int c = getkeyAlt();
-						if (c >= 'a'&&c <= 'z')
-						{
-							tk = c - 'a';
-							if (tk < ENCMAX)
-							{
-								if (encounter[tk].exists)
-								{
-									if (encounter[tk].alive &&
-										!(encounter[tk].type == CREATURE_WORKER_SERVANT ||
-											encounter[tk].type == CREATURE_WORKER_SWEATSHOP))
-									{
-										if (encounter[tk].cantbluff == 1 &&
-											(!sitealarm || encounter[tk].animalgloss == ANIMALGLOSS_ANIMAL))
-										{
-											clearcommandarea();
-											clearmessagearea();
-											clearmaparea();
-											set_color_easy(WHITE_ON_BLACK_BRIGHT);
-											mvaddstrAlt(9, 1, encounter[tk].name);
-											addstrAlt(CONST_sitemode101);
-									 	pressAnyKey();
-										}
-										else if (!encounter[tk].enemy() && sitealarm&&enemy)
-										{
-											clearcommandarea();
-											clearmessagearea();
-											clearmaparea();
-											set_color_easy(WHITE_ON_BLACK_BRIGHT);
-											mvaddstrAlt(9, 1, CONST_sitemode102);
-									 	pressAnyKey();
-										}
-										else break;
-									}
-								}
-							}
-						}
-						if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { tk = -1; break; }
-					}
-				}
-				else tk = forcetk;
-				if (tk != -1)
-				{
-					if (talk(*activesquad->squad[sp], tk))
-					{
-						if (enemy&&sitealarm)enemyattack();
-						else if (enemy)disguisecheck(encounter_timer);
-						creatureadvance();
-						encounter_timer++;
-					}
+					if (enemy&&sitealarm)enemyattack();
+					else if (enemy)disguisecheck(encounter_timer);
+					creatureadvance();
+					encounter_timer++;
 				}
 			}
 		}
-	
+	}
+
 }
 void pressedKeyM() {
 	extern short cursite;
@@ -907,132 +915,132 @@ void pressedKeyM() {
 	extern int locy;
 	extern int locz;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-		for (int x = 0; x < MAPX; x++)
+	for (int x = 0; x < MAPX; x++)
+	{
+		for (int y = 0; y < MAPY; y++)
 		{
-			for (int y = 0; y < MAPY; y++)
+			if (levelmap[x][y][locz].flag & SITEBLOCK_KNOWN)
 			{
-				if (levelmap[x][y][locz].flag & SITEBLOCK_KNOWN)
+				if (x == locx && y == locy)
 				{
-					if (x == locx && y == locy)
-					{
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						mvaddchAlt(y + 1, x + 5, CH_WHITE_SMILING_FACE);
-					}
-					else
-					{
-						set_color_easy(WHITE_ON_BLACK);
-						if (levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)
-						{
-							set_color_easy(WHITE_ON_WHITE);
-							mvaddchAlt(y + 1, x + 5, ' ');
-						}
-						else if (levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
-						{  // Pick color
-							if (levelmap[x][y][locz].flag & SITEBLOCK_METAL)
-								set_color_easy(WHITE_ON_WHITE_BRIGHT);
-							else if (levelmap[x][y][locz].flag & SITEBLOCK_CLOCK
-								&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
-								set_color_easy(RED_ON_BLACK);
-							else if (levelmap[x][y][locz].flag & SITEBLOCK_KLOCK
-								&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
-								set_color_easy(BLACK_ON_BLACK_BRIGHT);
-							else set_color_easy(YELLOW_ON_BLACK);
-							if ((levelmap[x + 1][y][locz].flag & SITEBLOCK_BLOCK) ||
-								(levelmap[x - 1][y][locz].flag & SITEBLOCK_BLOCK))
-								mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
-							else mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
-						}
-						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT) &&
-							LocationsPool::getInstance().siteHasCameras(cursite))
-						{
-							set_color_easy(RED_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, CH_YEN_SIGN);
-						}
-						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT) &&
-							LocationsPool::getInstance().siteHasCameras(cursite))
-						{
-							set_color_easy(RED_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
-						}
-						else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED) &&
-							LocationsPool::getInstance().siteHasCameras(cursite))
-						{
-							set_color_easy(RED_ON_BLACK);
-							mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
-						}
-						else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_UP)
-						{
-							set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, CH_UPWARDS_ARROW);
-						}
-						else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_DOWN)
-						{
-							set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, CH_DOWNWARDS_ARROW);
-						}
-						else if (levelmap[x][y][locz].special != -1)
-						{
-							set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, '!');
-						}
-						else if (levelmap[x][y][locz].siegeflag & SIEGEFLAG_TRAP)
-						{
-							set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, '!');
-						}
-						else if (levelmap[x][y][locz].flag & SITEBLOCK_LOOT)
-						{
-							set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-							mvaddchAlt(y + 1, x + 5, '$');
-						}
-						else mvaddchAlt(y + 1, x + 5, ' ');
-					}
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					mvaddchAlt(y + 1, x + 5, CH_WHITE_SMILING_FACE);
 				}
 				else
 				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					mvaddchAlt(y + 1, x + 5, CH_FULL_BLOCK);
+					set_color_easy(WHITE_ON_BLACK);
+					if (levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)
+					{
+						set_color_easy(WHITE_ON_WHITE);
+						mvaddchAlt(y + 1, x + 5, ' ');
+					}
+					else if (levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
+					{  // Pick color
+						if (levelmap[x][y][locz].flag & SITEBLOCK_METAL)
+							set_color_easy(WHITE_ON_WHITE_BRIGHT);
+						else if (levelmap[x][y][locz].flag & SITEBLOCK_CLOCK
+							&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
+							set_color_easy(RED_ON_BLACK);
+						else if (levelmap[x][y][locz].flag & SITEBLOCK_KLOCK
+							&& levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
+							set_color_easy(BLACK_ON_BLACK_BRIGHT);
+						else set_color_easy(YELLOW_ON_BLACK);
+						if ((levelmap[x + 1][y][locz].flag & SITEBLOCK_BLOCK) ||
+							(levelmap[x - 1][y][locz].flag & SITEBLOCK_BLOCK))
+							mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
+						else mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
+					}
+					else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT) &&
+						LocationsPool::getInstance().siteHasCameras(cursite))
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_YEN_SIGN);
+					}
+					else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT) &&
+						LocationsPool::getInstance().siteHasCameras(cursite))
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
+					}
+					else if ((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED) &&
+						LocationsPool::getInstance().siteHasCameras(cursite))
+					{
+						set_color_easy(RED_ON_BLACK);
+						mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
+					}
+					else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_UP)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_UPWARDS_ARROW);
+					}
+					else if (levelmap[x][y][locz].special == SPECIAL_STAIRS_DOWN)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_DOWNWARDS_ARROW);
+					}
+					else if (levelmap[x][y][locz].special != -1)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '!');
+					}
+					else if (levelmap[x][y][locz].siegeflag & SIEGEFLAG_TRAP)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '!');
+					}
+					else if (levelmap[x][y][locz].flag & SITEBLOCK_LOOT)
+					{
+						set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '$');
+					}
+					else mvaddchAlt(y + 1, x + 5, ' ');
 				}
 			}
+			else
+			{
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddchAlt(y + 1, x + 5, CH_FULL_BLOCK);
+			}
 		}
- 	pressAnyKey();
-	
+	}
+	pressAnyKey();
+
 }
 void pressedKeyF(int& encounter_timer) {
 	extern squadst *activesquad;
 	extern Creature encounter[ENCMAX];
-		// Don't subdue squad if someone is still in good condition.
-		bool cannotsubdue = false;
-		for (int j = 0; j < 6 && !cannotsubdue; j++)
+	// Don't subdue squad if someone is still in good condition.
+	bool cannotsubdue = false;
+	for (int j = 0; j < 6 && !cannotsubdue; j++)
+	{
+		if (activesquad->squad[j] &&
+			activesquad->squad[j]->alive &&
+			activesquad->squad[j]->blood > 40)
 		{
-			if (activesquad->squad[j] &&
-				activesquad->squad[j]->alive &&
-				activesquad->squad[j]->blood > 40)
-			{
-				cannotsubdue = true;
-			}
+			cannotsubdue = true;
 		}
-		// Cops can subdue and arrest the squad.
-		bool subdue = false;
-		for (int i = 0; i < ENCMAX && (!cannotsubdue && !subdue); i++)
+	}
+	// Cops can subdue and arrest the squad.
+	bool subdue = false;
+	for (int i = 0; i < ENCMAX && (!cannotsubdue && !subdue); i++)
+	{
+		if (encounter[i].exists&&
+			encounter[i].blood > 60 &&
+			(encounter[i].type == CREATURE_COP))
 		{
-			if (encounter[i].exists&&
-				encounter[i].blood>60 &&
-				(encounter[i].type == CREATURE_COP))
-			{
-				subdue = true;
-			}
+			subdue = true;
 		}
-		if (subdue)
-			fight_subdued();
-		else
-		{
-			youattack();
-			enemyattack();
-			creatureadvance();
-			encounter_timer++;
-		}
-	
+	}
+	if (subdue)
+		fight_subdued();
+	else
+	{
+		youattack();
+		enemyattack();
+		creatureadvance();
+		encounter_timer++;
+	}
+
 }
 int checkForPeopleWhoCanRecruit() {
 	extern squadst *activesquad;
@@ -1103,7 +1111,7 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 					if (partysize < 6)
 					{
 						int i = checkForPeopleWhoCanRecruit();
-						
+
 						// If someone can, add this person as a newly recruited Liberal!
 						if (i < 6 && i > -1)
 						{
@@ -1135,17 +1143,17 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 			gamelog.newline();
 			if (actgot < followers)
 			{
-		 	pressAnyKey();
+				pressAnyKey();
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				if (actgot == 0 && followers>1)mvaddstrAlt(16, 1, CONST_sitemode109, gamelog);
+				if (actgot == 0 && followers > 1)mvaddstrAlt(16, 1, CONST_sitemode109, gamelog);
 				else if (followers - actgot > 1)mvaddstrAlt(16, 1, CONST_sitemode110, gamelog);
 				else if (actgot == 0)mvaddstrAlt(16, 1, CONST_sitemode111, gamelog);
 				else mvaddstrAlt(16, 1, CONST_sitemode112, gamelog);
 				addstrAlt(CONST_sitemode113, gamelog);
 				gamelog.newline();
 			}
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 	else if (hostages)
@@ -1429,7 +1437,7 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 				}
 				if (len(newWeaponType))
 				{
-					
+
 					item = spawnNewWeapon(newWeaponType);
 					activesquad->loot.push_back(item);
 				}
@@ -1441,7 +1449,7 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 					mvaddstrAlt(16, 1, CONST_sitemode114, gamelog);
 					mvaddstrAlt(17, 1, s, gamelog);
 					gamelog.newline();
-			 	pressAnyKey(); //wait for key press before clearing.
+					pressAnyKey(); //wait for key press before clearing.
 				}
 			}
 			tookground = 1;
@@ -1879,7 +1887,7 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 	LocationsPool::getInstance().tickAttackTime(cursite);
 	if ((LocationsPool::getInstance().getAttackTime(cursite) >= 100 + LCSrandom(10) &&
 		(locz != 0 || locx<(MAPX / 2 - 3) || locx>(MAPX / 2 + 3) ||
-			locy>5)))
+			locy > 5)))
 	{
 		LocationsPool::getInstance().resetAttackTime(cursite);
 		int existingUnits = 0;
@@ -2195,89 +2203,89 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 	extern int ccs_boss_kills;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern Creature encounter[ENCMAX];
-	
 
 
 
-			//SEE IF THERE IS AN ENCOUNTER
-			char newenc = 0;
-			// 10% chance of encounter normally (100% if waiting)
-			// 20% chance of encounter after massive response
-			// 0% chance of encounter during sieges
-			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-			{
-				if (postalarmtimer > 80) { if (!LCSrandom(5)) newenc = 1; }
-				else if (!LCSrandom(10) || c == 's') newenc = 1;
-			}
-			for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) newenc = 0;
-			// Handle special tiles that activate when you step on them
-			// (rather than those that must be manually activated)
-			long makespecial = -1;
-			switch (levelmap[locx][locy][locz].special)
-			{
-			case SPECIAL_SECURITY_CHECKPOINT:
-			case SPECIAL_SECURITY_METALDETECTORS:
-			case SPECIAL_SECURITY_SECONDVISIT:
-			case SPECIAL_CLUB_BOUNCER:
-			case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
-			case SPECIAL_APARTMENT_LANDLORD:
-			case SPECIAL_HOUSE_CEO:
-			case SPECIAL_RESTAURANT_TABLE:
-			case SPECIAL_CAFE_COMPUTER:
-			case SPECIAL_PARK_BENCH:
-			case SPECIAL_BANK_TELLER:
-			case SPECIAL_CCS_BOSS:
-			case SPECIAL_OVAL_OFFICE_NW:
-			case SPECIAL_OVAL_OFFICE_NE:
-			case SPECIAL_OVAL_OFFICE_SW:
-			case SPECIAL_OVAL_OFFICE_SE:
-				makespecial = levelmap[locx][locy][locz].special;
-				newenc = 1;
-				break;
-			}
-			//DO DOORS
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
-			{
-				open_door(levelmap[olocx][olocy][olocz].flag&SITEBLOCK_RESTRICTED);
-				locx = olocx, locy = olocy, locz = olocz;
-				if (encsize > 0) newenc = 0;
-			}
-			//BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
-			if (ccs_boss_kills >= 1 &&
-				!LocationsPool::getInstance().isThereASiegeHere(cursite) &&
-				LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
-			{
-				bailUponDefeatCCS();
-				showcarprefs = 0;
-				return 1;
-			}
-			if (LocationsPool::getInstance().isThereASiegeHere(cursite)) // *JDS* police response added
-			{
-				if (attemptResolveSiege(olocx, olocy, olocz)) {
-					showcarprefs = 0;
-					return 1;
-				}
-			}
-			if (!LocationsPool::getInstance().isThereASiegeHere(cursite) && newenc)
-			{
-				encounterSpecial(makespecial, olocx, olocy, olocz);
-				hostcheck = 1;
-			}
-			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-				if ((locx != olocx || locy != olocy || locz != olocz) && !newenc)
-					putBackSpecials(olocx, olocy, olocz);
 
-			if (locx != olocx || locy != olocy || locz != olocz)
-			{
-				//NUKE GROUND LOOT
-				delete_and_clear_groundloot();
-				//MOVE BLOOD
-				if (levelmap[olocx][olocy][olocz].flag&SITEBLOCK_BLOODY2)
-					levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
-			}
-			knowmap(locx, locy, locz);
-		
-	
+	//SEE IF THERE IS AN ENCOUNTER
+	char newenc = 0;
+	// 10% chance of encounter normally (100% if waiting)
+	// 20% chance of encounter after massive response
+	// 0% chance of encounter during sieges
+	if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+	{
+		if (postalarmtimer > 80) { if (!LCSrandom(5)) newenc = 1; }
+		else if (!LCSrandom(10) || c == 's') newenc = 1;
+	}
+	for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) newenc = 0;
+	// Handle special tiles that activate when you step on them
+	// (rather than those that must be manually activated)
+	long makespecial = -1;
+	switch (levelmap[locx][locy][locz].special)
+	{
+	case SPECIAL_SECURITY_CHECKPOINT:
+	case SPECIAL_SECURITY_METALDETECTORS:
+	case SPECIAL_SECURITY_SECONDVISIT:
+	case SPECIAL_CLUB_BOUNCER:
+	case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
+	case SPECIAL_APARTMENT_LANDLORD:
+	case SPECIAL_HOUSE_CEO:
+	case SPECIAL_RESTAURANT_TABLE:
+	case SPECIAL_CAFE_COMPUTER:
+	case SPECIAL_PARK_BENCH:
+	case SPECIAL_BANK_TELLER:
+	case SPECIAL_CCS_BOSS:
+	case SPECIAL_OVAL_OFFICE_NW:
+	case SPECIAL_OVAL_OFFICE_NE:
+	case SPECIAL_OVAL_OFFICE_SW:
+	case SPECIAL_OVAL_OFFICE_SE:
+		makespecial = levelmap[locx][locy][locz].special;
+		newenc = 1;
+		break;
+	}
+	//DO DOORS
+	if (levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
+	{
+		open_door(levelmap[olocx][olocy][olocz].flag&SITEBLOCK_RESTRICTED);
+		locx = olocx, locy = olocy, locz = olocz;
+		if (encsize > 0) newenc = 0;
+	}
+	//BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
+	if (ccs_boss_kills >= 1 &&
+		!LocationsPool::getInstance().isThereASiegeHere(cursite) &&
+		LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+	{
+		bailUponDefeatCCS();
+		showcarprefs = 0;
+		return 1;
+	}
+	if (LocationsPool::getInstance().isThereASiegeHere(cursite)) // *JDS* police response added
+	{
+		if (attemptResolveSiege(olocx, olocy, olocz)) {
+			showcarprefs = 0;
+			return 1;
+		}
+	}
+	if (!LocationsPool::getInstance().isThereASiegeHere(cursite) && newenc)
+	{
+		encounterSpecial(makespecial, olocx, olocy, olocz);
+		hostcheck = 1;
+	}
+	if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+		if ((locx != olocx || locy != olocy || locz != olocz) && !newenc)
+			putBackSpecials(olocx, olocy, olocz);
+
+	if (locx != olocx || locy != olocy || locz != olocz)
+	{
+		//NUKE GROUND LOOT
+		delete_and_clear_groundloot();
+		//MOVE BLOOD
+		if (levelmap[olocx][olocy][olocz].flag&SITEBLOCK_BLOODY2)
+			levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
+	}
+	knowmap();
+
+
 	return 0;
 }
 void mode_site() {
@@ -2309,7 +2317,7 @@ void mode_site() {
 	showcarprefs = -1;
 	char bail_on_base = 1;
 	if (cursite == activesquad->squad[0]->base)bail_on_base = 0;
-	knowmap(locx, locy, locz);
+	knowmap();
 	char hostcheck = 0;
 	int encounter_timer = 0;
 	while (true)
@@ -2466,14 +2474,15 @@ void mode_site() {
 						{
 							if (!activesquad->squad[i]) i = 6;
 							else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
-							
+
 						}
 						if (can_graffiti) {
-							
-								set_color_easy(WHITE_ON_BLACK);
-								graffiti = 1;
-							
-						}else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+
+							set_color_easy(WHITE_ON_BLACK);
+							graffiti = 1;
+
+						}
+						else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					}
 					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				}
@@ -2596,172 +2605,173 @@ void mode_site() {
 			foughtthisround = 0;
 		}
 		{
-		int c;
-		if (levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
-		{
-			if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT)
+			int c;
+			if (levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
 			{
-				levelmap[locx][locy][locz].special = SPECIAL_NONE;
-				c = getkeyAlt();
-			}
-			else
-				c = 's';
-		}
-		else c = getkeyAlt();
-		if (partyalive == 0 && c == 'c')
-		{
-			//END OF GAME CHECK
-			if (!endcheck())
-			{
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT)
 				{
-					if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
-					else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
+					levelmap[locx][locy][locz].special = SPECIAL_NONE;
+					c = getkeyAlt();
 				}
 				else
-					if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-					{
-						sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
-						resolvesite();
-					}
-				mode = GAMEMODE_BASE;
-				showcarprefs = 0;
-				return;
+					c = 's';
 			}
-		} else if (partyalive > 0){
-			int olocx = locx, olocy = locy, olocz = locz;
-			bool canMove = !enemy || !sitealarm;
+			else c = getkeyAlt();
+			if (partyalive == 0 && c == 'c')
 			{
-				if (c == 'v'&&enemy&&sitealarm)
+				//END OF GAME CHECK
+				if (!endcheck())
 				{
-					char override = whichWay();
-					if (override) {
-						c = override;
-						canMove = true;
-					}
-					
-				}
-			}
-			switch (c) {
-			case 'w':
-			case KEY_UP:
-				if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
-				break;
-			case 'a':
-			case KEY_LEFT:
-				if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
-				break;
-			case 'd':
-			case KEY_RIGHT:
-				if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
-				break;
-			case 'x':
-			case KEY_DOWN:
-				if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
-				break;
-			case 'k':
-				if(enemy){ kidnapattempt(); }
-				break;
-			case 'u':
-				pressedKeyU(enemy);
-				break;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-				if (activesquad->squad[c - '1'] != NULL)
-				{
-					if (party_status == c - '1')fullstatus(party_status);
-					else party_status = c - '1';
-				}
-				break;
-			case 'e':
-				mapshowing = false;
-				equip(activesquad->loot, -1);
-				if (enemy&&sitealarm)enemyattack();
-				else if (enemy)disguisecheck(encounter_timer);
-				creatureadvance();
-				encounter_timer++;
-				mapshowing = true;
-				break;
-			case 'n':
-				pressedKeyN();
-				break;
-			case 'l':
-				if ((!enemy || !sitealarm)) {
-					pressedKeyL();
-					encounter_timer++;
-				}
-				break;
-			case 'j':
-				if ((!enemy || !sitealarm)) {
-					pressedKeyShiftL();
-					encounter_timer++;
-				}
-				break;
-			case 't':
-				if (talkers) {
-					pressedKeyT(enemy, encounter_timer);
-				}
-				break;
-			case 'o':
-				if(partysize > 1)orderparty();
-				break;
-			case '0':
-				party_status = -1;
-				break;
-			case 'm':
-				pressedKeyM();
-				break;
-			case 'f':
-				if (enemy) { pressedKeyF(encounter_timer); }
-				break;
-			case 'r':
-				pressedKeyR(freeable, libnum, enemy, hostages, partysize);
-				break;
-			case 'g':
-				pressedKeyG(enemy, encounter_timer);
-				break;
-			}			
-			
-			if (locx != olocx || locy != olocy || locz != olocz || c == 's') {	
-
-				int cbase = -1;
-				if (activesquad->squad[0] != NULL)
-				{
-					cbase = activesquad->squad[0]->base;
-				}
-				//NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
-				//REFRESHES THE SCREEN
-				long nlocx = locx, nlocy = locy, nlocz = locz;
-				locx = olocx, locy = olocy, locz = olocz;
-				if (enemy) {
-					enemyAttemptsFreeShots(encounter_timer);
-				}
-				creatureadvance();
-				encounter_timer++;
-				partyalive = squadalive(activesquad);
-				if (partyalive) {
-					//AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
-					locx = nlocx, locy = nlocy, locz = nlocz;
-					//CHECK FOR EXIT
-					if ((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT) ||
-						(cbase == cursite && !LocationsPool::getInstance().isThereASiegeHere(cursite) &&
-							bail_on_base))
+					if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 					{
-						bailOnBase();
-						sitealarm = 0;
-						return;
+						if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+						else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
 					}
-					if (moveOrWaitThenCheckForExit(olocx, olocy, olocz, c, encsize, hostcheck)) {
-						//RESET MODE
-						mode = GAMEMODE_BASE;
-						return;
-					}
+					else
+						if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+						{
+							sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
+							resolvesite();
+						}
+					mode = GAMEMODE_BASE;
+					showcarprefs = 0;
+					return;
 				}
 			}
+			else if (partyalive > 0) {
+				int olocx = locx, olocy = locy, olocz = locz;
+				bool canMove = !enemy || !sitealarm;
+				{
+					if (c == 'v'&&enemy&&sitealarm)
+					{
+						char override = whichWay();
+						if (override) {
+							c = override;
+							canMove = true;
+						}
+
+					}
+				}
+				switch (c) {
+				case 'w':
+				case KEY_UP:
+					if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
+					break;
+				case 'a':
+				case KEY_LEFT:
+					if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
+					break;
+				case 'd':
+				case KEY_RIGHT:
+					if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
+					break;
+				case 'x':
+				case KEY_DOWN:
+					if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
+					break;
+				case 'k':
+					if (enemy) { kidnapattempt(); }
+					break;
+				case 'u':
+					pressedKeyU(enemy);
+					break;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+					if (activesquad->squad[c - '1'] != NULL)
+					{
+						if (party_status == c - '1')fullstatus(party_status);
+						else party_status = c - '1';
+					}
+					break;
+				case 'e':
+					mapshowing = false;
+					equip(activesquad->loot, -1);
+					if (enemy&&sitealarm)enemyattack();
+					else if (enemy)disguisecheck(encounter_timer);
+					creatureadvance();
+					encounter_timer++;
+					mapshowing = true;
+					break;
+				case 'n':
+					pressedKeyN();
+					break;
+				case 'l':
+					if ((!enemy || !sitealarm)) {
+						pressedKeyL();
+						encounter_timer++;
+					}
+					break;
+				case 'j':
+					if ((!enemy || !sitealarm)) {
+						pressedKeyShiftL();
+						encounter_timer++;
+					}
+					break;
+				case 't':
+					if (talkers) {
+						pressedKeyT(enemy, encounter_timer);
+					}
+					break;
+				case 'o':
+					if (partysize > 1)orderparty();
+					break;
+				case '0':
+					party_status = -1;
+					break;
+				case 'm':
+					pressedKeyM();
+					break;
+				case 'f':
+					if (enemy) { pressedKeyF(encounter_timer); }
+					break;
+				case 'r':
+					pressedKeyR(freeable, libnum, enemy, hostages, partysize);
+					break;
+				case 'g':
+					pressedKeyG(enemy, encounter_timer);
+					break;
+				}
+
+				if (locx != olocx || locy != olocy || locz != olocz || c == 's') {
+
+					int cbase = -1;
+					if (activesquad->squad[0] != NULL)
+					{
+						cbase = activesquad->squad[0]->base;
+					}
+					//NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
+					//REFRESHES THE SCREEN
+					long nlocx = locx, nlocy = locy, nlocz = locz;
+					locx = olocx, locy = olocy, locz = olocz;
+					if (enemy) {
+						enemyAttemptsFreeShots(encounter_timer);
+					}
+					creatureadvance();
+					encounter_timer++;
+					partyalive = squadalive(activesquad);
+					if (partyalive) {
+						//AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
+						locx = nlocx, locy = nlocy, locz = nlocz;
+						//CHECK FOR EXIT
+						if ((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT) ||
+							(cbase == cursite && !LocationsPool::getInstance().isThereASiegeHere(cursite) &&
+								bail_on_base))
+						{
+							bailOnBase();
+							sitealarm = 0;
+							return;
+						}
+						if (moveOrWaitThenCheckForExit(olocx, olocy, olocz, c, encsize, hostcheck)) {
+							//RESET MODE
+							mode = GAMEMODE_BASE;
+							return;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -2867,7 +2877,7 @@ void mode_site(short loc)
 			SITEBLOCK_FIRE_START | SITEBLOCK_FIRE_PEAK | SITEBLOCK_FIRE_END));
 		//PLACE LOOT
 		int lootnum = LocationsPool::getInstance().lenloot(loc);
-		if (lootnum>10) lootnum = 10;
+		if (lootnum > 10) lootnum = 10;
 		int lx, ly, lz;
 		for (int l = 0; l < lootnum; l++)
 		{
@@ -2876,7 +2886,7 @@ void mode_site(short loc)
 			levelmap[lx][ly][lz].flag |= SITEBLOCK_LOOT;
 		}
 		//PLACE TRAPS
-		
+
 		if (LocationsPool::getInstance().hasTraps(loc))
 		{
 			int trapnum = 30;
@@ -2904,7 +2914,7 @@ void mode_site(short loc)
 			levelmap[lx][ly][lz].siegeflag |= SIEGEFLAG_UNIT;
 		}
 		if (!(LocationsPool::getInstance().doWeHaveTankTraps(loc)) &&
-			LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE&&
+			LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE &&
 			LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2)
 		{
 			levelmap[MAPX / 2][1][0].siegeflag |= SIEGEFLAG_HEAVYUNIT;
@@ -2923,13 +2933,13 @@ void printchaseencounter()
 	if (len(chaseseq.enemycar))
 	{
 		int carsy[4] = { 20,20,20,20 };
-		for (int v = 0; v<len(chaseseq.enemycar); v++)
+		for (int v = 0; v < len(chaseseq.enemycar); v++)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, v * 20 + 1, chaseseq.enemycar[v]->fullname(true));
 		}
-		for (int e = 0; e<ENCMAX; e++) if (encounter[e].exists)
-			for (int v = 0; v<len(chaseseq.enemycar); v++)
+		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists)
+			for (int v = 0; v < len(chaseseq.enemycar); v++)
 				if (chaseseq.enemycar[v]->id() == encounter[e].carid)
 				{
 					set_color_easy(RED_ON_BLACK_BRIGHT);

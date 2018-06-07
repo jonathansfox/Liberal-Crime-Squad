@@ -167,28 +167,28 @@ const string tag_attribute = "attribute";
 const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string blankString = "";
 #include "../creature/creature.h"
@@ -203,21 +203,21 @@ string attribute_enum_to_string(int attribute);
 //#include "../politics/politics.h"
 /* politics -- promotes the Vice President to President, and replaces VP */
 void promoteVP();
-        //only use here. --Schmel924
+//only use here. --Schmel924
 #include "../combat/chaseCreature.h"
 //for Vehicle* getChaseVehicle(const Creature &c);
-        //hmm --Schmel924
+		//hmm --Schmel924
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
- vector<string> ccs_covername_shotgun;
- vector<string> ccs_covername_other;
- const string creature = "creature\\";
- vector<file_and_text_collection> creature_text_file_collection = {
-	 /*creature.cpp*/
-	 customText(&ccs_covername_shotgun, creature + CONST_creature085),
-	 customText(&ccs_covername_other, creature + CONST_creature086),
- };
+vector<string> ccs_covername_shotgun;
+vector<string> ccs_covername_other;
+const string creature = "creature\\";
+vector<file_and_text_collection> creature_text_file_collection = {
+	/*creature.cpp*/
+	customText(&ccs_covername_shotgun, creature + CONST_creature085),
+	customText(&ccs_covername_other, creature + CONST_creature086),
+};
 extern string commaSpace;
 Creature& Creature::operator=(const Creature& rhs)
 {
@@ -520,9 +520,11 @@ Creature::Creature(const std::string& inputXml)
 		std::string tag = xml.GetTagName();
 		if (creature_XML_Integers.count(tag)) {
 			*creature_XML_Integers[tag] = atoi(xml.GetData().c_str());
-		}else if (creature_XML_Chars.count(tag)) {
+		}
+		else if (creature_XML_Chars.count(tag)) {
 			*creature_XML_Chars[tag] = atoi(xml.GetData().c_str());
-		}else if (creature_XML_Bools.count(tag)) {
+		}
+		else if (creature_XML_Bools.count(tag)) {
 			*creature_XML_Bools[tag] = atoi(xml.GetData().c_str());
 		}
 		else if (tag == tag_attribute && attributesi < ATTNUM)
@@ -680,8 +682,8 @@ string Creature::showXml() const
 	xml.AddElem(tag_dontname, dontname);
 	xml.AddElem(tag_seethroughdisguise, seethroughdisguise);
 	xml.AddElem(tag_seethroughstealth, seethroughdisguise);
-	xml.AddElem(tag_talkreceptive,		istalkreceptive);
-	xml.AddElem(tag_kidnap_resistant,		iskidnap_resistant );
+	xml.AddElem(tag_talkreceptive, istalkreceptive);
+	xml.AddElem(tag_kidnap_resistant, iskidnap_resistant);
 	xml.AddElem(tag_reports_to_police, isreports_to_police);
 	return xml.GetDoc();
 }
@@ -698,7 +700,7 @@ int Creature::get_attribute(int attribute, bool usejuice) const
 		if (age < 11)ret >>= 1;     // Strength is lowest at the beginning and end of life
 		else if (age < 16)ret -= 1;
 		else if (age > 70)ret -= 6;
-		else if (age>52)ret -= 3;
+		else if (age > 52)ret -= 3;
 		else if (age > 35)ret -= 1;
 		break;
 	case ATTRIBUTE_AGILITY:
@@ -715,27 +717,27 @@ int Creature::get_attribute(int attribute, bool usejuice) const
 		if (age < 11)ret += 2;      // Lots of folks like kids
 		else if (age < 16)ret -= 1; // Teenagers have communication difficulties and image issues
 		else if (age > 70)ret += 3; // Authority and experience in life then enhance Charisma with age
-		else if (age>52)ret += 2;
+		else if (age > 52)ret += 2;
 		else if (age > 35)ret += 1;
 		break;
 	case ATTRIBUTE_INTELLIGENCE:
 		if (age < 11)ret -= 3;      // Experience enhances Intelligence with age
 		else if (age < 16)ret -= 1;
 		else if (age > 70)ret += 3;
-		else if (age>52)ret += 2;
-		else if (age>35)ret += 1;
+		else if (age > 52)ret += 2;
+		else if (age > 35)ret += 1;
 		break;
 	case ATTRIBUTE_WISDOM:
 		if (age < 11)ret -= 2;      // Experience grants Wisdom with age
 		else if (age < 16)ret -= 1;
 		else if (age > 70)ret += 2;
-		else if (age>52)ret += 1;
+		else if (age > 52)ret += 1;
 		break;
 	case ATTRIBUTE_HEART:
 		if (age < 11)ret += 2;      // Experience saps Heart with age due to cynicism
 		else if (age < 16)ret += 1; // No wonder it's typically the young who are most Liberal...
 		else if (age > 70)ret -= 2;
-		else if (age>52)ret -= 1;
+		else if (age > 52)ret -= 1;
 		break;
 	}
 	// Physical stats want to know: Are you paralyzed?
@@ -776,7 +778,7 @@ int Creature::get_attribute(int attribute, bool usejuice) const
 	if (!usejuice)return ret;
 	// Never use juice to increase stats for the opposite ideology!
 	if (attribute == ATTRIBUTE_WISDOM && align != ALIGN_CONSERVATIVE)usejuice = false;
-	if (attribute == ATTRIBUTE_HEART  && align != ALIGN_LIBERAL)usejuice = false;
+	if (attribute == ATTRIBUTE_HEART && align != ALIGN_LIBERAL)usejuice = false;
 	// Effects of juice on the character's attributes
 	if (usejuice)
 	{
@@ -843,8 +845,8 @@ int Creature::roll_check(int skill)
 		if (i < 3)
 			roll[i] = newroll;
 		else
-			for (int j = 0; j<3; j++)
-				if (newroll>roll[j])
+			for (int j = 0; j < 3; j++)
+				if (newroll > roll[j])
 				{
 					int temp = roll[j];
 					roll[j] = newroll;
@@ -868,7 +870,7 @@ int Creature::attribute_roll(int attribute) const
 		addstrAlt(CONST_creature102);
 		addstrAlt(return_value);
 		addstrAlt(closeParenthesis);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	// Roll on the attribute value
 	return return_value;
@@ -887,7 +889,7 @@ bool Creature::attribute_check(int attribute, int difficulty) const
 		}
 		else addstrAlt(CONST_creature105);
 		addstrAlt(closeParenthesis);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return(attribute_roll(attribute) >= difficulty);
 }
@@ -905,7 +907,7 @@ int Creature::skill_roll(int skill) const
 		default:
 			set_color_easy(YELLOW_ON_RED_BRIGHT);
 			addstrAlt(CONST_creature097, gamelog);
-	 	pressAnyKey();
+			pressAnyKey();
 			break;
 		case PSEUDOSKILL_ESCAPEDRIVE:
 		case PSEUDOSKILL_DODGEDRIVE:
@@ -1028,7 +1030,7 @@ int Creature::skill_roll(int skill) const
 			addstrAlt(return_value);
 		}
 		addstrAlt(closeParenthesis);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return return_value;
 }
@@ -1046,7 +1048,7 @@ bool Creature::skill_check(int skill, int difficulty) const
 		}
 		else addstrAlt(CONST_creature105);
 		addstrAlt(closeParenthesis);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return(skill_roll(skill) >= difficulty);
 }
@@ -1077,7 +1079,7 @@ void Creature::skill_up()
 {
 	for (int s = 0; s < SKILLNUM; s++)
 	{
-		while (skill_experience[s] >= 100 + 10 * skills[s]&&
+		while (skill_experience[s] >= 100 + 10 * skills[s] &&
 			skills[s] < skill_cap(s, true))
 		{
 			skill_experience[s] -= 100 + 10 * skills[s];
@@ -1090,7 +1092,7 @@ void Creature::skill_up()
 /* turns a creature into a conservative */
 void conservatise(Creature &cr)
 {
-	if (cr.align == ALIGN_LIBERAL && cr.juice>0)cr.juice = 0;
+	if (cr.align == ALIGN_LIBERAL && cr.juice > 0)cr.juice = 0;
 	cr.align = ALIGN_CONSERVATIVE;
 	switch (cr.type)
 	{
@@ -1186,7 +1188,7 @@ void UniqueCreatures::newPresident()
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
-	strcpy(Pres_.name, (((string) CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)).c_str());
+	strcpy(Pres_.name, (((string)CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)).c_str());
 	strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
 	switch (exec[EXEC_PRESIDENT])
 	{ // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
@@ -1387,7 +1389,7 @@ bool Creature::take_clips(const ClipType& ct, int number)
 }
 void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
 {
-	if (weapon&&!w.empty())
+	if (weapon && !w.empty())
 	{
 		if (weapon->is_throwable() && weapon->is_same_type(w))
 		{
@@ -1566,7 +1568,7 @@ void add_age(Creature& person)
 	// For humans, estimate their age and gender
 	addstrAlt(CONST_creature138);
 	// Almost precise estimates of child and teen ages
-	if (person.age<20)
+	if (person.age < 20)
 	{
 		// Inaccuracy in estimating age should be the same every
 		// time a character is queried. I'm using the day of the
@@ -1577,19 +1579,19 @@ void add_age(Creature& person)
 	// More rough estimates of everyone else
 	else
 	{
-		if (person.age<30)
+		if (person.age < 30)
 			addstrAlt(CONST_creature140);
-		else if (person.age<40)
+		else if (person.age < 40)
 			addstrAlt(CONST_creature141);
-		else if (person.age<50)
+		else if (person.age < 50)
 			addstrAlt(CONST_creature142);
-		else if (person.age<60)
+		else if (person.age < 60)
 			addstrAlt(CONST_creature143);
-		else if (person.age<70)
+		else if (person.age < 70)
 			addstrAlt(CONST_creature144);
-		else if (person.age<80)
+		else if (person.age < 80)
 			addstrAlt(CONST_creature145);
-		else if (person.age<90)
+		else if (person.age < 90)
 			addstrAlt(CONST_creature146);
 		else
 			addstrAlt(CONST_creature147);

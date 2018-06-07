@@ -98,7 +98,7 @@ const string tag_skill = "skill";
 #include "../creature/creature.h"
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
- vector<string> city_names;
+vector<string> city_names;
 std::string gettitle(Creature &cr)
 {
 	extern short lawList[LAWNUM];
@@ -162,7 +162,7 @@ std::string gettitle(Creature &cr)
 		else return CONST_getnames040;
 	}
 }
- map<short, vector<string> > getViewString;
+map<short, vector<string> > getViewString;
 std::string getview(short view, bool shortname)
 {
 	if (shortname)
@@ -182,7 +182,7 @@ std::string getview(short view, bool shortname)
 			return CONST_getnames042;
 	}
 }
- map<short, string> getLawString;
+map<short, string> getLawString;
 std::string getlaw(int l)
 {
 	if (getLawString.count(l)) {
@@ -196,10 +196,10 @@ std::string cityname()
 {
 	return pickrandom(city_names);
 }
- map<short, string> getLawFlagString;
- map<short, map<short, string> > getLawFlagStringFull;
+map<short, string> getLawFlagString;
+map<short, map<short, string> > getLawFlagStringFull;
 int getLawFromFlag(int type);
- string findingBugs;
+string findingBugs;
 std::string getlawflag(int type)
 {
 	extern short lawList[LAWNUM];
@@ -215,7 +215,7 @@ std::string getlawflag(int type)
 		}
 }
 // shortname defaults to false
- vector<string> getMonth;
+vector<string> getMonth;
 std::string getmonth(int month, bool shortname)
 {
 	int monthIndex = (month - 1) * 2 + (shortname ? 0 : 1);
@@ -233,9 +233,9 @@ vector<file_and_text_collection> get_names_text_file_collection = {
 	customText(&city_names, names + CONST_getnames044),
 	customText(&getMonth, mostlyendings + CONST_getnames045),
 };
- map<short, string> getAlignString;
- string moderateLC;
- string buggyString;
+map<short, string> getAlignString;
+string moderateLC;
+string buggyString;
 std::string getalign(short alignment, bool capitalize)
 {
 	if (capitalize == false && alignment == ALIGN_MODERATE) {

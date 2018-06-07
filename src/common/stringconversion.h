@@ -12,12 +12,12 @@ inline const char* toCstring(long i) { return tostring(i).c_str(); }
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
 /* These strcpy, strncpy, and strcat wrappers handle std:strings */
-inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest,src.c_str()); }
-inline char* strncpy(char* dest, const std::string& src, size_t maxlen) { return strncpy(dest,src.c_str(),maxlen); }
-inline char* strcat(char* dest, const std::string& src) { return strcat(dest,src.c_str()); }
+inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest, src.c_str()); }
+inline char* strncpy(char* dest, const std::string& src, size_t maxlen) { return strncpy(dest, src.c_str(), maxlen); }
+inline char* strcat(char* dest, const std::string& src) { return strcat(dest, src.c_str()); }
 /* These strcpy and strcat wrappers handle numbers */
-inline char* strcpy(char* dest, long src) { return strcpy(dest,tostring(src)); }
-inline char* strcat(char* dest, long src) { return strcat(dest,tostring(src)); }
+inline char* strcpy(char* dest, long src) { return strcpy(dest, tostring(src)); }
+inline char* strcat(char* dest, long src) { return strcat(dest, tostring(src)); }
 /* This wrapper allows atoi to handle std::strings */
 inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 /* This wrapper allows atof to handle std::strings */

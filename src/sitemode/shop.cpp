@@ -102,7 +102,7 @@ const string tag_skill = "skill";
 #include "../common/stringconversion.h"
 //for string conversion
 #include "../common/commondisplay.h"
-// for void printfunds(int,int,char*)
+
 #include "../common/equipment.h"
 //for void equip(vector<Item *> &loot,int loc);
 //#include "../common/commonactionsCreature.h"
@@ -117,12 +117,12 @@ int squadsize(const squadst *st);
 extern string spaceDashSpace;
 extern string closeParenthesis;
 extern string undefined;
- extern string check_status_of_squad_liberal;
- extern string show_squad_liberal_status;
- extern string enter_done;
- extern string chooseALiberalTo;
- extern string singleSpace;
- string paranthesisDollar;
+extern string check_status_of_squad_liberal;
+extern string show_squad_liberal_status;
+extern string enter_done;
+extern string chooseALiberalTo;
+extern string singleSpace;
+string paranthesisDollar;
 ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
 { }
 Shop::Shop(MCD_STR xmlstring)
@@ -181,9 +181,9 @@ void Shop::init(const MCD_STR &xmlstring)
 		else if (tag == tag_letter)
 		{
 			letter_ = xml.GetData()[0];
-			if (97 <= letter_&&letter_ <= 122) //Check it is a letter.
+			if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
 				letter_defined_ = true;
-			else if (65 <= letter_&&letter_ <= 90)
+			else if (65 <= letter_ && letter_ <= 90)
 			{
 				letter_ += 32;
 				letter_defined_ = true;
@@ -226,30 +226,30 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, CONST_shop026);
+		mvaddstrAlt(0, 0, CONST_shop026);
 		addstrAlt(customers.squad[buyer]->name);
 		addstrAlt(CONST_shop051);
-		mvaddstrAlt(1,  0, CONST_shop028);
+		mvaddstrAlt(1, 0, CONST_shop028);
 		//Write wares and prices
 		for (int p = page * 19, y = 2; p < len(available_options) && p < page * 19 + 19; p++, y++)
 		{
 			if (available_options[p]->is_available())
 				set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			
+
 			mvaddcharAlt(y, 0, 'A' + y - 2);
 			addstrAlt(spaceDashSpace);
 			addstrAlt(available_options[p]->get_description_fullscreen());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22,  0, CONST_shop029); //allow customize CONST_shopB061? -XML
-		mvaddstrAlt(23, 0,		addpagestr());
-		mvaddstrAlt(24,  0, CONST_shop061 + std::string(customers.squad[buyer]->name) + singleSpace + exit_);
+		mvaddstrAlt(22, 0, CONST_shop029); //allow customize CONST_shopB061? -XML
+		mvaddstrAlt(23, 0, addpagestr());
+		mvaddstrAlt(24, 0, CONST_shop061 + std::string(customers.squad[buyer]->name) + singleSpace + exit_);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(available_options)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(available_options)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -274,7 +274,7 @@ int fenceselect(squadst& customers)
 	extern short interface_pgdn;
 	int ret = 0, page = 0;
 	consolidateLoot(customers.squad[0]->base);
-	
+
 	vector<int> selected(lenloot(customers.squad[0]->base), 0);
 	while (true)
 	{
@@ -340,7 +340,7 @@ int fenceselect(squadst& customers)
 						printparty();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8, 15, CONST_shop036);
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 					else
 					{
@@ -354,7 +354,7 @@ int fenceselect(squadst& customers)
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)
 			page--;
 		//PAGE DOWN
 		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) &&
@@ -366,7 +366,7 @@ int fenceselect(squadst& customers)
 		if (selected[l])
 		{
 			decreateLocationLoot(customers.squad[0]->base, l, selected[l]);
-			
+
 		}
 	}
 	return ret;
@@ -375,7 +375,7 @@ void equipLoot(int l, int loc);
 void deleteLocationLoot(int loc, int loot);
 int whatIsThisItemInLocation(int loc, int l);
 bool noQuickFenceLocation(int loc, int l);
-void sell_loot(squadst& customers) 
+void sell_loot(squadst& customers)
 {
 	extern short party_status;
 	extern class Ledger ledger;
@@ -386,25 +386,25 @@ void sell_loot(squadst& customers)
 		locheader();
 		printparty();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10,  1, CONST_shop058);
+		mvaddstrAlt(10, 1, CONST_shop058);
 		if (lenloot(customers.squad[0]->base))
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(10,  40, CONST_shop038);
-		mvaddstrAlt(11,  1, CONST_shop039);
-		mvaddstrAlt(11,  40, CONST_shop040);
-		mvaddstrAlt(12,  1, CONST_shop041);
-		mvaddstrAlt(12,  40, CONST_shop042);
+		mvaddstrAlt(10, 40, CONST_shop038);
+		mvaddstrAlt(11, 1, CONST_shop039);
+		mvaddstrAlt(11, 40, CONST_shop040);
+		mvaddstrAlt(12, 1, CONST_shop041);
+		mvaddstrAlt(12, 40, CONST_shop042);
 		if (party_status != -1)
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(15,  1, show_squad_liberal_status);
+		mvaddstrAlt(15, 1, show_squad_liberal_status);
 		if (partysize && (party_status == -1 || partysize > 1))
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(15,  40, check_status_of_squad_liberal);
+		mvaddstrAlt(15, 40, check_status_of_squad_liberal);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(16,  40, CONST_shop043);
+		mvaddstrAlt(16, 40, CONST_shop043);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		if (c == 'e'&&customers.squad[0]->base != -1)
@@ -465,16 +465,16 @@ void sell_loot(squadst& customers)
 			if (fenceamount)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, CONST_shop047);
+				mvaddstrAlt(8, 1, CONST_shop047);
 				addstrAlt(fenceamount);
 				addstrAlt(CONST_shop048);
-		 	pressAnyKey();
+				pressAnyKey();
 				ledger.add_funds(fenceamount, INCOME_PAWN);
 			}
 		}
 	}
 }
-void choose_buyer(squadst& customers, int& buyer) 
+void choose_buyer(squadst& customers, int& buyer)
 {
 	extern short party_status;
 	party_status = -1;
@@ -484,7 +484,7 @@ void choose_buyer(squadst& customers, int& buyer)
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  20, chooseALiberalTo + CONST_shop049);
+		mvaddstrAlt(8, 20, chooseALiberalTo + CONST_shop049);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= partysize + '1' - 1)
@@ -804,9 +804,9 @@ void maskselect(Creature &buyer)
 		addstrAlt(CONST_shop055);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(masktype)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(masktype)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';

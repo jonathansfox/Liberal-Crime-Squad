@@ -105,28 +105,28 @@ const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string tag_value = "value";
 const string tag_attribute = "attribute";
@@ -153,21 +153,21 @@ int getarmortype(const string &idname);
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 extern string singleDot;
- vector<string> date_fail;
- const string datey = "date\\";
- vector<file_and_text_collection> date_text_file_collection = {
-	 /*date.cpp*/
-	 customText(&date_fail, datey + CONST_date006),
- };
- extern string commaSpace;
- extern string singleSpace;
- vector<datest *> date;
+vector<string> date_fail;
+const string datey = "date\\";
+vector<file_and_text_collection> date_text_file_collection = {
+	/*date.cpp*/
+	customText(&date_fail, datey + CONST_date006),
+};
+extern string commaSpace;
+extern string singleSpace;
+vector<datest *> date;
 enum DateResults
 {
-   DATERESULT_MEETTOMORROW,
-   DATERESULT_BREAKUP,
-   DATERESULT_JOINED,
-   DATERESULT_ARRESTED
+	DATERESULT_MEETTOMORROW,
+	DATERESULT_BREAKUP,
+	DATERESULT_JOINED,
+	DATERESULT_ARRESTED
 };
 extern string AND;
 // Handles the result of a date or vacation
@@ -189,11 +189,11 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		addstrAlt(pool[p]->name, gamelog);
 		addstrAlt(CONST_date008, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		if (loveslavesleft(*pool[p]) <= 0)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y++,  0, CONST_date048, gamelog);
+			mvaddstrAlt(y++, 0, CONST_date048, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
 			addstrAlt(CONST_date010, gamelog);
 			int num_relationships = loveslaves(*pool[p]);
@@ -201,17 +201,17 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			if (num_relationships == 1) addstrAlt(CONST_date011, gamelog);
 			else addstrAlt(tostring(num_relationships) + CONST_date012, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(y++,  0, pool[p]->name, gamelog);
+			mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
 			addstrAlt(CONST_date013, gamelog);
 			if (num_relationships == 1) addstrAlt(CONST_date014, gamelog);
 			else addstrAlt(CONST_date015, gamelog);
 			addstrAlt(CONST_date016, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, CONST_date017, gamelog);
+			mvaddstrAlt(y++, 0, CONST_date017, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			delete_and_remove(d.date, e);
 			return DATERESULT_BREAKUP;
 		}
@@ -227,18 +227,18 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			gamelog.nextMessage();
 			//Get map of their workplace
 			LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
-	 	pressAnyKey();
+			pressAnyKey();
 			d.date[e]->flag |= CREATUREFLAG_LOVESLAVE;
 			d.date[e]->hireid = pool[p]->id;
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_date021);
+			mvaddstrAlt(0, 0, CONST_date021);
 			addstrAlt(d.date[e]->propername);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(2,  0, CONST_date096);
+			mvaddstrAlt(2, 0, CONST_date096);
 			addstrAlt(d.date[e]->get_type_name());
 			addstrAlt(CONST_date097);
-			mvaddstrAlt(3,  0, CONST_date098);
+			mvaddstrAlt(3, 0, CONST_date098);
 			enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 			sleeperize_prompt(*d.date[e], *pool[p], 8);
 			addCreature(d.date[e]);
@@ -252,7 +252,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				y++;
-				mvaddstrAlt(y++,  0, s + pool[p]->name + CONST_date025 + d.date[e]->name + CONST_dateB099, gamelog);
+				mvaddstrAlt(y++, 0, s + pool[p]->name + CONST_date025 + d.date[e]->name + CONST_dateB099, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
 				d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM, -1);
@@ -266,7 +266,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			else if (LocationsPool::getInstance().isLocationMapped(d.date[e]->worklocation) == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
 			{
 				y++;
-				mvaddstrAlt(y++,  0, s + d.date[e]->name + CONST_date026
+				mvaddstrAlt(y++, 0, s + d.date[e]->name + CONST_date026
 					+ LocationsPool::getInstance().getLocationName(d.date[e]->worklocation) + singleDot, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
@@ -287,16 +287,16 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				LocationsPool::getInstance().setLocationMappedAndUnhidden(d.date[e]->worklocation);
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, CONST_date042, gamelog);
+			mvaddstrAlt(y++, 0, CONST_date042, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			return DATERESULT_MEETTOMORROW;
 		}
 	}
 	else if (aroll == troll)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
+		mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
 		addstrAlt(CONST_date030, gamelog);
 		moveAlt(y++, 0);
 		switch (LCSrandom(7))
@@ -318,9 +318,9 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		case 5: addstrAlt(CONST_date040, gamelog); break;
 		case 6: addstrAlt(s + CONST_date041 + d.date[e]->hisher() + CONST_dateB103, gamelog); break;
 		}
-		mvaddstrAlt(y++,  0, CONST_date042, gamelog);
+		mvaddstrAlt(y++, 0, CONST_date042, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		return DATERESULT_MEETTOMORROW;
 	}
 	else
@@ -329,7 +329,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 		if (d.date[e]->align == -1 && aroll < troll / 2)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y++,  0, CONST_date043, gamelog);
+			mvaddstrAlt(y++, 0, CONST_date043, gamelog);
 			addstrAlt(d.date[e]->name, gamelog);
 			addstrAlt(CONST_date044, gamelog);
 			addstrAlt(pool[p]->name, gamelog);
@@ -342,7 +342,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				pool[p]->train(SKILL_SCIENCE, 20 * (d.date[e]->get_skill(SKILL_SCIENCE) - pool[p]->get_skill(SKILL_SCIENCE)));
 			if (d.date[e]->get_skill(SKILL_BUSINESS) > pool[p]->get_skill(SKILL_BUSINESS))
 				pool[p]->train(SKILL_BUSINESS, 20 * (d.date[e]->get_skill(SKILL_BUSINESS) - pool[p]->get_skill(SKILL_BUSINESS)));
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		//BREAK UP
 		// If your squad member is wanted by the police, a conservative who breaks up with
@@ -352,9 +352,9 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			(!LCSrandom(50) || (LCSrandom(2) && (d.date[e]->kidnap_resistant()))))
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
+			mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
 			addstrAlt(CONST_date046, gamelog);
-	 	pressAnyKey();
+			pressAnyKey();
 			moveAlt(y++, 0);
 			// 3/4 chance of being arrested if less than 50 juice,
 			// 1/2 chance of being arrested if more than 50 juice
@@ -371,7 +371,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 				pool[p]->location = ps;
 				pool[p]->drop_weapons_and_clips(NULL);
 				pool[p]->activity.type = ACTIVITY_NONE;
-		 	pressAnyKey();
+				pressAnyKey();
 				delete_and_remove(d.date, e);
 				return DATERESULT_ARRESTED;
 			}
@@ -390,8 +390,8 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			if (ls > 0 && LCSrandom(2))
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++,  0, s + CONST_date050 + d.date[e]->name, gamelog);
-				mvaddstrAlt(y++,  0, s + CONST_date051 + pool[p]->name + CONST_dateB104, gamelog);
+				mvaddstrAlt(y++, 0, s + CONST_date050 + d.date[e]->name, gamelog);
+				mvaddstrAlt(y++, 0, s + CONST_date051 + pool[p]->name + CONST_dateB104, gamelog);
 				switch (ls)
 				{
 				case 5:
@@ -441,7 +441,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			else
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
+				mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
 				addstrAlt(CONST_date059, gamelog);
 				gamelog.newline();
 				moveAlt(y++, 0);
@@ -449,7 +449,7 @@ static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 			addstrAlt(CONST_date060, gamelog);
 			gamelog.nextMessage();
 		}
- 	pressAnyKey();
+		pressAnyKey();
 		delete_and_remove(d.date, e);
 		return DATERESULT_BREAKUP;
 	}
@@ -464,7 +464,7 @@ char completevacation(datest &d, int p)
 	int e = 0;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
+	mvaddstrAlt(0, 0, pool[p]->name, gamelog);
 	addstrAlt(CONST_date061, gamelog);
 	gamelog.nextMessage();
 	// Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
@@ -525,7 +525,7 @@ char completedate(datest &d, int p)
 	music.play(MUSIC_DATING);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, pool[p]->name, gamelog);
+	mvaddstrAlt(0, 0, pool[p]->name, gamelog);
 	addstrAlt(CONST_date062, gamelog);
 	if (len(d.date) == 1)
 	{
@@ -540,7 +540,7 @@ char completedate(datest &d, int p)
 		else if (e == len(d.date) - 2) addstrAlt(AND, gamelog);
 		else
 		{
-			if (pool[p]->clinic>0)
+			if (pool[p]->clinic > 0)
 			{
 				addstrAlt(CONST_date066, gamelog);
 				addstrAlt(LocationsPool::getInstance().getLocationName(pool[p]->location), gamelog);
@@ -549,7 +549,7 @@ char completedate(datest &d, int p)
 		}
 	}
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	if (len(d.date) > 1 && !LCSrandom(len(d.date) > 2 ? 4 : 6))
 	{
 		switch (LCSrandom(3))
@@ -558,22 +558,22 @@ char completedate(datest &d, int p)
 			moveAlt(2, 0);
 			if (len(d.date) > 2) addstrAlt(CONST_date067, gamelog);
 			else addstrAlt(CONST_date068, gamelog);
-			mvaddstrAlt(3,  0, pool[p]->name, gamelog);
+			mvaddstrAlt(3, 0, pool[p]->name, gamelog);
 			addstrAlt(CONST_date069, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			break;
 		case 1:
 			moveAlt(2, 0);
 			if (len(d.date) > 2) addstrAlt(CONST_date070, gamelog);
 			else addstrAlt(CONST_date071, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(3,  0, CONST_date072, gamelog);
+			mvaddstrAlt(3, 0, CONST_date072, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			break;
 		default:
-			mvaddstrAlt(2,  0, pool[p]->name, gamelog);
+			mvaddstrAlt(2, 0, pool[p]->name, gamelog);
 			if (len(d.date) > 2)
 				addstr_fl(gamelog, CONST_date073.c_str(), pool[p]->heshe(), len(d.date));
 			else
@@ -584,29 +584,29 @@ char completedate(datest &d, int p)
 				addstrAlt(d.date[1]->name, gamelog);
 				gamelog.newline();
 			}
-			mvaddstrAlt(3,  0, CONST_date075, gamelog);
+			mvaddstrAlt(3, 0, CONST_date075, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			break;
 		}
-		mvaddstrAlt(5,  0, pool[p]->name, gamelog);
+		mvaddstrAlt(5, 0, pool[p]->name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		addstrAlt(pickrandom(date_fail), gamelog);
 		addjuice(*pool[p], -5, -50);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		return 1;
 	}
 	for (int e = len(d.date) - 1; e >= 0; e--)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_date076);
+		mvaddstrAlt(0, 0, CONST_date076);
 		addstrAlt(d.date[e]->name, gamelog);
 		addstrAlt(commaSpace, gamelog);
 		addstrAlt(d.date[e]->get_type_name(), gamelog);
 		addstrAlt(commaSpace, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(d.date[e]->worklocation,false, true), gamelog);
+		addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(d.date[e]->worklocation, false, true), gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
@@ -628,25 +628,25 @@ char completedate(datest &d, int p)
 				d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())), temp.back()->get_number());
 			delete_and_remove(temp, len(temp) - 1);
 		}
-		mvaddstrAlt(10,  0, CONST_date077);
+		mvaddstrAlt(10, 0, CONST_date077);
 		addstrAlt(pool[p]->name);
 		addstrAlt(CONST_date078);
 		if (ledger.get_funds() >= 100 && !pool[p]->clinic)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11,  0, CONST_date079);
+		mvaddstrAlt(11, 0, CONST_date079);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12,  0, CONST_date080);
+		mvaddstrAlt(12, 0, CONST_date080);
 		if (!pool[p]->clinic&&pool[p]->blood == 100)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(13, 0);
 		if (pool[p]->blood == 100) addstrAlt(CONST_date081);
 		else addstrAlt(CONST_date082);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(14,  0, CONST_date083);
+		mvaddstrAlt(14, 0, CONST_date083);
 		if (d.date[e]->align == -1 && !pool[p]->clinic)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(15,  0, CONST_date084);
+			mvaddstrAlt(15, 0, CONST_date084);
 		}
 		int thingsincommon = 0;
 		for (int s = 0; s < SKILLNUM; s++)
@@ -660,11 +660,11 @@ char completedate(datest &d, int p)
 			short aroll = pool[p]->skill_roll(SKILL_SEDUCTION);
 			short troll = d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
 			if (d.date[e]->align == ALIGN_CONSERVATIVE)
-				troll += troll*(d.date[e]->juice / 100);
+				troll += troll * (d.date[e]->juice / 100);
 			// Even liberals and moderates shouldn't be TOO easy to seduce! -- SlatersQuest
 			else if (d.date[e]->align == ALIGN_MODERATE)
-				troll += troll*(d.date[e]->juice / 150);
-			else troll += troll*(d.date[e]->juice / 200);
+				troll += troll * (d.date[e]->juice / 150);
+			else troll += troll * (d.date[e]->juice / 200);
 			char test = 0;
 			aroll += thingsincommon * 3;
 			if (c == 'a'&&ledger.get_funds() >= 100 && !pool[p]->clinic)
@@ -702,7 +702,7 @@ char completedate(datest &d, int p)
 				if (dateresult(aroll, troll, d, e, p, y) == DATERESULT_ARRESTED) return 1;
 				break;
 			}
-			if (c == 'c'&&!pool[p]->clinic&&pool[p]->blood == 100)
+			if (c == 'c' && !pool[p]->clinic&&pool[p]->blood == 100)
 			{
 				for (int e2 = len(d.date) - 1; e2 >= 0; e2--)
 				{
@@ -729,12 +729,12 @@ char completedate(datest &d, int p)
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				int bonus = 0;
-				mvaddstrAlt(17,  0, pool[p]->name, gamelog);
+				mvaddstrAlt(17, 0, pool[p]->name, gamelog);
 				if (pool[p]->get_weapon().is_ranged())
 				{
 					addstrAlt(CONST_date085, gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					mvaddstrAlt(18,  0, CONST_date086, gamelog);
+					mvaddstrAlt(18, 0, CONST_date086, gamelog);
 					gamelog.newline();
 					bonus = 5;
 				}
@@ -742,7 +742,7 @@ char completedate(datest &d, int p)
 				{
 					addstrAlt(CONST_date087, gamelog);
 					addstrAlt(pool[p]->get_weapon().get_name(1), gamelog);
-					mvaddstrAlt(18,  0, CONST_date088, gamelog);
+					mvaddstrAlt(18, 0, CONST_date088, gamelog);
 					gamelog.newline();
 					if (pool[p]->get_weapon().can_take_hostages())
 						bonus = 5;
@@ -759,7 +759,7 @@ char completedate(datest &d, int p)
 					gamelog.newline();
 					bonus += pool[p]->get_skill(SKILL_HANDTOHAND) - 1;
 				}
-		 	pressAnyKey();
+				pressAnyKey();
 				// Kidnap probably succeeds if the conservative isn't very dangerous,
 				// but fails 15 times as often if the conservative is tough stuff.
 				if ((!d.date[e]->kidnap_resistant() &&
@@ -767,7 +767,7 @@ char completedate(datest &d, int p)
 					LCSrandom(2 + bonus))
 				{
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					mvaddstrAlt(20,  0, d.date[e]->name, gamelog);
+					mvaddstrAlt(20, 0, d.date[e]->name, gamelog);
 					if (bonus)
 					{
 						addstrAlt(CONST_date092, gamelog);
@@ -778,11 +778,11 @@ char completedate(datest &d, int p)
 						addstrAlt(CONST_date093, gamelog);
 						gamelog.newline();
 					}
-			 	pressAnyKey();
-					mvaddstrAlt(22,  0, pool[p]->name, gamelog);
+					pressAnyKey();
+					mvaddstrAlt(22, 0, pool[p]->name, gamelog);
 					addstrAlt(CONST_date094, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 					d.date[e]->namecreature();
 					strcpy(d.date[e]->propername, d.date[e]->name);
 					d.date[e]->location = pool[p]->location;
@@ -796,13 +796,13 @@ char completedate(datest &d, int p)
 					d.date[e]->activity.intr() = new InterrogationST;
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0,  0, CONST_date095);
+					mvaddstrAlt(0, 0, CONST_date095);
 					addstrAlt(d.date[e]->propername);
 					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(2,  0, CONST_date096);
+					mvaddstrAlt(2, 0, CONST_date096);
 					addstrAlt(d.date[e]->get_type_name());
 					addstrAlt(CONST_date097);
-					mvaddstrAlt(3,  0, CONST_date098);
+					mvaddstrAlt(3, 0, CONST_date098);
 					enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
 					addCreature(d.date[e]);
 					stat_kidnappings++;
@@ -815,32 +815,32 @@ char completedate(datest &d, int p)
 					if (LCSrandom(2))
 					{
 						set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
+						mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
 						addstrAlt(CONST_date099, gamelog);
 						gamelog.newline();
-				 	pressAnyKey();
-						mvaddstrAlt((++y)++,  0, pool[p]->name, gamelog);
+						pressAnyKey();
+						mvaddstrAlt((++y)++, 0, pool[p]->name, gamelog);
 						addstrAlt(CONST_date100, gamelog);
 						gamelog.nextMessage();
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-				 	pressAnyKey();
+						pressAnyKey();
 						delete_and_remove(d.date, e);
 						break;
 					}
 					else
 					{
 						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(y++,  0, d.date[e]->name, gamelog);
+						mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
 						addstrAlt(CONST_date101, gamelog);
 						addstrAlt(pool[p]->name, gamelog);
 						addstrAlt(CONST_date102, gamelog);
 						gamelog.newline();
-				 	pressAnyKey();
-						mvaddstrAlt((++y)++,  0, CONST_date103, gamelog);
+						pressAnyKey();
+						mvaddstrAlt((++y)++, 0, CONST_date103, gamelog);
 						gamelog.nextMessage();
 						// Find the police station
-						int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location); 
+						int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location);
 						// Arrest the Liberal
 						removesquadinfo(*pool[p]);
 						pool[p]->carid = -1;
@@ -849,7 +849,7 @@ char completedate(datest &d, int p)
 						pool[p]->activity.type = ACTIVITY_NONE;
 						// Charge with kidnapping
 						criminalize(*pool[p], LAWFLAG_KIDNAPPING);
-				 	pressAnyKey();
+						pressAnyKey();
 						delete_and_remove(d.date, e);
 						return 1;
 					}

@@ -7,28 +7,28 @@ const string CONST_highscore002 = "score.dat";
 const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -167,58 +167,58 @@ void viewhighscores(int musicoverride)
 	{
 		if (score[s].valid)
 		{
-			if (yourscore == s&&score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			if (yourscore == s && score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			else if (yourscore == s)set_color_easy(RED_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y,  0, score[s].slogan);
-			if (yourscore == s&&score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK);
+			mvaddstrAlt(y, 0, score[s].slogan);
+			if (yourscore == s && score[s].endtype == END_WON)set_color_easy(GREEN_ON_BLACK);
 			else if (yourscore == s)set_color_easy(RED_ON_BLACK);
 			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y + 1, 0, getEndingString((EndTypes) score[s].endtype));
-			if (yourscore == s&&musicoverride == MUSIC_OFF) { music.play(getEndingMusic((EndTypes) score[s].endtype)); }
+			mvaddstrAlt(y + 1, 0, getEndingString((EndTypes)score[s].endtype));
+			if (yourscore == s && musicoverride == MUSIC_OFF) { music.play(getEndingMusic((EndTypes)score[s].endtype)); }
 			addstrAlt(getmonth(score[s].month));
 			addstrAlt(singleSpace);
 			addstrAlt(score[s].year);
 			addstrAlt(dotSpace);
-			mvaddstrAlt(y + 2,  0, numRecruit);
+			mvaddstrAlt(y + 2, 0, numRecruit);
 			addstrAlt(score[s].stat_recruits);
-			mvaddstrAlt(y + 3,  0, numMartyr);
+			mvaddstrAlt(y + 3, 0, numMartyr);
 			addstrAlt(score[s].stat_dead);
-			mvaddstrAlt(y + 2,  20, numKills);
+			mvaddstrAlt(y + 2, 20, numKills);
 			addstrAlt(score[s].stat_kills);
-			mvaddstrAlt(y + 3,  20, numKidnap);
+			mvaddstrAlt(y + 3, 20, numKidnap);
 			addstrAlt(score[s].stat_kidnappings);
-			mvaddstrAlt(y + 2,  40, cashTaxed);
+			mvaddstrAlt(y + 2, 40, cashTaxed);
 			addstrAlt(score[s].stat_funds);
-			mvaddstrAlt(y + 3,  40, cashSpent);
+			mvaddstrAlt(y + 3, 40, cashSpent);
 			addstrAlt(score[s].stat_spent);
-			mvaddstrAlt(y + 2,  60, flagsBought);
+			mvaddstrAlt(y + 2, 60, flagsBought);
 			addstrAlt(score[s].stat_buys);
-			mvaddstrAlt(y + 3,  60, flagsBurned);
+			mvaddstrAlt(y + 3, 60, flagsBurned);
 			addstrAlt(score[s].stat_burns);
 			y += 4;
 		}
 	}
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	//UNIVERSAL STATS
-	mvaddstrAlt(22,  0, univer);
-	mvaddstrAlt(23,  0, numRecruit);
+	mvaddstrAlt(22, 0, univer);
+	mvaddstrAlt(23, 0, numRecruit);
 	addstrAlt(ustat_recruits);
-	mvaddstrAlt(24,  0, numMartyr);
+	mvaddstrAlt(24, 0, numMartyr);
 	addstrAlt(ustat_dead);
-	mvaddstrAlt(23,  20, numKills);
+	mvaddstrAlt(23, 20, numKills);
 	addstrAlt(ustat_kills);
-	mvaddstrAlt(24,  20, numKidnap);
+	mvaddstrAlt(24, 20, numKidnap);
 	addstrAlt(ustat_kidnappings);
-	mvaddstrAlt(23,  40, cashTaxed);
+	mvaddstrAlt(23, 40, cashTaxed);
 	addstrAlt(ustat_funds);
-	mvaddstrAlt(24,  40, cashSpent);
+	mvaddstrAlt(24, 40, cashSpent);
 	addstrAlt(ustat_spent);
-	mvaddstrAlt(23,  60, flagsBought);
+	mvaddstrAlt(23, 60, flagsBought);
 	addstrAlt(ustat_buys);
-	mvaddstrAlt(24,  60, flagsBurned);
+	mvaddstrAlt(24, 60, flagsBurned);
 	addstrAlt(ustat_burns);
- 	pressAnyKey();
+	pressAnyKey();
 }
 MusicModes getEndingMusic(EndTypes e) {
 	switch (e)
@@ -337,7 +337,8 @@ void savehighscore(char endtype)
 	extern int month;
 	extern class Ledger ledger;
 	extern int version;
-	extern char slogan[SLOGAN_LEN];
+	//	extern char slogan[SLOGAN_LEN];
+	extern string slogan_str;
 	loadhighscores();
 	//MERGE THE STATS
 	ustat_recruits += stat_recruits;
@@ -350,24 +351,24 @@ void savehighscore(char endtype)
 	ustat_burns += stat_burns;
 	//PLACE THIS HIGH SCORE BY DATE IF NECESSARY
 	yourscore = -1;
-	for (int s = 0; s<SCORENUM; s++)
+	for (int s = 0; s < SCORENUM; s++)
 	{
-		if ((endtype == END_WON&&score[s].endtype == END_WON&&
+		if ((endtype == END_WON && score[s].endtype == END_WON &&
 			year == score[s].year&&month == score[s].month&&
-			ledger.total_expense + ledger.total_expense>score[s].stat_spent + score[s].stat_funds) ||
-			(endtype == END_WON&&score[s].endtype == END_WON
+			ledger.total_expense + ledger.total_expense > score[s].stat_spent + score[s].stat_funds) ||
+			(endtype == END_WON && score[s].endtype == END_WON
 				&& (year < score[s].year ||
-					(year == score[s].year && month<score[s].month))) ||
-			(endtype == END_WON&&score[s].endtype != END_WON) ||
-			(endtype != END_WON&&score[s].endtype != END_WON&&
-				ledger.total_expense + ledger.total_income>score[s].stat_spent + score[s].stat_funds) ||
+				(year == score[s].year && month < score[s].month))) ||
+					(endtype == END_WON && score[s].endtype != END_WON) ||
+			(endtype != END_WON && score[s].endtype != END_WON &&
+				ledger.total_expense + ledger.total_income > score[s].stat_spent + score[s].stat_funds) ||
 			score[s].valid == 0)
 		{
 			for (int s2 = SCORENUM - 1; s2 >= s + 1; s2--)
 			{
 				score[s2] = score[s2 - 1];
 			}
-			strcpy(score[s].slogan, slogan);
+			strcpy(score[s].slogan, slogan_str.c_str());
 			score[s].month = month;
 			score[s].year = year;
 			score[s].stat_recruits = stat_recruits;

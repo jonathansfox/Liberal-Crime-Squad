@@ -9,28 +9,28 @@ const string CONST_activities106 = " has ";
 const string CONST_activities121 = "!";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -92,8 +92,8 @@ const string tag_skill = "skill";
 #include "../combat/chaseCreature.h"
 //for void makechasers(long sitetype,long sitecrime);
 #include "../combat/fightCreature.h"  
-void makeloot(Creature &cr,vector<Item *> &loot);
-        
+void makeloot(Creature &cr, vector<Item *> &loot);
+
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
@@ -104,55 +104,55 @@ extern string singleDot;
 extern string spaceDashSpace;
 extern string singleDot;
 extern string singleSpace;
- vector<string> quality_0;
- vector<string> quality_20;
- vector<string> quality_35;
- vector<string> quality_50;
- vector<string> words_meaning_hacked;
- vector<string> enemy_website;
- vector<string> win_hand_to_hand;
- vector<string> lose_hand_to_hand;
- vector<string> car_wont_start;
- vector<string> gets_nervous;
- vector<string> cant_hotwire_car;
- vector<string> almost_hotwire_car;
- vector<string> cant_find_keys;
- vector<string> cant_find_keys_no_free_speech;
- map< Views, stringConnectedToView > pollingData;
- map< Activity, CreatureSkill> trainingActivity;
- const string activities = "activities\\";
+vector<string> quality_0;
+vector<string> quality_20;
+vector<string> quality_35;
+vector<string> quality_50;
+vector<string> words_meaning_hacked;
+vector<string> enemy_website;
+vector<string> win_hand_to_hand;
+vector<string> lose_hand_to_hand;
+vector<string> car_wont_start;
+vector<string> gets_nervous;
+vector<string> cant_hotwire_car;
+vector<string> almost_hotwire_car;
+vector<string> cant_find_keys;
+vector<string> cant_find_keys_no_free_speech;
+map< Views, stringConnectedToView > pollingData;
+map< Activity, CreatureSkill> trainingActivity;
+const string activities = "activities\\";
 
- const string CONST_activities022 = "cant_find_keys_no_free_speech.txt";
- const string CONST_activities021 = "cant_find_keys.txt";
- const string CONST_activities020 = "almost_hotwire_car.txt";
- const string CONST_activities019 = "cant_hotwire_car.txt";
- const string CONST_activities018 = "gets_nervous.txt";
- const string CONST_activities017 = "car_wont_start.txt";
- const string CONST_activities016 = "lose_hand_to_hand.txt";
- const string CONST_activities015 = "win_hand_to_hand.txt";
- const string CONST_activities014 = "enemy_website.txt";
- const string CONST_activities013 = "words_meaning_hacked.txt";
- const string CONST_activities012 = "quality_50.txt";
- const string CONST_activities011 = "quality_35.txt";
- const string CONST_activities010 = "quality_20.txt";
- const string CONST_activities009 = "quality_0.txt";
- vector<file_and_text_collection> activities_text_file_collection = {
-	 /*activities.cpp*/
-	 customText(&quality_0, activities + CONST_activities009),
-	 customText(&quality_20, activities + CONST_activities010),
-	 customText(&quality_35, activities + CONST_activities011),
-	 customText(&quality_50, activities + CONST_activities012),
-	 customText(&words_meaning_hacked, activities + CONST_activities013),
-	 customText(&enemy_website, activities + CONST_activities014),
-	 customText(&win_hand_to_hand, activities + CONST_activities015),
-	 customText(&lose_hand_to_hand, activities + CONST_activities016),
-	 customText(&car_wont_start, activities + CONST_activities017),
-	 customText(&gets_nervous, activities + CONST_activities018),
-	 customText(&cant_hotwire_car, activities + CONST_activities019),
-	 customText(&almost_hotwire_car, activities + CONST_activities020),
-	 customText(&cant_find_keys, activities + CONST_activities021),
-	 customText(&cant_find_keys_no_free_speech, activities + CONST_activities022),
- };
+const string CONST_activities022 = "cant_find_keys_no_free_speech.txt";
+const string CONST_activities021 = "cant_find_keys.txt";
+const string CONST_activities020 = "almost_hotwire_car.txt";
+const string CONST_activities019 = "cant_hotwire_car.txt";
+const string CONST_activities018 = "gets_nervous.txt";
+const string CONST_activities017 = "car_wont_start.txt";
+const string CONST_activities016 = "lose_hand_to_hand.txt";
+const string CONST_activities015 = "win_hand_to_hand.txt";
+const string CONST_activities014 = "enemy_website.txt";
+const string CONST_activities013 = "words_meaning_hacked.txt";
+const string CONST_activities012 = "quality_50.txt";
+const string CONST_activities011 = "quality_35.txt";
+const string CONST_activities010 = "quality_20.txt";
+const string CONST_activities009 = "quality_0.txt";
+vector<file_and_text_collection> activities_text_file_collection = {
+	/*activities.cpp*/
+	customText(&quality_0, activities + CONST_activities009),
+	customText(&quality_20, activities + CONST_activities010),
+	customText(&quality_35, activities + CONST_activities011),
+	customText(&quality_50, activities + CONST_activities012),
+	customText(&words_meaning_hacked, activities + CONST_activities013),
+	customText(&enemy_website, activities + CONST_activities014),
+	customText(&win_hand_to_hand, activities + CONST_activities015),
+	customText(&lose_hand_to_hand, activities + CONST_activities016),
+	customText(&car_wont_start, activities + CONST_activities017),
+	customText(&gets_nervous, activities + CONST_activities018),
+	customText(&cant_hotwire_car, activities + CONST_activities019),
+	customText(&almost_hotwire_car, activities + CONST_activities020),
+	customText(&cant_find_keys, activities + CONST_activities021),
+	customText(&cant_find_keys_no_free_speech, activities + CONST_activities022),
+};
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);
 void doActivitySellArt(vector<Creature *> &art, char &clearformess);
@@ -249,20 +249,20 @@ void repairarmor(Creature &cr, char &clearformess)
 	// Multiple passes, to find the best item to work on
 	if (cr.location != -1 && armor == NULL) {
 		findArmorToRepair(armor, pile, pileindex, pilelist, cr);
-		
+
 	}
 	if (clearformess) eraseAlt();
 	else makedelimiter();
 	if (armor == NULL)
 	{
-		mvaddstrAlt(8,  1, cr.name, gamelog);
+		mvaddstrAlt(8, 1, cr.name, gamelog);
 		stringAndMaybeTrain cleaningString = pickrandom(cleanSafeHouse);
 		addstrAlt(cleaningString.str, gamelog);
 		for (trainItem o : cleaningString.trainingItem) {
 			cr.train(o.whichSkill, o.experience, o.maxLevel);
 		}
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	else
 	{
@@ -360,7 +360,7 @@ void repairarmor(Creature &cr, char &clearformess)
 				delete_and_remove(*pilelist, pileindex);
 			}
 		}
- 	pressAnyKey();
+		pressAnyKey();
 	}
 }
 void addLootToLoc(int loc, Item* it);
@@ -390,10 +390,10 @@ void makearmor(Creature &cr, char &clearformess)
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, cr.name, gamelog);
+		mvaddstrAlt(8, 1, cr.name, gamelog);
 		addstrAlt(CONST_activities034, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		return;
 	}
 	else
@@ -419,10 +419,10 @@ void makearmor(Creature &cr, char &clearformess)
 			if (clearformess) eraseAlt();
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, cr.name, gamelog);
+			mvaddstrAlt(8, 1, cr.name, gamelog);
 			addstrAlt(CONST_activities035, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		else
 		{
@@ -436,7 +436,7 @@ void makearmor(Creature &cr, char &clearformess)
 			else makedelimiter();
 			Item *it = new Armor(at, quality);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, cr.name, gamelog);
+			mvaddstrAlt(8, 1, cr.name, gamelog);
 			if (quality <= ((Armor*)it)->get_quality_levels())
 			{
 				addstrAlt(CONST_activities036, gamelog);
@@ -458,12 +458,12 @@ void makearmor(Creature &cr, char &clearformess)
 			addstrAlt(armortype[at]->get_name(), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 }
 /* search for polls */
-			 map<short, string> supportsLiberalLaw;
+map<short, string> supportsLiberalLaw;
 void survey(Creature *cr)
 {
 	const string CONST_activities076 = "wanted amnesty for illegal immigrants";
@@ -535,10 +535,10 @@ void survey(Creature *cr)
 	for (int v = 0; v < VIEWNUM; v++)
 	{
 		survey[v] = attitude[v];
-		if (v != VIEW_LIBERALCRIMESQUAD&&v != VIEW_LIBERALCRIMESQUADPOS/*&&v!=VIEW_POLITICALVIOLENCE*/)
+		if (v != VIEW_LIBERALCRIMESQUAD && v != VIEW_LIBERALCRIMESQUADPOS/*&&v!=VIEW_POLITICALVIOLENCE*/)
 		{
 			if (maxview != -1) { if (public_interest[v] > public_interest[maxview]) maxview = v; }
-			else { if (public_interest[v]>0) maxview = v; }
+			else { if (public_interest[v] > 0) maxview = v; }
 		}
 		//MAKE SURVEY ACCURATE IF DEBUGGING
 		if (!SHOWMECHANICS) {
@@ -549,16 +549,16 @@ void survey(Creature *cr)
 		if (!SHOWMECHANICS) {
 			if (LCSrandom(public_interest[v] + 100) < int(misschance)) survey[v] = -1;
 		}
-		if (v == VIEW_LIBERALCRIMESQUAD&&attitude[v] == 0) survey[v] = -1;
-		if (v == VIEW_LIBERALCRIMESQUADPOS&&survey[VIEW_LIBERALCRIMESQUAD] <= 0) survey[v] = -1;
+		if (v == VIEW_LIBERALCRIMESQUAD && attitude[v] == 0) survey[v] = -1;
+		if (v == VIEW_LIBERALCRIMESQUADPOS && survey[VIEW_LIBERALCRIMESQUAD] <= 0) survey[v] = -1;
 	}
 	eraseAlt();
 	//TODO: Sort out the gamelog for this.
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, CONST_activities043);
+	mvaddstrAlt(0, 0, CONST_activities043);
 	int approval = presidentapproval();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2,  0, approval / 10 + (LCSrandom(noise * 2 + 1) - noise), gamelog);
+	mvaddstrAlt(2, 0, approval / 10 + (LCSrandom(noise * 2 + 1) - noise), gamelog);
 	addstrAlt(CONST_activities044);
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
 	addstrAlt(CONST_activities045);
@@ -568,7 +568,7 @@ void survey(Creature *cr)
 	//Top excitement issue
 	if (maxview != -1)
 	{
-		mvaddstrAlt(4,  0, CONST_activities046);
+		mvaddstrAlt(4, 0, CONST_activities046);
 		switch (maxview)
 		{
 			//case VIEW_POLITICALVIOLENCE:
@@ -610,17 +610,17 @@ void survey(Creature *cr)
 	}
 	else
 	{
-		mvaddstrAlt(4,  0, CONST_activities054);
+		mvaddstrAlt(4, 0, CONST_activities054);
 	}
 	//Header for issue box
-	mvaddstrAlt(6,  0, CONST_activities055);
-	mvaddstrAlt(7,  0, CONST_activities056);
+	mvaddstrAlt(6, 0, CONST_activities055);
+	mvaddstrAlt(7, 0, CONST_activities056);
 	//Footer
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23,  0, CONST_activities057);
+	mvaddstrAlt(23, 0, CONST_activities057);
 	addstrAlt(noise);
 	addstrAlt(CONST_activities058);
-	mvaddstrAlt(24,  0, CONST_activities059);
+	mvaddstrAlt(24, 0, CONST_activities059);
 	mvaddstrAlt(24, 40, addprevpagestr() + CONST_activities060 + addnextpagestr());
 	int page = 0;
 	const int maxpage = VIEWNUM / SURVEY_PAGE_SIZE;
@@ -632,15 +632,15 @@ void survey(Creature *cr)
 		//Start from the top
 		int y = 8;
 		//Draw each line
-		for (int v = page*SURVEY_PAGE_SIZE; v < (page + 1)*SURVEY_PAGE_SIZE; v++, y++)
+		for (int v = page * SURVEY_PAGE_SIZE; v < (page + 1)*SURVEY_PAGE_SIZE; v++, y++)
 		{
 			if (v >= VIEWNUM || (v == VIEW_CONSERVATIVECRIMESQUAD && (endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2)))
 			{
-				mvaddstrAlt(y,  0, CONST_activities061);
+				mvaddstrAlt(y, 0, CONST_activities061);
 				continue;
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y,  4, CONST_activities062);
+			mvaddstrAlt(y, 4, CONST_activities062);
 			if (noise >= 7 || survey[v] == -1) addstrAlt(CONST_activities063);
 			else if (noise >= 4)
 			{
@@ -706,12 +706,12 @@ void attemptarrest(Creature & liberal, const char* str, int clearformess)
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, liberal.name, gamelog);
+		mvaddstrAlt(8, 1, liberal.name, gamelog);
 		addstrAlt(CONST_activities077, gamelog);
 		addstrAlt(str, gamelog);
 		addstrAlt(CONST_activities121, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	// Chase sequence! Wee!
 	makechasers(-1, 5);
@@ -1029,7 +1029,7 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
 		brownies[s]->train(SKILL_BUSINESS, max(10 - brownies[s]->get_skill(SKILL_BUSINESS), 3));
 	}
 }
- vector<activityData> hackingActivities;
+vector<activityData> hackingActivities;
 #include "../items/lootTypePoolItem.h"
 void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 {
@@ -1115,10 +1115,10 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 			if (clearformess) eraseAlt();
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, msg, gamelog);
+			mvaddstrAlt(8, 1, msg, gamelog);
 			gamelog.nextMessage();
 			msg[0] = 0;
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		//CREDIT CARD FRAUD
 		for (int h = 0; h < len(cc); h++)
@@ -1134,14 +1134,14 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 				// up to 20 times, at which point the loop breaks. The skill check
 				// here doesn't take into account funding.
 				int fundgain = LCSrandom(101);
-				while (difficulty<hack_skill)
+				while (difficulty < hack_skill)
 				{
 					fundgain += LCSrandom(51);
 					difficulty += 2;
 				}
 				ledger.add_funds(fundgain, INCOME_CCFRAUD);
 				cc[h]->income = fundgain / len(cc);
-				if (fundgain / 25>LCSrandom(hack_skill + 1))
+				if (fundgain / 25 > LCSrandom(hack_skill + 1))
 					criminalize(*cc[h], LAWFLAG_CCFRAUD);
 			}
 			if (msg[0])
@@ -1149,10 +1149,10 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, msg, gamelog); //TODO: Log this?
+				mvaddstrAlt(8, 1, msg, gamelog); //TODO: Log this?
 				gamelog.nextMessage();
 				msg[0] = 0;
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 	}
@@ -1189,7 +1189,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
+				mvaddstrAlt(8, 1, graffiti[s]->name, gamelog);
 				//Check base inventory for a spraycan
 				bool foundone = false;
 				string gottaCan = gimmeASprayCan(graffiti[s]);
@@ -1207,14 +1207,14 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				{
 					ledger.subtract_funds(20, EXPENSE_SHOPPING);
 					addstrAlt(CONST_activities091, gamelog);
-			 	pressAnyKey();
-				buyMeASprayCan(graffiti[s]);
+					pressAnyKey();
+					buyMeASprayCan(graffiti[s]);
 				}
 				else if (!foundone)
 				{
 					addstrAlt(CONST_activities092, gamelog);
 					graffiti[s]->activity.type = ACTIVITY_NONE;
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 				gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
 			}
@@ -1227,7 +1227,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
+				mvaddstrAlt(8, 1, graffiti[s]->name, gamelog);
 				addstrAlt(CONST_activities093, gamelog);
 				criminalize(*graffiti[s], LAWFLAG_VANDALISM);
 				graffiti[s]->train(SKILL_STREETSENSE, 20);
@@ -1244,7 +1244,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				ns->positive = 0;
 				newsstory.push_back(ns);
 				sitestory = ns;
-		 	pressAnyKey();
+				pressAnyKey();
 				attemptarrest(*graffiti[s], NULL, clearformess);
 			}
 			else if (graffiti[s]->activity.arg != -1)
@@ -1255,7 +1255,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 					issue = graffiti[s]->activity.arg;
 					power = graffiti[s]->skill_roll(SKILL_ART) / 3;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
+					mvaddstrAlt(8, 1, graffiti[s]->name, gamelog);
 					addstrAlt(CONST_activities096, gamelog);
 					if (power > 3)addstrAlt(CONST_activities097, gamelog);
 					addstrAlt(CONST_activities098, gamelog);
@@ -1266,24 +1266,24 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 					addjuice(*graffiti[s], power, power * 20);
 					change_public_opinion(issue, power);
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 				else
 				{
 					power = 0;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
+					mvaddstrAlt(8, 1, graffiti[s]->name, gamelog);
 					addstrAlt(CONST_activities099, gamelog);
 					gamelog.nextMessage();
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			else if (!LCSrandom(max(30 - graffiti[s]->get_skill(SKILL_ART) * 2, 5)))
 			{
 				issue = randomissue();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, graffiti[s]->name, gamelog);
+				mvaddstrAlt(8, 1, graffiti[s]->name, gamelog);
 				addstrAlt(CONST_activities100, gamelog);
 				addstrAlt(getview(issue, false), gamelog);
 				addstrAlt(singleDot, gamelog);
@@ -1291,7 +1291,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 				graffiti[s]->activity.arg = issue;
 				power = 0;
 				graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			graffiti[s]->train(SKILL_ART, max(4 - graffiti[s]->get_skill(SKILL_ART), 0));
 			if (issue == VIEW_LIBERALCRIMESQUAD)
@@ -1345,11 +1345,11 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, prostitutes[p]->name, gamelog);
+				mvaddstrAlt(8, 1, prostitutes[p]->name, gamelog);
 				addstrAlt(CONST_activities101, gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], -7, -30);
-		 	pressAnyKey();
+				pressAnyKey();
 				caught = 1;
 				removesquadinfo(*prostitutes[p]);
 				prostitutes[p]->carid = -1;
@@ -1363,11 +1363,11 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, prostitutes[p]->name, gamelog);
+				mvaddstrAlt(8, 1, prostitutes[p]->name, gamelog);
 				addstrAlt(CONST_activities102, gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], 5, 0);
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 		if (!caught)
@@ -1406,12 +1406,12 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
 		{
 			students[s]->activity.type = ACTIVITY_NONE;
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8,  1, students[s]->name, gamelog);
+			mvaddstrAlt(8, 1, students[s]->name, gamelog);
 			addstrAlt(CONST_activities103, gamelog);
 			addstrAlt(students[s]->heshe(), gamelog);
 			addstrAlt(CONST_activities104, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 }
@@ -1622,7 +1622,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 			}
 		} while (!done);
 		gamelog.nextMessage(); //Do this now so that it doesn't have to be done in every case up there.
- 	pressAnyKey();
+		pressAnyKey();
 		if (crime != 0)
 		{
 			for (int t = 0; t < len(trouble); t++)
@@ -1645,28 +1645,28 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 					else
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+						mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 						addstrAlt(CONST_activities119, gamelog);
 						gamelog.nextMessage();
-				 	pressAnyKey();
+						pressAnyKey();
 						bool wonfight = false;
 						if (trouble[t]->get_weapon().is_threatening())
 						{
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+							mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 							addstrAlt(CONST_activities120, gamelog);
 							addstrAlt(trouble[t]->get_weapon().get_name(), gamelog);
 							addstrAlt(CONST_activities121, gamelog);
 							gamelog.nextMessage();
-					 	pressAnyKey();
+							pressAnyKey();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(8,  1, CONST_activities122, gamelog);
+							mvaddstrAlt(8, 1, CONST_activities122, gamelog);
 							gamelog.nextMessage();
-					 	pressAnyKey();
+							pressAnyKey();
 							addjuice(*trouble[t], 5, 20);
 							wonfight = true;
 						}
@@ -1679,21 +1679,21 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 								if (trouble[t]->skill_roll(SKILL_HANDTOHAND) > LCSrandom(6) + count)
 								{
 									set_color_easy(CYAN_ON_BLACK_BRIGHT);
-									mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+									mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 									addstrAlt(singleSpace, gamelog);
 									addstrAlt(pickrandom(win_hand_to_hand), gamelog);
 									gamelog.nextMessage();
-							 	pressAnyKey();
+									pressAnyKey();
 									wonfight = true;
 								}
 								else
 								{
 									set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-									mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+									mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 									addstrAlt(singleSpace, gamelog);
 									addstrAlt(pickrandom(lose_hand_to_hand), gamelog);
 									gamelog.nextMessage();
-							 	pressAnyKey();
+									pressAnyKey();
 									count++; // fight goes faster when you're losing
 									wonfight = false;
 								}
@@ -1703,14 +1703,14 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 								if (clearformess) eraseAlt();
 								else makedelimiter();
 								set_color_easy(GREEN_ON_BLACK_BRIGHT);
-								mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+								mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 								addstrAlt(CONST_activities123, gamelog);
 								if (lawList[LAW_FREESPEECH] == -2)
 									addstrAlt(CONST_activities124, gamelog);
 								else addstrAlt(CONST_activities125, gamelog);
 								addstrAlt(CONST_activities126, gamelog);
 								gamelog.nextMessage();
-						 	pressAnyKey();
+								pressAnyKey();
 								addjuice(*trouble[t], 30, 300);
 								if (trouble[t]->blood > 70)trouble[t]->blood = 70;
 							}
@@ -1720,11 +1720,11 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(RED_ON_BLACK_BRIGHT);
-							mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+							mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 							addstrAlt(CONST_activities127, gamelog);
 							gamelog.nextMessage();
 							trouble[t]->activity.type = ACTIVITY_CLINIC;
-					 	pressAnyKey();
+							pressAnyKey();
 							addjuice(*trouble[t], -10, -50);
 							if (trouble[t]->blood > 10)trouble[t]->blood = 10;
 							if (!LCSrandom(5))
@@ -1736,42 +1736,42 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 								case 0:
 									if (trouble[t]->special[SPECIALWOUND_LOWERSPINE] == 1)
 									{
-										mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+										mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 										addstrAlt(CONST_activities128, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_LOWERSPINE] = 0;
-								 	pressAnyKey();
+										pressAnyKey();
 									}
 									break;
 								case 1:
 									if (trouble[t]->special[SPECIALWOUND_UPPERSPINE] == 1)
 									{
-										mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+										mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 										addstrAlt(CONST_activities129, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_UPPERSPINE] = 0;
-								 	pressAnyKey();
+										pressAnyKey();
 									}
 									break;
 								case 2:
 									if (trouble[t]->special[SPECIALWOUND_NECK] == 1)
 									{
-										mvaddstrAlt(8,  1, trouble[t]->name, gamelog);
+										mvaddstrAlt(8, 1, trouble[t]->name, gamelog);
 										addstrAlt(CONST_activities130, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_NECK] = 0;
-								 	pressAnyKey();
+										pressAnyKey();
 									}
 									break;
 								case 3:
 									if (trouble[t]->special[SPECIALWOUND_TEETH] > 0)
 									{
-										mvaddstrAlt(8,  1, trouble[t]->name);
+										mvaddstrAlt(8, 1, trouble[t]->name);
 										if (trouble[t]->special[SPECIALWOUND_TEETH] > 1)addstrAlt(CONST_activities131, gamelog);
 										else addstrAlt(CONST_activities132, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_TEETH] = 0;
-								 	pressAnyKey();
+										pressAnyKey();
 									}
 									break;
 								default:
@@ -1803,7 +1803,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 										}
 										addstrAlt(CONST_activities139, gamelog);
 										gamelog.nextMessage();
-								 	pressAnyKey();
+										pressAnyKey();
 										trouble[t]->special[SPECIALWOUND_RIBS] -= ribminus;
 									}
 									break;
@@ -2036,9 +2036,9 @@ bool carselect(Creature &cr, short &cartype)
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(cart)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(cart)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -2130,21 +2130,21 @@ bool stealcar(Creature &cr, char &clearformess)
 		//THEFT SEQUENCE
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_activities178, gamelog);
+		mvaddstrAlt(0, 0, CONST_activities178, gamelog);
 		gamelog.nextMessage();
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10,  0, cr.name, gamelog);
+		mvaddstrAlt(10, 0, cr.name, gamelog);
 		addstrAlt(CONST_activities147, gamelog);
- 	pressAnyKey();
+		pressAnyKey();
 		//ROUGH DAY
 		if (!cr.skill_check(SKILL_STREETSENSE, diff))
 			do cartype = LCSrandom(lenVehicleType());
 		while (cartype == old || LCSrandom(10) < steal_difficultytofind(cartype));
 		v = getVehicleOfThisType(cartype);
 		string carname = v->fullname();
-		mvaddstrAlt(11,  0, cr.name, gamelog);
+		mvaddstrAlt(11, 0, cr.name, gamelog);
 		if (old != cartype)
 		{
 			addstrAlt(CONST_activities148, gamelog);
@@ -2155,21 +2155,21 @@ bool stealcar(Creature &cr, char &clearformess)
 		addstrAlt(v->longname(), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		//APPROACH?
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_activities178);
+		mvaddstrAlt(0, 0, CONST_activities178);
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10,  0, cr.name, gamelog);
+		mvaddstrAlt(10, 0, cr.name, gamelog);
 		addstrAlt(CONST_activities152, gamelog);
 		addstrAlt(carname, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
-		mvaddstrAlt(12,  0, CONST_activities153);
-		mvaddstrAlt(13,  0, CONST_activities186);
+		mvaddstrAlt(12, 0, CONST_activities153);
+		mvaddstrAlt(13, 0, CONST_activities186);
 		while (true)
 		{
 			int c = getkeyAlt();
@@ -2184,7 +2184,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_activities178);
+			mvaddstrAlt(0, 0, CONST_activities178);
 			printcreatureinfo(&cr);
 			makedelimiter();
 			if (alarmon)
@@ -2201,7 +2201,7 @@ bool stealcar(Creature &cr, char &clearformess)
 			else if (sensealarm)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10,  0, CONST_activities160);
+				mvaddstrAlt(10, 0, CONST_activities160);
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(CONST_activities161, gamelog);
 				gamelog.nextMessage();
@@ -2209,16 +2209,16 @@ bool stealcar(Creature &cr, char &clearformess)
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10,  0, cr.name, gamelog);
+				mvaddstrAlt(10, 0, cr.name, gamelog);
 				addstrAlt(CONST_activities162, gamelog);
 				addstrAlt(carname, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(12,  0, CONST_activities163);
+			mvaddstrAlt(12, 0, CONST_activities163);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(13,  0, CONST_activities164);
+			mvaddstrAlt(13, 0, CONST_activities164);
 			moveAlt(14, 0);
 			if (!sensealarm)addstrAlt(CONST_activities186);
 			else
@@ -2259,19 +2259,19 @@ bool stealcar(Creature &cr, char &clearformess)
 						cr.train(SKILL_SECURITY, 0); break;
 					}
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  0, cr.name, gamelog);
+					mvaddstrAlt(16, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities169, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 					entered = true;
 				}
 				else
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  0, cr.name, gamelog);
+					mvaddstrAlt(16, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities170, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			//BREAK WINDOW
@@ -2281,7 +2281,7 @@ bool stealcar(Creature &cr, char &clearformess)
 				if (cr.attribute_check(ATTRIBUTE_STRENGTH, difficulty))
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  0, cr.name, gamelog);
+					mvaddstrAlt(16, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities171, gamelog);
 					if (cr.get_weapon().get_bashstrengthmod() > 1)
 					{
@@ -2291,13 +2291,13 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
 					windowdamage = 10;
-			 	pressAnyKey();
+					pressAnyKey();
 					entered = true;
 				}
 				else
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  0, cr.name, gamelog);
+					mvaddstrAlt(16, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities173, gamelog);
 					if (cr.get_weapon().get_bashstrengthmod() > 1)
 					{
@@ -2307,7 +2307,7 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(CONST_activities175, gamelog);
 					gamelog.nextMessage();
 					windowdamage++;
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			//ALARM CHECK
@@ -2317,9 +2317,9 @@ bool stealcar(Creature &cr, char &clearformess)
 				if (!alarmon)
 				{
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++,  0, CONST_activities176, gamelog);
+					mvaddstrAlt(y++, 0, CONST_activities176, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 					alarmon = true;
 				}
 			}
@@ -2327,10 +2327,10 @@ bool stealcar(Creature &cr, char &clearformess)
 			if (!LCSrandom(50) || (!LCSrandom(5) && alarmon))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++,  0, cr.name, gamelog);
+				mvaddstrAlt(y++, 0, cr.name, gamelog);
 				addstrAlt(CONST_activities202, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				//FOOT CHASE
 				chaseseq.clean();
 				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
@@ -2358,12 +2358,12 @@ bool stealcar(Creature &cr, char &clearformess)
 			nervous_counter++;
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_activities178);
+			mvaddstrAlt(0, 0, CONST_activities178);
 			printcreatureinfo(&cr);
 			makedelimiter();
 			int y = 10;
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, cr.name, gamelog);
+			mvaddstrAlt(y++, 0, cr.name, gamelog);
 			addstrAlt(CONST_activities179, gamelog);
 			addstrAlt(carname, gamelog);
 			addstrAlt(singleDot, gamelog);
@@ -2380,9 +2380,9 @@ bool stealcar(Creature &cr, char &clearformess)
 				else addstrAlt(CONST_activities183);
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt((++y)++,  0, CONST_activities184);
+			mvaddstrAlt((++y)++, 0, CONST_activities184);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++,  0, CONST_activities185);
+			mvaddstrAlt(y++, 0, CONST_activities185);
 			moveAlt(y++, 0);
 			if (!sensealarm)addstrAlt(CONST_activities186);
 			else { addstrAlt(CONST_activities187); addstrAlt(cr.name); addstrAlt(singleDot); }
@@ -2410,16 +2410,16 @@ bool stealcar(Creature &cr, char &clearformess)
 						cr.train(SKILL_SECURITY, 0); break;
 					}
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++,  0, cr.name, gamelog);
+					mvaddstrAlt(y++, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities188, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 					started = true;
 				}
 				else
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++,  0, cr.name, gamelog);
+					mvaddstrAlt(y++, 0, cr.name, gamelog);
 					int flavor_text;
 					if (cr.get_skill(SKILL_SECURITY) < 4)
 						addstrAlt(pickrandom(cant_hotwire_car));
@@ -2432,7 +2432,7 @@ bool stealcar(Creature &cr, char &clearformess)
 						}
 					}
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			//KEYS
@@ -2479,14 +2479,14 @@ bool stealcar(Creature &cr, char &clearformess)
 					addstrAlt(CONST_activities197, gamelog);
 					addstrAlt(location, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 					started = true;
 				}
 				else
 				{
 					key_search_total++;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++,  0, cr.name, gamelog);
+					mvaddstrAlt(y++, 0, cr.name, gamelog);
 					addstrAlt(CONST_activities198, gamelog);
 					set_color_easy(GREEN_ON_BLACK_BRIGHT);
 					if (key_search_total == 5)
@@ -2509,17 +2509,17 @@ bool stealcar(Creature &cr, char &clearformess)
 						}
 					}
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			//NOTICE CHECK
 			if (!started && (!LCSrandom(50) || (!LCSrandom(5) && alarmon)))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++,  0, cr.name, gamelog);
+				mvaddstrAlt(y++, 0, cr.name, gamelog);
 				addstrAlt(CONST_activities202, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				//FOOT CHASE
 				chaseseq.clean();
 				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
@@ -2547,7 +2547,7 @@ bool stealcar(Creature &cr, char &clearformess)
 				addstrAlt(singleSpace, gamelog);
 				addstrAlt(pickrandom(gets_nervous), gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 		//CHASE SEQUENCE
@@ -2565,7 +2565,7 @@ bool stealcar(Creature &cr, char &clearformess)
 		chaseseq.clean();
 		chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
 		int chaselev = !LCSrandom(13 - windowdamage);
-		if (chaselev > 0 || (v->vtypeidname() == tag_POLICECAR&&LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
+		if (chaselev > 0 || (v->vtypeidname() == tag_POLICECAR && LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
 		{
 			v->add_heat(10);
 			chaselev = 1;
@@ -2592,16 +2592,16 @@ void getwheelchair(Creature &cr, char &clearformess)
 	if (LCSrandom(2))
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, cr.name, gamelog);
+		mvaddstrAlt(8, 1, cr.name, gamelog);
 		addstrAlt(CONST_activities203, gamelog);
 		cr.flag |= CREATUREFLAG_WHEELCHAIR;
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, cr.name, gamelog);
+		mvaddstrAlt(8, 1, cr.name, gamelog);
 		addstrAlt(CONST_activities204, gamelog);
 	}
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 }

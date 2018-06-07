@@ -174,28 +174,28 @@ const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string blankString = "";
 const string tag_value = "value";
@@ -217,950 +217,950 @@ int scare_factor(int lawflag, int crimenumber);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../common/creaturePoolCreature.h"
- vector<string> liberal_jury;
- vector<string> conservative_jury;
- vector<string> cruel_and_unusual_execution_methods;
- vector<string> standard_execution_methods;
- vector<string> supposedly_painless_execution_method;
- vector<string> reeducation_experiences;
- vector<string> labor_camp_experiences;
- vector<string> good_experiences;
- vector<string> bad_experiences;
- vector<string> general_experiences;
+vector<string> liberal_jury;
+vector<string> conservative_jury;
+vector<string> cruel_and_unusual_execution_methods;
+vector<string> standard_execution_methods;
+vector<string> supposedly_painless_execution_method;
+vector<string> reeducation_experiences;
+vector<string> labor_camp_experiences;
+vector<string> good_experiences;
+vector<string> bad_experiences;
+vector<string> general_experiences;
 #include "../customMaps.h"
- const string justice = "justice\\";
- vector<file_and_text_collection> justice_text_file_collection = {
-	 /*justice.cpp*/
-	 customText(&liberal_jury, justice + CONST_justice007),
-	 customText(&conservative_jury, justice + CONST_justice008),
-	 customText(&cruel_and_unusual_execution_methods, justice + CONST_justice009),
-	 customText(&standard_execution_methods, justice + CONST_justice010),
-	 customText(&supposedly_painless_execution_method, justice + CONST_justice011),
-	 customText(&reeducation_experiences, justice + CONST_justice012),
-	 customText(&labor_camp_experiences, justice + CONST_justice013),
-	 customText(&good_experiences, justice + CONST_justice014),
-	 customText(&bad_experiences, justice + CONST_justice015),
-	 customText(&general_experiences, justice + CONST_justice016),
- };
+const string justice = "justice\\";
+vector<file_and_text_collection> justice_text_file_collection = {
+	/*justice.cpp*/
+	customText(&liberal_jury, justice + CONST_justice007),
+	customText(&conservative_jury, justice + CONST_justice008),
+	customText(&cruel_and_unusual_execution_methods, justice + CONST_justice009),
+	customText(&standard_execution_methods, justice + CONST_justice010),
+	customText(&supposedly_painless_execution_method, justice + CONST_justice011),
+	customText(&reeducation_experiences, justice + CONST_justice012),
+	customText(&labor_camp_experiences, justice + CONST_justice013),
+	customText(&good_experiences, justice + CONST_justice014),
+	customText(&bad_experiences, justice + CONST_justice015),
+	customText(&general_experiences, justice + CONST_justice016),
+};
 #include "../common/musicClass.h"
- string counts_of; 
+string counts_of;
 extern string string_sleeper;
 extern string singleDot;
 extern string AND;
 extern string commaSpace;
 extern string singleSpace;
- string execution_in_three_months;
+string execution_in_three_months;
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
- /* monthly - sentence a liberal */
- void penalize(Creature &g, char lenient)
- {
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
-	 set_color_easy(RED_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
-	 gamelog.newline();
- 	pressAnyKey();
-	 short oldsentence = g.sentence;
-	 char olddeathpenalty = g.deathpenalty;
-	 g.sentence = 0, g.deathpenalty = 0;
-	 if (!lenient && ((g.crimes_suspected[LAWFLAG_MURDER]) || (g.crimes_suspected[LAWFLAG_TREASON]) ||
-		 ((g.crimes_suspected[LAWFLAG_BURNFLAG]) && lawList[LAW_FLAGBURNING] == -2) ||
-		 lawList[LAW_DEATHPENALTY] == -2))
-	 {
-		 if (lawList[LAW_DEATHPENALTY] == -2) g.deathpenalty = 1;
-		 if (lawList[LAW_DEATHPENALTY] == -1) g.deathpenalty = LCSrandom(3);
-		 if (lawList[LAW_DEATHPENALTY] == 0) g.deathpenalty = LCSrandom(2);
-		 if (lawList[LAW_DEATHPENALTY] == 1) g.deathpenalty = !LCSrandom(5);
-		 if (lawList[LAW_DEATHPENALTY] == 2) g.deathpenalty = 0;
-	 }
-	 for (int l = 0; l < LAWFLAGNUM; l++) if (g.crimes_suspected[l]>10) g.crimes_suspected[l] = 10;
-	 //CALC TIME
-	 if (!g.deathpenalty)
-	 {
-		 if (!(g.sentence < 0))
-		 {
-			 g.sentence += (36 + LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
-			 g.sentence += (1 + LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
-			 //g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
-			 //            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
-			 //g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
-			 g.sentence += (6 + LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
-			 g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
-			 g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
-			 g.sentence += (6 + LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
-			 g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
-			 g.sentence += (1 + LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
-			 g.sentence += 1 * g.crimes_suspected[LAWFLAG_DISTURBANCE];
-			 g.sentence += 1 * g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
-			 //g.sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
-			 g.sentence += 1 * g.crimes_suspected[LAWFLAG_HIREILLEGAL];
-			 g.sentence += (12 + LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
-			 // How illegal is marijuana?
-			 if (lawList[LAW_DRUGS] == -2) g.sentence += (3 + LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
-			 else if (lawList[LAW_DRUGS] == -1) g.sentence += (3 + LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
-			 else if (lawList[LAW_DRUGS] == 0) g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
-																													   // else not illegal
-			 g.sentence += 1 * g.crimes_suspected[LAWFLAG_BREAKING];
-			 g.sentence += (60 + LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
-			 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
-			 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
-			 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
-			 g.sentence += (3 + LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
-			 g.sentence += (1 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
-			 g.sentence += (6 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
-			 g.sentence += (4 + LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
-			 g.sentence += 1 * g.crimes_suspected[LAWFLAG_VANDALISM];
-			 g.sentence += (12 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
-			 g.sentence += (12 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
-			 g.sentence += (3 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
-		 }
-		 if (lawList[LAW_FLAGBURNING] == -2)
-		 {
-			 if (!LCSrandom(2)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
-			 else if (g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence = -1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
-		 }
-		 else if (lawList[LAW_FLAGBURNING] == -1) g.sentence += 36 * g.crimes_suspected[LAWFLAG_BURNFLAG];
-		 else if (lawList[LAW_FLAGBURNING] == 0) g.sentence += 1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
-		 if ((LCSrandom(4) - g.crimes_suspected[LAWFLAG_MURDER]) > 0)
-		 {
-			 if (!(g.sentence < 0)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
-		 }
-		 else
-		 {
-			 if (g.sentence < 0) g.sentence -= -1 * g.crimes_suspected[LAWFLAG_MURDER];
-			 else if (g.crimes_suspected[LAWFLAG_MURDER])
-				 g.sentence = -1 * g.crimes_suspected[LAWFLAG_MURDER];
-		 }
-		 if (g.sentence < 0) g.sentence -= 1 * g.crimes_suspected[LAWFLAG_TREASON];
-		 else if (g.crimes_suspected[LAWFLAG_TREASON]) g.sentence = -1 * g.crimes_suspected[LAWFLAG_TREASON];
-		 if (lenient&&g.sentence != -1) g.sentence /= 2;
-		 if (lenient&&g.sentence == -1) g.sentence = 240 + LCSrandom(120);
-	 }
-	 //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
-	 else if (g.deathpenalty&&lenient) g.deathpenalty = 0, g.sentence = -1;
-	 //MENTION LENIENCY
-	 if (lenient)
-	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(5, 1, CONST_justice018, gamelog);
-		 gamelog.newline();
-	 	pressAnyKey();
-	 }
-	 //MENTION SENTENCE
-	 if (olddeathpenalty)
-	 {
-		 g.deathpenalty = 1;
-		 g.sentence = 3;
-		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice019, gamelog);
-		 gamelog.newline();
-	 	pressAnyKey();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
-	 	pressAnyKey();
-	 }
-	 else if (g.deathpenalty)
-	 {
-		 g.sentence = 3;
-		 set_color_easy(YELLOW_ON_RED_BRIGHT);
-		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice020, gamelog);
-		 gamelog.newline();
-	 	pressAnyKey();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
-	 	pressAnyKey();
-	 }
-	 // Don't give a time-limited sentence if they already have a life sentence.
-	 else if ((g.sentence >= 0 && oldsentence < 0) ||
-		 (g.sentence == 0 && oldsentence>0))
-	 {
-		 g.sentence = oldsentence;
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice021, gamelog);
-		 mvaddstrAlt(8, 1, CONST_justice022, gamelog);
-		 if (g.sentence > 1 && lenient)
-		 {
-			 g.sentence--;
-			 addstrAlt(CONST_justice141, gamelog);
-		 }
-		 else addstrAlt(singleDot, gamelog);
-	 	pressAnyKey();
-	 }
-	 else if (g.sentence == 0)
-	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice024, gamelog);
-	 	pressAnyKey();
-	 }
-	 else
-	 {
-		 if (g.sentence >= 36)g.sentence -= g.sentence % 12;
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice025, gamelog);
-		 if (g.sentence > 1200) g.sentence /= -1200;
-		 if (g.sentence <= -1)
-		 {
-			 if (g.sentence < -1)
-			 {
-				 addstrAlt(-(g.sentence), gamelog);
-				 addstrAlt(CONST_justice026, gamelog);
-				 gamelog.newline();
-				 // Don't bother saying this if the convicted already has one or
-				 // more life sentences. Makes the 'consecutively' and 'concurrently'
-				 // statements later easier to tack on.
-				 if (oldsentence >= 0)
-				 {
-					 addstrAlt(singleDot, gamelog);
-				 	pressAnyKey();
-					 mvaddstrAlt(9, 1, CONST_justice027, gamelog);
-					 addstrAlt(g.propername, gamelog);
-				 }
-			 }
-			 else addstrAlt(CONST_justice028, gamelog);
-		 }
-		 else if (g.sentence >= 36)
-		 {
-			 addstrAlt(g.sentence / 12, gamelog);
-			 addstrAlt(CONST_justice029, gamelog);
-		 }
-		 else
-		 {
-			 addstrAlt(g.sentence, gamelog);
-			 addstrAlt(CONST_justice030, gamelog);
-			 if (g.sentence > 1)addstrAlt(CONST_justice031, gamelog);
-			 addstrAlt(CONST_justice032, gamelog);
-		 }
-		 // Mash together compatible sentences.
-		 if ((g.sentence > 0 && oldsentence > 0) ||
-			 (g.sentence < 0 && oldsentence < 0))
-		 {
-			 addstrAlt(CONST_justice033, gamelog);
-			 moveAlt(8, 1);
-			 if (lenient)
-			 {
-				 if (abs(oldsentence) > abs(g.sentence))
-					 g.sentence = oldsentence;
-				 addstrAlt(CONST_justice034, gamelog);
-			 }
-			 else
-			 {
-				 g.sentence += oldsentence;
-				 addstrAlt(CONST_justice035, gamelog);
-			 }
-		 }
-		 addstrAlt(singleDot, gamelog);
-		 //dejuice boss
-		 dejuiceBoss(g);
-	 	pressAnyKey();
-	 }
-	 gamelog.nextMessage();
- }
- /* monthly - move a liberal to jail */
- void imprison(Creature &g)
- {
-	 g.location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().getLocationCity(g.location));
- }
- int listAllCrimes(Creature &g) {
+/* monthly - sentence a liberal */
+void penalize(Creature &g, char lenient)
+{
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(3, 1, CONST_justice017, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	short oldsentence = g.sentence;
+	char olddeathpenalty = g.deathpenalty;
+	g.sentence = 0, g.deathpenalty = 0;
+	if (!lenient && ((g.crimes_suspected[LAWFLAG_MURDER]) || (g.crimes_suspected[LAWFLAG_TREASON]) ||
+		((g.crimes_suspected[LAWFLAG_BURNFLAG]) && lawList[LAW_FLAGBURNING] == -2) ||
+		lawList[LAW_DEATHPENALTY] == -2))
+	{
+		if (lawList[LAW_DEATHPENALTY] == -2) g.deathpenalty = 1;
+		if (lawList[LAW_DEATHPENALTY] == -1) g.deathpenalty = LCSrandom(3);
+		if (lawList[LAW_DEATHPENALTY] == 0) g.deathpenalty = LCSrandom(2);
+		if (lawList[LAW_DEATHPENALTY] == 1) g.deathpenalty = !LCSrandom(5);
+		if (lawList[LAW_DEATHPENALTY] == 2) g.deathpenalty = 0;
+	}
+	for (int l = 0; l < LAWFLAGNUM; l++) if (g.crimes_suspected[l] > 10) g.crimes_suspected[l] = 10;
+	//CALC TIME
+	if (!g.deathpenalty)
+	{
+		if (!(g.sentence < 0))
+		{
+			g.sentence += (36 + LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
+			g.sentence += (1 + LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
+			//g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
+			//            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
+			//g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
+			g.sentence += (6 + LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
+			g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
+			g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
+			g.sentence += (6 + LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
+			g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
+			g.sentence += (1 + LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
+			g.sentence += 1 * g.crimes_suspected[LAWFLAG_DISTURBANCE];
+			g.sentence += 1 * g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
+			//g.sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
+			g.sentence += 1 * g.crimes_suspected[LAWFLAG_HIREILLEGAL];
+			g.sentence += (12 + LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
+			// How illegal is marijuana?
+			if (lawList[LAW_DRUGS] == -2) g.sentence += (3 + LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
+			else if (lawList[LAW_DRUGS] == -1) g.sentence += (3 + LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
+			else if (lawList[LAW_DRUGS] == 0) g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
+																													  // else not illegal
+			g.sentence += 1 * g.crimes_suspected[LAWFLAG_BREAKING];
+			g.sentence += (60 + LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
+			g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
+			g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
+			g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
+			g.sentence += (3 + LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
+			g.sentence += (1 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
+			g.sentence += (6 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
+			g.sentence += (4 + LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
+			g.sentence += 1 * g.crimes_suspected[LAWFLAG_VANDALISM];
+			g.sentence += (12 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
+			g.sentence += (12 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
+			g.sentence += (3 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
+		}
+		if (lawList[LAW_FLAGBURNING] == -2)
+		{
+			if (!LCSrandom(2)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
+			else if (g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence = -1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+		}
+		else if (lawList[LAW_FLAGBURNING] == -1) g.sentence += 36 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+		else if (lawList[LAW_FLAGBURNING] == 0) g.sentence += 1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+		if ((LCSrandom(4) - g.crimes_suspected[LAWFLAG_MURDER]) > 0)
+		{
+			if (!(g.sentence < 0)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
+		}
+		else
+		{
+			if (g.sentence < 0) g.sentence -= -1 * g.crimes_suspected[LAWFLAG_MURDER];
+			else if (g.crimes_suspected[LAWFLAG_MURDER])
+				g.sentence = -1 * g.crimes_suspected[LAWFLAG_MURDER];
+		}
+		if (g.sentence < 0) g.sentence -= 1 * g.crimes_suspected[LAWFLAG_TREASON];
+		else if (g.crimes_suspected[LAWFLAG_TREASON]) g.sentence = -1 * g.crimes_suspected[LAWFLAG_TREASON];
+		if (lenient&&g.sentence != -1) g.sentence /= 2;
+		if (lenient&&g.sentence == -1) g.sentence = 240 + LCSrandom(120);
+	}
+	//LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
+	else if (g.deathpenalty&&lenient) g.deathpenalty = 0, g.sentence = -1;
+	//MENTION LENIENCY
+	if (lenient)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(5, 1, CONST_justice018, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+	}
+	//MENTION SENTENCE
+	if (olddeathpenalty)
+	{
+		g.deathpenalty = 1;
+		g.sentence = 3;
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(7, 1, g.propername, gamelog);
+		addstrAlt(CONST_justice019, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
+		pressAnyKey();
+	}
+	else if (g.deathpenalty)
+	{
+		g.sentence = 3;
+		set_color_easy(YELLOW_ON_RED_BRIGHT);
+		mvaddstrAlt(7, 1, g.propername, gamelog);
+		addstrAlt(CONST_justice020, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
+		pressAnyKey();
+	}
+	// Don't give a time-limited sentence if they already have a life sentence.
+	else if ((g.sentence >= 0 && oldsentence < 0) ||
+		(g.sentence == 0 && oldsentence > 0))
+	{
+		g.sentence = oldsentence;
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7, 1, g.propername, gamelog);
+		addstrAlt(CONST_justice021, gamelog);
+		mvaddstrAlt(8, 1, CONST_justice022, gamelog);
+		if (g.sentence > 1 && lenient)
+		{
+			g.sentence--;
+			addstrAlt(CONST_justice141, gamelog);
+		}
+		else addstrAlt(singleDot, gamelog);
+		pressAnyKey();
+	}
+	else if (g.sentence == 0)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7, 1, g.propername, gamelog);
+		addstrAlt(CONST_justice024, gamelog);
+		pressAnyKey();
+	}
+	else
+	{
+		if (g.sentence >= 36)g.sentence -= g.sentence % 12;
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(7, 1, g.propername, gamelog);
+		addstrAlt(CONST_justice025, gamelog);
+		if (g.sentence > 1200) g.sentence /= -1200;
+		if (g.sentence <= -1)
+		{
+			if (g.sentence < -1)
+			{
+				addstrAlt(-(g.sentence), gamelog);
+				addstrAlt(CONST_justice026, gamelog);
+				gamelog.newline();
+				// Don't bother saying this if the convicted already has one or
+				// more life sentences. Makes the 'consecutively' and 'concurrently'
+				// statements later easier to tack on.
+				if (oldsentence >= 0)
+				{
+					addstrAlt(singleDot, gamelog);
+					pressAnyKey();
+					mvaddstrAlt(9, 1, CONST_justice027, gamelog);
+					addstrAlt(g.propername, gamelog);
+				}
+			}
+			else addstrAlt(CONST_justice028, gamelog);
+		}
+		else if (g.sentence >= 36)
+		{
+			addstrAlt(g.sentence / 12, gamelog);
+			addstrAlt(CONST_justice029, gamelog);
+		}
+		else
+		{
+			addstrAlt(g.sentence, gamelog);
+			addstrAlt(CONST_justice030, gamelog);
+			if (g.sentence > 1)addstrAlt(CONST_justice031, gamelog);
+			addstrAlt(CONST_justice032, gamelog);
+		}
+		// Mash together compatible sentences.
+		if ((g.sentence > 0 && oldsentence > 0) ||
+			(g.sentence < 0 && oldsentence < 0))
+		{
+			addstrAlt(CONST_justice033, gamelog);
+			moveAlt(8, 1);
+			if (lenient)
+			{
+				if (abs(oldsentence) > abs(g.sentence))
+					g.sentence = oldsentence;
+				addstrAlt(CONST_justice034, gamelog);
+			}
+			else
+			{
+				g.sentence += oldsentence;
+				addstrAlt(CONST_justice035, gamelog);
+			}
+		}
+		addstrAlt(singleDot, gamelog);
+		//dejuice boss
+		dejuiceBoss(g);
+		pressAnyKey();
+	}
+	gamelog.nextMessage();
+}
+/* monthly - move a liberal to jail */
+void imprison(Creature &g)
+{
+	g.location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().getLocationCity(g.location));
+}
+int listAllCrimes(Creature &g) {
 
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
-		 int y = 5;
-		 bool breaker[LAWFLAGNUM] = { 0 };
-		 int typenum = 0;
-		 // *JDS* Scarefactor is the severity of the case against you; if you're a really
-		 // nasty person with a wide variety of major charges against you, then scarefactor
-		 // can get up there
-		 for (int i = 0; i < LAWFLAGNUM; i++) if (g.crimes_suspected[i])
-		 {
-			 typenum++;
-			 breaker[i] = 1;
-		 }
-		 int x = 2;
-		 while ((typenum--) > 0)
-		 {
-			 if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
-			 //////////////////////////////////////////////////////////////////////////
-			 //                                Treason                               //
-			 //////////////////////////////////////////////////////////////////////////
-			 // Technically, treason is exposing state secrets, or somesuch.         //
-			 // Illegal Immigrants cannot commit treason, because treason can only   //
-			 // be committed by `those owing allegiance to the United States`.       //
-			 //////////////////////////////////////////////////////////////////////////
-			 // The above is already respected by LCS; treason occurs from exposing
-			 // intelligence secrets, and illegal immigrants are not taken to trial.
-			 //    - Jonathan S. Fox
-			 // Oh, right. Forgot about that. Even if the law is L+?
-			 if (breaker[LAWFLAG_TREASON])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_TREASON] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_TREASON], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice041, gamelog);
-				 breaker[LAWFLAG_TREASON] = 0;
-			 }
-			 else if (breaker[LAWFLAG_TERRORISM])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_TERRORISM] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_TERRORISM], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice042, gamelog);
-				 breaker[LAWFLAG_TERRORISM] = 0;
-			 }
-			 else if (breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
-			 {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
-											 // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
-											 // Possibly people you accidentally kill when shooting at conservatives. -- LK
-				 if (g.crimes_suspected[LAWFLAG_MURDER] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_MURDER], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice043, gamelog);
-				 breaker[LAWFLAG_MURDER] = 0;
-			 }
-			 else if (breaker[LAWFLAG_KIDNAPPING])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_KIDNAPPING] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_KIDNAPPING], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice044, gamelog);
-				 breaker[LAWFLAG_KIDNAPPING] = 0;
-			 }
-			 else if (breaker[LAWFLAG_BANKROBBERY])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_BANKROBBERY] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_BANKROBBERY], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice045, gamelog);
-				 breaker[LAWFLAG_BANKROBBERY] = 0;
-			 }
-			 else if (breaker[LAWFLAG_ARSON])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_ARSON] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_ARSON], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice046, gamelog);
-				 breaker[LAWFLAG_ARSON] = 0;
-			 }
-			 else if (breaker[LAWFLAG_BURNFLAG] && lawList[LAW_FLAGBURNING] <= 0)
-			 {
-				 if (g.crimes_suspected[LAWFLAG_BURNFLAG] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_BURNFLAG]);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 if (lawList[LAW_FLAGBURNING] == -2)
-					 addstrAlt(CONST_justice047, gamelog);
-				 else if (lawList[LAW_FLAGBURNING] == -1)
-					 addstrAlt(CONST_justice048, gamelog);
-				 else if (lawList[LAW_FLAGBURNING] == 0)
-					 addstrAlt(CONST_justice049, gamelog);
-				 breaker[LAWFLAG_BURNFLAG] = 0;
-			 }
-			 else if (breaker[LAWFLAG_SPEECH])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_SPEECH] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_SPEECH], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice050, gamelog);
-				 breaker[LAWFLAG_SPEECH] = 0;
-			 }
-			 else if (breaker[LAWFLAG_BROWNIES])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_BROWNIES] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_BROWNIES], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice051, gamelog);
-				 breaker[LAWFLAG_BROWNIES] = 0;
-				 //x=2;
-			 }
-			 else if (breaker[LAWFLAG_ESCAPED])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_ESCAPED] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_ESCAPED], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice052, gamelog);
-				 breaker[LAWFLAG_ESCAPED] = 0;
-			 }
-			 else if (breaker[LAWFLAG_HELPESCAPE])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_HELPESCAPE] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_HELPESCAPE], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice053, gamelog);
-				 breaker[LAWFLAG_HELPESCAPE] = 0;
-				 x = 2;
-			 }
-			 else if (breaker[LAWFLAG_JURY])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_JURY] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_JURY], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice054, gamelog);
-				 breaker[LAWFLAG_JURY] = 0;
-			 }
-			 else if (breaker[LAWFLAG_RACKETEERING])
-			 {
-				 addstrAlt(CONST_justice055, gamelog);
-				 breaker[LAWFLAG_RACKETEERING] = 0;
-			 }
-			 else if (breaker[LAWFLAG_EXTORTION])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_EXTORTION] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_EXTORTION], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice056, gamelog);
-				 breaker[LAWFLAG_EXTORTION] = 0;
-			 }
-			 else if (breaker[LAWFLAG_ARMEDASSAULT])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_ARMEDASSAULT] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_ARMEDASSAULT], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice057, gamelog);
-				 breaker[LAWFLAG_ARMEDASSAULT] = 0;
-			 }
-			 else if (breaker[LAWFLAG_ASSAULT])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_ASSAULT] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_ASSAULT], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice058, gamelog);
-				 breaker[LAWFLAG_ASSAULT] = 0;
-			 }
-			 else if (breaker[LAWFLAG_CARTHEFT])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_CARTHEFT] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_CARTHEFT], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice059, gamelog);// If chase lasts more than 20 `turns` then
-				 breaker[LAWFLAG_CARTHEFT] = 0;// this should be `Grand Theft Auto` -- LK
-			 }                              // We'll just make it grand theft auto anyway :) -Fox
-			 else if (breaker[LAWFLAG_CCFRAUD])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_CCFRAUD] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_CCFRAUD], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice060, gamelog);
-				 breaker[LAWFLAG_CCFRAUD] = 0;
-			 }
-			 else if (breaker[LAWFLAG_THEFT])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_THEFT] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_THEFT], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice061, gamelog);
-				 breaker[LAWFLAG_THEFT] = 0;
-			 }
-			 else if (breaker[LAWFLAG_PROSTITUTION])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_PROSTITUTION] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_PROSTITUTION], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice062, gamelog);
-				 breaker[LAWFLAG_PROSTITUTION] = 0;
-			 }
-			 else if (breaker[LAWFLAG_HIREILLEGAL])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_HIREILLEGAL] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
-					 addstrAlt(counts_of, gamelog);
-					 addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice063 : CONST_justiceB173), gamelog);
-				 }
-				 else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice064 : CONST_justiceB174), gamelog);
-				 breaker[LAWFLAG_HIREILLEGAL] = 0;
-				 x = 2;
-			 }
-			 /*else if(breaker[LAWFLAG_GUNUSE])
-			 {
-			 if(g.crimes_suspected[LAWFLAG_GUNUSE]>1)
-			 {
-			 addstrAlt(g.crimes_suspected[LAWFLAG_GUNUSE]);
-			 addstrAlt(counts_of);
-			 }
-			 addstrAlt(CONST_justice065);
-			 breaker[LAWFLAG_GUNUSE]=0;
-			 x=2;
-			 }
-			 else if(breaker[LAWFLAG_GUNCARRY])
-			 {
-			 if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
-			 {
-			 addstrAlt(g.crimes_suspected[LAWFLAG_GUNCARRY]);
-			 addstrAlt(counts_of);
-			 }
-			 addstrAlt(CONST_justice066);
-			 breaker[LAWFLAG_GUNCARRY]=0;
-			 x=2;
-			 }*/
-			 else if (breaker[LAWFLAG_COMMERCE])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_COMMERCE] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_COMMERCE], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice067, gamelog);
-				 breaker[LAWFLAG_COMMERCE] = 0;
-				 x = 2;
-			 }
-			 else if (breaker[LAWFLAG_INFORMATION])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_INFORMATION] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_INFORMATION], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice068, gamelog);
-				 breaker[LAWFLAG_INFORMATION] = 0;
-				 x = 2;
-			 }
-			 else if (breaker[LAWFLAG_BURIAL])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_BURIAL] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_BURIAL], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice069, gamelog);
-				 breaker[LAWFLAG_BURIAL] = 0;
-			 }
-			 else if (breaker[LAWFLAG_BREAKING])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_BREAKING] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_BREAKING], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice070, gamelog);
-				 breaker[LAWFLAG_BREAKING] = 0;
-			 }
-			 else if (breaker[LAWFLAG_VANDALISM])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_VANDALISM] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_VANDALISM], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice071, gamelog);
-				 breaker[LAWFLAG_VANDALISM] = 0;
-			 }
-			 else if (breaker[LAWFLAG_RESIST])
-			 {
-				 addstrAlt(CONST_justice072, gamelog);
-				 breaker[LAWFLAG_RESIST] = 0;
-			 }
-			 else if (breaker[LAWFLAG_DISTURBANCE])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_DISTURBANCE] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_DISTURBANCE], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice073, gamelog);
-				 breaker[LAWFLAG_DISTURBANCE] = 0;
-			 }
-			 else if (breaker[LAWFLAG_PUBLICNUDITY])
-			 {
-				 if (g.crimes_suspected[LAWFLAG_PUBLICNUDITY] > 1)
-				 {
-					 addstrAlt(g.crimes_suspected[LAWFLAG_PUBLICNUDITY], gamelog);
-					 addstrAlt(counts_of, gamelog);
-				 }
-				 addstrAlt(CONST_justice074, gamelog);
-				 breaker[LAWFLAG_PUBLICNUDITY] = 0;
-			 }
-			 else if (breaker[LAWFLAG_LOITERING])
-			 {
-				 addstrAlt(CONST_justice075, gamelog);
-				 breaker[LAWFLAG_LOITERING] = 0;
-			 }
-			 if (typenum > 1) addstrAlt(commaSpace, gamelog);
-			 if (typenum == 1) addstrAlt(AND, gamelog);
-			 if (typenum == 0) addstrAlt(singleDot, gamelog);
-			 pressAnyKey();
-		 }
-		 return y;
-	 
- }
- void pleadInnocent(Creature &g, Creature &sleeperLawyer, const char attorneyname[200], const int defense, const bool sleeperjudge, const int scarefactor) {
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	int y = 5;
+	bool breaker[LAWFLAGNUM] = { 0 };
+	int typenum = 0;
+	// *JDS* Scarefactor is the severity of the case against you; if you're a really
+	// nasty person with a wide variety of major charges against you, then scarefactor
+	// can get up there
+	for (int i = 0; i < LAWFLAGNUM; i++) if (g.crimes_suspected[i])
+	{
+		typenum++;
+		breaker[i] = 1;
+	}
+	int x = 2;
+	while ((typenum--) > 0)
+	{
+		if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
+		//////////////////////////////////////////////////////////////////////////
+		//                                Treason                               //
+		//////////////////////////////////////////////////////////////////////////
+		// Technically, treason is exposing state secrets, or somesuch.         //
+		// Illegal Immigrants cannot commit treason, because treason can only   //
+		// be committed by `those owing allegiance to the United States`.       //
+		//////////////////////////////////////////////////////////////////////////
+		// The above is already respected by LCS; treason occurs from exposing
+		// intelligence secrets, and illegal immigrants are not taken to trial.
+		//    - Jonathan S. Fox
+		// Oh, right. Forgot about that. Even if the law is L+?
+		if (breaker[LAWFLAG_TREASON])
+		{
+			if (g.crimes_suspected[LAWFLAG_TREASON] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_TREASON], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice041, gamelog);
+			breaker[LAWFLAG_TREASON] = 0;
+		}
+		else if (breaker[LAWFLAG_TERRORISM])
+		{
+			if (g.crimes_suspected[LAWFLAG_TERRORISM] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_TERRORISM], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice042, gamelog);
+			breaker[LAWFLAG_TERRORISM] = 0;
+		}
+		else if (breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
+		{                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
+										// Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
+										// Possibly people you accidentally kill when shooting at conservatives. -- LK
+			if (g.crimes_suspected[LAWFLAG_MURDER] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_MURDER], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice043, gamelog);
+			breaker[LAWFLAG_MURDER] = 0;
+		}
+		else if (breaker[LAWFLAG_KIDNAPPING])
+		{
+			if (g.crimes_suspected[LAWFLAG_KIDNAPPING] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_KIDNAPPING], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice044, gamelog);
+			breaker[LAWFLAG_KIDNAPPING] = 0;
+		}
+		else if (breaker[LAWFLAG_BANKROBBERY])
+		{
+			if (g.crimes_suspected[LAWFLAG_BANKROBBERY] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_BANKROBBERY], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice045, gamelog);
+			breaker[LAWFLAG_BANKROBBERY] = 0;
+		}
+		else if (breaker[LAWFLAG_ARSON])
+		{
+			if (g.crimes_suspected[LAWFLAG_ARSON] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_ARSON], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice046, gamelog);
+			breaker[LAWFLAG_ARSON] = 0;
+		}
+		else if (breaker[LAWFLAG_BURNFLAG] && lawList[LAW_FLAGBURNING] <= 0)
+		{
+			if (g.crimes_suspected[LAWFLAG_BURNFLAG] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_BURNFLAG]);
+				addstrAlt(counts_of, gamelog);
+			}
+			if (lawList[LAW_FLAGBURNING] == -2)
+				addstrAlt(CONST_justice047, gamelog);
+			else if (lawList[LAW_FLAGBURNING] == -1)
+				addstrAlt(CONST_justice048, gamelog);
+			else if (lawList[LAW_FLAGBURNING] == 0)
+				addstrAlt(CONST_justice049, gamelog);
+			breaker[LAWFLAG_BURNFLAG] = 0;
+		}
+		else if (breaker[LAWFLAG_SPEECH])
+		{
+			if (g.crimes_suspected[LAWFLAG_SPEECH] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_SPEECH], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice050, gamelog);
+			breaker[LAWFLAG_SPEECH] = 0;
+		}
+		else if (breaker[LAWFLAG_BROWNIES])
+		{
+			if (g.crimes_suspected[LAWFLAG_BROWNIES] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_BROWNIES], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice051, gamelog);
+			breaker[LAWFLAG_BROWNIES] = 0;
+			//x=2;
+		}
+		else if (breaker[LAWFLAG_ESCAPED])
+		{
+			if (g.crimes_suspected[LAWFLAG_ESCAPED] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_ESCAPED], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice052, gamelog);
+			breaker[LAWFLAG_ESCAPED] = 0;
+		}
+		else if (breaker[LAWFLAG_HELPESCAPE])
+		{
+			if (g.crimes_suspected[LAWFLAG_HELPESCAPE] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_HELPESCAPE], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice053, gamelog);
+			breaker[LAWFLAG_HELPESCAPE] = 0;
+			x = 2;
+		}
+		else if (breaker[LAWFLAG_JURY])
+		{
+			if (g.crimes_suspected[LAWFLAG_JURY] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_JURY], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice054, gamelog);
+			breaker[LAWFLAG_JURY] = 0;
+		}
+		else if (breaker[LAWFLAG_RACKETEERING])
+		{
+			addstrAlt(CONST_justice055, gamelog);
+			breaker[LAWFLAG_RACKETEERING] = 0;
+		}
+		else if (breaker[LAWFLAG_EXTORTION])
+		{
+			if (g.crimes_suspected[LAWFLAG_EXTORTION] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_EXTORTION], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice056, gamelog);
+			breaker[LAWFLAG_EXTORTION] = 0;
+		}
+		else if (breaker[LAWFLAG_ARMEDASSAULT])
+		{
+			if (g.crimes_suspected[LAWFLAG_ARMEDASSAULT] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_ARMEDASSAULT], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice057, gamelog);
+			breaker[LAWFLAG_ARMEDASSAULT] = 0;
+		}
+		else if (breaker[LAWFLAG_ASSAULT])
+		{
+			if (g.crimes_suspected[LAWFLAG_ASSAULT] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_ASSAULT], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice058, gamelog);
+			breaker[LAWFLAG_ASSAULT] = 0;
+		}
+		else if (breaker[LAWFLAG_CARTHEFT])
+		{
+			if (g.crimes_suspected[LAWFLAG_CARTHEFT] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_CARTHEFT], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice059, gamelog);// If chase lasts more than 20 `turns` then
+			breaker[LAWFLAG_CARTHEFT] = 0;// this should be `Grand Theft Auto` -- LK
+		}                              // We'll just make it grand theft auto anyway :) -Fox
+		else if (breaker[LAWFLAG_CCFRAUD])
+		{
+			if (g.crimes_suspected[LAWFLAG_CCFRAUD] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_CCFRAUD], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice060, gamelog);
+			breaker[LAWFLAG_CCFRAUD] = 0;
+		}
+		else if (breaker[LAWFLAG_THEFT])
+		{
+			if (g.crimes_suspected[LAWFLAG_THEFT] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_THEFT], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice061, gamelog);
+			breaker[LAWFLAG_THEFT] = 0;
+		}
+		else if (breaker[LAWFLAG_PROSTITUTION])
+		{
+			if (g.crimes_suspected[LAWFLAG_PROSTITUTION] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_PROSTITUTION], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice062, gamelog);
+			breaker[LAWFLAG_PROSTITUTION] = 0;
+		}
+		else if (breaker[LAWFLAG_HIREILLEGAL])
+		{
+			if (g.crimes_suspected[LAWFLAG_HIREILLEGAL] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
+				addstrAlt(counts_of, gamelog);
+				addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice063 : CONST_justiceB173), gamelog);
+			}
+			else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice064 : CONST_justiceB174), gamelog);
+			breaker[LAWFLAG_HIREILLEGAL] = 0;
+			x = 2;
+		}
+		/*else if(breaker[LAWFLAG_GUNUSE])
+		{
+		if(g.crimes_suspected[LAWFLAG_GUNUSE]>1)
+		{
+		addstrAlt(g.crimes_suspected[LAWFLAG_GUNUSE]);
+		addstrAlt(counts_of);
+		}
+		addstrAlt(CONST_justice065);
+		breaker[LAWFLAG_GUNUSE]=0;
+		x=2;
+		}
+		else if(breaker[LAWFLAG_GUNCARRY])
+		{
+		if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
+		{
+		addstrAlt(g.crimes_suspected[LAWFLAG_GUNCARRY]);
+		addstrAlt(counts_of);
+		}
+		addstrAlt(CONST_justice066);
+		breaker[LAWFLAG_GUNCARRY]=0;
+		x=2;
+		}*/
+		else if (breaker[LAWFLAG_COMMERCE])
+		{
+			if (g.crimes_suspected[LAWFLAG_COMMERCE] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_COMMERCE], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice067, gamelog);
+			breaker[LAWFLAG_COMMERCE] = 0;
+			x = 2;
+		}
+		else if (breaker[LAWFLAG_INFORMATION])
+		{
+			if (g.crimes_suspected[LAWFLAG_INFORMATION] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_INFORMATION], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice068, gamelog);
+			breaker[LAWFLAG_INFORMATION] = 0;
+			x = 2;
+		}
+		else if (breaker[LAWFLAG_BURIAL])
+		{
+			if (g.crimes_suspected[LAWFLAG_BURIAL] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_BURIAL], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice069, gamelog);
+			breaker[LAWFLAG_BURIAL] = 0;
+		}
+		else if (breaker[LAWFLAG_BREAKING])
+		{
+			if (g.crimes_suspected[LAWFLAG_BREAKING] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_BREAKING], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice070, gamelog);
+			breaker[LAWFLAG_BREAKING] = 0;
+		}
+		else if (breaker[LAWFLAG_VANDALISM])
+		{
+			if (g.crimes_suspected[LAWFLAG_VANDALISM] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_VANDALISM], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice071, gamelog);
+			breaker[LAWFLAG_VANDALISM] = 0;
+		}
+		else if (breaker[LAWFLAG_RESIST])
+		{
+			addstrAlt(CONST_justice072, gamelog);
+			breaker[LAWFLAG_RESIST] = 0;
+		}
+		else if (breaker[LAWFLAG_DISTURBANCE])
+		{
+			if (g.crimes_suspected[LAWFLAG_DISTURBANCE] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_DISTURBANCE], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice073, gamelog);
+			breaker[LAWFLAG_DISTURBANCE] = 0;
+		}
+		else if (breaker[LAWFLAG_PUBLICNUDITY])
+		{
+			if (g.crimes_suspected[LAWFLAG_PUBLICNUDITY] > 1)
+			{
+				addstrAlt(g.crimes_suspected[LAWFLAG_PUBLICNUDITY], gamelog);
+				addstrAlt(counts_of, gamelog);
+			}
+			addstrAlt(CONST_justice074, gamelog);
+			breaker[LAWFLAG_PUBLICNUDITY] = 0;
+		}
+		else if (breaker[LAWFLAG_LOITERING])
+		{
+			addstrAlt(CONST_justice075, gamelog);
+			breaker[LAWFLAG_LOITERING] = 0;
+		}
+		if (typenum > 1) addstrAlt(commaSpace, gamelog);
+		if (typenum == 1) addstrAlt(AND, gamelog);
+		if (typenum == 0) addstrAlt(singleDot, gamelog);
+		pressAnyKey();
+	}
+	return y;
 
-	 // Show die rolls, 100% accurate poll numbers
-	 extern bool SHOWMECHANICS;
-	 extern Log gamelog;
-	 Creature *sleeperlawyer = &sleeperLawyer;
-		 int prosecution = 0;
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(1, 1, g.name, gamelog);
-		 addstrAlt(CONST_justice090);
-		 //TRIAL MESSAGE
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(3, 1, CONST_justice091, gamelog);
-		 gamelog.newline();
-		 pressAnyKey();
-		 //JURY MAKEUP MESSAGE
-		 set_color_easy(WHITE_ON_BLACK);
-		 moveAlt(5, 1);
-		 int jury = LCSrandom(61) - (60 * publicmood(-1)) / 100; // Political leanings of the population determine your jury
-		 if (sleeperjudge) jury -= 20;
-		 if (defense == 3) // Hired $5000 ace attorney
-		 {
-			 if (LCSrandom(10))
-			 {
-				 addstrAlt(attorneyname, gamelog);
-				 addstrAlt(CONST_justice092, gamelog);
-				 addstrAlt(g.name, gamelog);
-				 addstrAlt(CONST_justice093, gamelog);
-				 gamelog.newline();
-				 if (jury > 0) jury = 0;
-				 jury -= 30;
-			 }
-			 else
-			 {
-				 set_color_easy(RED_ON_BLACK_BRIGHT);
-				 addstrAlt(attorneyname, gamelog);
-				 addstrAlt(CONST_justice094, gamelog);
-				 gamelog.newline();
-				 jury = 0;
-				 prosecution += 100; // DUN DUN DUN!!
-			 }
-		 }
-		 else if (jury <= -29)
-		 {
-			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			 switch (LCSrandom(liberal_jury.size() + 1))
-			 {
-			 case 0:addstrAlt(g.name); addstrAlt(CONST_justice095, gamelog); break;
-			 default:addstrAlt(pickrandom(liberal_jury), gamelog); break;
-			 }
-			 gamelog.newline();
-		 }
-		 else if (jury <= -15) addstrAlt(CONST_justice096, gamelog);
-		 else if (jury < 15) addstrAlt(CONST_justice097, gamelog);
-		 else if (jury < 29) addstrAlt(CONST_justice098, gamelog);
-		 else
-		 {
-			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 addstrAlt(pickrandom(conservative_jury), gamelog);
-		 }
-		 gamelog.newline();
-		 // Debug jury bias
-		 if (SHOWMECHANICS)
-		 {
-			 addstrAlt(CONST_justice127);
-			 if (jury >= 0) addcharAlt('+');
-			 addstrAlt(jury);
-			 addstrAlt(CONST_justice108);
-		 }
-		 pressAnyKey();
-		 //PROSECUTION MESSAGE
-		 // *JDS* The bigger your record, the stronger the evidence
-		 prosecution += 40 + LCSrandom(101) + scarefactor + (20 * g.confessions);
-		 if (sleeperjudge) prosecution >>= 1;
-		 if (defense == 3) prosecution -= 60;
-		 set_color_easy(WHITE_ON_BLACK);
-		 moveAlt(7, 1);
+}
+void pleadInnocent(Creature &g, Creature &sleeperLawyer, const char attorneyname[200], const int defense, const bool sleeperjudge, const int scarefactor) {
 
-		 {
-			 if (prosecution <= 50) addstrAlt(CONST_justice101, gamelog);
-			 else if (prosecution <= 75) addstrAlt(CONST_justice102, gamelog);
-			 else if (prosecution <= 125) addstrAlt(CONST_justice103, gamelog);
-			 else if (prosecution <= 175) addstrAlt(CONST_justice104, gamelog);
-			 else addstrAlt(CONST_justice105, gamelog);
-			 gamelog.newline();
-		 }
-		 // Debug prosecution power
-		 if (SHOWMECHANICS)
-		 {
-			 addstrAlt(CONST_justice106);
-			 addstrAlt(prosecution / 2);
-			 addstrAlt(CONST_justice107);
-			 addstrAlt(prosecution);
-			 addstrAlt(CONST_justice108);
-		 }
-		 pressAnyKey();
-		 jury += LCSrandom(prosecution / 2 + 1) + prosecution / 2;
-		 //DEFENSE MESSAGE
-		 set_color_easy(WHITE_ON_BLACK);
-		 moveAlt(9, 1);
-		 int defensepower = 0;
-		 if (defense == 0 || defense == 3 || defense == 4)
-		 {
+	// Show die rolls, 100% accurate poll numbers
+	extern bool SHOWMECHANICS;
+	extern Log gamelog;
+	Creature *sleeperlawyer = &sleeperLawyer;
+	int prosecution = 0;
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 1, g.name, gamelog);
+	addstrAlt(CONST_justice090);
+	//TRIAL MESSAGE
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(3, 1, CONST_justice091, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	//JURY MAKEUP MESSAGE
+	set_color_easy(WHITE_ON_BLACK);
+	moveAlt(5, 1);
+	int jury = LCSrandom(61) - (60 * publicmood(-1)) / 100; // Political leanings of the population determine your jury
+	if (sleeperjudge) jury -= 20;
+	if (defense == 3) // Hired $5000 ace attorney
+	{
+		if (LCSrandom(10))
+		{
+			addstrAlt(attorneyname, gamelog);
+			addstrAlt(CONST_justice092, gamelog);
+			addstrAlt(g.name, gamelog);
+			addstrAlt(CONST_justice093, gamelog);
+			gamelog.newline();
+			if (jury > 0) jury = 0;
+			jury -= 30;
+		}
+		else
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			addstrAlt(attorneyname, gamelog);
+			addstrAlt(CONST_justice094, gamelog);
+			gamelog.newline();
+			jury = 0;
+			prosecution += 100; // DUN DUN DUN!!
+		}
+	}
+	else if (jury <= -29)
+	{
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		switch (LCSrandom(liberal_jury.size() + 1))
+		{
+		case 0:addstrAlt(g.name); addstrAlt(CONST_justice095, gamelog); break;
+		default:addstrAlt(pickrandom(liberal_jury), gamelog); break;
+		}
+		gamelog.newline();
+	}
+	else if (jury <= -15) addstrAlt(CONST_justice096, gamelog);
+	else if (jury < 15) addstrAlt(CONST_justice097, gamelog);
+	else if (jury < 29) addstrAlt(CONST_justice098, gamelog);
+	else
+	{
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		addstrAlt(pickrandom(conservative_jury), gamelog);
+	}
+	gamelog.newline();
+	// Debug jury bias
+	if (SHOWMECHANICS)
+	{
+		addstrAlt(CONST_justice127);
+		if (jury >= 0) addcharAlt('+');
+		addstrAlt(jury);
+		addstrAlt(CONST_justice108);
+	}
+	pressAnyKey();
+	//PROSECUTION MESSAGE
+	// *JDS* The bigger your record, the stronger the evidence
+	prosecution += 40 + LCSrandom(101) + scarefactor + (20 * g.confessions);
+	if (sleeperjudge) prosecution >>= 1;
+	if (defense == 3) prosecution -= 60;
+	set_color_easy(WHITE_ON_BLACK);
+	moveAlt(7, 1);
 
-			 {
-				 if (defense == 0) defensepower = LCSrandom(71);    // Court-appointed attorney
-				 else if (defense == 3) defensepower = LCSrandom(71) + 80; // Ace Liberal attorney
-				 else if (defense == 4)
-				 {
-					 // Sleeper attorney
-					 defensepower = LCSrandom(71) + sleeperlawyer->get_skill(SKILL_LAW) * 2
-						 + sleeperlawyer->get_skill(SKILL_PERSUASION) * 2;
-					 sleeperlawyer->train(SKILL_LAW, prosecution / 4);
-					 sleeperlawyer->train(SKILL_PERSUASION, prosecution / 4);
-				 }
-				 if (defensepower <= 5) addstrAlt(CONST_justice109, gamelog);
-				 else if (defensepower <= 15) addstrAlt(CONST_justice110, gamelog);
-				 else if (defensepower <= 25) addstrAlt(CONST_justice111, gamelog);
-				 else if (defensepower <= 50) addstrAlt(CONST_justice112, gamelog);
-				 else if (defensepower <= 75) addstrAlt(CONST_justice113, gamelog);
-				 else if (defensepower <= 100) addstrAlt(CONST_justice114, gamelog);
-				 else if (defensepower <= 145)
-				 {
-					 if (prosecution < 100) addstrAlt(CONST_justice115, gamelog);
-					 else addstrAlt(CONST_justice116, gamelog);
-				 }
-				 else
-				 {
-					 if (prosecution < 100)
-					 {
-						 addstrAlt(attorneyname, gamelog);
-						 addstrAlt(CONST_justice117, gamelog);
-						 mvaddstrAlt(10, 1, CONST_justice118, gamelog);
-						 if (defense == 4) addjuice(*sleeperlawyer, 10, 500); // Bow please
-					 }
-					 else
-					 {
-						 addstrAlt(attorneyname, gamelog);
-						 addstrAlt(CONST_justice119, gamelog);
-					 }
-				 }
-				 gamelog.newline();
-			 }
-		 }
-		 if (defense == 1)
-		 {
-			 // *JDS* LEGAL SELF-REPRESENTATION: To succeed here, you really need to have two skills be
-			 // high: persuasion and law, with law being 1.5 times as influential. You can't have
-			 // just one or just the other. Even if you're a very persuasive person, the court will eat
-			 // you alive if you can't sound intelligent when talking about the relevant charges, and you
-			 // won't be able to fool the jury into letting you go if you aren't persuasive, as no
-			 // matter how encyclopedic your legal knowledge is, it's all in the pitch.
-			 //
-			 // If either your persuasion or your law roll is too low, you'll end up getting a negative
-			 // result that will drag down your defense. So try not to suck in either area.
-			 defensepower = 5 * (g.skill_roll(SKILL_PERSUASION) - 3) +
-				 10 * (g.skill_roll(SKILL_LAW) - 3);
-			 g.train(SKILL_PERSUASION, 50);
-			 g.train(SKILL_LAW, 50);
-			 addstrAlt(g.name, gamelog);
-			 if (defensepower <= 0)
-			 {
-				 addstrAlt(CONST_justice120, gamelog);
-				 gamelog.newline();
-				 addjuice(g, -10, -50); // You should be ashamed
-			 }
-			 else if (defensepower <= 25) addstrAlt(CONST_justice121, gamelog);
-			 else if (defensepower <= 50) addstrAlt(CONST_justice122, gamelog);
-			 else if (defensepower <= 75) addstrAlt(CONST_justice123, gamelog);
-			 else if (defensepower <= 100) addstrAlt(CONST_justice124, gamelog);
-			 else if (defensepower <= 150) addstrAlt(CONST_justice125, gamelog);
-			 else
-			 {
-				 addstrAlt(CONST_justice126, gamelog);
-				 addjuice(g, 50, 1000); // That shit is legend
-			 }
-			 gamelog.newline();
-		 }
-		 // Debug defense power
-		 if (SHOWMECHANICS)
-		 {
-			 addstrAlt(CONST_justice127);
-			 addstrAlt(defensepower);
-			 addstrAlt(CONST_justice128);
-			 addstrAlt(jury + 1);
-			 addstrAlt(CONST_justice129);
-		 }
-		 pressAnyKey();
-		 //DELIBERATION MESSAGE
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(12, 1, CONST_justice130, gamelog);
-		 gamelog.newline();
-		 pressAnyKey();
-		 //JURY RETURN MESSAGE
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(1, 1, CONST_justice131, gamelog);
-		 gamelog.newline();
-		 pressAnyKey();
-		 bool keeplawflags = false;
-		 //HUNG JURY
-		 if (defensepower == jury)
-		 {
-			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(3, 1, CONST_justice132, gamelog);
-			 gamelog.newline();
-			 pressAnyKey();
-			 //RE-TRY
-			 if (LCSrandom(2) || scarefactor >= 10 || g.confessions)
-			 {
-				 set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(5, 1, CONST_justice133, gamelog);
-				 gamelog.newline();
-				 pressAnyKey();
-				 g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
-				 keeplawflags = true;
-			 }
-			 //NO RE-TRY
-			 else
-			 {
-				 set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(5, 1, CONST_justice134, gamelog);
-				 gamelog.newline();
-				 if (g.sentence == 0)
-				 {
-					 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					 mvaddstrAlt(7, 1, g.name, gamelog);
-					 addstrAlt(CONST_justice139, gamelog);
-				 }
-				 else
-				 {
-					 set_color_easy(WHITE_ON_BLACK);
-					 mvaddstrAlt(7, 1, g.name, gamelog);
-					 addstrAlt(CONST_justice140, gamelog);
-					 if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
-					 {
-						 g.sentence--;
-						 addstrAlt(CONST_justice141, gamelog);
-					 }
-					 else addstrAlt(singleDot, gamelog);
-					 if (g.deathpenalty)
-					 {
-						 g.sentence = 3;
-						 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
-					 }
-				 }
-				 gamelog.nextMessage();
-				 pressAnyKey();
-			 }
-		 }
-		 //ACQUITTAL!
-		 else if (defensepower > jury)
-		 {
-			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(3, 1, CONST_justice138, gamelog);
-			 gamelog.newline();
-			 pressAnyKey();
-			 if (g.sentence == 0)
-			 {
-				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(5, 1, g.name, gamelog);
-				 addstrAlt(CONST_justice139, gamelog);
-			 }
-			 else
-			 {
-				 set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(5, 1, g.name, gamelog);
-				 addstrAlt(CONST_justice140, gamelog);
-				 if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
-				 {
-					 g.sentence--;
-					 addstrAlt(CONST_justice141, gamelog);
-				 }
-				 else addstrAlt(singleDot, gamelog);
-				 if (g.deathpenalty)
-				 {
-					 g.sentence = 3;
-					 mvaddstrAlt(7, 1, execution_in_three_months, gamelog);
-				 }
-			 }
-			 gamelog.nextMessage();
-			 // Juice sleeper
-			 if (defense == 4) addjuice(*sleeperlawyer, 10, 100);
-			 // Juice for self-defense
-			 if (defense == 1) addjuice(g, 10, 100);
-			 pressAnyKey();
-		 }
-		 //LENIENCE
-		 else
-		 {
-			 // De-Juice sleeper
-			 if (defense == 4) addjuice(*sleeperlawyer, -5, 0);
-			 // Juice for getting convicted of something :)
-			 addjuice(g, 25, 200);
-			 // Check for lenience; sleeper judge will always be merciful
-			 if (defensepower / 3 >= jury / 4 || sleeperjudge) penalize(g, 1);
-			 else penalize(g, 0);
-		 }
-		 //CLEAN UP LAW FLAGS
-		 if (!keeplawflags) for (int i = 0; i < LAWFLAGNUM; i++) g.crimes_suspected[i] = 0;
-		 //Clean up heat, confessions
-		 g.heat = 0, g.confessions = 0;
-		 //PLACE PRISONER
-		 if (g.sentence != 0) imprison(g);
-		 else
-		 {
-			 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
-			 g.give_armor(clothes, NULL);
-		 }
-	 
- }
- void pleadGuilty(Creature &g, const bool sleeperjudge) {
+	{
+		if (prosecution <= 50) addstrAlt(CONST_justice101, gamelog);
+		else if (prosecution <= 75) addstrAlt(CONST_justice102, gamelog);
+		else if (prosecution <= 125) addstrAlt(CONST_justice103, gamelog);
+		else if (prosecution <= 175) addstrAlt(CONST_justice104, gamelog);
+		else addstrAlt(CONST_justice105, gamelog);
+		gamelog.newline();
+	}
+	// Debug prosecution power
+	if (SHOWMECHANICS)
+	{
+		addstrAlt(CONST_justice106);
+		addstrAlt(prosecution / 2);
+		addstrAlt(CONST_justice107);
+		addstrAlt(prosecution);
+		addstrAlt(CONST_justice108);
+	}
+	pressAnyKey();
+	jury += LCSrandom(prosecution / 2 + 1) + prosecution / 2;
+	//DEFENSE MESSAGE
+	set_color_easy(WHITE_ON_BLACK);
+	moveAlt(9, 1);
+	int defensepower = 0;
+	if (defense == 0 || defense == 3 || defense == 4)
+	{
 
-	 extern Log gamelog;
-	 
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(1, 1, CONST_justice143, gamelog);
-		 gamelog.nextMessage();
-		 pressAnyKey();
-		 // Check for lenience; sleeper judge will always be merciful
-		 if (sleeperjudge || LCSrandom(2)) penalize(g, 1);
-		 else penalize(g, 0);
-		 //CLEAN UP LAW FLAGS
-		 for (int i = 0; i < LAWFLAGNUM; i++) g.crimes_suspected[i] = 0;
-		 //Clean up heat, confessions
-		 g.heat = 0, g.confessions = 0;
-		 //PLACE PRISONER
-		 if (g.sentence != 0) imprison(g);
-		 else
-		 {
-			 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
-			 g.give_armor(clothes, NULL);
-		 }
-	 
- }
+		{
+			if (defense == 0) defensepower = LCSrandom(71);    // Court-appointed attorney
+			else if (defense == 3) defensepower = LCSrandom(71) + 80; // Ace Liberal attorney
+			else if (defense == 4)
+			{
+				// Sleeper attorney
+				defensepower = LCSrandom(71) + sleeperlawyer->get_skill(SKILL_LAW) * 2
+					+ sleeperlawyer->get_skill(SKILL_PERSUASION) * 2;
+				sleeperlawyer->train(SKILL_LAW, prosecution / 4);
+				sleeperlawyer->train(SKILL_PERSUASION, prosecution / 4);
+			}
+			if (defensepower <= 5) addstrAlt(CONST_justice109, gamelog);
+			else if (defensepower <= 15) addstrAlt(CONST_justice110, gamelog);
+			else if (defensepower <= 25) addstrAlt(CONST_justice111, gamelog);
+			else if (defensepower <= 50) addstrAlt(CONST_justice112, gamelog);
+			else if (defensepower <= 75) addstrAlt(CONST_justice113, gamelog);
+			else if (defensepower <= 100) addstrAlt(CONST_justice114, gamelog);
+			else if (defensepower <= 145)
+			{
+				if (prosecution < 100) addstrAlt(CONST_justice115, gamelog);
+				else addstrAlt(CONST_justice116, gamelog);
+			}
+			else
+			{
+				if (prosecution < 100)
+				{
+					addstrAlt(attorneyname, gamelog);
+					addstrAlt(CONST_justice117, gamelog);
+					mvaddstrAlt(10, 1, CONST_justice118, gamelog);
+					if (defense == 4) addjuice(*sleeperlawyer, 10, 500); // Bow please
+				}
+				else
+				{
+					addstrAlt(attorneyname, gamelog);
+					addstrAlt(CONST_justice119, gamelog);
+				}
+			}
+			gamelog.newline();
+		}
+	}
+	if (defense == 1)
+	{
+		// *JDS* LEGAL SELF-REPRESENTATION: To succeed here, you really need to have two skills be
+		// high: persuasion and law, with law being 1.5 times as influential. You can't have
+		// just one or just the other. Even if you're a very persuasive person, the court will eat
+		// you alive if you can't sound intelligent when talking about the relevant charges, and you
+		// won't be able to fool the jury into letting you go if you aren't persuasive, as no
+		// matter how encyclopedic your legal knowledge is, it's all in the pitch.
+		//
+		// If either your persuasion or your law roll is too low, you'll end up getting a negative
+		// result that will drag down your defense. So try not to suck in either area.
+		defensepower = 5 * (g.skill_roll(SKILL_PERSUASION) - 3) +
+			10 * (g.skill_roll(SKILL_LAW) - 3);
+		g.train(SKILL_PERSUASION, 50);
+		g.train(SKILL_LAW, 50);
+		addstrAlt(g.name, gamelog);
+		if (defensepower <= 0)
+		{
+			addstrAlt(CONST_justice120, gamelog);
+			gamelog.newline();
+			addjuice(g, -10, -50); // You should be ashamed
+		}
+		else if (defensepower <= 25) addstrAlt(CONST_justice121, gamelog);
+		else if (defensepower <= 50) addstrAlt(CONST_justice122, gamelog);
+		else if (defensepower <= 75) addstrAlt(CONST_justice123, gamelog);
+		else if (defensepower <= 100) addstrAlt(CONST_justice124, gamelog);
+		else if (defensepower <= 150) addstrAlt(CONST_justice125, gamelog);
+		else
+		{
+			addstrAlt(CONST_justice126, gamelog);
+			addjuice(g, 50, 1000); // That shit is legend
+		}
+		gamelog.newline();
+	}
+	// Debug defense power
+	if (SHOWMECHANICS)
+	{
+		addstrAlt(CONST_justice127);
+		addstrAlt(defensepower);
+		addstrAlt(CONST_justice128);
+		addstrAlt(jury + 1);
+		addstrAlt(CONST_justice129);
+	}
+	pressAnyKey();
+	//DELIBERATION MESSAGE
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(12, 1, CONST_justice130, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	//JURY RETURN MESSAGE
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 1, CONST_justice131, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	bool keeplawflags = false;
+	//HUNG JURY
+	if (defensepower == jury)
+	{
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		mvaddstrAlt(3, 1, CONST_justice132, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		//RE-TRY
+		if (LCSrandom(2) || scarefactor >= 10 || g.confessions)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(5, 1, CONST_justice133, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+			g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
+			keeplawflags = true;
+		}
+		//NO RE-TRY
+		else
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(5, 1, CONST_justice134, gamelog);
+			gamelog.newline();
+			if (g.sentence == 0)
+			{
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				mvaddstrAlt(7, 1, g.name, gamelog);
+				addstrAlt(CONST_justice139, gamelog);
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(7, 1, g.name, gamelog);
+				addstrAlt(CONST_justice140, gamelog);
+				if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
+				{
+					g.sentence--;
+					addstrAlt(CONST_justice141, gamelog);
+				}
+				else addstrAlt(singleDot, gamelog);
+				if (g.deathpenalty)
+				{
+					g.sentence = 3;
+					mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
+				}
+			}
+			gamelog.nextMessage();
+			pressAnyKey();
+		}
+	}
+	//ACQUITTAL!
+	else if (defensepower > jury)
+	{
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(3, 1, CONST_justice138, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		if (g.sentence == 0)
+		{
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			mvaddstrAlt(5, 1, g.name, gamelog);
+			addstrAlt(CONST_justice139, gamelog);
+		}
+		else
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(5, 1, g.name, gamelog);
+			addstrAlt(CONST_justice140, gamelog);
+			if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
+			{
+				g.sentence--;
+				addstrAlt(CONST_justice141, gamelog);
+			}
+			else addstrAlt(singleDot, gamelog);
+			if (g.deathpenalty)
+			{
+				g.sentence = 3;
+				mvaddstrAlt(7, 1, execution_in_three_months, gamelog);
+			}
+		}
+		gamelog.nextMessage();
+		// Juice sleeper
+		if (defense == 4) addjuice(*sleeperlawyer, 10, 100);
+		// Juice for self-defense
+		if (defense == 1) addjuice(g, 10, 100);
+		pressAnyKey();
+	}
+	//LENIENCE
+	else
+	{
+		// De-Juice sleeper
+		if (defense == 4) addjuice(*sleeperlawyer, -5, 0);
+		// Juice for getting convicted of something :)
+		addjuice(g, 25, 200);
+		// Check for lenience; sleeper judge will always be merciful
+		if (defensepower / 3 >= jury / 4 || sleeperjudge) penalize(g, 1);
+		else penalize(g, 0);
+	}
+	//CLEAN UP LAW FLAGS
+	if (!keeplawflags) for (int i = 0; i < LAWFLAGNUM; i++) g.crimes_suspected[i] = 0;
+	//Clean up heat, confessions
+	g.heat = 0, g.confessions = 0;
+	//PLACE PRISONER
+	if (g.sentence != 0) imprison(g);
+	else
+	{
+		Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
+		g.give_armor(clothes, NULL);
+	}
+
+}
+void pleadGuilty(Creature &g, const bool sleeperjudge) {
+
+	extern Log gamelog;
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 1, CONST_justice143, gamelog);
+	gamelog.nextMessage();
+	pressAnyKey();
+	// Check for lenience; sleeper judge will always be merciful
+	if (sleeperjudge || LCSrandom(2)) penalize(g, 1);
+	else penalize(g, 0);
+	//CLEAN UP LAW FLAGS
+	for (int i = 0; i < LAWFLAGNUM; i++) g.crimes_suspected[i] = 0;
+	//Clean up heat, confessions
+	g.heat = 0, g.confessions = 0;
+	//PLACE PRISONER
+	if (g.sentence != 0) imprison(g);
+	else
+	{
+		Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
+		g.give_armor(clothes, NULL);
+	}
+
+}
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
 {
@@ -1176,10 +1176,10 @@ void trial(Creature &g)
 	g.location = g.base;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1,  1, g.name, gamelog);
+	mvaddstrAlt(1, 1, g.name, gamelog);
 	addstrAlt(CONST_justice090, gamelog);
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
 	if (!iscriminal(g)) criminalize(g, LAWFLAG_LOITERING);
 	int scarefactor = 0;
@@ -1190,7 +1190,7 @@ void trial(Creature &g)
 	//CHECK FOR SLEEPERS
 	Creature *sleeperjudge = getSleeperJudge(g);
 	Creature *sleeperlawyer = getSleeperLawyer(g);
-	
+
 	//STATE CHARGES
 	set_color_easy(WHITE_ON_BLACK);
 	if (sleeperjudge)
@@ -1203,7 +1203,7 @@ void trial(Creature &g)
 	else mvaddstrAlt(3, 1, CONST_justice038, gamelog);
 	gamelog.newline();
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(5,  1, CONST_justice039, gamelog);
+	mvaddstrAlt(5, 1, CONST_justice039, gamelog);
 	addstrAlt(g.propername, gamelog);
 	addstrAlt(CONST_justice040, gamelog);
 	int y = listAllCrimes(g);
@@ -1219,11 +1219,11 @@ void trial(Creature &g)
 		addstrAlt(g.name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	//CHOOSE DEFENSE
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(y + 2,  1, CONST_justice078);
+	mvaddstrAlt(y + 2, 1, CONST_justice078);
 	char attorneyname[200];
 	unsigned long oldseed[RNG_SIZE];
 	copyRNG(oldseed, seed);
@@ -1231,32 +1231,32 @@ void trial(Creature &g)
 	generate_name(attorneyname);
 	copyRNG(seed, oldseed);
 	y += 4;
-	mvaddstrAlt(y++,  1, CONST_justice079);
-	mvaddstrAlt(y++,  1, CONST_justice080);
-	mvaddstrAlt(y++,  1, CONST_justice081);
+	mvaddstrAlt(y++, 1, CONST_justice079);
+	mvaddstrAlt(y++, 1, CONST_justice080);
+	mvaddstrAlt(y++, 1, CONST_justice081);
 	if (ledger.get_funds() < 5000) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(y++,  1, CONST_justice082);
+	mvaddstrAlt(y++, 1, CONST_justice082);
 	addstrAlt(attorneyname);
 	addstrAlt(singleDot);
 	if (sleeperlawyer)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y++,  1, CONST_justice083);
+		mvaddstrAlt(y++, 1, CONST_justice083);
 		addstrAlt(sleeperlawyer->name);
 		addstrAlt(CONST_justice084);
 	}
 	if (ledger.get_funds() < 5000) set_color_easy(WHITE_ON_BLACK);
 	//SAV - added in display of skills and relevant attributes to help
 	// decide when to defend self.
-	mvaddstrAlt(++y,  5, CONST_justice085);
+	mvaddstrAlt(++y, 5, CONST_justice085);
 	addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(y,  25, CONST_justice086);
+	mvaddstrAlt(y, 25, CONST_justice086);
 	addstrAlt(g.get_skill(SKILL_PERSUASION));
-	mvaddstrAlt(++y,  5, CONST_justice087);
+	mvaddstrAlt(++y, 5, CONST_justice087);
 	addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
-	mvaddstrAlt(y++,  25, CONST_justice088);
+	mvaddstrAlt(y++, 25, CONST_justice088);
 	addstrAlt(g.get_skill(SKILL_LAW));
-	mvaddstrAlt(y++,  5, CONST_justice089);
+	mvaddstrAlt(y++, 5, CONST_justice089);
 	addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	// End SAV's adds
 	short defense = -1;
@@ -1284,11 +1284,11 @@ void trial(Creature &g)
 						}
 	}
 	//TRIAL
-	if (defense != 2) { pleadInnocent(g, *sleeperlawyer,  attorneyname,   defense,   sleeperjudge,   scarefactor); }
+	if (defense != 2) { pleadInnocent(g, *sleeperlawyer, attorneyname, defense, sleeperjudge, scarefactor); }
 	//GUILTY PLEA
 	// How about CONST_justice142 (Nolo contendere) -- LK
 	// I would imagine this would disregard the strength of the defense. -- LK
-	else { pleadGuilty(g, sleeperjudge);  }
+	else { pleadGuilty(g, sleeperjudge); }
 }
 void reeducation(Creature &g)
 {
@@ -1299,7 +1299,7 @@ void reeducation(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(pickrandom(reeducation_experiences), gamelog);
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	moveAlt(10, 1);
 	if (!g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_FORMIDABLE))
 	{
@@ -1344,7 +1344,7 @@ void reeducation(Creature &g)
 		addstrAlt(CONST_justice148, gamelog);
 	}
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1381,7 +1381,7 @@ void laborcamp(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	moveAlt(10, 1);
 	if (escaped)
 	{
@@ -1429,7 +1429,7 @@ void laborcamp(Creature &g)
 		addstrAlt(CONST_justice158, gamelog);
 	}
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1492,7 +1492,7 @@ void prisonscene(Creature &g)
 	mvaddstrAlt(8, 1, g.name, gamelog);
 	addstrAlt(experience, gamelog);
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	moveAlt(10, 1);
 	if (escaped)
 	{
@@ -1544,7 +1544,7 @@ void prisonscene(Creature &g)
 		addstrAlt(CONST_justice169, gamelog);
 	}
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 	eraseAlt();
 	return;
 }
@@ -1583,11 +1583,11 @@ char prison(Creature &g)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8,  1, g.name, gamelog);
+			mvaddstrAlt(8, 1, g.name, gamelog);
 			addstrAlt(CONST_justice170, gamelog);
-			mvaddstrAlt(9,  1, CONST_justice171, gamelog);
+			mvaddstrAlt(9, 1, CONST_justice171, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			g.sentence = -1;
 			g.deathpenalty = 0;
 			return 1;
@@ -1601,12 +1601,12 @@ char prison(Creature &g)
 			{
 				eraseAlt();
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, CONST_justice172, gamelog);
+				mvaddstrAlt(8, 1, CONST_justice172, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(9,  1, CONST_justice173, gamelog);
+				mvaddstrAlt(9, 1, CONST_justice173, gamelog);
 				addstrAlt(g.name, gamelog);
 				gamelog.record(singleSpace); //Log this for formatting purposes.
-				mvaddstrAlt(10,  1, CONST_justice174, gamelog);
+				mvaddstrAlt(10, 1, CONST_justice174, gamelog);
 				if (lawList[LAW_DEATHPENALTY] == -2)
 					addstrAlt(pickrandom(cruel_and_unusual_execution_methods), gamelog);
 				else if (lawList[LAW_DEATHPENALTY] == -1 || lawList[LAW_DEATHPENALTY] == 0)
@@ -1614,18 +1614,18 @@ char prison(Creature &g)
 				else
 					addstrAlt(pickrandom(supposedly_painless_execution_method), gamelog);
 				addstrAlt(singleDot, gamelog);
-		 	pressAnyKey();
+				pressAnyKey();
 				//dejuice boss
 				int boss = getpoolcreature(g.hireid);
 				if (boss != -1)
 				{
 					gamelog.newline();
 					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(12,  1, pool[boss]->name, gamelog);
+					mvaddstrAlt(12, 1, pool[boss]->name, gamelog);
 					addstrAlt(CONST_justice175, gamelog);
 					gamelog.newline();
-					mvaddstrAlt(14,  1, CONST_justice176, gamelog);
-			 	pressAnyKey();
+					mvaddstrAlt(14, 1, CONST_justice176, gamelog);
+					pressAnyKey();
 					addjuice(*pool[boss], -50, -50);
 				}
 				gamelog.nextMessage();
@@ -1638,12 +1638,12 @@ char prison(Creature &g)
 			{
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(8,  1, g.name, gamelog);
+				mvaddstrAlt(8, 1, g.name, gamelog);
 				addstrAlt(CONST_justice177, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(9,  1, CONST_justice178, gamelog);
+				mvaddstrAlt(9, 1, CONST_justice178, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
 				g.give_armor(clothes, NULL);
 				// If their old base is no longer under LCS control, wander back to the
@@ -1660,20 +1660,20 @@ char prison(Creature &g)
 			{
 				eraseAlt();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, g.name, gamelog);
+				mvaddstrAlt(8, 1, g.name, gamelog);
 				addstrAlt(CONST_justice179, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				showed = 1;
 			}
 			else
 			{
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, g.name, gamelog);
+				mvaddstrAlt(8, 1, g.name, gamelog);
 				addstrAlt(CONST_justice180, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				showed = 1;
 			}
 		}
@@ -1683,12 +1683,12 @@ char prison(Creature &g)
 			{
 				eraseAlt();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8,  1, g.name, gamelog);
+				mvaddstrAlt(8, 1, g.name, gamelog);
 				addstrAlt(CONST_justice181, gamelog);
 				addstrAlt(g.sentence, gamelog);
 				addstrAlt(CONST_justice182, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				showed = 1;
 			}
 		}

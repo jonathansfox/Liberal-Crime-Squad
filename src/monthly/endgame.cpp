@@ -45,28 +45,28 @@ const string CONST_endgame002 = "archConservativeAmendment.txt";
 const string CONST_endgame001 = "stalinAmendment.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
-                                                                                    //
+																					//
 This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -83,16 +83,16 @@ void generate_name(char *str, char gender = GENDER_NEUTRAL);
 // for void printfunds(int,int,char*)
 #include "../common/misc.h"
 // for char* statename(int)
-         //shouldn't be in getnames? --Schmel924
+		 //shouldn't be in getnames? --Schmel924
 // for romannumeral (int)
-         //only usage here --Schmel924
+		 //only usage here --Schmel924
 #include "../title/titlescreen.h"
 // for void reset;
 #include "../title/highscore.h"
 // for void savehighscore(char endtype);
 //#include "../monthly/EndGameStatus.h"
 //own header
-        //does not compile without --Schmel924
+		//does not compile without --Schmel924
 #include "../politics/politics.h"
 //for publicmood
 #include "../cursesAlternative.h"
@@ -101,8 +101,8 @@ void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 #include "../common/musicClass.h"
- string pressKeyToReflect;
- string they_ll_round_you_up;
+string pressKeyToReflect;
+string they_ll_round_you_up;
 vector<int> state_biases;
 vector<string> reaganifiedCabinet;
 vector<string> stalinizedCabinet;
@@ -158,7 +158,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			mvaddstrAlt(0, 62, CONST_endgame009);
 			mvaddstrAlt(0, 70, CONST_endgame010);
 			mvaddstrAlt(24, 0, CONST_endgame011);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		bool yeswin_h = false, yeswin_s = false;
 		int yesvotes_h = 0, yesvotes_s = 0, s = 0;
@@ -222,7 +222,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 				else mvaddstrAlt(5 + s - 34, 54, statename(s));
 			}
 			mvaddstrAlt(24, 0, CONST_endgame012);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		for (int s = 0; s < STATENUM; s++)
 		{
@@ -287,8 +287,8 @@ void amendmentheading()
 	addstrAlt(CONST_endgame018);
 }
 /*
-    TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
-       that the country has become arch-conservative... --Addictgamer
+	TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
+	   that the country has become arch-conservative... --Addictgamer
 */
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
@@ -302,8 +302,8 @@ void tossjustices(char canseethings)
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12,  6, CONST_endgame019);
- 	pressAnyKey();
+		mvaddstrAlt(12, 6, CONST_endgame019);
+		pressAnyKey();
 	}
 	//STATE THE AMENDMENT
 	if (canseethings)
@@ -311,32 +311,32 @@ void tossjustices(char canseethings)
 		int tossnum = 0;
 		for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL) tossnum++;
 		amendmentheading();
-		mvaddstrAlt(2,  5, CONST_endgame020);
+		mvaddstrAlt(2, 5, CONST_endgame020);
 		if (tossnum != 1)addstrAlt(CONST_endgame021);
 		else addstrAlt(CONST_endgame022);
 		addstrAlt(CONST_endgame023);
 		int y = 4;
 		for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL)
 		{
-			mvaddstrAlt(y++,  0, courtname[j]);
+			mvaddstrAlt(y++, 0, courtname[j]);
 		}
-		mvaddstrAlt(y + 1,  5, CONST_endgame024);
+		mvaddstrAlt(y + 1, 5, CONST_endgame024);
 		if (tossnum != 1)addstrAlt(CONST_endgame028);
 		addstrAlt(CONST_endgame026);
-		mvaddstrAlt(y + 2,  0, CONST_endgame027);
+		mvaddstrAlt(y + 2, 0, CONST_endgame027);
 		if (tossnum != 1)addstrAlt(CONST_endgame028);
 		addstrAlt(CONST_endgame029);
-		mvaddstrAlt(y + 3,  0, CONST_endgame030);
+		mvaddstrAlt(y + 3, 0, CONST_endgame030);
 		if (tossnum != 1)addstrAlt(CONST_endgame031);
 		else addstrAlt(CONST_endgame032);
 		addstrAlt(CONST_endgame033);
-		mvaddstrAlt(y + 4,  0, CONST_endgame034);
+		mvaddstrAlt(y + 4, 0, CONST_endgame034);
 		if (tossnum != 1)addstrAlt(CONST_endgame035);
 		else addstrAlt(CONST_endgame036);
 		addstrAlt(CONST_endgame037);
-		mvaddstrAlt(y + 5,  0, CONST_endgame038);
-		mvaddstrAlt(y + 6,  0, CONST_endgame039);
-		mvaddstrAlt(24,  0, CONST_endgame045);
+		mvaddstrAlt(y + 5, 0, CONST_endgame038);
+		mvaddstrAlt(y + 6, 0, CONST_endgame039);
+		mvaddstrAlt(24, 0, CONST_endgame045);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(2, -1, -1, 1, canseethings))
@@ -351,8 +351,8 @@ void tossjustices(char canseethings)
 	}
 	if (canseethings)
 	{
-		mvaddstrAlt(24,  0, pressKeyToReflect);
- 	pressAnyKey();
+		mvaddstrAlt(24, 0, pressKeyToReflect);
+		pressAnyKey();
 	}
 }
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
@@ -367,8 +367,8 @@ void amendment_termlimits(char canseethings)
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12,  6, CONST_endgame041);
- 	pressAnyKey();
+		mvaddstrAlt(12, 6, CONST_endgame041);
+		pressAnyKey();
 	}
 	//STATE THE AMENDMENT
 	if (canseethings)
@@ -377,11 +377,11 @@ void amendment_termlimits(char canseethings)
 		{
 			int i = 2;
 			for (string s : amendmentPass) {
-				mvaddstrAlt(i,  0, s);
+				mvaddstrAlt(i, 0, s);
 				i++;
 			}
 		}
-		mvaddstrAlt(24,  0, CONST_endgame045);
+		mvaddstrAlt(24, 0, CONST_endgame045);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(2, -1, -1, 0, canseethings))
@@ -389,8 +389,8 @@ void amendment_termlimits(char canseethings)
 		termlimits = true;
 		if (canseethings)
 		{
-			mvaddstrAlt(24,  0, CONST_endgame043);
-	 	pressAnyKey();
+			mvaddstrAlt(24, 0, CONST_endgame043);
+			pressAnyKey();
 		}
 		elections_senate(0, canseethings);
 		elections_senate(1, canseethings);
@@ -400,25 +400,25 @@ void amendment_termlimits(char canseethings)
 	}
 	else if (canseethings)
 	{
-		mvaddstrAlt(24,  0, pressKeyToReflect);
- 	pressAnyKey();
+		mvaddstrAlt(24, 0, pressKeyToReflect);
+		pressAnyKey();
 	}
 }
- string conservativesRemakeWorld;
- string stalinistsRemakeWorld;
+string conservativesRemakeWorld;
+string stalinistsRemakeWorld;
 void badEndRemakeWorld(const string& str, const string& str2, const string& str3, EndTypes end) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	eraseAlt();
-	mvaddstrAlt(12,  10, str);
- 	pressAnyKey();
+	mvaddstrAlt(12, 10, str);
+	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
 	eraseAlt();
-	mvaddstrAlt(12,  12, str2);
- 	pressAnyKey();
+	mvaddstrAlt(12, 12, str2);
+	pressAnyKey();
 	set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	eraseAlt();
-	mvaddstrAlt(12,  14, str3);
- 	pressAnyKey();
+	mvaddstrAlt(12, 14, str3);
+	pressAnyKey();
 	savehighscore(end);
 }
 /* EndGameStatus - attempts to pass a constitutional amendment to lose the game */
@@ -463,17 +463,17 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		music.play(MUSIC_ELECTIONS);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		eraseAlt();
- 	pressAnyKey();
+		pressAnyKey();
 		//STATE THE AMENDMENT
 		amendmentheading();
 		{
 			int i = 2;
 			for (string s : output) {
-				mvaddstrAlt(i,  0, s);
+				mvaddstrAlt(i, 0, s);
 				i++;
 			}
 		}
-		mvaddstrAlt(24,  0, CONST_endgame045);
+		mvaddstrAlt(24, 0, CONST_endgame045);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(ratificationNumbers[0], ratificationNumbers[1], ratificationNumbers[2], ratificationNumbers[3], canseethings))
@@ -481,8 +481,8 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		music.play(endMusic);
 		if (canseethings)
 		{
-			mvaddstrAlt(24,  0, CONST_endgame046);
-	 	pressAnyKey();
+			mvaddstrAlt(24, 0, CONST_endgame046);
+			pressAnyKey();
 		}
 		amendnum = 1; // Constitution repealed...
 		if (canseethings)
@@ -571,9 +571,8 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 	{
 		if (canseethings)
 		{
-			mvaddstrAlt(24,  0, CONST_endgame047);
-	 	pressAnyKey();
+			mvaddstrAlt(24, 0, CONST_endgame047);
+			pressAnyKey();
 		}
 	}
 }
- 

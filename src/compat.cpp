@@ -63,64 +63,64 @@
 */
 
 #include "../cursesAlternative.h"
-int ptime=GetTickCount();
+int ptime = GetTickCount();
 void alarmset(int t)
 {
-   ptime=GetTickCount()+t;
+	ptime = GetTickCount() + t;
 }
 void alarmwait()
 {
-   while(ptime>(int)GetTickCount());
+	while (ptime > (int)GetTickCount());
 }
 void pause_ms(int t)
 {
-   alarmset(t);
-   refreshAlt();
-   alarmwait();
+	alarmset(t);
+	refreshAlt();
+	alarmwait();
 }
 // FNV-1a 32-bit hash function (fast and effective) -- helper function for getSeed()
-void fnvHash(unsigned long &fnv_hash,unsigned long num)
+void fnvHash(unsigned long &fnv_hash, unsigned long num)
 {
-   fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
-   fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
-   fnv_hash^=(num&0xffUL); // xor together with number's 1st byte
-   num>>=8; // right shift number to 2nd byte
-   fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
-   fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
-   fnv_hash^=(num&0xffUL); // xor together with number's 2nd byte
-   num>>=8; // right shift number to 3rd byte
-   fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
-   fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
-   fnv_hash^=(num&0xffUL); // xor together with number's 3rd byte
-   num>>=8; // right shift number to 4th byte
-   fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
-   fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
-   fnv_hash^=(num&0xffUL); // xor together with number's 4th byte
+	fnv_hash *= 16777619UL; // multiply by the FNV-1a hash's 32-bit prime
+	fnv_hash &= 0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
+	fnv_hash ^= (num & 0xffUL); // xor together with number's 1st byte
+	num >>= 8; // right shift number to 2nd byte
+	fnv_hash *= 16777619UL; // multiply by the FNV-1a hash's 32-bit prime
+	fnv_hash &= 0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
+	fnv_hash ^= (num & 0xffUL); // xor together with number's 2nd byte
+	num >>= 8; // right shift number to 3rd byte
+	fnv_hash *= 16777619UL; // multiply by the FNV-1a hash's 32-bit prime
+	fnv_hash &= 0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
+	fnv_hash ^= (num & 0xffUL); // xor together with number's 3rd byte
+	num >>= 8; // right shift number to 4th byte
+	fnv_hash *= 16777619UL; // multiply by the FNV-1a hash's 32-bit prime
+	fnv_hash &= 0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
+	fnv_hash ^= (num & 0xffUL); // xor together with number's 4th byte
 }
 // A high-quality RNG seed with multiple sources of entropy hashed together with FNV-1a hash
 unsigned long getSeed()
 {
-   unsigned long _seed=2166136261UL; // start out at the FNV-1a hash's 32-bit offset basis
+	unsigned long _seed = 2166136261UL; // start out at the FNV-1a hash's 32-bit offset basis
 #ifdef GO_PORTABLE // we have access to time.h's functions as entropy sources
-   fnvHash(_seed,time(NULL)); /* Seconds since 1970-01-01 00:00:00 */
-   fnvHash(_seed,clock()); /* clock ticks since LCS was launched (clock ticks are some fraction of a second that varies on different implementations) */
+	fnvHash(_seed, time(NULL)); /* Seconds since 1970-01-01 00:00:00 */
+	fnvHash(_seed, clock()); /* clock ticks since LCS was launched (clock ticks are some fraction of a second that varies on different implementations) */
 #endif // GO_PORTABLE
 #ifdef WIN32 // We're on Windows and can use the Win32 API as entropy sources
-   fnvHash(_seed,GetTickCount()); /* ms since system boot */
-   fnvHash(_seed,GetCurrentProcessId()); /* process ID for current process */
-   SYSTEM_INFO info; /* a whole bunch of system info */
-   GetSystemInfo(&info); /* get the system info */
-   fnvHash(_seed,(unsigned long)info.lpMinimumApplicationAddress); /* pointer to minimum accessible memory location */
-   fnvHash(_seed,(unsigned long)info.lpMaximumApplicationAddress); /* pointer to maximum accessible memory location */
+	fnvHash(_seed, GetTickCount()); /* ms since system boot */
+	fnvHash(_seed, GetCurrentProcessId()); /* process ID for current process */
+	SYSTEM_INFO info; /* a whole bunch of system info */
+	GetSystemInfo(&info); /* get the system info */
+	fnvHash(_seed, (unsigned long)info.lpMinimumApplicationAddress); /* pointer to minimum accessible memory location */
+	fnvHash(_seed, (unsigned long)info.lpMaximumApplicationAddress); /* pointer to maximum accessible memory location */
 #else // we're on a POSIX system and can use POSIX API entropy sources
 #if defined(_SC_AVPHYS_PAGES) && defined(_SC_PAGESIZE) // might or might not be defined... optional in POSIX
-   fnvHash(_seed,sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE)); /* current available memory */
+	fnvHash(_seed, sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE)); /* current available memory */
 #endif // defined(_SC_AVPHYS_PAGES) && defined(_SC_PAGESIZE)
 #ifdef _SC_NPROCESSORS_ONLN // might or might not be defined... optional in POSIX
-   fnvHash(_seed,sysconf(_SC_NPROCESSORS_ONLN));
+	fnvHash(_seed, sysconf(_SC_NPROCESSORS_ONLN));
 #endif // _SC_NPROCESSORS_ONLN
 #endif // WIN32
-   return _seed;
+	return _seed;
 }
 // Return a random number from 1 to 0xffffffff (any 32-bit integer except 0), using all of seed[].
 // This is a 32-bit version of George Marsaglia's xorshift pseudorandom number generator with 128-bit state space.
@@ -139,17 +139,17 @@ unsigned long r_num()
 		unsigned long t = seed[0] ^ ((seed[0] << 11) & 0xffffffff); // set temp variable and keep it within 32 bits
 		if (MORERANDOM) {
 			t ^= getSeed(); // add entropy
-	}// MORERANDOM
+		}// MORERANDOM
 		seed[0] = seed[1]; seed[1] = seed[2]; seed[2] = seed[3]; // shift variables
 		seed[3] = seed[3] ^ (seed[3] >> 19) ^ t ^ (t >> 8); // calculate random number
 		if (seed[3]) return seed[3]; // return a number unless it's zero, in which case it was initialized wrong
 		initMainRNG(); // recovery mechanism in case things were badly initialized
-}
+	}
 }
 // Picks a random number from 0 to max-1
 long LCSrandom(long max)
 {  // This expects r_num() to return a random number between 1 and 0xffffffff (any 32-bit integer except 0)... which it does
-   return (long)(max*(((long double)(r_num()-1))/((long double)0xffffffffUL)));
+	return (long)(max*(((long double)(r_num() - 1)) / ((long double)0xffffffffUL)));
 }
 // Returns a random number from 0 to 0xffffffff (any 32-bit integer), only using seed[0].
 // This is a linear congruential generator using parameters suggested in a paper by Pierre L'Ecuyer
@@ -158,26 +158,26 @@ long LCSrandom(long max)
 unsigned long r_num2()
 {
 	extern unsigned long seed[RNG_SIZE];
-   return seed[0]=(seed[0]*32310901UL+433494437UL)&0xffffffff; // return a random number, kept within 32 bits
+	return seed[0] = (seed[0] * 32310901UL + 433494437UL) & 0xffffffff; // return a random number, kept within 32 bits
 }
 // Initializes the xorshift Random Number Generator with help getSeed() and r_num2()
 void initMainRNG()
 {
 	extern unsigned long seed[RNG_SIZE];
 	// we got 4 integers to initialize, which we'll get from a well-seeded linear congruential generator
-   seed[0]=getSeed(); // seed the linear congruential generator
-   for(int i=RNG_SIZE-1;i>=0;i--) seed[i]=r_num2(); // initialize all the integers
+	seed[0] = getSeed(); // seed the linear congruential generator
+	for (int i = RNG_SIZE - 1; i >= 0; i--) seed[i] = r_num2(); // initialize all the integers
 }
 // Copies a xorshift Random Number Generator from src to dest
-void copyRNG(unsigned long(&dest)[RNG_SIZE],unsigned long(&src)[RNG_SIZE])
+void copyRNG(unsigned long(&dest)[RNG_SIZE], unsigned long(&src)[RNG_SIZE])
 {
-   for(int i=0;i<RNG_SIZE;i++) dest[i]=src[i]; // copy all the integers
+	for (int i = 0; i < RNG_SIZE; i++) dest[i] = src[i]; // copy all the integers
 }
 // Sets up another xorshift Random Number Generator whose state space is passed as an argument
 void initOtherRNG(unsigned long(&rng)[RNG_SIZE])
 {
 	extern unsigned long seed[RNG_SIZE];
-   r_num(); // randomize main xorshift RNG beforehand
-   copyRNG(rng,seed); // copy main xorshift RNG to the one we're setting up
-   r_num(); // randomize main xorshift RNG afterwards
+	r_num(); // randomize main xorshift RNG beforehand
+	copyRNG(rng, seed); // copy main xorshift RNG to the one we're setting up
+	r_num(); // randomize main xorshift RNG afterwards
 }

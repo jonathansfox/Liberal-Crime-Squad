@@ -80,28 +80,28 @@ const string CONST_saveload008 = "Verbose File Could Not Be Opened";
 const string CONST_saveload004 = "export";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
-                                                                                    //
+																					//
 This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -176,6 +176,7 @@ extern int police_heat;
 extern unsigned long attorneyseed[RNG_SIZE];
 extern char lcityname[CITY_NAMELEN];
 extern char slogan[SLOGAN_LEN];
+extern string slogan_str;
 extern short party_status;
 extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
@@ -801,7 +802,7 @@ void savegame(const string& filename)
 			fwrite(&location[l]->haveflag, sizeof(bool), 1, h);
 			fwrite(location[l]->mapseed, sizeof(unsigned long), RNG_SIZE, h);
 		}
-		
+
 		//VEHICLES
 		dummy = len(vehicle);
 		fwrite(&dummy, sizeof(int), 1, h);
@@ -1186,7 +1187,7 @@ char load(const string& filename)
 		recruit.resize(dummy);
 		for (int rt = 0; rt < len(recruit); rt++)
 		{
-			
+
 			long recruiter_id;
 			short timeleft;
 			char level;
@@ -1253,8 +1254,8 @@ char load(const string& filename)
 				delete_and_remove(vehicle, v--);
 			}
 		}
-			readVerbose(filename);
-		
+		readVerbose(filename);
+
 		return 1;
 	}
 	return 0;

@@ -1,27 +1,27 @@
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 #include "../includes.h"
@@ -99,7 +99,7 @@ void advancecreature(Creature &cr)
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 	int bleed = 0, topmedicalskill = 0;
@@ -107,7 +107,7 @@ void advancecreature(Creature &cr)
 	for (int i = 0; i < 6; i++) if (activesquad->squad[i] &&
 		activesquad->squad[i]->alive&&
 		activesquad->squad[i]->stunned == 0 &&
-		activesquad->squad[i]->blood>40 &&
+		activesquad->squad[i]->blood > 40 &&
 		activesquad->squad[i]->id != cr.id&&
 		activesquad->squad[i]->get_skill(SKILL_FIRSTAID) > topmedicalskill)
 		topmedicalskill = (topmedical = activesquad->squad[i])->get_skill(SKILL_FIRSTAID);
@@ -128,14 +128,14 @@ void advancecreature(Creature &cr)
 				gamelog.newline();
 				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
 				cr.wound[w] ^= WOUND_BLEEDING;
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			else bleed++;
 		}
 	}
 	if (mode == GAMEMODE_SITE && LCSrandom(3) &&
 		((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
-			(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
+		(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
 	{
 		int burndamage = (levelmap[locx][locy][locz].flag&SITEBLOCK_FIRE_PEAK) ? LCSrandom(40) : LCSrandom(20);
 		clearmessagearea();
@@ -179,7 +179,7 @@ void advancecreature(Creature &cr)
 				//<-- people dying in fire? probably your fault for starting it
 			}
 			adddeathmessage(cr);
-	 	pressAnyKey();
+			pressAnyKey();
 			if (cr.prisoner != NULL) freehostage(cr, 1);
 		}
 		else
@@ -188,7 +188,7 @@ void advancecreature(Creature &cr)
 			mvaddstrAlt(16, 1, cr.name, gamelog);
 			addstrAlt(isBurned, gamelog);
 			gamelog.newline(); //Next message?
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 	if (bleed > 0)
@@ -223,7 +223,7 @@ void advancecreature(Creature &cr)
 				//^-- might not die from squad attacking
 			}
 			adddeathmessage(cr);
-	 	pressAnyKey();
+			pressAnyKey();
 			if (cr.prisoner != NULL) freehostage(cr, 1);
 		}
 	}
@@ -259,13 +259,13 @@ void creatureadvance()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 					addstrAlt(drops, gamelog);
 					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(sBody, gamelog);
 					gamelog.newline();
 					makeloot(*activesquad->squad[p]->prisoner);
-			 	pressAnyKey();
+					pressAnyKey();
 					sitecrime += 10;
 					sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 					//criminalizeparty(LAWFLAG_MURDER);
@@ -314,12 +314,12 @@ void creatureadvance()
 				sitealarmtimer = 0;
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16,  1, smellsPanic, gamelog);
+				mvaddstrAlt(16, 1, smellsPanic, gamelog);
 				gamelog.newline();
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
 				else printencounter();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 		for (int z = 0; z < MAPZ; z++)
@@ -384,7 +384,7 @@ void creatureadvance()
 							if (tries == 5) // If all four directions unacceptable, spread upward
 							{
 								// Check if up is valid
-								if (z < MAPZ&&
+								if (z < MAPZ &&
 									!(levelmap[x][y][z + 1].flag & SITEBLOCK_FIRE_START) &&
 									!(levelmap[x][y][z + 1].flag & SITEBLOCK_DEBRIS) &&
 									!(levelmap[x][y][z + 1].flag & SITEBLOCK_FIRE_PEAK) &&

@@ -2,7 +2,6 @@
 const string CONST_game015 = "masktype";
 const string CONST_game014 = "default";
 const string CONST_game013 = "Unspecified error with custom text";
-const string CONST_game012 = "We need a slogan!";
 const string CONST_game011 = "debug_defines.txt";
 const string CONST_game010 = "File Error: InitiateMoreIncompleteText";
 const string CONST_game009 = "File Error: InitiateIncompleteText";
@@ -35,8 +34,8 @@ const string blankString = "";
 //////////////////////////////////////////////////////////////////////////////////////////
 //outstanding issues
    //site trucker-type bug still happens (latte-stand)
-      //might have to do with missing location in the verifyworklocation() loop
-         //but cannot locate instance of this
+	  //might have to do with missing location in the verifyworklocation() loop
+		 //but cannot locate instance of this
    //can have hostage in court?
 //changes 3.10 alpha 1
    //added AZERTY keyboard support
@@ -58,9 +57,9 @@ const string blankString = "";
 //changes 3.09
    //udistrict -> outoftown for the outskirts location
    //in advanceday(), made people going on vacation drop off squad loot
-      //if they are the last person in their squad (or else it would be deleted)
+	  //if they are the last person in their squad (or else it would be deleted)
    //added a function to every instance where a vehicle is deleted that
-      //makes sure that the liberal car preferences are nullified
+	  //makes sure that the liberal car preferences are nullified
    //update version number on the title screen
    //changed version variable to 30900
    //changed activesquad to squad[sq] in one portion of the squad movement code
@@ -81,7 +80,6 @@ const string tag_skill = "skill";
 #include "common/interval.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
-//#include "news/news.h"
 void loadgraphics();
 #include "creature/creaturetype.h"
 #include "items/loottype.h"
@@ -117,7 +115,7 @@ struct highscorest
 };
 highscorest score[SCORENUM];
 #ifdef WIN32
-bool fixcleartype=false;
+bool fixcleartype = false;
 #endif
 struct pointerAndString {
 	bool *super_collection;
@@ -148,13 +146,13 @@ void mainTwo() {
 }
 #include "common/musicClass.h"
 void mainThree() {
-	extern char* PACKAGE_VERSION;
+	extern string PACKAGE_VERSION_STR;
 	extern MusicClass music;
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 								 // set window title
 	char wtitle[50];
 	strcpy(wtitle, CONST_game004);
-	strcat(wtitle, PACKAGE_VERSION);
+	strcat(wtitle, PACKAGE_VERSION_STR.c_str());
 	set_title(wtitle);
 }
 string failedToLoadSitemaps;
@@ -172,8 +170,8 @@ void mainFour() {
 	start_colorAlt();
 	initMainRNG();
 	//initialize the array of color pairs
-	for (int i = 0; i<8; i++)
-		for (int j = 0; j<8; j++)
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
 		{
 			if (i == 0 && j == 0)
 			{
@@ -198,7 +196,7 @@ void mainFour() {
 	{
 		addstrAlt(failedToLoadSitemaps, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	//Setting initial game data...
 }
@@ -232,34 +230,35 @@ void mainFive() {
 	}
 	if (SHITLAWS) {
 		for (int l = 0; l < LAWNUM; l++) { lawList[l] = -2; }
-	}else
-	if (PERFECTLAWS) {
-		for (int l = 0; l < LAWNUM; l++) { lawList[l] = 2; }
 	}
-	else {
-		lawList[LAW_ABORTION] = 1;
-		lawList[LAW_ANIMALRESEARCH] = -1;
-		lawList[LAW_POLICEBEHAVIOR] = -1;
-		lawList[LAW_PRIVACY] = -1;
-		lawList[LAW_DEATHPENALTY] = -1;
-		lawList[LAW_NUCLEARPOWER] = -1;
-		lawList[LAW_POLLUTION] = -1;
-		lawList[LAW_LABOR] = 0;
-		lawList[LAW_GAY] = 1;
-		lawList[LAW_CORPORATE] = 0;
-		lawList[LAW_FREESPEECH] = 0;
-		lawList[LAW_FLAGBURNING] = 1;
-		lawList[LAW_GUNCONTROL] = -1;
-		lawList[LAW_TAX] = 0;
-		lawList[LAW_WOMEN] = 1;
-		lawList[LAW_CIVILRIGHTS] = 1;
-		lawList[LAW_DRUGS] = -1;
-		lawList[LAW_IMMIGRATION] = 0;
-		lawList[LAW_ELECTIONS] = 0;
-		lawList[LAW_MILITARY] = -1;
-		lawList[LAW_PRISONS] = 0;
-		lawList[LAW_TORTURE] = -1;
-	}
+	else
+		if (PERFECTLAWS) {
+			for (int l = 0; l < LAWNUM; l++) { lawList[l] = 2; }
+		}
+		else {
+			lawList[LAW_ABORTION] = 1;
+			lawList[LAW_ANIMALRESEARCH] = -1;
+			lawList[LAW_POLICEBEHAVIOR] = -1;
+			lawList[LAW_PRIVACY] = -1;
+			lawList[LAW_DEATHPENALTY] = -1;
+			lawList[LAW_NUCLEARPOWER] = -1;
+			lawList[LAW_POLLUTION] = -1;
+			lawList[LAW_LABOR] = 0;
+			lawList[LAW_GAY] = 1;
+			lawList[LAW_CORPORATE] = 0;
+			lawList[LAW_FREESPEECH] = 0;
+			lawList[LAW_FLAGBURNING] = 1;
+			lawList[LAW_GUNCONTROL] = -1;
+			lawList[LAW_TAX] = 0;
+			lawList[LAW_WOMEN] = 1;
+			lawList[LAW_CIVILRIGHTS] = 1;
+			lawList[LAW_DRUGS] = -1;
+			lawList[LAW_IMMIGRATION] = 0;
+			lawList[LAW_ELECTIONS] = 0;
+			lawList[LAW_MILITARY] = -1;
+			lawList[LAW_PRISONS] = 0;
+			lawList[LAW_TORTURE] = -1;
+		}
 }
 string fixLineSpecialCharacter(char * toFix) {
 	string str = blankString;
@@ -343,7 +342,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
 		cout << failedToLoad + fileName + exclamationPoint << endl;
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	else {
 		while (!txtFile.eof()) {
@@ -361,7 +360,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 					line.push_back(currentLine);
 					if (!isThisNotComment(currentLine)) {
 						cout << CONST_game006 << endl << currentLine << endl;
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 				}
 				types.push_back(line);
@@ -371,7 +370,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 	success = types.size() > 0;
 	if (!success) {
 		addstrAlt(CONST_game008 + fileName);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return success;
 }
@@ -385,7 +384,7 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
 		cout << failedToLoad + fileName + exclamationPoint << endl;
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	else {
 		cout << endl;
@@ -402,7 +401,7 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	success = types.size() > 0;
 	if (!success) {
 		addstrAlt(CONST_game008 + fileName);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return success;
 }
@@ -441,7 +440,7 @@ bool initialize_txt() {
 	extern vector<file_and_text_collection> reviewmode_text_file_collection;
 	extern vector<file_and_text_collection> siege_text_file_collection;
 	extern vector<file_and_text_collection> stealth_text_file_collection;
-	vector<vector<file_and_text_collection> > vast_text_collection = { 
+	vector<vector<file_and_text_collection> > vast_text_collection = {
 		activate_text_file_collection,
 		activities_text_file_collection,
 		baseactions_text_file_collection,
@@ -475,7 +474,7 @@ bool initialize_txt() {
 		stealth_text_file_collection,
 	};
 	bool loaded = true;
-	
+
 	for (vector<file_and_text_collection> file : vast_text_collection) {
 		for (file_and_text_collection f : file) {
 			if (f.superCollection) {
@@ -488,14 +487,14 @@ bool initialize_txt() {
 	}
 	loaded &= initialize_incomplete_txt();
 	if (!loaded) {
-		addstrAlt(CONST_game009 );
- 	pressAnyKey();
+		addstrAlt(CONST_game009);
+		pressAnyKey();
 	}
 	else {
 		loaded &= initialize_more_incomplete_txt();
 		if (!loaded) {
 			addstrAlt(CONST_game010);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 	return loaded;
@@ -529,54 +528,47 @@ void initialize_debug_defines() {
 			}
 		}
 		if (DISPLAYDEBUG) {
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 }
 void mainSix() {
-	extern char slogan[];
 	extern short senate[];
 	extern short house[];
 	extern short court[];
 	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	extern short  exec[];
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern vector<string> default_slogans;
-	strcpy(slogan, CONST_game012);
-	if (!LCSrandom(20))
+	for (int s = 0; s < SENATENUM; s++)
 	{
-		strcpy(slogan, pickrandom(default_slogans));
-	}
-	for (int s = 0; s<SENATENUM; s++)
-	{
-		if (s<25) senate[s] = -2;
-		else if (s<60) senate[s] = -1;
-		else if (s<80) senate[s] = 0;
-		else if (s<95) senate[s] = 1;
+		if (s < 25) senate[s] = -2;
+		else if (s < 60) senate[s] = -1;
+		else if (s < 80) senate[s] = 0;
+		else if (s < 95) senate[s] = 1;
 		else senate[s] = 2;
 	}
-	for (int h = 0; h<HOUSENUM; h++)
+	for (int h = 0; h < HOUSENUM; h++)
 	{
-		if (h<50) house[h] = -2;
-		else if (h<250) house[h] = -1;
-		else if (h<350) house[h] = 0;
-		else if (h<400) house[h] = 1;
+		if (h < 50) house[h] = -2;
+		else if (h < 250) house[h] = -1;
+		else if (h < 350) house[h] = 0;
+		else if (h < 400) house[h] = 1;
 		else house[h] = 2;
 	}
-	for (int c = 0; c<COURTNUM; c++)
+	for (int c = 0; c < COURTNUM; c++)
 	{
-		if (c<3) court[c] = -2;
-		else if (c<5) court[c] = -1;
-		else if (c<5) court[c] = 0;
-		else if (c<8) court[c] = 1;
+		if (c < 3) court[c] = -2;
+		else if (c < 5) court[c] = -1;
+		else if (c < 5) court[c] = 0;
+		else if (c < 8) court[c] = 1;
 		else court[c] = 2;
 		do
 		{
 			if (court[c] == -2) generate_name(courtname[c], GENDER_WHITEMALEPATRIARCH);
 			else generate_name(courtname[c]);
-		} while (len(courtname[c])>20);
+		} while (len(courtname[c]) > 20);
 	}
-	for (int e = 0; e<EXECNUM; e++)
+	for (int e = 0; e < EXECNUM; e++)
 	{
 		exec[e] = -2;
 		generate_name(execname[e], GENDER_WHITEMALEPATRIARCH);
@@ -595,7 +587,7 @@ int main(int argc, char* argv[])
 	bool xml_loaded_ok = initialize_txt();
 	if (!xml_loaded_ok) {
 		mvaddstrAlt(0, 0, CONST_game013);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	mainThree();
 	mainFour();
@@ -618,7 +610,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 	if (!xml.Load(string(artdir) + file))
 	{ //File is missing or not valid XML.
 		addstrAlt(failedToLoad + file + exclamationPoint, log);
- 	pressAnyKey();
+		pressAnyKey();
 		return false; //Abort.
 	}
 	xml.FindElem();
@@ -628,13 +620,13 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 	else
 	{
 		addstrAlt(defaultMissingForMask, log);
- 	pressAnyKey();
+		pressAnyKey();
 		return false; //Abort.
 	}
 	if (defaultindex == -1)
 	{
 		addstrAlt(defaultUnknownForMask, log);
- 	pressAnyKey();
+		pressAnyKey();
 		return false; //Abort.
 	}
 	xml.ResetMainPos();

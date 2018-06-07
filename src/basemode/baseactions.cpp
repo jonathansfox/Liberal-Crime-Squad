@@ -58,13 +58,13 @@ int squadsize(const squadst *st);
 extern string singleSpace;
 string enter_done;
 string spaceDashSpace;
- string chooseALiberalTo;
- string string_sleeper;
- vector<string> vehicleParagraph;
- const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> baseactions_text_file_collection = {
-	 customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
- };
+string chooseALiberalTo;
+string string_sleeper;
+vector<string> vehicleParagraph;
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> baseactions_text_file_collection = {
+	customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
+};
 /* base - burn the flag */
 void burnflag()
 {
@@ -143,7 +143,7 @@ void burnflag()
 		{
 			int x = LCSrandom(18);
 			int y = LCSrandom(7);
-			
+
 			if (flag[x][y][0] == ':' || flag[x][y][0] == '.' || flag[x][y][0] == CH_UPPER_HALF_BLOCK || flag[x][y][0] == CH_LOWER_HALF_BLOCK)
 			{
 				bool conf = false;
@@ -151,28 +151,28 @@ void burnflag()
 				{
 					if (flag[x - 1][y][0] != ':'&&
 						flag[x - 1][y][0] != '.'&&
-						flag[x - 1][y][0] != CH_UPPER_HALF_BLOCK&&
+						flag[x - 1][y][0] != CH_UPPER_HALF_BLOCK &&
 						flag[x - 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
 				}
 				if (x < 17)
 				{
 					if (flag[x + 1][y][0] != ':'&&
 						flag[x + 1][y][0] != '.'&&
-						flag[x + 1][y][0] != CH_UPPER_HALF_BLOCK&&
+						flag[x + 1][y][0] != CH_UPPER_HALF_BLOCK &&
 						flag[x + 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
 				}
 				if (y > 0)
 				{
 					if (flag[x][y - 1][0] != ':'&&
 						flag[x][y - 1][0] != '.'&&
-						flag[x][y - 1][0] != CH_UPPER_HALF_BLOCK&&
+						flag[x][y - 1][0] != CH_UPPER_HALF_BLOCK &&
 						flag[x][y - 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
 				}
 				if (y < 6)
 				{
 					if (flag[x][y + 1][0] != ':'&&
 						flag[x][y + 1][0] != '.'&&
-						flag[x][y + 1][0] != CH_UPPER_HALF_BLOCK&&
+						flag[x][y + 1][0] != CH_UPPER_HALF_BLOCK &&
 						flag[x][y + 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
 				}
 				if (conf)
@@ -193,11 +193,13 @@ void getslogan()
 	const string CONST_baseactions006 = "                                                                                          ";
 	const string CONST_baseactions005 = "What is your new slogan?";
 	extern char slogan[SLOGAN_LEN];
+	extern string slogan_str;
 	extern vector<string> default_slogans;
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(16, 0, CONST_baseactions005);
 	mvaddstrAlt(17, 0, CONST_baseactions006); // 80 spaces
 	enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).c_str());
+	slogan_str = slogan;
 }
 /* base - reorder party */
 void orderparty()
@@ -247,7 +249,7 @@ void setvehicles()
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_baseactions010);
+		mvaddstrAlt(0, 0, CONST_baseactions010);
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
@@ -386,9 +388,9 @@ void setvehicles()
 		}
 		//SAV - End add
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<lenVehiclePool()) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < lenVehiclePool()) page++;
 		if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	}
 }

@@ -8,7 +8,3 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source);
 void equipmentbaseassign();
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<Item *> &loot);
-/* compares two items, used in sorting gear */
-char itemcompare(Item *a, Item *b);
-/* check if the squad has a certain weapon */
-char squadhasitem(squadst &sq, int type, int subtype);

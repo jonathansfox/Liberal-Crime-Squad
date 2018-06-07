@@ -58,115 +58,121 @@ extern string singleSpace;
 void generate_name(char *first, char *last, char gender);
 void firstname(char *str, char gender);
 string lastname(bool archconservative);
-	/* fills a string with a proper name */
-	void generate_name(char *str, char gender)
+
+/* fills a string with a proper name */
+void generate_name(char *str, char gender)
+{
+	char first[80];
+	char last[80];
+	generate_name(first, last, gender);
+	strcpy(str, first);
+	strcat(str, singleSpace.data());
+	strcat(str, last);
+}
+string generate_name(char gender) {
+	char str[200];
+	generate_name(str, gender);
+	return str;
+}
+/* get a first and last name for the same person */
+void generate_name(char *first, char *last, char gender)
+{
+	do {
+		firstname(first, gender);
+		strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
+	} while (strcmp(first, last) == 0);
+}
+/* get a first, middle, and last name for the same person */
+void generate_long_name(char *first, char *middle, char *last, char gender)
+{
+	// pick either male or female so we can have 75% chance of first and middle names having matching genders
+	if (gender == GENDER_NEUTRAL)
+		gender = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
+	do {
+		firstname(first, gender);
+		if (LCSrandom(2)) // middle name is a first name
+			firstname(middle, (gender == GENDER_WHITEMALEPATRIARCH || LCSrandom(2) ? gender : GENDER_NEUTRAL)); // 25% chance for middle name of other gender unless white male patriarch
+		else // middle name is a last name
+			strcpy(middle, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
+		strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
+	} while (strcmp(first, middle) == 0 && strcmp(first, last) == 0 && strcmp(middle, last) == 0);
+}
+/* gets a random first name */
+void firstname(char *str, char gender)
+{
+	const string CONST_creaturenames009 = "Errol";
+	strcpy(str, blankString.c_str());
+	int roll, nametable;
+	// If we don't care if the name is male or female, pick one randomly
+	// This ensures gender balance in the names chosen
+	if (gender == GENDER_NEUTRAL)
+		gender = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
+	// For white male Arch-Conservative politicians
+	if (gender == GENDER_WHITEMALEPATRIARCH)
+		nametable = GENDER_WHITEMALEPATRIARCH;
+	// Assign a name from the available names for each gender
+	if (gender == GENDER_MALE)
 	{
-		char first[80];
-		char last[80];
-		generate_name(first, last, gender);
-		strcpy(str, first);
-		strcat(str, singleSpace.data());
-		strcat(str, last);
-	}
-	/* get a first and last name for the same person */
-	void generate_name(char *first, char *last, char gender)
-	{
-		do {
-			firstname(first, gender);
-			strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
-		} while (strcmp(first, last) == 0);
-	}
-	/* get a first, middle, and last name for the same person */
-	void generate_long_name(char *first, char *middle, char *last, char gender)
-	{
-		// pick either male or female so we can have 75% chance of first and middle names having matching genders
-		if (gender == GENDER_NEUTRAL)
-			gender = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-		do {
-			firstname(first, gender);
-			if (LCSrandom(2)) // middle name is a first name
-				firstname(middle, (gender == GENDER_WHITEMALEPATRIARCH || LCSrandom(2) ? gender : GENDER_NEUTRAL)); // 25% chance for middle name of other gender unless white male patriarch
-			else // middle name is a last name
-				strcpy(middle, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
-			strcpy(last, lastname(gender == GENDER_WHITEMALEPATRIARCH).data());
-		} while (strcmp(first, middle) == 0 && strcmp(first, last) == 0 && strcmp(middle, last) == 0);
-	}
-	/* gets a random first name */
-	void firstname(char *str, char gender)
-	{
-		const string CONST_creaturenames009 = "Errol";
-		strcpy(str, blankString.c_str());
-		int roll, nametable;
-		// If we don't care if the name is male or female, pick one randomly
-		// This ensures gender balance in the names chosen
-		if (gender == GENDER_NEUTRAL)
-			gender = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-		// For white male Arch-Conservative politicians
-		if (gender == GENDER_WHITEMALEPATRIARCH)
-			nametable = GENDER_WHITEMALEPATRIARCH;
-		// Assign a name from the available names for each gender
-		if (gender == GENDER_MALE)
-		{
-			// Roll on the number of gender-specific names,
-			// plus the number of gender-neutral names
-			roll = LCSrandom(len(male_first_names) +
-				len(gender_neutral_first_names));
-			// Decide whether to use a gender-specific name
-			// or a gender-neutral name
-			if (roll >= len(gender_neutral_first_names))
-				nametable = GENDER_MALE;
-			else
-				nametable = GENDER_NEUTRAL;
-		}
-		else if (gender == GENDER_FEMALE)
-		{
-			// (Same here, just use the number of female names instead)
-			roll = LCSrandom(len(female_first_names) +
-				len(gender_neutral_first_names));
-			if (roll >= len(gender_neutral_first_names))
-				nametable = GENDER_FEMALE;
-			else
-				nametable = GENDER_NEUTRAL;
-		}
-		if (nametable == GENDER_MALE) {
-			//IsaacG string.data() returns the char* representation of the string
-			strcat(str, pickrandom(male_first_names).data());
-		}
-		else if (nametable == GENDER_FEMALE) {
-			strcat(str, pickrandom(female_first_names).data());
-		}
-		else if (nametable == GENDER_NEUTRAL) {
-			strcat(str, pickrandom(gender_neutral_first_names).data());
-		}
-		else if (nametable == GENDER_WHITEMALEPATRIARCH) {
-			strcat(str, pickrandom(great_white_male_patriarch_first_names).data());
-		}
+		// Roll on the number of gender-specific names,
+		// plus the number of gender-neutral names
+		roll = LCSrandom(len(male_first_names) +
+			len(gender_neutral_first_names));
+		// Decide whether to use a gender-specific name
+		// or a gender-neutral name
+		if (roll >= len(gender_neutral_first_names))
+			nametable = GENDER_MALE;
 		else
-			strcat(str, CONST_creaturenames009.c_str());
+			nametable = GENDER_NEUTRAL;
 	}
-	string lastname(bool archconservative)
-		//{{{ Last Name
+	else if (gender == GENDER_FEMALE)
 	{
-		char str[80];
-		strcpy(str, blankString.c_str());
-		// For non-Arch-Conservatives, pick from ALL last names
-		if (!archconservative)
-		{
-			// Roll on the number of non-Arch-Conservative last names,
-			// plus the number of regular last names
-			int roll = LCSrandom(len(regular_last_names) +
-				len(archconservative_last_names));
-			// Decide whether to use an Arch-Conservative last name
-			// or a regular last name
-			archconservative = (roll >= len(regular_last_names));
-		}
-		// Now the archconservative variable might be true even if the function wasn't called that way,
-		// but if it WAS called that way it's definitely true... this way non-Arch-Conservatives get
-		// random last names out of all the last names, while Arch-Conservatives are limited to their own
-		// last names
-		if (archconservative)
-			strcat(str, pickrandom(archconservative_last_names).data());
+		// (Same here, just use the number of female names instead)
+		roll = LCSrandom(len(female_first_names) +
+			len(gender_neutral_first_names));
+		if (roll >= len(gender_neutral_first_names))
+			nametable = GENDER_FEMALE;
 		else
-			strcat(str, pickrandom(regular_last_names).data());
-		return str;
+			nametable = GENDER_NEUTRAL;
 	}
+	if (nametable == GENDER_MALE) {
+		//IsaacG string.data() returns the char* representation of the string
+		strcat(str, pickrandom(male_first_names).data());
+	}
+	else if (nametable == GENDER_FEMALE) {
+		strcat(str, pickrandom(female_first_names).data());
+	}
+	else if (nametable == GENDER_NEUTRAL) {
+		strcat(str, pickrandom(gender_neutral_first_names).data());
+	}
+	else if (nametable == GENDER_WHITEMALEPATRIARCH) {
+		strcat(str, pickrandom(great_white_male_patriarch_first_names).data());
+	}
+	else
+		strcat(str, CONST_creaturenames009.c_str());
+}
+string lastname(bool archconservative)
+//{{{ Last Name
+{
+	char str[80];
+	strcpy(str, blankString.c_str());
+	// For non-Arch-Conservatives, pick from ALL last names
+	if (!archconservative)
+	{
+		// Roll on the number of non-Arch-Conservative last names,
+		// plus the number of regular last names
+		int roll = LCSrandom(len(regular_last_names) +
+			len(archconservative_last_names));
+		// Decide whether to use an Arch-Conservative last name
+		// or a regular last name
+		archconservative = (roll >= len(regular_last_names));
+	}
+	// Now the archconservative variable might be true even if the function wasn't called that way,
+	// but if it WAS called that way it's definitely true... this way non-Arch-Conservatives get
+	// random last names out of all the last names, while Arch-Conservatives are limited to their own
+	// last names
+	if (archconservative)
+		strcat(str, pickrandom(archconservative_last_names).data());
+	else
+		strcat(str, pickrandom(regular_last_names).data());
+	return str;
+}

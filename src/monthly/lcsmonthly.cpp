@@ -174,10 +174,10 @@ int getloottype(const string &idname);
 #include "../common/musicClass.h"
 extern string spaceDashSpace;
 extern string closeParenthesis;
- string bound_to_rile_up;
- string major_news_take_it_up;
-  map<short, string> expenseTypes;
-  map<short, string> incomeTypes;
+string bound_to_rile_up;
+string major_news_take_it_up;
+map<short, string> expenseTypes;
+map<short, string> incomeTypes;
 //TODO: Log the monthly report? --Addictgamer
 /* monthly - reports the guardian's power to the player */
 void guardianupdate(char size, int power)
@@ -226,10 +226,10 @@ void guardianupdate(char size, int power)
 	else
 	{
 		addstrAlt(CONST_lcsmonthly027, gamelog);
-		mvaddstrAlt(8,  2, CONST_lcsmonthly028, gamelog);
+		mvaddstrAlt(8, 2, CONST_lcsmonthly028, gamelog);
 	}
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 	return;
 }
 /* monthly - lets the player choose a special edition for the guardian */
@@ -285,7 +285,7 @@ int choosespecialedition(char &clearformess)
 		music.play(MUSIC_NEWSPAPER);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, CONST_lcsmonthly029);
+		mvaddstrAlt(0, 0, CONST_lcsmonthly029);
 		int x = 1, y = 10;
 		char str[200];
 		for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
@@ -294,7 +294,7 @@ int choosespecialedition(char &clearformess)
 			str[1] = '\x0';
 			strcat(str, spaceDashSpace.c_str());
 			strcat(str, LootTypePool::getInstance().getIdName(loottypeindex[l]).c_str());
-			mvaddstrAlt(y,  x, str);
+			mvaddstrAlt(y, x, str);
 			x += 26;
 			if (x > 53) x = 1, y++;
 		}
@@ -306,9 +306,9 @@ int choosespecialedition(char &clearformess)
 		//PAGE DOWN
 		if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
 		{
-			mvaddstrAlt(17, 53,addnextpagestr());
+			mvaddstrAlt(17, 53, addnextpagestr());
 		}
-		mvaddstrAlt(24,  1, CONST_lcsmonthly030);
+		mvaddstrAlt(24, 1, CONST_lcsmonthly030);
 		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'r')
 		{
@@ -341,9 +341,9 @@ int choosespecialedition(char &clearformess)
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18<LootTypePool::getInstance().lenpool()) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
 	}
 	return -1;
 }
@@ -367,7 +367,7 @@ void printnews(short li, short newspaper)
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (lootIDName == tag_LOOT_CEOPHOTOS) // Tmp -XML
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly031, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly031, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -399,9 +399,9 @@ void printnews(short li, short newspaper)
 		case 9:addstrAlt(CONST_lcsmonthly041, gamelog); break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
+		mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -409,7 +409,7 @@ void printnews(short li, short newspaper)
 	}
 	else if (lootIDName == tag_LOOT_CEOLOVELETTERS)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly042, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly042, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -441,9 +441,9 @@ void printnews(short li, short newspaper)
 		case 7:addstrAlt(CONST_lcsmonthly050, gamelog); break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
+		mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -451,7 +451,7 @@ void printnews(short li, short newspaper)
 	}
 	else if (lootIDName == tag_LOOT_CEOTAXPAPERS)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly051, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly051, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -463,9 +463,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
+		mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -473,7 +473,7 @@ void printnews(short li, short newspaper)
 	}
 	else if (lootIDName == tag_LOOT_CORPFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly053, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly053, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, newspaper * 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
@@ -501,9 +501,9 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, bound_to_rile_up, gamelog);
+		mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CEOSALARY, 50);
 		change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -511,32 +511,32 @@ void printnews(short li, short newspaper)
 	}
 	else if (lootIDName == tag_LOOT_CCS_BACKERLIST)
 	{
-		mvaddstrAlt(5,  1, CONST_lcsmonthly059, gamelog);
+		mvaddstrAlt(5, 1, CONST_lcsmonthly059, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(6,  1, CONST_lcsmonthly060, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly060, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(7,  1, CONST_lcsmonthly061, gamelog);
+		mvaddstrAlt(7, 1, CONST_lcsmonthly061, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(8,  1, CONST_lcsmonthly062, gamelog);
+		mvaddstrAlt(8, 1, CONST_lcsmonthly062, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(9,  1, CONST_lcsmonthly063, gamelog);
+		mvaddstrAlt(9, 1, CONST_lcsmonthly063, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, CONST_lcsmonthly064, gamelog);
+		mvaddstrAlt(10, 1, CONST_lcsmonthly064, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(11,  1, CONST_lcsmonthly065, gamelog);
+		mvaddstrAlt(11, 1, CONST_lcsmonthly065, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(12,  1, CONST_lcsmonthly066, gamelog);
-		mvaddstrAlt(14,  1, CONST_lcsmonthly067, gamelog);
+		mvaddstrAlt(12, 1, CONST_lcsmonthly066, gamelog);
+		mvaddstrAlt(14, 1, CONST_lcsmonthly067, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(15,  1, CONST_lcsmonthly068, gamelog);
+		mvaddstrAlt(15, 1, CONST_lcsmonthly068, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(16,  1, CONST_lcsmonthly069, gamelog);
+		mvaddstrAlt(16, 1, CONST_lcsmonthly069, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17,  1, CONST_lcsmonthly070, gamelog);
+		mvaddstrAlt(17, 1, CONST_lcsmonthly070, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(18,  1, CONST_lcsmonthly071, gamelog);
+		mvaddstrAlt(18, 1, CONST_lcsmonthly071, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(20,  1, CONST_lcsmonthly072, gamelog);
+		mvaddstrAlt(20, 1, CONST_lcsmonthly072, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_INTELLIGENCE, 50);
 		change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
@@ -545,7 +545,7 @@ void printnews(short li, short newspaper)
 	else if (lootIDName == tag_LOOT_INTHQDISK
 		|| lootIDName == tag_LOOT_SECRETDOCUMENTS)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly073, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly073, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -571,16 +571,16 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, CONST_lcsmonthly080, gamelog);
+		mvaddstrAlt(10, 1, CONST_lcsmonthly080, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_INTELLIGENCE, 50);
 		offended_cia = 1;
 	}
 	else if (lootIDName == tag_LOOT_POLICERECORDS)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly081, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly081, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -618,7 +618,7 @@ void printnews(short li, short newspaper)
 	}
 	else if (lootIDName == tag_LOOT_JUDGEFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly088, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly088, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -628,13 +628,13 @@ void printnews(short li, short newspaper)
 		case 1:addstrAlt(CONST_lcsmonthly090, gamelog); break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(8,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(8, 1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_JUSTICES, 50);
 	}
 	else if (lootIDName == tag_LOOT_RESEARCHFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly091, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly091, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -650,12 +650,12 @@ void printnews(short li, short newspaper)
 			change_public_opinion(VIEW_GENETICS, 50); break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 	}
 	else if (lootIDName == tag_LOOT_PRISONFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly096, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly096, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -672,13 +672,13 @@ void printnews(short li, short newspaper)
 			addstrAlt(CONST_lcsmonthly100, gamelog);
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_DEATHPENALTY, 50);
 	}
 	else if (lootIDName == tag_LOOT_CABLENEWSFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly101, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly101, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -691,16 +691,16 @@ void printnews(short li, short newspaper)
 			break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, CONST_lcsmonthly111, gamelog);
+		mvaddstrAlt(10, 1, CONST_lcsmonthly111, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_CABLENEWS, 50);
 		offended_cablenews = 1;
 	}
 	else if (lootIDName == tag_LOOT_AMRADIOFILES)
 	{
-		mvaddstrAlt(6,  1, CONST_lcsmonthly107, gamelog);
+		mvaddstrAlt(6, 1, CONST_lcsmonthly107, gamelog);
 		moveAlt(7, 1);
 		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -711,14 +711,14 @@ void printnews(short li, short newspaper)
 		case 2:addstrAlt(CONST_lcsmonthly110, gamelog); break;
 		}
 		gamelog.newline();
-		mvaddstrAlt(9,  1, major_news_take_it_up, gamelog);
+		mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(10,  1, CONST_lcsmonthly111, gamelog);
+		mvaddstrAlt(10, 1, CONST_lcsmonthly111, gamelog);
 		gamelog.nextMessage();
 		change_public_opinion(VIEW_AMRADIO, 50);
 		offended_amradio = 1;
 	}
- 	pressAnyKey();
+	pressAnyKey();
 }
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
@@ -744,7 +744,7 @@ void fundreport(char &clearformess)
 		eraseAlt();
 		int y = 2, totalmoney = 0, dailymoney = 0, numpages = 1;
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_lcsmonthly113);
+		mvaddstrAlt(0, 0, CONST_lcsmonthly113);
 		for (int i = 0; i < INCOMETYPENUM; i++)
 		{
 			if (ledger.income[i])
@@ -850,7 +850,7 @@ void fundreport(char &clearformess)
 											// tally up liquid assets
 		long weaponValue = 0, armorValue = 0, clipValue = 0, lootValue = 0;
 		LocationsPool::getInstance().getAssetValues(weaponValue, armorValue, clipValue, lootValue);
-		
+
 		if (page == numpages - 1)
 		{
 			set_color_easy(WHITE_ON_BLACK);
@@ -915,7 +915,7 @@ void fundreport(char &clearformess)
 		set_color_easy(WHITE_ON_BLACK);
 		if (numpages > 1)
 		{
-			mvaddstrAlt(24, 0, CONST_lcsmonthly139 +			addpagestr());
+			mvaddstrAlt(24, 0, CONST_lcsmonthly139 + addpagestr());
 			while (true)
 			{
 				int c = getkeyAlt();
@@ -925,7 +925,7 @@ void fundreport(char &clearformess)
 					return;
 				}
 				//PAGE UP
-				if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) { page--; if (page<0) page = numpages - 1; break; }
+				if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) { page--; if (page < 0) page = numpages - 1; break; }
 				//PAGE DOWN
 				if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) { page++; if (page >= numpages) page = 0; break; }
 			}
@@ -933,7 +933,7 @@ void fundreport(char &clearformess)
 		else
 		{
 			mvaddstrAlt(24, 0, CONST_lcsmonthly140);
-	 	pressAnyKey();
+			pressAnyKey();
 			music.play(MUSIC_PREVIOUS);
 			return;
 		}

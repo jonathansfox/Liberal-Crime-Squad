@@ -25,7 +25,7 @@ void HelpActivities(int activityType)
 	}
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(0,  0, liberalHelpOn);
+	mvaddstrAlt(0, 0, liberalHelpOn);
 	vector<string> helpTopic;
 	if (helpTopics.count(activityType)) {
 		helpTopic = helpTopics[activityType];
@@ -38,6 +38,6 @@ void HelpActivities(int activityType)
 		mvaddstrAlt(4 + i, 0, helpTopic[i + 1]);
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23,  0, pressAnyKeyToReturn);
- 	pressAnyKey();
+	mvaddstrAlt(23, 0, pressAnyKeyToReturn);
+	pressAnyKey();
 }

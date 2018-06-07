@@ -77,7 +77,7 @@
 class configurable
 {
 public:
-   void virtual configure(const std::string& command, const std::string& value) = 0;
+	void virtual configure(const std::string& command, const std::string& value) = 0;
 private:
 };
 // Reads in an entire configuration file

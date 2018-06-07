@@ -26,7 +26,7 @@ void CreaturePool::moveEverythingFrom(int cursite, int hs)
 }
 void CreaturePool::stop_riding_me(int id_)
 {
-	for (int p = 0; p<lenpool(); p++)
+	for (int p = 0; p < lenpool(); p++)
 		if (pool[p]->carid == id_)
 			pool[p]->carid = -1;
 }
@@ -47,7 +47,7 @@ const bool CreaturePool::doesAnyoneLiveHere(int loc)
 }
 void CreaturePool::stop_preferring_me(int id_)
 {
-	for (int p = 0; p<lenpool(); p++)
+	for (int p = 0; p < lenpool(); p++)
 		if (pool[p]->pref_carid == id_)
 			pool[p]->pref_carid = -1;
 }
@@ -86,7 +86,7 @@ void CreaturePool::outSleepers(int cursite, int base)
 			gamelog.newline();
 			pool[p]->base = base;
 			pool[p]->location = pool[p]->base;
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	}
 }
@@ -156,7 +156,7 @@ const int CreaturePool::countLiberals(int cursite)
 	for (int p = 0; p < lenpool(); p++) {
 		if (pool[p]->align == 1 &&
 			pool[p]->alive&&
-			pool[p]->location == cursite&&
+			pool[p]->location == cursite &&
 			!(pool[p]->flag&CREATUREFLAG_SLEEPER)) {
 			libnum++;
 		}
@@ -218,18 +218,18 @@ const int CreaturePool::lenpool() {
 void whoAreWaitingForRescue(vector<Creature *>& waiting_for_rescue, int cursite, short special) {
 	for (int pl = 0; pl < len(pool); pl++)
 	{
-		if (pool[pl]->location == cursite&&
+		if (pool[pl]->location == cursite &&
 			!(pool[pl]->flag & CREATUREFLAG_SLEEPER) &&
-			!(special == SPECIAL_PRISON_CONTROL_LOW&&!(pool[pl]->sentence>0 && !pool[pl]->deathpenalty)) && //Low is for normal time-limited sentences.
-			!(special == SPECIAL_PRISON_CONTROL_MEDIUM&&!(pool[pl]->sentence < 0 && !pool[pl]->deathpenalty)) && //Medium is for life sentences.
-			!(special == SPECIAL_PRISON_CONTROL_HIGH&&!pool[pl]->deathpenalty)) //High is for death sentences.
+			!(special == SPECIAL_PRISON_CONTROL_LOW && !(pool[pl]->sentence > 0 && !pool[pl]->deathpenalty)) && //Low is for normal time-limited sentences.
+			!(special == SPECIAL_PRISON_CONTROL_MEDIUM && !(pool[pl]->sentence < 0 && !pool[pl]->deathpenalty)) && //Medium is for life sentences.
+			!(special == SPECIAL_PRISON_CONTROL_HIGH && !pool[pl]->deathpenalty)) //High is for death sentences.
 			waiting_for_rescue.push_back(pool[pl]);
 	}
 }
 Creature* findSleeperCarSalesman(int loc) {
 	for (int p = 0; p < len(pool); p++)
 		if (pool[p]->alive && (pool[p]->flag & CREATUREFLAG_SLEEPER) &&
-			pool[p]->type == CREATURE_CARSALESMAN&&LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(loc))
+			pool[p]->type == CREATURE_CARSALESMAN && LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(loc))
 			return pool[p];
 	return NULL;
 }
@@ -307,7 +307,7 @@ char completerecruitmeeting(recruitst &r, int p)
 		addstrAlt(pool[p]->name, gamelog);
 		addstrAlt(CONST_creaturePool011, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		return 1;
 	}
 	addstrAlt(CONST_creaturePool012, gamelog);
@@ -373,14 +373,14 @@ char completerecruitmeeting(recruitst &r, int p)
 			addstrAlt(r.recruit->name, gamelog);
 			addstrAlt(CONST_creaturePool030, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			moveAlt(y += 2, 0);
 			addstrAlt(r.recruit->name, gamelog);
 			addstrAlt(CONST_creaturePool031, gamelog);
 			gamelog.nextMessage();
 			liberalize(*r.recruit, false);
-	 	pressAnyKey();
+			pressAnyKey();
 			eraseAlt();
 			sleeperize_prompt(*r.recruit, *pool[p], 6);
 			r.recruit->hireid = pool[p]->id;
@@ -430,7 +430,7 @@ char completerecruitmeeting(recruitst &r, int p)
 				addstrAlt(str, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			else
 			{
@@ -441,7 +441,7 @@ char completerecruitmeeting(recruitst &r, int p)
 				addstrAlt(getview(LCSrandom(VIEWNUM - 3), true), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			// Liberals with juice increase difficulty as if their Wisdom were increased by said juice
 			if (r.recruit->juice >= 10)
@@ -509,10 +509,10 @@ char completerecruitmeeting(recruitst &r, int p)
 					mvaddstrAlt(y++, 0, CONST_creaturePool046, gamelog);
 					gamelog.nextMessage();
 				}
-		 	pressAnyKey();
+				pressAnyKey();
 				return 1;
 			}
-	 	pressAnyKey();
+			pressAnyKey();
 			return 0;
 		}
 		if (c == 'd') return 1;
@@ -523,7 +523,7 @@ void findAllTendersToThisHostage(Creature* cr, vector<Creature *>& temppool) {
 	for (int p = 0; p < len(pool); p++)
 	{
 		if (!pool[p]->alive) continue;
-		if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg == cr->id)
+		if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING && pool[p]->activity.arg == cr->id)
 		{
 			//If they're in the same location as the hostage,
 			//include them in the InterrogationST
@@ -548,12 +548,12 @@ void hostageEscapes(Creature* cr, char clearformess) {
 			addstrAlt(CONST_creaturePool047, gamelog);
 			gamelog.nextMessage();
 			LocationsPool::getInstance().setTimeUntilSiege(cr->location, 3);
-	 	pressAnyKey();
+			pressAnyKey();
 			//clear activities for tenders
 			for (int i = 0; i < len(pool); i++)
 			{
 				if (!pool[i]->alive) continue;
-				if (pool[i]->activity.type == ACTIVITY_HOSTAGETENDING&&pool[i]->activity.arg == cr->id)
+				if (pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == cr->id)
 					pool[i]->activity.type = ACTIVITY_NONE;
 			}
 			delete_and_remove(pool, p);
@@ -606,7 +606,7 @@ void selectOnlySleepersThatCanWork(vector<Creature *>& temppool) {
 		// Select only sleepers that can work
 		if (pool[p]->alive == true &&
 			pool[p]->flag & CREATUREFLAG_SLEEPER&&
-			pool[p]->align == ALIGN_LIBERAL&&
+			pool[p]->align == ALIGN_LIBERAL &&
 			pool[p]->hiding == false &&
 			pool[p]->clinic == false &&
 			pool[p]->dating == false)
@@ -633,7 +633,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 		else healing[p] = 0;
 		healing2[p] = 0;
 	}
-	if (!disbanding) for (int p = 0; p<CreaturePool::getInstance().lenpool(); p++)
+	if (!disbanding) for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!pool[p]->alive) continue;
 		if (pool[p]->hiding) continue;
@@ -642,7 +642,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 		// Having a specific healing activity helps bookkeeping for the player, though
 		// Only the highest medical skill is considered
 		if (pool[p]->activity.type == ACTIVITY_HEAL || pool[p]->activity.type == ACTIVITY_NONE)
-			if (pool[p]->location>-1 &&
+			if (pool[p]->location > -1 &&
 				healing[pool[p]->location] < pool[p]->get_skill(SKILL_FIRSTAID))
 			{
 				healing[pool[p]->location] = pool[p]->get_skill(SKILL_FIRSTAID);
@@ -695,7 +695,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					{
 						// Chance to stabilize/amputate wound
 						// Difficulty 12 (Will die if not treated)
-						if (pool[p]->location > -1 && healing[pool[p]->location] + LCSrandom(10)>12)
+						if (pool[p]->location > -1 && healing[pool[p]->location] + LCSrandom(10) > 12)
 							pool[p]->wound[w] = WOUND_CLEANOFF;
 						// Else take bleed damage (4)
 						else
@@ -795,7 +795,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 				if (transfer&&pool[p]->location > -1 &&
 					pool[p]->alive == 1 &&
 					pool[p]->align == 1 &&
-					LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL&&
+					LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL &&
 					LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_HOSPITAL_UNIVERSITY)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -803,7 +803,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					addstrAlt(CONST_creaturePool049, gamelog);
 					gamelog.nextMessage();
 					pool[p]->activity.type = ACTIVITY_CLINIC;
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 		}
@@ -861,10 +861,10 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 				else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
 			}
 			// Highest juice liberal not a sleeper or subject to a life sentence gets promoted
-			if (pool[p]->juice > maxjuice&&
+			if (pool[p]->juice > maxjuice &&
 				!(pool[p]->flag & CREATUREFLAG_SLEEPER) &&
 				(pool[p]->location == -1 ||
-					(LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_GOVERNMENT_PRISON || pool[p]->sentence >= 0)))
+				(LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_GOVERNMENT_PRISON || pool[p]->sentence >= 0)))
 			{
 				maxjuice = pool[p]->juice;
 				newboss = p;
@@ -883,10 +883,10 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 			mvaddstrAlt(8, 1, cr.name, gamelog);
 			addstrAlt(CONST_creaturePool056, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			mvaddstrAlt(10, 1, CONST_creaturePool051, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		return 0;
 	}
@@ -927,7 +927,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 			addstrAlt(CONST_creaturePool055, gamelog);
 		}
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	else // Founder level promotion
 	{
@@ -935,11 +935,11 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 		mvaddstrAlt(8, 1, cr.name, gamelog);
 		addstrAlt(CONST_creaturePool056, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		mvaddstrAlt(10, 1, pool[newboss]->name, gamelog);
 		addstrAlt(CONST_creaturePool057, gamelog);
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		cr.hireid = -2; // Make dead founder not founder.
 	}
 	return 1;
@@ -963,7 +963,7 @@ void dispersalcheck(char &clearformess)
 	const string CONST_creaturePool059 = "The Liberal has gone into hiding...";
 	extern Log gamelog;
 	extern char disbanding;
-	
+
 	//NUKE DISPERSED SQUAD MEMBERS WHOSE MASTERS ARE NOT AVAILABLE
 	if (CreaturePool::getInstance().lenpool())
 	{
@@ -1016,7 +1016,7 @@ void dispersalcheck(char &clearformess)
 				// don't ever have their subordinates checked
 				// and aren't lost themselves (they're a corpse,
 				// corpses don't lose contact)
-				if (!pool[p]->alive&&!disbanding)
+				if (!pool[p]->alive && !disbanding)
 				{
 					dispersal_status[p] = DISPERSAL_SAFE;
 					//Attempt to promote their subordinates
@@ -1037,7 +1037,7 @@ void dispersalcheck(char &clearformess)
 			{
 				if (!pool[p]->alive) continue;
 				if (pool[p]->location != -1 &&
-					LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON&&
+					LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON &&
 					!(pool[p]->flag & CREATUREFLAG_SLEEPER))
 				{
 					inprison = 1;
@@ -1058,13 +1058,13 @@ void dispersalcheck(char &clearformess)
 				}
 				// If in prison or unreachable due to a member of the command structure
 				// above being in prison
-				else if ((dispersal_status[p] == DISPERSAL_BOSSSAFE&&inprison) || dispersal_status[p] == DISPERSAL_BOSSINPRISON)
+				else if ((dispersal_status[p] == DISPERSAL_BOSSSAFE && inprison) || dispersal_status[p] == DISPERSAL_BOSSINPRISON)
 				{
 					int dispersalval = DISPERSAL_SAFE;
 					if (pool[p]->flag&CREATUREFLAG_LOVESLAVE)
 					{
-						if ((dispersal_status[p] == DISPERSAL_BOSSINPRISON&&!inprison) ||
-							(dispersal_status[p] == DISPERSAL_BOSSSAFE    && inprison))
+						if ((dispersal_status[p] == DISPERSAL_BOSSINPRISON && !inprison) ||
+							(dispersal_status[p] == DISPERSAL_BOSSSAFE && inprison))
 						{
 							pool[p]->juice--; // Love slaves bleed juice when not in prison with their lover
 							if (pool[p]->juice < -50) dispersalval = DISPERSAL_ABANDONLCS;
@@ -1083,7 +1083,7 @@ void dispersalcheck(char &clearformess)
 					}
 				}
 				// Otherwise, if they're reachable
-				else if (dispersal_status[p] == DISPERSAL_BOSSSAFE&&!inprison)
+				else if (dispersal_status[p] == DISPERSAL_BOSSSAFE && !inprison)
 				{
 					// Start looking through the pool again.
 					for (int p2 = CreaturePool::getInstance().lenpool() - 1; p2 >= 0; p2--)
@@ -1126,11 +1126,11 @@ void dispersalcheck(char &clearformess)
 						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
 						addstrAlt(CONST_creaturePool061, gamelog);
 						gamelog.nextMessage();
-				 	pressAnyKey();
+						pressAnyKey();
 						set_color_easy(GREEN_ON_BLACK_BRIGHT);
 						mvaddstrAlt(9, 1, CONST_creaturePool059, gamelog);
 						gamelog.nextMessage();
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 					else if (dispersal_status[p] == DISPERSAL_ABANDONLCS)
 					{
@@ -1138,7 +1138,7 @@ void dispersalcheck(char &clearformess)
 						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
 						addstrAlt(CONST_creaturePool060, gamelog);
 						gamelog.nextMessage();
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 					else if (dispersal_status[p] == DISPERSAL_NOCONTACT)
 					{
@@ -1146,7 +1146,7 @@ void dispersalcheck(char &clearformess)
 						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
 						addstrAlt(CONST_creaturePool061, gamelog);
 						gamelog.nextMessage();
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 				}
 				removesquadinfo(*pool[p]);
@@ -1323,7 +1323,7 @@ void monthlyRunTheSystem(char &clearformess) {
 				addstrAlt(pool[p]->name, gamelog);
 				addstrAlt(CONST_creaturePool063, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				removesquadinfo(*pool[p]);
 				delete_and_remove(pool, p);
 				continue;
@@ -1337,7 +1337,7 @@ void monthlyRunTheSystem(char &clearformess) {
 					addstrAlt(CONST_creaturePool065, gamelog);
 				else addstrAlt(CONST_creaturePool066, gamelog);
 				gamelog.newline();
-		 	pressAnyKey();
+				pressAnyKey();
 				removesquadinfo(*pool[p]);
 				delete_and_remove(pool, p);
 				continue;
@@ -1364,27 +1364,27 @@ void monthlyRunTheSystem(char &clearformess) {
 						//Rack up testimonies against the boss in court!
 						pool[p2]->confessions++;
 					}
-					  //Issue a raid on this guy's base!
-						if (pool[p]->base >= 0)LocationsPool::getInstance().addHeat(pool[p]->base, 300);
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
-						addstrAlt(CONST_creaturePool067, gamelog);
-						gamelog.newline();
-				 	pressAnyKey();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(9, 1, CONST_creaturePool068, gamelog);
-						gamelog.nextMessage();
-				 	pressAnyKey();
-						removesquadinfo(*pool[p]);
-						delete_and_remove(pool, p);
-						continue; //no trial for this person; skip to next person
-					
+					//Issue a raid on this guy's base!
+					if (pool[p]->base >= 0)LocationsPool::getInstance().addHeat(pool[p]->base, 300);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					addstrAlt(CONST_creaturePool067, gamelog);
+					gamelog.newline();
+					pressAnyKey();
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(9, 1, CONST_creaturePool068, gamelog);
+					gamelog.nextMessage();
+					pressAnyKey();
+					removesquadinfo(*pool[p]);
+					delete_and_remove(pool, p);
+					continue; //no trial for this person; skip to next person
+
 				}
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, pool[p]->name, gamelog);
 				addstrAlt(CONST_creaturePool069, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				pool[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, pool[p]->location);
 				Armor prisoner(getarmortype(tag_ARMOR_PRISONER));
 				pool[p]->give_armor(prisoner, NULL);
@@ -1417,7 +1417,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!(pool[p]->alive)) continue;
-		if (pool[p]->clinic>0)
+		if (pool[p]->clinic > 0)
 		{
 			pool[p]->clinic--;
 			for (int w = 0; w < BODYPARTNUM; w++)
@@ -1475,7 +1475,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 					addstrAlt(LocationsPool::getInstance().getLocationName(hospital), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 			// End treatment
@@ -1496,7 +1496,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 					LocationsPool::getInstance().getRentingType(pool[p]->base) == RENTING_NOCONTROL)
 					pool[p]->base = hs;
 				pool[p]->location = pool[p]->base;
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 	}
@@ -1569,7 +1569,7 @@ int otherPrisonersEscapeWithMe(Creature g, int prison) {
 /* transforms a creature id number into the index of that person in the pool */
 int getpoolcreature(int id)
 {
-	for (int i = 0; i<CreaturePool::getInstance().lenpool(); i++) if (pool[i]->id == id) return i;
+	for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++) if (pool[i]->id == id) return i;
 	return -1;
 }
 

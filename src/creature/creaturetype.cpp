@@ -99,10 +99,10 @@ Weapon& Creature::weapon_none()
 	static Weapon unarmed(*weapontype[getweapontype(tag_WEAPON_NONE)]);
 	return unarmed;
 }
- string singleDot;
- // This would normally be inlined inside the Creature class in creature.h, but the Creature class
- // has to be before creaturetype
- std::string Creature::get_type_name() const { return getcreaturetype(type_idname)->get_type_name(); }
+string singleDot;
+// This would normally be inlined inside the Creature class in creature.h, but the Creature class
+// has to be before creaturetype
+std::string Creature::get_type_name() const { return getcreaturetype(type_idname)->get_type_name(); }
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
 	const std::string& owner, const std::string& element)
@@ -118,7 +118,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int we
 {
 }
 extern string NONE;
- string undefined;
+string undefined;
 CreatureType::CreatureType(const std::string& xmlstring)
 	: age_(18, 57), alignment_public_mood_(true),
 	attribute_points_(40),
@@ -281,7 +281,7 @@ Alignment CreatureType::get_alignment() const
 		int a = ALIGN_CONSERVATIVE;
 		if (LCSrandom(100) < mood) a++;
 		if (LCSrandom(100) < mood) a++;
-		return (Alignment) a;
+		return (Alignment)a;
 	}
 	else return alignment_;
 }
@@ -447,14 +447,14 @@ const string CONST_creaturetypesX02 = "CCS Founder";
 //#define AGE_GRADUATE    26+LCSrandom(34) /* most folks, with 6-8 years college */
 //#define AGE_MIDDLEAGED  35+LCSrandom(25) /* for the more experienced types */
 //#define AGE_SENIOR      65+LCSrandom(30) /* ah, social security */
-/* Gender macros 
+/* Gender macros
 #define GIVE_GENDER_MALE                                       \
    if(lawList[LAW_WOMEN]==-2 ||                              \
    (lawList[LAW_WOMEN]==-1 && LCSrandom(25)) ||           \
    (lawList[LAW_WOMEN]==0 && LCSrandom(10)) ||            \
    (lawList[LAW_WOMEN]==1 && LCSrandom(4))) {             \
    cr.gender_conservative=cr.gender_liberal=GENDER_MALE; \
-         }
+		 }
 #define GIVE_GENDER_FEMALE                                     \
    if(lawList[LAW_WOMEN]==-2 ||                              \
    (lawList[LAW_WOMEN]==-1 && LCSrandom(25)) ||           \
@@ -613,7 +613,7 @@ void giveDefaultWeapon(Creature &cr, const short type) {
 		cr.reload(false);
 	}
 }
-void armSpecificCreature(Creature &cr, const short type, const CreatureType* crtype, int (&attcap)[ATTNUM]) {
+void armSpecificCreature(Creature &cr, const short type, const CreatureType* crtype, int(&attcap)[ATTNUM]) {
 	extern short mode;
 	extern short sitetype;
 	extern short lawList[LAWNUM];
@@ -1042,7 +1042,7 @@ void armCreature(Creature &cr, short type) {
 			break;
 		}
 	}
-	if(replaceTheseCreatures.count(type) >= 1){
+	if (replaceTheseCreatures.count(type) >= 1) {
 		CreatureTypes replacement = pickrandom(replaceTheseCreatures[type]);
 		makecreature(cr, replacement);
 	}

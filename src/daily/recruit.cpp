@@ -8,22 +8,22 @@ const string CONST_recruit006 = "%s was unable to track down a %s.";
 const string CONST_recruit005 = "%s asks around for a %s...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
 const string blankString = "";
@@ -101,7 +101,7 @@ char recruitment_activity(Creature &cr)
 		cr.train(SKILL_STREETSENSE, 5);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_recruit013);
+		mvaddstrAlt(0, 0, CONST_recruit013);
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
@@ -110,9 +110,9 @@ char recruitment_activity(Creature &cr)
 		int recruitCount = 0;
 		if (difficulty < 10)
 			// Generate recruitment candidates
-			for (recruitCount = 0; recruitCount<5; recruitCount++)
+			for (recruitCount = 0; recruitCount < 5; recruitCount++)
 			{
-				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE)>(difficulty + recruitCount * 2))
+				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE) > (difficulty + recruitCount * 2))
 				{
 					makecreature(encounter[recruitCount], type);
 					encounter[recruitCount].namecreature();
@@ -121,7 +121,7 @@ char recruitment_activity(Creature &cr)
 			}
 		if (recruitCount == 0) {
 			mvaddstr_f(11, 0, CONST_recruit006.c_str(), cr.name, name);
-	 	pressAnyKey();
+			pressAnyKey();
 			cursite = ocursite;
 			return 0;
 		}
@@ -132,10 +132,10 @@ char recruitment_activity(Creature &cr)
 			add_age(encounter[0]);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
-	 	pressAnyKey();
+			pressAnyKey();
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_recruit013);
+			mvaddstrAlt(0, 0, CONST_recruit013);
 			printcreatureinfo(&encounter[0]);
 			makedelimiter();
 			talk(cr, 0);
@@ -145,7 +145,7 @@ char recruitment_activity(Creature &cr)
 			{
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0,  0, CONST_recruit013);
+				mvaddstrAlt(0, 0, CONST_recruit013);
 				printcreatureinfo(&cr);
 				makedelimiter();
 				set_color_easy(WHITE_ON_BLACK);
@@ -167,7 +167,7 @@ char recruitment_activity(Creature &cr)
 					int id = encounter[c].id;
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0,  0, CONST_recruit013);
+					mvaddstrAlt(0, 0, CONST_recruit013);
 					printcreatureinfo(&encounter[c]);
 					makedelimiter();
 					talk(cr, c);

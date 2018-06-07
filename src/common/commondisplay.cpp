@@ -325,7 +325,7 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 	const string CONST_commondisplay006 = "Deceased";
 	short woundsum = 0;
 	bool bleeding = false;
-	for (int w = 0; w<BODYPARTNUM; w++)
+	for (int w = 0; w < BODYPARTNUM; w++)
 	{
 		if (g.wound[w] != 0)woundsum++;
 		if (g.wound[w] & WOUND_BLEEDING)bleeding = true;
@@ -361,7 +361,7 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 	{
 		addstrAlt(CONST_commondisplay011);
 	}
-	else if (g.blood<100)
+	else if (g.blood < 100)
 	{
 		if (smll)addstrAlt(CONST_commondisplay012);
 		else addstrAlt(CONST_commondisplay013);
@@ -466,7 +466,7 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
 		addstrAlt(CONST_commondisplay178);
 	}
-	else if (g.special[SPECIALWOUND_TEETH]<TOOTHNUM)
+	else if (g.special[SPECIALWOUND_TEETH] < TOOTHNUM)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
 		if (smll)addstrAlt(CONST_commondisplay040);
@@ -550,31 +550,31 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 		}
 	}
 	mvaddstrAlt(2, 0, CONST_commondisplay054);
-	if (knowledge>0)
+	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(3, 0, CONST_commondisplay056);
-	if (knowledge>0)
+	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(4, 0, CONST_commondisplay058);
-	if (knowledge>0)
+	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(5, 0, CONST_commondisplay060);
-	if (knowledge>1)
+	if (knowledge > 1)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(2, 11, CONST_commondisplay062);
-	if (knowledge>1)
+	if (knowledge > 1)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_AGILITY, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(3, 11, CONST_commondisplay064);
-	if (knowledge>1)
+	if (knowledge > 1)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_STRENGTH, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(4, 11, CONST_commondisplay066);
-	if (knowledge>0)
+	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_CHARISMA, true));
 	else addstrAlt(CONST_commondisplay067);
 	mvaddstrAlt(5, 11, CONST_commondisplay068);
@@ -630,7 +630,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 		{
 			fg = COLOR_YELLOW; in = 1;
 		}
-		else if (cr->get_armor().get_quality() >1)
+		else if (cr->get_armor().get_quality() > 1)
 		{
 			fg = COLOR_YELLOW; in = (bg == COLOR_RED);
 		}
@@ -660,14 +660,14 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 	memset(used, 0, sizeof(char)*SKILLNUM);
 	int snum = 5;
 	char printed = 1;
-	while (snum>0 && printed)
+	while (snum > 0 && printed)
 	{
 		printed = 0;
 		int max = 0;
 		long maxs = -1;
-		for (int s = 0; s<SKILLNUM; s++)
+		for (int s = 0; s < SKILLNUM; s++)
 		{
-			if ((cr->get_skill(s) * 10000 + cr->get_skill_ip(s))>max && !used[s])
+			if ((cr->get_skill(s) * 10000 + cr->get_skill_ip(s)) > max && !used[s])
 			{
 				max = (cr->get_skill(s) * 10000 + cr->get_skill_ip(s));
 				maxs = s;
@@ -681,17 +681,17 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 			if (cr->skill_cap(maxs, true) != 0 && cr->get_skill(maxs) >= cr->skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			// About to level up skills are white
 			else if (cr->get_skill_ip(maxs) >= 100 + (10 * cr->get_skill(maxs)) &&
-				cr->get_skill(maxs)<cr->skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				cr->get_skill(maxs) < cr->skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			// <1 skills are dark gray
-			else if (cr->get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			else if (cr->get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			// >=1 skills are light gray
 			else set_color_easy(WHITE_ON_BLACK);
 			moveAlt(3 + 5 - snum, 31);
-			if (knowledge>5 - snum)
+			if (knowledge > 5 - snum)
 				addstrAlt(skill_enum_to_string(maxs));
 			else addstrAlt(CONST_commondisplay075);
 			addstrAlt(CONST_commondisplay212);
-			if (knowledge>7 - snum)
+			if (knowledge > 7 - snum)
 				addstrAlt(cr->get_skill(maxs));
 			else addcharAlt('?');
 			if (snum == 5 && printed)
@@ -703,12 +703,12 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 		snum--;
 	}
 	int woundsum = 0;
-	for (int w = 0; w<BODYPARTNUM; w++)
+	for (int w = 0; w < BODYPARTNUM; w++)
 		if (cr->wound[w] != 0)woundsum++;
 	printhealthstat(*cr, 1, 49, FALSE);
-	if (woundsum>0)
+	if (woundsum > 0)
 	{
-		for (int w = 0; w<BODYPARTNUM; w++)
+		for (int w = 0; w < BODYPARTNUM; w++)
 		{
 			if (cr->wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
@@ -740,11 +740,11 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 						addstrAlt(CONST_commondisplay115);
 					else addstrAlt(CONST_commondisplay116);
 				}
-				if (cr->wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay088); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-				if (cr->wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay089); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-				if (cr->wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-				if (cr->wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay091); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-				if (cr->wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay092); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
+				if (cr->wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay088); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+				if (cr->wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay089); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+				if (cr->wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+				if (cr->wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay091); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+				if (cr->wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay092); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
 			}
 		}
 		set_color_easy(WHITE_ON_BLACK);
@@ -767,44 +767,44 @@ void printparty()
 	extern short sitealarmtimer;
 	Creature *party[6] = { NULL,NULL,NULL,NULL,NULL,NULL };
 	if (activesquad != NULL)
-		for (int p = 0; p<6; p++)party[p] = activesquad->squad[p];
+		for (int p = 0; p < 6; p++)party[p] = activesquad->squad[p];
 	set_color_easy(WHITE_ON_BLACK);
-	for (int i = 2; i<8; i++)
+	for (int i = 2; i < 8; i++)
 	{
-		mvaddstrAlt(i,  0, CONST_commondisplay220); // 80 spaces
+		mvaddstrAlt(i, 0, CONST_commondisplay220); // 80 spaces
 	}
 	if (party_status != -1 && party[party_status] == NULL)party_status = -1;
 	if (party_status != -1)
 	{
 		printcreatureinfo(party[party_status]);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1,  0, party_status + 1);
+		mvaddstrAlt(1, 0, party_status + 1);
 	}
 	else
 	{
 		char str[200];
-		mvaddstrAlt(1,  0, CONST_commondisplay094); // 80 characters
-		for (int p = 0; p<6; p++)
+		mvaddstrAlt(1, 0, CONST_commondisplay094); // 80 characters
+		for (int p = 0; p < 6; p++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(p + 2,  0, CONST_commondisplay220); // 80 spaces
+			mvaddstrAlt(p + 2, 0, CONST_commondisplay220); // 80 spaces
 			mvaddcharAlt(p + 2, 0, '1' + p);
 			if (party[p] != NULL)
 			{
 				if (party[p]->prisoner != NULL)set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(p + 2,  2, party[p]->name);
+				mvaddstrAlt(p + 2, 2, party[p]->name);
 				if (party[p]->prisoner != NULL)addstrAlt(CONST_commondisplay096);
 				int skill = 0;
 				char bright = 0;
-				for (int sk = 0; sk<SKILLNUM; sk++)
+				for (int sk = 0; sk < SKILLNUM; sk++)
 				{
 					skill += (int)party[p]->get_skill(sk);
 					if (party[p]->get_skill_ip(sk) >= 100 + (10 * party[p]->get_skill(sk)) &&
-						party[p]->get_skill(sk)<party[p]->skill_cap(sk, true))bright = 1;
+						party[p]->get_skill(sk) < party[p]->skill_cap(sk, true))bright = 1;
 				}
 				set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-				mvaddstrAlt(p + 2,  23, skill);
+				mvaddstrAlt(p + 2, 23, skill);
 				addstrAlt(CONST_commondisplay097);
 				addstrAlt(party[p]->get_weapon_skill());
 				moveAlt(p + 2, 31);
@@ -820,7 +820,7 @@ void printparty()
 					addstrAlt(party[p]->extra_throwing_weapons[0]->get_shortname(0));
 				else addstrAlt(party[p]->get_weapon().get_shortname(0));
 				//set_color_easy(WHITE_ON_BLACK);
-				if (party[p]->get_weapon().get_ammoamount()>0)
+				if (party[p]->get_weapon().get_ammoamount() > 0)
 				{
 					//set_color_easy(WHITE_ON_BLACK);
 					addstrAlt(CONST_commondisplay202);
@@ -865,7 +865,7 @@ void printparty()
 					{
 						fg = COLOR_YELLOW; in = 1;
 					}
-					else if (party[p]->get_armor().get_quality() >1)
+					else if (party[p]->get_armor().get_quality() > 1)
 					{
 						fg = COLOR_YELLOW; in = (bg == COLOR_RED);
 					}
@@ -923,7 +923,7 @@ void printwoundstat(Creature &cr, int y, int x)
 	const string CONST_commondisplay121 = "Burned";
 	const string CONST_commondisplay120 = "Torn";
 	// Add wound status
-	for (int w = 0; w<BODYPARTNUM; w++)
+	for (int w = 0; w < BODYPARTNUM; w++)
 	{
 		if (cr.wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
 		else set_color_easy(WHITE_ON_BLACK);
@@ -955,11 +955,11 @@ void printwoundstat(Creature &cr, int y, int x)
 					addstrAlt(CONST_commondisplay115);
 				else addstrAlt(CONST_commondisplay116);
 			}
-			if (cr.wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay117); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay118); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay120); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay121); sum--; if (sum>0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay117); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay118); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay120); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay121); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
 		}
 	}
 }
@@ -1066,15 +1066,15 @@ void printliberalstats(Creature &cr)
 	// Add juice
 	mvaddstrAlt(10, 16, CONST_commondisplay131);
 	addstrAlt(cr.juice);
-	if (cr.juice<1000)
+	if (cr.juice < 1000)
 	{
 		mvaddstrAlt(11, 16, CONST_commondisplay132);
-		if (cr.juice<0)addstrAlt(tag_0);
-		else if (cr.juice<10)addstrAlt(CONST_commondisplay133);
-		else if (cr.juice<50)addstrAlt(CONST_commondisplay134);
-		else if (cr.juice<100)addstrAlt(CONST_commondisplay135);
-		else if (cr.juice<200)addstrAlt(CONST_commondisplay136);
-		else if (cr.juice<500)addstrAlt(CONST_commondisplay137);
+		if (cr.juice < 0)addstrAlt(tag_0);
+		else if (cr.juice < 10)addstrAlt(CONST_commondisplay133);
+		else if (cr.juice < 50)addstrAlt(CONST_commondisplay134);
+		else if (cr.juice < 100)addstrAlt(CONST_commondisplay135);
+		else if (cr.juice < 200)addstrAlt(CONST_commondisplay136);
+		else if (cr.juice < 500)addstrAlt(CONST_commondisplay137);
 		else addstrAlt(CONST_commondisplay138);
 	}
 	// Add attributes
@@ -1099,14 +1099,14 @@ void printliberalstats(Creature &cr)
 	char printed = 1;
 	mvaddstrAlt(5, 28, CONST_commondisplay193);
 	mvaddstrAlt(5, 43, CONST_commondisplay194);
-	for (int skills_shown = 0; skills_shown<skills_max&&printed; skills_shown++)
+	for (int skills_shown = 0; skills_shown < skills_max&&printed; skills_shown++)
 	{
 		printed = 0;
 		int max = 0;
 		long maxs = -1;
-		for (int s = 0; s<SKILLNUM; s++)
+		for (int s = 0; s < SKILLNUM; s++)
 		{
-			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s))>max && !used[s])
+			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s)) > max && !used[s])
 			{
 				max = (cr.get_skill(s) * 10000 + cr.get_skill_ip(s));
 				maxs = s;
@@ -1120,27 +1120,27 @@ void printliberalstats(Creature &cr)
 			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			// About to level up skills are white
 			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
-				cr.get_skill(maxs)<cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				cr.get_skill(maxs) < cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			// <1 skills are dark gray
-			else if (cr.get_skill(maxs)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			else if (cr.get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			// >=1 skills are light gray
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
 			addstrAlt(CONST_commondisplay212);
 			moveAlt(6 + skills_shown, 42);
 			addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(maxs));
-			if (cr.get_skill_ip(maxs)<100 + (10 * cr.get_skill(maxs)))
+			if (cr.get_skill_ip(maxs) < 100 + (10 * cr.get_skill(maxs)))
 			{
 				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
 				{
-					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs)))<10)
+					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) < 10)
 						addcharAlt('0');
 					addstrAlt((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))));
 				}
 				else addstrAlt(CONST_commondisplay197);
 			}
 			else addstrAlt(CONST_commondisplay198);
-			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs)<cr.skill_cap(maxs, true))
+			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs, true))
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			moveAlt(6 + skills_shown, 48);
 			addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(maxs, true));
@@ -1205,7 +1205,7 @@ void printliberalstats(Creature &cr)
 	{
 		addstrAlt(lovers);
 		addstrAlt(CONST_commondisplay165);
-		if (lovers>1)addstrAlt(CONST_commondisplay166);
+		if (lovers > 1)addstrAlt(CONST_commondisplay166);
 	}
 	// Any dates with potential love interests scheduled?
 	if (scheduleddates(cr))
@@ -1263,7 +1263,7 @@ void printliberalstats(Creature &cr)
 		moveAlt(y++, x);
 		if (cr.special[SPECIALWOUND_TEETH] == 0)addstrAlt(CONST_commondisplay178);
 		else if (cr.special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)addstrAlt(CONST_commondisplay179);
-		else if (cr.special[SPECIALWOUND_TEETH]<TOOTHNUM)addstrAlt(CONST_commondisplay180);
+		else if (cr.special[SPECIALWOUND_TEETH] < TOOTHNUM)addstrAlt(CONST_commondisplay180);
 	}
 	if (cr.special[SPECIALWOUND_LIVER] != 1)
 	{
@@ -1290,10 +1290,10 @@ void printliberalstats(Creature &cr)
 		moveAlt(y++, x);
 		if (cr.special[SPECIALWOUND_RIBS] == 0)addstrAlt(CONST_commondisplay186);
 		else if (cr.special[SPECIALWOUND_RIBS] == RIBNUM - 1)addstrAlt(CONST_commondisplay187);
-		else if (cr.special[SPECIALWOUND_RIBS]<RIBNUM)addstrAlt(CONST_commondisplay188);
+		else if (cr.special[SPECIALWOUND_RIBS] < RIBNUM)addstrAlt(CONST_commondisplay188);
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	for (int i = 0, y = 12; i<AUGMENTATIONNUM; i++, y++)
+	for (int i = 0, y = 12; i < AUGMENTATIONNUM; i++, y++)
 	{
 		if (cr.get_augmentation(i).type == -1) continue;
 		mvaddstrAlt(y, 55, Augmentation::get_name(i));
@@ -1319,9 +1319,9 @@ void printliberalskills(Creature &cr)
 	addstrAlt(cr.get_type_name());
 	addstrAlt(closeParenthesis);
 	// Add all skills
-	for (int s = 0; s<SKILLNUM; s++)
+	for (int s = 0; s < SKILLNUM; s++)
 	{
-		if (s % 3 == 0 && s<9)
+		if (s % 3 == 0 && s < 9)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(4, 27 * (s / 3));
@@ -1333,9 +1333,9 @@ void printliberalskills(Creature &cr)
 		if (cr.skill_cap(s, true) != 0 && cr.get_skill(s) >= cr.skill_cap(s, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		// About to level up skills are white
 		else if (cr.get_skill_ip(s) >= 100 + (10 * cr.get_skill(s)) &&
-			cr.get_skill(s)<cr.skill_cap(s, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			cr.get_skill(s) < cr.skill_cap(s, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		// <1 skills are dark gray
-		else if (cr.get_skill(s)<1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		else if (cr.get_skill(s) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		// >=1 skills are light gray
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5 + s / 3, 27 * (s % 3));
@@ -1343,18 +1343,18 @@ void printliberalskills(Creature &cr)
 		addstrAlt(CONST_commondisplay212);
 		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
 		addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(s));
-		if (cr.get_skill_ip(s)<100 + (10 * cr.get_skill(s)))
+		if (cr.get_skill_ip(s) < 100 + (10 * cr.get_skill(s)))
 		{
 			if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) != 0)
 			{
-				if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s)))<10)
+				if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) < 10)
 					addstrAlt(tag_0);
 				addstrAlt((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))));
 			}
 			else addstrAlt(CONST_commondisplay197);
 		}
 		else addstrAlt(CONST_commondisplay198);
-		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s)<cr.skill_cap(s, true))
+		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s) < cr.skill_cap(s, true))
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(5 + s / 3, 20 + 27 * (s % 3));
 		addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(s, true));
@@ -1395,14 +1395,14 @@ void printliberalcrimes(Creature &cr)
 			mvaddstrAlt(3, 0, CONST_commondisplay203);
 		else mvaddstrAlt(3, 0, CONST_commondisplay204);
 	}
-	else if (cr.sentence<0)
+	else if (cr.sentence < 0)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
 			mvaddstrAlt(3, 0, CONST_commondisplay205);
 		else mvaddstrAlt(3, 0, CONST_commondisplay206);
 	}
-	else if (cr.sentence>0)
+	else if (cr.sentence > 0)
 	{
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		if (LocationsPool::getInstance().getLocationType(cr.location) == SITE_GOVERNMENT_PRISON)
@@ -1414,7 +1414,7 @@ void printliberalcrimes(Creature &cr)
 	// Add all crimes
 	for (int i = 0; i < LAWFLAGNUM; i++)
 	{
-		if (i % 2 == 0 && i<4)
+		if (i % 2 == 0 && i < 4)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(4, 40 * (i / 2), CONST_commondisplay210);
@@ -1446,14 +1446,14 @@ void fullstatus(int p)
 	{
 		eraseAlt();
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_commondisplay214);
+		mvaddstrAlt(0, 0, CONST_commondisplay214);
 		if (page == 0) printliberalstats(*activesquad->squad[p]);
 		else if (page == 1) printliberalskills(*activesquad->squad[p]);
 		else if (page == 2) printliberalcrimes(*activesquad->squad[p]);
-		mvaddstrAlt(23,  0, CONST_commondisplay215);
+		mvaddstrAlt(23, 0, CONST_commondisplay215);
 		if (activesquad->squad[1] != NULL)
 			addstrAlt(CONST_commondisplay216);
-		mvaddstrAlt(24,  0, CONST_commondisplay217);
+		mvaddstrAlt(24, 0, CONST_commondisplay217);
 		addstrAlt(CONST_commondisplay218);
 		int c = getkeyAlt();
 		if (activesquad->squad[1] != NULL && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
@@ -1469,7 +1469,7 @@ void fullstatus(int p)
 		else if (c == KEY_UP)
 		{
 			page--;
-			if (page<0) page = pagenum - 1;
+			if (page < 0) page = pagenum - 1;
 			page %= pagenum;
 		}
 		else if (c == 'n')
@@ -1482,7 +1482,7 @@ void fullstatus(int p)
 		else if (c == 'g')
 		{
 			activesquad->squad[p]->gender_liberal++;
-			if (activesquad->squad[p]->gender_liberal>2)
+			if (activesquad->squad[p]->gender_liberal > 2)
 				activesquad->squad[p]->gender_liberal = 0;
 		}
 		else break;

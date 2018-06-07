@@ -100,7 +100,9 @@ void newVehicle(Vehicle *startcar) {
 char showcarprefs = 1;
 siteblockst levelmap[MAPX][MAPY][MAPZ];
 chaseseqst chaseseq;
-char slogan[SLOGAN_LEN];
+const string CONST_game012 = "We need a slogan!";
+string slogan_str = CONST_game012;
+char slogan[SLOGAN_LEN] = "We need a slogan!";
 vector<squadst *> squad;
 squadst *activesquad = NULL;
 long cursquadid = 0;
@@ -233,7 +235,7 @@ bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
 	if (!xml.Load(string(artdir) + file))
 	{ // File is missing or not valid XML.
 		addstrAlt(failedToLoad + file + exclamationPoint, log);
- 	pressAnyKey();
+		pressAnyKey();
 		// Will cause abort here or else if file is missing all unrecognized types
 		// loaded from a saved game will be deleted. Also, you probably don't want
 		// to play with a whole category of things missing anyway. If the file
@@ -260,51 +262,51 @@ int driveskill(Creature &cr, int v) {
 /* transforms a squad id number into the index of that squad in the global vector */
 int getsquad(int id)
 {
-	for (int i = 0; i<len(squad); i++) if (squad[i]->id == id) return i;
+	for (int i = 0; i < len(squad); i++) if (squad[i]->id == id) return i;
 	return -1;
 }
 /* transforms a car id number into the index of that car in the global vector */
 int id_getcar(int id)
 {
-	for (int i = 0; i<len(vehicle); i++) if (vehicle[i]->id() == id) return i;
+	for (int i = 0; i < len(vehicle); i++) if (vehicle[i]->id() == id) return i;
 	return -1;
 }
 
 /* transforms a clip type id into the index of that clip type in the global vector */
 int getcliptype(int id)
 {
-	for (int i = 0; i<len(cliptype); i++) if (cliptype[i]->get_id() == id) return i;
+	for (int i = 0; i < len(cliptype); i++) if (cliptype[i]->get_id() == id) return i;
 	return -1;
 }
 /* transforms a clip type name into the index of that clip type in the global vector */
 int getcliptype(const string &idname)
 {
-	for (int i = 0; i<len(cliptype); i++) if (cliptype[i]->get_idname() == idname) return i;
+	for (int i = 0; i < len(cliptype); i++) if (cliptype[i]->get_idname() == idname) return i;
 	return -1;
 }
 
 /* transforms a armor type id into the index of that armor type in the global vector */
 int getarmortype(int id)
 {
-	for (int i = 0; i<len(armortype); i++) if (armortype[i]->get_id() == id) return i;
+	for (int i = 0; i < len(armortype); i++) if (armortype[i]->get_id() == id) return i;
 	return -1;
 }
 /* transforms a armor type name into the index of that armor type in the global vector */
 int getarmortype(const string &idname)
 {
-	for (int i = 0; i<len(armortype); i++) if (armortype[i]->get_idname() == idname) return i;
+	for (int i = 0; i < len(armortype); i++) if (armortype[i]->get_idname() == idname) return i;
 	return -1;
 }
 /* transforms a CreatureTypes value into a pointer to that creature type */
 const CreatureType* getcreaturetype(short crtype)
 {
-	for (int i = 0; i<len(creaturetype); i++) if (crtype == creaturetype[i]->get_type()) return creaturetype[i];
+	for (int i = 0; i < len(creaturetype); i++) if (crtype == creaturetype[i]->get_type()) return creaturetype[i];
 	return NULL;
 }
 /* transforms a creature type name into a pointer to that creature type  */
 const CreatureType* getcreaturetype(const std::string& crtype)
 {
-	for (int i = 0; i<len(creaturetype); i++) if (crtype == creaturetype[i]->get_idname()) return creaturetype[i];
+	for (int i = 0; i < len(creaturetype); i++) if (crtype == creaturetype[i]->get_idname()) return creaturetype[i];
 	return NULL;
 }
 

@@ -1,5 +1,5 @@
 #include "../items/itemPool.h"
-class LocationsPool : ItemTypePool{
+class LocationsPool : ItemTypePool {
 private:
 	static bool locationPoolInitiated;
 public:

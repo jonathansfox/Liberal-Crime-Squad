@@ -1,5 +1,5 @@
 #include "../items/itemPool.h"
-class CreaturePool : ItemTypePool{
+class CreaturePool : ItemTypePool {
 private:
 	static bool creaturePoolInitiated;
 	//CreaturePool();

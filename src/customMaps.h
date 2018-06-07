@@ -20,7 +20,7 @@ struct stringConnectedToView {
 	const string belowFifty;
 	const string belowFiftyLiberalLaw;
 	const string belowFiftyEliteLiberalLaw;
-	stringConnectedToView() : stringConnectedToView(blankString,blankString) {}
+	stringConnectedToView() : stringConnectedToView(blankString, blankString) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFifty_), belowFiftyEliteLiberalLaw(belowFifty_) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_, string belowFiftyEliteLiberalLaw_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFifty_), belowFiftyEliteLiberalLaw(belowFiftyEliteLiberalLaw_) {}
 	stringConnectedToView(string aboveFifty_, string belowFifty_, string belowFiftyEliteLiberalLaw_, string belowFiftyLiberalLaw_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFiftyLiberalLaw_), belowFiftyEliteLiberalLaw(belowFiftyEliteLiberalLaw_) {}

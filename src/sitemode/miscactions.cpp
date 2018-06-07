@@ -63,28 +63,28 @@ const string CONST_miscactions005 = "unlocks the door";
 const string CONST_miscactions004 = "was_abused.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -103,19 +103,19 @@ void printparty();
 // for void criminalizeparty
 //#include "../daily/daily.h"
 char securityable(int type);
-   
+
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
- vector<string> was_abused;
+vector<string> was_abused;
 #include "../customMaps.h"
- const string activities = "activities\\";
- vector<file_and_text_collection> misc_activities_text_file_collection = {
-	 /*miscactions.cpp*/
-	 customText(&was_abused, activities + CONST_miscactions004),
- };
- extern string singleDot;
- extern string singleSpace;
+const string activities = "activities\\";
+vector<file_and_text_collection> misc_activities_text_file_collection = {
+	/*miscactions.cpp*/
+	customText(&was_abused, activities + CONST_miscactions004),
+};
+extern string singleDot;
+extern string singleSpace;
 void fillEncounter(CreatureTypes c, int numleft);
 map<short, string> discussIssues;
 map<short, string> discussesIssues;
@@ -144,13 +144,13 @@ char unlock(short type, char &actual)
 	case UNLOCK_VAULT:      difficulty = DIFFICULTY_HEROIC; break;
 	}
 	int maxattack = -1;
-	for (int p = 0; p<6; p++)
+	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
 			if (activesquad->squad[p]->alive)
 			{
-				if (activesquad->squad[p]->get_skill(SKILL_SECURITY)>maxattack)
+				if (activesquad->squad[p]->get_skill(SKILL_SECURITY) > maxattack)
 				{
 					maxattack = activesquad->squad[p]->get_skill(SKILL_SECURITY);
 				}
@@ -192,7 +192,7 @@ char unlock(short type, char &actual)
 			}
 			clearmessagearea(false);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 			addstrAlt(singleSpace, gamelog);
 			switch (type)
 			{
@@ -209,7 +209,7 @@ char unlock(short type, char &actual)
 			for (int j = 0; j < 6; j++) //If people witness a successful unlock, they learn a little bit.
 			{
 				if (j == p) continue;
-				if (activesquad->squad[j] != NULL&&
+				if (activesquad->squad[j] != NULL &&
 					activesquad->squad[j]->alive&&
 					activesquad->squad[j]->get_skill(SKILL_SECURITY) < difficulty)
 				{
@@ -227,7 +227,7 @@ char unlock(short type, char &actual)
 					}
 				}
 			}
-	 	pressAnyKey();
+			pressAnyKey();
 			actual = 1;
 			return 1;
 		}
@@ -262,7 +262,7 @@ char unlock(short type, char &actual)
 				addstrAlt(CONST_miscactions013, gamelog);
 				gamelog.newline();
 			}
-	 	pressAnyKey();
+			pressAnyKey();
 			actual = 1;
 			return 0;
 		}
@@ -271,9 +271,9 @@ char unlock(short type, char &actual)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions033, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions033, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	actual = 0;
 	return 0;
@@ -296,7 +296,7 @@ char bash(short type, char &actual)
 			difficulty = DIFFICULTY_EASY; // Run down dump
 			crowable = true;
 		}
-		else if (LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_PRISON&&
+		else if (LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_PRISON &&
 			LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_INTELLIGENCEHQ)
 		{
 			difficulty = DIFFICULTY_CHALLENGING; // Respectable place
@@ -340,14 +340,14 @@ char bash(short type, char &actual)
 	if (!crowable)
 	{
 		int maxattack = 0;
-		for (int p = 0; p<6; p++)
+		for (int p = 0; p < 6; p++)
 		{
 			if (activesquad->squad[p] != NULL)
 			{
 				if (activesquad->squad[p]->alive)
 				{
 					if (activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH, true)*
-						activesquad->squad[p]->get_weapon().get_bashstrengthmod()>maxattack)
+						activesquad->squad[p]->get_weapon().get_bashstrengthmod() > maxattack)
 					{
 						maxattack = static_cast<int>(activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH, true)*
 							activesquad->squad[p]->get_weapon().get_bashstrengthmod());
@@ -362,7 +362,7 @@ char bash(short type, char &actual)
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, activesquad->squad[maxp]->name, gamelog);
+		mvaddstrAlt(16, 1, activesquad->squad[maxp]->name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		switch (type)
 		{
@@ -377,7 +377,7 @@ char bash(short type, char &actual)
 		}
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		int timer = 5;
 		if (crowable) timer = 20;
 		if (sitealarmtimer<0 || sitealarmtimer>timer)
@@ -390,9 +390,9 @@ char bash(short type, char &actual)
 		{
 			sitealarm = 1;
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(17,  1, CONST_miscactions020, gamelog);
+			mvaddstrAlt(17, 1, CONST_miscactions020, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		actual = 1;
 		return 1;
@@ -401,7 +401,7 @@ char bash(short type, char &actual)
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, activesquad->squad[maxp]->name, gamelog);
+		mvaddstrAlt(16, 1, activesquad->squad[maxp]->name, gamelog);
 		switch (type)
 		{
 		case BASH_DOOR:
@@ -412,9 +412,9 @@ char bash(short type, char &actual)
 		}
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		if (sitealarmtimer < 0) sitealarmtimer = 25;
-		else if (sitealarmtimer>10) sitealarmtimer -= 10;
+		else if (sitealarmtimer > 10) sitealarmtimer -= 10;
 		else sitealarmtimer = 0;
 		actual = 1;
 		return 0;
@@ -459,7 +459,7 @@ char hack(short type, char &actual)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, activesquad->squad[hacker]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[hacker]->name, gamelog);
 			if (!blind) addstrAlt(CONST_miscactions024, gamelog);
 			switch (type)
 			{
@@ -470,7 +470,7 @@ char hack(short type, char &actual)
 				addstrAlt(CONST_miscactions027, gamelog);
 			addstrAlt(CONST_miscactions028, gamelog);
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			actual = 1;
 			return 1;
 		}
@@ -478,7 +478,7 @@ char hack(short type, char &actual)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, activesquad->squad[hacker]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[hacker]->name, gamelog);
 			addstrAlt(CONST_miscactions029, gamelog);
 			if (blind) addstrAlt(CONST_miscactions030, gamelog);
 			switch (type)
@@ -487,7 +487,7 @@ char hack(short type, char &actual)
 			case HACK_VAULT:addstrAlt(CONST_miscactions032, gamelog); break;
 			}
 			gamelog.newline();
-	 	pressAnyKey();
+			pressAnyKey();
 			actual = 1;
 			return 0;
 		}
@@ -496,15 +496,15 @@ char hack(short type, char &actual)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions033, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions033, gamelog);
 		gamelog.newline();
 		if (blind)
 		{  // your only hacker was blind and had a skill roll, after the handicap, of 0 or less
-	 	pressAnyKey();
-			mvaddstrAlt(17,  1, CONST_miscactions034, gamelog);
+			pressAnyKey();
+			mvaddstrAlt(17, 1, CONST_miscactions034, gamelog);
 			gamelog.newline();
 		}
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	actual = 0;
 	return 0;
@@ -530,10 +530,10 @@ char run_broadcast(bool tv_broadcase)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions035, gamelog);
-		mvaddstrAlt(17,  1, CONST_miscactions036, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions035, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions036, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		return 0;
 	}
 	criminalizeparty(LAWFLAG_DISTURBANCE);
@@ -553,7 +553,7 @@ char run_broadcast(bool tv_broadcase)
 		mvaddstrAlt(17, 1, discussesIssues[VIEW_LIBERALCRIMESQUADPOS], gamelog);
 	}
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	int segmentpower = 0, partysize = squadalive(activesquad);
 	for (int p = 0; p < 6; p++)
 	{
@@ -602,7 +602,7 @@ char run_broadcast(bool tv_broadcase)
 		else mvaddstrAlt(16, 1, CONST_miscactions054, gamelog);
 	}
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	//CHECK PUBLIC OPINION
 	change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	if (tv_broadcase) {
@@ -626,7 +626,7 @@ char run_broadcast(bool tv_broadcase)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  1, CONST_miscactions055, gamelog);
+					mvaddstrAlt(16, 1, CONST_miscactions055, gamelog);
 					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(CONST_miscactions056, gamelog);
 					viewhit = LCSrandom(VIEWNUM);
@@ -651,16 +651,16 @@ char run_broadcast(bool tv_broadcase)
 						else change_public_opinion(viewhit, usegmentpower / 2);
 					}
 					segmentpower += usegmentpower;
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 				else
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16,  1, activesquad->squad[p]->prisoner->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->name, gamelog);
 					addstrAlt(CONST_miscactions057, gamelog);
 					gamelog.newline();
-			 	pressAnyKey();
+					pressAnyKey();
 				}
 			}
 		}
@@ -670,21 +670,21 @@ char run_broadcast(bool tv_broadcase)
 		sitealienate = 0;
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions058, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions058, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17,  1, CONST_miscactions059, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions059, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	//POST-SECURITY BLITZ IF IT SUCKED
 	if (((segmentpower < 85 && segmentpower >= 25) && tv_broadcase) || ((segmentpower < 90) && !tv_broadcase))
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions060, gamelog);
-		mvaddstrAlt(17,  1, CONST_miscactions061, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions060, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions061, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		int numleft = LCSrandom(8) + 2;
 		fillEncounter(CREATURE_SECURITYGUARD, numleft);
 	}
@@ -703,9 +703,9 @@ char run_broadcast(bool tv_broadcase)
 		else {
 			mvaddstrAlt(16, 1, CONST_miscactions066, gamelog);
 		}
-		mvaddstrAlt(17,  1, CONST_miscactions067, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions067, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	return 1;
 }
@@ -733,7 +733,7 @@ void partyrescue(short special)
 		}
 	}
 	vector<Creature*> waiting_for_rescue;
-	
+
 	whoAreWaitingForRescue(waiting_for_rescue, cursite, special);
 	for (int pl = 0; pl < len(waiting_for_rescue); pl++)
 	{
@@ -754,12 +754,12 @@ void partyrescue(short special)
 			freeslots--;
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16,  1, CONST_miscactions070, gamelog);
+			mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
 			addstrAlt(waiting_for_rescue[pl]->name, gamelog);
 			addstrAlt(CONST_miscactions071, gamelog);
 			gamelog.newline();
 			printparty();
-	 	pressAnyKey();
+			pressAnyKey();
 			waiting_for_rescue[pl]->location = -1;
 			waiting_for_rescue[pl]->base = activesquad->squad[0]->base;
 			waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
@@ -782,23 +782,23 @@ void partyrescue(short special)
 						waiting_for_rescue[pl]->flag |= CREATUREFLAG_JUSTESCAPED;
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16,  1, CONST_miscactions070, gamelog);
+						mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
 						addstrAlt(waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(CONST_miscactions071, gamelog);
 						gamelog.newline();
-				 	pressAnyKey();
+						pressAnyKey();
 						clearmessagearea();
-						mvaddstrAlt(16,  1, waiting_for_rescue[pl]->name, gamelog);
+						mvaddstrAlt(16, 1, waiting_for_rescue[pl]->name, gamelog);
 						addstrAlt(singleSpace, gamelog);
 						addstrAlt(pickrandom(was_abused), gamelog);
-						mvaddstrAlt(17,  1, CONST_miscactions072, gamelog);
+						mvaddstrAlt(17, 1, CONST_miscactions072, gamelog);
 						addstrAlt(activesquad->squad[p]->name, gamelog);
 						addstrAlt(CONST_miscactions073, gamelog);
 						gamelog.newline();
 						waiting_for_rescue[pl]->location = -1;
 						waiting_for_rescue[pl]->base = activesquad->squad[p]->base;
 						printparty();
-				 	pressAnyKey();
+						pressAnyKey();
 						waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
 						--pl;
 						break;
@@ -813,25 +813,25 @@ void partyrescue(short special)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions074, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions074, gamelog);
 		addstrAlt(waiting_for_rescue[0]->name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17,  1, CONST_miscactions077, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions077, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	else if (len(waiting_for_rescue) > 1)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_miscactions076, gamelog);
+		mvaddstrAlt(16, 1, CONST_miscactions076, gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17,  1, CONST_miscactions077, gamelog);
+		mvaddstrAlt(17, 1, CONST_miscactions077, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 }
 /* everybody reload! */

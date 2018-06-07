@@ -1,27 +1,27 @@
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 #include "../includes.h"
@@ -145,7 +145,7 @@ map<int, vector<int> > locationsSpawners = {
 		CREATURE_ATHLETE, 1,
 		CREATURE_LOCKSMITH, 1
 	}),
-	map<int, vector<int> >::value_type(SITE_BUSINESS_CIGARBAR,{ 
+	map<int, vector<int> >::value_type(SITE_BUSINESS_CIGARBAR,{
 		CREATURE_SCIENTIST_EMINENT, 1,
 		CREATURE_CORPORATE_MANAGER, 30,
 		CREATURE_COP, 5,
@@ -1074,7 +1074,7 @@ void addLaboratoryGenetic(int creaturearray[CREATURENUM], const char sec) {
 }
 void addPoliceStation(int creaturearray[CREATURENUM], const char sec) {
 	extern short lawList[LAWNUM];
-	
+
 
 
 	if (lawList[LAW_LABOR] < 2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
@@ -1232,7 +1232,7 @@ void prepareencounter(short type, char sec)
 	int encslot = 0;
 	emptyEncounter();
 	int creaturearray[CREATURENUM];
-	memset(creaturearray, 0, CREATURENUM*sizeof(int));
+	memset(creaturearray, 0, CREATURENUM * sizeof(int));
 	if (postalarmtimer > 80)
 	{
 		addPoliceOrMilitary(creaturearray);

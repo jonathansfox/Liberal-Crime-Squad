@@ -105,8 +105,8 @@ const string blankString = "";
 #include "../customMaps.h"
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
- vector<string> supremeChars;
- vector<string> courtChars;
+vector<string> supremeChars;
+vector<string> courtChars;
 string pressLToViewHighScores;
 map<short, vector<string> > endgameLawStrings;
 #include "../common/creaturePool.h"
@@ -188,20 +188,20 @@ bool liberalagenda(signed char won)
 		if (won == 1)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_liberalagenda015);
+			mvaddstrAlt(0, 0, CONST_liberalagenda015);
 			music.play(MUSIC_VICTORY);
 		}
 		else if (won == -1 || won == -2)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_liberalagenda016);
+			mvaddstrAlt(0, 0, CONST_liberalagenda016);
 			if (won == -1) music.play(MUSIC_REAGANIFIED);
 			if (won == -2) music.play(MUSIC_STALINIZED);
 		}
 		else
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_liberalagenda017);
+			mvaddstrAlt(0, 0, CONST_liberalagenda017);
 			music.play(MUSIC_LIBERALAGENDA);
 		}
 		if (page < 0) page = PAGENUM - 1;
@@ -210,9 +210,9 @@ bool liberalagenda(signed char won)
 		{
 		case PAGE_LEADERS:
 		{
-			mvaddstrAlt(1,  0, CONST_liberalagenda018);
-			mvaddstrAlt(2,  0, CONST_liberalagenda019);
-			mvaddstrAlt(3,  0, CONST_liberalagenda020);
+			mvaddstrAlt(1, 0, CONST_liberalagenda018);
+			mvaddstrAlt(2, 0, CONST_liberalagenda019);
+			mvaddstrAlt(3, 0, CONST_liberalagenda020);
 			signed char align = exec[EXEC_PRESIDENT];
 			set_alignment_color(align, true);
 			moveAlt(5, 0);
@@ -225,7 +225,7 @@ bool liberalagenda(signed char won)
 				else addstrAlt(CONST_liberalagenda025);
 			}
 			if (won == -2) moveAlt(5, 30);
-			else mvaddstrAlt(5,  25, execname[EXEC_PRESIDENT]);
+			else mvaddstrAlt(5, 25, execname[EXEC_PRESIDENT]);
 			align = exec[EXEC_VP];
 			set_alignment_color(align, true);
 			moveAlt(6, 0);
@@ -233,7 +233,7 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt(CONST_liberalagenda027);
 			else addstrAlt(CONST_liberalagenda028);
 			if (won == -2) moveAlt(6, 30);
-			else mvaddstrAlt(6,  25, execname[EXEC_VP]);
+			else mvaddstrAlt(6, 25, execname[EXEC_VP]);
 			align = exec[EXEC_STATE];
 			set_alignment_color(align, true);
 			moveAlt(7, 0);
@@ -241,7 +241,7 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt(CONST_liberalagenda030);
 			else addstrAlt(CONST_liberalagenda031);
 			if (won == -2) moveAlt(7, 30);
-			else mvaddstrAlt(7,  25, execname[EXEC_STATE]);
+			else mvaddstrAlt(7, 25, execname[EXEC_STATE]);
 			align = exec[EXEC_ATTORNEY];
 			set_alignment_color(align, true);
 			moveAlt(8, 0);
@@ -249,16 +249,16 @@ bool liberalagenda(signed char won)
 			else if (won == -2) addstrAlt(CONST_liberalagenda033);
 			else addstrAlt(CONST_liberalagenda034);
 			if (won == -2) moveAlt(8, 30);
-			else mvaddstrAlt(8,  25, execname[EXEC_ATTORNEY]);
+			else mvaddstrAlt(8, 25, execname[EXEC_ATTORNEY]);
 			if (won == -1)
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10,  0, CONST_liberalagenda035);
+				mvaddstrAlt(10, 0, CONST_liberalagenda035);
 			}
 			else if (won == -2)
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10,  0, CONST_liberalagenda036);
+				mvaddstrAlt(10, 0, CONST_liberalagenda036);
 			}
 			else
 			{
@@ -359,15 +359,15 @@ bool liberalagenda(signed char won)
 		{
 			if (page == PAGE_ISSUES_A)
 			{
-				mvaddstrAlt(1,  0, CONST_liberalagenda045);
-				mvaddstrAlt(2,  0, CONST_liberalagenda046);
-				mvaddstrAlt(3,  0, CONST_liberalagenda047);
+				mvaddstrAlt(1, 0, CONST_liberalagenda045);
+				mvaddstrAlt(2, 0, CONST_liberalagenda046);
+				mvaddstrAlt(3, 0, CONST_liberalagenda047);
 			}
 			else
 			{
-				mvaddstrAlt(1,  0, CONST_liberalagenda048);
-				mvaddstrAlt(2,  0, CONST_liberalagenda049);
-				mvaddstrAlt(3,  0, CONST_liberalagenda050);
+				mvaddstrAlt(1, 0, CONST_liberalagenda048);
+				mvaddstrAlt(2, 0, CONST_liberalagenda049);
+				mvaddstrAlt(3, 0, CONST_liberalagenda050);
 			}
 			int y = 4, startinglaw = 0;
 			if (page == PAGE_ISSUES_B) startinglaw = 18;

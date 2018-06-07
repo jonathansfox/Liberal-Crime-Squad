@@ -31,28 +31,28 @@ const string CONST_haulkidnapX01 = "\"[Please], be cool.\"";
 const string CONST_haulkidnapX02 = "\"Bitch, be cool.\"";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 //TODO: This file probably shouldn't have any nextMessage calls in it.
 //That will depend on the chase and fight code, I think...And the code that
@@ -113,12 +113,12 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 			gamelog.newline(); //New line.
 			a.prisoner = new Creature;
 			*a.prisoner = t;
-	 	pressAnyKey();
+			pressAnyKey();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(17, 1, t.name, gamelog);
 			addstrAlt(CONST_haulkidnap006, gamelog);
 			gamelog.newline(); //New line.
-	 	pressAnyKey();
+			pressAnyKey();
 			gamelog.newline();
 			return 1;
 		}
@@ -133,7 +133,7 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 			addstrAlt(t.name, gamelog);
 			addstrAlt(CONST_haulkidnap009, gamelog);
 			gamelog.newline(); //New line.
-	 	pressAnyKey();
+			pressAnyKey();
 			gamelog.newline();
 			return 0;
 		}
@@ -154,7 +154,7 @@ bool kidnap(Creature &a, Creature &t, bool &amateur)
 		else addstrAlt(CONST_haulkidnapX02, gamelog);
 		a.prisoner = new Creature;
 		*a.prisoner = t;
- 	pressAnyKey();
+		pressAnyKey();
 		gamelog.newline();
 		return 1;
 	}
@@ -229,7 +229,7 @@ void freehostage(Creature &cr, char situation)
 		if (mode == GAMEMODE_CHASECAR ||
 			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		else printencounter();
- 	pressAnyKey();
+		pressAnyKey();
 	}
 }
 /* prompt after you've said you want to kidnap someone */
@@ -258,16 +258,16 @@ void kidnapattempt()
 	if (!available)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_haulkidnap021);
-		mvaddstrAlt(17,  1, CONST_haulkidnap031);
- 	pressAnyKey();
+		mvaddstrAlt(16, 1, CONST_haulkidnap021);
+		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		pressAnyKey();
 		return;
 	}
 	do
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  20, chooseALiberalTo + CONST_haulkidnap023);
+		mvaddstrAlt(8, 20, chooseALiberalTo + CONST_haulkidnap023);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -290,7 +290,7 @@ void kidnapattempt()
 			clearmessagearea();
 			clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9,  1, CONST_haulkidnap024);
+			mvaddstrAlt(9, 1, CONST_haulkidnap024);
 			int x = 1, y = 11;
 			for (int t2 = 0; t2 < len(target); t2++)
 			{
@@ -349,9 +349,9 @@ void kidnapattempt()
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_haulkidnap025);
-		mvaddstrAlt(17,  1, CONST_haulkidnap026);
- 	pressAnyKey();
+		mvaddstrAlt(16, 1, CONST_haulkidnap025);
+		mvaddstrAlt(17, 1, CONST_haulkidnap026);
+		pressAnyKey();
 	}
 }
 /* prompt after you've said you want to release someone */
@@ -367,21 +367,21 @@ void releasehostage()
 	char availslot[6] = { 0,0,0,0,0,0 };
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner != NULL&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner != NULL && activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
 				available++, availslot[p] = 1;
 	if (!available)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_haulkidnap027);
-		mvaddstrAlt(17,  1, CONST_haulkidnap031);
- 	pressAnyKey();
+		mvaddstrAlt(16, 1, CONST_haulkidnap027);
+		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		pressAnyKey();
 		return;
 	}
 	do
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  20, chooseALiberalTo + CONST_haulkidnap029);
+		mvaddstrAlt(8, 20, chooseALiberalTo + CONST_haulkidnap029);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= '6')
@@ -393,10 +393,10 @@ void releasehostage()
 	if (!sitealarm)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16,  1, CONST_haulkidnap030, gamelog);
+		mvaddstrAlt(16, 1, CONST_haulkidnap030, gamelog);
 		gamelog.nextMessage(); //Next message.
-		mvaddstrAlt(17,  1, CONST_haulkidnap031);
- 	pressAnyKey();
+		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		pressAnyKey();
 		sitealarm = 1;
 		alienationcheck(1);
 	}
@@ -413,7 +413,7 @@ void squadgrab_immobile(char dead)
 		{
 			if (activesquad->squad[p]->alive &&
 				(activesquad->squad[p]->canwalk() ||
-					(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)) &&
+				(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)) &&
 				activesquad->squad[p]->prisoner == NULL)
 				hostslots++;
 			else if ((!activesquad->squad[p]->alive ||
@@ -423,12 +423,12 @@ void squadgrab_immobile(char dead)
 			{
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 				addstrAlt(CONST_haulkidnap032, gamelog);
 				addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline(); //New line.
-		 	pressAnyKey();
+				pressAnyKey();
 				freehostage(*activesquad->squad[p]->prisoner, 1);
 			}
 		}
@@ -438,7 +438,7 @@ void squadgrab_immobile(char dead)
 		if (activesquad->squad[p] != NULL)
 		{
 			if ((!activesquad->squad[p]->alive&&dead) ||
-				(activesquad->squad[p]->alive&&
+				(activesquad->squad[p]->alive &&
 					!(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR) &&
 					!activesquad->squad[p]->canwalk() && !dead))
 			{
@@ -448,7 +448,7 @@ void squadgrab_immobile(char dead)
 					{
 						clearmessagearea();
 						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16,  1, CONST_haulkidnap033, gamelog);
+						mvaddstrAlt(16, 1, CONST_haulkidnap033, gamelog);
 						addstrAlt(activesquad->squad[p]->name, gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
@@ -461,7 +461,7 @@ void squadgrab_immobile(char dead)
 					{
 						clearmessagearea();
 						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16,  1, activesquad->squad[p]->name, gamelog);
+						mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
 						addstrAlt(CONST_haulkidnap034, gamelog);
 						gamelog.newline(); //New line.
 						capturecreature(*activesquad->squad[p]);
@@ -476,13 +476,13 @@ void squadgrab_immobile(char dead)
 						{
 							if (activesquad->squad[p2]->alive &&
 								(activesquad->squad[p2]->canwalk() ||
-									(activesquad->squad[p2]->flag & CREATUREFLAG_WHEELCHAIR)) &&
+								(activesquad->squad[p2]->flag & CREATUREFLAG_WHEELCHAIR)) &&
 								activesquad->squad[p2]->prisoner == NULL)
 							{
 								activesquad->squad[p2]->prisoner = activesquad->squad[p];
 								clearmessagearea();
 								set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-								mvaddstrAlt(16,  1, activesquad->squad[p2]->name, gamelog);
+								mvaddstrAlt(16, 1, activesquad->squad[p2]->name, gamelog);
 								addstrAlt(CONST_haulkidnap035, gamelog);
 								addstrAlt(activesquad->squad[p]->name, gamelog);
 								addstrAlt(singleDot, gamelog);
@@ -503,7 +503,7 @@ void squadgrab_immobile(char dead)
 				}
 				if (flipstart) activesquad->squad[5] = NULL;
 				printparty();
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 		}
 	}

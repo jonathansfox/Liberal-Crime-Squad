@@ -151,22 +151,22 @@ const string CONST_interrogation004 = "execution.txt";
 const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 const string tag_value = "value";
 const string tag_attribute = "attribute";
@@ -178,7 +178,7 @@ const string tag_skill = "skill";
 #include "../log/log.h"
 #include "../common/commondisplayCreature.h"
 // for void printhealthstat(Creature &,int,int,char);
- #include "../common/getnames.h"
+#include "../common/getnames.h"
 // for std::string getview(short ,bool );
 #include "../common/commonactionsCreature.h"
 // for  void sleeperize_prompt(Creature &,Creature &,int);
@@ -188,92 +188,92 @@ const string tag_skill = "skill";
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
- vector<string> execution;
- vector<string> feels_sick;
- vector<string> low_heart_torture_props;
- vector<string> screaming;
- vector<string> beat_with_props;
- vector<string> words_meaning_screaming;
- vector<string> words_to_scream;
- vector<string> prays;
- vector<string> prays_on_drugs;
- vector<string> use_props;
- vector<string> resist_drugs;
- vector<string> partial_conversion;
- vector<string> broods_over_death;
- vector<string> self_wounding;
- vector<string> good_trip;
- vector<vector<string> > fall_in_love;
- vector<vector<string> > bad_trip;
- vector<vector<string> > good_trip_companion;
- vector<string> smarter_than_you_one_line;
- vector<vector<string> > smarter_than_you;
- vector<string> develops_hatred_one_line;
- vector<vector<string> > develops_hatred;
- vector<string> interrogater_shows_compassion_one_line;
- vector<vector<string> > interrogater_shows_compassion;
- vector<vector<string> > cling_to_interrogater;
- vector<string> clinging_one_line;
- vector<vector<string> > cling_to_religion;
- vector<string> cling_to_religion_one_line;
- vector<vector<string> > discuss;
- vector<string> vanilla_recruit;
- vector<vector<string> > cling_to_business;
- vector<vector<string> > cling_to_science;
- vector<string> cling_to_business_one_line;
- vector<string> cling_to_science_one_line;
- const string interrogate = "interrogation\\";
- const int DOUBLE_LINE = 2;
- vector<file_and_text_collection> interrogate_text_file_collection = {
-	 /*InterrogationST.cpp*/
-	 customText(&execution, interrogate + CONST_interrogation004),
-	 customText(&feels_sick, interrogate + CONST_interrogation005),
-	 customText(&low_heart_torture_props, interrogate + CONST_interrogation006),
-	 customText(&screaming, interrogate + CONST_interrogation007),
-	 customText(&beat_with_props, interrogate + CONST_interrogation008),
-	 customText(&words_meaning_screaming, interrogate + CONST_interrogation009),
-	 customText(&words_to_scream, interrogate + CONST_interrogation010),
-	 customText(&prays, interrogate + CONST_interrogation011),
-	 customText(&prays_on_drugs, interrogate + CONST_interrogation012),
-	 customText(&use_props, interrogate + CONST_interrogation013),
-	 customText(&resist_drugs, interrogate + CONST_interrogation014),
-	 customText(&partial_conversion, interrogate + CONST_interrogation015),
-	 customText(&broods_over_death, interrogate + CONST_interrogation016),
-	 customText(&self_wounding, interrogate + CONST_interrogation017),
-	 customText(&good_trip, interrogate + CONST_interrogation018),
-	 customText(&fall_in_love, interrogate + CONST_interrogation019, DOUBLE_LINE),
-	 customText(&bad_trip, interrogate + CONST_interrogation020, DOUBLE_LINE),
-	 customText(&good_trip_companion, interrogate + CONST_interrogation021, DOUBLE_LINE),
-	 customText(&smarter_than_you_one_line, interrogate + CONST_interrogation022),
-	 customText(&smarter_than_you, interrogate + CONST_interrogation023, DOUBLE_LINE),
-	 customText(&develops_hatred_one_line, interrogate + CONST_interrogation024),
-	 customText(&develops_hatred, interrogate + CONST_interrogation025, DOUBLE_LINE),
-	 customText(&interrogater_shows_compassion_one_line, interrogate + CONST_interrogation026),
-	 customText(&interrogater_shows_compassion, interrogate + CONST_interrogation027, DOUBLE_LINE),
-	 customText(&cling_to_interrogater, interrogate + CONST_interrogation028, DOUBLE_LINE),
-	 customText(&clinging_one_line, interrogate + CONST_interrogation029),
-	 customText(&cling_to_religion, interrogate + CONST_interrogation030, DOUBLE_LINE),
-	 customText(&cling_to_religion_one_line, interrogate + CONST_interrogation031),
-	 customText(&discuss, interrogate + CONST_interrogation032, DOUBLE_LINE),
-	 customText(&vanilla_recruit, interrogate + CONST_interrogation033),
-	 customText(&cling_to_business_one_line, interrogate + CONST_interrogation034),
-	 customText(&cling_to_science_one_line, interrogate + CONST_interrogation035),
-	 customText(&cling_to_business, interrogate + CONST_interrogation036, DOUBLE_LINE),
-	 customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
- };
- string feels_sick_and;
+vector<string> execution;
+vector<string> feels_sick;
+vector<string> low_heart_torture_props;
+vector<string> screaming;
+vector<string> beat_with_props;
+vector<string> words_meaning_screaming;
+vector<string> words_to_scream;
+vector<string> prays;
+vector<string> prays_on_drugs;
+vector<string> use_props;
+vector<string> resist_drugs;
+vector<string> partial_conversion;
+vector<string> broods_over_death;
+vector<string> self_wounding;
+vector<string> good_trip;
+vector<vector<string> > fall_in_love;
+vector<vector<string> > bad_trip;
+vector<vector<string> > good_trip_companion;
+vector<string> smarter_than_you_one_line;
+vector<vector<string> > smarter_than_you;
+vector<string> develops_hatred_one_line;
+vector<vector<string> > develops_hatred;
+vector<string> interrogater_shows_compassion_one_line;
+vector<vector<string> > interrogater_shows_compassion;
+vector<vector<string> > cling_to_interrogater;
+vector<string> clinging_one_line;
+vector<vector<string> > cling_to_religion;
+vector<string> cling_to_religion_one_line;
+vector<vector<string> > discuss;
+vector<string> vanilla_recruit;
+vector<vector<string> > cling_to_business;
+vector<vector<string> > cling_to_science;
+vector<string> cling_to_business_one_line;
+vector<string> cling_to_science_one_line;
+const string interrogate = "interrogation\\";
+const int DOUBLE_LINE = 2;
+vector<file_and_text_collection> interrogate_text_file_collection = {
+	/*InterrogationST.cpp*/
+	customText(&execution, interrogate + CONST_interrogation004),
+	customText(&feels_sick, interrogate + CONST_interrogation005),
+	customText(&low_heart_torture_props, interrogate + CONST_interrogation006),
+	customText(&screaming, interrogate + CONST_interrogation007),
+	customText(&beat_with_props, interrogate + CONST_interrogation008),
+	customText(&words_meaning_screaming, interrogate + CONST_interrogation009),
+	customText(&words_to_scream, interrogate + CONST_interrogation010),
+	customText(&prays, interrogate + CONST_interrogation011),
+	customText(&prays_on_drugs, interrogate + CONST_interrogation012),
+	customText(&use_props, interrogate + CONST_interrogation013),
+	customText(&resist_drugs, interrogate + CONST_interrogation014),
+	customText(&partial_conversion, interrogate + CONST_interrogation015),
+	customText(&broods_over_death, interrogate + CONST_interrogation016),
+	customText(&self_wounding, interrogate + CONST_interrogation017),
+	customText(&good_trip, interrogate + CONST_interrogation018),
+	customText(&fall_in_love, interrogate + CONST_interrogation019, DOUBLE_LINE),
+	customText(&bad_trip, interrogate + CONST_interrogation020, DOUBLE_LINE),
+	customText(&good_trip_companion, interrogate + CONST_interrogation021, DOUBLE_LINE),
+	customText(&smarter_than_you_one_line, interrogate + CONST_interrogation022),
+	customText(&smarter_than_you, interrogate + CONST_interrogation023, DOUBLE_LINE),
+	customText(&develops_hatred_one_line, interrogate + CONST_interrogation024),
+	customText(&develops_hatred, interrogate + CONST_interrogation025, DOUBLE_LINE),
+	customText(&interrogater_shows_compassion_one_line, interrogate + CONST_interrogation026),
+	customText(&interrogater_shows_compassion, interrogate + CONST_interrogation027, DOUBLE_LINE),
+	customText(&cling_to_interrogater, interrogate + CONST_interrogation028, DOUBLE_LINE),
+	customText(&clinging_one_line, interrogate + CONST_interrogation029),
+	customText(&cling_to_religion, interrogate + CONST_interrogation030, DOUBLE_LINE),
+	customText(&cling_to_religion_one_line, interrogate + CONST_interrogation031),
+	customText(&discuss, interrogate + CONST_interrogation032, DOUBLE_LINE),
+	customText(&vanilla_recruit, interrogate + CONST_interrogation033),
+	customText(&cling_to_business_one_line, interrogate + CONST_interrogation034),
+	customText(&cling_to_science_one_line, interrogate + CONST_interrogation035),
+	customText(&cling_to_business, interrogate + CONST_interrogation036, DOUBLE_LINE),
+	customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
+};
+string feels_sick_and;
 extern string singleDot;
 extern string AND;
 extern string singleSpace;
 extern string commaSpace;
 enum InterrogationTechnqiues
 {
-   TECHNIQUE_TALK,
-   TECHNIQUE_RESTRAIN,
-   TECHNIQUE_BEAT,
-   TECHNIQUE_PROPS,
-   TECHNIQUE_DRUGS,
-   TECHNIQUE_KILL
+	TECHNIQUE_TALK,
+	TECHNIQUE_RESTRAIN,
+	TECHNIQUE_BEAT,
+	TECHNIQUE_PROPS,
+	TECHNIQUE_DRUGS,
+	TECHNIQUE_KILL
 };
 // Clear sidebar
 void clear_interrogation_sidebar()
@@ -287,18 +287,18 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 	clear_interrogation_sidebar();
 	map<long, struct Float_Zero>& rapport = cr->activity.intr()->rapport;
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(4,  40, CONST_interrogation039);
+	mvaddstrAlt(4, 40, CONST_interrogation039);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(cr->name);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(6, 40, CONST_interrogation045);
 	printhealthstat(*cr, 6, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(7,  40, CONST_interrogation047);
+	mvaddstrAlt(7, 40, CONST_interrogation047);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(8,  40, CONST_interrogation048);
+	mvaddstrAlt(8, 40, CONST_interrogation048);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(9,  40, CONST_interrogation045);
+	mvaddstrAlt(9, 40, CONST_interrogation045);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(13, 40, CONST_interrogation044);
@@ -308,14 +308,14 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 	mvaddstrAlt(15, 40, CONST_interrogation045);
 	printhealthstat(*a, 16, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(17,  40, CONST_interrogation046);
+	mvaddstrAlt(17, 40, CONST_interrogation046);
 	addstrAlt(a->get_skill(SKILL_PSYCHOLOGY));
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(18,  40, CONST_interrogation047);
+	mvaddstrAlt(18, 40, CONST_interrogation047);
 	addstrAlt(a->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(19,  40, CONST_interrogation048);
+	mvaddstrAlt(19, 40, CONST_interrogation048);
 	addstrAlt(a->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(20,  40, CONST_interrogation049);
+	mvaddstrAlt(20, 40, CONST_interrogation049);
 	addstrAlt(a->get_armor().get_name());
 	// What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
 	// These are greater than and less than comparisons, so they are testing ranges -Fox
@@ -356,7 +356,7 @@ void show_interrogation_sidebar(Creature * cr, Creature * a)
 	}
 	mvaddstrAlt(22, 40, line_one);
 	if (len(line_two)) {
-		mvaddstrAlt(23,  40, line_two);
+		mvaddstrAlt(23, 40, line_two);
 	}
 }
 void printInterrogationMenu(bool techniques[6], Creature * cr, Creature * a) {
@@ -531,13 +531,13 @@ void tendhostage(Creature *cr, char &clearformess)
 	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, CONST_interrogation091);
+	mvaddstrAlt(0, 0, CONST_interrogation091);
 	addstrAlt(cr->name);
 	addstrAlt(CONST_interrogation092);
 	addstrAlt(cr->joindays);
- 	pressAnyKey();
+	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
-	
+
 	{
 		//each day, the attack roll is initialized to the number of days of the stay with
 		//the LCS -- they will eventually break, but also eventually become too traumatized
@@ -620,7 +620,7 @@ void tendhostage(Creature *cr, char &clearformess)
 		addstrAlt(CONST_interrogation092, gamelog);
 		addstrAlt(cr->joindays, gamelog);
 		gamelog.newline();
-		
+
 		mvaddstrAlt(2, 0, CONST_interrogation093, gamelog);
 		if (techniques[TECHNIQUE_RESTRAIN]) // Restraint
 		{
@@ -1398,6 +1398,6 @@ void tendhostage(Creature *cr, char &clearformess)
 	}
 	gamelog.nextMessage();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24,  0, CONST_interrogation167);
- 	pressAnyKey();
+	mvaddstrAlt(24, 0, CONST_interrogation167);
+	pressAnyKey();
 }

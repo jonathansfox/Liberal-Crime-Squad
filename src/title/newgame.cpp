@@ -65,28 +65,28 @@ const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string tag_value = "value";
 
@@ -243,9 +243,9 @@ int getMagnitudeFromString(const string& s) {
 	}
 	if (spaceUnfound) {
 		clearAlt();
-		mvaddstrAlt(0,  0, error);
-		mvaddstrAlt(1,  0, s);
- 	pressAnyKey();
+		mvaddstrAlt(0, 0, error);
+		mvaddstrAlt(1, 0, s);
+		pressAnyKey();
 	}
 	return atoi(s.substr(j).data());
 }
@@ -270,11 +270,11 @@ int getSkillFromString(const string& s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notASkill);
- 	pressAnyKey();
+		pressAnyKey();
 		return -1;
 	}
 }
- map<string, short> getAttributeEnumFromString;
+map<string, short> getAttributeEnumFromString;
 int getAttributeFromString(const string& s) {
 	int output = findSubstring(getAttributeEnumFromString, s);
 	if (output >= 0) {
@@ -284,11 +284,11 @@ int getAttributeFromString(const string& s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notAnAttribute);
- 	pressAnyKey();
+		pressAnyKey();
 		return -1;
 	}
 }
- map<string, short> getCreatureEnumFromString;
+map<string, short> getCreatureEnumFromString;
 int getCreatureFromString(const string& s) {
 	int output = findSubstring(getCreatureEnumFromString, s);
 	if (output >= 0) {
@@ -299,7 +299,7 @@ int getCreatureFromString(const string& s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notCreature);
- 	pressAnyKey();
+		pressAnyKey();
 		return -1;
 	}
 }
@@ -321,7 +321,7 @@ int getBaseFromString(const string& s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notValidMap);
- 	pressAnyKey();
+		pressAnyKey();
 		return -1;
 	}
 }
@@ -334,7 +334,7 @@ int getSpecialWoundFromString(const string& s) {
 		addstrAlt(error);
 		addstrAlt(s);
 		addstrAlt(notSpecialWound);
- 	pressAnyKey();
+		pressAnyKey();
 		return -1;
 	}
 }
@@ -369,7 +369,7 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(4,  6, newGameAdvanced);
+		mvaddstrAlt(4, 6, newGameAdvanced);
 		set_color_easy(WHITE_ON_BLACK);
 		{
 			string isThisSelected;
@@ -492,7 +492,7 @@ void setup_newgame()
 				if (court[c] == ALIGN_ARCHCONSERVATIVE)
 					generate_name(courtname[c], GENDER_WHITEMALEPATRIARCH);
 				else generate_name(courtname[c]);
-			} while (len(courtname[c])>20);
+			} while (len(courtname[c]) > 20);
 		}
 	}
 	if (classicmode)
@@ -506,7 +506,7 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(4,  6, newGameYourAgenda);
+		mvaddstrAlt(4, 6, newGameYourAgenda);
 
 		set_color_easy(WHITE_ON_BLACK);
 		string isThisSelected;
@@ -528,7 +528,7 @@ void setup_newgame()
 		addstrAlt(b_democrat);
 
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(13,  4, pressAnyOtherKey);
+		mvaddstrAlt(13, 4, pressAnyOtherKey);
 		const int c = getkeyAlt();
 		if (c == 'a')
 		{
@@ -546,9 +546,9 @@ void setup_newgame()
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(4,  6, newGameFieldLearn);
+		mvaddstrAlt(4, 6, newGameFieldLearn);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(5,  6, affectsTheseSkills);
+		mvaddstrAlt(5, 6, affectsTheseSkills);
 		string isThisSelected;
 
 		if (fieldskillrate == FIELDSKILLRATE_FAST)
@@ -570,7 +570,7 @@ void setup_newgame()
 		addstrAlt(c_hardMode);
 
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(16,  4, pressAnyOtherKey);
+		mvaddstrAlt(16, 4, pressAnyOtherKey);
 		const int c = getkeyAlt();
 		if (c == 'a')
 		{
@@ -719,18 +719,18 @@ void makecharacter()
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(4,  6, theFounder);
-		mvaddstrAlt(7,  2, firstName);
+		mvaddstrAlt(4, 6, theFounder);
+		mvaddstrAlt(7, 2, firstName);
 		addstrAlt(first[(int)gender]);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(7,  30, pressAtoReconsider);
+		mvaddstrAlt(7, 30, pressAtoReconsider);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9,  2, lastName);
+		mvaddstrAlt(9, 2, lastName);
 		addstrAlt(last);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9,  30, pressBtoBeReborn);
+		mvaddstrAlt(9, 30, pressBtoBeReborn);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11,  2, sexIs);
+		mvaddstrAlt(11, 2, sexIs);
 		if (newcr->gender_conservative == GENDER_MALE)
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -747,9 +747,9 @@ void makecharacter()
 			addstrAlt(itsComplicated);
 		}
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11,  30, pressCtoChangeSex);
+		mvaddstrAlt(11, 30, pressCtoChangeSex);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13,  2, history);
+		mvaddstrAlt(13, 2, history);
 		if (choices)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -761,17 +761,17 @@ void makecharacter()
 			addstrAlt(letFateDecide);
 		}
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13,  30, pressDtoToggle);
+		mvaddstrAlt(13, 30, pressDtoToggle);
 		if (!multipleCityMode)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15,  2, city);
+			mvaddstrAlt(15, 2, city);
 			addstrAlt(lcityname);
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15,  30, pressEtoRelocate);
+			mvaddstrAlt(15, 30, pressEtoRelocate);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19 - multipleCityMode * 2,  4, pressAnyKeyString);
+		mvaddstrAlt(19 - multipleCityMode * 2, 4, pressAnyKeyString);
 		const int c = getkeyAlt();
 		if (c == 'a')
 		{
@@ -825,7 +825,7 @@ void makecharacter()
 	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
 	bool assault_rifle = false;
 	bool sports_car = false;
-	
+
 	vector<Question> allQuestions;
 	bool firstQuestion = true;
 	bool firstAnswer = true;
@@ -1038,14 +1038,14 @@ void makecharacter()
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-		 	pressAnyKey();
+				pressAnyKey();
 				clearAlt();
 			}
 			if (invalidTag) {
 				clearAlt();
 				addstrAlt(invalidTag);
 				addstrAlt(founderQuestions[i]);
-		 	pressAnyKey();
+				pressAnyKey();
 				clearAlt();
 			}
 			else {
@@ -1062,13 +1062,13 @@ void makecharacter()
 	for (int i = 0; i < allQuestions.size(); i++) {
 		clearAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, allQuestions[i].HEADER);
-		mvaddstrAlt(1,  0, allQuestions[i].HEADER_2);
+		mvaddstrAlt(0, 0, allQuestions[i].HEADER);
+		mvaddstrAlt(1, 0, allQuestions[i].HEADER_2);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(2,  0, allQuestions[i].QUESTION);
-		mvaddstrAlt(3,  0, allQuestions[i].QUESTION_2);
+		mvaddstrAlt(2, 0, allQuestions[i].QUESTION);
+		mvaddstrAlt(3, 0, allQuestions[i].QUESTION_2);
 		if (i == 0) {
-			mvaddstrAlt(17,  0, theDocSaid);
+			mvaddstrAlt(17, 0, theDocSaid);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			if (newcr->gender_conservative == GENDER_MALE)
 				addstrAlt(aBoy);
@@ -1078,11 +1078,11 @@ void makecharacter()
 				addstrAlt(intersex);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
-			mvaddstrAlt(19,  0, myParents);
+			mvaddstrAlt(19, 0, myParents);
 			if (newcr->gender_conservative == GENDER_NEUTRAL)
 			{
 				addstrAlt(insistedOtherwise);
-				mvaddstrAlt(20,  0, they);
+				mvaddstrAlt(20, 0, they);
 			}
 			addstrAlt(namedMe);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1099,7 +1099,7 @@ void makecharacter()
 			string currentOption = spaceDashSpace;
 			mvaddstrAlt(5 + 2 * offset, 0, allOptions.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
 			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		else {
 			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
@@ -1212,15 +1212,15 @@ void makecharacter()
 				break;
 			default:
 				clearAlt();
-				mvaddstrAlt(0,  0, error);
-				mvaddstrAlt(1,  0, currentImpact.item_to_influcence);
+				mvaddstrAlt(0, 0, error);
+				mvaddstrAlt(1, 0, currentImpact.item_to_influcence);
 				break;
 			}
 			break;
 		default:
 			clearAlt();
-			mvaddstrAlt(0,  0, error);
-			mvaddstrAlt(1,  0, currentImpact.type);
+			mvaddstrAlt(0, 0, error);
+			mvaddstrAlt(1, 0, currentImpact.type);
 			break;
 		}
 	}
@@ -1244,15 +1244,15 @@ void makecharacter()
 		startcar = newSportsCar();
 		startcar->add_heat(10);
 		newVehicle(startcar);
-		
+
 		newcr->pref_carid = startcar->id();
 	}
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(2,  2, aNewConEra, gamelog);
+	mvaddstrAlt(2, 2, aNewConEra, gamelog);
 	gamelog.newline();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(4,  2, theYearIs, gamelog);
+	mvaddstrAlt(4, 2, theYearIs, gamelog);
 	addstrAlt(year, gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.newline();
@@ -1267,7 +1267,7 @@ void makecharacter()
 	mvaddstrAlt(8, 2, execname[EXEC_PRESIDENT], gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.nextMessage();
-	mvaddstrAlt(10,  2, conMajorityHouse, gamelog);
+	mvaddstrAlt(10, 2, conMajorityHouse, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(11, 2, senateConMajority, gamelog);
 	gamelog.newline();
@@ -1276,7 +1276,7 @@ void makecharacter()
 	mvaddstrAlt(13, 2, conEra, gamelog);
 	gamelog.nextMessage();
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(15,  2, thePresident, gamelog);
+	mvaddstrAlt(15, 2, thePresident, gamelog);
 	addstrAlt(execname[EXEC_PRESIDENT], gamelog);
 	addstrAlt(hasAskedCongressBeQuick, gamelog);
 	gamelog.newline();
@@ -1284,16 +1284,16 @@ void makecharacter()
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(theLeftSeems, gamelog);
 	gamelog.newline();
-	mvaddstrAlt(17,  2, powerlessToStop, gamelog);
+	mvaddstrAlt(17, 2, powerlessToStop, gamelog);
 	gamelog.nextMessage();
-	mvaddstrAlt(19,  2, inThisDarkTime, gamelog);
+	mvaddstrAlt(19, 2, inThisDarkTime, gamelog);
 	gamelog.nextMessage();
- 	pressAnyKey();
+	pressAnyKey();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, whatIsYourName);
+	mvaddstrAlt(0, 0, whatIsYourName);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1,  0, pressEnterToBeRealName);
+	mvaddstrAlt(1, 0, pressEnterToBeRealName);
 	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	addCreature(newcr);
 	make_world(hasmaps);

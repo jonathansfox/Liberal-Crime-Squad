@@ -217,28 +217,28 @@ const string tag_blood = "blood";
 const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 const string tag_value = "value";
 const string tag_attribute = "attribute";
@@ -263,65 +263,65 @@ void printparty();
 Vehicle* getChaseVehicle(const Creature &c);
 Creature* getChaseDriver(const Creature &c);
 //#include "../combat/haulkidnapCreature.h"
-void freehostage(Creature &cr,char situation);
+void freehostage(Creature &cr, char situation);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
 bool goodguyattack = false;
- vector<string> escape_running;
- vector<string> escape_crawling;
- vector<string> judge_debate;
- vector<string> conservative_ceo_debate;
- vector<string> other_ceo_debate;
- vector<string> conservative_politician_debate;
- vector<string> other_politician_debate;
- vector<string> media_debate;
- vector<string> military_debate;
- vector<string> police_debate;
- vector<string> scientist_debate;
- vector<string> cry_alarm;
- vector<string> bleeding_to_death;
- vector<string> stunned_text;
- vector<string> paralyzed_text;
- vector<string> paralyzed_tank;
- vector<string> bleeding_animal;
- vector<vector<string> > double_line_death;
- vector<string> body_falls_apart;
- vector<string> evasionStringsAlt;
- vector<string> evasionStrings;
- const string fighty = "fight\\";
-  const int DOUBLE_LINE = 2;
-  const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> fighty_text_file_collection = {
-	 /*fight.cpp*/
-	 customText(&escape_running, fighty + CONST_fight010),
-	 customText(&escape_crawling, fighty + CONST_fight011),
-	 customText(&judge_debate, fighty + CONST_fight012),
-	 customText(&conservative_ceo_debate, fighty + CONST_fight013),
-	 customText(&other_ceo_debate, fighty + CONST_fight014),
-	 customText(&conservative_politician_debate, fighty + CONST_fight015),
-	 customText(&other_politician_debate, fighty + CONST_fight016),
-	 customText(&media_debate, fighty + CONST_fight017),
-	 customText(&military_debate, fighty + CONST_fight018),
-	 customText(&police_debate, fighty + CONST_fight019),
-	 customText(&scientist_debate, fighty + CONST_fight020),
-	 customText(&cry_alarm, fighty + CONST_fight021),
-	 customText(&bleeding_to_death, fighty + CONST_fight022),
-	 customText(&stunned_text, fighty + CONST_fight023),
-	 customText(&paralyzed_text, fighty + CONST_fight024),
-	 customText(&paralyzed_tank, fighty + CONST_fight025),
-	 customText(&bleeding_animal, fighty + CONST_fight026),
-	 customText(&double_line_death, fighty + CONST_fight027, DOUBLE_LINE),
-	 customText(&body_falls_apart, fighty + CONST_fight028),
-	 customText(&evasionStrings, mostlyendings + CONST_fight029),
-	 customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
- };
- extern string singleSpace;
- extern string singleDot;
- extern string commaSpace;
- vector<Item *> groundloot;
+vector<string> escape_running;
+vector<string> escape_crawling;
+vector<string> judge_debate;
+vector<string> conservative_ceo_debate;
+vector<string> other_ceo_debate;
+vector<string> conservative_politician_debate;
+vector<string> other_politician_debate;
+vector<string> media_debate;
+vector<string> military_debate;
+vector<string> police_debate;
+vector<string> scientist_debate;
+vector<string> cry_alarm;
+vector<string> bleeding_to_death;
+vector<string> stunned_text;
+vector<string> paralyzed_text;
+vector<string> paralyzed_tank;
+vector<string> bleeding_animal;
+vector<vector<string> > double_line_death;
+vector<string> body_falls_apart;
+vector<string> evasionStringsAlt;
+vector<string> evasionStrings;
+const string fighty = "fight\\";
+const int DOUBLE_LINE = 2;
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> fighty_text_file_collection = {
+	/*fight.cpp*/
+	customText(&escape_running, fighty + CONST_fight010),
+	customText(&escape_crawling, fighty + CONST_fight011),
+	customText(&judge_debate, fighty + CONST_fight012),
+	customText(&conservative_ceo_debate, fighty + CONST_fight013),
+	customText(&other_ceo_debate, fighty + CONST_fight014),
+	customText(&conservative_politician_debate, fighty + CONST_fight015),
+	customText(&other_politician_debate, fighty + CONST_fight016),
+	customText(&media_debate, fighty + CONST_fight017),
+	customText(&military_debate, fighty + CONST_fight018),
+	customText(&police_debate, fighty + CONST_fight019),
+	customText(&scientist_debate, fighty + CONST_fight020),
+	customText(&cry_alarm, fighty + CONST_fight021),
+	customText(&bleeding_to_death, fighty + CONST_fight022),
+	customText(&stunned_text, fighty + CONST_fight023),
+	customText(&paralyzed_text, fighty + CONST_fight024),
+	customText(&paralyzed_tank, fighty + CONST_fight025),
+	customText(&bleeding_animal, fighty + CONST_fight026),
+	customText(&double_line_death, fighty + CONST_fight027, DOUBLE_LINE),
+	customText(&body_falls_apart, fighty + CONST_fight028),
+	customText(&evasionStrings, mostlyendings + CONST_fight029),
+	customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
+};
+extern string singleSpace;
+extern string singleDot;
+extern string commaSpace;
+vector<Item *> groundloot;
 std::string burstHitString(int bursthits) {
 	switch (bursthits)
 	{
@@ -339,7 +339,7 @@ void makeloot(Creature &cr, vector<Item *> &loot)
 	extern short mode;
 	cr.drop_weapons_and_clips(&loot);
 	cr.strip(&loot);
-	if (cr.money>0 && mode == GAMEMODE_SITE)
+	if (cr.money > 0 && mode == GAMEMODE_SITE)
 	{
 		loot.push_back(new Money(cr.money));
 		cr.money = 0;
@@ -673,11 +673,11 @@ void specialattack(Creature &a, Creature &t)
 	if ((t.animalgloss == ANIMALGLOSS_TANK || (t.animalgloss == ANIMALGLOSS_ANIMAL && lawList[LAW_ANIMALRESEARCH] != 2))
 		|| (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
 	{
-		mvaddstrAlt(17, 1, t.name + (string) CONST_fight076, gamelog);
+		mvaddstrAlt(17, 1, t.name + (string)CONST_fight076, gamelog);
 	}
 	else if (a.align == t.align)
 	{
-		mvaddstrAlt(17, 1, t.name + (string)  CONST_fight077 + a.name + singleDot);
+		mvaddstrAlt(17, 1, t.name + (string)CONST_fight077 + a.name + singleDot);
 	}
 	else if (attack > resist)
 	{
@@ -686,23 +686,23 @@ void specialattack(Creature &a, Creature &t)
 		{
 			if (t.juice > 100)
 			{
-				mvaddstrAlt(17, 1, t.name + (string)  CONST_fight078, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight078, gamelog);
 				addjuice(t, -50, 100);
 			}
 			else if (LCSrandom(15) > t.get_attribute(ATTRIBUTE_WISDOM, true) || t.get_attribute(ATTRIBUTE_WISDOM, true) < t.get_attribute(ATTRIBUTE_HEART, true))
 			{
-				mvaddstrAlt(17, 1, t.name + (string) CONST_fight079, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight079, gamelog);
 				t.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 			}
 			else if (t.align == ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
 			{
-				mvaddstrAlt(17, 1, t.name + (string)  CONST_fight080, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight080, gamelog);
 			}
 			else
 			{
 				if (a.align == -1)
 				{
-					mvaddstrAlt(17, 1, t.name + (string)  CONST_fight081, gamelog);
+					mvaddstrAlt(17, 1, t.name + (string)CONST_fight081, gamelog);
 					t.stunned = 0;
 					if (t.prisoner != NULL)
 						freehostage(t, 0);
@@ -710,7 +710,7 @@ void specialattack(Creature &a, Creature &t)
 				}
 				else
 				{
-					mvaddstrAlt(17, 1, t.name + (string) CONST_fight083, gamelog);
+					mvaddstrAlt(17, 1, t.name + (string)CONST_fight083, gamelog);
 					t.stunned = 0;
 					if (t.prisoner != NULL)
 						freehostage(t, 0);
@@ -747,18 +747,18 @@ void specialattack(Creature &a, Creature &t)
 		{
 			if (t.juice >= 100)
 			{
-				mvaddstrAlt(17, 1, t.name + (string)  CONST_fight085, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight085, gamelog);
 				addjuice(t, -50, 99);
 			}
 			else if (!t.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_AVERAGE) ||
 				t.get_attribute(ATTRIBUTE_HEART, true) < t.get_attribute(ATTRIBUTE_WISDOM, true))
 			{
-				mvaddstrAlt(17, 1, t.name + (string) CONST_fight086, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight086, gamelog);
 				t.adjust_attribute(ATTRIBUTE_HEART, +1);
 			}
 			else
 			{
-				mvaddstrAlt(17, 1, t.name + (string) CONST_fight087, gamelog);
+				mvaddstrAlt(17, 1, t.name + (string)CONST_fight087, gamelog);
 				t.stunned = 0;
 				liberalize(t);
 				t.infiltration /= 2;
@@ -769,14 +769,14 @@ void specialattack(Creature &a, Creature &t)
 	}
 	else
 	{
-		mvaddstrAlt(17, 1, t.name + (string)  CONST_fight088, gamelog);
+		mvaddstrAlt(17, 1, t.name + (string)CONST_fight088, gamelog);
 	}
 	gamelog.newline();
 	printparty();
 	if (mode == GAMEMODE_CHASECAR ||
 		mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 	else printencounter();
- 	pressAnyKey();
+	pressAnyKey();
 	return;
 }
 /* modifies a combat roll based on the creature's critical injuries */
@@ -804,7 +804,7 @@ void healthmodroll(int &aroll, Creature &a)
 /* adjusts attack damage based on armor, other factors */
 void damagemod(Creature &t, const char &damtype, int &damamount, int mod)
 {
-	
+
 	if (mod > 10) mod = 10; // Cap damage multiplier (every 5 points adds 1x damage)
 	if (mod <= -20) damamount >>= 8;  //Cars plus heavy armor can be really tough.
 	else if (mod <= -14) damamount >>= 7;
@@ -914,7 +914,7 @@ void severloot(Creature &cr)
 		mvaddstrAlt(17, 1, cr.name, gamelog);
 		addstrAlt(CONST_fight091, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		if (mode == GAMEMODE_SITE) cr.drop_weapons_and_clips(&groundloot);
 		else cr.drop_weapons_and_clips(NULL);
 	}
@@ -931,7 +931,7 @@ void severloot(Creature &cr)
 		addstrAlt(cr.get_armor().get_name(), gamelog);
 		addstrAlt(CONST_fight093, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		cr.strip(NULL);
 	}
 }
@@ -941,7 +941,7 @@ void adddeathmessage(Creature &cr)
 	extern short mode;
 	extern Log gamelog;
 	extern short lawList[LAWNUM];
-	extern char slogan[SLOGAN_LEN];
+	extern string slogan_str;
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	char str[200];
 	char secondLine[200];
@@ -1007,7 +1007,7 @@ void adddeathmessage(Creature &cr)
 			{
 			case ALIGN_LIBERAL:
 			case ALIGN_ELITELIBERAL:
-				strcpy(secondLine, slogan); break;
+				strcpy(secondLine, slogan_str.c_str()); break;
 			case ALIGN_MODERATE:
 				strcpy(secondLine, CONST_fight114.c_str()); break;
 			default:
@@ -1125,7 +1125,7 @@ string showMultipleHits(Creature &a, const int bursthits, const attackst* attack
 		{
 			str += CONST_fight137;
 		}
-		else { 
+		else {
 			str += attack_used->hit_description;
 		}
 		str += burstHitString(bursthits);
@@ -1150,7 +1150,7 @@ Creature* takeBulletForLeader(Creature &t, const int damamount, const int w) {
 		{
 			if (activesquad->squad[i] == NULL) break;
 			if (activesquad->squad[i] == &t) break;
-			if (activesquad->squad[i]->get_attribute(ATTRIBUTE_HEART, true)>8 &&
+			if (activesquad->squad[i]->get_attribute(ATTRIBUTE_HEART, true) > 8 &&
 				activesquad->squad[i]->get_attribute(ATTRIBUTE_AGILITY, true) > 4)
 			{
 				target = activesquad->squad[i];
@@ -1186,7 +1186,7 @@ int bodypartSeverAmount(const int w) {
 	return severamount;
 }
 int determineBodypartHit(Creature &t, const int aroll, const int droll, const bool sneak_attack) {
-	
+
 	bool canhit = false;
 	for (int w = 0; w < BODYPARTNUM && !canhit; w++)
 	{
@@ -1236,110 +1236,110 @@ int determineBodypartHit(Creature &t, const int aroll, const int droll, const bo
 void printSpecialWounds(Creature* target, const int w, const int damamount, const int damtype) {
 
 	extern Log gamelog;
-		char heavydam = 0, breakdam = 0, pokedam = 0;
-		if (damamount >= 12) //JDS -- 2x damage needed
-		{
-			if (damtype & WOUND_SHOT || damtype & WOUND_BURNED || damtype & WOUND_TORN || damtype & WOUND_CUT) heavydam = 1;
+	char heavydam = 0, breakdam = 0, pokedam = 0;
+	if (damamount >= 12) //JDS -- 2x damage needed
+	{
+		if (damtype & WOUND_SHOT || damtype & WOUND_BURNED || damtype & WOUND_TORN || damtype & WOUND_CUT) heavydam = 1;
+	}
+	if (damamount >= 10) //JDS -- 2x damage needed
+	{
+		if (damtype & WOUND_SHOT || damtype & WOUND_TORN || damtype & WOUND_CUT) pokedam = 1;
+	}
+	if ((damtype & WOUND_BRUISED || damtype & WOUND_SHOT || damtype & WOUND_TORN || damtype & WOUND_CUT) && damamount >= 50) {
+		breakdam = 1;
+	}
+	if (w == BODYPART_HEAD)
+	{
+		string damageDescription = specialWoundPossibilityHead(
+			*target,
+			breakdam,
+			heavydam,
+			damtype
+		);
+		if (len(damageDescription) > 0) {
+			clearmessagearea();
+			if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, damageDescription, gamelog);
+			gamelog.newline();
+			pressAnyKey();
 		}
-		if (damamount >= 10) //JDS -- 2x damage needed
-		{
-			if (damtype & WOUND_SHOT || damtype & WOUND_TORN || damtype & WOUND_CUT) pokedam = 1;
+	}
+	if (w == BODYPART_BODY)
+	{
+		string damageDescription = specialWoundPossibilityBody(
+			*target,
+			breakdam,
+			pokedam,
+			damtype
+		);
+		if (len(damageDescription) > 0) {
+			clearmessagearea();
+			//set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, damageDescription, gamelog);
+			gamelog.newline();
+			pressAnyKey();
 		}
-		if ((damtype & WOUND_BRUISED || damtype & WOUND_SHOT || damtype & WOUND_TORN || damtype & WOUND_CUT) && damamount >= 50) {
-			breakdam = 1;
-		}
-		if (w == BODYPART_HEAD)
-		{
-			string damageDescription = specialWoundPossibilityHead(
-				*target,
-				breakdam,
-				heavydam,
-				damtype
-			);
-			if (len(damageDescription) > 0) {
-				clearmessagearea();
-				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, damageDescription, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-			}
-		}
-		if (w == BODYPART_BODY)
-		{
-			string damageDescription = specialWoundPossibilityBody(
-				*target,
-				breakdam,
-				pokedam,
-				damtype
-			);
-			if (len(damageDescription) > 0) {
-				clearmessagearea();
-				//set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, damageDescription, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-			}
-		}
-	
+	}
+
 }
 void unsuccessfulHit(Creature &a, Creature &t, char* str, const bool sneak_attack, const int droll) {
 
 	extern short mode;
 	extern Log gamelog;
 	extern short sitealarm;
-	
-		if (sneak_attack)
+
+	if (sneak_attack)
+	{
+		strcpy(str, t.name);
+		strcat(str, (singleSpace + pickrandom(cry_alarm)).c_str());
+		sitealarm = 1;
+	}
+	else
+	{
+		if (mode == GAMEMODE_CHASECAR)
 		{
-			strcpy(str, t.name);
-			strcat(str, (singleSpace + pickrandom(cry_alarm)).c_str());
-			sitealarm = 1;
-		}
-		else
-		{
-			if (mode == GAMEMODE_CHASECAR)
-			{
-				Creature* driver = getChaseDriver(t);
-				strcpy(str, driver->name);
-				if (droll == 1) {
-					strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
-				}
-				else if (droll == 2) {
-					strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
-				}
-				else if (droll > 18 || droll < 1) {
-					strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
-				}
-				else {
-					strcat(str, evasionStringsAlt[droll - 3].c_str());
-				}
+			Creature* driver = getChaseDriver(t);
+			strcpy(str, driver->name);
+			if (droll == 1) {
+				strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
+			}
+			else if (droll == 2) {
+				strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
+			}
+			else if (droll > 18 || droll < 1) {
+				strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
 			}
 			else {
-				strcpy(str, t.name);
-				if (droll == 1) {
-					strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
-				}
-				else if (droll == 2) {
-					strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
-				}
-				else if (droll > 18 || droll < 1) {
-					strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
-				}
-				else {
-					strcat(str, evasionStrings[droll - 3].c_str());
-				}
+				strcat(str, evasionStringsAlt[droll - 3].c_str());
 			}
 		}
-		mvaddstrAlt(17, 1, str, gamelog);
-		gamelog.newline();
-		printparty();
-		if (mode == GAMEMODE_CHASECAR ||
-			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-		else printencounter();
-		pressAnyKey();
-	
+		else {
+			strcpy(str, t.name);
+			if (droll == 1) {
+				strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
+			}
+			else if (droll == 2) {
+				strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
+			}
+			else if (droll > 18 || droll < 1) {
+				strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
+			}
+			else {
+				strcat(str, evasionStrings[droll - 3].c_str());
+			}
+		}
+	}
+	mvaddstrAlt(17, 1, str, gamelog);
+	gamelog.newline();
+	printparty();
+	if (mode == GAMEMODE_CHASECAR ||
+		mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+	else printencounter();
+	pressAnyKey();
+
 }
 void addLocationChange(int cursite, sitechangest change);
 /* attack handling for an individual creature and its target */
@@ -1375,9 +1375,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		// It relies on lazy conditional OR, since each condition has side effects.
 		return false;
 	}
-	
 
-	
+
+
 	bool melee = !attack_used->ranged;
 	char str[200];
 	strcpy(str, a.name);
@@ -1444,7 +1444,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	strcat(str, CONST_fight146.c_str());
 	addstrAlt(str, gamelog);
 	gamelog.newline();
- 	pressAnyKey();
+	pressAnyKey();
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 	strcpy(str, a.heshe(true)); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
@@ -1594,7 +1594,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		int w = determineBodypartHit(t, aroll, droll, sneak_attack);
 		strcat(str, bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss).c_str());
 		strcat(str, showMultipleHits(a, bursthits, attack_used).c_str());
-		
+
 
 		char damtype = 0;
 		int damamount = 0;
@@ -1941,11 +1941,11 @@ void youattack()
 			{
 				if (encounter[e].enemy())
 				{
-					if (encounter[e].animalgloss == ANIMALGLOSS_TANK&&
+					if (encounter[e].animalgloss == ANIMALGLOSS_TANK &&
 						encounter[e].stunned == 0)
 						super_enemies.push_back(e);
 					else if ((encounter[e].is_armed() ||
-						(encounter[e].type == CREATURE_COP&&encounter[e].align == ALIGN_MODERATE) ||
+						(encounter[e].type == CREATURE_COP && encounter[e].align == ALIGN_MODERATE) ||
 						encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
 						encounter[e].type == CREATURE_JUDGE_LIBERAL ||
 						encounter[e].type == CREATURE_JUDGE_CONSERVATIVE ||
@@ -1967,14 +1967,14 @@ void youattack()
 		int target;
 		// If there are CONST_fight161, shoot at one of them unless we're using a persuasion-based attack
 		if (len(super_enemies) &&
-			((activesquad->squad[p]->type != CREATURE_SCIENTIST_EMINENT&&
-				activesquad->squad[p]->type != CREATURE_JUDGE_LIBERAL&&
-				activesquad->squad[p]->type != CREATURE_JUDGE_CONSERVATIVE&&
-				activesquad->squad[p]->type != CREATURE_CORPORATE_CEO&&
-				activesquad->squad[p]->type != CREATURE_POLITICIAN&&
-				activesquad->squad[p]->type != CREATURE_RADIOPERSONALITY&&
-				activesquad->squad[p]->type != CREATURE_NEWSANCHOR&&
-				activesquad->squad[p]->type != CREATURE_MILITARYOFFICER&&
+			((activesquad->squad[p]->type != CREATURE_SCIENTIST_EMINENT &&
+				activesquad->squad[p]->type != CREATURE_JUDGE_LIBERAL &&
+				activesquad->squad[p]->type != CREATURE_JUDGE_CONSERVATIVE &&
+				activesquad->squad[p]->type != CREATURE_CORPORATE_CEO &&
+				activesquad->squad[p]->type != CREATURE_POLITICIAN &&
+				activesquad->squad[p]->type != CREATURE_RADIOPERSONALITY &&
+				activesquad->squad[p]->type != CREATURE_NEWSANCHOR &&
+				activesquad->squad[p]->type != CREATURE_MILITARYOFFICER &&
 				!activesquad->squad[p]->get_weapon().has_musical_attack()) ||
 				(!activesquad->squad[p]->get_weapon().has_musical_attack() &&
 					activesquad->squad[p]->is_armed())))
@@ -2066,7 +2066,7 @@ void youattack()
 			if (pool[p]->get_weapon().get_attack(true, false, false))
 			{
 				char conf = 0;
-				if (pool[p]->get_weapon().get_ammoamount()>0) conf = 1;
+				if (pool[p]->get_weapon().get_ammoamount() > 0) conf = 1;
 				if (pool[p]->get_weapon().get_attack(true, false, false)->uses_ammo)
 					if (pool[p]->can_reload()) conf = 1;
 				if (conf)
@@ -2090,7 +2090,7 @@ void youattack()
 					Melee weapons only require a skill of 4.
 					If skill is 3 or lower, the odds are based on skill, with a maximum of 5% chance at skill = 0;
 					*/
-					if(len(badtarg) && pool[p]->get_weapon_skill() < ( 4 + (pool[p]->get_weapon().is_ranged() * 4) ) &&
+					if (len(badtarg) && pool[p]->get_weapon_skill() < (4 + (pool[p]->get_weapon().is_ranged() * 4)) &&
 						!LCSrandom(10 + 2 * (5 + 5 * pool[p]->get_weapon().is_ranged()) * pool[p]->get_weapon_skill()))
 					{
 						target = pickrandom(badtarg);
@@ -2147,7 +2147,7 @@ void enemyattack()
 	{
 		if (!encounter[e].exists) continue;
 		if (!encounter[e].alive) continue;
-		if (sitealarm == 1 && encounter[e].type == CREATURE_BOUNCER&&encounter[e].align != ALIGN_LIBERAL)
+		if (sitealarm == 1 && encounter[e].type == CREATURE_BOUNCER && encounter[e].align != ALIGN_LIBERAL)
 			conservatise(encounter[e]);
 		if (encounter[e].enemy()) encounter[e].cantbluff = 2;
 		if (mode != GAMEMODE_CHASECAR)
@@ -2182,10 +2182,10 @@ void enemyattack()
 							if (mode == GAMEMODE_CHASECAR ||
 								mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 							else printencounter();
-					 	pressAnyKey();
+							pressAnyKey();
 						}
 						clearmessagearea();
-						mvaddstrAlt(16,  1, encounter[e].name, gamelog);
+						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
 						if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
 							(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
 							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
@@ -2200,7 +2200,7 @@ void enemyattack()
 						if (mode == GAMEMODE_CHASECAR ||
 							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 						else printencounter();
-				 	pressAnyKey();
+						pressAnyKey();
 					}
 					continue;
 				}
@@ -2260,7 +2260,7 @@ void enemyattack()
 						{
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(16,  1, activesquad->squad[target]->name, gamelog);
+							mvaddstrAlt(16, 1, activesquad->squad[target]->name, gamelog);
 							addstrAlt(CONST_fight164, gamelog);
 							addstrAlt(activesquad->squad[target]->prisoner->name, gamelog);
 							addstrAlt(CONST_fight165, gamelog);
@@ -2274,7 +2274,7 @@ void enemyattack()
 								prisonerType == CREATURE_JUDGE_CONSERVATIVE ||
 								prisonerType == CREATURE_MILITARYOFFICER) sitecrime += 30;
 							makeloot(*activesquad->squad[target]->prisoner);
-					 	pressAnyKey();
+							pressAnyKey();
 							delete_and_nullify(activesquad->squad[target]->prisoner);
 						}
 					}
@@ -2288,7 +2288,7 @@ void enemyattack()
 			Melee weapons only require a skill of 4.
 			If skill is 3 or lower, the odds are based on skill, with a maximum of 10% chance at skill = 0;
 			*/
-			if(len(badtarg) && encounter[e].get_weapon_skill() < (4 + (encounter[e].get_weapon().is_ranged() * 4)) &&
+			if (len(badtarg) && encounter[e].get_weapon_skill() < (4 + (encounter[e].get_weapon().is_ranged() * 4)) &&
 				!LCSrandom(10 + 2 * (5 + 5 * encounter[e].get_weapon().is_ranged()) * encounter[e].get_weapon_skill()))
 			{
 				target = pickrandom(badtarg);
@@ -2310,7 +2310,7 @@ string specialWoundPossibilityBody(
 	Creature &t,
 	const char breakdam,
 	const char pokedam,
-	const char damtype	) 
+	const char damtype)
 {
 	Creature* target = &t;
 	string damageDescription = blankString;
@@ -2463,7 +2463,7 @@ string specialWoundPossibilityHead(
 	//char pokedam,
 	const char heavydam,
 	const char damtype
-	) {
+) {
 	Creature* target = &t;
 	string damageDescription = blankString;
 	switch (LCSrandom(7))

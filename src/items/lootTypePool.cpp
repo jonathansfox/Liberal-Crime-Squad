@@ -37,13 +37,13 @@ const string LootTypePool::getName(const string& itemtypename_) {
 /* transforms a loot type id into the index of that loot type in the global vector */
 int getloottype(int id)
 {
-	for (int i = 0; i<len(loottype); i++) if (loottype[i]->get_id() == id) return i;
+	for (int i = 0; i < len(loottype); i++) if (loottype[i]->get_id() == id) return i;
 	return -1;
 }
 /* transforms a loot type name into the index of that loot type in the global vector */
 int getloottype(const string &idname)
 {
-	for (int i = 0; i<len(loottype); i++) if (loottype[i]->get_idname() == idname) return i;
+	for (int i = 0; i < len(loottype); i++) if (loottype[i]->get_idname() == idname) return i;
 	return -1;
 }
 #include "../items/lootTypePoolItem.h"
@@ -97,7 +97,7 @@ string Loot::showXml() const
 }
 Loot* Loot::split(int number)
 {
-	if (number>number_) number = number_;
+	if (number > number_) number = number_;
 	Loot* newi = clone();
 	newi->number_ = number;
 	number_ -= number;
@@ -119,8 +119,8 @@ bool Loot::sort_compare_special(Item* other) const
 	{
 		int thisi = getloottype(get_itemtypename());
 		int otheri = getloottype(other->get_itemtypename());
-		if (thisi<otheri || otheri == -1) return false;
-		else if (thisi>otheri&&otheri != -1) return true;
+		if (thisi < otheri || otheri == -1) return false;
+		else if (thisi > otheri&&otheri != -1) return true;
 		else return false;
 	}
 	else return false;

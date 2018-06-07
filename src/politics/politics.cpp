@@ -77,28 +77,28 @@ const string CONST_politics002 = "Senate Elections ";
 const string CONST_politics001 = "corporateSuffix.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 
 const string blankString = "";
@@ -121,19 +121,19 @@ void amendment_termlimits(char canseethings);
 map<short, string> conservatiseLaw;
 map<short, string> liberalizeLaw;
 #include "../common/musicClass.h"
- string establishPrisonReform;
- string improvePrisonConditions;
+string establishPrisonReform;
+string improvePrisonConditions;
 extern string pressKeyToReflect;
 extern string YEA;
 extern string NAY;
 vector<string> corporateSuffix;
- map<short, string> winnerOfElection;
- const string mostlyendings = "mostlyendings\\";
- extern string commaSpace;
+map<short, string> winnerOfElection;
+const string mostlyendings = "mostlyendings\\";
+extern string commaSpace;
 #include "../customMaps.h"
- vector<file_and_text_collection> politics_text_file_collection = {
-	 customText(&corporateSuffix, mostlyendings + CONST_politics001),
- };
+vector<file_and_text_collection> politics_text_file_collection = {
+	customText(&corporateSuffix, mostlyendings + CONST_politics001),
+};
 /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
 * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
 bool stalinview(short view, bool islaw)
@@ -398,7 +398,7 @@ void elections_senate(int senmod, char canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(23, 0, CONST_politics069);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	int vote, change[6] = { 0,0,0,0,0,0 };
 	x = 0, y = 2;
@@ -406,7 +406,7 @@ void elections_senate(int senmod, char canseethings)
 	{
 		if (senmod != -1 && s % 3 != senmod) continue;
 		vote = -2;
-		for (int i = 0; i<4; i++) if (mood>LCSrandom(100)) vote++;
+		for (int i = 0; i < 4; i++) if (mood > LCSrandom(100)) vote++;
 		if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote = 3;
 		change[senate[s] + 2]--;
 		if (termlimits) senate[s] = vote;
@@ -416,7 +416,7 @@ void elections_senate(int senmod, char canseethings)
 			bool first = true;
 			do {
 				vote2 = -2;
-				for (int i = 0; i<4; i++) if (mood>LCSrandom(100)) vote2++;
+				for (int i = 0; i < 4; i++) if (mood > LCSrandom(100)) vote2++;
 				if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote2 = 3;
 				if (first) switch (lawList[LAW_ELECTIONS])
 				{
@@ -476,20 +476,20 @@ void elections_senate(int senmod, char canseethings)
 			winner = ALIGN_STALINIST;
 		else if (change[0] + change[1] > change[3] + change[4]) // C side gain/loss is more than L side gain/loss
 		{
-			if (change[1] < 0 && mood<25) winner = ALIGN_ARCHCONSERVATIVE;
+			if (change[1] < 0 && mood < 25) winner = ALIGN_ARCHCONSERVATIVE;
 			else winner = ALIGN_CONSERVATIVE;
 		}
-		else if (change[3] + change[4]>change[0] + change[1]) // L side gain/loss is more than C side gain/loss
+		else if (change[3] + change[4] > change[0] + change[1]) // L side gain/loss is more than C side gain/loss
 		{
 			if (change[3] < 0 && mood>75) winner = ALIGN_ELITELIBERAL;
 			else winner = ALIGN_LIBERAL;
 		}
-		else if (change[0]>0 && change[4] <= 0 && change[5] <= 0) // C+ increased and L+ and Stalinist both same or decreased
+		else if (change[0] > 0 && change[4] <= 0 && change[5] <= 0) // C+ increased and L+ and Stalinist both same or decreased
 		{
 			if (mood < 25) winner = ALIGN_ARCHCONSERVATIVE;
 			else winner = ALIGN_CONSERVATIVE;
 		}
-		else if (change[4]>0 && change[0] <= 0 && change[5] <= 0) // L+ increased and C+ and Stalinist both same or decreased
+		else if (change[4] > 0 && change[0] <= 0 && change[5] <= 0) // L+ increased and C+ and Stalinist both same or decreased
 		{
 			if (mood > 75) winner = ALIGN_ELITELIBERAL;
 			else winner = ALIGN_LIBERAL;
@@ -499,7 +499,7 @@ void elections_senate(int senmod, char canseethings)
 		else winner = ALIGN_MODERATE; // nobody won
 		addstrAlt(winnerOfElection[winner]);
 		mvaddstrAlt(22, 0, CONST_politics048);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 }
 void elections_house(char canseethings)
@@ -565,14 +565,14 @@ void elections_house(char canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(23, 0, CONST_politics069);
- 	pressAnyKey();
+		pressAnyKey();
 	}
 	int change[6] = { 0,0,0,0,0,0 };
 	x = 0, y = 2;
 	for (int h = 0; h < HOUSENUM; h++)
 	{
 		int vote = -2;
-		for (int i = 0; i<4; i++) if (mood>LCSrandom(100)) vote++;
+		for (int i = 0; i < 4; i++) if (mood > LCSrandom(100)) vote++;
 		if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote = 3;
 		change[house[h] + 2]--;
 		if (termlimits) house[h] = vote;
@@ -582,7 +582,7 @@ void elections_house(char canseethings)
 			bool first = true;
 			do {
 				vote2 = -2;
-				for (int i = 0; i<4; i++) if (mood>LCSrandom(100)) vote2++;
+				for (int i = 0; i < 4; i++) if (mood > LCSrandom(100)) vote2++;
 				if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote2 = 3;
 				if (first) switch (lawList[LAW_ELECTIONS])
 				{
@@ -670,20 +670,20 @@ void elections_house(char canseethings)
 			winner = ALIGN_STALINIST;
 		else if (change[0] + change[1] > change[3] + change[4]) // C side gain/loss is more than L side gain/loss
 		{
-			if (change[1] < 0 && mood<25) winner = ALIGN_ARCHCONSERVATIVE;
+			if (change[1] < 0 && mood < 25) winner = ALIGN_ARCHCONSERVATIVE;
 			else winner = ALIGN_CONSERVATIVE;
 		}
-		else if (change[3] + change[4]>change[0] + change[1]) // L side gain/loss is more than C side gain/loss
+		else if (change[3] + change[4] > change[0] + change[1]) // L side gain/loss is more than C side gain/loss
 		{
 			if (change[3] < 0 && mood>75) winner = ALIGN_ELITELIBERAL;
 			else winner = ALIGN_LIBERAL;
 		}
-		else if (change[0]>0 && change[4] <= 0 && change[5] <= 0) // C+ increased and L+ and Stalinist both same or decreased
+		else if (change[0] > 0 && change[4] <= 0 && change[5] <= 0) // C+ increased and L+ and Stalinist both same or decreased
 		{
 			if (mood < 25) winner = ALIGN_ARCHCONSERVATIVE;
 			else winner = ALIGN_CONSERVATIVE;
 		}
-		else if (change[4]>0 && change[0] <= 0 && change[5] <= 0) // L+ increased and C+ and Stalinist both same or decreased
+		else if (change[4] > 0 && change[0] <= 0 && change[5] <= 0) // L+ increased and C+ and Stalinist both same or decreased
 		{
 			if (mood > 75) winner = ALIGN_ELITELIBERAL;
 			else winner = ALIGN_LIBERAL;
@@ -695,7 +695,7 @@ void elections_house(char canseethings)
 		if (!disbanding)
 		{
 			mvaddstrAlt(22, 0, CONST_politics048);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		else pause_ms(800);
 	}
@@ -719,8 +719,8 @@ void elections(char clearformess, char canseethings)
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, CONST_politics049);
- 	pressAnyKey();
+		mvaddstrAlt(8, 1, CONST_politics049);
+		pressAnyKey();
 	}
 	//PRESIDENTIAL
 	if (year % 4 == 0)
@@ -729,7 +729,7 @@ void elections(char clearformess, char canseethings)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_politics050);
+			mvaddstrAlt(0, 0, CONST_politics050);
 			addstrAlt(year);
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(2, 0);
@@ -807,8 +807,8 @@ void elections(char clearformess, char canseethings)
 				moveAlt(8 - ((c + 1) % 3) * 2, 0);
 				// Choose title -- president or vice president special titles, otherwise
 				// pick based on historically likely titles (eg, governor most likely...)
-				if (c == presparty&&execterm == 1) addstrAlt(CONST_politics053);
-				else if (c == presparty&&!strcmp(candidate[c] + 1, execname[EXEC_VP])) addstrAlt(CONST_politics054);
+				if (c == presparty && execterm == 1) addstrAlt(CONST_politics053);
+				else if (c == presparty && !strcmp(candidate[c] + 1, execname[EXEC_VP])) addstrAlt(CONST_politics054);
 				else if (LCSrandom(2)) addstrAlt(CONST_politics055);
 				else if (LCSrandom(2)) addstrAlt(CONST_politics056);
 				else if (LCSrandom(2)) addstrAlt(CONST_politics057);
@@ -822,7 +822,7 @@ void elections(char clearformess, char canseethings)
 			{
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(8 + stalinmode * 2, 0, CONST_politics061);
-		 	pressAnyKey();
+				pressAnyKey();
 			}
 			else pause_ms(200);
 		}
@@ -866,7 +866,7 @@ void elections(char clearformess, char canseethings)
 			if (l % 5 == 4)
 			{
 				int maxvote = 0;
-				for (int c = 0; c<2 + stalinmode; c++) if (votes[c]>maxvote) maxvote = votes[c];
+				for (int c = 0; c < 2 + stalinmode; c++) if (votes[c] > maxvote) maxvote = votes[c];
 				vector<int> eligible;
 				for (int c = 0; c < 2 + stalinmode; c++) if (votes[c] == maxvote) eligible.push_back(c);
 				recount = len(eligible) > 1;
@@ -882,7 +882,7 @@ void elections(char clearformess, char canseethings)
 						addcharAlt('.');
 						addstrAlt(votes[c] % 10);
 						addcharAlt('%');
-						if (c == winner&&recount&&l == 999) addstrAlt(CONST_politics062);
+						if (c == winner && recount&&l == 999) addstrAlt(CONST_politics062);
 					}
 					if (!disbanding) pause_ms(40);
 					else pause_ms(20);
@@ -893,11 +893,11 @@ void elections(char clearformess, char canseethings)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(8 + stalinmode * 2, 0, CONST_politics063);
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 		//else if(disbanding) pause_ms(800);
 		//CONSTRUCT EXECUTIVE BRANCH
-		if (winner == presparty&&execterm == 1) execterm = 2;
+		if (winner == presparty && execterm == 1) execterm = 2;
 		else
 		{
 			presparty = winner, execterm = 1, exec[EXEC_PRESIDENT] = candidate[winner][0];
@@ -915,17 +915,17 @@ void elections(char clearformess, char canseethings)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_politics064);
+		mvaddstrAlt(0, 0, CONST_politics064);
 		addstrAlt(year);
 	}
 	vector<int> prop, propdir, canlaw;
 	int pnum = LCSrandom(4) + 4; // this expression for pnum has a maximum value of 7, important later on
 	char lawtaken[LAWNUM];
-	memset(lawtaken, 0, LAWNUM*sizeof(char));
+	memset(lawtaken, 0, LAWNUM * sizeof(char));
 	int lawpriority[LAWNUM];
-	memset(lawpriority, 0, LAWNUM*sizeof(int));
+	memset(lawpriority, 0, LAWNUM * sizeof(int));
 	char lawdir[LAWNUM];
-	memset(lawdir, 0, LAWNUM*sizeof(char));
+	memset(lawdir, 0, LAWNUM * sizeof(char));
 	//DETERMINE PROPS
 	for (int l = 0; l < LAWNUM; l++)
 	{
@@ -967,16 +967,16 @@ void elections(char clearformess, char canseethings)
 	for (int p = 0; p < pnum; p++)
 	{
 		int maxprior = 0;
-		for (int l = 0; l<LAWNUM; l++) if (lawpriority[l]>maxprior&&!lawtaken[l]) maxprior = lawpriority[l];
+		for (int l = 0; l < LAWNUM; l++) if (lawpriority[l] > maxprior && !lawtaken[l]) maxprior = lawpriority[l];
 		canlaw.clear();
-		for (int l = 0; l < LAWNUM; l++) if (lawpriority[l] == maxprior&&!lawtaken[l]) canlaw.push_back(l);
+		for (int l = 0; l < LAWNUM; l++) if (lawpriority[l] == maxprior && !lawtaken[l]) canlaw.push_back(l);
 		prop[p] = pickrandom(canlaw);
 		lawtaken[prop[p]] = 1;
 		propdir[p] = lawdir[prop[p]];
 		if (canseethings)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(p * 3 + 2,  0, CONST_politics065 + tostring(propnums[p]) + ':');
+			mvaddstrAlt(p * 3 + 2, 0, CONST_politics065 + tostring(propnums[p]) + ':');
 			mvaddstrAlt(p * 3 + 2, 18, CONST_politics095);
 			set_alignment_color(propdir[p]);
 			if (propdir[p] == 1) {
@@ -997,8 +997,8 @@ void elections(char clearformess, char canseethings)
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, CONST_politics069);
- 	pressAnyKey();
+		mvaddstrAlt(23, 0, CONST_politics069);
+		pressAnyKey();
 	}
 	for (int p = 0; p < pnum; p++)
 	{
@@ -1044,8 +1044,8 @@ void elections(char clearformess, char canseethings)
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, pressKeyToReflect);
- 	pressAnyKey();
+		mvaddstrAlt(23, 0, pressKeyToReflect);
+		pressAnyKey();
 	}
 }
 /* politics - causes the supreme court to hand down decisions */
@@ -1064,22 +1064,22 @@ void supremecourt(char clearformess, char canseethings)
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, CONST_politics073);
- 	pressAnyKey();
+		mvaddstrAlt(8, 1, CONST_politics073);
+		pressAnyKey();
 	}
 	//CHANGE THINGS AND REPORT
 	if (canseethings)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_politics074);
+		mvaddstrAlt(0, 0, CONST_politics074);
 		addstrAlt(year);
 		set_color_easy(WHITE_ON_BLACK);
 	}
 	vector<int> scase, scasedir;
 	int cnum = LCSrandom(5) + 2, bias = 0;
 	char lawtaken[LAWNUM];
-	memset(lawtaken, 0, LAWNUM*sizeof(char));
+	memset(lawtaken, 0, LAWNUM * sizeof(char));
 	scase.resize(cnum);
 	scasedir.resize(cnum);
 	for (int c = 0; c < cnum; c++)
@@ -1104,7 +1104,7 @@ void supremecourt(char clearformess, char canseethings)
 		}
 		if (canseethings)
 		{
-			
+
 			string name1, name2;
 			if (!LCSrandom(5)) (name1 = CONST_politics075);
 			else name1 = lastname();
@@ -1139,8 +1139,8 @@ void supremecourt(char clearformess, char canseethings)
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, CONST_politics080);
- 	pressAnyKey();
+		mvaddstrAlt(23, 0, CONST_politics080);
+		pressAnyKey();
 	}
 	for (int c = 0; c < cnum; c++)
 	{
@@ -1153,7 +1153,7 @@ void supremecourt(char clearformess, char canseethings)
 		if (scase[c] == LAW_FREESPEECH || scase[c] == LAW_FLAGBURNING) bias = 1;
 		else if (scase[c] == LAW_GUNCONTROL) bias = -1;
 		else bias = 0;
-		for (int l = 0; l<COURTNUM; l++)
+		for (int l = 0; l < COURTNUM; l++)
 		{
 			int vote = court[l];
 			if (vote == ALIGN_STALINIST)
@@ -1162,7 +1162,7 @@ void supremecourt(char clearformess, char canseethings)
 				else vote = ALIGN_ARCHCONSERVATIVE;
 			}
 			if (vote >= -1 && vote <= 1) vote += bias;
-			if (lawList[scase[c]]>vote && scasedir[c] == -1) yesvotes++;
+			if (lawList[scase[c]] > vote && scasedir[c] == -1) yesvotes++;
 			if (lawList[scase[c]] < vote && scasedir[c] == 1) yesvotes++;
 			if (l == COURTNUM - 1 && yesvotes >= COURTMAJORITY) yeswin = 1;
 			if (canseethings)
@@ -1185,8 +1185,8 @@ void supremecourt(char clearformess, char canseethings)
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, pressKeyToReflect);
- 	pressAnyKey();
+		mvaddstrAlt(23, 0, pressKeyToReflect);
+		pressAnyKey();
 	}
 	//CHANGE A JUSTICE 40% OF THE TIME
 	if (LCSrandom(10) >= 6)
@@ -1195,20 +1195,20 @@ void supremecourt(char clearformess, char canseethings)
 		{
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0,  0, CONST_politics084);
+			mvaddstrAlt(0, 0, CONST_politics084);
 		}
 		int j = LCSrandom(COURTNUM);
 		if (canseethings)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2,  0, CONST_politics085);
+			mvaddstrAlt(2, 0, CONST_politics085);
 			addstrAlt(courtname[j]);
 			addstrAlt(commaSpace);
 			addstrAlt(getalign(court[j], false));
 			addstrAlt(CONST_politics086);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(7,  0, CONST_politics087);
-	 	pressAnyKey();
+			mvaddstrAlt(7, 0, CONST_politics087);
+			pressAnyKey();
 		}
 		float president = (exec[EXEC_PRESIDENT] == ALIGN_STALINIST ? (float)-3 : (float)exec[EXEC_PRESIDENT]);
 		float sen = 0;
@@ -1226,10 +1226,10 @@ void supremecourt(char clearformess, char canseethings)
 			if (court[j] == ALIGN_ARCHCONSERVATIVE)
 				generate_name(courtname[j], GENDER_WHITEMALEPATRIARCH);
 			else generate_name(courtname[j]);
-		} while (len(courtname[j])>20);
+		} while (len(courtname[j]) > 20);
 		if (canseethings)
 		{
-			mvaddstrAlt(4,  0, CONST_politics088);
+			mvaddstrAlt(4, 0, CONST_politics088);
 			moveAlt(5, 0);
 			if (court[j] == ALIGN_STALINIST) addstrAlt(CONST_politics089);
 			else addstrAlt(CONST_politics090);
@@ -1238,8 +1238,8 @@ void supremecourt(char clearformess, char canseethings)
 			addstrAlt(getalign(court[j], false));
 			addstrAlt(CONST_politics091);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(7,  0, pressKeyToReflect);
-	 	pressAnyKey();
+			mvaddstrAlt(7, 0, pressKeyToReflect);
+			pressAnyKey();
 		}
 	}
 }
@@ -1302,25 +1302,25 @@ void congress(char clearformess, char canseethings)
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8,  1, CONST_politics092);
- 	pressAnyKey();
+		mvaddstrAlt(8, 1, CONST_politics092);
+		pressAnyKey();
 	}
 	//CHANGE THINGS AND REPORT
 	if (canseethings)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0,  0, CONST_politics093);
+		mvaddstrAlt(0, 0, CONST_politics093);
 		addstrAlt(year);
 	}
 	vector<int> bill, billdir, killbill;
 	int cnum = LCSrandom(3) + 1;
 	char lawtaken[LAWNUM];
-	memset(lawtaken, 0, LAWNUM*sizeof(char));
+	memset(lawtaken, 0, LAWNUM * sizeof(char));
 	int lawpriority[LAWNUM];
-	memset(lawpriority, 0, LAWNUM*sizeof(int));
+	memset(lawpriority, 0, LAWNUM * sizeof(int));
 	char lawdir[LAWNUM];
-	memset(lawdir, 0, LAWNUM*sizeof(char));
+	memset(lawdir, 0, LAWNUM * sizeof(char));
 	//DETERMINE BILLS
 	for (int l = 0; l < LAWNUM; l++)
 	{
@@ -1336,8 +1336,8 @@ void congress(char clearformess, char canseethings)
 				if (stalinview(l, true)) housealign = ALIGN_ELITELIBERAL;
 				else housealign = ALIGN_ARCHCONSERVATIVE;
 			}
-			if (lawList[l]<housealign)pup++;
-			else if (lawList[l]>housealign)pdown++;
+			if (lawList[l] < housealign)pup++;
+			else if (lawList[l] > housealign)pdown++;
 			pprior += abs(housealign - lawList[l]);
 		}
 		// Consult Senate
@@ -1349,8 +1349,8 @@ void congress(char clearformess, char canseethings)
 				if (stalinview(l, true)) senatealign = ALIGN_ELITELIBERAL;
 				else senatealign = ALIGN_ARCHCONSERVATIVE;
 			}
-			if (lawList[l]<senatealign)pup += 4;
-			else if (lawList[l]>senatealign)pdown += 4;
+			if (lawList[l] < senatealign)pup += 4;
+			else if (lawList[l] > senatealign)pdown += 4;
 			pprior += abs(senatealign - lawList[l]) * 4;
 		}
 		// Consult Public Opinion
@@ -1376,11 +1376,11 @@ void congress(char clearformess, char canseethings)
 	{
 		killbill[c] = BILL_PASSED_CONGRESS;
 		int maxprior = 0;
-		for (int l = 0; l<LAWNUM; l++)
-			if (lawpriority[l]>maxprior&&!lawtaken[l])maxprior = lawpriority[l];
+		for (int l = 0; l < LAWNUM; l++)
+			if (lawpriority[l] > maxprior && !lawtaken[l])maxprior = lawpriority[l];
 		canlaw.clear();
 		for (int l = 0; l < LAWNUM; l++)
-			if (lawpriority[l] == maxprior&&!lawtaken[l])
+			if (lawpriority[l] == maxprior && !lawtaken[l])
 				canlaw.push_back(l);
 		bill[c] = pickrandom(canlaw);
 		lawtaken[bill[c]] = 1;
@@ -1415,20 +1415,20 @@ void congress(char clearformess, char canseethings)
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, CONST_politics098);
- 	pressAnyKey();
-		mvaddstrAlt(0,  62, CONST_politics099);
-		mvaddstrAlt(0,  70, CONST_politics100);
+		mvaddstrAlt(23, 0, CONST_politics098);
+		pressAnyKey();
+		mvaddstrAlt(0, 62, CONST_politics099);
+		mvaddstrAlt(0, 70, CONST_politics100);
 	}
 	for (int c = 0; c < cnum; c++)
 	{
 		char yeswin_h = 0, yeswin_s = 0;
 		int yesvotes_h = 0, yesvotes_s = 0;
 		int s = 0;
-		for (int l = 0; l<HOUSENUM; l++)
+		for (int l = 0; l < HOUSENUM; l++)
 		{
 			int vote = determine_politician_vote(house[l], bill[c]);
-			if (lawList[bill[c]]>vote&&billdir[c] == -1) yesvotes_h++;
+			if (lawList[bill[c]] > vote&&billdir[c] == -1) yesvotes_h++;
 			if (lawList[bill[c]] < vote&&billdir[c] == 1) yesvotes_h++;
 			if (l == HOUSENUM - 1)
 			{
@@ -1457,7 +1457,7 @@ void congress(char clearformess, char canseethings)
 			if (l == HOUSENUM - 1)
 			{
 				if (yesvotes_s >= SENATEMAJORITY) yeswin_s = 1;
-				if (yesvotes_s<SENATESUPERMAJORITY&&killbill[c] == BILL_OVERRIDE_VETO) killbill[c] = BILL_PASSED_CONGRESS;
+				if (yesvotes_s < SENATESUPERMAJORITY&&killbill[c] == BILL_OVERRIDE_VETO) killbill[c] = BILL_PASSED_CONGRESS;
 				if (yesvotes_s == SENATEMAJORITY - 1)
 				{  //TIE BREAKER
 					int vote;
@@ -1476,7 +1476,7 @@ void congress(char clearformess, char canseethings)
 							else vote = ALIGN_ARCHCONSERVATIVE;
 						}
 					}
-					if (lawList[bill[c]]>vote&&billdir[c] == -1) yeswin_s = 1;
+					if (lawList[bill[c]] > vote&&billdir[c] == -1) yeswin_s = 1;
 					if (lawList[bill[c]] < vote&&billdir[c] == 1) yeswin_s = 1;
 					//ASSURED SIGNING BY PRESIDENT IF VP VOTED YES
 					if (yeswin_s) killbill[c] = BILL_SIGNED;
@@ -1516,12 +1516,12 @@ void congress(char clearformess, char canseethings)
 		if (canseethings)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(23,  0, CONST_politics103);
-	 	pressAnyKey();
-			mvaddstrAlt(0,  35, CONST_politics104);
+			mvaddstrAlt(23, 0, CONST_politics103);
+			pressAnyKey();
+			mvaddstrAlt(0, 35, CONST_politics104);
 			pause_ms(500);
 		}
-		for (int c = 0; c<len(bill); c++)
+		for (int c = 0; c < len(bill); c++)
 		{
 			if (killbill[c] != BILL_FAILED)
 			{
@@ -1540,7 +1540,7 @@ void congress(char clearformess, char canseethings)
 						else vote = ALIGN_ARCHCONSERVATIVE;
 					}
 				}
-				if ((lawList[bill[c]]>vote&&billdir[c] == -1) || (lawList[bill[c]] < vote&&billdir[c] == 1)) killbill[c] = BILL_SIGNED;
+				if ((lawList[bill[c]] > vote&&billdir[c] == -1) || (lawList[bill[c]] < vote&&billdir[c] == 1)) killbill[c] = BILL_SIGNED;
 			}
 			if (canseethings)
 			{
@@ -1572,16 +1572,16 @@ void congress(char clearformess, char canseethings)
 		if (canseethings)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(23,  0, pressKeyToReflect + CONST_politics110);
-	 	pressAnyKey();
+			mvaddstrAlt(23, 0, pressKeyToReflect + CONST_politics110);
+			pressAnyKey();
 		}
 	}
 	else if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23,  0, CONST_politics109);
-		mvaddstrAlt(24,  0, pressKeyToReflect + CONST_politics110);
- 	pressAnyKey();
+		mvaddstrAlt(23, 0, CONST_politics109);
+		mvaddstrAlt(24, 0, pressKeyToReflect + CONST_politics110);
+		pressAnyKey();
 	}
 	//CONGRESS CONSTITUTION CHANGES
 	int housemake[6] = { 0,0,0,0,0,0 };
@@ -1591,16 +1591,16 @@ void congress(char clearformess, char canseethings)
 	// Throw out non-L+ Justices?
 	bool tossj = false;
 	for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL) tossj = true;
-	if (housemake[4] + housemake[3] / 2 >= HOUSESUPERMAJORITY&&senatemake[4] + senatemake[3] / 2 >= SENATESUPERMAJORITY&&tossj&&!nocourtpurge)
+	if (housemake[4] + housemake[3] / 2 >= HOUSESUPERMAJORITY && senatemake[4] + senatemake[3] / 2 >= SENATESUPERMAJORITY && tossj && !nocourtpurge)
 		tossjustices(canseethings);
 	// Purge Congress, implement term limits, and hold new elections?
 	if ((housemake[4] + housemake[3] / 2 < HOUSESUPERMAJORITY || senatemake[4] + senatemake[3] / 2 < SENATESUPERMAJORITY) && publicmood(-1) > 80 && !notermlimit)
 		amendment_termlimits(canseethings);
 	// LET ARCH-CONSERVATIVES REPEAL THE CONSTITUTION AND LOSE THE GAME?
-	if (housemake[0] >= HOUSESUPERMAJORITY&&senatemake[0] >= SENATESUPERMAJORITY)
+	if (housemake[0] >= HOUSESUPERMAJORITY && senatemake[0] >= SENATESUPERMAJORITY)
 		attemptAmendmentEnding(canseethings, ALIGN_ARCHCONSERVATIVE);
 	// LET STALINISTS REPEAL THE CONSTITUTION AND LOSE THE GAME?
-	if (housemake[5] >= HOUSESUPERMAJORITY&&senatemake[5] >= SENATESUPERMAJORITY)
+	if (housemake[5] >= HOUSESUPERMAJORITY && senatemake[5] >= SENATESUPERMAJORITY)
 		attemptAmendmentEnding(canseethings, ALIGN_STALINIST);
 }
 /* politics - checks if the game is won */

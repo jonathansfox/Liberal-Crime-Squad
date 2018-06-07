@@ -18,28 +18,28 @@ const string CONST_monthly001 = "OEM United States - Codepage 437";
 const string CONST_monthly000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -169,7 +169,7 @@ void updateworld_laws(short *law, short *oldlaw)
 		law[LAW_DRUGS] != oldlaw[LAW_DRUGS])
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 			if (LocationsPool::getInstance().getLocationType(l) == SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
-				&&LocationsPool::getInstance().getRentingType(l) < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
+				&& LocationsPool::getInstance().getRentingType(l) < 0) // Only rename locations not under LCS control, to avoid switching names around under the player
 				LocationsPool::getInstance().initSite(l);
 }
 /* does end of month actions */
@@ -262,7 +262,7 @@ void passmonth(char &clearformess, char canseethings)
 		//   continue;
 		//}
 		if (v == VIEW_CONSERVATIVECRIMESQUAD) continue;
-		if (v != VIEW_AMRADIO&&v != VIEW_CABLENEWS)
+		if (v != VIEW_AMRADIO && v != VIEW_CABLENEWS)
 		{
 			issuebalance[v] = libpower[v] - conspower;
 			mediabalance += issuebalance[v];
@@ -288,7 +288,7 @@ void passmonth(char &clearformess, char canseethings)
 	// Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
 	if (stalinmode) for (int v = 0; v < VIEWNUM - 3; v++)
 	{
-		if (stalinview(v, false)) { if ((attitude[v] += 3)>100) attitude[v] = 100; }
+		if (stalinview(v, false)) { if ((attitude[v] += 3) > 100) attitude[v] = 100; }
 		else { if (--attitude[v] < 0) attitude[v] = 0; }
 	}
 	// End Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
@@ -347,7 +347,7 @@ void passmonth(char &clearformess, char canseethings)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(24, 0, CONST_monthly014);
 			clearformess = 1;
-	 	pressAnyKey();
+			pressAnyKey();
 		}
 	/*******************************************************
 	*                                                      *
@@ -374,20 +374,20 @@ void passmonth(char &clearformess, char canseethings)
 		music.play(MUSIC_DEFEAT);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		eraseAlt();
-		mvaddstrAlt(12,  10, CONST_monthly015, gamelog);
+		mvaddstrAlt(12, 10, CONST_monthly015, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK);
 		eraseAlt();
-		mvaddstrAlt(12,  12, CONST_monthly016, gamelog);
+		mvaddstrAlt(12, 12, CONST_monthly016, gamelog);
 		gamelog.newline();
- 	pressAnyKey();
+		pressAnyKey();
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		eraseAlt();
-		mvaddstrAlt(12,  14, CONST_monthly017, gamelog);
+		mvaddstrAlt(12, 14, CONST_monthly017, gamelog);
 		gamelog.newline();
 		gamelog.nextMessage();
- 	pressAnyKey();
+		pressAnyKey();
 		savehighscore(END_DISBANDLOSS);
 		viewhighscores();
 		end_game();
@@ -398,10 +398,10 @@ void passmonth(char &clearformess, char canseethings)
 	if (!disbanding) {
 		monthlyRunTheSystem(clearformess);
 	}
-	
+
 	//NUKE EXECUTION VICTIMS
 	monthlyRunExecutions();
-	
+
 	//MUST DO AN END OF GAME CHECK HERE BECAUSE OF EXECUTIONS
 	endcheck(END_EXECUTED);
 	//DISPERSAL CHECK
@@ -414,5 +414,5 @@ void passmonth(char &clearformess, char canseethings)
 	if (!disbanding) {
 		monthlyRunHealClinicPeople(clearformess);
 	}
-	
+
 }

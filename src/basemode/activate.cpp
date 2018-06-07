@@ -93,10 +93,10 @@ void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid);
 #include "../common/musicClass.h"
 extern string spaceDashSpace;
 extern string closeParenthesis;
- vector<ActivityAndString> data_lessons;
-  map<Activity, Data_Activity> data_activities;
- map<char, vector<ActivityAndString> > activate_menu_items;
- vector<RecruitData> recruitable_creatures;
+vector<ActivityAndString> data_lessons;
+map<Activity, Data_Activity> data_activities;
+map<char, vector<ActivityAndString> > activate_menu_items;
+vector<RecruitData> recruitable_creatures;
 extern string spaceParanthesisDollar;
 extern string singleSpace;
 extern string commaSpace;
@@ -113,18 +113,18 @@ Activity getDefaultActivityTeaching(Creature *cr) {
 			return ACTIVITY_TEACH_FIGHTING;
 		}
 	}
-		for (CreatureTypes type : ACTIVITY_TEACH_COVERT_DEFAULT) {
-			if (cr->type == type) {
-				return ACTIVITY_TEACH_COVERT;
-			}
+	for (CreatureTypes type : ACTIVITY_TEACH_COVERT_DEFAULT) {
+		if (cr->type == type) {
+			return ACTIVITY_TEACH_COVERT;
 		}
-		for (CreatureTypes type : ACTIVITY_TEACH_POLITICS_DEFAULT) {
-			if (cr->type == type) {
-				return ACTIVITY_TEACH_POLITICS;
-			}
+	}
+	for (CreatureTypes type : ACTIVITY_TEACH_POLITICS_DEFAULT) {
+		if (cr->type == type) {
+			return ACTIVITY_TEACH_POLITICS;
 		}
-		return ACTIVITY_TEACH_POLITICS;
-	
+	}
+	return ACTIVITY_TEACH_POLITICS;
+
 }
 // These two functions handle listing and updating class choices
 int classlist = 0;
@@ -213,9 +213,9 @@ void recruitSelect(Creature &cr)
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<options)page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < options)page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + (int)(c - 'a');
@@ -294,7 +294,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 	while (true)
 	{
 		eraseAlt();
-		
+
 		switch (cur_step) {
 		case 0: //PAGE 0, selecting a liberal
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -316,9 +316,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			mvaddstrAlt(23, 0, addpagestr());
 			c = getkeyAlt();
 			//PAGE UP
-			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)page--;
 			//PAGE DOWN
-			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool))page++;
+			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool))page++;
 			if (c >= 'a'&&c <= 's')
 			{
 				int p = page * 19 + c - 'a';
@@ -409,7 +409,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 			int line = 9;
 			for (int i = 0; i < desc.size(); i++)
 			{
-				if (desc[i].length()>50) continue;
+				if (desc[i].length() > 50) continue;
 				else if (desc[i] == blankString)
 				{
 					line++;
@@ -593,9 +593,9 @@ void select_makeclothing(Creature *cr)
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0)page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(armortypei))page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(armortypei))page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -717,8 +717,8 @@ void selectOneOfStandardActivities(char c, char choiceChar, Creature *cr) {
 			cr->activity.type = ACTIVITY_STEALCARS;
 			break;
 		case '5':
-			if(!cr->canwalk() && !(cr->flag & CREATUREFLAG_WHEELCHAIR))
-			cr->activity.type = ACTIVITY_WHEELCHAIR;
+			if (!cr->canwalk() && !(cr->flag & CREATUREFLAG_WHEELCHAIR))
+				cr->activity.type = ACTIVITY_WHEELCHAIR;
 			break;
 		case '6': {
 			if (cr->get_skill(SKILL_SCIENCE) != 0) {
@@ -795,9 +795,9 @@ void select_tendhostage(Creature *cr)
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + (int)(c - 'a');
@@ -863,15 +863,15 @@ void activate(Creature *cr)
 		int oldstate = state;
 		for (int i = 0; i < len(standard_activities_and_data); i++) {
 			set_color_easy(state == 'a' + i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(10 + i, 1, incrementChar('A', i) + spaceDashSpace + standard_activities_and_data[i]);
-	}
+			mvaddstrAlt(10 + i, 1, incrementChar('A', i) + spaceDashSpace + standard_activities_and_data[i]);
+		}
 		set_color_easy(state == 't' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(14, 1, CONST_activate048);		
+		mvaddstrAlt(14, 1, CONST_activate048);
 		if (hostagecount > 0)set_color_easy(state == 'i' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(15, 1, CONST_activate049);
 		set_color_easy(state == 'l' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(16, 1, CONST_activate050);		
+		mvaddstrAlt(16, 1, CONST_activate050);
 		if (clinictime(*cr))set_color_easy(state == 'm' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17, 1, CONST_activate051);
@@ -1000,7 +1000,7 @@ void activate(Creature *cr)
 			case 'e':
 				if (!sieged)
 				{
-					
+
 					createTempSquadWithJustThisLiberal(cr, cursquadid);
 				}
 				state = oldstate;
@@ -1085,10 +1085,10 @@ void activatebulk()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0,  0, CONST_activate066);
-		mvaddstrAlt(1,  0, CONST_activate062);
+		mvaddstrAlt(0, 0, CONST_activate066);
+		mvaddstrAlt(1, 0, CONST_activate062);
 		mvaddstrAlt(1, 51, CONST_activate063);
-		
+
 		for (int i = 0; i < len(bulkActivityString); i++) {
 			set_color_easy(selectedactivity == i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(2 + i, 51, incrementChar('1', i) + spaceDashSpace + bulkActivityString[i]);
@@ -1112,12 +1112,12 @@ void activatebulk()
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, CONST_activate064);
-		mvaddstrAlt(23, 0, 		addpagestr());
+		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -1229,9 +1229,9 @@ void activate()
 		mvaddstrAlt(24, 0, CONST_activate071);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';

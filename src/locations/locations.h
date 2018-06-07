@@ -34,36 +34,36 @@ const int SIEGEFLAG_HEAVYUNIT = BIT3;
 const int SIEGEFLAG_UNIT_DAMAGED = BIT4;
 struct siegest
 {
-   char siege;
-   //Puzz:  Temporary siege thing for organizations
-   int orgID;
-   short siegetype;
-   char underattack;
-   int attacktime;
-   short kills;
-   short tanks;
-   short escalationstate;
-   char lights_off;
-   char cameras_off;
-   short timeuntillocated;
-   short timeuntilcorps;
-   short timeuntilcia;
-   short timeuntilccs;
-   short timeuntilfiremen;
-   siegest() : siege(0),siegetype(-1),underattack(0),escalationstate(0),timeuntillocated(-1),timeuntilcorps(-1),timeuntilcia(-1),timeuntilccs(-1),timeuntilfiremen(-1) { }
+	char siege;
+	//Puzz:  Temporary siege thing for organizations
+	int orgID;
+	short siegetype;
+	char underattack;
+	int attacktime;
+	short kills;
+	short tanks;
+	short escalationstate;
+	char lights_off;
+	char cameras_off;
+	short timeuntillocated;
+	short timeuntilcorps;
+	short timeuntilcia;
+	short timeuntilccs;
+	short timeuntilfiremen;
+	siegest() : siege(0), siegetype(-1), underattack(0), escalationstate(0), timeuntillocated(-1), timeuntilcorps(-1), timeuntilcia(-1), timeuntilccs(-1), timeuntilfiremen(-1) { }
 };
 struct siteblockst
 {
-   short special;
-   int flag;
-   char siegeflag;
+	short special;
+	int flag;
+	char siegeflag;
 };
 struct sitechangest
 {
-   char x,y,z;
-   int flag;
-   sitechangest() { }
-   sitechangest(char x_, char y_, char z_, int flag_) :  x(x_), y(y_), z(z_), flag(flag_) { }
+	char x, y, z;
+	int flag;
+	sitechangest() { }
+	sitechangest(char x_, char y_, char z_, int flag_) : x(x_), y(y_), z(z_), flag(flag_) { }
 };
 const int MAPX = 70;
 const int MAPY = 23;
@@ -81,58 +81,58 @@ const int LOCATION_SHORTNAMELEN = 20;
 class Location
 {
 public:
-   char name[LOCATION_NAMELEN];
-   char shortname[LOCATION_SHORTNAMELEN];
-   char type;
-   int city;
-   int area; // two locations share an area if a squad located within one can reach the other without transportation
-   int parent; // the index of parent in vector<Locations> locations
-   int id = 0; // NOT USED, kept for backwards compatibility
-   vector<Item *> loot;
-   vector<sitechangest> changes;
-   int renting;
-   char newrental;
-   char needcar;
-   int closed;
-   bool hidden;
-   bool mapped;
-   bool upgradable;
-   int highsecurity;
-   siegest siege;
-   int heat;
-   int heat_protection;
-   int compound_walls;
-   int compound_stores;
-   char front_business;
-   char front_name[LOCATION_NAMELEN];
-   char front_shortname[LOCATION_SHORTNAMELEN];
-   bool haveflag;
-   unsigned long mapseed[RNG_SIZE];
-   Location(char type_, int parent_=-1);
-   Location() { }
-   Location* addchild(char type_);
-   ~Location() { delete_and_clear(loot); }
-   void init();
-   void update_heat_protection();
-   bool duplicatelocation();
-   bool can_be_upgraded() { return upgradable; }
-   bool can_be_fortified();
-   bool fortified();
-   bool can_be_trapped();
-   bool trapped() { return compound_walls&COMPOUND_TRAPS; }
-   bool can_install_tanktraps();
-   bool tank_traps();
-   bool can_have_businessfront();
-   bool has_business_front();
-   bool bomb_resistant();
-   bool part_of_justice_system();
-   bool is_lcs_safehouse() { return renting>=0; }
-   bool is_ccs_safehouse() { return renting==RENTING_CCS; }
-   bool is_city() { return type==city; }
-   string getname(signed char shortname_=false, bool include_city=false);
-   void rename(const char* name_, const char* shortname_);
-   string city_description();
-   void getloot(vector<Item *>& loot);
+	char name[LOCATION_NAMELEN];
+	char shortname[LOCATION_SHORTNAMELEN];
+	char type;
+	int city;
+	int area; // two locations share an area if a squad located within one can reach the other without transportation
+	int parent; // the index of parent in vector<Locations> locations
+	int id = 0; // NOT USED, kept for backwards compatibility
+	vector<Item *> loot;
+	vector<sitechangest> changes;
+	int renting;
+	char newrental;
+	char needcar;
+	int closed;
+	bool hidden;
+	bool mapped;
+	bool upgradable;
+	int highsecurity;
+	siegest siege;
+	int heat;
+	int heat_protection;
+	int compound_walls;
+	int compound_stores;
+	char front_business;
+	char front_name[LOCATION_NAMELEN];
+	char front_shortname[LOCATION_SHORTNAMELEN];
+	bool haveflag;
+	unsigned long mapseed[RNG_SIZE];
+	Location(char type_, int parent_ = -1);
+	Location() { }
+	Location* addchild(char type_);
+	~Location() { delete_and_clear(loot); }
+	void init();
+	void update_heat_protection();
+	bool duplicatelocation();
+	bool can_be_upgraded() { return upgradable; }
+	bool can_be_fortified();
+	bool fortified();
+	bool can_be_trapped();
+	bool trapped() { return compound_walls & COMPOUND_TRAPS; }
+	bool can_install_tanktraps();
+	bool tank_traps();
+	bool can_have_businessfront();
+	bool has_business_front();
+	bool bomb_resistant();
+	bool part_of_justice_system();
+	bool is_lcs_safehouse() { return renting >= 0; }
+	bool is_ccs_safehouse() { return renting == RENTING_CCS; }
+	bool is_city() { return type == city; }
+	string getname(signed char shortname_ = false, bool include_city = false);
+	void rename(const char* name_, const char* shortname_);
+	string city_description();
+	void getloot(vector<Item *>& loot);
 };
 /*******************************************************************************
 *

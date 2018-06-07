@@ -13,14 +13,8 @@ void sexwho(char *str);
 void sexseek(char *str);
 /* what type of sex? */
 void sextype(char *str);
-/* generate a vanity plate for the squad. */
-//void vanity(char *str);
-/* return a letter, number, or one of either. */
-void chooseLetterOrNumber(char *str,int type);
-/* generate a non-vanity plate for the squad. */
-void plate(char *str);
 /* name of a state (random state, by default) */
-const char* statename(int state=-1);
+const char* statename(int state = -1);
 /* EndGameStatus - converts an integer into a roman numeral for amendments */
 std::string romannumeral(int amendnum);
 /* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */

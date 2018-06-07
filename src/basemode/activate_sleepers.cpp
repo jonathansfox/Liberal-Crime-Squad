@@ -1,20 +1,20 @@
 #include "../includes.h"
 /*
 This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
 const string blankString = "";
@@ -211,20 +211,20 @@ void activate_sleepers()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0,  0, CONST_activate_sleepers024);
+		mvaddstrAlt(0, 0, CONST_activate_sleepers024);
 		makedelimiter(1);
-		mvaddstrAlt(1,  4, CONST_activate_sleepers025);
-		mvaddstrAlt(1,  25, CONST_activate_sleepers026);
-		mvaddstrAlt(1,  42, CONST_activate_sleepers027);
-		mvaddstrAlt(1,  57, CONST_activate_sleepers028);
+		mvaddstrAlt(1, 4, CONST_activate_sleepers025);
+		mvaddstrAlt(1, 25, CONST_activate_sleepers026);
+		mvaddstrAlt(1, 42, CONST_activate_sleepers027);
+		mvaddstrAlt(1, 57, CONST_activate_sleepers028);
 		int y = 2;
 		for (int p = page * 9; p < len(temppool) && p < page * 9 + 9; p++, y += 2)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, (y - 2) / 2 + 'A'); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->name);
-			mvaddstrAlt(y,  25, temppool[p]->get_type_name());
-			mvaddstrAlt(y + 1,  6, CONST_activate_sleepers029);
+			mvaddstrAlt(y, 25, temppool[p]->get_type_name());
+			mvaddstrAlt(y + 1, 6, CONST_activate_sleepers029);
 			if (temppool[p]->infiltration > 0.8f)
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.6f)
@@ -245,14 +245,14 @@ void activate_sleepers()
 			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22,  0, CONST_activate_sleepers030);
-		mvaddstrAlt(23, 0, 		addpagestr() + CONST_activate_sleepers031);
+		mvaddstrAlt(22, 0, CONST_activate_sleepers030);
+		mvaddstrAlt(23, 0, addpagestr() + CONST_activate_sleepers031);
 		set_color_easy(WHITE_ON_BLACK);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 9<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 9 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 9 + (int)(c - 'a');

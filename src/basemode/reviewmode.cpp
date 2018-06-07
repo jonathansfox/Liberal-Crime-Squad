@@ -167,7 +167,7 @@ const string tag_skill = "skill";
 // for commondisplay.h
 #include "../common/commondisplay.h"
 #include "../common/commondisplayCreature.h"
-// for void printfunds(int,int,char*)
+
 #include "../common/getnames.h"
 // for std::string getactivity(ActivityST)
 //#include "../common/equipment.h"
@@ -192,14 +192,14 @@ void printname(Creature &cr);
 const int PAGELENGTH = 19;
 extern string spaceDashSpace;
 extern string singleSpace;
- vector<string> methodOfExecution;
- vector<string> getsSick;
- const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> reviewmode_text_file_collection = {
-	 /*transferred via algorithm*/
-	 customText(&methodOfExecution, mostlyendings + CONST_reviewmode006),
-	 customText(&getsSick, mostlyendings + CONST_reviewmode007),
- };
+vector<string> methodOfExecution;
+vector<string> getsSick;
+const string mostlyendings = "mostlyendings\\";
+vector<file_and_text_collection> reviewmode_text_file_collection = {
+	/*transferred via algorithm*/
+	customText(&methodOfExecution, mostlyendings + CONST_reviewmode006),
+	customText(&getsSick, mostlyendings + CONST_reviewmode007),
+};
 struct stringAndColor
 {
 	string str;
@@ -324,9 +324,9 @@ void assemblesquad(squadst *cursquad)
 		mvaddstrAlt(24, 40, CONST_reviewmode021);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -469,7 +469,7 @@ void assemblesquad(squadst *cursquad)
 		}
 		else delete cursquad;
 	}
-	
+
 	nukeAllEmptySquads(squadloc, mode);
 }
 void review_mode(short mode)
@@ -676,9 +676,9 @@ void review_mode(short mode)
 		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + (int)(c - 'a');
@@ -720,7 +720,7 @@ void review_mode(short mode)
 					mvaddstrAlt(24, 0, CONST_reviewmode071);
 					addstrAlt(CONST_reviewmode072);
 					int c = getkeyAlt();
-					if (len(temppool)>1 && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
+					if (len(temppool) > 1 && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
 					{
 						int sx = 1;
 						if (c == KEY_LEFT) sx = -1;
@@ -978,9 +978,9 @@ void squadlessbaseassign()
 		mvaddstrAlt(23, 35, CONST_reviewmode109);
 		int c = getkeyAlt();
 		//PAGE UP (people)
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_lib>0) page_lib--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_lib > 0) page_lib--;
 		//PAGE DOWN (people)
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_lib + 1) * 19<len(temppool)) page_lib++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_lib + 1) * 19 < len(temppool)) page_lib++;
 		//PAGE UP (locations)
 		if (c == ','&&page_loc > 0) page_loc--;
 		//PAGE DOWN (locations)
@@ -1069,7 +1069,7 @@ void promoteliberals()
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 			moveAlt(y, 27);
 			bool iAmTheLeader = true;
-			for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool()  && iAmTheLeader; p2++)
+			for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
 			{
 				if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
 				{
@@ -1109,9 +1109,9 @@ void promoteliberals()
 		}
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1)*PAGELENGTH<len(temppool)) page++;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1)*PAGELENGTH < len(temppool)) page++;
 		if (c >= 'a'&&c <= 'a' + PAGELENGTH)
 		{
 			int p = page * PAGELENGTH + (int)(c - 'a');
@@ -1159,8 +1159,8 @@ void review()
 		music.play(MUSIC_REVIEWMODE);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0,  0, CONST_reviewmode118);
-		mvaddstrAlt(1,  0, CONST_reviewmode119); // 80 characters
+		mvaddstrAlt(0, 0, CONST_reviewmode118);
+		mvaddstrAlt(1, 0, CONST_reviewmode119); // 80 characters
 		int n[8] = { 0,0,0,0,0,0,0,0 }, y = 2;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
@@ -1178,10 +1178,10 @@ void review()
 		{
 			if (p < len(squad))
 			{
-				set_color_easy(activesquad == squad[p]? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+				set_color_easy(activesquad == squad[p] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
 				addstrAlt(squad[p]->name);
-				if (squad[p]->squad[0] != NULL&&squad[p]->squad[0]->location != -1)
+				if (squad[p]->squad[0] != NULL && squad[p]->squad[0]->location != -1)
 				{
 					setColorBasedOnSiege(squad[p]->squad[0]->location, y, activesquad == squad[p]);
 					set_color_easy(activesquad == squad[p] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
@@ -1256,12 +1256,12 @@ void review()
 		if (music.isEnabled())
 			mvaddstrAlt(21, 38, CONST_reviewmode130);
 		else mvaddstrAlt(21, 38, CONST_reviewmode131);
-		mvaddstrAlt(22,  0, CONST_reviewmode132);
-		mvaddstrAlt(23, 0,		addpagestr() + CONST_reviewmode133);
-		mvaddstrAlt(24,  0, CONST_reviewmode134);
+		mvaddstrAlt(22, 0, CONST_reviewmode132);
+		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode133);
+		mvaddstrAlt(24, 0, CONST_reviewmode134);
 		int c = getkeyAlt();
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page>0) page--;
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19<len(squad) + REVIEWMODENUM) page++;
+		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(squad) + REVIEWMODENUM) page++;
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= 'a'&&c <= 's')
 		{

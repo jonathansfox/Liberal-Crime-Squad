@@ -10,28 +10,28 @@ const string tag_Cons = "Cons, ";
 const string tag_Consp = "Cons+";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -97,7 +97,7 @@ void equip(vector<Item *> &loot, int loc);
 //#include "../politics/politics.h"
 bool stalinview(short view, bool islaw);
 //#include "../monthly/monthly.h"
-void passmonth(char &clearformess,char canseethings);
+void passmonth(char &clearformess, char canseethings);
 #include "../daily/daily.h"
 //for int monthday();
 #include "../daily/siege.h"
@@ -163,11 +163,11 @@ bool show_disbanding_screen(int& oldforcemonth)
 	oldforcemonth = month;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0,  0, getmonth(month) + singleSpace);
+	mvaddstrAlt(0, 0, getmonth(month) + singleSpace);
 	addstrAlt(year);
 	signed char align = exec[EXEC_PRESIDENT];
 	set_alignment_color(align, true);
-	mvaddstrAlt(1,  0, CONST_basemode012);
+	mvaddstrAlt(1, 0, CONST_basemode012);
 	addstrAlt(execname[EXEC_PRESIDENT]); addstrAlt(commaSpace);
 	addstrAlt(getalign(align));
 	if (execterm == 1)addstrAlt(CONST_basemode013);
@@ -242,7 +242,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 		set_alignment_color(align, true);
 		mvaddstrAlt(17, 33, CONST_basemode024);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17,  1, CONST_basemode019);
+		mvaddstrAlt(17, 1, CONST_basemode019);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(17, 68, CONST_basemode020);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
@@ -344,7 +344,7 @@ void mode_base()
 	extern short party_status;
 	extern class Ledger ledger;
 	extern short lawList[LAWNUM];
-	extern char slogan[SLOGAN_LEN];
+	extern string slogan_str;
 	extern vector<squadst *> squad;
 	extern vector<Creature *> pool;
 	int nonsighttime = 0, oldforcemonth = month;
@@ -361,7 +361,7 @@ void mode_base()
 		}
 		else
 		{
-			for (int p = 0; p< CreaturePool::getInstance().lenpool(); p++)
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 			{
 				if (pool[p]->alive&&
 					pool[p]->align == 1 &&
@@ -377,7 +377,7 @@ void mode_base()
 				}
 				else
 				{
-					if (pool[p]->dating == 1 && cantseereason>CANTSEE_DATING) cantseereason = CANTSEE_DATING;
+					if (pool[p]->dating == 1 && cantseereason > CANTSEE_DATING) cantseereason = CANTSEE_DATING;
 					else if (pool[p]->hiding != 0 && cantseereason > CANTSEE_HIDING) cantseereason = CANTSEE_HIDING;
 				}
 			}
@@ -402,7 +402,7 @@ void mode_base()
 			nonsighttime = 0;
 		}
 		int partysize = squadsize(activesquad);
-		if (activesquad&&!partysize)
+		if (activesquad && !partysize)
 		{
 			delete_and_remove(squad, getsquad(activesquad->id));
 			activesquad = NULL;
@@ -496,7 +496,7 @@ void mode_base()
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(18, 10, CONST_basemode040);
 			mvaddstrAlt(18, 51, CONST_basemode041);
-			if (partysize&&!underattack) set_color_easy(WHITE_ON_BLACK);
+			if (partysize && !underattack) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(19, 40, CONST_basemode042);
 			if (lenVehiclePool() && partysize) set_color_easy(WHITE_ON_BLACK);
@@ -507,8 +507,8 @@ void mode_base()
 			mvaddstrAlt(20, 40, CONST_basemode044);
 			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			if (partysize&&!sieged) mvaddstrAlt(8, 30, CONST_basemode045);
-			if (activesquad&&!sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
+			if (partysize && !sieged) mvaddstrAlt(8, 30, CONST_basemode045);
+			if (activesquad && !sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
 			{
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(8, 1, activesquad->name);
@@ -606,8 +606,8 @@ void mode_base()
 				mvaddstrAlt(22, 1, CONST_basemode062);
 			}
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (haveflag) mvaddstrCenter(17, slogan);
-			else mvaddstrCenter(13, slogan);
+			if (haveflag) mvaddstrCenter(17, slogan_str);
+			else mvaddstrCenter(13, slogan_str);
 		}
 		switch (int c = forcewait ? 'w' : getkeyAlt())
 		{
@@ -637,11 +637,11 @@ void mode_base()
 		case 'z': if (safenumber) {
 			activesquad = NULL;
 			for (int l = (selectedsiege == -1 || selectedsiege + 1 >= LocationsPool::getInstance().lenpool()) ? 0 : selectedsiege + 1;
-			l<LocationsPool::getInstance().lenpool(); l++)
+				l < LocationsPool::getInstance().lenpool(); l++)
 				if (isThisSafehouse(l)) { selectedsiege = l; break; }
 				else if (l == LocationsPool::getInstance().lenpool() - 1) l = -1;
 		} break;
-		case 'e': if (partysize&&!underattack&&activesquad->squad[0]->location != -1) {
+		case 'e': if (partysize && !underattack&&activesquad->squad[0]->location != -1) {
 			short ops = party_status;
 			party_status = -1;
 			equipLoot(activesquad->squad[0]->location, -1);
@@ -652,7 +652,7 @@ void mode_base()
 			char clearformess = forcewait;
 			if (!canseethings) nonsighttime++;
 			advanceday(clearformess, canseethings);
-			if (day>monthday()) passmonth(clearformess, canseethings);
+			if (day > monthday()) passmonth(clearformess, canseethings);
 			advancelocations();
 			if (forcewait&&day == 1)
 			{

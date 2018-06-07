@@ -45,20 +45,20 @@ const string tag_LOOT_CCS_BACKERLIST = "LOOT_CCS_BACKERLIST";
 const string tag_LOOT_PRISONFILES = "LOOT_PRISONFILES";
 /*
 This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /* monthly - sleeper behavior */
 const string blankString = "";
@@ -85,7 +85,7 @@ void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
 extern string string_sleeper;
- string they_are_stashed;
+string they_are_stashed;
 extern string singleDot;
 string hasBeenCaughtSnooping;
 string isNowHomeless;
@@ -194,14 +194,14 @@ void sleeper_influence(Creature &cr, char &clearformess, char canseethings, int(
 		change_public_opinion(VIEW_AMRADIO, 1);
 		for (int i = 0; i < VIEWNUM - 3; i++)
 		{
-			libpower[i] += power*(100 - attitude[VIEW_AMRADIO]) / 100;
+			libpower[i] += power * (100 - attitude[VIEW_AMRADIO]) / 100;
 		}
 		break;
 	case CREATURE_NEWSANCHOR:
 		change_public_opinion(VIEW_CABLENEWS, 1);
 		for (int i = 0; i < VIEWNUM - 3; i++)
 		{
-			libpower[i] += power*(100 - attitude[VIEW_CABLENEWS]) / 100;
+			libpower[i] += power * (100 - attitude[VIEW_CABLENEWS]) / 100;
 		}
 		break;
 		/* Cultural leaders block - influences cultural issues */
@@ -364,13 +364,13 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
+			mvaddstrAlt(6, 1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(hasBeenCaughtSnooping, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(8,  1, isNowHomeless, gamelog);
+			mvaddstrAlt(8, 1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			removesquadinfo(cr);
 			cr.location = homes;
 			cr.base = homes;
@@ -394,7 +394,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	case CREATURE_AGENT:
 	case CREATURE_POLITICIAN:
 		// Agents can leak intelligence files to you
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(lawList[LAW_PRIVACY] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_SECRETDOCUMENTS, homes);
@@ -407,7 +407,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	case CREATURE_COP:
 	case CREATURE_GANGUNIT:
 		// Cops can leak police files to you
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_POLICERECORDS, homes);
@@ -418,7 +418,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 	case CREATURE_CORPORATE_MANAGER:
 	case CREATURE_CORPORATE_CEO:
 		// Can leak corporate files to you
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && cr.type != CREATURE_CORPORATE_CEO) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CORPFILES, homes);
@@ -428,7 +428,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		break;
 	case CREATURE_EDUCATOR:
 	case CREATURE_PRISONGUARD:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_PRISONFILES, homes);
@@ -437,7 +437,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		}
 		break;
 	case CREATURE_NEWSANCHOR:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			// More likely to leak these documents the more restrictive
 			// free speech is -- because the more free the society, the
@@ -449,7 +449,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		}
 		break;
 	case CREATURE_RADIOPERSONALITY:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			// More likely to leak these documents the more restrictive
 			// free speech is -- because the more free the society, the
@@ -462,7 +462,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		break;
 	case CREATURE_SCIENTIST_LABTECH:
 	case CREATURE_SCIENTIST_EMINENT:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(lawList[LAW_ANIMALRESEARCH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_RESEARCHFILES, homes);
@@ -471,7 +471,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		}
 		break;
 	case CREATURE_JUDGE_CONSERVATIVE:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes) &&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (LCSrandom(5)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_JUDGEFILES, homes);
@@ -480,7 +480,7 @@ void sleeper_spy(Creature &cr, char &clearformess, char canseethings, int(&libpo
 		}
 		break;
 	case CREATURE_CCS_ARCHCONSERVATIVE:
-		if (!LocationsPool::getInstance().isThereASiegeHere(homes)&&canseethings)
+		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
 			if (ccsexposure >= CCSEXPOSURE_LCSGOTDATA) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CCS_BACKERLIST, homes);
@@ -506,11 +506,11 @@ void sleeper_embezzle(Creature &cr, char &clearformess, char canseethings, int(&
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
+			mvaddstrAlt(6, 1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			cr.crimes_suspected[LAWFLAG_COMMERCE]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -574,11 +574,11 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		if (cr.juice < -2)
 		{
 			eraseAlt();
-			mvaddstrAlt(6,  1, string_sleeper, gamelog);
+			mvaddstrAlt(6, 1, string_sleeper, gamelog);
 			addstrAlt(cr.name, gamelog);
 			addstrAlt(arrestedWhileStealing, gamelog);
 			gamelog.nextMessage();
-	 	pressAnyKey();
+			pressAnyKey();
 			cr.crimes_suspected[LAWFLAG_THEFT]++;
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
@@ -776,18 +776,19 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		}
 		if (loot) {
 			itemindex = getloottype(item);
-			if (itemindex > -1) { LocationsPool::getInstance().stashThisLootHere(item, shelter);}
+			if (itemindex > -1) { LocationsPool::getInstance().stashThisLootHere(item, shelter); }
 			else { numberofxmlfails++; }
 		}
 		else if (armor) {
 			itemindex = getarmortype(item);
 			if (itemindex > -1) {
-				LocationsPool::getInstance().stashThisArmorHere( itemindex,  shelter);}
+				LocationsPool::getInstance().stashThisArmorHere(itemindex, shelter);
+			}
 			else { numberofxmlfails++; }
 		}
 		else if (weapon) {
 			itemindex = getweapontype(item);
-			if (itemindex > -1) { LocationsPool::getInstance().stashThisWeaponHere( itemindex, shelter);}
+			if (itemindex > -1) { LocationsPool::getInstance().stashThisWeaponHere(itemindex, shelter); }
 			else { numberofxmlfails++; }
 		}
 		else {
@@ -795,20 +796,20 @@ void sleeper_steal(Creature &cr, char &clearformess, char canseethings, int(&lib
 		}
 	}
 	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK);   mvaddstrAlt(6,  1, string_sleeper, gamelog);
+	set_color_easy(WHITE_ON_BLACK);   mvaddstrAlt(6, 1, string_sleeper, gamelog);
 	addstrAlt(cr.name, gamelog);
 	addstrAlt(droppedOffPackage, gamelog);
 	gamelog.nextMessage();
 	if (numberofxmlfails > 0) {
 		set_color_easy(RED_ON_BLUE_BRIGHT);
-		mvaddstrAlt(8,  1, itemNotFound, xmllog);
-		mvaddstrAlt(9,  1, numberofxmlfails, xmllog);
+		mvaddstrAlt(8, 1, itemNotFound, xmllog);
+		mvaddstrAlt(9, 1, numberofxmlfails, xmllog);
 		addstrAlt(lostStolenItem, xmllog);
 		set_color_easy(RED_ON_GREEN_BRIGHT);
-		mvaddstrAlt(11,  1, contactModAuthor, xmllog);
+		mvaddstrAlt(11, 1, contactModAuthor, xmllog);
 		xmllog.nextMessage();
 	}
- 	pressAnyKey();
+	pressAnyKey();
 }
 /*********************************
 **
@@ -851,16 +852,16 @@ void sleeper_recruit(Creature &cr, char &clearformess, char canseethings, int(&l
 				LocationsPool::getInstance().setLocationMappedAndUnhidden(recruit->worklocation);
 				addCreature(recruit);
 				eraseAlt();
-				mvaddstrAlt(6,  1, string_sleeper, gamelog);
+				mvaddstrAlt(6, 1, string_sleeper, gamelog);
 				addstrAlt(cr.name, gamelog);
 				addstrAlt(hasRecruited, gamelog);
 				addstrAlt(recruit->get_type_name(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(8,  1, recruit->name, gamelog);
+				mvaddstrAlt(8, 1, recruit->name, gamelog);
 				addstrAlt(looksForwardToServing, gamelog);
 				gamelog.nextMessage();
-		 	pressAnyKey();
+				pressAnyKey();
 				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
 				stat_recruits++;
 				break;

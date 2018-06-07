@@ -23,47 +23,47 @@ const string blankString = "";
 // for log
 #include "../common/stringconversion.h"
 int AugmentType::number_of_augmenttypes = 0;
-AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
+AugmentType::AugmentType(const std::string& xmlstring) : max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
 {
 	extern Log xmllog;
-   id_=number_of_augmenttypes++;
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
-   idname_=xml.GetAttrib(tag_idname);
-   if(!len(idname_))
-   {
-      idname_ = CONST_augmenttype012+tostring(id_);
-      xmllog.log(CONST_augmenttype013+tostring(id_)+CONST_augmenttypeB014);
-   }
-   xml.IntoElem();
-   while(xml.FindElem())
-   {
-      std::string element = xml.GetTagName();
-      if(element==tag_name)
-         name_=xml.GetData();
-      else if(element==tag_type)
-         type_=augment_string_to_enum(xml.GetData());
-      else if(element==tag_attribute)
-         attribute_= attribute_string_to_enum(xml.GetData());
-      else if(element==tag_effect)
-         effect_=atoi(xml.GetData().c_str());
-      else if(element==tag_description)
-         description_=xml.GetData();
-      else if(element==tag_max_age)
-         max_age_=atoi(xml.GetData().c_str());
-      else if(element==tag_min_age)
-         min_age_=atoi(xml.GetData().c_str());
-      else if(element==tag_cost)
-         cost_=atoi(xml.GetData().c_str());
-      else if(element==tag_difficulty)
-         difficulty_=atoi(xml.GetData().c_str());
-   }
+	id_ = number_of_augmenttypes++;
+	CMarkup xml;
+	xml.SetDoc(xmlstring);
+	xml.FindElem();
+	idname_ = xml.GetAttrib(tag_idname);
+	if (!len(idname_))
+	{
+		idname_ = CONST_augmenttype012 + tostring(id_);
+		xmllog.log(CONST_augmenttype013 + tostring(id_) + CONST_augmenttypeB014);
+	}
+	xml.IntoElem();
+	while (xml.FindElem())
+	{
+		std::string element = xml.GetTagName();
+		if (element == tag_name)
+			name_ = xml.GetData();
+		else if (element == tag_type)
+			type_ = augment_string_to_enum(xml.GetData());
+		else if (element == tag_attribute)
+			attribute_ = attribute_string_to_enum(xml.GetData());
+		else if (element == tag_effect)
+			effect_ = atoi(xml.GetData().c_str());
+		else if (element == tag_description)
+			description_ = xml.GetData();
+		else if (element == tag_max_age)
+			max_age_ = atoi(xml.GetData().c_str());
+		else if (element == tag_min_age)
+			min_age_ = atoi(xml.GetData().c_str());
+		else if (element == tag_cost)
+			cost_ = atoi(xml.GetData().c_str());
+		else if (element == tag_difficulty)
+			difficulty_ = atoi(xml.GetData().c_str());
+	}
 }
 void AugmentType::make_augment(Augmentation& au)
 {
-   au.name=get_name();
-   au.type=get_type();
-   au.attribute=get_attribute();
-   au.effect=get_effect();
+	au.name = get_name();
+	au.type = get_type();
+	au.attribute = get_attribute();
+	au.effect = get_effect();
 }
