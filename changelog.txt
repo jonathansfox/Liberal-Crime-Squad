@@ -387,6 +387,7 @@ Shifted a few const strings to be within the functions calling them.  Decided th
 
 Some refactoring of creaturetype.cpp armCreature(Creature &cr, short type);
 Used tuples in refactoring of creaturetypes.cpp.  tuples should replace many of the fixed length vectors I have used in the past.  Passed an array by reference.  May be worth passing other arrays by reference.
+Replaced tuples with a struct.  Microsoft Visual Studio does not support tuples.  Not without going through a whole lot of extra trouble that isn't going to happen.
 
 Added new automated tests that create all existing creatures, and arm them based on every possible gun control law.
 As a side effect it creates all default locations, due to some overlap between the creature.cpp and locations.cpp code.
@@ -394,3 +395,12 @@ As a side effect it creates all default locations, due to some overlap between t
 If someone runs the automated tests, it is recommended to restart the program before starting a new game.
 
 Fixed a bug where Gentleman's Clubs were nameless.
+
+4.12.22
+
+Refactored news.cpp to remove most usage of char*
+Regular expression to find char* and char arrays (including some that are not used as string substitutes)
+char\s?\w*\s*[\*\[]+\w*
+Matching lines: 588    Matching files: 60    Total files searched: 158
+
+Cleaned up formatting.
