@@ -5,8 +5,6 @@ void activatebulk();
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr);
 /* activation-based recruitment */
-int recruitFindDifficulty(int creatureType);
-char* recruitName(int creatureType);
 void recruitSelect(Creature &cr);
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr);

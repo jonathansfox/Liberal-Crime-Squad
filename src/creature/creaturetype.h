@@ -43,7 +43,7 @@ private:
 		WeaponsAndClips(const std::string & weapon, int weapons, const std::string & clip, int clips);
 		WeaponsAndClips(CMarkup& xml, const string& owner);
 		// TODO this name conflicts with the vector<WeaponType *> weapontype, which is interfering with refactor efforts
-		std::string weapontype;
+		std::string weapon_type_str;
 		Interval number_weapons;
 		std::string cliptype;
 		Interval number_clips;

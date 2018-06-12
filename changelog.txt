@@ -404,3 +404,6 @@ char\s?\w*\s*[\*\[]+\w*
 Matching lines: 588    Matching files: 60    Total files searched: 158
 
 Cleaned up formatting.
+Slogans no longer have a 1/20 chance of using default_slogans.txt
+
+Initiating process for single cpp file.
