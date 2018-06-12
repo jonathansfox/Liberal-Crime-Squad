@@ -92,15 +92,11 @@ void gotoEquipmentScreen(int loc);
 void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid);
 #include "../common/creaturePoolCreature.h"
 #include "../common/musicClass.h"
-extern string spaceDashSpace;
-extern string closeParenthesis;
 vector<ActivityAndString> data_lessons;
 map<Activity, Data_Activity> data_activities;
 map<char, vector<ActivityAndString> > activate_menu_items;
 vector<RecruitData> recruitable_creatures;
-extern string spaceParanthesisDollar;
-extern string singleSpace;
-extern string commaSpace;
+//extern string spaceParanthesisDollar;
 //
 vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
 // this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
@@ -127,6 +123,10 @@ Activity getDefaultActivityTeaching(Creature *cr) {
 	return ACTIVITY_TEACH_POLITICS;
 
 }
+extern string closeParenthesis;
+string spaceDashSpace;
+string singleSpace = " ";
+string commaSpace;
 // These two functions handle listing and updating class choices
 int classlist = 0;
 void listclasses(Creature *cr)
@@ -1318,7 +1318,7 @@ char recruitment_activity(Creature &cr)
 			// Generate recruitment candidates
 			for (recruitCount = 0; recruitCount < 5; recruitCount++)
 			{
-				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE) >(difficulty + recruitCount * 2))
+				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE) > (difficulty + recruitCount * 2))
 				{
 					makecreature(encounter[recruitCount], type);
 					encounter[recruitCount].namecreature();
@@ -1428,8 +1428,8 @@ string getactivity(ActivityST &act);
 // #include "../locations/locationsPool.h"
 // #include "../common/musicClass.h"
 // #include "../common/creaturePoolCreature.h"
-extern string spaceDashSpace;
-extern string percentSign;
+//extern string spaceDashSpace;
+//extern string percentSign;
 void activate_sleeper(Creature *cr)
 {
 	const string CONST_activate_sleepers023 = " will steal equipment and send it to the Shelter.";
@@ -1577,6 +1577,7 @@ void activate_sleeper(Creature *cr)
 /* base - activate sleepers */
 void activate_sleepers()
 {
+	extern string percentSign;
 	const string CONST_activate_sleepers031 = " T to sort people.";
 	const string CONST_activate_sleepers030 = "Press a Letter to Assign an Activity.";
 	const string CONST_activate_sleepers029 = "Effectiveness: ";
@@ -1760,9 +1761,9 @@ void makeloot(Creature &cr, vector<Item *> &loot);
 //#include "../locations/locationsPool.h"
 // #include "../common/musicClass.h"
 //extern string singleDot;
-extern string spaceDashSpace;
+//extern string spaceDashSpace;
 //extern string singleDot;
-extern string singleSpace;
+//extern string singleSpace;
 vector<string> quality_0;
 vector<string> quality_20;
 vector<string> quality_35;
@@ -4716,10 +4717,7 @@ const string tag_armor = "armor";
 //for int stringtobool(std::string)
 // #include "../common/translateid.h"
 // for  int getarmortype
-extern vector<ArmorType *> armortype;
-Armor::Armor(const int seed, int quality, int number)
-	: Item(*armortype[seed], number), bloody_(false), damaged_(false), quality_(quality)
-{ }
+
 /*Armor::Armor(const ArmorType& seed, int quality, int number)
 : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
 { }*/
@@ -4826,104 +4824,128 @@ void Armor::set_bloody(bool b)
 const string ruinedName = "Tattered Rags";
 const string& Armor::get_name() const
 {
+	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_name();
 	else return ruinedName;
 }
 const string& Armor::get_shortname() const
 {
+	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_shortname();
 	else return ruinedName;
 }
 long Armor::get_fencevalue() const
 {
+	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_fencevalue() / quality_;
 	else return 0;
 }
 int Armor::get_make_difficulty() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_make_difficulty();
 }
 int Armor::get_make_price() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_make_price();
 }
 bool Armor::deathsquad_legality() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->deathsquad_legality();
 }
 bool Armor::can_get_bloody() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->can_get_bloody();
 }
 bool Armor::can_get_damaged() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->can_get_damaged();
 }
 int Armor::get_armor(int bodypart) const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_armor(bodypart);
 }
 bool Armor::has_fireprotection() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->has_fireprotection();
 }
 bool Armor::covers(int bodypart) const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->covers(bodypart);
 }
 bool Armor::conceals_face() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->conceals_face();
 }
 int Armor::get_interrogation_basepower() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_basepower();
 }
 int Armor::get_interrogation_assaultbonus() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_assaultbonus();
 }
 int Armor::get_interrogation_drugbonus() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_drugbonus();
 }
 int Armor::get_professionalism() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_professionalism();
 }
 int Armor::get_stealth_value() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_stealth_value();
 }
 int Armor::get_weaponsize_concealment() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_weaponsize_concealment();
 }
 bool Armor::conceals_weaponsize(int weaponsize) const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->conceals_weaponsize(weaponsize);
 }
 bool Armor::is_mask() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->is_mask();
 }
 bool Armor::is_surprise_mask() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->is_surprise_mask();
 }
 const string Armor::get_description() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_description();
 }
 int Armor::get_durability() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_durability();
 }
 int Armor::get_quality_levels() const
 {
+	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_quality_levels();
 }
 
@@ -5472,9 +5494,8 @@ int squadsize(const squadst *st);
 //#include "../set_color_support.h"
 //#include "../locations/locationsPool.h"
 //#include "../common/creaturePool.h"
-extern string singleSpace;
+//extern string singleSpace;
 string enter_done;
-string spaceDashSpace;
 string chooseALiberalTo;
 string string_sleeper;
 vector<string> vehicleParagraph;
@@ -5922,8 +5943,8 @@ void passmonth(char &clearformess, char canseethings);
 // #include "../common/musicClass.h"
 // #include "../common/creaturePool.h"
 // #include "../locations/locationsPool.h"
-extern string commaSpace;
-extern string singleSpace;
+//extern string commaSpace;
+//extern string singleSpace;
 string change_squad_order;
 enum CantSeeReason
 {
@@ -6620,10 +6641,10 @@ void equip(vector<Item *> &loot, int loc);
 // #include "../locations/locationsPool.h"
 // #include "../common/musicClass.h"
 // #include "../common/creaturePool.h"
-extern string change_squad_order;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string singleSpace;
+//extern string change_squad_order;
+//extern string check_status_of_squad_liberal;
+//extern string show_squad_liberal_status;
+//extern string singleSpace;
 //extern string singleDot;
 void fillEncounter(CreatureTypes c, int numleft) {
 	extern Creature encounter[ENCMAX];
@@ -10742,20 +10763,20 @@ char talk(Creature &a, const int t);
 // // #include "../locations/locationsPool.h"
 // // #include "../common/creaturePool.h"
 // // #include "../common/musicClass.h"
-extern string closeParenthesis;
-extern string undefined;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string enter_done;
-extern string chooseALiberalTo;
-extern string spaceDashSpace;
+//extern string closeParenthesis;
+//extern string undefined;
+//extern string check_status_of_squad_liberal;
+//extern string show_squad_liberal_status;
+//extern string enter_done;
+//extern string chooseALiberalTo;
+//extern string spaceDashSpace;
 //extern string singleDot;
-extern string change_squad_order;
-extern string spaceParanthesisDollar;
+//extern string change_squad_order;
+//extern string spaceParanthesisDollar;
 void emptyEncounter();
 void delete_and_clear_groundloot();
 bool isThereGroundLoot();
-extern string singleSpace;
+//extern string singleSpace;
 void deleteVehicle(int carid);
 void deleteVehicles(vector<Vehicle *>& carid);
 void fight_subdued()
@@ -13460,8 +13481,8 @@ the bottom of includes.h in the top src folder.
 // #include "../common/creaturePool.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-extern string singleSpace;
-extern string spaceDashSpace;
+//extern string singleSpace;
+//extern string spaceDashSpace;
 //extern string singleDot;
 
 /* common - tests if the person is a wanted criminal */
@@ -15751,7 +15772,7 @@ const string CONST_configfile000 = "Attempting to open filename: ";
 //#include "../configfile.h"
 //own header
 //#include "../cursesAlternative.h"
-extern string singleSpace;
+//extern string singleSpace;
 string attemptingToOpenFile = CONST_configfile000;
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
@@ -16180,7 +16201,7 @@ vector<file_and_text_collection> creature_text_file_collection = {
 	customText(&ccs_covername_shotgun, creature + CONST_creature085),
 	customText(&ccs_covername_other, creature + CONST_creature086),
 };
-extern string commaSpace;
+//extern string commaSpace;
 Creature& Creature::operator=(const Creature& rhs)
 {
 	if (this != &rhs)
@@ -16554,7 +16575,7 @@ Creature::Creature(const std::string& inputXml)
 			crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
 	}
 }
-extern string closeParenthesis;
+//extern string closeParenthesis;
 string Creature::showXml() const
 {
 	CMarkup xml;
@@ -17636,8 +17657,8 @@ vector<file_and_text_collection> names_text_file_collection = {
 	customText(&regular_last_names, names + CONST_creaturenames007),
 	customText(&archconservative_last_names, names + CONST_creaturenames008),
 };
-extern string closeParenthesis;
-extern string singleSpace;
+//extern string closeParenthesis;
+//extern string singleSpace;
 void generate_name(char *first, char *last, char gender);
 void firstname(char *str, char gender);
 string lastname(bool archconservative);
@@ -17879,7 +17900,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int we
 	cliptype(clip), number_clips(clips)
 {
 }
-extern string NONE;
+//extern string NONE;
 string undefined;
 CreatureType::CreatureType(const std::string& xmlstring)
 	: age_(18, 57), alignment_public_mood_(true),
@@ -17887,6 +17908,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
 	infiltration_(0), juice_(0), money_(20, 40)
 {
+	extern string NONE;
 	extern Log xmllog;
 	for (int i = 0; i < ATTNUM; i++)
 		attributes_[i].set_interval(1, 10);
@@ -18106,6 +18128,7 @@ std::string CreatureType::get_type_name() const
 }
 void CreatureType::give_weapon(Creature& cr) const
 {
+	extern string NONE;
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	const WeaponsAndClips& wc = pickrandom(weapons_and_clips_);
@@ -19446,7 +19469,8 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
 	: number_weapons(1),
 	cliptype(tag_APPROPRIATE), number_clips(4)
-{ 
+{
+	extern string NONE;
 	extern vector<WeaponType *> weapontype;
 	extern Log xmllog;
 	weapon_type_str = xml.GetData();
@@ -19620,13 +19644,13 @@ const string CONST_shopsnstuff004 = "armsdealer.xml";
 
 #include "../sitemode/shop.h"
 // #include "../common/musicClass.h"
-extern string closeParenthesis;
-extern string undefined;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string enter_done;
-extern string chooseALiberalTo;
-extern string spaceParanthesisDollar;
+//extern string closeParenthesis;
+//extern string undefined;
+//extern string check_status_of_squad_liberal;
+//extern string show_squad_liberal_status;
+//extern string enter_done;
+//extern string chooseALiberalTo;
+//extern string spaceParanthesisDollar;
 string toSpend;
 string chooseAColor;
 string theseColorsAreCon;
@@ -19744,6 +19768,7 @@ Creature* findSleeperCarSalesman(int loc);
 /* active squad visits the car dealership */
 void dealership(int loc)
 {
+	extern string spaceParanthesisDollar;
 	extern squadst *activesquad;
 	extern MusicClass music;
 	extern int year;
@@ -20864,8 +20889,8 @@ vector<file_and_text_collection> date_text_file_collection = {
 	/*date.cpp*/
 	customText(&date_fail, datey + CONST_date006),
 };
-extern string commaSpace;
-extern string singleSpace;
+//extern string commaSpace;
+//extern string singleSpace;
 vector<datest *> date;
 enum DateResults
 {
@@ -20874,7 +20899,8 @@ enum DateResults
 	DATERESULT_JOINED,
 	DATERESULT_ARRESTED
 };
-extern string AND;
+string AND;
+//extern string AND;
 // Handles the result of a date or vacation
 static int dateresult(int aroll, int troll, datest &d, int e, int p, int y)
 {
@@ -21217,7 +21243,7 @@ char completevacation(datest &d, int p)
 	case DATERESULT_ARRESTED:    return 1;
 	}
 }
-extern string pressKeyToReflect;
+//extern string pressKeyToReflect;
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d, int p)
 {
@@ -22588,9 +22614,9 @@ vector<file_and_text_collection> fighty_text_file_collection = {
 	customText(&evasionStrings, mostlyendings + CONST_fight029),
 	customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
 };
-extern string singleSpace;
-extern string singleDot;
-extern string commaSpace;
+//extern string singleSpace;
+//extern string singleDot;
+//extern string commaSpace;
 vector<Item *> groundloot;
 std::string burstHitString(int bursthits) {
 	switch (bursthits)
@@ -25904,11 +25930,11 @@ void removesquadinfo(Creature &cr);
 // #include "../common/creaturePoolCreature.h"
 
 
-extern string singleSpace;
-extern string chooseALiberalTo;
-extern string AND;
-extern string spaceDashSpace;
-extern string singleDot;
+//extern string singleSpace;
+//extern string chooseALiberalTo;
+//extern string AND;
+//extern string spaceDashSpace;
+//extern string singleDot;
 /* roll on the kidnap attempt and show the results */
 bool kidnap(Creature &a, Creature &t, bool &amateur)
 {
@@ -26444,7 +26470,7 @@ string hecoStalinized;
 string dotSpace;
 
 //extern highscorest score[SCORENUM];
-extern string singleSpace;
+//extern string singleSpace;
 MusicModes getEndingMusic(EndTypes e);
 string getEndingString(EndTypes e);
 struct  saveLoadChunk {
@@ -26453,54 +26479,7 @@ struct  saveLoadChunk {
 	size_t      ElementCount;
 	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
 };
-extern int ustat_recruits;
-extern int ustat_kidnappings;
-extern int ustat_dead;
-extern int ustat_kills;
-extern int ustat_funds;
-extern int ustat_spent;
-extern int ustat_buys;
-extern int ustat_burns;
-extern int stat_buys;
-extern int stat_burns;
-extern int stat_kidnappings;
-extern int year;
-extern int stat_dead;
-extern int stat_kills;
-extern int stat_recruits;
-vector<saveLoadChunk> highScoreSaveLoad = {
-	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
-	saveLoadChunk(&ustat_dead, sizeof(int), 1),
-	saveLoadChunk(&ustat_kills, sizeof(int), 1),
-	saveLoadChunk(&ustat_kidnappings, sizeof(int), 1),
-	saveLoadChunk(&ustat_funds, sizeof(int), 1),
-	saveLoadChunk(&ustat_spent, sizeof(int), 1),
-	saveLoadChunk(&ustat_buys, sizeof(int), 1),
-	saveLoadChunk(&ustat_burns, sizeof(int), 1),
-	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
-};
-/* loads the high scores file */
-void loadhighscores()
-{
-	extern int lowestloadscoreversion;
-	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
-	//LOAD FILE
-	int loadversion;
-	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB002.c_str(), LCSIO_PRE_HOME);
-	if (h != NULL)
-	{
-		fread(&loadversion, sizeof(int), 1, h);
-		if (loadversion < lowestloadscoreversion)
-		{
-			LCSCloseFile(h);
-			return;
-		}
-		for (saveLoadChunk s : highScoreSaveLoad) {
-			fread(s.Buffer, s.ElementSize, s.ElementCount, h);
-		}
-		LCSCloseFile(h);
-	}
-}
+
 /* displays the high score board */
 void viewhighscores(int musicoverride)
 {
@@ -26687,88 +26666,7 @@ string getEndingString(EndTypes e) {
 		break;
 	}
 }
-/* saves a new high score */
-void savehighscore(char endtype)
-{
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern int stat_kidnappings;
-	extern int year;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern int yourscore;
-	extern int month;
-	extern class Ledger ledger;
-	extern int version;
-	//	extern char slogan[SLOGAN_LEN];
-	extern string slogan_str;
-	loadhighscores();
-	//MERGE THE STATS
-	ustat_recruits += stat_recruits;
-	ustat_dead += stat_dead;
-	ustat_kills += stat_kills;
-	ustat_kidnappings += stat_kidnappings;
-	ustat_funds += ledger.total_income;
-	ustat_spent += ledger.total_expense;
-	ustat_buys += stat_buys;
-	ustat_burns += stat_burns;
-	//PLACE THIS HIGH SCORE BY DATE IF NECESSARY
-	yourscore = -1;
-	for (int s = 0; s < SCORENUM; s++)
-	{
-		if ((endtype == END_WON && score[s].endtype == END_WON &&
-			year == score[s].year&&month == score[s].month&&
-			ledger.total_expense + ledger.total_expense > score[s].stat_spent + score[s].stat_funds) ||
-			(endtype == END_WON && score[s].endtype == END_WON
-				&& (year < score[s].year ||
-				(year == score[s].year && month < score[s].month))) ||
-					(endtype == END_WON && score[s].endtype != END_WON) ||
-			(endtype != END_WON && score[s].endtype != END_WON &&
-				ledger.total_expense + ledger.total_income > score[s].stat_spent + score[s].stat_funds) ||
-			score[s].valid == 0)
-		{
-			for (int s2 = SCORENUM - 1; s2 >= s + 1; s2--)
-			{
-				score[s2] = score[s2 - 1];
-			}
-			strcpy(score[s].slogan, slogan_str.c_str());
-			score[s].month = month;
-			score[s].year = year;
-			score[s].stat_recruits = stat_recruits;
-			score[s].stat_dead = stat_dead;
-			score[s].stat_kills = stat_kills;
-			score[s].stat_kidnappings = stat_kidnappings;
-			score[s].stat_funds = ledger.total_income;
-			score[s].stat_spent = ledger.total_expense;
-			score[s].stat_buys = stat_buys;
-			score[s].stat_burns = stat_burns;
-			score[s].valid = 1;
-			score[s].endtype = endtype;
-			yourscore = s;
-			break;
-		}
-	}
-	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB003.c_str(), LCSIO_PRE_HOME);
-	if (h != NULL)
-	{
-		int lversion = version;
-		fwrite(&lversion, sizeof(int), 1, h);
-		for (saveLoadChunk s : highScoreSaveLoad) {
-			fwrite(s.Buffer, s.ElementSize, s.ElementCount, h);
-		}
-		LCSCloseFile(h);
-	}
-	title_screen::getInstance().reset();
-}
+
 
 
 // #include "../includes.h"
@@ -27034,10 +26932,10 @@ vector<file_and_text_collection> interrogate_text_file_collection = {
 	customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
 };
 string feels_sick_and;
-extern string singleDot;
-extern string AND;
-extern string singleSpace;
-extern string commaSpace;
+//extern string singleDot;
+//extern string AND;
+//extern string singleSpace;
+//extern string commaSpace;
 enum InterrogationTechnqiues
 {
 	TECHNIQUE_TALK,
@@ -28554,11 +28452,11 @@ vector<file_and_text_collection> justice_text_file_collection = {
 };
 // #include "../common/musicClass.h"
 string counts_of;
-extern string string_sleeper;
-extern string singleDot;
-extern string AND;
-extern string commaSpace;
-extern string singleSpace;
+//extern string string_sleeper;
+//extern string singleDot;
+//extern string AND;
+//extern string commaSpace;
+//extern string singleSpace;
 string execution_in_three_months;
 // #include "../common/creaturePool.h"
 // #include "../locations/locationsPool.h"
@@ -30180,8 +30078,8 @@ int getloottype(const string &idname);
 // #include "../set_color_support.h"
 // #include "../locations/locationsPool.h"
 // #include "../common/musicClass.h"
-extern string spaceDashSpace;
-extern string closeParenthesis;
+//extern string spaceDashSpace;
+//extern string closeParenthesis;
 string bound_to_rile_up;
 string major_news_take_it_up;
 map<short, string> expenseTypes;
@@ -31579,8 +31477,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     
 // #include "../creature/creature.h"
 // #include "../locations/locations.h"
 // #include "../common/creaturePool.h"
-extern string singleSpace;
-extern string commaSpace;
+//extern string singleSpace;
+//extern string commaSpace;
 // Finds a location with the corresponding type and returns
 // its index in the location array
 vector<string> labor_camp_name;
@@ -32646,8 +32544,8 @@ vector<file_and_text_collection> misc_activities_text_file_collection = {
 	/*miscactions.cpp*/
 	customText(&was_abused, activities + CONST_miscactions004),
 };
-extern string singleDot;
-extern string singleSpace;
+//extern string singleDot;
+//extern string singleSpace;
 void fillEncounter(CreatureTypes c, int numleft);
 map<short, string> discussIssues;
 map<short, string> discussesIssues;
@@ -33553,7 +33451,7 @@ void clearRentExemptions();
 void publishSpecialEditions(char &clearformess);
 void manageGrafiti();
 
-extern string singleDot;
+//extern string singleDot;
 
 // #include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
@@ -35556,11 +35454,11 @@ string affectsTheseSkills;
 string a_fastSkills;
 string b_classic;
 string c_hardMode;
-extern string spaceDashSpace;
-extern UniqueCreatures uniqueCreatures;
-extern string singleSpace;
+//extern string spaceDashSpace;
+//extern UniqueCreatures uniqueCreatures;
+//extern string singleSpace;
 void newVehicle(Vehicle *startcar);
-extern string singleDot;
+//extern string singleDot;
 vector<string> founderQuestions;
 // #include "../customMaps.h"
 vector<file_and_text_collection> newgame_file_collection = {
@@ -35975,6 +35873,7 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 /* creates your founder */
 void makecharacter()
 {
+	extern UniqueCreatures uniqueCreatures;
 	// Make the founder blind
 	extern bool BLIND;
 	// Make the founder unable to walk
@@ -37642,21 +37541,20 @@ int monthday();
 // #include "../common/creaturePool.h"
 // #include "../locations/locationsPool.h"
 #include "../cursesmovie.h"
-extern string singleSpace;
+//extern string singleSpace;
 vector<newsstoryst *> newsstory;
 newsstoryst* lastNewsStory() {
 	return newsstory[len(newsstory) - 1];
 }
-extern string commaSpace;
+//extern string commaSpace;
 // #include "../common/musicClass.h"
-extern char endgamestate;
+//extern char endgamestate;
 string ampersandR;
-extern string spaceDashSpace;
-extern string singleDot;
+//extern string spaceDashSpace;
+//extern string singleDot;
 string membersOfLCS;
 string lcsSpokeseperson;
 string policeSpokesperson;
-string AND;
 map<short, vector<string> > newsStories;
 map<short, string> cityNames;
 string accordingToSourcesAtScene;
@@ -37833,6 +37731,7 @@ newsstoryst* ccs_strikes_story()
 }
 newsstoryst* ccs_fbi_raid_story()
 {
+	extern char endgamestate;
 	newsstoryst* ns = new newsstoryst;
 	ns->type = NEWSSTORY_CCS_DEFEATED;
 	ns->priority = 8000;
@@ -37946,6 +37845,7 @@ newsstoryst* new_major_event()
 }
 void generate_random_event_news_stories()
 {
+	extern char endgamestate;
 	extern CCSexposure ccsexposure;
 	//Conservative Crime Squad Strikes!
 	if (endgamestate < ENDGAME_CCS_DEFEATED &&
@@ -38017,6 +37917,7 @@ void clean_up_empty_news_stories()
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns)
 {
+	extern char endgamestate;
 	extern short attitude[VIEWNUM];
 	// Priority is set differently based on the type of the news story
 	switch (ns.type)
@@ -42009,13 +41910,13 @@ map<short, string> liberalizeLaw;
 // #include "../common/musicClass.h"
 string establishPrisonReform;
 string improvePrisonConditions;
-extern string pressKeyToReflect;
-extern string YEA;
-extern string NAY;
+//extern string pressKeyToReflect;
+//extern string YEA;
+//extern string NAY;
 vector<string> corporateSuffix;
 map<short, string> winnerOfElection;
 //const string mostlyendings = "mostlyendings\\";
-extern string commaSpace;
+//extern string commaSpace;
 // #include "../customMaps.h"
 vector<file_and_text_collection> politics_text_file_collection = {
 	customText(&corporateSuffix, mostlyendings + CONST_politics001),
@@ -43758,8 +43659,8 @@ void printname(Creature &cr);
 // #include "../common/musicClass.h"
 // #include "../common/creaturePool.h"
 const int PAGELENGTH = 19;
-extern string spaceDashSpace;
-extern string singleSpace;
+//extern string spaceDashSpace;
+//extern string singleSpace;
 vector<string> methodOfExecution;
 vector<string> getsSick;
 //const string mostlyendings = "mostlyendings\\";
@@ -44976,14 +44877,14 @@ int squadsize(const squadst *st);
 // #include "../set_color_support.h"
 // #include "../common/musicClass.h"
 #include <functional>
-extern string spaceDashSpace;
-extern string closeParenthesis;
-extern string undefined;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string enter_done;
-extern string chooseALiberalTo;
-extern string singleSpace;
+//extern string spaceDashSpace;
+//extern string closeParenthesis;
+//extern string undefined;
+//extern string check_status_of_squad_liberal;
+//extern string show_squad_liberal_status;
+//extern string enter_done;
+//extern string chooseALiberalTo;
+//extern string singleSpace;
 string paranthesisDollar;
 ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
 { }
@@ -45830,10 +45731,10 @@ vector<string> newspaper_first_name;
 vector<string> newspaper_last_name;
 vector<string> insult_for_liberal;
 vector<string> word_replacing_liberal;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string singleDot;
-extern string change_squad_order;
+//extern string check_status_of_squad_liberal;
+//extern string show_squad_liberal_status;
+//extern string singleDot;
+//extern string change_squad_order;
 vector<string> engageConservativesEscape;
 vector<string> engageConservatives;
 vector<string> nextSiegeAgain;
@@ -48274,9 +48175,9 @@ void prepareencounter(short type, char sec);
 // #include "../locations/locationsPool.h"
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
-extern string string_sleeper;
+//extern string string_sleeper;
 string they_are_stashed;
-extern string singleDot;
+//extern string singleDot;
 string hasBeenCaughtSnooping;
 string isNowHomeless;
 string hasLeakedIntelligence;
@@ -49233,8 +49134,8 @@ const string stealth = "stealth\\";
 vector<file_and_text_collection> stealth_text_file_collection = {
 	customText(&blew_stealth_check, stealth + CONST_stealth053),
 };
-extern short cursite;
-extern short fieldskillrate;
+
+//extern short fieldskillrate;
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude, int difficulty)
 {
@@ -49269,6 +49170,7 @@ void noticecheck(int exclude, int difficulty)
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake)
 {
+	extern short cursite;
 	extern Log gamelog;
 	extern short mode;
 	extern short sitealarm;
@@ -49400,6 +49302,7 @@ char disguisesite(long type)
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const Creature &cr)
 {
+	extern short cursite;
 	extern int locx;
 	extern int locy;
 	extern int locz;
@@ -49732,6 +49635,8 @@ char weaponcheck(const Creature &cr, bool metaldetect)
 /* checks if conservatives see through your disguise */
 void disguisecheck(int timer)
 {
+	extern short cursite;
+	extern short fieldskillrate;
 	extern Log gamelog;
 	extern short sitetype;
 	extern short sitealarm;
@@ -50002,7 +49907,6 @@ void disguisecheck(int timer)
 // #include "../includes.h"
 const string CONST_talk040 = "# ";
 const string CONST_talk039 = "allText.txt";
-const string CONST_talk038 = " ";
 const string CONST_talk034 = "agree_to_release_hostages.txt";
 const string CONST_talk033 = "go_ahead_and_die.txt";
 const string CONST_talk032 = "let_hostages_go.txt";
@@ -50165,8 +50069,8 @@ map<short, string> issueTooLiberal;
 string saysComma;
 string respondsComma;
 string colonSpace;
-extern string singleDot;
-extern string singleSpace;
+//extern string singleDot;
+//extern string singleSpace;
 string unnamed_String_Talk_cpp_000;
 string unnamed_String_Talk_cpp_001;
 string unnamed_String_Talk_cpp_002;
@@ -51920,6 +51824,563 @@ char heyMisterMonster(Creature &a, Creature &tk)
 				encounter[i].align = ALIGN_LIBERAL;
 	return 1;
 }
+//bool initialize_incomplete_txt();
+
+
+// #include "../includes.h"
+const string CONST_vehicle007 = "Stolen ";
+
+//const string tag_id = "id";
+const string tag_myear = "myear";
+//const string tag_location = "location";
+const string tag_color = "color";
+const string tag_vtypeid = "vtypeid";
+const string tag_vtypeidname = "vtypeidname";
+const string tag_vehicle = "vehicle";
+//const string singleSpace = " ";
+// #include "vehicletype.h"
+vector<VehicleType *> vehicletype;
+// #include "vehicle.h"
+//own header
+long Vehicle::curcarid = 0;
+// #include "common/creaturePool.h"
+string Vehicle::showXml() const
+{
+	CMarkup xml;
+	xml.AddElem(tag_vehicle);
+	xml.IntoElem();
+	xml.AddElem(tag_vtypeidname, vtypeidname_);
+	xml.AddElem(tag_vtypeid, tostring(vtypeid_));
+	xml.AddElem(tag_color, color_);
+	xml.AddElem(tag_heat, tostring(heat_));
+	xml.AddElem(tag_location, tostring(location_));
+	xml.AddElem(tag_myear, tostring(myear_));
+	xml.AddElem(tag_id, tostring(id_));
+	return xml.GetDoc();
+}
+Vehicle::Vehicle(const std::string& inputXml)
+{
+	CMarkup xml;
+	xml.SetDoc(inputXml);
+	xml.FindElem();
+	xml.IntoElem();
+	while (xml.FindElem())
+	{
+		std::string tag = xml.GetTagName();
+		if (tag == tag_vtypeidname) vtypeidname_ = xml.GetData();
+		else if (tag == tag_vtypeid) vtypeid_ = atoi(xml.GetData().c_str());
+		else if (tag == tag_color) color_ = xml.GetData();
+		else if (tag == tag_heat) heat_ = atoi(xml.GetData().c_str());
+		else if (tag == tag_location) location_ = atoi(xml.GetData().c_str());
+		else if (tag == tag_myear) myear_ = atoi(xml.GetData().c_str());
+		else if (tag == tag_id) id_ = atoi(xml.GetData().c_str());
+	}
+}
+void Vehicle::init(const VehicleType& seed, const string& color, int myear)
+{
+	id_ = curcarid++;
+	heat_ = 0;
+	location_ = -1;
+	vtypeidname_ = seed.idname();
+	vtypeid_ = seed.id();
+	color_ = color;
+	myear_ = myear;
+}
+void Vehicle::stop_riding_me() const
+{
+	CreaturePool::getInstance().stop_riding_me(id_);
+}
+void Vehicle::stop_preferring_me() const
+{
+	CreaturePool::getInstance().stop_preferring_me(id_);
+}
+string Vehicle::fullname(bool halffull) const
+{
+	string s;
+	int words = 0;
+	if (heat_)
+	{
+		s = CONST_vehicle007;
+		words++;
+	}
+	if (displayscolor())
+	{
+		s += color_ + singleSpace;
+		words++;
+	}
+	if (myear_ != -1 && words < 2) //don't print year if that will make the name too long.
+		s += tostring(myear_) + singleSpace;
+	if (halffull) s += shortname();
+	else s += longname();
+	return s;
+}
+int Vehicle::modifieddriveskill(int skillLevel)
+{
+	return vehicletype[getvehicletype(vtypeidname_)]->modifieddriveskill(skillLevel); // Todo - add bonus if car is upgraded with nitro
+}
+int Vehicle::modifieddodgeskill(int skillLevel)
+{
+	return vehicletype[getvehicletype(vtypeidname_)]->modifieddodgeskill(skillLevel); // Todo - add bonus if car is upgraded
+}
+Vehicle::Vehicle(const VehicleType& seed) { init(seed, pickrandom(seed.color()), seed.makeyear()); }
+Vehicle::Vehicle(const VehicleType& seed, const string& color, int myear) { init(seed, color, myear); }
+Vehicle::~Vehicle() { stop_riding_me(); stop_preferring_me(); }
+short Vehicle::get_heat() const { return heat_; }
+void Vehicle::add_heat(short heat) { heat_ += heat; }
+long Vehicle::get_location() const { return location_; }
+void Vehicle::set_location(long new_location) { location_ = new_location; }
+const string& Vehicle::vtypeidname() const { return vtypeidname_; }
+long Vehicle::vtypeid() const { return vtypeid_; }
+const string& Vehicle::color() const { return color_; }
+bool Vehicle::displayscolor() const { return vehicletype[getvehicletype(vtypeidname_)]->displayscolor(); }
+int Vehicle::myear() const { return myear_; }
+long Vehicle::id() const { return id_; }
+int Vehicle::attackbonus(bool isDriver) const { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
+int Vehicle::gethitlocation(int bodypart) { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
+string Vehicle::getpartname(int hitlocation) { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
+int Vehicle::armorbonus(int hitlocation) const { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
+const string& Vehicle::longname() const { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
+const string& Vehicle::shortname() const { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }
+int Vehicle::steal_difficultytofind() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_difficultytofind(); }
+int Vehicle::steal_juice() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_juice(); }
+int Vehicle::steal_extraheat() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_extraheat(); }
+int Vehicle::sensealarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->sensealarmchance(); }
+int Vehicle::touchalarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->touchalarmchance(); }
+bool Vehicle::availableatshop() const { return vehicletype[getvehicletype(vtypeidname_)]->availableatshop(); }
+int Vehicle::price() const { return vehicletype[getvehicletype(vtypeidname_)]->price(); }
+int Vehicle::sleeperprice() const { return vehicletype[getvehicletype(vtypeidname_)]->sleeperprice(); }
+
+/* transforms a vehicle type id into the index of that vehicle type in the global vector */
+int getvehicletype(const int id)
+{
+	for (int i = 0; i < len(vehicletype); i++) if (vehicletype[i]->id() == id) return i;
+	return -1;
+}
+/* transforms a vehicle type idname into the index of that vehicle type in the global vector */
+int getvehicletype(const string &idname)
+{
+	for (int i = 0; i < len(vehicletype); i++) if (vehicletype[i]->idname() == idname) return i;
+	return -1;
+}
+
+int steal_difficultytofind(const int v) {
+	return vehicletype[v]->steal_difficultytofind();
+}
+int lenVehicleType() {
+	return len(vehicletype);
+}
+
+string vehicleTypelongname(const int p) {
+	return vehicletype[p]->longname();
+}
+
+Vehicle* getVehicleOfThisType(const int cartype) {
+	return new Vehicle(*vehicletype[cartype]);
+}
+
+Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year) {
+	return new Vehicle(*vehicletype[carchoice],
+		vehicletype[carchoice]->color()[colorchoice], year);
+}
+
+int getVehicleTypePrice(const int carchoice) {
+	return vehicletype[carchoice]->price();
+
+}
+
+int getVehicleTypeSleeperPrice(const int carchoice) {
+	return vehicletype[carchoice]->sleeperprice();
+}
+
+vector<string> getVehicleTypeColor(const int carchoice) {
+	return vehicletype[carchoice]->color();
+}
+
+bool vehicletypeavailableatshop(const int i) {
+	return vehicletype[i]->availableatshop();
+}
+string vehicleSportsCar;
+Vehicle* newSportsCar() {
+	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
+}
+
+void delete_and_clear_vehicle_types() {
+	delete_and_clear(vehicletype);
+}
+
+
+// #include "../includes.h"
+const string CONST_vehicletypeB061 = ": ";
+const string CONST_vehicletypeB060 = "::stealing: ";
+const string CONST_vehicletypeB055 = "::colors: ";
+const string CONST_vehicletypeB054 = "::year: ";
+const string CONST_vehicletypeB053 = "UNDEF";
+const string CONST_vehicletype063 = "Unknown element for vehicle type ";
+const string CONST_vehicletype062 = "::available_at_dealership: ";
+const string CONST_vehicletype061 = "Invalid boolean value for vehicle type ";
+const string CONST_vehicletype054 = "::colors::display_color: ";
+const string CONST_vehicletype051 = "::year::add_random_up_to_current_year: ";
+const string CONST_vehicletype049 = "::year::start_at_current_year: ";
+const string CONST_vehicletype047 = "LACKS IDNAME ";
+const string CONST_vehicletype046 = "UNDEFINED";
+
+const string tag_window = "window";
+//const string tag_body = "body";
+const string tag_Translucent = "Translucent";
+//const string tag_sleeperprice = "sleeperprice";
+//const string tag_price = "price";
+const string tag_available_at_dealership = "available_at_dealership";
+//const string tag_armor = "armor";
+const string tag_armor_midpoint = "armor_midpoint";
+const string tag_high_armor_max = "high_armor_max";
+const string tag_high_armor_min = "high_armor_min";
+const string tag_low_armor_max = "low_armor_max";
+const string tag_low_armor_min = "low_armor_min";
+const string tag_touch_alarm_chance = "touch_alarm_chance";
+const string tag_sense_alarm_chance = "sense_alarm_chance";
+const string tag_extra_heat = "extra_heat";
+//const string tag_juice = "juice";
+//const string tag_difficulty = "difficulty";
+const string tag_difficulty_to_find = "difficulty_to_find";
+const string tag_stealing = "stealing";
+//const string tag_shortname = "shortname";
+const string tag_longname = "longname";
+const string tag_passenger = "passenger";
+const string tag_driver = "driver";
+const string tag_attackbonus = "attackbonus";
+//const string tag_attack = "attack";
+const string tag_hardlimit = "hardlimit";
+const string tag_softlimit = "softlimit";
+const string tag_skillfactor = "skillfactor";
+//const string tag_skill = "skill";
+//const string tag_base = "base";
+const string tag_dodgebonus = "dodgebonus";
+const string tag_dodge = "dodge";
+const string tag_drivebonus = "drivebonus";
+const string tag_display_color = "display_color";
+//const string tag_color = "color";
+const string tag_colors = "colors";
+const string tag_add = "add";
+const string tag_add_random = "add_random";
+const string tag_add_random_up_to_current_year = "add_random_up_to_current_year";
+const string tag_start_at_year = "start_at_year";
+const string tag_start_at_current_year = "start_at_current_year";
+const string tag_year = "year";
+//const string blankString = "";
+//const string tag_idname = "idname";
+//const string tag_id = "id";
+// #include "../creature/creatureEnums.h"
+// #include "vehicletype.h"
+// #include "../common/stringconversion.h"
+//for atoi
+int VehicleType::number_of_vehicletypes = 0;
+VehicleType::VehicleType(MCD_STR xmlstring)
+	: /*idname_(CONST_vehicletype046), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
+	year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
+	longname_(CONST_vehicletype046), shortname_(CONST_vehicletypeB053),
+	drivebonus_(0), drivebonus_factor_(1), drivebonus_limit1_(8), drivebonus_limit2_(99),
+	dodgebonus_(0), dodgebonus_factor_(1), dodgebonus_limit1_(8), dodgebonus_limit2_(99),
+	attackbonus_driver_(-2), attackbonus_passenger_(0),
+	armormidpoint_(50), lowarmormin_(4), lowarmormax_(6), higharmormin_(0), higharmormax_(2),
+	steal_difficultytofind_(1), steal_juice_(0), steal_extraheat_(0),
+	sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111)
+{
+	id_ = number_of_vehicletypes++;
+	CMarkup xmlfile;
+	xmlfile.SetDoc(xmlstring);
+	xmlfile.FindElem();
+	idname_ = xmlfile.GetAttrib(tag_idname);
+	if (idname_ == blankString)
+		idname_ = CONST_vehicletype047 + tostring(id_);
+	xmlfile.IntoElem();
+	while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
+	{
+		std::string element = xmlfile.GetTagName();
+		if (element == tag_year)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_start_at_current_year)
+				{
+					int b = stringtobool(xmlfile.GetData());
+					if (b == 1)
+						year_startcurrent_ = true;
+					else if (b == 0)
+						year_startcurrent_ = false;
+					/*else
+					std::cerr << CONST_vehicletype061 << idname
+					<< CONST_vehicletype049 << xmlfile.GetData() << std::endl;*/
+				}
+				else if (element == tag_start_at_year)
+					year_start_ = atoi(xmlfile.GetData());
+				else if (element == tag_add_random_up_to_current_year)
+				{
+					int b = stringtobool(xmlfile.GetData());
+					if (b == 1)
+						year_randomuptocurrent_ = true;
+					else if (b == 0)
+						year_randomuptocurrent_ = false;
+					/*else
+					std::cerr << CONST_vehicletype061 << idname
+					<< CONST_vehicletype051 << xmlfile.GetData() << std::endl;*/
+				}
+				else if (element == tag_add_random)
+					year_addrandom_ = atoi(xmlfile.GetData());
+				else if (element == tag_add)
+					year_add_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB054
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_colors)
+		{
+			xmlfile.IntoElem();
+			//std::string color;
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_color)
+				{
+					color_.push_back(xmlfile.GetData());
+				}
+				else if (element == tag_display_color)
+				{
+					int b = stringtobool(xmlfile.GetData());
+					if (b == 1)
+						displaycolor_ = true;
+					else if (b == 0)
+						displaycolor_ = false;
+					/*else
+					std::cerr << CONST_vehicletype061 << idname
+					<< CONST_vehicletype054 << xmlfile.GetData() << std::endl;*/
+				}
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB055
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_drivebonus)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_base)
+					drivebonus_ = atoi(xmlfile.GetData());
+				else if (element == tag_skillfactor)
+					drivebonus_factor_ = atof(xmlfile.GetData());
+				else if (element == tag_softlimit)
+					drivebonus_limit1_ = atoi(xmlfile.GetData());
+				else if (element == tag_hardlimit)
+					drivebonus_limit2_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_dodgebonus)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_base)
+					dodgebonus_ = atoi(xmlfile.GetData());
+				else if (element == tag_skillfactor)
+					dodgebonus_factor_ = atof(xmlfile.GetData());
+				else if (element == tag_softlimit)
+					dodgebonus_limit1_ = atoi(xmlfile.GetData());
+				else if (element == tag_hardlimit)
+					dodgebonus_limit2_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_attackbonus)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_driver)
+					attackbonus_driver_ = atoi(xmlfile.GetData());
+				else if (element == tag_passenger)
+					attackbonus_passenger_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_longname)
+			longname_ = xmlfile.GetData();
+		else if (element == tag_shortname)
+		{
+			shortname_ = xmlfile.GetData();
+			if (len(shortname_) > 7)
+				shortname_.resize(7); //Only seven characters allowed for shortname_.
+		}
+		else if (element == tag_stealing)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_difficulty_to_find)
+					steal_difficultytofind_ = atoi(xmlfile.GetData());
+				else if (element == tag_juice)
+					steal_juice_ = atoi(xmlfile.GetData());
+				else if (element == tag_extra_heat)
+					steal_extraheat_ = atoi(xmlfile.GetData());
+				else if (element == tag_sense_alarm_chance)
+					sensealarmchance_ = atoi(xmlfile.GetData());
+				else if (element == tag_touch_alarm_chance)
+					touchalarmchance_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_armor)
+		{
+			xmlfile.IntoElem();
+			while (xmlfile.FindElem())
+			{
+				element = xmlfile.GetTagName();
+				if (element == tag_low_armor_min)
+					lowarmormin_ = atoi(xmlfile.GetData());
+				else if (element == tag_low_armor_max)
+					lowarmormax_ = atoi(xmlfile.GetData());
+				else if (element == tag_high_armor_min)
+					higharmormin_ = atoi(xmlfile.GetData());
+				else if (element == tag_high_armor_max)
+					higharmormax_ = atoi(xmlfile.GetData());
+				else if (element == tag_armor_midpoint)
+					armormidpoint_ = atoi(xmlfile.GetData());
+				/*else
+				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
+				<< element << std::endl;*/
+			}
+			xmlfile.OutOfElem();
+		}
+		else if (element == tag_available_at_dealership)
+		{
+			int b = stringtobool(xmlfile.GetData());
+			if (b == 1)
+				availableatshop_ = true;
+			else if (b == 0)
+				availableatshop_ = false;
+			/*else
+			std::cerr << CONST_vehicletype061 << idname
+			<< CONST_vehicletype062 << xmlfile.GetData() << std::endl;*/
+		}
+		else if (element == tag_price)
+			price_ = atoi(xmlfile.GetData());
+		else if (element == tag_sleeperprice)
+			sleeperprice_ = atoi(xmlfile.GetData());
+		/*else
+		std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB061 << element
+		<< std::endl;*/
+	}
+	if (len(color_) == 0)
+		color_.push_back(tag_Translucent); //Default.
+										   //xmlfile.OutOfElem();
+}
+int VehicleType::makeyear() const
+{
+	extern int year;
+	int myear = 0;
+	if (year_startcurrent_)
+		myear = year;
+	else
+		myear = year_start_;
+	if (year_randomuptocurrent_)
+		myear += LCSrandom(year - year_start_ + 1);
+	if (year_addrandom_ > 0)
+		myear += LCSrandom(year_addrandom_);
+	else if (year_addrandom_ < 0)
+		myear -= LCSrandom(-year_addrandom_);
+	myear += year_add_;
+	return myear;
+}
+int VehicleType::gethitlocation(int bodypart)
+{
+	switch (bodypart)
+	{
+	case BODYPART_HEAD:
+		return CARPART_WINDOW;
+	case BODYPART_BODY:
+	case BODYPART_ARM_RIGHT:
+	case BODYPART_ARM_LEFT:
+		return (LCSrandom(100) < armormidpoint_) ? CARPART_BODY : CARPART_WINDOW;
+	case BODYPART_LEG_RIGHT:
+	case BODYPART_LEG_LEFT:
+		return CARPART_BODY;
+	default:
+		return CARPART_WINDOW;
+	}
+}
+string VehicleType::getpartname(int location)
+{
+	return location == CARPART_WINDOW ? tag_window : tag_body;
+}
+int VehicleType::armorbonus(int location)
+{
+	switch (location)
+	{
+	case CARPART_BODY:
+		return LCSrandom(lowarmormax_ - lowarmormin_ + 1) + lowarmormin_;
+	case CARPART_WINDOW:
+		return LCSrandom(higharmormax_ - higharmormin_ + 1) + higharmormin_;
+	default:
+		return 0;
+	}
+}
+int VehicleType::modifieddriveskill(int skillLevel)
+{
+	int score = (int)floor((skillLevel + drivebonus_)*drivebonus_factor_);
+	if (score < drivebonus_limit1_)
+		return score;
+	if (score > drivebonus_limit1_)
+		score = (score + drivebonus_limit1_) / 2; // half credit after limit1
+	return (score > drivebonus_limit2_) ? drivebonus_limit2_ : score;
+}
+int VehicleType::modifieddodgeskill(int skillLevel)
+{
+	int score = (int)floor((skillLevel + dodgebonus_)*dodgebonus_factor_);
+	if (score < dodgebonus_limit1_)
+		return score;
+	if (score > dodgebonus_limit1_)
+		score = (score + dodgebonus_limit1_) / 2; // half credit after limit1
+	return (score > dodgebonus_limit2_) ? dodgebonus_limit2_ : score;
+}
+const string& VehicleType::idname() const { return idname_; }
+long VehicleType::id() const { return id_; }
+const vector<string>& VehicleType::color() const { return color_; }
+bool VehicleType::displayscolor() const { return displaycolor_; }
+const string& VehicleType::longname() const { return longname_; }
+const string& VehicleType::shortname() const { return shortname_; }
+int VehicleType::attackbonus(bool isDriving) const { return isDriving ? attackbonus_driver_ : attackbonus_passenger_; }
+int VehicleType::steal_difficultytofind() const { return steal_difficultytofind_; }
+int VehicleType::steal_juice() const { return steal_juice_; }
+int VehicleType::steal_extraheat() const { return steal_extraheat_; }
+int VehicleType::sensealarmchance() const { return sensealarmchance_; }
+int VehicleType::touchalarmchance() const { return touchalarmchance_; }
+bool VehicleType::availableatshop() const { return availableatshop_; }
+int VehicleType::price() const { return price_; }
+int VehicleType::sleeperprice() const { return sleeperprice_; }
+
+
+
 extern string findingBugs;
 extern string undefined;
 extern string NONE;
@@ -51988,8 +52449,6 @@ extern string saysComma;
 extern string while_naked;
 extern string respondsComma;
 extern string colonSpace;
-string singleSpace = CONST_talk038;
-string commaSpace;
 extern string theLCS;
 extern string notASkill;
 extern string notAnAttribute;
@@ -52593,7 +53052,6 @@ vector<string*> allTextString = {
 	&study_string1,
 	&study_string2,
 };
-bool initialize_incomplete_txt();
 bool initialize_incomplete_txt() {
 	int i = 0;
 	check_status_of_squad_liberal.append(CONST_talk040);
@@ -52604,555 +53062,139 @@ bool initialize_incomplete_txt() {
 	return i == len(allText);
 }
 
-// #include "../includes.h"
-const string CONST_vehicle007 = "Stolen ";
-
-//const string tag_id = "id";
-const string tag_myear = "myear";
-//const string tag_location = "location";
-const string tag_color = "color";
-const string tag_vtypeid = "vtypeid";
-const string tag_vtypeidname = "vtypeidname";
-const string tag_vehicle = "vehicle";
-//const string singleSpace = " ";
-// #include "vehicletype.h"
-vector<VehicleType *> vehicletype;
-// #include "vehicle.h"
-//own header
-long Vehicle::curcarid = 0;
-// #include "common/creaturePool.h"
-string Vehicle::showXml() const
+extern int ustat_recruits;
+extern int ustat_kidnappings;
+extern int ustat_dead;
+extern int ustat_kills;
+extern int ustat_funds;
+extern int ustat_spent;
+extern int ustat_buys;
+extern int ustat_burns;
+//extern int stat_buys;
+//extern int stat_burns;
+//extern int stat_kidnappings;
+//extern int year;
+//extern int stat_dead;
+//extern int stat_kills;
+//extern int stat_recruits;
+vector<saveLoadChunk> highScoreSaveLoad = {
+	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
+	saveLoadChunk(&ustat_dead, sizeof(int), 1),
+	saveLoadChunk(&ustat_kills, sizeof(int), 1),
+	saveLoadChunk(&ustat_kidnappings, sizeof(int), 1),
+	saveLoadChunk(&ustat_funds, sizeof(int), 1),
+	saveLoadChunk(&ustat_spent, sizeof(int), 1),
+	saveLoadChunk(&ustat_buys, sizeof(int), 1),
+	saveLoadChunk(&ustat_burns, sizeof(int), 1),
+	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
+};
+/* loads the high scores file */
+void loadhighscores()
 {
-	CMarkup xml;
-	xml.AddElem(tag_vehicle);
-	xml.IntoElem();
-	xml.AddElem(tag_vtypeidname, vtypeidname_);
-	xml.AddElem(tag_vtypeid, tostring(vtypeid_));
-	xml.AddElem(tag_color, color_);
-	xml.AddElem(tag_heat, tostring(heat_));
-	xml.AddElem(tag_location, tostring(location_));
-	xml.AddElem(tag_myear, tostring(myear_));
-	xml.AddElem(tag_id, tostring(id_));
-	return xml.GetDoc();
-}
-Vehicle::Vehicle(const std::string& inputXml)
-{
-	CMarkup xml;
-	xml.SetDoc(inputXml);
-	xml.FindElem();
-	xml.IntoElem();
-	while (xml.FindElem())
+	extern int lowestloadscoreversion;
+	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
+	//LOAD FILE
+	int loadversion;
+	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB002.c_str(), LCSIO_PRE_HOME);
+	if (h != NULL)
 	{
-		std::string tag = xml.GetTagName();
-		if (tag == tag_vtypeidname) vtypeidname_ = xml.GetData();
-		else if (tag == tag_vtypeid) vtypeid_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_color) color_ = xml.GetData();
-		else if (tag == tag_heat) heat_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_location) location_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_myear) myear_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_id) id_ = atoi(xml.GetData().c_str());
+		fread(&loadversion, sizeof(int), 1, h);
+		if (loadversion < lowestloadscoreversion)
+		{
+			LCSCloseFile(h);
+			return;
+		}
+		for (saveLoadChunk s : highScoreSaveLoad) {
+			fread(s.Buffer, s.ElementSize, s.ElementCount, h);
+		}
+		LCSCloseFile(h);
 	}
 }
-void Vehicle::init(const VehicleType& seed, const string& color, int myear)
+
+/* saves a new high score */
+void savehighscore(char endtype)
 {
-	id_ = curcarid++;
-	heat_ = 0;
-	location_ = -1;
-	vtypeidname_ = seed.idname();
-	vtypeid_ = seed.id();
-	color_ = color;
-	myear_ = myear;
-}
-void Vehicle::stop_riding_me() const
-{
-	CreaturePool::getInstance().stop_riding_me(id_);
-}
-void Vehicle::stop_preferring_me() const
-{
-	CreaturePool::getInstance().stop_preferring_me(id_);
-}
-string Vehicle::fullname(bool halffull) const
-{
-	string s;
-	int words = 0;
-	if (heat_)
-	{
-		s = CONST_vehicle007;
-		words++;
-	}
-	if (displayscolor())
-	{
-		s += color_ + singleSpace;
-		words++;
-	}
-	if (myear_ != -1 && words < 2) //don't print year if that will make the name too long.
-		s += tostring(myear_) + singleSpace;
-	if (halffull) s += shortname();
-	else s += longname();
-	return s;
-}
-int Vehicle::modifieddriveskill(int skillLevel)
-{
-	return vehicletype[getvehicletype(vtypeidname_)]->modifieddriveskill(skillLevel); // Todo - add bonus if car is upgraded with nitro
-}
-int Vehicle::modifieddodgeskill(int skillLevel)
-{
-	return vehicletype[getvehicletype(vtypeidname_)]->modifieddodgeskill(skillLevel); // Todo - add bonus if car is upgraded
-}
-Vehicle::Vehicle(const VehicleType& seed) { init(seed, pickrandom(seed.color()), seed.makeyear()); }
-Vehicle::Vehicle(const VehicleType& seed, const string& color, int myear) { init(seed, color, myear); }
-Vehicle::~Vehicle() { stop_riding_me(); stop_preferring_me(); }
-short Vehicle::get_heat() const { return heat_; }
-void Vehicle::add_heat(short heat) { heat_ += heat; }
-long Vehicle::get_location() const { return location_; }
-void Vehicle::set_location(long new_location) { location_ = new_location; }
-const string& Vehicle::vtypeidname() const { return vtypeidname_; }
-long Vehicle::vtypeid() const { return vtypeid_; }
-const string& Vehicle::color() const { return color_; }
-bool Vehicle::displayscolor() const { return vehicletype[getvehicletype(vtypeidname_)]->displayscolor(); }
-int Vehicle::myear() const { return myear_; }
-long Vehicle::id() const { return id_; }
-int Vehicle::attackbonus(bool isDriver) const { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
-int Vehicle::gethitlocation(int bodypart) { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
-string Vehicle::getpartname(int hitlocation) { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
-int Vehicle::armorbonus(int hitlocation) const { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
-const string& Vehicle::longname() const { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
-const string& Vehicle::shortname() const { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }
-int Vehicle::steal_difficultytofind() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_difficultytofind(); }
-int Vehicle::steal_juice() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_juice(); }
-int Vehicle::steal_extraheat() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_extraheat(); }
-int Vehicle::sensealarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->sensealarmchance(); }
-int Vehicle::touchalarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->touchalarmchance(); }
-bool Vehicle::availableatshop() const { return vehicletype[getvehicletype(vtypeidname_)]->availableatshop(); }
-int Vehicle::price() const { return vehicletype[getvehicletype(vtypeidname_)]->price(); }
-int Vehicle::sleeperprice() const { return vehicletype[getvehicletype(vtypeidname_)]->sleeperprice(); }
-
-/* transforms a vehicle type id into the index of that vehicle type in the global vector */
-int getvehicletype(const int id)
-{
-	for (int i = 0; i < len(vehicletype); i++) if (vehicletype[i]->id() == id) return i;
-	return -1;
-}
-/* transforms a vehicle type idname into the index of that vehicle type in the global vector */
-int getvehicletype(const string &idname)
-{
-	for (int i = 0; i < len(vehicletype); i++) if (vehicletype[i]->idname() == idname) return i;
-	return -1;
-}
-
-int steal_difficultytofind(const int v) {
-	return vehicletype[v]->steal_difficultytofind();
-}
-int lenVehicleType() {
-	return len(vehicletype);
-}
-
-string vehicleTypelongname(const int p) {
-	return vehicletype[p]->longname();
-}
-
-Vehicle* getVehicleOfThisType(const int cartype) {
-	return new Vehicle(*vehicletype[cartype]);
-}
-
-Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year) {
-	return new Vehicle(*vehicletype[carchoice],
-		vehicletype[carchoice]->color()[colorchoice], year);
-}
-
-int getVehicleTypePrice(const int carchoice) {
-	return vehicletype[carchoice]->price();
-
-}
-
-int getVehicleTypeSleeperPrice(const int carchoice) {
-	return vehicletype[carchoice]->sleeperprice();
-}
-
-vector<string> getVehicleTypeColor(const int carchoice) {
-	return vehicletype[carchoice]->color();
-}
-
-bool vehicletypeavailableatshop(const int i) {
-	return vehicletype[i]->availableatshop();
-}
-string vehicleSportsCar;
-Vehicle* newSportsCar() {
-	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
-}
-
-void delete_and_clear_vehicle_types() {
-	delete_and_clear(vehicletype);
-}
-
-
-// #include "../includes.h"
-const string CONST_vehicletypeB061 = ": ";
-const string CONST_vehicletypeB060 = "::stealing: ";
-const string CONST_vehicletypeB055 = "::colors: ";
-const string CONST_vehicletypeB054 = "::year: ";
-const string CONST_vehicletypeB053 = "UNDEF";
-const string CONST_vehicletype063 = "Unknown element for vehicle type ";
-const string CONST_vehicletype062 = "::available_at_dealership: ";
-const string CONST_vehicletype061 = "Invalid boolean value for vehicle type ";
-const string CONST_vehicletype054 = "::colors::display_color: ";
-const string CONST_vehicletype051 = "::year::add_random_up_to_current_year: ";
-const string CONST_vehicletype049 = "::year::start_at_current_year: ";
-const string CONST_vehicletype047 = "LACKS IDNAME ";
-const string CONST_vehicletype046 = "UNDEFINED";
-
-const string tag_window = "window";
-//const string tag_body = "body";
-const string tag_Translucent = "Translucent";
-//const string tag_sleeperprice = "sleeperprice";
-//const string tag_price = "price";
-const string tag_available_at_dealership = "available_at_dealership";
-//const string tag_armor = "armor";
-const string tag_armor_midpoint = "armor_midpoint";
-const string tag_high_armor_max = "high_armor_max";
-const string tag_high_armor_min = "high_armor_min";
-const string tag_low_armor_max = "low_armor_max";
-const string tag_low_armor_min = "low_armor_min";
-const string tag_touch_alarm_chance = "touch_alarm_chance";
-const string tag_sense_alarm_chance = "sense_alarm_chance";
-const string tag_extra_heat = "extra_heat";
-//const string tag_juice = "juice";
-//const string tag_difficulty = "difficulty";
-const string tag_difficulty_to_find = "difficulty_to_find";
-const string tag_stealing = "stealing";
-//const string tag_shortname = "shortname";
-const string tag_longname = "longname";
-const string tag_passenger = "passenger";
-const string tag_driver = "driver";
-const string tag_attackbonus = "attackbonus";
-//const string tag_attack = "attack";
-const string tag_hardlimit = "hardlimit";
-const string tag_softlimit = "softlimit";
-const string tag_skillfactor = "skillfactor";
-//const string tag_skill = "skill";
-//const string tag_base = "base";
-const string tag_dodgebonus = "dodgebonus";
-const string tag_dodge = "dodge";
-const string tag_drivebonus = "drivebonus";
-const string tag_display_color = "display_color";
-//const string tag_color = "color";
-const string tag_colors = "colors";
-const string tag_add = "add";
-const string tag_add_random = "add_random";
-const string tag_add_random_up_to_current_year = "add_random_up_to_current_year";
-const string tag_start_at_year = "start_at_year";
-const string tag_start_at_current_year = "start_at_current_year";
-const string tag_year = "year";
-//const string blankString = "";
-//const string tag_idname = "idname";
-//const string tag_id = "id";
-// #include "../creature/creatureEnums.h"
-// #include "vehicletype.h"
-// #include "../common/stringconversion.h"
-//for atoi
-int VehicleType::number_of_vehicletypes = 0;
-VehicleType::VehicleType(MCD_STR xmlstring)
-	: /*idname_(CONST_vehicletype046), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
-	year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
-	longname_(CONST_vehicletype046), shortname_(CONST_vehicletypeB053),
-	drivebonus_(0), drivebonus_factor_(1), drivebonus_limit1_(8), drivebonus_limit2_(99),
-	dodgebonus_(0), dodgebonus_factor_(1), dodgebonus_limit1_(8), dodgebonus_limit2_(99),
-	attackbonus_driver_(-2), attackbonus_passenger_(0),
-	armormidpoint_(50), lowarmormin_(4), lowarmormax_(6), higharmormin_(0), higharmormax_(2),
-	steal_difficultytofind_(1), steal_juice_(0), steal_extraheat_(0),
-	sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111)
-{
-	id_ = number_of_vehicletypes++;
-	CMarkup xmlfile;
-	xmlfile.SetDoc(xmlstring);
-	xmlfile.FindElem();
-	idname_ = xmlfile.GetAttrib(tag_idname);
-	if (idname_ == blankString)
-		idname_ = CONST_vehicletype047 + tostring(id_);
-	xmlfile.IntoElem();
-	while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
-	{
-		std::string element = xmlfile.GetTagName();
-		if (element == tag_year)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_start_at_current_year)
-				{
-					int b = stringtobool(xmlfile.GetData());
-					if (b == 1)
-						year_startcurrent_ = true;
-					else if (b == 0)
-						year_startcurrent_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype049 << xmlfile.GetData() << std::endl;*/
-				}
-				else if (element == tag_start_at_year)
-					year_start_ = atoi(xmlfile.GetData());
-				else if (element == tag_add_random_up_to_current_year)
-				{
-					int b = stringtobool(xmlfile.GetData());
-					if (b == 1)
-						year_randomuptocurrent_ = true;
-					else if (b == 0)
-						year_randomuptocurrent_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype051 << xmlfile.GetData() << std::endl;*/
-				}
-				else if (element == tag_add_random)
-					year_addrandom_ = atoi(xmlfile.GetData());
-				else if (element == tag_add)
-					year_add_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB054
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_colors)
-		{
-			xmlfile.IntoElem();
-			//std::string color;
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_color)
-				{
-					color_.push_back(xmlfile.GetData());
-				}
-				else if (element == tag_display_color)
-				{
-					int b = stringtobool(xmlfile.GetData());
-					if (b == 1)
-						displaycolor_ = true;
-					else if (b == 0)
-						displaycolor_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype054 << xmlfile.GetData() << std::endl;*/
-				}
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB055
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_drivebonus)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_base)
-					drivebonus_ = atoi(xmlfile.GetData());
-				else if (element == tag_skillfactor)
-					drivebonus_factor_ = atof(xmlfile.GetData());
-				else if (element == tag_softlimit)
-					drivebonus_limit1_ = atoi(xmlfile.GetData());
-				else if (element == tag_hardlimit)
-					drivebonus_limit2_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_dodgebonus)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_base)
-					dodgebonus_ = atoi(xmlfile.GetData());
-				else if (element == tag_skillfactor)
-					dodgebonus_factor_ = atof(xmlfile.GetData());
-				else if (element == tag_softlimit)
-					dodgebonus_limit1_ = atoi(xmlfile.GetData());
-				else if (element == tag_hardlimit)
-					dodgebonus_limit2_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_attackbonus)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_driver)
-					attackbonus_driver_ = atoi(xmlfile.GetData());
-				else if (element == tag_passenger)
-					attackbonus_passenger_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_longname)
-			longname_ = xmlfile.GetData();
-		else if (element == tag_shortname)
-		{
-			shortname_ = xmlfile.GetData();
-			if (len(shortname_) > 7)
-				shortname_.resize(7); //Only seven characters allowed for shortname_.
-		}
-		else if (element == tag_stealing)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_difficulty_to_find)
-					steal_difficultytofind_ = atoi(xmlfile.GetData());
-				else if (element == tag_juice)
-					steal_juice_ = atoi(xmlfile.GetData());
-				else if (element == tag_extra_heat)
-					steal_extraheat_ = atoi(xmlfile.GetData());
-				else if (element == tag_sense_alarm_chance)
-					sensealarmchance_ = atoi(xmlfile.GetData());
-				else if (element == tag_touch_alarm_chance)
-					touchalarmchance_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_armor)
-		{
-			xmlfile.IntoElem();
-			while (xmlfile.FindElem())
-			{
-				element = xmlfile.GetTagName();
-				if (element == tag_low_armor_min)
-					lowarmormin_ = atoi(xmlfile.GetData());
-				else if (element == tag_low_armor_max)
-					lowarmormax_ = atoi(xmlfile.GetData());
-				else if (element == tag_high_armor_min)
-					higharmormin_ = atoi(xmlfile.GetData());
-				else if (element == tag_high_armor_max)
-					higharmormax_ = atoi(xmlfile.GetData());
-				else if (element == tag_armor_midpoint)
-					armormidpoint_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
-			}
-			xmlfile.OutOfElem();
-		}
-		else if (element == tag_available_at_dealership)
-		{
-			int b = stringtobool(xmlfile.GetData());
-			if (b == 1)
-				availableatshop_ = true;
-			else if (b == 0)
-				availableatshop_ = false;
-			/*else
-			std::cerr << CONST_vehicletype061 << idname
-			<< CONST_vehicletype062 << xmlfile.GetData() << std::endl;*/
-		}
-		else if (element == tag_price)
-			price_ = atoi(xmlfile.GetData());
-		else if (element == tag_sleeperprice)
-			sleeperprice_ = atoi(xmlfile.GetData());
-		/*else
-		std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB061 << element
-		<< std::endl;*/
-	}
-	if (len(color_) == 0)
-		color_.push_back(tag_Translucent); //Default.
-										   //xmlfile.OutOfElem();
-}
-int VehicleType::makeyear() const
-{
+	extern int ustat_recruits;
+	extern int ustat_kidnappings;
+	extern int ustat_dead;
+	extern int ustat_kills;
+	extern int ustat_funds;
+	extern int ustat_spent;
+	extern int ustat_buys;
+	extern int ustat_burns;
+	extern int stat_buys;
+	extern int stat_burns;
+	extern int stat_kidnappings;
 	extern int year;
-	int myear = 0;
-	if (year_startcurrent_)
-		myear = year;
-	else
-		myear = year_start_;
-	if (year_randomuptocurrent_)
-		myear += LCSrandom(year - year_start_ + 1);
-	if (year_addrandom_ > 0)
-		myear += LCSrandom(year_addrandom_);
-	else if (year_addrandom_ < 0)
-		myear -= LCSrandom(-year_addrandom_);
-	myear += year_add_;
-	return myear;
-}
-int VehicleType::gethitlocation(int bodypart)
-{
-	switch (bodypart)
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int stat_recruits;
+	extern int yourscore;
+	extern int month;
+	extern class Ledger ledger;
+	extern int version;
+	//	extern char slogan[SLOGAN_LEN];
+	extern string slogan_str;
+	loadhighscores();
+	//MERGE THE STATS
+	ustat_recruits += stat_recruits;
+	ustat_dead += stat_dead;
+	ustat_kills += stat_kills;
+	ustat_kidnappings += stat_kidnappings;
+	ustat_funds += ledger.total_income;
+	ustat_spent += ledger.total_expense;
+	ustat_buys += stat_buys;
+	ustat_burns += stat_burns;
+	//PLACE THIS HIGH SCORE BY DATE IF NECESSARY
+	yourscore = -1;
+	for (int s = 0; s < SCORENUM; s++)
 	{
-	case BODYPART_HEAD:
-		return CARPART_WINDOW;
-	case BODYPART_BODY:
-	case BODYPART_ARM_RIGHT:
-	case BODYPART_ARM_LEFT:
-		return (LCSrandom(100) < armormidpoint_) ? CARPART_BODY : CARPART_WINDOW;
-	case BODYPART_LEG_RIGHT:
-	case BODYPART_LEG_LEFT:
-		return CARPART_BODY;
-	default:
-		return CARPART_WINDOW;
+		if ((endtype == END_WON && score[s].endtype == END_WON &&
+			year == score[s].year&&month == score[s].month&&
+			ledger.total_expense + ledger.total_expense > score[s].stat_spent + score[s].stat_funds) ||
+			(endtype == END_WON && score[s].endtype == END_WON
+				&& (year < score[s].year ||
+				(year == score[s].year && month < score[s].month))) ||
+					(endtype == END_WON && score[s].endtype != END_WON) ||
+			(endtype != END_WON && score[s].endtype != END_WON &&
+				ledger.total_expense + ledger.total_income > score[s].stat_spent + score[s].stat_funds) ||
+			score[s].valid == 0)
+		{
+			for (int s2 = SCORENUM - 1; s2 >= s + 1; s2--)
+			{
+				score[s2] = score[s2 - 1];
+			}
+			strcpy(score[s].slogan, slogan_str.c_str());
+			score[s].month = month;
+			score[s].year = year;
+			score[s].stat_recruits = stat_recruits;
+			score[s].stat_dead = stat_dead;
+			score[s].stat_kills = stat_kills;
+			score[s].stat_kidnappings = stat_kidnappings;
+			score[s].stat_funds = ledger.total_income;
+			score[s].stat_spent = ledger.total_expense;
+			score[s].stat_buys = stat_buys;
+			score[s].stat_burns = stat_burns;
+			score[s].valid = 1;
+			score[s].endtype = endtype;
+			yourscore = s;
+			break;
+		}
 	}
-}
-string VehicleType::getpartname(int location)
-{
-	return location == CARPART_WINDOW ? tag_window : tag_body;
-}
-int VehicleType::armorbonus(int location)
-{
-	switch (location)
+	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB003.c_str(), LCSIO_PRE_HOME);
+	if (h != NULL)
 	{
-	case CARPART_BODY:
-		return LCSrandom(lowarmormax_ - lowarmormin_ + 1) + lowarmormin_;
-	case CARPART_WINDOW:
-		return LCSrandom(higharmormax_ - higharmormin_ + 1) + higharmormin_;
-	default:
-		return 0;
+		int lversion = version;
+		fwrite(&lversion, sizeof(int), 1, h);
+		for (saveLoadChunk s : highScoreSaveLoad) {
+			fwrite(s.Buffer, s.ElementSize, s.ElementCount, h);
+		}
+		LCSCloseFile(h);
 	}
+	title_screen::getInstance().reset();
 }
-int VehicleType::modifieddriveskill(int skillLevel)
-{
-	int score = (int)floor((skillLevel + drivebonus_)*drivebonus_factor_);
-	if (score < drivebonus_limit1_)
-		return score;
-	if (score > drivebonus_limit1_)
-		score = (score + drivebonus_limit1_) / 2; // half credit after limit1
-	return (score > drivebonus_limit2_) ? drivebonus_limit2_ : score;
-}
-int VehicleType::modifieddodgeskill(int skillLevel)
-{
-	int score = (int)floor((skillLevel + dodgebonus_)*dodgebonus_factor_);
-	if (score < dodgebonus_limit1_)
-		return score;
-	if (score > dodgebonus_limit1_)
-		score = (score + dodgebonus_limit1_) / 2; // half credit after limit1
-	return (score > dodgebonus_limit2_) ? dodgebonus_limit2_ : score;
-}
-const string& VehicleType::idname() const { return idname_; }
-long VehicleType::id() const { return id_; }
-const vector<string>& VehicleType::color() const { return color_; }
-bool VehicleType::displayscolor() const { return displaycolor_; }
-const string& VehicleType::longname() const { return longname_; }
-const string& VehicleType::shortname() const { return shortname_; }
-int VehicleType::attackbonus(bool isDriving) const { return isDriving ? attackbonus_driver_ : attackbonus_passenger_; }
-int VehicleType::steal_difficultytofind() const { return steal_difficultytofind_; }
-int VehicleType::steal_juice() const { return steal_juice_; }
-int VehicleType::steal_extraheat() const { return steal_extraheat_; }
-int VehicleType::sensealarmchance() const { return sensealarmchance_; }
-int VehicleType::touchalarmchance() const { return touchalarmchance_; }
-bool VehicleType::availableatshop() const { return availableatshop_; }
-int VehicleType::price() const { return price_; }
-int VehicleType::sleeperprice() const { return sleeperprice_; }
 
+extern vector<ArmorType *> armortype;
+Armor::Armor(const int seed, int quality, int number)
+	: Item(*armortype[seed], number), bloody_(false), damaged_(false), quality_(quality)
+{ }

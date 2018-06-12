@@ -407,3 +407,10 @@ Cleaned up formatting.
 Slogans no longer have a 1/20 chance of using default_slogans.txt
 
 Initiating process for single cpp file.
+Moved nearly all source code to activate.cpp
+
+All usage of keyword extern limited to the function scope, except for instances past line 52_384 (of 53_200 lines)
+and extern string closeParenthesis;
+Located in locationsPool.cpp
+
+5_260 instances of "//"  Includes commented code that mostly can be removed.
