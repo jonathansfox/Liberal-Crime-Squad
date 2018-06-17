@@ -414,3 +414,23 @@ and extern string closeParenthesis;
 Located in locationsPool.cpp
 
 5_260 instances of "//"  Includes commented code that mostly can be removed.
+New file simpleFunctions.cpp
+Transfered a few functions out of activate.cpp that do not require anything other than constants and enumerators.
+Note that it currently has #include "includes.h"
+This will eventually be replaced.
+
+Created new struct and function 
+struct fullName {
+	string first;
+	string middle;
+	string last;
+
+};
+fullName generate_long_name(char gender);
+Probably not going to fully implement it.
+moved constructPositiveEventStory(view); and constructNegativeEventStory(view); to simpleFunctions.cpp
+Nearly at the point where this part of news stories can be stored externally.
+
+Deleted bulk of useless comments (the #include "" and such, redundant copyright information, artefacts from multiple file version)
+It's astonishing how much faster 'single file version' compiles.  Working out the issues to make 'multiple file version' compile just as quickly is still a priority.
+The .exe even has a smaller filesize.  1672 KB instead of 1739 KB, though this is considered only academically interesting.

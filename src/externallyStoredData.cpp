@@ -1141,15 +1141,7 @@ struct stringAndColor
 	stringAndColor(ColorSetup type_, string str_) : str(str_), type(type_) { }
 };
 int getLawFromFlag(int type);
-int getLawFromFlag(int type) {
-	if (type == LAWFLAG_BURNFLAG) {
-		return LAW_FLAGBURNING;
-	}
-	else if (type == LAWFLAG_HIREILLEGAL) {
-		return LAW_IMMIGRATION;
-	}
-	return 0;
-}
+
 // from activities.cpp
 extern string study_string1;
 extern string study_string2;
