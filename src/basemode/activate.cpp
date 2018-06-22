@@ -129,7 +129,7 @@ string commaSpace;
 int classlist = 0;
 void listclasses(Creature *cr)
 {
-	const string CONST_activate007 = "6 - Other classes";
+	const string CONST_activate007 = "Other classes";
 	const string CONST_activate006 = "Classes cost $60 a day. Study what?";
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 40, CONST_activate006);
@@ -138,12 +138,11 @@ void listclasses(Creature *cr)
 		if (i + classlist < len(data_lessons))
 		{
 			set_color_easy(cr->activity.type == data_lessons[i + classlist].activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(12 + i, 40, to_string(i + 1).c_str());
-			addstrAlt(spaceDashSpace); addstrAlt(data_lessons[i + classlist].str);
+			mvaddstrAlt(12 + i, 40, to_string(i + 1) + spaceDashSpace + data_lessons[i + classlist].str);
 		}
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(17, 40, CONST_activate007);
+	mvaddstrAlt(17, 40, to_string(6) + spaceDashSpace + CONST_activate007);
 }
 void updateclasschoice(Creature *cr, char choice)
 {
@@ -1248,7 +1247,6 @@ void activate()
 
 #include "../combat/fight.h"
 
-//const string singleDot = ".";
 const string CONST_recruit013 = "Adventures in Liberal Recruitment";
 const string CONST_recruit012 = "Press enter or escape to call it a day.";
 const string CONST_recruit011 = "%c - ";
@@ -4776,10 +4774,8 @@ const string CONST_armortype043 = "::body_covering::head: ";
 const string CONST_armortype041 = "::body_covering::body: ";
 const string CONST_armortype037 = "::armor::fireprotection: ";
 const string CONST_armortype035 = "::deathsquad_legality: ";
-//const string blankString = "";
 const string tag_durability = "durability";
 const string tag_qualitylevels = "qualitylevels";
-//const string tag_quality = "quality";
 const string tag_description = "description";
 const string tag_surprise = "surprise";
 const string tag_mask = "mask";
@@ -4802,7 +4798,6 @@ const string tag_body_covering = "body_covering";
 const string tag_fire = "fire";
 const string tag_fireprotection = "fireprotection";
 const string tag_limbs = "limbs";
-//const string tag_armor = "armor";
 const string tag_can_get_damaged = "can_get_damaged";
 const string tag_can_get_bloody = "can_get_bloody";
 const string tag_deathsquad_legality = "deathsquad_legality";
@@ -5236,7 +5231,6 @@ string enter_done;
 string chooseALiberalTo;
 string string_sleeper;
 vector<string> vehicleParagraph;
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> baseactions_text_file_collection = {
 	customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
 };
@@ -5621,8 +5615,6 @@ bool show_disbanding_screen(int& oldforcemonth)
 	const string CONST_basemode014 = ", 2nd Term";
 	const string CONST_basemode013 = ", 1st Term";
 	const string CONST_basemode012 = "President: ";
-	const string CONST_basemode007 = "OEM United States - Codepage 437";
-	const string CONST_basemode006 = "Open With...";
 	extern MusicClass music;
 	extern int year;
 	extern int month;
@@ -6267,7 +6259,6 @@ vector<string> carchase_obstacle_truck_pulls_out;
 vector<string> carchase_obstacle_cross_traffic;
 vector<string> carchase_obstacle_child;
 const string chase = "chase\\";
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> chase_text_file_collection = {
 	/*chase.cpp*/
 	customText(&car_speed, chase + CONST_chase006),
@@ -8034,7 +8025,6 @@ const string CONST_weapontype064 = "::can_take_hostages: ";
 
 const string tag_chance_causes_debris = "chance_causes_debris";
 const string tag_chance = "chance";
-//const string tag_fire = "fire";
 const string tag_severtype = "severtype";
 const string tag_fixed_damage = "fixed_damage";
 const string tag_random_damage = "random_damage";
@@ -8042,7 +8032,6 @@ const string tag_hits_required = "hits_required";
 const string tag_critical = "critical";
 const string tag_no = "no";
 const string tag_no_DR_for_limbs_chance = "no_damage_reduction_for_limbs_chance";
-//const string tag_armor = "armor";
 const string tag_armorpiercing = "armorpiercing";
 const string tag_damages_armor = "damages_armor";
 const string tag_bleeding = "bleeding";
@@ -8057,14 +8046,12 @@ const string tag_strength_min = "strength_min";
 const string tag_successive_attacks_difficulty = "successive_attacks_difficulty";
 const string tag_number_attacks = "number_attacks";
 const string tag_accuracy_bonus = "accuracy_bonus";
-//const string tag_skill = "skill";
 const string tag_hit_punctuation = "hit_punctuation";
 const string tag_always_describe_hit = "always_describe_hit";
 const string tag_hit_description = "hit_description";
 const string tag_attack = "attack";
 const string tag_attack_description = "attack_description";
 const string tag_ammotype = "ammotype";
-//const string tag_ammo = "ammo";
 const string tag_can_backstab = "can_backstab";
 const string tag_thrown = "thrown";
 const string tag_ranged = "ranged";
@@ -8083,13 +8070,11 @@ const string tag_can_threaten_hostages = "can_threaten_hostages";
 const string tag_threatening = "threatening";
 const string tag_can_take_hostages = "can_take_hostages";
 const string tag_shortname_future = "shortname_future";
-//const string tag_shortname = "shortname";
 const string tag_shortname_future_sub_2 = "shortname_future_sub_2";
 const string tag_shortname_future_sub_1 = "shortname_future_sub_1";
 const string tag_shortname_sub_2 = "shortname_sub_2";
 const string tag_shortname_sub_1 = "shortname_sub_1";
 const string tag_name_future = "name_future";
-//const string tag_name = "name";
 const string tag_name_future_sub_2 = "name_future_sub_2";
 const string tag_name_future_sub_1 = "name_future_sub_1";
 const string tag_name_sub_2 = "name_sub_2";
@@ -8871,7 +8856,6 @@ const string tag_ZSTART = "ZSTART";
 const string tag_Y = "Y";
 const string tag_YEND = "YEND";
 const string tag_YSTART = "YSTART";
-//const string tag_X = "X";
 const string tag_XEND = "XEND";
 const string tag_XSTART = "XSTART";
 const string tag_STAIRS_RANDOM = "STAIRS_RANDOM";
@@ -10102,9 +10086,7 @@ const string CONST_sitemode076 = "Your hostage is free.";
 const string CONST_sitemode075 = "Your hostages are free.";
 const string CONST_sitemode074 = "The police subdue and arrest the squad.";
 
-//const string tag_WEAPON = "WEAPON";
 const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-//const string tag_LOOT = "LOOT";
 const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
 const string tag_LOOT_CHEAPJEWELERY = "LOOT_CHEAPJEWELERY";
 const string tag_LOOT_TRINKET = "LOOT_TRINKET";
@@ -10169,7 +10151,6 @@ const string tag_WEAPON_GUITAR = "WEAPON_GUITAR";
 const string tag_LOOT_DIRTYSOCK = "LOOT_DIRTYSOCK";
 const string tag_LOOT_KIDART = "LOOT_KIDART";
 const string tag_ARMOR_TOGA = "ARMOR_TOGA";
-//const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
 const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
 const string tag_WEAPON_CROWBAR = "WEAPON_CROWBAR";
@@ -13181,7 +13162,6 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
 }
 map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
-//const string mostlyendings = "mostlyendings\\";
 const string CONST_commonactions009 = "methodOfSorting.txt";
 vector<file_and_text_collection> common_text_file_collection = {
 	customText(&methodOfSorting, mostlyendings + CONST_commonactions009),
@@ -13524,160 +13504,124 @@ const string CONST_commondisplay177 = "No Tongue";
 const string tag_0 = "0";
 
 std::string gettitle(Creature &cr);
-
+map<int, map<bool, ColorSetup> > alignmentColors = {
+	// Liberal activism
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_ARCHCONSERVATIVE, {map<bool, ColorSetup>::value_type(true, RED_ON_BLACK_BRIGHT)}),
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_CONSERVATIVE, {map<bool, ColorSetup>::value_type(true, MAGENTA_ON_BLACK_BRIGHT), map<bool, ColorSetup>::value_type(false, RED_ON_BLACK_BRIGHT)}),
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_MODERATE, {map<bool, ColorSetup>::value_type(true, YELLOW_ON_BLACK_BRIGHT)}),
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_LIBERAL, {map<bool, ColorSetup>::value_type(true, CYAN_ON_BLACK_BRIGHT), map<bool, ColorSetup>::value_type(false, GREEN_ON_BLACK_BRIGHT)}),
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_ELITELIBERAL, {map<bool, ColorSetup>::value_type(true, GREEN_ON_BLACK_BRIGHT)}),
+	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_STALINIST, {map<bool, ColorSetup>::value_type(true, RED_ON_BLACK_BRIGHT)}),
+};
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
 void set_alignment_color(short alignment, bool extended_range)
 {
-	switch (alignment)
-	{
-	case ALIGN_ARCHCONSERVATIVE:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_CONSERVATIVE:
-		if (extended_range)
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-		else set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_MODERATE:
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_LIBERAL:
-		if (extended_range)
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		else set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_ELITELIBERAL:
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_STALINIST:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-	default: // This should not happen! Set a strange color to indicate an error!
+	if (alignmentColors.count(alignment)) {
+		if (alignmentColors[alignment].count(extended_range)) {
+			set_color_easy(alignmentColors[alignment][extended_range]);
+		}
+		else {
+			set_color_easy(alignmentColors[alignment][true]);
+		}
+	}
+	else {
+		// This should not happen! Set a strange color to indicate an error!
 		set_color_easy(YELLOW_ON_RED_BRIGHT_BLINK);
-		break;
 	}
 }
+map<int, ColorSetup> activityColors = {
+	// Liberal activism
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_LIBERAL, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_TROUBLE, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_GRAFFITI, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_DOS_ATTACKS, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_HACKING, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_WRITE_LETTERS, GREEN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_WRITE_GUARDIAN, GREEN_ON_BLACK_BRIGHT),
+	// Recruitment
+	map<int, ColorSetup>::value_type(ACTIVITY_RECRUITING, GREEN_ON_BLACK),
+	// Less exciting liberal activities
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_SPY, BLUE_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_COMMUNITYSERVICE, BLUE_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_POLLS, BLUE_ON_BLACK_BRIGHT),
+	// Stealing things
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_STEAL, CYAN_ON_BLACK),
+	map<int, ColorSetup>::value_type(ACTIVITY_WHEELCHAIR, CYAN_ON_BLACK),
+	map<int, ColorSetup>::value_type(ACTIVITY_STEALCARS, CYAN_ON_BLACK),
+	// Illegal fundraising
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_EMBEZZLE, RED_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_SELL_DRUGS, RED_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_PROSTITUTION, RED_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_CCFRAUD, RED_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_DOS_RACKET, RED_ON_BLACK_BRIGHT),
+	// Legal fundraising
+	map<int, ColorSetup>::value_type(ACTIVITY_DONATIONS, CYAN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_SELL_TSHIRTS, CYAN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_SELL_ART, CYAN_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_SELL_MUSIC, CYAN_ON_BLACK_BRIGHT),
+	// Clothing/garment stuff
+	map<int, ColorSetup>::value_type(ACTIVITY_REPAIR_ARMOR, CYAN_ON_BLACK),
+	map<int, ColorSetup>::value_type(ACTIVITY_MAKE_ARMOR, CYAN_ON_BLACK),
+	// Teaching
+	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_POLITICS, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_FIGHTING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_COVERT, MAGENTA_ON_BLACK_BRIGHT),
+	//and studying
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DEBATING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MARTIAL_ARTS, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DRIVING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_PSYCHOLOGY, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_FIRST_AID, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_LAW, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DISGUISE, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_SCIENCE, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_BUSINESS, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_GYMNASTICS, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_ART, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MUSIC, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_TEACHING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WRITING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_LOCKSMITHING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COMPUTERS, MAGENTA_ON_BLACK_BRIGHT),
+	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COOKING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_FENCING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WEAVING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_RELIGION, MAGENTA_ON_BLACK_BRIGHT),
+	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MAGIC, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_CLUB, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_STREETSENSE, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_THROWING, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_STEALTH, MAGENTA_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_SEDUCTION, MAGENTA_ON_BLACK_BRIGHT),
+	// Interrogating
+	map<int, ColorSetup>::value_type(ACTIVITY_HOSTAGETENDING, YELLOW_ON_BLACK_BRIGHT),
+	// Dealing with your injuries
+	map<int, ColorSetup>::value_type(ACTIVITY_CLINIC, RED_ON_BLACK),
+	// Doing something Conservative
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_CONSERVATIVE, RED_ON_BLACK_BRIGHT),
+	// Dealing with the dead
+	map<int, ColorSetup>::value_type(ACTIVITY_BURY, BLACK_ON_BLACK_BRIGHT),
+	// Nothing terribly important
+	map<int, ColorSetup>::value_type(ACTIVITY_HEAL, WHITE_ON_BLACK),// Identical to none in practice
+	map<int, ColorSetup>::value_type(ACTIVITY_NONE, WHITE_ON_BLACK),
+	// Going somewhere
+	map<int, ColorSetup>::value_type(ACTIVITY_VISIT, YELLOW_ON_BLACK_BRIGHT),
+	// Quitting being a sleeper to join the LCS
+	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_JOINLCS, RED_ON_BLACK_BRIGHT),
+	map<int, ColorSetup>::value_type(ACTIVITY_AUGMENT, BLUE_ON_BLACK_BRIGHT),
+};
 // Sets the text color per activity type
 void set_activity_color(long activity_type)
 {
-	switch (activity_type)
-	{
-		// Liberal actvism
-	case ACTIVITY_SLEEPER_LIBERAL:
-	case ACTIVITY_TROUBLE:
-	case ACTIVITY_GRAFFITI:
-	case ACTIVITY_DOS_ATTACKS:
-	case ACTIVITY_HACKING:
-	case ACTIVITY_WRITE_LETTERS:
-	case ACTIVITY_WRITE_GUARDIAN:
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		break;
-		// Recruitment
-	case ACTIVITY_RECRUITING:
-		set_color_easy(GREEN_ON_BLACK);
-		break;
-		// Less exciting liberal activities
-	case ACTIVITY_SLEEPER_SPY:
-	case ACTIVITY_COMMUNITYSERVICE:
-	case ACTIVITY_POLLS:
-		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		break;
-		// Stealing things
-	case ACTIVITY_SLEEPER_STEAL:
-	case ACTIVITY_WHEELCHAIR:
-	case ACTIVITY_STEALCARS:
-		set_color_easy(CYAN_ON_BLACK);
-		break;
-		// Illegal fundraising
-	case ACTIVITY_SLEEPER_EMBEZZLE:
-	case ACTIVITY_SELL_DRUGS:
-	case ACTIVITY_PROSTITUTION:
-	case ACTIVITY_CCFRAUD:
-	case ACTIVITY_DOS_RACKET:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-		// Legal fundraising
-	case ACTIVITY_DONATIONS:
-	case ACTIVITY_SELL_TSHIRTS:
-	case ACTIVITY_SELL_ART:
-	case ACTIVITY_SELL_MUSIC:
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		break;
-		// Clothing/garment stuff
-	case ACTIVITY_REPAIR_ARMOR:
-	case ACTIVITY_MAKE_ARMOR:
-		set_color_easy(CYAN_ON_BLACK);
-		break;
-		// Teaching
-	case ACTIVITY_TEACH_POLITICS:
-	case ACTIVITY_TEACH_FIGHTING:
-	case ACTIVITY_TEACH_COVERT:
-		//and studying
-	case ACTIVITY_STUDY_DEBATING:
-	case ACTIVITY_STUDY_MARTIAL_ARTS:
-	case ACTIVITY_STUDY_DRIVING:
-	case ACTIVITY_STUDY_PSYCHOLOGY:
-	case ACTIVITY_STUDY_FIRST_AID:
-	case ACTIVITY_STUDY_LAW:
-	case ACTIVITY_STUDY_DISGUISE:
-	case ACTIVITY_STUDY_SCIENCE:
-	case ACTIVITY_STUDY_BUSINESS:
-	case ACTIVITY_STUDY_GYMNASTICS:
-	case ACTIVITY_STUDY_ART:
-	case ACTIVITY_STUDY_MUSIC:
-	case ACTIVITY_STUDY_TEACHING:
-	case ACTIVITY_STUDY_WRITING:
-	case ACTIVITY_STUDY_LOCKSMITHING:
-	case ACTIVITY_STUDY_COMPUTERS:
-		//case ACTIVITY_STUDY_COOKING:
-	case ACTIVITY_STUDY_FENCING:
-	case ACTIVITY_STUDY_WEAVING:
-	case ACTIVITY_STUDY_RELIGION:
-		//case ACTIVITY_STUDY_MAGIC:
-	case ACTIVITY_STUDY_CLUB:
-	case ACTIVITY_STUDY_STREETSENSE:
-	case ACTIVITY_STUDY_THROWING:
-	case ACTIVITY_STUDY_STEALTH:
-	case ACTIVITY_STUDY_SEDUCTION:
-		set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-		break;
-		// Interrogating
-	case ACTIVITY_HOSTAGETENDING:
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		break;
-		// Dealing with your injuries
-	case ACTIVITY_CLINIC:
-		set_color_easy(RED_ON_BLACK);
-		break;
-		// Doing something Conservative
-	case ACTIVITY_SLEEPER_CONSERVATIVE:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-		// Dealing with the dead
-	case ACTIVITY_BURY:
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		break;
-		// Nothing terribly important
-	case ACTIVITY_HEAL: // Identical to none in practice
-	case ACTIVITY_NONE:
-		set_color_easy(WHITE_ON_BLACK);
-		break;
-		// Going somewhere
-	case ACTIVITY_VISIT:
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		break;
-		// Quitting being a sleeper to join the LCS
-	case ACTIVITY_SLEEPER_JOINLCS:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-	case ACTIVITY_AUGMENT:
-		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		break;
-	default: // This should not happen! Set a strange color to indicate an error!
+	if (activityColors.count(activity_type)) {
+		set_color_easy(activityColors[activity_type]);
+	}
+	else {
+		// This should not happen! Set a strange color to indicate an error!
 		set_color_easy(YELLOW_ON_RED_BRIGHT);
-		break;
+			
 	}
 }
 /* draws a horizontal line across the screen */
@@ -14900,34 +14844,44 @@ void fullstatus(int p)
 	}
 }
 
-static char sbuf[81]; // used by addstr_f(), mvaddstr_f(), addstr_fl(), and mvaddstr_fl()
-#define FORMAT_OUTPUT  va_list args; \
-                       va_start(args,format); \
-                       vsnprintf(sbuf,81,format,args); \
-                       va_end(args);
-					  /*	addstr with formatted output	*/
 int addstr_f(const char * format, ...)
 {
-	FORMAT_OUTPUT
-		return addstrAlt(sbuf);
+	char sbuf[81];
+	va_list args;
+	va_start(args, format);
+	vsnprintf(sbuf, 81, format, args);
+	va_end(args);
+	return addstrAlt(sbuf);
 }
 /*	mvaddstr with formatted output	*/
 int mvaddstr_f(int y, int x, const char * format, ...)
 {
-	FORMAT_OUTPUT
-		return mvaddstrAlt(y, x, sbuf);
+	char sbuf[81];
+	va_list args;
+	va_start(args, format);
+	vsnprintf(sbuf, 81, format, args);
+	va_end(args);
+	return mvaddstrAlt(y, x, sbuf);
 }
 /*	addstr with formatted output and logging	*/
 int addstr_fl(Log &log, const char * format, ...)
 {
-	FORMAT_OUTPUT
-		return addstrAlt(sbuf, log);
+	char sbuf[81];
+	va_list args;
+	va_start(args, format);
+	vsnprintf(sbuf, 81, format, args);
+	va_end(args);
+	return addstrAlt(sbuf, log);
 }
 /*	mvaddstr with formatted output and logging	*/
 int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
 {
-	FORMAT_OUTPUT
-		return mvaddstrAlt(y, x, sbuf, log);
+	char sbuf[81];
+	va_list args;
+	va_start(args, format);
+	vsnprintf(sbuf, 81, format, args);
+	va_end(args);
+	return mvaddstrAlt(y, x, sbuf, log);
 }
 
 //#include "includes.h"
@@ -17141,36 +17095,10 @@ const string CONST_creaturetypes039 = "words_meaning_hick.txt";
 const string CONST_creaturetypesX01 = "CCS Lieutenant";
 const string CONST_creaturetypesX02 = "CCS Founder";
 
-//#define AGE_CHILD       7+LCSrandom(4)   /* child laborer */
-/* Age macros for characters */
-//#define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
-//#define AGE_MATURE      20+LCSrandom(40) /* most folks */
-//#define AGE_GRADUATE    26+LCSrandom(34) /* most folks, with 6-8 years college */
-//#define AGE_MIDDLEAGED  35+LCSrandom(25) /* for the more experienced types */
-//#define AGE_SENIOR      65+LCSrandom(30) /* ah, social security */
-/* Gender macros
-#define GIVE_GENDER_MALE                                       \
-if(lawList[LAW_WOMEN]==-2 ||                              \
-(lawList[LAW_WOMEN]==-1 && LCSrandom(25)) ||           \
-(lawList[LAW_WOMEN]==0 && LCSrandom(10)) ||            \
-(lawList[LAW_WOMEN]==1 && LCSrandom(4))) {             \
-cr.gender_conservative=cr.gender_liberal=GENDER_MALE; \
-}
-#define GIVE_GENDER_FEMALE                                     \
-if(lawList[LAW_WOMEN]==-2 ||                              \
-(lawList[LAW_WOMEN]==-1 && LCSrandom(25)) ||           \
-(lawList[LAW_WOMEN]==0 && LCSrandom(10)) ||            \
-(lawList[LAW_WOMEN]==1 && LCSrandom(4))) {             \
-cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE; \
-}
-*/
 #define AGE_TEENAGER    14+LCSrandom(4)  /* HS dropout, teenager, some fast food workers */
 #define AGE_YOUNGADULT  18+LCSrandom(18) /* young lads and ladies */
 vector<string> words_meaning_hick;
 vector<string> genetic_monster;
-// #include "../customMaps.h"
-// #include "../locations/locationsPool.h"
-//const string creature = "creature\\";
 vector<file_and_text_collection> creaturetypes_text_file_collection = {
 	/*creaturetypes.cpp*/
 	customText(&words_meaning_hick, creature + CONST_creaturetypes039),
@@ -20558,7 +20486,6 @@ string youDisappearedSafely;
 vector<string> conservativePrison;
 vector<string> stalinistPrison;
 vector<string> amendmentPass;
-//const string mostlyendings = "mostlyendings\\";
 // #include "../customMaps.h"
 vector<file_and_text_collection> endgame_text_file_collection = {
 	customText(&stalinAmendment, mostlyendings + CONST_endgame001),
@@ -21261,7 +21188,6 @@ vector<string> evasionStringsAlt;
 vector<string> evasionStrings;
 const string fighty = "fight\\";
 const int DOUBLE_LINE = 2;
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> fighty_text_file_collection = {
 	/*fight.cpp*/
 	customText(&escape_running, fighty + CONST_fight010),
@@ -24163,7 +24089,6 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 
 
 // #include "../includes.h"
-const string CONST_getnamesB037 = "C++ Source Code Editor (with encoding)";
 const string CONST_getnames045 = "getMonth.txt";
 const string CONST_getnames044 = "city_names.txt";
 const string CONST_getnames042 = "Buggy Software";
@@ -24301,8 +24226,6 @@ std::string getmonth(int month, bool shortname)
 		return getMonth[22 + (shortname ? 0 : 1)];
 	}
 }
-//const string names = "names\\";
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> get_names_text_file_collection = {
 	/*getnames.cpp*/
 	customText(&city_names, names + CONST_getnames044),
@@ -29065,7 +28988,6 @@ void fundreport(char &clearformess)
 
 
 // #include "../includes.h"
-const string CONST_liberalagendaB063 = "C++ Source Code Editor (with encoding)";
 const string CONST_liberalagenda066 = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
 const string CONST_liberalagenda065 = "Once these are Green, the country will have achieved Elite Liberal status.";
 const string CONST_liberalagenda064 = "Arch-Conservative";
@@ -29122,15 +29044,12 @@ const string CONST_liberalagenda011 = "supremeChars.txt";
 const string CONST_liberalagenda010 = "issue_phrases.txt";
 const string CONST_liberalagenda009 = "disbandingMessage.txt";
 
-//// #include "../common/getnames.h"
 string getlaw(int l);
-//// #include "../common/commonactions.h"
 void cleangonesquads();
 vector<string> supremeChars;
 vector<string> courtChars;
 string pressLToViewHighScores;
 map<short, vector<string> > endgameLawStrings;
-// #include "../common/creaturePool.h"
 enum Pages
 {
 	PAGE_LEADERS,
@@ -29142,7 +29061,6 @@ enum Pages
 };
 vector<string> disbandingMessage;
 vector<string> issue_phrases;
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> liberl_agenda_text_file_collection = {
 	customText(&disbandingMessage, mostlyendings + CONST_liberalagenda009),
 	customText(&issue_phrases, mostlyendings + CONST_liberalagenda010),
@@ -30095,22 +30013,15 @@ void initlocation(Location &loc)
 	}
 }
 
-// #include "../includes.h"
 const string CONST_loottype009 = "::cloth: ";
 const string CONST_loottype008 = "Invalid boolean value for loot type ";
 const string CONST_loottype007 = "::no_quick_fencing: ";
 const string CONST_loottype005 = "::stackable: ";
 
 const string tag_cloth = "cloth";
-//const string tag_no = "no";
 const string tag_no_quick_fencing = "no_quick_fencing";
 const string tag_stackable = "stackable";
-// #include "../creature/creatureEnums.h"
-// #include "../items/itemtype.h"
 #include "../items/loottype.h"
-//own header
-// #include "../common/stringconversion.h"
-//for stringtobool
 LootType::LootType(MCD_STR xmlstring)
 	: ItemType(xmlstring), stackable_(true),
 	no_quick_fencing_(false), cloth_(false)
@@ -30213,7 +30124,6 @@ void sextype(char *str)
 	strcpy(str, pickrandom(sextypeAcronym).c_str());
 }
 vector<string> listOfStates;
-//const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> misc_text_file_collection = {
 	customText(&sexdescAcronym, mostlyendings + CONST_misc001),
 	customText(&sexwhoAcronym, mostlyendings + CONST_misc002),
@@ -30544,13 +30454,10 @@ const string CONST_miscactions006 = "unlocks the cage";
 const string CONST_miscactions005 = "unlocks the door";
 const string CONST_miscactions004 = "was_abused.txt";
 
-//// #include "../common/commondisplay.h"
 void printparty();
 char securityable(int type);
 
 vector<string> was_abused;
-// #include "../customMaps.h"
-//const string activities = "activities\\";
 vector<file_and_text_collection> misc_activities_text_file_collection = {
 	/*miscactions.cpp*/
 	customText(&was_abused, activities + CONST_miscactions004),
@@ -30558,6 +30465,14 @@ vector<file_and_text_collection> misc_activities_text_file_collection = {
 void fillEncounter(CreatureTypes c, int numleft);
 map<short, string> discussIssues;
 map<short, string> discussesIssues;
+map<int, CheckDifficulty> unlockDifficulty = {
+	map<int, CheckDifficulty>::value_type(UNLOCK_CAGE,        DIFFICULTY_VERYEASY),
+	map<int, CheckDifficulty>::value_type(UNLOCK_CAGE_HARD,   DIFFICULTY_AVERAGE),
+	map<int, CheckDifficulty>::value_type(UNLOCK_CELL,        DIFFICULTY_FORMIDABLE),
+	map<int, CheckDifficulty>::value_type(UNLOCK_ARMORY,      DIFFICULTY_HEROIC),
+	map<int, CheckDifficulty>::value_type(UNLOCK_SAFE,        DIFFICULTY_HEROIC),
+	map<int, CheckDifficulty>::value_type(UNLOCK_VAULT,       DIFFICULTY_HEROIC),
+};
 char unlock(short type, char &actual)
 {
 	extern squadst *activesquad;
@@ -30565,22 +30480,18 @@ char unlock(short type, char &actual)
 	extern short cursite;
 	extern short fieldskillrate;
 	int difficulty = 0;
-	switch (type)
-	{
-	case UNLOCK_DOOR:
+	if (type == UNLOCK_DOOR) {
 		if (securityable(LocationsPool::getInstance().getLocationType(cursite)) == 1)
 			difficulty = DIFFICULTY_CHALLENGING;
 		else if (securityable(LocationsPool::getInstance().getLocationType(cursite)) > 1)
 			difficulty = DIFFICULTY_HARD;
 		else
 			difficulty = DIFFICULTY_EASY;
-		break;
-	case UNLOCK_CAGE:       difficulty = DIFFICULTY_VERYEASY; break;
-	case UNLOCK_CAGE_HARD:  difficulty = DIFFICULTY_AVERAGE; break;
-	case UNLOCK_CELL:       difficulty = DIFFICULTY_FORMIDABLE; break;
-	case UNLOCK_ARMORY:     difficulty = DIFFICULTY_HEROIC; break;
-	case UNLOCK_SAFE:       difficulty = DIFFICULTY_HEROIC; break;
-	case UNLOCK_VAULT:      difficulty = DIFFICULTY_HEROIC; break;
+	}
+	else {
+		if (unlockDifficulty.count(type)) {
+			difficulty = unlockDifficulty[type];
+		}
 	}
 	int maxattack = -1;
 	for (int p = 0; p < 6; p++)
@@ -31346,7 +31257,6 @@ string Money::equip_title() const
 
 
 // #include "../includes.h"
-const string CONST_monthlyB015 = "C++ Source Code Editor (with encoding)";
 const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
 const string CONST_monthly016 = "The last LCS members have all been hunted down.";
 const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
@@ -31360,8 +31270,6 @@ const string CONST_monthly005 = "Elite Liberal ";
 const string CONST_monthly004 = "컴�";
 const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
 const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
-const string CONST_monthly001 = "OEM United States - Codepage 437";
-const string CONST_monthly000 = "Open With...";
 
 //// #include "../common/commonactions.h"
 char endcheck(char cause);
@@ -34480,51 +34388,12 @@ const string tag_Manhattan_Island = "Manhattan Island";
 const string tag_Hollywood = "Hollywood";
 const string tag_Greater_Hollywood = "Greater Hollywood";
 const string tag_Long_Island = "Long Island";
-//const string tag_B = "B";
 const string tag_Brooklyn_and_Queens = "Brooklyn and Queens";
 const string tag_Outskirts_and_Orange_County = "Outskirts and Orange County";
 const string tag_Outskirts = "Outskirts";
 const string tag_Travel = "Travel";
 const string tag_Shopping = "Shopping";
-//const string tag_The = "The ";
-/*
-Copyright (c) 2002,2003,2004 by Tarn Adams //
-//
-This file is part of Liberal Crime Squad. //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify //
-it under the terms of the GNU General Public License as published by //
-the Free Software Foundation; either version 2 of the License, or //
-(at your option) any later version. //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful, //
-but WITHOUT ANY WARRANTY; without even the implied warranty of //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the //
-GNU General Public License for more details. //
-//
-You should have received a copy of the GNU General Public License //
-along with Liberal Crime Squad; if not, write to the Free Software //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA //
-*/
-/*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
-//TODO: Add logging for this file? --Addictgamer
-// #include "../creature/creature.h"
-// #include "../locations/locations.h"
-// #include "../common/commonactions.h"
-//// #include "../common/stringconversion.h"
-//inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest, src.c_str()); }
-//inline char* strcat(char* dest, const std::string& src) { return strcat(dest, src.c_str()); }
-//inline char* strcat(char* dest, long src) { return strcat(dest, tostring(src)); }
-// #include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
-// #include "../common/getnames.h"
-// #include "../common/misc.h"
-// cursesgraphics.h
+
 #define CH_BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL 0xc5
 #define CH_FULL_BLOCK 0xdb
 #define CH_LIGHT_SHADE 0xb0
@@ -34532,22 +34401,12 @@ the bottom of includes.h in the top src folder.
 #define CH_DARK_SHADE 0xb2
 // daily.h
 int monthday();
-// #include "../cursesAlternative.h"
-// #include "../set_color_support.h"
-// #include "../common/creaturePool.h"
-// #include "../locations/locationsPool.h"
 #include "../cursesmovie.h"
-//extern string singleSpace;
 vector<newsstoryst *> newsstory;
 newsstoryst* lastNewsStory() {
 	return newsstory[len(newsstory) - 1];
 }
-//extern string commaSpace;
-// #include "../common/musicClass.h"
-//extern char endgamestate;
 string ampersandR;
-//extern string spaceDashSpace;
-//extern string singleDot;
 string membersOfLCS;
 string lcsSpokeseperson;
 string policeSpokesperson;
@@ -34632,8 +34491,7 @@ vector<vector<string> > adListB;
 vector<vector<string> > adList;
 const int AD_LENGTH = 4;
 const string majorevent = "majorevent\\";
-//const string mostlyendings = "mostlyendings\\";
-// #include "../customMaps.h"
+
 vector<file_and_text_collection> majorevent_text_file_collection = {
 	/*majorevent.cpp*/
 	customText(&liberalCrime, majorevent + CONST_news019),
@@ -36312,6 +36170,95 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
 		break;
 	}
 }
+map<char, vector<Views> > siteViews = {
+	map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_COSMETICS,{
+			VIEW_ANIMALRESEARCH,
+			VIEW_WOMEN,
+		}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_GENETIC,{
+	VIEW_ANIMALRESEARCH,
+	VIEW_GENETICS,
+			}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_POLICESTATION,{
+	VIEW_POLICEBEHAVIOR,
+	VIEW_PRISONS,
+	VIEW_DRUGS,
+				}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_COURTHOUSE,{
+	VIEW_DEATHPENALTY,
+	VIEW_JUSTICES,
+	VIEW_FREESPEECH,
+	VIEW_GAY,
+	VIEW_WOMEN,
+	VIEW_CIVILRIGHTS,
+					}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_PRISON,{
+	VIEW_DEATHPENALTY,
+	VIEW_DRUGS,
+	VIEW_TORTURE,
+	VIEW_PRISONS,
+						}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_ARMYBASE,{
+	VIEW_TORTURE,
+	VIEW_MILITARY,
+							}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
+								}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,{
+	VIEW_INTELLIGENCE,
+	VIEW_TORTURE,
+	VIEW_PRISONS,
+									}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_SWEATSHOP,{
+	VIEW_SWEATSHOPS,
+	VIEW_IMMIGRATION,
+										}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_POLLUTER,{
+	VIEW_SWEATSHOPS,
+	VIEW_POLLUTION,
+											}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_NUCLEAR,{
+	VIEW_NUCLEARPOWER,
+												}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HEADQUARTERS,{
+	VIEW_TAXES,
+	VIEW_CORPORATECULTURE,
+	VIEW_WOMEN,
+													}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HOUSE,{
+	VIEW_TAXES,
+	VIEW_CEOSALARY,
+														}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_AMRADIO,{
+	VIEW_AMRADIO,
+	VIEW_FREESPEECH,
+	VIEW_GAY,
+	VIEW_WOMEN,
+	VIEW_CIVILRIGHTS,
+															}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_CABLENEWS,{
+	VIEW_CABLENEWS,
+	VIEW_FREESPEECH,
+	VIEW_GAY,
+	VIEW_WOMEN,
+	VIEW_CIVILRIGHTS,
+																}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_RESIDENTIAL_APARTMENT_UPSCALE,{
+	VIEW_TAXES,
+	VIEW_CEOSALARY,
+	VIEW_GUNCONTROL,
+																	}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_CIGARBAR,{
+	VIEW_TAXES,
+	VIEW_CEOSALARY,
+	VIEW_WOMEN,
+																		}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_BANK,{
+	VIEW_TAXES,
+	VIEW_CEOSALARY,
+	VIEW_CORPORATECULTURE,
+																			}),
+};
 void handle_public_opinion_impact(const newsstoryst &ns)
 {
 	// Check if this function is meant to handle public opinion impact
@@ -36376,96 +36323,13 @@ void handle_public_opinion_impact(const newsstoryst &ns)
 		if (ns.loc == -1) return;
 		// Location-specific issue impact
 		std::vector<int> issues;
-		switch (LocationsPool::getInstance().getLocationType(ns.loc))
-		{
-		case SITE_LABORATORY_COSMETICS:
-			issues.push_back(VIEW_ANIMALRESEARCH);
-			issues.push_back(VIEW_WOMEN);
-			break;
-		case SITE_LABORATORY_GENETIC:
-			issues.push_back(VIEW_ANIMALRESEARCH);
-			issues.push_back(VIEW_GENETICS);
-			break;
-		case SITE_GOVERNMENT_POLICESTATION:
-			issues.push_back(VIEW_POLICEBEHAVIOR);
-			issues.push_back(VIEW_PRISONS);
-			issues.push_back(VIEW_DRUGS);
-			break;
-		case SITE_GOVERNMENT_COURTHOUSE:
-			issues.push_back(VIEW_DEATHPENALTY);
-			issues.push_back(VIEW_JUSTICES);
-			issues.push_back(VIEW_FREESPEECH);
-			issues.push_back(VIEW_GAY);
-			issues.push_back(VIEW_WOMEN);
-			issues.push_back(VIEW_CIVILRIGHTS);
-			break;
-		case SITE_GOVERNMENT_PRISON:
-			issues.push_back(VIEW_DEATHPENALTY);
-			issues.push_back(VIEW_DRUGS);
-			issues.push_back(VIEW_TORTURE);
-			issues.push_back(VIEW_PRISONS);
-			break;
-		case SITE_GOVERNMENT_ARMYBASE:
-			issues.push_back(VIEW_TORTURE);
-			issues.push_back(VIEW_MILITARY);
-			break;
-		case SITE_GOVERNMENT_WHITE_HOUSE:
-			break;
-		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			issues.push_back(VIEW_INTELLIGENCE);
-			issues.push_back(VIEW_TORTURE);
-			issues.push_back(VIEW_PRISONS);
-			break;
-		case SITE_INDUSTRY_SWEATSHOP:
-			issues.push_back(VIEW_SWEATSHOPS);
-			issues.push_back(VIEW_IMMIGRATION);
-			break;
-		case SITE_INDUSTRY_POLLUTER:
-			issues.push_back(VIEW_SWEATSHOPS);
-			issues.push_back(VIEW_POLLUTION);
-			break;
-		case SITE_INDUSTRY_NUCLEAR:
-			issues.push_back(VIEW_NUCLEARPOWER);
-			break;
-		case SITE_CORPORATE_HEADQUARTERS:
-			issues.push_back(VIEW_TAXES);
-			issues.push_back(VIEW_CORPORATECULTURE);
-			issues.push_back(VIEW_WOMEN);
-			break;
-		case SITE_CORPORATE_HOUSE:
-			issues.push_back(VIEW_TAXES);
-			issues.push_back(VIEW_CEOSALARY);
-			break;
-		case SITE_MEDIA_AMRADIO:
-			issues.push_back(VIEW_AMRADIO);
-			issues.push_back(VIEW_FREESPEECH);
-			issues.push_back(VIEW_GAY);
-			issues.push_back(VIEW_WOMEN);
-			issues.push_back(VIEW_CIVILRIGHTS);
-			break;
-		case SITE_MEDIA_CABLENEWS:
-			issues.push_back(VIEW_CABLENEWS);
-			issues.push_back(VIEW_FREESPEECH);
-			issues.push_back(VIEW_GAY);
-			issues.push_back(VIEW_WOMEN);
-			issues.push_back(VIEW_CIVILRIGHTS);
-			break;
-		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			issues.push_back(VIEW_TAXES);
-			issues.push_back(VIEW_CEOSALARY);
-			issues.push_back(VIEW_GUNCONTROL);
-			break;
-		case SITE_BUSINESS_CIGARBAR:
-			issues.push_back(VIEW_TAXES);
-			issues.push_back(VIEW_CEOSALARY);
-			issues.push_back(VIEW_WOMEN);
-			break;
-		case SITE_BUSINESS_BANK:
-			issues.push_back(VIEW_TAXES);
-			issues.push_back(VIEW_CEOSALARY);
-			issues.push_back(VIEW_CORPORATECULTURE);
-			break;
+
+		if (siteViews.count(LocationsPool::getInstance().getLocationType(ns.loc))) {
+			for (Views v : siteViews[LocationsPool::getInstance().getLocationType(ns.loc)]){
+				issues.push_back(v);
+			}
 		}
+		
 		for (int i = 0; i < len(issues); i++)
 			change_public_opinion(issues[i], impact, squad_responsible, impact * 10);
 
@@ -37662,7 +37526,6 @@ void majornewspaper(char &clearformess, char canseethings)
 
 // #include "../includes.h"
 const string CONST_politics112 = "pro-Human Rights";
-const string CONST_politics111 = "return attitude[]";
 const string CONST_politics110 = "    ";
 const string CONST_politics109 = "None of the items made it to the President's desk.";
 const string CONST_politics107 = "*** VETO ***";
@@ -37674,8 +37537,6 @@ const string CONST_politics102 = "VP";
 const string CONST_politics100 = "Senate";
 const string CONST_politics099 = "House";
 const string CONST_politics098 = "Press any key to watch the votes unfold.";
-const string CONST_politics097 = "Expand Prisoners' Rights";
-const string CONST_politics096 = "Mandate Prison Rehabilitation";
 const string CONST_politics095 = "To ";
 const string CONST_politics094 = "Joint Resolution ";
 const string CONST_politics093 = "Legislative Agenda ";
@@ -38419,8 +38280,8 @@ void elections(char clearformess, char canseethings)
 			set_alignment_color(propdir[p]);
 			if (propdir[p] == 1) {
 				if (prop[p] == LAW_PRISONS) {
-					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform); // was CONST_politics096
-					else addstrAlt(improvePrisonConditions); // was CONST_politics097
+					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
+					else addstrAlt(improvePrisonConditions);
 				}
 				else {
 					addstrAlt(liberalizeLaw[prop[p]]);
@@ -38445,9 +38306,6 @@ void elections(char clearformess, char canseethings)
 		for (int l = 0; l < 1000; l++)
 		{
 			if (LCSrandom(100) < mood ? propdir[p] == 1 : propdir[p] == -1) yesvotes++;
-			/*vote=-2;
-			for(int i=0;i<4;i++) if(LCSrandom(100)<mood) vote++;
-			if((lawList[prop[p]]>vote&&propdir[p]==-1)||(lawList[prop[p]]<vote&&propdir[p]==1)) yesvotes++;*/
 			if (l == 999)
 			{
 				if (yesvotes > 500) yeswin = true;
@@ -38560,8 +38418,8 @@ void supremecourt(char clearformess, char canseethings)
 			set_alignment_color(scasedir[c]);
 			if (scasedir[c] == 1) {
 				if (scase[c] == LAW_PRISONS) {
-					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform); // was CONST_politics096
-					else addstrAlt(improvePrisonConditions); // was CONST_politics097
+					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
+					else addstrAlt(improvePrisonConditions);
 				}
 				else {
 					addstrAlt(liberalizeLaw[scase[c]]);
@@ -38836,8 +38694,8 @@ void congress(char clearformess, char canseethings)
 			set_alignment_color(billdir[c]);
 			if (billdir[c] == 1) {
 				if (bill[c] == LAW_PRISONS) {
-					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform); // was CONST_politics096
-					else addstrAlt(improvePrisonConditions); // was CONST_politics097
+					if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
+					else addstrAlt(improvePrisonConditions);
 				}
 				else {
 					addstrAlt(liberalizeLaw[bill[c]]);
@@ -39081,46 +38939,9 @@ char wincheck()
 	if (elibjudge < COURTMAJORITY && (wincondition == WINCONDITION_ELITE || elibjudge + libjudge / 2 < COURTSUPERMAJORITY)) return 0;
 	return 1;
 }
-/*      FIXED:
-At the present time, VIEW_CIVILRIGHTS has far too much sway.
-However, before this was the case, as an example, LAW_ABORTION
-and LAW_WOMEN, had the same CONST_politics111 attribute, and
-both returned VIEW_WOMEN. What I think is needed, is some sort
-of indicators for things such as:
-1) Desire for change, which could be based on the
-approval rate of the president.
-2) Liberal, Conservative, and Stalinist percentage of
-the country, i.e. how much support each party
-has.
-3) VIEW_HUMANRIGHTS, which should be based off of the
-two previous things, (i.e. A higher liberal
-percentage, and a higher desire for change would
-make VIEW_HUMANRIGHTS get closer to 100.)
--- LiteralKa
-ADDENDUM (20090812): Keeping this for historical purposes, and to
-possibly improve future changes to this issue.
-*/
-/*
-FIXME, PART1:
-LAW_HUMANRIGHTS is added as a sort of an indicator, but it relies on
-all the other Human Rights issue, rather than affecting the
-issues to be more CONST_politics112. Essentially, if you
-support Gay Rights but not Abortion Rights, you will not be
-considered as someone who supports 'human rights'.
----Servant Corps
-/////                                                                      /////
-@Servant:
-As it stands, (revision 316) the only alarming thing is that this may
-influence LAW_*s that are affected by LAW_HUMANRIGHTS. This is
-only mildly alarming because the LAW_* itself is effected, and
-not the attitude[VIEW_*].
--- LiteralKa
-*/
-
 
 
 // #include "../includes.h"
-const string CONST_reviewmodeB103 = "C++ Source Code Editor (with encoding)";
 const string CONST_reviewmode134 = "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.";
 const string CONST_reviewmode133 = "  Press U to Promote Liberals.";
 const string CONST_reviewmode132 = "Press a Letter to select a squad.  1-7 to view Liberal groups.";
@@ -39156,7 +38977,7 @@ const string CONST_reviewmode103 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴�
 const string CONST_reviewmode102 = "New Bases for Squadless Liberals";
 const string CONST_reviewmode101 = " with";
 const string CONST_reviewmode100 = "Choose squad member to replace ";
-const string CONST_reviewmode099 = "                                                                                ";
+const string eightyBlankSpaces = "                                                                                ";
 const string CONST_reviewmode097 = " has gained wisdom.                                                             ";
 const string CONST_reviewmode096 = " grows colder.                                                                  ";
 const string CONST_reviewmode095 = " has lost heart.                                                                ";
@@ -39380,9 +39201,9 @@ void assemblesquad(squadst *cursquad)
 					if (cursquad->squad[0]->location != temppool[p]->location)
 					{
 						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
+						mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
 						mvaddstrAlt(23, 0, CONST_reviewmode023); // 80 characters
-						mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 						pressAnyKey();
 						conf = 0;
 					}
@@ -39391,9 +39212,9 @@ void assemblesquad(squadst *cursquad)
 					!(temppool[p]->flag & CREATUREFLAG_WHEELCHAIR))
 				{
 					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
+					mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
 					mvaddstrAlt(23, 0, CONST_reviewmode026); // 80 characters
-					mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+					mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 					pressAnyKey();
 					conf = 0;
 				}
@@ -39438,8 +39259,8 @@ void assemblesquad(squadst *cursquad)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(22, 0, CONST_reviewmode028); // 80 characters
-			mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
-			mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+			mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+			mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 			int c2 = getkeyAlt();
 			if (c2 >= 'a'&&c2 <= 's')
 			{
@@ -39479,9 +39300,9 @@ void assemblesquad(squadst *cursquad)
 			else
 			{  // At this point we have a non-empty squad, none of whose members are Liberal
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
+				mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
 				mvaddstrAlt(23, 0, CONST_reviewmode033); // 80 characters
-				mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+				mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 				pressAnyKey();
 			}
 		}
@@ -39503,9 +39324,9 @@ void assemblesquad(squadst *cursquad)
 		bool hasmembers = squadsize(cursquad) > 0;
 		if (hasmembers)
 		{
-			mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
+			mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
 			mvaddstrAlt(23, 0, CONST_reviewmode036); // 80 characters
-			mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+			mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 			enter_name(24, 0, cursquad->name, SQUAD_NAMELEN, CONST_reviewmode038.c_str());
 			squad.push_back(cursquad);
 		}
@@ -39785,7 +39606,7 @@ void review_mode(short mode)
 					{
 						set_color_easy(WHITE_ON_BLACK);
 						mvaddstrAlt(23, 0, CONST_reviewmode073); // 80 characters
-						mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 						enter_name(24, 0, temppool[p]->name, CREATURE_NAMELEN, temppool[p]->propername);
 					}
 					else if (c == 'g' && temppool[p]->align == 1)
@@ -39809,8 +39630,8 @@ void review_mode(short mode)
 							mvaddstrAlt(22, 0, temppool[p]->name, gamelog);
 							addstrAlt(CONST_reviewmode078, gamelog); // 80 characters
 							gamelog.newline(); //New line.
-							mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
-							mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+							mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 							pressAnyKey();
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
@@ -39867,8 +39688,8 @@ void review_mode(short mode)
 							addstrAlt(temppool[p]->name, gamelog);
 							addstrAlt(CONST_reviewmode091, gamelog); // 4 characters (10+4+66=80)
 							addstrAlt(pickrandom(methodOfExecution), gamelog);
-							mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
-							mvaddstrAlt(24, 0, CONST_reviewmode099); // 80 spaces
+							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+							mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 							pressAnyKey();
 							if (boss != -1)
 							{
@@ -39917,8 +39738,8 @@ void review_mode(short mode)
 		if (c == 'z')
 		{
 			if (len(temppool) <= 1) continue;
-			mvaddstrAlt(22, 0, CONST_reviewmode099); // 80 spaces
-			mvaddstrAlt(23, 0, CONST_reviewmode099); // 80 spaces
+			mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+			mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(22, 8, CONST_reviewmode100);
 			if (!swap) {
@@ -40336,8 +40157,6 @@ void review()
 
 
 // #include "../includes.h"
-const string CONST_shopB061 = "option";
-const string CONST_shopB056 = "C++ Source Code Editor (with encoding)";
 const string CONST_shop062 = "$";
 const string CONST_shop061 = "Enter - ";
 const string CONST_shop060 = "B - Choose a buyer";
@@ -40372,8 +40191,6 @@ const string CONST_shop031 = "What will you sell?";
 const string CONST_shop029 = "Press a Letter to select an option";
 const string CONST_shop028 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?RICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 const string CONST_shop026 = "What will ";
-const string CONST_shop021 = "OEM United States - Codepage 437";
-const string CONST_shop020 = "Open With...";
 
 const string tag_letter = "letter";
 const string tag_sleeperprice = "sleeperprice";
@@ -40391,7 +40208,6 @@ const string tag_fullscreen = "fullscreen";
 const string tag_on = "on";
 const string tag_only_sell_legal_items = "only_sell_legal_items";
 
-//// #include "../common/commonactionsCreature.h"
 int squadsize(const squadst *st);
 
 #include <functional>
@@ -40945,7 +40761,6 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 		}
 	}
 }
-// #include "../items/lootTypePoolItem.h"
 
 bool Shop::ShopItem::is_available() const
 {
@@ -41018,8 +40833,6 @@ int Shop::ShopItem::adjusted_price() const
 			p *= 2;
 	return p;
 }
-// #include "../items/itemPool.h"
-// #include "../items/lootTypePool.h"
 const std::string Shop::ShopItem::get_description() const
 {
 	extern vector<ArmorType *> armortype;
@@ -41201,8 +41014,6 @@ void createNewStoryFieldAttack(const int loc) {
 	newsstory.push_back(ns);
 }
 
-//const string singleSpace = " ";
-//const string commaSpace = ", ";
 
 void emptyEncounter();
 void fillEncounter(CreatureTypes c, int numleft);
@@ -41490,8 +41301,6 @@ void statebrokenlaws(int loc)
 	const string CONST_siege067 = "You are wanted for unlawful burial";
 	const string CONST_siege066 = "You are wanted for unlawful access of an information system";
 	const string CONST_siege065 = "You are wanted for interference with interstate commerce";
-	const string CONST_siege064 = "You are wanted for possession of an illegal weapon";
-	const string CONST_siege063 = "You are wanted for firing an illegal weapon";
 	const string CONST_siege062 = "You are wanted for hiring an illegal alien";
 	const string CONST_siege061 = "You are wanted for prostitution";
 	const string CONST_siege060 = "You are wanted for petty larceny";
@@ -41626,12 +41435,6 @@ void statebrokenlaws(int loc)
 	//HIRE ILLEGAL
 	else if (breakercount[LAWFLAG_HIREILLEGAL])
 		mvaddstrAlt(4, 1, (lawList[LAW_IMMIGRATION] < 1 ? CONST_siege062 : CONST_siegeB252), gamelog);
-	//GUN USE
-	/*else if(breakercount[LAWFLAG_GUNUSE])
-	mvaddstrAlt(4, 1, CONST_siege063, gamelog);
-	//GUN CARRY
-	else if(breakercount[LAWFLAG_GUNCARRY])
-	mvaddstrAlt(4, 1, CONST_siege064, gamelog);*/
 	//COMMERCE
 	else if (breakercount[LAWFLAG_COMMERCE])
 		mvaddstrAlt(4, 1, CONST_siege065, gamelog);
@@ -41682,8 +41485,6 @@ void statebrokenlaws(Creature & cr)
 	const string CONST_siege103 = "UNLAWFUL BURIAL";
 	const string CONST_siege102 = "HACKING";
 	const string CONST_siege101 = "ELECTRONIC SABOTAGE";
-	const string CONST_siege100 = "CARRYING ILLEGAL WEAPONS";
-	const string CONST_siege099 = "FIRING ILLEGAL WEAPONS";
 	const string CONST_siege098 = "HIRING ILLEGAL ALIENS";
 	const string CONST_siege097 = "PROSTITUTION";
 	const string CONST_siege096 = "THEFT";
@@ -41781,12 +41582,6 @@ void statebrokenlaws(Creature & cr)
 		//HIRE ILLEGAL
 		else if (breakercount[LAWFLAG_HIREILLEGAL])
 			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
-		//GUN USE
-		/*else if(breakercount[LAWFLAG_GUNUSE])
-		addstrAlt(CONST_siege099);
-		//GUN CARRY
-		else if(breakercount[LAWFLAG_GUNCARRY])
-		addstrAlt(CONST_siege100);*/
 		//COMMERCE
 		else if (breakercount[LAWFLAG_COMMERCE])
 			addstrAlt(CONST_siege101);
@@ -44368,7 +44163,6 @@ const string CONST_stealth067 = " shouts in alarm at the squad's Liberal Trespas
 const string CONST_stealth066 = " acts natural.";
 const string CONST_stealth065 = "The squad";
 const string CONST_stealth064 = " fades into the shadows.";
-const string CONST_stealth062 = "holstered";
 const string CONST_stealth061 = "                                                        ";
 const string CONST_stealth060 = "We've alienated absolutely everyone here!               ";
 const string CONST_stealth059 = "We've alienated the masses here!              ";
@@ -44538,7 +44332,144 @@ char weapon_in_character(const string& wtype, const string& atype)
 		return CREATURE_SEAL;
 	return -1;
 }
+map<int, vector<string> > siegeDisguises = {
+	map<int, vector<string> >::value_type(SIEGE_CIA,
+		{
+			tag_ARMOR_BLACKSUIT,
+			tag_ARMOR_BLACKDRESS,
 
+		}),
+	map<int, vector<string> >::value_type(SIEGE_CORPORATE,
+			{
+				tag_ARMOR_MILITARY,
+				tag_ARMOR_ARMYARMOR,
+				tag_ARMOR_SEALSUIT,
+
+			}),
+	map<int, vector<string> >::value_type(SIEGE_HICKS,
+				{
+					tag_ARMOR_CLOTHES, // duplication means uniformed is incremented twice, makint its value 2 instead of 1 or 0
+					tag_ARMOR_CLOTHES, // it was how it was coded, what uniformed > 1 means is not clear from context
+					tag_ARMOR_OVERALLS,
+					tag_ARMOR_WIFEBEATER,
+
+				}),
+
+	map<int, vector<string> >::value_type(SIEGE_FIREMEN,
+					{
+						tag_ARMOR_BUNKERGEAR,
+
+					}),
+};
+map<int, vector<string> > locationDisguises = {
+	map<int, vector<string> >::value_type(SITE_BUSINESS_CIGARBAR, {
+	tag_ARMOR_EXPENSIVESUIT,
+	tag_ARMOR_CHEAPSUIT,
+	tag_ARMOR_EXPENSIVEDRESS,
+	tag_ARMOR_CHEAPDRESS,
+	tag_ARMOR_BLACKSUIT,
+	tag_ARMOR_BLACKDRESS,
+		}),
+	map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE, {
+tag_ARMOR_EXPENSIVESUIT,
+tag_ARMOR_EXPENSIVEDRESS,
+tag_ARMOR_SECURITYUNIFORM,
+tag_ARMOR_SERVANTUNIFORM,
+}),
+	map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER, {
+tag_ARMOR_WORKCLOTHES,
+tag_ARMOR_HARDHAT,
+	}),
+	map<int, vector<string> >::value_type(SITE_CORPORATE_HEADQUARTERS, {
+	tag_ARMOR_EXPENSIVESUIT,
+	tag_ARMOR_CHEAPSUIT,
+	tag_ARMOR_SECURITYUNIFORM,
+	tag_ARMOR_EXPENSIVEDRESS,
+	tag_ARMOR_CHEAPDRESS,
+		}),
+
+};
+map<int, vector<string> > restrictedLocationDisguises = {
+	map<int, vector<string> >::value_type(SITE_GOVERNMENT_COURTHOUSE, {
+		tag_ARMOR_BLACKROBE,
+			tag_ARMOR_BLACKSUIT,
+			tag_ARMOR_BLACKDRESS,
+			tag_ARMOR_CHEAPSUIT,
+			tag_ARMOR_CHEAPDRESS,
+			tag_ARMOR_EXPENSIVESUIT,
+			tag_ARMOR_EXPENSIVEDRESS,
+			tag_ARMOR_POLICEUNIFORM,
+			tag_ARMOR_POLICEARMOR,
+			}),
+	map<int, vector<string> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
+	tag_ARMOR_BLACKSUIT,
+	tag_ARMOR_BLACKDRESS,
+	tag_ARMOR_CHEAPSUIT,
+	tag_ARMOR_CHEAPDRESS,
+	tag_ARMOR_EXPENSIVESUIT,
+	tag_ARMOR_EXPENSIVEDRESS,
+	tag_ARMOR_MILITARY,
+	tag_ARMOR_ARMYARMOR,
+	tag_ARMOR_SEALSUIT,
+		}),
+	map<int, vector<string> >::value_type(SITE_GOVERNMENT_ARMYBASE, {
+	tag_ARMOR_MILITARY,
+	tag_ARMOR_ARMYARMOR,
+	tag_ARMOR_SEALSUIT,
+		}),
+	map<int, vector<string> >::value_type(SITE_MEDIA_AMRADIO, {
+		tag_ARMOR_SECURITYUNIFORM,
+			tag_ARMOR_EXPENSIVESUIT,
+			tag_ARMOR_CHEAPSUIT,
+			tag_ARMOR_EXPENSIVEDRESS,
+			tag_ARMOR_CHEAPDRESS,
+	
+		}),
+	map<int, vector<string> >::value_type(SITE_MEDIA_CABLENEWS, {
+				tag_ARMOR_SECURITYUNIFORM,
+					tag_ARMOR_EXPENSIVESUIT,
+					tag_ARMOR_EXPENSIVEDRESS,
+			
+		}),
+	map<int, vector<string> >::value_type(SITE_INDUSTRY_NUCLEAR, {
+				tag_ARMOR_LABCOAT,
+					tag_ARMOR_SECURITYUNIFORM,
+					tag_ARMOR_CIVILLIANARMOR,
+					tag_ARMOR_HARDHAT,
+			
+				}),
+	map<int, vector<string> >::value_type(SITE_BUSINESS_BANK, {
+		tag_ARMOR_CHEAPSUIT,
+			tag_ARMOR_EXPENSIVESUIT,
+			tag_ARMOR_CHEAPDRESS,
+			tag_ARMOR_EXPENSIVEDRESS,
+			tag_ARMOR_SECURITYUNIFORM,
+			tag_ARMOR_POLICEUNIFORM,
+			tag_ARMOR_POLICEARMOR,
+			}),
+	map<int, vector<string> >::value_type(SITE_GOVERNMENT_FIRESTATION, {
+		tag_ARMOR_BUNKERGEAR,
+			tag_ARMOR_WORKCLOTHES,
+			tag_ARMOR_OVERALLS,
+			}),
+	map<int, vector<string> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ, {
+		tag_ARMOR_BLACKSUIT,
+		tag_ARMOR_BLACKDRESS,
+				}),
+
+};
+map<int, vector<string> > highSecurityLocationDisguises = {
+	map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER,{
+	tag_ARMOR_SECURITYUNIFORM,
+	}),
+
+	map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE, {
+	tag_ARMOR_MILITARY,
+	tag_ARMOR_ARMYARMOR,
+	tag_ARMOR_SEALSUIT,
+		}),
+
+};
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const Creature &cr)
 {
@@ -44556,37 +44487,19 @@ char hasdisguise(const Creature &cr)
 	//   return 0;
 	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 	{
-		switch (LocationsPool::getInstance().getSiegeType(cursite))
-		{
-		case SIEGE_CIA:
-		{
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-			break;
+		for (string str : siegeDisguises[LocationsPool::getInstance().getSiegeType(cursite)]) {
+			if (cr.get_armor().get_itemtypename() == str) {
+				uniformed++;
+			}
 		}
-		case SIEGE_CORPORATE:
-		{
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
-			break;
-		}
-		case SIEGE_HICKS:
-		{
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_CLOTHES)uniformed = 2;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_WIFEBEATER)uniformed = 1;
-			break;
-		}
-		case SIEGE_CCS:
-		{
+		if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_CCS) {
+
 			// CCS has trained in anticipation of this tactic
 			// There is no fooling them
 			// (They pull this shit all the time in their own sieges)
 			uniformed = 0;
-			break;
 		}
-		case SIEGE_POLICE:
+		if(LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 		{
 			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)uniformed = 1;
@@ -44596,26 +44509,85 @@ char hasdisguise(const Creature &cr)
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
 			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
-			break;
 		}
-		case SIEGE_FIREMEN:
-		{
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
-			break;
-		}
-		}
+		
 	}
 	else
 	{
-		//// TODO Move to XML
+
 		if ((!cr.is_naked() || cr.animalgloss == ANIMALGLOSS_ANIMAL)
 			&& cr.get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
+		if (locationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+			uniformed = 0;
+		}
+
+		if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) {
+			if (highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+				uniformed = 0;
+			}
+			if (restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+				uniformed = 0;
+			}
+			for (string str : restrictedLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+				if (cr.get_armor().get_itemtypename() == str) {
+					uniformed++;
+				}
+			}
+			for (string str : highSecurityLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+				if (cr.get_armor().get_itemtypename() == str) {
+					uniformed++;
+				}
+			}
+		}else
+		if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED){
+			if (restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+				uniformed = 0;
+			}
+			for (string str : restrictedLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+				if (cr.get_armor().get_itemtypename() == str) {
+					uniformed++;
+				}
+			}
+
+		}else
+		if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) {
+			if (highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+				uniformed = 0;
+			}
+			for (string str : highSecurityLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+				if (cr.get_armor().get_itemtypename() == str) {
+					uniformed++;
+				}
+			}
+
+		}
+			for (string str : locationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+				if (cr.get_armor().get_itemtypename() == str) {
+					uniformed++;
+				}
+			}
+
+		
+		
+
+		
+
+		//// TODO Move to XML
+
 		switch (type)
 		{
+
 		case SITE_INDUSTRY_WAREHOUSE:
 		case SITE_RESIDENTIAL_SHELTER:
 			uniformed = 1;
 			break;
+
+		case SITE_INDUSTRY_SWEATSHOP:
+			uniformed = 0;
+			if (cr.is_naked()) uniformed = 1;
+			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM) uniformed = 1;
+			break;
+
 		case SITE_LABORATORY_COSMETICS:
 		case SITE_LABORATORY_GENETIC:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
@@ -44625,6 +44597,7 @@ char hasdisguise(const Creature &cr)
 				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite) ? 1 : 2);
 			}
 			break;
+
 		case SITE_GOVERNMENT_POLICESTATION:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 			{
@@ -44636,34 +44609,11 @@ char hasdisguise(const Creature &cr)
 				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite) ? 1 : 2);
 			}
 			break;
-		case SITE_GOVERNMENT_WHITE_HOUSE:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
-			}
-			break;
+
 		case SITE_GOVERNMENT_COURTHOUSE:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 			{
 				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKROBE)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 				if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 					cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite) ? 1 : 2);
@@ -44675,57 +44625,43 @@ char hasdisguise(const Creature &cr)
 				uniformed = 0;
 				if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2)
 				{
-					if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+					if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT) uniformed = 1;
 				}
-				else if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONGUARD)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONER)uniformed = 1;
+				else if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONGUARD) uniformed = 1;
+				if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONER) uniformed = 1;
 			}
 			break;
-		case SITE_GOVERNMENT_ARMYBASE:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
-			}
-			break;
-		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-			}
-			break;
+
+
+
+
+
+
+
+
+
+
+
 		case SITE_GOVERNMENT_FIRESTATION:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 			{
 				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
 				if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
 				{
-					if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-					if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+					if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM) uniformed = 1;
+					if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR) uniformed = 1;
 					if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-						cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
-					if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 1;
+						cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM) uniformed = 1;
+					if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR) uniformed = 1;
 				}
-			}
-			break;
+
+				break;
+
+
+
 		case SITE_BUSINESS_BANK:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
 			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 				if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 					cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite) ? 1 : 2);
@@ -44735,87 +44671,15 @@ char hasdisguise(const Creature &cr)
 				}
 			}
 			break;
-		case SITE_BUSINESS_CIGARBAR:
-			uniformed = 0;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-			break;
-		case SITE_INDUSTRY_SWEATSHOP:
-			uniformed = 0;
-			if (cr.is_naked())uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-			break;
-		case SITE_INDUSTRY_POLLUTER:
-			uniformed = 0;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
-			if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
-			{
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-			}
-			break;
-		case SITE_INDUSTRY_NUCLEAR:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
-			}
-			break;
-		case SITE_CORPORATE_HEADQUARTERS:
-			uniformed = 0;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-			break;
-		case SITE_CORPORATE_HOUSE:
-			uniformed = 0;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SERVANTUNIFORM)uniformed = 1;
-			if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
-			{
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
-			}
-			break;
-		case SITE_MEDIA_AMRADIO:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-			}
-			break;
-		case SITE_MEDIA_CABLENEWS:
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
-			{
-				uniformed = 0;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-			}
-			break;
 		case SITE_RESIDENTIAL_TENEMENT:
 		case SITE_RESIDENTIAL_APARTMENT:
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)uniformed = 0;
 			break;
+
 		default:
 			break;
+			}
 		}
 	}
 	if (!uniformed)
@@ -44856,7 +44720,6 @@ char weaponcheck(const Creature &cr, bool metaldetect)
 	bool suspicious = cr.get_weapon().is_suspicious();
 	bool concealed = cr.weapon_is_concealed();
 	char incharacter = weapon_in_character(cr.get_weapon().get_itemtypename(), cr.get_armor().get_itemtypename());
-	//bool illegal = cr.get_weapon().get_legality() < lawList[LAW_GUNCONTROL];
 	// If your disguise is inappropriate to the current location,
 	// then being in character isn't sufficient
 	if (hasdisguise(cr) == false)
@@ -44903,7 +44766,7 @@ void disguisecheck(int timer)
 		if (thisweapon > weapon)weapon = thisweapon;
 		//if(thisweapon==2)weaponar[i]=1;
 	}
-	// TODO if a weapon is CONST_stealth062
+	// TODO if a weapon is holstered
 	// meaning if it is within the squad inventory but not equipped by a squad member
 	// not even metal detectors can detect it
 	// This line checks all such weapons
@@ -45117,11 +44980,6 @@ void disguisecheck(int timer)
 				for (int i = 0; i < 6; i++)
 				{
 					if (activesquad->squad[i] == NULL)break;
-					//if(weaponar[i])
-					//{
-					// Illegal weapon crimes disabled
-					//criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
-					//}
 				}
 			}
 			else
@@ -45181,13 +45039,8 @@ void armsdealer(int loc);
 // #include "../combat/fight.h"
 // for void delenc(short e,char loot);
 void delenc(Creature &tk);
-// #include "../combat/fightCreature.h"  
-//for void capturecreature(Creature &t);
-// #include "../cursesAlternative.h"
-// #include "../set_color_support.h"
 // #include "../locations/locationsPool.h"
 void moveEverythingAwayFromSite(int cursite);
-// #include "../customMaps.h"
 vector<vector<string> > no_free_speech_flirt;
 vector<vector<string> > pickupLines;
 vector<vector<string> > lovingly_talk_to_mutant;
@@ -45261,9 +45114,6 @@ map<short, string> issueTooLiberal;
 string saysComma;
 string respondsComma;
 string colonSpace;
-//extern string singleDot;
-//extern string singleSpace;
-string unnamed_String_Talk_cpp_000;
 string unnamed_String_Talk_cpp_001;
 string unnamed_String_Talk_cpp_002;
 string unnamed_String_Talk_cpp_003;
@@ -45453,8 +45303,6 @@ char talkToBankTeller(Creature &a, Creature &tk)
 	extern short sitealarmtimer;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK);
-	/*mvaddstrAlt(9, 1, a.name);
-	addstrAlt(unnamed_String_Talk_cpp_000);*/
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_001);
 	if (is_naked)addstrAlt(while_naked);
@@ -46024,9 +45872,6 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		// IsaacG the reuse of string_60 is because a formatting error in the automatically generated code
-		// because string_60 is identicle to the strings that broke
-		// Aside from this, all unnamed_strings are in exact alphanumeric order, awaiting proper names
 		if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) == 0)
 		{
 			if (tk.align == ALIGN_LIBERAL)
@@ -46061,10 +45906,6 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 	else
 	{
 		selected_flirt = pickrandom(pickupLines);
-		/*int current_flirt = LCSrandom(pickupLines.size);
-		for(int i = 0; i < 5; i++){
-		selected_flirt.push_back(pickupLines[current_flirt][i]);
-		}*/
 	}
 	mvaddstrAlt(10, 1, selected_flirt[0], gamelog);
 	if (selected_flirt[1] != blankString) {
@@ -46113,7 +45954,6 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		return 1;
 	}
 	a.train(SKILL_SEDUCTION, LCSrandom(5) + 2);
-	//IsaacG Migrate Strings
 	if ((a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM // Police property on armor? -XML
 		|| a.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR
 		|| a.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR
@@ -46143,9 +45983,6 @@ char doYouComeHereOften(Creature &a, Creature &tk)
 		addstrAlt(unnamed_String_Talk_cpp_069, gamelog);
 		addstrAlt(tk.name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_070, gamelog);
-		// IsaacG the reuse of string_60 is because a formatting error in the automatically generated code
-		// because string_60 is identicle to the strings that broke
-		// Aside from this, all unnamed_strings are in exact alphanumeric order, awaiting proper names
 		if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) == 0)
 		{
 			addstrAlt(unnamed_String_Talk_cpp_071, gamelog);
@@ -47016,26 +46853,15 @@ char heyMisterMonster(Creature &a, Creature &tk)
 				encounter[i].align = ALIGN_LIBERAL;
 	return 1;
 }
-//bool initialize_incomplete_txt();
 
 
-// #include "../includes.h"
-const string CONST_vehicle007 = "Stolen ";
-
-//const string tag_id = "id";
 const string tag_myear = "myear";
-//const string tag_location = "location";
 const string tag_color = "color";
 const string tag_vtypeid = "vtypeid";
 const string tag_vtypeidname = "vtypeidname";
 const string tag_vehicle = "vehicle";
-//const string singleSpace = " ";
-// #include "vehicletype.h"
 vector<VehicleType *> vehicletype;
-// #include "vehicle.h"
-//own header
 long Vehicle::curcarid = 0;
-// #include "common/creaturePool.h"
 string Vehicle::showXml() const
 {
 	CMarkup xml;
@@ -47088,6 +46914,7 @@ void Vehicle::stop_preferring_me() const
 }
 string Vehicle::fullname(bool halffull) const
 {
+	const string CONST_vehicle007 = "Stolen ";
 	string s;
 	int words = 0;
 	if (heat_)
@@ -47200,16 +47027,9 @@ void delete_and_clear_vehicle_types() {
 	delete_and_clear(vehicletype);
 }
 
-
-// #include "../includes.h"
-const string CONST_vehicletypeB061 = ": ";
-const string CONST_vehicletypeB060 = "::stealing: ";
 const string CONST_vehicletypeB055 = "::colors: ";
 const string CONST_vehicletypeB054 = "::year: ";
 const string CONST_vehicletypeB053 = "UNDEF";
-const string CONST_vehicletype063 = "Unknown element for vehicle type ";
-const string CONST_vehicletype062 = "::available_at_dealership: ";
-const string CONST_vehicletype061 = "Invalid boolean value for vehicle type ";
 const string CONST_vehicletype054 = "::colors::display_color: ";
 const string CONST_vehicletype051 = "::year::add_random_up_to_current_year: ";
 const string CONST_vehicletype049 = "::year::start_at_current_year: ";
@@ -47217,12 +47037,8 @@ const string CONST_vehicletype047 = "LACKS IDNAME ";
 const string CONST_vehicletype046 = "UNDEFINED";
 
 const string tag_window = "window";
-//const string tag_body = "body";
 const string tag_Translucent = "Translucent";
-//const string tag_sleeperprice = "sleeperprice";
-//const string tag_price = "price";
 const string tag_available_at_dealership = "available_at_dealership";
-//const string tag_armor = "armor";
 const string tag_armor_midpoint = "armor_midpoint";
 const string tag_high_armor_max = "high_armor_max";
 const string tag_high_armor_min = "high_armor_min";
@@ -47231,26 +47047,19 @@ const string tag_low_armor_min = "low_armor_min";
 const string tag_touch_alarm_chance = "touch_alarm_chance";
 const string tag_sense_alarm_chance = "sense_alarm_chance";
 const string tag_extra_heat = "extra_heat";
-//const string tag_juice = "juice";
-//const string tag_difficulty = "difficulty";
 const string tag_difficulty_to_find = "difficulty_to_find";
 const string tag_stealing = "stealing";
-//const string tag_shortname = "shortname";
 const string tag_longname = "longname";
 const string tag_passenger = "passenger";
 const string tag_driver = "driver";
 const string tag_attackbonus = "attackbonus";
-//const string tag_attack = "attack";
 const string tag_hardlimit = "hardlimit";
 const string tag_softlimit = "softlimit";
 const string tag_skillfactor = "skillfactor";
-//const string tag_skill = "skill";
-//const string tag_base = "base";
 const string tag_dodgebonus = "dodgebonus";
 const string tag_dodge = "dodge";
 const string tag_drivebonus = "drivebonus";
 const string tag_display_color = "display_color";
-//const string tag_color = "color";
 const string tag_colors = "colors";
 const string tag_add = "add";
 const string tag_add_random = "add_random";
@@ -47258,13 +47067,6 @@ const string tag_add_random_up_to_current_year = "add_random_up_to_current_year"
 const string tag_start_at_year = "start_at_year";
 const string tag_start_at_current_year = "start_at_current_year";
 const string tag_year = "year";
-//const string blankString = "";
-//const string tag_idname = "idname";
-//const string tag_id = "id";
-// #include "../creature/creatureEnums.h"
-// #include "vehicletype.h"
-// #include "../common/stringconversion.h"
-//for atoi
 int VehicleType::number_of_vehicletypes = 0;
 VehicleType::VehicleType(MCD_STR xmlstring)
 	: /*idname_(CONST_vehicletype046), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
@@ -47301,9 +47103,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 						year_startcurrent_ = true;
 					else if (b == 0)
 						year_startcurrent_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype049 << xmlfile.GetData() << std::endl;*/
 				}
 				else if (element == tag_start_at_year)
 					year_start_ = atoi(xmlfile.GetData());
@@ -47314,17 +47113,11 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 						year_randomuptocurrent_ = true;
 					else if (b == 0)
 						year_randomuptocurrent_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype051 << xmlfile.GetData() << std::endl;*/
 				}
 				else if (element == tag_add_random)
 					year_addrandom_ = atoi(xmlfile.GetData());
 				else if (element == tag_add)
 					year_add_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB054
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47346,13 +47139,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 						displaycolor_ = true;
 					else if (b == 0)
 						displaycolor_ = false;
-					/*else
-					std::cerr << CONST_vehicletype061 << idname
-					<< CONST_vehicletype054 << xmlfile.GetData() << std::endl;*/
 				}
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB055
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47370,9 +47157,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 					drivebonus_limit1_ = atoi(xmlfile.GetData());
 				else if (element == tag_hardlimit)
 					drivebonus_limit2_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47390,9 +47174,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 					dodgebonus_limit1_ = atoi(xmlfile.GetData());
 				else if (element == tag_hardlimit)
 					dodgebonus_limit2_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47406,9 +47187,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 					attackbonus_driver_ = atoi(xmlfile.GetData());
 				else if (element == tag_passenger)
 					attackbonus_passenger_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47436,9 +47214,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 					sensealarmchance_ = atoi(xmlfile.GetData());
 				else if (element == tag_touch_alarm_chance)
 					touchalarmchance_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47458,9 +47233,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 					higharmormax_ = atoi(xmlfile.GetData());
 				else if (element == tag_armor_midpoint)
 					armormidpoint_ = atoi(xmlfile.GetData());
-				/*else
-				std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB060
-				<< element << std::endl;*/
 			}
 			xmlfile.OutOfElem();
 		}
@@ -47471,17 +47243,11 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 				availableatshop_ = true;
 			else if (b == 0)
 				availableatshop_ = false;
-			/*else
-			std::cerr << CONST_vehicletype061 << idname
-			<< CONST_vehicletype062 << xmlfile.GetData() << std::endl;*/
 		}
 		else if (element == tag_price)
 			price_ = atoi(xmlfile.GetData());
 		else if (element == tag_sleeperprice)
 			sleeperprice_ = atoi(xmlfile.GetData());
-		/*else
-		std::cerr << CONST_vehicletype063 << idname << CONST_vehicletypeB061 << element
-		<< std::endl;*/
 	}
 	if (len(color_) == 0)
 		color_.push_back(tag_Translucent); //Default.
@@ -48089,7 +47855,6 @@ vector<string*> allTextString = {
 	&heLiBurned,
 	&hecoStalinized,
 	&dotSpace,
-	&unnamed_String_Talk_cpp_000,
 	&unnamed_String_Talk_cpp_001,
 	&unnamed_String_Talk_cpp_002,
 	&unnamed_String_Talk_cpp_003,
@@ -48262,13 +48027,6 @@ extern int ustat_funds;
 extern int ustat_spent;
 extern int ustat_buys;
 extern int ustat_burns;
-//extern int stat_buys;
-//extern int stat_burns;
-//extern int stat_kidnappings;
-//extern int year;
-//extern int stat_dead;
-//extern int stat_kills;
-//extern int stat_recruits;
 vector<saveLoadChunk> highScoreSaveLoad = {
 	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
 	saveLoadChunk(&ustat_dead, sizeof(int), 1),

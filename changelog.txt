@@ -434,3 +434,26 @@ Nearly at the point where this part of news stories can be stored externally.
 Deleted bulk of useless comments (the #include "" and such, redundant copyright information, artefacts from multiple file version)
 It's astonishing how much faster 'single file version' compiles.  Working out the issues to make 'multiple file version' compile just as quickly is still a priority.
 The .exe even has a smaller filesize.  1672 KB instead of 1739 KB, though this is considered only academically interesting.
+
+Minor shuffling of string constant, namely collections made entirely of string constants have had the string constants defined within the collections, rather than externally.  Two strings capable of being used interchangably are best kept together.
+Deleted commented code.
+Removed preprocessor #define FORMAT_OUTPUT
+char sbuf[81]; has had its scope reduced from static global to function.
+Likely to rewrite functions addstr_f(), mvaddstr_f(), addstr_fl(), and mvaddstr_fl()
+All four, combined, are used 19 times.  Some variation of these functions could replace a large proportion of the approx. 3700 uses of addstr/mvaddstr.
+Curiously, the number (4048) of "const string" exceeds the number (3769) of "addstr".  Nearly all "const string" are used exactly once, (obviously excluding const xml tags).  Replacing the string literals with variable const strings has unveiled the underlying redundant nature of these thousands of lines of code.
+Amusingly, "addstrAlt(saysComma, gamelog);" appears 16 times.  This single string is used verbatim almost as many times as formatted strings are passed to addstr_f and co.
+Gathered all const string.  3265 total.  Approx. 700 begin with " " approx. 50 begin with ", " approx. 100 begin with "'s" approx 20 begin with "." "!" or "?"
+
+Replaced many of the "(story += x); (story += y)" with "story += x\ + y"
+It was a relic from when these lines were strcat(..., ...);
+Removing the parentheses helped clear up when numbers are added to the string, making sure tostring(int i) is used.
+Making these single line, i.e. story += x + y + z; instead of "+= x; += y; += z;" is mostly a matter of personal preference.  In Java, strings are immutable, so repeated calls to += for a string is wasteful.  StringBuilder is preferable, but I don't know offhand whether C++ has an equivalent class, or whether strings are mutable in C++.
+
+Transfered a few switch statements to maps.
+Removed an unused part of allTextString, and its corresponding entry in allText.txt
+
+Split constructNegativeEventStory() and constructPositiveEventStory() into functions for each individual story.  Mostly removed unused "const string" and "extern" within each smaller function.
+
+Converted some switch statements into maps.
+char hasdisguise(const Creature &cr) has been made to use maps in place of most of its switch statement, though it looks really weird.

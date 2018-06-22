@@ -263,41 +263,50 @@ void addFirestation(int creaturearray[CREATURENUM], const char sec) {
 /* prints a short blurb showing how to page forward */
 string addnextpagestr()
 {
-	const string CONST_commondisplay223 = "PGDN - Next";
-	const string CONST_commondisplay222 = ": - Next";
-	const string CONST_commondisplay221 = "] - Next";
+	const string CONST_commondisplay223 = "PGDN";
+	const string CONST_commondisplay222 = ":";
+	const string CONST_commondisplay221 = "]";
+	const string CONST_commondisplay22Z = " - Next";
+	string output;
 	extern short interface_pgup;
 	if (interface_pgup == '[')
-		return (CONST_commondisplay221);
+		output = CONST_commondisplay221;
 	else if (interface_pgup == '.')
-		return (CONST_commondisplay222);
-	else return (CONST_commondisplay223);
+		output = CONST_commondisplay222;
+	else output = CONST_commondisplay223;
+	return output + CONST_commondisplay22Z;
 }
 /* prints a short blurb showing how to page back */
 string addprevpagestr()
 {
-	const string CONST_commondisplay226 = "PGUP - Previous";
-	const string CONST_commondisplay225 = "; - Previous";
-	const string CONST_commondisplay224 = "[ - Previous";
+	const string CONST_commondisplay226 = "PGUP";
+	const string CONST_commondisplay225 = ";";
+	const string CONST_commondisplay224 = "[";
+	const string CONST_commondisplay22Y = " - Previous";
+	string output;
 	extern short interface_pgup;
 	if (interface_pgup == '[')
-		return (CONST_commondisplay224);
+		output = CONST_commondisplay224;
 	else if (interface_pgup == '.')
-		return (CONST_commondisplay225);
-	else return (CONST_commondisplay226);
+		output = CONST_commondisplay225;
+	else output = CONST_commondisplay226;
+	return output + CONST_commondisplay22Y;
 }
 /* prints a long blurb showing how to page forward and back */
 string addpagestr()
 {
-	const string CONST_commondisplay229 = "PGUP/PGDN to view other Liberal pages.";
-	const string CONST_commondisplay228 = "; and : to view other Liberal pages.";
-	const string CONST_commondisplay227 = "[] to view other Liberal pages.";
+	const string CONST_commondisplay229 = "PGUP/PGDN";
+	const string CONST_commondisplay228 = "; and :";
+	const string CONST_commondisplay227 = "[]";
+	const string CONST_commondisplay22X = " to view other Liberal pages.";
+	string output;
 	extern short interface_pgup;
 	if (interface_pgup == '[')
-		return (CONST_commondisplay227);
+		output = CONST_commondisplay227;
 	else if (interface_pgup == '.')
-		return (CONST_commondisplay228);
-	else return(CONST_commondisplay229);
+		output = CONST_commondisplay228;
+	else output = CONST_commondisplay229;
+	return output + CONST_commondisplay22X;
 }
 
 /* daily - returns the number of days in the current month */
@@ -461,146 +470,174 @@ int bodypartSeverAmount(const int w) {
 	return severamount;
 }
 std::string burstHitString(int bursthits) {
-	const string blankString = "";
-	const string CONST_fight035 = " times";
-	const string CONST_fight034 = " five times";
-	const string CONST_fight033 = " four times";
-	const string CONST_fight032 = " three times";
-	const string CONST_fight031 = " twice";
-	const string singleSpace = " ";
-	switch (bursthits)
-	{
-	case 1: return blankString;
-	case 2: return CONST_fight031;
-	case 3: return CONST_fight032;
-	case 4: return CONST_fight033;
-	case 5: return CONST_fight034;
-	default: return singleSpace + tostring(bursthits) + CONST_fight035;
+	if (bursthits < 1) {
+		bursthits = 1;
 	}
+	const vector<string> numberTimesHit =
+	{
+		"",
+		" twice",
+		" three",
+		" four",
+		" five",
+	};
+	const string singleSpace = " ";
+	const string CONST_fight035 = " times";
+	string output;
+	if (bursthits > 5) {
+		output += singleSpace + tostring(bursthits);
+	}
+	else {
+		output += numberTimesHit[bursthits - 1];
+	}
+	if (bursthits > 2) {
+		output += CONST_fight035;
+	}
+	return output;
 }
+map<int, bool> stalinView = {
+	map<int, bool>::value_type(VIEW_STALIN,  false), // Liberals and Stalinists don't get along
+		map<int, bool>::value_type(VIEW_MOOD,  false), // Liberals and Stalinists don't get along
+		map<int, bool>::value_type(VIEW_GAY,  false), // Stalinists discriminate against gay people
+		map<int, bool>::value_type(VIEW_DEATHPENALTY,  false), // Stalinists execute lots of people
+		map<int, bool>::value_type(VIEW_TAXES,  true), // Stalinists support communist income redistribution
+		map<int, bool>::value_type(VIEW_NUCLEARPOWER,  false), // Stalinists believe the more nuclear, the better
+		map<int, bool>::value_type(VIEW_ANIMALRESEARCH,  false), // Stalinists are in favor of unethical research
+		map<int, bool>::value_type(VIEW_POLICEBEHAVIOR,  false), // Stalinists use police for brutal repression
+		map<int, bool>::value_type(VIEW_TORTURE,  false), // Stalinists torture their enemies
+		map<int, bool>::value_type(VIEW_INTELLIGENCE,  false), // Stalinists don't believe in privacy
+		map<int, bool>::value_type(VIEW_FREESPEECH,  false), // Stalinists don't allow any dissent
+		map<int, bool>::value_type(VIEW_GENETICS,  false), // Stalinists are in favor of unethical research
+		map<int, bool>::value_type(VIEW_JUSTICES,  false), // Liberals and Stalinists don't get along
+		map<int, bool>::value_type(VIEW_GUNCONTROL,  true), // Stalinists don't want any armed resistance
+		map<int, bool>::value_type(VIEW_SWEATSHOPS,  true), // Stalinists say, Workers of the world unite!
+		map<int, bool>::value_type(VIEW_POLLUTION,  false), // Stalinists don't care about pollution
+		map<int, bool>::value_type(VIEW_CORPORATECULTURE,  true), // Stalinists hate rich people and corporations
+		map<int, bool>::value_type(VIEW_CEOSALARY,  true), // Stalinists hate rich people and corporations
+		map<int, bool>::value_type(VIEW_WOMEN,  false), // Stalinists discriminate against women
+		map<int, bool>::value_type(VIEW_CIVILRIGHTS,  false), // Stalinists discriminate against ethnic groups
+		map<int, bool>::value_type(VIEW_DRUGS,  false), // Stalinists only allow vodka
+		map<int, bool>::value_type(VIEW_IMMIGRATION,  false), // Stalinists maintained tight border security at the Iron Curtain
+		map<int, bool>::value_type(VIEW_MILITARY,  false), // Stalinists use the military for brutal repression
+		map<int, bool>::value_type(VIEW_PRISONS,  false), // Stalinists annex Canada to fill it with gulags
+		map<int, bool>::value_type(VIEW_AMRADIO,  true), // Stalinists agree that Conservatives are bad
+		map<int, bool>::value_type(VIEW_CABLENEWS,  true), // Stalinists agree that Conservatives are bad
+															   //map<int, bool>::value_type( VIEW_POLITICALVIOLENCE,  true), // the LCS and Stalinists both like using political violence
+		map<int, bool>::value_type(VIEW_LIBERALCRIMESQUAD,  false), // Liberals and Stalinists don't get along
+		map<int, bool>::value_type(VIEW_LIBERALCRIMESQUADPOS,  false), // Liberals and Stalinists don't get along
+		map<int, bool>::value_type(VIEW_CONSERVATIVECRIMESQUAD,  true), // Stalinists agree that Conservatives are bad
+		map<int, bool>::value_type(VIEWNUM,  false), // Liberals and Stalinists don't get along
+};
+map<int, bool> stalinLaw = {
+	map<int, bool>::value_type(LAW_STALIN,  false), // Liberals and Stalinists don't get along
+	map<int, bool>::value_type(LAW_MOOD,  false), // Liberals and Stalinists don't get along
+	map<int, bool>::value_type(LAW_ABORTION,  true), // Stalinists agree that abortion is good, although technically they don't let women choose
+	map<int, bool>::value_type(LAW_ANIMALRESEARCH,  false), // Stalinists are in favor of unethical research
+	map<int, bool>::value_type(LAW_POLICEBEHAVIOR,  false), // Stalinists use police for brutal repression
+	map<int, bool>::value_type(LAW_PRIVACY,  false), // Stalinists don't believe in privacy
+	map<int, bool>::value_type(LAW_DEATHPENALTY,  false), // Stalinists execute lots of people
+	map<int, bool>::value_type(LAW_NUCLEARPOWER,  false), // Stalinists believe the more nuclear, the better
+	map<int, bool>::value_type(LAW_POLLUTION,  false), // Stalinists don't care about pollution
+	map<int, bool>::value_type(LAW_LABOR,  true), // Stalinists say, Workers of the world unite!
+	map<int, bool>::value_type(LAW_GAY,  false), // Stalinists discriminate against gay people
+	map<int, bool>::value_type(LAW_CORPORATE,  true), // Stalinists hate rich people and corporations
+	map<int, bool>::value_type(LAW_FREESPEECH,  false), // Stalinists don't allow any dissent
+	map<int, bool>::value_type(LAW_FLAGBURNING,  true), // Stalinists regularly burn flags
+	map<int, bool>::value_type(LAW_GUNCONTROL,  true), // Stalinists don't want any armed resistance
+	map<int, bool>::value_type(LAW_TAX,  true), // Stalinists support communist income redistribution
+	map<int, bool>::value_type(LAW_WOMEN,  false), // Stalinists discriminate against women
+	map<int, bool>::value_type(LAW_CIVILRIGHTS,  false), // Stalinists discriminate against ethnic groups
+	map<int, bool>::value_type(LAW_DRUGS,  false), // Stalinists only allow vodka
+	map<int, bool>::value_type(LAW_IMMIGRATION,  false), // Stalinists maintained tight border security at the Iron Curtain
+	map<int, bool>::value_type(LAW_ELECTIONS,  false), // Stalinists don't even have elections
+	map<int, bool>::value_type(LAW_MILITARY,  false), // Stalinists use the military for brutal repression
+	map<int, bool>::value_type(LAW_PRISONS,  false), // Stalinists annex Canada to fill it with gulags
+	map<int, bool>::value_type(LAW_TORTURE,  false), // Stalinists torture their enemies
+	map<int, bool>::value_type(LAWNUM,  false), // Liberals and Stalinists don't get along
+};
 /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
 * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
 bool stalinview(short view, bool islaw)
 {
-	if (islaw) switch (view)
+	if (islaw)
 	{
-	case LAW_STALIN: return false; // Liberals and Stalinists don't get along
-	case LAW_MOOD: return false; // Liberals and Stalinists don't get along
-	case LAW_ABORTION: return true; // Stalinists agree that abortion is good, although technically they don't let women choose
-	case LAW_ANIMALRESEARCH: return false; // Stalinists are in favor of unethical research
-	case LAW_POLICEBEHAVIOR: return false; // Stalinists use police for brutal repression
-	case LAW_PRIVACY: return false; // Stalinists don't believe in privacy
-	case LAW_DEATHPENALTY: return false; // Stalinists execute lots of people
-	case LAW_NUCLEARPOWER: return false; // Stalinists believe the more nuclear, the better
-	case LAW_POLLUTION: return false; // Stalinists don't care about pollution
-	case LAW_LABOR: return true; // Stalinists say, Workers of the world unite!
-	case LAW_GAY: return false; // Stalinists discriminate against gay people
-	case LAW_CORPORATE: return true; // Stalinists hate rich people and corporations
-	case LAW_FREESPEECH: return false; // Stalinists don't allow any dissent
-	case LAW_FLAGBURNING: return true; // Stalinists regularly burn flags
-	case LAW_GUNCONTROL: return true; // Stalinists don't want any armed resistance
-	case LAW_TAX: return true; // Stalinists support communist income redistribution
-	case LAW_WOMEN: return false; // Stalinists discriminate against women
-	case LAW_CIVILRIGHTS: return false; // Stalinists discriminate against ethnic groups
-	case LAW_DRUGS: return false; // Stalinists only allow vodka
-	case LAW_IMMIGRATION: return false; // Stalinists maintained tight border security at the Iron Curtain
-	case LAW_ELECTIONS: return false; // Stalinists don't even have elections
-	case LAW_MILITARY: return false; // Stalinists use the military for brutal repression
-	case LAW_PRISONS: return false; // Stalinists annex Canada to fill it with gulags
-	case LAW_TORTURE: return false; // Stalinists torture their enemies
-	case LAWNUM: return false; // Liberals and Stalinists don't get along
-	default: return false; // Liberals and Stalinists don't get along
+		if (stalinLaw.count(view)) {
+			return stalinLaw[view];
+		}
+		else
+			return false; // if the law doesn't exist, assume false
 	}
-	else switch (view)
+	else
 	{
-	case VIEW_STALIN: return false; // Liberals and Stalinists don't get along
-	case VIEW_MOOD: return false; // Liberals and Stalinists don't get along
-	case VIEW_GAY: return false; // Stalinists discriminate against gay people
-	case VIEW_DEATHPENALTY: return false; // Stalinists execute lots of people
-	case VIEW_TAXES: return true; // Stalinists support communist income redistribution
-	case VIEW_NUCLEARPOWER: return false; // Stalinists believe the more nuclear, the better
-	case VIEW_ANIMALRESEARCH: return false; // Stalinists are in favor of unethical research
-	case VIEW_POLICEBEHAVIOR: return false; // Stalinists use police for brutal repression
-	case VIEW_TORTURE: return false; // Stalinists torture their enemies
-	case VIEW_INTELLIGENCE: return false; // Stalinists don't believe in privacy
-	case VIEW_FREESPEECH: return false; // Stalinists don't allow any dissent
-	case VIEW_GENETICS: return false; // Stalinists are in favor of unethical research
-	case VIEW_JUSTICES: return false; // Liberals and Stalinists don't get along
-	case VIEW_GUNCONTROL: return true; // Stalinists don't want any armed resistance
-	case VIEW_SWEATSHOPS: return true; // Stalinists say, Workers of the world unite!
-	case VIEW_POLLUTION: return false; // Stalinists don't care about pollution
-	case VIEW_CORPORATECULTURE: return true; // Stalinists hate rich people and corporations
-	case VIEW_CEOSALARY: return true; // Stalinists hate rich people and corporations
-	case VIEW_WOMEN: return false; // Stalinists discriminate against women
-	case VIEW_CIVILRIGHTS: return false; // Stalinists discriminate against ethnic groups
-	case VIEW_DRUGS: return false; // Stalinists only allow vodka
-	case VIEW_IMMIGRATION: return false; // Stalinists maintained tight border security at the Iron Curtain
-	case VIEW_MILITARY: return false; // Stalinists use the military for brutal repression
-	case VIEW_PRISONS: return false; // Stalinists annex Canada to fill it with gulags
-	case VIEW_AMRADIO: return true; // Stalinists agree that Conservatives are bad
-	case VIEW_CABLENEWS: return true; // Stalinists agree that Conservatives are bad
-									  //case VIEW_POLITICALVIOLENCE: return true; // the LCS and Stalinists both like using political violence
-	case VIEW_LIBERALCRIMESQUAD: return false; // Liberals and Stalinists don't get along
-	case VIEW_LIBERALCRIMESQUADPOS: return false; // Liberals and Stalinists don't get along
-	case VIEW_CONSERVATIVECRIMESQUAD: return true; // Stalinists agree that Conservatives are bad
-	case VIEWNUM: return false; // Liberals and Stalinists don't get along
-	default: return false; // Liberals and Stalinists don't get along
+		if (stalinView.count(view)) {
+			return stalinView[view];
+		}
+		else
+			return false; // if the view doesn't exist, assume false
 	}
 }
-
+map<int, int> lawReturnAttitude = {
+	map<int, int>::value_type(LAW_ABORTION, VIEW_WOMEN), //XXX, There is no ``VIEW_ABORTION''!
+	map<int, int>::value_type(LAW_ANIMALRESEARCH, VIEW_ANIMALRESEARCH),
+	map<int, int>::value_type(LAW_POLICEBEHAVIOR, VIEW_POLICEBEHAVIOR),
+	map<int, int>::value_type(LAW_PRIVACY, VIEW_INTELLIGENCE),
+	map<int, int>::value_type(LAW_DEATHPENALTY, VIEW_DEATHPENALTY),
+	map<int, int>::value_type(LAW_NUCLEARPOWER, VIEW_NUCLEARPOWER),
+	map<int, int>::value_type(LAW_POLLUTION, VIEW_POLLUTION),
+	map<int, int>::value_type(LAW_LABOR, VIEW_SWEATSHOPS),
+	map<int, int>::value_type(LAW_GAY, VIEW_GAY),
+	map<int, int>::value_type(LAW_FREESPEECH, VIEW_FREESPEECH),
+	map<int, int>::value_type(LAW_TAX, VIEW_TAXES),
+	map<int, int>::value_type(LAW_FLAGBURNING, VIEW_FREESPEECH),  // <-- I'm keeping this pure free speech instead of free speech
+	map<int, int>::value_type(LAW_WOMEN, VIEW_WOMEN),             // plus political violence. Ideologically, there's no association
+	map<int, int>::value_type(LAW_CIVILRIGHTS, VIEW_CIVILRIGHTS), // between flag burning and violence. - Jonathan S. Fox
+	map<int, int>::value_type(LAW_DRUGS, VIEW_DRUGS),
+	map<int, int>::value_type(LAW_IMMIGRATION, VIEW_IMMIGRATION), //XXX, VIEW_DRUGS?
+	map<int, int>::value_type(LAW_MILITARY, VIEW_MILITARY),
+	map<int, int>::value_type(LAW_TORTURE, VIEW_TORTURE),
+	map<int, int>::value_type(LAW_GUNCONTROL, VIEW_GUNCONTROL),
+	map<int, int>::value_type(LAW_PRISONS, VIEW_PRISONS),
+};
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l)
 {
-	extern short attitude[VIEWNUM];
-	switch (l)
-	{  // All laws should be affected by exactly one issue if there is a direct
-	   // correlation between that law and an issue. For example, police behavior
-	   // as a law should depend only upon police behavior as an issue. This keeps
-	   // the game logical to the player and ensures that the public opinion polls
-	   // displayed in-game accurately predict how people will vote in specific
-	   // issues. For a handful of laws, we might not have a directly correlating
-	   // issue; for example, as of this writing, there is no issue asking people's
-	   // opinions on torture. In this case, we can use the nearest issue, or we
-	   // can mix two closely related ones. As a general principle, try to avoid
-	   // getting too complicated here; this is under-the-hood stuff the player
-	   // will never appreciate, so it should be kept as simple and transparent as
-	   // possible so as to avoid creating unexpected results that will only confuse
-	   // players, like people refusing to further regulate nuclear power because
-	   // one of the other issues besides nuclear power is conservative, even when
-	   // the nuclear power issue is 100% Liberal. - Jonathan S. Fox
-	case LAW_ABORTION: return attitude[VIEW_WOMEN]; //XXX: There is no ``VIEW_ABORTION''!
-	case LAW_ANIMALRESEARCH: return attitude[VIEW_ANIMALRESEARCH];
-	case LAW_POLICEBEHAVIOR: return attitude[VIEW_POLICEBEHAVIOR];
-	case LAW_PRIVACY: return attitude[VIEW_INTELLIGENCE];
-	case LAW_DEATHPENALTY: return attitude[VIEW_DEATHPENALTY];
-	case LAW_NUCLEARPOWER: return attitude[VIEW_NUCLEARPOWER];
-	case LAW_POLLUTION: return attitude[VIEW_POLLUTION];
-	case LAW_LABOR: return attitude[VIEW_SWEATSHOPS];
-	case LAW_GAY: return attitude[VIEW_GAY];
-	case LAW_CORPORATE: return (attitude[VIEW_CORPORATECULTURE] + attitude[VIEW_CEOSALARY]) / 2; // <-- We'll be merging these two views here because there is no CEO salary law.
-	case LAW_FREESPEECH: return attitude[VIEW_FREESPEECH];                                     // The issue is there for flavor, and falls under the same umbrella of
-	case LAW_TAX: return attitude[VIEW_TAXES];                                                 // corporate regulation. - Jonathan S. Fox
-	case LAW_FLAGBURNING: return attitude[VIEW_FREESPEECH];  // <-- I'm keeping this pure free speech instead of free speech
-	case LAW_WOMEN: return attitude[VIEW_WOMEN];             // plus political violence. Ideologically, there's no association
-	case LAW_CIVILRIGHTS: return attitude[VIEW_CIVILRIGHTS]; // between flag burning and violence. - Jonathan S. Fox
-	case LAW_DRUGS: return attitude[VIEW_DRUGS];
-	case LAW_IMMIGRATION: return attitude[VIEW_IMMIGRATION]; //XXX: VIEW_DRUGS?
-	case LAW_MILITARY: return attitude[VIEW_MILITARY];
-	case LAW_TORTURE: return attitude[VIEW_TORTURE];
-	case LAW_GUNCONTROL: return attitude[VIEW_GUNCONTROL];
-	case LAW_PRISONS: return attitude[VIEW_PRISONS];
-	case LAW_STALIN:
-		l = 0;
-		for (int v = 0; v < VIEWNUM - 3; v++)
-			if (stalinview(v, false)) l += 100 - attitude[v];
-			else l += attitude[v];
+	if (lawReturnAttitude.count(l)) {
+		return lawReturnAttitude[l];
+	}
+	else {
+		extern short attitude[VIEWNUM];
+		switch (l)
+		{  // All laws should be affected by exactly one issue if there is a direct
+		   // correlation between that law and an issue. For example, police behavior
+		   // as a law should depend only upon police behavior as an issue. This keeps
+		   // the game logical to the player and ensures that the public opinion polls
+		   // displayed in-game accurately predict how people will vote in specific
+		   // issues. For a handful of laws, we might not have a directly correlating
+		   // issue; for example, as of this writing, there is no issue asking people's
+		   // opinions on torture. In this case, we can use the nearest issue, or we
+		   // can mix two closely related ones. As a general principle, try to avoid
+		   // getting too complicated here; this is under-the-hood stuff the player
+		   // will never appreciate, so it should be kept as simple and transparent as
+		   // possible so as to avoid creating unexpected results that will only confuse
+		   // players, like people refusing to further regulate nuclear power because
+		   // one of the other issues besides nuclear power is conservative, even when
+		   // the nuclear power issue is 100% Liberal. - Jonathan S. Fox
+		case LAW_CORPORATE: return (attitude[VIEW_CORPORATECULTURE] + attitude[VIEW_CEOSALARY]) / 2; // <-- We'll be merging these two views here because there is no CEO salary law.
+							// The issue is there for flavor, and falls under the same umbrella of
+							 // corporate regulation. - Jonathan S. Fox
+		case LAW_STALIN:
+			l = 0;
+			for (int v = 0; v < VIEWNUM - 3; v++)
+				if (stalinview(v, false)) l += 100 - attitude[v];
+				else l += attitude[v];
+				return l / (VIEWNUM - 3);
+		case LAW_ELECTIONS:
+		case LAW_MOOD:
+		default: //eg. -1
+			l = 0;
+			for (int v = 0; v < VIEWNUM - 3; v++) l += attitude[v];
 			return l / (VIEWNUM - 3);
-	case LAW_ELECTIONS:
-	case LAW_MOOD:
-	default: //eg. -1
-		l = 0;
-		for (int v = 0; v < VIEWNUM - 3; v++) l += attitude[v];
-		return l / (VIEWNUM - 3);
+		}
 	}
 }
 /* common - shifts public opinion on an issue */
@@ -1058,6 +1095,10 @@ string lastname(bool archconservative)
 }
 
 
+vector<int> maleOrFemale = {
+	GENDER_MALE,
+	GENDER_FEMALE
+};
 /* fills a string with a proper name */
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* get a first and last name for the same person */
@@ -1070,32 +1111,787 @@ void generate_long_name(char *first, char *middle, char *last, char gender = GEN
 const string CONST_news700 = "her";
 const string CONST_news378 = "his";
 const string CONST_news647 = "[hurting spree]";
-string constructPositiveEventStory(const short view) {
 
-	const string CONST_news458 = ".\"";
-	const string CONST_news457 = " choice, and I would only have a few seconds before they made it for me";
-	const string CONST_news456 = "helluva";
-	const string CONST_news455 = "[difficult]";
-	const string CONST_news454 = " the other. A ";
-	const string CONST_news453 = "AIDS";
-	const string CONST_news452 = "GRIDS";
-	const string CONST_news451 = "Maybe lose an eye the one way, maybe catch ";
-	const string CONST_news450 = "My shank's under the mattress. Better to be brave and fight or chicken out and let them take it? ";
-	const string CONST_news449 = "with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager. ";
-	const string CONST_news448 = "I was trapped with them now. There were three, looking me over ";
-	const string CONST_news447 = "coming to a halt with a deafening clang that said it all 컴 ";
-	const string CONST_news446 = "The steel bars grated forward in their rails, ";
-	const string CONST_news445 = " Take this excerpt, \"";
-	const string CONST_news444 = "_.&r";
-	const string CONST_news443 = "Buttlord";
-	const string CONST_news442 = "[Bum]lord";
+string constructVIEW_WOMEN()
+{
+	const string CONST_news284 = " Correctional Facility.&r";
+	const string CONST_news283 = " yesterday at the ";
+	const string CONST_news282 = ":";
+	const string CONST_news281 = " was pronounced dead at ";
+	const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
+	const string CONST_news279 = ", even though being gay is deviant, as we all know.";
+	const string CONST_news278 = " is a known faggot";
+	const string CONST_news277 = ", despite the fact that ";
+	const string CONST_news276 = "aggravated nature of the offense";
+	const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
+	const string CONST_news274 = " Authorities have stated that they will vigorously ";
+	const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
+	const string CONST_news272 = "The chase ended when ";
+	const string CONST_news271 = " at the pursuing police cruisers. ";
+	const string CONST_news270 = "taking swipes";
+	const string CONST_news269 = "urinating out the window";
+	const string CONST_news268 = "pissing out the window";
+	const string CONST_news267 = "[relieving themselves] out the window";
+	const string CONST_news266 = "throwing beer bottles";
+	const string CONST_news265 = "throwing [juice boxes]";
+	const string CONST_news264 = "murderers swerving wildly, ";
+	const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
+	const string CONST_news262 = "have not yet been released.";
+	const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
+	const string CONST_news260 = "A police spokesperson reported that four suspects ";
+	const string CONST_news259 = " here yesterday. ";
+	const string CONST_news258 = "a homosexual, was ";
+	const string CONST_news257 = "a known homosexual, was ";
+	const string CONST_news256 = "a known sexual deviant, was ";
+	const string CONST_news255 = " children.&r";
+	const string CONST_news250 = " and ";
+	const string CONST_news249 = "wife";
+	const string CONST_news248 = " is survived by ";
+	const string CONST_news246 = "had been completed.&r";
+	const string CONST_news245 = " surrendered without a struggle, reportedly saying that God's work ";
+	const string CONST_news244 = " abortion doctors as opposed to arresting them.&r";
+	const string CONST_news243 = " later admitted to being a rogue FBI vigilante, hunting down ";
+	const string CONST_news242 = "called the police on a cellphone and they arrived shortly thereafter. ";
+	const string CONST_news241 = "verses of the Bible at the stunned onlookers. Someone ";
+	const string CONST_news240 = " remained at the scene after the shooting, screaming ";
+	const string CONST_news239 = " Witnesses report that ";
+	const string CONST_news238 = ", is in custody.&r";
+	const string CONST_news237 = "The suspected shooter, ";
+	const string CONST_news236 = " times and died immediately in the parking lot. ";
+	const string CONST_news235 = " was hit ";
+	const string CONST_news234 = "shots were fired from a nearby vehicle. ";
+	const string CONST_news233 = " car when, according to police reports, ";
+	const string CONST_news232 = " was walking to ";
+	const string CONST_news230 = "Dr. ";
+	const string CONST_news229 = " Clinic yesterday. ";
+	const string CONST_news228 = "gunned down outside of the ";
+	const string CONST_news227 = "A doctor that routinely performed abortions was ruthlessly ";
+	const string CONST_news226 = "A doctor that routinely performed semi-legal abortions was ruthlessly ";
+	const string CONST_news225 = "A doctor that routinely performed illegal abortions was ruthlessly ";
+	const string CONST_news224 = "A doctor that routinely performed illegal abortion-murders was ruthlessly ";
+
+	const string CONST_newsB925 = "husband";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	string story;
+	//TODO IsaacG Migrate Strings?
+	char str[200];
+	story = cityname();
+	story += spaceDashSpace;
+
+	if (lawList[LAW_ABORTION] == -2) story += CONST_news224;
+	else if (lawList[LAW_ABORTION] == -1) story += CONST_news225;
+	else if (lawList[LAW_ABORTION] == 0) story += CONST_news226;
+	else story += CONST_news227 \
+		+ CONST_news228;
+	strcpy(str, lastname(true).data());
+	story += str \
+		+ CONST_news229 \
+		+ CONST_news230;
+
+	char dstr[200], dstr2[200];
+	const char gn = pickrandom(maleOrFemale);
+
+	generate_name(dstr, dstr2, gn);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2;
+	char gen[200];
+	strcpy(gen, (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378).data());
+
+	story += CONST_news232 \
+		+ gen;//TODO() Add more variety, not just in the parking lot.
+	story += CONST_news233 \
+		+ CONST_news234 \
+		+ dstr2 \
+		+ CONST_news235 \
+		+ tostring(LCSrandom(15) + 3) \
+		+ CONST_news236 \
+		+ CONST_news237;
+
+	char str2[200];
+	generate_name(str, str2);
+
+	story += str \
+		+ singleSpace \
+		+ str2 \
+		+ CONST_news238 \
+		+ CONST_news239 \
+		+ str2 \
+		+ CONST_news240 \
+		+ CONST_news241 \
+		+ CONST_news242 \
+		+ str2;
+
+	if (lawList[LAW_WOMEN] == -2)
+	{
+		story += CONST_news243 \
+			+ CONST_news244;
+	}
+	else
+	{
+		story += CONST_news245 \
+			+ CONST_news246;
+	}
+
+	story += singleSpace \
+		+ dstr2 \
+		+ CONST_news248 \
+		+ gen \
+		+ singleSpace;
+
+	char spouse = pickrandom(maleOrFemale);
+	if (lawList[LAW_GAY] <= 1)
+		spouse = (gn == GENDER_FEMALE ? GENDER_MALE : GENDER_FEMALE);
+
+	story += (spouse == GENDER_FEMALE ? CONST_news249 : CONST_newsB925) \
+		+ CONST_news250;
+
+	vector<string> two_to_five = {
+	"two",
+		"three",
+		"four",
+		"five"
+	};
+	story += pickrandom(two_to_five) \
+		+ CONST_news255;
+
+	return story;
+}
+string constructVIEW_GAY()
+{
+	const string CONST_news279 = ", even though being gay is deviant, as we all know.";
+	const string CONST_news278 = " is a known faggot";
+	const string CONST_news277 = ", despite the fact that ";
+	const string CONST_news276 = "aggravated nature of the offense";
+	const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
+	const string CONST_news274 = " Authorities have stated that they will vigorously ";
+	const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
+	const string CONST_news272 = "The chase ended when ";
+	const string CONST_news271 = " at the pursuing police cruisers. ";
+	const string CONST_news270 = "taking swipes";
+	const string CONST_news269 = "urinating out the window";
+	const string CONST_news268 = "pissing out the window";
+	const string CONST_news267 = "[relieving themselves] out the window";
+	const string CONST_news266 = "throwing beer bottles";
+	const string CONST_news265 = "throwing [juice boxes]";
+	const string CONST_news264 = "murderers swerving wildly, ";
+	const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
+	const string CONST_news262 = "have not yet been released.";
+	const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
+	const string CONST_news260 = "A police spokesperson reported that four suspects ";
+	const string CONST_news259 = " here yesterday. ";
+	const string CONST_news258 = "a homosexual, was ";
+	const string CONST_news257 = "a known homosexual, was ";
+	const string CONST_news256 = "a known sexual deviant, was ";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+	extern vector<string> vigilante_murder;
+	extern vector<string> why_chase_ended;
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	string story;
+	story = cityname();
+	story += spaceDashSpace;
+
+	char dstr[200], dstr2[200];
+	generate_name(dstr, dstr2);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2 \
+		+ commaSpace;
+
+	if (lawList[LAW_GAY] == -2) story += CONST_news256;
+	else if (lawList[LAW_GAY] == -1) story += CONST_news257;
+	else story += CONST_news258 \
+		+ pickrandom(vigilante_murder) \
+		+ CONST_news259 \
+		+ CONST_news260 \
+		+ CONST_news261 \
+		+ CONST_news262 \
+		+ ampersandR \
+		+ CONST_news263 \
+		+ CONST_news264;
+
+	switch (LCSrandom(3))
+	{
+	case 0:
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news265;
+		else story += CONST_news266;
+		break;
+	case 1:
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news267;
+		else if (lawList[LAW_FREESPEECH] == 2) story += CONST_news268;
+		else story += CONST_news269;
+		break;
+	case 2: story += CONST_news270; break;
+	}
+
+	story += CONST_news271 \
+		+ CONST_news272 \
+		+ pickrandom(why_chase_ended) \
+		+ " " \
+		+ CONST_news273 \
+		+ ampersandR \
+		+ CONST_news274 \
+		+ CONST_news275 \
+		+ CONST_news276;
+
+	if (lawList[LAW_GAY] == -2 && lawList[LAW_FREESPEECH] != -2)
+	{
+		story += CONST_news277 \
+			+ dstr \
+			+ singleSpace \
+			+ dstr2 \
+			+ CONST_news278;
+	}
+	else if (lawList[LAW_GAY] == -2)story += CONST_news279;
+	else story += singleDot \
+		+ ampersandR;
+
+	return story;
+}
+string constructVIEW_FREESPEECH()
+{
 	const string CONST_news441 = "_";
-	const string CONST_news440 = "'s new tour-de-force, _";
-	const string CONST_news438 = "have these works been as poignant as ";
-	const string CONST_news437 = "prison theme lately in its offerings for mass consumption, rarely ";
-	const string CONST_news436 = "Although popular culture has used, or perhaps overused, the ";
-	const string CONST_news435 = "detail what goes on behind bars. ";
-	const string CONST_news434 = " - A former prisoner has written a book describing in horrifying ";
+
+	const string CONST_news345 = "?";
+	const string CONST_news344 = "Mamma, why did they kill ";
+	const string CONST_news343 = " dead?";
+	const string CONST_news342 = "Mamma, is ";
+	const string CONST_news340 = "many area children spontaneously broke into tears. One child was ";
+	const string CONST_news339 = " When the decision to ban the book was announced yesterday, ";
+	const string CONST_news338 = " as key evidence of the dark nature of the book.";
+	const string CONST_news337 = "a child that ";
+	const string CONST_news336 = "a child that said a magic spell at her parents";
+	const string CONST_news335 = "a child that swore in class";
+	const string CONST_news334 = "In their complaint, the groups cited an incident involving ";
+	const string CONST_news332 = "some conservatives feel that the books ";
+	const string CONST_news331 = "Although the series is adored by children worldwide, ";
+	const string CONST_news329 = ". ";
+	const string CONST_news328 = " author ";
+	const string CONST_news327 = "_, is the third in an immensely popular series by ";
+	const string CONST_news325 = "_and_the_";
+	const string CONST_news322 = " The book, ";
+	const string CONST_news321 = "the city bowed to pressure from religious groups.";
+	const string CONST_news320 = " - A children's story has been removed from libraries here after ";
+
+	const string CONST_newsX02 = "heard saying, \"";
+
+	const string CONST_news1030 = "\"";
+
+	const string CONST_news485 = ". ";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+	extern vector<string> vigilante_murder;
+	extern vector<string> why_chase_ended;
+	extern vector<string> book_title;
+	extern vector<string> book_title_2;
+	extern vector<string> random_nationality;
+	extern vector<string> conservative_oppose_book;
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+	extern vector<string> petty_violence;
+	extern vector<string> his_her;
+	extern vector<string> older_younger;
+	extern vector<string> brother_sister;
+
+	string story;
+	story = cityname();
+	story += CONST_news320 \
+		+ CONST_news321 \
+		+ ampersandR \
+		+ CONST_news322 \
+		+ CONST_news441;
+
+	char dstr[200], nstr[200];
+
+	generate_name(nstr, dstr);
+
+	story += nstr \
+		+ CONST_news441 \
+		+ dstr \
+		+ CONST_news325 \
+		+ pickrandom(book_title) \
+		+ CONST_news441 \
+		+ pickrandom(book_title_2) \
+		+ CONST_news327 \
+		+ pickrandom(random_nationality) \
+		+ CONST_news328;
+
+	char c[2] = { 0,0 };
+
+	c[0] = 'A' + LCSrandom(26);
+
+	story += c \
+		+ singleDot;
+
+	c[0] = 'A' + LCSrandom(26);
+
+	story += c \
+		+ CONST_news329;
+
+	strcpy(dstr, lastname().data());
+
+	story += dstr \
+		+ CONST_news485 \
+		+ CONST_news331 \
+		+ CONST_news332 \
+		+ pickrandom(conservative_oppose_book) \
+		+ singleSpace \
+		+ CONST_news334;
+
+	switch (LCSrandom(3))
+	{
+	case 0: story += CONST_news335; break;
+	case 1: story += CONST_news336; break;
+	case 2: story += CONST_news337 \
+		+ pickrandom(petty_violence) \
+		+ singleSpace \
+		+ pickrandom(his_her) \
+		+ singleSpace \
+		+ pickrandom(older_younger) \
+		+ singleSpace \
+		+ pickrandom(brother_sister);
+		break;
+	}
+
+	story += CONST_news338 \
+		+ ampersandR \
+		+ CONST_news339 \
+		+ CONST_news340 \
+		+ CONST_newsX02;
+
+	switch (LCSrandom(2))
+	{
+	case 0:
+		story += CONST_news342 \
+			+ nstr \
+			+ CONST_news343;
+		break;
+	case 1:
+		story += CONST_news344 \
+			+ nstr \
+			+ CONST_news345;
+		break;
+	}
+
+	story += CONST_news1030 \
+		+ ampersandR;
+
+	return story;
+}
+const string CONST_news1030 = "\"";
+string constructVIEW_DEATHPENALTY()
+{
+	const string CONST_news458 = ".\"";
+
+	const string CONST_news306 = "can be put to death in this country.";
+	const string CONST_news305 = "tragedy, it will be that our nation is now evaluating the ease with which people ";
+	const string CONST_news304 = "and more events are expected this evening. If there is a bright side to be found from this ";
+	const string CONST_news303 = " Candlelight vigils were held throughout the country last night during the execution, ";
+	const string CONST_news301 = "The family wants closure. We don't have time for another trial";
+	const string CONST_news300 = "End of story";
+	const string CONST_news299 = "Assassin, serial killer, either way 컴 guilty. ";
+	const string CONST_news298 = "The convict is always referred to by three names. ";
+	const string CONST_news297 = "Let's not forget the convict is colored. You know how their kind are";
+	const string CONST_news295 = "spokesperson for the governor saying, ";
+	const string CONST_news294 = "The state still went through with the execution, with a ";
+	const string CONST_news293 = " was framed. ";
+	const string CONST_news292 = "an admission from a former prosecutor that ";
+	const string CONST_news291 = "a battery of negative DNA tests. ";
+	const string CONST_news290 = "a confession from another convict. ";
+	const string CONST_news289 = "have been produced, including ";
+	const string CONST_news288 = "Since then, numerous pieces of exculpatory evidence ";
+	const string CONST_news287 = " of 13 serial murders. ";
+	const string CONST_news286 = " was convicted in ";
+	const string CONST_news284 = " Correctional Facility.&r";
+	const string CONST_news283 = " yesterday at the ";
+	const string CONST_news282 = ":";
+	const string CONST_news281 = " was pronounced dead at ";
+	const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
+
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	extern vector<string> judge_with_prostitute;
+	extern vector<string> judge_with_prostitute_no_free_speech;
+	extern vector<string> judge_with_prostitute_full_free_speech;
+
+	extern vector<string> AMorPM;
+	string story;
+
+	story += statename() \
+		+ CONST_news280;
+
+	char dstr[200], dstr2[200], dstr3[200];
+
+	generate_long_name(dstr, dstr2, dstr3);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2 \
+		+ singleSpace \
+		+ dstr3 \
+		+ CONST_news281 \
+		+ tostring(LCSrandom(12) + 1) \
+		+ CONST_news282 \
+		+ tostring(LCSrandom(60)) \
+		+ pickrandom(AMorPM) \
+		+ CONST_news283;
+
+	char jstr[200];
+
+	strcpy(jstr, lastname(true).data());
+
+	story += jstr \
+		+ CONST_news284 \
+		+ singleSpace \
+		+ dstr3 \
+		+ CONST_news286 \
+		+ tostring(year - LCSrandom(11) - 10) \
+		+ CONST_news287 \
+		+ CONST_news288 \
+		+ CONST_news289;
+
+	switch (LCSrandom(3))
+	{
+	case 0: story += CONST_news290;
+		break;
+	case 1: story += CONST_news291;
+		break;
+	case 2:
+		story += CONST_news292 \
+			+ dstr3 \
+			+ CONST_news293;
+		break;
+	}
+
+	story += CONST_news294 \
+		+ CONST_news295 \
+		+ CONST_news1030;
+
+	switch (LCSrandom(3))
+	{
+	case 0: story += CONST_news297;
+		break;
+	case 1:
+		story += CONST_news298 \
+			+ CONST_news299 \
+			+ CONST_news300;
+		break;
+	case 2: story += CONST_news301;
+		break;
+	}
+
+	story += CONST_news458 \
+		+ ampersandR \
+		+ CONST_news303 \
+		+ CONST_news304 \
+		+ CONST_news305 \
+		+ CONST_news306 \
+		+ ampersandR;
+
+	return story;
+}
+string constructVIEW_INTELLIGENCE()
+{
+	const string CONST_news458 = ".\"";
+
+	const string CONST_news318 = "You think about that before you continue slanging accusations";
+	const string CONST_news317 = "these files deal with the one and not the other. ";
+	const string CONST_news316 = "It might be a bit presumptive to assume that ";
+	const string CONST_news315 = "Well, you know, there's privacy, and there's privacy. ";
+	const string CONST_news313 = " The FBI refused to comment initially, but when confronted with the information, ";
+	const string CONST_news312 = "\"deal with the undesirables\", although this phrase is not clarified. ";
+	const string CONST_news311 = " More disturbingly, the files make reference to a plan to ";
+	const string CONST_news310 = "unions, working for liberal organizations 컴 even ";
+	const string CONST_news309 = "The files contain information on which people have been attending demonstrations, organizing ";
+	const string CONST_news308 = "This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations. ";
+	const string CONST_news307 = "Washington, DC - The FBI might be keeping tabs on you. ";
+
+	const string CONST_newsX01 = "a spokesperson stated, \"";
+
+	const string CONST_news1030 = "\"";
+
+	const string CONST_news485 = ". ";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	extern vector<string> liberalCrime;
+
+	string story;
+	story += CONST_news307 \
+		+ CONST_news308 \
+		+ CONST_news309 \
+		+ CONST_news310 \
+		+ pickrandom(liberalCrime) \
+		+ ampersandR \
+		+ CONST_news311 \
+		+ CONST_news312 \
+		+ ampersandR \
+		+ CONST_news313 \
+		+ CONST_newsX01 \
+		+ CONST_news315 \
+		+ CONST_news316 \
+		+ CONST_news317 \
+		+ CONST_news318 \
+		+ CONST_news458 \
+		+ ampersandR;
+	return story;
+}
+
+string constructVIEW_JUSTICES()
+{
+	extern string ampersandR;
+
+	const string CONST_news361 = "the judge would be going on a Bible retreat for a few weeks to ";
+	const string CONST_news360 = " could not be reached for comment, although an aid stated that ";
+	const string CONST_news358 = " in exchange for their silence.";
+	const string CONST_news357 = " reportedly offered ";
+	const string CONST_news355 = "when police broke into the hotel room they saw ";
+	const string CONST_news354 = "According to sources familiar with the particulars, ";
+	const string CONST_news353 = " last week in a hotel during a police sting operation. ";
+	const string CONST_news352 = ", was found with ";
+	const string CONST_news351 = ", who once ";
+	const string CONST_news349 = " has resigned in disgrace after being caught with a prostitute.";
+	const string CONST_news348 = " has resigned in disgrace after being caught with a [civil servant].";
+	const string CONST_news347 = " - Conservative federal judge ";
+
+
+	const string CONST_newsB928 = "\"Make things right with the Almighty Father.\"";
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+
+	extern vector<string> judge_with_prostitute;
+	extern vector<string> judge_with_prostitute_no_free_speech;
+	extern vector<string> judge_with_prostitute_full_free_speech;
+	extern vector<string> crazy_conservative_act;
+
+	extern vector<string> bribe_officers;
+
+	string story;
+	story = cityname();
+	story += CONST_news347;
+
+	char dstr[200], dstr2[200];
+
+	generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2;
+
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news348;
+	else story += CONST_news349 \
+		+ ampersandR \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news351 \
+		+ pickrandom(crazy_conservative_act) \
+		+ CONST_news352;
+
+	char pstr[200], pstr2[200];
+	generate_name(pstr, pstr2);
+
+	story += pstr \
+		+ singleSpace \
+		+ pstr2 \
+		+ CONST_news353 \
+		+ CONST_news354 \
+		+ CONST_news355;
+
+	if (lawList[LAW_FREESPEECH] == -2) {
+		story += pickrandom(judge_with_prostitute_no_free_speech);
+	}
+	else if (lawList[LAW_FREESPEECH] == 2) {
+		story += pickrandom(judge_with_prostitute_full_free_speech);
+	}
+	else {
+		story += pickrandom(judge_with_prostitute);
+	}
+
+	story += singleSpace \
+		+ pstr2 \
+		+ CONST_news357 \
+		+ pickrandom(bribe_officers) \
+		+ CONST_news358 \
+		+ ampersandR \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news360 \
+		+ CONST_news361 \
+		+ CONST_newsB928 \
+		+ ampersandR;
+
+	return story;
+}
+string constructVIEW_AMRADIO()
+{
+	const string CONST_news390 = "to the FM band.";
+	const string CONST_news389 = "pastures. Of these, many said that they would be switching over ";
+	const string CONST_news388 = "have decided to leave the program for saner ";
+	const string CONST_news387 = "fully half of the host's most loyal supporters ";
+	const string CONST_news386 = "According to a poll completed yesterday, ";
+	const string CONST_news385 = "the damage might already be done. ";
+	const string CONST_news384 = " issued an apology later in the program, but ";
+	const string CONST_news381 = " g*dd*mn mind";
+	const string CONST_news380 = " [gosh darn] mind";
+	const string CONST_news379 = " goddamn mind";
+	const string CONST_news377 = "lost ";
+	const string CONST_news376 = " had ";
+	const string CONST_news374 = "\", a former fan of the show, ";
+	const string CONST_news373 = "liberal media establishment!";
+	const string CONST_news372 = "current president!";
+	const string CONST_news371 = "and the greatest living example of a reverse racist is the ";
+	const string CONST_news368 = "'s monologue for the evening began the way that fans ";
+	const string CONST_news366 = "\".";
+	const string CONST_news364 = " went off for fifteen minutes in an inexplicable rant ";
+	const string CONST_news363 = " - Well-known AM radio personality ";
+
+	const string CONST_newsX03 = "two nights ago during the syndicated radio program \"";
+	const string CONST_newsX04 = "had come to expect, with attacks on the \"liberal media establishment\"";
+	const string CONST_newsX05 = "the \"elite liberal agenda\". But when the radio icon said, \"";
+	const string CONST_newsX06 = ", knew that \"";
+	const string CONST_newsX07 = ". After that, it just got worse and worse.\"";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
+
+	extern vector<string> radio_name;
+	extern vector<string> radio_name_2;
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	extern vector<string> radio_host_crazy_quote;
+	extern vector<string> radio_host_lost_mind;
+
+	extern vector<string> my_idol;
+	string story;
+	story = cityname();
+	story += CONST_news363;
+
+	char dstr[200], dstr2[200];
+	generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news364 \
+		+ CONST_newsX03 \
+		+ pickrandom(radio_name) \
+		+ singleSpace \
+		+ pickrandom(radio_name_2) \
+		+ CONST_news366 \
+		+ ampersandR \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news368 \
+		+ CONST_newsX04 \
+		+ CONST_newsX05;
+
+	switch (LCSrandom(radio_host_crazy_quote.size()))
+	{
+	case 0:
+		story += CONST_news371;
+		if (presparty != CONSERVATIVE_PARTY) story += CONST_news372; // Limbaugh
+		else story += CONST_news373;
+		break;
+	default:
+		story += pickrandom(radio_host_crazy_quote);
+		break;
+	}
+
+	story += CONST_news374;
+
+	char nstr[200], nstr2[200];
+	generate_name(nstr, nstr2);
+
+	story += nstr \
+		+ singleSpace \
+		+ nstr2 \
+		+ CONST_newsX06 \
+		+ pickrandom(my_idol) \
+		+ CONST_news376;
+
+	switch (LCSrandom(radio_host_lost_mind.size()))
+	{
+	case 0:
+		story += CONST_news377 \
+			+ CONST_news378; // the AM personality's a white male patriarch
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_news379;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news380;
+		else story += CONST_news381;
+		break;
+	default:
+		story += pickrandom(radio_host_lost_mind);
+	}
+
+	story += CONST_newsX07 \
+		+ ampersandR \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news384 \
+		+ CONST_news385 \
+		+ CONST_news386 \
+		+ CONST_news387; // XXX How many of them switch should
+	story += CONST_news388; // depend on [LAW_FREESPEECH]
+	story += CONST_news389 \
+		+ CONST_news390 \
+		+ ampersandR;
+
+	return story;
+}
+string constructVIEW_GUNCONTROL()
+{
 	const string CONST_news433 = " was disturbingly obsessed with guns and death.&r";
 	const string CONST_news432 = "she";
 	const string CONST_news431 = "reports indicate that the student kept a journal that showed ";
@@ -1134,856 +1930,333 @@ string constructPositiveEventStory(const short view) {
 	const string CONST_news394 = " at a local ";
 	const string CONST_news393 = "shooting rampage";
 	const string CONST_news391 = "A student has gone on a ";
-	const string CONST_news390 = "to the FM band.";
-	const string CONST_news389 = "pastures. Of these, many said that they would be switching over ";
-	const string CONST_news388 = "have decided to leave the program for saner ";
-	const string CONST_news387 = "fully half of the host's most loyal supporters ";
-	const string CONST_news386 = "According to a poll completed yesterday, ";
-	const string CONST_news385 = "the damage might already be done. ";
-	const string CONST_news384 = " issued an apology later in the program, but ";
-	const string CONST_news381 = " g*dd*mn mind";
-	const string CONST_news380 = " [gosh darn] mind";
-	const string CONST_news379 = " goddamn mind";
-	const string CONST_news377 = "lost ";
-	const string CONST_news376 = " had ";
-	const string CONST_news374 = "\", a former fan of the show, ";
-	const string CONST_news373 = "liberal media establishment!";
-	const string CONST_news372 = "current president!";
-	const string CONST_news371 = "and the greatest living example of a reverse racist is the ";
-	const string CONST_news368 = "'s monologue for the evening began the way that fans ";
-	const string CONST_news366 = "\".";
-	const string CONST_news364 = " went off for fifteen minutes in an inexplicable rant ";
-	const string CONST_news363 = " - Well-known AM radio personality ";
-	const string CONST_news361 = "the judge would be going on a Bible retreat for a few weeks to ";
-	const string CONST_news360 = " could not be reached for comment, although an aid stated that ";
-	const string CONST_news358 = " in exchange for their silence.";
-	const string CONST_news357 = " reportedly offered ";
-	const string CONST_news355 = "when police broke into the hotel room they saw ";
-	const string CONST_news354 = "According to sources familiar with the particulars, ";
-	const string CONST_news353 = " last week in a hotel during a police sting operation. ";
-	const string CONST_news352 = ", was found with ";
-	const string CONST_news351 = ", who once ";
-	const string CONST_news349 = " has resigned in disgrace after being caught with a prostitute.";
-	const string CONST_news348 = " has resigned in disgrace after being caught with a [civil servant].";
-	const string CONST_news347 = " - Conservative federal judge ";
-	const string CONST_news345 = "?";
-	const string CONST_news344 = "Mamma, why did they kill ";
-	const string CONST_news343 = " dead?";
-	const string CONST_news342 = "Mamma, is ";
-	const string CONST_news340 = "many area children spontaneously broke into tears. One child was ";
-	const string CONST_news339 = " When the decision to ban the book was announced yesterday, ";
-	const string CONST_news338 = " as key evidence of the dark nature of the book.";
-	const string CONST_news337 = "a child that ";
-	const string CONST_news336 = "a child that said a magic spell at her parents";
-	const string CONST_news335 = "a child that swore in class";
-	const string CONST_news334 = "In their complaint, the groups cited an incident involving ";
-	const string CONST_news332 = "some conservatives feel that the books ";
-	const string CONST_news331 = "Although the series is adored by children worldwide, ";
-	const string CONST_news329 = ". ";
-	const string CONST_news328 = " author ";
-	const string CONST_news327 = "_, is the third in an immensely popular series by ";
-	const string CONST_news325 = "_and_the_";
-	const string CONST_news322 = " The book, ";
-	const string CONST_news321 = "the city bowed to pressure from religious groups.";
-	const string CONST_news320 = " - A children's story has been removed from libraries here after ";
-	const string CONST_news318 = "You think about that before you continue slanging accusations";
-	const string CONST_news317 = "these files deal with the one and not the other. ";
-	const string CONST_news316 = "It might be a bit presumptive to assume that ";
-	const string CONST_news315 = "Well, you know, there's privacy, and there's privacy. ";
-	const string CONST_news313 = " The FBI refused to comment initially, but when confronted with the information, ";
-	const string CONST_news312 = "\"deal with the undesirables\", although this phrase is not clarified. ";
-	const string CONST_news311 = " More disturbingly, the files make reference to a plan to ";
-	const string CONST_news310 = "unions, working for liberal organizations 컴 even ";
-	const string CONST_news309 = "The files contain information on which people have been attending demonstrations, organizing ";
-	const string CONST_news308 = "This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations. ";
-	const string CONST_news307 = "Washington, DC - The FBI might be keeping tabs on you. ";
-	const string CONST_news306 = "can be put to death in this country.";
-	const string CONST_news305 = "tragedy, it will be that our nation is now evaluating the ease with which people ";
-	const string CONST_news304 = "and more events are expected this evening. If there is a bright side to be found from this ";
-	const string CONST_news303 = " Candlelight vigils were held throughout the country last night during the execution, ";
-	const string CONST_news301 = "The family wants closure. We don't have time for another trial";
-	const string CONST_news300 = "End of story";
-	const string CONST_news299 = "Assassin, serial killer, either way 컴 guilty. ";
-	const string CONST_news298 = "The convict is always referred to by three names. ";
-	const string CONST_news297 = "Let's not forget the convict is colored. You know how their kind are";
-	const string CONST_news295 = "spokesperson for the governor saying, ";
-	const string CONST_news294 = "The state still went through with the execution, with a ";
-	const string CONST_news293 = " was framed. ";
-	const string CONST_news292 = "an admission from a former prosecutor that ";
-	const string CONST_news291 = "a battery of negative DNA tests. ";
-	const string CONST_news290 = "a confession from another convict. ";
-	const string CONST_news289 = "have been produced, including ";
-	const string CONST_news288 = "Since then, numerous pieces of exculpatory evidence ";
-	const string CONST_news287 = " of 13 serial murders. ";
-	const string CONST_news286 = " was convicted in ";
-	const string CONST_news284 = " Correctional Facility.&r";
-	const string CONST_news283 = " yesterday at the ";
-	const string CONST_news282 = ":";
-	const string CONST_news281 = " was pronounced dead at ";
-	const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
-	const string CONST_news279 = ", even though being gay is deviant, as we all know.";
-	const string CONST_news278 = " is a known faggot";
-	const string CONST_news277 = ", despite the fact that ";
-	const string CONST_news276 = "aggravated nature of the offense";
-	const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
-	const string CONST_news274 = " Authorities have stated that they will vigorously ";
-	const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
-	const string CONST_news272 = "The chase ended when ";
-	const string CONST_news271 = " at the pursuing police cruisers. ";
-	const string CONST_news270 = "taking swipes";
-	const string CONST_news269 = "urinating out the window";
-	const string CONST_news268 = "pissing out the window";
-	const string CONST_news267 = "[relieving themselves] out the window";
-	const string CONST_news266 = "throwing beer bottles";
-	const string CONST_news265 = "throwing [juice boxes]";
-	const string CONST_news264 = "murderers swerving wildly, ";
-	const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
-	const string CONST_news262 = "have not yet been released.";
-	const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
-	const string CONST_news260 = "A police spokesperson reported that four suspects ";
-	const string CONST_news259 = " here yesterday. ";
-	const string CONST_news258 = "a homosexual, was ";
-	const string CONST_news257 = "a known homosexual, was ";
-	const string CONST_news256 = "a known sexual deviant, was ";
-	const string CONST_news255 = " children.&r";
-	const string CONST_news254 = "five";
-	const string CONST_news253 = "four";
-	const string CONST_news252 = "three";
-	const string CONST_news251 = "two";
-	const string CONST_news250 = " and ";
-	const string CONST_news249 = "wife";
-	const string CONST_news248 = " is survived by ";
-	const string CONST_news246 = "had been completed.&r";
-	const string CONST_news245 = " surrendered without a struggle, reportedly saying that God's work ";
-	const string CONST_news244 = " abortion doctors as opposed to arresting them.&r";
-	const string CONST_news243 = " later admitted to being a rogue FBI vigilante, hunting down ";
-	const string CONST_news242 = "called the police on a cellphone and they arrived shortly thereafter. ";
-	const string CONST_news241 = "verses of the Bible at the stunned onlookers. Someone ";
-	const string CONST_news240 = " remained at the scene after the shooting, screaming ";
-	const string CONST_news239 = " Witnesses report that ";
-	const string CONST_news238 = ", is in custody.&r";
-	const string CONST_news237 = "The suspected shooter, ";
-	const string CONST_news236 = " times and died immediately in the parking lot. ";
-	const string CONST_news235 = " was hit ";
-	const string CONST_news234 = "shots were fired from a nearby vehicle. ";
-	const string CONST_news233 = " car when, according to police reports, ";
-	const string CONST_news232 = " was walking to ";
-	const string CONST_news230 = "Dr. ";
-	const string CONST_news229 = " Clinic yesterday. ";
-	const string CONST_news228 = "gunned down outside of the ";
-	const string CONST_news227 = "A doctor that routinely performed abortions was ruthlessly ";
-	const string CONST_news226 = "A doctor that routinely performed semi-legal abortions was ruthlessly ";
-	const string CONST_news225 = "A doctor that routinely performed illegal abortions was ruthlessly ";
-	const string CONST_news224 = "A doctor that routinely performed illegal abortion-murders was ruthlessly ";
-
-	const string CONST_newsB925 = "husband";
-
-
-	const string CONST_newsX01 = "a spokesperson stated, \"";
-	const string CONST_newsX02 = "heard saying, \"";
-	const string CONST_newsX03 = "two nights ago during the syndicated radio program \"";
-	const string CONST_newsX04 = "had come to expect, with attacks on the \"liberal media establishment\"";
-	const string CONST_newsX05 = "the \"elite liberal agenda\". But when the radio icon said, \"";
-	const string CONST_newsX06 = ", knew that \"";
-	const string CONST_newsX07 = ". After that, it just got worse and worse.\"";
-
-	const string CONST_news1030 = "\"";
 
 	const string CONST_news485 = ". ";
 
 	const string CONST_newsB943 = "him";
 	const string CONST_news864 = "killed ";
 	const string CONST_newsB935 = "he";
-	const string CONST_newsB928 = "\"Make things right with the Almighty Father.\"";
-
-	const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
-	const string CONST_newsB944 = "neo-pagan";
-	const string CONST_newsB942 = "Bloods";
 
 	extern string commaSpace;
 	extern int year;
 	extern short presparty;
 	extern short lawList[LAWNUM];
-	extern vector<string> vigilante_murder;
-	extern vector<string> why_chase_ended;
-	extern vector<string> book_title;
-	extern vector<string> book_title_2;
-	extern vector<string> random_nationality;
-	extern vector<string> conservative_oppose_book;
-	extern vector<string> radio_name;
-	extern vector<string> radio_name_2;
+
+	extern string spaceDashSpace;
+	extern string ampersandR;
+	extern string singleDot;
+
+	string story;
+	const int schtype = LCSrandom(4);
+
+	story = cityname();
+
+	story += spaceDashSpace \
+		+ CONST_news391;
+
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
+	else story += CONST_news393 \
+		+ CONST_news394;
+
+	switch (schtype)
+	{
+	case 0: story += CONST_news395; return story;
+	case 1: story += CONST_news396; return story;
+	case 2: story += CONST_news397; return story;
+	case 3: story += CONST_news398; return story;
+	}
+
+	story += CONST_news485;
+
+	char dstr[200], dstr2[200];
+	const char dg = pickrandom(maleOrFemale);
+	generate_name(dstr, dstr2, dg);
+
+	story += dstr \
+		+ singleSpace \
+		+ dstr2 \
+		+ commaSpace;
+	//6->11,10->15,14->19,18->23
+	story += 6 + (schtype * 4) + LCSrandom(6); //generate an age that would roughly correspond to the schtype
+	story += CONST_news400;
+
+	if (lawList[LAW_FREESPEECH] == -2)story += CONST_news401;
+	else story += CONST_news402 \
+		+ CONST_news403;
+
+	char jstr[200];
+
+	strcpy(jstr, lastname(true).data());
+	story += jstr;
+
+	switch (schtype)
+	{
+	case 0: story += CONST_news404; return story;
+	case 1: story += CONST_news405; return story;
+	case 2: story += CONST_news406; return story;
+	case 3: story += CONST_news407; return story;
+	}
+
+	story += CONST_news485 \
+		+ dstr2 \
+		+ CONST_news409;
+
+	if (schtype != 3) story += CONST_news410;
+	else story += CONST_news411 \
+		+ CONST_news412 \
+		+ CONST_news413;
+
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news414;
+	else story += CONST_news415 \
+		+ CONST_news416 \
+		+ CONST_news417 \
+		+ (dg == GENDER_FEMALE ? CONST_news700 : CONST_newsB943) \
+		+ CONST_news419;
+
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news420;
+	else story += CONST_news421 \
+		+ CONST_news422 \
+		+ CONST_news423;
+
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news424;
+	else
+	{
+		story += CONST_news864 \
+			+ tostring(2 + LCSrandom(30)) \
+			+ CONST_news426;
+	}
+
+	story += dstr;
+
+	if (lawList[LAW_FREESPEECH] == -2)story += CONST_news427;
+	else story += CONST_news428 \
+		+ CONST_news429 \
+		+ CONST_news430 \
+		+ CONST_news431 \
+		+ (dg == GENDER_FEMALE ? CONST_news432 : CONST_newsB935) \
+		+ CONST_news433;
+
+	return story;
+}
+string constructVIEW_PRISONS()
+{
+	const string CONST_news458 = ".\"";
+	const string CONST_news457 = " choice, and I would only have a few seconds before they made it for me";
+	const string CONST_news456 = "helluva";
+	const string CONST_news455 = "[difficult]";
+	const string CONST_news454 = " the other. A ";
+	const string CONST_news453 = "AIDS";
+	const string CONST_news452 = "GRIDS";
+	const string CONST_news451 = "Maybe lose an eye the one way, maybe catch ";
+	const string CONST_news450 = "My shank's under the mattress. Better to be brave and fight or chicken out and let them take it? ";
+	const string CONST_news449 = "with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager. ";
+	const string CONST_news448 = "I was trapped with them now. There were three, looking me over ";
+	const string CONST_news447 = "coming to a halt with a deafening clang that said it all 컴 ";
+	const string CONST_news446 = "The steel bars grated forward in their rails, ";
+	const string CONST_news445 = " Take this excerpt, \"";
+	const string CONST_news444 = "_.&r";
+	const string CONST_news443 = "Buttlord";
+	const string CONST_news442 = "[Bum]lord";
+	const string CONST_news441 = "_";
+	const string CONST_news440 = "'s new tour-de-force, _";
+	const string CONST_news438 = "have these works been as poignant as ";
+	const string CONST_news437 = "prison theme lately in its offerings for mass consumption, rarely ";
+	const string CONST_news436 = "Although popular culture has used, or perhaps overused, the ";
+	const string CONST_news435 = "detail what goes on behind bars. ";
+	const string CONST_news434 = " - A former prisoner has written a book describing in horrifying ";
+
+
+	extern string commaSpace;
+	extern int year;
+	extern short presparty;
+	extern short lawList[LAWNUM];
 	extern vector<string> prison_book_title;
 	extern vector<string> prison_book_title_2;
 	extern string spaceDashSpace;
 	extern string ampersandR;
-	extern string singleDot; 
-	extern vector<string> petty_violence;
-	extern vector<string> his_her;
-	extern vector<string> older_younger;
-	extern vector<string> brother_sister;
-	extern vector<string> judge_with_prostitute;
-	extern vector<string> judge_with_prostitute_no_free_speech;
-	extern vector<string> judge_with_prostitute_full_free_speech;
-	extern vector<string> radio_host_crazy_quote;
-	extern vector<string> radio_host_lost_mind;
-	extern vector<string> family_values_company_name;
-	extern vector<string> family_values_company_name_2;
-	extern vector<string> family_values_company_name_3;
-	extern vector<string> pollution_consumption;
-	extern vector<string> pollution_consumption_2;
-	extern vector<string> i_like_polution;
-	extern vector<string> distrust_liberals;
-	extern vector<string> tech_giant_name;
-	extern vector<string> tech_giant_name_2;
-	extern vector<string> fm_radio_name;
-	extern vector<string> fm_radio_name_2;
-	extern vector<string> public_place;
-	extern vector<string> reagan_bad;
-	extern vector<string> reagan_bad_2;
-	extern vector<string> ceo_behaving_badly;
-	extern vector<string> reagan_good;
-	extern vector<string> reagan_good_2;
-	extern vector<string> cable_name;
-	extern vector<string> cable_name_2;
-	extern vector<string> cable_city;
-	extern vector<string> cable_city_2;
-	extern vector<string> ccs_adjective;
-	extern vector<string> ccs_adjective_2;
-	extern vector<string> ccs_adjective_3;
-	extern vector<string> ccs_noun;
-	extern vector<string> personalAds;
-	extern vector<string> personalAdsLG;
-	extern vector<string> liberalCrime;
-	extern vector<string> AMorPM;
-	extern vector<string> bribe_officers;
-	extern vector<string> crazy_conservative_act;
-	extern vector<string> my_idol;
+	extern string singleDot;
+
 	string story;
-	(story = blankString);
+	story = cityname();
+	story += CONST_news434 \
+		+ CONST_news435 \
+		+ CONST_news436 \
+		+ CONST_news437 \
+		+ CONST_news438;
+	char dstr[200], dstr2[200];
+	generate_name(dstr, dstr2); // allow either gender (look up 'Orange is the New Black' online to see why)
+	story += dstr \
+		+ singleSpace \
+		+ dstr2 \
+		+ CONST_news440 \
+		+ pickrandom(prison_book_title) \
+		+ CONST_news441;
+	if (!LCSrandom(prison_book_title_2.size())) {
+		string story;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news442;
+		else story += CONST_news443;
+	}
+	else {
+		string story;
+		story += pickrandom(prison_book_title_2);
+	}
+	story += CONST_news444 \
+		+ CONST_news445;//TODO() Add more excerpts, more variety.
+	story += CONST_news446 \
+		+ CONST_news447 \
+		+ CONST_news448 \
+		+ CONST_news449 \
+		+ CONST_news450 \
+		+ CONST_news451;
+	if (lawList[LAW_GAY] == -2)story += CONST_news452;// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for AIDS.
+	else story += CONST_news453 \
+		+ CONST_news454;
+	if (lawList[LAW_FREESPEECH] == -2)story += CONST_news455;
+	else story += CONST_news456 \
+		+ CONST_news457 \
+		+ CONST_news458 \
+		+ ampersandR;
+	return story;
+}
+
+string constructPositiveEventStory(const short view) {
+
+	string story = blankString;
 
 	switch (view)
 	{
 	case VIEW_WOMEN:
 	{
-		//TODO IsaacG Migrate Strings?
-		char str[200], str2[200], gen[50];
-
-		(story = cityname());
-		(story += spaceDashSpace);
-
-		if (lawList[LAW_ABORTION] == -2) (story += CONST_news224);
-		else if (lawList[LAW_ABORTION] == -1) (story += CONST_news225);
-		else if (lawList[LAW_ABORTION] == 0) (story += CONST_news226);
-		else (story += CONST_news227);
-		(story += CONST_news228);
-		strcpy(str, lastname(true).data());
-		(story += str);
-		(story += CONST_news229);
-		(story += CONST_news230);
-
-		char dstr[200], dstr2[200];
-		const char gn = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-
-		generate_name(dstr, dstr2, gn);
-
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		strcpy(gen, (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378).data());
-
-		(story += CONST_news232); (story += gen);//TODO: Add more variety, not just in the parking lot.
-		(story += CONST_news233);
-		(story += CONST_news234);
-		(story += dstr2);
-		(story += CONST_news235);
-
-		(story += LCSrandom(15) + 3);
-
-		(story += CONST_news236);
-		(story += CONST_news237);
-
-		generate_name(str, str2);
-
-		(story += str);
-		(story += singleSpace);
-		(story += str2);
-		(story += CONST_news238);
-		(story += CONST_news239);
-		(story += str2);
-		(story += CONST_news240);
-		(story += CONST_news241);
-		(story += CONST_news242);
-		(story += str2);
-
-		if (lawList[LAW_WOMEN] == -2)
-		{
-			(story += CONST_news243);
-			(story += CONST_news244);
-		}
-		else
-		{
-			(story += CONST_news245);
-			(story += CONST_news246);
-		}
-
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news248);
-		(story += gen);
-		(story += singleSpace);
-
-		char spouse = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-		if (lawList[LAW_GAY] <= 1)
-			spouse = (gn == GENDER_FEMALE ? GENDER_MALE : GENDER_FEMALE);
-
-		(story += (spouse == GENDER_FEMALE ? CONST_news249 : CONST_newsB925));
-		(story += CONST_news250);
-
-		vector<string> CONST_news251_254 = {
-			CONST_news251, CONST_news252, CONST_news253, CONST_news254
-		};
-		(story += pickrandom(CONST_news251_254));
-
-		(story += CONST_news255);
-
+		story += constructVIEW_WOMEN();
 		break;
 	}
 	case VIEW_GAY:
 	{
-		(story = cityname());
-		(story += spaceDashSpace);
-
-		char dstr[200], dstr2[200];
-		generate_name(dstr, dstr2);
-
-		(story += dstr);
-		(story += " ");
-		(story += dstr2);
-		(story += ", ");
-
-		if (lawList[LAW_GAY] == -2) (story += CONST_news256);
-		else if (lawList[LAW_GAY] == -1) (story += CONST_news257);
-		else (story += CONST_news258);
-
-		(story += pickrandom(vigilante_murder));
-		(story += CONST_news259);
-		(story += CONST_news260);
-		(story += CONST_news261);
-		(story += CONST_news262);
-		(story += ampersandR);
-		(story += CONST_news263);
-		(story += CONST_news264);
-
-		switch (LCSrandom(3))
-		{
-		case 0:
-			if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news265);
-			else (story += CONST_news266);
-			break;
-		case 1:
-			if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news267);
-			else if (lawList[LAW_FREESPEECH] == 2) (story += CONST_news268);
-			else (story += CONST_news269);
-			break;
-		case 2: (story += CONST_news270); break;
-		}
-
-		(story += CONST_news271);
-		(story += CONST_news272);
-		(story += pickrandom(why_chase_ended));
-		(story += " ");
-		(story += CONST_news273);
-		(story += ampersandR);
-		(story += CONST_news274);
-		(story += CONST_news275);
-		(story += CONST_news276);
-
-		if (lawList[LAW_GAY] == -2 && lawList[LAW_FREESPEECH] != -2)
-		{
-			(story += CONST_news277);
-			(story += dstr);
-			(story += singleSpace);
-			(story += dstr2);
-			(story += CONST_news278);
-		}
-		else if (lawList[LAW_GAY] == -2)(story += CONST_news279);
-		else (story += singleDot);
-
-		(story += ampersandR);
-
+		story += constructVIEW_GAY();
 		break;
 	}
 	case VIEW_FREESPEECH:
 	{
-		(story = cityname());
-		(story += CONST_news320);
-		(story += CONST_news321);
-		(story += ampersandR);
-		(story += CONST_news322);
-		(story += CONST_news441);
-
-		char dstr[200], nstr[200];
-
-		generate_name(nstr, dstr);
-
-		(story += nstr);
-		(story += CONST_news441);
-		(story += dstr);
-		(story += CONST_news325);
-		(story += pickrandom(book_title));
-		(story += CONST_news441);
-		(story += pickrandom(book_title_2));
-		(story += CONST_news327);
-		(story += pickrandom(random_nationality));
-		(story += CONST_news328);
-
-		char c[2] = { 0,0 };
-
-		c[0] = 'A' + LCSrandom(26);
-
-		(story += c);
-		(story += singleDot);
-
-		c[0] = 'A' + LCSrandom(26);
-
-		(story += c);
-		(story += CONST_news329);
-
-		strcpy(dstr, lastname().data());
-
-		(story += dstr);
-		(story += CONST_news485);
-		(story += CONST_news331);
-		(story += CONST_news332);
-		(story += pickrandom(conservative_oppose_book));
-		(story += singleSpace);
-		(story += CONST_news334);
-
-		switch (LCSrandom(3))
-		{
-		case 0: (story += CONST_news335); break;
-		case 1: (story += CONST_news336); break;
-		case 2: (story += CONST_news337);
-			(story += pickrandom(petty_violence));
-			(story += singleSpace);
-			(story += pickrandom(his_her));
-			(story += singleSpace);
-			(story += pickrandom(older_younger));
-			(story += singleSpace);
-			(story += pickrandom(brother_sister));
-			break;
-		}
-
-		(story += CONST_news338);
-		(story += ampersandR);
-		(story += CONST_news339);
-		(story += CONST_news340);
-		(story += CONST_newsX02);
-
-		switch (LCSrandom(2))
-		{
-		case 0:
-			(story += CONST_news342);
-			(story += nstr);
-			(story += CONST_news343);
-			break;
-		case 1:
-			(story += CONST_news344);
-			(story += nstr);
-			(story += CONST_news345);
-			break;
-		}
-
-		(story += CONST_news1030);
-		(story += ampersandR);
-
+		story += constructVIEW_FREESPEECH();
 		break;
 	}
 	case VIEW_DEATHPENALTY:
 	{
-		
-		(story += statename());
-		(story += CONST_news280);
-
-		char dstr[200], dstr2[200], dstr3[200];
-
-		generate_long_name(dstr, dstr2, dstr3);
-
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += singleSpace);
-		(story += dstr3);
-		(story += CONST_news281);
-		(story += LCSrandom(12) + 1);
-		(story += CONST_news282);
-		(story += LCSrandom(60));
-		(story += pickrandom(AMorPM));
-		(story += CONST_news283);
-
-		char jstr[200];
-
-		strcpy(jstr, lastname(true).data());
-
-		(story += jstr);
-		(story += CONST_news284);
-		(story += singleSpace);
-		(story += dstr3);
-		(story += CONST_news286);
-		(story += year - LCSrandom(11) - 10);
-		(story += CONST_news287);
-		(story += CONST_news288);
-		(story += CONST_news289);
-
-		switch (LCSrandom(3))
-		{
-		case 0: (story += CONST_news290); break;
-		case 1: (story += CONST_news291); break;
-		case 2:
-			(story += CONST_news292);
-			(story += dstr3);
-			(story += CONST_news293);
-			break;
-		}
-
-		(story += CONST_news294);
-		(story += CONST_news295);
-		(story += CONST_news1030);
-
-		switch (LCSrandom(3))
-		{
-		case 0: (story += CONST_news297); break;
-		case 1:
-			(story += CONST_news298);
-			(story += CONST_news299);
-			(story += CONST_news300);
-			break;
-		case 2: (story += CONST_news301); break;
-		}
-
-		(story += CONST_news458);
-		(story += ampersandR);
-		(story += CONST_news303);
-		(story += CONST_news304);
-		(story += CONST_news305);
-		(story += CONST_news306);
-		(story += ampersandR);
+		story += constructVIEW_DEATHPENALTY();
 
 		break;
 	}
 	case VIEW_INTELLIGENCE:
 	{
-		(story += CONST_news307);
-		(story += CONST_news308);
-		(story += CONST_news309);
-		(story += CONST_news310);
-		(story += pickrandom(liberalCrime));
-		(story += ampersandR);
-		(story += CONST_news311);
-		(story += CONST_news312);
-		(story += ampersandR);
-		(story += CONST_news313);
-		(story += CONST_newsX01);
-		(story += CONST_news315);
-		(story += CONST_news316);
-		(story += CONST_news317);
-		(story += CONST_news318);
-		(story += CONST_news458);
-		(story += ampersandR);
+		story += constructVIEW_INTELLIGENCE();
 		break;
 	}
 
 	case VIEW_JUSTICES:
 	{
-		(story = cityname());
-		(story += CONST_news347);
-
-		char dstr[200], dstr2[200];
-
-		generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
-
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news348);
-		else (story += CONST_news349);
-
-		(story += ampersandR);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news351);
-		(story += pickrandom(crazy_conservative_act));
-		(story += CONST_news352);
-
-		char pstr[200], pstr2[200];
-		generate_name(pstr, pstr2);
-
-		(story += pstr);
-		(story += singleSpace);
-		(story += pstr2);
-		(story += CONST_news353);
-		(story += CONST_news354);
-		(story += CONST_news355);
-
-		if (lawList[LAW_FREESPEECH] == -2) {
-			(story += pickrandom(judge_with_prostitute_no_free_speech));
-		}
-		else if (lawList[LAW_FREESPEECH] == 2) {
-			(story += pickrandom(judge_with_prostitute_full_free_speech));
-		}
-		else {
-			(story += pickrandom(judge_with_prostitute));
-		}
-
-		(story += singleSpace);
-		(story += pstr2);
-		(story += CONST_news357);
-		(story += pickrandom(bribe_officers));
-		(story += CONST_news358);
-		(story += ampersandR);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news360);
-		(story += CONST_news361);
-		(story += CONST_newsB928);
-		(story += ampersandR);
-
+		story += constructVIEW_JUSTICES();
 		break;
 	}
 	case VIEW_AMRADIO:
 	{
-		(story = cityname());
-		(story += CONST_news363);
-
-		char dstr[200], dstr2[200];
-		generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
-
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news364);
-		(story += CONST_newsX03);
-		(story += pickrandom(radio_name));
-		(story += singleSpace);
-		(story += pickrandom(radio_name_2));
-		(story += CONST_news366);
-		(story += ampersandR);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news368);
-		(story += CONST_newsX04);
-		(story += CONST_newsX05);
-
-		switch (LCSrandom(radio_host_crazy_quote.size()))
-		{
-		case 0:
-			(story += CONST_news371);
-			if (presparty != CONSERVATIVE_PARTY) (story += CONST_news372); // Limbaugh
-			else (story += CONST_news373);
-			break;
-		default:
-			(story += pickrandom(radio_host_crazy_quote));
-			break;
-		}
-
-		(story += CONST_news374);
-
-		char nstr[200], nstr2[200];
-		generate_name(nstr, nstr2);
-
-		(story += nstr);
-		(story += singleSpace);
-		(story += nstr2);
-		(story += CONST_newsX06);
-		(story += pickrandom(my_idol));
-		(story += CONST_news376);
-
-		switch (LCSrandom(radio_host_lost_mind.size()))
-		{
-		case 0:
-			(story += CONST_news377);
-			(story += CONST_news378); // the AM personality's a white male patriarch
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news379);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news380);
-			else (story += CONST_news381);
-			break;
-		default:
-			(story += pickrandom(radio_host_lost_mind));
-		}
-
-		(story += CONST_newsX07);
-		(story += ampersandR);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news384);
-		(story += CONST_news385);
-		(story += CONST_news386);
-		(story += CONST_news387); // XXX How many of them switch should
-		(story += CONST_news388); // depend on [LAW_FREESPEECH]
-		(story += CONST_news389);
-		(story += CONST_news390);
-		(story += ampersandR);
-
+		story += constructVIEW_AMRADIO();
 		break;
 	}
 	case VIEW_GUNCONTROL:
 	{
-		const int schtype = LCSrandom(4);
-
-		(story = cityname());
-
-		(story += spaceDashSpace);
-		(story += CONST_news391);
-
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news647);
-		else (story += CONST_news393);
-
-		(story += CONST_news394);
-
-		switch (schtype)
-		{
-		case 0: (story += CONST_news395); break;
-		case 1: (story += CONST_news396); break;
-		case 2: (story += CONST_news397); break;
-		case 3: (story += CONST_news398); break;
-		}
-
-		(story += CONST_news485);
-
-		char dstr[200], dstr2[200];
-		const char dg = (LCSrandom(2) == 1 ? GENDER_MALE : GENDER_FEMALE);
-		generate_name(dstr, dstr2, dg);
-
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += commaSpace);
-		//6->11,10->15,14->19,18->23
-		(story += 6 + (schtype * 4) + LCSrandom(6)); //generate an age that would roughly correspond to the schtype
-		(story += CONST_news400);
-
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news401);
-		else (story += CONST_news402);
-
-		(story += CONST_news403);
-
-		char jstr[200];
-
-		strcpy(jstr, lastname(true).data());
-		(story += jstr);
-
-		switch (schtype)
-		{
-		case 0: (story += CONST_news404); break;
-		case 1: (story += CONST_news405); break;
-		case 2: (story += CONST_news406); break;
-		case 3: (story += CONST_news407); break;
-		}
-
-		(story += CONST_news485);
-		(story += dstr2);
-		(story += CONST_news409);
-
-		if (schtype != 3) (story += CONST_news410);
-		else (story += CONST_news411);
-
-		(story += CONST_news412);
-		(story += CONST_news413);
-
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news414);
-		else (story += CONST_news415);
-
-		(story += CONST_news416);
-		(story += CONST_news417);
-		(story += (dg == GENDER_FEMALE ? CONST_news700 : CONST_newsB943));
-		(story += CONST_news419);
-
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news420);
-		else (story += CONST_news421);
-
-		(story += CONST_news422);
-		(story += CONST_news423);
-
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news424);
-		else
-		{
-			(story += CONST_news864);
-			(story += 2 + LCSrandom(30));
-			(story += CONST_news426);
-		}
-
-		(story += dstr);
-
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news427);
-		else (story += CONST_news428);
-
-		(story += CONST_news429);
-		(story += CONST_news430);
-		(story += CONST_news431);
-		(story += (dg == GENDER_FEMALE ? CONST_news432 : CONST_newsB935));
-		(story += CONST_news433);
-
+		story += constructVIEW_GUNCONTROL();
 		break;
 	}
 	case VIEW_PRISONS:
 	{
-		(story = cityname());
-		(story += CONST_news434);
-		(story += CONST_news435);
-		(story += CONST_news436);
-		(story += CONST_news437);
-		(story += CONST_news438);
-		char dstr[200], dstr2[200];
-		generate_name(dstr, dstr2); // allow either gender (look up 'Orange is the New Black' online to see why)
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news440);
-		(story += pickrandom(prison_book_title));
-		(story += CONST_news441);
-		if (!LCSrandom(prison_book_title_2.size())) {
-			if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news442);
-			else (story += CONST_news443);
-		}
-		else {
-			(story += pickrandom(prison_book_title_2));
-		}
-		(story += CONST_news444);
-		(story += CONST_news445);//TODO: Add more excerpts, more variety.
-		(story += CONST_news446);
-		(story += CONST_news447);
-		(story += CONST_news448);
-		(story += CONST_news449);
-		(story += CONST_news450);
-		(story += CONST_news451);
-		if (lawList[LAW_GAY] == -2)(story += CONST_news452);// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for AIDS.
-		else (story += CONST_news453);
-		(story += CONST_news454);
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news455);
-		else (story += CONST_news456);
-		(story += CONST_news457);
-		(story += CONST_news458);
-		(story += ampersandR);
+		story += constructVIEW_PRISONS();
 		break;
 	}
 	}
 	return story;
 }
 
-const string CONST_news1030 = "\"";
 
-string constructNegativeEventStory(const short view) {
-	const string CONST_newsX08 = " The spokesperson further stated, \"";
-	const string CONST_newsX09 = "screamed \"fuck the police those goddamn motherfuckers. I got a fucking ticket this morning and I'm fucking pissed as shit.\"";
-	extern vector<string> public_place;
-	extern string commaSpace;
 
-	extern vector<string> judge_with_prostitute;
-	extern vector<string> judge_with_prostitute_no_free_speech;
-	extern vector<string> judge_with_prostitute_full_free_speech;
-	extern vector<string> radio_host_crazy_quote;
-	extern vector<string> radio_host_lost_mind;
+string constructNegativeVIEW_ANIMALRESEARCH()
+{
+
+	extern vector<string> animal_research_country;
+	extern vector<string> drug_name;
+	extern vector<string> drug_name_2;
+	extern vector<string> chimp_drug_impact;
+	extern vector<string> chimp_drug_horror;
+
+
+	const string CONST_news492 = " The first phase of human trials is slated to begin in a few months.";
+	const string CONST_news490 = "I think the media should be focusing on the enormous benefits of this drug.";
+	const string CONST_news489 = "While we understand your concerns, any worries are entirely unfounded. ";
+	const string CONST_news488 = ". We have a very experienced research team. ";
+	const string CONST_news487 = "a spokesperson for the research team stated that, \"It really isn't so bad as all that. Chimpanzees are very resilient creatures. ";
+	const string CONST_news486 = "Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ";
+	const string CONST_news485 = ". ";
+	const string CONST_news484 = " Along with bonobos, chimpanzees are our closest cousins";
+	const string CONST_news482 = "corrects erectile dysfunction in chimpanzees";
+	const string CONST_news481 = "[helps chimpanzees reproduce]";
+	const string CONST_news480 = ", the drug apparently ";
+	const string CONST_news479 = "Anal";
+	const string CONST_news478 = "Bum-Bum";
+	const string CONST_news477 = "Called ";
+	const string CONST_news476 = "here report that they have discovered an amazing new wonder drug. ";
+	const string CONST_news475 = " report that they have discovered an amazing new wonder drug. ";
+	const string CONST_news474 = "from ";
+	const string CONST_news473 = " - Researchers ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname()\
+		+ CONST_news473;
+	if (lawList[LAW_ANIMALRESEARCH] == 2)
+	{
+		story += CONST_news474;
+		story += pickrandom(animal_research_country);
+		story += CONST_news475;
+	}
+	else {
+		story += CONST_news476;
+	}
+	story += CONST_news477;
+	if (LCSrandom(drug_name.size())) {
+		story += pickrandom(drug_name);
+	}
+	else {
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news478;
+		else story += CONST_news479;
+	}
+	story += pickrandom(drug_name_2)\
+		+ CONST_news480;
+	if (LCSrandom(chimp_drug_impact.size())) {
+		story += pickrandom(chimp_drug_impact);
+	}
+	else {
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news481;
+		else story += CONST_news482;
+	}
+	story += CONST_news485 \
+		+ ampersandR \
+		+ CONST_news484 \
+		+ CONST_news485 \
+		+ CONST_news486 \
+		+ CONST_news487\
+		+ pickrandom(chimp_drug_horror)\
+		+ CONST_news488\
+		+ CONST_news489\
+		+ CONST_news490\
+		+ CONST_news1030\
+		+ ampersandR\
+		+ CONST_news492\
+		+ ampersandR;
+	return story;
+}
+string constructNegativeVIEW_POLLUTION() {
+
+
 	extern vector<string> family_values_company_name;
 	extern vector<string> family_values_company_name_2;
 	extern vector<string> family_values_company_name_3;
@@ -1991,18 +2264,106 @@ string constructNegativeEventStory(const short view) {
 	extern vector<string> pollution_consumption_2;
 	extern vector<string> i_like_polution;
 	extern vector<string> distrust_liberals;
+
+	const string CONST_news571 = "needs to take a breather on this one. We don't see why there's such a rush to judgment here. ";
+	const string CONST_news570 = "before we urge any action. Society really just ";
+	const string CONST_news569 = "there's work left to be done. We should study much more ";
+	const string CONST_news568 = "Why is there contention on the pollution question? It's because ";
+	const string CONST_news567 = "All we've done is introduced a little clarity into the ongoing debate. ";
+	const string CONST_news566 = " these issues to their own advantage. ";
+	const string CONST_news565 = ". You have to realize that ";
+	const string CONST_news564 = "a spokesperson stated that, \"";
+	const string CONST_news563 = " When questioned about the science behind these results, ";
+	const string CONST_news562 = " might actually ";
+	const string CONST_news561 = "Among the most startling of the think tank's findings is that ";
+	const string CONST_news560 = "and the latest science on the issue. ";
+	const string CONST_news559 = " recently released a wide-ranging report detailing recent trends ";
+	const string CONST_news558 = " - Pollution might not be so bad after all. The ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname()\
+		+ CONST_news558\
+		+ pickrandom(family_values_company_name)\
+		+ singleSpace\
+		+ pickrandom(family_values_company_name_2)\
+		+ singleSpace\
+		+ pickrandom(family_values_company_name_3)\
+		+ CONST_news559\
+		+ CONST_news560\
+		+ CONST_news561\
+		+ pickrandom(pollution_consumption)\
+		+ CONST_news562\
+		+ pickrandom(pollution_consumption_2)\
+		+ singleDot\
+		+ ampersandR\
+		+ CONST_news563\
+		+ CONST_news564\
+		+ pickrandom(i_like_polution)\
+		+ CONST_news565\
+		+ pickrandom(distrust_liberals)\
+		+ CONST_news566\
+		+ CONST_news567\
+		+ CONST_news568\
+		+ CONST_news569\
+		+ CONST_news570\
+		+ CONST_news571\
+		+ ampersandR;
+	return story;
+}
+string constructNegativeVIEW_CORPORATECULTURE() {
+
+
 	extern vector<string> tech_giant_name;
 	extern vector<string> tech_giant_name_2;
-	extern vector<string> fm_radio_name;
-	extern vector<string> fm_radio_name_2;
-	extern vector<string> animal_research_country;
-	extern vector<string> drug_name;
-	extern vector<string> drug_name_2;
-	extern vector<string> chimp_drug_impact;
-	extern vector<string> chimp_drug_horror;
-	extern vector<string> terrorist_group;
-	extern vector<string> terrorist_plot;
-	extern vector<string> terrorist_plot_no_free_speech;
+
+
+	const string CONST_news587 = "of the tech industry but is also indicative of a full economic recover.&r";
+	const string CONST_news586 = "analysts suggest that not only does the expansion speak to the health ";
+	const string CONST_news585 = "futures of some of the companies in the tech sector. On the whole, however, ";
+	const string CONST_news584 = "although the dampened movement might be expected due to the uncertain ";
+	const string CONST_news583 = "The markets reportedly responded to the announcement with mild interest, ";
+	const string CONST_news582 = "this welcome news is bound to be a pleasant surprise to those in the unemployment lines. ";
+	const string CONST_news581 = "of large corporations to export jobs overseas these days, ";
+	const string CONST_news580 = "light of the tendency ";
+	const string CONST_news579 = "Given the state of the economy recently and in ";
+	const string CONST_news578 = " increasing its payrolls by over ten thousand workers alone. ";
+	const string CONST_news577 = "tech giant ";
+	const string CONST_news576 = "are expected in the first month, with ";
+	const string CONST_news575 = "during the next quarter. Over thirty thousand jobs ";
+	const string CONST_news574 = "will be expanding their work forces considerably ";
+	const string CONST_news573 = "at a joint news conference here that they ";
+	const string CONST_news572 = " - Several major companies have announced ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname()\
+		+ CONST_news572\
+		+ CONST_news573\
+		+ CONST_news574\
+		+ CONST_news575\
+		+ CONST_news576\
+		+ CONST_news577\
+		+ pickrandom(tech_giant_name)\
+		+ pickrandom(tech_giant_name_2)\
+		+ CONST_news578\
+		+ CONST_news579\
+		+ CONST_news580\
+		+ CONST_news581\
+		+ CONST_news582\
+		+ CONST_news583\
+		+ CONST_news584\
+		+ CONST_news585\
+		+ CONST_news586\
+		+ CONST_news587;
+	return story;
+}
+string constructNegativeVIEW_GENETICS()
+{
+
+
 	extern vector<string> gene_corp_name;
 	extern vector<string> gene_corp_name_2;
 	extern vector<string> gene_product_name;
@@ -2010,99 +2371,305 @@ string constructNegativeEventStory(const short view) {
 	extern vector<string> gene_product_benefit;
 	extern vector<string> gene_product_cost;
 	extern vector<string> bullshit_no_free_speech;
-	extern vector<string> evidence_of_child_murder;
 	extern vector<string> bullshit;
+
+	const string CONST_news525 = "but the GM industry operates at a higher ethical standard. That goes without saying.";
+	const string CONST_news524 = "No. That's just ridiculous. I mean, sure companies have put unsafe products out, ";
+	const string CONST_news523 = ". Would we stake the reputation of our company on unsafe products? ";
+	const string CONST_news522 = " is just a load of ";
+	const string CONST_news521 = "Look, these products are safe. That thing about the ";
+	const string CONST_news520 = "One in particular said, \"";
+	const string CONST_news519 = "in their dismissal of the criticism which often follows the industry. ";
+	const string CONST_news518 = " Spokespeople for the GM corporations were universal ";
+	const string CONST_news517 = "this amazing new product actually ";
+	const string CONST_news516 = "According to the public relations representative speaking, ";
+	const string CONST_news515 = "\", during an afternoon PowerPoint presentation. ";
+	const string CONST_news514 = ", presented their product, \"";
+	const string CONST_news513 = " One such corporation, ";
+	const string CONST_news512 = "booths and gave talks to wide-eyed onlookers.";
+	const string CONST_news511 = "to showcase its upcoming products. Over thirty companies set up ";
+	const string CONST_news510 = " - The genetic foods industry staged a major event here yesterday ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname()\
+		+ CONST_news510\
+		+ CONST_news511\
+		+ CONST_news512\
+		+ ampersandR\
+		+ CONST_news513\
+		+ pickrandom(gene_corp_name)\
+		+ singleSpace\
+		+ pickrandom(gene_corp_name_2)\
+		+ CONST_news514\
+		+ pickrandom(gene_product_name)\
+		+ singleSpace\
+		+ pickrandom(gene_product_name_2)\
+		+ CONST_news515\
+		+ CONST_news516\
+		+ CONST_news517\
+		+ pickrandom(gene_product_benefit)\
+		+ singleDot\
+		+ ampersandR\
+		+ CONST_news518\
+		+ CONST_news519\
+		+ CONST_news520\
+		+ CONST_news521\
+		+ pickrandom(gene_product_cost)\
+		+ CONST_news522;
+	if (lawList[LAW_FREESPEECH] == -2) {
+		story += pickrandom(bullshit_no_free_speech);
+	}
+	else {
+		story += pickrandom(bullshit);
+	}
+	story += CONST_news523\
+		+ CONST_news524\
+		+ CONST_news525\
+		+ CONST_news1030\
+		+ ampersandR;
+	return story;
+}
+
+string constructNegativeVIEW_DEATHPENALTY()
+{
+
+	extern vector<string> evidence_of_child_murder;
 	extern vector<string> break_in_murder_case;
 	extern vector<string> mutilated_corpse;
-	const string CONST_newsB940 = "he ";
-	const string CONST_newsB939 = "Miss ";
-	const string CONST_news638 = "Mr. ";
-	const string CONST_news637 = "Mrs. ";
-	const string CONST_news636 = "Ms. ";
-	const string CONST_newsB941 = "himself";
+
+	const string CONST_news472 = "the death penalty in this case.";
+	const string CONST_news471 = "life imprisonment in this case.";
+	const string CONST_news470 = "seeking ";
+	const string CONST_news469 = " The district attorney's office has already repeatedly said it will be ";
+	const string CONST_news468 = ". Sources say that the police got a break in the case when ";
+	const string CONST_news467 = " dead and ";
+	const string CONST_news466 = " [in a better place]";
+	const string CONST_news465 = "only to turn up later";
+	const string CONST_news464 = ". Over twenty children in the past two years have gone missing, ";
+	const string CONST_news463 = " was detained yesterday afternoon, reportedly in possession of ";
+	const string CONST_news462 = "according to a spokesperson for the police department here. ";
+	const string CONST_news461 = "string of brutal child killings that has kept everyone in the area on edge, ";
+	const string CONST_news460 = "The authorities have apprehended their primary suspect in the ";
+	const string CONST_news459 = " - Perhaps parents can rest easier tonight. ";
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	char dstr[200], dstr2[200], dstr3[200];
+	generate_long_name(dstr, dstr2, dstr3);
+	string story = cityname()\
+		+ CONST_news459\
+		+ CONST_news460\
+		+ CONST_news461\
+		+ CONST_news462\
+		+ dstr\
+		+ singleSpace\
+		+ dstr2\
+		+ singleSpace\
+		+ dstr3\
+		+ CONST_news463\
+		+ pickrandom(evidence_of_child_murder)\
+		+ CONST_news464\
+		+ CONST_news465;
+	if (lawList[LAW_FREESPEECH] == -2)
+		story += CONST_news466;
+	else
+	{
+		story += CONST_news467;
+		story += pickrandom(mutilated_corpse);
+	}
+	story += CONST_news468\
+		+ pickrandom(break_in_murder_case)\
+		+ singleDot\
+		+ ampersandR\
+		+ CONST_news469\
+		+ CONST_news470;
+	if (lawList[LAW_DEATHPENALTY] == 2)
+		story += CONST_news471;
+	else
+		story += CONST_news472;
+	story += ampersandR;
+	return story;
+}
+
+string constructNegativeVIEW_INTELLIGENCE()
+{
+
+	const string CONST_newsX08 = " The spokesperson further stated, \"";
+
+	extern string commaSpace;
+
+
+	extern vector<string> terrorist_group;
+	extern vector<string> terrorist_plot;
+	extern vector<string> terrorist_plot_no_free_speech;
+
+
+	const string CONST_news508 = "this new age.";
+	const string CONST_news507 = "for what we feel are the essential tools for combating terrorism in ";
+	const string CONST_news506 = "The Head of the Agency will be sending a request to Congress ";
+	const string CONST_news505 = "However, let me also say that there's more that needs to be done. ";
+	const string CONST_news504 = "civilization before they can destroy American families. ";
+	const string CONST_news503 = "providing us with the tools we need to neutralize these enemies of ";
+	const string CONST_news502 = "that we are grateful to the Congress and this Administration for ";
+	const string CONST_news501 = "I won't compromise our sources and methods, but let me just say ";
+	const string CONST_news499 = "was to occur.";
+	const string CONST_news498 = "terrorist organization allowed the plot to be foiled just days before it ";
+	const string CONST_news497 = ". However, intelligence garnered from deep within the mysterious ";
+	const string CONST_news496 = " planned to ";
+	const string CONST_news495 = " According to a spokesperson for the agency, ";
+	const string CONST_news494 = "would have occurred on American soil.";
+	const string CONST_news493 = "Washington, DC - The CIA announced yesterday that it has averted a terror attack that ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story;
+	story += CONST_news493\
+		+ CONST_news494\
+		+ ampersandR\
+		+ CONST_news495\
+		+ pickrandom(terrorist_group)\
+		+ CONST_news496;
+	if (lawList[LAW_FREESPEECH] == -2)story += pickrandom(terrorist_plot_no_free_speech);
+	else story += pickrandom(terrorist_plot);
+	story += CONST_news497\
+		+ CONST_news498\
+		+ CONST_news499\
+		+ ampersandR\
+		+ CONST_newsX08\
+		+ CONST_news501\
+		+ CONST_news502\
+		+ CONST_news503\
+		+ CONST_news504\
+		+ CONST_news505\
+		+ CONST_news506\
+		+ CONST_news507\
+		+ CONST_news508\
+		+ CONST_news1030\
+		+ ampersandR;
+	return story;
+}
+
+string constructNegativeVIEW_JUSTICES()
+{
+
+
 	const string CONST_newsB937 = "If I were to be released, I would surely kill again.\"";
 
-	const string CONST_newsB944 = "neo-pagan";
-	const string CONST_newsB943 = "him";
-	const string CONST_newsB942 = "Bloods";
+	const string CONST_news557 = "completely strapped for cash.&r";
+	const string CONST_news556 = "to the current economic doldrums that have left the state ";
+	const string CONST_news555 = "has stated that the case will not be retried, due ";
+	const string CONST_news554 = " A spokesperson for the district attorney ";
+	const string CONST_news552 = "Thank you for saving me from myself. ";
+	const string CONST_news551 = " confessed and was sentenced to life, saying \"";
+	const string CONST_news550 = "covered in the victims' blood. ";
+	const string CONST_news549 = " was found with the murder weapon, ";
+	const string CONST_news548 = "After an intensive manhunt, ";
+	const string CONST_news547 = " slayings. ";
+	const string CONST_news546 = " was convicted of the now-infamous ";
+	const string CONST_news545 = " Ten years ago, ";
+	const string CONST_news544 = " grants was not coerced in any way.&r";
+	const string CONST_news543 = ", which even Justice ";
+	const string CONST_news542 = ", despite the confession of ";
+	const string CONST_news541 = " consultations with a Magic 8-Ball";
+	const string CONST_news540 = " family";
+	const string CONST_news539 = " close personal friendship with the ";
+	const string CONST_news538 = " personal philosophy of liberty";
+	const string CONST_news537 = " deserved another chance";
+	const string CONST_news536 = " belief that ";
+	const string CONST_news535 = " belief that the crimes were a vast right-wing conspiracy";
+	const string CONST_news534 = " general feeling about police corruption";
+	const string CONST_news533 = "ten-year-old eyewitness testimony";
+	const string CONST_news531 = "made the decision based on ";
+	const string CONST_news530 = " of the notoriously liberal circuit of appeals here ";
+	const string CONST_news529 = "Justice ";
+	const string CONST_news528 = " was overturned by a federal judge yesterday. ";
+	const string CONST_news527 = " - The conviction of confessed serial killer ";
 
-	const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
-	const string CONST_news711 = "beaten to death";
-	const string CONST_news710 = "[also harmed]";
-	const string CONST_news709 = ". The prisoner was ";
-	const string CONST_news708 = " altar";
-	const string CONST_news707 = "Satanic";
-	const string CONST_news706 = "sacrificed the guard on a makeshift ";
-	const string CONST_news705 = "performed deadly experiments on the guard unheard of since Dr. Mengele";
-	const string CONST_news704 = "eaten the guard's liver with some fava beans and a nice chianti";
-	const string CONST_news703 = "burnt the guard to a crisp using a lighter and some gasoline";
-	const string CONST_news702 = "tricked another guard into shooting the guard dead";
-	const string CONST_news701 = " off";
-	const string CONST_news699 = "taken the guard to the execution chamber and finished ";
-	const string CONST_news698 = "thrown the guard out the top-storey window";
-	const string CONST_news697 = "electrocuted the guard with high-voltage wires";
-	const string CONST_news696 = "hit all 36 pressure points of death on the guard";
-	const string CONST_news695 = "Crips";
-	const string CONST_news694 = "poisoned the guard with drugs smuggled into the prison by the ";
-	const string CONST_news693 = " own gun";
-	const string CONST_news691 = "shot the guard with ";
-	const string CONST_news690 = " cell";
-	const string CONST_news688 = "smashed the guard's skull with the toilet seat from ";
-	const string CONST_news687 = "chewed out the guard's throat";
-	const string CONST_news686 = "strangled the guard to death with a knotted bed sheet";
-	const string CONST_news685 = "slit the guard's throat with a shank";
-	const string CONST_news684 = "killed the guard";
-	const string CONST_news683 = "[harmed] the guard";
-	const string CONST_news682 = " had already ";
-	const string CONST_news681 = "the hostage, but ";
-	const string CONST_news680 = " The tower was breached in an attempt to reach ";
-	const string CONST_news678 = "Imma kill all you b*tches, startin' with this m*th*f*ck*r here.";
-	const string CONST_news677 = "[I will harm all police officers], startin' with this [one] here.";
-	const string CONST_news676 = "Imma kill all you bitches, startin' with this mothafucker here.";
-	const string CONST_news675 = "Why the f*ck am I talkin' to you? I'd rather kill this pig.";
-	const string CONST_news674 = "Why [am I] talkin' to you? I'd rather [harm this police officer.]";
-	const string CONST_news673 = "Why the fuck am I talkin' to you? I'd rather kill this pig.";
-	const string CONST_news672 = "F*ck a m*th*f*ck*n' bull. I'm killin' this pig sh*t.";
-	const string CONST_news671 = "[Too late.] [I am going to harm this police officer.]";
-	const string CONST_news670 = "Fuck a muthafuckin' bull. I'm killin' this pig shit.";
-	const string CONST_news669 = "Ah, f*ck this sh*t. This punk b*tch is f*ckin' dead!";
-	const string CONST_news668 = "Ah, [no way.] This [police officer will be harmed!]";
-	const string CONST_news667 = "Ah, fuck this shit. This punk bitch is fuckin' dead!";
-	const string CONST_news666 = " reportedly screamed into the receiver \"";
-	const string CONST_news665 = " days, but talks were cut short when ";
-	const string CONST_news664 = "attempted to negotiate by phone for ";
-	const string CONST_news663 = "Authorities locked down the prison and ";
-	const string CONST_news662 = " with the guard in a prison tower. ";
-	const string CONST_news661 = "herself";
-	const string CONST_news660 = " and barricaded ";
-	const string CONST_news659 = ", overpowered ";
-	const string CONST_news658 = ", an inmate at ";
-	const string CONST_news657 = " Two weeks ago, convicted rapist ";
-	const string CONST_news656 = " Two weeks ago, convicted [reproduction fiend] ";
-	const string CONST_news655 = " captor.";
-	const string CONST_news653 = "death of both the prison guard being held hostage and ";
-	const string CONST_news652 = " Correctional Facility ended tragically yesterday with the ";
-	const string CONST_news651 = " - The hostage crisis at the ";
-	const string CONST_news650 = "'s heroic actions.\"";
-	const string CONST_news649 = " if not for ";
-	const string CONST_news648 = "mass shooting";
-	const string CONST_news646 = " The spokesperson for the police department said, \"We'd have a yet another ";
-	const string CONST_news645 = "could hurt anyone else.&r";
-	const string CONST_news644 = "she ";
-	const string CONST_news643 = "before ";
-	const string CONST_news642 = "firefight, killing the attacker ";
-	const string CONST_news641 = "firefight, [putting the attacker to sleep] ";
-	const string CONST_news640 = " became more agitated, the heroic citizen was forced to engage the shooter in a ";
-	const string CONST_news639 = " attempted to talk down the shooter, but as ";
-	const string CONST_news635 = " Initially, ";
-	const string CONST_news634 = " to take cover while others called the police.&r";
-	const string CONST_news633 = "forcing ";
-	const string CONST_news632 = "The citizen pulled a concealed handgun and fired once at the shooter, ";
-	const string CONST_news631 = " sprung into action. ";
-	const string CONST_news630 = " opened fire at the ";
-	const string CONST_news629 = " After ";
-	const string CONST_news628 = " was prevented by a bystander with a gun.";
-	const string CONST_news626 = " - In a surprising turn, a ";
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	char dstr[200], dstr2[200], dstr3[200];
+	generate_long_name(dstr, dstr2, dstr3);
+	char jstr[200], jstr2[200];
+	const char gn = pickrandom(maleOrFemale);
+	generate_name(jstr, jstr2, gn);
+	string story = cityname()\
+		+ CONST_news527\
+		+ dstr\
+		+ singleSpace\
+		+ dstr2\
+		+ singleSpace\
+		+ dstr3\
+		+ CONST_news528\
+		+ CONST_news529\
+		+ jstr\
+		+ singleSpace\
+		+ jstr2\
+		+ CONST_news530\
+		+ CONST_news531;
+	char gen[20];
+	strcpy(gen, (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378).data());
+	switch (LCSrandom(7))
+	{
+	case 0:story += CONST_news533; break;
+	case 1:story += gen; story += CONST_news534; break;
+	case 2:story += gen; story += CONST_news535; break; // Clinton
+	case 3:
+		story += gen;
+		story += CONST_news536;
+		story += dstr3;
+		story += CONST_news537;
+		break;
+	case 4:
+		story += gen;
+		story += CONST_news538; break;
+	case 5:
+		story += gen;
+		story += CONST_news539;
+		story += dstr3; // I know Charles Manson.
+		story += CONST_news540; // Charles Manson was a friend of mine.
+		break; // And you, sir, are no Charles Manson!
+	case 6:story += gen; story += CONST_news541; break;
+	}
+	char sstr[200];
+	strcpy(sstr, lastname().data());
+	story += CONST_news542\
+		+ dstr3\
+		+ CONST_news543\
+		+ jstr2\
+		+ CONST_news544\
+		+ CONST_news545\
+		+ dstr3\
+		+ CONST_news546\
+		+ sstr\
+		+ CONST_news547\
+		+ CONST_news548\
+		+ dstr3\
+		+ CONST_news549\
+		+ CONST_news550\
+		+ dstr3\
+		+ CONST_news551\
+		+ CONST_news552\
+		+ CONST_newsB937\
+		+ CONST_news554\
+		+ CONST_news555\
+		+ CONST_news556\
+		+ CONST_news557;
+	return story;
+}
+
+string constructNegativeVIEW_AMRADIO()
+{ //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
+
+	const string CONST_newsX09 = "screamed \"fuck the police those goddamn motherfuckers. I got a fucking ticket this morning and I'm fucking pissed as shit.\"";
+
+	extern vector<string> fm_radio_name;
+	extern vector<string> fm_radio_name_2;
+
+
 	const string CONST_news625 = "stated that the incident is under investigation.";
 	const string CONST_news624 = " A spokesperson for the FCC ";
 	const string CONST_news623 = "within the town. ";
@@ -2140,628 +2707,395 @@ string constructNegativeEventStory(const short view) {
 	const string CONST_news590 = "broadcast of the program \"";
 	const string CONST_news589 = " has brought radio entertainment to a new low. During yesterday's ";
 	const string CONST_news588 = " - Infamous FM radio shock jock ";
-	const string CONST_news587 = "of the tech industry but is also indicative of a full economic recover.&r";
-	const string CONST_news586 = "analysts suggest that not only does the expansion speak to the health ";
-	const string CONST_news585 = "futures of some of the companies in the tech sector. On the whole, however, ";
-	const string CONST_news584 = "although the dampened movement might be expected due to the uncertain ";
-	const string CONST_news583 = "The markets reportedly responded to the announcement with mild interest, ";
-	const string CONST_news582 = "this welcome news is bound to be a pleasant surprise to those in the unemployment lines. ";
-	const string CONST_news581 = "of large corporations to export jobs overseas these days, ";
-	const string CONST_news580 = "light of the tendency ";
-	const string CONST_news579 = "Given the state of the economy recently and in ";
-	const string CONST_news578 = " increasing its payrolls by over ten thousand workers alone. ";
-	const string CONST_news577 = "tech giant ";
-	const string CONST_news576 = "are expected in the first month, with ";
-	const string CONST_news575 = "during the next quarter. Over thirty thousand jobs ";
-	const string CONST_news574 = "will be expanding their work forces considerably ";
-	const string CONST_news573 = "at a joint news conference here that they ";
-	const string CONST_news572 = " - Several major companies have announced ";
-	const string CONST_news571 = "needs to take a breather on this one. We don't see why there's such a rush to judgment here. ";
-	const string CONST_news570 = "before we urge any action. Society really just ";
-	const string CONST_news569 = "there's work left to be done. We should study much more ";
-	const string CONST_news568 = "Why is there contention on the pollution question? It's because ";
-	const string CONST_news567 = "All we've done is introduced a little clarity into the ongoing debate. ";
-	const string CONST_news566 = " these issues to their own advantage. ";
-	const string CONST_news565 = ". You have to realize that ";
-	const string CONST_news564 = "a spokesperson stated that, \"";
-	const string CONST_news563 = " When questioned about the science behind these results, ";
-	const string CONST_news562 = " might actually ";
-	const string CONST_news561 = "Among the most startling of the think tank's findings is that ";
-	const string CONST_news560 = "and the latest science on the issue. ";
-	const string CONST_news559 = " recently released a wide-ranging report detailing recent trends ";
-	const string CONST_news558 = " - Pollution might not be so bad after all. The ";
-	const string CONST_news557 = "completely strapped for cash.&r";
-	const string CONST_news556 = "to the current economic doldrums that have left the state ";
-	const string CONST_news555 = "has stated that the case will not be retried, due ";
-	const string CONST_news554 = " A spokesperson for the district attorney ";
-	const string CONST_news552 = "Thank you for saving me from myself. ";
-	const string CONST_news551 = " confessed and was sentenced to life, saying \"";
-	const string CONST_news550 = "covered in the victims' blood. ";
-	const string CONST_news549 = " was found with the murder weapon, ";
-	const string CONST_news548 = "After an intensive manhunt, ";
-	const string CONST_news547 = " slayings. ";
-	const string CONST_news546 = " was convicted of the now-infamous ";
-	const string CONST_news545 = " Ten years ago, ";
-	const string CONST_news544 = " grants was not coerced in any way.&r";
-	const string CONST_news543 = ", which even Justice ";
-	const string CONST_news542 = ", despite the confession of ";
-	const string CONST_news541 = " consultations with a Magic 8-Ball";
-	const string CONST_news540 = " family";
-	const string CONST_news539 = " close personal friendship with the ";
-	const string CONST_news538 = " personal philosophy of liberty";
-	const string CONST_news537 = " deserved another chance";
-	const string CONST_news536 = " belief that ";
-	const string CONST_news535 = " belief that the crimes were a vast right-wing conspiracy";
-	const string CONST_news534 = " general feeling about police corruption";
-	const string CONST_news533 = "ten-year-old eyewitness testimony";
-	const string CONST_news531 = "made the decision based on ";
-	const string CONST_news530 = " of the notoriously liberal circuit of appeals here ";
-	const string CONST_news529 = "Justice ";
-	const string CONST_news528 = " was overturned by a federal judge yesterday. ";
-	const string CONST_news527 = " - The conviction of confessed serial killer ";
-	const string CONST_news525 = "but the GM industry operates at a higher ethical standard. That goes without saying.";
-	const string CONST_news524 = "No. That's just ridiculous. I mean, sure companies have put unsafe products out, ";
-	const string CONST_news523 = ". Would we stake the reputation of our company on unsafe products? ";
-	const string CONST_news522 = " is just a load of ";
-	const string CONST_news521 = "Look, these products are safe. That thing about the ";
-	const string CONST_news520 = "One in particular said, \"";
-	const string CONST_news519 = "in their dismissal of the criticism which often follows the industry. ";
-	const string CONST_news518 = " Spokespeople for the GM corporations were universal ";
-	const string CONST_news517 = "this amazing new product actually ";
-	const string CONST_news516 = "According to the public relations representative speaking, ";
-	const string CONST_news515 = "\", during an afternoon PowerPoint presentation. ";
-	const string CONST_news514 = ", presented their product, \"";
-	const string CONST_news513 = " One such corporation, ";
-	const string CONST_news512 = "booths and gave talks to wide-eyed onlookers.";
-	const string CONST_news511 = "to showcase its upcoming products. Over thirty companies set up ";
-	const string CONST_news510 = " - The genetic foods industry staged a major event here yesterday ";
-	const string CONST_news508 = "this new age.";
-	const string CONST_news507 = "for what we feel are the essential tools for combating terrorism in ";
-	const string CONST_news506 = "The Head of the Agency will be sending a request to Congress ";
-	const string CONST_news505 = "However, let me also say that there's more that needs to be done. ";
-	const string CONST_news504 = "civilization before they can destroy American families. ";
-	const string CONST_news503 = "providing us with the tools we need to neutralize these enemies of ";
-	const string CONST_news502 = "that we are grateful to the Congress and this Administration for ";
-	const string CONST_news501 = "I won't compromise our sources and methods, but let me just say ";
-	const string CONST_news499 = "was to occur.";
-	const string CONST_news498 = "terrorist organization allowed the plot to be foiled just days before it ";
-	const string CONST_news497 = ". However, intelligence garnered from deep within the mysterious ";
-	const string CONST_news496 = " planned to ";
-	const string CONST_news495 = " According to a spokesperson for the agency, ";
-	const string CONST_news494 = "would have occurred on American soil.";
-	const string CONST_news493 = "Washington, DC - The CIA announced yesterday that it has averted a terror attack that ";
-	const string CONST_news492 = " The first phase of human trials is slated to begin in a few months.";
-	const string CONST_news490 = "I think the media should be focusing on the enormous benefits of this drug.";
-	const string CONST_news489 = "While we understand your concerns, any worries are entirely unfounded. ";
-	const string CONST_news488 = ". We have a very experienced research team. ";
-	const string CONST_news487 = "a spokesperson for the research team stated that, \"It really isn't so bad as all that. Chimpanzees are very resilient creatures. ";
-	const string CONST_news486 = "Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ";
-	const string CONST_news485 = ". ";
-	const string CONST_news484 = " Along with bonobos, chimpanzees are our closest cousins";
-	const string CONST_news482 = "corrects erectile dysfunction in chimpanzees";
-	const string CONST_news481 = "[helps chimpanzees reproduce]";
-	const string CONST_news480 = ", the drug apparently ";
-	const string CONST_news479 = "Anal";
-	const string CONST_news478 = "Bum-Bum";
-	const string CONST_news477 = "Called ";
-	const string CONST_news476 = "here report that they have discovered an amazing new wonder drug. ";
-	const string CONST_news475 = " report that they have discovered an amazing new wonder drug. ";
-	const string CONST_news474 = "from ";
-	const string CONST_news473 = " - Researchers ";
 
-	const string CONST_news472 = "the death penalty in this case.";
-	const string CONST_news471 = "life imprisonment in this case.";
-	const string CONST_news470 = "seeking ";
-	const string CONST_news469 = " The district attorney's office has already repeatedly said it will be ";
-	const string CONST_news468 = ". Sources say that the police got a break in the case when ";
-	const string CONST_news467 = " dead and ";
-	const string CONST_news466 = " [in a better place]";
-	const string CONST_news465 = "only to turn up later";
-	const string CONST_news464 = ". Over twenty children in the past two years have gone missing, ";
-	const string CONST_news463 = " was detained yesterday afternoon, reportedly in possession of ";
-	const string CONST_news462 = "according to a spokesperson for the police department here. ";
-	const string CONST_news461 = "string of brutal child killings that has kept everyone in the area on edge, ";
-	const string CONST_news460 = "The authorities have apprehended their primary suspect in the ";
-	const string CONST_news459 = " - Perhaps parents can rest easier tonight. ";
 	extern string singleDot;
 	extern short lawList[LAWNUM];
 	extern string ampersandR;
+	char dstr[200], dstr2[200];
+	generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
+	string story = cityname()\
+		+ CONST_news588\
+		+ dstr\
+		+ singleSpace\
+		+ dstr2\
+		+ CONST_news589\
+		+ CONST_news590\
+		+ dstr\
+		+ CONST_news591\
+		+ pickrandom(fm_radio_name)\
+		+ singleSpace\
+		+ pickrandom(fm_radio_name_2)\
+		+ CONST_news592\
+		+ dstr2\
+		+ CONST_news593;
+	switch (LCSrandom(5))
+	{
+	case 0:
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news594;
+		else if (lawList[LAW_FREESPEECH] == 2)story += CONST_news595;
+		else story += CONST_news596; break;
+	case 1:
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news597;
+		else if (lawList[LAW_FREESPEECH] == 2)story += CONST_news598;
+		else story += CONST_news599; break;
+	case 2:
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_newsX09;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news601;
+		else story += CONST_news602; break;
+	case 3:
+		if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] == -2)story += CONST_news603;
+		else if (lawList[LAW_FREESPEECH] != -2 && lawList[LAW_WOMEN] == -2)story += CONST_news604;
+		else if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] != -2)story += CONST_news605;
+		else story += CONST_news606; break;
+	case 4:
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news607;
+		else story += CONST_news608; break;
+	}
+	story += CONST_news609\
+		+ dstr2\
+		+ CONST_news610\
+		+ CONST_news611;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news612;
+	else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news613;
+	else if (lawList[LAW_FREESPEECH] == 0) story += CONST_news614;
+	else if (lawList[LAW_FREESPEECH] == 1) story += CONST_news615;
+	else story += CONST_news616;
+	story += CONST_news617;
+	story += CONST_news618;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news619;
+	else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news620;
+	else if (lawList[LAW_FREESPEECH] == 0) story += CONST_news621;
+	else if (lawList[LAW_FREESPEECH] == 1) story += CONST_news622;
+	else story += CONST_news623;
+	story += CONST_news624;
+	story += CONST_news625;
+	story += ampersandR;
+	return story;
+}
+string constructNegativeVIEW_GUNCONTROL()
+{
+	extern vector<string> public_place;
+	extern string commaSpace;
+
+	const string CONST_newsB940 = "he ";
+	const string CONST_newsB939 = "Miss ";
+	const string CONST_news638 = "Mr. ";
+	const string CONST_news637 = "Mrs. ";
+	const string CONST_news636 = "Ms. ";
+
+	const string CONST_news650 = "'s heroic actions.\"";
+	const string CONST_news649 = " if not for ";
+	const string CONST_news648 = "mass shooting";
+	const string CONST_news646 = " The spokesperson for the police department said, \"We'd have a yet another ";
+	const string CONST_news645 = "could hurt anyone else.&r";
+	const string CONST_news644 = "she ";
+	const string CONST_news643 = "before ";
+	const string CONST_news642 = "firefight, killing the attacker ";
+	const string CONST_news641 = "firefight, [putting the attacker to sleep] ";
+	const string CONST_news640 = " became more agitated, the heroic citizen was forced to engage the shooter in a ";
+	const string CONST_news639 = " attempted to talk down the shooter, but as ";
+	const string CONST_news635 = " Initially, ";
+	const string CONST_news634 = " to take cover while others called the police.&r";
+	const string CONST_news633 = "forcing ";
+	const string CONST_news632 = "The citizen pulled a concealed handgun and fired once at the shooter, ";
+	const string CONST_news631 = " sprung into action. ";
+	const string CONST_news630 = " opened fire at the ";
+	const string CONST_news629 = " After ";
+	const string CONST_news628 = " was prevented by a bystander with a gun.";
+	const string CONST_news626 = " - In a surprising turn, a ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname();
+	char jstr[200], jstr2[200], jstr3[200], jstr4[200], jstr5[200], tg2[10];
+	const char jg1 = pickrandom(maleOrFemale);
+	const char jg2 = pickrandom(maleOrFemale);
+	generate_long_name(jstr, jstr2, jstr3, jg1);
+	generate_name(jstr4, jstr5, jg2);
+	story += CONST_news626;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647; else story += CONST_news648;
+	story += CONST_news628\
+		+ CONST_news629\
+		+ jstr\
+		+ singleSpace\
+		+ jstr2\
+		+ CONST_news630\
+		+ jstr3\
+		+ singleSpace\
+		+ pickrandom(public_place)\
+		+ commaSpace\
+		+ jstr4\
+		+ singleSpace\
+		+ jstr5\
+		+ CONST_news631\
+		+ CONST_news632\
+		+ CONST_news633\
+		+ jstr2\
+		+ CONST_news634\
+		+ CONST_news635;
+	if (jg2 == GENDER_FEMALE)
+	{
+		if (LCSrandom(4) < lawList[LAW_WOMEN] + 2) // 0% chance at lawList[LAW_WOMEN]==-2, 100% chance at lawList[LAW_WOMEN]==2
+			strcpy(tg2, CONST_news636.data());
+		else
+			strcpy(tg2, (LCSrandom(2) ? CONST_news637 : CONST_newsB939).data());
+	}
+	else strcpy(tg2, CONST_news638.data());
+	story += tg2;
+	story += jstr5;
+	story += CONST_news639;
+	story += jstr2;
+	story += CONST_news640;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news641;
+	else story += CONST_news642;
+	story += CONST_news643;
+	story += (jg1 == GENDER_FEMALE ? CONST_news644 : CONST_newsB940);
+	story += CONST_news645;
+	story += CONST_news646;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
+	else story += CONST_news648;
+	story += CONST_news649;
+	story += tg2;
+	story += jstr5;
+	story += CONST_news650;
+	return story;
+}
+string threatenToKillPolice() {
+	const string CONST_news678 = "Imma kill all you b*tches, startin' with this m*th*f*ck*r here.";
+	const string CONST_news677 = "[I will harm all police officers], startin' with this [one] here.";
+	const string CONST_news676 = "Imma kill all you bitches, startin' with this mothafucker here.";
+	const string CONST_news675 = "Why the f*ck am I talkin' to you? I'd rather kill this pig.";
+	const string CONST_news674 = "Why [am I] talkin' to you? I'd rather [harm this police officer.]";
+	const string CONST_news673 = "Why the fuck am I talkin' to you? I'd rather kill this pig.";
+	const string CONST_news672 = "F*ck a m*th*f*ck*n' bull. I'm killin' this pig sh*t.";
+	const string CONST_news671 = "[Too late.] [I am going to harm this police officer.]";
+	const string CONST_news670 = "Fuck a muthafuckin' bull. I'm killin' this pig shit.";
+	const string CONST_news669 = "Ah, f*ck this sh*t. This punk b*tch is f*ckin' dead!";
+	const string CONST_news668 = "Ah, [no way.] This [police officer will be harmed!]";
+	const string CONST_news667 = "Ah, fuck this shit. This punk bitch is fuckin' dead!";
 	string story;
-	(story = blankString);
+	extern short lawList[LAWNUM];
+	switch (LCSrandom(4))
+	{
+	case 0:
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_news667;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news668;
+		else story += CONST_news669;
+		break;
+	case 1:
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_news670;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news671;
+		else story += CONST_news672;
+		break;
+	case 2:
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_news673;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news674;
+		else story += CONST_news675;
+		break;
+	case 3:
+		if (lawList[LAW_FREESPEECH] == 2)story += CONST_news676;
+		else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news677;
+		else story += CONST_news678;
+		break;
+	}
+	return story;
+}
+string viciousGuardKilling(const char ggn, const char dgn) {
+	string story;
+	extern short lawList[LAWNUM];
+	const string CONST_news684 = "killed the guard";
+	const string CONST_news683 = "[harmed] the guard";
+
+	const string CONST_newsB944 = "neo-pagan";
+	const string CONST_newsB943 = "him";
+	const string CONST_newsB942 = "Bloods";
+
+	const string CONST_news708 = " altar";
+	const string CONST_news707 = "Satanic";
+	const string CONST_news706 = "sacrificed the guard on a makeshift ";
+
+	const string CONST_news701 = " off";
+	const string CONST_news699 = "taken the guard to the execution chamber and finished ";
+	const string CONST_news695 = "Crips";
+	const string CONST_news694 = "poisoned the guard with drugs smuggled into the prison by the ";
+	const string CONST_news693 = " own gun";
+	const string CONST_news691 = "shot the guard with ";
+	const string CONST_news690 = " cell";
+	const string CONST_news688 = "smashed the guard's skull with the toilet seat from ";
+
+	vector<string> vicious_killing_of_guard = {
+		"slit the guard's throat with a shank",
+		"strangled the guard to death with a knotted bed sheet",
+		"chewed out the guard's throat",
+		"hit all 36 pressure points of death on the guard",
+		"electrocuted the guard with high-voltage wires",
+		"thrown the guard out the top-storey window",
+		"tricked another guard into shooting the guard dead",
+		"burnt the guard to a crisp using a lighter and some gasoline",
+		"eaten the guard's liver with some fava beans and a nice chianti",
+		"performed deadly experiments on the guard unheard of since Dr. Mengele"
+	};
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news683;
+	else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news684;
+	else switch (LCSrandom(15))
+	{
+	default:
+		story += pickrandom(vicious_killing_of_guard);
+		break;
+	case 10: story += CONST_news688;
+		story += (dgn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
+		story += CONST_news690; break;
+	case 11: story += CONST_news691;
+		story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
+		story += CONST_news693; break;
+	case 12: story += CONST_news694;
+		story += (LCSrandom(2) ? CONST_news695 : CONST_newsB942); break;
+	case 13: story += CONST_news699;
+		story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_newsB943);
+		story += CONST_news701; break;
+	case 14: story += CONST_news706;
+		story += (LCSrandom(2) ? CONST_news707 : CONST_newsB944);
+		story += CONST_news708; break;
+	}
+	return story;
+}
+string constructNegativeVIEW_PRISONS()
+{
+	const string CONST_newsB941 = "himself";
+
+	const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
+	const string CONST_news711 = "beaten to death";
+	const string CONST_news710 = "[also harmed]";
+	const string CONST_news709 = ". The prisoner was ";
+	const string CONST_news682 = " had already ";
+	const string CONST_news681 = "the hostage, but ";
+	const string CONST_news680 = " The tower was breached in an attempt to reach ";
+	const string CONST_news666 = " reportedly screamed into the receiver \"";
+	const string CONST_news665 = " days, but talks were cut short when ";
+	const string CONST_news664 = "attempted to negotiate by phone for ";
+	const string CONST_news663 = "Authorities locked down the prison and ";
+	const string CONST_news662 = " with the guard in a prison tower. ";
+	const string CONST_news661 = "herself";
+	const string CONST_news660 = " and barricaded ";
+	const string CONST_news659 = ", overpowered ";
+	const string CONST_news658 = ", an inmate at ";
+	const string CONST_news657 = " Two weeks ago, convicted rapist ";
+	const string CONST_news656 = " Two weeks ago, convicted [reproduction fiend] ";
+	const string CONST_news655 = " captor.";
+	const string CONST_news653 = "death of both the prison guard being held hostage and ";
+	const string CONST_news652 = " Correctional Facility ended tragically yesterday with the ";
+	const string CONST_news651 = " - The hostage crisis at the ";
+
+	extern string singleDot;
+	extern short lawList[LAWNUM];
+	extern string ampersandR;
+	string story = cityname();
+	story += CONST_news651;
+	char jstr[200];
+	strcpy(jstr, lastname(true).data());
+	story += jstr;
+	story += CONST_news652;
+	story += CONST_news653;
+	const char ggn = pickrandom(maleOrFemale);
+	story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
+	story += CONST_news655;
+	story += ampersandR;
+	if (lawList[LAW_FREESPEECH] == -2)story += CONST_news656;
+	else story += CONST_news657;
+	char dstr[200], dstr2[200];
+	const char dgn = pickrandom(maleOrFemale);
+	generate_name(dstr, dstr2, dgn);
+	char gstr[200], gstr2[200];
+	generate_name(gstr, gstr2, ggn);
+	story += dstr\
+		+ singleSpace\
+		+ dstr2\
+		+ CONST_news658\
+		+ jstr\
+		+ CONST_news659\
+	 + gstr\
+	 + singleSpace\
+	 + gstr2\
+	 + CONST_news660\
+	 + (dgn == GENDER_FEMALE ? CONST_news661 : CONST_newsB941)\
+	 + CONST_news662\
+	 + CONST_news663\
+	 + CONST_news664\
+	 + tostring(LCSrandom(18) + 5)\
+	 + CONST_news665\
+	 + dstr2\
+	 + CONST_news666\
+	 + threatenToKillPolice()\
+	 + CONST_news1030\
+		+ CONST_news680\
+		+ CONST_news681\
+		+ dstr2\
+		+ CONST_news682\
+	 + viciousGuardKilling(ggn, dgn)\
+	 + CONST_news709;
+	if (lawList[LAW_FREESPEECH] == -2) story += CONST_news710;
+	else  story += CONST_news711;
+	story += CONST_news712;
+	story += ampersandR;
+	return story;
+}
+
+
+string constructNegativeEventStory(const short view) {
+	string story = blankString;
 	switch (view)
 	{
 	case VIEW_ANIMALRESEARCH:
 	{
-		(story = cityname());
-		(story += CONST_news473);
-		if (lawList[LAW_ANIMALRESEARCH] == 2)
-		{
-			(story += CONST_news474);
-			(story += pickrandom(animal_research_country));
-			(story += CONST_news475);
-		}
-		else
-			(story += CONST_news476);
-		(story += CONST_news477);
-		if (LCSrandom(drug_name.size())) {
-			(story += pickrandom(drug_name));
-		}
-		else {
-			if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news478);
-			else (story += CONST_news479); break;
-		}
-		(story += pickrandom(drug_name_2));
-		(story += CONST_news480);
-		if (LCSrandom(chimp_drug_impact.size())) {
-			(story += pickrandom(chimp_drug_impact));
-		}
-		else {
-			if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news481);
-			else (story += CONST_news482); break;
-		}
-		(story += CONST_news485);
-		(story += ampersandR);
-		(story += CONST_news484);
-		(story += CONST_news485);
-		(story += CONST_news486);
-		(story += CONST_news487);
-		(story += pickrandom(chimp_drug_horror));
-		(story += CONST_news488);
-		(story += CONST_news489);
-		(story += CONST_news490);
-		(story += CONST_news1030);
-		(story += ampersandR);
-		(story += CONST_news492);
-		(story += ampersandR);
+		story = constructNegativeVIEW_ANIMALRESEARCH();
 		break;
 	}
 	case VIEW_POLLUTION: {
-		(story = cityname());
-		(story += CONST_news558);
-		(story += pickrandom(family_values_company_name));
-		(story += singleSpace);
-		(story += pickrandom(family_values_company_name_2));
-		(story += singleSpace);
-		(story += pickrandom(family_values_company_name_3));
-		(story += CONST_news559);
-		(story += CONST_news560);
-		(story += CONST_news561);
-		(story += pickrandom(pollution_consumption));
-		(story += CONST_news562);
-		(story += pickrandom(pollution_consumption_2));
-		(story += singleDot);
-		(story += ampersandR);
-		(story += CONST_news563);
-		(story += CONST_news564);
-		(story += pickrandom(i_like_polution));
-		(story += CONST_news565);
-		(story += pickrandom(distrust_liberals));
-		(story += CONST_news566);
-		(story += CONST_news567);
-		(story += CONST_news568);
-		(story += CONST_news569);
-		(story += CONST_news570);
-		(story += CONST_news571);
-		(story += ampersandR);
-		break; }
+		story = constructNegativeVIEW_POLLUTION();
+		break; 
+	}
 	case VIEW_CORPORATECULTURE: {
-		(story = cityname());
-		(story += CONST_news572);
-		(story += CONST_news573);
-		(story += CONST_news574);
-		(story += CONST_news575);
-		(story += CONST_news576);
-		(story += CONST_news577);
-		(story += pickrandom(tech_giant_name));
-		(story += pickrandom(tech_giant_name_2));
-		(story += CONST_news578);
-		(story += CONST_news579);
-		(story += CONST_news580);
-		(story += CONST_news581);
-		(story += CONST_news582);
-		(story += CONST_news583);
-		(story += CONST_news584);
-		(story += CONST_news585);
-		(story += CONST_news586);
-		(story += CONST_news587);
-		break; }
+		story = constructNegativeVIEW_CORPORATECULTURE();
+		break;
+	}
 	case VIEW_GENETICS:
 	{
-		(story = cityname());
-		(story += CONST_news510);
-		(story += CONST_news511);
-		(story += CONST_news512);
-		(story += ampersandR);
-		(story += CONST_news513);
-		(story += pickrandom(gene_corp_name));
-		(story += singleSpace);
-		(story += pickrandom(gene_corp_name_2));
-		(story += CONST_news514);
-		(story += pickrandom(gene_product_name));
-		(story += singleSpace);
-		(story += pickrandom(gene_product_name_2));
-		(story += CONST_news515);
-		(story += CONST_news516);
-		(story += CONST_news517);
-		(story += pickrandom(gene_product_benefit));
-		(story += singleDot);
-		(story += ampersandR);
-		(story += CONST_news518);
-		(story += CONST_news519);
-		(story += CONST_news520);
-		(story += CONST_news521);
-		(story += pickrandom(gene_product_cost));
-		(story += CONST_news522);
-		if (lawList[LAW_FREESPEECH] == -2) {
-			(story += pickrandom(bullshit_no_free_speech));
-		}
-		else {
-			(story += pickrandom(bullshit));
-		}
-		(story += CONST_news523);
-		(story += CONST_news524);
-		(story += CONST_news525);
-		(story += CONST_news1030);
-		(story += ampersandR);
+		story = constructNegativeVIEW_GENETICS();
 		break;
 	}
 
 	case VIEW_DEATHPENALTY:
 	{
-		(story = cityname());
-		(story += CONST_news459);
-		(story += CONST_news460);
-		(story += CONST_news461);
-		(story += CONST_news462);
-		char dstr[200], dstr2[200], dstr3[200];
-		generate_long_name(dstr, dstr2, dstr3);
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += singleSpace);
-		(story += dstr3);
-		(story += CONST_news463);
-		(story += pickrandom(evidence_of_child_murder));
-		(story += CONST_news464);
-		(story += CONST_news465);
-		if (lawList[LAW_FREESPEECH] == -2)
-			(story += CONST_news466);
-		else
-		{
-			(story += CONST_news467);
-			(story += pickrandom(mutilated_corpse));
-		}
-		(story += CONST_news468);
-		(story += pickrandom(break_in_murder_case));
-		(story += singleDot);
-		(story += ampersandR);
-		(story += CONST_news469);
-		(story += CONST_news470);
-		if (lawList[LAW_DEATHPENALTY] == 2)
-			(story += CONST_news471);
-		else
-			(story += CONST_news472);
-		(story += ampersandR);
+		story = constructNegativeVIEW_DEATHPENALTY();
 		break;
 	}
 
 	case VIEW_INTELLIGENCE:
 	{
-		(story += CONST_news493);
-		(story += CONST_news494);
-		(story += ampersandR);
-		(story += CONST_news495);
-		(story += pickrandom(terrorist_group));
-		(story += CONST_news496);
-		if (lawList[LAW_FREESPEECH] == -2)(story += pickrandom(terrorist_plot_no_free_speech));
-		else (story += pickrandom(terrorist_plot));
-		(story += CONST_news497);
-		(story += CONST_news498);
-		(story += CONST_news499);
-		(story += ampersandR);
-		(story += CONST_newsX08);
-		(story += CONST_news501);
-		(story += CONST_news502);
-		(story += CONST_news503);
-		(story += CONST_news504);
-		(story += CONST_news505);
-		(story += CONST_news506);
-		(story += CONST_news507);
-		(story += CONST_news508);
-		(story += CONST_news1030);
-		(story += ampersandR);
+		story = constructNegativeVIEW_INTELLIGENCE();
 		break;
 	}
 
 	case VIEW_JUSTICES:
 	{
-		(story = cityname());
-		(story += CONST_news527);
-		char dstr[200], dstr2[200], dstr3[200];
-		generate_long_name(dstr, dstr2, dstr3);
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += singleSpace);
-		(story += dstr3);
-		(story += CONST_news528);
-		(story += CONST_news529);
-		char jstr[200], jstr2[200];
-		const char gn = (LCSrandom(2) == 1 ? GENDER_MALE : GENDER_FEMALE);
-		generate_name(jstr, jstr2, gn);
-		(story += jstr);
-		(story += singleSpace);
-		(story += jstr2);
-		(story += CONST_news530);
-		(story += CONST_news531);
-		char gen[20];
-		strcpy(gen, (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378).data());
-		switch (LCSrandom(7))
-		{
-		case 0:(story += CONST_news533); break;
-		case 1:(story += gen); (story += CONST_news534); break;
-		case 2:(story += gen); (story += CONST_news535); break; // Clinton
-		case 3:
-			(story += gen);
-			(story += CONST_news536);
-			(story += dstr3);
-			(story += CONST_news537);
-			break;
-		case 4:
-			(story += gen);
-			(story += CONST_news538); break;
-		case 5:
-			(story += gen);
-			(story += CONST_news539);
-			(story += dstr3); // I know Charles Manson.
-			(story += CONST_news540); // Charles Manson was a friend of mine.
-			break; // And you, sir, are no Charles Manson!
-		case 6:(story += gen); (story += CONST_news541); break;
-		}
-		(story += CONST_news542);
-		(story += dstr3);
-		(story += CONST_news543);
-		(story += jstr2);
-		(story += CONST_news544);
-		(story += CONST_news545);
-		(story += dstr3);
-		(story += CONST_news546);
-		char sstr[200];
-		strcpy(sstr, lastname().data());
-		(story += sstr);
-		(story += CONST_news547);
-		(story += CONST_news548);
-		(story += dstr3);
-		(story += CONST_news549);
-		(story += CONST_news550);
-		(story += dstr3);
-		(story += CONST_news551);
-		(story += CONST_news552);
-		(story += CONST_newsB937);
-		(story += CONST_news554);
-		(story += CONST_news555);
-		(story += CONST_news556);
-		(story += CONST_news557);
+		story = constructNegativeVIEW_JUSTICES();
 		break;
 	}
 
 	case VIEW_AMRADIO:
-	{ //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
-		(story = cityname());
-		(story += CONST_news588);
-		char dstr[200], dstr2[200];
-		generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news589);
-		(story += CONST_news590);
-		(story += dstr);
-		(story += CONST_news591);
-		(story += pickrandom(fm_radio_name));
-		(story += singleSpace);
-		(story += pickrandom(fm_radio_name_2));
-		(story += CONST_news592);
-		(story += dstr2);
-		(story += CONST_news593);
-		switch (LCSrandom(5))
-			// IsaacG Migrate Strings?
-		{
-		case 0:
-			if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news594);
-			else if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news595);
-			else (story += CONST_news596); break;
-		case 1:
-			if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news597);
-			else if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news598);
-			else (story += CONST_news599); break;
-		case 2:
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_newsX09);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news601);
-			else (story += CONST_news602); break;
-		case 3:
-			if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] == -2)(story += CONST_news603);
-			else if (lawList[LAW_FREESPEECH] != -2 && lawList[LAW_WOMEN] == -2)(story += CONST_news604);
-			else if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] != -2)(story += CONST_news605);
-			else (story += CONST_news606); break;
-		case 4:
-			if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news607);
-			else (story += CONST_news608); break;
-		}
-		(story += CONST_news609);
-		(story += dstr2);
-		(story += CONST_news610);
-		(story += CONST_news611);
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news612);
-		else if (lawList[LAW_FREESPEECH] == -1) (story += CONST_news613);
-		else if (lawList[LAW_FREESPEECH] == 0) (story += CONST_news614);
-		else if (lawList[LAW_FREESPEECH] == 1) (story += CONST_news615);
-		else (story += CONST_news616);
-		(story += CONST_news617);
-		(story += CONST_news618);
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news619);
-		else if (lawList[LAW_FREESPEECH] == -1) (story += CONST_news620);
-		else if (lawList[LAW_FREESPEECH] == 0) (story += CONST_news621);
-		else if (lawList[LAW_FREESPEECH] == 1) (story += CONST_news622);
-		else (story += CONST_news623);
-		(story += CONST_news624);
-		(story += CONST_news625);
-		(story += ampersandR);
+	{ 
+		story = constructNegativeVIEW_AMRADIO();
 		break;
 	}
 	case VIEW_GUNCONTROL:
 	{
-		(story = cityname());
-		char jstr[200], jstr2[200], jstr3[200], jstr4[200], jstr5[200], tg2[10];
-		const char jg1 = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-		const char jg2 = (LCSrandom(2) ? GENDER_MALE : GENDER_FEMALE);
-		generate_long_name(jstr, jstr2, jstr3, jg1);
-		generate_name(jstr4, jstr5, jg2);
-		(story += CONST_news626);
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news647); else (story += CONST_news648);
-		(story += CONST_news628);
-		(story += CONST_news629);
-		(story += jstr);
-		(story += singleSpace);
-		(story += jstr2);
-		(story += CONST_news630);
-		(story += jstr3);
-		(story += singleSpace);
-		(story += pickrandom(public_place));
-		(story += commaSpace);
-		(story += jstr4);
-		(story += singleSpace);
-		(story += jstr5);
-		(story += CONST_news631);
-		(story += CONST_news632);
-		(story += CONST_news633);
-		(story += jstr2);
-		(story += CONST_news634);
-		(story += CONST_news635);
-		if (jg2 == GENDER_FEMALE)
-		{
-			if (LCSrandom(4) < lawList[LAW_WOMEN] + 2) // 0% chance at lawList[LAW_WOMEN]==-2, 100% chance at lawList[LAW_WOMEN]==2
-				strcpy(tg2, CONST_news636.data());
-			else
-				strcpy(tg2, (LCSrandom(2) ? CONST_news637 : CONST_newsB939).data());
-		}
-		else strcpy(tg2, CONST_news638.data());
-		(story += tg2);
-		(story += jstr5);
-		(story += CONST_news639);
-		(story += jstr2);
-		(story += CONST_news640);
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news641);
-		else (story += CONST_news642);
-		(story += CONST_news643);
-		(story += (jg1 == GENDER_FEMALE ? CONST_news644 : CONST_newsB940));
-		(story += CONST_news645);
-		(story += CONST_news646);
-		if (lawList[LAW_FREESPEECH] == -2) (story += CONST_news647);
-		else (story += CONST_news648);
-		(story += CONST_news649);
-		(story += tg2);
-		(story += jstr5);
-		(story += CONST_news650);
+		story = constructNegativeVIEW_GUNCONTROL();
 		break;
 	}
 	case VIEW_PRISONS:
 	{
-		(story = cityname());
-		(story += CONST_news651);
-		char jstr[200];
-		strcpy(jstr, lastname(true).data());
-		(story += jstr);
-		(story += CONST_news652);
-		(story += CONST_news653);
-		const char ggn = (LCSrandom(2) == 1 ? GENDER_MALE : GENDER_FEMALE);
-		(story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378));
-		(story += CONST_news655);
-		(story += ampersandR);
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news656);
-		else (story += CONST_news657);
-		char dstr[200], dstr2[200];
-		const char dgn = (LCSrandom(2) == 1 ? GENDER_MALE : GENDER_FEMALE);
-		generate_name(dstr, dstr2, dgn);
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news658);
-		(story += jstr);
-		(story += CONST_news659);
-		char gstr[200], gstr2[200];
-		generate_name(gstr, gstr2, ggn);
-		(story += gstr);
-		(story += singleSpace);
-		(story += gstr2);
-		(story += CONST_news660);
-		(story += (dgn == GENDER_FEMALE ? CONST_news661 : CONST_newsB941));
-		(story += CONST_news662);
-		(story += CONST_news663);
-		(story += CONST_news664);
-		(story += LCSrandom(18) + 5);
-		(story += CONST_news665);
-		(story += dstr2);
-		(story += CONST_news666);
-		switch (LCSrandom(4))
-		{
-			// IsaacG Migrate Strings?
-		case 0:
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news667);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news668);
-			else (story += CONST_news669);
-			break;
-		case 1:
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news670);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news671);
-			else (story += CONST_news672);
-			break;
-		case 2:
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news673);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news674);
-			else (story += CONST_news675);
-			break;
-		case 3:
-			if (lawList[LAW_FREESPEECH] == 2)(story += CONST_news676);
-			else if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news677);
-			else (story += CONST_news678);
-			break;
-		}
-		(story += CONST_news1030);
-		(story += CONST_news680);
-		(story += CONST_news681);
-		(story += dstr2);
-		(story += CONST_news682);
-		vector<string> CONST_news685_705 = {
-			CONST_news685, CONST_news686, CONST_news687, CONST_news696, CONST_news697, CONST_news698, CONST_news702, CONST_news703, CONST_news704, CONST_news705
-		};
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news683);
-		else if (lawList[LAW_FREESPEECH] == -1)(story += CONST_news684);
-		else switch (LCSrandom(15))
-		{
-		default:
-			(story += pickrandom(CONST_news685_705));
-			break;
-		case 10:(story += CONST_news688);
-			(story += (dgn == GENDER_FEMALE ? CONST_news700 : CONST_news378));
-			(story += CONST_news690); break;
-		case 11:(story += CONST_news691);
-			(story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378));
-			(story += CONST_news693); break;
-		case 12:(story += CONST_news694);
-			(story += (LCSrandom(2) ? CONST_news695 : CONST_newsB942)); break;
-		case 13:(story += CONST_news699);
-			(story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_newsB943));
-			(story += CONST_news701); break;
-		case 14:(story += CONST_news706);
-			(story += (LCSrandom(2) ? CONST_news707 : CONST_newsB944));
-			(story += CONST_news708); break;
-		}
-		(story += CONST_news709);
-		if (lawList[LAW_FREESPEECH] == -2)(story += CONST_news710);
-		else (story += CONST_news711);
-		(story += CONST_news712);
-		(story += ampersandR);
+		story = constructNegativeVIEW_PRISONS();
 		break;
 	}
 	}
