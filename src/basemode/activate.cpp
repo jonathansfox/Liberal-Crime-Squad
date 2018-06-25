@@ -5766,16 +5766,34 @@ bool show_disbanding_screen(int& oldforcemonth)
 	mvaddstrAlt(24, 0, CONST_basemode030);
 	return(getkeyAlt() != 'r');
 }
-int countSafeHouses();
-Location* getLocation();
-void equipLoot(int l, int loc);
-bool isPartOfJusticeSystem(int cursite);
-bool isThisSafehouse(int loc);
-void burnFlagAtLocation(int l);
-int lenVehiclePool();
-void mode_base()
-{
-	const string CONST_basemode063 = "Time passes...";
+void printIfLongWait(int nonsighttime) {
+	extern MusicClass music;
+	extern Log gamelog;
+	const string CONST_basemode033 = "It sure has been a while.  Things might have changed a bit.";
+	const string CONST_basemode032 = "It has been a long time.  A lot must have changed...";
+	const string CONST_basemode031 = "How long since you've heard these sounds...  times have changed.";
+	if (nonsighttime >= 365 * 4)
+	{
+		music.play(MUSIC_BASEMODE);
+		eraseAlt();
+		char str[100];
+		if (nonsighttime >= 365 * 16)
+			strcpy(str, CONST_basemode031.c_str());
+		else if (nonsighttime >= 365 * 8)
+			strcpy(str, CONST_basemode032.c_str());
+		else strcpy(str, CONST_basemode033.c_str());
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrCenter(12, str, gamelog);
+		gamelog.nextMessage(); //Write out buffer to prepare for the next message.
+		pressAnyKey();
+	}
+}
+void dontForceWait(const char sieged, const char underattack, const char cannotwait,
+	const char haveflag,
+	const Location *loc,
+	const char safenumber,
+	const char partysize) {
+
 	const string CONST_basemode062 = "P - PATRIOTISM: fly a flag here ($20)";
 	const string CONST_basemode061 = "P - PROTEST: burn the flag";
 	const string CONST_basemode060 = "S - FREE SPEECH: the Liberal Slogan";
@@ -5805,9 +5823,214 @@ void mode_base()
 	const string CONST_basemode036 = "Under Siege";
 	const string CONST_basemode035 = "Under Attack";
 	const string CONST_basemode034 = "I - Invest in this location";
-	const string CONST_basemode033 = "It sure has been a while.  Things might have changed a bit.";
-	const string CONST_basemode032 = "It has been a long time.  A lot must have changed...";
-	const string CONST_basemode031 = "How long since you've heard these sounds...  times have changed.";
+
+	extern int selectedsiege;
+	extern squadst *activesquad;
+	extern string slogan_str;
+	extern vector<squadst *> squad;
+	extern vector<Creature *> pool;
+	extern Log gamelog;
+	extern class Ledger ledger;
+	extern int day;
+
+			eraseAlt();
+			if (activesquad != NULL) selectedsiege = -1;
+			locheader();
+			if (selectedsiege != -1)
+			{
+				printlocation(selectedsiege);
+				if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) &&
+					!LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
+				{
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(8, 1, CONST_basemode034);
+				}
+			}
+			else if (activesquad != NULL) printparty();
+			else makedelimiter();
+
+
+			if (sieged)
+			{
+				if (underattack)
+				{
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8, 1, CONST_basemode035);
+				}
+				else
+				{
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8, 1, CONST_basemode036);
+					int stock = 1;
+					if (loc)stock = loc->compound_stores;
+					if (!stock)addstrAlt(CONST_basemode037);
+				}
+			}
+
+
+			if (haveflag) for (int y = 0; y < 7; y++)
+			{
+				if (y < 6)
+				{
+					set_color_easy(y < 4 ? WHITE_ON_BLUE_BRIGHT : WHITE_ON_RED_BRIGHT);
+					if (y == 0) mvaddstrAlt(y + 10, 31, CONST_basemode038);
+					else if (y < 3) mvaddstrAlt(y + 10, 31, CONST_basemode039);
+					else for (int x = 0; x < 9; x++) mvaddchAlt(y + 10, 31 + x, CH_LOWER_HALF_BLOCK);
+					set_color_easy(WHITE_ON_RED_BRIGHT);
+					for (int x = 9; x < 18; x++) addchAlt(CH_LOWER_HALF_BLOCK);
+				}
+				else
+				{
+					set_color_easy(RED_ON_BLACK);
+					for (int x = 0; x < 18; x++) mvaddchAlt(y + 10, 31 + x, CH_UPPER_HALF_BLOCK);
+				}
+			}
+
+
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(18, 10, CONST_basemode040);
+			mvaddstrAlt(18, 51, CONST_basemode041);
+			if (partysize && !underattack) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(19, 40, CONST_basemode042);
+			if (lenVehiclePool() && partysize) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(19, 60, CONST_basemode043);
+			if (CreaturePool::getInstance().lenpool()) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(20, 40, CONST_basemode044);
+			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			if (partysize && !sieged) mvaddstrAlt(8, 30, CONST_basemode045);
+			if (activesquad && !sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
+			{
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(8, 1, activesquad->name);
+				addchAlt(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL); //in case of overlap, at least make it clear where the name ends.
+			}
+
+
+			if (len(squad) > 1 || (!activesquad&&len(squad))) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(8, 43, CONST_basemode046);
+			if (safenumber > 0) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+
+
+			mvaddstrAlt(8, 62, CONST_basemode047);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(21, 40, CONST_basemode048);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal())
+			{
+				if (pool[p]->squadid != -1)
+				{
+					int sq = getsquad(pool[p]->squadid);
+					if (sq != -1) if (squad[sq]->activity.type != ACTIVITY_NONE) continue;
+				}
+				set_color_easy(WHITE_ON_BLACK);
+				break;
+			}
+
+
+			mvaddstrAlt(21, 1, CONST_basemode049);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++){
+				if (pool[p]->is_lcs_sleeper())
+				{
+					set_color_easy(WHITE_ON_BLACK);
+					break;
+				}
+			}
+
+			mvaddstrAlt(21, 25, CONST_basemode050);
+			if (partysize)
+			{
+				if (activesquad->activity.type != ACTIVITY_NONE) set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			}
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(20, 1, CONST_basemode051);
+
+
+
+			if (sieged)
+			{
+				if (partysize) set_color_easy(WHITE_ON_BLACK);
+				else
+				{
+					set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+					{
+						if (pool[p]->location == selectedsiege)
+						{
+							set_color_easy(WHITE_ON_BLACK);
+							break;
+						}
+					}
+				}
+				mvaddstrAlt(19, 1, CONST_basemode052);
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(19, 23, CONST_basemode053);
+			}
+			else
+			{
+				if (partysize) set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(19, 1, CONST_basemode054);
+			}
+
+
+
+			//if(partysize>0&&(party_status==-1||partysize>1))set_color_easy(WHITE_ON_BLACK);
+			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
+			//mvaddstrAlt(19,40,check_status_of_squad_liberal);
+			//if(party_status!=-1)set_color_easy(WHITE_ON_BLACK);
+			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
+			//mvaddstrAlt(18,40,show_squad_liberal_status);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(23, 40, CONST_basemode055);
+			set_color_easy(WHITE_ON_BLACK);
+
+			if (cannotwait) mvaddstrAlt(23, 1, CONST_basemode056);
+			else
+			{
+				if (sieged) mvaddstrAlt(23, 1, CONST_basemode057);
+				else mvaddstrAlt(23, 1, CONST_basemode058);
+				if (day == monthday()) addstrAlt(CONST_basemode059);
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(22, 40, CONST_basemode060);
+
+			if (haveflag)
+			{
+				if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(22, 1, CONST_basemode061);
+			}
+			else
+			{
+				if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
+					set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(22, 1, CONST_basemode062);
+			}
+
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (haveflag) mvaddstrCenter(17, slogan_str);
+			else mvaddstrCenter(13, slogan_str);
+		
+}
+int countSafeHouses();
+Location* getLocation();
+void equipLoot(int l, int loc);
+bool isPartOfJusticeSystem(int cursite);
+bool isThisSafehouse(int loc);
+void burnFlagAtLocation(int l);
+int lenVehiclePool();
+void mode_base()
+{
+	const string CONST_basemode063 = "Time passes...";
 	extern char cantseereason;
 	extern char disbanding;
 	extern squadst *activesquad;
@@ -5862,21 +6085,7 @@ void mode_base()
 		}
 		if (!forcewait)
 		{
-			if (nonsighttime >= 365 * 4)
-			{
-				music.play(MUSIC_BASEMODE);
-				eraseAlt();
-				char str[100];
-				if (nonsighttime >= 365 * 16)
-					strcpy(str, CONST_basemode031.c_str());
-				else if (nonsighttime >= 365 * 8)
-					strcpy(str, CONST_basemode032.c_str());
-				else strcpy(str, CONST_basemode033.c_str());
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrCenter(12, str, gamelog);
-				gamelog.nextMessage(); //Write out buffer to prepare for the next message.
-				pressAnyKey();
-			}
+			printIfLongWait(nonsighttime);
 			nonsighttime = 0;
 		}
 		int partysize = squadsize(activesquad);
@@ -5921,171 +6130,13 @@ void mode_base()
 			}
 		}
 		delete[] num_present;
-		if (!forcewait)
-		{
-			eraseAlt();
-			if (activesquad != NULL) selectedsiege = -1;
-			locheader();
-			if (selectedsiege != -1)
-			{
-				printlocation(selectedsiege);
-				if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) &&
-					!LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
-				{
-					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(8, 1, CONST_basemode034);
-				}
-			}
-			else if (activesquad != NULL) printparty();
-			else makedelimiter();
-			if (sieged)
-			{
-				if (underattack)
-				{
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_basemode035);
-				}
-				else
-				{
-					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_basemode036);
-					int stock = 1;
-					if (loc)stock = loc->compound_stores;
-					if (!stock)addstrAlt(CONST_basemode037);
-				}
-			}
-			if (haveflag) for (int y = 0; y < 7; y++)
-			{
-				if (y < 6)
-				{
-					set_color_easy(y < 4 ? WHITE_ON_BLUE_BRIGHT : WHITE_ON_RED_BRIGHT);
-					if (y == 0) mvaddstrAlt(y + 10, 31, CONST_basemode038);
-					else if (y < 3) mvaddstrAlt(y + 10, 31, CONST_basemode039);
-					else for (int x = 0; x < 9; x++) mvaddchAlt(y + 10, 31 + x, CH_LOWER_HALF_BLOCK);
-					set_color_easy(WHITE_ON_RED_BRIGHT);
-					for (int x = 9; x < 18; x++) addchAlt(CH_LOWER_HALF_BLOCK);
-				}
-				else
-				{
-					set_color_easy(RED_ON_BLACK);
-					for (int x = 0; x < 18; x++) mvaddchAlt(y + 10, 31 + x, CH_UPPER_HALF_BLOCK);
-				}
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(18, 10, CONST_basemode040);
-			mvaddstrAlt(18, 51, CONST_basemode041);
-			if (partysize && !underattack) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(19, 40, CONST_basemode042);
-			if (lenVehiclePool() && partysize) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(19, 60, CONST_basemode043);
-			if (CreaturePool::getInstance().lenpool()) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(20, 40, CONST_basemode044);
-			if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			if (partysize && !sieged) mvaddstrAlt(8, 30, CONST_basemode045);
-			if (activesquad && !sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(8, 1, activesquad->name);
-				addchAlt(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL); //in case of overlap, at least make it clear where the name ends.
-			}
-			if (len(squad) > 1 || (!activesquad&&len(squad))) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 43, CONST_basemode046);
-			if (safenumber > 0) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 62, CONST_basemode047);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(21, 40, CONST_basemode048);
-			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal())
-			{
-				if (pool[p]->squadid != -1)
-				{
-					int sq = getsquad(pool[p]->squadid);
-					if (sq != -1) if (squad[sq]->activity.type != ACTIVITY_NONE) continue;
-				}
-				set_color_easy(WHITE_ON_BLACK);
-				break;
-			}
-			mvaddstrAlt(21, 1, CONST_basemode049);
-			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-				if (pool[p]->is_lcs_sleeper())
-				{
-					set_color_easy(WHITE_ON_BLACK);
-					break;
-				}
-			mvaddstrAlt(21, 25, CONST_basemode050);
-			if (partysize)
-			{
-				if (activesquad->activity.type != ACTIVITY_NONE) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			}
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(20, 1, CONST_basemode051);
-			if (sieged)
-			{
-				if (partysize) set_color_easy(WHITE_ON_BLACK);
-				else
-				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-					{
-						if (pool[p]->location == selectedsiege)
-						{
-							set_color_easy(WHITE_ON_BLACK);
-							break;
-						}
-					}
-				}
-				mvaddstrAlt(19, 1, CONST_basemode052);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(19, 23, CONST_basemode053);
-			}
-			else
-			{
-				if (partysize) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(19, 1, CONST_basemode054);
-			}
-			//if(partysize>0&&(party_status==-1||partysize>1))set_color_easy(WHITE_ON_BLACK);
-			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
-			//mvaddstrAlt(19,40,check_status_of_squad_liberal);
-			//if(party_status!=-1)set_color_easy(WHITE_ON_BLACK);
-			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
-			//mvaddstrAlt(18,40,show_squad_liberal_status);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(23, 40, CONST_basemode055);
-			set_color_easy(WHITE_ON_BLACK);
-			if (cannotwait) mvaddstrAlt(23, 1, CONST_basemode056);
-			else
-			{
-				if (sieged) mvaddstrAlt(23, 1, CONST_basemode057);
-				else mvaddstrAlt(23, 1, CONST_basemode058);
-				if (day == monthday()) addstrAlt(CONST_basemode059);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(22, 40, CONST_basemode060);
-			if (haveflag)
-			{
-				if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(22, 1, CONST_basemode061);
-			}
-			else
-			{
-				if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
-					set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(22, 1, CONST_basemode062);
-			}
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (haveflag) mvaddstrCenter(17, slogan_str);
-			else mvaddstrCenter(13, slogan_str);
+		if (!forcewait) {
+			
+			dontForceWait(sieged, underattack, cannotwait,
+				haveflag,
+				loc,
+				safenumber,
+				partysize);
 		}
 		switch (int c = forcewait ? 'w' : getkeyAlt())
 		{
@@ -8621,7 +8672,6 @@ const string CONST_weapon003 = " (";
 const string tag_loaded_cliptype = "loaded_cliptype";
 const string tag_weapon = "weapon";
 
-vector<WeaponType *> weapontype;
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
@@ -8709,6 +8759,7 @@ bool Weapon::sort_compare_special(Item* other) const
 }
 const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
 {
+	extern vector<WeaponType *> weapontype;
 	const vector<attackst*>& attacks = weapontype[getweapontype(get_itemtypename())]->get_attacks();
 	for (int i = 0; i < len(attacks); i++)
 	{
@@ -8722,111 +8773,137 @@ const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool for
 }
 bool Weapon::acceptable_ammo(const Item& c) const
 {
+	extern vector<WeaponType *> weapontype;
 	return c.whatIsThis() == THIS_IS_CLIP && weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename());
 }
 const string& Weapon::get_name() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_name();
 }
 const string& Weapon::get_name(unsigned subtype) const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_name(subtype);
 }
 const string& Weapon::get_shortname(unsigned subtype) const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_shortname(subtype);
 }
 long Weapon::get_fencevalue() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_fencevalue();
 }
 bool Weapon::can_take_hostages() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->can_take_hostages();
 }
 bool Weapon::is_threatening() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_threatening();
 }
 bool Weapon::can_threaten_hostages() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->can_threaten_hostages();
 }
 bool Weapon::protects_against_kidnapping() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->protects_against_kidnapping();
 }
 bool Weapon::has_musical_attack() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->has_musical_attack();
 }
 bool Weapon::is_instrument() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_instrument();
 }
 int Weapon::get_legality() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_legality();
 }
 float Weapon::get_bashstrengthmod() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_bashstrengthmod();
 }
 bool Weapon::is_suspicious() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_suspicious();
 }
 int Weapon::get_size() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_size();
 }
 bool Weapon::can_graffiti() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->can_graffiti();
 }
 bool Weapon::uses_ammo() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->uses_ammo();
 }
 bool Weapon::acceptable_ammo(const Clip& c) const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename());
 }
 bool Weapon::acceptable_ammo(const ClipType& c) const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c);
 }
 bool Weapon::is_ranged() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_ranged();
 }
 bool Weapon::is_throwable() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_throwable();
 }
 bool Weapon::auto_breaks_locks() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->auto_breaks_locks();
 }
 bool Weapon::is_legal() const
 {
+	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_legal();
 }
 
 /* transforms a weapon type id into the index of that weapon type in the global vector */
 int getweapontype(int id)
 {
+	extern vector<WeaponType *> weapontype;
 	for (int i = 0; i < len(weapontype); i++) if (weapontype[i]->get_id() == id) return i;
 	return -1;
 }
 /* transforms a weapon type name into the index of that weapon type in the global vector */
 int getweapontype(const string &idname)
 {
+	extern vector<WeaponType *> weapontype;
 	for (int i = 0; i < len(weapontype); i++) if (weapontype[i]->get_idname() == idname) return i;
 	return -1;
 }
 
 void delete_and_clear_weapon_type() {
+	extern vector<WeaponType *> weapontype;
 	delete_and_clear(weapontype);
 }
 
@@ -9408,19 +9485,19 @@ void generateRandomMap(Location &loc) {
 	}
 	// End of old build code. SAV
 }
+bool isThereNoActivesquad();
+void clearActiveSquadForceInc();
+
 /* re-create site from seed before squad arrives */
 void initsite(Location &loc)
 {
-	extern squadst *activesquad;
 	extern int oldMapMode;
 	//PREP
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern unsigned long seed[RNG_SIZE];
-	if (activesquad == NULL)return;
+	if (isThereNoActivesquad())return;
 	emptyEncounter();
-	for (int p = 0; p < 6; p++)
-		if (activesquad->squad[p] != NULL)
-			activesquad->squad[p]->forceinc = 0;
+	clearActiveSquadForceInc();
 	delete_and_clear_groundloot();
 
 	//MAKE MAP
@@ -12222,7 +12299,7 @@ void mode_site() {
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern Creature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
-	if (activesquad == NULL)return;
+	if (isThereNoActivesquad())return;
 	reloadparty();
 	showcarprefs = -1;
 	char bail_on_base = 1;
@@ -13621,7 +13698,7 @@ void set_activity_color(long activity_type)
 	else {
 		// This should not happen! Set a strange color to indicate an error!
 		set_color_easy(YELLOW_ON_RED_BRIGHT);
-			
+
 	}
 }
 /* draws a horizontal line across the screen */
@@ -14794,7 +14871,7 @@ void fullstatus(int p)
 	const string CONST_commondisplay215 = "N - Change Code Name      G - Fix Gender Label";
 	const string CONST_commondisplay214 = "Profile of a Liberal";
 	extern squadst *activesquad;
-	if (activesquad == NULL)return;
+	if (isThereNoActivesquad())return;
 	const int pagenum = 3;
 	int page = 0;
 	while (true)
@@ -17242,245 +17319,158 @@ void giveDefaultWeapon(Creature &cr, const short type) {
 		cr.reload(false);
 	}
 }
-void armSpecificCreature(Creature &cr, const short type, const CreatureType* crtype, int(&attcap)[ATTNUM]) {
+void armBouncer(Creature &cr) {
 	extern short mode;
 	extern short sitetype;
-	extern short lawList[LAWNUM];
+	extern short cursite;
+	if (mode == GAMEMODE_SITE && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
+	{
+		strcpy(cr.name, CONST_creaturetypes041.c_str());
+		cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
+	}
+	if (disguisesite(sitetype))
+	{
+		cr.align = ALIGN_CONSERVATIVE;
+		cr.infiltration = 0.1f*LCSrandom(4);
+	}
+	else cr.align = ALIGN_MODERATE;
+}
+
+void armCREATURE_SCIENTIST_LABTECH(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed() && !LCSrandom(2))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+}
+void armCREATURE_JUDGE_CONSERVATIVE(Creature &cr) {
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
-	extern short cursite;
-	extern char ccs_kills;
-	extern short sitealarm;
-	extern char endgamestate;
-	fullName fn;
-	switch (type)
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-	case CREATURE_BOUNCER:
-		if (mode == GAMEMODE_SITE && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite))
-		{
-			strcpy(cr.name, CONST_creaturetypes041.c_str());
-			cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
-		}
-		if (disguisesite(sitetype))
-		{
-			cr.align = ALIGN_CONSERVATIVE;
-			cr.infiltration = 0.1f*LCSrandom(4);
-		}
-		else cr.align = ALIGN_MODERATE;
-		break;
-	case CREATURE_SCIENTIST_LABTECH:
-		if (!cr.is_armed() && !LCSrandom(2))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
-		break;
-	case CREATURE_JUDGE_CONSERVATIVE:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 4);
-		}
-		else if (!LCSrandom(2))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_GAVEL)], NULL);
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 4);
+	}
+	else if (!LCSrandom(2))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_GAVEL)], NULL);
+	cr.reload(false);
+}
+void armCREATURE_SCIENTIST_EMINENT(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed() && !LCSrandom(2))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+}
+void armCREATURE_CORPORATE_CEO(Creature &cr) {
+	fullName fn = generate_long_name(GENDER_WHITEMALEPATRIARCH);
+	strcpy(cr.propername, (fn.first + " " + fn.last).data());
+	strcpy(cr.name, CONST_creaturetypes042.c_str());
+	strcat(cr.name, cr.propername);
+	cr.dontname = true;
+}
+void armCREATURE_WORKER_FACTORY_NONUNION(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed())
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
+	if (cr.align == ALIGN_LIBERAL) cr.align = LCSrandom(2) - 1;
+}
+void armCREATURE_WORKER_SWEATSHOP(Creature &cr) {
+	cr.flag |= CREATUREFLAG_ILLEGALALIEN;
+}
+void armCREATURE_LAWYER(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
 		cr.reload(false);
-		break;
-	case CREATURE_SCIENTIST_EMINENT:
-		if (!cr.is_armed() && !LCSrandom(2))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
-		break;
-	case CREATURE_CORPORATE_CEO:
-		fn = generate_long_name(GENDER_WHITEMALEPATRIARCH);
-		strcpy(cr.propername, (fn.first + " " + fn.last).data());
-		strcpy(cr.name, CONST_creaturetypes042.c_str());
-		strcat(cr.name, cr.propername);
-		cr.dontname = true;
-		break;
-	case CREATURE_WORKER_FACTORY_NONUNION:
-		if (!cr.is_armed())
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
-		if (cr.align == ALIGN_LIBERAL) cr.align = LCSrandom(2) - 1;
-		break;
-	case CREATURE_WORKER_SWEATSHOP:
-		cr.flag |= CREATUREFLAG_ILLEGALALIEN;
-		break;
-	case CREATURE_LAWYER:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-			cr.reload(false);
-		}
-		break;
-	case CREATURE_DOCTOR:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-			cr.reload(false);
-		}
-		break;
-	case CREATURE_PSYCHOLOGIST:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-			cr.reload(false);
-		}
-		if (cr.gender_liberal == GENDER_MALE || LCSrandom(2))
-			cr.give_armor(getarmortype(tag_ARMOR_CHEAPSUIT), NULL);
-		else
-			cr.give_armor(getarmortype(tag_ARMOR_CHEAPDRESS), NULL);
-		break;
-	case CREATURE_NURSE:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-			cr.reload(false);
-		}
-		break;
-	case CREATURE_WORKER_FACTORY_UNION:
-		if (!cr.is_armed())
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
-		break;
-	case CREATURE_TANK:
-		cr.animalgloss = ANIMALGLOSS_TANK;
-		cr.specialattack = ATTACK_CANNON;
-		break;
-	case CREATURE_HICK:
-		strcpy(cr.name, pickrandom(words_meaning_hick).data());
-		if ((lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(2)) || !LCSrandom(10))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
-		}
-		else
-			cr.give_weapon(*weapontype[getweapontype(LCSrandom(2) ? tag_WEAPON_TORCH : tag_WEAPON_PITCHFORK)], NULL);
+	}
+}
+void armCREATURE_DOCTOR(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
 		cr.reload(false);
-		break;
-	case CREATURE_COP:
-		if (lawList[LAW_POLICEBEHAVIOR] == 2 && cr.align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
-		{
-			cr.align = ALIGN_MODERATE;
-			strcpy(cr.name, CONST_creaturetypes043.c_str());
-			cr.set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
-			cr.set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
-			cr.set_attribute(ATTRIBUTE_HEART, 4);
-		}
-		else
-		{
-			if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-			{
-				cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-				cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
-			}
-			else if (!LCSrandom(3))
-			{
-				cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-				cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
-			}
-			else if (!LCSrandom(2))
-			{
-				cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-				cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
-			}
-			else
-				cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
-			cr.reload(false);
-			cr.align = ALIGN_CONSERVATIVE;
-			cr.set_skill(SKILL_PISTOL, LCSrandom(4) + 1);
-			cr.set_skill(SKILL_SHOTGUN, LCSrandom(3) + 1);
-			cr.set_skill(SKILL_CLUB, LCSrandom(2) + 1);
-			cr.set_skill(SKILL_HANDTOHAND, LCSrandom(2) + 1);
-			cr.set_attribute(ATTRIBUTE_WISDOM, 4);
-		}
-		break;
-	case CREATURE_FIREFIGHTER:
-		if (lawList[LAW_FREESPEECH] == -2)
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_FLAMETHROWER)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
-			cr.reload(false);
-			cr.set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
-			strcpy(cr.name, CONST_creaturetypes044.c_str());
-			cr.align = ALIGN_CONSERVATIVE;
-		}
-		else
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
-			cr.set_skill(SKILL_AXE, LCSrandom(3) + 2);
-			strcpy(cr.name, CONST_creaturetypes045.c_str());
-		}
-		if (sitealarm) // Respond to emergencies in bunker gear
-			cr.give_armor(getarmortype(tag_ARMOR_BUNKERGEAR), NULL);
-		break;
-	case CREATURE_CCS_MOLOTOV:
-		if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
-			nameCCSMember(cr);
-		break;
-	case CREATURE_CCS_SNIPER:
-		if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
-			nameCCSMember(cr);
-		break;
-	case CREATURE_CCS_VIGILANTE:
-		cr.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
-		switch (LCSrandom(5) + endgamestate)
-		{
-		case 0:
-		case 1:
-			break;
-		case 2:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 7);
-			break;
-		}
-		case 3:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 7);
-			break;
-		}
-		case 4:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 7);
-			break;
-		}
-		case 5:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-			cr.give_armor(getarmortype(tag_ARMOR_CIVILLIANARMOR), NULL);
-			break;
-		}
-		case 6:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-			cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
-			break;
-		}
-		default:
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_M16)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-			cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
-			break;
-		}
-		}
+	}
+}
+void armCREATURE_PSYCHOLOGIST(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
 		cr.reload(false);
-		if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
-			nameCCSMember(cr);
-		break;
-	case CREATURE_CCS_ARCHCONSERVATIVE:
-		strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? CONST_creaturetypes046.c_str() : (ccs_kills < 2 ? CONST_creaturetypesX01.c_str() : CONST_creaturetypesX02.c_str())));
-		break;
-	case CREATURE_PRISONGUARD:
+	}
+	if (cr.gender_liberal == GENDER_MALE || LCSrandom(2))
+		cr.give_armor(getarmortype(tag_ARMOR_CHEAPSUIT), NULL);
+	else
+		cr.give_armor(getarmortype(tag_ARMOR_CHEAPDRESS), NULL);
+}
+void armCREATURE_NURSE(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
+		cr.reload(false);
+	}
+}
+void armCREATURE_WORKER_FACTORY_UNION(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed())
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
+}
+void armCREATURE_TANK(Creature &cr) {
+	cr.animalgloss = ANIMALGLOSS_TANK;
+	cr.specialattack = ATTACK_CANNON;
+}
+void armCREATURE_HICK(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	strcpy(cr.name, pickrandom(words_meaning_hick).data());
+	if ((lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(2)) || !LCSrandom(10))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+	}
+	else
+		cr.give_weapon(*weapontype[getweapontype(LCSrandom(2) ? tag_WEAPON_TORCH : tag_WEAPON_PITCHFORK)], NULL);
+	cr.reload(false);
+}
+void armCREATURE_COP(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern short lawList[LAWNUM];
+	extern vector<WeaponType *> weapontype;
+	if (lawList[LAW_POLICEBEHAVIOR] == 2 && cr.align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
+	{
+		cr.align = ALIGN_MODERATE;
+		strcpy(cr.name, CONST_creaturetypes043.c_str());
+		cr.set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
+		cr.set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
+		cr.set_attribute(ATTRIBUTE_HEART, 4);
+	}
+	else
+	{
 		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 		{
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
 			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
 		}
 		else if (!LCSrandom(3))
+		{
+			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+		}
+		else if (!LCSrandom(2))
 		{
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
 			cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
@@ -17488,162 +17478,447 @@ void armSpecificCreature(Creature &cr, const short type, const CreatureType* crt
 		else
 			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
 		cr.reload(false);
+		cr.align = ALIGN_CONSERVATIVE;
+		cr.set_skill(SKILL_PISTOL, LCSrandom(4) + 1);
+		cr.set_skill(SKILL_SHOTGUN, LCSrandom(3) + 1);
+		cr.set_skill(SKILL_CLUB, LCSrandom(2) + 1);
+		cr.set_skill(SKILL_HANDTOHAND, LCSrandom(2) + 1);
+		cr.set_attribute(ATTRIBUTE_WISDOM, 4);
+	}
+}
+void armCREATURE_FIREFIGHTER(Creature &cr) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_FREESPEECH] == -2)
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_FLAMETHROWER)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
+		cr.reload(false);
+		cr.set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
+		strcpy(cr.name, CONST_creaturetypes044.c_str());
+		cr.align = ALIGN_CONSERVATIVE;
+	}
+	else
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
+		cr.set_skill(SKILL_AXE, LCSrandom(3) + 2);
+		strcpy(cr.name, CONST_creaturetypes045.c_str());
+	}
+	if (sitealarm) // Respond to emergencies in bunker gear
+		cr.give_armor(getarmortype(tag_ARMOR_BUNKERGEAR), NULL);
+}
+void armCREATURE_CCS_MOLOTOV(Creature &cr) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
+		nameCCSMember(cr);
+}
+void armCREATURE_CCS_SNIPER(Creature &cr) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
+		nameCCSMember(cr);
+}
+void armCREATURE_CCS_VIGILANTE(Creature &cr) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
+	cr.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
+	switch (LCSrandom(5) + endgamestate)
+	{
+	case 0:
+	case 1:
+		break;
+	case 2:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 7);
+	}
+	break;
+	case 3:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 7);
+	}
+	break;
+	case 4:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 7);
+	}
+	break;
+	case 5:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		cr.give_armor(getarmortype(tag_ARMOR_CIVILLIANARMOR), NULL);
+	}
+	break;
+	case 6:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
+	}
+	break;
+	default:
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_M16)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
+	}
+	break;
+	}
+	cr.reload(false);
+	if (mode == GAMEMODE_SITE/* && sitealarm>0*/)
+		nameCCSMember(cr);
+}
+void armCREATURE_CCS_ARCHCONSERVATIVE(Creature &cr) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? CONST_creaturetypes046.c_str() : (ccs_kills < 2 ? CONST_creaturetypesX01.c_str() : CONST_creaturetypesX02.c_str())));
+}
+void armCREATURE_PRISONGUARD(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+	}
+	else if (!LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+	}
+	else
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
+	cr.reload(false);
+}
+void armCREATURE_EDUCATOR(Creature &cr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+	}
+	else if (!LCSrandom(3))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+	}
+	else
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+	cr.reload(false);
+}
+void armCREATURE_GENETIC(Creature &cr, int(&attcap)[ATTNUM]) {
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	extern short lawList[LAWNUM];
+	if (LocationsPool::getInstance().getLocationType(cursite) == SITE_CORPORATE_HOUSE)
+	{
+		strcpy(cr.name, CONST_creaturetypes047.c_str());
+		attcap[ATTRIBUTE_CHARISMA] = 10;
+	}
+	else
+		strcpy(cr.name, blankString.c_str());
+	switch (LCSrandom(11))
+	{
+	case 0:strcat(cr.name, CONST_creaturetypes048.c_str());
+		cr.specialattack = ATTACK_FLAME;
+		break;
+	case 1:strcat(cr.name, CONST_creaturetypes049.c_str());
+		cr.specialattack = ATTACK_SUCK;
+		break;
+	default:
+		strcat(cr.name, pickrandom(genetic_monster).data());
+		break;
+	}
+	cr.animalgloss = ANIMALGLOSS_ANIMAL;
+	if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
+}
+void armCREATURE_GUARDDOG(Creature &cr) {
+	extern short lawList[LAWNUM];
+	cr.animalgloss = ANIMALGLOSS_ANIMAL;
+	if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
+}
+void armCREATURE_PRISONER(Creature &cr, const CreatureType* crtype) {
+	cr.drop_weapons_and_clips(NULL);
+	crtype->give_weapon(cr);
+	cr.strip(NULL);
+	crtype->give_armor(cr);
+	cr.money = crtype->money_.roll();
+	cr.juice = crtype->juice_.roll();
+	cr.gender_liberal = cr.gender_conservative = crtype->roll_gender();
+	strcpy(cr.name, crtype->get_encounter_name().c_str());
+	if (cr.align == ALIGN_CONSERVATIVE)
+		cr.align = LCSrandom(2);
+}
+void armCREATURE_BUM(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed() && !LCSrandom(5))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+}
+void armCREATURE_MUTANT(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	if (!cr.is_armed() && !LCSrandom(5))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+}
+void armCREATURE_GANGMEMBER(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	extern short mode;
+	extern short sitetype;
+	extern short cursite;
+	extern char ccs_kills;
+	extern short sitealarm;
+	extern char endgamestate;
+	extern short lawList[LAWNUM];
+	extern vector<ClipType *> cliptype;
+	if (!LCSrandom(20) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 3);
+	}
+	else if (!LCSrandom(16) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+	}
+	else if (!LCSrandom(15))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_45)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_45)], 4);
+	}
+	else if (!LCSrandom(10))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+	}
+	else if (!LCSrandom(4))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+	}
+	else if (!LCSrandom(2))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
+	}
+	else
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
+	cr.reload(false);
+	// We'll make the crack house a bit dicey
+	if (LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
+	if (!LCSrandom(2))switch (LCSrandom(3))
+	{
+	case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
+		cr.crimes_suspected[LAWFLAG_BROWNIES]++;
+		break;
+	case 1://cr.crimes_committed[LAWFLAG_ASSAULT]++;
+		cr.crimes_suspected[LAWFLAG_ASSAULT]++;
+		break;
+	case 2://cr.crimes_committed[LAWFLAG_MURDER]++;
+		cr.crimes_suspected[LAWFLAG_MURDER]++;
+		break;
+	}
+}
+void armCREATURE_CRACKHEAD(Creature &cr, int(&attcap)[ATTNUM]) {
+	extern vector<WeaponType *> weapontype;
+	if (!LCSrandom(5))
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+	attcap[ATTRIBUTE_HEALTH] = 1 + LCSrandom(5);
+}
+void armCREATURE_FASTFOODWORKER(Creature &cr) {
+	cr.age = (LCSrandom(2) ? AGE_TEENAGER : AGE_YOUNGADULT);
+}
+void armCREATURE_FOOTBALLCOACH(Creature &cr) {
+	if (LCSrandom(2))
+	{
+		cr.set_attribute(ATTRIBUTE_HEALTH, 5);
+		cr.set_attribute(ATTRIBUTE_AGILITY, 5);
+		cr.set_attribute(ATTRIBUTE_STRENGTH, 5);
+	}
+}
+void armCREATURE_PROSTITUTE(Creature &cr) {
+	if (LCSrandom(7))cr.gender_conservative = cr.gender_liberal = GENDER_FEMALE;
+	else if (!LCSrandom(3))cr.gender_liberal = GENDER_FEMALE;
+	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+	if (!LCSrandom(3))cr.crimes_suspected[LAWFLAG_PROSTITUTION]++;
+}
+void armCREATURE_HIPPIE(Creature &cr) {
+	if (!LCSrandom(10))
+		cr.crimes_suspected[LAWFLAG_BROWNIES]++;
+}
+void armCREATURE_SOCIALITE(Creature &cr) {
+	cr.give_armor(getarmortype(cr.gender_liberal == GENDER_FEMALE ? tag_ARMOR_EXPENSIVEDRESS : tag_ARMOR_EXPENSIVESUIT), NULL);
+}
+void armCREATURE_THIEF(Creature &cr) {
+	switch (LCSrandom(5))
+	{
+	case 0:strcpy(cr.name, getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name().c_str());
+		break;
+	case 1:strcpy(cr.name, getcreaturetype(CREATURE_CLERK)->get_encounter_name().c_str());
+		break;
+	case 2:strcpy(cr.name, getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name().c_str()); break;
+	case 3:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name().c_str()); break;
+	case 4:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name().c_str()); break;
+	}
+	if (!LCSrandom(10))cr.crimes_suspected[(LCSrandom(2) ? LAWFLAG_BREAKING : LAWFLAG_THEFT)]++;
+}
+void armCREATURE_MILITARYOFFICER(Creature &cr) {
+	extern vector<WeaponType *> weapontype;
+	extern vector<ClipType *> cliptype;
+	if (LCSrandom(4))
+	{
+		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+		cr.reload(false);
+	}
+}
+// IsaacG Very few of the nested functions require anything other than &cr and type.  A rewrite that only uses those two parameters is desirable.
+void armSpecificCreature(Creature &cr, const short type, const CreatureType* crtype, int(&attcap)[ATTNUM]) {
+	switch (type)
+	{
+	case CREATURE_BOUNCER:
+		armBouncer(cr);
+		break;
+	case CREATURE_SCIENTIST_LABTECH:
+		armCREATURE_SCIENTIST_LABTECH(cr);
+		break;
+	case CREATURE_JUDGE_CONSERVATIVE:
+		armCREATURE_JUDGE_CONSERVATIVE(cr);
+		break;
+	case CREATURE_SCIENTIST_EMINENT:
+		armCREATURE_SCIENTIST_EMINENT(cr);
+		break;
+	case CREATURE_CORPORATE_CEO:
+		armCREATURE_CORPORATE_CEO(cr);
+		break;
+	case CREATURE_WORKER_FACTORY_NONUNION:
+		armCREATURE_WORKER_FACTORY_NONUNION(cr);
+		break;
+	case CREATURE_WORKER_SWEATSHOP:
+		armCREATURE_WORKER_SWEATSHOP(cr);
+		break;
+	case CREATURE_LAWYER:
+		armCREATURE_LAWYER(cr);
+		break;
+	case CREATURE_DOCTOR:
+		armCREATURE_DOCTOR(cr);
+		break;
+	case CREATURE_PSYCHOLOGIST:
+		armCREATURE_PSYCHOLOGIST(cr);
+		break;
+	case CREATURE_NURSE:
+		armCREATURE_NURSE(cr);
+		break;
+	case CREATURE_WORKER_FACTORY_UNION:
+		armCREATURE_WORKER_FACTORY_UNION(cr);
+		break;
+	case CREATURE_TANK:
+		armCREATURE_TANK(cr);
+		break;
+	case CREATURE_HICK:
+		armCREATURE_HICK(cr);
+		break;
+	case CREATURE_COP:
+		armCREATURE_COP(cr);
+		break;
+	case CREATURE_FIREFIGHTER:
+		armCREATURE_FIREFIGHTER(cr);
+		break;
+	case CREATURE_CCS_MOLOTOV:
+		armCREATURE_CCS_MOLOTOV(cr);
+		break;
+	case CREATURE_CCS_SNIPER:
+		armCREATURE_CCS_SNIPER(cr);
+		break;
+	case CREATURE_CCS_VIGILANTE:
+		armCREATURE_CCS_VIGILANTE(cr);
+		break;
+	case CREATURE_CCS_ARCHCONSERVATIVE:
+		armCREATURE_CCS_ARCHCONSERVATIVE(cr);
+		break;
+	case CREATURE_PRISONGUARD:
+		armCREATURE_PRISONGUARD(cr);
 		break;
 	case CREATURE_EDUCATOR:
-		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
-		}
-		else if (!LCSrandom(3))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
-		}
-		else
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
-		cr.reload(false);
+		armCREATURE_EDUCATOR(cr);
 		break;
 	case CREATURE_GENETIC:
-		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_CORPORATE_HOUSE)
-		{
-			strcpy(cr.name, CONST_creaturetypes047.c_str());
-			attcap[ATTRIBUTE_CHARISMA] = 10;
-		}
-		else
-			strcpy(cr.name, blankString.c_str());
-		switch (LCSrandom(11))
-		{
-		case 0:strcat(cr.name, CONST_creaturetypes048.c_str());
-			cr.specialattack = ATTACK_FLAME; break;
-		case 1:strcat(cr.name, CONST_creaturetypes049.c_str());
-			cr.specialattack = ATTACK_SUCK; break;
-		default:
-			strcat(cr.name, pickrandom(genetic_monster).data());
-			break;
-		}
-		cr.animalgloss = ANIMALGLOSS_ANIMAL;
-		if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
+		armCREATURE_GENETIC(cr, attcap);
 		break;
 	case CREATURE_GUARDDOG:
-		cr.animalgloss = ANIMALGLOSS_ANIMAL;
-		if (lawList[LAW_ANIMALRESEARCH] != 2)cr.money = 0;
+		armCREATURE_GUARDDOG(cr);
 		break;
 	case CREATURE_PRISONER:
-		cr.drop_weapons_and_clips(NULL);
-		crtype->give_weapon(cr);
-		cr.strip(NULL);
-		crtype->give_armor(cr);
-		cr.money = crtype->money_.roll();
-		cr.juice = crtype->juice_.roll();
-		cr.gender_liberal = cr.gender_conservative = crtype->roll_gender();
-		strcpy(cr.name, crtype->get_encounter_name().c_str());
-		if (cr.align == ALIGN_CONSERVATIVE)
-			cr.align = LCSrandom(2);
+		armCREATURE_PRISONER(cr, crtype);
 		break;
 	case CREATURE_BUM:
-		if (!cr.is_armed() && !LCSrandom(5))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
-		if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+		armCREATURE_BUM(cr);
 		break;
 	case CREATURE_MUTANT:
-		if (!cr.is_armed() && !LCSrandom(5))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+		armCREATURE_MUTANT(cr);
 		break;
 	case CREATURE_GANGMEMBER:
-		if (!LCSrandom(20) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 3);
-		}
-		else if (!LCSrandom(16) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
-		}
-		else if (!LCSrandom(15))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_45)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_45)], 4);
-		}
-		else if (!LCSrandom(10))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
-		}
-		else if (!LCSrandom(4))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
-		}
-		else if (!LCSrandom(2))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
-		}
-		else
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
-		cr.reload(false);
-		// We'll make the crack house a bit dicey
-		if (LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
-		if (!LCSrandom(2))switch (LCSrandom(3))
-		{
-		case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
-			cr.crimes_suspected[LAWFLAG_BROWNIES]++; break;
-		case 1://cr.crimes_committed[LAWFLAG_ASSAULT]++;
-			cr.crimes_suspected[LAWFLAG_ASSAULT]++; break;
-		case 2://cr.crimes_committed[LAWFLAG_MURDER]++;
-			cr.crimes_suspected[LAWFLAG_MURDER]++; break;
-		}
+		armCREATURE_GANGMEMBER(cr);
 		break;
 	case CREATURE_CRACKHEAD:
-		if (!LCSrandom(5))
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
-		if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
-		attcap[ATTRIBUTE_HEALTH] = 1 + LCSrandom(5);
+		armCREATURE_CRACKHEAD(cr, attcap);
 		break;
 	case CREATURE_FASTFOODWORKER:
-		cr.age = (LCSrandom(2) ? AGE_TEENAGER : AGE_YOUNGADULT);
+		armCREATURE_FASTFOODWORKER(cr);
 		break;
 	case CREATURE_FOOTBALLCOACH:
-		if (LCSrandom(2))
-		{
-			cr.set_attribute(ATTRIBUTE_HEALTH, 5);
-			cr.set_attribute(ATTRIBUTE_AGILITY, 5);
-			cr.set_attribute(ATTRIBUTE_STRENGTH, 5);
-		}
+		armCREATURE_FOOTBALLCOACH(cr);
 		break;
 	case CREATURE_PROSTITUTE:
-		if (LCSrandom(7))cr.gender_conservative = cr.gender_liberal = GENDER_FEMALE;
-		else if (!LCSrandom(3))cr.gender_liberal = GENDER_FEMALE;
-		if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
-		if (!LCSrandom(3))cr.crimes_suspected[LAWFLAG_PROSTITUTION]++;
+		armCREATURE_PROSTITUTE(cr);
 		break;
 	case CREATURE_HIPPIE:
-		if (!LCSrandom(10))
-			cr.crimes_suspected[LAWFLAG_BROWNIES]++;
+		armCREATURE_HIPPIE(cr);
 		break;
 	case CREATURE_SOCIALITE:
-		cr.give_armor(getarmortype(cr.gender_liberal == GENDER_FEMALE ? tag_ARMOR_EXPENSIVEDRESS : tag_ARMOR_EXPENSIVESUIT), NULL);
+		armCREATURE_SOCIALITE(cr);
 		break;
 	case CREATURE_THIEF:
-		switch (LCSrandom(5))
-		{
-		case 0:strcpy(cr.name, getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name().c_str()); break;
-		case 1:strcpy(cr.name, getcreaturetype(CREATURE_CLERK)->get_encounter_name().c_str()); break;
-		case 2:strcpy(cr.name, getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name().c_str()); break;
-		case 3:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name().c_str()); break;
-		case 4:strcpy(cr.name, getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name().c_str()); break;
-		}
-		if (!LCSrandom(10))cr.crimes_suspected[(LCSrandom(2) ? LAWFLAG_BREAKING : LAWFLAG_THEFT)]++;
+		armCREATURE_THIEF(cr);
 		break;
 	case CREATURE_MILITARYOFFICER:
-		if (LCSrandom(4))
-		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
-			cr.reload(false);
-		}
+		armCREATURE_MILITARYOFFICER(cr);
 		break;
 	}
 
@@ -17780,6 +18055,494 @@ void makecreature(Creature &cr, short type)
 	//ALIENATION
 	if ((sitealienate >= 1 && cr.align == ALIGN_MODERATE) || (sitealienate == 2 && cr.align == ALIGN_LIBERAL))conservatise(cr);
 }
+map<int, vector<SiteTypes> > okaySiteList = {
+map<int, vector<SiteTypes> >::value_type(CREATURE_BOUNCER,{
+SITE_BUSINESS_CIGARBAR,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_POLITICIAN,{
+SITE_GOVERNMENT_WHITE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_CEO,{
+SITE_CORPORATE_HEADQUARTERS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SECURITYGUARD,{
+SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_GOVERNMENT_COURTHOUSE,
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+SITE_INDUSTRY_SWEATSHOP,
+SITE_INDUSTRY_POLLUTER,
+SITE_INDUSTRY_NUCLEAR,
+SITE_CORPORATE_HEADQUARTERS,
+SITE_CORPORATE_HOUSE,
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_BUSINESS_CIGARBAR,
+SITE_BUSINESS_BANK,
+//SITE_GOVERNMENT_FIRESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_MANAGER,{
+SITE_BUSINESS_BANK,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_TELLER,{
+SITE_BUSINESS_BANK,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_LABTECH,{
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_INDUSTRY_NUCLEAR,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_EMINENT,{
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_INDUSTRY_NUCLEAR,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_MANAGER,{
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_INDUSTRY_SWEATSHOP,
+SITE_INDUSTRY_POLLUTER,
+SITE_INDUSTRY_NUCLEAR,
+SITE_CORPORATE_HEADQUARTERS,
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SERVANT,{
+SITE_CORPORATE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_JANITOR,{
+SITE_RESIDENTIAL_TENEMENT,
+SITE_RESIDENTIAL_APARTMENT,
+SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_HOSPITAL_CLINIC,
+SITE_HOSPITAL_UNIVERSITY,
+SITE_GOVERNMENT_POLICESTATION,
+SITE_GOVERNMENT_COURTHOUSE,
+SITE_GOVERNMENT_PRISON,
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+SITE_INDUSTRY_POLLUTER,
+SITE_INDUSTRY_NUCLEAR,
+SITE_CORPORATE_HEADQUARTERS,
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_BUSINESS_PAWNSHOP,
+SITE_BUSINESS_CRACKHOUSE,
+SITE_BUSINESS_JUICEBAR,
+SITE_BUSINESS_CIGARBAR,
+SITE_BUSINESS_LATTESTAND,
+SITE_BUSINESS_VEGANCOOP,
+SITE_BUSINESS_INTERNETCAFE,
+SITE_BUSINESS_DEPTSTORE,
+SITE_BUSINESS_HALLOWEEN,
+SITE_GOVERNMENT_FIRESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SWEATSHOP,{
+SITE_INDUSTRY_SWEATSHOP,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_NONUNION,{
+SITE_INDUSTRY_POLLUTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_CHILD,{
+SITE_INDUSTRY_POLLUTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SECRETARY,{
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_HOSPITAL_CLINIC,
+SITE_HOSPITAL_UNIVERSITY,
+SITE_GOVERNMENT_POLICESTATION,
+SITE_GOVERNMENT_COURTHOUSE,
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+SITE_INDUSTRY_POLLUTER,
+SITE_INDUSTRY_NUCLEAR,
+SITE_CORPORATE_HEADQUARTERS,
+SITE_CORPORATE_HOUSE,
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_GOVERNMENT_FIRESTATION,
+SITE_GOVERNMENT_WHITE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_UNION,{
+SITE_INDUSTRY_POLLUTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_LANDLORD,{
+SITE_RESIDENTIAL_TENEMENT,
+SITE_RESIDENTIAL_APARTMENT,
+SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TEENAGER,{
+SITE_RESIDENTIAL_TENEMENT,
+SITE_RESIDENTIAL_APARTMENT,
+SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+SITE_RESIDENTIAL_SHELTER,
+SITE_CORPORATE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_COP,{
+SITE_GOVERNMENT_POLICESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_DEATHSQUAD,{
+SITE_GOVERNMENT_POLICESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_FIREFIGHTER,{
+SITE_GOVERNMENT_FIRESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_GANGUNIT,{
+SITE_GOVERNMENT_POLICESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SWAT,{
+SITE_GOVERNMENT_POLICESTATION,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_LIBERAL,{
+SITE_GOVERNMENT_COURTHOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_CONSERVATIVE,{
+SITE_GOVERNMENT_COURTHOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SECRET_SERVICE,{
+SITE_GOVERNMENT_WHITE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_AGENT,{
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_RADIOPERSONALITY,{
+SITE_MEDIA_AMRADIO,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_NEWSANCHOR,{
+SITE_MEDIA_CABLENEWS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_GENETIC,{
+SITE_LABORATORY_GENETIC,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_GUARDDOG,{
+SITE_GOVERNMENT_PRISON,
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+SITE_CORPORATE_HOUSE,
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONER,{
+SITE_RESIDENTIAL_TENEMENT,
+SITE_RESIDENTIAL_SHELTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_JUROR,{
+SITE_RESIDENTIAL_APARTMENT,
+SITE_RESIDENTIAL_TENEMENT,
+SITE_RESIDENTIAL_SHELTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_LAWYER,{
+SITE_GOVERNMENT_COURTHOUSE,
+SITE_GOVERNMENT_WHITE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_DOCTOR,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PSYCHOLOGIST,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_NURSE,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SEWERWORKER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_COLLEGESTUDENT,{
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MUSICIAN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MATHEMATICIAN,{
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TEACHER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_HSDROPOUT,{
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BUM,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+SITE_RESIDENTIAL_SHELTER,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_GANGMEMBER,{
+SITE_BUSINESS_CRACKHOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CRACKHEAD,{
+SITE_BUSINESS_CRACKHOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PRIEST,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_ENGINEER,{
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_INDUSTRY_NUCLEAR,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_FASTFOODWORKER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BAKER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BARISTA,{
+SITE_BUSINESS_LATTESTAND,
+SITE_BUSINESS_INTERNETCAFE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BARTENDER,{
+SITE_BUSINESS_CIGARBAR,
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TELEMARKETER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CARSALESMAN,{
+SITE_BUSINESS_CARDEALERSHIP,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_OFFICEWORKER,{
+SITE_LABORATORY_COSMETICS,
+SITE_LABORATORY_GENETIC,
+SITE_HOSPITAL_CLINIC,
+SITE_HOSPITAL_UNIVERSITY,
+SITE_GOVERNMENT_COURTHOUSE,
+SITE_CORPORATE_HEADQUARTERS,
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_BUSINESS_DEPTSTORE,
+SITE_GOVERNMENT_WHITE_HOUSE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_FOOTBALLCOACH,{
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PROSTITUTE,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MAILMAN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_GARBAGEMAN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PLUMBER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CHEF,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+SITE_BUSINESS_CIGARBAR,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CONSTRUCTIONWORKER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_AMATEURMAGICIAN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TANK,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MERC,{
+SITE_CORPORATE_HEADQUARTERS,
+SITE_CORPORATE_HOUSE,
+SITE_INDUSTRY_NUCLEAR,
+SITE_LABORATORY_GENETIC,
+SITE_BUSINESS_BANK,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_HICK,{
+SITE_MEDIA_AMRADIO,
+SITE_MEDIA_CABLENEWS,
+SITE_OUTOFTOWN,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_VETERAN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_HARDENED_VETERAN,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SOLDIER,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYPOLICE,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYOFFICER,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SEAL,{
+SITE_GOVERNMENT_ARMYBASE,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_EDUCATOR, {
+	SITE_GOVERNMENT_PRISON,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONGUARD,{
+SITE_GOVERNMENT_PRISON,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_HIPPIE,{
+SITE_BUSINESS_VEGANCOOP,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_ART,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+SITE_MEDIA_CABLENEWS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_MUSIC,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+SITE_MEDIA_AMRADIO,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SOCIALITE,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PROGRAMMER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+SITE_GOVERNMENT_INTELLIGENCEHQ,
+SITE_CORPORATE_HEADQUARTERS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_RETIREE,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PAINTER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_SCULPTOR,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_AUTHOR,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_JOURNALIST,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_DANCER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_PHOTOGRAPHER,{
+SITE_MEDIA_CABLENEWS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CAMERAMAN,{
+SITE_MEDIA_CABLENEWS,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_HAIRSTYLIST,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_FASHIONDESIGNER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_CLERK,{
+SITE_BUSINESS_JUICEBAR,
+SITE_BUSINESS_LATTESTAND,
+SITE_BUSINESS_INTERNETCAFE,
+SITE_BUSINESS_DEPTSTORE,
+SITE_BUSINESS_HALLOWEEN,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_THIEF,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_ACTOR,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_YOGAINSTRUCTOR,{
+SITE_BUSINESS_VEGANCOOP,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_MARTIALARTIST,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_ATHLETE,{
+SITE_UDISTRICT,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_BIKER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TRUCKER,{
+SITE_OUTOFTOWN,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_TAXIDRIVER,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_NUN,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+map<int, vector<SiteTypes> >::value_type(CREATURE_LOCKSMITH,{
+SITE_DOWNTOWN,
+SITE_UDISTRICT,
+SITE_INDUSTRIAL,
+}),
+};
+
+vector<SiteTypes> defaultSiteList = {
+	SITE_RESIDENTIAL_SHELTER
+};
 /* ensures that the creature's work location is appropriate to its type */
 bool verifyworklocation(Creature &cr, char test_location, char test_type)
 {
@@ -17794,490 +18557,26 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 	// for things like stealth
 	short type = (test_type != -1 ? test_type : cr.type);
 	// TODO this can be extracted to a table
-	switch (type)
-	{
-	case CREATURE_BOUNCER:
-		okaysite[SITE_BUSINESS_CIGARBAR] = 1;
-		break;
-	case CREATURE_POLITICIAN:
-		okaysite[SITE_GOVERNMENT_WHITE_HOUSE] = 1;
-		break;
-	case CREATURE_CORPORATE_CEO:
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		break;
-	case CREATURE_SECURITYGUARD:
-		okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE] = 1;
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		okaysite[SITE_INDUSTRY_SWEATSHOP] = 1;
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_BUSINESS_CIGARBAR] = 1;
-		okaysite[SITE_BUSINESS_BANK] = 1;
-		//okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
-		break;
-	case CREATURE_BANK_MANAGER:
-	case CREATURE_BANK_TELLER:
-		okaysite[SITE_BUSINESS_BANK] = 1;
-		break;
-	case CREATURE_SCIENTIST_LABTECH:
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		break;
-	case CREATURE_SCIENTIST_EMINENT:
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		break;
-	case CREATURE_CORPORATE_MANAGER:
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_INDUSTRY_SWEATSHOP] = 1;
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		break;
-	case CREATURE_WORKER_SERVANT:
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		break;
-	case CREATURE_WORKER_JANITOR:
-		okaysite[SITE_RESIDENTIAL_TENEMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE] = 1;
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_HOSPITAL_CLINIC] = 1;
-		okaysite[SITE_HOSPITAL_UNIVERSITY] = 1;
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		okaysite[SITE_GOVERNMENT_PRISON] = 1;
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_BUSINESS_PAWNSHOP] = 1;
-		okaysite[SITE_BUSINESS_CRACKHOUSE] = 1;
-		okaysite[SITE_BUSINESS_JUICEBAR] = 1;
-		okaysite[SITE_BUSINESS_CIGARBAR] = 1;
-		okaysite[SITE_BUSINESS_LATTESTAND] = 1;
-		okaysite[SITE_BUSINESS_VEGANCOOP] = 1;
-		okaysite[SITE_BUSINESS_INTERNETCAFE] = 1;
-		okaysite[SITE_BUSINESS_DEPTSTORE] = 1;
-		okaysite[SITE_BUSINESS_HALLOWEEN] = 1;
-		okaysite[SITE_GOVERNMENT_FIRESTATION] = 1;
-		break;
-	case CREATURE_WORKER_SWEATSHOP:
-		okaysite[SITE_INDUSTRY_SWEATSHOP] = 1;
-		break;
-	case CREATURE_WORKER_FACTORY_NONUNION:
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		break;
-	case CREATURE_WORKER_FACTORY_CHILD:
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		break;
-	case CREATURE_WORKER_SECRETARY:
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_HOSPITAL_CLINIC] = 1;
-		okaysite[SITE_HOSPITAL_UNIVERSITY] = 1;
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_GOVERNMENT_FIRESTATION] = 1;
-		okaysite[SITE_GOVERNMENT_WHITE_HOUSE] = 1;
-		break;
-	case CREATURE_WORKER_FACTORY_UNION:
-		okaysite[SITE_INDUSTRY_POLLUTER] = 1;
-		break;
-	case CREATURE_LANDLORD:
-		okaysite[SITE_RESIDENTIAL_TENEMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE] = 1;
-		break;
-	case CREATURE_TEENAGER:
-		okaysite[SITE_RESIDENTIAL_TENEMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE] = 1;
-		okaysite[SITE_RESIDENTIAL_SHELTER] = 1;
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		break;
-	case CREATURE_COP:
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		break;
-	case CREATURE_DEATHSQUAD:
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		break;
-	case CREATURE_FIREFIGHTER:
-		okaysite[SITE_GOVERNMENT_FIRESTATION] = 1;
-		break;
-	case CREATURE_GANGUNIT:
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		break;
-	case CREATURE_SWAT:
-		okaysite[SITE_GOVERNMENT_POLICESTATION] = 1;
-		break;
-	case CREATURE_JUDGE_LIBERAL:
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		break;
-	case CREATURE_JUDGE_CONSERVATIVE:
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		break;
-	case CREATURE_SECRET_SERVICE:
-		okaysite[SITE_GOVERNMENT_WHITE_HOUSE] = 1;
-		break;
-	case CREATURE_AGENT:
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		break;
-	case CREATURE_RADIOPERSONALITY:
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		break;
-	case CREATURE_NEWSANCHOR:
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		break;
-	case CREATURE_GENETIC:
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		break;
-	case CREATURE_GUARDDOG:
-		okaysite[SITE_GOVERNMENT_PRISON] = 1;
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		okaysite[SITE_GOVERNMENT_ARMYBASE] = 1;
-		break;
-	case CREATURE_PRISONER:
-		okaysite[SITE_RESIDENTIAL_TENEMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_SHELTER] = 1;
-		break;
-	case CREATURE_JUROR:
-		okaysite[SITE_RESIDENTIAL_APARTMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_TENEMENT] = 1;
-		okaysite[SITE_RESIDENTIAL_SHELTER] = 1;
-		break;
-	case CREATURE_LAWYER:
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		okaysite[SITE_GOVERNMENT_WHITE_HOUSE] = 1;
-		break;
-	case CREATURE_DOCTOR:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_PSYCHOLOGIST:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_NURSE:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_CCS_ARCHCONSERVATIVE:
-	case CREATURE_CCS_MOLOTOV:
-	case CREATURE_CCS_SNIPER:
-	case CREATURE_CCS_VIGILANTE:
+	if (type == CREATURE_CCS_ARCHCONSERVATIVE || type == CREATURE_CCS_MOLOTOV ||
+		type == CREATURE_CCS_SNIPER || type == CREATURE_CCS_VIGILANTE) {
+
 		if (ccs_kills == 2)okaysite[SITE_OUTDOOR_BUNKER] = 1;
 		if (ccs_kills == 1)okaysite[SITE_RESIDENTIAL_BOMBSHELTER] = 1;
 		if (ccs_kills == 0)okaysite[SITE_BUSINESS_BARANDGRILL] = 1;
-		break;
-	case CREATURE_SEWERWORKER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_COLLEGESTUDENT:
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_MUSICIAN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_MATHEMATICIAN:
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_TEACHER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_HSDROPOUT:
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_BUM:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		okaysite[SITE_RESIDENTIAL_SHELTER] = 1;
-		break;
-	case CREATURE_GANGMEMBER:
-		okaysite[SITE_BUSINESS_CRACKHOUSE] = 1;
-		break;
-	case CREATURE_CRACKHEAD:
-		okaysite[SITE_BUSINESS_CRACKHOUSE] = 1;
-		break;
-	case CREATURE_PRIEST:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_ENGINEER:
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		break;
-	case CREATURE_FASTFOODWORKER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_BAKER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_BARISTA:
-		okaysite[SITE_BUSINESS_LATTESTAND] = 1;
-		okaysite[SITE_BUSINESS_INTERNETCAFE] = 1;
-		break;
-	case CREATURE_BARTENDER:
-		okaysite[SITE_BUSINESS_CIGARBAR] = 1;
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_TELEMARKETER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_CARSALESMAN:
-		okaysite[SITE_BUSINESS_CARDEALERSHIP] = 1;
-		break;
-	case CREATURE_OFFICEWORKER:
-		okaysite[SITE_LABORATORY_COSMETICS] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_HOSPITAL_CLINIC] = 1;
-		okaysite[SITE_HOSPITAL_UNIVERSITY] = 1;
-		okaysite[SITE_GOVERNMENT_COURTHOUSE] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_BUSINESS_DEPTSTORE] = 1;
-		okaysite[SITE_GOVERNMENT_WHITE_HOUSE] = 1;
-		break;
-	case CREATURE_FOOTBALLCOACH:
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_PROSTITUTE:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_MAILMAN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_GARBAGEMAN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_PLUMBER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_CHEF:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		okaysite[SITE_BUSINESS_CIGARBAR] = 1;
-		break;
-	case CREATURE_CONSTRUCTIONWORKER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_AMATEURMAGICIAN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_TANK:
-		okaysite[SITE_GOVERNMENT_ARMYBASE] = 1;
-		break;
-	case CREATURE_MERC:
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		okaysite[SITE_CORPORATE_HOUSE] = 1;
-		okaysite[SITE_INDUSTRY_NUCLEAR] = 1;
-		okaysite[SITE_LABORATORY_GENETIC] = 1;
-		okaysite[SITE_BUSINESS_BANK] = 1;
-		break;
-	case CREATURE_HICK:
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		okaysite[SITE_OUTOFTOWN] = 1;
-		break;
-	case CREATURE_VETERAN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_HARDENED_VETERAN:
-	case CREATURE_SOLDIER:
-	case CREATURE_MILITARYPOLICE:
-	case CREATURE_MILITARYOFFICER:
-	case CREATURE_SEAL:
-		okaysite[SITE_GOVERNMENT_ARMYBASE] = 1;
-		break;
-	case CREATURE_EDUCATOR:
-	case CREATURE_PRISONGUARD:
-		okaysite[SITE_GOVERNMENT_PRISON] = 1;
-		break;
-	case CREATURE_HIPPIE:
-		okaysite[SITE_BUSINESS_VEGANCOOP] = 1;
-		break;
-	case CREATURE_CRITIC_ART:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		break;
-	case CREATURE_CRITIC_MUSIC:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		okaysite[SITE_MEDIA_AMRADIO] = 1;
-		break;
-	case CREATURE_SOCIALITE:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_PROGRAMMER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ] = 1;
-		okaysite[SITE_CORPORATE_HEADQUARTERS] = 1;
-		break;
-	case CREATURE_RETIREE:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_PAINTER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_SCULPTOR:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_AUTHOR:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_JOURNALIST:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_DANCER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_PHOTOGRAPHER:
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		break;
-	case CREATURE_CAMERAMAN:
-		okaysite[SITE_MEDIA_CABLENEWS] = 1;
-		break;
-	case CREATURE_HAIRSTYLIST:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_FASHIONDESIGNER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_CLERK:
-		okaysite[SITE_BUSINESS_JUICEBAR] = 1;
-		okaysite[SITE_BUSINESS_LATTESTAND] = 1;
-		okaysite[SITE_BUSINESS_INTERNETCAFE] = 1;
-		okaysite[SITE_BUSINESS_DEPTSTORE] = 1;
-		okaysite[SITE_BUSINESS_HALLOWEEN] = 1;
-		break;
-	case CREATURE_THIEF:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_ACTOR:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_YOGAINSTRUCTOR:
-		okaysite[SITE_BUSINESS_VEGANCOOP] = 1;
-		break;
-	case CREATURE_MARTIALARTIST:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_ATHLETE:
-		okaysite[SITE_UDISTRICT] = 1;
-		break;
-	case CREATURE_BIKER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_TRUCKER:
-		okaysite[SITE_OUTOFTOWN] = 1;
-		break;
-	case CREATURE_TAXIDRIVER:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_NUN:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	case CREATURE_LOCKSMITH:
-		okaysite[SITE_DOWNTOWN] = 1;
-		okaysite[SITE_UDISTRICT] = 1;
-		okaysite[SITE_INDUSTRIAL] = 1;
-		break;
-	default:
-		okaysite[SITE_RESIDENTIAL_SHELTER] = 1;
-		break;
 	}
+	else {
+		if (okaySiteList.count(type)) {
+			for (SiteTypes s : okaySiteList[type]) {
+				okaysite[s] = 1;
+			}
+		}
+		else {
+			for (SiteTypes s : defaultSiteList) {
+				okaysite[s] = 1;
+			}
+		}
+	}
+
 	// Quick exit if only checking if a certain type works
 	if (test_type != -1) return okaysite[(int)test_location];
 	char swap = 0;
@@ -18311,7 +18610,6 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 }
 
 
-// IsaacG Cannot include within function due to namespace overlap
 CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
 	: number_weapons(1),
 	cliptype(tag_APPROPRIATE), number_clips(4)
@@ -18346,7 +18644,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 		}
 		else
 		{
-			const vector<attackst*>& attacks = ::weapontype[getweapontype(weapon_type_str)]->get_attacks();
+			const vector<attackst*>& attacks = weapontype[getweapontype(weapon_type_str)]->get_attacks();
 			// Find a usable clip type for the weapon.
 			if (cliptype == tag_APPROPRIATE)
 			{
@@ -18383,25 +18681,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 }
 
 // #include "../includes.h"
-const string CONST_daily024 = " regains contact with the LCS.";
-const string CONST_daily023 = "CREATURE_POLITICALACTIVIST";
-const string CONST_daily022 = "CREATURE_TEENAGER";
-const string CONST_daily021 = ". The Liberal will be missed.";
-const string CONST_daily020 = " has passed away at the age of ";
-const string CONST_daily019 = " surfs the Net for recent opinion polls.";
-const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
-const string CONST_daily017 = " has arrived at ";
-const string CONST_daily016 = " looks around ";
-const string CONST_daily013 = " arrives in ";
-const string CONST_daily012 = "%s spent $%d on tickets to go to %s.";
-const string CONST_daily011 = "%s couldn't afford tickets to go to %s.";
-const string CONST_daily010 = "travel location";
-const string CONST_daily009 = " didn't have a car to get to ";
-const string CONST_daily008 = " couldn't use the ";
-const string CONST_daily007 = " was too hot to risk.";
-const string CONST_daily006 = " decided ";
-const string CONST_daily005 = " instead of ";
-const string CONST_daily004 = " acted with ";
+
 
 void majornewspaper(char &clearformess, char canseethings);
 //// #include "../sitemode/sitemode.h"
@@ -18698,6 +18978,11 @@ void halloweenstore(int loc)
 void determineMedicalSupportAtEachLocation(bool clearformess);
 
 void ageThings(const char clearformess) {
+	const string CONST_daily024 = " regains contact with the LCS.";
+	const string CONST_daily023 = "CREATURE_POLITICALACTIVIST";
+	const string CONST_daily022 = "CREATURE_TEENAGER";
+	const string CONST_daily021 = ". The Liberal will be missed.";
+	const string CONST_daily020 = " has passed away at the age of ";
 	extern int day;
 	extern int month;
 	extern Log gamelog;
@@ -18876,6 +19161,7 @@ void doRent(const char clearformess) {
 			}
 }
 void activitiesForIndividuals(char &clearformess) {
+	const string CONST_daily019 = " surfs the Net for recent opinion polls.";
 	extern Log gamelog;
 	extern vector<Creature *> pool;
 	for (int p = 0; p < len(pool); p++)
@@ -18965,6 +19251,8 @@ void tendAllHostages(char &clearformess) {
 	}
 }
 void squadOverrideIndividual(const int sq, const char clearformess) {
+	const string CONST_daily005 = " instead of ";
+	const string CONST_daily004 = " acted with ";
 	extern Log gamelog;
 	extern vector<squadst *> squad;
 
@@ -18997,6 +19285,7 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 int driveskill(Creature &cr, int v);
 string getVehicleFullname(int i);
 void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) {
+	const string CONST_daily008 = " couldn't use the ";
 	extern Log gamelog;
 	extern vector<squadst *> squad;
 	//CAR UP AS NECESSARY
@@ -19125,6 +19414,8 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 	}
 }
 void turnSquadAway(const int sq) {
+	const string CONST_daily007 = " was too hot to risk.";
+	const string CONST_daily006 = " decided ";
 	extern Log gamelog;
 	extern vector<squadst *> squad;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -19156,6 +19447,10 @@ void giveDriverExperience(const int sq) {
 		}
 }
 void squadDepart(const int sq, char &clearformess) {
+	const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
+	const string CONST_daily017 = " has arrived at ";
+	const string CONST_daily016 = " looks around ";
+	const string CONST_daily013 = " arrives in ";
 	extern char showcarprefs;
 	extern squadst *activesquad;
 	extern Log gamelog;
@@ -19295,6 +19590,10 @@ void squadDepart(const int sq, char &clearformess) {
 	}
 }
 void advanceSquads(char &clearformess) {
+	const string CONST_daily012 = "%s spent $%d on tickets to go to %s.";
+	const string CONST_daily011 = "%s couldn't afford tickets to go to %s.";
+	const string CONST_daily010 = "travel location";
+	const string CONST_daily009 = " didn't have a car to get to ";
 	extern squadst *activesquad;
 	extern Log gamelog;
 	extern vector<squadst *> squad;
@@ -20713,8 +21012,7 @@ void tossjustices(char canseethings)
 			do {
 				fullName fn = generate_long_name();
 				strcpy(courtname[j], (fn.first + " " + fn.last).data());
-			}
-			while (len(courtname[j]) > 20);
+			} while (len(courtname[j]) > 20);
 			court[j] = ALIGN_ELITELIBERAL;
 		}
 		amendnum++;
@@ -24016,7 +24314,7 @@ void mainSix() {
 			}
 			else {
 				fn = generate_long_name();
-			}			
+			}
 			strcpy(courtname[c], (fn.first + " " + fn.last).data());
 		} while (len(courtname[c]) > 20);
 	}
@@ -28988,15 +29286,7 @@ void fundreport(char &clearformess)
 
 
 // #include "../includes.h"
-const string CONST_liberalagenda066 = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
-const string CONST_liberalagenda065 = "Once these are Green, the country will have achieved Elite Liberal status.";
-const string CONST_liberalagenda064 = "Arch-Conservative";
-const string CONST_liberalagenda063 = "-  ";
-const string CONST_liberalagenda062 = "Conservative  ";
-const string CONST_liberalagenda060 = "moderate  ";
-const string CONST_liberalagenda058 = "Liberal  ";
-const string CONST_liberalagenda056 = "Elite Liberal  ";
-const string CONST_liberalagenda055 = "Stalinist  ";
+
 const string CONST_liberalagenda054 = "The country has been Stalinized.";
 const string CONST_liberalagenda053 = "The country has been Reaganified.";
 const string CONST_liberalagenda052 = "The country has achieved Elite Liberal status!";
@@ -29007,33 +29297,7 @@ const string CONST_liberalagenda048 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»
 const string CONST_liberalagenda047 = "ÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼          ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
 const string CONST_liberalagenda046 = "³ GENERAL SUMMARY º ISSUES A º ISSUES B ³";
 const string CONST_liberalagenda045 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄ¿";
-const string CONST_liberalagenda044 = "Trial Judges";
-const string CONST_liberalagenda043 = "Stalinist Show";
-const string CONST_liberalagenda042 = "Replaced By";
-const string CONST_liberalagenda041 = "Ethics Officers";
-const string CONST_liberalagenda040 = "By Corporate";
-const string CONST_liberalagenda039 = "Replaced";
-const string CONST_liberalagenda038 = "Senate: ";
-const string CONST_liberalagenda037 = "House: ";
-const string CONST_liberalagenda036 = "The Congress consists of Stalinist Party loyalists.";
-const string CONST_liberalagenda035 = "The Congress consists of CEOs and televangelists.";
-const string CONST_liberalagenda034 = "Attorney General: ";
-const string CONST_liberalagenda033 = "Internal Affairs Commissar: ";
-const string CONST_liberalagenda032 = "Minister of Truth: ";
-const string CONST_liberalagenda031 = "Secretary of State: ";
-const string CONST_liberalagenda030 = "Foreign Affairs Commissar: ";
-const string CONST_liberalagenda029 = "Minister of Peace: ";
-const string CONST_liberalagenda028 = "Vice President: ";
-const string CONST_liberalagenda027 = "Premier: ";
-const string CONST_liberalagenda026 = "Minister of Love: ";
-const string CONST_liberalagenda025 = "(2nd Term):";
-const string CONST_liberalagenda024 = "(1st Term):";
-const string CONST_liberalagenda023 = "President ";
-const string CONST_liberalagenda022 = "General Secretary: ";
-const string CONST_liberalagenda021 = "King: ";
-const string CONST_liberalagenda020 = "¼                 ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-const string CONST_liberalagenda019 = "º GENERAL SUMMARY º ISSUES A ³ ISSUES B ³";
-const string CONST_liberalagenda018 = "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿";
+
 const string CONST_liberalagenda017 = "The Status of the Liberal Agenda";
 const string CONST_liberalagenda016 = "The Abject Failure of the Liberal Agenda";
 const string CONST_liberalagenda015 = "The Triumph of the Liberal Agenda";
@@ -29104,23 +29368,292 @@ bool confirmdisband()
 	disbandtime = year;
 	return true;
 }
-/* base - liberal agenda */
-bool liberalagenda(signed char won)
-{
-	extern MusicClass music;
-	extern short execterm;
-	extern short interface_pgup;
-	extern short interface_pgdn;
+void printDisbandOption() {
+	const string CONST_liberalagenda066 = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
+	//const string CONST_liberalagenda065 = "Once these are Green, the country will have achieved Elite Liberal status.";
+	const string CONST_liberalagenda064 = "Arch-Conservative";
+	const string CONST_liberalagenda063 = "-  ";
+	const string CONST_liberalagenda062 = "Conservative  ";
+	const string CONST_liberalagenda060 = "moderate  ";
+	const string CONST_liberalagenda058 = "Liberal  ";
+	const string CONST_liberalagenda056 = "Elite Liberal  ";
+	const string CONST_liberalagenda055 = "Stalinist  ";
 	extern bool stalinmode;
+
+	moveAlt(23, 0);
+	if (stalinmode)
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_liberalagenda055);
+	}
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_liberalagenda056);
+	if (!stalinmode)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		addstrAlt(CONST_liberalagenda063);
+	}
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_liberalagenda058);
+	if (!stalinmode)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		addstrAlt(CONST_liberalagenda063);
+	}
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_liberalagenda060);
+	if (!stalinmode)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		addstrAlt(CONST_liberalagenda063);
+	}
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_liberalagenda062);
+	if (!stalinmode)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		addstrAlt(CONST_liberalagenda063);
+	}
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_liberalagenda064);
+	set_color_easy(WHITE_ON_BLACK);
+	//mvaddstrAlt(23,0,CONST_liberalagenda065);
+	mvaddstrAlt(24, 0, CONST_liberalagenda066);
+}
+void printLaws(const int startinglaw, const signed char won) {
 	extern short wincondition;
+	extern short lawList[LAWNUM];
+	for (int l = startinglaw, y = 4; l < startinglaw + 18 && l < LAWNUM; l++, y++)
+	{
+		if (won == -1 || won == -2)
+			set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
+		else set_alignment_color(lawList[l], true);
+		moveAlt(y, 0);
+		if (won == -2)addstrAlt(endgameLawStrings[l][0]);
+		else if (won == -1)addstrAlt(endgameLawStrings[l][1]);
+		else if (lawList[l] == ALIGN_ARCHCONSERVATIVE)
+			addstrAlt(endgameLawStrings[l][2]);
+		else if (lawList[l] == -1)addstrAlt(endgameLawStrings[l][3]);
+		else if (lawList[l] == 0)addstrAlt(endgameLawStrings[l][4]);
+		else if (lawList[l] == 1)addstrAlt(endgameLawStrings[l][5]);
+		else if (won != 1 || wincondition != WINCONDITION_ELITE)addstrAlt(endgameLawStrings[l][6]);
+		else addstrAlt(endgameLawStrings[l][7]);
+	}
+}
+void printPage(const int page, const signed char won) {
+	const string CONST_liberalagenda044 = "Trial Judges";
+	const string CONST_liberalagenda043 = "Stalinist Show";
+	const string CONST_liberalagenda042 = "Replaced By";
+	const string CONST_liberalagenda041 = "Ethics Officers";
+	const string CONST_liberalagenda040 = "By Corporate";
+	const string CONST_liberalagenda039 = "Replaced";
+	const string CONST_liberalagenda038 = "Senate: ";
+	const string CONST_liberalagenda037 = "House: ";
+	const string CONST_liberalagenda036 = "The Congress consists of Stalinist Party loyalists.";
+	const string CONST_liberalagenda035 = "The Congress consists of CEOs and televangelists.";
+	const string CONST_liberalagenda034 = "Attorney General: ";
+	const string CONST_liberalagenda033 = "Internal Affairs Commissar: ";
+	const string CONST_liberalagenda032 = "Minister of Truth: ";
+	const string CONST_liberalagenda031 = "Secretary of State: ";
+	const string CONST_liberalagenda030 = "Foreign Affairs Commissar: ";
+	const string CONST_liberalagenda029 = "Minister of Peace: ";
+	const string CONST_liberalagenda028 = "Vice President: ";
+	const string CONST_liberalagenda027 = "Premier: ";
+	const string CONST_liberalagenda026 = "Minister of Love: ";
+	const string CONST_liberalagenda025 = "(2nd Term):";
+	const string CONST_liberalagenda024 = "(1st Term):";
+	const string CONST_liberalagenda023 = "President ";
+	const string CONST_liberalagenda022 = "General Secretary: ";
+	const string CONST_liberalagenda021 = "King: ";
+	const string CONST_liberalagenda020 = "¼                 ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+	const string CONST_liberalagenda019 = "º GENERAL SUMMARY º ISSUES A ³ ISSUES B ³";
+	const string CONST_liberalagenda018 = "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿";
+
+	extern short execterm;
 	extern short exec[EXECNUM];
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern bool stalinmode;
 	extern short house[HOUSENUM];
 	extern short senate[SENATENUM];
 	extern short court[COURTNUM];
 	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern short wincondition;
 	extern short lawList[LAWNUM];
-	int page = 0, y;
+	switch (page)
+	{
+	case PAGE_LEADERS:
+	{
+		mvaddstrAlt(1, 0, CONST_liberalagenda018);
+		mvaddstrAlt(2, 0, CONST_liberalagenda019);
+		mvaddstrAlt(3, 0, CONST_liberalagenda020);
+		signed char align = exec[EXEC_PRESIDENT];
+		set_alignment_color(align, true);
+		moveAlt(5, 0);
+		if (won == -1) addstrAlt(CONST_liberalagenda021);
+		else if (won == -2) addstrAlt(CONST_liberalagenda022);
+		else
+		{
+			addstrAlt(CONST_liberalagenda023);
+			if (execterm == 1)addstrAlt(CONST_liberalagenda024);
+			else addstrAlt(CONST_liberalagenda025);
+		}
+		if (won == -2) moveAlt(5, 30);
+		else mvaddstrAlt(5, 25, execname[EXEC_PRESIDENT]);
+		align = exec[EXEC_VP];
+		set_alignment_color(align, true);
+		moveAlt(6, 0);
+		if (won == -1) addstrAlt(CONST_liberalagenda026);
+		else if (won == -2) addstrAlt(CONST_liberalagenda027);
+		else addstrAlt(CONST_liberalagenda028);
+		if (won == -2) moveAlt(6, 30);
+		else mvaddstrAlt(6, 25, execname[EXEC_VP]);
+		align = exec[EXEC_STATE];
+		set_alignment_color(align, true);
+		moveAlt(7, 0);
+		if (won == -1) addstrAlt(CONST_liberalagenda029);
+		else if (won == -2) addstrAlt(CONST_liberalagenda030);
+		else addstrAlt(CONST_liberalagenda031);
+		if (won == -2) moveAlt(7, 30);
+		else mvaddstrAlt(7, 25, execname[EXEC_STATE]);
+		align = exec[EXEC_ATTORNEY];
+		set_alignment_color(align, true);
+		moveAlt(8, 0);
+		if (won == -1) addstrAlt(CONST_liberalagenda032);
+		else if (won == -2) addstrAlt(CONST_liberalagenda033);
+		else addstrAlt(CONST_liberalagenda034);
+		if (won == -2) moveAlt(8, 30);
+		else mvaddstrAlt(8, 25, execname[EXEC_ATTORNEY]);
+		if (won == -1)
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10, 0, CONST_liberalagenda035);
+		}
+		else if (won == -2)
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10, 0, CONST_liberalagenda036);
+		}
+		else
+		{
+			int housemake[6] = { 0,0,0,0,0,0 };
+			for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
+			if (housemake[5] + min(housemake[0], housemake[4]) >= HOUSEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+			else if (housemake[0] >= HOUSEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+			else if (housemake[4] >= HOUSEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+			else if (housemake[0] + housemake[1] >= HOUSEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+			else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+			else align = ALIGN_MODERATE; // nobody has a majority
+			set_alignment_color(align, true);
+			mvaddstrAlt(10, 0, CONST_liberalagenda037);
+			if (stalinmode) addstrAlt(tostring(housemake[5]) + tag_Sta);
+			addstrAlt(tostring(housemake[4]) + tag_Libp);
+			addstrAlt(tostring(housemake[3]) + tag_Lib);
+			addstrAlt(tostring(housemake[2]) + tag_Mod);
+			addstrAlt(tostring(housemake[1]) + tag_Cons);
+			addstrAlt(tostring(housemake[0]) + tag_Consp);
+			int senatemake[6] = { 0,0,0,0,0,0 };
+			for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
+			senatemake[exec[EXEC_VP] + 2]++; // Vice President is tie-breaking vote in the Senate
+			if (senatemake[5] + min(senatemake[0], senatemake[4]) >= SENATEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+			else if (senatemake[0] >= SENATEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+			else if (senatemake[4] >= SENATEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+			else if (senatemake[0] + senatemake[1] >= SENATEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+			else if (senatemake[3] + senatemake[4] >= SENATEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+			else align = ALIGN_MODERATE; // nobody has a majority
+			set_alignment_color(align, true);
+			senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
+			mvaddstrAlt(11, 0, CONST_liberalagenda038);
+			if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
+			addstrAlt(tostring(senatemake[4]) + tag_Libp);
+			addstrAlt(tostring(senatemake[3]) + tag_Lib);
+			addstrAlt(tostring(senatemake[2]) + tag_Mod);
+			addstrAlt(tostring(senatemake[1]) + tag_Cons);
+			addstrAlt(tostring(senatemake[0]) + tag_Consp);
+		}
+		if (won == -1 || won == -2) set_color_easy(RED_ON_BLACK_BRIGHT);
+		else if (won == 1) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		else
+		{
+			int courtmake[6] = { 0,0,0,0,0,0 };
+			for (int s = 0; s < COURTNUM; s++) courtmake[court[s] + 2]++;
+			if (courtmake[5] + min(courtmake[0], courtmake[4]) >= COURTMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+			else if (courtmake[0] >= COURTMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+			else if (courtmake[4] >= COURTMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+			else if (courtmake[0] + courtmake[1] >= COURTMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+			else if (courtmake[3] + courtmake[4] >= COURTMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+			else align = ALIGN_MODERATE; // nobody has a majority
+			set_alignment_color(align, true);
+		}
+		for (int i = 0; i < len(supremeChars); i++) {
+			mvaddstrAlt(5 + i, 56, supremeChars[i]);
+		}
+		for (int i = 0; i < len(courtChars); i++) {
+			mvaddstrAlt(6 + i, 58, courtChars[i]);
+		}
+		if (won == -1)
+		{
+			mvaddstrAlt(7, 65, CONST_liberalagenda039);
+			mvaddstrAlt(8, 63, CONST_liberalagenda040);
+			mvaddstrAlt(9, 62, CONST_liberalagenda041);
+		}
+		else if (won == -2)
+		{
+			mvaddstrAlt(7, 63, CONST_liberalagenda042);
+			mvaddstrAlt(8, 62, CONST_liberalagenda043);
+			mvaddstrAlt(9, 63, CONST_liberalagenda044);
+		}
+		else
+		{
+			for (int c = 0, y = 4; c < COURTNUM; c++, y++)
+			{
+				set_alignment_color(court[c], true);
+				mvaddstrAlt(y, 60, courtname[c]);
+			}
+		}
+		for (int l = 0; l < LAWNUM; l++)
+		{
+			if (won == -1 || won == -2)
+				set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
+			else if (won == 1 && wincondition == WINCONDITION_ELITE)
+				set_alignment_color(ALIGN_ELITELIBERAL, true);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ÄÄÄÄÄ\x10");
+			if (won == -1 || won == -2)
+				set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
+			else set_alignment_color(lawList[l], true);
+			addstrAlt(getlaw(l));
+			mvaddcharAlt(14 + l / 3, l % 3 * 26 + 3 - lawList[l], 'O');
+		}
+		break;
+	}
+	case PAGE_ISSUES_A:
+		mvaddstrAlt(1, 0, CONST_liberalagenda045);
+		mvaddstrAlt(2, 0, CONST_liberalagenda046);
+		mvaddstrAlt(3, 0, CONST_liberalagenda047);
+
+
+		printLaws(0, won);
+		break;
+	case PAGE_ISSUES_B:
+	
+			mvaddstrAlt(1, 0, CONST_liberalagenda048);
+			mvaddstrAlt(2, 0, CONST_liberalagenda049);
+			mvaddstrAlt(3, 0, CONST_liberalagenda050);
+		
+		printLaws(18, won);
+		break;
+
+	}
+}
+/* base - liberal agenda */
+bool liberalagenda(signed char won)
+{
+	extern MusicClass music;
+	extern short interface_pgup;
+	extern short interface_pgdn;
+	extern short wincondition;
+
+	int page = 0;
 	while (true)
 	{
 		eraseAlt();
@@ -29145,190 +29678,7 @@ bool liberalagenda(signed char won)
 		}
 		if (page < 0) page = PAGENUM - 1;
 		if (page >= PAGENUM) page = 0;
-		switch (page)
-		{
-		case PAGE_LEADERS:
-		{
-			mvaddstrAlt(1, 0, CONST_liberalagenda018);
-			mvaddstrAlt(2, 0, CONST_liberalagenda019);
-			mvaddstrAlt(3, 0, CONST_liberalagenda020);
-			signed char align = exec[EXEC_PRESIDENT];
-			set_alignment_color(align, true);
-			moveAlt(5, 0);
-			if (won == -1) addstrAlt(CONST_liberalagenda021);
-			else if (won == -2) addstrAlt(CONST_liberalagenda022);
-			else
-			{
-				addstrAlt(CONST_liberalagenda023);
-				if (execterm == 1)addstrAlt(CONST_liberalagenda024);
-				else addstrAlt(CONST_liberalagenda025);
-			}
-			if (won == -2) moveAlt(5, 30);
-			else mvaddstrAlt(5, 25, execname[EXEC_PRESIDENT]);
-			align = exec[EXEC_VP];
-			set_alignment_color(align, true);
-			moveAlt(6, 0);
-			if (won == -1) addstrAlt(CONST_liberalagenda026);
-			else if (won == -2) addstrAlt(CONST_liberalagenda027);
-			else addstrAlt(CONST_liberalagenda028);
-			if (won == -2) moveAlt(6, 30);
-			else mvaddstrAlt(6, 25, execname[EXEC_VP]);
-			align = exec[EXEC_STATE];
-			set_alignment_color(align, true);
-			moveAlt(7, 0);
-			if (won == -1) addstrAlt(CONST_liberalagenda029);
-			else if (won == -2) addstrAlt(CONST_liberalagenda030);
-			else addstrAlt(CONST_liberalagenda031);
-			if (won == -2) moveAlt(7, 30);
-			else mvaddstrAlt(7, 25, execname[EXEC_STATE]);
-			align = exec[EXEC_ATTORNEY];
-			set_alignment_color(align, true);
-			moveAlt(8, 0);
-			if (won == -1) addstrAlt(CONST_liberalagenda032);
-			else if (won == -2) addstrAlt(CONST_liberalagenda033);
-			else addstrAlt(CONST_liberalagenda034);
-			if (won == -2) moveAlt(8, 30);
-			else mvaddstrAlt(8, 25, execname[EXEC_ATTORNEY]);
-			if (won == -1)
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10, 0, CONST_liberalagenda035);
-			}
-			else if (won == -2)
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10, 0, CONST_liberalagenda036);
-			}
-			else
-			{
-				int housemake[6] = { 0,0,0,0,0,0 };
-				for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
-				if (housemake[5] + min(housemake[0], housemake[4]) >= HOUSEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-				else if (housemake[0] >= HOUSEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-				else if (housemake[4] >= HOUSEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-				else if (housemake[0] + housemake[1] >= HOUSEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-				else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-				else align = ALIGN_MODERATE; // nobody has a majority
-				set_alignment_color(align, true);
-				mvaddstrAlt(10, 0, CONST_liberalagenda037);
-				if (stalinmode) addstrAlt(tostring(housemake[5]) + tag_Sta);
-				addstrAlt(tostring(housemake[4]) + tag_Libp);
-				addstrAlt(tostring(housemake[3]) + tag_Lib);
-				addstrAlt(tostring(housemake[2]) + tag_Mod);
-				addstrAlt(tostring(housemake[1]) + tag_Cons);
-				addstrAlt(tostring(housemake[0]) + tag_Consp);
-				int senatemake[6] = { 0,0,0,0,0,0 };
-				for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
-				senatemake[exec[EXEC_VP] + 2]++; // Vice President is tie-breaking vote in the Senate
-				if (senatemake[5] + min(senatemake[0], senatemake[4]) >= SENATEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-				else if (senatemake[0] >= SENATEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-				else if (senatemake[4] >= SENATEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-				else if (senatemake[0] + senatemake[1] >= SENATEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-				else if (senatemake[3] + senatemake[4] >= SENATEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-				else align = ALIGN_MODERATE; // nobody has a majority
-				set_alignment_color(align, true);
-				senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
-				mvaddstrAlt(11, 0, CONST_liberalagenda038);
-				if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
-				addstrAlt(tostring(senatemake[4]) + tag_Libp);
-				addstrAlt(tostring(senatemake[3]) + tag_Lib);
-				addstrAlt(tostring(senatemake[2]) + tag_Mod);
-				addstrAlt(tostring(senatemake[1]) + tag_Cons);
-				addstrAlt(tostring(senatemake[0]) + tag_Consp);
-			}
-			if (won == -1 || won == -2) set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (won == 1) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			else
-			{
-				int courtmake[6] = { 0,0,0,0,0,0 };
-				for (int s = 0; s < COURTNUM; s++) courtmake[court[s] + 2]++;
-				if (courtmake[5] + min(courtmake[0], courtmake[4]) >= COURTMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-				else if (courtmake[0] >= COURTMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-				else if (courtmake[4] >= COURTMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-				else if (courtmake[0] + courtmake[1] >= COURTMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-				else if (courtmake[3] + courtmake[4] >= COURTMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-				else align = ALIGN_MODERATE; // nobody has a majority
-				set_alignment_color(align, true);
-			}
-			for (int i = 0; i < len(supremeChars); i++) {
-				mvaddstrAlt(5 + i, 56, supremeChars[i]);
-			}
-			for (int i = 0; i < len(courtChars); i++) {
-				mvaddstrAlt(6 + i, 58, courtChars[i]);
-			}
-			if (won == -1)
-			{
-				mvaddstrAlt(7, 65, CONST_liberalagenda039);
-				mvaddstrAlt(8, 63, CONST_liberalagenda040);
-				mvaddstrAlt(9, 62, CONST_liberalagenda041);
-			}
-			else if (won == -2)
-			{
-				mvaddstrAlt(7, 63, CONST_liberalagenda042);
-				mvaddstrAlt(8, 62, CONST_liberalagenda043);
-				mvaddstrAlt(9, 63, CONST_liberalagenda044);
-			}
-			else
-			{
-				y = 4;
-				for (int c = 0; c < COURTNUM; c++, y++)
-				{
-					set_alignment_color(court[c], true);
-					mvaddstrAlt(y, 60, courtname[c]);
-				}
-			}
-			for (int l = 0; l < LAWNUM; l++)
-			{
-				if (won == -1 || won == -2)
-					set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
-				else if (won == 1 && wincondition == WINCONDITION_ELITE)
-					set_alignment_color(ALIGN_ELITELIBERAL, true);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ÄÄÄÄÄ\x10");
-				if (won == -1 || won == -2)
-					set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
-				else set_alignment_color(lawList[l], true);
-				addstrAlt(getlaw(l));
-				mvaddcharAlt(14 + l / 3, l % 3 * 26 + 3 - lawList[l], 'O');
-			}
-			break;
-		}
-		case PAGE_ISSUES_A:
-		case PAGE_ISSUES_B:
-		{
-			if (page == PAGE_ISSUES_A)
-			{
-				mvaddstrAlt(1, 0, CONST_liberalagenda045);
-				mvaddstrAlt(2, 0, CONST_liberalagenda046);
-				mvaddstrAlt(3, 0, CONST_liberalagenda047);
-			}
-			else
-			{
-				mvaddstrAlt(1, 0, CONST_liberalagenda048);
-				mvaddstrAlt(2, 0, CONST_liberalagenda049);
-				mvaddstrAlt(3, 0, CONST_liberalagenda050);
-			}
-			int y = 4, startinglaw = 0;
-			if (page == PAGE_ISSUES_B) startinglaw = 18;
-			for (int l = startinglaw; l < startinglaw + 18 && l < LAWNUM; l++, y++)
-			{
-				if (won == -1 || won == -2)
-					set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
-				else set_alignment_color(lawList[l], true);
-				moveAlt(y, 0);
-				if (won == -2)addstrAlt(endgameLawStrings[l][0]);
-				else if (won == -1)addstrAlt(endgameLawStrings[l][1]);
-				else if (lawList[l] == ALIGN_ARCHCONSERVATIVE)
-					addstrAlt(endgameLawStrings[l][2]);
-				else if (lawList[l] == -1)addstrAlt(endgameLawStrings[l][3]);
-				else if (lawList[l] == 0)addstrAlt(endgameLawStrings[l][4]);
-				else if (lawList[l] == 1)addstrAlt(endgameLawStrings[l][5]);
-				else if (won != 1 || wincondition != WINCONDITION_ELITE)addstrAlt(endgameLawStrings[l][6]);
-				else addstrAlt(endgameLawStrings[l][7]);
-			}
-			break;
-		}
-		}
+		printPage(page, won);
 		if (won == 1)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -29363,45 +29713,7 @@ bool liberalagenda(signed char won)
 		}
 		else
 		{
-			moveAlt(23, 0);
-			if (stalinmode)
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				addstrAlt(CONST_liberalagenda055);
-			}
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_liberalagenda056);
-			if (!stalinmode)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				addstrAlt(CONST_liberalagenda063);
-			}
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_liberalagenda058);
-			if (!stalinmode)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				addstrAlt(CONST_liberalagenda063);
-			}
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_liberalagenda060);
-			if (!stalinmode)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				addstrAlt(CONST_liberalagenda063);
-			}
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_liberalagenda062);
-			if (!stalinmode)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				addstrAlt(CONST_liberalagenda063);
-			}
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_liberalagenda064);
-			set_color_easy(WHITE_ON_BLACK);
-			//mvaddstrAlt(23,0,CONST_liberalagenda065);
-			mvaddstrAlt(24, 0, CONST_liberalagenda066);
+			printDisbandOption();
 			int c = getkeyAlt();
 			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
 			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
@@ -32584,13 +32896,13 @@ void prepareencounter(short type, char sec)
 		case SITE_BUSINESS_BANK:
 		{
 			addBank(creaturearray, sec);
-			variableEncounter =  true;
+			variableEncounter = true;
 			break;
 		}
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 		{
 			addUpscaleApartment(creaturearray, sec);
-			variableEncounter =  true;
+			variableEncounter = true;
 			break;
 		}
 		default:
@@ -33243,198 +33555,55 @@ struct Question {
 	string QUESTION_2;
 	vector<Choice> choices;
 };
-const int MAX_CHOICES = 10;
-void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
-#include "../recruits.h"
-/* creates your founder */
-void makecharacter()
-{
-	extern UniqueCreatures uniqueCreatures;
-	// Make the founder blind
-	extern bool BLIND;
-	// Make the founder unable to walk
-	extern bool NOWALK;
-	// Make the founder have no face
-	extern bool NOFACE;
-	// Make the founder have a severely injured spine
-	extern bool SPINE;
-	// Make the founder have severe internal damage
-	extern bool INTERNAL;
+void printIntroduction() {
 	extern Log gamelog;
-	extern bool multipleCityMode;
-	extern int year;
-	extern int day;
-	extern int month;
-	extern class Ledger ledger;
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern char lcityname[CITY_NAMELEN];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	Creature *newcr = new Creature;
-	newcr->align = ALIGN_LIBERAL;
-	newcr->set_attribute(ATTRIBUTE_HEART, 0);
-	newcr->set_attribute(ATTRIBUTE_WISDOM, 0);
-	newcr->set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
-	newcr->set_attribute(ATTRIBUTE_AGILITY, 0);
-	newcr->set_attribute(ATTRIBUTE_STRENGTH, 0);
-	newcr->set_attribute(ATTRIBUTE_HEALTH, 0);
-	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
-	if (BLIND) {
-		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
-	}
-	if (SPINE) {
-		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
-	}
-	if (NOFACE) {
-		newcr->special[SPECIALWOUND_TONGUE] = 1;
-		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
-		newcr->special[SPECIALWOUND_NOSE] = 1;
-	}
-	if (NOWALK) {
-		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
-		newcr->special[SPECIALWOUND_NECK] = 1;
-		newcr->wound[BODYPART_LEG_RIGHT] = 1;
-		newcr->wound[BODYPART_LEG_LEFT] = 1;
-	}
-	if (INTERNAL) {
-		newcr->special[SPECIALWOUND_RIGHTLUNG] = 1;
-		newcr->special[SPECIALWOUND_LEFTLUNG] = 1;
-		newcr->special[SPECIALWOUND_HEART] = 1;
-		newcr->special[SPECIALWOUND_LIVER] = 1;
-		newcr->special[SPECIALWOUND_STOMACH] = 1;
-		newcr->special[SPECIALWOUND_LEFTKIDNEY] = 1;
-		newcr->special[SPECIALWOUND_RIGHTKIDNEY] = 1;
-		newcr->special[SPECIALWOUND_SPLEEN] = 1;
-	}
-	char first[3][80];
-	char last[80];
-	const bool is_male = LCSrandom(2); // whether or not starting gender is male
-	char gender = newcr->gender_liberal = newcr->gender_conservative = (is_male ? GENDER_MALE : GENDER_FEMALE);
-	do {
-		firstname(first[0], GENDER_NEUTRAL);
-		firstname(first[1], GENDER_MALE);
-		firstname(first[2], GENDER_FEMALE);
-		strcpy(last, lastname());
-	} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
-	{
-		Armor a(getarmortype(tag_ARMOR_CLOTHES));
-		newcr->give_armor(a, NULL);
-	}
-	bool choices = true;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(4, 6, theFounder);
-		mvaddstrAlt(7, 2, firstName);
-		addstrAlt(first[(int)gender]);
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(7, 30, pressAtoReconsider);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9, 2, lastName);
-		addstrAlt(last);
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9, 30, pressBtoBeReborn);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11, 2, sexIs);
-		if (newcr->gender_conservative == GENDER_MALE)
-		{
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			addstrAlt(male);
-		}
-		else if (newcr->gender_conservative == GENDER_FEMALE)
-		{
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			addstrAlt(female);
-		}
-		else
-		{
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			addstrAlt(itsComplicated);
-		}
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11, 30, pressCtoChangeSex);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 2, history);
-		if (choices)
-		{
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			addstrAlt(letMeChoose);
-		}
-		else
-		{
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(letFateDecide);
-		}
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 30, pressDtoToggle);
-		if (!multipleCityMode)
-		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15, 2, city);
-			addstrAlt(lcityname);
-			set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15, 30, pressEtoRelocate);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19 - multipleCityMode * 2, 4, pressAnyKeyString);
-		const int c = getkeyAlt();
-		if (c == 'a')
-		{
-			do {
-				firstname(first[(int)gender], newcr->gender_conservative);
-			} while (strcmp(first[(int)gender], last) == 0);
-			continue;
-		}
-		if (c == 'b')
-		{
-			do {
-				strcpy(last, lastname());
-			} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
-			continue;
-		}
-		if (c == 'c')
-		{
-			if ((newcr->gender_conservative == GENDER_FEMALE && !is_male) ||
-				(newcr->gender_conservative == GENDER_NEUTRAL && is_male))
-				newcr->gender_conservative = GENDER_MALE;
-			else if ((newcr->gender_conservative == GENDER_MALE && !is_male) ||
-				(newcr->gender_conservative == GENDER_FEMALE && is_male))
-				newcr->gender_conservative = GENDER_NEUTRAL;
-			else
-				newcr->gender_conservative = GENDER_FEMALE;
-			gender = newcr->gender_liberal = newcr->gender_conservative;
-			continue;
-		}
-		if (c == 'd')
-		{
-			choices = !choices;
-			continue;
-		}
-		if (c == 'e' && !multipleCityMode)
-		{
-			strcpy(lcityname, cityname());
-			continue;
-		}
-		break;
-	}
-	strcpy(newcr->propername, first[(int)gender]);
-	strcat(newcr->propername, singleSpace);
-	strcat(newcr->propername, last);
-	int c;
-	bool hasmaps = false;
-	bool makelawyer = false;
-	bool gaylawyer = false;
-	Vehicle * startcar = NULL;
-	char recruits = RECRUITS_NONE;
-	char base = SITE_RESIDENTIAL_SHELTER;
-	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
-	bool assault_rifle = false;
-	bool sports_car = false;
+	extern int year;
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(2, 2, aNewConEra, gamelog);
+	gamelog.newline();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(4, 2, theYearIs, gamelog);
+	addstrAlt(year, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(6, 2, conservativePresident, gamelog);
+	char president[80];
+	generate_name(president, GENDER_WHITEMALEPATRIARCH);
+	addstrAlt(president, gamelog);
+	addstrAlt(endsSecondTerm, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(7, 2, highSeventiesApprovePres, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(8, 2, execname[EXEC_PRESIDENT], gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.nextMessage();
+	mvaddstrAlt(10, 2, conMajorityHouse, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(11, 2, senateConMajority, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(12, 2, beginningOfNew, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(13, 2, conEra, gamelog);
+	gamelog.nextMessage();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(15, 2, thePresident, gamelog);
+	addstrAlt(execname[EXEC_PRESIDENT], gamelog);
+	addstrAlt(hasAskedCongressBeQuick, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(16, 2, rubberStampArchCon, gamelog);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(theLeftSeems, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(17, 2, powerlessToStop, gamelog);
+	gamelog.nextMessage();
+	mvaddstrAlt(19, 2, inThisDarkTime, gamelog);
+	gamelog.nextMessage();
+	pressAnyKey();
+}
+vector<Question> gatherAllFounderQuestions() {
+	const int MAX_CHOICES = 10;
 	vector<Question> allQuestions;
 	bool firstQuestion = true;
 	bool firstAnswer = true;
@@ -33444,9 +33613,6 @@ void makecharacter()
 	string header_2 = blankString;
 	string answer = blankString;
 	string answer_2 = blankString;
-	int birth_year = 1984; // default birth year, month, and day in case left undefined
-	int birth_month = 1;
-	int birth_day = 1;
 	//IsaacG This loop needs a rewrite
 	for (int i = 0; i < founderQuestions.size(); i++) {
 		const string first = founderQuestions[i];
@@ -33667,6 +33833,10 @@ void makecharacter()
 	currentChoice.ANSWER_2 = answer_2;
 	currentQuestion.choices.push_back(currentChoice);
 	allQuestions.push_back(currentQuestion);
+	return allQuestions;
+}
+vector<Impact> printQuestionsThenGatherImpacts(vector<Question> allQuestions, const bool choices, const int gender_conservative, const string propername) {
+
 	vector<Impact> impactsToApply;
 	for (int i = 0; i < allQuestions.size(); i++) {
 		clearAlt();
@@ -33676,30 +33846,30 @@ void makecharacter()
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(2, 0, allQuestions[i].QUESTION);
 		mvaddstrAlt(3, 0, allQuestions[i].QUESTION_2);
+		// print answers
 		if (i == 0) {
 			mvaddstrAlt(17, 0, theDocSaid);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (newcr->gender_conservative == GENDER_MALE)
+			if (gender_conservative == GENDER_MALE)
 				addstrAlt(aBoy);
-			else if (newcr->gender_conservative == GENDER_FEMALE)
+			else if (gender_conservative == GENDER_FEMALE)
 				addstrAlt(aGirl);
 			else
 				addstrAlt(intersex);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
 			mvaddstrAlt(19, 0, myParents);
-			if (newcr->gender_conservative == GENDER_NEUTRAL)
+			if (gender_conservative == GENDER_NEUTRAL)
 			{
 				addstrAlt(insistedOtherwise);
 				mvaddstrAlt(20, 0, they);
 			}
 			addstrAlt(namedMe);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt(newcr->propername);
+			addstrAlt(propername);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
 		}
-		// print answers
 		char selection;
 		if (!choices) {
 			int offset = LCSrandom(allQuestions[i].choices.size());
@@ -33730,6 +33900,208 @@ void makecharacter()
 			i--;
 		}
 	}
+	return impactsToApply;
+}
+void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
+#include "../recruits.h"
+/* creates your founder */
+void makecharacter()
+{
+	extern UniqueCreatures uniqueCreatures;
+	// Make the founder blind
+	extern bool BLIND;
+	// Make the founder unable to walk
+	extern bool NOWALK;
+	// Make the founder have no face
+	extern bool NOFACE;
+	// Make the founder have a severely injured spine
+	extern bool SPINE;
+	// Make the founder have severe internal damage
+	extern bool INTERNAL;
+	extern Log gamelog;
+	extern bool multipleCityMode;
+	extern int year;
+	extern int day;
+	extern int month;
+	extern class Ledger ledger;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern char lcityname[CITY_NAMELEN];
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	Creature *newcr = new Creature;
+	newcr->align = ALIGN_LIBERAL;
+	newcr->set_attribute(ATTRIBUTE_HEART, 0);
+	newcr->set_attribute(ATTRIBUTE_WISDOM, 0);
+	newcr->set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
+	newcr->set_attribute(ATTRIBUTE_AGILITY, 0);
+	newcr->set_attribute(ATTRIBUTE_STRENGTH, 0);
+	newcr->set_attribute(ATTRIBUTE_HEALTH, 0);
+	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
+	if (BLIND) {
+		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
+		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+	}
+	if (SPINE) {
+		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
+		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+	}
+	if (NOFACE) {
+		newcr->special[SPECIALWOUND_TONGUE] = 1;
+		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
+		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+		newcr->special[SPECIALWOUND_NOSE] = 1;
+	}
+	if (NOWALK) {
+		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
+		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+		newcr->special[SPECIALWOUND_NECK] = 1;
+		newcr->wound[BODYPART_LEG_RIGHT] = 1;
+		newcr->wound[BODYPART_LEG_LEFT] = 1;
+	}
+	if (INTERNAL) {
+		newcr->special[SPECIALWOUND_RIGHTLUNG] = 1;
+		newcr->special[SPECIALWOUND_LEFTLUNG] = 1;
+		newcr->special[SPECIALWOUND_HEART] = 1;
+		newcr->special[SPECIALWOUND_LIVER] = 1;
+		newcr->special[SPECIALWOUND_STOMACH] = 1;
+		newcr->special[SPECIALWOUND_LEFTKIDNEY] = 1;
+		newcr->special[SPECIALWOUND_RIGHTKIDNEY] = 1;
+		newcr->special[SPECIALWOUND_SPLEEN] = 1;
+	}
+	char first[3][80];
+	char last[80];
+	const bool is_male = LCSrandom(2); // whether or not starting gender is male
+	char gender = newcr->gender_liberal = newcr->gender_conservative = (is_male ? GENDER_MALE : GENDER_FEMALE);
+	do {
+		firstname(first[0], GENDER_NEUTRAL);
+		firstname(first[1], GENDER_MALE);
+		firstname(first[2], GENDER_FEMALE);
+		strcpy(last, lastname());
+	} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
+	{
+		Armor a(getarmortype(tag_ARMOR_CLOTHES));
+		newcr->give_armor(a, NULL);
+	}
+
+	bool choices = true;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(4, 6, theFounder);
+		mvaddstrAlt(7, 2, firstName);
+		addstrAlt(first[(int)gender]);
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(7, 30, pressAtoReconsider);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(9, 2, lastName);
+		addstrAlt(last);
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(9, 30, pressBtoBeReborn);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(11, 2, sexIs);
+		if (newcr->gender_conservative == GENDER_MALE)
+		{
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			addstrAlt(male);
+		}
+		else if (newcr->gender_conservative == GENDER_FEMALE)
+		{
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			addstrAlt(female);
+		}
+		else
+		{
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			addstrAlt(itsComplicated);
+		}
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(11, 30, pressCtoChangeSex);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13, 2, history);
+		if (choices)
+		{
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			addstrAlt(letMeChoose);
+		}
+		else
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			addstrAlt(letFateDecide);
+		}
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13, 30, pressDtoToggle);
+		if (!multipleCityMode)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(15, 2, city);
+			addstrAlt(lcityname);
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(15, 30, pressEtoRelocate);
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(19 - multipleCityMode * 2, 4, pressAnyKeyString);
+		const int c = getkeyAlt();
+		if (c == 'a')
+		{
+			do {
+				firstname(first[(int)gender], newcr->gender_conservative);
+			} while (strcmp(first[(int)gender], last) == 0);
+			continue;
+		}
+		if (c == 'b')
+		{
+			do {
+				strcpy(last, lastname());
+			} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
+			continue;
+		}
+		if (c == 'c')
+		{
+			if ((newcr->gender_conservative == GENDER_FEMALE && !is_male) ||
+				(newcr->gender_conservative == GENDER_NEUTRAL && is_male))
+				newcr->gender_conservative = GENDER_MALE;
+			else if ((newcr->gender_conservative == GENDER_MALE && !is_male) ||
+				(newcr->gender_conservative == GENDER_FEMALE && is_male))
+				newcr->gender_conservative = GENDER_NEUTRAL;
+			else
+				newcr->gender_conservative = GENDER_FEMALE;
+			gender = newcr->gender_liberal = newcr->gender_conservative;
+			continue;
+		}
+		if (c == 'd')
+		{
+			choices = !choices;
+			continue;
+		}
+		if (c == 'e' && !multipleCityMode)
+		{
+			strcpy(lcityname, cityname());
+			continue;
+		}
+		break;
+	}
+	strcpy(newcr->propername, first[(int)gender]);
+	strcat(newcr->propername, singleSpace);
+	strcat(newcr->propername, last);
+	int c;
+	bool hasmaps = false;
+	bool makelawyer = false;
+	bool gaylawyer = false;
+	Vehicle * startcar = NULL;
+	char recruits = RECRUITS_NONE;
+	char base = SITE_RESIDENTIAL_SHELTER;
+	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
+	bool assault_rifle = false;
+	bool sports_car = false;	
+	int birth_year = 1984; // default birth year, month, and day in case left undefined
+	int birth_month = 1;
+	int birth_day = 1;
+
+	vector<Question> allQuestions = gatherAllFounderQuestions();
+
+	vector<Impact> impactsToApply = printQuestionsThenGatherImpacts(allQuestions, choices, newcr->gender_conservative, newcr->propername);
+	
 	for (int i = 0; i < impactsToApply.size(); i++) {
 		const Impact currentImpact = impactsToApply[i];
 		switch (currentImpact.type) {
@@ -33854,48 +34226,7 @@ void makecharacter()
 		newVehicle(startcar);
 		newcr->pref_carid = startcar->id();
 	}
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(2, 2, aNewConEra, gamelog);
-	gamelog.newline();
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(4, 2, theYearIs, gamelog);
-	addstrAlt(year, gamelog);
-	addstrAlt(singleDot, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(6, 2, conservativePresident, gamelog);
-	char president[80];
-	generate_name(president, GENDER_WHITEMALEPATRIARCH);
-	addstrAlt(president, gamelog);
-	addstrAlt(endsSecondTerm, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(7, 2, highSeventiesApprovePres, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(8, 2, execname[EXEC_PRESIDENT], gamelog);
-	addstrAlt(singleDot, gamelog);
-	gamelog.nextMessage();
-	mvaddstrAlt(10, 2, conMajorityHouse, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(11, 2, senateConMajority, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(12, 2, beginningOfNew, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(13, 2, conEra, gamelog);
-	gamelog.nextMessage();
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(15, 2, thePresident, gamelog);
-	addstrAlt(execname[EXEC_PRESIDENT], gamelog);
-	addstrAlt(hasAskedCongressBeQuick, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(16, 2, rubberStampArchCon, gamelog);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(theLeftSeems, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(17, 2, powerlessToStop, gamelog);
-	gamelog.nextMessage();
-	mvaddstrAlt(19, 2, inThisDarkTime, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
+	printIntroduction();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, whatIsYourName);
@@ -34768,6 +35099,109 @@ void clean_up_empty_news_stories()
 		}
 	}
 }
+int bonusPriority(const short type, const long loc, long priority) {
+	extern short attitude[VIEWNUM];
+	switch (type)
+	{
+	case NEWSSTORY_SQUAD_ESCAPED:
+		priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_FLEDATTACK:
+		priority += 15 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_DEFENDED:
+		priority += 30 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_BROKESIEGE:
+		priority += 45 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
+		priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
+		priority += 15 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	case NEWSSTORY_SQUAD_KILLED_SITE:
+		priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
+		break;
+	default:
+		// Suppress actions at CCS safehouses
+		if (loc != -1 &&
+			LocationsPool::getInstance().getRentingType(loc) == RENTING_CCS)
+		{
+			priority = 0;
+		}
+		break;
+	}
+	return priority;
+}
+int moreBonusPriority(const short type, const long loc, long priority) {
+
+	switch (LocationsPool::getInstance().getLocationType(loc))
+	{
+		// Not even reported
+	case SITE_BUSINESS_CRACKHOUSE:
+		if (type == NEWSSTORY_SQUAD_KILLED_SITE ||
+			type == NEWSSTORY_SQUAD_SITE)
+		{
+			priority = 0;
+			break;
+		}
+		// Nobody cares
+	case SITE_RESIDENTIAL_TENEMENT:
+		priority /= 8;
+		break;
+		// Normal priority
+	case SITE_RESIDENTIAL_SHELTER:
+	case SITE_INDUSTRY_WAREHOUSE:
+	case SITE_RESIDENTIAL_BOMBSHELTER:
+	case SITE_DOWNTOWN:
+	case SITE_COMMERCIAL:
+	case SITE_UDISTRICT:
+	case SITE_OUTOFTOWN:
+	case SITE_INDUSTRIAL:
+	case SITE_RESIDENTIAL_APARTMENT:
+	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+	case SITE_LABORATORY_COSMETICS:
+	case SITE_LABORATORY_GENETIC:
+	case SITE_HOSPITAL_CLINIC:
+	case SITE_HOSPITAL_UNIVERSITY:
+	case SITE_INDUSTRY_SWEATSHOP:
+	case SITE_INDUSTRY_POLLUTER:
+	case SITE_BUSINESS_PAWNSHOP:
+	case SITE_BUSINESS_JUICEBAR:
+	case SITE_BUSINESS_CIGARBAR:
+	case SITE_BUSINESS_LATTESTAND:
+	case SITE_BUSINESS_VEGANCOOP:
+	case SITE_BUSINESS_INTERNETCAFE:
+	case SITE_BUSINESS_DEPTSTORE:
+	case SITE_BUSINESS_HALLOWEEN:
+	case SITE_BUSINESS_BARANDGRILL:
+	case SITE_BUSINESS_ARMSDEALER:
+	case SITE_BUSINESS_CARDEALERSHIP:
+	case SITE_OUTDOOR_PUBLICPARK:
+	case SITE_OUTDOOR_BUNKER:
+	default:
+		break;
+		// WOAH OMG
+	case SITE_INDUSTRY_NUCLEAR:
+	case SITE_GOVERNMENT_POLICESTATION:
+	case SITE_GOVERNMENT_COURTHOUSE:
+	case SITE_GOVERNMENT_PRISON:
+	case SITE_GOVERNMENT_INTELLIGENCEHQ:
+	case SITE_GOVERNMENT_ARMYBASE:
+	case SITE_GOVERNMENT_FIRESTATION:
+	case SITE_CORPORATE_HEADQUARTERS:
+	case SITE_CORPORATE_HOUSE:
+	case SITE_MEDIA_AMRADIO:
+	case SITE_MEDIA_CABLENEWS:
+	case SITE_BUSINESS_BANK:
+	case SITE_GOVERNMENT_WHITE_HOUSE:
+		priority *= 2;
+		break;
+	}
+	return priority;
+}
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns)
 {
@@ -34864,106 +35298,14 @@ void setpriority(newsstoryst &ns)
 		ns.violence_level += crime[CRIME_ATTACKED] * 4;
 		// Add additional priority based on the type of news story
 		// and how high profile the LCS is
-		switch (ns.type)
-		{
-		case NEWSSTORY_SQUAD_ESCAPED:
-			ns.priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_FLEDATTACK:
-			ns.priority += 15 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_DEFENDED:
-			ns.priority += 30 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_BROKESIEGE:
-			ns.priority += 45 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
-			ns.priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
-			ns.priority += 15 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		case NEWSSTORY_SQUAD_KILLED_SITE:
-			ns.priority += 10 + attitude[VIEW_LIBERALCRIMESQUAD] / 3;
-			break;
-		default:
-			// Suppress actions at CCS safehouses
-			if (ns.loc != -1 &&
-				LocationsPool::getInstance().getRentingType(ns.loc) == RENTING_CCS)
-			{
-				ns.priority = 0;
-			}
-			break;
-		}
+		ns.priority = bonusPriority(ns.type, ns.loc, ns.priority);
+		
 		// Double profile if the squad moved out in full battle colors
 		if (ns.claimed == 2) ns.priority *= 2;
 		// Modify notability by location
 		if (ns.loc != -1)
 		{
-			switch (LocationsPool::getInstance().getLocationType(ns.loc))
-			{
-				// Not even reported
-			case SITE_BUSINESS_CRACKHOUSE:
-				if (ns.type == NEWSSTORY_SQUAD_KILLED_SITE ||
-					ns.type == NEWSSTORY_SQUAD_SITE)
-				{
-					ns.priority = 0;
-					break;
-				}
-				// Nobody cares
-			case SITE_RESIDENTIAL_TENEMENT:
-				ns.priority /= 8;
-				break;
-				// Normal priority
-			case SITE_RESIDENTIAL_SHELTER:
-			case SITE_INDUSTRY_WAREHOUSE:
-			case SITE_RESIDENTIAL_BOMBSHELTER:
-			case SITE_DOWNTOWN:
-			case SITE_COMMERCIAL:
-			case SITE_UDISTRICT:
-			case SITE_OUTOFTOWN:
-			case SITE_INDUSTRIAL:
-			case SITE_RESIDENTIAL_APARTMENT:
-			case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			case SITE_LABORATORY_COSMETICS:
-			case SITE_LABORATORY_GENETIC:
-			case SITE_HOSPITAL_CLINIC:
-			case SITE_HOSPITAL_UNIVERSITY:
-			case SITE_INDUSTRY_SWEATSHOP:
-			case SITE_INDUSTRY_POLLUTER:
-			case SITE_BUSINESS_PAWNSHOP:
-			case SITE_BUSINESS_JUICEBAR:
-			case SITE_BUSINESS_CIGARBAR:
-			case SITE_BUSINESS_LATTESTAND:
-			case SITE_BUSINESS_VEGANCOOP:
-			case SITE_BUSINESS_INTERNETCAFE:
-			case SITE_BUSINESS_DEPTSTORE:
-			case SITE_BUSINESS_HALLOWEEN:
-			case SITE_BUSINESS_BARANDGRILL:
-			case SITE_BUSINESS_ARMSDEALER:
-			case SITE_BUSINESS_CARDEALERSHIP:
-			case SITE_OUTDOOR_PUBLICPARK:
-			case SITE_OUTDOOR_BUNKER:
-			default:
-				break;
-				// WOAH OMG
-			case SITE_INDUSTRY_NUCLEAR:
-			case SITE_GOVERNMENT_POLICESTATION:
-			case SITE_GOVERNMENT_COURTHOUSE:
-			case SITE_GOVERNMENT_PRISON:
-			case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			case SITE_GOVERNMENT_ARMYBASE:
-			case SITE_GOVERNMENT_FIRESTATION:
-			case SITE_CORPORATE_HEADQUARTERS:
-			case SITE_CORPORATE_HOUSE:
-			case SITE_MEDIA_AMRADIO:
-			case SITE_MEDIA_CABLENEWS:
-			case SITE_BUSINESS_BANK:
-			case SITE_GOVERNMENT_WHITE_HOUSE:
-				ns.priority *= 2;
-				break;
-			}
+			ns.priority = moreBonusPriority(ns.type, ns.loc, ns.priority);
 		}
 		// Cap news priority, in part so it can't displace major news stories
 		if (ns.priority > 20000) ns.priority = 20000;
@@ -36325,11 +36667,11 @@ void handle_public_opinion_impact(const newsstoryst &ns)
 		std::vector<int> issues;
 
 		if (siteViews.count(LocationsPool::getInstance().getLocationType(ns.loc))) {
-			for (Views v : siteViews[LocationsPool::getInstance().getLocationType(ns.loc)]){
+			for (Views v : siteViews[LocationsPool::getInstance().getLocationType(ns.loc)]) {
 				issues.push_back(v);
 			}
 		}
-		
+
 		for (int i = 0; i < len(issues); i++)
 			change_public_opinion(issues[i], impact, squad_responsible, impact * 10);
 
@@ -42263,16 +42605,56 @@ int numbereating(int loc)
 		if (pool[p]->location == loc && pool[p]->alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
 	return eaters;
 }
-/* siege - updates sieges in progress */
-void reduceCompoundStores(int loc, int amount);
-void emptyCompoundStores(int l);
-void deleteGeneratorLightsOff(int l);
-void setUnderAttack(int l);
-bool getLightsOff(int l);
-void setLightsOff(int l);
-bool hasBasicCompoundWalls(int l);
-void siegeturn(char clearformess)
-{
+void noOneIsThere(const int l) {
+	extern Log gamelog;
+	extern vector<Creature *> pool;
+	const string CONST_siege176 = "Conservatives have raided the ";
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege176, gamelog);
+	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
+	addstrAlt(CONST_siege177, gamelog);
+	gamelog.newline();
+	if (LocationsPool::getInstance().getSiegeType(l) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(l) == SITE_INDUSTRY_WAREHOUSE)
+		CCSCapturesSite(l);
+	pressAnyKey();
+	int y = 9;
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != l) continue;
+		if (!pool[p]->alive)
+		{
+			mvaddstrAlt(y++, 1, pool[p]->name);
+			addstrAlt(CONST_siege178, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+			delete_and_remove(pool, p);
+			continue;
+		}
+		if (pool[p]->align != 1)
+		{
+			mvaddstrAlt(y++, 1, pool[p]->name);
+			addstrAlt(CONST_siege179, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+			delete_and_remove(pool, p);
+			continue;
+		}
+	}
+	deleteLocationLoot(l);
+	deleteLocationVehicles(l);
+	gamelog.newline();
+	endLocationSiege(l);
+}
+int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
+
+	void deleteGeneratorLightsOff(int l);
+	bool getLightsOff(int l);
+	void setLightsOff(int l);
+	bool hasBasicCompoundWalls(int l);
+
+	const string CONST_siege224 = "'s words.";
+	const string CONST_siege223 = "Virtually everyone in America was moved by ";
 	const string CONST_siege222 = " later went on to win a Pulitzer for it.";
 	const string CONST_siege221 = "Even the Cable News and AM Radio spend days talking about it.";
 	const string CONST_siege220 = "The discussion was exciting and dynamic.";
@@ -42310,13 +42692,314 @@ void siegeturn(char clearformess)
 	const string CONST_siege187 = "A sniper nearly hits ";
 	const string CONST_siege185 = "A sniper takes out ";
 	const string CONST_siege184 = "The police have cut the lights!";
+	extern Log gamelog;
+	extern int stat_dead;
+	extern short lawList[LAWNUM];
+	extern vector<Creature *> pool;
+
+	char no_bad = 1;
+	//CUT LIGHTS
+	if (!getLightsOff(l) &&
+		!(hasAGenerator(l)) && !LCSrandom(10))
+	{
+		no_bad = 0;
+		if (clearformess) eraseAlt();
+		else makedelimiter();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 1, CONST_siege184, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		setLightsOff(l);
+	}
+	//SNIPER
+	if (!(hasBasicCompoundWalls(l)) && !LCSrandom(5))
+	{
+		no_bad = 0;
+		vector<int> pol;
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+		if (len(pol))
+		{
+			if (clearformess) eraseAlt();
+			else makedelimiter();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			int targ = pickrandom(pol);
+			if ((int)LCSrandom(50) > pool[targ]->juice)
+			{
+				mvaddstrAlt(8, 1, CONST_siege185, gamelog);
+				addstrAlt(pool[targ]->name, gamelog);
+				addstrAlt(CONST_siege188, gamelog);
+				gamelog.newline();
+				if (pool[targ]->align == 1) stat_dead++, num_liberals--;
+				removesquadinfo(*pool[targ]);
+				pool[targ]->die();
+			}
+			else
+			{
+				mvaddstrAlt(8, 1, CONST_siege187, gamelog);
+				addstrAlt(pool[targ]->name, gamelog);
+				addstrAlt(CONST_siege188, gamelog);
+				gamelog.newline();
+			}
+			pressAnyKey();
+		}
+	}
+	if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(3))
+	{
+		no_bad = 0;
+		//AIR STRIKE!
+		bool hit = true;
+		if (clearformess) eraseAlt();
+		else makedelimiter();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 1, CONST_siege189, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		bool hasAAGun = siteHasAAGun(l);
+		bool hasGenerator = hasAGenerator(l);
+		if (hasAAGun)
+		{
+			if (clearformess) eraseAlt();
+			else makedelimiter();
+			mvaddstrAlt(8, 1, CONST_siege190, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+			if (clearformess) eraseAlt();
+			else makedelimiter();
+			if (LCSrandom(5))
+			{
+				hit = false;
+				if (LCSrandom(2)) mvaddstrAlt(8, 1, CONST_siege191, gamelog);
+				else
+				{
+					mvaddstrAlt(8, 1, CONST_siege192, gamelog);
+					gamelog.newline();
+					pressAnyKey();
+					if (clearformess) eraseAlt();
+					else makedelimiter();
+					mvaddstrAlt(8, 1, CONST_siege193, gamelog);
+					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
+				}
+				gamelog.newline();
+				pressAnyKey();
+			}
+			else
+			{
+				mvaddstrAlt(8, 1, CONST_siege194, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+			}
+		}
+		if (hit)
+		{
+			if (clearformess) eraseAlt();
+			else makedelimiter();
+			mvaddstrAlt(8, 1, CONST_siege195, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+			if (hasAAGun && !LCSrandom(3))
+			{
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				mvaddstrAlt(8, 1, CONST_siege196, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				mvaddstrAlt(8, 1, CONST_siege197, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				deleteAAGun(l);
+			}
+			else if (hasGenerator && !LCSrandom(3))
+			{
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				mvaddstrAlt(8, 1, CONST_siege198, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				mvaddstrAlt(8, 1, CONST_siege199, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				deleteGeneratorLightsOff(l);
+			}
+			if (!LCSrandom(2))
+			{
+				vector<int> pol;
+				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+				if (len(pol))
+				{
+					if (clearformess) eraseAlt();
+					else makedelimiter();
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					int targ = pickrandom(pol);
+					if ((int)LCSrandom(100) > pool[targ]->juice)
+					{
+						mvaddstrAlt(8, 1, pool[targ]->name, gamelog);
+						addstrAlt(CONST_siege200, gamelog);
+						gamelog.newline();
+						if (pool[targ]->align == 1) stat_dead++, num_liberals--;
+						removesquadinfo(*pool[targ]);
+						pool[targ]->die();
+					}
+					else
+					{
+						mvaddstrAlt(8, 1, pool[targ]->name, gamelog);
+						addstrAlt(CONST_siege201, gamelog);
+						gamelog.newline();
+					}
+					pressAnyKey();
+				}
+			}
+			else
+			{
+				if (clearformess) eraseAlt();
+				else makedelimiter();
+				mvaddstrAlt(8, 1, CONST_siege202, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+			}
+		}
+	}
+	if ((LocationsPool::getInstance().doWeHaveTankTraps(l)) &&
+		LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(15))
+	{
+		no_bad = 0;
+		//ENGINEERS
+		if (clearformess) eraseAlt();
+		else makedelimiter();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 1, CONST_siege203, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		if (!clearformess)
+		{
+			makedelimiter();
+		}
+		mvaddstrAlt(clearformess ? 9 : 8, 1, CONST_siege204, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		LocationsPool::getInstance().deleteTankTraps(l);
+	}
+	//NEED GOOD THINGS TO BALANCE THE BAD
+	// ELITE REPORTER SNEAKS IN
+	if (!LCSrandom(20) && no_bad&&num_liberals > 0)
+	{
+		string repname = generate_name();
+		set_color_easy(WHITE_ON_BLACK);
+		eraseAlt();
+		mvaddstrAlt(1, 1, CONST_siege205, gamelog);
+		addstrAlt(repname, gamelog);
+		addstrAlt(CONST_siege206, gamelog);
+		addstrAlt(pickrandom(words_meaning_news), gamelog);
+		addstrAlt(singleSpace);
+		addstrAlt(pickrandom(newspaper_first_name), gamelog);
+		addstrAlt(singleSpace, gamelog);
+		addstrAlt(pickrandom(newspaper_last_name), gamelog);
+		mvaddstrAlt(2, 1, CONST_siege207, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		int best = 0;
+		for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
+		{
+			if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location != l) continue;
+			int sum = pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
+				+ pool[p]->get_attribute(ATTRIBUTE_HEART, true)
+				+ pool[p]->get_skill(SKILL_PERSUASION)
+				+ pool[p]->juice;
+			if (sum > bestvalue) best = p, bestvalue = sum;
+		}
+		mvaddstrAlt(4, 1, pool[best]->name, gamelog);
+		addstrAlt(CONST_siege208, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		mvaddstrAlt(6, 1, CONST_siege209, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
+			+ pool[best]->attribute_roll(ATTRIBUTE_HEART)
+			+ pool[best]->skill_roll(SKILL_PERSUASION)
+			+ pool[best]->skill_roll(SKILL_PERSUASION)
+			+ pool[best]->skill_roll(SKILL_PERSUASION);
+
+		if (segmentpower < 15)
+		{
+			mvaddstrAlt(8, 1, repname, gamelog);
+			addstrAlt(CONST_siege210, gamelog);
+			mvaddstrAlt(9, 1, CONST_siege211, gamelog);
+			if (LCSrandom(insult_for_liberal.size() + 1)) {
+				mvaddstrAlt(10, 1, pickrandom(insult_for_liberal));
+			}
+			else {
+				if (lawList[LAW_FREESPEECH] == -2) mvaddstrAlt(10, 1, CONST_siege212, gamelog);
+				else mvaddstrAlt(10, 1, CONST_siege213, gamelog);
+			}
+			addstrAlt(singleSpace, gamelog);
+			addstrAlt(pickrandom(word_replacing_liberal));
+			addstrAlt(singleDot, gamelog);
+			gamelog.newline();
+		}
+		else if (segmentpower < 20)
+		{
+			mvaddstrAlt(8, 1, CONST_siege214, gamelog);
+			addstrAlt(repname, gamelog);
+			addstrAlt(CONST_siege215, gamelog);
+			gamelog.newline();
+		}
+		else if (segmentpower < 25)
+		{
+			mvaddstrAlt(8, 1, CONST_siege216, gamelog);
+			addstrAlt(pool[best]->name, gamelog);
+			addstrAlt(CONST_siege217, gamelog);
+			gamelog.newline();
+		}
+		else if (segmentpower < 30)
+		{
+			mvaddstrAlt(8, 1, pool[best]->name, gamelog);
+			addstrAlt(CONST_siege218, gamelog);
+			gamelog.newline();
+		}
+		else if (segmentpower < 45)
+		{
+			mvaddstrAlt(8, 1, pool[best]->name, gamelog);
+			addstrAlt(CONST_siege219, gamelog);
+			gamelog.newline();
+		}
+		else if (segmentpower < 60)
+		{
+			mvaddstrAlt(8, 1, CONST_siege220, gamelog);
+			mvaddstrAlt(9, 1, CONST_siege221, gamelog);
+			gamelog.newline();
+		}
+		else
+		{
+			mvaddstrAlt(8, 1, repname);
+			addstrAlt(CONST_siege222, gamelog);
+			mvaddstrAlt(9, 1, CONST_siege223, gamelog);
+			addstrAlt(pool[best]->name, gamelog);
+			addstrAlt(CONST_siege224, gamelog);
+			gamelog.newline();
+		}
+		pressAnyKey();
+		//CHECK PUBLIC OPINION
+		change_public_opinion(VIEW_LIBERALCRIMESQUAD, 20);
+		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, (segmentpower - 25) / 2, segmentpower + 50);
+		for (int v = 0; v < 5; v++) change_public_opinion(LCSrandom(VIEWNUM - 3), (segmentpower - 25) / 2);
+	}
+	return num_liberals;
+}
+/* siege - updates sieges in progress */
+void reduceCompoundStores(int loc, int amount);
+void emptyCompoundStores(int l);
+void siegeturn(char clearformess)
+{
+	void setUnderAttack(int l);
+
 	const string CONST_siege183 = "The cops are coming!";
 	const string CONST_siege182 = " has starved to death.";
 	const string CONST_siege181 = "Your Liberals are starving!";
 	const string CONST_siege180 = "A day passes while under siege...";
-	const string CONST_siege176 = "Conservatives have raided the ";
-	const string CONST_siege224 = "'s words.";
-	const string CONST_siege223 = "Virtually everyone in America was moved by ";
 	const string CONST_siege247 = "give up";
 	extern Log gamelog;
 	extern char disbanding;
@@ -42338,394 +43021,70 @@ void siegeturn(char clearformess)
 		if (pool[p]->location == -1)continue; // Vacationers don't count
 		liberalcount[pool[p]->location]++;
 	}
-	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) if (LocationsPool::getInstance().isThereASiegeHere(l))
-	{
-		//resolve sieges with no people
-		if (liberalcount[l] == 0)
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+		if (LocationsPool::getInstance().isThereASiegeHere(l))
 		{
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_siege176, gamelog);
-			addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-			addstrAlt(CONST_siege177, gamelog);
-			gamelog.newline();
-			if (LocationsPool::getInstance().getSiegeType(l) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(l) == SITE_INDUSTRY_WAREHOUSE)
-				CCSCapturesSite(l);
-			pressAnyKey();
-			int y = 9;
-			for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+			//resolve sieges with no people
+			if (liberalcount[l] == 0)
 			{
-				if (pool[p]->location != l) continue;
-				if (!pool[p]->alive)
-				{
-					mvaddstrAlt(y++, 1, pool[p]->name);
-					addstrAlt(CONST_siege178, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					delete_and_remove(pool, p);
-					continue;
-				}
-				if (pool[p]->align != 1)
-				{
-					mvaddstrAlt(y++, 1, pool[p]->name);
-					addstrAlt(CONST_siege179, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					delete_and_remove(pool, p);
-					continue;
-				}
+				noOneIsThere(l);
 			}
-			deleteLocationLoot(l);
-			deleteLocationVehicles(l);
-			gamelog.newline();
-			endLocationSiege(l);
-		}
-		if (!LocationsPool::getInstance().isThisUnderAttack(l))
-		{
-			// Seperate logging message.
-			gamelog.record(CONST_siege180);
-			gamelog.newline();
-			//EAT
-			bool starving = false;
-			int eaters = numbereating(l);
-			if (LocationsPool::getInstance().getStoresAmount(l) == 0 && eaters > 0)
+			if (!LocationsPool::getInstance().isThisUnderAttack(l))
 			{
-				starving = true;
-				if (clearformess) eraseAlt();
-				else makedelimiter();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, CONST_siege181, gamelog);
+				// Seperate logging message.
+				gamelog.record(CONST_siege180);
 				gamelog.newline();
-				pressAnyKey();
-			}
-			if (LocationsPool::getInstance().getStoresAmount(l) >= eaters) reduceCompoundStores(l, eaters);
-			else emptyCompoundStores(l);
-			//ATTACK!
-			char attack = 0;
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-			{
-				if (!pool[p]->alive || pool[p]->location != l) continue;
-				if (starving) pool[p]->blood -= LCSrandom(8) + 4;
-				// Check if liberal starved to death.
-				if (pool[p]->blood <= 0)
+				//EAT
+				bool starving = false;
+				int eaters = numbereating(l);
+				if (LocationsPool::getInstance().getStoresAmount(l) == 0 && eaters > 0)
 				{
-					pool[p]->die();
+					starving = true;
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
-					addstrAlt(CONST_siege182, gamelog);
+					mvaddstrAlt(8, 1, CONST_siege181, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 				}
-			}
-			if (!LCSrandom(12))attack = 1;
-			if (attack)
-			{
-				if (clearformess) eraseAlt();
-				else makedelimiter();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, CONST_siege183, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-				setUnderAttack(l);
-			}
-			else
-			{
-				char no_bad = 1;
-				//CUT LIGHTS
-				if (!getLightsOff(l) &&
-					!(hasAGenerator(l)) && !LCSrandom(10))
+				if (LocationsPool::getInstance().getStoresAmount(l) >= eaters) reduceCompoundStores(l, eaters);
+				else emptyCompoundStores(l);
+				//ATTACK!
+				char attack = 0;
+				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 				{
-					no_bad = 0;
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_siege184, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					setLightsOff(l);
-				}
-				//SNIPER
-				if (!(hasBasicCompoundWalls(l)) && !LCSrandom(5))
-				{
-					no_bad = 0;
-					vector<int> pol;
-					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
-					if (len(pol))
+					if (!pool[p]->alive || pool[p]->location != l) continue;
+					if (starving) pool[p]->blood -= LCSrandom(8) + 4;
+					// Check if liberal starved to death.
+					if (pool[p]->blood <= 0)
 					{
+						pool[p]->die();
 						if (clearformess) eraseAlt();
 						else makedelimiter();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						int targ = pickrandom(pol);
-						if ((int)LCSrandom(50) > pool[targ]->juice)
-						{
-							mvaddstrAlt(8, 1, CONST_siege185, gamelog);
-							addstrAlt(pool[targ]->name, gamelog);
-							addstrAlt(CONST_siege188, gamelog);
-							gamelog.newline();
-							if (pool[targ]->align == 1) stat_dead++, liberalcount[l]--;
-							removesquadinfo(*pool[targ]);
-							pool[targ]->die();
-						}
-						else
-						{
-							mvaddstrAlt(8, 1, CONST_siege187, gamelog);
-							addstrAlt(pool[targ]->name, gamelog);
-							addstrAlt(CONST_siege188, gamelog);
-							gamelog.newline();
-						}
+						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+						addstrAlt(CONST_siege182, gamelog);
+						gamelog.newline();
 						pressAnyKey();
 					}
 				}
-				if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(3))
+				if (!LCSrandom(12))attack = 1;
+				if (attack)
 				{
-					no_bad = 0;
-					//AIR STRIKE!
-					bool hit = true;
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_siege189, gamelog);
+					mvaddstrAlt(8, 1, CONST_siege183, gamelog);
 					gamelog.newline();
 					pressAnyKey();
-					bool hasAAGun = siteHasAAGun(l);
-					bool hasGenerator = hasAGenerator(l);
-					if (hasAAGun)
-					{
-						if (clearformess) eraseAlt();
-						else makedelimiter();
-						mvaddstrAlt(8, 1, CONST_siege190, gamelog);
-						gamelog.newline();
-						pressAnyKey();
-						if (clearformess) eraseAlt();
-						else makedelimiter();
-						if (LCSrandom(5))
-						{
-							hit = false;
-							if (LCSrandom(2)) mvaddstrAlt(8, 1, CONST_siege191, gamelog);
-							else
-							{
-								mvaddstrAlt(8, 1, CONST_siege192, gamelog);
-								gamelog.newline();
-								pressAnyKey();
-								if (clearformess) eraseAlt();
-								else makedelimiter();
-								mvaddstrAlt(8, 1, CONST_siege193, gamelog);
-								for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
-							}
-							gamelog.newline();
-							pressAnyKey();
-						}
-						else
-						{
-							mvaddstrAlt(8, 1, CONST_siege194, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-						}
-					}
-					if (hit)
-					{
-						if (clearformess) eraseAlt();
-						else makedelimiter();
-						mvaddstrAlt(8, 1, CONST_siege195, gamelog);
-						gamelog.newline();
-						pressAnyKey();
-						if (hasAAGun && !LCSrandom(3))
-						{
-							if (clearformess) eraseAlt();
-							else makedelimiter();
-							mvaddstrAlt(8, 1, CONST_siege196, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-							if (clearformess) eraseAlt();
-							else makedelimiter();
-							mvaddstrAlt(8, 1, CONST_siege197, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-							deleteAAGun(l);
-						}
-						else if (hasGenerator && !LCSrandom(3))
-						{
-							if (clearformess) eraseAlt();
-							else makedelimiter();
-							mvaddstrAlt(8, 1, CONST_siege198, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-							if (clearformess) eraseAlt();
-							else makedelimiter();
-							mvaddstrAlt(8, 1, CONST_siege199, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-							deleteGeneratorLightsOff(l);
-						}
-						if (!LCSrandom(2))
-						{
-							vector<int> pol;
-							for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
-							if (len(pol))
-							{
-								if (clearformess) eraseAlt();
-								else makedelimiter();
-								set_color_easy(WHITE_ON_BLACK_BRIGHT);
-								int targ = pickrandom(pol);
-								if ((int)LCSrandom(100) > pool[targ]->juice)
-								{
-									mvaddstrAlt(8, 1, pool[targ]->name, gamelog);
-									addstrAlt(CONST_siege200, gamelog);
-									gamelog.newline();
-									if (pool[targ]->align == 1) stat_dead++, liberalcount[l]--;
-									removesquadinfo(*pool[targ]);
-									pool[targ]->die();
-								}
-								else
-								{
-									mvaddstrAlt(8, 1, pool[targ]->name, gamelog);
-									addstrAlt(CONST_siege201, gamelog);
-									gamelog.newline();
-								}
-								pressAnyKey();
-							}
-						}
-						else
-						{
-							if (clearformess) eraseAlt();
-							else makedelimiter();
-							mvaddstrAlt(8, 1, CONST_siege202, gamelog);
-							gamelog.newline();
-							pressAnyKey();
-						}
-					}
+					setUnderAttack(l);
 				}
-				if ((LocationsPool::getInstance().doWeHaveTankTraps(l)) &&
-					LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(15))
-				{
-					no_bad = 0;
-					//ENGINEERS
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_siege203, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					if (!clearformess)
-					{
-						makedelimiter();
-					}
-					mvaddstrAlt(clearformess ? 9 : 8, 1, CONST_siege204, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					LocationsPool::getInstance().deleteTankTraps(l);
+				else {
+					liberalcount[l] = siegeDontAttack(l, clearformess, liberalcount[l]);
 				}
-				//NEED GOOD THINGS TO BALANCE THE BAD
-				// ELITE REPORTER SNEAKS IN
-				if (!LCSrandom(20) && no_bad&&liberalcount[l] > 0)
-				{
-					string repname = generate_name();
-					set_color_easy(WHITE_ON_BLACK);
-					eraseAlt();
-					mvaddstrAlt(1, 1, CONST_siege205, gamelog);
-					addstrAlt(repname, gamelog);
-					addstrAlt(CONST_siege206, gamelog);
-					addstrAlt(pickrandom(words_meaning_news), gamelog);
-					addstrAlt(singleSpace);
-					addstrAlt(pickrandom(newspaper_first_name), gamelog);
-					addstrAlt(singleSpace, gamelog);
-					addstrAlt(pickrandom(newspaper_last_name), gamelog);
-					mvaddstrAlt(2, 1, CONST_siege207, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					int best = 0;
-					for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
-					{
-						if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location != l) continue;
-						int sum = pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
-							+ pool[p]->get_attribute(ATTRIBUTE_HEART, true)
-							+ pool[p]->get_skill(SKILL_PERSUASION)
-							+ pool[p]->juice;
-						if (sum > bestvalue) best = p, bestvalue = sum;
-					}
-					mvaddstrAlt(4, 1, pool[best]->name, gamelog);
-					addstrAlt(CONST_siege208, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					mvaddstrAlt(6, 1, CONST_siege209, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-					int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
-						+ pool[best]->attribute_roll(ATTRIBUTE_HEART)
-						+ pool[best]->skill_roll(SKILL_PERSUASION)
-						+ pool[best]->skill_roll(SKILL_PERSUASION)
-						+ pool[best]->skill_roll(SKILL_PERSUASION);
-
-					if (segmentpower < 15)
-					{
-						mvaddstrAlt(8, 1, repname, gamelog);
-						addstrAlt(CONST_siege210, gamelog);
-						mvaddstrAlt(9, 1, CONST_siege211, gamelog);
-						if (LCSrandom(insult_for_liberal.size() + 1)) {
-							mvaddstrAlt(10, 1, pickrandom(insult_for_liberal));
-						}
-						else {
-							if (lawList[LAW_FREESPEECH] == -2) mvaddstrAlt(10, 1, CONST_siege212, gamelog);
-							else mvaddstrAlt(10, 1, CONST_siege213, gamelog);
-						}
-						addstrAlt(singleSpace, gamelog);
-						addstrAlt(pickrandom(word_replacing_liberal));
-						addstrAlt(singleDot, gamelog);
-						gamelog.newline();
-					}
-					else if (segmentpower < 20)
-					{
-						mvaddstrAlt(8, 1, CONST_siege214, gamelog);
-						addstrAlt(repname, gamelog);
-						addstrAlt(CONST_siege215, gamelog);
-						gamelog.newline();
-					}
-					else if (segmentpower < 25)
-					{
-						mvaddstrAlt(8, 1, CONST_siege216, gamelog);
-						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt(CONST_siege217, gamelog);
-						gamelog.newline();
-					}
-					else if (segmentpower < 30)
-					{
-						mvaddstrAlt(8, 1, pool[best]->name, gamelog);
-						addstrAlt(CONST_siege218, gamelog);
-						gamelog.newline();
-					}
-					else if (segmentpower < 45)
-					{
-						mvaddstrAlt(8, 1, pool[best]->name, gamelog);
-						addstrAlt(CONST_siege219, gamelog);
-						gamelog.newline();
-					}
-					else if (segmentpower < 60)
-					{
-						mvaddstrAlt(8, 1, CONST_siege220, gamelog);
-						mvaddstrAlt(9, 1, CONST_siege221, gamelog);
-						gamelog.newline();
-					}
-					else
-					{
-						mvaddstrAlt(8, 1, repname);
-						addstrAlt(CONST_siege222, gamelog);
-						mvaddstrAlt(9, 1, CONST_siege223, gamelog);
-						addstrAlt(pool[best]->name, gamelog);
-						addstrAlt(CONST_siege224, gamelog);
-						gamelog.newline();
-					}
-					pressAnyKey();
-					//CHECK PUBLIC OPINION
-					change_public_opinion(VIEW_LIBERALCRIMESQUAD, 20);
-					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, (segmentpower - 25) / 2, segmentpower + 50);
-					for (int v = 0; v < 5; v++) change_public_opinion(LCSrandom(VIEWNUM - 3), (segmentpower - 25) / 2);
-				}
+				gamelog.newline(); // single blank line after every siege day
 			}
-			gamelog.newline(); // single blank line after every siege day
 		}
-	}
 	delete[] liberalcount;
 	delete[] food_prep;
 }
@@ -44423,20 +44782,20 @@ map<int, vector<string> > restrictedLocationDisguises = {
 			tag_ARMOR_CHEAPSUIT,
 			tag_ARMOR_EXPENSIVEDRESS,
 			tag_ARMOR_CHEAPDRESS,
-	
+
 		}),
 	map<int, vector<string> >::value_type(SITE_MEDIA_CABLENEWS, {
 				tag_ARMOR_SECURITYUNIFORM,
 					tag_ARMOR_EXPENSIVESUIT,
 					tag_ARMOR_EXPENSIVEDRESS,
-			
+
 		}),
 	map<int, vector<string> >::value_type(SITE_INDUSTRY_NUCLEAR, {
 				tag_ARMOR_LABCOAT,
 					tag_ARMOR_SECURITYUNIFORM,
 					tag_ARMOR_CIVILLIANARMOR,
 					tag_ARMOR_HARDHAT,
-			
+
 				}),
 	map<int, vector<string> >::value_type(SITE_BUSINESS_BANK, {
 		tag_ARMOR_CHEAPSUIT,
@@ -44499,7 +44858,7 @@ char hasdisguise(const Creature &cr)
 			// (They pull this shit all the time in their own sieges)
 			uniformed = 0;
 		}
-		if(LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
+		if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
 		{
 			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)uniformed = 1;
@@ -44510,24 +44869,22 @@ char hasdisguise(const Creature &cr)
 			if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
 				LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
 		}
-		
+
 	}
 	else
 	{
 
 		if ((!cr.is_naked() || cr.animalgloss == ANIMALGLOSS_ANIMAL)
 			&& cr.get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
-		if (locationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+		if (
+			locationDisguises.count(LocationsPool::getInstance().getLocationType(cursite)) ||
+			(highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite)) && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) ||
+			(restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite)) && levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+			) {
 			uniformed = 0;
 		}
-
 		if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED && LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) {
-			if (highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
-				uniformed = 0;
-			}
-			if (restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
-				uniformed = 0;
-			}
+
 			for (string str : restrictedLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
 				if (cr.get_armor().get_itemtypename() == str) {
 					uniformed++;
@@ -44538,39 +44895,41 @@ char hasdisguise(const Creature &cr)
 					uniformed++;
 				}
 			}
-		}else
-		if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED){
-			if (restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
-				uniformed = 0;
-			}
-			for (string str : restrictedLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
-				if (cr.get_armor().get_itemtypename() == str) {
-					uniformed++;
-				}
-			}
-
-		}else
-		if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) {
-			if (highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
-				uniformed = 0;
-			}
-			for (string str : highSecurityLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
-				if (cr.get_armor().get_itemtypename() == str) {
-					uniformed++;
-				}
-			}
-
 		}
-			for (string str : locationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
-				if (cr.get_armor().get_itemtypename() == str) {
-					uniformed++;
+		else
+			if (levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED) {
+				if (restrictedLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+					uniformed = 0;
 				}
+				for (string str : restrictedLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+					if (cr.get_armor().get_itemtypename() == str) {
+						uniformed++;
+					}
+				}
+
 			}
+			else
+				if (LocationsPool::getInstance().isThisPlaceHighSecurity(cursite)) {
+					if (highSecurityLocationDisguises.count(LocationsPool::getInstance().getLocationType(cursite))) {
+						uniformed = 0;
+					}
+					for (string str : highSecurityLocationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+						if (cr.get_armor().get_itemtypename() == str) {
+							uniformed++;
+						}
+					}
 
-		
-		
+				}
+		for (string str : locationDisguises[LocationsPool::getInstance().getLocationType(cursite)]) {
+			if (cr.get_armor().get_itemtypename() == str) {
+				uniformed++;
+			}
+		}
 
-		
+
+
+
+
 
 		//// TODO Move to XML
 

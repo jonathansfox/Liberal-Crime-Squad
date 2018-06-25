@@ -72,6 +72,7 @@ bool ALLOWSTALIN = false;
 bool VERBOSESAVEFILE = false;
 // NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
 // Remove almost all automatically generated comments from verbose savefiles
+vector<WeaponType *> weapontype;
 bool NOVERBOSECOMMENTS = false;
 unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];

@@ -1,117 +1,5 @@
 
 #include "../includes.h"
-const string CONST_locationsPoolB146 = ", NY";
-const string CONST_locationsPoolB145 = ", CA";
-const string CONST_locationsPoolB144 = ", VA";
-const string CONST_locationsPool145 = "Temporary Squad";
-const string CONST_locationsPool144 = "If you do not enter anything, their real name will be used.";
-const string CONST_locationsPool143 = " in its presence?";
-const string CONST_locationsPool142 = "What name will you use for this ";
-const string CONST_locationsPool141 = "The Education of ";
-const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
-const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
-const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
-const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
-const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
-const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
-const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
-const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
-const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
-const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
-const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
-const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
-const string CONST_locationsPool128 = "caseBUSINESSFRONT_MISCELLANEOUS.txt";
-const string CONST_locationsPool127 = "caseBUSINESSFRONT_RESTAURANT.txt";
-const string CONST_locationsPool126 = "caseBUSINESSFRONT_TEMPAGENCY.txt";
-const string CONST_locationsPool125 = "caseBUSINESSFRONT_INSURANCE.txt";
-const string CONST_locationsPool124 = "Enter - Back one step.";
-const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
-const string CONST_locationsPool122 = "Where will the Squad go?";
-const string CONST_locationsPool121 = "Acting Individually";
-const string CONST_locationsPool120 = "2) Press Z to Assemble a New Squad";
-const string CONST_locationsPool119 = "1) R - Review Assets and Form Squads";
-const string CONST_locationsPool118 = "To form a new squad:";
-const string CONST_locationsPool117 = "No Squad Selected";
-const string CONST_locationsPool116 = " Eating";
-const string CONST_locationsPool115 = "s";
-const string CONST_locationsPool114 = " Daily Ration";
-const string CONST_locationsPool113 = "Not Enough Food";
-const string CONST_locationsPool112 = " of Food Left";
-const string CONST_locationsPool111 = " Day";
-const string CONST_locationsPool110 = "GENERATOR";
-const string CONST_locationsPool109 = "LIGHTS OUT";
-const string CONST_locationsPool108 = "TANK TRAPS";
-const string CONST_locationsPool107 = "AA GUN";
-const string CONST_locationsPool106 = "BOOBY TRAPS";
-const string CONST_locationsPool105 = "CAMERAS ON";
-const string CONST_locationsPool104 = "CAMERAS OFF";
-const string CONST_locationsPool103 = "BUSINESS FRONT";
-const string CONST_locationsPool102 = "PRINTING PRESS";
-const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
-const string CONST_locationsPool100 = "This location has insufficient food stores.";
-const string CONST_locationsPool099 = "This location has food for only a few days.";
-const string CONST_locationsPool098 = "You are not under siege...  yet.";
-const string CONST_locationsPool097 = "Firemen are raiding this location!";
-const string CONST_locationsPool096 = "The CCS is raiding this location!";
-const string CONST_locationsPool095 = "The Corporations are raiding this location!";
-const string CONST_locationsPool094 = "The masses are storming this location!";
-const string CONST_locationsPool093 = "The CIA is raiding this location!";
-const string CONST_locationsPool092 = "The police are raiding this location!";
-const string CONST_locationsPool091 = "The police have surrounded this location.";
-const string CONST_locationsPool089 = ",. to view other base pages.";
-const string CONST_locationsPool088 = "  Shift and a Number will move ALL items!";
-const string CONST_locationsPool087 = "T to sort by type.";
-const string CONST_locationsPool086 = "T to sort by location.";
-const string CONST_locationsPool085 = "Press a Letter to assign a base.  Press a Number to select a base.";
-const string CONST_locationsPool084 = "NEW LOCATION";
-const string CONST_locationsPool083 = "----ITEM----------------CURRENT LOCATION---------------------------------------";
-const string CONST_locationsPool082 = "Moving Equipment";
-const string CONST_locationsPool081 = "Press a letter to select an item.";
-const string CONST_locationsPool080 = "x";
-const string CONST_locationsPool079 = "/";
-const string CONST_locationsPool078 = "Select Objects";
-const string CONST_locationsPool077 = "strip down.";
-const string CONST_locationsPool076 = "Can't carry any more ammo.";
-const string CONST_locationsPool075 = "That ammo doesn't fit.";
-const string CONST_locationsPool074 = "Can't carry ammo without a gun.";
-const string CONST_locationsPool073 = "No ammo available!";
-const string CONST_locationsPool072 = "No ammo required!";
-const string CONST_locationsPool071 = "No spare clips!";
-const string CONST_locationsPool070 = "No ammo to drop!";
-const string CONST_locationsPool069 = "receive it.";
-const string CONST_locationsPool068 = "drop a clip.";
-const string CONST_locationsPool067 = "receive a clip.";
-const string CONST_locationsPool066 = "You can't equip that.";
-const string CONST_locationsPool065 = "Z - Stash things at ";
-const string CONST_locationsPool064 = "Y - Get things from ";
-const string CONST_locationsPool063 = "Cursors - Increase or decrease ammo allocation";
-const string CONST_locationsPool062 = "S - Liberally Strip a Squad member";
-const string CONST_locationsPool061 = "Press a number to drop that Squad member's Conservative weapon";
-const string CONST_locationsPool060 = "Press a letter to equip a Liberal item";
-const string CONST_locationsPool059 = " x";
-const string CONST_locationsPool058 = "Equip the Squad";
-const string CONST_locationsPool057 = "     How many?          ";
-const string CONST_locationsPool056 = "Reporting Bugs to the Dev Team";
-const string CONST_locationsPool055 = "Going to ";
-const string CONST_locationsPool054 = "Making ";
-const string CONST_locationsPool053 = "a bug";
-const string CONST_locationsPool052 = "Tending to ";
-const string CONST_locationsPool051 = ", New York";
-const string CONST_locationsPool050 = ", California";
-const string CONST_locationsPool049 = ", Virginia";
-const string CONST_locationsPool048 = " Outskirts";
-const string CONST_locationsPool047 = "Mall";
-const string CONST_locationsPool046 = "sleeper agent";
-const string CONST_locationsPool045 = " as a ";
-const string CONST_locationsPool044 = "Stay at ";
-const string CONST_locationsPool043 = "-> ";
-const string CONST_locationsPool042 = "regular member";
-const string CONST_locationsPool040 = "Come to ";
-const string CONST_locationsPool039 = "   ";
-const string CONST_locationsPool038 = " best serve the Liberal cause?";
-const string CONST_locationsPool037 = "In what capacity will ";
-const string CONST_locationsPool036 = ".  Possessions go to the shelter.";
-const string CONST_locationsPool035 = "EVICTION NOTICE: ";
 
 const string tag_LOOT = "LOOT";
 const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
@@ -379,6 +267,9 @@ const bool LocationsPool::isNewRental(int cursite)
 #include "../common/creaturePool.h"
 void LocationsPool::evictLCSFrom(int l)
 {
+	const string CONST_locationsPool036 = ".  Possessions go to the shelter.";
+	const string CONST_locationsPool035 = "EVICTION NOTICE: ";
+
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, CONST_locationsPool035);
 	addstrAlt(LocationsPool::getInstance().getLocationName(l));
@@ -575,6 +466,16 @@ extern string singleDot;
 // Prompt to turn new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 {
+	const string CONST_locationsPool046 = "sleeper agent";
+	const string CONST_locationsPool045 = " as a ";
+	const string CONST_locationsPool044 = "Stay at ";
+	const string CONST_locationsPool043 = "-> ";
+	const string CONST_locationsPool042 = "regular member";
+	const string CONST_locationsPool040 = "Come to ";
+	const string CONST_locationsPool039 = "   ";
+	const string CONST_locationsPool038 = " best serve the Liberal cause?";
+	const string CONST_locationsPool037 = "In what capacity will ";
+
 	extern short interface_pgup;
 	extern short interface_pgdn;
 	bool selection = false;
@@ -644,21 +545,65 @@ int find_site_index_in_same_city(int site_type, int site_index)
 	if (site_index >= 0) city = location[site_index]->city;
 	return find_site_index_in_city(site_type, city);
 }
+void addChildren(Location* district, const vector<SiteTypes> subdistricts) {
+	for (SiteTypes st : subdistricts) {
+		district->addchild(st);
+	}
+}
+void addChildren(Location* district, const vector<SiteTypes> subdistricts, const bool hasmaps) {
+	for (SiteTypes st : subdistricts) {
+		district->addchild(st)->mapped = hasmaps;
+	}
+}
+vector<SiteTypes> classicDowntown = {
+	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+	SITE_GOVERNMENT_POLICESTATION,
+	SITE_GOVERNMENT_COURTHOUSE,
+	SITE_BUSINESS_BANK,
+	SITE_GOVERNMENT_FIRESTATION,
+	SITE_MEDIA_AMRADIO,
+	SITE_MEDIA_CABLENEWS,
+	SITE_BUSINESS_CIGARBAR,
+	SITE_BUSINESS_LATTESTAND,
+};
+vector<SiteTypes> classicCommercial = {
+
+	SITE_BUSINESS_DEPTSTORE,
+	SITE_BUSINESS_PAWNSHOP,
+	SITE_BUSINESS_HALLOWEEN,
+	SITE_BUSINESS_CARDEALERSHIP,
+};
+vector<SiteTypes> classicUptown = {
+
+	SITE_RESIDENTIAL_APARTMENT,
+	SITE_HOSPITAL_UNIVERSITY,
+	SITE_HOSPITAL_CLINIC,
+	SITE_LABORATORY_GENETIC,
+	SITE_LABORATORY_COSMETICS,
+	SITE_BUSINESS_VEGANCOOP,
+	SITE_BUSINESS_JUICEBAR,
+	SITE_BUSINESS_INTERNETCAFE,
+	SITE_OUTDOOR_PUBLICPARK,
+};
+vector<SiteTypes> classicOutOfTown = {
+
+	SITE_GOVERNMENT_PRISON,
+	SITE_GOVERNMENT_INTELLIGENCEHQ,
+	SITE_INDUSTRY_NUCLEAR,
+	SITE_CORPORATE_HEADQUARTERS,
+	SITE_CORPORATE_HOUSE,
+	SITE_GOVERNMENT_ARMYBASE,
+};
+
+
+
 void make_classic_world(bool hasmaps)
 {
 	Location* district = NULL;
 	location.push_back(district = new Location(SITE_DOWNTOWN));
 	district->area = 0;
 	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_POLICESTATION)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_COURTHOUSE)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_BANK)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_FIRESTATION)->mapped = hasmaps;
-	district->addchild(SITE_MEDIA_AMRADIO)->mapped = hasmaps;
-	district->addchild(SITE_MEDIA_CABLENEWS)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_CIGARBAR)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_LATTESTAND)->mapped = hasmaps;
+	addChildren(district, classicDowntown, hasmaps);
 	{
 		Location* site = district->addchild(SITE_BUSINESS_BARANDGRILL);
 		site->renting = RENTING_CCS;
@@ -667,22 +612,11 @@ void make_classic_world(bool hasmaps)
 	}
 	location.push_back(district = new Location(SITE_COMMERCIAL));
 	district->area = 0;
-	district->addchild(SITE_BUSINESS_DEPTSTORE);
-	district->addchild(SITE_BUSINESS_PAWNSHOP);
-	district->addchild(SITE_BUSINESS_HALLOWEEN);
-	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	addChildren(district, classicCommercial);
 
 	location.push_back(district = new Location(SITE_UDISTRICT));
 	district->area = 0;
-	district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	district->addchild(SITE_HOSPITAL_CLINIC);
-	district->addchild(SITE_LABORATORY_GENETIC);
-	district->addchild(SITE_LABORATORY_COSMETICS);
-	district->addchild(SITE_BUSINESS_VEGANCOOP);
-	district->addchild(SITE_BUSINESS_JUICEBAR);
-	district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	district->addchild(SITE_OUTDOOR_PUBLICPARK);
+	addChildren(district, classicUptown);
 
 	location.push_back(district = new Location(SITE_INDUSTRIAL));
 	district->area = 0;
@@ -703,12 +637,7 @@ void make_classic_world(bool hasmaps)
 	}
 	location.push_back(district = new Location(SITE_OUTOFTOWN));
 	district->area = 1;
-	district->addchild(SITE_GOVERNMENT_PRISON);
-	district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
-	district->addchild(SITE_INDUSTRY_NUCLEAR);
-	district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	district->addchild(SITE_CORPORATE_HOUSE);
-	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	addChildren(district, classicOutOfTown);
 	{
 		Location* site = district->addchild(SITE_OUTDOOR_BUNKER);
 		site->renting = RENTING_CCS;
@@ -718,8 +647,132 @@ void make_classic_world(bool hasmaps)
 	district->area = 1;
 	district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
 }
+
+
+vector<SiteTypes> seattleDowntown = {
+
+	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+	SITE_GOVERNMENT_POLICESTATION,
+	SITE_GOVERNMENT_COURTHOUSE,
+	SITE_BUSINESS_BANK,
+	SITE_GOVERNMENT_FIRESTATION,
+	SITE_MEDIA_AMRADIO,
+	SITE_BUSINESS_CIGARBAR,
+	SITE_BUSINESS_LATTESTAND,
+	SITE_BUSINESS_DEPTSTORE,
+};
+
+vector<SiteTypes> seattleUptown = {
+
+	SITE_RESIDENTIAL_APARTMENT,
+	SITE_HOSPITAL_UNIVERSITY,
+	SITE_HOSPITAL_CLINIC,
+	SITE_LABORATORY_GENETIC,
+	SITE_LABORATORY_COSMETICS,
+	SITE_BUSINESS_VEGANCOOP,
+	SITE_BUSINESS_JUICEBAR,
+	SITE_BUSINESS_INTERNETCAFE,
+	SITE_OUTDOOR_PUBLICPARK,
+	SITE_BUSINESS_HALLOWEEN,
+};
+vector<SiteTypes> seattleOutOfTown = {
+
+	SITE_GOVERNMENT_PRISON,
+	SITE_GOVERNMENT_INTELLIGENCEHQ,
+	SITE_CORPORATE_HEADQUARTERS,
+	SITE_GOVERNMENT_ARMYBASE,
+};
+
+vector<SiteTypes> newYorkManhattan = {
+
+	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+	SITE_GOVERNMENT_POLICESTATION,
+	SITE_GOVERNMENT_COURTHOUSE,
+	SITE_BUSINESS_BANK,
+	SITE_CORPORATE_HEADQUARTERS,
+	SITE_MEDIA_AMRADIO,
+	SITE_MEDIA_CABLENEWS,
+	SITE_BUSINESS_CIGARBAR,
+	SITE_OUTDOOR_PUBLICPARK,
+	SITE_BUSINESS_DEPTSTORE,
+	SITE_GOVERNMENT_PRISON,
+};
+
+vector<SiteTypes> newYorkLongIsland = {
+	SITE_RESIDENTIAL_APARTMENT,
+	SITE_GOVERNMENT_FIRESTATION,
+	SITE_HOSPITAL_UNIVERSITY,
+	SITE_HOSPITAL_CLINIC,
+	SITE_BUSINESS_JUICEBAR,
+	SITE_BUSINESS_INTERNETCAFE,
+	SITE_INDUSTRY_POLLUTER,
+	SITE_LABORATORY_GENETIC,
+	SITE_GOVERNMENT_ARMYBASE,
+};
+
+
+vector<SiteTypes> losAngelesDowntown = {
+
+
+
+	SITE_RESIDENTIAL_APARTMENT,
+	SITE_GOVERNMENT_POLICESTATION,
+	SITE_GOVERNMENT_COURTHOUSE,
+	SITE_BUSINESS_BANK,
+	SITE_GOVERNMENT_FIRESTATION,
+	SITE_CORPORATE_HEADQUARTERS,
+	SITE_HOSPITAL_UNIVERSITY,
+	SITE_BUSINESS_DEPTSTORE,
+
+};
+
+
+vector<SiteTypes> hollyWoodUptown = {
+
+
+	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+	SITE_BUSINESS_VEGANCOOP,
+	SITE_BUSINESS_HALLOWEEN,
+	SITE_BUSINESS_CIGARBAR,
+	SITE_MEDIA_AMRADIO,
+	SITE_OUTDOOR_PUBLICPARK,
+	SITE_CORPORATE_HOUSE,
+
+
+};
+
+
+vector<SiteTypes> seaportArea = {
+
+
+	SITE_RESIDENTIAL_TENEMENT,
+	SITE_HOSPITAL_CLINIC,
+	SITE_LABORATORY_GENETIC,
+	SITE_LABORATORY_COSMETICS,
+	SITE_INDUSTRY_POLLUTER,
+	SITE_BUSINESS_PAWNSHOP,
+	SITE_INDUSTRY_SWEATSHOP,
+	SITE_BUSINESS_CARDEALERSHIP,
+
+
+};
+
+vector<SiteTypes> washingtonDCDowntown = {
+
+	SITE_GOVERNMENT_POLICESTATION,
+	SITE_GOVERNMENT_FIRESTATION,
+	SITE_GOVERNMENT_COURTHOUSE,
+	SITE_BUSINESS_BANK,
+	SITE_BUSINESS_CARDEALERSHIP,
+	SITE_HOSPITAL_CLINIC,
+	SITE_HOSPITAL_UNIVERSITY,
+	SITE_BUSINESS_DEPTSTORE,
+
+};
 void make_world(bool hasmaps)
 {
+	const string CONST_locationsPool047 = "Mall";
+
 	extern bool multipleCityMode;
 	if (!multipleCityMode)
 	{
@@ -734,15 +787,7 @@ void make_world(bool hasmaps)
 	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
 	district->mapped = hasmaps; // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
-	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_POLICESTATION)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_COURTHOUSE)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_BANK)->mapped = hasmaps;
-	district->addchild(SITE_GOVERNMENT_FIRESTATION)->mapped = hasmaps;
-	district->addchild(SITE_MEDIA_AMRADIO)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_CIGARBAR)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_LATTESTAND)->mapped = hasmaps;
-	district->addchild(SITE_BUSINESS_DEPTSTORE)->mapped = hasmaps;
+	addChildren(district, seattleDowntown, hasmaps);
 	{
 		Location* site = district->addchild(SITE_BUSINESS_BARANDGRILL);
 		site->renting = RENTING_CCS;
@@ -751,16 +796,7 @@ void make_world(bool hasmaps)
 	}
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
-	district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	district->addchild(SITE_HOSPITAL_CLINIC);
-	district->addchild(SITE_LABORATORY_GENETIC);
-	district->addchild(SITE_LABORATORY_COSMETICS);
-	district->addchild(SITE_BUSINESS_VEGANCOOP);
-	district->addchild(SITE_BUSINESS_JUICEBAR);
-	district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	district->addchild(SITE_BUSINESS_HALLOWEEN);
+	addChildren(district, seattleUptown);
 	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
 	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
@@ -777,27 +813,14 @@ void make_world(bool hasmaps)
 	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
 	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
-	district->addchild(SITE_GOVERNMENT_PRISON);
-	district->addchild(SITE_GOVERNMENT_INTELLIGENCEHQ);
-	district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	addChildren(district, seattleOutOfTown);
 	location.push_back(city = new Location(SITE_CITY_NEW_YORK));
 	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
 	strcpy(district->name, tag_Manhattan_Island);
 	strcpy(district->shortname, tag_Manhattan);
 
-	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	district->addchild(SITE_BUSINESS_BANK);
-	district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	district->addchild(SITE_MEDIA_AMRADIO);
-	district->addchild(SITE_MEDIA_CABLENEWS);
-	district->addchild(SITE_BUSINESS_CIGARBAR);
-	district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	district->addchild(SITE_BUSINESS_DEPTSTORE);
-	district->addchild(SITE_GOVERNMENT_PRISON);
+	addChildren(district, newYorkManhattan);
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
 	strcpy(district->name, tag_Brooklyn_ampersand_Queens);
@@ -807,15 +830,7 @@ void make_world(bool hasmaps)
 		site->renting = RENTING_PERMANENT;
 		site->upgradable = true;
 	}
-	district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	district->addchild(SITE_HOSPITAL_CLINIC);
-	district->addchild(SITE_BUSINESS_JUICEBAR);
-	district->addchild(SITE_BUSINESS_INTERNETCAFE);
-	district->addchild(SITE_INDUSTRY_POLLUTER);
-	district->addchild(SITE_LABORATORY_GENETIC);
-	district->addchild(SITE_GOVERNMENT_ARMYBASE);
+	addChildren(district, newYorkLongIsland);
 	{
 		Location* site = district->addchild(SITE_RESIDENTIAL_BOMBSHELTER);
 		site->renting = RENTING_CCS;
@@ -843,26 +858,14 @@ void make_world(bool hasmaps)
 	district->area = 0;
 	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
 
-	district->addchild(SITE_RESIDENTIAL_APARTMENT);
-	district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	district->addchild(SITE_BUSINESS_BANK);
-	district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	district->addchild(SITE_CORPORATE_HEADQUARTERS);
-	district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	addChildren(district, losAngelesDowntown);
 
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
 	strcpy(district->name, tag_Greater_Hollywood);
 	strcpy(district->shortname, tag_Hollywood);
-	district->addchild(SITE_RESIDENTIAL_APARTMENT_UPSCALE);
-	district->addchild(SITE_BUSINESS_VEGANCOOP);
-	district->addchild(SITE_BUSINESS_HALLOWEEN);
-	district->addchild(SITE_BUSINESS_CIGARBAR);
-	district->addchild(SITE_MEDIA_AMRADIO);
-	district->addchild(SITE_OUTDOOR_PUBLICPARK);
-	district->addchild(SITE_CORPORATE_HOUSE);
+
+	addChildren(district, hollyWoodUptown);
 
 	district = city->addchild(SITE_INDUSTRIAL);
 	district->area = 0;
@@ -873,14 +876,7 @@ void make_world(bool hasmaps)
 		site->renting = RENTING_PERMANENT;
 		site->upgradable = true;
 	}
-	district->addchild(SITE_RESIDENTIAL_TENEMENT);
-	district->addchild(SITE_HOSPITAL_CLINIC);
-	district->addchild(SITE_LABORATORY_GENETIC);
-	district->addchild(SITE_LABORATORY_COSMETICS);
-	district->addchild(SITE_INDUSTRY_POLLUTER);
-	district->addchild(SITE_BUSINESS_PAWNSHOP);
-	district->addchild(SITE_INDUSTRY_SWEATSHOP);
-	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
+	addChildren(district, seaportArea);
 	district->addchild(SITE_BUSINESS_CRACKHOUSE)->upgradable = true;
 	district = city->addchild(SITE_OUTOFTOWN);
 	district->area = 1;
@@ -897,14 +893,7 @@ void make_world(bool hasmaps)
 	district = city->addchild(SITE_DOWNTOWN);
 	district->area = 0;
 	strcpy(district->name, tag_Downtown);
-	district->addchild(SITE_GOVERNMENT_POLICESTATION);
-	district->addchild(SITE_GOVERNMENT_FIRESTATION);
-	district->addchild(SITE_GOVERNMENT_COURTHOUSE);
-	district->addchild(SITE_BUSINESS_BANK);
-	district->addchild(SITE_BUSINESS_CARDEALERSHIP);
-	district->addchild(SITE_HOSPITAL_CLINIC);
-	district->addchild(SITE_HOSPITAL_UNIVERSITY);
-	district->addchild(SITE_BUSINESS_DEPTSTORE);
+	addChildren(district, washingtonDCDowntown);
 	district->addchild(SITE_RESIDENTIAL_SHELTER)->renting = RENTING_PERMANENT;
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
@@ -961,6 +950,14 @@ extern string singleSpace;
 extern string commaSpace;
 string Location::getname(signed char shortname_, bool include_city)
 {
+	const string CONST_locationsPool051 = ", New York";
+	const string CONST_locationsPool050 = ", California";
+	const string CONST_locationsPool049 = ", Virginia";
+	const string CONST_locationsPool048 = " Outskirts";
+
+	const string CONST_locationsPoolB146 = ", NY";
+	const string CONST_locationsPoolB145 = ", CA";
+	const string CONST_locationsPoolB144 = ", VA";
 	extern bool multipleCityMode;
 	string str;
 	if (!multipleCityMode) include_city = false;
@@ -1062,6 +1059,12 @@ void Location::update_heat_protection()
 map<short, string> getActivityString;
 std::string getactivity(ActivityST &act)
 {
+	const string CONST_locationsPool056 = "Reporting Bugs to the Dev Team";
+	const string CONST_locationsPool055 = "Going to ";
+	const string CONST_locationsPool054 = "Making ";
+	const string CONST_locationsPool053 = "a bug";
+	const string CONST_locationsPool052 = "Tending to ";
+
 	extern vector<ArmorType *> armortype;
 	if (getActivityString.count(act.type)) {
 		return getActivityString[act.type];
@@ -1127,6 +1130,7 @@ bool Creature::is_active_liberal() const
 /* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)
 {
+	const string CONST_locationsPool057 = "     How many?          ";
 	printparty();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 15, CONST_locationsPool057);
@@ -1140,73 +1144,266 @@ long prompt_amount(long min, long max)
 extern string spaceDashSpace;
 extern string enter_done;
 extern string chooseALiberalTo;
+
+void printEquipMenu(const int loc, const int page, const string errmsg, const vector<Item *> loot) {
+	const string CONST_locationsPool065 = "Z - Stash things at ";
+	const string CONST_locationsPool064 = "Y - Get things from ";
+	const string CONST_locationsPool063 = "Cursors - Increase or decrease ammo allocation";
+	const string CONST_locationsPool062 = "S - Liberally Strip a Squad member";
+	const string CONST_locationsPool061 = "Press a number to drop that Squad member's Conservative weapon";
+	const string CONST_locationsPool060 = "Press a letter to equip a Liberal item";
+	const string CONST_locationsPool059 = " x";
+	const string CONST_locationsPool058 = "Equip the Squad";
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_locationsPool058);
+	printparty();
+	if (!errmsg.empty()) {
+		set_color_easy(CYAN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 20, errmsg);
+		set_color_easy(WHITE_ON_BLACK);
+	}
+	int x = 1, y = 10;
+	char str[200];
+	//char str2[200];
+	for (int l = page * 18; l < len(loot) && l < page * 18 + 18; l++)
+	{
+		string s = loot[l]->equip_title();
+		if (loot[l]->get_number() > 1)
+			s += CONST_locationsPool059 + tostring(loot[l]->get_number());
+		str[0] = l - page * 18 + 'A';
+		str[1] = '\x0';
+		strcat(str, spaceDashSpace);
+		strcat(str, s);
+		mvaddstrAlt(y, x, str);
+		x += 26;
+		if (x > 53) x = 1, y++;
+	}
+	//PAGE UP
+	if (page > 0)
+	{
+		mvaddstrAlt(17, 1, addprevpagestr());
+	}
+	//PAGE DOWN
+	if ((page + 1) * 18 < len(loot))
+	{
+		mvaddstrAlt(17, 53, addnextpagestr());
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(19, 1, CONST_locationsPool060);
+	mvaddstrAlt(20, 1, CONST_locationsPool061);
+	mvaddstrAlt(21, 1, CONST_locationsPool062);
+	mvaddstrAlt(22, 1, CONST_locationsPool063);
+	if (loc != -1)
+	{
+		if (len(location[loc]->loot)) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(23, 1, CONST_locationsPool064);
+		addstrAlt(location[loc]->getname(true));
+		if (len(loot)) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(23, 40, CONST_locationsPool065);
+		addstrAlt(location[loc]->getname(true));
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(24, 1, enter_done);
+}
+int makeChoice(const int increaseammo, const int decreaseammo) {
+
+	const string CONST_locationsPool069 = "receive it.";
+	const string CONST_locationsPool068 = "drop a clip.";
+	const string CONST_locationsPool067 = "receive a clip.";
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(8, 20);
+	if (increaseammo)
+		addstrAlt(chooseALiberalTo + CONST_locationsPool067);
+	else if (decreaseammo)
+		addstrAlt(chooseALiberalTo + CONST_locationsPool068);
+	else addstrAlt(chooseALiberalTo + CONST_locationsPool069);
+	return getkeyAlt();
+
+}
+
+// TODO Relocate these to a new file
+// to allow removal of creature.h
+const string NOT_ERROR_BUT_CONTINUE = "For simplicity this function returns an error message, prompting 'continue;', this is not an error, but it needs to use 'continue;' anyway";
+string chooseSquadmember(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
+	extern squadst *activesquad;
+
+	const string CONST_locationsPool076 = "Can't carry any more ammo.";
+	const string CONST_locationsPool075 = "That ammo doesn't fit.";
+	const string CONST_locationsPool074 = "Can't carry ammo without a gun.";
+	const string CONST_locationsPool073 = "No ammo available!";
+	const string CONST_locationsPool072 = "No ammo required!";
+	const string CONST_locationsPool071 = "No spare clips!";
+	const string CONST_locationsPool070 = "No ammo to drop!";
+
+	Creature *squaddie = activesquad->squad[e - '1'];
+	if (squaddie)
+	{
+		if (decreaseammo)
+		{
+			if (len(squaddie->clips))
+			{
+				loot.push_back(squaddie->clips.back()->split(1));
+				if (squaddie->clips.back()->empty())
+					squaddie->clips.pop_back();
+				consolidateloot(loot);
+				return NOT_ERROR_BUT_CONTINUE;
+			}
+			else if (!squaddie->get_weapon().uses_ammo())
+			{
+				return CONST_locationsPool070;
+			}
+			else
+			{
+				return CONST_locationsPool071;
+			}
+		}
+		if (increaseammo)
+		{
+			if (!squaddie->get_weapon().uses_ammo())
+			{
+				return CONST_locationsPool072;
+			}
+			slot = -1;
+			for (int sl = 0; sl < len(loot); sl++)
+			{
+				if (loot[sl]->whatIsThis() == THIS_IS_CLIP && squaddie->get_weapon().acceptable_ammo(*loot[sl]))
+				{
+					slot = sl;
+					break;
+				}
+				else if (loot[sl]->whatIsThis() == THIS_IS_WEAPON && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
+				{
+					Weapon* w = static_cast<Weapon*>(loot[sl]); //cast -XML
+					if (w->is_throwable())
+					{
+						slot = sl;
+						break;
+					}
+				}
+			}
+			if (slot == -1)
+			{
+				return CONST_locationsPool073;
+			}
+		}
+		int armok = 2;
+		if ((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
+			(squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
+		if ((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF) ||
+			(squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
+		if (squaddie->special[SPECIALWOUND_NECK] != 1) armok = 0;
+		if (squaddie->special[SPECIALWOUND_UPPERSPINE] != 1) armok = 0;
+		if (loot[slot]->whatIsThis() == THIS_IS_WEAPON && armok)
+		{
+			Weapon* w = static_cast<Weapon*>(loot[slot]); //cast -XML
+			squaddie->give_weapon(*w, &loot);
+			if (loot[slot]->empty()) delete_and_remove(loot, slot);
+			if (page * 18 >= len(loot) && page != 0) page--;
+		}
+		else if (loot[slot]->whatIsThis() == THIS_IS_ARMOR)
+		{
+			Armor* a = static_cast<Armor*>(loot[slot]); //cast -XML
+			squaddie->give_armor(*a, &loot);
+			if (loot[slot]->empty()) delete_and_remove(loot, slot);
+			if (page * 18 >= len(loot) && page != 0) page--;
+		}
+		else if (loot[slot]->whatIsThis() == THIS_IS_CLIP && armok)
+		{
+			int space = 9 - squaddie->count_clips();
+			if (!squaddie->get_weapon().uses_ammo())
+			{
+				return CONST_locationsPool074;
+			}
+			else if (!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
+			{
+				return CONST_locationsPool075;
+			}
+			else if (space < 1)
+			{
+				return CONST_locationsPool076;
+			}
+			else
+			{
+				int amount = 1;
+				if (loot[slot]->get_number() > 1 && !increaseammo)
+					amount = prompt_amount(0, min((int)loot[slot]->get_number(), space));
+				squaddie->take_clips(*loot[slot], amount);
+				if (loot[slot]->empty()) delete_and_remove(loot, slot);
+				if (page * 18 >= len(loot) && page != 0) page--;
+			}
+		}
+		consolidateloot(loot);
+	}
+	return blankString;
+}
+bool isThereNoActivesquad() {
+	extern squadst *activesquad;
+	return activesquad == NULL;
+}
+// This function is used only once, but it allows another function not to import *activesquad (though, like much of the code, its purpose is unclear)
+void clearActiveSquadForceInc() {
+	extern squadst *activesquad;
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p] != NULL)
+			activesquad->squad[p]->forceinc = 0;
+}
+void disarmSquadmember(vector<Item *> &loot, const int p) {
+	extern squadst *activesquad;
+
+	if (activesquad->squad[p] != NULL)
+	{
+		activesquad->squad[p]->drop_weapons_and_clips(&loot);
+		consolidateloot(loot);
+	}
+}
+
+bool notDoesActiveSquadHaveExactlyOneMember() {
+	bool choice = true;
+	extern squadst *activesquad;
+	if (activesquad->squad[0])
+	{
+		choice = false;
+		for (int i = 1; i < 6; i++)
+			if (activesquad->squad[i])
+			{
+				choice = true; break;
+			}
+	}
+	return choice;
+}
+void completelyStripSquadMember(vector<Item *> &loot, int d) {
+	extern squadst *activesquad;
+	if (activesquad->squad[d])
+	{
+		activesquad->squad[d]->strip(&loot);
+		consolidateloot(loot);
+	}
+}
 /* review squad equipment */
 void equip(vector<Item *> &loot, int loc)
 {
-	extern squadst *activesquad;
+
+	const string CONST_locationsPool077 = "strip down.";
+
+	const string CONST_locationsPool066 = "You can't equip that.";
+
 	extern short interface_pgup;
 	extern short interface_pgdn;
-	if (activesquad == NULL) return;
+	if (isThereNoActivesquad()) return;
 	consolidateloot(loot);
 	if (loc != -1) consolidateloot(location[loc]->loot);
 	int page = 0;
-	const char *errmsg = NULL;
+	string errmsg = blankString;
 	while (true)
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, CONST_locationsPool058);
-		printparty();
-		if (errmsg) {
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 20, errmsg);
-			set_color_easy(WHITE_ON_BLACK);
-			errmsg = NULL;
-		}
-		int x = 1, y = 10;
-		char str[200];
-		//char str2[200];
-		for (int l = page * 18; l < len(loot) && l < page * 18 + 18; l++)
-		{
-			string s = loot[l]->equip_title();
-			if (loot[l]->get_number() > 1)
-				s += CONST_locationsPool059 + tostring(loot[l]->get_number());
-			str[0] = l - page * 18 + 'A';
-			str[1] = '\x0';
-			strcat(str, spaceDashSpace);
-			strcat(str, s);
-			mvaddstrAlt(y, x, str);
-			x += 26;
-			if (x > 53) x = 1, y++;
-		}
-		//PAGE UP
-		if (page > 0)
-		{
-			mvaddstrAlt(17, 1, addprevpagestr());
-		}
-		//PAGE DOWN
-		if ((page + 1) * 18 < len(loot))
-		{
-			mvaddstrAlt(17, 53, addnextpagestr());
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19, 1, CONST_locationsPool060);
-		mvaddstrAlt(20, 1, CONST_locationsPool061);
-		mvaddstrAlt(21, 1, CONST_locationsPool062);
-		mvaddstrAlt(22, 1, CONST_locationsPool063);
-		if (loc != -1)
-		{
-			if (len(location[loc]->loot)) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 1, CONST_locationsPool064);
-			addstrAlt(location[loc]->getname(true));
-			if (len(loot)) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 40, CONST_locationsPool065);
-			addstrAlt(location[loc]->getname(true));
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(24, 1, enter_done);
+		printEquipMenu(loc, page, errmsg, loot);
+		errmsg = blankString;
+
 		int c = getkeyAlt();
 		bool increaseammo = (c == KEY_UP), decreaseammo = (c == KEY_DOWN);
 		if ((c >= 'a'&&c <= 'r') || increaseammo || decreaseammo)
@@ -1220,169 +1417,47 @@ void equip(vector<Item *> &loot, int loc)
 					&& !(loot[slot]->whatIsThis() == THIS_IS_ARMOR)
 					&& !(loot[slot]->whatIsThis() == THIS_IS_CLIP))
 				{
-					errmsg = CONST_locationsPool066.c_str();
+					errmsg = CONST_locationsPool066;
 					continue;
 				}
 			}
-			bool choice = true;
-			if (activesquad->squad[0])
-			{
-				choice = false;
-				for (int c = 1; c < 6; c++)
-					if (activesquad->squad[c]) //are these slots always filled in order?
-					{
-						choice = true;
-						break;
-					}
-			}
-			int c = '1';
+			bool choice = notDoesActiveSquadHaveExactlyOneMember();
+			int e = '1';
 			if (choice)
 			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveAlt(8, 20);
-				if (increaseammo)
-					addstrAlt(chooseALiberalTo + CONST_locationsPool067);
-				else if (decreaseammo)
-					addstrAlt(chooseALiberalTo + CONST_locationsPool068);
-				else addstrAlt(chooseALiberalTo + CONST_locationsPool069);
-				c = getkeyAlt();
+				e = makeChoice(increaseammo, decreaseammo);
 			}
-			if (c >= '1'&&c <= '6')
+			if (e >= '1'&&e <= '6')
 			{
-				// TODO Relocate this to a new file
-				// to allow removal of creature.h
-				Creature *squaddie = activesquad->squad[c - '1'];
-				if (squaddie)
-				{
-					if (decreaseammo)
-					{
-						if (len(squaddie->clips))
-						{
-							loot.push_back(squaddie->clips.back()->split(1));
-							if (squaddie->clips.back()->empty())
-								squaddie->clips.pop_back();
-						}
-						else if (!squaddie->get_weapon().uses_ammo())
-						{
-							errmsg = CONST_locationsPool070.c_str();
-							continue;
-						}
-						else
-						{
-							errmsg = CONST_locationsPool071.c_str();
-							continue;
-						}
-						consolidateloot(loot);
-						continue;
+				errmsg = chooseSquadmember(decreaseammo, increaseammo, slot, page, e, loot);
+				if (!errmsg.empty()) {
+					if (errmsg == NOT_ERROR_BUT_CONTINUE) {
+						errmsg = blankString;
 					}
-					if (increaseammo)
-					{
-						if (!squaddie->get_weapon().uses_ammo())
-						{
-							errmsg = CONST_locationsPool072.c_str();
-							continue;
-						}
-						slot = -1;
-						for (int sl = 0; sl < len(loot); sl++)
-						{
-							if (loot[sl]->whatIsThis() == THIS_IS_CLIP && squaddie->get_weapon().acceptable_ammo(*loot[sl]))
-							{
-								slot = sl;
-								break;
-							}
-							else if (loot[sl]->whatIsThis() == THIS_IS_WEAPON && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
-							{
-								Weapon* w = static_cast<Weapon*>(loot[sl]); //cast -XML
-								if (w->is_throwable())
-								{
-									slot = sl;
-									break;
-								}
-							}
-						}
-						if (slot == -1)
-						{
-							errmsg = CONST_locationsPool073.c_str();
-							continue;
-						}
-					}
-					int armok = 2;
-					if ((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
-						(squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
-					if ((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF) ||
-						(squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
-					if (squaddie->special[SPECIALWOUND_NECK] != 1) armok = 0;
-					if (squaddie->special[SPECIALWOUND_UPPERSPINE] != 1) armok = 0;
-					if (loot[slot]->whatIsThis() == THIS_IS_WEAPON && armok)
-					{
-						Weapon* w = static_cast<Weapon*>(loot[slot]); //cast -XML
-						squaddie->give_weapon(*w, &loot);
-						if (loot[slot]->empty()) delete_and_remove(loot, slot);
-						if (page * 18 >= len(loot) && page != 0) page--;
-					}
-					else if (loot[slot]->whatIsThis() == THIS_IS_ARMOR)
-					{
-						Armor* a = static_cast<Armor*>(loot[slot]); //cast -XML
-						squaddie->give_armor(*a, &loot);
-						if (loot[slot]->empty()) delete_and_remove(loot, slot);
-						if (page * 18 >= len(loot) && page != 0) page--;
-					}
-					else if (loot[slot]->whatIsThis() == THIS_IS_CLIP && armok)
-					{
-						int space = 9 - squaddie->count_clips();
-						if (!squaddie->get_weapon().uses_ammo())
-						{
-							errmsg = CONST_locationsPool074.c_str(); continue;
-						}
-						else if (!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
-						{
-							errmsg = CONST_locationsPool075.c_str(); continue;
-						}
-						else if (space < 1)
-						{
-							errmsg = CONST_locationsPool076.c_str(); continue;
-						}
-						else
-						{
-							int amount = 1;
-							if (loot[slot]->get_number() > 1 && !increaseammo)
-								amount = prompt_amount(0, min((int)loot[slot]->get_number(), space));
-							squaddie->take_clips(*loot[slot], amount);
-							if (loot[slot]->empty()) delete_and_remove(loot, slot);
-							if (page * 18 >= len(loot) && page != 0) page--;
-						}
-					}
-					consolidateloot(loot);
+					continue;
 				}
 			}
 		}
-		if (c == 's')
-		{
-			bool choice = true;
-			if (activesquad->squad[0])
+		else
+			if (c == 's')
 			{
-				choice = false;
-				for (int c = 1; c < 6; c++)
-					if (activesquad->squad[c])
-					{
-						choice = true; break;
-					}
-			}
-			int c = '1';
-			if (choice)
-			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 20, chooseALiberalTo + CONST_locationsPool077);
-				c = getkeyAlt();
-			}
-			if (c >= '1'&&c <= '6')
-				if (activesquad->squad[c - '1'])
+				bool choice = notDoesActiveSquadHaveExactlyOneMember();
+
+				int d = '1';
+				if (choice)
 				{
-					activesquad->squad[c - '1']->strip(&loot);
-					consolidateloot(loot);
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(8, 20, chooseALiberalTo + CONST_locationsPool077);
+					d = getkeyAlt();
 				}
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
+				if (d >= '1'&& d <= '6')
+				{
+					completelyStripSquadMember(loot, d - '1');
+				}
+
+			}
+			else
+				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { break; }
 		if (loc != -1)
 		{
 			if (c == 'y'&&len(location[loc]->loot)) moveloot(loot, location[loc]->loot);
@@ -1391,11 +1466,7 @@ void equip(vector<Item *> &loot, int loc)
 		if (c >= '1'&&c <= '6')
 		{
 			int p = c - '1';
-			if (activesquad->squad[p] != NULL)
-			{
-				activesquad->squad[p]->drop_weapons_and_clips(&loot);
-				consolidateloot(loot);
-			}
+			disarmSquadmember(loot, p);
 		}
 		//PAGE UP
 		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
@@ -1406,6 +1477,10 @@ void equip(vector<Item *> &loot, int loc)
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<Item *> &dest, vector<Item *> &source)
 {
+	const string CONST_locationsPool081 = "Press a letter to select an item.";
+	const string CONST_locationsPool080 = "x";
+	const string CONST_locationsPool079 = "/";
+	const string CONST_locationsPool078 = "Select Objects";
 	extern short interface_pgup;
 	extern short interface_pgdn;
 	int page = 0;
@@ -1489,6 +1564,14 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 /* equipment - assign new bases to the equipment */
 void equipmentbaseassign()
 {
+	const string CONST_locationsPool089 = ",. to view other base pages.";
+	const string CONST_locationsPool088 = "  Shift and a Number will move ALL items!";
+	const string CONST_locationsPool087 = "T to sort by type.";
+	const string CONST_locationsPool086 = "T to sort by location.";
+	const string CONST_locationsPool085 = "Press a Letter to assign a base.  Press a Number to select a base.";
+	const string CONST_locationsPool084 = "NEW LOCATION";
+	const string CONST_locationsPool083 = "----ITEM----------------CURRENT LOCATION---------------------------------------";
+	const string CONST_locationsPool082 = "Moving Equipment";
 	extern short interface_pgup;
 	extern short interface_pgdn;
 	int page_loot = 0, page_loc = 0, selectedbase = 0;
@@ -1644,6 +1727,33 @@ char squadhasitem(squadst &sq, const string& type)
 /* location info at top of screen */
 void printlocation(long loc)
 {
+	const string CONST_locationsPool116 = " Eating";
+	const string CONST_locationsPool115 = "s";
+	const string CONST_locationsPool114 = " Daily Ration";
+	const string CONST_locationsPool113 = "Not Enough Food";
+	const string CONST_locationsPool112 = " of Food Left";
+	const string CONST_locationsPool111 = " Day";
+	const string CONST_locationsPool110 = "GENERATOR";
+	const string CONST_locationsPool109 = "LIGHTS OUT";
+	const string CONST_locationsPool108 = "TANK TRAPS";
+	const string CONST_locationsPool107 = "AA GUN";
+	const string CONST_locationsPool106 = "BOOBY TRAPS";
+	const string CONST_locationsPool105 = "CAMERAS ON";
+	const string CONST_locationsPool104 = "CAMERAS OFF";
+	const string CONST_locationsPool103 = "BUSINESS FRONT";
+	const string CONST_locationsPool102 = "PRINTING PRESS";
+	const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
+	const string CONST_locationsPool100 = "This location has insufficient food stores.";
+	const string CONST_locationsPool099 = "This location has food for only a few days.";
+	const string CONST_locationsPool098 = "You are not under siege...  yet.";
+	const string CONST_locationsPool097 = "Firemen are raiding this location!";
+	const string CONST_locationsPool096 = "The CCS is raiding this location!";
+	const string CONST_locationsPool095 = "The Corporations are raiding this location!";
+	const string CONST_locationsPool094 = "The masses are storming this location!";
+	const string CONST_locationsPool093 = "The CIA is raiding this location!";
+	const string CONST_locationsPool092 = "The police are raiding this location!";
+	const string CONST_locationsPool091 = "The police have surrounded this location.";
+
 	if (location[loc]->siege.siege)
 	{
 		if (!location[loc]->siege.underattack)
@@ -1778,6 +1888,12 @@ void printlocation(long loc)
 /* location and squad header */
 void locheader()
 {
+	const string CONST_locationsPool121 = "Acting Individually";
+	const string CONST_locationsPool120 = "2) Press Z to Assemble a New Squad";
+	const string CONST_locationsPool119 = "1) R - Review Assets and Form Squads";
+	const string CONST_locationsPool118 = "To form a new squad:";
+	const string CONST_locationsPool117 = "No Squad Selected";
+
 	extern squadst *activesquad;
 	extern int selectedsiege;
 	extern int day;
@@ -1877,6 +1993,9 @@ string safeHouse;
 /* base - go forth to stop evil */
 void stopevil()
 {
+	const string CONST_locationsPool124 = "Enter - Back one step.";
+	const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
+	const string CONST_locationsPool122 = "Where will the Squad go?";
 	extern class Ledger ledger;
 	extern squadst *activesquad;
 	extern short interface_pgup;
@@ -2098,6 +2217,10 @@ vector<string> caseBUSINESSFRONT_RESTAURANT;
 vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
 const string mostlyendings = "mostlyendings\\";
 #include "../customMaps.h"
+const string CONST_locationsPool128 = "caseBUSINESSFRONT_MISCELLANEOUS.txt";
+const string CONST_locationsPool127 = "caseBUSINESSFRONT_RESTAURANT.txt";
+const string CONST_locationsPool126 = "caseBUSINESSFRONT_TEMPAGENCY.txt";
+const string CONST_locationsPool125 = "caseBUSINESSFRONT_INSURANCE.txt";
 vector<file_and_text_collection> locationspool_text_file_collection = {
 	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + CONST_locationsPool125),
 	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + CONST_locationsPool126),
@@ -2115,6 +2238,18 @@ enum BusinessFronts
 /* base - invest in this location */
 void investlocation()
 {
+	const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
+	const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
+	const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
+	const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
+	const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
+	const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
+	const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
+	const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
+	const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
+	const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
+	const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
+	const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
 	extern class Ledger ledger;
 	extern int selectedsiege;
 	extern short lawList[LAWNUM];
@@ -2300,6 +2435,11 @@ void investlocation()
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(Creature &cr)
 {
+	const string CONST_locationsPool144 = "If you do not enter anything, their real name will be used.";
+	const string CONST_locationsPool143 = " in its presence?";
+	const string CONST_locationsPool142 = "What name will you use for this ";
+	const string CONST_locationsPool141 = "The Education of ";
+
 	extern squadst *activesquad;
 	extern int stat_kidnappings;
 	Creature *newcr = new Creature;
@@ -2446,6 +2586,8 @@ void gotoEquipmentScreen(int loc) {
 	equip(location[loc]->loot, -1);
 }
 void createTempSquadWithJustThisLiberal(Creature *cr, int cursquadid) {
+	const string CONST_locationsPool145 = "Temporary Squad";
+
 	extern squadst *activesquad;
 	//create a temp squad containing just this liberal
 	int oldsquadid = cr->squadid;
