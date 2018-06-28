@@ -5788,11 +5788,18 @@ void printIfLongWait(int nonsighttime) {
 		pressAnyKey();
 	}
 }
-void dontForceWait(const char sieged, const char underattack, const char cannotwait,
+
+void stillDontForceWait(const char sieged, const char cannotwait,
 	const char haveflag,
-	const Location *loc,
-	const char safenumber,
 	const char partysize) {
+
+	extern int selectedsiege;
+	extern squadst *activesquad;
+	extern string slogan_str;
+	extern vector<Creature *> pool;
+	extern Log gamelog;
+	extern class Ledger ledger;
+	extern int day;
 
 	const string CONST_basemode062 = "P - PATRIOTISM: fly a flag here ($20)";
 	const string CONST_basemode061 = "P - PROTEST: burn the flag";
@@ -5806,6 +5813,83 @@ void dontForceWait(const char sieged, const char underattack, const char cannotw
 	const string CONST_basemode053 = "G - Give Up";
 	const string CONST_basemode052 = "F - Escape/Engage";
 	const string CONST_basemode051 = "C - Cancel this Squad's Departure";
+
+
+	if (partysize)
+	{
+		if (activesquad->activity.type != ACTIVITY_NONE) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(20, 1, CONST_basemode051);
+
+
+
+	if (sieged)
+	{
+		if (partysize) set_color_easy(WHITE_ON_BLACK);
+		else
+		{
+			set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+			{
+				if (pool[p]->location == selectedsiege)
+				{
+					set_color_easy(WHITE_ON_BLACK);
+					break;
+				}
+			}
+		}
+		mvaddstrAlt(19, 1, CONST_basemode052);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(19, 23, CONST_basemode053);
+	}
+	else
+	{
+		if (partysize) set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(19, 1, CONST_basemode054);
+	}
+
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(23, 40, CONST_basemode055);
+	set_color_easy(WHITE_ON_BLACK);
+
+	if (cannotwait) mvaddstrAlt(23, 1, CONST_basemode056);
+	else
+	{
+		if (sieged) mvaddstrAlt(23, 1, CONST_basemode057);
+		else mvaddstrAlt(23, 1, CONST_basemode058);
+		if (day == monthday()) addstrAlt(CONST_basemode059);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 40, CONST_basemode060);
+
+	if (haveflag)
+	{
+		if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		else set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 1, CONST_basemode061);
+	}
+	else
+	{
+		if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
+			set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(22, 1, CONST_basemode062);
+	}
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (haveflag) mvaddstrCenter(17, slogan_str);
+	else mvaddstrCenter(13, slogan_str);
+}
+void dontForceWait(const char sieged, const char underattack, 
+	const char haveflag,
+	const Location *loc,
+	const char safenumber,
+	const char partysize) {
+
 	const string CONST_basemode050 = "B - Sleepers";
 	const string CONST_basemode049 = "A - Activate Liberals";
 	const string CONST_basemode048 = "L - The Status of the Liberal Agenda";
@@ -5824,14 +5908,11 @@ void dontForceWait(const char sieged, const char underattack, const char cannotw
 	const string CONST_basemode035 = "Under Attack";
 	const string CONST_basemode034 = "I - Invest in this location";
 
+
 	extern int selectedsiege;
 	extern squadst *activesquad;
-	extern string slogan_str;
 	extern vector<squadst *> squad;
 	extern vector<Creature *> pool;
-	extern Log gamelog;
-	extern class Ledger ledger;
-	extern int day;
 
 			eraseAlt();
 			if (activesquad != NULL) selectedsiege = -1;
@@ -5944,87 +6025,78 @@ void dontForceWait(const char sieged, const char underattack, const char cannotw
 			}
 
 			mvaddstrAlt(21, 25, CONST_basemode050);
-			if (partysize)
-			{
-				if (activesquad->activity.type != ACTIVITY_NONE) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			}
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(20, 1, CONST_basemode051);
-
-
-
-			if (sieged)
-			{
-				if (partysize) set_color_easy(WHITE_ON_BLACK);
-				else
-				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-					{
-						if (pool[p]->location == selectedsiege)
-						{
-							set_color_easy(WHITE_ON_BLACK);
-							break;
-						}
-					}
-				}
-				mvaddstrAlt(19, 1, CONST_basemode052);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(19, 23, CONST_basemode053);
-			}
-			else
-			{
-				if (partysize) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(19, 1, CONST_basemode054);
-			}
-
-
-
-			//if(partysize>0&&(party_status==-1||partysize>1))set_color_easy(WHITE_ON_BLACK);
-			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
-			//mvaddstrAlt(19,40,check_status_of_squad_liberal);
-			//if(party_status!=-1)set_color_easy(WHITE_ON_BLACK);
-			//else set_color(COLOR_BLACK,COLOR_BLACK,1);
-			//mvaddstrAlt(18,40,show_squad_liberal_status);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(23, 40, CONST_basemode055);
-			set_color_easy(WHITE_ON_BLACK);
-
-			if (cannotwait) mvaddstrAlt(23, 1, CONST_basemode056);
-			else
-			{
-				if (sieged) mvaddstrAlt(23, 1, CONST_basemode057);
-				else mvaddstrAlt(23, 1, CONST_basemode058);
-				if (day == monthday()) addstrAlt(CONST_basemode059);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(22, 40, CONST_basemode060);
-
-			if (haveflag)
-			{
-				if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(22, 1, CONST_basemode061);
-			}
-			else
-			{
-				if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
-					set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(22, 1, CONST_basemode062);
-			}
-
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (haveflag) mvaddstrCenter(17, slogan_str);
-			else mvaddstrCenter(13, slogan_str);
+			
 		
 }
+void pressedThisKeyInBaseMode(const int c) {
+	extern char disbanding;
+	extern squadst *activesquad;
+	extern int selectedsiege;
+	extern short party_status;
+	extern vector<squadst *> squad;
+
+	switch (c)
+	{
+	case 'i': if (selectedsiege != -1)
+		if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) && !LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
+			investlocation(); break;
+	case 'l': disbanding = liberalagenda(0); break;
+
+	case 'a': activate(); break;
+	case 'b': activate_sleepers(); break;
+	case TAB: if (len(squad)) {
+		if (!activesquad) activesquad = squad[0];
+		else for (int sq = 0; sq < len(squad); sq++)
+			if (squad[sq] == activesquad)
+			{
+				if (sq == len(squad) - 1) activesquad = squad[0];
+				else activesquad = squad[sq + 1];
+				break;
+			}
+	} break;
+
+	case 'r': if (CreaturePool::getInstance().lenpool()) review(); break;
+
+	case 's': getslogan(); break;
+	case '0': party_status = -1; break;
+	case '1': case '2': case '3': case '4': case '5': case '6':
+		if (activesquad) if (activesquad->squad[c - '1']) {
+			if (party_status == c - '1') fullstatus(party_status);
+			else party_status = c - '1';
+		} break;
+	}
+}
+
+void findCantSeeReason(char &canseethings, char &forcewait) {
+	bool isPartOfJusticeSystem(int cursite);
+	extern char cantseereason;
+	extern vector<Creature *> pool;
+
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (pool[p]->alive&&
+			pool[p]->align == 1 &&
+			pool[p]->dating == 0 &&
+			pool[p]->hiding == 0 &&
+			!(pool[p]->flag & CREATUREFLAG_SLEEPER))
+		{
+			if (!isPartOfJusticeSystem(pool[p]->location))
+			{
+				canseethings = 1;
+				if (pool[p]->clinic == 0) { forcewait = 0; break; }
+			}
+		}
+		else
+		{
+			if (pool[p]->dating == 1 && cantseereason > CANTSEE_DATING) cantseereason = CANTSEE_DATING;
+			else if (pool[p]->hiding != 0 && cantseereason > CANTSEE_HIDING) cantseereason = CANTSEE_HIDING;
+		}
+	}
+}
+
 int countSafeHouses();
 Location* getLocation();
 void equipLoot(int l, int loc);
-bool isPartOfJusticeSystem(int cursite);
 bool isThisSafehouse(int loc);
 void burnFlagAtLocation(int l);
 int lenVehiclePool();
@@ -6050,6 +6122,7 @@ void mode_base()
 	extern vector<Creature *> pool;
 	int nonsighttime = 0, oldforcemonth = month;
 	// FIXME This while(true) loop does not have an exit point  It relies on end_game(); to be called at some point
+	// Unless the player presses 'x', at which point this function 'return's
 	while (true)
 	{
 		char forcewait = 1;
@@ -6062,26 +6135,8 @@ void mode_base()
 		}
 		else
 		{
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-			{
-				if (pool[p]->alive&&
-					pool[p]->align == 1 &&
-					pool[p]->dating == 0 &&
-					pool[p]->hiding == 0 &&
-					!(pool[p]->flag & CREATUREFLAG_SLEEPER))
-				{
-					if (!isPartOfJusticeSystem(pool[p]->location))
-					{
-						canseethings = 1;
-						if (pool[p]->clinic == 0) { forcewait = 0; break; }
-					}
-				}
-				else
-				{
-					if (pool[p]->dating == 1 && cantseereason > CANTSEE_DATING) cantseereason = CANTSEE_DATING;
-					else if (pool[p]->hiding != 0 && cantseereason > CANTSEE_HIDING) cantseereason = CANTSEE_HIDING;
-				}
-			}
+			findCantSeeReason(canseethings, forcewait);
+
 		}
 		if (!forcewait)
 		{
@@ -6132,37 +6187,29 @@ void mode_base()
 		delete[] num_present;
 		if (!forcewait) {
 			
-			dontForceWait(sieged, underattack, cannotwait,
+			dontForceWait(sieged, underattack,
 				haveflag,
 				loc,
 				safenumber,
 				partysize);
+			stillDontForceWait(sieged, cannotwait,
+				haveflag,
+				partysize);
 		}
-		switch (int c = forcewait ? 'w' : getkeyAlt())
-		{
+		int c = forcewait ? 'w' : getkeyAlt();
+		switch (c) {
 		case 'x': return;
-		case 'i': if (selectedsiege != -1)
-			if (LocationsPool::getInstance().canBeUpgraded(selectedsiege) && !LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
-				investlocation(); break;
-		case 'l': disbanding = liberalagenda(0); break;
+
+		case 'v': if (lenVehiclePool() && partysize) {
+			short ops = party_status;
+			party_status = -1;
+			setvehicles();
+			party_status = ops;
+		} break;
 		case 'g': if (sieged) { giveup(); cleangonesquads(); } break;
 		case 'f': if (!sieged&&partysize > 0) stopevil();
 				  else if (underattack) { escape_engage(); cleangonesquads(); }
 				  else if (sieged) { sally_forth(); cleangonesquads(); } break;
-		case 'o': if (partysize > 1) orderparty(); break;
-		case 'c': if (partysize) activesquad->activity.type = ACTIVITY_NONE; break;
-		case 'a': activate(); break;
-		case 'b': activate_sleepers(); break;
-		case TAB: if (len(squad)) {
-			if (!activesquad) activesquad = squad[0];
-			else for (int sq = 0; sq < len(squad); sq++)
-				if (squad[sq] == activesquad)
-				{
-					if (sq == len(squad) - 1) activesquad = squad[0];
-					else activesquad = squad[sq + 1];
-					break;
-				}
-		} break;
 		case 'z': if (safenumber) {
 			activesquad = NULL;
 			for (int l = (selectedsiege == -1 || selectedsiege + 1 >= LocationsPool::getInstance().lenpool()) ? 0 : selectedsiege + 1;
@@ -6176,31 +6223,8 @@ void mode_base()
 			equipLoot(activesquad->squad[0]->location, -1);
 			party_status = ops;
 		} break;
-		case 'r': if (CreaturePool::getInstance().lenpool()) review(); break;
-		case 'w': if (forcewait || !cannotwait) {
-			char clearformess = forcewait;
-			if (!canseethings) nonsighttime++;
-			advanceday(clearformess, canseethings);
-			if (day > monthday()) passmonth(clearformess, canseethings);
-			advancelocations();
-			if (forcewait&&day == 1)
-			{
-				eraseAlt();
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(7, 5, CONST_basemode063, gamelog);
-				mvaddstrAlt(9, 12, getmonth(month, true) + singleSpace, gamelog);
-				mvaddstrAlt(9, 17, tostring(day) + commaSpace, gamelog);
-				mvaddstrAlt(9, 21, year, gamelog);
-				gamelog.nextMessage(); //Write out buffer to prepare for the next message.
-				refreshAlt();
-			}
-		} break;
-		case 'v': if (lenVehiclePool() && partysize) {
-			short ops = party_status;
-			party_status = -1;
-			setvehicles();
-			party_status = ops;
-		} break;
+		case 'o': if (partysize > 1) orderparty(); break;
+		case 'c': if (partysize) activesquad->activity.type = ACTIVITY_NONE; break;
 		case 'p': if (haveflag) {
 			burnflag();
 			stat_burns++;
@@ -6242,13 +6266,28 @@ void mode_base()
 					  if (loc) loc->haveflag = 1;
 					  stat_buys++;
 				  } break;
-		case 's': getslogan(); break;
-		case '0': party_status = -1; break;
-		case '1': case '2': case '3': case '4': case '5': case '6':
-			if (activesquad) if (activesquad->squad[c - '1']) {
-				if (party_status == c - '1') fullstatus(party_status);
-				else party_status = c - '1';
-			} break;
+		case 'w': if (forcewait || !cannotwait) {
+			char clearformess = forcewait;
+			if (!canseethings) nonsighttime++;
+			advanceday(clearformess, canseethings);
+			if (day > monthday()) passmonth(clearformess, canseethings);
+			advancelocations();
+			if (forcewait&&day == 1)
+			{
+				eraseAlt();
+				set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(7, 5, CONST_basemode063, gamelog);
+				mvaddstrAlt(9, 12, getmonth(month, true) + singleSpace, gamelog);
+				mvaddstrAlt(9, 17, tostring(day) + commaSpace, gamelog);
+				mvaddstrAlt(9, 21, year, gamelog);
+				gamelog.nextMessage(); //Write out buffer to prepare for the next message.
+				refreshAlt();
+			}
+		} break;
+		default:
+			pressedThisKeyInBaseMode(c);
+			break;
+
 		}
 	}
 }
@@ -11146,24 +11185,407 @@ void pressedKeyR(const int freeable, const int libnum, const int enemy, const in
 	else if (hostages)
 		releasehostage();
 }
+string getNewLootFromBank() {
+	string newLootType;
+	if (!LCSrandom(4))newLootType = tag_LOOT_WATCH;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+	return newLootType;
+}
+string getNewLootFromApartment() {
+	string newLootType;
+
+	if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_TRINKET;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+string getNewLootFromApartmentUpscale() {
+	string newLootType;
+	if (!LCSrandom(10))newLootType = tag_LOOT_EXPENSIVEJEWELERY;
+	else if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromLab() {
+	string newLootType;
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_RESEARCHFILES;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_LABEQUIPMENT;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_COMPUTER;
+	else if (!LCSrandom(5))newLootType = tag_LOOT_PDA;
+	else if (!LCSrandom(5))newLootType = tag_LOOT_CHEMICAL;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromPolice() {
+	string newLootType;
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_POLICERECORDS;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+
+
+	return newLootType;
+}
+string getNewLootFromCourt() {
+	string newLootType;
+
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_JUDGEFILES;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromWhiteHouse() {
+	string newLootType;
+
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+string getNewLootFromArmy() {
+	string newLootType;
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_WATCH;
+	else newLootType = tag_LOOT_TRINKET;
+
+	return newLootType;
+}
+string getNewLootFromIntelligence() {
+	string newLootType;
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+string getNewLootFromCorporate() {
+	string newLootType;
+
+
+	if (!LCSrandom(50))newLootType = tag_LOOT_CORPFILES;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromCorporateHouse() {
+	string newLootType;
+
+	if (!LCSrandom(8))newLootType = tag_LOOT_TRINKET;
+	else if (!LCSrandom(7))newLootType = tag_LOOT_WATCH;
+	else if (!LCSrandom(6))newLootType = tag_LOOT_PDA;
+	else if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_CHEAPJEWELERY;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_FAMILYPHOTO;
+	else newLootType = tag_LOOT_COMPUTER;
+
+
+	return newLootType;
+}
+
+string getNewLootFromRadio() {
+	string newLootType;
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_AMRADIOFILES;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_MICROPHONE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_CELLPHONE;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromCable() {
+	string newLootType;
+
+
+	if (!LCSrandom(20))newLootType = tag_LOOT_CABLENEWSFILES;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_MICROPHONE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_CELLPHONE;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromCCS() {
+	string newLootType;
+
+
+	if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
+	else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
+	else if (!LCSrandom(3))newLootType = tag_LOOT_TRINKET;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
+	else newLootType = tag_LOOT_COMPUTER;
+
+	return newLootType;
+}
+
+string getNewLootFromSITE_RESIDENTIAL_TENEMENT() {
+	string newLootType;
+
+	if (!LCSrandom(3))newLootType = tag_LOOT_KIDART;
+	else if (!LCSrandom(2))newLootType = tag_LOOT_DIRTYSOCK;
+	else newLootType = tag_LOOT_FAMILYPHOTO;
+
+	return newLootType;
+}
 void getRandomLoot(int cursite);
 Weapon* spawnNewWeapon(string newWeaponType);
 Armor* spawnNewArmor(string newArmorType);
-void pressedKeyG(const int enemy, int& encounter_timer) {
+
+void getThatGroundLoot() {
 	extern Log gamelog;
-	extern squadst *activesquad;
-	extern newsstoryst *sitestory;
-	extern short lawList[LAWNUM];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<Item *> groundloot;
-	extern int locx;
-	extern int locy;
-	extern int locz;
 	extern short sitealarm;
 	extern short cursite;
 	extern short sitealarmtimer;
 	extern short sitetype;
+	extern squadst *activesquad;
+	extern short lawList[LAWNUM];
+
+	int time = 20 + LCSrandom(10);
+	if (time < 1)time = 1;
+	if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
+	Item *item;
+	string newLootType, newWeaponType, newArmorType;
+	switch (sitetype)
+	{
+	case SITE_RESIDENTIAL_TENEMENT:
+		if (!LCSrandom(25))
+		{
+			string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_CROWBAR, tag_WEAPON_SHANK,
+				tag_WEAPON_SYRINGE, tag_WEAPON_CHAIN, tag_WEAPON_GUITAR,tag_WEAPON_SPRAYCAN };
+			newWeaponType = pickrandom(rndWeps);
+		}
+		else if (!LCSrandom(20))
+		{
+			string rndArmors[] = { tag_ARMOR_CHEAPDRESS, tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT,
+				tag_ARMOR_WORKCLOTHES, tag_ARMOR_TOGA, tag_ARMOR_PRISONER };
+			newArmorType = pickrandom(rndArmors);
+		}
+		else newLootType = getNewLootFromSITE_RESIDENTIAL_TENEMENT();
+		break;
+	case SITE_BUSINESS_BANK:
+		newLootType = getNewLootFromBank();
+		break;
+	case SITE_RESIDENTIAL_APARTMENT:
+		if (!LCSrandom(25))
+		{
+			string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_REVOLVER_38,
+				tag_WEAPON_REVOLVER_44, tag_WEAPON_NIGHTSTICK, tag_WEAPON_GUITAR };
+			newWeaponType = pickrandom(rndWeps);
+		}
+		else if (!LCSrandom(20))
+		{
+			string rndArmors[] = { tag_ARMOR_CHEAPDRESS, tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT,
+				tag_ARMOR_WORKCLOTHES, tag_ARMOR_CLOWNSUIT, tag_ARMOR_ELEPHANTSUIT, tag_ARMOR_DONKEYSUIT };
+			newArmorType = pickrandom(rndArmors);
+		}
+		else newLootType = getNewLootFromApartment();
+		break;
+	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+		if (!LCSrandom(30))
+		{
+			string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_COMBATKNIFE, tag_WEAPON_DAISHO, tag_WEAPON_SHOTGUN_PUMP,
+				tag_WEAPON_REVOLVER_44, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_SEMIRIFLE_AR15, tag_WEAPON_AUTORIFLE_M16 };
+			//make sure the number of types matches the random range...
+			newWeaponType = rndWeps[LCSrandom(6 - lawList[LAW_GUNCONTROL])];
+		}
+		else if (!LCSrandom(20))
+		{
+			string rndArmors[] = { tag_ARMOR_EXPENSIVEDRESS, tag_ARMOR_BLACKDRESS, tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_BLACKSUIT,
+				tag_ARMOR_BONDAGEGEAR, tag_ARMOR_CIVILLIANARMOR, tag_ARMOR_BLACKROBE, tag_ARMOR_LABCOAT };
+			newArmorType = pickrandom(rndArmors);
+		}
+		else newLootType = getNewLootFromApartmentUpscale();
+		break;
+	case SITE_LABORATORY_COSMETICS:
+	case SITE_INDUSTRY_NUCLEAR:
+	case SITE_LABORATORY_GENETIC:
+		newLootType = getNewLootFromLab();
+		break;
+	case SITE_GOVERNMENT_POLICESTATION:
+		if (!LCSrandom(25))
+		{
+			string rndWeps[] = { tag_WEAPON_NIGHTSTICK, tag_WEAPON_NIGHTSTICK, tag_WEAPON_SHOTGUN_PUMP, tag_WEAPON_SEMIPISTOL_9MM,
+				tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16, tag_WEAPON_AUTORIFLE_M16 };
+			//make sure the number of types matches the random range...
+			newWeaponType = rndWeps[LCSrandom(4) + 2 - lawList[LAW_GUNCONTROL]];
+		}
+		else if (!LCSrandom(25))
+		{
+			string rndArmors[] = { tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEARMOR, tag_ARMOR_POLICEUNIFORM,
+				tag_ARMOR_SWATARMOR, tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEARMOR, tag_ARMOR_DEATHSQUADUNIFORM };
+			//make sure the number of types matches the random range...
+			newArmorType = rndArmors[LCSrandom(4) + 2 - lawList[LAW_GUNCONTROL]];
+		}
+		else newLootType = getNewLootFromPolice();
+		break;
+	case SITE_GOVERNMENT_COURTHOUSE:
+		newLootType = getNewLootFromCourt();
+		break;
+	case SITE_GOVERNMENT_PRISON:
+		if (!LCSrandom(5))
+			newArmorType = tag_ARMOR_PRISONER;
+		else newWeaponType = tag_WEAPON_SHANK;
+		break;
+	case SITE_GOVERNMENT_WHITE_HOUSE:
+		newLootType = getNewLootFromWhiteHouse();
+		break;
+	case SITE_GOVERNMENT_ARMYBASE:
+		if (!LCSrandom(3))
+		{
+			string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
+			newWeaponType = pickrandom(rndWeps);
+		}
+		else if (!LCSrandom(2))
+		{
+			string rndArmors[] = { tag_ARMOR_ARMYARMOR };
+			newArmorType = pickrandom(rndArmors);
+		}
+		else newLootType = getNewLootFromArmy(); 
+		break;
+	case SITE_GOVERNMENT_INTELLIGENCEHQ:
+		if (!LCSrandom(24))
+		{
+			string rndWeps[] = { tag_WEAPON_FLAMETHROWER, tag_WEAPON_SEMIPISTOL_45,
+				tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
+			newWeaponType = pickrandom(rndWeps);
+		}
+		else if (!LCSrandom(30))
+		{
+			string rndArmors[] = { tag_ARMOR_HEAVYARMOR };
+			newArmorType = pickrandom(rndArmors);
+		}
+		else newLootType = getNewLootFromIntelligence(); 
+		
+		break;
+	case SITE_GOVERNMENT_FIRESTATION:
+		if (!LCSrandom(25)) newArmorType = tag_ARMOR_BUNKERGEAR;
+		else if (LCSrandom(2))newLootType = tag_LOOT_TRINKET;
+		else newLootType = tag_LOOT_COMPUTER;
+		break;
+	case SITE_INDUSTRY_SWEATSHOP:
+		newLootType = tag_LOOT_FINECLOTH;
+		break;
+	case SITE_INDUSTRY_POLLUTER:
+		newLootType = tag_LOOT_CHEMICAL;
+		break;
+	case SITE_CORPORATE_HEADQUARTERS:
+		newLootType = getNewLootFromCorporate();
+		break;
+	case SITE_CORPORATE_HOUSE:
+		if (!LCSrandom(50))
+		{
+			string rndArmors[] = { tag_ARMOR_EXPENSIVEDRESS, tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_EXPENSIVESUIT,
+				tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_BONDAGEGEAR };
+			newArmorType = pickrandom(rndArmors);
+		}else
+		newLootType = getNewLootFromCorporateHouse();
+		break;
+	case SITE_MEDIA_AMRADIO:
+		newLootType = getNewLootFromRadio();
+		break;
+	case SITE_MEDIA_CABLENEWS:
+		newLootType = getNewLootFromCable();
+		break;
+	case SITE_BUSINESS_BARANDGRILL:
+	case SITE_OUTDOOR_BUNKER:
+	case SITE_RESIDENTIAL_BOMBSHELTER:
+		//storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
+		string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_REVOLVER_38, tag_WEAPON_REVOLVER_44,
+			tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
+		string rndArmors[] = { tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT, tag_ARMOR_WORKCLOTHES,
+			tag_ARMOR_SECURITYUNIFORM, tag_ARMOR_CIVILLIANARMOR, tag_ARMOR_ARMYARMOR, tag_ARMOR_HEAVYARMOR };
+		switch (LCSrandom(3))
+		{
+		case 0:
+			newWeaponType = pickrandom(rndWeps);
+			break;
+		case 1:
+			newArmorType = pickrandom(rndArmors);
+			break;
+		default:
+			newLootType = getNewLootFromCCS();
+			break;
+		}
+		break;
+	}
+	item = NULL;
+	if (len(newLootType))
+	{
+		item = getNewLoot(newLootType);
+		activesquad->loot.push_back(item);
+	}
+	if (len(newArmorType))
+	{
+		item = spawnNewArmor(newArmorType);
+		activesquad->loot.push_back(item);
+	}
+	if (len(newWeaponType))
+	{
+
+		item = spawnNewWeapon(newWeaponType);
+		activesquad->loot.push_back(item);
+	}
+	if (item)
+	{
+		string s = item->equip_title();
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(16, 1, CONST_sitemode114, gamelog);
+		mvaddstrAlt(17, 1, s, gamelog);
+		gamelog.newline();
+		pressAnyKey(); //wait for key press before clearing.
+	}
+}
+void pressedKeyG(const int enemy, int& encounter_timer) {
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern short lawList[LAWNUM];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern vector<Item *> groundloot;
+	extern short sitealarm;
+	extern int locx;
+	extern int locy;
+	extern int locz;
 	extern int sitecrime;
+	extern short cursite;
 	if ((isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
 	{
 		bool tookground = 0;
@@ -11188,256 +11610,7 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 			}
 			else
 			{
-				int time = 20 + LCSrandom(10);
-				if (time < 1)time = 1;
-				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-				Item *item;
-				string newLootType, newWeaponType, newArmorType;
-				switch (sitetype)
-				{
-				case SITE_RESIDENTIAL_TENEMENT:
-					if (!LCSrandom(25))
-					{
-						string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_CROWBAR, tag_WEAPON_SHANK,
-							tag_WEAPON_SYRINGE, tag_WEAPON_CHAIN, tag_WEAPON_GUITAR,tag_WEAPON_SPRAYCAN };
-						newWeaponType = pickrandom(rndWeps);
-					}
-					else if (!LCSrandom(20))
-					{
-						string rndArmors[] = { tag_ARMOR_CHEAPDRESS, tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT,
-							tag_ARMOR_WORKCLOTHES, tag_ARMOR_TOGA, tag_ARMOR_PRISONER };
-						newArmorType = pickrandom(rndArmors);
-					}
-					else if (!LCSrandom(3))newLootType = tag_LOOT_KIDART;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_DIRTYSOCK;
-					else newLootType = tag_LOOT_FAMILYPHOTO;
-					break;
-				case SITE_BUSINESS_BANK:
-					if (!LCSrandom(4))newLootType = tag_LOOT_WATCH;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_RESIDENTIAL_APARTMENT:
-					if (!LCSrandom(25))
-					{
-						string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_REVOLVER_38,
-							tag_WEAPON_REVOLVER_44, tag_WEAPON_NIGHTSTICK, tag_WEAPON_GUITAR };
-						newWeaponType = pickrandom(rndWeps);
-					}
-					else if (!LCSrandom(20))
-					{
-						string rndArmors[] = { tag_ARMOR_CHEAPDRESS, tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT,
-							tag_ARMOR_WORKCLOTHES, tag_ARMOR_CLOWNSUIT, tag_ARMOR_ELEPHANTSUIT, tag_ARMOR_DONKEYSUIT };
-						newArmorType = pickrandom(rndArmors);
-					}
-					else if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_TRINKET;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-					if (!LCSrandom(30))
-					{
-						string rndWeps[] = { tag_WEAPON_BASEBALLBAT, tag_WEAPON_COMBATKNIFE, tag_WEAPON_DAISHO, tag_WEAPON_SHOTGUN_PUMP,
-							tag_WEAPON_REVOLVER_44, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_SEMIRIFLE_AR15, tag_WEAPON_AUTORIFLE_M16 };
-						//make sure the number of types matches the random range...
-						newWeaponType = rndWeps[LCSrandom(6 - lawList[LAW_GUNCONTROL])];
-					}
-					else if (!LCSrandom(20))
-					{
-						string rndArmors[] = { tag_ARMOR_EXPENSIVEDRESS, tag_ARMOR_BLACKDRESS, tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_BLACKSUIT,
-							tag_ARMOR_BONDAGEGEAR, tag_ARMOR_CIVILLIANARMOR, tag_ARMOR_BLACKROBE, tag_ARMOR_LABCOAT };
-						newArmorType = pickrandom(rndArmors);
-					}
-					else if (!LCSrandom(10))newLootType = tag_LOOT_EXPENSIVEJEWELERY;
-					else if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_LABORATORY_COSMETICS:
-				case SITE_INDUSTRY_NUCLEAR:
-				case SITE_LABORATORY_GENETIC:
-					if (!LCSrandom(20))newLootType = tag_LOOT_RESEARCHFILES;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_LABEQUIPMENT;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_COMPUTER;
-					else if (!LCSrandom(5))newLootType = tag_LOOT_PDA;
-					else if (!LCSrandom(5))newLootType = tag_LOOT_CHEMICAL;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_GOVERNMENT_POLICESTATION:
-					if (!LCSrandom(25))
-					{
-						string rndWeps[] = { tag_WEAPON_NIGHTSTICK, tag_WEAPON_NIGHTSTICK, tag_WEAPON_SHOTGUN_PUMP, tag_WEAPON_SEMIPISTOL_9MM,
-							tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16, tag_WEAPON_AUTORIFLE_M16 };
-						//make sure the number of types matches the random range...
-						newWeaponType = rndWeps[LCSrandom(4) + 2 - lawList[LAW_GUNCONTROL]];
-					}
-					else if (!LCSrandom(25))
-					{
-						string rndArmors[] = { tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEARMOR, tag_ARMOR_POLICEUNIFORM,
-							tag_ARMOR_SWATARMOR, tag_ARMOR_POLICEUNIFORM, tag_ARMOR_POLICEARMOR, tag_ARMOR_DEATHSQUADUNIFORM };
-						//make sure the number of types matches the random range...
-						newArmorType = rndArmors[LCSrandom(4) + 2 - lawList[LAW_GUNCONTROL]];
-					}
-					else if (!LCSrandom(20))newLootType = tag_LOOT_POLICERECORDS;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_GOVERNMENT_COURTHOUSE:
-					if (!LCSrandom(20))newLootType = tag_LOOT_JUDGEFILES;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_GOVERNMENT_PRISON:
-					if (!LCSrandom(5))
-						newArmorType = tag_ARMOR_PRISONER;
-					else newWeaponType = tag_WEAPON_SHANK;
-					break;
-				case SITE_GOVERNMENT_WHITE_HOUSE:
-					if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_GOVERNMENT_ARMYBASE:
-					if (!LCSrandom(3))
-					{
-						string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
-						newWeaponType = pickrandom(rndWeps);
-					}
-					else if (!LCSrandom(2))
-					{
-						string rndArmors[] = { tag_ARMOR_ARMYARMOR };
-						newArmorType = pickrandom(rndArmors);
-					}
-					else if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_WATCH;
-					else newLootType = tag_LOOT_TRINKET;
-					break;
-				case SITE_GOVERNMENT_INTELLIGENCEHQ:
-					if (!LCSrandom(24))
-					{
-						string rndWeps[] = { tag_WEAPON_FLAMETHROWER, tag_WEAPON_SEMIPISTOL_45,
-							tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
-						newWeaponType = pickrandom(rndWeps);
-					}
-					else if (!LCSrandom(30))
-					{
-						string rndArmors[] = { tag_ARMOR_HEAVYARMOR };
-						newArmorType = pickrandom(rndArmors);
-					}
-					else if (!LCSrandom(20))newLootType = tag_LOOT_SECRETDOCUMENTS;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_GOVERNMENT_FIRESTATION:
-					if (!LCSrandom(25)) newArmorType = tag_ARMOR_BUNKERGEAR;
-					else if (LCSrandom(2))newLootType = tag_LOOT_TRINKET;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_INDUSTRY_SWEATSHOP:
-					newLootType = tag_LOOT_FINECLOTH;
-					break;
-				case SITE_INDUSTRY_POLLUTER:
-					newLootType = tag_LOOT_CHEMICAL;
-					break;
-				case SITE_CORPORATE_HEADQUARTERS:
-					if (!LCSrandom(50))newLootType = tag_LOOT_CORPFILES;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_PDA;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_CORPORATE_HOUSE:
-					if (!LCSrandom(50))
-					{
-						string rndArmors[] = { tag_ARMOR_EXPENSIVEDRESS, tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_EXPENSIVESUIT,
-							tag_ARMOR_EXPENSIVESUIT, tag_ARMOR_BONDAGEGEAR };
-						newArmorType = pickrandom(rndArmors);
-					}
-					if (!LCSrandom(8))newLootType = tag_LOOT_TRINKET;
-					else if (!LCSrandom(7))newLootType = tag_LOOT_WATCH;
-					else if (!LCSrandom(6))newLootType = tag_LOOT_PDA;
-					else if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
-					else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_CHEAPJEWELERY;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_FAMILYPHOTO;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_MEDIA_AMRADIO:
-					if (!LCSrandom(20))newLootType = tag_LOOT_AMRADIOFILES;
-					else if (!LCSrandom(4))newLootType = tag_LOOT_MICROPHONE;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_CELLPHONE;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_MEDIA_CABLENEWS:
-					if (!LCSrandom(20))newLootType = tag_LOOT_CABLENEWSFILES;
-					else if (!LCSrandom(4))newLootType = tag_LOOT_MICROPHONE;
-					else if (!LCSrandom(3))newLootType = tag_LOOT_PDA;
-					else if (!LCSrandom(2))newLootType = tag_LOOT_CELLPHONE;
-					else newLootType = tag_LOOT_COMPUTER;
-					break;
-				case SITE_BUSINESS_BARANDGRILL:
-				case SITE_OUTDOOR_BUNKER:
-				case SITE_RESIDENTIAL_BOMBSHELTER:
-					//storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
-					string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_REVOLVER_38, tag_WEAPON_REVOLVER_44,
-						tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
-					string rndArmors[] = { tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT, tag_ARMOR_WORKCLOTHES,
-						tag_ARMOR_SECURITYUNIFORM, tag_ARMOR_CIVILLIANARMOR, tag_ARMOR_ARMYARMOR, tag_ARMOR_HEAVYARMOR };
-					switch (LCSrandom(3))
-					{
-					case 0:
-						newWeaponType = pickrandom(rndWeps);
-						break;
-					case 1:
-						newArmorType = pickrandom(rndArmors);
-						break;
-					default:
-						if (!LCSrandom(5))newLootType = tag_LOOT_CELLPHONE;
-						else if (!LCSrandom(4))newLootType = tag_LOOT_SILVERWARE;
-						else if (!LCSrandom(3))newLootType = tag_LOOT_TRINKET;
-						else if (!LCSrandom(2))newLootType = tag_LOOT_CHEAPJEWELERY;
-						else newLootType = tag_LOOT_COMPUTER;
-						break;
-					}
-					break;
-				}
-				item = NULL;
-				if (len(newLootType))
-				{
-					item = getNewLoot(newLootType);
-					activesquad->loot.push_back(item);
-				}
-				if (len(newArmorType))
-				{
-					item = spawnNewArmor(newArmorType);
-					activesquad->loot.push_back(item);
-				}
-				if (len(newWeaponType))
-				{
-
-					item = spawnNewWeapon(newWeaponType);
-					activesquad->loot.push_back(item);
-				}
-				if (item)
-				{
-					string s = item->equip_title();
-					clearmessagearea();
-					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(16, 1, CONST_sitemode114, gamelog);
-					mvaddstrAlt(17, 1, s, gamelog);
-					gamelog.newline();
-					pressAnyKey(); //wait for key press before clearing.
-				}
+				getThatGroundLoot();
 			}
 			tookground = 1;
 		}
@@ -23288,6 +23461,74 @@ void youattack()
 		}
 	}
 }
+
+bool decidesToFlee(const bool armed, char &printed, int &e) {
+	extern short mode;
+	extern Log gamelog;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	// encountered creatures cannot flee if during car chase
+	if (mode != GAMEMODE_CHASECAR)
+	{
+		// Encountered creature will flee if:
+		// (a) Non-Conservative, and not recently converted via music or some other mechanism
+		// (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
+		// (c) Conservative, and lost more than 55% blood
+		// (d) There's a fire, they are not firefighters, and they fail a random check
+		// Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
+		char fire = 0;
+		if (mode == GAMEMODE_SITE)
+		{
+			if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
+				levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)
+				fire = 1;
+			else if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
+				fire = 2;
+		}
+		if (((!encounter[e].enemy() ||
+			(encounter[e].juice == 0 && !encounter[e].is_armed() && armed&&encounter[e].blood<signed(70 + LCSrandom(61))))
+			&& !(encounter[e].flag & CREATUREFLAG_CONVERTED)) || (encounter[e].blood < 45 && encounter[e].juice < 200)
+			|| ((fire*LCSrandom(5) >= 3) && !(encounter[e].type == CREATURE_FIREFIGHTER)))
+		{
+			if (encounter[e].animalgloss == ANIMALGLOSS_NONE)
+			{
+				if (!incapacitated(encounter[e], 0, printed))
+				{
+					if (printed)
+					{
+						printparty();
+						if (mode == GAMEMODE_CHASECAR ||
+							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+						else printencounter();
+						pressAnyKey();
+					}
+					clearmessagearea();
+					mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+					if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+						(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
+						(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+						(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF) ||
+						(encounter[e].blood < 45))
+						addstrAlt(pickrandom(escape_crawling), gamelog);
+					else addstrAlt(pickrandom(escape_running), gamelog);
+					gamelog.newline();
+					delenc(e, 0);
+					e--;
+					printparty();
+					if (mode == GAMEMODE_CHASECAR ||
+						mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+					else printencounter();
+					pressAnyKey();
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
 void enemyattack()
 {
 	extern short mode;
@@ -23296,13 +23537,9 @@ void enemyattack()
 	extern squadst *activesquad;
 	extern short sitealarm;
 	extern int sitecrime;
-	extern int locx;
-	extern int locy;
-	extern int locz;
 	// Enemies don't attack
 	extern bool NOENEMYATTACK;
 	extern Creature encounter[ENCMAX];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	foughtthisround = 1;
 	goodguyattack = false;
 	bool armed = false;
@@ -23322,62 +23559,11 @@ void enemyattack()
 		if (sitealarm == 1 && encounter[e].type == CREATURE_BOUNCER && encounter[e].align != ALIGN_LIBERAL)
 			conservatise(encounter[e]);
 		if (encounter[e].enemy()) encounter[e].cantbluff = 2;
-		if (mode != GAMEMODE_CHASECAR)
-		{
-			// Encountered creature will flee if:
-			// (a) Non-Conservative, and not recently converted via music or some other mechanism
-			// (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
-			// (c) Conservative, and lost more than 55% blood
-			// (d) There's a fire, they are not firefighters, and they fail a random check
-			// Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
-			char fire = 0;
-			if (mode == GAMEMODE_SITE)
-			{
-				if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
-					levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)
-					fire = 1;
-				else if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
-					fire = 2;
-			}
-			if (((!encounter[e].enemy() ||
-				(encounter[e].juice == 0 && !encounter[e].is_armed() && armed&&encounter[e].blood<signed(70 + LCSrandom(61))))
-				&& !(encounter[e].flag & CREATUREFLAG_CONVERTED)) || (encounter[e].blood < 45 && encounter[e].juice < 200)
-				|| ((fire*LCSrandom(5) >= 3) && !(encounter[e].type == CREATURE_FIREFIGHTER)))
-			{
-				if (encounter[e].animalgloss == ANIMALGLOSS_NONE)
-				{
-					if (!incapacitated(encounter[e], 0, printed))
-					{
-						if (printed)
-						{
-							printparty();
-							if (mode == GAMEMODE_CHASECAR ||
-								mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-							else printencounter();
-							pressAnyKey();
-						}
-						clearmessagearea();
-						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-						if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-							(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
-							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF) ||
-							(encounter[e].blood < 45))
-							addstrAlt(pickrandom(escape_crawling), gamelog);
-						else addstrAlt(pickrandom(escape_running), gamelog);
-						gamelog.newline();
-						delenc(e, 0);
-						e--;
-						printparty();
-						if (mode == GAMEMODE_CHASECAR ||
-							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-						else printencounter();
-						pressAnyKey();
-					}
-					continue;
-				}
-			}
+
+		if (decidesToFlee(armed, printed, e)); {
+			continue;
 		}
+
 		vector<int> goodtarg, badtarg;
 		if (encounter[e].enemy())
 		{
@@ -30419,21 +30605,22 @@ vector<string> sexseekAcronym;
 /* what type of sex? */
 vector<string> sextypeAcronym;
 map<short, string> musicList;
-void sexdesc(char *str)
+
+string sexdesc()
 {
-	strcpy(str, pickrandom(sexdescAcronym).c_str());
+	return pickrandom(sexdescAcronym);
 }
-void sexwho(char *str)
+string sexwho()
 {
-	strcpy(str, pickrandom(sexwhoAcronym).c_str());
+	return pickrandom(sexwhoAcronym);
 }
-void sexseek(char *str)
+string sexseek()
 {
-	strcpy(str, pickrandom(sexseekAcronym).c_str());
+	return pickrandom(sexseekAcronym);
 }
-void sextype(char *str)
+string sextype()
 {
-	strcpy(str, pickrandom(sextypeAcronym).c_str());
+	return pickrandom(sextypeAcronym);
 }
 vector<string> listOfStates;
 vector<file_and_text_collection> misc_text_file_collection = {
@@ -34365,89 +34552,9 @@ const string CONST_news878 = "demonstrating the extreme dangers of Nuclear Waste
 const string CONST_news877 = " The Liberal Crime Squad tampered with the state's water supply yesterday, ";
 const string CONST_news876 = "yesterday by tampering with equipment on the site.";
 const string CONST_news875 = "the Liberal Crime Squad contaminated the state's water supply";
-const string CONST_news874 = "The name of the officer has not been released pending notification of the officer's family.";
-const string CONST_news873 = "The names of the officers have not been released pending notification of their families.";
-const string CONST_news872 = "A passerby had allegedly spotted the suspect committing a car theft. ";
-const string CONST_news871 = "appeared to be a corpse through an empty lot. ";
-const string CONST_news870 = "A passerby allegedly called the authorities after seeing the suspect dragging what ";
-const string CONST_news869 = "The suspect was allegedly selling \"pot brownies\". ";
-const string CONST_news868 = "The incident apparently occurred as a response to a public nudity complaint. ";
-const string CONST_news867 = " attempting to perform an arrest. ";
-const string CONST_news866 = "a police officer that was";
-const string CONST_news865 = " police officers that were";
-const string CONST_news864 = "killed ";
-const string CONST_news863 = " A suspect, whose identity is unclear, ";
-const string CONST_news862 = "according to a spokesperson from the police department.";
-const string CONST_news861 = "A routine arrest went horribly wrong yesterday, ";
-const string CONST_news859 = " while they were attempting to perform an arrest. ";
-const string CONST_news858 = "the police officer ";
-const string CONST_news857 = " officers ";
-const string CONST_news856 = "radical political group known as the Liberal Crime Squad, is believed to have killed ";
-const string CONST_news855 = " A suspect, identified only as a member of the ";
-const string CONST_news853 = " killed in the line of duty yesterday, ";
-const string CONST_news852 = "A police officer was";
-const string CONST_news851 = " police officers were";
+
 const string CONST_news850 = "Several";
 const string CONST_news849 = "Two";
-const string CONST_news848 = "OF CULTURE";
-const string CONST_news847 = "THE DEATH";
-const string CONST_news846 = "NEW JOBS";
-const string CONST_news845 = "LOOKING UP";
-const string CONST_news844 = "Fall fashions are previewed in stores across the country.";
-const string CONST_news843 = "Fall fashions hit the stores across the country.";
-const string CONST_news842 = "THEY ARE HERE";
-const string CONST_news841 = "JUSTICE AMOK";
-const string CONST_news840 = "GM FOOD FAIRE";
-const string CONST_news839 = "Free speech advocates fight hard to let a white supremacist rally take place.";
-const string CONST_news838 = "HATE RALLY";
-const string CONST_news837 = "DODGED BULLET";
-const string CONST_news836 = "HOSTAGE SLAIN";
-const string CONST_news835 = "BASTARDS";
-const string CONST_news834 = "[JERKS]";
-const string CONST_news833 = "APE EXPLORERS";
-const string CONST_news832 = "OPEC cuts oil production sharply in response to a US foreign policy decision.";
-const string CONST_news831 = "OIL CRUNCH";
-const string CONST_news830 = ": A new book lauding Reagan and the greatest generation.";
-const string CONST_news829 = "REAGAN THE MAN";
-const string CONST_news828 = "SAVES LIVES";
-const string CONST_news827 = "ARMED CITIZEN";
-const string CONST_news826 = "END IN TEARS";
-const string CONST_news825 = "Our boys defend freedom once again, defeating an evil dictator.";
-const string CONST_news824 = "BIG VICTORY";
-const string CONST_news823 = "LET'S FRY 'EM";
-const string CONST_news822 = "Jerry Falwell explains the truth about Tinky Winky. Again.";
-const string CONST_news821 = "KINKY WINKY";
-const string CONST_news820 = "AM IMPLOSION";
-const string CONST_news819 = "regularly visits prostitutes.";
-const string CONST_news818 = "regularly [donates to sperm banks].";
-const string CONST_news817 = "regularly visits [working women].";
-const string CONST_news816 = "This major CEO ";
-const string CONST_news815 = "AMERICAN CEO";
-const string CONST_news814 = "An enormous company files for bankruptcy, shattering the previous record.";
-const string CONST_news813 = "BELLY UP";
-const string CONST_news812 = "The Ohio River caught on fire again.";
-const string CONST_news811 = "RING OF FIRE";
-const string CONST_news810 = "A T-shirt in a store is found scrawled with a message from a sweatshop worker.";
-const string CONST_news809 = "CHILD'S PLEA";
-const string CONST_news808 = "IN CONTEMPT";
-const string CONST_news807 = "Over a hundred people become sick from genetically modified food.";
-const string CONST_news806 = "KILLER FOOD";
-const string CONST_news805 = "BOOK BANNED";
-const string CONST_news804 = "THE FBI FILES";
-const string CONST_news803 = "ON THE INSIDE";
-const string CONST_news802 = "A mutant animal has escaped from a lab and killed thirty people.";
-const string CONST_news801 = "HELL ON EARTH";
-const string CONST_news800 = "A nuclear power plant suffers a catastrophic meltdown.";
-const string CONST_news799 = "MELTDOWN";
-const string CONST_news798 = ": A new book further documenting the other side of Reagan.";
-const string CONST_news797 = "REAGAN FLAWED";
-const string CONST_news796 = "MASS SHOOTING";
-const string CONST_news795 = "NIGHTMARE";
-const string CONST_news794 = "Is the latest military invasion yet another quagmire?";
-const string CONST_news793 = "CASUALTIES MOUNT";
-const string CONST_news792 = "JUSTICE DEAD";
-const string CONST_news791 = "CRIME OF HATE";
-const string CONST_news790 = "CLINIC MURDER";
 const string CONST_news789 = "newspic.cpc";
 const string CONST_news788 = "newstops.cpc";
 const string CONST_news787 = "largecap.cpc";
@@ -35418,7 +35525,7 @@ void assign_page_numbers_to_newspaper_stories()
 	} while (acted);
 }
 /* news - show major news story */
-void preparepage(newsstoryst& ns, bool liberalguardian)
+void preparepage(const newsstoryst ns, const bool liberalguardian)
 {
 	extern int day;
 	extern int month;
@@ -35478,8 +35585,7 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
 	}
 }
 /* news - draws the specified block of text to the screen */
-void displaynewsstory(const char *story, const short *storyx_s, const short *storyx_e, int y)
-{
+void displaynewsstory(const string story, const short *storyx_s, const short *storyx_e, int y) {
 	vector<char *> text;
 	vector<char> centered;
 	int curpos = 0;
@@ -35588,7 +35694,8 @@ void displaynewsstory(const char *story, const short *storyx_s, const short *sto
 	}
 	text.clear();
 }
-void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s, short* storyx_e)
+
+void displaysinglead(const bool liberalguardian, char addplace[2][3], short* storyx_s, short* storyx_e)
 {
 	extern int year;
 	int x, y;
@@ -35628,7 +35735,7 @@ void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s,
 		short storyx_s[25], storyx_e[25];
 		for (int it2 = 0; it2 < 25; it2++) storyx_s[it2] = 40, storyx_e[it2] = 40;
 		for (int it2 = sy + 1; it2 <= ey - 1; it2++) storyx_s[it2] = sx + 1, storyx_e[it2] = ex - 1;
-		char ad[500];
+		string ad;
 		if (!liberalguardian)
 		{ // regular newspaper (not Liberal Guardian)
 			switch (choice) // should be 6 choices from 1 to 6
@@ -35637,55 +35744,49 @@ void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s,
 			case 3:
 			case 5:
 			default:
-				strcpy(ad, blankString);
+				ad = blankString;
 				for (string str : pickrandom(adList)) {
-					strcat(ad, str);
+					ad += str;
 				}
 				break;
 			case 2:
-				strcpy(ad, ampersandC + CONST_news093 + ampersandR + ampersandR);
-				strcat(ad, ampersandC + CONST_news094 + ampersandR);
-				strcat(ad, ampersandC + CONST_news095);
-				strcat(ad, LCSrandom(201) + 400);
-				strcat(ad, ampersandR);
+				ad = ampersandC + CONST_news093 + ampersandR + ampersandR;
+				ad += ampersandC + CONST_news094 + ampersandR;
+				ad += ampersandC + CONST_news095;
+				ad += LCSrandom(201) + 400;
+				ad += ampersandR;
 				break;
 			case 4:
-				strcpy(ad, ampersandC + CONST_news096 + ampersandR);
-				strcat(ad, ampersandC + CONST_news097);
-				strcat(ad, ampersandC);
-				strcat(ad, year - LCSrandom(15));
-				strcat(ad, singleSpace);
+				ad = ampersandC + CONST_news096 + ampersandR;
+				ad += ampersandC + CONST_news097;
+				ad += ampersandC;
+				ad += year - LCSrandom(15);
+				ad += singleSpace;
 				// strcat(ad,cartype);
 				//TODO: leading zeros, etc.
-				strcat(ad, CONST_news098 + ampersandR);
-				strcat(ad, ampersandC + CONST_news099 + ampersandR);
-				strcat(ad, ampersandC + CONST_news100);
-				strcat(ad, LCSrandom(16) + 15);
-				strcat(ad, ampersandR);
+				ad += CONST_news098 + ampersandR;
+				ad += ampersandC + CONST_news099 + ampersandR;
+				ad += ampersandC + CONST_news100;
+				ad += LCSrandom(16) + 15;
+				ad += ampersandR;
 				break;
 			case 6:
 			{
-				strcpy(ad, ampersandC);
-				strcat(ad, pickrandom(personalAds));
-				char str[10];
-				strcat(ad, ampersandR + ampersandR);
-				strcat(ad, ampersandC);
-				sexdesc(str);
-				strcat(ad, str);
-				strcat(ad, singleSpace);
-				sexwho(str);
-				strcat(ad, str);
-				strcat(ad, singleSpace);
-				sexseek(str);
-				strcat(ad, str);
-				strcat(ad, ampersandR);
-				strcat(ad, ampersandC);
-				sextype(str);
-				strcat(ad, str);
-				strcat(ad, CONST_news105);
-				sexwho(str);
-				strcat(ad, str);
-				strcat(ad, ampersandR);
+				ad = ampersandC;
+				ad += pickrandom(personalAds);
+				ad += ampersandR + ampersandR;
+				ad += ampersandC;
+				ad += sexdesc();
+				ad += singleSpace;				
+				ad += sexwho();
+				ad += singleSpace;
+				ad += sexseek();
+				ad += ampersandR;
+				ad += ampersandC;				
+				ad += sextype();
+				ad += CONST_news105;				
+				ad += sexwho();
+				ad += ampersandR;
 				break;
 			}
 			}
@@ -35699,41 +35800,35 @@ void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s,
 			case 4:
 			case 5:
 			default:
-				strcpy(ad, blankString);
+				ad = blankString;
 				for (string str : pickrandom(adListB)) {
-					strcat(ad, str);
+					ad += str;
 				}
 				break;
 			case 2:
-				strcpy(ad, ampersandC + CONST_news102 + ampersandR);
-				strcat(ad, ampersandC);
-				strcat(ad, LCSrandom(11) + 20);
-				strcat(ad, CONST_news103 + ampersandR + ampersandR);
-				strcat(ad, ampersandC + CONST_news104 + ampersandR);
+				ad = ampersandC + CONST_news102 + ampersandR;
+				ad += ampersandC;
+				ad += LCSrandom(11) + 20;
+				ad += CONST_news103 + ampersandR + ampersandR;
+				ad += ampersandC + CONST_news104 + ampersandR;
 				break;
 			case 6:
 			{
-				strcpy(ad, ampersandC);
-				strcat(ad, pickrandom(personalAdsLG));
-				char str[10];
-				strcat(ad, ampersandR + ampersandR);
-				strcat(ad, ampersandC);
-				sexdesc(str);
-				strcat(ad, str);
-				strcat(ad, singleSpace);
-				sexwho(str);
-				strcat(ad, str);
-				strcat(ad, singleSpace);
-				sexseek(str);
-				strcat(ad, str);
-				strcat(ad, ampersandR);
-				strcat(ad, ampersandC);
-				sextype(str);
-				strcat(ad, str);
-				strcat(ad, CONST_news105);
-				sexwho(str);
-				strcat(ad, str);
-				strcat(ad, ampersandR);
+				ad = ampersandC;
+				ad += pickrandom(personalAdsLG);
+				ad += ampersandR + ampersandR;
+				ad += ampersandC;				
+				ad += sexdesc();
+				ad += singleSpace;
+				ad += sexwho();
+				ad += singleSpace;
+				ad += sexseek();
+				ad += ampersandR;
+				ad += ampersandC;
+				ad += sextype();
+				ad += CONST_news105;
+				ad += sexwho();
+				ad += ampersandR;
 				break;
 			}
 			}
@@ -35741,7 +35836,7 @@ void displaysinglead(bool liberalguardian, char addplace[2][3], short* storyx_s,
 		displaynewsstory(ad, storyx_s, storyx_e, sy + 1);
 	}
 }
-void displayads(newsstoryst& ns, bool liberalguardian, short* storyx_s, short* storyx_e)
+void displayads(const newsstoryst ns, const bool liberalguardian, short* storyx_s, short* storyx_e)
 {
 	int adnumber = 0;
 	if (!liberalguardian)
@@ -35765,9 +35860,10 @@ void displayads(newsstoryst& ns, bool liberalguardian, short* storyx_s, short* s
 		displaysinglead(liberalguardian, addplace, storyx_s, storyx_e);
 }
 const string CONST_news485 = ". ";
-void squadstory_text_location(newsstoryst& ns, bool liberalguardian, bool ccs, char* story)
+string squadstory_text_location(const newsstoryst ns, bool liberalguardian, bool ccs)
 {
-	strcat(story, CONST_news106);
+	string story;
+	story += CONST_news106;
 	string placename = LocationsPool::getInstance().getLocationName(ns.loc);
 	if (placename.substr(0, 4) == tag_The)
 		placename = placename.substr(4);
@@ -35784,7 +35880,7 @@ void squadstory_text_location(newsstoryst& ns, bool liberalguardian, bool ccs, c
 	case SITE_CITY_ATLANTA:
 	case SITE_CITY_MIAMI:
 	case SITE_CITY_WASHINGTON_DC:
-		strcat(story, CONST_news118);
+		story += CONST_news118;
 		break;
 	case SITE_DOWNTOWN:
 	case SITE_COMMERCIAL:
@@ -35795,62 +35891,62 @@ void squadstory_text_location(newsstoryst& ns, bool liberalguardian, bool ccs, c
 		if (placename == tag_Shopping)
 		{
 			placename = CONST_news109;
-			strcat(story, CONST_news128);
+			story += CONST_news128;
 		}
 		else if (placename == tag_Travel)
 		{
 			placename = CONST_news111;
-			strcat(story, CONST_news128);
+			story += CONST_news128;
 		}
 		else if (placename == tag_Outskirts_and_Orange_County)
 		{
 			placename = CONST_news113;
-			strcat(story, CONST_news118);
+			story += CONST_news118;
 		}
 		else if (placename == tag_Brooklyn_and_Queens)
 		{
 			placename = tag_Long_Island;
-			strcat(story, CONST_news115);
+			story += CONST_news115;
 		}
 		else if (placename == tag_Greater_Hollywood)
 		{
 			placename = tag_Hollywood;
-			strcat(story, CONST_news118);
+			story += CONST_news118;
 		}
 		else if (placename == tag_Manhattan_Island)
 		{
 			placename = tag_Manhattan;
-			strcat(story, CONST_news118);
+			story += CONST_news118;
 		}
 		else if (placename == tag_Arlington)
-			strcat(story, CONST_news118);
+			story += CONST_news118;
 		else if (placename == tag_National_Mall)
-			strcat(story, CONST_news119);
+			story += CONST_news119;
 		else if (placename != tag_Downtown)
-			strcat(story, CONST_news120);
+			story += CONST_news120;
 		break;
 	case SITE_BUSINESS_PAWNSHOP:
 		if (placename.find(CONST_news121) != string::npos)
 		{
-			strcat(story, CONST_news126);
-			if (liberalguardian && !ccs)strcat(story, CONST_news127);
+			story += CONST_news126;
+			if (liberalguardian && !ccs)story += CONST_news127;
 		}
 		else
 		{
-			strcat(story, CONST_news128);
-			if (liberalguardian && !ccs)strcat(story, CONST_news129);
+			story += CONST_news128;
+			if (liberalguardian && !ccs)story += CONST_news129;
 		}
 		break;
 	case SITE_RESIDENTIAL_APARTMENT:
 	case SITE_BUSINESS_CARDEALERSHIP:
 	case SITE_BUSINESS_DEPTSTORE:
 	case SITE_OUTDOOR_PUBLICPARK:
-		strcat(story, CONST_news126);
-		if (liberalguardian && !ccs)strcat(story, CONST_news127);
+		story += CONST_news126;
+		if (liberalguardian && !ccs)story += CONST_news127;
 		break;
 	default:
-		strcat(story, CONST_news128);
-		if (liberalguardian && !ccs)strcat(story, CONST_news129);
+		story += CONST_news128;
+		if (liberalguardian && !ccs)story += CONST_news129;
 		break;
 	}
 	if (ccs)
@@ -35858,93 +35954,96 @@ void squadstory_text_location(newsstoryst& ns, bool liberalguardian, bool ccs, c
 		switch (LocationsPool::getInstance().getLocationType(ns.loc))
 		{
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			strcat(story, CONST_news130); break;
+			story += CONST_news130; break;
 		case SITE_BUSINESS_CIGARBAR:
-			strcat(story, CONST_news131); break;
+			story += CONST_news131; break;
 		case SITE_LABORATORY_COSMETICS:
-			strcat(story, CONST_news132); break;
+			story += CONST_news132; break;
 		case SITE_LABORATORY_GENETIC:
-			strcat(story, CONST_news133); break;
+			story += CONST_news133; break;
 		case SITE_GOVERNMENT_POLICESTATION:
-			strcat(story, CONST_news134); break;
+			story += CONST_news134; break;
 		case SITE_GOVERNMENT_COURTHOUSE:
-			strcat(story, CONST_news135); break;
+			story += CONST_news135; break;
 		case SITE_GOVERNMENT_PRISON:
-			strcat(story, CONST_news136); break;
+			story += CONST_news136; break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			strcat(story, CONST_news137); break;
+			story += CONST_news137; break;
 		case SITE_INDUSTRY_SWEATSHOP:
-			strcat(story, CONST_news138); break;
+			story += CONST_news138; break;
 		case SITE_INDUSTRY_POLLUTER:
-			strcat(story, CONST_news145); break;
+			story += CONST_news145; break;
 		case SITE_INDUSTRY_NUCLEAR:
-			strcat(story, CONST_news140); break;
+			story += CONST_news140; break;
 		case SITE_CORPORATE_HEADQUARTERS:
-			strcat(story, CONST_news141); break;
+			story += CONST_news141; break;
 		case SITE_CORPORATE_HOUSE:
-			strcat(story, CONST_news142); break;
+			story += CONST_news142; break;
 		case SITE_MEDIA_AMRADIO:
-			strcat(story, CONST_news143); break;
+			story += CONST_news143; break;
 		case SITE_MEDIA_CABLENEWS:
-			strcat(story, CONST_news144); break;
+			story += CONST_news144; break;
 		case SITE_GOVERNMENT_ARMYBASE:
-			strcat(story, CONST_news145); break;
+			story += CONST_news145; break;
 		case SITE_GOVERNMENT_FIRESTATION:
-			strcat(story, CONST_news146); break;
+			story += CONST_news146; break;
 		case SITE_BUSINESS_BANK:
-			strcat(story, CONST_news147); break;
+			story += CONST_news147; break;
 		default:
-			strcat(story, placename.c_str());
-			strcat(story, CONST_news485); break;
+			story += placename;
+			story += CONST_news485; break;
 		}
 	}
-	else strcat(story, placename.c_str());
+	else story += placename;
 	if (liberalguardian && !ccs)
 	{
 		switch (LocationsPool::getInstance().getLocationType(ns.loc))
 		{
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			strcat(story, CONST_news149); break;
+			story += CONST_news149; break;
 		case SITE_BUSINESS_CIGARBAR:
-			strcat(story, CONST_news150); break;
+			story += CONST_news150; break;
 		case SITE_LABORATORY_COSMETICS:
-			strcat(story, CONST_news151); break;
+			story += CONST_news151; break;
 		case SITE_LABORATORY_GENETIC:
-			strcat(story, CONST_news152); break;
+			story += CONST_news152; break;
 		case SITE_GOVERNMENT_POLICESTATION:
-			strcat(story, CONST_news153); break;
+			story += CONST_news153; break;
 		case SITE_GOVERNMENT_COURTHOUSE:
-			strcat(story, CONST_news154); break;
+			story += CONST_news154; break;
 		case SITE_GOVERNMENT_PRISON:
-			strcat(story, CONST_news155); break;
+			story += CONST_news155; break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			strcat(story, CONST_news156); break;
+			story += CONST_news156; break;
 		case SITE_GOVERNMENT_ARMYBASE:
-			strcat(story, CONST_news157); break;
+			story += CONST_news157; break;
 		case SITE_INDUSTRY_SWEATSHOP:
-			strcat(story, CONST_news158); break;
+			story += CONST_news158; break;
 		case SITE_INDUSTRY_POLLUTER:
-			strcat(story, CONST_news159); break;
+			story += CONST_news159; break;
 		case SITE_INDUSTRY_NUCLEAR:
-			strcat(story, CONST_news160); break;
+			story += CONST_news160; break;
 		case SITE_CORPORATE_HEADQUARTERS:
-			strcat(story, CONST_news161); break;
+			story += CONST_news161; break;
 		case SITE_CORPORATE_HOUSE:
-			strcat(story, CONST_news162); break;
+			story += CONST_news162; break;
 		case SITE_MEDIA_AMRADIO:
 		case SITE_MEDIA_CABLENEWS:
-			strcat(story, CONST_news163); break;
+			story += CONST_news163; break;
 		case SITE_BUSINESS_BANK:
-			strcat(story, CONST_news164); break;
+			story += CONST_news164; break;
 		default:
-			strcat(story, CONST_news485); break;
+			story += CONST_news485; break;
 		}
 	}
 	else if (!ccs)
-		strcat(story, CONST_news485);
+		story += CONST_news485;
+
+	return story;
 }
-void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, char* story)
+string squadstory_text_opening(const newsstoryst ns, bool liberalguardian, bool ccs)
 {
+	string story;
 	extern char newscherrybusted;
 	if (ns.type == NEWSSTORY_SQUAD_SITE)
 	{
@@ -35952,32 +36051,32 @@ void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, ch
 		{
 			if (ns.positive)
 			{
-				strcat(story, CONST_news203);
-				strcat(story, CONST_news180);
-				strcat(story, CONST_news185);
-				strcat(story, CONST_news221);
+				story += CONST_news203;
+				story += CONST_news180;
+				story += CONST_news185;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news207);
-				strcat(story, CONST_news184);
-				strcat(story, CONST_news185);
+				story += CONST_news207;
+				story += CONST_news184;
+				story += CONST_news185;
 			}
 		}
 		else
 		{
 			if (ns.positive)
 			{
-				strcat(story, CONST_news174);
-				strcat(story, CONST_news221);
+				story += CONST_news174;
+				story += CONST_news221;
 			}
 			else
 			{
 				if (!liberalguardian)
-					strcat(story, CONST_news176);
+					story += CONST_news176;
 				else
-					strcat(story, CONST_news177);
-				strcat(story, CONST_news221);
+					story += CONST_news177;
+				story += CONST_news221;
 			}
 		}
 	}
@@ -35987,29 +36086,29 @@ void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, ch
 		{
 			if (ns.positive && !liberalguardian)
 			{
-				strcat(story, CONST_news179);
-				strcat(story, CONST_news180);
-				strcat(story, CONST_news185);
-				strcat(story, CONST_news221);
+				story += CONST_news179;
+				story += CONST_news180;
+				story += CONST_news185;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news183);
-				strcat(story, CONST_news184);
-				strcat(story, CONST_news185);
+				story += CONST_news183;
+				story += CONST_news184;
+				story += CONST_news185;
 			}
 		}
 		else
 		{
 			if (ns.positive && !liberalguardian)
 			{
-				strcat(story, CONST_news186);
-				strcat(story, CONST_news221);
+				story += CONST_news186;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news188);
-				strcat(story, CONST_news221);
+				story += CONST_news188;
+				story += CONST_news221;
 			}
 		}
 	}
@@ -36019,35 +36118,35 @@ void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, ch
 		{
 			if (ns.positive && !liberalguardian)
 			{
-				strcat(story, CONST_news190);
-				strcat(story, CONST_news204);
-				strcat(story, CONST_news209);
-				strcat(story, CONST_news221);
+				story += CONST_news190;
+				story += CONST_news204;
+				story += CONST_news209;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news194);
-				strcat(story, pickrandom(ccs_adjective).c_str());
-				strcat(story, pickrandom(ccs_adjective_2).c_str());
-				strcat(story, CONST_news195);
-				strcat(story, pickrandom(ccs_noun).c_str());
-				strcat(story, CONST_news196);
-				strcat(story, pickrandom(ccs_adjective_3).c_str());
-				strcat(story, CONST_news197);
-				strcat(story, CONST_news221);
+				story += CONST_news194;
+				story += pickrandom(ccs_adjective);
+				story += pickrandom(ccs_adjective_2);
+				story += CONST_news195;
+				story += pickrandom(ccs_noun);
+				story += CONST_news196;
+				story += pickrandom(ccs_adjective_3);
+				story += CONST_news197;
+				story += CONST_news221;
 			}
 		}
 		else
 		{
 			if (ns.positive && !liberalguardian)
 			{
-				strcat(story, CONST_news199);
-				strcat(story, CONST_news221);
+				story += CONST_news199;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news201);
-				strcat(story, CONST_news221);
+				story += CONST_news201;
+				story += CONST_news221;
 			}
 		}
 	}
@@ -36057,67 +36156,52 @@ void squadstory_text_opening(newsstoryst& ns, bool liberalguardian, bool ccs, ch
 		{
 			if (ns.positive)
 			{
-				strcat(story, CONST_news203);
-				strcat(story, CONST_news204);
-				strcat(story, CONST_news209);
-				strcat(story, CONST_news221);
+				story += CONST_news203;
+				story += CONST_news204;
+				story += CONST_news209;
+				story += CONST_news221;
 			}
 			else
 			{
-				strcat(story, CONST_news207);
-				strcat(story, CONST_news208);
-				strcat(story, CONST_news209);
-				strcat(story, CONST_news221);
+				story += CONST_news207;
+				story += CONST_news208;
+				story += CONST_news209;
+				story += CONST_news221;
 			}
 		}
 		else
 		{
 			if (ns.positive)
 			{
-				strcat(story, CONST_news211);
-				strcat(story, CONST_news221);
+				story += CONST_news211;
+				story += CONST_news221;
 			}
 			else
 			{
 				if (!liberalguardian)
-					strcat(story, CONST_news213);
+					story += CONST_news213;
 				else
-					strcat(story, CONST_news214);//XXX: Rewrite me -- LK
-				strcat(story, CONST_news221);
+					story += CONST_news214;//XXX: Rewrite me -- LK
+				story += CONST_news221;
 			}
 		}
 	}
-	squadstory_text_location(ns, liberalguardian, ccs, story);
+	story += squadstory_text_location(ns, liberalguardian, ccs);
 	if (ns.type == NEWSSTORY_SQUAD_KILLED_SITE)
 	{
-		if (liberalguardian)strcat(story, CONST_news216);
-		else if (ns.positive)strcat(story, CONST_news217);
-		else strcat(story, CONST_news218);
+		if (liberalguardian)story += CONST_news216;
+		else if (ns.positive)story += CONST_news217;
+		else story += CONST_news218;
 	}
 	if (ns.type == NEWSSTORY_CCS_KILLED_SITE)
 	{
-		if (ns.positive && !liberalguardian)strcat(story, CONST_news219);
-		else strcat(story, CONST_news220);
+		if (ns.positive && !liberalguardian)story += CONST_news219;
+		else story += CONST_news220;
 	}
-	strcat(story, CONST_news221);
+	story += CONST_news221;
+	return story;
 }
-/* news - make some filler junk */
-void generatefiller(char *story, int amount)
-{ //TODO: Use text from filler.cpp
-	strcat(story, ampersandR + cityname() + spaceDashSpace);
-	for (int par = 0; amount > 0; amount--)
-	{
-		par++;
-		for (int i = 0; i < LCSrandom(10) + 3; i++)strcat(story, CONST_news222);
-		if (amount > 1)strcat(story, singleSpace);
-		if (par >= 50 && !LCSrandom(5) && amount > 20)
-		{
-			par = 0;
-			strcat(story, ampersandR + singleSpace);
-		}
-	}
-	strcat(story, ampersandR);
-}
+
 void displaycenterednewsfont(const std::string& str, int y)
 {
 	extern unsigned char bigletters[27][5][7][4];
@@ -36323,7 +36407,7 @@ string getLastNameForHeadline(char* fullName)
 	string ret = lastName;
 	return ret;
 }
-void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int header)
+void displaystoryheader(const newsstoryst ns, const bool liberalguardian, int& y, int header)
 {
 	extern char newscherrybusted;
 	extern char oldPresidentName[POLITICIAN_NAMELEN];
@@ -36740,18 +36824,18 @@ void displaynewspicture(int p, int y)
 }
 void displaynewsstoryPositiveX(const short view, const string next, const short* storyx_s, const short* storyx_e) {
 	displaycenterednewsfont(next, 5);
-	displaynewsstory(constructeventstory(view, true).c_str(), storyx_s, storyx_e, 13);
+	displaynewsstory(constructeventstory(view, true), storyx_s, storyx_e, 13);
 
 }
 void displaynewsstoryNegativeX(const short view, const string next, const short* storyx_s, const short* storyx_e) {
 	displaycenterednewsfont(next, 5);
-	displaynewsstory(constructeventstory(view, false).c_str(), storyx_s, storyx_e, 13);
+	displaynewsstory(constructeventstory(view, false), storyx_s, storyx_e, 13);
 
 }
 void displaynewsstoryNegativeX(const short view, const string next, const string second, const short* storyx_s, const short* storyx_e) {
 	displaycenterednewsfont(next, 5);
 	displaycenterednewsfont(second, 13);
-	displaynewsstory(constructeventstory(view, false).c_str(), storyx_s, storyx_e, 21);
+	displaynewsstory(constructeventstory(view, false), storyx_s, storyx_e, 21);
 
 }
 void displaynewsandpicture(const string news1, const string news2, const int picture) {
@@ -36759,8 +36843,68 @@ void displaynewsandpicture(const string news1, const string news2, const int pic
 	displaycenteredsmallnews(news2, 12);
 	displaynewspicture(picture, 13);
 }
-void displaymajoreventstory(newsstoryst& ns, const short* storyx_s, const short* storyx_e)
+void displaymajoreventstory(const newsstoryst ns, const short* storyx_s, const short* storyx_e)
 {
+	const string CONST_news848 = "OF CULTURE";
+	const string CONST_news847 = "THE DEATH";
+	const string CONST_news846 = "NEW JOBS";
+	const string CONST_news845 = "LOOKING UP";
+	const string CONST_news844 = "Fall fashions are previewed in stores across the country.";
+	const string CONST_news843 = "Fall fashions hit the stores across the country.";
+	const string CONST_news842 = "THEY ARE HERE";
+	const string CONST_news841 = "JUSTICE AMOK";
+	const string CONST_news840 = "GM FOOD FAIRE";
+	const string CONST_news839 = "Free speech advocates fight hard to let a white supremacist rally take place.";
+	const string CONST_news838 = "HATE RALLY";
+	const string CONST_news837 = "DODGED BULLET";
+	const string CONST_news836 = "HOSTAGE SLAIN";
+	const string CONST_news835 = "BASTARDS";
+	const string CONST_news834 = "[JERKS]";
+	const string CONST_news833 = "APE EXPLORERS";
+	const string CONST_news832 = "OPEC cuts oil production sharply in response to a US foreign policy decision.";
+	const string CONST_news831 = "OIL CRUNCH";
+	const string CONST_news830 = ": A new book lauding Reagan and the greatest generation.";
+	const string CONST_news829 = "REAGAN THE MAN";
+	const string CONST_news828 = "SAVES LIVES";
+	const string CONST_news827 = "ARMED CITIZEN";
+	const string CONST_news826 = "END IN TEARS";
+	const string CONST_news825 = "Our boys defend freedom once again, defeating an evil dictator.";
+	const string CONST_news824 = "BIG VICTORY";
+	const string CONST_news823 = "LET'S FRY 'EM";
+	const string CONST_news822 = "Jerry Falwell explains the truth about Tinky Winky. Again.";
+	const string CONST_news821 = "KINKY WINKY";
+	const string CONST_news820 = "AM IMPLOSION";
+	const string CONST_news819 = "regularly visits prostitutes.";
+	const string CONST_news818 = "regularly [donates to sperm banks].";
+	const string CONST_news817 = "regularly visits [working women].";
+	const string CONST_news816 = "This major CEO ";
+	const string CONST_news815 = "AMERICAN CEO";
+	const string CONST_news814 = "An enormous company files for bankruptcy, shattering the previous record.";
+	const string CONST_news813 = "BELLY UP";
+	const string CONST_news812 = "The Ohio River caught on fire again.";
+	const string CONST_news811 = "RING OF FIRE";
+	const string CONST_news810 = "A T-shirt in a store is found scrawled with a message from a sweatshop worker.";
+	const string CONST_news809 = "CHILD'S PLEA";
+	const string CONST_news808 = "IN CONTEMPT";
+	const string CONST_news807 = "Over a hundred people become sick from genetically modified food.";
+	const string CONST_news806 = "KILLER FOOD";
+	const string CONST_news805 = "BOOK BANNED";
+	const string CONST_news804 = "THE FBI FILES";
+	const string CONST_news803 = "ON THE INSIDE";
+	const string CONST_news802 = "A mutant animal has escaped from a lab and killed thirty people.";
+	const string CONST_news801 = "HELL ON EARTH";
+	const string CONST_news800 = "A nuclear power plant suffers a catastrophic meltdown.";
+	const string CONST_news799 = "MELTDOWN";
+	const string CONST_news798 = ": A new book further documenting the other side of Reagan.";
+	const string CONST_news797 = "REAGAN FLAWED";
+	const string CONST_news796 = "MASS SHOOTING";
+	const string CONST_news795 = "NIGHTMARE";
+	const string CONST_news794 = "Is the latest military invasion yet another quagmire?";
+	const string CONST_news793 = "CASUALTIES MOUNT";
+	const string CONST_news792 = "JUSTICE DEAD";
+	const string CONST_news791 = "CRIME OF HATE";
+	const string CONST_news790 = "CLINIC MURDER";
+
 	extern int month;
 	extern short lawList[LAWNUM];
 	if (ns.positive)
@@ -36900,14 +37044,395 @@ void displaymajoreventstory(newsstoryst& ns, const short* storyx_s, const short*
 		}
 	}
 }
-const string CONST_newsX10 = " The slogan, \"";
-const string CONST_newsX11 = " One uttered the words, \"";
-const string CONST_newsX12 = " As they left, they shouted, \"";
-const string CONST_newsX13 = " One of them was rumored to have cried out, \"";
-const string CONST_newsX14 = " Witnesses reported hearing the phrase, \"";
-const string CONST_newsX15 = "According to one person familiar with the case, \"";
+const string CONST_news862 = "according to a spokesperson from the police department.";
+const string CONST_news873 = "The names of the officers have not been released pending notification of their families.";
+string wantedOrGraffitiArrest(const newsstoryst ns) {
+
+	const string CONST_news859 = " while they were attempting to perform an arrest. ";
+	const string CONST_news858 = "the police officer ";
+	const string CONST_news857 = " officers ";
+	const string CONST_news856 = "radical political group known as the Liberal Crime Squad, is believed to have killed ";
+	const string CONST_news855 = " A suspect, identified only as a member of the ";
+	const string CONST_news853 = " killed in the line of duty yesterday, ";
+	const string CONST_news852 = "A police officer was";
+	const string CONST_news851 = " police officers were";
+	
+
+	string story;
+	int crime[CRIMENUM];
+	std::memset(crime, 0, sizeof(int)*CRIMENUM);
+	for (int c = 0; c < len(ns.crime); c++)
+		crime[ns.crime[c]]++;
+	if (crime[CRIME_KILLEDSOMEBODY] > 1)
+	{
+		if (crime[CRIME_KILLEDSOMEBODY] == 2)
+			story += CONST_news849;
+		else
+			story += CONST_news850;
+		story += CONST_news851;
+	}
+	else story += CONST_news852;
+	story += CONST_news853;
+	story += CONST_news862;
+	story += ampersandR;
+	story += CONST_news855;
+	story += CONST_news856;
+	if (crime[CRIME_KILLEDSOMEBODY] > 1)
+	{
+		story += crime[CRIME_KILLEDSOMEBODY];
+		story += CONST_news857;
+	}
+	else story += CONST_news858;
+	story += CONST_news859;
+	story += CONST_news873;
+	story += ampersandR;
+	return story;
+}
+string nudityCarDrugOrBurialArrest(const newsstoryst ns){
+	const string CONST_news874 = "The name of the officer has not been released pending notification of the officer's family.";
+	const string CONST_news872 = "A passerby had allegedly spotted the suspect committing a car theft. ";
+	const string CONST_news871 = "appeared to be a corpse through an empty lot. ";
+	const string CONST_news870 = "A passerby allegedly called the authorities after seeing the suspect dragging what ";
+	const string CONST_news869 = "The suspect was allegedly selling \"pot brownies\". ";
+	const string CONST_news868 = "The incident apparently occurred as a response to a public nudity complaint. ";
+	const string CONST_news867 = " attempting to perform an arrest. ";
+	const string CONST_news866 = "a police officer that was";
+	const string CONST_news865 = " police officers that were";
+	const string CONST_news864 = "killed ";
+	const string CONST_news863 = " A suspect, whose identity is unclear, ";
+	const string CONST_news861 = "A routine arrest went horribly wrong yesterday, ";
+	string story;
+	int crime[CRIMENUM];
+	std::memset(crime, 0, sizeof(int)*CRIMENUM);
+	for (int c = 0; c < len(ns.crime); c++)
+		crime[ns.crime[c]]++;
+	story += CONST_news861;
+	story += CONST_news862;
+	story += ampersandR;
+	story += CONST_news863;
+	story += CONST_news864;
+	if (crime[CRIME_KILLEDSOMEBODY] > 1)
+	{
+		story += crime[CRIME_KILLEDSOMEBODY];
+		story += CONST_news865;
+	}
+	else story += CONST_news866;
+	story += CONST_news867;
+	if (ns.type == NEWSSTORY_NUDITYARREST)
+		story += CONST_news868;
+	else if (ns.type == NEWSSTORY_DRUGARREST)
+		story += CONST_news869;
+	else if (ns.type == NEWSSTORY_BURIALARREST)
+	{
+		story += CONST_news870;
+		story += CONST_news871;
+	}
+	else
+		story += CONST_news872;
+	if (crime[CRIME_KILLEDSOMEBODY] > 1)
+		story += CONST_news873;
+	else story += CONST_news874;
+	story += ampersandR;
+	return story;
+
+}
+
 const string CONST_news1030 = "\"";
-void displayMinorStory(const bool liberalguardian, newsstoryst ns, char* story) {
+string otherCrime(const newsstoryst ns, const bool liberalguardian, const bool ccs) {
+	const string CONST_newsX10 = " The slogan, \"";
+	const string CONST_newsX11 = " One uttered the words, \"";
+	const string CONST_newsX12 = " As they left, they shouted, \"";
+	const string CONST_newsX13 = " One of them was rumored to have cried out, \"";
+	const string CONST_newsX14 = " Witnesses reported hearing the phrase, \"";
+		extern short lawList[LAWNUM];
+		extern string slogan_str;
+		string story;
+		int crime[CRIMENUM];
+		memset(crime, 0, sizeof(int)*CRIMENUM);
+		int typesum = 0;
+		for (int c = 0; c < len(ns.crime); c++)
+		{
+			// Count crimes of each type
+			crime[ns.crime[c]]++;
+			// Special crimes are described at the start or end of the article;
+			// others should be recorded in the body
+			if (ns.crime[c] == CRIME_HOUSE_PHOTOS) continue;
+			if (ns.crime[c] == CRIME_CORP_FILES) continue;
+			if (ns.crime[c] == CRIME_SHUTDOWNREACTOR) continue;
+			if (ns.crime[c] == CRIME_BANKVAULTROBBERY) continue;
+			if (ns.crime[c] == CRIME_BANKSTICKUP) continue;
+			if (ns.crime[c] == CRIME_POLICE_LOCKUP) continue;
+			if (ns.crime[c] == CRIME_COURTHOUSE_LOCKUP) continue;
+			if (ns.crime[c] == CRIME_PRISON_RELEASE) continue;
+			if (ns.crime[c] == CRIME_JURYTAMPERING) continue;
+			if (ns.crime[c] == CRIME_HACK_INTEL) continue;
+			if (ns.crime[c] == CRIME_ARMORY) continue;
+			if (ns.crime[c] == CRIME_HOUSE_PHOTOS) continue;
+			if (ns.crime[c] == CRIME_CORP_FILES) continue;
+			if (ns.crime[c] == CRIME_CARCHASE) continue;
+			if (ns.crime[c] == CRIME_CARCRASH) continue;
+			if (ns.crime[c] == CRIME_FOOTCHASE) continue;
+			//if(ns.crime[c]==CRIME_TAGGING) continue;
+			if (crime[ns.crime[c]] == 1) typesum++;
+		}
+		if (crime[CRIME_SHUTDOWNREACTOR])
+		{
+			if (lawList[LAW_NUCLEARPOWER] == 2)
+			{
+				story += liberalguardian ? CONST_news877 + CONST_news878 : accordingToSourcesAtScene + CONST_news875 + CONST_news876;				
+				story += ampersandR;
+			}
+			else
+			{
+				story += liberalguardian ? CONST_news881 + CONST_news882 : accordingToSourcesAtScene + CONST_news879 + CONST_news880;
+				
+				story += ampersandR;
+			}
+		}
+		if (crime[CRIME_POLICE_LOCKUP])
+		{
+			story += liberalguardian ? CONST_news884 + CONST_news885 : accordingToSourcesAtScene + CONST_news883;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_BANKVAULTROBBERY])
+		{
+			story += liberalguardian ? CONST_news887 + CONST_news888 : accordingToSourcesAtScene + CONST_news886;
+			
+			story += ampersandR;
+		}
+		else if (crime[CRIME_BANKSTICKUP])
+		{
+			story += liberalguardian ? CONST_news890 + CONST_news891 : accordingToSourcesAtScene + CONST_news889;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_COURTHOUSE_LOCKUP])
+		{
+			story += liberalguardian ? CONST_news893 + CONST_news894 : accordingToSourcesAtScene + CONST_news892;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_PRISON_RELEASE])
+		{
+			story += liberalguardian ? CONST_news896 + CONST_news897 : accordingToSourcesAtScene + CONST_news895;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_JURYTAMPERING])
+		{
+			story += liberalguardian ? CONST_news900 + CONST_news901 : accordingToPoliceSources + CONST_news898 + CONST_news899;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_HACK_INTEL])
+		{
+			story += liberalguardian ? CONST_news903 : accordingToPoliceSources + CONST_news902;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_ARMORY])
+		{
+			story += liberalguardian ? CONST_news906 : CONST_news1031 + CONST_news905;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_HOUSE_PHOTOS])
+		{
+			story += liberalguardian ? CONST_news908 : accordingToPoliceSources + CONST_news907;
+			
+			story += ampersandR;
+		}
+		if (crime[CRIME_CORP_FILES])
+		{
+			story += liberalguardian ? CONST_news910 : accordingToPoliceSources + CONST_news909;
+			
+			story += ampersandR;
+		}
+		if (liberalguardian && !ccs)
+		{
+			if (crime[CRIME_ATTACKED_MISTAKE]) typesum--;
+			if (crime[CRIME_KILLEDSOMEBODY]) typesum--;
+		}
+		if (typesum > 0)
+		{
+			if (typesum > 0)
+			{
+				if (!ccs)
+				{
+					story += liberalguardian ? CONST_news913 : CONST_news911 + CONST_news915;
+				}
+				else
+				{
+					story += CONST_news914;
+					story += CONST_news915;
+				}
+				if (crime[CRIME_ARSON])
+				{
+					story += liberalguardian || !ccs ? CONST_news917 : CONST_news916;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (!liberalguardian || ccs)
+				{
+					if (crime[CRIME_KILLEDSOMEBODY])
+					{
+						story += CONST_news918;
+						if (typesum >= 3)story += commaSpace;
+						else if (typesum == 2)story += AND;
+						typesum--;
+					}
+					if (crime[CRIME_ATTACKED_MISTAKE])
+					{
+						story += CONST_news921;
+						if (typesum >= 3)story += commaSpace;
+						else if (typesum == 2)story += AND;
+						typesum--;
+					}
+					if (crime[CRIME_ATTACKED])
+					{
+						if (crime[CRIME_ATTACKED_MISTAKE])story += CONST_news920;
+						else story += CONST_news921;
+						if (typesum >= 3)story += commaSpace;
+						else if (typesum == 2)story += AND;
+						typesum--;
+					}
+				}
+				else
+				{
+					if (crime[CRIME_ATTACKED])
+					{
+						story += CONST_news922;
+						if (typesum >= 3)story += commaSpace;
+						else if (typesum == 2)story += AND;
+						typesum--;
+					}
+				}
+				if (crime[CRIME_STOLEGROUND] || crime[CRIME_BANKTELLERROBBERY])
+				{
+					story += liberalguardian || !ccs ? CONST_news924 : CONST_news923;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (crime[CRIME_FREE_RABBITS] || crime[CRIME_FREE_BEASTS])
+				{
+					story += liberalguardian ? CONST_news926 : CONST_news925;
+
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (crime[CRIME_BREAK_SWEATSHOP] || crime[CRIME_BREAK_FACTORY] || crime[CRIME_VANDALISM])
+				{
+					story += liberalguardian || !ccs ? CONST_news928 : CONST_news927;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (crime[CRIME_TAGGING])
+				{
+					story += liberalguardian || !ccs ? CONST_news930 : CONST_news929;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (crime[CRIME_BROKEDOWNDOOR])
+				{
+					story += liberalguardian || !ccs ? CONST_news932 : CONST_news931;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				if (crime[CRIME_UNLOCKEDDOOR])
+				{
+					story += liberalguardian || !ccs ? CONST_news934 : CONST_news933;
+					
+					if (typesum >= 3)story += commaSpace;
+					else if (typesum == 2)story += AND;
+					typesum--;
+				}
+				story += singleDot;
+			}
+			story += ampersandR;
+		}
+		if (crime[CRIME_CARCHASE])
+		{
+			story += liberalguardian || !ccs ? CONST_news937 + CONST_news938 : CONST_news935 + CONST_news936;
+			
+			if (crime[CRIME_CARCRASH])
+			{
+				if (crime[CRIME_CARCRASH] > 1)
+				{
+					story += crime[CRIME_CARCRASH];
+					story += CONST_news939;
+				}
+				else story += CONST_news940;
+				if (!liberalguardian || ccs)
+					story += CONST_news941;//XXX: Why not turn them into martyrs?
+			}
+			if (crime[CRIME_FOOTCHASE])
+			{
+				story += liberalguardian || !ccs ? CONST_news943 : CONST_news942;
+
+			}
+			story += ampersandR;
+		}
+		if (!ccs)
+		{
+			if (!LCSrandom(8))
+			{
+				if (crime[CRIME_TAGGING])
+				{
+					story += CONST_newsX10;
+					story += slogan_str;
+					story += CONST_news945;
+				}
+				else
+				{
+					switch (LCSrandom(3))
+					{
+					case 0:
+						if (ns.type == NEWSSTORY_SQUAD_KILLED_SITE)
+						{
+							story += CONST_newsX11;
+							story += slogan_str;
+							story += CONST_news947;
+						}
+						else
+						{
+							story += CONST_newsX12;
+							story += slogan_str;
+							story += CONST_news1030;
+						}
+						return story;
+					case 1:
+						story += CONST_newsX13;
+						story += slogan_str;
+						story += CONST_news1030;
+						return story;
+					case 2:
+						story += CONST_newsX14;
+						story += slogan_str;
+						story += CONST_news1030;
+						return story;
+					}
+				}
+				story += ampersandR;
+			}
+		}
+		return story;
+	
+}
+
+string displayMinorStory(const bool liberalguardian, newsstoryst ns) {
+	string story;
 	extern short lawList[LAWNUM];
 	{
 		extern string slogan_str;
@@ -36916,44 +37441,18 @@ void displayMinorStory(const bool liberalguardian, newsstoryst ns, char* story) 
 		{
 		case NEWSSTORY_CCS_NOBACKERS:
 			for (string s : caseNEWSSTORY_CCS_NOBACKERS) {
-				strcat(story, s);
+				story += s;
 			}
 			break;
 		case NEWSSTORY_CCS_DEFEATED:
 			for (string s : caseNEWSSTORY_CCS_DEFEATED) {
-				strcat(story, s);
+				story += s;
 			}
 			break;
 		case NEWSSTORY_WANTEDARREST:
 		case NEWSSTORY_GRAFFITIARREST:
 		{
-			int crime[CRIMENUM];
-			std::memset(crime, 0, sizeof(int)*CRIMENUM);
-			for (int c = 0; c < len(ns.crime); c++)
-				crime[ns.crime[c]]++;
-			if (crime[CRIME_KILLEDSOMEBODY] > 1)
-			{
-				if (crime[CRIME_KILLEDSOMEBODY] == 2)
-					strcat(story, CONST_news849);
-				else
-					strcat(story, CONST_news850);
-				strcat(story, CONST_news851);
-			}
-			else strcat(story, CONST_news852);
-			strcat(story, CONST_news853);
-			strcat(story, CONST_news862);
-			strcat(story, ampersandR);
-			strcat(story, CONST_news855);
-			strcat(story, CONST_news856);
-			if (crime[CRIME_KILLEDSOMEBODY] > 1)
-			{
-				strcat(story, crime[CRIME_KILLEDSOMEBODY]);
-				strcat(story, CONST_news857);
-			}
-			else strcat(story, CONST_news858);
-			strcat(story, CONST_news859);
-			strcat(story, CONST_news873);
-			strcat(story, ampersandR);
+			story += wantedOrGraffitiArrest(ns);
 			break;
 		}
 		case NEWSSTORY_NUDITYARREST:
@@ -36961,37 +37460,7 @@ void displayMinorStory(const bool liberalguardian, newsstoryst ns, char* story) 
 		case NEWSSTORY_DRUGARREST:
 		case NEWSSTORY_BURIALARREST:
 		{
-			int crime[CRIMENUM];
-			std::memset(crime, 0, sizeof(int)*CRIMENUM);
-			for (int c = 0; c < len(ns.crime); c++)
-				crime[ns.crime[c]]++;
-			strcat(story, CONST_news861);
-			strcat(story, CONST_news862);
-			strcat(story, ampersandR);
-			strcat(story, CONST_news863);
-			strcat(story, CONST_news864);
-			if (crime[CRIME_KILLEDSOMEBODY] > 1)
-			{
-				strcat(story, crime[CRIME_KILLEDSOMEBODY]);
-				strcat(story, CONST_news865);
-			}
-			else strcat(story, CONST_news866);
-			strcat(story, CONST_news867);
-			if (ns.type == NEWSSTORY_NUDITYARREST)
-				strcat(story, CONST_news868);
-			else if (ns.type == NEWSSTORY_DRUGARREST)
-				strcat(story, CONST_news869);
-			else if (ns.type == NEWSSTORY_BURIALARREST)
-			{
-				strcat(story, CONST_news870);
-				strcat(story, CONST_news871);
-			}
-			else
-				strcat(story, CONST_news872);
-			if (crime[CRIME_KILLEDSOMEBODY] > 1)
-				strcat(story, CONST_news873);
-			else strcat(story, CONST_news874);
-			strcat(story, ampersandR);
+			story += nudityCarDrugOrBurialArrest(ns);
 			break;
 		}
 		case NEWSSTORY_SQUAD_ESCAPED:
@@ -37000,495 +37469,52 @@ void displayMinorStory(const bool liberalguardian, newsstoryst ns, char* story) 
 		case NEWSSTORY_SQUAD_BROKESIEGE:
 		case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
 		case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
-			strcat(story, membersOfLCS);
+			story += membersOfLCS;
 			if (!liberalguardian) {
-				strcat(story, newsStories[ns.type][0]);
-				strcat(story, policeSpokesperson);
+				story += newsStories[ns.type][0];
+				story += policeSpokesperson;
 			}
 			else
 			{
-				strcat(story, newsStories[ns.type][len(newsStories[ns.type]) - 1]);
-				strcat(story, lcsSpokeseperson);
+				story += newsStories[ns.type][len(newsStories[ns.type]) - 1];
+				story += lcsSpokeseperson;
 			}
-			strcat(story, ampersandR);
+			story += ampersandR;
 			break;
 		default:
-		{
 			bool ccs = 0;
 			if (ns.type == NEWSSTORY_CCS_KILLED_SITE || ns.type == NEWSSTORY_CCS_SITE)ccs = 1;
-			squadstory_text_opening(ns, liberalguardian, ccs, story);
-			int crime[CRIMENUM];
-			memset(crime, 0, sizeof(int)*CRIMENUM);
-			int typesum = 0;
-			for (int c = 0; c < len(ns.crime); c++)
-			{
-				// Count crimes of each type
-				crime[ns.crime[c]]++;
-				// Special crimes are described at the start or end of the article;
-				// others should be recorded in the body
-				if (ns.crime[c] == CRIME_HOUSE_PHOTOS) continue;
-				if (ns.crime[c] == CRIME_CORP_FILES) continue;
-				if (ns.crime[c] == CRIME_SHUTDOWNREACTOR) continue;
-				if (ns.crime[c] == CRIME_BANKVAULTROBBERY) continue;
-				if (ns.crime[c] == CRIME_BANKSTICKUP) continue;
-				if (ns.crime[c] == CRIME_POLICE_LOCKUP) continue;
-				if (ns.crime[c] == CRIME_COURTHOUSE_LOCKUP) continue;
-				if (ns.crime[c] == CRIME_PRISON_RELEASE) continue;
-				if (ns.crime[c] == CRIME_JURYTAMPERING) continue;
-				if (ns.crime[c] == CRIME_HACK_INTEL) continue;
-				if (ns.crime[c] == CRIME_ARMORY) continue;
-				if (ns.crime[c] == CRIME_HOUSE_PHOTOS) continue;
-				if (ns.crime[c] == CRIME_CORP_FILES) continue;
-				if (ns.crime[c] == CRIME_CARCHASE) continue;
-				if (ns.crime[c] == CRIME_CARCRASH) continue;
-				if (ns.crime[c] == CRIME_FOOTCHASE) continue;
-				//if(ns.crime[c]==CRIME_TAGGING) continue;
-				if (crime[ns.crime[c]] == 1) typesum++;
-			}
-			if (crime[CRIME_SHUTDOWNREACTOR])
-			{
-				if (lawList[LAW_NUCLEARPOWER] == 2)
-				{
-					if (!liberalguardian)
-					{
-						strcat(story, accordingToSourcesAtScene);
-						strcat(story, CONST_news875);
-						strcat(story, CONST_news876);
-						strcat(story, ampersandR);
-					}
-					else
-					{
-						strcat(story, CONST_news877);
-						strcat(story, CONST_news878);
-						strcat(story, ampersandR);
-					}
-				}
-				else
-				{
-					if (!liberalguardian)
-					{
-						strcat(story, accordingToSourcesAtScene);
-						strcat(story, CONST_news879);
-						strcat(story, CONST_news880);
-						strcat(story, ampersandR);
-					}
-					else
-					{
-						strcat(story, CONST_news881);
-						strcat(story, CONST_news882);
-						strcat(story, ampersandR);
-					}
-				}
-			}
-			if (crime[CRIME_POLICE_LOCKUP])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToSourcesAtScene);
-					strcat(story, CONST_news883);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news884);
-					strcat(story, CONST_news885);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_BANKVAULTROBBERY])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToSourcesAtScene);
-					strcat(story, CONST_news886);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news887);
-					strcat(story, CONST_news888);
-					strcat(story, ampersandR);
-				}
-			}
-			else if (crime[CRIME_BANKSTICKUP])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToSourcesAtScene);
-					strcat(story, CONST_news889);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news890);
-					strcat(story, CONST_news891);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_COURTHOUSE_LOCKUP])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToSourcesAtScene);
-					strcat(story, CONST_news892);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news893);
-					strcat(story, CONST_news894);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_PRISON_RELEASE])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToSourcesAtScene);
-					strcat(story, CONST_news895);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news896);
-					strcat(story, CONST_news897);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_JURYTAMPERING])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToPoliceSources);
-					strcat(story, CONST_news898);
-					strcat(story, CONST_news899);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news900);
-					strcat(story, CONST_news901);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_HACK_INTEL])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToPoliceSources);
-					strcat(story, CONST_news902);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news903);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_ARMORY])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, CONST_news1031);
-					strcat(story, CONST_news905);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news906);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_HOUSE_PHOTOS])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToPoliceSources);
-					strcat(story, CONST_news907);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news908);
-					strcat(story, ampersandR);
-				}
-			}
-			if (crime[CRIME_CORP_FILES])
-			{
-				if (!liberalguardian)
-				{
-					strcat(story, accordingToPoliceSources);
-					strcat(story, CONST_news909);
-					strcat(story, ampersandR);
-				}
-				else
-				{
-					strcat(story, CONST_news910);
-					strcat(story, ampersandR);
-				}
-			}
-			if (liberalguardian && !ccs)
-			{
-				if (crime[CRIME_ATTACKED_MISTAKE]) typesum--;
-				if (crime[CRIME_KILLEDSOMEBODY]) typesum--;
-			}
-			if (typesum > 0)
-			{
-				if (typesum > 0)
-				{
-					if (!ccs)
-					{
-						if (!liberalguardian)
-						{
-							strcat(story, CONST_news911);
-							strcat(story, CONST_news915);
-						}
-						else
-						{
-							strcat(story, CONST_news913);
-						}
-					}
-					else
-					{
-						strcat(story, CONST_news914);
-						strcat(story, CONST_news915);
-					}
-					if (crime[CRIME_ARSON])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news916);
-						}
-						else
-						{
-							strcat(story, CONST_news917);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (!liberalguardian || ccs)
-					{
-						if (crime[CRIME_KILLEDSOMEBODY])
-						{
-							strcat(story, CONST_news918);
-							if (typesum >= 3)strcat(story, commaSpace);
-							else if (typesum == 2)strcat(story, AND);
-							typesum--;
-						}
-						if (crime[CRIME_ATTACKED_MISTAKE])
-						{
-							strcat(story, CONST_news921);
-							if (typesum >= 3)strcat(story, commaSpace);
-							else if (typesum == 2)strcat(story, AND);
-							typesum--;
-						}
-						if (crime[CRIME_ATTACKED])
-						{
-							if (crime[CRIME_ATTACKED_MISTAKE])strcat(story, CONST_news920);
-							else strcat(story, CONST_news921);
-							if (typesum >= 3)strcat(story, commaSpace);
-							else if (typesum == 2)strcat(story, AND);
-							typesum--;
-						}
-					}
-					else
-					{
-						if (crime[CRIME_ATTACKED])
-						{
-							strcat(story, CONST_news922);
-							if (typesum >= 3)strcat(story, commaSpace);
-							else if (typesum == 2)strcat(story, AND);
-							typesum--;
-						}
-					}
-					if (crime[CRIME_STOLEGROUND] || crime[CRIME_BANKTELLERROBBERY])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news923);
-						}
-						else
-						{
-							strcat(story, CONST_news924);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (crime[CRIME_FREE_RABBITS] || crime[CRIME_FREE_BEASTS])
-					{
-						if (!liberalguardian)
-						{
-							strcat(story, CONST_news925);
-						}
-						else
-						{
-							strcat(story, CONST_news926);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (crime[CRIME_BREAK_SWEATSHOP] || crime[CRIME_BREAK_FACTORY] || crime[CRIME_VANDALISM])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news927);
-						}
-						else
-						{
-							strcat(story, CONST_news928);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (crime[CRIME_TAGGING])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news929);
-						}
-						else
-						{
-							strcat(story, CONST_news930);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (crime[CRIME_BROKEDOWNDOOR])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news931);
-						}
-						else
-						{
-							strcat(story, CONST_news932);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					if (crime[CRIME_UNLOCKEDDOOR])
-					{
-						if (!liberalguardian || ccs)
-						{
-							strcat(story, CONST_news933);
-						}
-						else
-						{
-							strcat(story, CONST_news934);
-						}
-						if (typesum >= 3)strcat(story, commaSpace);
-						else if (typesum == 2)strcat(story, AND);
-						typesum--;
-					}
-					strcat(story, singleDot);
-				}
-				strcat(story, ampersandR);
-			}
-			if (crime[CRIME_CARCHASE])
-			{
-				if (!liberalguardian || ccs)
-				{
-					strcat(story, CONST_news935);
-					strcat(story, CONST_news936);
-				}
-				else
-				{
-					strcat(story, CONST_news937);
-					strcat(story, CONST_news938);
-				}
-				if (crime[CRIME_CARCRASH])
-				{
-					if (crime[CRIME_CARCRASH] > 1)
-					{
-						strcat(story, crime[CRIME_CARCRASH]);
-						strcat(story, CONST_news939);
-					}
-					else strcat(story, CONST_news940);
-					if (!liberalguardian || ccs)
-						strcat(story, CONST_news941);//XXX: Why not turn them into martyrs?
-				}
-				if (crime[CRIME_FOOTCHASE])
-				{
-					if (!liberalguardian || ccs)
-						strcat(story, CONST_news942);
-					else
-						strcat(story, CONST_news943);
-				}
-				strcat(story, ampersandR);
-			}
-			if (!ccs)
-			{
-				if (!LCSrandom(8))
-				{
-					if (crime[CRIME_TAGGING])
-					{
-						strcat(story, CONST_newsX10);
-						strcat(story, slogan_str);
-						strcat(story, CONST_news945);
-					}
-					else
-					{
-						switch (LCSrandom(3))
-						{
-						case 0:
-							if (ns.type == NEWSSTORY_SQUAD_KILLED_SITE)
-							{
-								strcat(story, CONST_newsX11);
-								strcat(story, slogan_str);
-								strcat(story, CONST_news947);
-							}
-							else
-							{
-								strcat(story, CONST_newsX12);
-								strcat(story, slogan_str);
-								strcat(story, CONST_news1030);
-							}
-							break;
-						case 1:
-							strcat(story, CONST_newsX13);
-							strcat(story, slogan_str);
-							strcat(story, CONST_news1030);
-							break;
-						case 2:
-							strcat(story, CONST_newsX14);
-							strcat(story, slogan_str);
-							strcat(story, CONST_news1030);
-							break;
-						}
-					}
-					strcat(story, ampersandR);
-				}
-			}
+			story += squadstory_text_opening(ns, liberalguardian, ccs);
+			story += otherCrime(ns, liberalguardian, ccs);
 			break;
 		}
-		}
 	}
-}
-string displayMinorStory(const bool liberalguardian, newsstoryst ns) {
-	char story[5000];
-	displayMinorStory(liberalguardian, ns, story);
 	return story;
 }
+/* news - make some filler junk */
 string generatefiller(int amount) {
-	char story[5000];
-	generatefiller(story, amount);
+	string story;
+	 //TODO: Use text from filler.cpp
+		story += ampersandR + cityname() + spaceDashSpace;
+		for (int par = 0; amount > 0; amount--)
+		{
+			par++;
+			for (int i = 0; i < LCSrandom(10) + 3; i++)story += CONST_news222;
+			if (amount > 1)story += singleSpace;
+			if (par >= 50 && !LCSrandom(5) && amount > 20)
+			{
+				par = 0;
+				story += ampersandR + singleSpace;
+			}
+		}
+		story += ampersandR;
 	return story;
 
 }
-string displaynewsstory(const short *storyx_s, const short *storyx_e, int y) {
-	char story[5000];
-	displaynewsstory(story, storyx_s, storyx_e, y);
-	return story;
 
-}
-void displaystory(newsstoryst &ns, bool liberalguardian, int header)
+void displaystory(const newsstoryst ns, const bool liberalguardian, int header)
 {
+	const string CONST_newsX15 = "According to one person familiar with the case, \"";
 	extern char newscherrybusted;
 	extern bool multipleCityMode;
 	extern MusicClass music;
@@ -37548,7 +37574,7 @@ void displaystory(newsstoryst &ns, bool liberalguardian, int header)
 		(story += spaceDashSpace);
 		story += displayMinorStory(liberalguardian, ns);
 		story += generatefiller(200);
-		story += displaynewsstory(storyx_s, storyx_e, y);
+		displaynewsstory(story, storyx_s, storyx_e, y);
 		if (!newscherrybusted)newscherrybusted = 1;
 		if (ns.type == NEWSSTORY_CCS_SITE ||
 			ns.type == NEWSSTORY_CCS_KILLED_SITE)newscherrybusted = 2;
@@ -37687,7 +37713,7 @@ void displaystory(newsstoryst &ns, bool liberalguardian, int header)
 		(story += CONST_newsB955);
 		(story += ampersandR);
 		story += generatefiller(200);
-		story += displaynewsstory(storyx_s, storyx_e, y);
+		displaynewsstory(story, storyx_s, storyx_e, y);
 		break;
 	}
 	case NEWSSTORY_KIDNAPREPORT:
@@ -37726,40 +37752,40 @@ void displaystory(newsstoryst &ns, bool liberalguardian, int header)
 			}
 		}
 		string story;
-		(story = city);
-		(story += CONST_news1017);
-		(story += ns.cr->propername);
-		(story += CONST_news1018);
-		(story += CONST_news1019);
-		(story += ampersandR);
+		story = city;
+		story += CONST_news1017;
+		story += ns.cr->propername;
+		story += CONST_news1018;
+		story += CONST_news1019;
+		story += ampersandR;
 		char dstr[200], dstr2[200];
-		(story += singleSpace);
+		story += singleSpace;
 		generate_name(dstr, dstr2);
-		(story += dstr);
-		(story += singleSpace);
-		(story += dstr2);
-		(story += CONST_news1021);
-		(story += CONST_news1022);
-		(story += ns.cr->propername);
-		(story += CONST_news1023);
-		(story += ns.cr->joindays - 1);
-		(story += CONST_news1024);
-		(story += CONST_news1025);
-		(story += CONST_news1026);
-		(story += ns.cr->propername);
-		(story += CONST_news1027);
-		(story += CONST_news1028);
-		(story += CONST_news1029);
-		(story += CONST_news1030);
-		(story += ampersandR);
-		(story += CONST_news1031);
-		(story += ns.cr->propername);
-		(story += CONST_news1032);
-		(story += LocationsPool::getInstance().getLocationName(ns.cr->worklocation));
-		(story += CONST_news1033);
-		(story += ampersandR);
+		story += dstr;
+		story += singleSpace;
+		story += dstr2;
+		story += CONST_news1021;
+		story += CONST_news1022;
+		story += ns.cr->propername;
+		story += CONST_news1023;
+		story += ns.cr->joindays - 1;
+		story += CONST_news1024;
+		story += CONST_news1025;
+		story += CONST_news1026;
+		story += ns.cr->propername;
+		story += CONST_news1027;
+		story += CONST_news1028;
+		story += CONST_news1029;
+		story += CONST_news1030;
+		story += ampersandR;
+		story += CONST_news1031;
+		story += ns.cr->propername;
+		story += CONST_news1032;
+		story += LocationsPool::getInstance().getLocationName(ns.cr->worklocation);
+		story += CONST_news1033;
+		story += ampersandR;
 		story += generatefiller(200);
-		story += displaynewsstory(storyx_s, storyx_e, y);
+		displaynewsstory(story, storyx_s, storyx_e, y);
 		break;
 	}
 	}
@@ -38920,46 +38946,19 @@ char determine_politician_vote(char alignment, int law)
 	}
 	return vote;
 }
-void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
-/* politics - causes congress to act on legislation */
-void congress(char clearformess, char canseethings)
-{
-	extern MusicClass music;
+void determineBills(const char canseethings, vector<int> &bill, vector<int> &billdir) {
 	extern int year;
-	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-	extern bool nocourtpurge;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
 	extern short lawList[LAWNUM];
 	extern short house[HOUSENUM];
 	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
-	if (canseethings)
-	{
-		music.play(MUSIC_ELECTIONS);
-		if (clearformess) eraseAlt();
-		else makedelimiter();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_politics092);
-		pressAnyKey();
-	}
-	//CHANGE THINGS AND REPORT
-	if (canseethings)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_politics093);
-		addstrAlt(year);
-	}
-	vector<int> bill, billdir, killbill;
-	int cnum = LCSrandom(3) + 1;
+
 	char lawtaken[LAWNUM];
 	memset(lawtaken, 0, LAWNUM * sizeof(char));
 	int lawpriority[LAWNUM];
 	memset(lawpriority, 0, LAWNUM * sizeof(int));
 	char lawdir[LAWNUM];
 	memset(lawdir, 0, LAWNUM * sizeof(char));
-	//DETERMINE BILLS
+
 	for (int l = 0; l < LAWNUM; l++)
 	{
 		int pup = 0;
@@ -39007,12 +39006,8 @@ void congress(char clearformess, char canseethings)
 		lawpriority[l] = pprior;
 	}
 	vector<int> canlaw;
-	bill.resize(cnum);
-	billdir.resize(cnum);
-	killbill.resize(cnum);
-	for (int c = 0; c < cnum; c++)
+	for (int c = 0; c < bill.size(); c++)
 	{
-		killbill[c] = BILL_PASSED_CONGRESS;
 		int maxprior = 0;
 		for (int l = 0; l < LAWNUM; l++)
 			if (lawpriority[l] > maxprior && !lawtaken[l])maxprior = lawpriority[l];
@@ -39050,6 +39045,50 @@ void congress(char clearformess, char canseethings)
 			refreshAlt();
 		}
 	}
+}
+void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
+/* politics - causes congress to act on legislation */
+void congress(char clearformess, char canseethings)
+{
+	extern MusicClass music;
+	extern int year;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool nocourtpurge;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern short exec[EXECNUM];
+	extern short lawList[LAWNUM];
+	extern short house[HOUSENUM];
+	extern short senate[SENATENUM];
+	extern short court[COURTNUM];
+	if (canseethings)
+	{
+		music.play(MUSIC_ELECTIONS);
+		if (clearformess) eraseAlt();
+		else makedelimiter();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(8, 1, CONST_politics092);
+		pressAnyKey();
+	}
+	//CHANGE THINGS AND REPORT
+	if (canseethings)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, CONST_politics093);
+		addstrAlt(year);
+	}
+	vector<int> bill, billdir, killbill;
+	int cnum = LCSrandom(3) + 1;
+	bill.resize(cnum);
+	billdir.resize(cnum);
+	killbill.resize(cnum);
+	for (int c = 0; c < killbill.size(); c++)
+	{
+		killbill[c] = BILL_PASSED_CONGRESS;
+	}
+	//DETERMINE BILLS
+	determineBills(canseethings, bill, billdir);
+	
 	if (canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK);

@@ -457,3 +457,11 @@ Split constructNegativeEventStory() and constructPositiveEventStory() into funct
 
 Converted some switch statements into maps.
 char hasdisguise(const Creature &cr) has been made to use maps in place of most of its switch statement, though it looks really weird.
+
+Converted most of the world creation algorithm into maps, rather than a long series of identicle methods.
+Converted armSpecificCreature() switch statement into a series of unique functions.  One step closer to having it map-based.
+Exported switch statement from verifyworklocation() to external map.
+
+Fixed error in news calculation.  Had "story += ..." but did not proceed to print story anywhere.
+Replaced a number of void function(... char*); with string function(...); as well as (newsstoryst& ns) with (const newsstoryst ns)
+Replaced 'void sexdesc(char *str)' and related with 'string sexdesc();' (four functions)
