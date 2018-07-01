@@ -465,3 +465,10 @@ Exported switch statement from verifyworklocation() to external map.
 Fixed error in news calculation.  Had "story += ..." but did not proceed to print story anywhere.
 Replaced a number of void function(... char*); with string function(...); as well as (newsstoryst& ns) with (const newsstoryst ns)
 Replaced 'void sexdesc(char *str)' and related with 'string sexdesc();' (four functions)
+
+void review_mode(const short mode)
+replaced the switch statement inside a for loop
+with for loops inside a switch statement
+Though more verbose, this means the switch statement is only checked once, instead of every iteration.
+
+Cleaned up some siege and interrogation code.
