@@ -3113,3 +3113,274 @@ string constructeventstory(const short view, const char positive)
 		return constructNegativeEventStory(view);
 	}
 }
+
+
+
+string wasUnableToFind(const string old) {
+	const string CONST_activities149 = " but did find a ";
+	const string CONST_activities148 = " was unable to find a ";
+	return CONST_activities148 + old + CONST_activities149;
+}
+
+string considerLeaving(const bool sensealarm, const bool alarmon, const string name) {
+	const string singleDot = ".";
+	const string CONST_activities186 = "Enter - Call it a day.";
+
+	const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
+	const string CONST_activities167 = " is deterred.";
+	const string CONST_activities166 = "Enter - The Viper?   ";
+
+	if (!sensealarm) return CONST_activities186;
+	else
+	{
+		if (!alarmon)
+		{
+			return (CONST_activities166)+(name)+(CONST_activities167);
+		}
+		else
+		{
+			return (CONST_activities168)+(name)+(singleDot);
+		}
+	}
+}
+
+string getDespairString(const bool drugs, const bool restrain, const bool religion) {
+
+	const string CONST_interrogation133 = " wonders about death.";
+	const string CONST_interrogation132 = " wonders about apples.";
+	const string CONST_interrogation131 = " cries helplessly.";
+	const string CONST_interrogation130 = " barks helplessly.";
+	const string CONST_interrogation129 = " curls up in the corner and doesn't move.";
+	const string CONST_interrogation128 = " goes limp in the restraints.";
+	const string CONST_interrogation127 = "mommy.";
+	const string CONST_interrogation126 = "God's mercy.";
+	const string CONST_interrogation125 = "John Lennon's mercy.";
+	const string CONST_interrogation124 = " screams helplessly for ";
+
+	string output;
+	switch (LCSrandom(4))
+	{
+	case 0: output = CONST_interrogation124;
+		if (drugs) output = CONST_interrogation125;
+		else if (religion) output = CONST_interrogation126;
+		else  output = CONST_interrogation127;
+		break;
+	case 1:
+		if (restrain)  output = CONST_interrogation128;
+		else  output = CONST_interrogation129; break;
+	case 2:
+		if (drugs && !LCSrandom(5))  output = CONST_interrogation130;
+		else  output = CONST_interrogation131; break;
+	case 3:
+		if (drugs && !LCSrandom(3))  output = CONST_interrogation132;
+		else  output = CONST_interrogation133;
+		break;
+	}
+	return output;
+}
+
+string victimPrays(const bool onDrugs) {
+	extern vector<string> prays;
+	extern vector<string> prays_on_drugs;
+	if (!onDrugs)
+	{
+		return pickrandom(prays);
+	}
+	else
+	{
+		return pickrandom(prays_on_drugs);
+	}
+}
+
+string getFallsInLove(const string name, const bool restrain) {
+	extern vector<vector<string> > fall_in_love;
+	const string singleDot = ".";
+	string output;
+
+	const string CONST_interrogation143 = "talks about hugging ";
+	const string CONST_interrogation142 = " stammers and ";
+
+	const string CONST_interrogationB150 = "hugs ";
+
+	switch (LCSrandom(fall_in_love.size() + 1))
+	{
+	case 0:
+		output = CONST_interrogation142;
+		output += restrain ? CONST_interrogation143 : CONST_interrogationB150;
+		output += name;
+		output += singleDot;
+		break;
+	default:
+		int which_love = LCSrandom(fall_in_love.size());
+		output = fall_in_love[which_love][0];
+		output += name;
+		output += fall_in_love[which_love][1];
+		break;
+	}
+	return output;
+}
+
+string getBadTrip(const string name, const bool restrain, const bool rapport) {
+	extern vector<vector<string> > bad_trip;
+	const string singleDot = ".";
+
+	const string CONST_interrogation148 = " begs for the nightmare to end.";
+	const string CONST_interrogation147 = " curls up and";
+	const string CONST_interrogation146 = " to stop looking like Hitler.";
+	const string CONST_interrogation145 = " screams for ";
+	const string CONST_interrogation144 = " begs Hitler to stay and kill ";
+
+	string output;
+	switch (LCSrandom(bad_trip.size() + 2))
+	{
+	case 0:
+		if (rapport)
+		{
+			output = CONST_interrogation144;
+			output += name;
+			output += singleDot;
+		}
+		else
+		{
+			output = CONST_interrogation145;
+			output += name;
+			output += CONST_interrogation146;
+		}
+		break;
+	case 1:
+		if (!restrain) output = CONST_interrogation147;
+		output = CONST_interrogation148;
+		break;
+	default:
+		int which_trip = LCSrandom(bad_trip.size());
+		output = (bad_trip[which_trip][0]);
+		output += name;
+		output += (bad_trip[which_trip][1]);
+		break;
+	}
+	return output;
+}
+string outPsychologyCaptor(const string name) {
+	extern vector<string> smarter_than_you_one_line;
+	extern vector<vector<string> > smarter_than_you;
+	string output;
+	int which_smarter = LCSrandom(smarter_than_you.size() + smarter_than_you_one_line.size());
+	if (which_smarter < smarter_than_you.size()) {
+		output = smarter_than_you[which_smarter][0];
+		output += name;
+		output += smarter_than_you[which_smarter][1];
+	}
+	else {
+		output = pickrandom(smarter_than_you_one_line);
+	}
+	return output;
+
+}
+
+string triedConvertingTheAbused(const string name) {
+	extern vector<string> develops_hatred_one_line;
+	extern vector<vector<string> > develops_hatred;
+	string output;
+	int which_hatred = LCSrandom(develops_hatred.size() + develops_hatred_one_line.size());
+	if (which_hatred < develops_hatred.size())
+	{
+		output = develops_hatred[which_hatred][0];
+		output += name;
+		output += develops_hatred[which_hatred][1];
+	}
+	else {
+		output = pickrandom(develops_hatred_one_line);
+	}
+
+	return output;
+}
+
+string feelsBadForAbused(const string name) {
+	extern vector<string> interrogater_shows_compassion_one_line;
+	extern vector<vector<string> > interrogater_shows_compassion;
+
+	string output;
+	int which_compassion = LCSrandom(interrogater_shows_compassion.size() + interrogater_shows_compassion_one_line.size());
+	if (which_compassion < interrogater_shows_compassion.size()) {
+		output = interrogater_shows_compassion[which_compassion][0];
+		output += name;
+		output += interrogater_shows_compassion[which_compassion][1];
+	}
+	else {
+		output = pickrandom(interrogater_shows_compassion_one_line);
+	}
+	return output;
+}
+
+string stockholmSyndrome(const string name) {
+	extern vector<vector<string> > cling_to_interrogater;
+	extern vector<string> clinging_one_line;
+
+	string output;
+	int which_cling = LCSrandom(cling_to_interrogater.size() + clinging_one_line.size());
+	if (which_cling < cling_to_interrogater.size()) {
+		output = cling_to_interrogater[which_cling][0];
+		output += name;
+		output += cling_to_interrogater[which_cling][1];
+	}
+	else {
+		output = pickrandom(clinging_one_line);
+	}
+	return output;
+}
+
+string failToBreakReligion(const string a, const string cr) {
+	extern vector<vector<string> > cling_to_religion;
+	extern vector<string> cling_to_religion_one_line;
+
+	string output;
+	int which_cling = LCSrandom(cling_to_religion.size() + cling_to_religion_one_line.size());
+	if (which_cling < cling_to_religion.size()) {
+		output = a;
+		output += cling_to_religion[which_cling][0];
+		output += cr;
+		output += cling_to_religion[which_cling][1];
+	}
+	else {
+		output = cr;
+		output += pickrandom(cling_to_religion_one_line);
+	}
+	return output;
+}
+
+string failedToBreakBusiness(const string a, const string cr) {
+	extern vector<vector<string> > cling_to_business;
+	extern vector<string> cling_to_business_one_line;
+
+	string output;
+	int which_cling = LCSrandom(cling_to_business.size() + cling_to_business_one_line.size());
+	if (which_cling < cling_to_business.size()) {
+		output + cr;
+		output += cling_to_business[which_cling][0];
+		output += a;
+		output += cling_to_business[which_cling][1];
+	}
+	else {
+		output + cr;
+		output += pickrandom(cling_to_business_one_line);
+	}
+	return output;
+}
+
+string failedToBreakScience(const string a, const string cr) {
+	extern vector<vector<string> > cling_to_science;
+	extern vector<string> cling_to_science_one_line;
+	string output;
+	int which_cling = LCSrandom(cling_to_science.size() + cling_to_science_one_line.size());
+	if (which_cling < cling_to_science.size()) {
+		output + cr;
+		output += cling_to_science[which_cling][0];
+		output += a;
+		output += cling_to_science[which_cling][1];
+	}
+	else {
+		output + cr;
+		output += pickrandom(cling_to_science_one_line);
+	}
+	return output;
+}

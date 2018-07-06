@@ -194,6 +194,7 @@
     <ClCompile Include="..\src\lcsio.cpp" />
     <ClCompile Include="..\src\locations\locationsPool.cpp" />
     <ClCompile Include="..\src\log\log.cpp" />
+    <ClCompile Include="..\src\simpleFunctions.cpp" />
     <ClCompile Include="..\src\sitemode\mapspecials.cpp" />
     <ClCompile Include="..\src\sitemode\sitedisplay.cpp" />
     <ClCompile Include="..\src\title\initfile.cpp" />

@@ -472,3 +472,7 @@ with for loops inside a switch statement
 Though more verbose, this means the switch statement is only checked once, instead of every iteration.
 
 Cleaned up some siege and interrogation code.
+Further attempts at untangling tendHostage() method.
+Fixed a few instances of string += int
+replaced with string += tostring(int)
+as the autoconversion turns them into chars instead.
