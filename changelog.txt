@@ -476,3 +476,6 @@ Further attempts at untangling tendHostage() method.
 Fixed a few instances of string += int
 replaced with string += tostring(int)
 as the autoconversion turns them into chars instead.
+
+Replaced some while loops with for loops.
+Reverted minor change to enemyattack();

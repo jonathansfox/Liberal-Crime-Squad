@@ -21500,11 +21500,6 @@ const string CONST_fight159 = " just barely missed!";
 const string CONST_fight158 = " missed!";
 const string CONST_fight154 = " knocks the blow aside and counters!";
 const string CONST_fight153 = " to no effect.";
-const string CONST_fight152 = " BLOWING IT OFF!";
-const string CONST_fight151 = " CUTTING IT OFF!";
-const string CONST_fight150 = " BLOWING IT IN HALF!";
-const string CONST_fight149 = " BLOWING IT APART!";
-const string CONST_fight148 = " CUTTING IT IN HALF!";
 const string CONST_fight146 = "!";
 const string CONST_fight145 = "'s corpse";
 const string CONST_fight144 = " shields ";
@@ -21524,13 +21519,6 @@ const string CONST_fight130 = "bites";
 const string CONST_fight129 = "stabs";
 const string CONST_fight128 = "breathes fire at";
 const string CONST_fight127 = "fires a 120mm shell at";
-const string CONST_fight126 = "gracefully strikes at";
-const string CONST_fight125 = "jump kicks";
-const string CONST_fight124 = "strikes at";
-const string CONST_fight123 = "kicks";
-const string CONST_fight122 = "grapples with";
-const string CONST_fight121 = "swings at";
-const string CONST_fight120 = "punches";
 const string CONST_fight119 = "MISTAKENLY ";
 const string CONST_fight118 = " readies another ";
 const string CONST_fight117 = " reloads.";
@@ -22577,9 +22565,8 @@ int determineBodypartHit(Creature &t, const int aroll, const int droll, const bo
 	} while (((t.wound[w] & WOUND_CLEANOFF) || (t.wound[w] & WOUND_NASTYOFF)) && canhit == true);
 	return w;
 }
-void printSpecialWounds(Creature* target, const int w, const int damamount, const int damtype) {
+string printSpecialWounds(Creature* target, const int w, const int damamount, const int damtype) {
 
-	extern Log gamelog;
 	char heavydam = 0, breakdam = 0, pokedam = 0;
 	if (damamount >= 12) //JDS -- 2x damage needed
 	{
@@ -22592,99 +22579,135 @@ void printSpecialWounds(Creature* target, const int w, const int damamount, cons
 	if ((damtype & WOUND_BRUISED || damtype & WOUND_SHOT || damtype & WOUND_TORN || damtype & WOUND_CUT) && damamount >= 50) {
 		breakdam = 1;
 	}
-	if (w == BODYPART_HEAD)
-	{
-		string damageDescription = specialWoundPossibilityHead(
+	string damageDescription;
+	switch (w) {
+	case BODYPART_HEAD:
+		damageDescription = specialWoundPossibilityHead(
 			*target,
 			breakdam,
 			heavydam,
 			damtype
 		);
-		if (len(damageDescription) > 0) {
-			clearmessagearea();
-			if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			else set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, damageDescription, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-		}
-	}
-	if (w == BODYPART_BODY)
-	{
+		break;
+	case BODYPART_BODY:
 		string damageDescription = specialWoundPossibilityBody(
 			*target,
 			breakdam,
 			pokedam,
 			damtype
 		);
-		if (len(damageDescription) > 0) {
-			clearmessagearea();
-			//set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			else set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, damageDescription, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-		}
+		break;
 	}
+	return damageDescription;
 
 }
-void unsuccessfulHit(Creature &a, Creature &t, char* str, const bool sneak_attack, const int droll) {
 
-	extern short mode;
-	extern Log gamelog;
+
+char consolidateDamageTypesNotCutOrBruised(const attackst* attack_used) {
+	char damtype = 0;
+	if (attack_used->burns) damtype |= WOUND_BURNED;
+	if (attack_used->tears) damtype |= WOUND_TORN;
+	if (attack_used->shoots) damtype |= WOUND_SHOT;
+	if (attack_used->bleeding) damtype |= WOUND_BLEEDING;
+	return damtype;
+}
+
+char consolidateDamageTypes(const attackst* attack_used) {
+	char damtype = 0;
+	if (attack_used->bruises) damtype |= WOUND_BRUISED;
+	if (attack_used->cuts) damtype |= WOUND_CUT;
+	damtype |= consolidateDamageTypesNotCutOrBruised(attack_used);
+	return damtype;
+}
+
+string howGracefulAttack(int handToHand);
+string initiateCombat(const Creature a, const bool sneak_attack, const attackst* attack_used) {
 	extern short sitealarm;
 
-	if (sneak_attack)
+	string str;
+
+	if (!a.is_armed())
 	{
-		strcpy(str, t.name);
-		strcat(str, (singleSpace + pickrandom(cry_alarm)).c_str());
-		sitealarm = 1;
+		if (!a.animalgloss) //Move into WEAPON_NONE -XML
+		{
+			str += howGracefulAttack(a.get_skill(SKILL_HANDTOHAND));
+		}
+		else
+		{
+			if (a.specialattack == ATTACK_CANNON)
+			{
+				str += CONST_fight127;
+			}
+			else if (a.specialattack == ATTACK_FLAME) str += CONST_fight128;
+			else if (a.specialattack == ATTACK_SUCK) str += CONST_fight129;
+			else str += CONST_fight130;
+		}
 	}
 	else
 	{
-		if (mode == GAMEMODE_CHASECAR)
+
+		if (sneak_attack)
 		{
-			Creature* driver = getChaseDriver(t);
-			strcpy(str, driver->name);
-			if (droll == 1) {
-				strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
-			}
-			else if (droll == 2) {
-				strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
-			}
-			else if (droll > 18 || droll < 1) {
-				strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
-			}
-			else {
-				strcat(str, evasionStringsAlt[droll - 3].c_str());
-			}
+			str += CONST_fight131;
 		}
 		else {
-			strcpy(str, t.name);
-			if (droll == 1) {
-				strcpy(str, a.name); strcat(str, CONST_fight158.c_str());
-			}
-			else if (droll == 2) {
-				strcpy(str, a.name); strcat(str, CONST_fight159.c_str());
-			}
-			else if (droll > 18 || droll < 1) {
-				strcpy(str, a.name); strcat(str, CONST_fight160.c_str());  // You failed to hit someone who probably rolled a zero.  You should feel bad.
-			}
-			else {
-				strcat(str, evasionStrings[droll - 3].c_str());
-			}
+			str += attack_used->attack_description;
+			sitealarm = 1;
 		}
 	}
-	mvaddstrAlt(17, 1, str, gamelog);
-	gamelog.newline();
-	printparty();
-	if (mode == GAMEMODE_CHASECAR ||
-		mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-	else printencounter();
-	pressAnyKey();
+	return str;
+}
+
+string unsuccessfulHit(Creature &a, Creature &t, const int droll) {
+
+	extern short mode;
+
+	string str;
+
+	if (mode == GAMEMODE_CHASECAR)
+	{
+		Creature* driver = getChaseDriver(t);
+		str = driver->name;
+		if (droll == 1) {
+			str = a.name;
+			str += CONST_fight158;
+		}
+		else if (droll == 2) {
+			str = a.name;
+			str += CONST_fight159;
+		}
+		else if (droll > 18 || droll < 1) {
+			str = a.name;
+			str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
+		}
+		else {
+			str += evasionStringsAlt[droll - 3];
+		}
+	}
+	else {
+		str = t.name;
+		if (droll == 1) {
+			str = a.name;
+			str += CONST_fight158;
+		}
+		else if (droll == 2) {
+			str = a.name;
+			str += CONST_fight159;
+		}
+		else if (droll > 18 || droll < 1) {
+			str = a.name;
+			str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
+		}
+		else {
+			str += evasionStrings[droll - 3];
+		}
+	}
+	return str;
 
 }
+
+
+string dismemberingWound(const int w, const int wound);
 void addLocationChange(int cursite, sitechangest change);
 int bodypartSeverAmount(const int w);
 /* attack handling for an individual creature and its target */
@@ -22721,81 +22744,46 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		return false;
 	}
 
+	// for tanks, attack_used->ranged returns false, so we need to check if it's a tank
+	bool melee = !attack_used->ranged && !(!a.is_armed() && a.animalgloss && a.specialattack == ATTACK_CANNON);
+	
+	bool sneak_attack = a.is_armed() && (attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake) && (t.cantbluff < 1 && sitealarm < 1);
 
+	if (sneak_attack)
+	{
+		if (sitealarmtimer > 10 || sitealarmtimer < 0) { 
+			sitealarmtimer = 10;
+		}
+		t.cantbluff = 2;
+	}
 
-	bool melee = !attack_used->ranged;
-	char str[200];
-	strcpy(str, a.name);
-	strcat(str, singleSpace.c_str());
-	if (mistake) { strcat(str, CONST_fight119.c_str()); }
-	bool sneak_attack = false;
-	if (!a.is_armed())
 	{
-		if (!a.animalgloss) //Move into WEAPON_NONE -XML
+		string str = a.name;
+
+		str += singleSpace;
+		if (mistake) { str += CONST_fight119; }
+		str += initiateCombat(a, sneak_attack, attack_used);
+		str += singleSpace;
+		str += t.name;
+
+		if (a.is_armed() && !attack_used->thrown)
 		{
-			if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND) + 1))
-				strcat(str, CONST_fight120.c_str());
-			else if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND)))
-				strcat(str, CONST_fight121.c_str());
-			else if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND) - 1))
-				strcat(str, CONST_fight122.c_str());
-			else if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND) - 2))
-				strcat(str, CONST_fight123.c_str());
-			else if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND) - 3))
-				strcat(str, CONST_fight124.c_str());
-			else if (!LCSrandom(a.get_skill(SKILL_HANDTOHAND) - 4))
-				strcat(str, CONST_fight125.c_str());
-			else strcat(str, CONST_fight126.c_str());
+			str += CONST_fight132;
+			str += a.get_weapon().get_name(1);
 		}
-		else
-		{
-			if (a.specialattack == ATTACK_CANNON)
-			{
-				strcat(str, CONST_fight127.c_str());
-				melee = false;
-			}
-			else if (a.specialattack == ATTACK_FLAME) strcat(str, CONST_fight128.c_str());
-			else if (a.specialattack == ATTACK_SUCK) strcat(str, CONST_fight129.c_str());
-			else strcat(str, CONST_fight130.c_str());
-		}
+
+		str += CONST_fight146;
+
+		mvaddstrAlt(16, 1, str, gamelog);
 	}
-	else
-	{
-		if (attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake)
-		{
-			if (t.cantbluff < 1 && sitealarm < 1)
-			{
-				sneak_attack = true;
-				strcat(str, CONST_fight131.c_str());
-				if (sitealarmtimer > 10 || sitealarmtimer < 0) sitealarmtimer = 10;
-				t.cantbluff = 2;
-			}
-		}
-		if (!sneak_attack)
-		{
-			strcat(str, attack_used->attack_description.c_str());
-			sitealarm = 1;
-		}
-	}
-	strcat(str, singleSpace.c_str());
-	strcat(str, t.name);
-	mvaddstrAlt(16, 1, str, gamelog);
-	strcpy(str, blankString.c_str());
-	if (a.is_armed() && !attack_used->thrown)
-	{
-		strcat(str, CONST_fight132.c_str());
-		strcat(str, a.get_weapon().get_name(1).c_str());
-	}
-	strcat(str, CONST_fight146.c_str());
-	addstrAlt(str, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
-	strcpy(str, a.heshe(true)); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
+	
 	int bonus = 0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 				   //SKILL EFFECTS
-	const int wsk = (attack_used->skill);
+	const int wsk = attack_used->skill;
 	Creature* driver = getChaseDriver(t);
 	Creature* adriver = getChaseDriver(a);
 	Vehicle* avehicle = getChaseVehicle(a);
@@ -22932,13 +22920,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	//HIT!
 	if (aroll + bonus > droll)
 	{
-		if (sneak_attack) strcat(str, CONST_fight134.c_str());
-		else strcat(str, CONST_fight135.c_str());
-		strcat(str, t.name);
-		strcat(str, CONST_fight136.c_str());
 		int w = determineBodypartHit(t, aroll, droll, sneak_attack);
-		strcat(str, bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss).c_str());
-		strcat(str, showMultipleHits(a, bursthits, attack_used).c_str());
 
 
 		char damtype = 0;
@@ -22953,10 +22935,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		{
 			strengthmin = 5;
 			strengthmax = 10;
-			while (bursthits) //Put into WEAPON_NONE -XML
+			for ( ; bursthits > 0; bursthits--) //Put into WEAPON_NONE -XML
 			{
 				damamount += LCSrandom(5 + a.get_skill(SKILL_HANDTOHAND)) + 1 + a.get_skill(SKILL_HANDTOHAND);
-				bursthits--;
 			}
 			if (!a.animalgloss) damtype |= WOUND_BRUISED;
 			else
@@ -22965,10 +22946,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				{
 					damamount = LCSrandom(5000) + 5000;
 					armorpiercing = 20;
-					damtype |= WOUND_BURNED;
-					damtype |= WOUND_TORN;
-					damtype |= WOUND_SHOT;
-					damtype |= WOUND_BLEEDING;
+
+					damamount |= consolidateDamageTypesNotCutOrBruised(attack_used);
+
 					strengthmin = 0;
 					strengthmax = 0;
 				}
@@ -22980,12 +22960,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		}
 		else
 		{
-			if (attack_used->bruises) damtype |= WOUND_BRUISED;
-			if (attack_used->cuts) damtype |= WOUND_CUT;
-			if (attack_used->burns) damtype |= WOUND_BURNED;
-			if (attack_used->tears) damtype |= WOUND_TORN;
-			if (attack_used->shoots) damtype |= WOUND_SHOT;
-			if (attack_used->bleeding) damtype |= WOUND_BLEEDING;
+			damtype |= consolidateDamageTypes(attack_used);
 			strengthmin = attack_used->strength_min;
 			strengthmax = attack_used->strength_max;
 			severtype = attack_used->severtype;
@@ -23002,10 +22977,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				if (attack_used->critical.severtype_defined)
 					severtype = attack_used->critical.severtype;
 			}
-			while (bursthits > 0)
+			for (; bursthits > 0; bursthits--)
 			{
 				damamount += LCSrandom(random) + fixed;
-				bursthits--;
 			}
 			damagearmor = attack_used->damages_armor;
 			armorpiercing = attack_used->armorpiercing;
@@ -23058,12 +23032,12 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			if (mod2 > 0) mod3 -= mod2 * 2;
 			damagemod(t, damtype, damamount, mod3);
 		}
-		// Report vehicle protection effect
-		if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
-		{
-			strcat(str, CONST_fight138.c_str());
+
+			string str;
+		
+
 			// Could the vehicle have bounced that round on its own?
-			if (damamount == 0)
+			if ((damamount == 0) && (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0))
 			{
 				Creature testDummy; // Spawn nude test dummy to see if body armor was needed to prevent damage
 				int mod3 = mod;
@@ -23082,14 +23056,35 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 				const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
 				if (mod2 > 0) mod3 -= mod2 * 2;
 				damagemod(testDummy, damtype, cardmg, mod3);
+
 				if (cardmg < 2) //fudge factor of 1 armor level due to randomness
 				{
-					strcpy(str, CONST_fight139.c_str());
+					str = CONST_fight139;
+
+					str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+					str += vehicle->getpartname(vehicleHitLocation);
+				}
+
+			}
+			if (len(str) < 1) {
+				str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
+				if (sneak_attack) str += CONST_fight134;
+				else str += CONST_fight135;
+				str += t.name;
+				str += CONST_fight136;
+				str += bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss);
+				str += showMultipleHits(a, bursthits, attack_used);
+				// Report vehicle protection effect
+				if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
+				{
+					str += CONST_fight138;
+
+					str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+					str += vehicle->getpartname(vehicleHitLocation);
 				}
 			}
-			strcat(str, (CONST_fight140 + vehicle->shortname() + CONST_fight136).c_str());
-			strcat(str, vehicle->getpartname(vehicleHitLocation).c_str());
-		}
+
+		
 
 		// Bullets caught by armor should bruise instead of poke holes.
 		if (damamount < 4 && damtype & WOUND_SHOT)
@@ -23099,6 +23094,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		}
 		if (damamount > 0)
 		{
+				
 			Creature *target = takeBulletForLeader(t, damamount, w);
 			if (!target) target = &t;//If nobody jumps in front of the attack,
 			target->wound[w] |= damtype;
@@ -23115,13 +23111,20 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 					else damamount >>= 1;
 				} while (target->blood - damamount <= 0);
 			}
-			if (damagearmor) armordamage(target->get_armor(), w, damamount);
-			target->blood -= damamount;
-			levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
-			if ((target->wound[BODYPART_HEAD] & WOUND_CLEANOFF) ||
-				(target->wound[BODYPART_BODY] & WOUND_CLEANOFF) ||
-				(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
-				(target->wound[BODYPART_BODY] & WOUND_NASTYOFF) ||
+			if (damagearmor) armordamage(target->get_armor(), w, damamount); {
+				target->blood -= damamount; 
+			}
+			levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY; 
+
+			string hit_punctuation = attack_used->hit_punctuation;
+			string dismembered = dismemberingWound(w, target->wound[w]);
+			if (len(dismembered)) {
+				hit_punctuation = dismembered;
+			}
+			str += hit_punctuation;
+
+			if ((target->wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
+				(target->wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
 				target->blood <= 0)
 			{
 				if ((w == BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
@@ -23158,22 +23161,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 						sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 						if (a.squadid != -1) criminalizeparty(LAWFLAG_MURDER);
 					}
-				}
-				string hit_punctuation = attack_used->hit_punctuation;
-				if (w == BODYPART_HEAD && target->wound[w] & WOUND_CLEANOFF) {
-					hit_punctuation = CONST_fight151;
-				}
-				else if (w == BODYPART_BODY && target->wound[w] & WOUND_CLEANOFF) {
-					hit_punctuation = CONST_fight148;
-				}
-				else if (w == BODYPART_HEAD && target->wound[w] & WOUND_NASTYOFF) {
-					hit_punctuation = CONST_fight149;
-				}
-				else if (w == BODYPART_BODY && target->wound[w] & WOUND_NASTYOFF) {
-					hit_punctuation = CONST_fight150;
-				}
-
-				strcat(str, hit_punctuation.c_str());
+				}			
 				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				if (goodguyattack) { set_color_easy(GREEN_ON_BLACK_BRIGHT); }
 				else { set_color_easy(RED_ON_BLACK_BRIGHT); }
@@ -23192,10 +23180,6 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			}
 			else
 			{
-				string hit_punctuation = attack_used->hit_punctuation;
-				if (target->wound[w] & WOUND_CLEANOFF) (hit_punctuation = CONST_fight151);
-				else if (target->wound[w] & WOUND_NASTYOFF) (hit_punctuation = CONST_fight152);
-				strcat(str, hit_punctuation.c_str());
 				if (target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
 				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
@@ -23207,12 +23191,21 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 					mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 				else printencounter();
 				pressAnyKey();
-				//SPECIAL WOUNDS	
+				//SPECIAL WOUNDS
+				string damageDescription;
 				if (!(target->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
 					!target->animalgloss)
 				{
-					printSpecialWounds(target, w, damamount, damtype);
+					damageDescription = printSpecialWounds(target, w, damamount, damtype);
 					severloot(*target);
+				}
+				if (len(damageDescription) > 0) {
+					clearmessagearea();
+					if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					else set_color_easy(RED_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16, 1, damageDescription, gamelog);
+					gamelog.newline();
+					pressAnyKey();
 				}
 				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			}
@@ -23220,7 +23213,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		else
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			strcat(str, CONST_fight153.c_str());
+			str += CONST_fight153;
 			mvaddstrAlt(17, 1, str, gamelog);
 			gamelog.newline();
 			printparty();
@@ -23236,9 +23229,9 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		if (melee && aroll < droll - 10 && t.blood>70 && t.animalgloss == ANIMALGLOSS_NONE
 			&& t.is_armed() && t.get_weapon().get_attack(false, true, true) != NULL)
 		{
-			strcpy(str, t.name);
-			strcat(str, CONST_fight154.c_str());
-			mvaddstrAlt(17, 1, str, gamelog);
+			string str2 = t.name;
+			str2 += CONST_fight154;
+			mvaddstrAlt(17, 1, str2, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			goodguyattack = !goodguyattack;
@@ -23246,7 +23239,28 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 			goodguyattack = !goodguyattack;
 		}//TODO if missed person, but vehicle is large, it might damage the car. 
 		else {
-			unsuccessfulHit(a, t, str, sneak_attack, droll);
+			string str2;
+			if (sneak_attack)
+			{
+				str2 = t.name;
+				str2 += singleSpace + pickrandom(cry_alarm);
+				sitealarm = 1;
+			}
+			else {
+				str2 += unsuccessfulHit(a, t, droll);
+
+			}
+			mvaddstrAlt(17, 1, str2, gamelog);
+
+			gamelog.newline();
+			printparty();
+			if (mode == GAMEMODE_CHASECAR ||
+				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+			else printencounter();
+			pressAnyKey();
+
+
+
 		}
 	}
 	for (; thrownweapons > 0; thrownweapons--)
@@ -23462,73 +23476,6 @@ void youattack()
 	}
 }
 
-bool decidesToFlee(const bool armed, char &printed, int &e) {
-	extern short mode;
-	extern Log gamelog;
-	extern int locx;
-	extern int locy;
-	extern int locz;
-	extern Creature encounter[ENCMAX];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	// encountered creatures cannot flee if during car chase
-	if (mode != GAMEMODE_CHASECAR)
-	{
-		// Encountered creature will flee if:
-		// (a) Non-Conservative, and not recently converted via music or some other mechanism
-		// (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
-		// (c) Conservative, and lost more than 55% blood
-		// (d) There's a fire, they are not firefighters, and they fail a random check
-		// Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
-		char fire = 0;
-		if (mode == GAMEMODE_SITE)
-		{
-			if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
-				levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)
-				fire = 1;
-			else if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
-				fire = 2;
-		}
-		if (((!encounter[e].enemy() ||
-			(encounter[e].juice == 0 && !encounter[e].is_armed() && armed&&encounter[e].blood<signed(70 + LCSrandom(61))))
-			&& !(encounter[e].flag & CREATUREFLAG_CONVERTED)) || (encounter[e].blood < 45 && encounter[e].juice < 200)
-			|| ((fire*LCSrandom(5) >= 3) && !(encounter[e].type == CREATURE_FIREFIGHTER)))
-		{
-			if (encounter[e].animalgloss == ANIMALGLOSS_NONE)
-			{
-				if (!incapacitated(encounter[e], 0, printed))
-				{
-					if (printed)
-					{
-						printparty();
-						if (mode == GAMEMODE_CHASECAR ||
-							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-						else printencounter();
-						pressAnyKey();
-					}
-					clearmessagearea();
-					mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-					if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-						(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
-						(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-						(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF) ||
-						(encounter[e].blood < 45))
-						addstrAlt(pickrandom(escape_crawling), gamelog);
-					else addstrAlt(pickrandom(escape_running), gamelog);
-					gamelog.newline();
-					delenc(e, 0);
-					e--;
-					printparty();
-					if (mode == GAMEMODE_CHASECAR ||
-						mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-					else printencounter();
-					pressAnyKey();
-				}
-				return true;
-			}
-		}
-	}
-	return false;
-}
 void enemyattack()
 {
 	extern short mode;
@@ -23540,6 +23487,10 @@ void enemyattack()
 	// Enemies don't attack
 	extern bool NOENEMYATTACK;
 	extern Creature encounter[ENCMAX];
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	foughtthisround = 1;
 	goodguyattack = false;
 	bool armed = false;
@@ -23560,8 +23511,61 @@ void enemyattack()
 			conservatise(encounter[e]);
 		if (encounter[e].enemy()) encounter[e].cantbluff = 2;
 
-		if (decidesToFlee(armed, printed, e)); {
-			continue;
+		if (mode != GAMEMODE_CHASECAR)
+		{
+			// Encountered creature will flee if:
+			// (a) Non-Conservative, and not recently converted via music or some other mechanism
+			// (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
+			// (c) Conservative, and lost more than 55% blood
+			// (d) There's a fire, they are not firefighters, and they fail a random check
+			// Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
+			char fire = 0;
+			if (mode == GAMEMODE_SITE)
+			{
+				if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
+					levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)
+					fire = 1;
+				else if (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
+					fire = 2;
+			}
+			if (((!encounter[e].enemy() ||
+				(encounter[e].juice == 0 && !encounter[e].is_armed() && armed&&encounter[e].blood<signed(70 + LCSrandom(61))))
+				&& !(encounter[e].flag & CREATUREFLAG_CONVERTED)) || (encounter[e].blood < 45 && encounter[e].juice < 200)
+				|| ((fire*LCSrandom(5) >= 3) && !(encounter[e].type == CREATURE_FIREFIGHTER)))
+			{
+				if (encounter[e].animalgloss == ANIMALGLOSS_NONE)
+				{
+					if (!incapacitated(encounter[e], 0, printed))
+					{
+						if (printed)
+						{
+							printparty();
+							if (mode == GAMEMODE_CHASECAR ||
+								mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+							else printencounter();
+							pressAnyKey();
+						}
+						clearmessagearea();
+						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+						if ((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+							(encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF) ||
+							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+							(encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF) ||
+							(encounter[e].blood < 45))
+							addstrAlt(pickrandom(escape_crawling), gamelog);
+						else addstrAlt(pickrandom(escape_running), gamelog);
+						gamelog.newline();
+						delenc(e, 0);
+						e--;
+						printparty();
+						if (mode == GAMEMODE_CHASECAR ||
+							mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+						else printencounter();
+						pressAnyKey();
+					}
+					continue;
+				}
+			}
 		}
 
 		vector<int> goodtarg, badtarg;

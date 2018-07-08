@@ -3384,3 +3384,61 @@ string failedToBreakScience(const string a, const string cr) {
 	}
 	return output;
 }
+
+
+string howGracefulAttack(int handToHand) {
+
+	const string CONST_fight126 = "gracefully strikes at";
+	const string CONST_fight125 = "jump kicks";
+	const string CONST_fight124 = "strikes at";
+	const string CONST_fight123 = "kicks";
+	const string CONST_fight122 = "grapples with";
+	const string CONST_fight121 = "swings at";
+	const string CONST_fight120 = "punches";
+
+	if (!LCSrandom(handToHand + 1))
+		return CONST_fight120;
+	else if (!LCSrandom(handToHand))
+		return CONST_fight121;
+	else if (!LCSrandom(handToHand - 1))
+		return CONST_fight122;
+	else if (!LCSrandom(handToHand - 2))
+		return CONST_fight123;
+	else if (!LCSrandom(handToHand - 3))
+		return CONST_fight124;
+	else if (!LCSrandom(handToHand - 4))
+		return CONST_fight125;
+	else return CONST_fight126;
+}
+
+string dismemberingWound(const int w, const int wound) {
+
+	const string CONST_fight152 = " BLOWING IT OFF!";
+	const string CONST_fight151 = " CUTTING IT OFF!";
+	const string CONST_fight150 = " BLOWING IT IN HALF!";
+	const string CONST_fight149 = " BLOWING IT APART!";
+	const string CONST_fight148 = " CUTTING IT IN HALF!";
+
+	string output = blankString;
+
+	if (w == BODYPART_HEAD && wound & WOUND_CLEANOFF) {
+		output = CONST_fight151;
+	}
+	else if (w == BODYPART_BODY && wound & WOUND_CLEANOFF) {
+		output = CONST_fight148;
+	}
+	else if (w == BODYPART_HEAD && wound & WOUND_NASTYOFF) {
+		output = CONST_fight149;
+	}
+	else if (w == BODYPART_BODY && wound & WOUND_NASTYOFF) {
+		output = CONST_fight150;
+	}
+	else if (wound & WOUND_CLEANOFF) {
+		output = CONST_fight151;
+	}
+	else if (wound & WOUND_NASTYOFF) {
+		output = CONST_fight152;
+	}
+
+	return output;
+}
