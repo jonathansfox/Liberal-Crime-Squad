@@ -479,3 +479,31 @@ as the autoconversion turns them into chars instead.
 
 Replaced some while loops with for loops.
 Reverted minor change to enemyattack();
+
+Gutted almost exactly half the attack(Creature Creature) function, pulling out the new function  inflictDamage(const int numhits, Creature &a, Creature &t, const int aroll, const int droll, const bool sneak_attack, const attackst* attack_used)
+Since it takes 7 parameters, this is suboptimal, but splitting the third largest function in half more than makes up for it.
+Converted several ifelse chains from talkInCombat() into switch statements.
+Converted each individual case into its own function.
+
+Converted mode_site() from a while(true) function to while(increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer));
+
+Made two new classes.
+AttackInfliction and AttackSeverity
+Currently both are being used as immutable data structures to simplify the parameters of the previously mentioned inflictDamage() and its internal function inflictNonZeroDamage()
+There is much room for further implementation.
+
+Converted the massive ifelse chain in attackst into a switch statement.
+This allowed for redundant conditionals to be easily spotted and removed.  Fortunately there weren't any, but a switch statement with 29 cases is a hell of a lot cleaner than a 29 link if else chains.
+CPPDepend agrees.  Its Cyclomatic Complexity was 163, but is now 7.
+
+The regular expressions I used to mostly automate the conversion:
+
+\s+
+,\r\nENUM_
+
+ENUM_(\w*)
+map<string, int>::value_type\(\1, ENUM_\1\)
+
+\s+(\w*),
+case \1:\r\n\r\nbreak;\r\n
+

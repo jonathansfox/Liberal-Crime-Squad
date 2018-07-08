@@ -850,6 +850,149 @@ enum Bouncer_Reject_Reason
 	REJECTED_SMELLFUNNY,
 	NOT_REJECTED
 };
+
+
+enum bigListOfEnumTags {
+	ENUM_tag_only_sell_legal_items,
+	ENUM_tag_fullscreen,
+	ENUM_tag_allow_selling,
+	ENUM_tag_increase_prices_with_illegality,
+	ENUM_tag_department,
+	ENUM_tag_entry,
+	ENUM_tag_exit,
+	ENUM_tag_sell_masks,
+	ENUM_tag_letter,
+	ENUM_tag_item,
+//};
+
+//enum shopItemTagEnums {
+	ENUM_tag_class,
+	ENUM_tag_type,
+	ENUM_tag_description,
+	ENUM_tag_price,
+	ENUM_tag_sleeperprice,
+//	ENUM_tag_letter,
+
+//};
+
+//enum creatureTypeTagEnums {
+	ENUM_tag_alignment,
+	ENUM_tag_PUBLIC_MOOD,
+	ENUM_tag_LIBERAL,
+	ENUM_tag_MODERATE,
+	ENUM_tag_CONSERVATIVE,
+	ENUM_tag_age,
+	ENUM_tag_DOGYEARS,
+	ENUM_tag_CHILD,
+	ENUM_tag_TEENAGER,
+	ENUM_tag_YOUNGADULT,
+	ENUM_tag_MATURE,
+	ENUM_tag_GRADUATE,
+	ENUM_tag_MIDDLEAGED,
+	ENUM_tag_SENIOR,
+	ENUM_tag_attribute_points,
+	ENUM_tag_attributes,
+	ENUM_tag_juice,
+	ENUM_tag_gender,
+	ENUM_tag_infiltration,
+	ENUM_tag_money,
+	ENUM_tag_skills,
+	ENUM_tag_armor,
+	ENUM_tag_weapon,
+	ENUM_tag_encounter_name,
+	ENUM_tag_type_name,
+//};
+
+//enum weaponTypeTagEnum {
+	ENUM_tag_shortname,
+	ENUM_tag_shortname_future,
+	ENUM_tag_name_sub_1,
+	ENUM_tag_name_sub_2,
+	ENUM_tag_name_future_sub_1,
+	ENUM_tag_name_future_sub_2,
+	ENUM_tag_shortname_sub_1,
+	ENUM_tag_shortname_sub_2,
+	ENUM_tag_shortname_future_sub_1,
+	ENUM_tag_shortname_future_sub_2,
+	ENUM_tag_can_take_hostages,
+	ENUM_tag_threatening,
+	ENUM_tag_can_threaten_hostages,
+	ENUM_tag_protects_against_kidnapping,
+	ENUM_tag_musical_attack,
+	ENUM_tag_instrument,
+	ENUM_tag_graffiti,
+	ENUM_tag_legality,
+	ENUM_tag_bashstrengthmod,
+	ENUM_tag_auto_break_locks,
+	ENUM_tag_suspicious,
+	ENUM_tag_size,
+	ENUM_tag_attack,
+//};
+
+//enum attackSTEnums {
+	ENUM_tag_priority,
+	ENUM_tag_ranged,
+	ENUM_tag_thrown,
+	ENUM_tag_can_backstab,
+	ENUM_tag_ammotype,
+	ENUM_tag_attack_description,
+	ENUM_tag_hit_description,
+	ENUM_tag_always_describe_hit,
+	ENUM_tag_hit_punctuation,
+	ENUM_tag_skill,
+	ENUM_tag_accuracy_bonus,
+	ENUM_tag_number_attacks,
+	ENUM_tag_successive_attacks_difficulty,
+	ENUM_tag_strength_min,
+	ENUM_tag_strength_max,
+	ENUM_tag_random_damage,
+	ENUM_tag_fixed_damage,
+	ENUM_tag_bruises,
+	ENUM_tag_tears,
+	ENUM_tag_cuts,
+	ENUM_tag_burns,
+	ENUM_tag_shoots,
+	ENUM_tag_bleeding,
+	ENUM_tag_severtype,
+	ENUM_tag_damages_armor,
+	ENUM_tag_armorpiercing,
+	ENUM_tag_no_DR_for_limbs_chance,
+	ENUM_tag_critical,
+	ENUM_tag_fire,
+//};
+
+//enum augmentTagEnums {
+	ENUM_tag_name,
+//	ENUM_tag_type,
+	ENUM_tag_attribute,
+	ENUM_tag_effect,
+//	ENUM_tag_description,
+	ENUM_tag_max_age,
+	ENUM_tag_min_age,
+	ENUM_tag_cost,
+	ENUM_tag_difficulty,
+//};
+
+//enum armorTypeInitEnums {
+	ENUM_tag_make_difficulty,
+	ENUM_tag_make_price,
+	ENUM_tag_deathsquad_legality,
+	ENUM_tag_can_get_bloody,
+	ENUM_tag_can_get_damaged,
+//	ENUM_tag_armor,
+	ENUM_tag_body_covering,
+//	ENUM_tag_shortname,
+	ENUM_tag_interrogation,
+	ENUM_tag_professionalism,
+	ENUM_tag_conceal_weapon_size,
+	ENUM_tag_stealth_value,
+	ENUM_tag_mask,
+	ENUM_tag_surprise,
+//	ENUM_tag_description,
+	ENUM_tag_qualitylevels,
+	ENUM_tag_durability,
+};
+
 string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);

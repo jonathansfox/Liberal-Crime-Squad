@@ -1,7 +1,7 @@
-void pressSpecificKey(const char x, const char y);
-int pressSpecificKey(const char x, const char y, const char z);
-void pressSpecificKey(const char x, const char y, const char z, const char w);
-int pressSpecificKey(const char x, const char y, const char z, const char w, const char u);
+int pressSpecificKey(const int x, const int y);
+int pressSpecificKey(const int x, const int y, const int z);
+void pressSpecificKey(const int x, const int y, const int z, const int w);
+int pressSpecificKey(const int x, const int y, const int z, const int w, const int u);
 int clearAlt(void);
 int refreshAlt(void);
 int moveAlt(const int, const int);

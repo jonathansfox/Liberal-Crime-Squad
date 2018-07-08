@@ -442,21 +442,23 @@ void printname(Creature &cr)
 	set_color_easy(WHITE_ON_BLACK);
 }
 
-void pressSpecificKey(const char x, const char y) {
+int pressSpecificKey(const int x, const int y) {
 	int c;
 	do {
 		c = getkeyAlt();
 
 	} while (c != x && c != y);
+
+	return c;
 }
-void pressSpecificKey(const char x, const char y, const char z, const char w) {
+void pressSpecificKey(const int x, const int y, const int z, const int w) {
 	int c;
 	do {
 		c = getkeyAlt();
 
 	} while (c != x && c != y && c != z && c != w);
 }
-int pressSpecificKey(const char x, const char y, const char z, const char w, const char u) {
+int pressSpecificKey(const int x, const int y, const int z, const int w, const int u) {
 	int c;
 	do {
 		c = getkeyAlt();
@@ -464,7 +466,7 @@ int pressSpecificKey(const char x, const char y, const char z, const char w, con
 	} while (c != x && c != y && c != z && c != w && c != u);
 	return c;
 }
-int pressSpecificKey(const char x, const char y, const char z) {
+int pressSpecificKey(const int x, const int y, const int z) {
 	int c;
 	do {
 		c = getkeyAlt();

@@ -4832,6 +4832,28 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
 {
 	init(xmlstring);
 }
+
+
+map<string, int> armorTypeInitTags = {
+	map<string, int>::value_type(tag_make_difficulty, ENUM_tag_make_difficulty),
+	map<string, int>::value_type(tag_make_price, ENUM_tag_make_price),
+	map<string, int>::value_type(tag_deathsquad_legality, ENUM_tag_deathsquad_legality),
+	map<string, int>::value_type(tag_can_get_bloody, ENUM_tag_can_get_bloody),
+	map<string, int>::value_type(tag_can_get_damaged, ENUM_tag_can_get_damaged),
+	map<string, int>::value_type(tag_armor, ENUM_tag_armor),
+	map<string, int>::value_type(tag_body_covering, ENUM_tag_body_covering),
+	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),
+	map<string, int>::value_type(tag_interrogation, ENUM_tag_interrogation),
+	map<string, int>::value_type(tag_professionalism, ENUM_tag_professionalism),
+	map<string, int>::value_type(tag_conceal_weapon_size, ENUM_tag_conceal_weapon_size),
+	map<string, int>::value_type(tag_stealth_value, ENUM_tag_stealth_value),
+	map<string, int>::value_type(tag_mask, ENUM_tag_mask),
+	map<string, int>::value_type(tag_surprise, ENUM_tag_surprise),
+	map<string, int>::value_type(tag_description, ENUM_tag_description),
+	map<string, int>::value_type(tag_qualitylevels, ENUM_tag_qualitylevels),
+	map<string, int>::value_type(tag_durability, ENUM_tag_durability),
+};
+
 void ArmorType::init(const MCD_STR& xmlstring)
 {
 	CMarkup xml;
@@ -4841,187 +4863,194 @@ void ArmorType::init(const MCD_STR& xmlstring)
 	while (xml.FindElem()) //Loop over all the elements inside the armortype element.
 	{
 		std::string element = xml.GetTagName();
-		if (element == tag_make_difficulty)
-			make_difficulty_ = atoi(xml.GetData());
-		else if (element == tag_make_price)
-			make_price_ = atoi(xml.GetData());
-		else if (element == tag_deathsquad_legality)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				deathsquad_legality_ = true;
-			else if (b == 0)
-				deathsquad_legality_ = false;
-			/*else
-			errorlog << CONST_armortype048 << idname()
-			<< CONST_armortype035 << xml.GetData() << std::endl;*/
-		}
-		else if (element == tag_can_get_bloody)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_get_bloody_ = true;
-			else if (b == 0)
-				can_get_bloody_ = false;
-		}
-		else if (element == tag_can_get_damaged)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_get_damaged_ = true;
-			else if (b == 0)
-				can_get_damaged_ = false;
-		}
-		else if (element == tag_armor)
-		{
-			xml.IntoElem();
-			while (xml.FindElem())
-			{
-				element = xml.GetTagName();
-				if (element == tag_body)
-					armor_body_ = atoi(xml.GetData());
-				else if (element == tag_head)
-					armor_head_ = atoi(xml.GetData());
-				else if (element == tag_limbs)
-					armor_limbs_ = atoi(xml.GetData());
-				else if (element == tag_fireprotection)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						fireprotection_ = true;
-					else if (b == 0)
-						fireprotection_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype037 << xml.GetData() << std::endl;*/
-				}
+		int b;
+		if (armorTypeInitTags.count(element)) {
+			switch (armorTypeInitTags[element]) {
+			case ENUM_tag_make_difficulty:
+				make_difficulty_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_make_price:
+				make_price_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_deathsquad_legality:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					deathsquad_legality_ = true;
+				else if (b == 0)
+					deathsquad_legality_ = false;
 				/*else
-				errorlog << CONST_armortype054 << idname()
-				<< CONST_armortype051 << element << endl;*/
+				errorlog << CONST_armortype048 << idname()
+				<< CONST_armortype035 << xml.GetData() << std::endl;*/
+				break;
+			case ENUM_tag_can_get_bloody:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_get_bloody_ = true;
+				else if (b == 0)
+					can_get_bloody_ = false;
+				break;
+			case ENUM_tag_can_get_damaged:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_get_damaged_ = true;
+				else if (b == 0)
+					can_get_damaged_ = false;
+				break;
+			case ENUM_tag_armor:
+				xml.IntoElem();
+				while (xml.FindElem())
+				{
+					element = xml.GetTagName();
+					if (element == tag_body)
+						armor_body_ = atoi(xml.GetData());
+					else if (element == tag_head)
+						armor_head_ = atoi(xml.GetData());
+					else if (element == tag_limbs)
+						armor_limbs_ = atoi(xml.GetData());
+					else if (element == tag_fireprotection)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							fireprotection_ = true;
+						else if (b == 0)
+							fireprotection_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype037 << xml.GetData() << std::endl;*/
+					}
+					/*else
+					errorlog << CONST_armortype054 << idname()
+					<< CONST_armortype051 << element << endl;*/
+				}
+				xml.OutOfElem();
+				break;
+			case ENUM_tag_body_covering:
+				xml.IntoElem();
+				while (xml.FindElem())
+				{
+					element = xml.GetTagName();
+					if (element == tag_body)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							cover_body_ = true;
+						else if (b == 0)
+							cover_body_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype041 << xml.GetData() << std::endl;*/
+					}
+					else if (element == tag_head)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							cover_head_ = true;
+						else if (b == 0)
+							cover_head_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype043 << xml.GetData() << std::endl;*/
+					}
+					else if (element == tag_arms)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							cover_arms_ = true;
+						else if (b == 0)
+							cover_arms_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype045 << xml.GetData() << std::endl;*/
+					}
+					else if (element == tag_legs)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							cover_legs_ = true;
+						else if (b == 0)
+							cover_legs_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype047 << xml.GetData() << std::endl;*/
+					}
+					else if (element == tag_conceals_face)
+					{
+						b = stringtobool(xml.GetData());
+						if (b == 1)
+							conceal_face_ = true;
+						else if (b == 0)
+							conceal_face_ = false;
+						/*else
+						errorlog << CONST_armortype048 << idname()
+						<< CONST_armortype049 << xml.GetData() << std::endl;*/
+					}
+					/*else
+					errorlog << CONST_armortype054 << idname()
+					<< CONST_armortype051 << element << endl;*/
+				}
+				xml.OutOfElem();
+				break;
+			case ENUM_tag_shortname:
+				shortname_ = xml.GetData();
+				shortname_defined_ = true;
+				if (len(shortname_) > 14)
+					shortname_.resize(14);
+				break;
+			case ENUM_tag_interrogation:
+				xml.IntoElem();
+				while (xml.FindElem())
+				{
+					if (element == tag_basepower)
+						interrogation_basepower_ = atoi(xml.GetData());
+					else if (element == tag_assaultbonus)
+						interrogation_assaultbonus_ = atoi(xml.GetData());
+					else if (element == tag_drugbonus)
+						interrogation_drugbonus_ = atoi(xml.GetData());
+					/*else
+					errorlog << CONST_armortype054 << idname()
+					<< CONST_armortype053 << element << endl;*/
+				}
+				xml.OutOfElem();
+				break;
+			case ENUM_tag_professionalism:
+				professionalism_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_conceal_weapon_size:
+				conceal_weaponsize_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_stealth_value:
+				stealth_value_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_mask:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					mask_ = true;
+				else if (b == 0)
+					mask_ = false;
+				break;
+			case ENUM_tag_surprise:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					surprise_mask_ = true;
+				else if (b == 0)
+					surprise_mask_ = false;
+				break;
+			case ENUM_tag_description:
+				description_ = xml.GetData();
+				break;
+			case ENUM_tag_qualitylevels:
+				quality_levels_ = max(1, atoi(xml.GetData()));
+				break;
+			case ENUM_tag_durability:
+				durability_ = max(0, atoi(xml.GetData()));
+				break;
+				/*default:
+				errorlog << CONST_armortype054 << idname() << CONST_armortypeB044 << element << endl;
+				break;
+				*/
 			}
-			xml.OutOfElem();
 		}
-		else if (element == tag_body_covering)
-		{
-			xml.IntoElem();
-			while (xml.FindElem())
-			{
-				element = xml.GetTagName();
-				if (element == tag_body)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						cover_body_ = true;
-					else if (b == 0)
-						cover_body_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype041 << xml.GetData() << std::endl;*/
-				}
-				else if (element == tag_head)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						cover_head_ = true;
-					else if (b == 0)
-						cover_head_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype043 << xml.GetData() << std::endl;*/
-				}
-				else if (element == tag_arms)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						cover_arms_ = true;
-					else if (b == 0)
-						cover_arms_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype045 << xml.GetData() << std::endl;*/
-				}
-				else if (element == tag_legs)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						cover_legs_ = true;
-					else if (b == 0)
-						cover_legs_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype047 << xml.GetData() << std::endl;*/
-				}
-				else if (element == tag_conceals_face)
-				{
-					int b = stringtobool(xml.GetData());
-					if (b == 1)
-						conceal_face_ = true;
-					else if (b == 0)
-						conceal_face_ = false;
-					/*else
-					errorlog << CONST_armortype048 << idname()
-					<< CONST_armortype049 << xml.GetData() << std::endl;*/
-				}
-				/*else
-				errorlog << CONST_armortype054 << idname()
-				<< CONST_armortype051 << element << endl;*/
-			}
-			xml.OutOfElem();
-		}
-		else if (element == tag_shortname)
-		{
-			shortname_ = xml.GetData();
-			shortname_defined_ = true;
-			if (len(shortname_) > 14)
-				shortname_.resize(14);
-		}
-		else if (element == tag_interrogation)
-		{
-			xml.IntoElem();
-			while (xml.FindElem())
-			{
-				if (element == tag_basepower)
-					interrogation_basepower_ = atoi(xml.GetData());
-				else if (element == tag_assaultbonus)
-					interrogation_assaultbonus_ = atoi(xml.GetData());
-				else if (element == tag_drugbonus)
-					interrogation_drugbonus_ = atoi(xml.GetData());
-				/*else
-				errorlog << CONST_armortype054 << idname()
-				<< CONST_armortype053 << element << endl;*/
-			}
-			xml.OutOfElem();
-		}
-		else if (element == tag_professionalism)
-			professionalism_ = atoi(xml.GetData());
-		else if (element == tag_conceal_weapon_size)
-			conceal_weaponsize_ = atoi(xml.GetData());
-		else if (element == tag_stealth_value)
-			stealth_value_ = atoi(xml.GetData());
-		else if (element == tag_mask)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				mask_ = true;
-			else if (b == 0)
-				mask_ = false;
-		}
-		else if (element == tag_surprise)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				surprise_mask_ = true;
-			else if (b == 0)
-				surprise_mask_ = false;
-		}
-		else if (element == tag_description)
-			description_ = xml.GetData();
-		else if (element == tag_qualitylevels)
-			quality_levels_ = max(1, atoi(xml.GetData()));
-		else if (element == tag_durability)
-			durability_ = max(0, atoi(xml.GetData()));
-		/*else
-		errorlog << CONST_armortype054 << idname() << CONST_armortypeB044 << element << endl;*/
+
 	}
 	if (!shortname_defined_ && len(name_) <= 14)
 		shortname_ = name_;
@@ -5164,6 +5193,20 @@ const string tag_max_age = "max_age";
 const string tag_idname = "idname";
 const string tag_id = "id";
 int AugmentType::number_of_augmenttypes = 0;
+
+
+map<string, int> augmentTags = {
+	map<string, int>::value_type(tag_name, ENUM_tag_name),
+	map<string, int>::value_type(tag_type, ENUM_tag_type),
+	map<string, int>::value_type(tag_attribute, ENUM_tag_attribute),
+	map<string, int>::value_type(tag_effect, ENUM_tag_effect),
+	map<string, int>::value_type(tag_description, ENUM_tag_description),
+	map<string, int>::value_type(tag_max_age, ENUM_tag_max_age),
+	map<string, int>::value_type(tag_min_age, ENUM_tag_min_age),
+	map<string, int>::value_type(tag_cost, ENUM_tag_cost),
+	map<string, int>::value_type(tag_difficulty, ENUM_tag_difficulty),
+};
+
 AugmentType::AugmentType(const std::string& xmlstring) : max_age_(-1), min_age_(-1), cost_(0), difficulty_(5)
 {
 	extern Log xmllog;
@@ -5181,24 +5224,37 @@ AugmentType::AugmentType(const std::string& xmlstring) : max_age_(-1), min_age_(
 	while (xml.FindElem())
 	{
 		std::string element = xml.GetTagName();
-		if (element == tag_name)
-			name_ = xml.GetData();
-		else if (element == tag_type)
-			type_ = augment_string_to_enum(xml.GetData());
-		else if (element == tag_attribute)
-			attribute_ = attribute_string_to_enum(xml.GetData());
-		else if (element == tag_effect)
-			effect_ = atoi(xml.GetData().c_str());
-		else if (element == tag_description)
-			description_ = xml.GetData();
-		else if (element == tag_max_age)
-			max_age_ = atoi(xml.GetData().c_str());
-		else if (element == tag_min_age)
-			min_age_ = atoi(xml.GetData().c_str());
-		else if (element == tag_cost)
-			cost_ = atoi(xml.GetData().c_str());
-		else if (element == tag_difficulty)
-			difficulty_ = atoi(xml.GetData().c_str());
+		if (augmentTags.count(element)) {
+			switch (augmentTags[element]) {
+			case ENUM_tag_name:
+				name_ = xml.GetData();
+				break;
+			case ENUM_tag_type:
+				type_ = augment_string_to_enum(xml.GetData());
+				break;
+			case ENUM_tag_attribute:
+				attribute_ = attribute_string_to_enum(xml.GetData());
+				break;
+			case ENUM_tag_effect:
+				effect_ = atoi(xml.GetData().c_str());
+				break;
+			case ENUM_tag_description:
+				description_ = xml.GetData();
+				break;
+			case ENUM_tag_max_age:
+				max_age_ = atoi(xml.GetData().c_str());
+				break;
+			case ENUM_tag_min_age:
+				min_age_ = atoi(xml.GetData().c_str());
+				break;
+			case ENUM_tag_cost:
+				cost_ = atoi(xml.GetData().c_str());
+				break;
+			case ENUM_tag_difficulty:
+				difficulty_ = atoi(xml.GetData().c_str());
+				break;
+			}
+		}
 	}
 }
 void AugmentType::make_augment(Augmentation& au)
@@ -6747,18 +6803,8 @@ bool footchase()
 		}
 		if (partyalive > 0)
 		{
-			if (c == 'o'&&partysize > 1) orderparty();
-			if (c == '0') party_status = -1;
-			if (c >= '1'&&c <= '6')
-			{
-				if (activesquad->squad[c - '1'] != NULL)
-				{
-					if (party_status == c - '1') fullstatus(party_status);
-					else party_status = c - '1';
-				}
-			}
-			if (c == 'g')
-			{
+			switch (c) {
+			case 'g':
 				if (chaseseq.canpullover)
 				{
 					chase_giveup();
@@ -6766,9 +6812,9 @@ bool footchase()
 					gamelog.nextMessage(); //Get ready for the next message.
 					return 0;
 				}
-			}
-			if (c == 'd')
-			{
+				break;
+
+			case 'd':
 				if (encounter[0].exists&&
 					encounter[0].type == CREATURE_COP)
 				{
@@ -6778,9 +6824,16 @@ bool footchase()
 				evasiverun();
 				enemyattack();
 				creatureadvance();
-			}
-			if (c == 'f')
-			{
+				break;
+
+			case 'o':
+				if (partysize > 1) orderparty();
+				break;
+
+			case '0':
+				party_status = -1;
+				break;
+			case 'f':
 				if (encounter[0].exists&&
 					encounter[0].type == CREATURE_COP)
 				{
@@ -6790,8 +6843,26 @@ bool footchase()
 				youattack();
 				enemyattack();
 				creatureadvance();
+				break;
+
+			case 'e':
+
+				equip(activesquad->loot, -1);
+				break;
+			default:
+				if (c >= '1'&&c <= '6')
+				{
+					if (activesquad->squad[c - '1'] != NULL)
+					{
+						if (party_status == c - '1') fullstatus(party_status);
+						else party_status = c - '1';
+					}
+				}
+				break;
+
 			}
-			if (c == 'e') equip(activesquad->loot, -1);
+			
+			
 			//HAVE YOU LOST ALL OF THEM?
 			//THEN LEAVE
 			partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
@@ -8170,6 +8241,32 @@ const string tag_name_future_sub_1 = "name_future_sub_1";
 const string tag_name_sub_2 = "name_sub_2";
 const string tag_name_sub_1 = "name_sub_1";
 
+map<string, int> weaponTypeTags = {
+	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),
+	map<string, int>::value_type(tag_shortname_future, ENUM_tag_shortname_future),
+	map<string, int>::value_type(tag_name_sub_1, ENUM_tag_name_sub_1),
+	map<string, int>::value_type(tag_name_sub_2, ENUM_tag_name_sub_2),
+	map<string, int>::value_type(tag_name_future_sub_1, ENUM_tag_name_future_sub_1),
+	map<string, int>::value_type(tag_name_future_sub_2, ENUM_tag_name_future_sub_2),
+	map<string, int>::value_type(tag_shortname_sub_1, ENUM_tag_shortname_sub_1),
+	map<string, int>::value_type(tag_shortname_sub_2, ENUM_tag_shortname_sub_2),
+	map<string, int>::value_type(tag_shortname_future_sub_1, ENUM_tag_shortname_future_sub_1),
+	map<string, int>::value_type(tag_shortname_future_sub_2, ENUM_tag_shortname_future_sub_2),
+	map<string, int>::value_type(tag_can_take_hostages, ENUM_tag_can_take_hostages),
+	map<string, int>::value_type(tag_threatening, ENUM_tag_threatening),
+	map<string, int>::value_type(tag_can_threaten_hostages, ENUM_tag_can_threaten_hostages),
+	map<string, int>::value_type(tag_protects_against_kidnapping, ENUM_tag_protects_against_kidnapping),
+	map<string, int>::value_type(tag_musical_attack, ENUM_tag_musical_attack),
+	map<string, int>::value_type(tag_instrument, ENUM_tag_instrument),
+	map<string, int>::value_type(tag_graffiti, ENUM_tag_graffiti),
+	map<string, int>::value_type(tag_legality, ENUM_tag_legality),
+	map<string, int>::value_type(tag_bashstrengthmod, ENUM_tag_bashstrengthmod),
+	map<string, int>::value_type(tag_auto_break_locks, ENUM_tag_auto_break_locks),
+	map<string, int>::value_type(tag_suspicious, ENUM_tag_suspicious),
+	map<string, int>::value_type(tag_size, ENUM_tag_size),
+	map<string, int>::value_type(tag_attack, ENUM_tag_attack),
+};
+
 WeaponType::WeaponType(MCD_STR xmlstring)
 	: ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
 	name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
@@ -8185,183 +8282,214 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 	xml.SetDoc(xmlstring);
 	xml.FindElem();
 	xml.IntoElem();
+	attackst * attack;
 	while (xml.FindElem()) //Loop over all the elements inside the weapontype element.
 	{
 		std::string element = xml.GetTagName();
-		if (element == tag_shortname)
-		{
-			shortname_ = xml.GetData();
-			shortname_defined_ = true;
+		if (weaponTypeTags.count(element)) {
+			int b;
+			switch (weaponTypeTags[element]) {
+			case ENUM_tag_shortname:
+
+				shortname_ = xml.GetData();
+				shortname_defined_ = true;
+				break;
+			case ENUM_tag_shortname_future:
+
+				shortname_future_ = xml.GetData();
+				shortname_future_defined_ = true;
+				break;
+			case ENUM_tag_name_sub_1:
+
+				name_sub_1_ = xml.GetData();
+				name_sub_1_defined_ = true;
+				break;
+			case ENUM_tag_name_sub_2:
+
+				name_sub_2_ = xml.GetData();
+				name_sub_2_defined_ = true;
+				break;
+			case ENUM_tag_name_future_sub_1:
+
+				name_future_sub_1_ = xml.GetData();
+				name_future_sub_1_defined_ = true;
+				break;
+			case ENUM_tag_name_future_sub_2:
+
+				name_future_sub_2_ = xml.GetData();
+				name_future_sub_2_defined_ = true;
+				break;
+			case ENUM_tag_shortname_sub_1:
+
+				shortname_sub_1_ = xml.GetData();
+				shortname_sub_1_defined_ = true;
+				break;
+			case ENUM_tag_shortname_sub_2:
+
+				shortname_sub_2_ = xml.GetData();
+				shortname_sub_2_defined_ = true;
+				break;
+			case ENUM_tag_shortname_future_sub_1:
+
+				shortname_future_sub_1_ = xml.GetData();
+				shortname_future_sub_1_defined_ = true;
+				break;
+			case ENUM_tag_shortname_future_sub_2:
+
+				shortname_future_sub_2_ = xml.GetData();
+				shortname_future_sub_2_defined_ = true;
+				break;
+			case ENUM_tag_can_take_hostages:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_take_hostages_ = true;
+				else if (b == 0)
+					can_take_hostages_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype064 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_threatening:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					threatening_ = true;
+				else if (b == 0)
+					threatening_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype066 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_can_threaten_hostages:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_threaten_hostages_ = true;
+				else if (b == 0)
+					can_threaten_hostages_ = false;
+				break;
+			case ENUM_tag_protects_against_kidnapping:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					protects_against_kidnapping_ = true;
+				else if (b == 0)
+					protects_against_kidnapping_ = false;
+				break;
+			case ENUM_tag_musical_attack:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					musical_attack_ = true;
+				else if (b == 0)
+					musical_attack_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype068 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_instrument:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					instrument_ = true;
+				else if (b == 0)
+					instrument_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype070 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_graffiti:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_graffiti_ = true;
+				else if (b == 0)
+					can_graffiti_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype072 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_legality:
+				legality_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_bashstrengthmod:
+				bashstrengthmod_ = atoi(xml.GetData()) / 100.0;
+				break;
+			case ENUM_tag_auto_break_locks:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					auto_break_lock_ = true;
+				else if (b == 0)
+					auto_break_lock_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype074 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_suspicious:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					suspicious_ = true;
+				else if (b == 0)
+					suspicious_ = false;
+				/*else
+				errorlog << CONST_weapontype075 << idname()
+				<< CONST_weapontype076 << xml.GetData() << endl;*/
+				break;
+			case ENUM_tag_size:
+				size_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_attack:
+				attack = new attackst(xml.GetSubDoc());
+				for (b = 0; b < len(attacks_) && attack->priority >= attacks_[b]->priority; b++);
+				attacks_.insert(attacks_.begin() + b, attack);
+				break;
+				/*default:
+				errorlog << CONST_weapontype077 << idname()
+				<< CONST_weapontype078 << element << endl;
+				break;*/
+			}
 		}
-		else if (element == tag_shortname_future)
+		if (!shortname_defined_)
 		{
-			shortname_future_ = xml.GetData();
-			shortname_future_defined_ = true;
+			if ((uses_ammo() && len(name_) <= 9)
+				|| len(name_) <= 14)
+				shortname_ = name_;
 		}
-		else if (element == tag_name_sub_1)
+		else
 		{
-			name_sub_1_ = xml.GetData();
-			name_sub_1_defined_ = true;
+			if (len(shortname_) > 9 && uses_ammo())
+				shortname_.resize(9);
+			else if (len(shortname_) > 14)
+				shortname_.resize(14);
 		}
-		else if (element == tag_name_sub_2)
-		{
-			name_sub_2_ = xml.GetData();
-			name_sub_2_defined_ = true;
-		}
-		else if (element == tag_name_future_sub_1)
-		{
-			name_future_sub_1_ = xml.GetData();
-			name_future_sub_1_defined_ = true;
-		}
-		else if (element == tag_name_future_sub_2)
-		{
-			name_future_sub_2_ = xml.GetData();
-			name_future_sub_2_defined_ = true;
-		}
-		else if (element == tag_shortname_sub_1)
-		{
-			shortname_sub_1_ = xml.GetData();
-			shortname_sub_1_defined_ = true;
-		}
-		else if (element == tag_shortname_sub_2)
-		{
-			shortname_sub_2_ = xml.GetData();
-			shortname_sub_2_defined_ = true;
-		}
-		else if (element == tag_shortname_future_sub_1)
-		{
-			shortname_future_sub_1_ = xml.GetData();
-			shortname_future_sub_1_defined_ = true;
-		}
-		else if (element == tag_shortname_future_sub_2)
-		{
-			shortname_future_sub_2_ = xml.GetData();
-			shortname_future_sub_2_defined_ = true;
-		}
-		else if (element == tag_can_take_hostages)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_take_hostages_ = true;
-			else if (b == 0)
-				can_take_hostages_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype064 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_threatening)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				threatening_ = true;
-			else if (b == 0)
-				threatening_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype066 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_can_threaten_hostages)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_threaten_hostages_ = true;
-			else if (b == 0)
-				can_threaten_hostages_ = false;
-		}
-		else if (element == tag_protects_against_kidnapping)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				protects_against_kidnapping_ = true;
-			else if (b == 0)
-				protects_against_kidnapping_ = false;
-		}
-		else if (element == tag_musical_attack)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				musical_attack_ = true;
-			else if (b == 0)
-				musical_attack_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype068 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_instrument)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				instrument_ = true;
-			else if (b == 0)
-				instrument_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype070 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_graffiti)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_graffiti_ = true;
-			else if (b == 0)
-				can_graffiti_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype072 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_legality)
-			legality_ = atoi(xml.GetData());
-		else if (element == tag_bashstrengthmod)
-			bashstrengthmod_ = atoi(xml.GetData()) / 100.0;
-		else if (element == tag_auto_break_locks)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				auto_break_lock_ = true;
-			else if (b == 0)
-				auto_break_lock_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype074 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_suspicious)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				suspicious_ = true;
-			else if (b == 0)
-				suspicious_ = false;
-			/*else
-			errorlog << CONST_weapontype075 << idname()
-			<< CONST_weapontype076 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_size)
-			size_ = atoi(xml.GetData());
-		else if (element == tag_attack)
-		{
-			attackst* attack = new attackst(xml.GetSubDoc());
-			int i;
-			for (i = 0; i < len(attacks_) && attack->priority >= attacks_[i]->priority; i++);
-			attacks_.insert(attacks_.begin() + i, attack);
-		}
-		/*else
-		errorlog << CONST_weapontype077 << idname()
-		<< CONST_weapontype078 << element << endl;*/
-	}
-	if (!shortname_defined_)
-	{
-		if ((uses_ammo() && len(name_) <= 9)
-			|| len(name_) <= 14)
-			shortname_ = name_;
-	}
-	else
-	{
-		if (len(shortname_) > 9 && uses_ammo())
-			shortname_.resize(9);
-		else if (len(shortname_) > 14)
-			shortname_.resize(14);
 	}
 }
+map<string, int> attackstTags = {
+	map<string, int>::value_type(tag_priority, ENUM_tag_priority),
+	map<string, int>::value_type(tag_ranged, ENUM_tag_ranged),
+	map<string, int>::value_type(tag_thrown, ENUM_tag_thrown),
+	map<string, int>::value_type(tag_can_backstab, ENUM_tag_can_backstab),
+	map<string, int>::value_type(tag_ammotype, ENUM_tag_ammotype),
+	map<string, int>::value_type(tag_attack_description, ENUM_tag_attack_description),
+	map<string, int>::value_type(tag_hit_description, ENUM_tag_hit_description),
+	map<string, int>::value_type(tag_always_describe_hit, ENUM_tag_always_describe_hit),
+	map<string, int>::value_type(tag_hit_punctuation, ENUM_tag_hit_punctuation),
+	map<string, int>::value_type(tag_skill, ENUM_tag_skill),
+	map<string, int>::value_type(tag_accuracy_bonus, ENUM_tag_accuracy_bonus),
+	map<string, int>::value_type(tag_number_attacks, ENUM_tag_number_attacks),
+	map<string, int>::value_type(tag_successive_attacks_difficulty, ENUM_tag_successive_attacks_difficulty),
+	map<string, int>::value_type(tag_strength_min, ENUM_tag_strength_min),
+	map<string, int>::value_type(tag_strength_max, ENUM_tag_strength_max),
+	map<string, int>::value_type(tag_random_damage, ENUM_tag_random_damage),
+	map<string, int>::value_type(tag_fixed_damage, ENUM_tag_fixed_damage),
+	map<string, int>::value_type(tag_bruises, ENUM_tag_bruises),
+	map<string, int>::value_type(tag_tears, ENUM_tag_tears),
+	map<string, int>::value_type(tag_cuts, ENUM_tag_cuts),
+	map<string, int>::value_type(tag_burns, ENUM_tag_burns),
+	map<string, int>::value_type(tag_shoots, ENUM_tag_shoots),
+	map<string, int>::value_type(tag_bleeding, ENUM_tag_bleeding),
+	map<string, int>::value_type(tag_severtype, ENUM_tag_severtype),
+	map<string, int>::value_type(tag_damages_armor, ENUM_tag_damages_armor),
+	map<string, int>::value_type(tag_armorpiercing, ENUM_tag_armorpiercing),
+	map<string, int>::value_type(tag_no_DR_for_limbs_chance, ENUM_tag_no_DR_for_limbs_chance),
+	map<string, int>::value_type(tag_critical, ENUM_tag_critical),
+	map<string, int>::value_type(tag_fire, ENUM_tag_fire),
+};
+
 attackst::attackst(MCD_STR xmlstring)
 	: priority(1), ranged(false), thrown(false), ammotype(CONST_weapontype099), uses_ammo(false),
 	attack_description(CONST_weapontype080), hit_description(CONST_weapontypeB091),
@@ -8379,214 +8507,248 @@ attackst::attackst(MCD_STR xmlstring)
 	while (xml.FindElem()) //Loop over all the elements inside the vehicletype element.
 	{
 		std::string element = xml.GetTagName();
-		if (element == tag_priority)
-			priority = atoi(xml.GetData());
-		else if (element == tag_ranged)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				ranged = true;
-			else if (b == 0)
-				ranged = false;
-			/*else
-			errorlog << CONST_weapontype081 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_thrown)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				thrown = true;
-			else if (b == 0)
-				thrown = false;
-			/*else
-			errorlog << CONST_weapontype082 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_can_backstab)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				can_backstab = true;
-			else if (b == 0)
-				can_backstab = false;
-		}
-		else if (element == tag_ammotype)
-		{
-			ammotype = xml.GetData();
-			uses_ammo = true;
-		}
-		else if (element == tag_attack_description)
-			attack_description = xml.GetData();
-		else if (element == tag_hit_description)
-			hit_description = xml.GetData();
-		else if (element == tag_always_describe_hit)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				always_describe_hit = true;
-			else if (b == 0)
-				always_describe_hit = false;
-			/*else
-			errorlog << CONST_weapontype083 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_hit_punctuation)
-			hit_punctuation = xml.GetData();
-		else if (element == tag_skill)
-		{
-			int s = skill_string_to_enum(xml.GetData());
-			if (s != -1)
-				skill = s;
-			/*else
-			errorlog << CONST_weapontype084 << xml.GetData() << endl; */
-		}
-		else if (element == tag_accuracy_bonus)
-			accuracy_bonus = atoi(xml.GetData());
-		else if (element == tag_number_attacks)
-			number_attacks = atoi(xml.GetData());
-		else if (element == tag_successive_attacks_difficulty)
-			successive_attacks_difficulty = atoi(xml.GetData());
-		else if (element == tag_strength_min)
-			strength_min = atoi(xml.GetData());
-		else if (element == tag_strength_max)
-			strength_max = atoi(xml.GetData());
-		else if (element == tag_random_damage)
-			random_damage = atoi(xml.GetData());
-		else if (element == tag_fixed_damage)
-			fixed_damage = atoi(xml.GetData());
-		else if (element == tag_bruises)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				bruises = true;
-			else if (b == 0)
-				bruises = false;
-			/*else
-			errorlog << CONST_weapontype085 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_tears)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				tears = true;
-			else if (b == 0)
-				tears = false;
-			/*else
-			errorlog << CONST_weapontype086 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_cuts)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				cuts = true;
-			else if (b == 0)
-				cuts = false;
-			/*else
-			errorlog << CONST_weapontype087 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_burns)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				burns = true;
-			else if (b == 0)
-				burns = false;
-			/*else
-			errorlog << CONST_weapontype088 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_shoots)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				shoots = true;
-			else if (b == 0)
-				shoots = false;
-			/*else
-			errorlog << CONST_weapontype089 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_bleeding)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				bleeding = true;
-			else if (b == 0)
-				bleeding = false;
-			/*else
-			errorlog << CONST_weapontype090 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_severtype)
-		{
-			int s = severtype_string_to_enum(xml.GetData());
-			if (s != -1)
-				severtype = s;
-			/*else
-			errorlog << CONST_weapontype091 << xml.GetData() << endl; */
-		}
-		else if (element == tag_damages_armor)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1)
-				damages_armor = true;
-			else if (b == 0)
-				damages_armor = false;
-			/*else
-			errorlog << CONST_weapontype092 << xml.GetData() << endl;*/
-		}
-		else if (element == tag_armorpiercing)
-			armorpiercing = atoi(xml.GetData());
-		else if (element == tag_no_DR_for_limbs_chance)
-			no_damage_reduction_for_limbs_chance = atoi(xml.GetData());
-		else if (element == tag_critical)
-		{
-			xml.IntoElem();
-			while (xml.FindElem())
-			{
-				element = xml.GetTagName();
-				if (element == tag_chance)
-					critical.chance = atoi(xml.GetData());
-				else if (element == tag_hits_required)
-					critical.hits_required = atoi(xml.GetData());
-				else if (element == tag_random_damage)
+		if (attackstTags.count(element)) {
+			int b;
+			switch (attackstTags[element]) {
+
+			case ENUM_tag_priority:
+				priority = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_ranged:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					ranged = true;
+				else if (b == 0)
+					ranged = false;
+				/*else
+				errorlog << CONST_weapontype081 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_thrown:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					thrown = true;
+				else if (b == 0)
+					thrown = false;
+				/*else
+				errorlog << CONST_weapontype082 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_can_backstab:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					can_backstab = true;
+				else if (b == 0)
+					can_backstab = false;
+				break;
+
+			case ENUM_tag_ammotype:
+				ammotype = xml.GetData();
+				uses_ammo = true;
+				break;
+
+			case ENUM_tag_attack_description:
+				attack_description = xml.GetData();
+				break;
+
+			case ENUM_tag_hit_description:
+				hit_description = xml.GetData();
+				break;
+
+			case ENUM_tag_always_describe_hit:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					always_describe_hit = true;
+				else if (b == 0)
+					always_describe_hit = false;
+				/*else
+				errorlog << CONST_weapontype083 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_hit_punctuation:
+				hit_punctuation = xml.GetData();
+				break;
+
+			case ENUM_tag_skill:
+				b = skill_string_to_enum(xml.GetData());
+				if (b != -1)
+					skill = b;
+				/*else
+				errorlog << CONST_weapontype084 << xml.GetData() << endl; */
+				break;
+
+			case ENUM_tag_accuracy_bonus:
+				accuracy_bonus = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_number_attacks:
+				number_attacks = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_successive_attacks_difficulty:
+				successive_attacks_difficulty = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_strength_min:
+				strength_min = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_strength_max:
+				strength_max = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_random_damage:
+				random_damage = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_fixed_damage:
+				fixed_damage = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_bruises:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					bruises = true;
+				else if (b == 0)
+					bruises = false;
+				/*else
+				errorlog << CONST_weapontype085 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_tears:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					tears = true;
+				else if (b == 0)
+					tears = false;
+				/*else
+				errorlog << CONST_weapontype086 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_cuts:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					cuts = true;
+				else if (b == 0)
+					cuts = false;
+				/*else
+				errorlog << CONST_weapontype087 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_burns:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					burns = true;
+				else if (b == 0)
+					burns = false;
+				/*else
+				errorlog << CONST_weapontype088 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_shoots:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					shoots = true;
+				else if (b == 0)
+					shoots = false;
+				/*else
+				errorlog << CONST_weapontype089 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_bleeding:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					bleeding = true;
+				else if (b == 0)
+					bleeding = false;
+				/*else
+				errorlog << CONST_weapontype090 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_severtype:
+				b = severtype_string_to_enum(xml.GetData());
+				if (b != -1)
+					severtype = b;
+				/*else
+				errorlog << CONST_weapontype091 << xml.GetData() << endl; */
+				break;
+
+			case ENUM_tag_damages_armor:
+				b = stringtobool(xml.GetData());
+				if (b == 1)
+					damages_armor = true;
+				else if (b == 0)
+					damages_armor = false;
+				/*else
+				errorlog << CONST_weapontype092 << xml.GetData() << endl;*/
+				break;
+
+			case ENUM_tag_armorpiercing:
+				armorpiercing = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_no_DR_for_limbs_chance:
+				no_damage_reduction_for_limbs_chance = atoi(xml.GetData());
+				break;
+
+			case ENUM_tag_critical:
+				xml.IntoElem();
+				while (xml.FindElem())
 				{
-					critical.random_damage = atoi(xml.GetData());
-					critical.random_damage_defined = true;
-				}
-				else if (element == tag_fixed_damage)
-				{
-					critical.fixed_damage = atoi(xml.GetData());
-					critical.fixed_damage_defined = true;
-				}
-				else if (element == tag_severtype)
-				{
-					int s = severtype_string_to_enum(xml.GetData());
-					if (s != -1)
+					element = xml.GetTagName();
+					if (element == tag_chance)
+						critical.chance = atoi(xml.GetData());
+					else if (element == tag_hits_required)
+						critical.hits_required = atoi(xml.GetData());
+					else if (element == tag_random_damage)
 					{
-						critical.severtype = s;
-						critical.severtype_defined = true;
+						critical.random_damage = atoi(xml.GetData());
+						critical.random_damage_defined = true;
+					}
+					else if (element == tag_fixed_damage)
+					{
+						critical.fixed_damage = atoi(xml.GetData());
+						critical.fixed_damage_defined = true;
+					}
+					else if (element == tag_severtype)
+					{
+						b = severtype_string_to_enum(xml.GetData());
+						if (b != -1)
+						{
+							critical.severtype = b;
+							critical.severtype_defined = true;
+						}
+						/*else
+						errorlog << CONST_weapontype093 << xml.GetData() << endl; */
 					}
 					/*else
-					errorlog << CONST_weapontype093 << xml.GetData() << endl; */
+					errorlog << CONST_weapontype094 << element << endl; */
 				}
+				xml.OutOfElem();
+				break;
+			case ENUM_tag_fire:
+				xml.IntoElem();
+				while (xml.FindElem())
+				{
+					element = xml.GetTagName();
+					if (element == tag_chance)
+						fire.chance = atoi(xml.GetData());
+					else if (element == tag_chance_causes_debris)
+						fire.chance_causes_debris = atoi(xml.GetData());
+					/*else
+					errorlog << CONST_weapontype095 << element << endl; */
+				}
+				xml.OutOfElem();
+				break;
+
+			default:
 				/*else
-				errorlog << CONST_weapontype094 << element << endl; */
+				errorlog << CONST_weapontype096 << element << endl; */
+				break;
 			}
-			xml.OutOfElem();
 		}
-		else if (element == tag_fire)
-		{
-			xml.IntoElem();
-			while (xml.FindElem())
-			{
-				element = xml.GetTagName();
-				if (element == tag_chance)
-					fire.chance = atoi(xml.GetData());
-				else if (element == tag_chance_causes_debris)
-					fire.chance_causes_debris = atoi(xml.GetData());
-				/*else
-				errorlog << CONST_weapontype095 << element << endl; */
-			}
-			xml.OutOfElem();
-		}
-		/*else
-		errorlog << CONST_weapontype096 << element << endl; */
+
 	}
 	if (!bruises && !tears && !cuts && !burns && !shoots)
 		bruises = true; //If no type specified, then bruise.
@@ -12448,7 +12610,9 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 
 	return 0;
 }
-void mode_site() {
+// Return true if supposed to still be in mode_site(), false otherwise
+bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer) {
+
 	extern short cursite;
 	extern squadst *activesquad;
 	extern Log gamelog;
@@ -12472,6 +12636,466 @@ void mode_site() {
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern Creature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
+
+	int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), hostages = 0, encsize = 0, freeable = 0, enemy = 0, majorenemy = 0, talkers = 0;
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p] != NULL)
+			if (activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+				hostages++;
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].exists)
+		{
+			encsize++;
+			if (encounter[e].enemy())enemy++;
+			if (encounter[e].type == CREATURE_WORKER_SERVANT ||
+				encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
+				encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
+				(strcmp(encounter[e].name, CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1))freeable++;
+			else if ((encounter[e].cantbluff != 1 || sitealarm) && !(encounter[e].align == 1 && sitealarm&&enemy))talkers++;
+			if (encounter[e].type == CREATURE_CORPORATE_CEO ||
+				encounter[e].type == CREATURE_RADIOPERSONALITY ||
+				encounter[e].type == CREATURE_NEWSANCHOR ||
+				encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
+				encounter[e].type == CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
+		}
+	}
+	//If in combat, do a second check
+	if (talkers&&sitealarm&&enemy)
+	{
+		talkers = 0;
+		for (int e = 0; e < ENCMAX; e++)
+			if (encounter[e].exists)
+				if (encounter[e].enemy() && (encounter[e].cantbluff == 0 || encounter[e].animalgloss == ANIMALGLOSS_ANIMAL)) talkers++;
+	}
+	int libnum = CreaturePool::getInstance().countLiberals(cursite);
+	// Let the squad stop stressing out over the encounter if there are no enemies this round
+	if (!enemy) encounter_timer = 0;
+	eraseAlt();
+	{
+		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+		{
+			music.play(MUSIC_DEFENSE);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
+			addstrAlt(CONST_sitemode144);
+			addstrAlt(locz + 1);
+			addstrAlt(CONST_sitemode143);
+		}
+		else
+		{
+			if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
+			addstrAlt(CONST_sitemode144);
+			addstrAlt(locz + 1);
+			if (postalarmtimer > 80)
+			{
+				switch (LocationsPool::getInstance().getLocationType(cursite))
+				{
+				case SITE_GOVERNMENT_ARMYBASE:
+					addstrAlt(CONST_sitemode145);
+					break;
+				case SITE_GOVERNMENT_WHITE_HOUSE:
+					addstrAlt(CONST_sitemode146);
+					break;
+				case SITE_GOVERNMENT_INTELLIGENCEHQ:
+					addstrAlt(CONST_sitemode147);
+					break;
+				case SITE_CORPORATE_HEADQUARTERS:
+				case SITE_CORPORATE_HOUSE:
+					addstrAlt(CONST_sitemode148);
+					break;
+				case SITE_MEDIA_AMRADIO:
+				case SITE_MEDIA_CABLENEWS:
+					addstrAlt(CONST_sitemode149);
+					break;
+				case SITE_BUSINESS_CRACKHOUSE:
+					addstrAlt(CONST_sitemode150);
+					break;
+				case SITE_GOVERNMENT_POLICESTATION:
+				default:
+					if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+					{
+						addstrAlt(CONST_sitemode151);
+					}
+					else if (lawList[LAW_DEATHPENALTY] == -2 &&
+						lawList[LAW_POLICEBEHAVIOR] == -2)addstrAlt(CONST_sitemode152);
+					else addstrAlt(CONST_sitemode153);
+					break;
+				}
+				music.play(MUSIC_HEAVYCOMBAT);
+			}
+			else if (postalarmtimer > 60) { addstrAlt(CONST_sitemode154); music.play(MUSIC_ALARMED); }
+			else if (sitealienate == 1) { addstrAlt(CONST_sitemode155); music.play(MUSIC_ALARMED); }
+			else if (sitealienate == 2) { addstrAlt(CONST_sitemode156); music.play(MUSIC_ALARMED); }
+			else if (sitealarm) { addstrAlt(CONST_sitemode157); music.play(MUSIC_ALARMED); }
+			else if (sitealarmtimer == 0) { addstrAlt(CONST_sitemode158); music.play(MUSIC_SUSPICIOUS); }
+			else music.play(MUSIC_SITEMODE);
+		}
+	}
+	{
+		//PRINT PARTY
+		if (partyalive == 0)party_status = -1;
+		printparty();
+		//PRINT SITE INSTRUCTIONS
+		if (partyalive > 0)
+		{
+			if (!enemy || !sitealarm)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9, 1, CONST_sitemode159);
+			if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11, 1, change_squad_order);
+			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(12, 1, check_status_of_squad_liberal);
+			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(13, 1, show_squad_liberal_status);
+			if (isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
+				set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(9, 17, CONST_sitemode160);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(10, 17, CONST_sitemode161);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9, 32, CONST_sitemode162);
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(10, 32, CONST_sitemode163);
+			if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(10, 42, CONST_sitemode164);
+			mvaddstrAlt(10, 1, CONST_sitemodeXRL);
+			if (enemy) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(13, 42, CONST_sitemode165);
+			if (talkers) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14, 17, CONST_sitemode166);
+			bool graffiti = 0;
+			if (levelmap[locx][locy][locz].special != -1 &&
+				levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
+			else if (!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
+			{
+				if ((levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+					(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+					(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK) ||
+					(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
+				{
+					bool can_graffiti = false;
+					for (int i = 0; i < 6 && !can_graffiti; i++)
+					{
+						if (!activesquad->squad[i]) i = 6;
+						else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
+
+					}
+					if (can_graffiti) {
+
+						set_color_easy(WHITE_ON_BLACK);
+						graffiti = 1;
+
+					}
+					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				}
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			}
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			if (graffiti)mvaddstrAlt(11, 42, CONST_sitemode167);
+			else mvaddstrAlt(11, 42, CONST_sitemode168);
+			if (enemy&&sitealarm)
+			{
+				bool evade = false;
+				set_color_easy(WHITE_ON_BLACK);
+				for (int e = 0; e < ENCMAX; e++)
+				{
+					if (encounter[e].exists &&
+						encounter[e].alive  &&
+						encounter[e].cantbluff == 2)
+					{
+						// You can't sneak past this person; they already know you're there
+						evade = true;
+						break;
+					}
+				}
+				if (!evade)
+					mvaddstrAlt(12, 42, CONST_sitemode169);
+				else
+					mvaddstrAlt(12, 42, CONST_sitemode170);
+			}
+			else
+			{
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(12, 42, CONST_sitemode171);
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9, 42, CONST_sitemode172);
+			if (enemy)set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14, 1, CONST_sitemode173);
+			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+			{
+				if (freeable && (!enemy || !sitealarm))
+				{
+					set_color_easy(WHITE_ON_BLACK);
+					mvaddstrAlt(14, 32, CONST_sitemode174);
+				}
+				else
+				{
+					if (hostages) set_color_easy(WHITE_ON_BLACK);
+					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+					mvaddstrAlt(14, 32, CONST_sitemode175);
+				}
+			}
+			else
+			{
+				if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
+				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddstrAlt(14, 32, CONST_sitemode176);
+			}
+		}
+		else
+		{
+			//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
+			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+			{
+				for (int p = 0; p < 6; p++)
+				{
+					if (!activesquad->squad[p]) continue;
+					if (activesquad->squad[p]->carid != -1)
+						deleteVehicle(id_getcar(activesquad->squad[p]->carid));
+				}
+			}
+			for (int p = 0; p < 6; p++)
+			{
+				if (!activesquad->squad[p]) continue;
+				activesquad->squad[p]->die();
+				activesquad->squad[p]->location = -1;
+				activesquad->squad[p] = NULL;
+			}
+			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(9, 1, CONST_sitemode177);
+		}
+		//PRINT SITE MAP
+		printsitemap(locx, locy, locz);
+		//CHECK IF YOU HAVE A SQUIRMING AMATEUR HOSTAGE
+		//hostcheck SHOULD ONLY BE 1 WHEN A NEWENC IS CREATED
+		if (hostcheck)
+		{
+			char havehostage = 0;
+			//Check your whole squad
+			for (int p = 0; p < 6; p++)
+			{
+				if (activesquad->squad[p] != NULL)
+				{
+					//If they're unarmed and dragging someone
+					if (activesquad->squad[p]->prisoner != NULL &&
+						!activesquad->squad[p]->get_weapon().can_threaten_hostages())
+					{
+						//And that someone is not an LCS member
+						if (activesquad->squad[p]->prisoner->squadid == -1)
+						{
+							//They scream for help -- flag them kidnapped, cause alarm
+							activesquad->squad[p]->prisoner->flag |= CREATUREFLAG_KIDNAPPED;
+							if (activesquad->squad[p]->type == CREATURE_RADIOPERSONALITY)offended_amradio = 1;
+							if (activesquad->squad[p]->type == CREATURE_NEWSANCHOR)offended_cablenews = 1;
+							havehostage = 1;
+						}
+					}
+				}
+			}
+			if (havehostage)
+			{
+				alienationcheck(1);
+				sitecrime += 5;
+				criminalizeparty(LAWFLAG_KIDNAPPING);
+			}
+			hostcheck = 0;
+			clearmessagearea();
+		}
+		// check if we fought the previous loop; if so, add a blank gamelog line
+		if (foughtthisround)gamelog.newline();
+		foughtthisround = 0;
+	}
+	{
+		int c;
+		if (levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
+		{
+			if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT)
+			{
+				levelmap[locx][locy][locz].special = SPECIAL_NONE;
+				c = getkeyAlt();
+			}
+			else
+				c = 's';
+		}
+		else c = getkeyAlt();
+		if (partyalive == 0 && c == 'c')
+		{
+			//END OF GAME CHECK
+			if (!endcheck())
+			{
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+				{
+					if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+					else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
+				}
+				else
+					if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+					{
+						sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
+						resolvesite();
+					}
+				mode = GAMEMODE_BASE;
+				showcarprefs = 0;
+				return false;
+			}
+		}
+		else if (partyalive > 0) {
+			int olocx = locx, olocy = locy, olocz = locz;
+			bool canMove = !enemy || !sitealarm;
+			{
+				if (c == 'v'&&enemy&&sitealarm)
+				{
+					char override = whichWay();
+					if (override) {
+						c = override;
+						canMove = true;
+					}
+
+				}
+			}
+			switch (c) {
+			case 'w':
+			case KEY_UP:
+				if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
+				break;
+			case 'a':
+			case KEY_LEFT:
+				if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
+				break;
+			case 'd':
+			case KEY_RIGHT:
+				if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
+				break;
+			case 'x':
+			case KEY_DOWN:
+				if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
+				break;
+			case 'k':
+				if (enemy) { kidnapattempt(); }
+				break;
+			case 'u':
+				pressedKeyU(enemy);
+				break;
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+				if (activesquad->squad[c - '1'] != NULL)
+				{
+					if (party_status == c - '1')fullstatus(party_status);
+					else party_status = c - '1';
+				}
+				break;
+			case 'e':
+				mapshowing = false;
+				equip(activesquad->loot, -1);
+				if (enemy&&sitealarm)enemyattack();
+				else if (enemy)disguisecheck(encounter_timer);
+				creatureadvance();
+				encounter_timer++;
+				mapshowing = true;
+				break;
+			case 'n':
+				pressedKeyN();
+				break;
+			case 'l':
+				if ((!enemy || !sitealarm)) {
+					pressedKeyL();
+					encounter_timer++;
+				}
+				break;
+			case 'j':
+				if ((!enemy || !sitealarm)) {
+					pressedKeyShiftL();
+					encounter_timer++;
+				}
+				break;
+			case 't':
+				if (talkers) {
+					pressedKeyT(enemy, encounter_timer);
+				}
+				break;
+			case 'o':
+				if (partysize > 1)orderparty();
+				break;
+			case '0':
+				party_status = -1;
+				break;
+			case 'm':
+				pressedKeyM();
+				break;
+			case 'f':
+				if (enemy) { pressedKeyF(encounter_timer); }
+				break;
+			case 'r':
+				pressedKeyR(freeable, libnum, enemy, hostages, partysize);
+				break;
+			case 'g':
+				pressedKeyG(enemy, encounter_timer);
+				break;
+			}
+
+			if (locx != olocx || locy != olocy || locz != olocz || c == 's') {
+
+				int cbase = -1;
+				if (activesquad->squad[0] != NULL)
+				{
+					cbase = activesquad->squad[0]->base;
+				}
+				//NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
+				//REFRESHES THE SCREEN
+				long nlocx = locx, nlocy = locy, nlocz = locz;
+				locx = olocx, locy = olocy, locz = olocz;
+				if (enemy) {
+					enemyAttemptsFreeShots(encounter_timer);
+				}
+				creatureadvance();
+				encounter_timer++;
+				partyalive = squadalive(activesquad);
+				if (partyalive) {
+					//AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
+					locx = nlocx, locy = nlocy, locz = nlocz;
+					//CHECK FOR EXIT
+					if ((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT) ||
+						(cbase == cursite && !LocationsPool::getInstance().isThereASiegeHere(cursite) &&
+							bail_on_base))
+					{
+						bailOnBase();
+						sitealarm = 0;
+						return false;
+					}
+					if (moveOrWaitThenCheckForExit(olocx, olocy, olocz, c, encsize, hostcheck)) {
+						//RESET MODE
+						mode = GAMEMODE_BASE;
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+void mode_site() {
+	extern short cursite;
+	extern squadst *activesquad;
+	extern char showcarprefs;
+
 	if (isThereNoActivesquad())return;
 	reloadparty();
 	showcarprefs = -1;
@@ -12480,460 +13104,10 @@ void mode_site() {
 	knowmap();
 	char hostcheck = 0;
 	int encounter_timer = 0;
-	while (true)
+	
+	while (increment_mode_site(bail_on_base, hostcheck, encounter_timer))
 	{
-		int partysize = squadsize(activesquad), partyalive = squadalive(activesquad), hostages = 0, encsize = 0, freeable = 0, enemy = 0, majorenemy = 0, talkers = 0;
-		for (int p = 0; p < 6; p++)
-			if (activesquad->squad[p] != NULL)
-				if (activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
-					hostages++;
-		for (int e = 0; e < ENCMAX; e++)
-		{
-			if (encounter[e].exists)
-			{
-				encsize++;
-				if (encounter[e].enemy())enemy++;
-				if (encounter[e].type == CREATURE_WORKER_SERVANT ||
-					encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
-					encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
-					(strcmp(encounter[e].name, CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1))freeable++;
-				else if ((encounter[e].cantbluff != 1 || sitealarm) && !(encounter[e].align == 1 && sitealarm&&enemy))talkers++;
-				if (encounter[e].type == CREATURE_CORPORATE_CEO ||
-					encounter[e].type == CREATURE_RADIOPERSONALITY ||
-					encounter[e].type == CREATURE_NEWSANCHOR ||
-					encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
-					encounter[e].type == CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
-			}
-		}
-		//If in combat, do a second check
-		if (talkers&&sitealarm&&enemy)
-		{
-			talkers = 0;
-			for (int e = 0; e < ENCMAX; e++)
-				if (encounter[e].exists)
-					if (encounter[e].enemy() && (encounter[e].cantbluff == 0 || encounter[e].animalgloss == ANIMALGLOSS_ANIMAL)) talkers++;
-		}
-		int libnum = CreaturePool::getInstance().countLiberals(cursite);
-		// Let the squad stop stressing out over the encounter if there are no enemies this round
-		if (!enemy) encounter_timer = 0;
-		eraseAlt();
-		{
-			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
-			{
-				music.play(MUSIC_DEFENSE);
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
-				addstrAlt(CONST_sitemode144);
-				addstrAlt(locz + 1);
-				addstrAlt(CONST_sitemode143);
-			}
-			else
-			{
-				if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
-				else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
-				addstrAlt(CONST_sitemode144);
-				addstrAlt(locz + 1);
-				if (postalarmtimer > 80)
-				{
-					switch (LocationsPool::getInstance().getLocationType(cursite))
-					{
-					case SITE_GOVERNMENT_ARMYBASE:
-						addstrAlt(CONST_sitemode145);
-						break;
-					case SITE_GOVERNMENT_WHITE_HOUSE:
-						addstrAlt(CONST_sitemode146);
-						break;
-					case SITE_GOVERNMENT_INTELLIGENCEHQ:
-						addstrAlt(CONST_sitemode147);
-						break;
-					case SITE_CORPORATE_HEADQUARTERS:
-					case SITE_CORPORATE_HOUSE:
-						addstrAlt(CONST_sitemode148);
-						break;
-					case SITE_MEDIA_AMRADIO:
-					case SITE_MEDIA_CABLENEWS:
-						addstrAlt(CONST_sitemode149);
-						break;
-					case SITE_BUSINESS_CRACKHOUSE:
-						addstrAlt(CONST_sitemode150);
-						break;
-					case SITE_GOVERNMENT_POLICESTATION:
-					default:
-						if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
-						{
-							addstrAlt(CONST_sitemode151);
-						}
-						else if (lawList[LAW_DEATHPENALTY] == -2 &&
-							lawList[LAW_POLICEBEHAVIOR] == -2)addstrAlt(CONST_sitemode152);
-						else addstrAlt(CONST_sitemode153);
-						break;
-					}
-					music.play(MUSIC_HEAVYCOMBAT);
-				}
-				else if (postalarmtimer > 60) { addstrAlt(CONST_sitemode154); music.play(MUSIC_ALARMED); }
-				else if (sitealienate == 1) { addstrAlt(CONST_sitemode155); music.play(MUSIC_ALARMED); }
-				else if (sitealienate == 2) { addstrAlt(CONST_sitemode156); music.play(MUSIC_ALARMED); }
-				else if (sitealarm) { addstrAlt(CONST_sitemode157); music.play(MUSIC_ALARMED); }
-				else if (sitealarmtimer == 0) { addstrAlt(CONST_sitemode158); music.play(MUSIC_SUSPICIOUS); }
-				else music.play(MUSIC_SITEMODE);
-			}
-		}
-		{
-			//PRINT PARTY
-			if (partyalive == 0)party_status = -1;
-			printparty();
-			//PRINT SITE INSTRUCTIONS
-			if (partyalive > 0)
-			{
-				if (!enemy || !sitealarm)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(9, 1, CONST_sitemode159);
-				if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(11, 1, change_squad_order);
-				if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 1, check_status_of_squad_liberal);
-				if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 1, show_squad_liberal_status);
-				if (isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
-					set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(9, 17, CONST_sitemode160);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 17, CONST_sitemode161);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(9, 32, CONST_sitemode162);
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 32, CONST_sitemode163);
-				if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(10, 42, CONST_sitemode164);
-				mvaddstrAlt(10, 1, CONST_sitemodeXRL);
-				if (enemy) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 42, CONST_sitemode165);
-				if (talkers) set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(14, 17, CONST_sitemode166);
-				bool graffiti = 0;
-				if (levelmap[locx][locy][locz].special != -1 &&
-					levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
-				else if (!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
-				{
-					if ((levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-						(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-						(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK) ||
-						(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-					{
-						bool can_graffiti = false;
-						for (int i = 0; i < 6 && !can_graffiti; i++)
-						{
-							if (!activesquad->squad[i]) i = 6;
-							else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
-
-						}
-						if (can_graffiti) {
-
-							set_color_easy(WHITE_ON_BLACK);
-							graffiti = 1;
-
-						}
-						else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					}
-					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				}
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				if (graffiti)mvaddstrAlt(11, 42, CONST_sitemode167);
-				else mvaddstrAlt(11, 42, CONST_sitemode168);
-				if (enemy&&sitealarm)
-				{
-					bool evade = false;
-					set_color_easy(WHITE_ON_BLACK);
-					for (int e = 0; e < ENCMAX; e++)
-					{
-						if (encounter[e].exists &&
-							encounter[e].alive  &&
-							encounter[e].cantbluff == 2)
-						{
-							// You can't sneak past this person; they already know you're there
-							evade = true;
-							break;
-						}
-					}
-					if (!evade)
-						mvaddstrAlt(12, 42, CONST_sitemode169);
-					else
-						mvaddstrAlt(12, 42, CONST_sitemode170);
-				}
-				else
-				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					mvaddstrAlt(12, 42, CONST_sitemode171);
-				}
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(9, 42, CONST_sitemode172);
-				if (enemy)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(14, 1, CONST_sitemode173);
-				if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-				{
-					if (freeable && (!enemy || !sitealarm))
-					{
-						set_color_easy(WHITE_ON_BLACK);
-						mvaddstrAlt(14, 32, CONST_sitemode174);
-					}
-					else
-					{
-						if (hostages) set_color_easy(WHITE_ON_BLACK);
-						else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-						mvaddstrAlt(14, 32, CONST_sitemode175);
-					}
-				}
-				else
-				{
-					if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
-					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					mvaddstrAlt(14, 32, CONST_sitemode176);
-				}
-			}
-			else
-			{
-				//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-				if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-				{
-					for (int p = 0; p < 6; p++)
-					{
-						if (!activesquad->squad[p]) continue;
-						if (activesquad->squad[p]->carid != -1)
-							deleteVehicle(id_getcar(activesquad->squad[p]->carid));
-					}
-				}
-				for (int p = 0; p < 6; p++)
-				{
-					if (!activesquad->squad[p]) continue;
-					activesquad->squad[p]->die();
-					activesquad->squad[p]->location = -1;
-					activesquad->squad[p] = NULL;
-				}
-				endcheck(END_BUT_NOT_END); // play the right music in case we're dead
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(9, 1, CONST_sitemode177);
-			}
-			//PRINT SITE MAP
-			printsitemap(locx, locy, locz);
-			//CHECK IF YOU HAVE A SQUIRMING AMATEUR HOSTAGE
-			//hostcheck SHOULD ONLY BE 1 WHEN A NEWENC IS CREATED
-			if (hostcheck)
-			{
-				char havehostage = 0;
-				//Check your whole squad
-				for (int p = 0; p < 6; p++)
-				{
-					if (activesquad->squad[p] != NULL)
-					{
-						//If they're unarmed and dragging someone
-						if (activesquad->squad[p]->prisoner != NULL &&
-							!activesquad->squad[p]->get_weapon().can_threaten_hostages())
-						{
-							//And that someone is not an LCS member
-							if (activesquad->squad[p]->prisoner->squadid == -1)
-							{
-								//They scream for help -- flag them kidnapped, cause alarm
-								activesquad->squad[p]->prisoner->flag |= CREATUREFLAG_KIDNAPPED;
-								if (activesquad->squad[p]->type == CREATURE_RADIOPERSONALITY)offended_amradio = 1;
-								if (activesquad->squad[p]->type == CREATURE_NEWSANCHOR)offended_cablenews = 1;
-								havehostage = 1;
-							}
-						}
-					}
-				}
-				if (havehostage)
-				{
-					alienationcheck(1);
-					sitecrime += 5;
-					criminalizeparty(LAWFLAG_KIDNAPPING);
-				}
-				hostcheck = 0;
-				clearmessagearea();
-			}
-			// check if we fought the previous loop; if so, add a blank gamelog line
-			if (foughtthisround)gamelog.newline();
-			foughtthisround = 0;
-		}
-		{
-			int c;
-			if (levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
-			{
-				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_PERMANENT)
-				{
-					levelmap[locx][locy][locz].special = SPECIAL_NONE;
-					c = getkeyAlt();
-				}
-				else
-					c = 's';
-			}
-			else c = getkeyAlt();
-			if (partyalive == 0 && c == 'c')
-			{
-				//END OF GAME CHECK
-				if (!endcheck())
-				{
-					if (LocationsPool::getInstance().isThereASiegeHere(cursite))
-					{
-						if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
-						else sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
-					}
-					else
-						if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-						{
-							sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
-							resolvesite();
-						}
-					mode = GAMEMODE_BASE;
-					showcarprefs = 0;
-					return;
-				}
-			}
-			else if (partyalive > 0) {
-				int olocx = locx, olocy = locy, olocz = locz;
-				bool canMove = !enemy || !sitealarm;
-				{
-					if (c == 'v'&&enemy&&sitealarm)
-					{
-						char override = whichWay();
-						if (override) {
-							c = override;
-							canMove = true;
-						}
-
-					}
-				}
-				switch (c) {
-				case 'w':
-				case KEY_UP:
-					if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
-					break;
-				case 'a':
-				case KEY_LEFT:
-					if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
-					break;
-				case 'd':
-				case KEY_RIGHT:
-					if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
-					break;
-				case 'x':
-				case KEY_DOWN:
-					if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
-					break;
-				case 'k':
-					if (enemy) { kidnapattempt(); }
-					break;
-				case 'u':
-					pressedKeyU(enemy);
-					break;
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-					if (activesquad->squad[c - '1'] != NULL)
-					{
-						if (party_status == c - '1')fullstatus(party_status);
-						else party_status = c - '1';
-					}
-					break;
-				case 'e':
-					mapshowing = false;
-					equip(activesquad->loot, -1);
-					if (enemy&&sitealarm)enemyattack();
-					else if (enemy)disguisecheck(encounter_timer);
-					creatureadvance();
-					encounter_timer++;
-					mapshowing = true;
-					break;
-				case 'n':
-					pressedKeyN();
-					break;
-				case 'l':
-					if ((!enemy || !sitealarm)) {
-						pressedKeyL();
-						encounter_timer++;
-					}
-					break;
-				case 'j':
-					if ((!enemy || !sitealarm)) {
-						pressedKeyShiftL();
-						encounter_timer++;
-					}
-					break;
-				case 't':
-					if (talkers) {
-						pressedKeyT(enemy, encounter_timer);
-					}
-					break;
-				case 'o':
-					if (partysize > 1)orderparty();
-					break;
-				case '0':
-					party_status = -1;
-					break;
-				case 'm':
-					pressedKeyM();
-					break;
-				case 'f':
-					if (enemy) { pressedKeyF(encounter_timer); }
-					break;
-				case 'r':
-					pressedKeyR(freeable, libnum, enemy, hostages, partysize);
-					break;
-				case 'g':
-					pressedKeyG(enemy, encounter_timer);
-					break;
-				}
-
-				if (locx != olocx || locy != olocy || locz != olocz || c == 's') {
-
-					int cbase = -1;
-					if (activesquad->squad[0] != NULL)
-					{
-						cbase = activesquad->squad[0]->base;
-					}
-					//NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
-					//REFRESHES THE SCREEN
-					long nlocx = locx, nlocy = locy, nlocz = locz;
-					locx = olocx, locy = olocy, locz = olocz;
-					if (enemy) {
-						enemyAttemptsFreeShots(encounter_timer);
-					}
-					creatureadvance();
-					encounter_timer++;
-					partyalive = squadalive(activesquad);
-					if (partyalive) {
-						//AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
-						locx = nlocx, locy = nlocy, locz = nlocz;
-						//CHECK FOR EXIT
-						if ((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT) ||
-							(cbase == cursite && !LocationsPool::getInstance().isThereASiegeHere(cursite) &&
-								bail_on_base))
-						{
-							bailOnBase();
-							sitealarm = 0;
-							return;
-						}
-						if (moveOrWaitThenCheckForExit(olocx, olocy, olocz, c, encsize, hostcheck)) {
-							//RESET MODE
-							mode = GAMEMODE_BASE;
-							return;
-						}
-					}
-				}
-			}
-		}
+		;
 	}
 }
 newsstoryst* lastNewsStory();
@@ -17040,6 +17214,36 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int we
 {
 }
 //extern string NONE;
+
+map<string, int> creatureTypeTags = {
+	map<string, int>::value_type(tag_alignment, ENUM_tag_alignment),
+	map<string, int>::value_type(tag_PUBLIC_MOOD, ENUM_tag_PUBLIC_MOOD),
+	map<string, int>::value_type(tag_LIBERAL, ENUM_tag_LIBERAL),
+	map<string, int>::value_type(tag_MODERATE, ENUM_tag_MODERATE),
+	map<string, int>::value_type(tag_CONSERVATIVE, ENUM_tag_CONSERVATIVE),
+	map<string, int>::value_type(tag_age, ENUM_tag_age),
+	map<string, int>::value_type(tag_DOGYEARS, ENUM_tag_DOGYEARS),
+	map<string, int>::value_type(tag_CHILD, ENUM_tag_CHILD),
+	map<string, int>::value_type(tag_TEENAGER, ENUM_tag_TEENAGER),
+	map<string, int>::value_type(tag_YOUNGADULT, ENUM_tag_YOUNGADULT),
+	map<string, int>::value_type(tag_MATURE, ENUM_tag_MATURE),
+	map<string, int>::value_type(tag_GRADUATE, ENUM_tag_GRADUATE),
+	map<string, int>::value_type(tag_MIDDLEAGED, ENUM_tag_MIDDLEAGED),
+	map<string, int>::value_type(tag_SENIOR, ENUM_tag_SENIOR),
+	map<string, int>::value_type(tag_attribute_points, ENUM_tag_attribute_points),
+	map<string, int>::value_type(tag_attributes, ENUM_tag_attributes),
+	map<string, int>::value_type(tag_juice, ENUM_tag_juice),
+	map<string, int>::value_type(tag_gender, ENUM_tag_gender),
+	map<string, int>::value_type(tag_infiltration, ENUM_tag_infiltration),
+	map<string, int>::value_type(tag_money, ENUM_tag_money),
+	map<string, int>::value_type(tag_skills, ENUM_tag_skills),
+	map<string, int>::value_type(tag_armor, ENUM_tag_armor),
+	map<string, int>::value_type(tag_weapon, ENUM_tag_weapon),
+	map<string, int>::value_type(tag_encounter_name, ENUM_tag_encounter_name),
+	map<string, int>::value_type(tag_type_name, ENUM_tag_type_name),
+
+};
+
 string undefined;
 CreatureType::CreatureType(const std::string& xmlstring)
 	: age_(18, 57), alignment_public_mood_(true),
@@ -17067,120 +17271,140 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	while (xml.FindElem())
 	{
 		std::string element = xml.GetTagName();
-		if (element == tag_alignment)
-		{
-			std::string alignment = xml.GetData();
-			if (alignment == tag_PUBLIC_MOOD)
-				alignment_public_mood_ = true;
-			else if (alignment == tag_LIBERAL)
-			{
-				alignment_ = ALIGN_LIBERAL;
-				alignment_public_mood_ = false;
-			}
-			else if (alignment == tag_MODERATE)
-			{
-				alignment_ = ALIGN_MODERATE;
-				alignment_public_mood_ = false;
-			}
-			else if (alignment == tag_CONSERVATIVE)
-			{
-				alignment_ = ALIGN_CONSERVATIVE;
-				alignment_public_mood_ = false;
-			}
-			else
-				xmllog.log(CONST_creaturetype063 + idname_ + CONST_creaturetypeB086 + alignment);
-		}
-		else if (element == tag_age)
-		{
-			std::string age = xml.GetData();
-			if (age == tag_DOGYEARS)
-				age_.set_interval(2, 6);
-			else if (age == tag_CHILD)
-				age_.set_interval(7, 10);
-			else if (age == tag_TEENAGER)
-				age_.set_interval(14, 17);
-			else if (age == tag_YOUNGADULT)
-				age_.set_interval(18, 35);
-			else if (age == tag_MATURE)
-				age_.set_interval(20, 59);
-			else if (age == tag_GRADUATE)
-				age_.set_interval(26, 59);
-			else if (age == tag_MIDDLEAGED)
-				age_.set_interval(35, 59);
-			else if (age == tag_SENIOR)
-				age_.set_interval(65, 94);
-			else
-				assign_interval(age_, age, idname_, element);
-		}
-		else if (element == tag_attribute_points)
-			assign_interval(attribute_points_, xml.GetData(), idname_, element);
-		else if (element == tag_attributes)
-		{
-			while (xml.FindChildElem())
-			{
-				int attribute = attribute_string_to_enum(xml.GetChildTagName());
-				if (attribute != -1)
-					assign_interval(attributes_[attribute], xml.GetChildData(), idname_, element);
+		if (creatureTypeTags.count(element)) {
+			std::string age_alignment_or_whatever;
+			int gender;
+			switch (creatureTypeTags[element]) {
+			case ENUM_tag_alignment:
+
+
+				age_alignment_or_whatever = xml.GetData();
+				switch (creatureTypeTags[age_alignment_or_whatever]) {
+
+				case ENUM_tag_PUBLIC_MOOD:
+					alignment_public_mood_ = true;
+					break;
+				case ENUM_tag_LIBERAL:
+					alignment_ = ALIGN_LIBERAL;
+					alignment_public_mood_ = false;
+					break;
+				case ENUM_tag_MODERATE:
+					alignment_ = ALIGN_MODERATE;
+					alignment_public_mood_ = false;
+					break;
+				case ENUM_tag_CONSERVATIVE:
+					alignment_ = ALIGN_CONSERVATIVE;
+					alignment_public_mood_ = false;
+					break;
+				default:
+					xmllog.log(CONST_creaturetype063 + idname_ + CONST_creaturetypeB086 + age_alignment_or_whatever);
+					break;
+				}
+				break;
+			case ENUM_tag_age:
+				age_alignment_or_whatever = xml.GetData();
+				switch (creatureTypeTags[age_alignment_or_whatever]) {
+				case ENUM_tag_DOGYEARS:
+					age_.set_interval(2, 6);
+					break;
+				case ENUM_tag_CHILD:
+					age_.set_interval(7, 10);
+					break;
+				case ENUM_tag_TEENAGER:
+					age_.set_interval(14, 17);
+					break;
+				case ENUM_tag_YOUNGADULT:
+					age_.set_interval(18, 35);
+					break;
+				case ENUM_tag_MATURE:
+					age_.set_interval(20, 59);
+					break;
+				case ENUM_tag_GRADUATE:
+					age_.set_interval(26, 59);
+					break;
+				case ENUM_tag_MIDDLEAGED:
+					age_.set_interval(35, 59);
+					break;
+				case ENUM_tag_SENIOR:
+					age_.set_interval(65, 94);
+					break;
+				default:
+					assign_interval(age_, age_alignment_or_whatever, idname_, element);
+					break;
+				}
+			case ENUM_tag_attribute_points:
+				assign_interval(attribute_points_, xml.GetData(), idname_, element);
+				break;
+			case ENUM_tag_attributes:
+				while (xml.FindChildElem())
+				{
+					int attribute = attribute_string_to_enum(xml.GetChildTagName());
+					if (attribute != -1)
+						assign_interval(attributes_[attribute], xml.GetChildData(), idname_, element);
+					else
+						xmllog.log(CONST_creaturetype064 + idname_ + CONST_creaturetypeB086 + xml.GetTagName());
+				}
+				break;
+			case ENUM_tag_juice:
+				assign_interval(juice_, xml.GetData(), idname_, element);
+				break;
+			case ENUM_tag_gender:
+				gender = gender_string_to_enum(xml.GetData());
+				if (gender != -1 && gender != GENDER_WHITEMALEPATRIARCH)
+					gender_liberal_ = gender_conservative_ = gender;
 				else
-					xmllog.log(CONST_creaturetype064 + idname_ + CONST_creaturetypeB086 + xml.GetTagName());
-			}
-		}
-		else if (element == tag_juice)
-			assign_interval(juice_, xml.GetData(), idname_, element);
-		else if (element == tag_gender)
-		{
-			int gender = gender_string_to_enum(xml.GetData());
-			if (gender != -1 && gender != GENDER_WHITEMALEPATRIARCH)
-				gender_liberal_ = gender_conservative_ = gender;
-			else
-				xmllog.log(CONST_creaturetype065 + idname_ + CONST_creaturetypeB086 + xml.GetData());
-		}
-		else if (element == tag_infiltration)
-			assign_interval(infiltration_, xml.GetData(), idname_, element);
-		else if (element == tag_money)
-			assign_interval(money_, xml.GetData(), idname_, element);
-		else if (element == tag_skills)
-		{
-			while (xml.FindChildElem())
-			{
-				int skill = skill_string_to_enum(xml.GetChildTagName());
-				if (skill != -1)
-					assign_interval(skills_[skill], xml.GetChildData(), idname_, element);
+					xmllog.log(CONST_creaturetype065 + idname_ + CONST_creaturetypeB086 + xml.GetData());
+				break;
+			case ENUM_tag_infiltration:
+				assign_interval(infiltration_, xml.GetData(), idname_, element);
+				break;
+			case ENUM_tag_money:
+				assign_interval(money_, xml.GetData(), idname_, element);
+				break;
+			case ENUM_tag_skills:
+				while (xml.FindChildElem())
+				{
+					int skill = skill_string_to_enum(xml.GetChildTagName());
+					if (skill != -1)
+						assign_interval(skills_[skill], xml.GetChildData(), idname_, element);
+					else
+						xmllog.log(CONST_creaturetype066 + idname_ + CONST_creaturetypeB086 + xml.GetChildTagName());
+				}
+				break;
+			case ENUM_tag_armor:
+				if (getarmortype(xml.GetData()) != -1)
+					armortypes_.push_back(xml.GetData());
 				else
-					xmllog.log(CONST_creaturetype066 + idname_ + CONST_creaturetypeB086 + xml.GetChildTagName());
+					xmllog.log(CONST_creaturetype067 + idname_ + CONST_creaturetypeB086 + xml.GetData());
+				break;
+			case ENUM_tag_weapon:
+				//xml.SavePos(tag_creature);
+				weapons_and_clips_.push_back(WeaponsAndClips(xml, idname_));
+				//xml.RestorePos(tag_creature);
+				break;
+			case ENUM_tag_encounter_name:
+				encounter_name_ = xml.GetData();
+				break;
+			case ENUM_tag_type_name:
+				type_name_ = xml.GetData();
+				break;
 			}
 		}
-		else if (element == tag_armor)
-		{
-			if (getarmortype(xml.GetData()) != -1)
-				armortypes_.push_back(xml.GetData());
-			else
-				xmllog.log(CONST_creaturetype067 + idname_ + CONST_creaturetypeB086 + xml.GetData());
-		}
-		else if (element == tag_weapon)
-		{
-			//xml.SavePos(tag_creature);
-			weapons_and_clips_.push_back(WeaponsAndClips(xml, idname_));
-			//xml.RestorePos(tag_creature);
-		}
-		else if (element == tag_encounter_name)
-			encounter_name_ = xml.GetData();
-		else if (element == tag_type_name)
-			type_name_ = xml.GetData();
-		else
+		else {
 			xmllog.log(CONST_creaturetype068 + idname_ + CONST_creaturetypeB086 + element);
+		}
+		if (!len(type_name_))
+		{
+			xmllog.log(CONST_creaturetype069 + idname_ + singleDot);
+			type_name_ = undefined;
+		}
+		// If no weapon type has been given then use WEAPON_NONE.
+		if (!len(weapons_and_clips_))
+			weapons_and_clips_.push_back(WeaponsAndClips(tag_WEAPON_NONE, 1, NONE, 0));
+		// If no armor type has been given then use ARMOR_NONE.
+		if (!len(armortypes_))
+			armortypes_.push_back(tag_ARMOR_NONE);
 	}
-	if (!len(type_name_))
-	{
-		xmllog.log(CONST_creaturetype069 + idname_ + singleDot);
-		type_name_ = undefined;
-	}
-	// If no weapon type has been given then use WEAPON_NONE.
-	if (!len(weapons_and_clips_))
-		weapons_and_clips_.push_back(WeaponsAndClips(tag_WEAPON_NONE, 1, NONE, 0));
-	// If no armor type has been given then use ARMOR_NONE.
-	if (!len(armortypes_))
-		armortypes_.push_back(tag_ARMOR_NONE);
 }
 void CreatureType::make_creature(Creature& cr) const
 {
@@ -22705,11 +22929,415 @@ string unsuccessfulHit(Creature &a, Creature &t, const int droll) {
 	return str;
 
 }
-
-
 string dismemberingWound(const int w, const int wound);
-void addLocationChange(int cursite, sitechangest change);
 int bodypartSeverAmount(const int w);
+
+class AttackInfliction {
+public:
+	AttackInfliction(const bool, const int, const int, const attackst*);
+	const bool sneak_attack;
+	const int aroll;
+	const int droll;
+	const attackst* attack_used;
+};
+AttackInfliction::AttackInfliction(const bool _sneak_attack, const int _aroll, const int _droll, const attackst* _attack_used) : sneak_attack(_sneak_attack), aroll(_aroll < 0 ? 0 : _aroll), 
+	droll(_droll < 0 ? 0 : _droll),
+	attack_used(_attack_used) {
+	
+	
+}
+class AttackSeverity {
+public:
+	AttackSeverity::AttackSeverity(const int , const int , const int , const int );
+	const int damamount;
+	const int damagearmor;
+	const int severtype;
+	const int hit_location;
+
+};
+AttackSeverity::AttackSeverity(const int _damamount, const int _damagearmor, const int _severtype, const int w) : damamount(_damamount),
+	damagearmor(_damagearmor),
+	severtype(_severtype),
+	hit_location(w)
+{
+
+
+}
+void inflictNonZeroDamage(AttackInfliction attackI,
+	Creature &a,
+	const string inputStr,
+	const AttackSeverity attackS,
+	const int damtype,
+	Creature &t)
+{
+	const int damagearmor = attackS.damagearmor;
+	const int severtype = attackS.severtype;
+	const int totalDamage = attackS.damamount;
+	const int w = attackS.hit_location;
+	const bool sneak_attack = attackI.sneak_attack;
+	const attackst* attack_used = attackI.attack_used;
+
+	// TODO not all these externs are necessary
+	extern short mode;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int ccs_siege_kills;
+	extern int ccs_boss_kills;
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short cursite;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarmtimer;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
+
+	// These two variables are used and changed within this function, but are never used again by the function that calls this one
+	string str = inputStr;
+	int damamount = totalDamage;
+
+	Creature *target = takeBulletForLeader(t, damamount, w);
+	if (!target) target = &t;//If nobody jumps in front of the attack,
+	target->wound[w] |= damtype;
+	int severamount = bodypartSeverAmount(w);
+	if (severtype != -1 && damamount >= severamount)
+		target->wound[w] |= (char)severtype;
+	if (w != BODYPART_HEAD && w != BODYPART_BODY && target->blood - damamount <= 0 &&
+		target->blood > 0)
+	{
+		do
+		{
+			if (LCSrandom(100) < attack_used->no_damage_reduction_for_limbs_chance)
+				break;
+			else damamount >>= 1;
+		} while (target->blood - damamount <= 0);
+	}
+	if (damagearmor) armordamage(target->get_armor(), w, damamount); {
+		target->blood -= damamount;
+	}
+	levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY;
+
+	string hit_punctuation = attack_used->hit_punctuation;
+	string dismembered = dismemberingWound(w, target->wound[w]);
+	if (len(dismembered)) {
+		hit_punctuation = dismembered;
+	}
+	str += hit_punctuation;
+
+	if ((target->wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
+		(target->wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
+		target->blood <= 0)
+	{
+		if ((w == BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
+			(w == BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)) {
+			bloodblast(&target->get_armor());
+		}
+		const char alreadydead = !target->alive; // This tests whether the person being fatally wounded was a corpse
+		if (!alreadydead)
+		{
+			target->die();
+			if (t.align == -a.align)
+				addjuice(a, 5 + t.juice / 20, 1000); // Instant juice
+			else addjuice(a, -(5 + t.juice / 20), -50);
+			if (target->squadid != -1)
+			{
+				if (target->align == 1) stat_dead++;
+			}
+			else if (target->enemy() && (t.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
+			{
+				stat_kills++;
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
+				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
+				if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+				{
+					if (target->type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
+					ccs_siege_kills++;
+				}
+			}
+			if (target->squadid == -1 &&
+				(target->animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2) &&
+				!sneak_attack)
+			{
+				sitecrime += 10;
+				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+				if (a.squadid != -1) criminalizeparty(LAWFLAG_MURDER);
+			}
+		}
+		//set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		if (goodguyattack) { set_color_easy(GREEN_ON_BLACK_BRIGHT); }
+		else { set_color_easy(RED_ON_BLACK_BRIGHT); }
+
+		mvaddstrAlt(17, 1, str, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		if (!alreadydead)
+		{
+			severloot(t);
+			clearmessagearea();
+			adddeathmessage(*target);
+			pressAnyKey();
+			if (target->prisoner != NULL) freehostage(t, 1);
+		}
+	}
+	else
+	{
+		if (target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
+		if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		else set_color_easy(RED_ON_BLACK_BRIGHT);
+		//set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, str, gamelog);
+		gamelog.newline();
+		printparty();
+		if (mode == GAMEMODE_CHASECAR ||
+			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+		else printencounter();
+		pressAnyKey();
+		//SPECIAL WOUNDS
+		string damageDescription;
+		if (!(target->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
+			!target->animalgloss)
+		{
+			damageDescription = printSpecialWounds(target, w, damamount, damtype);
+			severloot(*target);
+		}
+		if (len(damageDescription) > 0) {
+			clearmessagearea();
+			if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			else set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(16, 1, damageDescription, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+		}
+		//set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	}
+}
+void inflictDamage(const int numhits, Creature &a, Creature &t, const AttackInfliction attackI) {
+	const int aroll = attackI.aroll;
+	const int droll = attackI.droll;
+	const bool sneak_attack = attackI.sneak_attack;
+	const attackst* attack_used = attackI.attack_used;
+
+	// TODO not all these externs are necessary
+	extern short mode;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern int ccs_siege_kills;
+	extern int ccs_boss_kills;
+	extern Log gamelog;
+	extern newsstoryst *sitestory;
+	extern short sitealarm;
+	extern int sitecrime;
+	extern short cursite;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarmtimer;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
+
+	int bursthits = numhits;
+
+	int w = determineBodypartHit(t, aroll, droll, sneak_attack);
+
+
+	char damtype = 0;
+	int damamount = 0;
+	char strengthmin = 1;
+	char strengthmax = 1;
+	int severtype = -1;
+	char damagearmor = 0;
+	char armorpiercing = 0;
+	int extraarmor = 0;
+	if (!a.is_armed())
+	{
+		strengthmin = 5;
+		strengthmax = 10;
+		for (; bursthits > 0; bursthits--) //Put into WEAPON_NONE -XML
+		{
+			damamount += LCSrandom(5 + a.get_skill(SKILL_HANDTOHAND)) + 1 + a.get_skill(SKILL_HANDTOHAND);
+		}
+		if (!a.animalgloss) damtype |= WOUND_BRUISED;
+		else
+		{
+			if (a.specialattack == ATTACK_CANNON)
+			{
+				damamount = LCSrandom(5000) + 5000;
+				armorpiercing = 20;
+
+				damamount |= consolidateDamageTypesNotCutOrBruised(attack_used);
+
+				strengthmin = 0;
+				strengthmax = 0;
+			}
+			else if (a.specialattack == ATTACK_FLAME) damtype |= WOUND_BURNED;
+			else if (a.specialattack == ATTACK_SUCK) damtype |= WOUND_CUT;
+			else damtype |= WOUND_TORN;
+			severtype = WOUND_NASTYOFF;
+		}
+	}
+	else
+	{
+		damtype |= consolidateDamageTypes(attack_used);
+		strengthmin = attack_used->strength_min;
+		strengthmax = attack_used->strength_max;
+		severtype = attack_used->severtype;
+		int random = attack_used->random_damage;
+		int fixed = attack_used->fixed_damage;
+		if (sneak_attack) fixed += 100;
+		if (bursthits >= attack_used->critical.hits_required
+			&& LCSrandom(100) < attack_used->critical.chance)
+		{
+			if (attack_used->critical.random_damage_defined)
+				random = attack_used->critical.random_damage;
+			if (attack_used->critical.fixed_damage_defined)
+				fixed = attack_used->critical.fixed_damage;
+			if (attack_used->critical.severtype_defined)
+				severtype = attack_used->critical.severtype;
+		}
+		for (; bursthits > 0; bursthits--)
+		{
+			damamount += LCSrandom(random) + fixed;
+		}
+		damagearmor = attack_used->damages_armor;
+		armorpiercing = attack_used->armorpiercing;
+	}
+	// Coarse combat lethality reduction.
+	//damamount/=2;
+	if (t.squadid != -1 && t.hireid == -1) // Plot Armor: if the founder is hit, inflict
+		damamount /= 2;                // 1/2 damage, because founders are cool
+	int mod = 0;
+	if (strengthmax > strengthmin)
+	{
+		// Melee attacks: Maximum strength bonus, minimum
+		// strength to deliver full damage
+		int strength = a.attribute_roll(ATTRIBUTE_STRENGTH);
+		if (strength > strengthmax) strength = (strengthmax + strength) / 2;
+		mod += strength - strengthmin;
+		armorpiercing += (strength - strengthmin) / 4;
+	}
+	//SKILL BONUS FOR GOOD ROLL
+	mod += aroll - droll;
+	//DO THE HEALTH MOD ON THE WOUND
+	mod -= t.attribute_roll(ATTRIBUTE_HEALTH);
+	//Health and poor accuracy will only avoid critical hits, not stop low-damage attacks
+	if (mod < 0) mod = 0;
+	// In a car chase, the vehicle itself provides bonus armor
+	int vehicleHitLocation = 0;
+	Vehicle* vehicle = getChaseVehicle(t);
+	if (mode == GAMEMODE_CHASECAR && vehicle != NULL)
+	{
+		vehicleHitLocation = vehicle->gethitlocation(w);
+		extraarmor = vehicle->armorbonus(vehicleHitLocation);
+		// TODO damage vehicle itself
+	}
+	int cardmg = damamount;
+	{
+		int mod3 = mod;
+		int armor = t.get_armor().get_armor(w);
+		if (t.animalgloss == ANIMALGLOSS_TANK)
+		{
+			if (damtype != WOUND_BURNED) armor = 15;
+			else armor = 10;
+		}
+		//if(t.get_armor().get_quality()>1)
+		armor -= t.get_armor().get_quality() - 1;
+		if (t.get_armor().is_damaged())
+			armor -= 1;
+		if (armor < 0) armor = 0; // Possible from second-rate clothes
+		armor += extraarmor; // Add vehicle armor 
+		const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
+		if (mod2 > 0) mod3 -= mod2 * 2;
+		damagemod(t, damtype, damamount, mod3);
+	}
+
+	string str;
+
+
+	// Could the vehicle have bounced that round on its own?
+	if ((damamount == 0) && (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0))
+	{
+		Creature testDummy; // Spawn nude test dummy to see if body armor was needed to prevent damage
+		int mod3 = mod;
+		int armor = t.get_armor().get_armor(w);
+		if (t.animalgloss == ANIMALGLOSS_TANK)
+		{
+			if (damtype != WOUND_BURNED) armor = 15;
+			else armor = 10;
+		}
+		//if(t.get_armor().get_quality()>1)
+		armor -= t.get_armor().get_quality() - 1;
+		if (t.get_armor().is_damaged())
+			armor -= 1;
+		if (armor < 0) armor = 0; // Possible from second-rate clothes
+		armor += extraarmor; // Add vehicle armor 
+		const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
+		if (mod2 > 0) mod3 -= mod2 * 2;
+		damagemod(testDummy, damtype, cardmg, mod3);
+
+		if (cardmg < 2) //fudge factor of 1 armor level due to randomness
+		{
+			str = CONST_fight139;
+
+			str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+			str += vehicle->getpartname(vehicleHitLocation);
+		}
+
+	}
+	if (len(str) < 1) {
+		str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
+		if (sneak_attack) str += CONST_fight134;
+		else str += CONST_fight135;
+		str += t.name;
+		str += CONST_fight136;
+		str += bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss);
+		str += showMultipleHits(a, bursthits, attack_used);
+		// Report vehicle protection effect
+		if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
+		{
+			str += CONST_fight138;
+
+			str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+			str += vehicle->getpartname(vehicleHitLocation);
+		}
+	}
+
+
+
+	// Bullets caught by armor should bruise instead of poke holes.
+	if (damamount < 4 && damtype & WOUND_SHOT)
+	{
+		damtype &= ~(WOUND_SHOT | WOUND_BLEEDING);
+		damtype |= WOUND_BRUISED;
+	}
+	if (damamount > 0)
+	{
+		AttackSeverity attackS(damamount, damagearmor, severtype, w);
+		inflictNonZeroDamage(attackI,
+			a,
+			str,
+			attackS,
+			damtype,
+			t);
+		
+	}
+	else
+	{
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		str += CONST_fight153;
+		mvaddstrAlt(17, 1, str, gamelog);
+		gamelog.newline();
+		printparty();
+		if (mode == GAMEMODE_CHASECAR ||
+			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+		else printencounter();
+		pressAnyKey();
+	}
+}
+
+void addLocationChange(int cursite, sitechangest change);
 /* attack handling for an individual creature and its target */
 bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee)
 {
@@ -22788,6 +23416,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	Creature* adriver = getChaseDriver(a);
 	Vehicle* avehicle = getChaseVehicle(a);
 	Vehicle* vehicle = getChaseVehicle(t);
+
 	// Basic roll
 	int aroll = a.skill_roll(wsk);
 	// In a car chase, the driver provides the defence roll instead of the victim.
@@ -22851,9 +23480,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 		healthmodroll(aroll, a);
 		healthmodroll(droll, t);
 	}
-	// Prevent negative rolls
-	if (aroll < 0) aroll = 0;
-	if (droll < 0) droll = 0;
+	AttackInfliction attackI(sneak_attack, aroll, droll, attack_used);
 	// Weapon accuracy bonuses and penalties
 	bonus += attack_used->accuracy_bonus;
 	//USE BULLETS
@@ -22920,308 +23547,7 @@ bool attack(Creature &a, Creature &t, const char mistake, const bool force_melee
 	//HIT!
 	if (aroll + bonus > droll)
 	{
-		int w = determineBodypartHit(t, aroll, droll, sneak_attack);
-
-
-		char damtype = 0;
-		int damamount = 0;
-		char strengthmin = 1;
-		char strengthmax = 1;
-		int severtype = -1;
-		char damagearmor = 0;
-		char armorpiercing = 0;
-		int extraarmor = 0;
-		if (!a.is_armed())
-		{
-			strengthmin = 5;
-			strengthmax = 10;
-			for ( ; bursthits > 0; bursthits--) //Put into WEAPON_NONE -XML
-			{
-				damamount += LCSrandom(5 + a.get_skill(SKILL_HANDTOHAND)) + 1 + a.get_skill(SKILL_HANDTOHAND);
-			}
-			if (!a.animalgloss) damtype |= WOUND_BRUISED;
-			else
-			{
-				if (a.specialattack == ATTACK_CANNON)
-				{
-					damamount = LCSrandom(5000) + 5000;
-					armorpiercing = 20;
-
-					damamount |= consolidateDamageTypesNotCutOrBruised(attack_used);
-
-					strengthmin = 0;
-					strengthmax = 0;
-				}
-				else if (a.specialattack == ATTACK_FLAME) damtype |= WOUND_BURNED;
-				else if (a.specialattack == ATTACK_SUCK) damtype |= WOUND_CUT;
-				else damtype |= WOUND_TORN;
-				severtype = WOUND_NASTYOFF;
-			}
-		}
-		else
-		{
-			damtype |= consolidateDamageTypes(attack_used);
-			strengthmin = attack_used->strength_min;
-			strengthmax = attack_used->strength_max;
-			severtype = attack_used->severtype;
-			int random = attack_used->random_damage;
-			int fixed = attack_used->fixed_damage;
-			if (sneak_attack) fixed += 100;
-			if (bursthits >= attack_used->critical.hits_required
-				&& LCSrandom(100) < attack_used->critical.chance)
-			{
-				if (attack_used->critical.random_damage_defined)
-					random = attack_used->critical.random_damage;
-				if (attack_used->critical.fixed_damage_defined)
-					fixed = attack_used->critical.fixed_damage;
-				if (attack_used->critical.severtype_defined)
-					severtype = attack_used->critical.severtype;
-			}
-			for (; bursthits > 0; bursthits--)
-			{
-				damamount += LCSrandom(random) + fixed;
-			}
-			damagearmor = attack_used->damages_armor;
-			armorpiercing = attack_used->armorpiercing;
-		}
-		// Coarse combat lethality reduction.
-		//damamount/=2;
-		if (t.squadid != -1 && t.hireid == -1) // Plot Armor: if the founder is hit, inflict
-			damamount /= 2;                // 1/2 damage, because founders are cool
-		int mod = 0;
-		if (strengthmax > strengthmin)
-		{
-			// Melee attacks: Maximum strength bonus, minimum
-			// strength to deliver full damage
-			int strength = a.attribute_roll(ATTRIBUTE_STRENGTH);
-			if (strength > strengthmax) strength = (strengthmax + strength) / 2;
-			mod += strength - strengthmin;
-			armorpiercing += (strength - strengthmin) / 4;
-		}
-		//SKILL BONUS FOR GOOD ROLL
-		mod += aroll - droll;
-		//DO THE HEALTH MOD ON THE WOUND
-		mod -= t.attribute_roll(ATTRIBUTE_HEALTH);
-		//Health and poor accuracy will only avoid critical hits, not stop low-damage attacks
-		if (mod < 0) mod = 0;
-		// In a car chase, the vehicle itself provides bonus armor
-		int vehicleHitLocation = 0;
-		Vehicle* vehicle = getChaseVehicle(t);
-		if (mode == GAMEMODE_CHASECAR && vehicle != NULL)
-		{
-			vehicleHitLocation = vehicle->gethitlocation(w);
-			extraarmor = vehicle->armorbonus(vehicleHitLocation);
-			// TODO damage vehicle itself
-		}
-		int cardmg = damamount;
-		{
-			int mod3 = mod;
-			int armor = t.get_armor().get_armor(w);
-			if (t.animalgloss == ANIMALGLOSS_TANK)
-			{
-				if (damtype != WOUND_BURNED) armor = 15;
-				else armor = 10;
-			}
-			//if(t.get_armor().get_quality()>1)
-			armor -= t.get_armor().get_quality() - 1;
-			if (t.get_armor().is_damaged())
-				armor -= 1;
-			if (armor < 0) armor = 0; // Possible from second-rate clothes
-			armor += extraarmor; // Add vehicle armor 
-			const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
-			if (mod2 > 0) mod3 -= mod2 * 2;
-			damagemod(t, damtype, damamount, mod3);
-		}
-
-			string str;
-		
-
-			// Could the vehicle have bounced that round on its own?
-			if ((damamount == 0) && (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0))
-			{
-				Creature testDummy; // Spawn nude test dummy to see if body armor was needed to prevent damage
-				int mod3 = mod;
-				int armor = t.get_armor().get_armor(w);
-				if (t.animalgloss == ANIMALGLOSS_TANK)
-				{
-					if (damtype != WOUND_BURNED) armor = 15;
-					else armor = 10;
-				}
-				//if(t.get_armor().get_quality()>1)
-				armor -= t.get_armor().get_quality() - 1;
-				if (t.get_armor().is_damaged())
-					armor -= 1;
-				if (armor < 0) armor = 0; // Possible from second-rate clothes
-				armor += extraarmor; // Add vehicle armor 
-				const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
-				if (mod2 > 0) mod3 -= mod2 * 2;
-				damagemod(testDummy, damtype, cardmg, mod3);
-
-				if (cardmg < 2) //fudge factor of 1 armor level due to randomness
-				{
-					str = CONST_fight139;
-
-					str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
-					str += vehicle->getpartname(vehicleHitLocation);
-				}
-
-			}
-			if (len(str) < 1) {
-				str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
-				if (sneak_attack) str += CONST_fight134;
-				else str += CONST_fight135;
-				str += t.name;
-				str += CONST_fight136;
-				str += bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss);
-				str += showMultipleHits(a, bursthits, attack_used);
-				// Report vehicle protection effect
-				if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
-				{
-					str += CONST_fight138;
-
-					str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
-					str += vehicle->getpartname(vehicleHitLocation);
-				}
-			}
-
-		
-
-		// Bullets caught by armor should bruise instead of poke holes.
-		if (damamount < 4 && damtype & WOUND_SHOT)
-		{
-			damtype &= ~(WOUND_SHOT | WOUND_BLEEDING);
-			damtype |= WOUND_BRUISED;
-		}
-		if (damamount > 0)
-		{
-				
-			Creature *target = takeBulletForLeader(t, damamount, w);
-			if (!target) target = &t;//If nobody jumps in front of the attack,
-			target->wound[w] |= damtype;
-			int severamount = bodypartSeverAmount(w);
-			if (severtype != -1 && damamount >= severamount)
-				target->wound[w] |= (char)severtype;
-			if (w != BODYPART_HEAD && w != BODYPART_BODY && target->blood - damamount <= 0 &&
-				target->blood > 0)
-			{
-				do
-				{
-					if (LCSrandom(100) < attack_used->no_damage_reduction_for_limbs_chance)
-						break;
-					else damamount >>= 1;
-				} while (target->blood - damamount <= 0);
-			}
-			if (damagearmor) armordamage(target->get_armor(), w, damamount); {
-				target->blood -= damamount; 
-			}
-			levelmap[locx][locy][locz].flag |= SITEBLOCK_BLOODY; 
-
-			string hit_punctuation = attack_used->hit_punctuation;
-			string dismembered = dismemberingWound(w, target->wound[w]);
-			if (len(dismembered)) {
-				hit_punctuation = dismembered;
-			}
-			str += hit_punctuation;
-
-			if ((target->wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
-				(target->wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
-				target->blood <= 0)
-			{
-				if ((w == BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
-					(w == BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)) {
-					bloodblast(&target->get_armor());
-				}
-				const char alreadydead = !target->alive; // This tests whether the person being fatally wounded was a corpse
-				if (!alreadydead)
-				{
-					target->die();
-					if (t.align == -a.align)
-						addjuice(a, 5 + t.juice / 20, 1000); // Instant juice
-					else addjuice(a, -(5 + t.juice / 20), -50);
-					if (target->squadid != -1)
-					{
-						if (target->align == 1) stat_dead++;
-					}
-					else if (target->enemy() && (t.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
-					{
-						stat_kills++;
-						if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
-						if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
-						if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
-						{
-							if (target->type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
-							ccs_siege_kills++;
-						}
-					}
-					if (target->squadid == -1 &&
-						(target->animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2) &&
-						!sneak_attack)
-					{
-						sitecrime += 10;
-						sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-						if (a.squadid != -1) criminalizeparty(LAWFLAG_MURDER);
-					}
-				}			
-				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				if (goodguyattack) { set_color_easy(GREEN_ON_BLACK_BRIGHT); }
-				else { set_color_easy(RED_ON_BLACK_BRIGHT); }
-
-				mvaddstrAlt(17, 1, str, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-				if (!alreadydead)
-				{
-					severloot(t);
-					clearmessagearea();
-					adddeathmessage(*target);
-					pressAnyKey();
-					if (target->prisoner != NULL) freehostage(t, 1);
-				}
-			}
-			else
-			{
-				if (target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
-				if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(17, 1, str, gamelog);
-				gamelog.newline();
-				printparty();
-				if (mode == GAMEMODE_CHASECAR ||
-					mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-				else printencounter();
-				pressAnyKey();
-				//SPECIAL WOUNDS
-				string damageDescription;
-				if (!(target->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
-					!target->animalgloss)
-				{
-					damageDescription = printSpecialWounds(target, w, damamount, damtype);
-					severloot(*target);
-				}
-				if (len(damageDescription) > 0) {
-					clearmessagearea();
-					if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					else set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, damageDescription, gamelog);
-					gamelog.newline();
-					pressAnyKey();
-				}
-				//set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			}
-		}
-		else
-		{
-			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			str += CONST_fight153;
-			mvaddstrAlt(17, 1, str, gamelog);
-			gamelog.newline();
-			printparty();
-			if (mode == GAMEMODE_CHASECAR ||
-				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-			else printencounter();
-			pressAnyKey();
-		}
+		inflictDamage(bursthits, a, t, attackI);
 	}
 	else
 	{
@@ -40514,6 +40840,20 @@ Shop::Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
 {
 	init(xmlstring);
 }
+
+map<string, int> shopInitTags = {
+	map<string, int>::value_type(tag_only_sell_legal_items, ENUM_tag_only_sell_legal_items),
+	map<string, int>::value_type(tag_fullscreen, ENUM_tag_fullscreen),
+	map<string, int>::value_type(tag_allow_selling, ENUM_tag_allow_selling),
+	map<string, int>::value_type(tag_increase_prices_with_illegality, ENUM_tag_increase_prices_with_illegality),
+	map<string, int>::value_type(tag_department, ENUM_tag_department),
+	map<string, int>::value_type(tag_entry, ENUM_tag_entry),
+	map<string, int>::value_type(tag_exit, ENUM_tag_exit),
+	map<string, int>::value_type(tag_sell_masks, ENUM_tag_sell_masks),
+	map<string, int>::value_type(tag_letter, ENUM_tag_letter),
+	map<string, int>::value_type(tag_item, ENUM_tag_item),
+
+};
 void Shop::init(const MCD_STR &xmlstring)
 {
 	CMarkup xml;
@@ -40523,52 +40863,65 @@ void Shop::init(const MCD_STR &xmlstring)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == tag_only_sell_legal_items)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1 || b == 0) only_sell_legal_ = b;
-		}
-		else if (tag == tag_fullscreen)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1 || b == 0) fullscreen_ = b;
-		}
-		else if (tag == tag_allow_selling)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1 || b == 0) allow_selling_ = b;
-		}
-		else if (tag == tag_increase_prices_with_illegality)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1 || b == 0) increase_prices_with_illegality_ = b;
-		}
-		else if (tag == tag_department)
-			options_.push_back(new Shop(xml.GetSubDoc(), fullscreen_, only_sell_legal_,
-				increase_prices_with_illegality_));
-		else if (tag == tag_entry) description_ = xml.GetData();
-		else if (tag == tag_exit) exit_ = xml.GetData();
-		else if (tag == tag_sell_masks)
-		{
-			int b = stringtobool(xml.GetData());
-			if (b == 1 || b == 0) sell_masks_ = b;
-		}
-		else if (tag == tag_letter)
-		{
-			letter_ = xml.GetData()[0];
-			if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
-				letter_defined_ = true;
-			else if (65 <= letter_ && letter_ <= 90)
-			{
-				letter_ += 32;
-				letter_defined_ = true;
+		if (shopInitTags.count(tag)) {
+			switch (shopInitTags[tag]) {
+				int b;
+			case ENUM_tag_only_sell_legal_items:
+
+				b = stringtobool(xml.GetData());
+				if (b == 1 || b == 0) only_sell_legal_ = b;
+				break;
+			case ENUM_tag_fullscreen:
+
+				b = stringtobool(xml.GetData());
+				if (b == 1 || b == 0) fullscreen_ = b;
+				break;
+			case ENUM_tag_allow_selling:
+
+				b = stringtobool(xml.GetData());
+				if (b == 1 || b == 0) allow_selling_ = b;
+				break;
+			case ENUM_tag_increase_prices_with_illegality:
+
+				b = stringtobool(xml.GetData());
+				if (b == 1 || b == 0) increase_prices_with_illegality_ = b;
+				break;
+			case ENUM_tag_department:
+
+				options_.push_back(new Shop(xml.GetSubDoc(), fullscreen_, only_sell_legal_,
+					increase_prices_with_illegality_));
+				break;
+			case ENUM_tag_entry:
+				description_ = xml.GetData();
+				break;
+			case ENUM_tag_exit:
+				exit_ = xml.GetData();
+				break;
+			case ENUM_tag_sell_masks:
+
+				b = stringtobool(xml.GetData());
+				if (b == 1 || b == 0) sell_masks_ = b;
+				break;
+			case ENUM_tag_letter:
+				letter_ = xml.GetData()[0];
+				if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
+					letter_defined_ = true;
+				else if (65 <= letter_ && letter_ <= 90)
+				{
+					letter_ += 32;
+					letter_defined_ = true;
+				}
+				else if (letter_ == '!') //Allow special character.
+					letter_defined_ = true;
+				break;
+			case ENUM_tag_item:
+
+				options_.push_back(new ShopItem(xml.GetSubDoc(), only_sell_legal_,
+					increase_prices_with_illegality_));
+				break;
+
 			}
-			else if (letter_ == '!') //Allow special character.
-				letter_defined_ = true;
 		}
-		else if (tag == tag_item)
-			options_.push_back(new ShopItem(xml.GetSubDoc(), only_sell_legal_,
-				increase_prices_with_illegality_));
 	}
 }
 Shop::~Shop()
@@ -40996,6 +41349,17 @@ bool Shop::is_available() const
 	for (int i = 0; i < len(options_) && !(r = options_[i]->display()); i++);
 	return r;
 }
+
+map<string, int> shopItemTags = {
+	map<string, int>::value_type(tag_class, ENUM_tag_class),
+	map<string, int>::value_type(tag_type, ENUM_tag_type),
+	map<string, int>::value_type(tag_description, ENUM_tag_description),
+	map<string, int>::value_type(tag_price, ENUM_tag_price),
+	map<string, int>::value_type(tag_sleeperprice, ENUM_tag_sleeperprice),
+	map<string, int>::value_type(tag_letter, ENUM_tag_letter),
+
+};
+
 Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 	bool increase_price_with_illegality)
 	: price_(0), only_sell_legal_(only_sell_legal),
@@ -41009,40 +41373,47 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == tag_class)
-		{
-			if (xml.GetData() == tag_WEAPON)
-				itemclass_ = WEAPON;
-			else if (xml.GetData() == tag_CLIP)
-				itemclass_ = CLIP;
-			else if (xml.GetData() == tag_ARMOR)
-				itemclass_ = ARMOR;
-			else if (xml.GetData() == tag_LOOT)
-				itemclass_ = LOOT;
-		}
-		else if (tag == tag_type)
-			itemtypename_ = xml.GetData();
-		else if (tag == tag_description)
-		{
-			description_ = xml.GetData();
-			description_defined_ = true;
-		}
-		else if (tag == tag_price)
-			price_ = atoi(xml.GetData());
-		else if (tag == tag_sleeperprice)
-			sleeperprice_ = atoi(xml.GetData());
-		else if (tag == tag_letter)
-		{
-			letter_ = xml.GetData()[0];
-			if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
-				letter_defined_ = true;
-			else if (65 <= letter_ && letter_ <= 90)
-			{
-				letter_ += 32;
-				letter_defined_ = true;
+		if (shopItemTags.count(tag)) {
+			switch (shopItemTags[tag]) {
+
+			case ENUM_tag_class:
+				if (xml.GetData() == tag_WEAPON)
+					itemclass_ = WEAPON;
+				else if (xml.GetData() == tag_CLIP)
+					itemclass_ = CLIP;
+				else if (xml.GetData() == tag_ARMOR)
+					itemclass_ = ARMOR;
+				else if (xml.GetData() == tag_LOOT)
+					itemclass_ = LOOT;
+				break;
+			case ENUM_tag_type:
+				itemtypename_ = xml.GetData();
+				break;
+			case ENUM_tag_description:
+				description_ = xml.GetData();
+				description_defined_ = true;
+				break;
+			case ENUM_tag_price:
+				price_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_sleeperprice:
+				sleeperprice_ = atoi(xml.GetData());
+				break;
+			case ENUM_tag_letter:
+				letter_ = xml.GetData()[0];
+				if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
+					letter_defined_ = true;
+				else if (65 <= letter_ && letter_ <= 90)
+				{
+					letter_ += 32;
+					letter_defined_ = true;
+				}
+				else if (letter_ == '!') //Allow special character.
+					letter_defined_ = true;
+				break;
+
+
 			}
-			else if (letter_ == '!') //Allow special character.
-				letter_defined_ = true;
 		}
 	}
 }
@@ -46539,6 +46910,543 @@ char talkAboutIssues(Creature &a, Creature &tk)
 		return 1;
 	}
 }
+
+void pressKeyAInCombat(Creature &a) {
+	extern newsstoryst *sitestory;
+	extern short attitude[VIEWNUM];
+	extern string slogan_str;
+	extern Creature encounter[ENCMAX];
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, a.name, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	switch (LCSrandom(4))
+	{
+	case 0:
+	{   // Formatting the slogan so that it always has quotes around it and punctuation
+		if (slogan_str[0] != '"') mvaddcharAlt(17, 1, '"');
+		mvaddstrAlt(17, 1 + (slogan_str[0] != '"' ? 1 : 0), slogan_str, gamelog);
+		const int last = len(slogan_str);
+		if (last && slogan_str[last - 1] != '"' && slogan_str[last - 1] != '!' && slogan_str[last - 1] != '.' && slogan_str[last - 1] != '?')
+			addcharAlt('!', gamelog);
+		if (last && slogan_str[last - 1] != '"') addcharAlt('"', gamelog);
+		if (!sitestory->claimed)
+			sitestory->claimed = 1;
+		break;
+	}
+	default:
+		mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
+		break;
+	}
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+		{
+			const int attack = a.juice / 50 + attitude[VIEW_LIBERALCRIMESQUAD] / 10;
+			const int defense = encounter[e].attribute_roll(ATTRIBUTE_WISDOM);
+			if (attack > defense)
+			{
+				if (encounter[e].type == CREATURE_COP ||
+					encounter[e].type == CREATURE_GANGUNIT ||
+					encounter[e].type == CREATURE_SWAT ||
+					encounter[e].type == CREATURE_DEATHSQUAD ||
+					encounter[e].type == CREATURE_SOLDIER ||
+					encounter[e].type == CREATURE_HARDENED_VETERAN ||
+					encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
+					encounter[e].type == CREATURE_AGENT ||
+					encounter[e].type == CREATURE_SECRET_SERVICE)
+				{
+					if (LCSrandom(3)) continue;
+				}
+				clearmessagearea();
+				mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+				addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
+				delenc(e, 0);
+				addjuice(a, 2, 200); // Instant juice!
+				pressAnyKey();
+			}
+		}
+	}
+}
+
+void pressedKeyAWithHostage(Creature &a, const int hostages, const int e) {
+
+	extern int sitecrime;
+	extern short lawList[LAWNUM];
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
+	extern short exec[EXECNUM];
+
+	Creature* executer = 0;
+	if (a.prisoner)
+		executer = &a;
+	else for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i] &&
+			activesquad->squad[i]->prisoner &&
+			activesquad->squad[i]->prisoner->alive &&
+			activesquad->squad[i]->prisoner->enemy())
+		{
+			executer = activesquad->squad[i];
+			break;
+		}
+	}
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	{
+		string executerGetAmmo;
+		if (executer->get_weapon().is_ranged()
+			&& executer->get_weapon().get_ammoamount() > 0)
+		{
+			executerGetAmmo = (unnamed_String_Talk_cpp_113);
+			executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
+		}
+		else
+		{
+			executerGetAmmo = (unnamed_String_Talk_cpp_114);
+		}
+		mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
+	}
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, executer->name, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
+	addstrAlt(executer->prisoner->name, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
+	gamelog.newline();
+	addjuice(*executer, -5, -50); // DE-juice for this shit
+	sitecrime += 10;
+	sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+	criminalize(*executer, LAWFLAG_MURDER);
+	if (executer->prisoner->type == CREATURE_CORPORATE_CEO ||
+		executer->prisoner->type == CREATURE_RADIOPERSONALITY ||
+		executer->prisoner->type == CREATURE_NEWSANCHOR ||
+		executer->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
+		executer->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
+	makeloot(*executer->prisoner);
+	pressAnyKey();
+	delete_and_nullify(executer->prisoner);
+	if (hostages > 1 && LCSrandom(2))
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
+		addstrAlt(pickrandom(please_no_more), gamelog);
+		gamelog.newline();
+		for (int i = ENCMAX - 1; i >= 0; i--)
+			if (encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
+				delenc(i, 0);
+		pressAnyKey();
+	}
+}
+void pressedKeyBWithHostage(Creature &a, const int hostages, const int e) {
+
+	extern int sitecrime;
+	extern short lawList[LAWNUM];
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
+	extern short exec[EXECNUM];
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, a.name, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	{
+		string nameHostages;
+		if (LCSrandom(5))
+		{
+			if (hostages > 1) nameHostages = (unnamed_String_Talk_cpp_119);
+			else nameHostages = (unnamed_String_Talk_cpp_120);
+		}
+		else {
+			nameHostages = (pickrandom(let_hostages_go));
+		}
+		mvaddstrAlt(17, 1, nameHostages, gamelog);
+	}
+	gamelog.newline();
+	pressAnyKey();
+	if (((encounter[e].type == CREATURE_DEATHSQUAD ||
+		encounter[e].type == CREATURE_AGENT ||
+		encounter[e].type == CREATURE_MERC ||
+		encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
+		encounter[e].type == CREATURE_GANGUNIT) &&
+		LCSrandom(2)) && encounter[e].align == ALIGN_CONSERVATIVE)
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, pickrandom(go_ahead_and_die), gamelog);
+		gamelog.newline();
+		pressAnyKey();
+	}
+	else
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, pickrandom(agree_to_release_hostages), gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		for (int i = ENCMAX - 1; i >= 0; i--)
+			if (encounter[i].exists&&encounter[i].enemy() && encounter[i].alive)
+				delenc(i, 0);
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		juiceparty(15, 200); // Instant juice for successful hostage negotiation
+		mvaddstrAlt(16, 1, hostages > 1 ? unnamed_String_Talk_cpp_121 : unnamed_String_Talk_cpp_122, gamelog);
+		gamelog.newline();
+		for (int i = 0; i < 6; i++)
+		{
+			if (activesquad->squad[i] &&
+				activesquad->squad[i]->prisoner &&
+				activesquad->squad[i]->prisoner->enemy())
+			{
+				delete_and_nullify(activesquad->squad[i]->prisoner);
+			}
+		}
+		pressAnyKey();
+	}
+}
+void pressKeyBInCombat(Creature &a, Creature &tk, const int hostages, const int weaponhostage) {
+	extern int sitecrime;
+	extern short lawList[LAWNUM];
+	extern newsstoryst *sitestory;
+	extern squadst *activesquad;
+	extern Creature encounter[ENCMAX];
+	extern short exec[EXECNUM];
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, a.name + colonSpace, gamelog);
+	{
+		string anotherHostageThing;
+		switch (LCSrandom(6))
+		{
+		case 0:anotherHostageThing = (unnamed_String_Talk_cpp_100);
+			if (!sitestory->claimed)sitestory->claimed = 1; break;
+		case 1:
+			if (lawList[LAW_FREESPEECH] == -2)anotherHostageThing = (unnamed_String_Talk_cpp_101);
+			else anotherHostageThing = (unnamed_String_Talk_cpp_102);
+			break;
+		default:
+			anotherHostageThing = (pickrandom(threaten_hostage));
+			break;
+		}
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, anotherHostageThing, gamelog);
+	}
+	gamelog.newline();
+	sitecrime += 5;
+	criminalizeparty(LAWFLAG_KIDNAPPING);
+	addjuice(a, -2, -10); // DE-juice for this shit
+	pressAnyKey();
+	if (weaponhostage)
+	{
+		bool noretreat = false;
+		int e = 0;
+		for (; e < ENCMAX; e++)
+		{
+			if (encounter[e].exists&&encounter[e].alive&&
+				encounter[e].enemy() && encounter[e].blood > 70)
+			{
+				if ((encounter[e].type == CREATURE_DEATHSQUAD ||
+					encounter[e].type == CREATURE_SOLDIER ||
+					encounter[e].type == CREATURE_HARDENED_VETERAN ||
+					encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
+					encounter[e].type == CREATURE_AGENT ||
+					encounter[e].type == CREATURE_MERC ||
+					encounter[e].type == CREATURE_COP ||
+					encounter[e].type == CREATURE_GANGUNIT ||
+					encounter[e].type == CREATURE_SWAT ||
+					encounter[e].type == CREATURE_SECRET_SERVICE) &&
+					LCSrandom(5))
+				{
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					clearmessagearea();
+					mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+					addstrAlt(colonSpace, gamelog);
+					if (encounter[e].align != ALIGN_CONSERVATIVE ||
+						(encounter[e].type == CREATURE_SECRET_SERVICE && exec[EXEC_PRESIDENT] > ALIGN_CONSERVATIVE))
+					{
+						set_color_easy(GREEN_ON_BLACK_BRIGHT);
+						mvaddstrAlt(17, 1, pickrandom(please_spare_hostage), gamelog);
+					}
+					else
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						if (((encounter[e].type == CREATURE_DEATHSQUAD ||
+							encounter[e].type == CREATURE_AGENT ||
+							encounter[e].type == CREATURE_MERC ||
+							encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
+							encounter[e].type == CREATURE_GANGUNIT))
+							&& encounter[e].align == ALIGN_CONSERVATIVE)
+						{
+							mvaddstrAlt(17, 1, pickrandom(who_cares_about_hostage), gamelog);
+						}
+						else
+						{
+							string moreHostageQuestions;
+							if (LCSrandom(5)) {
+								moreHostageQuestions = (pickrandom(hostage_negotiation));
+							}
+							else {
+								if (hostages > 1)
+									moreHostageQuestions = (unnamed_String_Talk_cpp_103);
+								else moreHostageQuestions = (unnamed_String_Talk_cpp_104);
+							}
+							mvaddstrAlt(17, 1, moreHostageQuestions, gamelog);
+						}
+					}
+					gamelog.newline();
+					pressAnyKey();
+					noretreat = true;
+					break;
+				}
+			}
+		}
+		if (e == ENCMAX) { e--; }
+		if (noretreat == false)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			clearmessagearea();
+			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_105, gamelog);
+			gamelog.newline();
+			for (int i = ENCMAX - 1; i >= 0; i--)
+			{
+				if (encounter[i].exists&&
+					encounter[i].alive&&
+					encounter[i].align <= -1)
+				{
+					delenc(i, 0);
+				}
+			}
+			pressAnyKey();
+		}
+		else
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			clearcommandarea();
+			clearmessagearea();
+			clearmaparea();
+			mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_106);
+			addstrAlt(a.name);
+			addstrAlt(unnamed_String_Talk_cpp_107);
+			mvaddstrAlt(11, 1, hostages > 1 ? (unnamed_String_Talk_cpp_108) : (unnamed_String_Talk_cpp_109));
+			mvaddstrAlt(12, 1, hostages > 1 ? (unnamed_String_Talk_cpp_110) : (unnamed_String_Talk_cpp_111));
+			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_112);
+			char c = pressSpecificKey('a', 'b'); // TODO: something to happen if you press 'c'
+			switch (c) {
+			case 'a':
+				pressedKeyAWithHostage(a, hostages, e);
+				break;
+
+			case 'b':
+				pressedKeyBWithHostage(a, hostages, e);
+				break;
+
+
+			}
+		}
+	}
+	else
+	{
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		clearmessagearea();
+		mvaddstrAlt(16, 1, tk.name, gamelog);
+		addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+	}
+}
+
+void pressKeyCInCombat(Creature &a) {
+
+	extern Creature encounter[ENCMAX];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern short lawList[LAWNUM];
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short cursite;
+	extern short siteonfire;
+	extern short fieldskillrate;
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	{
+		mvaddstrAlt(16, 1, a.name, gamelog);
+		addstrAlt(singleSpace, gamelog);
+		switch (LocationsPool::getInstance().getSiegeType(cursite))
+		{
+		case SIEGE_POLICE:
+			addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
+			break;
+		case SIEGE_CIA:
+			addstrAlt(unnamed_String_Talk_cpp_125, gamelog);
+			break;
+		case SIEGE_CCS:
+		case SIEGE_HICKS:
+			switch (LCSrandom(2))
+			{
+			case 0:
+				addstrAlt(unnamed_String_Talk_cpp_126, gamelog);
+				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_127, gamelog);
+				break;
+			case 1:
+				addstrAlt(unnamed_String_Talk_cpp_128, gamelog);
+				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_129, gamelog);
+				break;
+			}
+			break;
+		case SIEGE_CORPORATE:
+			addstrAlt(unnamed_String_Talk_cpp_130, gamelog);
+			break;
+		case SIEGE_FIREMEN:
+			addstrAlt(unnamed_String_Talk_cpp_131, gamelog);
+			if ((!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
+				!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+				!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
+				!(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS)) && !LCSrandom(10))
+			{
+				levelmap[locx][locy][locz].flag |= SITEBLOCK_FIRE_START;
+				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_132, gamelog);
+				gamelog.newline();
+				mvaddstrAlt(18, 1, unnamed_String_Talk_cpp_133, gamelog);
+			}
+			break;
+		}
+	}
+	else        //Special bluff messages for various uniforms
+	{
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		if (a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM ||
+			a.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR ||
+			a.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)
+		{
+			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_134, gamelog);
+		}
+		else if (a.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)
+		{
+			if (siteonfire) mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_135, gamelog);
+			else mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_136, gamelog);
+		}
+		else if (a.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)
+			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_137, gamelog);
+		else if (a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)
+			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_138, gamelog);
+		else if (a.get_armor().get_itemtypename() == tag_ARMOR_MITHRIL)
+		{
+			mvaddstrAlt(16, 1, a.name, gamelog);
+			addstrAlt(unnamed_String_Talk_cpp_139, gamelog);
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			addstrAlt(unnamed_String_Talk_cpp_140, gamelog);     //Fanciful multicolor message
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			addstrAlt(unnamed_String_Talk_cpp_141, gamelog);
+		}
+		else
+		{
+			mvaddstrAlt(16, 1, a.name, gamelog);
+			addstrAlt(unnamed_String_Talk_cpp_142, gamelog);
+			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_143, gamelog);
+		}
+
+	}
+	gamelog.newline();
+	pressAnyKey();
+	bool fooled = true;
+	int e = 0;
+	for (; e < ENCMAX; e++)
+	{
+		if (encounter[e].exists&&encounter[e].alive&&
+			encounter[e].enemy())
+		{
+			const int roll = a.skill_roll(SKILL_DISGUISE);
+			const int diff = encounter[e].get_attribute(ATTRIBUTE_WISDOM, true) > 10 ? DIFFICULTY_CHALLENGING : DIFFICULTY_AVERAGE;
+			fooled = roll >= diff;
+			if (roll + 1 == diff && fieldskillrate == FIELDSKILLRATE_HARD)
+				a.train(SKILL_DISGUISE, 20);
+			if (!fooled) break;
+		}
+	}
+	if (e == ENCMAX) { e--; }
+	switch (fieldskillrate)
+	{
+	case FIELDSKILLRATE_FAST:
+		a.train(SKILL_DISGUISE, 50); break;
+	case FIELDSKILLRATE_CLASSIC:
+		a.train(SKILL_DISGUISE, 20); break;
+	case FIELDSKILLRATE_HARD:
+		a.train(SKILL_DISGUISE, 0); break;
+	}
+	if (!fooled)
+	{
+		clearmessagearea();
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		if (encounter[e].type == CREATURE_HICK)
+		{
+			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_144, gamelog);
+			addstrAlt(encounter[e].name, gamelog);
+			addstrAlt(unnamed_String_Talk_cpp_145, gamelog);
+		}
+		else
+		{
+			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+			if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
+				addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
+			else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
+		}
+		pressAnyKey();
+	}
+	else
+	{
+		clearmessagearea();
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_148, gamelog);
+		pressAnyKey();
+		for (int e = ENCMAX - 1; e >= 0; e--)
+			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+				delenc(e, 0);
+	}
+	gamelog.newline();
+}
+
+void pressKeyDInCombat() {
+
+	extern squadst *activesquad;
+	extern short cursite;
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_149, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	int stolen = 0;
+	// Police assess stolen goods in inventory
+	for (int l = 0; l < len(activesquad->loot); l++)
+		if (activesquad->loot[l]->whatIsThis() == THIS_IS_LOOT)
+			stolen++;
+	for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i])
+		{
+			activesquad->squad[i]->crimes_suspected[LAWFLAG_THEFT] += stolen;
+			capturecreature(*activesquad->squad[i]);
+		}
+		activesquad->squad[i] = NULL;
+	}
+	LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
+}
+
 char talkInCombat(Creature &a, Creature &tk)
 {
 	extern Log gamelog;
@@ -46558,6 +47466,7 @@ char talkInCombat(Creature &a, Creature &tk)
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
 	extern short attitude[VIEWNUM];
+
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -46612,6 +47521,7 @@ char talkInCombat(Creature &a, Creature &tk)
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_099);
 	set_color_easy(WHITE_ON_BLACK);
+
 	while (true)
 	{
 		c = getkeyAlt();
@@ -46620,493 +47530,27 @@ char talkInCombat(Creature &a, Creature &tk)
 		if (c == 'c' && tk.cantbluff != 2)break;
 		if (c == 'd' && cop)break;
 	}
-	if (c == 'a')
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, a.name, gamelog);
-		addstrAlt(colonSpace, gamelog);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		switch (LCSrandom(4))
-		{
-		case 0:
-		{   // Formatting the slogan so that it always has quotes around it and punctuation
-			if (slogan_str[0] != '"') mvaddcharAlt(17, 1, '"');
-			mvaddstrAlt(17, 1 + (slogan_str[0] != '"' ? 1 : 0), slogan_str, gamelog);
-			const int last = len(slogan_str);
-			if (last && slogan_str[last - 1] != '"' && slogan_str[last - 1] != '!' && slogan_str[last - 1] != '.' && slogan_str[last - 1] != '?')
-				addcharAlt('!', gamelog);
-			if (last && slogan_str[last - 1] != '"') addcharAlt('"', gamelog);
-			if (!sitestory->claimed)
-				sitestory->claimed = 1;
-			break;
-		}
-		default:
-			mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
-			break;
-		}
-		pressAnyKey();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		for (int e = 0; e < ENCMAX; e++)
-		{
-			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
-			{
-				const int attack = a.juice / 50 + attitude[VIEW_LIBERALCRIMESQUAD] / 10;
-				const int defense = encounter[e].attribute_roll(ATTRIBUTE_WISDOM);
-				if (attack > defense)
-				{
-					if (encounter[e].type == CREATURE_COP ||
-						encounter[e].type == CREATURE_GANGUNIT ||
-						encounter[e].type == CREATURE_SWAT ||
-						encounter[e].type == CREATURE_DEATHSQUAD ||
-						encounter[e].type == CREATURE_SOLDIER ||
-						encounter[e].type == CREATURE_HARDENED_VETERAN ||
-						encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
-						encounter[e].type == CREATURE_AGENT ||
-						encounter[e].type == CREATURE_SECRET_SERVICE)
-					{
-						if (LCSrandom(3)) continue;
-					}
-					clearmessagearea();
-					mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-					addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
-					delenc(e, 0);
-					addjuice(a, 2, 200); // Instant juice!
-					pressAnyKey();
-				}
-			}
-		}
-	}
-	else if (c == 'b')
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, a.name + colonSpace, gamelog);
-		{
-			string anotherHostageThing;
-			switch (LCSrandom(6))
-			{
-			case 0:anotherHostageThing = (unnamed_String_Talk_cpp_100);
-				if (!sitestory->claimed)sitestory->claimed = 1; break;
-			case 1:
-				if (lawList[LAW_FREESPEECH] == -2)anotherHostageThing = (unnamed_String_Talk_cpp_101);
-				else anotherHostageThing = (unnamed_String_Talk_cpp_102);
-				break;
-			default:
-				anotherHostageThing = (pickrandom(threaten_hostage));
-				break;
-			}
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(17, 1, anotherHostageThing, gamelog);
-		}
-		gamelog.newline();
-		sitecrime += 5;
-		criminalizeparty(LAWFLAG_KIDNAPPING);
-		addjuice(a, -2, -10); // DE-juice for this shit
-		pressAnyKey();
-		if (weaponhostage)
-		{
-			bool noretreat = false;
-			int e = 0;
-			for (; e < ENCMAX; e++)
-			{
-				if (encounter[e].exists&&encounter[e].alive&&
-					encounter[e].enemy() && encounter[e].blood > 70)
-				{
-					if ((encounter[e].type == CREATURE_DEATHSQUAD ||
-						encounter[e].type == CREATURE_SOLDIER ||
-						encounter[e].type == CREATURE_HARDENED_VETERAN ||
-						encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
-						encounter[e].type == CREATURE_AGENT ||
-						encounter[e].type == CREATURE_MERC ||
-						encounter[e].type == CREATURE_COP ||
-						encounter[e].type == CREATURE_GANGUNIT ||
-						encounter[e].type == CREATURE_SWAT ||
-						encounter[e].type == CREATURE_SECRET_SERVICE) &&
-						LCSrandom(5))
-					{
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						clearmessagearea();
-						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-						addstrAlt(colonSpace, gamelog);
-						if (encounter[e].align != ALIGN_CONSERVATIVE ||
-							(encounter[e].type == CREATURE_SECRET_SERVICE && exec[EXEC_PRESIDENT] > ALIGN_CONSERVATIVE))
-						{
-							set_color_easy(GREEN_ON_BLACK_BRIGHT);
-							mvaddstrAlt(17, 1, pickrandom(please_spare_hostage), gamelog);
-						}
-						else
-						{
-							set_color_easy(RED_ON_BLACK_BRIGHT);
-							if (((encounter[e].type == CREATURE_DEATHSQUAD ||
-								encounter[e].type == CREATURE_AGENT ||
-								encounter[e].type == CREATURE_MERC ||
-								encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
-								encounter[e].type == CREATURE_GANGUNIT))
-								&& encounter[e].align == ALIGN_CONSERVATIVE)
-							{
-								mvaddstrAlt(17, 1, pickrandom(who_cares_about_hostage), gamelog);
-							}
-							else
-							{
-								string moreHostageQuestions;
-								if (LCSrandom(5)) {
-									moreHostageQuestions = (pickrandom(hostage_negotiation));
-								}
-								else {
-									if (hostages > 1)
-										moreHostageQuestions = (unnamed_String_Talk_cpp_103);
-									else moreHostageQuestions = (unnamed_String_Talk_cpp_104);
-								}
-								mvaddstrAlt(17, 1, moreHostageQuestions, gamelog);
-							}
-						}
-						gamelog.newline();
-						pressAnyKey();
-						noretreat = true;
-						break;
-					}
-				}
-			}
-			if (e == ENCMAX) { e--; }
-			if (noretreat == false)
-			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				clearmessagearea();
-				mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_105, gamelog);
-				gamelog.newline();
-				for (int i = ENCMAX - 1; i >= 0; i--)
-				{
-					if (encounter[i].exists&&
-						encounter[i].alive&&
-						encounter[i].align <= -1)
-					{
-						delenc(i, 0);
-					}
-				}
-				pressAnyKey();
-			}
-			else
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				clearcommandarea();
-				clearmessagearea();
-				clearmaparea();
-				mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_106);
-				addstrAlt(a.name);
-				addstrAlt(unnamed_String_Talk_cpp_107);
-				mvaddstrAlt(11, 1, hostages > 1 ? (unnamed_String_Talk_cpp_108) : (unnamed_String_Talk_cpp_109));
-				mvaddstrAlt(12, 1, hostages > 1 ? (unnamed_String_Talk_cpp_110) : (unnamed_String_Talk_cpp_111));
-				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_112);
-				while (true)
-				{
-					c = getkeyAlt();
-					if (c == 'a' || c == 'b')break; // TODO: something to happen if you press 'c'
-				}
-				if (c == 'a')
-				{
-					Creature* executer = 0;
-					if (a.prisoner)
-						executer = &a;
-					else for (int i = 0; i < 6; i++)
-					{
-						if (activesquad->squad[i] &&
-							activesquad->squad[i]->prisoner &&
-							activesquad->squad[i]->prisoner->alive &&
-							activesquad->squad[i]->prisoner->enemy())
-						{
-							executer = activesquad->squad[i];
-							break;
-						}
-					}
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-					{
-						string executerGetAmmo;
-						if (executer->get_weapon().is_ranged()
-							&& executer->get_weapon().get_ammoamount() > 0)
-						{
-							executerGetAmmo = (unnamed_String_Talk_cpp_113);
-							executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
-						}
-						else
-						{
-							executerGetAmmo = (unnamed_String_Talk_cpp_114);
-						}
-						mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
-					}
-					gamelog.newline();
-					pressAnyKey();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(17, 1, executer->name, gamelog);
-					addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
-					addstrAlt(executer->prisoner->name, gamelog);
-					addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
-					gamelog.newline();
-					addjuice(*executer, -5, -50); // DE-juice for this shit
-					sitecrime += 10;
-					sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-					criminalize(*executer, LAWFLAG_MURDER);
-					if (executer->prisoner->type == CREATURE_CORPORATE_CEO ||
-						executer->prisoner->type == CREATURE_RADIOPERSONALITY ||
-						executer->prisoner->type == CREATURE_NEWSANCHOR ||
-						executer->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
-						executer->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
-					makeloot(*executer->prisoner);
-					pressAnyKey();
-					delete_and_nullify(executer->prisoner);
-					if (hostages > 1 && LCSrandom(2))
-					{
-						clearmessagearea();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-						addstrAlt(colonSpace, gamelog);
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
-						addstrAlt(pickrandom(please_no_more), gamelog);
-						gamelog.newline();
-						for (int i = ENCMAX - 1; i >= 0; i--)
-							if (encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
-								delenc(i, 0);
-						pressAnyKey();
-					}
-				}
-				else if (c == 'b')
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, a.name, gamelog);
-					addstrAlt(colonSpace, gamelog);
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					{
-						string nameHostages;
-						if (LCSrandom(5))
-						{
-							if (hostages > 1) nameHostages = (unnamed_String_Talk_cpp_119);
-							else nameHostages = (unnamed_String_Talk_cpp_120);
-						}
-						else {
-							nameHostages = (pickrandom(let_hostages_go));
-						}
-						mvaddstrAlt(17, 1, nameHostages, gamelog);
-					}
-					gamelog.newline();
-					pressAnyKey();
-					if (((encounter[e].type == CREATURE_DEATHSQUAD ||
-						encounter[e].type == CREATURE_AGENT ||
-						encounter[e].type == CREATURE_MERC ||
-						encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
-						encounter[e].type == CREATURE_GANGUNIT) &&
-						LCSrandom(2)) && encounter[e].align == ALIGN_CONSERVATIVE)
-					{
-						clearmessagearea();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-						addstrAlt(colonSpace, gamelog);
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(17, 1, pickrandom(go_ahead_and_die), gamelog);
-						gamelog.newline();
-						pressAnyKey();
-					}
-					else
-					{
-						clearmessagearea();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-						addstrAlt(colonSpace, gamelog);
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(17, 1, pickrandom(agree_to_release_hostages), gamelog);
-						gamelog.newline();
-						pressAnyKey();
-						for (int i = ENCMAX - 1; i >= 0; i--)
-							if (encounter[i].exists&&encounter[i].enemy() && encounter[i].alive)
-								delenc(i, 0);
-						clearmessagearea();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						juiceparty(15, 200); // Instant juice for successful hostage negotiation
-						mvaddstrAlt(16, 1, hostages > 1 ? unnamed_String_Talk_cpp_121 : unnamed_String_Talk_cpp_122, gamelog);
-						gamelog.newline();
-						for (int i = 0; i < 6; i++)
-						{
-							if (activesquad->squad[i] &&
-								activesquad->squad[i]->prisoner &&
-								activesquad->squad[i]->prisoner->enemy())
-							{
-								delete_and_nullify(activesquad->squad[i]->prisoner);
-							}
-						}
-						pressAnyKey();
-					}
-				}
-			}
-		}
-		else
-		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			clearmessagearea();
-			mvaddstrAlt(16, 1, tk.name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-		}
-	}
-	else if (c == 'c')
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
-		{
-			mvaddstrAlt(16, 1, a.name, gamelog);
-			addstrAlt(singleSpace, gamelog);
-			switch (LocationsPool::getInstance().getSiegeType(cursite))
-			{
-			case SIEGE_POLICE:
-				addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
-				break;
-			case SIEGE_CIA:
-				addstrAlt(unnamed_String_Talk_cpp_125, gamelog);
-				break;
-			case SIEGE_CCS:
-			case SIEGE_HICKS:
-				switch (LCSrandom(2))
-				{
-				case 0:
-					addstrAlt(unnamed_String_Talk_cpp_126, gamelog);
-					mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_127, gamelog);
-					break;
-				case 1:
-					addstrAlt(unnamed_String_Talk_cpp_128, gamelog);
-					mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_129, gamelog);
-					break;
-				}
-				break;
-			case SIEGE_CORPORATE:
-				addstrAlt(unnamed_String_Talk_cpp_130, gamelog);
-				break;
-			case SIEGE_FIREMEN:
-				addstrAlt(unnamed_String_Talk_cpp_131, gamelog);
-				if ((!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
-					!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
-					!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
-					!(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS)) && !LCSrandom(10))
-				{
-					levelmap[locx][locy][locz].flag |= SITEBLOCK_FIRE_START;
-					mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_132, gamelog);
-					gamelog.newline();
-					mvaddstrAlt(18, 1, unnamed_String_Talk_cpp_133, gamelog);
-				}
-				break;
-			}
-		}
-		else        //Special bluff messages for various uniforms
-		{
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			if (a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM ||
-				a.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR ||
-				a.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)
-			{
-				mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_134, gamelog);
-			}
-			else if (a.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)
-			{
-				if (siteonfire) mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_135, gamelog);
-				else mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_136, gamelog);
-			}
-			else if (a.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)
-				mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_137, gamelog);
-			else if (a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)
-				mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_138, gamelog);
-			else if (a.get_armor().get_itemtypename() == tag_ARMOR_MITHRIL)
-			{
-				mvaddstrAlt(16, 1, a.name, gamelog);
-				addstrAlt(unnamed_String_Talk_cpp_139, gamelog);
-				set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				addstrAlt(unnamed_String_Talk_cpp_140, gamelog);     //Fanciful multicolor message
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt(unnamed_String_Talk_cpp_141, gamelog);
-			}
-			else
-			{
-				mvaddstrAlt(16, 1, a.name, gamelog);
-				addstrAlt(unnamed_String_Talk_cpp_142, gamelog);
-				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_143, gamelog);
-			}
+	switch (c) {
+	case 'a':
 
-		}
-		gamelog.newline();
-		pressAnyKey();
-		bool fooled = true;
-		int e = 0;
-		for (; e < ENCMAX; e++)
-		{
-			if (encounter[e].exists&&encounter[e].alive&&
-				encounter[e].enemy())
-			{
-				const int roll = a.skill_roll(SKILL_DISGUISE);
-				const int diff = encounter[e].get_attribute(ATTRIBUTE_WISDOM, true) > 10 ? DIFFICULTY_CHALLENGING : DIFFICULTY_AVERAGE;
-				fooled = roll >= diff;
-				if (roll + 1 == diff && fieldskillrate == FIELDSKILLRATE_HARD)
-					a.train(SKILL_DISGUISE, 20);
-				if (!fooled) break;
-			}
-		}
-		if (e == ENCMAX) { e--; }
-		switch (fieldskillrate)
-		{
-		case FIELDSKILLRATE_FAST:
-			a.train(SKILL_DISGUISE, 50); break;
-		case FIELDSKILLRATE_CLASSIC:
-			a.train(SKILL_DISGUISE, 20); break;
-		case FIELDSKILLRATE_HARD:
-			a.train(SKILL_DISGUISE, 0); break;
-		}
-		if (!fooled)
-		{
-			clearmessagearea();
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			if (encounter[e].type == CREATURE_HICK)
-			{
-				mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_144, gamelog);
-				addstrAlt(encounter[e].name, gamelog);
-				addstrAlt(unnamed_String_Talk_cpp_145, gamelog);
-			}
-			else
-			{
-				mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-				if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
-					addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
-				else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
-			}
-			pressAnyKey();
-		}
-		else
-		{
-			clearmessagearea();
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_148, gamelog);
-			pressAnyKey();
-			for (int e = ENCMAX - 1; e >= 0; e--)
-				if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
-					delenc(e, 0);
-		}
-		gamelog.newline();
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_149, gamelog);
-		gamelog.newline();
-		pressAnyKey();
-		int stolen = 0;
-		// Police assess stolen goods in inventory
-		for (int l = 0; l < len(activesquad->loot); l++)
-			if (activesquad->loot[l]->whatIsThis() == THIS_IS_LOOT)
-				stolen++;
-		for (int i = 0; i < 6; i++)
-		{
-			if (activesquad->squad[i])
-			{
-				activesquad->squad[i]->crimes_suspected[LAWFLAG_THEFT] += stolen;
-				capturecreature(*activesquad->squad[i]);
-			}
-			activesquad->squad[i] = NULL;
-		}
-		LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
+		pressKeyAInCombat(a);
+		break;
+
+	case 'b':
+
+		pressKeyBInCombat(a, tk, hostages, weaponhostage);
+		break;
+
+	case 'c':
+
+		pressKeyCInCombat(a);
+		break;
+
+	case 'd':
+
+		pressKeyDInCombat();
+		break;
+
 	}
 	return 1;
 }
@@ -47247,6 +47691,26 @@ string Vehicle::showXml() const
 	xml.AddElem(tag_id, tostring(id_));
 	return xml.GetDoc();
 }
+
+enum vehicleTagEnums {
+	ENUM_tag_vtypeidname,
+	ENUM_tag_vtypeid,
+	ENUM_tag_color,
+	ENUM_tag_heat,
+	ENUM_tag_location,
+	ENUM_tag_myear,
+	ENUM_tag_id,
+};
+map<string, int> vehicleXMLTags = {
+	map<string, int>::value_type(tag_vtypeidname, ENUM_tag_vtypeidname),
+	map<string, int>::value_type(tag_vtypeid, ENUM_tag_vtypeid),
+	map<string, int>::value_type(tag_color, ENUM_tag_color),
+	map<string, int>::value_type(tag_heat, ENUM_tag_heat),
+	map<string, int>::value_type(tag_location, ENUM_tag_location),
+	map<string, int>::value_type(tag_myear, ENUM_tag_myear),
+	map<string, int>::value_type(tag_id, ENUM_tag_id),
+};
+
 Vehicle::Vehicle(const std::string& inputXml)
 {
 	CMarkup xml;
@@ -47256,13 +47720,37 @@ Vehicle::Vehicle(const std::string& inputXml)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == tag_vtypeidname) vtypeidname_ = xml.GetData();
-		else if (tag == tag_vtypeid) vtypeid_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_color) color_ = xml.GetData();
-		else if (tag == tag_heat) heat_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_location) location_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_myear) myear_ = atoi(xml.GetData().c_str());
-		else if (tag == tag_id) id_ = atoi(xml.GetData().c_str());
+		if (vehicleXMLTags.count(tag)) {
+			switch (vehicleXMLTags[tag]) {
+			case ENUM_tag_vtypeidname:
+				vtypeidname_ = xml.GetData();
+				break;
+
+			case ENUM_tag_vtypeid:
+				vtypeid_ = atoi(xml.GetData().c_str());
+				break;
+
+			case ENUM_tag_color:
+				color_ = xml.GetData();
+				break;
+
+			case ENUM_tag_heat:
+				heat_ = atoi(xml.GetData().c_str());
+				break;
+
+			case ENUM_tag_location:
+				location_ = atoi(xml.GetData().c_str());
+				break;
+
+			case ENUM_tag_myear:
+				myear_ = atoi(xml.GetData().c_str());
+				break;
+
+			case ENUM_tag_id:
+				id_ = atoi(xml.GetData().c_str());
+				break;
+			}
+		}
 	}
 }
 void Vehicle::init(const VehicleType& seed, const string& color, int myear)
