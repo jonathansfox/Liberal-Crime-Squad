@@ -3627,16 +3627,188 @@ void observeAlarm(const bool sensealarm, const bool alarmon, const string name, 
 		gamelog.nextMessage();
 	}
 }
-
 string wasUnableToFind(const string old);
 string considerLeaving(const bool sensealarm, const bool alarmon, const string name);
 
-Vehicle* getVehicleOfThisType(int cartype);
-void newVehicle(Vehicle *startcar);
-/* steal a car */
-bool stealcar(Creature &cr, char &clearformess)
-{
+bool enterCar(Creature &cr, const bool sensealarm, bool &alarmon, string carname, const bool touchalarm, char &windowdamage) {
+	extern Log gamelog;
+	const string CONST_activities164 = "B - Break the window.";
+	const string CONST_activities163 = "A - Pick the lock.";
+	const string CONST_activities175 = " but it is still somewhat intact.";
+	const string CONST_activities174 = " with a ";
+	const string CONST_activities173 = " cracks the window";
+	const string CONST_activities171 = " smashes the window";
+	const string CONST_activities170 = " fiddles with the lock with no luck.";
+	const string CONST_activities176 = "An alarm suddenly starts blaring!";
+	const string CONST_activities169 = " jimmies the car door open.";
 	const string CONST_activities202 = " has been spotted by a passerby!";
+
+	const string CONST_activities178 = "Adventures in Liberal Car Theft";
+
+	extern vector<newsstoryst *> newsstory;
+	extern newsstoryst *sitestory;
+	extern chaseseqst chaseseq;
+	extern short mode;
+	extern short fieldskillrate;
+
+	for (bool entered = false; !entered;)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, CONST_activities178);
+		printcreatureinfo(&cr);
+		makedelimiter();
+
+		observeAlarm(sensealarm != 0, alarmon, cr.name, carname);
+
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(12, 0, CONST_activities163);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(13, 0, CONST_activities164);
+		moveAlt(14, 0);
+
+		addstrAlt(considerLeaving(sensealarm, alarmon, cr.name));
+
+		char method = -1;
+		while (method == -1)
+		{
+			int c = getkeyAlt();
+			if (c == 'a')method = 0;
+			if (c == 'b')method = 1;
+			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { return false; } /* try again tomorrow */
+		}
+		//PICK LOCK
+		if (method == 0)
+		{
+			if (cr.skill_check(SKILL_SECURITY, DIFFICULTY_AVERAGE))
+			{
+				switch (fieldskillrate)
+				{
+				case FIELDSKILLRATE_FAST:
+					cr.train(SKILL_SECURITY, 25); break;
+				case FIELDSKILLRATE_CLASSIC:
+					cr.train(SKILL_SECURITY, max(5 - cr.get_skill(SKILL_SECURITY), 0)); break;
+				case FIELDSKILLRATE_HARD:
+					cr.train(SKILL_SECURITY, 0); break;
+				}
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities169, gamelog);
+				gamelog.nextMessage();
+				pressAnyKey();
+				entered = true;
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities170, gamelog);
+				gamelog.nextMessage();
+				pressAnyKey();
+			}
+		}
+		//BREAK WINDOW
+		if (method == 1)
+		{
+			int difficulty = static_cast<int>(DIFFICULTY_EASY / cr.get_weapon().get_bashstrengthmod()) - windowdamage;
+			if (cr.attribute_check(ATTRIBUTE_STRENGTH, difficulty))
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities171, gamelog);
+				if (cr.get_weapon().get_bashstrengthmod() > 1)
+				{
+					addstrAlt(CONST_activities174, gamelog);
+					addstrAlt(cr.get_weapon().get_name(2), gamelog);
+				}
+				addstrAlt(singleDot, gamelog);
+				gamelog.nextMessage();
+				windowdamage = 10;
+				pressAnyKey();
+				entered = true;
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities173, gamelog);
+				if (cr.get_weapon().get_bashstrengthmod() > 1)
+				{
+					addstrAlt(CONST_activities174, gamelog);
+					addstrAlt(cr.get_weapon().get_name(2), gamelog);
+				}
+				addstrAlt(CONST_activities175, gamelog);
+				gamelog.nextMessage();
+				windowdamage++;
+				pressAnyKey();
+			}
+		}
+		//ALARM CHECK
+		int y = 17;
+		if (touchalarm || sensealarm)
+		{
+			if (!alarmon)
+			{
+				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++, 0, CONST_activities176, gamelog);
+				gamelog.nextMessage();
+				pressAnyKey();
+				alarmon = true;
+			}
+		}
+		//NOTICE CHECK
+		if (!LCSrandom(50) || (!LCSrandom(5) && alarmon))
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y++, 0, cr.name, gamelog);
+			addstrAlt(CONST_activities202, gamelog);
+			gamelog.nextMessage();
+			pressAnyKey();
+			//FOOT CHASE
+			chaseseq.clean();
+			chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
+			newsstoryst *ns = new newsstoryst;
+			ns->type = NEWSSTORY_CARTHEFT;
+			newsstory.push_back(ns);
+			sitestory = ns;
+			makechasers(-1, 5);
+			if (footchase(cr)) {
+				mode = GAMEMODE_BASE;
+				return false;
+			} // Switched to return false; this will cause you to try again tomorrow
+			else {
+				mode = GAMEMODE_BASE;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+bool startCar(Creature &cr, const string carname, const bool alarmon, const bool sensealarm) {
+	extern Log gamelog;
+
+	char keys_in_car = LCSrandom(5) > 0, key_search_total = 0;
+	int key_location = LCSrandom(5), nervous_counter = 0;
+
+	const string CONST_activities202 = " has been spotted by a passerby!";
+
+	const string CONST_activities178 = "Adventures in Liberal Car Theft";
+	const string CONST_activities188 = " hotwires the car!";
+	const string CONST_activities187 = "Enter - The Viper has finally deterred ";
+	const string CONST_activities186 = "Enter - Call it a day.";
+	const string CONST_activities185 = "B - Desperately search for keys.";
+	const string CONST_activities184 = "A - Hotwire the car.";
+
+
+	const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
+	const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+	const string CONST_activities181 = ":   ";
+	const string CONST_activities180 = "THE VIPER";
+
+
+	const string CONST_activities179 = " is behind the wheel of a ";
+
+
 	const string CONST_activities201 = "If they were here, I'd have found them by now.";
 	const string CONST_activities200 = "I don't think they're in here...";
 	const string CONST_activities199 = "Are they even in here?";
@@ -3650,31 +3822,223 @@ bool stealcar(Creature &cr, char &clearformess)
 	const string CONST_activities191 = "above the pull-down sunblock thingy!";
 	const string CONST_activities190 = "in the ignition.  Damn.";
 	const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
-	const string CONST_activities188 = " hotwires the car!";
-	const string CONST_activities187 = "Enter - The Viper has finally deterred ";
-	const string CONST_activities185 = "B - Desperately search for keys.";
-	const string CONST_activities184 = "A - Hotwire the car.";
 
+
+	extern vector<newsstoryst *> newsstory;
+	extern newsstoryst *sitestory;
+	extern chaseseqst chaseseq;
+	extern short mode;
+	extern short fieldskillrate;
+	extern short lawList[LAWNUM];
+
+	for (bool started = false; !started;)
+	{
+		nervous_counter++;
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(0, 0, CONST_activities178);
+		printcreatureinfo(&cr);
+		makedelimiter();
+		int y = 10;
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y++, 0, cr.name, gamelog);
+		addstrAlt(CONST_activities179, gamelog);
+		addstrAlt(carname, gamelog);
+		addstrAlt(singleDot, gamelog);
+		gamelog.nextMessage();
+		if (alarmon)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			moveAlt(y++, 0);
+			if (sensealarm)addstrAlt(CONST_activities180);
+			else addstrAlt(carname);
+			addstrAlt(CONST_activities181);
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			if (sensealarm)addstrAlt(CONST_activities182);
+			else addstrAlt(CONST_activities183);
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt((++y)++, 0, CONST_activities184);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y++, 0, CONST_activities185);
+		moveAlt(y++, 0);
+		if (!sensealarm)addstrAlt(CONST_activities186);
+		else { addstrAlt(CONST_activities187); addstrAlt(cr.name); addstrAlt(singleDot); }
+		y++;
+		char method = -1;
+		while (method == -1)
+		{
+			int c = getkeyAlt();
+			if (c == 'a') method = 0;
+			if (c == 'b') method = 1;
+			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { return false; } // Call it a day and try again tomorrow
+		}
+		//HOTWIRE CAR
+		if (method == 0)
+		{
+			if (cr.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING))
+			{
+				switch (fieldskillrate)
+				{
+				case FIELDSKILLRATE_FAST:
+					cr.train(SKILL_SECURITY, 50); break;
+				case FIELDSKILLRATE_CLASSIC:
+					cr.train(SKILL_SECURITY, max(10 - cr.get_skill(SKILL_SECURITY), 0)); break;
+				case FIELDSKILLRATE_HARD:
+					cr.train(SKILL_SECURITY, 0); break;
+				}
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities188, gamelog);
+				gamelog.nextMessage();
+				pressAnyKey();
+				started = true;
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++, 0, cr.name, gamelog);
+				int flavor_text;
+				if (cr.get_skill(SKILL_SECURITY) < 4)
+					addstrAlt(pickrandom(cant_hotwire_car));
+				else {
+					if (LCSrandom(cant_hotwire_car.size() + almost_hotwire_car.size()) >= cant_hotwire_car.size()) {
+						addstrAlt(pickrandom(almost_hotwire_car));
+					}
+					else {
+						addstrAlt(pickrandom(cant_hotwire_car));
+					}
+				}
+				gamelog.nextMessage();
+				pressAnyKey();
+			}
+		}
+		//KEYS
+		if (method == 1)
+		{
+			int difficulty;
+			string location;
+			if (!keys_in_car)
+			{
+				difficulty = DIFFICULTY_IMPOSSIBLE;
+				location = CONST_activities189;
+			}
+			else switch (key_location)
+			{
+			case 0:
+			default:
+				difficulty = DIFFICULTY_AUTOMATIC;
+				location = CONST_activities190;
+				break;
+			case 1:
+				difficulty = DIFFICULTY_EASY;
+				location = CONST_activities191;
+				break;
+			case 2:
+				difficulty = DIFFICULTY_EASY;
+				location = CONST_activities192;
+				break;
+			case 3:
+				difficulty = DIFFICULTY_AVERAGE;
+				location = CONST_activities193;
+				break;
+			case 4:
+				difficulty = DIFFICULTY_HARD;
+				location = CONST_activities194;
+				break;
+			}
+			if (cr.attribute_check(ATTRIBUTE_INTELLIGENCE, difficulty))
+			{
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				moveAlt(y++, 0);
+				if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_activities195, gamelog); // Holy car keys Batman!
+				else addstrAlt(CONST_activities196, gamelog);
+				addstrAlt(cr.name, gamelog);
+				addstrAlt(CONST_activities197, gamelog);
+				addstrAlt(location, gamelog);
+				gamelog.nextMessage();
+				pressAnyKey();
+				started = true;
+			}
+			else
+			{
+				key_search_total++;
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(y++, 0, cr.name, gamelog);
+				addstrAlt(CONST_activities198, gamelog);
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				if (key_search_total == 5)
+					addstrAlt(CONST_activities199, gamelog);
+				else if (key_search_total == 10)
+					addstrAlt(CONST_activities200, gamelog);
+				else if (key_search_total == 15)
+					addstrAlt(CONST_activities201, gamelog);
+				else if (key_search_total > 15)
+				{
+					addstrAlt(pickrandom(car_wont_start), gamelog);
+				}
+				else
+				{
+					if (lawList[LAW_FREESPEECH] == -2) {
+						addstrAlt(pickrandom(cant_find_keys_no_free_speech));
+					}
+					else {
+						addstrAlt(pickrandom(cant_find_keys));
+					}
+				}
+				gamelog.nextMessage();
+				pressAnyKey();
+			}
+		}
+		//NOTICE CHECK
+		if (!started && (!LCSrandom(50) || (!LCSrandom(5) && alarmon)))
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y++, 0, cr.name, gamelog);
+			addstrAlt(CONST_activities202, gamelog);
+			gamelog.nextMessage();
+			pressAnyKey();
+			//FOOT CHASE
+			chaseseq.clean();
+			chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
+			newsstoryst *ns = new newsstoryst;
+			ns->type = NEWSSTORY_CARTHEFT;
+			newsstory.push_back(ns);
+			sitestory = ns;
+			makechasers(-1, 5);
+			if (footchase(cr)) {
+				mode = GAMEMODE_BASE;
+				return false;
+			}
+			else {
+				mode = GAMEMODE_BASE;
+				return false;
+			}
+		}
+		// Nervous message check
+		else if (!started && (LCSrandom(7) + 5) < nervous_counter)
+		{
+			nervous_counter = 0;
+			moveAlt(++y, 0); y++;
+			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			addstrAlt(cr.name, gamelog);
+			addstrAlt(singleSpace, gamelog);
+			addstrAlt(pickrandom(gets_nervous), gamelog);
+			gamelog.nextMessage();
+			pressAnyKey();
+		}
+	}
+	return true;
+}
+
+Vehicle* getVehicleOfThisType(int cartype);
+void newVehicle(Vehicle *startcar);
+/* steal a car */
+bool stealcar(Creature &cr, char &clearformess)
+{
 
 	const string CONST_activities186 = "Enter - Call it a day.";
-	const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
-	const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
-	const string CONST_activities181 = ":   ";
-	const string CONST_activities180 = "THE VIPER";
-
-
-	const string CONST_activities179 = " is behind the wheel of a ";
 	const string CONST_activities178 = "Adventures in Liberal Car Theft";
-	const string CONST_activities176 = "An alarm suddenly starts blaring!";
-	const string CONST_activities175 = " but it is still somewhat intact.";
-	const string CONST_activities174 = " with a ";
-	const string CONST_activities173 = " cracks the window";
-	const string CONST_activities171 = " smashes the window";
-	const string CONST_activities170 = " fiddles with the lock with no luck.";
-	const string CONST_activities169 = " jimmies the car door open.";
-
-	const string CONST_activities164 = "B - Break the window.";
-	const string CONST_activities163 = "A - Pick the lock.";
 	const string CONST_activities153 = "A - Approach the driver's side door.";
 	const string CONST_activities152 = " looks from a distance at an empty ";
 	const string CONST_activities150 = " found a ";
@@ -3749,337 +4113,15 @@ bool stealcar(Creature &cr, char &clearformess)
 		bool alarmon = false, sensealarm = LCSrandom(100) < v->sensealarmchance(),
 			touchalarm = LCSrandom(100) < v->touchalarmchance();
 		char windowdamage = 0;
-		for (bool entered = false; !entered;)
-		{
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_activities178);
-			printcreatureinfo(&cr);
-			makedelimiter();
-
-			observeAlarm(sensealarm != 0, alarmon, cr.name, carname);
-
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(12, 0, CONST_activities163);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(13, 0, CONST_activities164);
-			moveAlt(14, 0);
-
-			addstrAlt(considerLeaving(sensealarm, alarmon, cr.name));
-
-			char method = -1;
-			while (method == -1)
-			{
-				int c = getkeyAlt();
-				if (c == 'a')method = 0;
-				if (c == 'b')method = 1;
-				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { delete v; return false; } /* try again tomorrow */
-			}
-			//PICK LOCK
-			if (method == 0)
-			{
-				if (cr.skill_check(SKILL_SECURITY, DIFFICULTY_AVERAGE))
-				{
-					switch (fieldskillrate)
-					{
-					case FIELDSKILLRATE_FAST:
-						cr.train(SKILL_SECURITY, 25); break;
-					case FIELDSKILLRATE_CLASSIC:
-						cr.train(SKILL_SECURITY, max(5 - cr.get_skill(SKILL_SECURITY), 0)); break;
-					case FIELDSKILLRATE_HARD:
-						cr.train(SKILL_SECURITY, 0); break;
-					}
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities169, gamelog);
-					gamelog.nextMessage();
-					pressAnyKey();
-					entered = true;
-				}
-				else
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities170, gamelog);
-					gamelog.nextMessage();
-					pressAnyKey();
-				}
-			}
-			//BREAK WINDOW
-			if (method == 1)
-			{
-				int difficulty = static_cast<int>(DIFFICULTY_EASY / cr.get_weapon().get_bashstrengthmod()) - windowdamage;
-				if (cr.attribute_check(ATTRIBUTE_STRENGTH, difficulty))
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities171, gamelog);
-					if (cr.get_weapon().get_bashstrengthmod() > 1)
-					{
-						addstrAlt(CONST_activities174, gamelog);
-						addstrAlt(cr.get_weapon().get_name(2), gamelog);
-					}
-					addstrAlt(singleDot, gamelog);
-					gamelog.nextMessage();
-					windowdamage = 10;
-					pressAnyKey();
-					entered = true;
-				}
-				else
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities173, gamelog);
-					if (cr.get_weapon().get_bashstrengthmod() > 1)
-					{
-						addstrAlt(CONST_activities174, gamelog);
-						addstrAlt(cr.get_weapon().get_name(2), gamelog);
-					}
-					addstrAlt(CONST_activities175, gamelog);
-					gamelog.nextMessage();
-					windowdamage++;
-					pressAnyKey();
-				}
-			}
-			//ALARM CHECK
-			int y = 17;
-			if (touchalarm || sensealarm)
-			{
-				if (!alarmon)
-				{
-					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++, 0, CONST_activities176, gamelog);
-					gamelog.nextMessage();
-					pressAnyKey();
-					alarmon = true;
-				}
-			}
-			//NOTICE CHECK
-			if (!LCSrandom(50) || (!LCSrandom(5) && alarmon))
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++, 0, cr.name, gamelog);
-				addstrAlt(CONST_activities202, gamelog);
-				gamelog.nextMessage();
-				pressAnyKey();
-				//FOOT CHASE
-				chaseseq.clean();
-				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
-				newsstoryst *ns = new newsstoryst;
-				ns->type = NEWSSTORY_CARTHEFT;
-				newsstory.push_back(ns);
-				sitestory = ns;
-				makechasers(-1, 5);
-				if (footchase(cr)) {
-					mode = GAMEMODE_BASE;
-					delete v; return false;
-				} // Switched to return false; this will cause you to try again tomorrow
-				else {
-					mode = GAMEMODE_BASE;
-					delete v; return false;
-				}
-			}
+		if (!enterCar(cr,  sensealarm,  alarmon,  carname,  touchalarm, windowdamage)) {
+			delete v;
+			return false;
 		}
 		//START CAR
-		char keys_in_car = LCSrandom(5) > 0, key_search_total = 0;
-		int key_location = LCSrandom(5), nervous_counter = 0;
 		//char ignition_progress=0;
-		for (bool started = false; !started;)
-		{
-			nervous_counter++;
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_activities178);
-			printcreatureinfo(&cr);
-			makedelimiter();
-			int y = 10;
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++, 0, cr.name, gamelog);
-			addstrAlt(CONST_activities179, gamelog);
-			addstrAlt(carname, gamelog);
-			addstrAlt(singleDot, gamelog);
-			gamelog.nextMessage();
-			if (alarmon)
-			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				moveAlt(y++, 0);
-				if (sensealarm)addstrAlt(CONST_activities180);
-				else addstrAlt(carname);
-				addstrAlt(CONST_activities181);
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				if (sensealarm)addstrAlt(CONST_activities182);
-				else addstrAlt(CONST_activities183);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt((++y)++, 0, CONST_activities184);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y++, 0, CONST_activities185);
-			moveAlt(y++, 0);
-			if (!sensealarm)addstrAlt(CONST_activities186);
-			else { addstrAlt(CONST_activities187); addstrAlt(cr.name); addstrAlt(singleDot); }
-			y++;
-			char method = -1;
-			while (method == -1)
-			{
-				int c = getkeyAlt();
-				if (c == 'a') method = 0;
-				if (c == 'b') method = 1;
-				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { delete v; return false; } // Call it a day and try again tomorrow
-			}
-			//HOTWIRE CAR
-			if (method == 0)
-			{
-				if (cr.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING))
-				{
-					switch (fieldskillrate)
-					{
-					case FIELDSKILLRATE_FAST:
-						cr.train(SKILL_SECURITY, 50); break;
-					case FIELDSKILLRATE_CLASSIC:
-						cr.train(SKILL_SECURITY, max(10 - cr.get_skill(SKILL_SECURITY), 0)); break;
-					case FIELDSKILLRATE_HARD:
-						cr.train(SKILL_SECURITY, 0); break;
-					}
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities188, gamelog);
-					gamelog.nextMessage();
-					pressAnyKey();
-					started = true;
-				}
-				else
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++, 0, cr.name, gamelog);
-					int flavor_text;
-					if (cr.get_skill(SKILL_SECURITY) < 4)
-						addstrAlt(pickrandom(cant_hotwire_car));
-					else {
-						if (LCSrandom(cant_hotwire_car.size() + almost_hotwire_car.size()) >= cant_hotwire_car.size()) {
-							addstrAlt(pickrandom(almost_hotwire_car));
-						}
-						else {
-							addstrAlt(pickrandom(cant_hotwire_car));
-						}
-					}
-					gamelog.nextMessage();
-					pressAnyKey();
-				}
-			}
-			//KEYS
-			if (method == 1)
-			{
-				int difficulty;
-				const char * location;
-				if (!keys_in_car)
-				{
-					difficulty = DIFFICULTY_IMPOSSIBLE;
-					location = CONST_activities189.c_str();
-				}
-				else switch (key_location)
-				{
-				case 0:
-				default:
-					difficulty = DIFFICULTY_AUTOMATIC;
-					location = CONST_activities190.c_str();
-					break;
-				case 1:
-					difficulty = DIFFICULTY_EASY;
-					location = CONST_activities191.c_str();
-					break;
-				case 2:
-					difficulty = DIFFICULTY_EASY;
-					location = CONST_activities192.c_str();
-					break;
-				case 3:
-					difficulty = DIFFICULTY_AVERAGE;
-					location = CONST_activities193.c_str();
-					break;
-				case 4:
-					difficulty = DIFFICULTY_HARD;
-					location = CONST_activities194.c_str();
-					break;
-				}
-				if (cr.attribute_check(ATTRIBUTE_INTELLIGENCE, difficulty))
-				{
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					moveAlt(y++, 0);
-					if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_activities195, gamelog); // Holy car keys Batman!
-					else addstrAlt(CONST_activities196, gamelog);
-					addstrAlt(cr.name, gamelog);
-					addstrAlt(CONST_activities197, gamelog);
-					addstrAlt(location, gamelog);
-					gamelog.nextMessage();
-					pressAnyKey();
-					started = true;
-				}
-				else
-				{
-					key_search_total++;
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y++, 0, cr.name, gamelog);
-					addstrAlt(CONST_activities198, gamelog);
-					set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					if (key_search_total == 5)
-						addstrAlt(CONST_activities199, gamelog);
-					else if (key_search_total == 10)
-						addstrAlt(CONST_activities200, gamelog);
-					else if (key_search_total == 15)
-						addstrAlt(CONST_activities201, gamelog);
-					else if (key_search_total > 15)
-					{
-						addstrAlt(pickrandom(car_wont_start), gamelog);
-					}
-					else
-					{
-						if (lawList[LAW_FREESPEECH] == -2) {
-							addstrAlt(pickrandom(cant_find_keys_no_free_speech));
-						}
-						else {
-							addstrAlt(pickrandom(cant_find_keys));
-						}
-					}
-					gamelog.nextMessage();
-					pressAnyKey();
-				}
-			}
-			//NOTICE CHECK
-			if (!started && (!LCSrandom(50) || (!LCSrandom(5) && alarmon)))
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++, 0, cr.name, gamelog);
-				addstrAlt(CONST_activities202, gamelog);
-				gamelog.nextMessage();
-				pressAnyKey();
-				//FOOT CHASE
-				chaseseq.clean();
-				chaseseq.location = LocationsPool::getInstance().getLocationParent(cr.location);
-				newsstoryst *ns = new newsstoryst;
-				ns->type = NEWSSTORY_CARTHEFT;
-				newsstory.push_back(ns);
-				sitestory = ns;
-				makechasers(-1, 5);
-				if (footchase(cr)) {
-					mode = GAMEMODE_BASE;
-					delete v; return 0;
-				}
-				else {
-					mode = GAMEMODE_BASE;
-					delete v; return 0;
-				}
-			}
-			// Nervous message check
-			else if (!started && (LCSrandom(7) + 5) < nervous_counter)
-			{
-				nervous_counter = 0;
-				moveAlt(++y, 0); y++;
-				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				addstrAlt(cr.name, gamelog);
-				addstrAlt(singleSpace, gamelog);
-				addstrAlt(pickrandom(gets_nervous), gamelog);
-				gamelog.nextMessage();
-				pressAnyKey();
-			}
+		if (!startCar(cr,   carname,   alarmon,   sensealarm)) {
+			delete v;
+			return false;
 		}
 		//CHASE SEQUENCE
 		//CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
@@ -12610,13 +12652,218 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 
 	return 0;
 }
-// Return true if supposed to still be in mode_site(), false otherwise
-bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer) {
+void partyIsAliveOnSite(const int enemy,
+	const int partysize,
+	const int talkers,
+	const int freeable,
+	const int hostages,
+	const int libnum) {
 
 	extern short cursite;
 	extern squadst *activesquad;
 	extern Log gamelog;
+	extern short party_status;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarm;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
+
+	if (!enemy || !sitealarm)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, CONST_sitemode159);
+	if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, change_squad_order);
+	if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, check_status_of_squad_liberal);
+	if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, show_squad_liberal_status);
+	if (isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 17, CONST_sitemode160);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 17, CONST_sitemode161);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 32, CONST_sitemode162);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 32, CONST_sitemode163);
+	if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 42, CONST_sitemode164);
+	mvaddstrAlt(10, 1, CONST_sitemodeXRL);
+	if (enemy) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 42, CONST_sitemode165);
+	if (talkers) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 17, CONST_sitemode166);
+	bool graffiti = 0;
+	if (levelmap[locx][locy][locz].special != -1 &&
+		levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
+	else if (!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
+	{
+		if ((levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
+			(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK) ||
+			(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
+		{
+			bool can_graffiti = false;
+			for (int i = 0; i < 6 && !can_graffiti; i++)
+			{
+				if (!activesquad->squad[i]) i = 6;
+				else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
+
+			}
+			if (can_graffiti) {
+
+				set_color_easy(WHITE_ON_BLACK);
+				graffiti = 1;
+
+			}
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		}
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	if (graffiti)mvaddstrAlt(11, 42, CONST_sitemode167);
+	else mvaddstrAlt(11, 42, CONST_sitemode168);
+	if (enemy&&sitealarm)
+	{
+		bool evade = false;
+		set_color_easy(WHITE_ON_BLACK);
+		for (int e = 0; e < ENCMAX; e++)
+		{
+			if (encounter[e].exists &&
+				encounter[e].alive  &&
+				encounter[e].cantbluff == 2)
+			{
+				// You can't sneak past this person; they already know you're there
+				evade = true;
+				break;
+			}
+		}
+		if (!evade)
+			mvaddstrAlt(12, 42, CONST_sitemode169);
+		else
+			mvaddstrAlt(12, 42, CONST_sitemode170);
+	}
+	else
+	{
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(12, 42, CONST_sitemode171);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 42, CONST_sitemode172);
+	if (enemy)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, CONST_sitemode173);
+	if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+	{
+		if (freeable && (!enemy || !sitealarm))
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(14, 32, CONST_sitemode174);
+		}
+		else
+		{
+			if (hostages) set_color_easy(WHITE_ON_BLACK);
+			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			mvaddstrAlt(14, 32, CONST_sitemode175);
+		}
+	}
+	else
+	{
+		if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(14, 32, CONST_sitemode176);
+	}
+}
+void onSiteButNoSiege() {
+
+	extern short cursite;
+	extern Log gamelog;
 	extern MusicClass music;
+	extern short postalarmtimer;
+	extern short sitealarmtimer;
+	extern short party_status;
+	extern int sitecrime;
+	extern int locz;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern short lawList[LAWNUM];
+
+	if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
+	else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	else set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
+	addstrAlt(CONST_sitemode144);
+	addstrAlt(locz + 1);
+	if (postalarmtimer > 80)
+	{
+		switch (LocationsPool::getInstance().getLocationType(cursite))
+		{
+		case SITE_GOVERNMENT_ARMYBASE:
+			addstrAlt(CONST_sitemode145);
+			break;
+		case SITE_GOVERNMENT_WHITE_HOUSE:
+			addstrAlt(CONST_sitemode146);
+			break;
+		case SITE_GOVERNMENT_INTELLIGENCEHQ:
+			addstrAlt(CONST_sitemode147);
+			break;
+		case SITE_CORPORATE_HEADQUARTERS:
+		case SITE_CORPORATE_HOUSE:
+			addstrAlt(CONST_sitemode148);
+			break;
+		case SITE_MEDIA_AMRADIO:
+		case SITE_MEDIA_CABLENEWS:
+			addstrAlt(CONST_sitemode149);
+			break;
+		case SITE_BUSINESS_CRACKHOUSE:
+			addstrAlt(CONST_sitemode150);
+			break;
+		case SITE_GOVERNMENT_POLICESTATION:
+		default:
+			if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
+			{
+				addstrAlt(CONST_sitemode151);
+			}
+			else if (lawList[LAW_DEATHPENALTY] == -2 &&
+				lawList[LAW_POLICEBEHAVIOR] == -2)addstrAlt(CONST_sitemode152);
+			else addstrAlt(CONST_sitemode153);
+			break;
+		}
+		music.play(MUSIC_HEAVYCOMBAT);
+	}
+	else if (postalarmtimer > 60) { addstrAlt(CONST_sitemode154); music.play(MUSIC_ALARMED); }
+	else if (sitealienate == 1) { addstrAlt(CONST_sitemode155); music.play(MUSIC_ALARMED); }
+	else if (sitealienate == 2) { addstrAlt(CONST_sitemode156); music.play(MUSIC_ALARMED); }
+	else if (sitealarm) { addstrAlt(CONST_sitemode157); music.play(MUSIC_ALARMED); }
+	else if (sitealarmtimer == 0) { addstrAlt(CONST_sitemode158); music.play(MUSIC_SUSPICIOUS); }
+	else music.play(MUSIC_SITEMODE);
+}
+void playSiegeMusic() {
+	extern MusicClass music;
+	extern int locz;
+	extern short cursite;
+
+	music.play(MUSIC_DEFENSE);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
+	addstrAlt(CONST_sitemode144);
+	addstrAlt(locz + 1);
+	addstrAlt(CONST_sitemode143);
+}
+void partyPerformsAction(const int c, const bool canMove, const int enemy, const int talkers, int &encounter_timer) {
+
+	extern short cursite;
+	extern squadst *activesquad;
+	extern Log gamelog;
 	extern short postalarmtimer;
 	extern short sitealarmtimer;
 	extern short mode;
@@ -12633,6 +12880,115 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 	extern char showcarprefs;
 	extern short offended_amradio;
 	extern short offended_cablenews;
+
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern Creature encounter[ENCMAX];
+	extern short lawList[LAWNUM];
+	
+	
+	
+	switch (c) {
+	case 'w':
+	case KEY_UP:
+		if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
+		break;
+	case 'a':
+	case KEY_LEFT:
+		if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
+		break;
+	case 'd':
+	case KEY_RIGHT:
+		if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
+		break;
+	case 'x':
+	case KEY_DOWN:
+		if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
+		break;
+	case 'u':
+		pressedKeyU(enemy);
+		break;
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+		if (activesquad->squad[c - '1'] != NULL)
+		{
+			if (party_status == c - '1')fullstatus(party_status);
+			else party_status = c - '1';
+		}
+		break;
+	case 'k':
+		if (enemy) { kidnapattempt(); }
+		break;
+	case 'e':
+		mapshowing = false;
+		equip(activesquad->loot, -1);
+		if (enemy&&sitealarm)enemyattack();
+		else if (enemy)disguisecheck(encounter_timer);
+		creatureadvance();
+		encounter_timer++;
+		mapshowing = true;
+		break;
+	case 'n':
+		pressedKeyN();
+		break;
+	case 'l':
+		if ((!enemy || !sitealarm)) {
+			pressedKeyL();
+			encounter_timer++;
+		}
+		break;
+	case 'j':
+		if ((!enemy || !sitealarm)) {
+			pressedKeyShiftL();
+			encounter_timer++;
+		}
+		break;
+	case 't':
+		if (talkers) {
+			pressedKeyT(enemy, encounter_timer);
+		}
+		break;
+	case '0':
+		party_status = -1;
+		break;
+	case 'm':
+		pressedKeyM();
+		break;
+	case 'f':
+		if (enemy) { pressedKeyF(encounter_timer); }
+		break;
+	case 'g':
+		pressedKeyG(enemy, encounter_timer);
+		break;
+	}
+
+}
+// Return true if supposed to still be in mode_site(), false otherwise
+bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer) {
+
+	extern short cursite;
+	extern squadst *activesquad;
+	extern Log gamelog;
+	extern short postalarmtimer;
+	extern short sitealarmtimer;
+	extern short mode;
+	extern bool mapshowing;
+	extern short party_status;
+	extern char foughtthisround;
+	extern int sitecrime;
+	extern int locx;
+	extern int locy;
+	extern int locz;
+	extern short sitealarm;
+	extern short sitealienate;
+	extern newsstoryst *sitestory;
+	extern char showcarprefs;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern Creature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
@@ -12675,64 +13031,11 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 	{
 		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 		{
-			music.play(MUSIC_DEFENSE);
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
-			addstrAlt(CONST_sitemode144);
-			addstrAlt(locz + 1);
-			addstrAlt(CONST_sitemode143);
+			playSiegeMusic();
 		}
 		else
 		{
-			if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(cursite, -1, true));
-			addstrAlt(CONST_sitemode144);
-			addstrAlt(locz + 1);
-			if (postalarmtimer > 80)
-			{
-				switch (LocationsPool::getInstance().getLocationType(cursite))
-				{
-				case SITE_GOVERNMENT_ARMYBASE:
-					addstrAlt(CONST_sitemode145);
-					break;
-				case SITE_GOVERNMENT_WHITE_HOUSE:
-					addstrAlt(CONST_sitemode146);
-					break;
-				case SITE_GOVERNMENT_INTELLIGENCEHQ:
-					addstrAlt(CONST_sitemode147);
-					break;
-				case SITE_CORPORATE_HEADQUARTERS:
-				case SITE_CORPORATE_HOUSE:
-					addstrAlt(CONST_sitemode148);
-					break;
-				case SITE_MEDIA_AMRADIO:
-				case SITE_MEDIA_CABLENEWS:
-					addstrAlt(CONST_sitemode149);
-					break;
-				case SITE_BUSINESS_CRACKHOUSE:
-					addstrAlt(CONST_sitemode150);
-					break;
-				case SITE_GOVERNMENT_POLICESTATION:
-				default:
-					if (LocationsPool::getInstance().getRentingType(cursite) == RENTING_CCS)
-					{
-						addstrAlt(CONST_sitemode151);
-					}
-					else if (lawList[LAW_DEATHPENALTY] == -2 &&
-						lawList[LAW_POLICEBEHAVIOR] == -2)addstrAlt(CONST_sitemode152);
-					else addstrAlt(CONST_sitemode153);
-					break;
-				}
-				music.play(MUSIC_HEAVYCOMBAT);
-			}
-			else if (postalarmtimer > 60) { addstrAlt(CONST_sitemode154); music.play(MUSIC_ALARMED); }
-			else if (sitealienate == 1) { addstrAlt(CONST_sitemode155); music.play(MUSIC_ALARMED); }
-			else if (sitealienate == 2) { addstrAlt(CONST_sitemode156); music.play(MUSIC_ALARMED); }
-			else if (sitealarm) { addstrAlt(CONST_sitemode157); music.play(MUSIC_ALARMED); }
-			else if (sitealarmtimer == 0) { addstrAlt(CONST_sitemode158); music.play(MUSIC_SUSPICIOUS); }
-			else music.play(MUSIC_SITEMODE);
+			onSiteButNoSiege();
 		}
 	}
 	{
@@ -12742,118 +13045,12 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 		//PRINT SITE INSTRUCTIONS
 		if (partyalive > 0)
 		{
-			if (!enemy || !sitealarm)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, CONST_sitemode159);
-			if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 1, change_squad_order);
-			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, check_status_of_squad_liberal);
-			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(13, 1, show_squad_liberal_status);
-			if (isThereGroundLoot() || (levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
-				set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 17, CONST_sitemode160);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(10, 17, CONST_sitemode161);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9, 32, CONST_sitemode162);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(10, 32, CONST_sitemode163);
-			if (!enemy || !sitealarm) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 42, CONST_sitemode164);
-			mvaddstrAlt(10, 1, CONST_sitemodeXRL);
-			if (enemy) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(13, 42, CONST_sitemode165);
-			if (talkers) set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(14, 17, CONST_sitemode166);
-			bool graffiti = 0;
-			if (levelmap[locx][locy][locz].special != -1 &&
-				levelmap[locx][locy][locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
-			else if (!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
-			{
-				if ((levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-					(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-					(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK) ||
-					(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-				{
-					bool can_graffiti = false;
-					for (int i = 0; i < 6 && !can_graffiti; i++)
-					{
-						if (!activesquad->squad[i]) i = 6;
-						else can_graffiti = activesquad->squad[i]->get_weapon().can_graffiti();
-
-					}
-					if (can_graffiti) {
-
-						set_color_easy(WHITE_ON_BLACK);
-						graffiti = 1;
-
-					}
-					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				}
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			}
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			if (graffiti)mvaddstrAlt(11, 42, CONST_sitemode167);
-			else mvaddstrAlt(11, 42, CONST_sitemode168);
-			if (enemy&&sitealarm)
-			{
-				bool evade = false;
-				set_color_easy(WHITE_ON_BLACK);
-				for (int e = 0; e < ENCMAX; e++)
-				{
-					if (encounter[e].exists &&
-						encounter[e].alive  &&
-						encounter[e].cantbluff == 2)
-					{
-						// You can't sneak past this person; they already know you're there
-						evade = true;
-						break;
-					}
-				}
-				if (!evade)
-					mvaddstrAlt(12, 42, CONST_sitemode169);
-				else
-					mvaddstrAlt(12, 42, CONST_sitemode170);
-			}
-			else
-			{
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 42, CONST_sitemode171);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9, 42, CONST_sitemode172);
-			if (enemy)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(14, 1, CONST_sitemode173);
-			if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
-			{
-				if (freeable && (!enemy || !sitealarm))
-				{
-					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(14, 32, CONST_sitemode174);
-				}
-				else
-				{
-					if (hostages) set_color_easy(WHITE_ON_BLACK);
-					else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					mvaddstrAlt(14, 32, CONST_sitemode175);
-				}
-			}
-			else
-			{
-				if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
-				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(14, 32, CONST_sitemode176);
-			}
+			partyIsAliveOnSite(enemy,
+				partysize,
+				talkers,
+				freeable,
+				hostages,
+				libnum);
 		}
 		else
 		{
@@ -12968,86 +13165,14 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 				}
 			}
 			switch (c) {
-			case 'w':
-			case KEY_UP:
-				if (canMove && locy > 0 && !(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))locy--;
-				break;
-			case 'a':
-			case KEY_LEFT:
-				if (canMove && !(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
-				break;
-			case 'd':
-			case KEY_RIGHT:
-				if (canMove && !(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
-				break;
-			case 'x':
-			case KEY_DOWN:
-				if (canMove && !(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))locy++;
-				break;
-			case 'k':
-				if (enemy) { kidnapattempt(); }
-				break;
-			case 'u':
-				pressedKeyU(enemy);
-				break;
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-				if (activesquad->squad[c - '1'] != NULL)
-				{
-					if (party_status == c - '1')fullstatus(party_status);
-					else party_status = c - '1';
-				}
-				break;
-			case 'e':
-				mapshowing = false;
-				equip(activesquad->loot, -1);
-				if (enemy&&sitealarm)enemyattack();
-				else if (enemy)disguisecheck(encounter_timer);
-				creatureadvance();
-				encounter_timer++;
-				mapshowing = true;
-				break;
-			case 'n':
-				pressedKeyN();
-				break;
-			case 'l':
-				if ((!enemy || !sitealarm)) {
-					pressedKeyL();
-					encounter_timer++;
-				}
-				break;
-			case 'j':
-				if ((!enemy || !sitealarm)) {
-					pressedKeyShiftL();
-					encounter_timer++;
-				}
-				break;
-			case 't':
-				if (talkers) {
-					pressedKeyT(enemy, encounter_timer);
-				}
+			case 'r':
+				pressedKeyR(freeable, libnum, enemy, hostages, partysize);
 				break;
 			case 'o':
 				if (partysize > 1)orderparty();
 				break;
-			case '0':
-				party_status = -1;
-				break;
-			case 'm':
-				pressedKeyM();
-				break;
-			case 'f':
-				if (enemy) { pressedKeyF(encounter_timer); }
-				break;
-			case 'r':
-				pressedKeyR(freeable, libnum, enemy, hostages, partysize);
-				break;
-			case 'g':
-				pressedKeyG(enemy, encounter_timer);
+			default:
+				partyPerformsAction(c, canMove, enemy, talkers, encounter_timer);
 				break;
 			}
 
@@ -13087,6 +13212,7 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 					}
 				}
 			}
+
 		}
 	}
 	return true;
@@ -13919,9 +14045,6 @@ const string CONST_commondisplay109 = "Right Arm:";
 const string CONST_commondisplay108 = "Body:";
 const string CONST_commondisplay107 = "Head:";
 const string CONST_commondisplay154 = "Clothes: ";
-const string CONST_commondisplay180 = "Missing Teeth";
-const string CONST_commondisplay178 = "No Teeth";
-const string CONST_commondisplay177 = "No Tongue";
 
 
 
@@ -14063,9 +14186,11 @@ void makedelimiter(int y, int x)
 	else // normal delimiter
 		mvaddstrAlt(y, x, CONST_commondisplay005); // 80 characters
 }
-/* prints a character's health description (One Leg, Liberal, NearDETH...) */
-void printhealthstat(Creature &g, int y, int x, char smll)
-{
+string getHealthStat(Creature &g, const char smll) {
+	const string CONST_commondisplay180 = "Missing Teeth";
+	const string CONST_commondisplay178 = "No Teeth";
+	const string CONST_commondisplay177 = "No Tongue";
+
 	const string CONST_commondisplay044 = "Moderate";
 	const string CONST_commondisplay043 = "Conservative";
 	const string CONST_commondisplay042 = "Consrvtv";
@@ -14102,13 +14227,16 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 	const string CONST_commondisplay008 = "Near Death";
 	const string CONST_commondisplay007 = "NearDETH";
 	const string CONST_commondisplay006 = "Deceased";
+
 	short woundsum = 0;
 	bool bleeding = false;
+
 	for (int w = 0; w < BODYPARTNUM; w++)
 	{
 		if (g.wound[w] != 0)woundsum++;
 		if (g.wound[w] & WOUND_BLEEDING)bleeding = true;
 	}
+
 	int armok = 2, legok = 2;
 	if ((g.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
 		(g.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
@@ -14118,174 +14246,171 @@ void printhealthstat(Creature &g, int y, int x, char smll)
 		(g.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
 	if ((g.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
 		(g.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-	moveAlt(y, x);
+
+
 	if (bleeding)set_color_easy(RED_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK_BRIGHT);
+
 	if (!g.alive)
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_commondisplay006);
+		return (CONST_commondisplay006);
 	}
 	else if (g.blood <= 20)
 	{
-		if (smll)addstrAlt(CONST_commondisplay007);
-		else addstrAlt(CONST_commondisplay008);
+		if (smll)return (CONST_commondisplay007);
+		else return (CONST_commondisplay008);
 	}
 	else if (g.blood <= 50)
 	{
-		if (smll)addstrAlt(CONST_commondisplay009);
-		else addstrAlt(CONST_commondisplay010);
+		if (smll)return (CONST_commondisplay009);
+		else return (CONST_commondisplay010);
 	}
 	else if (g.blood <= 75)
 	{
-		addstrAlt(CONST_commondisplay011);
+		return (CONST_commondisplay011);
 	}
 	else if (g.blood < 100)
 	{
-		if (smll)addstrAlt(CONST_commondisplay012);
-		else addstrAlt(CONST_commondisplay013);
+		if (smll)return (CONST_commondisplay012);
+		else return (CONST_commondisplay013);
 	}
 	else if (g.special[SPECIALWOUND_NECK] == 2)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay014);
-		else addstrAlt(CONST_commondisplay015);
+		if (smll)return (CONST_commondisplay014);
+		else return (CONST_commondisplay015);
 	}
 	else if (g.special[SPECIALWOUND_UPPERSPINE] == 2)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay016);
-		else addstrAlt(CONST_commondisplay017);
+		if (smll)return (CONST_commondisplay016);
+		else return (CONST_commondisplay017);
 	}
 	else if (g.special[SPECIALWOUND_LOWERSPINE] == 2)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay018);
-		else addstrAlt(CONST_commondisplay019);
+		if (smll)return (CONST_commondisplay018);
+		else return (CONST_commondisplay019);
 	}
 	else if (g.special[SPECIALWOUND_RIGHTEYE] == 0 &&
 		g.special[SPECIALWOUND_LEFTEYE] == 0 &&
 		g.special[SPECIALWOUND_NOSE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay020);
-		else addstrAlt(CONST_commondisplay021);
+		if (smll)return (CONST_commondisplay020);
+		else return (CONST_commondisplay021);
 	}
 	else if (legok == 0 && armok == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay022);
+		return (CONST_commondisplay022);
 	}
 	else if ((legok == 1 && armok == 0) || (armok == 1 && legok == 0))
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay023);
+		return (CONST_commondisplay023);
 	}
 	else if (legok == 2 && armok == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay024);
+		return (CONST_commondisplay024);
 	}
 	else if (legok == 0 && armok == 2)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay025);
+		return (CONST_commondisplay025);
 	}
 	else if (legok == 1 && armok == 1)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay026);
-		else addstrAlt(CONST_commondisplay027);
+		if (smll)return (CONST_commondisplay026);
+		else return (CONST_commondisplay027);
 	}
 	else if (armok == 1)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay028);
+		return (CONST_commondisplay028);
 	}
 	else if (legok == 1)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay029);
+		return (CONST_commondisplay029);
 	}
 	else if (g.special[SPECIALWOUND_RIGHTEYE] == 0 &&
 		g.special[SPECIALWOUND_LEFTEYE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay030);
+		return (CONST_commondisplay030);
 	}
 	else if ((g.special[SPECIALWOUND_RIGHTEYE] == 0 ||
 		g.special[SPECIALWOUND_LEFTEYE] == 0) &&
 		g.special[SPECIALWOUND_NOSE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay031);
-		else addstrAlt(CONST_commondisplay032);
+		if (smll)return (CONST_commondisplay031);
+		else return (CONST_commondisplay032);
 	}
 	else if (g.special[SPECIALWOUND_NOSE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay033);
-		else addstrAlt(CONST_commondisplay034);
+		if (smll)return (CONST_commondisplay033);
+		else return (CONST_commondisplay034);
 	}
 	else if (g.special[SPECIALWOUND_RIGHTEYE] == 0 ||
 		g.special[SPECIALWOUND_LEFTEYE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay035);
-		else addstrAlt(CONST_commondisplay036);
+		if (smll)return (CONST_commondisplay035);
+		else return (CONST_commondisplay036);
 	}
 	else if (g.special[SPECIALWOUND_TONGUE] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay037);
-		else addstrAlt(CONST_commondisplay177);
+		if (smll)return (CONST_commondisplay037);
+		else return (CONST_commondisplay177);
 	}
 	else if (g.special[SPECIALWOUND_TEETH] == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		addstrAlt(CONST_commondisplay178);
+		return (CONST_commondisplay178);
 	}
 	else if (g.special[SPECIALWOUND_TEETH] < TOOTHNUM)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		if (smll)addstrAlt(CONST_commondisplay040);
-		else addstrAlt(CONST_commondisplay180);
+		if (smll)return (CONST_commondisplay040);
+		else return (CONST_commondisplay180);
 	}
 	else
 	{
 		if (g.align == -1)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			if (smll)addstrAlt(CONST_commondisplay042);
-			else addstrAlt(CONST_commondisplay043);
+			if (smll)return (CONST_commondisplay042);
+			else return (CONST_commondisplay043);
 		}
 		else if (g.align == 0)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_commondisplay044);
+			return (CONST_commondisplay044);
 		}
 		else
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			if (g.animalgloss == ANIMALGLOSS_ANIMAL)
-				addstrAlt(CONST_commondisplay115);
-			else addstrAlt(CONST_commondisplay116);
+				return (CONST_commondisplay115);
+			else return (CONST_commondisplay116);
 		}
 	}
 }
-//void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
-string getVehicleShortname(int i);
-/* character info at top of screen */
-void printcreatureinfo(Creature *cr, unsigned char knowledge)
+/* prints a character's health description (One Leg, Liberal, NearDETH...) */
+void printhealthstat(Creature &g, int y, int x, char smll)
 {
-	const string CONST_commondisplay092 = "Brn";
-	const string CONST_commondisplay091 = "Trn";
-	const string CONST_commondisplay089 = "Brs";
-	const string CONST_commondisplay088 = "Sht";
-	const string CONST_commondisplay085 = "Clean sever";
-	const string CONST_commondisplay077 = "Top Skills:";
-	const string CONST_commondisplay075 = "???????";
-	const string CONST_commondisplay068 = "Trans: ";
+	string wound = getHealthStat(g, smll);
+	mvaddstrAlt(y, x, wound);
+}
+
+void printAttributesAsKnowledgePermits(Creature *cr, unsigned char knowledge) {
 	const string CONST_commondisplay067 = "?";
 	const string CONST_commondisplay066 = "Char:   ";
 	const string CONST_commondisplay064 = "Str:    ";
@@ -14294,40 +14419,6 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 	const string CONST_commondisplay058 = "Wis:    ";
 	const string CONST_commondisplay056 = "Int:    ";
 	const string CONST_commondisplay054 = "Hrt:    ";
-	const string CONST_commondisplay053 = "an angry Hangin' Judge";
-	const string CONST_commondisplay052 = "a frightened Eminent Scientist";
-	const string CONST_commondisplay051 = "a smarmy News Anchor";
-	const string CONST_commondisplay050 = "a crying Radio Personality";
-	const string CONST_commondisplay049 = "a squirming CEO";
-	const string CONST_commondisplay048 = "a cursing Politician";
-	const string CONST_commondisplay047 = ", holding ";
-	extern short sitealarm;
-	extern short sitealarmtimer;
-	extern int year;
-	extern short mode;
-	extern char showcarprefs;
-	char str[200];
-	makedelimiter(1);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 2, cr->name);
-	addstrAlt(commaSpace);
-	addstrAlt(gettitle(*cr));
-	if (cr->prisoner != NULL)
-	{
-		addstrAlt(CONST_commondisplay047);
-		switch (cr->prisoner->type)
-		{
-		case CREATURE_POLITICIAN:addstrAlt(CONST_commondisplay048); break;
-		case CREATURE_CORPORATE_CEO:addstrAlt(CONST_commondisplay049); break;
-		case CREATURE_RADIOPERSONALITY:addstrAlt(CONST_commondisplay050); break;
-		case CREATURE_NEWSANCHOR:addstrAlt(CONST_commondisplay051); break;
-		case CREATURE_SCIENTIST_EMINENT:addstrAlt(CONST_commondisplay052); break;
-		case CREATURE_JUDGE_CONSERVATIVE:addstrAlt(CONST_commondisplay053); break;
-		default:
-			addstrAlt(cr->prisoner->name);
-			break;
-		}
-	}
 	mvaddstrAlt(2, 0, CONST_commondisplay054);
 	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
@@ -14356,17 +14447,68 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 	if (knowledge > 0)
 		addstrAlt(cr->get_attribute(ATTRIBUTE_CHARISMA, true));
 	else addstrAlt(CONST_commondisplay067);
+}
+//void printcreatureinfo(Creature *cr, unsigned char knowledge = 255);
+string getVehicleShortname(int i);
+/* character info at top of screen */
+void printcreatureinfo(Creature *cr, unsigned char knowledge)
+{
+	const string CONST_commondisplay092 = "Brn";
+	const string CONST_commondisplay091 = "Trn";
+	const string CONST_commondisplay089 = "Brs";
+	const string CONST_commondisplay088 = "Sht";
+	const string CONST_commondisplay085 = "Clean sever";
+	const string CONST_commondisplay077 = "Top Skills:";
+	const string CONST_commondisplay075 = "???????";
+
+	const string CONST_commondisplay068 = "Trans: ";
+
+	const string CONST_commondisplay053 = "an angry Hangin' Judge";
+	const string CONST_commondisplay052 = "a frightened Eminent Scientist";
+	const string CONST_commondisplay051 = "a smarmy News Anchor";
+	const string CONST_commondisplay050 = "a crying Radio Personality";
+	const string CONST_commondisplay049 = "a squirming CEO";
+	const string CONST_commondisplay048 = "a cursing Politician";
+	const string CONST_commondisplay047 = ", holding ";
+	extern short sitealarm;
+	extern short sitealarmtimer;
+	extern int year;
+	extern short mode;
+	extern char showcarprefs;
+	makedelimiter(1);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 2, cr->name);
+	addstrAlt(commaSpace);
+	addstrAlt(gettitle(*cr));
+	if (cr->prisoner != NULL)
+	{
+		addstrAlt(CONST_commondisplay047);
+		switch (cr->prisoner->type)
+		{
+		case CREATURE_POLITICIAN:addstrAlt(CONST_commondisplay048); break;
+		case CREATURE_CORPORATE_CEO:addstrAlt(CONST_commondisplay049); break;
+		case CREATURE_RADIOPERSONALITY:addstrAlt(CONST_commondisplay050); break;
+		case CREATURE_NEWSANCHOR:addstrAlt(CONST_commondisplay051); break;
+		case CREATURE_SCIENTIST_EMINENT:addstrAlt(CONST_commondisplay052); break;
+		case CREATURE_JUDGE_CONSERVATIVE:addstrAlt(CONST_commondisplay053); break;
+		default:
+			addstrAlt(cr->prisoner->name);
+			break;
+		}
+	}
+	printAttributesAsKnowledgePermits(cr, knowledge);
 	mvaddstrAlt(5, 11, CONST_commondisplay068);
 	long v = -1;
 	if (showcarprefs == 1)v = id_getcar(cr->pref_carid);
 	else v = id_getcar(cr->carid);
+	string str;
 	if (v != -1 && showcarprefs != -1)
 	{
-		strcpy(str, getVehicleShortname(v).c_str());
+		(str = getVehicleShortname(v));
 		char d;
 		if (showcarprefs == 1)d = cr->pref_is_driver;
 		else d = cr->is_driver;
-		if (d)strcat(str, CONST_commondisplay156.c_str());
+		if (d)(str += CONST_commondisplay156);
 	}
 	else
 	{
@@ -14375,12 +14517,11 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 			(cr->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
 		if ((cr->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
 			(cr->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-		if (cr->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, CONST_commondisplay157.c_str());
-		else if (legok >= 1)strcpy(str, CONST_commondisplay158.c_str());
-		else strcpy(str, CONST_commondisplay003.c_str());
+		if (cr->flag & CREATUREFLAG_WHEELCHAIR) { (str = CONST_commondisplay157); }
+		else if (legok >= 1) { (str = CONST_commondisplay158); }
+		else { (str = CONST_commondisplay003); }
 	}
 	addstrAlt(str);
-	moveAlt(6, 0);
 	if (mode != GAMEMODE_SITE) set_color_easy(WHITE_ON_BLACK);
 	else switch (weaponcheck(*cr))
 	{
@@ -14389,9 +14530,8 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 	case 1:set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
 	case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
 	}
-	addstrAlt(CONST_commondisplay153);
+	mvaddstrAlt(6, 0, CONST_commondisplay153);
 	addstrAlt(cr->get_weapon_string(1));
-	moveAlt(7, 0);
 	if (mode != GAMEMODE_SITE)
 	{
 		int fg = COLOR_WHITE;
@@ -14432,7 +14572,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 			if (cr->get_armor().get_stealth_value() > 1)
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	}
-	addstrAlt(CONST_commondisplay154);
+	mvaddstrAlt(7, 0, CONST_commondisplay154);
 	addstrAlt(cr->get_armor_string(false));
 	set_color_easy(WHITE_ON_BLACK);
 	char used[SKILLNUM];
@@ -14742,27 +14882,113 @@ void printwoundstat(Creature &cr, int y, int x)
 		}
 	}
 }
+string juiceUntilLevelUp(const int juice) {
+
+	const string CONST_commondisplay138 = "1000";
+	const string CONST_commondisplay137 = "500";
+	const string CONST_commondisplay136 = "200";
+	const string CONST_commondisplay135 = "100";
+	const string CONST_commondisplay134 = "50";
+	const string CONST_commondisplay133 = "10";
+	const string CONST_commondisplay132 = "Next:  ";
+
+	string howMuchJuice;
+	if (juice < 1000)
+	{
+		howMuchJuice = CONST_commondisplay132;
+		if (juice < 0) howMuchJuice += tag_0;
+		else if (juice < 10) howMuchJuice += CONST_commondisplay133;
+		else if (juice < 50) howMuchJuice += CONST_commondisplay134;
+		else if (juice < 100) howMuchJuice += CONST_commondisplay135;
+		else if (juice < 200) howMuchJuice += CONST_commondisplay136;
+		else if (juice < 500) howMuchJuice += CONST_commondisplay137;
+		else  howMuchJuice += CONST_commondisplay138;
+	}
+	return howMuchJuice;
+}
+
+void printCreatureAttributes(Creature &cr) {
+
+	const string CONST_commondisplay145 = "Charisma: ";
+	const string CONST_commondisplay144 = "Strength: ";
+	const string CONST_commondisplay143 = "Agility: ";
+	const string CONST_commondisplay142 = "Health: ";
+	const string CONST_commondisplay141 = "Wisdom: ";
+	const string CONST_commondisplay140 = "Intelligence: ";
+	const string CONST_commondisplay139 = "Heart: ";
+
+	mvaddstrAlt(5, 0, CONST_commondisplay139);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
+	mvaddstrAlt(6, 0, CONST_commondisplay140);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
+	mvaddstrAlt(7, 0, CONST_commondisplay141);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_WISDOM, true));
+	mvaddstrAlt(8, 0, CONST_commondisplay142);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_HEALTH, true));
+	mvaddstrAlt(9, 0, CONST_commondisplay143);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_AGILITY, true));
+	mvaddstrAlt(10, 0, CONST_commondisplay144);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_STRENGTH, true));
+	mvaddstrAlt(11, 0, CONST_commondisplay145);
+	addstrAlt(cr.get_attribute(ATTRIBUTE_CHARISMA, true));
+}
+void printCreatureSkills(Creature &cr) {
+	char used[SKILLNUM];
+	memset(used, 0, sizeof(char)*SKILLNUM);
+	int skills_max = 16;
+	char printed = 1;
+	for (int skills_shown = 0; skills_shown < skills_max&&printed; skills_shown++)
+	{
+		printed = 0;
+		int max = 0;
+		long maxs = -1;
+		for (int s = 0; s < SKILLNUM; s++)
+		{
+			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s)) > max && !used[s])
+			{
+				max = (cr.get_skill(s) * 10000 + cr.get_skill_ip(s));
+				maxs = s;
+			}
+		}
+		if (maxs != -1)
+		{
+			used[maxs] = 1;
+			printed = 1;
+			// Maxed skills are cyan
+			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			// About to level up skills are white
+			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
+				cr.get_skill(maxs) < cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			// <1 skills are dark gray
+			else if (cr.get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			// >=1 skills are light gray
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
+			addstrAlt(CONST_commondisplay212);
+			moveAlt(6 + skills_shown, 42);
+			addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(maxs));
+			if (cr.get_skill_ip(maxs) < 100 + (10 * cr.get_skill(maxs)))
+			{
+				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
+				{
+					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) < 10)
+						addcharAlt('0');
+					addstrAlt((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))));
+				}
+				else addstrAlt(CONST_commondisplay197);
+			}
+			else addstrAlt(CONST_commondisplay198);
+			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs, true))
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+			moveAlt(6 + skills_shown, 48);
+			addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(maxs, true));
+		}
+	}
+}
+vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]);
 /* full screen character sheet */
 void printliberalstats(Creature &cr)
 {
-	const string CONST_commondisplay188 = "Broken Ribs";
-	const string CONST_commondisplay187 = "Broken Rib";
-	const string CONST_commondisplay186 = "All Ribs Broken";
-	const string CONST_commondisplay185 = "Busted Spleen";
-	const string CONST_commondisplay184 = "Stomach Injured";
-	const string CONST_commondisplay183 = "L. Kidney Damaged";
-	const string CONST_commondisplay182 = "R. Kidney Damaged";
-	const string CONST_commondisplay181 = "Liver Damaged";
-	const string CONST_commondisplay179 = "Missing a Tooth";
-	const string CONST_commondisplay176 = "No Nose";
-	const string CONST_commondisplay175 = "No Left Eye";
-	const string CONST_commondisplay174 = "No Right Eye";
-	const string CONST_commondisplay173 = "Broken Lw Spine";
-	const string CONST_commondisplay172 = "Broken Up Spine";
-	const string CONST_commondisplay171 = "Broken Neck";
-	const string CONST_commondisplay170 = "L. Lung Collapsed";
-	const string CONST_commondisplay169 = "R. Lung Collapsed";
-	const string CONST_commondisplay168 = "Heart Punctured";
 	const string CONST_commondisplay167 = "Scheduled Dates:    ";
 	const string CONST_commondisplay166 = "s";
 	const string CONST_commondisplay165 = " Romantic Interest";
@@ -14772,20 +14998,6 @@ void printliberalstats(Creature &cr)
 	const string CONST_commondisplay161 = " Max";
 	const string CONST_commondisplay160 = " Recruits / ";
 	const string CONST_commondisplay155 = "Car: ";
-	const string CONST_commondisplay145 = "Charisma: ";
-	const string CONST_commondisplay144 = "Strength: ";
-	const string CONST_commondisplay143 = "Agility: ";
-	const string CONST_commondisplay142 = "Health: ";
-	const string CONST_commondisplay141 = "Wisdom: ";
-	const string CONST_commondisplay140 = "Intelligence: ";
-	const string CONST_commondisplay139 = "Heart: ";
-	const string CONST_commondisplay138 = "1000";
-	const string CONST_commondisplay137 = "500";
-	const string CONST_commondisplay136 = "200";
-	const string CONST_commondisplay135 = "100";
-	const string CONST_commondisplay134 = "50";
-	const string CONST_commondisplay133 = "10";
-	const string CONST_commondisplay132 = "Next:  ";
 	const string CONST_commondisplay131 = "Juice: ";
 	const string CONST_commondisplay130 = "*";
 	const string CONST_commondisplay129 = ", Genderqueer";
@@ -14845,86 +15057,13 @@ void printliberalstats(Creature &cr)
 	// Add juice
 	mvaddstrAlt(10, 16, CONST_commondisplay131);
 	addstrAlt(cr.juice);
-	if (cr.juice < 1000)
-	{
-		mvaddstrAlt(11, 16, CONST_commondisplay132);
-		if (cr.juice < 0)addstrAlt(tag_0);
-		else if (cr.juice < 10)addstrAlt(CONST_commondisplay133);
-		else if (cr.juice < 50)addstrAlt(CONST_commondisplay134);
-		else if (cr.juice < 100)addstrAlt(CONST_commondisplay135);
-		else if (cr.juice < 200)addstrAlt(CONST_commondisplay136);
-		else if (cr.juice < 500)addstrAlt(CONST_commondisplay137);
-		else addstrAlt(CONST_commondisplay138);
-	}
+	mvaddstrAlt(11, 16, juiceUntilLevelUp(cr.juice));
 	// Add attributes
-	mvaddstrAlt(5, 0, CONST_commondisplay139);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(6, 0, CONST_commondisplay140);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
-	mvaddstrAlt(7, 0, CONST_commondisplay141);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(8, 0, CONST_commondisplay142);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_HEALTH, true));
-	mvaddstrAlt(9, 0, CONST_commondisplay143);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_AGILITY, true));
-	mvaddstrAlt(10, 0, CONST_commondisplay144);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_STRENGTH, true));
-	mvaddstrAlt(11, 0, CONST_commondisplay145);
-	addstrAlt(cr.get_attribute(ATTRIBUTE_CHARISMA, true));
+	printCreatureAttributes(cr);
 	// Add highest skills
-	char used[SKILLNUM];
-	memset(used, 0, sizeof(char)*SKILLNUM);
-	int skills_max = 16;
-	char printed = 1;
 	mvaddstrAlt(5, 28, CONST_commondisplay193);
 	mvaddstrAlt(5, 43, CONST_commondisplay194);
-	for (int skills_shown = 0; skills_shown < skills_max&&printed; skills_shown++)
-	{
-		printed = 0;
-		int max = 0;
-		long maxs = -1;
-		for (int s = 0; s < SKILLNUM; s++)
-		{
-			if ((cr.get_skill(s) * 10000 + cr.get_skill_ip(s)) > max && !used[s])
-			{
-				max = (cr.get_skill(s) * 10000 + cr.get_skill_ip(s));
-				maxs = s;
-			}
-		}
-		if (maxs != -1)
-		{
-			used[maxs] = 1;
-			printed = 1;
-			// Maxed skills are cyan
-			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			// About to level up skills are white
-			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
-				cr.get_skill(maxs) < cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			// <1 skills are dark gray
-			else if (cr.get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			// >=1 skills are light gray
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
-			addstrAlt(CONST_commondisplay212);
-			moveAlt(6 + skills_shown, 42);
-			addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(maxs));
-			if (cr.get_skill_ip(maxs) < 100 + (10 * cr.get_skill(maxs)))
-			{
-				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
-				{
-					if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) < 10)
-						addcharAlt('0');
-					addstrAlt((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))));
-				}
-				else addstrAlt(CONST_commondisplay197);
-			}
-			else addstrAlt(CONST_commondisplay198);
-			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs, true))
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			moveAlt(6 + skills_shown, 48);
-			addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(maxs, true));
-		}
-	}
+	printCreatureSkills(cr);
 	set_color_easy(WHITE_ON_BLACK);
 	// Add weapon
 	mvaddstrAlt(13, 0, CONST_commondisplay153);
@@ -14994,82 +15133,13 @@ void printliberalstats(Creature &cr)
 	}
 	printwoundstat(cr, 5, 55);
 	//SPECIAL WOUNDS
-	set_color_easy(RED_ON_BLACK);
-	int y = 17;
-	int x = 0;
-	if (cr.special[SPECIALWOUND_HEART] != 1)
 	{
-		mvaddstrAlt(y++, x, CONST_commondisplay168);
-	}
-	if (cr.special[SPECIALWOUND_RIGHTLUNG] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay169);
-	}
-	if (cr.special[SPECIALWOUND_LEFTLUNG] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay170);
-	}
-	if (cr.special[SPECIALWOUND_NECK] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay171);
-	}
-	if (cr.special[SPECIALWOUND_UPPERSPINE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay172);
-	}
-	if (cr.special[SPECIALWOUND_LOWERSPINE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay173);
-	}
-	if (cr.special[SPECIALWOUND_RIGHTEYE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay174);
-	}
-	if (cr.special[SPECIALWOUND_LEFTEYE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay175);
-	}
-	if (cr.special[SPECIALWOUND_NOSE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay176);
-	}
-	if (cr.special[SPECIALWOUND_TONGUE] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay177);
-	}
-	if (cr.special[SPECIALWOUND_TEETH] != TOOTHNUM)
-	{
-		moveAlt(y++, x);
-		if (cr.special[SPECIALWOUND_TEETH] == 0)addstrAlt(CONST_commondisplay178);
-		else if (cr.special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)addstrAlt(CONST_commondisplay179);
-		else if (cr.special[SPECIALWOUND_TEETH] < TOOTHNUM)addstrAlt(CONST_commondisplay180);
-	}
-	if (cr.special[SPECIALWOUND_LIVER] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay181);
-	}
-	if (cr.special[SPECIALWOUND_RIGHTKIDNEY] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay182);
-	}
-	if (cr.special[SPECIALWOUND_LEFTKIDNEY] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay183);
-	}
-	if (cr.special[SPECIALWOUND_STOMACH] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay184);
-	}
-	if (cr.special[SPECIALWOUND_SPLEEN] != 1)
-	{
-		mvaddstrAlt(y++, x, CONST_commondisplay185);
-	}
-	if (cr.special[SPECIALWOUND_RIBS] != RIBNUM)
-	{
-		moveAlt(y++, x);
-		if (cr.special[SPECIALWOUND_RIBS] == 0)addstrAlt(CONST_commondisplay186);
-		else if (cr.special[SPECIALWOUND_RIBS] == RIBNUM - 1)addstrAlt(CONST_commondisplay187);
-		else if (cr.special[SPECIALWOUND_RIBS] < RIBNUM)addstrAlt(CONST_commondisplay188);
+		set_color_easy(RED_ON_BLACK);
+		int y = 17;
+		for (string str : printSpecialWounds(cr.special)) {
+
+			mvaddstrAlt(y++, 0, str);
+		}
 	}
 	set_color_easy(WHITE_ON_BLACK);
 	for (int i = 0, y = 12; i < AUGMENTATIONNUM; i++, y++)
@@ -15388,6 +15458,12 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
 void readMapCBSpecials(int x, int y, int z, int i)
 {
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	if (i < 0 || i > 42) {
+		levelmap[x][y][z].special = -1;
+	}
+	else {
+		levelmap[x][y][z].special = i - 1;
+	}/*
 	switch (i)
 	{
 	default:
@@ -15434,7 +15510,7 @@ void readMapCBSpecials(int x, int y, int z, int i)
 	case 40: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_NE; break;
 	case 41: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_SW; break;
 	case 42: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_SE; break;
-	}
+	}*/
 }
 void makeDoor(int x, int y, int z, int flags = 0)
 {
@@ -25244,6 +25320,9 @@ void freehostage(Creature &cr, char situation)
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()
 {
+	const string CONST_haulkidnapD01 = " Is The Only Viable Target";
+	const string CONST_haulkidnapD02 = "Still Kidnap? [Y/N]";
+
 	extern int sitecrime;
 	extern short party_status;
 	extern short sitealarm;
@@ -25284,12 +25363,18 @@ void kidnapattempt()
 				kidnapper = c - '1';
 	} while (kidnapper < 0);
 	vector<int> target;
-	for (int e = 0; e < ENCMAX; e++)
+	bool possibleMistakeToKidnap = false;
+	for (int e = 0; e < ENCMAX; e++) {
 		if (encounter[e].exists&&encounter[e].alive&&encounter[e].align == -1 &&
 			(encounter[e].animalgloss == ANIMALGLOSS_NONE || lawList[LAW_ANIMALRESEARCH] == 2) &&
 			(!encounter[e].get_weapon().protects_against_kidnapping() ||
 				encounter[e].blood <= 20) && encounter[e].animalgloss != ANIMALGLOSS_TANK)
 			target.push_back(e);
+
+		if (encounter[e].get_weapon().protects_against_kidnapping()) {
+			possibleMistakeToKidnap = true;
+		}
+	}
 	if (len(target))
 	{
 		int t = target[0];
@@ -25319,7 +25404,27 @@ void kidnapattempt()
 				}
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 			} while (t < 0);
+		}else
+		// Special case: More than one conservative, but only one can be kidnapped
+		if (len(target) == 1 && possibleMistakeToKidnap) {
+			clearcommandarea();
+			clearmessagearea();
+			clearmaparea();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(11, 1, encounter[target[0]].name);
+			addstrAlt(CONST_haulkidnapD01);
+			mvaddstrAlt(12, 1, CONST_haulkidnapD02);
+			int c = pressSpecificKey('y', 'n');
+			if (c == 'n') {
+				return;
+			}
+			else if (c == 'y') {
+
+			}
 		}
+
+
+
 		bool amateur = 0;
 		if (kidnap(*activesquad->squad[kidnapper], encounter[t], amateur))
 		{
@@ -33986,6 +34091,47 @@ void printIntroduction() {
 	gamelog.nextMessage();
 	pressAnyKey();
 }
+enum founderQuestionTagEnums {
+	ENUM_tag_HEADER,
+	ENUM_tag_ANSWER,
+	ENUM_tag_QUESTION,
+	ENUM_tag_SKILL_,
+	ENUM_tag_ATTRIBUTE_,
+	ENUM_tag_STARTING_,
+	ENUM_tag_BIRTHDAY_,
+	ENUM_tag_MONEY,
+	ENUM_tag_DATING_LAWYER,
+	ENUM_tag_GAY,
+	ENUM_tag_HASMAPS,
+	ENUM_tag_CREATURE,
+	ENUM_tag_BASE,
+	ENUM_tag_ARMOR,
+	ENUM_tag_JUICE,
+	ENUM_tag_RECRUITS_GANG,
+	ENUM_tag_ASSAULT_RIFLE,
+	ENUM_tag_SPORTS_CAR,
+};
+map<string, int> founderQuestionTags = {
+	map<string, int>::value_type(tag_HEADER, ENUM_tag_HEADER),
+	map<string, int>::value_type(tag_ANSWER, ENUM_tag_ANSWER),
+	map<string, int>::value_type(tag_QUESTION, ENUM_tag_QUESTION),
+	map<string, int>::value_type(tag_SKILL_, ENUM_tag_SKILL_),
+	map<string, int>::value_type(tag_ATTRIBUTE_, ENUM_tag_ATTRIBUTE_),
+	map<string, int>::value_type(tag_STARTING_, ENUM_tag_STARTING_),
+	map<string, int>::value_type(tag_BIRTHDAY_, ENUM_tag_BIRTHDAY_),
+	map<string, int>::value_type(tag_MONEY, ENUM_tag_MONEY),
+	map<string, int>::value_type(tag_DATING_LAWYER, ENUM_tag_DATING_LAWYER),
+	map<string, int>::value_type(tag_GAY, ENUM_tag_GAY),
+	map<string, int>::value_type(tag_HASMAPS, ENUM_tag_HASMAPS),
+	map<string, int>::value_type(tag_CREATURE, ENUM_tag_CREATURE),
+	map<string, int>::value_type(tag_BASE, ENUM_tag_BASE),
+	map<string, int>::value_type(tag_ARMOR, ENUM_tag_ARMOR),
+	map<string, int>::value_type(tag_JUICE, ENUM_tag_JUICE),
+	map<string, int>::value_type(tag_RECRUITS_GANG, ENUM_tag_RECRUITS_GANG),
+	map<string, int>::value_type(tag_ASSAULT_RIFLE, ENUM_tag_ASSAULT_RIFLE),
+	map<string, int>::value_type(tag_SPORTS_CAR, ENUM_tag_SPORTS_CAR),
+};
+
 vector<Question> gatherAllFounderQuestions() {
 	const int MAX_CHOICES = 10;
 	vector<Question> allQuestions;
@@ -33997,10 +34143,19 @@ vector<Question> gatherAllFounderQuestions() {
 	string header_2 = blankString;
 	string answer = blankString;
 	string answer_2 = blankString;
-	//IsaacG This loop needs a rewrite
+
 	for (int i = 0; i < founderQuestions.size(); i++) {
+		Impact currentImpact;
+		bool invalidTag = false;
 		const string first = founderQuestions[i];
-		if (first.substr(0, 6) == tag_HEADER) {
+		int enumTag = -1;
+		for (int j = 3; j < 14 && enumTag == -1; j++) {
+			if (founderQuestionTags.count(first.substr(0, j))) {
+				enumTag = founderQuestionTags[first.substr(0, j)];
+			}
+		}
+		switch (enumTag) {
+		case ENUM_tag_HEADER:
 			if (first.substr(6, 1) == singleSpace) {
 				header = first.substr(7);
 				header_2 = blankString;
@@ -34008,8 +34163,8 @@ vector<Question> gatherAllFounderQuestions() {
 			else  if (first.substr(6, 2) == tag__2) {
 				header_2 = first.substr(9);
 			}
-		}
-		else if (first.substr(0, 6) == tag_ANSWER) {
+			break;
+		case ENUM_tag_ANSWER:
 			if (firstAnswer) {
 				if (first.substr(6, 1) == singleSpace) {
 					answer = first.substr(7);
@@ -34035,8 +34190,8 @@ vector<Question> gatherAllFounderQuestions() {
 					answer_2 = first.substr(9);
 				}
 			}
-		}
-		else if (first.substr(0, 8) == tag_QUESTION) {
+			break;
+		case ENUM_tag_QUESTION:
 			if (!firstQuestion) {
 				if (first.substr(8, 1) == singleSpace) {
 					currentChoice.ANSWER = answer;
@@ -34067,150 +34222,145 @@ vector<Question> gatherAllFounderQuestions() {
 				currentQuestion.QUESTION = first.substr(9);
 				currentQuestion.QUESTION_2 = blankString;
 			}
-		}
-		else {
-			bool invalidTag = false;
-			Impact currentImpact;
-			if (first.substr(0, 6) == tag_SKILL_) {
-				currentImpact.type = SKILL;
-				currentImpact.item_to_influcence = getSkillFromString(founderQuestions[i]);
-				currentImpact.set_value = getSetValue(founderQuestions[i]);
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (currentImpact.item_to_influcence == -1) {
-					invalidTag = true;
-				}
-			}
-			else if (first.substr(0, 10) == tag_ATTRIBUTE_) {
-				currentImpact.type = ATTRIBUTE;
-				currentImpact.item_to_influcence = getAttributeFromString(founderQuestions[i]);
-				currentImpact.set_value = getSetValue(founderQuestions[i]);
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (currentImpact.item_to_influcence == -1) {
-					invalidTag = true;
-				}
-			}
-			else if (first.substr(0, 9) == tag_STARTING_) {
-				currentImpact.type = OTHER;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (first.substr(9, 5) == tag_MONTH) {
-					currentImpact.item_to_influcence = STARTING_MONTH;
-				}
-				else if (first.substr(9, 3) == tag_DAY) {
-					currentImpact.item_to_influcence = STARTING_DAY;
-				}
-				else if (first.substr(9, 4) == tag_YEAR) {
-					currentImpact.item_to_influcence = STARTING_YEAR;
-				}
-				else {
-					invalidTag = true;
-				}
-			}
-			else if (first.substr(0, 9) == tag_BIRTHDAY_) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = 0;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-				if (first.substr(9, 5) == tag_MONTH) {
-					currentImpact.item_to_influcence = BIRTH_MONTH;
-				}
-				else if (first.substr(9, 3) == tag_DAY) {
-					currentImpact.item_to_influcence = BIRTH_DAY;
-				}
-				else if (first.substr(9, 4) == tag_YEAR) {
-					currentImpact.item_to_influcence = BIRTH_YEAR;
-				}
-				else {
-					invalidTag = true;
-				}
-			}
-			else if (first.substr(0, 5) == tag_MONEY) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = MONEY;
-				currentImpact.set_value = getSetValue(founderQuestions[i]);
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			}
-			else if (first.substr(0, 13) == tag_DATING_LAWYER) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = DATING_LAWYER;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			}
-			else if (first.substr(0, 3) == tag_GAY) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = GAY;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			}
-			else if (first.substr(0, 7) == tag_HASMAPS) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = HAS_MAPS;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			}
-			else if (first.substr(0, 8) == tag_CREATURE) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = CREATURE;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getCreatureFromString(founderQuestions[i].substr(9));
-			}
-			else if (first.substr(0, 4) == tag_BASE) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = BASE;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getBaseFromString(founderQuestions[i]);
-				if (currentImpact.magnitude == -1) {
-					invalidTag = true;
-				}
-			}
-			else if (first.substr(0, 5) == tag_ARMOR) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = ARMOR;
-				currentImpact.set_value = true;
+			break;
+		case ENUM_tag_SKILL_:
+			currentImpact.type = SKILL;
+			currentImpact.item_to_influcence = getSkillFromString(founderQuestions[i]);
+			currentImpact.set_value = getSetValue(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			if (currentImpact.item_to_influcence == -1) {
 				invalidTag = true;
 			}
-			else if (first.substr(0, 5) == tag_JUICE) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = JUICE;
-				currentImpact.set_value = getSetValue(founderQuestions[i]);
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_ATTRIBUTE_:
+			currentImpact.type = ATTRIBUTE;
+			currentImpact.item_to_influcence = getAttributeFromString(founderQuestions[i]);
+			currentImpact.set_value = getSetValue(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			if (currentImpact.item_to_influcence == -1) {
+				invalidTag = true;
 			}
-			else if (first.substr(0, 13) == tag_RECRUITS_GANG) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = RECRUITS;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_STARTING_:
+			currentImpact.type = OTHER;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			if (first.substr(9, 5) == tag_MONTH) {
+				currentImpact.item_to_influcence = STARTING_MONTH;
 			}
-			else if (first.substr(0, 13) == tag_ASSAULT_RIFLE) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = ASSAULT_RIFLE;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			else if (first.substr(9, 3) == tag_DAY) {
+				currentImpact.item_to_influcence = STARTING_DAY;
 			}
-			else if (first.substr(0, 10) == tag_SPORTS_CAR) {
-				currentImpact.type = OTHER;
-				currentImpact.item_to_influcence = SPORTS_CAR;
-				currentImpact.set_value = true;
-				currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			}
-			else {
-				clearAlt();
-				addstrAlt(invalidTag);
-				addstrAlt(founderQuestions[i]);
-				pressAnyKey();
-				clearAlt();
-			}
-			if (invalidTag) {
-				clearAlt();
-				addstrAlt(invalidTag);
-				addstrAlt(founderQuestions[i]);
-				pressAnyKey();
-				clearAlt();
+			else if (first.substr(9, 4) == tag_YEAR) {
+				currentImpact.item_to_influcence = STARTING_YEAR;
 			}
 			else {
-				currentChoice.impact.push_back(currentImpact);
+				invalidTag = true;
 			}
+			break;
+		case ENUM_tag_BIRTHDAY_:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = 0;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			if (first.substr(9, 5) == tag_MONTH) {
+				currentImpact.item_to_influcence = BIRTH_MONTH;
+			}
+			else if (first.substr(9, 3) == tag_DAY) {
+				currentImpact.item_to_influcence = BIRTH_DAY;
+			}
+			else if (first.substr(9, 4) == tag_YEAR) {
+				currentImpact.item_to_influcence = BIRTH_YEAR;
+			}
+			else {
+				invalidTag = true;
+			}
+			break;
+		case ENUM_tag_MONEY:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = MONEY;
+			currentImpact.set_value = getSetValue(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_DATING_LAWYER:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = DATING_LAWYER;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_GAY:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = GAY;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_HASMAPS:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = HAS_MAPS;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_CREATURE:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = CREATURE;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getCreatureFromString(founderQuestions[i].substr(9));
+			break;
+		case ENUM_tag_BASE:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = BASE;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getBaseFromString(founderQuestions[i]);
+			if (currentImpact.magnitude == -1) {
+				invalidTag = true;
+			}
+			break;
+		case ENUM_tag_ARMOR:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = ARMOR;
+			currentImpact.set_value = true;
+			invalidTag = true;
+			break;
+		case ENUM_tag_JUICE:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = JUICE;
+			currentImpact.set_value = getSetValue(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_RECRUITS_GANG:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = RECRUITS;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_ASSAULT_RIFLE:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = ASSAULT_RIFLE;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		case ENUM_tag_SPORTS_CAR:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influcence = SPORTS_CAR;
+			currentImpact.set_value = true;
+			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			break;
+		default:
+			invalidTag = true;
+			break;
 		}
+		
+		if (invalidTag) {
+			clearAlt();
+			addstrAlt(invalidTag);
+			addstrAlt(founderQuestions[i]);
+			pressAnyKey();
+			clearAlt();
+		}
+		else {
+			currentChoice.impact.push_back(currentImpact);
+		}
+		
 	}
 	// The last choice and question added after the loop ends
 	currentChoice.ANSWER = answer;
