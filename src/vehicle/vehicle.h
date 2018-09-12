@@ -44,8 +44,8 @@ public:
 	int modifieddriveskill(int skillLevel);
 	int modifieddodgeskill(int skillLevel);
 	int attackbonus(bool isDriver) const;// { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
-	int gethitlocation(int bodypart);// { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
-	string getpartname(int hitlocation);// { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
+	int gethitlocation(int bodypart) const;// { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
+	string getpartname(int hitlocation) const;// { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
 	int armorbonus(int hitlocation) const;// { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
 	const string& longname() const;// { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
 	const string& shortname() const;// { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }

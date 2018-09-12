@@ -36,7 +36,7 @@ protected:
 		else
 			return letter_ - 32;
 	}
-	virtual void choose(squadst& customers, int& buyer) const = 0;
+	virtual void choose(Deprecatedsquadst& customers, int& buyer) const = 0;
 };
 class Shop : public ShopOption
 {
@@ -44,19 +44,15 @@ public:
 	Shop(MCD_STR xmlstring);
 	~Shop();
 	//This function is used to start the shop interface.
-	void enter(squadst& customers) const;
+	void enter(Deprecatedsquadst& customers) const;
 protected:
-	virtual void choose(squadst& customers, int& buyer) const;
+	virtual void choose(Deprecatedsquadst& customers, int& buyer) const;
 	virtual bool is_available() const;
 private:
 	Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal, bool increase_prices_with_illegality);
 	void init(const MCD_STR &xmlstring);
-	void browse_fullscreen(squadst& customers, int& buyer) const;
-	void browse_halfscreen(squadst& customers, int& buyer) const;
-	//void sell_loot(squadst& customers) const;
-	//int fenceselect(squadst& customers) const;
-	//void choose_buyer(squadst& customers, int& buyer) const;
-	//void maskselect(Creature &buyer) const;
+	void browse_fullscreen(Deprecatedsquadst& customers, int& buyer) const;
+	void browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const;
 	bool allow_selling_;
 	bool only_sell_legal_;
 	bool increase_prices_with_illegality_;
@@ -71,7 +67,7 @@ private:
 			bool increase_price_with_illegality);
 		virtual bool display() const;
 	protected:
-		virtual void choose(squadst& customers, int& buyer) const;
+		virtual void choose(Deprecatedsquadst& customers, int& buyer) const;
 		virtual bool is_available() const;
 		virtual const std::string get_description_halfscreen() const;
 		virtual const std::string get_description_fullscreen() const;

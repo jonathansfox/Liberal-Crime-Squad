@@ -200,7 +200,7 @@ void title_screen::selectAndLoadSaveFile() {
 		bool to_delete = false;
 		int page = 0;
 		// IsaacG This almost has to be redone
-		while (true)
+		while (!len(savefile_name))
 		{
 			eraseAlt();
 			set_color_easy(to_delete ? YELLOW_ON_RED : WHITE_ON_BLACK_BRIGHT);
@@ -210,14 +210,12 @@ void title_screen::selectAndLoadSaveFile() {
 			int y = 2;
 			for (int p = page * 19; p < s_savefiles.size() && p < page * 19 + 19; p++, y++)
 			{
-				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 				mvaddchAlt(y, 0, y + 'A' - 2);
 				addstrAlt(spaceDashSpace);
 				const string &strtemp = s_savefiles[y - 2];
 				addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
 			}
 			mvaddstrAlt(y, 0, (char(y + 'A' - 2)) + spaceDashSpace + newGame);
-			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
 			mvaddstrAlt(23, 0, addpagestr());
 			int c = getkeyAlt();
@@ -228,29 +226,24 @@ void title_screen::selectAndLoadSaveFile() {
 			if (c >= 'a'&&c <= 's')
 			{
 				const int p = page * 19 + c - 'a';
-				if (!to_delete)
-				{
-					if (p <= s_savefiles.size()) {
-						if (p < s_savefiles.size()) {
-							savefile_name = s_savefiles[p];
+				if (p < s_savefiles.size()) {
+					if (!to_delete) {
+						savefile_name = s_savefiles[p];
+					}
+					else {
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrCenter(10, areYouSureDelte + s_savefiles[p] + questionYSlashN);
+						c = getkeyAlt();
+						if (c == 'y')
+						{
+							LCSDeleteFile(s_savefiles[p].c_str(), LCSIO_PRE_HOME);
+							s_savefiles = move(LCSSaveFiles());
 						}
-						else {
-							choose_savefile_name();
-						}
-						break;
+						continue;
 					}
 				}
-				else if (p < s_savefiles.size())
-				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrCenter(10, areYouSureDelte + s_savefiles[p] + questionYSlashN);
-					c = getkeyAlt();
-					if (c == 'y')
-					{
-						LCSDeleteFile(s_savefiles[p].c_str(), LCSIO_PRE_HOME);
-						s_savefiles = move(LCSSaveFiles());
-					}
-					continue;
+				else if (p == s_savefiles.size()) {
+					choose_savefile_name();
 				}
 			}
 			else if (c == 'v') to_delete = !to_delete;

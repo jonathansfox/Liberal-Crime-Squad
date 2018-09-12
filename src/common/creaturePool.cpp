@@ -10,9 +10,9 @@ const string tag_skill = "skill";
 #include "../locations/locations.h"
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolCreature.h"
-vector<Creature *> pool;
+vector<DeprecatedCreature *> pool;
 CreaturePool singletonPool;
-void addCreature(Creature* cr)
+void addCreature(DeprecatedCreature* cr)
 {
 	pool.push_back(cr);
 }
@@ -91,6 +91,8 @@ void CreaturePool::outSleepers(int cursite, int base)
 	}
 }
 #include "../sitemode/advance.h"
+/* handles end of round stuff for one creature */
+void advancecreature(DeprecatedCreature &cr);
 void CreaturePool::advanceCreaturesAtLocation(int cursite)
 {
 	for (int p = 0; p < lenpool(); p++)
@@ -128,7 +130,7 @@ const int CreaturePool::liberal_guardian_writing_power()
 		if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_WRITE_GUARDIAN)
 		{
 			if (pool[i]->location != -1 &&
-				LocationsPool::getInstance().getCompoundWalls(pool[i]->location) & COMPOUND_PRINTINGPRESS)
+				LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,pool[i]->location) & COMPOUND_PRINTINGPRESS)
 			{
 				pool[i]->train(SKILL_WRITING, LCSrandom(3)); // Experience gain
 				power += pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
@@ -212,10 +214,10 @@ void CreaturePool::moveAllSquadMembers(int l)
 		if (pool[p]->base == l) pool[p]->base = hs;
 	}
 }
-const int CreaturePool::lenpool() {
+const int CreaturePool::lenpool() const {
 	return len(pool);
 }
-void whoAreWaitingForRescue(vector<Creature *>& waiting_for_rescue, int cursite, short special) {
+void whoAreWaitingForRescue(vector<DeprecatedCreature *>& waiting_for_rescue, int cursite, short special) {
 	for (int pl = 0; pl < len(pool); pl++)
 	{
 		if (pool[pl]->location == cursite &&
@@ -226,10 +228,10 @@ void whoAreWaitingForRescue(vector<Creature *>& waiting_for_rescue, int cursite,
 			waiting_for_rescue.push_back(pool[pl]);
 	}
 }
-Creature* findSleeperCarSalesman(int loc) {
+DeprecatedCreature* findSleeperCarSalesman(int loc) {
 	for (int p = 0; p < len(pool); p++)
 		if (pool[p]->alive && (pool[p]->flag & CREATUREFLAG_SLEEPER) &&
-			pool[p]->type == CREATURE_CARSALESMAN && LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(loc))
+			pool[p]->type == CREATURE_CARSALESMAN && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,loc))
 			return pool[p];
 	return NULL;
 }
@@ -247,9 +249,12 @@ static void getissueeventstring(char* str)
 {
 	strcat(str, issueEventString[LCSrandom(VIEWNUM - 3)].data());
 }
-/* daily - recruit - recruit meeting */
-char completerecruitmeeting(recruitst &r, int p)
-{
+enum LOOP_CONTINUATION {
+	RETURN_ZERO,
+	RETURN_ONE,
+	REPEAT
+};
+LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecruitst &r, int &y) {
 	const string CONST_creaturePool046 = "This whole thing was a mistake. There won't be another meeting.";
 	const string CONST_creaturePool045 = " comes off as slightly insane.";
 	const string CONST_creaturePool044 = " needs more experience.";
@@ -268,6 +273,166 @@ char completerecruitmeeting(recruitst &r, int p)
 	const string CONST_creaturePool031 = " accepts, and is eager to get started.";
 	const string CONST_creaturePool030 = " join the Liberal Crime Squad.";
 	const string CONST_creaturePool029 = " offers to let ";
+
+	extern Log gamelog;
+	extern int stat_recruits;
+	extern class Ledger ledger;
+
+	int c = getkeyAlt();
+	if (c == 'c' && subordinatesleft(*pool[p]) && r.eagerness() >= 4)
+	{
+		mvaddstrAlt(y, 0, pool[p]->name, gamelog);
+		addstrAlt(CONST_creaturePool029, gamelog);
+		addstrAlt(r.recruit->name, gamelog);
+		addstrAlt(CONST_creaturePool030, gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		moveAlt(y += 2, 0);
+		addstrAlt(r.recruit->name, gamelog);
+		addstrAlt(CONST_creaturePool031, gamelog);
+		gamelog.nextMessage();
+		liberalize(*r.recruit, false);
+		pressAnyKey();
+		eraseAlt();
+		sleeperize_prompt(*r.recruit, *pool[p], 6);
+		r.recruit->hireid = pool[p]->id;
+		pool[p]->train(SKILL_PERSUASION, 25);
+		addCreature(r.recruit);
+		r.recruit = NULL;
+		stat_recruits++;
+		return RETURN_ONE;
+	}
+	if (c == 'b' || (c == 'a' && ledger.get_funds() >= 50))
+	{
+		if (c == 'a')
+			ledger.subtract_funds(50, EXPENSE_RECRUITMENT);
+		pool[p]->train(SKILL_PERSUASION,
+			max(12 - pool[p]->get_skill(SKILL_PERSUASION), 5));
+		pool[p]->train(SKILL_SCIENCE,
+			max(r.recruit->get_skill(SKILL_SCIENCE) - pool[p]->get_skill(SKILL_SCIENCE), 0));
+		pool[p]->train(SKILL_RELIGION,
+			max(r.recruit->get_skill(SKILL_RELIGION) - pool[p]->get_skill(SKILL_RELIGION), 0));
+		pool[p]->train(SKILL_LAW,
+			max(r.recruit->get_skill(SKILL_LAW) - pool[p]->get_skill(SKILL_LAW), 0));
+		pool[p]->train(SKILL_BUSINESS,
+			max(r.recruit->get_skill(SKILL_BUSINESS) - pool[p]->get_skill(SKILL_BUSINESS), 0));
+		int lib_persuasiveness = pool[p]->get_skill(SKILL_BUSINESS) +
+			pool[p]->get_skill(SKILL_SCIENCE) +
+			pool[p]->get_skill(SKILL_RELIGION) +
+			pool[p]->get_skill(SKILL_LAW) +
+			pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
+		int recruit_reluctance = 5 +
+			r.recruit->get_skill(SKILL_BUSINESS) +
+			r.recruit->get_skill(SKILL_SCIENCE) +
+			r.recruit->get_skill(SKILL_RELIGION) +
+			r.recruit->get_skill(SKILL_LAW) +
+			r.recruit->get_attribute(ATTRIBUTE_WISDOM, true) +
+			r.recruit->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
+		if (lib_persuasiveness > recruit_reluctance) recruit_reluctance = 0;
+		else recruit_reluctance -= lib_persuasiveness;
+		int difficulty = recruit_reluctance;
+		char str[75];
+		strcpy(str, blankString.c_str());
+		if (c == 'a')
+		{
+			difficulty -= 5;
+			mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
+			addstrAlt(CONST_creaturePool032, gamelog);
+			getissueeventstring(str);
+			addstrAlt(str, gamelog);
+			addstrAlt(singleDot, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+		}
+		else
+		{
+			mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
+			addstrAlt(CONST_creaturePool033, gamelog);
+			addstrAlt(pool[p]->hisher(), gamelog);
+			addstrAlt(CONST_creaturePool034, gamelog);
+			addstrAlt(getview(LCSrandom(VIEWNUM - 3), true), gamelog);
+			addstrAlt(singleDot, gamelog);
+			gamelog.newline();
+			pressAnyKey();
+		}
+		// Liberals with juice increase difficulty as if their Wisdom were increased by said juice
+		if (r.recruit->juice >= 10)
+		{
+			if (r.recruit->juice < 50) //Activist
+				difficulty += 1;
+			else if (r.recruit->juice < 100) //Socialist Threat
+				difficulty += static_cast<int>(2 + 0.1*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
+			else if (r.recruit->juice < 200) //Revolutionary
+				difficulty += static_cast<int>(3 + 0.2*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
+			else if (r.recruit->juice < 500) //Urban Commando
+				difficulty += static_cast<int>(4 + 0.3*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
+			else if (r.recruit->juice < 1000) //Liberal Guardian
+				difficulty += static_cast<int>(5 + 0.4*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
+			else //Elite Liberal
+				difficulty += static_cast<int>(6 + 0.5*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
+		}
+		if (difficulty > 18) difficulty = 18; // difficulty above 18 is impossible, we don't want that
+		if (pool[p]->skill_check(SKILL_PERSUASION, difficulty))
+		{
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			//if (r.level < 127) r.level++;
+			if (r.eagerness1 < 127) r.eagerness1++;
+			mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
+			addstrAlt(CONST_creaturePool035, gamelog);
+			addstrAlt(pool[p]->name, gamelog);
+			addstrAlt(CONST_creaturePool036, gamelog);
+			gamelog.newline();
+			mvaddstrAlt(y++, 0, CONST_creaturePool037, gamelog);
+			gamelog.nextMessage();
+		}
+		else if (pool[p]->skill_check(SKILL_PERSUASION, difficulty)) // Second chance to not fail horribly
+		{
+			//if (r.level < 127) r.level++;
+			if (r.eagerness1 > -128) r.eagerness1--;
+			mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
+			addstrAlt(CONST_creaturePool038, gamelog);
+			addstrAlt(pool[p]->name, gamelog);
+			addstrAlt(CONST_creaturePool039, gamelog);
+			gamelog.newline();
+			mvaddstrAlt(y++, 0, CONST_creaturePool040, gamelog);
+			gamelog.nextMessage();
+		}
+		else
+		{
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			moveAlt(y++, 0);
+			if (r.recruit->talkreceptive() && r.recruit->align == ALIGN_LIBERAL)
+			{
+				addstrAlt(r.recruit->name, gamelog);
+				addstrAlt(CONST_creaturePool041, gamelog);
+				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(CONST_creaturePool042, gamelog);
+				gamelog.newline();
+				mvaddstrAlt(y++, 0, CONST_creaturePool043, gamelog);
+				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(CONST_creaturePool044, gamelog);
+				gamelog.nextMessage();
+			}
+			else
+			{
+				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(CONST_creaturePool045, gamelog);
+				gamelog.newline();
+				mvaddstrAlt(y++, 0, CONST_creaturePool046, gamelog);
+				gamelog.nextMessage();
+			}
+			pressAnyKey();
+			return RETURN_ONE;
+		}
+		pressAnyKey();
+		return RETURN_ZERO;
+	}
+	if (c == 'd') return RETURN_ONE;
+	return REPEAT;
+}
+void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
+
 	const string CONST_creaturePool028 = "D - Break off the meetings.";
 	const string CONST_creaturePool027 = " isn't ready to join the LCS.";
 	const string CONST_creaturePool026 = "C - ";
@@ -284,32 +449,9 @@ char completerecruitmeeting(recruitst &r, int p)
 	const string CONST_creaturePool014 = " is interested in learning more.";
 	const string CONST_creaturePool013 = " will take a lot of persuading.";
 	const string CONST_creaturePool012 = "Meeting with ";
-	const string CONST_creaturePool011 = "!";
-	const string CONST_creaturePool010 = "Get it together, ";
-	const string CONST_creaturePool009 = "due to multiple booking of recruitment sessions.";
-	const string CONST_creaturePool008 = " accidentally missed the meeting with ";
 	extern Log gamelog;
-	extern MusicClass music;
-	extern int stat_recruits;
 	extern class Ledger ledger;
-	music.play(MUSIC_RECRUITING);
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	moveAlt(0, 0);
-	if (pool[p]->meetings++ > 5 && LCSrandom(pool[p]->meetings - 5))
-	{
-		addstrAlt(pool[p]->name, gamelog);
-		addstrAlt(CONST_creaturePool008, gamelog);
-		addstrAlt(r.recruit->name, gamelog);
-		mvaddstrAlt(1, 0, CONST_creaturePool009, gamelog);
-		gamelog.newline();
-		mvaddstrAlt(3, 0, CONST_creaturePool010, gamelog);
-		addstrAlt(pool[p]->name, gamelog);
-		addstrAlt(CONST_creaturePool011, gamelog);
-		gamelog.nextMessage();
-		pressAnyKey();
-		return 1;
-	}
+
 	addstrAlt(CONST_creaturePool012, gamelog);
 	addstrAlt(r.recruit->name, gamelog);
 	addstrAlt(commaSpace, gamelog);
@@ -362,163 +504,51 @@ char completerecruitmeeting(recruitst &r, int p)
 		set_color_easy(WHITE_ON_BLACK);
 	}
 	mvaddstrAlt(16, 0, CONST_creaturePool028);
+}
+/* daily - recruit - recruit meeting */
+char completerecruitmeeting(Deprecatedrecruitst &r, const int p)
+{
+	const string CONST_creaturePool011 = "!";
+	const string CONST_creaturePool010 = "Get it together, ";
+	const string CONST_creaturePool009 = "due to multiple booking of recruitment sessions.";
+	const string CONST_creaturePool008 = " accidentally missed the meeting with ";
+
+	extern MusicClass music;
+	extern Log gamelog;
+	music.play(MUSIC_RECRUITING);
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	moveAlt(0, 0);
+	if (pool[p]->meetings++ > 5 && LCSrandom(pool[p]->meetings - 5))
+	{
+		addstrAlt(pool[p]->name, gamelog);
+		addstrAlt(CONST_creaturePool008, gamelog);
+		addstrAlt(r.recruit->name, gamelog);
+		mvaddstrAlt(1, 0, CONST_creaturePool009, gamelog);
+		gamelog.newline();
+		mvaddstrAlt(3, 0, CONST_creaturePool010, gamelog);
+		addstrAlt(pool[p]->name, gamelog);
+		addstrAlt(CONST_creaturePool011, gamelog);
+		gamelog.nextMessage();
+		pressAnyKey();
+		return 1;
+	}
+	printrecruitmeeting(r, p);
 	int y = 18;
 	while (true)
 	{
-		int c = getkeyAlt();
-		if (c == 'c' && subordinatesleft(*pool[p]) && r.eagerness() >= 4)
-		{
-			mvaddstrAlt(y, 0, pool[p]->name, gamelog);
-			addstrAlt(CONST_creaturePool029, gamelog);
-			addstrAlt(r.recruit->name, gamelog);
-			addstrAlt(CONST_creaturePool030, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			moveAlt(y += 2, 0);
-			addstrAlt(r.recruit->name, gamelog);
-			addstrAlt(CONST_creaturePool031, gamelog);
-			gamelog.nextMessage();
-			liberalize(*r.recruit, false);
-			pressAnyKey();
-			eraseAlt();
-			sleeperize_prompt(*r.recruit, *pool[p], 6);
-			r.recruit->hireid = pool[p]->id;
-			pool[p]->train(SKILL_PERSUASION, 25);
-			addCreature(r.recruit);
-			r.recruit = NULL;
-			stat_recruits++;
-			return 1;
-		}
-		if (c == 'b' || (c == 'a' && ledger.get_funds() >= 50))
-		{
-			if (c == 'a')
-				ledger.subtract_funds(50, EXPENSE_RECRUITMENT);
-			pool[p]->train(SKILL_PERSUASION,
-				max(12 - pool[p]->get_skill(SKILL_PERSUASION), 5));
-			pool[p]->train(SKILL_SCIENCE,
-				max(r.recruit->get_skill(SKILL_SCIENCE) - pool[p]->get_skill(SKILL_SCIENCE), 0));
-			pool[p]->train(SKILL_RELIGION,
-				max(r.recruit->get_skill(SKILL_RELIGION) - pool[p]->get_skill(SKILL_RELIGION), 0));
-			pool[p]->train(SKILL_LAW,
-				max(r.recruit->get_skill(SKILL_LAW) - pool[p]->get_skill(SKILL_LAW), 0));
-			pool[p]->train(SKILL_BUSINESS,
-				max(r.recruit->get_skill(SKILL_BUSINESS) - pool[p]->get_skill(SKILL_BUSINESS), 0));
-			int lib_persuasiveness = pool[p]->get_skill(SKILL_BUSINESS) +
-				pool[p]->get_skill(SKILL_SCIENCE) +
-				pool[p]->get_skill(SKILL_RELIGION) +
-				pool[p]->get_skill(SKILL_LAW) +
-				pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
-			int recruit_reluctance = 5 +
-				r.recruit->get_skill(SKILL_BUSINESS) +
-				r.recruit->get_skill(SKILL_SCIENCE) +
-				r.recruit->get_skill(SKILL_RELIGION) +
-				r.recruit->get_skill(SKILL_LAW) +
-				r.recruit->get_attribute(ATTRIBUTE_WISDOM, true) +
-				r.recruit->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
-			if (lib_persuasiveness > recruit_reluctance) recruit_reluctance = 0;
-			else recruit_reluctance -= lib_persuasiveness;
-			int difficulty = recruit_reluctance;
-			char str[75];
-			strcpy(str, blankString.c_str());
-			if (c == 'a')
-			{
-				difficulty -= 5;
-				mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
-				addstrAlt(CONST_creaturePool032, gamelog);
-				getissueeventstring(str);
-				addstrAlt(str, gamelog);
-				addstrAlt(singleDot, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-			}
-			else
-			{
-				mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
-				addstrAlt(CONST_creaturePool033, gamelog);
-				addstrAlt(pool[p]->hisher(), gamelog);
-				addstrAlt(CONST_creaturePool034, gamelog);
-				addstrAlt(getview(LCSrandom(VIEWNUM - 3), true), gamelog);
-				addstrAlt(singleDot, gamelog);
-				gamelog.newline();
-				pressAnyKey();
-			}
-			// Liberals with juice increase difficulty as if their Wisdom were increased by said juice
-			if (r.recruit->juice >= 10)
-			{
-				if (r.recruit->juice < 50) //Activist
-					difficulty += 1;
-				else if (r.recruit->juice < 100) //Socialist Threat
-					difficulty += static_cast<int>(2 + 0.1*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
-				else if (r.recruit->juice < 200) //Revolutionary
-					difficulty += static_cast<int>(3 + 0.2*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
-				else if (r.recruit->juice < 500) //Urban Commando
-					difficulty += static_cast<int>(4 + 0.3*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
-				else if (r.recruit->juice < 1000) //Liberal Guardian
-					difficulty += static_cast<int>(5 + 0.4*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
-				else //Elite Liberal
-					difficulty += static_cast<int>(6 + 0.5*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false));
-			}
-			if (difficulty > 18) difficulty = 18; // difficulty above 18 is impossible, we don't want that
-			if (pool[p]->skill_check(SKILL_PERSUASION, difficulty))
-			{
-				set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				if (r.level < 127) r.level++;
-				if (r.eagerness1 < 127) r.eagerness1++;
-				mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
-				addstrAlt(CONST_creaturePool035, gamelog);
-				addstrAlt(pool[p]->name, gamelog);
-				addstrAlt(CONST_creaturePool036, gamelog);
-				gamelog.newline();
-				mvaddstrAlt(y++, 0, CONST_creaturePool037, gamelog);
-				gamelog.nextMessage();
-			}
-			else if (pool[p]->skill_check(SKILL_PERSUASION, difficulty)) // Second chance to not fail horribly
-			{
-				if (r.level < 127) r.level++;
-				if (r.eagerness1 > -128) r.eagerness1--;
-				mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
-				addstrAlt(CONST_creaturePool038, gamelog);
-				addstrAlt(pool[p]->name, gamelog);
-				addstrAlt(CONST_creaturePool039, gamelog);
-				gamelog.newline();
-				mvaddstrAlt(y++, 0, CONST_creaturePool040, gamelog);
-				gamelog.nextMessage();
-			}
-			else
-			{
-				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				moveAlt(y++, 0);
-				if (r.recruit->talkreceptive() && r.recruit->align == ALIGN_LIBERAL)
-				{
-					addstrAlt(r.recruit->name, gamelog);
-					addstrAlt(CONST_creaturePool041, gamelog);
-					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(CONST_creaturePool042, gamelog);
-					gamelog.newline();
-					mvaddstrAlt(y++, 0, CONST_creaturePool043, gamelog);
-					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(CONST_creaturePool044, gamelog);
-					gamelog.nextMessage();
-				}
-				else
-				{
-					addstrAlt(pool[p]->name, gamelog);
-					addstrAlt(CONST_creaturePool045, gamelog);
-					gamelog.newline();
-					mvaddstrAlt(y++, 0, CONST_creaturePool046, gamelog);
-					gamelog.nextMessage();
-				}
-				pressAnyKey();
+		LOOP_CONTINUATION next_loop = increment_completerecruitmeeting(p, r, y);
+		if (next_loop != REPEAT) {
+			if (next_loop == RETURN_ONE) {
 				return 1;
 			}
-			pressAnyKey();
-			return 0;
+			else if (next_loop == RETURN_ZERO) {
+				return 0;
+			}
 		}
-		if (c == 'd') return 1;
 	}
 }
-void findAllTendersToThisHostage(Creature* cr, vector<Creature *>& temppool) {
+void findAllTendersToThisHostage(DeprecatedCreature* cr, vector<DeprecatedCreature *>& temppool) {
 	//Find all tenders who are set to this hostage
 	for (int p = 0; p < len(pool); p++)
 	{
@@ -534,7 +564,7 @@ void findAllTendersToThisHostage(Creature* cr, vector<Creature *>& temppool) {
 		}
 	}
 }
-void hostageEscapes(Creature* cr, char clearformess) {
+void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
 	const string CONST_creaturePool047 = " has escaped!";
 	extern Log gamelog;
 	for (int p = 0; p < len(pool); p++)
@@ -561,12 +591,12 @@ void hostageEscapes(Creature* cr, char clearformess) {
 		}
 	}
 }
-void setAllCreatureActivities(Activity cr, vector<Creature *>& temppool) {
+void setAllCreatureActivities(Activity cr, vector<DeprecatedCreature *>& temppool) {
 	for (int p = 0; p < len(temppool); p++) {
 		temppool[p]->activity.type = cr;
 	}
 }
-Creature::~Creature()
+DeprecatedCreature::~DeprecatedCreature()
 {
 	delete weapon;
 	delete armor;
@@ -580,11 +610,11 @@ Creature::~Creature()
 	// Clean up hostage situation
 	stop_hauling_me();
 }
-void Creature::stop_hauling_me()
+void DeprecatedCreature::stop_hauling_me()
 {
 	for (int p = 0; p < len(pool); p++) if (pool[p]->prisoner == this) pool[p]->prisoner = NULL;
 }
-bool Creature::enemy() const
+bool DeprecatedCreature::enemy() const
 {
 	if (align == ALIGN_CONSERVATIVE)
 		return true;
@@ -599,7 +629,7 @@ bool Creature::enemy() const
 }
 #include "../common/translateid.h"
 // for  int getpoolcreature(int)
-void selectOnlySleepersThatCanWork(vector<Creature *>& temppool) {
+void selectOnlySleepersThatCanWork(vector<DeprecatedCreature *>& temppool) {
 	// Comb the pool of Liberals for sleeper agents
 	for (int p = 0; p < len(pool); p++)
 	{
@@ -795,7 +825,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 				if (transfer&&pool[p]->location > -1 &&
 					pool[p]->alive == 1 &&
 					pool[p]->align == 1 &&
-					LocationsPool::getInstance().getRentingType(pool[p]->location) != RENTING_NOCONTROL &&
+					LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->location) != RENTING_NOCONTROL &&
 					LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_HOSPITAL_UNIVERSITY)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -826,7 +856,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 	delete[] healing2;
 }
 /* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(Creature &cr, char &clearformess)
+bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 {
 	const string CONST_creaturePool057 = " is the new leader of the Liberal Crime Squad!";
 	const string CONST_creaturePool056 = " has died.";
@@ -1021,7 +1051,7 @@ void dispersalcheck(char &clearformess)
 					dispersal_status[p] = DISPERSAL_SAFE;
 					//Attempt to promote their subordinates
 					if (promotesubordinates(*pool[p], clearformess)) promotion = 1;
-					if (pool[p]->location == -1 || LocationsPool::getInstance().getRentingType(pool[p]->location) == RENTING_NOCONTROL)
+					if (pool[p]->location == -1 || LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->location) == RENTING_NOCONTROL)
 						delete_and_remove(pool, p--);
 				}
 			}
@@ -1167,10 +1197,10 @@ void dispersalcheck(char &clearformess)
 	endcheck(END_DISPERSED);
 	cleangonesquads();
 }
-extern vector<squadst *> squad;
-vector<Creature *> activatable_liberals()
+extern vector<Deprecatedsquadst *> squad;
+vector<DeprecatedCreature *> activatable_liberals()
 {
-	vector<Creature *> temppool;
+	vector<DeprecatedCreature *> temppool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->is_active_liberal())
@@ -1185,8 +1215,8 @@ vector<Creature *> activatable_liberals()
 	}
 	return temppool;
 }
-vector<Creature *> getLiberalsSharingLocation(Creature * cr) {
-	vector<Creature *> temppool;
+vector<DeprecatedCreature *> getLiberalsSharingLocation(DeprecatedCreature * cr) {
+	vector<DeprecatedCreature *> temppool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) {
 		if (pool[p] == cr) continue;
 		if (pool[p]->is_active_liberal() && (pool[p]->location == cr->location))
@@ -1196,8 +1226,8 @@ vector<Creature *> getLiberalsSharingLocation(Creature * cr) {
 	}
 	return temppool;
 }
-vector<Creature *> getHostagesSharingLocation(Creature *cr) {
-	vector<Creature *> temppool;
+vector<DeprecatedCreature *> getHostagesSharingLocation(DeprecatedCreature *cr) {
+	vector<DeprecatedCreature *> temppool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->align != 1 &&
@@ -1209,7 +1239,7 @@ vector<Creature *> getHostagesSharingLocation(Creature *cr) {
 	}
 	return temppool;
 }
-int countHostagesSharingLocation(Creature *cr) {
+int countHostagesSharingLocation(DeprecatedCreature *cr) {
 	int hostagecount = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -1217,7 +1247,7 @@ int countHostagesSharingLocation(Creature *cr) {
 	}
 	return hostagecount;
 }
-int countDeadSharingLocation(Creature *cr) {
+int countDeadSharingLocation(DeprecatedCreature *cr) {
 	int havedead = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -1294,8 +1324,8 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 	return output;
 }
 //#include "../monthly/justice.h"
-void trial(Creature &g);
-char prison(Creature &g);
+void trial(DeprecatedCreature &g);
+char prison(DeprecatedCreature &g);
 void monthlyRunTheSystem(char &clearformess) {
 	const string CONST_creaturePool069 = " is moved to the courthouse for trial.";
 	const string CONST_creaturePool068 = "The traitor will testify in court, and safehouses may be compromised.";
@@ -1493,7 +1523,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 				int hs = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 				if (hs == -1) hs = 0; //TODO: Error unable to find location
 				if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base) ||
-					LocationsPool::getInstance().getRentingType(pool[p]->base) == RENTING_NOCONTROL)
+					LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->base) == RENTING_NOCONTROL)
 					pool[p]->base = hs;
 				pool[p]->location = pool[p]->base;
 				pressAnyKey();
@@ -1502,7 +1532,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 	}
 }
 //#include "../monthly/sleeper_update.h"
-void sleepereffect(Creature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
+void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
 void havingSleepers(char &clearformess, char canseethings, int(&libpower)[VIEWNUM]) {
 	for (int pl = CreaturePool::getInstance().lenpool() - 1; pl > 0; pl--) {
 		if (pool[pl]->alive && (pool[pl]->flag & CREATUREFLAG_SLEEPER)) {
@@ -1518,7 +1548,7 @@ void giveSeductionExperienceToLoveSlaves() {
 			pool[s]->train(SKILL_SEDUCTION, 5);
 	}
 }
-void dejuiceBoss(Creature &g) {
+void dejuiceBoss(DeprecatedCreature &g) {
 	int boss = getpoolcreature(g.hireid);
 	if (boss != -1 && pool[boss]->juice > 50)
 	{
@@ -1527,21 +1557,21 @@ void dejuiceBoss(Creature &g) {
 		addjuice(*pool[boss], -juice, 0);
 	}
 }
-Creature * getSleeperJudge(Creature g) {
-	Creature * sleeperjudge = NULL;
+DeprecatedCreature * getSleeperJudge(DeprecatedCreature g) {
+	DeprecatedCreature * sleeperjudge = NULL;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(g.location))
+		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
 		{
 			if (pool[p]->type == CREATURE_JUDGE_CONSERVATIVE || pool[p]->type == CREATURE_JUDGE_LIBERAL)
 				if (pool[p]->infiltration * 100 >= LCSrandom(100)) sleeperjudge = pool[p];
 		}
 	return sleeperjudge;
 }
-Creature * getSleeperLawyer(Creature g) {
+DeprecatedCreature * getSleeperLawyer(DeprecatedCreature g) {
 	int maxsleeperskill = 0;
-	Creature * sleeperlawyer = NULL;
+	DeprecatedCreature * sleeperlawyer = NULL;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().getLocationCity(pool[p]->location) == LocationsPool::getInstance().getLocationCity(g.location))
+		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
 		{
 			if (pool[p]->type == CREATURE_LAWYER)
 				if (pool[p]->get_skill(SKILL_LAW) + pool[p]->get_skill(SKILL_PERSUASION) >= maxsleeperskill)
@@ -1552,7 +1582,7 @@ Creature * getSleeperLawyer(Creature g) {
 		}
 	return sleeperlawyer;
 }
-int otherPrisonersEscapeWithMe(Creature g, int prison) {
+int otherPrisonersEscapeWithMe(DeprecatedCreature g, int prison) {
 	int num_escaped = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -1629,7 +1659,7 @@ void criminalizepool(short crime, long exclude, short loc)
 	}
 }
 /* common - gives juice to a given creature */
-void addjuice(Creature &cr, long juice, long cap)
+void addjuice(DeprecatedCreature &cr, long juice, long cap)
 {
 	// Ignore zero changes
 	if (juice == 0) return;
@@ -1653,7 +1683,7 @@ void addjuice(Creature &cr, long juice, long cap)
 }
 // Determines the number of subordinates a creature may recruit,
 // based on their max and the number they already command
-int subordinatesleft(const Creature& cr)
+int subordinatesleft(const DeprecatedCreature& cr)
 {
 	int recruitcap = maxsubordinates(cr);
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
@@ -1664,7 +1694,7 @@ int subordinatesleft(const Creature& cr)
 	else return 0;
 }
 // Determines the number of love slaves a creature has
-int loveslaves(const Creature& cr)
+int loveslaves(const DeprecatedCreature& cr)
 {
 	int loveslaves = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
@@ -1675,7 +1705,7 @@ int loveslaves(const Creature& cr)
 }
 /* The following boolean functions will return true if first is supposed to be
 before second in the list. */
-bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
+bool sort_none(const DeprecatedCreature* first, const DeprecatedCreature* second) //This will sort sorted back to unsorted.
 {
 	for (int j = 0; j < CreaturePool::getInstance().lenpool(); j++)
 		if (pool[j] == first) return true;

@@ -259,7 +259,7 @@ public:
 	CMarkup( MCD_CSTR szDoc ) { x_InitMarkup(); SetDoc( szDoc ); };
 	CMarkup( int nFlags ) { x_InitMarkup(); SetDoc( NULL ); m_nDocFlags = nFlags; };
 	CMarkup( const CMarkup& markup ) { x_InitMarkup(); *this = markup; };
-	void operator=( const CMarkup& markup );
+	void operator=( const CMarkup markup );
 	~CMarkup();
 	// Navigate
 	bool Load( MCD_CSTR_FILENAME szFileName );

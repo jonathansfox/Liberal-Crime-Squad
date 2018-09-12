@@ -127,7 +127,7 @@ string vehicleType;
 string doesNotExistVehicle;
 string couldNotLoad;
 Item* create_item(const std::string& inputXml);
-extern vector<Creature *> pool;
+extern vector<DeprecatedCreature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
 extern vector<Location *> location;
@@ -188,11 +188,11 @@ extern short court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern UniqueCreatures uniqueCreatures;
-extern vector<squadst *> squad;
-extern vector<datest *> date;
-extern vector<recruitst *> recruit;
-extern vector<newsstoryst *> newsstory;
-extern squadst *activesquad;
+extern vector<Deprecatedsquadst *> squad;
+extern vector<Deprecateddatest *> date;
+extern vector<Deprecatedrecruitst *> recruit;
+extern vector<Deprecatednewsstoryst *> newsstory;
+extern Deprecatedsquadst *activesquad;
 extern char homedir[MAX_PATH_SIZE];
 // TODO: It would be really cool to be able to CONST_saveload004 characters.
 /* handles saving */
@@ -776,13 +776,14 @@ void savegame(const string& filename)
 			fwrite(&dummy, sizeof(int), 1, h);
 			for (int l2 = 0; l2 < len(location[l]->changes); l2++)
 				fwrite(&location[l]->changes[l2], sizeof(sitechangest), 1, h);
+			int unused = 0;
 			fwrite(location[l]->name, sizeof(char), LOCATION_NAMELEN, h);
 			fwrite(location[l]->shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
 			fwrite(&location[l]->type, sizeof(char), 1, h);
 			fwrite(&location[l]->city, sizeof(int), 1, h);
 			fwrite(&location[l]->area, sizeof(int), 1, h);
 			fwrite(&location[l]->parent, sizeof(int), 1, h);
-			fwrite(&location[l]->id, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
+			fwrite(&unused, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
 			fwrite(&location[l]->renting, sizeof(int), 1, h);
 			fwrite(&location[l]->newrental, sizeof(char), 1, h);
 			fwrite(&location[l]->needcar, sizeof(char), 1, h);
@@ -831,6 +832,7 @@ void savegame(const string& filename)
 				//deep write rapport map
 				int size = len(intr->rapport);
 				fwrite(&size, sizeof(int), 1, h);
+				// Pointer Arithmetic
 				for (map<long, Float_Zero>::iterator i = intr->rapport.begin(); i != intr->rapport.end(); i++)
 				{
 					fwrite(&i->first, sizeof(long), 1, h);
@@ -898,11 +900,14 @@ void savegame(const string& filename)
 		fwrite(&dummy, sizeof(int), 1, h);
 		for (int rt = 0; rt < len(recruit); rt++)
 		{
+			short unused = 0;
+			char unused_c = 0;
+			char Unused_var_task = 0;
 			fwrite(&recruit[rt]->recruiter_id, sizeof(long), 1, h);
-			fwrite(&recruit[rt]->timeleft, sizeof(short), 1, h);
-			fwrite(&recruit[rt]->level, sizeof(char), 1, h);
+			fwrite(&unused, sizeof(short), 1, h); // Unused, kept for backwards compatibility
+			fwrite(&unused_c, sizeof(char), 1, h); // Unused, kept for backwards compatibility
 			fwrite(&recruit[rt]->eagerness1, sizeof(char), 1, h);
-			fwrite(&recruit[rt]->task, sizeof(char), 1, h);
+			fwrite(&Unused_var_task, sizeof(char), 1, h); // Unused, kept for backwards compatibility
 			std::string creatureStr = recruit[rt]->recruit->showXml();
 			int creatureSize = len(creatureStr);
 			fwrite(&creatureSize, sizeof(int), 1, h);
@@ -1019,7 +1024,8 @@ char load(const string& filename)
 			fread(&location[l]->city, sizeof(int), 1, h);
 			fread(&location[l]->area, sizeof(int), 1, h);
 			fread(&location[l]->parent, sizeof(int), 1, h);
-			fread(&location[l]->id, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
+			int unused;
+			fread(&unused, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
 			fread(&location[l]->renting, sizeof(int), 1, h);
 			fread(&location[l]->newrental, sizeof(char), 1, h);
 			fread(&location[l]->needcar, sizeof(char), 1, h);
@@ -1061,7 +1067,7 @@ char load(const string& filename)
 			vector<char> vec = vector<char>(creatureSize + 1);
 			fread(&vec[0], creatureSize, 1, h);
 			vec[creatureSize] = '\0';
-			pool[pl] = new Creature(&vec[0]);
+			pool[pl] = new DeprecatedCreature(&vec[0]);
 			// extra InterrogationST data if applicable
 			if (pool[pl]->align == -1 && pool[pl]->alive)
 			{
@@ -1096,7 +1102,7 @@ char load(const string& filename)
 		squad.resize(dummy);
 		for (int sq = 0; sq < len(squad); sq++)
 		{
-			squad[sq] = new squadst;
+			squad[sq] = new Deprecatedsquadst;
 			fread(squad[sq]->name, sizeof(char), SQUAD_NAMELEN, h);
 			fread(&squad[sq]->activity, sizeof(ActivityST), 1, h);
 			fread(&squad[sq]->id, sizeof(int), 1, h);
@@ -1166,7 +1172,7 @@ char load(const string& filename)
 		date.resize(dummy);
 		for (int dt = 0; dt < len(date); dt++)
 		{
-			date[dt] = new datest;
+			date[dt] = new Deprecateddatest;
 			fread(&date[dt]->mac_id, sizeof(long), 1, h);
 			fread(&date[dt]->timeleft, sizeof(short), 1, h);
 			fread(&date[dt]->city, sizeof(int), 1, h);
@@ -1179,7 +1185,7 @@ char load(const string& filename)
 				vector<char> vec = vector<char>(creatureSize + 1);
 				fread(&vec[0], creatureSize, 1, h);
 				vec[creatureSize] = '\0';
-				date[dt]->date[dt2] = new Creature(&vec[0]);
+				date[dt]->date[dt2] = new DeprecatedCreature(&vec[0]);
 			}
 		}
 		//RECRUITS
@@ -1189,32 +1195,32 @@ char load(const string& filename)
 		{
 
 			long recruiter_id;
-			short timeleft;
-			char level;
+			short Unused_var_timeleft; // Unused, kept for backwards compatibility
+			char Unused_var_level; // Unused, kept for backwards compatibility
 			char eagerness1;
-			char task;
+			char Unused_var_task; // Unused, kept for backwards compatibility
 			fread(&recruiter_id, sizeof(long), 1, h);
-			fread(&timeleft, sizeof(short), 1, h);
-			fread(&level, sizeof(char), 1, h);
+			fread(&Unused_var_timeleft, sizeof(short), 1, h); // Unused, kept for backwards compatibility
+			fread(&Unused_var_level, sizeof(char), 1, h); // Unused, kept for backwards compatibility
 			fread(&eagerness1, sizeof(char), 1, h);
-			fread(&task, sizeof(char), 1, h);
+			fread(&Unused_var_task, sizeof(char), 1, h); // Unused, kept for backwards compatibility
 			int creatureSize;
 			fread(&creatureSize, sizeof(int), 1, h);
 			vector<char> vec = vector<char>(creatureSize + 1);
 			fread(&vec[0], creatureSize, 1, h);
 			vec[creatureSize] = '\0';
-			recruit[rt] = new recruitst(new Creature(&vec[0]), recruiter_id);
-			recruit[rt]->timeleft = timeleft;
-			recruit[rt]->level = level;
+			recruit[rt] = new Deprecatedrecruitst(new DeprecatedCreature(&vec[0]), recruiter_id);
+			//recruit[rt]->timeleft = timeleft; 
+			//recruit[rt]->level = level;
 			recruit[rt]->eagerness1 = eagerness1;
-			recruit[rt]->task = task;
+			//recruit[rt]->task = task;
 		}
 		//NEWS STORIES
 		fread(&dummy, sizeof(int), 1, h);
 		newsstory.resize(dummy);
 		for (int ns = 0; ns < len(newsstory); ns++)
 		{
-			newsstory[ns] = new newsstoryst;
+			newsstory[ns] = new Deprecatednewsstoryst;
 			fread(&newsstory[ns]->type, sizeof(short), 1, h);
 			fread(&newsstory[ns]->view, sizeof(short), 1, h);
 			fread(&newsstory[ns]->loc, sizeof(long), 1, h);

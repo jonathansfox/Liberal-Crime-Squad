@@ -50,9 +50,79 @@ struct attackst
 		int chance_causes_debris;
 	} fire;
 };
+enum WeaponTypeFloat {
+	FLOAT_BASHSTRENGTHMOD_,
+};
+enum WeaponTypeInt {
+	INT_LEGALITY_,
+	INT_SIZE_,
+};
+enum WeaponTypeString {
+	STRING_NAME_SUB_1_,
+	STRING_NAME_SUB_2_,
+	STRING_NAME_FUTURE_SUB_1_,
+	STRING_NAME_FUTURE_SUB_2_,
+	STRING_SHORTNAME_,
+	STRING_SHORTNAME_FUTURE_,
+	STRING_SHORTNAME_SUB_1_,
+	STRING_SHORTNAME_SUB_2_,
+	STRING_SHORTNAME_FUTURE_SUB_1_,
+	STRING_SHORTNAME_FUTURE_SUB_2_,
+
+};
+enum WeaponTypeBool {
+	/*BOOL_NAME_SUB_1_DEFINED_,
+	BOOL_NAME_SUB_2_DEFINED_,
+	BOOL_NAME_FUTURE_SUB_1_DEFINED_,
+	BOOL_NAME_FUTURE_SUB_2_DEFINED_,
+	BOOL_SHORTNAME_DEFINED_,
+	BOOL_SHORTNAME_FUTURE_DEFINED_,
+	BOOL_SHORTNAME_SUB_1_DEFINED_,
+	BOOL_SHORTNAME_SUB_2_DEFINED_,
+	BOOL_SHORTNAME_FUTURE_SUB_1_DEFINED_,
+	BOOL_SHORTNAME_FUTURE_SUB_2_DEFINED_,*/
+	BOOL_CAN_TAKE_HOSTAGES_,
+	BOOL_THREATENING_,
+	BOOL_CAN_THREATEN_HOSTAGES_,
+	BOOL_PROTECTS_AGAINST_KIDNAPPING_,
+	BOOL_MUSICAL_ATTACK_,
+	BOOL_INSTRUMENT_,
+	BOOL_SUSPICIOUS_,
+	BOOL_CAN_GRAFFITI_,
+	BOOL_AUTO_BREAK_LOCK_,
+
+};
 class WeaponType : public ItemType
 {
 public:
+	const bool get_specific_bool(const WeaponTypeBool b) const {
+		switch (b) {
+		/*case BOOL_NAME_SUB_1_DEFINED_: return (); break;
+		case BOOL_NAME_SUB_2_DEFINED_: return (); break;
+		case BOOL_NAME_FUTURE_SUB_1_DEFINED_: return (); break;
+		case BOOL_NAME_FUTURE_SUB_2_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_FUTURE_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_SUB_1_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_SUB_2_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_FUTURE_SUB_1_DEFINED_: return (); break;
+		case BOOL_SHORTNAME_FUTURE_SUB_2_DEFINED_: return (); break;*/
+		case BOOL_CAN_TAKE_HOSTAGES_: return can_take_hostages_; break;
+		case BOOL_THREATENING_: return threatening_; break;
+		case BOOL_CAN_THREATEN_HOSTAGES_: return can_threaten_hostages_; break;
+		case BOOL_PROTECTS_AGAINST_KIDNAPPING_: return protects_against_kidnapping_; break;
+		case BOOL_MUSICAL_ATTACK_: return musical_attack_; break;
+		case BOOL_INSTRUMENT_: return instrument_; break;
+		case BOOL_SUSPICIOUS_: return suspicious_; break;
+		case BOOL_CAN_GRAFFITI_: return can_graffiti_; break;
+		case BOOL_AUTO_BREAK_LOCK_: return auto_break_lock_; break;
+		default:// ERROR
+			return false;
+		}
+	}
+	//const int get_specific_int(const WeaponTypeInt i);
+	//const string get_specific_string(const WeaponTypeString s);
+	//const float get_specific_float(const WeaponTypeFloat f);
 	virtual thisItemIs whatIsThis() const { return THIS_IS_WEAPON; }
 	// Constructor to create a weapon type from xml.
 	explicit WeaponType(MCD_STR xmlstring);
@@ -67,16 +137,6 @@ public:
 	const string& get_shortname(unsigned subtype = 0) const;
 	// Returns if the weapon type can be used to take hostages without causing
 	// alarm. 
-	bool can_take_hostages() const { return can_take_hostages_; }
-	// Returns if the weapon type can be used to threaten landlords.
-	bool is_threatening() const { return threatening_; }
-	bool can_threaten_hostages() const { return can_threaten_hostages_; }
-	bool protects_against_kidnapping() const { return protects_against_kidnapping_; }
-	// Returns if the weapon will use a musical attack in combat.
-	bool has_musical_attack() const { return musical_attack_; }
-	// Returns whether the weapon type is considered an instrument when fund
-	// raising with music.
-	bool is_instrument() const { return instrument_; }
 	// Returns the most liberal gun control law for the weapon to be legal.
 	// -2, -1, 0, 1 and 2 for C+, C, M, L and L+ respectively. -3 always illegal.
 	int get_legality() const { return legality_; }
@@ -84,8 +144,6 @@ public:
 	bool is_legal() const;
 	// Returns the bash bonus provided by the weapon type.
 	float get_bashstrengthmod() const { return bashstrengthmod_; }
-	// 
-	bool is_suspicious() const { return suspicious_; }
 	// Returns the size of the weapon type. Used for concealment under clothes.
 	int get_size() const { return size_; }
 	// Gives a reference to the vector of all possible attacks made by the
@@ -100,10 +158,6 @@ public:
 	bool is_ranged() const;
 	// Checks if any of the weapon's attacks involve throwing the weapon.
 	bool is_throwable() const;
-	// Returns if the weapon type should always succeed breaking locks.
-	bool auto_breaks_locks() const { return auto_break_lock_; }
-	// Returns if the weapon type can be used to make graffiti.
-	bool can_graffiti() const { return can_graffiti_; }
 private:
 	string name_sub_1_;
 	string name_sub_2_;

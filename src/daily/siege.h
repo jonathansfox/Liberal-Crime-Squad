@@ -21,4 +21,3 @@ void conquertext();
 void conquertextccs();
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc);
-void statebrokenlaws(Creature &cr);

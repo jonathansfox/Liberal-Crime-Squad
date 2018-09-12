@@ -176,12 +176,11 @@ void CursesMoviest::convertindices_sound(filelistst &master)
 void CursesMoviest::playmovie(int x, int y)
 {
 	long timer = 0, finalframe = 0;
-	bool cont, pted;
-	do
-	{
+	for (bool cont = false; cont; ) {
 		//int time=GetTickCount();
 		alarmset(10);
-		cont = false, pted = false;
+		cont = false;
+		bool pted = false;
 		//ASSUMES FRAME ORDERED BY STOP TIMER
 		for (int f = 0; f < len(frame); f++)
 		{
@@ -222,5 +221,5 @@ void CursesMoviest::playmovie(int x, int y)
 		// TODO this is the only instance in entire program using checkkey()
 		int c = checkkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) timer = finalframe;
-	} while (cont);
+	}
 }

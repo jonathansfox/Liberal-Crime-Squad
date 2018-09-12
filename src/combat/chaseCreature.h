@@ -1,7 +1,7 @@
 
-int driveskill(Creature &cr, Vehicle &v);
-Vehicle* getChaseVehicle(const Creature &c);
-Creature* getChaseDriver(const Creature &c);
+int driveskill(DeprecatedCreature &cr, Vehicle &v);
+Vehicle* getChaseVehicle(const DeprecatedCreature &c);
+DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c);
 /* the next two functions force a chase sequence with a specific liberal */
-bool footchase(Creature &cr);
-bool chasesequence(Creature &cr, Vehicle &v);
+bool footchase(DeprecatedCreature &cr);
+bool chasesequence(DeprecatedCreature &cr, Vehicle &v);

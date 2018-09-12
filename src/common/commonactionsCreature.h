@@ -1,41 +1,41 @@
 
 /* tells how many total members a squad has (including dead members) */
-int squadsize(const squadst *st);
+int squadsize(const Deprecatedsquadst *st);
 /* tells how many members a squad has who are alive */
-int squadalive(const squadst *st);
+int squadalive(const Deprecatedsquadst *st);
 
 /* common - tests if the person is a wanted criminal */
-bool iscriminal(Creature &cr);
+bool iscriminal(DeprecatedCreature &cr);
 /* common - sends somebody to the hospital */
-void hospitalize(int loc, Creature &patient);
+void hospitalize(int loc, DeprecatedCreature &patient);
 /* common - determines how long a creature's injuries will take to heal */
-int clinictime(Creature &g);
+int clinictime(DeprecatedCreature &g);
 /* common - applies a crime to a person */
-void criminalize(Creature &cr, short crime);
+void criminalize(DeprecatedCreature &cr, short crime);
 /* common - gives juice to a given creature */
-void addjuice(Creature &cr, long juice, long cap);
+void addjuice(DeprecatedCreature &cr, long juice, long cap);
 /* common - removes the liberal from all squads */
-void removesquadinfo(Creature &cr);
+void removesquadinfo(DeprecatedCreature &cr);
 /* Determines the number of subordinates a creature may command */
-int maxsubordinates(const Creature& cr);
+int maxsubordinates(const DeprecatedCreature& cr);
 /* Determines the number of subordinates a creature may recruit,
 based on their max and the number they already command */
-int subordinatesleft(const Creature& cr);
+int subordinatesleft(const DeprecatedCreature& cr);
 // Determines the number of love slaves a creature has
-int loveslaves(const Creature& cr);
+int loveslaves(const DeprecatedCreature& cr);
 /* Determines the number of loveslaves a creature may recruit,
 based on their max and the number they already command */
-int loveslavesleft(const Creature& cr);
+int loveslavesleft(const DeprecatedCreature& cr);
 // Determines the number of recruitment meetings a creature has scheduled
-int scheduledmeetings(const Creature& cr);
+int scheduledmeetings(const DeprecatedCreature& cr);
 // Determines the number of dates a creature has scheduled
-int scheduleddates(const Creature& cr);
+int scheduleddates(const DeprecatedCreature& cr);
 // Prompt to convert a new recruit into a sleeper
-void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
+void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recruiter, int y);
 /* common - Sort a list of creatures.*/
-void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone = false);
+void sortliberals(std::vector<DeprecatedCreature *>& liberals, short sortingchoice, bool dosortnone = false);
 /* common - Functions used when sorting vectors of creatures. */
-bool sort_none(const Creature* first, const Creature* second);
+bool sort_none(const DeprecatedCreature* first, const DeprecatedCreature* second);
 
-bool sort_locationandname(const Creature* first, const Creature* second);
-bool sort_squadorname(const Creature* first, const Creature* second);
+bool sort_locationandname(const DeprecatedCreature* first, const DeprecatedCreature* second);
+bool sort_squadorname(const DeprecatedCreature* first, const DeprecatedCreature* second);

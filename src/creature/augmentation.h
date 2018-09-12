@@ -12,10 +12,11 @@ enum Augmentations
 	AUGMENTATION_SKIN,
 	AUGMENTATIONNUM
 };
+
 class Augmentation
 {
 public:
-	Augmentation() :type(-1), name(blankString), attribute(-1), effect(-1),
+	Augmentation() :type(-1), name(""), attribute(-1), effect(-1),
 		value(-1) { }
 	Augmentation(const std::string& inputXml);
 	string showXml() const;

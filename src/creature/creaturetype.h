@@ -6,10 +6,10 @@ class CreatureType
 public:
 	// Creates a creature type from xml.
 	explicit CreatureType(const std::string& xmlstring);
-	friend void makecreature(Creature &cr, short type);
+	friend void makecreature(DeprecatedCreature &cr, short type);
 	// Remakes the creature into the creature type. Depends on being called
 	// from makecreature currently.
-	void make_creature(Creature& cr) const;
+	void make_creature(DeprecatedCreature& cr) const;
 	const std::string& get_idname() const { return idname_; }
 	long get_id() const { return id_; }
 	short get_type() const { return type_; }
@@ -20,11 +20,11 @@ public:
 	std::string get_type_name() const;
 	// Gives the creature one of the creature type's possible weapons,
 	// with clips if so defined.
-	void give_weapon(Creature& cr) const;
+	void give_weapon(DeprecatedCreature& cr) const;
 	// May give a 9mm, .45 or .38 depending on gun control law and chance.
-	void give_weapon_civilian(Creature& cr) const;
+	void give_weapon_civilian(DeprecatedCreature& cr) const;
 	// Gives the creature one of the creature type's possible armors.
-	void give_armor(Creature& cr) const;
+	void give_armor(DeprecatedCreature& cr) const;
 	static int s_number_of_creaturetypes;
 
 
@@ -62,7 +62,7 @@ private:
 };
 /* transforms a CreatureTypes value into a pointer to that creature type */
 const CreatureType* getcreaturetype(short crtype);
-// This declaration is necessary for the function Creature::get_type_name() to work.
+// This declaration is necessary for the function DeprecatedCreature::get_type_name() to work.
 // It isn't part of the CreatureType class or creaturetype.cpp file, it's implemented elsewhere.
 /* transforms a creature type name into a pointer to that creature type */
 const CreatureType* getcreaturetype(const std::string& crtype);

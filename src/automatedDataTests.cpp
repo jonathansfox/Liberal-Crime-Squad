@@ -91,19 +91,18 @@ void testCreature() {
 	multipleCityMode = false;
 	void make_world(bool hasmaps);
 	make_world(false);
-	bool hasmaps = false;
 	bool makelawyer = false;
 	bool gaylawyer = false;
 	Vehicle * startcar = NULL;
 	char recruits = 1;
 	char base = 21;
-	Creature *newcr = new Creature;
-	void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, Creature * newcr);
+	DeprecatedCreature *newcr = new DeprecatedCreature;
+	void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, DeprecatedCreature * newcr);
 	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
 
 	extern short lawList[LAWNUM];
 	for (int i = 0; i < CREATURENUM; i++) {
-		Creature cr;
+		DeprecatedCreature cr;
 		for (int j = -2; j < 3; j++) {
 			lawList[LAW_GUNCONTROL] = j;
 			makecreature(cr, i);

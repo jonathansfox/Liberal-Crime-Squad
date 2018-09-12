@@ -29,8 +29,3 @@ to the index of the chosen thing in the nameprice vector. */
 int buyprompt(const string &firstline, const string &secondline,
 	const vector< pair<string, int> > &nameprice, int namepaddedlength,
 	const string &producttype, const string &exitstring);
-
-/* common - moves all squad members and their cars to a new location */
-void locatesquad(squadst *st, long loc);
-/* common - assigns a new base to all members of a squad */
-void basesquad(squadst *st, long loc);

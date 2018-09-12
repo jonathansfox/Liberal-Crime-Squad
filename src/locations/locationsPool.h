@@ -1,53 +1,80 @@
 #include "../items/itemPool.h"
+enum locationsPoolBooleans {
+	BOOL_CANBEUPGRADED,
+	BOOL_ISNEWRENTAL,
+	BOOL_CANBEFORTIFIED,
+	BOOL_SITEHASCAMERAS,
+	BOOL_HASTRAPS,
+	BOOL_LIGHTSOFF,
+	BOOL_ISLOCATIONMAPPED,
+	BOOL_ISLOCATIONHIDDEN,
+};
+enum locationsPoolIntegers {
+	INT_GETSTORESAMOUNT,
+	INT_GETRENTINGTYPE,
+	INT_ISTHISPLACEHIGHSECURITY,
+	INT_GETLOCATIONCITY,
+	
+	INT_GETTIMEUNTILSIEGE_POLICE,
+	INT_GETTIMEUNTILSIEGE_CIA,		
+	INT_GETTIMEUNTILSIEGE_CORPORATE,
+	INT_GETTIMEUNTILSIEGE_CCS,
+	INT_GETTIMEUNTILSIEGE_FIREMEN,
+	INT_GETTIMEUNTILSIEGE_ORG,
+	INT_GETTIMEUNTILSIEGE_HICKS,
+
+	INT_GETCOMPOUNDWALLS,
+	INT_ISTHISSITECLOSED,
+	INT_GETLOCATIONPARENT,
+	INT_GETATTACKTIME,
+	INT_DOWEHAVETANKTRAPS,
+	INT_GETSIEGEKILLS,
+	INT_GETSIEGETANKS,
+	INT_GETHEAT,
+	INT_LENLOOT,
+
+};
+
+/*
+enum locationsPoolCharacters {
+
+	CHAR_ISTHEREASIEGEHERE,
+	CHAR_GETLOCATIONTYPE,
+	CHAR_DOESTHISPLACENEEDACAR,
+	CHAR_ISTHISUNDERATTACK,
+	CHAR_ISTHISAFRONT,
+};
+enum locationsPoolShorts {
+
+	SHORT_GETSIEGETYPE,
+	SHORT_GETSIEGEESCALATIONSTATE,
+};
+enum locationsPoolStrings {
+
+	STRING_GETLOCATIONNAME,
+	STRING_GETLOCATIONNAMEWITHGETNAMEMETHOD,
+	STRING_GETLOCATIONNAMEWITHGETNAMEMETHOD,
+	STRING_GETFRONTNAME,
+};*/
 class LocationsPool : ItemTypePool {
-private:
-	static bool locationPoolInitiated;
 public:
 	static LocationsPool getInstance();
-	const int lenpool();
-	int getStoresAmount(int l);
 	void delete_and_clear_pool();
-	bool canBeUpgraded(int cursite);
-	const char isThereASiegeHere(int cursite);
-	const int isThisPlaceHighSecurity(int cursite);
-	void isThereASiegeHere(int cursite, char newCondition);
-	void isThisPlaceHighSecurity(int cursite, int newCondition);
-	const char getLocationType(int cursite);
-	const short getSiegeType(int cursite);
 	void spawnATank(int cursite, int num);
-	const short getSiegeEscalationState(int cursite);
-	const int getRentingType(int cursite);
 	void initSite(int loc);
 	void eraseAndReplaceGraffiti(int cursite, int locx, int locy, int locz);
-	const string getLocationName(int cursite);
-	const int getLocationCity(int cursite);
 	void hideCCSSafehouses();
 	void addHeat(int cursite, int heat);
 	void clearHeat(int cursite);
 	void clearunderattack(int cursite);
 	void deleteTankTraps(int l);
-	int getTimeUntilSiege(int loc, int type);
 	void setTimeUntilSiege(int loc, int type, int time);
-	const int getHeat(int cursite);
-	const void findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox);
-	const bool isLocationMapped(int cursite);
-	const bool isLocationHidden(int cursite);
 	void setLocationMappedAndUnhidden(int cursite);
-	const string getLocationNameWithGetnameMethod(int cursite, signed char a, bool b);
-	const string getLocationNameWithGetnameMethod(int cursite, signed char a);
 	void removeTank(int cursite);
 	void addSiegeKill(int cursite);
-	const int getCompoundWalls(int cursite);
 	void setTimeUntilSiege(int cursite, int time);
-	const bool isNewRental(int cursite);
 	void evictLCSFrom(int l);
-	const int isThisSiteClosed(int cursite);
-	const char doesThisPlaceNeedACar(int cursite);
-	const int findTravelLocation();
-	const int getLocationParent(int cursite);
 	int deleteSpecialItem(int slot, vector<int> loottypeindex);
-	void getAssetValues(long & weaponValue, long & armorValue, long & clipValue, long & lootValue);
-	const bool canBeFortified(int cursite);
 	void initLocation(int cursite);
 	void equipLoc(int, int);
 	void stashThisLootHere(const string&, int);
@@ -56,20 +83,65 @@ public:
 	void stashThisArmorHere(int itemindex, int shelter);
 	void captureSite(int cursite);
 	void closeSite(int cursite, int sitecrime);
-	bool siteHasCameras(int cursite);
-	int lenloot(int cursite);
-	char isThisUnderAttack(int cursite);
 	void setRenting(int cursite, int renting);
-	char isThisAFront(int cursite);
-	string getFrontName(int cursite);
 	void tickAttackTime(int cursite);
-	int getAttackTime(int cursite);
 	void resetAttackTime(int cursite);
-	int doWeHaveTankTraps(int cursite);
 	void spawnATank(int cursite);
-	int getSiegeKills(int cursite);
-	int getSiegeTanks(int cursite);
 	void turnOffSiege(int cursite);
-	bool hasTraps(int loc);
-	bool lightsOff(int loc);
+
+	const int lenpool() const;
+	const int findTravelLocation() const;
+
+	const int get_specific_integer(const locationsPoolIntegers lPI, const int cursite) const;
+
+	void isThereASiegeHere(int cursite, char newCondition) const;
+	void isThisPlaceHighSecurity(int cursite, int newCondition) const;
+	void getAssetValues(long & weaponValue, long & armorValue, long & clipValue, long & lootValue) const;
+	const void findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox) const;
+
+
+
+	bool canBeUpgraded(int cursite) const ;
+	const bool isNewRental(int cursite) const;
+	const bool canBeFortified(int cursite) const;
+	bool siteHasCameras(int cursite) const;
+	bool hasTraps(int loc) const;
+	bool lightsOff(int loc) const;
+	const bool isLocationMapped(int cursite) const;
+	const bool isLocationHidden(int cursite) const;
+
+	const char isThereASiegeHere(int cursite) const ;
+	const char getLocationType(int cursite) const;
+	const char doesThisPlaceNeedACar(int cursite) const;
+	char isThisUnderAttack(int cursite) const;
+	char isThisAFront(int cursite) const;
+
+	const short getSiegeType(int cursite) const;
+	const short getSiegeEscalationState(int cursite) const;
+
+	const string getLocationName(int cursite) const;
+	const string getLocationNameWithGetnameMethod(int cursite, signed char a, bool b) const;
+	const string getLocationNameWithGetnameMethod(int cursite, signed char a) const;
+	string getFrontName(int cursite) const;
+
+
+private:
+
+	int getStoresAmount(int l) const;
+	const int getRentingType(int cursite) const;
+	const int isThisPlaceHighSecurity(int cursite) const;
+	const int getLocationCity(int cursite) const;
+	int getTimeUntilSiege(int loc, int type) const;
+	const int getCompoundWalls(int cursite) const;
+	const int isThisSiteClosed(int cursite) const;
+	const int getLocationParent(int cursite) const;
+	int getAttackTime(int cursite) const;
+	int doWeHaveTankTraps(int cursite) const;
+	int getSiegeKills(int cursite) const;
+	int getSiegeTanks(int cursite) const;
+	const int getHeat(int cursite) const;
+	int lenloot(int cursite) const;
+
+
+	static bool locationPoolInitiated;
 };

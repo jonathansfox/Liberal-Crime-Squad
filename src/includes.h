@@ -991,6 +991,58 @@ enum bigListOfEnumTags {
 //	ENUM_tag_description,
 	ENUM_tag_qualitylevels,
 	ENUM_tag_durability,
+//};
+
+//enum vehicleTagEnums {
+	ENUM_tag_vtypeidname,
+	ENUM_tag_vtypeid,
+	ENUM_tag_color,
+	ENUM_tag_heat,
+	ENUM_tag_location,
+	ENUM_tag_myear,
+	ENUM_tag_id,
+//};
+
+//enum vehicleTypeTagsEnums {
+	ENUM_tag_year,
+	ENUM_tag_start_at_current_year,
+	ENUM_tag_start_at_year,
+	ENUM_tag_add_random_up_to_current_year,
+	ENUM_tag_add_random,
+	ENUM_tag_add,
+	ENUM_tag_colors,
+//	ENUM_tag_color,
+	ENUM_tag_display_color,
+	ENUM_tag_drivebonus,
+	ENUM_tag_base,
+	ENUM_tag_skillfactor,
+	ENUM_tag_softlimit,
+	ENUM_tag_hardlimit,
+	ENUM_tag_dodgebonus,
+//	ENUM_tag_base,
+//	ENUM_tag_skillfactor,
+//	ENUM_tag_softlimit,
+//	ENUM_tag_hardlimit,
+	ENUM_tag_attackbonus,
+	ENUM_tag_driver,
+	ENUM_tag_passenger,
+	ENUM_tag_longname,
+//	ENUM_tag_shortname,
+	ENUM_tag_stealing,
+	ENUM_tag_difficulty_to_find,
+//	ENUM_tag_juice,
+	ENUM_tag_extra_heat,
+	ENUM_tag_sense_alarm_chance,
+	ENUM_tag_touch_alarm_chance,
+//	ENUM_tag_armor,
+	ENUM_tag_low_armor_min,
+	ENUM_tag_low_armor_max,
+	ENUM_tag_high_armor_min,
+	ENUM_tag_high_armor_max,
+	ENUM_tag_armor_midpoint,
+	ENUM_tag_available_at_dealership,
+//	ENUM_tag_price,
+//	ENUM_tag_sleeperprice
 };
 
 string skill_enum_to_string(int skill_type);

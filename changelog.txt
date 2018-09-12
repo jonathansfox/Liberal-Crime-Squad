@@ -507,3 +507,164 @@ map<string, int>::value_type\(\1, ENUM_\1\)
 \s+(\w*),
 case \1:\r\n\r\nbreak;\r\n
 
+Fixed bug where guncontrol news stories displayed incorrectly.
+A previous regular expression used to replace
+story += ;
+...
+story += ;
+with
+story += \
+...
+ + \
+ + ;
+Broke a number of else statements that were not confined to curly braces.
+Relocated much of the strings used in articles to helper functions, namely the sections that rely on lawList[]
+This allows for no usage of extern lawList[] within the news.cpp file.
+It also allows for a significant reduction in local variables within any single function, and serves to make the numerous 'filename_string_x001' style string constants less ambigious.
+
+Applied the above regular expressions (to convert ifelse chains into switch statements) to the founderQuestion function.  Loop is now much cleaner.
+Added warning for player if attempting kidnapping, but all but one conservative posess "protects_from_kidnap"
+
+4.12.23
+
+Rewrote much of the printwall() method, removing a substantial amount of duplicate code.
+Similar process with otherCrime() method.
+Minor refactoring.
+Massive ifelse chain VehicleType::VehicleType(MCD_STR xmlstring) replaced with nested switch statements.
+Minor refactoring of news code.
+Turned the while(true) loop in review() to while(iterateReview()) {}, and converted its ifelse chain to a switch statement.
+
+Refactored some updateworld_laws() to remove duplicate code.
+Changed location::rename() to use const string instead of const char*
+BUGREPORT: Locations (Ministry of Love etc.) do not get renamed properly when laws change. (At least, not in multicity mode)
+
+Refactored getThatGroundLoot()
+Identified and repaired likely source of "no fireman raids" bug.
+else if (lawList[LAW_FREESPEECH] <= -1 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0) 
+		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
+		offended_firemen = 0;
+	
+This code causes offended_firemen to be zeroed out every time its containing function is called, but from context it is clearly only supposed to do that if the conditional is passed.  i.e. missing curly braces.  This is why if statements are best written with curly braces, even if the statement only uses one line afterwards.
+
+Hollowed out much of  huntingSiegePrint(const int l, int& numpres);
+Clear instance of duplicate code, similarities between raids.  Work on later date.
+Refactoring of presidentialElection();
+CPPDepend now remarks 51 methods overly long/complex with Issues High
+293 with Issues Medium
+
+Fixed typo in tendhostage()
+Dismantled printnews() into constituent parts.
+
+Updated CppDepend so it doesn't include third-party code.
+Fixed bug where game crashes if recruiter goes on vacation while recruiting.
+
+Refactored pleadInnocent, others
+created new enum for LegalDefense
+
+Eliminated all usage of "extern short sitealarm"
+This has allowed "sitealarm" to become a bool, and eliminated the ambiguity of "sitealarm != 0, sitealarm == 1, sitealarm < 1" etc.
+
+Removed some dead code in chasesequence()
+it turns out the while(true) loop does not have any exits apart from the return statements.
+Therefore, the code that follows the loop cannot be executed.
+Similar issue fixed within footchase()
+
+Minor refactoring of select_augmentation(Creature *cr)
+extracted new method add_augmentation(Creature *victim, Creature *cr, AugmentType *selected_aug)
+
+Minor refactoring of displaystoryheader()
+
+extracted new method attempt_find_keys() from start_car()
+
+removed an "always false" conditional from creatureadvance()
+
+CppDepend now indicates 0 methods overly long/complex with Issues High.
+226 with Issues Medium
+Renamed Creature to DeprecatedCreature to help facilitate replacing it with simpler types.
+Performing similar actions with types that directly reference Creature.
+1071 instances of "Deprecated"
+
+New struct NameAndAlignment
+Takes seven variables from Creature.  Able to replace Creature in many cases.
+
+1044 instances of "Deprecated"
+1024
+
+765 within "activate.cpp" the single-file compile version.
+
+1017 instances of "Deprecated"
+750 within "activate.cpp" the single-file compile version.
+
+4.12.24
+Copied code back into multiple file setup.  Able to compile and run, no obvious bugs.
+Deprecated
+Matching lines: 1022    Matching files: 56    Total files searched: 158
+
+#include "newcreature.h"
+created new header file, newcreature.h, meant to contain all the non-deprecated aspects of creature.h.
+5 of the 43 instances of creature.h have been immediately replaced.
+
+1014 "Deprecated" (27 in globals.cpp) 55 files
+
+1006 (29 in globals.cpp) 44 files
+
+activate.cpp	25
+activate_sleepers.cpp	3
+activities.cpp	81
+advance.cpp	8
+automatedDataTests.cpp	3
+baseactions.cpp	4
+basemode.cpp	13
+chase.cpp	47
+chaseCreature.h	5
+commonactions.cpp	23
+commonactionsCreature.h	19
+commondisplay.cpp	21
+commondisplayCreature.h	6
+creature.cpp	56
+creature.h	38
+creaturePool.cpp	36
+creaturePoolCreature.h	16
+creaturetype.cpp	48
+creaturetype.h	6
+daily.cpp	46
+date.cpp	17
+fight.cpp	77
+fightCreature.h	8
+globals.cpp	29
+haulkidnap.cpp	13
+haulkidnapCreature.h	3
+interrogation.cpp	25
+justice.cpp	24
+locations.h	6
+locationsPool.cpp	40
+mapspecials.cpp	15
+miscactions.cpp	8
+newgame.cpp	4
+news.cpp	27
+recruit.cpp	6
+reviewmode.cpp	28
+saveload.cpp	12
+shop.cpp	11
+shop.h	6
+siege.cpp	29
+sitemode.cpp	41
+sleeper_update.cpp	12
+stealth.cpp	4
+talk.cpp	57
+
+Removed recruitst unused field "timeleft"
+Probably was copied from datest.
+Removed recruitst unused field "level", and "task",
+Sometimes written to, but it was never read.
+
+Combined locx, locy, and locz into a single structure coordinatest
+Minor refactoring.
+CppDepend identifies "60 days of debt", 53 days of which fall under the category of "too many local variables", 100 instances in total.
+This means, as a metric, CppDepend's definition of technical debt is nearly resolved.
+
+Refactored WeaponType so its const getters take an enumerator, rather than having a unique method for every single barely-used internal value.
+
+Major refactoring of LocationsPool.  Similar to technique in WeaponType.
+Located source of bug where disguise continues to be printed in red after returning to base.  Method of fixing, uncertain.
+commondisplay.cpp Line 713 is related.

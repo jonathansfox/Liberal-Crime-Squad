@@ -52,6 +52,12 @@ struct siegest
 	short timeuntilfiremen;
 	siegest() : siege(0), siegetype(-1), underattack(0), escalationstate(0), timeuntillocated(-1), timeuntilcorps(-1), timeuntilcia(-1), timeuntilccs(-1), timeuntilfiremen(-1) { }
 };
+struct coordinatest
+{
+	int locx;
+	int locy;
+	int locz;
+};
 struct siteblockst
 {
 	short special;
@@ -87,7 +93,7 @@ public:
 	int city;
 	int area; // two locations share an area if a squad located within one can reach the other without transportation
 	int parent; // the index of parent in vector<Locations> locations
-	int id = 0; // NOT USED, kept for backwards compatibility
+	//int id = 0; // NOT USED, kept for backwards compatibility
 	vector<Item *> loot;
 	vector<sitechangest> changes;
 	int renting;
@@ -108,9 +114,9 @@ public:
 	char front_shortname[LOCATION_SHORTNAMELEN];
 	bool haveflag;
 	unsigned long mapseed[RNG_SIZE];
-	Location(char type_, int parent_ = -1);
+	Location(const char type_, const int parent_ = -1);
 	Location() { }
-	Location* addchild(char type_);
+	Location* addchild(const char type_);
 	~Location() { delete_and_clear(loot); }
 	void init();
 	void update_heat_protection();
@@ -129,8 +135,8 @@ public:
 	bool is_lcs_safehouse() { return renting >= 0; }
 	bool is_ccs_safehouse() { return renting == RENTING_CCS; }
 	bool is_city() { return type == city; }
-	string getname(signed char shortname_ = false, bool include_city = false);
-	void rename(const char* name_, const char* shortname_);
+	string getname(const signed char shortname_ = false, const bool include_city = false);
+	void rename(const string name_, const string shortname_);
 	string city_description();
 	void getloot(vector<Item *>& loot);
 };
@@ -143,22 +149,22 @@ public:
 /*
  world.cpp
 */
-Location* find_site_in_city(int site_type, int city);
-int find_site_index_in_city(int site_type, int city);
+Location* find_site_in_city(const int site_type, const int city);
+int find_site_index_in_city(const int site_type, const int city);
 /* find local versions of these locations */
-int find_site_index_in_same_city(int site_type, int site_index);
+int find_site_index_in_same_city(const int site_type, const int site_index);
 /*
-inline int find_site_index_in_same_city(int site_type, const Creature& cr) { return find_site_index_in_same_city(site_type,cr.location); }
+inline int find_site_index_in_same_city(int site_type, const DeprecatedCreature& cr) { return find_site_index_in_same_city(site_type,cr.location); }
 inline int find_police_station(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION,site_index); }
-inline int find_police_station(const Creature& cr) { return find_police_station(cr.location); }
+inline int find_police_station(const DeprecatedCreature& cr) { return find_police_station(cr.location); }
 inline int find_clinic(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_CLINIC,site_index); }
-inline int find_clinic(const Creature& cr) { return find_clinic(cr.location); }
+inline int find_clinic(const DeprecatedCreature& cr) { return find_clinic(cr.location); }
 inline int find_homeless_shelter(int site_index) { return find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER,site_index); }
-inline int find_homeless_shelter(const Creature& cr) { return find_homeless_shelter(cr.location); }
+inline int find_homeless_shelter(const DeprecatedCreature& cr) { return find_homeless_shelter(cr.location); }
 inline int find_courthouse(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE,site_index); }
-inline int find_courthouse(const Creature& cr) { return find_courthouse(cr.location); }
+inline int find_courthouse(const DeprecatedCreature& cr) { return find_courthouse(cr.location); }
 inline int find_hospital(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY,site_index); }
-inline int find_hospital(const Creature& cr) { return find_hospital(cr.location); }
+inline int find_hospital(const DeprecatedCreature& cr) { return find_hospital(cr.location); }
 /* sets up the list of locations */
-void make_world(bool hasmaps);
+void make_world(const bool hasmaps);
 #endif //LOCATIONS_H_INCLUDED

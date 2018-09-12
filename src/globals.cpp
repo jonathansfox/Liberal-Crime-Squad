@@ -104,14 +104,14 @@ chaseseqst chaseseq;
 const string CONST_game012 = "We need a slogan!";
 string slogan_str = CONST_game012;
 char slogan[SLOGAN_LEN] = "We need a slogan!";
-vector<squadst *> squad;
-squadst *activesquad = NULL;
+vector<Deprecatedsquadst *> squad;
+Deprecatedsquadst *activesquad = NULL;
 long cursquadid = 0;
 char disbanding = 0;
 int disbandtime = 0;
 char cantseereason;
 short activesortingchoice[SORTINGCHOICENUM];
-Creature encounter[ENCMAX];
+DeprecatedCreature encounter[ENCMAX];
 short mode = GAMEMODE_TITLE;
 short offended_corps = 0;
 short offended_cia = 0;
@@ -157,12 +157,9 @@ int ustat_funds = 0;
 int ustat_spent = 0;
 int ustat_buys = 0;
 int ustat_burns = 0;
-int locx;
-int locy;
-int locz;
+coordinatest loc_coord;
 short sitetype;
 short sitealienate;
-short sitealarm;
 short sitealarmtimer;
 short postalarmtimer;
 short siteonfire;
@@ -185,8 +182,8 @@ CCSexposure ccsexposure = CCSEXPOSURE_NONE;
 char ccs_kills = 0;
 int ccs_siege_kills = 0;
 int ccs_boss_kills = 0;
-vector<recruitst *> recruit;
-newsstoryst *sitestory = NULL;
+vector<Deprecatedrecruitst *> recruit;
+Deprecatednewsstoryst *sitestory = NULL;
 int yourscore = -1;
 #include "common/creaturePool.h"
 #include "locations/locationsPool.h"
@@ -255,8 +252,8 @@ string getVehicleShortname(int i) {
 string getVehicleFullname(int i) {
 	return vehicle[i]->fullname();
 }
-int driveskill(Creature &cr, Vehicle &v);
-int driveskill(Creature &cr, int v) {
+int driveskill(DeprecatedCreature &cr, Vehicle &v);
+int driveskill(DeprecatedCreature &cr, int v) {
 	return driveskill(cr, *vehicle[v]);
 }
 
@@ -312,7 +309,7 @@ const CreatureType* getcreaturetype(const std::string& crtype)
 }
 
 /* common - moves all squad members and their cars to a new location */
-void locatesquad(squadst *st, long loc)
+void locatesquad(Deprecatedsquadst *st, long loc)
 {
 	for (int p = 0; p < 6; p++) if (st->squad[p] != NULL)
 	{
@@ -351,7 +348,7 @@ void deleteVehicles(vector<Vehicle *>& carid) {
 	delete_and_clear(carid, vehicle);
 }
 
-void addCreatueVehiclesToCollection(Creature *cr[6], vector<Vehicle *> &veh) {
+void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *> &veh) {
 	for (int p = 0; p < 6; p++)
 	{
 		if (cr[p] == NULL) continue;
@@ -390,9 +387,9 @@ bool mainSeven(bool xml_loaded_ok) {
 	return xml_loaded_ok;
 }
 
-void newRecruit(Creature *newcr, int a) {
+void newRecruit(DeprecatedCreature *newcr, int a) {
 
-	recruitst *newrst = new recruitst(newcr, a);
+	Deprecatedrecruitst *newrst = new Deprecatedrecruitst(newcr, a);
 	recruit.push_back(newrst);
 }
 
@@ -446,7 +443,7 @@ void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
 	}
 }
 
-void removeCreatureFromSquad(Creature &cr, int oldsqid) {
+void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid) {
 	activesquad = squad[getsquad(oldsqid)];
 	for (int i = 0; i < 6; i++)
 	{
@@ -458,3 +455,357 @@ void removeCreatureFromSquad(Creature &cr, int oldsqid) {
 		}
 	}
 }
+void setEncounterZeroExistsFalse() {
+	encounter[0].exists = false;
+}
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+int encounterSize() {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	int encsize = 0;
+	for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encsize++;
+	return encsize;
+}
+int baddieCount() {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	int baddiecount = 0;
+	for (int e = 0; e < ENCMAX; e++) if (encounter[e].enemy && encounter[e].alive&&encounter[e].exists) baddiecount++;
+	return baddiecount;
+}
+int baddieCount(const bool in_car) {
+	int baddiecount = 0;
+
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].carid != -1 &&
+			encounter[e].enemy() &&
+			encounter[e].alive&&
+			encounter[e].exists)baddiecount++;
+	}
+	return baddiecount;
+}
+void damage_creature(const int e) {
+
+	encounter[e].blood = LCSrandom(75) + 1;
+}
+void conservatise(const int e) {
+	conservatise(encounter[e]);
+}
+vector<NameAndAlignment> getEncounterNameAndAlignment() {
+	vector<NameAndAlignment> nameList;
+	for (int e = 0; e < ENCMAX; e++) {
+		nameList.push_back(encounter[e].getNameAndAlignment());
+	}
+	return nameList;
+}
+void spawnPresident() {
+	encounter[2] = uniqueCreatures.President();
+}
+void liberalizeEncounterIfThisType(const int type) {
+
+	for (int i = 0; i < ENCMAX; i++)
+		if (encounter[i].type == type)
+			encounter[i].align = ALIGN_LIBERAL;
+}
+int squadAlive() {
+	int partyalive = 0;
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p]) if (activesquad->squad[p]->alive == 1) partyalive++;
+	return partyalive;
+}
+void addCrimeToSiteStory(const int crime) {
+
+	sitestory->crime.push_back(crime);
+}
+#include "items/money.h"
+void giveActiveSquadThisLoot(Item* de) {
+	activesquad->loot.push_back(de);
+}
+
+void giveActiveSquadMoney(const int money) {
+
+	giveActiveSquadThisLoot(new Money(money));
+}
+Item* getNewLoot(const string& newLootType, int num = 1);
+void giveActiveSquadLoot(const string loot) {
+
+	giveActiveSquadThisLoot(getNewLoot(loot));
+}
+void claimSiteStory() {
+	sitestory->claimed = 2;
+}
+void claimSiteStoryOne() {
+	if (!sitestory->claimed)
+		sitestory->claimed = 1;
+}
+void addjuice(DeprecatedCreature &cr, long juice, long cap);
+void juiceActiveSquad(const long juice, const long cap) {
+
+	for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i])
+			addjuice(*(activesquad->squad[i]), juice, cap);
+	}
+}
+void juiceEntireCreaturePool(const long juice, const long cap) {
+	extern vector<DeprecatedCreature *> pool;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], juice, cap);
+}
+int getEscapeEngageLocation() {
+	int loc = -1;
+	if (selectedsiege != -1) loc = selectedsiege;
+	if (activesquad != NULL) loc = activesquad->squad[0]->location;
+	return loc;
+}
+void deleteAllSquadsInActiveAreaExceptActive(const int loc) {
+	for (int sq = len(squad) - 1; sq >= 0; sq--)
+		if (squad[sq] != activesquad && squad[sq]->squad[0])
+			if (squad[sq]->squad[0]->location == loc)
+			{
+				if (activesquad)
+				{
+					for (int p = 0; p < 6; p++)
+					{
+						if (!squad[sq]->squad[p]) continue;
+						squad[sq]->squad[p]->squadid = -1;
+					}
+					delete_and_remove(squad, sq);
+				}
+				else activesquad = squad[sq];
+			}
+}
+void formANewSquadIfThereAreNone() {
+	const string CONST_siege254 = " Defense";
+	extern vector<DeprecatedCreature *> pool;
+	if (!activesquad)
+	{
+		squad.push_back(new Deprecatedsquadst);
+		squad.back()->id = cursquadid++;
+		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
+		strcat(squad.back()->name, CONST_siege254.c_str());
+		int i = 0;
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege && pool[p]->alive&&pool[p]->align == 1)
+		{
+			squad.back()->squad[i] = pool[p];
+			pool[p]->squadid = squad.back()->id;
+			if (++i >= 6) break;
+		}
+		activesquad = squad.back();
+	}
+}
+void countHeroes(int &partysize, int &partyalive) {
+	extern vector<DeprecatedCreature *> pool;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
+	{
+		partysize++;
+		if (pool[p]->alive) partyalive++;
+	}
+}
+void cancelOutBleeding() {
+	extern vector<DeprecatedCreature *> pool;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) for (int w = 0; w < BODYPARTNUM; w++) pool[p]->wound[w] &= ~WOUND_BLEEDING;
+}
+int print_character_info(const int c, const int party_status) {
+	void fullstatus(const int party_status);
+	if (c >= '1'&&c <= '6') if (activesquad->squad[c - '1'] != NULL)
+	{
+		if (party_status == c - '1')fullstatus(party_status);
+		else return c - '1';
+	}
+	return party_status;
+}
+void baseEveryoneLeftAtHomelessShelter(const int homes) {
+	void removesquadinfo(DeprecatedCreature &cr);
+	extern vector<DeprecatedCreature *> pool;
+
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != cursite) continue;
+		if (!pool[p]->alive)
+		{
+			delete_and_remove(pool, p);
+			continue;
+		}
+		//BASE EVERYONE LEFT AT HOMELESS SHELTER
+		removesquadinfo(*pool[p]);
+		pool[p]->hiding = LCSrandom(3) + 2;
+		if (pool[p]->align == 1) // not a hostage
+			pool[p]->location = -1;
+		else // hostages don't go into hiding, just shove em into the homeless shelter
+			pool[p]->location = homes;
+		pool[p]->base = homes;
+	}
+}
+int printBestLCSMemberForNews(const string repname, const int l) {
+	void printReporterDuringSiege(const string repname, const string name, const int segmentpower);
+	const string CONST_siege209 = "The interview is wide-ranging, covering a variety of topics.";
+	const string CONST_siege208 = " decides to give an interview.";
+	extern vector<DeprecatedCreature *> pool;
+	extern Log gamelog;
+	int best = 0;
+	for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location != l) continue;
+		int sum = pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
+			+ pool[p]->get_attribute(ATTRIBUTE_HEART, true)
+			+ pool[p]->get_skill(SKILL_PERSUASION)
+			+ pool[p]->juice;
+		if (sum > bestvalue) best = p, bestvalue = sum;
+	}
+	mvaddstrAlt(4, 1, pool[best]->name, gamelog);
+
+	addstrAlt(CONST_siege208, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	mvaddstrAlt(6, 1, CONST_siege209, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
+		+ pool[best]->attribute_roll(ATTRIBUTE_HEART)
+		+ pool[best]->skill_roll(SKILL_PERSUASION)
+		+ pool[best]->skill_roll(SKILL_PERSUASION)
+		+ pool[best]->skill_roll(SKILL_PERSUASION);
+
+	printReporterDuringSiege(repname, pool[best]->name, segmentpower);
+	return segmentpower;
+}
+void set_site_story_as_last_news_story() {
+	Deprecatednewsstoryst* lastNewsStory();
+	extern Deprecatednewsstoryst *sitestory;
+	sitestory = lastNewsStory();
+
+}
+void setSiteStoryClaimedZero() {
+	extern Deprecatednewsstoryst *sitestory;
+	sitestory->claimed = 0;
+}
+bool isActiveSquadAnonymous() {
+	return activesquad->stance == SQUADSTANCE_ANONYMOUS;
+}
+char shouldWeBailOnBase() {
+	char bail_on_base = 1;
+	if (cursite == activesquad->squad[0]->base)bail_on_base = 0;
+	return bail_on_base;
+}
+void set_sitestory_type() {
+	void resolvesite();
+	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	{
+		if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+		else { sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE; }
+	}
+	else
+		if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+		{
+			sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
+			resolvesite();
+		}
+}
+int activesquadSize() {
+	int squadsize(const Deprecatedsquadst *st);
+	return squadsize(activesquad);
+}
+int activesquadAlive() {
+	int squadalive(const Deprecatedsquadst *st);
+	return squadalive(activesquad);
+}
+int getactivesquadBase() {
+	int cbase = -1;
+	if (activesquad->squad[0] != NULL)
+	{
+		cbase = activesquad->squad[0]->base;
+	}
+	return cbase;
+}
+int getactivesquadCarID(const int p) {
+	if (!activesquad->squad[p]) {
+		return activesquad->squad[p]->carid;
+	}
+	else {
+		return -1;
+	}
+}
+void killActiveSquad() {
+	for (int p = 0; p < 6; p++)
+	{
+		if (!activesquad->squad[p]) continue;
+		activesquad->squad[p]->die();
+		activesquad->squad[p]->location = -1;
+		activesquad->squad[p] = NULL;
+	}
+}
+void conservatiseEncslot(const int encslot) {
+	conservatise(encounter[encslot]);
+}
+
+vector<int> potentialEncounterNoticers() {
+	vector<int> noticer;
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].type == CREATURE_PRISONER)continue;
+		if (encounter[e].exists&&encounter[e].alive&&
+			encounter[e].enemy())
+		{
+			noticer.push_back(e);
+		}
+	}
+	return noticer;
+}
+int get_stealth_difficulty(const int n) {
+	return encounter[n].get_stealth_difficulty();
+}
+int get_disguise_difficulty(const int n) {
+	return encounter[n].get_disguise_difficulty();
+}
+
+int get_encounter_time(const int n) {
+	int time;
+	time = 20 + LCSrandom(10) - encounter[n].get_attribute(ATTRIBUTE_INTELLIGENCE, true)
+		- encounter[n].get_attribute(ATTRIBUTE_WISDOM, true);
+	return time;
+}
+
+
+void clearCarStates() {
+	extern vector<DeprecatedCreature *> pool;
+	for (int p = 0; p < len(pool); p++) pool[p]->carid = -1;
+}
+
+void removeItemFromSquad(const int loottypeindex) {
+	extern vector<Deprecatedsquadst *> squad;
+	int getloottype(const string &idname);
+	for (int sq = 0; sq < len(squad); sq++)
+	{
+		for (int l = 0; l < len(squad[sq]->loot); l++)
+		{
+			if (!(squad[sq]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
+			if (getloottype(squad[sq]->loot[l]->get_itemtypename()) == loottypeindex)
+			{
+				squad[sq]->loot[l]->decrease_number(1);
+				if (squad[sq]->loot[l]->empty())
+					delete_and_remove(squad[sq]->loot, l);
+				return;// loottypeindex;
+			}
+		}
+	}
+}
+
+void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox) {
+	extern vector<Deprecatedsquadst *> squad;
+	void consolidateloot(vector<Item *> &loot);
+	int getloottype(const string &idname);
+	for (int sq = 0; sq < len(squad); sq++)
+	{
+		consolidateloot(squad[sq]->loot);
+		for (int l = 0; l < len(squad[sq]->loot); l++)
+		{
+			if (!(squad[sq]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
+			if (!binary_search(dox.begin(), dox.end(), squad[sq]->loot[l]->get_itemtypename())) continue;
+			if (!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
+			{
+				loottypeindex.push_back(getloottype(squad[sq]->loot[l]->get_itemtypename()));
+				havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())] = true;
+			}
+		}
+	}
+}
+

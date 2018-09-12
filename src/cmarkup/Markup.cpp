@@ -600,9 +600,10 @@ int TextEncoding::PerformConversion( void* pTo, MCD_CSTR pszToEncoding/*=NULL*/ 
 		// UTF16To8 will be deprecated since weird output buffer size sensitivity not worth implementing here
 		const unsigned short* p16 = (const unsigned short*)m_pFrom;
 		const unsigned short* p16End = p16 + m_nFromLen;
-		int nUChar;
+		
 		if ( nToCP == MCD_UTF32 )
 		{
+			int nUChar;
 			unsigned int* p32 = (unsigned int*)pTo;
 			while ( p16 != p16End )
 			{
@@ -2518,7 +2519,7 @@ CMarkup::~CMarkup()
 	delete m_pSavedPosMaps;
 	delete m_pElemPosTree;
 }
-void CMarkup::operator=( const CMarkup& markup )
+void CMarkup::operator=( const CMarkup markup )
 {
 	// Copying not supported during file mode because of file pointer
 	if ( (m_nDocFlags & (MDF_READFILE|MDF_WRITEFILE)) || (markup.m_nDocFlags & (MDF_READFILE|MDF_WRITEFILE)) )

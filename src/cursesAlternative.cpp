@@ -11,7 +11,7 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../creature/creature.h"
+#include "../creature/newcreature.h"
 #include "../locations/locations.h"
 #include "../pdcurses/curses.h"
 #include "../log/log.h"
@@ -378,69 +378,6 @@ void printfunds(int y, int offsetx, const char* prefix)
 	extern class Ledger ledger;
 	printfunds(y, offsetx, prefix, ledger.get_funds());
 }
-#include "../locations/locationsPool.h"
-// prints a formatted name, used by promoteliberals
-void printname(Creature &cr)
-{
-	int bracketcolor = -1, namecolor, brightness;
-	if (cr.hiding)
-		bracketcolor = COLOR_BLACK;
-	// Determine bracket color, if any, based on location
-	if (cr.location != -1)
-	{
-		switch (LocationsPool::getInstance().getLocationType(cr.location))
-		{
-		case SITE_GOVERNMENT_POLICESTATION:
-		case SITE_GOVERNMENT_COURTHOUSE:
-			if (!(cr.flag & CREATUREFLAG_SLEEPER))
-				bracketcolor = COLOR_YELLOW;
-			break;
-		case SITE_GOVERNMENT_PRISON:
-			if (!(cr.flag & CREATUREFLAG_SLEEPER))
-				bracketcolor = COLOR_RED;
-			break;
-		default:
-			break;
-		}
-	}
-	// Determine name color, based on recruitment style
-	if (cr.flag & CREATUREFLAG_LOVESLAVE)
-		namecolor = COLOR_MAGENTA;
-	else if (cr.flag & CREATUREFLAG_BRAINWASHED)
-		namecolor = COLOR_YELLOW;
-	else namecolor = COLOR_WHITE;
-	// Determine name brightness, based on subordinates left
-	/*if(subordinatesleft(cr))
-	brightness=1;
-	else*/
-	brightness = 0;
-	// add bracket (if used)
-	if (bracketcolor != -1)
-	{
-		set_color(bracketcolor, COLOR_BLACK, 1);
-		addstrAlt(CONST_cursesAlternative011);
-	}
-	if (cr.flag & CREATUREFLAG_SLEEPER)
-	{
-		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_cursesAlternative011);
-	}
-	// add name
-	set_color(namecolor, COLOR_BLACK, brightness);
-	addstrAlt(cr.name);
-	// add close bracket (if used)
-	if (cr.flag & CREATUREFLAG_SLEEPER)
-	{
-		set_color_easy(BLUE_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_cursesAlternative013);
-	}
-	if (bracketcolor != -1)
-	{
-		set_color(bracketcolor, COLOR_BLACK, 1);
-		addstrAlt(CONST_cursesAlternative013);
-	}
-	set_color_easy(WHITE_ON_BLACK);
-}
 
 int pressSpecificKey(const int x, const int y) {
 	int c;
@@ -473,4 +410,66 @@ int pressSpecificKey(const int x, const int y, const int z) {
 
 	} while (c != x && c != y && c != z);
 	return c;
+}
+#include "../locations/locationsPool.h"
+// prints a formatted name, used by promoteliberals
+void printname(const int hiding, const int location, const int flag, const string name) {
+	int bracketcolor = -1, namecolor, brightness;
+	if (hiding)
+		bracketcolor = COLOR_BLACK;
+	// Determine bracket color, if any, based on location
+	if (location != -1)
+	{
+		switch (LocationsPool::getInstance().getLocationType(location))
+		{
+		case SITE_GOVERNMENT_POLICESTATION:
+		case SITE_GOVERNMENT_COURTHOUSE:
+			if (!(flag & CREATUREFLAG_SLEEPER))
+				bracketcolor = COLOR_YELLOW;
+			break;
+		case SITE_GOVERNMENT_PRISON:
+			if (!(flag & CREATUREFLAG_SLEEPER))
+				bracketcolor = COLOR_RED;
+			break;
+		default:
+			break;
+		}
+	}
+	// Determine name color, based on recruitment style
+	if (flag & CREATUREFLAG_LOVESLAVE)
+		namecolor = COLOR_MAGENTA;
+	else if (flag & CREATUREFLAG_BRAINWASHED)
+		namecolor = COLOR_YELLOW;
+	else namecolor = COLOR_WHITE;
+	// Determine name brightness, based on subordinates left
+	/*if(subordinatesleft(cr))
+	brightness=1;
+	else*/
+	brightness = 0;
+	// add bracket (if used)
+	if (bracketcolor != -1)
+	{
+		set_color(bracketcolor, COLOR_BLACK, 1);
+		addstrAlt(CONST_cursesAlternative011);
+	}
+	if (flag & CREATUREFLAG_SLEEPER)
+	{
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_cursesAlternative011);
+	}
+	// add name
+	set_color(namecolor, COLOR_BLACK, brightness);
+	addstrAlt(name);
+	// add close bracket (if used)
+	if (flag & CREATUREFLAG_SLEEPER)
+	{
+		set_color_easy(BLUE_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_cursesAlternative013);
+	}
+	if (bracketcolor != -1)
+	{
+		set_color(bracketcolor, COLOR_BLACK, 1);
+		addstrAlt(CONST_cursesAlternative013);
+	}
+	set_color_easy(WHITE_ON_BLACK);
 }

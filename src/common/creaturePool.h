@@ -17,7 +17,7 @@ public:
 	static CreaturePool getInstance();
 	const int liberal_guardian_writing_power();
 	const int howManyLivingPeopleAreHere(int l);
-	const int lenpool();
+	const int lenpool() const;
 	void delete_and_clear_pool();
 	void setupDisband();
 	const bool isThisCarWantedByAnotherSquad(long vehicleID, int squadID);

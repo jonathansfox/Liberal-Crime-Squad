@@ -7,6 +7,11 @@ const string CONST_lootTypePool000 = "loot";
 #include "../items/loottype.h"
 vector<LootType *> loottype;
 bool LootTypePool::lootTypePoolInitiated = false;
+
+const int LootTypePool::lenpool() const
+{
+	return len(loottype);
+}
 LootTypePool lPool;
 LootTypePool LootTypePool::getInstance()
 {
@@ -15,10 +20,6 @@ LootTypePool LootTypePool::getInstance()
 		lootTypePoolInitiated = true;
 	}
 	return lPool;
-}
-const int LootTypePool::lenpool()
-{
-	return len(loottype);
 }
 const string LootTypePool::getIdName(int i)
 {
