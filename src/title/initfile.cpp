@@ -24,7 +24,7 @@ This file is part of Liberal Crime Squad.
 */
 #include "../common/stringconversion.h"
 //for int stringtobool(std::string boolstr);
-#include "../common/consolesupport.h"
+//#include "../common/consolesupport.h"
 // for void begin_cleartype_fix();
 #include "../title/titlescreen.h"
 void setconfigoption(std::string name, std::string value)
@@ -71,6 +71,7 @@ void setconfigoption(std::string name, std::string value)
 	}
 #endif
 }
+#include <common\\consolesupport.h>
 void loadinitfile()
 {
 	std::fstream file;

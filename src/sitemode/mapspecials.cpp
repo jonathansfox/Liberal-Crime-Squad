@@ -183,6 +183,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../sitemode/advance.h"
 #include "../sitemode/miscactions.h"
@@ -191,8 +201,6 @@ const string tag_skill = "skill";
 #include "../items/loottype.h"
 #include "../items/loot.h"
 #include "../items/money.h"
-//#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 #include "../log/log.h"
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
@@ -283,7 +291,6 @@ Item* create_item(const std::string& inputXml)
 		it = new Money(inputXml);
 	return it;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 void makecreature(const int x, const short type);
 void special_bouncer_greet_squad()
 {

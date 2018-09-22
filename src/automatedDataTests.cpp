@@ -25,11 +25,11 @@ extern map<short, vector<string> >  endgameLawStrings; // 0~7
 //string_to_law;
 void testCreature();
 void automatedDataTests() {
+
 	const string CONST_automatedDataTests013 = "TEST";
 	const string CONST_automatedDataTests008 = "SUCCESS";
 	clearAlt();
-	for (int i = 0; i < LAWNUM; i++) {
-		int k = 0;
+	for (int i = 0, k = 0; i < LAWNUM; i++) {
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, i);
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
@@ -51,29 +51,27 @@ void automatedDataTests() {
 			mvaddstrAlt(k++, 0, endgameLawStrings[i][j]); // 0~7
 		}
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests008);
-		pressAnyKey();
-		clearAlt();
 	}
-	for (int i = 0; i < VIEWNUM - 3; i++) {
-		int k = 0;
+	pressAnyKey();
+	clearAlt();
+	for (int i = 0, k = 0; i < VIEWNUM - 3; i++) {
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, i);
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, issueEventString[i]);
-		pressAnyKey();
-		clearAlt();
 	}
-	for (int i = 0; i < VIEWNUM; i++) {
-		int k = 0;
+	pressAnyKey();
+	clearAlt();
+	for (int i = 0, k = 0; i < VIEWNUM; i++) {
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, i);
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, discussIssues[i]);
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
 		mvaddstrAlt(k++, 0, discussesIssues[i]);
-		pressAnyKey();
-		clearAlt();
 	}
+	pressAnyKey();
+	clearAlt();
 	testCreature();
 
 }
@@ -97,6 +95,8 @@ void testCreature() {
 	char recruits = 1;
 	char base = 21;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
+	void recruitment_activity(DeprecatedCreature &cr);
+	recruitment_activity(*newcr);
 	void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, DeprecatedCreature * newcr);
 	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
 
@@ -108,10 +108,10 @@ void testCreature() {
 			makecreature(cr, i);
 		}
 		if (i % 20 == 0) {
+			pressAnyKey();
 			clearAlt();
 		}
 		mvaddstrAlt(i % 20, 0, cr.name);
-		pressAnyKey();
 
 	}
 	mvaddstrAlt(21, 0, "TEST COMPLETE");

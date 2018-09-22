@@ -14,6 +14,17 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+
+#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../items/armortype.h"
 #include "common/interval.h"
@@ -22,7 +33,7 @@ const string tag_skill = "skill";
 #include "vehicle/vehicle.h"
 #include "creature/creaturetype.h"
 #include "creature/augmenttype.h"
-#include "common/consolesupport.h"
+//#include "common/consolesupport.h"
 // for end_cleartype_fix()
 ///
 /*
@@ -195,6 +206,7 @@ int endwinAlt(void);
 void delete_and_clear_vehicle_types();
 void delete_and_clear_date_pool();
 void delete_and_clear_weapon_type();
+#include <common\\consolesupport.h>
 /* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
 {
@@ -458,7 +470,13 @@ void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid) {
 void setEncounterZeroExistsFalse() {
 	encounter[0].exists = false;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
+vector<NameAndAlignment> getEncounterNameAndAlignment() {
+	vector<NameAndAlignment> nameList;
+	for (int e = 0; e < ENCMAX; e++) {
+		nameList.push_back(encounter[e].getNameAndAlignment());
+	}
+	return nameList;
+}
 int encounterSize() {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int encsize = 0;
@@ -490,13 +508,7 @@ void damage_creature(const int e) {
 void conservatise(const int e) {
 	conservatise(encounter[e]);
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment() {
-	vector<NameAndAlignment> nameList;
-	for (int e = 0; e < ENCMAX; e++) {
-		nameList.push_back(encounter[e].getNameAndAlignment());
-	}
-	return nameList;
-}
+
 void spawnPresident() {
 	encounter[2] = uniqueCreatures.President();
 }

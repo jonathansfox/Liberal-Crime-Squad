@@ -63,6 +63,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
@@ -79,8 +89,6 @@ const string tag_skill = "skill";
 // for addstr
 #include "../common/translateid.h"
 // for  int getsquad(int)
-#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 // for void criminalize(Creature &,short);
@@ -577,17 +585,89 @@ void draw_issue_page(const int page, const int noise, const int survey[], const 
 		}
 	}
 }
-void survey(DeprecatedCreature *cr)
-{
-	static const char SURVEY_PAGE_SIZE = 14;
+void printMostConcernedAbout(const int maxview) {
+	//const string CONST_activities048 = "political terrorism.";
+	extern short attitude[VIEWNUM];
+	extern short lawList[LAWNUM];
 
-	const string CONST_activities054 = "The public is not concerned with politics right now.";
 	const string CONST_activities053 = "Liberal Media Bias.";
 	const string CONST_activities052 = "Conservative Media Bias.";
 	const string CONST_activities051 = "the LCS terrorists.";
 	const string CONST_activities050 = "the Liberal Crime Squad.";
 	const string CONST_activities049 = "activist political groups.";
-	const string CONST_activities048 = "political terrorism.";
+	switch (maxview)
+	{
+		//case VIEW_POLITICALVIOLENCE:
+		//   if(attitude[VIEW_POLITICALVIOLENCE]>50) addstrAlt(CONST_activities047);
+		//   else addstrAlt(CONST_activities048);
+		//   break;
+	case VIEW_LIBERALCRIMESQUAD:
+	case VIEW_LIBERALCRIMESQUADPOS:
+		if (attitude[VIEW_LIBERALCRIMESQUAD] < 50) addstrAlt(CONST_activities049);
+		else
+		{
+			if (attitude[VIEW_LIBERALCRIMESQUADPOS] > 50) addstrAlt(CONST_activities050);
+			else addstrAlt(CONST_activities051);
+		}
+		break;
+	case VIEW_AMRADIO:
+	case VIEW_CABLENEWS:
+		if (attitude[VIEW_AMRADIO] + attitude[VIEW_CABLENEWS] > 100) addstrAlt(CONST_activities052);
+		else addstrAlt(CONST_activities053);
+		break;
+	default:
+		stringConnectedToView currentView = pollingData[(Views)maxview];
+		if (attitude[maxview] > 50) {
+			addstrAlt(pollingData[(Views)maxview].aboveFifty);
+		}
+		else {
+			if (lawList[maxview] == 2) {
+				addstrAlt(pollingData[(Views)maxview].belowFiftyEliteLiberalLaw);
+			}
+			else if (lawList[maxview] >= 1) {
+				addstrAlt(pollingData[(Views)maxview].belowFiftyLiberalLaw);
+			}
+			else {
+				addstrAlt(currentView.belowFifty);
+			}
+		}
+		break;
+	}
+}
+int surveyValue(const int v, const int noise, const int misschance) {
+	extern short attitude[VIEWNUM];
+	extern short public_interest[VIEWNUM];
+	extern bool SHOWMECHANICS;
+	int survey;
+	survey = attitude[v];
+	//MAKE SURVEY ACCURATE IF DEBUGGING
+	if (!SHOWMECHANICS) {
+		do { survey += LCSrandom(noise * 2 + 1) - noise; } while (!LCSrandom(20));
+	}
+	if (survey < 0) survey = 0;
+	if (survey > 100) survey = 100;
+	if (!SHOWMECHANICS) {
+		if (LCSrandom(public_interest[v] + 100) < int(misschance)) survey = -1;
+	}
+	if (v == VIEW_LIBERALCRIMESQUAD && attitude[v] == 0) survey = -1;
+	return survey;
+}
+int findmaxview(const int _maxview, const int v) {
+	extern short public_interest[VIEWNUM];
+	int maxview = _maxview;
+	if (v != VIEW_LIBERALCRIMESQUAD && v != VIEW_LIBERALCRIMESQUADPOS/*&&v!=VIEW_POLITICALVIOLENCE*/)
+	{
+		if (_maxview != -1) { if (public_interest[v] > public_interest[_maxview]) maxview = v; }
+		else { if (public_interest[v] > 0) maxview = v; }
+	}
+	return maxview;
+
+}
+void survey(DeprecatedCreature *cr)
+{
+	static const char SURVEY_PAGE_SIZE = 14;
+	const string CONST_activities054 = "The public is not concerned with politics right now.";
+
 	const string CONST_activities047 = "taking strong action.";
 	const string CONST_activities046 = "The people are most concerned about ";
 	const string CONST_activities045 = "President ";
@@ -601,13 +681,8 @@ void survey(DeprecatedCreature *cr)
 	extern char newscherrybusted;
 	extern char endgamestate;
 	extern Deprecatednewsstoryst *sitestory;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	extern short exec[EXECNUM];
-	extern short attitude[VIEWNUM];
-	extern short public_interest[VIEWNUM];
-	extern short lawList[LAWNUM];
 	music.play(MUSIC_ELECTIONS);
 	const int creatureskill = cr->skill_roll(SKILL_COMPUTERS);
 	const int misschance = max(30 - creatureskill, 5);
@@ -616,24 +691,10 @@ void survey(DeprecatedCreature *cr)
 	int maxview = -1;
 	for (int v = 0; v < VIEWNUM; v++)
 	{
-		survey[v] = attitude[v];
-		if (v != VIEW_LIBERALCRIMESQUAD && v != VIEW_LIBERALCRIMESQUADPOS/*&&v!=VIEW_POLITICALVIOLENCE*/)
-		{
-			if (maxview != -1) { if (public_interest[v] > public_interest[maxview]) maxview = v; }
-			else { if (public_interest[v] > 0) maxview = v; }
-		}
-		//MAKE SURVEY ACCURATE IF DEBUGGING
-		if (!SHOWMECHANICS) {
-			do { survey[v] += LCSrandom(noise * 2 + 1) - noise; } while (!LCSrandom(20));
-		}
-		if (survey[v] < 0) survey[v] = 0;
-		if (survey[v] > 100) survey[v] = 100;
-		if (!SHOWMECHANICS) {
-			if (LCSrandom(public_interest[v] + 100) < int(misschance)) survey[v] = -1;
-		}
-		if (v == VIEW_LIBERALCRIMESQUAD && attitude[v] == 0) survey[v] = -1;
-		if (v == VIEW_LIBERALCRIMESQUADPOS && survey[VIEW_LIBERALCRIMESQUAD] <= 0) survey[v] = -1;
+		survey[v] = surveyValue(v, noise, misschance);
+		maxview = findmaxview(maxview, v);
 	}
+	if (survey[VIEW_LIBERALCRIMESQUAD] <= 0) survey[VIEW_LIBERALCRIMESQUADPOS] = -1;
 	eraseAlt();
 	//TODO: Sort out the gamelog for this.
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -651,44 +712,7 @@ void survey(DeprecatedCreature *cr)
 	if (maxview != -1)
 	{
 		mvaddstrAlt(4, 0, CONST_activities046);
-		switch (maxview)
-		{
-			//case VIEW_POLITICALVIOLENCE:
-			//   if(attitude[VIEW_POLITICALVIOLENCE]>50) addstrAlt(CONST_activities047);
-			//   else addstrAlt(CONST_activities048);
-			//   break;
-		case VIEW_LIBERALCRIMESQUAD:
-		case VIEW_LIBERALCRIMESQUADPOS:
-			if (attitude[VIEW_LIBERALCRIMESQUAD] < 50) addstrAlt(CONST_activities049);
-			else
-			{
-				if (attitude[VIEW_LIBERALCRIMESQUADPOS] > 50) addstrAlt(CONST_activities050);
-				else addstrAlt(CONST_activities051);
-			}
-			break;
-		case VIEW_AMRADIO:
-		case VIEW_CABLENEWS:
-			if (attitude[VIEW_AMRADIO] + attitude[VIEW_CABLENEWS] > 100) addstrAlt(CONST_activities052);
-			else addstrAlt(CONST_activities053);
-			break;
-		default:
-			stringConnectedToView currentView = pollingData[(Views)maxview];
-			if (attitude[maxview] > 50) {
-				addstrAlt(pollingData[(Views)maxview].aboveFifty);
-			}
-			else {
-				if (lawList[maxview] == 2) {
-					addstrAlt(pollingData[(Views)maxview].belowFiftyEliteLiberalLaw);
-				}
-				else if (lawList[maxview] >= 1) {
-					addstrAlt(pollingData[(Views)maxview].belowFiftyLiberalLaw);
-				}
-				else {
-					addstrAlt(currentView.belowFifty);
-				}
-			}
-			break;
-		}
+		printMostConcernedAbout(maxview);
 	}
 	else
 	{
@@ -1180,7 +1204,6 @@ void doActivityHacking(vector<DeprecatedCreature *> &hack, char &clearformess)
 		}
 	}
 }
-int lenloot(int cursite);
 string gimmeASprayCan(DeprecatedCreature* graffiti);
 void buyMeASprayCan(DeprecatedCreature* graffiti);
 void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearformess)

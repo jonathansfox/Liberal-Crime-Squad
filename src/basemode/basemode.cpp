@@ -65,6 +65,15 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 //#include "../pdcurses/curses.h"
 #include "../cursesgraphics.h"
@@ -91,6 +100,8 @@ void review();
 //for int mvaddstr(int, int, const char*)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
 // for int squadsize(const squadst *)
 //#include "../common/equipment.h"
 void equip(vector<Item *> &loot, int loc);
@@ -120,75 +131,46 @@ enum CantSeeReason
 };
 string check_status_of_squad_liberal;
 string show_squad_liberal_status;
-bool show_disbanding_screen(int& oldforcemonth)
-{
-	const string CONST_basemode030 = "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month";
-	const string CONST_basemode029 = "컴컴컴컴컴컴컴컴";
-	const string CONST_basemode026 = "Conservative";
-	const string CONST_basemode025 = "Liberal";
-	const string CONST_basemode024 = "Public Mood";
-	const string CONST_basemode020 = "Libertarian";
-	const string CONST_basemode019 = "Stalinist";
-	const string CONST_basemode017 = "Supreme Court: ";
-	const string CONST_basemode016 = "Senate: ";
+void printHouseMake() {
+	extern bool stalinmode;
+	extern short house[HOUSENUM];
 	const string CONST_basemode015 = "House: ";
-	const string CONST_basemode014 = ", 2nd Term";
-	const string CONST_basemode013 = ", 1st Term";
-	const string CONST_basemode012 = "President: ";
-	extern MusicClass music;
-	extern int year;
-	extern int month;
-	extern int disbandtime;
-	extern short execterm;
+	int housemake[6] = { 0,0,0,0,0,0 };
+	for (int h = 0; h < HOUSENUM; h++) {
+		housemake[house[h] + 2]++;
+	}
+	{
+		signed char align;
+		if (housemake[5] + min(housemake[0], housemake[4]) >= HOUSEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+		else if (housemake[0] >= HOUSEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+		else if (housemake[4] >= HOUSEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+		else if (housemake[0] + housemake[1] >= HOUSEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+		else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+		else align = ALIGN_MODERATE; // nobody has a majority
+		set_alignment_color(align, true);
+		mvaddstrAlt(2, 0, CONST_basemode015);
+		if (stalinmode) {
+			addstrAlt(tostring(housemake[5]) + tag_Sta);
+		}
+		addstrAlt(tostring(housemake[4]) + tag_Libp);
+		addstrAlt(tostring(housemake[3]) + tag_Lib);
+		addstrAlt(tostring(housemake[2]) + tag_Mod);
+		addstrAlt(tostring(housemake[1]) + tag_Cons);
+		addstrAlt(tostring(housemake[0]) + tag_Consp);
+	}
+}
+void printSenateMake() {
+	const string CONST_basemode016 = "Senate: ";
 	extern bool stalinmode;
 	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short house[HOUSENUM];
 	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
-	extern short lawList[LAWNUM];
-	extern short attitude[VIEWNUM];
-	extern vector<DeprecatedCreature *> pool;
-	if (oldforcemonth == month) return true;
-	music.play(MUSIC_DISBANDED);
-	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-	{
-		int targetjuice = LCSrandom(100 * (year - disbandtime + 1));
-		if (targetjuice > 1000) targetjuice = 1000;
-		if (pool[p]->juice < targetjuice&&pool[p]->hireid != -1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
-			pool[p]->alive = 0; // Kill for the purposes of disbanding all contacts below
-	}
-	oldforcemonth = month;
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, getmonth(month) + singleSpace);
-	addstrAlt(year);
-	signed char align = exec[EXEC_PRESIDENT];
-	set_alignment_color(align, true);
-	mvaddstrAlt(1, 0, CONST_basemode012);
-	addstrAlt(execname[EXEC_PRESIDENT]); addstrAlt(commaSpace);
-	addstrAlt(getalign(align));
-	if (execterm == 1)addstrAlt(CONST_basemode013);
-	else addstrAlt(CONST_basemode014);
-	int housemake[6] = { 0,0,0,0,0,0 };
-	for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
-	if (housemake[5] + min(housemake[0], housemake[4]) >= HOUSEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-	else if (housemake[0] >= HOUSEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-	else if (housemake[4] >= HOUSEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-	else if (housemake[0] + housemake[1] >= HOUSEMAJORITY) align = ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-	else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-	else align = ALIGN_MODERATE; // nobody has a majority
-	set_alignment_color(align, true);
-	mvaddstrAlt(2, 0, CONST_basemode015);
-	if (stalinmode) addstrAlt(tostring(housemake[5]) + tag_Sta);
-	addstrAlt(tostring(housemake[4]) + tag_Libp);
-	addstrAlt(tostring(housemake[3]) + tag_Lib);
-	addstrAlt(tostring(housemake[2]) + tag_Mod);
-	addstrAlt(tostring(housemake[1]) + tag_Cons);
-	addstrAlt(tostring(housemake[0]) + tag_Consp);
 	int senatemake[6] = { 0,0,0,0,0,0 };
-	for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
+	for (int s = 0; s < SENATENUM; s++) {
+		senatemake[senate[s] + 2]++;
+	}
 	senatemake[exec[EXEC_VP] + 2]++; // Vice President is tie-breaking vote in the Senate
+	
+	signed char align;
 	if (senatemake[5] + min(senatemake[0], senatemake[4]) >= SENATEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
 	else if (senatemake[0] >= SENATEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
 	else if (senatemake[4] >= SENATEMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
@@ -196,6 +178,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 	else if (senatemake[3] + senatemake[4] >= SENATEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
+	
 	senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
 	mvaddstrAlt(3, 0, CONST_basemode016);
 	if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
@@ -204,8 +187,18 @@ bool show_disbanding_screen(int& oldforcemonth)
 	addstrAlt(tostring(senatemake[2]) + tag_Mod);
 	addstrAlt(tostring(senatemake[1]) + tag_Cons);
 	addstrAlt(tostring(senatemake[0]) + tag_Consp);
+}
+void printCourtMake() {
+	extern bool stalinmode;
+	extern short court[COURTNUM];
+	const string CONST_basemode017 = "Supreme Court: ";
 	int courtmake[6] = { 0,0,0,0,0,0 };
-	for (int s = 0; s < COURTNUM; s++) courtmake[court[s] + 2]++;
+	for (int s = 0; s < COURTNUM; s++) {
+		courtmake[court[s] + 2]++;
+	}
+
+	
+	signed char align;
 	if (courtmake[5] + min(courtmake[0], courtmake[4]) >= COURTMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
 	else if (courtmake[0] >= COURTMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
 	else if (courtmake[4] >= COURTMAJORITY) align = ALIGN_ELITELIBERAL; // Elite Liberals have a majority
@@ -213,6 +206,8 @@ bool show_disbanding_screen(int& oldforcemonth)
 	else if (courtmake[3] + courtmake[4] >= COURTMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
+	
+
 	mvaddstrAlt(4, 0, CONST_basemode017);
 	if (stalinmode) addstrAlt(tostring(courtmake[5]) + tag_Sta);
 	addstrAlt(tostring(courtmake[4]) + tag_Libp);
@@ -220,51 +215,71 @@ bool show_disbanding_screen(int& oldforcemonth)
 	addstrAlt(tostring(courtmake[2]) + tag_Mod);
 	addstrAlt(tostring(courtmake[1]) + tag_Cons);
 	addstrAlt(tostring(courtmake[0]) + tag_Consp);
-	for (int l = 0; l < LAWNUM; l++)
+}
+
+void printStalinMood() {
+	const string CONST_basemode029 = "컴컴컴컴컴컴컴컴";
+	const string CONST_basemode024 = "Public Mood";
+	const string CONST_basemode020 = "Libertarian";
+	const string CONST_basemode019 = "Stalinist";
+	extern short attitude[VIEWNUM];
+
+	signed char align;
+	int stalin = 0; // the Stalinist mood position from 1 to 78 (left=Stalinist, right=Libertarian)
+	for (int v = 0; v < VIEWNUM - 3; v++)
 	{
-		align = lawList[l];
-		set_alignment_color(align, true);
-		mvaddstrAlt(6 + l / 3, l % 3 * 30, getlaw(l));
+		stalin += stalinview(v, false) ? attitude[v] : 100 - attitude[v];
 	}
+	stalin = 78 - (stalin * 77) / ((VIEWNUM - 3) * 100); // very accurate Stalinist mood positioning!
+	if (stalin >= 64) align = ALIGN_ELITELIBERAL;
+	else if (stalin >= 48) align = ALIGN_LIBERAL;
+	else if (stalin >= 32) align = ALIGN_MODERATE;
+	else if (stalin >= 16) align = ALIGN_CONSERVATIVE;
+	else align = ALIGN_ARCHCONSERVATIVE;
+	set_alignment_color(align, true);
+	mvaddstrAlt(17, 33, CONST_basemode024);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, CONST_basemode019);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 68, CONST_basemode020);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 0, "\x11컴컴컴컴컴컴컴�");
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 16, CONST_basemode029);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 32, CONST_basemode029);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 48, CONST_basemode029);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 64, "컴컴컴컴컴컴컴�\x10");
+	set_alignment_color(align, true);
+	mvaddcharAlt(18, stalin, 'O');
+}
+void printMood() {
+
+	extern bool stalinmode;
 	if (stalinmode)
 	{
-		int stalin = 0; // the Stalinist mood position from 1 to 78 (left=Stalinist, right=Libertarian)
-		for (int v = 0; v < VIEWNUM - 3; v++)
-			stalin += stalinview(v, false) ? attitude[v] : 100 - attitude[v];
-		stalin = 78 - (stalin * 77) / ((VIEWNUM - 3) * 100); // very accurate Stalinist mood positioning!
-		if (stalin >= 64) align = ALIGN_ELITELIBERAL;
-		else if (stalin >= 48) align = ALIGN_LIBERAL;
-		else if (stalin >= 32) align = ALIGN_MODERATE;
-		else if (stalin >= 16) align = ALIGN_CONSERVATIVE;
-		else align = ALIGN_ARCHCONSERVATIVE;
-		set_alignment_color(align, true);
-		mvaddstrAlt(17, 33, CONST_basemode024);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, CONST_basemode019);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 68, CONST_basemode020);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(18, 0, "\x11컴컴컴컴컴컴컴�");
-		set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-		mvaddstrAlt(18, 16, CONST_basemode029);
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(18, 32, CONST_basemode029);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(18, 48, CONST_basemode029);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(18, 64, "컴컴컴컴컴컴컴�\x10");
-		set_alignment_color(align, true);
-		mvaddcharAlt(18, stalin, 'O');
+		printStalinMood();
 	}
+
+	const string CONST_basemode029 = "컴컴컴컴컴컴컴컴";
+	const string CONST_basemode026 = "Conservative";
+	const string CONST_basemode025 = "Liberal";
+	const string CONST_basemode024 = "Public Mood";
+	extern short attitude[VIEWNUM];
+
 	int mood = 0; // the mood position from 1 to 78 (left=left-wing, right=right-wing)
-	for (int v = 0; v < VIEWNUM - 3; v++) mood += attitude[v];
+	for (int v = 0; v < VIEWNUM - 3; v++) { mood += attitude[v]; }
 	mood = 78 - (mood * 77) / ((VIEWNUM - 3) * 100); // very accurate mood positioning!
+	signed char align;
 	if (mood >= 64) align = ALIGN_ARCHCONSERVATIVE;
 	else if (mood >= 48) align = ALIGN_CONSERVATIVE;
 	else if (mood >= 32) align = ALIGN_MODERATE;
 	else if (mood >= 16) align = ALIGN_LIBERAL;
 	else align = ALIGN_ELITELIBERAL;
 	set_alignment_color(align, true);
+
 	mvaddstrAlt(stalinmode ? 21 : 20, 33, CONST_basemode024);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(21, 1, CONST_basemode025);
@@ -281,9 +296,93 @@ bool show_disbanding_screen(int& oldforcemonth)
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 64, "컴컴컴컴컴컴컴�\x10");
 	set_alignment_color(align, true);
+
 	mvaddcharAlt(22, mood, 'O');
+}
+void printLawMake() {
+	extern short lawList[LAWNUM];
+
+	for (int l = 0; l < LAWNUM; l++)
+	{
+		set_alignment_color(lawList[l], true);
+		mvaddstrAlt(6 + l / 3, l % 3 * 30, getlaw(l));
+	}
+}
+void printMonthAndYear() {
+	extern int year;
+	extern int month;
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, getmonth(month) + singleSpace);
+	addstrAlt(year);
+}
+void letTheUnworthyLeave() {
+	extern vector<DeprecatedCreature *> pool;
+	extern int disbandtime;
+	extern int year;
+
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		int targetjuice = LCSrandom(100 * (year - disbandtime + 1));
+		if (targetjuice > 1000) targetjuice = 1000;
+		if (pool[p]->juice < targetjuice&&pool[p]->hireid != -1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
+			pool[p]->alive = 0; // Kill for the purposes of disbanding all contacts below
+	}
+}
+void printExecMove() {
+
+	const string CONST_basemode014 = ", 2nd Term";
+	const string CONST_basemode013 = ", 1st Term";
+	const string CONST_basemode012 = "President: ";
+	extern short execterm;
+
+	extern short exec[EXECNUM];
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	set_alignment_color(exec[EXEC_PRESIDENT], true);
+	mvaddstrAlt(1, 0, CONST_basemode012);
+	addstrAlt(execname[EXEC_PRESIDENT]);
+	addstrAlt(commaSpace);
+	addstrAlt(getalign(exec[EXEC_PRESIDENT]));
+	if (execterm == 1) {
+		addstrAlt(CONST_basemode013);
+	}
+	else {
+		addstrAlt(CONST_basemode014);
+	}
+
+}
+void printDisbandScreen() {
+
+	const string CONST_basemode030 = "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month";
+	extern MusicClass music;
+
+	music.play(MUSIC_DISBANDED);
+
+	letTheUnworthyLeave();
+
+	eraseAlt();
+	printMonthAndYear();
+
+	printExecMove();
+	printHouseMake();
+	printSenateMake();
+	printCourtMake();
+	printLawMake();
+
+	printMood();
+
+
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, CONST_basemode030);
+}
+bool show_disbanding_screen(int& oldforcemonth)
+{
+	extern int month;
+	if (oldforcemonth == month) return true;
+
+	oldforcemonth = month;
+	printDisbandScreen();
+
 	return(getkeyAlt() != 'r');
 }
 void printIfLongWait(int nonsighttime) {

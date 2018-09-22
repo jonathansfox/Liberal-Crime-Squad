@@ -984,14 +984,21 @@ This file is part of Liberal Crime Squad.                                       
 */
 //TODO: Add logging for this file? --Addictgamer
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/commonactions.h"
 //#include "../common/stringconversion.h"
 inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest, src.c_str()); }
 inline char* strcat(char* dest, const std::string& src) { return strcat(dest, src.c_str()); }
 inline char* strcat(char* dest, long src) { return strcat(dest, tostring(src)); }
-#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 #include "../common/getnames.h"
 #include "../common/misc.h"
 // cursesgraphics.h
@@ -1183,6 +1190,12 @@ vector<file_and_text_collection> majorevent_text_file_collection = {
 	customText(&caseNEWSSTORY_CCS_DEFEATED, mostlyendings + CONST_news091),
 	customText(&caseNEWSSTORY_CCS_NOBACKERS, mostlyendings + CONST_news092),
 };
+void displaynewspicture(int p, int y);
+void displaycenterednewsfont(const std::string& str, int y);
+void preparepage(const Deprecatednewsstoryst ns, const bool liberalguardian);
+
+
+
 
 Deprecatednewsstoryst* ccs_strikes_story()
 {
@@ -1699,66 +1712,6 @@ void assign_page_numbers_to_newspaper_stories()
 			acted = 1;
 		}
 	} while (acted);
-}
-/* news - show major news story */
-void preparepage(const Deprecatednewsstoryst ns, const bool liberalguardian)
-{
-	extern int day;
-	extern int month;
-	extern int year;
-	extern unsigned char newstops[6][80][5][4];
-	set_color_easy(WHITE_ON_WHITE);
-	for (int x = 0; x < 80; x++)
-		for (int y = 0; y < 25; y++)
-			mvaddcharAlt(y, x, ' ');
-	set_color_easy(WHITE_ON_BLACK);
-	if (ns.page == 1 || (liberalguardian&&ns.guardianpage == 1))
-	{
-		//TOP
-		int pap = LCSrandom(5);
-		for (int x = 0; x < 80; x++)
-		{
-			for (int y = 0; y < 5; y++)
-			{
-				if (liberalguardian)
-				{
-					set_color((newstops[5][x][y][1]),
-						(newstops[5][x][y][2]),
-						newstops[5][x][y][3]);
-					mvaddcharAlt(y, x, newstops[5][x][y][0]);
-				}
-				else
-				{
-					set_color((newstops[pap][x][y][1]),
-						(newstops[pap][x][y][2]),
-						newstops[pap][x][y][3]);
-					mvaddcharAlt(y, x, newstops[pap][x][y][0]);
-				}
-			}
-		}
-		if (!liberalguardian) // Liberal Guardian graphics don't support adding a date
-		{
-			//DATE
-			set_color_easy(BLACK_ON_WHITE);
-			int pday = day, pmonth = month, pyear = year;
-			if (pday > monthday()) // Day counter has increased but end-of-month has not yet
-			{ // been checked so it has to be accounted for here.
-				pday = 1, pmonth++;
-				if (pmonth > 12) pmonth = 1, pyear++;
-			}
-			mvaddstrAlt(3, 66 + (pday < 10), getmonth(pmonth, true));
-			addstrAlt(singleSpace);
-			addstrAlt(pday);
-			addstrAlt(commaSpace);
-			addstrAlt(pyear);
-		}
-	}
-	else
-	{
-		//PAGE
-		set_color_easy(BLACK_ON_WHITE);
-		mvaddstrAlt(0, 76, liberalguardian ? ns.guardianpage : ns.page);
-	}
 }
 /* news - draws the specified block of text to the screen */
 void displaynewsstory(const string story, const short *storyx_s, const short *storyx_e, int y) {
@@ -2424,59 +2377,6 @@ string squadstory_text_opening(const Deprecatednewsstoryst ns, bool liberalguard
 	return story;
 }
 
-void displaycenterednewsfont(const std::string& str, int y)
-{
-	extern unsigned char bigletters[27][5][7][4];
-	int width = -1;
-	for (int s = 0; s < len(str); s++)
-	{
-		if (str[s] >= 'A'&&str[s] <= 'Z')width += 6;
-		else if (str[s] == '\'')width += 4;
-		else width += 3;
-	}
-	int x = 39 - width / 2;
-	for (int s = 0; s < len(str); s++)
-	{
-		if ((str[s] >= 'A'&&str[s] <= 'Z') || str[s] == '\'')
-		{
-			int p;
-			if (str[s] >= 'A'&&str[s] <= 'Z') p = str[s] - 'A';
-			else p = 26;
-			int lim = 6;
-			if (str[s] == '\'') lim = 4;
-			if (s == len(str) - 1) lim--;
-			for (int x2 = 0; x2 < lim; x2++) for (int y2 = 0; y2 < 7; y2++)
-			{
-				// Clean the square first.
-				set_color_easy(BLACK_ON_BLACK);
-				mvaddchAlt(y + y2, x + x2, ' ');
-				if (x2 == 5)
-				{
-					set_color_easy(WHITE_ON_WHITE);
-					mvaddchAlt(y + y2, x + x2, ' ');
-				}
-				else
-				{
-					set_color((bigletters[p][x2][y2][1]),
-						(bigletters[p][x2][y2][2]),
-						bigletters[p][x2][y2][3]);
-					mvaddcharAlt(y + y2, x + x2, bigletters[p][x2][y2][0]);
-				}
-			}
-			x += lim;
-		}
-		else
-		{
-			set_color_easy(WHITE_ON_WHITE);
-			for (int x2 = 0; x2 < 3; x2++) for (int y2 = 0; y2 < 7; y2++)
-			{
-				mvaddcharAlt(y + y2, x + x2, ' ');
-			}
-			x += 3;
-		}
-	}
-}
-
 string constructeventstory(const short view, const char positive);
 
 const int PICTURE_MUTANT_BEAST = 0;
@@ -3034,20 +2934,6 @@ void displaycenteredsmallnews(const std::string& str, int y)
 {
 	set_color_easy(BLACK_ON_WHITE);
 	mvaddstrCenter(y, str);
-}
-void displaynewspicture(int p, int y)
-{
-	extern unsigned char newspic[20][78][18][4];
-	for (int x2 = 0; x2 < 78; x2++)
-		for (int y2 = 0; y2 < 15; y2++)
-		{
-			if (y + y2 > 24) break;
-			set_color((newspic[p][x2][y2][1]),
-				(newspic[p][x2][y2][2]),
-				newspic[p][x2][y2][3]);
-			moveAlt(y + y2, 1 + x2);
-			addcharAlt(newspic[p][x2][y2][0]);
-		}
 }
 void displaynewsstoryPositiveX(const short view, const string next, const short* storyx_s, const short* storyx_e) {
 	displaycenterednewsfont(next, 5);

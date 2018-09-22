@@ -58,6 +58,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -190,14 +200,12 @@ const string CONST_siege167 = "Surrender yourselves!";
 int baddieCount();
 int encounterSize();
 vector<NameAndAlignment> getEncounterNameAndAlignment();
-const string singleSpace = " ";
-void giveup()
-{
-	const string CONST_siege031 = " is slain.";
-	const string CONST_siege030 = "Everyone in the ";
+void surrenderToAuthorities(const int loc) {
+
 	const string CONST_siege029 = "Materials relating to the business front have been taken.";
 	const string CONST_siege028 = "The compound is dismantled.";
-	const string CONST_siege026 = "Law enforcement has confiscated $%d in LCS funds.";
+	const string CONST_siege026A = "Law enforcement has confiscated $";
+	const string CONST_siege026B = " in LCS funds.";
 	const string CONST_siege025 = "Fortunately, your funds remain intact.";
 	const string CONST_siege024 = " Liberals are taken to the police station.";
 	const string CONST_siege023 = "is taken to the police station.";
@@ -210,10 +218,6 @@ void giveup()
 	const string CONST_siege016 = "The soldiers";
 	const string CONST_siege015 = "The police";
 	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
-	extern int stat_dead;
-	extern short cursite;
 	extern short offended_firemen;
 	extern short offended_amradio;
 	extern short offended_cablenews;
@@ -221,194 +225,215 @@ void giveup()
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
 	extern class Ledger ledger;
+
+	music.play(MUSIC_SIEGE);
+	int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
+	//END SIEGE
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
+		mvaddstrAlt(1, 1, CONST_siege015, gamelog);
+	else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
+		mvaddstrAlt(1, 1, CONST_siege016, gamelog);
+	else mvaddstrAlt(1, 1, CONST_siege017, gamelog);
+	addstrAlt(CONST_siege018, gamelog);
+	gamelog.newline();
+	int kcount = 0, pcount = 0, icount = 0;
+	string kname;
+	string pname;
+	string pcname;
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != loc || !pool[p]->getNameAndAlignment().alive) continue;
+		if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
+		if (pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->getNameAndAlignment().align == -1)
+		{
+			kcount++;
+			kname = pool[p]->propername;
+			if (pool[p]->getNameAndAlignment().type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
+			if (pool[p]->getNameAndAlignment().type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
+			//clear InterrogationST data if deleted
+			delete pool[p]->activity.intr();
+		}
+	}
+	//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
+	if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
+	if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN && hasPrintingPress(loc))
+		criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
+												  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != loc || !pool[p]->getNameAndAlignment().alive) continue;
+		if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->getNameAndAlignment().align == -1))
+		{
+			pcount++;
+			pname = pool[p]->propername;
+			pcname = pool[p]->getNameAndAlignment().name;
+		}
+	}
+	if (kcount == 1)
+	{
+		mvaddstrAlt(3, 1, kname);
+		addstrAlt(CONST_siege019, gamelog);
+		gamelog.newline();
+	}
+	if (kcount > 1)
+	{
+		mvaddstrAlt(3, 1, CONST_siege020, gamelog);
+		gamelog.newline();
+	}
+	if (pcount == 1)
+	{
+		mvaddstrAlt(5, 1, pname, gamelog);
+		if (pname == pcname)
+		{
+			addstrAlt(CONST_siege021, gamelog);
+			addstrAlt(pcname, gamelog);
+			addstrAlt(CONST_siege022, gamelog);
+		}
+		mvaddstrAlt(6, 1, CONST_siege023, gamelog);
+		gamelog.newline();
+	}
+	if (pcount > 1)
+	{
+		mvaddstrAlt(5, 1, pcount, gamelog);
+		addstrAlt(CONST_siege024, gamelog);
+		gamelog.newline();
+	}
+	if (ledger.get_funds() > 0)
+	{
+		if (ledger.get_funds() <= 2000 || LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
+		{
+			mvaddstrAlt(8, 1, CONST_siege025, gamelog);
+			gamelog.newline();
+		}
+		else
+		{
+			int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
+			if (ledger.get_funds() - confiscated > 50000)
+				confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
+			mvaddstrAlt(8, 1, CONST_siege026A + tostring(confiscated) + CONST_siege026B, gamelog);
+			gamelog.newline();
+			ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
+		}
+	}
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
+	{
+		if (hasPrintingPress(loc))
+		{
+			mvaddstrAlt(10, 1, CONST_siege174, gamelog);
+			gamelog.newline();
+			deletePrintingPress(loc);
+		}
+	}
+	else
+	{
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS, loc))
+		{
+			mvaddstrAlt(10, 1, CONST_siege028, gamelog);
+			gamelog.newline();
+			deleteCompoundWalls(loc);
+		}
+	}
+	if (LocationsPool::getInstance().isThisAFront(loc) != -1)
+	{
+		mvaddstrAlt(12, 1, CONST_siege029, gamelog);
+		gamelog.newline();
+		deleteBusinessFront(loc);
+	}
+	pressAnyKey();
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
+		offended_firemen = 0; // Firemen do not hold grudges
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != loc) continue;
+		//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
+		if ((pool[p]->flag & CREATUREFLAG_MISSING) ||
+			!pool[p]->getNameAndAlignment().alive)
+		{
+			// Clear actions for anybody who was tending to this person
+			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
+				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
+					pool[i]->activity.type = ACTIVITY_NONE;
+			removesquadinfo(*pool[p]);
+			delete_and_remove(pool, p);
+			continue;
+		}
+		//TAKE SQUAD EQUIPMENT
+		if (pool[p]->squadid != -1)
+		{
+			int sq = getsquad(pool[p]->squadid);
+			if (sq != -1)delete_and_clear(squad[sq]->loot);
+		}
+		pool[p]->drop_weapons_and_clips(NULL);
+		if (iscriminal(*pool[p]))
+		{
+			removesquadinfo(*pool[p]);
+			pool[p]->location = polsta;
+			pool[p]->activity.type = ACTIVITY_NONE;
+		}
+	}
+}
+void surrenderAndDie(const int loc) {
+	const string CONST_siege031 = " is slain.";
+	const string CONST_siege030 = "Everyone in the ";
+
+	extern int stat_dead;
+	extern short cursite;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern vector<DeprecatedCreature *> pool;
+
+	//OTHERWISE IT IS SUICIDE
+	int killnumber = 0;
+	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
+	{
+		if (pool[p]->location != loc) continue;
+		if (pool[p]->getNameAndAlignment().alive&&pool[p]->getNameAndAlignment().align == 1) stat_dead++;
+		killnumber++;
+		removesquadinfo(*pool[p]);
+		pool[p]->die();
+		pool[p]->location = -1;
+	}
+	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
+		CCSCapturesSite(loc);
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 1, CONST_siege030, gamelog);
+	addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
+	addstrAlt(CONST_siege031, gamelog);
+	gamelog.newline();
+	if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
+	pressAnyKey();
+	createNewStoryMassacre(loc, killnumber);
+	//MUST SET cursite TO SATISFY endcheck() CODE
+	int tmp = cursite;
+	cursite = loc;
+	endcheck();
+	cursite = tmp;
+}
+const string singleSpace = " ";
+void giveup()
+{
+	extern Log gamelog;
+	extern Deprecatedsquadst *activesquad;
+	extern int selectedsiege;
 	int loc = -1;
 	if (selectedsiege != -1)loc = selectedsiege;
 	if (activesquad != NULL)loc = activesquad->squad[0]->location;
 	if (loc == -1)return;
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,loc) > 1)LocationsPool::getInstance().setRenting(loc, RENTING_NOCONTROL);
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, loc) > 1)LocationsPool::getInstance().setRenting(loc, RENTING_NOCONTROL);
 	//IF POLICE, END SIEGE
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
 		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 	{
-		music.play(MUSIC_SIEGE);
-		int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
-		//END SIEGE
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
-			mvaddstrAlt(1, 1, CONST_siege015, gamelog);
-		else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
-			mvaddstrAlt(1, 1, CONST_siege016, gamelog);
-		else mvaddstrAlt(1, 1, CONST_siege017, gamelog);
-		addstrAlt(CONST_siege018, gamelog);
-		gamelog.newline();
-		int kcount = 0, pcount = 0, icount = 0;
-		string kname;
-		string pname;
-		string pcname;
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc || !pool[p]->alive) continue;
-			if (pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
-			if (pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1)
-			{
-				kcount++;
-				kname = pool[p]->propername;
-				if (pool[p]->type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
-				if (pool[p]->type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
-				//clear InterrogationST data if deleted
-				delete pool[p]->activity.intr();
-			}
-		}
-		//CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
-		if (kcount) criminalizepool(LAWFLAG_KIDNAPPING, -1, loc);
-		if (icount) criminalizepool(LAWFLAG_HIREILLEGAL, -1, loc);
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN && hasPrintingPress(loc))
-			criminalizepool(LAWFLAG_SPEECH, -1, loc); // Criminalize pool for unacceptable speech
-													  //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc || !pool[p]->alive) continue;
-			if (iscriminal(*pool[p]) && !(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == -1))
-			{
-				pcount++;
-				pname = pool[p]->propername;
-				pcname = pool[p]->name;
-			}
-		}
-		if (kcount == 1)
-		{
-			mvaddstrAlt(3, 1, kname);
-			addstrAlt(CONST_siege019, gamelog);
-			gamelog.newline();
-		}
-		if (kcount > 1)
-		{
-			mvaddstrAlt(3, 1, CONST_siege020, gamelog);
-			gamelog.newline();
-		}
-		if (pcount == 1)
-		{
-			mvaddstrAlt(5, 1, pname, gamelog);
-			if (pname == pcname)
-			{
-				addstrAlt(CONST_siege021, gamelog);
-				addstrAlt(pcname, gamelog);
-				addstrAlt(CONST_siege022, gamelog);
-			}
-			mvaddstrAlt(6, 1, CONST_siege023, gamelog);
-			gamelog.newline();
-		}
-		if (pcount > 1)
-		{
-			mvaddstrAlt(5, 1, pcount, gamelog);
-			addstrAlt(CONST_siege024, gamelog);
-			gamelog.newline();
-		}
-		if (ledger.get_funds() > 0)
-		{
-			if (ledger.get_funds() <= 2000 || LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
-			{
-				mvaddstrAlt(8, 1, CONST_siege025, gamelog);
-				gamelog.newline();
-			}
-			else
-			{
-				int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
-				if (ledger.get_funds() - confiscated > 50000)
-					confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
-				mvaddstr_fl(8, 1, gamelog, CONST_siege026.c_str(), confiscated);
-				gamelog.newline();
-				ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
-			}
-		}
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
-		{
-			if (hasPrintingPress(loc))
-			{
-				mvaddstrAlt(10, 1, CONST_siege174, gamelog);
-				gamelog.newline();
-				deletePrintingPress(loc);
-			}
-		}
-		else
-		{
-			if (LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,loc))
-			{
-				mvaddstrAlt(10, 1, CONST_siege028, gamelog);
-				gamelog.newline();
-				deleteCompoundWalls(loc);
-			}
-		}
-		if (LocationsPool::getInstance().isThisAFront(loc) != -1)
-		{
-			mvaddstrAlt(12, 1, CONST_siege029, gamelog);
-			gamelog.newline();
-			deleteBusinessFront(loc);
-		}
-		pressAnyKey();
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
-			offended_firemen = 0; // Firemen do not hold grudges
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc) continue;
-			//ALL KIDNAP VICTIMS FREED REGARDLESS OF CRIMES
-			if ((pool[p]->flag & CREATUREFLAG_MISSING) ||
-				!pool[p]->alive)
-			{
-				// Clear actions for anybody who was tending to this person
-				for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
-					if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
-						pool[i]->activity.type = ACTIVITY_NONE;
-				removesquadinfo(*pool[p]);
-				delete_and_remove(pool, p);
-				continue;
-			}
-			//TAKE SQUAD EQUIPMENT
-			if (pool[p]->squadid != -1)
-			{
-				int sq = getsquad(pool[p]->squadid);
-				if (sq != -1)delete_and_clear(squad[sq]->loot);
-			}
-			pool[p]->drop_weapons_and_clips(NULL);
-			if (iscriminal(*pool[p]))
-			{
-				removesquadinfo(*pool[p]);
-				pool[p]->location = polsta;
-				pool[p]->activity.type = ACTIVITY_NONE;
-			}
-		}
+		surrenderToAuthorities(loc);
 		endLocationSiege(loc);
 	}
 	else
 	{
-		//OTHERWISE IT IS SUICIDE
-		int killnumber = 0;
-		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
-		{
-			if (pool[p]->location != loc) continue;
-			if (pool[p]->alive&&pool[p]->align == 1) stat_dead++;
-			killnumber++;
-			removesquadinfo(*pool[p]);
-			pool[p]->die();
-			pool[p]->location = -1;
-		}
-		if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
-			CCSCapturesSite(loc);
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1, 1, CONST_siege030, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-		addstrAlt(CONST_siege031, gamelog);
-		gamelog.newline();
-		if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
-		pressAnyKey();
-		createNewStoryMassacre(loc, killnumber);
-		//MUST SET cursite TO SATISFY endcheck() CODE
-		int tmp = cursite;
-		cursite = loc;
-		endcheck();
-		cursite = tmp;
+		surrenderAndDie(loc);
 		endLocationSiege(loc);
 	}
 	//CONFISCATE MATERIAL
@@ -678,143 +703,206 @@ void statebrokenlaws(int loc)
 	gamelog.nextMessage();
 	pressAnyKey();
 }
+
+const string CONST_siegeB254 = "HIRING UNDOCUMENTED WORKERS";
+const string CONST_siegeB253 = "FLAG BURNING";
+const string CONST_siege109 = "LOITERING";
+const string CONST_siege108 = "PUBLIC NUDITY";
+const string CONST_siege107 = "DISTURBING THE PEACE";
+const string CONST_siege106 = "RESISTING ARREST";
+const string CONST_siege105 = "VANDALISM";
+const string CONST_siege104 = "BREAKING AND ENTERING";
+const string CONST_siege103 = "UNLAWFUL BURIAL";
+const string CONST_siege102 = "HACKING";
+const string CONST_siege101 = "ELECTRONIC SABOTAGE";
+const string CONST_siege098 = "HIRING ILLEGAL ALIENS";
+const string CONST_siege097 = "PROSTITUTION";
+const string CONST_siege096 = "THEFT";
+const string CONST_siege095 = "CREDIT CARD FRAUD";
+const string CONST_siege094 = "GRAND THEFT AUTO";
+const string CONST_siege093 = "ASSAULT";
+const string CONST_siege092 = "ARMED ASSAULT";
+const string CONST_siege091 = "EXTORTION";
+const string CONST_siege090 = "RACKETEERING";
+const string CONST_siege089 = "JURY TAMPERING";
+const string CONST_siege088 = "RELEASING PRISONERS";
+const string CONST_siege087 = "ESCAPING PRISON";
+const string CONST_siege086 = "DRUG DEALING";
+const string CONST_siege085 = "HARMFUL SPEECH";
+const string CONST_siege084 = "FLAG MURDER";
+const string CONST_siege083 = "ARSON";
+const string CONST_siege082 = "BANK ROBBERY";
+const string CONST_siege081 = "KIDNAPPING";
+const string CONST_siege080 = "MURDER";
+const string CONST_siege079 = "TERRORISM";
+const string CONST_siege078 = "TREASON";
+map<int, string> mostSeriousCrime = {
+
+	map<int, string>::value_type(LAWFLAG_TREASON,
+	CONST_siege078),
+	//TERRORISM
+	map<int, string>::value_type(LAWFLAG_TERRORISM,
+	CONST_siege079),
+	//MURDERER
+	map<int, string>::value_type(LAWFLAG_MURDER,
+	CONST_siege080),
+	//KIDNAPPER
+	map<int, string>::value_type(LAWFLAG_KIDNAPPING,
+	CONST_siege081),
+	//BANK ROBBER
+	map<int, string>::value_type(LAWFLAG_BANKROBBERY,
+	CONST_siege082),
+	//ARSONIST
+	map<int, string>::value_type(LAWFLAG_BANKROBBERY,
+	CONST_siege083),
+	//BURN FLAG
+	//map<int, string>::value_type(LAWFLAG_BURNFLAG,
+	//lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253),
+};
+map<int, string> mostSeriousCrime2 = {
+	//BURN FLAG
+	//map<int, string>::value_type(LAWFLAG_BURNFLAG,
+	//lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253),
+	//SPEECH
+	map<int, string>::value_type(LAWFLAG_SPEECH,
+	CONST_siege085),
+	//BROWNIES
+	map<int, string>::value_type(LAWFLAG_BROWNIES,
+	CONST_siege086),
+	//ESCAPED
+	map<int, string>::value_type(LAWFLAG_ESCAPED,
+	CONST_siege087),
+	//HELP ESCAPED
+	map<int, string>::value_type(LAWFLAG_HELPESCAPE,
+	CONST_siege088),
+	//JURY
+	map<int, string>::value_type(LAWFLAG_JURY,
+	CONST_siege089),
+	//RACKETEERING
+	map<int, string>::value_type(LAWFLAG_RACKETEERING,
+	CONST_siege090),
+	//EXTORTION
+	map<int, string>::value_type(LAWFLAG_EXTORTION,
+	CONST_siege091),
+	//ASSAULT
+	map<int, string>::value_type(LAWFLAG_ARMEDASSAULT,
+	CONST_siege092),
+	//ASSAULT
+	map<int, string>::value_type(LAWFLAG_ASSAULT,
+	CONST_siege093),
+	//CAR THEFT
+	map<int, string>::value_type(LAWFLAG_CARTHEFT,
+	CONST_siege094),
+	//CC FRAUD
+	map<int, string>::value_type(LAWFLAG_CCFRAUD,
+	CONST_siege095),
+	//THIEF
+	map<int, string>::value_type(LAWFLAG_THEFT,
+	CONST_siege096),
+	//PROSTITUTION
+	map<int, string>::value_type(LAWFLAG_PROSTITUTION,
+	CONST_siege097),
+	//HIRE ILLEGAL
+	//map<int, string>::value_type(LAWFLAG_HIREILLEGAL,
+	//lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254),
+};
+map<int, string> mostSeriousCrime3 = {
+	//HIRE ILLEGAL
+	//map<int, string>::value_type(LAWFLAG_HIREILLEGAL,
+	//lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254),
+	//COMMERCE
+	map<int, string>::value_type(LAWFLAG_COMMERCE,
+	CONST_siege101),
+	//INFORMATION
+	map<int, string>::value_type(LAWFLAG_INFORMATION,
+	CONST_siege102),
+	//UNLAWFUL BURIAL
+	map<int, string>::value_type(LAWFLAG_BURIAL,
+	CONST_siege103),
+	//BREAKING
+	map<int, string>::value_type(LAWFLAG_BREAKING,
+	CONST_siege104),
+	//VANDALISM
+	map<int, string>::value_type(LAWFLAG_VANDALISM,
+	CONST_siege105),
+	//RESIST
+	map<int, string>::value_type(LAWFLAG_RESIST,
+	CONST_siege106),
+	//DISTURBANCE
+	map<int, string>::value_type(LAWFLAG_DISTURBANCE,
+	CONST_siege107),
+	//PUBLIC NUDITY
+	map<int, string>::value_type(LAWFLAG_PUBLICNUDITY,
+	CONST_siege108),
+	//LOITERING
+	map<int, string>::value_type(LAWFLAG_LOITERING,
+	CONST_siege109),
+};
+void printMostSeriousCrime(const bool breakercount[LAWFLAGNUM]) {
+
+	extern short lawList[LAWNUM];
+	for (auto const& x : mostSeriousCrime)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+
+	if (breakercount[LAWFLAG_BURNFLAG]) {
+		addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253);
+		return;
+	}
+
+	for (auto const& x : mostSeriousCrime2)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+
+	if (breakercount[LAWFLAG_HIREILLEGAL]){
+		addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
+		return;
+	}
+
+	for (auto const& x : mostSeriousCrime3)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+}
 void statebrokenlaws(DeprecatedCreature & cr)
 {
-	const string CONST_siegeB254 = "HIRING UNDOCUMENTED WORKERS";
-	const string CONST_siegeB253 = "FLAG BURNING";
-	const string CONST_siege109 = "LOITERING";
-	const string CONST_siege108 = "PUBLIC NUDITY";
-	const string CONST_siege107 = "DISTURBING THE PEACE";
-	const string CONST_siege106 = "RESISTING ARREST";
-	const string CONST_siege105 = "VANDALISM";
-	const string CONST_siege104 = "BREAKING AND ENTERING";
-	const string CONST_siege103 = "UNLAWFUL BURIAL";
-	const string CONST_siege102 = "HACKING";
-	const string CONST_siege101 = "ELECTRONIC SABOTAGE";
-	const string CONST_siege098 = "HIRING ILLEGAL ALIENS";
-	const string CONST_siege097 = "PROSTITUTION";
-	const string CONST_siege096 = "THEFT";
-	const string CONST_siege095 = "CREDIT CARD FRAUD";
-	const string CONST_siege094 = "GRAND THEFT AUTO";
-	const string CONST_siege093 = "ASSAULT";
-	const string CONST_siege092 = "ARMED ASSAULT";
-	const string CONST_siege091 = "EXTORTION";
-	const string CONST_siege090 = "RACKETEERING";
-	const string CONST_siege089 = "JURY TAMPERING";
-	const string CONST_siege088 = "RELEASING PRISONERS";
-	const string CONST_siege087 = "ESCAPING PRISON";
-	const string CONST_siege086 = "DRUG DEALING";
-	const string CONST_siege085 = "HARMFUL SPEECH";
-	const string CONST_siege084 = "FLAG MURDER";
-	const string CONST_siege083 = "ARSON";
-	const string CONST_siege082 = "BANK ROBBERY";
-	const string CONST_siege081 = "KIDNAPPING";
-	const string CONST_siege080 = "MURDER";
-	const string CONST_siege079 = "TERRORISM";
-	const string CONST_siege078 = "TREASON";
 	const string CONST_siege077 = "REHABILITATION";
 	const string CONST_siege076 = "WANTED FOR ";
-	extern short lawList[LAWNUM];
-	bool kidnapped = (cr.flag&CREATUREFLAG_KIDNAPPED), criminal = false, breakercount[LAWFLAGNUM];
-	for (int i = 0; i < LAWFLAGNUM; i++)
-		if (cr.crimes_suspected[i]) breakercount[i] = true, criminal = true;
-		else breakercount[i] = false;
+	bool kidnapped = (cr.flag&CREATUREFLAG_KIDNAPPED);
+	bool criminal = false;
+	bool breakercount[LAWFLAGNUM];
+	for (int i = 0; i < LAWFLAGNUM; i++) {
+		if (cr.crimes_suspected[i]) { 
+			breakercount[i] = true;
+			criminal = true;
+		}
+		else { 
+			breakercount[i] = false;
+		}
+	}
 		if (!criminal && !kidnapped) return;
+
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+
 		addstrAlt(CONST_siege076);
 		//KIDNAP VICTIM
-		if (kidnapped)
+		if (kidnapped) {
 			addstrAlt(CONST_siege077);
-		//TREASON
-		else if (breakercount[LAWFLAG_TREASON])
-			addstrAlt(CONST_siege078);
-		//TERRORISM
-		else if (breakercount[LAWFLAG_TERRORISM])
-			addstrAlt(CONST_siege079);
-		//MURDERER
-		else if (breakercount[LAWFLAG_MURDER])
-			addstrAlt(CONST_siege080);
-		//KIDNAPPER
-		else if (breakercount[LAWFLAG_KIDNAPPING])
-			addstrAlt(CONST_siege081);
-		//BANK ROBBER
-		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt(CONST_siege082);
-		//ARSONIST
-		else if (breakercount[LAWFLAG_BANKROBBERY])
-			addstrAlt(CONST_siege083);
-		//BURN FLAG
-		else if (breakercount[LAWFLAG_BURNFLAG])
-			addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253);
-		//SPEECH
-		else if (breakercount[LAWFLAG_SPEECH])
-			addstrAlt(CONST_siege085);
-		//BROWNIES
-		else if (breakercount[LAWFLAG_BROWNIES])
-			addstrAlt(CONST_siege086);
-		//ESCAPED
-		else if (breakercount[LAWFLAG_ESCAPED])
-			addstrAlt(CONST_siege087);
-		//HELP ESCAPED
-		else if (breakercount[LAWFLAG_HELPESCAPE])
-			addstrAlt(CONST_siege088);
-		//JURY
-		else if (breakercount[LAWFLAG_JURY])
-			addstrAlt(CONST_siege089);
-		//RACKETEERING
-		else if (breakercount[LAWFLAG_RACKETEERING])
-			addstrAlt(CONST_siege090);
-		//EXTORTION
-		else if (breakercount[LAWFLAG_EXTORTION])
-			addstrAlt(CONST_siege091);
-		//ASSAULT
-		else if (breakercount[LAWFLAG_ARMEDASSAULT])
-			addstrAlt(CONST_siege092);
-		//ASSAULT
-		else if (breakercount[LAWFLAG_ASSAULT])
-			addstrAlt(CONST_siege093);
-		//CAR THEFT
-		else if (breakercount[LAWFLAG_CARTHEFT])
-			addstrAlt(CONST_siege094);
-		//CC FRAUD
-		else if (breakercount[LAWFLAG_CCFRAUD])
-			addstrAlt(CONST_siege095);
-		//THIEF
-		else if (breakercount[LAWFLAG_THEFT])
-			addstrAlt(CONST_siege096);
-		//PROSTITUTION
-		else if (breakercount[LAWFLAG_PROSTITUTION])
-			addstrAlt(CONST_siege097);
-		//HIRE ILLEGAL
-		else if (breakercount[LAWFLAG_HIREILLEGAL])
-			addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
-		//COMMERCE
-		else if (breakercount[LAWFLAG_COMMERCE])
-			addstrAlt(CONST_siege101);
-		//INFORMATION
-		else if (breakercount[LAWFLAG_INFORMATION])
-			addstrAlt(CONST_siege102);
-		//UNLAWFUL BURIAL
-		else if (breakercount[LAWFLAG_BURIAL])
-			addstrAlt(CONST_siege103);
-		//BREAKING
-		else if (breakercount[LAWFLAG_BREAKING])
-			addstrAlt(CONST_siege104);
-		//VANDALISM
-		else if (breakercount[LAWFLAG_VANDALISM])
-			addstrAlt(CONST_siege105);
-		//RESIST
-		else if (breakercount[LAWFLAG_RESIST])
-			addstrAlt(CONST_siege106);
-		//DISTURBANCE
-		else if (breakercount[LAWFLAG_DISTURBANCE])
-			addstrAlt(CONST_siege107);
-		//PUBLIC NUDITY
-		else if (breakercount[LAWFLAG_PUBLICNUDITY])
-			addstrAlt(CONST_siege108);
-		//LOITERING
-		else if (breakercount[LAWFLAG_LOITERING])
-			addstrAlt(CONST_siege109);
+		}
+		else {
+			printMostSeriousCrime(breakercount);
+		}
 }
 /* siege - updates upcoming sieges */
 void dropHeatByFivePercent(int l);

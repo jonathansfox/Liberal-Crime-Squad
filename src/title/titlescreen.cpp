@@ -60,7 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 #include "../title/titlescreen.h"
 void mode_base();
-#include "../common/consolesupport.h"
+//#include "../common/consolesupport.h"
 // for void getkeyAlt()
 #include "../common/commondisplay.h"
 // for addstr

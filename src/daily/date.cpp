@@ -36,7 +36,9 @@ const string CONST_date077 = "How should ";
 const string CONST_date076 = "Seeing ";
 const string CONST_date075 = "Things go downhill fast.";
 const string CONST_date074 = " mixes up the names of ";
-const string CONST_date073 = " realizes %s has committed to eating %d meals at once.";
+const string CONST_date073A = " realizes ";
+const string CONST_date073B = " has committed to eating ";
+const string CONST_date073C = " meals at once.";;
 const string CONST_date072 = "Ruh roh...";
 const string CONST_date071 = "Unfortunately, they turn up at the same time.";
 const string CONST_date070 = "Unfortunately, they all turn up at the same time.";
@@ -132,6 +134,14 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -575,7 +585,7 @@ extern string AND;
 		 default:
 			 mvaddstrAlt(2, 0, pool[p]->name, gamelog);
 			 if (len(d.date) > 2)
-				 addstr_fl(gamelog, CONST_date073.c_str(), pool[p]->heshe(), len(d.date));
+				 addstrAlt(CONST_date073A + pool[p]->heshe() + CONST_date073B + tostring(len(d.date)) + CONST_date073C, gamelog);
 			 else
 			 {
 				 addstrAlt(CONST_date074, gamelog);

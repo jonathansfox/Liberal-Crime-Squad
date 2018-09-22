@@ -386,7 +386,10 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 	extern short interface_pgdn;
 	DeprecatedCreature *victim = 0;
 	vector<DeprecatedCreature *> temppool = getLiberalsSharingLocation(cr);
-	int cur_step = 0, page = 0, c = 0, aug_c = 0;
+	int cur_step = 0;
+	int page = 0;
+	int c = 0;
+	int aug_c = 0;
 	vector<AugmentType *> aug_type;
 	AugmentType *selected_aug;
 	while (true)
@@ -458,7 +461,6 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			set_color_easy(WHITE_ON_BLACK);
 			for (int x = 0, y = 4; x < aug_type.size(); x++, y++)
 			{
-				//set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
 				mvaddcharAlt(y, 26, y + '1' - 4); addstrAlt(spaceDashSpace);
 				addstrAlt(aug_type[x]->get_name());
 			}

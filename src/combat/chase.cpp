@@ -48,6 +48,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
@@ -66,6 +76,10 @@ void reloadparty(bool wasteful = false);
 // for addstr (with log)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
+/* tells how many members a squad has who are alive */
+int squadalive(const Deprecatedsquadst *st);
 // for int squadsize(const squadst *);
 //#include "common/equipment.h"
 void equip(vector<Item *> &loot, int loc);
@@ -1590,26 +1604,21 @@ Vehicle* getChaseVehicle(const DeprecatedCreature &c)
 	extern short mode;
 	extern chaseseqst chaseseq;
 	Vehicle* found = NULL;
-	//addstrAlt(CONST_chase080, gamelog);
-	//addstrAlt(c.name, gamelog);
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
 		for (int v2 = 0; v2 < len(chaseseq.friendcar); v2++)
 			if (chaseseq.friendcar[v2]->id() == c.carid)
 			{
-				//addstr_fl(gamelog,CONST_chase081,c.carid, v2);
 				found = chaseseq.friendcar[v2];
 				break;
 			}
 		for (int v2 = 0; v2 < len(chaseseq.enemycar); v2++)
 			if (chaseseq.enemycar[v2]->id() == c.carid)
 			{
-				//addstr_fl(gamelog,CONST_chase082,c.carid, v2);
 				found = chaseseq.enemycar[v2];
 				break;
 			}
 	}
-	//gamelog.newline();
 	return found;
 }
 DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
@@ -1620,7 +1629,6 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 	DeprecatedCreature* found = NULL;
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
-		//addstr_fl(gamelog,CONST_chase083, c.name);
 		int v = c.carid;
 		// Check to see if the car we are in is being driven by an LCS member
 		for (int p = 0; p < 6; p++)
@@ -1629,7 +1637,6 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 			if (activesquad->squad[p]->carid == v
 				&& activesquad->squad[p]->is_driver)
 			{
-				//addstr_fl(gamelog,CONST_chase084,activesquad->squad[p]->name, v);
 				found = activesquad->squad[p];
 			}
 		}
@@ -1640,7 +1647,6 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 			if (encounter[p].carid == v
 				&& encounter[p].is_driver)
 			{
-				//addstr_fl(gamelog,CONST_chase085,encounter[p].name, v);
 				found = &encounter[p];
 			}
 		}

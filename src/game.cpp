@@ -91,7 +91,7 @@ void loadgraphics();
 int readConfigFile(const std::string& filename);
 #include "log/log.h"
 //for the gamelog
-#include "common/consolesupport.h"
+//#include "common/consolesupport.h"
 // for getkey
 #include "common/stringconversion.h"
 //for string conversion
@@ -146,6 +146,7 @@ void mainTwo() {
 	gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
 }
 #include "common/musicClass.h"
+void set_title(char *s);
 void mainThree() {
 	extern string PACKAGE_VERSION_STR;
 	extern MusicClass music;

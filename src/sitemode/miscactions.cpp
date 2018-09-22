@@ -92,6 +92,15 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locationsEnums.h"
 //#include "../sitemode/sitedisplay.h"
 void clearmessagearea(bool redrawmaparea = true);
@@ -100,6 +109,8 @@ void clearmessagearea(bool redrawmaparea = true);
 void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many members a squad has who are alive */
+int squadalive(const Deprecatedsquadst *st);
 // for void criminalizeparty
 //#include "../daily/daily.h"
 char securityable(int type);

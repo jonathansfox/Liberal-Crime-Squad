@@ -5,10 +5,10 @@ const string CONST_commondisplay202 = " (";
 const string CONST_commondisplay201 = "Name: ";
 const string CONST_commondisplay200 = "Code name: ";
 const string CONST_commondisplay212 = ": ";
-const string CONST_commondisplay199 = "%2d.00";
+const string CONST_commondisplay199 = ".00";
 const string CONST_commondisplay198 = "99+";
 const string CONST_commondisplay197 = "00";
-const string CONST_commondisplay196 = "%2d.";
+const string CONST_commondisplay196 = ".";
 const string CONST_commondisplay194 = "NOW   MAX";
 const string CONST_commondisplay193 = "SKILL";
 const string CONST_commondisplay003 = "On \"Foot\"";
@@ -92,12 +92,19 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 const string blankString = "";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locationsEnums.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
 #include "../sitemode/stealth.h"
-#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 #include "../common/getnames.h"
 std::string gettitle(const int align, const int juice);
 bool isThereNoActivesquad();
@@ -561,30 +568,6 @@ map<int, string> prisoner_description = {
 	map<int, string>::value_type(CREATURE_SCIENTIST_EMINENT, CONST_commondisplay052),
 	map<int, string>::value_type(CREATURE_JUDGE_CONSERVATIVE, CONST_commondisplay053),
 };
-void set_color_for_armor(const Armor armor) {
-	int fg = COLOR_WHITE;
-	int bg = COLOR_BLACK;
-	int in = 1;
-	if (armor.is_bloody())
-	{
-		bg = COLOR_RED;  in = 0;
-	}
-	if (armor.get_quality() > armor.get_quality_levels())
-	{
-		fg = COLOR_BLACK;
-	}
-	else if (armor.is_damaged())
-	{
-		fg = COLOR_YELLOW; in = 1;
-	}
-	else if (armor.get_quality() > 1)
-	{
-		fg = COLOR_YELLOW; in = (bg == COLOR_RED);
-	}
-	if (fg == COLOR_WHITE && bg == COLOR_BLACK)
-		in = 0;
-	set_color(fg, bg, in);
-}
 void set_color_for_disguise(DeprecatedCreature* cr) {
 
 	extern short sitealarmtimer;
@@ -650,6 +633,8 @@ void printWounds(DeprecatedCreature *cr) {
 		}
 	}
 }
+void set_color_for_armor(const Armor armor);
+void setColorForArmor(const Armor ar);
 /* character info at top of screen */
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 {
@@ -796,30 +781,7 @@ void clearRowsTwoThroughSeven() {
 		mvaddstrAlt(i, 0, CONST_commondisplay220); // 80 spaces
 	}
 }
-void setColorForArmor(const Armor ar) {
-	int fg = COLOR_WHITE;
-	int bg = COLOR_BLACK;
-	int in = 1;
-	if (ar.is_bloody())
-	{
-		bg = COLOR_RED;  in = 1;
-	}
-	if (ar.get_quality() > ar.get_quality_levels())
-	{
-		fg = COLOR_BLACK;
-	}
-	else if (ar.is_damaged())
-	{
-		fg = COLOR_YELLOW; in = 1;
-	}
-	else if (ar.get_quality() > 1)
-	{
-		fg = COLOR_YELLOW; in = (bg == COLOR_RED);
-	}
-	if (fg == COLOR_WHITE && bg == COLOR_BLACK)
-		in = 0;
-	set_color(fg, bg, in);
-}
+
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 /* party info at top of screen */
 void printparty()
@@ -1039,6 +1001,9 @@ string juiceUntilLevelUp(const int juice) {
 	return howMuchJuice;
 }
 
+string twoDigits(const int x) {
+	return x < 10 ? tostring(0) + tostring(x) : tostring(x);
+}
 void printCreatureAttributes(DeprecatedCreature &cr) {
 
 	const string CONST_commondisplay145 = "Charisma: ";
@@ -1098,7 +1063,7 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
 			addstrAlt(CONST_commondisplay212);
 			moveAlt(6 + skills_shown, 42);
-			addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(maxs));
+			addstrAlt(twoDigits(cr.get_skill(maxs)) + CONST_commondisplay196);
 			if (cr.get_skill_ip(maxs) < 100 + (10 * cr.get_skill(maxs)))
 			{
 				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
@@ -1113,7 +1078,7 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs, true))
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			moveAlt(6 + skills_shown, 48);
-			addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(maxs, true));
+			addstrAlt(twoDigits(cr.skill_cap(maxs, true)) + CONST_commondisplay199);
 		}
 	}
 }
@@ -1325,7 +1290,7 @@ void printliberalskills(DeprecatedCreature &cr)
 		addstrAlt(skill_enum_to_string(s));
 		addstrAlt(CONST_commondisplay212);
 		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
-		addstr_f(CONST_commondisplay196.c_str(), cr.get_skill(s));
+		addstrAlt(twoDigits(cr.get_skill(s)) + CONST_commondisplay196);
 		if (cr.get_skill_ip(s) < 100 + (10 * cr.get_skill(s)))
 		{
 			if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) != 0)
@@ -1340,14 +1305,13 @@ void printliberalskills(DeprecatedCreature &cr)
 		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s) < cr.skill_cap(s, true))
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(5 + s / 3, 20 + 27 * (s % 3));
-		addstr_f(CONST_commondisplay199.c_str(), cr.skill_cap(s, true));
+		addstrAlt(twoDigits(cr.skill_cap(s, true)) + CONST_commondisplay199.c_str());
 	}
 	set_color_easy(WHITE_ON_BLACK);
 }
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(DeprecatedCreature &cr)
 {
-	const string CONST_commondisplay213 = "%2d";
 	const string CONST_commondisplay211 = "NUM";
 	const string CONST_commondisplay210 = "CRIME";
 	const string CONST_commondisplay209 = " months in prison.";
@@ -1408,7 +1372,7 @@ void printliberalcrimes(DeprecatedCreature &cr)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(5 + i / 2, 40 * (i % 2), getlawflag(i) + CONST_commondisplay212);
-		mvaddstr_f(5 + i / 2, 30 + 40 * (i % 2), CONST_commondisplay213.c_str(), cr.crimes_suspected[i]);
+		mvaddstrAlt(5 + i / 2, 30 + 40 * (i % 2), twoDigits(cr.crimes_suspected[i]));
 	}
 	set_color_easy(WHITE_ON_BLACK);
 }
@@ -1471,44 +1435,4 @@ void fullstatus(const int _p)
 		}
 		else break;
 	}
-}
-
-int addstr_f(const char * format, ...)
-{
-	char sbuf[81];
-	va_list args;
-	va_start(args, format);
-	vsnprintf(sbuf, 81, format, args);
-	va_end(args);
-	return addstrAlt(sbuf);
-}
-/*	mvaddstr with formatted output	*/
-int mvaddstr_f(int y, int x, const char * format, ...)
-{
-	char sbuf[81];
-	va_list args;
-	va_start(args, format);
-	vsnprintf(sbuf, 81, format, args);
-	va_end(args);
-	return mvaddstrAlt(y, x, sbuf);
-}
-/*	addstr with formatted output and logging	*/
-int addstr_fl(Log &log, const char * format, ...)
-{
-	char sbuf[81];
-	va_list args;
-	va_start(args, format);
-	vsnprintf(sbuf, 81, format, args);
-	va_end(args);
-	return addstrAlt(sbuf, log);
-}
-/*	mvaddstr with formatted output and logging	*/
-int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
-{
-	char sbuf[81];
-	va_list args;
-	va_start(args, format);
-	vsnprintf(sbuf, 81, format, args);
-	va_end(args);
-	return mvaddstrAlt(y, x, sbuf, log);
 }

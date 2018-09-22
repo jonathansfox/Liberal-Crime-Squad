@@ -204,6 +204,16 @@ This file is part of Liberal Crime Squad.                                       
 string singleSpace = " ";
 const string blankString = "";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 //#include "cursesgraphics.h"
 #define CH_FULL_BLOCK 0xdb
@@ -3113,6 +3123,7 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 				{
 					bailOnBase();
 					resetSiteAlarm();
+					mode = GAMEMODE_BASE;
 					return false;
 				}
 				if (moveOrWaitThenCheckForExit(olocx, olocy, olocz, c, encsize, hostcheck)) {

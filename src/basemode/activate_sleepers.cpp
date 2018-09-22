@@ -26,8 +26,6 @@ const string tag_skill = "skill";
 void sorting_prompt(short listforsorting);
 #include "../common/commonactionsCreature.h"
 // for void sortliberals(std::vector<Creature *>&,short,bool)
-//#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 #include "../common/commondisplay.h"
 //#include "../common/commondisplayCreature.h"
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);

@@ -96,6 +96,15 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../sitemode/sitedisplay.h"
 #include "../log/log.h"
@@ -266,144 +275,6 @@ const string tag_skill = "skill";
 		 return CREATURE_SEAL;
 	 return -1;
  }
- map<int, vector<string> > siegeDisguises = {
-	 map<int, vector<string> >::value_type(SIEGE_CIA,
-		 {
-			 tag_ARMOR_BLACKSUIT,
-			 tag_ARMOR_BLACKDRESS,
-
-		 }),
-		 map<int, vector<string> >::value_type(SIEGE_CORPORATE,
-			 {
-				 tag_ARMOR_MILITARY,
-				 tag_ARMOR_ARMYARMOR,
-				 tag_ARMOR_SEALSUIT,
-
-			 }),
-			 map<int, vector<string> >::value_type(SIEGE_HICKS,
-				 {
-					 tag_ARMOR_CLOTHES, // duplication means uniformed is incremented twice, makint its value 2 instead of 1 or 0
-					 tag_ARMOR_CLOTHES, // it was how it was coded, what uniformed > 1 means is not clear from context
-					 tag_ARMOR_OVERALLS,
-					 tag_ARMOR_WIFEBEATER,
-
-				 }),
-
-				 map<int, vector<string> >::value_type(SIEGE_FIREMEN,
-					 {
-						 tag_ARMOR_BUNKERGEAR,
-
-					 }),
- };
- map<int, vector<string> > locationDisguises = {
-	 map<int, vector<string> >::value_type(SITE_BUSINESS_CIGARBAR,{
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_CHEAPDRESS,
-	 tag_ARMOR_BLACKSUIT,
-	 tag_ARMOR_BLACKDRESS,
-		 }),
-		 map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE,{
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_SERVANTUNIFORM,
-			 }),
-			 map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER,{
-	 tag_ARMOR_WORKCLOTHES,
-	 tag_ARMOR_HARDHAT,
-				 }),
-				 map<int, vector<string> >::value_type(SITE_CORPORATE_HEADQUARTERS,{
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_CHEAPDRESS,
-					 }),
-
- };
- map<int, vector<string> > restrictedLocationDisguises = {
-	 map<int, vector<string> >::value_type(SITE_GOVERNMENT_COURTHOUSE,{
-	 tag_ARMOR_BLACKROBE,
-	 tag_ARMOR_BLACKSUIT,
-	 tag_ARMOR_BLACKDRESS,
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_CHEAPDRESS,
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_POLICEUNIFORM,
-	 tag_ARMOR_POLICEARMOR,
-		 }),
-		 map<int, vector<string> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
-	 tag_ARMOR_BLACKSUIT,
-	 tag_ARMOR_BLACKDRESS,
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_CHEAPDRESS,
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_MILITARY,
-	 tag_ARMOR_ARMYARMOR,
-	 tag_ARMOR_SEALSUIT,
-			 }),
-			 map<int, vector<string> >::value_type(SITE_GOVERNMENT_ARMYBASE,{
-	 tag_ARMOR_MILITARY,
-	 tag_ARMOR_ARMYARMOR,
-	 tag_ARMOR_SEALSUIT,
-				 }),
-				 map<int, vector<string> >::value_type(SITE_MEDIA_AMRADIO,{
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_CHEAPDRESS,
-
-					 }),
-					 map<int, vector<string> >::value_type(SITE_MEDIA_CABLENEWS,{
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_EXPENSIVEDRESS,
-
-						 }),
-						 map<int, vector<string> >::value_type(SITE_INDUSTRY_NUCLEAR,{
-	 tag_ARMOR_LABCOAT,
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_CIVILLIANARMOR,
-	 tag_ARMOR_HARDHAT,
-
-							 }),
-							 map<int, vector<string> >::value_type(SITE_BUSINESS_BANK,{
-	 tag_ARMOR_CHEAPSUIT,
-	 tag_ARMOR_EXPENSIVESUIT,
-	 tag_ARMOR_CHEAPDRESS,
-	 tag_ARMOR_EXPENSIVEDRESS,
-	 tag_ARMOR_SECURITYUNIFORM,
-	 tag_ARMOR_POLICEUNIFORM,
-	 tag_ARMOR_POLICEARMOR,
-								 }),
-								 map<int, vector<string> >::value_type(SITE_GOVERNMENT_FIRESTATION,{
-	 tag_ARMOR_BUNKERGEAR,
-	 tag_ARMOR_WORKCLOTHES,
-	 tag_ARMOR_OVERALLS,
-									 }),
-									 map<int, vector<string> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,{
-	 tag_ARMOR_BLACKSUIT,
-	 tag_ARMOR_BLACKDRESS,
-										 }),
-
- };
- map<int, vector<string> > highSecurityLocationDisguises = {
-	 map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER,{
-	 tag_ARMOR_SECURITYUNIFORM,
-		 }),
-
-		 map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE,{
-	 tag_ARMOR_MILITARY,
-	 tag_ARMOR_ARMYARMOR,
-	 tag_ARMOR_SEALSUIT,
-			 }),
-
- };
  /* checks if a creature's uniform is appropriate to the location */
  char hasdisguise(const DeprecatedCreature &cr)
  {
@@ -411,6 +282,7 @@ const string tag_skill = "skill";
 	 extern coordinatest loc_coord;
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 extern short lawList[LAWNUM];
+
 	 short type = -1;
 	 if (cursite >= 0)type = LocationsPool::getInstance().getLocationType(cursite);
 	 char uniformed = 0;
@@ -419,9 +291,492 @@ const string tag_skill = "skill";
 	 //   return 0;
 	 if (LocationsPool::getInstance().isThereASiegeHere(cursite))
 	 {
+		 switch (LocationsPool::getInstance().getSiegeType(cursite))
+		 {
+		 case SIEGE_CIA:
+		 {
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+			 break;
+		 }
+		 case SIEGE_CORPORATE:
+		 {
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
+			 break;
+		 }
+		 case SIEGE_HICKS:
+		 {
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CLOTHES)uniformed = 2;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WIFEBEATER)uniformed = 1;
+			 break;
+		 }
+		 case SIEGE_CCS:
+		 {
+			 // CCS has trained in anticipation of this tactic
+			 // There is no fooling them
+			 // (They pull this shit all the time in their own sieges)
+			 uniformed = 0;
+			 break;
+		 }
+		 case SIEGE_POLICE:
+		 {
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
+				 LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY &&
+				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR &&
+				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
+				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+			 break;
+		 }
+		 case SIEGE_FIREMEN:
+		 {
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
+			 break;
+		 }
+		 }
+	 }
+	 else
+	 {
+		 //// TODO Move to XML
+		 if ((!cr.is_naked() || cr.animalgloss == ANIMALGLOSS_ANIMAL)
+			 && cr.get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
+		 switch (type)
+		 {
+		 case SITE_INDUSTRY_WAREHOUSE:
+		 case SITE_RESIDENTIAL_SHELTER:
+			 uniformed = 1;
+			 break;
+		 case SITE_LABORATORY_COSMETICS:
+		 case SITE_LABORATORY_GENETIC:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+			 }
+			 break;
+		 case SITE_GOVERNMENT_POLICESTATION:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+			 }
+			 break;
+		 case SITE_GOVERNMENT_WHITE_HOUSE:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
+			 }
+			 break;
+		 case SITE_GOVERNMENT_COURTHOUSE:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKROBE)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+			 }
+			 break;
+		 case SITE_GOVERNMENT_PRISON:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2)
+				 {
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+				 }
+				 else if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONGUARD)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONER)uniformed = 1;
+			 }
+			 break;
+		 case SITE_GOVERNMENT_ARMYBASE:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
+			 }
+			 break;
+		 case SITE_GOVERNMENT_INTELLIGENCEHQ:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+			 }
+			 break;
+		 case SITE_GOVERNMENT_FIRESTATION:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
+				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+				 {
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+					 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
+						 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 1;
+				 }
+			 }
+			 break;
+		 case SITE_BUSINESS_BANK:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+				 {
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
+				 }
+			 }
+			 break;
+		 case SITE_BUSINESS_CIGARBAR:
+			 uniformed = 0;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+			 break;
+		 case SITE_INDUSTRY_SWEATSHOP:
+			 uniformed = 0;
+			 if (cr.is_naked())uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 break;
+		 case SITE_INDUSTRY_POLLUTER:
+			 uniformed = 0;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
+			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+			 {
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 }
+			 break;
+		 case SITE_INDUSTRY_NUCLEAR:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
+			 }
+			 break;
+		 case SITE_CORPORATE_HEADQUARTERS:
+			 uniformed = 0;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+			 break;
+		 case SITE_CORPORATE_HOUSE:
+			 uniformed = 0;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SERVANTUNIFORM)uniformed = 1;
+			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+			 {
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
+			 }
+			 break;
+		 case SITE_MEDIA_AMRADIO:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+			 }
+			 break;
+		 case SITE_MEDIA_CABLENEWS:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
+			 {
+				 uniformed = 0;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+			 }
+			 break;
+		 case SITE_RESIDENTIAL_TENEMENT:
+		 case SITE_RESIDENTIAL_APARTMENT:
+		 case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)uniformed = 0;
+			 break;
+		 default:
+			 break;
+		 }
+	 }
+	 if (!uniformed)
+	 {
+		 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 2;
+		 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 2;
+		 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 2;
+		 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) &&
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 2;
+		 // Loop over adjacent locations to check if fire is anywhere in sight?
+		 // Or perhaps have a site fire alarm? - Nick
+		 if ((levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_START ||
+			 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_END ||
+			 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_PEAK) &&
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
+	 }
+	 if (uniformed)
+	 {
+		 int qlmax = cr.get_armor().get_quality_levels();
+		 int ql = cr.get_armor().get_quality() + cr.get_armor().is_damaged();
+		 if (ql > qlmax)  // Shredded clothes are obvious
+		 {
+			 uniformed = 0;
+		 }
+		 else if ((ql - 1) * 2 > qlmax) // poor clothes make a poor disguise
+		 {
+			 uniformed++;
+		 }
+		 if (uniformed > 2)
+			 uniformed = 0;
+	 }
+	 return uniformed;
+ }
+ /* checks if a creature's uniform is appropriate to the location 
+
+ map<int, vector<string> > siegeDisguises = {
+ map<int, vector<string> >::value_type(SIEGE_CIA,
+ {
+ tag_ARMOR_BLACKSUIT,
+ tag_ARMOR_BLACKDRESS,
+
+ }
+ ),
+ map<int, vector<string> >::value_type(SIEGE_CORPORATE,
+ {
+ tag_ARMOR_MILITARY,
+ tag_ARMOR_ARMYARMOR,
+ tag_ARMOR_SEALSUIT,
+
+ }
+ ),
+ map<int, vector<string> >::value_type(SIEGE_HICKS,
+ {
+ tag_ARMOR_CLOTHES, // duplication means uniformed is incremented twice, making its value 2 instead of 1 or 0
+ tag_ARMOR_CLOTHES, // it was how it was coded, what uniformed > 1 means is not clear from context
+ tag_ARMOR_OVERALLS,
+ tag_ARMOR_WIFEBEATER,
+
+ }
+ ),
+
+ map<int, vector<string> >::value_type(SIEGE_FIREMEN,
+ {
+ tag_ARMOR_BUNKERGEAR,
+
+ }
+ ),
+ };
+ map<int, vector<string> > locationDisguises = {
+ map<int, vector<string> >::value_type(SITE_BUSINESS_CIGARBAR,
+ {
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_CHEAPDRESS,
+ tag_ARMOR_BLACKSUIT,
+ tag_ARMOR_BLACKDRESS,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE,
+ {
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_SERVANTUNIFORM,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER,
+ {
+ tag_ARMOR_WORKCLOTHES,
+ tag_ARMOR_HARDHAT,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_CORPORATE_HEADQUARTERS,
+ {
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_CHEAPDRESS,
+ }
+ ),
+
+ };
+ map<int, vector<string> > restrictedLocationDisguises = {
+ map<int, vector<string> >::value_type(SITE_GOVERNMENT_COURTHOUSE,
+ {
+ tag_ARMOR_BLACKROBE,
+ tag_ARMOR_BLACKSUIT,
+ tag_ARMOR_BLACKDRESS,
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_CHEAPDRESS,
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_POLICEUNIFORM,
+ tag_ARMOR_POLICEARMOR,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,
+ {
+ tag_ARMOR_BLACKSUIT,
+ tag_ARMOR_BLACKDRESS,
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_CHEAPDRESS,
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_MILITARY,
+ tag_ARMOR_ARMYARMOR,
+ tag_ARMOR_SEALSUIT,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_GOVERNMENT_ARMYBASE,
+ {
+ tag_ARMOR_MILITARY,
+ tag_ARMOR_ARMYARMOR,
+ tag_ARMOR_SEALSUIT,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_MEDIA_AMRADIO,
+ {
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_CHEAPDRESS,
+
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_MEDIA_CABLENEWS,
+ {
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_EXPENSIVEDRESS,
+
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_INDUSTRY_NUCLEAR,
+ {
+ tag_ARMOR_LABCOAT,
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_CIVILLIANARMOR,
+ tag_ARMOR_HARDHAT,
+
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_BUSINESS_BANK,
+ {
+ tag_ARMOR_CHEAPSUIT,
+ tag_ARMOR_EXPENSIVESUIT,
+ tag_ARMOR_CHEAPDRESS,
+ tag_ARMOR_EXPENSIVEDRESS,
+ tag_ARMOR_SECURITYUNIFORM,
+ tag_ARMOR_POLICEUNIFORM,
+ tag_ARMOR_POLICEARMOR,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_GOVERNMENT_FIRESTATION,
+ {
+ tag_ARMOR_BUNKERGEAR,
+ tag_ARMOR_WORKCLOTHES,
+ tag_ARMOR_OVERALLS,
+ }
+ ),
+ map<int, vector<string> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,
+ {
+ tag_ARMOR_BLACKSUIT,
+ tag_ARMOR_BLACKDRESS,
+ }
+ ),
+
+ };
+ map<int, vector<string> > highSecurityLocationDisguises = {
+ map<int, vector<string> >::value_type(SITE_INDUSTRY_POLLUTER,
+ {
+ tag_ARMOR_SECURITYUNIFORM,
+ }
+ ),
+
+ map<int, vector<string> >::value_type(SITE_CORPORATE_HOUSE,
+ {
+ tag_ARMOR_MILITARY,
+ tag_ARMOR_ARMYARMOR,
+ tag_ARMOR_SEALSUIT,
+ }
+ ),
+
+ };
+ char hasdisguise(const DeprecatedCreature &cr)
+ {
+	 extern short cursite;
+	 extern coordinatest loc_coord;
+	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	 extern short lawList[LAWNUM];
+	 short type = -1;
+	 if (cursite >= 0)type = LocationsPool::getInstance().getLocationType(cursite);
+	 char uniformed = 1;
+	 // Never uniformed in battle colors
+	 //if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+	 //   return 0;
+	 if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	 {
 		 for (string str : siegeDisguises[LocationsPool::getInstance().getSiegeType(cursite)]) {
 			 if (cr.get_armor().get_itemtypename() == str) {
-				 uniformed++;
+				 uniformed = 1;
+				 break;
 			 }
 		 }
 		 if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_CCS) {
@@ -606,7 +961,9 @@ const string tag_skill = "skill";
 		 case SITE_RESIDENTIAL_TENEMENT:
 		 case SITE_RESIDENTIAL_APARTMENT:
 		 case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)uniformed = 0;
+			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED) { 
+				 uniformed = 0;
+			 }
 			 break;
 
 		 default:
@@ -646,7 +1003,7 @@ const string tag_skill = "skill";
 	 }
 	 return uniformed;
  }
- /* checks if a creature's weapon is suspicious */
+  checks if a creature's weapon is suspicious */
  char weaponcheck(const DeprecatedCreature &cr, bool metaldetect)
  {
 	 bool suspicious = cr.get_weapon().get_specific_bool(BOOL_SUSPICIOUS_);
@@ -671,7 +1028,6 @@ const string tag_skill = "skill";
  int get_disguise_difficulty(const int n);
  int get_encounter_time(const int n);
  vector<int> potentialEncounterNoticers();
- vector<NameAndAlignment> getEncounterNameAndAlignment();
  int activesquadSize();
  /* checks if conservatives see through your disguise */
  void disguisecheck(int timer)

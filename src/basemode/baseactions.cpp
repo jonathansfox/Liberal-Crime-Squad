@@ -31,18 +31,19 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 //#include "../cursesgraphics.h"
-#define CH_BOX_DRAWINGS_LIGHT_VERTICAL 0xb3
-#define CH_UPPER_HALF_BLOCK 0xdf
-#define CH_LOWER_HALF_BLOCK 0xdc
-#define CH_BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL 0xc5
-#define CH_FULL_BLOCK 0xdb
-#define CH_LIGHT_SHADE 0xb0
-#define CH_MEDIUM_SHADE 0xb1
-#define CH_DARK_SHADE 0xb2
+
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
-#include "../common/consolesupport.h"
 //#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
 //#include "../common/commonactionsCreature.h"
@@ -72,128 +73,6 @@ extern string spaceDashSpace;
 // string string_sleeper;
 // vector<string> vehicleParagraph;
  
- /* base - burn the flag */
- void burnflag()
- {
-	 int flagparts = 126, flag[18][7][4];
-	 for (int y = 0; y < 7; y++) if (y < 6) for (int x = 0; x < 18; x++)
-	 {
-		 if (x < 9 && y < 4)
-		 {
-			 switch (y)
-			 {
-			 case 0: flag[x][y][0] = ((x % 2) ? '.' : ':'); break;
-			 default: flag[x][y][0] = ':'; break;
-			 case 3: flag[x][y][0] = CH_LOWER_HALF_BLOCK; break;
-			 }
-			 flag[x][y][2] = COLOR_BLUE;
-		 }
-		 else
-		 {
-			 flag[x][y][0] = CH_LOWER_HALF_BLOCK;
-			 flag[x][y][2] = COLOR_RED;
-		 }
-		 flag[x][y][1] = COLOR_WHITE;
-		 flag[x][y][3] = 1;
-	 }
-	 else for (int x = 0; x < 18; x++)
-	 {
-		 flag[x][y][0] = CH_UPPER_HALF_BLOCK;
-		 flag[x][y][1] = COLOR_RED;
-		 flag[x][y][2] = COLOR_BLACK;
-		 flag[x][y][3] = 0;
-	 }
-	 int x1 = LCSrandom(18);
-	 int y1 = LCSrandom(7);
-	 flag[x1][y1][0] = CH_DARK_SHADE;
-	 flag[x1][y1][1] = COLOR_YELLOW;
-	 flag[x1][y1][2] = COLOR_BLACK;
-	 flag[x1][y1][3] = 1;
-	 bool first = true;
-	 while (flagparts > 0)
-	 {
-		 if (!first) for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
-		 {
-			 if (flag[x][y][0] == CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0] = CH_DARK_SHADE;
-			 else if (flag[x][y][0] == CH_DARK_SHADE)
-			 {
-				 flag[x][y][0] = CH_MEDIUM_SHADE;
-				 flag[x][y][1] = COLOR_RED;
-				 flag[x][y][2] = COLOR_BLACK;
-				 flag[x][y][3] = 0;
-			 }
-			 else if (flag[x][y][0] == CH_MEDIUM_SHADE)
-			 {
-				 flag[x][y][0] = CH_LIGHT_SHADE;
-				 flag[x][y][1] = COLOR_BLACK;
-				 flag[x][y][2] = COLOR_BLACK;
-				 flag[x][y][3] = 1;
-			 }
-			 else if (flag[x][y][0] == CH_LIGHT_SHADE)
-			 {
-				 flagparts--;
-				 flag[x][y][0] = ' ';
-				 flag[x][y][1] = COLOR_BLACK;
-				 flag[x][y][2] = COLOR_BLACK;
-				 flag[x][y][3] = 0;
-			 }
-		 }
-		 else first = false;
-		 for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
-		 {
-			 set_color(short(flag[x][y][1]), short(flag[x][y][2]), bool(flag[x][y][3]));
-			 mvaddchAlt(y + 10, x + 31, flag[x][y][0]);
-		 }
-		 pause_ms(10);
-		 bool gotnew = false;
-		 while (!gotnew&&flagparts > 3)
-		 {
-			 int x = LCSrandom(18);
-			 int y = LCSrandom(7);
-
-			 if (flag[x][y][0] == ':' || flag[x][y][0] == '.' || flag[x][y][0] == CH_UPPER_HALF_BLOCK || flag[x][y][0] == CH_LOWER_HALF_BLOCK)
-			 {
-				 bool conf = false;
-				 if (x > 0)
-				 {
-					 if (flag[x - 1][y][0] != ':'&&
-						 flag[x - 1][y][0] != '.'&&
-						 flag[x - 1][y][0] != CH_UPPER_HALF_BLOCK &&
-						 flag[x - 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
-				 }
-				 if (x < 17)
-				 {
-					 if (flag[x + 1][y][0] != ':'&&
-						 flag[x + 1][y][0] != '.'&&
-						 flag[x + 1][y][0] != CH_UPPER_HALF_BLOCK &&
-						 flag[x + 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
-				 }
-				 if (y > 0)
-				 {
-					 if (flag[x][y - 1][0] != ':'&&
-						 flag[x][y - 1][0] != '.'&&
-						 flag[x][y - 1][0] != CH_UPPER_HALF_BLOCK &&
-						 flag[x][y - 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
-				 }
-				 if (y < 6)
-				 {
-					 if (flag[x][y + 1][0] != ':'&&
-						 flag[x][y + 1][0] != '.'&&
-						 flag[x][y + 1][0] != CH_UPPER_HALF_BLOCK &&
-						 flag[x][y + 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
-				 }
-				 if (conf)
-				 {
-					 flag[x][y][0] = CH_BOX_DRAWINGS_LIGHT_VERTICAL;
-					 flag[x][y][1] = COLOR_YELLOW;
-					 flag[x][y][2] = COLOR_BLACK;
-					 flag[x][y][3] = 1;
-					 gotnew = true;
-				 }
-			 }
-		 }
-	 }
- }
  /* base - new slogan */
  void getslogan()
  {
@@ -276,6 +155,7 @@ extern string spaceDashSpace;
 		 if (x > 53) x = 1, y++;
 	 }
  }
+ int getkey_cap_alt();
  /* base - assign a vehicle to this squad */
  void setvehicles()
  {
@@ -308,8 +188,7 @@ extern string spaceDashSpace;
 		 for (int i = 0; i < len(vehicleParagraph); i++) {
 			 mvaddstrAlt(18 + i, 1, vehicleParagraph[i]);
 		 }
-		 // TODO this is the only instance in entire program using getkey_cap()
-		 int c = getkey_cap();
+		 int c = getkey_cap_alt();
 		 if (c >= 'A'&&c <= 'R')
 		 {
 			 int slot = c - 'A' + page * 18;

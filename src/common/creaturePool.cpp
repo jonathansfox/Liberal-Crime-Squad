@@ -7,6 +7,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+
+#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolCreature.h"
@@ -65,7 +75,7 @@ void CreaturePool::clearAllBleedingAndEscapeFlags()
 extern string string_sleeper;
 #include "../cursesAlternative.h"
 #include "../log/log.h"
-#include "../common/consolesupport.h"
+//#include "../common/consolesupport.h"
 void CreaturePool::outSleepers(int cursite, int base)
 {
 	const string CONST_creaturePool007 = "The Liberal is now at your command as a normal squad member.";

@@ -75,8 +75,6 @@ const string blankString = "";
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 #include "../basemode/liberalagenda.h"
 // for liberalagenda
-#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
 //#include "../log/log.h"
 // for commondisplay.h
 #include "../common/commondisplay.h"

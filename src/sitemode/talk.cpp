@@ -64,6 +64,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -1376,7 +1386,6 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 		pressAnyKey();
 	}
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int e) {
 	extern Log gamelog;
 	extern int sitecrime;

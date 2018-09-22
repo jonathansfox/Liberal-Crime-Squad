@@ -37,6 +37,15 @@ const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
 const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
 const string blankString = "";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
@@ -2044,6 +2053,8 @@ void locheader()
 	}
 }
 #include "../common/commonactions.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
 #include "../common/musicClass.h"
 string closeParenthesis;
 string spaceParanthesisDollar;

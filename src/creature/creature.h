@@ -27,7 +27,7 @@ private:
 	bool isreports_to_police;
 
 public:
-	NameAndAlignment getNameAndAlignment() { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(type, blood, align), name); }
+	NameAndAlignment getNameAndAlignment() { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(align, type, blood), name); }
 	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
 	deque<Weapon*> extra_throwing_weapons;
 	deque<Clip*> clips;
@@ -230,64 +230,6 @@ void liberalize(DeprecatedCreature &cr, bool rename = true);
 /* gives a cover name to CCS members */
 void nameCCSMember(DeprecatedCreature &cr);
 //end of ripped part
-
-
-struct Deprecateddatest
-{
-	long mac_id;
-	vector<DeprecatedCreature *> date;
-	short timeleft;
-	int city;
-	Deprecateddatest() : timeleft(0) { }
-	~Deprecateddatest() { delete_and_clear(date); }
-};
-
-struct Deprecatedrecruitst
-{
-	long recruiter_id;
-	DeprecatedCreature* recruit;
-	//short timeleft;
-	//char level;
-	char eagerness1;
-	//, task;
-	//Deprecatedrecruitst();
-	Deprecatedrecruitst(DeprecatedCreature * cr, int id);
-	~Deprecatedrecruitst();
-	char eagerness();
-};
-
-struct Deprecatednewsstoryst
-{
-	short type, view;
-	char claimed;
-	short politics_level, violence_level;
-	DeprecatedCreature *cr;
-	vector<int> crime;
-	long loc, priority, page, guardianpage;
-	char positive;
-	short siegetype;
-	Deprecatednewsstoryst() : claimed(1), politics_level(0), violence_level(0), cr(NULL), loc(-1) { }
-};
-
-
-struct Deprecatedsquadst
-{
-	char name[SQUAD_NAMELEN];
-	DeprecatedCreature *squad[6];
-	ActivityST activity;
-	int id;
-	vector<Item *> loot;
-
-	char stance; // Squad's site action stance: high profile, low profile, etc.
-
-	Deprecatedsquadst()
-	{
-		for (int p = 0; p < 6; p++) squad[p] = NULL;
-		strcpy(name, blankString.c_str());
-		activity.type = ACTIVITY_NONE, id = -1, stance = SQUADSTANCE_STANDARD;
-	}
-	~Deprecatedsquadst() { delete_and_clear(loot); }
-};
 
 
 #endif

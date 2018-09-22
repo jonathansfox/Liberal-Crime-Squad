@@ -104,7 +104,7 @@ const string tag_skill = "skill";
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
 
-#include "../common/consolesupport.h"
+//#include "../common/consolesupport.h"
 // for getkey
 
 #include "../log/log.h"

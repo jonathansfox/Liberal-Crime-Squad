@@ -22,14 +22,8 @@ int addcharAlt(const char ch);
 int addcharAlt(const char ch, Log &log);
 int mvaddcharAlt(int y, int x, char ch);
 int mvaddcharAlt(int y, int x, char ch, Log &log);
-/* addstr with formatted output */
-int addstr_f(const char * format, ...);
-/* mvaddstr with formatted output */
-int mvaddstr_f(int y, int x, const char * format, ...);
-/* addstr with formatted output and logging */
-int addstr_fl(Log &log, const char * format, ...);
-/* mvaddstr with formatted output and logging */
-int mvaddstr_fl(int y, int x, Log &log, const char * format, ...);
+
+
 int eraseAlt(void);
 int mvaddchAlt(int, int, const int);
 int mvgetnstrAlt(int, int, char *, int);

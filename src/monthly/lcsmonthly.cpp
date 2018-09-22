@@ -281,7 +281,7 @@ extern string closeParenthesis;
 			  str[0] = l - page * 18 + 'A';
 			  str[1] = '\x0';
 			  strcat(str, spaceDashSpace.c_str());
-			  strcat(str, LootTypePool::getInstance().getIdName(loottypeindex[l]).c_str());
+			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
 			  mvaddstrAlt(y, x, str);
 			  x += 26;
 			  if (x > 53) x = 1, y++;

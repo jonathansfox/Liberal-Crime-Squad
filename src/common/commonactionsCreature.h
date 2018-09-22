@@ -1,9 +1,4 @@
 
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
-/* tells how many members a squad has who are alive */
-int squadalive(const Deprecatedsquadst *st);
-
 /* common - tests if the person is a wanted criminal */
 bool iscriminal(DeprecatedCreature &cr);
 /* common - sends somebody to the hospital */

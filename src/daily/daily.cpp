@@ -49,6 +49,17 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+#include "../creature/deprecatedCreatureA.h"
+
+#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
@@ -68,6 +79,8 @@ void mode_site(short loc);
 // for  int getsquad(int)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
 // for void basesquad(squadst *,long)
 #include "../daily/daily.h"
 /* squad members with no chain of command lose contact */
@@ -78,7 +91,7 @@ void dispersalcheck(char &clearformess);
 #include "../daily/siege.h"        
 //for sigeturn and siegecheck
 //#include "../daily/recruit.h"
-char recruitment_activity(DeprecatedCreature &cr);
+void recruitment_activity(DeprecatedCreature &cr);
 char completerecruitmeeting(Deprecatedrecruitst &d, const int p);
 //#include "../daily/date.h"
 char completevacation(Deprecateddatest &d, int p);
@@ -276,11 +289,6 @@ void dealership(int loc)
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			mvaddstrAlt(11, 1, s_sellCar);
 		}
-		/*if(car_to_sell && car_to_sell->heat>1 && ledger.get_funds()>=500)
-		set_color_easy(WHITE_ON_BLACK);
-		else
-		set_color(COLOR_BLACK,COLOR_BLACK,1);
-		mvaddstrAlt(12, 1, CONST_shopsnstuff006);*/
 		if (partysize >= 2)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, b_chooseBuyer);
@@ -592,7 +600,6 @@ bool stealcar(DeprecatedCreature &cr, char &clearformess);
 bool carselect(DeprecatedCreature &cr, short &cartype);
 /* get a wheelchair */
 void getwheelchair(DeprecatedCreature &cr, char &clearformess);
-void augment(DeprecatedCreature &cr, char &clearformess);
 
 void activitiesForIndividuals(char &clearformess) {
 	const string CONST_daily019 = " surfs the Net for recent opinion polls.";
@@ -1034,8 +1041,11 @@ void squadDepart(const int sq, char &clearformess) {
 	}
 }
 void advanceSquads(char &clearformess) {
-	const string CONST_daily012 = "%s spent $%d on tickets to go to %s.";
-	const string CONST_daily011 = "%s couldn't afford tickets to go to %s.";
+	const string CONST_daily012A = " spent $";
+	const string CONST_daily012B = " on tickets to go to ";
+	const string CONST_daily012C = ".";
+	const string CONST_daily011A = " couldn't afford tickets to go to %";
+	const string CONST_daily011B = ".";
 	const string CONST_daily010 = "travel location";
 	const string CONST_daily009 = " didn't have a car to get to ";
 	extern Deprecatedsquadst *activesquad;
@@ -1107,13 +1117,13 @@ void advanceSquads(char &clearformess) {
 				price *= 100;
 				if (ledger.get_funds() < price)
 				{
-					mvaddstr_fl(8, 1, gamelog, CONST_daily011.c_str(), squad[sq]->name, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
+					mvaddstrAlt(8, 1, squad[sq]->name + CONST_daily011A + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + CONST_daily011B, gamelog);
 					canDepart = false;
 				}
 				else
 				{
 					ledger.subtract_funds(price, EXPENSE_TRAVEL);
-					mvaddstr_fl(8, 1, gamelog, CONST_daily012.c_str(), squad[sq]->name, price, LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg).c_str());
+					mvaddstrAlt(8, 1, squad[sq]->name + CONST_daily012A + tostring(price) + CONST_daily012B + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + CONST_daily012C, gamelog);
 				}
 				pressAnyKey();
 			}

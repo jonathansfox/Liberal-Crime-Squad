@@ -244,6 +244,16 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locations.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
@@ -258,6 +268,10 @@ int getarmortype(const string &idname);
 void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
+/* tells how many members a squad has who are alive */
+int squadalive(const Deprecatedsquadst *st);
 // for int squadsize(const squadst *);
 //#include "../combat/chaseCreature.h"
 Vehicle* getChaseVehicle(const DeprecatedCreature &c);

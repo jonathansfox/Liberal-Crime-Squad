@@ -162,6 +162,15 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
+
+////
 #include "../locations/locationsEnums.h"
 #include "../log/log.h"
 // for commondisplay.h
@@ -175,6 +184,8 @@ void consolidateloot(vector<Item *>&);
 void equipmentbaseassign();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const Deprecatedsquadst *st);
 // for short reviewmodeenum_to_sortingchoiceenum(short)
 //#include "../common/translateid.h"
 int getsquad(int);
