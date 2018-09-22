@@ -660,11 +660,44 @@ Sometimes written to, but it was never read.
 
 Combined locx, locy, and locz into a single structure coordinatest
 Minor refactoring.
-CppDepend identifies "60 days of debt", 53 days of which fall under the category of "too many local variables", 100 instances in total.
-This means, as a metric, CppDepend's definition of technical debt is nearly resolved.
+CppDepend identifies "60 days of debt".
 
 Refactored WeaponType so its const getters take an enumerator, rather than having a unique method for every single barely-used internal value.
 
 Major refactoring of LocationsPool.  Similar to technique in WeaponType.
 Located source of bug where disguise continues to be printed in red after returning to base.  Method of fixing, uncertain.
 commondisplay.cpp Line 713 is related.
+
+Restructuring of DeprecatedCreature class, laying groundwork for new ImmutableSimpleCreature superclass.
+Split apart Deprecateddatest and related structures, so only files using them import them.
+
+Minor refactoring of basemode.cpp
+
+Fixed bug where liberal guardian special reports were incorrectly titled "Loot_CEOLoveLetter" and similar.
+
+4.12.25
+Creature names appear in red regardless of situation.
+Game crashes when liberals set to auto-recruit.  Visual Studio debugger presents no usable information.  Online search suggests it may be an issue with compatibility of VS 2013 and VS 2017.
+
+My hatred of Visual Studio and C++ grows.
+
+
+X(1) The game crashes for me whenever I wait a day after assigning any squad member to "Recruiting" via the Activate menu.
+X (2) Also, when I'm on site, every NPC's name is in red, even though some are Liberal or Moderate. If I talk to them, their names are in their proper colors, so it's just the display text while on site.
+(3) Also another bug is when there are referendums/propositions and the population votes it seems to always vote in favour of the conservative ruling, even though when I check polls it goes 70-100% for liberal.
+(4) Another one is the buildings don't change names after policy change, so even though you will only have police officers the building is still called deathsquad hq
+X(5) Also another annoying bug, the slogan gets reset every time you exit the game.
+(6) Another one is I think that repairing clothes is bugged and you can't sell damaged clothes so your equipment just gets flooded with broken equipment.
+X (7) Disguise is always red.
+
+Removed all usage and references to addstr_f(...) and other "add formatted strings" methods.  This fixed (1).
+Fixed (5).  New means of saving and loading slogan led to the slogan being saved, but not loaded.
+Fixed disguise continues to be printed in red after returning to base.
+Fixed (7) by reverting hasdisguise() into 4.12.19 version.
+Fixed (2), turns out the code checking the alignment was returning the creature's type instead.
+
+(8) possible bug with encounterSpecial(
+...
+	case SPECIAL_CAFE_COMPUTER:
+		encounterCafeComputer();
+
