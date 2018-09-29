@@ -68,7 +68,18 @@ const string blankString = "";
 #include "../items/money.h"
 #include "../recruits.h"
 vector<Location *> location;
-void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, DeprecatedCreature * newcr) {
+/* creates your founder */
+struct newGameArguments {
+	const char recruits;
+	const char base;
+	const bool makelawyer;
+	const bool gaylawyer;
+	const bool sports_car;
+	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
+};
+Vehicle* newSportsCar();
+void newVehicle(Vehicle *startcar);
+void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm) {
 	// Gives you bloody armor
 	extern bool GIVEBLOODYARMOR;
 	// Start with lots of money
@@ -84,14 +95,25 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern vector<Deprecatedsquadst *> squad;
+	// This is not a proper for loop, it only iterates to find a single instance of a valid location
+	// then executes its code once, and then break;
 	for (int l = 0; l < len(location); l++)
 	{
-		if (location[l]->type == base)
+		if (location[l]->type == ngm.base)
 		{
 			newcr->base = l;
 			newcr->location = l;
-			if (startcar) startcar->set_location(l);
-			switch (base)
+			if (ngm.sports_car) {
+
+				Vehicle * startcar = newSportsCar();
+				startcar->add_heat(10);
+				newVehicle(startcar);
+				newcr->pref_carid = startcar->id();
+				
+				startcar->set_location(l);
+				
+			}
+			switch (ngm.base)
 			{
 			case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting = 500; break;
 			case SITE_RESIDENTIAL_APARTMENT:location[l]->renting = 200; break;
@@ -102,7 +124,7 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 				break;
 			}
 			location[l]->newrental = 1;
-			switch (recruits)
+			switch (ngm.recruits)
 			{
 			case RECRUITS_GANG:
 				for (int i = 0; i < 4; i++)
@@ -151,14 +173,14 @@ void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool
 	//newcr->juice=0;
 	squad.push_back(newsq);
 	activesquad = newsq;
-	if (makelawyer)
+	if (ngm.makelawyer)
 	{
 		DeprecatedCreature* lawyer = new DeprecatedCreature;
 		makecreature(*lawyer, CREATURE_LAWYER);
 		// Make sure lawyer is of the appropriate gender for dating the main character;
 		// opposite sex by default, same sex if the option was chosen that mentions
 		// homosexuality
-		if (gaylawyer)
+		if (ngm.gaylawyer)
 		{
 			lawyer->gender_conservative = lawyer->gender_liberal = newcr->gender_conservative;
 			// neutral founder gets neutral partner
@@ -1802,34 +1824,34 @@ char squadhasitem(Deprecatedsquadst &sq, const string& type)
 }
 #include "../daily/siege.h"
 /* location info at top of screen */
+const string CONST_locationsPool116 = " Eating";
+const string CONST_locationsPool115 = "s";
+const string CONST_locationsPool114 = " Daily Ration";
+const string CONST_locationsPool113 = "Not Enough Food";
+const string CONST_locationsPool112 = " of Food Left";
+const string CONST_locationsPool111 = " Day";
+const string CONST_locationsPool110 = "GENERATOR";
+const string CONST_locationsPool109 = "LIGHTS OUT";
+const string CONST_locationsPool108 = "TANK TRAPS";
+const string CONST_locationsPool107 = "AA GUN";
+const string CONST_locationsPool106 = "BOOBY TRAPS";
+const string CONST_locationsPool105 = "CAMERAS ON";
+const string CONST_locationsPool104 = "CAMERAS OFF";
+const string CONST_locationsPool103 = "BUSINESS FRONT";
+const string CONST_locationsPool102 = "PRINTING PRESS";
+const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
+const string CONST_locationsPool100 = "This location has insufficient food stores.";
+const string CONST_locationsPool099 = "This location has food for only a few days.";
+const string CONST_locationsPool098 = "You are not under siege...  yet.";
+const string CONST_locationsPool097 = "Firemen are raiding this location!";
+const string CONST_locationsPool096 = "The CCS is raiding this location!";
+const string CONST_locationsPool095 = "The Corporations are raiding this location!";
+const string CONST_locationsPool094 = "The masses are storming this location!";
+const string CONST_locationsPool093 = "The CIA is raiding this location!";
+const string CONST_locationsPool092 = "The police are raiding this location!";
+const string CONST_locationsPool091 = "The police have surrounded this location.";
 void printlocation(long loc)
 {
-	const string CONST_locationsPool116 = " Eating";
-	const string CONST_locationsPool115 = "s";
-	const string CONST_locationsPool114 = " Daily Ration";
-	const string CONST_locationsPool113 = "Not Enough Food";
-	const string CONST_locationsPool112 = " of Food Left";
-	const string CONST_locationsPool111 = " Day";
-	const string CONST_locationsPool110 = "GENERATOR";
-	const string CONST_locationsPool109 = "LIGHTS OUT";
-	const string CONST_locationsPool108 = "TANK TRAPS";
-	const string CONST_locationsPool107 = "AA GUN";
-	const string CONST_locationsPool106 = "BOOBY TRAPS";
-	const string CONST_locationsPool105 = "CAMERAS ON";
-	const string CONST_locationsPool104 = "CAMERAS OFF";
-	const string CONST_locationsPool103 = "BUSINESS FRONT";
-	const string CONST_locationsPool102 = "PRINTING PRESS";
-	const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
-	const string CONST_locationsPool100 = "This location has insufficient food stores.";
-	const string CONST_locationsPool099 = "This location has food for only a few days.";
-	const string CONST_locationsPool098 = "You are not under siege...  yet.";
-	const string CONST_locationsPool097 = "Firemen are raiding this location!";
-	const string CONST_locationsPool096 = "The CCS is raiding this location!";
-	const string CONST_locationsPool095 = "The Corporations are raiding this location!";
-	const string CONST_locationsPool094 = "The masses are storming this location!";
-	const string CONST_locationsPool093 = "The CIA is raiding this location!";
-	const string CONST_locationsPool092 = "The police are raiding this location!";
-	const string CONST_locationsPool091 = "The police have surrounded this location.";
 
 	if (location[loc]->siege.siege)
 	{
@@ -2114,11 +2136,11 @@ bool showSafehouseInfo(Location* this_location, Location* squad_location, const 
 	return show_safehouse_info;
 }
 /* base - go forth to stop evil */
+const string CONST_locationsPool124 = "Enter - Back one step.";
+const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
+const string CONST_locationsPool122 = "Where will the Squad go?";
 void stopevil()
 {
-	const string CONST_locationsPool124 = "Enter - Back one step.";
-	const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
-	const string CONST_locationsPool122 = "Where will the Squad go?";
 	extern class Ledger ledger;
 	extern Deprecatedsquadst *activesquad;
 	extern short interface_pgup;
@@ -2323,20 +2345,20 @@ enum BusinessFronts
 	BUSINESSFRONTNUM
 };
 /* base - invest in this location */
+const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
+const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
+const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
+const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
+const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
+const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
+const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
+const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
+const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
+const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
+const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
+const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
 void investlocation()
 {
-	const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
-	const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
-	const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
-	const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
-	const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
-	const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
-	const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
-	const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
-	const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
-	const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
-	const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
-	const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
 	extern class Ledger ledger;
 	extern int selectedsiege;
 	extern short lawList[LAWNUM];

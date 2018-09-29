@@ -44,29 +44,30 @@ extern string percentSign;
 //// #include "../common/commonactions.h"
 void sorting_prompt(short listforsorting);
 string getactivity(ActivityST &act);
+const string CONST_activate_sleepers023 = " will steal equipment and send it to the Shelter.";
+const string CONST_activate_sleepers022 = " will embezzle money for the LCS.";
+const string CONST_activate_sleepers021 = " will snoop around for secrets and enemy plans.";
+const string CONST_activate_sleepers020 = " will try to recruit additional sleeper agents.";
+const string CONST_activate_sleepers019 = " will build support for Liberal causes.";
+const string CONST_activate_sleepers018 = " will stay out of trouble.";
+const string CONST_activate_sleepers017 = "3 - Steal Equipment";
+const string CONST_activate_sleepers016 = "2 - Embezzle Funds";
+const string CONST_activate_sleepers015 = "1 - Uncover Secrets";
+const string CONST_activate_sleepers014 = "3 - [Need More Juice to Recruit]";
+const string CONST_activate_sleepers013 = "3 - [Enlightened Can't Recruit]";
+const string CONST_activate_sleepers012 = "3 - Expand Sleeper Network";
+const string CONST_activate_sleepers011 = "2 - Advocate Liberalism";
+const string CONST_activate_sleepers010 = "1 - Lay Low";
+const string CONST_activate_sleepers009 = "Enter - Confirm Selection";
+const string CONST_activate_sleepers008 = "C - Join the Active LCS";
+const string CONST_activate_sleepers007 = "B - Espionage";
+const string CONST_activate_sleepers006 = "A - Communication and Advocacy";
+const string CONST_activate_sleepers005 = " focus on?";
+const string CONST_activate_sleepers004 = "Taking Undercover Action:   What will ";
 void activate_sleeper(DeprecatedCreature *cr)
 {
-	const string CONST_activate_sleepers023 = " will steal equipment and send it to the Shelter.";
-	const string CONST_activate_sleepers022 = " will embezzle money for the LCS.";
-	const string CONST_activate_sleepers021 = " will snoop around for secrets and enemy plans.";
-	const string CONST_activate_sleepers020 = " will try to recruit additional sleeper agents.";
-	const string CONST_activate_sleepers019 = " will build support for Liberal causes.";
-	const string CONST_activate_sleepers018 = " will stay out of trouble.";
-	const string CONST_activate_sleepers017 = "3 - Steal Equipment";
-	const string CONST_activate_sleepers016 = "2 - Embezzle Funds";
-	const string CONST_activate_sleepers015 = "1 - Uncover Secrets";
-	const string CONST_activate_sleepers014 = "3 - [Need More Juice to Recruit]";
-	const string CONST_activate_sleepers013 = "3 - [Enlightened Can't Recruit]";
-	const string CONST_activate_sleepers012 = "3 - Expand Sleeper Network";
-	const string CONST_activate_sleepers011 = "2 - Advocate Liberalism";
-	const string CONST_activate_sleepers010 = "1 - Lay Low";
-	const string CONST_activate_sleepers009 = "Enter - Confirm Selection";
-	const string CONST_activate_sleepers008 = "C - Join the Active LCS";
-	const string CONST_activate_sleepers007 = "B - Espionage";
-	const string CONST_activate_sleepers006 = "A - Communication and Advocacy";
-	const string CONST_activate_sleepers005 = " focus on?";
-	const string CONST_activate_sleepers004 = "Taking Undercover Action:   What will ";
-	int state = 0, choice = 0;
+	int state = 0;
+	int choice = 0;
 	while (true)
 	{
 		eraseAlt();
@@ -189,17 +190,17 @@ void activate_sleeper(DeprecatedCreature *cr)
 	}
 }
 /* base - activate sleepers */
+const string CONST_activate_sleepers031 = " T to sort people.";
+const string CONST_activate_sleepers030 = "Press a Letter to Assign an Activity.";
+const string CONST_activate_sleepers029 = "Effectiveness: ";
+const string CONST_activate_sleepers028 = "ACTIVITY";
+const string CONST_activate_sleepers027 = "SITE";
+const string CONST_activate_sleepers026 = "JOB";
+const string CONST_activate_sleepers025 = "CODE NAME";
+const string CONST_activate_sleepers024 = "Activate Sleeper Agents";
 void activate_sleepers()
 {
 	extern string percentSign;
-	const string CONST_activate_sleepers031 = " T to sort people.";
-	const string CONST_activate_sleepers030 = "Press a Letter to Assign an Activity.";
-	const string CONST_activate_sleepers029 = "Effectiveness: ";
-	const string CONST_activate_sleepers028 = "ACTIVITY";
-	const string CONST_activate_sleepers027 = "SITE";
-	const string CONST_activate_sleepers026 = "JOB";
-	const string CONST_activate_sleepers025 = "CODE NAME";
-	const string CONST_activate_sleepers024 = "Activate Sleeper Agents";
 	extern MusicClass music;
 	extern short interface_pgup;
 	extern short interface_pgdn;

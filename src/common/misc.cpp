@@ -1246,21 +1246,21 @@ void MusicClass::play(int _musicmode)
 		return story;
 	}
 
+	const string CONST_news250 = " and ";
+	const string CONST_news249 = "wife";
+	const string CONST_news248 = " is survived by ";
+
+	const string CONST_news237 = "The suspected shooter, ";
+	const string CONST_news236 = " times and died immediately in the parking lot. ";
+	const string CONST_news235 = " was hit ";
+	const string CONST_news234 = "shots were fired from a nearby vehicle. ";
+	const string CONST_news233 = " car when, according to police reports, ";
+	const string CONST_news232 = " was walking to ";
+
+	const string CONST_newsB925 = "husband";
 	string newsOnKiller() {
 		string story;
 
-		const string CONST_news250 = " and ";
-		const string CONST_news249 = "wife";
-		const string CONST_news248 = " is survived by ";
-
-		const string CONST_news237 = "The suspected shooter, ";
-		const string CONST_news236 = " times and died immediately in the parking lot. ";
-		const string CONST_news235 = " was hit ";
-		const string CONST_news234 = "shots were fired from a nearby vehicle. ";
-		const string CONST_news233 = " car when, according to police reports, ";
-		const string CONST_news232 = " was walking to ";
-
-		const string CONST_newsB925 = "husband";
 
 		extern short lawList[LAWNUM];
 
@@ -1402,21 +1402,21 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_news276 = "aggravated nature of the offense";
+	const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
+	const string CONST_news274 = " Authorities have stated that they will vigorously ";
+	const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
+	const string CONST_news272 = "The chase ended when ";
+	const string CONST_news271 = " at the pursuing police cruisers. ";
+
+	const string CONST_news264 = "murderers swerving wildly, ";
+	const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
+	const string CONST_news262 = "have not yet been released.";
+	const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
+	const string CONST_news260 = "A police spokesperson reported that four suspects ";
+	const string CONST_news259 = " here yesterday. ";
 	string constructVIEW_GAY()
 	{
-		const string CONST_news276 = "aggravated nature of the offense";
-		const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
-		const string CONST_news274 = " Authorities have stated that they will vigorously ";
-		const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
-		const string CONST_news272 = "The chase ended when ";
-		const string CONST_news271 = " at the pursuing police cruisers. ";
-
-		const string CONST_news264 = "murderers swerving wildly, ";
-		const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
-		const string CONST_news262 = "have not yet been released.";
-		const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
-		const string CONST_news260 = "A police spokesperson reported that four suspects ";
-		const string CONST_news259 = " here yesterday. ";
 
 
 		extern string commaSpace;
@@ -1469,36 +1469,36 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_news441 = "_";
+
+	const string CONST_news345 = "?";
+	const string CONST_news344 = "Mamma, why did they kill ";
+	const string CONST_news343 = " dead?";
+	const string CONST_news342 = "Mamma, is ";
+	const string CONST_news340 = "many area children spontaneously broke into tears. One child was ";
+	const string CONST_news339 = " When the decision to ban the book was announced yesterday, ";
+	const string CONST_news338 = " as key evidence of the dark nature of the book.";
+	const string CONST_news337 = "a child that ";
+	const string CONST_news336 = "a child that said a magic spell at her parents";
+	const string CONST_news335 = "a child that swore in class";
+	const string CONST_news334 = "In their complaint, the groups cited an incident involving ";
+	const string CONST_news332 = "some conservatives feel that the books ";
+	const string CONST_news331 = "Although the series is adored by children worldwide, ";
+	const string CONST_news329 = ". ";
+	const string CONST_news328 = " author ";
+	const string CONST_news327 = "_, is the third in an immensely popular series by ";
+	const string CONST_news325 = "_and_the_";
+	const string CONST_news322 = " The book, ";
+	const string CONST_news321 = "the city bowed to pressure from religious groups.";
+	const string CONST_news320 = " - A children's story has been removed from libraries here after ";
+
+	const string CONST_newsX02 = "heard saying, \"";
+
+	const string CONST_news1030 = "\"";
+
+	const string CONST_news485 = ". ";
 	string constructVIEW_FREESPEECH()
 	{
-		const string CONST_news441 = "_";
-
-		const string CONST_news345 = "?";
-		const string CONST_news344 = "Mamma, why did they kill ";
-		const string CONST_news343 = " dead?";
-		const string CONST_news342 = "Mamma, is ";
-		const string CONST_news340 = "many area children spontaneously broke into tears. One child was ";
-		const string CONST_news339 = " When the decision to ban the book was announced yesterday, ";
-		const string CONST_news338 = " as key evidence of the dark nature of the book.";
-		const string CONST_news337 = "a child that ";
-		const string CONST_news336 = "a child that said a magic spell at her parents";
-		const string CONST_news335 = "a child that swore in class";
-		const string CONST_news334 = "In their complaint, the groups cited an incident involving ";
-		const string CONST_news332 = "some conservatives feel that the books ";
-		const string CONST_news331 = "Although the series is adored by children worldwide, ";
-		const string CONST_news329 = ". ";
-		const string CONST_news328 = " author ";
-		const string CONST_news327 = "_, is the third in an immensely popular series by ";
-		const string CONST_news325 = "_and_the_";
-		const string CONST_news322 = " The book, ";
-		const string CONST_news321 = "the city bowed to pressure from religious groups.";
-		const string CONST_news320 = " - A children's story has been removed from libraries here after ";
-
-		const string CONST_newsX02 = "heard saying, \"";
-
-		const string CONST_news1030 = "\"";
-
-		const string CONST_news485 = ". ";
 
 
 		extern vector<string> book_title;
@@ -1599,35 +1599,35 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news1030 = "\"";
+//	const string CONST_news1030 = "\"";
+	const string CONST_news458 = ".\"";
+
+	const string CONST_news306 = "can be put to death in this country.";
+	const string CONST_news305 = "tragedy, it will be that our nation is now evaluating the ease with which people ";
+	const string CONST_news304 = "and more events are expected this evening. If there is a bright side to be found from this ";
+	const string CONST_news303 = " Candlelight vigils were held throughout the country last night during the execution, ";
+	const string CONST_news301 = "The family wants closure. We don't have time for another trial";
+	const string CONST_news300 = "End of story";
+	const string CONST_news299 = "Assassin, serial killer, either way 컴 guilty. ";
+	const string CONST_news298 = "The convict is always referred to by three names. ";
+	const string CONST_news297 = "Let's not forget the convict is colored. You know how their kind are";
+	const string CONST_news295 = "spokesperson for the governor saying, ";
+	const string CONST_news294 = "The state still went through with the execution, with a ";
+	const string CONST_news293 = " was framed. ";
+	const string CONST_news292 = "an admission from a former prosecutor that ";
+	const string CONST_news291 = "a battery of negative DNA tests. ";
+	const string CONST_news290 = "a confession from another convict. ";
+	const string CONST_news289 = "have been produced, including ";
+	const string CONST_news288 = "Since then, numerous pieces of exculpatory evidence ";
+	const string CONST_news287 = " of 13 serial murders. ";
+	const string CONST_news286 = " was convicted in ";
+	const string CONST_news284 = " Correctional Facility.&r";
+	const string CONST_news283 = " yesterday at the ";
+	const string CONST_news282 = ":";
+	const string CONST_news281 = " was pronounced dead at ";
+	const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
 	string constructVIEW_DEATHPENALTY()
 	{
-		const string CONST_news458 = ".\"";
-
-		const string CONST_news306 = "can be put to death in this country.";
-		const string CONST_news305 = "tragedy, it will be that our nation is now evaluating the ease with which people ";
-		const string CONST_news304 = "and more events are expected this evening. If there is a bright side to be found from this ";
-		const string CONST_news303 = " Candlelight vigils were held throughout the country last night during the execution, ";
-		const string CONST_news301 = "The family wants closure. We don't have time for another trial";
-		const string CONST_news300 = "End of story";
-		const string CONST_news299 = "Assassin, serial killer, either way 컴 guilty. ";
-		const string CONST_news298 = "The convict is always referred to by three names. ";
-		const string CONST_news297 = "Let's not forget the convict is colored. You know how their kind are";
-		const string CONST_news295 = "spokesperson for the governor saying, ";
-		const string CONST_news294 = "The state still went through with the execution, with a ";
-		const string CONST_news293 = " was framed. ";
-		const string CONST_news292 = "an admission from a former prosecutor that ";
-		const string CONST_news291 = "a battery of negative DNA tests. ";
-		const string CONST_news290 = "a confession from another convict. ";
-		const string CONST_news289 = "have been produced, including ";
-		const string CONST_news288 = "Since then, numerous pieces of exculpatory evidence ";
-		const string CONST_news287 = " of 13 serial murders. ";
-		const string CONST_news286 = " was convicted in ";
-		const string CONST_news284 = " Correctional Facility.&r";
-		const string CONST_news283 = " yesterday at the ";
-		const string CONST_news282 = ":";
-		const string CONST_news281 = " was pronounced dead at ";
-		const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
 
 
 
@@ -1715,23 +1715,23 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+//	const string CONST_news458 = ".\"";
+
+	const string CONST_news318 = "You think about that before you continue slanging accusations";
+	const string CONST_news317 = "these files deal with the one and not the other. ";
+	const string CONST_news316 = "It might be a bit presumptive to assume that ";
+	const string CONST_news315 = "Well, you know, there's privacy, and there's privacy. ";
+	const string CONST_news313 = " The FBI refused to comment initially, but when confronted with the information, ";
+	const string CONST_news312 = "\"deal with the undesirables\", although this phrase is not clarified. ";
+	const string CONST_news311 = " More disturbingly, the files make reference to a plan to ";
+	const string CONST_news310 = "unions, working for liberal organizations 컴 even ";
+	const string CONST_news309 = "The files contain information on which people have been attending demonstrations, organizing ";
+	const string CONST_news308 = "This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations. ";
+	const string CONST_news307 = "Washington, DC - The FBI might be keeping tabs on you. ";
+
+	const string CONST_newsX01 = "a spokesperson stated, \"";
 	string constructVIEW_INTELLIGENCE()
 	{
-		const string CONST_news458 = ".\"";
-
-		const string CONST_news318 = "You think about that before you continue slanging accusations";
-		const string CONST_news317 = "these files deal with the one and not the other. ";
-		const string CONST_news316 = "It might be a bit presumptive to assume that ";
-		const string CONST_news315 = "Well, you know, there's privacy, and there's privacy. ";
-		const string CONST_news313 = " The FBI refused to comment initially, but when confronted with the information, ";
-		const string CONST_news312 = "\"deal with the undesirables\", although this phrase is not clarified. ";
-		const string CONST_news311 = " More disturbingly, the files make reference to a plan to ";
-		const string CONST_news310 = "unions, working for liberal organizations 컴 even ";
-		const string CONST_news309 = "The files contain information on which people have been attending demonstrations, organizing ";
-		const string CONST_news308 = "This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations. ";
-		const string CONST_news307 = "Washington, DC - The FBI might be keeping tabs on you. ";
-
-		const string CONST_newsX01 = "a spokesperson stated, \"";
 
 		extern string ampersandR;
 		extern string singleDot;
@@ -1795,23 +1795,23 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+
+	const string CONST_news361 = "the judge would be going on a Bible retreat for a few weeks to ";
+	const string CONST_news360 = " could not be reached for comment, although an aid stated that ";
+	const string CONST_news358 = " in exchange for their silence.";
+	const string CONST_news357 = " reportedly offered ";
+	const string CONST_news355 = "when police broke into the hotel room they saw ";
+	const string CONST_news354 = "According to sources familiar with the particulars, ";
+	const string CONST_news353 = " last week in a hotel during a police sting operation. ";
+	const string CONST_news352 = ", was found with ";
+	const string CONST_news351 = ", who once ";
+	const string CONST_news347 = " - Conservative federal judge ";
+
+
+	const string CONST_newsB928 = "\"Make things right with the Almighty Father.\"";
 	string constructVIEW_JUSTICES()
 	{
 		extern string ampersandR;
-
-		const string CONST_news361 = "the judge would be going on a Bible retreat for a few weeks to ";
-		const string CONST_news360 = " could not be reached for comment, although an aid stated that ";
-		const string CONST_news358 = " in exchange for their silence.";
-		const string CONST_news357 = " reportedly offered ";
-		const string CONST_news355 = "when police broke into the hotel room they saw ";
-		const string CONST_news354 = "According to sources familiar with the particulars, ";
-		const string CONST_news353 = " last week in a hotel during a police sting operation. ";
-		const string CONST_news352 = ", was found with ";
-		const string CONST_news351 = ", who once ";
-		const string CONST_news347 = " - Conservative federal judge ";
-
-
-		const string CONST_newsB928 = "\"Make things right with the Almighty Father.\"";
 
 		extern string commaSpace;
 		extern int year;
@@ -1897,30 +1897,30 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_news390 = "to the FM band.";
+	const string CONST_news389 = "pastures. Of these, many said that they would be switching over ";
+	const string CONST_news388 = "have decided to leave the program for saner ";
+	const string CONST_news387 = "fully half of the host's most loyal supporters ";
+	const string CONST_news386 = "According to a poll completed yesterday, ";
+	const string CONST_news385 = "the damage might already be done. ";
+	const string CONST_news384 = " issued an apology later in the program, but ";
+	const string CONST_news376 = " had ";
+	const string CONST_news374 = "\", a former fan of the show, ";
+	const string CONST_news373 = "liberal media establishment!";
+	const string CONST_news372 = "current president!";
+	const string CONST_news371 = "and the greatest living example of a reverse racist is the ";
+	const string CONST_news368 = "'s monologue for the evening began the way that fans ";
+	const string CONST_news366 = "\".";
+	const string CONST_news364 = " went off for fifteen minutes in an inexplicable rant ";
+	const string CONST_news363 = " - Well-known AM radio personality ";
+
+	const string CONST_newsX03 = "two nights ago during the syndicated radio program \"";
+	const string CONST_newsX04 = "had come to expect, with attacks on the \"liberal media establishment\"";
+	const string CONST_newsX05 = "the \"elite liberal agenda\". But when the radio icon said, \"";
+	const string CONST_newsX06 = ", knew that \"";
+	const string CONST_newsX07 = ". After that, it just got worse and worse.\"";
 	string constructVIEW_AMRADIO()
 	{
-		const string CONST_news390 = "to the FM band.";
-		const string CONST_news389 = "pastures. Of these, many said that they would be switching over ";
-		const string CONST_news388 = "have decided to leave the program for saner ";
-		const string CONST_news387 = "fully half of the host's most loyal supporters ";
-		const string CONST_news386 = "According to a poll completed yesterday, ";
-		const string CONST_news385 = "the damage might already be done. ";
-		const string CONST_news384 = " issued an apology later in the program, but ";
-		const string CONST_news376 = " had ";
-		const string CONST_news374 = "\", a former fan of the show, ";
-		const string CONST_news373 = "liberal media establishment!";
-		const string CONST_news372 = "current president!";
-		const string CONST_news371 = "and the greatest living example of a reverse racist is the ";
-		const string CONST_news368 = "'s monologue for the evening began the way that fans ";
-		const string CONST_news366 = "\".";
-		const string CONST_news364 = " went off for fifteen minutes in an inexplicable rant ";
-		const string CONST_news363 = " - Well-known AM radio personality ";
-
-		const string CONST_newsX03 = "two nights ago during the syndicated radio program \"";
-		const string CONST_newsX04 = "had come to expect, with attacks on the \"liberal media establishment\"";
-		const string CONST_newsX05 = "the \"elite liberal agenda\". But when the radio icon said, \"";
-		const string CONST_newsX06 = ", knew that \"";
-		const string CONST_newsX07 = ". After that, it just got worse and worse.\"";
 
 
 		extern string commaSpace;
@@ -2122,26 +2122,26 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_news433 = " was disturbingly obsessed with guns and death.&r";
+	const string CONST_news432 = "she";
+	const string CONST_news431 = "reports indicate that the student kept a journal that showed ";
+	const string CONST_news430 = " Investigators are currently searching the student's belongings, and initial ";
+	const string CONST_news429 = " shortly afterwards.&r";
+	const string CONST_news413 = "classrooms, ";
+	const string CONST_news412 = " while classes were in session, then systematically started breaking into ";
+	const string CONST_news411 = "university ";
+	const string CONST_news410 = "school ";
+	const string CONST_news409 = " entered the ";
+	const string CONST_news403 = " more than a dozen classmates and two teachers at ";
+	const string CONST_news400 = ", used a variety of guns to ";
+	const string CONST_news394 = " at a local ";
+	const string CONST_news391 = "A student has gone on a ";
+
+//	const string CONST_news485 = ". ";
+
+	const string CONST_newsB935 = "he";
 	string constructVIEW_GUNCONTROL()
 	{
-		const string CONST_news433 = " was disturbingly obsessed with guns and death.&r";
-		const string CONST_news432 = "she";
-		const string CONST_news431 = "reports indicate that the student kept a journal that showed ";
-		const string CONST_news430 = " Investigators are currently searching the student's belongings, and initial ";
-		const string CONST_news429 = " shortly afterwards.&r";
-		const string CONST_news413 = "classrooms, ";
-		const string CONST_news412 = " while classes were in session, then systematically started breaking into ";
-		const string CONST_news411 = "university ";
-		const string CONST_news410 = "school ";
-		const string CONST_news409 = " entered the ";
-		const string CONST_news403 = " more than a dozen classmates and two teachers at ";
-		const string CONST_news400 = ", used a variety of guns to ";
-		const string CONST_news394 = " at a local ";
-		const string CONST_news391 = "A student has gone on a ";
-
-		const string CONST_news485 = ". ";
-
-		const string CONST_newsB935 = "he";
 
 		extern string commaSpace;
 		extern int year;
@@ -2257,27 +2257,27 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
+//	const string CONST_news458 = ".\"";
+	const string CONST_news457 = " choice, and I would only have a few seconds before they made it for me";
+	const string CONST_news454 = " the other. A ";
+	const string CONST_news451 = "Maybe lose an eye the one way, maybe catch ";
+	const string CONST_news450 = "My shank's under the mattress. Better to be brave and fight or chicken out and let them take it? ";
+	const string CONST_news449 = "with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager. ";
+	const string CONST_news448 = "I was trapped with them now. There were three, looking me over ";
+	const string CONST_news447 = "coming to a halt with a deafening clang that said it all 컴 ";
+	const string CONST_news446 = "The steel bars grated forward in their rails, ";
+	const string CONST_news445 = " Take this excerpt, \"";
+	const string CONST_news444 = "_.&r";
+//	const string CONST_news441 = "_";
+	const string CONST_news440 = "'s new tour-de-force, _";
+	const string CONST_news438 = "have these works been as poignant as ";
+	const string CONST_news437 = "prison theme lately in its offerings for mass consumption, rarely ";
+	const string CONST_news436 = "Although popular culture has used, or perhaps overused, the ";
+	const string CONST_news435 = "detail what goes on behind bars. ";
+	const string CONST_news434 = " - A former prisoner has written a book describing in horrifying ";
+
 	string constructVIEW_PRISONS()
 	{
-		const string CONST_news458 = ".\"";
-		const string CONST_news457 = " choice, and I would only have a few seconds before they made it for me";
-		const string CONST_news454 = " the other. A ";
-		const string CONST_news451 = "Maybe lose an eye the one way, maybe catch ";
-		const string CONST_news450 = "My shank's under the mattress. Better to be brave and fight or chicken out and let them take it? ";
-		const string CONST_news449 = "with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager. ";
-		const string CONST_news448 = "I was trapped with them now. There were three, looking me over ";
-		const string CONST_news447 = "coming to a halt with a deafening clang that said it all 컴 ";
-		const string CONST_news446 = "The steel bars grated forward in their rails, ";
-		const string CONST_news445 = " Take this excerpt, \"";
-		const string CONST_news444 = "_.&r";
-		const string CONST_news441 = "_";
-		const string CONST_news440 = "'s new tour-de-force, _";
-		const string CONST_news438 = "have these works been as poignant as ";
-		const string CONST_news437 = "prison theme lately in its offerings for mass consumption, rarely ";
-		const string CONST_news436 = "Although popular culture has used, or perhaps overused, the ";
-		const string CONST_news435 = "detail what goes on behind bars. ";
-		const string CONST_news434 = " - A former prisoner has written a book describing in horrifying ";
-
 
 		extern string commaSpace;
 		extern vector<string> prison_book_title;
@@ -2496,6 +2496,22 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR;
 		return story;
 	}
+
+	const string CONST_news571 = "needs to take a breather on this one. We don't see why there's such a rush to judgment here. ";
+	const string CONST_news570 = "before we urge any action. Society really just ";
+	const string CONST_news569 = "there's work left to be done. We should study much more ";
+	const string CONST_news568 = "Why is there contention on the pollution question? It's because ";
+	const string CONST_news567 = "All we've done is introduced a little clarity into the ongoing debate. ";
+	const string CONST_news566 = " these issues to their own advantage. ";
+	const string CONST_news565 = ". You have to realize that ";
+	const string CONST_news564 = "a spokesperson stated that, \"";
+	const string CONST_news563 = " When questioned about the science behind these results, ";
+	const string CONST_news562 = " might actually ";
+	const string CONST_news561 = "Among the most startling of the think tank's findings is that ";
+	const string CONST_news560 = "and the latest science on the issue. ";
+	const string CONST_news559 = " recently released a wide-ranging report detailing recent trends ";
+	const string CONST_news558 = " - Pollution might not be so bad after all. The ";
+
 	string constructNegativeVIEW_POLLUTION() {
 
 
@@ -2506,21 +2522,6 @@ void MusicClass::play(int _musicmode)
 		extern vector<string> pollution_consumption_2;
 		extern vector<string> i_like_polution;
 		extern vector<string> distrust_liberals;
-
-		const string CONST_news571 = "needs to take a breather on this one. We don't see why there's such a rush to judgment here. ";
-		const string CONST_news570 = "before we urge any action. Society really just ";
-		const string CONST_news569 = "there's work left to be done. We should study much more ";
-		const string CONST_news568 = "Why is there contention on the pollution question? It's because ";
-		const string CONST_news567 = "All we've done is introduced a little clarity into the ongoing debate. ";
-		const string CONST_news566 = " these issues to their own advantage. ";
-		const string CONST_news565 = ". You have to realize that ";
-		const string CONST_news564 = "a spokesperson stated that, \"";
-		const string CONST_news563 = " When questioned about the science behind these results, ";
-		const string CONST_news562 = " might actually ";
-		const string CONST_news561 = "Among the most startling of the think tank's findings is that ";
-		const string CONST_news560 = "and the latest science on the issue. ";
-		const string CONST_news559 = " recently released a wide-ranging report detailing recent trends ";
-		const string CONST_news558 = " - Pollution might not be so bad after all. The ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -2553,29 +2554,29 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR;
 		return story;
 	}
+	const string CONST_news587 = "of the tech industry but is also indicative of a full economic recover.&r";
+	const string CONST_news586 = "analysts suggest that not only does the expansion speak to the health ";
+	const string CONST_news585 = "futures of some of the companies in the tech sector. On the whole, however, ";
+	const string CONST_news584 = "although the dampened movement might be expected due to the uncertain ";
+	const string CONST_news583 = "The markets reportedly responded to the announcement with mild interest, ";
+	const string CONST_news582 = "this welcome news is bound to be a pleasant surprise to those in the unemployment lines. ";
+	const string CONST_news581 = "of large corporations to export jobs overseas these days, ";
+	const string CONST_news580 = "light of the tendency ";
+	const string CONST_news579 = "Given the state of the economy recently and in ";
+	const string CONST_news578 = " increasing its payrolls by over ten thousand workers alone. ";
+	const string CONST_news577 = "tech giant ";
+	const string CONST_news576 = "are expected in the first month, with ";
+	const string CONST_news575 = "during the next quarter. Over thirty thousand jobs ";
+	const string CONST_news574 = "will be expanding their work forces considerably ";
+	const string CONST_news573 = "at a joint news conference here that they ";
+	const string CONST_news572 = " - Several major companies have announced ";
+
 	string constructNegativeVIEW_CORPORATECULTURE() {
 
 
 		extern vector<string> tech_giant_name;
 		extern vector<string> tech_giant_name_2;
 
-
-		const string CONST_news587 = "of the tech industry but is also indicative of a full economic recover.&r";
-		const string CONST_news586 = "analysts suggest that not only does the expansion speak to the health ";
-		const string CONST_news585 = "futures of some of the companies in the tech sector. On the whole, however, ";
-		const string CONST_news584 = "although the dampened movement might be expected due to the uncertain ";
-		const string CONST_news583 = "The markets reportedly responded to the announcement with mild interest, ";
-		const string CONST_news582 = "this welcome news is bound to be a pleasant surprise to those in the unemployment lines. ";
-		const string CONST_news581 = "of large corporations to export jobs overseas these days, ";
-		const string CONST_news580 = "light of the tendency ";
-		const string CONST_news579 = "Given the state of the economy recently and in ";
-		const string CONST_news578 = " increasing its payrolls by over ten thousand workers alone. ";
-		const string CONST_news577 = "tech giant ";
-		const string CONST_news576 = "are expected in the first month, with ";
-		const string CONST_news575 = "during the next quarter. Over thirty thousand jobs ";
-		const string CONST_news574 = "will be expanding their work forces considerably ";
-		const string CONST_news573 = "at a joint news conference here that they ";
-		const string CONST_news572 = " - Several major companies have announced ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -2728,22 +2729,22 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_news470 = "seeking ";
+	const string CONST_news469 = " The district attorney's office has already repeatedly said it will be ";
+	const string CONST_news468 = ". Sources say that the police got a break in the case when ";
+	const string CONST_news465 = "only to turn up later";
+	const string CONST_news464 = ". Over twenty children in the past two years have gone missing, ";
+	const string CONST_news463 = " was detained yesterday afternoon, reportedly in possession of ";
+	const string CONST_news462 = "according to a spokesperson for the police department here. ";
+	const string CONST_news461 = "string of brutal child killings that has kept everyone in the area on edge, ";
+	const string CONST_news460 = "The authorities have apprehended their primary suspect in the ";
+	const string CONST_news459 = " - Perhaps parents can rest easier tonight. ";
 	string constructNegativeVIEW_DEATHPENALTY()
 	{
 
 		extern vector<string> evidence_of_child_murder;
 		extern vector<string> break_in_murder_case;
 
-		const string CONST_news470 = "seeking ";
-		const string CONST_news469 = " The district attorney's office has already repeatedly said it will be ";
-		const string CONST_news468 = ". Sources say that the police got a break in the case when ";
-		const string CONST_news465 = "only to turn up later";
-		const string CONST_news464 = ". Over twenty children in the past two years have gone missing, ";
-		const string CONST_news463 = " was detained yesterday afternoon, reportedly in possession of ";
-		const string CONST_news462 = "according to a spokesperson for the police department here. ";
-		const string CONST_news461 = "string of brutal child killings that has kept everyone in the area on edge, ";
-		const string CONST_news460 = "The authorities have apprehended their primary suspect in the ";
-		const string CONST_news459 = " - Perhaps parents can rest easier tonight. ";
 		extern string singleDot;
 		extern string ampersandR;
 		char dstr[200], dstr2[200], dstr3[200];
@@ -2787,10 +2788,25 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_newsX08 = " The spokesperson further stated, \"";
+	const string CONST_news508 = "this new age.";
+	const string CONST_news507 = "for what we feel are the essential tools for combating terrorism in ";
+	const string CONST_news506 = "The Head of the Agency will be sending a request to Congress ";
+	const string CONST_news505 = "However, let me also say that there's more that needs to be done. ";
+	const string CONST_news504 = "civilization before they can destroy American families. ";
+	const string CONST_news503 = "providing us with the tools we need to neutralize these enemies of ";
+	const string CONST_news502 = "that we are grateful to the Congress and this Administration for ";
+	const string CONST_news501 = "I won't compromise our sources and methods, but let me just say ";
+	const string CONST_news499 = "was to occur.";
+	const string CONST_news498 = "terrorist organization allowed the plot to be foiled just days before it ";
+	const string CONST_news497 = ". However, intelligence garnered from deep within the mysterious ";
+	const string CONST_news496 = " planned to ";
+	const string CONST_news495 = " According to a spokesperson for the agency, ";
+	const string CONST_news494 = "would have occurred on American soil.";
+	const string CONST_news493 = "Washington, DC - The CIA announced yesterday that it has averted a terror attack that ";
 	string constructNegativeVIEW_INTELLIGENCE()
 	{
 
-		const string CONST_newsX08 = " The spokesperson further stated, \"";
 
 		extern string commaSpace;
 
@@ -2798,21 +2814,6 @@ void MusicClass::play(int _musicmode)
 		extern vector<string> terrorist_group;
 
 
-		const string CONST_news508 = "this new age.";
-		const string CONST_news507 = "for what we feel are the essential tools for combating terrorism in ";
-		const string CONST_news506 = "The Head of the Agency will be sending a request to Congress ";
-		const string CONST_news505 = "However, let me also say that there's more that needs to be done. ";
-		const string CONST_news504 = "civilization before they can destroy American families. ";
-		const string CONST_news503 = "providing us with the tools we need to neutralize these enemies of ";
-		const string CONST_news502 = "that we are grateful to the Congress and this Administration for ";
-		const string CONST_news501 = "I won't compromise our sources and methods, but let me just say ";
-		const string CONST_news499 = "was to occur.";
-		const string CONST_news498 = "terrorist organization allowed the plot to be foiled just days before it ";
-		const string CONST_news497 = ". However, intelligence garnered from deep within the mysterious ";
-		const string CONST_news496 = " planned to ";
-		const string CONST_news495 = " According to a spokesperson for the agency, ";
-		const string CONST_news494 = "would have occurred on American soil.";
-		const string CONST_news493 = "Washington, DC - The CIA announced yesterday that it has averted a terror attack that ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -2881,33 +2882,33 @@ void MusicClass::play(int _musicmode)
 		}
 		return story;
 	}
+	const string CONST_newsB937 = "If I were to be released, I would surely kill again.\"";
+
+	const string CONST_news557 = "completely strapped for cash.&r";
+	const string CONST_news556 = "to the current economic doldrums that have left the state ";
+	const string CONST_news555 = "has stated that the case will not be retried, due ";
+	const string CONST_news554 = " A spokesperson for the district attorney ";
+	const string CONST_news552 = "Thank you for saving me from myself. ";
+	const string CONST_news551 = " confessed and was sentenced to life, saying \"";
+	const string CONST_news550 = "covered in the victims' blood. ";
+	const string CONST_news549 = " was found with the murder weapon, ";
+	const string CONST_news548 = "After an intensive manhunt, ";
+	const string CONST_news547 = " slayings. ";
+	const string CONST_news546 = " was convicted of the now-infamous ";
+	const string CONST_news545 = " Ten years ago, ";
+	const string CONST_news544 = " grants was not coerced in any way.&r";
+	const string CONST_news543 = ", which even Justice ";
+	const string CONST_news542 = ", despite the confession of ";
+
+	const string CONST_news531 = "made the decision based on ";
+	const string CONST_news530 = " of the notoriously liberal circuit of appeals here ";
+	const string CONST_news529 = "Justice ";
+	const string CONST_news528 = " was overturned by a federal judge yesterday. ";
+	const string CONST_news527 = " - The conviction of confessed serial killer ";
 	string constructNegativeVIEW_JUSTICES()
 	{
 
 
-		const string CONST_newsB937 = "If I were to be released, I would surely kill again.\"";
-
-		const string CONST_news557 = "completely strapped for cash.&r";
-		const string CONST_news556 = "to the current economic doldrums that have left the state ";
-		const string CONST_news555 = "has stated that the case will not be retried, due ";
-		const string CONST_news554 = " A spokesperson for the district attorney ";
-		const string CONST_news552 = "Thank you for saving me from myself. ";
-		const string CONST_news551 = " confessed and was sentenced to life, saying \"";
-		const string CONST_news550 = "covered in the victims' blood. ";
-		const string CONST_news549 = " was found with the murder weapon, ";
-		const string CONST_news548 = "After an intensive manhunt, ";
-		const string CONST_news547 = " slayings. ";
-		const string CONST_news546 = " was convicted of the now-infamous ";
-		const string CONST_news545 = " Ten years ago, ";
-		const string CONST_news544 = " grants was not coerced in any way.&r";
-		const string CONST_news543 = ", which even Justice ";
-		const string CONST_news542 = ", despite the confession of ";
-
-		const string CONST_news531 = "made the decision based on ";
-		const string CONST_news530 = " of the notoriously liberal circuit of appeals here ";
-		const string CONST_news529 = "Justice ";
-		const string CONST_news528 = " was overturned by a federal judge yesterday. ";
-		const string CONST_news527 = " - The conviction of confessed serial killer ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -2957,25 +2958,25 @@ void MusicClass::play(int _musicmode)
 			+ CONST_news557;
 		return story;
 	}
+	const string CONST_news608 = "masturbated";
+	const string CONST_news607 = "[had fun]";
+	const string CONST_news606 = "breastfed from a lactating woman";
+	const string CONST_news605 = "[fed] from a [woman]";
+	const string CONST_news604 = "breastfed from an exposed woman";
+	const string CONST_news603 = "[fed] from [an indecent] woman";
+	const string CONST_news602 = "screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs. I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"";
+	const string CONST_news601 = "screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"";
+	const string CONST_news599 = "encouraged listeners to call in and relieve themselves";
+	const string CONST_news598 = "encouraged listeners to call in and take a piss";
+	const string CONST_news597 = "encouraged listeners to call in and [urinate]";
+	const string CONST_news596 = "had intercourse";
+	const string CONST_news595 = "fucked";
+	const string CONST_news594 = "[had consensual intercourse in the missionary position]";
+	const string CONST_newsX09 = "screamed \"fuck the police those goddamn motherfuckers. I got a fucking ticket this morning and I'm fucking pissed as shit.\"";
+
 	string obsceneAct() {
 		string story;
 		extern short lawList[LAWNUM];
-
-		const string CONST_news608 = "masturbated";
-		const string CONST_news607 = "[had fun]";
-		const string CONST_news606 = "breastfed from a lactating woman";
-		const string CONST_news605 = "[fed] from a [woman]";
-		const string CONST_news604 = "breastfed from an exposed woman";
-		const string CONST_news603 = "[fed] from [an indecent] woman";
-		const string CONST_news602 = "screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs. I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"";
-		const string CONST_news601 = "screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"";
-		const string CONST_news599 = "encouraged listeners to call in and relieve themselves";
-		const string CONST_news598 = "encouraged listeners to call in and take a piss";
-		const string CONST_news597 = "encouraged listeners to call in and [urinate]";
-		const string CONST_news596 = "had intercourse";
-		const string CONST_news595 = "fucked";
-		const string CONST_news594 = "[had consensual intercourse in the missionary position]";
-		const string CONST_newsX09 = "screamed \"fuck the police those goddamn motherfuckers. I got a fucking ticket this morning and I'm fucking pissed as shit.\"";
 
 		switch (LCSrandom(5))
 		{
@@ -3044,6 +3045,20 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
+	const string CONST_news625 = "stated that the incident is under investigation.";
+	const string CONST_news624 = " A spokesperson for the FCC ";
+	const string CONST_news618 = "from irate listeners ";
+	const string CONST_news617 = " complaints ";
+	const string CONST_news611 = "the FCC received ";
+	const string CONST_news610 = " later apologized, ";
+	const string CONST_news609 = " on the air. Although ";
+
+	const string CONST_news593 = " reportedly ";
+	const string CONST_news592 = "\", ";
+	const string CONST_news591 = "'s ";
+	const string CONST_news590 = "broadcast of the program \"";
+	const string CONST_news589 = " has brought radio entertainment to a new low. During yesterday's ";
+	const string CONST_news588 = " - Infamous FM radio shock jock ";
 	string constructNegativeVIEW_AMRADIO()
 	{ //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
 
@@ -3052,20 +3067,6 @@ void MusicClass::play(int _musicmode)
 		extern vector<string> fm_radio_name_2;
 
 
-		const string CONST_news625 = "stated that the incident is under investigation.";
-		const string CONST_news624 = " A spokesperson for the FCC ";
-		const string CONST_news618 = "from irate listeners ";
-		const string CONST_news617 = " complaints ";
-		const string CONST_news611 = "the FCC received ";
-		const string CONST_news610 = " later apologized, ";
-		const string CONST_news609 = " on the air. Although ";
-
-		const string CONST_news593 = " reportedly ";
-		const string CONST_news592 = "\", ";
-		const string CONST_news591 = "'s ";
-		const string CONST_news590 = "broadcast of the program \"";
-		const string CONST_news589 = " has brought radio entertainment to a new low. During yesterday's ";
-		const string CONST_news588 = " - Infamous FM radio shock jock ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -3155,31 +3156,31 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
+	const string CONST_newsB940 = "he ";
+
+	const string CONST_news650 = "'s heroic actions.\"";
+	const string CONST_news649 = " if not for ";
+	const string CONST_news646 = " The spokesperson for the police department said, \"We'd have a yet another ";
+	const string CONST_news645 = "could hurt anyone else.&r";
+	const string CONST_news644 = "she ";
+	const string CONST_news643 = "before ";
+
+	const string CONST_news640 = " became more agitated, the heroic citizen was forced to engage the shooter in a ";
+	const string CONST_news639 = " attempted to talk down the shooter, but as ";
+	const string CONST_news635 = " Initially, ";
+	const string CONST_news634 = " to take cover while others called the police.&r";
+	const string CONST_news633 = "forcing ";
+	const string CONST_news632 = "The citizen pulled a concealed handgun and fired once at the shooter, ";
+	const string CONST_news631 = " sprung into action. ";
+	const string CONST_news630 = " opened fire at the ";
+	const string CONST_news629 = " After ";
+	const string CONST_news628 = " was prevented by a bystander with a gun.";
+	const string CONST_news626 = " - In a surprising turn, a ";
 	string constructNegativeVIEW_GUNCONTROL()
 	{
 		extern vector<string> public_place;
 		extern string commaSpace;
 
-		const string CONST_newsB940 = "he ";
-
-		const string CONST_news650 = "'s heroic actions.\"";
-		const string CONST_news649 = " if not for ";
-		const string CONST_news646 = " The spokesperson for the police department said, \"We'd have a yet another ";
-		const string CONST_news645 = "could hurt anyone else.&r";
-		const string CONST_news644 = "she ";
-		const string CONST_news643 = "before ";
-
-		const string CONST_news640 = " became more agitated, the heroic citizen was forced to engage the shooter in a ";
-		const string CONST_news639 = " attempted to talk down the shooter, but as ";
-		const string CONST_news635 = " Initially, ";
-		const string CONST_news634 = " to take cover while others called the police.&r";
-		const string CONST_news633 = "forcing ";
-		const string CONST_news632 = "The citizen pulled a concealed handgun and fired once at the shooter, ";
-		const string CONST_news631 = " sprung into action. ";
-		const string CONST_news630 = " opened fire at the ";
-		const string CONST_news629 = " After ";
-		const string CONST_news628 = " was prevented by a bystander with a gun.";
-		const string CONST_news626 = " - In a surprising turn, a ";
 
 		extern string singleDot;
 		extern string ampersandR;
@@ -3276,41 +3277,41 @@ void MusicClass::play(int _musicmode)
 		}
 		return story;
 	}
+	const string CONST_news684 = "killed the guard";
+	const string CONST_news683 = "[harmed] the guard";
+
+	const string CONST_newsB944 = "neo-pagan";
+	const string CONST_newsB943 = "him";
+	const string CONST_newsB942 = "Bloods";
+
+	const string CONST_news708 = " altar";
+	const string CONST_news707 = "Satanic";
+	const string CONST_news706 = "sacrificed the guard on a makeshift ";
+
+	const string CONST_news701 = " off";
+	const string CONST_news699 = "taken the guard to the execution chamber and finished ";
+	const string CONST_news695 = "Crips";
+	const string CONST_news694 = "poisoned the guard with drugs smuggled into the prison by the ";
+	const string CONST_news693 = " own gun";
+	const string CONST_news691 = "shot the guard with ";
+	const string CONST_news690 = " cell";
+	const string CONST_news688 = "smashed the guard's skull with the toilet seat from ";
+	const vector<string> vicious_killing_of_guard = {
+		"slit the guard's throat with a shank",
+		"strangled the guard to death with a knotted bed sheet",
+		"chewed out the guard's throat",
+		"hit all 36 pressure points of death on the guard",
+		"electrocuted the guard with high-voltage wires",
+		"thrown the guard out the top-storey window",
+		"tricked another guard into shooting the guard dead",
+		"burnt the guard to a crisp using a lighter and some gasoline",
+		"eaten the guard's liver with some fava beans and a nice chianti",
+		"performed deadly experiments on the guard unheard of since Dr. Mengele"
+	};
 	string viciousGuardKilling(const char ggn, const char dgn) {
 		string story;
 		extern short lawList[LAWNUM];
-		const string CONST_news684 = "killed the guard";
-		const string CONST_news683 = "[harmed] the guard";
 
-		const string CONST_newsB944 = "neo-pagan";
-		const string CONST_newsB943 = "him";
-		const string CONST_newsB942 = "Bloods";
-
-		const string CONST_news708 = " altar";
-		const string CONST_news707 = "Satanic";
-		const string CONST_news706 = "sacrificed the guard on a makeshift ";
-
-		const string CONST_news701 = " off";
-		const string CONST_news699 = "taken the guard to the execution chamber and finished ";
-		const string CONST_news695 = "Crips";
-		const string CONST_news694 = "poisoned the guard with drugs smuggled into the prison by the ";
-		const string CONST_news693 = " own gun";
-		const string CONST_news691 = "shot the guard with ";
-		const string CONST_news690 = " cell";
-		const string CONST_news688 = "smashed the guard's skull with the toilet seat from ";
-
-		vector<string> vicious_killing_of_guard = {
-			"slit the guard's throat with a shank",
-			"strangled the guard to death with a knotted bed sheet",
-			"chewed out the guard's throat",
-			"hit all 36 pressure points of death on the guard",
-			"electrocuted the guard with high-voltage wires",
-			"thrown the guard out the top-storey window",
-			"tricked another guard into shooting the guard dead",
-			"burnt the guard to a crisp using a lighter and some gasoline",
-			"eaten the guard's liver with some fava beans and a nice chianti",
-			"performed deadly experiments on the guard unheard of since Dr. Mengele"
-		};
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news683;
 		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news684;
 		else switch (LCSrandom(15))
@@ -3364,28 +3365,28 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
+	const string CONST_newsB941 = "himself";
+
+	const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
+	const string CONST_news709 = ". The prisoner was ";
+	const string CONST_news682 = " had already ";
+	const string CONST_news681 = "the hostage, but ";
+	const string CONST_news680 = " The tower was breached in an attempt to reach ";
+	const string CONST_news666 = " reportedly screamed into the receiver \"";
+	const string CONST_news665 = " days, but talks were cut short when ";
+	const string CONST_news664 = "attempted to negotiate by phone for ";
+	const string CONST_news663 = "Authorities locked down the prison and ";
+	const string CONST_news662 = " with the guard in a prison tower. ";
+	const string CONST_news661 = "herself";
+	const string CONST_news660 = " and barricaded ";
+	const string CONST_news659 = ", overpowered ";
+	const string CONST_news658 = ", an inmate at ";
+	const string CONST_news655 = " captor.";
+	const string CONST_news653 = "death of both the prison guard being held hostage and ";
+	const string CONST_news652 = " Correctional Facility ended tragically yesterday with the ";
+	const string CONST_news651 = " - The hostage crisis at the ";
 	string constructNegativeVIEW_PRISONS()
 	{
-		const string CONST_newsB941 = "himself";
-
-		const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
-		const string CONST_news709 = ". The prisoner was ";
-		const string CONST_news682 = " had already ";
-		const string CONST_news681 = "the hostage, but ";
-		const string CONST_news680 = " The tower was breached in an attempt to reach ";
-		const string CONST_news666 = " reportedly screamed into the receiver \"";
-		const string CONST_news665 = " days, but talks were cut short when ";
-		const string CONST_news664 = "attempted to negotiate by phone for ";
-		const string CONST_news663 = "Authorities locked down the prison and ";
-		const string CONST_news662 = " with the guard in a prison tower. ";
-		const string CONST_news661 = "herself";
-		const string CONST_news660 = " and barricaded ";
-		const string CONST_news659 = ", overpowered ";
-		const string CONST_news658 = ", an inmate at ";
-		const string CONST_news655 = " captor.";
-		const string CONST_news653 = "death of both the prison guard being held hostage and ";
-		const string CONST_news652 = " Correctional Facility ended tragically yesterday with the ";
-		const string CONST_news651 = " - The hostage crisis at the ";
 
 		extern string singleDot;
 		extern string ampersandR;

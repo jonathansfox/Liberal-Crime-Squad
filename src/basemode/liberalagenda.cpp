@@ -263,25 +263,25 @@ void printLeadersWithoutVictor() {
 	addstrAlt(tostring(senatemake[0]) + tag_Consp);
 
 }
+const string CONST_liberalagenda034 = "Attorney General: ";
+const string CONST_liberalagenda033 = "Internal Affairs Commissar: ";
+const string CONST_liberalagenda032 = "Minister of Truth: ";
+const string CONST_liberalagenda031 = "Secretary of State: ";
+const string CONST_liberalagenda030 = "Foreign Affairs Commissar: ";
+const string CONST_liberalagenda029 = "Minister of Peace: ";
+const string CONST_liberalagenda028 = "Vice President: ";
+const string CONST_liberalagenda027 = "Premier: ";
+const string CONST_liberalagenda026 = "Minister of Love: ";
+const string CONST_liberalagenda025 = "(2nd Term):";
+const string CONST_liberalagenda024 = "(1st Term):";
+const string CONST_liberalagenda023 = "President ";
+const string CONST_liberalagenda022 = "General Secretary: ";
+const string CONST_liberalagenda021 = "King: ";
 void printLeadersFirstPage(const signed char won) {
 	extern short execterm;
 	extern short exec[EXECNUM];
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
-	const string CONST_liberalagenda034 = "Attorney General: ";
-	const string CONST_liberalagenda033 = "Internal Affairs Commissar: ";
-	const string CONST_liberalagenda032 = "Minister of Truth: ";
-	const string CONST_liberalagenda031 = "Secretary of State: ";
-	const string CONST_liberalagenda030 = "Foreign Affairs Commissar: ";
-	const string CONST_liberalagenda029 = "Minister of Peace: ";
-	const string CONST_liberalagenda028 = "Vice President: ";
-	const string CONST_liberalagenda027 = "Premier: ";
-	const string CONST_liberalagenda026 = "Minister of Love: ";
-	const string CONST_liberalagenda025 = "(2nd Term):";
-	const string CONST_liberalagenda024 = "(1st Term):";
-	const string CONST_liberalagenda023 = "President ";
-	const string CONST_liberalagenda022 = "General Secretary: ";
-	const string CONST_liberalagenda021 = "King: ";
 
 	signed char align;
 
@@ -436,16 +436,16 @@ void printPage(const int page, const signed char won) {
 	}
 }
 /* base - liberal agenda */
+const string CONST_liberalagenda054 = "The country has been Stalinized.";
+const string CONST_liberalagenda053 = "The country has been Reaganified.";
+const string CONST_liberalagenda052 = "The country has achieved Elite Liberal status!";
+const string CONST_liberalagenda051 = "The country has achieved Liberal status!";
+
+const string CONST_liberalagenda017 = "The Status of the Liberal Agenda";
+const string CONST_liberalagenda016 = "The Abject Failure of the Liberal Agenda";
+const string CONST_liberalagenda015 = "The Triumph of the Liberal Agenda";
 bool liberalagenda(signed char won)
 {
-	const string CONST_liberalagenda054 = "The country has been Stalinized.";
-	const string CONST_liberalagenda053 = "The country has been Reaganified.";
-	const string CONST_liberalagenda052 = "The country has achieved Elite Liberal status!";
-	const string CONST_liberalagenda051 = "The country has achieved Liberal status!";
-
-	const string CONST_liberalagenda017 = "The Status of the Liberal Agenda";
-	const string CONST_liberalagenda016 = "The Abject Failure of the Liberal Agenda";
-	const string CONST_liberalagenda015 = "The Triumph of the Liberal Agenda";
 	extern MusicClass music;
 	extern short interface_pgup;
 	extern short interface_pgdn;

@@ -408,6 +408,18 @@ void printIfLongWait(int nonsighttime) {
 	}
 }
 
+const string CONST_basemode062 = "P - PATRIOTISM: fly a flag here ($20)";
+const string CONST_basemode061 = "P - PROTEST: burn the flag";
+const string CONST_basemode060 = "S - FREE SPEECH: the Liberal Slogan";
+const string CONST_basemode059 = " (next month)";
+const string CONST_basemode058 = "W - Wait a day";
+const string CONST_basemode057 = "W - Wait out the siege";
+const string CONST_basemode056 = "Cannot Wait until Siege Resolved";
+const string CONST_basemode055 = "X - Live to fight EVIL another day";
+const string CONST_basemode054 = "F - Go forth to stop EVIL";
+const string CONST_basemode053 = "G - Give Up";
+const string CONST_basemode052 = "F - Escape/Engage";
+const string CONST_basemode051 = "C - Cancel this Squad's Departure";
 void stillDontForceWait(const char sieged, const char cannotwait,
 	const char haveflag,
 	const char partysize) {
@@ -420,18 +432,6 @@ void stillDontForceWait(const char sieged, const char cannotwait,
 	extern class Ledger ledger;
 	extern int day;
 
-	const string CONST_basemode062 = "P - PATRIOTISM: fly a flag here ($20)";
-	const string CONST_basemode061 = "P - PROTEST: burn the flag";
-	const string CONST_basemode060 = "S - FREE SPEECH: the Liberal Slogan";
-	const string CONST_basemode059 = " (next month)";
-	const string CONST_basemode058 = "W - Wait a day";
-	const string CONST_basemode057 = "W - Wait out the siege";
-	const string CONST_basemode056 = "Cannot Wait until Siege Resolved";
-	const string CONST_basemode055 = "X - Live to fight EVIL another day";
-	const string CONST_basemode054 = "F - Go forth to stop EVIL";
-	const string CONST_basemode053 = "G - Give Up";
-	const string CONST_basemode052 = "F - Escape/Engage";
-	const string CONST_basemode051 = "C - Cancel this Squad's Departure";
 
 
 	if (partysize)
@@ -504,29 +504,29 @@ void stillDontForceWait(const char sieged, const char cannotwait,
 	else mvaddstrCenter(13, slogan_str);
 }
 int lenVehiclePool();
+const string CONST_basemode050 = "B - Sleepers";
+const string CONST_basemode049 = "A - Activate Liberals";
+const string CONST_basemode048 = "L - The Status of the Liberal Agenda";
+const string CONST_basemode047 = "Z - Next Location";
+const string CONST_basemode046 = "TAB - Next Squad";
+const string CONST_basemode045 = "O - Reorder";
+const string CONST_basemode044 = "R - Review Assets and Form Squads";
+const string CONST_basemode043 = "V - Vehicles";
+const string CONST_basemode042 = "E - Equip Squad";
+const string CONST_basemode041 = "ÄÄÄ PLANNING ÄÄÄ";
+const string CONST_basemode040 = "ÄÄÄ ACTIVISM ÄÄÄ";
+const string CONST_basemode039 = ":::::::::";
+const string CONST_basemode038 = ":.:.:.:.:";
+const string CONST_basemode037 = " (No Food)";
+const string CONST_basemode036 = "Under Siege";
+const string CONST_basemode035 = "Under Attack";
+const string CONST_basemode034 = "I - Invest in this location";
 void dontForceWait(const char sieged, const char underattack,
 	const char haveflag,
 	const Location *loc,
 	const char safenumber,
 	const char partysize) {
 
-	const string CONST_basemode050 = "B - Sleepers";
-	const string CONST_basemode049 = "A - Activate Liberals";
-	const string CONST_basemode048 = "L - The Status of the Liberal Agenda";
-	const string CONST_basemode047 = "Z - Next Location";
-	const string CONST_basemode046 = "TAB - Next Squad";
-	const string CONST_basemode045 = "O - Reorder";
-	const string CONST_basemode044 = "R - Review Assets and Form Squads";
-	const string CONST_basemode043 = "V - Vehicles";
-	const string CONST_basemode042 = "E - Equip Squad";
-	const string CONST_basemode041 = "ÄÄÄ PLANNING ÄÄÄ";
-	const string CONST_basemode040 = "ÄÄÄ ACTIVISM ÄÄÄ";
-	const string CONST_basemode039 = ":::::::::";
-	const string CONST_basemode038 = ":.:.:.:.:";
-	const string CONST_basemode037 = " (No Food)";
-	const string CONST_basemode036 = "Under Siege";
-	const string CONST_basemode035 = "Under Attack";
-	const string CONST_basemode034 = "I - Invest in this location";
 
 
 	extern int selectedsiege;

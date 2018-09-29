@@ -1092,8 +1092,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
-string PACKAGE_VERSION_STR = "4.12.25";
-int version = 41225;
+string PACKAGE_VERSION_STR = "4.12.27";
+int version = 41227;
 int lowestloadversion = 40100;
 int lowestloadscoreversion = 31203;
 

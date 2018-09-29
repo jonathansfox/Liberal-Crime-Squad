@@ -220,15 +220,15 @@ void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > 
 
 int armor_makedifficulty(Armor& type, DeprecatedCreature *cr); //Replace with Armor class method? -XML
 int armor_makedifficulty(ArmorType& type, DeprecatedCreature *cr); //Replace with Armor class method? -XML
+const string CONST_activities033 = " ruined";
+const string CONST_activities032 = " repairs what little can be fixed of ";
+const string CONST_activities031 = " finds there is no hope of repairing ";
+const string CONST_activities030 = " repairs ";
+const string CONST_activities029 = " is working to repair ";
+const string CONST_activities028 = " cleans ";
+const string CONST_activities027 = " disposes of ";
 void repairarmor(DeprecatedCreature &cr, char &clearformess)
 {
-	const string CONST_activities033 = " ruined";
-	const string CONST_activities032 = " repairs what little can be fixed of ";
-	const string CONST_activities031 = " finds there is no hope of repairing ";
-	const string CONST_activities030 = " repairs ";
-	const string CONST_activities029 = " is working to repair ";
-	const string CONST_activities028 = " cleans ";
-	const string CONST_activities027 = " disposes of ";
 	extern Log gamelog;
 	extern vector<Deprecatedsquadst *> squad;
 	Armor *armor = NULL;
@@ -375,17 +375,17 @@ void repairarmor(DeprecatedCreature &cr, char &clearformess)
 void addLootToLoc(int loc, Item* it);
 char tryFindCloth(int cursite);
 /* armor manufacture */
+const string CONST_activities042 = " wasted the materials for a";
+const string CONST_activities041 = "th-rate";
+const string CONST_activities040 = "fourth-rate";
+const string CONST_activities039 = "third-rate";
+const string CONST_activities038 = "second-rate";
+const string CONST_activities037 = "first-rate";
+const string CONST_activities036 = " has made a ";
+const string CONST_activities035 = " cannot find enough cloth to reduce clothing costs.";
+const string CONST_activities034 = " cannot afford material for clothing.";
 void makearmor(DeprecatedCreature &cr, char &clearformess)
 {
-	const string CONST_activities042 = " wasted the materials for a";
-	const string CONST_activities041 = "th-rate";
-	const string CONST_activities040 = "fourth-rate";
-	const string CONST_activities039 = "third-rate";
-	const string CONST_activities038 = "second-rate";
-	const string CONST_activities037 = "first-rate";
-	const string CONST_activities036 = " has made a ";
-	const string CONST_activities035 = " cannot find enough cloth to reduce clothing costs.";
-	const string CONST_activities034 = " cannot afford material for clothing.";
 	extern Log gamelog;
 	extern class Ledger ledger;
 	extern vector<Deprecatedsquadst *> squad;
@@ -509,22 +509,22 @@ void print_issue_box(const int noise) {
 	mvaddstrAlt(24, 0, CONST_activities059);
 	mvaddstrAlt(24, 40, addprevpagestr() + CONST_activities060 + addnextpagestr());
 }
+const string CONST_activities076 = "wanted amnesty for illegal immigrants";
+const string CONST_activities075 = "condemned unnecessary immigration regulations";
+const string CONST_activities074 = "believed in legalizing marijuana";
+const string CONST_activities073 = "supported keeping marijuana legal";
+const string CONST_activities072 = "% ";
+const string CONST_activities071 = "??";
+const string CONST_activities070 = "None     ";
+const string CONST_activities069 = "Low      ";
+const string CONST_activities068 = "Moderate ";
+const string CONST_activities067 = "High     ";
+const string CONST_activities066 = "Very High";
+const string CONST_activities063 = "Unknown  ";
+const string CONST_activities062 = "........................................................";
+const string CONST_activities061 = "                                                                                ";
 void draw_issue_page(const int page, const int noise, const int survey[], const char SURVEY_PAGE_SIZE) {
 
-	const string CONST_activities076 = "wanted amnesty for illegal immigrants";
-	const string CONST_activities075 = "condemned unnecessary immigration regulations";
-	const string CONST_activities074 = "believed in legalizing marijuana";
-	const string CONST_activities073 = "supported keeping marijuana legal";
-	const string CONST_activities072 = "% ";
-	const string CONST_activities071 = "??";
-	const string CONST_activities070 = "None     ";
-	const string CONST_activities069 = "Low      ";
-	const string CONST_activities068 = "Moderate ";
-	const string CONST_activities067 = "High     ";
-	const string CONST_activities066 = "Very High";
-	const string CONST_activities063 = "Unknown  ";
-	const string CONST_activities062 = "........................................................";
-	const string CONST_activities061 = "                                                                                ";
 
 	extern short lawList[LAWNUM];
 	extern char newscherrybusted;
@@ -663,16 +663,16 @@ int findmaxview(const int _maxview, const int v) {
 	return maxview;
 
 }
+const string CONST_activities054 = "The public is not concerned with politics right now.";
+
+const string CONST_activities047 = "taking strong action.";
+const string CONST_activities046 = "The people are most concerned about ";
+const string CONST_activities045 = "President ";
+const string CONST_activities044 = "% had a favorable opinion of ";
+const string CONST_activities043 = "Survey of Public Opinion, According to Recent Polls";
 void survey(DeprecatedCreature *cr)
 {
 	static const char SURVEY_PAGE_SIZE = 14;
-	const string CONST_activities054 = "The public is not concerned with politics right now.";
-
-	const string CONST_activities047 = "taking strong action.";
-	const string CONST_activities046 = "The people are most concerned about ";
-	const string CONST_activities045 = "President ";
-	const string CONST_activities044 = "% had a favorable opinion of ";
-	const string CONST_activities043 = "Survey of Public Opinion, According to Recent Polls";
 	extern Log gamelog;
 	extern MusicClass music;
 	extern short interface_pgup;
@@ -2157,21 +2157,21 @@ void observeAlarm(const bool sensealarm, const bool alarmon, const string name, 
 string wasUnableToFind(const string old);
 string considerLeaving(const bool sensealarm, const bool alarmon, const string name);
 
+const string CONST_activities164 = "B - Break the window.";
+const string CONST_activities163 = "A - Pick the lock.";
+const string CONST_activities175 = " but it is still somewhat intact.";
+const string CONST_activities174 = " with a ";
+const string CONST_activities173 = " cracks the window";
+const string CONST_activities171 = " smashes the window";
+const string CONST_activities170 = " fiddles with the lock with no luck.";
+const string CONST_activities176 = "An alarm suddenly starts blaring!";
+const string CONST_activities169 = " jimmies the car door open.";
+const string CONST_activities202 = " has been spotted by a passerby!";
+
+const string CONST_activities178 = "Adventures in Liberal Car Theft";
+
 bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, string carname, const bool touchalarm, char &windowdamage) {
 	extern Log gamelog;
-	const string CONST_activities164 = "B - Break the window.";
-	const string CONST_activities163 = "A - Pick the lock.";
-	const string CONST_activities175 = " but it is still somewhat intact.";
-	const string CONST_activities174 = " with a ";
-	const string CONST_activities173 = " cracks the window";
-	const string CONST_activities171 = " smashes the window";
-	const string CONST_activities170 = " fiddles with the lock with no luck.";
-	const string CONST_activities176 = "An alarm suddenly starts blaring!";
-	const string CONST_activities169 = " jimmies the car door open.";
-	const string CONST_activities202 = " has been spotted by a passerby!";
-
-	const string CONST_activities178 = "Adventures in Liberal Car Theft";
-
 	extern vector<Deprecatednewsstoryst *> newsstory;
 	extern Deprecatednewsstoryst *sitestory;
 	extern chaseseqst chaseseq;
@@ -2317,21 +2317,21 @@ enum CarHotwireMethod {
 	ATTEMPT_HOTWIRE,
 	USE_KEYS
 };
+const string CONST_activities201 = "If they were here, I'd have found them by now.";
+const string CONST_activities200 = "I don't think they're in here...";
+const string CONST_activities199 = "Are they even in here?";
+const string CONST_activities198 = ": <rummaging> ";
+const string CONST_activities197 = " found the keys ";
+const string CONST_activities196 = "Holy shit!  ";
+const string CONST_activities195 = "Holy [Car Keys]!  ";
+const string CONST_activities194 = "under the back seat!";
+const string CONST_activities193 = "under the front seat!";
+const string CONST_activities192 = "in the glove compartment!";
+const string CONST_activities191 = "above the pull-down sunblock thingy!";
+const string CONST_activities190 = "in the ignition.  Damn.";
+const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
 bool attempt_find_keys(const bool keys_in_car, const int key_location, const int key_search_total, int& y, DeprecatedCreature &cr) {
 	extern Log gamelog;
-	const string CONST_activities201 = "If they were here, I'd have found them by now.";
-	const string CONST_activities200 = "I don't think they're in here...";
-	const string CONST_activities199 = "Are they even in here?";
-	const string CONST_activities198 = ": <rummaging> ";
-	const string CONST_activities197 = " found the keys ";
-	const string CONST_activities196 = "Holy shit!  ";
-	const string CONST_activities195 = "Holy [Car Keys]!  ";
-	const string CONST_activities194 = "under the back seat!";
-	const string CONST_activities193 = "under the front seat!";
-	const string CONST_activities192 = "in the glove compartment!";
-	const string CONST_activities191 = "above the pull-down sunblock thingy!";
-	const string CONST_activities190 = "in the ignition.  Damn.";
-	const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
 
 	extern short lawList[LAWNUM];
 	bool started = false;
@@ -2405,29 +2405,29 @@ bool attempt_find_keys(const bool keys_in_car, const int key_location, const int
 	}
 	return started;
 }
+//const string CONST_activities202 = " has been spotted by a passerby!";
+
+//const string CONST_activities178 = "Adventures in Liberal Car Theft";
+const string CONST_activities188 = " hotwires the car!";
+const string CONST_activities187 = "Enter - The Viper has finally deterred ";
+const string CONST_activities186 = "Enter - Call it a day.";
+const string CONST_activities185 = "B - Desperately search for keys.";
+const string CONST_activities184 = "A - Hotwire the car.";
+
+
+const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
+const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+const string CONST_activities181 = ":   ";
+const string CONST_activities180 = "THE VIPER";
+
+
+const string CONST_activities179 = " is behind the wheel of a ";
 bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, const bool sensealarm) {
 	extern Log gamelog;
 
 	char keys_in_car = LCSrandom(5) > 0, key_search_total = 0;
 	int key_location = LCSrandom(5), nervous_counter = 0;
 
-	const string CONST_activities202 = " has been spotted by a passerby!";
-
-	const string CONST_activities178 = "Adventures in Liberal Car Theft";
-	const string CONST_activities188 = " hotwires the car!";
-	const string CONST_activities187 = "Enter - The Viper has finally deterred ";
-	const string CONST_activities186 = "Enter - Call it a day.";
-	const string CONST_activities185 = "B - Desperately search for keys.";
-	const string CONST_activities184 = "A - Hotwire the car.";
-
-
-	const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
-	const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
-	const string CONST_activities181 = ":   ";
-	const string CONST_activities180 = "THE VIPER";
-
-
-	const string CONST_activities179 = " is behind the wheel of a ";
 
 
 
@@ -2580,15 +2580,15 @@ bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, 
 Vehicle* getVehicleOfThisType(int cartype);
 void newVehicle(Vehicle *startcar);
 /* steal a car */
+//const string CONST_activities186 = "Enter - Call it a day.";
+//const string CONST_activities178 = "Adventures in Liberal Car Theft";
+const string CONST_activities153 = "A - Approach the driver's side door.";
+const string CONST_activities152 = " looks from a distance at an empty ";
+const string CONST_activities150 = " found a ";
+const string CONST_activities147 = " looks around for an accessible vehicle...";
 bool stealcar(DeprecatedCreature &cr, char &clearformess)
 {
 
-	const string CONST_activities186 = "Enter - Call it a day.";
-	const string CONST_activities178 = "Adventures in Liberal Car Theft";
-	const string CONST_activities153 = "A - Approach the driver's side door.";
-	const string CONST_activities152 = " looks from a distance at an empty ";
-	const string CONST_activities150 = " found a ";
-	const string CONST_activities147 = " looks around for an accessible vehicle...";
 	extern Log gamelog;
 	extern MusicClass music;
 	extern short mode;

@@ -483,8 +483,8 @@ extern string singleSpace;
 	 if (typenum == 0) return singleDot;
 	 else return blankString;
  }
- void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, int &typenum, const string crime_string, const bool mention_multiple_counts = false);
- void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, int &typenum, const string crime_string, const bool mention_multiple_counts) {
+ void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
+ void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts) {
 	 extern Log gamelog;
 	 if (mention_multiple_counts && g.crimes_suspected[law_flag] > 1)
 	 {
@@ -492,7 +492,7 @@ extern string singleSpace;
 		 addstrAlt(counts_of, gamelog);
 	 }
 	 addstrAlt(crime_string, gamelog);
-	 addstrAlt(commaAndPunctuation(typenum--), gamelog);
+	 addstrAlt(commaAndPunctuation(typenum), gamelog);
 	 pressAnyKey();
  }
  map<Lawflags, string> crimeBlockOne = {
@@ -600,6 +600,7 @@ extern string singleSpace;
 	 for (std::pair<Lawflags, string> element : crimeBlockTwo) {
 
 		 if (g.crimes_suspected[element.first]) {
+			 typenum--;
 			 printSingleCrime(g, element.first, typenum, element.second, crimeMultipleCounts[element.first]);
 			 if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
 		 }
@@ -615,15 +616,16 @@ extern string singleSpace;
 		 }
 		 else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice064 : CONST_justiceB174), gamelog);
 		 x = 2;
-		 addstrAlt(commaAndPunctuation(typenum--), gamelog);
-		 pressAnyKey();
 		 typenum--;
+		 addstrAlt(commaAndPunctuation(typenum), gamelog);
+		 pressAnyKey();
 		 if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
 	 }
 
 	 for (std::pair<Lawflags, string> element : crimeBlockThree) {
 
 		 if (g.crimes_suspected[element.first]) {
+			 typenum--;
 			 printSingleCrime(g, element.first, typenum, element.second, crimeMultipleCounts[element.first]);
 			 if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
 		 }

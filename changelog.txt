@@ -701,3 +701,15 @@ Fixed (2), turns out the code checking the alignment was returning the creature'
 	case SPECIAL_CAFE_COMPUTER:
 		encounterCafeComputer();
 
+ter is a bug in the game when i send any of my members on a mission that involves something with the police like stealing a car or sending out your squad on a mission even doing graffiti will crash the game 
+
+
+X The defendant, Alejandro Palin, is charged with
+ loitering and
+
+still printing "and" when there is only one charge.
+
+Partial refactoring of hasdisguise().  Less invasive than previous attempt.
+Removed several unused const strings.
+
+Fixed game crashing bug on total party kill.

@@ -366,21 +366,21 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	}
 }
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);
+const string CONST_activate028 = "Are you sure? (y/n)";
+const string CONST_activate027 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_activate026 = "Description";
+const string CONST_activate025 = "Chance at Success: ";
+const string CONST_activate024 = " +";
+const string CONST_activate023 = "Effect: ";
+const string CONST_activate022 = "Augmentation: ";
+const string CONST_activate021 = "Subject: ";
+const string CONST_activate020 = "Select an Augmentation";
+const string CONST_activate019 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_activate017 = "Press a Letter to select a Liberal";
+const string CONST_activate016 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�";
+const string CONST_activate015 = "Select a Liberal to perform experiments on";
 void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general cleanup
 {
-	const string CONST_activate028 = "Are you sure? (y/n)";
-	const string CONST_activate027 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_activate026 = "Description";
-	const string CONST_activate025 = "Chance at Success: ";
-	const string CONST_activate024 = " +";
-	const string CONST_activate023 = "Effect: ";
-	const string CONST_activate022 = "Augmentation: ";
-	const string CONST_activate021 = "Subject: ";
-	const string CONST_activate020 = "Select an Augmentation";
-	const string CONST_activate019 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_activate017 = "Press a Letter to select a Liberal";
-	const string CONST_activate016 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�";
-	const string CONST_activate015 = "Select a Liberal to perform experiments on";
 	extern Log gamelog;
 	extern short interface_pgup;
 	extern short interface_pgdn;
@@ -744,14 +744,14 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 	}
 }
 /* base - activate - hostages */
+const string CONST_activate043 = "Press a Letter to select a Conservative";
+const string CONST_activate042 = "Day";
+const string CONST_activate041 = "Days";
+const string CONST_activate040 = "DAYS IN CAPTIVITY";
+const string CONST_activate038 = " be watching over?";
+const string CONST_activate037 = "Which hostage will ";
 void select_tendhostage(DeprecatedCreature *cr)
 {
-	const string CONST_activate043 = "Press a Letter to select a Conservative";
-	const string CONST_activate042 = "Day";
-	const string CONST_activate041 = "Days";
-	const string CONST_activate040 = "DAYS IN CAPTIVITY";
-	const string CONST_activate038 = " be watching over?";
-	const string CONST_activate037 = "Which hostage will ";
 	extern short mode;
 	extern short interface_pgup;
 	extern short interface_pgdn;
@@ -900,23 +900,23 @@ int getKeyInActivate(DeprecatedCreature *cr, const int hostagecount, int &state,
 	}
 	return c;
 }
+const string CONST_activate058 = " will ";
+const string CONST_activate057 = "X - Nothing for Now";
+const string CONST_activate056 = "Enter - Confirm Selection";
+const string CONST_activate055 = "? - Help";
+const string CONST_activate054 = "E - Equip this Liberal";
+const string CONST_activate053 = "Z - Dispose of bodies";
+const string CONST_activate052 = "H - Heal Liberals";
+const string CONST_activate051 = "M - Move to the Free Clinic";
+const string CONST_activate050 = "L - Learn in the University District";
+const string CONST_activate049 = "I - Tend to a Conservative hostage";
+const string CONST_activate048 = "T - Teaching Other Liberals";
+const string CONST_activate047 = " be doing today?";
+const string CONST_activate046 = "Taking Action: What will ";
+const string CONST_activate045 = " yesterday. What now?";
+const string CONST_activate044 = " made $";
 LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead) {
 
-	const string CONST_activate058 = " will ";
-	const string CONST_activate057 = "X - Nothing for Now";
-	const string CONST_activate056 = "Enter - Confirm Selection";
-	const string CONST_activate055 = "? - Help";
-	const string CONST_activate054 = "E - Equip this Liberal";
-	const string CONST_activate053 = "Z - Dispose of bodies";
-	const string CONST_activate052 = "H - Heal Liberals";
-	const string CONST_activate051 = "M - Move to the Free Clinic";
-	const string CONST_activate050 = "L - Learn in the University District";
-	const string CONST_activate049 = "I - Tend to a Conservative hostage";
-	const string CONST_activate048 = "T - Teaching Other Liberals";
-	const string CONST_activate047 = " be doing today?";
-	const string CONST_activate046 = "Taking Action: What will ";
-	const string CONST_activate045 = " yesterday. What now?";
-	const string CONST_activate044 = " made $";
 	extern int selectedsiege;
 
 	eraseAlt();
@@ -1180,12 +1180,12 @@ void activatebulk()
 	}
 }
 /* base - activate the uninvolved */
+const string CONST_activate071 = "Press Z to assign simple tasks in bulk.";
+const string CONST_activate070 = " T to sort people.";
+const string CONST_activate069 = "Press a Letter to Assign an Activity.";
+const string CONST_activate068 = "ACTIVITY";
 void activate()
 {
-	const string CONST_activate071 = "Press Z to assign simple tasks in bulk.";
-	const string CONST_activate070 = " T to sort people.";
-	const string CONST_activate069 = "Press a Letter to Assign an Activity.";
-	const string CONST_activate068 = "ACTIVITY";
 	extern MusicClass music;
 	extern short mode;
 	extern short interface_pgup;

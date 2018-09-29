@@ -82,6 +82,16 @@ const string blankString = "";
 #include "creature/creature.h"
 #include "vehicle/vehicleType.h"
 #include "vehicle/vehicle.h"
+
+struct newGameArguments {
+	const char recruits;
+	const char base;
+	const bool makelawyer;
+	const bool gaylawyer;
+	const bool sports_car;
+	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
+};
+void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm);
 void testCreature() {
 
 	// This, this requires a lot of prepwork to test the makecreature(...) method
@@ -91,14 +101,13 @@ void testCreature() {
 	make_world(false);
 	bool makelawyer = false;
 	bool gaylawyer = false;
-	Vehicle * startcar = NULL;
+	bool sports_car = false;
 	char recruits = 1;
 	char base = 21;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	void recruitment_activity(DeprecatedCreature &cr);
 	recruitment_activity(*newcr);
-	void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, DeprecatedCreature * newcr);
-	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
+	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
 
 	extern short lawList[LAWNUM];
 	for (int i = 0; i < CREATURENUM; i++) {
@@ -115,6 +124,8 @@ void testCreature() {
 
 	}
 	mvaddstrAlt(21, 0, "TEST COMPLETE");
+
+	mvaddstrAlt(22, 0, "Please Restart");
 	// Player should restart at this point.
 	pressAnyKey();
 }

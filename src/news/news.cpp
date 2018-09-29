@@ -959,28 +959,28 @@ const string tag_Shopping = "Shopping";
 const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 //TODO: Add logging for this file? --Addictgamer
 #include "../creature/creature.h"
@@ -1022,9 +1022,9 @@ Deprecatednewsstoryst* lastNewsStory() {
 extern string commaSpace;
 #include "../common/musicClass.h"
 extern char endgamestate;
- string ampersandR;
- extern string spaceDashSpace;
- extern string singleDot;
+string ampersandR;
+extern string spaceDashSpace;
+extern string singleDot;
 string membersOfLCS;
 string lcsSpokeseperson;
 string policeSpokesperson;
@@ -1207,7 +1207,7 @@ Deprecatednewsstoryst* ccs_strikes_story()
 	ns->positive = true;
 	do {
 		ns->loc = LCSrandom(LocationsPool::getInstance().lenpool());
-	} while (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,ns->loc) != -1);
+	} while (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, ns->loc) != -1);
 	return ns;
 }
 Deprecatednewsstoryst* ccs_fbi_raid_story()
@@ -1423,7 +1423,7 @@ int bonusPriority(const short type, const long loc, long priority) {
 	default:
 		// Suppress actions at CCS safehouses
 		if (loc != -1 &&
-			LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,loc) == RENTING_CCS)
+			LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, loc) == RENTING_CCS)
 		{
 			priority = 0;
 		}
@@ -2724,93 +2724,129 @@ void displaystoryheader(const Deprecatednewsstoryst ns, const bool liberalguardi
 	}
 }
 map<char, vector<Views> > siteViews = {
-	map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_COSMETICS,{
-	VIEW_ANIMALRESEARCH,
-	VIEW_WOMEN,
-		}),
-		map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_GENETIC,{
-	VIEW_ANIMALRESEARCH,
-	VIEW_GENETICS,
-			}),
-			map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_POLICESTATION,{
-	VIEW_POLICEBEHAVIOR,
-	VIEW_PRISONS,
-	VIEW_DRUGS,
-				}),
-				map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_COURTHOUSE,{
-	VIEW_DEATHPENALTY,
-	VIEW_JUSTICES,
-	VIEW_FREESPEECH,
-	VIEW_GAY,
-	VIEW_WOMEN,
-	VIEW_CIVILRIGHTS,
-					}),
-					map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_PRISON,{
-	VIEW_DEATHPENALTY,
-	VIEW_DRUGS,
-	VIEW_TORTURE,
-	VIEW_PRISONS,
-						}),
-						map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_ARMYBASE,{
-	VIEW_TORTURE,
-	VIEW_MILITARY,
-							}),
-							map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
-								}),
-								map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,{
-	VIEW_INTELLIGENCE,
-	VIEW_TORTURE,
-	VIEW_PRISONS,
-									}),
-									map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_SWEATSHOP,{
-	VIEW_SWEATSHOPS,
-	VIEW_IMMIGRATION,
-										}),
-										map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_POLLUTER,{
-	VIEW_SWEATSHOPS,
-	VIEW_POLLUTION,
-											}),
-											map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_NUCLEAR,{
-	VIEW_NUCLEARPOWER,
-												}),
-												map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HEADQUARTERS,{
-	VIEW_TAXES,
-	VIEW_CORPORATECULTURE,
-	VIEW_WOMEN,
-													}),
-													map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HOUSE,{
-	VIEW_TAXES,
-	VIEW_CEOSALARY,
-														}),
-														map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_AMRADIO,{
-	VIEW_AMRADIO,
-	VIEW_FREESPEECH,
-	VIEW_GAY,
-	VIEW_WOMEN,
-	VIEW_CIVILRIGHTS,
-															}),
-															map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_CABLENEWS,{
-	VIEW_CABLENEWS,
-	VIEW_FREESPEECH,
-	VIEW_GAY,
-	VIEW_WOMEN,
-	VIEW_CIVILRIGHTS,
-																}),
-																map<SiteTypes, vector<Views> >::value_type(SITE_RESIDENTIAL_APARTMENT_UPSCALE,{
-	VIEW_TAXES,
-	VIEW_CEOSALARY,
-	VIEW_GUNCONTROL,
-																	}),
-																	map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_CIGARBAR,{
-	VIEW_TAXES,
-	VIEW_CEOSALARY,
-	VIEW_WOMEN,
-																		}),
-																		map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_BANK,{
-	VIEW_TAXES,
-	VIEW_CEOSALARY,
-	VIEW_CORPORATECULTURE,
-																			}),
+	map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_COSMETICS,
+		{
+			VIEW_ANIMALRESEARCH,
+			VIEW_WOMEN,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_LABORATORY_GENETIC,
+		{
+			VIEW_ANIMALRESEARCH,
+			VIEW_GENETICS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_POLICESTATION,
+		{
+			VIEW_POLICEBEHAVIOR,
+			VIEW_PRISONS,
+			VIEW_DRUGS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_COURTHOUSE,
+		{
+			VIEW_DEATHPENALTY,
+			VIEW_JUSTICES,
+			VIEW_FREESPEECH,
+			VIEW_GAY,
+			VIEW_WOMEN,
+			VIEW_CIVILRIGHTS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_PRISON,
+		{
+			VIEW_DEATHPENALTY,
+			VIEW_DRUGS,
+			VIEW_TORTURE,
+			VIEW_PRISONS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_ARMYBASE,
+		{
+			VIEW_TORTURE,
+			VIEW_MILITARY,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,
+		{
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,
+		{
+			VIEW_INTELLIGENCE,
+			VIEW_TORTURE,
+			VIEW_PRISONS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_SWEATSHOP,
+		{
+			VIEW_SWEATSHOPS,
+			VIEW_IMMIGRATION,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_POLLUTER,
+		{
+			VIEW_SWEATSHOPS,
+			VIEW_POLLUTION,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_INDUSTRY_NUCLEAR,
+		{
+			VIEW_NUCLEARPOWER,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HEADQUARTERS,
+		{
+			VIEW_TAXES,
+			VIEW_CORPORATECULTURE,
+			VIEW_WOMEN,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_CORPORATE_HOUSE,
+		{
+			VIEW_TAXES,
+			VIEW_CEOSALARY,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_AMRADIO,
+		{
+			VIEW_AMRADIO,
+			VIEW_FREESPEECH,
+			VIEW_GAY,
+			VIEW_WOMEN,
+			VIEW_CIVILRIGHTS,
+		}
+		),
+	map<SiteTypes, vector<Views> >::value_type(SITE_MEDIA_CABLENEWS,
+		{
+			VIEW_CABLENEWS,
+			VIEW_FREESPEECH,
+			VIEW_GAY,
+			VIEW_WOMEN,
+			VIEW_CIVILRIGHTS,
+		}
+		),
+			map<SiteTypes, vector<Views> >::value_type(SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+				{
+					VIEW_TAXES,
+					VIEW_CEOSALARY,
+					VIEW_GUNCONTROL,
+				}
+				),
+			map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_CIGARBAR,
+				{
+					VIEW_TAXES,
+					VIEW_CEOSALARY,
+					VIEW_WOMEN,
+				}
+				),
+			map<SiteTypes, vector<Views> >::value_type(SITE_BUSINESS_BANK,
+				{
+					VIEW_TAXES,
+					VIEW_CEOSALARY,
+					VIEW_CORPORATECULTURE,
+				}
+				),
 };
 void handle_public_opinion_impact(const Deprecatednewsstoryst &ns)
 {
@@ -2956,70 +2992,80 @@ void displaynewsandpicture(const string news1, const string news2, const int pic
 	displaycenteredsmallnews(news2, 12);
 	displaynewspicture(picture, 13);
 }
-void displaypositivemajoreventstory(const Deprecatednewsstoryst ns, const short* storyx_s, const short* storyx_e) {
 
-	const string CONST_news820 = "AM IMPLOSION";
-	const string CONST_news819 = "regularly visits prostitutes.";
-	const string CONST_news818 = "regularly [donates to sperm banks].";
-	const string CONST_news817 = "regularly visits [working women].";
-	const string CONST_news816 = "This major CEO ";
-	const string CONST_news815 = "AMERICAN CEO";
-	const string CONST_news814 = "An enormous company files for bankruptcy, shattering the previous record.";
-	const string CONST_news813 = "BELLY UP";
-	const string CONST_news812 = "The Ohio River caught on fire again.";
-	const string CONST_news811 = "RING OF FIRE";
-	const string CONST_news810 = "A T-shirt in a store is found scrawled with a message from a sweatshop worker.";
-	const string CONST_news809 = "CHILD'S PLEA";
-	const string CONST_news808 = "IN CONTEMPT";
-	const string CONST_news807 = "Over a hundred people become sick from genetically modified food.";
-	const string CONST_news806 = "KILLER FOOD";
-	const string CONST_news805 = "BOOK BANNED";
-	const string CONST_news804 = "THE FBI FILES";
-	const string CONST_news803 = "ON THE INSIDE";
-	const string CONST_news802 = "A mutant animal has escaped from a lab and killed thirty people.";
-	const string CONST_news801 = "HELL ON EARTH";
-	const string CONST_news800 = "A nuclear power plant suffers a catastrophic meltdown.";
-	const string CONST_news799 = "MELTDOWN";
-	const string CONST_news798 = ": A new book further documenting the other side of Reagan.";
-	const string CONST_news797 = "REAGAN FLAWED";
-	const string CONST_news796 = "MASS SHOOTING";
-	const string CONST_news795 = "NIGHTMARE";
-	const string CONST_news794 = "Is the latest military invasion yet another quagmire?";
-	const string CONST_news793 = "CASUALTIES MOUNT";
-	const string CONST_news792 = "JUSTICE DEAD";
-	const string CONST_news791 = "CRIME OF HATE";
-	const string CONST_news790 = "CLINIC MURDER";
+map<short, string> positiveMajorEvents = {
+	map<short, string>::value_type(VIEW_WOMEN,
+	CONST_news790),
+
+	map<short, string>::value_type(VIEW_GAY,
+	CONST_news791),
+
+	map<short, string>::value_type(VIEW_DEATHPENALTY,
+	CONST_news792),
+
+	map<short, string>::value_type(VIEW_GUNCONTROL,
+	CONST_news796),
+
+	map<short, string>::value_type(VIEW_PRISONS,
+	CONST_news803),
+
+	map<short, string>::value_type(VIEW_INTELLIGENCE,
+	CONST_news804),
+
+	map<short, string>::value_type(VIEW_FREESPEECH,
+	CONST_news805),
+
+	map<short, string>::value_type(VIEW_JUSTICES,
+	CONST_news808),
+
+	map<short, string>::value_type(VIEW_AMRADIO,
+	CONST_news820),
+};
+struct TwoStringsAndAnInt {
+	const string first;
+	const string second;
+	const int third;
+	TwoStringsAndAnInt(string _first, string _second, int _third) : first(_first), second(_second), third(_third) {}
+	TwoStringsAndAnInt() : first(""), second(""), third(-1) {}
+};
+map<short, TwoStringsAndAnInt> positiveMajorPictures = {
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_NUCLEARPOWER,
+	TwoStringsAndAnInt(CONST_news799, CONST_news800, PICTURE_MELTDOWN)),
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_ANIMALRESEARCH,
+	TwoStringsAndAnInt(CONST_news801, CONST_news802, PICTURE_MUTANT_BEAST)),
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_GENETICS,
+	TwoStringsAndAnInt(CONST_news806, CONST_news807, PICTURE_GENETICS)),
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_SWEATSHOPS,
+	TwoStringsAndAnInt(CONST_news809, CONST_news810, PICTURE_TSHIRT)),
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_POLLUTION,
+	TwoStringsAndAnInt(CONST_news811, CONST_news812, PICTURE_RIVERFIRE)),
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_CORPORATECULTURE,
+	TwoStringsAndAnInt(CONST_news813, CONST_news814, PICTURE_DOLLARS)),
+
+
+
+};
+void displaypositivemajoreventstory(const Deprecatednewsstoryst ns, const short* storyx_s, const short* storyx_e) {
 
 	extern short lawList[LAWNUM];
 
 	switch (ns.view)
 	{
 	case VIEW_WOMEN:
-		displaynewsstoryPositiveX(ns.view, CONST_news790, storyx_s, storyx_e);
-		break;
 	case VIEW_GAY:
-		displaynewsstoryPositiveX(ns.view, CONST_news791, storyx_s, storyx_e);
-		break;
 	case VIEW_DEATHPENALTY:
-		displaynewsstoryPositiveX(ns.view, CONST_news792, storyx_s, storyx_e);
-		break;
 	case VIEW_GUNCONTROL:
-		displaynewsstoryPositiveX(ns.view, CONST_news796, storyx_s, storyx_e);
-		break;
 	case VIEW_PRISONS:
-		displaynewsstoryPositiveX(ns.view, CONST_news803, storyx_s, storyx_e);
-		break;
 	case VIEW_INTELLIGENCE:
-		displaynewsstoryPositiveX(ns.view, CONST_news804, storyx_s, storyx_e);
-		break;
 	case VIEW_FREESPEECH:
-		displaynewsstoryPositiveX(ns.view, CONST_news805, storyx_s, storyx_e);
-		break;
 	case VIEW_JUSTICES:
-		displaynewsstoryPositiveX(ns.view, CONST_news808, storyx_s, storyx_e);
-		break;
 	case VIEW_AMRADIO:
-		displaynewsstoryPositiveX(ns.view, CONST_news820, storyx_s, storyx_e);
+		displaynewsstoryPositiveX(ns.view, positiveMajorEvents[ns.view], storyx_s, storyx_e);
 		break;
 
 
@@ -3029,23 +3075,14 @@ void displaypositivemajoreventstory(const Deprecatednewsstoryst ns, const short*
 		displaynewsandpicture(CONST_news797, str, PICTURE_BOOK);
 		break;
 	}
+
 	case VIEW_NUCLEARPOWER:
-		displaynewsandpicture(CONST_news799, CONST_news800, PICTURE_MELTDOWN);
-		break;
 	case VIEW_ANIMALRESEARCH:
-		displaynewsandpicture(CONST_news801, CONST_news802, PICTURE_MUTANT_BEAST);
-		break;
 	case VIEW_GENETICS:
-		displaynewsandpicture(CONST_news806, CONST_news807, PICTURE_GENETICS);
-		break;
 	case VIEW_SWEATSHOPS:
-		displaynewsandpicture(CONST_news809, CONST_news810, PICTURE_TSHIRT);
-		break;
 	case VIEW_POLLUTION:
-		displaynewsandpicture(CONST_news811, CONST_news812, PICTURE_RIVERFIRE);
-		break;
 	case VIEW_CORPORATECULTURE:
-		displaynewsandpicture(CONST_news813, CONST_news814, PICTURE_DOLLARS);
+		displaynewsandpicture(positiveMajorPictures[ns.view].first, positiveMajorPictures[ns.view].second, positiveMajorPictures[ns.view].third);
 		break;
 	case VIEW_CEOSALARY:
 	{
@@ -3067,71 +3104,68 @@ void displaypositivemajoreventstory(const Deprecatednewsstoryst ns, const short*
 
 	}
 }
-void displaynegativemajoreventstory(const Deprecatednewsstoryst ns, const short* storyx_s, const short* storyx_e) {
 
-	const string CONST_news848 = "OF CULTURE";
-	const string CONST_news847 = "THE DEATH";
-	const string CONST_news846 = "NEW JOBS";
-	const string CONST_news845 = "LOOKING UP";
-	const string CONST_news844 = "Fall fashions are previewed in stores across the country.";
-	const string CONST_news843 = "Fall fashions hit the stores across the country.";
-	const string CONST_news842 = "THEY ARE HERE";
-	const string CONST_news841 = "JUSTICE AMOK";
-	const string CONST_news840 = "GM FOOD FAIRE";
-	const string CONST_news839 = "Free speech advocates fight hard to let a white supremacist rally take place.";
-	const string CONST_news838 = "HATE RALLY";
-	const string CONST_news837 = "DODGED BULLET";
-	const string CONST_news836 = "HOSTAGE SLAIN";
-	const string CONST_news835 = "BASTARDS";
-	const string CONST_news834 = "[JERKS]";
-	const string CONST_news833 = "APE EXPLORERS";
-	const string CONST_news832 = "OPEC cuts oil production sharply in response to a US foreign policy decision.";
-	const string CONST_news831 = "OIL CRUNCH";
-	const string CONST_news830 = ": A new book lauding Reagan and the greatest generation.";
-	const string CONST_news829 = "REAGAN THE MAN";
-	const string CONST_news828 = "SAVES LIVES";
-	const string CONST_news827 = "ARMED CITIZEN";
-	const string CONST_news826 = "END IN TEARS";
-	const string CONST_news825 = "Our boys defend freedom once again, defeating an evil dictator.";
-	const string CONST_news824 = "BIG VICTORY";
-	const string CONST_news823 = "LET'S FRY 'EM";
-	const string CONST_news822 = "Jerry Falwell explains the truth about Tinky Winky. Again.";
-	const string CONST_news821 = "KINKY WINKY";
+map<short, string> negativeMajorEvents = {
+
+	map<short, string>::value_type(VIEW_DEATHPENALTY,
+		CONST_news823),
+
+	map<short, string>::value_type(VIEW_ANIMALRESEARCH,
+		CONST_news833),
+
+	map<short, string>::value_type(VIEW_PRISONS,
+		CONST_news836),
+
+	map<short, string>::value_type(VIEW_INTELLIGENCE,
+		CONST_news837),
+
+	map<short, string>::value_type(VIEW_GENETICS,
+		CONST_news840),
+
+	map<short, string>::value_type(VIEW_JUSTICES,
+		CONST_news841),
+
+	map<short, string>::value_type(VIEW_POLLUTION,
+		CONST_news845),
+
+	map<short, string>::value_type(VIEW_CORPORATECULTURE,
+		CONST_news846),
+};
+map<short, TwoStringsAndAnInt> negativeMajorPictures = {
+
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_GAY,
+		TwoStringsAndAnInt(CONST_news821, CONST_news822, PICTURE_TINKYWINKY)
+	),
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_NUCLEARPOWER,
+		TwoStringsAndAnInt(CONST_news831, CONST_news832, PICTURE_OIL)
+	),
+	map<short, TwoStringsAndAnInt>::value_type(VIEW_FREESPEECH,
+		TwoStringsAndAnInt(CONST_news838, CONST_news839, PICTURE_KKK)
+	),
+
+
+
+};
+void displaynegativemajoreventstory(const Deprecatednewsstoryst ns, const short* storyx_s, const short* storyx_e) {
 
 	extern int month;
 	extern short lawList[LAWNUM];
 
 	switch (ns.view)
 	{
-	case VIEW_GAY:
-		displaynewsandpicture(CONST_news821, CONST_news822, PICTURE_TINKYWINKY);
-		break;
 	case VIEW_DEATHPENALTY:
-		displaynewsstoryNegativeX(ns.view, CONST_news823, storyx_s, storyx_e);
+	case VIEW_ANIMALRESEARCH:
+	case VIEW_PRISONS:
+	case VIEW_INTELLIGENCE:
+	case VIEW_GENETICS:
+	case VIEW_JUSTICES:
+	case VIEW_POLLUTION:
+	case VIEW_CORPORATECULTURE:
+		displaynewsstoryNegativeX(ns.view, negativeMajorEvents[ns.view], storyx_s, storyx_e);
 		break;
+
 	case VIEW_GUNCONTROL:
 		displaynewsstoryNegativeX(ns.view, CONST_news827, CONST_news828, storyx_s, storyx_e);
-		break;
-	case VIEW_ANIMALRESEARCH:
-		displaynewsstoryNegativeX(ns.view, CONST_news833, storyx_s, storyx_e);
-		break;
-	case VIEW_PRISONS:
-		displaynewsstoryNegativeX(ns.view, CONST_news836, storyx_s, storyx_e);
-		break;
-	case VIEW_INTELLIGENCE:
-		displaynewsstoryNegativeX(ns.view, CONST_news837, storyx_s, storyx_e);
-		break;
-	case VIEW_GENETICS:
-		displaynewsstoryNegativeX(ns.view, CONST_news840, storyx_s, storyx_e);
-		break;
-	case VIEW_JUSTICES:
-		displaynewsstoryNegativeX(ns.view, CONST_news841, storyx_s, storyx_e);
-		break;
-	case VIEW_POLLUTION:
-		displaynewsstoryNegativeX(ns.view, CONST_news845, storyx_s, storyx_e);
-		break;
-	case VIEW_CORPORATECULTURE:
-		displaynewsstoryNegativeX(ns.view, CONST_news846, storyx_s, storyx_e);
 		break;
 	case VIEW_AMRADIO:
 		displaynewsstoryNegativeX(ns.view, CONST_news847, CONST_news848, storyx_s, storyx_e);
@@ -3144,12 +3178,13 @@ void displaynegativemajoreventstory(const Deprecatednewsstoryst ns, const short*
 		displaynewsandpicture(CONST_news829, str, PICTURE_BOOK);
 		break;
 	}
+
+	case VIEW_GAY:
 	case VIEW_NUCLEARPOWER:
-		displaynewsandpicture(CONST_news831, CONST_news832, PICTURE_OIL);
-		break;
 	case VIEW_FREESPEECH:
-		displaynewsandpicture(CONST_news838, CONST_news839, PICTURE_KKK);
+		displaynewsandpicture(negativeMajorPictures[ns.view].first, negativeMajorPictures[ns.view].second, negativeMajorPictures[ns.view].third);
 		break;
+
 	case VIEW_SWEATSHOPS:
 		displaynewsandpicture(CONST_news842, month >= 8 && month <= 11 ? CONST_news843 : CONST_news844, PICTURE_TSHIRT);
 		break;
@@ -3289,68 +3324,55 @@ bool specialCrimes(const int c) {
 	}
 	return special;
 }
+
+map<int, vector<string> >accordingToLiberalGuardian = {
+
+	map<Crimes, vector<string> >::value_type(CRIME_POLICE_LOCKUP,
+		{ CONST_news884 + CONST_news885 , accordingToSourcesAtScene + CONST_news883 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_BANKVAULTROBBERY,
+		{ CONST_news887 + CONST_news888 , accordingToSourcesAtScene + CONST_news886 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_BANKSTICKUP,
+		{ CONST_news890 + CONST_news891 , accordingToSourcesAtScene + CONST_news889 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_COURTHOUSE_LOCKUP,
+		{ CONST_news893 + CONST_news894 , accordingToSourcesAtScene + CONST_news892 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_PRISON_RELEASE,
+		{ CONST_news896 + CONST_news897 , accordingToSourcesAtScene + CONST_news895 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_JURYTAMPERING,
+		{ CONST_news900 + CONST_news901 , accordingToPoliceSources + CONST_news898 + CONST_news899 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_HACK_INTEL,
+		{ CONST_news903 , accordingToPoliceSources + CONST_news902 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_ARMORY,
+		{ CONST_news906 , CONST_news1031 + CONST_news905 }
+	),
+	map<Crimes,  vector<string> >::value_type(CRIME_HOUSE_PHOTOS,
+		{ CONST_news908 , accordingToPoliceSources + CONST_news907 }
+	),
+	map<Crimes, vector<string> >::value_type(CRIME_CORP_FILES,
+		{ CONST_news910 , accordingToPoliceSources + CONST_news909 }
+	),
+};
 string accordingToCrimeString(const int c, const bool liberalguardian) {
 	string story;
 
 	switch (c) {
 	case CRIME_POLICE_LOCKUP:
-
-		story += liberalguardian ? CONST_news884 + CONST_news885 : accordingToSourcesAtScene + CONST_news883;
-
-		story += ampersandR;
-		break;
 	case CRIME_BANKVAULTROBBERY:
-
-		story += liberalguardian ? CONST_news887 + CONST_news888 : accordingToSourcesAtScene + CONST_news886;
-
-		story += ampersandR;
-		break;
 	case CRIME_BANKSTICKUP:
-
-		story += liberalguardian ? CONST_news890 + CONST_news891 : accordingToSourcesAtScene + CONST_news889;
-
-		story += ampersandR;
-		break;
 	case CRIME_COURTHOUSE_LOCKUP:
-
-		story += liberalguardian ? CONST_news893 + CONST_news894 : accordingToSourcesAtScene + CONST_news892;
-
-		story += ampersandR;
-		break;
 	case CRIME_PRISON_RELEASE:
-
-		story += liberalguardian ? CONST_news896 + CONST_news897 : accordingToSourcesAtScene + CONST_news895;
-
-		story += ampersandR;
-		break;
 	case CRIME_JURYTAMPERING:
-
-		story += liberalguardian ? CONST_news900 + CONST_news901 : accordingToPoliceSources + CONST_news898 + CONST_news899;
-
-		story += ampersandR;
-		break;
 	case CRIME_HACK_INTEL:
-
-		story += liberalguardian ? CONST_news903 : accordingToPoliceSources + CONST_news902;
-
-		story += ampersandR;
-		break;
 	case CRIME_ARMORY:
-
-		story += liberalguardian ? CONST_news906 : CONST_news1031 + CONST_news905;
-
-		story += ampersandR;
-		break;
 	case CRIME_HOUSE_PHOTOS:
-
-		story += liberalguardian ? CONST_news908 : accordingToPoliceSources + CONST_news907;
-
-		story += ampersandR;
-		break;
 	case CRIME_CORP_FILES:
-
-		story += liberalguardian ? CONST_news910 : accordingToPoliceSources + CONST_news909;
-
+		story += accordingToLiberalGuardian[c][!liberalguardian];
 		story += ampersandR;
 		break;
 	}
@@ -3685,6 +3707,68 @@ string generatefiller(int amount) {
 	return story;
 
 }
+
+map<int, vector<string> >siegeMassacreStory = {
+
+	map<SiegeTypes,  vector<string> >::value_type(SIEGE_POLICE,
+
+		{
+			(CONST_news984)+(CONST_news985),
+			(CONST_news986)+(CONST_news987)
+		}
+	),
+	map<SiegeTypes,  vector<string> >::value_type(SIEGE_HICKS,
+
+		{
+			(CONST_news984)+
+			(CONST_news985)
+
+		,
+
+		(CONST_news986)+
+		(CONST_news987)
+		}),
+
+	map<SiegeTypes,  vector<string> >::value_type(SIEGE_CORPORATE,
+
+		{
+			(CONST_news988)
+
+			,
+
+		(CONST_news989)+
+		(CONST_news990)+
+		(CONST_news991)+
+		(CONST_news992)
+		}),
+
+	map<SiegeTypes,  vector<string> >::value_type(SIEGE_CCS,
+
+		{
+			(CONST_news993)+
+			(CONST_news994)
+
+		,
+
+		(CONST_news995)+
+		(CONST_news996)
+		}),
+
+	map<SiegeTypes,  vector<string> >::value_type(SIEGE_FIREMEN,
+		{
+			(CONST_news999)+
+			(CONST_news1000)+
+		(CONST_news1001)+
+		(CONST_news1002)
+
+		,
+
+		(CONST_news1005)+
+		(CONST_news1006)
+		}),
+
+
+};
 string displayMassacreStory(const Deprecatednewsstoryst ns, const bool liberalguardian, int &y) {
 	extern string city;
 	const string CONST_newsX15 = "According to one person familiar with the case, \"";
@@ -3715,29 +3799,33 @@ string displayMassacreStory(const Deprecatednewsstoryst ns, const bool liberalgu
 		(story += tostring(ns.crime[1]));
 		(story += CONST_news958); //Gruesome pile, large pile.
 	}
-	else if (ns.crime[1] > 1)(story += CONST_news959);
-	else (story += CONST_news960);
-	(story += CONST_news961);
-	(story += LocationsPool::getInstance().getLocationName(ns.loc));
-	(story += CONST_news962);
+	else if (ns.crime[1] > 1) { (story += CONST_news959); }
+	else { (story += CONST_news960); }
+	story += CONST_news961;
+	story += LocationsPool::getInstance().getLocationName(ns.loc);
+	story += CONST_news962;
 	if (!liberalguardian)
 	{
-		(story += CONST_news963);
-		(story += CONST_news964);
-		(story += ampersandR);
-		(story += CONST_news965);
-		(story += CONST_newsX15);
+		story += CONST_news963;
+		story += CONST_news964;
+		story += ampersandR;
+		story += CONST_news965;
+		story += CONST_newsX15;
 	}
 	else
 	{
-		(story += CONST_news967);
-		(story += CONST_news968);
-		(story += ampersandR);
-		(story += CONST_news969);
-		if (ns.crime[1] > 1)(story += CONST_news970);
-		else (story += CONST_news971);
-		(story += CONST_news972);
-		(story += CONST_news973);
+		story += CONST_news967;
+		story += CONST_news968;
+		story += ampersandR;
+		story += CONST_news969;
+		if (ns.crime[1] > 1) {
+			story += CONST_news970;
+		}
+		else {
+			story += CONST_news971;
+		}
+		story += CONST_news972;
+		story += CONST_news973;
 	}
 	switch (ns.crime[0])
 	{
@@ -3753,70 +3841,34 @@ string displayMassacreStory(const Deprecatednewsstoryst ns, const bool liberalgu
 		}
 		else
 		{
-			(story += CONST_news980);
-			(story += CONST_news981);
-			(story += CONST_news982);
-			(story += CONST_news983);
+			story += CONST_news980;
+			story += CONST_news981;
+			story += CONST_news982;
+			story += CONST_news983;
 		}
 		break;
-	case SIEGE_POLICE:
-	case SIEGE_HICKS:
-		if (!liberalguardian)
-		{
-			(story += CONST_news984);
-			(story += CONST_news985);
-		}
-		else
-		{
-			(story += CONST_news986);
-			(story += CONST_news987);
-		}
-		break;
-	case SIEGE_CORPORATE:
-		if (!liberalguardian)
-		{
-			(story += CONST_news988);
-		}
-		else
-		{
-			(story += CONST_news989);
-			(story += CONST_news990);
-			(story += CONST_news991);
-			(story += CONST_news992);
-		}
-		break;
-	case SIEGE_CCS:
-		if (!liberalguardian)
-		{
-			(story += CONST_news993);
-			(story += CONST_news994);
-		}
-		else
-		{
-			(story += CONST_news995);
-			(story += CONST_news996);
-		}
-		break;
+		// SIEGE_FIREMEN gets a conditional opening
+		// The rest is included in siegeMassacreStory;
 	case SIEGE_FIREMEN:
 		if (!liberalguardian)
 		{
 			if (ns.crime[1] > 1)(story += CONST_news997);
 			else (story += CONST_news998);
-			(story += CONST_news999);
-			(story += CONST_news1000);
-			(story += CONST_news1001);
-			(story += CONST_news1002);
 		}
 		else
 		{
 			if (ns.crime[1] > 1)(story += CONST_news1003);
 			else (story += CONST_news1004);
-			(story += CONST_news1005);
-			(story += CONST_news1006);
 		}
+	case SIEGE_POLICE:
+	case SIEGE_HICKS:
+	case SIEGE_CORPORATE:
+	case SIEGE_CCS:
+		story += siegeMassacreStory[ns.crime[0]][liberalguardian];
+		break;
 	}
-	(story += CONST_newsB955);
-	(story += ampersandR);
+	story += CONST_newsB955;
+	story += ampersandR;
 	story += generatefiller(200);
 	return story;
 }
@@ -3872,7 +3924,7 @@ void displaystory(const Deprecatednewsstoryst ns, const bool liberalguardian, in
 	string city;
 	if (multipleCityMode && ns.loc != -1)
 	{
-		Location * ns_site = find_site_in_city(LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,ns.loc), -1);
+		Location * ns_site = find_site_in_city(LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, ns.loc), -1);
 		if (cityNames.count(ns_site->type) > 0) {
 			city = cityNames[ns_site->type].data();
 		}

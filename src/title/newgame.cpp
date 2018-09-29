@@ -1254,9 +1254,26 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 	return choices;
 }
 
-void initiateNewgameLocations(char base, char recruits, Vehicle * startcar, bool makelawyer, bool gaylawyer, DeprecatedCreature * newcr);
 #include "../recruits.h"
 /* creates your founder */
+struct newGameArguments {
+	const char recruits;
+	const char base;
+	const bool makelawyer;
+	const bool gaylawyer;
+	const bool sports_car;
+	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
+};
+void giveMeAssaultRifle(DeprecatedCreature* newcr) {
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+
+	Weapon neww(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)]);
+	Clip newc(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 9);
+	newcr->give_weapon(neww, NULL);
+	newcr->take_clips(newc, 9);
+}
+void initiateNewgameLocations(DeprecatedCreature* newcr, newGameArguments ngm);
 void makecharacter()
 {
 	extern UniqueCreatures uniqueCreatures;
@@ -1265,8 +1282,6 @@ void makecharacter()
 	extern int day;
 	extern int month;
 	extern class Ledger ledger;
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	set_default_values(newcr);
 	bool choices = print_default_founder_window(newcr);
@@ -1274,7 +1289,6 @@ void makecharacter()
 	bool hasmaps = false;
 	bool makelawyer = false;
 	bool gaylawyer = false;
-	Vehicle * startcar = NULL;
 	char recruits = RECRUITS_NONE;
 	char base = SITE_RESIDENTIAL_SHELTER;
 	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
@@ -1401,16 +1415,7 @@ void makecharacter()
 		newcr->age--;
 	}
 	if (assault_rifle) {
-		Weapon neww(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)]);
-		Clip newc(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 9);
-		newcr->give_weapon(neww, NULL);
-		newcr->take_clips(newc, 9);
-	}
-	if (sports_car) {
-		startcar = newSportsCar();
-		startcar->add_heat(10);
-		newVehicle(startcar);
-		newcr->pref_carid = startcar->id();
+		giveMeAssaultRifle(newcr);
 	}
 	printIntroduction();
 	eraseAlt();
@@ -1421,6 +1426,7 @@ void makecharacter()
 	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
 	addCreature(newcr);
 	make_world(hasmaps);
-	initiateNewgameLocations(base, recruits, startcar, makelawyer, gaylawyer, newcr);
+	
+	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
 	uniqueCreatures.initialize();
 }

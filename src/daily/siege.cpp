@@ -200,23 +200,23 @@ const string CONST_siege167 = "Surrender yourselves!";
 int baddieCount();
 int encounterSize();
 vector<NameAndAlignment> getEncounterNameAndAlignment();
+const string CONST_siege029 = "Materials relating to the business front have been taken.";
+const string CONST_siege028 = "The compound is dismantled.";
+const string CONST_siege026A = "Law enforcement has confiscated $";
+const string CONST_siege026B = " in LCS funds.";
+const string CONST_siege025 = "Fortunately, your funds remain intact.";
+const string CONST_siege024 = " Liberals are taken to the police station.";
+const string CONST_siege023 = "is taken to the police station.";
+const string CONST_siege022 = ",";
+const string CONST_siege021 = ", aka ";
+const string CONST_siege020 = "The kidnap victims are rehabilitated and freed.";
+const string CONST_siege019 = " is rehabilitated and freed.";
+const string CONST_siege018 = " confiscate everything, including Squad weapons.";
+const string CONST_siege017 = "The firemen";
+const string CONST_siege016 = "The soldiers";
+const string CONST_siege015 = "The police";
 void surrenderToAuthorities(const int loc) {
 
-	const string CONST_siege029 = "Materials relating to the business front have been taken.";
-	const string CONST_siege028 = "The compound is dismantled.";
-	const string CONST_siege026A = "Law enforcement has confiscated $";
-	const string CONST_siege026B = " in LCS funds.";
-	const string CONST_siege025 = "Fortunately, your funds remain intact.";
-	const string CONST_siege024 = " Liberals are taken to the police station.";
-	const string CONST_siege023 = "is taken to the police station.";
-	const string CONST_siege022 = ",";
-	const string CONST_siege021 = ", aka ";
-	const string CONST_siege020 = "The kidnap victims are rehabilitated and freed.";
-	const string CONST_siege019 = " is rehabilitated and freed.";
-	const string CONST_siege018 = " confiscate everything, including Squad weapons.";
-	const string CONST_siege017 = "The firemen";
-	const string CONST_siege016 = "The soldiers";
-	const string CONST_siege015 = "The police";
 	extern Log gamelog;
 	extern short offended_firemen;
 	extern short offended_amradio;
@@ -548,20 +548,20 @@ void printSpecificCrime(const Lawflags crime) {
 	mvaddstrAlt(4, 1, youAreWantedForThis[crime], gamelog);
 }
 /* siege - CONST_siege032 */
+const string CONST_siege075 = " and other crimes";
+const string CONST_siege062 = "You are wanted for hiring an illegal alien";
+const string CONST_siege048 = "You are wanted for flag burning";
+const string CONST_siege047 = "You are wanted for felony flag burning";
+const string CONST_siege046 = "You are wanted for Flag Murder";
+const string CONST_siege039 = " unharmed!";
+const string CONST_siege038 = " and the others";
+const string CONST_siege037 = "Release ";
+const string CONST_siege035 = "In the name of God, your campaign of terror ends here!";
+const string CONST_siege034 = "You hear a blaring voice on a loudspeaker:";
+const string CONST_siege033 = "You hear shouts:";
+const string CONST_siegeB252 = "You are wanted for hiring an undocumented worker";
 void statebrokenlaws(int loc)
 {
-	const string CONST_siege075 = " and other crimes";
-	const string CONST_siege062 = "You are wanted for hiring an illegal alien";
-	const string CONST_siege048 = "You are wanted for flag burning";
-	const string CONST_siege047 = "You are wanted for felony flag burning";
-	const string CONST_siege046 = "You are wanted for Flag Murder";
-	const string CONST_siege039 = " unharmed!";
-	const string CONST_siege038 = " and the others";
-	const string CONST_siege037 = "Release ";
-	const string CONST_siege035 = "In the name of God, your campaign of terror ends here!";
-	const string CONST_siege034 = "You hear a blaring voice on a loudspeaker:";
-	const string CONST_siege033 = "You hear shouts:";
-	const string CONST_siegeB252 = "You are wanted for hiring an undocumented worker";
 	extern Log gamelog;
 	extern MusicClass music;
 	extern short lawList[LAWNUM];
@@ -1160,19 +1160,19 @@ void corporateSiegePrint(const int l) {
 	offended_corps = 0;
 }
 
+const string CONST_siege144 = "CCS members pour out of the truck and shoot in the front doors!";
+const string CONST_siege143 = "INJURED: ";
+const string CONST_siege142 = "KILLED: ";
+const string CONST_siege141 = "CCS CAR BOMBING CASUALTY REPORT";
+const string CONST_siege140 = "The truck plows into the building and explodes!";
+const string CONST_siege138 = "A screeching truck pulls up to ";
+const string CONST_siege137 = " is gearing up to attack ";
+const string CONST_siege136 = "You have received a sleeper warning that the CCS ";
 void CCSSiegePrint(const int l, const int numpres) {
 	extern Log gamelog;
 	extern vector<DeprecatedCreature *> pool;
 	extern MusicClass music;
 
-	const string CONST_siege144 = "CCS members pour out of the truck and shoot in the front doors!";
-	const string CONST_siege143 = "INJURED: ";
-	const string CONST_siege142 = "KILLED: ";
-	const string CONST_siege141 = "CCS CAR BOMBING CASUALTY REPORT";
-	const string CONST_siege140 = "The truck plows into the building and explodes!";
-	const string CONST_siege138 = "A screeching truck pulls up to ";
-	const string CONST_siege137 = " is gearing up to attack ";
-	const string CONST_siege136 = "You have received a sleeper warning that the CCS ";
 
 	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,l) && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && !LCSrandom(60) && numpres > 0)
 	{
@@ -1717,6 +1717,20 @@ void noOneIsThere(const int l) {
 	gamelog.newline();
 	endLocationSiege(l);
 }
+const string CONST_siege202 = "Fortunately, no one is hurt.";
+const string CONST_siege201 = " narrowly avoided death!";
+const string CONST_siege200 = " was killed in the bombing!";
+const string CONST_siege199 = "The lights fade and all is dark.";
+const string CONST_siege198 = "The generator has been destroyed!";
+const string CONST_siege197 = "There's nothing left but smoking wreckage...";
+const string CONST_siege196 = "The anti-aircraft gun takes a direct hit!";
+const string CONST_siege195 = "Explosions rock the compound!";
+const string CONST_siege194 = "A skilled pilot gets through!";
+const string CONST_siege193 = "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!";
+const string CONST_siege192 = "Hit! One of the bombers slams into to the ground.";
+const string CONST_siege191 = "You didn't shoot any down, but you've made them think twice!";
+const string CONST_siege190 = "The thunder of the anti-aircraft gun shakes the compound!";
+const string CONST_siege189 = "You hear planes streak overhead!";
 void airStrike(const char clearformess, const int l, int &num_liberals) {
 
 	extern Log gamelog;
@@ -1725,20 +1739,6 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 	extern vector<DeprecatedCreature *> pool;
 	void deleteGeneratorLightsOff(int l);
 
-	const string CONST_siege202 = "Fortunately, no one is hurt.";
-	const string CONST_siege201 = " narrowly avoided death!";
-	const string CONST_siege200 = " was killed in the bombing!";
-	const string CONST_siege199 = "The lights fade and all is dark.";
-	const string CONST_siege198 = "The generator has been destroyed!";
-	const string CONST_siege197 = "There's nothing left but smoking wreckage...";
-	const string CONST_siege196 = "The anti-aircraft gun takes a direct hit!";
-	const string CONST_siege195 = "Explosions rock the compound!";
-	const string CONST_siege194 = "A skilled pilot gets through!";
-	const string CONST_siege193 = "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!";
-	const string CONST_siege192 = "Hit! One of the bombers slams into to the ground.";
-	const string CONST_siege191 = "You didn't shoot any down, but you've made them think twice!";
-	const string CONST_siege190 = "The thunder of the anti-aircraft gun shakes the compound!";
-	const string CONST_siege189 = "You hear planes streak overhead!";
 
 	bool hit = true;
 	if (clearformess) eraseAlt();
@@ -1891,26 +1891,26 @@ void shotAtBySniper(const char clearformess, const int l, int &num_liberals) {
 		pressAnyKey();
 	}
 }
+const string CONST_siege224 = "'s words.";
+const string CONST_siege223 = "Virtually everyone in America was moved by ";
+const string CONST_siege222 = " later went on to win a Pulitzer for it.";
+const string CONST_siege221 = "Even the Cable News and AM Radio spend days talking about it.";
+const string CONST_siege220 = "The discussion was exciting and dynamic.";
+const string CONST_siege219 = " represents the LCS well.";
+const string CONST_siege218 = "'s verbal finesse leaves something to be desired.";
+const string CONST_siege217 = " stutters nervously the whole time.";
+const string CONST_siege216 = "But ";
+const string CONST_siege215 = " falls asleep.";
+const string CONST_siege214 = "But the interview is so boring that ";
+const string CONST_siege213 = "Retarded";
+const string CONST_siege212 = "Dumb";
+const string CONST_siege211 = "and later used the material for a Broadway play called";
+const string CONST_siege210 = " canceled the interview halfway through";
 void printReporterDuringSiege(const string repname, const string name, const int segmentpower) {
 
 	extern Log gamelog;
 	extern short lawList[LAWNUM];
 
-	const string CONST_siege224 = "'s words.";
-	const string CONST_siege223 = "Virtually everyone in America was moved by ";
-	const string CONST_siege222 = " later went on to win a Pulitzer for it.";
-	const string CONST_siege221 = "Even the Cable News and AM Radio spend days talking about it.";
-	const string CONST_siege220 = "The discussion was exciting and dynamic.";
-	const string CONST_siege219 = " represents the LCS well.";
-	const string CONST_siege218 = "'s verbal finesse leaves something to be desired.";
-	const string CONST_siege217 = " stutters nervously the whole time.";
-	const string CONST_siege216 = "But ";
-	const string CONST_siege215 = " falls asleep.";
-	const string CONST_siege214 = "But the interview is so boring that ";
-	const string CONST_siege213 = "Retarded";
-	const string CONST_siege212 = "Dumb";
-	const string CONST_siege211 = "and later used the material for a Broadway play called";
-	const string CONST_siege210 = " canceled the interview halfway through";
 	string line_one;
 	string line_two = blankString;
 	if (segmentpower < 15)
@@ -2062,15 +2062,15 @@ int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
 /* siege - updates sieges in progress */
 void reduceCompoundStores(int loc, int amount);
 void emptyCompoundStores(int l);
+const string CONST_siege183 = "The cops are coming!";
+const string CONST_siege182 = " has starved to death.";
+const string CONST_siege181 = "Your Liberals are starving!";
+const string CONST_siege180 = "A day passes while under siege...";
+const string CONST_siege247 = "give up";
 void siegeturn(char clearformess)
 {
 	void setUnderAttack(int l);
 
-	const string CONST_siege183 = "The cops are coming!";
-	const string CONST_siege182 = " has starved to death.";
-	const string CONST_siege181 = "Your Liberals are starving!";
-	const string CONST_siege180 = "A day passes while under siege...";
-	const string CONST_siege247 = "give up";
 	extern Log gamelog;
 	extern char disbanding;
 	extern int stat_dead;
@@ -2282,15 +2282,15 @@ void cancelOutBleeding();
 int print_character_info(const int c, const int party_status);
 void countHeroes(int &partysize, int &partyalive);
 // Siege -- Mass combat outside safehouse
+const string CONST_siege242 = "The siege is broken!";
+const string CONST_siege241 = "You're free!";
+const string CONST_siege240 = "C - Reflect on your Conservative judgment.";
+const string CONST_siege239 = "G - Surrender";
+const string CONST_siege238 = "F - Fight!";
+const string CONST_siege237 = "E - Equip";
+const string CONST_siege236 = "D - Escape";
 char sally_forth_aux(int loc)
 {
-	const string CONST_siege242 = "The siege is broken!";
-	const string CONST_siege241 = "You're free!";
-	const string CONST_siege240 = "C - Reflect on your Conservative judgment.";
-	const string CONST_siege239 = "G - Surrender";
-	const string CONST_siege238 = "F - Fight!";
-	const string CONST_siege237 = "E - Equip";
-	const string CONST_siege236 = "D - Escape";
 	extern Log gamelog;
 	extern short mode;
 	extern short cursite;
@@ -2570,24 +2570,24 @@ void escape_engage()
 }
 void juiceEntireCreaturePool(const long juice, const long cap);
 /* siege - flavor text when you crush a CCS safe house */
+const string CONST_siege273 = "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD";
+const string CONST_siege272 = "revolution to attend to?";
+const string CONST_siege271 = "The CCS has been completely destroyed.  Now wasn't there a ";
+const string CONST_siege270 = "the last of the enemy's morale and confidence is shattered.";
+const string CONST_siege269 = "With its Founder killed in the heart of their own base, ";
+const string CONST_siege268 = "slips away.  ";
+const string CONST_siege267 = "The CCS Founder lying dead at their feet, the squad ";
+const string CONST_siege266 = "it is increasingly clear that this was the CCS's last safehouse.";
+const string CONST_siege265 = "As your Liberals pick through the remains of the safehouse, ";
+const string CONST_siege264 = "their final victory.  ";
+const string CONST_siege263 = "Gunfire still ringing in their ears, the squad revels in ";
+const string CONST_siege262 = "this will make a fine base for future Liberal operations.";
+const string CONST_siege261 = "power has been severely weakened.  Once the safehouse cools off, ";
+const string CONST_siege260 = "The CCS Founder wasn't here, but for now, their ";
+const string CONST_siege258 = "The CCS Lieutenant lying dead at their feet, the squad ";
+const string CONST_siege257 = "their victory.  ";
 void conquertextccs()
 {
-	const string CONST_siege273 = "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD";
-	const string CONST_siege272 = "revolution to attend to?";
-	const string CONST_siege271 = "The CCS has been completely destroyed.  Now wasn't there a ";
-	const string CONST_siege270 = "the last of the enemy's morale and confidence is shattered.";
-	const string CONST_siege269 = "With its Founder killed in the heart of their own base, ";
-	const string CONST_siege268 = "slips away.  ";
-	const string CONST_siege267 = "The CCS Founder lying dead at their feet, the squad ";
-	const string CONST_siege266 = "it is increasingly clear that this was the CCS's last safehouse.";
-	const string CONST_siege265 = "As your Liberals pick through the remains of the safehouse, ";
-	const string CONST_siege264 = "their final victory.  ";
-	const string CONST_siege263 = "Gunfire still ringing in their ears, the squad revels in ";
-	const string CONST_siege262 = "this will make a fine base for future Liberal operations.";
-	const string CONST_siege261 = "power has been severely weakened.  Once the safehouse cools off, ";
-	const string CONST_siege260 = "The CCS Founder wasn't here, but for now, their ";
-	const string CONST_siege258 = "The CCS Lieutenant lying dead at their feet, the squad ";
-	const string CONST_siege257 = "their victory.  ";
 	extern Log gamelog;
 	extern MusicClass music;
 	extern int ccs_siege_kills;

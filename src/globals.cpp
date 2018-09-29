@@ -729,7 +729,7 @@ int getactivesquadBase() {
 	return cbase;
 }
 int getactivesquadCarID(const int p) {
-	if (!activesquad->squad[p]) {
+	if (activesquad->squad[p]) {
 		return activesquad->squad[p]->carid;
 	}
 	else {

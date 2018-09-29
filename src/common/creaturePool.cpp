@@ -264,26 +264,26 @@ enum LOOP_CONTINUATION {
 	RETURN_ONE,
 	REPEAT
 };
-LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecruitst &r, int &y) {
-	const string CONST_creaturePool046 = "This whole thing was a mistake. There won't be another meeting.";
-	const string CONST_creaturePool045 = " comes off as slightly insane.";
-	const string CONST_creaturePool044 = " needs more experience.";
-	const string CONST_creaturePool043 = "Maybe ";
-	const string CONST_creaturePool042 = " really understands the problem.";
-	const string CONST_creaturePool041 = " isn't convinced ";
-	const string CONST_creaturePool040 = "They'll meet again tomorrow.";
-	const string CONST_creaturePool039 = "'s arguments.";
-	const string CONST_creaturePool038 = " is skeptical about some of ";
-	const string CONST_creaturePool037 = "They'll definitely meet again tomorrow.";
-	const string CONST_creaturePool036 = "'s views to be insightful.";
-	const string CONST_creaturePool035 = " found ";
-	const string CONST_creaturePool034 = " views on ";
-	const string CONST_creaturePool033 = " explains ";
-	const string CONST_creaturePool032 = " shares ";
-	const string CONST_creaturePool031 = " accepts, and is eager to get started.";
-	const string CONST_creaturePool030 = " join the Liberal Crime Squad.";
-	const string CONST_creaturePool029 = " offers to let ";
+const string CONST_creaturePool046 = "This whole thing was a mistake. There won't be another meeting.";
+const string CONST_creaturePool045 = " comes off as slightly insane.";
+const string CONST_creaturePool044 = " needs more experience.";
+const string CONST_creaturePool043 = "Maybe ";
+const string CONST_creaturePool042 = " really understands the problem.";
+const string CONST_creaturePool041 = " isn't convinced ";
+const string CONST_creaturePool040 = "They'll meet again tomorrow.";
+const string CONST_creaturePool039 = "'s arguments.";
+const string CONST_creaturePool038 = " is skeptical about some of ";
+const string CONST_creaturePool037 = "They'll definitely meet again tomorrow.";
+const string CONST_creaturePool036 = "'s views to be insightful.";
+const string CONST_creaturePool035 = " found ";
+const string CONST_creaturePool034 = " views on ";
+const string CONST_creaturePool033 = " explains ";
+const string CONST_creaturePool032 = " shares ";
+const string CONST_creaturePool031 = " accepts, and is eager to get started.";
+const string CONST_creaturePool030 = " join the Liberal Crime Squad.";
+const string CONST_creaturePool029 = " offers to let ";
 
+LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecruitst &r, int &y) {
 	extern Log gamelog;
 	extern int stat_recruits;
 	extern class Ledger ledger;
@@ -441,24 +441,24 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 	if (c == 'd') return RETURN_ONE;
 	return REPEAT;
 }
+const string CONST_creaturePool028 = "D - Break off the meetings.";
+const string CONST_creaturePool027 = " isn't ready to join the LCS.";
+const string CONST_creaturePool026 = "C - ";
+const string CONST_creaturePool025 = " needs more Juice to recruit.";
+const string CONST_creaturePool023 = " join the LCS as a full member.";
+const string CONST_creaturePool022 = "C - Offer to let ";
+const string CONST_creaturePool021 = "B - Just casually chat with them and discuss politics.";
+const string CONST_creaturePool020 = "A - Spend $50 on props and a book for them to keep afterward.";
+const string CONST_creaturePool019 = " approach the situation?";
+const string CONST_creaturePool018 = "How should ";
+const string CONST_creaturePool017 = " kind of regrets agreeing to this.";
+const string CONST_creaturePool016 = " is ready to fight for the Liberal Cause.";
+const string CONST_creaturePool015 = " feels something needs to be done.";
+const string CONST_creaturePool014 = " is interested in learning more.";
+const string CONST_creaturePool013 = " will take a lot of persuading.";
+const string CONST_creaturePool012 = "Meeting with ";
 void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 
-	const string CONST_creaturePool028 = "D - Break off the meetings.";
-	const string CONST_creaturePool027 = " isn't ready to join the LCS.";
-	const string CONST_creaturePool026 = "C - ";
-	const string CONST_creaturePool025 = " needs more Juice to recruit.";
-	const string CONST_creaturePool023 = " join the LCS as a full member.";
-	const string CONST_creaturePool022 = "C - Offer to let ";
-	const string CONST_creaturePool021 = "B - Just casually chat with them and discuss politics.";
-	const string CONST_creaturePool020 = "A - Spend $50 on props and a book for them to keep afterward.";
-	const string CONST_creaturePool019 = " approach the situation?";
-	const string CONST_creaturePool018 = "How should ";
-	const string CONST_creaturePool017 = " kind of regrets agreeing to this.";
-	const string CONST_creaturePool016 = " is ready to fight for the Liberal Cause.";
-	const string CONST_creaturePool015 = " feels something needs to be done.";
-	const string CONST_creaturePool014 = " is interested in learning more.";
-	const string CONST_creaturePool013 = " will take a lot of persuading.";
-	const string CONST_creaturePool012 = "Meeting with ";
 	extern Log gamelog;
 	extern class Ledger ledger;
 

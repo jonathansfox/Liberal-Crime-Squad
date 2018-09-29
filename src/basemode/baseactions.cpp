@@ -157,11 +157,11 @@ extern string spaceDashSpace;
  }
  int getkey_cap_alt();
  /* base - assign a vehicle to this squad */
+ const string CONST_baseactions012 = "be a passenger.";
+ const string CONST_baseactions011 = "drive it.";
+ const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
  void setvehicles()
  {
-	 const string CONST_baseactions012 = "be a passenger.";
-	 const string CONST_baseactions011 = "drive it.";
-	 const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
 	 extern Deprecatedsquadst *activesquad;
 	 extern short interface_pgup;
 	 extern short interface_pgdn;

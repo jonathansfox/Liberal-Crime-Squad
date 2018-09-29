@@ -247,17 +247,17 @@ void publicOpinionNaturalMoves(int(&issuebalance)[VIEWNUM - 5],
 		}
 	}
 }
+//const string CONST_monthly014 = "Press any key to reflect on these poll numbers.";
+//const string CONST_monthly013 = "Arch-Conservative";
+//const string CONST_monthly012 = "-  ";
+//const string CONST_monthly011 = "Conservative  ";
+//const string CONST_monthly009 = "moderate  ";
+//const string CONST_monthly007 = "Liberal  ";
+//const string CONST_monthly005 = "Elite Liberal ";
+//const string CONST_monthly004 = "ÄÄÄ";
+//const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
+//const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
 void printIntelligenceReport(char &clearformess) {
-	const string CONST_monthly014 = "Press any key to reflect on these poll numbers.";
-	const string CONST_monthly013 = "Arch-Conservative";
-	const string CONST_monthly012 = "-  ";
-	const string CONST_monthly011 = "Conservative  ";
-	const string CONST_monthly009 = "moderate  ";
-	const string CONST_monthly007 = "Liberal  ";
-	const string CONST_monthly005 = "Elite Liberal ";
-	const string CONST_monthly004 = "ÄÄÄ";
-	const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
-	const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
 	/*******************************************************
 	*                 INTELLIGENCE REPORT                  *
 	*     ONLY IF SHOWMECHANICS OR SHOWWAIT IS DEFINED     *
@@ -342,6 +342,36 @@ void updateEndgamestate() {
 		break;
 	}
 }
+void long_disband_loss() {
+
+	extern Log gamelog;
+	extern MusicClass music;
+
+	const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
+	const string CONST_monthly016 = "The last LCS members have all been hunted down.";
+	const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
+
+	music.play(MUSIC_DEFEAT);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	eraseAlt();
+	mvaddstrAlt(12, 10, CONST_monthly015, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK);
+	eraseAlt();
+	mvaddstrAlt(12, 12, CONST_monthly016, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	eraseAlt();
+	mvaddstrAlt(12, 14, CONST_monthly017, gamelog);
+	gamelog.newline();
+	gamelog.nextMessage();
+	pressAnyKey();
+	savehighscore(END_DISBANDLOSS);
+	viewhighscores();
+	end_game();
+}
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
 {
@@ -350,7 +380,6 @@ void passmonth(char &clearformess, char canseethings)
 	// Show die rolls, 100% accurate poll numbers
 	extern bool SHOWMECHANICS;
 	extern Log gamelog;
-	extern MusicClass music;
 	extern int year;
 	extern int day;
 	extern int month;
@@ -450,30 +479,7 @@ void passmonth(char &clearformess, char canseethings)
 	//CONTROL LONG DISBANDS
 	if (disbanding&&year - disbandtime >= 50)
 	{
-		const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
-		const string CONST_monthly016 = "The last LCS members have all been hunted down.";
-		const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
-
-		music.play(MUSIC_DEFEAT);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		eraseAlt();
-		mvaddstrAlt(12, 10, CONST_monthly015, gamelog);
-		gamelog.newline();
-		pressAnyKey();
-		set_color_easy(WHITE_ON_BLACK);
-		eraseAlt();
-		mvaddstrAlt(12, 12, CONST_monthly016, gamelog);
-		gamelog.newline();
-		pressAnyKey();
-		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		eraseAlt();
-		mvaddstrAlt(12, 14, CONST_monthly017, gamelog);
-		gamelog.newline();
-		gamelog.nextMessage();
-		pressAnyKey();
-		savehighscore(END_DISBANDLOSS);
-		viewhighscores();
-		end_game();
+		long_disband_loss();
 	}
 	//UPDATE THE WORLD IN CASE THE LAWS HAVE CHANGED
 	updateworld_laws(lawList, oldlaw);

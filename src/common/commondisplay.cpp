@@ -411,21 +411,21 @@ string missingPartOfFace(const char lefteye, const char righteye, const char nos
 		else return (CONST_commondisplay036);
 	}
 }
-string getHealthStat(DeprecatedCreature &g, const char smll) {
-	const string CONST_commondisplay180 = "Missing Teeth";
-	const string CONST_commondisplay178 = "No Teeth";
-	const string CONST_commondisplay177 = "No Tongue";
+//const string CONST_commondisplay180 = "Missing Teeth";
+//const string CONST_commondisplay178 = "No Teeth";
+//const string CONST_commondisplay177 = "No Tongue";
 
-	const string CONST_commondisplay040 = "MisTeeth";
-	const string CONST_commondisplay037 = "NoTongue";
-	const string CONST_commondisplay021 = "Face Gone";
-	const string CONST_commondisplay020 = "FaceGone";
-	const string CONST_commondisplay019 = "Paraplegic";
-	const string CONST_commondisplay018 = "Parapleg";
-	const string CONST_commondisplay017 = "Quadraplegic";
-	const string CONST_commondisplay016 = "Quadpleg";
-	const string CONST_commondisplay015 = "Neck Broken";
-	const string CONST_commondisplay014 = "NckBroke";
+const string CONST_commondisplay040 = "MisTeeth";
+const string CONST_commondisplay037 = "NoTongue";
+const string CONST_commondisplay021 = "Face Gone";
+const string CONST_commondisplay020 = "FaceGone";
+const string CONST_commondisplay019 = "Paraplegic";
+const string CONST_commondisplay018 = "Parapleg";
+const string CONST_commondisplay017 = "Quadraplegic";
+const string CONST_commondisplay016 = "Quadpleg";
+const string CONST_commondisplay015 = "Neck Broken";
+const string CONST_commondisplay014 = "NckBroke";
+string getHealthStat(DeprecatedCreature &g, const char smll) {
 
 	bool bleeding = false;
 
@@ -636,14 +636,14 @@ void printWounds(DeprecatedCreature *cr) {
 void set_color_for_armor(const Armor armor);
 void setColorForArmor(const Armor ar);
 /* character info at top of screen */
+const string CONST_commondisplay077 = "Top Skills:";
+const string CONST_commondisplay075 = "???????";
+
+const string CONST_commondisplay068 = "Trans: ";
+
+const string CONST_commondisplay047 = ", holding ";
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 {
-	const string CONST_commondisplay077 = "Top Skills:";
-	const string CONST_commondisplay075 = "???????";
-
-	const string CONST_commondisplay068 = "Trans: ";
-
-	const string CONST_commondisplay047 = ", holding ";
 
 
 	extern short sitealarmtimer;
@@ -784,13 +784,13 @@ void clearRowsTwoThroughSeven() {
 
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 /* party info at top of screen */
+const string CONST_commondisplay101 = " (1)";
+const string CONST_commondisplay100 = " (XX)";
+const string CONST_commondisplay097 = "/";
+const string CONST_commondisplay096 = "+H";
+const string CONST_commondisplay094 = "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�";
 void printparty()
 {
-	const string CONST_commondisplay101 = " (1)";
-	const string CONST_commondisplay100 = " (XX)";
-	const string CONST_commondisplay097 = "/";
-	const string CONST_commondisplay096 = "+H";
-	const string CONST_commondisplay094 = "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�";
 	extern Deprecatedsquadst *activesquad;
 	extern short party_status;
 	extern char showcarprefs;
@@ -1086,24 +1086,24 @@ vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]);
 /* full screen character sheet */
 
 void statebrokenlaws(DeprecatedCreature &cr);
+const string CONST_commondisplay167 = "Scheduled Dates:    ";
+const string CONST_commondisplay166 = "s";
+const string CONST_commondisplay165 = " Romantic Interest";
+const string CONST_commondisplay164 = "Scheduled Meetings: ";
+const string CONST_commondisplay163 = "Can't Recruit";
+const string CONST_commondisplay162 = "Enlightened ";
+const string CONST_commondisplay161 = " Max";
+const string CONST_commondisplay160 = " Recruits / ";
+const string CONST_commondisplay155 = "Car: ";
+const string CONST_commondisplay131 = "Juice: ";
+const string CONST_commondisplay130 = "*";
+const string CONST_commondisplay129 = ", Genderqueer";
+const string CONST_commondisplay128 = ", Female";
+const string CONST_commondisplay127 = ", Male";
+const string CONST_commondisplay126 = " (Age ";
+const string CONST_commondisplay125 = "Born ";
 void printliberalstats(DeprecatedCreature &cr)
 {
-	const string CONST_commondisplay167 = "Scheduled Dates:    ";
-	const string CONST_commondisplay166 = "s";
-	const string CONST_commondisplay165 = " Romantic Interest";
-	const string CONST_commondisplay164 = "Scheduled Meetings: ";
-	const string CONST_commondisplay163 = "Can't Recruit";
-	const string CONST_commondisplay162 = "Enlightened ";
-	const string CONST_commondisplay161 = " Max";
-	const string CONST_commondisplay160 = " Recruits / ";
-	const string CONST_commondisplay155 = "Car: ";
-	const string CONST_commondisplay131 = "Juice: ";
-	const string CONST_commondisplay130 = "*";
-	const string CONST_commondisplay129 = ", Genderqueer";
-	const string CONST_commondisplay128 = ", Female";
-	const string CONST_commondisplay127 = ", Male";
-	const string CONST_commondisplay126 = " (Age ";
-	const string CONST_commondisplay125 = "Born ";
 	extern int year;
 	extern int day;
 	extern int month;

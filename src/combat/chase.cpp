@@ -316,11 +316,11 @@ string isCapturedByOther(const int p) {
 
 	return output;
 }
+const string CONST_chase028 = " breaks away!";
+const string CONST_chase026 = " can't keep up!";
+const string CONST_chase025 = " tips into a pool. The tank is trapped!";
 void evasiverun()
 {
-	const string CONST_chase028 = " breaks away!";
-	const string CONST_chase026 = " can't keep up!";
-	const string CONST_chase025 = " tips into a pool. The tank is trapped!";
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
 	extern DeprecatedCreature encounter[ENCMAX];
@@ -694,14 +694,14 @@ int driveskill(DeprecatedCreature &cr, Vehicle &v)
 	driveskill *= static_cast<int>(cr.blood / 50.0);
 	return driveskill;
 }
+const string CONST_chase047 = " brakes hard and nearly crashes!";
+const string CONST_chase046 = " backs off for safety.";
+const string CONST_chase045 = " skids out!";
+const string CONST_chase044 = " falls behind!";
+const string CONST_chase043 = "You make obscene gestures at the pursuers!";
+const string CONST_chase042 = "You boldly weave through oncoming traffic!";
 void evasivedrive()
 {
-	const string CONST_chase047 = " brakes hard and nearly crashes!";
-	const string CONST_chase046 = " backs off for safety.";
-	const string CONST_chase045 = " skids out!";
-	const string CONST_chase044 = " falls behind!";
-	const string CONST_chase043 = "You make obscene gestures at the pursuers!";
-	const string CONST_chase042 = "You boldly weave through oncoming traffic!";
 	extern chaseseqst chaseseq;
 	extern Deprecatedsquadst *activesquad;
 	extern short fieldskillrate;
@@ -843,18 +843,18 @@ void evasivedrive()
 		}
 	}
 }
+const string CONST_chase058 = " crawls free of the car, shivering with pain.";
+const string CONST_chase057 = " gasps in pain, but lives, for now.";
+const string CONST_chase056 = " feet.";
+const string CONST_chase055 = " wheelchair.";
+const string CONST_chase054 = " and struggles to ";
+const string CONST_chase053 = "car frame";
+const string CONST_chase052 = " grips the ";
+const string CONST_chase051 = " seat, out cold, and dies.";
+const string CONST_chase050 = " slumps in ";
+const string CONST_chase049 = "Your ";
 void crashfriendlycar(int v)
 {
-	const string CONST_chase058 = " crawls free of the car, shivering with pain.";
-	const string CONST_chase057 = " gasps in pain, but lives, for now.";
-	const string CONST_chase056 = " feet.";
-	const string CONST_chase055 = " wheelchair.";
-	const string CONST_chase054 = " and struggles to ";
-	const string CONST_chase053 = "car frame";
-	const string CONST_chase052 = " grips the ";
-	const string CONST_chase051 = " seat, out cold, and dies.";
-	const string CONST_chase050 = " slumps in ";
-	const string CONST_chase049 = "Your ";
 	extern int stat_dead;
 	extern chaseseqst chaseseq;
 	extern Deprecatedsquadst *activesquad;
@@ -1369,13 +1369,6 @@ void destroyAllCarsAndDetermineMusic() {
 }
 LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 
-	const string CONST_chase086 = "attacks";
-	const string CONST_chase085 = "  Found encounter driver %s in carID %d";
-	const string CONST_chase084 = "  Found LCS driver %s in carID %d";
-	const string CONST_chase083 = "Searching for %s's driver.  ";
-	const string CONST_chase082 = "  Found enemycar with ID %d at index %d";
-	const string CONST_chase081 = "  Found friendcar with ID %d at index %d";
-	const string CONST_chase080 = "Searching for chase vehicle for ";
 
 	extern short mode;
 	extern chaseseqst chaseseq;
@@ -1656,14 +1649,14 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 }
 void conservatise(const int e);
 Vehicle* getVehicleOfThisType(int cartype);
+const string CONST_chase094 = "STATIONWAGON";
+const string CONST_chase093 = "PICKUP";
+const string CONST_chase092 = "JEEP";
+const string CONST_chase091 = "SUV";
+const string CONST_chase090 = "AGENTCAR";
+const string CONST_chase088 = "HMMWV";
 void makechasers(long type, const long sitecriminality)
 {
-	const string CONST_chase094 = "STATIONWAGON";
-	const string CONST_chase093 = "PICKUP";
-	const string CONST_chase092 = "JEEP";
-	const string CONST_chase091 = "SUV";
-	const string CONST_chase090 = "AGENTCAR";
-	const string CONST_chase088 = "HMMWV";
 	extern char endgamestate;
 	extern chaseseqst chaseseq;
 	extern DeprecatedCreature encounter[ENCMAX];
