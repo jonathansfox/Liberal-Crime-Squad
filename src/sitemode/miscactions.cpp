@@ -109,8 +109,6 @@ void clearmessagearea(bool redrawmaparea = true);
 void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
-/* tells how many members a squad has who are alive */
-int squadalive(const Deprecatedsquadst *st);
 // for void criminalizeparty
 //#include "../daily/daily.h"
 char securityable(int type);
@@ -148,17 +146,17 @@ map<int, CheckDifficulty> unlockDifficulty = {
 	map<int, CheckDifficulty>::value_type(UNLOCK_SAFE,        DIFFICULTY_HEROIC),
 	map<int, CheckDifficulty>::value_type(UNLOCK_VAULT,       DIFFICULTY_HEROIC),
 };
+short getCurrentSite();
 char unlock(short type, char &actual)
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
-	extern short cursite;
 	extern short fieldskillrate;
 	int difficulty = 0;
 	if (type == UNLOCK_DOOR) {
-		if (securityable(LocationsPool::getInstance().getLocationType(cursite)) == 1)
+		if (securityable(LocationsPool::getInstance().getLocationType(getCurrentSite())) == 1)
 			difficulty = DIFFICULTY_CHALLENGING;
-		else if (securityable(LocationsPool::getInstance().getLocationType(cursite)) > 1)
+		else if (securityable(LocationsPool::getInstance().getLocationType(getCurrentSite())) > 1)
 			difficulty = DIFFICULTY_HARD;
 		else
 			difficulty = DIFFICULTY_EASY;
@@ -303,7 +301,6 @@ char unlock(short type, char &actual)
 	actual = 0;
 	return 0;
 }
-
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 /* bash attempt */
@@ -313,19 +310,18 @@ char bash(short type, char &actual)
 	extern Log gamelog;
 	extern short sitealarmtimer;
 
-	extern short cursite;
 	int difficulty = 0;
 	bool crowable = false;
 	switch (type)
 	{
 	case BASH_DOOR:
-		if (!securityable(LocationsPool::getInstance().getLocationType(cursite)))
+		if (!securityable(LocationsPool::getInstance().getLocationType(getCurrentSite())))
 		{
 			difficulty = DIFFICULTY_EASY; // Run down dump
 			crowable = true;
 		}
-		else if (LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_PRISON &&
-			LocationsPool::getInstance().getLocationType(cursite) != SITE_GOVERNMENT_INTELLIGENCEHQ)
+		else if (LocationsPool::getInstance().getLocationType(getCurrentSite()) != SITE_GOVERNMENT_PRISON &&
+			LocationsPool::getInstance().getLocationType(getCurrentSite()) != SITE_GOVERNMENT_INTELLIGENCEHQ)
 		{
 			difficulty = DIFFICULTY_CHALLENGING; // Respectable place
 			crowable = true;
@@ -412,8 +408,8 @@ char bash(short type, char &actual)
 			sitealarmtimer = timer;
 		else sitealarmtimer = 0;
 		//Bashing doors in secure areas sets off alarms
-		if ((LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_PRISON ||
-			LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_INTELLIGENCEHQ) &&
+		if ((LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_PRISON ||
+			LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_INTELLIGENCEHQ) &&
 			!isThereASiteAlarm())
 		{
 			setSiteAlarmOne();
@@ -583,7 +579,7 @@ char run_broadcast(bool tv_broadcase)
 	}
 	gamelog.newline();
 	pressAnyKey();
-	int segmentpower = 0, partysize = squadalive(activesquad);
+	int segmentpower = 0, partysize = activesquadAlive();
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
@@ -744,7 +740,6 @@ void partyrescue(short special)
 {
 	extern Log gamelog;
 	extern Deprecatedsquadst *activesquad;
-	extern short cursite;
 	int freeslots = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -763,7 +758,7 @@ void partyrescue(short special)
 	}
 	vector<DeprecatedCreature*> waiting_for_rescue;
 
-	whoAreWaitingForRescue(waiting_for_rescue, cursite, special);
+	whoAreWaitingForRescue(waiting_for_rescue, getCurrentSite(), special);
 	for (int pl = 0; pl < len(waiting_for_rescue); pl++)
 	{
 		if (LCSrandom(2) && freeslots)

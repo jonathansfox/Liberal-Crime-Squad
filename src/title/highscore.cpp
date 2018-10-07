@@ -68,8 +68,6 @@ string heLiBurned;
 string hecoStalinized;
 string dotSpace;
 
-//extern highscorest score[SCORENUM];
-//extern string singleSpace;
 MusicModes getEndingMusic(EndTypes e);
 string getEndingString(EndTypes e);
 struct  saveLoadChunk {
@@ -151,7 +149,6 @@ void savehighscore(char endtype)
 	extern int month;
 	extern class Ledger ledger;
 	extern int version;
-	//	extern char slogan[SLOGAN_LEN];
 	extern string slogan_str;
 	loadhighscores();
 	//MERGE THE STATS

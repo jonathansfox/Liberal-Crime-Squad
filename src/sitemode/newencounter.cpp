@@ -968,6 +968,7 @@ void addCCS(int creaturearray[CREATURENUM]) {
 	creaturearray[CREATURE_RADIOPERSONALITY] += 1;
 
 }
+short getCurrentSite();
 bool populateEncounter(const int type, int creaturearray[CREATURENUM], const char sec);
 /* generates a new random encounter */
 void conservatiseEncslot(const int encslot);
@@ -976,7 +977,6 @@ void prepareencounter(short type, char sec)
 	extern short mode;
 	extern coordinatest loc_coord;
 	extern short postalarmtimer;
-	extern short cursite;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int encslot = 0;
 	emptyEncounter();
@@ -986,7 +986,7 @@ void prepareencounter(short type, char sec)
 	{
 		addPoliceOrMilitary(creaturearray);
 	}
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 	{
 		addCCS(creaturearray);
 		for (int n = 0; n < LCSrandom(6) + 1; n++)
@@ -1046,7 +1046,6 @@ vector<NameAndAlignment> getEncounterNameAndAlignment();
 char addsiegeencounter(char type)
 {
 	extern short sitetype;
-	extern short cursite;
 	extern short lawList[LAWNUM];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int num;
@@ -1062,16 +1061,16 @@ char addsiegeencounter(char type)
 	{
 		if (freeslots < 6)return 0;
 		num = LCSrandom(3) + 4;
-		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+		if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 		{
-			switch (LocationsPool::getInstance().getSiegeType(cursite))
+			switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
 			{
 			case SIEGE_POLICE:
-				if (LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)
+				if (LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) == 0)
 					fillEncounter(CREATURE_SWAT, num);
 				else
 				{
-					if (LocationsPool::getInstance().getSiegeEscalationState(cursite) < 3) fillEncounter(CREATURE_SOLDIER, num);
+					if (LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) < 3) fillEncounter(CREATURE_SOLDIER, num);
 					else fillEncounter(CREATURE_SEAL, num);
 				}
 				break;
@@ -1139,7 +1138,7 @@ char addsiegeencounter(char type)
 				}
 				break;
 			default:
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				{
 					for (int e = 0; e < ENCMAX && num > 0; e++) {
 						if (!LCSrandom(11))

@@ -77,7 +77,6 @@ void squadgrab_immobile(char dead);
 void freehostage(DeprecatedCreature &cr, char situation);
 
 
-void addLocationChange(int cursite, sitechangest change);
 //string smellsPanic;
 
 
@@ -88,7 +87,7 @@ string drops;
 string sBody;
 
 vector<NameAndAlignment> getEncounterNameAndAlignment();
-
+short getCurrentSite();
 /* handles end of round stuff for one creature */
 void advancecreature(DeprecatedCreature &cr)
 {
@@ -101,7 +100,6 @@ void advancecreature(DeprecatedCreature &cr)
 	extern int stat_kills;
 	extern int ccs_siege_kills;
 	extern int ccs_boss_kills;
-	extern short cursite;
 	extern int sitecrime;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
@@ -179,9 +177,9 @@ void advancecreature(DeprecatedCreature &cr)
 			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) LocationsPool::getInstance().addSiegeKill(getCurrentSite());
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && cr.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(getCurrentSite());
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				{
 					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 					ccs_siege_kills++;
@@ -223,9 +221,9 @@ void advancecreature(DeprecatedCreature &cr)
 			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite))LocationsPool::getInstance().addSiegeKill(cursite);
-				if (LocationsPool::getInstance().isThereASiegeHere(cursite) && cr.animalgloss == ANIMALGLOSS_TANK)LocationsPool::getInstance().removeTank(cursite);
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))LocationsPool::getInstance().addSiegeKill(getCurrentSite());
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && cr.animalgloss == ANIMALGLOSS_TANK)LocationsPool::getInstance().removeTank(getCurrentSite());
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				{
 					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 					ccs_siege_kills++;
@@ -254,7 +252,6 @@ void resetSiteAlarm();
 void sitemodeCreatureAdvance() {
 
 	extern int sitecrime;
-	extern short cursite;
 
 	extern short sitealarmtimer;
 	extern short siteonfire;
@@ -359,7 +356,7 @@ void sitemodeCreatureAdvance() {
 					if (!LCSrandom(5))
 					{
 						sitechangest change(x, y, z, SITEBLOCK_DEBRIS);
-						addLocationChange(cursite, change);
+						addLocationChange(getCurrentSite(), change);
 						levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
 						levelmap[x][y][z].flag &= ~SITEBLOCK_DOOR;
 						levelmap[x][y][z].flag &= ~SITEBLOCK_FIRE_START;
@@ -378,7 +375,6 @@ void creatureadvance()
 {
 	extern int sitecrime;
 	extern Deprecatednewsstoryst *sitestory;
-	extern short cursite;
 
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
@@ -419,10 +415,10 @@ void creatureadvance()
 			}
 		}
 	}
-	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
-		CreaturePool::getInstance().advanceCreaturesAtLocation(cursite);
-		autopromote(cursite);
+		CreaturePool::getInstance().advanceCreaturesAtLocation(getCurrentSite());
+		autopromote(getCurrentSite());
 	}
 	for (int e = 0; e < ENCMAX; e++)
 	{

@@ -81,7 +81,7 @@ void creatureadvance();
 //#include "../sitemode/miscactions.h"
 void reloadparty(bool wasteful = false);
 //#include "../sitemode/sitemode.h"
-void mode_site(short loc);
+void mode_site(const short loc);
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 // for void cleangonesquads();
@@ -375,12 +375,14 @@ void surrenderToAuthorities(const int loc) {
 		}
 	}
 }
+
+short getCurrentSite();
+void setCurrentSite(const short i);
 void surrenderAndDie(const int loc) {
 	const string CONST_siege031 = " is slain.";
 	const string CONST_siege030 = "Everyone in the ";
 
 	extern int stat_dead;
-	extern short cursite;
 	extern Log gamelog;
 	extern MusicClass music;
 	extern vector<DeprecatedCreature *> pool;
@@ -408,10 +410,10 @@ void surrenderAndDie(const int loc) {
 	pressAnyKey();
 	createNewStoryMassacre(loc, killnumber);
 	//MUST SET cursite TO SATISFY endcheck() CODE
-	int tmp = cursite;
-	cursite = loc;
+	int tmp = getCurrentSite();
+	setCurrentSite(loc);
 	endcheck();
-	cursite = tmp;
+	setCurrentSite(tmp);
 }
 const string singleSpace = " ";
 void giveup()
@@ -875,11 +877,11 @@ void printMostSeriousCrime(const bool breakercount[LAWFLAGNUM]) {
 		}
 	}
 }
-void statebrokenlaws(DeprecatedCreature & cr)
+void statebrokenlaws(CreatureJustice cr, const int flag)
 {
 	const string CONST_siege077 = "REHABILITATION";
 	const string CONST_siege076 = "WANTED FOR ";
-	bool kidnapped = (cr.flag&CREATUREFLAG_KIDNAPPED);
+	bool kidnapped = (flag&CREATUREFLAG_KIDNAPPED);
 	bool criminal = false;
 	bool breakercount[LAWFLAGNUM];
 	for (int i = 0; i < LAWFLAGNUM; i++) {
@@ -2176,7 +2178,6 @@ void escapesiege(char won)
 	const string CONST_siege225 = "You have escaped!";
 	extern Log gamelog;
 	extern Deprecatedsquadst *activesquad;
-	extern short cursite;
 	extern MusicClass music;
 	extern int police_heat;
 	//TEXT IF DIDN'T WIN
@@ -2208,20 +2209,20 @@ void escapesiege(char won)
 		activesquad = NULL; //active squad cannot be disbanded in removesquadinfo,
 							//but we need to disband current squad as the people are going to be 'away'.
 							//GET RID OF DEAD, etc.
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) > 1)LocationsPool::getInstance().setRenting(cursite, RENTING_NOCONTROL);
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 1)LocationsPool::getInstance().setRenting(getCurrentSite(), RENTING_NOCONTROL);
 		baseEveryoneLeftAtHomelessShelter(homes);
-		deleteLocationLoot(cursite);
-		deleteLocationVehicles(cursite);
-		deleteCompoundWalls(cursite);
-		emptyCompoundStores(cursite);
-		deleteBusinessFront(cursite);
-		LocationsPool::getInstance().initLocation(cursite);
+		deleteLocationLoot(getCurrentSite());
+		deleteLocationVehicles(getCurrentSite());
+		deleteCompoundWalls(getCurrentSite());
+		emptyCompoundStores(getCurrentSite());
+		deleteBusinessFront(getCurrentSite());
+		LocationsPool::getInstance().initLocation(getCurrentSite());
 	}
 	//SET UP NEW SIEGE CHARACTERISTICS, INCLUDING TIMING
-	endLocationSiege(cursite);
-	if (won&&LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
+	endLocationSiege(getCurrentSite());
+	if (won&&LocationsPool::getInstance().getSiegeType(getCurrentSite()) == SIEGE_POLICE)
 	{
-		escalateSite(cursite);
+		escalateSite(getCurrentSite());
 		if (police_heat < 4) police_heat++;
 	}
 }
@@ -2237,7 +2238,6 @@ void conquertext()
 	const string CONST_siege230 = "the time being.  While they are regrouping, you might consider ";
 	const string CONST_siege229 = "The Conservative automatons have been driven back ÄÄ for ";
 	extern Log gamelog;
-	extern short cursite;
 	extern MusicClass music;
 	//GIVE INFO SCREEN
 	music.play(MUSIC_CONQUER);
@@ -2245,7 +2245,7 @@ void conquertext()
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
 	gamelog.newline();
-	if (LocationsPool::getInstance().getSiegeType(cursite) == SIEGE_POLICE)
+	if (LocationsPool::getInstance().getSiegeType(getCurrentSite()) == SIEGE_POLICE)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(3, 16, CONST_siege229, gamelog);
@@ -2289,17 +2289,17 @@ const string CONST_siege239 = "G - Surrender";
 const string CONST_siege238 = "F - Fight!";
 const string CONST_siege237 = "E - Equip";
 const string CONST_siege236 = "D - Escape";
+
 char sally_forth_aux(int loc)
 {
 	extern Log gamelog;
 	extern short mode;
-	extern short cursite;
 	extern char foughtthisround;
 	extern MusicClass music;
 	extern short party_status;
 	reloadparty();
 	siegest siege = getWholeSiege(loc);
-	cursite = loc;
+	setCurrentSite(loc);
 	emptyEncounter();
 	switch (siege.siegetype)
 	{

@@ -1016,10 +1016,7 @@ void MusicClass::play(int _musicmode)
 	}
 
 	const string singleSpace = " ";
-//	const string blankString = "";
 
-	//extern string closeParenthesis;
-	//extern string singleSpace;
 	void generate_name(char *first, char *last, char gender);
 	void firstname(char *str, char gender);
 	string lastname(bool archconservative);

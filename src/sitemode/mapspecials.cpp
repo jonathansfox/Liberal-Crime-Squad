@@ -291,16 +291,16 @@ Item* create_item(const std::string& inputXml)
 		it = new Money(inputXml);
 	return it;
 }
+short getCurrentSite();
 void makecreature(const int x, const short type);
 void special_bouncer_greet_squad()
 {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	extern short cursite;
 	// add a bouncer if there isn't one in the first slot
 	// IsaacG Change in behavior: adds a bouncer whether or not there is one in the first slot
-	if (!isThereASiteAlarm() && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) != RENTING_PERMANENT)
+	if (!isThereASiteAlarm() && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) != RENTING_PERMANENT)
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 		{
 			makecreature(0, CREATURE_CCS_VIGILANTE);
 			makecreature(1, CREATURE_CCS_VIGILANTE);
@@ -337,7 +337,6 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 
 	extern short sitetype;
 	extern Deprecatedsquadst *activesquad;
-	extern short cursite;
 	extern Log gamelog;
 	extern DeprecatedCreature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
@@ -390,9 +389,9 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 					}
 				}
 				// High security in gentleman's club? Gone
-				if (sitetype == SITE_BUSINESS_CIGARBAR && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+				if (sitetype == SITE_BUSINESS_CIGARBAR && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 					if (rejected > REJECTED_GUESTLIST)rejected = REJECTED_GUESTLIST;
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS && LocationsPool::getInstance().getLocationType(cursite) != SITE_BUSINESS_BARANDGRILL)
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS && LocationsPool::getInstance().getLocationType(getCurrentSite()) != SITE_BUSINESS_BARANDGRILL)
 					rejected = REJECTED_CCS;
 			}
 		}
@@ -430,19 +429,18 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 }
 void special_bouncer_assess_squad()
 {
-	extern short cursite;
 	extern Log gamelog;
 	extern coordinatest loc_coord;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern DeprecatedCreature encounter[ENCMAX];
 
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_PERMANENT) return;
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_PERMANENT) return;
 	bool autoadmit = 0;
 	char sleepername[80];
 	emptyEncounter();
 	special_bouncer_greet_squad();
 	{
-		string name = getSleeperBouncerName(cursite);
+		string name = getSleeperBouncerName(getCurrentSite());
 		if (name.size()) {
 			autoadmit = 1;
 			strcpy(sleepername, name.data());
@@ -464,7 +462,7 @@ void special_bouncer_assess_squad()
 	}
 	else
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 			addstrAlt(CONST_mapspecials031, gamelog);
 		else
 			addstrAlt(CONST_mapspecials032, gamelog);
@@ -531,13 +529,12 @@ void special_lab_cosmetics_cagedanimals()
 }
 void special_readsign(int sign)
 {
-	extern short cursite;
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	switch (sign) //TODO: Log these?
 	{
 	case SPECIAL_SIGN_ONE:
-		switch (LocationsPool::getInstance().getLocationType(cursite))
+		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
 			mvaddstrAlt(16, 1, CONST_mapspecialsX03);
@@ -555,7 +552,7 @@ void special_readsign(int sign)
 		}
 		break;
 	case SPECIAL_SIGN_TWO:
-		switch (LocationsPool::getInstance().getLocationType(cursite))
+		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
 			mvaddstrAlt(16, 1, CONST_mapspecialsX04);
@@ -563,7 +560,7 @@ void special_readsign(int sign)
 		}
 		break;
 	case SPECIAL_SIGN_THREE:
-		switch (LocationsPool::getInstance().getLocationType(cursite))
+		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
 			mvaddstrAlt(16, 1, CONST_mapspecials044);
@@ -1077,7 +1074,6 @@ void special_intel_supercomputer()
 }
 void special_graffiti()
 {
-	extern short cursite;
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
@@ -1096,9 +1092,9 @@ void special_graffiti()
 	noticecheck(-1, DIFFICULTY_HARD);
 	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_GRAFFITI;
 	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~(SITEBLOCK_GRAFFITI_CCS | SITEBLOCK_GRAFFITI_OTHER);
-	if (!LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+	if (!LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 	{
-		LocationsPool::getInstance().eraseAndReplaceGraffiti(cursite, loc_coord.locx, loc_coord.locy, loc_coord.locz);
+		LocationsPool::getInstance().eraseAndReplaceGraffiti(getCurrentSite(), loc_coord.locx, loc_coord.locy, loc_coord.locz);
 	}
 	sitecrime++;
 	juiceActiveSquad(1, 50);
@@ -1307,7 +1303,6 @@ void special_house_photos()
 void special_armory()
 {
 	extern bool m249;
-	extern short cursite;
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
@@ -1333,7 +1328,7 @@ void special_armory()
 			pressAnyKey();
 			bool empty = true;
 			Item *it;
-			if (m249 == false && LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE)
+			if (m249 == false && LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_ARMYBASE)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1400,7 +1395,7 @@ void special_armory()
 				do
 				{
 					Armor* de;
-					if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE)
+					if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_ARMYBASE)
 						de = new Armor(getarmortype(tag_ARMOR_ARMYARMOR));
 					else
 						de = new Armor(getarmortype(tag_ARMOR_CIVILLIANARMOR));
@@ -1418,7 +1413,7 @@ void special_armory()
 				gamelog.newline();
 				pressAnyKey();
 				int numleft = LCSrandom(8) + 2;
-				if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE) {
+				if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_ARMYBASE) {
 					fillEncounter(CREATURE_SOLDIER, numleft);
 				}
 				else {
@@ -1441,7 +1436,7 @@ void special_armory()
 				gamelog.newline();
 				pressAnyKey();
 				int numleft = LCSrandom(4) + 2;
-				if (LocationsPool::getInstance().getLocationType(cursite) == SITE_GOVERNMENT_ARMYBASE) {
+				if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_GOVERNMENT_ARMYBASE) {
 					fillEncounter(CREATURE_SOLDIER, numleft);
 				}
 				else {
@@ -1608,11 +1603,10 @@ void special_display_case()
 }
 void spawn_security()
 {
-	extern short cursite;
 	// add a bouncer if there isn't one in the first slot
 	if (!isThereASiteAlarm() && !getEncounterNameAndAlignment()[0].exists)
 	{
-		switch (LocationsPool::getInstance().getLocationType(cursite))
+		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
 		case SITE_CORPORATE_HEADQUARTERS:
@@ -1652,7 +1646,7 @@ void spawn_security()
 		case SITE_BUSINESS_BARANDGRILL:
 		case SITE_RESIDENTIAL_BOMBSHELTER:
 		case SITE_OUTDOOR_BUNKER:
-			if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+			if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 			{
 				makecreature(0, CREATURE_CCS_VIGILANTE);
 				makecreature(1, CREATURE_CCS_VIGILANTE);
@@ -1662,7 +1656,6 @@ void spawn_security()
 }
 void special_security(bool metaldetect)
 {
-	extern short cursite;
 	extern short sitetype;
 	extern Log gamelog;
 	extern coordinatest loc_coord;
@@ -1672,8 +1665,8 @@ void special_security(bool metaldetect)
 	emptyEncounter();
 	spawn_security();
 	{
-		autoadmit = doWeHaveASleeperHere(cursite);
-		string name = getSleeperSecurityName(cursite, encounter[0].type);
+		autoadmit = doWeHaveASleeperHere(getCurrentSite());
+		string name = getSleeperSecurityName(getCurrentSite(), encounter[0].type);
 		if (name.size()) {
 			autoadmit = 2;
 			strcpy(encounter[0].name, name.data());
@@ -1771,7 +1764,6 @@ void special_bank_vault()
 {
 	extern Deprecatednewsstoryst *sitestory;
 	extern Deprecatedsquadst *activesquad;
-	extern short cursite;
 	extern int sitecrime;
 	extern Log gamelog;
 	extern coordinatest loc_coord;
@@ -1787,7 +1779,7 @@ void special_bank_vault()
 	gamelog.newline();
 	pressAnyKey();
 	{
-		string sleeperBanker = getSleeperBankerName(cursite);
+		string sleeperBanker = getSleeperBankerName(getCurrentSite());
 		if (sleeperBanker.size()) {
 			clearmessagearea();
 			mvaddstrAlt(16, 1, string_sleeper, gamelog);
@@ -1883,7 +1875,7 @@ void special_bank_vault()
 					}
 					if (!canbreakin)
 					{
-						string sleeperBankRobber = haveSleeperBankerCrackSafe(cursite, activesquad->squad[0]->base);
+						string sleeperBankRobber = haveSleeperBankerCrackSafe(getCurrentSite(), activesquad->squad[0]->base);
 						if (sleeperBankRobber.size()) {
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1941,13 +1933,12 @@ void special_bank_vault()
 }
 void special_bank_teller()
 {
-	extern short cursite;
 	extern short sitealienate;
 	extern Log gamelog;
 	extern coordinatest loc_coord;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
-		LocationsPool::getInstance().isThereASiegeHere(cursite))
+		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -2056,11 +2047,10 @@ void special_ccs_boss()
 {
 	extern Log gamelog;
 	extern coordinatest loc_coord;
-	extern short cursite;
 	extern short sitealienate;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
-		LocationsPool::getInstance().isThereASiegeHere(cursite))
+		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

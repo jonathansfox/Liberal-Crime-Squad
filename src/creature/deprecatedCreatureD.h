@@ -17,4 +17,17 @@ struct Deprecatedsquadst
 		activity.type = ACTIVITY_NONE, id = -1, stance = SQUADSTANCE_STANDARD;
 	}
 	~Deprecatedsquadst() { delete_and_clear(loot); }
+	/* tells how many total members a squad has (including dead members) */
+	int squadsize() {
+		int squadsize(const Deprecatedsquadst *st);
+		return squadsize(this);
+	}
+	/* tells how many members a squad has who are alive */
+	int squadalive() {
+		int squadalive(const Deprecatedsquadst *st);
+		return squadalive(this);
+	}
 };
+
+int activesquadSize();
+int activesquadAlive();

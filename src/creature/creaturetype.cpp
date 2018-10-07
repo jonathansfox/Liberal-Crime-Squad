@@ -185,7 +185,6 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int we
 	cliptype(clip), number_clips(clips)
 {
 }
-//extern string NONE;
 
 map<string, int> creatureTypeTags = {
 	map<string, int>::value_type(tag_alignment, ENUM_tag_alignment),
@@ -727,11 +726,11 @@ void giveDefaultWeapon(DeprecatedCreature &cr, const short type) {
 }
 #include "locations/locationsPool.h"
 #include "sitemode/stealth.h"
+short getCurrentSite();
 void armBouncer(DeprecatedCreature &cr) {
 	extern short mode;
 	extern short sitetype;
-	extern short cursite;
-	if (mode == GAMEMODE_SITE && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+	if (mode == GAMEMODE_SITE && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 	{
 		strcpy(cr.name, CONST_creaturetypes041.c_str());
 		cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
@@ -907,12 +906,7 @@ void armCREATURE_COP(DeprecatedCreature &cr) {
 }
 bool isThereASiteAlarm();
 void armCREATURE_FIREFIGHTER(DeprecatedCreature &cr) {
-	extern short mode;
-	extern short sitetype;
-	extern short cursite;
-	extern char ccs_kills;
 
-	extern char endgamestate;
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	extern short lawList[LAWNUM];
@@ -936,28 +930,18 @@ void armCREATURE_FIREFIGHTER(DeprecatedCreature &cr) {
 }
 void armCREATURE_CCS_MOLOTOV(DeprecatedCreature &cr) {
 	extern short mode;
-	extern short sitetype;
-	extern short cursite;
-	extern char ccs_kills;
-	extern char endgamestate;
+
 	if (mode == GAMEMODE_SITE)
 		nameCCSMember(cr);
 }
 void armCREATURE_CCS_SNIPER(DeprecatedCreature &cr) {
 	extern short mode;
-	extern short sitetype;
-	extern short cursite;
-	extern char ccs_kills;
 
-	extern char endgamestate;
 	if (mode == GAMEMODE_SITE)
 		nameCCSMember(cr);
 }
 void armCREATURE_CCS_VIGILANTE(DeprecatedCreature &cr) {
 	extern short mode;
-	extern short sitetype;
-	extern short cursite;
-	extern char ccs_kills;
 
 	extern char endgamestate;
 	extern vector<WeaponType *> weapontype;
@@ -1015,11 +999,10 @@ void armCREATURE_CCS_VIGILANTE(DeprecatedCreature &cr) {
 void armCREATURE_CCS_ARCHCONSERVATIVE(DeprecatedCreature &cr) {
 	extern short mode;
 	extern short sitetype;
-	extern short cursite;
 	extern char ccs_kills;
 
 	extern char endgamestate;
-	strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(cursite) ? CONST_creaturetypes046.c_str() : (ccs_kills < 2 ? CONST_creaturetypesX01.c_str() : CONST_creaturetypesX02.c_str())));
+	strcpy(cr.name, (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) ? CONST_creaturetypes046.c_str() : (ccs_kills < 2 ? CONST_creaturetypesX01.c_str() : CONST_creaturetypesX02.c_str())));
 }
 void armCREATURE_PRISONGUARD(DeprecatedCreature &cr) {
 	extern vector<ClipType *> cliptype;
@@ -1060,12 +1043,11 @@ void armCREATURE_EDUCATOR(DeprecatedCreature &cr) {
 void armCREATURE_GENETIC(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
 	extern short mode;
 	extern short sitetype;
-	extern short cursite;
 	extern char ccs_kills;
 
 	extern char endgamestate;
 	extern short lawList[LAWNUM];
-	if (LocationsPool::getInstance().getLocationType(cursite) == SITE_CORPORATE_HOUSE)
+	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_CORPORATE_HOUSE)
 	{
 		strcpy(cr.name, CONST_creaturetypes047.c_str());
 		attcap[ATTRIBUTE_CHARISMA] = 10;
@@ -1119,7 +1101,6 @@ void armCREATURE_GANGMEMBER(DeprecatedCreature &cr) {
 	extern vector<WeaponType *> weapontype;
 	extern short mode;
 	extern short sitetype;
-	extern short cursite;
 	extern char ccs_kills;
 
 	extern char endgamestate;
@@ -1159,7 +1140,7 @@ void armCREATURE_GANGMEMBER(DeprecatedCreature &cr) {
 		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
 	cr.reload(false);
 	// We'll make the crack house a bit dicey
-	if (LocationsPool::getInstance().getLocationType(cursite) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
+	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
 	if (!LCSrandom(2))switch (LCSrandom(3))
 	{
 	case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
@@ -1405,8 +1386,10 @@ void makecreature(const int x, const short type) {
 /* rolls up a creature's stats and equipment */
 void makecreature(DeprecatedCreature &cr, short type)
 {
+	if (type == -1) {
+		return;
+	}
 	extern short sitealienate;
-	extern short cursite;
 	cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
 	cr.strip(NULL);                  //
 	cr.creatureinit();
@@ -1414,9 +1397,8 @@ void makecreature(DeprecatedCreature &cr, short type)
 	cr.squadid = -1;
 	cr.type = type;
 	cr.infiltration = 0;
-	cr.location = cursite;
-	cr.worklocation = cursite;
-	verifyworklocation(cr);
+	cr.location = getCurrentSite();
+	cr.worklocation = verifyworklocation(type, cr.location);
 
 	armCreature(cr, type);
 
@@ -1453,13 +1435,13 @@ void makecreature(DeprecatedCreature &cr, short type)
 			if (randomskill == SKILL_SHOTGUN) continue;
 			if (randomskill == SKILL_PISTOL) continue;
 		}
-		if (cr.skill_cap(randomskill, true) > cr.get_skill(randomskill))
+		if (cr.skill_cap(randomskill) > cr.get_skill(randomskill))
 		{
 			cr.set_skill(randomskill, cr.get_skill(randomskill) + 1);
 			randomskills--;
 			while (randomskills&&LCSrandom(2))
 			{
-				if (cr.skill_cap(randomskill, true) > cr.get_skill(randomskill) &&
+				if (cr.skill_cap(randomskill) > cr.get_skill(randomskill) &&
 					cr.get_skill(randomskill) < 4)
 				{
 					cr.set_skill(randomskill, cr.get_skill(randomskill) + 1);

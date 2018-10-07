@@ -1984,6 +1984,7 @@ void printlocation(long loc)
 		addstrAlt(CONST_locationsPool116);
 	}
 }
+void addStringYear();
 /* location and squad header */
 void locheader()
 {
@@ -2040,7 +2041,7 @@ void locheader()
 	addstrAlt(singleSpace);
 	addstrAlt(day);
 	addstrAlt(commaSpace);
-	addstrAlt(year);
+	addStringYear();
 	if (activesquad == NULL && selectedsiege == -1)
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -2075,8 +2076,6 @@ void locheader()
 	}
 }
 #include "../common/commonactions.h"
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
 #include "../common/musicClass.h"
 string closeParenthesis;
 string spaceParanthesisDollar;
@@ -2180,7 +2179,7 @@ void stopevil()
 		if (location[l]->parent == loc && location[l]->renting == RENTING_NOCONTROL && !location[l]->hidden)
 			temploc.push_back(l);
 	// Determine cost of tickets for travel
-	int ticketprice = 100 * squadsize(activesquad);
+	int ticketprice = 100 * activesquadSize();
 	while (true)
 	{
 		music.play(MUSIC_STOPEVIL);

@@ -268,11 +268,6 @@ int getarmortype(const string &idname);
 void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
-/* tells how many members a squad has who are alive */
-int squadalive(const Deprecatedsquadst *st);
-// for int squadsize(const squadst *);
 //#include "../combat/chaseCreature.h"
 Vehicle* getChaseVehicle(const DeprecatedCreature &c);
 DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c);
@@ -826,7 +821,7 @@ bool goodguyattack = false;
 	 if (a.special[SPECIALWOUND_RIBS] == 0) aroll -= LCSrandom(5);
  }
  /* adjusts attack damage based on armor, other factors */
- void damagemod(DeprecatedCreature &t, const char &damtype, int &damamount, int mod)
+ void damagemod(const DeprecatedCreature t, const char &damtype, int &damamount, int mod)
  {
 
 	 if (mod > 10) mod = 10; // Cap damage multiplier (every 5 points adds 1x damage)
@@ -1138,7 +1133,7 @@ bool goodguyattack = false;
 	 return false;
  }
 
- string showMultipleHits(DeprecatedCreature &a, const int bursthits, const attackst* attack_used) {
+ string showMultipleHits(DeprecatedCreature &a, const int bursthits, const attackst attack_used) {
 	 string str;
 	 // show multiple hits
 	 if (bursthits > 1 && a.is_armed()) // Only show if not melee
@@ -1149,14 +1144,14 @@ bool goodguyattack = false;
 			 str += CONST_fight137;
 		 }
 		 else {
-			 str += attack_used->hit_description;
+			 str += attack_used.hit_description;
 		 }
 		 str += burstHitString(bursthits);
 	 }
-	 else if (attack_used->always_describe_hit)
+	 else if (attack_used.always_describe_hit)
 	 {
 		 str += commaSpace;
-		 str += attack_used->hit_description;
+		 str += attack_used.hit_description;
 	 }
 	 return str;
  }
@@ -1282,26 +1277,26 @@ bool goodguyattack = false;
  }
 
 
- char consolidateDamageTypesNotCutOrBruised(const attackst* attack_used) {
+ char consolidateDamageTypesNotCutOrBruised(const attackst attack_used) {
 	 char damtype = 0;
-	 if (attack_used->burns) damtype |= WOUND_BURNED;
-	 if (attack_used->tears) damtype |= WOUND_TORN;
-	 if (attack_used->shoots) damtype |= WOUND_SHOT;
-	 if (attack_used->bleeding) damtype |= WOUND_BLEEDING;
+	 if (attack_used.burns) damtype |= WOUND_BURNED;
+	 if (attack_used.tears) damtype |= WOUND_TORN;
+	 if (attack_used.shoots) damtype |= WOUND_SHOT;
+	 if (attack_used.bleeding) damtype |= WOUND_BLEEDING;
 	 return damtype;
  }
 
- char consolidateDamageTypes(const attackst* attack_used) {
+ char consolidateDamageTypes(const attackst attack_used) {
 	 char damtype = 0;
-	 if (attack_used->bruises) damtype |= WOUND_BRUISED;
-	 if (attack_used->cuts) damtype |= WOUND_CUT;
+	 if (attack_used.bruises) damtype |= WOUND_BRUISED;
+	 if (attack_used.cuts) damtype |= WOUND_CUT;
 	 damtype |= consolidateDamageTypesNotCutOrBruised(attack_used);
 	 return damtype;
  }
 
  void setSiteAlarmOne();
  string howGracefulAttack(int handToHand);
- string initiateCombat(const DeprecatedCreature a, const bool sneak_attack, const attackst* attack_used) {
+ string initiateCombat(const DeprecatedCreature a, const bool sneak_attack, const attackst attack_used) {
 
 
 	 string str;
@@ -1331,7 +1326,7 @@ bool goodguyattack = false;
 			 str += CONST_fight131;
 		 }
 		 else {
-			 str += attack_used->attack_description;
+			 str += attack_used.attack_description;
 			 setSiteAlarmOne();
 		 }
 	 }
@@ -1390,13 +1385,13 @@ bool goodguyattack = false;
 
  class AttackInfliction {
  public:
-	 AttackInfliction(const bool, const int, const int, const attackst*);
+	 AttackInfliction(const bool, const int, const int, const attackst);
 	 const bool sneak_attack;
 	 const int aroll;
 	 const int droll;
-	 const attackst* attack_used;
+	 const attackst attack_used;
  };
- AttackInfliction::AttackInfliction(const bool _sneak_attack, const int _aroll, const int _droll, const attackst* _attack_used) : sneak_attack(_sneak_attack), aroll(_aroll < 0 ? 0 : _aroll),
+ AttackInfliction::AttackInfliction(const bool _sneak_attack, const int _aroll, const int _droll, const attackst _attack_used) : sneak_attack(_sneak_attack), aroll(_aroll < 0 ? 0 : _aroll),
 	 droll(_droll < 0 ? 0 : _droll),
 	 attack_used(_attack_used) {
 
@@ -1419,6 +1414,7 @@ bool goodguyattack = false;
 
 
  }
+short  getCurrentSite();
  void inflictNonZeroDamage(AttackInfliction attackI,
 	 DeprecatedCreature &a,
 	 const string inputStr,
@@ -1426,14 +1422,6 @@ bool goodguyattack = false;
 	 const int damtype,
 	 DeprecatedCreature &t)
  {
-	 const int damagearmor = attackS.damagearmor;
-	 const int severtype = attackS.severtype;
-	 const int totalDamage = attackS.damamount;
-	 const int w = attackS.hit_location;
-	 const bool sneak_attack = attackI.sneak_attack;
-	 const attackst* attack_used = attackI.attack_used;
-
-	 // TODO not all these externs are necessary
 	 extern short mode;
 	 extern int stat_dead;
 	 extern int stat_kills;
@@ -1443,39 +1431,37 @@ bool goodguyattack = false;
 	 extern Deprecatednewsstoryst *sitestory;
 
 	 extern int sitecrime;
-	 extern short cursite;
 	 extern coordinatest loc_coord;
-	 extern short sitealarmtimer;
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 extern short lawList[LAWNUM];
 
 	 // These two variables are used and changed within this function, but are never used again by the function that calls this one
 	 string str = inputStr;
-	 int damamount = totalDamage;
+	 int damamount = attackS.damamount;
 
-	 DeprecatedCreature *target = takeBulletForLeader(t, damamount, w);
+	 DeprecatedCreature *target = takeBulletForLeader(t, damamount, attackS.hit_location);
 	 if (!target) target = &t;//If nobody jumps in front of the attack,
-	 target->wound[w] |= damtype;
-	 int severamount = bodypartSeverAmount(w);
-	 if (severtype != -1 && damamount >= severamount)
-		 target->wound[w] |= (char)severtype;
-	 if (w != BODYPART_HEAD && w != BODYPART_BODY && target->blood - damamount <= 0 &&
+	 target->wound[attackS.hit_location] |= damtype;
+	 int severamount = bodypartSeverAmount(attackS.hit_location);
+	 if (attackS.severtype != -1 && damamount >= severamount)
+		 target->wound[attackS.hit_location] |= (char)attackS.severtype;
+	 if (attackS.hit_location != BODYPART_HEAD && attackS.hit_location != BODYPART_BODY && target->blood - damamount <= 0 &&
 		 target->blood > 0)
 	 {
 		 do
 		 {
-			 if (LCSrandom(100) < attack_used->no_damage_reduction_for_limbs_chance)
+			 if (LCSrandom(100) < attackI.attack_used.no_damage_reduction_for_limbs_chance)
 				 break;
 			 else damamount >>= 1;
 		 } while (target->blood - damamount <= 0);
 	 }
-	 if (damagearmor) armordamage(target->get_armor(), w, damamount); {
+	 if (attackS.damagearmor) armordamage(target->get_armor(), attackS.hit_location, damamount); {
 		 target->blood -= damamount;
 	 }
 	 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_BLOODY;
 
-	 string hit_punctuation = attack_used->hit_punctuation;
-	 string dismembered = dismemberingWound(w, target->wound[w]);
+	 string hit_punctuation = attackI.attack_used.hit_punctuation;
+	 string dismembered = dismemberingWound(attackS.hit_location, target->wound[attackS.hit_location]);
 	 if (len(dismembered)) {
 		 hit_punctuation = dismembered;
 	 }
@@ -1485,8 +1471,8 @@ bool goodguyattack = false;
 		 (target->wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
 		 target->blood <= 0)
 	 {
-		 if ((w == BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
-			 (w == BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)) {
+		 if ((attackS.hit_location == BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF) ||
+			 (attackS.hit_location == BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)) {
 			 bloodblast(&target->get_armor());
 		 }
 		 const char alreadydead = !target->alive; // This tests whether the person being fatally wounded was a corpse
@@ -1503,9 +1489,9 @@ bool goodguyattack = false;
 			 else if (target->enemy() && (t.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			 {
 				 stat_kills++;
-				 if (LocationsPool::getInstance().isThereASiegeHere(cursite)) LocationsPool::getInstance().addSiegeKill(cursite);
-				 if (LocationsPool::getInstance().isThereASiegeHere(cursite) && t.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(cursite);
-				 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+				 if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) LocationsPool::getInstance().addSiegeKill(getCurrentSite());
+				 if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && t.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(getCurrentSite());
+				 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				 {
 					 if (target->type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 					 ccs_siege_kills++;
@@ -1513,7 +1499,7 @@ bool goodguyattack = false;
 			 }
 			 if (target->squadid == -1 &&
 				 (target->animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2) &&
-				 !sneak_attack)
+				 !attackI.sneak_attack)
 			 {
 				 sitecrime += 10;
 				 sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -1538,7 +1524,7 @@ bool goodguyattack = false;
 	 }
 	 else
 	 {
-		 if (target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
+		 if (target->wound[attackS.hit_location] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
 		 if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		 else set_color_easy(RED_ON_BLACK_BRIGHT);
 		 //set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1551,10 +1537,10 @@ bool goodguyattack = false;
 		 pressAnyKey();
 		 //SPECIAL WOUNDS
 		 string damageDescription;
-		 if (!(target->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
+		 if (!(target->wound[attackS.hit_location] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
 			 !target->animalgloss)
 		 {
-			 damageDescription = printSpecialWounds(target, w, damamount, damtype);
+			 damageDescription = printSpecialWounds(target, attackS.hit_location, damamount, damtype);
 			 severloot(*target);
 		 }
 		 if (len(damageDescription) > 0) {
@@ -1599,13 +1585,13 @@ bool goodguyattack = false;
 
 	 return cardmg;
  }
- void defineIfDefined(const attackst* attack_used, int &random, int &fixed, int &severtype) {
-	 if (attack_used->critical.random_damage_defined)
-		 random = attack_used->critical.random_damage;
-	 if (attack_used->critical.fixed_damage_defined)
-		 fixed = attack_used->critical.fixed_damage;
-	 if (attack_used->critical.severtype_defined)
-		 severtype = attack_used->critical.severtype;
+ void defineIfDefined(const attackst attack_used, int &random, int &fixed, int &severtype) {
+	 if (attack_used.critical.random_damage_defined)
+		 random = attack_used.critical.random_damage;
+	 if (attack_used.critical.fixed_damage_defined)
+		 fixed = attack_used.critical.fixed_damage;
+	 if (attack_used.critical.severtype_defined)
+		 severtype = attack_used.critical.severtype;
  }
  string bouncesOffCar(const Vehicle* vehicle, const int vehicleHitLocation) {
 	 string str = CONST_fight139;
@@ -1615,18 +1601,39 @@ bool goodguyattack = false;
 
 	 return str;
  }
+ struct damageDetails  {
+	 const int mod;
+	 const int hit_location;
+	 const int extraarmor;
+	 const char armorpiercing;
+	 damageDetails(int _mod, int _hit_location, int _extraarmor, char _armorpiercing) : mod(_mod), hit_location(_hit_location), extraarmor(_extraarmor), armorpiercing(_armorpiercing) {};
+ };
+ void updateDamageExcludingCar(const DeprecatedCreature t, char &damtype, int &damamount, const damageDetails ddetails) {
+
+	 int mod3 = ddetails.mod;
+	 int armor = t.get_armor().get_armor(ddetails.hit_location);
+	 if (t.animalgloss == ANIMALGLOSS_TANK)
+	 {
+		 if (damtype != WOUND_BURNED) armor = 15;
+		 else armor = 10;
+	 }
+	 //if(t.get_armor().get_quality()>1)
+	 armor -= t.get_armor().get_quality() - 1;
+	 if (t.get_armor().is_damaged())
+		 armor -= 1;
+	 if (armor < 0) armor = 0; // Possible from second-rate clothes
+	 armor += ddetails.extraarmor; // Add vehicle armor 
+	 const int mod2 = armor + LCSrandom(armor + 1) - ddetails.armorpiercing;
+	 if (mod2 > 0) mod3 -= mod2 * 2;
+	 damagemod(t, damtype, damamount, mod3);
+ }
  void inflictDamage(const int numhits, DeprecatedCreature &a, DeprecatedCreature &t, const AttackInfliction attackI) {
-	 const int aroll = attackI.aroll;
-	 const int droll = attackI.droll;
-	 const bool sneak_attack = attackI.sneak_attack;
-	 const attackst* attack_used = attackI.attack_used;
 
 	 extern short mode;
 	 extern Log gamelog;
 
-	 int bursthits = numhits;
 
-	 int w = determineBodypartHit(t, aroll, droll, sneak_attack);
+	 int hit_location = determineBodypartHit(t, attackI.aroll, attackI.droll, attackI.sneak_attack);
 
 
 	 char damtype = 0;
@@ -1641,7 +1648,7 @@ bool goodguyattack = false;
 	 {
 		 strengthmin = 5;
 		 strengthmax = 10;
-		 for (; bursthits > 0; bursthits--) //Put into WEAPON_NONE -XML
+		 for (int i = numhits; i > 0; i--) //Put into WEAPON_NONE -XML
 		 {
 			 damamount += LCSrandom(5 + a.get_skill(SKILL_HANDTOHAND)) + 1 + a.get_skill(SKILL_HANDTOHAND);
 		 }
@@ -1653,7 +1660,7 @@ bool goodguyattack = false;
 				 damamount = LCSrandom(5000) + 5000;
 				 armorpiercing = 20;
 
-				 damtype |= consolidateDamageTypesNotCutOrBruised(attack_used);
+				 damtype |= consolidateDamageTypesNotCutOrBruised(attackI.attack_used);
 
 				 strengthmin = 0;
 				 strengthmax = 0;
@@ -1676,24 +1683,24 @@ bool goodguyattack = false;
 	 }
 	 else
 	 {
-		 damtype |= consolidateDamageTypes(attack_used);
-		 strengthmin = attack_used->strength_min;
-		 strengthmax = attack_used->strength_max;
-		 severtype = attack_used->severtype;
-		 int random = attack_used->random_damage;
-		 int fixed = attack_used->fixed_damage;
-		 if (sneak_attack) fixed += 100;
-		 if (bursthits >= attack_used->critical.hits_required
-			 && LCSrandom(100) < attack_used->critical.chance)
+		 damtype |= consolidateDamageTypes(attackI.attack_used);
+		 strengthmin = attackI.attack_used.strength_min;
+		 strengthmax = attackI.attack_used.strength_max;
+		 severtype = attackI.attack_used.severtype;
+		 int random = attackI.attack_used.random_damage;
+		 int fixed = attackI.attack_used.fixed_damage;
+		 if (attackI.sneak_attack) fixed += 100;
+		 if (numhits >= attackI.attack_used.critical.hits_required
+			 && LCSrandom(100) < attackI.attack_used.critical.chance)
 		 {
-			 defineIfDefined(attack_used, random, fixed, severtype);
+			 defineIfDefined(attackI.attack_used, random, fixed, severtype);
 		 }
-		 for (; bursthits > 0; bursthits--)
+		 for (int i = numhits; i > 0; i--)
 		 {
 			 damamount += LCSrandom(random) + fixed;
 		 }
-		 damagearmor = attack_used->damages_armor;
-		 armorpiercing = attack_used->armorpiercing;
+		 damagearmor = attackI.attack_used.damages_armor;
+		 armorpiercing = attackI.attack_used.armorpiercing;
 	 }
 	 // Coarse combat lethality reduction.
 	 //damamount/=2;
@@ -1710,7 +1717,7 @@ bool goodguyattack = false;
 		 armorpiercing += (strength - strengthmin) / 4;
 	 }
 	 //SKILL BONUS FOR GOOD ROLL
-	 mod += aroll - droll;
+	 mod += attackI.aroll - attackI.droll;
 	 //DO THE HEALTH MOD ON THE WOUND
 	 mod -= t.attribute_roll(ATTRIBUTE_HEALTH);
 	 //Health and poor accuracy will only avoid critical hits, not stop low-damage attacks
@@ -1720,28 +1727,13 @@ bool goodguyattack = false;
 	 Vehicle* vehicle = getChaseVehicle(t);
 	 if (mode == GAMEMODE_CHASECAR && vehicle != NULL)
 	 {
-		 vehicleHitLocation = vehicle->gethitlocation(w);
+		 vehicleHitLocation = vehicle->gethitlocation(hit_location);
 		 extraarmor = vehicle->armorbonus(vehicleHitLocation);
 		 // TODO damage vehicle itself
 	 }
 	 int cardmg = damamount;
 	 {
-		 int mod3 = mod;
-		 int armor = t.get_armor().get_armor(w);
-		 if (t.animalgloss == ANIMALGLOSS_TANK)
-		 {
-			 if (damtype != WOUND_BURNED) armor = 15;
-			 else armor = 10;
-		 }
-		 //if(t.get_armor().get_quality()>1)
-		 armor -= t.get_armor().get_quality() - 1;
-		 if (t.get_armor().is_damaged())
-			 armor -= 1;
-		 if (armor < 0) armor = 0; // Possible from second-rate clothes
-		 armor += extraarmor; // Add vehicle armor 
-		 const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
-		 if (mod2 > 0) mod3 -= mod2 * 2;
-		 damagemod(t, damtype, damamount, mod3);
+		 updateDamageExcludingCar(t, damtype, damamount, damageDetails(mod, hit_location, extraarmor, armorpiercing));
 	 }
 
 	 string str;
@@ -1753,7 +1745,7 @@ bool goodguyattack = false;
 				 armorpiercing, cardmg);
 		 }
 		 else {
-			 int armor = t.get_armor().get_armor(w);
+			 int armor = t.get_armor().get_armor(hit_location);
 			 //if(t.get_armor().get_quality()>1)
 			 armor -= t.get_armor().get_quality() - 1;
 			 if (t.get_armor().is_damaged())
@@ -1772,12 +1764,12 @@ bool goodguyattack = false;
 
 	 if (len(str) < 1) {
 		 str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
-		 if (sneak_attack) str += CONST_fight134;
+		 if (attackI.sneak_attack) str += CONST_fight134;
 		 else str += CONST_fight135;
 		 str += t.name;
 		 str += CONST_fight136;
-		 str += bodypartName((Bodyparts)w, (AnimalGlosses)t.animalgloss);
-		 str += showMultipleHits(a, bursthits, attack_used);
+		 str += bodypartName((Bodyparts)hit_location, (AnimalGlosses)t.animalgloss);
+		 str += showMultipleHits(a, numhits, attackI.attack_used);
 		 // Report vehicle protection effect
 		 if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
 		 {
@@ -1796,11 +1788,10 @@ bool goodguyattack = false;
 	 }
 	 if (damamount > 0)
 	 {
-		 AttackSeverity attackS(damamount, damagearmor, severtype, w);
 		 inflictNonZeroDamage(attackI,
 			 a,
 			 str,
-			 attackS,
+			 AttackSeverity(damamount, damagearmor, severtype, hit_location),
 			 damtype,
 			 t);
 
@@ -1819,24 +1810,23 @@ bool goodguyattack = false;
 	 }
  }
  void addLocationChange(int cursite, sitechangest change);
- void directlyUseWeapon(DeprecatedCreature &a, int &num_attacks, int &thrownweapons, int &bursthits, const attackst* attack_used) {
+ void directlyUseWeapon(DeprecatedCreature &a, int &num_attacks, int &thrownweapons, int &bursthits, const attackst attack_used) {
 
 	 extern short mode;
 
 	 extern Deprecatednewsstoryst *sitestory;
 
 	 extern int sitecrime;
-	 extern short cursite;
 	 extern coordinatest loc_coord;
 
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
-	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance_causes_debris)
+	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used.fire.chance_causes_debris)
 	 {// TODO - In a car chase, debris should make driving harder for one round, or require a drive skill check to avoid damage
 		 sitechangest change(loc_coord.locx, loc_coord.locy, loc_coord.locz, SITEBLOCK_DEBRIS);
-		 addLocationChange(cursite, change);//  location[cursite]->changes.push_back(change);
+		 addLocationChange(getCurrentSite(), change);//  location[cursite]->changes.push_back(change);
 	 }
-	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance)
+	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used.fire.chance)
 	 {// TODO - In a car chase, apply vehicle damage, with drive skill check to partially mitigate
 	  // Fire!
 		 if (!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_END) ||
@@ -1852,7 +1842,7 @@ bool goodguyattack = false;
 		 }
 	 }
 
-	 if (attack_used->thrown)
+	 if (attack_used.thrown)
 	 {
 		 thrownweapons = num_attacks;
 		 if (thrownweapons > a.count_weapons()) {
@@ -1861,7 +1851,7 @@ bool goodguyattack = false;
 		 }
 	 }
 	 else
-		 if (attack_used->uses_ammo) {
+		 if (attack_used.uses_ammo) {
 			 if (a.get_weapon().get_ammoamount() < num_attacks) {
 				 num_attacks = a.get_weapon().get_ammoamount();
 			 }
@@ -1869,7 +1859,7 @@ bool goodguyattack = false;
 		 }
 
  }
- string firstStrike(const DeprecatedCreature a, const DeprecatedCreature t, const char mistake, const bool sneak_attack, const attackst* attack_used) {
+ string firstStrike(const DeprecatedCreature a, const DeprecatedCreature t, const char mistake, const bool sneak_attack, const attackst attack_used) {
 	 string str = a.name;
 
 	 str += singleSpace;
@@ -1878,7 +1868,7 @@ bool goodguyattack = false;
 	 str += singleSpace;
 	 str += t.name;
 
-	 if (a.is_armed() && !attack_used->thrown)
+	 if (a.is_armed() && !attack_used.thrown)
 	 {
 		 str += CONST_fight132;
 		 str += a.get_weapon().get_name(1);
@@ -1902,36 +1892,6 @@ bool goodguyattack = false;
 	 }
 
  }
- int driverDodgeSkill(const DeprecatedCreature t) {
-
-	 DeprecatedCreature* driver = getChaseDriver(t);
-	 Vehicle* vehicle = getChaseVehicle(t);
-
-	 if (driver != NULL && vehicle != NULL)
-	 {  // without a vehicle or driver, you get a zero roll.
-		 return driver->skill_roll(PSEUDOSKILL_DODGEDRIVE);
-	 }
-	 else {
-		 return 0;
-	 }
- }
- void trainDodgeDriveAndAttack(DeprecatedCreature &a, DeprecatedCreature &t, const int droll, const int aroll, const int weapon_skill) {
-	 DeprecatedCreature* driver = getChaseDriver(t);
-
-	 if (driver != NULL)
-		 driver->train(SKILL_DRIVING, aroll / 2);
-	 else
-		 t.train(SKILL_DODGE, aroll * 2);
-	 a.train(weapon_skill, droll * 2 + 5);
- }
- void driverHealthModRoll(int &droll, const DeprecatedCreature t) {
-	 DeprecatedCreature* driver = getChaseDriver(t);
-
-	 if (driver != NULL)
-	 {// if there is no driver, we already rolled a zero, so don't worry about further penalties.
-		 healthmodroll(droll, *driver);
-	 }
- }
 
  bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee) {
 	 extern DeprecatedCreature encounter[ENCMAX];
@@ -1947,17 +1907,16 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 {
 	extern short mode;
 	extern Log gamelog;
-	extern short cursite;
 	extern short sitealarmtimer;
 
 	clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 
-	const attackst* attack_used = a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
+	const attackst attack_used = *a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
 		force_melee,
 		(force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
-	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || attack_used == NULL) {
+	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || &attack_used == NULL) {
 		// All exit points consolidated here, except the final one.
 		// These four conditions, in order, determine the attacker is not capable of attacking using the standard attack()
 		// It relies on lazy conditional OR, since each condition has side effects.
@@ -1965,9 +1924,9 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 
 	// for tanks, attack_used->ranged returns false, so we need to check if it's a tank
-	bool melee = !attack_used->ranged && !(!a.is_armed() && a.animalgloss && a.specialattack == ATTACK_CANNON);
+	bool melee = !attack_used.ranged && !(!a.is_armed() && a.animalgloss && a.specialattack == ATTACK_CANNON);
 
-	bool sneak_attack = a.is_armed() && (attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake) && (t.cantbluff < 1 && !isThereASiteAlarm());
+	bool sneak_attack = a.is_armed() && (attack_used.can_backstab && a.align == ALIGN_LIBERAL && !mistake) && (t.cantbluff < 1 && !isThereASiteAlarm());
 
 	if (sneak_attack)
 	{
@@ -1986,7 +1945,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 
 	int bonus = 0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 				   //SKILL EFFECTS
-	const int wsk = attack_used->skill;
+	const int wsk = attack_used.skill;
 
 	// Basic roll
 	int aroll = a.skill_roll(wsk);
@@ -1998,8 +1957,29 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	else
 	{
-		droll = driverDodgeSkill(t);
-		bonus += driverAttackBonus(a);
+
+		DeprecatedCreature* driver = getChaseDriver(t);
+		Vehicle* vehicle = getChaseVehicle(t);
+
+		if (driver != NULL && vehicle != NULL)
+		{  // without a vehicle or driver, you get a zero roll.
+			droll = driver->skill_roll(PSEUDOSKILL_DODGEDRIVE);
+		}
+		else {
+			droll = 0;
+		}
+
+		DeprecatedCreature* adriver = getChaseDriver(a);
+		Vehicle* avehicle = getChaseVehicle(a);
+
+		if (adriver != NULL && avehicle != NULL)
+		{
+			bonus += avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
+		}
+		else // shouldn't happen
+		{
+			bonus += -10; // You're on the wrong side of a drive-by shooting?!
+		}
 	}
 	if (sneak_attack)
 	{
@@ -2009,7 +1989,13 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	else
 	{
-		trainDodgeDriveAndAttack(a, t, droll, aroll, wsk);
+		DeprecatedCreature* driver = getChaseDriver(t);
+
+		if (driver != NULL)
+			driver->train(SKILL_DRIVING, aroll / 2);
+		else
+			t.train(SKILL_DODGE, aroll * 2);
+		a.train(wsk, droll * 2 + 5);
 	}
 	// Hostages interfere with attack
 	if (t.prisoner != NULL) bonus -= LCSrandom(10);
@@ -2026,7 +2012,12 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	{
 		// In a car chase, the driver is applying dodge rolls even for crippled people.
 		healthmodroll(aroll, a);
-		driverHealthModRoll(droll, t);
+		DeprecatedCreature* driver = getChaseDriver(t);
+
+		if (driver != NULL)
+		{// if there is no driver, we already rolled a zero, so don't worry about further penalties.
+			healthmodroll(droll, *driver);
+		}
 	}
 	else
 	{
@@ -2036,7 +2027,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	AttackInfliction attackI(sneak_attack, aroll, droll, attack_used);
 	// Weapon accuracy bonuses and penalties
-	bonus += attack_used->accuracy_bonus;
+	bonus += attack_used.accuracy_bonus;
 	//USE BULLETS
 	int bursthits = 0; // Tracks number of hits.
 	int thrownweapons = 0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
@@ -2049,7 +2040,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	else
 	{
-		int num_attacks = attack_used->number_attacks;
+		int num_attacks = attack_used.number_attacks;
 		if (sneak_attack) {
 			num_attacks = 1;
 			bursthits = 1;
@@ -2059,7 +2050,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 			for (int i = 0; i < num_attacks; i++)
 			{
 				// Each shot in a burst is increasingly less likely to hit
-				if (aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
+				if (aroll + bonus - i * attack_used.successive_attacks_difficulty > droll)
 					bursthits++;
 			}
 		}
@@ -2119,12 +2110,10 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	return true;
 }
 void singleSquadMemberAttack(const int p, const bool wasalarm) {
-	//extern char foughtthisround;
 	extern Deprecatedsquadst *activesquad;
 	extern Deprecatednewsstoryst *sitestory;
 
 	extern int sitecrime;
-	//extern short cursite;
 	extern DeprecatedCreature encounter[ENCMAX];
 	vector<int> super_enemies;
 	vector<int> dangerous_enemies;
@@ -2256,7 +2245,6 @@ void youattack()
 	extern Deprecatedsquadst *activesquad;
 	extern Deprecatednewsstoryst *sitestory;
 	extern int sitecrime;
-	extern short cursite;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	extern vector<DeprecatedCreature *> pool;
 	foughtthisround = 1;
@@ -2271,14 +2259,14 @@ void youattack()
 		}
 	}
 	//COVER FIRE
-	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
 			if (!pool[p]->alive) continue;
 			if (pool[p]->align != 1) continue;
 			if (pool[p]->squadid != -1) continue;
-			if (pool[p]->location != cursite) continue;
+			if (pool[p]->location != getCurrentSite()) continue;
 			// Juice check to engage in cover fire
 			// 10% chance for every 10 juice, starting at
 			// 10% chance for 0 juice -- caps out at 100%
@@ -2964,10 +2952,8 @@ string specialWoundPossibilityHead(
 void capturecreature(DeprecatedCreature &t)
 {
 	extern short sitetype;
-	extern short cursite;
 	t.activity.type = ACTIVITY_NONE;
 	t.drop_weapons_and_clips(NULL);
-	//t.strip(NULL);
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
 	t.give_armor(clothes, NULL);
 	freehostage(t, 2); // situation 2 = no message; this may want to be changed to 0 or 1
@@ -2979,7 +2965,7 @@ void capturecreature(DeprecatedCreature &t)
 	}
 	if (t.flag & CREATUREFLAG_JUSTESCAPED)
 	{
-		t.location = cursite;
+		t.location = getCurrentSite();
 		if (sitetype == SITE_GOVERNMENT_PRISON ||
 			sitetype == SITE_GOVERNMENT_COURTHOUSE)
 		{
@@ -2995,7 +2981,7 @@ void capturecreature(DeprecatedCreature &t)
 		}
 	}
 	else
-		t.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cursite);
+		t.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, getCurrentSite());
 	t.squadid = -1;
 }
 /* pushes people into the current squad (used in a siege) */
@@ -3004,7 +2990,7 @@ void autopromote(const int loc)
 	extern Deprecatedsquadst *activesquad;
 	extern vector<DeprecatedCreature *> pool;
 	if (!activesquad) return;
-	const int partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+	const int partysize = activesquadSize(), partyalive = activesquadAlive();
 	int libnum = 0;
 	if (partyalive == 6) return;
 	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)

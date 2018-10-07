@@ -185,17 +185,13 @@ void equipmentbaseassign();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 /* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
 // for short reviewmodeenum_to_sortingchoiceenum(short)
 //#include "../common/translateid.h"
 int getsquad(int);
 int getpoolcreature(int);
 //#include "../monthly/lcsmonthly.h"
 void fundreport(char &clearformess);
-void printname(DeprecatedCreature &cr) {
-	void printname(const int hiding, const int location, const int flag, const string name);
-	printname(cr.hiding, cr.location, cr.flag, cr.name);
-}
+void printname(const int hiding, const int location, const int flag, const string name);
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
@@ -271,7 +267,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 	int page = 0;
 	while (true)
 	{
-		int partysize = squadsize(cursquad);
+		int partysize = cursquad->squadsize();
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(0, 0);
@@ -299,11 +295,11 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 			{
 				skill += (int)temppool[p]->get_skill(sk);
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true)) bright = 1;
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk)) bright = 1;
 			}
 			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
-			printhealthstat(*temppool[p], y, 33, FALSE);
+			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, FALSE);
 			if (temppool[p]->squadid == cursquad->id)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -474,7 +470,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 	//FINALIZE NEW SQUADS
 	if (newsquad)
 	{
-		bool hasmembers = squadsize(cursquad) > 0;
+		bool hasmembers = cursquad->squadsize() > 0;
 		if (hasmembers)
 		{
 			mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
@@ -558,11 +554,11 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 		{
 			skill += (int)temppool[p]->get_skill(sk);
 			if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-				temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
+				temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = 1;
 		}
 		set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		mvaddstrAlt(y, 25, skill);
-		printhealthstat(*temppool[p], y, 33, TRUE);
+		printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
 		if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(y, 42);
@@ -745,9 +741,11 @@ void review_mode(const short mode)
 						set_color_easy(GREEN_ON_BLACK_BRIGHT);
 						addstrAlt(CONST_reviewmode065);
 					}
-					if (page == 0) printliberalstats(*temppool[p]);
-					else if (page == 1) printliberalskills(*temppool[p]);
-					else if (page == 2) printliberalcrimes(*temppool[p]);
+					if (page == 0) {
+						printliberalstats(*temppool[p]);
+					}
+					else if (page == 1) printliberalskills(temppool[p]->getCreatureJustice(), temppool[p]->getListOfCreatureSkills());
+					else if (page == 2) printliberalcrimes(temppool[p]->getCreatureJustice());
 					// Add removal of squad members member
 					moveAlt(22, 0);
 					if (temppool[p]->is_active_liberal() &&
@@ -1118,7 +1116,7 @@ void promoteliberals()
 			{
 				if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
 				{
-					printname(*pool[p2]);
+					printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->name);
 					moveAlt(y, 54);
 					for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 					{
@@ -1129,7 +1127,7 @@ void promoteliberals()
 							else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
 								addstrAlt(CONST_reviewmode114);
 							else
-								printname(*pool[p3]);
+								printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->name);
 							break;
 						}
 					}
@@ -1138,7 +1136,7 @@ void promoteliberals()
 			}
 			if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
 			moveAlt(y++, 4 + level[p]);
-			printname(*temppool[p]);
+			printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->name);
 		}
 		moveAlt(21, 0);
 		for (stringAndColor s : liberalListAndColor) {

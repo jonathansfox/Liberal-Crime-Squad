@@ -175,7 +175,7 @@ short sitealarmtimer;
 short postalarmtimer;
 short siteonfire;
 int sitecrime;
-short cursite;
+
 bool mapshowing = false;
 bool encounterwarnings = false;
 char foughtthisround = 0;
@@ -604,9 +604,34 @@ void formANewSquadIfThereAreNone() {
 		activesquad = squad.back();
 	}
 }
+
+short cur_site;
+
+short getCurrentSite() {
+	return cur_site;
+}
+void setCurrentSite(const short i) {
+	sitetype = LocationsPool::getInstance().getLocationType(i);
+	cur_site = i;
+}
+
+void resetSiteGlobals() {
+	sitealarmtimer = -1;
+	postalarmtimer = 0;
+	siteonfire = 0;
+	sitealienate = 0;
+	sitecrime = 0;
+
+}
+
+void resetCCSSiegeGlobals() {
+
+	ccs_siege_kills = 0;
+	ccs_boss_kills = 0;
+}
 void countHeroes(int &partysize, int &partyalive) {
 	extern vector<DeprecatedCreature *> pool;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == cursite && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == getCurrentSite() && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
 	{
 		partysize++;
 		if (pool[p]->alive) partyalive++;
@@ -631,7 +656,7 @@ void baseEveryoneLeftAtHomelessShelter(const int homes) {
 
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
-		if (pool[p]->location != cursite) continue;
+		if (pool[p]->location != getCurrentSite()) continue;
 		if (!pool[p]->alive)
 		{
 			delete_and_remove(pool, p);
@@ -695,30 +720,47 @@ bool isActiveSquadAnonymous() {
 }
 char shouldWeBailOnBase() {
 	char bail_on_base = 1;
-	if (cursite == activesquad->squad[0]->base)bail_on_base = 0;
+	if (getCurrentSite() == activesquad->squad[0]->base)bail_on_base = 0;
 	return bail_on_base;
 }
 void set_sitestory_type() {
 	void resolvesite();
-	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
-		if (LocationsPool::getInstance().isThisUnderAttack(cursite))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
+		if (LocationsPool::getInstance().isThisUnderAttack(getCurrentSite()))sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
 		else { sitestory->type = NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE; }
 	}
 	else
-		if (!LocationsPool::getInstance().isThereASiegeHere(cursite))
+		if (!LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 		{
 			sitestory->type = NEWSSTORY_SQUAD_KILLED_SITE;
 			resolvesite();
 		}
 }
 int activesquadSize() {
-	int squadsize(const Deprecatedsquadst *st);
-	return squadsize(activesquad);
+	return activesquad->squadsize();
 }
 int activesquadAlive() {
-	int squadalive(const Deprecatedsquadst *st);
-	return squadalive(activesquad);
+	return activesquad->squadalive();
+}
+void assembleActiveSquad() {
+	void assemblesquad(Deprecatedsquadst *cursquad);
+	extern Deprecatedsquadst *activesquad;
+	assemblesquad(activesquad);
+}
+void locateActiveSquad(const int loc) {
+
+	locatesquad(activesquad, loc);
+}
+int countactivesquadhostages() {
+	extern Deprecatedsquadst *activesquad;
+	int hostages = 0;
+
+	for (int p = 0; p < 6; p++)
+		if (activesquad->squad[p] != NULL)
+			if (activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+				hostages++;
+	return hostages;
 }
 int getactivesquadBase() {
 	int cbase = -1;
@@ -820,4 +862,3 @@ void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, co
 		}
 	}
 }
-

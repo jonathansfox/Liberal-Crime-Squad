@@ -46,8 +46,6 @@ const string tag_skill = "skill";
 #include "../vehicle/vehicle.h"
 //#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
-//#include "../common/commonactionsCreature.h"
-int squadsize(const Deprecatedsquadst *st);
 #include "../common/commondisplay.h"
 // for void printparty(void)
 #include "../cursesAlternative.h"
@@ -96,7 +94,7 @@ extern string spaceDashSpace;
 	 extern short party_status;
 	 extern Deprecatedsquadst *activesquad;
 	 party_status = -1;
-	 int partysize = squadsize(activesquad);
+	 int partysize = activesquadSize();
 	 if (partysize <= 1) return;
 	 while (true)
 	 {

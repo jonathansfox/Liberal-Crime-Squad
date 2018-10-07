@@ -109,7 +109,6 @@ const string tag_skill = "skill";
 #include "../sitemode/sitedisplay.h"
 #include "../log/log.h"
 #include "../common/commonactionsCreature.h"
-// for int squadsize(const squadst *st);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
@@ -119,11 +118,10 @@ const string tag_skill = "skill";
  vector<file_and_text_collection> stealth_text_file_collection = {
 	 customText(&blew_stealth_check, stealth + CONST_stealth053),
  };
- extern short cursite;
+ short getCurrentSite();
  extern short fieldskillrate;
 /* checks if your liberal activity is noticed */
 
-//extern short fieldskillrate;
 /* checks if your liberal activity is noticed */
  char disguisesite(long type);
 
@@ -164,13 +162,12 @@ const string tag_skill = "skill";
  /* checks if your liberal behavior/attack alienates anyone */
  char alienationcheck(char mistake)
  {
-	 extern short cursite;
 	 extern Log gamelog;
 	 extern short mode;
 
 	 extern short sitealienate;
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	 if (LocationsPool::getInstance().isThereASiegeHere(cursite))return 0;
+	 if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))return 0;
 	 char alienate = 0;
 
 	 int oldsitealienate = sitealienate;
@@ -382,20 +379,19 @@ const string tag_skill = "skill";
  /* checks if a creature's uniform is appropriate to the location */
  char hasdisguise(const DeprecatedCreature &cr)
  {
-	 extern short cursite;
 	 extern coordinatest loc_coord;
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 extern short lawList[LAWNUM];
 
 	 short type = -1;
-	 if (cursite >= 0)type = LocationsPool::getInstance().getLocationType(cursite);
+	 if (getCurrentSite() >= 0)type = LocationsPool::getInstance().getLocationType(getCurrentSite());
 	 char uniformed = 0;
 	 // Never uniformed in battle colors
 	 //if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
 	 //   return 0;
-	 if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	 if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	 {
-		 switch (LocationsPool::getInstance().getSiegeType(cursite))
+		 switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
 		 {
 		 case SIEGE_CCS:
 		 {
@@ -408,19 +404,19 @@ const string tag_skill = "skill";
 		 case SIEGE_POLICE:
 		 {
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
-				 LocationsPool::getInstance().getSiegeEscalationState(cursite) == 0)uniformed = 1;
+				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) == 0)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY &&
-				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR &&
-				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
-				 LocationsPool::getInstance().getSiegeEscalationState(cursite) > 0)uniformed = 1;
+				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
 			 break;
 		 }
 		 default:
-			 if (siegeDisguises.count(LocationsPool::getInstance().getSiegeType(cursite)) > 0) {
-				 if (siegeDisguises[LocationsPool::getInstance().getSiegeType(cursite)].count(cr.get_armor().get_itemtypename()) > 0) {
-					 uniformed = siegeDisguises[LocationsPool::getInstance().getSiegeType(cursite)][cr.get_armor().get_itemtypename()];
+			 if (siegeDisguises.count(LocationsPool::getInstance().getSiegeType(getCurrentSite())) > 0) {
+				 if (siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())].count(cr.get_armor().get_itemtypename()) > 0) {
+					 uniformed = siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())][cr.get_armor().get_itemtypename()];
 				 }
 			 }
 			 break;
@@ -445,7 +441,7 @@ const string tag_skill = "skill";
 			 {
 				 uniformed = 0;
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
-				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_GOVERNMENT_POLICESTATION:
@@ -458,7 +454,7 @@ const string tag_skill = "skill";
 					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
 
-				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_BUSINESS_BANK:
@@ -476,8 +472,8 @@ const string tag_skill = "skill";
 					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
 
-				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) ? 1 : 2);
-				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
+				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 				 {
 					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
 				 }
@@ -500,7 +496,7 @@ const string tag_skill = "skill";
 				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
-				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, cursite) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_GOVERNMENT_FIRESTATION:
@@ -510,7 +506,7 @@ const string tag_skill = "skill";
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
-				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, cursite))
+				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 				 {
 					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
 					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
@@ -541,7 +537,7 @@ const string tag_skill = "skill";
 			 uniformed = 0;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
-			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, cursite))
+			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			 {
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
 			 }
@@ -552,7 +548,7 @@ const string tag_skill = "skill";
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SERVANTUNIFORM)uniformed = 1;
-			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			 {
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
 				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
@@ -594,7 +590,7 @@ const string tag_skill = "skill";
 		 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 2;
 		 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 			 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 2;
-		 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite) &&
+		 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) &&
 			 cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 2;
 		 // Loop over adjacent locations to check if fire is anywhere in sight?
 		 // Or perhaps have a site fire alarm? - Nick
@@ -646,11 +642,9 @@ const string tag_skill = "skill";
  int get_disguise_difficulty(const int n);
  int get_encounter_time(const int n);
  vector<int> potentialEncounterNoticers();
- int activesquadSize();
  /* checks if conservatives see through your disguise */
  void disguisecheck(int timer)
  {
-	 extern short cursite;
 	 extern short fieldskillrate;
 	 extern Log gamelog;
 	 extern short sitetype;
@@ -690,7 +684,7 @@ const string tag_skill = "skill";
 	 // Nothing suspicious going on here
 	 if (sitealarmtimer == -1 && weapon < 1 && !forcecheck)
 	 {
-		 if (!disguisesite(LocationsPool::getInstance().getLocationType(cursite)) &&
+		 if (!disguisesite(LocationsPool::getInstance().getLocationType(getCurrentSite())) &&
 			 !(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED))return;
 	 }
 	 vector<int> noticer = potentialEncounterNoticers();

@@ -253,67 +253,71 @@ extern string singleSpace;
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
  /* monthly - sentence a liberal */
- void calculateSentence(DeprecatedCreature &g, const char lenient) {
+ int calculateSentence(CreatureJustice g, const char lenient) {
 	 extern short lawList[LAWNUM];
-	 if (!(g.sentence < 0))
+	 int new_sentence = g.sentence;
+	 if (!(new_sentence < 0))
 	 {
-		 g.sentence += (36 + LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
-		 g.sentence += (1 + LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
-		 //g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
+		 new_sentence += (36 + LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
+		 new_sentence += (1 + LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
+		 //new_sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
 		 //            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
-		 //g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
-		 g.sentence += (6 + LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
-		 g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
-		 g.sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
-		 g.sentence += (6 + LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
-		 g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
-		 g.sentence += (1 + LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
-		 g.sentence += 1 * g.crimes_suspected[LAWFLAG_DISTURBANCE];
-		 g.sentence += 1 * g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
-		 //g.sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
-		 g.sentence += 1 * g.crimes_suspected[LAWFLAG_HIREILLEGAL];
-		 g.sentence += (12 + LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
+		 //new_sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
+		 new_sentence += (6 + LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
+		 new_sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
+		 new_sentence += (1 + LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
+		 new_sentence += (6 + LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
+		 new_sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
+		 new_sentence += (1 + LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
+		 new_sentence += 1 * g.crimes_suspected[LAWFLAG_DISTURBANCE];
+		 new_sentence += 1 * g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
+		 //new_sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
+		 new_sentence += 1 * g.crimes_suspected[LAWFLAG_HIREILLEGAL];
+		 new_sentence += (12 + LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
 		 // How illegal is marijuana?
-		 if (lawList[LAW_DRUGS] == -2) g.sentence += (3 + LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
-		 else if (lawList[LAW_DRUGS] == -1) g.sentence += (3 + LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
-		 else if (lawList[LAW_DRUGS] == 0) g.sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
+		 if (lawList[LAW_DRUGS] == -2) new_sentence += (3 + LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
+		 else if (lawList[LAW_DRUGS] == -1) new_sentence += (3 + LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
+		 else if (lawList[LAW_DRUGS] == 0) new_sentence += (3 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
 																												   // else not illegal
-		 g.sentence += 1 * g.crimes_suspected[LAWFLAG_BREAKING];
-		 g.sentence += (60 + LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
-		 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
-		 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
-		 g.sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
-		 g.sentence += (3 + LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
-		 g.sentence += (1 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
-		 g.sentence += (6 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
-		 g.sentence += (4 + LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
-		 g.sentence += 1 * g.crimes_suspected[LAWFLAG_VANDALISM];
-		 g.sentence += (12 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
-		 g.sentence += (12 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
-		 g.sentence += (3 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
+		 new_sentence += 1 * g.crimes_suspected[LAWFLAG_BREAKING];
+		 new_sentence += (60 + LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
+		 new_sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
+		 new_sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
+		 new_sentence += (30 + LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
+		 new_sentence += (3 + LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
+		 new_sentence += (1 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
+		 new_sentence += (6 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
+		 new_sentence += (4 + LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
+		 new_sentence += 1 * g.crimes_suspected[LAWFLAG_VANDALISM];
+		 new_sentence += (12 + LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
+		 new_sentence += (12 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
+		 new_sentence += (3 + LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
 	 }
 	 if (lawList[LAW_FLAGBURNING] == -2)
 	 {
-		 if (!LCSrandom(2)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
-		 else if (g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence = -1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+		 if (!LCSrandom(2)) new_sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
+		 else if (g.crimes_suspected[LAWFLAG_BURNFLAG])new_sentence = -1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
 	 }
-	 else if (lawList[LAW_FLAGBURNING] == -1) g.sentence += 36 * g.crimes_suspected[LAWFLAG_BURNFLAG];
-	 else if (lawList[LAW_FLAGBURNING] == 0) g.sentence += 1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+	 else if (lawList[LAW_FLAGBURNING] == -1) new_sentence += 36 * g.crimes_suspected[LAWFLAG_BURNFLAG];
+	 else if (lawList[LAW_FLAGBURNING] == 0) new_sentence += 1 * g.crimes_suspected[LAWFLAG_BURNFLAG];
 	 if ((LCSrandom(4) - g.crimes_suspected[LAWFLAG_MURDER]) > 0)
 	 {
-		 if (!(g.sentence < 0)) g.sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
+		 if (!(new_sentence < 0)) new_sentence += (120 + LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
 	 }
 	 else
 	 {
-		 if (g.sentence < 0) g.sentence -= -1 * g.crimes_suspected[LAWFLAG_MURDER];
+		 if (new_sentence < 0) new_sentence -= -1 * g.crimes_suspected[LAWFLAG_MURDER];
 		 else if (g.crimes_suspected[LAWFLAG_MURDER])
-			 g.sentence = -1 * g.crimes_suspected[LAWFLAG_MURDER];
+			 new_sentence = -1 * g.crimes_suspected[LAWFLAG_MURDER];
 	 }
-	 if (g.sentence < 0) g.sentence -= 1 * g.crimes_suspected[LAWFLAG_TREASON];
-	 else if (g.crimes_suspected[LAWFLAG_TREASON]) g.sentence = -1 * g.crimes_suspected[LAWFLAG_TREASON];
-	 if (lenient&&g.sentence != -1) g.sentence /= 2;
-	 if (lenient&&g.sentence == -1) g.sentence = 240 + LCSrandom(120);
+	 if (new_sentence < 0) new_sentence -= 1 * g.crimes_suspected[LAWFLAG_TREASON];
+	 else if (g.crimes_suspected[LAWFLAG_TREASON]) new_sentence = -1 * g.crimes_suspected[LAWFLAG_TREASON];
+	 if (lenient&&new_sentence != -1) new_sentence /= 2;
+	 if (lenient&&new_sentence == -1) new_sentence = 240 + LCSrandom(120);
+
+	 return new_sentence;
  }
+
 // string counts_of;
 // string execution_in_three_months;
  /* monthly - sentence a liberal */
@@ -346,7 +350,7 @@ extern string singleSpace;
 	 //CALC TIME
 	 if (!g.deathpenalty)
 	 {
-		 calculateSentence(g, lenient);
+		 g.sentence = calculateSentence(g.getCreatureJustice(), lenient);
 	 }
 	 //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
 	 else if (g.deathpenalty&&lenient) g.deathpenalty = 0, g.sentence = -1;
@@ -483,8 +487,9 @@ extern string singleSpace;
 	 if (typenum == 0) return singleDot;
 	 else return blankString;
  }
- void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
- void printSingleCrime(DeprecatedCreature &g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts) {
+ void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
+ void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts) {
+
 	 extern Log gamelog;
 	 if (mention_multiple_counts && g.crimes_suspected[law_flag] > 1)
 	 {
@@ -559,7 +564,7 @@ extern string singleSpace;
 	 map<Lawflags, bool>::value_type(LAWFLAG_PUBLICNUDITY,  true),
 	 map<Lawflags, bool>::value_type(LAWFLAG_LOITERING, false),
  };
- int listAllCrimes(DeprecatedCreature &g) {
+ int listAllCrimes(CreatureJustice g) {
 
 	 extern Log gamelog;
 	 extern short lawList[LAWNUM];
@@ -642,13 +647,13 @@ extern string singleSpace;
 	 ACE_ATTORNEY = 3,
 	 SLEEPER_ATTORNEY = 4
  };
- void acquittal(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const LegalDefense defense, const bool sleeperjudge) {
+ int get_sentence(CreatureJustice g, DeprecatedCreature &sleeperLawyer, const LegalDefense defense, const bool sleeperjudge) {
 	 extern Log gamelog;
-	 DeprecatedCreature *sleeperlawyer = &sleeperLawyer;
 	 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice138, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
+	 int new_sentence = g.sentence;
 	 if (g.sentence == 0)
 	 {
 		 set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -662,22 +667,17 @@ extern string singleSpace;
 		 addstrAlt(CONST_justice140, gamelog);
 		 if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 		 {
-			 g.sentence--;
+			 new_sentence--;
 			 addstrAlt(CONST_justice141, gamelog);
 		 }
 		 else addstrAlt(singleDot, gamelog);
 		 if (g.deathpenalty)
 		 {
-			 g.sentence = 3;
+			 new_sentence = 3;
 			 mvaddstrAlt(7, 1, execution_in_three_months, gamelog);
 		 }
 	 }
-	 gamelog.nextMessage();
-	 // Juice sleeper
-	 if (defense == SLEEPER_ATTORNEY) addjuice(*sleeperlawyer, 10, 100);
-	 // Juice for self-defense
-	 if (defense == SELF_REPRESENT) addjuice(g, 10, 100);
-	 pressAnyKey();
+	 return new_sentence;
  }
  bool hung_jury(DeprecatedCreature &g, const bool sleeperjudge, const int scarefactor) {
 	 extern Log gamelog;
@@ -961,7 +961,14 @@ extern string singleSpace;
 	 //ACQUITTAL!
 	 else if (defensepower > jury)
 	 {
-		 acquittal(g, sleeperLawyer, defense, sleeperjudge);
+		 g.sentence = (g.getCreatureJustice(), sleeperLawyer, defense, sleeperjudge);
+
+		 gamelog.nextMessage();
+		 // Juice sleeper
+		 if (defense == SLEEPER_ATTORNEY) addjuice(*sleeperlawyer, 10, 100);
+		 // Juice for self-defense
+		 if (defense == SELF_REPRESENT) addjuice(g, 10, 100);
+		 pressAnyKey();
 	 }
 	 //LENIENCE
 	 else
@@ -1036,7 +1043,7 @@ extern string singleSpace;
 	 mvaddstrAlt(5, 1, CONST_justice039, gamelog);
 	 addstrAlt(g.propername, gamelog);
 	 addstrAlt(CONST_justice040, gamelog);
-	 int y = listAllCrimes(g);
+	 int y = listAllCrimes(g.getCreatureJustice());
 	 gamelog.newline();
 	 if (g.confessions)
 	 {

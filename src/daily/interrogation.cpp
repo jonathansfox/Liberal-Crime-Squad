@@ -292,7 +292,7 @@ void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
 	addstrAlt(cr->name);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(6, 40, CONST_interrogation045);
-	printhealthstat(*cr, 6, 48, 0);
+	printhealthstat(cr->getCreatureHealth(), 6, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(7, 40, CONST_interrogation047);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
@@ -306,7 +306,7 @@ void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
 	addstrAlt(a->name);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(15, 40, CONST_interrogation045);
-	printhealthstat(*a, 16, 48, 0);
+	printhealthstat(a->getCreatureHealth(), 16, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(17, 40, CONST_interrogation046);
 	addstrAlt(a->get_skill(SKILL_PSYCHOLOGY));

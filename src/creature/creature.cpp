@@ -232,10 +232,10 @@ DeprecatedCreature& DeprecatedCreature::operator=(const DeprecatedCreature& rhs)
 	}
 	return *this;
 }
-int DeprecatedCreature::get_disguise_difficulty() {
+int DeprecatedCreature::get_disguise_difficulty() const {
 	return seethroughdisguise;
 }
-int	DeprecatedCreature::get_stealth_difficulty() {
+int	DeprecatedCreature::get_stealth_difficulty() const {
 	return seethroughstealth;
 }
 void DeprecatedCreature::copy(const DeprecatedCreature& org)
@@ -593,7 +593,7 @@ DeprecatedCreature::DeprecatedCreature(const std::string& inputXml)
 			crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
 	}
 }
-//extern string closeParenthesis;
+
 string DeprecatedCreature::showXml() const
 {
 	CMarkup xml;
@@ -825,7 +825,7 @@ int DeprecatedCreature::get_attribute(int attribute, bool usejuice) const
 	if (ret > MAXATTRIBUTE) ret = MAXATTRIBUTE;
 	return ret;
 }
-int DeprecatedCreature::roll_check(int skill)
+int roll_check(int skill)
 {
 	// This die rolling system (and the associated difficulty
 	// ratings) is adapted from EABA, which uses a system of
@@ -1050,6 +1050,7 @@ int DeprecatedCreature::skill_roll(int skill) const
 	}
 	return return_value;
 }
+
 bool DeprecatedCreature::skill_check(int skill, int difficulty) const
 {
 	extern string closeParenthesis;
@@ -1074,14 +1075,16 @@ void DeprecatedCreature::train(int trainedskill, int experience, int upto)
 	// Do we allow animals to gain skills? Right now, yes
 	//if(animalgloss==ANIMALGLOSS_ANIMAL)return;
 	// Don't give experience if already maxed out or requested to give none
-	if (skill_cap(trainedskill, true) <= skills[trainedskill] || upto <= skills[trainedskill] || experience == 0) { return; }
+	if (skill_cap(trainedskill) <= skills[trainedskill] || upto <= skills[trainedskill] || experience == 0) { return; }
 	else {
+		// This is the only instance in the entire solution to use skill_cap(.., false)
+		// thereby replaced with an inline copy paste get_attribute(.., false)
 		// Skill gain scaled by ability in the area
-		skill_experience[trainedskill] += max(1, static_cast<int>(experience * skill_cap(trainedskill, false) / 6.0));
+		skill_experience[trainedskill] += max(1, static_cast<int>(experience * get_attribute(get_associated_attribute((CreatureSkill)trainedskill), false) / 6.0));
 		int abovenextlevel;
 		// only allow gaining experience on the new level if it doesn't put us over a level limit
 		if (skills[trainedskill] >= (upto - 1) ||
-			skills[trainedskill] >= (skill_cap(trainedskill, true) - 1))
+			skills[trainedskill] >= (skill_cap(trainedskill) - 1))
 		{
 			abovenextlevel = 0;
 		}
@@ -1097,12 +1100,12 @@ void DeprecatedCreature::skill_up()
 	for (int s = 0; s < SKILLNUM; s++)
 	{
 		while (skill_experience[s] >= 100 + 10 * skills[s] &&
-			skills[s] < skill_cap(s, true))
+			skills[s] < skill_cap(s))
 		{
 			skill_experience[s] -= 100 + 10 * skills[s];
 			skills[s]++;
 		}
-		if (skills[s] == skill_cap(s, true))
+		if (skills[s] == skill_cap(s))
 			skill_experience[s] = 0;
 	}
 }
@@ -1159,20 +1162,20 @@ bool DeprecatedCreature::talkreceptive() const
 {
 	return !enemy() && istalkreceptive;
 }
-/* are the characters close enough in age to date? */
-bool DeprecatedCreature::can_date(const DeprecatedCreature &a) const
-{
+
+bool DeprecatedCreature::can_date(const int aage, const char aanimalgloss) const {
+
 	// Make age not matter for dating or prostitution
 	extern bool ZEROMORAL;
 	if (!ZEROMORAL) {
 		// Assume age appropriate for animals, tanks, etc.
 		// (use other restrictions for these, like humorous rejections)
-		if (animalgloss || a.animalgloss) return true;
+		if (animalgloss || aanimalgloss) return true;
 		// Prohibit anyone 10 or younger
-		if (age < 11 || a.age < 11) return false;
+		if (age < 11 || aage < 11) return false;
 		// Allow 11-15 year olds only if the other partner is
 		// within 4 years age difference
-		if (age < 16 || a.age < 16) return abs(age - a.age) < 5;
+		if (age < 16 || aage < 16) return abs(age - aage) < 5;
 	}
 	// Allow anyone 16 or older
 	return true;
@@ -1575,57 +1578,63 @@ int get_XML_value(const std::string& inputXml) {
 	return value;
 }
 // Add an age estimate to a person's name
-void add_age(DeprecatedCreature& person)
-{
-	extern string closeParenthesis;
+string get_age_string(const CreatureBio bio, const char animalgloss) {
+
 	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
-	if (person.animalgloss != ANIMALGLOSS_NONE)
+	if (animalgloss != ANIMALGLOSS_NONE)
 	{
-		addstrAlt(CONST_creature137);
-		return;
+		return (CONST_creature137);
 	}
-	// For humans, estimate their age and gender
-	addstrAlt(CONST_creature138);
-	// Almost precise estimates of child and teen ages
-	if (person.age < 20)
-	{
-		// Inaccuracy in estimating age should be the same every
-		// time a character is queried. I'm using the day of the
-		// month the character was born on to determine this.
-		addstrAlt(person.age + person.birthday_day % 3 - 1);
-		addstrAlt(CONST_creature151);
-	}
-	// More rough estimates of everyone else
-	else
-	{
-		if (person.age < 30)
-			addstrAlt(CONST_creature140);
-		else if (person.age < 40)
-			addstrAlt(CONST_creature141);
-		else if (person.age < 50)
-			addstrAlt(CONST_creature142);
-		else if (person.age < 60)
-			addstrAlt(CONST_creature143);
-		else if (person.age < 70)
-			addstrAlt(CONST_creature144);
-		else if (person.age < 80)
-			addstrAlt(CONST_creature145);
-		else if (person.age < 90)
-			addstrAlt(CONST_creature146);
+	else {
+
+		extern string closeParenthesis;
+
+		
+		// For humans, estimate their age and gender
+		string str = (CONST_creature138);
+		// Almost precise estimates of child and teen ages
+		if (bio.age < 20)
+		{
+			// Inaccuracy in estimating age should be the same every
+			// time a character is queried. I'm using the day of the
+			// month the character was born on to determine this.
+			str += (bio.age + bio.birthday_day % 3 - 1);
+			str += (CONST_creature151);
+		}
+		// More rough estimates of everyone else
 		else
-			addstrAlt(CONST_creature147);
+		{
+			if (bio.age < 30)
+				str += (CONST_creature140);
+			else if (bio.age < 40)
+				str += (CONST_creature141);
+			else if (bio.age < 50)
+				str += (CONST_creature142);
+			else if (bio.age < 60)
+				str += (CONST_creature143);
+			else if (bio.age < 70)
+				str += (CONST_creature144);
+			else if (bio.age < 80)
+				str += (CONST_creature145);
+			else if (bio.age < 90)
+				str += (CONST_creature146);
+			else
+				str += (CONST_creature147);
+		}
+		// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
+		if (bio.gender_liberal == GENDER_MALE)
+			str += (CONST_creature148);
+		else if (bio.gender_liberal == GENDER_FEMALE)
+			str += (CONST_creature149);
+		else
+			str += (CONST_creature150);
+		// Note if there's some conflict with Conservative society's perceptions
+		if (bio.gender_liberal != bio.gender_conservative && bio.gender_liberal != GENDER_NEUTRAL)
+			str += (CONST_creature151);
+		str += (closeParenthesis);
+
+		return str;
 	}
-	// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
-	if (person.gender_liberal == GENDER_MALE)
-		addstrAlt(CONST_creature148);
-	else if (person.gender_liberal == GENDER_FEMALE)
-		addstrAlt(CONST_creature149);
-	else
-		addstrAlt(CONST_creature150);
-	// Note if there's some conflict with Conservative society's perceptions
-	if (person.gender_liberal != person.gender_conservative && person.gender_liberal != GENDER_NEUTRAL)
-		addstrAlt(CONST_creature151);
-	addstrAlt(closeParenthesis);
 }
 struct fullName {
 	string first;

@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "cursesAlternative.h"
 using namespace std;
-//extern map<short, string>  helpTopics;
+
 //string_to_activity;
 extern map<short, string>  conservativeLegalArgument;
 //string_to_law;

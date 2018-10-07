@@ -1445,7 +1445,7 @@ void doActivityLearn(vector<DeprecatedCreature *> &students, char &clearformess)
 				if (effectiveness[i] < 1)
 					effectiveness[i] = 1;
 				students[s]->train(skill[i], effectiveness[i]);
-				if (students[s]->get_skill(skill[i]) < students[s]->skill_cap(skill[i], true))
+				if (students[s]->get_skill(skill[i]) < students[s]->skill_cap(skill[i]))
 					worthcontinuing = true;
 			}
 		if (!worthcontinuing)
@@ -1949,7 +1949,7 @@ void doActivityTeach(vector<DeprecatedCreature *> &teachers, char &clearformess)
 					//teacher's ability at teaching
 					if (pool[p]->get_skill(skillarray[i]) < teachers[t]->get_skill(skillarray[i]) - 1 &&
 						pool[p]->get_skill(skillarray[i]) < teachers[t]->get_skill(SKILL_TEACHING) + 2 &&
-						pool[p]->get_skill(skillarray[i]) < pool[p]->skill_cap(skillarray[i], true))
+						pool[p]->get_skill(skillarray[i]) < pool[p]->skill_cap(skillarray[i]))
 					{
 						students++;
 					}
@@ -1977,7 +1977,7 @@ void doActivityTeach(vector<DeprecatedCreature *> &teachers, char &clearformess)
 					//teacher's ability at teaching
 					if (pool[p]->get_skill(skillarray[i]) < teachers[t]->get_skill(skillarray[i]) - 1 &&
 						pool[p]->get_skill(skillarray[i]) < teachers[t]->get_skill(SKILL_TEACHING) + 2 &&
-						pool[p]->get_skill(skillarray[i]) < pool[p]->skill_cap(skillarray[i], true))
+						pool[p]->get_skill(skillarray[i]) < pool[p]->skill_cap(skillarray[i]))
 					{
 						// Teach based on teacher's skill in the topic plus skill in teaching, minus
 						// student's skill in the topic

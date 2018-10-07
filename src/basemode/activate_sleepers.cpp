@@ -205,8 +205,7 @@ void activate_sleepers()
 	extern short interface_pgup;
 	extern short interface_pgdn;
 	extern short activesortingchoice[SORTINGCHOICENUM];
-	vector<DeprecatedCreature *> temppool;
-	selectOnlySleepersThatCanWork(temppool);
+	vector<DeprecatedCreature *> temppool = selectOnlySleepersThatCanWork();
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS]);
 	int page = 0;

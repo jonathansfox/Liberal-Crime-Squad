@@ -19,7 +19,7 @@ private:
 	int attributes[ATTNUM];
 	int skills[SKILLNUM];
 	int skill_experience[SKILLNUM];
-	static int roll_check(int skill);
+	//static int roll_check(int skill);
 	int seethroughdisguise;
 	int seethroughstealth;
 	bool istalkreceptive;
@@ -27,7 +27,20 @@ private:
 	bool isreports_to_police;
 
 public:
-	NameAndAlignment getNameAndAlignment() { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(align, type, blood), name); }
+	const NameAndAlignment getNameAndAlignment() const { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(align, type, blood), name); }
+	const CreatureHealth getCreatureHealth()  const { return CreatureHealth(getNameAndAlignment(), animalgloss, wound, special); }
+	const CreatureJustice getCreatureJustice()  const { return CreatureJustice(propername, name, get_type_name(), deathpenalty, location, sentence, crimes_suspected, juice, align); }
+	const CreatureBio getCreatureBio() const { return CreatureBio(birthday_month, birthday_day, age, gender_conservative, gender_liberal); }
+	const CreatureInventory getCreatureInventory() const { return CreatureInventory(get_weapon_string(0), get_armor_string(true));  }
+	const CreatureCar getCreatureCar() const { return CreatureCar(pref_carid, carid, pref_is_driver, is_driver); }
+	const ListOfCreatureSkills getListOfCreatureSkills() const {
+		int skill_attribute[SKILLNUM];
+		for (int i = 0; i < SKILLNUM; i++) {
+			skill_attribute[i] = skill_cap(i);
+		}
+		return ListOfCreatureSkills(skills, skill_experience, skill_attribute);
+	};
+
 	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
 	deque<Weapon*> extra_throwing_weapons;
 	deque<Clip*> clips;
@@ -45,96 +58,66 @@ public:
 	void strip(vector<Item*>* lootpile);
 	ActivityST activity;
 
-	int get_disguise_difficulty();
-	int	get_stealth_difficulty();
-	void set_attribute(int attribute, int amount) { attributes[attribute] = MIN(amount, MAXATTRIBUTE); }
-	int get_true_attribute(int attribute) const;
-	int get_attribute(int attribute, bool use_juice) const;
-	void adjust_attribute(int attribute, int amount) { set_attribute(attribute, attributes[attribute] + amount); }
-	int attribute_roll(int attribute) const;
-	bool attribute_check(int attribute, int difficulty) const;
-	void set_skill(int skill, int amount) { skills[skill] = MIN(amount, MAXATTRIBUTE); }
-	int get_skill(int skill) const { return MIN(skills[skill], MAXATTRIBUTE); }
-	int skill_roll(int skill) const;
-	bool skill_check(int skill, int difficulty) const;
-	int get_weapon_skill() const;
-	char name[CREATURE_NAMELEN];
-	char propername[CREATURE_NAMELEN];
-	char gender_conservative;
-	char gender_liberal;
-	int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
-	int age;
-	int birthday_month;
-	int birthday_day;
-	bool exists;
-	int align;
-	bool alive;
-	void die();
-	int type;
-	std::string type_idname;
-	float infiltration;
-	char animalgloss;
-	int specialattack;
-	int clinic;
-	int dating;
-	int hiding;
-	int trainingtime;
-	int trainingsubject;
 	DeprecatedCreature* prisoner;
-	int sentence;
-	char confessions;
-	char deathpenalty;
-	int joindays;
-	int deathdays;
-	int id;
-	int hireid;
-	int meetings;
-	char forceinc;
-	void train(int trainedskill, int experience, int upto = MAXATTRIBUTE);
-	void skill_up();
-	int get_skill_ip(int skill) const { return skill_experience[skill]; }
-	std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after DeprecatedCreature)
-	bool enemy() const;
-	int stunned;
-	bool has_thrown_weapon;
-	bool is_armed() const { return weapon; }
-	bool is_naked() const { return !armor; }
-	bool will_do_ranged_attack(bool force_ranged, bool force_melee) const; //force_melee is likely unnecessary. -XML
-	bool can_reload() const;
-	bool will_reload(bool force_ranged, bool force_melee) const;
-	bool reload(bool wasteful);
-	bool ready_another_throwing_weapon();
-	int count_clips() const;
-	int count_weapons() const;
-	bool weapon_is_concealed() const { return is_armed() && get_armor().conceals_weaponsize(weapon->get_size()); }
-	string get_weapon_string(int subtype) const;
-	string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
-	int money;
-	int juice;
-	int income;
-	unsigned char wound[BODYPARTNUM];
-	int blood;
-	char special[SPECIALWOUNDNUM];
-	//int crimes_committed[LAWFLAGNUM];
-	int crimes_suspected[LAWFLAGNUM];
-	//int crimes_convicted[LAWFLAGNUM];
-	int heat;
-	int location;
-	int worklocation;
-	char cantbluff;
-	int base;
-	int carid;
-	char is_driver;
-	int pref_carid;
-	char pref_is_driver;
-	int flag;
-	void stop_hauling_me();
-	void creatureinit();
+
 	DeprecatedCreature() { creatureinit(); }
 	DeprecatedCreature(const DeprecatedCreature& org) { copy(org); }
 	DeprecatedCreature& operator=(const DeprecatedCreature& rhs);
 	~DeprecatedCreature();
 	explicit DeprecatedCreature(const std::string& inputXml);
+
+	/* are the characters close enough in age to date? */
+	bool can_date(const int aage, const char aanimalgloss) const;
+
+	bool exists;
+	bool alive;
+	bool enemy() const;
+
+	int align;
+	int type;
+	int blood;
+
+	char name[CREATURE_NAMELEN];
+
+
+
+	void set_attribute(int attribute, int amount) { attributes[attribute] = MIN(amount, MAXATTRIBUTE); }
+	void adjust_attribute(int attribute, int amount) { set_attribute(attribute, attributes[attribute] + amount); }
+	void set_skill(int skill, int amount) { skills[skill] = MIN(amount, MAXATTRIBUTE); }
+
+	void die();
+	void train(int trainedskill, int experience, int upto = MAXATTRIBUTE);
+	void skill_up();
+
+	bool reload(bool wasteful);
+	bool ready_another_throwing_weapon();
+
+	void stop_hauling_me();
+	void creatureinit();
+
+	int get_disguise_difficulty() const;
+	int	get_stealth_difficulty() const;
+	int get_true_attribute(int attribute) const;
+	int get_attribute(int attribute, bool use_juice) const;
+	int attribute_roll(int attribute) const;
+	bool attribute_check(int attribute, int difficulty) const;
+	int get_skill(int skill) const { return MIN(skills[skill], MAXATTRIBUTE); }
+	int skill_roll(int skill) const;
+	bool skill_check(int skill, int difficulty) const;
+	int get_weapon_skill() const;
+	int get_skill_ip(int skill) const { return skill_experience[skill]; }
+	std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after DeprecatedCreature)
+	
+	bool is_armed() const { return weapon; }
+	bool is_naked() const { return !armor; }
+	bool will_do_ranged_attack(bool force_ranged, bool force_melee) const; //force_melee is likely unnecessary. -XML
+	bool can_reload() const;
+	bool will_reload(bool force_ranged, bool force_melee) const;
+	int count_clips() const;
+	int count_weapons() const;
+	bool weapon_is_concealed() const { return is_armed() && get_armor().conceals_weaponsize(weapon->get_size()); }
+	string get_weapon_string(int subtype) const;
+	string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
 	string showXml() const;
 	bool is_active_liberal() const;
 	bool is_imprisoned() const;
@@ -143,19 +126,68 @@ public:
 	//int attval(int a,char usejuice=1);
 	/* are they interested in talking about the issues? */
 	bool talkreceptive() const;
-	/* are the characters close enough in age to date? */
-	bool can_date(const DeprecatedCreature &a) const;
 	/* rolls up a proper name for a creature */
 	void namecreature();
-	bool dontname;
 	/* can turn the tables on datenapping */
 	bool kidnap_resistant() const;
 	bool reports_to_police() const;
 	/* returns the creature's maximum level in the given skill */
-	int skill_cap(int skill, bool use_juice) const { return get_attribute(get_associated_attribute((CreatureSkill)skill), use_juice); }
+	int skill_cap(int skill) const { return get_attribute(get_associated_attribute((CreatureSkill)skill), true); }
 	const char* heshe(bool capitalize = false) const;
 	const char* hisher(bool capitalize = false) const;
 	const char* himher(bool capitalize = false) const;
+
+	bool dontname;
+	char propername[CREATURE_NAMELEN];
+	char gender_conservative;
+	char gender_liberal;
+
+	std::string type_idname;
+	float infiltration;
+	char animalgloss;
+	char forceinc;
+	bool has_thrown_weapon;
+
+	int age;
+	int birthday_month;
+	int birthday_day;
+	
+	int sentence;
+	char confessions;
+	char deathpenalty;
+
+	int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+	int specialattack;
+	int clinic;
+	int dating;
+	int hiding;
+	int trainingtime;
+	int trainingsubject;
+	int joindays;
+	int deathdays;
+	int id;
+	int hireid;
+	int meetings;
+	int stunned;
+	int money;
+	int juice;
+	int income;
+	int heat;
+	int location;
+	int worklocation;
+	int base;
+	int flag;
+
+	int pref_carid;
+	int carid;
+	char cantbluff;
+	char is_driver;
+	char pref_is_driver;
+
+	unsigned char wound[BODYPARTNUM];
+	char special[SPECIALWOUNDNUM];
+
+	int crimes_suspected[LAWFLAGNUM];
 };
 
 // this data struct is for activities, it relates to their info text and a couple of other things to avoid needing big switches in the code
@@ -218,11 +250,11 @@ public:
 implementations should be in creature.cpp
 */
 // Add an age estimate to a person's name
-void add_age(DeprecatedCreature& person);
+string get_age_string(const CreatureBio bio, const char animalgloss);
 /* rolls up a creature's stats and equipment */
 void makecreature(DeprecatedCreature &cr, short type);
 /* ensures that the creature's work location is appropriate to its type */
-bool verifyworklocation(DeprecatedCreature &cr, char test_location = -1, char test_type = -1);
+int verifyworklocation(const int type, const int worklocation);
 /* turns a creature into a conservative */
 void conservatise(DeprecatedCreature &cr);
 /* turns a creature into a liberal */

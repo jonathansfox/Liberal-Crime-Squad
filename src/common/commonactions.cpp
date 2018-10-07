@@ -200,21 +200,21 @@ int lawflagheat(int lawflag)
 	default:return 0;
 	}
 }
+short getCurrentSite();
 /* common - applies a crime to a person */
 void criminalize(DeprecatedCreature &cr, short crime)
 {
 	extern short mode;
-	extern short cursite;
 	if (mode == GAMEMODE_SITE)
 	{
-		if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+		if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 		{
 			// Do not criminalize the LCS for self-defense against
 			// extrajudicial raids
-			if (LocationsPool::getInstance().getSiegeType(cursite) != SIEGE_POLICE)
+			if (LocationsPool::getInstance().getSiegeType(getCurrentSite()) != SIEGE_POLICE)
 				return;
 		}
-		else if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == RENTING_CCS)
+		else if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 			// Do not criminalize the LCS for crimes against the CCS
 			return;
 	}

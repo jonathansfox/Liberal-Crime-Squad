@@ -76,7 +76,7 @@ void sorting_prompt(short listforsorting);
 #include "../common/commondisplayCreature.h"
 // for void printfunds(int,int,char*)
 //#include "../common/getnames.h"
-string gettitle(DeprecatedCreature &cr);
+std::string gettitle(const int align, const int juice);
 string getactivity(ActivityST &act);
 //#include "../common/help.h"
 void HelpActivities(int);
@@ -229,18 +229,18 @@ void recruitSelect(DeprecatedCreature &cr)
 	}
 	return;
 }
-void show_victim_status(DeprecatedCreature *victim)
+void show_victim_status(CreatureHealth victim, const int age, const int HEART)
 {
 	const string CONST_activate014 = "Age: ";
 	const string CONST_activate013 = "Heart: ";
 	const string CONST_activate012 = "Status:";
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 55, CONST_activate012);
-	printhealthstat(*victim, 2, 66, true);
-	printwoundstat(*victim, 4, 55);
+	printhealthstat(victim, 2, 66, true);
+	printwoundstat(victim, 4, 55);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(11, 55, CONST_activate013); mvaddstrAlt(11, 66, victim->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(12, 55, CONST_activate014); mvaddstrAlt(12, 66, victim->age);
+	mvaddstrAlt(11, 55, CONST_activate013); mvaddstrAlt(11, 66, HEART);
+	mvaddstrAlt(12, 55, CONST_activate014); mvaddstrAlt(12, 66, age);
 }
 #include <sstream>
 vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
@@ -410,7 +410,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 				addstrAlt(temppool[p]->name);
 				mvaddstrAlt(y, 49, temppool[p]->get_attribute(ATTRIBUTE_HEART, true));
 				mvaddstrAlt(y, 62, temppool[p]->age);
-				printhealthstat(*temppool[p], y, 31, TRUE);
+				printhealthstat(temppool[p]->getCreatureHealth(), y, 31, TRUE);
 			}
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(22, 0, CONST_activate017);
@@ -437,9 +437,9 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_activate021);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
+			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->align, victim->juice));
 			//mvaddstrAlt(1,0,CONST_activate019);
-			show_victim_status(victim);
+			show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
 			mvaddstrAlt(2, 1, CONST_activate020);
 			for (int p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
 			{
@@ -480,12 +480,12 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_activate021);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(*victim));
+			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->align, victim->juice));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(2, 0, CONST_activate022);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(selected_aug->get_name());
-			show_victim_status(victim);
+			show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(4, 0, CONST_activate023);
 			set_color_easy(WHITE_ON_BLACK);
@@ -534,7 +534,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			if (c == 'y')
 			{
 				apply_augmentation(victim, cr, selected_aug);
-				show_victim_status(victim);
+				show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
 				pressAnyKey();
 				return;
 			}
@@ -786,11 +786,11 @@ void select_tendhostage(DeprecatedCreature *cr)
 			{
 				skill += temppool[p]->get_skill(sk);
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = 1;
 			}
 			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
-			printhealthstat(*temppool[p], y, 33, TRUE);
+			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
 			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
@@ -1217,11 +1217,11 @@ void activate()
 			{
 				skill += temppool[p]->get_skill(sk);
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk, true))bright = 1;
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = 1;
 			}
 			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
-			printhealthstat(*temppool[p], y, 33, TRUE);
+			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
 			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));

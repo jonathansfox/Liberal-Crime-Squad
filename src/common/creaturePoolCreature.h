@@ -4,7 +4,7 @@ DeprecatedCreature* findSleeperCarSalesman(int loc);
 void findAllTendersToThisHostage(DeprecatedCreature* cr, vector<DeprecatedCreature *>& temppool);
 void hostageEscapes(DeprecatedCreature* cr, char clearformess);
 void setAllCreatureActivities(Activity cr, vector<DeprecatedCreature *>& temppool);
-void selectOnlySleepersThatCanWork(vector<DeprecatedCreature *>& temppool);
+vector<DeprecatedCreature *> selectOnlySleepersThatCanWork();
 vector<DeprecatedCreature *> activatable_liberals();
 vector<DeprecatedCreature *> getLiberalsSharingLocation(DeprecatedCreature * cr);
 vector<DeprecatedCreature *> getHostagesSharingLocation(DeprecatedCreature *cr);

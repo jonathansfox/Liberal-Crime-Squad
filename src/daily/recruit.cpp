@@ -105,7 +105,6 @@ char Deprecatedrecruitst::eagerness()
 	if (recruit->align == -1) eagerness_temp -= 4;
 	return eagerness_temp;
 }
-//extern string singleDot;
 void makecreature(const int x, const short type);
 /* recruiting */
 vector<RecruitData> recruitable_creatures;
@@ -126,14 +125,16 @@ string recruitName(int creatureType) {
 			return recruitable_creatures[i].name;
 	return CONST_activate065;
 }
+
+short getCurrentSite();
+void setCurrentSite(const short i);
 const string singleDot = ".";
 void recruitment_activity(DeprecatedCreature &cr)
 {
 	extern MusicClass music;
-	extern short cursite;
 	extern DeprecatedCreature encounter[ENCMAX];
-	int ocursite = cursite;
-	cursite = cr.location;
+	int ocursite = getCurrentSite();
+	setCurrentSite(cr.location);
 	int type = cr.activity.arg;
 	int difficulty = recruitFindDifficulty(type);
 	string name = recruitName(type);
@@ -164,14 +165,14 @@ void recruitment_activity(DeprecatedCreature &cr)
 		if (recruitCount == 0) {
 			mvaddstrAlt(11, 0, cr.name + CONST_recruit006A + name + CONST_recruit006B);
 			pressAnyKey();
-			cursite = ocursite;
+			setCurrentSite(ocursite);
 			return;
 		}
 		else if (recruitCount == 1) {
 			mvaddstrAlt(11, 0, cr.name + CONST_recruit007);
 			set_alignment_color(encounter[0].align);
 			addstrAlt(encounter[0].name);
-			add_age(encounter[0]);
+			addstrAlt(get_age_string(encounter[0].getCreatureBio(), encounter[0].animalgloss));
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
 			pressAnyKey();
@@ -197,7 +198,7 @@ void recruitment_activity(DeprecatedCreature &cr)
 					mvaddstrAlt(12 + i, 0, char('a' + i) + CONST_recruit011);
 					set_alignment_color(encounter[i].align);
 					addstrAlt(encounter[i].name);
-					add_age(encounter[i]);
+					addstrAlt(get_age_string(encounter[i].getCreatureBio(), encounter[i].animalgloss));
 				}
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(12 + recruitCount + 1, 0, CONST_recruit012);
@@ -220,5 +221,5 @@ void recruitment_activity(DeprecatedCreature &cr)
 			}
 		}
 	}
-	cursite = ocursite;
+	setCurrentSite(ocursite);
 }

@@ -113,7 +113,6 @@ extern string singleDot;
 #include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
 
-//extern string singleDot;
 bool policeStationNeedsUpdate(short *law, short *oldlaw) {
 	return ((law[LAW_POLICEBEHAVIOR] == -2 && law[LAW_DEATHPENALTY] == -2) ||
 		(oldlaw[LAW_POLICEBEHAVIOR] == -2 && oldlaw[LAW_DEATHPENALTY] == -2)) &&

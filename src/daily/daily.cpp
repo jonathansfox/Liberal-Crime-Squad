@@ -68,7 +68,7 @@ const string tag_skill = "skill";
 //#include "../news/news.h"
 void majornewspaper(char &clearformess, char canseethings);
 //#include "../sitemode/sitemode.h"
-void mode_site(short loc);
+void mode_site(const short loc);
 #include "../log/log.h"
 // for commondisplay.h
 #include "../common/commondisplay.h"
@@ -80,7 +80,6 @@ void mode_site(short loc);
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 /* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
 // for void basesquad(squadst *,long)
 #include "../daily/daily.h"
 /* squad members with no chain of command lose contact */
@@ -149,14 +148,18 @@ void locatesquad(Deprecatedsquadst *st, long loc);
 /* common - assigns a new base to all members of a squad */
 void basesquad(Deprecatedsquadst *st, long loc);
 
+void locateActiveSquad(const int loc);
+
 void hospital(int loc)
 {
 	extern Deprecatedsquadst *activesquad;
 	extern MusicClass music;
 	extern short party_status;
 	music.play(MUSIC_SHOPPING);
-	locatesquad(activesquad, loc);
-	int partysize = squadsize(activesquad);
+
+	locateActiveSquad(loc);
+
+	int partysize = activesquadSize();
 	while (true)
 	{
 		eraseAlt();
@@ -221,10 +224,9 @@ void pawnshop(int loc)
 /* choose buyer */
 void choose_buyer(short &buyer)
 {
-	extern Deprecatedsquadst *activesquad;
 	extern short party_status;
 	party_status = -1;
-	int partysize = squadsize(activesquad);
+	int partysize = activesquadSize();
 	if (partysize <= 1) return;
 	while (true)
 	{
@@ -260,8 +262,8 @@ void dealership(int loc)
 	extern vector<Vehicle *> vehicle;
 	music.play(MUSIC_SHOPPING);
 	short buyer = 0;
-	locatesquad(activesquad, loc);
-	int partysize = squadsize(activesquad);
+	locateActiveSquad(loc);
+	int partysize = activesquadSize();
 	while (true)
 	{
 		eraseAlt();

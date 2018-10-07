@@ -522,7 +522,6 @@ extern string AND;
 	 case DATERESULT_ARRESTED:    return 1;
 	 }
  }
- //extern string pressKeyToReflect;
  /* daily - date - dater p goes on some dates */
  char completedate(Deprecateddatest &d, int p)
  {

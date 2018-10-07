@@ -117,7 +117,6 @@ const string tag_skill = "skill";
 #include "../common/equipment.h"
 //for void equip(vector<Item *> &loot,int loc);
 //#include "../common/commonactionsCreature.h"
-int squadsize(const Deprecatedsquadst *st);
 #include "../common/translateid.h"
 // for  int getweapontype
 #include "../cursesAlternative.h"
@@ -418,7 +417,7 @@ extern string undefined;
  {
 	 extern short party_status;
 	 extern class Ledger ledger;
-	 int partysize = squadsize(&customers);
+	 int partysize = customers.squadsize();
 	 while (true)
 	 {
 		 eraseAlt();
@@ -517,7 +516,7 @@ extern string undefined;
  {
 	 extern short party_status;
 	 party_status = -1;
-	 int partysize = squadsize(&customers);
+	 int partysize = customers.squadsize();
 	 if (partysize <= 1) return;
 	 while (true)
 	 {
@@ -533,12 +532,84 @@ extern string undefined;
 		 }
 	 }
  }
- void maskselect(DeprecatedCreature &buyer);
+
+ // Removing the subsequent references to location will be difficult.
+ void maskselect(DeprecatedCreature &buyer)
+ {
+	 extern short interface_pgup;
+	 extern short interface_pgdn;
+	 extern class Ledger ledger;
+	 extern vector<ArmorType *> armortype;
+	 short maskindex = -1;
+	 std::vector<int> masktype;
+	 for (int a = 0; a < len(armortype); a++)
+	 {
+		 if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
+			 masktype.push_back(a);
+	 }
+	 int page = 0;
+	 while (true)
+	 {
+		 eraseAlt();
+		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		 mvaddstrAlt(0, 0, CONST_shop050);
+		 addstrAlt(buyer.name);
+		 addstrAlt(CONST_shop051);
+		 set_color_easy(WHITE_ON_BLACK);
+		 mvaddstrAlt(1, 0, CONST_shop052);
+		 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
+		 {
+			 set_color_easy(WHITE_ON_BLACK);
+
+			 mvaddcharAlt(y, 0, y + 'A' - 2);
+			 addstrAlt(spaceDashSpace);
+			 addstrAlt(armortype[masktype[p]]->get_name());
+			 set_color_easy(WHITE_ON_BLACK);
+			 mvaddstrAlt(y, 39, armortype[masktype[p]]->get_description());
+		 }
+		 set_color_easy(WHITE_ON_BLACK);
+		 mvaddstrAlt(22, 0, CONST_shop053);
+		 mvaddstrAlt(23, 0, addpagestr());
+		 mvaddstrAlt(24, 0, CONST_shop054);
+		 addstrAlt(buyer.name);
+		 addstrAlt(CONST_shop055);
+		 int c = getkeyAlt();
+		 //PAGE UP
+		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		 //PAGE DOWN
+		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(masktype)) page++;
+		 if (c >= 'a'&&c <= 's')
+		 {
+			 int p = page * 19 + c - 'a';
+			 if (p < len(masktype))
+			 {
+				 maskindex = masktype[p];
+				 break;
+			 }
+		 }
+		 if (c == 'z')
+		 {
+			 for (int i = 0; i < len(armortype); i++)
+				 if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
+					 masktype.push_back(i);
+			 maskindex = pickrandom(masktype);
+			 break;
+		 }
+		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	 }
+	 extern vector<Location *> location;
+	 if (maskindex != -1 && ledger.get_funds() >= 15)
+	 {
+		 Armor a = Armor(maskindex);
+		 buyer.give_armor(a, &location[buyer.base]->loot);
+		 ledger.subtract_funds(15, EXPENSE_SHOPPING);
+	 }
+ }
  void Shop::browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const
  {
 	 extern short party_status;
 	 extern class Ledger ledger;
-	 int page = 0, partysize = squadsize(&customers);
+	 int page = 0, partysize = customers.squadsize();
 	 std::vector<ShopOption*> available_options = options_;
 	 available_options.erase(remove_if(available_options.begin(),
 		 available_options.end(),
@@ -816,78 +887,6 @@ extern string undefined;
 	 }
  }
 
- // Removing the subsequent references to location will be difficult.
- void maskselect(DeprecatedCreature &buyer)
- {
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
-	 extern class Ledger ledger;
-	 extern vector<ArmorType *> armortype;
-	 short maskindex = -1;
-	 std::vector<int> masktype;
-	 for (int a = 0; a < len(armortype); a++)
-	 {
-		 if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
-			 masktype.push_back(a);
-	 }
-	 int page = 0;
-	 while (true)
-	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(0, 0, CONST_shop050);
-		 addstrAlt(buyer.name);
-		 addstrAlt(CONST_shop051);
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(1, 0, CONST_shop052);
-		 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
-		 {
-			 set_color_easy(WHITE_ON_BLACK);
-
-			 mvaddcharAlt(y, 0, y + 'A' - 2);
-			 addstrAlt(spaceDashSpace);
-			 addstrAlt(armortype[masktype[p]]->get_name());
-			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(y, 39, armortype[masktype[p]]->get_description());
-		 }
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(22, 0, CONST_shop053);
-		 mvaddstrAlt(23, 0, addpagestr());
-		 mvaddstrAlt(24, 0, CONST_shop054);
-		 addstrAlt(buyer.name);
-		 addstrAlt(CONST_shop055);
-		 int c = getkeyAlt();
-		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
-		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(masktype)) page++;
-		 if (c >= 'a'&&c <= 's')
-		 {
-			 int p = page * 19 + c - 'a';
-			 if (p < len(masktype))
-			 {
-				 maskindex = masktype[p];
-				 break;
-			 }
-		 }
-		 if (c == 'z')
-		 {
-			 for (int i = 0; i < len(armortype); i++)
-				 if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
-					 masktype.push_back(i);
-			 maskindex = pickrandom(masktype);
-			 break;
-		 }
-		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	 }
-	 extern vector<Location *> location;
-	 if (maskindex != -1 && ledger.get_funds() >= 15)
-	 {
-		 Armor a = Armor(maskindex);
-		 buyer.give_armor(a, &location[buyer.base]->loot);
-		 ledger.subtract_funds(15, EXPENSE_SHOPPING);
-	 }
- }
  void Shop::ShopItem::choose(Deprecatedsquadst& customers, int& buyer) const
  {
 	 extern class Ledger ledger;

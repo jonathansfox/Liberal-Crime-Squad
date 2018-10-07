@@ -126,11 +126,6 @@ extern string closeParenthesis;
 bool isThereASiteAlarm();
 void makedelimiter(int y = 8, int x = 0);
 
-//const string tag_0 = "0";
-std::string gettitle(DeprecatedCreature &cr)
-{
-	return gettitle(cr.align, cr.juice);
-}
 map<int, map<bool, ColorSetup> > alignmentColors = {
 	// Liberal activism
 	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_ARCHCONSERVATIVE,{ map<bool, ColorSetup>::value_type(true, RED_ON_BLACK_BRIGHT) }),
@@ -425,7 +420,7 @@ const string CONST_commondisplay017 = "Quadraplegic";
 const string CONST_commondisplay016 = "Quadpleg";
 const string CONST_commondisplay015 = "Neck Broken";
 const string CONST_commondisplay014 = "NckBroke";
-string getHealthStat(DeprecatedCreature &g, const char smll) {
+string getHealthStat(CreatureHealth g, const char smll) {
 
 	bool bleeding = false;
 
@@ -504,12 +499,11 @@ string getHealthStat(DeprecatedCreature &g, const char smll) {
 	}
 }
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
-void printhealthstat(DeprecatedCreature &g, int y, int x, char smll)
+void printhealthstat(CreatureHealth g, int y, int x, char smll)
 {
 	string wound = getHealthStat(g, smll);
 	mvaddstrAlt(y, x, wound);
 }
-
 void printAttributesAsKnowledgePermits(DeprecatedCreature *cr, unsigned char knowledge) {
 	const string CONST_commondisplay067 = "?";
 	const string CONST_commondisplay066 = "Char:   ";
@@ -654,7 +648,7 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1, 2, cr->name);
 	addstrAlt(commaSpace);
-	addstrAlt(gettitle(*cr));
+	addstrAlt(gettitle(cr->align, cr->juice));
 	if (cr->prisoner != NULL)
 	{
 		string prisoner_info = CONST_commondisplay047;
@@ -695,8 +689,6 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	if (mode != GAMEMODE_SITE) { 
 		set_color_easy(WHITE_ON_BLACK); 
 	}
-	// TODO This is key to the weapon display being red when back at base bug
-	// Figure out how to fix
 	else {
 		switch (weaponcheck(*cr))
 		{
@@ -741,10 +733,10 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 			used[maxs] = 1;
 			printed = 1;
 			// Maxed skills are cyan
-			if (cr->skill_cap(maxs, true) != 0 && cr->get_skill(maxs) >= cr->skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			if (cr->skill_cap(maxs) != 0 && cr->get_skill(maxs) >= cr->skill_cap(maxs))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			// About to level up skills are white
 			else if (cr->get_skill_ip(maxs) >= 100 + (10 * cr->get_skill(maxs)) &&
-				cr->get_skill(maxs) < cr->skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				cr->get_skill(maxs) < cr->skill_cap(maxs))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			// <1 skills are dark gray
 			else if (cr->get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			// >=1 skills are light gray
@@ -768,13 +760,14 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	int woundsum = 0;
 	for (int w = 0; w < BODYPARTNUM; w++)
 		if (cr->wound[w] != 0)woundsum++;
-	printhealthstat(*cr, 1, 49, FALSE);
+	printhealthstat(cr->getCreatureHealth(), 1, 49, FALSE);
 	if (woundsum > 0)
 	{
 		printWounds(cr);
 		set_color_easy(WHITE_ON_BLACK);
 	}
 }
+
 void clearRowsTwoThroughSeven() {
 	for (int i = 2; i < 8; i++)
 	{
@@ -831,7 +824,7 @@ void printparty()
 				{
 					skill += (int)party[p]->get_skill(sk);
 					if (party[p]->get_skill_ip(sk) >= 100 + (10 * party[p]->get_skill(sk)) &&
-						party[p]->get_skill(sk) < party[p]->skill_cap(sk, true))bright = 1;
+						party[p]->get_skill(sk) < party[p]->skill_cap(sk))bright = 1;
 				}
 				set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				mvaddstrAlt(p + 2, 23, skill);
@@ -903,7 +896,7 @@ void printparty()
 							set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				}
 				mvaddstrAlt(p + 2, 46, party[p]->get_armor().get_shortname());
-				printhealthstat(*party[p], p + 2, 61, TRUE);
+				printhealthstat(party[p]->getCreatureHealth(), p + 2, 61, TRUE);
 				set_color_easy(WHITE_ON_BLACK);
 				moveAlt(p + 2, 70);
 				long v = -1;
@@ -931,7 +924,7 @@ void printparty()
 	}
 	makedelimiter();
 }
-void printwoundstat(DeprecatedCreature &cr, int y, int x)
+void printwoundstat(CreatureHealth cr, int y, int x)
 {
 	const string CONST_commondisplay121 = "Burned";
 	const string CONST_commondisplay120 = "Torn";
@@ -1052,10 +1045,10 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 			used[maxs] = 1;
 			printed = 1;
 			// Maxed skills are cyan
-			if (cr.skill_cap(maxs, true) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			if (cr.skill_cap(maxs) != 0 && cr.get_skill(maxs) >= cr.skill_cap(maxs))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			// About to level up skills are white
 			else if (cr.get_skill_ip(maxs) >= 100 + (10 * cr.get_skill(maxs)) &&
-				cr.get_skill(maxs) < cr.skill_cap(maxs, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				cr.get_skill(maxs) < cr.skill_cap(maxs))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			// <1 skills are dark gray
 			else if (cr.get_skill(maxs) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			// >=1 skills are light gray
@@ -1075,17 +1068,17 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 				else addstrAlt(CONST_commondisplay197);
 			}
 			else addstrAlt(CONST_commondisplay198);
-			if (cr.skill_cap(maxs, true) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs, true))
+			if (cr.skill_cap(maxs) == 0 || cr.get_skill(maxs) < cr.skill_cap(maxs))
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			moveAlt(6 + skills_shown, 48);
-			addstrAlt(twoDigits(cr.skill_cap(maxs, true)) + CONST_commondisplay199);
+			addstrAlt(twoDigits(cr.skill_cap(maxs)) + CONST_commondisplay199);
 		}
 	}
 }
 vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]);
 /* full screen character sheet */
 
-void statebrokenlaws(DeprecatedCreature &cr);
+void statebrokenlaws(CreatureJustice cr, const int flag);
 const string CONST_commondisplay167 = "Scheduled Dates:    ";
 const string CONST_commondisplay166 = "s";
 const string CONST_commondisplay165 = " Romantic Interest";
@@ -1102,29 +1095,29 @@ const string CONST_commondisplay128 = ", Female";
 const string CONST_commondisplay127 = ", Male";
 const string CONST_commondisplay126 = " (Age ";
 const string CONST_commondisplay125 = "Born ";
-void printliberalstats(DeprecatedCreature &cr)
-{
+void printliberalstats_a(const CreatureBio cr, const CreatureJustice cr_2, const int flag) {
+
 	extern int year;
 	extern int day;
 	extern int month;
-	extern char showcarprefs;
+
 	set_color_easy(WHITE_ON_BLACK);
 	// Add name
 	mvaddstrAlt(2, 0, CONST_commondisplay201);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(cr.name);
+	addstrAlt(cr_2.name);
 	set_color_easy(WHITE_ON_BLACK);
-	if (strcmp(cr.propername, cr.name) != 0)
+	if (strcmp(cr_2.propername.data(), cr_2.name.data()) != 0)
 	{
 		//The names do not match, print real name as well
 		addstrAlt(CONST_commondisplay202);
-		addstrAlt(cr.propername);
+		addstrAlt(cr_2.propername);
 		addstrAlt(closeParenthesis);
 	}
 	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
+	addstrAlt(gettitle(cr_2.align, cr_2.juice));
 	addstrAlt(CONST_commondisplay202);
-	addstrAlt(cr.get_type_name());
+	addstrAlt(cr_2.get_type_name);
 	addstrAlt(closeParenthesis);
 	moveAlt(3, 0);
 	// Add birthdate
@@ -1151,25 +1144,26 @@ void printliberalstats(DeprecatedCreature &cr)
 	//   addstrAlt(CONST_commondisplay130);
 	addstrAlt(closeParenthesis);
 	moveAlt(3, 46);
-	statebrokenlaws(cr);
+	statebrokenlaws(cr_2, flag);
 	set_color_easy(WHITE_ON_BLACK);
 	// Add juice
 	mvaddstrAlt(10, 16, CONST_commondisplay131);
-	addstrAlt(cr.juice);
-	mvaddstrAlt(11, 16, juiceUntilLevelUp(cr.juice));
-	// Add attributes
-	printCreatureAttributes(cr);
-	// Add highest skills
-	mvaddstrAlt(5, 28, CONST_commondisplay193);
-	mvaddstrAlt(5, 43, CONST_commondisplay194);
-	printCreatureSkills(cr);
+	addstrAlt(cr_2.juice);
+	mvaddstrAlt(11, 16, juiceUntilLevelUp(cr_2.juice));
+
+}
+
+void printliberalstats_c(const CreatureCar cr, const CreatureInventory cr_2, const CreatureHealth cr_3, const int flag) {
+
+	extern char showcarprefs;
+
 	set_color_easy(WHITE_ON_BLACK);
 	// Add weapon
 	mvaddstrAlt(13, 0, CONST_commondisplay153);
-	addstrAlt(cr.get_weapon_string(0));
+	addstrAlt(cr_2.get_weapon_string);
 	// Add clothing
 	mvaddstrAlt(14, 0, CONST_commondisplay154);
-	addstrAlt(cr.get_armor_string(true));
+	addstrAlt(cr_2.get_armor_string);
 	// Add vehicle
 	mvaddstrAlt(15, 0, CONST_commondisplay155);
 	long v = -1;
@@ -1186,14 +1180,18 @@ void printliberalstats(DeprecatedCreature &cr)
 	else
 	{
 		int legok = 2;
-		if ((cr.wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-			(cr.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-		if ((cr.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-			(cr.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-		if (cr.flag & CREATUREFLAG_WHEELCHAIR)addstrAlt(CONST_commondisplay157);
+		if ((cr_3.wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+			(cr_3.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+		if ((cr_3.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+			(cr_3.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+		if (flag & CREATUREFLAG_WHEELCHAIR)addstrAlt(CONST_commondisplay157);
 		else if (legok >= 1)addstrAlt(CONST_commondisplay158);
 		else addstrAlt(CONST_commondisplay003);
 	}
+
+}
+void printliberalstats_d(DeprecatedCreature &cr) {
+
 	// Add recruit stats
 	if (cr.flag != CREATUREFLAG_BRAINWASHED)
 	{
@@ -1230,16 +1228,28 @@ void printliberalstats(DeprecatedCreature &cr)
 		mvaddstrAlt(21, 55, CONST_commondisplay167);
 		addstrAlt(scheduleddates(cr));
 	}
-	printwoundstat(cr, 5, 55);
+
+
+}
+void printliberalstats_e(const CreatureHealth getCreatureHealth) {
+
+
+	printwoundstat(getCreatureHealth, 5, 55);
 	//SPECIAL WOUNDS
 	{
 		set_color_easy(RED_ON_BLACK);
 		int y = 17;
-		for (string str : printSpecialWounds(cr.special)) {
+		for (string str : printSpecialWounds(getCreatureHealth.special)) {
 
 			mvaddstrAlt(y++, 0, str);
 		}
 	}
+
+
+}
+void printliberalstats_f(DeprecatedCreature &cr) {
+
+
 	set_color_easy(WHITE_ON_BLACK);
 	for (int i = 0, y = 12; i < AUGMENTATIONNUM; i++, y++)
 	{
@@ -1248,23 +1258,41 @@ void printliberalstats(DeprecatedCreature &cr)
 		addstrAlt(CONST_commondisplay212);
 		addstrAlt(cr.get_augmentation(i).name);
 	}
+
+}
+
+void printliberalstats(DeprecatedCreature &cr)
+{
+	printliberalstats_a(cr.getCreatureBio(), cr.getCreatureJustice(), cr.flag);
+
+	// Add attributes
+	printCreatureAttributes(cr);
+	// Add highest skills
+	mvaddstrAlt(5, 28, CONST_commondisplay193);
+	mvaddstrAlt(5, 43, CONST_commondisplay194);
+	printCreatureSkills(cr);
+
+	printliberalstats_c(cr.getCreatureCar(), cr.getCreatureInventory(), cr.getCreatureHealth(), cr.flag);
+	printliberalstats_d(cr);
+	printliberalstats_e(cr.getCreatureHealth());
+	printliberalstats_f(cr);
 }
 /* Full screen character sheet, skills only edition */
-void printliberalskills(DeprecatedCreature &cr)
-{
+void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2) {
+
 	// Add name
 	set_color_easy(WHITE_ON_BLACK);
 	moveAlt(2, 0);
-	if (strcmp(cr.propername, cr.name) != 0)
+	if (strcmp(cr.propername.data(), cr.name.data()) != 0)
 		addstrAlt(CONST_commondisplay200);
 	else addstrAlt(CONST_commondisplay201);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	addstrAlt(cr.name);
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
+	addstrAlt(gettitle(cr.align, cr.juice));
 	addstrAlt(CONST_commondisplay202);
-	addstrAlt(cr.get_type_name());
+	addstrAlt(cr.get_type_name);
 	addstrAlt(closeParenthesis);
 	// Add all skills
 	for (int s = 0; s < SKILLNUM; s++)
@@ -1278,39 +1306,40 @@ void printliberalskills(DeprecatedCreature &cr)
 			addstrAlt(CONST_commondisplay194);
 		}
 		// Maxed skills are cyan
-		if (cr.skill_cap(s, true) != 0 && cr.get_skill(s) >= cr.skill_cap(s, true))set_color_easy(CYAN_ON_BLACK_BRIGHT);
+		if (cr_2.skill_cap(s) != 0 && cr_2.get_skill(s) >= cr_2.skill_cap(s))set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		// About to level up skills are white
-		else if (cr.get_skill_ip(s) >= 100 + (10 * cr.get_skill(s)) &&
-			cr.get_skill(s) < cr.skill_cap(s, true))set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		else if (cr_2.get_skill_ip(s) >= 100 + (10 * cr_2.get_skill(s)) &&
+			cr_2.get_skill(s) < cr_2.skill_cap(s))set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		// <1 skills are dark gray
-		else if (cr.get_skill(s) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		else if (cr_2.get_skill(s) < 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		// >=1 skills are light gray
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5 + s / 3, 27 * (s % 3));
 		addstrAlt(skill_enum_to_string(s));
 		addstrAlt(CONST_commondisplay212);
 		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
-		addstrAlt(twoDigits(cr.get_skill(s)) + CONST_commondisplay196);
-		if (cr.get_skill_ip(s) < 100 + (10 * cr.get_skill(s)))
+		addstrAlt(twoDigits(cr_2.get_skill(s)) + CONST_commondisplay196);
+		if (cr_2.get_skill_ip(s) < 100 + (10 * cr_2.get_skill(s)))
 		{
-			if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) != 0)
+			if ((cr_2.get_skill_ip(s) * 100) / (100 + (10 * cr_2.get_skill(s))) != 0)
 			{
-				if ((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))) < 10)
+				if ((cr_2.get_skill_ip(s) * 100) / (100 + (10 * cr_2.get_skill(s))) < 10)
 					addstrAlt(tag_0);
-				addstrAlt((cr.get_skill_ip(s) * 100) / (100 + (10 * cr.get_skill(s))));
+				addstrAlt((cr_2.get_skill_ip(s) * 100) / (100 + (10 * cr_2.get_skill(s))));
 			}
 			else addstrAlt(CONST_commondisplay197);
 		}
 		else addstrAlt(CONST_commondisplay198);
-		if (cr.skill_cap(s, true) == 0 || cr.get_skill(s) < cr.skill_cap(s, true))
+		if (cr_2.skill_cap(s) == 0 || cr_2.get_skill(s) < cr_2.skill_cap(s))
 			set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		moveAlt(5 + s / 3, 20 + 27 * (s % 3));
-		addstrAlt(twoDigits(cr.skill_cap(s, true)) + CONST_commondisplay199.c_str());
+		addstrAlt(twoDigits(cr_2.skill_cap(s)) + CONST_commondisplay199.c_str());
 	}
 	set_color_easy(WHITE_ON_BLACK);
 }
+
 /* Full screen character sheet, crime sheet */
-void printliberalcrimes(DeprecatedCreature &cr)
+void printliberalcrimes(CreatureJustice cr)
 {
 	const string CONST_commondisplay211 = "NUM";
 	const string CONST_commondisplay210 = "CRIME";
@@ -1323,16 +1352,16 @@ void printliberalcrimes(DeprecatedCreature &cr)
 	const string CONST_commondisplay203 = "On DEATH ROW";
 	// Add name
 	set_color_easy(WHITE_ON_BLACK);
-	if (strcmp(cr.propername, cr.name) != 0)
+	if (strcmp(cr.propername.data(), cr.name.data()) != 0)
 		mvaddstrAlt(2, 0, CONST_commondisplay200);
 	else mvaddstrAlt(2, 0, CONST_commondisplay201);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	addstrAlt(cr.name);
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr));
+	addstrAlt(gettitle(cr.align, cr.juice));
 	addstrAlt(CONST_commondisplay202);
-	addstrAlt(cr.get_type_name());
+	addstrAlt(cr.get_type_name);
 	addstrAlt(closeParenthesis);
 	// Show outstanding convictions in addition to untried crimes
 	if (cr.deathpenalty)
@@ -1395,9 +1424,11 @@ void fullstatus(const int _p)
 		eraseAlt();
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(0, 0, CONST_commondisplay214);
-		if (page == 0) printliberalstats(*activesquad->squad[p]);
-		else if (page == 1) printliberalskills(*activesquad->squad[p]);
-		else if (page == 2) printliberalcrimes(*activesquad->squad[p]);
+		if (page == 0) { 
+			printliberalstats(*activesquad->squad[p]);
+		}
+		else if (page == 1) printliberalskills(activesquad->squad[p]->getCreatureJustice(), activesquad->squad[p]->getListOfCreatureSkills());
+		else if (page == 2) printliberalcrimes(activesquad->squad[p]->getCreatureJustice());
 		mvaddstrAlt(23, 0, CONST_commondisplay215);
 		if (activesquad->squad[1] != NULL)
 			addstrAlt(CONST_commondisplay216);

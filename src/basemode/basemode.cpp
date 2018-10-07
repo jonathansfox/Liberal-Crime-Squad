@@ -100,9 +100,6 @@ void review();
 //for int mvaddstr(int, int, const char*)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
-// for int squadsize(const squadst *)
 //#include "../common/equipment.h"
 void equip(vector<Item *> &loot, int loc);
 //#include "../politics/politics.h"
@@ -308,13 +305,13 @@ void printLawMake() {
 		mvaddstrAlt(6 + l / 3, l % 3 * 30, getlaw(l));
 	}
 }
+void addStringYear();
 void printMonthAndYear() {
-	extern int year;
 	extern int month;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, getmonth(month) + singleSpace);
-	addstrAlt(year);
+	addStringYear();
 }
 void letTheUnworthyLeave() {
 	extern vector<DeprecatedCreature *> pool;
@@ -856,7 +853,7 @@ bool iterate_mode_base(int &nonsighttime, int &oldforcemonth) {
 		printIfLongWait(nonsighttime);
 		nonsighttime = 0;
 	}
-	int partysize = squadsize(activesquad);
+	int partysize = activesquadSize();
 	if (activesquad && !partysize)
 	{
 		delete_and_remove(squad, getsquad(activesquad->id));

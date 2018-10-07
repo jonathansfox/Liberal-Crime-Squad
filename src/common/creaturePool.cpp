@@ -639,7 +639,8 @@ bool DeprecatedCreature::enemy() const
 }
 #include "../common/translateid.h"
 // for  int getpoolcreature(int)
-void selectOnlySleepersThatCanWork(vector<DeprecatedCreature *>& temppool) {
+vector<DeprecatedCreature *> selectOnlySleepersThatCanWork() {
+	vector<DeprecatedCreature *> temppool;
 	// Comb the pool of Liberals for sleeper agents
 	for (int p = 0; p < len(pool); p++)
 	{
@@ -654,6 +655,7 @@ void selectOnlySleepersThatCanWork(vector<DeprecatedCreature *>& temppool) {
 			temppool.push_back(pool[p]);
 		}
 	}
+	return temppool;
 }
 #include "../daily/siege.h"
 void determineMedicalSupportAtEachLocation(bool clearformess) {
@@ -1616,11 +1618,11 @@ int getpoolcreature(int id)
 void savehighscore(char endtype);
 void viewhighscores(int musicoverride = MUSIC_OFF);
 void end_game(int err = EXIT_SUCCESS);
+short getCurrentSite();
 /* common - test for possible game over */
 char endcheck(char cause)
 {
 	extern MusicClass music;
-	extern short cursite;
 	bool dead = true;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
 		if (pool[p]->alive&&pool[p]->align == 1 &&
@@ -1636,9 +1638,9 @@ char endcheck(char cause)
 		// OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
 		if (cause == END_OTHER)
 		{  // got killed, possibly in a siege but maybe not, find out the reason we lost
-			if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+			if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 			{
-				switch (LocationsPool::getInstance().getSiegeType(cursite))
+				switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
 				{
 				case SIEGE_POLICE: savehighscore(END_POLICE); break;
 				case SIEGE_CIA: savehighscore(END_CIA); break;

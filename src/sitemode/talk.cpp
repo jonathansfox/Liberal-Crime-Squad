@@ -340,9 +340,10 @@ string unnamed_String_Talk_cpp_148;
 string unnamed_String_Talk_cpp_149;
 /* bluff, date, issues */
 bool isThereASiteAlarm();
+
+short getCurrentSite();
 char talk(DeprecatedCreature &a, const int t)
 {
-	extern short cursite;
 	extern DeprecatedCreature encounter[ENCMAX];
 	DeprecatedCreature &tk = encounter[t];
 	// TALKING TO DOGS
@@ -356,7 +357,7 @@ char talk(DeprecatedCreature &a, const int t)
 		return heyMisterMonster(a, tk);
 	}
 	// BLUFFING
-	if ((isThereASiteAlarm() || LocationsPool::getInstance().isThereASiegeHere(cursite)) && tk.enemy())
+	if ((isThereASiteAlarm() || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) && tk.enemy())
 	{
 		return talkInCombat(a, tk);
 	}
@@ -370,7 +371,6 @@ void giveActiveSquadThisLoot(Item* de);
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
-	extern short cursite;
 
 	extern Deprecatednewsstoryst *sitestory;
 	extern int sitecrime;
@@ -404,7 +404,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(10, 1, pickrandom(robbing_bank), gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_005, gamelog);
@@ -474,7 +474,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		int difficulty = DIFFICULTY_VERYEASY;
 		if (armed_liberal == NULL)
 			difficulty += 12;
-		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite))
+		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			difficulty += 12;
 		clearcommandarea(); clearmessagearea(); clearmaparea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -491,7 +491,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			sitestory->crime.push_back(CRIME_BANKSTICKUP);
 			sitecrime += 50;
 			CreatureTypes guard = CREATURE_SECURITYGUARD;
-			if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY,cursite)) guard = CREATURE_MERC;
+			if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite())) guard = CREATURE_MERC;
 			makecreature(0, guard);
 			makecreature(1, guard);
 			makecreature(2, guard);
@@ -533,7 +533,6 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 }
 char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern short cursite;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9, 1, a.name);
@@ -552,14 +551,14 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	addstrAlt(tk.name);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	add_age(tk);
+	addstrAlt(get_age_string(tk.getCreatureBio(), tk.animalgloss));
 	addstrAlt(unnamed_String_Talk_cpp_017);
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_018);
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
-	if (tk.can_date(a))set_color_easy(WHITE_ON_BLACK);
+	if (tk.can_date(a.age, a.animalgloss))set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_019);
 	if (is_naked)addstrAlt(while_naked);
@@ -568,13 +567,13 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_020);
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
-	if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == -1)
+	if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == -1)
 	{
 		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_021);
 		if (is_naked)addstrAlt(while_naked);
 		addstrAlt(singleDot);
 	}
-	else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) > 0)
+	else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 0)
 	{
 		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_022);
 		if (is_naked)addstrAlt(while_naked);
@@ -600,14 +599,14 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 		case 'a':
 			return wannaHearSomethingDisturbing(a, tk);
 		case 'b':
-			if (!tk.can_date(a)) break;
+			if (!tk.can_date(a.age, a.animalgloss)) break;
 			return doYouComeHereOften(a, tk);
 		case 'c':
 			return 0;
 		case 'd':
-			if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) == -1)
+			if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == -1)
 				return heyIWantToRentARoom(a, tk);
-			else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,cursite) > 0)
+			else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 0)
 				return heyIWantToCancelMyRoom(a, tk);
 			else if (tk.type == CREATURE_GANGMEMBER || tk.type == CREATURE_MERC)
 				return heyINeedAGun(a, tk);
@@ -622,7 +621,6 @@ void locationIsNowRented(int l, int rent);
 char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
-	extern short cursite;
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -657,7 +655,7 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	gamelog.newline();
 	pressAnyKey();
 
-	moveEverythingAwayFromSite(cursite);
+	moveEverythingAwayFromSite(getCurrentSite());
 
 	return 1;
 }
@@ -668,7 +666,6 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
 	extern char newscherrybusted;
-	extern short cursite;
 	extern Deprecatedsquadst *activesquad;
 	extern class Ledger ledger;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
@@ -690,7 +687,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 		return 1;
 	}
 	int rent;
-	switch (LocationsPool::getInstance().getLocationType(cursite))
+	switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 	{
 	default:rent = 200; break;
 	case SITE_RESIDENTIAL_APARTMENT:rent = 650; break;
@@ -740,8 +737,8 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			addstrAlt(unnamed_String_Talk_cpp_041);
 			pressAnyKey();
 			ledger.subtract_funds(rent, EXPENSE_RENT);
-			locationIsNowRented(cursite, rent);
-			basesquad(activesquad, cursite);
+			locationIsNowRented(getCurrentSite(), rent);
+			basesquad(activesquad, getCurrentSite());
 			return 1;
 		case 'b': // Refuse rent deal
 			clearcommandarea(); clearmessagearea(); clearmaparea();
@@ -823,13 +820,13 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 					for (int i = 0; i < 6; i++)
 						if (activesquad->squad[i])
 							criminalize(*(activesquad->squad[i]), LAWFLAG_EXTORTION);
-					LocationsPool::getInstance().setSiegetimeuntillocated(cursite, 2);
+					LocationsPool::getInstance().setSiegetimeuntillocated(getCurrentSite(), 2);
 					rent = 10000000; // Yeah he's kicking you out next month
 				}
 				// ...or it's yours for free
 				else rent = 0;
-				locationIsNowRented(cursite, rent);
-				basesquad(activesquad, cursite);
+				locationIsNowRented(getCurrentSite(), rent);
+				basesquad(activesquad, getCurrentSite());
 				return 1;
 			}
 		}
@@ -839,7 +836,6 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
-	extern short cursite;
 	extern short lawList[LAWNUM];
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -884,7 +880,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		pressAnyKey();
 		return 1;
 	}
-	switch (LocationsPool::getInstance().getLocationType(cursite))
+	switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 	{
 	case SITE_OUTDOOR_BUNKER:
 	case SITE_BUSINESS_CRACKHOUSE:
@@ -899,7 +895,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_054, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		armsdealer(cursite);
+		armsdealer(getCurrentSite());
 		return 1;
 	default:
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1610,22 +1606,22 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 		pressAnyKey();
 	}
 }
+
 void pressKeyCInCombat(DeprecatedCreature &a) {
 	extern Log gamelog;
 	extern DeprecatedCreature encounter[ENCMAX];
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
 	extern coordinatest loc_coord;
-	extern short cursite;
 	extern short siteonfire;
 	extern short fieldskillrate;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	if (LocationsPool::getInstance().isThereASiegeHere(cursite))
+	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
 		mvaddstrAlt(16, 1, a.name, gamelog);
 		addstrAlt(singleSpace, gamelog);
-		switch (LocationsPool::getInstance().getSiegeType(cursite))
+		switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
 		{
 		case SIEGE_POLICE:
 			addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
@@ -1762,7 +1758,6 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 void pressKeyDInCombat() {
 	extern Log gamelog;
 	extern Deprecatedsquadst *activesquad;
-	extern short cursite;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_149, gamelog);
@@ -1782,13 +1777,12 @@ void pressKeyDInCombat() {
 		}
 		activesquad->squad[i] = NULL;
 	}
-	LocationsPool::getInstance().isThereASiegeHere(cursite, 0);
+	LocationsPool::getInstance().isThereASiegeHere(getCurrentSite(), 0);
 }
 
 char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
-	extern short cursite;
 	extern Deprecatednewsstoryst *sitestory;
 	extern int sitecrime;
 	extern Deprecatedsquadst *activesquad;
@@ -2687,506 +2681,705 @@ bool initialize_incomplete_txt() {
 }
 
 map<int, vector<SiteTypes> > okaySiteList = {
-	map<int, vector<SiteTypes> >::value_type(CREATURE_BOUNCER,{
-	SITE_BUSINESS_CIGARBAR,
-		}),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_POLITICIAN,{
-	SITE_GOVERNMENT_WHITE_HOUSE,
-			}),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_CEO,{
-	SITE_CORPORATE_HEADQUARTERS,
-				}),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_SECURITYGUARD,{
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_INDUSTRY_SWEATSHOP,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_CORPORATE_HOUSE,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_BUSINESS_BANK,
-	//SITE_GOVERNMENT_FIRESTATION,
-					}),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_MANAGER,{
-	SITE_BUSINESS_BANK,
-						}),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_TELLER,{
-	SITE_BUSINESS_BANK,
-							}),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_LABTECH,{
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_INDUSTRY_NUCLEAR,
-								}),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_EMINENT,{
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_INDUSTRY_NUCLEAR,
-									}),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_MANAGER,{
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_INDUSTRY_SWEATSHOP,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-										}),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SERVANT,{
-	SITE_CORPORATE_HOUSE,
-											}),
-											map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_JANITOR,{
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_HOSPITAL_CLINIC,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_GOVERNMENT_PRISON,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_BUSINESS_PAWNSHOP,
-	SITE_BUSINESS_CRACKHOUSE,
-	SITE_BUSINESS_JUICEBAR,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_BUSINESS_LATTESTAND,
-	SITE_BUSINESS_VEGANCOOP,
-	SITE_BUSINESS_INTERNETCAFE,
-	SITE_BUSINESS_DEPTSTORE,
-	SITE_BUSINESS_HALLOWEEN,
-	SITE_GOVERNMENT_FIRESTATION,
-												}),
-												map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SWEATSHOP,{
-	SITE_INDUSTRY_SWEATSHOP,
-													}),
-													map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_NONUNION,{
-	SITE_INDUSTRY_POLLUTER,
-														}),
-														map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_CHILD,{
-	SITE_INDUSTRY_POLLUTER,
-															}),
-															map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SECRETARY,{
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_HOSPITAL_CLINIC,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_CORPORATE_HOUSE,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_GOVERNMENT_WHITE_HOUSE,
-																}),
-																map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_UNION,{
-	SITE_INDUSTRY_POLLUTER,
-																	}),
-																	map<int, vector<SiteTypes> >::value_type(CREATURE_LANDLORD,{
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-																		}),
-																		map<int, vector<SiteTypes> >::value_type(CREATURE_TEENAGER,{
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_RESIDENTIAL_SHELTER,
-	SITE_CORPORATE_HOUSE,
-																			}),
-																			map<int, vector<SiteTypes> >::value_type(CREATURE_COP,{
-	SITE_GOVERNMENT_POLICESTATION,
-																				}),
-																				map<int, vector<SiteTypes> >::value_type(CREATURE_DEATHSQUAD,{
-	SITE_GOVERNMENT_POLICESTATION,
-																					}),
-																					map<int, vector<SiteTypes> >::value_type(CREATURE_FIREFIGHTER,{
-	SITE_GOVERNMENT_FIRESTATION,
-																						}),
-																						map<int, vector<SiteTypes> >::value_type(CREATURE_GANGUNIT,{
-	SITE_GOVERNMENT_POLICESTATION,
-																							}),
-																							map<int, vector<SiteTypes> >::value_type(CREATURE_SWAT,{
-	SITE_GOVERNMENT_POLICESTATION,
-																								}),
-																								map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_LIBERAL,{
-	SITE_GOVERNMENT_COURTHOUSE,
-																									}),
-																									map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_CONSERVATIVE,{
-	SITE_GOVERNMENT_COURTHOUSE,
-																										}),
-																										map<int, vector<SiteTypes> >::value_type(CREATURE_SECRET_SERVICE,{
-	SITE_GOVERNMENT_WHITE_HOUSE,
-																											}),
-																											map<int, vector<SiteTypes> >::value_type(CREATURE_AGENT,{
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-																												}),
-																												map<int, vector<SiteTypes> >::value_type(CREATURE_RADIOPERSONALITY,{
-	SITE_MEDIA_AMRADIO,
-																													}),
-																													map<int, vector<SiteTypes> >::value_type(CREATURE_NEWSANCHOR,{
-	SITE_MEDIA_CABLENEWS,
-																														}),
-																														map<int, vector<SiteTypes> >::value_type(CREATURE_GENETIC,{
-	SITE_LABORATORY_GENETIC,
-																															}),
-																															map<int, vector<SiteTypes> >::value_type(CREATURE_GUARDDOG,{
-	SITE_GOVERNMENT_PRISON,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_CORPORATE_HOUSE,
-	SITE_GOVERNMENT_ARMYBASE,
-																																}),
-																																map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONER,{
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_RESIDENTIAL_SHELTER,
-																																	}),
-																																	map<int, vector<SiteTypes> >::value_type(CREATURE_JUROR,{
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_RESIDENTIAL_SHELTER,
-																																		}),
-																																		map<int, vector<SiteTypes> >::value_type(CREATURE_LAWYER,{
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_GOVERNMENT_WHITE_HOUSE,
-																																			}),
-																																			map<int, vector<SiteTypes> >::value_type(CREATURE_DOCTOR,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-																																				}),
-																																				map<int, vector<SiteTypes> >::value_type(CREATURE_PSYCHOLOGIST,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-																																					}),
-																																					map<int, vector<SiteTypes> >::value_type(CREATURE_NURSE,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																						}),
-																																						map<int, vector<SiteTypes> >::value_type(CREATURE_SEWERWORKER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																							}),
-																																							map<int, vector<SiteTypes> >::value_type(CREATURE_COLLEGESTUDENT,{
-	SITE_UDISTRICT,
-																																								}),
-																																								map<int, vector<SiteTypes> >::value_type(CREATURE_MUSICIAN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																									}),
-																																									map<int, vector<SiteTypes> >::value_type(CREATURE_MATHEMATICIAN,{
-	SITE_UDISTRICT,
-																																										}),
-																																										map<int, vector<SiteTypes> >::value_type(CREATURE_TEACHER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																											}),
-																																											map<int, vector<SiteTypes> >::value_type(CREATURE_HSDROPOUT,{
-	SITE_INDUSTRIAL,
-																																												}),
-																																												map<int, vector<SiteTypes> >::value_type(CREATURE_BUM,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-	SITE_RESIDENTIAL_SHELTER,
-																																													}),
-																																													map<int, vector<SiteTypes> >::value_type(CREATURE_GANGMEMBER,{
-	SITE_BUSINESS_CRACKHOUSE,
-																																														}),
-																																														map<int, vector<SiteTypes> >::value_type(CREATURE_CRACKHEAD,{
-	SITE_BUSINESS_CRACKHOUSE,
-																																															}),
-																																															map<int, vector<SiteTypes> >::value_type(CREATURE_PRIEST,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																}),
-																																																map<int, vector<SiteTypes> >::value_type(CREATURE_ENGINEER,{
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_INDUSTRY_NUCLEAR,
-																																																	}),
-																																																	map<int, vector<SiteTypes> >::value_type(CREATURE_FASTFOODWORKER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																		}),
-																																																		map<int, vector<SiteTypes> >::value_type(CREATURE_BAKER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																			}),
-																																																			map<int, vector<SiteTypes> >::value_type(CREATURE_BARISTA,{
-	SITE_BUSINESS_LATTESTAND,
-	SITE_BUSINESS_INTERNETCAFE,
-																																																				}),
-																																																				map<int, vector<SiteTypes> >::value_type(CREATURE_BARTENDER,{
-	SITE_BUSINESS_CIGARBAR,
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																					}),
-																																																					map<int, vector<SiteTypes> >::value_type(CREATURE_TELEMARKETER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																						}),
-																																																						map<int, vector<SiteTypes> >::value_type(CREATURE_CARSALESMAN,{
-	SITE_BUSINESS_CARDEALERSHIP,
-																																																							}),
-																																																							map<int, vector<SiteTypes> >::value_type(CREATURE_OFFICEWORKER,{
-	SITE_LABORATORY_COSMETICS,
-	SITE_LABORATORY_GENETIC,
-	SITE_HOSPITAL_CLINIC,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_BUSINESS_DEPTSTORE,
-	SITE_GOVERNMENT_WHITE_HOUSE,
-																																																								}),
-																																																								map<int, vector<SiteTypes> >::value_type(CREATURE_FOOTBALLCOACH,{
-	SITE_UDISTRICT,
-																																																									}),
-																																																									map<int, vector<SiteTypes> >::value_type(CREATURE_PROSTITUTE,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																										}),
-																																																										map<int, vector<SiteTypes> >::value_type(CREATURE_MAILMAN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																											}),
-																																																											map<int, vector<SiteTypes> >::value_type(CREATURE_GARBAGEMAN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																												}),
-																																																												map<int, vector<SiteTypes> >::value_type(CREATURE_PLUMBER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																													}),
-																																																													map<int, vector<SiteTypes> >::value_type(CREATURE_CHEF,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-	SITE_BUSINESS_CIGARBAR,
-																																																														}),
-																																																														map<int, vector<SiteTypes> >::value_type(CREATURE_CONSTRUCTIONWORKER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																															}),
-																																																															map<int, vector<SiteTypes> >::value_type(CREATURE_AMATEURMAGICIAN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																}),
-																																																																map<int, vector<SiteTypes> >::value_type(CREATURE_TANK,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																	}),
-																																																																	map<int, vector<SiteTypes> >::value_type(CREATURE_MERC,{
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_CORPORATE_HOUSE,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_LABORATORY_GENETIC,
-	SITE_BUSINESS_BANK,
-																																																																		}),
-																																																																		map<int, vector<SiteTypes> >::value_type(CREATURE_HICK,{
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_OUTOFTOWN,
-																																																																			}),
-																																																																			map<int, vector<SiteTypes> >::value_type(CREATURE_VETERAN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																				}),
-																																																																				map<int, vector<SiteTypes> >::value_type(CREATURE_HARDENED_VETERAN,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																					}),
-																																																																					map<int, vector<SiteTypes> >::value_type(CREATURE_SOLDIER,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																						}),
-																																																																						map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYPOLICE,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																							}),
-																																																																							map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYOFFICER,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																								}),
-																																																																								map<int, vector<SiteTypes> >::value_type(CREATURE_SEAL,{
-	SITE_GOVERNMENT_ARMYBASE,
-																																																																									}),
-																																																																									map<int, vector<SiteTypes> >::value_type(CREATURE_EDUCATOR,{
-	SITE_GOVERNMENT_PRISON,
-																																																																										}),
-																																																																										map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONGUARD,{
-	SITE_GOVERNMENT_PRISON,
-																																																																											}),
-																																																																											map<int, vector<SiteTypes> >::value_type(CREATURE_HIPPIE,{
-	SITE_BUSINESS_VEGANCOOP,
-																																																																												}),
-																																																																												map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_ART,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-	SITE_MEDIA_CABLENEWS,
-																																																																													}),
-																																																																													map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_MUSIC,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-	SITE_MEDIA_AMRADIO,
-																																																																														}),
-																																																																														map<int, vector<SiteTypes> >::value_type(CREATURE_SOCIALITE,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																															}),
-																																																																															map<int, vector<SiteTypes> >::value_type(CREATURE_PROGRAMMER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_CORPORATE_HEADQUARTERS,
-																																																																																}),
-																																																																																map<int, vector<SiteTypes> >::value_type(CREATURE_RETIREE,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																	}),
-																																																																																	map<int, vector<SiteTypes> >::value_type(CREATURE_PAINTER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																		}),
-																																																																																		map<int, vector<SiteTypes> >::value_type(CREATURE_SCULPTOR,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																			}),
-																																																																																			map<int, vector<SiteTypes> >::value_type(CREATURE_AUTHOR,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																				}),
-																																																																																				map<int, vector<SiteTypes> >::value_type(CREATURE_JOURNALIST,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																					}),
-																																																																																					map<int, vector<SiteTypes> >::value_type(CREATURE_DANCER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																						}),
-																																																																																						map<int, vector<SiteTypes> >::value_type(CREATURE_PHOTOGRAPHER,{
-	SITE_MEDIA_CABLENEWS,
-																																																																																							}),
-																																																																																							map<int, vector<SiteTypes> >::value_type(CREATURE_CAMERAMAN,{
-	SITE_MEDIA_CABLENEWS,
-																																																																																								}),
-																																																																																								map<int, vector<SiteTypes> >::value_type(CREATURE_HAIRSTYLIST,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																									}),
-																																																																																									map<int, vector<SiteTypes> >::value_type(CREATURE_FASHIONDESIGNER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																										}),
-																																																																																										map<int, vector<SiteTypes> >::value_type(CREATURE_CLERK,{
-	SITE_BUSINESS_JUICEBAR,
-	SITE_BUSINESS_LATTESTAND,
-	SITE_BUSINESS_INTERNETCAFE,
-	SITE_BUSINESS_DEPTSTORE,
-	SITE_BUSINESS_HALLOWEEN,
-																																																																																											}),
-																																																																																											map<int, vector<SiteTypes> >::value_type(CREATURE_THIEF,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																												}),
-																																																																																												map<int, vector<SiteTypes> >::value_type(CREATURE_ACTOR,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																													}),
-																																																																																													map<int, vector<SiteTypes> >::value_type(CREATURE_YOGAINSTRUCTOR,{
-	SITE_BUSINESS_VEGANCOOP,
-																																																																																														}),
-																																																																																														map<int, vector<SiteTypes> >::value_type(CREATURE_MARTIALARTIST,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																															}),
-																																																																																															map<int, vector<SiteTypes> >::value_type(CREATURE_ATHLETE,{
-	SITE_UDISTRICT,
-																																																																																																}),
-																																																																																																map<int, vector<SiteTypes> >::value_type(CREATURE_BIKER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																																	}),
-																																																																																																	map<int, vector<SiteTypes> >::value_type(CREATURE_TRUCKER,{
-	SITE_OUTOFTOWN,
-																																																																																																		}),
-																																																																																																		map<int, vector<SiteTypes> >::value_type(CREATURE_TAXIDRIVER,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																																			}),
-																																																																																																			map<int, vector<SiteTypes> >::value_type(CREATURE_NUN,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																																				}),
-																																																																																																				map<int, vector<SiteTypes> >::value_type(CREATURE_LOCKSMITH,{
-	SITE_DOWNTOWN,
-	SITE_UDISTRICT,
-	SITE_INDUSTRIAL,
-																																																																																																					}),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_BOUNCER,
+		{
+			SITE_BUSINESS_CIGARBAR,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_POLITICIAN,
+		{
+			SITE_GOVERNMENT_WHITE_HOUSE,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_CEO,
+		{
+			SITE_CORPORATE_HEADQUARTERS,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_SECURITYGUARD,
+		{
+			SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+			SITE_LABORATORY_COSMETICS,
+			SITE_LABORATORY_GENETIC,
+			SITE_GOVERNMENT_COURTHOUSE,
+			SITE_GOVERNMENT_INTELLIGENCEHQ,
+			SITE_INDUSTRY_SWEATSHOP,
+			SITE_INDUSTRY_POLLUTER,
+			SITE_INDUSTRY_NUCLEAR,
+			SITE_CORPORATE_HEADQUARTERS,
+			SITE_CORPORATE_HOUSE,
+			SITE_MEDIA_AMRADIO,
+			SITE_MEDIA_CABLENEWS,
+			SITE_BUSINESS_CIGARBAR,
+			SITE_BUSINESS_BANK,
+			//SITE_GOVERNMENT_FIRESTATION,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_MANAGER,
+		{
+			SITE_BUSINESS_BANK,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_TELLER,
+		{
+			SITE_BUSINESS_BANK,
+
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_LABTECH,
+		{
+			SITE_LABORATORY_COSMETICS,
+			SITE_LABORATORY_GENETIC,
+			SITE_INDUSTRY_NUCLEAR,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_EMINENT,
+		{
+			SITE_LABORATORY_COSMETICS,
+			SITE_LABORATORY_GENETIC,
+			SITE_INDUSTRY_NUCLEAR,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_MANAGER,
+		{
+			SITE_LABORATORY_COSMETICS,
+			SITE_LABORATORY_GENETIC,
+			SITE_INDUSTRY_SWEATSHOP,
+			SITE_INDUSTRY_POLLUTER,
+			SITE_INDUSTRY_NUCLEAR,
+			SITE_CORPORATE_HEADQUARTERS,
+			SITE_MEDIA_AMRADIO,
+			SITE_MEDIA_CABLENEWS,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SERVANT,
+		{
+			SITE_CORPORATE_HOUSE,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_JANITOR,
+		{
+			SITE_RESIDENTIAL_TENEMENT,
+			SITE_RESIDENTIAL_APARTMENT,
+			SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+			SITE_LABORATORY_COSMETICS,
+			SITE_LABORATORY_GENETIC,
+			SITE_HOSPITAL_CLINIC,
+			SITE_HOSPITAL_UNIVERSITY,
+			SITE_GOVERNMENT_POLICESTATION,
+			SITE_GOVERNMENT_COURTHOUSE,
+			SITE_GOVERNMENT_PRISON,
+			SITE_GOVERNMENT_INTELLIGENCEHQ,
+			SITE_INDUSTRY_POLLUTER,
+			SITE_INDUSTRY_NUCLEAR,
+			SITE_CORPORATE_HEADQUARTERS,
+			SITE_MEDIA_AMRADIO,
+			SITE_MEDIA_CABLENEWS,
+			SITE_BUSINESS_PAWNSHOP,
+			SITE_BUSINESS_CRACKHOUSE,
+			SITE_BUSINESS_JUICEBAR,
+			SITE_BUSINESS_CIGARBAR,
+			SITE_BUSINESS_LATTESTAND,
+			SITE_BUSINESS_VEGANCOOP,
+			SITE_BUSINESS_INTERNETCAFE,
+			SITE_BUSINESS_DEPTSTORE,
+			SITE_BUSINESS_HALLOWEEN,
+			SITE_GOVERNMENT_FIRESTATION,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SWEATSHOP,
+		{
+			SITE_INDUSTRY_SWEATSHOP,
+		}
+		),
+	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_NONUNION,
+		{
+			SITE_INDUSTRY_POLLUTER,
+		}
+		),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_CHILD,
+				{
+					SITE_INDUSTRY_POLLUTER,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SECRETARY,
+				{
+					SITE_LABORATORY_COSMETICS,
+					SITE_LABORATORY_GENETIC,
+					SITE_HOSPITAL_CLINIC,
+					SITE_HOSPITAL_UNIVERSITY,
+					SITE_GOVERNMENT_POLICESTATION,
+					SITE_GOVERNMENT_COURTHOUSE,
+					SITE_GOVERNMENT_INTELLIGENCEHQ,
+					SITE_INDUSTRY_POLLUTER,
+					SITE_INDUSTRY_NUCLEAR,
+					SITE_CORPORATE_HEADQUARTERS,
+					SITE_CORPORATE_HOUSE,
+					SITE_MEDIA_AMRADIO,
+					SITE_MEDIA_CABLENEWS,
+					SITE_GOVERNMENT_FIRESTATION,
+					SITE_GOVERNMENT_WHITE_HOUSE,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_UNION,
+				{
+					SITE_INDUSTRY_POLLUTER,
+				}
+				),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_LANDLORD,
+			{
+				SITE_RESIDENTIAL_TENEMENT,
+				SITE_RESIDENTIAL_APARTMENT,
+				SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+			}
+			),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_TEENAGER,
+			{
+				SITE_RESIDENTIAL_TENEMENT,
+				SITE_RESIDENTIAL_APARTMENT,
+				SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+				SITE_RESIDENTIAL_SHELTER,
+				SITE_CORPORATE_HOUSE,
+			}
+			),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_COP,
+				{
+					SITE_GOVERNMENT_POLICESTATION,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_DEATHSQUAD,
+				{
+					SITE_GOVERNMENT_POLICESTATION,
+				}
+				),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_FIREFIGHTER,
+			{
+				SITE_GOVERNMENT_FIRESTATION,
+			}
+			),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_GANGUNIT,
+			{
+				SITE_GOVERNMENT_POLICESTATION,
+			}
+			),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_SWAT,
+				{
+					SITE_GOVERNMENT_POLICESTATION,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_LIBERAL,
+				{
+					SITE_GOVERNMENT_COURTHOUSE,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_CONSERVATIVE,
+				{
+					SITE_GOVERNMENT_COURTHOUSE,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_SECRET_SERVICE,
+				{
+					SITE_GOVERNMENT_WHITE_HOUSE,
+				}
+				),
+			map<int, vector<SiteTypes> >::value_type(CREATURE_AGENT,
+				{
+					SITE_GOVERNMENT_INTELLIGENCEHQ,
+				}
+				),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_RADIOPERSONALITY,
+			{
+				SITE_MEDIA_AMRADIO,
+			}
+			),
+		map<int, vector<SiteTypes> >::value_type(CREATURE_NEWSANCHOR,
+			{
+				SITE_MEDIA_CABLENEWS,
+			}
+			),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_GENETIC,
+					{
+						SITE_LABORATORY_GENETIC,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_GUARDDOG,
+					{
+						SITE_GOVERNMENT_PRISON,
+						SITE_GOVERNMENT_INTELLIGENCEHQ,
+						SITE_CORPORATE_HOUSE,
+						SITE_GOVERNMENT_ARMYBASE,
+					}
+					),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONER,
+						{
+							SITE_RESIDENTIAL_TENEMENT,
+							SITE_RESIDENTIAL_SHELTER,
+						}
+						),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_JUROR,
+						{
+							SITE_RESIDENTIAL_APARTMENT,
+							SITE_RESIDENTIAL_TENEMENT,
+							SITE_RESIDENTIAL_SHELTER,
+						}
+						),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_LAWYER,
+						{
+							SITE_GOVERNMENT_COURTHOUSE,
+							SITE_GOVERNMENT_WHITE_HOUSE,
+						}
+						),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_DOCTOR,
+					{
+						SITE_DOWNTOWN,
+						SITE_UDISTRICT,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_PSYCHOLOGIST,
+					{
+						SITE_DOWNTOWN,
+						SITE_UDISTRICT,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_NURSE,
+					{
+						SITE_DOWNTOWN,
+						SITE_UDISTRICT,
+						SITE_INDUSTRIAL,
+					}
+					),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_SEWERWORKER,
+						{
+							SITE_DOWNTOWN,
+							SITE_UDISTRICT,
+							SITE_INDUSTRIAL,
+						}
+						),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_COLLEGESTUDENT,
+					{
+						SITE_UDISTRICT,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_MUSICIAN,
+					{
+						SITE_DOWNTOWN,
+						SITE_UDISTRICT,
+						SITE_INDUSTRIAL,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_MATHEMATICIAN,
+					{
+						SITE_UDISTRICT,
+					}
+					),
+				map<int, vector<SiteTypes> >::value_type(CREATURE_TEACHER,
+					{
+						SITE_DOWNTOWN,
+						SITE_UDISTRICT,
+						SITE_INDUSTRIAL,
+					}
+					),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_HSDROPOUT,
+						{
+							SITE_INDUSTRIAL,
+						}
+						),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_BUM,
+						{
+							SITE_DOWNTOWN,	
+							SITE_UDISTRICT,
+
+							SITE_INDUSTRIAL,
+							SITE_RESIDENTIAL_SHELTER,
+						}
+						),
+
+				map<int, vector<SiteTypes> >::value_type(CREATURE_GANGMEMBER,
+					{
+						SITE_BUSINESS_CRACKHOUSE,
+					}
+					),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_CRACKHEAD,
+							{
+								SITE_BUSINESS_CRACKHOUSE,
+							}
+							),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_PRIEST,
+							{
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_ENGINEER,
+								{
+									SITE_MEDIA_AMRADIO,
+									SITE_MEDIA_CABLENEWS,
+									SITE_INDUSTRY_NUCLEAR,
+								}
+								),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_FASTFOODWORKER,
+								{
+									SITE_DOWNTOWN,
+									SITE_UDISTRICT,
+									SITE_INDUSTRIAL,
+								}
+								),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_BAKER,
+								{
+									SITE_DOWNTOWN,
+									SITE_UDISTRICT,
+									SITE_INDUSTRIAL,
+								}
+								),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_BARISTA,
+							{
+								SITE_BUSINESS_LATTESTAND,
+								SITE_BUSINESS_INTERNETCAFE,
+							}
+							),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_BARTENDER,
+							{
+								SITE_BUSINESS_CIGARBAR,
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_TELEMARKETER,
+							{
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_CARSALESMAN,
+								{
+									SITE_BUSINESS_CARDEALERSHIP,
+								}
+								),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_OFFICEWORKER,
+							{
+								SITE_LABORATORY_COSMETICS,
+								SITE_LABORATORY_GENETIC,
+								SITE_HOSPITAL_CLINIC,
+								SITE_HOSPITAL_UNIVERSITY,
+								SITE_GOVERNMENT_COURTHOUSE,
+								SITE_CORPORATE_HEADQUARTERS,
+								SITE_MEDIA_AMRADIO,
+								SITE_MEDIA_CABLENEWS,
+								SITE_BUSINESS_DEPTSTORE,
+								SITE_GOVERNMENT_WHITE_HOUSE,
+							}
+							),
+					map<int, vector<SiteTypes> >::value_type(CREATURE_FOOTBALLCOACH,
+						{
+							SITE_UDISTRICT,
+						}
+						),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_PROSTITUTE,
+							{
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_MAILMAN,
+							{
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_GARBAGEMAN,
+								{
+									SITE_DOWNTOWN,
+									SITE_UDISTRICT,
+									SITE_INDUSTRIAL,
+								}
+								),
+						map<int, vector<SiteTypes> >::value_type(CREATURE_PLUMBER,
+							{
+								SITE_DOWNTOWN,
+								SITE_UDISTRICT,
+								SITE_INDUSTRIAL,
+							}
+							),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_CHEF,
+									{
+										SITE_DOWNTOWN,
+										SITE_UDISTRICT,
+										SITE_INDUSTRIAL,
+										SITE_BUSINESS_CIGARBAR,
+									}
+									),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_CONSTRUCTIONWORKER,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+										}
+										),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_AMATEURMAGICIAN,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+										}
+										),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_TANK,
+										{
+											SITE_GOVERNMENT_ARMYBASE,
+										}
+										),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_MERC,
+								{
+									SITE_CORPORATE_HEADQUARTERS,
+									SITE_CORPORATE_HOUSE,
+									SITE_INDUSTRY_NUCLEAR,
+									SITE_LABORATORY_GENETIC,
+									SITE_BUSINESS_BANK,
+								}
+								),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_HICK,
+									{
+										SITE_MEDIA_AMRADIO,
+										SITE_MEDIA_CABLENEWS,
+										SITE_OUTOFTOWN,
+									}
+									),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_VETERAN,
+									{
+										SITE_DOWNTOWN,
+										SITE_UDISTRICT,
+										SITE_INDUSTRIAL,
+									}
+									),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_HARDENED_VETERAN,
+										{
+											SITE_GOVERNMENT_ARMYBASE,
+										}
+										),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_SOLDIER,
+									{
+										SITE_GOVERNMENT_ARMYBASE,
+									}
+									),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYPOLICE,
+									{
+										SITE_GOVERNMENT_ARMYBASE,
+									}
+									),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYOFFICER,
+									{
+										SITE_GOVERNMENT_ARMYBASE,
+									}
+									),
+							map<int, vector<SiteTypes> >::value_type(CREATURE_SEAL,
+								{
+									SITE_GOVERNMENT_ARMYBASE,
+								}
+								),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_EDUCATOR,
+									{
+										SITE_GOVERNMENT_PRISON,
+									}
+									),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONGUARD,
+									{
+										SITE_GOVERNMENT_PRISON,
+									}
+									),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_HIPPIE,
+									{
+										SITE_BUSINESS_VEGANCOOP,
+									}
+									),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_ART,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+											SITE_MEDIA_CABLENEWS,
+										}
+										),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_MUSIC,
+
+									{
+										SITE_DOWNTOWN,
+										SITE_UDISTRICT,
+										SITE_INDUSTRIAL,
+										SITE_MEDIA_AMRADIO,
+									}
+									),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_SOCIALITE,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+											map<int, vector<SiteTypes> >::value_type(CREATURE_PROGRAMMER,
+												{
+													SITE_DOWNTOWN,
+													SITE_UDISTRICT,
+													SITE_INDUSTRIAL,
+													SITE_GOVERNMENT_INTELLIGENCEHQ,
+													SITE_CORPORATE_HEADQUARTERS,
+												}
+												),
+											map<int, vector<SiteTypes> >::value_type(CREATURE_RETIREE,
+												{
+													SITE_DOWNTOWN,
+													SITE_UDISTRICT,
+													SITE_INDUSTRIAL,
+												}
+												),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_PAINTER,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+										}
+										),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_SCULPTOR,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_AUTHOR,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+											map<int, vector<SiteTypes> >::value_type(CREATURE_JOURNALIST,
+												{
+													SITE_DOWNTOWN,
+													SITE_UDISTRICT,
+													SITE_INDUSTRIAL,
+												}
+												),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_DANCER,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_PHOTOGRAPHER,
+										{
+											SITE_MEDIA_CABLENEWS,
+										}
+										),
+								map<int, vector<SiteTypes> >::value_type(CREATURE_CAMERAMAN,
+									{
+										SITE_MEDIA_CABLENEWS,
+									}
+									),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_HAIRSTYLIST,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+										}
+										),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_FASHIONDESIGNER,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_CLERK,
+											{
+												SITE_BUSINESS_JUICEBAR,
+												SITE_BUSINESS_LATTESTAND,
+												SITE_BUSINESS_INTERNETCAFE,
+												SITE_BUSINESS_DEPTSTORE,
+												SITE_BUSINESS_HALLOWEEN,
+											}
+											),
+									map<int, vector<SiteTypes> >::value_type(CREATURE_THIEF,
+										{
+											SITE_DOWNTOWN,
+											SITE_UDISTRICT,
+											SITE_INDUSTRIAL,
+										}
+										),
+										map<int, vector<SiteTypes> >::value_type(CREATURE_ACTOR,
+											{
+												SITE_DOWNTOWN,
+												SITE_UDISTRICT,
+												SITE_INDUSTRIAL,
+											}
+											),
+												map<int, vector<SiteTypes> >::value_type(CREATURE_YOGAINSTRUCTOR,
+													{
+														SITE_BUSINESS_VEGANCOOP,
+													}
+													),
+													map<int, vector<SiteTypes> >::value_type(CREATURE_MARTIALARTIST,
+														{
+															SITE_DOWNTOWN,
+															SITE_UDISTRICT,
+															SITE_INDUSTRIAL,
+														}
+														),
+													map<int, vector<SiteTypes> >::value_type(CREATURE_ATHLETE,
+														{
+															SITE_UDISTRICT,
+														}
+														),
+													map<int, vector<SiteTypes> >::value_type(CREATURE_BIKER,
+														{
+															SITE_DOWNTOWN,
+															SITE_UDISTRICT,
+															SITE_INDUSTRIAL,
+														}
+														),
+											map<int, vector<SiteTypes> >::value_type(CREATURE_TRUCKER,
+												{
+													SITE_OUTOFTOWN,
+												}
+												),
+												map<int, vector<SiteTypes> >::value_type(CREATURE_TAXIDRIVER,
+													{
+														SITE_DOWNTOWN,
+														SITE_UDISTRICT,
+														SITE_INDUSTRIAL,
+													}
+													),
+												map<int, vector<SiteTypes> >::value_type(CREATURE_NUN,
+													{
+														SITE_DOWNTOWN,
+														SITE_UDISTRICT,
+														SITE_INDUSTRIAL,
+													}
+													),
+													map<int, vector<SiteTypes> >::value_type(CREATURE_LOCKSMITH,
+														{
+															SITE_DOWNTOWN,
+															SITE_UDISTRICT,
+															SITE_INDUSTRIAL,
+														}
+														),
 };
 
 vector<SiteTypes> defaultSiteList = {
 	SITE_RESIDENTIAL_SHELTER
 };
 /* ensures that the creature's work location is appropriate to its type */
-bool verifyworklocation(DeprecatedCreature &cr, char test_location, char test_type)
+int verifyworklocation(const int type, const int worklocation)
 {
 	extern bool multipleCityMode;
 	extern char ccs_kills;
 	int okaysite[SITENUM];
 	memset(okaysite, 0, SITENUM * sizeof(int));
-	// If the caller sets test_type, they're just
-	// asking if the chosen creature type is appropriate
-	// to the location they provided, not actually setting
-	// the creature work location -- this is useful
-	// for things like stealth
-	short type = (test_type != -1 ? test_type : cr.type);
+
 	// TODO this can be extracted to a table
 	if (type == CREATURE_CCS_ARCHCONSERVATIVE || type == CREATURE_CCS_MOLOTOV ||
 		type == CREATURE_CCS_SNIPER || type == CREATURE_CCS_VIGILANTE) {
@@ -3207,36 +3400,38 @@ bool verifyworklocation(DeprecatedCreature &cr, char test_location, char test_ty
 			}
 		}
 	}
-
-	// Quick exit if only checking if a certain type works
-	if (test_type != -1) return okaysite[(int)test_location];
+	int new_work_location = worklocation;
 	char swap = 0;
-	if (cr.worklocation == -1) swap = 1;
-	else if (!okaysite[(int)LocationsPool::getInstance().getLocationType((int)cr.worklocation)]) swap = 1;
+	// TODO possible alwaysfalse conditional, investigate
+	if (worklocation == -1) swap = 1;
+	else if (!okaysite[(int)LocationsPool::getInstance().getLocationType((int)worklocation)]) swap = 1;
 	if (swap)
 	{
-		//int city = location[cr.location]->city;
+		//int city = location[location]->city;
 		//PICK A TYPE OF WORK LOCATION
-		//cr.worklocation=choose_one(okaysite,SITENUM,0);
+		//worklocation=choose_one(okaysite,SITENUM,0);
 		//FIND ONE OF THESE
 		vector<int> goodlist;
-		//find_site_index_in_city(cr.worklocation, location[cr.location]->city);
+		//find_site_index_in_city(worklocation, location[location]->city);
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
-			//if(location[l]->type==cr.worklocation && (!multipleCityMode || location[l]->city == cr.location))
-			if (okaysite[(int)LocationsPool::getInstance().getLocationType(l)] && (!multipleCityMode || LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,l) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,cr.location)))
+			//if(location[l]->type==worklocation && (!multipleCityMode || location[l]->city == location))
+			if (okaysite[(int)LocationsPool::getInstance().getLocationType(l)] &&
+				(!multipleCityMode || LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,l)
+					==
+					LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,worklocation)))
 				goodlist.push_back(l);
 		// Sadler - This line sometimes causes a memory fault
 		//               Only thing I can think of is if loop above didn't
-		//               find any locations of type == to cr.worklocation
+		//               find any locations of type == to worklocation
 		//               My hunch is that some locations, such as the 1st four
 		//               are special and cannot be used here..
 		//
 		//   TODO There was a bug in the makecharacter() code where the
 		//   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
 		//   is still occurring, normally at the Latte Bar Downtown ;
-		if (!len(goodlist)) cr.worklocation = 0;
-		else cr.worklocation = pickrandom(goodlist);
+		if (!len(goodlist)) new_work_location = 0;
+		else new_work_location = pickrandom(goodlist);
 	}
-	return false;
+	return new_work_location;
 }
 

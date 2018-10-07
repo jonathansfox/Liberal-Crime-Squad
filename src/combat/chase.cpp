@@ -76,11 +76,6 @@ void reloadparty(bool wasteful = false);
 // for addstr (with log)
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
-/* tells how many total members a squad has (including dead members) */
-int squadsize(const Deprecatedsquadst *st);
-/* tells how many members a squad has who are alive */
-int squadalive(const Deprecatedsquadst *st);
-// for int squadsize(const squadst *);
 //#include "common/equipment.h"
 void equip(vector<Item *> &loot, int loc);
 #include "fight.h"
@@ -529,7 +524,7 @@ LOOP_CONTINUATION increment_footchase() {
 	extern Deprecatednewsstoryst *sitestory;
 	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	int partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+	int partysize = activesquadSize(), partyalive = activesquadAlive();
 	int encsize = encounterSize();
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
@@ -620,7 +615,7 @@ LOOP_CONTINUATION increment_footchase() {
 
 		//HAVE YOU LOST ALL OF THEM?
 		//THEN LEAVE
-		partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+		partysize = activesquadSize(), partyalive = activesquadAlive();
 		int baddiecount = baddieCount();
 		if (partyalive > 0 && baddiecount == 0)
 		{
@@ -1315,8 +1310,7 @@ void printSituationAndInstructions(const short obstacle) {
 	extern Log gamelog;
 	extern chaseseqst chaseseq;
 	extern short party_status;
-	extern Deprecatedsquadst *activesquad;
-	int partysize = squadsize(activesquad);
+	int partysize = activesquadSize();
 
 	const string CONST_chase078 = "P - Pull over";
 	const string CONST_chase077 = "B - Bail out and run!";
@@ -1379,8 +1373,8 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 
-	int partysize = squadsize(activesquad);
-	int partyalive = squadalive(activesquad);
+	int partysize = activesquadSize();
+	int partyalive = activesquadAlive();
 
 	if (c == 'o'&&partysize > 1)orderparty();
 	if (c == '0')party_status = -1;
@@ -1426,7 +1420,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 			creatureadvance();
 			if (drivingupdate(obstacle))
 			{
-				partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+				partysize = activesquadSize(), partyalive = activesquadAlive();
 				if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 			}
 		}
@@ -1443,7 +1437,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 			creatureadvance();
 			if (drivingupdate(obstacle))
 			{
-				partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+				partysize = activesquadSize(), partyalive = activesquadAlive();
 				if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 			}
 		}
@@ -1461,7 +1455,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 			{
 				if (obstacledrive(obstacle, 0))
 				{
-					partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+					partysize = activesquadSize(), partyalive = activesquadAlive();
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 				}
 				creatureadvance();
@@ -1471,13 +1465,13 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 			{
 				if (obstacledrive(obstacle, 1))
 				{
-					partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+					partysize = activesquadSize(), partyalive = activesquadAlive();
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 				}
 				creatureadvance();
 				if (drivingupdate(obstacle))
 				{
-					partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+					partysize = activesquadSize(), partyalive = activesquadAlive();
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 				}
 			}
@@ -1486,7 +1480,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 	}
 	//HAVE YOU LOST ALL OF THEM?
 	//THEN LEAVE
-	partysize = squadsize(activesquad), partyalive = squadalive(activesquad);
+	partysize = activesquadSize(), partyalive = activesquadAlive();
 	int baddiecount = baddieCount(true);
 	if (partyalive > 0 && baddiecount == 0)
 	{
@@ -1503,10 +1497,8 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 LOOP_CONTINUATION increment_chasesequence(short& obstacle) {
 
 	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
 	extern short party_status;
-
-	int partyalive = squadalive(activesquad);
+	int partyalive = activesquadAlive();
 
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);

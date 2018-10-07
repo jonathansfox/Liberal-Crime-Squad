@@ -487,14 +487,14 @@ vector<string> corporateSuffix;
 		 if (abs(exec[EXEC_PRESIDENT] - exec[EXEC_ATTORNEY]) > 1) fillCabinetPost(EXEC_ATTORNEY);
 	 }
  }
+ void addStringYear();
  void printSenateElectionsHeader() {
 	 extern MusicClass music;
-	 extern int year;
 	 music.play(MUSIC_ELECTIONS);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(0, 0, CONST_politics002);
-	 addstrAlt(year);
+	 addStringYear();
  }
  void printPressAnyKeyElections() {
 	 set_color_easy(WHITE_ON_BLACK);
@@ -573,7 +573,6 @@ vector<string> corporateSuffix;
  void elections_senate(int senmod, char canseethings)
  {
 	 extern MusicClass music;
-	 extern int year;
 	 extern bool termlimits;
 	 extern bool stalinmode;
 	 extern char disbanding;
@@ -771,12 +770,11 @@ vector<string> corporateSuffix;
  }
  void printHouseElectionsHeader() {
 	 extern MusicClass music;
-	 extern int year;
 	 music.play(MUSIC_ELECTIONS);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(0, 0, CONST_politics020);
-	 addstrAlt(year);
+	 addStringYear();
 	 printHouseMembership();
 	 set_color_easy(WHITE_ON_BLACK);
 	 mvaddstrAlt(23, 0, CONST_politics069);
@@ -1074,17 +1072,30 @@ vector<string> corporateSuffix;
 		 for (int e = EXEC_PRESIDENT + 1; e < EXECNUM; e++) fillCabinetPost(e);
 	 }
  }
+ bool isPresidentElectionYear() {
+	 extern int year;
+	 return year % 4 == 0;
+ }
+ bool isAnyElectionYear() {
+	 extern int year;
+	 return year % 2 == 0;
+
+ }
+ int senMod() {
+	 extern int year;
+	 return (year % 6) / 2;
+ }
+ void addStringYear() {
+	 extern int year;
+	 addstrAlt(year);
+ }
  /* politics - causes the people to vote (presidential, congressional, propositions) */
  void elections(char clearformess, char canseethings)
  {
 	 extern MusicClass music;
-	 extern int year;
-	 extern short presparty;
+
 	 extern bool stalinmode;
-	 extern char disbanding;
-	 extern short execterm;
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	 extern short exec[EXECNUM];
+
 	 extern short lawList[LAWNUM];
 	 extern short public_interest[VIEWNUM];
 	 if (canseethings)
@@ -1097,14 +1108,14 @@ vector<string> corporateSuffix;
 		 pressAnyKey();
 	 }
 	 //PRESIDENTIAL
-	 if (year % 4 == 0)
+	 if (isPresidentElectionYear())
 	 {
 		 if (canseethings)
 		 {
 			 eraseAlt();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(0, 0, CONST_politics050);
-			 addstrAlt(year);
+			 addStringYear();
 			 set_color_easy(WHITE_ON_BLACK);
 			 moveAlt(2, 0);
 			 if (stalinmode) addstrAlt(CONST_politics051);
@@ -1112,9 +1123,9 @@ vector<string> corporateSuffix;
 		 }
 		 presidentialElection(canseethings);
 	 }
-	 if (year % 2 == 0)
+	 if (isAnyElectionYear())
 	 {
-		 elections_senate((year % 6) / 2, canseethings); //SENATE
+		 elections_senate(senMod(), canseethings); //SENATE
 		 elections_house(canseethings); //HOUSE
 	 }
 	 //PROPOSITIONS
@@ -1123,7 +1134,7 @@ vector<string> corporateSuffix;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_politics064);
-		 addstrAlt(year);
+		 addStringYear();
 	 }
 	 vector<int> prop, propdir, canlaw;
 	 int pnum = LCSrandom(4) + 4; // this expression for pnum has a maximum value of 7, important later on
@@ -1208,9 +1219,10 @@ vector<string> corporateSuffix;
 		 pressAnyKey();
 	 }
 	 for (int p = 0; p < pnum; p++)
-	 {
-		 bool yeswin = voteOnBill(canseethings, publicmood(prop[p]), propdir[p], p);
-		 if (yeswin) lawList[prop[p]] += propdir[p];
+	 {		 
+		 if (voteOnBill(canseethings, publicmood(prop[p]), propdir[p], p)) {
+			 lawList[prop[p]] += propdir[p];
+		 }
 	 }
 	 if (canseethings)
 	 {
@@ -1223,7 +1235,6 @@ vector<string> corporateSuffix;
  void supremecourt(char clearformess, char canseethings)
  {
 	 extern MusicClass music;
-	 extern int year;
 	 extern short exec[EXECNUM];
 	 extern short lawList[LAWNUM];
 	 extern short senate[SENATENUM];
@@ -1244,7 +1255,7 @@ vector<string> corporateSuffix;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_politics074);
-		 addstrAlt(year);
+		 addStringYear();
 		 set_color_easy(WHITE_ON_BLACK);
 	 }
 	 vector<int> scase, scasedir;
@@ -1454,7 +1465,6 @@ vector<string> corporateSuffix;
 	 return vote;
  }
  void determineBills(const char canseethings, vector<int> &bill, vector<int> &billdir) {
-	 extern int year;
 	 extern short lawList[LAWNUM];
 	 extern short house[HOUSENUM];
 	 extern short senate[SENATENUM];
@@ -1529,7 +1539,7 @@ vector<string> corporateSuffix;
 		 {
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(c * 3 + 2, 0, CONST_politics094);
-			 addstrAlt(year);
+			 addStringYear();
 			 addcharAlt('-');
 			 addstrAlt(c + 1);
 			 mvaddstrAlt(c * 3 + 3, 0, CONST_politics095);
@@ -1555,7 +1565,6 @@ vector<string> corporateSuffix;
  }
  void displayCongressHeader(const char clearformess) {
 	 extern MusicClass music;
-	 extern int year;
 	 music.play(MUSIC_ELECTIONS);
 	 if (clearformess) eraseAlt();
 	 else makedelimiter();
@@ -1566,7 +1575,7 @@ vector<string> corporateSuffix;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(0, 0, CONST_politics093);
-	 addstrAlt(year);
+	 addStringYear();
  }
  void displayCongressHeaderPartTwo() {
 	 set_color_easy(WHITE_ON_BLACK);
@@ -1654,33 +1663,112 @@ vector<string> corporateSuffix;
 	 mvaddstrAlt(24, 0, pressKeyToReflect + CONST_politics110);
 	 pressAnyKey();
  }
+ BillStatus determineBillStatus(const int billc, const int billdirc, const int c, const char canseethings) {
+
+	 extern short house[HOUSENUM];
+	 extern short senate[SENATENUM];
+	 extern short exec[EXECNUM];
+	 extern short lawList[LAWNUM];
+
+	 BillStatus killbillc = BILL_PASSED_CONGRESS;
+
+	 char yeswin_h = 0;
+	 char yeswin_s = 0;
+	 int yesvotes_h = 0;
+	 int yesvotes_s = 0;
+	 int s = 0;
+	 for (int l = 0; l < HOUSENUM; l++)
+	 {
+
+		 int vote = determine_politician_vote(house[l], billc);
+		 if (lawList[billc] > vote&&billdirc == -1) yesvotes_h++;
+		 if (lawList[billc] < vote&&billdirc == 1) yesvotes_h++;
+		 if (l == HOUSENUM - 1)
+		 {
+			 if (yesvotes_h >= HOUSEMAJORITY) yeswin_h = 1;
+			 if (yesvotes_h >= HOUSESUPERMAJORITY) killbillc = BILL_OVERRIDE_VETO;
+		 }
+		 if (canseethings)
+		 {
+			 displayHouseVotes(l, yesvotes_h, yeswin_h, c);
+		 }
+		 if (l % 4 == 0 && s < SENATENUM)
+		 {
+			 vote = determine_politician_vote(senate[s++], billc);
+			 if (lawList[billc] > vote&&billdirc == -1) yesvotes_s++;
+			 if (lawList[billc] < vote&&billdirc == 1) yesvotes_s++;
+		 }
+		 if (l == HOUSENUM - 1)
+		 {
+			 if (yesvotes_s >= SENATEMAJORITY) yeswin_s = 1;
+			 if (yesvotes_s < SENATESUPERMAJORITY&&killbillc == BILL_OVERRIDE_VETO) killbillc = BILL_PASSED_CONGRESS;
+			 if (yesvotes_s == SENATEMAJORITY - 1)
+			 {  //TIE BREAKER
+				 int vote;
+				 if ((exec[EXEC_VP] >= -1 && exec[EXEC_VP] <= 1) ||
+					 (exec[EXEC_PRESIDENT] >= -1 && exec[EXEC_PRESIDENT] <= 1))
+					 vote = (exec[EXEC_PRESIDENT] + // only consult Cabinet and random number generator if alignment between -1 and 1
+						 exec[EXEC_VP] +        // for President and/or Vice President
+						 exec[EXEC_STATE] +
+						 exec[EXEC_ATTORNEY] + LCSrandom(9) - 4) / 4;
+				 else
+				 {
+					 vote = exec[EXEC_VP];
+					 if (vote == ALIGN_STALINIST)
+					 {
+						 if (stalinview(billc, true)) vote = ALIGN_ELITELIBERAL;
+						 else vote = ALIGN_ARCHCONSERVATIVE;
+					 }
+				 }
+				 if (lawList[billc] > vote&&billdirc == -1) yeswin_s = 1;
+				 if (lawList[billc] < vote&&billdirc == 1) yeswin_s = 1;
+				 //ASSURED SIGNING BY PRESIDENT IF VP VOTED YES
+				 if (yeswin_s) killbillc = BILL_SIGNED;
+			 }
+		 }
+		 if (canseethings)
+		 {
+			 displaySenateVotes(l, yesvotes_s, yeswin_s, c, s);
+		 }
+	 }
+	 if (!yeswin_h || !yeswin_s) killbillc = BILL_FAILED;
+	 return killbillc;
+ }
+vector<int> getHouseMake() {
+
+	 extern short house[HOUSENUM];
+	 vector<int> housemake = { 0,0,0,0,0,0 };
+	 for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
+	 return housemake;
+ }
+vector<int> getSenateMake() {
+
+	 extern short senate[SENATENUM];
+	 vector<int> senatemake = { 0,0,0,0,0,0 };
+	 for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
+	 return senatemake;
+ }
  void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
  /* politics - causes congress to act on legislation */
  void congress(char clearformess, char canseethings)
  {
-	 extern MusicClass music;
-	 extern int year;
 	 extern bool notermlimit;           //These determine if ELAs can take place --kviiri
 	 extern bool nocourtpurge;
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+
 	 extern short exec[EXECNUM];
 	 extern short lawList[LAWNUM];
-	 extern short house[HOUSENUM];
-	 extern short senate[SENATENUM];
 	 extern short court[COURTNUM];
 	 if (canseethings)
 	 {
 		 displayCongressHeader(clearformess);
 	 }
-	 vector<int> bill, billdir, killbill;
+	 vector<int> bill, billdir;
+	 vector<BillStatus> killbill;
 	 int cnum = LCSrandom(3) + 1;
 	 bill.resize(cnum);
 	 billdir.resize(cnum);
 	 killbill.resize(cnum);
-	 for (int c = 0; c < killbill.size(); c++)
-	 {
-		 killbill[c] = BILL_PASSED_CONGRESS;
-	 }
+
 	 //DETERMINE BILLS
 	 determineBills(canseethings, bill, billdir);
 
@@ -1690,63 +1778,7 @@ vector<string> corporateSuffix;
 	 }
 	 for (int c = 0; c < cnum; c++)
 	 {
-		 char yeswin_h = 0, yeswin_s = 0;
-		 int yesvotes_h = 0, yesvotes_s = 0;
-		 int s = 0;
-		 for (int l = 0; l < HOUSENUM; l++)
-		 {
-			 int vote = determine_politician_vote(house[l], bill[c]);
-			 if (lawList[bill[c]] > vote&&billdir[c] == -1) yesvotes_h++;
-			 if (lawList[bill[c]] < vote&&billdir[c] == 1) yesvotes_h++;
-			 if (l == HOUSENUM - 1)
-			 {
-				 if (yesvotes_h >= HOUSEMAJORITY) yeswin_h = 1;
-				 if (yesvotes_h >= HOUSESUPERMAJORITY) killbill[c] = BILL_OVERRIDE_VETO;
-			 }
-			 if (canseethings)
-			 {
-				 displayHouseVotes(l, yesvotes_h, yeswin_h, c);
-			 }
-			 if (l % 4 == 0 && s < SENATENUM)
-			 {
-				 vote = determine_politician_vote(senate[s++], bill[c]);
-				 if (lawList[bill[c]] > vote&&billdir[c] == -1) yesvotes_s++;
-				 if (lawList[bill[c]] < vote&&billdir[c] == 1) yesvotes_s++;
-			 }
-			 if (l == HOUSENUM - 1)
-			 {
-				 if (yesvotes_s >= SENATEMAJORITY) yeswin_s = 1;
-				 if (yesvotes_s < SENATESUPERMAJORITY&&killbill[c] == BILL_OVERRIDE_VETO) killbill[c] = BILL_PASSED_CONGRESS;
-				 if (yesvotes_s == SENATEMAJORITY - 1)
-				 {  //TIE BREAKER
-					 int vote;
-					 if ((exec[EXEC_VP] >= -1 && exec[EXEC_VP] <= 1) ||
-						 (exec[EXEC_PRESIDENT] >= -1 && exec[EXEC_PRESIDENT] <= 1))
-						 vote = (exec[EXEC_PRESIDENT] + // only consult Cabinet and random number generator if alignment between -1 and 1
-							 exec[EXEC_VP] +        // for President and/or Vice President
-							 exec[EXEC_STATE] +
-							 exec[EXEC_ATTORNEY] + LCSrandom(9) - 4) / 4;
-					 else
-					 {
-						 vote = exec[EXEC_VP];
-						 if (vote == ALIGN_STALINIST)
-						 {
-							 if (stalinview(bill[c], true)) vote = ALIGN_ELITELIBERAL;
-							 else vote = ALIGN_ARCHCONSERVATIVE;
-						 }
-					 }
-					 if (lawList[bill[c]] > vote&&billdir[c] == -1) yeswin_s = 1;
-					 if (lawList[bill[c]] < vote&&billdir[c] == 1) yeswin_s = 1;
-					 //ASSURED SIGNING BY PRESIDENT IF VP VOTED YES
-					 if (yeswin_s) killbill[c] = BILL_SIGNED;
-				 }
-			 }
-			 if (canseethings)
-			 {
-				 displaySenateVotes(l, yesvotes_s, yeswin_s, c, s);
-			 }
-		 }
-		 if (!yeswin_h || !yeswin_s) killbill[c] = BILL_FAILED;
+		 killbill[c] = determineBillStatus(bill[c], billdir[c], c, canseethings);
 	 }
 	 int havebill = 0;
 	 for (int c = 0; c < cnum; c++) if (killbill[c] != BILL_FAILED) havebill++;
@@ -1793,10 +1825,8 @@ vector<string> corporateSuffix;
 		 printDeadInCongress();
 	 }
 	 //CONGRESS CONSTITUTION CHANGES
-	 int housemake[6] = { 0,0,0,0,0,0 };
-	 for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
-	 int senatemake[6] = { 0,0,0,0,0,0 };
-	 for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
+	 vector<int> housemake = getHouseMake();
+	 vector<int> senatemake = getSenateMake();
 	 // Throw out non-L+ Justices?
 	 bool tossj = false;
 	 for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL) tossj = true;
