@@ -690,6 +690,8 @@ X(5) Also another annoying bug, the slogan gets reset every time you exit the ga
 (6) Another one is I think that repairing clothes is bugged and you can't sell damaged clothes so your equipment just gets flooded with broken equipment.
 X (7) Disguise is always red.
 
+4.12.26
+
 Removed all usage and references to addstr_f(...) and other "add formatted strings" methods.  This fixed (1).
 Fixed (5).  New means of saving and loading slogan led to the slogan being saved, but not loaded.
 Fixed disguise continues to be printed in red after returning to base.
@@ -713,3 +715,44 @@ Partial refactoring of hasdisguise().  Less invasive than previous attempt.
 Removed several unused const strings.
 
 Fixed game crashing bug on total party kill.
+
+4.12.27
+
+Abolished all usage of "extern short cursite"
+Usage of extern keyword:
+Matching lines: 4912    Matching files: 67    Total files searched: 160
+
+
+fight.cpp damagemod() function updated to use const creature instead of creature&
+Of the 6 rules with a total 10 high level violations remaining, 5 are from Creature.  It is time.
+
+New struct CreatureHealth
+Contains const qualified DeprecatedCreature values pertaining to printhealthstat function.
+New struct CreatureJustice
+Contains const qualified DeprecatedCreature values pertaining to printliberalcrimes function.
+(constructor currently oversized)
+
+Split printliberalstats() function into six smaller functions.
+
+Use of DeprecatedCreature
+Matching lines: 676    Matching files: 45    Total files searched: 160
+
+Use of Deprecated
+Matching lines: 1009    Matching files: 49    Total files searched: 160
+
+(Deprecated
+Matching lines: 343    Matching files: 38    Total files searched: 160
+To focus on functions that take in a Deprecated structure.
+
+Matching lines: 333    Matching files: 38    Total files searched: 160
+
+const Deprecated
+Matching lines: 84    Matching files: 24    Total files searched: 160
+Matching lines: 71    Matching files: 18    Total files searched: 160
+
+Fixed Grimith's gamecrash.  It was brought on by attempting to recruit from an area that did not have any recruitable options.
+Something called "SITE_RESIDENTIAL_BOMBSHELTER"
+
+4.12.28
+
+Bug: Sudden Heat Vanishing
