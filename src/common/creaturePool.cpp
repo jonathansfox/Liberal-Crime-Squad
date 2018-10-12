@@ -89,7 +89,7 @@ void CreaturePool::outSleepers(int cursite, int base)
 			pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 			eraseAlt();
 			mvaddstrAlt(8, 1, string_sleeper, gamelog);
-			addstrAlt(pool[p]->name, gamelog);
+			addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool006, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(10, 1, CONST_creaturePool007, gamelog);
@@ -212,7 +212,7 @@ const bool CreaturePool::isThisCarWantedByAnotherSquad(long vehicleID, int squad
 }
 const string CreaturePool::getName(int p)
 {
-	return pool[p]->name;
+	return pool[p]->getNameAndAlignment().name;
 }
 void CreaturePool::moveAllSquadMembers(int l)
 {
@@ -232,9 +232,9 @@ void whoAreWaitingForRescue(vector<DeprecatedCreature *>& waiting_for_rescue, in
 	{
 		if (pool[pl]->location == cursite &&
 			!(pool[pl]->flag & CREATUREFLAG_SLEEPER) &&
-			!(special == SPECIAL_PRISON_CONTROL_LOW && !(pool[pl]->sentence > 0 && !pool[pl]->deathpenalty)) && //Low is for normal time-limited sentences.
-			!(special == SPECIAL_PRISON_CONTROL_MEDIUM && !(pool[pl]->sentence < 0 && !pool[pl]->deathpenalty)) && //Medium is for life sentences.
-			!(special == SPECIAL_PRISON_CONTROL_HIGH && !pool[pl]->deathpenalty)) //High is for death sentences.
+			!(special == SPECIAL_PRISON_CONTROL_LOW && !(pool[pl]->getCreatureJustice().sentence > 0 && !pool[pl]->getCreatureJustice().deathpenalty)) && //Low is for normal time-limited sentences.
+			!(special == SPECIAL_PRISON_CONTROL_MEDIUM && !(pool[pl]->getCreatureJustice().sentence < 0 && !pool[pl]->getCreatureJustice().deathpenalty)) && //Medium is for life sentences.
+			!(special == SPECIAL_PRISON_CONTROL_HIGH && !pool[pl]->getCreatureJustice().deathpenalty)) //High is for death sentences.
 			waiting_for_rescue.push_back(pool[pl]);
 	}
 }
@@ -291,15 +291,15 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 	int c = getkeyAlt();
 	if (c == 'c' && subordinatesleft(*pool[p]) && r.eagerness() >= 4)
 	{
-		mvaddstrAlt(y, 0, pool[p]->name, gamelog);
+		mvaddstrAlt(y, 0, pool[p]->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool029, gamelog);
-		addstrAlt(r.recruit->name, gamelog);
+		addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool030, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		moveAlt(y += 2, 0);
-		addstrAlt(r.recruit->name, gamelog);
+		addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool031, gamelog);
 		gamelog.nextMessage();
 		liberalize(*r.recruit, false);
@@ -347,7 +347,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 		if (c == 'a')
 		{
 			difficulty -= 5;
-			mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
+			mvaddstrAlt(y++, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool032, gamelog);
 			getissueeventstring(str);
 			addstrAlt(str, gamelog);
@@ -357,7 +357,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 		}
 		else
 		{
-			mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
+			mvaddstrAlt(y++, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool033, gamelog);
 			addstrAlt(pool[p]->hisher(), gamelog);
 			addstrAlt(CONST_creaturePool034, gamelog);
@@ -388,9 +388,9 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			//if (r.level < 127) r.level++;
 			if (r.eagerness1 < 127) r.eagerness1++;
-			mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
+			mvaddstrAlt(y++, 0, r.recruit->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool035, gamelog);
-			addstrAlt(pool[p]->name, gamelog);
+			addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool036, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(y++, 0, CONST_creaturePool037, gamelog);
@@ -400,9 +400,9 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 		{
 			//if (r.level < 127) r.level++;
 			if (r.eagerness1 > -128) r.eagerness1--;
-			mvaddstrAlt(y++, 0, r.recruit->name, gamelog);
+			mvaddstrAlt(y++, 0, r.recruit->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool038, gamelog);
-			addstrAlt(pool[p]->name, gamelog);
+			addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool039, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(y++, 0, CONST_creaturePool040, gamelog);
@@ -414,19 +414,19 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 			moveAlt(y++, 0);
 			if (r.recruit->talkreceptive() && r.recruit->align == ALIGN_LIBERAL)
 			{
-				addstrAlt(r.recruit->name, gamelog);
+				addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool041, gamelog);
-				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool042, gamelog);
 				gamelog.newline();
 				mvaddstrAlt(y++, 0, CONST_creaturePool043, gamelog);
-				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool044, gamelog);
 				gamelog.nextMessage();
 			}
 			else
 			{
-				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool045, gamelog);
 				gamelog.newline();
 				mvaddstrAlt(y++, 0, CONST_creaturePool046, gamelog);
@@ -463,7 +463,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	extern class Ledger ledger;
 
 	addstrAlt(CONST_creaturePool012, gamelog);
-	addstrAlt(r.recruit->name, gamelog);
+	addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
 	addstrAlt(commaSpace, gamelog);
 	addstrAlt(r.recruit->get_type_name(), gamelog);
 	addstrAlt(commaSpace, gamelog);
@@ -473,7 +473,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	printfunds();
 	printcreatureinfo(r.recruit);
 	makedelimiter();
-	mvaddstrAlt(10, 0, r.recruit->name);
+	mvaddstrAlt(10, 0, r.recruit->getNameAndAlignment().name);
 	switch (r.eagerness())
 	{
 	case 1: addstrAlt(CONST_creaturePool013); break;
@@ -483,7 +483,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 			 else addstrAlt(CONST_creaturePool017); break;
 	}
 	mvaddstrAlt(11, 0, CONST_creaturePool018);
-	addstrAlt(pool[p]->name);
+	addstrAlt(pool[p]->getNameAndAlignment().name);
 	addstrAlt(CONST_creaturePool019);
 	moveAlt(13, 0);
 	if (ledger.get_funds() < 50) set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -494,14 +494,14 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	if (subordinatesleft(*pool[p]) && r.eagerness() >= 4)
 	{
 		addstrAlt(CONST_creaturePool022);
-		addstrAlt(r.recruit->name);
+		addstrAlt(r.recruit->getNameAndAlignment().name);
 		addstrAlt(CONST_creaturePool023);
 	}
 	else if (!subordinatesleft(*pool[p]))
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		addstrAlt(CONST_creaturePool026);
-		addstrAlt(pool[p]->name);
+		addstrAlt(pool[p]->getNameAndAlignment().name);
 		addstrAlt(CONST_creaturePool025);
 		set_color_easy(WHITE_ON_BLACK);
 	}
@@ -509,7 +509,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		addstrAlt(CONST_creaturePool026);
-		addstrAlt(r.recruit->name);
+		addstrAlt(r.recruit->getNameAndAlignment().name);
 		addstrAlt(CONST_creaturePool027);
 		set_color_easy(WHITE_ON_BLACK);
 	}
@@ -531,13 +531,13 @@ char completerecruitmeeting(Deprecatedrecruitst &r, const int p)
 	moveAlt(0, 0);
 	if (pool[p]->meetings++ > 5 && LCSrandom(pool[p]->meetings - 5))
 	{
-		addstrAlt(pool[p]->name, gamelog);
+		addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool008, gamelog);
-		addstrAlt(r.recruit->name, gamelog);
+		addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
 		mvaddstrAlt(1, 0, CONST_creaturePool009, gamelog);
 		gamelog.newline();
 		mvaddstrAlt(3, 0, CONST_creaturePool010, gamelog);
-		addstrAlt(pool[p]->name, gamelog);
+		addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool011, gamelog);
 		gamelog.nextMessage();
 		pressAnyKey();
@@ -584,7 +584,7 @@ void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
 			if (clearformess) eraseAlt();
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, cr->name, gamelog);
+			mvaddstrAlt(8, 1, cr->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool047, gamelog);
 			gamelog.nextMessage();
 			LocationsPool::getInstance().setTimeUntilSiege(cr->location, 3);
@@ -726,7 +726,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					pool[p]->die();
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_creaturePool048, gamelog);
 					gamelog.nextMessage();
 				}
@@ -841,7 +841,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_HOSPITAL_UNIVERSITY)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_creaturePool049, gamelog);
 					gamelog.nextMessage();
 					pool[p]->activity.type = ACTIVITY_CLINIC;
@@ -906,7 +906,7 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 			if (pool[p]->juice > maxjuice &&
 				!(pool[p]->flag & CREATUREFLAG_SLEEPER) &&
 				(pool[p]->location == -1 ||
-				(LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_GOVERNMENT_PRISON || pool[p]->sentence >= 0)))
+				(LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_GOVERNMENT_PRISON || pool[p]->getCreatureJustice().sentence >= 0)))
 			{
 				maxjuice = pool[p]->juice;
 				newboss = p;
@@ -922,7 +922,7 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 			if (clearformess) eraseAlt();
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, cr.name, gamelog);
+			mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool056, gamelog);
 			gamelog.newline();
 			pressAnyKey();
@@ -954,18 +954,18 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 	if (bigboss != -1) // Normal promotion
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, pool[bigboss]->name, gamelog);
+		mvaddstrAlt(8, 1, pool[bigboss]->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool052, gamelog);
-		addstrAlt(pool[newboss]->name, gamelog);
+		addstrAlt(pool[newboss]->getNameAndAlignment().name, gamelog);
 		mvaddstrAlt(9, 1, CONST_creaturePool053, gamelog);
-		addstrAlt(cr.name, gamelog);
+		addstrAlt(cr.getNameAndAlignment().name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		if (subordinates > 1)
 		{
 			gamelog.newline();
-			mvaddstrAlt(11, 1, pool[newboss]->name, gamelog);
+			mvaddstrAlt(11, 1, pool[newboss]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool054, gamelog);
-			addstrAlt(cr.name, gamelog);
+			addstrAlt(cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_creaturePool055, gamelog);
 		}
 		gamelog.nextMessage();
@@ -974,11 +974,11 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 	else // Founder level promotion
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, cr.name, gamelog);
+		mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool056, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		mvaddstrAlt(10, 1, pool[newboss]->name, gamelog);
+		mvaddstrAlt(10, 1, pool[newboss]->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_creaturePool057, gamelog);
 		gamelog.nextMessage();
 		pressAnyKey();
@@ -1165,7 +1165,7 @@ void dispersalcheck(char &clearformess)
 					if (!pool[p]->hiding&&dispersal_status[p] == DISPERSAL_HIDING)
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+						mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_creaturePool061, gamelog);
 						gamelog.nextMessage();
 						pressAnyKey();
@@ -1177,7 +1177,7 @@ void dispersalcheck(char &clearformess)
 					else if (dispersal_status[p] == DISPERSAL_ABANDONLCS)
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+						mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_creaturePool060, gamelog);
 						gamelog.nextMessage();
 						pressAnyKey();
@@ -1185,7 +1185,7 @@ void dispersalcheck(char &clearformess)
 					else if (dispersal_status[p] == DISPERSAL_NOCONTACT)
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+						mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_creaturePool061, gamelog);
 						gamelog.nextMessage();
 						pressAnyKey();
@@ -1273,7 +1273,7 @@ string getSleeperBouncerName(short cursite) {
 	{
 		if (pool[p]->base == cursite && pool[p]->type == CREATURE_BOUNCER)
 		{
-			output = pool[p]->name;
+			output = pool[p]->getNameAndAlignment().name;
 			break;
 		}
 	}
@@ -1287,7 +1287,7 @@ string getSleeperSecurityName(short cursite, int type) {
 		{
 			if (pool[p]->type == type)
 			{
-				name = pool[p]->name;
+				name = pool[p]->getNameAndAlignment().name;
 				break;
 			}
 		}
@@ -1313,7 +1313,7 @@ string getSleeperBankerName(short cursite) {
 			pool[p]->flag & CREATUREFLAG_SLEEPER &&
 			pool[p]->base == cursite)
 		{
-			output = pool[p]->name;
+			output = pool[p]->getNameAndAlignment().name;
 			break;
 		}
 	}
@@ -1325,11 +1325,11 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 	{
 		if (pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
 		{
-			output = pool[p]->name;
+			output = pool[p]->getNameAndAlignment().name;
 			pool[p]->location = pool[p]->base = base;
 			pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 			pool[p]->activity.type = ACTIVITY_NONE;
-			pool[p]->crimes_suspected[LAWFLAG_BANKROBBERY]++;
+			pool[p]->criminalize_me(LAWFLAG_BANKROBBERY, false);
 			break;
 		}
 	}
@@ -1362,7 +1362,7 @@ void monthlyRunTheSystem(char &clearformess) {
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, CONST_creaturePool062, gamelog);
-				addstrAlt(pool[p]->name, gamelog);
+				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool063, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
@@ -1373,7 +1373,7 @@ void monthlyRunTheSystem(char &clearformess) {
 			else if (pool[p]->flag & CREATUREFLAG_ILLEGALALIEN && lawList[LAW_IMMIGRATION] != 2)
 			{
 				set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+				mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool064, gamelog);
 				if (lawList[LAW_IMMIGRATION] == -2 && lawList[LAW_DEATHPENALTY] == -2)
 					addstrAlt(CONST_creaturePool065, gamelog);
@@ -1404,12 +1404,12 @@ void monthlyRunTheSystem(char &clearformess) {
 					{  //Charge the boss with racketeering!
 						criminalize(*pool[p2], LAWFLAG_RACKETEERING);
 						//Rack up testimonies against the boss in court!
-						pool[p2]->confessions++;
+						pool[p2]->another_confession();
 					}
 					//Issue a raid on this guy's base!
 					if (pool[p]->base >= 0)LocationsPool::getInstance().addHeat(pool[p]->base, 300);
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_creaturePool067, gamelog);
 					gamelog.newline();
 					pressAnyKey();
@@ -1423,7 +1423,7 @@ void monthlyRunTheSystem(char &clearformess) {
 
 				}
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+				mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool069, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
@@ -1512,7 +1512,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 				{
 					pool[p]->location = hospital;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_creaturePool070, gamelog);
 					addstrAlt(LocationsPool::getInstance().getLocationName(hospital), gamelog);
 					addstrAlt(singleDot, gamelog);
@@ -1527,7 +1527,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+				mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_creaturePool071, gamelog);
 				addstrAlt(LocationsPool::getInstance().getLocationName(pool[p]->location), gamelog);
 				addstrAlt(singleDot, gamelog);

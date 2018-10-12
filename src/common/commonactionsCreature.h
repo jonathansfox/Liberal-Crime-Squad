@@ -1,6 +1,6 @@
 
 /* common - tests if the person is a wanted criminal */
-bool iscriminal(DeprecatedCreature &cr);
+bool iscriminal(CreatureJustice cr);
 /* common - sends somebody to the hospital */
 void hospitalize(int loc, DeprecatedCreature &patient);
 /* common - determines how long a creature's injuries will take to heal */

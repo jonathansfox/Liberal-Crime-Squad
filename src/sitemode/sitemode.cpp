@@ -293,6 +293,10 @@ char securityable(int type);
 #include "../combat/chase.h"
 //for void makechasers(long sitetype,long sitecrime);
 
+int getEncounterAnimalGloss(const int e);
+bool get_encounter_cantbluff_is_zero(const int e);
+bool get_encounter_cantbluff_is_two(const int e);
+bool get_encounter_cantbluff_is_one(const int e);
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 bool isThereNoActivesquad();
@@ -331,7 +335,7 @@ void fight_subdued()
 	int hostages = 0;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
 				hostages++;
 	int stolen = 0;
 	// Police assess stolen goods in inventory
@@ -341,7 +345,9 @@ void fight_subdued()
 	for (int p = 0; p < 6; p++)
 	{
 		if (!activesquad->squad[p]) continue;
-		activesquad->squad[p]->crimes_suspected[LAWFLAG_THEFT] += stolen;
+		for (int i = 0; i < stolen; i++) {
+			activesquad->squad[p]->criminalize_me(LAWFLAG_THEFT);
+		}
 		capturecreature(*(activesquad->squad[p]));
 		activesquad->squad[p] = NULL;
 	}
@@ -735,44 +741,52 @@ void pressedKeyL() {
 	creatureadvance();
 
 }
-int defineforcesp() {
+
+enum INDEX_WITH_SPECIAL_MEANING {
+	MULTIPLE_LIVING_MEMBERS = -2,
+	NO_VALID_MEMBERS = -1,
+};
+int findLivingSquadMemberIndex() {
 	extern Deprecatedsquadst *activesquad;
-	int forcesp = -1;
+	int forcesp = NO_VALID_MEMBERS;
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
 			if (activesquad->squad[p]->alive)
 			{
-				if (forcesp == -1)forcesp = p;
-				else forcesp = -2;
+				if (forcesp == NO_VALID_MEMBERS)forcesp = p;
+				else forcesp = MULTIPLE_LIVING_MEMBERS;
 			}
 		}
 	}
 	return forcesp;
 }
-int defineforcetk() {
-
-	extern DeprecatedCreature encounter[ENCMAX];
-	int forcetk = -1;
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+int findEncounterCreatureWhoCanBeBluffed() {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	
+	int forcetk = NO_VALID_MEMBERS;
 	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (encounter[e].exists&&encounter[e].alive &&
 			!(encounter[e].type == CREATURE_WORKER_SERVANT ||
 				encounter[e].type == CREATURE_WORKER_SWEATSHOP))
 		{
-			if (encounter[e].cantbluff != 1 || isThereASiteAlarm())
+			if (!get_encounter_cantbluff_is_one(e) || isThereASiteAlarm())
 			{
-				if (forcetk == -1)forcetk = e;
-				else forcetk = -2;
+				if (forcetk == NO_VALID_MEMBERS)forcetk = e;
+				else forcetk = MULTIPLE_LIVING_MEMBERS;
 			}
 		}
 	}
-	return forcetk;
+	return  forcetk;
 }
-char talk(DeprecatedCreature &a, const int t);
-void pressedKeyTWithMultipleLivingMembers(int &sp) {
-	extern Deprecatedsquadst *activesquad;
+char haveActiveSquadTalk(const int sp, const int tk);
+void printActiveSquadTalkOptions();
+bool activeSquadMemberIsAliveAndExists(const int sp);
+int pressedKeyTWithMultipleLivingMembers() {
+	int sp = NO_VALID_MEMBERS;
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -781,42 +795,27 @@ void pressedKeyTWithMultipleLivingMembers(int &sp) {
 	mvaddstrAlt(9, 50, CONST_sitemode097);
 	mvaddstrAlt(9, 60, CONST_sitemode098);
 	mvaddstrAlt(9, 70, CONST_sitemode099);
-	int y = 11;
-	for (int p = 0; p < 6; p++)
-	{
-		if (activesquad->squad[p] != NULL)
-		{
-			if (activesquad->squad[p]->alive)
-			{
-				mvaddcharAlt(y, 1, p + '1');
-				addstrAlt(spaceDashSpace);
-				addstrAlt(activesquad->squad[p]->name);
-				mvaddstrAlt(y, 50, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-					activesquad->squad[p]->get_skill(SKILL_PERSUASION));
-				mvaddstrAlt(y, 60, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-					activesquad->squad[p]->get_skill(SKILL_SEDUCTION));
-				mvaddstrAlt(y++, 70, activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) / 2 +
-					activesquad->squad[p]->get_skill(SKILL_DISGUISE));
-			}
-		}
-	}
+
+	printActiveSquadTalkOptions();
+
 	while (true)
 	{
 		int c = getkeyAlt();
 		if (c >= '1'&&c <= '6')
 		{
-			sp = c - '1';
-			if (activesquad->squad[sp] != NULL) if (activesquad->squad[sp]->alive) break;
+			sp =  (c - '1');
+			if (activeSquadMemberIsAliveAndExists(sp)) break;
 		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { sp = -1; break; }
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { sp = NO_VALID_MEMBERS; break; }
 	}
+	return sp;
 }
-void pressedKeyTAndMeantIt(const int enemy, int& encounter_timer, const int forcetk, const int sp) {
-	extern Deprecatedsquadst *activesquad;
-
-	extern DeprecatedCreature encounter[ENCMAX];
-	int tk = -1;
-	if (forcetk == -2)
+CantBluffAnimal encounterGetCantBluffAnimal(const int t);
+CreatureBio encounterGetCreatureBio(const int t);
+int pressedKeyTAndMeantIt(const int enemy, const int forcetk, const int sp) {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	int tk = NO_VALID_MEMBERS;
+	if (forcetk == MULTIPLE_LIVING_MEMBERS)
 	{
 		while (true)
 		{
@@ -830,7 +829,9 @@ void pressedKeyTAndMeantIt(const int enemy, int& encounter_timer, const int forc
 			{
 				if (encounter[t].exists)
 				{
-					if (encounter[t].cantbluff != 1)
+					CantBluffAnimal encounterBA = encounterGetCantBluffAnimal(t);
+					CreatureBio encounterBio = encounterGetCreatureBio(t);
+					if (encounterBA.cantbluff != 1)
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddcharAlt(y, x, t + 'A');
@@ -848,7 +849,7 @@ void pressedKeyTAndMeantIt(const int enemy, int& encounter_timer, const int forc
 							break;
 						}
 						addstrAlt(encounter[t].name);
-						addstrAlt(get_age_string(encounter[t].getCreatureBio(), encounter[t].animalgloss));
+						addstrAlt(get_age_string(encounterBio, encounterBA.animalgloss));
 						y++;
 						if (y == 17)
 						{
@@ -868,79 +869,84 @@ void pressedKeyTAndMeantIt(const int enemy, int& encounter_timer, const int forc
 				}
 			}
 			int c = getkeyAlt();
-			if (c >= 'a'&&c <= 'z')
+			if(c - 'a' >= 0 && c - 'a' < ENCMAX)
 			{
-				tk = c - 'a';
-				if (tk < ENCMAX)
+				tk = (c - 'a');
+				if (encounter[tk].exists)
 				{
-					if (encounter[tk].exists)
+					if (encounter[tk].alive &&
+						!(encounter[tk].type == CREATURE_WORKER_SERVANT ||
+							encounter[tk].type == CREATURE_WORKER_SWEATSHOP))
 					{
-						if (encounter[tk].alive &&
-							!(encounter[tk].type == CREATURE_WORKER_SERVANT ||
-								encounter[tk].type == CREATURE_WORKER_SWEATSHOP))
+						CantBluffAnimal encounterBA = encounterGetCantBluffAnimal(tk);
+						if (encounterBA.cantbluff == 1 &&
+							(!isThereASiteAlarm() || encounterBA.animalgloss == ANIMALGLOSS_ANIMAL))
 						{
-							if (encounter[tk].cantbluff == 1 &&
-								(!isThereASiteAlarm() || encounter[tk].animalgloss == ANIMALGLOSS_ANIMAL))
-							{
-								clearcommandarea();
-								clearmessagearea();
-								clearmaparea();
-								set_color_easy(WHITE_ON_BLACK_BRIGHT);
-								mvaddstrAlt(9, 1, encounter[tk].name);
-								addstrAlt(CONST_sitemode101);
-								pressAnyKey();
-							}
-							else if (!encounter[tk].enemy() && isThereASiteAlarm() && enemy)
-							{
-								clearcommandarea();
-								clearmessagearea();
-								clearmaparea();
-								set_color_easy(WHITE_ON_BLACK_BRIGHT);
-								mvaddstrAlt(9, 1, CONST_sitemode102);
-								pressAnyKey();
-							}
-							else break;
+							clearcommandarea();
+							clearmessagearea();
+							clearmaparea();
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
+							mvaddstrAlt(9, 1, encounter[tk].name);
+							addstrAlt(CONST_sitemode101);
+							pressAnyKey();
 						}
+						else if (!encounter[tk].enemy && isThereASiteAlarm() && enemy)
+						{
+							clearcommandarea();
+							clearmessagearea();
+							clearmaparea();
+							set_color_easy(WHITE_ON_BLACK_BRIGHT);
+							mvaddstrAlt(9, 1, CONST_sitemode102);
+							pressAnyKey();
+						}
+						else break;
 					}
 				}
+				
 			}
-			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { tk = -1; break; }
+			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) { tk = NO_VALID_MEMBERS; break; }
 		}
 	}
 	else tk = forcetk;
-	if (tk != -1)
-	{
-		if (talk(*activesquad->squad[sp], tk))
-		{
-			if (enemy&&isThereASiteAlarm())enemyattack();
-			else if (enemy)disguisecheck(encounter_timer);
-			creatureadvance();
-			encounter_timer++;
-		}
-	}
+	return tk;
 }
 void pressedKeyT(const int enemy, int& encounter_timer) {
 	// forcesp is the index of the only living activesquad member, or is -2 if more than one living activesquad members exist
-	int forcesp = defineforcesp();
+	int forcesp = findLivingSquadMemberIndex();
 	// forcetk is the index of the only encounter creature with cantbluff != 1 (or isThereASiteAlarm()), or is -2 if more than one such creature exists
-	int forcetk = defineforcetk();
+	int forcetk = findEncounterCreatureWhoCanBeBluffed();
 
 	// Together, this condition is asking whether the activesquad is willing and able to attempt a bluff
-	if (forcetk != -1 && forcesp != -1)
+	if (forcetk != NO_VALID_MEMBERS && forcesp != NO_VALID_MEMBERS)
 	{
-		int sp = -1;
-		if (forcesp == -2)
+		int sp = NO_VALID_MEMBERS;
+		if (forcesp == MULTIPLE_LIVING_MEMBERS)
 		{
 			// since forcesp != -1, the only way for sp != -1 to be false is if this function either does not assign a value to sp or assigns the value -1
 			// which only occurs if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)
-			pressedKeyTWithMultipleLivingMembers(sp);
+			sp = pressedKeyTWithMultipleLivingMembers();
 		}
-		else sp = forcesp;
+		else {
+			sp = forcesp;
+		}
 		// if sp == -1 at this point, it means the player has opted to cancel the effects of pressing 't'
-		if (sp != -1)
+		if (sp != NO_VALID_MEMBERS)
 		{
-			pressedKeyTAndMeantIt(enemy, encounter_timer, forcetk, sp);
-
+			int tk = pressedKeyTAndMeantIt(enemy, forcetk, sp);
+			if (tk != NO_VALID_MEMBERS)
+			{
+				if (haveActiveSquadTalk(sp, tk))
+				{
+					if (enemy&&isThereASiteAlarm()) {
+						enemyattack();
+					}
+					else if (enemy) { 
+						disguisecheck(encounter_timer);
+					}
+					creatureadvance();
+					encounter_timer++;
+				}
+			}
 		}
 	}
 
@@ -1076,47 +1082,21 @@ void pressedKeyF(int& encounter_timer) {
 	}
 
 }
-int checkForPeopleWhoCanRecruit() {
-	extern Deprecatedsquadst *activesquad;
-	// Check for people who can recruit followers
-	for (int i = 0; i < 6; i++)
-		if (activesquad->squad[i] != NULL)
-			if (subordinatesleft(*activesquad->squad[i]))
-				return i;
-	return -1;
-}
-void addNewRecruit(int i, int e) {
-	extern int stat_recruits;
-	extern Deprecatedsquadst *activesquad;
-	extern DeprecatedCreature encounter[ENCMAX];
-	DeprecatedCreature *newcr = new DeprecatedCreature;
-	*newcr = encounter[e];
-	newcr->namecreature();
-	newcr->location = activesquad->squad[i]->location;
-	newcr->base = activesquad->squad[i]->base;
-	newcr->hireid = activesquad->squad[i]->id;
-	addCreature(newcr);
-	stat_recruits++;
-	for (int p = 0; p < 6; p++)
-	{
-		if (activesquad->squad[p] == NULL)
-		{
-			activesquad->squad[p] = newcr;
-			newcr->squadid = activesquad->id;
-			break;
-		}
-	}
-}
+int checkForPeopleWhoCanRecruit();
+void addNewRecruit(int i, int e);
 int countactivesquadhostages();
 void assembleActiveSquad();
 /* base - review - assemble a squad */
+void criminalizeEncounterPrisonerEscape(const int e);
+void duplicateEncounterMember(const int e);
+void unpersonLastEncounterMember();
 void pressedKeyR(const int freeable, const int enemy) {
 	extern Log gamelog;
 	const int hostages = countactivesquadhostages();
 	extern short sitealarmtimer;
 	int partysize = activesquadSize();
 	const int libnum = CreaturePool::getInstance().countLiberals(getCurrentSite());
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && libnum > 6)
 	{
 		assembleActiveSquad();
@@ -1137,12 +1117,12 @@ void pressedKeyR(const int freeable, const int enemy) {
 				if ((encounter[e].type == CREATURE_WORKER_SERVANT ||
 					encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
 					encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
-					(strcmp(encounter[e].name, CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1)) && !flipstart)
+					(strcmp(encounter[e].name.data(), CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1)) && !flipstart)
 				{
-					if (strcmp(encounter[e].name, CONST_sitemode141.c_str()) == 0)
+					if (strcmp(encounter[e].name.data(), CONST_sitemode141.c_str()) == 0)
 					{
 						setSiteAlarmOne(); /* alarm for prisoner escape */
-						criminalize(encounter[e], LAWFLAG_ESCAPED);
+						criminalizeEncounterPrisonerEscape(e);
 					}
 					followers++, flipstart = 1, freed = 1;
 					if (partysize < 6)
@@ -1159,9 +1139,11 @@ void pressedKeyR(const int freeable, const int enemy) {
 					}
 				}
 				if (flipstart)
-					if (e < ENCMAX - 1)encounter[e] = encounter[e + 1];
+					if (e < ENCMAX - 1) {
+						duplicateEncounterMember(e);
+					}
 			}
-			if (flipstart)encounter[ENCMAX - 1].exists = 0;
+			if (flipstart) { unpersonLastEncounterMember(); }
 			if (freed)
 			{
 				int time = 20 + LCSrandom(10);
@@ -1682,26 +1664,13 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 		encounter_timer++;
 	}
 }
-void putBackSpecials(const int olocx, const int olocy, const int olocz) {
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
-	//PUT BACK SPECIALS
-	for (int e = 0; e < ENCMAX; e++)
-		if (encounter[e].exists)
-		{
-			if (!encounter[e].cantbluff&&encounter[e].type == CREATURE_LANDLORD)
-				levelmap[olocx][olocy][olocz].special = SPECIAL_APARTMENT_LANDLORD;
-			if (!encounter[e].cantbluff&&encounter[e].type == CREATURE_BANK_TELLER)
-				levelmap[olocx][olocy][olocz].special = SPECIAL_BANK_TELLER;
-			encounter[e].exists = 0;
-		}
-}
+void putBackSpecials(const int olocx, const int olocy, const int olocz);
 void enemyAttemptsFreeShots(int& encounter_timer) {
 	extern Log gamelog;
 	extern Deprecatedsquadst *activesquad;
 	extern short fieldskillrate;
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
-	extern DeprecatedCreature encounter[ENCMAX];
 	//ENEMIES SHOULD GET FREE SHOTS NOW
 	if (isThereASiteAlarm())
 	{
@@ -1711,7 +1680,7 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 		{
 			if (encounter[e].exists &&
 				encounter[e].alive  &&
-				encounter[e].cantbluff == 2)
+				get_encounter_cantbluff_is_two(e))
 			{
 				// You can't sneak past this person; they already know you're there
 				snuck_away = false;
@@ -1792,7 +1761,7 @@ void bailUponVictory() {
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL)continue;
-		if (activesquad->squad[p]->prisoner != NULL)
+		if (activesquad->squad[p]->is_holding_body())
 		{
 			if (activesquad->squad[p]->prisoner->squadid != -1)
 			{
@@ -1808,7 +1777,7 @@ void bailUponVictory() {
 				kidnaptransfer(*activesquad->squad[p]->prisoner);
 				delete activesquad->squad[p]->prisoner;
 			}
-			activesquad->squad[p]->prisoner = NULL;
+			activesquad->squad[p]->discard_body();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -1857,9 +1826,13 @@ void bailOnBase() {
 	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))level = 1000;
 	//MAKE SURE YOU ARE GUILTY OF SOMETHING
 	bool guilty = 0;
-	for (int p = 0; p < 6; p++)
-		if (activesquad->squad[p] != NULL)
-			if (iscriminal(*activesquad->squad[p]))guilty = 1;
+	for (int p = 0; p < 6; p++) {
+		if (activesquad->squad[p] != NULL) {
+			if (iscriminal(activesquad->squad[p]->getCreatureJustice())) {
+				guilty = 1; 
+			}
+		}
+	}
 	if (!guilty)level = 0;
 	makechasers(sitetype, level);
 	bool havecar = 0;
@@ -1892,7 +1865,7 @@ void bailOnBase() {
 		for (int p = 0; p < 6; p++)
 		{
 			if (activesquad->squad[p] == NULL)continue;
-			if (activesquad->squad[p]->prisoner != NULL)
+			if (activesquad->squad[p]->is_holding_body())
 			{
 				//If this is an LCS member or corpse being hauled (marked as in the squad)
 				if (activesquad->squad[p]->prisoner->squadid != -1)
@@ -1909,7 +1882,7 @@ void bailOnBase() {
 					kidnaptransfer(*activesquad->squad[p]->prisoner);
 					delete activesquad->squad[p]->prisoner;
 				}
-				activesquad->squad[p]->prisoner = NULL;
+				activesquad->squad[p]->discard_body();
 			}
 		}
 		//Clear all bleeding and prison escape flags
@@ -1955,7 +1928,7 @@ void bailUponDefeatCCS() {
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL)continue;
-		if (activesquad->squad[p]->prisoner != NULL)
+		if (activesquad->squad[p]->is_holding_body())
 		{
 			if (activesquad->squad[p]->prisoner->squadid != -1)
 			{
@@ -1971,7 +1944,7 @@ void bailUponDefeatCCS() {
 				kidnaptransfer(*activesquad->squad[p]->prisoner);
 				delete activesquad->squad[p]->prisoner;
 			}
-			activesquad->squad[p]->prisoner = NULL;
+			activesquad->squad[p]->discard_body();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -2238,13 +2211,14 @@ void encounterParkBench() {
 		prepareencounter(sitetype, 0);
 	}
 }
+void spawnCreatureCEO();
 void encounterSpecialHouseCEO() {
 	extern Log gamelog;
 	extern coordinatest loc_coord;
 	extern short sitealienate;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern UniqueCreatures uniqueCreatures;
-	extern DeprecatedCreature encounter[ENCMAX];
+
 	extern short lawList[LAWNUM];
 
 	if ((isThereASiteAlarm() || sitealienate || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) &&
@@ -2273,8 +2247,7 @@ void encounterSpecialHouseCEO() {
 			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			pressAnyKey();
 			emptyEncounter();
-			encounter[0] = uniqueCreatures.CEO();
-			encounter[0].exists = true;
+			spawnCreatureCEO();
 			break;
 		case UNIQUECREATURE_DEAD:
 		case UNIQUECREATURE_LIBERAL:
@@ -2542,7 +2515,7 @@ void partyIsAliveOnSite(const int enemy,
 	extern coordinatest loc_coord;
 
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	if (!enemy || !isThereASiteAlarm())set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -2614,7 +2587,7 @@ void partyIsAliveOnSite(const int enemy,
 		{
 			if (encounter[e].exists &&
 				encounter[e].alive  &&
-				encounter[e].cantbluff == 2)
+				get_encounter_cantbluff_is_two(e))
 			{
 				// You can't sneak past this person; they already know you're there
 				evade = true;
@@ -2823,16 +2796,14 @@ void partyPerformsAction(const int c, const bool canMove, const int enemy, const
 
 }
 void recounttalkers(int& talkers) {
-	extern DeprecatedCreature encounter[ENCMAX];
-
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	talkers = 0;
 	for (int e = 0; e < ENCMAX; e++)
 		if (encounter[e].exists)
-			if (encounter[e].enemy() && (encounter[e].cantbluff == 0 || encounter[e].animalgloss == ANIMALGLOSS_ANIMAL)) talkers++;
+			if (encounter[e].enemy && (get_encounter_cantbluff_is_zero(e) || getEncounterAnimalGloss(e) == ANIMALGLOSS_ANIMAL)) talkers++;
 }
 void tallyupencounter(int& encsize, int& enemy, int& freeable, int& talkers, int& majorenemy) {
-	extern DeprecatedCreature encounter[ENCMAX];
-
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	encsize = 0;
 	freeable = 0;
@@ -2845,12 +2816,12 @@ void tallyupencounter(int& encsize, int& enemy, int& freeable, int& talkers, int
 		if (encounter[e].exists)
 		{
 			encsize++;
-			if (encounter[e].enemy())enemy++;
+			if (encounter[e].enemy)enemy++;
 			if (encounter[e].type == CREATURE_WORKER_SERVANT ||
 				encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
 				encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
-				(strcmp(encounter[e].name, CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1))freeable++;
-			else if ((encounter[e].cantbluff != 1 || isThereASiteAlarm()) && !(encounter[e].align == 1 && isThereASiteAlarm() && enemy))talkers++;
+				(strcmp(encounter[e].name.data(), CONST_sitemode141.c_str()) == 0 && encounter[e].align == 1))freeable++;
+			else if ((!get_encounter_cantbluff_is_one(e) || isThereASiteAlarm()) && !(encounter[e].align == 1 && isThereASiteAlarm() && enemy))talkers++;
 			if (encounter[e].type == CREATURE_CORPORATE_CEO ||
 				encounter[e].type == CREATURE_RADIOPERSONALITY ||
 				encounter[e].type == CREATURE_NEWSANCHOR ||
@@ -2903,7 +2874,7 @@ void checkForHostageScream(char &hostcheck) {
 			if (activesquad->squad[p] != NULL)
 			{
 				//If they're unarmed and dragging someone
-				if (activesquad->squad[p]->prisoner != NULL &&
+				if (activesquad->squad[p]->is_holding_body() &&
 					!activesquad->squad[p]->get_weapon().get_specific_bool(BOOL_CAN_THREATEN_HOSTAGES_))
 				{
 					//And that someone is not an LCS member
@@ -3259,11 +3230,13 @@ void mode_site(const short loc)
 	}
 	mode_site();
 }
+int getEncounterCarID(const int e);
+int getEncounterIsDriver(const int e);
 /* prints the names of creatures you see in car chases */
 void printchaseencounter()
 {
 	extern chaseseqst chaseseq;
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int i = 19; i <= 24; i++)
 		mvaddstrAlt(i, 0, CONST_sitemode178); // 80 spaces
 	if (len(chaseseq.enemycar))
@@ -3276,11 +3249,11 @@ void printchaseencounter()
 		}
 		for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists)
 			for (int v = 0; v < len(chaseseq.enemycar); v++)
-				if (chaseseq.enemycar[v]->id() == encounter[e].carid)
+				if (chaseseq.enemycar[v]->id() == getEncounterCarID(e))
 				{
 					set_color_easy(RED_ON_BLACK_BRIGHT);
 					mvaddstrAlt(carsy[v], v * 20 + 1, encounter[e].name);
-					if (encounter[e].is_driver) addstrAlt(CONST_sitemode179);
+					if (getEncounterIsDriver(e)) addstrAlt(CONST_sitemode179);
 					carsy[v]++;
 				}
 	}

@@ -8,24 +8,6 @@
 
 class DeprecatedCreature
 {
-private:
-	class Augmentation augmentations[AUGMENTATIONNUM];
-	static Weapon& weapon_none();
-	static Armor& armor_none();
-	Weapon* weapon;
-	Armor* armor;
-
-	void copy(const DeprecatedCreature& org);
-	int attributes[ATTNUM];
-	int skills[SKILLNUM];
-	int skill_experience[SKILLNUM];
-	//static int roll_check(int skill);
-	int seethroughdisguise;
-	int seethroughstealth;
-	bool istalkreceptive;
-	bool iskidnap_resistant;
-	bool isreports_to_police;
-
 public:
 	const NameAndAlignment getNameAndAlignment() const { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(align, type, blood), name); }
 	const CreatureHealth getCreatureHealth()  const { return CreatureHealth(getNameAndAlignment(), animalgloss, wound, special); }
@@ -33,6 +15,7 @@ public:
 	const CreatureBio getCreatureBio() const { return CreatureBio(birthday_month, birthday_day, age, gender_conservative, gender_liberal); }
 	const CreatureInventory getCreatureInventory() const { return CreatureInventory(get_weapon_string(0), get_armor_string(true));  }
 	const CreatureCar getCreatureCar() const { return CreatureCar(pref_carid, carid, pref_is_driver, is_driver); }
+	const CantBluffAnimal getCantBluffAnimal() const { return CantBluffAnimal(cantbluff, animalgloss); }
 	const ListOfCreatureSkills getListOfCreatureSkills() const {
 		int skill_attribute[SKILLNUM];
 		for (int i = 0; i < SKILLNUM; i++) {
@@ -40,25 +23,15 @@ public:
 		}
 		return ListOfCreatureSkills(skills, skill_experience, skill_attribute);
 	};
-
-	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
-	deque<Weapon*> extra_throwing_weapons;
-	deque<Clip*> clips;
-	Weapon& get_weapon() const { return is_armed() ? *weapon : weapon_none(); }
-	Armor& get_armor() const { return is_naked() ? armor_none() : *armor; }
-	bool take_clips(Item& clip, int number);
-	bool take_clips(Clip& clip, int number);
-	bool take_clips(const ClipType& ct, int number);
-	void give_weapon(Weapon& w, vector<Item*>* lootpile);
-	void give_weapon(const WeaponType& wt, vector<Item*>* lootpile);
-	void drop_weapon(vector<Item*>* lootpile);
-	void drop_weapons_and_clips(vector<Item*>* lootpile);
-	void give_armor(Armor& a, vector<Item*>* lootpile);
-	void give_armor(const int at, vector<Item*>* lootpile);
-	void strip(vector<Item*>* lootpile);
-	ActivityST activity;
-
-	DeprecatedCreature* prisoner;
+	const CreatureAttributeList getCreatureAttributeList() const {
+		int attribute_list[ATTNUM];
+		int attribute_juice_list[ATTNUM];
+		for (int i = 0; i < ATTNUM; i++) {
+			attribute_list[i] = get_attribute(i, false);
+			attribute_juice_list[i] = get_attribute(i, true);
+		}
+		return CreatureAttributeList(attribute_list, attribute_juice_list);
+	}
 
 	DeprecatedCreature() { creatureinit(); }
 	DeprecatedCreature(const DeprecatedCreature& org) { copy(org); }
@@ -69,16 +42,7 @@ public:
 	/* are the characters close enough in age to date? */
 	bool can_date(const int aage, const char aanimalgloss) const;
 
-	bool exists;
-	bool alive;
 	bool enemy() const;
-
-	int align;
-	int type;
-	int blood;
-
-	char name[CREATURE_NAMELEN];
-
 
 
 	void set_attribute(int attribute, int amount) { attributes[attribute] = MIN(amount, MAXATTRIBUTE); }
@@ -137,6 +101,172 @@ public:
 	const char* hisher(bool capitalize = false) const;
 	const char* himher(bool capitalize = false) const;
 
+	void clear_criminal_record_but_not_heat() {
+
+		for (int i = 0; i < LAWFLAGNUM; i++)
+			crimes_suspected[i] = 0;
+	}
+	void clear_criminal_record() {
+
+		// Clear criminal record?
+		heat = 0;
+		for (int i = 0; i < LAWFLAGNUM; i++)
+			crimes_suspected[i] = 0;
+	}
+	void criminalize_me(const int crime, const bool grant_heat) {
+		int lawflagheat(int lawflag);
+		crimes_suspected[crime]++;
+		if (grant_heat) {
+			heat += lawflagheat(crime);
+
+		}
+	}
+	void criminalize_me(const int crime) {
+		criminalize_me(crime, false);
+	}
+	void clear_no_longer_crimes() {
+		extern short lawList[LAWNUM];
+		if (lawList[LAW_FLAGBURNING] > 0)crimes_suspected[LAWFLAG_BURNFLAG] = 0;
+		if (lawList[LAW_DRUGS] > 0)crimes_suspected[LAWFLAG_BROWNIES] = 0;
+		if (lawList[LAW_IMMIGRATION] == 2)flag &= ~CREATUREFLAG_ILLEGALALIEN;
+		if (lawList[LAW_FREESPEECH] > -2)crimes_suspected[LAWFLAG_SPEECH] = 0;
+	}
+	void cap_crimes_at_ten() {
+
+		for (int l = 0; l < LAWFLAGNUM; l++) {
+			if (crimes_suspected[l] > 10) {
+
+				crimes_suspected[l] = 10;
+			}
+		}
+	}
+
+	void apply_special_wound(const int wound, const int flag) {
+		special[wound] |= flag;
+	}
+
+	void lose_blood(const int loss) {
+		blood -= loss;
+	}
+
+	void lose_all_blood() {
+		blood = 0;
+	}
+
+	void set_blood(const int _blood) {
+		blood = _blood;
+	}
+	void set_special_wound(const int wound, const int value) {
+		special[wound] = value;
+	}
+	void un_alive() {
+		alive = 0; // Kill for the purposes of disbanding all contacts below
+	}
+	void apply_wound(const int _wound, const int flag) {
+		wound[_wound] |= flag;
+	}
+
+	void another_confession() {
+		confessions++;
+	}
+	char getCreatureConfessions() {
+		return confessions;
+	}
+	void rename(const string _name) {
+		strcpy(name, _name.data());
+	}
+	void new_name() {
+		void enter_name(int y, int x, char *name, int len, const char* defname);
+		enter_name(24, 0, name, CREATURE_NAMELEN, propername);
+	}
+	void new_name_four() {
+		void enter_name(int y, int x, char *name, int len, const char* defname);
+		enter_name(4, 0, name, CREATURE_NAMELEN, propername);
+	}
+	void new_name_two() {
+		void enter_name(int y, int x, char *name, int len, const char* defname);
+		enter_name(2, 0, name, CREATURE_NAMELEN, propername);
+	}
+	void set_age(const int a) {
+		age = a;
+	}
+	void age_up() {
+		age++;
+	}
+	void set_date_of_birth(const int _birth_day, const int _birth_month, const int birth_year) {
+
+		extern int year;
+		extern int day;
+		extern int month;
+
+		birthday_day = _birth_day;
+		birthday_month = _birth_month;
+		age = year - birth_year;
+		// Don't count this year in founder's age if starting before birthday
+		if (month < getCreatureBio().birthday_month ||
+			(month == getCreatureBio().birthday_month && day < getCreatureBio().birthday_day))
+		{
+			age--;
+		}
+	}
+
+	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
+	Weapon& get_weapon() const { return is_armed() ? *weapon : weapon_none(); }
+	Armor& get_armor() const { return is_naked() ? armor_none() : *armor; }
+	bool take_clips(Item& clip, int number);
+	bool take_clips(Clip& clip, int number);
+	bool take_clips(const ClipType& ct, int number);
+	void give_weapon(Weapon& w, vector<Item*>* lootpile);
+	void give_weapon(const WeaponType& wt, vector<Item*>* lootpile);
+	void drop_weapon(vector<Item*>* lootpile);
+	void drop_weapons_and_clips(vector<Item*>* lootpile);
+	void give_armor(Armor& a, vector<Item*>* lootpile);
+	void give_armor(const int at, vector<Item*>* lootpile);
+	void strip(vector<Item*>* lootpile);
+	void makeloot(vector<Item *> &loot);
+	void makeloot(const int base);
+	void set_money(const int _money) {
+		money = _money;
+	}
+	void no_money() {
+		money = 0;
+	}
+	void make_cantbluff_two() {
+		cantbluff = 2;
+	}
+	void make_cantbluff_zero() {
+		cantbluff = 0;
+	}
+	void make_cantbluff_one() {
+		cantbluff = 1;
+	}
+	bool is_cantbluff_two() {
+		return cantbluff == 2;
+	}
+	bool is_cantbluff_zero() {
+		return cantbluff == 0;
+	}
+	bool is_holding_body() {
+		if (prisoner) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	void discard_body() {
+		prisoner = NULL;
+	}
+	// public
+	deque<Weapon*> extra_throwing_weapons;
+	deque<Clip*> clips;
+
+	ActivityST activity;
+
+
+	bool exists;
+	int type;
+
 	bool dontname;
 	char propername[CREATURE_NAMELEN];
 	char gender_conservative;
@@ -144,17 +274,8 @@ public:
 
 	std::string type_idname;
 	float infiltration;
-	char animalgloss;
 	char forceinc;
 	bool has_thrown_weapon;
-
-	int age;
-	int birthday_month;
-	int birthday_day;
-	
-	int sentence;
-	char confessions;
-	char deathpenalty;
 
 	int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
 	int specialattack;
@@ -167,11 +288,13 @@ public:
 	int deathdays;
 	int id;
 	int hireid;
+
 	int meetings;
+
 	int stunned;
-	int money;
-	int juice;
 	int income;
+
+	int juice;
 	int heat;
 	int location;
 	int worklocation;
@@ -180,14 +303,55 @@ public:
 
 	int pref_carid;
 	int carid;
-	char cantbluff;
 	char is_driver;
 	char pref_is_driver;
 
+	// private, [in progress]
+	DeprecatedCreature * prisoner;
+
+	bool alive;
+
+	int align;
+	int blood;
+	char animalgloss;
+
 	unsigned char wound[BODYPARTNUM];
 	char special[SPECIALWOUNDNUM];
+	
+	// private, except in justice.cpp
+	int sentence;
+	char confessions;
+	char deathpenalty;
 
+	// private, except in saveload.cpp
+	char name[CREATURE_NAMELEN];
 	int crimes_suspected[LAWFLAGNUM];
+
+	int age;
+	int birthday_month;
+	int birthday_day;
+private:
+
+	char cantbluff;
+
+	int money;
+
+	class Augmentation augmentations[AUGMENTATIONNUM];
+	static Weapon& weapon_none();
+	static Armor& armor_none();
+	Weapon* weapon;
+	Armor* armor;
+
+	void copy(const DeprecatedCreature& org);
+	int attributes[ATTNUM];
+	int skills[SKILLNUM];
+	int skill_experience[SKILLNUM];
+	int seethroughdisguise;
+	int seethroughstealth;
+	bool istalkreceptive;
+	bool iskidnap_resistant;
+	bool isreports_to_police;
+
 };
 
 // this data struct is for activities, it relates to their info text and a couple of other things to avoid needing big switches in the code

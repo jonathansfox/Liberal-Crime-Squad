@@ -74,7 +74,7 @@ void activate_sleeper(DeprecatedCreature *cr)
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
 		mvaddstrAlt(0, 0, CONST_activate_sleepers004);
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate_sleepers005);
 		printcreatureinfo(cr);
 		makedelimiter();
@@ -119,30 +119,30 @@ void activate_sleeper(DeprecatedCreature *cr)
 		switch (cr->activity.type)
 		{
 		case ACTIVITY_NONE:
-			mvaddstrAlt(22, 3, cr->name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers018);
 			break;
 		case ACTIVITY_SLEEPER_LIBERAL:
-			mvaddstrAlt(22, 3, cr->name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers019);
 			break;
 		case ACTIVITY_SLEEPER_RECRUIT:
 			if (subordinatesleft(*cr))
 			{
-				mvaddstrAlt(22, 3, cr->name);
+				mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 				addstrAlt(CONST_activate_sleepers020);
 			}
 			break;
 		case ACTIVITY_SLEEPER_SPY:
-			mvaddstrAlt(22, 3, cr->name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers021);
 			break;
 		case ACTIVITY_SLEEPER_EMBEZZLE:
-			mvaddstrAlt(22, 3, cr->name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers022);
 			break;
 		case ACTIVITY_SLEEPER_STEAL:
-			mvaddstrAlt(22, 3, cr->name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers023);
 			break;
 		}
@@ -226,7 +226,7 @@ void activate_sleepers()
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, (y - 2) / 2 + 'A'); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			mvaddstrAlt(y, 25, temppool[p]->get_type_name());
 			mvaddstrAlt(y + 1, 6, CONST_activate_sleepers029);
 			if (temppool[p]->infiltration > 0.8f)

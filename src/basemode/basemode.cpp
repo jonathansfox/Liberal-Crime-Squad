@@ -1,6 +1,5 @@
 
 #include "../includes.h"
-const string CONST_basemodeB054 = "C++ Source Code Editor (with encoding)";
 
 const string tag_Sta = "Sta, ";
 const string tag_Libp = "Lib+, ";
@@ -323,7 +322,7 @@ void letTheUnworthyLeave() {
 		int targetjuice = LCSrandom(100 * (year - disbandtime + 1));
 		if (targetjuice > 1000) targetjuice = 1000;
 		if (pool[p]->juice < targetjuice&&pool[p]->hireid != -1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
-			pool[p]->alive = 0; // Kill for the purposes of disbanding all contacts below
+			pool[p]->un_alive();
 	}
 }
 void printExecMove() {
@@ -691,8 +690,8 @@ void findCantSeeReason(char &canseethings, char &forcewait) {
 
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (pool[p]->alive&&
-			pool[p]->align == 1 &&
+		if (pool[p]->getCreatureHealth().alive&&
+			pool[p]->getCreatureHealth().align == 1 &&
 			pool[p]->dating == 0 &&
 			pool[p]->hiding == 0 &&
 			!(pool[p]->flag & CREATUREFLAG_SLEEPER))
@@ -761,7 +760,7 @@ bool cannotWaitDuringSiege() {
 	for (int i = 0; i < LocationsPool::getInstance().lenpool(); i++) num_present[i] = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{  // Dead people, non-liberals, and vacationers don't count
-		if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location == -1) continue;
+		if (!pool[p]->getCreatureHealth().alive || pool[p]->getCreatureHealth().align != 1 || pool[p]->location == -1) continue;
 		num_present[pool[p]->location]++;
 	}
 

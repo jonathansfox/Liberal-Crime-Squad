@@ -120,7 +120,7 @@ void testCreature() {
 			pressAnyKey();
 			clearAlt();
 		}
-		mvaddstrAlt(i % 20, 0, cr.name);
+		mvaddstrAlt(i % 20, 0, cr.getNameAndAlignment().name);
 
 	}
 	mvaddstrAlt(21, 0, "TEST COMPLETE");

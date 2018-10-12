@@ -1,6 +1,5 @@
 
 #include "../includes.h"
-const string CONST_monthlyB015 = "C++ Source Code Editor (with encoding)";
 const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
 const string CONST_monthly016 = "The last LCS members have all been hunted down.";
 const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
@@ -14,8 +13,6 @@ const string CONST_monthly005 = "Elite Liberal ";
 const string CONST_monthly004 = "ÄÄÄ";
 const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
 const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
-const string CONST_monthly001 = "OEM United States - Codepage 437";
-const string CONST_monthly000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -256,6 +253,29 @@ void publicOpinionNaturalMoves(int(&issuebalance)[VIEWNUM - 5],
 //const string CONST_monthly004 = "ÄÄÄ";
 //const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
 //const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
+void print_labels_on_bottom_of_screen() {
+
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(23, 0, CONST_monthly005);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(CONST_monthly012);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_monthly007);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(CONST_monthly012);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_monthly009);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(CONST_monthly012);
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_monthly011);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(CONST_monthly012);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_monthly013);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(24, 0, CONST_monthly014);
+}
 void printIntelligenceReport(char &clearformess) {
 	/*******************************************************
 	*                 INTELLIGENCE REPORT                  *
@@ -290,26 +310,7 @@ void printIntelligenceReport(char &clearformess) {
 		mvaddstrAlt(y, x, getview(v, false));
 		mvaddcharAlt(y++, x + 23 + pip, 'O');
 	}
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23, 0, CONST_monthly005);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
-	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly007);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
-	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly009);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
-	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly011);
-	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly013);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24, 0, CONST_monthly014);
+	print_labels_on_bottom_of_screen();
 	clearformess = 1;
 	pressAnyKey();
 }

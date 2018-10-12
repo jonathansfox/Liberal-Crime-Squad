@@ -786,7 +786,7 @@ const string tag_skill = "skill";
 				 if (partysize > 1)
 					 mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
 				 else
-					 mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
+					 mvaddstrAlt(16, 1, activesquad->squad[0]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_stealth064, gamelog);
 				 gamelog.newline();
 				 pressAnyKey();
@@ -817,7 +817,7 @@ const string tag_skill = "skill";
 			 if (blew_it != -1 && LCSrandom(2))
 			 {
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(16, 1, activesquad->squad[blew_it]->name, gamelog);
+				 mvaddstrAlt(16, 1, activesquad->squad[blew_it]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(pickrandom(blew_stealth_check), gamelog);
 				 gamelog.newline();
 				 pressAnyKey();
@@ -828,7 +828,7 @@ const string tag_skill = "skill";
 				 if (partysize > 1)
 					 mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
 				 else
-					 mvaddstrAlt(16, 1, activesquad->squad[0]->name, gamelog);
+					 mvaddstrAlt(16, 1, activesquad->squad[0]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_stealth066, gamelog);
 				 gamelog.newline();
 				 pressAnyKey();

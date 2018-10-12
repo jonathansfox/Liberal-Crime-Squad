@@ -1,9 +1,6 @@
 
 #include "../includes.h"
-const string CONST_titlescreenB004 = "C++ Source Code Editor (with encoding)";
 const string CONST_titlescreen003 = "real_quote.txt";
-const string CONST_titlescreen002 = "OEM United States - Codepage 437";
-const string CONST_titlescreen001 = "Open With...";
 
 const string blankString = "";
 /*

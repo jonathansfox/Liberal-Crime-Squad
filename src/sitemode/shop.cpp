@@ -1,7 +1,6 @@
 
 #include "../includes.h"
 const string CONST_shopB061 = "option";
-const string CONST_shopB056 = "C++ Source Code Editor (with encoding)";
 const string CONST_shop062 = "$";
 const string CONST_shop061 = "Enter - ";
 const string CONST_shop060 = "B - Choose a buyer";
@@ -36,8 +35,6 @@ const string CONST_shop031 = "What will you sell?";
 const string CONST_shop029 = "Press a Letter to select an option";
 const string CONST_shop028 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?RICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 const string CONST_shop026 = "What will ";
-const string CONST_shop021 = "OEM United States - Codepage 437";
-const string CONST_shop020 = "Open With...";
 
 const string tag_letter = "letter";
 const string tag_sleeperprice = "sleeperprice";
@@ -265,7 +262,7 @@ extern string undefined;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(0, 0, CONST_shop026);
-		 addstrAlt(customers.squad[buyer]->name);
+		 addstrAlt(customers.squad[buyer]->getNameAndAlignment().name);
 		 addstrAlt(CONST_shop051);
 		 mvaddstrAlt(1, 0, CONST_shop028);
 		 //Write wares and prices
@@ -282,7 +279,7 @@ extern string undefined;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(22, 0, CONST_shop029); //allow customize CONST_shopB061? -XML
 		 mvaddstrAlt(23, 0, addpagestr());
-		 mvaddstrAlt(24, 0, CONST_shop061 + std::string(customers.squad[buyer]->name) + singleSpace + exit_);
+		 mvaddstrAlt(24, 0, CONST_shop061 + std::string(customers.squad[buyer]->getNameAndAlignment().name) + singleSpace + exit_);
 		 int c = getkeyAlt();
 		 //PAGE UP
 		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
@@ -553,7 +550,7 @@ extern string undefined;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_shop050);
-		 addstrAlt(buyer.name);
+		 addstrAlt(buyer.getNameAndAlignment().name);
 		 addstrAlt(CONST_shop051);
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(1, 0, CONST_shop052);
@@ -571,7 +568,7 @@ extern string undefined;
 		 mvaddstrAlt(22, 0, CONST_shop053);
 		 mvaddstrAlt(23, 0, addpagestr());
 		 mvaddstrAlt(24, 0, CONST_shop054);
-		 addstrAlt(buyer.name);
+		 addstrAlt(buyer.getNameAndAlignment().name);
 		 addstrAlt(CONST_shop055);
 		 int c = getkeyAlt();
 		 //PAGE UP
@@ -622,7 +619,7 @@ extern string undefined;
 		 locheader();
 		 printparty();
 		 mvaddstrAlt(8, 45, CONST_shop056);
-		 addstrAlt(customers.squad[buyer]->name);
+		 addstrAlt(customers.squad[buyer]->getNameAndAlignment().name);
 		 //Write wares and prices
 		 int y = 10, x = 1, taken_letters = 0;
 		 for (int p = page * 19; p < len(available_options) && p < page * 19 + 20; p++)

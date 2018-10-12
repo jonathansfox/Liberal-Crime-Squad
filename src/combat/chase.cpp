@@ -115,10 +115,7 @@ void fillEncounter(CreatureTypes c, int numleft) {
 	}
 }
 void emptyEncounter();
-void emptyEncounter() {
-	extern DeprecatedCreature encounter[ENCMAX];
-	for (int e = 0; e < ENCMAX; e++)encounter[e].exists = 0;
-}
+
 vector<string> car_speed;
 vector<string> car_plows_through;
 vector<string> car_crash_modes;
@@ -172,7 +169,7 @@ void chase_giveup()
 		activesquad->squad[p]->location = ps;
 		activesquad->squad[p]->drop_weapons_and_clips(NULL);
 		activesquad->squad[p]->activity.type = ACTIVITY_NONE;
-		if (activesquad->squad[p]->prisoner)
+		if (activesquad->squad[p]->is_holding_body())
 		{
 			if (activesquad->squad[p]->prisoner->squadid == -1) hostagefreed++;
 			freehostage(*activesquad->squad[p], 2);
@@ -243,14 +240,14 @@ string isCapturedByCop(const int p) {
 	const string CONST_chase031 = "thrown to the ground, and tazed repeatedly!";
 	const string CONST_chase030 = "thrown to the ground, and tazed to death!";
 	const string CONST_chase029 = "pushed to the ground, and handcuffed!";
-	string output = activesquad->squad[p]->name + isSeized;
+	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 	if (lawList[LAW_POLICEBEHAVIOR] >= ALIGN_LIBERAL)
 	{
 		output += CONST_chase029;
 	}
 	else
 	{
-		if (activesquad->squad[p]->blood <= 10)
+		if (activesquad->squad[p]->getCreatureHealth().blood <= 10)
 		{
 			output += CONST_chase030;
 		}
@@ -258,7 +255,7 @@ string isCapturedByCop(const int p) {
 		{
 			output += CONST_chase031;
 		}
-		activesquad->squad[p]->blood -= 10;
+		activesquad->squad[p]->lose_blood(10);
 	}
 	return output;
 }
@@ -268,11 +265,11 @@ string isSummaryExecuted(const int p) {
 
 	const string CONST_chase032 = "thrown to the ground, and shot in the head!";
 
-	string output = activesquad->squad[p]->name + isSeized;
+	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 
 	output += isSeized;
 	output += CONST_chase032;
-	activesquad->squad[p]->blood = 0;
+	activesquad->squad[p]->lose_all_blood();
 
 	return output;
 }
@@ -282,9 +279,9 @@ string isCrushedByTank(const int p) {
 
 	const string CONST_chase033 = " crushed beneath the tank's treads!";
 
-	string output = activesquad->squad[p]->name + CONST_chase033;
+	string output = activesquad->squad[p]->getNameAndAlignment().name + CONST_chase033;
 
-	activesquad->squad[p]->blood = 0;
+	activesquad->squad[p]->lose_all_blood();
 
 	return output;
 }
@@ -296,10 +293,10 @@ string isCapturedByOther(const int p) {
 	const string CONST_chase035 = "thrown to the ground, and beaten senseless!";
 	const string CONST_chase034 = "thrown to the ground, and beaten to death!";
 
-	string output = activesquad->squad[p]->name + isSeized;
+	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 
 	output += isSeized;
-	if (activesquad->squad[p]->blood <= 60)
+	if (activesquad->squad[p]->getCreatureHealth().blood <= 60)
 	{
 		output += CONST_chase034;
 	}
@@ -307,7 +304,7 @@ string isCapturedByOther(const int p) {
 	{
 		output += CONST_chase035;
 	}
-	activesquad->squad[p]->blood -= 60;
+	activesquad->squad[p]->lose_blood(60);
 
 	return output;
 }
@@ -326,7 +323,7 @@ void evasiverun()
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;
-		if (activesquad->squad[p]->alive)
+		if (activesquad->squad[p]->getCreatureHealth().alive)
 		{
 			if (activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
 			{
@@ -365,7 +362,7 @@ void evasiverun()
 		{
 			clearmessagearea();
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+			mvaddstrAlt(16, 1, encounter[e].getNameAndAlignment().name, gamelog);
 			if (encounter[e].type == CREATURE_TANK)
 			{
 				addstrAlt(CONST_chase025, gamelog);
@@ -384,7 +381,7 @@ void evasiverun()
 		{
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+			mvaddstrAlt(16, 1, encounter[e].getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_chase048, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
@@ -398,19 +395,19 @@ void evasiverun()
 	{
 		if (!encounter[0].exists) break;
 		if (activesquad->squad[p] == NULL) continue;
-		if (activesquad->squad[p]->alive)
+		if (activesquad->squad[p]->getCreatureHealth().alive)
 		{
 			if (yourspeed[p] > theirbest)
 			{
 				if (p == 0 && othersleft == 0) break;
 				clearmessagearea();
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_chase028, gamelog);
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				//Unload hauled hostage or body when they get back to the safehouse
-				if (activesquad->squad[p]->prisoner != NULL)
+				if (activesquad->squad[p]->is_holding_body())
 				{
 					//If this is an LCS member or corpse being hauled (marked as in the squad)
 					if (activesquad->squad[p]->prisoner->squadid != -1)
@@ -427,7 +424,8 @@ void evasiverun()
 						kidnaptransfer(*activesquad->squad[p]->prisoner);
 						delete activesquad->squad[p]->prisoner;
 					}
-					activesquad->squad[p]->prisoner = NULL;
+
+					activesquad->squad[p]->discard_body();
 				}
 				removesquadinfo(*activesquad->squad[p]);
 				printparty();
@@ -454,7 +452,7 @@ void evasiverun()
 				}
 				mvaddstrAlt(16, 1, squadmemberSubdued, gamelog);
 				gamelog.newline(); //New line.
-				if (activesquad->squad[p]->blood <= 0)
+				if (activesquad->squad[p]->getCreatureHealth().blood <= 0)
 					activesquad->squad[p]->die();
 				capturecreature(*activesquad->squad[p]);
 				for (int i = p + 1, j = p; i < 6; i++, j++)
@@ -686,7 +684,7 @@ int driveskill(DeprecatedCreature &cr, Vehicle &v)
 	int driveskill = cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
 	healthmodroll(driveskill, cr);
 	if (driveskill < 0) driveskill = 0;
-	driveskill *= static_cast<int>(cr.blood / 50.0);
+	driveskill *= static_cast<int>(cr.getCreatureHealth().blood / 50.0);
 	return driveskill;
 }
 const string CONST_chase047 = " brakes hard and nearly crashes!";
@@ -707,7 +705,7 @@ void evasivedrive()
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;
-		if (activesquad->squad[p]->alive&&
+		if (activesquad->squad[p]->getCreatureHealth().alive&&
 			activesquad->squad[p]->is_driver)
 		{
 			int v = id_getcar(activesquad->squad[p]->carid);
@@ -729,7 +727,7 @@ void evasivedrive()
 	{
 		if (encounter[e].carid != -1 &&
 			encounter[e].enemy() &&
-			encounter[e].alive&&
+			encounter[e].getCreatureHealth().alive&&
 			encounter[e].exists&&
 			encounter[e].is_driver)
 		{
@@ -775,7 +773,7 @@ void evasivedrive()
 			{
 				if (encounter[e].id == theirrolls_drv[i])
 				{
-					addstrAlt(encounter[e].name, gamelog);
+					addstrAlt(encounter[e].getNameAndAlignment().name, gamelog);
 					break;
 				}
 			}
@@ -828,7 +826,7 @@ void evasivedrive()
 			{
 				if (encounter[e].id == theirrolls_drv[i])
 				{
-					addstrAlt(encounter[e].name, gamelog);
+					addstrAlt(encounter[e].getNameAndAlignment().name, gamelog);
 					break;
 				}
 			}
@@ -872,34 +870,34 @@ void crashfriendlycar(int v)
 			// Inflict injuries on Liberals
 			for (int w = 0; w < BODYPARTNUM; w++)
 				// If limb is intact
-				if (!(activesquad->squad[p]->wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)))
+				if (!(activesquad->squad[p]->getCreatureHealth().wound[w] & (WOUND_CLEANOFF | WOUND_NASTYOFF)))
 				{
 					// Inflict injuries
 					if (LCSrandom(2))
 					{
-						activesquad->squad[p]->wound[w] |= (WOUND_TORN | WOUND_BLEEDING);
-						activesquad->squad[p]->blood -= 1 + LCSrandom(25);
+						activesquad->squad[p]->apply_special_wound(w, (WOUND_TORN | WOUND_BLEEDING));
+						activesquad->squad[p]->lose_blood(1 + LCSrandom(25));
 					}
 					if (!LCSrandom(3))
 					{
-						activesquad->squad[p]->wound[w] |= (WOUND_CUT | WOUND_BLEEDING);
-						activesquad->squad[p]->blood -= 1 + LCSrandom(25);
+						activesquad->squad[p]->apply_special_wound(w, (WOUND_CUT | WOUND_BLEEDING));
+						activesquad->squad[p]->lose_blood(1 + LCSrandom(25));
 					}
-					if (LCSrandom(2) || activesquad->squad[p]->wound[w] == 0)
+					if (LCSrandom(2) || activesquad->squad[p]->getCreatureHealth().wound[w] == 0)
 					{
-						activesquad->squad[p]->wound[w] |= WOUND_BRUISED;
-						activesquad->squad[p]->blood -= 1 + LCSrandom(10);
+						activesquad->squad[p]->apply_special_wound(w, WOUND_BRUISED);
+						activesquad->squad[p]->lose_blood(1 + LCSrandom(10));
 					}
 				}
 			// Kill off hostages
-			if (activesquad->squad[p]->prisoner)
+			if (activesquad->squad[p]->is_holding_body())
 			{
 				// Instant death
-				if (activesquad->squad[p]->prisoner->alive)
+				if (activesquad->squad[p]->prisoner->getCreatureHealth().alive)
 				{
 					clearmessagearea();
 					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
 					addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					gamelog.newline(); //New line.
 					printparty();
@@ -911,22 +909,22 @@ void crashfriendlycar(int v)
 				// Record death if living Liberal is hauled
 				if (activesquad->squad[p]->prisoner->squadid != -1)
 				{
-					if (activesquad->squad[p]->prisoner->alive&&
-						activesquad->squad[p]->prisoner->align == 1)stat_dead++;
+					if (activesquad->squad[p]->prisoner->getCreatureHealth().alive&&
+						activesquad->squad[p]->prisoner->getCreatureHealth().align == 1)stat_dead++;
 					activesquad->squad[p]->prisoner->die();
 					activesquad->squad[p]->prisoner->location = -1;
 				}
 				// Otherwise just kill them off and be done with it
 				else delete activesquad->squad[p]->prisoner;
-				activesquad->squad[p]->prisoner = NULL;
+				activesquad->squad[p]->discard_body();
 			}
 			// Handle squad member death
-			if (activesquad->squad[p]->blood <= 0)
+			if (activesquad->squad[p]->getCreatureHealth().blood <= 0)
 			{
 				// Inform the player
 				clearmessagearea();
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				switch (LCSrandom(die_in_car.size() + 1))
 				{
 					//TODO IsaacG Migrate Strings
@@ -945,7 +943,7 @@ void crashfriendlycar(int v)
 				activesquad->squad[p]->location = -1;
 				victimsum++;
 				// Account for deaths for high score
-				if (activesquad->squad[p]->align == ALIGN_LIBERAL)stat_dead++;
+				if (activesquad->squad[p]->getCreatureHealth().align == ALIGN_LIBERAL)stat_dead++;
 				// Remove dead Liberal from squad
 				activesquad->squad[p] = NULL;
 			}
@@ -954,7 +952,7 @@ void crashfriendlycar(int v)
 				// Inform the player of character survival
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				switch (LCSrandom(3))
 				{
 				case 0:
@@ -1000,6 +998,7 @@ void crashfriendlycar(int v)
 		activesquad->squad[p]->carid = -1;
 	}
 }
+int getEncounterCarID(const int p);
 void crashenemycar(int v)
 {
 	const string CONST_chase063 = " hits a parked car and flips over.";
@@ -1009,12 +1008,12 @@ void crashenemycar(int v)
 	const string CONST_chase059 = " slams into a building.";
 	extern chaseseqst chaseseq;
 	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int victimsum = 0;
 	for (int p = ENCMAX - 1; p >= 0; p--)
 	{
 		if (!encounter[p].exists) continue;
-		if (encounter[p].carid == chaseseq.enemycar[v]->id())
+		if (getEncounterCarID(p) == chaseseq.enemycar[v]->id())
 		{
 			victimsum++;
 			delenc(p, 0);
@@ -1087,7 +1086,7 @@ bool drivingupdate(short &obstacle)
 				driver = p;
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_chase064, gamelog);
 				gamelog.newline(); //New line.
 				printparty();

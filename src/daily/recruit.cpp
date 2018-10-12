@@ -148,7 +148,7 @@ void recruitment_activity(DeprecatedCreature &cr)
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10, 0, cr.name + CONST_recruit005A + name + CONST_recruit005B);
+		mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit005A + name + CONST_recruit005B);
 		pressAnyKey();
 		int recruitCount = 0;
 		if (difficulty < 10)
@@ -163,15 +163,15 @@ void recruitment_activity(DeprecatedCreature &cr)
 				else break;
 			}
 		if (recruitCount == 0) {
-			mvaddstrAlt(11, 0, cr.name + CONST_recruit006A + name + CONST_recruit006B);
+			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit006A + name + CONST_recruit006B);
 			pressAnyKey();
 			setCurrentSite(ocursite);
 			return;
 		}
 		else if (recruitCount == 1) {
-			mvaddstrAlt(11, 0, cr.name + CONST_recruit007);
+			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit007);
 			set_alignment_color(encounter[0].align);
-			addstrAlt(encounter[0].name);
+			addstrAlt(encounter[0].getNameAndAlignment().name);
 			addstrAlt(get_age_string(encounter[0].getCreatureBio(), encounter[0].animalgloss));
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(singleDot);
@@ -192,12 +192,12 @@ void recruitment_activity(DeprecatedCreature &cr)
 				printcreatureinfo(&cr);
 				makedelimiter();
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 0, cr.name + CONST_recruit010);
+				mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit010);
 				for (int i = 0; i < recruitCount; i++) {
 					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(12 + i, 0, char('a' + i) + CONST_recruit011);
 					set_alignment_color(encounter[i].align);
-					addstrAlt(encounter[i].name);
+					addstrAlt(encounter[i].getNameAndAlignment().name);
 					addstrAlt(get_age_string(encounter[i].getCreatureBio(), encounter[i].animalgloss));
 				}
 				set_color_easy(WHITE_ON_BLACK);

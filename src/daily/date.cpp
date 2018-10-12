@@ -194,9 +194,9 @@ extern string AND;
 	 {
 		 set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		 moveAlt(y, 0); y++;
-		 addstrAlt(d.date[e]->name, gamelog);
+		 addstrAlt(d.date[e]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_date007, gamelog);
-		 addstrAlt(pool[p]->name, gamelog);
+		 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_date008, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
@@ -204,14 +204,14 @@ extern string AND;
 		 {
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(y++, 0, CONST_date048, gamelog);
-			 addstrAlt(pool[p]->name, gamelog);
+			 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date010, gamelog);
 			 int num_relationships = loveslaves(*pool[p]);
 			 if (pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
 			 if (num_relationships == 1) addstrAlt(CONST_date011, gamelog);
 			 else addstrAlt(tostring(num_relationships) + CONST_date012, gamelog);
 			 gamelog.newline();
-			 mvaddstrAlt(y++, 0, pool[p]->name, gamelog);
+			 mvaddstrAlt(y++, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date013, gamelog);
 			 if (num_relationships == 1) addstrAlt(CONST_date014, gamelog);
 			 else addstrAlt(CONST_date015, gamelog);
@@ -230,9 +230,9 @@ extern string AND;
 			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			 moveAlt(y, 0); y++;
 			 addstrAlt(CONST_date018, gamelog);
-			 addstrAlt(d.date[e]->name, gamelog);
+			 addstrAlt(d.date[e]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date019, gamelog);
-			 addstrAlt(pool[p]->name, gamelog);
+			 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date020, gamelog);
 			 gamelog.nextMessage();
 			 //Get map of their workplace
@@ -249,7 +249,7 @@ extern string AND;
 			 addstrAlt(d.date[e]->get_type_name());
 			 addstrAlt(CONST_date097);
 			 mvaddstrAlt(3, 0, CONST_date098);
-			 enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
+			 d.date[e]->new_name_four();
 			 sleeperize_prompt(*d.date[e], *pool[p], 8);
 			 addCreature(d.date[e]);
 			 stat_recruits++;
@@ -262,7 +262,7 @@ extern string AND;
 			 {
 				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				 y++;
-				 mvaddstrAlt(y++, 0, s + pool[p]->name + CONST_date025 + d.date[e]->name + CONST_dateB099, gamelog);
+				 mvaddstrAlt(y++, 0, s + pool[p]->getNameAndAlignment().name + CONST_date025 + d.date[e]->getNameAndAlignment().name + CONST_dateB099, gamelog);
 				 gamelog.newline();
 				 moveAlt(y++, 0);
 				 d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM, -1);
@@ -276,20 +276,20 @@ extern string AND;
 			 else if (LocationsPool::getInstance().isLocationMapped(d.date[e]->worklocation) == 0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM, false)))
 			 {
 				 y++;
-				 mvaddstrAlt(y++, 0, s + d.date[e]->name + CONST_date026
+				 mvaddstrAlt(y++, 0, s + d.date[e]->getNameAndAlignment().name + CONST_date026
 					 + LocationsPool::getInstance().getLocationName(d.date[e]->worklocation) + singleDot, gamelog);
 				 gamelog.newline();
 				 moveAlt(y++, 0);
 				 if (!(LocationsPool::getInstance().getLocationType(d.date[e]->worklocation) <= SITE_RESIDENTIAL_SHELTER))
 				 {
-					 addstrAlt(pool[p]->name, gamelog);
+					 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 					 addstrAlt(CONST_date027, gamelog);
 					 gamelog.newline();
 					 y++;
 				 }
 				 else
 				 {
-					 addstrAlt(pool[p]->name, gamelog);
+					 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 					 addstrAlt(CONST_date028, gamelog);
 					 gamelog.newline();
 					 y++;
@@ -306,7 +306,7 @@ extern string AND;
 	 else if (aroll == troll)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
+		 mvaddstrAlt(y++, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_date030, gamelog);
 		 moveAlt(y++, 0);
 		 switch (LCSrandom(7))
@@ -340,9 +340,9 @@ extern string AND;
 		 {
 			 set_color_easy(RED_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(y++, 0, CONST_date043, gamelog);
-			 addstrAlt(d.date[e]->name, gamelog);
+			 addstrAlt(d.date[e]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date044, gamelog);
-			 addstrAlt(pool[p]->name, gamelog);
+			 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date045, gamelog);
 			 gamelog.newline();
 			 pool[p]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
@@ -358,11 +358,11 @@ extern string AND;
 		 // If your squad member is wanted by the police, a conservative who breaks up with
 		 // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
 		 // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance. -Fox
-		 if ((iscriminal(*pool[p])) &&
+		 if ((iscriminal(pool[p]->getCreatureJustice())) &&
 			 (!LCSrandom(50) || (LCSrandom(2) && (d.date[e]->kidnap_resistant()))))
 		 {
 			 set_color_easy(RED_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
+			 mvaddstrAlt(y++, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date046, gamelog);
 			 pressAnyKey();
 			 moveAlt(y++, 0);
@@ -373,7 +373,7 @@ extern string AND;
 				 // Find the police station
 				 long ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location);
 				 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				 addstrAlt(pool[p]->name, gamelog);
+				 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_date047, gamelog);
 				 gamelog.nextMessage();
 				 removesquadinfo(*pool[p]);
@@ -389,7 +389,7 @@ extern string AND;
 			 {
 				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				 addstrAlt(CONST_date048, gamelog);
-				 addstrAlt(pool[p]->name, gamelog);
+				 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_date049, gamelog);
 				 gamelog.nextMessage();
 			 }
@@ -400,8 +400,8 @@ extern string AND;
 			 if (ls > 0 && LCSrandom(2))
 			 {
 				 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(y++, 0, s + CONST_date050 + d.date[e]->name, gamelog);
-				 mvaddstrAlt(y++, 0, s + CONST_date051 + pool[p]->name + CONST_dateB104, gamelog);
+				 mvaddstrAlt(y++, 0, s + CONST_date050 + d.date[e]->getNameAndAlignment().name, gamelog);
+				 mvaddstrAlt(y++, 0, s + CONST_date051 + pool[p]->getNameAndAlignment().name + CONST_dateB104, gamelog);
 				 switch (ls)
 				 {
 				 case 5:
@@ -432,15 +432,15 @@ extern string AND;
 						 lsfound++;
 						 if (lsfound == 1)
 						 {
-							 addstrAlt(pool[q]->name, gamelog);
+							 addstrAlt(pool[q]->getNameAndAlignment().name, gamelog);
 						 }
 						 else if (lsfound < ls)
 						 {
-							 addstrAlt(s + commaSpace + pool[q]->name, gamelog);
+							 addstrAlt(s + commaSpace + pool[q]->getNameAndAlignment().name, gamelog);
 						 }
 						 else
 						 {
-							 addstrAlt(s + AND + pool[q]->name, gamelog);
+							 addstrAlt(s + AND + pool[q]->getNameAndAlignment().name, gamelog);
 						 }
 					 }
 				 }
@@ -451,7 +451,7 @@ extern string AND;
 			 else
 			 {
 				 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
+				 mvaddstrAlt(y++, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_date059, gamelog);
 				 gamelog.newline();
 				 moveAlt(y++, 0);
@@ -474,7 +474,7 @@ extern string AND;
 	 int e = 0;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, pool[p]->name, gamelog);
+	 mvaddstrAlt(0, 0, pool[p]->getNameAndAlignment().name, gamelog);
 	 addstrAlt(CONST_date061, gamelog);
 	 gamelog.nextMessage();
 	 // Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
@@ -534,7 +534,7 @@ extern string AND;
 	 music.play(MUSIC_DATING);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, pool[p]->name, gamelog);
+	 mvaddstrAlt(0, 0, pool[p]->getNameAndAlignment().name, gamelog);
 	 addstrAlt(CONST_date062, gamelog);
 	 if (len(d.date) == 1)
 	 {
@@ -544,7 +544,7 @@ extern string AND;
 	 else addstrAlt(CONST_date065, gamelog);
 	 for (int e = 0; e < len(d.date); e++)
 	 {
-		 addstrAlt(d.date[e]->name, gamelog);
+		 addstrAlt(d.date[e]->getNameAndAlignment().name, gamelog);
 		 if (e <= len(d.date) - 3) addstrAlt(commaSpace, gamelog);
 		 else if (e == len(d.date) - 2) addstrAlt(AND, gamelog);
 		 else
@@ -567,7 +567,7 @@ extern string AND;
 			 moveAlt(2, 0);
 			 if (len(d.date) > 2) addstrAlt(CONST_date067, gamelog);
 			 else addstrAlt(CONST_date068, gamelog);
-			 mvaddstrAlt(3, 0, pool[p]->name, gamelog);
+			 mvaddstrAlt(3, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date069, gamelog);
 			 gamelog.newline();
 			 pressAnyKey();
@@ -582,15 +582,15 @@ extern string AND;
 			 pressAnyKey();
 			 break;
 		 default:
-			 mvaddstrAlt(2, 0, pool[p]->name, gamelog);
+			 mvaddstrAlt(2, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			 if (len(d.date) > 2)
 				 addstrAlt(CONST_date073A + pool[p]->heshe() + CONST_date073B + tostring(len(d.date)) + CONST_date073C, gamelog);
 			 else
 			 {
 				 addstrAlt(CONST_date074, gamelog);
-				 addstrAlt(d.date[0]->name, gamelog);
+				 addstrAlt(d.date[0]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(AND, gamelog);
-				 addstrAlt(d.date[1]->name, gamelog);
+				 addstrAlt(d.date[1]->getNameAndAlignment().name, gamelog);
 				 gamelog.newline();
 			 }
 			 mvaddstrAlt(3, 0, CONST_date075, gamelog);
@@ -598,7 +598,7 @@ extern string AND;
 			 pressAnyKey();
 			 break;
 		 }
-		 mvaddstrAlt(5, 0, pool[p]->name, gamelog);
+		 mvaddstrAlt(5, 0, pool[p]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(singleSpace, gamelog);
 		 addstrAlt(pickrandom(date_fail), gamelog);
 		 addjuice(*pool[p], -5, -50);
@@ -611,7 +611,7 @@ extern string AND;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_date076);
-		 addstrAlt(d.date[e]->name, gamelog);
+		 addstrAlt(d.date[e]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(commaSpace, gamelog);
 		 addstrAlt(d.date[e]->get_type_name(), gamelog);
 		 addstrAlt(commaSpace, gamelog);
@@ -638,7 +638,7 @@ extern string AND;
 			 delete_and_remove(temp, len(temp) - 1);
 		 }
 		 mvaddstrAlt(10, 0, CONST_date077);
-		 addstrAlt(pool[p]->name);
+		 addstrAlt(pool[p]->getNameAndAlignment().name);
 		 addstrAlt(CONST_date078);
 		 if (ledger.get_funds() >= 100 && !pool[p]->clinic)set_color_easy(WHITE_ON_BLACK);
 		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -738,7 +738,7 @@ extern string AND;
 			 {
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 int bonus = 0;
-				 mvaddstrAlt(17, 0, pool[p]->name, gamelog);
+				 mvaddstrAlt(17, 0, pool[p]->getNameAndAlignment().name, gamelog);
 				 if (pool[p]->get_weapon().is_ranged())
 				 {
 					 addstrAlt(CONST_date085, gamelog);
@@ -776,7 +776,7 @@ extern string AND;
 					 LCSrandom(2 + bonus))
 				 {
 					 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-					 mvaddstrAlt(20, 0, d.date[e]->name, gamelog);
+					 mvaddstrAlt(20, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 					 if (bonus)
 					 {
 						 addstrAlt(CONST_date092, gamelog);
@@ -788,12 +788,12 @@ extern string AND;
 						 gamelog.newline();
 					 }
 					 pressAnyKey();
-					 mvaddstrAlt(22, 0, pool[p]->name, gamelog);
+					 mvaddstrAlt(22, 0, pool[p]->getNameAndAlignment().name, gamelog);
 					 addstrAlt(CONST_date094, gamelog);
 					 gamelog.nextMessage();
 					 pressAnyKey();
 					 d.date[e]->namecreature();
-					 strcpy(d.date[e]->propername, d.date[e]->name);
+					 strcpy(d.date[e]->propername, d.date[e]->getNameAndAlignment().name.data());
 					 d.date[e]->location = pool[p]->location;
 					 d.date[e]->base = pool[p]->base;
 					 d.date[e]->flag |= CREATUREFLAG_MISSING;
@@ -812,7 +812,7 @@ extern string AND;
 					 addstrAlt(d.date[e]->get_type_name());
 					 addstrAlt(CONST_date097);
 					 mvaddstrAlt(3, 0, CONST_date098);
-					 enter_name(4, 0, d.date[e]->name, CREATURE_NAMELEN, d.date[e]->propername);
+					 d.date[e]->new_name_four();
 					 addCreature(d.date[e]);
 					 stat_kidnappings++;
 					 d.date.erase(d.date.begin() + e);
@@ -824,11 +824,11 @@ extern string AND;
 					 if (LCSrandom(2))
 					 {
 						 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-						 mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
+						 mvaddstrAlt(y++, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 						 addstrAlt(CONST_date099, gamelog);
 						 gamelog.newline();
 						 pressAnyKey();
-						 mvaddstrAlt((++y)++, 0, pool[p]->name, gamelog);
+						 mvaddstrAlt((++y)++, 0, pool[p]->getNameAndAlignment().name, gamelog);
 						 addstrAlt(CONST_date100, gamelog);
 						 gamelog.nextMessage();
 						 // Charge with kidnapping
@@ -840,9 +840,9 @@ extern string AND;
 					 else
 					 {
 						 set_color_easy(RED_ON_BLACK_BRIGHT);
-						 mvaddstrAlt(y++, 0, d.date[e]->name, gamelog);
+						 mvaddstrAlt(y++, 0, d.date[e]->getNameAndAlignment().name, gamelog);
 						 addstrAlt(CONST_date101, gamelog);
-						 addstrAlt(pool[p]->name, gamelog);
+						 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 						 addstrAlt(CONST_date102, gamelog);
 						 gamelog.newline();
 						 pressAnyKey();

@@ -1,6 +1,5 @@
 
 #include "../includes.h"
-const string CONST_getnamesB037 = "C++ Source Code Editor (with encoding)";
 const string CONST_getnames045 = "getMonth.txt";
 const string CONST_getnames044 = "city_names.txt";
 const string CONST_getnames043 = "Software Bugs";
@@ -36,8 +35,6 @@ const string CONST_getnames011 = "Wrong-Thinker";
 const string CONST_getnames010 = "Mindless Conservative";
 const string CONST_getnames009 = "Conservative Punk";
 const string CONST_getnames008 = "Conservative Dregs";
-const string CONST_getnames001 = "OEM United States - Codepage 437";
-const string CONST_getnames000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //

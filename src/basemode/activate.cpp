@@ -194,7 +194,7 @@ void recruitSelect(DeprecatedCreature &cr)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(0, 0, CONST_activate008);
-		addstrAlt(cr.name);
+		addstrAlt(cr.getNameAndAlignment().name);
 		addstrAlt(CONST_activate009);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(1, 0, CONST_activate010);
@@ -278,7 +278,7 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	moveAlt(21, 1);
 	int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
 	if (blood_saved > 100) blood_saved = 100;
-	victim->blood -= 100 - blood_saved;
+	victim->lose_blood(100 - blood_saved);
 	if (skills < difficulty &&
 		LCSrandom((100 * difficulty) / skills) < 100)
 	{
@@ -286,83 +286,79 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 		switch (selected_aug->get_type())
 		{
 		case AUGMENTATION_HEAD:
-			wound = &victim->wound[BODYPART_HEAD];
-			victim->blood -= 100;
+			victim->apply_special_wound(BODYPART_HEAD, WOUND_NASTYOFF);
+			victim->lose_blood( 100);
 			break;
 		case AUGMENTATION_BODY:
-			wound = &victim->wound[BODYPART_BODY];
-			victim->blood -= 100;
+			victim->apply_special_wound(BODYPART_BODY, WOUND_NASTYOFF);
+			victim->lose_blood( 100);
 			break;
 		case AUGMENTATION_ARMS:
 			if (LCSrandom(2))
-				wound = &victim->wound[BODYPART_ARM_LEFT];
+				victim->apply_special_wound(BODYPART_ARM_LEFT, WOUND_NASTYOFF);
 			else
-				wound = &victim->wound[BODYPART_ARM_RIGHT];
-			victim->blood -= 25;
+				victim->apply_special_wound(BODYPART_ARM_RIGHT, WOUND_NASTYOFF);
+			victim->lose_blood( 25);
 			break;
 		case AUGMENTATION_LEGS:
 			if (LCSrandom(2))
-				wound = &victim->wound[BODYPART_LEG_LEFT];
+				victim->apply_special_wound(BODYPART_LEG_LEFT, WOUND_NASTYOFF);
 			else
-				wound = &victim->wound[BODYPART_LEG_RIGHT];
-			victim->blood -= 25;
+				victim->apply_special_wound(BODYPART_LEG_RIGHT, WOUND_NASTYOFF);
+			victim->lose_blood( 25);
 			break;
 		case AUGMENTATION_SKIN:
 			if (LCSrandom(2))
-				wound = &victim->wound[BODYPART_HEAD];
+				victim->apply_special_wound(BODYPART_HEAD, WOUND_NASTYOFF);
 			else
-				wound = &victim->wound[BODYPART_BODY];
-			victim->blood -= 50;
+				victim->apply_special_wound(BODYPART_BODY, WOUND_NASTYOFF);
+			victim->lose_blood( 50);
 			break;
 		}
-		*wound |= WOUND_NASTYOFF;
-		if (victim->blood > 0)
+		if (victim->getCreatureHealth().blood > 0)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(string(victim->name) + CONST_activate030, gamelog);
+			addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate030, gamelog);
 		}
 	}
 	else //It was successful... but not without some injuries
 	{
-		unsigned char* wound = nullptr;
 		switch (selected_aug->get_type())
 		{
 		case AUGMENTATION_HEAD:
-			wound = &victim->wound[BODYPART_HEAD];
+			victim->apply_special_wound(BODYPART_HEAD, WOUND_BLEEDING | WOUND_BRUISED);
 			break;
 		case AUGMENTATION_BODY:
-			wound = &victim->wound[BODYPART_BODY];
+			victim->apply_special_wound(BODYPART_BODY, WOUND_BLEEDING | WOUND_BRUISED);
 			break;
 		case AUGMENTATION_ARMS:
 			if (LCSrandom(2))
-				wound = &victim->wound[BODYPART_ARM_RIGHT];
+				victim->apply_special_wound(BODYPART_ARM_RIGHT, WOUND_BLEEDING | WOUND_BRUISED);
 			else
-				wound = &victim->wound[BODYPART_ARM_LEFT];
+				victim->apply_special_wound(BODYPART_ARM_LEFT, WOUND_BLEEDING | WOUND_BRUISED);
 			break;
 		case AUGMENTATION_LEGS:
 			if (LCSrandom(2))
-				wound = &victim->wound[BODYPART_LEG_RIGHT];
+				victim->apply_special_wound(BODYPART_LEG_RIGHT, WOUND_BLEEDING | WOUND_BRUISED);
 			else
-				wound = &victim->wound[BODYPART_LEG_LEFT];
+				victim->apply_special_wound(BODYPART_LEG_LEFT, WOUND_BLEEDING | WOUND_BRUISED);
 			break;
 		case AUGMENTATION_SKIN:
-			wound = &victim->wound[BODYPART_HEAD];
+			victim->apply_special_wound(BODYPART_HEAD, WOUND_BLEEDING | WOUND_BRUISED);
 			break;
 		}
-		*wound |= WOUND_BLEEDING;
-		*wound |= WOUND_BRUISED;
 		selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
 		victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
 		cr->train(SKILL_SCIENCE, 15);
 		addjuice(*cr, 10, 1000);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		addstrAlt(string(victim->name) + CONST_activate031 + selected_aug->get_name(), gamelog);
+		addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate031 + selected_aug->get_name(), gamelog);
 	}
-	if (victim->blood <= 0) //Lost too much blood, you killed 'em
+	if (victim->getCreatureHealth().blood <= 0) //Lost too much blood, you killed 'em
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		victim->die();
-		addstrAlt(string(victim->name) + CONST_activate032 + cr->name, gamelog);
+		addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate032 + cr->getNameAndAlignment().name, gamelog);
 	}
 }
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);
@@ -407,9 +403,9 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
 				moveAlt(y, 0);
 				addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-				addstrAlt(temppool[p]->name);
+				addstrAlt(temppool[p]->getNameAndAlignment().name);
 				mvaddstrAlt(y, 49, temppool[p]->get_attribute(ATTRIBUTE_HEART, true));
-				mvaddstrAlt(y, 62, temppool[p]->age);
+				mvaddstrAlt(y, 62, temppool[p]->getCreatureBio().age);
 				printhealthstat(temppool[p]->getCreatureHealth(), y, 31, TRUE);
 			}
 			set_color_easy(WHITE_ON_BLACK);
@@ -437,9 +433,9 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_activate021);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->align, victim->juice));
+			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
 			//mvaddstrAlt(1,0,CONST_activate019);
-			show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
+			show_victim_status(victim->getCreatureHealth(), victim->getCreatureBio().age, victim->get_attribute(ATTRIBUTE_HEART, true));
 			mvaddstrAlt(2, 1, CONST_activate020);
 			for (int p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
 			{
@@ -455,7 +451,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 				aug_type.clear();
 				if (victim->get_augmentation(aug_c - 'a').type == -1) //False if already augmented on that bodypart.
 				{
-					selectAugmentType(aug_type, aug_c, victim->age);
+					selectAugmentType(aug_type, aug_c, victim->getCreatureBio().age);
 				}
 			}
 			set_color_easy(WHITE_ON_BLACK);
@@ -480,12 +476,12 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_activate021);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->align, victim->juice));
+			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(2, 0, CONST_activate022);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(selected_aug->get_name());
-			show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
+			show_victim_status(victim->getCreatureHealth(), victim->getCreatureBio().age, victim->get_attribute(ATTRIBUTE_HEART, true));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(4, 0, CONST_activate023);
 			set_color_easy(WHITE_ON_BLACK);
@@ -534,7 +530,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			if (c == 'y')
 			{
 				apply_augmentation(victim, cr, selected_aug);
-				show_victim_status(victim->getCreatureHealth(), victim->age, victim->get_attribute(ATTRIBUTE_HEART, true));
+				show_victim_status(victim->getCreatureHealth(), victim->getCreatureBio().age, victim->get_attribute(ATTRIBUTE_HEART, true));
 				pressAnyKey();
 				return;
 			}
@@ -581,7 +577,7 @@ void select_makeclothing(DeprecatedCreature *cr)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(0, 0, CONST_activate033);
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate034);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(1, 0, CONST_activate035);
@@ -693,12 +689,12 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 			cr->activity.type = activate_menu_items[c][choice].activity;
 			break;
 		case '2':
-			if (ZEROMORAL || cr->age >= 18)
+			if (ZEROMORAL || cr->getCreatureBio().age >= 18)
 				cr->activity.type = ACTIVITY_PROSTITUTION; break;
 		default:
 			if (cr->get_skill(SKILL_COMPUTERS) > 1)
 				cr->activity.type = ACTIVITY_CCFRAUD;
-			else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
+			else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->getCreatureBio().age >= 18))
 				cr->activity.type = ACTIVITY_PROSTITUTION;
 			else cr->activity.type = ACTIVITY_SELL_DRUGS;
 		}
@@ -769,7 +765,7 @@ void select_tendhostage(DeprecatedCreature *cr)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(0, 0, CONST_activate037);
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate038);
 		mvaddstrAlt(1, 0, CONST_activate067);
 		mvaddstrAlt(1, 57, CONST_activate040);
@@ -779,7 +775,7 @@ void select_tendhostage(DeprecatedCreature *cr)
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			char bright = 0;
 			int skill = 0;
 			for (int sk = 0; sk < SKILLNUM; sk++)
@@ -925,7 +921,7 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	moveAlt(0, 0);
 	if (cr->income)
 	{
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate044);
 		addstrAlt(cr->income);
 		addstrAlt(CONST_activate045);
@@ -933,7 +929,7 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	else
 	{
 		addstrAlt(CONST_activate046);
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate047);
 	}
 	printcreatureinfo(cr);
@@ -1021,7 +1017,7 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	moveAlt(22, 3);
 	if (activity.show_name)
 	{
-		addstrAlt(cr->name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate058);
 	}
 	addstrAlt(activity.lineAttempt(0, cr));
@@ -1081,7 +1077,7 @@ Activity getDefaultActivityIllegalFundraising(DeprecatedCreature *cr) {
 	extern bool ZEROMORAL;
 	if (cr->get_skill(SKILL_COMPUTERS) > 1)
 		return ACTIVITY_CCFRAUD;
-	else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->age >= 18))
+	else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->getCreatureBio().age >= 18))
 		return ACTIVITY_PROSTITUTION;
 	else
 		return ACTIVITY_SELL_DRUGS;
@@ -1124,7 +1120,7 @@ void activatebulk()
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			moveAlt(y, 25);
 			set_activity_color(temppool[p]->activity.type);
 			addstrAlt(getactivity(temppool[p]->activity));
@@ -1210,7 +1206,7 @@ void activate()
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			char bright = 0;
 			int skill = 0;
 			for (int sk = 0; sk < SKILLNUM; sk++)

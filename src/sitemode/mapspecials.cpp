@@ -266,7 +266,7 @@ char checkActiveSquadForRejection(const char autoadmit, const bool metaldetect) 
 			if (autoadmit < 1 && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE, DIFFICULTY_CHALLENGING)))
 				if (rejected > REJECTED_SMELLFUNNY)rejected = REJECTED_SMELLFUNNY;
 			// Underage? Gone
-			if (autoadmit < 1 && activesquad->squad[s]->age < 18)
+			if (autoadmit < 1 && activesquad->squad[s]->getCreatureBio().age < 18)
 				if (rejected > REJECTED_UNDERAGE)rejected = REJECTED_UNDERAGE;
 		}
 	}
@@ -333,12 +333,12 @@ customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_mapspecials024),
 	customText(&caseREJECTED_WEAPONS, mostlyendings + CONST_mapspecials028),
 	customText(&caseNOT_REJECTED, mostlyendings + CONST_mapspecials029),
 };
+void setEncounterZeroExistsFalse();
 char sizeUpSquadForEntry(const bool autoadmit) {
 
 	extern short sitetype;
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
 
 	char rejected = NOT_REJECTED;
@@ -368,7 +368,7 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 				if (disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE, DIFFICULTY_CHALLENGING)))
 					if (rejected > REJECTED_SMELLFUNNY)rejected = REJECTED_SMELLFUNNY;
 				// Underage? Gone
-				if (activesquad->squad[s]->age < 18)
+				if (activesquad->squad[s]->getCreatureBio().age < 18)
 					if (rejected > REJECTED_UNDERAGE)rejected = REJECTED_UNDERAGE;
 				// Not a gentleman by their definition?
 				if (sitetype == SITE_BUSINESS_CIGARBAR &&
@@ -423,7 +423,7 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 		pressAnyKey();
 	}
 	else {
-		encounter[0].exists = 0;
+		setEncounterZeroExistsFalse();
 	}
 	return rejected;
 }
@@ -444,7 +444,7 @@ void special_bouncer_assess_squad()
 		if (name.size()) {
 			autoadmit = 1;
 			strcpy(sleepername, name.data());
-			strcpy(encounter[0].name, sleepername);
+			encounter[0].rename(sleepername);
 			encounter[0].align = 1;
 		}
 
@@ -486,7 +486,7 @@ void special_bouncer_assess_squad()
 				else levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
 			}
 		}
-	encounter[0].cantbluff = 1;
+	encounter[0].make_cantbluff_one();
 }
 void special_lab_cosmetics_cagedanimals()
 {
@@ -615,7 +615,7 @@ void special_nuclear_onoff()
 			if (maxs)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, maxs->name, gamelog);
+				mvaddstrAlt(16, 1, maxs->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_mapspecials049, gamelog);
 				gamelog.newline();
 				pressAnyKey();
@@ -889,7 +889,7 @@ void special_courthouse_jury()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_mapspecials067, gamelog);
 					mvaddstrAlt(17, 1, CONST_mapspecials068, gamelog);//XXX: This is very awkward grammar.
 					addstrAlt(pickrandom(randomCrime), gamelog);
@@ -905,7 +905,7 @@ void special_courthouse_jury()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_mapspecials070, gamelog);
 					gamelog.newline();
 					pressAnyKey();
@@ -1654,6 +1654,26 @@ void spawn_security()
 		}
 	}
 }
+void lock_or_unlock_adjacent_doors(const bool rejected) {
+
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+
+	for (int dx = -1; dx <= 1; dx++) {
+		for (int dy = -1; dy <= 1; dy++)
+		{
+			if (levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag & SITEBLOCK_DOOR)
+			{
+				if (rejected)
+				{
+					levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag |= SITEBLOCK_LOCKED;
+					levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag |= SITEBLOCK_CLOCK;
+				}
+				else levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
+			}
+		}
+	}
+}
 void special_security(bool metaldetect)
 {
 	extern short sitetype;
@@ -1669,9 +1689,9 @@ void special_security(bool metaldetect)
 		string name = getSleeperSecurityName(getCurrentSite(), encounter[0].type);
 		if (name.size()) {
 			autoadmit = 2;
-			strcpy(encounter[0].name, name.data());
+			encounter[0].rename(name);
 			encounter[0].align = 1;
-			encounter[0].cantbluff = 1;
+			encounter[0].make_cantbluff_one();
 		}
 	}
 	//clearmessagearea();
@@ -1706,7 +1726,7 @@ void special_security(bool metaldetect)
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		addstrAlt(pickrandom(caseRejectionReasons[rejected]), gamelog);
 	}
-	else
+	else {
 		switch (rejected)
 		{
 		case REJECTED_NUDE:
@@ -1731,22 +1751,13 @@ void special_security(bool metaldetect)
 			gamelog.newline();
 			break;
 		}
+	}
 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	for (int dx = -1; dx <= 1; dx++)
-		for (int dy = -1; dy <= 1; dy++)
-		{
-			if (levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag & SITEBLOCK_DOOR)
-			{
-				if (rejected < NOT_REJECTED)
-				{
-					levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag |= SITEBLOCK_LOCKED;
-					levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag |= SITEBLOCK_CLOCK;
-				}
-				else levelmap[loc_coord.locx + dx][loc_coord.locy + dy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
-			}
-		}
-	encounter[0].cantbluff = 1;
+
+	lock_or_unlock_adjacent_doors(rejected != NOT_REJECTED);
+
+	encounter[0].make_cantbluff_one();
 }
 void special_security_checkpoint()
 {
@@ -1853,7 +1864,7 @@ void special_bank_vault()
 								{
 									clearmessagearea();
 									set_color_easy(WHITE_ON_BLACK_BRIGHT);
-									mvaddstrAlt(16, 1, c->name, gamelog);
+									mvaddstrAlt(16, 1, c->getNameAndAlignment().name, gamelog);
 									addstrAlt(CONST_mapspecials146, gamelog);
 									gamelog.newline();
 									pressAnyKey();
@@ -1861,7 +1872,7 @@ void special_bank_vault()
 									break;
 								}
 							}
-							if (c->prisoner && c->prisoner->type == CREATURE_BANK_MANAGER)
+							if (c->is_holding_body() && c->prisoner->type == CREATURE_BANK_MANAGER)
 							{
 								clearmessagearea();
 								set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1905,7 +1916,7 @@ void special_bank_vault()
 						{
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(16, 1, manager->name, gamelog);
+							mvaddstrAlt(16, 1, manager->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_mapspecials150, gamelog);
 							gamelog.newline();
 							pressAnyKey();

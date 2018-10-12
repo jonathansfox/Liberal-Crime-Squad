@@ -148,7 +148,7 @@ void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments 
 					recruit->set_attribute(ATTRIBUTE_WISDOM,
 						recruit->get_attribute(ATTRIBUTE_WISDOM, false) / 2);
 					recruit->namecreature();
-					strcpy(recruit->name, recruit->propername);
+					recruit->rename(recruit->propername);
 					recruit->location = l;
 					recruit->base = l;
 					recruit->hireid = newcr->id;
@@ -202,7 +202,7 @@ void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments 
 		lawyer->flag |= CREATUREFLAG_LOVESLAVE;
 		lawyer->align = ALIGN_LIBERAL;
 		lawyer->infiltration = 0.3f;
-		lawyer->age = 28;
+		lawyer->set_age(28);
 		location[lawyer->worklocation]->mapped = 1;
 		lawyer->hireid = newcr->id;
 		addCreature(lawyer);
@@ -514,7 +514,7 @@ void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recrui
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(y, 0, CONST_locationsPool037);
-		addstrAlt(converted.name);
+		addstrAlt(converted.getNameAndAlignment().name);
 		addstrAlt(CONST_locationsPool038);
 		set_color_easy(selection ? WHITE_ON_BLACK : WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y + 2, 0, selection ? CONST_locationsPool039 : CONST_locationsPool043);
@@ -2572,7 +2572,7 @@ void kidnaptransfer(DeprecatedCreature &cr)
 	addstrAlt(newcr->get_type_name());
 	addstrAlt(CONST_locationsPool143);
 	mvaddstrAlt(3, 0, CONST_locationsPool144);
-	enter_name(4, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
+	newcr->new_name_four();
 	addCreature(newcr);
 	stat_kidnappings++;
 }
@@ -2963,10 +2963,13 @@ void buyMeASprayCan(DeprecatedCreature* graffiti) {
 	Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
 	graffiti->give_weapon(spray, &location[graffiti->base]->loot);
 }
-void makeloot(DeprecatedCreature &cr, vector<Item *> &loot);
 void lootTheBody(DeprecatedCreature &cr, int base) {
 	//MAKE BASE LOOT
-	makeloot(cr, location[base]->loot);
+	cr.makeloot(location[base]->loot);
+}
+
+void DeprecatedCreature::makeloot(const int base) {
+	lootTheBody(*this, base);
 }
 int countSafeHouses() {
 	int safenumber = 0;

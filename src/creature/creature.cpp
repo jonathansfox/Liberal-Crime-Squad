@@ -787,11 +787,12 @@ int DeprecatedCreature::get_attribute(int attribute, bool usejuice) const
 	}
 	// Finish now if not using juice to avoid bounds check.
 	if (!usejuice)return ret;
+
 	// Never use juice to increase stats for the opposite ideology!
-	if (attribute == ATTRIBUTE_WISDOM && align != ALIGN_CONSERVATIVE)usejuice = false;
-	if (attribute == ATTRIBUTE_HEART && align != ALIGN_LIBERAL)usejuice = false;
+	bool skip_juice = (attribute == ATTRIBUTE_WISDOM && align != ALIGN_CONSERVATIVE) || (attribute == ATTRIBUTE_HEART && align != ALIGN_LIBERAL);
+
 	// Effects of juice on the character's attributes
-	if (usejuice)
+	if (skip_juice)
 	{
 		if (juice <= -50)ret = 1; // Damn worthless
 		else if (juice <= -10)ret = static_cast<int>(ret*0.6); // Society's dregs
@@ -1117,10 +1118,10 @@ void conservatise(DeprecatedCreature &cr)
 	switch (cr.type)
 	{
 	case CREATURE_WORKER_FACTORY_UNION:
-		strcpy(cr.name, CONST_creature106.c_str());
+		cr.rename(CONST_creature106);
 		break;
 	case CREATURE_JUDGE_LIBERAL:
-		strcpy(cr.name, CONST_creature107.c_str());
+		cr.rename(CONST_creature107);
 		break;
 	}
 }
@@ -1136,7 +1137,7 @@ void liberalize(DeprecatedCreature &cr, bool rename)
 		switch (cr.type)
 		{
 		case CREATURE_WORKER_FACTORY_NONUNION:
-			strcpy(cr.name, CONST_creature108.c_str());
+			cr.rename(CONST_creature108);
 			break;
 			//    case CREATURE_JUDGE_CONSERVATIVE:
 			//       strcpy(cr.name,CONST_creature109.c_str());
@@ -1146,16 +1147,26 @@ void liberalize(DeprecatedCreature &cr, bool rename)
 /* gives a CCS member a cover name */
 void nameCCSMember(DeprecatedCreature &cr)
 {
-	if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)
-		strcpy(cr.name, CONST_creature110.c_str());
-	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)
-		strcpy(cr.name, CONST_creature111.c_str());
-	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR)
-		strcpy(cr.name, CONST_creature112.c_str());
-	else if (cr.get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2))
-		strcpy(cr.name, pickrandom(ccs_covername_shotgun).data());
-	else
-		strcpy(cr.name, pickrandom(ccs_covername_other).data());
+	if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR) {
+
+		cr.rename(CONST_creature110);
+	}
+	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR) {
+
+		cr.rename(CONST_creature111);
+	}
+	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR) {
+
+		cr.rename(CONST_creature112);
+	}
+	else if (cr.get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2)) {
+
+		cr.rename(pickrandom(ccs_covername_shotgun));
+	}
+	else {
+
+		cr.rename(pickrandom(ccs_covername_other));
+	}
 }
 /* are they interested in talking about the issues? */
 bool DeprecatedCreature::talkreceptive() const
@@ -1208,7 +1219,7 @@ void UniqueCreatures::newPresident()
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
-	strcpy(Pres_.name, (((string)CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)).c_str());
+	Pres_.rename((((string)CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)));
 	strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
 	switch (exec[EXEC_PRESIDENT])
 	{ // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
@@ -1665,4 +1676,3 @@ void DeprecatedCreature::namecreature()
 		dontname = true;
 	}
 }
-

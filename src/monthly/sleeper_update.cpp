@@ -106,8 +106,6 @@ string droppedOffPackage;
 string itemNotFound;
 string lostStolenItem;
 string contactModAuthor;
-string hasRecruited;
-string looksForwardToServing;
 
 
 map<CreatureTypes, vector<CreatureSkill> > skill_influence = {
@@ -489,7 +487,7 @@ void sleeper_influence(DeprecatedCreature &cr, char &clearformess, char canseeth
 void creatureLeaksIntel(DeprecatedCreature cr, const string& leak, const string& stashed) {
 	eraseAlt();
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.name, gamelog);
+	addstrAlt(cr.getNameAndAlignment().name, gamelog);
 	addstrAlt(leak, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(7, 1, stashed, gamelog);
@@ -507,7 +505,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			eraseAlt();
 			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
+			addstrAlt(cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(hasBeenCaughtSnooping, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(8, 1, isNowHomeless, gamelog);
@@ -649,11 +647,11 @@ void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethi
 		{
 			eraseAlt();
 			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.name, gamelog);
+			addstrAlt(cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
-			cr.crimes_suspected[LAWFLAG_COMMERCE]++;
+			cr.criminalize_me(LAWFLAG_COMMERCE);
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
 			cr.drop_weapons_and_clips(NULL);
@@ -909,21 +907,15 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 **   SLEEPERS STEALING THINGS
 **
 **********************************/
-void printArrestedWhileStealing(DeprecatedCreature &cr) {
+void printArrestedWhileStealing(string crname) {
 	extern Log gamelog;
 	extern short lawList[LAWNUM];
 	eraseAlt();
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.name, gamelog);
+	addstrAlt(crname, gamelog);
 	addstrAlt(arrestedWhileStealing, gamelog);
 	gamelog.nextMessage();
 	pressAnyKey();
-	cr.crimes_suspected[LAWFLAG_THEFT]++;
-	removesquadinfo(cr);
-	cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
-	cr.drop_weapons_and_clips(NULL);
-	cr.activity.type = ACTIVITY_NONE;
-	cr.flag &= ~CREATUREFLAG_SLEEPER;
 }
 void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
@@ -932,7 +924,14 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 		cr.juice -= 1;
 		if (cr.juice < -2)
 		{
-			printArrestedWhileStealing(cr);
+			printArrestedWhileStealing(cr.getNameAndAlignment().name);
+
+			cr.criminalize_me(LAWFLAG_THEFT);
+			removesquadinfo(cr);
+			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
+			cr.drop_weapons_and_clips(NULL);
+			cr.activity.type = ACTIVITY_NONE;
+			cr.flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
 	}
@@ -953,7 +952,7 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.name, gamelog);
+	addstrAlt(cr.getNameAndAlignment().name, gamelog);
 	addstrAlt(droppedOffPackage, gamelog);
 	gamelog.nextMessage();
 	if (numberofxmlfails > 0) {
@@ -982,45 +981,30 @@ void sleeper_scandal(DeprecatedCreature &cr, char &clearformess, char canseethin
 **   SLEEPERS RECRUITING
 **
 **********************************/
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+void incrementStatRecruits();
+int getEncounterWorkLocation(const int e);
+void sleeperSuccessfullyRecruits(const string name, const int id, const float infiltration, const int e);
 void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	extern int stat_recruits;
-	extern DeprecatedCreature encounter[ENCMAX];
+
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	if (subordinatesleft(cr))
 	{
 		prepareencounter(LocationsPool::getInstance().getLocationType(cr.worklocation), 0);
-		for (int e = 0; e < 18; e++)
+		for (int e = 0; e < ENCMAX; e++)
 		{
 			if (encounter[e].exists == false)
 				break;
-			if (encounter[e].worklocation == cr.worklocation || !LCSrandom(5))
+			if (getEncounterWorkLocation(e) == cr.worklocation || !LCSrandom(5))
 			{
 				if (encounter[e].align != 1 && LCSrandom(5))continue;
-				DeprecatedCreature* recruit = new DeprecatedCreature(encounter[e]);
-				liberalize(*recruit, 0);
-				recruit->namecreature();
-				recruit->hireid = cr.id;
-				if (recruit->infiltration > cr.infiltration)
-				{
-					recruit->infiltration = cr.infiltration;
-				}
-				recruit->flag |= CREATUREFLAG_SLEEPER;
-				LocationsPool::getInstance().setLocationMappedAndUnhidden(recruit->worklocation);
-				addCreature(recruit);
-				eraseAlt();
-				mvaddstrAlt(6, 1, string_sleeper, gamelog);
-				addstrAlt(cr.name, gamelog);
-				addstrAlt(hasRecruited, gamelog);
-				addstrAlt(recruit->get_type_name(), gamelog);
-				addstrAlt(singleDot, gamelog);
-				gamelog.newline();
-				mvaddstrAlt(8, 1, recruit->name, gamelog);
-				addstrAlt(looksForwardToServing, gamelog);
+				sleeperSuccessfullyRecruits(cr.getNameAndAlignment().name, cr.id, cr.infiltration, e);
 				gamelog.nextMessage();
 				pressAnyKey();
 				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
-				stat_recruits++;
+				incrementStatRecruits();
 				break;
 			}
 		}

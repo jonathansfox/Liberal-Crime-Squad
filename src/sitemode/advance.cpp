@@ -135,9 +135,9 @@ void advancecreature(DeprecatedCreature &cr)
 			{
 				clearmessagearea();
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, topmedical->name, gamelog);
+				mvaddstrAlt(16, 1, topmedical->getNameAndAlignment().name, gamelog);
 				addstrAlt(ableToStopBleed, gamelog);
-				mvaddstrAlt(17, 1, cr.name, gamelog);
+				mvaddstrAlt(17, 1, cr.getNameAndAlignment().name, gamelog);
 				addstrAlt(sWounds, gamelog);
 				gamelog.newline();
 				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
@@ -194,12 +194,12 @@ void advancecreature(DeprecatedCreature &cr)
 			}
 			adddeathmessage(cr);
 			pressAnyKey();
-			if (cr.prisoner != NULL) freehostage(cr, 1);
+			if (cr.is_holding_body()) freehostage(cr, 1);
 		}
 		else
 		{
 			set_color_easy(RED_ON_BLACK);
-			mvaddstrAlt(16, 1, cr.name, gamelog);
+			mvaddstrAlt(16, 1, cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(isBurned, gamelog);
 			gamelog.newline(); //Next message?
 			pressAnyKey();
@@ -238,14 +238,11 @@ void advancecreature(DeprecatedCreature &cr)
 			}
 			adddeathmessage(cr);
 			pressAnyKey();
-			if (cr.prisoner != NULL) freehostage(cr, 1);
+			if (cr.is_holding_body()) freehostage(cr, 1);
 		}
 	}
 }
-void advancecreature(const int e) {
-	extern DeprecatedCreature encounter[ENCMAX];
-	advancecreature(encounter[e]);
-}
+void advancecreature(const int e);
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 void resetSiteAlarm();
@@ -385,7 +382,7 @@ void creatureadvance()
 		if (activesquad->squad[p] == NULL) continue;
 		if (!activesquad->squad[p]->alive) continue;
 		advancecreature(*activesquad->squad[p]);
-		if (activesquad->squad[p]->prisoner != NULL)
+		if (activesquad->squad[p]->is_holding_body())
 		{
 			advancecreature(*activesquad->squad[p]->prisoner);
 			if (!activesquad->squad[p]->prisoner->alive)
@@ -394,9 +391,9 @@ void creatureadvance()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(drops, gamelog);
-					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
+					addstrAlt(activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
 					addstrAlt(sBody, gamelog);
 					gamelog.newline();
 					makeloot(*activesquad->squad[p]->prisoner);

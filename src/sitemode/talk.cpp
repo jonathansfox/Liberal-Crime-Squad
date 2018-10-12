@@ -171,8 +171,8 @@ vector<file_and_text_collection> talk_file_collection = {
 	customText(&agree_to_release_hostages, talk_combat + CONST_talk034),
 };
 string while_naked;
-char heyMisterDog(DeprecatedCreature &a, DeprecatedCreature &tk);
-char heyMisterMonster(DeprecatedCreature &a, DeprecatedCreature &tk);
+char heyMisterDog(DeprecatedCreature &tk);
+char heyMisterMonster(DeprecatedCreature &tk);
 char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk);
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk);
 char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk);
@@ -349,12 +349,12 @@ char talk(DeprecatedCreature &a, const int t)
 	// TALKING TO DOGS
 	if (tk.type == CREATURE_GUARDDOG && tk.align != ALIGN_LIBERAL)
 	{
-		return heyMisterDog(a, tk);
+		return heyMisterDog(tk);
 	}
 	// TALKING TO MONSTERS
 	if (tk.type == CREATURE_GENETIC && tk.align != ALIGN_LIBERAL)
 	{
-		return heyMisterMonster(a, tk);
+		return heyMisterMonster(tk);
 	}
 	// BLUFFING
 	if ((isThereASiteAlarm() || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) && tk.enemy())
@@ -398,7 +398,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case 'a':
 		clearcommandarea(); clearmessagearea(); clearmaparea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9, 1, a.name, gamelog);
+		mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_004, gamelog);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(10, 1, pickrandom(robbing_bank), gamelog);
@@ -435,7 +435,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			sitealarmtimer = 0;
 			giveActiveSquadThisLoot(new Money(5000));
 		}
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 		return 1;
 	case 'b':
 	{
@@ -453,7 +453,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		if (armed_liberal)
 		{
-			mvaddstrAlt(9, 1, armed_liberal->name, gamelog);
+			mvaddstrAlt(9, 1, armed_liberal->getNameAndAlignment().name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_009, gamelog);
 			addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 			addstrAlt(singleDot, gamelog);
@@ -461,7 +461,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			pressAnyKey();
 			clearmessagearea();
 		}
-		mvaddstrAlt(10, 1, a.name, gamelog);
+		mvaddstrAlt(10, 1, a.getNameAndAlignment().name, gamelog);
 		addstrAlt(saysComma, gamelog);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_010, gamelog);
@@ -535,7 +535,7 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name);
 	addstrAlt(unnamed_String_Talk_cpp_016);
 	switch (tk.align)
 	{
@@ -549,7 +549,7 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		break;
 	}
-	addstrAlt(tk.name);
+	addstrAlt(tk.getNameAndAlignment().name);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	addstrAlt(get_age_string(tk.getCreatureBio(), tk.animalgloss));
 	addstrAlt(unnamed_String_Talk_cpp_017);
@@ -558,7 +558,7 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_018);
 	if (is_naked)addstrAlt(while_naked);
 	addstrAlt(singleDot);
-	if (tk.can_date(a.age, a.animalgloss))set_color_easy(WHITE_ON_BLACK);
+	if (tk.can_date(a.getCreatureBio().age, a.animalgloss))set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_019);
 	if (is_naked)addstrAlt(while_naked);
@@ -599,7 +599,7 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 		case 'a':
 			return wannaHearSomethingDisturbing(a, tk);
 		case 'b':
-			if (!tk.can_date(a.age, a.animalgloss)) break;
+			if (!tk.can_date(a.getCreatureBio().age, a.animalgloss)) break;
 			return doYouComeHereOften(a, tk);
 		case 'c':
 			return 0;
@@ -625,7 +625,7 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	clearmessagearea();
 	clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_025, gamelog);
@@ -635,7 +635,7 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if (is_naked)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
 		addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_026, gamelog);
@@ -644,7 +644,7 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 		return 1;
 	}
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tk.name, gamelog);
+	mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
 	addstrAlt(respondsComma, gamelog);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_027, gamelog);
@@ -670,7 +670,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	extern class Ledger ledger;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_029, gamelog);
 	gamelog.newline();
@@ -679,7 +679,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if (is_naked)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_030, gamelog);
 		gamelog.newline();
@@ -694,7 +694,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:rent = 1500; break;
 	}
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+	mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_031, gamelog);
 	addstrAlt(rent, gamelog);
@@ -721,13 +721,13 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			if (ledger.get_funds() < rent) break;
 			clearcommandarea(); clearmessagearea(); clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_038, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+			mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_039, gamelog);
 			gamelog.newline();
@@ -743,13 +743,13 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 		case 'b': // Refuse rent deal
 			clearcommandarea(); clearmessagearea(); clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_042, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+			mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_043, gamelog);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -772,7 +772,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			}
 			if (armed_liberal)
 			{
-				mvaddstrAlt(9, 1, armed_liberal->name, gamelog);
+				mvaddstrAlt(9, 1, armed_liberal->getNameAndAlignment().name, gamelog);
 				addstrAlt(unnamed_String_Talk_cpp_045, gamelog);
 				addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
 				addstrAlt(singleDot, gamelog);
@@ -780,7 +780,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 				pressAnyKey();
 				clearmessagearea();
 			}
-			mvaddstrAlt(9, 1, a.name, gamelog);
+			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
 			addstrAlt(saysComma, gamelog);
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_046, gamelog);
@@ -795,20 +795,20 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			if (roll < difficulty - 1)
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+				mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_047, gamelog);
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				addstrAlt(unnamed_String_Talk_cpp_048, gamelog);
 				gamelog.newline();
 				pressAnyKey();
-				tk.cantbluff = 1;
+				tk.make_cantbluff_one();
 				return 1;
 			}
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+				mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_049, gamelog);
 				gamelog.newline();
@@ -839,7 +839,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	extern short lawList[LAWNUM];
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_050, gamelog);
 	gamelog.newline();
@@ -848,7 +848,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if (is_naked)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_051, gamelog);
 		gamelog.newline();
@@ -863,7 +863,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 			a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM))
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_052, gamelog);
 		gamelog.newline();
@@ -873,7 +873,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if (isThereASiteAlarm())
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_053, gamelog);
 		gamelog.newline();
@@ -890,7 +890,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case SITE_RESIDENTIAL_BOMBSHELTER:
 	case SITE_RESIDENTIAL_SHELTER:
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_054, gamelog);
 		gamelog.newline();
@@ -899,7 +899,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		return 1;
 	default:
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_055, gamelog);
 		gamelog.newline();
@@ -912,7 +912,7 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 	extern Log gamelog;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_056, gamelog);
 	gamelog.newline();
@@ -924,7 +924,7 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 		tk.animalgloss == ANIMALGLOSS_TANK)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
 		switch (tk.type)
 		{
 		case CREATURE_TANK: addstrAlt(unnamed_String_Talk_cpp_057, gamelog); break;
@@ -935,10 +935,10 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 		pressAnyKey();
 		return 1;
 	}
-	else if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) != 0 && interested)
+	else if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) != 0 && interested)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_061, gamelog);
 		gamelog.newline();
@@ -948,9 +948,9 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) == 0)
+		if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) == 0)
 		{
 			if (tk.align == ALIGN_LIBERAL)
 				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_062, gamelog);
@@ -973,7 +973,7 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 	int y = 12;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog); addstrAlt(saysComma, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	vector<string> selected_flirt;
 	int line;
@@ -1004,7 +1004,7 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		tk.animalgloss == ANIMALGLOSS_TANK)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.name, gamelog);
+		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
 		switch (tk.type)
 		{
 		case CREATURE_TANK:
@@ -1015,14 +1015,14 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 1, pickrandom(dog_rejection), gamelog);
 			tk.align = ALIGN_CONSERVATIVE;
-			tk.cantbluff = 1;
+			tk.make_cantbluff_one();
 			break;
 		case CREATURE_GENETIC:
 			addstrAlt(saysComma, gamelog);
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 1, pickrandom(mutant_rejection), gamelog);
 			tk.align = ALIGN_CONSERVATIVE;
-			tk.cantbluff = 1;
+			tk.make_cantbluff_one();
 			break;
 		default:
 			addstrAlt(unnamed_String_Talk_cpp_067, gamelog);
@@ -1040,31 +1040,31 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		&& tk.type == CREATURE_PROSTITUTE)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_068, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 	}
 	else if (succeeded)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++, 1, selected_flirt[2], gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		++y;
-		mvaddstrAlt(y++, 1, a.name, gamelog);
+		mvaddstrAlt(y++, 1, a.getNameAndAlignment().name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_069, gamelog);
-		addstrAlt(tk.name, gamelog);
+		addstrAlt(tk.getNameAndAlignment().name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_070, gamelog);
-		if (strcmp(tk.name, unnamed_String_Talk_cpp_060.data()) == 0)
+		if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) == 0)
 		{
 			addstrAlt(unnamed_String_Talk_cpp_071, gamelog);
-			mvaddstrAlt(y++, 1, tk.name, gamelog);
+			mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_072, gamelog);
 			criminalize(tk, LAWFLAG_ESCAPED);
 		}
@@ -1076,7 +1076,7 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.name, gamelog);
+		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
 		addstrAlt(respondsComma, gamelog);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (tk.type == CREATURE_CORPORATE_CEO)
@@ -1095,7 +1095,7 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		gamelog.newline();
 		pressAnyKey();
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 	}
 	return 1;
 }
@@ -1117,7 +1117,7 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 	clearmessagearea();
 	clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
 	addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	int y = 10;
@@ -1166,10 +1166,10 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		difficulty += 5;
 	succeeded = a.skill_check(SKILL_PERSUASION, difficulty);
 	// Prisoners never accept to join you, you must liberate them instead
-	if (succeeded && strcmp(tk.name, unnamed_String_Talk_cpp_081.data()) != 0)
+	if (succeeded && strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_081.data()) != 0)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt((++y)++, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt((++y)++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		if (tk.type == CREATURE_MUTANT && tk.get_attribute(ATTRIBUTE_INTELLIGENCE, true) < 3)
 			mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_082, gamelog);
@@ -1195,7 +1195,7 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		pressAnyKey();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(++y, 1, unnamed_String_Talk_cpp_087, gamelog);
-		addstrAlt(tk.name, gamelog);
+		addstrAlt(tk.getNameAndAlignment().name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_088, gamelog);
 		gamelog.newline();
 		pressAnyKey();
@@ -1209,7 +1209,7 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt((++y)++, 1, tk.name, gamelog); addstrAlt(respondsComma, gamelog);
+		mvaddstrAlt((++y)++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		if (tk.type == CREATURE_MUTANT &&
 			tk.get_attribute(ATTRIBUTE_INTELLIGENCE, true) < 3)
@@ -1242,20 +1242,21 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 		return 1;
 	}
 }
-
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+int encounterWisdomRoll(const int e);
 void pressKeyAInCombat(DeprecatedCreature &a) {
 	extern Log gamelog;
 	extern Deprecatednewsstoryst *sitestory;
 	extern short attitude[VIEWNUM];
 	extern string slogan_str;
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.name, gamelog);
+	mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
 	addstrAlt(colonSpace, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	switch (LCSrandom(4))
@@ -1280,10 +1281,10 @@ void pressKeyAInCombat(DeprecatedCreature &a) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+		if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy)
 		{
 			const int attack = a.juice / 50 + attitude[VIEW_LIBERALCRIMESQUAD] / 10;
-			const int defense = encounter[e].attribute_roll(ATTRIBUTE_WISDOM);
+			const int defense = encounterWisdomRoll(e);
 			if (attack > defense)
 			{
 				if (encounter[e].type == CREATURE_COP ||
@@ -1318,12 +1319,12 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	extern short exec[EXECNUM];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	DeprecatedCreature* executer = 0;
-	if (a.prisoner)
+	if (a.is_holding_body())
 		executer = &a;
 	else for (int i = 0; i < 6; i++)
 	{
 		if (activesquad->squad[i] &&
-			activesquad->squad[i]->prisoner &&
+			activesquad->squad[i]->is_holding_body() &&
 			activesquad->squad[i]->prisoner->alive &&
 			activesquad->squad[i]->prisoner->enemy())
 		{
@@ -1349,9 +1350,9 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	gamelog.newline();
 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(17, 1, executer->name, gamelog);
+	mvaddstrAlt(17, 1, executer->getNameAndAlignment().name, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
-	addstrAlt(executer->prisoner->name, gamelog);
+	addstrAlt(executer->prisoner->getNameAndAlignment().name, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
 	gamelog.newline();
 	addjuice(*executer, -5, -50); // DE-juice for this shit
@@ -1392,7 +1393,7 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 	extern short exec[EXECNUM];
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.name, gamelog);
+	mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
 	addstrAlt(colonSpace, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	{
@@ -1446,7 +1447,7 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		for (int i = 0; i < 6; i++)
 		{
 			if (activesquad->squad[i] &&
-				activesquad->squad[i]->prisoner &&
+				activesquad->squad[i]->is_holding_body() &&
 				activesquad->squad[i]->prisoner->enemy())
 			{
 				delete_and_nullify(activesquad->squad[i]->prisoner);
@@ -1465,7 +1466,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 	extern short exec[EXECNUM];
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.name + colonSpace, gamelog);
+	mvaddstrAlt(16, 1, a.getNameAndAlignment().name + colonSpace, gamelog);
 	{
 		string anotherHostageThing;
 		switch (LCSrandom(6))
@@ -1577,7 +1578,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 			clearmessagearea();
 			clearmaparea();
 			mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_106);
-			addstrAlt(a.name);
+			addstrAlt(a.getNameAndAlignment().name);
 			addstrAlt(unnamed_String_Talk_cpp_107);
 			mvaddstrAlt(11, 1, hostages > 1 ? (unnamed_String_Talk_cpp_108) : (unnamed_String_Talk_cpp_109));
 			mvaddstrAlt(12, 1, hostages > 1 ? (unnamed_String_Talk_cpp_110) : (unnamed_String_Talk_cpp_111));
@@ -1600,16 +1601,16 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		clearmessagearea();
-		mvaddstrAlt(16, 1, tk.name, gamelog);
+		mvaddstrAlt(16, 1, tk.getNameAndAlignment().name, gamelog);
 		addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}
 }
-
+int getDifficultyBasedOnEncounterWisdom(const int e);
 void pressKeyCInCombat(DeprecatedCreature &a) {
 	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
 	extern coordinatest loc_coord;
@@ -1619,7 +1620,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
-		mvaddstrAlt(16, 1, a.name, gamelog);
+		mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
 		{
@@ -1681,7 +1682,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_138, gamelog);
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_MITHRIL)
 		{
-			mvaddstrAlt(16, 1, a.name, gamelog);
+			mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_139, gamelog);
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			addstrAlt(unnamed_String_Talk_cpp_140, gamelog);     //Fanciful multicolor message
@@ -1690,7 +1691,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, a.name, gamelog);
+			mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
 			addstrAlt(unnamed_String_Talk_cpp_142, gamelog);
 			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_143, gamelog);
 		}
@@ -1703,10 +1704,10 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	for (; e < ENCMAX; e++)
 	{
 		if (encounter[e].exists&&encounter[e].alive&&
-			encounter[e].enemy())
+			encounter[e].enemy)
 		{
 			const int roll = a.skill_roll(SKILL_DISGUISE);
-			const int diff = encounter[e].get_attribute(ATTRIBUTE_WISDOM, true) > 10 ? DIFFICULTY_CHALLENGING : DIFFICULTY_AVERAGE;
+			const int diff = getDifficultyBasedOnEncounterWisdom(e);
 			fooled = roll >= diff;
 			if (roll + 1 == diff && fieldskillrate == FIELDSKILLRATE_HARD)
 				a.train(SKILL_DISGUISE, 20);
@@ -1749,7 +1750,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 		mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_148, gamelog);
 		pressAnyKey();
 		for (int e = ENCMAX - 1; e >= 0; e--)
-			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy)
 				delenc(e, 0);
 	}
 	gamelog.newline();
@@ -1772,14 +1773,19 @@ void pressKeyDInCombat() {
 	{
 		if (activesquad->squad[i])
 		{
-			activesquad->squad[i]->crimes_suspected[LAWFLAG_THEFT] += stolen;
+			for (int j = 0; j < stolen; j++) {
+				activesquad->squad[i]->criminalize_me(LAWFLAG_THEFT);
+			}
 			capturecreature(*activesquad->squad[i]);
 		}
 		activesquad->squad[i] = NULL;
 	}
 	LocationsPool::getInstance().isThereASiegeHere(getCurrentSite(), 0);
 }
-
+char haveActiveSquadTalk(const int sp, const int tk) {
+	extern Deprecatedsquadst *activesquad;
+	return talk(*activesquad->squad[sp], tk);
+}
 char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	extern Log gamelog;
@@ -1800,7 +1806,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	clearmessagearea();
 	clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.name, gamelog);
+	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_094, gamelog);
 	switch (tk.align)
 	{
@@ -1808,7 +1814,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case ALIGN_LIBERAL: set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
 	case ALIGN_MODERATE: set_color_easy(WHITE_ON_BLACK_BRIGHT); break;
 	}
-	addstrAlt(tk.name, gamelog);
+	addstrAlt(tk.getNameAndAlignment().name, gamelog);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	addstrAlt(unnamed_String_Talk_cpp_095, gamelog);
 	gamelog.newline();
@@ -1817,7 +1823,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	for (int i = 0; i < 6; i++)
 	{
 		if (activesquad->squad[i] &&
-			activesquad->squad[i]->prisoner&&
+			activesquad->squad[i]->is_holding_body() &&
 			activesquad->squad[i]->prisoner->alive&&
 			activesquad->squad[i]->prisoner->enemy())
 		{
@@ -1843,7 +1849,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_096);
 	if (!hostages)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_097);
-	if (tk.cantbluff != 2)set_color_easy(WHITE_ON_BLACK);
+	if (!tk.is_cantbluff_two())set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_098);
 	if (cop)set_color_easy(WHITE_ON_BLACK);
@@ -1856,7 +1862,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 		c = getkeyAlt();
 		if (c == 'a')break;
 		if (c == 'b' && hostages)break;
-		if (c == 'c' && tk.cantbluff != 2)break;
+		if (c == 'c' && !tk.is_cantbluff_two())break;
 		if (c == 'd' && cop)break;
 	}
 	switch (c) {
@@ -1883,16 +1889,9 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	return 1;
 }
-void liberalizeEncounterIfThisType(const int type);
-char heyMisterDog(DeprecatedCreature &a, DeprecatedCreature &tk)
-{
-	extern Log gamelog;
+int findMostHeartfulLiberal() {
 	extern Deprecatedsquadst *activesquad;
-	extern DeprecatedCreature encounter[ENCMAX];
-	bool success = false;
-	string pitch;
-	string response;
-	// Find most Heartful Liberal
+
 	int bestp = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -1903,6 +1902,39 @@ char heyMisterDog(DeprecatedCreature &a, DeprecatedCreature &tk)
 			bestp = p;
 		}
 	}
+	return bestp;
+}
+void printSpecialRecruitment(const string aname, const string tkname, const string pitch, const string response) {
+	extern Log gamelog;
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, pitch, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, tkname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, response, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+
+}
+void liberalizeEncounterIfThisType(const int type);
+char heyMisterDog(DeprecatedCreature &tk)
+{
+	extern Log gamelog;
+	extern Deprecatedsquadst *activesquad;
+	bool success = false;
+	string pitch;
+	string response;
+	// Find most Heartful Liberal
+	int bestp = findMostHeartfulLiberal();
 	// Say something unbelievably hippie
 	if (activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true) >= 15)
 	{
@@ -1913,33 +1945,19 @@ char heyMisterDog(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	else // or not
 	{
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 		vector<string> which_choice = pickrandom(normal_talk_to_dog);
 		pitch = which_choice[0];
 		response = which_choice[1];
 	}
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, activesquad->squad[bestp]->name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(11, 1, pitch, gamelog);
-	gamelog.newline();
-	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, tk.name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14, 1, response, gamelog);
-	gamelog.newline();
-	pressAnyKey();
+
+	printSpecialRecruitment(activesquad->squad[bestp]->getNameAndAlignment().name, tk.getNameAndAlignment().name, pitch, response);
+
 	if (success)
 		liberalizeEncounterIfThisType(CREATURE_GUARDDOG);
 	return 1;
 }
-char heyMisterMonster(DeprecatedCreature &a, DeprecatedCreature &tk)
+char heyMisterMonster(DeprecatedCreature &tk)
 {
 	extern Log gamelog;
 	extern Deprecatedsquadst *activesquad;
@@ -1947,16 +1965,7 @@ char heyMisterMonster(DeprecatedCreature &a, DeprecatedCreature &tk)
 	string pitch;
 	string response;
 	// Find most Heartful Liberal
-	int bestp = 0;
-	for (int p = 0; p < 6; p++)
-	{
-		if (activesquad->squad[p] &&
-			activesquad->squad[p]->get_attribute(ATTRIBUTE_HEART, true) >
-			activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true))
-		{
-			bestp = p;
-		}
-	}
+	int bestp = findMostHeartfulLiberal();
 	// Say something diplomatic
 	if (activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true) >= 15)
 	{
@@ -1967,28 +1976,14 @@ char heyMisterMonster(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	else // or not
 	{
-		tk.cantbluff = 1;
+		tk.make_cantbluff_one();
 		vector<string> which_choice = pickrandom(normal_talk_to_mutant);
 		pitch = which_choice[0];
 		response = which_choice[1];
 	}
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, activesquad->squad[bestp]->name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(11, 1, pitch, gamelog);
-	gamelog.newline();
-	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, tk.name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14, 1, response, gamelog);
-	gamelog.newline();
-	pressAnyKey();
+
+	printSpecialRecruitment(activesquad->squad[bestp]->getNameAndAlignment().name, tk.getNameAndAlignment().name, pitch, response);
+
 	if (success)
 		liberalizeEncounterIfThisType(CREATURE_GENETIC);
 	return 1;

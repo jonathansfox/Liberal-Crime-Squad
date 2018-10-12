@@ -70,7 +70,7 @@ extern string singleDot;
 
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
-bool iscriminal(DeprecatedCreature &cr)
+bool iscriminal(CreatureJustice cr)
 {
 	for (int i = 0; i < LAWFLAGNUM; i++) if (cr.crimes_suspected[i]) return true;
 	return false;
@@ -80,23 +80,23 @@ int clinictime(DeprecatedCreature &g)
 {
 	int time = 0;
 	for (int w = 0; w < BODYPARTNUM; w++)
-		if ((g.wound[w] & WOUND_NASTYOFF) && (g.blood < 100))
+		if ((g.getCreatureHealth().wound[w] & WOUND_NASTYOFF) && (g.getCreatureHealth().blood < 100))
 			time++;
-	if (g.blood <= 10)time++;
-	if (g.blood <= 50)time++;
-	if (g.blood < 100)time++;
-	if (!g.special[SPECIALWOUND_RIGHTLUNG])time++;
-	if (!g.special[SPECIALWOUND_LEFTLUNG])time++;
-	if (!g.special[SPECIALWOUND_HEART])time += 2;
-	if (!g.special[SPECIALWOUND_LIVER])time++;
-	if (!g.special[SPECIALWOUND_STOMACH])time++;
-	if (!g.special[SPECIALWOUND_RIGHTKIDNEY])time++;
-	if (!g.special[SPECIALWOUND_LEFTKIDNEY])time++;
-	if (!g.special[SPECIALWOUND_SPLEEN])time++;
-	if (g.special[SPECIALWOUND_RIBS] < RIBNUM)time++;
-	if (!g.special[SPECIALWOUND_NECK])time++;
-	if (!g.special[SPECIALWOUND_UPPERSPINE])time++;
-	if (!g.special[SPECIALWOUND_LOWERSPINE])time++;
+	if (g.getCreatureHealth().blood <= 10)time++;
+	if (g.getCreatureHealth().blood <= 50)time++;
+	if (g.getCreatureHealth().blood < 100)time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LEFTLUNG])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_HEART])time += 2;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LIVER])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_STOMACH])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_SPLEEN])time++;
+	if (g.getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM)time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_NECK])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LOWERSPINE])time++;
 	return time;
 }
 /* common - sends somebody to the hospital */
@@ -114,7 +114,7 @@ void hospitalize(int loc, DeprecatedCreature &patient)
 	extern Log gamelog;
 	extern vector<Deprecatedsquadst *> squad;
 	// He's dead, Jim
-	if (!patient.alive)return;
+	if (!patient.getCreatureHealth().alive)return;
 	int time = clinictime(patient);
 	if (time > 0)
 	{
@@ -127,7 +127,7 @@ void hospitalize(int loc, DeprecatedCreature &patient)
 		// Inform about the hospitalization
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, patient.name, gamelog);
+		mvaddstrAlt(8, 1, patient.getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_commonactions004, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
 		addstrAlt(CONST_commonactions005, gamelog);
@@ -218,8 +218,7 @@ void criminalize(DeprecatedCreature &cr, short crime)
 			// Do not criminalize the LCS for crimes against the CCS
 			return;
 	}
-	cr.crimes_suspected[crime]++;
-	cr.heat += lawflagheat(crime);
+	cr.criminalize_me(crime, true);
 }
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
@@ -229,7 +228,7 @@ void criminalizeparty(short crime)
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p])
 		{
-			if (!activesquad->squad[p]->alive) continue;
+			if (!activesquad->squad[p]->getCreatureHealth().alive) continue;
 			criminalize(*(activesquad->squad[p]), crime);
 		}
 }
@@ -248,7 +247,7 @@ void juiceparty(long juice, long cap)
 	if (activesquad != NULL)
 		for (int p = 0; p < 6; p++)
 			if (activesquad->squad[p] != NULL)
-				if (activesquad->squad[p]->alive)
+				if (activesquad->squad[p]->getCreatureHealth().alive)
 					addjuice(*activesquad->squad[p], juice, cap);
 }
 /* common - removes the liberal from all squads */
@@ -305,7 +304,7 @@ int maxsubordinates(const DeprecatedCreature& cr)
 	else if (cr.juice >= 100) recruitcap += 3;
 	else if (cr.juice >= 50)  recruitcap += 1;
 	//Cap for founder
-	if (cr.hireid == -1 && cr.align == 1) recruitcap += 6;
+	if (cr.hireid == -1 && cr.getCreatureHealth().align == 1) recruitcap += 6;
 	return recruitcap;
 }
 int loveslaves(const DeprecatedCreature& cr);
@@ -326,7 +325,7 @@ int loveslavesleft(const DeprecatedCreature& cr)
 }
 
 /* common - Sort a list of creatures.*/
-inline bool sort_name(const DeprecatedCreature* first, const DeprecatedCreature* second) { return strcmp(first->name, second->name) < 0; }
+inline bool sort_name(const DeprecatedCreature* first, const DeprecatedCreature* second) { return strcmp(first->getNameAndAlignment().name.data(), second->getNameAndAlignment().name.data()) < 0; }
 bool sort_locationandname(const DeprecatedCreature* first, const DeprecatedCreature* second)
 {
 	return first->location < second->location
@@ -543,6 +542,6 @@ int squadsize(const Deprecatedsquadst *st)
 int squadalive(const Deprecatedsquadst *st)
 {
 	int partyalive = 0;
-	if (st) for (int p = 0; p < 6; p++) if (st->squad[p]) if (st->squad[p]->alive) partyalive++;
+	if (st) for (int p = 0; p < 6; p++) if (st->squad[p]) if (st->squad[p]->getCreatureHealth().alive) partyalive++;
 	return partyalive;
 }

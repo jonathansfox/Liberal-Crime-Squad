@@ -1,6 +1,5 @@
 
 #include "../includes.h"
-const string CONST_reviewmodeB103 = "C++ Source Code Editor (with encoding)";
 const string CONST_reviewmode134 = "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.";
 const string CONST_reviewmode133 = "  Press U to Promote Liberals.";
 const string CONST_reviewmode132 = "Press a Letter to select a squad.  1-7 to view Liberal groups.";
@@ -102,8 +101,6 @@ const string CONST_reviewmode009 = "The squad is full.";
 const string CONST_reviewmode008 = "Assemble the squad!";
 const string CONST_reviewmode007 = "getsSick.txt";
 const string CONST_reviewmode006 = "methodOfExecution.txt";
-const string CONST_reviewmode001 = "OEM United States - Codepage 437";
-const string CONST_reviewmode000 = "Open With...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -288,7 +285,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			char bright = 0;
 			int skill = 0;
 			for (int sk = 0; sk < SKILLNUM; sk++)
@@ -318,8 +315,8 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 					mvaddstrAlt(y, 75, CONST_reviewmode015);
 				}
 			}
-			if (temppool[p]->align == -1) set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (temppool[p]->align == 0) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (temppool[p]->getCreatureHealth().align == -1) set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (temppool[p]->getCreatureHealth().align == 0) set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			else set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 50, temppool[p]->get_type_name());
 			y++;
@@ -439,7 +436,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 			for (int p = 0; p < 6; p++)
 				if (cursquad->squad[p])
 				{  // It is good if either there is at least one Liberal, or if the squad is completely empty
-					if (cursquad->squad[p]->align == 1)
+					if (cursquad->squad[p]->getCreatureHealth().align == 1)
 					{
 						good = true; break;
 					} // We found a Liberal, it's good
@@ -498,14 +495,14 @@ vector<DeprecatedCreature *> countLiberals(const short mode) {
 	case REVIEWMODE_HOSTAGES:
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
-			if (pool[p]->align != ALIGN_LIBERAL && pool[p]->alive)
+			if (pool[p]->getCreatureHealth().align != ALIGN_LIBERAL && pool[p]->getCreatureHealth().alive)
 				temppool.push_back(pool[p]);
 		}
 		break;
 	case REVIEWMODE_CLINIC:
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
-			if (pool[p]->clinic && pool[p]->alive)
+			if (pool[p]->clinic && pool[p]->getCreatureHealth().alive)
 				temppool.push_back(pool[p]);
 		}
 		break;
@@ -526,14 +523,14 @@ vector<DeprecatedCreature *> countLiberals(const short mode) {
 	case REVIEWMODE_DEAD:
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
-			if (!pool[p]->alive)
+			if (!pool[p]->getCreatureHealth().alive)
 				temppool.push_back(pool[p]);
 		}
 		break;
 	case REVIEWMODE_AWAY:
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		{
-			if ((pool[p]->dating || pool[p]->hiding) && pool[p]->alive)
+			if ((pool[p]->dating || pool[p]->hiding) && pool[p]->getCreatureHealth().alive)
 				temppool.push_back(pool[p]);
 		}
 		break;
@@ -547,7 +544,7 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-		addstrAlt(temppool[p]->name);
+		addstrAlt(temppool[p]->getNameAndAlignment().name);
 		char bright = 0;
 		int skill = 0;
 		for (int sk = 0; sk < SKILLNUM; sk++)
@@ -601,35 +598,35 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 		}
 		case REVIEWMODE_JUSTICE:
 		{
-			if (temppool[p]->deathpenalty&&temppool[p]->sentence != 0 &&
+			if (temppool[p]->getCreatureJustice().deathpenalty&&temppool[p]->getCreatureJustice().sentence != 0 &&
 				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				addstrAlt(CONST_reviewmode044);
-				addstrAlt(temppool[p]->sentence);
+				addstrAlt(temppool[p]->getCreatureJustice().sentence);
 				addstrAlt(singleSpace);
-				if (temppool[p]->sentence > 1)addstrAlt(CONST_reviewmode053);
+				if (temppool[p]->getCreatureJustice().sentence > 1)addstrAlt(CONST_reviewmode053);
 				else addstrAlt(CONST_reviewmode054);
 			}
-			else if (temppool[p]->sentence <= -1 &&
+			else if (temppool[p]->getCreatureJustice().sentence <= -1 &&
 				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 			{
 				set_color_easy(WHITE_ON_BLACK);
-				if (temppool[p]->sentence < -1)
+				if (temppool[p]->getCreatureJustice().sentence < -1)
 				{
-					addstrAlt(-(temppool[p]->sentence));
+					addstrAlt(-(temppool[p]->getCreatureJustice().sentence));
 					addstrAlt(CONST_reviewmode047);
 				}
 				else
 					addstrAlt(CONST_reviewmode048);
 			}
-			else if (temppool[p]->sentence != 0 &&
+			else if (temppool[p]->getCreatureJustice().sentence != 0 &&
 				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				addstrAlt(temppool[p]->sentence);
+				addstrAlt(temppool[p]->getCreatureJustice().sentence);
 				addstrAlt(singleSpace);
-				if (temppool[p]->sentence > 1)addstrAlt(CONST_reviewmode053);
+				if (temppool[p]->getCreatureJustice().sentence > 1)addstrAlt(CONST_reviewmode053);
 				else addstrAlt(CONST_reviewmode054);
 			}
 			else
@@ -651,8 +648,8 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 		}
 		case REVIEWMODE_SLEEPERS:
 		{
-			if (temppool[p]->align == -1)set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (temppool[p]->align == 0)set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			if (temppool[p]->getCreatureHealth().align == -1)set_color_easy(RED_ON_BLACK_BRIGHT);
+			else if (temppool[p]->getCreatureHealth().align == 0)set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			else set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			addstrAlt(temppool[p]->get_type_name());
 			break;
@@ -712,7 +709,7 @@ void review_mode(const short mode)
 
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, CONST_reviewmode060);
-		if (swap) { addstrAlt(CONST_reviewmode061); addstrAlt(swap->name); }
+		if (swap) { addstrAlt(CONST_reviewmode061); addstrAlt(swap->getNameAndAlignment().name); }
 		else addstrAlt(CONST_reviewmode062);
 		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
 		int c = getkeyAlt();
@@ -731,7 +728,7 @@ void review_mode(const short mode)
 				{
 					eraseAlt();
 					moveAlt(0, 0);
-					if (temppool[p]->align != 1)
+					if (temppool[p]->getCreatureHealth().align != 1)
 					{
 						set_color_easy(RED_ON_BLACK_BRIGHT);
 						addstrAlt(CONST_reviewmode064);
@@ -757,7 +754,7 @@ void review_mode(const short mode)
 							addstrAlt(CONST_reviewmode067);
 					}
 					moveAlt(23, 0);
-					if (temppool[p]->align != 1) addstrAlt(CONST_reviewmode068);
+					if (temppool[p]->getCreatureHealth().align != 1) addstrAlt(CONST_reviewmode068);
 					else addstrAlt(CONST_reviewmode069);
 					if (len(temppool) > 1) addstrAlt(CONST_reviewmode070);
 					mvaddstrAlt(24, 0, CONST_reviewmode071);
@@ -787,9 +784,9 @@ void review_mode(const short mode)
 						set_color_easy(WHITE_ON_BLACK);
 						mvaddstrAlt(23, 0, CONST_reviewmode073); // 80 characters
 						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
-						enter_name(24, 0, temppool[p]->name, CREATURE_NAMELEN, temppool[p]->propername);
+						temppool[p]->new_name();
 					}
-					else if (c == 'g' && temppool[p]->align == 1)
+					else if (c == 'g' && temppool[p]->getCreatureHealth().align == 1)
 					{
 						temppool[p]->gender_liberal++;
 						if (temppool[p]->gender_liberal > 2)
@@ -807,7 +804,7 @@ void review_mode(const short mode)
 						if (c == 'c')
 						{
 							// Release squad member
-							mvaddstrAlt(22, 0, temppool[p]->name, gamelog);
+							mvaddstrAlt(22, 0, temppool[p]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_reviewmode078, gamelog); // 80 characters
 							gamelog.newline(); //New line.
 							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
@@ -817,20 +814,20 @@ void review_mode(const short mode)
 							// if they have low heart
 							// TODO: Do law check against other members?
 							if (temppool[p]->get_attribute(ATTRIBUTE_HEART, true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM, true) + LCSrandom(5)
-								&& iscriminal(*pool[boss]))
+								&& iscriminal(pool[boss]->getCreatureJustice()))
 							{
 								set_color_easy(CYAN_ON_BLACK_BRIGHT);
 								mvaddstrAlt(22, 0, CONST_reviewmode081, gamelog);
-								addstrAlt(temppool[p]->name, gamelog);
+								addstrAlt(temppool[p]->getNameAndAlignment().name, gamelog);
 								addstrAlt(CONST_reviewmode082, gamelog);
 								gamelog.newline(); //New line.
 								mvaddstrAlt(24, 0, CONST_reviewmode083, gamelog);
 								gamelog.newline(); //New line.
 								mvaddstrAlt(25, 0, CONST_reviewmode084, gamelog);
-								addstrAlt(pool[boss]->name, gamelog);
+								addstrAlt(pool[boss]->getNameAndAlignment().name, gamelog);
 								addstrAlt(CONST_reviewmode085, gamelog);
 								criminalize(*pool[boss], LAWFLAG_RACKETEERING);
-								pool[boss]->confessions++;
+								pool[boss]->another_confession();
 								// TODO: Depending on the crime increase heat or make seige
 								if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,pool[boss]->base) > 20)
 									LocationsPool::getInstance().setSiegetimeuntillocated(pool[boss]->base, 3);
@@ -853,7 +850,7 @@ void review_mode(const short mode)
 						if (pool[boss]->location != temppool[p]->location) break;
 						set_color_easy(WHITE_ON_BLACK);
 						mvaddstrAlt(22, 0, CONST_reviewmode086); // 25 characters (25+55=80)
-						addstrAlt(pool[boss]->name);
+						addstrAlt(pool[boss]->getNameAndAlignment().name);
 						addstrAlt(CONST_reviewmode087); // 55 characters (25+55=80)
 						mvaddstrAlt(23, 0, CONST_reviewmode088); // 80 characters
 						mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
@@ -863,9 +860,9 @@ void review_mode(const short mode)
 							temppool[p]->die();
 							cleangonesquads();
 							stat_kills++;
-							mvaddstrAlt(22, 0, pool[boss]->name, gamelog);
+							mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_reviewmode090, gamelog); // 10 characters (10+4+66=80)
-							addstrAlt(temppool[p]->name, gamelog);
+							addstrAlt(temppool[p]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_reviewmode091, gamelog); // 4 characters (10+4+66=80)
 							addstrAlt(pickrandom(methodOfExecution), gamelog);
 							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
@@ -877,14 +874,14 @@ void review_mode(const short mode)
 								{
 									set_color_easy(GREEN_ON_BLACK_BRIGHT);
 									gamelog.newline(); //New line.
-									mvaddstrAlt(22, 0, pool[boss]->name, gamelog);
+									mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
 									addstrAlt(CONST_reviewmode094, gamelog); // 80 characters
 									pool[boss]->adjust_attribute(ATTRIBUTE_HEART, -1);
 									// this sentence probably takes more than 80 characters so use 2 lines and break it here
 									gamelog.newline(); //New line.
 									mvaddstrAlt(23, 0, pickrandom(getsSick), gamelog);
 									gamelog.newline(); //New line.
-									mvaddstrAlt(24, 0, pool[boss]->name, gamelog);
+									mvaddstrAlt(24, 0, pool[boss]->getNameAndAlignment().name, gamelog);
 									addstrAlt(CONST_reviewmode095, gamelog); // 80 characters
 									pressAnyKey();
 								}
@@ -892,11 +889,11 @@ void review_mode(const short mode)
 								{
 									gamelog.newline(); //New line here too.
 									set_color_easy(CYAN_ON_BLACK_BRIGHT);
-									mvaddstrAlt(22, 0, pool[boss]->name, gamelog);
+									mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
 									addstrAlt(CONST_reviewmode096, gamelog); // 80 characters
 									pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 									gamelog.newline(); //New line.
-									mvaddstrAlt(24, 0, pool[boss]->name, gamelog);
+									mvaddstrAlt(24, 0, pool[boss]->getNameAndAlignment().name, gamelog);
 									addstrAlt(CONST_reviewmode097, gamelog); // 80 characters
 									pressAnyKey();
 								}
@@ -931,7 +928,7 @@ void review_mode(const short mode)
 				if (p < len(temppool)) swap = temppool[swapPos = p];
 			}
 			else { // non-null swap
-				addstrAlt(swap->name);
+				addstrAlt(swap->getNameAndAlignment().name);
 				addstrAlt(CONST_reviewmode101);
 				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -995,7 +992,7 @@ void squadlessbaseassign()
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->name);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			mvaddstrAlt(y, 25, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->base, true, true));
 			if (LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
 				addstrAlt(CONST_reviewmode105);
@@ -1090,7 +1087,7 @@ void promoteliberals()
 	vector<DeprecatedCreature *> temppool;
 	vector<int> level;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive&&pool[p]->align == 1)
+		if (pool[p]->getCreatureHealth().alive&&pool[p]->getCreatureHealth().align == 1)
 			temppool.push_back(pool[p]);
 	if (!len(temppool)) return;
 	//SORT
@@ -1114,20 +1111,20 @@ void promoteliberals()
 			bool iAmTheLeader = true;
 			for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
 			{
-				if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
+				if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
 				{
-					printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->name);
+					printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->getNameAndAlignment().name);
 					moveAlt(y, 54);
 					for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 					{
-						if (pool[p3]->alive == 1 && pool[p3]->id == pool[p2]->hireid)
+						if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid)
 						{
 							if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
 								addstrAlt(CONST_reviewmode113);
 							else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
 								addstrAlt(CONST_reviewmode114);
 							else
-								printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->name);
+								printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
 							break;
 						}
 					}
@@ -1136,7 +1133,7 @@ void promoteliberals()
 			}
 			if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
 			moveAlt(y++, 4 + level[p]);
-			printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->name);
+			printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->getNameAndAlignment().name);
 		}
 		moveAlt(21, 0);
 		for (stringAndColor s : liberalListAndColor) {
@@ -1163,13 +1160,13 @@ void promoteliberals()
 			{
 				for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
 				{
-					if (pool[p2]->alive == 1 && pool[p2]->id == temppool[p]->hireid)
+					if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
 					{
-						addstrAlt(pool[p2]->name);
+						addstrAlt(pool[p2]->getNameAndAlignment().name);
 						for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 						{
 							// Can't promote if new boss can't accept more subordinates
-							if (pool[p3]->alive == 1 && pool[p3]->id == pool[p2]->hireid &&
+							if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid &&
 								(temppool[p]->flag&CREATUREFLAG_BRAINWASHED || subordinatesleft(*pool[p3])))
 							{
 								temppool[p]->hireid = pool[p2]->hireid;
@@ -1205,12 +1202,12 @@ bool iterateReview(int &page) {
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->is_active_liberal()) n[0]++; // Active Liberals
-		if (pool[p]->align != ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
-		if (pool[p]->clinic && pool[p]->alive) n[2]++; // Hospital
+		if (pool[p]->getCreatureHealth().align != ALIGN_LIBERAL && pool[p]->getCreatureHealth().alive) n[1]++; // Hostages
+		if (pool[p]->clinic && pool[p]->getCreatureHealth().alive) n[2]++; // Hospital
 		if (pool[p]->is_imprisoned()) n[3]++; // Justice System
 		if (pool[p]->is_lcs_sleeper()) n[4]++; // Sleepers
-		if (!pool[p]->alive) n[5]++; // The Dead
-		if ((pool[p]->dating || pool[p]->hiding) && pool[p]->alive) n[6]++; // Away
+		if (!pool[p]->getCreatureHealth().alive) n[5]++; // The Dead
+		if ((pool[p]->dating || pool[p]->hiding) && pool[p]->getCreatureHealth().alive) n[6]++; // Away
 	}
 	n[7] += consolidateSiegeLoot();
 

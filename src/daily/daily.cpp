@@ -435,10 +435,10 @@ void ageThings(const char clearformess) {
 		//TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
 		if (!pool[p]->animalgloss)
 		{
-			if (pool[p]->age > 60)
+			if (pool[p]->getCreatureBio().age > 60)
 			{
 				int decrement = 0;
-				while (pool[p]->age - decrement > 60)
+				while (pool[p]->getCreatureBio().age - decrement > 60)
 				{
 					if (LCSrandom(365 * 10) == 0)
 					{
@@ -450,9 +450,9 @@ void ageThings(const char clearformess) {
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+							mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_daily020, gamelog);
-							addstrAlt(pool[p]->age, gamelog);
+							addstrAlt(pool[p]->getCreatureBio().age, gamelog);
 							addstrAlt(CONST_daily021, gamelog);
 							gamelog.nextMessage();
 							pressAnyKey();
@@ -463,11 +463,11 @@ void ageThings(const char clearformess) {
 				}
 				if (!pool[p]->alive)continue;
 			}
-			if (pmonth == pool[p]->birthday_month&&
-				pday == pool[p]->birthday_day)
+			if (pmonth == pool[p]->getCreatureBio().birthday_month&&
+				pday == pool[p]->getCreatureBio().birthday_day)
 			{
-				pool[p]->age++;
-				switch (pool[p]->age)
+				pool[p]->age_up();
+				switch (pool[p]->getCreatureBio().age)
 				{
 				case 13:
 					pool[p]->type = CREATURE_TEENAGER; // aww, all grown up
@@ -495,7 +495,7 @@ void ageThings(const char clearformess) {
 					if (clearformess) eraseAlt();
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_daily024, gamelog);
 					gamelog.nextMessage();
 					pressAnyKey();
@@ -665,7 +665,7 @@ void activitiesForIndividuals(char &clearformess) {
 			if (clearformess) eraseAlt();
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, pool[p]->name, gamelog);
+			mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_daily019, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
@@ -710,7 +710,7 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 				if (clearformess) eraseAlt();
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(8, 1, squad[sq]->squad[p]->name, gamelog);
+				mvaddstrAlt(8, 1, squad[sq]->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_daily004, gamelog);
 				addstrAlt(squad[sq]->name, gamelog);
 				addstrAlt(CONST_daily005, gamelog);

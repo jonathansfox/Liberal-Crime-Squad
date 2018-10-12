@@ -215,7 +215,7 @@ char unlock(short type, char &actual)
 			}
 			clearmessagearea(false);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(singleSpace, gamelog);
 			switch (type)
 			{
@@ -273,7 +273,7 @@ char unlock(short type, char &actual)
 					case FIELDSKILLRATE_HARD:
 						activesquad->squad[p]->train(SKILL_SECURITY, 10); break;
 					}
-					mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_miscactions012, gamelog);
 					gamelog.newline();
 					break;
@@ -281,7 +281,7 @@ char unlock(short type, char &actual)
 			}
 			if (i == 3)
 			{
-				mvaddstrAlt(16, 1, activesquad->squad[p]->name, gamelog);
+				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_miscactions013, gamelog);
 				gamelog.newline();
 			}
@@ -386,7 +386,7 @@ char bash(short type, char &actual)
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, activesquad->squad[maxp]->name, gamelog);
+		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		switch (type)
 		{
@@ -425,7 +425,7 @@ char bash(short type, char &actual)
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, activesquad->squad[maxp]->name, gamelog);
+		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
 		switch (type)
 		{
 		case BASH_DOOR:
@@ -483,7 +483,7 @@ char hack(short type, char &actual)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, activesquad->squad[hacker]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[hacker]->getNameAndAlignment().name, gamelog);
 			if (!blind) addstrAlt(CONST_miscactions024, gamelog);
 			switch (type)
 			{
@@ -502,7 +502,7 @@ char hack(short type, char &actual)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, activesquad->squad[hacker]->name, gamelog);
+			mvaddstrAlt(16, 1, activesquad->squad[hacker]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_miscactions029, gamelog);
 			if (blind) addstrAlt(CONST_miscactions030, gamelog);
 			switch (type)
@@ -645,14 +645,14 @@ char run_broadcast(bool tv_broadcase)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->prisoner != NULL && activesquad->squad[p]->prisoner->alive)
+			if (activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->prisoner->alive)
 			{
 				if (((activesquad->squad[p]->prisoner->type == CREATURE_NEWSANCHOR) && tv_broadcase) || ((activesquad->squad[p]->prisoner->type == CREATURE_RADIOPERSONALITY) && !tv_broadcase))
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, CONST_miscactions055, gamelog);
-					addstrAlt(activesquad->squad[p]->prisoner->name, gamelog);
+					addstrAlt(activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_miscactions056, gamelog);
 					viewhit = LCSrandom(VIEWNUM);
 					if (discussIssues.count(viewhit)) {
@@ -682,7 +682,7 @@ char run_broadcast(bool tv_broadcase)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
 					addstrAlt(CONST_miscactions057, gamelog);
 					gamelog.newline();
 					pressAnyKey();
@@ -750,7 +750,7 @@ void partyrescue(short special)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner == NULL)
+			if (activesquad->squad[p]->alive&&!activesquad->squad[p]->is_holding_body())
 			{
 				hostslots++;
 			}
@@ -779,7 +779,7 @@ void partyrescue(short special)
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
-			addstrAlt(waiting_for_rescue[pl]->name, gamelog);
+			addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_miscactions071, gamelog);
 			gamelog.newline();
 			printparty();
@@ -798,7 +798,7 @@ void partyrescue(short special)
 			{
 				if (activesquad->squad[p] != NULL)
 				{
-					if (activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner == NULL)
+					if (activesquad->squad[p]->alive&&!activesquad->squad[p]->is_holding_body())
 					{
 						activesquad->squad[p]->prisoner = waiting_for_rescue[pl];
 						waiting_for_rescue[pl]->squadid = activesquad->id;
@@ -807,16 +807,16 @@ void partyrescue(short special)
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
-						addstrAlt(waiting_for_rescue[pl]->name, gamelog);
+						addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_miscactions071, gamelog);
 						gamelog.newline();
 						pressAnyKey();
 						clearmessagearea();
-						mvaddstrAlt(16, 1, waiting_for_rescue[pl]->name, gamelog);
+						mvaddstrAlt(16, 1, waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 						addstrAlt(singleSpace, gamelog);
 						addstrAlt(pickrandom(was_abused), gamelog);
 						mvaddstrAlt(17, 1, CONST_miscactions072, gamelog);
-						addstrAlt(activesquad->squad[p]->name, gamelog);
+						addstrAlt(activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_miscactions073, gamelog);
 						gamelog.newline();
 						waiting_for_rescue[pl]->location = -1;
@@ -838,7 +838,7 @@ void partyrescue(short special)
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_miscactions074, gamelog);
-		addstrAlt(waiting_for_rescue[0]->name, gamelog);
+		addstrAlt(waiting_for_rescue[0]->getNameAndAlignment().name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

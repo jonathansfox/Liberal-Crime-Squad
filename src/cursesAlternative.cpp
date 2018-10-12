@@ -582,8 +582,6 @@ const string CONST_sitedisplay022 = "LCS";
 const string CONST_sitedisplay018 = "CCS";
 const string CONST_sitedisplay014 = "GNG";
 const string CONST_sitedisplay010 = "   ";
-const string CONST_sitedisplay005 = "OEM United States - Codepage 437";
-const string CONST_sitedisplay004 = "Open With...";
 const string CONST_sitedisplay096 = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_sitedisplay062 = "³                         ³";
 const string CONST_sitedisplay061 = "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ";
@@ -599,71 +597,7 @@ const string tag_ARMOR = "ARMOR";
 //const string blankString = "";
 const string tag_MONEY = "MONEY";
 const string tag_CEO = "CEO";
-/*
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
-/*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
-// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
-// (The same character set used by Liberal Crime Squad when it is running)
-// Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
-// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
-// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
-// then choosing OEM/DOS in the Script dropdown box.
-// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
-// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
-// then pick WINDOWS-437 from the dropdown box and then choose the radio button
-// to make this the default encoding and disable auto-detection of the encoding.
-// Then close the file and reopen it (since Code::Blocks detects the encoding
-// when it opens the file and it can't be changed after that; what we changed was
-// how it detects encoding for files it opens in the future, not files already open).
-// In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select CONST_sitedisplay004, choose "C++ Source Code Editor (with encoding)",
-// then choose CONST_sitedisplay005.
-// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
-// the codepage will be correct already since it's running in a console window just
-// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
-// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
-// Advanced tab, and choose English (United States) from the dropdown box as the encoding
-// for non-Unicode applications, then press OK.
-// If you have a Linux or other UNIX-based system you are obviously smart enough
-// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
-// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
-// it out for yourself.
-//const string tag_value = "value";
-//const string tag_attribute = "attribute";
-//const string tag_skill = "skill";
-//#include "../creature/newcreature.h"
-//#include "../locations/locations.h"
-// only for locations.h
-//#include "../sitemode/sitedisplay.h"
 void printchaseencounter();
-//#include "../common/consolesupport.h"
-// for void set_color(short,short,bool)
-//#include "../cursesAlternative.h"
-//#include "../cursesAlternativeConstants.h"
-//#include "../set_color_support.h"
 bool isThereGroundLoot();
 // Imperfect but quick and dirty line of sight check
 // Only works if the target point is at most two spaces

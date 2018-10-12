@@ -106,7 +106,7 @@ extern string spaceDashSpace;
 		 makedelimiter();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 std::string str = CONST_baseactions008;
-		 str += activesquad->squad[oldPos - '1']->name;
+		 str += activesquad->squad[oldPos - '1']->getNameAndAlignment().name;
 		 str += CONST_baseactions009;
 		 str += (char)oldPos;
 		 mvaddstrCenter(8, str);
@@ -128,7 +128,7 @@ extern string spaceDashSpace;
 		 for (int p = 0; p < 6; p++)
 		 {
 			 if (activesquad->squad[p] == NULL) continue;
-			 if (activesquad->squad[p]->alive&&
+			 if (activesquad->squad[p]->getCreatureHealth().alive&&
 				 activesquad->squad[p]->pref_carid == getCarID(l))
 			 {
 				 this_squad = true;

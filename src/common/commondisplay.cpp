@@ -504,7 +504,7 @@ void printhealthstat(CreatureHealth g, int y, int x, char smll)
 	string wound = getHealthStat(g, smll);
 	mvaddstrAlt(y, x, wound);
 }
-void printAttributesAsKnowledgePermits(DeprecatedCreature *cr, unsigned char knowledge) {
+void printAttributesAsKnowledgePermits(CreatureAttributeList cr, unsigned char knowledge) {
 	const string CONST_commondisplay067 = "?";
 	const string CONST_commondisplay066 = "Char:   ";
 	const string CONST_commondisplay064 = "Str:    ";
@@ -513,34 +513,13 @@ void printAttributesAsKnowledgePermits(DeprecatedCreature *cr, unsigned char kno
 	const string CONST_commondisplay058 = "Wis:    ";
 	const string CONST_commondisplay056 = "Int:    ";
 	const string CONST_commondisplay054 = "Hrt:    ";
-	mvaddstrAlt(2, 0, CONST_commondisplay054);
-	if (knowledge > 0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(3, 0, CONST_commondisplay056);
-	if (knowledge > 0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_INTELLIGENCE, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(4, 0, CONST_commondisplay058);
-	if (knowledge > 0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(5, 0, CONST_commondisplay060);
-	if (knowledge > 1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(2, 11, CONST_commondisplay062);
-	if (knowledge > 1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_AGILITY, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(3, 11, CONST_commondisplay064);
-	if (knowledge > 1)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_STRENGTH, true));
-	else addstrAlt(CONST_commondisplay067);
-	mvaddstrAlt(4, 11, CONST_commondisplay066);
-	if (knowledge > 0)
-		addstrAlt(cr->get_attribute(ATTRIBUTE_CHARISMA, true));
-	else addstrAlt(CONST_commondisplay067);
+	mvaddstrAlt(2, 0, CONST_commondisplay054 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_HEART, true))));
+	mvaddstrAlt(3, 0, CONST_commondisplay056 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true))));
+	mvaddstrAlt(4, 0, CONST_commondisplay058 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_WISDOM, true))));
+	mvaddstrAlt(5, 0, CONST_commondisplay060 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_HEALTH, true))));
+	mvaddstrAlt(2, 11, CONST_commondisplay062 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_AGILITY, true))));
+	mvaddstrAlt(3, 11, CONST_commondisplay064 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_STRENGTH, true))));
+	mvaddstrAlt(4, 11, CONST_commondisplay066 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_CHARISMA, true))));
 }
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
@@ -589,7 +568,7 @@ void printWounds(DeprecatedCreature *cr) {
 
 	for (int w = 0; w < BODYPARTNUM; w++)
 	{
-		if (cr->wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
+		if (cr->getCreatureHealth().wound[w] & WOUND_BLEEDING)set_color_easy(RED_ON_BLACK_BRIGHT);
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(2 + w, 49);
 		switch (w)
@@ -602,28 +581,28 @@ void printWounds(DeprecatedCreature *cr) {
 		case BODYPART_LEG_LEFT:addstrAlt(CONST_commondisplay112); break;
 		}
 		moveAlt(2 + w, 61);
-		if (cr->wound[w] & WOUND_NASTYOFF)addstrAlt(CONST_commondisplay113);
-		else if (cr->wound[w] & WOUND_CLEANOFF)addstrAlt(CONST_commondisplay085);
+		if (cr->getCreatureHealth().wound[w] & WOUND_NASTYOFF)addstrAlt(CONST_commondisplay113);
+		else if (cr->getCreatureHealth().wound[w] & WOUND_CLEANOFF)addstrAlt(CONST_commondisplay085);
 		else
 		{
 			int sum = 0;
-			if (cr->wound[w] & WOUND_SHOT)sum++;
-			if (cr->wound[w] & WOUND_CUT)sum++;
-			if (cr->wound[w] & WOUND_BRUISED)sum++;
-			if (cr->wound[w] & WOUND_BURNED)sum++;
-			if (cr->wound[w] & WOUND_TORN)sum++;
+			if (cr->getCreatureHealth().wound[w] & WOUND_SHOT)sum++;
+			if (cr->getCreatureHealth().wound[w] & WOUND_CUT)sum++;
+			if (cr->getCreatureHealth().wound[w] & WOUND_BRUISED)sum++;
+			if (cr->getCreatureHealth().wound[w] & WOUND_BURNED)sum++;
+			if (cr->getCreatureHealth().wound[w] & WOUND_TORN)sum++;
 			if (sum == 0)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				if (cr->animalgloss == ANIMALGLOSS_ANIMAL)
+				if (cr->getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL)
 					addstrAlt(CONST_commondisplay115);
 				else addstrAlt(CONST_commondisplay116);
 			}
-			if (cr->wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay088); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay089); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay091); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay092); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay088); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay089); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay091); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay092); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
 		}
 	}
 }
@@ -646,21 +625,21 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	extern char showcarprefs;
 	makedelimiter(1);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 2, cr->name);
+	mvaddstrAlt(1, 2, cr->getNameAndAlignment().name);
 	addstrAlt(commaSpace);
-	addstrAlt(gettitle(cr->align, cr->juice));
-	if (cr->prisoner != NULL)
+	addstrAlt(gettitle(cr->getCreatureHealth().align, cr->juice));
+	if (cr->is_holding_body())
 	{
 		string prisoner_info = CONST_commondisplay047;
 		if (prisoner_description.count(cr->prisoner->type) >= 1) {
 			prisoner_info += prisoner_description[cr->prisoner->type];
 		}
 		else {
-			prisoner_info += cr->prisoner->name;
+			prisoner_info += cr->prisoner->getNameAndAlignment().name;
 		}
 		addstrAlt(prisoner_info);
 	}
-	printAttributesAsKnowledgePermits(cr, knowledge);
+	printAttributesAsKnowledgePermits(cr->getCreatureAttributeList(), knowledge);
 	mvaddstrAlt(5, 11, CONST_commondisplay068);
 	long v = -1;
 	if (showcarprefs == 1)v = id_getcar(cr->pref_carid);
@@ -677,10 +656,10 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	else
 	{
 		int legok = 2;
-		if ((cr->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-			(cr->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-		if ((cr->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-			(cr->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+		if ((cr->getCreatureHealth().wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+			(cr->getCreatureHealth().wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+		if ((cr->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+			(cr->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
 		if (cr->flag & CREATUREFLAG_WHEELCHAIR) { (str = CONST_commondisplay157); }
 		else if (legok >= 1) { (str = CONST_commondisplay158); }
 		else { (str = CONST_commondisplay003); }
@@ -759,7 +738,7 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	}
 	int woundsum = 0;
 	for (int w = 0; w < BODYPARTNUM; w++)
-		if (cr->wound[w] != 0)woundsum++;
+		if (cr->getCreatureHealth().wound[w] != 0)woundsum++;
 	printhealthstat(cr->getCreatureHealth(), 1, 49, FALSE);
 	if (woundsum > 0)
 	{
@@ -814,10 +793,10 @@ void printparty()
 			mvaddcharAlt(p + 2, 0, '1' + p);
 			if (party[p] != NULL)
 			{
-				if (party[p]->prisoner != NULL)set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+				if (party[p]->is_holding_body())set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				else set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(p + 2, 2, party[p]->name);
-				if (party[p]->prisoner != NULL)addstrAlt(CONST_commondisplay096);
+				mvaddstrAlt(p + 2, 2, party[p]->getNameAndAlignment().name);
+				if (party[p]->is_holding_body())addstrAlt(CONST_commondisplay096);
 				int skill = 0;
 				char bright = 0;
 				for (int sk = 0; sk < SKILLNUM; sk++)
@@ -910,10 +889,10 @@ void printparty()
 				else
 				{
 					int legok = 2;
-					if ((party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
-						(party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-					if ((party[p]->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
-						(party[p]->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+					if ((party[p]->getCreatureHealth().wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF) ||
+						(party[p]->getCreatureHealth().wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+					if ((party[p]->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
+						(party[p]->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
 					if (party[p]->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, CONST_commondisplay157.c_str());
 					else if (legok >= 1)strcpy(str, CONST_commondisplay158.c_str());
 					else strcpy(str, CONST_commondisplay003.c_str());
@@ -1456,7 +1435,7 @@ void fullstatus(const int _p)
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(23, 0, CONST_commondisplay219); // 80 characters
 			mvaddstrAlt(24, 0, CONST_commondisplay220); // 80 spaces
-			enter_name(24, 0, activesquad->squad[p]->name, CREATURE_NAMELEN, activesquad->squad[p]->propername);
+			activesquad->squad[p]->new_name();
 		}
 		else if (c == 'g')
 		{

@@ -188,3 +188,44 @@ struct CreatureCar {
 
 	CreatureCar(const int _pref_carid, const int _carid, const char _pref_is_driver, const char _is_driver) : pref_carid(_pref_carid), carid(_carid), pref_is_driver(_pref_is_driver), is_driver(_is_driver) {}
 };
+
+struct CantBluffAnimal {
+	const char cantbluff;
+	const char animalgloss;
+	CantBluffAnimal(const char _cantbluff, const char _animalgloss) : cantbluff(_cantbluff), animalgloss(_animalgloss) {}
+};
+
+struct CreatureAttributeList {
+	const int get_attribute(const int x, const bool use_juice) {
+		if (use_juice) {
+			return attribute_juice_list.at(x);
+		}
+		else {
+			return attribute_list.at(x);
+		}
+	}
+	CreatureAttributeList(const int _attribute_list[ATTNUM], const int _attribute_juice_list[ATTNUM]) : 
+		attribute_list{ 
+		map<int, int>::value_type(ATTRIBUTE_STRENGTH, _attribute_list [ATTRIBUTE_STRENGTH]),
+		map<int, int>::value_type(ATTRIBUTE_INTELLIGENCE, _attribute_list[ATTRIBUTE_INTELLIGENCE]),
+		map<int, int>::value_type(ATTRIBUTE_WISDOM, _attribute_list[ATTRIBUTE_WISDOM]),
+		map<int, int>::value_type(ATTRIBUTE_AGILITY, _attribute_list[ATTRIBUTE_AGILITY]),
+		map<int, int>::value_type(ATTRIBUTE_HEALTH, _attribute_list[ATTRIBUTE_HEALTH]),
+		map<int, int>::value_type(ATTRIBUTE_CHARISMA, _attribute_list[ATTRIBUTE_CHARISMA]),
+		map<int, int>::value_type(ATTRIBUTE_HEART, _attribute_list[ATTRIBUTE_HEART]),
+
+	},
+		attribute_juice_list{
+		map<int, int>::value_type(ATTRIBUTE_STRENGTH, _attribute_juice_list[ATTRIBUTE_STRENGTH]),
+		map<int, int>::value_type(ATTRIBUTE_INTELLIGENCE, _attribute_juice_list[ATTRIBUTE_INTELLIGENCE]),
+		map<int, int>::value_type(ATTRIBUTE_WISDOM, _attribute_juice_list[ATTRIBUTE_WISDOM]),
+		map<int, int>::value_type(ATTRIBUTE_AGILITY, _attribute_juice_list[ATTRIBUTE_AGILITY]),
+		map<int, int>::value_type(ATTRIBUTE_HEALTH, _attribute_juice_list[ATTRIBUTE_HEALTH]),
+		map<int, int>::value_type(ATTRIBUTE_CHARISMA, _attribute_juice_list[ATTRIBUTE_CHARISMA]),
+		map<int, int>::value_type(ATTRIBUTE_HEART, _attribute_juice_list[ATTRIBUTE_HEART]),
+	}
+	{}
+private:
+	const map<int, int> attribute_list;
+	const map<int, int> attribute_juice_list;
+};

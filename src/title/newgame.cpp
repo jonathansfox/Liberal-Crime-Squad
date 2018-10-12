@@ -1079,6 +1079,52 @@ vector<Impact> printQuestionsThenGatherImpacts(vector<Question> allQuestions, co
 	}
 	return impactsToApply;
 }
+void make_blind(DeprecatedCreature *newcr) {
+
+	newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
+	newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+}
+void remove_spine(DeprecatedCreature *newcr) {
+
+	newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
+	newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+}
+void remove_face(DeprecatedCreature *newcr) {
+
+	newcr->special[SPECIALWOUND_TONGUE] = 1;
+	newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
+	newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+	newcr->special[SPECIALWOUND_NOSE] = 1;
+}
+void make_paraplegic(DeprecatedCreature *newcr) {
+
+	newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
+	newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+	newcr->special[SPECIALWOUND_NECK] = 1;
+	newcr->wound[BODYPART_LEG_RIGHT] = 1;
+	newcr->wound[BODYPART_LEG_LEFT] = 1;
+}
+void severe_internal_damage(DeprecatedCreature *newcr) {
+
+	newcr->special[SPECIALWOUND_RIGHTLUNG] = 1;
+	newcr->special[SPECIALWOUND_LEFTLUNG] = 1;
+	newcr->special[SPECIALWOUND_HEART] = 1;
+	newcr->special[SPECIALWOUND_LIVER] = 1;
+	newcr->special[SPECIALWOUND_STOMACH] = 1;
+	newcr->special[SPECIALWOUND_LEFTKIDNEY] = 1;
+	newcr->special[SPECIALWOUND_RIGHTKIDNEY] = 1;
+	newcr->special[SPECIALWOUND_SPLEEN] = 1;
+}
+void set_attributes_zero(DeprecatedCreature* newcr) {
+
+	newcr->set_attribute(ATTRIBUTE_HEART, 0);
+	newcr->set_attribute(ATTRIBUTE_WISDOM, 0);
+	newcr->set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
+	newcr->set_attribute(ATTRIBUTE_AGILITY, 0);
+	newcr->set_attribute(ATTRIBUTE_STRENGTH, 0);
+	newcr->set_attribute(ATTRIBUTE_HEALTH, 0);
+	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
+}
 void set_default_values(DeprecatedCreature* newcr) {
 	// Make the founder blind
 	extern bool BLIND;
@@ -1092,43 +1138,21 @@ void set_default_values(DeprecatedCreature* newcr) {
 	extern bool INTERNAL;
 
 	newcr->align = ALIGN_LIBERAL;
-	newcr->set_attribute(ATTRIBUTE_HEART, 0);
-	newcr->set_attribute(ATTRIBUTE_WISDOM, 0);
-	newcr->set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
-	newcr->set_attribute(ATTRIBUTE_AGILITY, 0);
-	newcr->set_attribute(ATTRIBUTE_STRENGTH, 0);
-	newcr->set_attribute(ATTRIBUTE_HEALTH, 0);
-	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
+	set_attributes_zero(newcr);
 	if (BLIND) {
-		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+		make_blind(newcr);
 	}
 	if (SPINE) {
-		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+		remove_spine(newcr);
 	}
 	if (NOFACE) {
-		newcr->special[SPECIALWOUND_TONGUE] = 1;
-		newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-		newcr->special[SPECIALWOUND_LEFTEYE] = 1;
-		newcr->special[SPECIALWOUND_NOSE] = 1;
+		remove_face(newcr);
 	}
 	if (NOWALK) {
-		newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-		newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
-		newcr->special[SPECIALWOUND_NECK] = 1;
-		newcr->wound[BODYPART_LEG_RIGHT] = 1;
-		newcr->wound[BODYPART_LEG_LEFT] = 1;
+		make_paraplegic(newcr);
 	}
 	if (INTERNAL) {
-		newcr->special[SPECIALWOUND_RIGHTLUNG] = 1;
-		newcr->special[SPECIALWOUND_LEFTLUNG] = 1;
-		newcr->special[SPECIALWOUND_HEART] = 1;
-		newcr->special[SPECIALWOUND_LIVER] = 1;
-		newcr->special[SPECIALWOUND_STOMACH] = 1;
-		newcr->special[SPECIALWOUND_LEFTKIDNEY] = 1;
-		newcr->special[SPECIALWOUND_RIGHTKIDNEY] = 1;
-		newcr->special[SPECIALWOUND_SPLEEN] = 1;
+		severe_internal_damage(newcr);
 	}
 }
 bool print_default_founder_window(DeprecatedCreature* newcr) {
@@ -1405,15 +1429,7 @@ void makecharacter()
 		}
 	}
 	//calculate founder's birthday and age
-	newcr->birthday_day = birth_day;
-	newcr->birthday_month = birth_month;
-	newcr->age = year - birth_year;
-	// Don't count this year in founder's age if starting before birthday
-	if (month < newcr->birthday_month ||
-		(month == newcr->birthday_month && day < newcr->birthday_day))
-	{
-		newcr->age--;
-	}
+	newcr->set_date_of_birth(birth_day, birth_month, birth_year);
 	if (assault_rifle) {
 		giveMeAssaultRifle(newcr);
 	}
@@ -1423,7 +1439,7 @@ void makecharacter()
 	mvaddstrAlt(0, 0, whatIsYourName);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1, 0, pressEnterToBeRealName);
-	enter_name(2, 0, newcr->name, CREATURE_NAMELEN, newcr->propername);
+	newcr->new_name_two();
 	addCreature(newcr);
 	make_world(hasmaps);
 	
