@@ -107,7 +107,7 @@ void CreaturePool::advanceCreaturesAtLocation(int cursite)
 {
 	for (int p = 0; p < lenpool(); p++)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->squadid != -1) continue;
 		if (pool[p]->location != cursite) continue;
 		advancecreature(*pool[p]);
@@ -137,7 +137,7 @@ const int CreaturePool::liberal_guardian_writing_power()
 	int power = 0;
 	for (int i = 0; i < lenpool(); i++)
 	{
-		if (pool[i]->alive&&pool[i]->activity.type == ACTIVITY_WRITE_GUARDIAN)
+		if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity.type == ACTIVITY_WRITE_GUARDIAN)
 		{
 			if (pool[i]->location != -1 &&
 				LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,pool[i]->location) & COMPOUND_PRINTINGPRESS)
@@ -157,7 +157,7 @@ const int CreaturePool::howManyLivingPeopleAreHere(int l)
 	for (int p = 0; p < lenpool(); p++)
 	{
 		if (pool[p]->location != l) continue; // People not at this base don't count
-		if (!pool[p]->alive) continue; // Dead people don't count
+		if (!pool[p]->getNameAndAlignment().alive) continue; // Dead people don't count
 		numpres++;
 	}
 	return numpres;
@@ -167,7 +167,7 @@ const int CreaturePool::countLiberals(int cursite)
 	int libnum = 0;
 	for (int p = 0; p < lenpool(); p++) {
 		if (pool[p]->align == 1 &&
-			pool[p]->alive&&
+			pool[p]->getNameAndAlignment().alive&&
 			pool[p]->location == cursite &&
 			!(pool[p]->flag&CREATUREFLAG_SLEEPER)) {
 			libnum++;
@@ -190,7 +190,7 @@ void CreaturePool::setupDisband()
 {
 	for (int p = lenpool() - 1; p >= 0; p--)
 	{
-		if (!pool[p]->alive || pool[p]->flag&CREATUREFLAG_KIDNAPPED || pool[p]->flag&CREATUREFLAG_MISSING) delete_and_remove(pool, p);
+		if (!pool[p]->getNameAndAlignment().alive || pool[p]->flag&CREATUREFLAG_KIDNAPPED || pool[p]->flag&CREATUREFLAG_MISSING) delete_and_remove(pool, p);
 		else if (!(pool[p]->flag&CREATUREFLAG_SLEEPER))
 		{
 			removesquadinfo(*pool[p]);
@@ -202,7 +202,7 @@ const bool CreaturePool::isThisCarWantedByAnotherSquad(long vehicleID, int squad
 {
 	for (int p = 0; p < lenpool(); p++)
 	{
-		if (pool[p]->squadid != -1 && pool[p]->alive&&
+		if (pool[p]->squadid != -1 && pool[p]->getNameAndAlignment().alive&&
 			pool[p]->pref_carid == vehicleID && pool[p]->squadid != squadID)
 		{
 			return true;
@@ -240,7 +240,7 @@ void whoAreWaitingForRescue(vector<DeprecatedCreature *>& waiting_for_rescue, in
 }
 DeprecatedCreature* findSleeperCarSalesman(int loc) {
 	for (int p = 0; p < len(pool); p++)
-		if (pool[p]->alive && (pool[p]->flag & CREATUREFLAG_SLEEPER) &&
+		if (pool[p]->getNameAndAlignment().alive && (pool[p]->flag & CREATUREFLAG_SLEEPER) &&
 			pool[p]->type == CREATURE_CARSALESMAN && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,loc))
 			return pool[p];
 	return NULL;
@@ -562,7 +562,7 @@ void findAllTendersToThisHostage(DeprecatedCreature* cr, vector<DeprecatedCreatu
 	//Find all tenders who are set to this hostage
 	for (int p = 0; p < len(pool); p++)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->activity.type == ACTIVITY_HOSTAGETENDING && pool[p]->activity.arg == cr->id)
 		{
 			//If they're in the same location as the hostage,
@@ -592,7 +592,7 @@ void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
 			//clear activities for tenders
 			for (int i = 0; i < len(pool); i++)
 			{
-				if (!pool[i]->alive) continue;
+				if (!pool[i]->getNameAndAlignment().alive) continue;
 				if (pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == cr->id)
 					pool[i]->activity.type = ACTIVITY_NONE;
 			}
@@ -645,7 +645,7 @@ vector<DeprecatedCreature *> selectOnlySleepersThatCanWork() {
 	for (int p = 0; p < len(pool); p++)
 	{
 		// Select only sleepers that can work
-		if (pool[p]->alive == true &&
+		if (pool[p]->getNameAndAlignment().alive == true &&
 			pool[p]->flag & CREATUREFLAG_SLEEPER&&
 			pool[p]->align == ALIGN_LIBERAL &&
 			pool[p]->hiding == false &&
@@ -677,7 +677,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 	}
 	if (!disbanding) for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->hiding) continue;
 		if (pool[p]->flag&CREATUREFLAG_SLEEPER) continue;
 		// People will help heal even if they aren't specifically assigned to do so
@@ -700,7 +700,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 	//HEAL NON-CLINIC PEOPLE AND TRAIN
 	if (!disbanding) for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!(pool[p]->alive)) continue;
+		if (!(pool[p]->getNameAndAlignment().alive)) continue;
 		if (clinictime(*pool[p]))
 		{
 			// For people in LCS home treatment
@@ -721,7 +721,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					if (pool[p]->blood > 100)
 						pool[p]->blood = 100;
 				}
-				if (pool[p]->alive&&pool[p]->blood < 0)
+				if (pool[p]->getNameAndAlignment().alive&&pool[p]->blood < 0)
 				{
 					if (clearformess) eraseAlt();
 					else makedelimiter();
@@ -835,7 +835,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 				// Apply damage
 				pool[p]->blood -= damage;
 				if (transfer&&pool[p]->location > -1 &&
-					pool[p]->alive == 1 &&
+					pool[p]->getNameAndAlignment().alive == 1 &&
 					pool[p]->align == 1 &&
 					LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->location) != RENTING_NOCONTROL &&
 					LocationsPool::getInstance().getLocationType(pool[p]->location) != SITE_HOSPITAL_UNIVERSITY)
@@ -890,7 +890,7 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 	{
 		if (pool[p]->id == cr.id)continue;
 		if (pool[p]->id == cr.hireid)bigboss = p;
-		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->align == 1)
+		if (pool[p]->hireid == cr.id && pool[p]->getNameAndAlignment().alive && pool[p]->align == 1)
 		{
 			subordinates++;
 			//Brainwashed people inelligible for promotion to founder
@@ -933,7 +933,7 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 		return 0;
 	}
 	//Chain of command totally destroyed if dead person's boss also dead
-	if (bigboss == -2 || (cr.hireid != -1 && bigboss != -1 && !pool[bigboss]->alive))return 0;
+	if (bigboss == -2 || (cr.hireid != -1 && bigboss != -1 && !pool[bigboss]->getNameAndAlignment().alive))return 0;
 	//Promote the new boss
 	pool[newboss]->hireid = cr.hireid;
 	//Order secondary subordinates to follow the new boss
@@ -1058,7 +1058,7 @@ void dispersalcheck(char &clearformess)
 				// don't ever have their subordinates checked
 				// and aren't lost themselves (they're a corpse,
 				// corpses don't lose contact)
-				if (!pool[p]->alive && !disbanding)
+				if (!pool[p]->getNameAndAlignment().alive && !disbanding)
 				{
 					dispersal_status[p] = DISPERSAL_SAFE;
 					//Attempt to promote their subordinates
@@ -1077,7 +1077,7 @@ void dispersalcheck(char &clearformess)
 			// so we can verify that their subordinates can reach them.
 			for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 			{
-				if (!pool[p]->alive) continue;
+				if (!pool[p]->getNameAndAlignment().alive) continue;
 				if (pool[p]->location != -1 &&
 					LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON &&
 					!(pool[p]->flag & CREATUREFLAG_SLEEPER))
@@ -1091,7 +1091,7 @@ void dispersalcheck(char &clearformess)
 					dispersal_status[p] = DISPERSAL_HIDING;
 					for (int p2 = CreaturePool::getInstance().lenpool() - 1; p2 >= 0; p2--)
 					{
-						if (pool[p2]->hireid == pool[p]->id && pool[p2]->alive)
+						if (pool[p2]->hireid == pool[p]->id && pool[p2]->getNameAndAlignment().alive)
 						{
 							dispersal_status[p2] = DISPERSAL_BOSSINHIDING; // Mark them as unreachable
 							changed = 1; // Need another iteration
@@ -1116,7 +1116,7 @@ void dispersalcheck(char &clearformess)
 														// Find all subordinates
 					for (int p2 = CreaturePool::getInstance().lenpool() - 1; p2 >= 0; p2--)
 					{
-						if (pool[p2]->hireid == pool[p]->id && pool[p2]->alive)
+						if (pool[p2]->hireid == pool[p]->id && pool[p2]->getNameAndAlignment().alive)
 						{
 							if (inprison) dispersal_status[p2] = DISPERSAL_BOSSINPRISON;
 							else dispersal_status[p2] = DISPERSAL_BOSSSAFE;
@@ -1243,7 +1243,7 @@ vector<DeprecatedCreature *> getHostagesSharingLocation(DeprecatedCreature *cr) 
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->align != 1 &&
-			pool[p]->alive&&
+			pool[p]->getNameAndAlignment().alive&&
 			pool[p]->location == cr->location)
 		{
 			temppool.push_back(pool[p]);
@@ -1255,7 +1255,7 @@ int countHostagesSharingLocation(DeprecatedCreature *cr) {
 	int hostagecount = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (pool[p]->alive&&pool[p]->align != 1 && pool[p]->location == cr->location) hostagecount++;
+		if (pool[p]->getNameAndAlignment().alive&&pool[p]->align != 1 && pool[p]->location == cr->location) hostagecount++;
 	}
 	return hostagecount;
 }
@@ -1263,7 +1263,7 @@ int countDeadSharingLocation(DeprecatedCreature *cr) {
 	int havedead = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive) havedead = 1;
+		if (!pool[p]->getNameAndAlignment().alive) havedead = 1;
 	}
 	return havedead;
 }
@@ -1351,7 +1351,7 @@ void monthlyRunTheSystem(char &clearformess) {
 	extern short lawList[LAWNUM];
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->flag & CREATUREFLAG_SLEEPER) continue;
 		if (pool[p]->location == -1) continue;
 		if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
@@ -1400,7 +1400,7 @@ void monthlyRunTheSystem(char &clearformess) {
 					/*+ pool[p]->get_skill(SKILL_SURVIVAL)*5*/ && pool[p]->hireid != -1)
 				{
 					int p2 = getpoolcreature(pool[p]->hireid);
-					if (pool[p2]->alive && (pool[p2]->location == -1 || LocationsPool::getInstance().getLocationType(pool[p2]->location) != SITE_GOVERNMENT_PRISON))
+					if (pool[p2]->getNameAndAlignment().alive && (pool[p2]->location == -1 || LocationsPool::getInstance().getLocationType(pool[p2]->location) != SITE_GOVERNMENT_PRISON))
 					{  //Charge the boss with racketeering!
 						criminalize(*pool[p2], LAWFLAG_RACKETEERING);
 						//Rack up testimonies against the boss in court!
@@ -1444,7 +1444,7 @@ void monthlyRunExecutions() {
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location == -1) continue;
-		if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON && !pool[p]->alive)
+		if (LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_PRISON && !pool[p]->getNameAndAlignment().alive)
 		{
 			removesquadinfo(*pool[p]);
 			pool[p]->die();
@@ -1458,7 +1458,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 	extern Log gamelog;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!(pool[p]->alive)) continue;
+		if (!(pool[p]->getNameAndAlignment().alive)) continue;
 		if (pool[p]->clinic > 0)
 		{
 			pool[p]->clinic--;
@@ -1547,7 +1547,7 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
 void havingSleepers(char &clearformess, char canseethings, int(&libpower)[VIEWNUM]) {
 	for (int pl = CreaturePool::getInstance().lenpool() - 1; pl > 0; pl--) {
-		if (pool[pl]->alive && (pool[pl]->flag & CREATUREFLAG_SLEEPER)) {
+		if (pool[pl]->getNameAndAlignment().alive && (pool[pl]->flag & CREATUREFLAG_SLEEPER)) {
 			sleepereffect(*pool[pl], clearformess, canseethings, libpower);
 		}
 	}
@@ -1572,7 +1572,7 @@ void dejuiceBoss(DeprecatedCreature &g) {
 DeprecatedCreature * getSleeperJudge(DeprecatedCreature g) {
 	DeprecatedCreature * sleeperjudge = NULL;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
+		if (pool[p]->getNameAndAlignment().alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
 		{
 			if (pool[p]->type == CREATURE_JUDGE_CONSERVATIVE || pool[p]->type == CREATURE_JUDGE_LIBERAL)
 				if (pool[p]->infiltration * 100 >= LCSrandom(100)) sleeperjudge = pool[p];
@@ -1583,7 +1583,7 @@ DeprecatedCreature * getSleeperLawyer(DeprecatedCreature g) {
 	int maxsleeperskill = 0;
 	DeprecatedCreature * sleeperlawyer = NULL;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
+		if (pool[p]->getNameAndAlignment().alive && (pool[p]->flag&CREATUREFLAG_SLEEPER) && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location))
 		{
 			if (pool[p]->type == CREATURE_LAWYER)
 				if (pool[p]->get_skill(SKILL_LAW) + pool[p]->get_skill(SKILL_PERSUASION) >= maxsleeperskill)
@@ -1625,7 +1625,7 @@ char endcheck(char cause)
 	extern MusicClass music;
 	bool dead = true;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
-		if (pool[p]->alive&&pool[p]->align == 1 &&
+		if (pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1 &&
 			!(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid != -1)) // Allow sleepers to lead LCS without losing
 			dead = false;
 	if (dead) // Did we just lose the game?
@@ -1700,7 +1700,7 @@ int subordinatesleft(const DeprecatedCreature& cr)
 	int recruitcap = maxsubordinates(cr);
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		// ignore seduced and brainwashed characters
-		if (pool[p]->hireid == cr.id&&pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
+		if (pool[p]->hireid == cr.id&&pool[p]->getNameAndAlignment().alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
 			recruitcap--;
 	if (recruitcap > 0) return recruitcap;
 	else return 0;
@@ -1711,7 +1711,7 @@ int loveslaves(const DeprecatedCreature& cr)
 	int loveslaves = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 		// If subordinate and a love slave
-		if (pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+		if (pool[p]->hireid == cr.id && pool[p]->getNameAndAlignment().alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
 			loveslaves++;
 	return loveslaves;
 }

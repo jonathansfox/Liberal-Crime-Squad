@@ -348,7 +348,7 @@ void evasiverun()
 	}
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		if (!encounter[e].exists) continue;
+		if (!encounter[e].getNameAndAlignment().exists) continue;
 		int chaser = encounter[e].attribute_roll(ATTRIBUTE_AGILITY) +
 			encounter[e].attribute_roll(ATTRIBUTE_HEALTH);
 		//healthmodroll(chaser,encounter[e]);
@@ -393,7 +393,7 @@ void evasiverun()
 	int othersleft = 0;
 	for (int p = 5; p >= 0; p--)
 	{
-		if (!encounter[0].exists) break;
+		if (!encounter[0].getNameAndAlignment().exists) break;
 		if (activesquad->squad[p] == NULL) continue;
 		if (activesquad->squad[p]->getCreatureHealth().alive)
 		{
@@ -646,7 +646,7 @@ bool footchase()
 	int chasenum = 0;
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		if (encounter[e].exists) chasenum++;
+		if (encounter[e].getNameAndAlignment().exists) chasenum++;
 		encounter[e].carid = -1;
 	}
 	if (chasenum == 0) return 1;
@@ -728,7 +728,7 @@ void evasivedrive()
 		if (encounter[e].carid != -1 &&
 			encounter[e].enemy() &&
 			encounter[e].getCreatureHealth().alive&&
-			encounter[e].exists&&
+			encounter[e].getNameAndAlignment().exists&&
 			encounter[e].is_driver)
 		{
 			for (int v = 0; v < len(chaseseq.enemycar); v++)
@@ -741,7 +741,7 @@ void evasivedrive()
 				}
 			}
 		}
-		else if (encounter[e].carid == -1) encounter[e].exists = false;
+		else if (encounter[e].carid == -1) encounter[e].stop_existing();
 	}
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -801,7 +801,7 @@ void evasivedrive()
 				if (encounter[e].carid == theirrolls_id[i])
 				{
 					for (int e2 = e; e2 < ENCMAX - 1; e2++) encounter[e2] = encounter[e2 + 1];
-					encounter[ENCMAX - 1].exists = 0;
+					encounter[ENCMAX - 1].stop_existing();
 					encounter[ENCMAX - 1].carid = -1;
 					e--;
 				}
@@ -1106,7 +1106,7 @@ bool drivingupdate(short &obstacle)
 		driver = -1;
 		for (int p = 0; p < ENCMAX; p++)
 		{
-			if (!encounter[p].exists) continue;
+			if (!encounter[p].getNameAndAlignment().exists) continue;
 			if (encounter[p].carid == chaseseq.enemycar[v]->id())
 			{
 				if (encounter[p].is_driver)
@@ -1173,7 +1173,7 @@ bool dodgedrive()
 		driver = -1;
 		for (int p = 0; p < ENCMAX; p++)
 		{
-			if (!encounter[p].exists) continue;
+			if (!encounter[p].getNameAndAlignment().exists) continue;
 			if (encounter[p].carid == chaseseq.enemycar[v]->id())
 			{
 				if (encounter[p].is_driver)
@@ -1627,7 +1627,7 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 		// Check to see if the car we are in is being driven by an encounter creature.
 		for (int p = 0; p < ENCMAX; p++)
 		{
-			if (!encounter[p].exists) continue;
+			if (!encounter[p].getNameAndAlignment().exists) continue;
 			if (encounter[p].carid == v
 				&& encounter[p].is_driver)
 			{

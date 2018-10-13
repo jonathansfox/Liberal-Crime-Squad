@@ -835,7 +835,7 @@ void savegame(const string& filename)
 			fwrite(&creatureSize, sizeof(int), 1, h);
 			fwrite(creatureStr.c_str(), creatureSize, 1, h);
 			// extra InterrogationST data if applicable
-			if (pool[pl]->align == -1 && pool[pl]->alive)
+			if (pool[pl]->align == -1 && pool[pl]->getNameAndAlignment().alive)
 			{
 				InterrogationST* &intr = pool[pl]->activity.intr();
 				fwrite(intr->techniques, sizeof(bool[6]), 1, h);
@@ -1080,7 +1080,7 @@ char load(const string& filename)
 			vec[creatureSize] = '\0';
 			pool[pl] = new DeprecatedCreature(&vec[0]);
 			// extra InterrogationST data if applicable
-			if (pool[pl]->align == -1 && pool[pl]->alive)
+			if (pool[pl]->align == -1 && pool[pl]->getNameAndAlignment().alive)
 			{
 				InterrogationST* &intr = pool[pl]->activity.intr();
 				intr = new InterrogationST;

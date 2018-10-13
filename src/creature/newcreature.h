@@ -111,6 +111,20 @@ private:
 	int skill_attribute[SKILLNUM];
 
 };
+struct PartialCreatureJustice {
+	const int juice;
+	const int align;
+	const char deathpenalty;
+	const int location;
+	const int sentence;
+	PartialCreatureJustice(const char _deathpenalty, const int _location, const int _sentence, const int _juice, const  int _align) :
+		deathpenalty(_deathpenalty),
+		location(_location),
+		sentence(_sentence),
+		juice(_juice),
+		align(_align) 
+	{}
+};
 struct CreatureJustice {
 	const string propername;
 	const string name;
@@ -121,46 +135,49 @@ struct CreatureJustice {
 	const int location;
 	const int sentence;
 	const int crimes_suspected[30];
-	CreatureJustice(const char _propername[], const  char _name[], const string _get_type_name, const char _deathpenalty, const int _location, const int _sentence, const int _crimes_suspected[30], const int _juice, const  int _align) :
+	CreatureJustice(PartialCreatureJustice na, const char _propername[], const  char _name[], const string _get_type_name, const int _crimes_suspected[30]) : 
 		propername(_propername),
-		name(_name), 
-		get_type_name(_get_type_name), deathpenalty(_deathpenalty), location(_location), sentence(_sentence),
-		// Fragile af, but C++ doesn't make const arrays easy to implement, and documentation is unclear
-		crimes_suspected{
-		_crimes_suspected[0],
-		_crimes_suspected[1],
-		_crimes_suspected[2],
-		_crimes_suspected[3],
-		_crimes_suspected[4],
-		_crimes_suspected[5],
-		_crimes_suspected[6],
-		_crimes_suspected[7],
-		_crimes_suspected[8],
-		_crimes_suspected[9],
-		_crimes_suspected[10],
-		_crimes_suspected[11],
-		_crimes_suspected[12],
-		_crimes_suspected[13],
-		_crimes_suspected[14],
-		_crimes_suspected[15],
-		_crimes_suspected[16],
-		_crimes_suspected[17],
-		_crimes_suspected[18],
-		_crimes_suspected[19],
-		_crimes_suspected[20],
-		_crimes_suspected[21],
-		_crimes_suspected[22],
-		_crimes_suspected[23],
-		_crimes_suspected[24],
-		_crimes_suspected[25],
-		_crimes_suspected[26],
-		_crimes_suspected[27],
-		_crimes_suspected[28],
-		_crimes_suspected[29],
-	},
-	juice(_juice),
-	align(_align)
-	{};
+			name(_name),
+			get_type_name(_get_type_name),
+			deathpenalty(na.deathpenalty),
+			location(na.location),
+			sentence(na.sentence),
+			// Fragile af, but C++ doesn't make const arrays easy to implement, and documentation is unclear
+			crimes_suspected{
+			_crimes_suspected[0],
+			_crimes_suspected[1],
+			_crimes_suspected[2],
+			_crimes_suspected[3],
+			_crimes_suspected[4],
+			_crimes_suspected[5],
+			_crimes_suspected[6],
+			_crimes_suspected[7],
+			_crimes_suspected[8],
+			_crimes_suspected[9],
+			_crimes_suspected[10],
+			_crimes_suspected[11],
+			_crimes_suspected[12],
+			_crimes_suspected[13],
+			_crimes_suspected[14],
+			_crimes_suspected[15],
+			_crimes_suspected[16],
+			_crimes_suspected[17],
+			_crimes_suspected[18],
+			_crimes_suspected[19],
+			_crimes_suspected[20],
+			_crimes_suspected[21],
+			_crimes_suspected[22],
+			_crimes_suspected[23],
+			_crimes_suspected[24],
+			_crimes_suspected[25],
+			_crimes_suspected[26],
+			_crimes_suspected[27],
+			_crimes_suspected[28],
+			_crimes_suspected[29],
+		},
+		juice(na.juice),
+		align(na.align)
+	{}
 };
 struct CreatureBio {
 

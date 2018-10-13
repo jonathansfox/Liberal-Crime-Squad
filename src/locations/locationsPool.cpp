@@ -476,7 +476,7 @@ void cleangonesquads()
 			{  // Let's do a bit of housekeeping here
 			   // And see if we can't gracefully eliminate that
 			   // pesky dead liberal in my squad bug
-				if (squad[sq]->squad[p]->alive == false)
+				if (squad[sq]->squad[p]->getNameAndAlignment().alive == false)
 				{
 					removesquadinfo(*squad[sq]->squad[p]);
 					p = -1; // restart this for loop

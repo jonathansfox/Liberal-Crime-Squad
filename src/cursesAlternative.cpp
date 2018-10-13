@@ -1469,130 +1469,250 @@ void set_color_for_armor(const Armor armor) {
 #define CH_LIGHT_SHADE 0xb0
 #define CH_MEDIUM_SHADE 0xb1
 #define CH_DARK_SHADE 0xb2
+std::pair<ColorSetup, int> AmericanFlag[7][18] = {
+	{
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+},
+};
 
+bool has_ignited(const int c) {
+
+	// Ignition currently follows five steps
+	//CH_BOX_DRAWINGS_LIGHT_VERTICAL
+	//CH_DARK_SHADE
+	//CH_MEDIUM_SHADE
+	//CH_LIGHT_SHADE
+	//' '
+	// Any character other than these five indicate non-ignition
+	// therfore, only these five cannot be used in flag design
+	return c == CH_BOX_DRAWINGS_LIGHT_VERTICAL ||
+		c == CH_DARK_SHADE ||
+		c == CH_MEDIUM_SHADE ||
+		c == CH_LIGHT_SHADE  ||
+		c == ' ';
+}
+
+void printFlag() {
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 18; j++) {
+			set_color_easy(AmericanFlag[i][j].first);
+			mvaddchAlt(i + 10, j + 31, AmericanFlag[i][j].second);
+		}
+	}
+}
 /* base - burn the flag */
 void burnflag()
 {
-	int flagparts = 126, flag[18][7][4];
-	for (int y = 0; y < 7; y++) if (y < 6) for (int x = 0; x < 18; x++)
-	{
-		if (x < 9 && y < 4)
-		{
-			switch (y)
-			{
-			case 0: flag[x][y][0] = ((x % 2) ? '.' : ':'); break;
-			default: flag[x][y][0] = ':'; break;
-			case 3: flag[x][y][0] = CH_LOWER_HALF_BLOCK; break;
-			}
-			flag[x][y][2] = COLOR_BLUE;
+	int flagparts = 126;
+	std::pair<ColorSetup, int> flag[18][7];
+	for (int y = 0; y < 7; y++) {
+		for (int x = 0; x < 18; x++) {
+			flag[x][y] = AmericanFlag[y][x];
 		}
-		else
-		{
-			flag[x][y][0] = CH_LOWER_HALF_BLOCK;
-			flag[x][y][2] = COLOR_RED;
-		}
-		flag[x][y][1] = COLOR_WHITE;
-		flag[x][y][3] = 1;
-	}
-	else for (int x = 0; x < 18; x++)
-	{
-		flag[x][y][0] = CH_UPPER_HALF_BLOCK;
-		flag[x][y][1] = COLOR_RED;
-		flag[x][y][2] = COLOR_BLACK;
-		flag[x][y][3] = 0;
 	}
 	int x1 = LCSrandom(18);
 	int y1 = LCSrandom(7);
-	flag[x1][y1][0] = CH_DARK_SHADE;
-	flag[x1][y1][1] = COLOR_YELLOW;
-	flag[x1][y1][2] = COLOR_BLACK;
-	flag[x1][y1][3] = 1;
+	flag[x1][y1] = std::pair<ColorSetup, int>(YELLOW_ON_BLACK_BRIGHT, CH_DARK_SHADE);
 	bool first = true;
 	while (flagparts > 0)
 	{
 		if (!first) for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
 		{
-			if (flag[x][y][0] == CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0] = CH_DARK_SHADE;
-			else if (flag[x][y][0] == CH_DARK_SHADE)
+			if (flag[x][y].second == CH_BOX_DRAWINGS_LIGHT_VERTICAL) { flag[x][y] = std::pair<ColorSetup, int>(flag[x][y].first, CH_DARK_SHADE); }
+			else if (flag[x][y].second == CH_DARK_SHADE)
 			{
-				flag[x][y][0] = CH_MEDIUM_SHADE;
-				flag[x][y][1] = COLOR_RED;
-				flag[x][y][2] = COLOR_BLACK;
-				flag[x][y][3] = 0;
+				flag[x][y] = std::pair<ColorSetup, int>(RED_ON_BLACK, CH_MEDIUM_SHADE);
 			}
-			else if (flag[x][y][0] == CH_MEDIUM_SHADE)
+			else if (flag[x][y].second == CH_MEDIUM_SHADE)
 			{
-				flag[x][y][0] = CH_LIGHT_SHADE;
-				flag[x][y][1] = COLOR_BLACK;
-				flag[x][y][2] = COLOR_BLACK;
-				flag[x][y][3] = 1;
+				flag[x][y] = std::pair<ColorSetup, int>(BLACK_ON_BLACK_BRIGHT, CH_LIGHT_SHADE);
 			}
-			else if (flag[x][y][0] == CH_LIGHT_SHADE)
+			else if (flag[x][y].second == CH_LIGHT_SHADE)
 			{
 				flagparts--;
-				flag[x][y][0] = ' ';
-				flag[x][y][1] = COLOR_BLACK;
-				flag[x][y][2] = COLOR_BLACK;
-				flag[x][y][3] = 0;
+				flag[x][y] = std::pair<ColorSetup, int>(BLACK_ON_BLACK, ' ');
 			}
 		}
 		else first = false;
 		for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
 		{
-			set_color(short(flag[x][y][1]), short(flag[x][y][2]), bool(flag[x][y][3]));
-			mvaddchAlt(y + 10, x + 31, flag[x][y][0]);
+			set_color_easy(flag[x][y].first);
+			mvaddchAlt(y + 10, x + 31, flag[x][y].second);
 		}
+
 		pause_ms(10);
+
 		bool gotnew = false;
 		while (!gotnew&&flagparts > 3)
 		{
 			int x = LCSrandom(18);
 			int y = LCSrandom(7);
 
-			if (flag[x][y][0] == ':' || flag[x][y][0] == '.' || flag[x][y][0] == CH_UPPER_HALF_BLOCK || flag[x][y][0] == CH_LOWER_HALF_BLOCK)
+			if (!has_ignited(flag[x][y].second))
 			{
 				bool conf = false;
 				if (x > 0)
 				{
-					if (flag[x - 1][y][0] != ':'&&
-						flag[x - 1][y][0] != '.'&&
-						flag[x - 1][y][0] != CH_UPPER_HALF_BLOCK &&
-						flag[x - 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
+					if (has_ignited(flag[x - 1][y].second)) conf = true;
 				}
 				if (x < 17)
 				{
-					if (flag[x + 1][y][0] != ':'&&
-						flag[x + 1][y][0] != '.'&&
-						flag[x + 1][y][0] != CH_UPPER_HALF_BLOCK &&
-						flag[x + 1][y][0] != CH_LOWER_HALF_BLOCK) conf = true;
+					if (has_ignited(flag[x + 1][y].second)) conf = true;
 				}
 				if (y > 0)
 				{
-					if (flag[x][y - 1][0] != ':'&&
-						flag[x][y - 1][0] != '.'&&
-						flag[x][y - 1][0] != CH_UPPER_HALF_BLOCK &&
-						flag[x][y - 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
+					if (has_ignited(flag[x][y - 1].second)) conf = true;
 				}
 				if (y < 6)
 				{
-					if (flag[x][y + 1][0] != ':'&&
-						flag[x][y + 1][0] != '.'&&
-						flag[x][y + 1][0] != CH_UPPER_HALF_BLOCK &&
-						flag[x][y + 1][0] != CH_LOWER_HALF_BLOCK) conf = true;
+					if (has_ignited(flag[x][y + 1].second)) conf = true;
 				}
 				if (conf)
 				{
-					flag[x][y][0] = CH_BOX_DRAWINGS_LIGHT_VERTICAL;
-					flag[x][y][1] = COLOR_YELLOW;
-					flag[x][y][2] = COLOR_BLACK;
-					flag[x][y][3] = 1;
+					flag[x][y] = std::pair<ColorSetup, int>(YELLOW_ON_BLACK_BRIGHT, CH_BOX_DRAWINGS_LIGHT_VERTICAL);
 					gotnew = true;
 				}
 			}
 		}
 	}
 }
-
 
 const string CONST_consolesupportB011 = "from status line";
 const string CONST_consolesupportB010 = "to status line";

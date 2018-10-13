@@ -422,11 +422,11 @@ void ageThings(const char clearformess) {
 		pday = 1, pmonth = (pmonth % 12) + 1; // checked so it has to be accounted for here.
 	for (int p = 0; p < len(pool); p++)
 	{
-		pool[p]->stunned = 0; // For lack of a better place, make stunning expire here
+		pool[p]->stop_being_stunned(); // For lack of a better place, make stunning expire here
 							  // Increment number of days since joined/kidnapped
 		pool[p]->joindays++;
 		// Increment number of days been dead if dead
-		if (!pool[p]->alive)
+		if (!pool[p]->getNameAndAlignment().alive)
 		{
 			pool[p]->deathdays++;
 			continue;
@@ -461,7 +461,7 @@ void ageThings(const char clearformess) {
 					}
 					decrement += 10;
 				}
-				if (!pool[p]->alive)continue;
+				if (!pool[p]->getNameAndAlignment().alive)continue;
 			}
 			if (pmonth == pool[p]->getCreatureBio().birthday_month&&
 				pday == pool[p]->getCreatureBio().birthday_day)
@@ -531,7 +531,7 @@ void meetWithPotentialRecruits(char &clearformess) {
 		int p = getpoolcreature(recruit[r]->recruiter_id);
 		// Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
 		// or 3) recruiter is dead.
-		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->location) != RENTING_NOCONTROL && pool[p]->alive&&
+		if (p != -1 && ((pool[p]->location != -1 && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,pool[p]->location) != RENTING_NOCONTROL && pool[p]->getNameAndAlignment().alive&&
 			LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[p]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,recruit[r]->recruit->location))))
 		{
 			//MEET WITH RECRUIT
@@ -610,7 +610,7 @@ void activitiesForIndividuals(char &clearformess) {
 	for (int p = 0; p < len(pool); p++)
 	{
 		pool[p]->income = 0;
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->clinic) continue;
 		if (pool[p]->dating) continue;
 		if (pool[p]->hiding) continue;
@@ -688,7 +688,7 @@ void tendAllHostages(char &clearformess) {
 	extern vector<DeprecatedCreature *> pool;
 	for (int p = len(pool) - 1; p >= 0; p--)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->align != 1)
 			tendhostage(pool[p], clearformess);
 	}
@@ -1143,7 +1143,7 @@ void moveSquadlessToBaseIfNotSiege() {
 	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < len(pool); p++)
 	{
-		if (!pool[p]->alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
+		if (!pool[p]->getNameAndAlignment().alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
 			continue;
 		// Prevent moving people to a sieged location,
 		// but don't evacuate people already under siege. - wisq

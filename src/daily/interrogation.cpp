@@ -906,7 +906,7 @@ DeprecatedCreature* getAttackAndLeadInterrogator(int &attack, const DeprecatedCr
 	{
 		int currentAttack = 0;
 		if (temp) {
-			if (temp->alive)
+			if (temp->getNameAndAlignment().alive)
 			{
 				if (temp->get_skill(SKILL_BUSINESS) > business) {
 					business = temp->get_skill(SKILL_BUSINESS);
@@ -933,7 +933,7 @@ DeprecatedCreature* getAttackAndLeadInterrogator(int &attack, const DeprecatedCr
 	}
 	vector<int> goodp;
 	for (int p = 0; p < len(temppool); p++) {
-		if (temppool[p] && temppool[p]->alive&&_attack[p] == attack) {
+		if (temppool[p] && temppool[p]->getNameAndAlignment().alive&&_attack[p] == attack) {
 			goodp.push_back(p);
 		}
 	}
@@ -1064,7 +1064,7 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 	}
 	//show_interrogation_sidebar(cr,a);
 	pressAnyKey();
-	if (tortured && cr->alive)
+	if (tortured && cr->getNameAndAlignment().alive)
 	{
 		creaturePossiblyLosesHeartOrGainsWisdom(a, y);
 	}
@@ -1140,7 +1140,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 			if (techniques[TECHNIQUE_KILL]) // Kill the Hostage
 			{
 				attemptExecution(cr);
-				if (cr->alive) {
+				if (cr->getNameAndAlignment().alive) {
 					//Interrogation will continue as planned, with
 					//these restrictions:
 					techniques[TECHNIQUE_TALK] = 0; //don't talk to them today
@@ -1216,12 +1216,12 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 			//show_interrogation_sidebar(cr,a);
 			pressAnyKey();
 		}
-		if (techniques[TECHNIQUE_BEAT] && !turned&&cr->alive) // Beating
+		if (techniques[TECHNIQUE_BEAT] && !turned&&cr->getNameAndAlignment().alive) // Beating
 		{
 			beatCaptive(a, cr, y, temppool, techniques, rapport);
 		}
 		// Verbal Interrogation
-		if (techniques[TECHNIQUE_TALK] && cr->alive)
+		if (techniques[TECHNIQUE_TALK] && cr->getNameAndAlignment().alive)
 		{
 			float rapport_temp = rapport[a->id];
 			if (!techniques[TECHNIQUE_RESTRAIN])attack += 5;
@@ -1344,7 +1344,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 		}
 		//Possibly suicidal when heart is down to 1 and prisoner has already been
 		//captive for a week without rescue
-		if (!turned&&cr->alive&&cr->get_attribute(ATTRIBUTE_HEART, false) <= 1 && LCSrandom(3) && cr->joindays > 6)
+		if (!turned&&cr->getNameAndAlignment().alive&&cr->get_attribute(ATTRIBUTE_HEART, false) <= 1 && LCSrandom(3) && cr->joindays > 6)
 		{
 			attemptSuicide(cr, techniques[TECHNIQUE_RESTRAIN], y);
 		}
@@ -1353,7 +1353,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 			turned = 1;// Lucky!
 		}
 		//Death
-		if (cr->alive == 0 || cr->blood < 1)
+		if (cr->getNameAndAlignment().alive == 0 || cr->blood < 1)
 		{
 			//delete InterrogationST information
 			delete intr;
@@ -1381,7 +1381,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 				return;
 			}
 		}
-		if (cr->align == 1 || !cr->alive) {
+		if (cr->align == 1 || !cr->getNameAndAlignment().alive) {
 			setAllCreatureActivities(ACTIVITY_NONE, temppool);
 		}
 	}

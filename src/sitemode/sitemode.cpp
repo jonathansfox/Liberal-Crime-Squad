@@ -753,7 +753,7 @@ int findLivingSquadMemberIndex() {
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive)
+			if (activesquad->squad[p]->getNameAndAlignment().alive)
 			{
 				if (forcesp == NO_VALID_MEMBERS)forcesp = p;
 				else forcesp = MULTIPLE_LIVING_MEMBERS;
@@ -1054,7 +1054,7 @@ void pressedKeyF(int& encounter_timer) {
 	for (int j = 0; j < 6 && !cannotsubdue; j++)
 	{
 		if (activesquad->squad[j] &&
-			activesquad->squad[j]->alive &&
+			activesquad->squad[j]->getNameAndAlignment().alive &&
 			activesquad->squad[j]->blood > 40)
 		{
 			cannotsubdue = true;

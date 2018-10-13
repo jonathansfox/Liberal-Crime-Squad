@@ -1399,7 +1399,7 @@ void makecreature(DeprecatedCreature &cr, short type)
 	cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
 	cr.strip(NULL);                  //
 	cr.creatureinit();
-	cr.exists = 1;
+	cr.make_existing();
 	cr.squadid = -1;
 	cr.type = type;
 	cr.infiltration = 0;

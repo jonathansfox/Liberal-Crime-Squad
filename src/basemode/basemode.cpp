@@ -517,6 +517,7 @@ const string CONST_basemode037 = " (No Food)";
 const string CONST_basemode036 = "Under Siege";
 const string CONST_basemode035 = "Under Attack";
 const string CONST_basemode034 = "I - Invest in this location";
+void printFlag();
 void dontForceWait(const char sieged, const char underattack,
 	const char haveflag,
 	const Location *loc,
@@ -565,22 +566,8 @@ void dontForceWait(const char sieged, const char underattack,
 	}
 
 
-	if (haveflag) for (int y = 0; y < 7; y++)
-	{
-		if (y < 6)
-		{
-			set_color_easy(y < 4 ? WHITE_ON_BLUE_BRIGHT : WHITE_ON_RED_BRIGHT);
-			if (y == 0) mvaddstrAlt(y + 10, 31, CONST_basemode038);
-			else if (y < 3) mvaddstrAlt(y + 10, 31, CONST_basemode039);
-			else for (int x = 0; x < 9; x++) mvaddchAlt(y + 10, 31 + x, CH_LOWER_HALF_BLOCK);
-			set_color_easy(WHITE_ON_RED_BRIGHT);
-			for (int x = 9; x < 18; x++) addchAlt(CH_LOWER_HALF_BLOCK);
-		}
-		else
-		{
-			set_color_easy(RED_ON_BLACK);
-			for (int x = 0; x < 18; x++) mvaddchAlt(y + 10, 31 + x, CH_UPPER_HALF_BLOCK);
-		}
+	if (haveflag) {
+		printFlag(); 
 	}
 
 

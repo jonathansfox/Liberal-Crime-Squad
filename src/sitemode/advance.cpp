@@ -103,7 +103,7 @@ void advancecreature(DeprecatedCreature &cr)
 	extern int sitecrime;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
-	if (!cr.alive) return;
+	if (!cr.getNameAndAlignment().alive) return;
 	char incaprint;
 	if (incapacitated(cr, 1, incaprint))
 	{
@@ -119,8 +119,8 @@ void advancecreature(DeprecatedCreature &cr)
 	int bleed = 0, topmedicalskill = 0;
 	DeprecatedCreature* topmedical = NULL;
 	for (int i = 0; i < 6; i++) if (activesquad->squad[i] &&
-		activesquad->squad[i]->alive&&
-		activesquad->squad[i]->stunned == 0 &&
+		activesquad->squad[i]->getNameAndAlignment().alive&&
+		!activesquad->squad[i]->is_stunned() &&
 		activesquad->squad[i]->blood > 40 &&
 		activesquad->squad[i]->id != cr.id&&
 		activesquad->squad[i]->get_skill(SKILL_FIRSTAID) > topmedicalskill)
@@ -380,12 +380,12 @@ void creatureadvance()
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL) continue;
-		if (!activesquad->squad[p]->alive) continue;
+		if (!activesquad->squad[p]->getNameAndAlignment().alive) continue;
 		advancecreature(*activesquad->squad[p]);
 		if (activesquad->squad[p]->is_holding_body())
 		{
 			advancecreature(*activesquad->squad[p]->prisoner);
-			if (!activesquad->squad[p]->prisoner->alive)
+			if (!activesquad->squad[p]->prisoner->getNameAndAlignment().alive)
 			{
 				if (activesquad->squad[p]->prisoner->squadid == -1)
 				{

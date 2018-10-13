@@ -427,7 +427,7 @@ extern string AND;
 				 int lsfound = 0;
 				 for (int q = 0; q < (int)pool.size(); q++)
 				 {
-					 if (pool[q]->hireid == pool[p]->id && pool[q]->alive && pool[q]->flag & CREATUREFLAG_LOVESLAVE)
+					 if (pool[q]->hireid == pool[p]->id && pool[q]->getNameAndAlignment().alive && pool[q]->flag & CREATUREFLAG_LOVESLAVE)
 					 {
 						 lsfound++;
 						 if (lsfound == 1)

@@ -205,7 +205,7 @@ void recruitment_activity(DeprecatedCreature &cr)
 				int c = getkeyAlt();
 				if (c == ENTER || c == ESC) break;
 				c -= 'a';
-				if (c >= 0 && c < ENCMAX - 1 && encounter[c].exists)
+				if (c >= 0 && c < ENCMAX - 1 && encounter[c].getNameAndAlignment().exists)
 				{
 					int id = encounter[c].id;
 					eraseAlt();

@@ -468,7 +468,7 @@ void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid) {
 	}
 }
 void setEncounterZeroExistsFalse() {
-	encounter[0].exists = false;
+	encounter[0].stop_existing();
 }
 vector<NameAndAlignment> getEncounterNameAndAlignment() {
 	vector<NameAndAlignment> nameList;
@@ -492,10 +492,10 @@ void delenc(const short e, const char loot)
 	//BURY IT
 	for (int en = e; en < ENCMAX; en++)
 	{
-		if (!encounter[en].exists) break;
+		if (!encounter[en].getNameAndAlignment().exists) break;
 		if (en < ENCMAX - 1) encounter[en] = encounter[en + 1];
 	}
-	encounter[ENCMAX - 1].exists = 0;
+	encounter[ENCMAX - 1].stop_existing();
 }
 void delenc(DeprecatedCreature &tk) {
 	delenc(&tk - encounter, 0);
@@ -504,7 +504,7 @@ void bloodyUpEncounterArmor() {
 
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		if (!encounter[e].exists) continue;
+		if (!encounter[e].getNameAndAlignment().exists) continue;
 		if (!LCSrandom(2))
 			encounter[e].get_armor().set_bloody(true);
 	}
@@ -528,8 +528,8 @@ int baddieCount(const bool in_car) {
 	{
 		if (encounter[e].carid != -1 &&
 			encounter[e].enemy() &&
-			encounter[e].alive&&
-			encounter[e].exists)baddiecount++;
+			encounter[e].getNameAndAlignment().alive&&
+			encounter[e].getNameAndAlignment().exists)baddiecount++;
 	}
 	return baddiecount;
 }
@@ -553,7 +553,7 @@ void liberalizeEncounterIfThisType(const int type) {
 int squadAlive() {
 	int partyalive = 0;
 	for (int p = 0; p < 6; p++)
-		if (activesquad->squad[p]) if (activesquad->squad[p]->alive == 1) partyalive++;
+		if (activesquad->squad[p]) if (activesquad->squad[p]->getNameAndAlignment().alive == 1) partyalive++;
 	return partyalive;
 }
 void addCrimeToSiteStory(const int crime) {
@@ -638,7 +638,7 @@ void formANewSquadIfThereAreNone() {
 		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
 		strcat(squad.back()->name, CONST_siege254.c_str());
 		int i = 0;
-		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege && pool[p]->alive&&pool[p]->align == 1)
+		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege && pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1)
 		{
 			squad.back()->squad[i] = pool[p];
 			pool[p]->squadid = squad.back()->id;
@@ -677,7 +677,7 @@ void countHeroes(int &partysize, int &partyalive) {
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == getCurrentSite() && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
 	{
 		partysize++;
-		if (pool[p]->alive) partyalive++;
+		if (pool[p]->getNameAndAlignment().alive) partyalive++;
 	}
 }
 void cancelOutBleeding() {
@@ -700,7 +700,7 @@ void baseEveryoneLeftAtHomelessShelter(const int homes) {
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != getCurrentSite()) continue;
-		if (!pool[p]->alive)
+		if (!pool[p]->getNameAndAlignment().alive)
 		{
 			delete_and_remove(pool, p);
 			continue;
@@ -724,7 +724,7 @@ int printBestLCSMemberForNews(const string repname, const int l) {
 	int best = 0;
 	for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive || pool[p]->align != 1 || pool[p]->location != l) continue;
+		if (!pool[p]->getNameAndAlignment().alive || pool[p]->align != 1 || pool[p]->location != l) continue;
 		int sum = pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
 			+ pool[p]->get_attribute(ATTRIBUTE_HEART, true)
 			+ pool[p]->get_skill(SKILL_PERSUASION)
@@ -839,7 +839,7 @@ vector<int> potentialEncounterNoticers() {
 	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (encounter[e].type == CREATURE_PRISONER)continue;
-		if (encounter[e].exists&&encounter[e].alive&&
+		if (encounter[e].getNameAndAlignment().exists&&encounter[e].getNameAndAlignment().alive&&
 			encounter[e].enemy())
 		{
 			noticer.push_back(e);
@@ -915,7 +915,7 @@ void printActiveSquadTalkOptions() {
 
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive)
+			if (activesquad->squad[p]->getNameAndAlignment().alive)
 			{
 				mvaddcharAlt(y, 1, p + '1');
 				addstrAlt(spaceDashSpace);
@@ -931,7 +931,7 @@ void printActiveSquadTalkOptions() {
 	}
 }
 bool activeSquadMemberIsAliveAndExists(const int sp) {
-	return activesquad->squad[sp] != NULL && activesquad->squad[sp]->alive;
+	return activesquad->squad[sp] != NULL && activesquad->squad[sp]->getNameAndAlignment().alive;
 }
 void criminalize(DeprecatedCreature &cr, short crime);
 void criminalizeEncounterPrisonerEscape(const int e) {
@@ -942,7 +942,7 @@ void duplicateEncounterMember(const int e) {
 	encounter[e] = encounter[e + 1];
 }
 void unpersonLastEncounterMember() {
-	encounter[ENCMAX - 1].exists = 0;
+	encounter[ENCMAX - 1].stop_existing();
 }
 int subordinatesleft(const DeprecatedCreature& cr);
 int checkForPeopleWhoCanRecruit() {
@@ -988,7 +988,7 @@ bool get_encounter_cantbluff_is_one(const int e) {
 void spawnCreatureCEO() {
 
 	encounter[0] = uniqueCreatures.CEO();
-	encounter[0].exists = true;
+	encounter[0].make_existing();
 }
 int getEncounterAnimalGloss(const int e) {
 	return encounter[e].animalgloss;
@@ -1056,18 +1056,18 @@ void incrementStatRecruits() {
 void putBackSpecials(const int olocx, const int olocy, const int olocz) {
 	//PUT BACK SPECIALS
 	for (int e = 0; e < ENCMAX; e++)
-		if (encounter[e].exists)
+		if (encounter[e].getNameAndAlignment().exists)
 		{
 			if (encounter[e].is_cantbluff_zero()&&encounter[e].type == CREATURE_LANDLORD)
 				levelmap[olocx][olocy][olocz].special = SPECIAL_APARTMENT_LANDLORD;
 			if (encounter[e].is_cantbluff_zero()&&encounter[e].type == CREATURE_BANK_TELLER)
 				levelmap[olocx][olocy][olocz].special = SPECIAL_BANK_TELLER;
-			encounter[e].exists = 0;
+			encounter[e].stop_existing();
 		}
 }
 
 void emptyEncounter() {
-	for (int e = 0; e < ENCMAX; e++)encounter[e].exists = 0;
+	for (int e = 0; e < ENCMAX; e++)encounter[e].stop_existing();
 }
 void advancecreature(DeprecatedCreature &cr);
 void advancecreature(const int e) {

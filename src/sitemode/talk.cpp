@@ -1325,7 +1325,7 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	{
 		if (activesquad->squad[i] &&
 			activesquad->squad[i]->is_holding_body() &&
-			activesquad->squad[i]->prisoner->alive &&
+			activesquad->squad[i]->prisoner->getNameAndAlignment().alive &&
 			activesquad->squad[i]->prisoner->enemy())
 		{
 			executer = activesquad->squad[i];
@@ -1824,7 +1824,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	{
 		if (activesquad->squad[i] &&
 			activesquad->squad[i]->is_holding_body() &&
-			activesquad->squad[i]->prisoner->alive&&
+			activesquad->squad[i]->prisoner->getNameAndAlignment().alive&&
 			activesquad->squad[i]->prisoner->enemy())
 		{
 			hostages++;

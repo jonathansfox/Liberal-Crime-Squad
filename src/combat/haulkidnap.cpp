@@ -226,10 +226,10 @@ void freehostage(DeprecatedCreature &cr, char situation)
 		{
 			for (int e = 0; e < ENCMAX; e++)
 			{
-				if (encounter[e].exists == 0)
+				if (encounter[e].getNameAndAlignment().exists == 0)
 				{
 					encounter[e] = *cr.prisoner;
-					encounter[e].exists = 1;
+					encounter[e].make_existing();
 					conservatise(e);
 					break;
 				}
@@ -349,7 +349,7 @@ void kidnapattempt()
 	vector<int> target;
 	bool possibleMistakeToKidnap = false;
 	for (int e = 0; e < ENCMAX; e++) {
-		if (encounter[e].exists&&encounter[e].getCreatureHealth().alive&&encounter[e].getCreatureHealth().align == -1 &&
+		if (encounter[e].getNameAndAlignment().exists&&encounter[e].getCreatureHealth().alive&&encounter[e].getCreatureHealth().align == -1 &&
 			(encounter[e].getCreatureHealth().animalgloss == ANIMALGLOSS_NONE || lawList[LAW_ANIMALRESEARCH] == 2) &&
 			(!encounter[e].get_weapon().get_specific_bool(BOOL_PROTECTS_AGAINST_KIDNAPPING_) ||
 				encounter[e].getCreatureHealth().blood <= 20) && encounter[e].getCreatureHealth().animalgloss != ANIMALGLOSS_TANK)
@@ -422,7 +422,7 @@ void kidnapattempt()
 		{
 			bool present = 0;
 			for (int e = 0; e < ENCMAX; e++) {
-				if (encounter[e].exists&&encounter[e].getCreatureHealth().alive) {
+				if (encounter[e].getNameAndAlignment().exists&&encounter[e].getCreatureHealth().alive) {
 					present = 1;
 					break;
 				}

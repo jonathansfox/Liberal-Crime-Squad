@@ -574,7 +574,7 @@ void statebrokenlaws(int loc)
 	string kname;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive || pool[p]->location != loc) continue;
+		if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != loc) continue;
 		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
 		{
 			kname = pool[p]->propername;
@@ -934,7 +934,7 @@ int allCreatureHeatGeneration(const int l, int& numpres) {
 	{
 		// Sleepers and people not at this base don't count
 		if (pool[p]->location != l || pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
-		if (!pool[p]->alive) // Corpses attract attention
+		if (!pool[p]->getNameAndAlignment().alive) // Corpses attract attention
 		{
 			crimes += 5;
 			continue;
@@ -1029,7 +1029,7 @@ void policeSiegePrintNonePresent(const int l) {
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l) continue;
-		if (!pool[p]->alive)
+		if (!pool[p]->getNameAndAlignment().alive)
 		{
 			mvaddstrAlt(y, 1, pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_siege178, gamelog);
@@ -1355,7 +1355,7 @@ void theFiremenHaveRaidedEmptySafehouse(const int l) {
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l)continue;
-		if (!pool[p]->alive)
+		if (!pool[p]->getNameAndAlignment().alive)
 		{
 			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_siege178, gamelog);
@@ -1684,7 +1684,7 @@ int numbereating(int loc)
 	extern vector<DeprecatedCreature *> pool;
 	int eaters = 0;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
-		if (pool[p]->location == loc && pool[p]->alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
+		if (pool[p]->location == loc && pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
 	return eaters;
 }
 void noOneIsThere(const int l) {
@@ -1704,7 +1704,7 @@ void noOneIsThere(const int l) {
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l) continue;
-		if (!pool[p]->alive)
+		if (!pool[p]->getNameAndAlignment().alive)
 		{
 			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name);
 			addstrAlt(CONST_siege178, gamelog);
@@ -1831,7 +1831,7 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 		if (!LCSrandom(2))
 		{
 			vector<int> pol;
-			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->getNameAndAlignment().alive&&pool[p]->location == l) pol.push_back(p);
 			if (len(pol))
 			{
 				if (clearformess) eraseAlt();
@@ -1875,7 +1875,7 @@ void shotAtBySniper(const char clearformess, const int l, int &num_liberals) {
 	extern vector<DeprecatedCreature *> pool;
 
 	vector<int> pol;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->alive&&pool[p]->location == l) pol.push_back(p);
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->getNameAndAlignment().alive&&pool[p]->location == l) pol.push_back(p);
 	if (len(pol))
 	{
 		if (clearformess) eraseAlt();
@@ -2097,7 +2097,7 @@ void siegeturn(char clearformess)
 	std::memset(liberalcount, 0, sizeof(int)*LocationsPool::getInstance().lenpool());
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive)continue; // Dead people don't count
+		if (!pool[p]->getNameAndAlignment().alive)continue; // Dead people don't count
 		if (pool[p]->align != 1)continue; // Non-liberals don't count
 		if (pool[p]->location == -1)continue; // Vacationers don't count
 		liberalcount[pool[p]->location]++;
@@ -2134,7 +2134,7 @@ void siegeturn(char clearformess)
 				char attack = 0;
 				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 				{
-					if (!pool[p]->alive || pool[p]->location != l) continue;
+					if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != l) continue;
 					if (starving) pool[p]->blood -= LCSrandom(8) + 4;
 					// Check if liberal starved to death.
 					if (pool[p]->blood <= 0)

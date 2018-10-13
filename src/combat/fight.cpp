@@ -457,11 +457,11 @@ bool goodguyattack = false;
 		 }
 		 return 1;
 	 }
-	 if (a.stunned)
+	 if (a.is_stunned())
 	 {
 		 if (noncombat)
 		 {
-			 a.stunned--;
+			 a.decrement_stunned();
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
@@ -673,7 +673,7 @@ bool goodguyattack = false;
 	 }
 	 else if (attack > resist)
 	 {
-		 t.stunned += (attack - resist) / 4;
+		 t.increase_stunned((attack - resist) / 4);
 		 if (a.enemy())
 		 {
 			 if (t.juice > 100)
@@ -695,7 +695,7 @@ bool goodguyattack = false;
 				 if (a.getCreatureHealth().align == -1)
 				 {
 					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight081, gamelog);
-					 t.stunned = 0;
+					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
 					 addstrAlt(CONST_fight146, gamelog);
@@ -703,17 +703,17 @@ bool goodguyattack = false;
 				 else
 				 {
 					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight083, gamelog);
-					 t.stunned = 0;
+					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
 					 addstrAlt(CONST_fight146, gamelog);
 				 }
 				 for (int e = 0; e < ENCMAX; e++)
 				 {
-					 if (encounter[e].exists == 0)
+					 if (encounter[e].getNameAndAlignment().exists == 0)
 					 {
 						 encounter[e] = t;
-						 encounter[e].exists = 1;
+						 encounter[e].make_existing();
 						 if (a.getCreatureHealth().align == -1)conservatise(encounter[e]);
 						 encounter[e].make_cantbluff_two();
 						 encounter[e].squadid = -1;
@@ -751,7 +751,7 @@ bool goodguyattack = false;
 			 else
 			 {
 				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight087, gamelog);
-				 t.stunned = 0;
+				 t.stop_being_stunned();
 				 liberalize(t);
 				 t.infiltration /= 2;
 				 t.flag |= CREATUREFLAG_CONVERTED;
@@ -2089,12 +2089,12 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 	vector<int> non_enemies;
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		if (encounter[e].getCreatureHealth().alive&&encounter[e].exists)
+		if (encounter[e].getCreatureHealth().alive&&encounter[e].getNameAndAlignment().exists)
 		{
 			if (encounter[e].enemy())
 			{
 				if (encounter[e].getCreatureHealth().animalgloss == ANIMALGLOSS_TANK &&
-					encounter[e].stunned == 0)
+					!encounter[e].is_stunned())
 					super_enemies.push_back(e);
 				else if ((encounter[e].is_armed() ||
 					(encounter[e].type == CREATURE_COP && encounter[e].getCreatureHealth().align == ALIGN_MODERATE) ||
@@ -2108,7 +2108,7 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 					encounter[e].type == CREATURE_MILITARYOFFICER ||
 					encounter[e].specialattack != -1) &&
 					encounter[e].getCreatureHealth().blood >= 40 &&
-					encounter[e].stunned == 0)
+					!encounter[e].is_stunned())
 					dangerous_enemies.push_back(e);
 				else enemies.push_back(e);
 			}
@@ -2315,7 +2315,7 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 	extern coordinatest loc_coord;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
-	if (!encounter[e].exists) return REPEAT;
+	if (!encounter[e].getNameAndAlignment().exists) return REPEAT;
 	if (!encounter[e].getCreatureHealth().alive) return REPEAT;
 	if (isThereASiteAlarm() && encounter[e].type == CREATURE_BOUNCER && encounter[e].getCreatureHealth().align != ALIGN_LIBERAL)
 		conservatise(e);
@@ -2364,7 +2364,7 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 	{
 		for (int e2 = 0; e2 < ENCMAX; e2++)
 		{
-			if (!encounter[e2].exists) continue;
+			if (!encounter[e2].getNameAndAlignment().exists) continue;
 			if (!encounter[e2].getCreatureHealth().alive) continue;
 			if (encounter[e2].getCreatureHealth().align != -1) continue;
 			goodtarg.push_back(e2);
@@ -2372,7 +2372,7 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 	}
 	for (int e2 = 0; e2 < ENCMAX; e2++)
 	{
-		if (!encounter[e2].exists) continue;
+		if (!encounter[e2].getNameAndAlignment().exists) continue;
 		if (!encounter[e2].getCreatureHealth().alive) continue;
 		if (encounter[e2].enemy()) continue;
 		badtarg.push_back(e2);
@@ -2381,7 +2381,7 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 	int target = pickrandom(goodtarg);
 	char canmistake = 1;
 	int encnum = 0;
-	for (int e2 = 0; e2 < ENCMAX; e2++) if (encounter[e2].exists) encnum++;
+	for (int e2 = 0; e2 < ENCMAX; e2++) if (encounter[e2].getNameAndAlignment().exists) encnum++;
 	if ((encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
 		encounter[e].type == CREATURE_JUDGE_LIBERAL ||
 		encounter[e].type == CREATURE_JUDGE_CONSERVATIVE ||

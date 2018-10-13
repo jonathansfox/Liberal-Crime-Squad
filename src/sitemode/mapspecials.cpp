@@ -603,7 +603,7 @@ void special_nuclear_onoff()
 			DeprecatedCreature* maxs = 0;
 			for (int p = 0; p < 6; p++)
 			{
-				if (activesquad->squad[p] != NULL && activesquad->squad[p]->alive)
+				if (activesquad->squad[p] != NULL && activesquad->squad[p]->getNameAndAlignment().alive)
 				{
 					if (activesquad->squad[p]->skill_check(SKILL_SCIENCE, max))
 					{
@@ -863,7 +863,7 @@ void special_courthouse_jury()
 			{
 				if (activesquad->squad[p] != NULL)
 				{
-					if (activesquad->squad[p]->alive)
+					if (activesquad->squad[p]->getNameAndAlignment().alive)
 					{
 						if (activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true) +
 							activesquad->squad[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true) +

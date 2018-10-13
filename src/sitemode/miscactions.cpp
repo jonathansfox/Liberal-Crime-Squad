@@ -171,7 +171,7 @@ char unlock(short type, char &actual)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive)
+			if (activesquad->squad[p]->getNameAndAlignment().alive)
 			{
 				if (activesquad->squad[p]->get_skill(SKILL_SECURITY) > maxattack)
 				{
@@ -185,7 +185,7 @@ char unlock(short type, char &actual)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive)
+			if (activesquad->squad[p]->getNameAndAlignment().alive)
 			{
 				if (activesquad->squad[p]->get_skill(SKILL_SECURITY) == maxattack)
 				{
@@ -233,10 +233,10 @@ char unlock(short type, char &actual)
 			{
 				if (j == p) continue;
 				if (activesquad->squad[j] != NULL &&
-					activesquad->squad[j]->alive&&
+					activesquad->squad[j]->getNameAndAlignment().alive&&
 					activesquad->squad[j]->get_skill(SKILL_SECURITY) < difficulty)
 				{
-					if (activesquad->squad[j]->alive)
+					if (activesquad->squad[j]->getNameAndAlignment().alive)
 					{
 						switch (fieldskillrate)
 						{
@@ -368,7 +368,7 @@ char bash(short type, char &actual)
 		{
 			if (activesquad->squad[p] != NULL)
 			{
-				if (activesquad->squad[p]->alive)
+				if (activesquad->squad[p]->getNameAndAlignment().alive)
 				{
 					if (activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH, true)*
 						activesquad->squad[p]->get_weapon().get_bashstrengthmod() > maxattack)
@@ -457,7 +457,7 @@ char hack(short type, char &actual)
 	}
 	int maxattack = 0, maxblindattack = -3, hacker = -1, blind = -1;
 	for (int p = 0; p < 6; p++) if (activesquad->squad[p] != NULL)
-		if (activesquad->squad[p]->alive && activesquad->squad[p]->get_skill(SKILL_COMPUTERS))
+		if (activesquad->squad[p]->getNameAndAlignment().alive && activesquad->squad[p]->get_skill(SKILL_COMPUTERS))
 		{
 			int roll = activesquad->squad[p]->skill_roll(SKILL_COMPUTERS);
 			if (!activesquad->squad[p]->special[SPECIALWOUND_RIGHTEYE] &&
@@ -584,7 +584,7 @@ char run_broadcast(bool tv_broadcase)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (!activesquad->squad[p]->alive)continue;
+			if (!activesquad->squad[p]->getNameAndAlignment().alive)continue;
 			segmentpower += activesquad->squad[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
 			segmentpower += activesquad->squad[p]->get_attribute(ATTRIBUTE_HEART, true);
 			segmentpower += activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA, true);
@@ -645,7 +645,7 @@ char run_broadcast(bool tv_broadcase)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->prisoner->alive)
+			if (activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->prisoner->getNameAndAlignment().alive)
 			{
 				if (((activesquad->squad[p]->prisoner->type == CREATURE_NEWSANCHOR) && tv_broadcase) || ((activesquad->squad[p]->prisoner->type == CREATURE_RADIOPERSONALITY) && !tv_broadcase))
 				{
@@ -750,7 +750,7 @@ void partyrescue(short special)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->alive&&!activesquad->squad[p]->is_holding_body())
+			if (activesquad->squad[p]->getNameAndAlignment().alive&&!activesquad->squad[p]->is_holding_body())
 			{
 				hostslots++;
 			}
@@ -798,7 +798,7 @@ void partyrescue(short special)
 			{
 				if (activesquad->squad[p] != NULL)
 				{
-					if (activesquad->squad[p]->alive&&!activesquad->squad[p]->is_holding_body())
+					if (activesquad->squad[p]->getNameAndAlignment().alive&&!activesquad->squad[p]->is_holding_body())
 					{
 						activesquad->squad[p]->prisoner = waiting_for_rescue[pl];
 						waiting_for_rescue[pl]->squadid = activesquad->id;
@@ -865,7 +865,7 @@ void reloadparty(bool wasteful)
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL)continue;
-		if (!activesquad->squad[p]->alive)continue;
+		if (!activesquad->squad[p]->getNameAndAlignment().alive)continue;
 		if (activesquad->squad[p]->has_thrown_weapon)
 		{
 			activesquad->squad[p]->ready_another_throwing_weapon();

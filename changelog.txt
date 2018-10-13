@@ -756,3 +756,17 @@ Something called "SITE_RESIDENTIAL_BOMBSHELTER"
 4.12.28
 
 Bug: Sudden Heat Vanishing
+
+Removed 23 instances of extern DeprecatedCreature encounter[ENCMAX];
+Matching lines: 19    Matching files: 7    Total files searched: 160
+ 
+extern 
+Matching lines: 4870    Matching files: 67    Total files searched: 160
+ 
+new struct CreatureAttributeList
+removed all references to DeprecatedCreature class member crimes_suspected[LAWFLAGNUM];
+removed all references to DeprecatedCreature class member name[CREATURE_NAMELEN];
+excluding references in saveload.cpp
+continued work removing references to internal variables of the DeprecatedCreature class.
+
+Extracted the American Flag graphic and the burning thereof into a table, allowing for arbitrary flag usage.

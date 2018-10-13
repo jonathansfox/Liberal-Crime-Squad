@@ -108,7 +108,6 @@ const string tag_skill = "skill";
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 
-void makeloot(DeprecatedCreature &cr, vector<Item *> &loot);
 const string singleDot = ".";
 const string singleSpace = " ";
 vector<string> quality_0;
@@ -816,7 +815,7 @@ void funds_and_trouble(char &clearformess)
 	vector<DeprecatedCreature *> trouble, hack, bury, solicit, tshirts, art, music, graffiti, brownies, prostitutes, teachers, students;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
-		if (!pool[p]->alive) continue;
+		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->location == -1)
 		{
 			pool[p]->activity.type = ACTIVITY_NONE;
@@ -1937,7 +1936,7 @@ void doActivityTeach(vector<DeprecatedCreature *> &teachers, char &clearformess)
 			//If they're at the location
 			if (pool[p]->location == teachers[t]->location &&
 				pool[p]->align == ALIGN_LIBERAL &&
-				pool[p]->alive)
+				pool[p]->getNameAndAlignment().alive)
 			{
 				//Step through the array of skills to train
 				for (int i = 0; i < 13; i++)           //Any reason why we aren't using a while(true) loop or something even more dynamic? --kviiri
@@ -1965,7 +1964,7 @@ void doActivityTeach(vector<DeprecatedCreature *> &teachers, char &clearformess)
 			//If they're at the location
 			if (pool[p]->location == teachers[t]->location &&
 				pool[p]->align == ALIGN_LIBERAL &&
-				pool[p]->alive)
+				pool[p]->getNameAndAlignment().alive)
 			{
 				//Step through the array of skills to train
 				for (int i = 0; i < 13; i++)
@@ -2021,7 +2020,7 @@ void doActivityBury(vector<DeprecatedCreature *> &bury, char &clearformess)
 	{
 		for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 		{
-			if (pool[p]->alive) continue;
+			if (pool[p]->getNameAndAlignment().alive) continue;
 			bool arrest_attempted = false;
 			// strip corpse's inventory
 			pool[p]->makeloot(bury[0]->base);

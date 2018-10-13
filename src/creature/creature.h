@@ -11,7 +11,7 @@ class DeprecatedCreature
 public:
 	const NameAndAlignment getNameAndAlignment() const { return NameAndAlignment(CreatureBools(exists, alive, enemy()), CreatureInts(align, type, blood), name); }
 	const CreatureHealth getCreatureHealth()  const { return CreatureHealth(getNameAndAlignment(), animalgloss, wound, special); }
-	const CreatureJustice getCreatureJustice()  const { return CreatureJustice(propername, name, get_type_name(), deathpenalty, location, sentence, crimes_suspected, juice, align); }
+	const CreatureJustice getCreatureJustice()  const { return CreatureJustice(PartialCreatureJustice(deathpenalty, location, sentence, juice, align), propername, name, get_type_name(), crimes_suspected); }
 	const CreatureBio getCreatureBio() const { return CreatureBio(birthday_month, birthday_day, age, gender_conservative, gender_liberal); }
 	const CreatureInventory getCreatureInventory() const { return CreatureInventory(get_weapon_string(0), get_armor_string(true));  }
 	const CreatureCar getCreatureCar() const { return CreatureCar(pref_carid, carid, pref_is_driver, is_driver); }
@@ -45,19 +45,6 @@ public:
 	bool enemy() const;
 
 
-	void set_attribute(int attribute, int amount) { attributes[attribute] = MIN(amount, MAXATTRIBUTE); }
-	void adjust_attribute(int attribute, int amount) { set_attribute(attribute, attributes[attribute] + amount); }
-	void set_skill(int skill, int amount) { skills[skill] = MIN(amount, MAXATTRIBUTE); }
-
-	void die();
-	void train(int trainedskill, int experience, int upto = MAXATTRIBUTE);
-	void skill_up();
-
-	bool reload(bool wasteful);
-	bool ready_another_throwing_weapon();
-
-	void stop_hauling_me();
-	void creatureinit();
 
 	int get_disguise_difficulty() const;
 	int	get_stealth_difficulty() const;
@@ -100,6 +87,21 @@ public:
 	const char* heshe(bool capitalize = false) const;
 	const char* hisher(bool capitalize = false) const;
 	const char* himher(bool capitalize = false) const;
+
+
+	void set_attribute(int attribute, int amount) { attributes[attribute] = MIN(amount, MAXATTRIBUTE); }
+	void adjust_attribute(int attribute, int amount) { set_attribute(attribute, attributes[attribute] + amount); }
+	void set_skill(int skill, int amount) { skills[skill] = MIN(amount, MAXATTRIBUTE); }
+
+	void die();
+	void train(int trainedskill, int experience, int upto = MAXATTRIBUTE);
+	void skill_up();
+
+	bool reload(bool wasteful);
+	bool ready_another_throwing_weapon();
+
+	void stop_hauling_me();
+	void creatureinit();
 
 	void clear_criminal_record_but_not_heat() {
 
@@ -169,7 +171,7 @@ public:
 	void another_confession() {
 		confessions++;
 	}
-	char getCreatureConfessions() {
+	char getCreatureConfessions() const {
 		return confessions;
 	}
 	void rename(const string _name) {
@@ -224,6 +226,7 @@ public:
 	void give_armor(const int at, vector<Item*>* lootpile);
 	void strip(vector<Item*>* lootpile);
 	void makeloot(vector<Item *> &loot);
+
 	void makeloot(const int base);
 	void set_money(const int _money) {
 		money = _money;
@@ -240,13 +243,13 @@ public:
 	void make_cantbluff_one() {
 		cantbluff = 1;
 	}
-	bool is_cantbluff_two() {
+	bool is_cantbluff_two() const {
 		return cantbluff == 2;
 	}
-	bool is_cantbluff_zero() {
+	bool is_cantbluff_zero() const {
 		return cantbluff == 0;
 	}
-	bool is_holding_body() {
+	bool is_holding_body() const {
 		if (prisoner) {
 			return true;
 		}
@@ -257,6 +260,24 @@ public:
 	void discard_body() {
 		prisoner = NULL;
 	}
+	bool is_stunned() const {
+		return stunned;
+	}
+	void decrement_stunned() {
+		stunned--;
+	}
+	void increase_stunned(const int e) {
+		stunned += e;
+	}
+	void stop_being_stunned() {
+		stunned = 0;
+	}
+	void stop_existing() {
+		exists = false;
+	}
+	void make_existing() {
+		exists = true;
+	}
 	// public
 	deque<Weapon*> extra_throwing_weapons;
 	deque<Clip*> clips;
@@ -264,7 +285,6 @@ public:
 	ActivityST activity;
 
 
-	bool exists;
 	int type;
 
 	bool dontname;
@@ -291,7 +311,6 @@ public:
 
 	int meetings;
 
-	int stunned;
 	int income;
 
 	int juice;
@@ -309,7 +328,6 @@ public:
 	// private, [in progress]
 	DeprecatedCreature * prisoner;
 
-	bool alive;
 
 	int align;
 	int blood;
@@ -331,6 +349,10 @@ public:
 	int birthday_month;
 	int birthday_day;
 private:
+	bool alive;
+
+	bool exists;
+	int stunned;
 
 	char cantbluff;
 

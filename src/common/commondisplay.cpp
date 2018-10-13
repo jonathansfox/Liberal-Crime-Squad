@@ -513,13 +513,13 @@ void printAttributesAsKnowledgePermits(CreatureAttributeList cr, unsigned char k
 	const string CONST_commondisplay058 = "Wis:    ";
 	const string CONST_commondisplay056 = "Int:    ";
 	const string CONST_commondisplay054 = "Hrt:    ";
-	mvaddstrAlt(2, 0, CONST_commondisplay054 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_HEART, true))));
-	mvaddstrAlt(3, 0, CONST_commondisplay056 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true))));
-	mvaddstrAlt(4, 0, CONST_commondisplay058 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_WISDOM, true))));
-	mvaddstrAlt(5, 0, CONST_commondisplay060 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_HEALTH, true))));
-	mvaddstrAlt(2, 11, CONST_commondisplay062 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_AGILITY, true))));
-	mvaddstrAlt(3, 11, CONST_commondisplay064 + ((knowledge > 1) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_STRENGTH, true))));
-	mvaddstrAlt(4, 11, CONST_commondisplay066 + ((knowledge > 0) ? CONST_commondisplay067 : tostring(cr.get_attribute(ATTRIBUTE_CHARISMA, true))));
+	mvaddstrAlt(2, 0, CONST_commondisplay054 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_HEART, true)) : CONST_commondisplay067));
+	mvaddstrAlt(3, 0, CONST_commondisplay056 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true)) : CONST_commondisplay067));
+	mvaddstrAlt(4, 0, CONST_commondisplay058 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_WISDOM, true)) : CONST_commondisplay067));
+	mvaddstrAlt(5, 0, CONST_commondisplay060 + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_HEALTH, true)) : CONST_commondisplay067));
+	mvaddstrAlt(2, 11, CONST_commondisplay062 + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_AGILITY, true)) : CONST_commondisplay067));
+	mvaddstrAlt(3, 11, CONST_commondisplay064 + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_STRENGTH, true)) : CONST_commondisplay067));
+	mvaddstrAlt(4, 11, CONST_commondisplay066 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_CHARISMA, true)) : CONST_commondisplay067));
 }
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
