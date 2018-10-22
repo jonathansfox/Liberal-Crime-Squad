@@ -33,6 +33,14 @@ const string tag_skill = "skill";
 #include <gui_constants.h>
 
 
+short interface_pgup = '[';
+short interface_pgdn = ']';
+bool is_page_up(const int c) {
+	return c == interface_pgup || c == KEY_UP || c == KEY_LEFT;
+}
+bool is_page_down(const int c) {
+	return c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT;
+}
 void translategetch(int &c);
 void translategetch_cap(int &c);
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
@@ -592,7 +600,6 @@ const string CONST_sitedisplay026 = "»";
 const string CONST_sitedisplay025 = "É";
 const string CONST_sitedisplay024 = "Í";
 const string CONST_sitedisplay023 = "º";
-
 const string tag_ARMOR = "ARMOR";
 //const string blankString = "";
 const string tag_MONEY = "MONEY";
@@ -1621,7 +1628,7 @@ bool has_ignited(const int c) {
 	//CH_LIGHT_SHADE
 	//' '
 	// Any character other than these five indicate non-ignition
-	// therfore, only these five cannot be used in flag design
+	// therfore, only these five should not be used in flag design
 	return c == CH_BOX_DRAWINGS_LIGHT_VERTICAL ||
 		c == CH_DARK_SHADE ||
 		c == CH_MEDIUM_SHADE ||
@@ -1763,7 +1770,6 @@ void    PDC_set_titleAlt(const char *ch);
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
-	extern short interface_pgup;
 	//if(c==-63)c='7';
 	//if(c==-62)c='8';
 	//if(c==-61)c='9';

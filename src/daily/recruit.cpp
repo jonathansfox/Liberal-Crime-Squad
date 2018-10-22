@@ -135,7 +135,7 @@ void recruitment_activity(DeprecatedCreature &cr)
 	extern DeprecatedCreature encounter[ENCMAX];
 	int ocursite = getCurrentSite();
 	setCurrentSite(cr.location);
-	int type = cr.activity.arg;
+	int type = cr.activity_arg();
 	int difficulty = recruitFindDifficulty(type);
 	string name = recruitName(type);
 	if (type >= 0)

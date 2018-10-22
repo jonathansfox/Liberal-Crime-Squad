@@ -770,3 +770,13 @@ excluding references in saveload.cpp
 continued work removing references to internal variables of the DeprecatedCreature class.
 
 Extracted the American Flag graphic and the burning thereof into a table, allowing for arbitrary flag usage.
+
+Removed nearly all 
+	//extern short interface_pgup;
+	//extern short interface_pgdn;
+	
+Major refactoring of lcsmonthly.cpp
+
+Fixed failure to rename sites.
+initSite(Location loc) was used instead of initLocation(Location loc)
+I don't know why both functions exist with such similar names.

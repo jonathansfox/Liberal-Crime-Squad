@@ -335,7 +335,7 @@ void fight_subdued()
 	int hostages = 0;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->get_prisoner_align() != ALIGN_LIBERAL)
 				hostages++;
 	int stolen = 0;
 	// Police assess stolen goods in inventory
@@ -512,9 +512,9 @@ void open_door(bool restricted)
 			clearmessagearea(false);
 			if (c == 'y')
 			{
-				char actual; // 1 if an actual attempt was made, 0 otherwise
+				UnlockAttempt actual = unlock(UNLOCK_DOOR); // 1 if an actual attempt was made, 0 otherwise
 							 // If the unlock was successful
-				if (unlock(UNLOCK_DOOR, actual))
+				if (actual == UNLOCKED)
 				{
 					// Unlock the door
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~(SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
@@ -523,7 +523,7 @@ void open_door(bool restricted)
 					//criminalizeparty(LAWFLAG_BREAKING);
 				}
 				// Else perma-lock it if an attempt was made
-				else if (actual)
+				else if (actual == LOUD_FAILURE)
 				{
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_CLOCK;
 					if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_ALARMED)
@@ -536,7 +536,7 @@ void open_door(bool restricted)
 					}
 				}
 				// Check for people noticing you fiddling with the lock
-				if (actual)
+				if (actual != NEVERMIND)
 				{
 					alienationcheck(0);
 					noticecheck(-1);
@@ -548,7 +548,8 @@ void open_door(bool restricted)
 	}
 	else if (locked || (!restricted && alarmed))
 	{
-		while (true)
+		int c;
+		do
 		{
 			clearmessagearea(false);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -561,11 +562,11 @@ void open_door(bool restricted)
 			else mvaddstrAlt(16, 1, CONST_sitemode088, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(17, 1, CONST_sitemode089);
-			int c = getkeyAlt();
+			c = getkeyAlt();
 			if (c == 'y')
 			{
-				char actual;
-				if (bash(BASH_DOOR, actual))
+				UnlockAttempt actualy = bash();
+				if (actualy == UNLOCKED)
 				{
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
 					int time = 0;
@@ -583,15 +584,10 @@ void open_door(bool restricted)
 					sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
 					criminalizeparty(LAWFLAG_BREAKING);
 				}
-				if (actual)
-				{
-					alienationcheck(1);
-					noticecheck(-1, DIFFICULTY_HEROIC);
-				}
-				break;
+				alienationcheck(1);
+				noticecheck(-1, DIFFICULTY_HEROIC);
 			}
-			else if (c == 'n')break;
-		}
+		} while (c != 'y' && c != 'n');
 	}
 	else
 	{
@@ -1763,21 +1759,7 @@ void bailUponVictory() {
 		if (activesquad->squad[p] == NULL)continue;
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid != -1)
-			{
-				//RESTORE POOL MEMBER
-				activesquad->squad[p]->prisoner->squadid = -1;
-				//MUST LOCATE THE MEMBER
-				activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-				activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-			}
-			else
-			{
-				//CONVERT KIDNAP VICTIM
-				kidnaptransfer(*activesquad->squad[p]->prisoner);
-				delete activesquad->squad[p]->prisoner;
-			}
-			activesquad->squad[p]->discard_body();
+			activesquad->squad[p]->deal_with_prisoner();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -1867,22 +1849,8 @@ void bailOnBase() {
 			if (activesquad->squad[p] == NULL)continue;
 			if (activesquad->squad[p]->is_holding_body())
 			{
-				//If this is an LCS member or corpse being hauled (marked as in the squad)
-				if (activesquad->squad[p]->prisoner->squadid != -1)
-				{
-					//Take them out of the squad
-					activesquad->squad[p]->prisoner->squadid = -1;
-					//Set base and current location to squad's safehouse
-					activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-					activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-				}
-				else //A kidnapped conservative
-				{
-					//Convert them into a prisoner
-					kidnaptransfer(*activesquad->squad[p]->prisoner);
-					delete activesquad->squad[p]->prisoner;
-				}
-				activesquad->squad[p]->discard_body();
+
+				activesquad->squad[p]->deal_with_prisoner();
 			}
 		}
 		//Clear all bleeding and prison escape flags
@@ -1930,21 +1898,7 @@ void bailUponDefeatCCS() {
 		if (activesquad->squad[p] == NULL)continue;
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid != -1)
-			{
-				//RESTORE POOL MEMBER
-				activesquad->squad[p]->prisoner->squadid = -1;
-				//MUST LOCATE THE MEMBER
-				activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-				activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-			}
-			else
-			{
-				//CONVERT KIDNAP VICTIM
-				kidnaptransfer(*activesquad->squad[p]->prisoner);
-				delete activesquad->squad[p]->prisoner;
-			}
-			activesquad->squad[p]->discard_body();
+			activesquad->squad[p]->deal_with_prisoner();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -2878,10 +2832,10 @@ void checkForHostageScream(char &hostcheck) {
 					!activesquad->squad[p]->get_weapon().get_specific_bool(BOOL_CAN_THREATEN_HOSTAGES_))
 				{
 					//And that someone is not an LCS member
-					if (activesquad->squad[p]->prisoner->squadid == -1)
+					if (activesquad->squad[p]->is_prisoner_non_LCS())
 					{
 						//They scream for help -- flag them kidnapped, cause alarm
-						activesquad->squad[p]->prisoner->flag |= CREATUREFLAG_KIDNAPPED;
+						activesquad->squad[p]->mark_prisoner_as_kidnapped();
 						if (activesquad->squad[p]->type == CREATURE_RADIOPERSONALITY)offended_amradio = 1;
 						if (activesquad->squad[p]->type == CREATURE_NEWSANCHOR)offended_cablenews = 1;
 						havehostage = 1;

@@ -2766,6 +2766,8 @@ map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
 	};
 	return true;
 }
+
+
 void processTheUnprocessed(vector<string> &unprocessed, map<short, vector<string> > &processed, map<string, short> string_to_short) {
 	int nextHelp = -2;
 	vector<string> nextHelpStrings;

@@ -226,8 +226,6 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 	extern short mode;
 	extern Deprecatedsquadst *activesquad;
 	extern long cursquadid;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
@@ -333,9 +331,9 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 		mvaddstrAlt(24, 40, CONST_reviewmode021);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
+		if (is_page_down(c) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -582,7 +580,7 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 			}
 			if (usepers)
 			{  // Let's add some color here...
-				set_activity_color(temppool[p]->activity.type);
+				set_activity_color(temppool[p]->activity_type());
 				addstrAlt(getactivity(temppool[p]->activity));
 			}
 			break;
@@ -685,8 +683,6 @@ void review_mode(const short mode)
 {
 	extern Log gamelog;
 	extern int stat_kills;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
@@ -714,9 +710,9 @@ void review_mode(const short mode)
 		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(temppool)) page++;
+		if (is_page_down(c) && (page + 1) * 19 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + (int)(c - 'a');
@@ -962,8 +958,6 @@ void review_mode(const short mode)
 void squadlessbaseassign()
 {
 	extern bool multipleCityMode;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern vector<DeprecatedCreature *> pool;
 	int page_lib = 0, page_loc = 0, selectedbase = 0;
@@ -1018,9 +1012,9 @@ void squadlessbaseassign()
 		mvaddstrAlt(23, 35, CONST_reviewmode109);
 		int c = getkeyAlt();
 		//PAGE UP (people)
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_lib > 0) page_lib--;
+		if (is_page_up(c) && page_lib > 0) page_lib--;
 		//PAGE DOWN (people)
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_lib + 1) * 19 < len(temppool)) page_lib++;
+		if (is_page_down(c) && (page_lib + 1) * 19 < len(temppool)) page_lib++;
 		//PAGE UP (locations)
 		if (c == ','&&page_loc > 0) page_loc--;
 		//PAGE DOWN (locations)
@@ -1081,8 +1075,6 @@ void sortbyhire(vector<DeprecatedCreature *> &temppool, vector<int> &level)
 /* base - review - promote liberals */
 void promoteliberals()
 {
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern vector<DeprecatedCreature *> pool;
 	vector<DeprecatedCreature *> temppool;
 	vector<int> level;
@@ -1149,9 +1141,9 @@ void promoteliberals()
 		}
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1)*PAGELENGTH < len(temppool)) page++;
+		if (is_page_down(c) && (page + 1)*PAGELENGTH < len(temppool)) page++;
 		if (c >= 'a'&&c <= 'a' + PAGELENGTH)
 		{
 			int p = page * PAGELENGTH + (int)(c - 'a');
@@ -1188,8 +1180,6 @@ bool iterateReview(int &page) {
 
 	extern MusicClass music;
 	extern Deprecatedsquadst *activesquad;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
 
@@ -1236,7 +1226,7 @@ bool iterateReview(int &page) {
 					{
 						if (squad[p]->squad[p2] == NULL) continue;
 						const std::string str2 = getactivity(squad[p]->squad[p2]->activity);
-						set_activity_color(squad[p]->squad[p2]->activity.type);
+						set_activity_color(squad[p]->squad[p2]->activity_type());
 						if (haveact&&str != str2) multipleact = true;
 						str = str2, haveact = true;
 					}
@@ -1307,8 +1297,8 @@ bool iterateReview(int &page) {
 	mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode133);
 	mvaddstrAlt(24, 0, CONST_reviewmode134);
 	int c = getkeyAlt();
-	if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
-	if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(squad) + REVIEWMODENUM) page++;
+	if (is_page_up(c) && page > 0) page--;
+	if (is_page_down(c) && (page + 1) * 19 < len(squad) + REVIEWMODENUM) page++;
 	if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return false;
 	if (c >= 'a'&&c <= 's')
 	{

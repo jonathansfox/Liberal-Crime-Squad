@@ -384,30 +384,34 @@ void creatureadvance()
 		advancecreature(*activesquad->squad[p]);
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			advancecreature(*activesquad->squad[p]->prisoner);
-			if (!activesquad->squad[p]->prisoner->getNameAndAlignment().alive)
+			activesquad->squad[p]->advance_prisoner();
+			if (!activesquad->squad[p]->is_prisoner_alive())
 			{
-				if (activesquad->squad[p]->prisoner->squadid == -1)
+				if (activesquad->squad[p]->is_prisoner_non_LCS())
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(drops, gamelog);
-					addstrAlt(activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+					addstrAlt(activesquad->squad[p]->get_prisoner_name(), gamelog);
 					addstrAlt(sBody, gamelog);
 					gamelog.newline();
-					makeloot(*activesquad->squad[p]->prisoner);
+					activesquad->squad[p]->make_prisoner_ground_loot();
 					pressAnyKey();
 					sitecrime += 10;
 					sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 					//criminalizeparty(LAWFLAG_MURDER);
 					//<-- might not die from squad's attacks
-					if (activesquad->squad[p]->prisoner->type == CREATURE_CORPORATE_CEO ||
-						activesquad->squad[p]->prisoner->type == CREATURE_RADIOPERSONALITY ||
-						activesquad->squad[p]->prisoner->type == CREATURE_NEWSANCHOR ||
-						activesquad->squad[p]->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
-						activesquad->squad[p]->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
-					delete_and_nullify(activesquad->squad[p]->prisoner);
+					if (activesquad->squad[p]->get_prisoner_type() == CREATURE_CORPORATE_CEO ||
+						activesquad->squad[p]->get_prisoner_type() == CREATURE_RADIOPERSONALITY ||
+						activesquad->squad[p]->get_prisoner_type() == CREATURE_NEWSANCHOR ||
+						activesquad->squad[p]->get_prisoner_type() == CREATURE_SCIENTIST_EMINENT ||
+						activesquad->squad[p]->get_prisoner_type() == CREATURE_JUDGE_CONSERVATIVE)
+					{
+						sitecrime += 30;
+					}
+
+					activesquad->squad[p]->delete_and_nullify_prisoner();
 				}
 			}
 		}

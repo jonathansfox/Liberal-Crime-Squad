@@ -631,11 +631,11 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 	if (cr->is_holding_body())
 	{
 		string prisoner_info = CONST_commondisplay047;
-		if (prisoner_description.count(cr->prisoner->type) >= 1) {
-			prisoner_info += prisoner_description[cr->prisoner->type];
+		if (prisoner_description.count(cr->get_prisoner_type()) >= 1) {
+			prisoner_info += prisoner_description[cr->get_prisoner_type()];
 		}
 		else {
-			prisoner_info += cr->prisoner->getNameAndAlignment().name;
+			prisoner_info += cr->get_prisoner_name();
 		}
 		addstrAlt(prisoner_info);
 	}
@@ -822,8 +822,8 @@ void printparty()
 					case 2:set_color_easy(RED_ON_BLACK_BRIGHT); break;
 					}
 				}
-				if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
-					addstrAlt(party[p]->extra_throwing_weapons[0]->get_shortname(0));
+				if (party[p]->has_thrown_weapon && party[p]->has_extra_throwing_weapons())
+					addstrAlt(party[p]->get_name_next_throwing_weapon());
 				else addstrAlt(party[p]->get_weapon().get_shortname(0));
 				//set_color_easy(WHITE_ON_BLACK);
 				if (party[p]->get_weapon().get_ammoamount() > 0)
@@ -836,7 +836,7 @@ void printparty()
 				else if (party[p]->get_weapon().uses_ammo())
 				{
 					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					if (len(party[p]->clips))
+					if (party[p]->has_clips())
 					{
 						addstrAlt(CONST_commondisplay202);
 						addstrAlt(party[p]->count_clips());
@@ -847,7 +847,7 @@ void printparty()
 				}
 				else if (party[p]->get_weapon().is_throwable() && !party[p]->has_thrown_weapon)
 					addstrAlt(CONST_commondisplay101);
-				else if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
+				else if (party[p]->has_thrown_weapon && party[p]->has_extra_throwing_weapons())
 				{
 					set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					addstrAlt(CONST_commondisplay202);

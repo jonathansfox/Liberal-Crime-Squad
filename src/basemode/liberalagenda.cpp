@@ -435,6 +435,7 @@ void printPage(const int page, const signed char won) {
 
 	}
 }
+
 /* base - liberal agenda */
 const string CONST_liberalagenda054 = "The country has been Stalinized.";
 const string CONST_liberalagenda053 = "The country has been Reaganified.";
@@ -447,8 +448,6 @@ const string CONST_liberalagenda015 = "The Triumph of the Liberal Agenda";
 bool liberalagenda(signed char won)
 {
 	extern MusicClass music;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern short wincondition;
 
 	int page = 0;
@@ -485,8 +484,8 @@ bool liberalagenda(signed char won)
 			else mvaddstrAlt(23, 0, CONST_liberalagenda052);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
-			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
-			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
+			if (is_page_down(c)) page++;
+			else if (is_page_up(c)) page--;
 			else if (c == 'l') break;
 		}
 		else if (won == -1)
@@ -495,8 +494,8 @@ bool liberalagenda(signed char won)
 			mvaddstrAlt(23, 0, CONST_liberalagenda053);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
-			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
-			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
+			if (is_page_down(c)) page++;
+			else if (is_page_up(c)) page--;
 			else if (c == 'l') break;
 		}
 		else if (won == -2)
@@ -505,16 +504,16 @@ bool liberalagenda(signed char won)
 			mvaddstrAlt(23, 0, CONST_liberalagenda054);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
-			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
-			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
+			if (is_page_down(c)) page++;
+			else if (is_page_up(c)) page--;
 			else if (c == 'l') break;
 		}
 		else
 		{
 			printDisbandOption();
 			int c = getkeyAlt();
-			if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) page++;
-			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) page--;
+			if (is_page_down(c)) page++;
+			else if (is_page_up(c)) page--;
 			else if (c == 'd') return confirmdisband();
 			else break;
 		}

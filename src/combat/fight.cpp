@@ -1050,7 +1050,7 @@ bool goodguyattack = false;
 	 extern Log gamelog;
 	 //RELOAD
 	 if ((a.will_reload(mode == GAMEMODE_CHASECAR, force_melee)
-		 || (a.has_thrown_weapon && len(a.extra_throwing_weapons)))
+		 || (a.has_thrown_weapon && a.has_extra_throwing_weapons()))
 		 && !force_melee)
 	 {
 		 char str[200];
@@ -1060,7 +1060,7 @@ bool goodguyattack = false;
 			 strcpy(str, a.getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight117.c_str());
 		 }
-		 else if (a.has_thrown_weapon && len(a.extra_throwing_weapons))
+		 else if (a.has_thrown_weapon && a.has_extra_throwing_weapons())
 		 {
 			 a.ready_another_throwing_weapon();
 			 strcpy(str, a.getNameAndAlignment().name.data());
@@ -2398,29 +2398,32 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 			if (activesquad->squad[target]->is_holding_body() && !LCSrandom(2))
 			{
 				// Mistaken attack
-				actual = attack(encounter[e], *activesquad->squad[target]->prisoner, 1);
-				if (!activesquad->squad[target]->prisoner->getCreatureHealth().alive)
+				actual = activesquad->squad[target]->human_shield_attacked(encounter[e]);
+				if (!activesquad->squad[target]->is_prisoner_alive())
 				{
-					if (activesquad->squad[target]->prisoner->squadid == -1)
+					if (activesquad->squad[target]->is_prisoner_non_LCS())
 					{
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16, 1, activesquad->squad[target]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_fight164, gamelog);
-						addstrAlt(activesquad->squad[target]->prisoner->getNameAndAlignment().name, gamelog);
+						addstrAlt(activesquad->squad[target]->get_prisoner_name(), gamelog);
 						addstrAlt(CONST_fight165, gamelog);
 						gamelog.newline();
-						const int prisonerType = activesquad->squad[target]->prisoner->type;
+						const int prisonerType = activesquad->squad[target]->get_prisoner_type();
 						if (prisonerType == CREATURE_CORPORATE_CEO ||
 							prisonerType == CREATURE_POLITICIAN ||
 							prisonerType == CREATURE_RADIOPERSONALITY ||
 							prisonerType == CREATURE_NEWSANCHOR ||
 							prisonerType == CREATURE_SCIENTIST_EMINENT ||
 							prisonerType == CREATURE_JUDGE_CONSERVATIVE ||
-							prisonerType == CREATURE_MILITARYOFFICER) sitecrime += 30;
-						makeloot(*activesquad->squad[target]->prisoner);
+							prisonerType == CREATURE_MILITARYOFFICER) 
+						{
+							sitecrime += 30;
+						}
+						activesquad->squad[target]->make_prisoner_ground_loot();
 						pressAnyKey();
-						delete_and_nullify(activesquad->squad[target]->prisoner);
+						activesquad->squad[target]->delete_and_nullify_prisoner();
 					}
 				}
 				return REPEAT;
@@ -2921,15 +2924,15 @@ string specialWoundPossibilityHead(
 void capturecreature(DeprecatedCreature &t)
 {
 	extern short sitetype;
-	t.activity.type = ACTIVITY_NONE;
+	t.set_activity(ACTIVITY_NONE);
 	t.drop_weapons_and_clips(NULL);
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
 	t.give_armor(clothes, NULL);
 	freehostage(t, 2); // situation 2 = no message; this may want to be changed to 0 or 1
 	if (t.is_holding_body())
 	{
-		if (t.prisoner->squadid == -1)
-			delete t.prisoner;
+		if (t.is_prisoner_non_LCS())
+			t.delete_prisoner();
 		t.discard_body(); // Stop hauling people
 	}
 	if (t.flag & CREATUREFLAG_JUSTESCAPED)

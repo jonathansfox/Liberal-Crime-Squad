@@ -1999,41 +1999,26 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-
+	const string CONST_news398 = "university";
+	const string CONST_news397 = "high school";
+	const string CONST_news396 = "middle school";
+	const string CONST_news395 = "elementary school";
+	const string CONST_news407 = "University";
+	const string CONST_news406 = "High School";
+	const string CONST_news405 = "Middle School";
+	const string CONST_news404 = "Elementary School";
+	const vector<string> elementary = { CONST_news395, CONST_news404 };
+	const vector<string> middle = { CONST_news396, CONST_news405 };
+	const vector<string> high = { CONST_news397, CONST_news406 };
+	const vector<string> university = { CONST_news398, CONST_news407 };
+	map<int, vector<string> > SchoolTypes = {
+		map<int, vector<string> >::value_type(0, elementary),
+		map<int,  vector<string> >::value_type(1, middle),
+		map<int,  vector<string> >::value_type(2, high),
+		map<int,  vector<string> >::value_type(3, university),
+	};
 	string getSchool(const int schtype, const bool capitalized) {
-
-		const string CONST_news398 = "university";
-		const string CONST_news397 = "high school";
-		const string CONST_news396 = "middle school";
-		const string CONST_news395 = "elementary school";
-		const string CONST_news407 = "University";
-		const string CONST_news406 = "High School";
-		const string CONST_news405 = "Middle School";
-		const string CONST_news404 = "Elementary School";
-
-		string story;
-		if (capitalized) {
-
-			switch (schtype)
-			{
-			case 0: story += CONST_news404; break;
-			case 1: story += CONST_news405; break;
-			case 2: story += CONST_news406; break;
-			case 3: story += CONST_news407; break;
-			}
-		}
-		else {
-
-			switch (schtype)
-			{
-			case 0: story += CONST_news395; break;
-			case 1: story += CONST_news396; break;
-			case 2: story += CONST_news397; break;
-			case 3: story += CONST_news398; break;
-			}
-
-		}
-		return story;
+		return SchoolTypes[schtype][capitalized];
 	}
 
 	string getAgeForSchoolStudent(const int schtype) {

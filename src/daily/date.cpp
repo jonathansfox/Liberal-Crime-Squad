@@ -380,7 +380,7 @@ extern string AND;
 				 pool[p]->carid = -1;
 				 pool[p]->location = ps;
 				 pool[p]->drop_weapons_and_clips(NULL);
-				 pool[p]->activity.type = ACTIVITY_NONE;
+				 pool[p]->set_activity(ACTIVITY_NONE);
 				 pressAnyKey();
 				 delete_and_remove(d.date, e);
 				 return DATERESULT_ARRESTED;
@@ -855,7 +855,7 @@ extern string AND;
 						 pool[p]->carid = -1;
 						 pool[p]->location = ps;
 						 pool[p]->drop_weapons_and_clips(NULL);
-						 pool[p]->activity.type = ACTIVITY_NONE;
+						 pool[p]->set_activity(ACTIVITY_NONE);
 						 // Charge with kidnapping
 						 criminalize(*pool[p], LAWFLAG_KIDNAPPING);
 						 pressAnyKey();

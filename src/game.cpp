@@ -499,6 +499,7 @@ bool initialize_txt() {
 			addstrAlt(CONST_game010);
 			pressAnyKey();
 		}
+		
 	}
 	return loaded;
 }

@@ -354,43 +354,24 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 	mvaddstrAlt(4, 6, newGameAdvanced);
 	set_color_easy(WHITE_ON_BLACK);
 	{
-		string isThisSelected;
-		if (classicmode)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(7, 0, isThisSelected);
+		mvaddstrAlt(7, 0, classicmode ? isSelected : unSelected);
 		addstrAlt(a_classicMode);
 		if (!classicmode)
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		if (strongccs)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(9, 0, isThisSelected);
+		mvaddstrAlt(9, 0, strongccs ? isSelected : unSelected);
 		addstrAlt(b_weDidntStartIt);
 		set_color_easy(WHITE_ON_BLACK);
-		if (nightmarelaws)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(11, 0, isThisSelected);
+		mvaddstrAlt(11, 0, nightmarelaws ? isSelected : unSelected);
 		addstrAlt(c_nightmareMode);
 		set_color_easy(WHITE_ON_BLACK);
-		if (multipleCityMode)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(13, 0, isThisSelected);
+		mvaddstrAlt(13, 0, multipleCityMode ? isSelected : unSelected);
 		addstrAlt(d_nationalLCS);
-		if (nocourtpurge)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(15, 0, isThisSelected);
+		mvaddstrAlt(15, 0, nocourtpurge ? isSelected : unSelected);
 		addstrAlt(e_marathonMode);
 		int bottomRow;
 		if (ALLOWSTALIN) {
-			if (stalinmode)
-				isThisSelected = (isSelected);
-			else isThisSelected = (unSelected);
-			mvaddstrAlt(17, 0, isThisSelected);
+			mvaddstrAlt(17, 0, stalinmode? isSelected : unSelected);
 			addstrAlt(f_stalinistMode);
 			bottomRow = 21;
 		}
@@ -399,41 +380,42 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 		}// ALLOWSTALIN
 		mvaddstrAlt(bottomRow, 4, pressAnyOtherKey);
 	}
-	const int c = getkeyAlt();
-	if (c == 'a')
-	{
+	switch (getkeyAlt()) {
+	case 'a':
+
 		classicmode = !classicmode;
-		return REPEAT;
-	}
-	if (c == 'b')
-	{
+		break;
+
+	case 'b':
 		strongccs = !strongccs;
-		return REPEAT;
-	}
-	if (c == 'c')
-	{
+
+		break;
+
+	case 'c':
 		nightmarelaws = !nightmarelaws;
-		return REPEAT;
-	}
-	if (c == 'd')
-	{
+
+		break;
+
+	case 'd':
 		multipleCityMode = !multipleCityMode;
-		return REPEAT;
-	}
-	if (c == 'e')
-	{
+
+		break;
+
+	case 'e':
+
 		nocourtpurge = !nocourtpurge;
 		notermlimit = !notermlimit;
-		return REPEAT;
+		break;
+
+	case 'f':
+		if (ALLOWSTALIN) {
+				stalinmode = !stalinmode;
+				return REPEAT;
+		} // else return RETURN_ZERO
+	default:
+		return RETURN_ZERO;
 	}
-	if (ALLOWSTALIN) {
-		if (c == 'f')
-		{
-			stalinmode = !stalinmode;
-			return REPEAT;
-		}
-	}
-	return RETURN_ZERO;
+	return REPEAT;
 }
 void implementNightmareLaws() {
 	extern short lawList[LAWNUM];

@@ -2,28 +2,28 @@
 #include "../includes.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+//
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+//
+Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+it under the terms of the GNU General Public License as published by            //
+the Free Software Foundation; either version 2 of the License, or               //
+(at your option) any later version.                                             //
+//
+Liberal Crime Squad is distributed in the hope that it will be useful,          //
+but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+GNU General Public License for more details.                                    //
+//
+You should have received a copy of the GNU General Public License               //
+along with Liberal Crime Squad; if not, write to the Free Software              //
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+This file was created by Chris Johnson (grundee@users.sourceforge.net)
+by copying code from game.cpp.
+To see descriptions of files and functions, see the list at
+the bottom of includes.h in the top src folder.
 */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -102,11 +102,11 @@ void mode_site(const short loc);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
- vector<string> words_meaning_news;
- vector<string> newspaper_first_name;
- vector<string> newspaper_last_name;
- vector<string> insult_for_liberal;
- vector<string> word_replacing_liberal;
+vector<string> words_meaning_news;
+vector<string> newspaper_first_name;
+vector<string> newspaper_last_name;
+vector<string> insult_for_liberal;
+vector<string> word_replacing_liberal;
 extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
 extern string singleDot;
@@ -354,8 +354,8 @@ void surrenderToAuthorities(const int loc) {
 		{
 			// Clear actions for anybody who was tending to this person
 			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
-				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity.type == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
-					pool[i]->activity.type = ACTIVITY_NONE;
+				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
+					pool[i]->set_activity(ACTIVITY_NONE);
 			removesquadinfo(*pool[p]);
 			delete_and_remove(pool, p);
 			continue;
@@ -371,7 +371,7 @@ void surrenderToAuthorities(const int loc) {
 		{
 			removesquadinfo(*pool[p]);
 			pool[p]->location = polsta;
-			pool[p]->activity.type = ACTIVITY_NONE;
+			pool[p]->set_activity(ACTIVITY_NONE);
 		}
 	}
 }
@@ -448,7 +448,7 @@ void resolvesafehouses()
 	extern int selectedsiege;
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,l) >= 0 && LocationsPool::getInstance().isThereASiegeHere(l))
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, l) >= 0 && LocationsPool::getInstance().isThereASiegeHere(l))
 		{
 			cleangonesquads();
 			selectedsiege = l; // hack for calling giveup()
@@ -865,7 +865,7 @@ void printMostSeriousCrime(const bool breakercount[LAWFLAGNUM]) {
 		}
 	}
 
-	if (breakercount[LAWFLAG_HIREILLEGAL]){
+	if (breakercount[LAWFLAG_HIREILLEGAL]) {
 		addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
 		return;
 	}
@@ -886,26 +886,26 @@ void statebrokenlaws(CreatureJustice cr, const int flag)
 	bool criminal = false;
 	bool breakercount[LAWFLAGNUM];
 	for (int i = 0; i < LAWFLAGNUM; i++) {
-		if (cr.crimes_suspected[i]) { 
+		if (cr.crimes_suspected[i]) {
 			breakercount[i] = true;
 			criminal = true;
 		}
-		else { 
+		else {
 			breakercount[i] = false;
 		}
 	}
-		if (!criminal && !kidnapped) return;
+	if (!criminal && !kidnapped) return;
 
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 
-		addstrAlt(CONST_siege076);
-		//KIDNAP VICTIM
-		if (kidnapped) {
-			addstrAlt(CONST_siege077);
-		}
-		else {
-			printMostSeriousCrime(breakercount);
-		}
+	addstrAlt(CONST_siege076);
+	//KIDNAP VICTIM
+	if (kidnapped) {
+		addstrAlt(CONST_siege077);
+	}
+	else {
+		printMostSeriousCrime(breakercount);
+	}
 }
 /* siege - updates upcoming sieges */
 void dropHeatByFivePercent(int l);
@@ -949,8 +949,8 @@ int allCreatureHeatGeneration(const int l, int& numpres) {
 		// Accumulate heat from liberals who have it, but let them bleed it off in the process
 		if (pool[p]->heat > 0)
 		{
-			crimes += pool[p]->heat / (pool[p]->activity.type == ACTIVITY_NONE ? 60 : 10) + 1;
-			pool[p]->heat -= min(pool[p]->activity.type == ACTIVITY_NONE ? pool[p]->heat / 10 : 5, pool[p]->heat);
+			crimes += pool[p]->heat / (pool[p]->activity_type() == ACTIVITY_NONE ? 60 : 10) + 1;
+			pool[p]->heat -= min(pool[p]->activity_type() == ACTIVITY_NONE ? pool[p]->heat / 10 : 5, pool[p]->heat);
 		}
 	}
 	return crimes;
@@ -973,7 +973,7 @@ void possibleWarningFromSleepers(const int l) {
 		if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 			pool[pl]->location != -1 &&
 			LocationsPool::getInstance().getLocationType(pool[pl]->location) == SITE_GOVERNMENT_POLICESTATION &&
-			LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[pl]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,l))
+			LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, pool[pl]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, l))
 		{
 			//if(pool[pl]->infiltration*100>LCSrandom(50))
 			{
@@ -1188,7 +1188,7 @@ void CCSSiegePrint(const int l, const int numpres) {
 	extern MusicClass music;
 
 
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,l) && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && !LCSrandom(60) && numpres > 0)
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT, l) && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && !LCSrandom(60) && numpres > 0)
 	{
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, LCSrandom(3) + 1);
 		// CCS sleepers may give a warning before raids
@@ -1215,8 +1215,8 @@ void CCSSiegePrint(const int l, const int numpres) {
 			pressAnyKey();
 		}
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) - 1); // CCS raid countdown!
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && numpres > 0)
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) - 1); // CCS raid countdown!
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && numpres > 0)
 	{
 		music.play(MUSIC_SIEGE);
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1);
@@ -1228,7 +1228,7 @@ void CCSSiegePrint(const int l, const int numpres) {
 		addstrAlt(CONST_siege188, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		if (!(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS,l)) &&
+		if (!(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l)) &&
 			!LCSrandom(5))
 		{
 			// CCS Carbombs safehouse!!
@@ -1299,7 +1299,7 @@ void CCSSiegePrint(const int l, const int numpres) {
 			CCSSiege(l);
 		}
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CCS, l) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1); // Silently call off foiled ccs raids
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1); // Silently call off foiled ccs raids
 }
 void printFiremenRaid(const string loc) {
 	extern Log gamelog;
@@ -1333,7 +1333,7 @@ void printFiremenRaid(const string loc) {
 }
 bool incomingRaidFiremen(const int l) {
 	extern short lawList[LAWNUM];
-	return lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_FIREMEN, l) == 0;
+	return lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0;
 }
 void theFiremenHaveRaidedEmptySafehouse(const int l) {
 	extern Log gamelog;
@@ -1493,7 +1493,7 @@ void possiblyWarnOfFiremenSiege(const int l) {
 	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		if (pool[pl]->flag & CREATUREFLAG_SLEEPER &&
 			pool[pl]->type == CREATURE_FIREFIGHTER &&
-			LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,pool[pl]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,l))
+			LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, pool[pl]->location) == LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, l))
 			firemensleepercount++;
 	if (LCSrandom(firemensleepercount + 1) > 0 || !LCSrandom(10))
 	{
@@ -1554,18 +1554,18 @@ void huntingSiegePrint(const int l, int& numpres) {
 	}
 	//OTHER OFFENDABLE ENTITIES
 	//CORPS
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,l) && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CORPORATE, l) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_corps && !LCSrandom(600) && numpres > 0)
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT, l) && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_corps && !LCSrandom(600) && numpres > 0)
 	{
 		possiblyWarnOfCorpSiege(l);
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CORPORATE, l) > 0) {
-		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CORPORATE, l) - 1); // Corp raid countdown!
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) > 0) {
+		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) - 1); // Corp raid countdown!
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CORPORATE, l) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_corps&&numpres > 0)
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_corps&&numpres > 0)
 	{
 		corporateSiegePrint(l);
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CORPORATE, l) == 0) {
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0) {
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1); // Silently call off foiled corp raids
 	}
 	//CONSERVATIVE CRIME SQUAD
@@ -1576,14 +1576,14 @@ void huntingSiegePrint(const int l, int& numpres) {
 		CCSSiegePrint(l, numpres);
 	}
 	//CIA
-	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,l) && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CIA, l) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_cia && !LCSrandom(300) && numpres > 0)
+	if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT, l) && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_cia && !LCSrandom(300) && numpres > 0)
 	{
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, LCSrandom(3) + 1);
 		// *JDS* agent sleepers may give a warning before cia raids
 		possiblyWarnOfCIARaid(l);
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CIA, l) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CIA, l) - 1); // CIA raid countdown!
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CIA, l) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_cia&&numpres > 0)
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) > 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) - 1); // CIA raid countdown!
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_cia&&numpres > 0)
 	{
 		music.play(MUSIC_SIEGE);
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, -1);
@@ -1591,7 +1591,7 @@ void huntingSiegePrint(const int l, int& numpres) {
 		printCIASiege(l);
 		CIASiege(l);
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_CIA, l) == 0) {
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == 0) {
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, -1); // Silently call off foiled cia raids
 	}
 	//HICKS
@@ -1610,14 +1610,14 @@ void huntingSiegePrint(const int l, int& numpres) {
 		offended_cablenews = 0;
 	}
 	//Firemen
-	if (lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_FIREMEN, l) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) &&
+	if (lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == -1 && !LocationsPool::getInstance().isThereASiegeHere(l) &&
 		offended_firemen && numpres > 0 && hasPrintingPress(l) && !LCSrandom(90))
 	{
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, LCSrandom(3) + 1);
 		// Sleeper Firemen can warn you of an impending raid
 		possiblyWarnOfFiremenSiege(l);
 	}
-	else if (LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_FIREMEN, l) > 0) LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_FIREMEN, l) - 1);
+	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) > 0) LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) - 1);
 	else if (incomingRaidFiremen(l) && !LocationsPool::getInstance().isThereASiegeHere(l) && numpres > 0)
 	{
 		music.play(MUSIC_SIEGE);
@@ -1631,7 +1631,7 @@ void huntingSiegePrint(const int l, int& numpres) {
 	{
 		theFiremenHaveRaidedEmptySafehouse(l);
 	}
-	else if (lawList[LAW_FREESPEECH] <= -1 && LocationsPool::getInstance().get_specific_integer(INT_GETTIMEUNTILSIEGE_FIREMEN, l) == 0) {
+	else if (lawList[LAW_FREESPEECH] <= -1 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0) {
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
 		offended_firemen = 0;
 	}
@@ -1660,12 +1660,12 @@ void siegecheck(char canseethings)
 	int numpres;
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISSITECLOSED,find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, l)))
+		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISSITECLOSED, find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, l)))
 		{
 			dropHeatByFivePercent(l);
 		}
 		if (LocationsPool::getInstance().isThereASiegeHere(l))continue;
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,l) == RENTING_NOCONTROL)continue;
+		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, l) == RENTING_NOCONTROL)continue;
 		numpres = 0;
 		if (getTimeUntilSiege(l) == -2)
 		{
@@ -2042,7 +2042,7 @@ int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
 		//AIR STRIKE!
 		airStrike(clearformess, l, num_liberals);
 	}
-	if ((LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS,l)) &&
+	if ((LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l)) &&
 		LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(15))
 	{
 		no_bad = 0;
@@ -2118,7 +2118,7 @@ void siegeturn(char clearformess)
 				//EAT
 				bool starving = false;
 				int eaters = numbereating(l);
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT,l) == 0 && eaters > 0)
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0)
 				{
 					starving = true;
 					if (clearformess) eraseAlt();
@@ -2128,7 +2128,7 @@ void siegeturn(char clearformess)
 					gamelog.newline();
 					pressAnyKey();
 				}
-				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT,l) >= eaters) reduceCompoundStores(l, eaters);
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) >= eaters) reduceCompoundStores(l, eaters);
 				else emptyCompoundStores(l);
 				//ATTACK!
 				char attack = 0;
@@ -2174,7 +2174,7 @@ int fooddaysleft(int loc)
 {
 	int eaters = numbereating(loc);
 	if (eaters == 0) return -1;
-	return LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT,loc) / eaters + ((LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT,loc) % eaters) > eaters / 2);
+	return LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, loc) / eaters + ((LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, loc) % eaters) > eaters / 2);
 }
 void baseEveryoneLeftAtHomelessShelter(const int homes);
 void escalateSite(int l);
@@ -2328,7 +2328,7 @@ char sally_forth_aux(int loc)
 		else if (siege.escalationstate >= 1)
 			fillEncounter(CREATURE_SOLDIER, ENCMAX - 9);
 		// M1 Tank
-		if (siege.escalationstate >= 2 && !(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS,loc)))
+		if (siege.escalationstate >= 2 && !(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, loc)))
 			addTank();
 		break;
 	}

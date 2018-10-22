@@ -167,7 +167,7 @@ bool crackhouseNeedsUpdate(short *law, short *oldlaw) {
 void reinitializeSite(const int sitetype) {
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 		if (LocationsPool::getInstance().getLocationType(l) == sitetype)
-			LocationsPool::getInstance().initSite(l);
+			LocationsPool::getInstance().initLocation(l);
 }
 // #include "../common/musicClass.h"
 /* rename various buildings according to the new laws */

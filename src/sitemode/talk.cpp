@@ -1325,8 +1325,8 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	{
 		if (activesquad->squad[i] &&
 			activesquad->squad[i]->is_holding_body() &&
-			activesquad->squad[i]->prisoner->getNameAndAlignment().alive &&
-			activesquad->squad[i]->prisoner->enemy())
+			activesquad->squad[i]->is_prisoner_alive() &&
+			activesquad->squad[i]->is_prisoner_enemy())
 		{
 			executer = activesquad->squad[i];
 			break;
@@ -1352,21 +1352,21 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(17, 1, executer->getNameAndAlignment().name, gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
-	addstrAlt(executer->prisoner->getNameAndAlignment().name, gamelog);
+	addstrAlt(executer->get_prisoner_name(), gamelog);
 	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
 	gamelog.newline();
 	addjuice(*executer, -5, -50); // DE-juice for this shit
 	sitecrime += 10;
 	sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 	criminalize(*executer, LAWFLAG_MURDER);
-	if (executer->prisoner->type == CREATURE_CORPORATE_CEO ||
-		executer->prisoner->type == CREATURE_RADIOPERSONALITY ||
-		executer->prisoner->type == CREATURE_NEWSANCHOR ||
-		executer->prisoner->type == CREATURE_SCIENTIST_EMINENT ||
-		executer->prisoner->type == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
-	makeloot(*executer->prisoner);
+	if (executer->get_prisoner_type() == CREATURE_CORPORATE_CEO ||
+		executer->get_prisoner_type() == CREATURE_RADIOPERSONALITY ||
+		executer->get_prisoner_type() == CREATURE_NEWSANCHOR ||
+		executer->get_prisoner_type() == CREATURE_SCIENTIST_EMINENT ||
+		executer->get_prisoner_type() == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
+	executer->make_prisoner_ground_loot();
 	pressAnyKey();
-	delete_and_nullify(executer->prisoner);
+	executer->delete_and_nullify_prisoner();
 	if (hostages > 1 && LCSrandom(2))
 	{
 		clearmessagearea();
@@ -1448,9 +1448,9 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		{
 			if (activesquad->squad[i] &&
 				activesquad->squad[i]->is_holding_body() &&
-				activesquad->squad[i]->prisoner->enemy())
+				activesquad->squad[i]->is_prisoner_enemy())
 			{
-				delete_and_nullify(activesquad->squad[i]->prisoner);
+				activesquad->squad[i]->delete_and_nullify_prisoner();
 			}
 		}
 		pressAnyKey();
@@ -1824,8 +1824,8 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	{
 		if (activesquad->squad[i] &&
 			activesquad->squad[i]->is_holding_body() &&
-			activesquad->squad[i]->prisoner->getNameAndAlignment().alive&&
-			activesquad->squad[i]->prisoner->enemy())
+			activesquad->squad[i]->is_prisoner_alive() &&
+			activesquad->squad[i]->is_prisoner_enemy())
 		{
 			hostages++;
 			if (activesquad->squad[i]->get_weapon().get_specific_bool(BOOL_CAN_THREATEN_HOSTAGES_))

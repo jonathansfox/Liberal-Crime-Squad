@@ -249,8 +249,6 @@ extern string undefined;
  }
  void Shop::browse_fullscreen(Deprecatedsquadst& customers, int& buyer) const
  {
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
 	 int page = 0;
 	 std::vector<ShopOption*> available_options = options_;
 	 available_options.erase(remove_if(available_options.begin(),
@@ -282,9 +280,9 @@ extern string undefined;
 		 mvaddstrAlt(24, 0, CONST_shop061 + std::string(customers.squad[buyer]->getNameAndAlignment().name) + singleSpace + exit_);
 		 int c = getkeyAlt();
 		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(available_options)) page++;
+		 if (is_page_down(c) && (page + 1) * 19 < len(available_options)) page++;
 		 if (c >= 'a'&&c <= 's')
 		 {
 			 int p = page * 19 + c - 'a';
@@ -305,8 +303,6 @@ extern string undefined;
 #include "locations/locationsPool.h"
  int fenceselect(Deprecatedsquadst& customers)
  {
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
 	 int ret = 0, page = 0;
 	 consolidateLoot(customers.squad[0]->base);
 
@@ -389,10 +385,10 @@ extern string undefined;
 		 }
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)
+		 if (is_page_up(c) && page > 0)
 			 page--;
 		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) &&
+		 if (is_page_down(c) &&
 			 (page + 1) * 18 < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
 			 page++;
 	 }
@@ -533,8 +529,6 @@ extern string undefined;
  // Removing the subsequent references to location will be difficult.
  void maskselect(DeprecatedCreature &buyer)
  {
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
 	 extern class Ledger ledger;
 	 extern vector<ArmorType *> armortype;
 	 short maskindex = -1;
@@ -572,9 +566,9 @@ extern string undefined;
 		 addstrAlt(CONST_shop055);
 		 int c = getkeyAlt();
 		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(masktype)) page++;
+		 if (is_page_down(c) && (page + 1) * 19 < len(masktype)) page++;
 		 if (c >= 'a'&&c <= 's')
 		 {
 			 int p = page * 19 + c - 'a';

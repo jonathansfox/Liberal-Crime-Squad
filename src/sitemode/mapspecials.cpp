@@ -505,8 +505,8 @@ void special_lab_cosmetics_cagedanimals()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_CAGE, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_CAGE);
+			if (actualy == UNLOCKED)
 			{
 				int time = 20 + LCSrandom(10);
 				if (time < 1)time = 1;
@@ -516,7 +516,7 @@ void special_lab_cosmetics_cagedanimals()
 				addCrimeToSiteStory(CRIME_FREE_RABBITS);
 				criminalizeparty(LAWFLAG_VANDALISM);
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				alienationcheck(0);
 				noticecheck(-1);
@@ -688,8 +688,8 @@ void special_lab_genetic_cagedanimals()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_CAGE_HARD, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_CAGE_HARD);
+			if (actualy == UNLOCKED)
 			{
 				int time = 20 + LCSrandom(10);
 				if (time < 1)time = 1;
@@ -718,11 +718,11 @@ void special_lab_genetic_cagedanimals()
 					alienationcheck(0);
 				}
 			}
-			else if (actual)
+			else if (actualy == LOUD_FAILURE)
 			{
 				noticecheck(-1);
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
@@ -749,8 +749,8 @@ void special_policestation_lockup()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_CELL, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_CELL);
+			if (actualy == UNLOCKED)
 			{
 				int numleft = LCSrandom(8) + 2;
 				fillEncounter(CREATURE_PRISONER, numleft);
@@ -765,7 +765,7 @@ void special_policestation_lockup()
 				refreshAlt();
 				partyrescue(SPECIAL_POLICESTATION_LOCKUP);
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				alienationcheck(1);
 				noticecheck(-1, DIFFICULTY_HARD);
@@ -779,53 +779,68 @@ void special_policestation_lockup()
 		else if (c == 'n')return;
 	}
 }
-void special_courthouse_lockup()
-{
+
+
+void courtLockupPressY() {
+
 	extern short mode;
 	extern int sitecrime;
 	extern short sitealarmtimer;
-	extern Log gamelog;
 	extern coordinatest loc_coord;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	while (true)
+
+	UnlockAttempt actualy = unlock(UNLOCK_CELL);
+	if (actualy == UNLOCKED)
+	{
+		int numleft = LCSrandom(8) + 2;
+		fillEncounter(CREATURE_PRISONER, numleft);
+		juiceparty(50, 1000);
+		sitecrime += 20;
+		int time = 20 + LCSrandom(10);
+		if (time < 1) { time = 1; }
+		if (sitealarmtimer > time || sitealarmtimer == -1) { sitealarmtimer = time; }
+		if (mode == GAMEMODE_CHASECAR ||
+			mode == GAMEMODE_CHASEFOOT)
+		{
+			printchaseencounter();
+		}
+		else { 
+			printencounter(); 
+		}
+		refreshAlt();
+		partyrescue(SPECIAL_COURTHOUSE_LOCKUP);
+	}
+	if (actualy != NEVERMIND)
+	{
+		alienationcheck(1);
+		noticecheck(-1, DIFFICULTY_HARD);
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		sitecrime += 3;
+		addCrimeToSiteStory(CRIME_COURTHOUSE_LOCKUP);
+		criminalizeparty(LAWFLAG_HELPESCAPE);
+	}
+}
+void special_courthouse_lockup()
+{
+	extern Log gamelog;
+	int c;
+	do
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials061, gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17, 1, CONST_mapspecials062);
-		int c = getkeyAlt();
+
+		c = getkeyAlt();
+
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_CELL, actual))
-			{
-				int numleft = LCSrandom(8) + 2;
-				fillEncounter(CREATURE_PRISONER, numleft);
-				juiceparty(50, 1000);
-				sitecrime += 20;
-				int time = 20 + LCSrandom(10);
-				if (time < 1)time = 1;
-				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-				if (mode == GAMEMODE_CHASECAR ||
-					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
-				else printencounter();
-				refreshAlt();
-				partyrescue(SPECIAL_COURTHOUSE_LOCKUP);
-			}
-			if (actual)
-			{
-				alienationcheck(1);
-				noticecheck(-1, DIFFICULTY_HARD);
-				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
-				sitecrime += 3;
-				addCrimeToSiteStory(CRIME_COURTHOUSE_LOCKUP);
-				criminalizeparty(LAWFLAG_HELPESCAPE);
-			}
-			return;
+			courtLockupPressY();
 		}
-		else if (c == 'n')return;
-	}
+
+	}while (c != 'y' && c != 'n');
+	return;
 }
 void special_courthouse_jury()
 {
@@ -1032,8 +1047,8 @@ void special_intel_supercomputer()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (hack(HACK_SUPERCOMPUTER, actual))
+			UnlockAttempt actualy = hack(HACK_SUPERCOMPUTER);
+			if (actualy == UNLOCKED)
 			{
 				clearmessagearea();
 				//char *loot;
@@ -1055,7 +1070,7 @@ void special_intel_supercomputer()
 				giveActiveSquadLoot(tag_LOOT_INTHQDISK);
 				pressAnyKey();
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				int time = 20 + LCSrandom(10);
 				if (time < 1)time = 1;
@@ -1189,8 +1204,8 @@ void special_house_photos()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_SAFE, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_SAFE);
+			if (actualy == UNLOCKED)
 			{
 				bool empty = true;
 				if (deagle == false)
@@ -1289,7 +1304,7 @@ void special_house_photos()
 					if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 				}
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				alienationcheck(0);
 				noticecheck(-1);
@@ -1468,8 +1483,8 @@ void special_corporate_files()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
-			if (unlock(UNLOCK_SAFE, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_SAFE);
+			if (actualy == UNLOCKED)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1484,7 +1499,7 @@ void special_corporate_files()
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 				pressAnyKey();
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				alienationcheck(0);
 				noticecheck(-1);
@@ -1808,14 +1823,14 @@ void special_bank_vault()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			char actual;
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, CONST_mapspecials137, gamelog);
 			mvaddstrAlt(17, 1, CONST_mapspecials138, gamelog);
 			gamelog.newline();
 			pressAnyKey();
-			if (!unlock(UNLOCK_VAULT, actual))
+			UnlockAttempt actualy = unlock(UNLOCK_VAULT);
+			if (actualy != UNLOCKED)
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1833,7 +1848,8 @@ void special_bank_vault()
 				mvaddstrAlt(17, 1, CONST_mapspecials142, gamelog);
 				gamelog.newline();
 				pressAnyKey();
-				if (!hack(HACK_VAULT, actual))
+				actualy = hack(HACK_VAULT);
+				if (actualy != UNLOCKED)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1872,7 +1888,7 @@ void special_bank_vault()
 									break;
 								}
 							}
-							if (c->is_holding_body() && c->prisoner->type == CREATURE_BANK_MANAGER)
+							if (c->is_holding_body() && c->get_prisoner_type() == CREATURE_BANK_MANAGER)
 							{
 								clearmessagearea();
 								set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1932,7 +1948,7 @@ void special_bank_vault()
 					}
 				}
 			}
-			if (actual)
+			if (actualy != NEVERMIND)
 			{
 				alienationcheck(0);
 				noticecheck(-1);

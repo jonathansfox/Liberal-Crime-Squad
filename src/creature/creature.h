@@ -212,6 +212,13 @@ public:
 		}
 	}
 
+	Clip* take_one_clip() {
+
+		Clip* new_clip = clips.back()->split(1);
+		if (clips.back()->empty())
+			clips.pop_back();
+		return new_clip;
+	}
 	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
 	Weapon& get_weapon() const { return is_armed() ? *weapon : weapon_none(); }
 	Armor& get_armor() const { return is_naked() ? armor_none() : *armor; }
@@ -278,13 +285,130 @@ public:
 	void make_existing() {
 		exists = true;
 	}
+
 	// public
-	deque<Weapon*> extra_throwing_weapons;
-	deque<Clip*> clips;
+	string get_name_next_throwing_weapon() const {
+		return extra_throwing_weapons[0]->get_shortname(0);
+	}
+	bool has_extra_throwing_weapons() const {
+		return len(extra_throwing_weapons) > 0;
+	}
+	bool has_clips() const {
+		return len(clips) > 0;
+	}
+	int activity_type() const {
+		return activity.type;
+	}
+	void set_activity(const int c) {
+		activity.type = c;
+	}
+	int activity_arg() const {
+		return activity.arg;
+	}
+	int get_prisoner_type()const {
+		if (prisoner)
+			return prisoner->type;
+		else
+			return -1;
+	}
+	string get_prisoner_name()const {
+		if (prisoner)
+			return prisoner->name;
+		else
+			return "";
+	}
+	int get_prisoner_align() const {
+		//if (prisoner)
+			return prisoner->align;
+		//else
+		//	return -3;
+	}
+	bool is_prisoner_alive() const {
+		return prisoner->alive;
+	}
+	bool is_prisoner_enemy()const {
+		return prisoner->enemy();
+	}
+	void delete_and_nullify_prisoner() {
 
-	ActivityST activity;
+		delete_and_nullify(prisoner);
+	}
+	void make_prisoner_ground_loot() {
+		void makeloot(DeprecatedCreature &cr);
+		makeloot(*prisoner);
+	}
+	void advance_prisoner() {
+		void advancecreature(DeprecatedCreature &cr);
+		advancecreature(*prisoner);
+	}
+	void mark_prisoner_as_kidnapped() {
+		prisoner->flag |= CREATUREFLAG_KIDNAPPED;
+	}
+	bool is_prisoner_non_LCS() const {
+		return prisoner->squadid == -1;
+	}
+	void deal_with_prisoner() {
+		void removesquadinfo(DeprecatedCreature &cr);
+		void kidnaptransfer(DeprecatedCreature &cr);
+		//If this is an LCS member or corpse being hauled (marked as in the squad)
+		if (prisoner->squadid != -1)
+		{
+			//Take them out of the squad  TODO: These two lines appear to be interchangeable, but it is unclear if they are
+			removesquadinfo(*prisoner);
+			//RESTORE POOL MEMBER
+			//prisoner->squadid = -1;
+			//Set base and current location to squad's safehouse
+			//MUST LOCATE THE MEMBER
+			prisoner->location = base;
+			prisoner->base = base;
+		}
+		else //A kidnapped conservative
+		{
+			//Convert them into a prisoner
+			//CONVERT KIDNAP VICTIM
+			kidnaptransfer(*prisoner);
+			delete prisoner;
+		}
+		discard_body();
 
+	}
+	void drop_prisoner() {
+		void freehostage(DeprecatedCreature &cr, char situation);
+		freehostage(*prisoner, 1);
+	}
+	void prisoner_dies() {
 
+		void removesquadinfo(DeprecatedCreature &cr);
+		removesquadinfo(*prisoner);
+		prisoner->die();
+		prisoner->location = -1;
+	}
+	int prisoner_usegment_power() const {
+		int usegmentpower = 0;
+		usegmentpower += prisoner->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
+		usegmentpower += prisoner->get_attribute(ATTRIBUTE_HEART, true);
+		usegmentpower += prisoner->get_attribute(ATTRIBUTE_CHARISMA, true);
+		usegmentpower += prisoner->get_skill(SKILL_PERSUASION);
+		return usegmentpower;
+	}
+	void make_prisoner_cantbluff_two() {
+		prisoner->make_cantbluff_two();
+	}
+	void make_prisoner(DeprecatedCreature *cr) {
+		prisoner = cr;
+	}
+	void make_new_prisoner(DeprecatedCreature &cr) {
+
+		prisoner = new DeprecatedCreature;
+		*prisoner = cr;
+	}
+	void delete_prisoner() {
+		delete prisoner;
+	}
+	char human_shield_attacked(DeprecatedCreature &cr) {
+		bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
+		return attack(cr, *prisoner, 1);
+	}
 	int type;
 
 	bool dontname;
@@ -326,7 +450,7 @@ public:
 	char pref_is_driver;
 
 	// private, [in progress]
-	DeprecatedCreature * prisoner;
+	ActivityST activity;
 
 
 	int align;
@@ -335,7 +459,9 @@ public:
 
 	unsigned char wound[BODYPARTNUM];
 	char special[SPECIALWOUNDNUM];
-	
+	// private, except in haulkidnap.cpp
+	DeprecatedCreature * prisoner;
+
 	// private, except in justice.cpp
 	int sentence;
 	char confessions;
@@ -349,6 +475,10 @@ public:
 	int birthday_month;
 	int birthday_day;
 private:
+
+	deque<Clip*> clips;
+	deque<Weapon*> extra_throwing_weapons;
+
 	bool alive;
 
 	bool exists;

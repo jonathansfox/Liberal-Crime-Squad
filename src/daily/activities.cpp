@@ -389,7 +389,7 @@ void makearmor(DeprecatedCreature &cr, char &clearformess)
 	extern class Ledger ledger;
 	extern vector<Deprecatedsquadst *> squad;
 	extern vector<ArmorType *> armortype;
-	int at = cr.activity.arg;
+	int at = cr.activity_arg();
 	int cost = armortype[at]->get_make_price();
 	int hcost = (cost >> 1) + 1;
 	int dif = armor_makedifficulty(*armortype[at], &cr);
@@ -731,8 +731,8 @@ void survey(DeprecatedCreature *cr)
 		do {
 			c = getkeyAlt();
 			if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) {}
-			else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) { page--; }
-			else if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) { page++; }
+			else if (is_page_up(c)) { page--; }
+			else if (is_page_down(c)) { page++; }
 		} while (c != 'x' && c != ENTER && c != ESC && c != SPACEBAR && c != interface_pgup && c != KEY_UP && c != KEY_LEFT && c != interface_pgdn && c != KEY_DOWN && c != KEY_RIGHT);
 
 	}
@@ -818,10 +818,10 @@ void funds_and_trouble(char &clearformess)
 		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->location == -1)
 		{
-			pool[p]->activity.type = ACTIVITY_NONE;
+			pool[p]->set_activity(ACTIVITY_NONE);
 			continue;
 		}
-		switch (pool[p]->activity.type)
+		switch (pool[p]->activity_type())
 		{
 		case ACTIVITY_TEACH_FIGHTING:
 		case ACTIVITY_TEACH_POLITICS:
@@ -864,11 +864,11 @@ void funds_and_trouble(char &clearformess)
 			break;
 		case ACTIVITY_BURY:
 			bury.push_back(pool[p]);
-			pool[p]->activity.type = ACTIVITY_NONE;
+			pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_CLINIC:
 			hospitalize(find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, pool[p]->location), *pool[p]);
-			pool[p]->activity.type = ACTIVITY_NONE;
+			pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_STUDY_DEBATING:
 		case ACTIVITY_STUDY_MARTIAL_ARTS:
@@ -901,7 +901,7 @@ void funds_and_trouble(char &clearformess)
 		case ACTIVITY_SLEEPER_JOINLCS:
 			if (!LocationsPool::getInstance().isThereASiegeHere(find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location)))
 			{
-				pool[p]->activity.type = ACTIVITY_NONE;
+				pool[p]->set_activity(ACTIVITY_NONE);
 				pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 				pool[p]->location = pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 			}
@@ -1090,7 +1090,7 @@ void doActivityHacking(vector<DeprecatedCreature *> &hack, char &clearformess)
 		//First, do accounting to figure out who's doing what
 		for (int h = 0; h < len(hack); h++)
 		{
-			switch (hack[h]->activity.type)
+			switch (hack[h]->activity_type())
 			{
 			case ACTIVITY_CCFRAUD:
 				hack[h]->train(SKILL_COMPUTERS, 2);
@@ -1258,7 +1258,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				else if (!foundone)
 				{
 					addstrAlt(CONST_activities092, gamelog);
-					graffiti[s]->activity.type = ACTIVITY_NONE;
+					graffiti[s]->set_activity(ACTIVITY_NONE);
 					pressAnyKey();
 				}
 				gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
@@ -1276,7 +1276,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				addstrAlt(CONST_activities093, gamelog);
 				criminalize(*graffiti[s], LAWFLAG_VANDALISM);
 				graffiti[s]->train(SKILL_STREETSENSE, 20);
-				if (graffiti[s]->activity.arg != -1)
+				if (graffiti[s]->activity_arg() != -1)
 				{
 					addstrAlt(CONST_activities094, gamelog);
 					graffiti[s]->activity.arg = -1;
@@ -1292,12 +1292,12 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				pressAnyKey();
 				attemptarrest(*graffiti[s], NULL, clearformess);
 			}
-			else if (graffiti[s]->activity.arg != -1)
+			else if (graffiti[s]->activity_arg() != -1)
 			{
 				power = 0;
 				if (!LCSrandom(3))
 				{
-					issue = graffiti[s]->activity.arg;
+					issue = graffiti[s]->activity_arg();
 					power = graffiti[s]->skill_roll(SKILL_ART) / 3;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, graffiti[s]->getNameAndAlignment().name, gamelog);
@@ -1400,7 +1400,7 @@ void doActivityProstitution(vector<DeprecatedCreature *> &prostitutes, char &cle
 				prostitutes[p]->carid = -1;
 				prostitutes[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, prostitutes[p]->location);
 				prostitutes[p]->drop_weapons_and_clips(NULL);
-				prostitutes[p]->activity.type = ACTIVITY_NONE;
+				prostitutes[p]->set_activity(ACTIVITY_NONE);
 				criminalize(*prostitutes[p], LAWFLAG_PROSTITUTION);
 			}
 			else
@@ -1435,7 +1435,7 @@ void doActivityLearn(vector<DeprecatedCreature *> &students, char &clearformess)
 		ledger.subtract_funds(60, EXPENSE_TRAINING);
 		int skill[2] = { -1, -1 };
 		int effectiveness[2] = { 20, 20 };
-		skill[0] = trainingActivity[(Activity)(students[s]->activity.type)];
+		skill[0] = trainingActivity[(Activity)(students[s]->activity_type())];
 		bool worthcontinuing = false;
 		for (int i = 0; i < 2; i++)
 			if (skill[i] != -1)
@@ -1449,7 +1449,7 @@ void doActivityLearn(vector<DeprecatedCreature *> &students, char &clearformess)
 			}
 		if (!worthcontinuing)
 		{
-			students[s]->activity.type = ACTIVITY_NONE;
+			students[s]->set_activity(ACTIVITY_NONE);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 1, students[s]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_activities103, gamelog);
@@ -1779,7 +1779,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 							mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_activities127, gamelog);
 							gamelog.nextMessage();
-							trouble[t]->activity.type = ACTIVITY_CLINIC;
+							trouble[t]->set_activity(ACTIVITY_CLINIC);
 							pressAnyKey();
 							addjuice(*trouble[t], -10, -50);
 							if (trouble[t]->blood > 10)trouble[t]->blood = 10;
@@ -1885,7 +1885,7 @@ void doActivityTeach(vector<DeprecatedCreature *> &teachers, char &clearformess)
 		int cost = 0, students = 0;
 		//Build a list of skills to train and determine the cost for running
 		//a class depending on what the teacher is teaching
-		switch (teachers[t]->activity.type)
+		switch (teachers[t]->activity_type())
 		{
 		case ACTIVITY_TEACH_POLITICS:
 			cost = 2;
@@ -2062,8 +2062,6 @@ bool carselect(DeprecatedCreature &cr, short &cartype)
 	const string CONST_activities144 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴DIFFICULTY TO FIND UNATTENDED컴";
 	const string CONST_activities143 = " try to find and steal today?";
 	const string CONST_activities142 = "What type of car will ";
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	cartype = -1;
 	vector<int> cart;
 	for (int a = 0; a < lenVehicleType(); a++)
@@ -2093,9 +2091,9 @@ bool carselect(DeprecatedCreature &cr, short &cartype)
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(cart)) page++;
+		if (is_page_down(c) && (page + 1) * 19 < len(cart)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -2591,8 +2589,6 @@ bool stealcar(DeprecatedCreature &cr, char &clearformess)
 	extern Log gamelog;
 	extern MusicClass music;
 	extern short mode;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern Deprecatednewsstoryst *sitestory;
 	extern chaseseqst chaseseq;
 	extern short fieldskillrate;

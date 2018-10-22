@@ -89,13 +89,13 @@ void activate_sleeper(DeprecatedCreature *cr)
 		switch (state)
 		{
 		case 'a':
-			set_color_easy(cr->activity.type == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
-			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(11, 40, CONST_activate_sleepers011);
 			if (subordinatesleft(*cr))
 			{
-				set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+				set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				mvaddstrAlt(12, 40, CONST_activate_sleepers012);
 			}
 			else
@@ -107,16 +107,16 @@ void activate_sleeper(DeprecatedCreature *cr)
 			}
 			break;
 		case 'b':
-			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
-			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
-			set_color_easy(cr->activity.type == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(12, 40, CONST_activate_sleepers017);
 			break;
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		switch (cr->activity.type)
+		switch (cr->activity_type())
 		{
 		case ACTIVITY_NONE:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
@@ -157,20 +157,20 @@ void activate_sleeper(DeprecatedCreature *cr)
 				switch (choice)
 				{
 				default:
-				case '1':cr->activity.type = ACTIVITY_NONE; break;
-				case '2':cr->activity.type = ACTIVITY_SLEEPER_LIBERAL; break;
+				case '1':cr->set_activity(ACTIVITY_NONE); break;
+				case '2':cr->set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
 				case '3':
 					if (subordinatesleft(*cr))
-						cr->activity.type = ACTIVITY_SLEEPER_RECRUIT; break;
+						cr->set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
 				}
 				break;
 			case 'b':
 				switch (choice)
 				{
 				default:
-				case '1':cr->activity.type = ACTIVITY_SLEEPER_SPY; break;
-				case '2':cr->activity.type = ACTIVITY_SLEEPER_EMBEZZLE; break;
-				case '3':cr->activity.type = ACTIVITY_SLEEPER_STEAL; break;
+				case '1':cr->set_activity(ACTIVITY_SLEEPER_SPY); break;
+				case '2':cr->set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
+				case '3':cr->set_activity(ACTIVITY_SLEEPER_STEAL); break;
 				}
 				break;
 			}
@@ -178,11 +178,11 @@ void activate_sleeper(DeprecatedCreature *cr)
 		if (state == 'c')
 		{
 			//ActivityST oact=cr->activity;
-			cr->activity.type = ACTIVITY_SLEEPER_JOINLCS;
+			cr->set_activity(ACTIVITY_SLEEPER_JOINLCS);
 		}
 		if (c == 'x')
 		{
-			cr->activity.type = ACTIVITY_NONE;
+			cr->set_activity(ACTIVITY_NONE);
 			break;
 		}
 		else
@@ -202,8 +202,6 @@ void activate_sleepers()
 {
 	extern string percentSign;
 	extern MusicClass music;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	vector<DeprecatedCreature *> temppool = selectOnlySleepersThatCanWork();
 	if (!len(temppool)) return;
@@ -245,7 +243,7 @@ void activate_sleepers()
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->worklocation, true, true));
 			// Let's add some color here...
-			set_activity_color(temppool[p]->activity.type);
+			set_activity_color(temppool[p]->activity_type());
 			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
@@ -254,9 +252,9 @@ void activate_sleepers()
 		set_color_easy(WHITE_ON_BLACK);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 9 < len(temppool)) page++;
+		if (is_page_down(c) && (page + 1) * 9 < len(temppool)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 9 + (int)(c - 'a');

@@ -507,8 +507,6 @@ void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recrui
 	const string CONST_locationsPool038 = " best serve the Liberal cause?";
 	const string CONST_locationsPool037 = "In what capacity will ";
 
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	bool selection = false;
 	while (true)
 	{
@@ -552,8 +550,7 @@ void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recrui
 			liberalize(converted, false);
 			break;
 		}
-		else if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT ||
-			c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) selection = !selection;
+		else if (is_page_up(c) || is_page_down(c)) selection = !selection;
 	}
 }
 Location* find_site_in_city(const int site_type, const int city)
@@ -1328,7 +1325,7 @@ int makeChoice(const int increaseammo, const int decreaseammo) {
 // TODO Relocate these to a new file
 // to allow removal of creature.h
 const string NOT_ERROR_BUT_CONTINUE = "For simplicity this function returns an error message, prompting 'continue;', this is not an error, but it needs to use 'continue;' anyway";
-string chooseSquadmember(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
+string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
 	extern Deprecatedsquadst *activesquad;
 
 	const string CONST_locationsPool076 = "Can't carry any more ammo.";
@@ -1344,11 +1341,9 @@ string chooseSquadmember(const bool decreaseammo, const bool increaseammo, int& 
 	{
 		if (decreaseammo)
 		{
-			if (len(squaddie->clips))
+			if (squaddie->has_clips())
 			{
-				loot.push_back(squaddie->clips.back()->split(1));
-				if (squaddie->clips.back()->empty())
-					squaddie->clips.pop_back();
+				loot.push_back(squaddie->take_one_clip());
 				consolidateloot(loot);
 				return NOT_ERROR_BUT_CONTINUE;
 			}
@@ -1491,8 +1486,6 @@ void equip(vector<Item *> &loot, int loc)
 
 	const string CONST_locationsPool066 = "You can't equip that.";
 
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	if (isThereNoActivesquad()) return;
 	consolidateloot(loot);
 	if (loc != -1) consolidateloot(location[loc]->loot);
@@ -1504,7 +1497,8 @@ void equip(vector<Item *> &loot, int loc)
 		errmsg = blankString;
 
 		int c = getkeyAlt();
-		bool increaseammo = (c == KEY_UP), decreaseammo = (c == KEY_DOWN);
+		bool increaseammo = (c == KEY_UP);
+		bool decreaseammo = (c == KEY_DOWN);
 		if ((c >= 'a'&&c <= 'r') || increaseammo || decreaseammo)
 		{
 			int slot = c - 'a' + page * 18;
@@ -1528,7 +1522,7 @@ void equip(vector<Item *> &loot, int loc)
 			}
 			if (e >= '1'&&e <= '6')
 			{
-				errmsg = chooseSquadmember(decreaseammo, increaseammo, slot, page, e, loot);
+				errmsg = transferClipBaseSquad(decreaseammo, increaseammo, slot, page, e, loot);
 				if (!errmsg.empty()) {
 					if (errmsg == NOT_ERROR_BUT_CONTINUE) {
 						errmsg = blankString;
@@ -1568,9 +1562,9 @@ void equip(vector<Item *> &loot, int loc)
 			disarmSquadmember(loot, p);
 		}
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < len(loot)) page++;
+		if (is_page_down(c) && (page + 1) * 18 < len(loot)) page++;
 	}
 }
 /* lets you pick stuff to stash/retrieve from one location to another */
@@ -1580,8 +1574,6 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 	const string CONST_locationsPool080 = "x";
 	const string CONST_locationsPool079 = "/";
 	const string CONST_locationsPool078 = "Select Objects";
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	int page = 0;
 	vector<int> selected(len(source), 0);
 	while (true)
@@ -1640,9 +1632,9 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < len(source)) page++;
+		if (is_page_down(c) && (page + 1) * 18 < len(source)) page++;
 	}
 	for (int l = len(source) - 1; l >= 0; l--) if (selected[l] > 0)
 	{
@@ -1671,8 +1663,6 @@ void equipmentbaseassign()
 	const string CONST_locationsPool084 = "NEW LOCATION";
 	const string CONST_locationsPool083 = "----ITEM----------------CURRENT LOCATION---------------------------------------";
 	const string CONST_locationsPool082 = "Moving Equipment";
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	int page_loot = 0, page_loc = 0, selectedbase = 0;
 	bool sortbytype = false;
 	vector<Item *> temploot;
@@ -1728,9 +1718,9 @@ void equipmentbaseassign()
 			addstrAlt(addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP (items)
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page_loot > 0) page_loot--;
+		if (is_page_up(c) && page_loot > 0) page_loot--;
 		//PAGE DOWN (items)
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page_loot + 1) * 19 < len(temploot)) page_loot++;
+		if (is_page_down(c) && (page_loot + 1) * 19 < len(temploot)) page_loot++;
 		//PAGE UP (locations)
 		if (c == ','&&page_loc > 0) page_loc--;
 		//PAGE DOWN (locations)
@@ -2142,8 +2132,6 @@ void stopevil()
 {
 	extern class Ledger ledger;
 	extern Deprecatedsquadst *activesquad;
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern bool multipleCityMode;
 	extern MusicClass music;
 	//int l = 0, p = 0;
@@ -2272,9 +2260,9 @@ void stopevil()
 		else mvaddstrAlt(24, 1, CONST_locationsPool124);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 11 < len(temploc)) page++;
+		if (is_page_down(c) && (page + 1) * 11 < len(temploc)) page++;
 		if (c >= 'a'&&c <= 'k')
 		{
 			int sq = page * 11 + c - 'a';
@@ -3202,23 +3190,30 @@ void deleteGeneratorLightsOff(int l) {
 int LocationsPool::getTimeUntilSiege(int loc, int type)const {
 	switch (type) {
 	case SIEGE_POLICE:
+	//case INT_GETTIMEUNTILSIEGE_POLICE:
 		return location[loc]->siege.timeuntillocated;
 		break;
 	case SIEGE_CIA:
+	//case INT_GETTIMEUNTILSIEGE_CIA:
 		return location[loc]->siege.timeuntilcia;
 		break;
 	case SIEGE_CORPORATE:
+	//case INT_GETTIMEUNTILSIEGE_CORPORATE:
 		return location[loc]->siege.timeuntilcorps;
 		break;
 	case SIEGE_CCS:
+	//case INT_GETTIMEUNTILSIEGE_CCS:
 		return location[loc]->siege.timeuntilccs;
 		break;
 	case SIEGE_FIREMEN:
+	//case INT_GETTIMEUNTILSIEGE_FIREMEN:
 		return location[loc]->siege.timeuntilfiremen;
 		break;
 	default:
 	case SIEGE_ORG:
+	//case INT_GETTIMEUNTILSIEGE_ORG:
 	case SIEGE_HICKS:
+	//case INT_GETTIMEUNTILSIEGE_HICKS:
 	case SIEGENUM:
 		return 0;
 		break;
@@ -3297,13 +3292,14 @@ const int LocationsPool::get_specific_integer(const locationsPoolIntegers lPI, c
 	case INT_ISTHISPLACEHIGHSECURITY: return isThisPlaceHighSecurity(cursite); break;
 	case INT_GETLOCATIONCITY: return getLocationCity(cursite); break;
 
-	case INT_GETTIMEUNTILSIEGE_POLICE: return getTimeUntilSiege(cursite, SIEGE_POLICE); break;
-	case INT_GETTIMEUNTILSIEGE_CIA: return getTimeUntilSiege(cursite, SIEGE_CIA); break;
-	case INT_GETTIMEUNTILSIEGE_CORPORATE: return getTimeUntilSiege(cursite, SIEGE_CORPORATE); break;
-	case INT_GETTIMEUNTILSIEGE_CCS: return getTimeUntilSiege(cursite, SIEGE_CCS); break;
-	case INT_GETTIMEUNTILSIEGE_FIREMEN: return getTimeUntilSiege(cursite, SIEGE_FIREMEN); break;
-	case INT_GETTIMEUNTILSIEGE_ORG: return getTimeUntilSiege(cursite, SIEGE_ORG); break;
-	case INT_GETTIMEUNTILSIEGE_HICKS: return getTimeUntilSiege(cursite, SIEGE_HICKS); break;
+	//case INT_GETTIMEUNTILSIEGE_POLICE: 
+	//case INT_GETTIMEUNTILSIEGE_CIA: 
+	//case INT_GETTIMEUNTILSIEGE_CORPORATE: 
+	//case INT_GETTIMEUNTILSIEGE_CCS: 
+	//case INT_GETTIMEUNTILSIEGE_FIREMEN: 
+	//case INT_GETTIMEUNTILSIEGE_ORG: 
+	//case INT_GETTIMEUNTILSIEGE_HICKS: 
+	//	return getTimeUntilSiege(cursite, lPI); break;
 
 	case INT_GETCOMPOUNDWALLS: return getCompoundWalls(cursite); break;
 	case INT_ISTHISSITECLOSED: return isThisSiteClosed(cursite); break;

@@ -161,8 +161,6 @@ extern string spaceDashSpace;
  void setvehicles()
  {
 	 extern Deprecatedsquadst *activesquad;
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
 	 if (!activesquad) return;
 	 int page = 0;
 	 while (true)
@@ -276,9 +274,9 @@ extern string spaceDashSpace;
 		 }
 		 //SAV - End add
 		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < lenVehiclePool()) page++;
+		 if (is_page_down(c) && (page + 1) * 18 < lenVehiclePool()) page++;
 		 if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	 }
  }

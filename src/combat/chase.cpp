@@ -168,10 +168,10 @@ void chase_giveup()
 		activesquad->squad[p]->carid = -1;
 		activesquad->squad[p]->location = ps;
 		activesquad->squad[p]->drop_weapons_and_clips(NULL);
-		activesquad->squad[p]->activity.type = ACTIVITY_NONE;
+		activesquad->squad[p]->set_activity(ACTIVITY_NONE);
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid == -1) hostagefreed++;
+			if (activesquad->squad[p]->is_prisoner_non_LCS()) hostagefreed++;
 			freehostage(*activesquad->squad[p], 2);
 		}
 		activesquad->squad[p] = NULL;
@@ -409,23 +409,7 @@ void evasiverun()
 				//Unload hauled hostage or body when they get back to the safehouse
 				if (activesquad->squad[p]->is_holding_body())
 				{
-					//If this is an LCS member or corpse being hauled (marked as in the squad)
-					if (activesquad->squad[p]->prisoner->squadid != -1)
-					{
-						//Take them out of the squad
-						removesquadinfo(*activesquad->squad[p]->prisoner);
-						//Set base and current location to squad's safehouse
-						activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-						activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-					}
-					else //A kidnapped conservative
-					{
-						//Convert them into a prisoner
-						kidnaptransfer(*activesquad->squad[p]->prisoner);
-						delete activesquad->squad[p]->prisoner;
-					}
-
-					activesquad->squad[p]->discard_body();
+					activesquad->squad[p]->deal_with_prisoner();
 				}
 				removesquadinfo(*activesquad->squad[p]);
 				printparty();
@@ -893,29 +877,28 @@ void crashfriendlycar(int v)
 			if (activesquad->squad[p]->is_holding_body())
 			{
 				// Instant death
-				if (activesquad->squad[p]->prisoner->getCreatureHealth().alive)
+				if (activesquad->squad[p]->is_prisoner_alive())
 				{
 					clearmessagearea();
 					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->get_prisoner_name(), gamelog);
 					addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					gamelog.newline(); //New line.
 					printparty();
 					pressAnyKey();
 				}
-				activesquad->squad[p]->prisoner->die();
-				activesquad->squad[p]->prisoner->location = -1;
+				activesquad->squad[p]->prisoner_dies();
 				victimsum++;
 				// Record death if living Liberal is hauled
-				if (activesquad->squad[p]->prisoner->squadid != -1)
+				if (!activesquad->squad[p]->is_prisoner_non_LCS())
 				{
-					if (activesquad->squad[p]->prisoner->getCreatureHealth().alive&&
-						activesquad->squad[p]->prisoner->getCreatureHealth().align == 1)stat_dead++;
-					activesquad->squad[p]->prisoner->die();
-					activesquad->squad[p]->prisoner->location = -1;
+					if (activesquad->squad[p]->is_prisoner_alive()&&
+						activesquad->squad[p]->get_prisoner_align() == 1)stat_dead++;
+
+					activesquad->squad[p]->prisoner_dies();
 				}
 				// Otherwise just kill them off and be done with it
-				else delete activesquad->squad[p]->prisoner;
+				else activesquad->squad[p]->delete_prisoner();
 				activesquad->squad[p]->discard_body();
 			}
 			// Handle squad member death

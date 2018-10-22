@@ -433,8 +433,6 @@ int choiceprompt(const string &firstline, const string &secondline,
 	const vector<string> &option, const string &optiontypename,
 	bool allowexitwochoice, const string &exitstring)
 {
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	int page = 0;
 	while (true)
 	{
@@ -464,9 +462,9 @@ int choiceprompt(const string &firstline, const string &secondline,
 		if (allowexitwochoice) addstrAlt(enterDash + exitstring);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(option)) page++;
+		if (is_page_down(c) && (page + 1) * 19 < len(option)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';
@@ -483,8 +481,6 @@ int buyprompt(const string &firstline, const string &secondline,
 	const string &producttype, const string &exitstring)
 {
 	const string CONST_commonactions012 = "$";
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	extern class Ledger ledger;
 	int page = 0;
 	while (true)
@@ -518,9 +514,9 @@ int buyprompt(const string &firstline, const string &secondline,
 		mvaddstrAlt(24, 0, enterDash + exitstring);
 		int c = getkeyAlt();
 		//PAGE UP
-		if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
-		if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < len(nameprice)) page++;
+		if (is_page_down(c) && (page + 1) * 19 < len(nameprice)) page++;
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + c - 'a';

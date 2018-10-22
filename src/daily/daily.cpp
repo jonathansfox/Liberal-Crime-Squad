@@ -623,7 +623,7 @@ void activitiesForIndividuals(char &clearformess) {
 		//CLEAR ACTIONS FOR PEOPLE UNDER SIEGE
 		if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->location))
 		{
-			switch (pool[p]->activity.type)
+			switch (pool[p]->activity_type())
 			{
 			case ACTIVITY_HOSTAGETENDING:
 			case ACTIVITY_TEACH_POLITICS:
@@ -633,11 +633,11 @@ void activitiesForIndividuals(char &clearformess) {
 			case ACTIVITY_REPAIR_ARMOR:
 				break;
 			default:
-				pool[p]->activity.type = ACTIVITY_NONE;
+				pool[p]->set_activity(ACTIVITY_NONE);
 				break;
 			}
 		}
-		switch (pool[p]->activity.type)
+		switch (pool[p]->activity_type())
 		{
 		case ACTIVITY_REPAIR_ARMOR:
 			repairarmor(*pool[p], clearformess);
@@ -649,7 +649,7 @@ void activitiesForIndividuals(char &clearformess) {
 			break;
 		case ACTIVITY_WHEELCHAIR:
 			getwheelchair(*pool[p], clearformess);
-			if (pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->activity.type = ACTIVITY_NONE;
+			if (pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_RECRUITING:
 			clearformess = 1;
@@ -657,7 +657,7 @@ void activitiesForIndividuals(char &clearformess) {
 			break;
 		case ACTIVITY_STEALCARS:
 			if (stealcar(*pool[p], clearformess))
-				pool[p]->activity.type = ACTIVITY_NONE;
+				pool[p]->set_activity(ACTIVITY_NONE);
 			else if (pool[p]->location != -1 && LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
 				criminalize(*pool[p], LAWFLAG_CARTHEFT);
 			break;
@@ -675,7 +675,7 @@ void activitiesForIndividuals(char &clearformess) {
 			clearformess = 1;
 			break;
 		case ACTIVITY_VISIT:
-			pool[p]->activity.type = ACTIVITY_NONE;
+			pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_NONE:
 			if (pool[p]->align == 1 && !pool[p]->is_imprisoned() && (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
@@ -704,8 +704,8 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 	{
 		if (squad[sq]->squad[p])
 		{
-			if (squad[sq]->squad[p]->activity.type != ACTIVITY_NONE &&
-				squad[sq]->squad[p]->activity.type != ACTIVITY_VISIT)
+			if (squad[sq]->squad[p]->activity_type() != ACTIVITY_NONE &&
+				squad[sq]->squad[p]->activity_type() != ACTIVITY_VISIT)
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
@@ -719,7 +719,7 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 				gamelog.newline();
 				pressAnyKey();
 			}
-			squad[sq]->squad[p]->activity.type = ACTIVITY_VISIT;
+			squad[sq]->squad[p]->set_activity(ACTIVITY_VISIT);
 			squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
 		}
 	}

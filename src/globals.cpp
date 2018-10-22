@@ -179,8 +179,6 @@ int sitecrime;
 bool mapshowing = false;
 bool encounterwarnings = false;
 char foughtthisround = 0;
-short interface_pgup = '[';
-short interface_pgdn = ']';
 int day = 1;
 short party_status = -1;
 short wincondition = WINCONDITION_ELITE;
@@ -801,7 +799,7 @@ int countactivesquadhostages() {
 
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->get_prisoner_align() != ALIGN_LIBERAL)
 				hostages++;
 	return hostages;
 }
