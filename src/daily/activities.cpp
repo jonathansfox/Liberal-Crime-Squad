@@ -467,16 +467,9 @@ void DeprecatedCreature::makearmor(const char clearformess)
 	extern Log gamelog;
 	extern class Ledger ledger;
 	extern vector<ArmorType *> armortype;
-<<<<<<< HEAD
 	const int at = activity_arg();
 	const int cost = armortype[at]->get_make_price();
 	const int hcost = (cost >> 1) + 1;
-=======
-	int at = cr.activity_arg();
-	int cost = armortype[at]->get_make_price();
-	int hcost = (cost >> 1) + 1;
-	int dif = armor_makedifficulty(*armortype[at], &cr);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	if (ledger.get_funds() < hcost)
 	{
 		if (clearformess) eraseAlt();
@@ -890,11 +883,7 @@ void funds_and_trouble(const char clearformess)
 			pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_CLINIC:
-<<<<<<< HEAD
 			pool[p]->hospitalize(find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, pool[p]->location));
-=======
-			hospitalize(find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, pool[p]->location), *pool[p]);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_STUDY_DEBATING:
@@ -1426,11 +1415,7 @@ void DeprecatedCreature::doActivityProstitution(vector<DeprecatedCreature *> &pr
 				prostitutes[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, prostitutes[p]->location);
 				prostitutes[p]->drop_weapons_and_clips(NULL);
 				prostitutes[p]->set_activity(ACTIVITY_NONE);
-<<<<<<< HEAD
 				prostitutes[p]->criminalize(LAWFLAG_PROSTITUTION);
-=======
-				criminalize(*prostitutes[p], LAWFLAG_PROSTITUTION);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			}
 			else
 			{

@@ -1296,11 +1296,7 @@ int makeChoice(const int increaseammo, const int decreaseammo) {
 // TODO Relocate these to a new file
 // to allow removal of creature.h
 const string NOT_ERROR_BUT_CONTINUE = "For simplicity this function returns an error message, prompting 'continue;', this is not an error, but it needs to use 'continue;' anyway";
-<<<<<<< HEAD
 string DeprecatedCreature::transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
-=======
-string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	extern Deprecatedsquadst *activesquad;
 
 	const string CONST_locationsPool076 = "Can't carry any more ammo.";
@@ -3151,7 +3147,6 @@ int LocationsPool::getTimeUntilSiege(int loc, int type)const {
 	switch (type) {
 	case SIEGE_POLICE:
 	//case INT_GETTIMEUNTILSIEGE_POLICE:
-<<<<<<< HEAD
 		return listOfLocations[loc]->siege.timeuntillocated;
 		break;
 	case SIEGE_CIA:
@@ -3169,25 +3164,6 @@ int LocationsPool::getTimeUntilSiege(int loc, int type)const {
 	case SIEGE_FIREMEN:
 	//case INT_GETTIMEUNTILSIEGE_FIREMEN:
 		return listOfLocations[loc]->siege.timeuntilfiremen;
-=======
-		return location[loc]->siege.timeuntillocated;
-		break;
-	case SIEGE_CIA:
-	//case INT_GETTIMEUNTILSIEGE_CIA:
-		return location[loc]->siege.timeuntilcia;
-		break;
-	case SIEGE_CORPORATE:
-	//case INT_GETTIMEUNTILSIEGE_CORPORATE:
-		return location[loc]->siege.timeuntilcorps;
-		break;
-	case SIEGE_CCS:
-	//case INT_GETTIMEUNTILSIEGE_CCS:
-		return location[loc]->siege.timeuntilccs;
-		break;
-	case SIEGE_FIREMEN:
-	//case INT_GETTIMEUNTILSIEGE_FIREMEN:
-		return location[loc]->siege.timeuntilfiremen;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		break;
 	default:
 	case SIEGE_ORG:

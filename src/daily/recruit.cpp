@@ -130,13 +130,8 @@ void DeprecatedCreature::recruitment_activity()
 	extern MusicClass music;
 	extern DeprecatedCreature encounter[ENCMAX];
 	int ocursite = getCurrentSite();
-<<<<<<< HEAD
 	setCurrentSite(location);
 	int type = activity_arg();
-=======
-	setCurrentSite(cr.location);
-	int type = cr.activity_arg();
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	int difficulty = recruitFindDifficulty(type);
 	string name = recruitName(type);
 	if (type >= 0)

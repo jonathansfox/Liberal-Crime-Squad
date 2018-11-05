@@ -557,11 +557,7 @@ vector<DeprecatedCreature *> DeprecatedCreature::findAllTendersToThisHostage() {
 	for (int p = 0; p < len(pool); p++)
 	{
 		if (!pool[p]->getNameAndAlignment().alive) continue;
-<<<<<<< HEAD
 		if (pool[p]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[p]->activity_arg() == id)
-=======
-		if (pool[p]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[p]->activity_arg() == cr->id)
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		{
 			//If they're in the same location as the hostage,
 			//include them in the InterrogationST
@@ -592,11 +588,7 @@ void DeprecatedCreature::hostageEscapes(const char clearformess) {
 			for (int i = 0; i < len(pool); i++)
 			{
 				if (!pool[i]->getNameAndAlignment().alive) continue;
-<<<<<<< HEAD
 				if (pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity_arg() == id)
-=======
-				if (pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity_arg() == cr->id)
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 					pool[i]->set_activity(ACTIVITY_NONE);
 			}
 			delete_and_remove(pool, p);
@@ -1332,11 +1324,7 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 			pool[p]->location = pool[p]->base = base;
 			pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 			pool[p]->set_activity(ACTIVITY_NONE);
-<<<<<<< HEAD
 			pool[p]->criminalize_without_heat(LAWFLAG_BANKROBBERY);
-=======
-			pool[p]->criminalize_me(LAWFLAG_BANKROBBERY, false);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			break;
 		}
 	}

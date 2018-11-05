@@ -570,11 +570,7 @@ void open_door(bool restricted)
 			c = getkeyAlt();
 			if (c == 'y')
 			{
-<<<<<<< HEAD
 				UnlockAttempt actualy = DeprecatedCreature::bash();
-=======
-				UnlockAttempt actualy = bash();
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				if (actualy == UNLOCKED)
 				{
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;

@@ -90,23 +90,13 @@ void DeprecatedCreature::activate_sleeper()
 		switch (state)
 		{
 		case 'a':
-<<<<<<< HEAD
 			set_color_easy(activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
 			set_color_easy(activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-=======
-			set_color_easy(cr->activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
-			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			mvaddstrAlt(11, 40, CONST_activate_sleepers011);
 			if (subordinatesleft())
 			{
-<<<<<<< HEAD
 				set_color_easy(activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-=======
-				set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				mvaddstrAlt(12, 40, CONST_activate_sleepers012);
 			}
 			else
@@ -118,28 +108,16 @@ void DeprecatedCreature::activate_sleeper()
 			}
 			break;
 		case 'b':
-<<<<<<< HEAD
 			set_color_easy(activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
 			set_color_easy(activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
 			set_color_easy(activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-=======
-			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
-			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
-			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			mvaddstrAlt(12, 40, CONST_activate_sleepers017);
 			break;
 		}
 		set_color_easy(WHITE_ON_BLACK);
-<<<<<<< HEAD
 		switch (activity_type())
-=======
-		switch (cr->activity_type())
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		{
 		case ACTIVITY_NONE:
 			mvaddstrAlt(22, 3, getNameAndAlignment().name);
@@ -180,55 +158,32 @@ void DeprecatedCreature::activate_sleeper()
 				switch (choice)
 				{
 				default:
-<<<<<<< HEAD
 				case '1':set_activity(ACTIVITY_NONE); break;
 				case '2':set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
 				case '3':
 					if (subordinatesleft())
 						set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
-=======
-				case '1':cr->set_activity(ACTIVITY_NONE); break;
-				case '2':cr->set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
-				case '3':
-					if (subordinatesleft(*cr))
-						cr->set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				}
 				break;
 			case 'b':
 				switch (choice)
 				{
 				default:
-<<<<<<< HEAD
 				case '1':set_activity(ACTIVITY_SLEEPER_SPY); break;
 				case '2':set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
 				case '3':set_activity(ACTIVITY_SLEEPER_STEAL); break;
-=======
-				case '1':cr->set_activity(ACTIVITY_SLEEPER_SPY); break;
-				case '2':cr->set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
-				case '3':cr->set_activity(ACTIVITY_SLEEPER_STEAL); break;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				}
 				break;
 			}
 		}
 		if (state == 'c')
 		{
-<<<<<<< HEAD
 			//ActivityST oact=activity;
 			set_activity(ACTIVITY_SLEEPER_JOINLCS);
 		}
 		if (c == 'x')
 		{
 			set_activity(ACTIVITY_NONE);
-=======
-			//ActivityST oact=cr->activity;
-			cr->set_activity(ACTIVITY_SLEEPER_JOINLCS);
-		}
-		if (c == 'x')
-		{
-			cr->set_activity(ACTIVITY_NONE);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			break;
 		}
 		else

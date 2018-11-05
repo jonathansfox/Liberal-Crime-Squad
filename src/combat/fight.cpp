@@ -1023,13 +1023,8 @@ bool goodguyattack = false;
 	 extern short mode;
 	 extern Log gamelog;
 	 //RELOAD
-<<<<<<< HEAD
 	 if ((will_reload(mode == GAMEMODE_CHASECAR, force_melee)
 		 || (has_thrown_weapon && has_extra_throwing_weapons()))
-=======
-	 if ((a.will_reload(mode == GAMEMODE_CHASECAR, force_melee)
-		 || (a.has_thrown_weapon && a.has_extra_throwing_weapons()))
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		 && !force_melee)
 	 {
 		 char str[200];
@@ -1039,11 +1034,7 @@ bool goodguyattack = false;
 			 strcpy(str, getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight117.c_str());
 		 }
-<<<<<<< HEAD
 		 else if (has_thrown_weapon && has_extra_throwing_weapons())
-=======
-		 else if (a.has_thrown_weapon && a.has_extra_throwing_weapons())
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		 {
 			 ready_another_throwing_weapon();
 			 strcpy(str, getNameAndAlignment().name.data());
@@ -2878,27 +2869,16 @@ string DeprecatedCreature::specialWoundPossibilityHead(
 /* abandoned liberal is captured by conservatives */
 void DeprecatedCreature::capturedByConservatives() {
 	extern short sitetype;
-<<<<<<< HEAD
 	set_activity(ACTIVITY_NONE);
 	drop_weapons_and_clips(NULL);
-=======
-	t.set_activity(ACTIVITY_NONE);
-	t.drop_weapons_and_clips(NULL);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
 	give_armor(clothes, NULL);
 	freehostage(2); // situation 2 = no message; this may want to be changed to 0 or 1
 	if (is_holding_body())
 	{
-<<<<<<< HEAD
 		if (is_prisoner_non_LCS())
 			delete_prisoner();
 		discard_body(); // Stop hauling people
-=======
-		if (t.is_prisoner_non_LCS())
-			t.delete_prisoner();
-		t.discard_body(); // Stop hauling people
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	}
 	if (flag & CREATUREFLAG_JUSTESCAPED)
 	{

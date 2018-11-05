@@ -625,19 +625,11 @@ void DeprecatedCreature::printcreatureinfo(unsigned char knowledge)
 	if (is_holding_body())
 	{
 		string prisoner_info = CONST_commondisplay047;
-<<<<<<< HEAD
 		if (prisoner_description.count(get_prisoner_type()) >= 1) {
 			prisoner_info += prisoner_description[get_prisoner_type()];
 		}
 		else {
 			prisoner_info += get_prisoner_name();
-=======
-		if (prisoner_description.count(cr->get_prisoner_type()) >= 1) {
-			prisoner_info += prisoner_description[cr->get_prisoner_type()];
-		}
-		else {
-			prisoner_info += cr->get_prisoner_name();
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		addstrAlt(prisoner_info);
 	}

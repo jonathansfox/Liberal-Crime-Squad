@@ -526,21 +526,12 @@ void DeprecatedCreature::sleeper_spy(char canseethings, int(&libpower)[VIEWNUM])
 			mvaddstrAlt(8, 1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
-<<<<<<< HEAD
 			removesquadinfo();
 			location = homes;
 			base = homes;
 			drop_weapons_and_clips(NULL);
 			set_activity(ACTIVITY_NONE);
 			flag &= ~CREATUREFLAG_SLEEPER;
-=======
-			removesquadinfo(cr);
-			cr.location = homes;
-			cr.base = homes;
-			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		return;
 	}
@@ -675,21 +666,12 @@ void DeprecatedCreature::sleeper_embezzle(char canseethings, int(&libpower)[VIEW
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
-<<<<<<< HEAD
 			criminalize_without_heat(LAWFLAG_COMMERCE);
 			removesquadinfo();
 			location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, location);
 			drop_weapons_and_clips(NULL);
 			set_activity(ACTIVITY_NONE);
 			flag &= ~CREATUREFLAG_SLEEPER;
-=======
-			cr.criminalize_me(LAWFLAG_COMMERCE);
-			removesquadinfo(cr);
-			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
-			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		return;
 	}
@@ -959,21 +941,12 @@ void DeprecatedCreature::sleeper_steal(char canseethings, int(&libpower)[VIEWNUM
 		{
 			printArrestedWhileStealing(getNameAndAlignment().name);
 
-<<<<<<< HEAD
 			criminalize_without_heat(LAWFLAG_THEFT);
 			removesquadinfo();
 			location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, location);
 			drop_weapons_and_clips(NULL);
 			set_activity(ACTIVITY_NONE);
 			flag &= ~CREATUREFLAG_SLEEPER;
-=======
-			cr.criminalize_me(LAWFLAG_THEFT);
-			removesquadinfo(cr);
-			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
-			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		return;
 	}
@@ -1045,11 +1018,7 @@ void DeprecatedCreature::sleeper_recruit(char canseethings, int(&libpower)[VIEWN
 				sleeperSuccessfullyRecruits(getNameAndAlignment().name, id, infiltration, e);
 				gamelog.nextMessage();
 				pressAnyKey();
-<<<<<<< HEAD
 				if (!subordinatesleft())set_activity(ACTIVITY_NONE);
-=======
-				if (!subordinatesleft(cr))cr.set_activity(ACTIVITY_NONE);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				incrementStatRecruits();
 				break;
 			}
@@ -1083,15 +1052,9 @@ void DeprecatedCreature::sleeper_recruit(char canseethings, int(&libpower)[VIEWN
 void DeprecatedCreature::sleepereffect(char canseethings, int(&libpower)[VIEWNUM])
 {
 	extern char disbanding;
-<<<<<<< HEAD
 	if (disbanding)set_activity(ACTIVITY_SLEEPER_LIBERAL);
 	int infiltrate = 1;
 	switch (activity_type())
-=======
-	if (disbanding)cr.set_activity(ACTIVITY_SLEEPER_LIBERAL);
-	int infiltrate = 1;
-	switch (cr.activity_type())
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	{
 	case ACTIVITY_SLEEPER_LIBERAL:
 		sleeper_influence(canseethings, libpower);

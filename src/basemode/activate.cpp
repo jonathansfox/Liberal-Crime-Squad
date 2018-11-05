@@ -138,11 +138,7 @@ void DeprecatedCreature::listclasses()
 	{
 		if (i + classlist < len(data_lessons))
 		{
-<<<<<<< HEAD
 			set_color_easy(activity_type() == data_lessons[i + classlist].activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-=======
-			set_color_easy(cr->activity_type() == data_lessons[i + classlist].activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			mvaddstrAlt(12 + i, 40, to_string(i + 1) + spaceDashSpace + data_lessons[i + classlist].str);
 		}
 	}
@@ -154,13 +150,8 @@ void DeprecatedCreature::updateclasschoice(char choice)
 	if (choice >= '1' && choice <= '5')
 	{
 		if (choice - '1' + classlist < len(data_lessons))
-<<<<<<< HEAD
 			set_activity(data_lessons[choice - '1' + classlist].activity);
 		listclasses();
-=======
-			cr->set_activity(data_lessons[choice - '1' + classlist].activity);
-		listclasses(cr);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	}
 	else if (choice == '6')
 	{
@@ -228,13 +219,8 @@ void DeprecatedCreature::recruitSelect()
 			int p = page * 19 + (int)(c - 'a');
 			if (p < options)
 			{
-<<<<<<< HEAD
 				set_activity(ACTIVITY_RECRUITING);
 				activity.arg = recruitable_creatures[p].type;
-=======
-				cr.set_activity(ACTIVITY_RECRUITING);
-				cr.activity.arg = recruitable_creatures[p].type;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				break;
 			}
 		}
@@ -616,13 +602,8 @@ void DeprecatedCreature::select_makeclothing()
 			int p = page * 19 + c - 'a';
 			if (p < len(armortypei))
 			{
-<<<<<<< HEAD
 				set_activity(ACTIVITY_MAKE_ARMOR);
 				activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
-=======
-				cr->set_activity(ACTIVITY_MAKE_ARMOR);
-				cr->activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				return;
 			}
 		}
@@ -648,7 +629,6 @@ void DeprecatedCreature::selectStandardActivityA(const char choiceChar) {
 		if (location != -1 &&
 			LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS, location) & COMPOUND_PRINTINGPRESS)
 		{
-<<<<<<< HEAD
 			set_activity(ACTIVITY_WRITE_GUARDIAN); break;
 		}
 	default:
@@ -667,42 +647,6 @@ void DeprecatedCreature::selectStandardActivityA(const char choiceChar) {
 			}
 			else
 				set_activity(ACTIVITY_TROUBLE);
-=======
-		case '1':
-		case '2':
-		case '4':
-			//case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;
-		case '5':
-		case '6':
-			cr->set_activity(activate_menu_items[c][choice].activity);
-			break;
-		case '3':cr->set_activity(ACTIVITY_GRAFFITI);
-			cr->activity.arg = -1;
-			break;
-		case '7':
-			if (cr->location != -1 &&
-				LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,cr->location) & COMPOUND_PRINTINGPRESS)
-			{
-				cr->set_activity(ACTIVITY_WRITE_GUARDIAN); break;
-			}
-		default:
-			if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 7 || cr->juice < 0)
-				cr->set_activity(ACTIVITY_COMMUNITYSERVICE);
-			else if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
-				cr->set_activity(ACTIVITY_TROUBLE);
-			else
-			{
-				if (cr->get_skill(SKILL_COMPUTERS) > 2)
-					cr->set_activity(ACTIVITY_HACKING);
-				else if (cr->get_skill(SKILL_ART) > 1)
-				{
-					cr->set_activity(ACTIVITY_GRAFFITI);
-					cr->activity.arg = -1;
-				}
-				else
-					cr->set_activity(ACTIVITY_TROUBLE);
-			}
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 	}
 }
@@ -759,26 +703,7 @@ void DeprecatedCreature::set_activity_augment() {
 		select_augmentation();
 		if (activity_type() != ACTIVITY_AUGMENT)
 		{
-<<<<<<< HEAD
 			activity = oact;
-=======
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-			cr->set_activity(activate_menu_items[c][choice].activity);
-			break;
-		default:
-			if (cr->get_weapon().get_specific_bool(BOOL_INSTRUMENT_))
-				cr->set_activity(ACTIVITY_SELL_MUSIC);
-			else if (cr->get_skill(SKILL_ART) > 1)
-				cr->set_activity(ACTIVITY_SELL_ART);
-			else if (cr->get_skill(SKILL_TAILORING) > 1)
-				cr->set_activity(ACTIVITY_SELL_TSHIRTS);
-			else if (cr->get_skill(SKILL_MUSIC) > 1)
-				cr->set_activity(ACTIVITY_SELL_MUSIC);
-			else cr->set_activity(ACTIVITY_DONATIONS);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 	}
 }
@@ -832,69 +757,11 @@ void DeprecatedCreature::selectOneOfStandardActivities(const char c, const char 
 		selectStandardActivityB(choiceChar);
 		break;
 	case 'c':
-<<<<<<< HEAD
 		selectStandardActivityC(choiceChar);
 		break;
 	case 'd':
 
 		selectStandardActivityD(choiceChar);
-=======
-		switch (choiceChar)
-		{
-		case '1':
-		case '3':
-			//case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
-			cr->set_activity(activate_menu_items[c][choice].activity);
-			break;
-		case '2':
-			if (ZEROMORAL || cr->getCreatureBio().age >= 18)
-				cr->set_activity(ACTIVITY_PROSTITUTION); break;
-		default:
-			if (cr->get_skill(SKILL_COMPUTERS) > 1)
-				cr->set_activity(ACTIVITY_CCFRAUD);
-			else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->getCreatureBio().age >= 18))
-				cr->set_activity(ACTIVITY_PROSTITUTION);
-			else cr->set_activity(ACTIVITY_SELL_DRUGS);
-		}
-		break;
-	case 'd':
-		switch (choiceChar)
-		{
-		case '1': { // Pick type to recruit
-			ActivityST oact = cr->activity;
-			cr->set_activity(ACTIVITY_NONE);
-			recruitSelect(*cr);
-			if (cr->activity_type() == ACTIVITY_RECRUITING) break;
-			else cr->activity = oact;
-			break; }
-		case '2': { // Pick clothing to make
-			ActivityST oact = cr->activity;
-			cr->set_activity(ACTIVITY_NONE);
-			select_makeclothing(cr);
-			if (cr->activity_type() == ACTIVITY_MAKE_ARMOR) break;
-			else cr->activity = oact;
-			break; }
-		case '3':
-			cr->set_activity(activate_menu_items[c][choice].activity);
-			break;
-		case '4':
-			cr->set_activity(ACTIVITY_STEALCARS);
-			break;
-		case '5':
-			if (!cr->canwalk() && !(cr->flag & CREATUREFLAG_WHEELCHAIR))
-				cr->set_activity(ACTIVITY_WHEELCHAIR);
-			break;
-		case '6': {
-			if (cr->get_skill(SKILL_SCIENCE) != 0) {
-				ActivityST oact = cr->activity;
-				cr->set_activity(ACTIVITY_NONE);
-				select_augmentation(cr);
-				if (cr->activity_type() == ACTIVITY_AUGMENT) break;
-				else cr->activity = oact;
-			}
-			break; }
-		}
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		break;
 	}
 }
@@ -908,21 +775,12 @@ const string CONST_activate037 = "Which hostage will ";
 void DeprecatedCreature::select_tendhostage()
 {
 	extern short mode;
-<<<<<<< HEAD
 	vector<DeprecatedCreature *> temppool = getHostagesSharingLocation();
 	if (!len(temppool))return;
 	if (len(temppool) == 1)
 	{
 		set_activity(ACTIVITY_HOSTAGETENDING);
 		activity.arg = temppool[0]->id;
-=======
-	vector<DeprecatedCreature *> temppool = getHostagesSharingLocation(cr);
-	if (!len(temppool))return;
-	if (len(temppool) == 1)
-	{
-		cr->set_activity(ACTIVITY_HOSTAGETENDING);
-		cr->activity.arg = temppool[0]->id;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		return;
 	}
 	int page = 0;
@@ -975,13 +833,8 @@ void DeprecatedCreature::select_tendhostage()
 			int p = page * 19 + (int)(c - 'a');
 			if (p < len(temppool))
 			{
-<<<<<<< HEAD
 				set_activity(ACTIVITY_HOSTAGETENDING);
 				activity.arg = temppool[p]->id;
-=======
-				cr->set_activity(ACTIVITY_HOSTAGETENDING);
-				cr->activity.arg = temppool[p]->id;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				return;
 			}
 		}
@@ -1012,36 +865,21 @@ int DeprecatedCreature::getKeyInActivate(const int hostagecount, int &state, con
 			case '3':
 				// activate_menu_items['t'] starts its index at 0 with ACTIVITY_NONE, instead of starting at 1 the way the other maps do
 				// This is a temporary fix as part of a move to basically remove switch(state) as well as switch(choice)
-<<<<<<< HEAD
 				set_activity(activate_menu_items['t'][(choice - '1') + 1].activity);
 				break;
 			default:
 				set_activity(getDefaultActivityTeaching());
-=======
-				cr->set_activity(activate_menu_items['t'][(choice - '1') + 1].activity);
-				break;
-			default:
-				cr->set_activity(getDefaultActivityTeaching(cr));
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				break;
 			}
 			break;
 		case 'i':
 			if (hostagecount > 0)
 			{
-<<<<<<< HEAD
 				ActivityST oact = activity;
 				set_activity(ACTIVITY_NONE);
 				select_tendhostage();
 				if (activity_type() == ACTIVITY_HOSTAGETENDING) break;
 				else activity = oact;
-=======
-				ActivityST oact = cr->activity;
-				cr->set_activity(ACTIVITY_NONE);
-				select_tendhostage(cr);
-				if (cr->activity_type() == ACTIVITY_HOSTAGETENDING) break;
-				else cr->activity = oact;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			}
 			state = oldstate;
 			break;
@@ -1049,7 +887,6 @@ int DeprecatedCreature::getKeyInActivate(const int hostagecount, int &state, con
 			updateclasschoice(choice);
 			break;
 		case 'm':
-<<<<<<< HEAD
 			if (clinictime()) set_activity(ACTIVITY_CLINIC);
 			else state = oldstate;
 			break;
@@ -1059,17 +896,6 @@ int DeprecatedCreature::getKeyInActivate(const int hostagecount, int &state, con
 			break;
 		case 'z':
 			if (havedead) set_activity(ACTIVITY_BURY);
-=======
-			if (clinictime(*cr)) cr->set_activity(ACTIVITY_CLINIC);
-			else state = oldstate;
-			break;
-		case 'h':
-			if (cr->get_skill(SKILL_FIRSTAID)) cr->set_activity(ACTIVITY_HEAL);
-			else state = oldstate;
-			break;
-		case 'z':
-			if (havedead) cr->set_activity(ACTIVITY_BURY);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			else state = oldstate;
 			break;
 		case 'e':
@@ -1081,11 +907,7 @@ int DeprecatedCreature::getKeyInActivate(const int hostagecount, int &state, con
 			state = oldstate;
 			break;
 		case 'x':
-<<<<<<< HEAD
 			set_activity(ACTIVITY_NONE);
-=======
-			cr->set_activity(ACTIVITY_NONE);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			break;
 		default:
 			state = oldstate;
@@ -1132,11 +954,7 @@ LOOP_CONTINUATION DeprecatedCreature::iterateActivate(const int hostagecount, in
 	}
 	printcreatureinfo();
 	makedelimiter();
-<<<<<<< HEAD
 	Data_Activity activity = data_activities[(Activity)activity_type()];
-=======
-	Data_Activity activity = data_activities[(Activity)cr->activity_type()];
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	if (!state)
 	{
 		if (activity.key != 'x')
@@ -1194,11 +1012,7 @@ LOOP_CONTINUATION DeprecatedCreature::iterateActivate(const int hostagecount, in
 	{
 		int ypos = 10;
 		for (ActivityAndString current_item : activate_menu_items[state]) {
-<<<<<<< HEAD
 			set_color_easy(activity_type() == current_item.activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-=======
-			set_color_easy(cr->activity_type() == current_item.activity ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			moveAlt(ypos, 40);
 			if (current_item.i > 0)
 			{
@@ -1351,7 +1165,6 @@ void activatebulk()
 				switch (selectedactivity)
 				{
 				case 0: //Activism
-<<<<<<< HEAD
 					temppool[p]->set_activity(temppool[p]->getDefaultActivityActivism());
 					break;
 				case 1: //Fundraising
@@ -1359,15 +1172,6 @@ void activatebulk()
 					break;
 				case 2: //Illegal Fundraising
 					temppool[p]->set_activity(temppool[p]->getDefaultActivityIllegalFundraising());
-=======
-					temppool[p]->set_activity(getDefaultActivityActivism(temppool[p]));
-					break;
-				case 1: //Fundraising
-					temppool[p]->set_activity(getDefaultActivityFundraising(temppool[p]));
-					break;
-				case 2: //Illegal Fundraising
-					temppool[p]->set_activity(getDefaultActivityIllegalFundraising(temppool[p]));
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 					break;
 				case 3: //Check polls
 					temppool[p]->set_activity(ACTIVITY_POLLS);

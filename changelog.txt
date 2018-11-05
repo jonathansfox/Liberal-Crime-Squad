@@ -780,3 +780,54 @@ Major refactoring of lcsmonthly.cpp
 Fixed failure to rename sites.
 initSite(Location loc) was used instead of initLocation(Location loc)
 I don't know why both functions exist with such similar names.
+
+4.12.29
+
+More refactoring.
+Identified a large number of instances where clearformess is guaranteed to be true, as well as instances it goes entirely unused, making it pointless as a variable.
+characterRespondsToRequest(const string, const string, const string);
+removes a fair amount of duplicate code.
+
+Fixed bug where hostages could starve during a siege, but did not need to eat.  Now they have to eat.
+
+Deprecated 
+Matching lines: 985    Matching files: 50    Total files searched: 160
+(Deprecated
+Matching lines: 341    Matching files: 37    Total files searched: 160
+
+Massive transfer of methods that use DeprecatedCreature& as an argument, moved into DeprecatedCreature as class methods.
+Total number to transfer numbers along the lines of 300 (including unknown number of duplicates, probably half or more).  A great many can be made private, once it comes to that.
+(DeprecatedCreature
+Matching lines: 255    Matching files: 31    Total files searched: 160
+Matching lines: 242    Matching files: 29    Total files searched: 160
+CppDepend is listing increased debt from the DeprecatedCreature class as it bloats.  This debt existed beforehand, it was just not measured by CppDepend as it largely ignores Globals.
+
+Deleted haulkidnapCreature.h
+creature.h now requires vehicle.h to be #include before it can be #include
+This is intended as temporary.  Files that do not otherwise require #include "vehicle.h" are followed by ///
+
+(DeprecatedCreature
+Matching lines: 199    Matching files: 26    Total files searched: 159
+
+Deleted deprecatedCreatureB.h
+Renamed overloaded method footchase into two methods, foot_chase() and footchase();
+The distinction is foot_chase() was previously footchase(DeprecatedCreature *cr), made into a member function for DeprecatedCreature.
+
+(DeprecatedCreature
+Matching lines: 148    Matching files: 19    Total files searched: 158
+
+const DeprecatedCreature
+Matching lines: 29    Matching files: 10    Total files searched: 158
+
+(DeprecatedCreature
+Matching lines: 76    Matching files: 13    Total files searched: 158
+const DeprecatedCreature
+Matching lines: 16    Matching files: 6    Total files searched: 158
+Nearly all within creature.h
+
+Renamed vector<Location *> location to listOfLocations
+Deletec deprecatedCreatureD.h
+
+Moved all DeprecatedCreature functions and values that involve other classes into private.
+Global functions requiring access to the now private functions made into DeprecatedCreature::static functions.
+Some exceptions for shop.cpp and creatureType.cpp, which are their own classes.

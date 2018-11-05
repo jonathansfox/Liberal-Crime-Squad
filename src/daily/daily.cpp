@@ -632,11 +632,7 @@ void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
 			//pool[p]->activity.type=ACTIVITY_NONE;
 			break;
 		case ACTIVITY_WHEELCHAIR:
-<<<<<<< HEAD
 			pool[p]->getwheelchair(clearformess);
-=======
-			getwheelchair(*pool[p], clearformess);
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			if (pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_RECRUITING:
@@ -644,12 +640,8 @@ void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
 			pool[p]->recruitment_activity();
 			break;
 		case ACTIVITY_STEALCARS:
-<<<<<<< HEAD
 			clearformess = 1;
 			if (pool[p]->stealcar())
-=======
-			if (stealcar(*pool[p], clearformess))
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				pool[p]->set_activity(ACTIVITY_NONE);
 			else if (pool[p]->location != -1 && LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
 				pool[p]->criminalize( LAWFLAG_CARTHEFT);

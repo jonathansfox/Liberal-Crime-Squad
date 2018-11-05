@@ -530,28 +530,7 @@ void special_lab_cosmetics_cagedanimals()
 		c = getkeyAlt();
 		if (c == 'y')
 		{
-<<<<<<< HEAD
 			unlockCageCosmetic();
-=======
-			UnlockAttempt actualy = unlock(UNLOCK_CAGE);
-			if (actualy == UNLOCKED)
-			{
-				int time = 20 + LCSrandom(10);
-				if (time < 1)time = 1;
-				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-				sitecrime++;
-				juiceparty(3, 100);
-				addCrimeToSiteStory(CRIME_FREE_RABBITS);
-				criminalizeparty(LAWFLAG_VANDALISM);
-			}
-			if (actualy != NEVERMIND)
-			{
-				alienationcheck(0);
-				noticecheck(-1);
-				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
-			}
-			return;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 	}while (c != 'n' && c != 'y');
 }
@@ -851,13 +830,8 @@ void courtLockupPressY() {
 	extern short mode;
 	extern int sitecrime;
 	extern short sitealarmtimer;
-<<<<<<< HEAD
 	//extern coordinatest loc_coord;
 	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-=======
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 
 	UnlockAttempt actualy = unlock(UNLOCK_CELL);
 	if (actualy == UNLOCKED)
@@ -884,11 +858,7 @@ void courtLockupPressY() {
 	{
 		alienationcheck(1);
 		noticecheck(-1, DIFFICULTY_HARD);
-<<<<<<< HEAD
 		empty_current_special();
-=======
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
->>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		sitecrime += 3;
 		addCrimeToSiteStory(CRIME_COURTHOUSE_LOCKUP);
 		criminalizeparty(LAWFLAG_HELPESCAPE);
