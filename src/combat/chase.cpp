@@ -162,7 +162,11 @@ void DeprecatedCreature::chase_giveup()
 		if (activesquad->squad[p]->is_holding_body())
 		{
 			if (activesquad->squad[p]->is_prisoner_non_LCS()) hostagefreed++;
+<<<<<<< HEAD
 			activesquad->squad[p]->freehostage(2);
+=======
+			freehostage(*activesquad->squad[p], 2);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		activesquad->squad[p] = NULL;
 	}

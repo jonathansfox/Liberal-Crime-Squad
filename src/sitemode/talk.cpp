@@ -1271,6 +1271,7 @@ void DeprecatedCreature::pressKeyAInCombat() {
 		}
 	}
 }
+<<<<<<< HEAD
 vector<int> HighSiteCrimeExecution = {
 	CREATURE_CORPORATE_CEO ,
 	CREATURE_RADIOPERSONALITY ,
@@ -1279,6 +1280,156 @@ vector<int> HighSiteCrimeExecution = {
 	CREATURE_JUDGE_CONSERVATIVE
 };
 void DeprecatedCreature::pressKeyBInCombat(DeprecatedCreature &tk, const int hostages, const int weaponhostage) {
+=======
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int e) {
+	extern Log gamelog;
+	extern int sitecrime;
+	extern short lawList[LAWNUM];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	extern short exec[EXECNUM];
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	DeprecatedCreature* executer = 0;
+	if (a.is_holding_body())
+		executer = &a;
+	else for (int i = 0; i < 6; i++)
+	{
+		if (activesquad->squad[i] &&
+			activesquad->squad[i]->is_holding_body() &&
+			activesquad->squad[i]->is_prisoner_alive() &&
+			activesquad->squad[i]->is_prisoner_enemy())
+		{
+			executer = activesquad->squad[i];
+			break;
+		}
+	}
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	{
+		string executerGetAmmo;
+		if (executer->get_weapon().is_ranged()
+			&& executer->get_weapon().get_ammoamount() > 0)
+		{
+			executerGetAmmo = (unnamed_String_Talk_cpp_113);
+			executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
+		}
+		else
+		{
+			executerGetAmmo = (unnamed_String_Talk_cpp_114);
+		}
+		mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
+	}
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, executer->getNameAndAlignment().name, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
+	addstrAlt(executer->get_prisoner_name(), gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
+	gamelog.newline();
+	addjuice(*executer, -5, -50); // DE-juice for this shit
+	sitecrime += 10;
+	sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+	criminalize(*executer, LAWFLAG_MURDER);
+	if (executer->get_prisoner_type() == CREATURE_CORPORATE_CEO ||
+		executer->get_prisoner_type() == CREATURE_RADIOPERSONALITY ||
+		executer->get_prisoner_type() == CREATURE_NEWSANCHOR ||
+		executer->get_prisoner_type() == CREATURE_SCIENTIST_EMINENT ||
+		executer->get_prisoner_type() == CREATURE_JUDGE_CONSERVATIVE)sitecrime += 30;
+	executer->make_prisoner_ground_loot();
+	pressAnyKey();
+	executer->delete_and_nullify_prisoner();
+	if (hostages > 1 && LCSrandom(2))
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
+		addstrAlt(pickrandom(please_no_more), gamelog);
+		gamelog.newline();
+		for (int i = ENCMAX - 1; i >= 0; i--)
+			if (encounter[i].exists && encounter[i].enemy && encounter[i].alive)
+				delenc(i, 0);
+		pressAnyKey();
+	}
+}
+void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int e) {
+	extern Log gamelog;
+	extern int sitecrime;
+	extern short lawList[LAWNUM];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	extern short exec[EXECNUM];
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	{
+		string nameHostages;
+		if (LCSrandom(5))
+		{
+			if (hostages > 1) nameHostages = (unnamed_String_Talk_cpp_119);
+			else nameHostages = (unnamed_String_Talk_cpp_120);
+		}
+		else {
+			nameHostages = (pickrandom(let_hostages_go));
+		}
+		mvaddstrAlt(17, 1, nameHostages, gamelog);
+	}
+	gamelog.newline();
+	pressAnyKey();
+	if (((encounter[e].type == CREATURE_DEATHSQUAD ||
+		encounter[e].type == CREATURE_AGENT ||
+		encounter[e].type == CREATURE_MERC ||
+		encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
+		encounter[e].type == CREATURE_GANGUNIT) &&
+		LCSrandom(2)) && encounter[e].align == ALIGN_CONSERVATIVE)
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, pickrandom(go_ahead_and_die), gamelog);
+		gamelog.newline();
+		pressAnyKey();
+	}
+	else
+	{
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
+		addstrAlt(colonSpace, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, pickrandom(agree_to_release_hostages), gamelog);
+		gamelog.newline();
+		pressAnyKey();
+		for (int i = ENCMAX - 1; i >= 0; i--)
+			if (encounter[i].exists&&encounter[i].enemy && encounter[i].alive)
+				delenc(i, 0);
+		clearmessagearea();
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		juiceparty(15, 200); // Instant juice for successful hostage negotiation
+		mvaddstrAlt(16, 1, hostages > 1 ? unnamed_String_Talk_cpp_121 : unnamed_String_Talk_cpp_122, gamelog);
+		gamelog.newline();
+		for (int i = 0; i < 6; i++)
+		{
+			if (activesquad->squad[i] &&
+				activesquad->squad[i]->is_holding_body() &&
+				activesquad->squad[i]->is_prisoner_enemy())
+			{
+				activesquad->squad[i]->delete_and_nullify_prisoner();
+			}
+		}
+		pressAnyKey();
+	}
+}
+void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int hostages, const int weaponhostage) {
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	extern int sitecrime;
 	extern Log gamelog;
 	extern short lawList[LAWNUM];

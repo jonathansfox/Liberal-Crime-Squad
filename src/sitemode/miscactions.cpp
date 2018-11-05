@@ -299,7 +299,11 @@ UnlockAttempt unlock(short type)
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 /* bash attempt */
+<<<<<<< HEAD
 UnlockAttempt DeprecatedCreature::bash()
+=======
+UnlockAttempt bash()
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;

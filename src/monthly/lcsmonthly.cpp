@@ -381,6 +381,143 @@ extern string closeParenthesis;
 	  pressAnyKey();
 	  return;
   }
+<<<<<<< HEAD
+  void change_opinion_from_Influence(vector< pair<string, vector<int> > > Influence) {
+
+	  extern Log gamelog;
+
+	  vector<int>::iterator it;
+	  int influence = LCSrandom(Influence.size());
+	  addstrAlt(Influence[influence].first, gamelog);
+	  for (it = Influence[influence].second.begin(); it != Influence[influence].second.end(); it += 2) {
+		  change_public_opinion(*it, *(it + 1));
+=======
+  void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
+  /* monthly - lets the player choose a special edition for the guardian */
+  int choosespecialedition(char &clearformess)
+  {
+	  extern MusicClass music;
+	  //Temporary, maybe put special edition definition into an xml file. -XML
+	  static const string document_types[] =
+	  {  // This list MUST be in alphabetical order for binary_search() to work right
+		  tag_LOOT_AMRADIOFILES,
+		  tag_LOOT_CABLENEWSFILES,
+		  tag_LOOT_CCS_BACKERLIST,
+		  tag_LOOT_CEOLOVELETTERS,
+		  tag_LOOT_CEOPHOTOS,
+		  tag_LOOT_CEOTAXPAPERS,
+		  tag_LOOT_CORPFILES,
+		  tag_LOOT_INTHQDISK,
+		  tag_LOOT_JUDGEFILES,
+		  tag_LOOT_POLICERECORDS,
+		  tag_LOOT_PRISONFILES,
+		  tag_LOOT_RESEARCHFILES,
+		  tag_LOOT_SECRETDOCUMENTS
+	  };
+	  static const vector<string> dox(document_types, document_types + len(document_types));
+	  int page = 0;
+	  //char havetype[LOOTNUM];
+	  //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
+	  vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
+	  vector<int> loottypeindex;
+	  LocationsPool::getInstance().findAllLootTypes(havetype, loottypeindex, dox);
+	  constructLootIndices(havetype, loottypeindex, dox);
+	  if (!len(loottypeindex)) return -1;
+	  clearformess = 1;
+	  //PICK ONE
+	  while (true)
+	  {
+		  music.play(MUSIC_NEWSPAPER);
+		  eraseAlt();
+		  set_color_easy(WHITE_ON_BLACK);
+		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
+		  int x = 1, y = 10;
+		  char str[200];
+		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
+		  {
+			  str[0] = l - page * 18 + 'A';
+			  str[1] = '\x0';
+			  strcat(str, spaceDashSpace.c_str());
+			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
+			  mvaddstrAlt(y, x, str);
+			  x += 26;
+			  if (x > 53) x = 1, y++;
+		  }
+		  //PAGE UP
+		  if (page > 0)
+		  {
+			  mvaddstrAlt(17, 1, addprevpagestr());
+		  }
+		  //PAGE DOWN
+		  if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
+		  {
+			  mvaddstrAlt(17, 53, addnextpagestr());
+		  }
+		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
+		  int c = getkeyAlt();
+		  if (c >= 'a'&&c <= 'r')
+		  {
+			  int slot = c - 'a' + page * 18;
+			  if (slot >= 0 && slot < len(loottypeindex))
+			  {
+				  // remove item from location
+				  int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
+				  if (output != -1) {
+					  return output;
+				  }
+				  // if not in location, remove item from squad
+				  removeItemFromSquad(loottypeindex[slot]);
+				  //WHOOPS!
+				  return loottypeindex[slot];
+			  }
+		  }
+		  if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
+		  //PAGE UP
+		  if (is_page_up(c) && page > 0) page--;
+		  //PAGE DOWN
+		  if (is_page_down(c) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
+	  }
+
+  }
+
+  void printLootCCSBackers() {
+	  extern CCSexposure ccsexposure;
+	  extern Log gamelog;
+
+	  mvaddstrAlt(5, 1, CONST_lcsmonthly059, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(6, 1, CONST_lcsmonthly060, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(7, 1, CONST_lcsmonthly061, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(8, 1, CONST_lcsmonthly062, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(9, 1, CONST_lcsmonthly063, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(10, 1, CONST_lcsmonthly064, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(11, 1, CONST_lcsmonthly065, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(12, 1, CONST_lcsmonthly066, gamelog);
+	  mvaddstrAlt(14, 1, CONST_lcsmonthly067, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(15, 1, CONST_lcsmonthly068, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(16, 1, CONST_lcsmonthly069, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(17, 1, CONST_lcsmonthly070, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(18, 1, CONST_lcsmonthly071, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(20, 1, CONST_lcsmonthly072, gamelog);
+	  gamelog.nextMessage();
+	  change_public_opinion(VIEW_INTELLIGENCE, 50);
+	  change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
+	  ccsexposure = CCSEXPOSURE_EXPOSED;
+  }
+<<<<<<< HEAD
+=======
   void change_opinion_from_Influence(vector< pair<string, vector<int> > > Influence) {
 
 	  extern Log gamelog;
@@ -429,6 +566,7 @@ extern string closeParenthesis;
 	  change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
 	  ccsexposure = CCSEXPOSURE_EXPOSED;
   }
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 
 //  vector< pair<string, vector<int> > > CEOPhotosInfluence;
   void printLootCEOPhotos() {

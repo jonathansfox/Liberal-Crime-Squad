@@ -186,6 +186,7 @@ void DeprecatedCreature::freehostage(char situation)
 	extern short mode;
 	extern Log gamelog;
 	extern DeprecatedCreature encounter[ENCMAX];
+<<<<<<< HEAD
 	if (!is_holding_body())return;
 	if (is_prisoner_alive())
 	{
@@ -197,6 +198,19 @@ void DeprecatedCreature::freehostage(char situation)
 				addstrAlt(AND, gamelog);
 				addstrAlt(get_prisoner_name(), gamelog);
 				if (prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap016, gamelog);
+=======
+	if (!cr.is_holding_body())return;
+	if (cr.is_prisoner_alive())
+	{
+		if (situation == 0)
+		{
+			if (cr.is_prisoner_non_LCS())addstrAlt(CONST_haulkidnap015, gamelog);
+			else
+			{
+				addstrAlt(AND, gamelog);
+				addstrAlt(cr.get_prisoner_name(), gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap016, gamelog);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				else addstrAlt(CONST_haulkidnap017, gamelog);
 			}
 			gamelog.newline(); //New line.
@@ -205,11 +219,19 @@ void DeprecatedCreature::freehostage(char situation)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+<<<<<<< HEAD
 			if (is_prisoner_non_LCS())mvaddstrAlt(16, 1, CONST_haulkidnap018, gamelog);
 			else
 			{
 				mvaddstrAlt(16, 1, get_prisoner_name(), gamelog);
 				if (prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
+=======
+			if (cr.is_prisoner_non_LCS())mvaddstrAlt(16, 1, CONST_haulkidnap018, gamelog);
+			else
+			{
+				mvaddstrAlt(16, 1, cr.get_prisoner_name(), gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				else addstrAlt(CONST_haulkidnap020, gamelog);
 			}
 			gamelog.newline(); //New line.
@@ -218,7 +240,11 @@ void DeprecatedCreature::freehostage(char situation)
 		{
 			//Don't print anything.
 		}
+<<<<<<< HEAD
 		if (is_prisoner_non_LCS())
+=======
+		if (cr.is_prisoner_non_LCS())
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		{
 			for (int e = 0; e < ENCMAX; e++)
 			{
@@ -230,15 +256,25 @@ void DeprecatedCreature::freehostage(char situation)
 					break;
 				}
 			}
+<<<<<<< HEAD
 			delete_prisoner();
+=======
+			cr.delete_prisoner();
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 		else prisoner->capturedByConservatives();
 	}
 	else
 	{
+<<<<<<< HEAD
 		if (!is_prisoner_non_LCS())
 		{
 			prisoner_dies();
+=======
+		if (!cr.is_prisoner_non_LCS())
+		{
+			cr.prisoner_dies();
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 		}
 	}
 	discard_body();
@@ -402,7 +438,11 @@ void DeprecatedCreature::kidnapattempt()
 			)
 		{
 			activesquad->squad[kidnapper]->make_new_prisoner(encounter[t]);
+<<<<<<< HEAD
 			encounter[t].delenc(0);
+=======
+			delenc(t, 0);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			int time = 20 + LCSrandom(10);
 			if (time < 1) time = 1;
 			if (sitealarmtimer > time || sitealarmtimer == -1) sitealarmtimer = time;
@@ -472,7 +512,11 @@ void releasehostage()
 				kidnapper = c - '1';
 	} while (kidnapper < 0);
 	activesquad->squad[kidnapper]->make_prisoner_cantbluff_two();
+<<<<<<< HEAD
 	activesquad->squad[kidnapper]->freehostage(2);
+=======
+	freehostage(*(activesquad->squad[kidnapper]), 2);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 	if (!isThereASiteAlarm())
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

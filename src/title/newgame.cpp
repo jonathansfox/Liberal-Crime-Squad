@@ -409,7 +409,11 @@ void print_newgame_choices(const bool classicmode, const bool strongccs, const b
 		addstrAlt(e_marathonMode);
 		int bottomRow;
 		if (ALLOWSTALIN) {
+<<<<<<< HEAD
 			mvaddstrAlt(17, 0, stalinmode ? isSelected : unSelected);
+=======
+			mvaddstrAlt(17, 0, stalinmode? isSelected : unSelected);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			addstrAlt(f_stalinistMode);
 			bottomRow = 21;
 		}
@@ -418,10 +422,49 @@ void print_newgame_choices(const bool classicmode, const bool strongccs, const b
 		}// ALLOWSTALIN
 		mvaddstrAlt(bottomRow, 4, pressAnyOtherKey);
 	}
+<<<<<<< HEAD
 }
 LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs, bool &nightmarelaws) {
 	print_newgame_choices(classicmode, strongccs, nightmarelaws);
 	return newgame_starting_conditions_getKey(classicmode, strongccs, nightmarelaws);
+=======
+	switch (getkeyAlt()) {
+	case 'a':
+
+		classicmode = !classicmode;
+		break;
+
+	case 'b':
+		strongccs = !strongccs;
+
+		break;
+
+	case 'c':
+		nightmarelaws = !nightmarelaws;
+
+		break;
+
+	case 'd':
+		multipleCityMode = !multipleCityMode;
+
+		break;
+
+	case 'e':
+
+		nocourtpurge = !nocourtpurge;
+		notermlimit = !notermlimit;
+		break;
+
+	case 'f':
+		if (ALLOWSTALIN) {
+				stalinmode = !stalinmode;
+				return REPEAT;
+		} // else return RETURN_ZERO
+	default:
+		return RETURN_ZERO;
+	}
+	return REPEAT;
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 }
 void implementNightmareLaws() {
 	extern short lawList[LAWNUM];

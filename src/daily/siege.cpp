@@ -353,7 +353,11 @@ void DeprecatedCreature::surrenderToAuthorities(const int loc) {
 			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
 					pool[i]->set_activity(ACTIVITY_NONE);
+<<<<<<< HEAD
 			pool[p]->removesquadinfo();
+=======
+			removesquadinfo(*pool[p]);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 			delete_and_remove(pool, p);
 			continue;
 		}
@@ -2129,9 +2133,15 @@ void siegeturn()
 				gamelog.record(CONST_siege180);
 				gamelog.newline();
 				//EAT
+<<<<<<< HEAD
 				const int eaters = numbereating(l);
 				const bool starving = LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0;
 				if (starving)
+=======
+				bool starving = false;
+				int eaters = numbereating(l);
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0)
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				{
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -2140,8 +2150,13 @@ void siegeturn()
 					pressAnyKey();
 					checkForStarvation(l);
 				}
+<<<<<<< HEAD
 
 				reduceCompoundStores(l, eaters);
+=======
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) >= eaters) reduceCompoundStores(l, eaters);
+				else emptyCompoundStores(l);
+>>>>>>> acaa55987f7b177b662bdb7f42ebb6850475784a
 				//ATTACK!
 				bool attack = false;
 				if (!LCSrandom(12)) { 
