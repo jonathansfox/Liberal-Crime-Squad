@@ -529,56 +529,67 @@ extern string commaSpace;
 	 } while (loc.duplicatelocation());
 
  }
- void returnToDefaultName(Location &loc) {
-	 switch (loc.type)
-	 {
-	 case SITE_GOVERNMENT_WHITE_HOUSE:
-		 loc.rename(CONST_locations032, CONST_locations032);
-		 break;
-	 case SITE_CORPORATE_HEADQUARTERS:
-		 loc.rename(CONST_locations033, CONST_locationsB115);
-		 break;
-	 case SITE_BUSINESS_BANK:
-		 loc.rename(CONST_locations034, CONST_locationsB116);
-		 break;
-	 case SITE_RESIDENTIAL_SHELTER:
-		 loc.rename(CONST_locations040, CONST_locationsB118);
-		 break;
-	 case SITE_MEDIA_CABLENEWS:
-		 loc.rename(CONST_locations067, CONST_locationsB123);
-		 break;
-	 case SITE_MEDIA_AMRADIO:
-		 loc.rename(CONST_locations068, CONST_locationsB124);
-		 break;
-	 case SITE_HOSPITAL_UNIVERSITY:
-		 loc.rename(CONST_locations075, CONST_locationsB125);
-		 break;
-	 case SITE_HOSPITAL_CLINIC:
-		 loc.rename(CONST_locations076, CONST_locationsB126);
-		 break;
-	 case SITE_RESIDENTIAL_BOMBSHELTER:
-		 loc.rename(CONST_locations111, CONST_locationsB128);
-		 break;
-	 case SITE_BUSINESS_BARANDGRILL:
-		 loc.rename(CONST_locations112, CONST_locationsB129);
-		 break;
-	 case SITE_OUTDOOR_BUNKER:
-		 loc.rename(CONST_locations113, CONST_locationsB130);
-		 break;
-	 case SITE_BUSINESS_ARMSDEALER:
-		 loc.rename(CONST_locations114, CONST_locations114);
-		 break;
-	 case SITE_BUSINESS_HALLOWEEN:
-		 loc.rename(CONST_locations085, CONST_locationsB127);
-		 break;
-	 }
- }
+ map<int, pair<string, string> > defaultLocationNames = {
+	 
+	 map<int, pair<string, string> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,
+	 make_pair(CONST_locations032, CONST_locations032)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_CORPORATE_HEADQUARTERS,
+		 make_pair(CONST_locations033, CONST_locationsB115)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_BUSINESS_BANK,
+		 make_pair(CONST_locations034, CONST_locationsB116)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_RESIDENTIAL_SHELTER,
+		 make_pair(CONST_locations040, CONST_locationsB118)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_MEDIA_CABLENEWS,
+		 make_pair(CONST_locations067, CONST_locationsB123)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_MEDIA_AMRADIO,
+		 make_pair(CONST_locations068, CONST_locationsB124)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_HOSPITAL_UNIVERSITY,
+		 make_pair(CONST_locations075, CONST_locationsB125)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_HOSPITAL_CLINIC,
+		 make_pair(CONST_locations076, CONST_locationsB126)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_RESIDENTIAL_BOMBSHELTER,
+		 make_pair(CONST_locations111, CONST_locationsB128)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_BUSINESS_BARANDGRILL,
+		 make_pair(CONST_locations112, CONST_locationsB129)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_OUTDOOR_BUNKER,
+		 make_pair(CONST_locations113, CONST_locationsB130)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_BUSINESS_ARMSDEALER,
+		 make_pair(CONST_locations114, CONST_locations114)
+	 ),
+
+	 map<int, pair<string, string> >::value_type(SITE_BUSINESS_HALLOWEEN,
+		 make_pair(CONST_locations085, CONST_locationsB127)
+	 ),
+ };
  map<short, vector<string> > getSiteName;
  /* daily - seeds and names a site (will re-seed and rename if used after start) */
  void initlocation(Location &loc)
  {  // NOTE: make sure to keep code here matching code in updateworld_laws() in monthly.cpp for when names are changed
 	 loc.init();
-	 switch (loc.type)
+	 const int loctype = loc.type;
+	 switch (loctype)
 	 {
 	 case SITE_GOVERNMENT_POLICESTATION:
 		 renamePoliceStation(loc);
@@ -639,7 +650,7 @@ extern string commaSpace;
 	 case SITE_INDUSTRIAL:
 	 case SITE_OUTOFTOWN:
 	 case SITE_TRAVEL:
-		 loc.rename(getSiteName[loc.type][0], getSiteName[loc.type][1]);
+		 loc.rename(getSiteName[loctype][0], getSiteName[loctype][1]);
 		 break;
 	 case SITE_GOVERNMENT_WHITE_HOUSE:
 	 case SITE_CORPORATE_HEADQUARTERS:
@@ -654,7 +665,9 @@ extern string commaSpace;
 	 case SITE_OUTDOOR_BUNKER:
 	 case SITE_BUSINESS_ARMSDEALER:
 	 case SITE_BUSINESS_HALLOWEEN:
-		 returnToDefaultName(loc);
+		 if (defaultLocationNames.count(loctype)) {
+			 loc.rename(defaultLocationNames[loctype].first, defaultLocationNames[loctype].second);
+		 }
 		 break;
 	 case SITE_LABORATORY_GENETIC:
 		 strcpy(loc.name, lastname(true));
@@ -682,24 +695,21 @@ extern string commaSpace;
 		 strcpy(loc.shortname, CONST_locations087);
 		 break;
 	 case SITE_BUSINESS_JUICEBAR:
-		 strcpy(loc.name, blankString);
-		 strcat(loc.name, pickrandom(juice_name));
+		 strcpy(loc.name, pickrandom(juice_name));
 		 strcat(loc.name, singleSpace);
 		 strcat(loc.name, pickrandom(juice_name_2));
 		 strcat(loc.name, CONST_locations099);
 		 strcpy(loc.shortname, CONST_locations100);
 		 break;
 	 case SITE_BUSINESS_VEGANCOOP:
-		 strcpy(loc.name, blankString);
-		 strcat(loc.name, pickrandom(vegan_name));
+		 strcpy(loc.name, pickrandom(vegan_name));
 		 strcat(loc.name, singleSpace);
 		 strcat(loc.name, pickrandom(vegan_name_2));
 		 strcat(loc.name, CONST_locations101);
 		 strcpy(loc.shortname, CONST_locations102);
 		 break;
 	 case SITE_BUSINESS_INTERNETCAFE:
-		 strcpy(loc.name, blankString);
-		 strcat(loc.name, pickrandom(cafe_name));
+		 strcpy(loc.name, pickrandom(cafe_name));
 		 strcat(loc.name, singleSpace);
 		 strcat(loc.name, pickrandom(cafe_name_2));
 		 strcat(loc.name, CONST_locations103);
@@ -712,8 +722,7 @@ extern string commaSpace;
 		 strcpy(loc.shortname, CONST_locations106);
 		 break;
 	 case SITE_BUSINESS_LATTESTAND:
-		 strcpy(loc.name, blankString);
-		 strcat(loc.name, pickrandom(latte_name));
+		 strcpy(loc.name, pickrandom(latte_name));
 		 strcat(loc.name, singleSpace);
 		 strcat(loc.name, pickrandom(latte_name_2));
 		 strcat(loc.name, CONST_locations107);

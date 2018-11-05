@@ -114,7 +114,6 @@ const string CONST_fight120 = "punches";
 const string CONST_fight119 = "MISTAKENLY ";
 const string CONST_fight118 = " readies another ";
 const string CONST_fight117 = " reloads.";
-const string CONST_fight116 = "actual";
 const string CONST_fight114 = "\"A plague on both your houses...\"";
 const string CONST_fight113 = " speaks these final words: ";
 const string CONST_fight112 = "soils the floor.";
@@ -243,36 +242,28 @@ This file is part of Liberal Crime Squad.                                       
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../sitemode/stealth.h"
 #include "../sitemode/sitedisplay.h"
 #include "../items/money.h"
 #include "../log/log.h"
 // for gamelog
 //#include "../common/translateid.h"
-int getarmortype(const string &idname);
+int getarmortype(const string idname);
 //#include "../common/commondisplay.h"
-void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
-//#include "../combat/chaseCreature.h"
-Vehicle* getChaseVehicle(const DeprecatedCreature &c);
-DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c);
 //#include "../combat/haulkidnapCreature.h"
-void freehostage(DeprecatedCreature &cr,char situation);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
@@ -333,9 +324,9 @@ bool goodguyattack = false;
  vector<Item *> groundloot;
 
  /* generates the loot dropped by a creature when it dies */
- void makeloot(DeprecatedCreature &cr)
+ void DeprecatedCreature::makeloot()
  {
-	 cr.makeloot(groundloot);
+	 makeloot(groundloot);
  }
  bool isThereGroundLoot() {
 	 return len(groundloot) > 0;
@@ -347,30 +338,19 @@ bool goodguyattack = false;
 
  vector<NameAndAlignment> getEncounterNameAndAlignment();
  void delenc(const short e, const char loot);
- string specialWoundPossibilityBody(
-	 DeprecatedCreature &target,
-	 const char breakdam,
-	 const char pokedam,
-	 const char damtype
- );
- string specialWoundPossibilityHead(
-	 DeprecatedCreature &target,
-	 const char breakdam,
-	 const char heavydam,
-	 const char damtype
- );
- bool incapacitatedTank(DeprecatedCreature &a, const char noncombat, char &printed) {
+
+ bool DeprecatedCreature::incapacitatedTank(const char noncombat, char &printed) {
 
 	 extern Log gamelog;
-	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
+	 if (getCreatureHealth().blood <= 20 || (getCreatureHealth().blood <= 50 && (LCSrandom(2) || forceinc)))
 	 {
-		 a.forceinc = 0;
+		 forceinc = 0;
 		 if (noncombat)
 		 {
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(16, 1, tag_The, gamelog);
-			 addstrAlt(a.getNameAndAlignment().name, gamelog);
+			 addstrAlt(getNameAndAlignment().name, gamelog);
 			 addstrAlt(singleSpace + pickrandom(paralyzed_tank));
 			 gamelog.newline();
 			 printed = 1;
@@ -381,19 +361,19 @@ bool goodguyattack = false;
 
  }
 
- bool incapacitatedAnimal(DeprecatedCreature &a, const char noncombat, char &printed) {
+ bool DeprecatedCreature::incapacitatedAnimal(const char noncombat, char &printed) {
 
 	 extern Log gamelog;
 	 extern short lawList[LAWNUM];
-	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
+	 if (getCreatureHealth().blood <= 20 || (getCreatureHealth().blood <= 50 && (LCSrandom(2) || forceinc)))
 	 {
-		 a.forceinc = 0;
+		 forceinc = 0;
 		 if (noncombat)
 		 {
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(16, 1, tag_The, gamelog);
-			 addstrAlt(a.getNameAndAlignment().name);
+			 addstrAlt(getNameAndAlignment().name);
 			 switch (LCSrandom(3))
 			 {
 			 case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_fight038, gamelog);
@@ -409,18 +389,18 @@ bool goodguyattack = false;
 	 return 0;
 
  }
- bool incapacitatedPerson(DeprecatedCreature &a, const char noncombat, char &printed) {
+ bool DeprecatedCreature::incapacitatedPerson(const char noncombat, char &printed) {
 	 extern Log gamelog;
 	 extern short mode;
 	 extern short lawList[LAWNUM];
-	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
+	 if (getCreatureHealth().blood <= 20 || (getCreatureHealth().blood <= 50 && (LCSrandom(2) || forceinc)))
 	 {
-		 a.forceinc = 0;
+		 forceinc = 0;
 		 if (noncombat)
 		 {
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, a.getNameAndAlignment().name);
+			 mvaddstrAlt(16, 1, getNameAndAlignment().name);
 			 switch (LCSrandom(54))
 			 {
 				 //TODO IsaacG Complete Migration of Strings
@@ -428,18 +408,18 @@ bool goodguyattack = false;
 					 else addstrAlt(CONST_fight039); break;
 			 case 1: if (mode != GAMEMODE_CHASECAR) addstrAlt(CONST_fight040);
 					 else addstrAlt(CONST_fight041); break;
-			 case 2: if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] && a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
+			 case 2: if (getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] && getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
 				 addstrAlt(CONST_fight042);
-					 else if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] || a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
+					 else if (getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] || getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
 						 addstrAlt(CONST_fight043);
 					 else addstrAlt(CONST_fight044); break;
 			 case 3: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_fight045);
 					 else addstrAlt(CONST_fight046); break;
-			 case 4: if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] > 1) addstrAlt(CONST_fight047);
-					 else if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] == 1) addstrAlt(CONST_fight048);
+			 case 4: if (getCreatureHealth().special[SPECIALWOUND_TEETH] > 1) addstrAlt(CONST_fight047);
+					 else if (getCreatureHealth().special[SPECIALWOUND_TEETH] == 1) addstrAlt(CONST_fight048);
 					 else addstrAlt(CONST_fight049); break;
-			 case 5: if (a.getCreatureBio().age < 20 && !a.getCreatureHealth().animalgloss) addstrAlt(CONST_fightX01);
-					 else switch (a.type) {
+			 case 5: if (getCreatureBio().age < 20 && !getCreatureHealth().animalgloss) addstrAlt(CONST_fightX01);
+					 else switch (type) {
 					 case CREATURE_GENETIC:
 						 addstrAlt(CONST_fightX02); break;
 					 case CREATURE_GUARDDOG:
@@ -457,27 +437,27 @@ bool goodguyattack = false;
 		 }
 		 return 1;
 	 }
-	 if (a.is_stunned())
+	 if (is_stunned())
 	 {
 		 if (noncombat)
 		 {
-			 a.decrement_stunned();
+			 decrement_stunned();
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
+			 mvaddstrAlt(16, 1, getNameAndAlignment().name, gamelog);
 			 addstrAlt(singleSpace + pickrandom(stunned_text));
 			 gamelog.newline();
 			 printed = 1;
 		 }
 		 return 1;
 	 }
-	 if (a.getCreatureHealth().special[SPECIALWOUND_NECK] == 2 || a.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] == 2)
+	 if (getCreatureHealth().special[SPECIALWOUND_NECK] == 2 || getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] == 2)
 	 {
 		 if (!noncombat)
 		 {
 			 clearmessagearea();
 			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
+			 mvaddstrAlt(16, 1, getNameAndAlignment().name, gamelog);
 			 addstrAlt(singleSpace + pickrandom(paralyzed_text));
 			 gamelog.newline();
 			 printed = 1;
@@ -487,25 +467,25 @@ bool goodguyattack = false;
 	 return 0;
  }
  /* checks if the creature can fight and prints flavor text if they can't */
- char incapacitated(DeprecatedCreature &a, const char noncombat, char &printed)
+ char DeprecatedCreature::incapacitated(const char noncombat, char &printed)
  {
 	 printed = 0;
-	 switch (a.getCreatureHealth().animalgloss) {
+	 switch (getCreatureHealth().animalgloss) {
 	 case ANIMALGLOSS_TANK:
-		 return incapacitatedTank(a, noncombat, printed);
+		 return incapacitatedTank(noncombat, printed);
 	 case ANIMALGLOSS_ANIMAL:
-		 return incapacitatedAnimal(a, noncombat, printed);
+		 return incapacitatedAnimal(noncombat, printed);
 	 default:
-		 return incapacitatedPerson(a, noncombat, printed);
+		 return incapacitatedPerson(noncombat, printed);
 	 }
  }
- string getSpecialAttackString(DeprecatedCreature &a, DeprecatedCreature &t, int &resist, int &attack) {
+ string DeprecatedCreature::getSpecialAttackString(DeprecatedCreature &t, int &resist, int &attack) {
 
 	 char str[200];
-	 strcpy(str, a.getNameAndAlignment().name.data());
+	 strcpy(str, getNameAndAlignment().name.data());
 	 strcat(str, singleSpace.c_str());
 
-	 switch (a.type)
+	 switch (type)
 	 {
 	 case CREATURE_JUDGE_CONSERVATIVE:
 	 case CREATURE_JUDGE_LIBERAL:
@@ -519,12 +499,12 @@ bool goodguyattack = false;
 		 else
 			 resist = t.skill_roll(SKILL_LAW) +
 			 t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.skill_roll(SKILL_LAW);
+		 attack += skill_roll(SKILL_LAW);
 		 break;
 	 case CREATURE_SCIENTIST_EMINENT:
 		 switch (LCSrandom(scientist_debate.size() + 1))
 		 {
-		 case 0:if (a.getCreatureHealth().align == ALIGN_CONSERVATIVE)strcat(str, CONST_fight059.c_str());
+		 case 0:if (getCreatureHealth().align == ALIGN_CONSERVATIVE)strcat(str, CONST_fight059.c_str());
 				else strcat(str, CONST_fight060.c_str()); break;
 		 default:
 			 strcat(str, pickrandom(scientist_debate).c_str()); break;
@@ -538,10 +518,10 @@ bool goodguyattack = false;
 		 else
 			 resist = t.skill_roll(SKILL_SCIENCE) +
 			 t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.skill_roll(SKILL_SCIENCE);
+		 attack += skill_roll(SKILL_SCIENCE);
 		 break;
 	 case CREATURE_POLITICIAN:
-		 if (a.getCreatureHealth().align == -1)
+		 if (getCreatureHealth().align == -1)
 			 strcat(str, pickrandom(conservative_politician_debate).c_str());
 		 else
 			 strcat(str, pickrandom(other_politician_debate).c_str());
@@ -554,10 +534,10 @@ bool goodguyattack = false;
 		 else
 			 resist = t.skill_roll(SKILL_LAW) +
 			 t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.skill_roll(SKILL_LAW);
+		 attack += skill_roll(SKILL_LAW);
 		 break;
 	 case CREATURE_CORPORATE_CEO:
-		 if (a.getCreatureHealth().align == -1)
+		 if (getCreatureHealth().align == -1)
 			 strcat(str, pickrandom(conservative_ceo_debate).c_str());
 		 else
 			 strcat(str, pickrandom(other_ceo_debate).c_str());
@@ -570,7 +550,7 @@ bool goodguyattack = false;
 		 else
 			 resist = t.skill_roll(SKILL_BUSINESS) +
 			 t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.skill_roll(SKILL_BUSINESS);
+		 attack += skill_roll(SKILL_BUSINESS);
 		 break;
 	 case CREATURE_RADIOPERSONALITY:
 	 case CREATURE_NEWSANCHOR:
@@ -582,7 +562,7 @@ bool goodguyattack = false;
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
 		 else
 			 resist = t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.attribute_roll(ATTRIBUTE_CHARISMA);
+		 attack += attribute_roll(ATTRIBUTE_CHARISMA);
 		 break;
 	 case CREATURE_MILITARYOFFICER:
 		 strcat(str, pickrandom(military_debate).c_str());
@@ -593,37 +573,37 @@ bool goodguyattack = false;
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
 		 else
 			 resist = t.attribute_roll(ATTRIBUTE_WISDOM);
-		 attack += a.attribute_roll(ATTRIBUTE_CHARISMA);
+		 attack += attribute_roll(ATTRIBUTE_CHARISMA);
 		 break;
 	 case CREATURE_COP:
-		 if (a.enemy())
+		 if (enemy())
 		 {
 			 strcat(str, pickrandom(police_debate).c_str());
 			 strcat(str, singleSpace.c_str());
 			 strcat(str, t.getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight146.c_str());
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
-			 attack += a.skill_roll(SKILL_PERSUASION);
+			 attack += skill_roll(SKILL_PERSUASION);
 			 break;
 		 }
 		 //No break. If the cop is a liberal it will do a musical attack instead.
 	 default:
-		 if (a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) || a.type == CREATURE_COP)
+		 if (get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) || type == CREATURE_COP)
 		 {
 			 switch (LCSrandom(5))
 			 {
 				 //TODO IsaacG Migrate Strings
 			 case 0:strcat(str, CONST_fight067.c_str()); break;
 			 case 1:strcat(str, CONST_fight068.c_str()); break;
-			 case 2:if (a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_))
+			 case 2:if (get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_))
 			 {
 				 strcat(str, CONST_fight069.c_str());
-				 strcat(str, a.get_weapon().get_name().c_str());
+				 strcat(str, get_weapon().get_name().c_str());
 			 }
 					else // let's use a small enough instrument for anyone to carry in their pocket
 						strcat(str, CONST_fight070.c_str());
 				 strcat(str, CONST_fight071.c_str()); break;
-			 case 3:if (a.getCreatureHealth().align == 1)strcat(str, CONST_fight072.c_str());
+			 case 3:if (getCreatureHealth().align == 1)strcat(str, CONST_fight072.c_str());
 					else strcat(str, CONST_fight073.c_str());
 					break;
 			 case 4:strcat(str, CONST_fight074.c_str()); break;
@@ -631,19 +611,19 @@ bool goodguyattack = false;
 			 strcat(str, singleSpace.c_str());
 			 strcat(str, t.getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight146.c_str());
-			 attack = a.skill_roll(SKILL_MUSIC);
+			 attack = skill_roll(SKILL_MUSIC);
 			 if (t.getCreatureHealth().align == 1)
 				 resist = t.attribute_roll(ATTRIBUTE_HEART);
 			 else resist = t.attribute_roll(ATTRIBUTE_WISDOM);
 			 if (resist > 0)
-				 a.train(SKILL_MUSIC, LCSrandom(resist) + 1);
-			 else a.train(SKILL_MUSIC, 1);
+				 train(SKILL_MUSIC, LCSrandom(resist) + 1);
+			 else train(SKILL_MUSIC, 1);
 		 }
 		 break;
 	 }
 	 return str;
  }
- void specialattack(DeprecatedCreature &a, DeprecatedCreature &t)
+ void DeprecatedCreature::makespecialattack(DeprecatedCreature &t)
  {
 	 extern short mode;
 	 extern Log gamelog;
@@ -654,32 +634,32 @@ bool goodguyattack = false;
 	 clearmessagearea();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 int attack = 0;
-	 if (a.getCreatureHealth().align != 1)
-		 attack = a.attribute_roll(ATTRIBUTE_WISDOM) + t.get_attribute(ATTRIBUTE_WISDOM, false);
-	 else //if (a.align == 1)
-		 attack = a.attribute_roll(ATTRIBUTE_HEART) + t.get_attribute(ATTRIBUTE_HEART, false);
+	 if (getCreatureHealth().align != 1)
+		 attack = attribute_roll(ATTRIBUTE_WISDOM) + t.get_attribute(ATTRIBUTE_WISDOM, false);
+	 else //if (align == 1)
+		 attack = attribute_roll(ATTRIBUTE_HEART) + t.get_attribute(ATTRIBUTE_HEART, false);
 
-	 mvaddstrAlt(16, 1, getSpecialAttackString(a, t, resist, attack), gamelog);
+	 mvaddstrAlt(16, 1, getSpecialAttackString(t, resist, attack), gamelog);
 
 	 gamelog.newline();
 	 if ((t.getCreatureHealth().animalgloss == ANIMALGLOSS_TANK || (t.getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL && lawList[LAW_ANIMALRESEARCH] != 2))
-		 || (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
+		 || (enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
 	 {
 		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight076, gamelog);
 	 }
-	 else if (a.getCreatureHealth().align == t.getCreatureHealth().align)
+	 else if (getCreatureHealth().align == t.getCreatureHealth().align)
 	 {
-		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight077 + a.getNameAndAlignment().name + singleDot);
+		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight077 + getNameAndAlignment().name + singleDot);
 	 }
 	 else if (attack > resist)
 	 {
 		 t.increase_stunned((attack - resist) / 4);
-		 if (a.enemy())
+		 if (enemy())
 		 {
 			 if (t.juice > 100)
 			 {
 				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight078, gamelog);
-				 addjuice(t, -50, 100);
+				 t.add_juice(-50, 100);
 			 }
 			 else if (LCSrandom(15) > t.get_attribute(ATTRIBUTE_WISDOM, true) || t.get_attribute(ATTRIBUTE_WISDOM, true) < t.get_attribute(ATTRIBUTE_HEART, true))
 			 {
@@ -692,12 +672,12 @@ bool goodguyattack = false;
 			 }
 			 else
 			 {
-				 if (a.getCreatureHealth().align == -1)
+				 if (getCreatureHealth().align == -1)
 				 {
 					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight081, gamelog);
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
-						 freehostage(t, 0);
+						t.freehostage(0);
 					 addstrAlt(CONST_fight146, gamelog);
 				 }
 				 else
@@ -705,7 +685,7 @@ bool goodguyattack = false;
 					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight083, gamelog);
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
-						 freehostage(t, 0);
+						 t.freehostage(0);
 					 addstrAlt(CONST_fight146, gamelog);
 				 }
 				 for (int e = 0; e < ENCMAX; e++)
@@ -714,7 +694,7 @@ bool goodguyattack = false;
 					 {
 						 encounter[e] = t;
 						 encounter[e].make_existing();
-						 if (a.getCreatureHealth().align == -1)conservatise(encounter[e]);
+						 if (getCreatureHealth().align == -1)encounter[e].conservatise();
 						 encounter[e].make_cantbluff_two();
 						 encounter[e].squadid = -1;
 						 break;
@@ -740,7 +720,7 @@ bool goodguyattack = false;
 			 if (t.juice >= 100)
 			 {
 				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight085, gamelog);
-				 addjuice(t, -50, 99);
+				 t.add_juice(-50, 99);
 			 }
 			 else if (!t.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_AVERAGE) ||
 				 t.get_attribute(ATTRIBUTE_HEART, true) < t.get_attribute(ATTRIBUTE_WISDOM, true))
@@ -752,7 +732,7 @@ bool goodguyattack = false;
 			 {
 				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight087, gamelog);
 				 t.stop_being_stunned();
-				 liberalize(t);
+				 t.liberalize();
 				 t.infiltration /= 2;
 				 t.flag |= CREATUREFLAG_CONVERTED;
 				 t.make_cantbluff_zero();
@@ -764,7 +744,7 @@ bool goodguyattack = false;
 		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight088, gamelog);
 	 }
 	 gamelog.newline();
-	 printparty();
+	 DeprecatedCreature::printparty();
 	 if (mode == GAMEMODE_CHASECAR ||
 		 mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 	 else printencounter();
@@ -772,29 +752,28 @@ bool goodguyattack = false;
 	 return;
  }
  /* modifies a combat roll based on the creature's critical injuries */
- void healthmodroll(int &aroll, DeprecatedCreature &a)
- {
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] != 1) aroll -= LCSrandom(2);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE] != 1) aroll -= LCSrandom(2);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] != 1 &&
-		 a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE] != 1) aroll -= LCSrandom(20);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG] != 1) aroll -= LCSrandom(8);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_LEFTLUNG] != 1) aroll -= LCSrandom(8);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_HEART] != 1) aroll -= LCSrandom(10);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_LIVER] != 1) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_STOMACH] != 1) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY] != 1) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY] != 1) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_SPLEEN] != 1) aroll -= LCSrandom(4);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_LOWERSPINE] != 1) aroll -= LCSrandom(100);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] != 1) aroll -= LCSrandom(200);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_NECK] != 1) aroll -= LCSrandom(300);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM / 2) aroll -= LCSrandom(5);
-	 if (a.getCreatureHealth().special[SPECIALWOUND_RIBS] == 0) aroll -= LCSrandom(5);
+ void DeprecatedCreature::healthmodroll(int &aroll){
+	 if (getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] != 1) aroll -= LCSrandom(2);
+	 if (getCreatureHealth().special[SPECIALWOUND_LEFTEYE] != 1) aroll -= LCSrandom(2);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] != 1 &&
+		 getCreatureHealth().special[SPECIALWOUND_LEFTEYE] != 1) aroll -= LCSrandom(20);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG] != 1) aroll -= LCSrandom(8);
+	 if (getCreatureHealth().special[SPECIALWOUND_LEFTLUNG] != 1) aroll -= LCSrandom(8);
+	 if (getCreatureHealth().special[SPECIALWOUND_HEART] != 1) aroll -= LCSrandom(10);
+	 if (getCreatureHealth().special[SPECIALWOUND_LIVER] != 1) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_STOMACH] != 1) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY] != 1) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY] != 1) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_SPLEEN] != 1) aroll -= LCSrandom(4);
+	 if (getCreatureHealth().special[SPECIALWOUND_LOWERSPINE] != 1) aroll -= LCSrandom(100);
+	 if (getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] != 1) aroll -= LCSrandom(200);
+	 if (getCreatureHealth().special[SPECIALWOUND_NECK] != 1) aroll -= LCSrandom(300);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM / 2) aroll -= LCSrandom(5);
+	 if (getCreatureHealth().special[SPECIALWOUND_RIBS] == 0) aroll -= LCSrandom(5);
  }
  /* adjusts attack damage based on armor, other factors */
- void damagemod(const DeprecatedCreature t, const char &damtype, int &damamount, int mod)
+ void DeprecatedCreature::damagemod(const char &damtype, int &damamount, int mod) const
  {
 
 	 if (mod > 10) mod = 10; // Cap damage multiplier (every 5 points adds 1x damage)
@@ -808,10 +787,10 @@ bool goodguyattack = false;
 	 else if (mod <= -1) damamount >>= 1;
 	 else if (mod >= 0) damamount = (int)((float)damamount * (1.0f + 0.2f*mod));
 	 // Firefighter's bunker gear reduces fire damage by 3/4
-	 if ((damtype & WOUND_BURNED) && t.get_armor().has_fireprotection())
+	 if ((damtype & WOUND_BURNED) && get_armor().has_fireprotection())
 	 {
 		 // Damaged gear isn't as effective as undamaged gear
-		 if (t.get_armor().is_damaged())
+		 if (get_armor().is_damaged())
 			 damamount >>= 1; // Only half as much damage reduction
 		 else
 			 damamount >>= 2; // Full damage reduction
@@ -853,8 +832,7 @@ bool goodguyattack = false;
  }
  std::string burstHitString(int bursthits);
  /* blood explosions */
- void bloodyUpEncounterArmor();
- void bloodblast(Armor* armor)
+ void DeprecatedCreature::bloodblast(Armor* armor)
  {
 	 extern short mode;
 	 extern Deprecatedsquadst *activesquad;
@@ -879,50 +857,50 @@ bool goodguyattack = false;
 	 refreshAlt();
  }
  /* destroys armor, masks, drops weapons based on severe damage */
- void severloot(DeprecatedCreature &cr)
+ void DeprecatedCreature::severloot()
  {
 	 extern short mode;
 	 extern Log gamelog;
 	 int armok = 2;
-	 if ((cr.getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
-		 (cr.getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
-	 if ((cr.getCreatureHealth().wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF) ||
-		 (cr.getCreatureHealth().wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
-	 if (cr.getCreatureHealth().special[SPECIALWOUND_NECK] != 1) armok = 0;
-	 if (cr.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] != 1) armok = 0;
-	 if (cr.is_armed() && armok == 0)
+	 if ((getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
+		 (getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
+	 if ((getCreatureHealth().wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF) ||
+		 (getCreatureHealth().wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
+	 if (getCreatureHealth().special[SPECIALWOUND_NECK] != 1) armok = 0;
+	 if (getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] != 1) armok = 0;
+	 if (is_armed() && armok == 0)
 	 {
 		 clearmessagearea();
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(16, 1, tag_The, gamelog);
-		 addstrAlt(cr.get_weapon().get_name(1), gamelog);
+		 addstrAlt(get_weapon().get_name(1), gamelog);
 		 addstrAlt(CONST_fight090, gamelog);
-		 mvaddstrAlt(17, 1, cr.getNameAndAlignment().name, gamelog);
+		 mvaddstrAlt(17, 1, getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_fight091, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
-		 if (mode == GAMEMODE_SITE) cr.drop_weapons_and_clips(&groundloot);
-		 else cr.drop_weapons_and_clips(NULL);
+		 if (mode == GAMEMODE_SITE) drop_weapons_and_clips(&groundloot);
+		 else drop_weapons_and_clips(NULL);
 	 }
-	 if ((((cr.getCreatureHealth().wound[BODYPART_BODY] & WOUND_CLEANOFF) ||
-		 (cr.getCreatureHealth().wound[BODYPART_BODY] & WOUND_NASTYOFF)) &&
-		 cr.get_armor().covers(BODYPART_BODY)) ||
-		 ((cr.getCreatureHealth().wound[BODYPART_HEAD] & WOUND_NASTYOFF) &&
-			 cr.get_armor().is_mask()))
+	 if ((((getCreatureHealth().wound[BODYPART_BODY] & WOUND_CLEANOFF) ||
+		 (getCreatureHealth().wound[BODYPART_BODY] & WOUND_NASTYOFF)) &&
+		 get_armor().covers(BODYPART_BODY)) ||
+		 ((getCreatureHealth().wound[BODYPART_HEAD] & WOUND_NASTYOFF) &&
+			 get_armor().is_mask()))
 	 {
 		 clearmessagearea();
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(16, 1, cr.getNameAndAlignment().name, gamelog);
+		 mvaddstrAlt(16, 1, getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_fight136, gamelog);
-		 addstrAlt(cr.get_armor().get_name(), gamelog);
+		 addstrAlt(get_armor().get_name(), gamelog);
 		 addstrAlt(CONST_fight093, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
-		 cr.strip(NULL);
+		 strip(NULL);
 	 }
  }
  /* describes a character's death */
- void adddeathmessage(DeprecatedCreature &cr)
+ void DeprecatedCreature::adddeathmessage()
  {
 	 extern short mode;
 	 extern Log gamelog;
@@ -932,9 +910,9 @@ bool goodguyattack = false;
 	 char str[200];
 	 char secondLine[200];
 	 bool hasSecondLine = false;
-	 strcpy(str, cr.getNameAndAlignment().name.data());
-	 if ((cr.getCreatureHealth().wound[BODYPART_HEAD] & WOUND_CLEANOFF) ||
-		 (cr.getCreatureHealth().wound[BODYPART_HEAD] & WOUND_NASTYOFF))
+	 strcpy(str, getNameAndAlignment().name.data());
+	 if ((getCreatureHealth().wound[BODYPART_HEAD] & WOUND_CLEANOFF) ||
+		 (getCreatureHealth().wound[BODYPART_HEAD] & WOUND_NASTYOFF))
 	 {
 		 hasSecondLine = true;
 		 switch (LCSrandom(4))
@@ -967,8 +945,8 @@ bool goodguyattack = false;
 			 break;
 		 }
 	 }
-	 else if ((cr.getCreatureHealth().wound[BODYPART_BODY] & WOUND_CLEANOFF) ||
-		 (cr.getCreatureHealth().wound[BODYPART_BODY] & WOUND_NASTYOFF))
+	 else if ((getCreatureHealth().wound[BODYPART_BODY] & WOUND_CLEANOFF) ||
+		 (getCreatureHealth().wound[BODYPART_BODY] & WOUND_NASTYOFF))
 	 {
 		 strcat(str, (singleSpace + pickrandom(body_falls_apart)).c_str());
 	 }
@@ -989,7 +967,7 @@ bool goodguyattack = false;
 			 break;
 		 case 2:
 			 strcat(str, CONST_fight113.c_str());
-			 switch (cr.getCreatureHealth().align)
+			 switch (getCreatureHealth().align)
 			 {
 			 case ALIGN_LIBERAL:
 			 case ALIGN_ELITELIBERAL:
@@ -1013,101 +991,97 @@ bool goodguyattack = false;
 	 }
 	 gamelog.newline();
  }
- /* attack handling for an individual creature and its target */
- // returns a boolean representing whether it was the intended target or CONST_fight116
- // so bool actual does not need to be passed by reference
- bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
 
- bool attemptSpecialAttack(DeprecatedCreature &a, DeprecatedCreature &t, const bool force_melee) {
+ bool DeprecatedCreature::attemptSpecialAttack(DeprecatedCreature &t, const bool force_melee) {
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	 //SPECIAL ATTACK!
 	 int encnum = 0;
 	 for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encnum++;
 	 bool specialAttackIsPossible = (!force_melee &&
-		 (((a.type == CREATURE_COP && a.getCreatureHealth().align == ALIGN_MODERATE && a.enemy()) ||
-			 a.type == CREATURE_SCIENTIST_EMINENT ||
-			 a.type == CREATURE_JUDGE_LIBERAL ||
-			 a.type == CREATURE_JUDGE_CONSERVATIVE ||
-			 (a.type == CREATURE_CORPORATE_CEO && LCSrandom(2)) ||
-			 a.type == CREATURE_POLITICIAN ||
-			 a.type == CREATURE_RADIOPERSONALITY ||
-			 a.type == CREATURE_NEWSANCHOR ||
-			 a.type == CREATURE_MILITARYOFFICER ||
-			 a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_)) &&
-			 (a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) || !a.is_armed() || a.getCreatureHealth().align != 1)));
+		 (((type == CREATURE_COP && getCreatureHealth().align == ALIGN_MODERATE && enemy()) ||
+			 type == CREATURE_SCIENTIST_EMINENT ||
+			 type == CREATURE_JUDGE_LIBERAL ||
+			 type == CREATURE_JUDGE_CONSERVATIVE ||
+			 (type == CREATURE_CORPORATE_CEO && LCSrandom(2)) ||
+			 type == CREATURE_POLITICIAN ||
+			 type == CREATURE_RADIOPERSONALITY ||
+			 type == CREATURE_NEWSANCHOR ||
+			 type == CREATURE_MILITARYOFFICER ||
+			 get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_)) &&
+			 (get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) || !is_armed() || getCreatureHealth().align != 1)));
 	 if (specialAttackIsPossible)
 	 {
-		 if (a.getCreatureHealth().align == 1 || encnum < ENCMAX)
+		 if (getCreatureHealth().align == 1 || encnum < ENCMAX)
 		 {
-			 specialattack(a, t);
+			 makespecialattack(t);
 			 return true;
 		 }
 	 }
 	 return false;
  }
- bool attemptReload(DeprecatedCreature &a, const bool force_melee) {
+ bool DeprecatedCreature::attemptReload(const bool force_melee) {
 	 extern short mode;
 	 extern Log gamelog;
 	 //RELOAD
-	 if ((a.will_reload(mode == GAMEMODE_CHASECAR, force_melee)
-		 || (a.has_thrown_weapon && len(a.extra_throwing_weapons)))
+	 if ((will_reload(mode == GAMEMODE_CHASECAR, force_melee)
+		 || (has_thrown_weapon && has_extra_throwing_weapons()))
 		 && !force_melee)
 	 {
 		 char str[200];
-		 if (a.will_reload(mode == GAMEMODE_CHASECAR, force_melee))
+		 if (will_reload(mode == GAMEMODE_CHASECAR, force_melee))
 		 {
-			 a.reload(false);
-			 strcpy(str, a.getNameAndAlignment().name.data());
+			 reload(false);
+			 strcpy(str, getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight117.c_str());
 		 }
-		 else if (a.has_thrown_weapon && len(a.extra_throwing_weapons))
+		 else if (has_thrown_weapon && has_extra_throwing_weapons())
 		 {
-			 a.ready_another_throwing_weapon();
-			 strcpy(str, a.getNameAndAlignment().name.data());
+			 ready_another_throwing_weapon();
+			 strcpy(str, getNameAndAlignment().name.data());
 			 strcat(str, CONST_fight118.c_str());
-			 strcat(str, a.get_weapon().get_name().c_str());
+			 strcat(str, get_weapon().get_name().c_str());
 			 strcat(str, singleDot.c_str());
 		 }
 		 mvaddstrAlt(16, 1, str, gamelog);
 		 gamelog.newline();
-		 printparty();
+		 DeprecatedCreature::printparty();
 		 if (mode == GAMEMODE_CHASECAR
 			 || mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		 else printencounter();
 		 pressAnyKey();
 		 return true;
 	 }
-	 else if (a.has_thrown_weapon) a.has_thrown_weapon = false;
+	 else if (has_thrown_weapon) has_thrown_weapon = false;
 	 return false;
  }
- bool attemptIncapacitated(DeprecatedCreature &a) {
+ bool DeprecatedCreature::attemptIncapacitated() {
 	 extern short mode;
 	 //INCAPACITATED
 	 char incaprint;
-	 a.forceinc = 0;
-	 if (incapacitated(a, 0, incaprint))
+	 forceinc = 0;
+	 if (incapacitated(0, incaprint))
 	 {
 		 if (incaprint)
 		 {
-			 printparty();
+			 DeprecatedCreature::printparty();
 			 if (mode == GAMEMODE_CHASECAR ||
 				 mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			 else printencounter();
 			 pressAnyKey();
 		 }
-		 a.forceinc = 1;
+		 forceinc = 1;
 		 return true;
 	 }
 	 return false;
  }
 
- string showMultipleHits(DeprecatedCreature &a, const int bursthits, const attackst attack_used) {
+ string DeprecatedCreature::showMultipleHits(const int bursthits, const attackst attack_used) {
 	 string str;
 	 // show multiple hits
-	 if (bursthits > 1 && a.is_armed()) // Only show if not melee
+	 if (bursthits > 1 && is_armed()) // Only show if not melee
 	 {
 		 str = commaSpace;
-		 if (!a.is_armed()) //Move into WEAPON_NONE? -XML
+		 if (!is_armed()) //Move into WEAPON_NONE? -XML
 		 {
 			 str += CONST_fight137;
 		 }
@@ -1123,19 +1097,19 @@ bool goodguyattack = false;
 	 }
 	 return str;
  }
- DeprecatedCreature* takeBulletForLeader(DeprecatedCreature &t, const int damamount, const int w) {
+ DeprecatedCreature* DeprecatedCreature::takeBulletForLeader(const int damamount, const int w) {
 	 extern Log gamelog;
 	 extern Deprecatedsquadst *activesquad;
 	 DeprecatedCreature* target = 0;
-	 if (t.squadid != -1 && t.hireid == -1 && //if the founder is hit...
-		 (damamount > t.getCreatureHealth().blood || damamount >= 10) && //and lethal or potentially crippling damage is done...
+	 if (squadid != -1 && hireid == -1 && //if the founder is hit...
+		 (damamount > getCreatureHealth().blood || damamount >= 10) && //and lethal or potentially crippling damage is done...
 		 (w == BODYPART_HEAD || w == BODYPART_BODY)) //to a critical bodypart...
 	 {
 		 //Oh Noes!!!! Find a liberal to jump in front of the bullet!!!
 		 for (int i = 0; i < 6; i++)
 		 {
 			 if (activesquad->squad[i] == NULL) break;
-			 if (activesquad->squad[i] == &t) break;
+			 if (activesquad->squad[i] == this) break;
 			 if (activesquad->squad[i]->get_attribute(ATTRIBUTE_HEART, true) > 8 &&
 				 activesquad->squad[i]->get_attribute(ATTRIBUTE_AGILITY, true) > 4)
 			 {
@@ -1143,14 +1117,14 @@ bool goodguyattack = false;
 				 clearmessagearea();
 				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(16, 1, target->getNameAndAlignment().name, gamelog);
-				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_fight142, gamelog);
+				 if (!getCreatureHealth().alive) addstrAlt(CONST_fight142, gamelog);
 				 else addstrAlt(CONST_fight143, gamelog);
 				 addstrAlt(CONST_fight144, gamelog);
-				 addstrAlt(t.getNameAndAlignment().name, gamelog);
-				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_fight145, gamelog);
+				 addstrAlt(getNameAndAlignment().name, gamelog);
+				 if (!getCreatureHealth().alive) addstrAlt(CONST_fight145, gamelog);
 				 addstrAlt(CONST_fight146, gamelog);
 				 gamelog.newline();
-				 addjuice(*target, 10, 1000);//Instant juice!! Way to take the bullet!!
+				 target->add_juice(10, 1000);//Instant juice!! Way to take the bullet!!
 				 pressAnyKey();
 				 break;
 			 }
@@ -1159,12 +1133,12 @@ bool goodguyattack = false;
 	 return target;
  }
 
- int determineBodypartHit(DeprecatedCreature &t, const int aroll, const int droll, const bool sneak_attack) {
+ int DeprecatedCreature::determineBodypartHit(const int aroll, const int droll, const bool sneak_attack) {
 
 	 bool canhit = false;
 	 for (int w = 0; w < BODYPARTNUM && !canhit; w++)
 	 {
-		 if (!(t.getCreatureHealth().wound[w] & WOUND_CLEANOFF) && !(t.getCreatureHealth().wound[w] & WOUND_NASTYOFF))
+		 if (!(getCreatureHealth().wound[w] & WOUND_CLEANOFF) && !(getCreatureHealth().wound[w] & WOUND_NASTYOFF))
 		 {
 			 canhit = true;
 		 }
@@ -1176,13 +1150,13 @@ bool goodguyattack = false;
 		 if (aroll > droll + 5)
 			 offset = 4;  // NICE SHOT; MORE LIKELY TO HIT BODY/HEAD
 		 if (aroll > droll + 10 &&
-			 (!(t.getCreatureHealth().wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
-				 !(t.getCreatureHealth().wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF))))
+			 (!(getCreatureHealth().wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) ||
+				 !(getCreatureHealth().wound[BODYPART_BODY] & (WOUND_CLEANOFF | WOUND_NASTYOFF))))
 			 offset = 8;  // NO LIMB HITS HERE YOU AWESOME PERSON
 		 if (sneak_attack)
 			 offset = 10; // Backstab! 2/3 body, 1/3 head
 		 if (aroll > droll + 15 &&
-			 !(t.getCreatureHealth().wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)))
+			 !(getCreatureHealth().wound[BODYPART_HEAD] & (WOUND_CLEANOFF | WOUND_NASTYOFF)))
 			 offset = 12; // BOOM AUTOMATIC HEADSHOT MOTHA******
 						  //Weighted location roll:
 						  //200% chance to hit body
@@ -1204,10 +1178,10 @@ bool goodguyattack = false;
 		 case 4:
 		 case 0:w = BODYPART_LEG_LEFT; break;
 		 }
-	 } while (((t.getCreatureHealth().wound[w] & WOUND_CLEANOFF) || (t.getCreatureHealth().wound[w] & WOUND_NASTYOFF)) && canhit == true);
+	 } while (((getCreatureHealth().wound[w] & WOUND_CLEANOFF) || (getCreatureHealth().wound[w] & WOUND_NASTYOFF)) && canhit == true);
 	 return w;
  }
- string printSpecialWounds(DeprecatedCreature* target, const int w, const int damamount, const int damtype) {
+ string DeprecatedCreature::printSpecialWounds(const int w, const int damamount, const int damtype) {
 
 	 char heavydam = 0, breakdam = 0, pokedam = 0;
 	 if (damamount >= 12) //JDS -- 2x damage needed
@@ -1225,7 +1199,6 @@ bool goodguyattack = false;
 	 switch (w) {
 	 case BODYPART_HEAD:
 		 damageDescription = specialWoundPossibilityHead(
-			 *target,
 			 breakdam,
 			 heavydam,
 			 damtype
@@ -1233,7 +1206,6 @@ bool goodguyattack = false;
 		 break;
 	 case BODYPART_BODY:
 		 string damageDescription = specialWoundPossibilityBody(
-			 *target,
 			 breakdam,
 			 pokedam,
 			 damtype
@@ -1264,25 +1236,25 @@ bool goodguyattack = false;
 
  void setSiteAlarmOne();
  string howGracefulAttack(int handToHand);
- string initiateCombat(const DeprecatedCreature a, const bool sneak_attack, const attackst attack_used) {
+ string DeprecatedCreature::initiateCombat(const bool sneak_attack, const attackst attack_used) const {
 
 
 	 string str;
 
-	 if (!a.is_armed())
+	 if (!is_armed())
 	 {
-		 if (!a.getCreatureHealth().animalgloss) //Move into WEAPON_NONE -XML
+		 if (!getCreatureHealth().animalgloss) //Move into WEAPON_NONE -XML
 		 {
-			 str += howGracefulAttack(a.get_skill(SKILL_HANDTOHAND));
+			 str += howGracefulAttack(get_skill(SKILL_HANDTOHAND));
 		 }
 		 else
 		 {
-			 if (a.specialattack == ATTACK_CANNON)
+			 if (specialattack == ATTACK_CANNON)
 			 {
 				 str += CONST_fight127;
 			 }
-			 else if (a.specialattack == ATTACK_FLAME) str += CONST_fight128;
-			 else if (a.specialattack == ATTACK_SUCK) str += CONST_fight129;
+			 else if (specialattack == ATTACK_FLAME) str += CONST_fight128;
+			 else if (specialattack == ATTACK_SUCK) str += CONST_fight129;
 			 else str += CONST_fight130;
 		 }
 	 }
@@ -1301,7 +1273,7 @@ bool goodguyattack = false;
 	 return str;
  }
 
- string unsuccessfulHit(DeprecatedCreature &a, DeprecatedCreature &t, const int droll) {
+ string DeprecatedCreature::unsuccessfulHit(DeprecatedCreature &t, const int droll) {
 
 	 extern short mode;
 
@@ -1309,18 +1281,18 @@ bool goodguyattack = false;
 
 	 if (mode == GAMEMODE_CHASECAR)
 	 {
-		 DeprecatedCreature* driver = getChaseDriver(t);
+		 DeprecatedCreature* driver = t.getChaseDriver();
 		 str = driver->getNameAndAlignment().name;
 		 if (droll == 1) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight158;
 		 }
 		 else if (droll == 2) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight159;
 		 }
 		 else if (droll > 18 || droll < 1) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
 		 }
 		 else {
@@ -1330,15 +1302,15 @@ bool goodguyattack = false;
 	 else {
 		 str = t.getNameAndAlignment().name;
 		 if (droll == 1) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight158;
 		 }
 		 else if (droll == 2) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight159;
 		 }
 		 else if (droll > 18 || droll < 1) {
-			 str = a.getNameAndAlignment().name;
+			 str = getNameAndAlignment().name;
 			 str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
 		 }
 		 else {
@@ -1351,29 +1323,14 @@ bool goodguyattack = false;
  string dismemberingWound(const int w, const int wound);
  int bodypartSeverAmount(const int w);
 
- class AttackInfliction {
- public:
-	 AttackInfliction(const bool, const int, const int, const attackst);
-	 const bool sneak_attack;
-	 const int aroll;
-	 const int droll;
-	 const attackst attack_used;
- };
+
  AttackInfliction::AttackInfliction(const bool _sneak_attack, const int _aroll, const int _droll, const attackst _attack_used) : sneak_attack(_sneak_attack), aroll(_aroll < 0 ? 0 : _aroll),
 	 droll(_droll < 0 ? 0 : _droll),
 	 attack_used(_attack_used) {
 
 
  }
- class AttackSeverity {
- public:
-	 AttackSeverity::AttackSeverity(const int, const int, const int, const int);
-	 const int damamount;
-	 const int damagearmor;
-	 const int severtype;
-	 const int hit_location;
-
- };
+ 
  AttackSeverity::AttackSeverity(const int _damamount, const int _damagearmor, const int _severtype, const int w) : damamount(_damamount),
 	 damagearmor(_damagearmor),
 	 severtype(_severtype),
@@ -1383,8 +1340,7 @@ bool goodguyattack = false;
 
  }
 short  getCurrentSite();
- void inflictNonZeroDamage(AttackInfliction attackI,
-	 DeprecatedCreature &a,
+ void DeprecatedCreature::inflictNonZeroDamage(AttackInfliction attackI,
 	 const string inputStr,
 	 const AttackSeverity attackS,
 	 const int damtype,
@@ -1407,7 +1363,7 @@ short  getCurrentSite();
 	 string str = inputStr;
 	 int damamount = attackS.damamount;
 
-	 DeprecatedCreature *target = takeBulletForLeader(t, damamount, attackS.hit_location);
+	 DeprecatedCreature *target = t.takeBulletForLeader(damamount, attackS.hit_location);
 	 if (!target) target = &t;//If nobody jumps in front of the attack,
 	 target->apply_wound(attackS.hit_location, damtype);
 	 int severamount = bodypartSeverAmount(attackS.hit_location);
@@ -1447,9 +1403,9 @@ short  getCurrentSite();
 		 if (!alreadydead)
 		 {
 			 target->die();
-			 if (t.getCreatureHealth().align == -a.getCreatureHealth().align)
-				 addjuice(a, 5 + t.juice / 20, 1000); // Instant juice
-			 else addjuice(a, -(5 + t.juice / 20), -50);
+			 if (t.getCreatureHealth().align == -getCreatureHealth().align)
+				 add_juice(5 + t.juice / 20, 1000); // Instant juice
+			 else add_juice(-(5 + t.juice / 20), -50);
 			 if (target->squadid != -1)
 			 {
 				 if (target->getCreatureHealth().align == 1) stat_dead++;
@@ -1471,7 +1427,7 @@ short  getCurrentSite();
 			 {
 				 sitecrime += 10;
 				 sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-				 if (a.squadid != -1) criminalizeparty(LAWFLAG_MURDER);
+				 if (squadid != -1) criminalizeparty(LAWFLAG_MURDER);
 			 }
 		 }
 		 //set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1483,11 +1439,11 @@ short  getCurrentSite();
 		 pressAnyKey();
 		 if (!alreadydead)
 		 {
-			 severloot(t);
+			 t.severloot();
 			 clearmessagearea();
-			 adddeathmessage(*target);
+			 target->adddeathmessage();
 			 pressAnyKey();
-			 if (target->is_holding_body()) freehostage(t, 1);
+			 if (target->is_holding_body()) t.freehostage(1);
 		 }
 	 }
 	 else
@@ -1498,7 +1454,7 @@ short  getCurrentSite();
 		 //set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(17, 1, str, gamelog);
 		 gamelog.newline();
-		 printparty();
+		 DeprecatedCreature::printparty();
 		 if (mode == GAMEMODE_CHASECAR ||
 			 mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		 else printencounter();
@@ -1508,8 +1464,8 @@ short  getCurrentSite();
 		 if (!(target->getCreatureHealth().wound[attackS.hit_location] & (WOUND_CLEANOFF | WOUND_NASTYOFF)) &&
 			 !target->getCreatureHealth().animalgloss)
 		 {
-			 damageDescription = printSpecialWounds(target, attackS.hit_location, damamount, damtype);
-			 severloot(*target);
+			 damageDescription = target->printSpecialWounds(attackS.hit_location, damamount, damtype);
+			 target->severloot();
 		 }
 		 if (len(damageDescription) > 0) {
 			 clearmessagearea();
@@ -1533,7 +1489,7 @@ short  getCurrentSite();
 
 	 const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
 	 if (mod2 > 0) mod3 -= mod2 * 2;
-	 damagemod(testDummy, damtype, cardmg, mod3);
+	 testDummy.damagemod(damtype, cardmg, mod3);
 
 	 return cardmg;
  }
@@ -1549,7 +1505,7 @@ short  getCurrentSite();
 
 	 const int mod2 = armor + LCSrandom(armor + 1) - armorpiercing;
 	 if (mod2 > 0) mod3 -= mod2 * 2;
-	 damagemod(testDummy, damtype, cardmg, mod3);
+	 testDummy.damagemod(damtype, cardmg, mod3);
 
 	 return cardmg;
  }
@@ -1569,39 +1525,33 @@ short  getCurrentSite();
 
 	 return str;
  }
- struct damageDetails  {
-	 const int mod;
-	 const int hit_location;
-	 const int extraarmor;
-	 const char armorpiercing;
-	 damageDetails(int _mod, int _hit_location, int _extraarmor, char _armorpiercing) : mod(_mod), hit_location(_hit_location), extraarmor(_extraarmor), armorpiercing(_armorpiercing) {};
- };
- void updateDamageExcludingCar(const DeprecatedCreature t, char &damtype, int &damamount, const damageDetails ddetails) {
+
+ void DeprecatedCreature::updateDamageExcludingCar(char &damtype, int &damamount, const damageDetails ddetails) const {
 
 	 int mod3 = ddetails.mod;
-	 int armor = t.get_armor().get_armor(ddetails.hit_location);
-	 if (t.getCreatureHealth().animalgloss == ANIMALGLOSS_TANK)
+	 int armor = get_armor().get_armor(ddetails.hit_location);
+	 if (getCreatureHealth().animalgloss == ANIMALGLOSS_TANK)
 	 {
 		 if (damtype != WOUND_BURNED) armor = 15;
 		 else armor = 10;
 	 }
 	 //if(t.get_armor().get_quality()>1)
-	 armor -= t.get_armor().get_quality() - 1;
-	 if (t.get_armor().is_damaged())
+	 armor -= get_armor().get_quality() - 1;
+	 if (get_armor().is_damaged())
 		 armor -= 1;
 	 if (armor < 0) armor = 0; // Possible from second-rate clothes
 	 armor += ddetails.extraarmor; // Add vehicle armor 
 	 const int mod2 = armor + LCSrandom(armor + 1) - ddetails.armorpiercing;
 	 if (mod2 > 0) mod3 -= mod2 * 2;
-	 damagemod(t, damtype, damamount, mod3);
+	 damagemod(damtype, damamount, mod3);
  }
- void inflictDamage(const int numhits, DeprecatedCreature &a, DeprecatedCreature &t, const AttackInfliction attackI) {
+ void DeprecatedCreature::inflictDamage(const int numhits, DeprecatedCreature &t, const AttackInfliction attackI) {
 
 	 extern short mode;
 	 extern Log gamelog;
 
 
-	 int hit_location = determineBodypartHit(t, attackI.aroll, attackI.droll, attackI.sneak_attack);
+	 int hit_location = t.determineBodypartHit(attackI.aroll, attackI.droll, attackI.sneak_attack);
 
 
 	 char damtype = 0;
@@ -1612,18 +1562,18 @@ short  getCurrentSite();
 	 char damagearmor = 0;
 	 char armorpiercing = 0;
 	 int extraarmor = 0;
-	 if (!a.is_armed())
+	 if (!is_armed())
 	 {
 		 strengthmin = 5;
 		 strengthmax = 10;
 		 for (int i = numhits; i > 0; i--) //Put into WEAPON_NONE -XML
 		 {
-			 damamount += LCSrandom(5 + a.get_skill(SKILL_HANDTOHAND)) + 1 + a.get_skill(SKILL_HANDTOHAND);
+			 damamount += LCSrandom(5 + get_skill(SKILL_HANDTOHAND)) + 1 + get_skill(SKILL_HANDTOHAND);
 		 }
-		 if (!a.getCreatureHealth().animalgloss) damtype |= WOUND_BRUISED;
+		 if (!getCreatureHealth().animalgloss) damtype |= WOUND_BRUISED;
 		 else
 		 {
-			 switch (a.specialattack) {
+			 switch (specialattack) {
 			 case ATTACK_CANNON:
 				 damamount = LCSrandom(5000) + 5000;
 				 armorpiercing = 20;
@@ -1679,7 +1629,7 @@ short  getCurrentSite();
 	 {
 		 // Melee attacks: Maximum strength bonus, minimum
 		 // strength to deliver full damage
-		 int strength = a.attribute_roll(ATTRIBUTE_STRENGTH);
+		 int strength = attribute_roll(ATTRIBUTE_STRENGTH);
 		 if (strength > strengthmax) strength = (strengthmax + strength) / 2;
 		 mod += strength - strengthmin;
 		 armorpiercing += (strength - strengthmin) / 4;
@@ -1692,7 +1642,7 @@ short  getCurrentSite();
 	 if (mod < 0) mod = 0;
 	 // In a car chase, the vehicle itself provides bonus armor
 	 int vehicleHitLocation = 0;
-	 Vehicle* vehicle = getChaseVehicle(t);
+	 Vehicle* vehicle = t.getChaseVehicle();
 	 if (mode == GAMEMODE_CHASECAR && vehicle != NULL)
 	 {
 		 vehicleHitLocation = vehicle->gethitlocation(hit_location);
@@ -1701,7 +1651,7 @@ short  getCurrentSite();
 	 }
 	 int cardmg = damamount;
 	 {
-		 updateDamageExcludingCar(t, damtype, damamount, damageDetails(mod, hit_location, extraarmor, armorpiercing));
+		 t.updateDamageExcludingCar(damtype, damamount, damageDetails(mod, hit_location, extraarmor, armorpiercing));
 	 }
 
 	 string str;
@@ -1731,13 +1681,13 @@ short  getCurrentSite();
 	 }
 
 	 if (len(str) < 1) {
-		 str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
+		 str = heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
 		 if (attackI.sneak_attack) str += CONST_fight134;
 		 else str += CONST_fight135;
 		 str += t.getNameAndAlignment().name;
 		 str += CONST_fight136;
 		 str += bodypartName((Bodyparts)hit_location, (AnimalGlosses)t.getCreatureHealth().animalgloss);
-		 str += showMultipleHits(a, numhits, attackI.attack_used);
+		 str += showMultipleHits(numhits, attackI.attack_used);
 		 // Report vehicle protection effect
 		 if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
 		 {
@@ -1757,7 +1707,7 @@ short  getCurrentSite();
 	 if (damamount > 0)
 	 {
 		 inflictNonZeroDamage(attackI,
-			 a,
+			 
 			 str,
 			 AttackSeverity(damamount, damagearmor, severtype, hit_location),
 			 damtype,
@@ -1770,7 +1720,7 @@ short  getCurrentSite();
 		 str += CONST_fight153;
 		 mvaddstrAlt(17, 1, str, gamelog);
 		 gamelog.newline();
-		 printparty();
+		 DeprecatedCreature::printparty();
 		 if (mode == GAMEMODE_CHASECAR ||
 			 mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		 else printencounter();
@@ -1778,7 +1728,7 @@ short  getCurrentSite();
 	 }
  }
  void addLocationChange(int cursite, sitechangest change);
- void directlyUseWeapon(DeprecatedCreature &a, int &num_attacks, int &thrownweapons, int &bursthits, const attackst attack_used) {
+ void DeprecatedCreature::directlyUseWeapon(int &num_attacks, int &thrownweapons, int &bursthits, const attackst attack_used) {
 
 	 extern short mode;
 
@@ -1792,7 +1742,7 @@ short  getCurrentSite();
 	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used.fire.chance_causes_debris)
 	 {// TODO - In a car chase, debris should make driving harder for one round, or require a drive skill check to avoid damage
 		 sitechangest change(loc_coord.locx, loc_coord.locy, loc_coord.locz, SITEBLOCK_DEBRIS);
-		 addLocationChange(getCurrentSite(), change);//  location[cursite]->changes.push_back(change);
+		 addLocationChange(getCurrentSite(), change);//  listOfLocations[cursite]->changes.push_back(change);
 	 }
 	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used.fire.chance)
 	 {// TODO - In a car chase, apply vehicle damage, with drive skill check to partially mitigate
@@ -1804,7 +1754,7 @@ short  getCurrentSite();
 		 {
 			 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_FIRE_START;
 			 sitecrime += 3;
-			 addjuice(a, 5, 500);
+			 add_juice(5, 500);
 			 criminalizeparty(LAWFLAG_ARSON);
 			 sitestory->crime.push_back(CRIME_ARSON);
 		 }
@@ -1813,46 +1763,46 @@ short  getCurrentSite();
 	 if (attack_used.thrown)
 	 {
 		 thrownweapons = num_attacks;
-		 if (thrownweapons > a.count_weapons()) {
-			 thrownweapons = a.count_weapons();
+		 if (thrownweapons > count_weapons()) {
+			 thrownweapons = count_weapons();
 			 num_attacks = thrownweapons;
 		 }
 	 }
 	 else
 		 if (attack_used.uses_ammo) {
-			 if (a.get_weapon().get_ammoamount() < num_attacks) {
-				 num_attacks = a.get_weapon().get_ammoamount();
+			 if (get_weapon().get_ammoamount() < num_attacks) {
+				 num_attacks = get_weapon().get_ammoamount();
 			 }
-			 a.get_weapon().decrease_ammo(num_attacks);
+			 get_weapon().decrease_ammo(num_attacks);
 		 }
 
  }
- string firstStrike(const DeprecatedCreature a, const DeprecatedCreature t, const char mistake, const bool sneak_attack, const attackst attack_used) {
-	 string str = a.getNameAndAlignment().name;
+ string DeprecatedCreature::firstStrike(const DeprecatedCreature t, const char mistake, const bool sneak_attack, const attackst attack_used) {
+	 string str = getNameAndAlignment().name;
 
 	 str += singleSpace;
 	 if (mistake) { str += CONST_fight119; }
-	 str += initiateCombat(a, sneak_attack, attack_used);
+	 str += initiateCombat(sneak_attack, attack_used);
 	 str += singleSpace;
 	 str += t.getNameAndAlignment().name;
 
-	 if (a.is_armed() && !attack_used.thrown)
+	 if (is_armed() && !attack_used.thrown)
 	 {
 		 str += CONST_fight132;
-		 str += a.get_weapon().get_name(1);
+		 str += get_weapon().get_name(1);
 	 }
 
 	 str += CONST_fight146;
 	 return str;
  }
- int driverAttackBonus(const DeprecatedCreature a) {
+ int DeprecatedCreature::driverAttackBonus() {
 
-	 DeprecatedCreature* adriver = getChaseDriver(a);
-	 Vehicle* avehicle = getChaseVehicle(a);
+	 DeprecatedCreature* adriver = getChaseDriver();
+	 Vehicle* avehicle = getChaseVehicle();
 
 	 if (adriver != NULL && avehicle != NULL)
 	 {
-		 return avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
+		 return avehicle->attackbonus(adriver->id == id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
 	 }
 	 else // shouldn't happen
 	 {
@@ -1864,14 +1814,14 @@ short  getCurrentSite();
  bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee) {
 	 extern DeprecatedCreature encounter[ENCMAX];
 	 extern vector<DeprecatedCreature *> pool;
-	 return attack(*pool[p], encounter[t], mistake, force_melee);
+	 return pool[p]->attack(encounter[t], mistake, force_melee);
  }
 
 bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee = false);
 void addLocationChange(int cursite, sitechangest change);
 bool isThereASiteAlarm();
 /* attack handling for an individual creature and its target */
-bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee)
+bool DeprecatedCreature::attack(DeprecatedCreature &t, const char mistake, const bool force_melee)
 {
 	extern short mode;
 	extern Log gamelog;
@@ -1881,10 +1831,10 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 
-	const attackst attack_used = *a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
+	const attackst attack_used = *get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
 		force_melee,
-		(force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
-	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || &attack_used == NULL) {
+		(force_melee || !can_reload())); //No reload if force melee or unable to reload.
+	if (attemptIncapacitated() || attemptSpecialAttack(t, force_melee) || attemptReload(force_melee) || &attack_used == NULL) {
 		// All exit points consolidated here, except the final one.
 		// These four conditions, in order, determine the attacker is not capable of attacking using the standard attack()
 		// It relies on lazy conditional OR, since each condition has side effects.
@@ -1892,9 +1842,9 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 
 	// for tanks, attack_used->ranged returns false, so we need to check if it's a tank
-	bool melee = !attack_used.ranged && !(!a.is_armed() && a.getCreatureHealth().animalgloss && a.specialattack == ATTACK_CANNON);
+	bool melee = !attack_used.ranged && !(!is_armed() && getCreatureHealth().animalgloss && specialattack == ATTACK_CANNON);
 
-	bool sneak_attack = a.is_armed() && (attack_used.can_backstab && a.getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
+	bool sneak_attack = is_armed() && (attack_used.can_backstab && getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
 
 	if (sneak_attack)
 	{
@@ -1904,7 +1854,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 		t.make_cantbluff_two();
 	}
 
-	mvaddstrAlt(16, 1, firstStrike(a, t, mistake, sneak_attack, attack_used), gamelog);
+	mvaddstrAlt(16, 1, firstStrike(t, mistake, sneak_attack, attack_used), gamelog);
 
 	gamelog.newline();
 	pressAnyKey();
@@ -1916,7 +1866,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	const int wsk = attack_used.skill;
 
 	// Basic roll
-	int aroll = a.skill_roll(wsk);
+	int aroll = skill_roll(wsk);
 	// In a car chase, the driver provides the defence roll instead of the victim.
 	int droll;
 	if (mode != GAMEMODE_CHASECAR)
@@ -1926,8 +1876,8 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	else
 	{
 
-		DeprecatedCreature* driver = getChaseDriver(t);
-		Vehicle* vehicle = getChaseVehicle(t);
+		DeprecatedCreature* driver = t.getChaseDriver();
+		Vehicle* vehicle = t.getChaseVehicle();
 
 		if (driver != NULL && vehicle != NULL)
 		{  // without a vehicle or driver, you get a zero roll.
@@ -1937,12 +1887,12 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 			droll = 0;
 		}
 
-		DeprecatedCreature* adriver = getChaseDriver(a);
-		Vehicle* avehicle = getChaseVehicle(a);
+		DeprecatedCreature* adriver = getChaseDriver();
+		Vehicle* avehicle = getChaseVehicle();
 
 		if (adriver != NULL && avehicle != NULL)
 		{
-			bonus += avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
+			bonus += avehicle->attackbonus(adriver->id == id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
 		}
 		else // shouldn't happen
 		{
@@ -1952,46 +1902,46 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	if (sneak_attack)
 	{
 		droll = t.attribute_roll(ATTRIBUTE_WISDOM) / 2;
-		aroll += a.skill_roll(SKILL_STEALTH);
-		a.train(wsk, 10);
+		aroll += skill_roll(SKILL_STEALTH);
+		train(wsk, 10);
 	}
 	else
 	{
-		DeprecatedCreature* driver = getChaseDriver(t);
+		DeprecatedCreature* driver = t.getChaseDriver();
 
 		if (driver != NULL)
 			driver->train(SKILL_DRIVING, aroll / 2);
 		else
 			t.train(SKILL_DODGE, aroll * 2);
-		a.train(wsk, droll * 2 + 5);
+		train(wsk, droll * 2 + 5);
 	}
 	// Hostages interfere with attack
 	if (t.is_holding_body()) bonus -= LCSrandom(10);
-	if (a.is_holding_body()) aroll -= LCSrandom(10);
+	if (is_holding_body()) aroll -= LCSrandom(10);
 	//Injured people suck at attacking, are like fish in a barrel to attackers
 	if (mode == GAMEMODE_CHASEFOOT)
 	{
 		// If in a foot chase, double the debilitating effect of injuries
-		healthmodroll(aroll, a);
-		healthmodroll(droll, t);
-		healthmodroll(droll, t);
+		healthmodroll(aroll);
+		t.healthmodroll(droll);
+		t.healthmodroll(droll);
 	}
 	else if (mode == GAMEMODE_CHASECAR)
 	{
 		// In a car chase, the driver is applying dodge rolls even for crippled people.
-		healthmodroll(aroll, a);
-		DeprecatedCreature* driver = getChaseDriver(t);
+		healthmodroll(aroll);
+		DeprecatedCreature* driver = t.getChaseDriver();
 
 		if (driver != NULL)
 		{// if there is no driver, we already rolled a zero, so don't worry about further penalties.
-			healthmodroll(droll, *driver);
+			driver->healthmodroll(droll);
 		}
 	}
 	else
 	{
 		// Any other case (site fight) normal penalties.
-		healthmodroll(aroll, a);
-		healthmodroll(droll, t);
+		healthmodroll(aroll);
+		t.healthmodroll(droll);
 	}
 	AttackInfliction attackI(sneak_attack, aroll, droll, attack_used);
 	// Weapon accuracy bonuses and penalties
@@ -1999,12 +1949,12 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	//USE BULLETS
 	int bursthits = 0; // Tracks number of hits.
 	int thrownweapons = 0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
-	if (!a.is_armed()) //Move into WEAPON_NONE -XML
+	if (!is_armed()) //Move into WEAPON_NONE -XML
 	{
 		// Martial arts multi-strikes
-		bursthits = 1 + LCSrandom(a.get_skill(SKILL_HANDTOHAND) / 3 + 1);
+		bursthits = 1 + LCSrandom(get_skill(SKILL_HANDTOHAND) / 3 + 1);
 		if (bursthits > 5) bursthits = 5;
-		if (a.getCreatureHealth().animalgloss) bursthits = 1; // Whoops, must be human to use martial arts fanciness
+		if (getCreatureHealth().animalgloss) bursthits = 1; // Whoops, must be human to use martial arts fanciness
 	}
 	else
 	{
@@ -2013,7 +1963,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 			num_attacks = 1;
 			bursthits = 1;
 		}
-		directlyUseWeapon(a, num_attacks, thrownweapons, bursthits, attack_used);
+		directlyUseWeapon(num_attacks, thrownweapons, bursthits, attack_used);
 		if (!sneak_attack) {
 			for (int i = 0; i < num_attacks; i++)
 			{
@@ -2026,7 +1976,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	//HIT!
 	if (aroll + bonus > droll)
 	{
-		inflictDamage(bursthits, a, t, attackI);
+		inflictDamage(bursthits, t, attackI);
 	}
 	else
 	{
@@ -2040,7 +1990,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 			gamelog.newline();
 			pressAnyKey();
 			goodguyattack = !goodguyattack;
-			attack(t, a, 0, true);
+			t.attack(*this, 0, true);
 			goodguyattack = !goodguyattack;
 		}//TODO if missed person, but vehicle is large, it might damage the car. 
 		else {
@@ -2052,13 +2002,13 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 				setSiteAlarmOne();
 			}
 			else {
-				str2 += unsuccessfulHit(a, t, droll);
+				str2 += unsuccessfulHit(t, droll);
 
 			}
 			mvaddstrAlt(17, 1, str2, gamelog);
 
 			gamelog.newline();
-			printparty();
+			DeprecatedCreature::printparty();
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
@@ -2070,14 +2020,14 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	for (; thrownweapons > 0; thrownweapons--)
 	{
-		if (a.has_thrown_weapon)
-			a.ready_another_throwing_weapon();
-		a.drop_weapon(NULL);
+		if (has_thrown_weapon)
+			ready_another_throwing_weapon();
+		drop_weapon(NULL);
 	}
 	// This is the only point in the function that returns true
 	return true;
 }
-void singleSquadMemberAttack(const int p, const bool wasalarm) {
+void DeprecatedCreature::singleSquadMemberAttack(const int p, const bool wasalarm) {
 	extern Deprecatedsquadst *activesquad;
 	extern Deprecatednewsstoryst *sitestory;
 
@@ -2156,7 +2106,7 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 	bool actual;
 	const short beforeblood = encounter[target].getCreatureHealth().blood;
 	if (encounter[target].getCreatureHealth().align == 1) mistake = 1;
-	actual = attack(*activesquad->squad[p], encounter[target], mistake);
+	actual = activesquad->squad[p]->attack(encounter[target], mistake);
 	if (actual)
 	{
 		if (mistake)
@@ -2168,27 +2118,27 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 		else
 		{
 			sitecrime += 3;
-			addjuice(*(activesquad->squad[p]), 1, 200);
+			activesquad->squad[p]->add_juice(1, 200);
 		}
 		sitestory->crime.push_back(CRIME_ATTACKED);
 		// Charge with assault if first strike
 		if (isThereASiteAlarm() && (!wasalarm || (beforeblood > encounter[target].getCreatureHealth().blood && beforeblood == 100)))
 		{
 			if (!activesquad->squad[p]->is_armed())
-				criminalize(*activesquad->squad[p], LAWFLAG_ASSAULT);
-			else criminalize(*activesquad->squad[p], LAWFLAG_ARMEDASSAULT);
+				activesquad->squad[p]->criminalize(LAWFLAG_ASSAULT);
+			else activesquad->squad[p]->criminalize(LAWFLAG_ARMEDASSAULT);
 		}
 	}
 	if (!encounter[target].getCreatureHealth().alive)
 	{
-		delenc(target, 1);
+		encounter[target].delenc(1);
 		if (!mistake)
 		{
 			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
 				if (!activesquad->squad[p]->getCreatureHealth().alive) continue;
-				addjuice(*(activesquad->squad[p]), 5, 500);
+				activesquad->squad[p]->add_juice(5, 500);
 			}
 		}
 	}
@@ -2201,13 +2151,13 @@ void yourinitialattack() {
 	{
 		if (activesquad->squad[p] == NULL) continue;
 		if (!activesquad->squad[p]->getCreatureHealth().alive) continue;
-		singleSquadMemberAttack(p, wasalarm);
+		DeprecatedCreature::singleSquadMemberAttack(p, wasalarm);
 	}
 }
 
 vector<NameAndAlignment> getEncounterNameAndAlignment();
 /* attack handling for each side as a whole */
-void youattack()
+void DeprecatedCreature::youattack()
 {
 	extern char foughtthisround;
 	extern Deprecatedsquadst *activesquad;
@@ -2284,24 +2234,23 @@ void youattack()
 							sitecrime += 10;
 						}
 						if (!pool[p]->is_armed())
-							criminalize(*pool[p], LAWFLAG_ASSAULT);
-						else criminalize(*pool[p], LAWFLAG_ARMEDASSAULT);
+							pool[p]->criminalize(LAWFLAG_ASSAULT);
+						else pool[p]->criminalize(LAWFLAG_ARMEDASSAULT);
 					}
-					if (!encounter[target].alive) delenc(target, 1);
+					if (!encounter[target].alive) {
+						extern DeprecatedCreature encounter[ENCMAX];
+						encounter[target].delenc(1);
+					}
 				}
 			}
 		}
 	}
 }
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
+
 void conservatise(const int e);
 // RETURN_ONE - special meaning, additional conditionals
 // RETURN_ZERO - break surrounding loop
-LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
+LOOP_CONTINUATION DeprecatedCreature::singleEnemyAttack(const int e, const bool armed) {
 
 	extern short mode;
 	extern char foughtthisround;
@@ -2318,7 +2267,7 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 	if (!encounter[e].getNameAndAlignment().exists) return REPEAT;
 	if (!encounter[e].getCreatureHealth().alive) return REPEAT;
 	if (isThereASiteAlarm() && encounter[e].type == CREATURE_BOUNCER && encounter[e].getCreatureHealth().align != ALIGN_LIBERAL)
-		conservatise(e);
+		encounter[e].conservatise();
 	if (encounter[e].enemy()) encounter[e].make_cantbluff_two();
 
 	if (mode != GAMEMODE_CHASECAR)
@@ -2398,29 +2347,32 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 			if (activesquad->squad[target]->is_holding_body() && !LCSrandom(2))
 			{
 				// Mistaken attack
-				actual = attack(encounter[e], *activesquad->squad[target]->prisoner, 1);
-				if (!activesquad->squad[target]->prisoner->getCreatureHealth().alive)
+				actual = activesquad->squad[target]->human_shield_attacked(encounter[e]);
+				if (!activesquad->squad[target]->is_prisoner_alive())
 				{
-					if (activesquad->squad[target]->prisoner->squadid == -1)
+					if (activesquad->squad[target]->is_prisoner_non_LCS())
 					{
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16, 1, activesquad->squad[target]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_fight164, gamelog);
-						addstrAlt(activesquad->squad[target]->prisoner->getNameAndAlignment().name, gamelog);
+						addstrAlt(activesquad->squad[target]->get_prisoner_name(), gamelog);
 						addstrAlt(CONST_fight165, gamelog);
 						gamelog.newline();
-						const int prisonerType = activesquad->squad[target]->prisoner->type;
+						const int prisonerType = activesquad->squad[target]->get_prisoner_type();
 						if (prisonerType == CREATURE_CORPORATE_CEO ||
 							prisonerType == CREATURE_POLITICIAN ||
 							prisonerType == CREATURE_RADIOPERSONALITY ||
 							prisonerType == CREATURE_NEWSANCHOR ||
 							prisonerType == CREATURE_SCIENTIST_EMINENT ||
 							prisonerType == CREATURE_JUDGE_CONSERVATIVE ||
-							prisonerType == CREATURE_MILITARYOFFICER) sitecrime += 30;
-						makeloot(*activesquad->squad[target]->prisoner);
+							prisonerType == CREATURE_MILITARYOFFICER) 
+						{
+							sitecrime += 30;
+						}
+						activesquad->squad[target]->make_prisoner_ground_loot();
 						pressAnyKey();
-						delete_and_nullify(activesquad->squad[target]->prisoner);
+						activesquad->squad[target]->delete_and_nullify_prisoner();
 					}
 				}
 				return REPEAT;
@@ -2438,16 +2390,16 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 		{
 			target = pickrandom(badtarg);
 			if (encounter[target].flag & CREATUREFLAG_CONVERTED)
-				actual = attack(encounter[e], encounter[target], 0);
+				actual = encounter[e].attack(encounter[target], 0);
 			// Mistaken Attack
-			else actual = attack(encounter[e], encounter[target], 1);
-			if (!encounter[target].getCreatureHealth().alive) delenc(target, 1);
+			else actual = encounter[e].attack(encounter[target], 1);
+			if (!encounter[target].getCreatureHealth().alive) encounter[target].delenc(1);
 			return REPEAT;
 		}
 	}
 	if (encounter[e].enemy())
-		actual = attack(encounter[e], *activesquad->squad[target], 0);
-	else actual = attack(encounter[e], encounter[target], 0);
+		actual = encounter[e].attack(*activesquad->squad[target], 0);
+	else actual = encounter[e].attack(encounter[target], 0);
 	return REPEAT;
 }
 void enemyattack()
@@ -2475,13 +2427,13 @@ void enemyattack()
 	char printed;
 	for (int e = 0; e < ENCMAX; e++)
 	{
-		switch (singleEnemyAttack(e, armed)) {
+		switch (DeprecatedCreature::singleEnemyAttack(e, armed)) {
 		case RETURN_ONE:
-			if (!incapacitated(encounter[e], 0, printed))
+			if (!encounter[e].incapacitated(0, printed))
 			{
 				if (printed)
 				{
-					printparty();
+					DeprecatedCreature::printparty();
 					if (mode == GAMEMODE_CHASECAR ||
 						mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 					else printencounter();
@@ -2499,7 +2451,7 @@ void enemyattack()
 				gamelog.newline();
 				delenc(e, 0);
 				e--;
-				printparty();
+				DeprecatedCreature::printparty();
 				if (mode == GAMEMODE_CHASECAR ||
 					mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 				else printencounter();
@@ -2631,115 +2583,113 @@ string damtypeToRibsString(const char damtype, const char ribminus, const int ri
 	return damageDescription;
 }
 //std::string bodypartName(Bodyparts w, AnimalGlosses t);
-string specialWoundPossibilityBody(
-	DeprecatedCreature &t,
+string DeprecatedCreature::specialWoundPossibilityBody(
 	const char breakdam,
 	const char pokedam,
 	const char damtype)
 {
-	DeprecatedCreature* target = &t;
 	string damageDescription = blankString;
 	switch (LCSrandom(11))
 	{
 	case 0:
-		if (target->getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] && breakdam)
+		if (getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] && breakdam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToUpperSpineString(damtype);
-			target->set_special_wound(SPECIALWOUND_UPPERSPINE, 0);
-			if (target->getCreatureHealth().blood > 20) target->set_blood(20);
+			set_special_wound(SPECIALWOUND_UPPERSPINE, 0);
+			if (getCreatureHealth().blood > 20) set_blood(20);
 		}
 		break;
 	case 1:
-		if (target->getCreatureHealth().special[SPECIALWOUND_LOWERSPINE] && breakdam)
+		if (getCreatureHealth().special[SPECIALWOUND_LOWERSPINE] && breakdam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToLowerSpineString(damtype);
-			target->set_special_wound(SPECIALWOUND_LOWERSPINE, 0);
-			if (target->getCreatureHealth().blood > 20) target->set_blood(20);
+			set_special_wound(SPECIALWOUND_LOWERSPINE, 0);
+			if (getCreatureHealth().blood > 20) set_blood(20);
 		}
 		break;
 	case 2:
-		if (target->getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToRightLungString(damtype);
-			target->set_special_wound(SPECIALWOUND_RIGHTLUNG, 0);
-			if (target->getCreatureHealth().blood > 20) target->set_blood(20);
+			set_special_wound(SPECIALWOUND_RIGHTLUNG, 0);
+			if (getCreatureHealth().blood > 20) set_blood(20);
 		}
 		break;
 	case 3:
-		if (target->getCreatureHealth().special[SPECIALWOUND_LEFTLUNG] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_LEFTLUNG] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToLeftLungString(damtype);
-			target->set_special_wound(SPECIALWOUND_LEFTLUNG, 0);
-			if (target->getCreatureHealth().blood > 20) target->set_blood(20);
+			set_special_wound(SPECIALWOUND_LEFTLUNG, 0);
+			if (getCreatureHealth().blood > 20) set_blood(20);
 		}
 		break;
 	case 4:
-		if (target->getCreatureHealth().special[SPECIALWOUND_HEART] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_HEART] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToHeartString(damtype);
-			target->set_special_wound(SPECIALWOUND_HEART, 0);
-			if (target->getCreatureHealth().blood > 3) target->set_blood(3);
+			set_special_wound(SPECIALWOUND_HEART, 0);
+			if (getCreatureHealth().blood > 3) set_blood(3);
 		}
 		break;
 	case 5:
-		if (target->getCreatureHealth().special[SPECIALWOUND_LIVER] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_LIVER] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToLiverString(damtype);
-			target->set_special_wound(SPECIALWOUND_LIVER, 0);
-			if (target->getCreatureHealth().blood > 50) target->set_blood(50);
+			set_special_wound(SPECIALWOUND_LIVER, 0);
+			if (getCreatureHealth().blood > 50) set_blood(50);
 		}
 		break;
 	case 6:
-		if (target->getCreatureHealth().special[SPECIALWOUND_STOMACH] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_STOMACH] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToStomachString(damtype);
-			target->set_special_wound(SPECIALWOUND_STOMACH, 0);
-			if (target->getCreatureHealth().blood > 50) target->set_blood(50);
+			set_special_wound(SPECIALWOUND_STOMACH, 0);
+			if (getCreatureHealth().blood > 50) set_blood(50);
 		}
 		break;
 	case 7:
-		if (target->getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToRightKidneyString(damtype);
-			target->set_special_wound(SPECIALWOUND_RIGHTKIDNEY, 0);
-			if (target->getCreatureHealth().blood > 50) target->set_blood(50);
+			set_special_wound(SPECIALWOUND_RIGHTKIDNEY, 0);
+			if (getCreatureHealth().blood > 50) set_blood(50);
 		}
 		break;
 	case 8:
-		if (target->getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToLeftKidneyString(damtype);
-			target->set_special_wound(SPECIALWOUND_LEFTKIDNEY, 0);
-			if (target->getCreatureHealth().blood > 50) target->set_blood(50);
+			set_special_wound(SPECIALWOUND_LEFTKIDNEY, 0);
+			if (getCreatureHealth().blood > 50) set_blood(50);
 		}
 		break;
 	case 9:
-		if (target->getCreatureHealth().special[SPECIALWOUND_SPLEEN] && pokedam)
+		if (getCreatureHealth().special[SPECIALWOUND_SPLEEN] && pokedam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToSpleenString(damtype);
-			target->set_special_wound(SPECIALWOUND_SPLEEN, 0);
-			if (target->getCreatureHealth().blood > 50) target->set_blood(50);
+			set_special_wound(SPECIALWOUND_SPLEEN, 0);
+			if (getCreatureHealth().blood > 50) set_blood(50);
 		}
 		break;
 	case 10:
-		if (target->getCreatureHealth().special[SPECIALWOUND_RIBS] > 0 && breakdam)
+		if (getCreatureHealth().special[SPECIALWOUND_RIBS] > 0 && breakdam)
 		{
 			int ribminus = LCSrandom(RIBNUM) + 1;
-			if (ribminus > target->getCreatureHealth().special[SPECIALWOUND_RIBS]) ribminus = target->getCreatureHealth().special[SPECIALWOUND_RIBS];
+			if (ribminus > getCreatureHealth().special[SPECIALWOUND_RIBS]) ribminus = getCreatureHealth().special[SPECIALWOUND_RIBS];
 
-			damageDescription += damtypeToRibsString(damtype, ribminus, target->getCreatureHealth().special[SPECIALWOUND_RIBS], target->getNameAndAlignment().name);
+			damageDescription += damtypeToRibsString(damtype, ribminus, getCreatureHealth().special[SPECIALWOUND_RIBS], getNameAndAlignment().name);
 
-			target->set_special_wound(SPECIALWOUND_RIBS, target->getCreatureHealth().special[SPECIALWOUND_RIBS] - ribminus);
+			set_special_wound(SPECIALWOUND_RIBS, getCreatureHealth().special[SPECIALWOUND_RIBS] - ribminus);
 		}
 		break;
 	}
@@ -2834,122 +2784,121 @@ string damtypeToNeckString(const char damtype) {
 	return damageDescription;
 }
 
-string specialWoundPossibilityHead(
-	DeprecatedCreature &t,
+string DeprecatedCreature::specialWoundPossibilityHead(
 	const char breakdam,
 	//char pokedam,
 	const char heavydam,
 	const char damtype
 ) {
-	DeprecatedCreature* target = &t;
+	//DeprecatedCreature* target = &t;
 	string damageDescription = blankString;
 	switch (LCSrandom(7))
 	{
 
 	case 0:
-		if ((target->getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] ||
-			target->getCreatureHealth().special[SPECIALWOUND_LEFTEYE] ||
-			target->getCreatureHealth().special[SPECIALWOUND_NOSE]) && heavydam)
+		if ((getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] ||
+			getCreatureHealth().special[SPECIALWOUND_LEFTEYE] ||
+			getCreatureHealth().special[SPECIALWOUND_NOSE]) && heavydam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToFaceString(damtype);
-			target->set_special_wound(SPECIALWOUND_RIGHTEYE, 0);
-			target->set_special_wound(SPECIALWOUND_LEFTEYE, 0);
-			target->set_special_wound(SPECIALWOUND_NOSE, 0);
-			if (target->getCreatureHealth().blood > 20)target->set_blood(20);
+			set_special_wound(SPECIALWOUND_RIGHTEYE, 0);
+			set_special_wound(SPECIALWOUND_LEFTEYE, 0);
+			set_special_wound(SPECIALWOUND_NOSE, 0);
+			if (getCreatureHealth().blood > 20)set_blood(20);
 		}
 		break;
 	case 1:
-		if (target->getCreatureHealth().special[SPECIALWOUND_TEETH] > 0)
+		if (getCreatureHealth().special[SPECIALWOUND_TEETH] > 0)
 		{
 			int teethminus = LCSrandom(TOOTHNUM) + 1;
-			if (teethminus > target->getCreatureHealth().special[SPECIALWOUND_TEETH])
-				teethminus = target->getCreatureHealth().special[SPECIALWOUND_TEETH];
-			damageDescription += damtypeToTeethString(damtype, target->getCreatureHealth().special[SPECIALWOUND_TEETH], target->getNameAndAlignment().name, teethminus);
-			target->set_special_wound(SPECIALWOUND_TEETH, target->getCreatureHealth().special[SPECIALWOUND_TEETH] - teethminus);
+			if (teethminus > getCreatureHealth().special[SPECIALWOUND_TEETH])
+				teethminus = getCreatureHealth().special[SPECIALWOUND_TEETH];
+			damageDescription += damtypeToTeethString(damtype, getCreatureHealth().special[SPECIALWOUND_TEETH], getNameAndAlignment().name, teethminus);
+			set_special_wound(SPECIALWOUND_TEETH, getCreatureHealth().special[SPECIALWOUND_TEETH] - teethminus);
 		}
 		break;
 	case 2:
-		if (target->getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] && heavydam)
+		if (getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] && heavydam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToRightEyeString(damtype);
-			target->set_special_wound(SPECIALWOUND_RIGHTEYE, 0);
-			if (target->getCreatureHealth().blood > 50)target->set_blood(50);
+			set_special_wound(SPECIALWOUND_RIGHTEYE, 0);
+			if (getCreatureHealth().blood > 50)set_blood(50);
 		}
 		break;
 	case 3:
-		if (target->getCreatureHealth().special[SPECIALWOUND_LEFTEYE] && heavydam)
+		if (getCreatureHealth().special[SPECIALWOUND_LEFTEYE] && heavydam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToLeftEyeString(damtype);
-			target->set_special_wound(SPECIALWOUND_LEFTEYE, 0);
-			if (target->getCreatureHealth().blood > 50)target->set_blood(50);
+			set_special_wound(SPECIALWOUND_LEFTEYE, 0);
+			if (getCreatureHealth().blood > 50)set_blood(50);
 		}
 		break;
 	case 4:
-		if (target->getCreatureHealth().special[SPECIALWOUND_TONGUE] && heavydam)
+		if (getCreatureHealth().special[SPECIALWOUND_TONGUE] && heavydam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToTongueString(damtype);
-			target->set_special_wound(SPECIALWOUND_TONGUE, 0);
-			if (target->getCreatureHealth().blood > 50)target->set_blood(50);
+			set_special_wound(SPECIALWOUND_TONGUE, 0);
+			if (getCreatureHealth().blood > 50)set_blood(50);
 		}
 		break;
 	case 5:
-		if (target->getCreatureHealth().special[SPECIALWOUND_NOSE] && heavydam)
+		if (getCreatureHealth().special[SPECIALWOUND_NOSE] && heavydam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToNoseString(damtype);
-			target->set_special_wound(SPECIALWOUND_NOSE, 0);
-			if (target->getCreatureHealth().blood > 50)target->set_blood(50);
+			set_special_wound(SPECIALWOUND_NOSE, 0);
+			if (getCreatureHealth().blood > 50)set_blood(50);
 		}
 		break;
 	case 6:
-		if (target->getCreatureHealth().special[SPECIALWOUND_NECK] && breakdam)
+		if (getCreatureHealth().special[SPECIALWOUND_NECK] && breakdam)
 		{
-			damageDescription += (target->getNameAndAlignment().name);
+			damageDescription += (getNameAndAlignment().name);
 			damageDescription += damtypeToNeckString(damtype);
-			target->set_special_wound(SPECIALWOUND_NECK, 0);
-			if (target->getCreatureHealth().blood > 20)target->set_blood(20);
+			set_special_wound(SPECIALWOUND_NECK, 0);
+			if (getCreatureHealth().blood > 20)set_blood(20);
 		}
 		break;
 	}
 	return damageDescription;
 }
 /* abandoned liberal is captured by conservatives */
-void capturecreature(DeprecatedCreature &t)
-{
+void DeprecatedCreature::capturedByConservatives() {
 	extern short sitetype;
-	t.activity.type = ACTIVITY_NONE;
-	t.drop_weapons_and_clips(NULL);
+	set_activity(ACTIVITY_NONE);
+	drop_weapons_and_clips(NULL);
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
-	t.give_armor(clothes, NULL);
-	freehostage(t, 2); // situation 2 = no message; this may want to be changed to 0 or 1
-	if (t.is_holding_body())
+	give_armor(clothes, NULL);
+	freehostage(2); // situation 2 = no message; this may want to be changed to 0 or 1
+	if (is_holding_body())
 	{
-		if (t.prisoner->squadid == -1)
-			delete t.prisoner;
-		t.discard_body(); // Stop hauling people
+		if (is_prisoner_non_LCS())
+			delete_prisoner();
+		discard_body(); // Stop hauling people
 	}
-	if (t.flag & CREATUREFLAG_JUSTESCAPED)
+	if (flag & CREATUREFLAG_JUSTESCAPED)
 	{
-		t.location = getCurrentSite();
+		location = getCurrentSite();
 		if (sitetype == SITE_GOVERNMENT_PRISON ||
 			sitetype == SITE_GOVERNMENT_COURTHOUSE)
 		{
 			Armor prisoner = Armor(getarmortype(tag_ARMOR_PRISONER));
-			t.give_armor(prisoner, NULL);
+			give_armor(prisoner, NULL);
 		}
 		if (sitetype == SITE_GOVERNMENT_PRISON)
 		{
-			t.clear_criminal_record();
+			clear_criminal_record();
 		}
 	}
 	else
-		t.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, getCurrentSite());
-	t.squadid = -1;
+		location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, getCurrentSite());
+	squadid = -1;
 }
+
 /* pushes people into the current squad (used in a siege) */
 void autopromote(const int loc)
 {

@@ -123,7 +123,7 @@ bool Weapon::acceptable_ammo(const Item& c) const
 	extern vector<WeaponType *> weapontype;
 	return c.whatIsThis() == THIS_IS_CLIP && weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename());
 }
-const string& Weapon::get_name() const
+const string Weapon::get_name() const
 {
 	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_name();
@@ -202,7 +202,7 @@ int getweapontype(int id)
 	return -1;
 }
 /* transforms a weapon type name into the index of that weapon type in the global vector */
-int getweapontype(const string &idname)
+int getweapontype(const string idname)
 {
 	extern vector<WeaponType *> weapontype;
 	for (int i = 0; i < len(weapontype); i++) if (weapontype[i]->get_idname() == idname) return i;

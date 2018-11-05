@@ -15,13 +15,6 @@ enum locationsPoolIntegers {
 	INT_ISTHISPLACEHIGHSECURITY,
 	INT_GETLOCATIONCITY,
 	
-	INT_GETTIMEUNTILSIEGE_POLICE,
-	INT_GETTIMEUNTILSIEGE_CIA,		
-	INT_GETTIMEUNTILSIEGE_CORPORATE,
-	INT_GETTIMEUNTILSIEGE_CCS,
-	INT_GETTIMEUNTILSIEGE_FIREMEN,
-	INT_GETTIMEUNTILSIEGE_ORG,
-	INT_GETTIMEUNTILSIEGE_HICKS,
 
 	INT_GETCOMPOUNDWALLS,
 	INT_ISTHISSITECLOSED,
@@ -33,6 +26,13 @@ enum locationsPoolIntegers {
 	INT_GETHEAT,
 	INT_LENLOOT,
 
+	//INT_GETTIMEUNTILSIEGE_POLICE,
+	//INT_GETTIMEUNTILSIEGE_CIA,
+	//INT_GETTIMEUNTILSIEGE_CORPORATE,
+	//INT_GETTIMEUNTILSIEGE_CCS,
+	//INT_GETTIMEUNTILSIEGE_FIREMEN,
+	//INT_GETTIMEUNTILSIEGE_ORG,
+	//INT_GETTIMEUNTILSIEGE_HICKS,
 };
 
 /*
@@ -97,7 +97,6 @@ public:
 	void isThereASiegeHere(int cursite, char newCondition) const;
 	void isThisPlaceHighSecurity(int cursite, int newCondition) const;
 	void getAssetValues(long & weaponValue, long & armorValue, long & clipValue, long & lootValue) const;
-	const void findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox) const;
 
 
 
@@ -125,13 +124,13 @@ public:
 	string getFrontName(int cursite) const;
 
 
+	int getTimeUntilSiege(int loc, int type) const;
 private:
 
 	int getStoresAmount(int l) const;
 	const int getRentingType(int cursite) const;
 	const int isThisPlaceHighSecurity(int cursite) const;
 	const int getLocationCity(int cursite) const;
-	int getTimeUntilSiege(int loc, int type) const;
 	const int getCompoundWalls(int cursite) const;
 	const int isThisSiteClosed(int cursite) const;
 	const int getLocationParent(int cursite) const;

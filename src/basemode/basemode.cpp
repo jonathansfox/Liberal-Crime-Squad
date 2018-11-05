@@ -63,14 +63,12 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -78,8 +76,6 @@ const string tag_skill = "skill";
 #include "../cursesgraphics.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 //#include "../basemode/liberalagenda.h"
 bool liberalagenda(signed char won);
 #include "../basemode/baseactions.h"
@@ -100,11 +96,8 @@ void review();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 //#include "../common/equipment.h"
-void equip(vector<Item *> &loot, int loc);
 //#include "../politics/politics.h"
 bool stalinview(short view, bool islaw);
-//#include "../monthly/monthly.h"
-void passmonth(char &clearformess,char canseethings);
 #include "../daily/daily.h"
 //for int monthday();
 #include "../daily/siege.h"
@@ -544,7 +537,7 @@ void dontForceWait(const char sieged, const char underattack,
 			mvaddstrAlt(8, 1, CONST_basemode034);
 		}
 	}
-	else if (activesquad != NULL) printparty();
+	else if (activesquad != NULL) DeprecatedCreature::printparty();
 	else makedelimiter();
 
 
@@ -767,6 +760,8 @@ bool cannotWaitDuringSiege() {
 
 	return cannotwait;
 }
+//#include "../monthly/monthly.h"
+void passmonth(char canseethings);
 void pressedKeyWInBaseMode(const char forcewait, const char canseethings, int &nonsighttime) {
 	const string CONST_basemode063 = "Time passes...";
 	extern int day;
@@ -776,8 +771,12 @@ void pressedKeyWInBaseMode(const char forcewait, const char canseethings, int &n
 
 	char clearformess = forcewait;
 	if (!canseethings) nonsighttime++;
+	// advanceday ALWAYS assigns clearformess true
+	// therefore passmonth is ALWAYS being passed the value true
 	advanceday(clearformess, canseethings);
-	if (day > monthday()) passmonth(clearformess, canseethings);
+	if (day > monthday()) { 
+		passmonth(canseethings);
+	}
 	advancelocations();
 	if (forcewait&&day == 1)
 	{

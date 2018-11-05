@@ -13,14 +13,12 @@ const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 //#include "../creature/newcreature.h"
 
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
-//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../common/getnames.h"
@@ -33,6 +31,14 @@ const string tag_skill = "skill";
 #include <gui_constants.h>
 
 
+short interface_pgup = '[';
+short interface_pgdn = ']';
+bool is_page_up(const int c) {
+	return c == interface_pgup || c == KEY_UP || c == KEY_LEFT;
+}
+bool is_page_down(const int c) {
+	return c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT;
+}
 void translategetch(int &c);
 void translategetch_cap(int &c);
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
@@ -214,22 +220,27 @@ const ColorSetup YELLOW_ON_RED_BRIGHT = { COLOR_YELLOW, COLOR_RED, 1 };
 const ColorSetup YELLOW_ON_RED_BRIGHT_BLINK = { COLOR_YELLOW, COLOR_RED, 1, 1 };
 void displayDifficulty(int difficulty)
 {
-	const char *_difficulty[] = { "Simple", "Very Easy", "Easy", "Below Average", "Average", "Above Average", "Hard", "Very Hard", "Extremely Difficult", "Nearly Impossible", "Impossible" };
-	switch (difficulty)
-	{
-	case 0:	set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-	case 1: set_color_easy(CYAN_ON_BLACK_BRIGHT); break;
-	case 2: set_color_easy(CYAN_ON_BLACK); break;
-	case 3: set_color_easy(BLUE_ON_BLACK_BRIGHT); break;
-	case 4: set_color_easy(WHITE_ON_BLACK_BRIGHT); break;
-	case 5: set_color_easy(WHITE_ON_BLACK); break;
-	case 6: set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
-	case 7: set_color_easy(MAGENTA_ON_BLACK); break;
-	case 8: set_color_easy(MAGENTA_ON_BLACK_BRIGHT); break;
-	case 9: set_color_easy(RED_ON_BLACK);	break;
-	default:set_color_easy(RED_ON_BLACK_BRIGHT);	break;
+	const pair<ColorSetup, string> _difficulties[] = { 
+		make_pair(GREEN_ON_BLACK_BRIGHT, "Simple"),
+		make_pair(CYAN_ON_BLACK_BRIGHT, "Very Easy"),
+		make_pair(CYAN_ON_BLACK, "Easy"),
+		make_pair(BLUE_ON_BLACK_BRIGHT, "Below Average"),
+		make_pair(WHITE_ON_BLACK_BRIGHT, "Average"),
+		make_pair(WHITE_ON_BLACK, "Above Average"),
+		make_pair(YELLOW_ON_BLACK_BRIGHT, "Hard"),
+		make_pair(MAGENTA_ON_BLACK, "Very Hard"),
+		make_pair(MAGENTA_ON_BLACK_BRIGHT, "Extremely Difficult"),
+		make_pair(RED_ON_BLACK, "Nearly Impossible"),
+		make_pair(RED_ON_BLACK_BRIGHT, "Impossible") 
+	};
+	if (difficulty >= 0 && difficulty < 10) {
+		set_color_easy(_difficulties[difficulty].first);
+		addstrAlt(_difficulties[difficulty].second);
 	}
-	if (difficulty >= 0 && difficulty < 10) addstrAlt(_difficulty[difficulty]); else addstrAlt(_difficulty[10]);
+	else {
+		set_color_easy(_difficulties[10].first);
+		addstrAlt(_difficulties[10].second);
+	}
 }
 // IsaacG Various functions that are the single time
 // a given aspect of the curses library is used
@@ -244,7 +255,6 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
-void printfunds(int y, int offsetx, const char* prefix, long funds);
 void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
 	char moneystr[50], prefixbuffer[50];
@@ -592,7 +602,6 @@ const string CONST_sitedisplay026 = "»";
 const string CONST_sitedisplay025 = "É";
 const string CONST_sitedisplay024 = "Í";
 const string CONST_sitedisplay023 = "º";
-
 const string tag_ARMOR = "ARMOR";
 //const string blankString = "";
 const string tag_MONEY = "MONEY";
@@ -655,7 +664,7 @@ enum wallDirection {
 void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) {
 
 	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (x > loc_coord.locx && x < MAPX) visible[WALL_LEFT] = true;
 	if (x > 0 && x < loc_coord.locx) visible[WALL_RIGHT] = true;
@@ -668,7 +677,7 @@ void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) 
 }
 void checkForLOS(bool(&visible)[8], const int x, const int y, const int z) {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 
 	if (!LineOfSight(x - 1, y, z)) visible[WALL_LEFT] = false;
@@ -1201,7 +1210,7 @@ void printsitemap(int x, int y, int z)
 		str = blankString;
 	}
 
-	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
+	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != SPECIAL_NONE)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(24, 67 - (len(str) >> 1), str);
@@ -1621,7 +1630,7 @@ bool has_ignited(const int c) {
 	//CH_LIGHT_SHADE
 	//' '
 	// Any character other than these five indicate non-ignition
-	// therfore, only these five cannot be used in flag design
+	// therfore, only these five should not be used in flag design
 	return c == CH_BOX_DRAWINGS_LIGHT_VERTICAL ||
 		c == CH_DARK_SHADE ||
 		c == CH_MEDIUM_SHADE ||
@@ -1763,7 +1772,6 @@ void    PDC_set_titleAlt(const char *ch);
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
-	extern short interface_pgup;
 	//if(c==-63)c='7';
 	//if(c==-62)c='8';
 	//if(c==-61)c='9';

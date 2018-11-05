@@ -80,6 +80,8 @@ const string tag_cliptype = "cliptype";
 const string tag_number_weapons = "number_weapons";
 const string blankString = "";
 const string tag_value = "value";
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 #include "../locations/locationsEnums.h"
 #include "../common/interval.h"
@@ -712,59 +714,59 @@ weaponLayout getWeaponLayout(const short type) {
 	return weaponLayout(tag_WEAPON_NONE);
 }
 
-void giveDefaultWeapon(DeprecatedCreature &cr, const short type) {
+void DeprecatedCreature::giveDefaultWeapon() {
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	if (defaultWeapons.count(type) >= 1) {
 		weaponLayout layout = getWeaponLayout(type);
-		cr.give_weapon(*weapontype[getweapontype(layout.weaponTag)], NULL);
+		give_weapon(*weapontype[getweapontype(layout.weaponTag)], NULL);
 		if (layout.ammunition >= 1) {
-			cr.take_clips(*cliptype[getcliptype(layout.clipTag)], layout.ammunition);
+			take_clips(*cliptype[getcliptype(layout.clipTag)], layout.ammunition);
 		}
-		cr.reload(false);
+		reload(false);
 	}
 }
 #include "locations/locationsPool.h"
 #include "sitemode/stealth.h"
 short getCurrentSite();
-void armBouncer(DeprecatedCreature &cr) {
+void DeprecatedCreature::armBouncer() {
 	extern short mode;
 	extern short sitetype;
 	if (mode == GAMEMODE_SITE && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 	{
-		cr.rename(CONST_creaturetypes041);
-		cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
+		rename(CONST_creaturetypes041);
+		set_skill(SKILL_CLUB, LCSrandom(3) + 3);
 	}
 	if (disguisesite(sitetype))
 	{
-		cr.align = ALIGN_CONSERVATIVE;
-		cr.infiltration = 0.1f*LCSrandom(4);
+		align = ALIGN_CONSERVATIVE;
+		infiltration = 0.1f*LCSrandom(4);
 	}
-	else cr.align = ALIGN_MODERATE;
+	else align = ALIGN_MODERATE;
 }
 
-void armCREATURE_SCIENTIST_LABTECH(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_SCIENTIST_LABTECH() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed() && !LCSrandom(2))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+	if (!is_armed() && !LCSrandom(2))
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
 }
-void armCREATURE_JUDGE_CONSERVATIVE(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_JUDGE_CONSERVATIVE() {
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_44)], 4);
 	}
 	else if (!LCSrandom(2))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_GAVEL)], NULL);
-	cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_GAVEL)], NULL);
+	reload(false);
 }
-void armCREATURE_SCIENTIST_EMINENT(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_SCIENTIST_EMINENT() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed() && !LCSrandom(2))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+	if (!is_armed() && !LCSrandom(2))
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
 }
 struct fullName {
 	string first;
@@ -773,179 +775,179 @@ struct fullName {
 
 };
 fullName generate_long_name(char gender = GENDER_NEUTRAL);
-void armCREATURE_CORPORATE_CEO(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_CORPORATE_CEO() {
 	fullName fn = generate_long_name(GENDER_WHITEMALEPATRIARCH);
-	strcpy(cr.propername, (fn.first + " " + fn.last).data());
-	cr.rename(CONST_creaturetypes042 + cr.propername);
-	cr.dontname = true;
+	strcpy(propername, (fn.first + " " + fn.last).data());
+	rename(CONST_creaturetypes042 + propername);
+	dontname = true;
 }
-void armCREATURE_WORKER_FACTORY_NONUNION(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_WORKER_FACTORY_NONUNION() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed())
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
-	if (cr.align == ALIGN_LIBERAL) cr.align = LCSrandom(2) - 1;
+	if (!is_armed())
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
+	if (align == ALIGN_LIBERAL) align = LCSrandom(2) - 1;
 }
-void armCREATURE_WORKER_SWEATSHOP(DeprecatedCreature &cr) {
-	cr.flag |= CREATUREFLAG_ILLEGALALIEN;
+void DeprecatedCreature::armCREATURE_WORKER_SWEATSHOP() {
+	flag |= CREATUREFLAG_ILLEGALALIEN;
 }
-void armCREATURE_LAWYER(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_LAWYER() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-		cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
+		reload(false);
 	}
 }
-void armCREATURE_DOCTOR(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_DOCTOR() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-		cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
+		reload(false);
 	}
 }
-void armCREATURE_PSYCHOLOGIST(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_PSYCHOLOGIST() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-		cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
+		reload(false);
 	}
-	if (cr.gender_liberal == GENDER_MALE || LCSrandom(2))
-		cr.give_armor(getarmortype(tag_ARMOR_CHEAPSUIT), NULL);
+	if (gender_liberal == GENDER_MALE || LCSrandom(2))
+		give_armor(getarmortype(tag_ARMOR_CHEAPSUIT), NULL);
 	else
-		cr.give_armor(getarmortype(tag_ARMOR_CHEAPDRESS), NULL);
+		give_armor(getarmortype(tag_ARMOR_CHEAPDRESS), NULL);
 }
-void armCREATURE_NURSE(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_NURSE() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
-		cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_38)], 1);
+		reload(false);
 	}
 }
-void armCREATURE_WORKER_FACTORY_UNION(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_WORKER_FACTORY_UNION() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed())
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
+	if (!is_armed())
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_CHAIN)], NULL);
 }
-void armCREATURE_TANK(DeprecatedCreature &cr) {
-	cr.animalgloss = ANIMALGLOSS_TANK;
-	cr.specialattack = ATTACK_CANNON;
+void DeprecatedCreature::armCREATURE_TANK() {
+	animalgloss = ANIMALGLOSS_TANK;
+	specialattack = ATTACK_CANNON;
 }
 
 vector<string> words_meaning_hick;
 vector<string> genetic_monster;
 
-void armCREATURE_HICK(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_HICK() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
-	cr.rename(pickrandom(words_meaning_hick));
+	rename(pickrandom(words_meaning_hick));
 	if ((lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(2)) || !LCSrandom(10))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
 	}
 	else
-		cr.give_weapon(*weapontype[getweapontype(LCSrandom(2) ? tag_WEAPON_TORCH : tag_WEAPON_PITCHFORK)], NULL);
-	cr.reload(false);
+		give_weapon(*weapontype[getweapontype(LCSrandom(2) ? tag_WEAPON_TORCH : tag_WEAPON_PITCHFORK)], NULL);
+	reload(false);
 }
-void armCREATURE_COP(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_COP() {
 	extern vector<ClipType *> cliptype;
 	extern short lawList[LAWNUM];
 	extern vector<WeaponType *> weapontype;
-	if (lawList[LAW_POLICEBEHAVIOR] == 2 && cr.align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
+	if (lawList[LAW_POLICEBEHAVIOR] == 2 && align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
 	{
-		cr.align = ALIGN_MODERATE;
-		cr.rename(CONST_creaturetypes043);
-		cr.set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
-		cr.set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
-		cr.set_attribute(ATTRIBUTE_HEART, 4);
+		align = ALIGN_MODERATE;
+		rename(CONST_creaturetypes043);
+		set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
+		set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
+		set_attribute(ATTRIBUTE_HEART, 4);
 	}
 	else
 	{
 		if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+			give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+			take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
 		}
 		else if (!LCSrandom(3))
 		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+			give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+			take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
 		}
 		else if (!LCSrandom(2))
 		{
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-			cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+			give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+			take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
 		}
 		else
-			cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
-		cr.reload(false);
-		cr.align = ALIGN_CONSERVATIVE;
-		cr.set_skill(SKILL_PISTOL, LCSrandom(4) + 1);
-		cr.set_skill(SKILL_SHOTGUN, LCSrandom(3) + 1);
-		cr.set_skill(SKILL_CLUB, LCSrandom(2) + 1);
-		cr.set_skill(SKILL_HANDTOHAND, LCSrandom(2) + 1);
-		cr.set_attribute(ATTRIBUTE_WISDOM, 4);
+			give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
+		reload(false);
+		align = ALIGN_CONSERVATIVE;
+		set_skill(SKILL_PISTOL, LCSrandom(4) + 1);
+		set_skill(SKILL_SHOTGUN, LCSrandom(3) + 1);
+		set_skill(SKILL_CLUB, LCSrandom(2) + 1);
+		set_skill(SKILL_HANDTOHAND, LCSrandom(2) + 1);
+		set_attribute(ATTRIBUTE_WISDOM, 4);
 	}
 }
 bool isThereASiteAlarm();
-void armCREATURE_FIREFIGHTER(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_FIREFIGHTER() {
 
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_FREESPEECH] == -2)
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_FLAMETHROWER)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
-		cr.reload(false);
-		cr.set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
-		cr.rename(CONST_creaturetypes044);
-		cr.align = ALIGN_CONSERVATIVE;
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_FLAMETHROWER)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
+		reload(false);
+		set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
+		rename(CONST_creaturetypes044);
+		align = ALIGN_CONSERVATIVE;
 	}
 	else
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
-		cr.set_skill(SKILL_AXE, LCSrandom(3) + 2);
-		cr.rename(CONST_creaturetypes045);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
+		set_skill(SKILL_AXE, LCSrandom(3) + 2);
+		rename(CONST_creaturetypes045);
 	}
 	if (isThereASiteAlarm()) // Respond to emergencies in bunker gear
-		cr.give_armor(getarmortype(tag_ARMOR_BUNKERGEAR), NULL);
+		give_armor(getarmortype(tag_ARMOR_BUNKERGEAR), NULL);
 }
-void armCREATURE_CCS_MOLOTOV(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_CCS_MOLOTOV() {
 	extern short mode;
 
 	if (mode == GAMEMODE_SITE)
-		nameCCSMember(cr);
+		nameCCSMember();
 }
-void armCREATURE_CCS_SNIPER(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_CCS_SNIPER() {
 	extern short mode;
 
 	if (mode == GAMEMODE_SITE)
-		nameCCSMember(cr);
+		nameCCSMember();
 }
-void armCREATURE_CCS_VIGILANTE(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_CCS_VIGILANTE() {
 	extern short mode;
 
 	extern char endgamestate;
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
-	cr.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
+	give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
 	switch (LCSrandom(5) + endgamestate)
 	{
 	case 0:
@@ -953,93 +955,93 @@ void armCREATURE_CCS_VIGILANTE(DeprecatedCreature &cr) {
 		break;
 	case 2:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 7);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_9)], 7);
 	}
 	break;
 	case 3:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_44)], 7);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_44)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_44)], 7);
 	}
 	break;
 	case 4:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 7);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 7);
 	}
 	break;
 	case 5:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-		cr.give_armor(getarmortype(tag_ARMOR_CIVILLIANARMOR), NULL);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		give_armor(getarmortype(tag_ARMOR_CIVILLIANARMOR), NULL);
 	}
 	break;
 	case 6:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-		cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIRIFLE_AR15)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
 	}
 	break;
 	default:
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_M16)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
-		cr.give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_M16)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 7);
+		give_armor(getarmortype(tag_ARMOR_ARMYARMOR), NULL);
 	}
 	break;
 	}
-	cr.reload(false);
+	reload(false);
 	if (mode == GAMEMODE_SITE)
-		nameCCSMember(cr);
+		nameCCSMember();
 }
-void armCREATURE_CCS_ARCHCONSERVATIVE(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_CCS_ARCHCONSERVATIVE() {
 	extern short mode;
 	extern short sitetype;
 	extern char ccs_kills;
 
 	extern char endgamestate;
-	cr.rename((LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) ? CONST_creaturetypes046 : (ccs_kills < 2 ? CONST_creaturetypesX01 : CONST_creaturetypesX02)));
+	rename((LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) ? CONST_creaturetypes046 : (ccs_kills < 2 ? CONST_creaturetypesX01 : CONST_creaturetypesX02)));
 }
-void armCREATURE_PRISONGUARD(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_PRISONGUARD() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
 	}
 	else if (!LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
 	}
 	else
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
-	cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_NIGHTSTICK)], NULL);
+	reload(false);
 }
-void armCREATURE_EDUCATOR(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_EDUCATOR() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
 	}
 	else if (!LCSrandom(3))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
 	}
 	else
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
-	cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SYRINGE)], NULL);
+	reload(false);
 }
-void armCREATURE_GENETIC(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
+void DeprecatedCreature::armCREATURE_GENETIC(int(&attcap)[ATTNUM]) {
 	extern short mode;
 	extern short sitetype;
 	extern char ccs_kills;
@@ -1048,57 +1050,46 @@ void armCREATURE_GENETIC(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
 	extern short lawList[LAWNUM];
 	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_CORPORATE_HOUSE)
 	{
-		cr.rename( CONST_creaturetypes047);
+		rename( CONST_creaturetypes047);
 		attcap[ATTRIBUTE_CHARISMA] = 10;
 	}
 	else
-		cr.rename( blankString);
+		rename( blankString);
 	switch (LCSrandom(11))
 	{
 	case 0:
-		cr.rename(cr.getNameAndAlignment().name + CONST_creaturetypes048);
-		cr.specialattack = ATTACK_FLAME;
+		rename(getNameAndAlignment().name + CONST_creaturetypes048);
+		specialattack = ATTACK_FLAME;
 		break;
 	case 1:
-		cr.rename(cr.getNameAndAlignment().name + CONST_creaturetypes049);
-		cr.specialattack = ATTACK_SUCK;
+		rename(getNameAndAlignment().name + CONST_creaturetypes049);
+		specialattack = ATTACK_SUCK;
 		break;
 	default:
-		cr.rename(cr.getNameAndAlignment().name + pickrandom(genetic_monster));
+		rename(getNameAndAlignment().name + pickrandom(genetic_monster));
 		break;
 	}
-	cr.animalgloss = ANIMALGLOSS_ANIMAL;
-	if (lawList[LAW_ANIMALRESEARCH] != 2)cr.no_money();
+	animalgloss = ANIMALGLOSS_ANIMAL;
+	if (lawList[LAW_ANIMALRESEARCH] != 2)no_money();
 }
-void armCREATURE_GUARDDOG(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_GUARDDOG() {
 	extern short lawList[LAWNUM];
-	cr.animalgloss = ANIMALGLOSS_ANIMAL;
-	if (lawList[LAW_ANIMALRESEARCH] != 2)cr.no_money();
+	animalgloss = ANIMALGLOSS_ANIMAL;
+	if (lawList[LAW_ANIMALRESEARCH] != 2)no_money();
 }
-void armCREATURE_PRISONER(DeprecatedCreature &cr, const CreatureType* crtype) {
-	cr.drop_weapons_and_clips(NULL);
-	crtype->give_weapon(cr);
-	cr.strip(NULL);
-	crtype->give_armor(cr);
-	cr.set_money(crtype->money_.roll());
-	cr.juice = crtype->juice_.roll();
-	cr.gender_liberal = cr.gender_conservative = crtype->roll_gender();
-	cr.rename(crtype->get_encounter_name());
-	if (cr.align == ALIGN_CONSERVATIVE)
-		cr.align = LCSrandom(2);
-}
-void armCREATURE_BUM(DeprecatedCreature &cr) {
+
+void DeprecatedCreature::armCREATURE_BUM() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed() && !LCSrandom(5))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
-	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+	if (!is_armed() && !LCSrandom(5))
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+	if (align == ALIGN_CONSERVATIVE)align = LCSrandom(2);
 }
-void armCREATURE_MUTANT(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_MUTANT() {
 	extern vector<WeaponType *> weapontype;
-	if (!cr.is_armed() && !LCSrandom(5))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+	if (!is_armed() && !LCSrandom(5))
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
 }
-void armCREATURE_GANGMEMBER(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_GANGMEMBER() {
 	extern vector<WeaponType *> weapontype;
 	extern short mode;
 	extern short sitetype;
@@ -1109,313 +1100,272 @@ void armCREATURE_GANGMEMBER(DeprecatedCreature &cr) {
 	extern vector<ClipType *> cliptype;
 	if (!LCSrandom(20) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 3);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 3);
 	}
 	else if (!LCSrandom(16) || (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(5)))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SMG_MP5)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_SMG)], 4);
 	}
 	else if (!LCSrandom(15))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_45)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_45)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_45)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_45)], 4);
 	}
 	else if (!LCSrandom(10))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHOTGUN_PUMP)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_BUCKSHOT)], 4);
 	}
 	else if (!LCSrandom(4))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
 	}
 	else if (!LCSrandom(2))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_REVOLVER_38)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_38)], 4);
 	}
 	else
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
-	cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_COMBATKNIFE)], NULL);
+	reload(false);
 	// We'll make the crack house a bit dicey
-	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_BUSINESS_CRACKHOUSE)cr.align = ALIGN_CONSERVATIVE;
+	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_BUSINESS_CRACKHOUSE)align = ALIGN_CONSERVATIVE;
 	if (!LCSrandom(2))switch (LCSrandom(3))
 	{
-	case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
-		cr.criminalize_me(LAWFLAG_BROWNIES, false);
+	case 0://crimes_committed[LAWFLAG_BROWNIES]++;
+		criminalize_without_heat(LAWFLAG_BROWNIES);
 		break;
-	case 1://cr.crimes_committed[LAWFLAG_ASSAULT]++;
-		cr.criminalize_me(LAWFLAG_ASSAULT, false);
+	case 1://crimes_committed[LAWFLAG_ASSAULT]++;
+		criminalize_without_heat(LAWFLAG_ASSAULT);
 		break;
-	case 2://cr.crimes_committed[LAWFLAG_MURDER]++;
-		cr.criminalize_me(LAWFLAG_MURDER, false);
+	case 2://crimes_committed[LAWFLAG_MURDER]++;
+		criminalize_without_heat(LAWFLAG_MURDER);
 		break;
 	}
 }
-void armCREATURE_CRACKHEAD(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
+void DeprecatedCreature::armCREATURE_CRACKHEAD(int(&attcap)[ATTNUM]) {
 	extern vector<WeaponType *> weapontype;
 	if (!LCSrandom(5))
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
-	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SHANK)], NULL);
+	if (align == ALIGN_CONSERVATIVE)align = LCSrandom(2);
 	attcap[ATTRIBUTE_HEALTH] = 1 + LCSrandom(5);
 }
-void armCREATURE_FASTFOODWORKER(DeprecatedCreature &cr) {
-	cr.set_age((LCSrandom(2) ? AGE_TEENAGER : AGE_YOUNGADULT));
+void DeprecatedCreature::armCREATURE_FASTFOODWORKER() {
+	set_age((LCSrandom(2) ? AGE_TEENAGER : AGE_YOUNGADULT));
 }
-void armCREATURE_FOOTBALLCOACH(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_FOOTBALLCOACH() {
 	if (LCSrandom(2))
 	{
-		cr.set_attribute(ATTRIBUTE_HEALTH, 5);
-		cr.set_attribute(ATTRIBUTE_AGILITY, 5);
-		cr.set_attribute(ATTRIBUTE_STRENGTH, 5);
+		set_attribute(ATTRIBUTE_HEALTH, 5);
+		set_attribute(ATTRIBUTE_AGILITY, 5);
+		set_attribute(ATTRIBUTE_STRENGTH, 5);
 	}
 }
-void armCREATURE_PROSTITUTE(DeprecatedCreature &cr) {
-	if (LCSrandom(7))cr.gender_conservative = cr.gender_liberal = GENDER_FEMALE;
-	else if (!LCSrandom(3))cr.gender_liberal = GENDER_FEMALE;
-	if (cr.align == ALIGN_CONSERVATIVE)cr.align = LCSrandom(2);
-	if (!LCSrandom(3)) { cr.criminalize_me(LAWFLAG_PROSTITUTION); }
+void DeprecatedCreature::armCREATURE_PROSTITUTE() {
+	if (LCSrandom(7))gender_conservative = gender_liberal = GENDER_FEMALE;
+	else if (!LCSrandom(3))gender_liberal = GENDER_FEMALE;
+	if (align == ALIGN_CONSERVATIVE)align = LCSrandom(2);
+	if (!LCSrandom(3)) { criminalize_without_heat(LAWFLAG_PROSTITUTION); }
 }
-void armCREATURE_HIPPIE(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_HIPPIE() {
 	if (!LCSrandom(10)) {
-		cr.criminalize_me(LAWFLAG_BROWNIES);
+		criminalize_without_heat(LAWFLAG_BROWNIES);
 	}
 }
-void armCREATURE_SOCIALITE(DeprecatedCreature &cr) {
-	cr.give_armor(getarmortype(cr.gender_liberal == GENDER_FEMALE ? tag_ARMOR_EXPENSIVEDRESS : tag_ARMOR_EXPENSIVESUIT), NULL);
+void DeprecatedCreature::armCREATURE_SOCIALITE() {
+	give_armor(getarmortype(gender_liberal == GENDER_FEMALE ? tag_ARMOR_EXPENSIVEDRESS : tag_ARMOR_EXPENSIVESUIT), NULL);
 }
-void armCREATURE_THIEF(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_THIEF() {
 	switch (LCSrandom(5))
 	{
 	case 0:
-		cr.rename( getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name());
+		rename( getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name());
 		break;
 	case 1:
-		cr.rename( getcreaturetype(CREATURE_CLERK)->get_encounter_name());
+		rename( getcreaturetype(CREATURE_CLERK)->get_encounter_name());
 		break;
 	case 2:
-		cr.rename( getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name());
+		rename( getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name());
 		break;
 	case 3:
-		cr.rename( getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name());
+		rename( getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name());
 		break;
 	case 4:
-		cr.rename( getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name());
+		rename( getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name());
 		break;
 	}
-	if (!LCSrandom(10)) { cr.criminalize_me(LCSrandom(2) ? LAWFLAG_BREAKING : LAWFLAG_THEFT); }
+	if (!LCSrandom(10)) { criminalize_without_heat(LCSrandom(2) ? LAWFLAG_BREAKING : LAWFLAG_THEFT); }
 }
-void armCREATURE_MILITARYOFFICER(DeprecatedCreature &cr) {
+void DeprecatedCreature::armCREATURE_MILITARYOFFICER() {
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	if (LCSrandom(4))
 	{
-		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
-		cr.take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
-		cr.reload(false);
+		give_weapon(*weapontype[getweapontype(tag_WEAPON_SEMIPISTOL_9MM)], NULL);
+		take_clips(*cliptype[getcliptype(tag_CLIP_9)], 4);
+		reload(false);
 	}
 }
+void DeprecatedCreature::armCREATURE_PRISONER() {
+	const CreatureType* crtype = getcreaturetype(type);
+
+	drop_weapons_and_clips(NULL);
+	crtype->give_weapon(*this);
+	strip(NULL);
+	crtype->give_armor(*this);
+	set_money(crtype->money_.roll());
+	juice = crtype->juice_.roll();
+	gender_liberal = gender_conservative = crtype->roll_gender();
+	rename(crtype->get_encounter_name());
+	if (align == ALIGN_CONSERVATIVE)
+		align = LCSrandom(2);
+}
 // IsaacG Very few of the nested functions require anything other than &cr and type.  A rewrite that only uses those two parameters is desirable.
-void armSpecificCreature(DeprecatedCreature &cr, const short type, const CreatureType* crtype, int(&attcap)[ATTNUM]) {
+void DeprecatedCreature::armSpecificCreature(int(&attcap)[ATTNUM]) {
 	switch (type)
 	{
 	case CREATURE_BOUNCER:
-		armBouncer(cr);
+		armBouncer();
 		break;
 	case CREATURE_SCIENTIST_LABTECH:
-		armCREATURE_SCIENTIST_LABTECH(cr);
+		armCREATURE_SCIENTIST_LABTECH();
 		break;
 	case CREATURE_JUDGE_CONSERVATIVE:
-		armCREATURE_JUDGE_CONSERVATIVE(cr);
+		armCREATURE_JUDGE_CONSERVATIVE();
 		break;
 	case CREATURE_SCIENTIST_EMINENT:
-		armCREATURE_SCIENTIST_EMINENT(cr);
+		armCREATURE_SCIENTIST_EMINENT();
 		break;
 	case CREATURE_CORPORATE_CEO:
-		armCREATURE_CORPORATE_CEO(cr);
+		armCREATURE_CORPORATE_CEO();
 		break;
 	case CREATURE_WORKER_FACTORY_NONUNION:
-		armCREATURE_WORKER_FACTORY_NONUNION(cr);
+		armCREATURE_WORKER_FACTORY_NONUNION();
 		break;
 	case CREATURE_WORKER_SWEATSHOP:
-		armCREATURE_WORKER_SWEATSHOP(cr);
+		armCREATURE_WORKER_SWEATSHOP();
 		break;
 	case CREATURE_LAWYER:
-		armCREATURE_LAWYER(cr);
+		armCREATURE_LAWYER();
 		break;
 	case CREATURE_DOCTOR:
-		armCREATURE_DOCTOR(cr);
+		armCREATURE_DOCTOR();
 		break;
 	case CREATURE_PSYCHOLOGIST:
-		armCREATURE_PSYCHOLOGIST(cr);
+		armCREATURE_PSYCHOLOGIST();
 		break;
 	case CREATURE_NURSE:
-		armCREATURE_NURSE(cr);
+		armCREATURE_NURSE();
 		break;
 	case CREATURE_WORKER_FACTORY_UNION:
-		armCREATURE_WORKER_FACTORY_UNION(cr);
+		armCREATURE_WORKER_FACTORY_UNION();
 		break;
 	case CREATURE_TANK:
-		armCREATURE_TANK(cr);
+		armCREATURE_TANK();
 		break;
 	case CREATURE_HICK:
-		armCREATURE_HICK(cr);
+		armCREATURE_HICK();
 		break;
 	case CREATURE_COP:
-		armCREATURE_COP(cr);
+		armCREATURE_COP();
 		break;
 	case CREATURE_FIREFIGHTER:
-		armCREATURE_FIREFIGHTER(cr);
+		armCREATURE_FIREFIGHTER();
 		break;
 	case CREATURE_CCS_MOLOTOV:
-		armCREATURE_CCS_MOLOTOV(cr);
+		armCREATURE_CCS_MOLOTOV();
 		break;
 	case CREATURE_CCS_SNIPER:
-		armCREATURE_CCS_SNIPER(cr);
+		armCREATURE_CCS_SNIPER();
 		break;
 	case CREATURE_CCS_VIGILANTE:
-		armCREATURE_CCS_VIGILANTE(cr);
+		armCREATURE_CCS_VIGILANTE();
 		break;
 	case CREATURE_CCS_ARCHCONSERVATIVE:
-		armCREATURE_CCS_ARCHCONSERVATIVE(cr);
+		armCREATURE_CCS_ARCHCONSERVATIVE();
 		break;
 	case CREATURE_PRISONGUARD:
-		armCREATURE_PRISONGUARD(cr);
+		armCREATURE_PRISONGUARD();
 		break;
 	case CREATURE_EDUCATOR:
-		armCREATURE_EDUCATOR(cr);
+		armCREATURE_EDUCATOR();
 		break;
 	case CREATURE_GENETIC:
-		armCREATURE_GENETIC(cr, attcap);
+		armCREATURE_GENETIC( attcap);
 		break;
 	case CREATURE_GUARDDOG:
-		armCREATURE_GUARDDOG(cr);
+		armCREATURE_GUARDDOG();
 		break;
 	case CREATURE_PRISONER:
-		armCREATURE_PRISONER(cr, crtype);
+		armCREATURE_PRISONER();
 		break;
 	case CREATURE_BUM:
-		armCREATURE_BUM(cr);
+		armCREATURE_BUM();
 		break;
 	case CREATURE_MUTANT:
-		armCREATURE_MUTANT(cr);
+		armCREATURE_MUTANT();
 		break;
 	case CREATURE_GANGMEMBER:
-		armCREATURE_GANGMEMBER(cr);
+		armCREATURE_GANGMEMBER();
 		break;
 	case CREATURE_CRACKHEAD:
-		armCREATURE_CRACKHEAD(cr, attcap);
+		armCREATURE_CRACKHEAD( attcap);
 		break;
 	case CREATURE_FASTFOODWORKER:
-		armCREATURE_FASTFOODWORKER(cr);
+		armCREATURE_FASTFOODWORKER();
 		break;
 	case CREATURE_FOOTBALLCOACH:
-		armCREATURE_FOOTBALLCOACH(cr);
+		armCREATURE_FOOTBALLCOACH();
 		break;
 	case CREATURE_PROSTITUTE:
-		armCREATURE_PROSTITUTE(cr);
+		armCREATURE_PROSTITUTE();
 		break;
 	case CREATURE_HIPPIE:
-		armCREATURE_HIPPIE(cr);
+		armCREATURE_HIPPIE();
 		break;
 	case CREATURE_SOCIALITE:
-		armCREATURE_SOCIALITE(cr);
+		armCREATURE_SOCIALITE();
 		break;
 	case CREATURE_THIEF:
-		armCREATURE_THIEF(cr);
+		armCREATURE_THIEF();
 		break;
 	case CREATURE_MILITARYOFFICER:
-		armCREATURE_MILITARYOFFICER(cr);
+		armCREATURE_MILITARYOFFICER();
 		break;
 	}
 
 
 }
-void armCreature(DeprecatedCreature &cr, short type) {
-
-	const CreatureType* crtype = getcreaturetype(type);
-	crtype->make_creature(cr);
-	int attnum = crtype->attribute_points_.roll();
-	int attcap[ATTNUM];
-	for (int i = 0; i < ATTNUM; i++)
-	{
-		cr.set_attribute(i, crtype->attributes_[i].min);
-		attcap[i] = crtype->attributes_[i].max;
-	}
-	bool skipThisCreature = false;
-	for (CreatureTypes crt : doNotArmInThisFunction) {
-		if (crt == type) {
-			skipThisCreature = true;
-			break;
-		}
-	}
-	for (CreatureTypes crt : armAsCivilian) {
-		if (crt == type) {
-			crtype->give_weapon_civilian(cr);
-			break;
-		}
-	}
-	if (replaceTheseCreatures.count(type) >= 1) {
-		CreatureTypes replacement = pickrandom(replaceTheseCreatures[type]);
-		makecreature(cr, replacement);
-	}
-	giveDefaultWeapon(cr, type);
-	if (!skipThisCreature)
-		armSpecificCreature(cr, type, crtype, attcap);
-
-	vector<int> possible;
-	for (int a = 0; a < ATTNUM; a++)
-	{
-		attnum -= min(4, cr.get_attribute(a, false));
-		possible.push_back(a);
-	}
-	while (attnum > 0 && len(possible))
-	{
-		int i = LCSrandom(len(possible));
-		int a = possible[i];
-		if (a == ATTRIBUTE_WISDOM && cr.align == ALIGN_LIBERAL && LCSrandom(4)) a = ATTRIBUTE_HEART;
-		if (a == ATTRIBUTE_HEART && cr.align == ALIGN_CONSERVATIVE && LCSrandom(4)) a = ATTRIBUTE_WISDOM;
-		if (cr.get_attribute(a, false) < attcap[a])
-		{
-			cr.adjust_attribute(a, +1);
-			attnum--;
-		}
-		else possible.erase(possible.begin() + i);
-	}
-
-	possible.clear();
-}
-
-/* rolls up a creature's stats and equipment */
-void makecreature(DeprecatedCreature &cr, short type)
-{
+void DeprecatedCreature::makecreature(const short type) {
+	int verifyworklocation(const int type, const int worklocation);
 	if (type == -1) {
 		return;
 	}
 	extern short sitealienate;
-	cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
-	cr.strip(NULL);                  //
-	cr.creatureinit();
-	cr.make_existing();
-	cr.squadid = -1;
-	cr.type = type;
-	cr.infiltration = 0;
-	cr.location = getCurrentSite();
-	cr.worklocation = verifyworklocation(type, cr.location);
+	short getCurrentSite();
+	drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
+	strip(NULL);                  //
+	creatureinit();
+	make_existing();
+	squadid = -1;
+	this->type = type;
+	infiltration = 0;
+	location = getCurrentSite();
+	worklocation = verifyworklocation(type, location);
 
-	armCreature(cr, type);
+	armCreature();
 
-	if (cr.align == ALIGN_LIBERAL) cr.infiltration = 0.15f + (LCSrandom(10) - 5)*0.01f;
-	else if (cr.align == ALIGN_MODERATE) cr.infiltration = 0.25f + (LCSrandom(10) - 5)*0.01f;
-	else cr.infiltration += 0.35f*(1 - cr.infiltration) + (LCSrandom(10) - 5)*0.01f;
-	if (cr.infiltration < 0) cr.infiltration = 0;
-	if (cr.infiltration > 1) cr.infiltration = 1;
+	if (align == ALIGN_LIBERAL) infiltration = 0.15f + (LCSrandom(10) - 5)*0.01f;
+	else if (align == ALIGN_MODERATE) infiltration = 0.25f + (LCSrandom(10) - 5)*0.01f;
+	else infiltration += 0.35f*(1 - infiltration) + (LCSrandom(10) - 5)*0.01f;
+	if (infiltration < 0) infiltration = 0;
+	if (infiltration > 1) infiltration = 1;
 	int randomskills = LCSrandom(4) + 4;
-	if (cr.getCreatureBio().age > 20) randomskills += static_cast<int>(randomskills*((cr.getCreatureBio().age - 20.0) / 20.0));
-	else randomskills -= (20 - cr.getCreatureBio().age) / 2;
+	if (getCreatureBio().age > 20) randomskills += static_cast<int>(randomskills*((getCreatureBio().age - 20.0) / 20.0));
+	else randomskills -= (20 - getCreatureBio().age) / 2;
 	vector<int> possible;
 	for (int s = 0; s < SKILLNUM; s++)possible.push_back(s);
 	//RANDOM STARTING SKILLS
@@ -1436,21 +1386,21 @@ void makecreature(DeprecatedCreature &cr, short type)
 		}
 		// 90% chance of not allowing some skills, other than
 		//   for conservatives
-		if (LCSrandom(10) && cr.align != ALIGN_CONSERVATIVE)
+		if (LCSrandom(10) && align != ALIGN_CONSERVATIVE)
 		{
 			if (randomskill == SKILL_SHOTGUN) continue;
 			if (randomskill == SKILL_PISTOL) continue;
 		}
-		if (cr.skill_cap(randomskill) > cr.get_skill(randomskill))
+		if (skill_cap(randomskill) > get_skill(randomskill))
 		{
-			cr.set_skill(randomskill, cr.get_skill(randomskill) + 1);
+			set_skill(randomskill, get_skill(randomskill) + 1);
 			randomskills--;
 			while (randomskills&&LCSrandom(2))
 			{
-				if (cr.skill_cap(randomskill) > cr.get_skill(randomskill) &&
-					cr.get_skill(randomskill) < 4)
+				if (skill_cap(randomskill) > get_skill(randomskill) &&
+					get_skill(randomskill) < 4)
 				{
-					cr.set_skill(randomskill, cr.get_skill(randomskill) + 1);
+					set_skill(randomskill, get_skill(randomskill) + 1);
 					randomskills--;
 				}
 				else
@@ -1463,7 +1413,82 @@ void makecreature(DeprecatedCreature &cr, short type)
 		else possible.erase(possible.begin() + i);
 	}
 	//ALIENATION
-	if ((sitealienate >= 1 && cr.align == ALIGN_MODERATE) || (sitealienate == 2 && cr.align == ALIGN_LIBERAL))conservatise(cr);
+	if ((sitealienate >= 1 && align == ALIGN_MODERATE) || (sitealienate == 2 && align == ALIGN_LIBERAL))conservatise();
+
+}
+const string CONST_creature108 = "New Union Worker";
+void DeprecatedCreature::liberalize(bool rename) {
+
+	extern UniqueCreatures uniqueCreatures;
+	if (align == ALIGN_CONSERVATIVE && juice > 0)juice = 0;
+	align = ALIGN_LIBERAL;
+	if (id == uniqueCreatures.CEO().id)
+		uniqueCreatures.newCEO();
+	if (rename)
+		switch (type)
+		{
+		case CREATURE_WORKER_FACTORY_NONUNION:
+			this->rename(CONST_creature108);
+			break;
+			//    case CREATURE_JUDGE_CONSERVATIVE:
+			//       strcpy(name,CONST_creature109.c_str());
+			//       break;
+		}
+}
+void DeprecatedCreature::armCreature() {
+	////
+
+	const CreatureType* crtype = getcreaturetype(type);
+	crtype->make_creature(*this);
+	int attnum = crtype->attribute_points_.roll();
+	int attcap[ATTNUM];
+	for (int i = 0; i < ATTNUM; i++)
+	{
+		set_attribute(i, crtype->attributes_[i].min);
+		attcap[i] = crtype->attributes_[i].max;
+	}
+	bool skipThisCreature = false;
+	for (CreatureTypes crt : doNotArmInThisFunction) {
+		if (crt == type) {
+			skipThisCreature = true;
+			break;
+		}
+	}
+	for (CreatureTypes crt : armAsCivilian) {
+		if (crt == type) {
+			crtype->give_weapon_civilian(*this);
+			break;
+		}
+	}
+	if (replaceTheseCreatures.count(type) >= 1) {
+		CreatureTypes replacement = pickrandom(replaceTheseCreatures[type]);
+		makecreature(replacement);
+	}
+	giveDefaultWeapon();
+	if (!skipThisCreature)
+		armSpecificCreature(attcap);
+
+	vector<int> possible;
+	for (int a = 0; a < ATTNUM; a++)
+	{
+		attnum -= min(4, get_attribute(a, false));
+		possible.push_back(a);
+	}
+	while (attnum > 0 && len(possible))
+	{
+		int i = LCSrandom(len(possible));
+		int a = possible[i];
+		if (a == ATTRIBUTE_WISDOM && align == ALIGN_LIBERAL && LCSrandom(4)) a = ATTRIBUTE_HEART;
+		if (a == ATTRIBUTE_HEART && align == ALIGN_CONSERVATIVE && LCSrandom(4)) a = ATTRIBUTE_WISDOM;
+		if (get_attribute(a, false) < attcap[a])
+		{
+			adjust_attribute(a, +1);
+			attnum--;
+		}
+		else possible.erase(possible.begin() + i);
+	}
+
+	possible.clear();
 }
 #include "customMaps.h"
 const string creature = "creature\\";

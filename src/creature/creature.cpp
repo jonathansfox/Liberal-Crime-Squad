@@ -52,8 +52,7 @@ const string CONST_creature113 = "President ";
 const string CONST_creature112 = "CCS Heavy";
 const string CONST_creature111 = "Soldier";
 const string CONST_creature110 = "Elite Security";
-const string CONST_creature109 = "Enlightened Judge";
-const string CONST_creature108 = "New Union Worker";
+//const string CONST_creature109 = "Enlightened Judge";
 const string CONST_creature107 = "Jaded Liberal Judge";
 const string CONST_creature106 = "Ex-Union Worker";
 const string CONST_creature105 = ", IMPOSSIBLE";
@@ -191,9 +190,9 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 const string blankString = "";
-#include "../creature/creature.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
+#include "../creature/creature.h"
 #include "../sitemode/stealth.h"
 // for hasdisguise
 //#include "../common/stringconversion.h"
@@ -908,7 +907,6 @@ bool DeprecatedCreature::attribute_check(int attribute, int difficulty) const
 	return(attribute_roll(attribute) >= difficulty);
 }
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(const DeprecatedCreature &cr);
 int DeprecatedCreature::skill_roll(int skill) const
 {
 	extern string closeParenthesis;
@@ -949,7 +947,7 @@ int DeprecatedCreature::skill_roll(int skill) const
 		adjusted_attribute_value = skill_value;
 		break;
 	}
-	Vehicle* v = getChaseVehicle(*this);
+	Vehicle* v = getChaseVehicle();
 	switch (pseudoskill)
 	{
 	case PSEUDOSKILL_ESCAPEDRIVE:
@@ -1019,7 +1017,7 @@ int DeprecatedCreature::skill_roll(int skill) const
 	case SKILL_DISGUISE:
 	{
 		// Check for appropriate uniform
-		char uniformed = hasdisguise(*this);
+		char uniformed = hasdisguise();
 		// Ununiformed disguise checks automatically fail
 		if (!uniformed) { return_value = 0; break; }
 		// reduce effectiveness for 'partial' uniforms (police uniforms when trespassing)
@@ -1110,64 +1108,92 @@ void DeprecatedCreature::skill_up()
 			skill_experience[s] = 0;
 	}
 }
-/* turns a creature into a conservative */
-void conservatise(DeprecatedCreature &cr)
-{
-	if (cr.align == ALIGN_LIBERAL && cr.juice > 0)cr.juice = 0;
-	cr.align = ALIGN_CONSERVATIVE;
-	switch (cr.type)
+
+void  DeprecatedCreature::conservatise() {
+
+	if (align == ALIGN_LIBERAL && juice > 0)juice = 0;
+	align = ALIGN_CONSERVATIVE;
+	switch (type)
 	{
 	case CREATURE_WORKER_FACTORY_UNION:
-		cr.rename(CONST_creature106);
+		rename(CONST_creature106);
 		break;
 	case CREATURE_JUDGE_LIBERAL:
-		cr.rename(CONST_creature107);
+		rename(CONST_creature107);
 		break;
 	}
 }
-/* turns a creature into a liberal */
-void liberalize(DeprecatedCreature &cr, bool rename)
-{
-	extern UniqueCreatures uniqueCreatures;
-	if (cr.align == ALIGN_CONSERVATIVE && cr.juice > 0)cr.juice = 0;
-	cr.align = ALIGN_LIBERAL;
-	if (cr.id == uniqueCreatures.CEO().id)
-		uniqueCreatures.newCEO();
-	if (rename)
-		switch (cr.type)
-		{
-		case CREATURE_WORKER_FACTORY_NONUNION:
-			cr.rename(CONST_creature108);
-			break;
-			//    case CREATURE_JUDGE_CONSERVATIVE:
-			//       strcpy(cr.name,CONST_creature109.c_str());
-			//       break;
-		}
-}
-/* gives a CCS member a cover name */
-void nameCCSMember(DeprecatedCreature &cr)
-{
-	if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR) {
+void DeprecatedCreature::nameCCSMember() {
 
-		cr.rename(CONST_creature110);
+	if (get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR) {
+
+		rename(CONST_creature110);
 	}
-	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR) {
+	else if (get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR) {
 
-		cr.rename(CONST_creature111);
+		rename(CONST_creature111);
 	}
-	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR) {
+	else if (get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR) {
 
-		cr.rename(CONST_creature112);
+		rename(CONST_creature112);
 	}
-	else if (cr.get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2)) {
+	else if (get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2)) {
 
-		cr.rename(pickrandom(ccs_covername_shotgun));
+		rename(pickrandom(ccs_covername_shotgun));
 	}
 	else {
 
-		cr.rename(pickrandom(ccs_covername_other));
+		rename(pickrandom(ccs_covername_other));
 	}
 }
+
+// Determines the number of subordinates a creature may command
+int DeprecatedCreature::maxsubordinates() const {
+	//brainwashed recruits can't recruit normally
+	if (flag & CREATUREFLAG_BRAINWASHED)return 0;
+	int recruitcap = 0;
+	//Cap based on juice
+	if (juice >= 500)      recruitcap += 6;
+	else if (juice >= 200) recruitcap += 5;
+	else if (juice >= 100) recruitcap += 3;
+	else if (juice >= 50)  recruitcap += 1;
+	//Cap for founder
+	if (hireid == -1 && getCreatureHealth().align == 1) recruitcap += 6;
+	return recruitcap;
+}
+int DeprecatedCreature::subordinatesleft() const {
+	extern vector<DeprecatedCreature *> pool;
+	int recruitcap = maxsubordinates();
+	for (int p = 0; p < len(pool); p++)
+		// ignore seduced and brainwashed characters
+		if (pool[p]->hireid == id&&pool[p]->getNameAndAlignment().alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE | CREATUREFLAG_BRAINWASHED)))
+			recruitcap--;
+	if (recruitcap > 0) return recruitcap;
+	else return 0;
+}
+void DeprecatedCreature::add_juice(long juice, long cap) {
+	extern vector<DeprecatedCreature *> pool;
+	// Ignore zero changes
+	if (juice == 0) return;
+	// Check against cap
+	if ((juice > 0 && juice >= cap) ||
+		(juice < 0 && juice <= cap))
+		return;
+	// Apply juice gain
+	juice += juice;
+	// Pyramid scheme of juice trickling up the chain
+	if (hireid != -1)
+		for (int i = 0; i < len(pool); i++)
+			if (pool[i]->id == hireid)
+			{
+				pool[i]->add_juice(juice / 5, juice);
+				break;
+			}
+	// Bounds check
+	if (juice > 1000)juice = 1000;
+	if (juice < -50)juice = -50;
+}
+
 /* are they interested in talking about the issues? */
 bool DeprecatedCreature::talkreceptive() const
 {
@@ -1208,14 +1234,14 @@ void DeprecatedCreature::die()
 }
 void UniqueCreatures::newCEO()
 {
-	makecreature(CEO_, CREATURE_CORPORATE_CEO);
+	CEO_.makecreature(CREATURE_CORPORATE_CEO);
 	CEO_ID = CEO_.id, CEO_state = UNIQUECREATURE_ALIVE;
 }
 void UniqueCreatures::newPresident()
 {
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	extern short exec[EXECNUM];
-	makecreature(Pres_, CREATURE_POLITICIAN);
+	Pres_.makecreature(CREATURE_POLITICIAN);
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
@@ -1675,4 +1701,13 @@ void DeprecatedCreature::namecreature()
 		strcpy(propername, (fn.first + " " + fn.last).data());
 		dontname = true;
 	}
+}
+
+Deprecatedrecruitst DeprecatedCreature::deprecatedrecruitst(int id) {
+	return Deprecatedrecruitst(this, id);
+}
+
+
+void monthlyRunTheSystem() {
+	DeprecatedCreature::monthlyRunTheSystem();
 }

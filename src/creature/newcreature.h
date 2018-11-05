@@ -5,8 +5,10 @@
 #include "../items/item.h"
 #include "../items/clip.h"
 #include "../items/weapon.h"
+#include "../items/armortype.h"
 #include "../items/armor.h"
 #include "augmentation.h"
+#include "augmenttype.h"
 
 #include "creatureEnums.h"
 struct CreatureBools
@@ -245,4 +247,22 @@ struct CreatureAttributeList {
 private:
 	const map<int, int> attribute_list;
 	const map<int, int> attribute_juice_list;
+};
+
+struct newGameArguments {
+	const char recruits;
+	const char base;
+	const bool makelawyer;
+	const bool gaylawyer;
+	const bool sports_car;
+	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
+};
+
+enum LegalDefense {
+	UNDECIDED = -1,
+	COURT_ATTORNEY = 0,
+	SELF_REPRESENT = 1,
+	PLEAD_GUILTY = 2,
+	ACE_ATTORNEY = 3,
+	SLEEPER_ATTORNEY = 4
 };

@@ -185,8 +185,6 @@ void title_screen::choose_savefile_name()
 	makecharacter();
 }
 void title_screen::selectAndLoadSaveFile() {
-	extern short interface_pgup;
-	extern short interface_pgdn;
 	s_savefiles = move(LCSSaveFiles());
 	char loaded = s_savefiles.size() > 0;
 	if (!loaded)
@@ -217,9 +215,9 @@ void title_screen::selectAndLoadSaveFile() {
 			mvaddstrAlt(23, 0, addpagestr());
 			int c = getkeyAlt();
 			//PAGE UP
-			if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)page--;
+			if (is_page_up(c) && page > 0)page--;
 			//PAGE DOWN
-			if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 19 < s_savefiles.size())page++;
+			if (is_page_down(c) && (page + 1) * 19 < s_savefiles.size())page++;
 			if (c >= 'a'&&c <= 's')
 			{
 				const int p = page * 19 + c - 'a';

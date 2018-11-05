@@ -2,11 +2,11 @@
 miscactions.cpp
 */
 /* unlock attempt */
-char unlock(short type, char &actual);
+
+UnlockAttempt unlock(short type);
 /* bash attempt */
-char bash(short type, char &actual);
 /* computer hack attempt */
-char hack(short type, char &actual);
+UnlockAttempt hack(short type);
 /* run a radio broadcast */
 //char radio_broadcast();
 /* run a tv broadcast */

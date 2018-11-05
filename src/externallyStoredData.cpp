@@ -1092,11 +1092,13 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
-string PACKAGE_VERSION_STR = "4.12.27";
-int version = 41227;
+string PACKAGE_VERSION_STR = "4.12.29";
+int version = 41229;
 int lowestloadversion = 40100;
 int lowestloadscoreversion = 31203;
 
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
@@ -2766,6 +2768,8 @@ map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
 	};
 	return true;
 }
+
+
 void processTheUnprocessed(vector<string> &unprocessed, map<short, vector<string> > &processed, map<string, short> string_to_short) {
 	int nextHelp = -2;
 	vector<string> nextHelpStrings;

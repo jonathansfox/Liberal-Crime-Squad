@@ -47,20 +47,16 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 //#include "basemode/baseactions.h"
 void orderparty();
 //#include "sitemode/advance.h"
@@ -77,12 +73,10 @@ void reloadparty(bool wasteful = false);
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 //#include "common/equipment.h"
-void equip(vector<Item *> &loot, int loc);
 #include "fight.h"
 #include "fightCreature.h"  
 // for void youattack();
-#include "haulkidnapCreature.h"
-// for  void kidnaptransfer(Creature &cr);
+
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
@@ -94,11 +88,7 @@ extern string check_status_of_squad_liberal;
 extern string show_squad_liberal_status;
 extern string singleSpace;
 extern string singleDot;
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
+
 const string mostlyendings = "mostlyendings\\";
 vector<NameAndAlignment> getEncounterNameAndAlignment();
 void makecreature(const int x, const short type);
@@ -147,7 +137,7 @@ string hereTheyCome;
 string isSeized;
 const int DRIVING_RANDOMNESS = 13;
 void deleteVehicles(vector<Vehicle *>& carid);
-void chase_giveup()
+void DeprecatedCreature::chase_giveup()
 {
 	const string CONST_chase020 = " is free.";
 	const string CONST_chase019 = "s are free.";
@@ -168,11 +158,11 @@ void chase_giveup()
 		activesquad->squad[p]->carid = -1;
 		activesquad->squad[p]->location = ps;
 		activesquad->squad[p]->drop_weapons_and_clips(NULL);
-		activesquad->squad[p]->activity.type = ACTIVITY_NONE;
+		activesquad->squad[p]->set_activity(ACTIVITY_NONE);
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid == -1) hostagefreed++;
-			freehostage(*activesquad->squad[p], 2);
+			if (activesquad->squad[p]->is_prisoner_non_LCS()) hostagefreed++;
+			activesquad->squad[p]->freehostage(2);
 		}
 		activesquad->squad[p] = NULL;
 	}
@@ -334,7 +324,6 @@ void evasiverun()
 			{
 				yourspeed[p] = activesquad->squad[p]->attribute_roll(ATTRIBUTE_AGILITY) +
 					activesquad->squad[p]->attribute_roll(ATTRIBUTE_HEALTH);
-				//healthmodroll(yourspeed[p],*activesquad->squad[p]);
 				notwheelchair++;
 			}
 			if (yourworst > yourspeed[p]) yourworst = yourspeed[p];
@@ -351,7 +340,6 @@ void evasiverun()
 		if (!encounter[e].getNameAndAlignment().exists) continue;
 		int chaser = encounter[e].attribute_roll(ATTRIBUTE_AGILITY) +
 			encounter[e].attribute_roll(ATTRIBUTE_HEALTH);
-		//healthmodroll(chaser,encounter[e]);
 		if (theirbest < chaser) theirbest = chaser;
 		if (theirworst > chaser) theirworst = chaser;
 		if (encounter[e].type == CREATURE_TANK && LCSrandom(10))
@@ -409,26 +397,10 @@ void evasiverun()
 				//Unload hauled hostage or body when they get back to the safehouse
 				if (activesquad->squad[p]->is_holding_body())
 				{
-					//If this is an LCS member or corpse being hauled (marked as in the squad)
-					if (activesquad->squad[p]->prisoner->squadid != -1)
-					{
-						//Take them out of the squad
-						removesquadinfo(*activesquad->squad[p]->prisoner);
-						//Set base and current location to squad's safehouse
-						activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-						activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-					}
-					else //A kidnapped conservative
-					{
-						//Convert them into a prisoner
-						kidnaptransfer(*activesquad->squad[p]->prisoner);
-						delete activesquad->squad[p]->prisoner;
-					}
-
-					activesquad->squad[p]->discard_body();
+					activesquad->squad[p]->deal_with_prisoner();
 				}
-				removesquadinfo(*activesquad->squad[p]);
-				printparty();
+				activesquad->squad[p]->removesquadinfo();
+				DeprecatedCreature::printparty();
 			}
 			else if (yourspeed[p] < theirbest - 10)
 			{
@@ -454,7 +426,7 @@ void evasiverun()
 				gamelog.newline(); //New line.
 				if (activesquad->squad[p]->getCreatureHealth().blood <= 0)
 					activesquad->squad[p]->die();
-				capturecreature(*activesquad->squad[p]);
+				activesquad->squad[p]->capturedByConservatives();
 				for (int i = p + 1, j = p; i < 6; i++, j++)
 					activesquad->squad[j] = activesquad->squad[i];
 				activesquad->squad[5] = NULL;
@@ -462,7 +434,7 @@ void evasiverun()
 				// Tanks don't stop either.
 				if (encounter[0].type != CREATURE_DEATHSQUAD &&
 					encounter[0].type != CREATURE_TANK)delenc(0, 0);
-				printparty();
+				DeprecatedCreature::printparty();
 				printchaseencounter();
 				pressAnyKey();
 			}
@@ -514,7 +486,7 @@ void destroyAllCarsOfParty() {
 int encounterSize();
 int baddieCount(const bool in_car);
 int baddieCount();
-LOOP_CONTINUATION increment_footchase() {
+LOOP_CONTINUATION DeprecatedCreature::increment_footchase() {
 	extern chaseseqst chaseseq;
 	extern char foughtthisround;
 	extern Deprecatedsquadst *activesquad;
@@ -529,7 +501,7 @@ LOOP_CONTINUATION increment_footchase() {
 	mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationName(chaseseq.location));
 	//PRINT PARTY
 	if (partyalive == 0) party_status = -1;
-	printparty();
+	DeprecatedCreature::printparty();
 	if (partyalive > 0)
 	{
 		printDrivingSituation(partysize);
@@ -588,7 +560,7 @@ LOOP_CONTINUATION increment_footchase() {
 				sitestory->crime.push_back(CRIME_FOOTCHASE);
 				criminalizeparty(LAWFLAG_RESIST);
 			}
-			youattack();
+			DeprecatedCreature::youattack();
 			enemyattack();
 			creatureadvance();
 			break;
@@ -661,7 +633,7 @@ bool footchase()
 	gamelog.newline(); //New line.
 	pressAnyKey();
 	while (true) {
-		LOOP_CONTINUATION x = increment_footchase();
+		LOOP_CONTINUATION x = DeprecatedCreature::increment_footchase();
 		if (x == RETURN_ZERO) {
 			mode = GAMEMODE_BASE;
 			//Make sure all possible exits of the chase have the nextMessage() call
@@ -678,13 +650,12 @@ bool footchase()
 		}
 	}
 }
-int driveskill(DeprecatedCreature &cr, int v);
-int driveskill(DeprecatedCreature &cr, Vehicle &v)
+int DeprecatedCreature::driveskill(Vehicle &v)
 {
-	int driveskill = cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
-	healthmodroll(driveskill, cr);
+	int driveskill = skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
+	healthmodroll(driveskill);
 	if (driveskill < 0) driveskill = 0;
-	driveskill *= static_cast<int>(cr.getCreatureHealth().blood / 50.0);
+	driveskill *= static_cast<int>(getCreatureHealth().blood / 50.0);
 	return driveskill;
 }
 const string CONST_chase047 = " brakes hard and nearly crashes!";
@@ -693,7 +664,7 @@ const string CONST_chase045 = " skids out!";
 const string CONST_chase044 = " falls behind!";
 const string CONST_chase043 = "You make obscene gestures at the pursuers!";
 const string CONST_chase042 = "You boldly weave through oncoming traffic!";
-void evasivedrive()
+void DeprecatedCreature::evasivedrive()
 {
 	extern chaseseqst chaseseq;
 	extern Deprecatedsquadst *activesquad;
@@ -709,7 +680,7 @@ void evasivedrive()
 			activesquad->squad[p]->is_driver)
 		{
 			int v = id_getcar(activesquad->squad[p]->carid);
-			yourrolls.push_back(driveskill(*activesquad->squad[p], v) + LCSrandom(DRIVING_RANDOMNESS));
+			yourrolls.push_back(activesquad->squad[p]->driveskill(v) + LCSrandom(DRIVING_RANDOMNESS));
 			switch (fieldskillrate)
 			{
 			case FIELDSKILLRATE_FAST:
@@ -735,7 +706,7 @@ void evasivedrive()
 			{
 				if (chaseseq.enemycar[v]->id() == encounter[e].carid)
 				{
-					theirrolls.push_back(driveskill(encounter[e], *chaseseq.enemycar[v]) + LCSrandom(DRIVING_RANDOMNESS));
+					theirrolls.push_back(encounter[e].driveskill(*chaseseq.enemycar[v]) + LCSrandom(DRIVING_RANDOMNESS));
 					theirrolls_id.push_back(encounter[e].carid);
 					theirrolls_drv.push_back(encounter[e].id);
 				}
@@ -846,7 +817,7 @@ const string CONST_chase052 = " grips the ";
 const string CONST_chase051 = " seat, out cold, and dies.";
 const string CONST_chase050 = " slumps in ";
 const string CONST_chase049 = "Your ";
-void crashfriendlycar(int v)
+void DeprecatedCreature::crashfriendlycar(int v)
 {
 	extern int stat_dead;
 	extern chaseseqst chaseseq;
@@ -859,7 +830,7 @@ void crashfriendlycar(int v)
 	addstrAlt(chaseseq.friendcar[v]->fullname(), gamelog);
 	addstrAlt(pickrandom(car_crash_modes), gamelog);
 	gamelog.newline(); //New line it.
-	printparty();
+	DeprecatedCreature::printparty();
 	pressAnyKey();
 	int victimsum = 0;
 	for (int p = 0; p < 6; p++)
@@ -893,29 +864,28 @@ void crashfriendlycar(int v)
 			if (activesquad->squad[p]->is_holding_body())
 			{
 				// Instant death
-				if (activesquad->squad[p]->prisoner->getCreatureHealth().alive)
+				if (activesquad->squad[p]->is_prisoner_alive())
 				{
 					clearmessagearea();
 					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->get_prisoner_name(), gamelog);
 					addstrAlt(pickrandom(car_crash_fatalities), gamelog);
 					gamelog.newline(); //New line.
-					printparty();
+					DeprecatedCreature::printparty();
 					pressAnyKey();
 				}
-				activesquad->squad[p]->prisoner->die();
-				activesquad->squad[p]->prisoner->location = -1;
+				activesquad->squad[p]->prisoner_dies();
 				victimsum++;
 				// Record death if living Liberal is hauled
-				if (activesquad->squad[p]->prisoner->squadid != -1)
+				if (!activesquad->squad[p]->is_prisoner_non_LCS())
 				{
-					if (activesquad->squad[p]->prisoner->getCreatureHealth().alive&&
-						activesquad->squad[p]->prisoner->getCreatureHealth().align == 1)stat_dead++;
-					activesquad->squad[p]->prisoner->die();
-					activesquad->squad[p]->prisoner->location = -1;
+					if (activesquad->squad[p]->is_prisoner_alive()&&
+						activesquad->squad[p]->get_prisoner_align() == 1)stat_dead++;
+
+					activesquad->squad[p]->prisoner_dies();
 				}
 				// Otherwise just kill them off and be done with it
-				else delete activesquad->squad[p]->prisoner;
+				else activesquad->squad[p]->delete_prisoner();
 				activesquad->squad[p]->discard_body();
 			}
 			// Handle squad member death
@@ -936,7 +906,7 @@ void crashfriendlycar(int v)
 					break;
 				}
 				gamelog.newline(); //New line.
-				printparty();
+				DeprecatedCreature::printparty();
 				pressAnyKey();
 				// Mark as dead
 				activesquad->squad[p]->die();
@@ -974,7 +944,7 @@ void crashfriendlycar(int v)
 					break;
 				}
 				gamelog.newline(); //New line.
-				printparty();
+				DeprecatedCreature::printparty();
 				pressAnyKey();
 			}
 		}
@@ -1040,7 +1010,7 @@ void crashenemycar(int v)
 	printchaseencounter();
 	pressAnyKey();
 }
-bool drivingupdate(short &obstacle)
+bool DeprecatedCreature::drivingupdate(short &obstacle)
 {
 	const string CONST_chase064 = " takes over the wheel.";
 	extern chaseseqst chaseseq;
@@ -1074,10 +1044,10 @@ bool drivingupdate(short &obstacle)
 			vector<int> goodp;
 			int max = 0;
 			for (int p = 0; p < len(passenger); p++)
-				if (driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v]) > max&&activesquad->squad[passenger[p]]->canwalk())
-					max = driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v]);
+				if (activesquad->squad[passenger[p]]->driveskill(*chaseseq.friendcar[v]) > max&&activesquad->squad[passenger[p]]->canwalk())
+					max = activesquad->squad[passenger[p]]->driveskill(*chaseseq.friendcar[v]);
 			for (int p = 0; p < len(passenger); p++)
-				if (driveskill(*activesquad->squad[passenger[p]], *chaseseq.friendcar[v]) == max && activesquad->squad[passenger[p]]->canwalk())
+				if (activesquad->squad[passenger[p]]->driveskill(*chaseseq.friendcar[v]) == max && activesquad->squad[passenger[p]]->canwalk())
 					goodp.push_back(passenger[p]);
 			if (len(goodp))
 			{
@@ -1089,7 +1059,7 @@ bool drivingupdate(short &obstacle)
 				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_chase064, gamelog);
 				gamelog.newline(); //New line.
-				printparty();
+				DeprecatedCreature::printparty();
 				pressAnyKey();
 			}
 		}
@@ -1162,7 +1132,7 @@ bool dodgedrive()
 		{
 			if (!activesquad->squad[driver]->skill_check(PSEUDOSKILL_ESCAPEDRIVE, DIFFICULTY_EASY))
 			{
-				crashfriendlycar(v);
+				DeprecatedCreature::crashfriendlycar(v);
 				sitestory->crime.push_back(CRIME_CARCHASE);
 				return 1;
 			}
@@ -1223,7 +1193,7 @@ bool obstacledrive(short obstacle, char choice)
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				enemyattack();
-				youattack();
+				DeprecatedCreature::youattack();
 			}
 		}
 		break;
@@ -1246,7 +1216,7 @@ bool obstacledrive(short obstacle, char choice)
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				enemyattack();
-				youattack();
+				DeprecatedCreature::youattack();
 			}
 		}
 		break;
@@ -1291,7 +1261,7 @@ bool obstacledrive(short obstacle, char choice)
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				enemyattack();
-				youattack();
+				DeprecatedCreature::youattack();
 			}
 			else
 			{
@@ -1399,7 +1369,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 	{
 		if (chaseseq.canpullover)
 		{
-			chase_giveup();
+			DeprecatedCreature::chase_giveup();
 			return RETURN_ZERO;
 		}
 	}
@@ -1413,11 +1383,11 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 				if (chaseseq.location) sitestory->crime.push_back(CRIME_CARCHASE);
 				criminalizeparty(LAWFLAG_RESIST);
 			}
-			evasivedrive();
+			DeprecatedCreature::evasivedrive();
 			enemyattack();
-			youattack();
+			DeprecatedCreature::youattack();
 			creatureadvance();
-			if (drivingupdate(obstacle))
+			if (DeprecatedCreature::drivingupdate(obstacle))
 			{
 				partysize = activesquadSize(), partyalive = activesquadAlive();
 				if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
@@ -1431,16 +1401,16 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 				if (chaseseq.location) sitestory->crime.push_back(CRIME_CARCHASE);
 				criminalizeparty(LAWFLAG_RESIST);
 			}
-			youattack();
+			DeprecatedCreature::youattack();
 			enemyattack();
 			creatureadvance();
-			if (drivingupdate(obstacle))
+			if (DeprecatedCreature::drivingupdate(obstacle))
 			{
 				partysize = activesquadSize(), partyalive = activesquadAlive();
 				if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 			}
 		}
-		if (c == 'e') equip(activesquad->loot, -1);
+		if (c == 'e')DeprecatedCreature::equip(activesquad->loot, -1);
 	}
 	else
 	{
@@ -1458,7 +1428,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 				}
 				creatureadvance();
-				drivingupdate(obstacle);
+				DeprecatedCreature::drivingupdate(obstacle);
 			}
 			if (c == 'f')
 			{
@@ -1468,7 +1438,7 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
 				}
 				creatureadvance();
-				if (drivingupdate(obstacle))
+				if (DeprecatedCreature::drivingupdate(obstacle))
 				{
 					partysize = activesquadSize(), partyalive = activesquadAlive();
 					if (partyalive > 0) return footchase() ? RETURN_ONE : RETURN_ZERO;
@@ -1504,7 +1474,7 @@ LOOP_CONTINUATION increment_chasesequence(short& obstacle) {
 	mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationName(chaseseq.location));
 	//PRINT PARTY
 	if (partyalive == 0) party_status = -1;
-	printparty();
+	DeprecatedCreature::printparty();
 	if (partyalive > 0)
 	{
 		printSituationAndInstructions(obstacle);
@@ -1530,8 +1500,7 @@ LOOP_CONTINUATION increment_chasesequence(short& obstacle) {
 	return REPEAT;
 
 }
-void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *> &veh);
-bool chasesequence()
+bool DeprecatedCreature::chasesequence()
 {
 	const string CONST_chase073 = "As you pull away from the site, you notice that you are ";
 	extern MusicClass music;
@@ -1553,7 +1522,11 @@ bool chasesequence()
 		return 1;
 	}
 	chaseseq.friendcar.clear();
-	addCreatueVehiclesToCollection(activesquad->squad, chaseseq.friendcar);
+	for (int i = 0; i < 6; i++) {
+		if (activesquad->squad[i] != NULL) {
+			activesquad->squad[i]->addCreatureVehiclesToCollection(chaseseq.friendcar);
+		}
+	}
 	mode = GAMEMODE_CHASECAR;
 	music.play(MUSIC_CARCHASE);
 	eraseAlt();
@@ -1583,21 +1556,21 @@ bool chasesequence()
 		}
 	}
 }
-Vehicle* getChaseVehicle(const DeprecatedCreature &c)
+Vehicle* DeprecatedCreature::getChaseVehicle() const
 {
 	extern short mode;
 	extern chaseseqst chaseseq;
 	Vehicle* found = NULL;
-	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
+	if (mode == GAMEMODE_CHASECAR && carid != -1)
 	{
 		for (int v2 = 0; v2 < len(chaseseq.friendcar); v2++)
-			if (chaseseq.friendcar[v2]->id() == c.carid)
+			if (chaseseq.friendcar[v2]->id() == carid)
 			{
 				found = chaseseq.friendcar[v2];
 				break;
 			}
 		for (int v2 = 0; v2 < len(chaseseq.enemycar); v2++)
-			if (chaseseq.enemycar[v2]->id() == c.carid)
+			if (chaseseq.enemycar[v2]->id() == carid)
 			{
 				found = chaseseq.enemycar[v2];
 				break;
@@ -1605,15 +1578,15 @@ Vehicle* getChaseVehicle(const DeprecatedCreature &c)
 	}
 	return found;
 }
-DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
+DeprecatedCreature* DeprecatedCreature::getChaseDriver() const
 {
 	extern short mode;
 	extern Deprecatedsquadst *activesquad;
 	extern DeprecatedCreature encounter[ENCMAX];
 	DeprecatedCreature* found = NULL;
-	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
+	if (mode == GAMEMODE_CHASECAR && carid != -1)
 	{
-		int v = c.carid;
+		int v = carid;
 		// Check to see if the car we are in is being driven by an LCS member
 		for (int p = 0; p < 6; p++)
 		{
@@ -1797,21 +1770,20 @@ void makechasers(long type, const long sitecriminality)
 			load[v]++;
 		}
 }
-void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid);
 
 /* the next two functions force a chase sequence with a specific liberal */
-bool footchase(DeprecatedCreature &cr)
+bool DeprecatedCreature::foot_chase()
 {
 	extern Deprecatedsquadst *activesquad;
 	extern short party_status;
 	extern long cursquadid;
-	long oldsqid = cr.squadid;
-	DeprecatedCreature *crp = &cr;
+	long oldsqid = squadid;
+	DeprecatedCreature *crp = this;
 	Deprecatedsquadst *sq = new Deprecatedsquadst;
-	sq->squad[0] = &cr;
+	sq->squad[0] = this;
 	sq->squad[0]->squadid = cursquadid; cursquadid++;
-	cr.squadid = sq->squad[0]->squadid;
-	cr.carid = -1;
+	squadid = sq->squad[0]->squadid;
+	carid = -1;
 	Deprecatedsquadst *oact = activesquad;
 	short ops = party_status;
 	activesquad = sq;
@@ -1819,27 +1791,27 @@ bool footchase(DeprecatedCreature &cr)
 	bool escaped = footchase();
 	party_status = ops;
 	delete sq;
-	if (escaped) cr.squadid = oldsqid;
+	if (escaped) squadid = oldsqid;
 	else if (oldsqid != -1)
 	{
-		removeCreatureFromSquad(*crp, oldsqid);
+		crp->removeCreatureFromSquad(oldsqid);
 	}
 	activesquad = oact;
 	return escaped;
 }
-bool chasesequence(DeprecatedCreature &cr, Vehicle &v)
+bool DeprecatedCreature::chasesequence(Vehicle &v)
 {
 	extern Deprecatedsquadst *activesquad;
 	extern short party_status;
 	extern long cursquadid;
 	extern Log gamelog;
-	long oldsqid = cr.squadid;
+	long oldsqid = squadid;
 	Deprecatedsquadst *sq = new Deprecatedsquadst;
-	sq->squad[0] = &cr;
+	sq->squad[0] = this;
 	sq->squad[0]->squadid = cursquadid;
 	sq->id = cursquadid; cursquadid++;
-	cr.carid = v.id();
-	cr.is_driver = 1;
+	carid = v.id();
+	is_driver = 1;
 	Deprecatedsquadst *oact = activesquad;
 	short ops = party_status;
 	activesquad = sq;
@@ -1849,12 +1821,12 @@ bool chasesequence(DeprecatedCreature &cr, Vehicle &v)
 	delete sq;
 	if (ret)
 	{
-		cr.squadid = oldsqid;
-		cr.carid = -1;
+		squadid = oldsqid;
+		carid = -1;
 	}
 	else if (oldsqid != -1)
 	{
-		removeCreatureFromSquad(cr, oldsqid);
+		removeCreatureFromSquad(oldsqid);
 	}
 	activesquad = oact;
 	gamelog.nextMessage(); //Next message.

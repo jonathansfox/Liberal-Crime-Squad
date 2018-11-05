@@ -13,26 +13,22 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "vehicle/vehicletype.h"
+#include "vehicle/vehicle.h"
 #include "creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-
-#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
-#include "../items/armortype.h"
+//#include "../items/armortype.h"
 #include "common/interval.h"
 // needed for creaturetype
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
 #include "creature/creaturetype.h"
-#include "creature/augmenttype.h"
+//#include "creature/augmenttype.h"
 //#include "common/consolesupport.h"
 // for end_cleartype_fix()
 ///
@@ -179,8 +175,6 @@ int sitecrime;
 bool mapshowing = false;
 bool encounterwarnings = false;
 char foughtthisround = 0;
-short interface_pgup = '[';
-short interface_pgdn = ']';
 int day = 1;
 short party_status = -1;
 short wincondition = WINCONDITION_ELITE;
@@ -239,7 +233,7 @@ void end_game(int err)
 extern string failedToLoad;
 extern string exclamationPoint;
 template<class Type>
-bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
+bool populate_from_xml(vector<Type*>& types, const string file, Log& log)
 {
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
@@ -264,9 +258,8 @@ string getVehicleShortname(int i) {
 string getVehicleFullname(int i) {
 	return vehicle[i]->fullname();
 }
-int driveskill(DeprecatedCreature &cr, Vehicle &v);
-int driveskill(DeprecatedCreature &cr, int v) {
-	return driveskill(cr, *vehicle[v]);
+int DeprecatedCreature::driveskill(int v) {
+	return driveskill(*vehicle[v]);
 }
 
 /* transforms a squad id number into the index of that squad in the global vector */
@@ -289,7 +282,7 @@ int getcliptype(int id)
 	return -1;
 }
 /* transforms a clip type name into the index of that clip type in the global vector */
-int getcliptype(const string &idname)
+int getcliptype(const string idname)
 {
 	for (int i = 0; i < len(cliptype); i++) if (cliptype[i]->get_idname() == idname) return i;
 	return -1;
@@ -302,7 +295,7 @@ int getarmortype(int id)
 	return -1;
 }
 /* transforms a armor type name into the index of that armor type in the global vector */
-int getarmortype(const string &idname)
+int getarmortype(const string idname)
 {
 	for (int i = 0; i < len(armortype); i++) if (armortype[i]->get_idname() == idname) return i;
 	return -1;
@@ -314,7 +307,7 @@ const CreatureType* getcreaturetype(short crtype)
 	return NULL;
 }
 /* transforms a creature type name into a pointer to that creature type  */
-const CreatureType* getcreaturetype(const std::string& crtype)
+const CreatureType* getcreaturetype(const std::string crtype)
 {
 	for (int i = 0; i < len(creaturetype); i++) if (crtype == creaturetype[i]->get_idname()) return creaturetype[i];
 	return NULL;
@@ -360,13 +353,12 @@ void deleteVehicles(vector<Vehicle *>& carid) {
 	delete_and_clear(carid, vehicle);
 }
 
-void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *> &veh) {
-	for (int p = 0; p < 6; p++)
-	{
-		if (cr[p] == NULL) continue;
-		if (cr[p]->carid != -1)
+void DeprecatedCreature::addCreatureVehiclesToCollection(vector<Vehicle *> &veh) {
+	
+		
+		if (carid != -1)
 		{
-			int v = id_getcar(cr[p]->carid);
+			int v = id_getcar(carid);
 			if (v != -1)
 			{
 				int v2;
@@ -378,10 +370,10 @@ void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *>
 				if (v2 == len(veh)) veh.push_back(vehicle[v]);
 			}
 		}
-	}
+	
 }
 
-bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
+bool populate_masks_from_xml(vector<ArmorType*>& masks, const string file, Log& log);
 bool mainSeven(bool xml_loaded_ok) {
 	extern vector<LootType *> loottype;
 	extern vector<WeaponType *> weapontype;
@@ -398,16 +390,14 @@ bool mainSeven(bool xml_loaded_ok) {
 	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_globals013, xmllog);
 	return xml_loaded_ok;
 }
+void DeprecatedCreature::newRecruit(int a) {
 
-void newRecruit(DeprecatedCreature *newcr, int a) {
-
-	Deprecatedrecruitst *newrst = new Deprecatedrecruitst(newcr, a);
-	recruit.push_back(newrst);
+	recruit.push_back(new Deprecatedrecruitst(this, a));
 }
 
 const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
 const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-int getweapontype(const string &idname);
+int getweapontype(const string idname);
 Weapon* spawnNewWeapon(string newWeaponType) {
 	extern vector<WeaponType *> weapontype;
 	Weapon *w = new Weapon(*weapontype[getweapontype(newWeaponType)]);
@@ -455,11 +445,11 @@ void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
 	}
 }
 
-void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid) {
+void DeprecatedCreature::removeCreatureFromSquad(int oldsqid) {
 	activesquad = squad[getsquad(oldsqid)];
 	for (int i = 0; i < 6; i++)
 	{
-		if (activesquad->squad[i]) if (activesquad->squad[i] == &cr)
+		if (activesquad->squad[i]) if (activesquad->squad[i] == this)
 		{
 			for (int j = i + 1; j < 6; j++, i++) activesquad->squad[i] = activesquad->squad[j];
 			activesquad->squad[5] = NULL;
@@ -477,9 +467,8 @@ vector<NameAndAlignment> getEncounterNameAndAlignment() {
 	}
 	return nameList;
 }
-void makeloot(DeprecatedCreature &cr);
 void makecreature(const int x, const short type) {
-	makecreature(encounter[x], type);
+	encounter[x].makecreature(type);
 }
 // TODO convert this to Linked List?
 /* kills the specified creature from the encounter, dropping loot */
@@ -488,19 +477,28 @@ void delenc(const short e, const char loot)
 	extern short mode;
 	extern DeprecatedCreature encounter[ENCMAX];
 	//MAKE GROUND LOOT
-	if ((mode == GAMEMODE_SITE) && loot) makeloot(encounter[e]);
+	if ((mode == GAMEMODE_SITE) && loot) encounter[e].makeloot();
 	//BURY IT
-	for (int en = e; en < ENCMAX; en++)
+	int en = e;
+	for ( ; en < ENCMAX; en++)
 	{
 		if (!encounter[en].getNameAndAlignment().exists) break;
 		if (en < ENCMAX - 1) encounter[en] = encounter[en + 1];
 	}
-	encounter[ENCMAX - 1].stop_existing();
+	encounter[en].stop_existing();
 }
-void delenc(DeprecatedCreature &tk) {
-	delenc(&tk - encounter, 0);
+void DeprecatedCreature::delenc(const int i = 0) {
+	void delenc(const short e, const char loot);
+	//delenc(this - encounter, 0); // test this
+	for (int e = 0; e < ENCMAX; e++) {
+		if (&encounter[e] == this) {
+			delenc(e, i);
+			return;
+		}
+	}
 }
-void bloodyUpEncounterArmor() {
+
+void DeprecatedCreature::bloodyUpEncounterArmor() {
 
 	for (int e = 0; e < ENCMAX; e++)
 	{
@@ -538,7 +536,7 @@ void damage_creature(const int e) {
 	encounter[e].blood = LCSrandom(75) + 1;
 }
 void conservatise(const int e) {
-	conservatise(encounter[e]);
+	encounter[e].conservatise();
 }
 
 void spawnPresident() {
@@ -592,18 +590,17 @@ void claimSiteStoryOne() {
 	if (!sitestory->claimed)
 		sitestory->claimed = 1;
 }
-void addjuice(DeprecatedCreature &cr, long juice, long cap);
 void juiceActiveSquad(const long juice, const long cap) {
 
 	for (int i = 0; i < 6; i++)
 	{
 		if (activesquad->squad[i])
-			addjuice(*(activesquad->squad[i]), juice, cap);
+			activesquad->squad[i]->add_juice(juice, cap);
 	}
 }
 void juiceEntireCreaturePool(const long juice, const long cap) {
 	extern vector<DeprecatedCreature *> pool;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], juice, cap);
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) pool[p]->add_juice(juice, cap);
 }
 int getEscapeEngageLocation() {
 	int loc = -1;
@@ -694,7 +691,6 @@ int print_character_info(const int c, const int party_status) {
 	return party_status;
 }
 void baseEveryoneLeftAtHomelessShelter(const int homes) {
-	void removesquadinfo(DeprecatedCreature &cr);
 	extern vector<DeprecatedCreature *> pool;
 
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
@@ -706,7 +702,7 @@ void baseEveryoneLeftAtHomelessShelter(const int homes) {
 			continue;
 		}
 		//BASE EVERYONE LEFT AT HOMELESS SHELTER
-		removesquadinfo(*pool[p]);
+		pool[p]->removesquadinfo();
 		pool[p]->hiding = LCSrandom(3) + 2;
 		if (pool[p]->align == 1) // not a hostage
 			pool[p]->location = -1;
@@ -801,7 +797,7 @@ int countactivesquadhostages() {
 
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->get_prisoner_align() != ALIGN_LIBERAL)
 				hostages++;
 	return hostages;
 }
@@ -831,7 +827,7 @@ void killActiveSquad() {
 	}
 }
 void conservatiseEncslot(const int encslot) {
-	conservatise(encounter[encslot]);
+	encounter[encslot].conservatise();
 }
 
 vector<int> potentialEncounterNoticers() {
@@ -869,7 +865,7 @@ void clearCarStates() {
 
 void removeItemFromSquad(const int loottypeindex) {
 	extern vector<Deprecatedsquadst *> squad;
-	int getloottype(const string &idname);
+	int getloottype(const string idname);
 	for (int sq = 0; sq < len(squad); sq++)
 	{
 		for (int l = 0; l < len(squad[sq]->loot); l++)
@@ -881,26 +877,6 @@ void removeItemFromSquad(const int loottypeindex) {
 				if (squad[sq]->loot[l]->empty())
 					delete_and_remove(squad[sq]->loot, l);
 				return;// loottypeindex;
-			}
-		}
-	}
-}
-
-void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox) {
-	extern vector<Deprecatedsquadst *> squad;
-	void consolidateloot(vector<Item *> &loot);
-	int getloottype(const string &idname);
-	for (int sq = 0; sq < len(squad); sq++)
-	{
-		consolidateloot(squad[sq]->loot);
-		for (int l = 0; l < len(squad[sq]->loot); l++)
-		{
-			if (!(squad[sq]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
-			if (!binary_search(dox.begin(), dox.end(), squad[sq]->loot[l]->get_itemtypename())) continue;
-			if (!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
-			{
-				loottypeindex.push_back(getloottype(squad[sq]->loot[l]->get_itemtypename()));
-				havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())] = true;
 			}
 		}
 	}
@@ -933,9 +909,8 @@ void printActiveSquadTalkOptions() {
 bool activeSquadMemberIsAliveAndExists(const int sp) {
 	return activesquad->squad[sp] != NULL && activesquad->squad[sp]->getNameAndAlignment().alive;
 }
-void criminalize(DeprecatedCreature &cr, short crime);
 void criminalizeEncounterPrisonerEscape(const int e) {
-	criminalize(encounter[e], LAWFLAG_ESCAPED);
+	encounter[e].criminalize(LAWFLAG_ESCAPED);
 
 }
 void duplicateEncounterMember(const int e) {
@@ -944,17 +919,15 @@ void duplicateEncounterMember(const int e) {
 void unpersonLastEncounterMember() {
 	encounter[ENCMAX - 1].stop_existing();
 }
-int subordinatesleft(const DeprecatedCreature& cr);
 int checkForPeopleWhoCanRecruit() {
 	extern Deprecatedsquadst *activesquad;
 	// Check for people who can recruit followers
 	for (int i = 0; i < 6; i++)
 		if (activesquad->squad[i] != NULL)
-			if (subordinatesleft(*activesquad->squad[i]))
+			if (activesquad->squad[i]->subordinatesleft())
 				return i;
 	return -1;
 }
-void addCreature(DeprecatedCreature* cr);
 void addNewRecruit(int i, int e) {
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	*newcr = encounter[e];
@@ -962,7 +935,7 @@ void addNewRecruit(int i, int e) {
 	newcr->location = activesquad->squad[i]->location;
 	newcr->base = activesquad->squad[i]->base;
 	newcr->hireid = activesquad->squad[i]->id;
-	addCreature(newcr);
+	newcr->addCreature();
 	stat_recruits++;
 	for (int p = 0; p < 6; p++)
 	{
@@ -1027,7 +1000,7 @@ void sleeperSuccessfullyRecruits(const string name, const int id, const float in
 	string singleDot = ".";
 
 	DeprecatedCreature* recruit = new DeprecatedCreature(encounter[e]);
-	liberalize(*recruit, 0);
+	recruit->liberalize(false);
 	recruit->namecreature();
 	recruit->hireid = id;
 	if (recruit->infiltration > infiltration)
@@ -1036,7 +1009,7 @@ void sleeperSuccessfullyRecruits(const string name, const int id, const float in
 	}
 	recruit->flag |= CREATUREFLAG_SLEEPER;
 	LocationsPool::getInstance().setLocationMappedAndUnhidden(recruit->worklocation);
-	addCreature(recruit);
+	recruit->addCreature();
 	eraseAlt();
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
 	addstrAlt(name, gamelog);
@@ -1069,7 +1042,6 @@ void putBackSpecials(const int olocx, const int olocy, const int olocz) {
 void emptyEncounter() {
 	for (int e = 0; e < ENCMAX; e++)encounter[e].stop_existing();
 }
-void advancecreature(DeprecatedCreature &cr);
 void advancecreature(const int e) {
-	advancecreature(encounter[e]);
+	encounter[e].advancecreature();
 }

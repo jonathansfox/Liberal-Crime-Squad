@@ -13,7 +13,7 @@ public:
 	virtual Weapon* split(int number);
 	virtual bool merge(Item& i);
 	virtual bool sort_compare_special(Item* other) const;
-	const string& get_name() const;
+	const string get_name() const;
 	const string& get_name(unsigned subtype) const;
 	const string& get_shortname(unsigned subtype = 0) const;
 	long get_fencevalue() const;

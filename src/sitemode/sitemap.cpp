@@ -1,19 +1,6 @@
 
 #include "../includes.h"
-const string CONST_sitemapC043 = "Export";
 
-const string CONST_sitemapB042 = "mapCSV_ApartmentIndustrial2_Tiles.csv";
-const string CONST_sitemapB041 = "3";
-const string CONST_sitemapB040 = "csv";
-const string CONST_sitemap039 = "ApartmentIndustrial2";
-const string CONST_sitemap038 = "2";
-const string CONST_sitemap037 = "mapCSV_ApartmentIndustrial_Tiles.csv";
-const string CONST_sitemap036 = "ApartmentIndustrial";
-const string CONST_sitemap035 = "mapCSV_[NAMEHERE]_Specials.csv";
-const string CONST_sitemap034 = "mapCSV_[NAMEHERE]_Tiles.csv";
-const string CONST_sitemap033 = "../art";
-const string CONST_sitemap032 = "csvTilemap.lua";
-const string CONST_sitemap031 = "Deadly Alien Map Editor";
 const string CONST_sitemap030 = "GENERIC_UNSECURE";
 
 const string tag_WEIGHT = "WEIGHT";
@@ -197,32 +184,38 @@ map<short, string> buildThisSite;
 			 }
 	 }
  }
- void addLootToLocation(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	 for (int x = 2; x < MAPX - 2; x++)
-		 for (int y = 2; y < MAPY - 2; y++)
-			 for (int z = 0; z < MAPZ; z++)
-				 if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
-					 !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
-					 (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED) &&
-					 !LCSrandom(10))
-					 switch (loc.type)
-					 {
-					 case SITE_BUSINESS_BANK:
-					 case SITE_RESIDENTIAL_SHELTER:
-					 case SITE_BUSINESS_CRACKHOUSE:
-					 case SITE_BUSINESS_JUICEBAR:
-					 case SITE_BUSINESS_CIGARBAR:
-					 case SITE_BUSINESS_LATTESTAND:
-					 case SITE_BUSINESS_VEGANCOOP:
-					 case SITE_BUSINESS_INTERNETCAFE:
-					 case SITE_INDUSTRY_WAREHOUSE:
-					 case SITE_BUSINESS_BARANDGRILL:
-					 case SITE_OUTDOOR_BUNKER:
-					 case SITE_RESIDENTIAL_BOMBSHELTER:               break;
-					 default: levelmap[x][y][z].flag |= SITEBLOCK_LOOT; break;
-					 }
- }
+const vector<int> thesePlacesDontGetLoot = {
+	SITE_BUSINESS_BANK,
+	SITE_RESIDENTIAL_SHELTER,
+	SITE_BUSINESS_CRACKHOUSE,
+	SITE_BUSINESS_JUICEBAR,
+	SITE_BUSINESS_CIGARBAR,
+	SITE_BUSINESS_LATTESTAND,
+	SITE_BUSINESS_VEGANCOOP,
+	SITE_BUSINESS_INTERNETCAFE,
+	SITE_INDUSTRY_WAREHOUSE,
+	SITE_BUSINESS_BARANDGRILL,
+	SITE_OUTDOOR_BUNKER,
+	SITE_RESIDENTIAL_BOMBSHELTER
+};
+void addLootToOneTenthValidSquares() {
+
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	for (int x = 2; x < MAPX - 2; x++) {
+		for (int y = 2; y < MAPY - 2; y++) {
+			for (int z = 0; z < MAPZ; z++) {
+				if (!(levelmap[x][y][0].flag & SITEBLOCK_DOOR) &&
+					!(levelmap[x][y][0].flag & SITEBLOCK_BLOCK) &&
+					(levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED) &&
+					!LCSrandom(10))
+				{
+					levelmap[x][y][z].flag |= SITEBLOCK_LOOT;
+				}
+			}
+		}
+	}
+}
+
  void clearOutRestrictions(Location &loc) {
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //Clear out restrictions
@@ -628,7 +621,7 @@ map<short, string> buildThisSite;
 	 copyRNG(seed, loc.mapseed);
 	 // A short guide to how the new maps work...
 	 //
-	 //   Edit maps using DAME, the CONST_sitemap031. You can find a maps.dam file
+	 //   Edit maps using DAME, the Deadly Alien Map Editor. You can find a maps.dam file
 	 // to open with DAME in the /dev directory. You can find DAME here (try search engine if link
 	 // is out of date):
 	 //   http://dambots.com/dame-editor/
@@ -644,8 +637,8 @@ map<short, string> buildThisSite;
 	 // matrix with the tile you want to use by dragging tiles from the tiles panel. You can then box-drag
 	 // to fill large areas.
 	 //   When you're done editing, save maps.dam and use File->Export to create the map source files the
-	 // game can run. In the Export Project dialog, use CONST_sitemap032 for the LUA exporter. CSV dir should
-	 // be CONST_sitemap033 and File Extension should be CONST_sitemapB040. These are probably the defaults. Press CONST_sitemapC043 and
+	 // game can run. In the Export Project dialog, use csvTilemap.lua for the LUA exporter. CSV dir should
+	 // be ../art and File Extension should be csv. These are probably the defaults. Press Export and
 	 // it will automagically build the map source files. You're done -- run the game and visit that
 	 // location to view the results in-game. You don't even need to make a new game.
 	 //   To remove a map from the game and go back to the old map generation modes, just delete the .csv
@@ -653,20 +646,20 @@ map<short, string> buildThisSite;
 	 // it'll try to generate them again next time you export.
 	 //
 	 //   Map naming conventions:
-	 // CONST_sitemap034 - Tile map
-	 // CONST_sitemap035 - Special locations (vault, equipment, lockup, etc.)
+	 // mapCSV_[NAMEHERE]_Tiles.csv - Tile map
+	 // mapCSV_[NAMEHERE]_Specials.csv - Special locations (vault, equipment, lockup, etc.)
 	 //   [NAMEHERE] is the name in quotes below, and it's what the maps are called in the DAME layer list.
-	 // For example, for the industrial apartment, the DAME name is CONST_sitemap036, and the
-	 // exported file name is CONST_sitemap037. DAME should add the prefix and suffix
+	 // For example, for the industrial apartment, the DAME name is ApartmentIndustrial, and the
+	 // exported file name is mapCSV_ApartmentIndustrial_Tiles.csv. DAME should add the prefix and suffix
 	 // to the exported files automatically.
 	 //
 	 //   Additional Notes:
 	 // 1. All maps MUST have both a tile map and a special map, even if the special map is blank. This
 	 // goes for both first floor maps and otherwise.
 	 // 2. For multi-floor maps, add up stairs to the special map, then create a new set of maps for
-	 // each additional floor, appending CONST_sitemap038 to the location name for the second floor, CONST_sitemapB041 for
+	 // each additional floor, appending 2 to the location name for the second floor, 3 for
 	 // third floor, and so on. For example, a second floor to the industrial apartments would have the
-	 // name CONST_sitemap039 in DAME, and export as CONST_sitemapB042.
+	 // name ApartmentIndustrial2 in DAME, and export as mapCSV_ApartmentIndustrial2_Tiles.csv.
 	 //
 	 // With love,
 	 //   Fox
@@ -726,7 +719,17 @@ map<short, string> buildThisSite;
 	 clearOutRestrictions(loc);
 	 //ADD LOOT
 	 copyRNG(seed, oldseed);
-	 addLootToLocation(loc);
+
+	 bool spawnLoot = true;
+	 for (int i : thesePlacesDontGetLoot) {
+		 if (loc.type == i) {
+			 spawnLoot = false;
+		 }
+	 }
+	 if (spawnLoot) {
+		 addLootToOneTenthValidSquares();
+	 }
+
 	 addSemiPermanentChanges(loc);
  }
  configSiteMap::~configSiteMap()

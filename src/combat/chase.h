@@ -1,5 +1,5 @@
 
-bool chasesequence();
+//bool chasesequence();
 bool footchase();
 void evasivedrive();
 void evasiverun();

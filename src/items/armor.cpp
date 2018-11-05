@@ -124,7 +124,7 @@ void Armor::set_bloody(bool b)
 	if (can_get_bloody() || !b) bloody_ = b;
 }
 const string ruinedName = "Tattered Rags";
-const string& Armor::get_name() const
+const string Armor::get_name() const
 {
 	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())

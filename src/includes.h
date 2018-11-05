@@ -263,12 +263,6 @@ enum UnlockTypes
 	UNLOCKNUM
 };
 
-enum BashTypes
-{
-	BASH_DOOR,
-	BASHNUM
-};
-
 enum HackTypes
 {
 	HACK_SUPERCOMPUTER,

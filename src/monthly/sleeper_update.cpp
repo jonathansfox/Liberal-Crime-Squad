@@ -1,7 +1,4 @@
 #include "../includes.h"
-const string CONST_sleeper_update046 = "canseethings";
-const string CONST_sleeper_update045 = "abstracted debate";
-const string CONST_sleeper_update044 = "liberal power";
 
 const string tag_LOOT = "LOOT";
 const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
@@ -65,6 +62,8 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
@@ -110,37 +109,53 @@ string contactModAuthor;
 
 map<CreatureTypes, vector<CreatureSkill> > skill_influence = {
 	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_ART,
-		{ SKILL_WRITING, SKILL_ART }),
-		map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PAINTER,
-			{ SKILL_ART }),
-			map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCULPTOR,
-				{ SKILL_ART }),
-				map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_MUSIC,
-					{ SKILL_WRITING, SKILL_MUSIC }),
-					map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_MUSICIAN,
-						{ SKILL_MUSIC }),
-						map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_AUTHOR,
-							{ SKILL_WRITING }),
-							map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JOURNALIST,
-								{ SKILL_WRITING }),
-								map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JUDGE_CONSERVATIVE,
-									{ SKILL_WRITING, SKILL_LAW }),
-									map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_LAWYER,
-										{ SKILL_LAW }),
-										map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_LABTECH,
-											{ SKILL_SCIENCE }),
-											map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_EMINENT,
-												{ SKILL_SCIENCE }),
-												map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_CEO,
-													{ SKILL_BUSINESS }),
-													map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_MANAGER,
-														{ SKILL_BUSINESS }),
-														map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PRIEST,
-															{ SKILL_RELIGION }),
-															map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_NUN,
-																{ SKILL_RELIGION }),
-																map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_EDUCATOR,
-																	{ SKILL_PSYCHOLOGY }),
+		{ SKILL_WRITING, SKILL_ART }
+		),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PAINTER,
+		{ SKILL_ART }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCULPTOR,
+		{ SKILL_ART }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_MUSIC,
+		{ SKILL_WRITING, SKILL_MUSIC }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_MUSICIAN,
+		{ SKILL_MUSIC }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_AUTHOR,
+		{ SKILL_WRITING }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JOURNALIST,
+		{ SKILL_WRITING }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JUDGE_CONSERVATIVE,
+		{ SKILL_WRITING, SKILL_LAW }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_LAWYER,
+		{ SKILL_LAW }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_LABTECH,
+		{ SKILL_SCIENCE }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_EMINENT,
+		{ SKILL_SCIENCE }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_CEO,
+		{ SKILL_BUSINESS }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_MANAGER,
+		{ SKILL_BUSINESS }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PRIEST,
+		{ SKILL_RELIGION }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_NUN,
+		{ SKILL_RELIGION }
+	),
+	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_EDUCATOR,
+		{ SKILL_PSYCHOLOGY }
+	),
 };
 map<CreatureTypes, int> super_sleepers_multiplier = {
 	map<CreatureTypes, int> ::value_type(CREATURE_CORPORATE_CEO, 20),
@@ -396,34 +411,34 @@ map<CreatureTypes, vector<Views> > creature_influences_views = {
 **     PUBLIC OPINION
 **
 **********************************/
-void sleeper_influence(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_influence(char canseethings, int(&libpower)[VIEWNUM])
 {
 	extern short attitude[VIEWNUM];
 	extern short lawList[LAWNUM];
-	int power = (cr.get_attribute(ATTRIBUTE_CHARISMA, true) +
-		cr.get_attribute(ATTRIBUTE_HEART, true) +
-		cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true) +
-		cr.get_skill(SKILL_PERSUASION));
+	int power = (get_attribute(ATTRIBUTE_CHARISMA, true) +
+		get_attribute(ATTRIBUTE_HEART, true) +
+		get_attribute(ATTRIBUTE_INTELLIGENCE, true) +
+		get_skill(SKILL_PERSUASION));
 	// Profession specific skills
-	if (skill_influence.count(static_cast<CreatureTypes>(cr.type)) >= 1) {
-		for (CreatureSkill sk : skill_influence[static_cast<CreatureTypes>(cr.type)]) {
-			power += cr.get_skill(sk);
+	if (skill_influence.count(static_cast<CreatureTypes>(type)) >= 1) {
+		for (CreatureSkill sk : skill_influence[static_cast<CreatureTypes>(type)]) {
+			power += get_skill(sk);
 		}
 	}
-	if (super_sleepers_multiplier.count(static_cast<CreatureTypes>(cr.type)) >= 1) {
-		power *= super_sleepers_multiplier[static_cast<CreatureTypes>(cr.type)];
+	if (super_sleepers_multiplier.count(static_cast<CreatureTypes>(type)) >= 1) {
+		power *= super_sleepers_multiplier[static_cast<CreatureTypes>(type)];
 	}
 	else {
 		power *= 2;
 	}
-	power = static_cast<int>(power*cr.infiltration);
-	if (creature_influences_views.count(static_cast<CreatureTypes>(cr.type)) >= 1) {
-		for (Views sk : creature_influences_views[static_cast<CreatureTypes>(cr.type)]) {
+	power = static_cast<int>(power*infiltration);
+	if (creature_influences_views.count(static_cast<CreatureTypes>(type)) >= 1) {
+		for (Views sk : creature_influences_views[static_cast<CreatureTypes>(type)]) {
 			libpower[sk] += power;
 		}
 	}
 	else {
-		switch (cr.type)
+		switch (type)
 		{
 			/* Radio Personalities and News Anchors subvert Conservative news stations by
 			reducing their audience and twisting views on the issues. As their respective
@@ -484,51 +499,51 @@ void sleeper_influence(DeprecatedCreature &cr, char &clearformess, char canseeth
 **   SLEEPERS SNOOPING AROUND
 **
 **********************************/
-void creatureLeaksIntel(DeprecatedCreature cr, const string& leak, const string& stashed) {
+void DeprecatedCreature::creatureLeaksIntel(const string& leak, const string& stashed) {
 	eraseAlt();
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.getNameAndAlignment().name, gamelog);
+	addstrAlt(getNameAndAlignment().name, gamelog);
 	addstrAlt(leak, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(7, 1, stashed, gamelog);
 	gamelog.nextMessage();
 }
-void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_spy(char canseethings, int(&libpower)[VIEWNUM])
 {
 	extern CCSexposure ccsexposure;
 	extern short lawList[LAWNUM];
-	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
-	if (LCSrandom(100) > 100 * cr.infiltration)
+	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
+	if (LCSrandom(100) > 100 * infiltration)
 	{
-		cr.juice -= 1;
-		if (cr.juice < -2)
+		juice -= 1;
+		if (juice < -2)
 		{
 			eraseAlt();
 			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.getNameAndAlignment().name, gamelog);
+			addstrAlt(getNameAndAlignment().name, gamelog);
 			addstrAlt(hasBeenCaughtSnooping, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(8, 1, isNowHomeless, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
-			removesquadinfo(cr);
-			cr.location = homes;
-			cr.base = homes;
-			cr.drop_weapons_and_clips(NULL);
-			cr.activity.type = ACTIVITY_NONE;
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
+			removesquadinfo();
+			location = homes;
+			base = homes;
+			drop_weapons_and_clips(NULL);
+			set_activity(ACTIVITY_NONE);
+			flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
 	}
 	// Improves juice, as confidence improves
-	if (cr.juice < 100)
+	if (juice < 100)
 	{
-		cr.juice += 10;
-		if (cr.juice > 100) cr.juice = 100;
+		juice += 10;
+		if (juice > 100) juice = 100;
 	}
-	LocationsPool::getInstance().setLocationMappedAndUnhidden(cr.base);
+	LocationsPool::getInstance().setLocationMappedAndUnhidden(base);
 	bool pause = false;
-	switch (cr.type)
+	switch (type)
 	{
 	case CREATURE_SECRET_SERVICE:
 	case CREATURE_AGENT:
@@ -538,7 +553,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_PRIVACY] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_SECRETDOCUMENTS, homes);
-			creatureLeaksIntel(cr, hasLeakedIntelligence, they_are_stashed);
+			creatureLeaksIntel(hasLeakedIntelligence, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -551,7 +566,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_POLICERECORDS, homes);
-			creatureLeaksIntel(cr, hasLeakedPolice, they_are_stashed);
+			creatureLeaksIntel(hasLeakedPolice, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -560,9 +575,9 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		// Can leak corporate files to you
 		if (!LocationsPool::getInstance().isThereASiegeHere(homes) && canseethings)
 		{
-			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && cr.type != CREATURE_CORPORATE_CEO) break;
+			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && type != CREATURE_CORPORATE_CEO) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CORPFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedCorporate, they_are_stashed);
+			creatureLeaksIntel(hasLeakedCorporate, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -572,7 +587,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_PRISONFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedPrison, they_are_stashed);
+			creatureLeaksIntel(hasLeakedPrison, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -584,7 +599,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CABLENEWSFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedCableNews, papersAreStashed);
+			creatureLeaksIntel(hasLeakedCableNews, papersAreStashed);
 			pause = true;
 		}
 		break;
@@ -596,7 +611,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_AMRADIOFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedAMRadio, papersAreStashed);
+			creatureLeaksIntel(hasLeakedAMRadio, papersAreStashed);
 			pause = true;
 		}
 		break;
@@ -606,7 +621,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_ANIMALRESEARCH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_RESEARCHFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedAnimalResearch, they_are_stashed);
+			creatureLeaksIntel(hasLeakedAnimalResearch, they_are_stashed);
 			pause = true;
 		}
 		break;
@@ -615,7 +630,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(5)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_JUDGEFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedJudiciary, papersAreStashed);
+			creatureLeaksIntel(hasLeakedJudiciary, papersAreStashed);
 			pause = true;
 		}
 		break;
@@ -624,7 +639,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (ccsexposure >= CCSEXPOSURE_LCSGOTDATA) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CCS_BACKERLIST, homes);
-			creatureLeaksIntel(cr, hasLeakedCCS, diskIsStashed);
+			creatureLeaksIntel(hasLeakedCCS, diskIsStashed);
 			pause = true;
 			ccsexposure = CCSEXPOSURE_LCSGOTDATA;
 		}
@@ -637,49 +652,49 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 **   SLEEPERS EMBEZZLING FUNDS
 **
 **********************************/
-void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_embezzle(char canseethings, int(&libpower)[VIEWNUM])
 {
 	extern class Ledger ledger;
-	if (LCSrandom(100) > 100 * cr.infiltration)
+	if (LCSrandom(100) > 100 * infiltration)
 	{
-		cr.juice -= 1;
-		if (cr.juice < -2)
+		juice -= 1;
+		if (juice < -2)
 		{
 			eraseAlt();
 			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.getNameAndAlignment().name, gamelog);
+			addstrAlt(getNameAndAlignment().name, gamelog);
 			addstrAlt(arrestedWhileEmbezzling, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
-			cr.criminalize_me(LAWFLAG_COMMERCE);
-			removesquadinfo(cr);
-			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
-			cr.drop_weapons_and_clips(NULL);
-			cr.activity.type = ACTIVITY_NONE;
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
+			criminalize_without_heat(LAWFLAG_COMMERCE);
+			removesquadinfo();
+			location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, location);
+			drop_weapons_and_clips(NULL);
+			set_activity(ACTIVITY_NONE);
+			flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
 	}
 	// Improves juice, as confidence improves
-	if (cr.juice < 100)
+	if (juice < 100)
 	{
-		cr.juice += 10;
-		if (cr.juice > 100) cr.juice = 100;
+		juice += 10;
+		if (juice > 100) juice = 100;
 	}
 	int income;
-	switch (cr.type)
+	switch (type)
 	{
 	case CREATURE_CORPORATE_CEO:
-		income = static_cast<int>(50000 * cr.infiltration);
+		income = static_cast<int>(50000 * infiltration);
 		break;
 	case CREATURE_SCIENTIST_EMINENT:
 	case CREATURE_CORPORATE_MANAGER:
 	case CREATURE_BANK_MANAGER:
 	case CREATURE_POLITICIAN:
-		income = static_cast<int>(5000 * cr.infiltration);
+		income = static_cast<int>(5000 * infiltration);
 		break;
 	default:
-		income = static_cast<int>(500 * cr.infiltration);
+		income = static_cast<int>(500 * infiltration);
 		break;
 	}
 	ledger.add_funds(income, INCOME_EMBEZZLEMENT);
@@ -700,16 +715,16 @@ string randomString(vector<stringAndInt> outputList) {
 	}
 	return outputList[len(outputList) - 1].str;
 }
-void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
+void DeprecatedCreature::stashRandomStolenItem(int &numberofxmlfails) {
 	string item;
-	int shelter = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
+	int shelter = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
 
 	extern short lawList[LAWNUM];
 
 	bool loot = false;
 	bool armor = false;
 	bool weapon = false;
-	switch (LocationsPool::getInstance().getLocationType(cr.location)) //Temporary (transitionally) solution until sites are done. -XML
+	switch (LocationsPool::getInstance().getLocationType(location)) //Temporary (transitionally) solution until sites are done. -XML
 	{
 	case SITE_RESIDENTIAL_TENEMENT:
 		item = randomString({ stringAndInt(3, tag_LOOT_KIDART),
@@ -917,42 +932,42 @@ void printArrestedWhileStealing(string crname) {
 	gamelog.nextMessage();
 	pressAnyKey();
 }
-void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_steal(char canseethings, int(&libpower)[VIEWNUM])
 {
-	if (LCSrandom(100) > 100 * cr.infiltration)
+	if (LCSrandom(100) > 100 * infiltration)
 	{
-		cr.juice -= 1;
-		if (cr.juice < -2)
+		juice -= 1;
+		if (juice < -2)
 		{
-			printArrestedWhileStealing(cr.getNameAndAlignment().name);
+			printArrestedWhileStealing(getNameAndAlignment().name);
 
-			cr.criminalize_me(LAWFLAG_THEFT);
-			removesquadinfo(cr);
-			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
-			cr.drop_weapons_and_clips(NULL);
-			cr.activity.type = ACTIVITY_NONE;
-			cr.flag &= ~CREATUREFLAG_SLEEPER;
+			criminalize_without_heat(LAWFLAG_THEFT);
+			removesquadinfo();
+			location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, location);
+			drop_weapons_and_clips(NULL);
+			set_activity(ACTIVITY_NONE);
+			flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
 	}
 	// Improves juice, as confidence improves
-	if (cr.juice < 100)
+	if (juice < 100)
 	{
-		cr.juice += 10;
-		if (cr.juice > 100)cr.juice = 100;
+		juice += 10;
+		if (juice > 100)juice = 100;
 	}
-	cr.infiltration -= LCSrandom(10)*0.01f - 0.02f; //No effectiveness drop before? -Niel
+	infiltration -= LCSrandom(10)*0.01f - 0.02f; //No effectiveness drop before? -Niel
 													//Item *item;
 
 	int numberofxmlfails = 0; // Tell them how many fails
 	for (int number_of_items = LCSrandom(10) + 1; number_of_items > 0; number_of_items--)
 	{
-		stashRandomStolenItem(cr, numberofxmlfails);
+		stashRandomStolenItem(numberofxmlfails);
 	}
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.getNameAndAlignment().name, gamelog);
+	addstrAlt(getNameAndAlignment().name, gamelog);
 	addstrAlt(droppedOffPackage, gamelog);
 	gamelog.nextMessage();
 	if (numberofxmlfails > 0) {
@@ -971,7 +986,7 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 **   SLEEPERS CREATING SCANDALS
 **
 **********************************/
-void sleeper_scandal(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_scandal(char canseethings, int(&libpower)[VIEWNUM])
 {
 	// Add content here!
 	return;
@@ -985,25 +1000,25 @@ vector<NameAndAlignment> getEncounterNameAndAlignment();
 void incrementStatRecruits();
 int getEncounterWorkLocation(const int e);
 void sleeperSuccessfullyRecruits(const string name, const int id, const float infiltration, const int e);
-void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleeper_recruit(char canseethings, int(&libpower)[VIEWNUM])
 {
 
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
-	if (subordinatesleft(cr))
+	if (subordinatesleft())
 	{
-		prepareencounter(LocationsPool::getInstance().getLocationType(cr.worklocation), 0);
+		prepareencounter(LocationsPool::getInstance().getLocationType(worklocation), 0);
 		for (int e = 0; e < ENCMAX; e++)
 		{
 			if (encounter[e].exists == false)
 				break;
-			if (getEncounterWorkLocation(e) == cr.worklocation || !LCSrandom(5))
+			if (getEncounterWorkLocation(e) == worklocation || !LCSrandom(5))
 			{
 				if (encounter[e].align != 1 && LCSrandom(5))continue;
-				sleeperSuccessfullyRecruits(cr.getNameAndAlignment().name, cr.id, cr.infiltration, e);
+				sleeperSuccessfullyRecruits(getNameAndAlignment().name, id, infiltration, e);
 				gamelog.nextMessage();
 				pressAnyKey();
-				if (!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
+				if (!subordinatesleft())set_activity(ACTIVITY_NONE);
 				incrementStatRecruits();
 				break;
 			}
@@ -1011,14 +1026,15 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 	}
 	return;
 }
+
 /**********************************************************************
 ** *JDS*
 ** ----- The sleeper system has been completely reworked.
 ** - Sleepers no longer directly influence the issues. They now affect
-** the broad CONST_sleeper_update044 stats across many issues, which are used
+** the broad liberal power stats across many issues, which are used
 ** as a kind of monthly liberal roll akin to AM Radio and Cable News.
 ** - Each sleeper can affect one or more issue, throwing their power
-** into the CONST_sleeper_update045 on that issue.
+** into the abstracted debate on that issue.
 ** - After all of the sleepers have contributed to the liberal power
 ** stats, a roll is made on each issue to see whether the liberals
 ** make background progress on those issues.
@@ -1027,47 +1043,47 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 ** corporate managers, CEOs, and agents can all now leak secret
 ** documents of the appropriate types, and they will make a check
 ** each month. This will only happen if the homeless shelter is not
-** under siege, and CONST_sleeper_update046 is enabled (eg, you're not in prison
+** under siege, and canseethings is enabled (eg, you're not in prison
 ** or disbanded or some other situation where your sleeper can't get
 ** in touch with anyone in your squad).
 ** - News Anchors and Radio Personalities remain the two most powerful
 ** sleepers.
 **********************************************************************/
-void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
+void DeprecatedCreature::sleepereffect(char canseethings, int(&libpower)[VIEWNUM])
 {
 	extern char disbanding;
-	if (disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
+	if (disbanding)set_activity(ACTIVITY_SLEEPER_LIBERAL);
 	int infiltrate = 1;
-	switch (cr.activity.type)
+	switch (activity_type())
 	{
 	case ACTIVITY_SLEEPER_LIBERAL:
-		sleeper_influence(cr, clearformess, canseethings, libpower);
-		cr.infiltration -= 0.02f;
+		sleeper_influence(canseethings, libpower);
+		infiltration -= 0.02f;
 		break;
 	case ACTIVITY_SLEEPER_EMBEZZLE:
-		sleeper_embezzle(cr, clearformess, canseethings, libpower);
+		sleeper_embezzle(canseethings, libpower);
 		break;
 	case ACTIVITY_SLEEPER_STEAL:
-		sleeper_steal(cr, clearformess, canseethings, libpower);
+		sleeper_steal(canseethings, libpower);
 		infiltrate = 0;
 		break;
 	case ACTIVITY_SLEEPER_RECRUIT:
-		sleeper_recruit(cr, clearformess, canseethings, libpower);
+		sleeper_recruit(canseethings, libpower);
 		break;
 	case ACTIVITY_SLEEPER_SPY:
-		sleeper_spy(cr, clearformess, canseethings, libpower);
+		sleeper_spy(canseethings, libpower);
 		break;
 	case ACTIVITY_SLEEPER_SCANDAL:
-		sleeper_scandal(cr, clearformess, canseethings, libpower);
+		sleeper_scandal(canseethings, libpower);
 		break;
 	case ACTIVITY_NONE:
 	case ACTIVITY_SLEEPER_JOINLCS:
 	default:
 		break;
 	}
-	if (infiltrate) cr.infiltration += LCSrandom(8)*0.01f - 0.02f;
-	if (cr.infiltration >= 1)
-		cr.infiltration = 1;
-	if (cr.infiltration <= 0)
-		cr.infiltration = 0;
+	if (infiltrate) infiltration += LCSrandom(8)*0.01f - 0.02f;
+	if (infiltration >= 1)
+		infiltration = 1;
+	if (infiltration <= 0)
+		infiltration = 0;
 }

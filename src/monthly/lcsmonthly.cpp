@@ -1,4 +1,190 @@
 #include "../includes.h"
+
+
+const string CONST_lcsmonthly050 = "promising someone company profits in exchange for sexual favors.";
+const string CONST_lcsmonthly049 = "that seem to touch on every fetish known to man.";
+const string CONST_lcsmonthly048 = "to the FDA official overseeing the CEO's products.";
+const string CONST_lcsmonthly047 = "implying that he has enslaved his houseservants.";
+const string CONST_lcsmonthly046 = "to himself.  They're very steamy.";
+const string CONST_lcsmonthly045 = "to an illicit gay lover.";
+const string CONST_lcsmonthly044 = "to the judge that acquit him in a corruption trial.";
+const string CONST_lcsmonthly043 = "addressed to his pet dog.  Yikes.";
+
+
+const vector<int> viewAnimals = { VIEW_ANIMALRESEARCH, 15 };
+const vector<int> viewJustice = { VIEW_JUSTICES, 15 };
+const vector<int> viewGay = { VIEW_GAY, 15 };
+const vector<int> emptyVector = {};
+const vector<int> viewSweatshop = { VIEW_SWEATSHOPS, 10 };
+const vector<int> viewGeneticAndPollution = { VIEW_GENETICS, 10, VIEW_POLLUTION, 10 };
+const vector< pair<string, vector<int> > > CEOLoveLettersInfluence = {
+	std::make_pair(CONST_lcsmonthly043, viewAnimals),
+	std::make_pair(CONST_lcsmonthly044, viewJustice),
+	std::make_pair(CONST_lcsmonthly045, viewGay),
+	std::make_pair(CONST_lcsmonthly046, emptyVector),
+	std::make_pair(CONST_lcsmonthly047, viewSweatshop),
+	std::make_pair(CONST_lcsmonthly048, viewGeneticAndPollution),
+	std::make_pair(CONST_lcsmonthly049, emptyVector),
+	std::make_pair(CONST_lcsmonthly050, emptyVector),
+};
+
+const string CONST_lcsmonthly041 = "playing with feces and urine.";
+const string CONST_lcsmonthly040 = "torturing an employee with a hot iron.";
+const string CONST_lcsmonthly039 = "waving a Nazi flag at a supremacist rally.";
+const string CONST_lcsmonthly038 = "castrating himself.";
+const string CONST_lcsmonthly037 = "making out with an FDA official overseeing the CEO's products.";
+const string CONST_lcsmonthly036 = "tongue-kissing an infamous dictator.";
+const string CONST_lcsmonthly035 = "engaging in heavy bondage.  A cucumber was involved in some way.";
+const string CONST_lcsmonthly034 = "participating in a murder.";
+const string CONST_lcsmonthly033 = "digging up graves and sleeping with the dead.";
+const string CONST_lcsmonthly032 = "engaging in lewd behavior with animals.";
+const vector<int> viewPoliceAndJustice = { VIEW_POLICEBEHAVIOR, 15, VIEW_JUSTICES, 10 };
+ const vector< pair<string, vector<int> > > CEOPhotosInfluence  = {
+	std::make_pair(CONST_lcsmonthly032, viewAnimals),
+	std::make_pair(CONST_lcsmonthly033, emptyVector),
+	std::make_pair(CONST_lcsmonthly034, viewPoliceAndJustice),
+	std::make_pair(CONST_lcsmonthly035, emptyVector),
+	std::make_pair(CONST_lcsmonthly036, emptyVector),
+	std::make_pair(CONST_lcsmonthly037, viewGeneticAndPollution),
+	std::make_pair(CONST_lcsmonthly038, emptyVector),
+	std::make_pair(CONST_lcsmonthly039, emptyVector),
+	std::make_pair(CONST_lcsmonthly040, viewSweatshop),
+	std::make_pair(CONST_lcsmonthly041, emptyVector),
+};
+const string CONST_lcsmonthly052 = "showing that he has engaged in consistent tax evasion.";
+const vector<int> viewTaxesStrong = { VIEW_TAXES, 25 };
+const vector< pair<string, vector<int> > > CEOTaxesInfluence = {
+	std::make_pair(CONST_lcsmonthly052, viewTaxesStrong),
+
+};
+
+const string CONST_lcsmonthly058 = "describing an intricate tax scheme.";
+const string CONST_lcsmonthly057 = "cheerfully describing foreign corporate sweatshops.";
+const string CONST_lcsmonthly056 = "containing a memo: \"Terminate the pregnancy, I terminate you.\"";
+const string CONST_lcsmonthly055 = "with a list of gay employees entitled \"Homo-workers\".";
+const string CONST_lcsmonthly054 = "describing a genetic monster created in a lab.";
+const vector<int> strongGenetics = { VIEW_GENETICS, 50 };
+const vector<int> strongGay = { VIEW_GAY, 50 };
+const vector<int> strongWomen = { VIEW_WOMEN, 50 };
+const vector<int> strongSweat = { VIEW_SWEATSHOPS, 50 };
+const vector<int> strongTaxes = { VIEW_TAXES, 50 };
+ const vector< pair<string, vector<int> > > CorpFilesInfluence = {
+	std::make_pair(CONST_lcsmonthly054, strongGenetics),
+	std::make_pair(CONST_lcsmonthly055, strongGay),
+	std::make_pair(CONST_lcsmonthly056, strongWomen),
+	std::make_pair(CONST_lcsmonthly057, strongSweat),
+	std::make_pair(CONST_lcsmonthly058, strongTaxes),
+};
+
+const string CONST_lcsmonthly079 = "documenting the infiltration of a pro-choice group.";
+const string CONST_lcsmonthly078 = "used to keep tabs on gay citizens.";
+const string CONST_lcsmonthly077 = "documenting \"harmful speech\" made by innocent citizens.";
+const string CONST_lcsmonthly076 = "containing private information on innocent citizens.";
+const string CONST_lcsmonthly075 = "documenting the planned assassination of a Liberal federal judge.";
+const string CONST_lcsmonthly074 = "documenting the overthrow of a government.";
+
+const vector<int> strongJustice = { VIEW_JUSTICES, 50 };
+const vector<int> strongFreeSpeech = { VIEW_FREESPEECH, 50 };
+const vector< pair<string, vector<int> > > CIAPapersInfluence = {
+	std::make_pair(CONST_lcsmonthly074, emptyVector),
+	std::make_pair(CONST_lcsmonthly075, strongJustice),
+	std::make_pair(CONST_lcsmonthly076, emptyVector),
+	std::make_pair(CONST_lcsmonthly077, strongFreeSpeech),
+	std::make_pair(CONST_lcsmonthly078, strongGay),
+	std::make_pair(CONST_lcsmonthly079, strongWomen),
+
+};
+
+
+const string CONST_lcsmonthly086 = "documenting widespread corruption in the force.";
+const string CONST_lcsmonthly085 = "documenting a forced confession.";
+const string CONST_lcsmonthly084 = "documenting a systematic invasion of privacy by the force.";
+const string CONST_lcsmonthly083 = "documenting a police torture case.";
+const string CONST_lcsmonthly082 = "documenting human rights abuses by the force.";
+
+const string CONST_lcsmonthly100 = "documenting gladiatorial matches held between prisoners by guards.";
+const vector<int> viewTorture = { VIEW_TORTURE , 15 };
+const vector<int> strongTorture = { VIEW_TORTURE , 50 };
+const vector<int> viewIntelligence = { VIEW_INTELLIGENCE , 15 };
+const vector<int> viewDeathPrisons = { VIEW_DEATHPENALTY , 50, VIEW_PRISONS , 20 };
+  const vector< pair<string, vector<int> > > PolicePapersInfluence =
+{
+	std::make_pair(CONST_lcsmonthly082, viewTorture),
+	std::make_pair(CONST_lcsmonthly083, strongTorture),
+
+	std::make_pair(CONST_lcsmonthly084, viewIntelligence),
+
+	std::make_pair(CONST_lcsmonthly085, emptyVector),
+	std::make_pair(CONST_lcsmonthly086, emptyVector),
+
+	std::make_pair(CONST_lcsmonthly100, viewDeathPrisons),
+
+};
+
+const string CONST_lcsmonthly090 = "promising Conservative rulings in exchange for appointments.";
+const string CONST_lcsmonthly089 = "taking bribes to acquit murderers.";
+
+const vector< pair<string, vector<int> > > JudgePapersInfluence =
+{
+	std::make_pair(CONST_lcsmonthly089, emptyVector),
+	std::make_pair(CONST_lcsmonthly090, emptyVector),
+};
+
+
+const string CONST_lcsmonthly095 = "showing human test subjects dying under genetic research.";
+const string CONST_lcsmonthly094 = "covering up the accidental creation of a genetic monster.";
+const string CONST_lcsmonthly093 = "studying the effects of torture on cats.";
+const string CONST_lcsmonthly092 = "documenting horrific animal rights abuses.";
+
+const vector<int> strongAnimals = { VIEW_ANIMALRESEARCH, 50 };
+
+const vector< pair<string, vector<int> > > ResearchPapersInfluence = {
+	std::make_pair(CONST_lcsmonthly092, strongAnimals),
+	std::make_pair(CONST_lcsmonthly093, strongAnimals),
+	std::make_pair(CONST_lcsmonthly094, strongGenetics),
+	std::make_pair(CONST_lcsmonthly095, strongGenetics),
+};
+
+
+const string CONST_lcsmonthly099 = "documenting widespread corruption among prison employees.";
+const string CONST_lcsmonthly098 = "documenting a prison torture case.";
+const string CONST_lcsmonthly097 = "documenting human rights abuses by prison guards.";
+
+const vector< pair<string, vector<int> > > PrisonPapersInfluence =
+{
+	std::make_pair(CONST_lcsmonthly097, emptyVector),
+	std::make_pair(CONST_lcsmonthly098, strongTorture),
+
+	std::make_pair(CONST_lcsmonthly099, emptyVector),
+	std::make_pair(CONST_lcsmonthly100, emptyVector),
+};
+
+
+const string CONST_lcsmonthly110 = "planning to drum up a false scandal about a Liberal figure.";
+const string CONST_lcsmonthly105 = "instructing a female anchor to 'get sexier or get a new job'.";
+const string CONST_lcsmonthly103 = "mandating negative coverage of Liberal politicians.";
+const string CONST_lcsmonthly102 = "calling their news 'the vanguard of Conservative thought'.";
+
+const vector< pair<string, vector<int> > > CablePapersInfluence  = {
+	std::make_pair(CONST_lcsmonthly102, emptyVector),
+	std::make_pair(CONST_lcsmonthly103, emptyVector),
+	std::make_pair(CONST_lcsmonthly110, emptyVector),
+	std::make_pair(CONST_lcsmonthly105, emptyVector),
+
+};
+
+const string CONST_lcsmonthly109 = "saying 'it's okay to lie, they don't need the truth'.";
+const string CONST_lcsmonthly108 = "calling listeners 'sheep to be told what to think'.";
+
+const vector< pair<string, vector<int> > > RadioPapersInfluence  =
+{
+	std::make_pair(CONST_lcsmonthly108, emptyVector),
+	std::make_pair(CONST_lcsmonthly109, emptyVector),
+	std::make_pair(CONST_lcsmonthly110, emptyVector),
+};
+
+
+
 const string CONST_lcsmonthly140 = "Press any key to reflect on the report.";
 const string CONST_lcsmonthly139 = "Press Enter to reflect on the report.  ";
 const string CONST_lcsmonthly138 = "$";
@@ -18,40 +204,20 @@ const string CONST_lcsmonthly117 = "-$";
 const string CONST_lcsmonthly114 = "+$";
 const string CONST_lcsmonthly113 = "Liberal Crime Squad: Funding Report";
 const string CONST_lcsmonthly111 = "This is bound to get the Conservative masses a little riled up.";
-const string CONST_lcsmonthly110 = "planning to drum up a false scandal about a Liberal figure.";
-const string CONST_lcsmonthly109 = "saying 'it's okay to lie, they don't need the truth'.";
-const string CONST_lcsmonthly108 = "calling listeners 'sheep to be told what to think'.";
+
 const string CONST_lcsmonthly107 = "The Liberal Guardian runs a story featuring AM radio plans ";
-const string CONST_lcsmonthly105 = "instructing a female anchor to 'get sexier or get a new job'.";
-const string CONST_lcsmonthly103 = "mandating negative coverage of Liberal politicians.";
-const string CONST_lcsmonthly102 = "calling their news 'the vanguard of Conservative thought'.";
+
 const string CONST_lcsmonthly101 = "The Liberal Guardian runs a story featuring cable news memos ";
-const string CONST_lcsmonthly100 = "documenting gladiatorial matches held between prisoners by guards.";
-const string CONST_lcsmonthly099 = "documenting widespread corruption among prison employees.";
-const string CONST_lcsmonthly098 = "documenting a prison torture case.";
-const string CONST_lcsmonthly097 = "documenting human rights abuses by prison guards.";
+
 const string CONST_lcsmonthly096 = "The Liberal Guardian runs a story featuring prison documents ";
-const string CONST_lcsmonthly095 = "showing human test subjects dying under genetic research.";
-const string CONST_lcsmonthly094 = "covering up the accidental creation of a genetic monster.";
-const string CONST_lcsmonthly093 = "studying the effects of torture on cats.";
-const string CONST_lcsmonthly092 = "documenting horrific animal rights abuses.";
+
 const string CONST_lcsmonthly091 = "The Liberal Guardian runs a story featuring research papers ";
-const string CONST_lcsmonthly090 = "promising Conservative rulings in exchange for appointments.";
-const string CONST_lcsmonthly089 = "taking bribes to acquit murderers.";
+
 const string CONST_lcsmonthly088 = "The Liberal Guardian runs a story with evidence of a Conservative judge ";
-const string CONST_lcsmonthly086 = "documenting widespread corruption in the force.";
-const string CONST_lcsmonthly085 = "documenting a forced confession.";
-const string CONST_lcsmonthly084 = "documenting a systematic invasion of privacy by the force.";
-const string CONST_lcsmonthly083 = "documenting a police torture case.";
-const string CONST_lcsmonthly082 = "documenting human rights abuses by the force.";
+
 const string CONST_lcsmonthly081 = "The Liberal Guardian runs a story featuring police records ";
 const string CONST_lcsmonthly080 = "This is bound to get the Government a little riled up.";
-const string CONST_lcsmonthly079 = "documenting the infiltration of a pro-choice group.";
-const string CONST_lcsmonthly078 = "used to keep tabs on gay citizens.";
-const string CONST_lcsmonthly077 = "documenting \"harmful speech\" made by innocent citizens.";
-const string CONST_lcsmonthly076 = "containing private information on innocent citizens.";
-const string CONST_lcsmonthly075 = "documenting the planned assassination of a Liberal federal judge.";
-const string CONST_lcsmonthly074 = "documenting the overthrow of a government.";
+
 const string CONST_lcsmonthly073 = "The Liberal Guardian runs a story featuring CIA and other intelligence files ";
 const string CONST_lcsmonthly072 = "This is the beginning of the end for the Conservative Crime Squad.";
 const string CONST_lcsmonthly071 = "News denounce the CCS.";
@@ -67,33 +233,12 @@ const string CONST_lcsmonthly062 = "in the state and federal governments. Sectio
 const string CONST_lcsmonthly061 = "responsibilities of Conservative Crime Squad sympathizers and supporters";
 const string CONST_lcsmonthly060 = "the CCS organization, also revealing in extreme detail the names and ";
 const string CONST_lcsmonthly059 = "The Liberal Guardian runs more than one thousand pages of documents about ";
-const string CONST_lcsmonthly058 = "describing an intricate tax scheme.";
-const string CONST_lcsmonthly057 = "cheerfully describing foreign corporate sweatshops.";
-const string CONST_lcsmonthly056 = "containing a memo: \"Terminate the pregnancy, I terminate you.\"";
-const string CONST_lcsmonthly055 = "with a list of gay employees entitled \"Homo-workers\".";
-const string CONST_lcsmonthly054 = "describing a genetic monster created in a lab.";
+
 const string CONST_lcsmonthly053 = "The Liberal Guardian runs a story featuring Corporate files ";
-const string CONST_lcsmonthly052 = "showing that he has engaged in consistent tax evasion.";
 const string CONST_lcsmonthly051 = "The Liberal Guardian runs a story featuring a major CEO's tax papers ";
-const string CONST_lcsmonthly050 = "promising someone company profits in exchange for sexual favors.";
-const string CONST_lcsmonthly049 = "that seem to touch on every fetish known to man.";
-const string CONST_lcsmonthly048 = "to the FDA official overseeing the CEO's products.";
-const string CONST_lcsmonthly047 = "implying that he has enslaved his houseservants.";
-const string CONST_lcsmonthly046 = "to himself.  They're very steamy.";
-const string CONST_lcsmonthly045 = "to an illicit gay lover.";
-const string CONST_lcsmonthly044 = "to the judge that acquit him in a corruption trial.";
-const string CONST_lcsmonthly043 = "addressed to his pet dog.  Yikes.";
+
 const string CONST_lcsmonthly042 = "The Liberal Guardian runs a story featuring love letters from a major CEO ";
-const string CONST_lcsmonthly041 = "playing with feces and urine.";
-const string CONST_lcsmonthly040 = "torturing an employee with a hot iron.";
-const string CONST_lcsmonthly039 = "waving a Nazi flag at a supremacist rally.";
-const string CONST_lcsmonthly038 = "castrating himself.";
-const string CONST_lcsmonthly037 = "making out with an FDA official overseeing the CEO's products.";
-const string CONST_lcsmonthly036 = "tongue-kissing an infamous dictator.";
-const string CONST_lcsmonthly035 = "engaging in heavy bondage.  A cucumber was involved in some way.";
-const string CONST_lcsmonthly034 = "participating in a murder.";
-const string CONST_lcsmonthly033 = "digging up graves and sleeping with the dead.";
-const string CONST_lcsmonthly032 = "engaging in lewd behavior with animals.";
+
 const string CONST_lcsmonthly031 = "The Liberal Guardian runs a story featuring photos of a major CEO ";
 const string CONST_lcsmonthly030 = "Enter - Not in this month's Liberal Guardian";
 const string CONST_lcsmonthly029 = "Do you want to run a special edition?";
@@ -152,7 +297,10 @@ the bottom of includes.h in the top src folder.
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../creature/newcreature.h"
+//#include "../creature/newcreature.h
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
+#include "../creature/creature.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../items/itemPool.h"
@@ -164,7 +312,7 @@ const string tag_skill = "skill";
 //#include "../common/equipment.h"
 void consolidateloot(vector<Item *> &loot);
 //#include "../common/translateid.h"
-int getloottype(const string &idname);
+int getloottype(const string idname);
 void removeItemFromSquad(const int loottypeindex);
 #include "../common/commonactions.h"
 // for void change_public_opinion(int,int,char =1,char=100);
@@ -233,248 +381,19 @@ extern string closeParenthesis;
 	  pressAnyKey();
 	  return;
   }
-  void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
-  /* monthly - lets the player choose a special edition for the guardian */
-  int choosespecialedition(char &clearformess)
-  {
-	  extern short interface_pgup;
-	  extern short interface_pgdn;
-	  extern MusicClass music;
-	  //Temporary, maybe put special edition definition into an xml file. -XML
-	  static const string document_types[] =
-	  {  // This list MUST be in alphabetical order for binary_search() to work right
-		  tag_LOOT_AMRADIOFILES,
-		  tag_LOOT_CABLENEWSFILES,
-		  tag_LOOT_CCS_BACKERLIST,
-		  tag_LOOT_CEOLOVELETTERS,
-		  tag_LOOT_CEOPHOTOS,
-		  tag_LOOT_CEOTAXPAPERS,
-		  tag_LOOT_CORPFILES,
-		  tag_LOOT_INTHQDISK,
-		  tag_LOOT_JUDGEFILES,
-		  tag_LOOT_POLICERECORDS,
-		  tag_LOOT_PRISONFILES,
-		  tag_LOOT_RESEARCHFILES,
-		  tag_LOOT_SECRETDOCUMENTS
-	  };
-	  static const vector<string> dox(document_types, document_types + len(document_types));
-	  int page = 0;
-	  //char havetype[LOOTNUM];
-	  //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-	  vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
-	  vector<int> loottypeindex;
-	  LocationsPool::getInstance().findAllLootTypes(havetype, loottypeindex, dox);
-	  constructLootIndices(havetype, loottypeindex, dox);
-	  if (!len(loottypeindex)) return -1;
-	  clearformess = 1;
-	  //PICK ONE
-	  while (true)
-	  {
-		  music.play(MUSIC_NEWSPAPER);
-		  eraseAlt();
-		  set_color_easy(WHITE_ON_BLACK);
-		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
-		  int x = 1, y = 10;
-		  char str[200];
-		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
-		  {
-			  str[0] = l - page * 18 + 'A';
-			  str[1] = '\x0';
-			  strcat(str, spaceDashSpace.c_str());
-			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
-			  mvaddstrAlt(y, x, str);
-			  x += 26;
-			  if (x > 53) x = 1, y++;
-		  }
-		  //PAGE UP
-		  if (page > 0)
-		  {
-			  mvaddstrAlt(17, 1, addprevpagestr());
-		  }
-		  //PAGE DOWN
-		  if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
-		  {
-			  mvaddstrAlt(17, 53, addnextpagestr());
-		  }
-		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
-		  int c = getkeyAlt();
-		  if (c >= 'a'&&c <= 'r')
-		  {
-			  int slot = c - 'a' + page * 18;
-			  if (slot >= 0 && slot < len(loottypeindex))
-			  {
-				  // remove item from location
-				  int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
-				  if (output != -1) {
-					  return output;
-				  }
-				  // if not in location, remove item from squad
-				  removeItemFromSquad(loottypeindex[slot]);
-				  //WHOOPS!
-				  return loottypeindex[slot];
-			  }
-		  }
-		  if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
-		  //PAGE UP
-		  if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
-		  //PAGE DOWN
-		  if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
-	  }
-	  return -1;
-  }
-  void printLootCEOPhotos() {
-	  extern short offended_corps;
+  void change_opinion_from_Influence(vector< pair<string, vector<int> > > Influence) {
+
 	  extern Log gamelog;
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly031, gamelog);
-	  moveAlt(7, 1);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(10))
-	  {
-	  case 0:
-		  addstrAlt(CONST_lcsmonthly032, gamelog);
-		  change_public_opinion(VIEW_ANIMALRESEARCH, 15);
-		  break;
-	  case 1:addstrAlt(CONST_lcsmonthly033, gamelog); break;
-	  case 2:
-		  addstrAlt(CONST_lcsmonthly034, gamelog);
-		  change_public_opinion(VIEW_POLICEBEHAVIOR, 15);
-		  change_public_opinion(VIEW_JUSTICES, 10);
-		  break;
-	  case 3:addstrAlt(CONST_lcsmonthly035, gamelog); break;
-	  case 4:addstrAlt(CONST_lcsmonthly036, gamelog); break;
-	  case 5:
-		  addstrAlt(CONST_lcsmonthly037, gamelog);
-		  change_public_opinion(VIEW_GENETICS, 10);
-		  change_public_opinion(VIEW_POLLUTION, 10);
-		  break;
-	  case 6:addstrAlt(CONST_lcsmonthly038, gamelog); break;
-	  case 7:addstrAlt(CONST_lcsmonthly039, gamelog); break;
-	  case 8:
-		  addstrAlt(CONST_lcsmonthly040, gamelog);
-		  change_public_opinion(VIEW_SWEATSHOPS, 10);
-		  break;
-	  case 9:addstrAlt(CONST_lcsmonthly041, gamelog); break;
+	  vector<int>::iterator it;
+	  int influence = LCSrandom(Influence.size());
+	  addstrAlt(Influence[influence].first, gamelog);
+	  for (it = Influence[influence].second.begin(); it != Influence[influence].second.end(); it += 2) {
+		  change_public_opinion(*it, *(it + 1));
 	  }
-	  gamelog.newline();
-	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
-	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
-	  gamelog.nextMessage();
-	  change_public_opinion(VIEW_CEOSALARY, 50);
-	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
-	  offended_corps = 1;
-  }
-  void printLootCEOLoveLetters() {
-	  extern short offended_corps;
-	  extern Log gamelog;
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly042, gamelog);
-	  moveAlt(7, 1);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(8))
-	  {
-	  case 0:
-		  addstrAlt(CONST_lcsmonthly043, gamelog);
-		  change_public_opinion(VIEW_ANIMALRESEARCH, 15);
-		  break;
-	  case 1:
-		  addstrAlt(CONST_lcsmonthly044, gamelog);
-		  change_public_opinion(VIEW_JUSTICES, 15);
-		  break;
-	  case 2:
-		  addstrAlt(CONST_lcsmonthly045, gamelog);
-		  change_public_opinion(VIEW_GAY, 15);
-		  break;
-	  case 3:addstrAlt(CONST_lcsmonthly046, gamelog); break;
-	  case 4:
-		  addstrAlt(CONST_lcsmonthly047, gamelog);
-		  change_public_opinion(VIEW_SWEATSHOPS, 10);
-		  break;
-	  case 5:
-		  addstrAlt(CONST_lcsmonthly048, gamelog);
-		  change_public_opinion(VIEW_GENETICS, 10);
-		  change_public_opinion(VIEW_POLLUTION, 10);
-		  break;
-	  case 6:addstrAlt(CONST_lcsmonthly049, gamelog); break;
-	  case 7:addstrAlt(CONST_lcsmonthly050, gamelog); break;
-	  }
-	  gamelog.newline();
-	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
-	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
-	  gamelog.nextMessage();
-	  change_public_opinion(VIEW_CEOSALARY, 50);
-	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
-	  offended_corps = 1;
   }
 
-  void printLootCEOTaxes() {
-	  extern short offended_corps;
-	  extern Log gamelog;
-
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly051, gamelog);
-	  moveAlt(7, 1);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(1))
-	  {
-	  default:
-		  addstrAlt(CONST_lcsmonthly052, gamelog);
-		  change_public_opinion(VIEW_TAXES, 25);
-		  break;
-	  }
-	  gamelog.newline();
-	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
-	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
-	  gamelog.nextMessage();
-	  change_public_opinion(VIEW_CEOSALARY, 50);
-	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
-	  offended_corps = 1;
-  }
-  void printLootCorpFiles(const short newspaper) {
-	  extern short offended_corps;
-	  extern Log gamelog;
-
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly053, gamelog);
-	  moveAlt(7, 1);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, newspaper * 10);
-	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
-	  switch (LCSrandom(5))
-	  {
-	  case 0:
-		  addstrAlt(CONST_lcsmonthly054, gamelog);
-		  change_public_opinion(VIEW_GENETICS, 50);
-		  break;
-	  case 1:
-		  addstrAlt(CONST_lcsmonthly055, gamelog);
-		  change_public_opinion(VIEW_GAY, 50);
-		  break;
-	  case 2:
-		  addstrAlt(CONST_lcsmonthly056, gamelog);
-		  change_public_opinion(VIEW_WOMEN, 50);
-		  break;
-	  case 3:
-		  addstrAlt(CONST_lcsmonthly057, gamelog);
-		  change_public_opinion(VIEW_SWEATSHOPS, 50);
-		  break;
-	  case 4:
-		  addstrAlt(CONST_lcsmonthly058, gamelog);
-		  change_public_opinion(VIEW_TAXES, 50);
-		  break;
-	  }
-	  gamelog.newline();
-	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
-	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
-	  gamelog.nextMessage();
-	  change_public_opinion(VIEW_CEOSALARY, 50);
-	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
-	  offended_corps = 1;
-  }
   void printLootCCSBackers() {
 	  extern CCSexposure ccsexposure;
 	  extern Log gamelog;
@@ -510,6 +429,98 @@ extern string closeParenthesis;
 	  change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
 	  ccsexposure = CCSEXPOSURE_EXPOSED;
   }
+
+//  vector< pair<string, vector<int> > > CEOPhotosInfluence;
+  void printLootCEOPhotos() {
+	  extern short offended_corps;
+	  extern Log gamelog;
+
+	  mvaddstrAlt(6, 1, CONST_lcsmonthly031, gamelog);
+	  moveAlt(7, 1);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
+
+	  change_opinion_from_Influence(CEOPhotosInfluence);
+
+	  gamelog.newline();
+	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  gamelog.nextMessage();
+	  change_public_opinion(VIEW_CEOSALARY, 50);
+	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
+	  offended_corps = 1;
+  }
+//  vector< pair<string, vector<int> > > CEOLoveLettersInfluence;
+  void printLootCEOLoveLetters() {
+	  extern short offended_corps;
+	  extern Log gamelog;
+	  mvaddstrAlt(6, 1, CONST_lcsmonthly042, gamelog);
+	  moveAlt(7, 1);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
+
+
+	  change_opinion_from_Influence(CEOLoveLettersInfluence);
+
+
+	  gamelog.newline();
+	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  gamelog.nextMessage();
+	  change_public_opinion(VIEW_CEOSALARY, 50);
+	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
+	  offended_corps = 1;
+  }
+//  vector< pair<string, vector<int> > > CEOTaxesInfluence;
+
+  void printLootCEOTaxes() {
+	  extern short offended_corps;
+	  extern Log gamelog;
+
+	  mvaddstrAlt(6, 1, CONST_lcsmonthly051, gamelog);
+	  moveAlt(7, 1);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
+
+	  change_opinion_from_Influence(CEOTaxesInfluence);
+
+	  gamelog.newline();
+	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  gamelog.nextMessage();
+	  change_public_opinion(VIEW_CEOSALARY, 50);
+	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
+	  offended_corps = 1;
+  }
+
+//  vector< pair<string, vector<int> > > CorpFilesInfluence;
+
+  void printLootCorpFiles(const short newspaper) {
+	  extern short offended_corps;
+	  extern Log gamelog;
+
+	  mvaddstrAlt(6, 1, CONST_lcsmonthly053, gamelog);
+	  moveAlt(7, 1);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, newspaper * 10);
+	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
+
+
+	  change_opinion_from_Influence(CEOPhotosInfluence);
+
+	  gamelog.newline();
+	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
+	  gamelog.newline();
+	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  gamelog.nextMessage();
+	  change_public_opinion(VIEW_CEOSALARY, 50);
+	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
+	  offended_corps = 1;
+  }
+//  vector< pair<string, vector<int> > > CIAPapersInfluence;
+
   void printLootCIAPapers() {
 	  extern short offended_cia;
 	  extern Log gamelog;
@@ -518,27 +529,10 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(6))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly074, gamelog); break;
-	  case 1:
-		  addstrAlt(CONST_lcsmonthly075, gamelog);
-		  change_public_opinion(VIEW_JUSTICES, 50);
-		  break;
-	  case 2:addstrAlt(CONST_lcsmonthly076, gamelog); break;
-	  case 3:
-		  addstrAlt(CONST_lcsmonthly077, gamelog);
-		  change_public_opinion(VIEW_FREESPEECH, 50);
-		  break;
-	  case 4:
-		  addstrAlt(CONST_lcsmonthly078, gamelog);
-		  change_public_opinion(VIEW_GAY, 50);
-		  break;
-	  case 5:
-		  addstrAlt(CONST_lcsmonthly079, gamelog);
-		  change_public_opinion(VIEW_WOMEN, 50);
-		  break;
-	  }
+
+
+	  change_opinion_from_Influence(CIAPapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
@@ -548,6 +542,8 @@ extern string closeParenthesis;
 	  offended_cia = 1;
   }
 
+//  vector< pair<string, vector<int> > > PolicePapersInfluence;
+
   void printLootPolicePapers() {
 	  extern Log gamelog;
 
@@ -555,38 +551,17 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(6))
-	  {
-	  case 0:
-		  addstrAlt(CONST_lcsmonthly082, gamelog);
-		  change_public_opinion(VIEW_TORTURE, 15);
-		  break;
-	  case 1:
-		  addstrAlt(CONST_lcsmonthly083, gamelog);
-		  change_public_opinion(VIEW_TORTURE, 50);
-		  break;
-	  case 2:
-		  addstrAlt(CONST_lcsmonthly084, gamelog);
-		  change_public_opinion(VIEW_INTELLIGENCE, 15);
-		  break;
-	  case 3:
-		  addstrAlt(CONST_lcsmonthly085, gamelog);
-		  break;
-	  case 4:
-		  addstrAlt(CONST_lcsmonthly086, gamelog);
-		  break;
-	  case 5:
-		  addstrAlt(CONST_lcsmonthly100, gamelog);
-		  change_public_opinion(VIEW_DEATHPENALTY, 50);
-		  change_public_opinion(VIEW_PRISONS, 20);
-		  break;
-	  }
+
+
+	  change_opinion_from_Influence(PolicePapersInfluence);
+
 	  moveAlt(9, 1);
 	  gamelog.newline();
 	  addstrAlt(major_news_take_it_up, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_POLICEBEHAVIOR, 50);
   }
+//  vector< pair<string, vector<int> > > JudgePapersInfluence;
   void printLootJudgePapers() {
 	  extern Log gamelog;
 
@@ -594,16 +569,17 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(2))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly089, gamelog); break;
-	  case 1:addstrAlt(CONST_lcsmonthly090, gamelog); break;
-	  }
+
+
+	  change_opinion_from_Influence(JudgePapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(8, 1, major_news_take_it_up, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_JUSTICES, 50);
   }
+
+//  vector< pair<string, vector<int> > > ResearchPapersInfluence;
   void printLootResearchPapers() {
 	  extern Log gamelog;
 
@@ -611,21 +587,16 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(4))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly092, gamelog);
-		  change_public_opinion(VIEW_ANIMALRESEARCH, 50); break;
-	  case 1:addstrAlt(CONST_lcsmonthly093, gamelog);
-		  change_public_opinion(VIEW_ANIMALRESEARCH, 50); break;
-	  case 2:addstrAlt(CONST_lcsmonthly094, gamelog);
-		  change_public_opinion(VIEW_GENETICS, 50); break;
-	  case 3:addstrAlt(CONST_lcsmonthly095, gamelog);
-		  change_public_opinion(VIEW_GENETICS, 50); break;
-	  }
+
+
+	  change_opinion_from_Influence(ResearchPapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.nextMessage();
   }
+
+//  vector< pair<string, vector<int> > > PrisonPapersInfluence;
   void printLootPrisonPapers() {
 	  extern Log gamelog;
 
@@ -634,22 +605,17 @@ extern string closeParenthesis;
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
 	  change_public_opinion(VIEW_PRISONS, 50);
-	  switch (LCSrandom(4))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly097, gamelog); break;
-	  case 1:
-		  addstrAlt(CONST_lcsmonthly098, gamelog);
-		  change_public_opinion(VIEW_TORTURE, 50);
-		  break;
-	  case 2:addstrAlt(CONST_lcsmonthly099, gamelog); break;
-	  case 3:
-		  addstrAlt(CONST_lcsmonthly100, gamelog);
-	  }
+
+
+	  change_opinion_from_Influence(PrisonPapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_DEATHPENALTY, 50);
   }
+
+//  vector< pair<string, vector<int> > > CablePapersInfluence;
   void printLootCablePapers() {
 	  extern short offended_cablenews;
 	  extern Log gamelog;
@@ -658,14 +624,10 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(4))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly102, gamelog); break;
-	  case 1:addstrAlt(CONST_lcsmonthly103, gamelog); break;
-	  case 2:addstrAlt(CONST_lcsmonthly110, gamelog); break;
-	  case 3:addstrAlt(CONST_lcsmonthly105, gamelog);
-		  break;
-	  }
+
+
+	  change_opinion_from_Influence(CablePapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
@@ -674,6 +636,8 @@ extern string closeParenthesis;
 	  change_public_opinion(VIEW_CABLENEWS, 50);
 	  offended_cablenews = 1;
   }
+
+//  vector< pair<string, vector<int> > > RadioPapersInfluence;
   void printLootRadioPapers() {
 	  extern short offended_amradio;
 	  extern Log gamelog;
@@ -683,12 +647,10 @@ extern string closeParenthesis;
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
-	  switch (LCSrandom(3))
-	  {
-	  case 0:addstrAlt(CONST_lcsmonthly108, gamelog); break;
-	  case 1:addstrAlt(CONST_lcsmonthly109, gamelog); break;
-	  case 2:addstrAlt(CONST_lcsmonthly110, gamelog); break;
-	  }
+
+
+	  change_opinion_from_Influence(RadioPapersInfluence);
+
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
@@ -899,16 +861,13 @@ extern string closeParenthesis;
 	  mvaddstrAlt(y, 60 - len(num), num);
   }
   /* monthly - LCS finances report */
-  void fundreport(char &clearformess)
+  void fundreport()
   {
-	  extern short interface_pgup;
-	  extern short interface_pgdn;
 	  extern char disbanding;
 	  extern MusicClass music;
 	  extern class Ledger ledger;
 	  if (disbanding) return;
 	  music.play(MUSIC_FINANCES);
-	  clearformess = true;
 	  int page = 0;
 	  bool showledger = false;
 	  int expenselines = 0;
@@ -1016,9 +975,9 @@ extern string closeParenthesis;
 					  return;
 				  }
 				  //PAGE UP
-				  if (c == interface_pgup || c == KEY_UP || c == KEY_LEFT) { page--; if (page < 0) page = numpages - 1; break; }
+				  if (is_page_up(c)) { page--; if (page < 0) page = numpages - 1; break; }
 				  //PAGE DOWN
-				  if (c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) { page++; if (page >= numpages) page = 0; break; }
+				  if (is_page_down(c)) { page++; if (page >= numpages) page = 0; break; }
 			  }
 		  }
 		  else
@@ -1029,5 +988,161 @@ extern string closeParenthesis;
 			  return;
 		  }
 	  }
+	  return;
   }
 
+//#include "creature/creature.h"
+//#include "creature/deprecatedCreatureD.h"
+#include "locations/locations.h"
+  /* monthly - lets the player choose a special edition for the guardian */
+  int choosespecialedition()
+  {
+	  extern vector<Location *> listOfLocations;
+	  extern MusicClass music;
+	  //Temporary, maybe put special edition definition into an xml file. -XML
+	  static const string document_types[] =
+	  {  // This list MUST be in alphabetical order for binary_search() to work right
+		  tag_LOOT_AMRADIOFILES,
+		  tag_LOOT_CABLENEWSFILES,
+		  tag_LOOT_CCS_BACKERLIST,
+		  tag_LOOT_CEOLOVELETTERS,
+		  tag_LOOT_CEOPHOTOS,
+		  tag_LOOT_CEOTAXPAPERS,
+		  tag_LOOT_CORPFILES,
+		  tag_LOOT_INTHQDISK,
+		  tag_LOOT_JUDGEFILES,
+		  tag_LOOT_POLICERECORDS,
+		  tag_LOOT_PRISONFILES,
+		  tag_LOOT_RESEARCHFILES,
+		  tag_LOOT_SECRETDOCUMENTS
+	  };
+	  static const vector<string> dox(document_types, document_types + len(document_types));
+	  int page = 0;
+	  //char havetype[LOOTNUM];
+	  //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
+	  vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
+	  vector<int> loottypeindex;
+
+	  //FIND ALL LOOT TYPES
+	  for (int loc = 0; loc < LocationsPool::getInstance().lenpool(); loc++)
+	  {
+		  if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, loc) == RENTING_NOCONTROL) continue;
+		  consolidateloot(listOfLocations[loc]->loot);
+		  for (int l = 0; l < len(listOfLocations[loc]->loot); l++)
+		  {
+			  if (!(listOfLocations[loc]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
+			  if (!binary_search(dox.begin(), dox.end(), listOfLocations[loc]->loot[l]->get_itemtypename())) continue;
+			  if (!havetype[getloottype(listOfLocations[loc]->loot[l]->get_itemtypename())])
+			  {
+				  loottypeindex.push_back(getloottype(listOfLocations[loc]->loot[l]->get_itemtypename()));
+				  havetype[getloottype(listOfLocations[loc]->loot[l]->get_itemtypename())] = true;
+			  }
+		  }
+	  }
+	  extern vector<Deprecatedsquadst *> squad;
+	  void consolidateloot(vector<Item *> &loot);
+	  int getloottype(const string idname);
+
+	  for (int sq = 0; sq < len(squad); sq++)
+	  {
+		  consolidateloot(squad[sq]->loot);
+		  for (int l = 0; l < len(squad[sq]->loot); l++)
+		  {
+			  if (!(squad[sq]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
+			  if (!binary_search(dox.begin(), dox.end(), squad[sq]->loot[l]->get_itemtypename())) continue;
+			  if (!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
+			  {
+				  loottypeindex.push_back(getloottype(squad[sq]->loot[l]->get_itemtypename()));
+				  havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())] = true;
+			  }
+		  }
+	  }
+
+	  if (!len(loottypeindex)) return -1;
+	  
+	  //PICK ONE
+	  while (true)
+	  {
+		  music.play(MUSIC_NEWSPAPER);
+		  eraseAlt();
+		  set_color_easy(WHITE_ON_BLACK);
+		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
+		  int x = 1, y = 10;
+		  char str[200];
+		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
+		  {
+			  str[0] = l - page * 18 + 'A';
+			  str[1] = '\x0';
+			  strcat(str, spaceDashSpace.c_str());
+			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
+			  mvaddstrAlt(y, x, str);
+			  x += 26;
+			  if (x > 53) x = 1, y++;
+		  }
+		  //PAGE UP
+		  if (page > 0)
+		  {
+			  mvaddstrAlt(17, 1, addprevpagestr());
+		  }
+		  //PAGE DOWN
+		  if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
+		  {
+			  mvaddstrAlt(17, 53, addnextpagestr());
+		  }
+		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
+		  int c = getkeyAlt();
+		  if (c >= 'a'&&c <= 'r')
+		  {
+			  int slot = c - 'a' + page * 18;
+			  if (slot >= 0 && slot < len(loottypeindex))
+			  {
+				  // remove item from location
+				  int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
+				  if (output != -1) {
+					  return output;
+				  }
+				  // if not in location, remove item from squad
+				  removeItemFromSquad(loottypeindex[slot]);
+				  //WHOOPS!
+				  return loottypeindex[slot];
+			  }
+		  }
+		  if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
+		  //PAGE UP
+		  if (is_page_up(c) && page > 0) page--;
+		  //PAGE DOWN
+		  if (is_page_down(c) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
+	  }
+	  return -1;
+  }
+
+  void publishSpecialEditions() {
+	  extern vector<Location *> listOfLocations;
+	  //YOUR PAPER AND PUBLIC OPINION AND STUFF
+	  vector<int> nploc;
+	  for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
+	  {
+		  if ((listOfLocations[l]->compound_walls & COMPOUND_PRINTINGPRESS) &&
+			  !listOfLocations[l]->siege.siege&&
+			  listOfLocations[l]->renting != RENTING_CCS) {
+			  nploc.push_back(l);
+		  }
+	  }
+
+	  if (len(nploc))
+	  {
+		  //DO SPECIAL EDITIONS
+		  int loottypeindex = choosespecialedition();
+
+		  if (loottypeindex != -1) {
+
+			  printnews(loottypeindex, len(nploc));
+			  if (LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
+				  LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_SECRETDOCUMENTS)
+			  {
+				  for (int l = 0; l < len(nploc); l++)
+					  criminalizepool(LAWFLAG_TREASON, -1, nploc[l]);
+			  }
+		  }
+	  }
+  }

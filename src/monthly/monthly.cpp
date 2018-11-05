@@ -87,10 +87,10 @@ void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
 #include "../politics/politics.h"
 //for publicmood
 //#include "../monthly/lcsmonthly.h"
-void fundreport(char &clearformess);
+void fundreport();
 //#include "../daily/daily.h"
 //for dispersalcheck and securitytable
-void dispersalcheck(char &clearformess);
+void dispersalcheck(const char clearformess);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 //#include <common\\getnames.h>
@@ -102,7 +102,7 @@ std::string getview(short view, bool shortname);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 void clearRentExemptions();
-void publishSpecialEditions(char &clearformess);
+void publishSpecialEditions();
 void manageGrafiti();
 
 extern string singleDot;
@@ -167,7 +167,7 @@ bool crackhouseNeedsUpdate(short *law, short *oldlaw) {
 void reinitializeSite(const int sitetype) {
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 		if (LocationsPool::getInstance().getLocationType(l) == sitetype)
-			LocationsPool::getInstance().initSite(l);
+			LocationsPool::getInstance().initLocation(l);
 }
 // #include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
@@ -276,7 +276,7 @@ void print_labels_on_bottom_of_screen() {
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, CONST_monthly014);
 }
-void printIntelligenceReport(char &clearformess) {
+void printIntelligenceReport() {
 	/*******************************************************
 	*                 INTELLIGENCE REPORT                  *
 	*     ONLY IF SHOWMECHANICS OR SHOWWAIT IS DEFINED     *
@@ -311,8 +311,6 @@ void printIntelligenceReport(char &clearformess) {
 		mvaddcharAlt(y++, x + 23 + pip, 'O');
 	}
 	print_labels_on_bottom_of_screen();
-	clearformess = 1;
-	pressAnyKey();
 }
 void updateEndgamestate() {
 	extern char endgamestate;
@@ -373,7 +371,7 @@ void long_disband_loss() {
 	end_game();
 }
 /* does end of month actions */
-void passmonth(char &clearformess, char canseethings)
+void passmonth(char canseethings)
 {
 	// Show polls when you can't see things
 	extern bool SHOWWAIT;
@@ -409,16 +407,16 @@ void passmonth(char &clearformess, char canseethings)
 	clearRentExemptions();
 	// Check for game over
 	endcheck(END_DEAD);
-	dispersalcheck(clearformess);
+	dispersalcheck(true);
 	if (!disbanding) {
-		publishSpecialEditions(clearformess);
+		publishSpecialEditions();
 	}
 	int libpower[VIEWNUM] = { 0 };
 	//STORIES STALE EVEN IF NOT PRINTED
 	for (int v = 0; v < VIEWNUM; v++)public_interest[v] /= 2;
 	int conspower = 200 - attitude[VIEW_AMRADIO] - attitude[VIEW_CABLENEWS];
 	//HAVING SLEEPERS
-	havingSleepers(clearformess, canseethings, libpower);
+	havingSleepers(canseethings, libpower);
 	manageGrafiti();
 	int mediabalance = 0;
 	int issuebalance[VIEWNUM - 5];
@@ -448,7 +446,8 @@ void passmonth(char &clearformess, char canseethings)
 	*******************************************************/
 	if ((SHOWMECHANICS || SHOWWAIT) && canseethings)
 	{
-		printIntelligenceReport(clearformess);
+		printIntelligenceReport();
+		pressAnyKey();
 	}
 	/*******************************************************
 	*                                                      *
@@ -457,17 +456,14 @@ void passmonth(char &clearformess, char canseethings)
 	*******************************************************/
 	//ELECTIONS
 	if (month == 11) {
-		elections(clearformess, canseethings);
-		clearformess = 1;
+		elections(canseethings);
 	}
 	//SUPREME COURT
 	if (month == 6) {
-		supremecourt(clearformess, canseethings);
-		clearformess = 1;
+		supremecourt(canseethings);
 	}
 	//CONGRESS
-	congress(clearformess, canseethings);
-	clearformess = 1;
+	congress(canseethings);
 	//DID YOU WIN?
 	if (wincheck())
 	{
@@ -485,7 +481,8 @@ void passmonth(char &clearformess, char canseethings)
 	updateworld_laws(lawList, oldlaw);
 	//THE SYSTEM!
 	if (!disbanding) {
-		monthlyRunTheSystem(clearformess);
+		void monthlyRunTheSystem();
+		monthlyRunTheSystem();
 	}
 
 	//NUKE EXECUTION VICTIMS
@@ -494,14 +491,14 @@ void passmonth(char &clearformess, char canseethings)
 	//MUST DO AN END OF GAME CHECK HERE BECAUSE OF EXECUTIONS
 	endcheck(END_EXECUTED);
 	//DISPERSAL CHECK
-	dispersalcheck(clearformess);
+	dispersalcheck(true);
 	//FUND REPORTS
-	if (canseethings)fundreport(clearformess);
+	if (canseethings)fundreport();
 	ledger.resetMonthlyAmounts();
-	if (clearformess) eraseAlt();
+	if (!disbanding) eraseAlt();
 	//HEAL CLINIC PEOPLE
 	if (!disbanding) {
-		monthlyRunHealClinicPeople(clearformess);
+		monthlyRunHealClinicPeople();
 	}
 
 }

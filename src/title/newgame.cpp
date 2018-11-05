@@ -95,14 +95,14 @@ const string tag_attribute = "attribute";
 
 const string tag_skill = "skill";
 
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 
 //#include "../common/consolesupport.h"
 // for getkey
@@ -204,11 +204,6 @@ string a_fastSkills;
 string b_classic;
 string c_hardMode;
 
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
 
 extern string spaceDashSpace;
 
@@ -343,7 +338,50 @@ int getSpecialWoundFromString(const string& s) {
 		return -1;
 	}
 }
-LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs, bool &nightmarelaws) {
+LOOP_CONTINUATION newgame_starting_conditions_getKey(bool &classicmode, bool &strongccs, bool &nightmarelaws) {
+	extern bool stalinmode;
+	extern bool multipleCityMode;
+	extern bool ALLOWSTALIN;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool nocourtpurge;
+	switch (getkeyAlt()) {
+	case 'a':
+
+		classicmode = !classicmode;
+		break;
+
+	case 'b':
+		strongccs = !strongccs;
+
+		break;
+
+	case 'c':
+		nightmarelaws = !nightmarelaws;
+
+		break;
+
+	case 'd':
+		multipleCityMode = !multipleCityMode;
+
+		break;
+
+	case 'e':
+
+		nocourtpurge = !nocourtpurge;
+		notermlimit = !notermlimit;
+		break;
+
+	case 'f':
+		if (ALLOWSTALIN) {
+			stalinmode = !stalinmode;
+			return REPEAT;
+		} // else return RETURN_ZERO
+	default:
+		return RETURN_ZERO;
+	}
+	return REPEAT;
+}
+void print_newgame_choices(const bool classicmode, const bool strongccs, const bool nightmarelaws) {
 	extern bool stalinmode;
 	extern bool multipleCityMode;
 	extern bool ALLOWSTALIN;
@@ -354,43 +392,24 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 	mvaddstrAlt(4, 6, newGameAdvanced);
 	set_color_easy(WHITE_ON_BLACK);
 	{
-		string isThisSelected;
-		if (classicmode)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(7, 0, isThisSelected);
+		mvaddstrAlt(7, 0, classicmode ? isSelected : unSelected);
 		addstrAlt(a_classicMode);
 		if (!classicmode)
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		if (strongccs)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(9, 0, isThisSelected);
+		mvaddstrAlt(9, 0, strongccs ? isSelected : unSelected);
 		addstrAlt(b_weDidntStartIt);
 		set_color_easy(WHITE_ON_BLACK);
-		if (nightmarelaws)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(11, 0, isThisSelected);
+		mvaddstrAlt(11, 0, nightmarelaws ? isSelected : unSelected);
 		addstrAlt(c_nightmareMode);
 		set_color_easy(WHITE_ON_BLACK);
-		if (multipleCityMode)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(13, 0, isThisSelected);
+		mvaddstrAlt(13, 0, multipleCityMode ? isSelected : unSelected);
 		addstrAlt(d_nationalLCS);
-		if (nocourtpurge)
-			isThisSelected = (isSelected);
-		else isThisSelected = (unSelected);
-		mvaddstrAlt(15, 0, isThisSelected);
+		mvaddstrAlt(15, 0, nocourtpurge ? isSelected : unSelected);
 		addstrAlt(e_marathonMode);
 		int bottomRow;
 		if (ALLOWSTALIN) {
-			if (stalinmode)
-				isThisSelected = (isSelected);
-			else isThisSelected = (unSelected);
-			mvaddstrAlt(17, 0, isThisSelected);
+			mvaddstrAlt(17, 0, stalinmode ? isSelected : unSelected);
 			addstrAlt(f_stalinistMode);
 			bottomRow = 21;
 		}
@@ -399,41 +418,10 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 		}// ALLOWSTALIN
 		mvaddstrAlt(bottomRow, 4, pressAnyOtherKey);
 	}
-	const int c = getkeyAlt();
-	if (c == 'a')
-	{
-		classicmode = !classicmode;
-		return REPEAT;
-	}
-	if (c == 'b')
-	{
-		strongccs = !strongccs;
-		return REPEAT;
-	}
-	if (c == 'c')
-	{
-		nightmarelaws = !nightmarelaws;
-		return REPEAT;
-	}
-	if (c == 'd')
-	{
-		multipleCityMode = !multipleCityMode;
-		return REPEAT;
-	}
-	if (c == 'e')
-	{
-		nocourtpurge = !nocourtpurge;
-		notermlimit = !notermlimit;
-		return REPEAT;
-	}
-	if (ALLOWSTALIN) {
-		if (c == 'f')
-		{
-			stalinmode = !stalinmode;
-			return REPEAT;
-		}
-	}
-	return RETURN_ZERO;
+}
+LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs, bool &nightmarelaws) {
+	print_newgame_choices(classicmode, strongccs, nightmarelaws);
+	return newgame_starting_conditions_getKey(classicmode, strongccs, nightmarelaws);
 }
 void implementNightmareLaws() {
 	extern short lawList[LAWNUM];
@@ -1079,53 +1067,54 @@ vector<Impact> printQuestionsThenGatherImpacts(vector<Question> allQuestions, co
 	}
 	return impactsToApply;
 }
-void make_blind(DeprecatedCreature *newcr) {
+void DeprecatedCreature:: make_blind() {
 
-	newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-	newcr->special[SPECIALWOUND_LEFTEYE] = 1;
+	special[SPECIALWOUND_RIGHTEYE] = 1;
+	special[SPECIALWOUND_LEFTEYE] = 1;
 }
-void remove_spine(DeprecatedCreature *newcr) {
+void DeprecatedCreature:: remove_spine() {
 
-	newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-	newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
+	special[SPECIALWOUND_UPPERSPINE] = 1;
+	special[SPECIALWOUND_LOWERSPINE] = 1;
 }
-void remove_face(DeprecatedCreature *newcr) {
+void DeprecatedCreature:: remove_face() {
 
-	newcr->special[SPECIALWOUND_TONGUE] = 1;
-	newcr->special[SPECIALWOUND_RIGHTEYE] = 1;
-	newcr->special[SPECIALWOUND_LEFTEYE] = 1;
-	newcr->special[SPECIALWOUND_NOSE] = 1;
+	special[SPECIALWOUND_TONGUE] = 1;
+	special[SPECIALWOUND_RIGHTEYE] = 1;
+	special[SPECIALWOUND_LEFTEYE] = 1;
+	special[SPECIALWOUND_NOSE] = 1;
 }
-void make_paraplegic(DeprecatedCreature *newcr) {
+void DeprecatedCreature:: make_paraplegic() {
 
-	newcr->special[SPECIALWOUND_UPPERSPINE] = 1;
-	newcr->special[SPECIALWOUND_LOWERSPINE] = 1;
-	newcr->special[SPECIALWOUND_NECK] = 1;
-	newcr->wound[BODYPART_LEG_RIGHT] = 1;
-	newcr->wound[BODYPART_LEG_LEFT] = 1;
+	special[SPECIALWOUND_UPPERSPINE] = 1;
+	special[SPECIALWOUND_LOWERSPINE] = 1;
+	special[SPECIALWOUND_NECK] = 1;
+	wound[BODYPART_LEG_RIGHT] = 1;
+	wound[BODYPART_LEG_LEFT] = 1;
 }
-void severe_internal_damage(DeprecatedCreature *newcr) {
+void DeprecatedCreature:: severe_internal_damage() {
 
-	newcr->special[SPECIALWOUND_RIGHTLUNG] = 1;
-	newcr->special[SPECIALWOUND_LEFTLUNG] = 1;
-	newcr->special[SPECIALWOUND_HEART] = 1;
-	newcr->special[SPECIALWOUND_LIVER] = 1;
-	newcr->special[SPECIALWOUND_STOMACH] = 1;
-	newcr->special[SPECIALWOUND_LEFTKIDNEY] = 1;
-	newcr->special[SPECIALWOUND_RIGHTKIDNEY] = 1;
-	newcr->special[SPECIALWOUND_SPLEEN] = 1;
+	special[SPECIALWOUND_RIGHTLUNG] = 1;
+	special[SPECIALWOUND_LEFTLUNG] = 1;
+	special[SPECIALWOUND_HEART] = 1;
+	special[SPECIALWOUND_LIVER] = 1;
+	special[SPECIALWOUND_STOMACH] = 1;
+	special[SPECIALWOUND_LEFTKIDNEY] = 1;
+	special[SPECIALWOUND_RIGHTKIDNEY] = 1;
+	special[SPECIALWOUND_SPLEEN] = 1;
 }
-void set_attributes_zero(DeprecatedCreature* newcr) {
+void DeprecatedCreature::set_attributes_zero() {
 
-	newcr->set_attribute(ATTRIBUTE_HEART, 0);
-	newcr->set_attribute(ATTRIBUTE_WISDOM, 0);
-	newcr->set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
-	newcr->set_attribute(ATTRIBUTE_AGILITY, 0);
-	newcr->set_attribute(ATTRIBUTE_STRENGTH, 0);
-	newcr->set_attribute(ATTRIBUTE_HEALTH, 0);
-	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
+	set_attribute(ATTRIBUTE_HEART, 0);
+	set_attribute(ATTRIBUTE_WISDOM, 0);
+	set_attribute(ATTRIBUTE_INTELLIGENCE, 0);
+	set_attribute(ATTRIBUTE_AGILITY, 0);
+	set_attribute(ATTRIBUTE_STRENGTH, 0);
+	set_attribute(ATTRIBUTE_HEALTH, 0);
+	set_attribute(ATTRIBUTE_CHARISMA, 0);
 }
-void set_default_values(DeprecatedCreature* newcr) {
+
+void DeprecatedCreature::set_default_values() {
 	// Make the founder blind
 	extern bool BLIND;
 	// Make the founder unable to walk
@@ -1137,32 +1126,33 @@ void set_default_values(DeprecatedCreature* newcr) {
 	// Make the founder have severe internal damage
 	extern bool INTERNAL;
 
-	newcr->align = ALIGN_LIBERAL;
-	set_attributes_zero(newcr);
+	align = ALIGN_LIBERAL;
+	set_attributes_zero();
 	if (BLIND) {
-		make_blind(newcr);
+		make_blind();
 	}
 	if (SPINE) {
-		remove_spine(newcr);
+		remove_spine();
 	}
 	if (NOFACE) {
-		remove_face(newcr);
+		remove_face();
 	}
 	if (NOWALK) {
-		make_paraplegic(newcr);
+		make_paraplegic();
 	}
 	if (INTERNAL) {
-		severe_internal_damage(newcr);
+		severe_internal_damage();
 	}
 }
-bool print_default_founder_window(DeprecatedCreature* newcr) {
+
+bool DeprecatedCreature::print_default_founder_window() {
 	extern bool multipleCityMode;
 	extern char lcityname[CITY_NAMELEN];
 
 	char first[3][80];
 	char last[80];
 	const bool is_male = LCSrandom(2); // whether or not starting gender is male
-	char gender = newcr->gender_liberal = newcr->gender_conservative = (is_male ? GENDER_MALE : GENDER_FEMALE);
+	char gender = gender_liberal = gender_conservative = (is_male ? GENDER_MALE : GENDER_FEMALE);
 	do {
 		firstname(first[0], GENDER_NEUTRAL);
 		firstname(first[1], GENDER_MALE);
@@ -1171,7 +1161,7 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 	} while (strcmp(first[0], last) == 0 && strcmp(first[1], last) == 0 && strcmp(first[2], last) == 0);
 	{
 		Armor a(getarmortype(tag_ARMOR_CLOTHES));
-		newcr->give_armor(a, NULL);
+		give_armor(a, NULL);
 	}
 
 	bool choices = true;
@@ -1191,12 +1181,12 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 		mvaddstrAlt(9, 30, pressBtoBeReborn);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(11, 2, sexIs);
-		if (newcr->gender_conservative == GENDER_MALE)
+		if (gender_conservative == GENDER_MALE)
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			addstrAlt(male);
 		}
-		else if (newcr->gender_conservative == GENDER_FEMALE)
+		else if (gender_conservative == GENDER_FEMALE)
 		{
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			addstrAlt(female);
@@ -1236,7 +1226,7 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 		if (c == 'a')
 		{
 			do {
-				firstname(first[(int)gender], newcr->gender_conservative);
+				firstname(first[(int)gender], gender_conservative);
 			} while (strcmp(first[(int)gender], last) == 0);
 			continue;
 		}
@@ -1249,15 +1239,15 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 		}
 		if (c == 'c')
 		{
-			if ((newcr->gender_conservative == GENDER_FEMALE && !is_male) ||
-				(newcr->gender_conservative == GENDER_NEUTRAL && is_male))
-				newcr->gender_conservative = GENDER_MALE;
-			else if ((newcr->gender_conservative == GENDER_MALE && !is_male) ||
-				(newcr->gender_conservative == GENDER_FEMALE && is_male))
-				newcr->gender_conservative = GENDER_NEUTRAL;
+			if ((gender_conservative == GENDER_FEMALE && !is_male) ||
+				(gender_conservative == GENDER_NEUTRAL && is_male))
+				gender_conservative = GENDER_MALE;
+			else if ((gender_conservative == GENDER_MALE && !is_male) ||
+				(gender_conservative == GENDER_FEMALE && is_male))
+				gender_conservative = GENDER_NEUTRAL;
 			else
-				newcr->gender_conservative = GENDER_FEMALE;
-			gender = newcr->gender_liberal = newcr->gender_conservative;
+				gender_conservative = GENDER_FEMALE;
+			gender = gender_liberal = gender_conservative;
 			continue;
 		}
 		if (c == 'd')
@@ -1272,32 +1262,23 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 		}
 		break;
 	}
-	strcpy(newcr->propername, first[(int)gender]);
-	strcat(newcr->propername, singleSpace);
-	strcat(newcr->propername, last);
+	strcpy(propername, first[(int)gender]);
+	strcat(propername, singleSpace);
+	strcat(propername, last);
 	return choices;
 }
 
 #include "../recruits.h"
 /* creates your founder */
-struct newGameArguments {
-	const char recruits;
-	const char base;
-	const bool makelawyer;
-	const bool gaylawyer;
-	const bool sports_car;
-	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
-};
-void giveMeAssaultRifle(DeprecatedCreature* newcr) {
+void DeprecatedCreature::giveMeAssaultRifle() {
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 
 	Weapon neww(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)]);
 	Clip newc(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 9);
-	newcr->give_weapon(neww, NULL);
-	newcr->take_clips(newc, 9);
+	give_weapon(neww, NULL);
+	take_clips(newc, 9);
 }
-void initiateNewgameLocations(DeprecatedCreature* newcr, newGameArguments ngm);
 void makecharacter()
 {
 	extern UniqueCreatures uniqueCreatures;
@@ -1307,8 +1288,8 @@ void makecharacter()
 	extern int month;
 	extern class Ledger ledger;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
-	set_default_values(newcr);
-	bool choices = print_default_founder_window(newcr);
+	newcr->set_default_values();
+	bool choices = newcr->print_default_founder_window();
 	int c;
 	bool hasmaps = false;
 	bool makelawyer = false;
@@ -1431,7 +1412,7 @@ void makecharacter()
 	//calculate founder's birthday and age
 	newcr->set_date_of_birth(birth_day, birth_month, birth_year);
 	if (assault_rifle) {
-		giveMeAssaultRifle(newcr);
+		newcr->giveMeAssaultRifle();
 	}
 	printIntroduction();
 	eraseAlt();
@@ -1440,9 +1421,9 @@ void makecharacter()
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1, 0, pressEnterToBeRealName);
 	newcr->new_name_two();
-	addCreature(newcr);
+	newcr->addCreature();
 	make_world(hasmaps);
 	
-	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
+	newcr->initiateNewgameLocations(newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
 	uniqueCreatures.initialize();
 }

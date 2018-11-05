@@ -195,7 +195,6 @@
     <ClCompile Include="..\src\combat\haulkidnap.cpp" />
     <ClCompile Include="..\src\common\commonactions.cpp" />
     <ClCompile Include="..\src\common\commondisplay.cpp" />
-    <ClCompile Include="..\src\common\consolesupport.cpp" />
     <ClCompile Include="..\src\common\getnames.cpp" />
     <ClCompile Include="..\src\common\help.cpp" />
     <ClCompile Include="..\src\common\misc.cpp" />
@@ -267,12 +266,10 @@
     <ClInclude Include="..\src\combat\fight.h" />
     <ClInclude Include="..\src\combat\fightCreature.h" />
     <ClInclude Include="..\src\combat\haulkidnap.h" />
-    <ClInclude Include="..\src\combat\haulkidnapCreature.h" />
     <ClInclude Include="..\src\common\commonactions.h" />
     <ClInclude Include="..\src\common\commonactionsCreature.h" />
     <ClInclude Include="..\src\common\commondisplay.h" />
     <ClInclude Include="..\src\common\commondisplayCreature.h" />
-    <ClInclude Include="..\src\common\commondisplayLog.h" />
     <ClInclude Include="..\src\common\consolesupport.h" />
     <ClInclude Include="..\src\common\creaturePool.h" />
     <ClInclude Include="..\src\common\creaturePoolCreature.h" />
@@ -293,6 +290,8 @@
     <ClInclude Include="..\src\creature\creature.h" />
     <ClInclude Include="..\src\creature\creatureEnums.h" />
     <ClInclude Include="..\src\creature\creaturetype.h" />
+    <ClInclude Include="..\src\creature\deprecatedCreatureC.h" />
+    <ClInclude Include="..\src\creature\deprecatedCreatureD.h" />
     <ClInclude Include="..\src\creature\newcreature.h" />
     <ClInclude Include="..\src\cursesAlternative.h" />
     <ClInclude Include="..\src\cursesAlternativeConstants.h" />
@@ -309,7 +308,6 @@
     <ClInclude Include="..\src\items\lootTypePoolItem.h" />
     <ClInclude Include="..\src\locations\locationsEnums.h" />
     <ClInclude Include="..\src\locations\locationsPool.h" />
-    <ClInclude Include="..\src\news\news.h" />
     <ClInclude Include="..\src\politics\politics.h" />
     <ClInclude Include="..\src\sitemode\advance.h" />
     <ClInclude Include="..\src\sitemode\miscactions.h" />

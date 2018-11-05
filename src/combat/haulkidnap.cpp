@@ -63,14 +63,12 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../sitemode/advance.h"
@@ -84,7 +82,6 @@ const string tag_skill = "skill";
 //// #include "../common/commonactions.h"
 void criminalizeparty(short crime);
 //// #include "../common/commonactionsCreature.h"
-void removesquadinfo(DeprecatedCreature &cr);
 /* roll on the kidnap attempt and show the results */
 #include "set_color_support.h"
 #include "cursesAlternative.h"
@@ -150,32 +147,32 @@ void printAmateurKidnapString(const string aname, const string tname) {
 
 }
 /* roll on the kidnap attempt and show the results */
-bool attemptKidnap(DeprecatedCreature &a, DeprecatedCreature &t, const bool amateur)
+bool DeprecatedCreature::attemptKidnap(DeprecatedCreature &t, const bool amateur)
 {
 	if (amateur)
 	{
 		//BASIC ROLL
-		int aroll = a.skill_roll(SKILL_HANDTOHAND);
+		int aroll = skill_roll(SKILL_HANDTOHAND);
 		int droll = t.attribute_check(ATTRIBUTE_AGILITY, true);
-		a.train(SKILL_HANDTOHAND, droll);
+		train(SKILL_HANDTOHAND, droll);
 		clearmessagearea();
 		//HIT!
 		if (aroll > droll)
 		{
-			printAmateurKidnapString(a.getNameAndAlignment().name, t.getNameAndAlignment().name);
+			printAmateurKidnapString(getNameAndAlignment().name, t.getNameAndAlignment().name);
 
 			return 1;
 		}
 		else
 		{
-			printFailedKidnapString(a.getNameAndAlignment().name, t.getNameAndAlignment().name);
+			printFailedKidnapString(getNameAndAlignment().name, t.getNameAndAlignment().name);
 
 			return 0;
 		}
 	}
 	else
 	{
-		printKidnapString(a.getNameAndAlignment().name, t.getNameAndAlignment().name, a.get_weapon().get_name(2));
+		printKidnapString(getNameAndAlignment().name, t.getNameAndAlignment().name, get_weapon().get_name(2));
 
 		return 1;
 	}
@@ -183,24 +180,23 @@ bool attemptKidnap(DeprecatedCreature &a, DeprecatedCreature &t, const bool amat
 string AND;
 void conservatise(const int cr);
 
-void capturecreature(DeprecatedCreature &t);
 /* hostage freed due to host unable to haul */
-void freehostage(DeprecatedCreature &cr, char situation)
+void DeprecatedCreature::freehostage(char situation)
 {
 	extern short mode;
 	extern Log gamelog;
 	extern DeprecatedCreature encounter[ENCMAX];
-	if (!cr.is_holding_body())return;
-	if (cr.prisoner->getCreatureHealth().alive)
+	if (!is_holding_body())return;
+	if (is_prisoner_alive())
 	{
 		if (situation == 0)
 		{
-			if (cr.prisoner->squadid == -1)addstrAlt(CONST_haulkidnap015, gamelog);
+			if (is_prisoner_non_LCS())addstrAlt(CONST_haulkidnap015, gamelog);
 			else
 			{
 				addstrAlt(AND, gamelog);
-				addstrAlt(cr.prisoner->getNameAndAlignment().name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap016, gamelog);
+				addstrAlt(get_prisoner_name(), gamelog);
+				if (prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap016, gamelog);
 				else addstrAlt(CONST_haulkidnap017, gamelog);
 			}
 			gamelog.newline(); //New line.
@@ -209,11 +205,11 @@ void freehostage(DeprecatedCreature &cr, char situation)
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (cr.prisoner->squadid == -1)mvaddstrAlt(16, 1, CONST_haulkidnap018, gamelog);
+			if (is_prisoner_non_LCS())mvaddstrAlt(16, 1, CONST_haulkidnap018, gamelog);
 			else
 			{
-				mvaddstrAlt(16, 1, cr.prisoner->getNameAndAlignment().name, gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
+				mvaddstrAlt(16, 1, get_prisoner_name(), gamelog);
+				if (prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
 				else addstrAlt(CONST_haulkidnap020, gamelog);
 			}
 			gamelog.newline(); //New line.
@@ -222,35 +218,33 @@ void freehostage(DeprecatedCreature &cr, char situation)
 		{
 			//Don't print anything.
 		}
-		if (cr.prisoner->squadid == -1)
+		if (is_prisoner_non_LCS())
 		{
 			for (int e = 0; e < ENCMAX; e++)
 			{
 				if (encounter[e].getNameAndAlignment().exists == 0)
 				{
-					encounter[e] = *cr.prisoner;
+					encounter[e] = *prisoner;
 					encounter[e].make_existing();
-					conservatise(e);
+					encounter[e].conservatise();
 					break;
 				}
 			}
-			delete cr.prisoner;
+			delete_prisoner();
 		}
-		else capturecreature(*cr.prisoner);
+		else prisoner->capturedByConservatives();
 	}
 	else
 	{
-		if (cr.prisoner->squadid != -1)
+		if (!is_prisoner_non_LCS())
 		{
-			removesquadinfo(*cr.prisoner);
-			cr.prisoner->die();
-			cr.prisoner->location = -1;
+			prisoner_dies();
 		}
 	}
-	cr.discard_body();
+	discard_body();
 	if (situation == 1)
 	{
-		printparty();
+		DeprecatedCreature::printparty();
 		if (mode == GAMEMODE_CHASECAR ||
 			mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 		else printencounter();
@@ -292,8 +286,8 @@ void amateurKidnapping(const int kidnapper, const int t) {
 	criminalizeparty(LAWFLAG_KIDNAPPING);
 	if (activesquad->squad[kidnapper]->is_holding_body())
 	{
-		if (activesquad->squad[kidnapper]->prisoner->type == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
-		if (activesquad->squad[kidnapper]->prisoner->type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
+		if (activesquad->squad[kidnapper]->get_prisoner_type() == CREATURE_RADIOPERSONALITY) offended_amradio = 1;
+		if (activesquad->squad[kidnapper]->get_prisoner_type() == CREATURE_NEWSANCHOR) offended_cablenews = 1;
 	}
 	else
 	{
@@ -306,7 +300,7 @@ extern string spaceDashSpace;
 void enemyattack();
 void delenc(const short e, const char loot);
 /* prompt after you've said you want to kidnap someone */
-void kidnapattempt()
+void DeprecatedCreature::kidnapattempt()
 {
 	extern short party_status;
 
@@ -337,7 +331,7 @@ void kidnapattempt()
 	}
 	do
 	{
-		printparty();
+		DeprecatedCreature::printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 20, chooseALiberalTo + CONST_haulkidnap023);
 		int c = getkeyAlt();
@@ -403,13 +397,12 @@ void kidnapattempt()
 
 		if (
 
-			attemptKidnap(*activesquad->squad[kidnapper], encounter[t], crappy_weapon)
+			activesquad->squad[kidnapper]->attemptKidnap(encounter[t], crappy_weapon)
 			
 			)
 		{
-			activesquad->squad[kidnapper]->prisoner = new DeprecatedCreature;
-			*activesquad->squad[kidnapper]->prisoner = encounter[t];
-			delenc(t, 0);
+			activesquad->squad[kidnapper]->make_new_prisoner(encounter[t]);
+			encounter[t].delenc(0);
 			int time = 20 + LCSrandom(10);
 			if (time < 1) time = 1;
 			if (sitealarmtimer > time || sitealarmtimer == -1) sitealarmtimer = time;
@@ -457,7 +450,7 @@ void releasehostage()
 	char availslot[6] = { 0,0,0,0,0,0 };
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->getCreatureHealth().alive&&activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->prisoner->getCreatureHealth().align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->getCreatureHealth().alive&&activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->get_prisoner_align() != ALIGN_LIBERAL)
 				available++, availslot[p] = 1;
 	if (!available)
 	{
@@ -469,7 +462,7 @@ void releasehostage()
 	}
 	do
 	{
-		printparty();
+		DeprecatedCreature::printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 20, chooseALiberalTo + CONST_haulkidnap029);
 		int c = getkeyAlt();
@@ -478,8 +471,8 @@ void releasehostage()
 			if (availslot[c - '1'])
 				kidnapper = c - '1';
 	} while (kidnapper < 0);
-	activesquad->squad[kidnapper]->prisoner->make_cantbluff_two();
-	freehostage(*(activesquad->squad[kidnapper]), 2);
+	activesquad->squad[kidnapper]->make_prisoner_cantbluff_two();
+	activesquad->squad[kidnapper]->freehostage(2);
 	if (!isThereASiteAlarm())
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -491,7 +484,6 @@ void releasehostage()
 		alienationcheck(1);
 	}
 }
-void makeloot(DeprecatedCreature &cr);
 const string singleDot = ".";
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
@@ -517,11 +509,11 @@ void squadgrab_immobile(char dead)
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(CONST_haulkidnap032, gamelog);
-				addstrAlt(activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+				addstrAlt(activesquad->squad[p]->get_prisoner_name(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline(); //New line.
 				pressAnyKey();
-				freehostage(*activesquad->squad[p]->prisoner, 1);
+				activesquad->squad[p]->drop_prisoner();
 			}
 		}
 	}
@@ -545,7 +537,7 @@ void squadgrab_immobile(char dead)
 						addstrAlt(singleDot, gamelog);
 						gamelog.newline();
 						//DROP LOOT
-						makeloot(*activesquad->squad[p]);
+						activesquad->squad[p]->makeloot();
 						activesquad->squad[p]->die();
 						activesquad->squad[p]->location = -1;
 					}
@@ -556,7 +548,7 @@ void squadgrab_immobile(char dead)
 						mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
 						addstrAlt(CONST_haulkidnap034, gamelog);
 						gamelog.newline(); //New line.
-						capturecreature(*activesquad->squad[p]);
+						activesquad->squad[p]->capturedByConservatives();
 					}
 				}
 				else
@@ -571,7 +563,7 @@ void squadgrab_immobile(char dead)
 								(activesquad->squad[p2]->flag & CREATUREFLAG_WHEELCHAIR)) &&
 								!activesquad->squad[p2]->is_holding_body())
 							{
-								activesquad->squad[p2]->prisoner = activesquad->squad[p];
+								activesquad->squad[p2]->make_prisoner( activesquad->squad[p]);
 								clearmessagearea();
 								set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 								mvaddstrAlt(16, 1, activesquad->squad[p2]->getNameAndAlignment().name, gamelog);
@@ -594,7 +586,7 @@ void squadgrab_immobile(char dead)
 					if (flipstart&&pt < 5) activesquad->squad[pt] = activesquad->squad[pt + 1];
 				}
 				if (flipstart) activesquad->squad[5] = NULL;
-				printparty();
+				DeprecatedCreature::printparty();
 				pressAnyKey();
 			}
 		}

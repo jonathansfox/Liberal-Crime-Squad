@@ -35,7 +35,7 @@ public:
 	virtual bool is_same_type(const Item& i) const { return itemtypename_ == i.itemtypename_; }
 	virtual thisItemIs whatIsThis() const = 0;
 	virtual bool is_cloth() const { return false; }
-	virtual const string& get_name() const = 0;
+	virtual const string get_name() const = 0;
 	const char* aan() const;
 	virtual long get_fencevalue() const = 0;
 	virtual bool is_good_for_sale() const { return true; } //Have one that gives an error message when suitable? -XML
@@ -44,7 +44,7 @@ public:
 	void decrease_number(long decrease) { number_ -= decrease; }
 	long get_number() const { return number_; }
 	bool empty() const { return number_ <= 0; }
-	const string& get_itemtypename() const { return itemtypename_; }
+	const string get_itemtypename() const { return itemtypename_; }
 	long get_itemtypeid() const { return itemtypeid_; }
 	bool no_quick_fencing() const { return false; } // Overridden in loot.h.  Try to never use at all.
 protected:

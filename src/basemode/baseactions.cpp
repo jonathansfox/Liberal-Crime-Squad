@@ -30,24 +30,19 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 //#include "../cursesgraphics.h"
 
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 //#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
 #include "../common/commondisplay.h"
-// for void printparty(void)
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
@@ -98,7 +93,7 @@ extern string spaceDashSpace;
 	 if (partysize <= 1) return;
 	 while (true)
 	 {
-		 printparty();
+		 DeprecatedCreature::printparty();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(8, 26, CONST_baseactions007);
 		 int oldPos = getkeyAlt();
@@ -161,8 +156,6 @@ extern string spaceDashSpace;
  void setvehicles()
  {
 	 extern Deprecatedsquadst *activesquad;
-	 extern short interface_pgup;
-	 extern short interface_pgdn;
 	 if (!activesquad) return;
 	 int page = 0;
 	 while (true)
@@ -170,7 +163,7 @@ extern string spaceDashSpace;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_baseactions010);
-		 printparty();
+		 DeprecatedCreature::printparty();
 		 printCars(page);
 		 set_color_easy(WHITE_ON_BLACK);
 		 //PAGE UP
@@ -276,9 +269,9 @@ extern string spaceDashSpace;
 		 }
 		 //SAV - End add
 		 //PAGE UP
-		 if ((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0) page--;
+		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
-		 if ((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page + 1) * 18 < lenVehiclePool()) page++;
+		 if (is_page_down(c) && (page + 1) * 18 < lenVehiclePool()) page++;
 		 if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	 }
  }

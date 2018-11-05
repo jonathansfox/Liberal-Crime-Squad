@@ -46,3 +46,6 @@ int checkkeyAlt();
 void echoAlt();
 
 int getkeyAlt();
+
+bool is_page_up(const int c);
+bool is_page_down(const int c);

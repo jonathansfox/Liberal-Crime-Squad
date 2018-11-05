@@ -112,9 +112,9 @@ int randomissue(bool core_only = 0);
 // for  void makedelimiter(int y=8,int x=0);
 //#include "../monthly/EndGameStatus.h"
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
-void tossjustices(char canseethings);
+void tossjustices(const char canseethings);
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
-void amendment_termlimits(char canseethings);
+void amendment_termlimits(const char canseethings);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include <common\\getnames.h>
@@ -197,7 +197,7 @@ vector<string> corporateSuffix;
  };
  /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
  * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
- bool stalinview(short view, bool islaw)
+ bool stalinview(const short view, const bool islaw)
  {
 	 if (islaw)
 	 {
@@ -282,8 +282,10 @@ vector<string> corporateSuffix;
 	 }
  }
  /* common - shifts public opinion on an issue */
- void change_public_opinion(int v, int power, char affect, char cap)
+ void change_public_opinion(const int v, const int power, const char _affect, const char _cap)
  {
+	 char affect = _affect;
+	 char cap = _cap;
 	 extern short attitude[VIEWNUM];
 	 extern short public_interest[VIEWNUM];
 	 extern short background_liberal_influence[VIEWNUM];
@@ -382,7 +384,7 @@ vector<string> corporateSuffix;
 
 
  /* politics -- gets the leaning of an issue voter for an election */
- int getswingvoter(bool stalin)
+ int getswingvoter(const bool stalin)
  {
 	 extern short attitude[VIEWNUM];
 	 // Take a random voter, calculate how liberal or conservative they are
@@ -430,7 +432,7 @@ vector<string> corporateSuffix;
 	 return approval;
  }
  /* politics -- gets the leaning of a partyline voter for an election */
- int getsimplevoter(int leaning)
+ int getsimplevoter(const int leaning)
  {
 	 extern short attitude[VIEWNUM];
 	 // no need for this to deal with Stalinism, this function deliberately only deals with the liberal vs. conservative spectrum
@@ -440,7 +442,7 @@ vector<string> corporateSuffix;
  }
 
  /* politics -- appoints a figure to an executive office, based on the President's alignment */
- void fillCabinetPost(int position)
+ void fillCabinetPost(const int position)
  {
 	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	 extern short exec[EXECNUM];
@@ -570,7 +572,7 @@ vector<string> corporateSuffix;
 	 mvaddstrAlt(y, x, CONST_politics004);
 	 mvaddstrAlt(y, x, getalign(senate[s], false));
  }
- void elections_senate(int senmod, char canseethings)
+ void elections_senate(const int senmod, const char canseethings)
  {
 	 extern MusicClass music;
 	 extern bool termlimits;
@@ -1090,7 +1092,7 @@ vector<string> corporateSuffix;
 	 addstrAlt(year);
  }
  /* politics - causes the people to vote (presidential, congressional, propositions) */
- void elections(char clearformess, char canseethings)
+ void elections(const char canseethings)
  {
 	 extern MusicClass music;
 
@@ -1101,8 +1103,7 @@ vector<string> corporateSuffix;
 	 if (canseethings)
 	 {
 		 music.play(MUSIC_ELECTIONS);
-		 if (clearformess) eraseAlt();
-		 else makedelimiter();
+		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(8, 1, CONST_politics049);
 		 pressAnyKey();
@@ -1232,7 +1233,7 @@ vector<string> corporateSuffix;
 	 }
  }
  /* politics - causes the supreme court to hand down decisions */
- void supremecourt(char clearformess, char canseethings)
+ void supremecourt(const char canseethings)
  {
 	 extern MusicClass music;
 	 extern short exec[EXECNUM];
@@ -1243,8 +1244,7 @@ vector<string> corporateSuffix;
 	 if (canseethings)
 	 {
 		 music.play(MUSIC_ELECTIONS);
-		 if (clearformess) eraseAlt();
-		 else makedelimiter();
+		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(8, 1, CONST_politics073);
 		 pressAnyKey();
@@ -1434,7 +1434,7 @@ vector<string> corporateSuffix;
  };
  //Some politicians listen to public opinion, but no politician will radically deviate from their alignment.
  //More extreme politicians are less likely to deviate from their views. Moderates always consult public opinion.
- char determine_politician_vote(char alignment, int law)
+ char determine_politician_vote(const char alignment, const int law)
  {
 	 char vote = alignment;
 	 int mood = publicmood(law);
@@ -1748,9 +1748,9 @@ vector<int> getSenateMake() {
 	 for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
 	 return senatemake;
  }
- void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
+ void attemptAmendmentEnding(const char canseethings, Alignment enforcedAlignment);
  /* politics - causes congress to act on legislation */
- void congress(char clearformess, char canseethings)
+ void congress(const char canseethings)
  {
 	 extern bool notermlimit;           //These determine if ELAs can take place --kviiri
 	 extern bool nocourtpurge;
@@ -1760,7 +1760,7 @@ vector<int> getSenateMake() {
 	 extern short court[COURTNUM];
 	 if (canseethings)
 	 {
-		 displayCongressHeader(clearformess);
+		 displayCongressHeader(true);
 	 }
 	 vector<int> bill, billdir;
 	 vector<BillStatus> killbill;

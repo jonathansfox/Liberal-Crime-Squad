@@ -99,7 +99,7 @@ const string CONST_sitemode081 = "Try the door anyway? (Yes or No)";
 const string CONST_sitemode080 = "EMERGENCY EXIT ONLY. ALARM WILL SOUND.";
 const string CONST_sitemode079 = "This door appears to be wired up to an alarm.";
 const string CONST_sitemode078 = "The vault door is impenetrable.";
-const string CONST_sitemode077 = "too hot";
+
 const string CONST_sitemode076 = "Your hostage is free.";
 const string CONST_sitemode075 = "Your hostages are free.";
 const string CONST_sitemode074 = "The police subdue and arrest the squad.";
@@ -203,15 +203,15 @@ This file is part of Liberal Crime Squad.                                       
 */
 string singleSpace = " ";
 const string blankString = "";
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
 
 #include "../creature/deprecatedCreatureC.h"
 
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -224,8 +224,6 @@ const string blankString = "";
 #define CH_BOX_DRAWINGS_DOUBLE_VERTICAL 0xba
 #define CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL 0xcd
 #define CH_WHITE_SMILING_FACE 0x01
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../basemode/baseactions.h"
 // for orderparty
 #include "../basemode/reviewmode.h"
@@ -278,7 +276,6 @@ char addsiegeencounter(char type);
 // for  id_getcar
 //#include "common/equipment.h"
 /* review squad equipment */
-void equip(vector<Item *> &loot, int loc);
 //#include "daily/daily.h"
 /* daily - returns true if the site type supports high security */
 char securityable(int type);
@@ -288,7 +285,6 @@ char securityable(int type);
 #include "../combat/fightCreature.h"  
 //for void enemyattack();
 #include "../combat/haulkidnap.h"
-#include "../combat/haulkidnapCreature.h"
 //for void kidnapattempt();
 #include "../combat/chase.h"
 //for void makechasers(long sitetype,long sitecrime);
@@ -335,7 +331,7 @@ void fight_subdued()
 	int hostages = 0;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
-			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
+			if (activesquad->squad[p]->is_holding_body() &&activesquad->squad[p]->get_prisoner_align() != ALIGN_LIBERAL)
 				hostages++;
 	int stolen = 0;
 	// Police assess stolen goods in inventory
@@ -346,9 +342,9 @@ void fight_subdued()
 	{
 		if (!activesquad->squad[p]) continue;
 		for (int i = 0; i < stolen; i++) {
-			activesquad->squad[p]->criminalize_me(LAWFLAG_THEFT);
+			activesquad->squad[p]->criminalize_without_heat(LAWFLAG_THEFT);
 		}
-		capturecreature(*(activesquad->squad[p]));
+		activesquad->squad[p]->capturedByConservatives();
 		activesquad->squad[p] = NULL;
 	}
 	CreaturePool::getInstance().stopAllBleeding();
@@ -369,32 +365,41 @@ void fight_subdued()
 	gamelog.newline();
 	pressAnyKey();
 }
+void knowblock(const int locx, const int locy, const int locz) {
 
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	if (locx < MAPX - 1 && locy < MAPY - 1 && locx > 0 && locy > 0)
+	{
+		levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
+	}
+
+}
+bool is_blocked(const int locx, const int locy, const int locz) {
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	if (locx < MAPX - 1 && locy < MAPY - 1 && locx > 0 && locy > 0) {
+		return levelmap[locx][locy][locz].flag & SITEBLOCK_BLOCK;
+	}
+	else {
+		return true;
+	}
+}
 /* marks the area around the specified tile as explored */
 void knowmap(const int locx, const int locy, const int locz)
 {
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0)levelmap[locx - 1][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1)levelmap[locx + 1][locy][locz].flag |= SITEBLOCK_KNOWN;
-	if (locy > 0)levelmap[locx][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locy < MAPY - 1)levelmap[locx][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0 && locy > 0)
-		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx - 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1 && locy>0)
-		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy - 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx + 1][locy - 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx > 0 && locy < MAPY - 1)
-		if (!(levelmap[locx - 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx - 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
-	if (locx < MAPX - 1 && locy < MAPY - 1)
-		if (!(levelmap[locx + 1][locy][locz].flag & SITEBLOCK_BLOCK) ||
-			!(levelmap[locx][locy + 1][locz].flag & SITEBLOCK_BLOCK))
-			levelmap[locx + 1][locy + 1][locz].flag |= SITEBLOCK_KNOWN;
+	knowblock(locx, locy, locz);
+	knowblock(locx + 1, locy, locz);
+	knowblock(locx, locy + 1, locz);
+	knowblock(locx - 1, locy, locz);
+	knowblock(locx, locy - 1, locz);
+
+	for (int i = -1; i < 2; i += 2) {
+		for (int j = -1; j < 2; j += 2) {
+			if (!is_blocked(locx + i, locy, locz) ||
+				!is_blocked(locx, locy + j, locz)) {
+				knowblock(locx + i, locy + j, locz);
+			}
+		}
+	}
 }
 
 void knowmap() {
@@ -402,7 +407,7 @@ void knowmap() {
 	knowmap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 }
 short getCurrentSite();
-/* site - determines spin on site news story, CONST_sitemode077 timer */
+/* site - determines spin on site news story, too hot timer */
 void resolvesite()
 {
 	extern Deprecatedsquadst *activesquad;
@@ -512,9 +517,9 @@ void open_door(bool restricted)
 			clearmessagearea(false);
 			if (c == 'y')
 			{
-				char actual; // 1 if an actual attempt was made, 0 otherwise
+				UnlockAttempt actual = unlock(UNLOCK_DOOR); // 1 if an actual attempt was made, 0 otherwise
 							 // If the unlock was successful
-				if (unlock(UNLOCK_DOOR, actual))
+				if (actual == UNLOCKED)
 				{
 					// Unlock the door
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~(SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
@@ -523,7 +528,7 @@ void open_door(bool restricted)
 					//criminalizeparty(LAWFLAG_BREAKING);
 				}
 				// Else perma-lock it if an attempt was made
-				else if (actual)
+				else if (actual == LOUD_FAILURE)
 				{
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_CLOCK;
 					if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_ALARMED)
@@ -536,7 +541,7 @@ void open_door(bool restricted)
 					}
 				}
 				// Check for people noticing you fiddling with the lock
-				if (actual)
+				if (actual != NEVERMIND)
 				{
 					alienationcheck(0);
 					noticecheck(-1);
@@ -548,7 +553,8 @@ void open_door(bool restricted)
 	}
 	else if (locked || (!restricted && alarmed))
 	{
-		while (true)
+		int c;
+		do
 		{
 			clearmessagearea(false);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -561,11 +567,11 @@ void open_door(bool restricted)
 			else mvaddstrAlt(16, 1, CONST_sitemode088, gamelog);
 			gamelog.newline();
 			mvaddstrAlt(17, 1, CONST_sitemode089);
-			int c = getkeyAlt();
+			c = getkeyAlt();
 			if (c == 'y')
 			{
-				char actual;
-				if (bash(BASH_DOOR, actual))
+				UnlockAttempt actualy = DeprecatedCreature::bash();
+				if (actualy == UNLOCKED)
 				{
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
 					int time = 0;
@@ -583,15 +589,10 @@ void open_door(bool restricted)
 					sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
 					criminalizeparty(LAWFLAG_BREAKING);
 				}
-				if (actual)
-				{
-					alienationcheck(1);
-					noticecheck(-1, DIFFICULTY_HEROIC);
-				}
-				break;
+				alienationcheck(1);
+				noticecheck(-1, DIFFICULTY_HEROIC);
 			}
-			else if (c == 'n')break;
-		}
+		} while (c != 'y' && c != 'n');
 	}
 	else
 	{
@@ -635,7 +636,7 @@ void pressedKeyN() {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(0, 0, CONST_sitemode093);
-	printparty();
+	DeprecatedCreature::printparty();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 1, CONST_sitemode094);
 	mvaddstrAlt(11, 1, CONST_sitemode095);
@@ -658,13 +659,13 @@ void pressedKeyN() {
 	mapshowing = true;
 
 }
-void pressedKeyU(const int enemy) {
+void  DeprecatedCreature::pressedKeyU(const int enemy) {
 	extern Deprecatedsquadst *activesquad;
 
 	extern coordinatest loc_coord;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	{
-		if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
+		if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != SPECIAL_NONE)
 		{
 			switch (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special)
 			{
@@ -736,7 +737,7 @@ void pressedKeyU(const int enemy) {
 void pressedKeyL() {
 
 	reloadparty(true);
-	printparty();
+	DeprecatedCreature::printparty();
 	refreshAlt();
 	creatureadvance();
 
@@ -1075,7 +1076,7 @@ void pressedKeyF(int& encounter_timer) {
 		fight_subdued();
 	else
 	{
-		youattack();
+		DeprecatedCreature::youattack();
 		enemyattack();
 		creatureadvance();
 		encounter_timer++;
@@ -1658,7 +1659,7 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 			sitecrime++;
 			sitestory->crime.push_back(CRIME_STOLEGROUND);
 			if (enemy)
-				criminalize(*(activesquad->squad[0]), LAWFLAG_THEFT);
+				activesquad->squad[0]->criminalize(LAWFLAG_THEFT);
 		}
 		creatureadvance();
 		encounter_timer++;
@@ -1763,21 +1764,7 @@ void bailUponVictory() {
 		if (activesquad->squad[p] == NULL)continue;
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid != -1)
-			{
-				//RESTORE POOL MEMBER
-				activesquad->squad[p]->prisoner->squadid = -1;
-				//MUST LOCATE THE MEMBER
-				activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-				activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-			}
-			else
-			{
-				//CONVERT KIDNAP VICTIM
-				kidnaptransfer(*activesquad->squad[p]->prisoner);
-				delete activesquad->squad[p]->prisoner;
-			}
-			activesquad->squad[p]->discard_body();
+			activesquad->squad[p]->deal_with_prisoner();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -1856,7 +1843,7 @@ void bailOnBase() {
 		}
 	}
 	bool gotout;
-	if (havecar)gotout = chasesequence();
+	if (havecar)gotout = DeprecatedCreature::chasesequence();
 	else gotout = footchase();
 	//If you survived
 	if (gotout)
@@ -1867,22 +1854,8 @@ void bailOnBase() {
 			if (activesquad->squad[p] == NULL)continue;
 			if (activesquad->squad[p]->is_holding_body())
 			{
-				//If this is an LCS member or corpse being hauled (marked as in the squad)
-				if (activesquad->squad[p]->prisoner->squadid != -1)
-				{
-					//Take them out of the squad
-					activesquad->squad[p]->prisoner->squadid = -1;
-					//Set base and current location to squad's safehouse
-					activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-					activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-				}
-				else //A kidnapped conservative
-				{
-					//Convert them into a prisoner
-					kidnaptransfer(*activesquad->squad[p]->prisoner);
-					delete activesquad->squad[p]->prisoner;
-				}
-				activesquad->squad[p]->discard_body();
+
+				activesquad->squad[p]->deal_with_prisoner();
 			}
 		}
 		//Clear all bleeding and prison escape flags
@@ -1930,21 +1903,7 @@ void bailUponDefeatCCS() {
 		if (activesquad->squad[p] == NULL)continue;
 		if (activesquad->squad[p]->is_holding_body())
 		{
-			if (activesquad->squad[p]->prisoner->squadid != -1)
-			{
-				//RESTORE POOL MEMBER
-				activesquad->squad[p]->prisoner->squadid = -1;
-				//MUST LOCATE THE MEMBER
-				activesquad->squad[p]->prisoner->location = activesquad->squad[p]->base;
-				activesquad->squad[p]->prisoner->base = activesquad->squad[p]->base;
-			}
-			else
-			{
-				//CONVERT KIDNAP VICTIM
-				kidnaptransfer(*activesquad->squad[p]->prisoner);
-				delete activesquad->squad[p]->prisoner;
-			}
-			activesquad->squad[p]->discard_body();
+			activesquad->squad[p]->deal_with_prisoner();
 		}
 	}
 	//Clear all bleeding and prison escape flags
@@ -2128,12 +2087,13 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 	}
 	return 0;
 }
+void empty_current_special();
 void encounterCafeComputer() {
 	extern Log gamelog;
-	extern coordinatest loc_coord;
+	//extern coordinatest loc_coord;
 	extern short sitetype;
 	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() || sitealienate)
 	{
@@ -2141,7 +2101,7 @@ void encounterCafeComputer() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode120, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 	}
 	else
@@ -2150,7 +2110,7 @@ void encounterCafeComputer() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode121, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 		prepareencounter(sitetype, 0);
 		emptyEncounter();
@@ -2158,10 +2118,10 @@ void encounterCafeComputer() {
 }
 void encounterRestaurantTable() {
 	extern Log gamelog;
-	extern coordinatest loc_coord;
+	//extern coordinatest loc_coord;
 	extern short sitetype;
 	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() || sitealienate)
 	{
@@ -2169,7 +2129,7 @@ void encounterRestaurantTable() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode122, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 		prepareencounter(sitetype, 0);
 	}
@@ -2179,17 +2139,17 @@ void encounterRestaurantTable() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode123, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 		prepareencounter(sitetype, 0);
 	}
 }
 void encounterParkBench() {
 	extern Log gamelog;
-	extern coordinatest loc_coord;
+	//extern coordinatest loc_coord;
 	extern short sitetype;
 	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() || sitealienate)
 	{
@@ -2197,7 +2157,7 @@ void encounterParkBench() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode124, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 	}
 	else
@@ -2206,7 +2166,7 @@ void encounterParkBench() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode125, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 		prepareencounter(sitetype, 0);
 	}
@@ -2214,9 +2174,9 @@ void encounterParkBench() {
 void spawnCreatureCEO();
 void encounterSpecialHouseCEO() {
 	extern Log gamelog;
-	extern coordinatest loc_coord;
+	//extern coordinatest loc_coord;
 	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern UniqueCreatures uniqueCreatures;
 
 	extern short lawList[LAWNUM];
@@ -2232,7 +2192,7 @@ void encounterSpecialHouseCEO() {
 			mvaddstrAlt(16, 1, CONST_sitemode127, gamelog);
 		addstrAlt(CONST_sitemode128, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 	}
 	else
@@ -2244,7 +2204,7 @@ void encounterSpecialHouseCEO() {
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, CONST_sitemode129, gamelog);
 			gamelog.newline();
-			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+			empty_current_special();
 			pressAnyKey();
 			emptyEncounter();
 			spawnCreatureCEO();
@@ -2255,7 +2215,7 @@ void encounterSpecialHouseCEO() {
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, CONST_sitemode130, gamelog);
 			gamelog.newline();
-			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+			empty_current_special();
 			pressAnyKey();
 			break;
 		}
@@ -2263,9 +2223,9 @@ void encounterSpecialHouseCEO() {
 }
 void encounterApartmentLandlord() {
 	extern Log gamelog;
-	extern coordinatest loc_coord;
+	//extern coordinatest loc_coord;
 	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	if (isThereASiteAlarm() || sitealienate ||
@@ -2275,7 +2235,7 @@ void encounterApartmentLandlord() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode131, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 	}
 	else
@@ -2284,7 +2244,7 @@ void encounterApartmentLandlord() {
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_sitemode132, gamelog);
 		gamelog.newline();
-		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+		empty_current_special();
 		pressAnyKey();
 		emptyEncounter();
 		makecreature(0, CREATURE_LANDLORD);
@@ -2404,7 +2364,7 @@ void encounterSpecial(const int makespecial, const int olocx, const int olocy, c
 void pressedKeyShiftL() {
 
 	reloadparty();
-	printparty();
+	DeprecatedCreature::printparty();
 	refreshAlt();
 	creatureadvance();
 
@@ -2502,7 +2462,7 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 
 	return 0;
 }
-void partyIsAliveOnSite(const int enemy,
+void DeprecatedCreature::partyIsAliveOnSite(const int enemy,
 	const int talkers,
 	const int freeable) {
 
@@ -2550,7 +2510,7 @@ void partyIsAliveOnSite(const int enemy,
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(14, 17, CONST_sitemode166);
 	bool graffiti = 0;
-	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1 &&
+	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != SPECIAL_NONE &&
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color_easy(WHITE_ON_BLACK);
 	else if (!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & (SITEBLOCK_GRAFFITI | SITEBLOCK_BLOODY2)))
 	{
@@ -2734,7 +2694,7 @@ void partyPerformsAction(const int c, const bool canMove, const int enemy, const
 		if (canMove && !(levelmap[loc_coord.locx][loc_coord.locy + 1][loc_coord.locz].flag & SITEBLOCK_BLOCK))loc_coord.locy++;
 		break;
 	case 'u':
-		pressedKeyU(enemy);
+		DeprecatedCreature::pressedKeyU(enemy);
 		break;
 	case '1':
 	case '2':
@@ -2749,11 +2709,11 @@ void partyPerformsAction(const int c, const bool canMove, const int enemy, const
 		}
 		break;
 	case 'k':
-		if (enemy) { kidnapattempt(); }
+		if (enemy) { DeprecatedCreature::kidnapattempt(); }
 		break;
 	case 'e':
 		mapshowing = false;
-		equip(activesquad->loot, -1);
+		DeprecatedCreature::equip(activesquad->loot, -1);
 		if (enemy&&isThereASiteAlarm())enemyattack();
 		else if (enemy)disguisecheck(encounter_timer);
 		creatureadvance();
@@ -2853,7 +2813,7 @@ bool canactivesquadmove(int& c, const int enemy) {
 	}
 	return canMove;
 }
-void checkForHostageScream(char &hostcheck) {
+void DeprecatedCreature::checkForHostageScream(char &hostcheck) {
 
 	extern Deprecatedsquadst *activesquad;
 	extern int sitecrime;
@@ -2878,10 +2838,10 @@ void checkForHostageScream(char &hostcheck) {
 					!activesquad->squad[p]->get_weapon().get_specific_bool(BOOL_CAN_THREATEN_HOSTAGES_))
 				{
 					//And that someone is not an LCS member
-					if (activesquad->squad[p]->prisoner->squadid == -1)
+					if (activesquad->squad[p]->is_prisoner_non_LCS())
 					{
 						//They scream for help -- flag them kidnapped, cause alarm
-						activesquad->squad[p]->prisoner->flag |= CREATUREFLAG_KIDNAPPED;
+						activesquad->squad[p]->mark_prisoner_as_kidnapped();
 						if (activesquad->squad[p]->type == CREATURE_RADIOPERSONALITY)offended_amradio = 1;
 						if (activesquad->squad[p]->type == CREATURE_NEWSANCHOR)offended_cablenews = 1;
 						havehostage = 1;
@@ -2967,11 +2927,11 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 	}
 	//PRINT PARTY
 	if (activesquadAlive() == 0)party_status = -1;
-	printparty();
+	DeprecatedCreature::printparty();
 	//PRINT SITE INSTRUCTIONS
 	if (activesquadAlive() > 0)
 	{
-		partyIsAliveOnSite(enemy,
+		DeprecatedCreature::partyIsAliveOnSite(enemy,
 			talkers,
 			freeable);
 	}
@@ -2990,7 +2950,7 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 			return true;
 		}
 	}
-	checkForHostageScream(hostcheck);
+	DeprecatedCreature::checkForHostageScream(hostcheck);
 	// check if we fought the previous loop; if so, add a blank gamelog line
 	addNewLineIfFoughtThisRound();
 
@@ -3000,7 +2960,7 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 	{
 		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_PERMANENT)
 		{
-			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_NONE;
+			empty_current_special();
 			c = getkeyAlt();
 		}
 		else {
@@ -3166,7 +3126,7 @@ void mode_site(const short loc)
 			for (int x = 0; x < MAPX; x++)
 				for (int y = 0; y < MAPY; y++)
 					for (int z = 0; z < MAPZ; z++)
-						levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
+						knowblock(x, y, z);
 		}
 	}
 	else

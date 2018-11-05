@@ -91,14 +91,12 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
+#include "vehicle/vehicleType.h"///
+#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locationsEnums.h"
@@ -106,7 +104,6 @@ const string tag_skill = "skill";
 void clearmessagearea(bool redrawmaparea = true);
 #include "../log/log.h"
 //#include "../common/commondisplay.h"
-void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 // for void criminalizeparty
@@ -147,7 +144,8 @@ map<int, CheckDifficulty> unlockDifficulty = {
 	map<int, CheckDifficulty>::value_type(UNLOCK_VAULT,       DIFFICULTY_HEROIC),
 };
 short getCurrentSite();
-char unlock(short type, char &actual)
+#include "miscactions.h"
+UnlockAttempt unlock(short type)
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
@@ -251,8 +249,7 @@ char unlock(short type, char &actual)
 				}
 			}
 			pressAnyKey();
-			actual = 1;
-			return 1;
+			return UNLOCKED;
 		}
 		else
 		{
@@ -286,8 +283,7 @@ char unlock(short type, char &actual)
 				gamelog.newline();
 			}
 			pressAnyKey();
-			actual = 1;
-			return 0;
+			return LOUD_FAILURE;
 		}
 	}
 	else
@@ -298,13 +294,12 @@ char unlock(short type, char &actual)
 		gamelog.newline();
 		pressAnyKey();
 	}
-	actual = 0;
-	return 0;
+	return NEVERMIND;
 }
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 /* bash attempt */
-char bash(short type, char &actual)
+UnlockAttempt DeprecatedCreature::bash()
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
@@ -312,9 +307,7 @@ char bash(short type, char &actual)
 
 	int difficulty = 0;
 	bool crowable = false;
-	switch (type)
-	{
-	case BASH_DOOR:
+	
 		if (!securityable(LocationsPool::getInstance().getLocationType(getCurrentSite())))
 		{
 			difficulty = DIFFICULTY_EASY; // Run down dump
@@ -331,8 +324,7 @@ char bash(short type, char &actual)
 			difficulty = DIFFICULTY_FORMIDABLE; // Very high security
 			crowable = false;
 		}
-		break;
-	}
+	
 	if (crowable)
 	{
 		//if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))
@@ -388,17 +380,14 @@ char bash(short type, char &actual)
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
 		addstrAlt(singleSpace, gamelog);
-		switch (type)
-		{
-		case BASH_DOOR:
+		
 			if (crowable) addstrAlt(CONST_miscactions015, gamelog);
 			else if (activesquad->squad[maxp]->get_weapon().get_bashstrengthmod() > 1)
 				addstrAlt(CONST_miscactions016, gamelog);
 			else if (activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
 				addstrAlt(CONST_miscactions017, gamelog);
 			else addstrAlt(CONST_miscactions018, gamelog);
-			break;
-		}
+		
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
 		pressAnyKey();
@@ -418,34 +407,29 @@ char bash(short type, char &actual)
 			gamelog.newline();
 			pressAnyKey();
 		}
-		actual = 1;
-		return 1;
+		return UNLOCKED;
 	}
 	else
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
-		switch (type)
-		{
-		case BASH_DOOR:
+		
 			if (activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
 				addstrAlt(CONST_miscactions021, gamelog);
 			else addstrAlt(CONST_miscactions022, gamelog);
-			break;
-		}
+		
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		if (sitealarmtimer < 0) sitealarmtimer = 25;
 		else if (sitealarmtimer > 10) sitealarmtimer -= 10;
 		else sitealarmtimer = 0;
-		actual = 1;
-		return 0;
+		return LOUD_FAILURE;
 	}
 }
 /* computer hack attempt */
-char hack(short type, char &actual)
+UnlockAttempt hack(short type)
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
@@ -495,8 +479,7 @@ char hack(short type, char &actual)
 			addstrAlt(CONST_miscactions028, gamelog);
 			gamelog.newline();
 			pressAnyKey();
-			actual = 1;
-			return 1;
+			return UNLOCKED;
 		}
 		else
 		{
@@ -512,8 +495,7 @@ char hack(short type, char &actual)
 			}
 			gamelog.newline();
 			pressAnyKey();
-			actual = 1;
-			return 0;
+			return LOUD_FAILURE;
 		}
 	}
 	else
@@ -530,8 +512,7 @@ char hack(short type, char &actual)
 		}
 		pressAnyKey();
 	}
-	actual = 0;
-	return 0;
+	return NEVERMIND;
 }
 vector<NameAndAlignment> getEncounterNameAndAlignment();
 /* run a broadcast */
@@ -645,14 +626,14 @@ char run_broadcast(bool tv_broadcase)
 	{
 		if (activesquad->squad[p] != NULL)
 		{
-			if (activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->prisoner->getNameAndAlignment().alive)
+			if (activesquad->squad[p]->is_holding_body() && activesquad->squad[p]->is_prisoner_alive())
 			{
-				if (((activesquad->squad[p]->prisoner->type == CREATURE_NEWSANCHOR) && tv_broadcase) || ((activesquad->squad[p]->prisoner->type == CREATURE_RADIOPERSONALITY) && !tv_broadcase))
+				if (((activesquad->squad[p]->get_prisoner_type() == CREATURE_NEWSANCHOR) && tv_broadcase) || ((activesquad->squad[p]->get_prisoner_type() == CREATURE_RADIOPERSONALITY) && !tv_broadcase))
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, CONST_miscactions055, gamelog);
-					addstrAlt(activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+					addstrAlt(activesquad->squad[p]->get_prisoner_name(), gamelog);
 					addstrAlt(CONST_miscactions056, gamelog);
 					viewhit = LCSrandom(VIEWNUM);
 					if (discussIssues.count(viewhit)) {
@@ -663,10 +644,7 @@ char run_broadcast(bool tv_broadcase)
 					}
 					gamelog.newline();
 					int usegmentpower = 10; //FAME BONUS
-					usegmentpower += activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_INTELLIGENCE, true);
-					usegmentpower += activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_HEART, true);
-					usegmentpower += activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_CHARISMA, true);
-					usegmentpower += activesquad->squad[p]->prisoner->get_skill(SKILL_PERSUASION);
+					usegmentpower += activesquad->squad[p]->prisoner_usegment_power();
 					if (tv_broadcase) {
 						if (viewhit != VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit, (usegmentpower - 10) / 2);
 						else change_public_opinion(viewhit, usegmentpower / 2, 1);
@@ -682,7 +660,7 @@ char run_broadcast(bool tv_broadcase)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, activesquad->squad[p]->prisoner->getNameAndAlignment().name, gamelog);
+					mvaddstrAlt(16, 1, activesquad->squad[p]->get_prisoner_name(), gamelog);
 					addstrAlt(CONST_miscactions057, gamelog);
 					gamelog.newline();
 					pressAnyKey();
@@ -769,7 +747,7 @@ void partyrescue(short special)
 				{
 					activesquad->squad[p] = waiting_for_rescue[pl];
 					activesquad->squad[p]->squadid = activesquad->id;
-					criminalize(*activesquad->squad[p], LAWFLAG_ESCAPED);
+					activesquad->squad[p]->criminalize(LAWFLAG_ESCAPED);
 					activesquad->squad[p]->flag |= CREATUREFLAG_JUSTESCAPED;
 					break;
 				}
@@ -782,7 +760,7 @@ void partyrescue(short special)
 			addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_miscactions071, gamelog);
 			gamelog.newline();
-			printparty();
+			DeprecatedCreature::printparty();
 			pressAnyKey();
 			waiting_for_rescue[pl]->location = -1;
 			waiting_for_rescue[pl]->base = activesquad->squad[0]->base;
@@ -800,9 +778,9 @@ void partyrescue(short special)
 				{
 					if (activesquad->squad[p]->getNameAndAlignment().alive&&!activesquad->squad[p]->is_holding_body())
 					{
-						activesquad->squad[p]->prisoner = waiting_for_rescue[pl];
+						activesquad->squad[p]->make_prisoner(waiting_for_rescue[pl]);
 						waiting_for_rescue[pl]->squadid = activesquad->id;
-						criminalize(*waiting_for_rescue[pl], LAWFLAG_ESCAPED);
+						waiting_for_rescue[pl]->criminalize(LAWFLAG_ESCAPED);
 						waiting_for_rescue[pl]->flag |= CREATUREFLAG_JUSTESCAPED;
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -821,7 +799,7 @@ void partyrescue(short special)
 						gamelog.newline();
 						waiting_for_rescue[pl]->location = -1;
 						waiting_for_rescue[pl]->base = activesquad->squad[p]->base;
-						printparty();
+						DeprecatedCreature::printparty();
 						pressAnyKey();
 						waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
 						--pl;
