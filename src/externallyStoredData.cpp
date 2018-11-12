@@ -1092,13 +1092,11 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
-string PACKAGE_VERSION_STR = "4.12.29";
-int version = 41229;
+string PACKAGE_VERSION_STR = "4.12.30";
+int version = 41230;
 int lowestloadversion = 40100;
 int lowestloadscoreversion = 31203;
 
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"

@@ -182,14 +182,15 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
 #include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -203,6 +204,7 @@ const string tag_skill = "skill";
 #include "../log/log.h"
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
+// for void addjuice(DeprecatedCreature &cr, long juice, long cap);
 #include "../common/translateid.h"
 // for  int getloottype(int id);
 //#include "../combat/fight.h"
@@ -232,7 +234,11 @@ vector<NameAndAlignment> getEncounterNameAndAlignment();
 void claimSiteStoryOne();
 void juiceActiveSquad(const long juice, const long cap);
 void giveActiveSquadThisLoot(Item* de);
-char DeprecatedCreature::checkActiveSquadForRejection(const char autoadmit, const bool metaldetect) {
+/* checks if a creature's weapon is suspicious or illegal */
+char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
+/* checks if a creature's uniform is appropriate to the location */
+char hasdisguise(const DeprecatedCreature &cr);
+char checkActiveSquadForRejection(const char autoadmit, const bool metaldetect) {
 	extern Deprecatedsquadst *activesquad;
 	extern short sitetype;
 	char rejected = NOT_REJECTED;
@@ -244,7 +250,7 @@ char DeprecatedCreature::checkActiveSquadForRejection(const char autoadmit, cons
 			// Wrong clothes? Gone
 			if (activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss != ANIMALGLOSS_ANIMAL)
 				if (rejected > REJECTED_NUDE)rejected = REJECTED_NUDE;
-			if (autoadmit < 1 && !activesquad->squad[s]->hasdisguise())
+			if (autoadmit < 1 && !hasdisguise(*activesquad->squad[s]))
 				if (rejected > REJECTED_DRESSCODE)rejected = REJECTED_DRESSCODE;
 			// Busted, cheap, bloody clothes? Gone
 			if (autoadmit < 2 && activesquad->squad[s]->get_armor().is_bloody())
@@ -254,7 +260,7 @@ char DeprecatedCreature::checkActiveSquadForRejection(const char autoadmit, cons
 			if (autoadmit < 2 && activesquad->squad[s]->get_armor().get_quality() != 1)
 				if (rejected > REJECTED_SECONDRATECLOTHES)rejected = REJECTED_SECONDRATECLOTHES;
 			// Suspicious weapons? Gone
-			if (autoadmit < 2 && activesquad->squad[s]->weaponcheck(metaldetect)>0)
+			if (autoadmit < 2 && weaponcheck(*activesquad->squad[s], metaldetect)>0)
 				if (rejected > REJECTED_WEAPONS)rejected = REJECTED_WEAPONS;
 			// Fail a tough disguise check? Gone
 			if (autoadmit < 1 && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE, DIFFICULTY_CHALLENGING)))
@@ -328,7 +334,7 @@ customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_mapspecials024),
 	customText(&caseNOT_REJECTED, mostlyendings + CONST_mapspecials029),
 };
 void setEncounterZeroExistsFalse();
-char DeprecatedCreature::sizeUpSquadForEntry(const bool autoadmit) {
+char sizeUpSquadForEntry(const bool autoadmit) {
 
 	extern short sitetype;
 	extern Deprecatedsquadst *activesquad;
@@ -346,7 +352,7 @@ char DeprecatedCreature::sizeUpSquadForEntry(const bool autoadmit) {
 				// Wrong clothes? Gone
 				if (activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss != ANIMALGLOSS_ANIMAL)
 					if (rejected > REJECTED_NUDE)rejected = REJECTED_NUDE;
-				if (!activesquad->squad[s]->hasdisguise())
+				if (!hasdisguise(*activesquad->squad[s]))
 					if (rejected > REJECTED_DRESSCODE)rejected = REJECTED_DRESSCODE;
 				// Busted, cheap, bloody clothes? Gone
 				if (activesquad->squad[s]->get_armor().is_bloody())
@@ -356,7 +362,7 @@ char DeprecatedCreature::sizeUpSquadForEntry(const bool autoadmit) {
 				if (activesquad->squad[s]->get_armor().get_quality() != 1)
 					if (rejected > REJECTED_SECONDRATECLOTHES)rejected = REJECTED_SECONDRATECLOTHES;
 				// Suspicious weapons? Gone
-				if (activesquad->squad[s]->weaponcheck() > 0)
+				if (weaponcheck(*activesquad->squad[s]) > 0)
 					if (rejected > REJECTED_WEAPONS)rejected = REJECTED_WEAPONS;
 				// Fail a tough disguise check? Gone
 				if (disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE, DIFFICULTY_CHALLENGING)))
@@ -421,17 +427,6 @@ char DeprecatedCreature::sizeUpSquadForEntry(const bool autoadmit) {
 	}
 	return rejected;
 }
-void empty_current_special() {
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_NONE;
-}
-void replace_current_special(const int new_special) {
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = new_special;
-
-}
 void special_bouncer_assess_squad()
 {
 	extern Log gamelog;
@@ -463,7 +458,7 @@ void special_bouncer_assess_squad()
 		addstrAlt(sleepername, gamelog);
 		addstrAlt(CONST_mapspecials030, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 	}
 	else
 	{
@@ -472,11 +467,11 @@ void special_bouncer_assess_squad()
 		else
 			addstrAlt(CONST_mapspecials032, gamelog);
 		gamelog.newline();
-		replace_current_special(SPECIAL_CLUB_BOUNCER_SECONDVISIT);
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_CLUB_BOUNCER_SECONDVISIT;
 	}
 	printencounter();
 	pressAnyKey();
-	char rejected = DeprecatedCreature::sizeUpSquadForEntry(autoadmit);
+	char rejected = sizeUpSquadForEntry(autoadmit);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
@@ -493,46 +488,44 @@ void special_bouncer_assess_squad()
 		}
 	encounter[0].make_cantbluff_one();
 }
-void unlockCageCosmetic() {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	UnlockAttempt actualy = unlock(UNLOCK_CAGE);
-	if (actualy == UNLOCKED)
-	{
-		int time = 20 + LCSrandom(10);
-		if (time < 1)time = 1;
-		if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-		sitecrime++;
-		juiceparty(3, 100);
-		addCrimeToSiteStory(CRIME_FREE_RABBITS);
-		criminalizeparty(LAWFLAG_VANDALISM);
-	}
-	if (actualy != NEVERMIND)
-	{
-		alienationcheck(0);
-		noticecheck(-1);
-		empty_current_special();
-	}
-}
 void special_lab_cosmetics_cagedanimals()
 {
+	extern int sitecrime;
+	extern short sitealarmtimer;
 	extern Log gamelog;
-	int c;
-	do
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	while (true)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials036, gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17, 1, CONST_mapspecials062);
-		c = getkeyAlt();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			unlockCageCosmetic();
+			UnlockAttempt actualy = unlock(UNLOCK_CAGE);
+			if (actualy == UNLOCKED)
+			{
+				int time = 20 + LCSrandom(10);
+				if (time < 1)time = 1;
+				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
+				sitecrime++;
+				juiceparty(3, 100);
+				addCrimeToSiteStory(CRIME_FREE_RABBITS);
+				criminalizeparty(LAWFLAG_VANDALISM);
+			}
+			if (actualy != NEVERMIND)
+			{
+				alienationcheck(0);
+				noticecheck(-1);
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+			}
+			return;
 		}
-	}while (c != 'n' && c != 'y');
+		else if (c == 'n')return;
+	}
 }
 void special_readsign(int sign)
 {
@@ -577,102 +570,15 @@ void special_readsign(int sign)
 	}
 	pressAnyKey();
 }
-void turn_off_nuclear_plant() {
-	extern int sitecrime;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-
-	addstrAlt(CONST_mapspecials049, gamelog);
-	gamelog.newline();
-	pressAnyKey();
-	mvaddstrAlt(17, 1, singleDot, gamelog);
-	pressAnyKey();
-	addstrAlt(singleDot, gamelog);
-	pressAnyKey();
-	addstrAlt(singleDot, gamelog);
-	pressAnyKey();
-	if (lawList[LAW_NUCLEARPOWER] == 2)
-	{
-		mvaddstrAlt(17, 1, CONST_mapspecials050, gamelog);
-		gamelog.newline();
-		change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
-		change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, -50, 0, 0);
-		pressAnyKey();
-		juiceparty(40, 1000); // Instant juice!
-		sitecrime += 25; //Shutdown Site
-		addCrimeToSiteStory(CRIME_SHUTDOWNREACTOR);
-	}
-	else
-	{
-		mvaddstrAlt(16, 1, CONST_mapspecials051, gamelog);
-		gamelog.newline();
-		addstrAlt(CONST_mapspecials052); // Remove remaining part of previous text.
-		mvaddstrAlt(17, 1, CONST_mapspecials053, gamelog);
-		gamelog.newline();
-		change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
-		pressAnyKey();
-		juiceparty(100, 1000); // Instant juice!
-		sitecrime += 50; //Shutdown Site
-		addCrimeToSiteStory(CRIME_SHUTDOWNREACTOR);
-	}
-}
-DeprecatedCreature* activesquadSkillCheck(const int skill, const int difficulty) {
-
-	extern Deprecatedsquadst *activesquad;
-	DeprecatedCreature* maxs = 0;
-	for (int p = 0; p < 6; p++)
-	{
-		if (activesquad->squad[p] != NULL && activesquad->squad[p]->getNameAndAlignment().alive)
-		{
-			if (activesquad->squad[p]->skill_check(skill, difficulty))
-			{
-				maxs = activesquad->squad[p];
-				break;
-			}
-		}
-	}
-	return maxs;
-}
-
-void attemptToTurnOffNuclear() {
-	extern int sitecrime;
-	extern Log gamelog;
-
-	clearmessagearea();
-	empty_current_special();
-	DeprecatedCreature* maxs = activesquadSkillCheck(SKILL_SCIENCE, DIFFICULTY_HARD);
-
-	if (maxs)
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, maxs->getNameAndAlignment().name, gamelog);
-		turn_off_nuclear_plant();
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials054, gamelog);
-		mvaddstrAlt(17, 1, CONST_mapspecials055, gamelog);
-		gamelog.newline();
-		pressAnyKey();
-		juiceparty(15, 500);
-	}
-	setSiteAlarmOne();
-	alienationcheck(1);
-	empty_current_special();
-	sitecrime += 5;
-	criminalizeparty(LAWFLAG_TERRORISM);
-}
 void special_nuclear_onoff()
 {
-	//extern Deprecatedsquadst *activesquad;
-	//extern int sitecrime;
+	extern Deprecatedsquadst *activesquad;
+	extern int sitecrime;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
-	int c;
-	do	
+	while (true)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -688,70 +594,129 @@ void special_nuclear_onoff()
 			gamelog.newline();
 			mvaddstrAlt(17, 1, CONST_mapspecials048);
 		}
-		c = getkeyAlt();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			attemptToTurnOffNuclear();
+			clearmessagearea();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+			char max = DIFFICULTY_HARD;
+			DeprecatedCreature* maxs = 0;
+			for (int p = 0; p < 6; p++)
+			{
+				if (activesquad->squad[p] != NULL && activesquad->squad[p]->getNameAndAlignment().alive)
+				{
+					if (activesquad->squad[p]->skill_check(SKILL_SCIENCE, max))
+					{
+						maxs = activesquad->squad[p];
+						break;
+					}
+				}
+			}
+			if (maxs)
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 1, maxs->getNameAndAlignment().name, gamelog);
+				addstrAlt(CONST_mapspecials049, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				mvaddstrAlt(17, 1, singleDot, gamelog);
+				pressAnyKey();
+				addstrAlt(singleDot, gamelog);
+				pressAnyKey();
+				addstrAlt(singleDot, gamelog);
+				pressAnyKey();
+				if (lawList[LAW_NUCLEARPOWER] == 2)
+				{
+					mvaddstrAlt(17, 1, CONST_mapspecials050, gamelog);
+					gamelog.newline();
+					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
+					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, -50, 0, 0);
+					pressAnyKey();
+					juiceparty(40, 1000); // Instant juice!
+					sitecrime += 25; //Shutdown Site
+					addCrimeToSiteStory(CRIME_SHUTDOWNREACTOR);
+				}
+				else
+				{
+					mvaddstrAlt(16, 1, CONST_mapspecials051, gamelog);
+					gamelog.newline();
+					addstrAlt(CONST_mapspecials052); // Remove remaining part of previous text.
+					mvaddstrAlt(17, 1, CONST_mapspecials053, gamelog);
+					gamelog.newline();
+					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
+					pressAnyKey();
+					juiceparty(100, 1000); // Instant juice!
+					sitecrime += 50; //Shutdown Site
+					addCrimeToSiteStory(CRIME_SHUTDOWNREACTOR);
+				}
+			}
+			else
+			{
+				set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				mvaddstrAlt(16, 1, CONST_mapspecials054, gamelog);
+				mvaddstrAlt(17, 1, CONST_mapspecials055, gamelog);
+				gamelog.newline();
+				pressAnyKey();
+				juiceparty(15, 500);
+			}
+			setSiteAlarmOne();
+			alienationcheck(1);
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+			sitecrime += 5;
+			criminalizeparty(LAWFLAG_TERRORISM);
+			return;
 		}
-	}while (c != 'n' && c != 'y');
+		else if (c == 'n')return;
+	}
 }
 void fillEncounter(CreatureTypes c, int numleft);
-void unlockCage() {
+void special_lab_genetic_cagedanimals()
+{
 	extern short mode;
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-
-	int time = 20 + LCSrandom(10);
-	if (time < 1)time = 1;
-	if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
-	sitecrime++;
-	juiceparty(5, 200);
-	addCrimeToSiteStory(CRIME_FREE_BEASTS);
-	criminalizeparty(LAWFLAG_VANDALISM);
-	if (!LCSrandom(2))
-	{
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials058, gamelog);
-		gamelog.newline();
-		int numleft = LCSrandom(6) + 1;
-		fillEncounter(CREATURE_GENETIC, numleft);
-		if (mode == GAMEMODE_CHASECAR ||
-			mode == GAMEMODE_CHASEFOOT)printchaseencounter();
-		else printencounter();
-		pressAnyKey();
-		setSiteAlarmOne();
-		alienationcheck(1);
-	}
-	else
-	{
-		alienationcheck(0);
-	}
-}
-void special_lab_genetic_cagedanimals()
-{
-	//extern short mode;
-	//extern int sitecrime;
-	//extern short sitealarmtimer;
-	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	int c;
-	do
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	while (true)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials056, gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17, 1, CONST_mapspecials062);
-		c = getkeyAlt();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			UnlockAttempt actualy = unlock(UNLOCK_CAGE_HARD);
 			if (actualy == UNLOCKED)
 			{
-				unlockCage();
+				int time = 20 + LCSrandom(10);
+				if (time < 1)time = 1;
+				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
+				sitecrime++;
+				juiceparty(5, 200);
+				addCrimeToSiteStory(CRIME_FREE_BEASTS);
+				criminalizeparty(LAWFLAG_VANDALISM);
+				if (!LCSrandom(2))
+				{
+					clearmessagearea();
+					set_color_easy(WHITE_ON_BLACK_BRIGHT);
+					mvaddstrAlt(16, 1, CONST_mapspecials058, gamelog);
+					gamelog.newline();
+					int numleft = LCSrandom(6) + 1;
+					fillEncounter(CREATURE_GENETIC, numleft);
+					if (mode == GAMEMODE_CHASECAR ||
+						mode == GAMEMODE_CHASEFOOT)printchaseencounter();
+					else printencounter();
+					pressAnyKey();
+					setSiteAlarmOne();
+					alienationcheck(1);
+				}
+				else
+				{
+					alienationcheck(0);
+				}
 			}
 			else if (actualy == LOUD_FAILURE)
 			{
@@ -759,69 +724,60 @@ void special_lab_genetic_cagedanimals()
 			}
 			if (actualy != NEVERMIND)
 			{
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
+			return;
 		}
-	} while (c != 'y' && c != 'n');
-}
-void unlockCell() {
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-
-	int numleft = LCSrandom(8) + 2;
-	fillEncounter(CREATURE_PRISONER, numleft);
-	juiceparty(50, 1000);
-	sitecrime += 20;
-	int time = 20 + LCSrandom(10);
-	if (time < 1)time = 1;
-	if (sitealarmtimer > time || sitealarmtimer == -1) { sitealarmtimer = time; }
-	if (mode == GAMEMODE_CHASECAR ||
-		mode == GAMEMODE_CHASEFOOT) {
-		printchaseencounter();
+		else if (c == 'n')return;
 	}
-	else { printencounter(); }
-	refreshAlt();
-	partyrescue(SPECIAL_POLICESTATION_LOCKUP);
-}
-void noiseFromUnlockingCell() {
-	//extern coordinatest loc_coord;
-	extern int sitecrime;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-	alienationcheck(1);
-	noticecheck(-1, DIFFICULTY_HARD);
-	empty_current_special();
-	sitecrime += 2;
-	addCrimeToSiteStory(CRIME_POLICE_LOCKUP);
-	criminalizeparty(LAWFLAG_HELPESCAPE);
 }
 void special_policestation_lockup()
 {
+	extern coordinatest loc_coord;
+	extern short mode;
+	extern int sitecrime;
+	extern short sitealarmtimer;
 	extern Log gamelog;
-
-	int c;
-	do
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	while (true)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials059, gamelog);
 		gamelog.newline();
 		mvaddstrAlt(17, 1, CONST_mapspecials062);
-		c = getkeyAlt();
+		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			UnlockAttempt actualy = unlock(UNLOCK_CELL);
 			if (actualy == UNLOCKED)
 			{
-				unlockCell();
+				int numleft = LCSrandom(8) + 2;
+				fillEncounter(CREATURE_PRISONER, numleft);
+				juiceparty(50, 1000);
+				sitecrime += 20;
+				int time = 20 + LCSrandom(10);
+				if (time < 1)time = 1;
+				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
+				if (mode == GAMEMODE_CHASECAR ||
+					mode == GAMEMODE_CHASEFOOT)printchaseencounter();
+				else printencounter();
+				refreshAlt();
+				partyrescue(SPECIAL_POLICESTATION_LOCKUP);
 			}
 			if (actualy != NEVERMIND)
 			{
-				noiseFromUnlockingCell();
+				alienationcheck(1);
+				noticecheck(-1, DIFFICULTY_HARD);
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
+				sitecrime += 2;
+				addCrimeToSiteStory(CRIME_POLICE_LOCKUP);
+				criminalizeparty(LAWFLAG_HELPESCAPE);
 			}
+			return;
 		}
-	} while (c != 'n' && c != 'y');
+		else if (c == 'n')return;
+	}
 }
 
 
@@ -830,8 +786,8 @@ void courtLockupPressY() {
 	extern short mode;
 	extern int sitecrime;
 	extern short sitealarmtimer;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	UnlockAttempt actualy = unlock(UNLOCK_CELL);
 	if (actualy == UNLOCKED)
@@ -858,7 +814,7 @@ void courtLockupPressY() {
 	{
 		alienationcheck(1);
 		noticecheck(-1, DIFFICULTY_HARD);
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		sitecrime += 3;
 		addCrimeToSiteStory(CRIME_COURTHOUSE_LOCKUP);
 		criminalizeparty(LAWFLAG_HELPESCAPE);
@@ -893,8 +849,8 @@ void special_courthouse_jury()
 	extern Deprecatedsquadst *activesquad;
 	extern int sitecrime;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate)
 	{
 		clearmessagearea();
@@ -915,7 +871,7 @@ void special_courthouse_jury()
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			int maxattack = 0;
 			int maxp = -1;
 			for (int p = 0; p < 6; p++)
@@ -958,7 +914,7 @@ void special_courthouse_jury()
 					alienationcheck(0);
 					noticecheck(-1);
 					//INSTANT JUICE BONUS
-					activesquad->squad[p]->add_juice(25, 200);
+					addjuice(*(activesquad->squad[p]), 25, 200);
 				}
 				else
 				{
@@ -993,8 +949,8 @@ void special_prison_control(short prison_control_type)
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
 	while (true)
 	{
@@ -1051,7 +1007,7 @@ void special_prison_control(short prison_control_type)
 			partyrescue(prison_control_type);
 			alienationcheck(1);
 			noticecheck(-1);
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			sitecrime += 30;
 			juiceparty(50, 1000);
 			addCrimeToSiteStory(CRIME_PRISON_RELEASE);
@@ -1069,8 +1025,8 @@ void special_intel_supercomputer()
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate)
 	{
 		clearmessagearea();
@@ -1121,7 +1077,7 @@ void special_intel_supercomputer()
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 				alienationcheck(1);
 				noticecheck(-1, DIFFICULTY_HARD);
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 				sitecrime += 3;
 				addCrimeToSiteStory(CRIME_HACK_INTEL);
 				criminalizeparty(LAWFLAG_TREASON);
@@ -1183,7 +1139,7 @@ void special_sweatshop_equipment()
 			if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 			alienationcheck(0);
 			noticecheck(-1, DIFFICULTY_HEROIC);
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_DEBRIS;
 			sitecrime++;
 			juiceparty(5, 100);
@@ -1217,7 +1173,7 @@ void special_polluter_equipment()
 			change_public_opinion(VIEW_POLLUTION, 2, 1, 70);
 			alienationcheck(0);
 			noticecheck(-1, DIFFICULTY_HEROIC);
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_DEBRIS;
 			sitecrime += 2;
 			juiceparty(5, 100);
@@ -1234,8 +1190,8 @@ void special_house_photos()
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	while (true)
@@ -1352,7 +1308,7 @@ void special_house_photos()
 			{
 				alienationcheck(0);
 				noticecheck(-1);
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
 			return;
 		}
@@ -1365,8 +1321,8 @@ void special_armory()
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern vector<WeaponType *> weapontype;
 	extern vector<ClipType *> cliptype;
 	while (true)
@@ -1504,7 +1460,7 @@ void special_armory()
 			}
 			alienationcheck(0);
 			noticecheck(-1);
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			return;
 		}
 		else if (c == 'n')return;
@@ -1515,8 +1471,8 @@ void special_corporate_files()
 	extern int sitecrime;
 	extern short sitealarmtimer;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1547,7 +1503,7 @@ void special_corporate_files()
 			{
 				alienationcheck(0);
 				noticecheck(-1);
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 				sitecrime += 3;
 				addCrimeToSiteStory(CRIME_CORP_FILES);
 				criminalizeparty(LAWFLAG_THEFT);
@@ -1561,8 +1517,8 @@ void special_radio_broadcaststudio()
 {
 	extern short sitealienate;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1586,7 +1542,7 @@ void special_radio_broadcaststudio()
 			if (run_broadcast(false))
 			{
 				claimSiteStory();
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
 			return;
 		}
@@ -1597,8 +1553,8 @@ void special_news_broadcaststudio()
 {
 	extern short sitealienate;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1621,7 +1577,7 @@ void special_news_broadcaststudio()
 			if (run_broadcast(true))
 			{
 				claimSiteStory();
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
 			return;
 		}
@@ -1649,7 +1605,7 @@ void special_display_case()
 			if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 			alienationcheck(0);
 			noticecheck(-1, DIFFICULTY_HEROIC);
-			empty_current_special();
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_DEBRIS;
 			sitecrime++;
 			juiceparty(5, 100);
@@ -1737,8 +1693,8 @@ void special_security(bool metaldetect)
 {
 	extern short sitetype;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern DeprecatedCreature encounter[ENCMAX];
 	char autoadmit = 0;
 	emptyEncounter();
@@ -1760,7 +1716,7 @@ void special_security(bool metaldetect)
 	{
 		addstrAlt(CONST_mapspecials124, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_NONE;
 		return;
 	}
 	else if (autoadmit)
@@ -1768,18 +1724,18 @@ void special_security(bool metaldetect)
 		addstrAlt(CONST_mapspecials125, gamelog);
 		metaldetect = false;
 		gamelog.newline();
-		replace_current_special(SPECIAL_SECURITY_SECONDVISIT);
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_SECURITY_SECONDVISIT;
 	}
 	else
 	{
 		if (metaldetect) addstrAlt(CONST_mapspecials126, gamelog);
 		else addstrAlt(CONST_mapspecials127, gamelog);
 		gamelog.newline();
-		replace_current_special(SPECIAL_SECURITY_SECONDVISIT);
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_SECURITY_SECONDVISIT;
 	}
 	printencounter();
 	pressAnyKey();
-	char rejected = DeprecatedCreature::checkActiveSquadForRejection(autoadmit, metaldetect);
+	char rejected = checkActiveSquadForRejection(autoadmit, metaldetect);
 	moveAlt(17, 1);
 	if (caseRejectionReasons.count(rejected)) {
 		set_color_easy(RED_ON_BLACK_BRIGHT);
@@ -1882,7 +1838,7 @@ void special_bank_vault()
 				mvaddstrAlt(17, 1, CONST_mapspecials140, gamelog);
 				gamelog.newline();
 				pressAnyKey();
-				empty_current_special();
+				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 			}
 			else
 			{
@@ -1900,7 +1856,7 @@ void special_bank_vault()
 					mvaddstrAlt(16, 1, CONST_mapspecials143, gamelog);
 					gamelog.newline();
 					pressAnyKey();
-					empty_current_special();
+					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 				}
 				else
 				{
@@ -1968,7 +1924,7 @@ void special_bank_vault()
 						levelmap[loc_coord.locx - 1][loc_coord.locy][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
 						levelmap[loc_coord.locx][loc_coord.locy + 1][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
 						levelmap[loc_coord.locx][loc_coord.locy - 1][loc_coord.locz].flag &= ~SITEBLOCK_DOOR;
-						empty_current_special();
+						levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 					}
 					else
 					{
@@ -2006,8 +1962,8 @@ void special_bank_teller()
 {
 	extern short sitealienate;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern coordinatest loc_coord;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
@@ -2015,7 +1971,7 @@ void special_bank_teller()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials152, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 	}
 	else
@@ -2024,7 +1980,7 @@ void special_bank_teller()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials153, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
 		makecreature(0, CREATURE_BANK_TELLER);
@@ -2036,15 +1992,15 @@ void special_bank_money()
 	extern short sitealarmtimer;
 	extern int sitecrime;
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
+	extern coordinatest loc_coord;
 	extern short postalarmtimer;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	static int swat_counter = 0;
 	clearmessagearea(false);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, CONST_mapspecials154, gamelog);
 	gamelog.newline();
-	empty_current_special();
+	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 	giveActiveSquadMoney(20000);
 	sitecrime += 20;
 	if (postalarmtimer <= 80) swat_counter = 0;
@@ -2117,9 +2073,9 @@ void special_oval_office()
 void special_ccs_boss()
 {
 	extern Log gamelog;
-	//extern coordinatest loc_coord;
+	extern coordinatest loc_coord;
 	extern short sitealienate;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
@@ -2127,7 +2083,7 @@ void special_ccs_boss()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials160, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
 		makecreature(0, CREATURE_CCS_ARCHCONSERVATIVE);
@@ -2143,7 +2099,7 @@ void special_ccs_boss()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_mapspecials161, gamelog);
 		gamelog.newline();
-		empty_current_special();
+		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
 		makecreature(0, CREATURE_CCS_ARCHCONSERVATIVE);

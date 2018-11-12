@@ -158,12 +158,14 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locationsEnums.h"
@@ -185,7 +187,7 @@ void equipmentbaseassign();
 int getsquad(int);
 int getpoolcreature(int);
 //#include "../monthly/lcsmonthly.h"
-void fundreport();
+void fundreport(char &clearformess);
 void printname(const int hiding, const int location, const int flag, const string name);
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
@@ -382,7 +384,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 						{
 							if (cursquad->squad[pt] == NULL)
 							{
-								temppool[p]->removesquadinfo();
+								removesquadinfo(*temppool[p]);
 								cursquad->squad[pt] = temppool[p];
 								temppool[p]->squadid = cursquad->id;
 								break;
@@ -733,7 +735,7 @@ void review_mode(const short mode)
 						addstrAlt(CONST_reviewmode065);
 					}
 					if (page == 0) {
-						temppool[p]->printliberalstats();
+						printliberalstats(*temppool[p]);
 					}
 					else if (page == 1) printliberalskills(temppool[p]->getCreatureJustice(), temppool[p]->getListOfCreatureSkills());
 					else if (page == 2) printliberalcrimes(temppool[p]->getCreatureJustice());
@@ -820,7 +822,7 @@ void review_mode(const short mode)
 								mvaddstrAlt(25, 0, CONST_reviewmode084, gamelog);
 								addstrAlt(pool[boss]->getNameAndAlignment().name, gamelog);
 								addstrAlt(CONST_reviewmode085, gamelog);
-								pool[boss]->criminalize(LAWFLAG_RACKETEERING);
+								criminalize(*pool[boss], LAWFLAG_RACKETEERING);
 								pool[boss]->another_confession();
 								// TODO: Depending on the crime increase heat or make seige
 								if (LocationsPool::getInstance().get_specific_integer(INT_GETHEAT,pool[boss]->base) > 20)
@@ -830,7 +832,7 @@ void review_mode(const short mode)
 							}
 							gamelog.nextMessage(); //Write out buffer to prepare for next message.
 												   // Remove squad member
-							temppool[p]->removesquadinfo();
+							removesquadinfo(*temppool[p]);
 							cleangonesquads();
 							delete_and_remove(temppool, p, pool, getpoolcreature(temppool[p]->id));
 							break;
@@ -1111,7 +1113,7 @@ void promoteliberals()
 						{
 							if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
 								addstrAlt(CONST_reviewmode113);
-							else if (!pool[p3]->subordinatesleft() && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
+							else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
 								addstrAlt(CONST_reviewmode114);
 							else
 								printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
@@ -1157,7 +1159,7 @@ void promoteliberals()
 						{
 							// Can't promote if new boss can't accept more subordinates
 							if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid &&
-								(temppool[p]->flag&CREATUREFLAG_BRAINWASHED || pool[p3]->subordinatesleft()))
+								(temppool[p]->flag&CREATUREFLAG_BRAINWASHED || subordinatesleft(*pool[p3])))
 							{
 								temppool[p]->hireid = pool[p2]->hireid;
 								sortbyhire(temppool, level);
@@ -1319,11 +1321,9 @@ bool iterateReview(int &page) {
 	if (c == 'u') promoteliberals();
 	if (c == 'v')
 	{
-		fundreport();
-		extern char disbanding;
-		if (!disbanding) {
-			eraseAlt();
-		}
+		char clearformess = false;
+		fundreport(clearformess);
+		if (clearformess) eraseAlt();
 	}
 	if (c == 'y') music.enableIf(!music.isEnabled());
 

@@ -13,12 +13,14 @@ const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 //#include "../creature/newcreature.h"
 
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
 #include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../common/getnames.h"
@@ -220,27 +222,22 @@ const ColorSetup YELLOW_ON_RED_BRIGHT = { COLOR_YELLOW, COLOR_RED, 1 };
 const ColorSetup YELLOW_ON_RED_BRIGHT_BLINK = { COLOR_YELLOW, COLOR_RED, 1, 1 };
 void displayDifficulty(int difficulty)
 {
-	const pair<ColorSetup, string> _difficulties[] = { 
-		make_pair(GREEN_ON_BLACK_BRIGHT, "Simple"),
-		make_pair(CYAN_ON_BLACK_BRIGHT, "Very Easy"),
-		make_pair(CYAN_ON_BLACK, "Easy"),
-		make_pair(BLUE_ON_BLACK_BRIGHT, "Below Average"),
-		make_pair(WHITE_ON_BLACK_BRIGHT, "Average"),
-		make_pair(WHITE_ON_BLACK, "Above Average"),
-		make_pair(YELLOW_ON_BLACK_BRIGHT, "Hard"),
-		make_pair(MAGENTA_ON_BLACK, "Very Hard"),
-		make_pair(MAGENTA_ON_BLACK_BRIGHT, "Extremely Difficult"),
-		make_pair(RED_ON_BLACK, "Nearly Impossible"),
-		make_pair(RED_ON_BLACK_BRIGHT, "Impossible") 
-	};
-	if (difficulty >= 0 && difficulty < 10) {
-		set_color_easy(_difficulties[difficulty].first);
-		addstrAlt(_difficulties[difficulty].second);
+	const char *_difficulty[] = { "Simple", "Very Easy", "Easy", "Below Average", "Average", "Above Average", "Hard", "Very Hard", "Extremely Difficult", "Nearly Impossible", "Impossible" };
+	switch (difficulty)
+	{
+	case 0:	set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+	case 1: set_color_easy(CYAN_ON_BLACK_BRIGHT); break;
+	case 2: set_color_easy(CYAN_ON_BLACK); break;
+	case 3: set_color_easy(BLUE_ON_BLACK_BRIGHT); break;
+	case 4: set_color_easy(WHITE_ON_BLACK_BRIGHT); break;
+	case 5: set_color_easy(WHITE_ON_BLACK); break;
+	case 6: set_color_easy(YELLOW_ON_BLACK_BRIGHT); break;
+	case 7: set_color_easy(MAGENTA_ON_BLACK); break;
+	case 8: set_color_easy(MAGENTA_ON_BLACK_BRIGHT); break;
+	case 9: set_color_easy(RED_ON_BLACK);	break;
+	default:set_color_easy(RED_ON_BLACK_BRIGHT);	break;
 	}
-	else {
-		set_color_easy(_difficulties[10].first);
-		addstrAlt(_difficulties[10].second);
-	}
+	if (difficulty >= 0 && difficulty < 10) addstrAlt(_difficulty[difficulty]); else addstrAlt(_difficulty[10]);
 }
 // IsaacG Various functions that are the single time
 // a given aspect of the curses library is used
@@ -255,6 +252,7 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
+void printfunds(int y, int offsetx, const char* prefix, long funds);
 void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
 	char moneystr[50], prefixbuffer[50];
@@ -664,7 +662,7 @@ enum wallDirection {
 void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) {
 
 	extern coordinatest loc_coord;
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (x > loc_coord.locx && x < MAPX) visible[WALL_LEFT] = true;
 	if (x > 0 && x < loc_coord.locx) visible[WALL_RIGHT] = true;
@@ -677,7 +675,7 @@ void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) 
 }
 void checkForLOS(bool(&visible)[8], const int x, const int y, const int z) {
 
-	//extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 
 	if (!LineOfSight(x - 1, y, z)) visible[WALL_LEFT] = false;
@@ -1210,7 +1208,7 @@ void printsitemap(int x, int y, int z)
 		str = blankString;
 	}
 
-	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != SPECIAL_NONE)
+	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(24, 67 - (len(str) >> 1), str);

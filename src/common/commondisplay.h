@@ -8,6 +8,8 @@ void set_alignment_color(short alignment, bool extended_range = false);
 void set_activity_color(long activity_type);
 /* location and squad header */
 void locheader();
+/* party info at top of screen */
+void printparty();
 /* location info at top of screen */
 void printlocation(long loc);
 /* full character sheet (with surrounding interface) */
@@ -23,5 +25,9 @@ string addprevpagestr();
 /* returns a long blurb showing how to page forward and back */
 string addpagestr();
 
+/* addstr with formatted output */
+int addstr_f(const char * format, ...);
+/* mvaddstr with formatted output */
+int mvaddstr_f(int y, int x, const char * format, ...);
 
 #endif

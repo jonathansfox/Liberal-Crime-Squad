@@ -77,14 +77,14 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 #include "creature/newcreature.h"
-//#include "../items/armortype.h"
+#include "../items/armortype.h"
 #include "common/interval.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 //#include "news/news.h"
 void loadgraphics();
 #include "items/loottype.h"
-//#include "creature/augmenttype.h"
+#include "creature/augmenttype.h"
 //#include "configfile.h"
 // Reads in an entire configuration file
 // Returns 0 for read successful, returns -1 if failed read
@@ -202,43 +202,21 @@ void mainFour() {
 	}
 	//Setting initial game data...
 }
-const vector< pair<int, int> > default_laws = {
-	make_pair(LAW_ABORTION, 1),
-	make_pair(LAW_ANIMALRESEARCH, -1),
-	make_pair(LAW_POLICEBEHAVIOR, -1),
-	make_pair(LAW_PRIVACY, -1),
-	make_pair(LAW_DEATHPENALTY, -1),
-	make_pair(LAW_NUCLEARPOWER, -1),
-	make_pair(LAW_POLLUTION, -1),
-	make_pair(LAW_LABOR, 0),
-	make_pair(LAW_GAY, 1),
-	make_pair(LAW_CORPORATE, 0),
-	make_pair(LAW_FREESPEECH, 0),
-	make_pair(LAW_FLAGBURNING, 1),
-	make_pair(LAW_GUNCONTROL, -1),
-	make_pair(LAW_TAX, 0),
-	make_pair(LAW_WOMEN, 1),
-	make_pair(LAW_CIVILRIGHTS, 1),
-	make_pair(LAW_DRUGS, -1),
-	make_pair(LAW_IMMIGRATION, 0),
-	make_pair(LAW_ELECTIONS, 0),
-	make_pair(LAW_MILITARY, -1),
-	make_pair(LAW_PRISONS, 0),
-	make_pair(LAW_TORTURE, -1)
-};
-
 void mainFive() {
+	// Laws start archconservative
+	extern bool SHITLAWS;
+	// Laws start elite liberal
+	extern bool PERFECTLAWS;
+	// Public opinion starts at 100% Liberal
+	extern bool REVOLUTIONNOW;
 	extern short activesortingchoice[];
 	extern short attitude[];
 	extern short public_interest[];
 	extern short background_liberal_influence[];
 	extern short lawList[];
-	extern bool REVOLUTIONNOW;
 	//Initialize sorting choices.
 	for (int s = 0; s < SORTINGCHOICENUM; s++)
-	{
 		activesortingchoice[s] = SORTING_NONE;
-	}
 	for (int v = 0; v < VIEWNUM; v++)
 	{
 		attitude[v] = 30 + LCSrandom(25);
@@ -248,32 +226,41 @@ void mainFive() {
 	attitude[VIEW_LIBERALCRIMESQUAD] = 0;
 	attitude[VIEW_LIBERALCRIMESQUADPOS] = 5;
 	//attitude[VIEW_POLITICALVIOLENCE]=5;
-
 	if (REVOLUTIONNOW) {
 		for (int v = 0; v < VIEWNUM; v++)
 			attitude[v] = 100;
 	}
-	// Laws start archconservative
-	extern bool SHITLAWS;
-	// Laws start elite liberal
-	extern bool PERFECTLAWS;
-	// Public opinion starts at 100% Liberal
-
-	extern short lawList[];
-
 	if (SHITLAWS) {
 		for (int l = 0; l < LAWNUM; l++) { lawList[l] = -2; }
 	}
-	else {
+	else
 		if (PERFECTLAWS) {
 			for (int l = 0; l < LAWNUM; l++) { lawList[l] = 2; }
 		}
 		else {
-			for (pair<int, int> p : default_laws) {
-				lawList[p.first] = p.second;
-			}
+			lawList[LAW_ABORTION] = 1;
+			lawList[LAW_ANIMALRESEARCH] = -1;
+			lawList[LAW_POLICEBEHAVIOR] = -1;
+			lawList[LAW_PRIVACY] = -1;
+			lawList[LAW_DEATHPENALTY] = -1;
+			lawList[LAW_NUCLEARPOWER] = -1;
+			lawList[LAW_POLLUTION] = -1;
+			lawList[LAW_LABOR] = 0;
+			lawList[LAW_GAY] = 1;
+			lawList[LAW_CORPORATE] = 0;
+			lawList[LAW_FREESPEECH] = 0;
+			lawList[LAW_FLAGBURNING] = 1;
+			lawList[LAW_GUNCONTROL] = -1;
+			lawList[LAW_TAX] = 0;
+			lawList[LAW_WOMEN] = 1;
+			lawList[LAW_CIVILRIGHTS] = 1;
+			lawList[LAW_DRUGS] = -1;
+			lawList[LAW_IMMIGRATION] = 0;
+			lawList[LAW_ELECTIONS] = 0;
+			lawList[LAW_MILITARY] = -1;
+			lawList[LAW_PRISONS] = 0;
+			lawList[LAW_TORTURE] = -1;
 		}
-	}
 }
 string fixLineSpecialCharacter(char * toFix) {
 	string str = blankString;
@@ -641,7 +628,7 @@ int main(int argc, char* argv[])
 		title_screen::getInstance().mode_title();
 	}
 }
-bool populate_masks_from_xml(vector<ArmorType*>& masks, const string file, Log& log)
+bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log)
 {
 	extern char artdir[];
 	CMarkup xml;

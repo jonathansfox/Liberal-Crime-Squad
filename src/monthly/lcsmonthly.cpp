@@ -297,10 +297,7 @@ the bottom of includes.h in the top src folder.
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-//#include "../creature/newcreature.h
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
-#include "../creature/creature.h"
+#include "../creature/newcreature.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../items/itemPool.h"
@@ -312,7 +309,7 @@ const string tag_skill = "skill";
 //#include "../common/equipment.h"
 void consolidateloot(vector<Item *> &loot);
 //#include "../common/translateid.h"
-int getloottype(const string idname);
+int getloottype(const string &idname);
 void removeItemFromSquad(const int loottypeindex);
 #include "../common/commonactions.h"
 // for void change_public_opinion(int,int,char =1,char=100);
@@ -380,6 +377,93 @@ extern string closeParenthesis;
 	  gamelog.nextMessage();
 	  pressAnyKey();
 	  return;
+  }
+  void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
+  /* monthly - lets the player choose a special edition for the guardian */
+  int choosespecialedition(char &clearformess)
+  {
+	  extern MusicClass music;
+	  //Temporary, maybe put special edition definition into an xml file. -XML
+	  static const string document_types[] =
+	  {  // This list MUST be in alphabetical order for binary_search() to work right
+		  tag_LOOT_AMRADIOFILES,
+		  tag_LOOT_CABLENEWSFILES,
+		  tag_LOOT_CCS_BACKERLIST,
+		  tag_LOOT_CEOLOVELETTERS,
+		  tag_LOOT_CEOPHOTOS,
+		  tag_LOOT_CEOTAXPAPERS,
+		  tag_LOOT_CORPFILES,
+		  tag_LOOT_INTHQDISK,
+		  tag_LOOT_JUDGEFILES,
+		  tag_LOOT_POLICERECORDS,
+		  tag_LOOT_PRISONFILES,
+		  tag_LOOT_RESEARCHFILES,
+		  tag_LOOT_SECRETDOCUMENTS
+	  };
+	  static const vector<string> dox(document_types, document_types + len(document_types));
+	  int page = 0;
+	  //char havetype[LOOTNUM];
+	  //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
+	  vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
+	  vector<int> loottypeindex;
+	  LocationsPool::getInstance().findAllLootTypes(havetype, loottypeindex, dox);
+	  constructLootIndices(havetype, loottypeindex, dox);
+	  if (!len(loottypeindex)) return -1;
+	  clearformess = 1;
+	  //PICK ONE
+	  while (true)
+	  {
+		  music.play(MUSIC_NEWSPAPER);
+		  eraseAlt();
+		  set_color_easy(WHITE_ON_BLACK);
+		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
+		  int x = 1, y = 10;
+		  char str[200];
+		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
+		  {
+			  str[0] = l - page * 18 + 'A';
+			  str[1] = '\x0';
+			  strcat(str, spaceDashSpace.c_str());
+			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
+			  mvaddstrAlt(y, x, str);
+			  x += 26;
+			  if (x > 53) x = 1, y++;
+		  }
+		  //PAGE UP
+		  if (page > 0)
+		  {
+			  mvaddstrAlt(17, 1, addprevpagestr());
+		  }
+		  //PAGE DOWN
+		  if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
+		  {
+			  mvaddstrAlt(17, 53, addnextpagestr());
+		  }
+		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
+		  int c = getkeyAlt();
+		  if (c >= 'a'&&c <= 'r')
+		  {
+			  int slot = c - 'a' + page * 18;
+			  if (slot >= 0 && slot < len(loottypeindex))
+			  {
+				  // remove item from location
+				  int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
+				  if (output != -1) {
+					  return output;
+				  }
+				  // if not in location, remove item from squad
+				  removeItemFromSquad(loottypeindex[slot]);
+				  //WHOOPS!
+				  return loottypeindex[slot];
+			  }
+		  }
+		  if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
+		  //PAGE UP
+		  if (is_page_up(c) && page > 0) page--;
+		  //PAGE DOWN
+		  if (is_page_down(c) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
+	  }
+	  return -1;
   }
   void change_opinion_from_Influence(vector< pair<string, vector<int> > > Influence) {
 
@@ -861,13 +945,14 @@ extern string closeParenthesis;
 	  mvaddstrAlt(y, 60 - len(num), num);
   }
   /* monthly - LCS finances report */
-  void fundreport()
+  void fundreport(char &clearformess)
   {
 	  extern char disbanding;
 	  extern MusicClass music;
 	  extern class Ledger ledger;
 	  if (disbanding) return;
 	  music.play(MUSIC_FINANCES);
+	  clearformess = true;
 	  int page = 0;
 	  bool showledger = false;
 	  int expenselines = 0;
@@ -988,161 +1073,5 @@ extern string closeParenthesis;
 			  return;
 		  }
 	  }
-	  return;
   }
 
-//#include "creature/creature.h"
-//#include "creature/deprecatedCreatureD.h"
-#include "locations/locations.h"
-  /* monthly - lets the player choose a special edition for the guardian */
-  int choosespecialedition()
-  {
-	  extern vector<Location *> listOfLocations;
-	  extern MusicClass music;
-	  //Temporary, maybe put special edition definition into an xml file. -XML
-	  static const string document_types[] =
-	  {  // This list MUST be in alphabetical order for binary_search() to work right
-		  tag_LOOT_AMRADIOFILES,
-		  tag_LOOT_CABLENEWSFILES,
-		  tag_LOOT_CCS_BACKERLIST,
-		  tag_LOOT_CEOLOVELETTERS,
-		  tag_LOOT_CEOPHOTOS,
-		  tag_LOOT_CEOTAXPAPERS,
-		  tag_LOOT_CORPFILES,
-		  tag_LOOT_INTHQDISK,
-		  tag_LOOT_JUDGEFILES,
-		  tag_LOOT_POLICERECORDS,
-		  tag_LOOT_PRISONFILES,
-		  tag_LOOT_RESEARCHFILES,
-		  tag_LOOT_SECRETDOCUMENTS
-	  };
-	  static const vector<string> dox(document_types, document_types + len(document_types));
-	  int page = 0;
-	  //char havetype[LOOTNUM];
-	  //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-	  vector<bool> havetype(LootTypePool::getInstance().lenpool(), false);
-	  vector<int> loottypeindex;
-
-	  //FIND ALL LOOT TYPES
-	  for (int loc = 0; loc < LocationsPool::getInstance().lenpool(); loc++)
-	  {
-		  if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, loc) == RENTING_NOCONTROL) continue;
-		  consolidateloot(listOfLocations[loc]->loot);
-		  for (int l = 0; l < len(listOfLocations[loc]->loot); l++)
-		  {
-			  if (!(listOfLocations[loc]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
-			  if (!binary_search(dox.begin(), dox.end(), listOfLocations[loc]->loot[l]->get_itemtypename())) continue;
-			  if (!havetype[getloottype(listOfLocations[loc]->loot[l]->get_itemtypename())])
-			  {
-				  loottypeindex.push_back(getloottype(listOfLocations[loc]->loot[l]->get_itemtypename()));
-				  havetype[getloottype(listOfLocations[loc]->loot[l]->get_itemtypename())] = true;
-			  }
-		  }
-	  }
-	  extern vector<Deprecatedsquadst *> squad;
-	  void consolidateloot(vector<Item *> &loot);
-	  int getloottype(const string idname);
-
-	  for (int sq = 0; sq < len(squad); sq++)
-	  {
-		  consolidateloot(squad[sq]->loot);
-		  for (int l = 0; l < len(squad[sq]->loot); l++)
-		  {
-			  if (!(squad[sq]->loot[l]->whatIsThis() == THIS_IS_LOOT)) continue;
-			  if (!binary_search(dox.begin(), dox.end(), squad[sq]->loot[l]->get_itemtypename())) continue;
-			  if (!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
-			  {
-				  loottypeindex.push_back(getloottype(squad[sq]->loot[l]->get_itemtypename()));
-				  havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())] = true;
-			  }
-		  }
-	  }
-
-	  if (!len(loottypeindex)) return -1;
-	  
-	  //PICK ONE
-	  while (true)
-	  {
-		  music.play(MUSIC_NEWSPAPER);
-		  eraseAlt();
-		  set_color_easy(WHITE_ON_BLACK);
-		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
-		  int x = 1, y = 10;
-		  char str[200];
-		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
-		  {
-			  str[0] = l - page * 18 + 'A';
-			  str[1] = '\x0';
-			  strcat(str, spaceDashSpace.c_str());
-			  strcat(str, LootTypePool::getInstance().getName(LootTypePool::getInstance().getIdName(loottypeindex[l])).c_str());
-			  mvaddstrAlt(y, x, str);
-			  x += 26;
-			  if (x > 53) x = 1, y++;
-		  }
-		  //PAGE UP
-		  if (page > 0)
-		  {
-			  mvaddstrAlt(17, 1, addprevpagestr());
-		  }
-		  //PAGE DOWN
-		  if ((page + 1) * 18 < LootTypePool::getInstance().lenpool())
-		  {
-			  mvaddstrAlt(17, 53, addnextpagestr());
-		  }
-		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
-		  int c = getkeyAlt();
-		  if (c >= 'a'&&c <= 'r')
-		  {
-			  int slot = c - 'a' + page * 18;
-			  if (slot >= 0 && slot < len(loottypeindex))
-			  {
-				  // remove item from location
-				  int output = LocationsPool::getInstance().deleteSpecialItem(slot, loottypeindex);
-				  if (output != -1) {
-					  return output;
-				  }
-				  // if not in location, remove item from squad
-				  removeItemFromSquad(loottypeindex[slot]);
-				  //WHOOPS!
-				  return loottypeindex[slot];
-			  }
-		  }
-		  if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return -1;
-		  //PAGE UP
-		  if (is_page_up(c) && page > 0) page--;
-		  //PAGE DOWN
-		  if (is_page_down(c) && (page + 1) * 18 < LootTypePool::getInstance().lenpool()) page++;
-	  }
-	  return -1;
-  }
-
-  void publishSpecialEditions() {
-	  extern vector<Location *> listOfLocations;
-	  //YOUR PAPER AND PUBLIC OPINION AND STUFF
-	  vector<int> nploc;
-	  for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
-	  {
-		  if ((listOfLocations[l]->compound_walls & COMPOUND_PRINTINGPRESS) &&
-			  !listOfLocations[l]->siege.siege&&
-			  listOfLocations[l]->renting != RENTING_CCS) {
-			  nploc.push_back(l);
-		  }
-	  }
-
-	  if (len(nploc))
-	  {
-		  //DO SPECIAL EDITIONS
-		  int loottypeindex = choosespecialedition();
-
-		  if (loottypeindex != -1) {
-
-			  printnews(loottypeindex, len(nploc));
-			  if (LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
-				  LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_SECRETDOCUMENTS)
-			  {
-				  for (int l = 0; l < len(nploc); l++)
-					  criminalizepool(LAWFLAG_TREASON, -1, nploc[l]);
-			  }
-		  }
-	  }
-  }

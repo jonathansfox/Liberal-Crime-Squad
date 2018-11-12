@@ -87,17 +87,18 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
-//#include "../items/armortype.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../items/loottype.h"
@@ -316,7 +317,7 @@ extern string undefined;
 			 mvaddstrAlt(0, 30, CONST_shop032);
 			 addstrAlt(ret);
 		 }
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 int x = 1, y = 10;
 		 for (int l = page * 18; l < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base) && l < page * 18 + 18; l++)
 		 {
@@ -367,7 +368,7 @@ extern string undefined;
 				 {
 					 if (!getCanBeSoldLocation(customers.squad[0]->base, slot))
 					 {
-						 DeprecatedCreature::printparty();
+						 printparty();
 						 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						 mvaddstrAlt(8, 15, CONST_shop036);
 						 pressAnyKey();
@@ -414,7 +415,7 @@ extern string undefined;
 	 {
 		 eraseAlt();
 		 locheader();
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(10, 1, CONST_shop058);
 		 if (LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
@@ -512,7 +513,7 @@ extern string undefined;
 	 if (partysize <= 1) return;
 	 while (true)
 	 {
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(8, 20, chooseALiberalTo + CONST_shop049);
 		 int c = getkeyAlt();
@@ -526,7 +527,7 @@ extern string undefined;
  }
 
  // Removing the subsequent references to location will be difficult.
- void DeprecatedCreature::maskselect()
+ void maskselect(DeprecatedCreature &buyer)
  {
 	 extern class Ledger ledger;
 	 extern vector<ArmorType *> armortype;
@@ -543,7 +544,7 @@ extern string undefined;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_shop050);
-		 addstrAlt(getNameAndAlignment().name);
+		 addstrAlt(buyer.getNameAndAlignment().name);
 		 addstrAlt(CONST_shop051);
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(1, 0, CONST_shop052);
@@ -561,7 +562,7 @@ extern string undefined;
 		 mvaddstrAlt(22, 0, CONST_shop053);
 		 mvaddstrAlt(23, 0, addpagestr());
 		 mvaddstrAlt(24, 0, CONST_shop054);
-		 addstrAlt(getNameAndAlignment().name);
+		 addstrAlt(buyer.getNameAndAlignment().name);
 		 addstrAlt(CONST_shop055);
 		 int c = getkeyAlt();
 		 //PAGE UP
@@ -587,11 +588,11 @@ extern string undefined;
 		 }
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	 }
-	 extern vector<Location *> listOfLocations;
+	 extern vector<Location *> location;
 	 if (maskindex != -1 && ledger.get_funds() >= 15)
 	 {
 		 Armor a = Armor(maskindex);
-		 give_armor(a, &listOfLocations[base]->loot);
+		 buyer.give_armor(a, &location[buyer.base]->loot);
 		 ledger.subtract_funds(15, EXPENSE_SHOPPING);
 	 }
  }
@@ -610,7 +611,7 @@ extern string undefined;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK);
 		 locheader();
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 mvaddstrAlt(8, 45, CONST_shop056);
 		 addstrAlt(customers.squad[buyer]->getNameAndAlignment().name);
 		 //Write wares and prices
@@ -700,7 +701,7 @@ extern string undefined;
 		 else if (c == 's'&&allow_selling_&&LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
 			 sell_loot(customers);
 		 else if (c == 'm'&&sell_masks_&&ledger.get_funds() >= 15)
-			 customers.squad[buyer]->maskselect();
+			 maskselect(*customers.squad[buyer]);
 		 else if (c == 'b') choose_buyer(customers, buyer);
 		 else if (c == '0') party_status = -1;
 		 else if (c >= '1'&&c <= '6')
@@ -884,29 +885,29 @@ extern string undefined;
 	 extern vector<WeaponType *> weapontype;
 	 if (!is_available()) return;
 	 ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
-	 extern vector<Location *> listOfLocations;
+	 extern vector<Location *> location;
 	 switch (itemclass_)
 	 {
 	 case WEAPON: {
 		 Weapon* i = new Weapon(*weapontype[getweapontype(itemtypename_)]);
-		 customers.squad[buyer]->give_weapon(*i, &listOfLocations[customers.squad[0]->base]->loot);
+		 customers.squad[buyer]->give_weapon(*i, &location[customers.squad[0]->base]->loot);
 		 if (i->empty()) delete i;
-		 else listOfLocations[customers.squad[0]->base]->loot.push_back(i);
+		 else location[customers.squad[0]->base]->loot.push_back(i);
 		 break; }
 	 case CLIP: {
 		 Clip* i = new Clip(*cliptype[getcliptype(itemtypename_)]);
 		 customers.squad[buyer]->take_clips(*i, 1);
 		 if (i->empty()) delete i;
-		 else listOfLocations[customers.squad[0]->base]->loot.push_back(i);
+		 else location[customers.squad[0]->base]->loot.push_back(i);
 		 break; }
 	 case ARMOR: {
 		 Armor* i = new Armor(getarmortype(itemtypename_));
-		 customers.squad[buyer]->give_armor(*i, &listOfLocations[customers.squad[0]->base]->loot);
+		 customers.squad[buyer]->give_armor(*i, &location[customers.squad[0]->base]->loot);
 		 if (i->empty()) delete i;
-		 else listOfLocations[customers.squad[0]->base]->loot.push_back(i);
+		 else location[customers.squad[0]->base]->loot.push_back(i);
 		 break; }
 	 case LOOT: {
-		 listOfLocations[customers.squad[0]->base]->loot.push_back(getNewLoot(itemtypename_));
+		 location[customers.squad[0]->base]->loot.push_back(getNewLoot(itemtypename_));
 		 break; }
 	 }
  }

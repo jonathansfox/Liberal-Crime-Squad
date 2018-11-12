@@ -2,9 +2,14 @@
 miscactions.cpp
 */
 /* unlock attempt */
-
+enum UnlockAttempt {
+	UNLOCKED,
+	LOUD_FAILURE,
+	NEVERMIND
+};
 UnlockAttempt unlock(short type);
 /* bash attempt */
+UnlockAttempt bash();
 /* computer hack attempt */
 UnlockAttempt hack(short type);
 /* run a radio broadcast */

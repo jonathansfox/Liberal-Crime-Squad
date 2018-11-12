@@ -21,8 +21,6 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 //#include "../common/commonactions.h"
 void sorting_prompt(short listforsorting);
@@ -30,6 +28,7 @@ void sorting_prompt(short listforsorting);
 // for void sortliberals(std::vector<Creature *>&,short,bool)
 #include "../common/commondisplay.h"
 //#include "../common/commondisplayCreature.h"
+void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 //#include "../common/getnames.h"
 string getactivity(ActivityST &act);
 #include "../cursesAlternative.h"
@@ -65,7 +64,7 @@ const string CONST_activate_sleepers007 = "B - Espionage";
 const string CONST_activate_sleepers006 = "A - Communication and Advocacy";
 const string CONST_activate_sleepers005 = " focus on?";
 const string CONST_activate_sleepers004 = "Taking Undercover Action:   What will ";
-void DeprecatedCreature::activate_sleeper()
+void activate_sleeper(DeprecatedCreature *cr)
 {
 	int state = 0;
 	int choice = 0;
@@ -75,9 +74,9 @@ void DeprecatedCreature::activate_sleeper()
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
 		mvaddstrAlt(0, 0, CONST_activate_sleepers004);
-		addstrAlt(getNameAndAlignment().name);
+		addstrAlt(cr->getNameAndAlignment().name);
 		addstrAlt(CONST_activate_sleepers005);
-		printcreatureinfo();
+		printcreatureinfo(cr);
 		makedelimiter();
 		set_color_easy(state == 'a' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		mvaddstrAlt(10, 1, CONST_activate_sleepers006);
@@ -90,60 +89,60 @@ void DeprecatedCreature::activate_sleeper()
 		switch (state)
 		{
 		case 'a':
-			set_color_easy(activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
-			set_color_easy(activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(11, 40, CONST_activate_sleepers011);
-			if (subordinatesleft())
+			if (subordinatesleft(*cr))
 			{
-				set_color_easy(activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+				set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				mvaddstrAlt(12, 40, CONST_activate_sleepers012);
 			}
 			else
 			{
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				if (flag & CREATUREFLAG_BRAINWASHED)
+				if (cr->flag & CREATUREFLAG_BRAINWASHED)
 					mvaddstrAlt(12, 40, CONST_activate_sleepers013);
 				else mvaddstrAlt(12, 40, CONST_activate_sleepers014);
 			}
 			break;
 		case 'b':
-			set_color_easy(activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
-			set_color_easy(activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
-			set_color_easy(activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(12, 40, CONST_activate_sleepers017);
 			break;
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		switch (activity_type())
+		switch (cr->activity_type())
 		{
 		case ACTIVITY_NONE:
-			mvaddstrAlt(22, 3, getNameAndAlignment().name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers018);
 			break;
 		case ACTIVITY_SLEEPER_LIBERAL:
-			mvaddstrAlt(22, 3, getNameAndAlignment().name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers019);
 			break;
 		case ACTIVITY_SLEEPER_RECRUIT:
-			if (subordinatesleft())
+			if (subordinatesleft(*cr))
 			{
-				mvaddstrAlt(22, 3, getNameAndAlignment().name);
+				mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 				addstrAlt(CONST_activate_sleepers020);
 			}
 			break;
 		case ACTIVITY_SLEEPER_SPY:
-			mvaddstrAlt(22, 3, getNameAndAlignment().name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers021);
 			break;
 		case ACTIVITY_SLEEPER_EMBEZZLE:
-			mvaddstrAlt(22, 3, getNameAndAlignment().name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers022);
 			break;
 		case ACTIVITY_SLEEPER_STEAL:
-			mvaddstrAlt(22, 3, getNameAndAlignment().name);
+			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
 			addstrAlt(CONST_activate_sleepers023);
 			break;
 		}
@@ -158,32 +157,32 @@ void DeprecatedCreature::activate_sleeper()
 				switch (choice)
 				{
 				default:
-				case '1':set_activity(ACTIVITY_NONE); break;
-				case '2':set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
+				case '1':cr->set_activity(ACTIVITY_NONE); break;
+				case '2':cr->set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
 				case '3':
-					if (subordinatesleft())
-						set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
+					if (subordinatesleft(*cr))
+						cr->set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
 				}
 				break;
 			case 'b':
 				switch (choice)
 				{
 				default:
-				case '1':set_activity(ACTIVITY_SLEEPER_SPY); break;
-				case '2':set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
-				case '3':set_activity(ACTIVITY_SLEEPER_STEAL); break;
+				case '1':cr->set_activity(ACTIVITY_SLEEPER_SPY); break;
+				case '2':cr->set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
+				case '3':cr->set_activity(ACTIVITY_SLEEPER_STEAL); break;
 				}
 				break;
 			}
 		}
 		if (state == 'c')
 		{
-			//ActivityST oact=activity;
-			set_activity(ACTIVITY_SLEEPER_JOINLCS);
+			//ActivityST oact=cr->activity;
+			cr->set_activity(ACTIVITY_SLEEPER_JOINLCS);
 		}
 		if (c == 'x')
 		{
-			set_activity(ACTIVITY_NONE);
+			cr->set_activity(ACTIVITY_NONE);
 			break;
 		}
 		else
@@ -260,7 +259,7 @@ void activate_sleepers()
 		{
 			int p = page * 9 + (int)(c - 'a');
 			if (p < len(temppool))
-				temppool[p]->activate_sleeper();
+				activate_sleeper(temppool[p]);
 		}
 		if (c == 't')
 		{

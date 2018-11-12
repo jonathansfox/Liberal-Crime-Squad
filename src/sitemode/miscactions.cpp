@@ -91,12 +91,14 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locationsEnums.h"
@@ -104,6 +106,7 @@ const string tag_skill = "skill";
 void clearmessagearea(bool redrawmaparea = true);
 #include "../log/log.h"
 //#include "../common/commondisplay.h"
+void printparty();
 #include "../common/commonactions.h"
 #include "../common/commonactionsCreature.h"
 // for void criminalizeparty
@@ -299,7 +302,7 @@ UnlockAttempt unlock(short type)
 bool isThereASiteAlarm();
 void setSiteAlarmOne();
 /* bash attempt */
-UnlockAttempt DeprecatedCreature::bash()
+UnlockAttempt bash()
 {
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
@@ -747,7 +750,7 @@ void partyrescue(short special)
 				{
 					activesquad->squad[p] = waiting_for_rescue[pl];
 					activesquad->squad[p]->squadid = activesquad->id;
-					activesquad->squad[p]->criminalize(LAWFLAG_ESCAPED);
+					criminalize(*activesquad->squad[p], LAWFLAG_ESCAPED);
 					activesquad->squad[p]->flag |= CREATUREFLAG_JUSTESCAPED;
 					break;
 				}
@@ -760,7 +763,7 @@ void partyrescue(short special)
 			addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_miscactions071, gamelog);
 			gamelog.newline();
-			DeprecatedCreature::printparty();
+			printparty();
 			pressAnyKey();
 			waiting_for_rescue[pl]->location = -1;
 			waiting_for_rescue[pl]->base = activesquad->squad[0]->base;
@@ -780,7 +783,7 @@ void partyrescue(short special)
 					{
 						activesquad->squad[p]->make_prisoner(waiting_for_rescue[pl]);
 						waiting_for_rescue[pl]->squadid = activesquad->id;
-						waiting_for_rescue[pl]->criminalize(LAWFLAG_ESCAPED);
+						criminalize(*waiting_for_rescue[pl], LAWFLAG_ESCAPED);
 						waiting_for_rescue[pl]->flag |= CREATUREFLAG_JUSTESCAPED;
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -799,7 +802,7 @@ void partyrescue(short special)
 						gamelog.newline();
 						waiting_for_rescue[pl]->location = -1;
 						waiting_for_rescue[pl]->base = activesquad->squad[p]->base;
-						DeprecatedCreature::printparty();
+						printparty();
 						pressAnyKey();
 						waiting_for_rescue.erase(waiting_for_rescue.begin() + pl);
 						--pl;

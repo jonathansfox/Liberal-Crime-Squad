@@ -79,10 +79,19 @@ void automatedDataTests() {
 
 // This, this requires a lot of prepwork to test the makecreature(...) method
 const string blankString = "";
+#include "creature/creature.h"
 #include "vehicle/vehicleType.h"
 #include "vehicle/vehicle.h"
-#include "creature/creature.h"
 
+struct newGameArguments {
+	const char recruits;
+	const char base;
+	const bool makelawyer;
+	const bool gaylawyer;
+	const bool sports_car;
+	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
+};
+void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm);
 void testCreature() {
 
 	// This, this requires a lot of prepwork to test the makecreature(...) method
@@ -96,15 +105,16 @@ void testCreature() {
 	char recruits = 1;
 	char base = 21;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
-	newcr->recruitment_activity();
-	newcr->initiateNewgameLocations(newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
+	void recruitment_activity(DeprecatedCreature &cr);
+	recruitment_activity(*newcr);
+	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
 
 	extern short lawList[LAWNUM];
 	for (int i = 0; i < CREATURENUM; i++) {
 		DeprecatedCreature cr;
 		for (int j = -2; j < 3; j++) {
 			lawList[LAW_GUNCONTROL] = j;
-			cr.makecreature(i);
+			makecreature(cr, i);
 		}
 		if (i % 20 == 0) {
 			pressAnyKey();

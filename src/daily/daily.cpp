@@ -48,23 +48,25 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
+#include "../creature/deprecatedCreatureA.h"
+
+#include "../creature/deprecatedCreatureB.h"
 
 #include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 //#include "../news/news.h"
-void majornewspaper(char canseethings);
+void majornewspaper(char &clearformess, char canseethings);
 //#include "../sitemode/sitemode.h"
 void mode_site(const short loc);
 #include "../log/log.h"
@@ -81,13 +83,14 @@ void mode_site(const short loc);
 // for void basesquad(squadst *,long)
 #include "../daily/daily.h"
 /* squad members with no chain of command lose contact */
-void dispersalcheck(const char clearformess);
+void dispersalcheck(char &clearformess);
 
 #include "../daily/activities.h"
 //for void repairarmor(Creature &cr,char &clearformess); and stealcar
 #include "../daily/siege.h"        
 //for sigeturn and siegecheck
 //#include "../daily/recruit.h"
+void recruitment_activity(DeprecatedCreature &cr);
 char completerecruitmeeting(Deprecatedrecruitst &d, const int p);
 //#include "../daily/date.h"
 char completevacation(Deprecateddatest &d, int p);
@@ -161,7 +164,7 @@ void hospital(int loc)
 	{
 		eraseAlt();
 		locheader();
-		DeprecatedCreature::printparty();
+		printparty();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10, 1, f_fixWounds);
 		set_color_easy(WHITE_ON_BLACK);
@@ -186,7 +189,7 @@ void hospital(int loc)
 			for (int p = 5; p >= 0; p--)
 			{
 				if (activesquad->squad[p] == NULL)continue;
-				activesquad->squad[p]->hospitalize(loc);
+				hospitalize(loc, *activesquad->squad[p]);
 			}
 			break;
 		}
@@ -227,7 +230,7 @@ void choose_buyer(short &buyer)
 	if (partysize <= 1) return;
 	while (true)
 	{
-		DeprecatedCreature::printparty();
+		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 20, chooseALiberalTo + toSpend);
 		int c = getkeyAlt();
@@ -265,7 +268,7 @@ void dealership(int loc)
 	{
 		eraseAlt();
 		locheader();
-		DeprecatedCreature::printparty();
+		printparty();
 		DeprecatedCreature *sleepercarsalesman = findSleeperCarSalesman(loc);
 		Vehicle* car_to_sell = 0;
 		int price = 0;
@@ -556,13 +559,13 @@ void meetWithPotentialRecruits(char &clearformess) {
 	}
 }
 // Determines the number of recruitment meetings a creature has scheduled
-int DeprecatedCreature::scheduledmeetings() const
+int scheduledmeetings(const DeprecatedCreature& cr)
 {
 	extern vector<Deprecatedrecruitst *> recruit;
 	int meetings = 0;
 	for (int p = len(recruit) - 1; p >= 0; p--)
 		// If meeting is with this creature
-		if (recruit[p]->recruiter_id == id) meetings++;
+		if (recruit[p]->recruiter_id == cr.id) meetings++;
 	return meetings;
 }
 void doRent(const char clearformess) {
@@ -586,8 +589,21 @@ void doRent(const char clearformess) {
 			}
 }
 
+/* hostage tending */
+void tendhostage(DeprecatedCreature *cr, char &clearformess);
+/* armor repair */
+void repairarmor(DeprecatedCreature &cr, char &clearformess);
+/* armor manufacture */
+void makearmor(DeprecatedCreature &cr, char &clearformess);
+/* search for polls */
+void survey(DeprecatedCreature *cr);
+/* steal a car */
+bool stealcar(DeprecatedCreature &cr, char &clearformess);
+bool carselect(DeprecatedCreature &cr, short &cartype);
+/* get a wheelchair */
+void getwheelchair(DeprecatedCreature &cr, char &clearformess);
 
-void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
+void activitiesForIndividuals(char &clearformess) {
 	const string CONST_daily019 = " surfs the Net for recent opinion polls.";
 	extern Log gamelog;
 	extern vector<DeprecatedCreature *> pool;
@@ -624,27 +640,26 @@ void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
 		switch (pool[p]->activity_type())
 		{
 		case ACTIVITY_REPAIR_ARMOR:
-			pool[p]->repairarmor(clearformess);
+			repairarmor(*pool[p], clearformess);
 			break;
 		case ACTIVITY_MAKE_ARMOR:
-			pool[p]->makearmor(clearformess);
+			makearmor(*pool[p], clearformess);
 			// Uncomment this to have people stop making armor after the first day
 			//pool[p]->activity.type=ACTIVITY_NONE;
 			break;
 		case ACTIVITY_WHEELCHAIR:
-			pool[p]->getwheelchair(clearformess);
+			getwheelchair(*pool[p], clearformess);
 			if (pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->set_activity(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_RECRUITING:
 			clearformess = 1;
-			pool[p]->recruitment_activity();
+			recruitment_activity(*pool[p]);
 			break;
 		case ACTIVITY_STEALCARS:
-			clearformess = 1;
-			if (pool[p]->stealcar())
+			if (stealcar(*pool[p], clearformess))
 				pool[p]->set_activity(ACTIVITY_NONE);
 			else if (pool[p]->location != -1 && LocationsPool::getInstance().getLocationType(pool[p]->location) == SITE_GOVERNMENT_POLICESTATION)
-				pool[p]->criminalize( LAWFLAG_CARTHEFT);
+				criminalize(*pool[p], LAWFLAG_CARTHEFT);
 			break;
 		case ACTIVITY_POLLS:
 			if (clearformess) eraseAlt();
@@ -655,7 +670,7 @@ void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
 			gamelog.nextMessage();
 			pressAnyKey();
 			pool[p]->train(SKILL_COMPUTERS, max(3 - pool[p]->get_skill(SKILL_COMPUTERS), 1));
-			pool[p]->survey();
+			survey(pool[p]);
 			//pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
 			clearformess = 1;
 			break;
@@ -664,7 +679,7 @@ void DeprecatedCreature::activitiesForIndividuals(char &clearformess) {
 			break;
 		case ACTIVITY_NONE:
 			if (pool[p]->align == 1 && !pool[p]->is_imprisoned() && (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
-				pool[p]->repairarmor(clearformess);
+				repairarmor(*pool[p], clearformess);
 			break;
 		}
 	}
@@ -674,9 +689,8 @@ void tendAllHostages(char &clearformess) {
 	for (int p = len(pool) - 1; p >= 0; p--)
 	{
 		if (!pool[p]->getNameAndAlignment().alive) continue;
-		if (pool[p]->align != 1){
-			pool[p]->tendhostage(clearformess); // assigned clearformess true if any hostages exists (and don't escape)
-		}
+		if (pool[p]->align != 1)
+			tendhostage(pool[p], clearformess);
 	}
 }
 void squadOverrideIndividual(const int sq, const char clearformess) {
@@ -742,6 +756,7 @@ void cullUnavailableCars(vector<long> &wantcar, vector<long> &caridused, const i
 		}
 	}
 }
+int driveskill(DeprecatedCreature &cr, int v);
 void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) {
 	extern Log gamelog;
 	extern vector<Deprecatedsquadst *> squad;
@@ -788,16 +803,16 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 					{
 						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (squad[sq]->squad[passenger[p]]->driveskill(v) > max&&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v) > max&&
 								squad[sq]->squad[passenger[p]]->canwalk())
-								max = squad[sq]->squad[passenger[p]]->driveskill(v);
+								max = driveskill(*squad[sq]->squad[passenger[p]], v);
 					}
 					vector<int> goodp;
 					for (int p = 0; p < len(passenger); p++)
 					{
 						int v = id_getcar(squad[sq]->squad[passenger[p]]->carid);
 						if (v >= 0)
-							if (squad[sq]->squad[passenger[p]]->driveskill(v) == max &&
+							if (driveskill(*squad[sq]->squad[passenger[p]], v) == max &&
 								squad[sq]->squad[passenger[p]]->canwalk())
 								goodp.push_back(passenger[p]);
 					}
@@ -817,15 +832,15 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 				{
 					long v = id_getcar(squad[sq]->squad[driver[p]]->carid);
 					if (v >= 0)
-						if (squad[sq]->squad[driver[p]]->driveskill(v) > max)
-							max = squad[sq]->squad[driver[p]]->driveskill(v);
+						if (driveskill(*squad[sq]->squad[driver[p]], v) > max)
+							max = driveskill(*squad[sq]->squad[driver[p]], v);
 				}
 				vector<int> goodp;
 				for (int p = 0; p < len(driver); p++)
 				{
 					long v = id_getcar(squad[sq]->squad[driver[p]]->carid);
 					if (v >= 0)
-						if (squad[sq]->squad[driver[p]]->driveskill(v) == max)
+						if (driveskill(*squad[sq]->squad[driver[p]], v) == max)
 							goodp.push_back(p);
 				}
 				if (len(goodp))
@@ -883,7 +898,7 @@ void giveDriverExperience(const int sq) {
 			}
 		}
 }
-void squadDepart(const int sq, const char clearformess) {
+void squadDepart(const int sq, char &clearformess) {
 	const string singleDot = ".";
 	const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
 	const string CONST_daily017 = " has arrived at ";
@@ -918,6 +933,7 @@ void squadDepart(const int sq, const char clearformess) {
 			basesquad(squad[sq], l);
 			locatesquad(squad[sq], l);
 		}
+		clearformess = 1;
 		break;
 	case SITE_BUSINESS_DEPTSTORE:
 	case SITE_BUSINESS_HALLOWEEN:
@@ -956,6 +972,7 @@ void squadDepart(const int sq, const char clearformess) {
 		showcarprefs = 0;
 		if (activesquad->squad[0] != NULL)
 			locatesquad(activesquad, activesquad->squad[0]->base);
+		clearformess = 1;
 		break;
 	case SITE_HOSPITAL_UNIVERSITY:
 	case SITE_HOSPITAL_CLINIC:
@@ -972,6 +989,7 @@ void squadDepart(const int sq, const char clearformess) {
 		hospital(squad[sq]->activity.arg);
 		if (activesquad->squad[0] != NULL)
 			locatesquad(activesquad, activesquad->squad[0]->base);
+		clearformess = 1;
 		break;
 	default:
 		if (clearformess) eraseAlt();
@@ -1020,6 +1038,7 @@ void squadDepart(const int sq, const char clearformess) {
 		}
 		if (squad[sq]->squad[0])
 			locatesquad(squad[sq], squad[sq]->squad[0]->base);
+		clearformess = 1;
 		break;
 	}
 }
@@ -1112,7 +1131,6 @@ void advanceSquads(char &clearformess) {
 			}
 			if (canDepart) {
 				squadDepart(sq, clearformess);
-				clearformess = 1;
 			}
 			squad[sq]->activity.type = ACTIVITY_NONE;
 		}
@@ -1159,36 +1177,30 @@ void advanceday(char &clearformess, char canseethings)
 	// Move squadless Liberals to their bases if not under siege
 	if (!disbanding) {
 		moveSquadlessToBaseIfNotSiege();
-		advanceSquads(clearformess);  //MIGHT assign clearformess true
-		tendAllHostages(clearformess); // assigns clearformess true if any hostages exists (and don't escape) checks clearformess iff hostage(s) escape
-		DeprecatedCreature::activitiesForIndividuals(clearformess);  //MIGHT assign clearformess true
+		advanceSquads(clearformess);
+		tendAllHostages(clearformess);
+		activitiesForIndividuals(clearformess);
 	}
-	// CANNOT change clearformess
 	funds_and_trouble(clearformess);
 	determineMedicalSupportAtEachLocation(clearformess);
 	//DISPERSAL CHECK
 	dispersalcheck(clearformess);
 	//DO RENT
 	doRent(clearformess);
-
 	//MEET WITH POTENTIAL RECRUITS
-	meetWithPotentialRecruits(clearformess); //MIGHT assign clearformess true
+	meetWithPotentialRecruits(clearformess);
 	//DO DATES
 	if (!disbanding) {
-		doDates(clearformess); //MIGHT assign clearformess true
+		doDates(clearformess);
 	}
-
-	// CANNOT change clearformess
 	//AGE THINGS
 	ageThings(clearformess);
-
 	//DO REPORTING BY MAJOR NEWSPAPERS
-	clearformess = true; // ALWAYS assigns clearformess true
-	majornewspaper(canseethings);
+	majornewspaper(clearformess, canseethings);
 	//CLEAN UP GONE SQUADS
 	cleangonesquads();
 	//SIEGE?
-	siegeturn();
+	siegeturn(clearformess);
 	siegecheck(canseethings);
 	//CLEAN GONE SQUADS AGAIN
 	cleangonesquads();

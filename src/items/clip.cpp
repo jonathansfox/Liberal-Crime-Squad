@@ -75,7 +75,7 @@ string Clip::equip_title() const
 	extern vector<ClipType *> cliptype;
 	return cliptype[getcliptype(get_itemtypename())]->get_name();
 }
-const string Clip::get_name() const
+const string& Clip::get_name() const
 {
 	extern vector<ClipType *> cliptype;
 	return cliptype[getcliptype(get_itemtypename())]->get_name();

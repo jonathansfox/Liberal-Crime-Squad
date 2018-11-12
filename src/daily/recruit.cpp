@@ -32,14 +32,17 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+
+#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
-//#include "../items/armortype.h"
+#include "../items/armortype.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../basemode/activate.h"
@@ -48,6 +51,7 @@ const string tag_skill = "skill";
 // for commondisplay.h
 #include "../common/commondisplay.h"
 #include "../common/commondisplayCreature.h"
+// for void printcreatureinfo(Creature *,unsigned char=255)
 #include "../common/getnames.h"
 // for getview
 //#include "../common/commonactions.h"
@@ -71,6 +75,7 @@ const string CONST_recruit007 = "%s managed to set up a meeting with ";
 const string CONST_recruit006 = "%s was unable to track down a %s.";
 const string CONST_recruit005 = "%s asks around for a %s...";
 */
+char talk(DeprecatedCreature &a, const int t);
 
 Deprecatedrecruitst::Deprecatedrecruitst(DeprecatedCreature *cr, int id) {
 	extern short attitude[VIEWNUM];
@@ -124,50 +129,47 @@ string recruitName(int creatureType) {
 short getCurrentSite();
 void setCurrentSite(const short i);
 const string singleDot = ".";
-
-void DeprecatedCreature::recruitment_activity()
+void recruitment_activity(DeprecatedCreature &cr)
 {
 	extern MusicClass music;
 	extern DeprecatedCreature encounter[ENCMAX];
 	int ocursite = getCurrentSite();
-	setCurrentSite(location);
-	int type = activity_arg();
+	setCurrentSite(cr.location);
+	int type = cr.activity_arg();
 	int difficulty = recruitFindDifficulty(type);
 	string name = recruitName(type);
 	if (type >= 0)
 	{
 		music.play(MUSIC_RECRUITING);
-		train(SKILL_STREETSENSE, 5);
+		cr.train(SKILL_STREETSENSE, 5);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(0, 0, CONST_recruit013);
-		printcreatureinfo();
+		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10, 0, getNameAndAlignment().name + CONST_recruit005A + name + CONST_recruit005B);
+		mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit005A + name + CONST_recruit005B);
 		pressAnyKey();
 		int recruitCount = 0;
 		if (difficulty < 10)
 			// Generate recruitment candidates
 			for (recruitCount = 0; recruitCount < 5; recruitCount++)
 			{
-				if (recruitCount == 0 || skill_roll(SKILL_STREETSENSE) >(difficulty + recruitCount * 2))
+				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE) >(difficulty + recruitCount * 2))
 				{
-
-					void makecreature(const int x, const short type);
 					makecreature(recruitCount, type);
 					encounter[recruitCount].namecreature();
 				}
 				else break;
 			}
 		if (recruitCount == 0) {
-			mvaddstrAlt(11, 0, getNameAndAlignment().name + CONST_recruit006A + name + CONST_recruit006B);
+			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit006A + name + CONST_recruit006B);
 			pressAnyKey();
 			setCurrentSite(ocursite);
 			return;
 		}
 		else if (recruitCount == 1) {
-			mvaddstrAlt(11, 0, getNameAndAlignment().name + CONST_recruit007);
+			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit007);
 			set_alignment_color(encounter[0].align);
 			addstrAlt(encounter[0].getNameAndAlignment().name);
 			addstrAlt(get_age_string(encounter[0].getCreatureBio(), encounter[0].animalgloss));
@@ -177,9 +179,9 @@ void DeprecatedCreature::recruitment_activity()
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, CONST_recruit013);
-			encounter[0].printcreatureinfo();
+			printcreatureinfo(&encounter[0]);
 			makedelimiter();
-			talk(0);
+			talk(cr, 0);
 		}
 		else {
 			while (true)
@@ -187,10 +189,10 @@ void DeprecatedCreature::recruitment_activity()
 				eraseAlt();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(0, 0, CONST_recruit013);
-				printcreatureinfo();
+				printcreatureinfo(&cr);
 				makedelimiter();
 				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 0, getNameAndAlignment().name + CONST_recruit010);
+				mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit010);
 				for (int i = 0; i < recruitCount; i++) {
 					set_color_easy(WHITE_ON_BLACK);
 					mvaddstrAlt(12 + i, 0, char('a' + i) + CONST_recruit011);
@@ -209,10 +211,10 @@ void DeprecatedCreature::recruitment_activity()
 					eraseAlt();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(0, 0, CONST_recruit013);
-					encounter[c].printcreatureinfo();
+					printcreatureinfo(&encounter[c]);
 					makedelimiter();
-					talk(c);
-					if (encounter[c].id == id) { encounter[c].delenc(0); }
+					talk(cr, c);
+					if (encounter[c].id == id) delenc(c, 0);
 					recruitCount--;
 					if (recruitCount <= 0) break;
 				}

@@ -2,7 +2,7 @@
 #define FIGHT_H0
 
 /* attack handling for each side as a whole */
-//void youattack();
+void youattack();
 void enemyattack();
 /* kills the specified creature from the encounter, dropping loot */
 void delenc(short e, char loot);

@@ -983,12 +983,14 @@ This file is part of Liberal Crime Squad.                                       
 		the bottom of includes.h in the top src folder.
 */
 //TODO: Add logging for this file? --Addictgamer
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
 #include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -2527,51 +2529,7 @@ string getLastNameForHeadline(char* fullName)
 	string ret = lastName;
 	return ret;
 }
-map<int, string> singleLineHeaders = {
-	map<int, string>::value_type( VIEW_TAXES,
-	CONST_news768),
-	map<int, string>::value_type( VIEW_SWEATSHOPS,
-	CONST_news768),
-	map<int, string>::value_type( VIEW_CEOSALARY,
-		 CONST_news768),
-		
-	map<int, string>::value_type( VIEW_NUCLEARPOWER,
-		 CONST_news769),
-		
-	map<int, string>::value_type( VIEW_POLICEBEHAVIOR,
-		 CONST_news770),
-		
-	map<int, string>::value_type( VIEW_DEATHPENALTY,
-		 CONST_news771),
-		
-	map<int, string>::value_type( VIEW_INTELLIGENCE,
-		 CONST_news772),
-		
-	map<int, string>::value_type( VIEW_ANIMALRESEARCH,
-	CONST_news773),
-	map<int, string>::value_type( VIEW_GENETICS,
-		 CONST_news773),
-		
-	map<int, string>::value_type( VIEW_FREESPEECH,
-	CONST_news774),
-	map<int, string>::value_type( VIEW_GAY,
-	CONST_news774),
-	map<int, string>::value_type( VIEW_JUSTICES,
-		 CONST_news774),
-		
-	map<int, string>::value_type( VIEW_POLLUTION,
-		 CONST_news775),
-		
-	map<int, string>::value_type( VIEW_CORPORATECULTURE,
-		 CONST_news776),
-		
-	map<int, string>::value_type( VIEW_AMRADIO,
-		 CONST_news777),
-		
-	map<int, string>::value_type( VIEW_CABLENEWS,
-		 CONST_news778),
-		
-};
+
 void displaystoryheader(const Deprecatednewsstoryst ns, const bool liberalguardian, int& y, int header)
 {
 	extern char newscherrybusted;
@@ -2681,12 +2639,49 @@ void displaystoryheader(const Deprecatednewsstoryst ns, const bool liberalguardi
 					if (ns.priority > 150)
 					{
 						change_public_opinion(header, 5, 1); // Bonus for big story
-						if (singleLineHeaders.count(header) > 0) {
-							single_line_news = singleLineHeaders[header];
-						}
-						else {
+						switch (header)
+						{
+						case VIEW_TAXES:
+						case VIEW_SWEATSHOPS:
+						case VIEW_CEOSALARY:
+							single_line_news = CONST_news768;
+							break;
+						case VIEW_NUCLEARPOWER:
+							single_line_news = CONST_news769;
+							break;
+						case VIEW_POLICEBEHAVIOR:
+							single_line_news = CONST_news770;
+							break;
+						case VIEW_DEATHPENALTY:
+							single_line_news = CONST_news771;
+							break;
+						case VIEW_INTELLIGENCE:
+							single_line_news = CONST_news772;
+							break;
+						case VIEW_ANIMALRESEARCH:
+						case VIEW_GENETICS:
+							single_line_news = CONST_news773;
+							break;
+						case VIEW_FREESPEECH:
+						case VIEW_GAY:
+						case VIEW_JUSTICES:
+							single_line_news = CONST_news774;
+							break;
+						case VIEW_POLLUTION:
+							single_line_news = CONST_news775;
+							break;
+						case VIEW_CORPORATECULTURE:
+							single_line_news = CONST_news776;
+							break;
+						case VIEW_AMRADIO:
+							single_line_news = CONST_news777;
+							break;
+						case VIEW_CABLENEWS:
+							single_line_news = CONST_news778;
+							break;
+						default:
 							single_line_news = CONST_news779;
-
+							break;
 						}
 					}
 					else
@@ -4118,8 +4113,9 @@ void display_newspaper()
 	}
 }
 /* news - major newspaper reporting on lcs and other topics */
-void majornewspaper(char canseethings)
+void majornewspaper(char &clearformess, char canseethings)
 {
+	clearformess = true;
 	generate_random_event_news_stories();
 	clean_up_empty_news_stories();
 	if (canseethings) run_television_news_stories();

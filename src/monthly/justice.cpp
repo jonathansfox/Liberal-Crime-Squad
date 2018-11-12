@@ -201,8 +201,6 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
@@ -323,40 +321,36 @@ extern string singleSpace;
 // string counts_of;
 // string execution_in_three_months;
  /* monthly - sentence a liberal */
- void DeprecatedCreature::penalize(const char lenient)
+ void penalize(DeprecatedCreature &g, const char lenient)
  {
-	 CreatureJustice g_crimes = getCreatureJustice();
+	 CreatureJustice g_crimes = g.getCreatureJustice();
 	 extern Log gamelog;
 	 extern short lawList[LAWNUM];
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
-	 short oldsentence = getCreatureJustice().sentence;
-	 char olddeathpenalty = getCreatureJustice().deathpenalty;
-	 sentence = 0;
-	 deathpenalty = 0;
+	 short oldsentence = g.getCreatureJustice().sentence;
+	 char olddeathpenalty = g.getCreatureJustice().deathpenalty;
+	 g.sentence = 0, g.deathpenalty = 0;
 	 if (!lenient && ((g_crimes.crimes_suspected[LAWFLAG_MURDER]) || (g_crimes.crimes_suspected[LAWFLAG_TREASON]) ||
 		 ((g_crimes.crimes_suspected[LAWFLAG_BURNFLAG]) && lawList[LAW_FLAGBURNING] == -2) ||
 		 lawList[LAW_DEATHPENALTY] == -2))
 	 {
-		 if (lawList[LAW_DEATHPENALTY] == -2) deathpenalty = 1;
-		 if (lawList[LAW_DEATHPENALTY] == -1) deathpenalty = LCSrandom(3);
-		 if (lawList[LAW_DEATHPENALTY] == 0) deathpenalty = LCSrandom(2);
-		 if (lawList[LAW_DEATHPENALTY] == 1) deathpenalty = !LCSrandom(5);
-		 if (lawList[LAW_DEATHPENALTY] == 2) deathpenalty = 0;
+		 if (lawList[LAW_DEATHPENALTY] == -2) g.deathpenalty = 1;
+		 if (lawList[LAW_DEATHPENALTY] == -1) g.deathpenalty = LCSrandom(3);
+		 if (lawList[LAW_DEATHPENALTY] == 0) g.deathpenalty = LCSrandom(2);
+		 if (lawList[LAW_DEATHPENALTY] == 1) g.deathpenalty = !LCSrandom(5);
+		 if (lawList[LAW_DEATHPENALTY] == 2) g.deathpenalty = 0;
 	 }
-	 cap_crimes_at_ten();
+	 g.cap_crimes_at_ten();
 	 //CALC TIME
-	 if (!getCreatureJustice().deathpenalty)
+	 if (!g.getCreatureJustice().deathpenalty)
 	 {
-		 sentence = calculateSentence(getCreatureJustice(), lenient);
+		 g.sentence = calculateSentence(g.getCreatureJustice(), lenient);
 	 }
 	 //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
-	 else if (getCreatureJustice().deathpenalty&&lenient) {
-		 deathpenalty = 0;
-		 sentence = -1; 
-	 }
+	 else if (g.getCreatureJustice().deathpenalty&&lenient) g.deathpenalty = 0, g.sentence = -1;
 	 //MENTION LENIENCY
 	 if (lenient)
 	 {
@@ -368,10 +362,10 @@ extern string singleSpace;
 	 //MENTION SENTENCE
 	 if (olddeathpenalty)
 	 {
-		 deathpenalty = 1;
-		 sentence = 3;
+		 g.deathpenalty = 1;
+		 g.sentence = 3;
 		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(7, 1, propername, gamelog);
+		 mvaddstrAlt(7, 1, g.propername, gamelog);
 		 addstrAlt(CONST_justice019, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
@@ -379,11 +373,11 @@ extern string singleSpace;
 		 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
 		 pressAnyKey();
 	 }
-	 else if (getCreatureJustice().deathpenalty)
+	 else if (g.getCreatureJustice().deathpenalty)
 	 {
-		 sentence = 3;
+		 g.sentence = 3;
 		 set_color_easy(YELLOW_ON_RED_BRIGHT);
-		 mvaddstrAlt(7, 1, propername, gamelog);
+		 mvaddstrAlt(7, 1, g.propername, gamelog);
 		 addstrAlt(CONST_justice020, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
@@ -392,41 +386,41 @@ extern string singleSpace;
 		 pressAnyKey();
 	 }
 	 // Don't give a time-limited sentence if they already have a life sentence.
-	 else if ((getCreatureJustice().sentence >= 0 && oldsentence < 0) ||
-		 (getCreatureJustice().sentence == 0 && oldsentence > 0))
+	 else if ((g.getCreatureJustice().sentence >= 0 && oldsentence < 0) ||
+		 (g.getCreatureJustice().sentence == 0 && oldsentence > 0))
 	 {
-		 sentence = oldsentence;
+		 g.sentence = oldsentence;
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, propername, gamelog);
+		 mvaddstrAlt(7, 1, g.propername, gamelog);
 		 addstrAlt(CONST_justice021, gamelog);
 		 mvaddstrAlt(8, 1, CONST_justice022, gamelog);
-		 if (getCreatureJustice().sentence > 1 && lenient)
+		 if (g.getCreatureJustice().sentence > 1 && lenient)
 		 {
-			 sentence--;
+			 g.sentence--;
 			 addstrAlt(CONST_justice141, gamelog);
 		 }
 		 else addstrAlt(singleDot, gamelog);
 		 pressAnyKey();
 	 }
-	 else if (getCreatureJustice().sentence == 0)
+	 else if (g.getCreatureJustice().sentence == 0)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, propername, gamelog);
+		 mvaddstrAlt(7, 1, g.propername, gamelog);
 		 addstrAlt(CONST_justice024, gamelog);
 		 pressAnyKey();
 	 }
 	 else
 	 {
-		 if (getCreatureJustice().sentence >= 36)sentence -= sentence % 12;
+		 if (g.getCreatureJustice().sentence >= 36)g.sentence -= g.sentence % 12;
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(7, 1, propername, gamelog);
+		 mvaddstrAlt(7, 1, g.propername, gamelog);
 		 addstrAlt(CONST_justice025, gamelog);
-		 if (getCreatureJustice().sentence > 1200) sentence /= -1200;
-		 if (getCreatureJustice().sentence <= -1)
+		 if (g.getCreatureJustice().sentence > 1200) g.sentence /= -1200;
+		 if (g.getCreatureJustice().sentence <= -1)
 		 {
-			 if (getCreatureJustice().sentence < -1)
+			 if (g.getCreatureJustice().sentence < -1)
 			 {
-				 addstrAlt(-(getCreatureJustice().sentence), gamelog);
+				 addstrAlt(-(g.getCreatureJustice().sentence), gamelog);
 				 addstrAlt(CONST_justice026, gamelog);
 				 gamelog.newline();
 				 // Don't bother saying this if the convicted already has one or
@@ -437,52 +431,52 @@ extern string singleSpace;
 					 addstrAlt(singleDot, gamelog);
 					 pressAnyKey();
 					 mvaddstrAlt(9, 1, CONST_justice027, gamelog);
-					 addstrAlt(propername, gamelog);
+					 addstrAlt(g.propername, gamelog);
 				 }
 			 }
 			 else addstrAlt(CONST_justice028, gamelog);
 		 }
-		 else if (getCreatureJustice().sentence >= 36)
+		 else if (g.getCreatureJustice().sentence >= 36)
 		 {
-			 addstrAlt(getCreatureJustice().sentence / 12, gamelog);
+			 addstrAlt(g.getCreatureJustice().sentence / 12, gamelog);
 			 addstrAlt(CONST_justice029, gamelog);
 		 }
 		 else
 		 {
-			 addstrAlt(getCreatureJustice().sentence, gamelog);
+			 addstrAlt(g.getCreatureJustice().sentence, gamelog);
 			 addstrAlt(CONST_justice030, gamelog);
-			 if (getCreatureJustice().sentence > 1)addstrAlt(CONST_justice031, gamelog);
+			 if (g.getCreatureJustice().sentence > 1)addstrAlt(CONST_justice031, gamelog);
 			 addstrAlt(CONST_justice032, gamelog);
 		 }
 		 // Mash together compatible sentences.
-		 if ((getCreatureJustice().sentence > 0 && oldsentence > 0) ||
-			 (getCreatureJustice().sentence < 0 && oldsentence < 0))
+		 if ((g.getCreatureJustice().sentence > 0 && oldsentence > 0) ||
+			 (g.getCreatureJustice().sentence < 0 && oldsentence < 0))
 		 {
 			 addstrAlt(CONST_justice033, gamelog);
 			 moveAlt(8, 1);
 			 if (lenient)
 			 {
-				 if (abs(oldsentence) > abs(getCreatureJustice().sentence))
-					 sentence = oldsentence;
+				 if (abs(oldsentence) > abs(g.getCreatureJustice().sentence))
+					 g.sentence = oldsentence;
 				 addstrAlt(CONST_justice034, gamelog);
 			 }
 			 else
 			 {
-				 sentence += oldsentence;
+				 g.sentence += oldsentence;
 				 addstrAlt(CONST_justice035, gamelog);
 			 }
 		 }
 		 addstrAlt(singleDot, gamelog);
 		 //dejuice boss
-		 dejuiceBoss();
+		 dejuiceBoss(g);
 		 pressAnyKey();
 	 }
 	 gamelog.nextMessage();
  }
  /* monthly - move a liberal to jail */
- void DeprecatedCreature::imprison()
+ void imprison(DeprecatedCreature &g)
  {
-	 location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,location));
+	 g.location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location));
  }
  string commaAndPunctuation(const int typenum) {
 	 if (typenum > 1) return commaSpace;
@@ -642,7 +636,14 @@ extern string singleSpace;
 	 return y;
 
  }
-
+ enum LegalDefense {
+	 UNDECIDED = -1,
+	 COURT_ATTORNEY = 0,
+	 SELF_REPRESENT = 1,
+	 PLEAD_GUILTY = 2,
+	 ACE_ATTORNEY = 3,
+	 SLEEPER_ATTORNEY = 4
+ };
  int get_sentence(CreatureJustice g, DeprecatedCreature &sleeperLawyer, const LegalDefense defense, const bool sleeperjudge) {
 	 extern Log gamelog;
 	 set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -675,7 +676,7 @@ extern string singleSpace;
 	 }
 	 return new_sentence;
  }
- bool DeprecatedCreature::hung_jury(const bool sleeperjudge, const int scarefactor) {
+ bool hung_jury(DeprecatedCreature &g, const bool sleeperjudge, const int scarefactor) {
 	 extern Log gamelog;
 	 bool keeplawflags = false;
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -683,13 +684,13 @@ extern string singleSpace;
 	 gamelog.newline();
 	 pressAnyKey();
 	 //RE-TRY
-	 if (LCSrandom(2) || scarefactor >= 10 || getCreatureConfessions())
+	 if (LCSrandom(2) || scarefactor >= 10 || g.getCreatureConfessions())
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(5, 1, CONST_justice133, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
-		 location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, location);
+		 g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
 		 keeplawflags = true;
 	 }
 	 //NO RE-TRY
@@ -698,26 +699,26 @@ extern string singleSpace;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(5, 1, CONST_justice134, gamelog);
 		 gamelog.newline();
-		 if (getCreatureJustice().sentence == 0)
+		 if (g.getCreatureJustice().sentence == 0)
 		 {
 			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(7, 1, getNameAndAlignment().name, gamelog);
+			 mvaddstrAlt(7, 1, g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice139, gamelog);
 		 }
 		 else
 		 {
 			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(7, 1, getNameAndAlignment().name, gamelog);
+			 mvaddstrAlt(7, 1, g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice140, gamelog);
-			 if (!getCreatureJustice().deathpenalty && getCreatureJustice().sentence > 1 && (LCSrandom(2) || sleeperjudge))
+			 if (!g.getCreatureJustice().deathpenalty && g.getCreatureJustice().sentence > 1 && (LCSrandom(2) || sleeperjudge))
 			 {
-				 sentence--;
+				 g.sentence--;
 				 addstrAlt(CONST_justice141, gamelog);
 			 }
 			 else addstrAlt(singleDot, gamelog);
-			 if (getCreatureJustice().deathpenalty)
+			 if (g.getCreatureJustice().deathpenalty)
 			 {
-				 sentence = 3;
+				 g.sentence = 3;
 				 mvaddstrAlt(9, 1, execution_in_three_months, gamelog);
 			 }
 		 }
@@ -758,7 +759,7 @@ extern string singleSpace;
 		 addstrAlt(CONST_justice119, gamelog);
 	 }
  }
- int DeprecatedCreature::get_defensepower(DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const int prosecution) {
+ int get_defensepower(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const int prosecution) {
 	 extern Log gamelog;
 	 DeprecatedCreature *sleeperlawyer = &sleeperLawyer;
 	 int defensepower = 0;
@@ -783,7 +784,7 @@ extern string singleSpace;
 			 printultimatedefensepower(prosecution, attorneyname);
 		 }
 		 if (defense == SLEEPER_ATTORNEY && defensepower > 145 && prosecution < 100) {
-			 sleeperlawyer->add_juice(10, 500); // Bow please
+			 addjuice(*sleeperlawyer, 10, 500); // Bow please
 		 }
 		 gamelog.newline();
 
@@ -799,16 +800,16 @@ extern string singleSpace;
 		 //
 		 // If either your persuasion or your law roll is too low, you'll end up getting a negative
 		 // result that will drag down your defense. So try not to suck in either area.
-		 defensepower = 5 * (skill_roll(SKILL_PERSUASION) - 3) +
-			 10 * (skill_roll(SKILL_LAW) - 3);
-		 train(SKILL_PERSUASION, 50);
-		 train(SKILL_LAW, 50);
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 defensepower = 5 * (g.skill_roll(SKILL_PERSUASION) - 3) +
+			 10 * (g.skill_roll(SKILL_LAW) - 3);
+		 g.train(SKILL_PERSUASION, 50);
+		 g.train(SKILL_LAW, 50);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 if (defensepower <= 0)
 		 {
 			 addstrAlt(CONST_justice120, gamelog);
 			 gamelog.newline();
-			 add_juice(-10, -50); // You should be ashamed
+			 addjuice(g, -10, -50); // You should be ashamed
 		 }
 		 else if (defensepower <= 25) addstrAlt(CONST_justice121, gamelog);
 		 else if (defensepower <= 50) addstrAlt(CONST_justice122, gamelog);
@@ -818,13 +819,13 @@ extern string singleSpace;
 		 else
 		 {
 			 addstrAlt(CONST_justice126, gamelog);
-			 add_juice(50, 1000); // That shit is legend
+			 addjuice(g, 50, 1000); // That shit is legend
 		 }
 		 gamelog.newline();
 	 }
 	 return defensepower;
  }
- bool DeprecatedCreature::pleadInnocent(DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const bool sleeperjudge, const int scarefactor) {
+ bool pleadInnocent(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const bool sleeperjudge, const int scarefactor) {
 
 	 // Show die rolls, 100% accurate poll numbers
 	 extern bool SHOWMECHANICS;
@@ -833,7 +834,7 @@ extern string singleSpace;
 	 int prosecution = 0;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(1, 1, getNameAndAlignment().name, gamelog);
+	 mvaddstrAlt(1, 1, g.getNameAndAlignment().name, gamelog);
 	 addstrAlt(CONST_justice090);
 	 //TRIAL MESSAGE
 	 set_color_easy(WHITE_ON_BLACK);
@@ -851,7 +852,7 @@ extern string singleSpace;
 		 {
 			 addstrAlt(attorneyname, gamelog);
 			 addstrAlt(CONST_justice092, gamelog);
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice093, gamelog);
 			 gamelog.newline();
 			 if (jury > 0) jury = 0;
@@ -872,7 +873,7 @@ extern string singleSpace;
 		 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		 switch (LCSrandom(liberal_jury.size() + 1))
 		 {
-		 case 0:addstrAlt(getNameAndAlignment().name); addstrAlt(CONST_justice095, gamelog); break;
+		 case 0:addstrAlt(g.getNameAndAlignment().name); addstrAlt(CONST_justice095, gamelog); break;
 		 default:addstrAlt(pickrandom(liberal_jury), gamelog); break;
 		 }
 		 gamelog.newline();
@@ -897,7 +898,7 @@ extern string singleSpace;
 	 pressAnyKey();
 	 //PROSECUTION MESSAGE
 	 // *JDS* The bigger your record, the stronger the evidence
-	 prosecution += 40 + LCSrandom(101) + scarefactor + (20 * getCreatureConfessions());
+	 prosecution += 40 + LCSrandom(101) + scarefactor + (20 * g.getCreatureConfessions());
 	 if (sleeperjudge) prosecution >>= 1;
 	 if (defense == ACE_ATTORNEY) prosecution -= 60;
 	 set_color_easy(WHITE_ON_BLACK);
@@ -925,7 +926,7 @@ extern string singleSpace;
 	 //DEFENSE MESSAGE
 	 set_color_easy(WHITE_ON_BLACK);
 	 moveAlt(9, 1);
-	 int defensepower = get_defensepower(sleeperLawyer, attorneyname, defense, prosecution);
+	 int defensepower = get_defensepower(g, sleeperLawyer, attorneyname, defense, prosecution);
 
 	 // Debug defense power
 	 if (SHOWMECHANICS)
@@ -952,35 +953,35 @@ extern string singleSpace;
 	 //HUNG JURY
 	 if (defensepower == jury)
 	 {
-		 keeplawflags = hung_jury(sleeperjudge, scarefactor);
+		 keeplawflags = hung_jury(g, sleeperjudge, scarefactor);
 	 }
 	 //ACQUITTAL!
 	 else if (defensepower > jury)
 	 {
-		 sentence = (getCreatureJustice(), sleeperLawyer, defense, sleeperjudge);
+		 g.sentence = (g.getCreatureJustice(), sleeperLawyer, defense, sleeperjudge);
 
 		 gamelog.nextMessage();
 		 // Juice sleeper
-		 if (defense == SLEEPER_ATTORNEY) sleeperlawyer->add_juice(10, 100);
+		 if (defense == SLEEPER_ATTORNEY) addjuice(*sleeperlawyer, 10, 100);
 		 // Juice for self-defense
-		 if (defense == SELF_REPRESENT) add_juice(10, 100);
+		 if (defense == SELF_REPRESENT) addjuice(g, 10, 100);
 		 pressAnyKey();
 	 }
 	 //LENIENCE
 	 else
 	 {
 		 // De-Juice sleeper
-		 if (defense == SLEEPER_ATTORNEY) sleeperlawyer->add_juice(-5, 0);
+		 if (defense == SLEEPER_ATTORNEY) addjuice(*sleeperlawyer, -5, 0);
 		 // Juice for getting convicted of something :)
-		 add_juice(25, 200);
+		 addjuice(g, 25, 200);
 		 // Check for lenience; sleeper judge will always be merciful
-		 if (defensepower / 3 >= jury / 4 || sleeperjudge) penalize(1);
-		 else penalize(0);
+		 if (defensepower / 3 >= jury / 4 || sleeperjudge) penalize(g, 1);
+		 else penalize(g, 0);
 	 }
 
 	 return keeplawflags;
  }
- void DeprecatedCreature::pleadGuilty(const bool sleeperjudge) {
+ void pleadGuilty(DeprecatedCreature &g, const bool sleeperjudge) {
 
 	 extern Log gamelog;
 
@@ -990,14 +991,14 @@ extern string singleSpace;
 	 gamelog.nextMessage();
 	 pressAnyKey();
 	 // Check for lenience; sleeper judge will always be merciful
-	 if (sleeperjudge || LCSrandom(2)) penalize(1);
-	 else penalize(0);
+	 if (sleeperjudge || LCSrandom(2)) penalize(g, 1);
+	 else penalize(g, 0);
 
  }
  /* monthly - hold trial on a liberal */
- void DeprecatedCreature::trial()
+ void trial(DeprecatedCreature &g)
  {
-	 CreatureJustice g_crimes = getCreatureJustice();
+	 CreatureJustice g_crimes = g.getCreatureJustice();
 	 extern Log gamelog;
 	 extern MusicClass music;
 	 extern class Ledger ledger;
@@ -1006,24 +1007,24 @@ extern string singleSpace;
 	 music.play(MUSIC_TRIAL);
 	 // If their old base is no longer under LCS control, wander back to the
 	 // homeless shelter instead.
-	 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,base) < 0) base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
-	 location = base;
+	 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,g.base) < 0) g.base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
+	 g.location = g.base;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(1, 1, getNameAndAlignment().name, gamelog);
+	 mvaddstrAlt(1, 1, g.getNameAndAlignment().name, gamelog);
 	 addstrAlt(CONST_justice090, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 set_color_easy(WHITE_ON_BLACK);
-	 if (!iscriminal(getCreatureJustice())) { criminalize(LAWFLAG_LOITERING); }
+	 if (!iscriminal(g.getCreatureJustice())) criminalize(g, LAWFLAG_LOITERING);
 	 int scarefactor = 0;
 	 for (int i = 0; i < LAWFLAGNUM; i++) if (g_crimes.crimes_suspected[i])
 	 {
 		 scarefactor += scare_factor(i, g_crimes.crimes_suspected[i]);
 	 }
 	 //CHECK FOR SLEEPERS
-	 DeprecatedCreature *sleeperjudge = getSleeperJudge();
-	 DeprecatedCreature *sleeperlawyer = getSleeperLawyer();
+	 DeprecatedCreature *sleeperjudge = getSleeperJudge(g);
+	 DeprecatedCreature *sleeperlawyer = getSleeperLawyer(g);
 
 	 //STATE CHARGES
 	 set_color_easy(WHITE_ON_BLACK);
@@ -1032,25 +1033,25 @@ extern string singleSpace;
 		 mvaddstrAlt(3, 1, string_sleeper, gamelog);
 		 addstrAlt(sleeperjudge->getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice037, gamelog);
-		 confessions = 0; //Made sleeper judge prevent these lunatics from testifying
+		 g.confessions = 0; //Made sleeper judge prevent these lunatics from testifying
 	 }
 	 else mvaddstrAlt(3, 1, CONST_justice038, gamelog);
 	 gamelog.newline();
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(5, 1, CONST_justice039, gamelog);
-	 addstrAlt(propername, gamelog);
+	 addstrAlt(g.propername, gamelog);
 	 addstrAlt(CONST_justice040, gamelog);
-	 int y = listAllCrimes(getCreatureJustice());
+	 int y = listAllCrimes(g.getCreatureJustice());
 	 gamelog.newline();
-	 if (getCreatureConfessions())
+	 if (g.getCreatureConfessions())
 	 {
-		 if (getCreatureConfessions() > 1)
+		 if (g.getCreatureConfessions() > 1)
 		 {
-			 mvaddstrAlt(y += 2, 1, getCreatureConfessions(), gamelog);
+			 mvaddstrAlt(y += 2, 1, g.getCreatureConfessions(), gamelog);
 			 addstrAlt(CONST_justice076, gamelog);
 		 }
 		 else mvaddstrAlt(y += 2, 1, CONST_justice077, gamelog);
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(singleDot, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
@@ -1083,15 +1084,15 @@ extern string singleSpace;
 	 //SAV - added in display of skills and relevant attributes to help
 	 // decide when to defend self.
 	 mvaddstrAlt(++y, 5, CONST_justice085);
-	 addstrAlt(get_attribute(ATTRIBUTE_HEART, true));
+	 addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
 	 mvaddstrAlt(y, 25, CONST_justice086);
-	 addstrAlt(get_skill(SKILL_PERSUASION));
+	 addstrAlt(g.get_skill(SKILL_PERSUASION));
 	 mvaddstrAlt(++y, 5, CONST_justice087);
-	 addstrAlt(get_attribute(ATTRIBUTE_CHARISMA, true));
+	 addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
 	 mvaddstrAlt(y++, 25, CONST_justice088);
-	 addstrAlt(get_skill(SKILL_LAW));
+	 addstrAlt(g.get_skill(SKILL_LAW));
 	 mvaddstrAlt(y++, 5, CONST_justice089);
-	 addstrAlt(get_attribute(ATTRIBUTE_INTELLIGENCE, true));
+	 addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	 // End SAV's adds
 	 LegalDefense defense = UNDECIDED;
 	 while (defense == UNDECIDED) {
@@ -1119,80 +1120,80 @@ extern string singleSpace;
 	 }
 	 //TRIAL
 	 bool keeplawflags = false;
-	 if (defense != PLEAD_GUILTY) { keeplawflags = pleadInnocent(*sleeperlawyer, attorneyname, defense, sleeperjudge, scarefactor); }
+	 if (defense != PLEAD_GUILTY) { keeplawflags = pleadInnocent(g, *sleeperlawyer, attorneyname, defense, sleeperjudge, scarefactor); }
 	 //GUILTY PLEA
 	 // How about CONST_justice142 (Nolo contendere) -- LK
 	 // I would imagine this would disregard the strength of the defense. -- LK
-	 else { pleadGuilty(sleeperjudge); }
+	 else { pleadGuilty(g, sleeperjudge); }
 
 	 //CLEAN UP LAW FLAGS
 	 if (!keeplawflags) {
-		 clear_criminal_record();
+		 g.clear_criminal_record();
 	 } 
 	 //This is redundant if !keeplawflags
-	 heat = 0;
+	 g.heat = 0;
 
 
-	 confessions = 0;
+	 g.confessions = 0;
 	 //PLACE PRISONER
-	 if (getCreatureJustice().sentence != 0) imprison();
+	 if (g.getCreatureJustice().sentence != 0) imprison(g);
 	 else
 	 {
 		 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
-		 give_armor(clothes, NULL);
+		 g.give_armor(clothes, NULL);
 	 }
  }
- void DeprecatedCreature::reeducation()
+ void reeducation(DeprecatedCreature &g)
  {
 	 extern Log gamelog;
 	 extern vector<DeprecatedCreature *> pool;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+	 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 	 addstrAlt(pickrandom(reeducation_experiences), gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 moveAlt(10, 1);
-	 if (!attribute_check(ATTRIBUTE_HEART, DIFFICULTY_FORMIDABLE))
+	 if (!g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_FORMIDABLE))
 	 {
-		 if (juice > 0 && LCSrandom(2))
+		 if (g.juice > 0 && LCSrandom(2))
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice144, gamelog);
-			 add_juice(-50, 0);
+			 addjuice(g, -50, 0);
 		 }
-		 else if (LCSrandom(15) > get_attribute(ATTRIBUTE_WISDOM, true)
-			 || get_attribute(ATTRIBUTE_WISDOM, true) < get_attribute(ATTRIBUTE_HEART, true))
+		 else if (LCSrandom(15) > g.get_attribute(ATTRIBUTE_WISDOM, true)
+			 || g.get_attribute(ATTRIBUTE_WISDOM, true) < g.get_attribute(ATTRIBUTE_HEART, true))
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice145, gamelog);
-			 adjust_attribute(ATTRIBUTE_WISDOM, +1);
+			 g.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		 }
-		 else if (align == ALIGN_LIBERAL && flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
+		 else if (g.align == ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice146, gamelog);
-			 addstrAlt(pool[hireid]->getNameAndAlignment().name, gamelog);
+			 addstrAlt(pool[g.hireid]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(singleDot, gamelog);
 		 }
 		 else
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice147, gamelog);
 			 //Rat out contact
-			 int contact = getpoolcreature(hireid);
+			 int contact = getpoolcreature(g.hireid);
 			 if (contact >= 0)
 			 {
-				 pool[contact]->criminalize(LAWFLAG_RACKETEERING);
+				 criminalize(*pool[contact], LAWFLAG_RACKETEERING);
 				 pool[contact]->another_confession();
 			 }
-			 die();
-			 location = -1;
+			 g.die();
+			 g.location = -1;
 		 }
 	 }
 	 else
 	 {
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice148, gamelog);
 	 }
 	 gamelog.nextMessage();
@@ -1200,30 +1201,29 @@ extern string singleSpace;
 	 eraseAlt();
 	 return;
  }
-
- void DeprecatedCreature::laborcamp()
+ void laborcamp(DeprecatedCreature &g)
  {
 	 extern Log gamelog;
 	 int escaped = 0;
 	 const char *experience;
 	 // Escape attempt!
-	 if (hireid == -1 && !LCSrandom(3))
+	 if (g.hireid == -1 && !LCSrandom(3))
 	 {
 		 escaped = 2;
 		 experience = CONST_justice149.c_str();
 	 }
-	 else if (skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
+	 else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
 	 {
 		 escaped = 1;
 		 experience = CONST_justice150.c_str();
-		 give_armor(getarmortype(tag_ARMOR_WORKCLOTHES), NULL);
+		 g.give_armor(getarmortype(tag_ARMOR_WORKCLOTHES), NULL);
 	 }
-	 else if (skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
+	 else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
 	 {
 		 escaped = 1;
 		 experience = CONST_justice151.c_str();
 	 }
-	 else if (skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
+	 else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
 	 {
 		 escaped = 1;
 		 experience = CONST_justice152.c_str();
@@ -1231,22 +1231,22 @@ extern string singleSpace;
 	 if (!escaped)experience = (singleSpace + pickrandom(labor_camp_experiences)).data();
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+	 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 	 addstrAlt(experience, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 moveAlt(10, 1);
 	 if (escaped)
 	 {
-		 int prison = location;
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 int prison = g.location;
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice164, gamelog);
-		 add_juice(50, 1000);
-		 criminalize(LAWFLAG_ESCAPED);
-		 location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
+		 addjuice(g, 50, 1000);
+		 criminalize(g, LAWFLAG_ESCAPED);
+		 g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
 		 if (escaped == 2)
 		 {
-			 int num_escaped = otherPrisonersEscapeWithMe(prison);
+			 int num_escaped = otherPrisonersEscapeWithMe(g, prison);
 			 if (num_escaped == 1)
 			 {
 				 gamelog.nextMessage();
@@ -1261,24 +1261,24 @@ extern string singleSpace;
 	 }
 	 else if (!LCSrandom(4))
 	 {
-		 if (get_attribute(ATTRIBUTE_HEALTH, true) > 1)
+		 if (g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice156, gamelog);
-			 add_juice(-40, 0);
-			 add_juice(-10, -50);
+			 addjuice(g, -40, 0);
+			 addjuice(g, -10, -50);
 		 }
 		 else
 		 {
-			 addstrAlt(getNameAndAlignment().name, gamelog);
+			 addstrAlt(g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice157, gamelog);
-			 die();
-			 location = -1;
+			 g.die();
+			 g.location = -1;
 		 }
 	 }
 	 else
 	 {
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice158, gamelog);
 	 }
 	 gamelog.nextMessage();
@@ -1286,39 +1286,38 @@ extern string singleSpace;
 	 eraseAlt();
 	 return;
  }
-
- void DeprecatedCreature::prisonscene()
+ void prisonscene(DeprecatedCreature &g)
  {
 	 extern Log gamelog;
 	 extern vector<DeprecatedCreature *> pool;
 	 int escaped = 0;
 	 int effect = 0;
 	 const char *experience;
-	 if (juice + int(hireid == -1) * 300 > 500)
+	 if (g.juice + int(g.hireid == -1) * 300 > 500)
 	 {
 		 // Escape attempt!
-		 if (hireid == -1 && !LCSrandom(10))
+		 if (g.hireid == -1 && !LCSrandom(10))
 		 {
 			 escaped = 2;
 			 experience = CONST_justice159.c_str();
 		 }
-		 else if (skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
+		 else if (g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
 		 {
 			 escaped = 2;
 			 experience = CONST_justice160.c_str();
 		 }
-		 else if (skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
+		 else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
 		 {
 			 escaped = 1;
 			 experience = CONST_justice161.c_str();
-			 give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
+			 g.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
 		 }
-		 else if (skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
+		 else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
 		 {
 			 escaped = 1;
 			 experience = CONST_justice162.c_str();
 		 }
-		 else if (skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
+		 else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
 		 {
 			 escaped = 1;
 			 experience = CONST_justice163.c_str();
@@ -1326,12 +1325,12 @@ extern string singleSpace;
 	 }
 	 if (escaped == 0)
 	 {
-		 if (attribute_check(ATTRIBUTE_HEART, DIFFICULTY_HARD)) {
+		 if (g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_HARD)) {
 			 effect = 1;
 			 if (LCSrandom(2) > 0) experience = (singleSpace + pickrandom(good_experiences)).data();
 			 else experience = (singleSpace + pickrandom(general_experiences)).data();
 		 }
-		 else if (attribute_check(ATTRIBUTE_HEART, DIFFICULTY_CHALLENGING)) {
+		 else if (g.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_CHALLENGING)) {
 			 effect = 0;
 			 experience = (singleSpace + pickrandom(general_experiences)).data();
 		 }
@@ -1343,19 +1342,19 @@ extern string singleSpace;
 	 }
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+	 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 	 addstrAlt(experience, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 moveAlt(10, 1);
 	 if (escaped)
 	 {
-		 int prison = location;
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 int prison = g.location;
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice164, gamelog);
-		 add_juice(50, 1000);
-		 criminalize(LAWFLAG_ESCAPED);
-		 location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
+		 addjuice(g, 50, 1000);
+		 criminalize(g, LAWFLAG_ESCAPED);
+		 g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
 		 if (escaped == 2)
 		 {
 			 int num_escaped = 0;
@@ -1363,8 +1362,8 @@ extern string singleSpace;
 			 {
 				 if (pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
 				 {
-					 pool[p]->criminalize(LAWFLAG_ESCAPED);
-					 pool[p]->location = location;
+					 criminalize(*pool[p], LAWFLAG_ESCAPED);
+					 pool[p]->location = g.location;
 					 num_escaped++;
 				 }
 			 }
@@ -1382,19 +1381,19 @@ extern string singleSpace;
 	 }
 	 else if (effect > 0)
 	 {
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice167, gamelog);
-		 add_juice(20, 1000);
+		 addjuice(g, 20, 1000);
 	 }
 	 else if (effect < 0)
 	 {
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice168, gamelog);
-		 add_juice(-20, -30);
+		 addjuice(g, -20, -30);
 	 }
 	 else
 	 {
-		 addstrAlt(getNameAndAlignment().name, gamelog);
+		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_justice169, gamelog);
 	 }
 	 gamelog.nextMessage();
@@ -1404,8 +1403,7 @@ extern string singleSpace;
  }
  /* monthly - advances a liberal's prison time or executes them */
  //RETURNS IF SCREEN WAS ERASED
-
- char DeprecatedCreature::prison()
+ char prison(DeprecatedCreature &g)
  {
 	 extern Log gamelog;
 	 extern int stat_dead;
@@ -1413,53 +1411,53 @@ extern string singleSpace;
 	 extern vector<DeprecatedCreature *> pool;
 	 char showed = 0;
 	 // People not on death row or about to be released can have a scene in prison
-	 if (!getCreatureJustice().deathpenalty && getCreatureJustice().sentence != 1)
+	 if (!g.getCreatureJustice().deathpenalty && g.getCreatureJustice().sentence != 1)
 	 {
 		 if (lawList[LAW_PRISONS] == 2)
 		 {
 			 //Liberal therapy.
-			 if (!LCSrandom(5)) reeducation();
+			 if (!LCSrandom(5)) reeducation(g);
 		 }
 		 else if (lawList[LAW_PRISONS] == -2)
 		 {
 			 //Labor camp.
-			 if (!LCSrandom(5)) laborcamp();
+			 if (!LCSrandom(5)) laborcamp(g);
 		 }
 		 else
 		 {
 			 //Normal prison.
-			 if (!LCSrandom(5)) prisonscene();
+			 if (!LCSrandom(5)) prisonscene(g);
 		 }
 	 }
-	 if (getCreatureJustice().sentence > 0)
+	 if (g.getCreatureJustice().sentence > 0)
 	 {
 		 //COMMUTE DEATH IN RIGHT CLIMATE
-		 if (getCreatureJustice().deathpenalty&&lawList[LAW_DEATHPENALTY] == 2)
+		 if (g.getCreatureJustice().deathpenalty&&lawList[LAW_DEATHPENALTY] == 2)
 		 {
 			 eraseAlt();
 			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+			 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_justice170, gamelog);
 			 mvaddstrAlt(9, 1, CONST_justice171, gamelog);
 			 gamelog.nextMessage();
 			 pressAnyKey();
-			 sentence = -1;
-			 deathpenalty = 0;
+			 g.sentence = -1;
+			 g.deathpenalty = 0;
 			 return 1;
 		 }
 		 //ADVANCE SENTENCE
-		 sentence--;
-		 if (getCreatureJustice().sentence == 0)
+		 g.sentence--;
+		 if (g.getCreatureJustice().sentence == 0)
 		 {
 			 //EXECUTE
-			 if (getCreatureJustice().deathpenalty)
+			 if (g.getCreatureJustice().deathpenalty)
 			 {
 				 eraseAlt();
 				 set_color_easy(RED_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(8, 1, CONST_justice172, gamelog);
 				 gamelog.newline();
 				 mvaddstrAlt(9, 1, CONST_justice173, gamelog);
-				 addstrAlt(getNameAndAlignment().name, gamelog);
+				 addstrAlt(g.getNameAndAlignment().name, gamelog);
 				 gamelog.record(singleSpace); //Log this for formatting purposes.
 				 mvaddstrAlt(10, 1, CONST_justice174, gamelog);
 				 if (lawList[LAW_DEATHPENALTY] == -2)
@@ -1471,7 +1469,7 @@ extern string singleSpace;
 				 addstrAlt(singleDot, gamelog);
 				 pressAnyKey();
 				 //dejuice boss
-				 int boss = getpoolcreature(hireid);
+				 int boss = getpoolcreature(g.hireid);
 				 if (boss != -1)
 				 {
 					 gamelog.newline();
@@ -1481,10 +1479,10 @@ extern string singleSpace;
 					 gamelog.newline();
 					 mvaddstrAlt(14, 1, CONST_justice176, gamelog);
 					 pressAnyKey();
-					 pool[boss]->add_juice(-50, -50);
+					 addjuice(*pool[boss], -50, -50);
 				 }
 				 gamelog.nextMessage();
-				 die();
+				 g.die();
 				 stat_dead++;
 				 showed = 1;
 			 }
@@ -1493,29 +1491,29 @@ extern string singleSpace;
 			 {
 				 eraseAlt();
 				 set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_justice177, gamelog);
 				 gamelog.newline();
 				 mvaddstrAlt(9, 1, CONST_justice178, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
 				 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
-				 give_armor(clothes, NULL);
+				 g.give_armor(clothes, NULL);
 				 // If their old base is no longer under LCS control, wander back to the
 				 // homeless shelter instead.
-				 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,base) < 0) base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, location);
-				 location = base;
+				 if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,g.base) < 0) g.base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
+				 g.location = g.base;
 				 showed = 1;
 			 }
 		 }
 		 //NOTIFY OF IMPENDING THINGS
-		 else if (getCreatureJustice().sentence == 1)
+		 else if (g.getCreatureJustice().sentence == 1)
 		 {
-			 if (getCreatureJustice().deathpenalty)
+			 if (g.getCreatureJustice().deathpenalty)
 			 {
 				 eraseAlt();
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_justice179, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
@@ -1525,7 +1523,7 @@ extern string singleSpace;
 			 {
 				 eraseAlt();
 				 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_justice180, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
@@ -1534,13 +1532,13 @@ extern string singleSpace;
 		 }
 		 else
 		 {
-			 if (getCreatureJustice().deathpenalty)
+			 if (g.getCreatureJustice().deathpenalty)
 			 {
 				 eraseAlt();
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_justice181, gamelog);
-				 addstrAlt(getCreatureJustice().sentence, gamelog);
+				 addstrAlt(g.getCreatureJustice().sentence, gamelog);
 				 addstrAlt(CONST_justice182, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();

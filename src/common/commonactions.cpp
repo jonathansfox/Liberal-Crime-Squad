@@ -29,18 +29,23 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locationsEnums.h"
 //#include "../pdcurses/curses.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../common/translateid.h"
 // for  int getsquad(int)
 #include "../log/log.h"
@@ -71,27 +76,27 @@ bool iscriminal(CreatureJustice cr)
 	return false;
 }
 /* common - determines how long a creature's injuries will take to heal */
-int DeprecatedCreature::clinictime()
+int clinictime(DeprecatedCreature &g)
 {
 	int time = 0;
 	for (int w = 0; w < BODYPARTNUM; w++)
-		if ((getCreatureHealth().wound[w] & WOUND_NASTYOFF) && (getCreatureHealth().blood < 100))
+		if ((g.getCreatureHealth().wound[w] & WOUND_NASTYOFF) && (g.getCreatureHealth().blood < 100))
 			time++;
-	if (getCreatureHealth().blood <= 10)time++;
-	if (getCreatureHealth().blood <= 50)time++;
-	if (getCreatureHealth().blood < 100)time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_LEFTLUNG])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_HEART])time += 2;
-	if (!getCreatureHealth().special[SPECIALWOUND_LIVER])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_STOMACH])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_SPLEEN])time++;
-	if (getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM)time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_NECK])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_UPPERSPINE])time++;
-	if (!getCreatureHealth().special[SPECIALWOUND_LOWERSPINE])time++;
+	if (g.getCreatureHealth().blood <= 10)time++;
+	if (g.getCreatureHealth().blood <= 50)time++;
+	if (g.getCreatureHealth().blood < 100)time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_RIGHTLUNG])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LEFTLUNG])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_HEART])time += 2;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LIVER])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_STOMACH])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_RIGHTKIDNEY])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LEFTKIDNEY])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_SPLEEN])time++;
+	if (g.getCreatureHealth().special[SPECIALWOUND_RIBS] < RIBNUM)time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_NECK])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE])time++;
+	if (!g.getCreatureHealth().special[SPECIALWOUND_LOWERSPINE])time++;
 	return time;
 }
 /* common - sends somebody to the hospital */
@@ -99,7 +104,7 @@ int DeprecatedCreature::clinictime()
 * *JDS* Hospitalize -- sends current person to the *
 * specified clinic or hospital.                    *
 ***************************************************/
-void DeprecatedCreature::hospitalize(int loc)
+void hospitalize(int loc, DeprecatedCreature &patient)
 {
 	const string CONST_commonactions008 = "harmful speech";
 	const string CONST_commonactions007 = "month";
@@ -109,20 +114,20 @@ void DeprecatedCreature::hospitalize(int loc)
 	extern Log gamelog;
 	extern vector<Deprecatedsquadst *> squad;
 	// He's dead, Jim
-	if (!getCreatureHealth().alive)return;
-	int time = clinictime();
+	if (!patient.getCreatureHealth().alive)return;
+	int time = clinictime(patient);
 	if (time > 0)
 	{
 		Deprecatedsquadst* patientsquad = NULL;
-		if (squadid != -1)
-			patientsquad = squad[getsquad(squadid)];
-		clinic = time;
-		squadid = -1;
-		location = loc;
+		if (patient.squadid != -1)
+			patientsquad = squad[getsquad(patient.squadid)];
+		patient.clinic = time;
+		patient.squadid = -1;
+		patient.location = loc;
 		// Inform about the hospitalization
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, getNameAndAlignment().name, gamelog);
+		mvaddstrAlt(8, 1, patient.getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_commonactions004, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
 		addstrAlt(CONST_commonactions005, gamelog);
@@ -138,7 +143,7 @@ void DeprecatedCreature::hospitalize(int loc)
 			bool flipstart = 0;
 			for (int p = 0; p < 6; p++)
 			{
-				if (patientsquad->squad[p] == this)
+				if (patientsquad->squad[p] == &patient)
 				{
 					patientsquad->squad[p] = NULL;
 					flipstart = 1;
@@ -197,7 +202,8 @@ int lawflagheat(int lawflag)
 }
 short getCurrentSite();
 /* common - applies a crime to a person */
-void DeprecatedCreature::criminalize(short crime) {
+void criminalize(DeprecatedCreature &cr, short crime)
+{
 	extern short mode;
 	if (mode == GAMEMODE_SITE)
 	{
@@ -212,9 +218,8 @@ void DeprecatedCreature::criminalize(short crime) {
 			// Do not criminalize the LCS for crimes against the CCS
 			return;
 	}
-	criminalize_me(crime, true);
+	cr.criminalize_me(crime, true);
 }
-
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
 {
@@ -224,7 +229,7 @@ void criminalizeparty(short crime)
 		if (activesquad->squad[p])
 		{
 			if (!activesquad->squad[p]->getCreatureHealth().alive) continue;
-			activesquad->squad[p]->criminalize( crime);
+			criminalize(*(activesquad->squad[p]), crime);
 		}
 }
 
@@ -234,6 +239,7 @@ void criminalizeparty(short crime)
 int scare_factor(int lawflag, int crimenumber) {
 	return lawflagheat(lawflag) * crimenumber;
 }
+void addjuice(DeprecatedCreature &cr, long juice, long cap);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice, long cap)
 {
@@ -242,27 +248,26 @@ void juiceparty(long juice, long cap)
 		for (int p = 0; p < 6; p++)
 			if (activesquad->squad[p] != NULL)
 				if (activesquad->squad[p]->getCreatureHealth().alive)
-					activesquad->squad[p]->add_juice(juice, cap);
+					addjuice(*activesquad->squad[p], juice, cap);
 }
 /* common - removes the liberal from all squads */
-
-void DeprecatedCreature::removesquadinfo()
+void removesquadinfo(DeprecatedCreature &cr)
 {
 	extern vector<Deprecatedsquadst *> squad;
-	if (squadid != -1)
+	if (cr.squadid != -1)
 	{
-		long sq = getsquad(squadid);
+		long sq = getsquad(cr.squadid);
 		if (sq != -1)
 		{
 			bool flipstart = 0;
 			for (int pt = 0; pt < 6; pt++)
 			{
-				if (squad[sq]->squad[pt] == this)flipstart = 1;
+				if (squad[sq]->squad[pt] == &cr)flipstart = 1;
 				if (flipstart&&pt < 5)squad[sq]->squad[pt] = squad[sq]->squad[pt + 1];
 			}
 			if (flipstart)squad[sq]->squad[5] = NULL;
 		}
-		squadid = -1;
+		cr.squadid = -1;
 	}
 }
 
@@ -287,17 +292,32 @@ void basesquad(Deprecatedsquadst *st, long loc)
 	for (int p = 0; p < 6; p++) if (st->squad[p] != NULL) st->squad[p]->base = loc;
 }
 
-
+// Determines the number of subordinates a creature may command
+int maxsubordinates(const DeprecatedCreature& cr)
+{
+	//brainwashed recruits can't recruit normally
+	if (cr.flag & CREATUREFLAG_BRAINWASHED)return 0;
+	int recruitcap = 0;
+	//Cap based on juice
+	if (cr.juice >= 500)      recruitcap += 6;
+	else if (cr.juice >= 200) recruitcap += 5;
+	else if (cr.juice >= 100) recruitcap += 3;
+	else if (cr.juice >= 50)  recruitcap += 1;
+	//Cap for founder
+	if (cr.hireid == -1 && cr.getCreatureHealth().align == 1) recruitcap += 6;
+	return recruitcap;
+}
+int loveslaves(const DeprecatedCreature& cr);
 // Determines the number of love slaves a creature may recruit,
 // based on max minus number they already command
-int DeprecatedCreature::loveslavesleft() const
+int loveslavesleft(const DeprecatedCreature& cr)
 {
 	// Get maximum lovers
-	int loveslavecap = get_skill(SKILL_SEDUCTION) / 2 + 1;
+	int loveslavecap = cr.get_skill(SKILL_SEDUCTION) / 2 + 1;
 	// -1 if they're a love slave (their boss is a lover)
-	if (flag & CREATUREFLAG_LOVESLAVE) loveslavecap--;
+	if (cr.flag & CREATUREFLAG_LOVESLAVE) loveslavecap--;
 	// Subtract number of love slaves they have
-	loveslavecap -= loveslaves();
+	loveslavecap -= loveslaves(cr);
 	// If they can have more, return that number
 	if (loveslavecap > 0) return loveslavecap;
 	// If they're at 0 or less, return 0

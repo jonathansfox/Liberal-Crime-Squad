@@ -12,7 +12,7 @@ public:
 	virtual bool merge(Item& i);
 	virtual bool sort_compare_special(Item* other) const;
 	virtual string equip_title() const;
-	virtual const string get_name() const;
+	virtual const string& get_name() const;
 	virtual long get_fencevalue() const;
 	bool is_stackable() const;
 	bool no_quick_fencing() const;

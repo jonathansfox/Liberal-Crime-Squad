@@ -164,7 +164,7 @@ int getvehicletype(const int id)
 	return -1;
 }
 /* transforms a vehicle type idname into the index of that vehicle type in the global vector */
-int getvehicletype(const string idname)
+int getvehicletype(const string &idname)
 {
 	for (int i = 0; i < len(vehicletype); i++) if (vehicletype[i]->idname() == idname) return i;
 	return -1;

@@ -1,6 +1,10 @@
 
+/* character info at top of screen */
+void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 /* full screen character sheet, just skills */
 void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2);
+/* full screen character sheet */
+void printliberalstats(DeprecatedCreature &cr);
 //void printliberalstats(CreatureStats cr);
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(CreatureJustice cr);

@@ -30,19 +30,24 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureD.h"
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 //#include "../cursesgraphics.h"
 
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 //#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
 #include "../common/commondisplay.h"
+// for void printparty(void)
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
@@ -93,7 +98,7 @@ extern string spaceDashSpace;
 	 if (partysize <= 1) return;
 	 while (true)
 	 {
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(8, 26, CONST_baseactions007);
 		 int oldPos = getkeyAlt();
@@ -163,7 +168,7 @@ extern string spaceDashSpace;
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(0, 0, CONST_baseactions010);
-		 DeprecatedCreature::printparty();
+		 printparty();
 		 printCars(page);
 		 set_color_easy(WHITE_ON_BLACK);
 		 //PAGE UP

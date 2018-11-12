@@ -108,21 +108,22 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
+#include "../creature/deprecatedCreatureA.h"
+#include "../creature/deprecatedCreatureB.h"
 
 #include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../common/equipment.h"
 //for void consolidateloot(vector<Item *> &loot);
 #include "../common/translateid.h"
@@ -139,7 +140,7 @@ Item* create_item(const std::string& inputXml);
 extern vector<DeprecatedCreature *> pool;
 extern Log gamelog;
 extern char newscherrybusted;
-extern vector<Location *> listOfLocations;
+extern vector<Location *> location;
 extern bool multipleCityMode;
 extern int stat_buys;
 extern int stat_burns;
@@ -768,50 +769,50 @@ void savegame(const string& filename)
 		}
 
 		//LOCATIONS
-		dummy = len(listOfLocations);
+		dummy = len(location);
 		fwrite(&dummy, sizeof(int), 1, h);
-		for (int l = 0; l < len(listOfLocations); l++)
+		for (int l = 0; l < len(location); l++)
 		{
-			consolidateloot(listOfLocations[l]->loot); // consolidate loot before saving
-			dummy = len(listOfLocations[l]->loot);
+			consolidateloot(location[l]->loot); // consolidate loot before saving
+			dummy = len(location[l]->loot);
 			fwrite(&dummy, sizeof(int), 1, h);
-			for (int l2 = 0; l2 < len(listOfLocations[l]->loot); l2++)
+			for (int l2 = 0; l2 < len(location[l]->loot); l2++)
 			{
-				std::string itemStr = listOfLocations[l]->loot[l2]->showXml();
+				std::string itemStr = location[l]->loot[l2]->showXml();
 				int itemSize = len(itemStr);
 				fwrite(&itemSize, sizeof(int), 1, h);
 				fwrite(itemStr.c_str(), itemSize, 1, h);
 			}
-			dummy = len(listOfLocations[l]->changes);
+			dummy = len(location[l]->changes);
 			fwrite(&dummy, sizeof(int), 1, h);
-			for (int l2 = 0; l2 < len(listOfLocations[l]->changes); l2++)
-				fwrite(&listOfLocations[l]->changes[l2], sizeof(sitechangest), 1, h);
+			for (int l2 = 0; l2 < len(location[l]->changes); l2++)
+				fwrite(&location[l]->changes[l2], sizeof(sitechangest), 1, h);
 			int unused = 0;
-			fwrite(listOfLocations[l]->name, sizeof(char), LOCATION_NAMELEN, h);
-			fwrite(listOfLocations[l]->shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
-			fwrite(&listOfLocations[l]->type, sizeof(char), 1, h);
-			fwrite(&listOfLocations[l]->city, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->area, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->parent, sizeof(int), 1, h);
+			fwrite(location[l]->name, sizeof(char), LOCATION_NAMELEN, h);
+			fwrite(location[l]->shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
+			fwrite(&location[l]->type, sizeof(char), 1, h);
+			fwrite(&location[l]->city, sizeof(int), 1, h);
+			fwrite(&location[l]->area, sizeof(int), 1, h);
+			fwrite(&location[l]->parent, sizeof(int), 1, h);
 			fwrite(&unused, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
-			fwrite(&listOfLocations[l]->renting, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->newrental, sizeof(char), 1, h);
-			fwrite(&listOfLocations[l]->needcar, sizeof(char), 1, h);
-			fwrite(&listOfLocations[l]->closed, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->hidden, sizeof(bool), 1, h);
-			fwrite(&listOfLocations[l]->mapped, sizeof(bool), 1, h);
-			fwrite(&listOfLocations[l]->upgradable, sizeof(bool), 1, h);
-			fwrite(&listOfLocations[l]->highsecurity, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->siege, sizeof(siegest), 1, h);
-			fwrite(&listOfLocations[l]->heat, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->heat_protection, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->compound_walls, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->compound_stores, sizeof(int), 1, h);
-			fwrite(&listOfLocations[l]->front_business, sizeof(char), 1, h);
-			fwrite(listOfLocations[l]->front_name, sizeof(char), LOCATION_NAMELEN, h);
-			fwrite(listOfLocations[l]->front_shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
-			fwrite(&listOfLocations[l]->haveflag, sizeof(bool), 1, h);
-			fwrite(listOfLocations[l]->mapseed, sizeof(unsigned long), RNG_SIZE, h);
+			fwrite(&location[l]->renting, sizeof(int), 1, h);
+			fwrite(&location[l]->newrental, sizeof(char), 1, h);
+			fwrite(&location[l]->needcar, sizeof(char), 1, h);
+			fwrite(&location[l]->closed, sizeof(int), 1, h);
+			fwrite(&location[l]->hidden, sizeof(bool), 1, h);
+			fwrite(&location[l]->mapped, sizeof(bool), 1, h);
+			fwrite(&location[l]->upgradable, sizeof(bool), 1, h);
+			fwrite(&location[l]->highsecurity, sizeof(int), 1, h);
+			fwrite(&location[l]->siege, sizeof(siegest), 1, h);
+			fwrite(&location[l]->heat, sizeof(int), 1, h);
+			fwrite(&location[l]->heat_protection, sizeof(int), 1, h);
+			fwrite(&location[l]->compound_walls, sizeof(int), 1, h);
+			fwrite(&location[l]->compound_stores, sizeof(int), 1, h);
+			fwrite(&location[l]->front_business, sizeof(char), 1, h);
+			fwrite(location[l]->front_name, sizeof(char), LOCATION_NAMELEN, h);
+			fwrite(location[l]->front_shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
+			fwrite(&location[l]->haveflag, sizeof(bool), 1, h);
+			fwrite(location[l]->mapseed, sizeof(unsigned long), RNG_SIZE, h);
 		}
 
 		//VEHICLES
@@ -986,13 +987,13 @@ char load(const string& filename)
 		}
 		//LOCATIONS
 		fread(&dummy, sizeof(int), 1, h);
-		listOfLocations.resize(dummy);
-		for (int l = 0; l < len(listOfLocations); l++)
+		location.resize(dummy);
+		for (int l = 0; l < len(location); l++)
 		{
-			listOfLocations[l] = new Location;
+			location[l] = new Location;
 			fread(&dummy, sizeof(int), 1, h);
-			listOfLocations[l]->loot.resize(dummy);
-			for (int l2 = 0; l2 < len(listOfLocations[l]->loot); l2++)
+			location[l]->loot.resize(dummy);
+			for (int l2 = 0; l2 < len(location[l]->loot); l2++)
 			{
 				int itemSize;
 				fread(&itemSize, sizeof(int), 1, h);
@@ -1001,59 +1002,59 @@ char load(const string& filename)
 				vec[itemSize] = '\0';
 				Item* it = create_item(&vec[0]);
 				if (it != NULL)
-					listOfLocations[l]->loot[l2] = it;
+					location[l]->loot[l2] = it;
 			}
 			//Remove items of unknown type.
-			for (int l2 = len(listOfLocations[l]->loot) - 1; l2 >= 0; l2--)
+			for (int l2 = len(location[l]->loot) - 1; l2 >= 0; l2--)
 			{
 				bool del = false;
-				if (listOfLocations[l]->loot[l2]->whatIsThis() == THIS_IS_LOOT)
-					del = (getloottype(listOfLocations[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (listOfLocations[l]->loot[l2]->whatIsThis() == THIS_IS_CLIP)
-					del = (getcliptype(listOfLocations[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (listOfLocations[l]->loot[l2]->whatIsThis() == THIS_IS_WEAPON)
-					del = (getweapontype(listOfLocations[l]->loot[l2]->get_itemtypename()) == -1);
-				else if (listOfLocations[l]->loot[l2]->whatIsThis() == THIS_IS_ARMOR)
-					del = (getarmortype(listOfLocations[l]->loot[l2]->get_itemtypename()) == -1);
+				if (location[l]->loot[l2]->whatIsThis() == THIS_IS_LOOT)
+					del = (getloottype(location[l]->loot[l2]->get_itemtypename()) == -1);
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_CLIP)
+					del = (getcliptype(location[l]->loot[l2]->get_itemtypename()) == -1);
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_WEAPON)
+					del = (getweapontype(location[l]->loot[l2]->get_itemtypename()) == -1);
+				else if (location[l]->loot[l2]->whatIsThis() == THIS_IS_ARMOR)
+					del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
 				if (del)
 				{
 					addstrAlt(itemType);
-					addstrAlt(listOfLocations[l]->loot[l2]->get_itemtypename());
+					addstrAlt(location[l]->loot[l2]->get_itemtypename());
 					addstrAlt(doesNotExistItem);
-					delete_and_remove(listOfLocations[l]->loot, l2);
+					delete_and_remove(location[l]->loot, l2);
 				}
 			}
-			consolidateloot(listOfLocations[l]->loot); // consolidate loot after loading
+			consolidateloot(location[l]->loot); // consolidate loot after loading
 			fread(&dummy, sizeof(int), 1, h);
-			listOfLocations[l]->changes.resize(dummy);
-			for (int l2 = 0; l2 < len(listOfLocations[l]->changes); l2++)
-				fread(&listOfLocations[l]->changes[l2], sizeof(sitechangest), 1, h);
-			fread(listOfLocations[l]->name, sizeof(char), LOCATION_NAMELEN, h);
-			fread(listOfLocations[l]->shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
-			fread(&listOfLocations[l]->type, sizeof(char), 1, h);
-			fread(&listOfLocations[l]->city, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->area, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->parent, sizeof(int), 1, h);
+			location[l]->changes.resize(dummy);
+			for (int l2 = 0; l2 < len(location[l]->changes); l2++)
+				fread(&location[l]->changes[l2], sizeof(sitechangest), 1, h);
+			fread(location[l]->name, sizeof(char), LOCATION_NAMELEN, h);
+			fread(location[l]->shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
+			fread(&location[l]->type, sizeof(char), 1, h);
+			fread(&location[l]->city, sizeof(int), 1, h);
+			fread(&location[l]->area, sizeof(int), 1, h);
+			fread(&location[l]->parent, sizeof(int), 1, h);
 			int unused;
 			fread(&unused, sizeof(int), 1, h); // NOT USED, kept for backwards compatibility
-			fread(&listOfLocations[l]->renting, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->newrental, sizeof(char), 1, h);
-			fread(&listOfLocations[l]->needcar, sizeof(char), 1, h);
-			fread(&listOfLocations[l]->closed, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->hidden, sizeof(bool), 1, h);
-			fread(&listOfLocations[l]->mapped, sizeof(bool), 1, h);
-			fread(&listOfLocations[l]->upgradable, sizeof(bool), 1, h);
-			fread(&listOfLocations[l]->highsecurity, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->siege, sizeof(siegest), 1, h);
-			fread(&listOfLocations[l]->heat, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->heat_protection, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->compound_walls, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->compound_stores, sizeof(int), 1, h);
-			fread(&listOfLocations[l]->front_business, sizeof(char), 1, h);
-			fread(listOfLocations[l]->front_name, sizeof(char), LOCATION_NAMELEN, h);
-			fread(listOfLocations[l]->front_shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
-			fread(&listOfLocations[l]->haveflag, sizeof(bool), 1, h);
-			fread(listOfLocations[l]->mapseed, sizeof(unsigned long), RNG_SIZE, h);
+			fread(&location[l]->renting, sizeof(int), 1, h);
+			fread(&location[l]->newrental, sizeof(char), 1, h);
+			fread(&location[l]->needcar, sizeof(char), 1, h);
+			fread(&location[l]->closed, sizeof(int), 1, h);
+			fread(&location[l]->hidden, sizeof(bool), 1, h);
+			fread(&location[l]->mapped, sizeof(bool), 1, h);
+			fread(&location[l]->upgradable, sizeof(bool), 1, h);
+			fread(&location[l]->highsecurity, sizeof(int), 1, h);
+			fread(&location[l]->siege, sizeof(siegest), 1, h);
+			fread(&location[l]->heat, sizeof(int), 1, h);
+			fread(&location[l]->heat_protection, sizeof(int), 1, h);
+			fread(&location[l]->compound_walls, sizeof(int), 1, h);
+			fread(&location[l]->compound_stores, sizeof(int), 1, h);
+			fread(&location[l]->front_business, sizeof(char), 1, h);
+			fread(location[l]->front_name, sizeof(char), LOCATION_NAMELEN, h);
+			fread(location[l]->front_shortname, sizeof(char), LOCATION_SHORTNAMELEN, h);
+			fread(&location[l]->haveflag, sizeof(bool), 1, h);
+			fread(location[l]->mapseed, sizeof(unsigned long), RNG_SIZE, h);
 		}
 		//VEHICLES
 		fread(&dummy, sizeof(int), 1, h);
@@ -1219,8 +1220,7 @@ char load(const string& filename)
 			vector<char> vec = vector<char>(creatureSize + 1);
 			fread(&vec[0], creatureSize, 1, h);
 			vec[creatureSize] = '\0';
-			DeprecatedCreature* newRecruit = new DeprecatedCreature(&vec[0]);
-			recruit[rt] = &newRecruit->deprecatedrecruitst(recruiter_id);
+			recruit[rt] = new Deprecatedrecruitst(new DeprecatedCreature(&vec[0]), recruiter_id);
 			//recruit[rt]->timeleft = timeleft; 
 			//recruit[rt]->level = level;
 			recruit[rt]->eagerness1 = eagerness1;

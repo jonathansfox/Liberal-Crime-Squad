@@ -34,14 +34,15 @@ const string tag_attribute = "attribute";
 
 const string tag_skill = "skill";
 
-#include "vehicle/vehicleType.h"
-#include "vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
 #include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -51,6 +52,7 @@ const string tag_skill = "skill";
 #include "../log/log.h"
 
 //#include "common/commondisplay.h"
+void printparty();
 
 #include "../common/commonactions.h"
 // for void criminalizeparty(short crime)
@@ -71,6 +73,8 @@ void squadgrab_immobile(char dead);
 void addLocationChange(int cursite, sitechangest change);
 string smellsPanic;
 void squadgrab_immobile(char dead);
+//// #include "combat/haulkidnapCreature.h"
+void freehostage(DeprecatedCreature &cr, char situation);
 
 
 //string smellsPanic;
@@ -85,8 +89,8 @@ string sBody;
 vector<NameAndAlignment> getEncounterNameAndAlignment();
 short getCurrentSite();
 /* handles end of round stuff for one creature */
-void DeprecatedCreature::advancecreature() {
-
+void advancecreature(DeprecatedCreature &cr)
+{
 	extern Deprecatedsquadst *activesquad;
 	extern Deprecatednewsstoryst *sitestory;
 	extern coordinatest loc_coord;
@@ -99,13 +103,13 @@ void DeprecatedCreature::advancecreature() {
 	extern int sitecrime;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	extern short lawList[LAWNUM];
-	if (!getNameAndAlignment().alive) return;
+	if (!cr.getNameAndAlignment().alive) return;
 	char incaprint;
-	if (incapacitated(1, incaprint))
+	if (incapacitated(cr, 1, incaprint))
 	{
 		if (incaprint)
 		{
-			DeprecatedCreature::printparty();
+			printparty();
 			if (mode == GAMEMODE_CHASECAR ||
 				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
 			else printencounter();
@@ -118,26 +122,26 @@ void DeprecatedCreature::advancecreature() {
 		activesquad->squad[i]->getNameAndAlignment().alive&&
 		!activesquad->squad[i]->is_stunned() &&
 		activesquad->squad[i]->blood > 40 &&
-		activesquad->squad[i]->id != id&&
+		activesquad->squad[i]->id != cr.id&&
 		activesquad->squad[i]->get_skill(SKILL_FIRSTAID) > topmedicalskill)
 		topmedicalskill = (topmedical = activesquad->squad[i])->get_skill(SKILL_FIRSTAID);
 	for (int w = 0; w < BODYPARTNUM; w++)
 	{
-		if (wound[w] & WOUND_BLEEDING)
+		if (cr.wound[w] & WOUND_BLEEDING)
 		{
-			if (LCSrandom(500) < get_attribute(ATTRIBUTE_HEALTH, true))
-				wound[w] ^= WOUND_BLEEDING;
-			else if (squadid != -1 && topmedical&&topmedical->skill_check(SKILL_FIRSTAID, DIFFICULTY_FORMIDABLE))
+			if (LCSrandom(500) < cr.get_attribute(ATTRIBUTE_HEALTH, true))
+				cr.wound[w] ^= WOUND_BLEEDING;
+			else if (cr.squadid != -1 && topmedical&&topmedical->skill_check(SKILL_FIRSTAID, DIFFICULTY_FORMIDABLE))
 			{
 				clearmessagearea();
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, topmedical->getNameAndAlignment().name, gamelog);
 				addstrAlt(ableToStopBleed, gamelog);
-				mvaddstrAlt(17, 1, getNameAndAlignment().name, gamelog);
+				mvaddstrAlt(17, 1, cr.getNameAndAlignment().name, gamelog);
 				addstrAlt(sWounds, gamelog);
 				gamelog.newline();
 				topmedical->train(SKILL_FIRSTAID, max(int(50 - topmedicalskill * 2), 0));
-				wound[w] ^= WOUND_BLEEDING;
+				cr.wound[w] ^= WOUND_BLEEDING;
 				pressAnyKey();
 			}
 			else bleed++;
@@ -150,52 +154,52 @@ void DeprecatedCreature::advancecreature() {
 		int burndamage = (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_FIRE_PEAK) ? LCSrandom(40) : LCSrandom(20);
 		clearmessagearea();
 		// Firefighter's bunker gear reduces burn damage
-		if (get_armor().has_fireprotection())
+		if (cr.get_armor().has_fireprotection())
 		{
 			// Base effect is 3/4 damage reduction, the denominator
 			// increases with low quality or damaged gear
 			int denom = 4;
 			// Damaged gear
-			if (get_armor().is_damaged()) denom += 2;
+			if (cr.get_armor().is_damaged()) denom += 2;
 			// Shoddy quality gear
-			denom += get_armor().get_quality() - 1;
+			denom += cr.get_armor().get_quality() - 1;
 			// Apply damage reduction
 			burndamage = static_cast<int>(burndamage * (1 - (3.0 / denom)));
 		}
-		blood -= burndamage;
-		if (blood <= 0)
+		cr.blood -= burndamage;
+		if (cr.blood <= 0)
 		{
-			die();
-			if (squadid != -1)
+			cr.die();
+			if (cr.squadid != -1)
 			{
-				if (align == 1) stat_dead++;
+				if (cr.align == 1) stat_dead++;
 			}
-			else if (align == -1 && (animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
+			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
 				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) LocationsPool::getInstance().addSiegeKill(getCurrentSite());
-				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(getCurrentSite());
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && cr.animalgloss == ANIMALGLOSS_TANK) LocationsPool::getInstance().removeTank(getCurrentSite());
 				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				{
-					if (type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
+					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 					ccs_siege_kills++;
 				}
 			}
-			if (squadid == -1)
+			if (cr.squadid == -1)
 			{
 				sitecrime += 10;
 				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 				criminalizeparty(LAWFLAG_MURDER);
 				//<-- people dying in fire? probably your fault for starting it
 			}
-			adddeathmessage();
+			adddeathmessage(cr);
 			pressAnyKey();
-			if (is_holding_body()) freehostage(1);
+			if (cr.is_holding_body()) freehostage(cr, 1);
 		}
 		else
 		{
 			set_color_easy(RED_ON_BLACK);
-			mvaddstrAlt(16, 1, getNameAndAlignment().name, gamelog);
+			mvaddstrAlt(16, 1, cr.getNameAndAlignment().name, gamelog);
 			addstrAlt(isBurned, gamelog);
 			gamelog.newline(); //Next message?
 			pressAnyKey();
@@ -204,37 +208,37 @@ void DeprecatedCreature::advancecreature() {
 	if (bleed > 0)
 	{
 		clearmessagearea();
-		blood -= bleed;
+		cr.blood -= bleed;
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_BLOODY;
-		get_armor().set_bloody(true);
-		if (blood <= 0)
+		cr.get_armor().set_bloody(true);
+		if (cr.blood <= 0)
 		{
-			die();
-			if (squadid != -1)
+			cr.die();
+			if (cr.squadid != -1)
 			{
-				if (align == 1) stat_dead++;
+				if (cr.align == 1) stat_dead++;
 			}
-			else if (align == -1 && (animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
+			else if (cr.align == -1 && (cr.animalgloss != ANIMALGLOSS_ANIMAL || lawList[LAW_ANIMALRESEARCH] == 2))
 			{
 				stat_kills++;
 				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))LocationsPool::getInstance().addSiegeKill(getCurrentSite());
-				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && animalgloss == ANIMALGLOSS_TANK)LocationsPool::getInstance().removeTank(getCurrentSite());
+				if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) && cr.animalgloss == ANIMALGLOSS_TANK)LocationsPool::getInstance().removeTank(getCurrentSite());
 				if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 				{
-					if (type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
+					if (cr.type == CREATURE_CCS_ARCHCONSERVATIVE) ccs_boss_kills++;
 					ccs_siege_kills++;
 				}
 			}
-			if (squadid == -1)
+			if (cr.squadid == -1)
 			{
 				sitecrime += 10;
 				sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
 				//criminalizeparty(LAWFLAG_MURDER);
 				//^-- might not die from squad attacking
 			}
-			adddeathmessage();
+			adddeathmessage(cr);
 			pressAnyKey();
-			if (is_holding_body()) freehostage(1);
+			if (cr.is_holding_body()) freehostage(cr, 1);
 		}
 	}
 }
@@ -377,7 +381,7 @@ void creatureadvance()
 	{
 		if (activesquad->squad[p] == NULL) continue;
 		if (!activesquad->squad[p]->getNameAndAlignment().alive) continue;
-		activesquad->squad[p]->advancecreature();
+		advancecreature(*activesquad->squad[p]);
 		if (activesquad->squad[p]->is_holding_body())
 		{
 			activesquad->squad[p]->advance_prisoner();

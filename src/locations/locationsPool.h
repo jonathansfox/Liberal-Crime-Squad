@@ -97,6 +97,7 @@ public:
 	void isThereASiegeHere(int cursite, char newCondition) const;
 	void isThisPlaceHighSecurity(int cursite, int newCondition) const;
 	void getAssetValues(long & weaponValue, long & armorValue, long & clipValue, long & lootValue) const;
+	const void findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox) const;
 
 
 

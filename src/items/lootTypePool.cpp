@@ -42,7 +42,7 @@ int getloottype(int id)
 	return -1;
 }
 /* transforms a loot type name into the index of that loot type in the global vector */
-int getloottype(const string idname)
+int getloottype(const string &idname)
 {
 	for (int i = 0; i < len(loottype); i++) if (loottype[i]->get_idname() == idname) return i;
 	return -1;
@@ -55,7 +55,7 @@ string Loot::equip_title() const
 {
 	return loottype[getloottype(get_itemtypename())]->get_name();
 }
-const string Loot::get_name() const
+const string& Loot::get_name() const
 {
 	return loottype[getloottype(get_itemtypename())]->get_name();
 }

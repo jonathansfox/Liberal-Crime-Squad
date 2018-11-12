@@ -57,19 +57,22 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
 #include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
+#include "../vehicle/vehicletype.h"
+#include "../vehicle/vehicle.h"
 #include "../basemode/baseactions.h"
 // for orderparty
 #include "../sitemode/sitedisplay.h"
@@ -212,7 +215,7 @@ const string CONST_siege018 = " confiscate everything, including Squad weapons."
 const string CONST_siege017 = "The firemen";
 const string CONST_siege016 = "The soldiers";
 const string CONST_siege015 = "The police";
-void DeprecatedCreature::surrenderToAuthorities(const int loc) {
+void surrenderToAuthorities(const int loc) {
 
 	extern Log gamelog;
 	extern short offended_firemen;
@@ -353,7 +356,7 @@ void DeprecatedCreature::surrenderToAuthorities(const int loc) {
 			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
 					pool[i]->set_activity(ACTIVITY_NONE);
-			pool[p]->removesquadinfo();
+			removesquadinfo(*pool[p]);
 			delete_and_remove(pool, p);
 			continue;
 		}
@@ -366,7 +369,7 @@ void DeprecatedCreature::surrenderToAuthorities(const int loc) {
 		pool[p]->drop_weapons_and_clips(NULL);
 		if (iscriminal(pool[p]->getCreatureJustice()))
 		{
-			pool[p]->removesquadinfo();
+			removesquadinfo(*pool[p]);
 			pool[p]->location = polsta;
 			pool[p]->set_activity(ACTIVITY_NONE);
 		}
@@ -391,7 +394,7 @@ void surrenderAndDie(const int loc) {
 		if (pool[p]->location != loc) continue;
 		if (pool[p]->getNameAndAlignment().alive&&pool[p]->getNameAndAlignment().align == 1) stat_dead++;
 		killnumber++;
-		pool[p]->removesquadinfo();
+		removesquadinfo(*pool[p]);
 		pool[p]->die();
 		pool[p]->location = -1;
 	}
@@ -427,7 +430,7 @@ void giveup()
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE ||
 		LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 	{
-		DeprecatedCreature::surrenderToAuthorities(loc);
+		surrenderToAuthorities(loc);
 		endLocationSiege(loc);
 	}
 	else
@@ -1680,8 +1683,8 @@ int numbereating(int loc)
 {
 	extern vector<DeprecatedCreature *> pool;
 	int eaters = 0;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, and not a sleeper, to count as an eater
-		if (pool[p]->location == loc && pool[p]->getNameAndAlignment().alive && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
+		if (pool[p]->location == loc && pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1 && !(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
 	return eaters;
 }
 void noOneIsThere(const int l) {
@@ -1739,7 +1742,7 @@ const string CONST_siege192 = "Hit! One of the bombers slams into to the ground.
 const string CONST_siege191 = "You didn't shoot any down, but you've made them think twice!";
 const string CONST_siege190 = "The thunder of the anti-aircraft gun shakes the compound!";
 const string CONST_siege189 = "You hear planes streak overhead!";
-void airStrike( const int l, int &num_liberals) {
+void airStrike(const char clearformess, const int l, int &num_liberals) {
 
 	extern Log gamelog;
 	extern int stat_dead;
@@ -1749,7 +1752,8 @@ void airStrike( const int l, int &num_liberals) {
 
 
 	bool hit = true;
-	 eraseAlt();
+	if (clearformess) eraseAlt();
+	else makedelimiter();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, CONST_siege189, gamelog);
 	gamelog.newline();
@@ -1758,12 +1762,13 @@ void airStrike( const int l, int &num_liberals) {
 	bool hasGenerator = hasAGenerator(l);
 	if (hasAAGun)
 	{
-		eraseAlt();
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		mvaddstrAlt(8, 1, CONST_siege190, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		eraseAlt();
-
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		if (LCSrandom(5))
 		{
 			hit = false;
@@ -1773,10 +1778,10 @@ void airStrike( const int l, int &num_liberals) {
 				mvaddstrAlt(8, 1, CONST_siege192, gamelog);
 				gamelog.newline();
 				pressAnyKey();
-				eraseAlt();
-
+				if (clearformess) eraseAlt();
+				else makedelimiter();
 				mvaddstrAlt(8, 1, CONST_siege193, gamelog);
-				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)  pool[p]->add_juice(20, 1000);
+				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
 			}
 			gamelog.newline();
 			pressAnyKey();
@@ -1790,20 +1795,20 @@ void airStrike( const int l, int &num_liberals) {
 	}
 	if (hit)
 	{
-		 eraseAlt();
-
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		mvaddstrAlt(8, 1, CONST_siege195, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		if (hasAAGun && !LCSrandom(3))
 		{
-			eraseAlt();
-
+			if (clearformess) eraseAlt();
+			else makedelimiter();
 			mvaddstrAlt(8, 1, CONST_siege196, gamelog);
 			gamelog.newline();
 			pressAnyKey();
-			 eraseAlt();
-
+			if (clearformess) eraseAlt();
+			else makedelimiter();
 			mvaddstrAlt(8, 1, CONST_siege197, gamelog);
 			gamelog.newline();
 			pressAnyKey();
@@ -1811,13 +1816,13 @@ void airStrike( const int l, int &num_liberals) {
 		}
 		else if (hasGenerator && !LCSrandom(3))
 		{
-			eraseAlt();
-
+			if (clearformess) eraseAlt();
+			else makedelimiter();
 			mvaddstrAlt(8, 1, CONST_siege198, gamelog);
 			gamelog.newline();
 			pressAnyKey();
-			eraseAlt();
-
+			if (clearformess) eraseAlt();
+			else makedelimiter();
 			mvaddstrAlt(8, 1, CONST_siege199, gamelog);
 			gamelog.newline();
 			pressAnyKey();
@@ -1829,8 +1834,8 @@ void airStrike( const int l, int &num_liberals) {
 			for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->getNameAndAlignment().alive&&pool[p]->location == l) pol.push_back(p);
 			if (len(pol))
 			{
-				eraseAlt();
-
+				if (clearformess) eraseAlt();
+				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				int targ = pickrandom(pol);
 				if ((int)LCSrandom(100) > pool[targ]->juice)
@@ -1839,7 +1844,7 @@ void airStrike( const int l, int &num_liberals) {
 					addstrAlt(CONST_siege200, gamelog);
 					gamelog.newline();
 					if (pool[targ]->align == 1) stat_dead++, num_liberals--;
-					pool[targ]->removesquadinfo();
+					removesquadinfo(*pool[targ]);
 					pool[targ]->die();
 				}
 				else
@@ -1853,15 +1858,15 @@ void airStrike( const int l, int &num_liberals) {
 		}
 		else
 		{
-			eraseAlt();
-
+			if (clearformess) eraseAlt();
+			else makedelimiter();
 			mvaddstrAlt(8, 1, CONST_siege202, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 		}
 	}
 }
-void shotAtBySniper(const int l, int &num_liberals) {
+void shotAtBySniper(const char clearformess, const int l, int &num_liberals) {
 	const string CONST_siege187 = "A sniper nearly hits ";
 	const string CONST_siege185 = "A sniper takes out ";
 
@@ -1873,7 +1878,8 @@ void shotAtBySniper(const int l, int &num_liberals) {
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->getNameAndAlignment().alive&&pool[p]->location == l) pol.push_back(p);
 	if (len(pol))
 	{
-		eraseAlt();
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		int targ = pickrandom(pol);
 		if ((int)LCSrandom(50) > pool[targ]->juice)
@@ -1883,7 +1889,7 @@ void shotAtBySniper(const int l, int &num_liberals) {
 			addstrAlt(CONST_siege188, gamelog);
 			gamelog.newline();
 			if (pool[targ]->align == 1) stat_dead++, num_liberals--;
-			pool[targ]->removesquadinfo();
+			removesquadinfo(*pool[targ]);
 			pool[targ]->die();
 		}
 		else
@@ -1997,7 +2003,7 @@ void generateReporterDuringSiege(const int l) {
 	change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, (segmentpower - 25) / 2, segmentpower + 50);
 	for (int v = 0; v < 5; v++) change_public_opinion(LCSrandom(VIEWNUM - 3), (segmentpower - 25) / 2);
 }
-void siegeDontAttack(const int l, int num_liberals) {
+int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
 
 	bool getLightsOff(int l);
 	void setLightsOff(int l);
@@ -2016,7 +2022,8 @@ void siegeDontAttack(const int l, int num_liberals) {
 		!(hasAGenerator(l)) && !LCSrandom(10))
 	{
 		no_bad = 0;
-		eraseAlt();
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, CONST_siege184, gamelog);
 		gamelog.newline();
@@ -2027,26 +2034,30 @@ void siegeDontAttack(const int l, int num_liberals) {
 	if (!(hasBasicCompoundWalls(l)) && !LCSrandom(5))
 	{
 		no_bad = 0;
-		shotAtBySniper(l, num_liberals);
+		shotAtBySniper(clearformess, l, num_liberals);
 	}
 	if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(3))
 	{
 		no_bad = 0;
 		//AIR STRIKE!
-		airStrike(l, num_liberals);
+		airStrike(clearformess, l, num_liberals);
 	}
 	if ((LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l)) &&
 		LocationsPool::getInstance().getSiegeEscalationState(l) >= 3 && !LCSrandom(15))
 	{
 		no_bad = 0;
 		//ENGINEERS
-		 eraseAlt();
+		if (clearformess) eraseAlt();
+		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, CONST_siege203, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		
-		mvaddstrAlt( 9, 1, CONST_siege204, gamelog);
+		if (!clearformess)
+		{
+			makedelimiter();
+		}
+		mvaddstrAlt(clearformess ? 9 : 8, 1, CONST_siege204, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		LocationsPool::getInstance().deleteTankTraps(l);
@@ -2057,69 +2068,45 @@ void siegeDontAttack(const int l, int num_liberals) {
 	{
 		generateReporterDuringSiege(l);
 	}
-}
-const string CONST_siege182 = " has starved to death.";
-void checkForStarvation(const int l) {
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != l) continue;
-		
-		pool[p]->blood -= LCSrandom(8) + 4;
-		// Check if liberal starved to death.
-		if (pool[p]->blood <= 0)
-		{
-			pool[p]->die();
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege182, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-		}
-	}
-}
-int countLiberalsAtLocation(const int l) {
-	extern vector<DeprecatedCreature *> pool;
-
-	int liberalcount = 0;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (pool[p]->getNameAndAlignment().alive && // Dead people don't count
-			pool[p]->align == 1 &&// Non-liberals don't count
-			pool[p]->location == l) {// Vacationers don't count
-			liberalcount++;
-		}
-	}
-	return liberalcount;
+	return num_liberals;
 }
 /* siege - updates sieges in progress */
 void reduceCompoundStores(int loc, int amount);
+void emptyCompoundStores(int l);
 const string CONST_siege183 = "The cops are coming!";
+const string CONST_siege182 = " has starved to death.";
 const string CONST_siege181 = "Your Liberals are starving!";
 const string CONST_siege180 = "A day passes while under siege...";
 const string CONST_siege247 = "give up";
-void siegeturn()
+void siegeturn(char clearformess)
 {
-	extern char disbanding;
-	if (disbanding)return;
-
 	void setUnderAttack(int l);
 
 	extern Log gamelog;
-
-	
-	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) {
+	extern char disbanding;
+	extern int stat_dead;
+	extern short lawList[LAWNUM];
+	extern vector<DeprecatedCreature *> pool;
+	if (disbanding)return;
+	// Count people at each location
+	//int hs=-1;
+	int* liberalcount = new int[LocationsPool::getInstance().lenpool()];
+	char* food_prep = new char[LocationsPool::getInstance().lenpool()];
+	// Clear food_prep and liberalcount lists
+	std::memset(food_prep, 0, LocationsPool::getInstance().lenpool());
+	std::memset(liberalcount, 0, sizeof(int)*LocationsPool::getInstance().lenpool());
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (!pool[p]->getNameAndAlignment().alive)continue; // Dead people don't count
+		if (pool[p]->align != 1)continue; // Non-liberals don't count
+		if (pool[p]->location == -1)continue; // Vacationers don't count
+		liberalcount[pool[p]->location]++;
+	}
+	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 		if (LocationsPool::getInstance().isThereASiegeHere(l))
 		{
-			// hypothetical scenario: this differs from original in case liberals enter
-			// a given sige location during the processing of other sieges
-			// It is unclear whether this is possible.
-			const int liberalcount = countLiberalsAtLocation(l);
 			//resolve sieges with no people
-			if (liberalcount == 0)
+			if (liberalcount[l] == 0)
 			{
 				noOneIsThere(l);
 			}
@@ -2129,27 +2116,44 @@ void siegeturn()
 				gamelog.record(CONST_siege180);
 				gamelog.newline();
 				//EAT
-				const int eaters = numbereating(l);
-				const bool starving = LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0;
-				if (starving)
+				bool starving = false;
+				int eaters = numbereating(l);
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0)
 				{
-					eraseAlt();
+					starving = true;
+					if (clearformess) eraseAlt();
+					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, CONST_siege181, gamelog);
 					gamelog.newline();
 					pressAnyKey();
-					checkForStarvation(l);
 				}
-
-				reduceCompoundStores(l, eaters);
+				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) >= eaters) reduceCompoundStores(l, eaters);
+				else emptyCompoundStores(l);
 				//ATTACK!
-				bool attack = false;
-				if (!LCSrandom(12)) { 
-					attack = true;
+				char attack = 0;
+				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+				{
+					if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != l) continue;
+					if (starving) pool[p]->blood -= LCSrandom(8) + 4;
+					// Check if liberal starved to death.
+					if (pool[p]->blood <= 0)
+					{
+						pool[p]->die();
+						if (clearformess) eraseAlt();
+						else makedelimiter();
+						set_color_easy(WHITE_ON_BLACK_BRIGHT);
+						mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
+						addstrAlt(CONST_siege182, gamelog);
+						gamelog.newline();
+						pressAnyKey();
+					}
 				}
+				if (!LCSrandom(12))attack = 1;
 				if (attack)
 				{
-					eraseAlt();
+					if (clearformess) eraseAlt();
+					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, CONST_siege183, gamelog);
 					gamelog.newline();
@@ -2157,12 +2161,13 @@ void siegeturn()
 					setUnderAttack(l);
 				}
 				else {
-					siegeDontAttack(l, liberalcount);
+					liberalcount[l] = siegeDontAttack(l, clearformess, liberalcount[l]);
 				}
 				gamelog.newline(); // single blank line after every siege day
 			}
 		}
-	}
+	delete[] liberalcount;
+	delete[] food_prep;
 }
 /* siege - checks how many days of food left at the site */
 int fooddaysleft(int loc)
@@ -2174,7 +2179,6 @@ int fooddaysleft(int loc)
 void baseEveryoneLeftAtHomelessShelter(const int homes);
 void escalateSite(int l);
 void dumpLootAtLocation(int homes, vector<Item *>& loot);
-void emptyCompoundStores(int l);
 /* siege - what happens when you escaped the siege */
 void escapesiege(char won)
 {
@@ -2345,7 +2349,7 @@ char sally_forth_aux(int loc)
 		mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationName(loc));
 		// Player's party
 		if (partyalive == 0) party_status = -1;
-		DeprecatedCreature::printparty();
+		printparty();
 		if (partyalive > 0)
 		{
 			// Options
@@ -2404,7 +2408,7 @@ char sally_forth_aux(int loc)
 			}
 			if (c == 'f')
 			{
-				DeprecatedCreature::youattack();
+				youattack();
 				enemyattack();
 				creatureadvance();
 			}

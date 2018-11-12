@@ -95,13 +95,14 @@ const string blankString = "";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
 
-//#include "../creature/deprecatedCreatureD.h"
+#include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
@@ -376,8 +377,7 @@ const string tag_skill = "skill";
 
  };
  /* checks if a creature's uniform is appropriate to the location */
-
- char DeprecatedCreature::hasdisguise() const
+ char hasdisguise(const DeprecatedCreature &cr)
  {
 	 extern coordinatest loc_coord;
 	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
@@ -403,20 +403,20 @@ const string tag_skill = "skill";
 		 }
 		 case SIEGE_POLICE:
 		 {
-			 if (get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR &&
 				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) == 0)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_MILITARY &&
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY &&
 				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR &&
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR &&
 				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT &&
 				 LocationsPool::getInstance().getSiegeEscalationState(getCurrentSite()) > 0)uniformed = 1;
 			 break;
 		 }
 		 default:
 			 if (siegeDisguises.count(LocationsPool::getInstance().getSiegeType(getCurrentSite())) > 0) {
-				 if (siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())].count(get_armor().get_itemtypename()) > 0) {
-					 uniformed = siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())][get_armor().get_itemtypename()];
+				 if (siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())].count(cr.get_armor().get_itemtypename()) > 0) {
+					 uniformed = siegeDisguises[LocationsPool::getInstance().getSiegeType(getCurrentSite())][cr.get_armor().get_itemtypename()];
 				 }
 			 }
 			 break;
@@ -425,8 +425,8 @@ const string tag_skill = "skill";
 	 else
 	 {
 		 //// TODO Move to XML
-		 if ((!is_naked() || animalgloss == ANIMALGLOSS_ANIMAL)
-			 && get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
+		 if ((!cr.is_naked() || cr.animalgloss == ANIMALGLOSS_ANIMAL)
+			 && cr.get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
 
 		 switch (type)
 		 {
@@ -440,42 +440,42 @@ const string tag_skill = "skill";
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
 				 uniformed = 0;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_GOVERNMENT_POLICESTATION:
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
 				 uniformed = 0;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-					 get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
 
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_BUSINESS_BANK:
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
 				 uniformed = 0;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-					 get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
 
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 				 {
-					 if (get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR)uniformed = 1;
 				 }
 			 }
 			 break;
@@ -483,43 +483,43 @@ const string tag_skill = "skill";
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
 				 uniformed = 0;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_BLACKROBE)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKROBE)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BLACKDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_CHEAPDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 
 				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-					 get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+					 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
 
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) ? 1 : 2);
 			 }
 			 break;
 		 case SITE_GOVERNMENT_FIRESTATION:
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
 				 uniformed = 0;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_OVERALLS)uniformed = 1;
 				 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 				 {
-					 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
-					 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 1;
 					 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-						 get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
-					 if (get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 1;
+						 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 1;
 				 }
 			 }
 			 break;
 		 case SITE_INDUSTRY_SWEATSHOP:
 			 uniformed = 0;
-			 if (is_naked())uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 if (cr.is_naked())uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
 			 break;
 		 case SITE_GOVERNMENT_PRISON:
 			 if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
@@ -527,32 +527,32 @@ const string tag_skill = "skill";
 				 uniformed = 0;
 				 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2)
 				 {
-					 if (get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
+					 if (cr.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)uniformed = 1;
 				 }
-				 else if (get_armor().get_itemtypename() == tag_ARMOR_PRISONGUARD)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_PRISONER)uniformed = 1;
+				 else if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONGUARD)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_PRISONER)uniformed = 1;
 			 }
 			 break;
 		 case SITE_INDUSTRY_POLLUTER:
 			 uniformed = 0;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_WORKCLOTHES)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_HARDHAT)uniformed = 1;
 			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			 {
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
 			 }
 			 break;
 		 case SITE_CORPORATE_HOUSE:
 			 uniformed = 0;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
-			 if (get_armor().get_itemtypename() == tag_ARMOR_SERVANTUNIFORM)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVESUIT)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_EXPENSIVEDRESS)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
+			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SERVANTUNIFORM)uniformed = 1;
 			 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			 {
-				 if (get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
-				 if (get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_MILITARY)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR)uniformed = 1;
+				 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SEALSUIT)uniformed = 1;
 			 }
 			 break;
 
@@ -567,8 +567,8 @@ const string tag_skill = "skill";
 				 //if_count		
 				 if (siteDisguisesRestricted.count(type) > 0) {
 					 uniformed = 0;
-					 if (siteDisguisesRestricted[type].count(get_armor().get_itemtypename()) > 0) {
-						 uniformed = siteDisguisesRestricted[type][get_armor().get_itemtypename()];
+					 if (siteDisguisesRestricted[type].count(cr.get_armor().get_itemtypename()) > 0) {
+						 uniformed = siteDisguisesRestricted[type][cr.get_armor().get_itemtypename()];
 					 }
 				 }
 			 }
@@ -576,8 +576,8 @@ const string tag_skill = "skill";
 			 {
 				 if (siteDisguises.count(type) > 0) {
 					 uniformed = 0;
-					 if (siteDisguises[type].count(get_armor().get_itemtypename()) > 0) {
-						 uniformed = siteDisguises[type][get_armor().get_itemtypename()];
+					 if (siteDisguises[type].count(cr.get_armor().get_itemtypename()) > 0) {
+						 uniformed = siteDisguises[type][cr.get_armor().get_itemtypename()];
 					 }
 				 }
 			 }
@@ -586,23 +586,23 @@ const string tag_skill = "skill";
 	 }
 	 if (!uniformed)
 	 {
-		 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 2;
-		 if (get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 2;
+		 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM)uniformed = 2;
+		 if (cr.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR)uniformed = 2;
 		 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
-			 get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 2;
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)uniformed = 2;
 		 if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()) &&
-			 get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 2;
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)uniformed = 2;
 		 // Loop over adjacent locations to check if fire is anywhere in sight?
 		 // Or perhaps have a site fire alarm? - Nick
 		 if ((levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_START ||
 			 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_END ||
 			 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_PEAK) &&
-			 get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
+			 cr.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)uniformed = 1;
 	 }
 	 if (uniformed)
 	 {
-		 int qlmax = get_armor().get_quality_levels();
-		 int ql = get_armor().get_quality() + get_armor().is_damaged();
+		 int qlmax = cr.get_armor().get_quality_levels();
+		 int ql = cr.get_armor().get_quality() + cr.get_armor().is_damaged();
 		 if (ql > qlmax)  // Shredded clothes are obvious
 		 {
 			 uniformed = 0;
@@ -618,15 +618,14 @@ const string tag_skill = "skill";
  }
 
  /* checks if a creature's weapon is suspicious */
-
- char DeprecatedCreature::weaponcheck(bool metaldetect) const
+ char weaponcheck(const DeprecatedCreature &cr, bool metaldetect)
  {
-	 bool suspicious = get_weapon().get_specific_bool(BOOL_SUSPICIOUS_);
-	 bool concealed = weapon_is_concealed();
-	 char incharacter = weapon_in_character(get_weapon().get_itemtypename(), get_armor().get_itemtypename());
+	 bool suspicious = cr.get_weapon().get_specific_bool(BOOL_SUSPICIOUS_);
+	 bool concealed = cr.weapon_is_concealed();
+	 char incharacter = weapon_in_character(cr.get_weapon().get_itemtypename(), cr.get_armor().get_itemtypename());
 	 // If your disguise is inappropriate to the current location,
 	 // then being in character isn't sufficient
-	 if (hasdisguise() == false)
+	 if (hasdisguise(cr) == false)
 		 incharacter = -1;
 	 if (suspicious)
 	 {
@@ -666,7 +665,7 @@ const string tag_skill = "skill";
 		 if (activesquad->squad[i] == NULL)break;
 		 if (activesquad->squad[i]->is_naked() &&
 			 activesquad->squad[i]->animalgloss != ANIMALGLOSS_ANIMAL)forcecheck = true;
-		 int thisweapon = activesquad->squad[i]->weaponcheck(false);
+		 int thisweapon = weaponcheck(*activesquad->squad[i], false);
 		 if (thisweapon > weapon)weapon = thisweapon;
 		 //if(thisweapon==2)weaponar[i]=1;
 	 }
@@ -740,7 +739,7 @@ const string tag_skill = "skill";
 				 if (spotted)
 				 {
 					 // Scary weapons are not very casual.
-					 if (activesquad->squad[i]->weaponcheck(false) == 2)
+					 if (weaponcheck(*activesquad->squad[i], false) == 2)
 					 {
 						 noticed = true;
 						 break;
@@ -800,7 +799,7 @@ const string tag_skill = "skill";
 				 for (int i = 0; i < 6; i++)
 				 {
 					 if (activesquad->squad[i] == NULL) break;
-					 if (activesquad->squad[i]->hasdisguise())
+					 if (hasdisguise(*(activesquad->squad[i])))
 					 {
 						 switch (fieldskillrate)
 						 {

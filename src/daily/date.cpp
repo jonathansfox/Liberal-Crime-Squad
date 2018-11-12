@@ -133,12 +133,14 @@ This file is part of Liberal Crime Squad.                                       
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-#include "vehicle/vehicleType.h"///
-#include "vehicle/vehicle.h"///
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
+#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+//#include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
+
 ////
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
@@ -149,10 +151,11 @@ const string tag_skill = "skill";
 #include "../common/commondisplayCreature.h"
 // for  addstr
 #include "../common/commonactionsCreature.h"
+// for int loveslavesleft(const Creature&)
 #include "../common/getnames.h"
 // for void enter_name(int,int,char *,int,const char *=NULL)
 //#include "../common/translateid.h"
-int getarmortype(const string idname);
+int getarmortype(const string &idname);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 #include "../set_color_support.h"
@@ -178,7 +181,7 @@ extern string singleDot;
  };
 extern string AND;
  // Handles the result of a date or vacation
- int DeprecatedCreature::dateresult(int aroll, int troll, Deprecateddatest &d, int e, int p, int y)
+ static int dateresult(int aroll, int troll, Deprecateddatest &d, int e, int p, int y)
  {
 	 extern MusicClass music;
 	 extern int stat_recruits;
@@ -197,13 +200,13 @@ extern string AND;
 		 addstrAlt(CONST_date008, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
-		 if (pool[p]->loveslavesleft() <= 0)
+		 if (loveslavesleft(*pool[p]) <= 0)
 		 {
 			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(y++, 0, CONST_date048, gamelog);
 			 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(CONST_date010, gamelog);
-			 int num_relationships = pool[p]->loveslaves();
+			 int num_relationships = loveslaves(*pool[p]);
 			 if (pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
 			 if (num_relationships == 1) addstrAlt(CONST_date011, gamelog);
 			 else addstrAlt(tostring(num_relationships) + CONST_date012, gamelog);
@@ -247,8 +250,8 @@ extern string AND;
 			 addstrAlt(CONST_date097);
 			 mvaddstrAlt(3, 0, CONST_date098);
 			 d.date[e]->new_name_four();
-			 d.date[e]->sleeperize_prompt(*pool[p], 8);
-			 d.date[e]->addCreature();
+			 sleeperize_prompt(*d.date[e], *pool[p], 8);
+			 addCreature(d.date[e]);
 			 stat_recruits++;
 			 d.date.erase(d.date.begin() + e);
 			 return DATERESULT_JOINED;
@@ -373,7 +376,7 @@ extern string AND;
 				 addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				 addstrAlt(CONST_date047, gamelog);
 				 gamelog.nextMessage();
-				 pool[p]->removesquadinfo();
+				 removesquadinfo(*pool[p]);
 				 pool[p]->carid = -1;
 				 pool[p]->location = ps;
 				 pool[p]->drop_weapons_and_clips(NULL);
@@ -393,7 +396,7 @@ extern string AND;
 		 }
 		 else
 		 {
-			 int ls = pool[p]->loveslaves();
+			 int ls = loveslaves(*pool[p]);
 			 if (ls > 0 && LCSrandom(2))
 			 {
 				 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -510,7 +513,7 @@ extern string AND;
 		 troll += d.date[e]->skill_roll(SKILL_SCIENCE);
 		 aroll += pool[p]->skill_roll(SKILL_SCIENCE);
 	 }
-	 switch (DeprecatedCreature::dateresult(aroll, troll, d, e, p, 2))
+	 switch (dateresult(aroll, troll, d, e, p, 2))
 	 {
 	 default:
 	 case DATERESULT_MEETTOMORROW:return 0;
@@ -520,7 +523,7 @@ extern string AND;
 	 }
  }
  /* daily - date - dater p goes on some dates */
- char DeprecatedCreature::completedate(Deprecateddatest &d, int p)
+ char completedate(Deprecateddatest &d, int p)
  {
 	 extern MusicClass music;
 	 extern int stat_kidnappings;
@@ -598,7 +601,7 @@ extern string AND;
 		 mvaddstrAlt(5, 0, pool[p]->getNameAndAlignment().name, gamelog);
 		 addstrAlt(singleSpace, gamelog);
 		 addstrAlt(pickrandom(date_fail), gamelog);
-		 pool[p]->add_juice(-5, -50);
+		 addjuice(*pool[p], -5, -50);
 		 gamelog.nextMessage();
 		 pressAnyKey();
 		 return 1;
@@ -622,7 +625,7 @@ extern string AND;
 		 d.date[e]->drop_weapons_and_clips(&temp);
 		 Armor atmp(getarmortype(tag_ARMOR_CLOTHES));
 		 d.date[e]->give_armor(atmp, &temp);
-		 d.date[e]->printcreatureinfo();
+		 printcreatureinfo(d.date[e]);
 		 makedelimiter();
 		 while (len(temp))
 		 {
@@ -810,7 +813,7 @@ extern string AND;
 					 addstrAlt(CONST_date097);
 					 mvaddstrAlt(3, 0, CONST_date098);
 					 d.date[e]->new_name_four();
-					d.date[e]->addCreature();
+					 addCreature(d.date[e]);
 					 stat_kidnappings++;
 					 d.date.erase(d.date.begin() + e);
 					 break;
@@ -829,7 +832,7 @@ extern string AND;
 						 addstrAlt(CONST_date100, gamelog);
 						 gamelog.nextMessage();
 						 // Charge with kidnapping
-						 pool[p]->criminalize( LAWFLAG_KIDNAPPING);
+						 criminalize(*pool[p], LAWFLAG_KIDNAPPING);
 						 pressAnyKey();
 						 delete_and_remove(d.date, e);
 						 break;
@@ -848,13 +851,13 @@ extern string AND;
 						 // Find the police station
 						 int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, pool[p]->location);
 						 // Arrest the Liberal
-						 pool[p]->removesquadinfo();
+						 removesquadinfo(*pool[p]);
 						 pool[p]->carid = -1;
 						 pool[p]->location = ps;
 						 pool[p]->drop_weapons_and_clips(NULL);
 						 pool[p]->set_activity(ACTIVITY_NONE);
 						 // Charge with kidnapping
-						 pool[p]->criminalize(LAWFLAG_KIDNAPPING);
+						 criminalize(*pool[p], LAWFLAG_KIDNAPPING);
 						 pressAnyKey();
 						 delete_and_remove(d.date, e);
 						 return 1;
@@ -873,19 +876,20 @@ extern string AND;
 
 
  // Determines the number of dates a creature has scheduled
- int DeprecatedCreature::scheduleddates() const
+ int scheduleddates(const DeprecatedCreature& cr)
  {
 	 int dates = 0;
 	 for (int p = len(date) - 1; p >= 0; p--)
 		 // Does this creature have a list of dates scheduled?
-		 if (date[p]->mac_id == id)
+		 if (date[p]->mac_id == cr.id)
 		 {
 			 dates = len(date[p]->date); break;
 		 }
 	 return dates;
  }
  int getpoolcreature(int id);
-// char completedate(Deprecateddatest &d, int p);
+ char completedate(Deprecateddatest &d, int p);
+ void removesquadinfo(DeprecatedCreature &cr);
  char completevacation(Deprecateddatest &d, int p);
  void doDates(char &clearformess) {
 	 extern vector<DeprecatedCreature *> pool;
@@ -910,9 +914,7 @@ extern string AND;
 					 if (LocationsPool::getInstance().isThereASiegeHere(pool[p]->base))
 						 pool[p]->base = hs;
 					 pool[p]->location = pool[p]->base;
-
 					 clearformess = 1;
-
 					 if (completevacation(*date[d], p))
 					 {
 						 delete_and_remove(date, d);
@@ -931,10 +933,8 @@ extern string AND;
 				 }
 				 //DO DATE
 				 else {
-
 					 clearformess = 1;
-
-					 if (DeprecatedCreature::completedate(*date[d], p))
+					 if (completedate(*date[d], p))
 					 {
 						 delete_and_remove(date, d);
 						 continue;
@@ -945,7 +945,7 @@ extern string AND;
 						 if (pool[p]->dating > 0)
 						 {
 							 //NOW KICK THE DATER OUT OF THE SQUAD AND LOCATION
-							 pool[p]->removesquadinfo();
+							 removesquadinfo(*pool[p]);
 							 pool[p]->location = -1;
 						 }
 					 }
@@ -960,13 +960,13 @@ extern string AND;
 		 }
 	 }
  }
+ void delenc(DeprecatedCreature &tk);
  int getCity(int l);
- void DeprecatedCreature::newDate(DeprecatedCreature &tk) {
-
+ void newDate(DeprecatedCreature &a, DeprecatedCreature &tk) {
 	 Deprecateddatest *newd = NULL;
 	 for (int d = 0; d < len(date); d++)
 	 {
-		 if (date[d]->mac_id == id)
+		 if (date[d]->mac_id == a.id)
 		 {
 			 newd = date[d];
 			 break;
@@ -975,18 +975,18 @@ extern string AND;
 	 if (newd == NULL)
 	 {
 		 newd = new Deprecateddatest;
-		 newd->mac_id = id;
-		 newd->city = getCity(location);
+		 newd->mac_id = a.id;
+		 newd->city = getCity(a.location);
 		 date.push_back(newd);
 	 }
 	 DeprecatedCreature *newcr = new DeprecatedCreature;
 	 *newcr = tk;
 	 newcr->namecreature();
-	 newcr->location = location;
-	 newcr->base = base;
+	 newcr->location = a.location;
+	 newcr->base = a.base;
 	 newd->date.push_back(newcr);
 	 // TODO this is a pointer subtracting another pointer in order to calculate the index, change it
-	 tk.delenc(0);
+	 delenc(tk);
  }
 
  void delete_and_clear_date_pool() {

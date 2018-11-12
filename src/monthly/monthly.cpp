@@ -87,10 +87,10 @@ void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
 #include "../politics/politics.h"
 //for publicmood
 //#include "../monthly/lcsmonthly.h"
-void fundreport();
+void fundreport(char &clearformess);
 //#include "../daily/daily.h"
 //for dispersalcheck and securitytable
-void dispersalcheck(const char clearformess);
+void dispersalcheck(char &clearformess);
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 //#include <common\\getnames.h>
@@ -102,7 +102,7 @@ std::string getview(short view, bool shortname);
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
 void clearRentExemptions();
-void publishSpecialEditions();
+void publishSpecialEditions(char &clearformess);
 void manageGrafiti();
 
 extern string singleDot;
@@ -276,7 +276,7 @@ void print_labels_on_bottom_of_screen() {
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, CONST_monthly014);
 }
-void printIntelligenceReport() {
+void printIntelligenceReport(char &clearformess) {
 	/*******************************************************
 	*                 INTELLIGENCE REPORT                  *
 	*     ONLY IF SHOWMECHANICS OR SHOWWAIT IS DEFINED     *
@@ -311,6 +311,8 @@ void printIntelligenceReport() {
 		mvaddcharAlt(y++, x + 23 + pip, 'O');
 	}
 	print_labels_on_bottom_of_screen();
+	clearformess = 1;
+	pressAnyKey();
 }
 void updateEndgamestate() {
 	extern char endgamestate;
@@ -371,7 +373,7 @@ void long_disband_loss() {
 	end_game();
 }
 /* does end of month actions */
-void passmonth(char canseethings)
+void passmonth(char &clearformess, char canseethings)
 {
 	// Show polls when you can't see things
 	extern bool SHOWWAIT;
@@ -407,16 +409,16 @@ void passmonth(char canseethings)
 	clearRentExemptions();
 	// Check for game over
 	endcheck(END_DEAD);
-	dispersalcheck(true);
+	dispersalcheck(clearformess);
 	if (!disbanding) {
-		publishSpecialEditions();
+		publishSpecialEditions(clearformess);
 	}
 	int libpower[VIEWNUM] = { 0 };
 	//STORIES STALE EVEN IF NOT PRINTED
 	for (int v = 0; v < VIEWNUM; v++)public_interest[v] /= 2;
 	int conspower = 200 - attitude[VIEW_AMRADIO] - attitude[VIEW_CABLENEWS];
 	//HAVING SLEEPERS
-	havingSleepers(canseethings, libpower);
+	havingSleepers(clearformess, canseethings, libpower);
 	manageGrafiti();
 	int mediabalance = 0;
 	int issuebalance[VIEWNUM - 5];
@@ -446,8 +448,7 @@ void passmonth(char canseethings)
 	*******************************************************/
 	if ((SHOWMECHANICS || SHOWWAIT) && canseethings)
 	{
-		printIntelligenceReport();
-		pressAnyKey();
+		printIntelligenceReport(clearformess);
 	}
 	/*******************************************************
 	*                                                      *
@@ -456,14 +457,17 @@ void passmonth(char canseethings)
 	*******************************************************/
 	//ELECTIONS
 	if (month == 11) {
-		elections(canseethings);
+		elections(clearformess, canseethings);
+		clearformess = 1;
 	}
 	//SUPREME COURT
 	if (month == 6) {
-		supremecourt(canseethings);
+		supremecourt(clearformess, canseethings);
+		clearformess = 1;
 	}
 	//CONGRESS
-	congress(canseethings);
+	congress(clearformess, canseethings);
+	clearformess = 1;
 	//DID YOU WIN?
 	if (wincheck())
 	{
@@ -481,8 +485,7 @@ void passmonth(char canseethings)
 	updateworld_laws(lawList, oldlaw);
 	//THE SYSTEM!
 	if (!disbanding) {
-		void monthlyRunTheSystem();
-		monthlyRunTheSystem();
+		monthlyRunTheSystem(clearformess);
 	}
 
 	//NUKE EXECUTION VICTIMS
@@ -491,14 +494,14 @@ void passmonth(char canseethings)
 	//MUST DO AN END OF GAME CHECK HERE BECAUSE OF EXECUTIONS
 	endcheck(END_EXECUTED);
 	//DISPERSAL CHECK
-	dispersalcheck(true);
+	dispersalcheck(clearformess);
 	//FUND REPORTS
-	if (canseethings)fundreport();
+	if (canseethings)fundreport(clearformess);
 	ledger.resetMonthlyAmounts();
-	if (!disbanding) eraseAlt();
+	if (clearformess) eraseAlt();
 	//HEAL CLINIC PEOPLE
 	if (!disbanding) {
-		monthlyRunHealClinicPeople();
+		monthlyRunHealClinicPeople(clearformess);
 	}
 
 }

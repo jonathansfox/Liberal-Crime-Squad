@@ -2,7 +2,7 @@
 /* siege - updates upcoming sieges */
 void siegecheck(char canseethings);
 /* siege - updates sieges in progress */
-void siegeturn();
+void siegeturn(char clearformess);
 /* siege - handles giving up */
 void giveup();
 /* siege - checks how many days of food left at the site */
