@@ -831,3 +831,64 @@ Deletec deprecatedCreatureD.h
 Moved all DeprecatedCreature functions and values that involve other classes into private.
 Global functions requiring access to the now private functions made into DeprecatedCreature::static functions.
 Some exceptions for shop.cpp and creatureType.cpp, which are their own classes.
+
+Began work on AbstractCreature class.
+
+\([^\(\r\n]*Deprecated
+ Matching lines: 208    Matching files: 29    Total files searched: 158
+creature.h(709):
+  Matching lines: 60
+DeprecatedCreature::[^\(\r\n]+\([^\(\r\n]*Deprecated
+Matching lines: 55    Matching files: 10    Total files searched: 158
+
+Cut down:
+Find all "Deprecated and Problematic", Match case, Regular expressions, Find Results 1, Current Project: game.vcxproj, ""
+  creature\creaturetype.cpp(383):void CreatureType::make_creature(DeprecatedCreature& cr) const
+  creature\creaturetype.cpp(465):void CreatureType::give_weapon(DeprecatedCreature& cr) const
+  creature\creaturetype.cpp(486):void CreatureType::give_weapon_civilian(DeprecatedCreature& cr) const
+  creature\creaturetype.cpp(513):void CreatureType::give_armor(DeprecatedCreature& cr) const
+  
+  creature\creaturetype.h(11):	void make_creature(DeprecatedCreature& cr) const;
+  creature\creaturetype.h(18):	void give_weapon(DeprecatedCreature& cr) const;
+  creature\creaturetype.h(20):	void give_weapon_civilian(DeprecatedCreature& cr) const;
+  creature\creaturetype.h(22):	void give_armor(DeprecatedCreature& cr) const;
+  
+  daily\interrogation.cpp(907):	for (DeprecatedCreature* temp : temppool)//int p = 0; p < len(temppool); p++)  
+  
+  sitemode\shop.cpp(237): void Shop::enter(Deprecatedsquadst& customers) const
+  sitemode\shop.cpp(244): void Shop::choose(Deprecatedsquadst& customers, int& buyer) const
+  sitemode\shop.cpp(249): void Shop::browse_fullscreen(Deprecatedsquadst& customers, int& buyer) const
+  sitemode\shop.cpp(303): int fenceselect(Deprecatedsquadst& customers)
+  sitemode\shop.cpp(408): void sell_loot(Deprecatedsquadst& customers)
+  sitemode\shop.cpp(507): void choose_buyer(Deprecatedsquadst& customers, int& buyer)
+  sitemode\shop.cpp(598): void Shop::browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const
+  sitemode\shop.cpp(880): void Shop::ShopItem::choose(Deprecatedsquadst& customers, int& buyer) const
+  
+  sitemode\shop.h(39):	virtual void choose(Deprecatedsquadst& customers, int& buyer) const = 0;
+  sitemode\shop.h(47):	void enter(Deprecatedsquadst& customers) const;
+  sitemode\shop.h(49):	virtual void choose(Deprecatedsquadst& customers, int& buyer) const;
+  sitemode\shop.h(54):	void browse_fullscreen(Deprecatedsquadst& customers, int& buyer) const;
+  sitemode\shop.h(55):	void browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const;
+  sitemode\shop.h(70):		virtual void choose(Deprecatedsquadst& customers, int& buyer) const;
+  
+Matching lines: 23    Matching files: 5    Total files searched: 158
+\([^\(\r\n]*Deprecated
+Matching lines: 229    Matching files: 26    Total files searched: 158
+DeprecatedCreature::[^\(\r\n]+\([^\(\r\n]*Deprecated
+Matching lines: 91    Matching files: 16    Total files searched: 158
+
+Game now crashes with regards to hostages/kidnapping.  This is found in several backup versions.  Null pointer exception during the tendAllHostages function.
+Scrapped all remains of AbstractCreature.  Inheritance in C++ works differently than Java, especially with regards to overriding methods and virtual methods.  This led to a shitstorm.
+Further examination, this does not appear to be the cause.  Fucking c++.
+Lots of crashing, largely related to kidnapping and xml stuff.
+
+It appears to specifically be accessing member variables of the various references within DeprecatedCreature.  Augmentation*, Armor*, and Weapon* specifically.  Depending on how a creature is generated, the pointers it holds for those values may not be initialized.
+
+Backtrack to 4.12.28 in progress.
+
+4.12.30 Completely reverted to 4.12.28
+I have learned not to make such sweeping changes to so many areas at once.  The next attempt shall learn from the experience.
+
+Fixed bug where age estimates were replaced with odd symbols.
+
+4.12.31
