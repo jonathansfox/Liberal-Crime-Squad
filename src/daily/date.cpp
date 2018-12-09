@@ -1,110 +1,5 @@
-
+#define	DATE_CPP
 #include "../includes.h"
-const string CONST_dateB104 = "'s ";
-const string CONST_dateB103 = " cell phone.";
-const string CONST_dateB102 = " pet";
-const string CONST_dateB101 = " favourite TV show.";
-const string CONST_dateB100 = " hair.";
-const string CONST_dateB099 = "'s frozen Conservative heart.";
-const string CONST_date103 = "The Liberal wakes up in the police station...";
-const string CONST_date102 = " remembers seeing!";
-const string CONST_date101 = "'s fist is the last thing ";
-const string CONST_date100 = " has failed to kidnap the Conservative.";
-const string CONST_date099 = " manages to get away on the way back to the safehouse!";
-const string CONST_date098 = "If you do not enter anything, their real name will be used.";
-const string CONST_date097 = " in its presence?";
-const string CONST_date096 = "What name will you use for this ";
-const string CONST_date095 = "The Education of ";
-const string CONST_date094 = " kidnaps the Conservative!";
-const string CONST_date093 = " struggles and yells for help, but nobody comes.";
-const string CONST_date092 = " doesn't resist.";
-const string CONST_date091 = "not to [resist]!";
-const string CONST_date090 = "not to fuck around!";
-const string CONST_date089 = " seizes the Conservative swine from behind and warns it";
-const string CONST_date088 = "to the corporate slave's throat!";
-const string CONST_date087 = " grabs the Conservative from behind, holding the ";
-const string CONST_date086 = "and threatens to blow the Conservative's brains out!";
-const string CONST_date085 = " comes back from the bathroom toting the ";
-const string CONST_date084 = "E - Just kidnap the Conservative bitch.";
-const string CONST_date083 = "D - Break it off.";
-const string CONST_date082 = "C - Spend a week on a cheap vacation (must be uninjured).";
-const string CONST_date081 = "C - Spend a week on a cheap vacation (stands up any other dates).";
-const string CONST_date080 = "B - Try to get through the evening without spending a penny.";
-const string CONST_date079 = "A - Spend a hundred bucks tonight to get the ball rolling.";
-const string CONST_date078 = " approach the situation?";
-const string CONST_date077 = "How should ";
-const string CONST_date076 = "Seeing ";
-const string CONST_date075 = "Things go downhill fast.";
-const string CONST_date074 = " mixes up the names of ";
-const string CONST_date073A = " realizes ";
-const string CONST_date073B = " has committed to eating ";
-const string CONST_date073C = " meals at once.";;
-const string CONST_date072 = "Ruh roh...";
-const string CONST_date071 = "Unfortunately, they turn up at the same time.";
-const string CONST_date070 = "Unfortunately, they all turn up at the same time.";
-const string CONST_date069 = ".  An ambush was set for the lying dog...";
-const string CONST_date068 = "Unfortunately, they know each other and had been discussing";
-const string CONST_date067 = "Unfortunately, they all know each other and had been discussing";
-const string CONST_date066 = " at ";
-const string CONST_date065 = "dates to manage with ";
-const string CONST_date064 = "a hot date with ";
-const string CONST_date063 = "a \"hot\" date with ";
-const string CONST_date062 = " has ";
-const string CONST_date061 = " is back from vacation.";
-const string CONST_date060 = "This relationship is over.";
-const string CONST_date059 = " can sense that things just aren't working out.";
-const string CONST_date058 = " from meeting ";
-const string CONST_date057 = "schedule for keeping ";
-const string CONST_date056 = "mind-bending ";
-const string CONST_date055 = "detailed ";
-const string CONST_date054 = "complicated ";
-const string CONST_date053 = "intricate ";
-const string CONST_date052 = "awe-inspiring ";
-const string CONST_date051 = "notices ";
-const string CONST_date050 = "The date starts well, but goes horribly wrong when ";
-const string CONST_date049 = " escapes the police ambush!";
-const string CONST_date048 = "But ";
-const string CONST_date047 = " has been arrested.";
-const string CONST_date046 = " was leaking information to the police the whole time!";
-const string CONST_date045 = "'s mind with wisdom!!!";
-const string CONST_date044 = " actually curses ";
-const string CONST_date043 = "Talking with ";
-const string CONST_date042 = "They'll meet again tomorrow.";
-const string CONST_date041 = " to recharge ";
-const string CONST_date040 = " to go to a birthday party.";
-const string CONST_date039 = " six-legged pig.";
-const string CONST_date038 = " fish.";
-const string CONST_date037 = " dog.";
-const string CONST_date036 = " cat.";
-const string CONST_date035 = " to take care of ";
-const string CONST_date034 = " to catch ";
-const string CONST_date033 = " due to an early meeting tomorrow.";
-const string CONST_date032 = " due to an allergy attack.";
-const string CONST_date031 = " to wash ";
-const string CONST_date030 = " seemed to have fun, but left early";
-const string CONST_date028 = " knows all about that already.";
-const string CONST_date027 = " was able to create a map of the site with this information.";
-const string CONST_date026 = " turns the topic of discussion to the ";
-const string CONST_date025 = " is slowly warming ";
-const string CONST_date021 = "The Self-Nullifying Infatuation of ";
-const string CONST_date020 = "'s totally unconditional love-slave!";
-const string CONST_date019 = " is ";
-const string CONST_date018 = "In fact, ";
-const string CONST_date017 = "It was fun though. They agree to part ways amicably.";
-const string CONST_date016 = " relationship.";
-const string CONST_date015 = "yet another";
-const string CONST_date014 = "another";
-const string CONST_date013 = " isn't seductive enough to juggle ";
-const string CONST_date012 = " people!";
-const string CONST_date011 = "someone!";
-const string CONST_date010 = " is already dating ";
-const string CONST_date008 = "'s unique life philosophy...";
-const string CONST_date007 = " is quite taken with ";
-const string CONST_date006 = "date_fail.txt";
-
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -130,64 +25,10 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-//#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-// for  addstr
-#include "../common/commonactionsCreature.h"
-// for int loveslavesleft(const Creature&)
-#include "../common/getnames.h"
-// for void enter_name(int,int,char *,int,const char *=NULL)
-//#include "../common/translateid.h"
-int getarmortype(const string &idname);
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../common/creaturePoolCreature.h"
-#include "../locations/locationsPool.h"
-#include "../common/musicClass.h"
-extern string singleDot;
- vector<string> date_fail;
- const string datey = "date\\";
- vector<file_and_text_collection> date_text_file_collection = {
-	 /*date.cpp*/
-	 customText(&date_fail, datey + CONST_date006),
- };
- extern string commaSpace;
- extern string singleSpace;
  vector<Deprecateddatest *> date;
- enum DateResults
- {
-	 DATERESULT_MEETTOMORROW,
-	 DATERESULT_BREAKUP,
-	 DATERESULT_JOINED,
-	 DATERESULT_ARRESTED
- };
-extern string AND;
  // Handles the result of a date or vacation
  static int dateresult(int aroll, int troll, Deprecateddatest &d, int e, int p, int y)
  {
-	 extern MusicClass music;
-	 extern int stat_recruits;
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
-	 extern vector<DeprecatedCreature *> pool;
 	 music.play(MUSIC_DATING);
 	 std::string s = blankString;
 	 if (aroll > troll)
@@ -467,9 +308,6 @@ extern string AND;
  /* daily - date - dater p gets back from vacation */
  char completevacation(Deprecateddatest &d, int p)
  {
-	 extern MusicClass music;
-	 extern Log gamelog;
-	 extern vector<DeprecatedCreature *> pool;
 	 music.play(MUSIC_DATING);
 	 int e = 0;
 	 eraseAlt();
@@ -525,12 +363,6 @@ extern string AND;
  /* daily - date - dater p goes on some dates */
  char completedate(Deprecateddatest &d, int p)
  {
-	 extern MusicClass music;
-	 extern int stat_kidnappings;
-	 extern Log gamelog;
-	 extern class Ledger ledger;
-	 extern short lawList[LAWNUM];
-	 extern vector<DeprecatedCreature *> pool;
 	 music.play(MUSIC_DATING);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -887,12 +719,7 @@ extern string AND;
 		 }
 	 return dates;
  }
- int getpoolcreature(int id);
- char completedate(Deprecateddatest &d, int p);
- void removesquadinfo(DeprecatedCreature &cr);
- char completevacation(Deprecateddatest &d, int p);
  void doDates(char &clearformess) {
-	 extern vector<DeprecatedCreature *> pool;
 	 for (int d = len(date) - 1; d >= 0; d--)
 	 {
 		 int p = getpoolcreature(date[d]->mac_id);

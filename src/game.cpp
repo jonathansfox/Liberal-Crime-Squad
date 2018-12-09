@@ -1,17 +1,5 @@
+#define	GAME_CPP
 #include "includes.h"
-const string CONST_game015 = "masktype";
-const string CONST_game014 = "default";
-const string CONST_game013 = "Unspecified error with custom text";
-const string CONST_game012 = "We need a slogan!";
-const string CONST_game011 = "debug_defines.txt";
-const string CONST_game010 = "File Error: InitiateMoreIncompleteText";
-const string CONST_game009 = "File Error: InitiateIncompleteText";
-const string CONST_game008 = "File Error: ";
-const string CONST_game006 = "Comment Found";
-const string CONST_game005 = "sitemaps.txt";
-const string CONST_game004 = "Liberal Crime Squad ";
-
-const string blankString = "";
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -73,61 +61,7 @@ const string blankString = "";
 //possible bug with hauling people
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "creature/newcreature.h"
-#include "../items/armortype.h"
-#include "common/interval.h"
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-//#include "news/news.h"
-void loadgraphics();
-#include "items/loottype.h"
-#include "creature/augmenttype.h"
-//#include "configfile.h"
-// Reads in an entire configuration file
-// Returns 0 for read successful, returns -1 if failed read
-int readConfigFile(const std::string& filename);
-#include "log/log.h"
-//for the gamelog
-//#include "common/consolesupport.h"
-// for getkey
-#include "common/stringconversion.h"
-//for string conversion
-//#include "common/getnames.h"
-std::string cityname();
-#include "common/translateid.h"
-// for  getarmortype 
-#include "title/initfile.h"
-//for void loadinitfile();
-#include "title/titlescreen.h"
-//for void mode_title();
-#include "common/creaturePool.h"
-#include "locations/locationsPool.h"
-#include "cursesAlternative.h"
-#include "customMaps.h"
-/* end the game and clean up */
-void end_game(int err = EXIT_SUCCESS);
-#ifdef WIN32
-bool fixcleartype=false;
-#endif
-struct pointerAndString {
-	bool *super_collection;
-	string fileName;
-	pointerAndString(bool *super_, const string& file_) : fileName(file_), super_collection(super_) {}
-};
-struct fullName {
-	string first;
-	string middle;
-	string last;
-
-};
-//int mainSeven(bool xml_loaded_ok);
-void init_console();
-void initialize_debug_defines();
 void mainOne() {
-	extern Log gamelog; //The gamelog.
 	init_console(); // do this FIRST
 					//start curses
 	initscrAlt();
@@ -137,7 +71,6 @@ void mainOne() {
 	LocationsPool::getInstance();
 }
 void mainTwo() {
-	extern Log gamelog; //The gamelog.
 	time_t t = time(0);
 	struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
 	char datetime[41];
@@ -145,11 +78,7 @@ void mainTwo() {
 		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
 	gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
 }
-#include "common/musicClass.h"
-void set_title(char *s);
 void mainThree() {
-	extern string PACKAGE_VERSION_STR;
-	extern MusicClass music;
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 								 // set window title
 	char wtitle[50];
@@ -157,16 +86,9 @@ void mainThree() {
 	strcat(wtitle, PACKAGE_VERSION_STR.c_str());
 	set_title(wtitle);
 }
-string failedToLoadSitemaps;
-string debugCode;
-string activated;
-string failedToLoad;
-string exclamationPoint;
-string defaultMissingForMask;
-string defaultUnknownForMask;
+
 int oldMapMode = 0; // -1 if we're using the old map generation functions.
 void mainFour() {
-	extern Log gamelog; //The gamelog.
 	noechoAlt();
 	//initialize curses color
 	start_colorAlt();
@@ -203,17 +125,6 @@ void mainFour() {
 	//Setting initial game data...
 }
 void mainFive() {
-	// Laws start archconservative
-	extern bool SHITLAWS;
-	// Laws start elite liberal
-	extern bool PERFECTLAWS;
-	// Public opinion starts at 100% Liberal
-	extern bool REVOLUTIONNOW;
-	extern short activesortingchoice[];
-	extern short attitude[];
-	extern short public_interest[];
-	extern short background_liberal_influence[];
-	extern short lawList[];
 	//Initialize sorting choices.
 	for (int s = 0; s < SORTINGCHOICENUM; s++)
 		activesortingchoice[s] = SORTING_NONE;
@@ -336,7 +247,6 @@ bool isThisNotComment(char* currentLine) {
 // returns true if file loads, false if not.
 bool populate_from_txt(vector< vector<string> >& types, const string& fileName, const int dimension)
 {
-	extern char artdir[];
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
@@ -378,7 +288,6 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 }
 bool populate_from_txt(vector<string> & types, const string& fileName)
 {
-	extern char artdir[];
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
@@ -407,70 +316,37 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	}
 	return success;
 }
-
-bool initialize_incomplete_txt();
 bool initialize_more_incomplete_txt();
 bool initialize_txt();
 bool initialize_txt() {
-	extern vector<file_and_text_collection> activate_text_file_collection;
-	extern vector<file_and_text_collection> activities_text_file_collection;
-	extern vector<file_and_text_collection> baseactions_text_file_collection;
-	extern vector<file_and_text_collection> chase_text_file_collection;
-	extern vector<file_and_text_collection> common_text_file_collection;
-	extern vector<file_and_text_collection> creature_text_file_collection;
-	extern vector<file_and_text_collection> creaturetypes_text_file_collection;
-	extern vector<file_and_text_collection> date_text_file_collection;
-	extern vector<file_and_text_collection> endgame_text_file_collection;
-	extern vector<file_and_text_collection> externally_stored_data_text_file_collection;
-	extern vector<file_and_text_collection> fighty_text_file_collection;
-	extern vector<file_and_text_collection> get_names_text_file_collection;
-	extern vector<file_and_text_collection> globals_text_file_collection;
-	extern vector<file_and_text_collection> interrogate_text_file_collection;
-	extern vector<file_and_text_collection> justice_text_file_collection;
-	extern vector<file_and_text_collection> liberl_agenda_text_file_collection;
-	extern vector<file_and_text_collection> locations_text_file_collection;
-	extern vector<file_and_text_collection> locationspool_text_file_collection;
-	extern vector<file_and_text_collection> majorevent_text_file_collection;
-	extern vector<file_and_text_collection> map_specials_text_file_collection;
-	extern vector<file_and_text_collection> misc_activities_text_file_collection;
-	extern vector<file_and_text_collection> misc_text_file_collection;
-	extern vector<file_and_text_collection> names_text_file_collection;
-	extern vector<file_and_text_collection> newgame_file_collection;
-	extern vector<file_and_text_collection> politics_text_file_collection;
-	extern vector<file_and_text_collection> talk_file_collection;
-	extern vector<file_and_text_collection> text_file_collection;
-	extern vector<file_and_text_collection> title_screen_text_files;
-	extern vector<file_and_text_collection> reviewmode_text_file_collection;
-	extern vector<file_and_text_collection> siege_text_file_collection;
-	extern vector<file_and_text_collection> stealth_text_file_collection;
 	vector<vector<file_and_text_collection> > vast_text_collection = {
-		activate_text_file_collection,
-		activities_text_file_collection,
-		baseactions_text_file_collection,
-		chase_text_file_collection,
-		common_text_file_collection,
-		creature_text_file_collection,
-		creaturetypes_text_file_collection,
-		date_text_file_collection,
-		endgame_text_file_collection,
-		externally_stored_data_text_file_collection,
-		fighty_text_file_collection,
-		get_names_text_file_collection,
-		globals_text_file_collection,
-		interrogate_text_file_collection,
-		justice_text_file_collection,
-		liberl_agenda_text_file_collection,
-		locations_text_file_collection,
-		locationspool_text_file_collection,
-		majorevent_text_file_collection,
-		map_specials_text_file_collection,
-		misc_activities_text_file_collection,
-		misc_text_file_collection,
-		names_text_file_collection,
-		newgame_file_collection,
-		politics_text_file_collection,
-		talk_file_collection,
-		text_file_collection,
+	activate_text_file_collection,
+	activities_text_file_collection,
+	baseactions_text_file_collection,
+	chase_text_file_collection,
+	common_text_file_collection,
+	creature_text_file_collection,
+	creaturetypes_text_file_collection,
+	date_text_file_collection,
+	endgame_text_file_collection,
+	externally_stored_data_text_file_collection,
+	fighty_text_file_collection,
+	get_names_text_file_collection,
+	globals_text_file_collection,
+	interrogate_text_file_collection,
+	justice_text_file_collection,
+	liberl_agenda_text_file_collection,
+	locations_text_file_collection,
+	locationspool_text_file_collection,
+	majorevent_text_file_collection,
+	map_specials_text_file_collection,
+	misc_activities_text_file_collection,
+	misc_text_file_collection,
+	names_text_file_collection,
+	newgame_file_collection,
+	politics_text_file_collection,
+	talk_file_collection,
+	//	text_file_collection,
 		title_screen_text_files,
 		reviewmode_text_file_collection,
 		siege_text_file_collection,
@@ -482,13 +358,15 @@ bool initialize_txt() {
 		for (file_and_text_collection f : file) {
 			if (f.superCollection) {
 				loaded &= populate_from_txt(*f.super_collection, f.fileName, f.dimensions);
+				//loaded &= f.super_collection->size() > 0; this test is redundant, populate_from_txt already does it
+				//the gamecrash from when namelists are empty was not detected.
 			}
 			else {
 				loaded &= populate_from_txt(*f.collection, f.fileName);
+				//loaded &= f.collection->size() > 0;
 			}
 		}
 	}
-	loaded &= initialize_incomplete_txt();
 	if (!loaded) {
 		addstrAlt(CONST_game009);
 		pressAnyKey();
@@ -504,10 +382,6 @@ bool initialize_txt() {
 	return loaded;
 }
 void initialize_debug_defines() {
-	// inform player of activated debug codes
-	extern bool DISPLAYDEBUG;
-	extern char artdir[];
-	extern vector<pointerAndString> debug_defines;
 	string fileName = CONST_game011;
 	ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
@@ -537,7 +411,6 @@ void initialize_debug_defines() {
 	}
 }
 void initiateSenate() {
-	extern short senate[];
 	for (int s = 0; s < SENATENUM; s++)
 	{
 		if (s < 25) senate[s] = -2;
@@ -548,7 +421,6 @@ void initiateSenate() {
 	}
 }
 void initiateHouse() {
-	extern short house[];
 	for (int h = 0; h < HOUSENUM; h++)
 	{
 		if (h < 50) house[h] = -2;
@@ -558,10 +430,7 @@ void initiateHouse() {
 		else house[h] = 2;
 	}
 }
-fullName generate_long_name(char gender = GENDER_NEUTRAL);
 void initiateCourt() {
-	extern short court[];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	for (int c = 0; c < COURTNUM; c++)
 	{
 		if (c < 3) court[c] = -2;
@@ -583,8 +452,6 @@ void initiateCourt() {
 	}
 }
 void initiateExec() {
-	extern short  exec[];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	for (int e = 0; e < EXECNUM; e++)
 	{
 		exec[e] = -2;
@@ -598,12 +465,9 @@ void mainSix() {
 	initiateCourt();
 	initiateExec();
 
-	extern unsigned long attorneyseed[4];
 	initOtherRNG(attorneyseed);
-	extern char lcityname[];
 	strcpy(lcityname, cityname());
 }
-bool mainSeven(bool xml_loaded_ok);
 int main(int argc, char* argv[])
 {
 	mainOne();
@@ -630,7 +494,6 @@ int main(int argc, char* argv[])
 }
 bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log)
 {
-	extern char artdir[];
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ //File is missing or not valid XML.

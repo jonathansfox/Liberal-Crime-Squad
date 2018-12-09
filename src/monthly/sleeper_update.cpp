@@ -1,48 +1,5 @@
+#define	SLEEPER_UPDATE_CPP
 #include "../includes.h"
-const string CONST_sleeper_update046 = "canseethings";
-const string CONST_sleeper_update045 = "abstracted debate";
-const string CONST_sleeper_update044 = "liberal power";
-
-const string tag_LOOT = "LOOT";
-const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
-const string tag_LOOT_PDA = "LOOT_PDA";
-const string tag_LOOT_CELLPHONE = "LOOT_CELLPHONE";
-const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
-const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
-const string tag_ARMOR = "ARMOR";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
-const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
-const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
-const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
-const string tag_LOOT_SILVERWARE = "LOOT_SILVERWARE";
-const string tag_LOOT_CHEMICAL = "LOOT_CHEMICAL";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_LOOT_POLICERECORDS = "LOOT_POLICERECORDS";
-const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
-const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
-const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
-const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
-const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
-const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
-const string tag_LOOT_MICROPHONE = "LOOT_MICROPHONE";
-const string tag_LOOT_CABLENEWSFILES = "LOOT_CABLENEWSFILES";
-const string tag_LOOT_AMRADIOFILES = "LOOT_AMRADIOFILES";
-const string tag_LOOT_FAMILYPHOTO = "LOOT_FAMILYPHOTO";
-const string tag_LOOT_CHEAPJEWELERY = "LOOT_CHEAPJEWELERY";
-const string tag_LOOT_WATCH = "LOOT_WATCH";
-const string tag_LOOT_TRINKET = "LOOT_TRINKET";
-const string tag_LOOT_CORPFILES = "LOOT_CORPFILES";
-const string tag_LOOT_FINECLOTH = "LOOT_FINECLOTH";
-const string tag_WEAPON_SHANK = "WEAPON_SHANK";
-const string tag_LOOT_JUDGEFILES = "LOOT_JUDGEFILES";
-const string tag_LOOT_LABEQUIPMENT = "LOOT_LABEQUIPMENT";
-const string tag_LOOT_RESEARCHFILES = "LOOT_RESEARCHFILES";
-const string tag_LOOT_EXPENSIVEJEWELERY = "LOOT_EXPENSIVEJEWELERY";
-const string tag_LOOT_DIRTYSOCK = "LOOT_DIRTYSOCK";
-const string tag_LOOT_KIDART = "LOOT_KIDART";
-const string tag_LOOT_CCS_BACKERLIST = "LOOT_CCS_BACKERLIST";
-const string tag_LOOT_PRISONFILES = "LOOT_PRISONFILES";
 /*
 This file is part of Liberal Crime Squad.                                           //
                                                                                     //
@@ -61,51 +18,8 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /* monthly - sleeper behavior */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-//#include "sitemode/newencounter.h"
-void prepareencounter(short type, char sec);
-#include "../items/lootTypePoolItem.h"
-//#include "common/commonactions.h"
-void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
-#include "../common/commonactionsCreature.h"
-#include "../log/log.h"
-#include "../common/translateid.h"
-// for  int getloottype(int id);
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../common/creaturePoolCreature.h"
-#include "../locations/locationsPool.h"
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
-extern string string_sleeper;
- string they_are_stashed;
-extern string singleDot;
-string hasBeenCaughtSnooping;
-string isNowHomeless;
-string hasLeakedIntelligence;
-string hasLeakedPolice;
-string hasLeakedCorporate;
-string hasLeakedPrison;
-string hasLeakedCableNews;
-string hasLeakedAMRadio;
-string hasLeakedAnimalResearch;
-string hasLeakedJudiciary;
-string papersAreStashed;
-string hasLeakedCCS;
-string diskIsStashed;
-string arrestedWhileEmbezzling;
-string arrestedWhileStealing;
-string droppedOffPackage;
-string itemNotFound;
-string lostStolenItem;
-string contactModAuthor;
 
 
 map<CreatureTypes, vector<CreatureSkill> > skill_influence = {
@@ -398,8 +312,6 @@ map<CreatureTypes, vector<Views> > creature_influences_views = {
 **********************************/
 void sleeper_influence(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	extern short attitude[VIEWNUM];
-	extern short lawList[LAWNUM];
 	int power = (cr.get_attribute(ATTRIBUTE_CHARISMA, true) +
 		cr.get_attribute(ATTRIBUTE_HEART, true) +
 		cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true) +
@@ -495,8 +407,6 @@ void creatureLeaksIntel(DeprecatedCreature cr, const string& leak, const string&
 }
 void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	extern CCSexposure ccsexposure;
-	extern short lawList[LAWNUM];
 	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
@@ -639,7 +549,6 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 **********************************/
 void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	extern class Ledger ledger;
 	if (LCSrandom(100) > 100 * cr.infiltration)
 	{
 		cr.juice -= 1;
@@ -704,7 +613,6 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 	string item;
 	int shelter = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 
-	extern short lawList[LAWNUM];
 
 	bool loot = false;
 	bool armor = false;
@@ -908,8 +816,6 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 **
 **********************************/
 void printArrestedWhileStealing(string crname) {
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 	eraseAlt();
 	mvaddstrAlt(6, 1, string_sleeper, gamelog);
 	addstrAlt(crname, gamelog);
@@ -1035,7 +941,6 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 **********************************************************************/
 void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	extern char disbanding;
 	if (disbanding)cr.set_activity(ACTIVITY_SLEEPER_LIBERAL);
 	int infiltrate = 1;
 	switch (cr.activity_type())

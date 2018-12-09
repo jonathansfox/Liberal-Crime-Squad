@@ -1,34 +1,5 @@
+#define	HAULKIDNAP_CPP
 #include "../includes.h"
-const string CONST_haulkidnap035 = " hauls ";
-const string CONST_haulkidnap034 = " is left to be captured.";
-const string CONST_haulkidnap033 = "Nobody can carry Martyr ";
-const string CONST_haulkidnap032 = " can no longer handle ";
-const string CONST_haulkidnap031 = "                                  ";
-const string CONST_haulkidnap030 = "The hostage shouts for help!      ";
-const string CONST_haulkidnap029 = "release their hostage.";
-const string CONST_haulkidnap027 = "No hostages are being held.       ";
-const string CONST_haulkidnap026 = "                                                     ";
-const string CONST_haulkidnap025 = "All of the targets are too dangerous.                ";
-const string CONST_haulkidnap024 = "Kidnap whom?";
-const string CONST_haulkidnap023 = "do the job.";
-const string CONST_haulkidnap021 = "No one can do the job.            ";
-const string CONST_haulkidnap020 = " is captured.";
-const string CONST_haulkidnap019 = " is recaptured.";
-const string CONST_haulkidnap018 = "A hostage escapes!";
-const string CONST_haulkidnap017 = " is captured";
-const string CONST_haulkidnap016 = " is recaptured";
-const string CONST_haulkidnap015 = " and a hostage is freed";
-const string CONST_haulkidnap012 = "and says, ";
-const string CONST_haulkidnap011 = " the ";
-const string CONST_haulkidnap010 = " shows ";
-const string CONST_haulkidnap009 = " writhes away!";
-const string CONST_haulkidnap008 = "but ";
-const string CONST_haulkidnap007 = " grabs at ";
-const string CONST_haulkidnap006 = " is struggling and screaming!";
-const string CONST_haulkidnap005 = "!";
-const string CONST_haulkidnap004 = " snatches ";
-const string CONST_haulkidnapX01 = "\"[Please], be cool.\"";
-const string CONST_haulkidnapX02 = "\"Bitch, be cool.\"";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -59,40 +30,8 @@ This file is part of Liberal Crime Squad.                                       
 //handles the squad moving around the site. For now, this'll do. I must remember
 //to come back here and finish the job.
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../sitemode/advance.h"
-// for creatureadvance
-#include "../sitemode/stealth.h"
-#include "../sitemode/sitedisplay.h"
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-// for printparty
-//// #include "../common/commonactions.h"
-void criminalizeparty(short crime);
-//// #include "../common/commonactionsCreature.h"
-void removesquadinfo(DeprecatedCreature &cr);
-/* roll on the kidnap attempt and show the results */
-#include "set_color_support.h"
-#include "cursesAlternative.h"
-const string singleSpace = " ";
 void printKidnapString(const string aname, const string tname, const string weapon) {
 
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -116,7 +55,6 @@ void printKidnapString(const string aname, const string tname, const string weap
 
 }
 void printFailedKidnapString(const string aname, const string tname) {
-	extern Log gamelog;
 
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, aname, gamelog);
@@ -132,7 +70,6 @@ void printFailedKidnapString(const string aname, const string tname) {
 
 }
 void printAmateurKidnapString(const string aname, const string tname) {
-	extern Log gamelog;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, aname, gamelog);
@@ -180,16 +117,9 @@ bool attemptKidnap(DeprecatedCreature &a, DeprecatedCreature &t, const bool amat
 		return 1;
 	}
 }
-string AND;
-void conservatise(const int cr);
-
-void capturecreature(DeprecatedCreature &t);
 /* hostage freed due to host unable to haul */
 void freehostage(DeprecatedCreature &cr, char situation)
 {
-	extern short mode;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	if (!cr.is_holding_body())return;
 	if (cr.is_prisoner_alive())
 	{
@@ -256,8 +186,6 @@ void freehostage(DeprecatedCreature &cr, char situation)
 	}
 }
 bool reconsiderKidnapping(const string name) {
-	const string CONST_haulkidnapD01 = " Is The Only Viable Target";
-	const string CONST_haulkidnapD02 = "Still Kidnap? [Y/N]";
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -272,16 +200,8 @@ bool reconsiderKidnapping(const string name) {
 	else
 		return false;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
 void amateurKidnapping(const int kidnapper, const int t) {
 
-	extern short offended_amradio;
-	extern short offended_cablenews;
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	alienationcheck(1);
@@ -299,19 +219,9 @@ void amateurKidnapping(const int kidnapper, const int t) {
 		if (encounter[t].type == CREATURE_NEWSANCHOR) offended_cablenews = 1;
 	}
 }
-extern string chooseALiberalTo;
-extern string spaceDashSpace;
-void enemyattack();
-void delenc(const short e, const char loot);
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()
 {
-	extern short party_status;
-
-	extern short sitealarmtimer;
-	extern Deprecatedsquadst *activesquad;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern short lawList[LAWNUM];
 	short kidnapper = -1;
 	party_status = -1;
 	int available = 0;
@@ -444,10 +354,6 @@ void kidnapattempt()
 /* prompt after you've said you want to release someone */
 void releasehostage()
 {
-	extern short party_status;
-
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	short kidnapper = -1;
 	party_status = -1;
 	int available = 0;
@@ -488,13 +394,9 @@ void releasehostage()
 		alienationcheck(1);
 	}
 }
-void makeloot(DeprecatedCreature &cr);
-const string singleDot = ".";
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	int hostslots = 0; //DRAGGING PEOPLE OUT IF POSSIBLE
 	for (int p = 0; p < 6; p++)
 	{

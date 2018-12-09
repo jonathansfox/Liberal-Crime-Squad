@@ -1,18 +1,5 @@
-
+#define	MONTHLY_CPP
 #include "../includes.h"
-const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
-const string CONST_monthly016 = "The last LCS members have all been hunted down.";
-const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
-const string CONST_monthly014 = "Press any key to reflect on these poll numbers.";
-const string CONST_monthly013 = "Arch-Conservative";
-const string CONST_monthly012 = "-  ";
-const string CONST_monthly011 = "Conservative  ";
-const string CONST_monthly009 = "moderate  ";
-const string CONST_monthly007 = "Liberal  ";
-const string CONST_monthly005 = "Elite Liberal ";
-const string CONST_monthly004 = "ÄÄÄ";
-const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
-const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -66,48 +53,6 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../basemode/liberalagenda.h"
-// for liberalagenda
-//#include "../items/itemPool.h"
-//#include "../items/lootTypePool.h"
-//#include "../common/commonactions.h"
-char endcheck(char cause);
-void change_public_opinion(int v, int power, char affect = 1, char cap = 100);
-#include "../log/log.h"
-#include "../common/commondisplay.h"
-// for set_alignment_color and delimiter
-#include "../common/translateid.h"
-// for  int getpoolcreature(int id);
-#include "../title/titlescreen.h"
-// for void reset;
-#include "../title/highscore.h"
-// for viewhighscores, in event of EndGameStatus
-#include "../politics/politics.h"
-//for publicmood
-//#include "../monthly/lcsmonthly.h"
-void fundreport(char &clearformess);
-//#include "../daily/daily.h"
-//for dispersalcheck and securitytable
-void dispersalcheck(char &clearformess);
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-//#include <common\\getnames.h>
-std::string getview(short view, bool shortname);
-#include "../locations/locationsPool.h"
-#include "../locations/locationsEnums.h"
-#include "../common/creaturePool.h"
-#include "../common/creaturePoolHeader.h"
-/* end the game and clean up */
-void end_game(int err = EXIT_SUCCESS);
-void clearRentExemptions();
-void publishSpecialEditions(char &clearformess);
-void manageGrafiti();
-
-extern string singleDot;
-
-#include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
 
 bool policeStationNeedsUpdate(short *law, short *oldlaw) {
@@ -169,7 +114,6 @@ void reinitializeSite(const int sitetype) {
 		if (LocationsPool::getInstance().getLocationType(l) == sitetype)
 			LocationsPool::getInstance().initLocation(l);
 }
-// #include "../common/musicClass.h"
 /* rename various buildings according to the new laws */
 
 void updateworld_laws(short *law, short *oldlaw)
@@ -202,9 +146,6 @@ void publicOpinionNaturalMoves(int(&issuebalance)[VIEWNUM - 5],
 	int(&libpower)[VIEWNUM],
 	int &conspower,
 	int &mediabalance) {
-
-	extern short attitude[VIEWNUM];
-	extern short background_liberal_influence[VIEWNUM];
 
 	for (int v = 0; v < VIEWNUM; v++)
 	{
@@ -243,16 +184,7 @@ void publicOpinionNaturalMoves(int(&issuebalance)[VIEWNUM - 5],
 		}
 	}
 }
-//const string CONST_monthly014 = "Press any key to reflect on these poll numbers.";
-//const string CONST_monthly013 = "Arch-Conservative";
-//const string CONST_monthly012 = "-  ";
-//const string CONST_monthly011 = "Conservative  ";
-//const string CONST_monthly009 = "moderate  ";
-//const string CONST_monthly007 = "Liberal  ";
-//const string CONST_monthly005 = "Elite Liberal ";
-//const string CONST_monthly004 = "ÄÄÄ";
-//const string CONST_monthly003 = "CURRENT POLITICAL TRENDS";
-//const string CONST_monthly002 = "LCS MONTHLY INTELLIGENCE REPORT";
+
 void print_labels_on_bottom_of_screen() {
 
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -282,11 +214,6 @@ void printIntelligenceReport(char &clearformess) {
 	*     ONLY IF SHOWMECHANICS OR SHOWWAIT IS DEFINED     *
 	*        EYES ONLY - LCS PROPERTY - TOP SECRET         *
 	*******************************************************/
-	extern MusicClass music;
-	extern char endgamestate;
-	extern char newscherrybusted;
-	extern bool stalinmode;
-	extern short attitude[VIEWNUM];
 
 	music.play(MUSIC_ELECTIONS);
 	eraseAlt();
@@ -315,8 +242,6 @@ void printIntelligenceReport(char &clearformess) {
 	pressAnyKey();
 }
 void updateEndgamestate() {
-	extern char endgamestate;
-	extern short attitude[VIEWNUM];
 
 	switch (endgamestate)
 	{
@@ -344,12 +269,6 @@ void updateEndgamestate() {
 }
 void long_disband_loss() {
 
-	extern Log gamelog;
-	extern MusicClass music;
-
-	const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
-	const string CONST_monthly016 = "The last LCS members have all been hunted down.";
-	const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
 
 	music.play(MUSIC_DEFEAT);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -375,22 +294,6 @@ void long_disband_loss() {
 /* does end of month actions */
 void passmonth(char &clearformess, char canseethings)
 {
-	// Show polls when you can't see things
-	extern bool SHOWWAIT;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
-	extern Log gamelog;
-	extern int year;
-	extern int day;
-	extern int month;
-	extern char disbanding;
-	extern bool stalinmode;
-	extern int disbandtime;
-	extern class Ledger ledger;
-	extern short lawList[LAWNUM];
-	extern short attitude[VIEWNUM];
-	extern short public_interest[VIEWNUM];
-	extern short background_liberal_influence[VIEWNUM];
 	short oldlaw[LAWNUM];
 	for (int i = 0; i < LAWNUM; i++) {
 		oldlaw[i] = lawList[i];

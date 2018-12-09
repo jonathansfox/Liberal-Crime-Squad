@@ -1,154 +1,5 @@
-
+#define	INTERROGATION_CPP
 #include "../includes.h"
-const string CONST_interrogationB150 = "hugs ";
-const string CONST_interrogation167 = "Press any key to reflect on this.";
-const string CONST_interrogation166 = "'s disappearance has not yet been reported.";
-const string CONST_interrogation165 = " was able to create a map of the site with this information.";
-const string CONST_interrogation164 = "Unfortunately, none of it is useful to the LCS.";
-const string CONST_interrogation163 = " reveals details about the ";
-const string CONST_interrogation162 = "The conversion is convincing enough that the police no longer consider it a kidnapping.";
-const string CONST_interrogation161 = "The Automaton has been Enlightened!   Your Liberal ranks are swelling!";
-const string CONST_interrogation160 = " grows colder.";
-const string CONST_interrogation159 = "'s interrogation.";
-const string CONST_interrogation158 = " under ";
-const string CONST_interrogation157 = " is dead";
-const string CONST_interrogation156 = " has committed suicide.";
-const string CONST_interrogation155 = " has been tainted with wisdom!";
-const string CONST_interrogation154 = "!";
-const string CONST_interrogation153 = " turns the tables on ";
-const string CONST_interrogation152 = " holds firm.";
-const string CONST_interrogation148 = " begs for the nightmare to end.";
-const string CONST_interrogation147 = " curls up and";
-const string CONST_interrogation146 = " to stop looking like Hitler.";
-const string CONST_interrogation145 = " screams for ";
-const string CONST_interrogation144 = " begs Hitler to stay and kill ";
-const string CONST_interrogation143 = "talks about hugging ";
-const string CONST_interrogation142 = " stammers and ";
-const string CONST_interrogation140 = " takes it well.";
-const string CONST_interrogation139 = "'s weakened body crumbles under the brutal assault.";
-const string CONST_interrogation138 = " is badly hurt.";
-const string CONST_interrogation137 = " seems to be getting the message.";
-const string CONST_interrogation136 = "A detailed map has been created of ";
-const string CONST_interrogation134 = " beats information out of the pathetic thing.";
-const string CONST_interrogation133 = " wonders about death.";
-const string CONST_interrogation132 = " wonders about apples.";
-const string CONST_interrogation131 = " cries helplessly.";
-const string CONST_interrogation130 = " barks helplessly.";
-const string CONST_interrogation129 = " curls up in the corner and doesn't move.";
-const string CONST_interrogation128 = " goes limp in the restraints.";
-const string CONST_interrogation127 = "mommy.";
-const string CONST_interrogation126 = "God's mercy.";
-const string CONST_interrogation125 = "John Lennon's mercy.";
-const string CONST_interrogation124 = " screams helplessly for ";
-const string CONST_interrogation123 = "!\" in its face.";
-const string CONST_interrogation122 = "! ";
-const string CONST_interrogation121 = " the Automaton";
-const string CONST_interrogation120 = "'s guards beat";
-const string CONST_interrogation119 = " beat";
-const string CONST_interrogation118 = " beats";
-const string CONST_interrogation115 = "screaming \"";
-const string CONST_interrogation114 = " had a near-death experience and met John Lennon.";
-const string CONST_interrogation113 = " had a near-death experience and met God in heaven.";
-const string CONST_interrogation112 = " clumsily rescues it from cardiac arrest with a defibrillator.";
-const string CONST_interrogation111 = " from any health damage.";
-const string CONST_interrogation110 = " skillfully saves ";
-const string CONST_interrogation109 = " deftly rescues it from cardiac arrest with a defibrillator.";
-const string CONST_interrogation108 = "'s incompetence at first aid.";
-const string CONST_interrogation107 = " dies due to ";
-const string CONST_interrogation106 = "'s weakened state.";
-const string CONST_interrogation105 = "It is a lethal overdose in ";
-const string CONST_interrogation104 = " pants.";
-const string CONST_interrogation103 = " has a panic attack and shits ";
-const string CONST_interrogation102 = " has a panic attack and [makes a stinky].";
-const string CONST_interrogation101 = " flatlines.";
-const string CONST_interrogation100 = " uses a defibrillator repeatedly but ";
-const string CONST_interrogation099 = " foams at the mouth and its eyes roll back in its skull.";
-const string CONST_interrogation098 = "It is subjected to dangerous hallucinogens.";
-const string CONST_interrogation097 = "converted into a makeshift cell.";
-const string CONST_interrogation096 = " is locked in a back room ";
-const string CONST_interrogation095 = "in the middle of a back room.";
-const string CONST_interrogation094 = " is tied hands and feet to a metal chair";
-const string CONST_interrogation093 = "The Automaton";
-const string CONST_interrogation092 = ": Day ";
-const string CONST_interrogation091 = "The Education of ";
-const string CONST_interrogation089 = " in cold blood.";
-const string CONST_interrogation088 = "execute ";
-const string CONST_interrogation087 = "There is no one able to get up the nerve to ";
-const string CONST_interrogation085 = " by ";
-const string CONST_interrogation084 = " executes ";
-const string CONST_interrogation082 = "The Final Education of ";
-const string CONST_interrogation081 = "Press Enter to Confirm the Plan";
-const string CONST_interrogation080 = "K - Kill the Hostage";
-const string CONST_interrogation079 = "($50)";
-const string CONST_interrogation078 = "Hallucinogenic Drugs    ";
-const string CONST_interrogation077 = "No ";
-const string CONST_interrogation076 = "E - ";
-const string CONST_interrogation075 = "($250)";
-const string CONST_interrogation074 = "Expensive Props     ";
-const string CONST_interrogation072 = "D - ";
-const string CONST_interrogation071 = "Violently Beaten    ";
-const string CONST_interrogation070 = "Not ";
-const string CONST_interrogation069 = "C - ";
-const string CONST_interrogation068 = "Physical Restraints   ";
-const string CONST_interrogation066 = "B - ";
-const string CONST_interrogation065 = "Attempt to Convert";
-const string CONST_interrogation064 = "No Verbal Contact     ";
-const string CONST_interrogation063 = "A - ";
-const string CONST_interrogation062 = "Selecting a Liberal Interrogation Plan";
-const string CONST_interrogation061 = "The Execution of an Automaton         ";
-const string CONST_interrogation058 = "murder ";
-const string CONST_interrogation057 = "The Conservative would like to ";
-const string CONST_interrogation056 = "The Conservative hates ";
-const string CONST_interrogation055 = "toward ";
-const string CONST_interrogation054 = "The Conservative is uncooperative ";
-const string CONST_interrogation053 = "The Conservative likes ";
-const string CONST_interrogation052 = " as its only friend.";
-const string CONST_interrogation051 = "to ";
-const string CONST_interrogation050 = "The Conservative clings helplessly ";
-const string CONST_interrogation049 = "Outfit: ";
-const string CONST_interrogation048 = "Wisdom: ";
-const string CONST_interrogation047 = "Heart: ";
-const string CONST_interrogation046 = "Psychology Skill: ";
-const string CONST_interrogation045 = "Health: ";
-const string CONST_interrogation044 = "Lead Interrogator: ";
-const string CONST_interrogation039 = "Prisoner: ";
-const string CONST_interrogation038 = "                                  ";
-const string CONST_interrogation037 = "cling_to_science.txt";
-const string CONST_interrogation036 = "cling_to_business.txt";
-const string CONST_interrogation035 = "cling_to_science_one_line.txt";
-const string CONST_interrogation034 = "cling_to_business_one_line.txt";
-const string CONST_interrogation033 = "vanilla_recruit.txt";
-const string CONST_interrogation032 = "discuss.txt";
-const string CONST_interrogation031 = "cling_to_religion_one_line.txt";
-const string CONST_interrogation030 = "cling_to_religion.txt";
-const string CONST_interrogation029 = "clinging_one_line.txt";
-const string CONST_interrogation028 = "cling_to_interrogater.txt";
-const string CONST_interrogation027 = "interrogater_shows_compassion.txt";
-const string CONST_interrogation026 = "interrogater_shows_compassion_one_line.txt";
-const string CONST_interrogation025 = "develops_hatred.txt";
-const string CONST_interrogation024 = "develops_hatred_one_line.txt";
-const string CONST_interrogation023 = "smarter_than_you.txt";
-const string CONST_interrogation022 = "smarter_than_you_one_line.txt";
-const string CONST_interrogation021 = "good_trip_companion.txt";
-const string CONST_interrogation020 = "bad_trip.txt";
-const string CONST_interrogation019 = "fall_in_love.txt";
-const string CONST_interrogation018 = "good_trip.txt";
-const string CONST_interrogation017 = "self_wounding.txt";
-const string CONST_interrogation016 = "broods_over_death.txt";
-const string CONST_interrogation015 = "partial_conversion.txt";
-const string CONST_interrogation014 = "resist_drugs.txt";
-const string CONST_interrogation013 = "use_props.txt";
-const string CONST_interrogation012 = "prays_on_drugs.txt";
-const string CONST_interrogation011 = "prays.txt";
-const string CONST_interrogation010 = "words_to_scream.txt";
-const string CONST_interrogation009 = "words_meaning_screaming.txt";
-const string CONST_interrogation008 = "beat_with_props.txt";
-const string CONST_interrogation007 = "screaming.txt";
-const string CONST_interrogation006 = "low_heart_torture_props.txt";
-const string CONST_interrogation005 = "feels_sick.txt";
-const string CONST_interrogation004 = "execution.txt";
-
-const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -168,113 +19,6 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-#include "../locations/locationsEnums.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../log/log.h"
-#include "../common/commondisplayCreature.h"
-// for void printhealthstat(Creature &,int,int,char);
- #include "../common/getnames.h"
-// for std::string getview(short ,bool );
-#include "../common/commonactionsCreature.h"
-// for  void sleeperize_prompt(Creature &,Creature &,int);
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../common/creaturePoolCreature.h"
-#include "../locations/locationsPool.h"
-#include "../common/musicClass.h"
- vector<string> execution;
- vector<string> feels_sick;
- vector<string> low_heart_torture_props;
- vector<string> screaming;
- vector<string> beat_with_props;
- vector<string> words_meaning_screaming;
- vector<string> words_to_scream;
- vector<string> prays;
- vector<string> prays_on_drugs;
- vector<string> use_props;
- vector<string> resist_drugs;
- vector<string> partial_conversion;
- vector<string> broods_over_death;
- vector<string> self_wounding;
- vector<string> good_trip;
- vector<vector<string> > fall_in_love;
- vector<vector<string> > bad_trip;
- vector<vector<string> > good_trip_companion;
- vector<string> smarter_than_you_one_line;
- vector<vector<string> > smarter_than_you;
- vector<string> develops_hatred_one_line;
- vector<vector<string> > develops_hatred;
- vector<string> interrogater_shows_compassion_one_line;
- vector<vector<string> > interrogater_shows_compassion;
- vector<vector<string> > cling_to_interrogater;
- vector<string> clinging_one_line;
- vector<vector<string> > cling_to_religion;
- vector<string> cling_to_religion_one_line;
- vector<vector<string> > discuss;
- vector<string> vanilla_recruit;
- vector<vector<string> > cling_to_business;
- vector<vector<string> > cling_to_science;
- vector<string> cling_to_business_one_line;
- vector<string> cling_to_science_one_line;
- const string interrogate = "interrogation\\";
- const int DOUBLE_LINE = 2;
- vector<file_and_text_collection> interrogate_text_file_collection = {
-	 /*InterrogationST.cpp*/
-	 customText(&execution, interrogate + CONST_interrogation004),
-	 customText(&feels_sick, interrogate + CONST_interrogation005),
-	 customText(&low_heart_torture_props, interrogate + CONST_interrogation006),
-	 customText(&screaming, interrogate + CONST_interrogation007),
-	 customText(&beat_with_props, interrogate + CONST_interrogation008),
-	 customText(&words_meaning_screaming, interrogate + CONST_interrogation009),
-	 customText(&words_to_scream, interrogate + CONST_interrogation010),
-	 customText(&prays, interrogate + CONST_interrogation011),
-	 customText(&prays_on_drugs, interrogate + CONST_interrogation012),
-	 customText(&use_props, interrogate + CONST_interrogation013),
-	 customText(&resist_drugs, interrogate + CONST_interrogation014),
-	 customText(&partial_conversion, interrogate + CONST_interrogation015),
-	 customText(&broods_over_death, interrogate + CONST_interrogation016),
-	 customText(&self_wounding, interrogate + CONST_interrogation017),
-	 customText(&good_trip, interrogate + CONST_interrogation018),
-	 customText(&fall_in_love, interrogate + CONST_interrogation019, DOUBLE_LINE),
-	 customText(&bad_trip, interrogate + CONST_interrogation020, DOUBLE_LINE),
-	 customText(&good_trip_companion, interrogate + CONST_interrogation021, DOUBLE_LINE),
-	 customText(&smarter_than_you_one_line, interrogate + CONST_interrogation022),
-	 customText(&smarter_than_you, interrogate + CONST_interrogation023, DOUBLE_LINE),
-	 customText(&develops_hatred_one_line, interrogate + CONST_interrogation024),
-	 customText(&develops_hatred, interrogate + CONST_interrogation025, DOUBLE_LINE),
-	 customText(&interrogater_shows_compassion_one_line, interrogate + CONST_interrogation026),
-	 customText(&interrogater_shows_compassion, interrogate + CONST_interrogation027, DOUBLE_LINE),
-	 customText(&cling_to_interrogater, interrogate + CONST_interrogation028, DOUBLE_LINE),
-	 customText(&clinging_one_line, interrogate + CONST_interrogation029),
-	 customText(&cling_to_religion, interrogate + CONST_interrogation030, DOUBLE_LINE),
-	 customText(&cling_to_religion_one_line, interrogate + CONST_interrogation031),
-	 customText(&discuss, interrogate + CONST_interrogation032, DOUBLE_LINE),
-	 customText(&vanilla_recruit, interrogate + CONST_interrogation033),
-	 customText(&cling_to_business_one_line, interrogate + CONST_interrogation034),
-	 customText(&cling_to_science_one_line, interrogate + CONST_interrogation035),
-	 customText(&cling_to_business, interrogate + CONST_interrogation036, DOUBLE_LINE),
-	 customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
- };
- string feels_sick_and;
-extern string singleDot;
-extern string AND;
-extern string singleSpace;
-extern string commaSpace;
-enum InterrogationTechnqiues
-{
-   TECHNIQUE_TALK,
-   TECHNIQUE_RESTRAIN,
-   TECHNIQUE_BEAT,
-   TECHNIQUE_PROPS,
-   TECHNIQUE_DRUGS,
-   TECHNIQUE_KILL
-};
 // Clear sidebar
 void clear_interrogation_sidebar()
 {
@@ -427,7 +171,6 @@ void printInterrogationMenu(bool techniques[6], DeprecatedCreature * cr, Depreca
 }
 void attemptExecution(DeprecatedCreature * cr) {
 
-	extern Log gamelog;
 	vector<DeprecatedCreature *> temppool;
 	findAllTendersToThisHostage(cr, temppool);
 	eraseAlt();
@@ -489,8 +232,6 @@ void attemptExecution(DeprecatedCreature * cr) {
 	pressAnyKey();
 }
 char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
-	extern short lawList[LAWNUM];
-	extern Log gamelog;
 	char emptyDrugs = 0;
 	cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 	pressAnyKey();
@@ -569,7 +310,6 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 	}
 	return emptyDrugs;
 }
-string getDespairString(const bool drugs, const bool restrain, const bool religion);
 
 string acquireMapFromWork(const int worklocation) {
 
@@ -581,19 +321,8 @@ string acquireMapFromWork(const int worklocation) {
 	}
 }
 
-string victimPrays(const bool onDrugs);
-string getFallsInLove(const string name, const bool restrain);
-string getBadTrip(const string name, const bool restrain, const bool rapport);
-string outPsychologyCaptor(const string name);
-string triedConvertingTheAbused(const string name);
-string feelsBadForAbused(const string name);
-string stockholmSyndrome(const string name);
-string failToBreakReligion(const string a, const string cr);
-string failedToBreakBusiness(const string a, const string cr);
-string failedToBreakScience(const string a, const string cr);
 
 bool attemptToOutsmartCaptor(DeprecatedCreature *cr, DeprecatedCreature *a, const bool drugs, int& y) {
-	extern Log gamelog;
 	//Failure to break religious convictions
 	if (cr->get_skill(SKILL_RELIGION) > a->get_skill(SKILL_RELIGION) + a->get_skill(SKILL_PSYCHOLOGY) && !drugs)
 	{
@@ -627,7 +356,6 @@ bool attemptToOutsmartCaptor(DeprecatedCreature *cr, DeprecatedCreature *a, cons
 
 }
 void getCreatureWorkplaceMaps(DeprecatedCreature* cr, int &y, const string aname) {
-	extern Log gamelog;
 	mvaddstrAlt(y, 0, cr->getNameAndAlignment().name, gamelog);
 	addstrAlt(CONST_interrogation163, gamelog);
 	addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
@@ -645,7 +373,6 @@ void getCreatureWorkplaceMaps(DeprecatedCreature* cr, int &y, const string aname
 }
 
 bool attemptSway(DeprecatedCreature *cr, DeprecatedCreature *a, const int attack, map<long, struct Float_Zero>(&rapport), char& turned, int& y) {
-	extern Log gamelog;
 
 	//Target is swayed by Liberal Reason -- skilled interrogators, time held,
 	//and rapport contribute to the likelihood of this
@@ -681,7 +408,6 @@ bool attemptSway(DeprecatedCreature *cr, DeprecatedCreature *a, const int attack
 }
 
 void interrogaterNotOutsmarted(DeprecatedCreature *cr, DeprecatedCreature *a, const bool props, map<long, struct Float_Zero>(&rapport), int& y) {
-	extern Log gamelog;
 
 	//Target is not sold on the LCS arguments and holds firm
 	//This is the worst possible outcome if you use props
@@ -715,7 +441,6 @@ void interrogaterNotOutsmarted(DeprecatedCreature *cr, DeprecatedCreature *a, co
 }
 
 void creaturePossiblyLosesHeartOrGainsWisdom(DeprecatedCreature* a, int &y) {
-	extern Log gamelog;
 	if (LCSrandom(a->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 	{
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -773,8 +498,6 @@ vector<string> printCreatureInterrogationStatus(DeprecatedCreature* cr, const bo
 	return output;
 }
 void creatureConversion(DeprecatedCreature* cr, DeprecatedCreature* a, int &y) {
-	extern int stat_recruits;
-	extern Log gamelog;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(++y, 0, CONST_interrogation161, gamelog);
 	if (cr->get_attribute(ATTRIBUTE_HEART, true) > 7 &&
@@ -805,8 +528,6 @@ string tortureLineTwo() {
 	return  CONST_interrogation115 + pickrandom(screaming) + CONST_interrogation122 + pickrandom(screaming) + CONST_interrogation123;
 }
 void hostageDies(DeprecatedCreature *cr, DeprecatedCreature *a, int &y) {
-	extern int stat_kills;
-	extern Log gamelog;
 
 	cr->die();
 	stat_kills++;
@@ -846,7 +567,6 @@ void hostageDies(DeprecatedCreature *cr, DeprecatedCreature *a, int &y) {
 	}
 }
 void attemptSuicide(DeprecatedCreature *cr, const bool restrain, int &y) {
-	extern Log gamelog;
 
 	//can't commit suicide if restrained
 	if (LCSrandom(6) || restrain)
@@ -876,7 +596,6 @@ void attemptSuicide(DeprecatedCreature *cr, const bool restrain, int &y) {
 	pressAnyKey();
 }
 void illTellYouWhatIKnow(DeprecatedCreature *cr, DeprecatedCreature *a, const int forceroll, int &y) {
-	extern Log gamelog;
 
 	gamelog.newline();
 	if (cr->get_attribute(ATTRIBUTE_HEART, false) > 1) cr->adjust_attribute(ATTRIBUTE_HEART, -1);
@@ -948,9 +667,7 @@ DeprecatedCreature* getAttackAndLeadInterrogator(int &attack, const DeprecatedCr
 	attack -= cr->attribute_roll(ATTRIBUTE_WISDOM) * 2;
 	return a;
 }
-const string CONST_news1030 = "\"";
 void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const vector<DeprecatedCreature *> temppool, const bool(&techniques)[6], map<long, struct Float_Zero>(&rapport)) {
-	extern Log gamelog;
 	y++;
 	int forceroll = 0;
 	bool tortured = 0;
@@ -1072,14 +789,6 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 /* hostage tending */
 void tendhostage(DeprecatedCreature *cr, char &clearformess)
 {
-	// Interrogation always enlightens
-	extern bool AUTOENLIGHTEN;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern int stat_recruits;
-	extern int stat_kills;
-	extern class Ledger ledger;
-	extern short lawList[LAWNUM];
 	if (cr->location == -1)
 	{
 		delete cr;

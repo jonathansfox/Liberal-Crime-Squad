@@ -1,6 +1,5 @@
+#define	CURSESMOVIE_CPP
 #include "includes.h"
-const string CONST_cursesmovie001 = "rb";
-const string CONST_cursesmovie000 = "wb";
 //////////////////////////////////////////////////////////////////////////////////////////
 //																						//
 //Copyright (c) 2002,2003,2004 by Tarn Adams											//

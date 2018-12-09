@@ -1,3 +1,4 @@
+#define	COMMONACTIONS_CPP
 #include "../includes.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -24,49 +25,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locationsEnums.h"
-//#include "../pdcurses/curses.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../common/translateid.h"
-// for  int getsquad(int)
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-// for makedelimeter
-#include "../title/highscore.h"       
-//for void savehighscore(char endtype)
-#include "../politics/politics.h"
-//for int publicmood(int l)
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
-/* end the game and clean up */
-void end_game(int err = EXIT_SUCCESS);
-extern string singleSpace;
-extern string spaceDashSpace;
-extern string singleDot;
 
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
@@ -106,13 +64,6 @@ int clinictime(DeprecatedCreature &g)
 ***************************************************/
 void hospitalize(int loc, DeprecatedCreature &patient)
 {
-	const string CONST_commonactions008 = "harmful speech";
-	const string CONST_commonactions007 = "month";
-	const string CONST_commonactions006 = "months";
-	const string CONST_commonactions005 = " for ";
-	const string CONST_commonactions004 = " will be at ";
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
 	// He's dead, Jim
 	if (!patient.getCreatureHealth().alive)return;
 	int time = clinictime(patient);
@@ -200,11 +151,9 @@ int lawflagheat(int lawflag)
 	default:return 0;
 	}
 }
-short getCurrentSite();
 /* common - applies a crime to a person */
 void criminalize(DeprecatedCreature &cr, short crime)
 {
-	extern short mode;
 	if (mode == GAMEMODE_SITE)
 	{
 		if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
@@ -223,7 +172,6 @@ void criminalize(DeprecatedCreature &cr, short crime)
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
 {
-	extern Deprecatedsquadst *activesquad;
 	if (!activesquad) return;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p])
@@ -243,7 +191,6 @@ void addjuice(DeprecatedCreature &cr, long juice, long cap);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice, long cap)
 {
-	extern Deprecatedsquadst *activesquad;
 	if (activesquad != NULL)
 		for (int p = 0; p < 6; p++)
 			if (activesquad->squad[p] != NULL)
@@ -253,7 +200,6 @@ void juiceparty(long juice, long cap)
 /* common - removes the liberal from all squads */
 void removesquadinfo(DeprecatedCreature &cr)
 {
-	extern vector<Deprecatedsquadst *> squad;
 	if (cr.squadid != -1)
 	{
 		long sq = getsquad(cr.squadid);
@@ -334,7 +280,6 @@ bool sort_locationandname(const DeprecatedCreature* first, const DeprecatedCreat
 }
 bool sort_squadorname(const DeprecatedCreature* first, const DeprecatedCreature* second)
 {
-	extern vector<Deprecatedsquadst *> squad;
 	// Use getsquad to treat members of a new squad being assembled as if not in a squad.
 	bool first_in_squad = getsquad(first->squadid) != -1;
 	bool second_in_squad = getsquad(second->squadid) != -1;
@@ -362,18 +307,14 @@ void sortliberals(std::vector<DeprecatedCreature *>& liberals, short sortingchoi
 	case SORTING_SQUAD_OR_NAME: sort(liberals.begin(), liberals.end(), sort_squadorname); break;
 	}
 }
-const string mostlyendings = "mostlyendings\\";
 map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
-const string CONST_commonactions009 = "methodOfSorting.txt";
 vector<file_and_text_collection> common_text_file_collection = {
 	customText(&methodOfSorting, mostlyendings + CONST_commonactions009),
 };
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)
 {
-	const string CONST_commonactions010 = "Choose how to sort list of ";
-	extern short activesortingchoice[SORTINGCHOICENUM];
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1, 1, CONST_commonactions010);
@@ -424,9 +365,9 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
 	default: return 0;//-1;
 	}
 }
-string selectA;
-string selectAn;
-string enterDash;
+//string selectA;
+//string selectAn;
+//string enterDash;
 /* common - Displays options to choose from and returns an int corresponding
 to the index of the option in the vector. */
 int choiceprompt(const string &firstline, const string &secondline,
@@ -480,8 +421,6 @@ int buyprompt(const string &firstline, const string &secondline,
 	const vector< pair<string, int> > &nameprice, int namepaddedlength,
 	const string &producttype, const string &exitstring)
 {
-	const string CONST_commonactions012 = "$";
-	extern class Ledger ledger;
 	int page = 0;
 	while (true)
 	{

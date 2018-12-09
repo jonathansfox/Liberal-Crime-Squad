@@ -1,106 +1,5 @@
-
+#define	REVIEWMODE_CPP
 #include "../includes.h"
-const string CONST_reviewmode134 = "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.";
-const string CONST_reviewmode133 = "  Press U to Promote Liberals.";
-const string CONST_reviewmode132 = "Press a Letter to select a squad.  1-7 to view Liberal groups.";
-const string CONST_reviewmode131 = "Press Y to turn on some Music.";
-const string CONST_reviewmode130 = "Press Y to turn off the Music.";
-const string CONST_reviewmode129 = "Press V to Inspect Liberal finances.";
-const string CONST_reviewmode128 = "8 - Review and Move Equipment (";
-const string CONST_reviewmode127 = "7 - Away (";
-const string CONST_reviewmode126 = "6 - The Dead (";
-const string CONST_reviewmode125 = "5 - Sleepers (";
-const string CONST_reviewmode124 = "4 - Justice System (";
-const string CONST_reviewmode123 = "3 - Hospital (";
-const string CONST_reviewmode122 = "2 - Hostages (";
-const string CONST_reviewmode121 = "1 - Active Liberals (";
-const string CONST_reviewmode120 = "Acting Individually";
-const string CONST_reviewmode119 = "컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�";
-const string CONST_reviewmode118 = "Review your Liberals and Assemble Squads";
-const string CONST_reviewmode117 = "Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.";
-const string CONST_reviewmode116 = "Press a letter to promote a Liberal. You cannot promote Liberals in hiding.";
-const string CONST_reviewmode115 = "<LCS Leader>";
-const string CONST_reviewmode114 = "<Can't Lead More>";
-const string CONST_reviewmode113 = "<Refuses Promotion>";
-const string CONST_reviewmode112 = "CONTACT AFTER PROMOTION";
-const string CONST_reviewmode111 = "컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_reviewmode110 = "Promote the Elite Liberals";
-const string CONST_reviewmode109 = "T to sort people.";
-const string CONST_reviewmode108 = ",. to view other Base pages.";
-const string CONST_reviewmode107 = "Liberals must be moved in squads to transfer between cities.";
-const string CONST_reviewmode106 = "Press a Letter to assign a Base.  Press a Number to select a Base.";
-const string CONST_reviewmode105 = " <Under Siege>";
-const string CONST_reviewmode104 = "NEW BASE";
-const string CONST_reviewmode103 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
-const string CONST_reviewmode102 = "New Bases for Squadless Liberals";
-const string CONST_reviewmode101 = " with";
-const string CONST_reviewmode100 = "Choose squad member to replace ";
-const string CONST_reviewmode099 = "                                                                                ";
-const string CONST_reviewmode097 = " has gained wisdom.                                                             ";
-const string CONST_reviewmode096 = " grows colder.                                                                  ";
-const string CONST_reviewmode095 = " has lost heart.                                                                ";
-const string CONST_reviewmode094 = " feels sick to the stomach afterward and                                        ";
-const string CONST_reviewmode091 = " by ";
-const string CONST_reviewmode090 = " executes ";
-const string CONST_reviewmode089 = "  C - Confirm       Any other key to continue                                   ";
-const string CONST_reviewmode088 = "Killing your squad members is Not a Liberal Act.                                ";
-const string CONST_reviewmode087 = " kill this squad member?                               ";
-const string CONST_reviewmode086 = "Confirm you want to have ";
-const string CONST_reviewmode085 = " in court.";
-const string CONST_reviewmode084 = "to testify against ";
-const string CONST_reviewmode083 = "The Conservative traitor has ratted you out to the police, and sworn";
-const string CONST_reviewmode082 = "'s whereabouts.";
-const string CONST_reviewmode081 = "A Liberal friend tips you off on ";
-const string CONST_reviewmode078 = " has been released.                                                             ";
-const string CONST_reviewmode076 = "If the member has low heart they may go to the police.                          ";
-const string CONST_reviewmode075 = "Do you want to permanently release this squad member from the LCS?              ";
-const string CONST_reviewmode073 = "What is the new code name?                                                      ";
-const string CONST_reviewmode072 = "    UP/DOWN  - More Info";
-const string CONST_reviewmode071 = "Press any other key to continue the Struggle";
-const string CONST_reviewmode070 = "    LEFT/RIGHT - View Others";
-const string CONST_reviewmode069 = "N - Change Code Name      G - Fix Gender Label";
-const string CONST_reviewmode068 = "Press N to change this Automaton's Code Name";
-const string CONST_reviewmode067 = "         K - Kill member";
-const string CONST_reviewmode066 = "R - Remove member";
-const string CONST_reviewmode065 = "Profile of a Liberal";
-const string CONST_reviewmode064 = "Profile of an Automaton";
-const string CONST_reviewmode063 = " T to sort people.";
-const string CONST_reviewmode062 = "Reorder Liberals";
-const string CONST_reviewmode061 = "Place ";
-const string CONST_reviewmode060 = "Press a Letter to View Status.        Z - ";
-const string CONST_reviewmode059 = "<No Contact>";
-const string CONST_reviewmode058 = "Day";
-const string CONST_reviewmode057 = "Days";
-const string CONST_reviewmode054 = "Month";
-const string CONST_reviewmode053 = "Months";
-const string CONST_reviewmode052 = "Out in ";
-const string CONST_reviewmode051 = "컴컴컴�";
-const string CONST_reviewmode048 = "Life Sentence";
-const string CONST_reviewmode047 = " Life Sentences";
-const string CONST_reviewmode044 = "DEATH ROW: ";
-const string CONST_reviewmode041 = "SQUAD";
-const string CONST_reviewmode040 = "Away";
-const string CONST_reviewmode039 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_reviewmode038 = "The Liberal Crime Squad";
-const string CONST_reviewmode036 = "What shall we designate this Liberal squad?                                     ";
-const string CONST_reviewmode033 = "You cannot form a Squad with only Conservatives!                                ";
-const string CONST_reviewmode031 = "Temporary Squad";
-const string CONST_reviewmode028 = "Press a Letter to view Liberal details.                                         ";
-const string CONST_reviewmode026 = "                Squad Liberals must be able to move around.                     ";
-const string CONST_reviewmode023 = "           Liberals must be in the same location to form a Squad.               ";
-const string CONST_reviewmode021 = "9 - Dissolve the squad.";
-const string CONST_reviewmode020 = "Enter - I need no squad!";
-const string CONST_reviewmode019 = "Enter - The squad is ready.";
-const string CONST_reviewmode018 = "V - View a Liberal";
-const string CONST_reviewmode016 = "Press a Letter to add or remove a Liberal from the squad.";
-const string CONST_reviewmode015 = "AWAY";
-const string CONST_reviewmode012 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴";
-const string CONST_reviewmode011 = "Squad: ";
-const string CONST_reviewmode010 = "New Squad";
-const string CONST_reviewmode009 = "The squad is full.";
-const string CONST_reviewmode008 = "Assemble the squad!";
-const string CONST_reviewmode007 = "getsSick.txt";
-const string CONST_reviewmode006 = "methodOfExecution.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -154,81 +53,19 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locationsEnums.h"
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-// for void printfunds(int,int,char*)
-#include "../common/getnames.h"
-// for std::string getactivity(ActivityST)
-//#include "../common/equipment.h"
-void consolidateloot(vector<Item *>&);
-void equipmentbaseassign();
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-/* tells how many total members a squad has (including dead members) */
-// for short reviewmodeenum_to_sortingchoiceenum(short)
-//#include "../common/translateid.h"
-int getsquad(int);
-int getpoolcreature(int);
-//#include "../monthly/lcsmonthly.h"
-void fundreport(char &clearformess);
-void printname(const int hiding, const int location, const int flag, const string name);
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-#include "../common/musicClass.h"
-#include "../common/creaturePool.h"
-const int PAGELENGTH = 19;
-extern string spaceDashSpace;
-extern string singleSpace;
-
 vector<string> methodOfExecution;
 vector<string> getsSick;
-const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> reviewmode_text_file_collection = {
 	/*transferred via algorithm*/
 	customText(&methodOfExecution, mostlyendings + CONST_reviewmode006),
 	customText(&getsSick, mostlyendings + CONST_reviewmode007),
 };
-struct stringAndColor
-{
-	string str;
-	ColorSetup type;
-	stringAndColor(const string& str_, const ColorSetup type_) : str(str_), type(type_) { }
-	stringAndColor(const ColorSetup type_, const string& str_) : str(str_), type(type_) { }
-};
 map<short, string> reviewStrings;
 map<short, string> reviewStringsSecondLine;
 vector<stringAndColor> liberalListAndColor;
-const string eightyBlankSpaces = "                                                                                ";
-void nukeAllEmptySquads(const vector<int> squadloc, const int mode);
 /* base - review - assemble a squad */
 void assemblesquad(Deprecatedsquadst *cursquad)
 {
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern long cursquadid;
-	extern short activesortingchoice[SORTINGCHOICENUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
 	int culloc = -1;
 	if (cursquad != NULL) culloc = cursquad->squad[0]->location;
 	char newsquad = 0;
@@ -480,7 +317,6 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 	nukeAllEmptySquads(squadloc, mode);
 }
 vector<DeprecatedCreature *> countLiberals(const short mode) {
-	extern vector<DeprecatedCreature *> pool;
 	vector<DeprecatedCreature *> temppool;
 	switch (mode) {
 	case REVIEWMODE_LIBERALS:
@@ -537,7 +373,6 @@ vector<DeprecatedCreature *> countLiberals(const short mode) {
 }
 void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, const short mode) {
 	int y = 2;
-	extern vector<Deprecatedsquadst *> squad;
 	for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
 	{
 		set_color_easy(WHITE_ON_BLACK);
@@ -681,11 +516,6 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 }
 void review_mode(const short mode)
 {
-	extern Log gamelog;
-	extern int stat_kills;
-	extern short activesortingchoice[SORTINGCHOICENUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
 	DeprecatedCreature *swap = NULL;
 	int swapPos = 0;
 	vector<DeprecatedCreature *> temppool = countLiberals(mode);
@@ -694,7 +524,8 @@ void review_mode(const short mode)
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)]);
 	int page = 0;
-	while (true)
+	int c;
+	do
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
@@ -708,11 +539,15 @@ void review_mode(const short mode)
 		if (swap) { addstrAlt(CONST_reviewmode061); addstrAlt(swap->getNameAndAlignment().name); }
 		else addstrAlt(CONST_reviewmode062);
 		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
-		int c = getkeyAlt();
+
+		c = getkeyAlt();
+
 		//PAGE UP
 		if (is_page_up(c) && page > 0) page--;
+		else
 		//PAGE DOWN
 		if (is_page_down(c) && (page + 1) * 19 < len(temppool)) page++;
+		else
 		if (c >= 'a'&&c <= 's')
 		{
 			int p = page * 19 + (int)(c - 'a');
@@ -720,7 +555,7 @@ void review_mode(const short mode)
 			{
 				int page = 0;
 				//const int pagenum=2;
-				while (true)
+				while (true) // a while(true) loop within a while(true) loop  //TODO FIXME
 				{
 					eraseAlt();
 					moveAlt(0, 0);
@@ -755,40 +590,40 @@ void review_mode(const short mode)
 					if (len(temppool) > 1) addstrAlt(CONST_reviewmode070);
 					mvaddstrAlt(24, 0, CONST_reviewmode071);
 					addstrAlt(CONST_reviewmode072);
-					int c = getkeyAlt();
-					if (len(temppool) > 1 && ((c == KEY_LEFT) || (c == KEY_RIGHT)))
+					const int d = getkeyAlt();
+					if (len(temppool) > 1 && ((d == KEY_LEFT) || (d == KEY_RIGHT)))
 					{
 						int sx = 1;
-						if (c == KEY_LEFT) sx = -1;
+						if (d == KEY_LEFT) sx = -1;
 						p = (p + len(temppool) + sx) % len(temppool);
 						continue;
-					}
-					if (c == KEY_DOWN)
+					}else
+					if (d == KEY_DOWN)
 					{
 						page++;
 						if (page > 2) page = 0;
 						continue;
-					}
-					if (c == KEY_UP)
+					}else
+					if (d == KEY_UP)
 					{
 						page--;
 						if (page < 0) page = 2;
 						continue;
-					}
-					if (c == 'n')
+					}else
+					if (d == 'n')
 					{
 						set_color_easy(WHITE_ON_BLACK);
 						mvaddstrAlt(23, 0, CONST_reviewmode073); // 80 characters
 						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
 						temppool[p]->new_name();
 					}
-					else if (c == 'g' && temppool[p]->getCreatureHealth().align == 1)
+					else if (d == 'g' && temppool[p]->getCreatureHealth().align == 1)
 					{
 						temppool[p]->gender_liberal++;
 						if (temppool[p]->gender_liberal > 2)
 							temppool[p]->gender_liberal = 0;
 					}
-					else if (c == 'r' && temppool[p]->is_active_liberal() &&
+					else if (d == 'r' && temppool[p]->is_active_liberal() &&
 						temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
 					{
 						int boss = getpoolcreature(temppool[p]->hireid);
@@ -796,8 +631,8 @@ void review_mode(const short mode)
 						mvaddstrAlt(22, 0, CONST_reviewmode075); // 80 characters
 						mvaddstrAlt(23, 0, CONST_reviewmode076); // 80 characters
 						mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
-						int c = getkeyAlt();
-						if (c == 'c')
+					
+						if (getkeyAlt() == 'c')
 						{
 							// Release squad member
 							mvaddstrAlt(22, 0, temppool[p]->getNameAndAlignment().name, gamelog);
@@ -838,7 +673,7 @@ void review_mode(const short mode)
 							break;
 						}
 					}
-					else if (c == 'k' && temppool[p]->is_active_liberal() &&
+					else if (d == 'k' && temppool[p]->is_active_liberal() &&
 						temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
 					{
 						// Kill squad member
@@ -850,8 +685,8 @@ void review_mode(const short mode)
 						addstrAlt(CONST_reviewmode087); // 55 characters (25+55=80)
 						mvaddstrAlt(23, 0, CONST_reviewmode088); // 80 characters
 						mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
-						int c = getkeyAlt();
-						if (c == 'c')
+						
+						if (getkeyAlt() == 'c')
 						{
 							temppool[p]->die();
 							cleangonesquads();
@@ -902,11 +737,13 @@ void review_mode(const short mode)
 				}
 			}
 		}
+		else
 		if (c == 't')
 		{
 			sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));
 			sortliberals(temppool, activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)], true);
 		}
+		else
 		// Reorder squad
 		if (c == 'z')
 		{
@@ -951,15 +788,12 @@ void review_mode(const short mode)
 				}
 			}
 		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
+		
+	}while (c != 'x' && c != ENTER && c != ESC && c != SPACEBAR);
 }
 /* base - review - assign new bases to the squadless */
 void squadlessbaseassign()
 {
-	extern bool multipleCityMode;
-	extern short activesortingchoice[SORTINGCHOICENUM];
-	extern vector<DeprecatedCreature *> pool;
 	int page_lib = 0, page_loc = 0, selectedbase = 0;
 	vector<DeprecatedCreature *> temppool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal() && pool[p]->squadid == -1) temppool.push_back(pool[p]);
@@ -1072,74 +906,109 @@ void sortbyhire(vector<DeprecatedCreature *> &temppool, vector<int> &level)
 	for (int p = 0; p < len(newpool); p++)
 		temppool.push_back(newpool[p]);
 }
+void printPromotionScreen(const vector<DeprecatedCreature *> temppool, const vector<int> level, const int page) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	printfunds();
+	mvaddstrAlt(0, 0, CONST_reviewmode110);
+	mvaddstrAlt(1, 0, CONST_reviewmode111); // 80 characters
+	mvaddstrAlt(1, 54, CONST_reviewmode112);
+	int y = 2;
+	for (int p = page * PAGELENGTH; p < len(temppool) && p < page*PAGELENGTH + PAGELENGTH; p++)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
+		moveAlt(y, 27);
+		bool iAmTheLeader = true;
+		for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
+		{
+			if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
+			{
+				printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->getNameAndAlignment().name);
+				moveAlt(y, 54);
+				for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
+				{
+					if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid)
+					{
+						if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
+							addstrAlt(CONST_reviewmode113);
+						else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
+							addstrAlt(CONST_reviewmode114);
+						else
+							printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
+						break;
+					}
+				}
+				iAmTheLeader = false;
+			}
+		}
+		if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
+		moveAlt(y++, 4 + level[p]);
+		printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->getNameAndAlignment().name);
+	}
+	moveAlt(21, 0);
+	for (stringAndColor s : liberalListAndColor) {
+		set_color_easy(s.type);
+		addstrAlt(s.str);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode116);
+	mvaddstrAlt(23, 0, CONST_reviewmode117);
+	if (len(temppool) > PAGELENGTH)
+	{
+		mvaddstrAlt(24, 0, addpagestr());
+	}
+}
+bool printAttemptNewPromotion(const vector<DeprecatedCreature *> temppool, const int p) {
+
+	for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
+	{
+		if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
+		{
+			addstrAlt(pool[p2]->getNameAndAlignment().name);
+			for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
+			{
+				// Can't promote if new boss can't accept more subordinates
+				if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid &&
+					(temppool[p]->flag&CREATUREFLAG_BRAINWASHED || subordinatesleft(*pool[p3])))
+				{
+					temppool[p]->hireid = pool[p2]->hireid;
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	return false;
+}
+vector<DeprecatedCreature *> getAllLiberals() {
+
+	vector<DeprecatedCreature *> temppool;
+	for (DeprecatedCreature* p : pool) {
+		if (p->getCreatureHealth().alive&&p->getCreatureHealth().align == 1) {
+			temppool.push_back(p);
+		}
+	}
+	return temppool;
+}
 /* base - review - promote liberals */
 void promoteliberals()
 {
-	extern vector<DeprecatedCreature *> pool;
-	vector<DeprecatedCreature *> temppool;
-	vector<int> level;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-		if (pool[p]->getCreatureHealth().alive&&pool[p]->getCreatureHealth().align == 1)
-			temppool.push_back(pool[p]);
+	vector<DeprecatedCreature *> temppool = getAllLiberals();
 	if (!len(temppool)) return;
 	//SORT
+	vector<int> level;
 	sortbyhire(temppool, level);
 	//PROMOTE
 	int page = 0;
-	while (true)
+	int c;
+	do
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		printfunds();
-		mvaddstrAlt(0, 0, CONST_reviewmode110);
-		mvaddstrAlt(1, 0, CONST_reviewmode111); // 80 characters
-		mvaddstrAlt(1, 54, CONST_reviewmode112);
-		int y = 2;
-		for (int p = page * PAGELENGTH; p < len(temppool) && p < page*PAGELENGTH + PAGELENGTH; p++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			moveAlt(y, 27);
-			bool iAmTheLeader = true;
-			for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
-			{
-				if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
-				{
-					printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->getNameAndAlignment().name);
-					moveAlt(y, 54);
-					for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
-					{
-						if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid)
-						{
-							if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
-								addstrAlt(CONST_reviewmode113);
-							else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
-								addstrAlt(CONST_reviewmode114);
-							else
-								printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
-							break;
-						}
-					}
-					iAmTheLeader = false;
-				}
-			}
-			if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
-			moveAlt(y++, 4 + level[p]);
-			printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->getNameAndAlignment().name);
-		}
-		moveAlt(21, 0);
-		for (stringAndColor s : liberalListAndColor) {
-			set_color_easy(s.type);
-			addstrAlt(s.str);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_reviewmode116);
-		mvaddstrAlt(23, 0, CONST_reviewmode117);
-		if (len(temppool) > PAGELENGTH)
-		{
-			mvaddstrAlt(24, 0, addpagestr());
-		}
-		int c = getkeyAlt();
+		printPromotionScreen(temppool, level, page);
+
+
+		c = getkeyAlt();
 		//PAGE UP
 		if (is_page_up(c) && page > 0) page--;
 		//PAGE DOWN
@@ -1148,40 +1017,17 @@ void promoteliberals()
 		{
 			int p = page * PAGELENGTH + (int)(c - 'a');
 			// *JDS* can't promote liberals in hiding OR loveslaves
-			if (p < len(temppool) && !temppool[p]->hiding && !(temppool[p]->flag&CREATUREFLAG_LOVESLAVE))
+			bool creatureIsNeitherHidingNorLoveslave = p < len(temppool) && !temppool[p]->hiding && !(temppool[p]->flag&CREATUREFLAG_LOVESLAVE);
+			if (creatureIsNeitherHidingNorLoveslave)
 			{
-				for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
-				{
-					if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
-					{
-						addstrAlt(pool[p2]->getNameAndAlignment().name);
-						for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
-						{
-							// Can't promote if new boss can't accept more subordinates
-							if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid &&
-								(temppool[p]->flag&CREATUREFLAG_BRAINWASHED || subordinatesleft(*pool[p3])))
-							{
-								temppool[p]->hireid = pool[p2]->hireid;
-								sortbyhire(temppool, level);
-								break;
-							}
-						}
-						break;
-					}
+				if (printAttemptNewPromotion(temppool, p)) {
+					sortbyhire(temppool, level);
 				}
 			}
 		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
+	} while (c != 'x' && c != ENTER && c != ESC && c != SPACEBAR);
 }
-void setColorBasedOnSiege(const int cursite, const int y, const bool p);
-int consolidateSiegeLoot();
 bool iterateReview(int &page) {
-
-	extern MusicClass music;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
 
 	music.play(MUSIC_REVIEWMODE);
 	eraseAlt();

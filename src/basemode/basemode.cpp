@@ -1,12 +1,6 @@
-
+#define	BASEMODE_CPP
 #include "../includes.h"
 
-const string tag_Sta = "Sta, ";
-const string tag_Libp = "Lib+, ";
-const string tag_Lib = "Lib, ";
-const string tag_Mod = "Mod, ";
-const string tag_Cons = "Cons, ";
-const string tag_Consp = "Cons+";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -59,78 +53,8 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-//#include "../pdcurses/curses.h"
-#include "../cursesgraphics.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-//#include "../basemode/liberalagenda.h"
-bool liberalagenda(signed char won);
-#include "../basemode/baseactions.h"
-//#include "../basemode/activate_sleepers.h"
-void activate_sleepers();
-//#include "../basemode/activate.h"
-void activate();
-//#include "../basemode/reviewmode.h"
-void review();
-#include "../common/translateid.h"
-// for  int getsquad(int)
-#include "../common/getnames.h"
-// for std::string getmonth(int)
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-//for int mvaddstr(int, int, const char*)
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-//#include "../common/equipment.h"
-void equip(vector<Item *> &loot, int loc);
-//#include "../politics/politics.h"
-bool stalinview(short view, bool islaw);
-//#include "../monthly/monthly.h"
-void passmonth(char &clearformess,char canseethings);
-#include "../daily/daily.h"
-//for int monthday();
-#include "../daily/siege.h"
-//for giveup()
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../common/musicClass.h"
-#include "../common/creaturePool.h"
-#include "../locations/locationsPool.h"
-extern string commaSpace;
-extern string singleSpace;
-string change_squad_order;
-enum CantSeeReason
-{
-	CANTSEE_DATING = 1,
-	CANTSEE_HIDING = 2,
-	CANTSEE_OTHER = 3,
-	CANTSEE_DISBANDING = 4
-};
-string check_status_of_squad_liberal;
-string show_squad_liberal_status;
 void printHouseMake() {
-	extern bool stalinmode;
-	extern short house[HOUSENUM];
-	const string CONST_basemode015 = "House: ";
 	int housemake[6] = { 0,0,0,0,0,0 };
 	for (int h = 0; h < HOUSENUM; h++) {
 		housemake[house[h] + 2]++;
@@ -156,10 +80,6 @@ void printHouseMake() {
 	}
 }
 void printSenateMake() {
-	const string CONST_basemode016 = "Senate: ";
-	extern bool stalinmode;
-	extern short exec[EXECNUM];
-	extern short senate[SENATENUM];
 	int senatemake[6] = { 0,0,0,0,0,0 };
 	for (int s = 0; s < SENATENUM; s++) {
 		senatemake[senate[s] + 2]++;
@@ -185,9 +105,6 @@ void printSenateMake() {
 	addstrAlt(tostring(senatemake[0]) + tag_Consp);
 }
 void printCourtMake() {
-	extern bool stalinmode;
-	extern short court[COURTNUM];
-	const string CONST_basemode017 = "Supreme Court: ";
 	int courtmake[6] = { 0,0,0,0,0,0 };
 	for (int s = 0; s < COURTNUM; s++) {
 		courtmake[court[s] + 2]++;
@@ -214,11 +131,6 @@ void printCourtMake() {
 }
 
 void printStalinMood() {
-	const string CONST_basemode029 = "컴컴컴컴컴컴컴컴";
-	const string CONST_basemode024 = "Public Mood";
-	const string CONST_basemode020 = "Libertarian";
-	const string CONST_basemode019 = "Stalinist";
-	extern short attitude[VIEWNUM];
 
 	signed char align;
 	int stalin = 0; // the Stalinist mood position from 1 to 78 (left=Stalinist, right=Libertarian)
@@ -253,17 +165,11 @@ void printStalinMood() {
 }
 void printMood() {
 
-	extern bool stalinmode;
 	if (stalinmode)
 	{
 		printStalinMood();
 	}
 
-	const string CONST_basemode029 = "컴컴컴컴컴컴컴컴";
-	const string CONST_basemode026 = "Conservative";
-	const string CONST_basemode025 = "Liberal";
-	const string CONST_basemode024 = "Public Mood";
-	extern short attitude[VIEWNUM];
 
 	int mood = 0; // the mood position from 1 to 78 (left=left-wing, right=right-wing)
 	for (int v = 0; v < VIEWNUM - 3; v++) { mood += attitude[v]; }
@@ -296,7 +202,6 @@ void printMood() {
 	mvaddcharAlt(22, mood, 'O');
 }
 void printLawMake() {
-	extern short lawList[LAWNUM];
 
 	for (int l = 0; l < LAWNUM; l++)
 	{
@@ -304,18 +209,13 @@ void printLawMake() {
 		mvaddstrAlt(6 + l / 3, l % 3 * 30, getlaw(l));
 	}
 }
-void addStringYear();
 void printMonthAndYear() {
-	extern int month;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, getmonth(month) + singleSpace);
 	addStringYear();
 }
 void letTheUnworthyLeave() {
-	extern vector<DeprecatedCreature *> pool;
-	extern int disbandtime;
-	extern int year;
 
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
@@ -327,13 +227,6 @@ void letTheUnworthyLeave() {
 }
 void printExecMove() {
 
-	const string CONST_basemode014 = ", 2nd Term";
-	const string CONST_basemode013 = ", 1st Term";
-	const string CONST_basemode012 = "President: ";
-	extern short execterm;
-
-	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
 	mvaddstrAlt(1, 0, CONST_basemode012);
 	addstrAlt(execname[EXEC_PRESIDENT]);
@@ -349,8 +242,6 @@ void printExecMove() {
 }
 void printDisbandScreen() {
 
-	const string CONST_basemode030 = "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month";
-	extern MusicClass music;
 
 	music.play(MUSIC_DISBANDED);
 
@@ -373,7 +264,6 @@ void printDisbandScreen() {
 }
 bool show_disbanding_screen(int& oldforcemonth)
 {
-	extern int month;
 	if (oldforcemonth == month) return true;
 
 	oldforcemonth = month;
@@ -382,11 +272,6 @@ bool show_disbanding_screen(int& oldforcemonth)
 	return(getkeyAlt() != 'r');
 }
 void printIfLongWait(int nonsighttime) {
-	extern MusicClass music;
-	extern Log gamelog;
-	const string CONST_basemode033 = "It sure has been a while.  Things might have changed a bit.";
-	const string CONST_basemode032 = "It has been a long time.  A lot must have changed...";
-	const string CONST_basemode031 = "How long since you've heard these sounds...  times have changed.";
 	if (nonsighttime >= 365 * 4)
 	{
 		music.play(MUSIC_BASEMODE);
@@ -404,31 +289,9 @@ void printIfLongWait(int nonsighttime) {
 	}
 }
 
-const string CONST_basemode062 = "P - PATRIOTISM: fly a flag here ($20)";
-const string CONST_basemode061 = "P - PROTEST: burn the flag";
-const string CONST_basemode060 = "S - FREE SPEECH: the Liberal Slogan";
-const string CONST_basemode059 = " (next month)";
-const string CONST_basemode058 = "W - Wait a day";
-const string CONST_basemode057 = "W - Wait out the siege";
-const string CONST_basemode056 = "Cannot Wait until Siege Resolved";
-const string CONST_basemode055 = "X - Live to fight EVIL another day";
-const string CONST_basemode054 = "F - Go forth to stop EVIL";
-const string CONST_basemode053 = "G - Give Up";
-const string CONST_basemode052 = "F - Escape/Engage";
-const string CONST_basemode051 = "C - Cancel this Squad's Departure";
 void stillDontForceWait(const char sieged, const char cannotwait,
 	const char haveflag,
 	const char partysize) {
-
-	extern int selectedsiege;
-	extern Deprecatedsquadst *activesquad;
-	extern string slogan_str;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern class Ledger ledger;
-	extern int day;
-
-
 
 	if (partysize)
 	{
@@ -499,25 +362,6 @@ void stillDontForceWait(const char sieged, const char cannotwait,
 	if (haveflag) mvaddstrCenter(17, slogan_str);
 	else mvaddstrCenter(13, slogan_str);
 }
-int lenVehiclePool();
-const string CONST_basemode050 = "B - Sleepers";
-const string CONST_basemode049 = "A - Activate Liberals";
-const string CONST_basemode048 = "L - The Status of the Liberal Agenda";
-const string CONST_basemode047 = "Z - Next Location";
-const string CONST_basemode046 = "TAB - Next Squad";
-const string CONST_basemode045 = "O - Reorder";
-const string CONST_basemode044 = "R - Review Assets and Form Squads";
-const string CONST_basemode043 = "V - Vehicles";
-const string CONST_basemode042 = "E - Equip Squad";
-const string CONST_basemode041 = "컴� PLANNING 컴�";
-const string CONST_basemode040 = "컴� ACTIVISM 컴�";
-const string CONST_basemode039 = ":::::::::";
-const string CONST_basemode038 = ":.:.:.:.:";
-const string CONST_basemode037 = " (No Food)";
-const string CONST_basemode036 = "Under Siege";
-const string CONST_basemode035 = "Under Attack";
-const string CONST_basemode034 = "I - Invest in this location";
-void printFlag();
 void dontForceWait(const char sieged, const char underattack,
 	const char haveflag,
 	const Location *loc,
@@ -525,11 +369,6 @@ void dontForceWait(const char sieged, const char underattack,
 	const char partysize) {
 
 
-
-	extern int selectedsiege;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<Deprecatedsquadst *> squad;
-	extern vector<DeprecatedCreature *> pool;
 
 	eraseAlt();
 	if (activesquad != NULL) selectedsiege = -1;
@@ -632,11 +471,6 @@ void dontForceWait(const char sieged, const char underattack,
 
 }
 void pressedThisKeyInBaseMode(const int c) {
-	extern char disbanding;
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
-	extern short party_status;
-	extern vector<Deprecatedsquadst *> squad;
 
 	switch (c)
 	{
@@ -671,9 +505,6 @@ void pressedThisKeyInBaseMode(const int c) {
 }
 
 void findCantSeeReason(char &canseethings, char &forcewait) {
-	bool isPartOfJusticeSystem(int cursite);
-	extern char cantseereason;
-	extern vector<DeprecatedCreature *> pool;
 
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -696,11 +527,7 @@ void findCantSeeReason(char &canseethings, char &forcewait) {
 		}
 	}
 }
-void burnFlagAtLocation(int l);
 void politicalEffectsOfFlagBurning(const char sieged) {
-	extern short lawList[LAWNUM];
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
 
 	if (selectedsiege != -1)
 	{
@@ -735,12 +562,7 @@ void politicalEffectsOfFlagBurning(const char sieged) {
 		}
 	}
 }
-int countSafeHouses();
-Location* getLocation();
-void equipLoot(int l, int loc);
-bool isThisSafehouse(int loc);
 bool cannotWaitDuringSiege() {
-	extern vector<DeprecatedCreature *> pool;
 
 	// Count people at each location
 	int* num_present = new int[LocationsPool::getInstance().lenpool()];
@@ -768,11 +590,6 @@ bool cannotWaitDuringSiege() {
 	return cannotwait;
 }
 void pressedKeyWInBaseMode(const char forcewait, const char canseethings, int &nonsighttime) {
-	const string CONST_basemode063 = "Time passes...";
-	extern int day;
-	extern int month;
-	extern int year;
-	extern Log gamelog;
 
 	char clearformess = forcewait;
 	if (!canseethings) nonsighttime++;
@@ -792,9 +609,6 @@ void pressedKeyWInBaseMode(const char forcewait, const char canseethings, int &n
 	}
 }
 void pressedKeyPInBaseMode(const char haveflag, const char sieged, Location *loc) {
-	extern class Ledger ledger;
-	extern int stat_buys;
-	extern int stat_burns;
 	if (haveflag) {
 		burnflag();
 		stat_burns++;
@@ -806,21 +620,11 @@ void pressedKeyPInBaseMode(const char haveflag, const char sieged, Location *loc
 		stat_buys++;
 	}
 }
-int lenVehiclePool();
 bool iterate_mode_base(int &nonsighttime, int &oldforcemonth) {
 
 	// FIXME This while(true) loop does not have an exit point  It relies on end_game(); to be called at some point
 	// Unless the player presses 'x', at which point this function 'return's
 
-	extern char cantseereason;
-	extern char disbanding;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern int selectedsiege;
-	extern short party_status;
-	extern string slogan_str;
-	extern vector<Deprecatedsquadst *> squad;
 	char forcewait = 1;
 	char canseethings = 0;
 	cantseereason = CANTSEE_OTHER;
@@ -919,7 +723,6 @@ bool iterate_mode_base(int &nonsighttime, int &oldforcemonth) {
 }
 void mode_base()
 {
-	extern int month;
 	int nonsighttime = 0, oldforcemonth = month;
 	// FIXME This while(true) loop does not have an exit point  It relies on end_game(); to be called at some point
 	// Unless the player presses 'x', at which point this function 'return's

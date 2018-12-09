@@ -1,5 +1,5 @@
+#define	LOOTTYPEPOOL_CPP
 #include "../includes.h"
-const string CONST_lootTypePool000 = "loot";
 
 #include "../items/itemPool.h"
 #include "../items/lootTypePool.h"

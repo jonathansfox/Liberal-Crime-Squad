@@ -1,43 +1,5 @@
-
+#define	COMMONDISPLAY_CPP
 #include "../includes.h"
-const string CONST_commondisplay000 = ",";
-const string CONST_commondisplay202 = " (";
-const string CONST_commondisplay201 = "Name: ";
-const string CONST_commondisplay200 = "Code name: ";
-const string CONST_commondisplay212 = ": ";
-const string CONST_commondisplay199 = ".00";
-const string CONST_commondisplay198 = "99+";
-const string CONST_commondisplay197 = "00";
-const string CONST_commondisplay196 = ".";
-const string CONST_commondisplay194 = "NOW   MAX";
-const string CONST_commondisplay193 = "SKILL";
-const string CONST_commondisplay003 = "On \"Foot\"";
-const string CONST_commondisplay158 = "On Foot";
-const string CONST_commondisplay157 = "Wheelchair";
-const string CONST_commondisplay156 = "-D";
-const string CONST_commondisplay220 = "                                                                                ";
-const string CONST_commondisplay153 = "Weapon: ";
-const string CONST_commondisplay119 = "Cut";
-const string CONST_commondisplay118 = "Bruised";
-const string CONST_commondisplay117 = "Shot";
-const string CONST_commondisplay116 = "Liberal";
-const string CONST_commondisplay115 = "Animal";
-const string CONST_commondisplay114 = "Severed";
-const string CONST_commondisplay113 = "Ripped off";
-const string CONST_commondisplay112 = "Left Leg:";
-const string CONST_commondisplay111 = "Right Leg:";
-const string CONST_commondisplay110 = "Left Arm:";
-const string CONST_commondisplay109 = "Right Arm:";
-const string CONST_commondisplay108 = "Body:";
-const string CONST_commondisplay107 = "Head:";
-const string CONST_commondisplay154 = "Clothes: ";
-const string CONST_commondisplay180 = "Missing Teeth";
-const string CONST_commondisplay178 = "No Teeth";
-const string CONST_commondisplay177 = "No Tongue";
-
-
-
-const string tag_0 = "0";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -90,51 +52,7 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-const string blankString = "";
-#include "../creature/creature.h"
-////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locationsEnums.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../sitemode/stealth.h"
-#include "../common/getnames.h"
-std::string gettitle(const int align, const int juice);
-bool isThereNoActivesquad();
-// for getmonth
-#include "../common/translateid.h"
-// for  int getcar(int)
-#include "../common/commonactionsCreature.h"
-// for void sortliberals(std::vector<Creature *>&,short,bool)
-#include "../daily/siege.h"
-// for statebrokenlaws(cr);
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-extern string commaSpace;
-extern string singleSpace;
-extern string closeParenthesis;
-
-bool isThereASiteAlarm();
-void makedelimiter(int y = 8, int x = 0);
-
-map<int, map<bool, ColorSetup> > alignmentColors = {
-	// Liberal activism
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_ARCHCONSERVATIVE,{ map<bool, ColorSetup>::value_type(true, RED_ON_BLACK_BRIGHT) }),
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_CONSERVATIVE,{ map<bool, ColorSetup>::value_type(true, MAGENTA_ON_BLACK_BRIGHT), map<bool, ColorSetup>::value_type(false, RED_ON_BLACK_BRIGHT) }),
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_MODERATE,{ map<bool, ColorSetup>::value_type(true, YELLOW_ON_BLACK_BRIGHT) }),
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_LIBERAL,{ map<bool, ColorSetup>::value_type(true, CYAN_ON_BLACK_BRIGHT), map<bool, ColorSetup>::value_type(false, GREEN_ON_BLACK_BRIGHT) }),
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_ELITELIBERAL,{ map<bool, ColorSetup>::value_type(true, GREEN_ON_BLACK_BRIGHT) }),
-	map<int,  map<bool, ColorSetup> >::value_type(ALIGN_STALINIST,{ map<bool, ColorSetup>::value_type(true, RED_ON_BLACK_BRIGHT) }),
-};
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
@@ -153,87 +71,6 @@ void set_alignment_color(short alignment, bool extended_range)
 		set_color_easy(YELLOW_ON_RED_BRIGHT_BLINK);
 	}
 }
-map<int, ColorSetup> activityColors = {
-	// Liberal activism
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_LIBERAL, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_TROUBLE, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_GRAFFITI, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_DOS_ATTACKS, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_HACKING, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_WRITE_LETTERS, GREEN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_WRITE_GUARDIAN, GREEN_ON_BLACK_BRIGHT),
-	// Recruitment
-	map<int, ColorSetup>::value_type(ACTIVITY_RECRUITING, GREEN_ON_BLACK),
-	// Less exciting liberal activities
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_SPY, BLUE_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_COMMUNITYSERVICE, BLUE_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_POLLS, BLUE_ON_BLACK_BRIGHT),
-	// Stealing things
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_STEAL, CYAN_ON_BLACK),
-	map<int, ColorSetup>::value_type(ACTIVITY_WHEELCHAIR, CYAN_ON_BLACK),
-	map<int, ColorSetup>::value_type(ACTIVITY_STEALCARS, CYAN_ON_BLACK),
-	// Illegal fundraising
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_EMBEZZLE, RED_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_SELL_DRUGS, RED_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_PROSTITUTION, RED_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_CCFRAUD, RED_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_DOS_RACKET, RED_ON_BLACK_BRIGHT),
-	// Legal fundraising
-	map<int, ColorSetup>::value_type(ACTIVITY_DONATIONS, CYAN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_SELL_TSHIRTS, CYAN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_SELL_ART, CYAN_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_SELL_MUSIC, CYAN_ON_BLACK_BRIGHT),
-	// Clothing/garment stuff
-	map<int, ColorSetup>::value_type(ACTIVITY_REPAIR_ARMOR, CYAN_ON_BLACK),
-	map<int, ColorSetup>::value_type(ACTIVITY_MAKE_ARMOR, CYAN_ON_BLACK),
-	// Teaching
-	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_POLITICS, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_FIGHTING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_TEACH_COVERT, MAGENTA_ON_BLACK_BRIGHT),
-	//and studying
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DEBATING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MARTIAL_ARTS, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DRIVING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_PSYCHOLOGY, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_FIRST_AID, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_LAW, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_DISGUISE, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_SCIENCE, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_BUSINESS, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_GYMNASTICS, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_ART, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MUSIC, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_TEACHING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WRITING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_LOCKSMITHING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COMPUTERS, MAGENTA_ON_BLACK_BRIGHT),
-	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COOKING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_FENCING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WEAVING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_RELIGION, MAGENTA_ON_BLACK_BRIGHT),
-	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MAGIC, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_CLUB, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_STREETSENSE, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_THROWING, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_STEALTH, MAGENTA_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_SEDUCTION, MAGENTA_ON_BLACK_BRIGHT),
-	// Interrogating
-	map<int, ColorSetup>::value_type(ACTIVITY_HOSTAGETENDING, YELLOW_ON_BLACK_BRIGHT),
-	// Dealing with your injuries
-	map<int, ColorSetup>::value_type(ACTIVITY_CLINIC, RED_ON_BLACK),
-	// Doing something Conservative
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_CONSERVATIVE, RED_ON_BLACK_BRIGHT),
-	// Dealing with the dead
-	map<int, ColorSetup>::value_type(ACTIVITY_BURY, BLACK_ON_BLACK_BRIGHT),
-	// Nothing terribly important
-	map<int, ColorSetup>::value_type(ACTIVITY_HEAL, WHITE_ON_BLACK),// Identical to none in practice
-	map<int, ColorSetup>::value_type(ACTIVITY_NONE, WHITE_ON_BLACK),
-	// Going somewhere
-	map<int, ColorSetup>::value_type(ACTIVITY_VISIT, YELLOW_ON_BLACK_BRIGHT),
-	// Quitting being a sleeper to join the LCS
-	map<int, ColorSetup>::value_type(ACTIVITY_SLEEPER_JOINLCS, RED_ON_BLACK_BRIGHT),
-	map<int, ColorSetup>::value_type(ACTIVITY_AUGMENT, BLUE_ON_BLACK_BRIGHT),
-};
 // Sets the text color per activity type
 void set_activity_color(long activity_type)
 {
@@ -251,10 +88,6 @@ void set_activity_color(long activity_type)
 /* draws a horizontal line across the screen */
 void makedelimiter(int y, int x)
 {
-	const string CONST_commondisplay005 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_commondisplay004 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫";
-	extern short mode;
-	extern bool mapshowing;
 	set_color_easy(WHITE_ON_BLACK);
 	if (mode == GAMEMODE_SITE && y == 8 && x == 0 && mapshowing) // special case: there is a map on the right in site mode
 		mvaddstrAlt(y, x, CONST_commondisplay004); // 80 characters
@@ -263,9 +96,6 @@ void makedelimiter(int y, int x)
 }
 string perfectlyHealthy(const int align, const int animalgloss, const char smll) {
 
-	const string CONST_commondisplay044 = "Moderate";
-	const string CONST_commondisplay043 = "Conservative";
-	const string CONST_commondisplay042 = "Consrvtv";
 
 	if (align == -1)
 	{
@@ -288,14 +118,6 @@ string perfectlyHealthy(const int align, const int animalgloss, const char smll)
 }
 string bleedingOut(const int alive, const int blood, const char smll) {
 
-	const string CONST_commondisplay013 = "Lightly Wounded";
-	const string CONST_commondisplay012 = "LtWound";
-	const string CONST_commondisplay011 = "Wounded";
-	const string CONST_commondisplay010 = "Badly Wounded";
-	const string CONST_commondisplay009 = "BadWound";
-	const string CONST_commondisplay008 = "Near Death";
-	const string CONST_commondisplay007 = "NearDETH";
-	const string CONST_commondisplay006 = "Deceased";
 
 	if (!alive)
 	{
@@ -323,14 +145,6 @@ string bleedingOut(const int alive, const int blood, const char smll) {
 	}
 }
 string missingArmAndOrLeg(const int armok, const int legok, const char smll, const bool bleeding) {
-	const string CONST_commondisplay029 = "One Leg";
-	const string CONST_commondisplay028 = "One Arm";
-	const string CONST_commondisplay027 = "One Arm, One Leg";
-	const string CONST_commondisplay026 = "1Arm1Leg";
-	const string CONST_commondisplay025 = "No Legs";
-	const string CONST_commondisplay024 = "No Arms";
-	const string CONST_commondisplay023 = "One Limb";
-	const string CONST_commondisplay022 = "No Limbs";
 
 	if (legok == 0 && armok == 0)
 	{
@@ -370,13 +184,6 @@ string missingArmAndOrLeg(const int armok, const int legok, const char smll, con
 	}
 }
 string missingPartOfFace(const char lefteye, const char righteye, const char nose, const bool bleeding, const char smll) {
-	const string CONST_commondisplay036 = "Missing Eye";
-	const string CONST_commondisplay035 = "One Eye";
-	const string CONST_commondisplay034 = "Missing Nose";
-	const string CONST_commondisplay033 = "NoseGone";
-	const string CONST_commondisplay032 = "Face Mutilated";
-	const string CONST_commondisplay031 = "FaceMutl";
-	const string CONST_commondisplay030 = "Blind";
 
 	if (righteye == 0 &&
 		lefteye == 0)
@@ -406,20 +213,6 @@ string missingPartOfFace(const char lefteye, const char righteye, const char nos
 		else return (CONST_commondisplay036);
 	}
 }
-//const string CONST_commondisplay180 = "Missing Teeth";
-//const string CONST_commondisplay178 = "No Teeth";
-//const string CONST_commondisplay177 = "No Tongue";
-
-const string CONST_commondisplay040 = "MisTeeth";
-const string CONST_commondisplay037 = "NoTongue";
-const string CONST_commondisplay021 = "Face Gone";
-const string CONST_commondisplay020 = "FaceGone";
-const string CONST_commondisplay019 = "Paraplegic";
-const string CONST_commondisplay018 = "Parapleg";
-const string CONST_commondisplay017 = "Quadraplegic";
-const string CONST_commondisplay016 = "Quadpleg";
-const string CONST_commondisplay015 = "Neck Broken";
-const string CONST_commondisplay014 = "NckBroke";
 string getHealthStat(CreatureHealth g, const char smll) {
 
 	bool bleeding = false;
@@ -505,14 +298,6 @@ void printhealthstat(CreatureHealth g, int y, int x, char smll)
 	mvaddstrAlt(y, x, wound);
 }
 void printAttributesAsKnowledgePermits(CreatureAttributeList cr, unsigned char knowledge) {
-	const string CONST_commondisplay067 = "?";
-	const string CONST_commondisplay066 = "Char:   ";
-	const string CONST_commondisplay064 = "Str:    ";
-	const string CONST_commondisplay062 = "Agi:    ";
-	const string CONST_commondisplay060 = "Hlth:   ";
-	const string CONST_commondisplay058 = "Wis:    ";
-	const string CONST_commondisplay056 = "Int:    ";
-	const string CONST_commondisplay054 = "Hrt:    ";
 	mvaddstrAlt(2, 0, CONST_commondisplay054 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_HEART, true)) : CONST_commondisplay067));
 	mvaddstrAlt(3, 0, CONST_commondisplay056 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true)) : CONST_commondisplay067));
 	mvaddstrAlt(4, 0, CONST_commondisplay058 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_WISDOM, true)) : CONST_commondisplay067));
@@ -521,29 +306,7 @@ void printAttributesAsKnowledgePermits(CreatureAttributeList cr, unsigned char k
 	mvaddstrAlt(3, 11, CONST_commondisplay064 + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_STRENGTH, true)) : CONST_commondisplay067));
 	mvaddstrAlt(4, 11, CONST_commondisplay066 + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_CHARISMA, true)) : CONST_commondisplay067));
 }
-/* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
-/* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(const DeprecatedCreature &cr);
-//void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
-string getVehicleShortname(int i);
-const string CONST_commondisplay053 = "an angry Hangin' Judge";
-const string CONST_commondisplay052 = "a frightened Eminent Scientist";
-const string CONST_commondisplay051 = "a smarmy News Anchor";
-const string CONST_commondisplay050 = "a crying Radio Personality";
-const string CONST_commondisplay049 = "a squirming CEO";
-const string CONST_commondisplay048 = "a cursing Politician";
-map<int, string> prisoner_description = {
-	map<int, string>::value_type(CREATURE_POLITICIAN, CONST_commondisplay048),
-	map<int, string>::value_type(CREATURE_CORPORATE_CEO, CONST_commondisplay049),
-	map<int, string>::value_type(CREATURE_RADIOPERSONALITY, CONST_commondisplay050),
-	map<int, string>::value_type(CREATURE_NEWSANCHOR, CONST_commondisplay051),
-	map<int, string>::value_type(CREATURE_SCIENTIST_EMINENT, CONST_commondisplay052),
-	map<int, string>::value_type(CREATURE_JUDGE_CONSERVATIVE, CONST_commondisplay053),
-};
 void set_color_for_disguise(DeprecatedCreature* cr) {
-
-	extern short sitealarmtimer;
 
 	switch (hasdisguise(*cr))
 	{
@@ -560,11 +323,6 @@ void set_color_for_disguise(DeprecatedCreature* cr) {
 
 }
 void printWounds(DeprecatedCreature *cr) {
-	const string CONST_commondisplay092 = "Brn";
-	const string CONST_commondisplay091 = "Trn";
-	const string CONST_commondisplay089 = "Brs";
-	const string CONST_commondisplay088 = "Sht";
-	const string CONST_commondisplay085 = "Clean sever";
 
 	for (int w = 0; w < BODYPARTNUM; w++)
 	{
@@ -606,23 +364,11 @@ void printWounds(DeprecatedCreature *cr) {
 		}
 	}
 }
-void set_color_for_armor(const Armor armor);
-void setColorForArmor(const Armor ar);
 /* character info at top of screen */
-const string CONST_commondisplay077 = "Top Skills:";
-const string CONST_commondisplay075 = "???????";
-
-const string CONST_commondisplay068 = "Trans: ";
-
-const string CONST_commondisplay047 = ", holding ";
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 {
 
 
-	extern short sitealarmtimer;
-	extern int year;
-	extern short mode;
-	extern char showcarprefs;
 	makedelimiter(1);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(1, 2, cr->getNameAndAlignment().name);
@@ -754,22 +500,9 @@ void clearRowsTwoThroughSeven() {
 	}
 }
 
-void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 /* party info at top of screen */
-const string CONST_commondisplay101 = " (1)";
-const string CONST_commondisplay100 = " (XX)";
-const string CONST_commondisplay097 = "/";
-const string CONST_commondisplay096 = "+H";
-const string CONST_commondisplay094 = "#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�";
 void printparty()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern short party_status;
-	extern char showcarprefs;
-	extern short mode;
-	extern bool mapshowing;
-
-	extern short sitealarmtimer;
 	DeprecatedCreature *party[6] = { NULL,NULL,NULL,NULL,NULL,NULL };
 	if (activesquad != NULL)
 		for (int p = 0; p < 6; p++)party[p] = activesquad->squad[p];
@@ -905,8 +638,6 @@ void printparty()
 }
 void printwoundstat(CreatureHealth cr, int y, int x)
 {
-	const string CONST_commondisplay121 = "Burned";
-	const string CONST_commondisplay120 = "Torn";
 	// Add wound status
 	for (int w = 0; w < BODYPARTNUM; w++)
 	{
@@ -950,14 +681,6 @@ void printwoundstat(CreatureHealth cr, int y, int x)
 }
 string juiceUntilLevelUp(const int juice) {
 
-	const string CONST_commondisplay138 = "1000";
-	const string CONST_commondisplay137 = "500";
-	const string CONST_commondisplay136 = "200";
-	const string CONST_commondisplay135 = "100";
-	const string CONST_commondisplay134 = "50";
-	const string CONST_commondisplay133 = "10";
-	const string CONST_commondisplay132 = "Next:  ";
-
 	string howMuchJuice;
 	if (juice < 1000)
 	{
@@ -977,14 +700,6 @@ string twoDigits(const int x) {
 	return x < 10 ? tostring(0) + tostring(x) : tostring(x);
 }
 void printCreatureAttributes(DeprecatedCreature &cr) {
-
-	const string CONST_commondisplay145 = "Charisma: ";
-	const string CONST_commondisplay144 = "Strength: ";
-	const string CONST_commondisplay143 = "Agility: ";
-	const string CONST_commondisplay142 = "Health: ";
-	const string CONST_commondisplay141 = "Wisdom: ";
-	const string CONST_commondisplay140 = "Intelligence: ";
-	const string CONST_commondisplay139 = "Heart: ";
 
 	mvaddstrAlt(5, 0, CONST_commondisplay139);
 	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
@@ -1054,31 +769,8 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 		}
 	}
 }
-vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]);
-/* full screen character sheet */
-
-void statebrokenlaws(CreatureJustice cr, const int flag);
-const string CONST_commondisplay167 = "Scheduled Dates:    ";
-const string CONST_commondisplay166 = "s";
-const string CONST_commondisplay165 = " Romantic Interest";
-const string CONST_commondisplay164 = "Scheduled Meetings: ";
-const string CONST_commondisplay163 = "Can't Recruit";
-const string CONST_commondisplay162 = "Enlightened ";
-const string CONST_commondisplay161 = " Max";
-const string CONST_commondisplay160 = " Recruits / ";
-const string CONST_commondisplay155 = "Car: ";
-const string CONST_commondisplay131 = "Juice: ";
-const string CONST_commondisplay130 = "*";
-const string CONST_commondisplay129 = ", Genderqueer";
-const string CONST_commondisplay128 = ", Female";
-const string CONST_commondisplay127 = ", Male";
-const string CONST_commondisplay126 = " (Age ";
-const string CONST_commondisplay125 = "Born ";
 void printliberalstats_a(const CreatureBio cr, const CreatureJustice cr_2, const int flag) {
 
-	extern int year;
-	extern int day;
-	extern int month;
 
 	set_color_easy(WHITE_ON_BLACK);
 	// Add name
@@ -1134,7 +826,6 @@ void printliberalstats_a(const CreatureBio cr, const CreatureJustice cr_2, const
 
 void printliberalstats_c(const CreatureCar cr, const CreatureInventory cr_2, const CreatureHealth cr_3, const int flag) {
 
-	extern char showcarprefs;
 
 	set_color_easy(WHITE_ON_BLACK);
 	// Add weapon
@@ -1320,15 +1011,6 @@ void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2) {
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(CreatureJustice cr)
 {
-	const string CONST_commondisplay211 = "NUM";
-	const string CONST_commondisplay210 = "CRIME";
-	const string CONST_commondisplay209 = " months in prison.";
-	const string CONST_commondisplay208 = "Sentenced to ";
-	const string CONST_commondisplay207 = "Serving ";
-	const string CONST_commondisplay206 = "Sentenced to life in prison";
-	const string CONST_commondisplay205 = "Serving life in prison";
-	const string CONST_commondisplay204 = "Sentenced to DEATH";
-	const string CONST_commondisplay203 = "On DEATH ROW";
 	// Add name
 	set_color_easy(WHITE_ON_BLACK);
 	if (strcmp(cr.propername.data(), cr.name.data()) != 0)
@@ -1388,13 +1070,6 @@ void printliberalcrimes(CreatureJustice cr)
 void fullstatus(const int _p)
 {
 	int p = _p;
-	const string CONST_commondisplay219 = "What is the new code name?                                                      ";
-	const string CONST_commondisplay218 = "    UP/DOWN  - More Info";
-	const string CONST_commondisplay217 = "Press any other key to continue the Struggle";
-	const string CONST_commondisplay216 = "    LEFT/RIGHT - Other Liberals";
-	const string CONST_commondisplay215 = "N - Change Code Name      G - Fix Gender Label";
-	const string CONST_commondisplay214 = "Profile of a Liberal";
-	extern Deprecatedsquadst *activesquad;
 	if (isThereNoActivesquad())return;
 	const int pagenum = 3;
 	int page = 0;

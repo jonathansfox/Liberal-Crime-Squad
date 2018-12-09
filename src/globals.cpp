@@ -1,40 +1,6 @@
+#define	GLOBALS_CPP
+#define	CREATURENAMES_CPP
 #include "includes.h"
-const string CONST_globals013 = "augmentations.xml";
-const string CONST_globals012 = "creatures.xml";
-const string CONST_globals011 = "loot.xml";
-const string CONST_globals010 = "masks.xml";
-const string CONST_globals009 = "armors.xml";
-const string CONST_globals008 = "weapons.xml";
-const string CONST_globals007 = "clips.xml";
-const string CONST_globals006 = "vehicles.xml";
-const string CONST_globals005 = "xmllog";
-const string CONST_globals004 = "default_slogans.txt";
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-
-#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../items/armortype.h"
-#include "common/interval.h"
-// needed for creaturetype
-#include "vehicle/vehicletype.h"
-#include "vehicle/vehicle.h"
-#include "creature/creaturetype.h"
-#include "creature/augmenttype.h"
-//#include "common/consolesupport.h"
-// for end_cleartype_fix()
 ///
 /*
 DEBUG DEFINES
@@ -88,7 +54,6 @@ bool NOVERBOSECOMMENTS = false;
 unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
-#include "common/musicClass.h"
 MusicClass music;
 char homedir[MAX_PATH_SIZE];
 char artdir[MAX_PATH_SIZE];
@@ -112,7 +77,6 @@ void newVehicle(Vehicle *startcar) {
 char showcarprefs = 1;
 siteblockst levelmap[MAPX][MAPY][MAPZ];
 chaseseqst chaseseq;
-const string CONST_game012 = "We need a slogan!";
 string slogan_str = CONST_game012;
 char slogan[SLOGAN_LEN] = "We need a slogan!";
 vector<Deprecatedsquadst *> squad;
@@ -194,17 +158,6 @@ int ccs_boss_kills = 0;
 vector<Deprecatedrecruitst *> recruit;
 Deprecatednewsstoryst *sitestory = NULL;
 int yourscore = -1;
-#include "common/creaturePool.h"
-#include "locations/locationsPool.h"
-#include "items/itemPool.h"
-#include "items/lootTypePool.h"
-void delete_and_clear_sitemaps();
-void delete_and_clear_groundloot();
-int endwinAlt(void);
-void delete_and_clear_vehicle_types();
-void delete_and_clear_date_pool();
-void delete_and_clear_weapon_type();
-#include <common\\consolesupport.h>
 /* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
 {
@@ -231,11 +184,6 @@ void end_game(int err)
 	endwinAlt();
 	exit(err);
 }
-#include "items/loottype.h"
-#include "log/log.h"
-#include "cursesAlternative.h"
-extern string failedToLoad;
-extern string exclamationPoint;
 template<class Type>
 bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
 {
@@ -262,7 +210,6 @@ string getVehicleShortname(int i) {
 string getVehicleFullname(int i) {
 	return vehicle[i]->fullname();
 }
-int driveskill(DeprecatedCreature &cr, Vehicle &v);
 int driveskill(DeprecatedCreature &cr, int v) {
 	return driveskill(cr, *vehicle[v]);
 }
@@ -379,12 +326,7 @@ void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *>
 	}
 }
 
-bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
 bool mainSeven(bool xml_loaded_ok) {
-	extern vector<LootType *> loottype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<VehicleType *> vehicletype;
-	extern Log xmllog;
 	xmllog.initialize(CONST_globals005, true, 1);
 	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_globals006, xmllog);
 	xml_loaded_ok &= populate_from_xml(cliptype, CONST_globals007, xmllog);
@@ -403,11 +345,7 @@ void newRecruit(DeprecatedCreature *newcr, int a) {
 	recruit.push_back(newrst);
 }
 
-const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-int getweapontype(const string &idname);
 Weapon* spawnNewWeapon(string newWeaponType) {
-	extern vector<WeaponType *> weapontype;
 	Weapon *w = new Weapon(*weapontype[getweapontype(newWeaponType)]);
 	if (w->uses_ammo())
 	{
@@ -438,10 +376,7 @@ Armor* spawnNewArmor(string newArmorType) {
 
 	return a;
 }
-#include "common/ledgerEnums.h"
-#include "common/ledger.h"
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age) {
-	extern class Ledger ledger;
 	for (int x = 0; x < augmenttype.size(); x++)
 	{
 		if (augmenttype[x]->get_type() == aug_c - 'a' &&
@@ -475,7 +410,6 @@ vector<NameAndAlignment> getEncounterNameAndAlignment() {
 	}
 	return nameList;
 }
-void makeloot(DeprecatedCreature &cr);
 void makecreature(const int x, const short type) {
 	makecreature(encounter[x], type);
 }
@@ -483,8 +417,6 @@ void makecreature(const int x, const short type) {
 /* kills the specified creature from the encounter, dropping loot */
 void delenc(const short e, const char loot)
 {
-	extern short mode;
-	extern DeprecatedCreature encounter[ENCMAX];
 	//MAKE GROUND LOOT
 	if ((mode == GAMEMODE_SITE) && loot) makeloot(encounter[e]);
 	//BURY IT
@@ -558,10 +490,8 @@ void addCrimeToSiteStory(const int crime) {
 
 	sitestory->crime.push_back(crime);
 }
-#include "items/money.h"
 void DeprecatedCreature::makeloot(vector<Item *> &loot)
 {
-	extern short mode;
 	drop_weapons_and_clips(&loot);
 	strip(&loot);
 	if (money > 0 && mode == GAMEMODE_SITE)
@@ -578,7 +508,6 @@ void giveActiveSquadMoney(const int money) {
 
 	giveActiveSquadThisLoot(new Money(money));
 }
-Item* getNewLoot(const string& newLootType, int num = 1);
 void giveActiveSquadLoot(const string loot) {
 
 	giveActiveSquadThisLoot(getNewLoot(loot));
@@ -590,7 +519,6 @@ void claimSiteStoryOne() {
 	if (!sitestory->claimed)
 		sitestory->claimed = 1;
 }
-void addjuice(DeprecatedCreature &cr, long juice, long cap);
 void juiceActiveSquad(const long juice, const long cap) {
 
 	for (int i = 0; i < 6; i++)
@@ -600,7 +528,6 @@ void juiceActiveSquad(const long juice, const long cap) {
 	}
 }
 void juiceEntireCreaturePool(const long juice, const long cap) {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], juice, cap);
 }
 int getEscapeEngageLocation() {
@@ -627,8 +554,6 @@ void deleteAllSquadsInActiveAreaExceptActive(const int loc) {
 			}
 }
 void formANewSquadIfThereAreNone() {
-	const string CONST_siege254 = " Defense";
-	extern vector<DeprecatedCreature *> pool;
 	if (!activesquad)
 	{
 		squad.push_back(new Deprecatedsquadst);
@@ -671,7 +596,6 @@ void resetCCSSiegeGlobals() {
 	ccs_boss_kills = 0;
 }
 void countHeroes(int &partysize, int &partyalive) {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->align == 1 && pool[p]->location == getCurrentSite() && !(pool[p]->flag&CREATUREFLAG_SLEEPER))
 	{
 		partysize++;
@@ -679,11 +603,9 @@ void countHeroes(int &partysize, int &partyalive) {
 	}
 }
 void cancelOutBleeding() {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) for (int w = 0; w < BODYPARTNUM; w++) pool[p]->wound[w] &= ~WOUND_BLEEDING;
 }
 int print_character_info(const int c, const int party_status) {
-	void fullstatus(const int party_status);
 	if (c >= '1'&&c <= '6') if (activesquad->squad[c - '1'] != NULL)
 	{
 		if (party_status == c - '1')fullstatus(party_status);
@@ -692,9 +614,6 @@ int print_character_info(const int c, const int party_status) {
 	return party_status;
 }
 void baseEveryoneLeftAtHomelessShelter(const int homes) {
-	void removesquadinfo(DeprecatedCreature &cr);
-	extern vector<DeprecatedCreature *> pool;
-
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != getCurrentSite()) continue;
@@ -714,11 +633,6 @@ void baseEveryoneLeftAtHomelessShelter(const int homes) {
 	}
 }
 int printBestLCSMemberForNews(const string repname, const int l) {
-	void printReporterDuringSiege(const string repname, const string name, const int segmentpower);
-	const string CONST_siege209 = "The interview is wide-ranging, covering a variety of topics.";
-	const string CONST_siege208 = " decides to give an interview.";
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
 	int best = 0;
 	for (int p = 0, bestvalue = -1000; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -747,13 +661,10 @@ int printBestLCSMemberForNews(const string repname, const int l) {
 	return segmentpower;
 }
 void set_site_story_as_last_news_story() {
-	Deprecatednewsstoryst* lastNewsStory();
-	extern Deprecatednewsstoryst *sitestory;
 	sitestory = lastNewsStory();
 
 }
 void setSiteStoryClaimedZero() {
-	extern Deprecatednewsstoryst *sitestory;
 	sitestory->claimed = 0;
 }
 bool isActiveSquadAnonymous() {
@@ -785,8 +696,6 @@ int activesquadAlive() {
 	return activesquad->squadalive();
 }
 void assembleActiveSquad() {
-	void assemblesquad(Deprecatedsquadst *cursquad);
-	extern Deprecatedsquadst *activesquad;
 	assemblesquad(activesquad);
 }
 void locateActiveSquad(const int loc) {
@@ -794,7 +703,6 @@ void locateActiveSquad(const int loc) {
 	locatesquad(activesquad, loc);
 }
 int countactivesquadhostages() {
-	extern Deprecatedsquadst *activesquad;
 	int hostages = 0;
 
 	for (int p = 0; p < 6; p++)
@@ -861,13 +769,10 @@ int get_encounter_time(const int n) {
 
 
 void clearCarStates() {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < len(pool); p++) pool[p]->carid = -1;
 }
 
 void removeItemFromSquad(const int loottypeindex) {
-	extern vector<Deprecatedsquadst *> squad;
-	int getloottype(const string &idname);
 	for (int sq = 0; sq < len(squad); sq++)
 	{
 		for (int l = 0; l < len(squad[sq]->loot); l++)
@@ -885,9 +790,6 @@ void removeItemFromSquad(const int loottypeindex) {
 }
 
 void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox) {
-	extern vector<Deprecatedsquadst *> squad;
-	void consolidateloot(vector<Item *> &loot);
-	int getloottype(const string &idname);
 	for (int sq = 0; sq < len(squad); sq++)
 	{
 		consolidateloot(squad[sq]->loot);
@@ -905,7 +807,6 @@ void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, co
 }
 
 void printActiveSquadTalkOptions() {
-	extern string spaceDashSpace;
 	int y = 11;
 
 	for (int p = 0; p < 6; p++)
@@ -931,7 +832,6 @@ void printActiveSquadTalkOptions() {
 bool activeSquadMemberIsAliveAndExists(const int sp) {
 	return activesquad->squad[sp] != NULL && activesquad->squad[sp]->getNameAndAlignment().alive;
 }
-void criminalize(DeprecatedCreature &cr, short crime);
 void criminalizeEncounterPrisonerEscape(const int e) {
 	criminalize(encounter[e], LAWFLAG_ESCAPED);
 
@@ -942,9 +842,7 @@ void duplicateEncounterMember(const int e) {
 void unpersonLastEncounterMember() {
 	encounter[ENCMAX - 1].stop_existing();
 }
-int subordinatesleft(const DeprecatedCreature& cr);
 int checkForPeopleWhoCanRecruit() {
-	extern Deprecatedsquadst *activesquad;
 	// Check for people who can recruit followers
 	for (int i = 0; i < 6; i++)
 		if (activesquad->squad[i] != NULL)
@@ -952,7 +850,6 @@ int checkForPeopleWhoCanRecruit() {
 				return i;
 	return -1;
 }
-void addCreature(DeprecatedCreature* cr);
 void addNewRecruit(int i, int e) {
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	*newcr = encounter[e];
@@ -1015,14 +912,7 @@ int getEncounterIsDriver(const int e) {
 int getEncounterWorkLocation(const int e) {
 	return encounter[e].worklocation;
 }
-#include "common/creaturePoolCreature.h"
-
-string hasRecruited;
-string looksForwardToServing;
 void sleeperSuccessfullyRecruits(const string name, const int id, const float infiltration, const int e) {
-	extern string string_sleeper;
-	extern Log gamelog;
-	string singleDot = ".";
 
 	DeprecatedCreature* recruit = new DeprecatedCreature(encounter[e]);
 	liberalize(*recruit, 0);
@@ -1071,3 +961,19 @@ void advancecreature(DeprecatedCreature &cr);
 void advancecreature(const int e) {
 	advancecreature(encounter[e]);
 }
+
+vector<string> male_first_names;
+vector<string> female_first_names;
+vector<string> gender_neutral_first_names;
+vector<string> great_white_male_patriarch_first_names;
+vector<string> regular_last_names;
+vector<string> archconservative_last_names;
+vector<file_and_text_collection> names_text_file_collection = {
+	/*creaturenames.cpp*/
+	customText(&male_first_names, names + CONST_creaturenames003),
+	customText(&female_first_names, names + CONST_creaturenames004),
+	customText(&gender_neutral_first_names, names + CONST_creaturenames005),
+	customText(&great_white_male_patriarch_first_names, names + CONST_creaturenames006),
+	customText(&regular_last_names, names + CONST_creaturenames007),
+	customText(&archconservative_last_names, names + CONST_creaturenames008),
+};

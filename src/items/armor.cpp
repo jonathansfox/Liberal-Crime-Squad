@@ -1,27 +1,5 @@
+#define	ARMOR_CPP
 #include "../includes.h"
-
-const string CONST_armor011 = "]";
-const string CONST_armor010 = "[";
-const string tag_D = "D";
-const string tag_B = "B";
-const string tag_X = "X";
-const string tag_quality = "quality";
-const string tag_false = "false";
-const string tag_damaged = "damaged";
-const string tag_true = "true";
-const string tag_bloody = "bloody";
-const string tag_blood = "blood";
-const string tag_armor = "armor";
-#include "../items/itemtype.h"
-#include "../items/item.h"
-#include "../items/armortype.h"
-#include "../items/armor.h"
-//own header
-#include "../common/stringconversion.h"
-//for int stringtobool(std::string)
-#include "../common/translateid.h"
-// for  int getarmortype
-
 
 Armor::Armor(const std::string& inputXml) : Item(inputXml)
 {
@@ -123,134 +101,108 @@ void Armor::set_bloody(bool b)
 {
 	if (can_get_bloody() || !b) bloody_ = b;
 }
-const string ruinedName = "Tattered Rags";
 const string& Armor::get_name() const
 {
-	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_name();
 	else return ruinedName;
 }
 const string& Armor::get_shortname() const
 {
-	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_shortname();
 	else return ruinedName;
 }
 long Armor::get_fencevalue() const
 {
-	extern vector<ArmorType *> armortype;
 	if (quality_ <= get_quality_levels())
 		return armortype[getarmortype(get_itemtypename())]->get_fencevalue() / quality_;
 	else return 0;
 }
 int Armor::get_make_difficulty() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_make_difficulty();
 }
 int Armor::get_make_price() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_make_price();
 }
 bool Armor::deathsquad_legality() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->deathsquad_legality();
 }
 bool Armor::can_get_bloody() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->can_get_bloody();
 }
 bool Armor::can_get_damaged() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->can_get_damaged();
 }
 int Armor::get_armor(int bodypart) const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_armor(bodypart);
 }
 bool Armor::has_fireprotection() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->has_fireprotection();
 }
 bool Armor::covers(int bodypart) const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->covers(bodypart);
 }
 bool Armor::conceals_face() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->conceals_face();
 }
 int Armor::get_interrogation_basepower() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_basepower();
 }
 int Armor::get_interrogation_assaultbonus() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_assaultbonus();
 }
 int Armor::get_interrogation_drugbonus() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_interrogation_drugbonus();
 }
 int Armor::get_professionalism() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_professionalism();
 }
 int Armor::get_stealth_value() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_stealth_value();
 }
 int Armor::get_weaponsize_concealment() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_weaponsize_concealment();
 }
 bool Armor::conceals_weaponsize(int weaponsize) const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->conceals_weaponsize(weaponsize);
 }
 bool Armor::is_mask() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->is_mask();
 }
 bool Armor::is_surprise_mask() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->is_surprise_mask();
 }
 const string Armor::get_description() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_description();
 }
 int Armor::get_durability() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_durability();
 }
 int Armor::get_quality_levels() const
 {
-	extern vector<ArmorType *> armortype;
 	return armortype[getarmortype(get_itemtypename())]->get_quality_levels();
 }
-extern vector<ArmorType *> armortype;
 Armor::Armor(const int seed, int quality, int number)
 	: Item(*armortype[seed], number), bloody_(false), damaged_(false), quality_(quality)
 { }

@@ -1,5 +1,5 @@
+#define	BASEACTIONS_CPP
 #include "../includes.h"
-const string CONST_baseactions004 = "vehicleParagraph.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -26,59 +26,15 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-//#include "../cursesgraphics.h"
-
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-//#include "../common/getnames.h"
-void enter_name(int, int, char*, int, const char*);
-#include "../common/commondisplay.h"
-// for void printparty(void)
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
-extern string singleSpace;
-string enter_done;
-extern string spaceDashSpace;
- string chooseALiberalTo;
- string string_sleeper;
  vector<string> vehicleParagraph;
- const string mostlyendings = "mostlyendings\\";
  vector<file_and_text_collection> baseactions_text_file_collection = {
 	 customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
  };
 /* base - burn the flag */
 
-// string enter_done;
-// string chooseALiberalTo;
-// string string_sleeper;
-// vector<string> vehicleParagraph;
- 
  /* base - new slogan */
  void getslogan()
  {
-	 const string CONST_baseactions006 = "                                                                                          ";
-	 const string CONST_baseactions005 = "What is your new slogan?";
-	 extern char slogan[SLOGAN_LEN];
-	 extern string slogan_str;
-	 extern vector<string> default_slogans;
 	 set_color_easy(WHITE_ON_BLACK);
 	 mvaddstrAlt(16, 0, CONST_baseactions005);
 	 mvaddstrAlt(17, 0, CONST_baseactions006); // 80 spaces
@@ -88,11 +44,6 @@ extern string spaceDashSpace;
  /* base - reorder party */
  void orderparty()
  {
-	 const string CONST_baseactions009 = " in Spot ";
-	 const string CONST_baseactions008 = "Choose squad member to replace ";
-	 const string CONST_baseactions007 = "Choose squad member to move";
-	 extern short party_status;
-	 extern Deprecatedsquadst *activesquad;
 	 party_status = -1;
 	 int partysize = activesquadSize();
 	 if (partysize <= 1) return;
@@ -115,11 +66,7 @@ extern string spaceDashSpace;
 		 swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
 	 }
  }
- int lenVehiclePool();
- int getCarID(const int l);
- string getCarFullname(const int l);
  void printCars(const int page) {
-	 extern Deprecatedsquadst *activesquad;
 	 int x = 1, y = 10;
 	 string str;
 	 for (int l = page * 18; l < lenVehiclePool() && l < page * 18 + 18; l++)
@@ -153,14 +100,9 @@ extern string spaceDashSpace;
 		 if (x > 53) x = 1, y++;
 	 }
  }
- int getkey_cap_alt();
  /* base - assign a vehicle to this squad */
- const string CONST_baseactions012 = "be a passenger.";
- const string CONST_baseactions011 = "drive it.";
- const string CONST_baseactions010 = "Choosing the Right Liberal Vehicle";
  void setvehicles()
  {
-	 extern Deprecatedsquadst *activesquad;
 	 if (!activesquad) return;
 	 int page = 0;
 	 while (true)

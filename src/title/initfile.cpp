@@ -1,12 +1,5 @@
+#define	INITFILE_CPP
 #include "../includes.h"
-const string CONST_initfile006 = "init.txt";
-
-const string tag_fixcleartype = "fixcleartype";
-const string tag_autosave = "autosave";
-const string tag_page = "page";
-const string tag_brackets = "brackets";
-const string tag_azerty = "azerty";
-const string tag_pagekeys = "pagekeys";
 /*
 This file handles the loading of init.txt
 This file is part of Liberal Crime Squad.
@@ -22,16 +15,8 @@ This file is part of Liberal Crime Squad.
 	along with Liberal Crime Squad; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
-#include "../common/stringconversion.h"
-//for int stringtobool(std::string boolstr);
-//#include "../common/consolesupport.h"
-// for void begin_cleartype_fix();
-#include "../title/titlescreen.h"
 void setconfigoption(std::string name, std::string value)
 {
-	extern short interface_pgup;
-	extern short interface_pgdn;
-	extern bool fixcleartype;
 	transform(name.begin(), name.end(), name.begin(), ::tolower);
 	transform(value.begin(), value.end(), value.begin(), ::tolower);
 	if (name == tag_pagekeys)

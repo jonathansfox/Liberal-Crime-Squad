@@ -892,3 +892,42 @@ I have learned not to make such sweeping changes to so many areas at once.  The 
 Fixed bug where age estimates were replaced with odd symbols.
 
 4.12.31
+
+Fixed bug where game freezes on "Release Oppressed".
+
+4.12.32
+
+Removed allText.txt
+
+const string [\w\d]* = "
+7290
+const string tag[\w\d]* = "
+1063
+
+Deleted creaturenames.cpp
+
+After removing commented strings:
+Find all "const string [\w\d]* = \"", Regular expressions, Find Results 1, Current Project: game.vcxproj, ""
+ Matching lines: 7085    Matching files: 3    Total files searched: 169
+These 7085 const strings will be placed within preprocessor if statements, rather than creating 70+ new header files.  Mostly because that is much easier to automate, but also because the end goal is to remove them from the program entirely.
+
+Transferring most instances of extern and #include into the #ifdef blocks within includes.h
+This should help drastically in the identification and removal of duplicate code.
+
+includes.h
+extern 1992
+const string 7124
+
+
+
+talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
+wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
+ (and several others within talk.cpp)
+return type set to void, as it only ever returns 1
+
+Removed all usage of cursesAlternative printing in in files after talk.cpp, left off going backwards at
+void doYouComeHereOften()...
+Line 695-824
+
+4407 ...Alt()
+143 moved to includes.h

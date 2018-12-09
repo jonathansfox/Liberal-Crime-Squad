@@ -1,170 +1,5 @@
-
+#define	CREATURE_CPP
 #include "../includes.h"
-const string CONST_creatureD162 = "z";
-
-const string CONST_creatureC161 = "x";
-
-const string CONST_creatureB162 = "/";
-const string CONST_creatureB161 = "selves";
-const string CONST_creatureB160 = "them";
-const string CONST_creatureB159 = "her";
-const string CONST_creatureB158 = "themself";
-const string CONST_creatureB157 = "hers";
-const string CONST_creatureB154 = "heANDshe";
-const string CONST_creatureB153 = "xyr";
-const string CONST_creatureB066 = "xem";
-const string CONST_creature151 = "?";
-const string CONST_creature150 = ", Ambiguous";
-const string CONST_creature149 = ", Female";
-const string CONST_creature148 = ", Male";
-const string CONST_creature147 = "Very Old";
-const string CONST_creature146 = "80s";
-const string CONST_creature145 = "70s";
-const string CONST_creature144 = "60s";
-const string CONST_creature143 = "50s";
-const string CONST_creature142 = "40s";
-const string CONST_creature141 = "30s";
-const string CONST_creature140 = "20s";
-const string CONST_creature138 = " (";
-const string CONST_creature137 = " (?)";
-const string CONST_creature136 = "None";
-const string CONST_creature135 = " (0/";
-const string CONST_creature134 = " (1/";
-const string CONST_creature132 = "self";
-const string CONST_creature131 = "xemself";
-const string CONST_creature130 = "Xem";
-const string CONST_creature129 = "Her";
-const string CONST_creature128 = "Him";
-const string CONST_creature127 = "s";
-const string CONST_creature126 = "xyrs";
-const string CONST_creature125 = "Xyr";
-const string CONST_creature123 = "His";
-const string CONST_creature122 = "zemself";
-const string CONST_creature121 = "zurz";
-const string CONST_creature120 = "zem";
-const string CONST_creature119 = "zur";
-const string CONST_creature118 = "zee";
-const string CONST_creature117 = "xe";
-const string CONST_creature116 = "Xe";
-const string CONST_creature115 = "She";
-const string CONST_creature114 = "He";
-const string CONST_creature113 = "President ";
-const string CONST_creature112 = "CCS Heavy";
-const string CONST_creature111 = "Soldier";
-const string CONST_creature110 = "Elite Security";
-const string CONST_creature109 = "Enlightened Judge";
-const string CONST_creature108 = "New Union Worker";
-const string CONST_creature107 = "Jaded Liberal Judge";
-const string CONST_creature106 = "Ex-Union Worker";
-const string CONST_creature105 = ", IMPOSSIBLE";
-const string CONST_creature104 = ", Difficulty ";
-const string CONST_creature103 = " SkillCheck(";
-const string CONST_creature102 = ", Outcome of ";
-const string CONST_creature101 = "Adjusted Attribute Value ";
-const string CONST_creature100 = "automatic failure";
-const string CONST_creature099 = ", Skill Value ";
-const string CONST_creature098 = " SkillRoll(";
-const string CONST_creature097 = "-=ILLEGAL SKILL ROLL=-";
-const string CONST_creature094 = " AttributeCheck(";
-const string CONST_creature092 = ", Attribute Level ";
-const string CONST_creature091 = " AttributeRoll(";
-const string CONST_creature090 = "%f";
-const string CONST_creature089 = "Scruffy";
-const string CONST_creature087 = "CREATURE_WORKER_JANITOR";
-const string CONST_creature086 = "ccs_covername_other.txt";
-const string CONST_creature085 = "ccs_covername_shotgun.txt";
-const string CONST_creatureX01 = "he";
-const string CONST_creatureX02 = "she";
-const string CONST_creatureX03 = "his";
-const string CONST_creatureX04 = "her";
-const string CONST_creatureX05 = "xyr";
-const string CONST_creatureX06 = "him";
-const string CONST_creatureX07 = "xem";
-
-const string tag_value = "value";
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_NONE = "ARMOR_NONE";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_NONE = "WEAPON_NONE";
-const string tag_Pres = "Pres";
-const string tag_Pres_state = "Pres_state";
-const string tag_Pres_ID = "Pres_ID";
-const string tag_CEO = "CEO";
-const string tag_CEO_state = "CEO_state";
-const string tag_CEO_ID = "CEO_ID";
-const string tag_uniquecreatures = "uniquecreatures";
-const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
-const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
-const string tag_reports_to_police = "reports_to_police";
-const string tag_kidnap_resistant = "kidnap_resistant";
-const string tag_talkreceptive = "talkreceptive";
-const string tag_seethroughstealth = "seethroughstealth";
-const string tag_seethroughdisguise = "seethroughdisguise";
-const string tag_dontname = "dontname";
-const string tag_flag = "flag";
-const string tag_pref_is_driver = "pref_is_driver";
-const string tag_pref_carid = "pref_carid";
-const string tag_is_driver = "is_driver";
-const string tag_carid = "carid";
-const string tag_arg = "arg";
-const string tag_arg2 = "arg2";
-const string tag_type = "type";
-const string tag_activity = "activity";
-const string tag_base = "base";
-const string tag_cantbluff = "cantbluff";
-const string tag_worklocation = "worklocation";
-const string tag_location = "location";
-const string tag_crimes_suspected = "crimes_suspected";
-const string tag_special = "special";
-const string tag_blood = "blood";
-const string tag_wound = "wound";
-const string tag_income = "income";
-const string tag_juice = "juice";
-const string tag_money = "money";
-const string tag_has_thrown_weapon = "has_thrown_weapon";
-const string tag_stunned = "stunned";
-const string tag_forceinc = "forceinc";
-const string tag_meetings = "meetings";
-const string tag_hireid = "hireid";
-const string tag_id = "id";
-const string tag_deathdays = "deathdays";
-const string tag_joindays = "joindays";
-const string tag_deathpenalty = "deathpenalty";
-const string tag_confessions = "confessions";
-const string tag_sentence = "sentence";
-const string tag_prisoner = "prisoner";
-const string tag_trainingsubject = "trainingsubject";
-const string tag_trainingtime = "trainingtime";
-const string tag_hiding = "hiding";
-const string tag_dating = "dating";
-const string tag_clinic = "clinic";
-const string tag_specialattack = "specialattack";
-const string tag_animalgloss = "animalgloss";
-const string tag_infiltration = "infiltration";
-const string tag_type_idname = "type_idname";
-const string tag_alive = "alive";
-const string tag_align = "align";
-const string tag_exists = "exists";
-const string tag_birthday_day = "birthday_day";
-const string tag_birthday_month = "birthday_month";
-const string tag_age = "age";
-const string tag_squadid = "squadid";
-const string tag_gender = "gender";
-const string tag_gender_liberal = "gender_liberal";
-const string tag_gender_conservative = "gender_conservative";
-const string tag_propername = "propername";
-const string tag_name = "name";
-const string tag_skill_experience = "skill_experience";
-const string tag_skill = "skill";
-const string tag_creature = "creature";
-const string tag_clip = "clip";
-const string tag_augmentation = "augmentation";
-const string tag_armor = "armor";
-const string tag_weapon = "weapon";
-const string tag_attribute = "attribute";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -190,35 +25,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-#include "../creature/creature.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../sitemode/stealth.h"
-// for hasdisguise
-//#include "../common/stringconversion.h"
-string attribute_enum_to_string(int attribute);
-#include "../common/translateid.h"
-// for  int getweapontype(int )
-//#include "../politics/politics.h"
-/* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP();
-        //only use here. --Schmel924
-#include "../combat/chaseCreature.h"
-//for Vehicle* getChaseVehicle(const Creature &c);
-        //hmm --Schmel924
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
- vector<string> ccs_covername_shotgun;
- vector<string> ccs_covername_other;
- const string creature = "creature\\";
- vector<file_and_text_collection> creature_text_file_collection = {
-	 /*creature.cpp*/
-	 customText(&ccs_covername_shotgun, creature + CONST_creature085),
-	 customText(&ccs_covername_other, creature + CONST_creature086),
- };
-extern string commaSpace;
 
 DeprecatedCreature& DeprecatedCreature::operator=(const DeprecatedCreature& rhs)
 {
@@ -341,7 +147,6 @@ bool DeprecatedCreature::canwalk() const
 }
 void DeprecatedCreature::creatureinit()
 {
-	extern long curcreatureid;
 	dontname = false;
 	hireid = -1;
 	worklocation = 0;
@@ -871,9 +676,6 @@ int roll_check(int skill)
 }
 int DeprecatedCreature::attribute_roll(int attribute) const
 {
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
-	extern string closeParenthesis;
 	int return_value = roll_check(get_attribute(attribute, true));
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature091);
@@ -890,9 +692,6 @@ int DeprecatedCreature::attribute_roll(int attribute) const
 }
 bool DeprecatedCreature::attribute_check(int attribute, int difficulty) const
 {
-	extern string closeParenthesis;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature094);
 		addstrAlt(attribute_enum_to_string(attribute));
@@ -907,14 +706,8 @@ bool DeprecatedCreature::attribute_check(int attribute, int difficulty) const
 	}
 	return(attribute_roll(attribute) >= difficulty);
 }
-/* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(const DeprecatedCreature &cr);
 int DeprecatedCreature::skill_roll(int skill) const
 {
-	extern string closeParenthesis;
-	extern Log gamelog;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
 	int pseudoskill = 0;
 	// Handle Pseudoskills
 	if (skill < 0)
@@ -1054,9 +847,6 @@ int DeprecatedCreature::skill_roll(int skill) const
 
 bool DeprecatedCreature::skill_check(int skill, int difficulty) const
 {
-	extern string closeParenthesis;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
 	if (SHOWMECHANICS) {
 		mvaddstrAlt(8, 1, CONST_creature103);
 		addstrAlt(skill_enum_to_string(skill));
@@ -1128,7 +918,6 @@ void conservatise(DeprecatedCreature &cr)
 /* turns a creature into a liberal */
 void liberalize(DeprecatedCreature &cr, bool rename)
 {
-	extern UniqueCreatures uniqueCreatures;
 	if (cr.align == ALIGN_CONSERVATIVE && cr.juice > 0)cr.juice = 0;
 	cr.align = ALIGN_LIBERAL;
 	if (cr.id == uniqueCreatures.CEO().id)
@@ -1176,8 +965,6 @@ bool DeprecatedCreature::talkreceptive() const
 
 bool DeprecatedCreature::can_date(const int aage, const char aanimalgloss) const {
 
-	// Make age not matter for dating or prostitution
-	extern bool ZEROMORAL;
 	if (!ZEROMORAL) {
 		// Assume age appropriate for animals, tanks, etc.
 		// (use other restrictions for these, like humorous rejections)
@@ -1193,9 +980,6 @@ bool DeprecatedCreature::can_date(const int aage, const char aanimalgloss) const
 }
 void DeprecatedCreature::die()
 {
-	extern UniqueCreatures uniqueCreatures;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern char oldPresidentName[POLITICIAN_NAMELEN];
 	alive = 0, blood = 0;
 	if (id == uniqueCreatures.CEO().id)
 		uniqueCreatures.newCEO();
@@ -1213,8 +997,6 @@ void UniqueCreatures::newCEO()
 }
 void UniqueCreatures::newPresident()
 {
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
 	makecreature(Pres_, CREATURE_POLITICIAN);
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
@@ -1526,11 +1308,7 @@ void DeprecatedCreature::give_armor(Armor& a, vector<Item*>* lootpile)
 		armor = a.split(1);
 	}
 }
-/*void DeprecatedCreature::give_armor(const ArmorType& at, vector<Item*>* lootpile)
-{
-Armor a(at);
-give_armor(a, lootpile);
-}*/
+
 void DeprecatedCreature::give_armor(const int at, vector<Item*>* lootpile)
 {
 	Armor a(at);
@@ -1556,7 +1334,6 @@ int DeprecatedCreature::get_weapon_skill() const {
 }
 string DeprecatedCreature::get_weapon_string(int subtype) const
 {
-	extern string closeParenthesis;
 	string r;
 	if (is_armed())
 	{
@@ -1598,7 +1375,6 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 	}
 	else {
 
-		extern string closeParenthesis;
 
 		
 		// For humans, estimate their age and gender

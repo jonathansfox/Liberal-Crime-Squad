@@ -1,25 +1,5 @@
+#define	AUGMENTATION_CPP
 #include "../includes.h"
-#include "augmentation.h"
-
-const string CONST_augmentation017 = "Conservative Swine! (Bug)";
-const string CONST_augmentation016 = "Skin";
-const string CONST_augmentation015 = "Legs";
-const string CONST_augmentation014 = "Arms";
-const string CONST_augmentation013 = "Body";
-const string CONST_augmentation012 = "Head";
-const string tag_skin = "skin";
-const string tag_effect = "effect";
-const string tag_type = "type";
-const string tag_name = "name";
-const string tag_augmentation = "augmentation";
-
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-
-const string tag_legs = "legs";
-const string tag_arms = "arms";
-const string tag_body = "body";
-const string tag_head = "head";
 
 std::string Augmentation::get_name(int au)
 {

@@ -1,9 +1,5 @@
+#define	ITEM_CPP
 #include "../includes.h"
-const string CONST_item007 = "a";
-const string CONST_item006 = "an";
-const string CONST_item005 = "number";
-const string CONST_item004 = "itemtypeid";
-const string CONST_item003 = "itemtypename";
 
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"

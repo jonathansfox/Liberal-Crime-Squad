@@ -1,8 +1,5 @@
+#define	MONEY_CPP
 #include "../includes.h"
-const string CONST_money003 = "$";
-const string CONST_money002 = "amount";
-
-const string tag_money = "money";
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/item.h"

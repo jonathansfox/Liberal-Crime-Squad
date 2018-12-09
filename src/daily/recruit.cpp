@@ -1,13 +1,5 @@
+#define	RECRUIT_CPP
 #include "../includes.h"
-const string CONST_recruit013 = "Adventures in Liberal Recruitment";
-const string CONST_recruit012 = "Press enter or escape to call it a day.";
-const string CONST_recruit011 = " - ";
-const string CONST_recruit010 = " was able to get information on multiple people.";
-const string CONST_recruit007 = " managed to set up a meeting with ";
-const string CONST_recruit006A = " was unable to track down a ";
-const string CONST_recruit006B = ".";
-const string CONST_recruit005A = " asks around for a ";
-const string CONST_recruit005B = "...";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -28,57 +20,7 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-
-#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-//#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../items/armortype.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../basemode/activate.h"
-// for recruitFindDifficulty and recruitName
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-// for void printcreatureinfo(Creature *,unsigned char=255)
-#include "../common/getnames.h"
-// for getview
-//#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-// for subordinatesleft
-#include "../combat/fight.h"
-
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../common/musicClass.h"
-
-/* recruit struct constructor */
-
-#include "../combat/fight.h"
-
-/*const string CONST_recruit013 = "Adventures in Liberal Recruitment";
-const string CONST_recruit012 = "Press enter or escape to call it a day.";
-const string CONST_recruit011 = "%c - ";
-const string CONST_recruit010 = "%s was able to get information on multiple people.";
-const string CONST_recruit007 = "%s managed to set up a meeting with ";
-const string CONST_recruit006 = "%s was unable to track down a %s.";
-const string CONST_recruit005 = "%s asks around for a %s...";
-*/
-char talk(DeprecatedCreature &a, const int t);
-
 Deprecatedrecruitst::Deprecatedrecruitst(DeprecatedCreature *cr, int id) {
-	extern short attitude[VIEWNUM];
 	recruit = cr;
 	recruiter_id = id;
 	//Has heard of the LCS
@@ -105,7 +47,6 @@ char Deprecatedrecruitst::eagerness()
 	if (recruit->align == -1) eagerness_temp -= 4;
 	return eagerness_temp;
 }
-void makecreature(const int x, const short type);
 /* recruiting */
 vector<RecruitData> recruitable_creatures;
 // Return the difficulty of tracking this character type down, for the
@@ -119,20 +60,14 @@ int recruitFindDifficulty(int creatureType)
 }
 string recruitName(int creatureType) {
 
-	const string CONST_activate065 = "missingno";
 	for (int i = 0; i < len(recruitable_creatures); i++)
 		if (recruitable_creatures[i].type == creatureType)
 			return recruitable_creatures[i].name;
 	return CONST_activate065;
 }
 
-short getCurrentSite();
-void setCurrentSite(const short i);
-const string singleDot = ".";
 void recruitment_activity(DeprecatedCreature &cr)
 {
-	extern MusicClass music;
-	extern DeprecatedCreature encounter[ENCMAX];
 	int ocursite = getCurrentSite();
 	setCurrentSite(cr.location);
 	int type = cr.activity_arg();

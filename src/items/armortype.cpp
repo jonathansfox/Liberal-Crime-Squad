@@ -1,106 +1,6 @@
-
+#define	ARMORTYPE_CPP
 #include "../includes.h"
-const string CONST_armortypeB044 = ": ";
 
-const string CONST_armortype055 = "UNDEF";
-const string CONST_armortype054 = "Unknown element for armor type ";
-const string CONST_armortype053 = "::InterrogationST: ";
-const string CONST_armortype051 = "::armor: ";
-const string CONST_armortype049 = "::body_covering::conceal_face: ";
-const string CONST_armortype048 = "Invalid boolean value for armor type ";
-const string CONST_armortype047 = "::body_covering::legs: ";
-const string CONST_armortype045 = "::body_covering::arms: ";
-const string CONST_armortype043 = "::body_covering::head: ";
-const string CONST_armortype041 = "::body_covering::body: ";
-const string CONST_armortype037 = "::armor::fireprotection: ";
-const string CONST_armortype035 = "::deathsquad_legality: ";
-const string blankString = "";
-const string tag_durability = "durability";
-const string tag_qualitylevels = "qualitylevels";
-const string tag_quality = "quality";
-const string tag_description = "description";
-const string tag_surprise = "surprise";
-const string tag_mask = "mask";
-const string tag_stealth = "stealth";
-const string tag_stealth_value = "stealth_value";
-const string tag_conceal_weapon_size = "conceal_weapon_size";
-const string tag_professionalism = "professionalism";
-const string tag_drugbonus = "drugbonus";
-const string tag_assaultbonus = "assaultbonus";
-const string tag_basepower = "basepower";
-const string tag_base = "base";
-const string tag_interrogation = "interrogation";
-const string tag_shortname = "shortname";
-const string tag_conceals_face = "conceals_face";
-const string tag_legs = "legs";
-const string tag_arms = "arms";
-const string tag_head = "head";
-const string tag_body = "body";
-const string tag_body_covering = "body_covering";
-const string tag_fire = "fire";
-const string tag_fireprotection = "fireprotection";
-const string tag_limbs = "limbs";
-const string tag_armor = "armor";
-const string tag_can_get_damaged = "can_get_damaged";
-const string tag_can_get_bloody = "can_get_bloody";
-const string tag_deathsquad_legality = "deathsquad_legality";
-const string tag_make_price = "make_price";
-const string tag_make_difficulty = "make_difficulty";
-#include "../creature/creatureEnums.h"
-//#include "../items/item.h"
-#include "../items/itemtype.h"
-//#include "../items/armor.h"
-#include "../items/armortype.h"
-//own header
-#include "../common/stringconversion.h"
-//for stringtobool
-
-
-//// #include "../includes.h"
-/*const string CONST_armortypeB044 = ": ";
-
-const string CONST_armortype055 = "UNDEF";
-const string CONST_armortype054 = "Unknown element for armor type ";
-const string CONST_armortype053 = "::InterrogationST: ";
-const string CONST_armortype051 = "::armor: ";
-const string CONST_armortype049 = "::body_covering::conceal_face: ";
-const string CONST_armortype048 = "Invalid boolean value for armor type ";
-const string CONST_armortype047 = "::body_covering::legs: ";
-const string CONST_armortype045 = "::body_covering::arms: ";
-const string CONST_armortype043 = "::body_covering::head: ";
-const string CONST_armortype041 = "::body_covering::body: ";
-const string CONST_armortype037 = "::armor::fireprotection: ";
-const string CONST_armortype035 = "::deathsquad_legality: ";
-const string tag_durability = "durability";
-const string tag_qualitylevels = "qualitylevels";
-const string tag_description = "description";
-const string tag_surprise = "surprise";
-const string tag_mask = "mask";
-const string tag_stealth = "stealth";
-const string tag_stealth_value = "stealth_value";
-const string tag_conceal_weapon_size = "conceal_weapon_size";
-const string tag_professionalism = "professionalism";
-const string tag_drugbonus = "drugbonus";
-const string tag_assaultbonus = "assaultbonus";
-const string tag_basepower = "basepower";
-const string tag_base = "base";
-const string tag_interrogation = "interrogation";
-const string tag_shortname = "shortname";
-const string tag_conceals_face = "conceals_face";
-const string tag_legs = "legs";
-const string tag_arms = "arms";
-const string tag_head = "head";
-const string tag_body = "body";
-const string tag_body_covering = "body_covering";
-const string tag_fire = "fire";
-const string tag_fireprotection = "fireprotection";
-const string tag_limbs = "limbs";
-const string tag_can_get_damaged = "can_get_damaged";
-const string tag_can_get_bloody = "can_get_bloody";
-const string tag_deathsquad_legality = "deathsquad_legality";
-const string tag_make_price = "make_price";
-const string tag_make_difficulty = "make_difficulty";
-*/
 ArmorType::ArmorType(MCD_STR xmlstring)
 	: ItemType(xmlstring),
 	make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
@@ -131,25 +31,6 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
 }
 
 
-map<string, int> armorTypeInitTags = {
-	map<string, int>::value_type(tag_make_difficulty, ENUM_tag_make_difficulty),
-	map<string, int>::value_type(tag_make_price, ENUM_tag_make_price),
-	map<string, int>::value_type(tag_deathsquad_legality, ENUM_tag_deathsquad_legality),
-	map<string, int>::value_type(tag_can_get_bloody, ENUM_tag_can_get_bloody),
-	map<string, int>::value_type(tag_can_get_damaged, ENUM_tag_can_get_damaged),
-	map<string, int>::value_type(tag_armor, ENUM_tag_armor),
-	map<string, int>::value_type(tag_body_covering, ENUM_tag_body_covering),
-	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),
-	map<string, int>::value_type(tag_interrogation, ENUM_tag_interrogation),
-	map<string, int>::value_type(tag_professionalism, ENUM_tag_professionalism),
-	map<string, int>::value_type(tag_conceal_weapon_size, ENUM_tag_conceal_weapon_size),
-	map<string, int>::value_type(tag_stealth_value, ENUM_tag_stealth_value),
-	map<string, int>::value_type(tag_mask, ENUM_tag_mask),
-	map<string, int>::value_type(tag_surprise, ENUM_tag_surprise),
-	map<string, int>::value_type(tag_description, ENUM_tag_description),
-	map<string, int>::value_type(tag_qualitylevels, ENUM_tag_qualitylevels),
-	map<string, int>::value_type(tag_durability, ENUM_tag_durability),
-};
 
 void ArmorType::init(const MCD_STR& xmlstring)
 {
@@ -387,7 +268,6 @@ bool ArmorType::covers(int bodypart) const
 }
 const string& ArmorType::get_shortname() const
 {
-	extern int year;
 	if (shortname_future_defined_ && year >= 2100)
 		return shortname_future_;
 	else if (year >= 2100 && name_future_defined_ && len(name_future_) <= 14)

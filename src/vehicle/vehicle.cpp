@@ -1,14 +1,5 @@
+#define	VEHICLE_CPP
 #include "../includes.h"
-const string CONST_vehicle007 = "Stolen ";
-
-const string tag_id = "id";
-const string tag_myear = "myear";
-const string tag_location = "location";
-const string tag_color = "color";
-const string tag_vtypeid = "vtypeid";
-const string tag_vtypeidname = "vtypeidname";
-const string tag_vehicle = "vehicle";
-const string singleSpace = " ";
 #include "vehicletype.h"
 vector<VehicleType *> vehicletype;
 #include "vehicle.h"
@@ -102,7 +93,6 @@ void Vehicle::stop_preferring_me() const
 }
 string Vehicle::fullname(bool halffull) const
 {
-	const string CONST_vehicle007 = "Stolen ";
 	string s;
 	int words = 0;
 	if (heat_)
@@ -206,7 +196,7 @@ vector<string> getVehicleTypeColor(const int carchoice) {
 bool vehicletypeavailableatshop(const int i) {
 	return vehicletype[i]->availableatshop();
 }
-string vehicleSportsCar;
+//string vehicleSportsCar;
 Vehicle* newSportsCar() {
 	return new Vehicle(*vehicletype[getvehicletype(vehicleSportsCar)]);
 }

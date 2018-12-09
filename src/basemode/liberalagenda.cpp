@@ -1,11 +1,5 @@
-
+#define	LIBERALAGENDA_CPP
 #include "../includes.h"
-const string tag_Sta = "Sta, ";
-const string tag_Libp = "Lib+, ";
-const string tag_Lib = "Lib, ";
-const string tag_Mod = "Mod, ";
-const string tag_Cons = "Cons, ";
-const string tag_Consp = "Cons+";
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -33,56 +27,10 @@ const string tag_Consp = "Cons+";
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-#include "../creature/creatureEnums.h"
-//#include "../common/commondisplay.h"
-void set_alignment_color(short alignment, bool extended_range = false);
-//#include "../common/getnames.h"
-string getlaw(int l);
-//#include "../common/commonactions.h"
-void cleangonesquads();
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-const string blankString = "";
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../common/musicClass.h"
- vector<string> supremeChars;
- vector<string> courtChars;
-string pressLToViewHighScores;
-map<short, vector<string> > endgameLawStrings;
-#include "../common/creaturePool.h"
-enum Pages
-{
-	PAGE_LEADERS,
-	PAGE_ISSUES_A,
-	PAGE_ISSUES_B,
-	//PAGE_POLLS_A,
-	//PAGE_POLLS_B
-	PAGENUM
-};
-vector<string> disbandingMessage;
-vector<string> issue_phrases;
-const string mostlyendings = "mostlyendings\\";
-
-const string CONST_liberalagenda012 = "courtChars.txt";
-const string CONST_liberalagenda011 = "supremeChars.txt";
-const string CONST_liberalagenda010 = "issue_phrases.txt";
-const string CONST_liberalagenda009 = "disbandingMessage.txt";
-
-vector<file_and_text_collection> liberl_agenda_text_file_collection = {
-	customText(&disbandingMessage, mostlyendings + CONST_liberalagenda009),
-	customText(&issue_phrases, mostlyendings + CONST_liberalagenda010),
-	customText(&supremeChars, mostlyendings + CONST_liberalagenda011),
-	customText(&courtChars, mostlyendings + CONST_liberalagenda012),
-};
 /* base - liberal agenda - disband */
 /* base - liberal agenda - disband */
 bool confirmdisband()
 {
-	const string CONST_liberalagenda014 = "Type this Liberal phrase to confirm (press a wrong letter to rethink it):";
-	const string CONST_liberalagenda013 = "Are you sure you want to disband?";
-	extern int year;
-	extern int disbandtime;
 	string word = pickrandom(issue_phrases);
 	for (int pos = 0; pos < len(word);)
 	{
@@ -116,16 +64,6 @@ bool confirmdisband()
 	return true;
 }
 void printDisbandOption() {
-	const string CONST_liberalagenda066 = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
-	//const string CONST_liberalagenda065 = "Once these are Green, the country will have achieved Elite Liberal status.";
-	const string CONST_liberalagenda064 = "Arch-Conservative";
-	const string CONST_liberalagenda063 = "-  ";
-	const string CONST_liberalagenda062 = "Conservative  ";
-	const string CONST_liberalagenda060 = "moderate  ";
-	const string CONST_liberalagenda058 = "Liberal  ";
-	const string CONST_liberalagenda056 = "Elite Liberal  ";
-	const string CONST_liberalagenda055 = "Stalinist  ";
-	extern bool stalinmode;
 
 	moveAlt(23, 0);
 	if (stalinmode)
@@ -168,8 +106,6 @@ void printDisbandOption() {
 	mvaddstrAlt(24, 0, CONST_liberalagenda066);
 }
 void printLaws(const int startinglaw, const signed char won) {
-	extern short wincondition;
-	extern short lawList[LAWNUM];
 	for (int l = startinglaw, y = 4; l < startinglaw + 18 && l < LAWNUM; l++, y++)
 	{
 		if (won == -1 || won == -2)
@@ -188,14 +124,6 @@ void printLaws(const int startinglaw, const signed char won) {
 	}
 }
 void printReplacements(const signed char won) {
-	const string CONST_liberalagenda044 = "Trial Judges";
-	const string CONST_liberalagenda043 = "Stalinist Show";
-	const string CONST_liberalagenda042 = "Replaced By";
-	const string CONST_liberalagenda041 = "Ethics Officers";
-	const string CONST_liberalagenda040 = "By Corporate";
-	const string CONST_liberalagenda039 = "Replaced";
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	if (won == -1)
 	{
 		mvaddstrAlt(7, 65, CONST_liberalagenda039);
@@ -218,12 +146,6 @@ void printReplacements(const signed char won) {
 	}
 }
 void printLeadersWithoutVictor() {
-	const string CONST_liberalagenda038 = "Senate: ";
-	const string CONST_liberalagenda037 = "House: ";
-	extern bool stalinmode;
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short exec[EXECNUM];
 
 	signed char align;
 
@@ -263,24 +185,7 @@ void printLeadersWithoutVictor() {
 	addstrAlt(tostring(senatemake[0]) + tag_Consp);
 
 }
-const string CONST_liberalagenda034 = "Attorney General: ";
-const string CONST_liberalagenda033 = "Internal Affairs Commissar: ";
-const string CONST_liberalagenda032 = "Minister of Truth: ";
-const string CONST_liberalagenda031 = "Secretary of State: ";
-const string CONST_liberalagenda030 = "Foreign Affairs Commissar: ";
-const string CONST_liberalagenda029 = "Minister of Peace: ";
-const string CONST_liberalagenda028 = "Vice President: ";
-const string CONST_liberalagenda027 = "Premier: ";
-const string CONST_liberalagenda026 = "Minister of Love: ";
-const string CONST_liberalagenda025 = "(2nd Term):";
-const string CONST_liberalagenda024 = "(1st Term):";
-const string CONST_liberalagenda023 = "President ";
-const string CONST_liberalagenda022 = "General Secretary: ";
-const string CONST_liberalagenda021 = "King: ";
 void printLeadersFirstPage(const signed char won) {
-	extern short execterm;
-	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 
 	signed char align;
@@ -321,7 +226,6 @@ void printLeadersFirstPage(const signed char won) {
 
 }
 void printCourtWithoutVictory() {
-	extern short court[COURTNUM];
 
 	signed char align;
 
@@ -336,8 +240,6 @@ void printCourtWithoutVictory() {
 	set_alignment_color(align, true);
 }
 void printSingleLaw(const signed char won, const int l) {
-	extern short wincondition;
-	extern short lawList[LAWNUM];
 	if (won == -1 || won == -2)
 		set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
 	else if (won == 1 && wincondition == WINCONDITION_ELITE)
@@ -352,15 +254,7 @@ void printSingleLaw(const signed char won, const int l) {
 }
 void printPageLeaders(const signed char won) {
 
-	const string CONST_liberalagenda036 = "The Congress consists of Stalinist Party loyalists.";
-	const string CONST_liberalagenda035 = "The Congress consists of CEOs and televangelists.";
 
-	const string CONST_liberalagenda020 = "ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ";
-	const string CONST_liberalagenda019 = "บ GENERAL SUMMARY บ ISSUES A ณ ISSUES B ณ";
-	const string CONST_liberalagenda018 = "ษอออออออออออออออออปฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟ";
-
-	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 	mvaddstrAlt(1, 0, CONST_liberalagenda018);
 	mvaddstrAlt(2, 0, CONST_liberalagenda019);
@@ -402,12 +296,6 @@ void printPageLeaders(const signed char won) {
 	}
 }
 void printPage(const int page, const signed char won) {
-	const string CONST_liberalagenda050 = "ฯอออออออออออออออออฯออออออออออผ          ศอออออออออออออออออออออออออออออออออออออออ";
-	const string CONST_liberalagenda049 = "ณ GENERAL SUMMARY ณ ISSUES A บ ISSUES B บ";
-	const string CONST_liberalagenda048 = "ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤษออออออออออป";
-	const string CONST_liberalagenda047 = "ฯอออออออออออออออออผ          ศออออออออออฯอออออออออออออออออออออออออออออออออออออออ";
-	const string CONST_liberalagenda046 = "ณ GENERAL SUMMARY บ ISSUES A บ ISSUES B ณ";
-	const string CONST_liberalagenda045 = "ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤษออออออออออปฤฤฤฤฤฤฤฤฤฤฟ";
 
 	switch (page)
 	{
@@ -437,18 +325,8 @@ void printPage(const int page, const signed char won) {
 }
 
 /* base - liberal agenda */
-const string CONST_liberalagenda054 = "The country has been Stalinized.";
-const string CONST_liberalagenda053 = "The country has been Reaganified.";
-const string CONST_liberalagenda052 = "The country has achieved Elite Liberal status!";
-const string CONST_liberalagenda051 = "The country has achieved Liberal status!";
-
-const string CONST_liberalagenda017 = "The Status of the Liberal Agenda";
-const string CONST_liberalagenda016 = "The Abject Failure of the Liberal Agenda";
-const string CONST_liberalagenda015 = "The Triumph of the Liberal Agenda";
 bool liberalagenda(signed char won)
 {
-	extern MusicClass music;
-	extern short wincondition;
 
 	int page = 0;
 	while (true)

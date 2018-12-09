@@ -1,33 +1,8 @@
+#define	AUTOMATEDDATATESTS_CPP
 #include "includes.h"
-#include "cursesAlternative.h"
-using namespace std;
 
-//string_to_activity;
-extern map<short, string>  conservativeLegalArgument;
-//string_to_law;
-extern map<short, string>  youAreStupidTalkAboutIssues;
-//string_to_law;
-extern map<short, string>  issueTooLiberal;
-//string_to_law;
-extern map<short, string>  issueEventString;
-//string_to_view; [LCSrandom(VIEWNUM - 3)]
-extern map<short, string>  conservatiseLaw;
-//string_to_law;
-extern map<short, string>  liberalizeLaw;
-//string_to_law;
-extern map<short, string>  discussIssues;
-//string_to_view; LCSrandom(VIEWNUM);
-extern map<short, string>  discussesIssues;
-//string_to_view; LCSrandom(VIEWNUM);
-extern map<short, vector<string> >  talkAboutTheIssues; // 0~1
-//string_to_law;
-extern map<short, vector<string> >  endgameLawStrings; // 0~7
-//string_to_law;
-void testCreature();
 void automatedDataTests() {
 
-	const string CONST_automatedDataTests013 = "TEST";
-	const string CONST_automatedDataTests008 = "SUCCESS";
 	clearAlt();
 	for (int i = 0, k = 0; i < LAWNUM; i++) {
 		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
@@ -78,7 +53,6 @@ void automatedDataTests() {
 
 
 // This, this requires a lot of prepwork to test the makecreature(...) method
-const string blankString = "";
 #include "creature/creature.h"
 #include "vehicle/vehicleType.h"
 #include "vehicle/vehicle.h"
@@ -95,7 +69,6 @@ void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments 
 void testCreature() {
 
 	// This, this requires a lot of prepwork to test the makecreature(...) method
-	extern bool multipleCityMode;
 	multipleCityMode = false;
 	void make_world(bool hasmaps);
 	make_world(false);
@@ -109,7 +82,6 @@ void testCreature() {
 	recruitment_activity(*newcr);
 	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
 
-	extern short lawList[LAWNUM];
 	for (int i = 0; i < CREATURENUM; i++) {
 		DeprecatedCreature cr;
 		for (int j = -2; j < 3; j++) {

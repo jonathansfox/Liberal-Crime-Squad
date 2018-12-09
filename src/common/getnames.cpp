@@ -1,40 +1,5 @@
-
+#define	GETNAMES_CPP
 #include "../includes.h"
-const string CONST_getnames045 = "getMonth.txt";
-const string CONST_getnames044 = "city_names.txt";
-const string CONST_getnames043 = "Software Bugs";
-const string CONST_getnames042 = "Buggy Software";
-const string CONST_getnames041 = "bugs";
-const string CONST_getnames040 = "Elite Liberal";
-const string CONST_getnames039 = "Liberal Guardian";
-const string CONST_getnames038 = "Urban Commando";
-const string CONST_getnames037 = "Revolutionary";
-const string CONST_getnames036 = "Socialist Threat";
-const string CONST_getnames035 = "Activist";
-const string CONST_getnames034 = "Civilian";
-const string CONST_getnames033 = "Punk";
-const string CONST_getnames032 = "Society's Dregs";
-const string CONST_getnames031 = "Damn Worthless";
-const string CONST_getnames030 = "[Darn] Worthless";
-const string CONST_getnames029 = "Peace Prize Winner";
-const string CONST_getnames028 = "Peacemaker";
-const string CONST_getnames027 = "Great Person";
-const string CONST_getnames026 = "Upstanding Citizen";
-const string CONST_getnames025 = "Respected";
-const string CONST_getnames024 = "Hard Working";
-const string CONST_getnames023 = "Non-Liberal";
-const string CONST_getnames022 = "Non-Liberal Punk";
-const string CONST_getnames018 = "Evil Incarnate";
-const string CONST_getnames017 = "Arch-Conservative";
-const string CONST_getnames016 = "Insane Vigilante";
-const string CONST_getnames015 = "Heartless Bastard";
-const string CONST_getnames014 = "Heartless [Jerk]";
-const string CONST_getnames013 = "Stubborn as Hell";
-const string CONST_getnames012 = "Stubborn as [Heck]";
-const string CONST_getnames011 = "Wrong-Thinker";
-const string CONST_getnames010 = "Mindless Conservative";
-const string CONST_getnames009 = "Conservative Punk";
-const string CONST_getnames008 = "Conservative Dregs";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -88,17 +53,9 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/newcreature.h"
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
 vector<string> city_names;
 std::string gettitle(const int align, const int juice)
 {
-	extern short lawList[LAWNUM];
 	if (align == -1)
 	{
 		if (juice <= -50)
@@ -184,7 +141,7 @@ map<short, string> getLawString;
 
 map<short, string> getLawFlagString;
 map<short, map<short, string> > getLawFlagStringFull;
-string findingBugs;
+//string findingBugs;
 
 // shortname defaults to false
 vector<string> getMonth;
@@ -198,16 +155,14 @@ std::string getmonth(int month, bool shortname)
 		return getMonth[22 + (shortname ? 0 : 1)];
 	}
 }
-const string names = "names\\";
-const string mostlyendings = "mostlyendings\\";
 vector<file_and_text_collection> get_names_text_file_collection = {
 	/*getnames.cpp*/
 	customText(&city_names, names + CONST_getnames044),
 	customText(&getMonth, mostlyendings + CONST_getnames045),
 };
 map<short, string> getAlignString;
-string moderateLC;
-string buggyString;
+//string moderateLC;
+//string buggyString;
 std::string getalign(short alignment, bool capitalize)
 {
 	if (capitalize == false && alignment == ALIGN_MODERATE) {

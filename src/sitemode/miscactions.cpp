@@ -1,66 +1,5 @@
+#define	MISCACTIONS_CPP
 #include "../includes.h"
-const string CONST_miscactions077 = "You'll have to come back later.";
-const string CONST_miscactions076 = "There's nobody left to carry the others.";
-const string CONST_miscactions074 = "There's nobody left to carry ";
-const string CONST_miscactions073 = " will have to haul a Liberal.";
-const string CONST_miscactions072 = "so ";
-const string CONST_miscactions071 = " from the Conservatives.";
-const string CONST_miscactions070 = "You've rescued ";
-const string CONST_miscactions067 = "at their desks.  The Squad might yet escape.";
-const string CONST_miscactions066 = "The show was so good that security listened to it ";
-const string CONST_miscactions065 = " that security watched it ";
-const string CONST_miscactions064 = "entertaining";
-const string CONST_miscactions063 = "hilarious";
-const string CONST_miscactions062 = "The show was so ";
-const string CONST_miscactions061 = "after the show!";
-const string CONST_miscactions060 = "Security is waiting for the Squad ";
-const string CONST_miscactions059 = "They no longer feel alienated.";
-const string CONST_miscactions058 = "Moderates at the station appreciated the show.";
-const string CONST_miscactions057 = ", the hostage, is kept off-air.";
-const string CONST_miscactions056 = " is forced on to ";
-const string CONST_miscactions055 = "The hostage ";
-const string CONST_miscactions054 = "It was the best hour of AM radio EVER.";
-const string CONST_miscactions053 = "It was thought-provoking, even humorous.";
-const string CONST_miscactions052 = "The Squad put on a good show.";
-const string CONST_miscactions051 = "The show was all right.";
-const string CONST_miscactions050 = "It is mediocre radio.";
-const string CONST_miscactions049 = "It is a very boring hour.";
-const string CONST_miscactions048 = "The show really sucks.";
-const string CONST_miscactions047 = "The Squad sounds wholly insane.";
-const string CONST_miscactions046 = "It was the best hour of Cable TV EVER.";
-const string CONST_miscactions042 = "It is mediocre TV.";
-const string CONST_miscactions039 = "The Squad looks completely insane.";
-const string CONST_miscactions038 = "The Squad takes control of the microphone and ";
-const string CONST_miscactions037 = "The Squad steps in front of the cameras and ";
-const string CONST_miscactions036 = "the broadcast never happens.";
-const string CONST_miscactions035 = "The Conservatives in the room hurry the Squad, so ";
-const string CONST_miscactions034 = "Including the BLIND HACKER you brought.";
-const string CONST_miscactions033 = "You can't find anyone to do the job.";
-const string CONST_miscactions032 = " bypass the vault's electronic lock.";
-const string CONST_miscactions031 = " bypass the supercomputer security.";
-const string CONST_miscactions030 = " see how to";
-const string CONST_miscactions029 = " couldn't";
-const string CONST_miscactions028 = "!";
-const string CONST_miscactions027 = " despite being blind";
-const string CONST_miscactions026 = " disabled the second layer of security";
-const string CONST_miscactions025 = " burned a disk of top secret files";
-const string CONST_miscactions024 = " has";
-const string CONST_miscactions022 = " kicks the door";
-const string CONST_miscactions021 = " rams into the door";
-const string CONST_miscactions020 = "Alarms go off!";
-const string CONST_miscactions018 = "kicks in the door";
-const string CONST_miscactions017 = "rams open the door";
-const string CONST_miscactions016 = "smashes in the door";
-const string CONST_miscactions015 = "uses a crowbar on the door";
-const string CONST_miscactions013 = " can't figure the lock out.";
-const string CONST_miscactions012 = " is close, but can't quite get the lock open.";
-const string CONST_miscactions010 = "cracks the combo locks";
-const string CONST_miscactions009 = "unlocks the cell";
-const string CONST_miscactions008 = "opens the armory";
-const string CONST_miscactions007 = "cracks the safe";
-const string CONST_miscactions006 = "unlocks the cage";
-const string CONST_miscactions005 = "unlocks the door";
-const string CONST_miscactions004 = "was_abused.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -87,72 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locationsEnums.h"
-//#include "../sitemode/sitedisplay.h"
-void clearmessagearea(bool redrawmaparea = true);
-#include "../log/log.h"
-//#include "../common/commondisplay.h"
-void printparty();
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-// for void criminalizeparty
-//#include "../daily/daily.h"
-char securityable(int type);
-   
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
- vector<string> was_abused;
-#include "../customMaps.h"
- const string activities = "activities\\";
- vector<file_and_text_collection> misc_activities_text_file_collection = {
-	 /*miscactions.cpp*/
-	 customText(&was_abused, activities + CONST_miscactions004),
- };
- extern string singleDot;
- extern string singleSpace;
-void fillEncounter(CreatureTypes c, int numleft);
-map<short, string> discussIssues;
-map<short, string> discussesIssues;
-
-void whoAreWaitingForRescue(vector<DeprecatedCreature *>& waiting_for_rescue, int cursite, short special);
-//vector<string> was_abused;
-//vector<file_and_text_collection> misc_activities_text_file_collection = {
-	/*miscactions.cpp*/
-	//customText(&was_abused, activities + CONST_miscactions004),
-//};
-void fillEncounter(CreatureTypes c, int numleft);
-//map<short, string> discussIssues;
-//map<short, string> discussesIssues;
-map<int, CheckDifficulty> unlockDifficulty = {
-	map<int, CheckDifficulty>::value_type(UNLOCK_CAGE,        DIFFICULTY_VERYEASY),
-	map<int, CheckDifficulty>::value_type(UNLOCK_CAGE_HARD,   DIFFICULTY_AVERAGE),
-	map<int, CheckDifficulty>::value_type(UNLOCK_CELL,        DIFFICULTY_FORMIDABLE),
-	map<int, CheckDifficulty>::value_type(UNLOCK_ARMORY,      DIFFICULTY_HEROIC),
-	map<int, CheckDifficulty>::value_type(UNLOCK_SAFE,        DIFFICULTY_HEROIC),
-	map<int, CheckDifficulty>::value_type(UNLOCK_VAULT,       DIFFICULTY_HEROIC),
-};
-short getCurrentSite();
-#include "miscactions.h"
 UnlockAttempt unlock(short type)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short fieldskillrate;
 	int difficulty = 0;
 	if (type == UNLOCK_DOOR) {
 		if (securityable(LocationsPool::getInstance().getLocationType(getCurrentSite())) == 1)
@@ -299,14 +174,9 @@ UnlockAttempt unlock(short type)
 	}
 	return NEVERMIND;
 }
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
 /* bash attempt */
 UnlockAttempt bash()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short sitealarmtimer;
 
 	int difficulty = 0;
 	bool crowable = false;
@@ -434,8 +304,6 @@ UnlockAttempt bash()
 /* computer hack attempt */
 UnlockAttempt hack(short type)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	int difficulty = 0;
 	switch (type)
 	{
@@ -517,14 +385,9 @@ UnlockAttempt hack(short type)
 	}
 	return NEVERMIND;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 /* run a broadcast */
 char run_broadcast(bool tv_broadcase)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-
-	extern short sitealienate;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	setSiteAlarmOne();
 	int enemy = 0;
@@ -715,12 +578,9 @@ char run_broadcast(bool tv_broadcase)
 	}
 	return 1;
 }
-// #include "../common/creaturePoolCreature.h"
 /* rescues people held at the activeparty's current location */
 void partyrescue(short special)
 {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
 	int freeslots = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -842,7 +702,6 @@ void partyrescue(short special)
 /* everybody reload! */
 void reloadparty(bool wasteful)
 {
-	extern Deprecatedsquadst *activesquad;
 	for (int p = 0; p < 6; p++)
 	{
 		if (activesquad->squad[p] == NULL)continue;

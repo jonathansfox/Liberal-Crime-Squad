@@ -1,181 +1,5 @@
+#define	SITEMODE_CPP
 #include "../includes.h"
-const string CONST_sitemode179 = "-D";
-const string CONST_sitemode178 = "                                                                                ";
-const string CONST_sitemode177 = "C - Reflect on your Conservative ineptitude";
-const string CONST_sitemode176 = "R - Reorganize";
-const string CONST_sitemode175 = "R - Release hostage";
-const string CONST_sitemode174 = "R - Release oppressed";
-const string CONST_sitemode173 = "F - Fight!";
-const string CONST_sitemode172 = "E - Equip";
-const string CONST_sitemode171 = "V - Evade";
-const string CONST_sitemode170 = "V - Run";
-const string CONST_sitemode169 = "V - Sneak";
-const string CONST_sitemode168 = "U - Use";
-const string CONST_sitemode167 = "U - Graffiti";
-const string CONST_sitemode166 = "T - Talk";
-const string CONST_sitemode165 = "K - Kidnap";
-const string CONST_sitemode164 = "L - Reload";
-const string CONST_sitemode163 = "S - Wait";
-const string CONST_sitemode162 = "M - Map";
-const string CONST_sitemode161 = "N - Options";
-const string CONST_sitemode160 = "G - Get Loot";
-const string CONST_sitemodeXRL = "J - Reload Empty";
-const string CONST_sitemode159 = "W,A,D,X - Move";
-const string CONST_sitemode158 = ": CONSERVATIVES SUSPICIOUS";
-const string CONST_sitemode157 = ": CONSERVATIVES ALARMED";
-const string CONST_sitemode156 = ": ALIENATED EVERYONE";
-const string CONST_sitemode155 = ": ALIENATED MASSES";
-const string CONST_sitemode154 = ": CONSERVATIVE REINFORCEMENTS INCOMING";
-const string CONST_sitemode153 = ": POLICE RESPONDING";
-const string CONST_sitemode152 = ": DEATH SQUADS RESPONDING";
-const string CONST_sitemode151 = ": CCS VIGILANTIES RESPONDING";
-const string CONST_sitemode150 = ": GANG MEMBERS RESPONDING";
-const string CONST_sitemode149 = ": ANGRY MOB RESPONDING";
-const string CONST_sitemode148 = ": MERCENARIES RESPONDING";
-const string CONST_sitemode147 = ": AGENTS RESPONDING";
-const string CONST_sitemode146 = ": SECRET SERVICE RESPONDING";
-const string CONST_sitemode145 = ": SOLDIERS AND TANKS RESPONDING";
-const string CONST_sitemode144 = ", Level ";
-const string CONST_sitemode143 = ": Escape or Engage";
-const string CONST_sitemode141 = "Prisoner";
-const string CONST_sitemode140 = "There is a crowd of people passing by.";
-const string CONST_sitemode139 = "There is a crowd of people up ahead.";
-const string CONST_sitemode138 = "There is a group of people passing by.";
-const string CONST_sitemode137 = "There is a group of people up ahead.";
-const string CONST_sitemode136 = "There are a few people passing by.";
-const string CONST_sitemode135 = "There are a few people up ahead.";
-const string CONST_sitemode134 = "There is someone passing by.";
-const string CONST_sitemode133 = "There is someone up ahead.";
-const string CONST_sitemode132 = "The landlord is in.";
-const string CONST_sitemode131 = "The landlord is out of the office.";
-const string CONST_sitemode130 = "The CEO's study lies empty.";
-const string CONST_sitemode129 = "The CEO is in his study.";
-const string CONST_sitemode128 = "The CEO must have fled to a panic room.";
-const string CONST_sitemode127 = "[Rats!] ";
-const string CONST_sitemode126 = "Damn! ";
-const string CONST_sitemode125 = "There are people sitting here.";
-const string CONST_sitemode124 = "The bench is empty.";
-const string CONST_sitemode123 = "The table is occupied.";
-const string CONST_sitemode122 = "Some people are hiding under the table.";
-const string CONST_sitemode121 = "The computer is occupied.";
-const string CONST_sitemode120 = "The computer has been unplugged.";
-const string CONST_sitemode119 = "the power of your Liberal Convictions!";
-const string CONST_sitemode118 = "The Conservatives have shrunk back under ";
-const string CONST_sitemode117 = "The CCS has been broken!";
-const string CONST_sitemode116 = " has left ";
-const string CONST_sitemode115 = "The squad sneaks past the conservatives!";
-const string CONST_sitemode114 = "You find: ";
-const string CONST_sitemode113 = " you, feeling safer getting out alone.";
-const string CONST_sitemode112 = "One Liberal leaves";
-const string CONST_sitemode111 = "The Liberal leaves";
-const string CONST_sitemode110 = "Some leave";
-const string CONST_sitemode109 = "They all leave";
-const string CONST_sitemode108 = " from the Conservatives.";
-const string CONST_sitemode107 = "an Oppressed Liberal";
-const string CONST_sitemode106 = "some Oppressed Liberals";
-const string CONST_sitemode105 = "You free ";
-const string CONST_sitemode102 = "You have to deal with the enemies first.";
-const string CONST_sitemode101 = " won't talk to you.";
-const string CONST_sitemode100 = "To whom?";
-const string CONST_sitemode099 = "Bluff";
-const string CONST_sitemode098 = "Dating";
-const string CONST_sitemode097 = "Issues";
-const string CONST_sitemode096 = "Which Liberal will speak?";
-const string CONST_sitemode095 = "[ ] M - Music";
-const string CONST_sitemode094 = "[ ] E - Encounter warnings";
-const string CONST_sitemode093 = "Site mode options";
-const string CONST_sitemode092 = "Which way?  (W,A,D, and X to move, ENTER to abort)";
-const string CONST_sitemode091 = "It opens easily. The alarm goes off!";
-const string CONST_sitemode090 = "The alarm goes off!";
-const string CONST_sitemode089 = "Force it open? (Yes or No)";
-const string CONST_sitemode088 = "It's locked from the other side.";
-const string CONST_sitemode087 = "locked.";
-const string CONST_sitemode086 = "still ";
-const string CONST_sitemode085 = "You shake the handle but it is ";
-const string CONST_sitemode084 = "Your tampering sets off the alarm!";
-const string CONST_sitemode083 = "Try to pick the lock? (Yes or No)";
-const string CONST_sitemode082 = "You try the door, but it is locked.";
-const string CONST_sitemode081 = "Try the door anyway? (Yes or No)";
-const string CONST_sitemode080 = "EMERGENCY EXIT ONLY. ALARM WILL SOUND.";
-const string CONST_sitemode079 = "This door appears to be wired up to an alarm.";
-const string CONST_sitemode078 = "The vault door is impenetrable.";
-const string CONST_sitemode077 = "too hot";
-const string CONST_sitemode076 = "Your hostage is free.";
-const string CONST_sitemode075 = "Your hostages are free.";
-const string CONST_sitemode074 = "The police subdue and arrest the squad.";
-
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-const string tag_LOOT = "LOOT";
-const string tag_LOOT_COMPUTER = "LOOT_COMPUTER";
-const string tag_LOOT_CHEAPJEWELERY = "LOOT_CHEAPJEWELERY";
-const string tag_LOOT_TRINKET = "LOOT_TRINKET";
-const string tag_LOOT_SILVERWARE = "LOOT_SILVERWARE";
-const string tag_LOOT_CELLPHONE = "LOOT_CELLPHONE";
-const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
-const string tag_ARMOR_SECURITYUNIFORM = "ARMOR_SECURITYUNIFORM";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
-const string tag_ARMOR_CHEAPSUIT = "ARMOR_CHEAPSUIT";
-const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string tag_ARMOR_TRENCHCOAT = "ARMOR_TRENCHCOAT";
-const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
-const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
-const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
-const string tag_WEAPON_REVOLVER_38 = "WEAPON_REVOLVER_38";
-const string tag_WEAPON_REVOLVER_44 = "WEAPON_REVOLVER_44";
-const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
-const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
-const string tag_LOOT_PDA = "LOOT_PDA";
-const string tag_LOOT_MICROPHONE = "LOOT_MICROPHONE";
-const string tag_LOOT_CABLENEWSFILES = "LOOT_CABLENEWSFILES";
-const string tag_LOOT_AMRADIOFILES = "LOOT_AMRADIOFILES";
-const string tag_LOOT_FAMILYPHOTO = "LOOT_FAMILYPHOTO";
-const string tag_LOOT_WATCH = "LOOT_WATCH";
-const string tag_ARMOR_BONDAGEGEAR = "ARMOR_BONDAGEGEAR";
-const string tag_ARMOR_EXPENSIVESUIT = "ARMOR_EXPENSIVESUIT";
-const string tag_ARMOR_EXPENSIVEDRESS = "ARMOR_EXPENSIVEDRESS";
-const string tag_LOOT_CORPFILES = "LOOT_CORPFILES";
-const string tag_LOOT_CHEMICAL = "LOOT_CHEMICAL";
-const string tag_LOOT_FINECLOTH = "LOOT_FINECLOTH";
-const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
-const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
-const string tag_WEAPON_SHANK = "WEAPON_SHANK";
-const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
-const string tag_LOOT_JUDGEFILES = "LOOT_JUDGEFILES";
-const string tag_LOOT_POLICERECORDS = "LOOT_POLICERECORDS";
-const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
-const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
-const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
-const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
-const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
-const string tag_WEAPON_NIGHTSTICK = "WEAPON_NIGHTSTICK";
-const string tag_LOOT_LABEQUIPMENT = "LOOT_LABEQUIPMENT";
-const string tag_LOOT_RESEARCHFILES = "LOOT_RESEARCHFILES";
-const string tag_LOOT_EXPENSIVEJEWELERY = "LOOT_EXPENSIVEJEWELERY";
-const string tag_ARMOR_BLACKROBE = "ARMOR_BLACKROBE";
-const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
-const string tag_ARMOR_BLACKDRESS = "ARMOR_BLACKDRESS";
-const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
-const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
-const string tag_WEAPON_COMBATKNIFE = "WEAPON_COMBATKNIFE";
-const string tag_WEAPON_BASEBALLBAT = "WEAPON_BASEBALLBAT";
-const string tag_WEAPON_DAISHO = "WEAPON_DAISHO";
-const string tag_ARMOR_CLOWNSUIT = "ARMOR_CLOWNSUIT";
-const string tag_ARMOR_DONKEYSUIT = "ARMOR_DONKEYSUIT";
-const string tag_ARMOR_ELEPHANTSUIT = "ARMOR_ELEPHANTSUIT";
-const string tag_ARMOR_CHEAPDRESS = "ARMOR_CHEAPDRESS";
-const string tag_WEAPON_GUITAR = "WEAPON_GUITAR";
-const string tag_LOOT_DIRTYSOCK = "LOOT_DIRTYSOCK";
-const string tag_LOOT_KIDART = "LOOT_KIDART";
-const string tag_ARMOR_TOGA = "ARMOR_TOGA";
-const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
-const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
-const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
-const string tag_WEAPON_CROWBAR = "WEAPON_CROWBAR";
-const string tag_X = "X";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -201,134 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-string singleSpace = " ";
-const string blankString = "";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-//#include "cursesgraphics.h"
-#define CH_FULL_BLOCK 0xdb
-#define CH_UPWARDS_ARROW 0x18
-#define CH_DOWNWARDS_ARROW 0x19
-#define CH_BLACK_SMILING_FACE 0x02
-#define CH_YEN_SIGN 0x9d
-#define CH_BOX_DRAWINGS_DOUBLE_VERTICAL 0xba
-#define CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL 0xcd
-#define CH_WHITE_SMILING_FACE 0x01
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../basemode/baseactions.h"
-// for orderparty
-#include "../basemode/reviewmode.h"
-#include "advance.h"
-//#include "sitemode/mapspecials.h"
-void special_bouncer_assess_squad();
-void special_bouncer_greet_squad();
-void special_lab_cosmetics_cagedanimals();
-void special_readsign(int sign);
-void special_nuclear_onoff();
-void special_lab_genetic_cagedanimals();
-void special_policestation_lockup();
-void special_courthouse_lockup();
-void special_courthouse_jury();
-void special_prison_control(short prison_control_type);
-void special_intel_supercomputer();
-void special_sweatshop_equipment();
-void special_polluter_equipment();
-void special_house_photos();
-void special_corporate_files();
-void special_radio_broadcaststudio();
-void special_news_broadcaststudio();
-void special_graffiti();
-void special_armory();
-void special_display_case();
-void special_security_checkpoint();
-void special_security_metaldetectors();
-void special_security_secondvisit();
-void special_bank_teller();
-void special_bank_money();
-void special_bank_vault();
-void special_ccs_boss();
-void special_oval_office();
-#include "stealth.h"
-#include "miscactions.h"
-void reloadparty(bool wasteful = false);
-#include "sitedisplay.h"
-//#include "sitemode/newencounter.h"
-void prepareencounter(short type, char sec);
-char addsiegeencounter(char type);
-#include "../items/lootTypePoolItem.h"
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-// for printparty()
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-// for squadsize
-#include "../common/translateid.h"
-// for  id_getcar
-//#include "common/equipment.h"
-/* review squad equipment */
-void equip(vector<Item *> &loot, int loc);
-//#include "daily/daily.h"
-/* daily - returns true if the site type supports high security */
-char securityable(int type);
-#include "../daily/siege.h"
-//for void conquertext();
-#include "../combat/fight.h"
-#include "../combat/fightCreature.h"  
-//for void enemyattack();
-#include "../combat/haulkidnap.h"
-#include "../combat/haulkidnapCreature.h"
-//for void kidnapattempt();
-#include "../combat/chase.h"
-//for void makechasers(long sitetype,long sitecrime);
-
-int getEncounterAnimalGloss(const int e);
-bool get_encounter_cantbluff_is_zero(const int e);
-bool get_encounter_cantbluff_is_two(const int e);
-bool get_encounter_cantbluff_is_one(const int e);
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
-bool isThereNoActivesquad();
-void resetSiteAlarm();
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
-#include "../common/creaturePoolCreature.h"
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
-#include "../common/musicClass.h"
-extern string closeParenthesis;
-extern string undefined;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string enter_done;
-extern string chooseALiberalTo;
-extern string spaceDashSpace;
-extern string singleDot;
-extern string change_squad_order;
-extern string spaceParanthesisDollar;
-void emptyEncounter();
-void delete_and_clear_groundloot();
-bool isThereGroundLoot();
-extern string singleSpace;
-void deleteVehicle(int carid);
-void deleteVehicles(vector<Vehicle *>& carid);
 void fight_subdued()
 {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern chaseseqst chaseseq;
 	//int p;
 	//int ps=find_police_station(chaseseq.location);
 	deleteVehicles(chaseseq.friendcar);
@@ -373,7 +71,6 @@ void fight_subdued()
 /* marks the area around the specified tile as explored */
 void knowmap(const int locx, const int locy, const int locz)
 {
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	levelmap[locx][locy][locz].flag |= SITEBLOCK_KNOWN;
 	if (locx > 0)levelmap[locx - 1][locy][locz].flag |= SITEBLOCK_KNOWN;
 	if (locx < MAPX - 1)levelmap[locx + 1][locy][locz].flag |= SITEBLOCK_KNOWN;
@@ -398,17 +95,12 @@ void knowmap(const int locx, const int locy, const int locz)
 }
 
 void knowmap() {
-	extern coordinatest loc_coord;
 	knowmap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 }
 short getCurrentSite();
 /* site - determines spin on site news story, CONST_sitemode077 timer */
 void resolvesite()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Deprecatednewsstoryst *sitestory;
-	extern short sitealienate;
 	if (sitealienate) sitestory->positive = 0;
 	//removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably
 	//notice later on that all their stuff has been stolen or whatever.
@@ -447,14 +139,6 @@ void resolvesite()
 /* behavior when the player bumps into a door in sitemode */
 void open_door(bool restricted)
 {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern coordinatest loc_coord;
-	extern Deprecatednewsstoryst *sitestory;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	bool locked = levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_LOCKED,
 		alarmed = levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_ALARMED,
 		vault_door = levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_METAL,
@@ -623,10 +307,6 @@ int whichWay() {
 	return c;
 }
 void pressedKeyN() {
-	extern MusicClass music;
-	extern bool mapshowing;
-	extern bool encounterwarnings;
-
 	mapshowing = false;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
@@ -655,11 +335,7 @@ void pressedKeyN() {
 
 }
 void pressedKeyU(const int enemy) {
-	extern Deprecatedsquadst *activesquad;
-
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	{
+	
 		if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
 		{
 			switch (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special)
@@ -727,7 +403,7 @@ void pressedKeyU(const int enemy) {
 				}
 			}
 		}
-	}
+	
 }
 void pressedKeyL() {
 
@@ -738,12 +414,7 @@ void pressedKeyL() {
 
 }
 
-enum INDEX_WITH_SPECIAL_MEANING {
-	MULTIPLE_LIVING_MEMBERS = -2,
-	NO_VALID_MEMBERS = -1,
-};
 int findLivingSquadMemberIndex() {
-	extern Deprecatedsquadst *activesquad;
 	int forcesp = NO_VALID_MEMBERS;
 	for (int p = 0; p < 6; p++)
 	{
@@ -758,7 +429,6 @@ int findLivingSquadMemberIndex() {
 	}
 	return forcesp;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 int findEncounterCreatureWhoCanBeBluffed() {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	
@@ -778,9 +448,6 @@ int findEncounterCreatureWhoCanBeBluffed() {
 	}
 	return  forcetk;
 }
-char haveActiveSquadTalk(const int sp, const int tk);
-void printActiveSquadTalkOptions();
-bool activeSquadMemberIsAliveAndExists(const int sp);
 int pressedKeyTWithMultipleLivingMembers() {
 	int sp = NO_VALID_MEMBERS;
 	clearcommandarea();
@@ -806,8 +473,6 @@ int pressedKeyTWithMultipleLivingMembers() {
 	}
 	return sp;
 }
-CantBluffAnimal encounterGetCantBluffAnimal(const int t);
-CreatureBio encounterGetCreatureBio(const int t);
 int pressedKeyTAndMeantIt(const int enemy, const int forcetk, const int sp) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int tk = NO_VALID_MEMBERS;
@@ -948,8 +613,6 @@ void pressedKeyT(const int enemy, int& encounter_timer) {
 
 }
 void pressedKeyM() {
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	for (int x = 0; x < MAPX; x++)
 	{
 		for (int y = 0; y < MAPY; y++)
@@ -1041,9 +704,7 @@ void pressedKeyM() {
 	pressAnyKey();
 
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 void pressedKeyF(int& encounter_timer) {
-	extern Deprecatedsquadst *activesquad;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	// Don't subdue squad if someone is still in good condition.
 	bool cannotsubdue = false;
@@ -1078,18 +739,8 @@ void pressedKeyF(int& encounter_timer) {
 	}
 
 }
-int checkForPeopleWhoCanRecruit();
-void addNewRecruit(int i, int e);
-int countactivesquadhostages();
-void assembleActiveSquad();
-/* base - review - assemble a squad */
-void criminalizeEncounterPrisonerEscape(const int e);
-void duplicateEncounterMember(const int e);
-void unpersonLastEncounterMember();
 void pressedKeyR(const int freeable, const int enemy) {
-	extern Log gamelog;
 	const int hostages = countactivesquadhostages();
-	extern short sitealarmtimer;
 	int partysize = activesquadSize();
 	const int libnum = CreaturePool::getInstance().countLiberals(getCurrentSite());
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
@@ -1103,8 +754,8 @@ void pressedKeyR(const int freeable, const int enemy) {
 		short followers = 0, actgot = 0;
 		if (enemy)setSiteAlarmOne();
 		bool freed;
-		do
-		{
+		//do
+		//{
 			bool flipstart = 0;
 			freed = 0;
 			for (int e = 0; e < ENCMAX; e++)
@@ -1146,7 +797,7 @@ void pressedKeyR(const int freeable, const int enemy) {
 				if (time < 1)time = 1;
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 			}
-		} while (freed);
+		//} while (freed);
 		if (followers > 0)
 		{
 			clearmessagearea();
@@ -1353,9 +1004,6 @@ string getNewLootFromSITE_RESIDENTIAL_TENEMENT() {
 
 	return newLootType;
 }
-void getRandomLoot(int cursite);
-Weapon* spawnNewWeapon(string newWeaponType);
-Armor* spawnNewArmor(string newArmorType);
 void getGroundLootFromTenement(string &newLootType, string &newWeaponType, string &newArmorType) {
 	if (!LCSrandom(25))
 	{
@@ -1373,10 +1021,6 @@ void getGroundLootFromTenement(string &newLootType, string &newWeaponType, strin
 }
 void getGroundLootFromCCS(string &newLootType, string &newWeaponType, string &newArmorType) {
 	//storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
-	string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_REVOLVER_38, tag_WEAPON_REVOLVER_44,
-		tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
-	string rndArmors[] = { tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT, tag_ARMOR_WORKCLOTHES,
-		tag_ARMOR_SECURITYUNIFORM, tag_ARMOR_CIVILLIANARMOR, tag_ARMOR_ARMYARMOR, tag_ARMOR_HEAVYARMOR };
 	switch (LCSrandom(3))
 	{
 	case 0:
@@ -1438,7 +1082,6 @@ void getGroundLootFromArmyBase(string &newLootType, string &newWeaponType, strin
 	else newLootType = getNewLootFromArmy();
 }
 void getGroundLootFromPoliceStation(string &newLootType, string &newWeaponType, string &newArmorType) {
-	extern short lawList[LAWNUM];
 
 	if (!LCSrandom(25))
 	{
@@ -1457,7 +1100,6 @@ void getGroundLootFromPoliceStation(string &newLootType, string &newWeaponType, 
 	else newLootType = getNewLootFromPolice();
 }
 void getGroundLootFromUpscaleApartment(string &newLootType, string &newWeaponType, string &newArmorType) {
-	extern short lawList[LAWNUM];
 
 	if (!LCSrandom(30))
 	{
@@ -1490,12 +1132,9 @@ void getGroundLootFromApartment(string &newLootType, string &newWeaponType, stri
 	}
 	else newLootType = getNewLootFromApartment();
 }
-void giveActiveSquadThisLoot(Item* de);
 void pickupAndPrintNewLoot(const string newLootType, const string newWeaponType, const string newArmorType) {
-	extern Log gamelog;
 
 	Item *item;
-	extern Deprecatedsquadst *activesquad;
 	item = NULL;
 	if (len(newLootType))
 	{
@@ -1526,8 +1165,6 @@ void pickupAndPrintNewLoot(const string newLootType, const string newWeaponType,
 }
 void getThatGroundLoot() {
 
-	extern short sitealarmtimer;
-	extern short sitetype;
 
 	int time = 20 + LCSrandom(10);
 	if (time < 1)time = 1;
@@ -1602,15 +1239,6 @@ void getThatGroundLoot() {
 	pickupAndPrintNewLoot(newLootType, newWeaponType, newArmorType);
 }
 void pressedKeyG(const int enemy, int& encounter_timer) {
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern short lawList[LAWNUM];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<Item *> groundloot;
-
-	extern coordinatest loc_coord;
-	extern int sitecrime;
 	if ((isThereGroundLoot() || (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_LOOT)))
 	{
 		bool tookground = 0;
@@ -1660,11 +1288,7 @@ void pressedKeyG(const int enemy, int& encounter_timer) {
 		encounter_timer++;
 	}
 }
-void putBackSpecials(const int olocx, const int olocy, const int olocz);
 void enemyAttemptsFreeShots(int& encounter_timer) {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern short fieldskillrate;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	//ENEMIES SHOULD GET FREE SHOTS NOW
@@ -1734,10 +1358,6 @@ void enemyAttemptsFreeShots(int& encounter_timer) {
 	else disguisecheck(encounter_timer);
 }
 void bailUponVictory() {
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
 	music.play(MUSIC_CONQUER);
 	if (LocationsPool::getInstance().isThisUnderAttack(getCurrentSite()))sitestory->type = NEWSSTORY_SQUAD_DEFENDED;
 	else sitestory->type = NEWSSTORY_SQUAD_BROKESIEGE;
@@ -1775,15 +1395,6 @@ void bailUponVictory() {
 	escapesiege(1);
 }
 void bailOnBase() {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern short postalarmtimer;
-	extern short sitetype;
-	extern int sitecrime;
-
-	extern chaseseqst chaseseq;
-	extern char showcarprefs;
-	extern Deprecatednewsstoryst *sitestory;
 	// Seperate logging message.
 	gamelog.record(activesquad->name);
 	gamelog.record(CONST_sitemode116);
@@ -1886,11 +1497,6 @@ void bailOnBase() {
 	}
 }
 void bailUponDefeatCCS() {
-	extern Log gamelog;
-	extern char ccs_kills;
-	extern Deprecatedsquadst *activesquad;
-	extern char endgamestate;
-	extern MusicClass music;
 	music.play(MUSIC_CONQUER);
 	//DEAL WITH PRISONERS AND STOP BLEEDING
 	for (int p = 0; p < 6; p++)
@@ -1922,8 +1528,6 @@ void bailUponDefeatCCS() {
 	conquertextccs();
 }
 int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern coordinatest loc_coord;
 
 	if (loc_coord.locx != olocx || loc_coord.locy != olocy || loc_coord.locz != olocz)
 		emptyEncounter();
@@ -2083,11 +1687,6 @@ int attemptResolveSiege(const int olocx, const int olocy, const int olocz) {
 	return 0;
 }
 void encounterCafeComputer() {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitetype;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() || sitealienate)
 	{
@@ -2111,12 +1710,6 @@ void encounterCafeComputer() {
 	}
 }
 void encounterRestaurantTable() {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitetype;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
 	if (isThereASiteAlarm() || sitealienate)
 	{
 		clearmessagearea();
@@ -2139,11 +1732,6 @@ void encounterRestaurantTable() {
 	}
 }
 void encounterParkBench() {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitetype;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() || sitealienate)
 	{
@@ -2165,15 +1753,7 @@ void encounterParkBench() {
 		prepareencounter(sitetype, 0);
 	}
 }
-void spawnCreatureCEO();
 void encounterSpecialHouseCEO() {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern UniqueCreatures uniqueCreatures;
-
-	extern short lawList[LAWNUM];
 
 	if ((isThereASiteAlarm() || sitealienate || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) &&
 		uniqueCreatures.CEO_state == UNIQUECREATURE_ALIVE)
@@ -2216,10 +1796,6 @@ void encounterSpecialHouseCEO() {
 	}
 }
 void encounterApartmentLandlord() {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	if (isThereASiteAlarm() || sitealienate ||
@@ -2245,11 +1821,6 @@ void encounterApartmentLandlord() {
 	}
 }
 void encounterOtherSpecial(const int olocx, const int olocy, const int olocz) {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern bool encounterwarnings;
-	extern short sitetype;
-
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	bool squadmoved = (olocx != loc_coord.locx || olocy != loc_coord.locy || olocz != loc_coord.locz);
@@ -2366,11 +1937,6 @@ void pressedKeyShiftL() {
 // return true if leaving site
 int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz, const char c, const int encsize, char& hostcheck) {
 
-	extern coordinatest loc_coord;
-	extern short postalarmtimer;
-	extern char showcarprefs;
-	extern int ccs_boss_kills;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 
@@ -2463,12 +2029,6 @@ void partyIsAliveOnSite(const int enemy,
 	const int hostages = countactivesquadhostages();
 	const int partysize = activesquadSize();
 	const int libnum = CreaturePool::getInstance().countLiberals(getCurrentSite());
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short party_status;
-	extern coordinatest loc_coord;
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	if (!enemy || !isThereASiteAlarm())set_color_easy(WHITE_ON_BLACK);
@@ -2586,17 +2146,6 @@ void partyIsAliveOnSite(const int enemy,
 }
 void onSiteButNoSiege() {
 
-	extern Log gamelog;
-	extern MusicClass music;
-	extern short postalarmtimer;
-	extern short sitealarmtimer;
-	extern short party_status;
-	extern int sitecrime;
-	extern coordinatest loc_coord;
-
-	extern short sitealienate;
-	extern short lawList[LAWNUM];
-
 	if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
 	else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
@@ -2648,9 +2197,6 @@ void onSiteButNoSiege() {
 	else music.play(MUSIC_SITEMODE);
 }
 void playSiegeMusic() {
-	extern MusicClass music;
-	extern coordinatest loc_coord;
-
 	music.play(MUSIC_DEFENSE);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationNameWithGetnameMethod(getCurrentSite(), -1, true));
@@ -2660,13 +2206,6 @@ void playSiegeMusic() {
 }
 void partyPerformsAction(const int c, const bool canMove, const int enemy, const int talkers, int &encounter_timer) {
 
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern bool mapshowing;
-	extern short party_status;
-	extern coordinatest loc_coord;
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 
@@ -2809,12 +2348,6 @@ bool canactivesquadmove(int& c, const int enemy) {
 }
 void checkForHostageScream(char &hostcheck) {
 
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern coordinatest loc_coord;
-	extern short offended_amradio;
-	extern short offended_cablenews;
-
 	//PRINT SITE MAP
 	printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 	//CHECK IF YOU HAVE A SQUIRMING AMATEUR HOSTAGE
@@ -2854,8 +2387,6 @@ void checkForHostageScream(char &hostcheck) {
 	}
 
 }
-void killActiveSquad();
-int getactivesquadCarID(const int p);
 void destroyActiveCars() {
 
 	if (!LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
@@ -2869,7 +2400,6 @@ void destroyActiveCars() {
 	}
 }
 void partyIsDeadOnSite() {
-	extern Log gamelog;
 	//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
 	destroyActiveCars();
 	killActiveSquad();
@@ -2877,26 +2407,13 @@ void partyIsDeadOnSite() {
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(9, 1, CONST_sitemode177);
 }
-void set_sitestory_type();
-int getactivesquadBase();
 void addNewLineIfFoughtThisRound() {
-	extern char foughtthisround;
-	extern Log gamelog;
 
 	if (foughtthisround)gamelog.newline();
 	foughtthisround = 0;
 }
 // Return true if supposed to still be in mode_site(), false otherwise
 bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer) {
-
-	extern Log gamelog;
-	extern short mode;
-	extern short party_status;
-	extern coordinatest loc_coord;
-	extern char showcarprefs;
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 
 	int encsize;
 	int freeable;
@@ -3015,9 +2532,7 @@ bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_tim
 	}
 	return true;
 }
-char shouldWeBailOnBase();
 void mode_site() {
-	extern char showcarprefs;
 
 	if (isThereNoActivesquad())return;
 	reloadparty();
@@ -3032,15 +2547,8 @@ void mode_site() {
 		;
 	}
 }
-bool isActiveSquadAnonymous();
-void set_site_story_as_last_news_story();
-void setSiteStoryClaimedZero();
-void resetSiteGlobals();
-void setCurrentSite(const short i);
-void resetCCSSiegeGlobals();
 void placeLootForSiege(const int lootnum) {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int lx, ly, lz;
 
 	for (int l = 0; l < ((lootnum <= 10) ? lootnum : 10); l++)
@@ -3052,7 +2560,6 @@ void placeLootForSiege(const int lootnum) {
 }
 void placeTrapsForSiege() {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int lx, ly, lz;
 
 	int trapnum = 30;
@@ -3065,7 +2572,6 @@ void placeTrapsForSiege() {
 }
 void placeUnitsForSiege() {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	int lx, ly, lz;
 
 	int unitnum = 6;
@@ -3086,12 +2592,6 @@ void placeUnitsForSiege() {
 }
 void mode_site(const short loc)
 {
-	extern short mode;
-	extern MusicClass music;
-	extern coordinatest loc_coord;
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
 	setCurrentSite(loc);
 
 	resetSiteAlarm();
@@ -3184,12 +2684,9 @@ void mode_site(const short loc)
 	}
 	mode_site();
 }
-int getEncounterCarID(const int e);
-int getEncounterIsDriver(const int e);
 /* prints the names of creatures you see in car chases */
 void printchaseencounter()
 {
-	extern chaseseqst chaseseq;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int i = 19; i <= 24; i++)
 		mvaddstrAlt(i, 0, CONST_sitemode178); // 80 spaces

@@ -23,86 +23,13 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-
+#define	ADVANCE_CPP
 #include "../includes.h"
 
-const string blankString = "";
-const string tag_value = "value";
 
-const string tag_attribute = "attribute";
-
-
-const string tag_skill = "skill";
-
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-
-#include "sitedisplay.h"
-
-#include "../log/log.h"
-
-//#include "common/commondisplay.h"
-void printparty();
-
-#include "../common/commonactions.h"
-// for void criminalizeparty(short crime)
-
-#include "../combat/fight.h"
-#include "../combat/fightCreature.h"  
-
-//#include "combat/haulkidnap.h"
-void squadgrab_immobile(char dead);
-//#include "combat/haulkidnapCreature.h"
-
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
-
-void addLocationChange(int cursite, sitechangest change);
-string smellsPanic;
-void squadgrab_immobile(char dead);
-//// #include "combat/haulkidnapCreature.h"
-void freehostage(DeprecatedCreature &cr, char situation);
-
-
-//string smellsPanic;
-
-
-string ableToStopBleed;
-string sWounds;
-string isBurned;
-string drops;
-string sBody;
-
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-short getCurrentSite();
 /* handles end of round stuff for one creature */
 void advancecreature(DeprecatedCreature &cr)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-	extern coordinatest loc_coord;
-	extern Log gamelog;
-	extern short mode;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int ccs_siege_kills;
-	extern int ccs_boss_kills;
-	extern int sitecrime;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 	if (!cr.getNameAndAlignment().alive) return;
 	char incaprint;
 	if (incapacitated(cr, 1, incaprint))
@@ -242,19 +169,8 @@ void advancecreature(DeprecatedCreature &cr)
 		}
 	}
 }
-void advancecreature(const int e);
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
-void resetSiteAlarm();
 void sitemodeCreatureAdvance() {
 
-	extern int sitecrime;
-
-	extern short sitealarmtimer;
-	extern short siteonfire;
-	extern Log gamelog;
-	extern short postalarmtimer;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (isThereASiteAlarm() && sitecrime > 10) postalarmtimer++;
 	if (sitealarmtimer > 0 && !isThereASiteAlarm() && sitecrime > 5)
@@ -370,12 +286,7 @@ void sitemodeCreatureAdvance() {
 /* handles end of round stuff for everyone */
 void creatureadvance()
 {
-	extern int sitecrime;
-	extern Deprecatednewsstoryst *sitestory;
 
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short mode;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int p = 0; p < 6; p++)
 	{

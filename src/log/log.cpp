@@ -1,7 +1,5 @@
+#define	LOG_CPP
 #include "../includes.h"
-const string CONST_log001 = "last message";
-
-const string blankString = "";
 /*
 	log.cpp
 	Ciprian Ilies

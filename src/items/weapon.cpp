@@ -1,24 +1,5 @@
-
+#define	WEAPON_CPP
 #include "../includes.h"
-const string CONST_weaponB004 = ")";
-const string CONST_weapon003 = " (";
-
-const string tag_ammo = "ammo";
-const string tag_loaded_cliptype = "loaded_cliptype";
-const string tag_weapon = "weapon";
-#include "../creature/creatureEnums.h"
-#include "../items/itemtype.h"
-#include "../items/item.h"
-#include "../items/cliptype.h"
-#include "../items/clip.h"
-#include "../items/weapontype.h"
-#include "../items/weapon.h"
-//#include "../items/weapon.h"
-//own header currently inside includes.h
-//own header
-#include "../common/translateid.h"
-// for getweapontype
-
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
@@ -106,7 +87,6 @@ bool Weapon::sort_compare_special(Item* other) const
 }
 const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
 {
-	extern vector<WeaponType *> weapontype;
 	const vector<attackst*>& attacks = weapontype[getweapontype(get_itemtypename())]->get_attacks();
 	for (int i = 0; i < len(attacks); i++)
 	{
@@ -120,96 +100,78 @@ const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool for
 }
 bool Weapon::acceptable_ammo(const Item& c) const
 {
-	extern vector<WeaponType *> weapontype;
 	return c.whatIsThis() == THIS_IS_CLIP && weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename());
 }
 const string& Weapon::get_name() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_name();
 }
 const string& Weapon::get_name(unsigned subtype) const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_name(subtype);
 }
 const string& Weapon::get_shortname(unsigned subtype) const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_shortname(subtype);
 }
 long Weapon::get_fencevalue() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_fencevalue();
 }
 bool Weapon::get_specific_bool(const WeaponTypeBool b) const {
 
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_specific_bool(b);
 }
 int Weapon::get_legality() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_legality();
 }
 float Weapon::get_bashstrengthmod() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_bashstrengthmod();
 }
 int Weapon::get_size() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->get_size();
 }
 bool Weapon::uses_ammo() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->uses_ammo();
 }
 bool Weapon::acceptable_ammo(const Clip& c) const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c.get_itemtypename());
 }
 bool Weapon::acceptable_ammo(const ClipType& c) const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->acceptable_ammo(c);
 }
 bool Weapon::is_ranged() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_ranged();
 }
 bool Weapon::is_throwable() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_throwable();
 }
 bool Weapon::is_legal() const
 {
-	extern vector<WeaponType *> weapontype;
 	return weapontype[getweapontype(get_itemtypename())]->is_legal();
 }
 
 /* transforms a weapon type id into the index of that weapon type in the global vector */
 int getweapontype(int id)
 {
-	extern vector<WeaponType *> weapontype;
 	for (int i = 0; i < len(weapontype); i++) if (weapontype[i]->get_id() == id) return i;
 	return -1;
 }
 /* transforms a weapon type name into the index of that weapon type in the global vector */
 int getweapontype(const string &idname)
 {
-	extern vector<WeaponType *> weapontype;
 	for (int i = 0; i < len(weapontype); i++) if (weapontype[i]->get_idname() == idname) return i;
 	return -1;
 }
 
 void delete_and_clear_weapon_type() {
-	extern vector<WeaponType *> weapontype;
 	delete_and_clear(weapontype);
 }

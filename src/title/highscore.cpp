@@ -1,10 +1,5 @@
-
+#define	HIGHSCORE_CPP
 #include "../includes.h"
-const string CONST_highscoreB003 = "wb";
-const string CONST_highscoreB002 = "rb";
-const string CONST_highscore002 = "score.dat";
-
-const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -30,84 +25,9 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../title/titlescreen.h"
-#include "../common/getnames.h"
-// for getmonth
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../common/musicClass.h"
-
-string univer;
-string numRecruit;
-string numMartyr;
-string numKills;
-string numKidnap;
-string cashTaxed;
-string cashSpent;
-string flagsBought;
-string flagsBurned;
-string noValid;
-string heLiElite;
-string heLiLiber;
-string heLiBrought;
-string heLiBlot;
-string heLiMob;
-string heLiDownsized;
-string heLiKIA;
-string hecoReag;
-string heLiDie;
-string heLiExec;
-string heLiVaca;
-string heLiHide;
-string heLiHunted;
-string heLiScattered;
-string heLiOutCrime;
-string heLiBurned;
-string hecoStalinized;
-string dotSpace;
-
-MusicModes getEndingMusic(EndTypes e);
-string getEndingString(EndTypes e);
-struct  saveLoadChunk {
-	void * Buffer;
-	size_t      ElementSize;
-	size_t      ElementCount;
-	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
-};
-const string singleSpace = " ";
-
-struct highscorest
-{
-	char valid, endtype, slogan[SLOGAN_LEN];
-	int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
-};
-highscorest score[SCORENUM];
-
-extern int ustat_recruits;
-extern int ustat_kidnappings;
-extern int ustat_dead;
-extern int ustat_kills;
-extern int ustat_funds;
-extern int ustat_spent;
-extern int ustat_buys;
-extern int ustat_burns;
-vector<saveLoadChunk> highScoreSaveLoad = {
-	saveLoadChunk(&ustat_recruits, sizeof(int), 1),
-	saveLoadChunk(&ustat_dead, sizeof(int), 1),
-	saveLoadChunk(&ustat_kills, sizeof(int), 1),
-	saveLoadChunk(&ustat_kidnappings, sizeof(int), 1),
-	saveLoadChunk(&ustat_funds, sizeof(int), 1),
-	saveLoadChunk(&ustat_spent, sizeof(int), 1),
-	saveLoadChunk(&ustat_buys, sizeof(int), 1),
-	saveLoadChunk(&ustat_burns, sizeof(int), 1),
-	saveLoadChunk(score, sizeof(highscorest), SCORENUM)
-};
 /* loads the high scores file */
 void loadhighscores()
 {
-	extern int lowestloadscoreversion;
 	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
 	//LOAD FILE
 	int loadversion;
@@ -130,26 +50,6 @@ void loadhighscores()
 /* saves a new high score */
 void savehighscore(char endtype)
 {
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern int stat_kidnappings;
-	extern int year;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern int yourscore;
-	extern int month;
-	extern class Ledger ledger;
-	extern int version;
-	extern string slogan_str;
 	loadhighscores();
 	//MERGE THE STATS
 	ustat_recruits += stat_recruits;
@@ -212,23 +112,6 @@ void savehighscore(char endtype)
 /* displays the high score board */
 void viewhighscores(int musicoverride)
 {
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern int stat_kidnappings;
-	extern int year;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern MusicClass music;
-	extern int yourscore;
 	if (musicoverride != MUSIC_OFF) music.play(musicoverride);
 	loadhighscores();
 	short validsum = 0;

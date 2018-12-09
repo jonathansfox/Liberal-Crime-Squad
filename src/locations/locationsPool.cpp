@@ -1,100 +1,12 @@
-
+#define	LOCATIONSPOOL_CPP
 #include "../includes.h"
-
-const string tag_LOOT = "LOOT";
-const string tag_LOOT_SECRETDOCUMENTS = "LOOT_SECRETDOCUMENTS";
-const string tag_LOOT_INTHQDISK = "LOOT_INTHQDISK";
-const string tag_The_Bronx = "The Bronx";
-const string tag_Long_Island = "Long Island";
-const string tag_Brooklyn_ampersand_Queens = "Brooklyn & Queens";
-const string tag_B = "B";
-const string tag_Manhattan = "Manhattan";
-const string tag_The = "The ";
-const string tag_Manhattan_Island = "Manhattan Island";
-const string tag_Greater_Hollywood = "Greater Hollywood";
-const string tag_Hollywood = "Hollywood";
-const string tag_Arlington = "Arlington";
-const string tag_City_Outskirts = "City Outskirts";
-const string tag_Seaport_Area = "Seaport Area";
-const string tag_Shopping = "Shopping";
-const string tag_Seaport = "Seaport";
-const string tag_Outskirts_amp_Orange_County = "Outskirts & Orange County";
-const string tag_Outskirts = "Outskirts";
-const string tag_University_District = "University District";
-const string tag_i_District = "I-District";
-const string tag_Industrial_District = "Industrial District";
-const string tag_u_District = "U-District";
-const string tag_D = "D";
-const string tag_Downtown = "Downtown";
-const string tag_National_Mall = "National Mall";
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string tag_CLIP = "CLIP";
-const string tag_CLIP_9 = "CLIP_9";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
-const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
-const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
-const string blankString = "";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../items/armortype.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../common/commondisplay.h"
-// for void printfunds(int,int,char*)
-#include "../common/stringconversion.h"
-//for string attribute_enum_to_string(int)
-#include "../common/getnames.h"
-// for cityname
-#include "../common/translateid.h"
-// for  getarmortype
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
-#include "locationsPool.h"
-#include "../common/creaturePoolCreature.h"
-#include "../items/money.h"
-#include "../recruits.h"
 vector<Location *> location;
-/* creates your founder */
-struct newGameArguments {
-	const char recruits;
-	const char base;
-	const bool makelawyer;
-	const bool gaylawyer;
-	const bool sports_car;
-	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
-};
-Vehicle* newSportsCar();
-void newVehicle(Vehicle *startcar);
 void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm) {
-	// Gives you bloody armor
-	extern bool GIVEBLOODYARMOR;
-	// Start with lots of money
-	extern bool HIGHFUNDS;
 	Deprecatedsquadst *newsq = new Deprecatedsquadst;
-	extern class Ledger ledger;
-	extern long cursquadid;
 	newsq->id = 0; cursquadid++;
 	newsq->squad[0] = newcr;
 	newcr->squadid = 0;
-	extern string theLCS;
 	strcpy(newsq->name, theLCS);
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<Deprecatedsquadst *> squad;
 	// This is not a proper for loop, it only iterates to find a single instance of a valid location
 	// then executes its code once, and then break;
 	for (int l = 0; l < len(location); l++)
@@ -169,7 +81,6 @@ void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments 
 			break;
 		}
 	}
-	extern Deprecatedsquadst *activesquad;
 	//newcr->juice=0;
 	squad.push_back(newsq);
 	activesquad = newsq;
@@ -242,7 +153,6 @@ void LocationsPool::addHeat(int cursite, int heat)
 {
 	location[cursite]->heat += heat;
 }
-#include "../common/equipment.h"
 const void LocationsPool::findAllLootTypes(vector<bool>& havetype, vector<int>& loottypeindex, const vector<string>& dox)const
 {
 	//FIND ALL LOOT TYPES
@@ -295,11 +205,8 @@ const bool LocationsPool::isNewRental(int cursite)const
 {
 	return location[cursite]->newrental;
 }
-#include "../common/creaturePool.h"
 void LocationsPool::evictLCSFrom(int l)
 {
-	const string CONST_locationsPool036 = ".  Possessions go to the shelter.";
-	const string CONST_locationsPool035 = "EVICTION NOTICE: ";
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, CONST_locationsPool035);
@@ -375,17 +282,14 @@ const bool LocationsPool::canBeFortified(int cursite)const
 	return location[cursite]->can_be_fortified();
 }
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
-void initlocation(Location &loc);
 void LocationsPool::initLocation(int cursite)
 {
 	initlocation(*location[cursite]);
 }
-#include "../items/lootTypePoolItem.h"
 void LocationsPool::stashThisLootHere(const string& tag, int homes) {
 	location[homes]->loot.push_back(getNewLoot(tag));
 }
 void LocationsPool::stashThisWeaponHere(int itemindex, int shelter) {
-	extern vector<WeaponType *> weapontype;
 	location[shelter]->loot.push_back(new Weapon(*weapontype[itemindex]));
 }
 void LocationsPool::stashThisArmorHere(int itemindex, int shelter) {
@@ -431,12 +335,11 @@ const int LocationsPool::getRentingType(int cursite)const
 {
 	return location[cursite]->renting;
 }
-//#include "sitemode/sitemode.h"
-void initsite(Location &loc);
 void LocationsPool::initSite(int loc)
 {
 	initsite(*location[loc]);
 }
+// TODO Understand this
 void LocationsPool::eraseAndReplaceGraffiti(int cursite, int locx, int locy, int locz)
 {
 	// Erase any previous semi-permanent graffiti here
@@ -462,12 +365,9 @@ const string LocationsPool::getLocationName(int cursite)const
 {
 	return location[cursite]->getname();
 }
-#include "../common/commonactionsCreature.h"
 /* common - purges empty squads from existence */
 void cleangonesquads()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern vector<Deprecatedsquadst *> squad;
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 	{  //NUKE SQUAD IF IT IS GONE
 		bool hasmembers = false;
@@ -492,20 +392,9 @@ void cleangonesquads()
 		else location[squad[sq]->squad[0]->base]->getloot(squad[sq]->loot);
 	}
 }
-//#include "pdcurses/curses.h"
-extern string singleDot;
 // Prompt to turn new recruit into a sleeper
 void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recruiter, int y)
 {
-	const string CONST_locationsPool046 = "sleeper agent";
-	const string CONST_locationsPool045 = " as a ";
-	const string CONST_locationsPool044 = "Stay at ";
-	const string CONST_locationsPool043 = "-> ";
-	const string CONST_locationsPool042 = "regular member";
-	const string CONST_locationsPool040 = "Come to ";
-	const string CONST_locationsPool039 = "   ";
-	const string CONST_locationsPool038 = " best serve the Liberal cause?";
-	const string CONST_locationsPool037 = "In what capacity will ";
 
 	bool selection = false;
 	while (true)
@@ -561,7 +450,6 @@ Location* find_site_in_city(const int site_type, const int city)
 }
 int find_site_index_in_city(const int site_type, const int city)
 {
-	extern bool multipleCityMode;
 	for (int i = 0; i < len(location); i++)
 		if (location[i]->type == site_type && (!multipleCityMode || city == -1 || location[i]->city == city))
 			return i;
@@ -583,47 +471,6 @@ void addChildren(Location* district, const vector<SiteTypes> subdistricts, const
 		district->addchild(st)->mapped = hasmaps;
 	}
 }
-vector<SiteTypes> classicDowntown = {
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_BUSINESS_BANK,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_BUSINESS_LATTESTAND,
-};
-vector<SiteTypes> classicCommercial = {
-
-	SITE_BUSINESS_DEPTSTORE,
-	SITE_BUSINESS_PAWNSHOP,
-	SITE_BUSINESS_HALLOWEEN,
-	SITE_BUSINESS_CARDEALERSHIP,
-};
-vector<SiteTypes> classicUptown = {
-
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_HOSPITAL_CLINIC,
-	SITE_LABORATORY_GENETIC,
-	SITE_LABORATORY_COSMETICS,
-	SITE_BUSINESS_VEGANCOOP,
-	SITE_BUSINESS_JUICEBAR,
-	SITE_BUSINESS_INTERNETCAFE,
-	SITE_OUTDOOR_PUBLICPARK,
-};
-vector<SiteTypes> classicOutOfTown = {
-
-	SITE_GOVERNMENT_PRISON,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_INDUSTRY_NUCLEAR,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_CORPORATE_HOUSE,
-	SITE_GOVERNMENT_ARMYBASE,
-};
-
-
 
 void make_classic_world(bool hasmaps)
 {
@@ -676,132 +523,8 @@ void make_classic_world(bool hasmaps)
 	district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
 }
 
-
-vector<SiteTypes> seattleDowntown = {
-
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_BUSINESS_BANK,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_MEDIA_AMRADIO,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_BUSINESS_LATTESTAND,
-	SITE_BUSINESS_DEPTSTORE,
-};
-
-vector<SiteTypes> seattleUptown = {
-
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_HOSPITAL_CLINIC,
-	SITE_LABORATORY_GENETIC,
-	SITE_LABORATORY_COSMETICS,
-	SITE_BUSINESS_VEGANCOOP,
-	SITE_BUSINESS_JUICEBAR,
-	SITE_BUSINESS_INTERNETCAFE,
-	SITE_OUTDOOR_PUBLICPARK,
-	SITE_BUSINESS_HALLOWEEN,
-};
-vector<SiteTypes> seattleOutOfTown = {
-
-	SITE_GOVERNMENT_PRISON,
-	SITE_GOVERNMENT_INTELLIGENCEHQ,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_GOVERNMENT_ARMYBASE,
-};
-
-vector<SiteTypes> newYorkManhattan = {
-
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_BUSINESS_BANK,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_MEDIA_AMRADIO,
-	SITE_MEDIA_CABLENEWS,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_OUTDOOR_PUBLICPARK,
-	SITE_BUSINESS_DEPTSTORE,
-	SITE_GOVERNMENT_PRISON,
-};
-
-vector<SiteTypes> newYorkLongIsland = {
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_HOSPITAL_CLINIC,
-	SITE_BUSINESS_JUICEBAR,
-	SITE_BUSINESS_INTERNETCAFE,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_LABORATORY_GENETIC,
-	SITE_GOVERNMENT_ARMYBASE,
-};
-
-
-vector<SiteTypes> losAngelesDowntown = {
-
-
-
-	SITE_RESIDENTIAL_APARTMENT,
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_BUSINESS_BANK,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_CORPORATE_HEADQUARTERS,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_BUSINESS_DEPTSTORE,
-
-};
-
-
-vector<SiteTypes> hollyWoodUptown = {
-
-
-	SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-	SITE_BUSINESS_VEGANCOOP,
-	SITE_BUSINESS_HALLOWEEN,
-	SITE_BUSINESS_CIGARBAR,
-	SITE_MEDIA_AMRADIO,
-	SITE_OUTDOOR_PUBLICPARK,
-	SITE_CORPORATE_HOUSE,
-
-
-};
-
-
-vector<SiteTypes> seaportArea = {
-
-
-	SITE_RESIDENTIAL_TENEMENT,
-	SITE_HOSPITAL_CLINIC,
-	SITE_LABORATORY_GENETIC,
-	SITE_LABORATORY_COSMETICS,
-	SITE_INDUSTRY_POLLUTER,
-	SITE_BUSINESS_PAWNSHOP,
-	SITE_INDUSTRY_SWEATSHOP,
-	SITE_BUSINESS_CARDEALERSHIP,
-
-
-};
-
-vector<SiteTypes> washingtonDCDowntown = {
-
-	SITE_GOVERNMENT_POLICESTATION,
-	SITE_GOVERNMENT_FIRESTATION,
-	SITE_GOVERNMENT_COURTHOUSE,
-	SITE_BUSINESS_BANK,
-	SITE_BUSINESS_CARDEALERSHIP,
-	SITE_HOSPITAL_CLINIC,
-	SITE_HOSPITAL_UNIVERSITY,
-	SITE_BUSINESS_DEPTSTORE,
-
-};
 void make_world(const bool hasmaps)
 {
-	const string CONST_locationsPool047 = "Mall";
-
-	extern bool multipleCityMode;
 	if (!multipleCityMode)
 	{
 		make_classic_world(hasmaps);
@@ -940,18 +663,15 @@ void make_world(const bool hasmaps)
 // its index in the location array
 int findlocation(int type, int city = -1)
 {
-	extern bool multipleCityMode;
 	if (!multipleCityMode) city = -1;
 	for (int i = 0; i < len(location); i++)
 		if (location[i]->type == type && (location[i]->city == city || city == -1)) return i;
 	return -1;
 }
 // Locations - Construct a new location with the specified parameters
-#include "../daily/daily.h"
 Location::Location(const char type_, const int parent_)
 	: type(type_), city(-1), parent(parent_), renting(RENTING_NOCONTROL), needcar(false), hidden(false), upgradable(false)
 {
-	extern bool multipleCityMode;
 	if (this->parent != -1)
 	{
 		this->needcar = location[this->parent]->needcar;
@@ -974,50 +694,6 @@ Location* Location::addchild(const char type_)
 *  0: first part of place name is long, and if there's a city at the end it's short
 *  1: first part of the name is short unless the place itself is a city in which case it's long, and if there's a city at the end it's short
 *  2: entire name is short, no matter what */
-extern string singleSpace;
-extern string commaSpace;
-enum cityLocationTagEnums {
-	ENUM_tag_Downtown,
-	ENUM_tag_University_District,
-	ENUM_tag_u_District,
-	ENUM_tag_Industrial_District,
-	ENUM_tag_i_District,
-	ENUM_tag_Shopping,
-	ENUM_tag_Outskirts,
-	ENUM_tag_Seaport_Area,
-	ENUM_tag_Seaport,
-	ENUM_tag_Outskirts_amp_Orange_County,
-	ENUM_tag_City_Outskirts,
-	ENUM_tag_Arlington,
-	ENUM_tag_Hollywood,
-	ENUM_tag_Greater_Hollywood,
-	ENUM_tag_Manhattan,
-	ENUM_tag_Manhattan_Island,
-	ENUM_tag_Brooklyn_ampersand_Queens,
-	ENUM_tag_Long_Island,
-	ENUM_tag_The_Bronx
-};
-map <string, int> cityLocationTags = {
-	map<string, int>::value_type(tag_Downtown, ENUM_tag_Downtown),
-	map<string, int>::value_type(tag_University_District, ENUM_tag_University_District),
-	map<string, int>::value_type(tag_u_District, ENUM_tag_u_District),
-	map<string, int>::value_type(tag_Industrial_District, ENUM_tag_Industrial_District),
-	map<string, int>::value_type(tag_i_District, ENUM_tag_i_District),
-	map<string, int>::value_type(tag_Shopping, ENUM_tag_Shopping),
-	map<string, int>::value_type(tag_Outskirts, ENUM_tag_Outskirts),
-	map<string, int>::value_type(tag_Seaport_Area, ENUM_tag_Seaport_Area),
-	map<string, int>::value_type(tag_Seaport, ENUM_tag_Seaport),
-	map<string, int>::value_type(tag_Outskirts_amp_Orange_County, ENUM_tag_Outskirts_amp_Orange_County),
-	map<string, int>::value_type(tag_City_Outskirts, ENUM_tag_City_Outskirts),
-	map<string, int>::value_type(tag_Arlington, ENUM_tag_Arlington),
-	map<string, int>::value_type(tag_Hollywood, ENUM_tag_Hollywood),
-	map<string, int>::value_type(tag_Greater_Hollywood, ENUM_tag_Greater_Hollywood),
-	map<string, int>::value_type(tag_Manhattan, ENUM_tag_Manhattan),
-	map<string, int>::value_type(tag_Manhattan_Island, ENUM_tag_Manhattan_Island),
-	map<string, int>::value_type(tag_Brooklyn_ampersand_Queens, ENUM_tag_Brooklyn_ampersand_Queens),
-	map<string, int>::value_type(tag_Long_Island, ENUM_tag_Long_Island),
-	map<string, int>::value_type(tag_The_Bronx, ENUM_tag_The_Bronx)
-};
 string defaultName(const signed char shortname_, Location* thisLocation) {
 	string str;
 	if ((shortname_ >= 1 && thisLocation->type != thisLocation->city) || shortname_ >= 2) {
@@ -1036,15 +712,6 @@ string defaultName(const signed char shortname_, Location* thisLocation) {
 }
 string Location::getname(const signed char shortname_, const bool include_city)
 {
-	const string CONST_locationsPool051 = ", New York";
-	const string CONST_locationsPool050 = ", California";
-	const string CONST_locationsPool049 = ", Virginia";
-	const string CONST_locationsPool048 = " Outskirts";
-
-	const string CONST_locationsPoolB146 = ", NY";
-	const string CONST_locationsPoolB145 = ", CA";
-	const string CONST_locationsPoolB144 = ", VA";
-	extern bool multipleCityMode;
 	string str = defaultName(shortname_, this);
 	if (multipleCityMode&&include_city&&type != city) {
 		string cityname = location[findlocation(city, city)]->getname(shortname_ + 2);
@@ -1104,7 +771,6 @@ bool Location::duplicatelocation()
 }
 void Location::update_heat_protection()
 {
-	extern short lawList[LAWNUM];
 	int l;
 	for (l = 0; l < len(location); l++)
 	{
@@ -1152,16 +818,8 @@ void Location::update_heat_protection()
 	heat_protection *= 5;
 	if (heat_protection > 95) heat_protection = 95;
 }
-map<short, string> getActivityString;
 std::string getactivity(ActivityST &act)
 {
-	const string CONST_locationsPool056 = "Reporting Bugs to the Dev Team";
-	const string CONST_locationsPool055 = "Going to ";
-	const string CONST_locationsPool054 = "Making ";
-	const string CONST_locationsPool053 = "a bug";
-	const string CONST_locationsPool052 = "Tending to ";
-
-	extern vector<ArmorType *> armortype;
 	if (getActivityString.count(act.type)) {
 		return getActivityString[act.type];
 	}
@@ -1226,7 +884,6 @@ bool DeprecatedCreature::is_active_liberal() const
 /* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)
 {
-	const string CONST_locationsPool057 = "     How many?          ";
 	printparty();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 15, CONST_locationsPool057);
@@ -1237,20 +894,9 @@ long prompt_amount(long min, long max)
 	amount = std::min((long)amount, max);
 	return amount;
 }
-extern string spaceDashSpace;
-extern string enter_done;
-extern string chooseALiberalTo;
+
 
 void printEquipMenu(const int loc, const int page, const string errmsg, const vector<Item *> loot) {
-	const string CONST_locationsPool065 = "Z - Stash things at ";
-	const string CONST_locationsPool064 = "Y - Get things from ";
-	const string CONST_locationsPool063 = "Cursors - Increase or decrease ammo allocation";
-	const string CONST_locationsPool062 = "S - Liberally Strip a Squad member";
-	const string CONST_locationsPool061 = "Press a number to drop that Squad member's Conservative weapon";
-	const string CONST_locationsPool060 = "Press a letter to equip a Liberal item";
-	const string CONST_locationsPool059 = " x";
-	const string CONST_locationsPool058 = "Equip the Squad";
-
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(0, 0, CONST_locationsPool058);
@@ -1307,9 +953,6 @@ void printEquipMenu(const int loc, const int page, const string errmsg, const ve
 }
 int makeChoice(const int increaseammo, const int decreaseammo) {
 
-	const string CONST_locationsPool069 = "receive it.";
-	const string CONST_locationsPool068 = "drop a clip.";
-	const string CONST_locationsPool067 = "receive a clip.";
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	moveAlt(8, 20);
@@ -1324,17 +967,7 @@ int makeChoice(const int increaseammo, const int decreaseammo) {
 
 // TODO Relocate these to a new file
 // to allow removal of creature.h
-const string NOT_ERROR_BUT_CONTINUE = "For simplicity this function returns an error message, prompting 'continue;', this is not an error, but it needs to use 'continue;' anyway";
 string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, int& slot, int& page, const int e, vector<Item *> &loot) {
-	extern Deprecatedsquadst *activesquad;
-
-	const string CONST_locationsPool076 = "Can't carry any more ammo.";
-	const string CONST_locationsPool075 = "That ammo doesn't fit.";
-	const string CONST_locationsPool074 = "Can't carry ammo without a gun.";
-	const string CONST_locationsPool073 = "No ammo available!";
-	const string CONST_locationsPool072 = "No ammo required!";
-	const string CONST_locationsPool071 = "No spare clips!";
-	const string CONST_locationsPool070 = "No ammo to drop!";
 
 	DeprecatedCreature *squaddie = activesquad->squad[e - '1'];
 	if (squaddie)
@@ -1436,18 +1069,15 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 	return blankString;
 }
 bool isThereNoActivesquad() {
-	extern Deprecatedsquadst *activesquad;
 	return activesquad == NULL;
 }
 // This function is used only once, but it allows another function not to import *activesquad (though, like much of the code, its purpose is unclear)
 void clearActiveSquadForceInc() {
-	extern Deprecatedsquadst *activesquad;
 	for (int p = 0; p < 6; p++)
 		if (activesquad->squad[p] != NULL)
 			activesquad->squad[p]->forceinc = 0;
 }
 void disarmSquadmember(vector<Item *> &loot, const int p) {
-	extern Deprecatedsquadst *activesquad;
 
 	if (activesquad->squad[p] != NULL)
 	{
@@ -1458,7 +1088,6 @@ void disarmSquadmember(vector<Item *> &loot, const int p) {
 
 bool notDoesActiveSquadHaveExactlyOneMember() {
 	bool choice = true;
-	extern Deprecatedsquadst *activesquad;
 	if (activesquad->squad[0])
 	{
 		choice = false;
@@ -1471,7 +1100,6 @@ bool notDoesActiveSquadHaveExactlyOneMember() {
 	return choice;
 }
 void completelyStripSquadMember(vector<Item *> &loot, int d) {
-	extern Deprecatedsquadst *activesquad;
 	if (activesquad->squad[d])
 	{
 		activesquad->squad[d]->strip(&loot);
@@ -1481,10 +1109,6 @@ void completelyStripSquadMember(vector<Item *> &loot, int d) {
 /* review squad equipment */
 void equip(vector<Item *> &loot, int loc)
 {
-
-	const string CONST_locationsPool077 = "strip down.";
-
-	const string CONST_locationsPool066 = "You can't equip that.";
 
 	if (isThereNoActivesquad()) return;
 	consolidateloot(loot);
@@ -1570,10 +1194,6 @@ void equip(vector<Item *> &loot, int loc)
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<Item *> &dest, vector<Item *> &source)
 {
-	const string CONST_locationsPool081 = "Press a letter to select an item.";
-	const string CONST_locationsPool080 = "x";
-	const string CONST_locationsPool079 = "/";
-	const string CONST_locationsPool078 = "Select Objects";
 	int page = 0;
 	vector<int> selected(len(source), 0);
 	while (true)
@@ -1655,14 +1275,6 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 /* equipment - assign new bases to the equipment */
 void equipmentbaseassign()
 {
-	const string CONST_locationsPool089 = ",. to view other base pages.";
-	const string CONST_locationsPool088 = "  Shift and a Number will move ALL items!";
-	const string CONST_locationsPool087 = "T to sort by type.";
-	const string CONST_locationsPool086 = "T to sort by location.";
-	const string CONST_locationsPool085 = "Press a Letter to assign a base.  Press a Number to select a base.";
-	const string CONST_locationsPool084 = "NEW LOCATION";
-	const string CONST_locationsPool083 = "----ITEM----------------CURRENT LOCATION---------------------------------------";
-	const string CONST_locationsPool082 = "Moving Equipment";
 	int page_loot = 0, page_loc = 0, selectedbase = 0;
 	bool sortbytype = false;
 	vector<Item *> temploot;
@@ -1756,9 +1368,6 @@ void equipmentbaseassign()
 			int p = page_loc * 9 + c - '1';
 			if (p < len(temploc)) selectedbase = p;
 		}
-		// Check if the player wants to move all items to a new location,
-		// using Shift + a number key.
-		const char upnums[] = "!@#$%^&*(";
 		for (int upnumi = 0; upnumi < len(upnums); upnumi++)
 		{
 			if (c == upnums[upnumi])
@@ -1812,34 +1421,7 @@ char squadhasitem(Deprecatedsquadst &sq, const string& type)
 	}
 	return 0;
 }
-#include "../daily/siege.h"
 /* location info at top of screen */
-const string CONST_locationsPool116 = " Eating";
-const string CONST_locationsPool115 = "s";
-const string CONST_locationsPool114 = " Daily Ration";
-const string CONST_locationsPool113 = "Not Enough Food";
-const string CONST_locationsPool112 = " of Food Left";
-const string CONST_locationsPool111 = " Day";
-const string CONST_locationsPool110 = "GENERATOR";
-const string CONST_locationsPool109 = "LIGHTS OUT";
-const string CONST_locationsPool108 = "TANK TRAPS";
-const string CONST_locationsPool107 = "AA GUN";
-const string CONST_locationsPool106 = "BOOBY TRAPS";
-const string CONST_locationsPool105 = "CAMERAS ON";
-const string CONST_locationsPool104 = "CAMERAS OFF";
-const string CONST_locationsPool103 = "BUSINESS FRONT";
-const string CONST_locationsPool102 = "PRINTING PRESS";
-const string CONST_locationsPool101 = "FORTIFIED COMPOUND";
-const string CONST_locationsPool100 = "This location has insufficient food stores.";
-const string CONST_locationsPool099 = "This location has food for only a few days.";
-const string CONST_locationsPool098 = "You are not under siege...  yet.";
-const string CONST_locationsPool097 = "Firemen are raiding this location!";
-const string CONST_locationsPool096 = "The CCS is raiding this location!";
-const string CONST_locationsPool095 = "The Corporations are raiding this location!";
-const string CONST_locationsPool094 = "The masses are storming this location!";
-const string CONST_locationsPool093 = "The CIA is raiding this location!";
-const string CONST_locationsPool092 = "The police are raiding this location!";
-const string CONST_locationsPool091 = "The police have surrounded this location.";
 void printlocation(long loc)
 {
 
@@ -1974,21 +1556,10 @@ void printlocation(long loc)
 		addstrAlt(CONST_locationsPool116);
 	}
 }
-void addStringYear();
 /* location and squad header */
 void locheader()
 {
-	const string CONST_locationsPool121 = "Acting Individually";
-	const string CONST_locationsPool120 = "2) Press Z to Assemble a New Squad";
-	const string CONST_locationsPool119 = "1) R - Review Assets and Form Squads";
-	const string CONST_locationsPool118 = "To form a new squad:";
-	const string CONST_locationsPool117 = "No Squad Selected";
 
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
-	extern int day;
-	extern int month;
-	extern int year;
 	if (activesquad != NULL && activesquad->squad[0]->location != -1)
 	{
 		if (location[activesquad->squad[0]->location]->siege.siege)
@@ -2065,24 +1636,8 @@ void locheader()
 		mvaddstrAlt(0, 41, str);
 	}
 }
-#include "../common/commonactions.h"
-#include "../common/musicClass.h"
-string closeParenthesis;
-string spaceParanthesisDollar;
-string needCar;
-string travelDifCity;
-string secrecyLevel;
-string percentSign;
-string heatLevel;
-string underSiege;
-string currentLocation;
-string highSecurity;
-string closedDown;
-string enemySafeHouse;
-string safeHouse;
+
 bool showSafehouseInfo(Location* this_location, Location* squad_location, const bool havecar, const int ticketprice) {
-	extern class Ledger ledger;
-	extern bool multipleCityMode;
 
 	bool show_safehouse_info = false;
 	if (this_location == squad_location) {
@@ -2125,15 +1680,8 @@ bool showSafehouseInfo(Location* this_location, Location* squad_location, const 
 	return show_safehouse_info;
 }
 /* base - go forth to stop evil */
-const string CONST_locationsPool124 = "Enter - Back one step.";
-const string CONST_locationsPool123 = "Enter - The squad is not yet Liberal enough.";
-const string CONST_locationsPool122 = "Where will the Squad go?";
 void stopevil()
 {
-	extern class Ledger ledger;
-	extern Deprecatedsquadst *activesquad;
-	extern bool multipleCityMode;
-	extern MusicClass music;
 	//int l = 0, p = 0;
 	if (!activesquad) return;
 	bool havecar = false;
@@ -2311,44 +1859,15 @@ vector<string> caseBUSINESSFRONT_INSURANCE;
 vector<string> caseBUSINESSFRONT_TEMPAGENCY;
 vector<string> caseBUSINESSFRONT_RESTAURANT;
 vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
-const string mostlyendings = "mostlyendings\\";
-#include "../customMaps.h"
-const string CONST_locationsPool128 = "caseBUSINESSFRONT_MISCELLANEOUS.txt";
-const string CONST_locationsPool127 = "caseBUSINESSFRONT_RESTAURANT.txt";
-const string CONST_locationsPool126 = "caseBUSINESSFRONT_TEMPAGENCY.txt";
-const string CONST_locationsPool125 = "caseBUSINESSFRONT_INSURANCE.txt";
 vector<file_and_text_collection> locationspool_text_file_collection = {
 	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + CONST_locationsPool125),
 	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + CONST_locationsPool126),
 	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + CONST_locationsPool127),
 	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + CONST_locationsPool128),
 };
-enum BusinessFronts
-{
-	BUSINESSFRONT_INSURANCE,
-	BUSINESSFRONT_TEMPAGENCY,
-	BUSINESSFRONT_RESTAURANT,
-	BUSINESSFRONT_MISCELLANEOUS,
-	BUSINESSFRONTNUM
-};
 /* base - invest in this location */
-const string CONST_locationsPool140 = "R - Stockpile 20 daily rations of food ($150)";
-const string CONST_locationsPool139 = "F - Setup a Business Front to ward off suspicion ($3000)";
-const string CONST_locationsPool138 = "P - Buy a Printing Press to start your own newspaper ($3000)";
-const string CONST_locationsPool137 = "A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)";
-const string CONST_locationsPool136 = "A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)";
-const string CONST_locationsPool135 = "G - Buy a Generator for emergency electricity ($3000)";
-const string CONST_locationsPool134 = "T - Ring the Compound with Tank Traps ($3000)";
-const string CONST_locationsPool133 = "B - Place Booby Traps throughout the Compound ($3000)";
-const string CONST_locationsPool132 = "C - Place Security Cameras around the Compound ($2000)";
-const string CONST_locationsPool131 = "W - Fortify the Compound for a Siege ($2000)";
-const string CONST_locationsPool130 = "W - Fortify the Bomb Shelter Entrances ($2000)";
-const string CONST_locationsPool129 = "W - Repair the Bunker Fortifications ($2000)";
 void investlocation()
 {
-	extern class Ledger ledger;
-	extern int selectedsiege;
-	extern short lawList[LAWNUM];
 	int loc = selectedsiege;
 	while (true)
 	{
@@ -2529,7 +2048,6 @@ void investlocation()
 	}
 }
 void makeIntoHostage(DeprecatedCreature* newcr) {
-	extern Deprecatedsquadst *activesquad;
 	newcr->namecreature();
 	newcr->location = activesquad->squad[0]->base;
 	newcr->base = activesquad->squad[0]->base;
@@ -2542,12 +2060,7 @@ void makeIntoHostage(DeprecatedCreature* newcr) {
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(DeprecatedCreature &cr)
 {
-	const string CONST_locationsPool144 = "If you do not enter anything, their real name will be used.";
-	const string CONST_locationsPool143 = " in its presence?";
-	const string CONST_locationsPool142 = "What name will you use for this ";
-	const string CONST_locationsPool141 = "The Education of ";
 
-	extern int stat_kidnappings;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	*newcr = cr;
 	makeIntoHostage(newcr);
@@ -2567,7 +2080,6 @@ void kidnaptransfer(DeprecatedCreature &cr)
 /* transfer all loot from some source (such as a squad or another location) to a location, and deal with money properly */
 void Location::getloot(vector<Item *>& loot)
 {
-	extern class Ledger ledger;
 	for (int l = len(loot) - 1; l >= 0; l--)
 		if (loot[l]->whatIsThis() == THIS_IS_MONEY)
 		{
@@ -2584,12 +2096,6 @@ void Location::getloot(vector<Item *>& loot)
 void clearRentExemptions() {
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) location[l]->newrental = 0;
 }
-/* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess);
-/* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l, short newspaper);
-#include "../items/itemPool.h"
-#include "../items/lootTypePool.h"
 void publishSpecialEditions(char &clearformess) {
 	//YOUR PAPER AND PUBLIC OPINION AND STUFF
 	vector<int> nploc;
@@ -2616,8 +2122,6 @@ void publishSpecialEditions(char &clearformess) {
 	}
 }
 void manageGrafiti() {
-	extern char endgamestate;
-	extern short background_liberal_influence[VIEWNUM];
 	//Manage graffiti
 	for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++) // Check each location
 	{
@@ -2670,7 +2174,6 @@ void manageGrafiti() {
 	}
 }
 siegest* getseigestFromLocation(int secondaryLocation) {
-	extern Deprecatedsquadst *activesquad;
 	siegest* siege = NULL;
 	int primaryLocation = activesquad ? activesquad->squad[0]->location : -1;
 	if (primaryLocation != -1) {
@@ -2685,9 +2188,6 @@ void gotoEquipmentScreen(int loc) {
 	equip(location[loc]->loot, -1);
 }
 void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid) {
-	const string CONST_locationsPool145 = "Temporary Squad";
-
-	extern Deprecatedsquadst *activesquad;
 	//create a temp squad containing just this liberal
 	int oldsquadid = cr->squadid;
 	Deprecatedsquadst *oldactivesquad = activesquad;
@@ -2752,8 +2252,6 @@ int consolidateSiegeLoot() {
 }
 
 void nukeAllEmptySquads(const vector<int> squadloc, const int mode) {
-	extern Deprecatedsquadst *activesquad;
-	extern vector<Deprecatedsquadst *> squad;
 	//NUKE ALL EMPTY SQUADS
 	for (int sq = len(squad) - 1; sq >= 0; sq--)
 	{
@@ -2802,9 +2300,7 @@ void LocationsPool::closeSite(int cursite, int sitecrime) {
 bool LocationsPool::siteHasCameras(int cursite)const {
 	return (location[cursite]->compound_walls & COMPOUND_CAMERAS) && !location[cursite]->siege.cameras_off;
 }
-void giveActiveSquadThisLoot(Item* de);
 void getRandomLoot(int cursite) {
-	extern Deprecatedsquadst *activesquad;
 	int b = LCSrandom(len(location[cursite]->loot));
 	Item *it = location[cursite]->loot[b];
 	giveActiveSquadThisLoot(it);
@@ -2944,10 +2440,8 @@ string gimmeASprayCan(DeprecatedCreature* graffiti) {
 	}
 	return "";
 }
-const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 void buyMeASprayCan(DeprecatedCreature* graffiti) {
 
-	extern vector<WeaponType *> weapontype;
 	Weapon spray(*weapontype[getweapontype(tag_WEAPON_SPRAYCAN)]);
 	graffiti->give_weapon(spray, &location[graffiti->base]->loot);
 }
@@ -2965,8 +2459,6 @@ int countSafeHouses() {
 	return safenumber;
 }
 Location* getLocation() {
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
 	Location* loc = NULL;
 	if (selectedsiege != -1) loc = location[selectedsiege];
 	if (activesquad) if (activesquad->squad[0]->location != -1)

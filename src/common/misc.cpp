@@ -1,50 +1,5 @@
-
+#define	MISC_CPP
 #include "../includes.h"
-const string CONST_miscC026 = "): ";
-
-const string CONST_miscB025 = ".mid:  ";
-const string CONST_miscB024 = ".mid";
-const string CONST_miscB023 = ".ogg:  ";
-const string CONST_miscB022 = ".ogg";
-const string CONST_miscB021 = "/";
-const string CONST_miscB020 = ".mid as MIDI fallback)";
-const string CONST_misc019 = "1234567890-";
-const string CONST_misc018 = "SDL_mixer function Mix_PlayMusic() failed:  ";
-const string CONST_misc017 = "Pastorale";
-const string CONST_misc016 = "Mars";
-const string CONST_misc015 = "Ogg Vorbis support failed to load. MIDI music will be used instead if possible.";
-const string CONST_misc014 = "Unable to initialize SDL_mixer:  ";
-const string CONST_misc013 = "Unable to initialize SDL:  ";
-const string CONST_misc012 = "SDL_mixer function Mix_LoadMUS() failed to load ";
-const string CONST_misc011 = "midi/";
-const string CONST_misc009 = "ogg/";
-const string CONST_misc008 = "Loading MIDI music (";
-const string CONST_misc007 = "(with ";
-const string CONST_misc006 = "Loading Ogg Vorbis music (";
-const string CONST_misc005 = "listOfStates.txt";
-const string CONST_misc004 = "sextypeAcronym.txt";
-const string CONST_misc003 = "sexseekAcronym.txt";
-const string CONST_misc002 = "sexwhoAcronym.txt";
-const string CONST_misc001 = "sexdescAcronym.txt";
-
-const string blankString = "";
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../common/interval.h"
-#include "../log/log.h"
-#include "../cursesAlternative.h"
-#include "../creature/creatureEnums.h"
-#include "../customMaps.h"
-#include "../common/musicClass.h"
-/* pick a descriptor acronym */
- vector<string> sexdescAcronym;
-/* what kind of person? */
- vector<string> sexwhoAcronym;
-/* seeking acronym */
- vector<string> sexseekAcronym;
-/* what type of sex? */
- vector<string> sextypeAcronym;
- map<short, string> musicList;
 void sexdesc(char *str)
 {
 	strcpy(str, pickrandom(sexdescAcronym).c_str());
@@ -77,15 +32,6 @@ string sextype()
 {
 	return pickrandom(sextypeAcronym);
 }
- vector<string> listOfStates;
- const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> misc_text_file_collection = {
-	 customText(&sexdescAcronym, mostlyendings + CONST_misc001),
-	 customText(&sexwhoAcronym, mostlyendings + CONST_misc002),
-	 customText(&sexseekAcronym, mostlyendings + CONST_misc003),
-	 customText(&sextypeAcronym, mostlyendings + CONST_misc004),
-	 customText(&listOfStates, mostlyendings + CONST_misc005),
- };
 const char* statename(int i)
 {
 	if (i < 0 || i >= len(listOfStates)) i = LCSrandom(len(listOfStates));
@@ -177,8 +123,6 @@ int previous = MUSIC_OFF;
 /* helper function for initsongs() */
 void loadsong(int i, const char* filename)
 {
-	extern Log gamelog;
-	extern char artdir[MAX_PATH_SIZE];
 	// the reason it prints progress on the screen is because it might be a little slow sometimes so this reassures the user progress is being made
 	eraseAlt();
 	if (oggsupport)
@@ -202,7 +146,6 @@ void loadsong(int i, const char* filename)
 void MusicClass::init()
 {
 #ifndef DONT_INCLUDE_SDL
-	extern Log gamelog;
 	if (songsinitialized) return; // only initialize once
 	if (SDL_Init(SDL_INIT_AUDIO) != 0) // initialize what we need from SDL for audio
 	{  // SDL failed to initialize, so log it and exit
@@ -310,7 +253,6 @@ void MusicClass::init()
 void MusicClass::quit()
 {
 #ifndef DONT_INCLUDE_SDL
-	extern MusicClass music;
 	if (!songsinitialized) return; // only shut down once
 	music.play(MUSIC_OFF);
 	for (int c = 0; c < MUSIC_OFF; c++) if (songs[c]) Mix_FreeMusic(songs[c]);
@@ -324,7 +266,6 @@ void MusicClass::quit()
 void MusicClass::play(int _musicmode)
 {
 #ifndef DONT_INCLUDE_SDL
-	extern Log gamelog;
 	if (!songsinitialized) init(); // if it hasn't been initialized already, do it now
 	if (_musicmode == MUSIC_CURRENT) return; // keep playing current music if that's what's requested
 	if (_musicmode == MUSIC_RANDOM) _musicmode = LCSrandom(MUSIC_OFF); // play a random song if that's what's requested
@@ -448,9 +389,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	void addCrackhouse(int creaturearray[CREATURENUM]) {
-		extern char endgamestate;
-		extern short lawList[LAWNUM];
-
 		if (lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 2;
 		if (lawList[LAW_POLLUTION] == -2)creaturearray[CREATURE_MUTANT] += 2;
 		if (lawList[LAW_POLLUTION] == -2 &&
@@ -459,8 +397,6 @@ void MusicClass::play(int _musicmode)
 			creaturearray[CREATURE_CCS_VIGILANTE] += 5;
 	}
 	void addCigarbar(int creaturearray[CREATURENUM], const char sec) {
-		extern char endgamestate;
-		extern short lawList[LAWNUM];
 		if (sec || isThereASiteAlarm())creaturearray[CREATURE_BOUNCER] += 100;
 		else creaturearray[CREATURE_BOUNCER] += 10;
 		if (sec)creaturearray[CREATURE_GUARDDOG] += 25;
@@ -473,9 +409,6 @@ void MusicClass::play(int _musicmode)
 	}
 	void addWhitehouse(int creaturearray[CREATURENUM], const char sec) {
 
-		extern char endgamestate;
-		extern short exec[EXECNUM];
-
 
 		if (sec)creaturearray[CREATURE_SECRET_SERVICE] += 100;
 		else creaturearray[CREATURE_SECRET_SERVICE] += 5;
@@ -483,9 +416,6 @@ void MusicClass::play(int _musicmode)
 			creaturearray[CREATURE_CCS_ARCHCONSERVATIVE] += 1;
 	}
 	void addLatteStandOrPark(int creaturearray[CREATURENUM]) {
-		extern short lawList[LAWNUM];
-		extern char endgamestate;
-
 
 
 		if (lawList[LAW_LABOR] < 2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION] += 5;
@@ -504,8 +434,6 @@ void MusicClass::play(int _musicmode)
 		else creaturearray[CREATURE_PRISONGUARD] += 1;
 	}
 	void addVeganCoop(int creaturearray[CREATURENUM]) {
-		extern short lawList[LAWNUM];
-
 
 
 		if (lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 1;
@@ -515,9 +443,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	void addShelter(int creaturearray[CREATURENUM]) {
-		extern short lawList[LAWNUM];
-
-
 
 		if (lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 2;
 		if (lawList[LAW_POLLUTION] == -2)creaturearray[CREATURE_MUTANT] += 2;
@@ -525,8 +450,6 @@ void MusicClass::play(int _musicmode)
 			lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 50;
 	}
 	void addTenement(int creaturearray[CREATURENUM]) {
-		extern short lawList[LAWNUM];
-
 
 
 		if (lawList[LAW_LABOR] < 2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION] += 1;
@@ -540,7 +463,6 @@ void MusicClass::play(int _musicmode)
 		else creaturearray[CREATURE_PRISONGUARD] += 1;
 	}
 	void addApartment(int creaturearray[CREATURENUM]) {
-		extern short lawList[LAWNUM];
 
 
 		if (lawList[LAW_LABOR] < 2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
@@ -573,7 +495,6 @@ void MusicClass::play(int _musicmode)
 		else creaturearray[CREATURE_SECURITYGUARD] += 100;
 	}
 	void addIndustryPolluter(int creaturearray[CREATURENUM], const char sec) {
-		extern short lawList[LAWNUM];
 		if (sec)creaturearray[CREATURE_SECURITYGUARD] += 100;
 
 		if (lawList[LAW_LABOR] == -2)
@@ -646,7 +567,6 @@ void MusicClass::play(int _musicmode)
 		else creaturearray[CREATURE_SECURITYGUARD] += 3;
 	}
 	void addPoliceStation(int creaturearray[CREATURENUM], const char sec) {
-		extern short lawList[LAWNUM];
 
 
 
@@ -667,7 +587,6 @@ void MusicClass::play(int _musicmode)
 	}
 	void addCourthouse(int creaturearray[CREATURENUM], const char sec) {
 
-		extern short lawList[LAWNUM];
 
 
 		if (sec)creaturearray[CREATURE_COP] = 2000;
@@ -688,8 +607,6 @@ void MusicClass::play(int _musicmode)
 	void addFirestation(int creaturearray[CREATURENUM], const char sec) {
 
 
-		extern short lawList[LAWNUM];
-
 		if (sec)
 		{
 			if (lawList[LAW_DEATHPENALTY] == -2 &&
@@ -702,12 +619,7 @@ void MusicClass::play(int _musicmode)
 	/* prints a short blurb showing how to page forward */
 	string addnextpagestr()
 	{
-		const string CONST_commondisplay223 = "PGDN";
-		const string CONST_commondisplay222 = ":";
-		const string CONST_commondisplay221 = "]";
-		const string CONST_commondisplay22Z = " - Next";
 		string output;
-		extern short interface_pgup;
 		if (interface_pgup == '[')
 			output = CONST_commondisplay221;
 		else if (interface_pgup == '.')
@@ -718,12 +630,7 @@ void MusicClass::play(int _musicmode)
 	/* prints a short blurb showing how to page back */
 	string addprevpagestr()
 	{
-		const string CONST_commondisplay226 = "PGUP";
-		const string CONST_commondisplay225 = ";";
-		const string CONST_commondisplay224 = "[";
-		const string CONST_commondisplay22Y = " - Previous";
 		string output;
-		extern short interface_pgup;
 		if (interface_pgup == '[')
 			output = CONST_commondisplay224;
 		else if (interface_pgup == '.')
@@ -734,12 +641,7 @@ void MusicClass::play(int _musicmode)
 	/* prints a long blurb showing how to page forward and back */
 	string addpagestr()
 	{
-		const string CONST_commondisplay229 = "PGUP/PGDN";
-		const string CONST_commondisplay228 = "; and :";
-		const string CONST_commondisplay227 = "[]";
-		const string CONST_commondisplay22X = " to view other Liberal pages.";
 		string output;
-		extern short interface_pgup;
 		if (interface_pgup == '[')
 			output = CONST_commondisplay227;
 		else if (interface_pgup == '.')
@@ -751,8 +653,6 @@ void MusicClass::play(int _musicmode)
 	/* daily - returns the number of days in the current month */
 	int monthday()
 	{
-		extern int month;
-		extern int year;
 		switch (month)
 		{
 		case 2: return 28 + (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); // February
@@ -764,7 +664,6 @@ void MusicClass::play(int _musicmode)
 		}
 	}
 
-#include "locations/locationsEnums.h"
 	bool populateEncounter(const int type, int creaturearray[CREATURENUM], const char sec) {
 		switch (type)
 		{
@@ -912,16 +811,6 @@ void MusicClass::play(int _musicmode)
 		if (bursthits < 1) {
 			bursthits = 1;
 		}
-		const vector<string> numberTimesHit =
-		{
-			"",
-			" twice",
-			" three",
-			" four",
-			" five",
-		};
-		const string singleSpace = " ";
-		const string CONST_fight035 = " times";
 		string output;
 		if (bursthits > 5) {
 			output += singleSpace + tostring(bursthits);
@@ -936,8 +825,6 @@ void MusicClass::play(int _musicmode)
 	}
 	std::string getlaw(int l)
 	{
-		extern map<short, string> getLawString;
-		const string CONST_getnames043 = "Software Bugs";
 		if (getLawString.count(l)) {
 			return getLawString[l];
 		}
@@ -947,7 +834,6 @@ void MusicClass::play(int _musicmode)
 	}
 	std::string cityname()
 	{
-		extern vector<string> city_names;
 		return pickrandom(city_names);
 	}
 
@@ -962,10 +848,6 @@ void MusicClass::play(int _musicmode)
 	}
 	std::string getlawflag(int type)
 	{
-		extern string findingBugs;
-		extern map<short, string> getLawFlagString;
-		extern map<short, map<short, string> > getLawFlagStringFull;
-		extern short lawList[LAWNUM];
 		if (getLawFlagStringFull.count(type)) {
 			return getLawFlagStringFull[type][lawList[getLawFromFlag(type)]];
 		}
@@ -1000,9 +882,6 @@ void MusicClass::play(int _musicmode)
 	/* common - random issue by public interest */
 	int randomissue(bool core_only)
 	{
-		extern char newscherrybusted;
-		extern char endgamestate;
-		extern short public_interest[VIEWNUM];
 		int interest_array[VIEWNUM], total_interest = 0;
 		int numviews = core_only ? VIEWNUM - 5 : ((endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2) ? VIEWNUM - 1 : VIEWNUM);
 		for (int i = 0; i < numviews; i++)
@@ -1014,12 +893,6 @@ void MusicClass::play(int _musicmode)
 		for (int i = 0; i < numviews; i++) if (roll < interest_array[i]) return i;
 		return VIEW_MOOD;
 	}
-
-	const string singleSpace = " ";
-
-	void generate_name(char *first, char *last, char gender);
-	void firstname(char *str, char gender);
-	string lastname(bool archconservative);
 
 	/* fills a string with a proper name */
 	void generate_name(char *str, char gender)
@@ -1061,11 +934,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string firstname(const char default_gender) {
 		string str;
-		extern vector<string> male_first_names;
-		extern vector<string> female_first_names;
-		extern vector<string> gender_neutral_first_names;
-		extern vector<string> great_white_male_patriarch_first_names;
-		const string CONST_creaturenames009 = "Errol";
 		int roll, nametable;
 		// If we don't care if the name is male or female, pick one randomly
 		// This ensures gender balance in the names chosen
@@ -1126,8 +994,6 @@ void MusicClass::play(int _musicmode)
 	string lastname(bool archconservative)
 		//{{{ Last Name
 	{
-		extern vector<string> regular_last_names;
-		extern vector<string> archconservative_last_names;
 		string str;
 		// For non-Arch-Conservatives, pick from ALL last names
 		if (!archconservative)
@@ -1152,32 +1018,11 @@ void MusicClass::play(int _musicmode)
 	}
 
 
-	vector<int> maleOrFemale = {
-		GENDER_MALE,
-		GENDER_FEMALE
-	};
-	/* fills a string with a proper name */
-	void generate_name(char *str, char gender = GENDER_NEUTRAL);
-	/* get a first and last name for the same person */
-	void generate_name(char *first, char *last, char gender = GENDER_NEUTRAL);
-
-	string lastname(bool archconservative = false);
-	const char* statename(int state = -1);
-	void generate_long_name(char *first, char *middle, char *last, char gender = GENDER_NEUTRAL);
-
-	const string CONST_news700 = "her";
-	const string CONST_news378 = "his";
-	const string CONST_news647 = "[hurting spree]";
 	string isInCustody() {
 		char str[200];
 		char str2[200];
 		generate_name(str, str2);
 
-		const string CONST_news242 = "called the police on a cellphone and they arrived shortly thereafter. ";
-		const string CONST_news241 = "verses of the Bible at the stunned onlookers. Someone ";
-		const string CONST_news240 = " remained at the scene after the shooting, screaming ";
-		const string CONST_news239 = " Witnesses report that ";
-		const string CONST_news238 = ", is in custody.&r";
 		string output = str \
 			+ singleSpace \
 			+ str2 \
@@ -1192,21 +1037,12 @@ void MusicClass::play(int _musicmode)
 	}
 	string atTheAbortionClinic() {
 		string story;
-		const string CONST_news230 = "Dr. ";
-		const string CONST_news229 = " Clinic yesterday. ";
 		story += lastname(true) \
 			+ CONST_news229 \
 			+ CONST_news230;
 		return story;
 	}
 	string abortionDoctorShot() {
-		const string CONST_news228 = "gunned down outside of the ";
-		const string CONST_news227 = "A doctor that routinely performed abortions was ruthlessly ";
-		const string CONST_news226 = "A doctor that routinely performed semi-legal abortions was ruthlessly ";
-		const string CONST_news225 = "A doctor that routinely performed illegal abortions was ruthlessly ";
-		const string CONST_news224 = "A doctor that routinely performed illegal abortion-murders was ruthlessly ";
-
-		extern short lawList[LAWNUM];
 
 		string story;
 		if (lawList[LAW_ABORTION] == -2) story += CONST_news224;
@@ -1221,12 +1057,6 @@ void MusicClass::play(int _musicmode)
 
 	string howCrazyIsKiller() {
 		string story;
-		extern short lawList[LAWNUM];
-
-		const string CONST_news246 = "had been completed.&r";
-		const string CONST_news245 = " surrendered without a struggle, reportedly saying that God's work ";
-		const string CONST_news244 = " abortion doctors as opposed to arresting them.&r";
-		const string CONST_news243 = " later admitted to being a rogue FBI vigilante, hunting down ";
 
 		if (lawList[LAW_WOMEN] == -2)
 		{
@@ -1243,23 +1073,9 @@ void MusicClass::play(int _musicmode)
 		return story;
 	}
 
-	const string CONST_news250 = " and ";
-	const string CONST_news249 = "wife";
-	const string CONST_news248 = " is survived by ";
-
-	const string CONST_news237 = "The suspected shooter, ";
-	const string CONST_news236 = " times and died immediately in the parking lot. ";
-	const string CONST_news235 = " was hit ";
-	const string CONST_news234 = "shots were fired from a nearby vehicle. ";
-	const string CONST_news233 = " car when, according to police reports, ";
-	const string CONST_news232 = " was walking to ";
-
-	const string CONST_newsB925 = "husband";
 	string newsOnKiller() {
 		string story;
 
-
-		extern short lawList[LAWNUM];
 
 		const char gn = pickrandom(maleOrFemale);
 
@@ -1302,10 +1118,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string constructVIEW_WOMEN()
 	{
-		const string CONST_news255 = " children.&r";
-
-		extern string spaceDashSpace;
-
 		string story;
 
 		story = cityname();
@@ -1316,12 +1128,6 @@ void MusicClass::play(int _musicmode)
 		story += atTheAbortionClinic();
 		story += newsOnKiller();
 
-		vector<string> two_to_five = {
-			"two",
-			"three",
-			"four",
-			"five"
-		};
 		story += pickrandom(two_to_five) \
 			+ CONST_news255;
 
@@ -1331,14 +1137,6 @@ void MusicClass::play(int _musicmode)
 	string getPhraseDrunkDriving() {
 
 		string story;
-		extern short lawList[LAWNUM];
-
-		const string CONST_news270 = "taking swipes";
-		const string CONST_news269 = "urinating out the window";
-		const string CONST_news268 = "pissing out the window";
-		const string CONST_news267 = "[relieving themselves] out the window";
-		const string CONST_news266 = "throwing beer bottles";
-		const string CONST_news265 = "throwing [juice boxes]";
 
 		switch (LCSrandom(3))
 		{
@@ -1359,14 +1157,8 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseKnownHomosexual() {
 
-
-		const string CONST_news258 = "a homosexual, was ";
-		const string CONST_news257 = "a known homosexual, was ";
-		const string CONST_news256 = "a known sexual deviant, was ";
-
 		string story;
 
-		extern short lawList[LAWNUM];
 
 		if (lawList[LAW_GAY] == -2) story += CONST_news256;
 		else if (lawList[LAW_GAY] == -1) story += CONST_news257;
@@ -1378,12 +1170,7 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseNoEmpathyForHomosexual(const string dstr, const string dstr2) {
 
-		extern string singleDot;
-		const string CONST_news279 = ", even though being gay is deviant, as we all know.";
-		const string CONST_news278 = " is a known faggot";
-		const string CONST_news277 = ", despite the fact that ";
 		string story;
-		extern short lawList[LAWNUM];
 
 
 		if (lawList[LAW_GAY] == -2 && lawList[LAW_FREESPEECH] != -2)
@@ -1399,30 +1186,9 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news276 = "aggravated nature of the offense";
-	const string CONST_news275 = "prosecute this case as a hate crime, due to the ";
-	const string CONST_news274 = " Authorities have stated that they will vigorously ";
-	const string CONST_news273 = "at which point they were taken into custody. Nobody was seriously injured during the incident.";
-	const string CONST_news272 = "The chase ended when ";
-	const string CONST_news271 = " at the pursuing police cruisers. ";
-
-	const string CONST_news264 = "murderers swerving wildly, ";
-	const string CONST_news263 = " Witnesses of the freeway chase described the pickup of the alleged ";
-	const string CONST_news262 = "have not yet been released.";
-	const string CONST_news261 = "were apprehended after a high speed chase. Their names ";
-	const string CONST_news260 = "A police spokesperson reported that four suspects ";
-	const string CONST_news259 = " here yesterday. ";
 	string constructVIEW_GAY()
 	{
 
-
-		extern string commaSpace;
-
-		extern vector<string> vigilante_murder;
-		extern vector<string> why_chase_ended;
-
-		extern string spaceDashSpace;
-		extern string ampersandR;
 
 		string story;
 		story = cityname();
@@ -1466,50 +1232,8 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news441 = "_";
-
-	const string CONST_news345 = "?";
-	const string CONST_news344 = "Mamma, why did they kill ";
-	const string CONST_news343 = " dead?";
-	const string CONST_news342 = "Mamma, is ";
-	const string CONST_news340 = "many area children spontaneously broke into tears. One child was ";
-	const string CONST_news339 = " When the decision to ban the book was announced yesterday, ";
-	const string CONST_news338 = " as key evidence of the dark nature of the book.";
-	const string CONST_news337 = "a child that ";
-	const string CONST_news336 = "a child that said a magic spell at her parents";
-	const string CONST_news335 = "a child that swore in class";
-	const string CONST_news334 = "In their complaint, the groups cited an incident involving ";
-	const string CONST_news332 = "some conservatives feel that the books ";
-	const string CONST_news331 = "Although the series is adored by children worldwide, ";
-	const string CONST_news329 = ". ";
-	const string CONST_news328 = " author ";
-	const string CONST_news327 = "_, is the third in an immensely popular series by ";
-	const string CONST_news325 = "_and_the_";
-	const string CONST_news322 = " The book, ";
-	const string CONST_news321 = "the city bowed to pressure from religious groups.";
-	const string CONST_news320 = " - A children's story has been removed from libraries here after ";
-
-	const string CONST_newsX02 = "heard saying, \"";
-
-	const string CONST_news1030 = "\"";
-
-	const string CONST_news485 = ". ";
 	string constructVIEW_FREESPEECH()
 	{
-
-
-		extern vector<string> book_title;
-		extern vector<string> book_title_2;
-		extern vector<string> random_nationality;
-		extern vector<string> conservative_oppose_book;
-
-		extern string spaceDashSpace;
-		extern string ampersandR;
-		extern string singleDot;
-		extern vector<string> petty_violence;
-		extern vector<string> his_her;
-		extern vector<string> older_younger;
-		extern vector<string> brother_sister;
 
 		string story;
 		story = cityname();
@@ -1596,47 +1320,9 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-//	const string CONST_news1030 = "\"";
-	const string CONST_news458 = ".\"";
-
-	const string CONST_news306 = "can be put to death in this country.";
-	const string CONST_news305 = "tragedy, it will be that our nation is now evaluating the ease with which people ";
-	const string CONST_news304 = "and more events are expected this evening. If there is a bright side to be found from this ";
-	const string CONST_news303 = " Candlelight vigils were held throughout the country last night during the execution, ";
-	const string CONST_news301 = "The family wants closure. We don't have time for another trial";
-	const string CONST_news300 = "End of story";
-	const string CONST_news299 = "Assassin, serial killer, either way ÄÄ guilty. ";
-	const string CONST_news298 = "The convict is always referred to by three names. ";
-	const string CONST_news297 = "Let's not forget the convict is colored. You know how their kind are";
-	const string CONST_news295 = "spokesperson for the governor saying, ";
-	const string CONST_news294 = "The state still went through with the execution, with a ";
-	const string CONST_news293 = " was framed. ";
-	const string CONST_news292 = "an admission from a former prosecutor that ";
-	const string CONST_news291 = "a battery of negative DNA tests. ";
-	const string CONST_news290 = "a confession from another convict. ";
-	const string CONST_news289 = "have been produced, including ";
-	const string CONST_news288 = "Since then, numerous pieces of exculpatory evidence ";
-	const string CONST_news287 = " of 13 serial murders. ";
-	const string CONST_news286 = " was convicted in ";
-	const string CONST_news284 = " Correctional Facility.&r";
-	const string CONST_news283 = " yesterday at the ";
-	const string CONST_news282 = ":";
-	const string CONST_news281 = " was pronounced dead at ";
-	const string CONST_news280 = " - An innocent citizen has been put to death in the electric chair. ";
 	string constructVIEW_DEATHPENALTY()
 	{
 
-
-
-		extern string commaSpace;
-		extern int year;
-
-		extern string spaceDashSpace;
-		extern string ampersandR;
-		extern string singleDot;
-
-
-		extern vector<string> AMorPM;
 		string story;
 
 		story += statename() \
@@ -1712,28 +1398,8 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-//	const string CONST_news458 = ".\"";
-
-	const string CONST_news318 = "You think about that before you continue slanging accusations";
-	const string CONST_news317 = "these files deal with the one and not the other. ";
-	const string CONST_news316 = "It might be a bit presumptive to assume that ";
-	const string CONST_news315 = "Well, you know, there's privacy, and there's privacy. ";
-	const string CONST_news313 = " The FBI refused to comment initially, but when confronted with the information, ";
-	const string CONST_news312 = "\"deal with the undesirables\", although this phrase is not clarified. ";
-	const string CONST_news311 = " More disturbingly, the files make reference to a plan to ";
-	const string CONST_news310 = "unions, working for liberal organizations ÄÄ even ";
-	const string CONST_news309 = "The files contain information on which people have been attending demonstrations, organizing ";
-	const string CONST_news308 = "This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations. ";
-	const string CONST_news307 = "Washington, DC - The FBI might be keeping tabs on you. ";
-
-	const string CONST_newsX01 = "a spokesperson stated, \"";
 	string constructVIEW_INTELLIGENCE()
 	{
-
-		extern string ampersandR;
-		extern string singleDot;
-
-		extern vector<string> liberalCrime;
 
 		string story;
 		story += CONST_news307 \
@@ -1758,13 +1424,6 @@ void MusicClass::play(int _musicmode)
 	string getPhraseJudgeWithProstitute() {
 
 		string story;
-
-		extern short lawList[LAWNUM];
-
-		extern vector<string> judge_with_prostitute;
-		extern vector<string> judge_with_prostitute_no_free_speech;
-		extern vector<string> judge_with_prostitute_full_free_speech;
-
 		if (lawList[LAW_FREESPEECH] == -2) {
 			story += pickrandom(judge_with_prostitute_no_free_speech);
 		}
@@ -1781,42 +1440,16 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseJudgeResigned() {
 
-		extern short lawList[LAWNUM];
 		string story;
 
-		const string CONST_news349 = " has resigned in disgrace after being caught with a prostitute.";
-		const string CONST_news348 = " has resigned in disgrace after being caught with a [civil servant].";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news348;
 		else story += CONST_news349;
 
 		return story;
 	}
-
-	const string CONST_news361 = "the judge would be going on a Bible retreat for a few weeks to ";
-	const string CONST_news360 = " could not be reached for comment, although an aid stated that ";
-	const string CONST_news358 = " in exchange for their silence.";
-	const string CONST_news357 = " reportedly offered ";
-	const string CONST_news355 = "when police broke into the hotel room they saw ";
-	const string CONST_news354 = "According to sources familiar with the particulars, ";
-	const string CONST_news353 = " last week in a hotel during a police sting operation. ";
-	const string CONST_news352 = ", was found with ";
-	const string CONST_news351 = ", who once ";
-	const string CONST_news347 = " - Conservative federal judge ";
-
-
-	const string CONST_newsB928 = "\"Make things right with the Almighty Father.\"";
 	string constructVIEW_JUSTICES()
 	{
-		extern string ampersandR;
-
-		extern string commaSpace;
-		extern int year;
-		extern short presparty;
-		extern vector<string> crazy_conservative_act;
-
-		extern vector<string> bribe_officers;
-
 		string story;
 		story = cityname();
 		story += CONST_news347;
@@ -1869,15 +1502,7 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseRadioHostLostMind() {
 
-		const string CONST_news381 = " g*dd*mn mind";
-		const string CONST_news380 = " [gosh darn] mind";
-		const string CONST_news379 = " goddamn mind";
-		const string CONST_news377 = "lost ";
 		string story;
-		extern short lawList[LAWNUM];
-
-		extern vector<string> radio_host_lost_mind;
-
 
 		switch (LCSrandom(radio_host_lost_mind.size()))
 		{
@@ -1894,46 +1519,9 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news390 = "to the FM band.";
-	const string CONST_news389 = "pastures. Of these, many said that they would be switching over ";
-	const string CONST_news388 = "have decided to leave the program for saner ";
-	const string CONST_news387 = "fully half of the host's most loyal supporters ";
-	const string CONST_news386 = "According to a poll completed yesterday, ";
-	const string CONST_news385 = "the damage might already be done. ";
-	const string CONST_news384 = " issued an apology later in the program, but ";
-	const string CONST_news376 = " had ";
-	const string CONST_news374 = "\", a former fan of the show, ";
-	const string CONST_news373 = "liberal media establishment!";
-	const string CONST_news372 = "current president!";
-	const string CONST_news371 = "and the greatest living example of a reverse racist is the ";
-	const string CONST_news368 = "'s monologue for the evening began the way that fans ";
-	const string CONST_news366 = "\".";
-	const string CONST_news364 = " went off for fifteen minutes in an inexplicable rant ";
-	const string CONST_news363 = " - Well-known AM radio personality ";
-
-	const string CONST_newsX03 = "two nights ago during the syndicated radio program \"";
-	const string CONST_newsX04 = "had come to expect, with attacks on the \"liberal media establishment\"";
-	const string CONST_newsX05 = "the \"elite liberal agenda\". But when the radio icon said, \"";
-	const string CONST_newsX06 = ", knew that \"";
-	const string CONST_newsX07 = ". After that, it just got worse and worse.\"";
 	string constructVIEW_AMRADIO()
 	{
 
-
-		extern string commaSpace;
-		extern int year;
-		extern short presparty;
-
-		extern vector<string> radio_name;
-		extern vector<string> radio_name_2;
-
-		extern string spaceDashSpace;
-		extern string ampersandR;
-		extern string singleDot;
-
-		extern vector<string> radio_host_crazy_quote;
-
-		extern vector<string> my_idol;
 		string story;
 		story = cityname();
 		story += CONST_news363;
@@ -1999,24 +1587,6 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news398 = "university";
-	const string CONST_news397 = "high school";
-	const string CONST_news396 = "middle school";
-	const string CONST_news395 = "elementary school";
-	const string CONST_news407 = "University";
-	const string CONST_news406 = "High School";
-	const string CONST_news405 = "Middle School";
-	const string CONST_news404 = "Elementary School";
-	const vector<string> elementary = { CONST_news395, CONST_news404 };
-	const vector<string> middle = { CONST_news396, CONST_news405 };
-	const vector<string> high = { CONST_news397, CONST_news406 };
-	const vector<string> university = { CONST_news398, CONST_news407 };
-	map<int, vector<string> > SchoolTypes = {
-		map<int, vector<string> >::value_type(0, elementary),
-		map<int,  vector<string> >::value_type(1, middle),
-		map<int,  vector<string> >::value_type(2, high),
-		map<int,  vector<string> >::value_type(3, university),
-	};
 	string getSchool(const int schtype, const bool capitalized) {
 		return SchoolTypes[schtype][capitalized];
 	}
@@ -2028,8 +1598,6 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseKillingSpree() {
 		string story;
-		extern short lawList[LAWNUM];
-		const string CONST_news393 = "shooting rampage";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
 		else story += CONST_news393;
@@ -2038,9 +1606,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string getPhraseKilledSelf() {
-		const string CONST_news428 = " committed suicide";
-		const string CONST_news427 = " [feel deeply asleep]";
-		extern short lawList[LAWNUM];
 		string story;
 		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news427;
 		else story += CONST_news428;
@@ -2050,9 +1615,6 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseMowedDown() {
 		string story;
-		extern short lawList[LAWNUM];
-		const string CONST_news402 = "mow down";
-		const string CONST_news401 = "[scare]";
 
 
 		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news401;
@@ -2063,23 +1625,7 @@ void MusicClass::play(int _musicmode)
 
 	string getGraphicShootingDetails(const int dg) {
 
-		extern short lawList[LAWNUM];
 		string story;
-
-		const string CONST_newsB943 = "him";
-		const string CONST_news864 = "killed ";
-
-		const string CONST_news426 = " and wounded dozens more. ";
-		const string CONST_news424 = "[hurt some people]. ";
-		const string CONST_news423 = " When the police arrived, the student had already ";
-		const string CONST_news422 = " as well.&r";
-		const string CONST_news421 = "shot";
-		const string CONST_news420 = "[unfortunately harmed]";
-		const string CONST_news419 = ", they were ";
-		const string CONST_news417 = "When other students tried to wrestle the weapons away from ";
-		const string CONST_news416 = " students and teachers inside. ";
-		const string CONST_news415 = "spraying bullets at";
-		const string CONST_news414 = "[scaring]";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news414;
 		else story += CONST_news415;
@@ -2104,34 +1650,8 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news433 = " was disturbingly obsessed with guns and death.&r";
-	const string CONST_news432 = "she";
-	const string CONST_news431 = "reports indicate that the student kept a journal that showed ";
-	const string CONST_news430 = " Investigators are currently searching the student's belongings, and initial ";
-	const string CONST_news429 = " shortly afterwards.&r";
-	const string CONST_news413 = "classrooms, ";
-	const string CONST_news412 = " while classes were in session, then systematically started breaking into ";
-	const string CONST_news411 = "university ";
-	const string CONST_news410 = "school ";
-	const string CONST_news409 = " entered the ";
-	const string CONST_news403 = " more than a dozen classmates and two teachers at ";
-	const string CONST_news400 = ", used a variety of guns to ";
-	const string CONST_news394 = " at a local ";
-	const string CONST_news391 = "A student has gone on a ";
-
-//	const string CONST_news485 = ". ";
-
-	const string CONST_newsB935 = "he";
 	string constructVIEW_GUNCONTROL()
 	{
-
-		extern string commaSpace;
-		extern int year;
-		extern short presparty;
-
-		extern string spaceDashSpace;
-		extern string ampersandR;
-		extern string singleDot;
 
 		string story;
 		const int schtype = LCSrandom(4);
@@ -2196,11 +1716,6 @@ void MusicClass::play(int _musicmode)
 	string getPhrasePrisonBook() {
 		string story;
 
-		const string CONST_news443 = "Buttlord";
-		const string CONST_news442 = "[Bum]lord";
-		extern short lawList[LAWNUM];
-		extern vector<string> prison_book_title_2;
-
 		if (!LCSrandom(prison_book_title_2.size())) {
 			story;
 			if (lawList[LAW_FREESPEECH] == -2) story += CONST_news442;
@@ -2215,11 +1730,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseAIDS() {
 		string story;
-		const string CONST_news453 = "AIDS";
-		const string CONST_news452 = "GRIDS";
-
-		extern short lawList[LAWNUM];
-
 		if (lawList[LAW_GAY] == -2)story += CONST_news452;// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for AIDS.
 		else story += CONST_news453;
 
@@ -2228,10 +1738,7 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseDifficult() {
 		string story;
-		extern short lawList[LAWNUM];
 
-		const string CONST_news456 = "helluva";
-		const string CONST_news455 = "[difficult]";
 
 		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news455;
 		else story += CONST_news456;
@@ -2239,33 +1746,9 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
-//	const string CONST_news458 = ".\"";
-	const string CONST_news457 = " choice, and I would only have a few seconds before they made it for me";
-	const string CONST_news454 = " the other. A ";
-	const string CONST_news451 = "Maybe lose an eye the one way, maybe catch ";
-	const string CONST_news450 = "My shank's under the mattress. Better to be brave and fight or chicken out and let them take it? ";
-	const string CONST_news449 = "with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager. ";
-	const string CONST_news448 = "I was trapped with them now. There were three, looking me over ";
-	const string CONST_news447 = "coming to a halt with a deafening clang that said it all ÄÄ ";
-	const string CONST_news446 = "The steel bars grated forward in their rails, ";
-	const string CONST_news445 = " Take this excerpt, \"";
-	const string CONST_news444 = "_.&r";
-//	const string CONST_news441 = "_";
-	const string CONST_news440 = "'s new tour-de-force, _";
-	const string CONST_news438 = "have these works been as poignant as ";
-	const string CONST_news437 = "prison theme lately in its offerings for mass consumption, rarely ";
-	const string CONST_news436 = "Although popular culture has used, or perhaps overused, the ";
-	const string CONST_news435 = "detail what goes on behind bars. ";
-	const string CONST_news434 = " - A former prisoner has written a book describing in horrifying ";
 
 	string constructVIEW_PRISONS()
 	{
-
-		extern string commaSpace;
-		extern vector<string> prison_book_title;
-		extern string spaceDashSpace;
-		extern string ampersandR;
-		extern string singleDot;
 
 		string story;
 		story = cityname();
@@ -2366,13 +1849,6 @@ void MusicClass::play(int _musicmode)
 	string getAnimalTestNation() {
 		string story;
 
-		extern vector<string> animal_research_country;
-
-		extern short lawList[LAWNUM];
-		const string CONST_news476 = "here report that they have discovered an amazing new wonder drug. ";
-		const string CONST_news475 = " report that they have discovered an amazing new wonder drug. ";
-		const string CONST_news474 = "from ";
-
 		if (lawList[LAW_ANIMALRESEARCH] == 2)
 		{
 			story += CONST_news474;
@@ -2390,12 +1866,6 @@ void MusicClass::play(int _musicmode)
 	string getPhraseDrugName() {
 
 		string story;
-		extern short lawList[LAWNUM];
-
-		const string CONST_news479 = "Anal";
-		const string CONST_news478 = "Bum-Bum";
-		extern vector<string> drug_name;
-
 		if (LCSrandom(drug_name.size())) {
 			story += pickrandom(drug_name);
 		}
@@ -2409,12 +1879,6 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseViagra() {
 		string story;
-		extern short lawList[LAWNUM];
-		extern vector<string> chimp_drug_impact;
-		const string CONST_news482 = "corrects erectile dysfunction in chimpanzees";
-		const string CONST_news481 = "[helps chimpanzees reproduce]";
-
-
 		if (LCSrandom(chimp_drug_impact.size())) {
 			story += pickrandom(chimp_drug_impact);
 		}
@@ -2429,24 +1893,6 @@ void MusicClass::play(int _musicmode)
 	string constructNegativeVIEW_ANIMALRESEARCH()
 	{
 
-		extern vector<string> drug_name_2;
-		extern vector<string> chimp_drug_horror;
-
-
-		const string CONST_news492 = " The first phase of human trials is slated to begin in a few months.";
-		const string CONST_news490 = "I think the media should be focusing on the enormous benefits of this drug.";
-		const string CONST_news489 = "While we understand your concerns, any worries are entirely unfounded. ";
-		const string CONST_news488 = ". We have a very experienced research team. ";
-		const string CONST_news487 = "a spokesperson for the research team stated that, \"It really isn't so bad as all that. Chimpanzees are very resilient creatures. ";
-		const string CONST_news486 = "Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ";
-		const string CONST_news485 = ". ";
-		const string CONST_news484 = " Along with bonobos, chimpanzees are our closest cousins";
-		const string CONST_news480 = ", the drug apparently ";
-		const string CONST_news477 = "Called ";
-		const string CONST_news473 = " - Researchers ";
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname()\
 			+ CONST_news473;
 
@@ -2479,34 +1925,8 @@ void MusicClass::play(int _musicmode)
 		return story;
 	}
 
-	const string CONST_news571 = "needs to take a breather on this one. We don't see why there's such a rush to judgment here. ";
-	const string CONST_news570 = "before we urge any action. Society really just ";
-	const string CONST_news569 = "there's work left to be done. We should study much more ";
-	const string CONST_news568 = "Why is there contention on the pollution question? It's because ";
-	const string CONST_news567 = "All we've done is introduced a little clarity into the ongoing debate. ";
-	const string CONST_news566 = " these issues to their own advantage. ";
-	const string CONST_news565 = ". You have to realize that ";
-	const string CONST_news564 = "a spokesperson stated that, \"";
-	const string CONST_news563 = " When questioned about the science behind these results, ";
-	const string CONST_news562 = " might actually ";
-	const string CONST_news561 = "Among the most startling of the think tank's findings is that ";
-	const string CONST_news560 = "and the latest science on the issue. ";
-	const string CONST_news559 = " recently released a wide-ranging report detailing recent trends ";
-	const string CONST_news558 = " - Pollution might not be so bad after all. The ";
-
 	string constructNegativeVIEW_POLLUTION() {
 
-
-		extern vector<string> family_values_company_name;
-		extern vector<string> family_values_company_name_2;
-		extern vector<string> family_values_company_name_3;
-		extern vector<string> pollution_consumption;
-		extern vector<string> pollution_consumption_2;
-		extern vector<string> i_like_polution;
-		extern vector<string> distrust_liberals;
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname()\
 			+ CONST_news558\
 			+ pickrandom(family_values_company_name)\
@@ -2536,32 +1956,10 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR;
 		return story;
 	}
-	const string CONST_news587 = "of the tech industry but is also indicative of a full economic recover.&r";
-	const string CONST_news586 = "analysts suggest that not only does the expansion speak to the health ";
-	const string CONST_news585 = "futures of some of the companies in the tech sector. On the whole, however, ";
-	const string CONST_news584 = "although the dampened movement might be expected due to the uncertain ";
-	const string CONST_news583 = "The markets reportedly responded to the announcement with mild interest, ";
-	const string CONST_news582 = "this welcome news is bound to be a pleasant surprise to those in the unemployment lines. ";
-	const string CONST_news581 = "of large corporations to export jobs overseas these days, ";
-	const string CONST_news580 = "light of the tendency ";
-	const string CONST_news579 = "Given the state of the economy recently and in ";
-	const string CONST_news578 = " increasing its payrolls by over ten thousand workers alone. ";
-	const string CONST_news577 = "tech giant ";
-	const string CONST_news576 = "are expected in the first month, with ";
-	const string CONST_news575 = "during the next quarter. Over thirty thousand jobs ";
-	const string CONST_news574 = "will be expanding their work forces considerably ";
-	const string CONST_news573 = "at a joint news conference here that they ";
-	const string CONST_news572 = " - Several major companies have announced ";
-
 	string constructNegativeVIEW_CORPORATECULTURE() {
 
 
-		extern vector<string> tech_giant_name;
-		extern vector<string> tech_giant_name_2;
 
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname()\
 			+ CONST_news572\
 			+ CONST_news573\
@@ -2586,11 +1984,6 @@ void MusicClass::play(int _musicmode)
 	string getPhraseBullshit() {
 
 		string story;
-		extern short lawList[LAWNUM];
-
-		extern vector<string> bullshit_no_free_speech;
-		extern vector<string> bullshit;
-
 		if (lawList[LAW_FREESPEECH] == -2) {
 			story += pickrandom(bullshit_no_free_speech);
 		}
@@ -2602,19 +1995,6 @@ void MusicClass::play(int _musicmode)
 		return story;
 	}
 	string getCorporationNameAndProduct() {
-		extern vector<string> gene_corp_name;
-		extern vector<string> gene_corp_name_2;
-		extern vector<string> gene_product_name;
-		extern vector<string> gene_product_name_2;
-		extern vector<string> gene_product_benefit;
-
-		const string CONST_news517 = "this amazing new product actually ";
-		const string CONST_news516 = "According to the public relations representative speaking, ";
-		const string CONST_news515 = "\", during an afternoon PowerPoint presentation. ";
-		const string CONST_news514 = ", presented their product, \"";
-
-		extern string singleDot;
-
 		string story = pickrandom(gene_corp_name)\
 			+ singleSpace\
 			+ pickrandom(gene_corp_name_2)\
@@ -2633,24 +2013,6 @@ void MusicClass::play(int _musicmode)
 	string constructNegativeVIEW_GENETICS()
 	{
 
-
-		extern vector<string> gene_product_cost;
-
-		const string CONST_news525 = "but the GM industry operates at a higher ethical standard. That goes without saying.";
-		const string CONST_news524 = "No. That's just ridiculous. I mean, sure companies have put unsafe products out, ";
-		const string CONST_news523 = ". Would we stake the reputation of our company on unsafe products? ";
-		const string CONST_news522 = " is just a load of ";
-		const string CONST_news521 = "Look, these products are safe. That thing about the ";
-		const string CONST_news520 = "One in particular said, \"";
-		const string CONST_news519 = "in their dismissal of the criticism which often follows the industry. ";
-		const string CONST_news518 = " Spokespeople for the GM corporations were universal ";
-		const string CONST_news513 = " One such corporation, ";
-		const string CONST_news512 = "booths and gave talks to wide-eyed onlookers.";
-		const string CONST_news511 = "to showcase its upcoming products. Over thirty companies set up ";
-		const string CONST_news510 = " - The genetic foods industry staged a major event here yesterday ";
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname()\
 			+ CONST_news510\
 			+ CONST_news511\
@@ -2679,11 +2041,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseMutilatedCorpse() {
 		string story;
-		extern short lawList[LAWNUM];
-
-		extern vector<string> mutilated_corpse;
-		const string CONST_news467 = " dead and ";
-		const string CONST_news466 = " [in a better place]";
 
 		if (lawList[LAW_FREESPEECH] == -2)
 			story += CONST_news466;
@@ -2698,11 +2055,7 @@ void MusicClass::play(int _musicmode)
 	string getPhraseDeathPenalty() {
 		string story;
 
-		const string CONST_news472 = "the death penalty in this case.";
-		const string CONST_news471 = "life imprisonment in this case.";
-
-		extern short lawList[LAWNUM];
-
+		
 		if (lawList[LAW_DEATHPENALTY] == 2)
 			story += CONST_news471;
 		else
@@ -2711,24 +2064,9 @@ void MusicClass::play(int _musicmode)
 
 		return story;
 	}
-	const string CONST_news470 = "seeking ";
-	const string CONST_news469 = " The district attorney's office has already repeatedly said it will be ";
-	const string CONST_news468 = ". Sources say that the police got a break in the case when ";
-	const string CONST_news465 = "only to turn up later";
-	const string CONST_news464 = ". Over twenty children in the past two years have gone missing, ";
-	const string CONST_news463 = " was detained yesterday afternoon, reportedly in possession of ";
-	const string CONST_news462 = "according to a spokesperson for the police department here. ";
-	const string CONST_news461 = "string of brutal child killings that has kept everyone in the area on edge, ";
-	const string CONST_news460 = "The authorities have apprehended their primary suspect in the ";
-	const string CONST_news459 = " - Perhaps parents can rest easier tonight. ";
 	string constructNegativeVIEW_DEATHPENALTY()
 	{
 
-		extern vector<string> evidence_of_child_murder;
-		extern vector<string> break_in_murder_case;
-
-		extern string singleDot;
-		extern string ampersandR;
 		char dstr[200], dstr2[200], dstr3[200];
 		generate_long_name(dstr, dstr2, dstr3);
 		string story = cityname()\
@@ -2760,45 +2098,16 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseTerroristPlot() {
 		string story;
-		extern short lawList[LAWNUM];
 
-		extern vector<string> terrorist_plot;
-		extern vector<string> terrorist_plot_no_free_speech;
 
 		if (lawList[LAW_FREESPEECH] == -2)story += pickrandom(terrorist_plot_no_free_speech);
 		else story += pickrandom(terrorist_plot);
 
 		return story;
 	}
-	const string CONST_newsX08 = " The spokesperson further stated, \"";
-	const string CONST_news508 = "this new age.";
-	const string CONST_news507 = "for what we feel are the essential tools for combating terrorism in ";
-	const string CONST_news506 = "The Head of the Agency will be sending a request to Congress ";
-	const string CONST_news505 = "However, let me also say that there's more that needs to be done. ";
-	const string CONST_news504 = "civilization before they can destroy American families. ";
-	const string CONST_news503 = "providing us with the tools we need to neutralize these enemies of ";
-	const string CONST_news502 = "that we are grateful to the Congress and this Administration for ";
-	const string CONST_news501 = "I won't compromise our sources and methods, but let me just say ";
-	const string CONST_news499 = "was to occur.";
-	const string CONST_news498 = "terrorist organization allowed the plot to be foiled just days before it ";
-	const string CONST_news497 = ". However, intelligence garnered from deep within the mysterious ";
-	const string CONST_news496 = " planned to ";
-	const string CONST_news495 = " According to a spokesperson for the agency, ";
-	const string CONST_news494 = "would have occurred on American soil.";
-	const string CONST_news493 = "Washington, DC - The CIA announced yesterday that it has averted a terror attack that ";
 	string constructNegativeVIEW_INTELLIGENCE()
 	{
 
-
-		extern string commaSpace;
-
-
-		extern vector<string> terrorist_group;
-
-
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story;
 		story += CONST_news493\
 			+ CONST_news494\
@@ -2828,16 +2137,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string unreliableTestimony(const char gn, const string dstr3) {
 
-		const string CONST_news541 = " consultations with a Magic 8-Ball";
-		const string CONST_news540 = " family";
-		const string CONST_news539 = " close personal friendship with the ";
-		const string CONST_news538 = " personal philosophy of liberty";
-		const string CONST_news537 = " deserved another chance";
-		const string CONST_news536 = " belief that ";
-		const string CONST_news535 = " belief that the crimes were a vast right-wing conspiracy";
-		const string CONST_news534 = " general feeling about police corruption";
-		const string CONST_news533 = "ten-year-old eyewitness testimony";
-
 		string gen = (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
 		string story;
 		switch (LCSrandom(7))
@@ -2864,36 +2163,9 @@ void MusicClass::play(int _musicmode)
 		}
 		return story;
 	}
-	const string CONST_newsB937 = "If I were to be released, I would surely kill again.\"";
-
-	const string CONST_news557 = "completely strapped for cash.&r";
-	const string CONST_news556 = "to the current economic doldrums that have left the state ";
-	const string CONST_news555 = "has stated that the case will not be retried, due ";
-	const string CONST_news554 = " A spokesperson for the district attorney ";
-	const string CONST_news552 = "Thank you for saving me from myself. ";
-	const string CONST_news551 = " confessed and was sentenced to life, saying \"";
-	const string CONST_news550 = "covered in the victims' blood. ";
-	const string CONST_news549 = " was found with the murder weapon, ";
-	const string CONST_news548 = "After an intensive manhunt, ";
-	const string CONST_news547 = " slayings. ";
-	const string CONST_news546 = " was convicted of the now-infamous ";
-	const string CONST_news545 = " Ten years ago, ";
-	const string CONST_news544 = " grants was not coerced in any way.&r";
-	const string CONST_news543 = ", which even Justice ";
-	const string CONST_news542 = ", despite the confession of ";
-
-	const string CONST_news531 = "made the decision based on ";
-	const string CONST_news530 = " of the notoriously liberal circuit of appeals here ";
-	const string CONST_news529 = "Justice ";
-	const string CONST_news528 = " was overturned by a federal judge yesterday. ";
-	const string CONST_news527 = " - The conviction of confessed serial killer ";
 	string constructNegativeVIEW_JUSTICES()
 	{
 
-
-
-		extern string singleDot;
-		extern string ampersandR;
 		char dstr[200], dstr2[200], dstr3[200];
 		generate_long_name(dstr, dstr2, dstr3);
 		char jstr[200], jstr2[200];
@@ -2940,25 +2212,8 @@ void MusicClass::play(int _musicmode)
 			+ CONST_news557;
 		return story;
 	}
-	const string CONST_news608 = "masturbated";
-	const string CONST_news607 = "[had fun]";
-	const string CONST_news606 = "breastfed from a lactating woman";
-	const string CONST_news605 = "[fed] from a [woman]";
-	const string CONST_news604 = "breastfed from an exposed woman";
-	const string CONST_news603 = "[fed] from [an indecent] woman";
-	const string CONST_news602 = "screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs. I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"";
-	const string CONST_news601 = "screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"";
-	const string CONST_news599 = "encouraged listeners to call in and relieve themselves";
-	const string CONST_news598 = "encouraged listeners to call in and take a piss";
-	const string CONST_news597 = "encouraged listeners to call in and [urinate]";
-	const string CONST_news596 = "had intercourse";
-	const string CONST_news595 = "fucked";
-	const string CONST_news594 = "[had consensual intercourse in the missionary position]";
-	const string CONST_newsX09 = "screamed \"fuck the police those goddamn motherfuckers. I got a fucking ticket this morning and I'm fucking pissed as shit.\"";
-
 	string obsceneAct() {
 		string story;
-		extern short lawList[LAWNUM];
 
 		switch (LCSrandom(5))
 		{
@@ -2989,13 +2244,7 @@ void MusicClass::play(int _musicmode)
 
 	string howManyListeners() {
 		string story;
-		extern short lawList[LAWNUM];
 
-		const string CONST_news616 = "some";
-		const string CONST_news615 = "dozens of";
-		const string CONST_news614 = "hundreds of";
-		const string CONST_news613 = "several hundred";
-		const string CONST_news612 = "thousands of";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news612;
 		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news613;
@@ -3009,13 +2258,6 @@ void MusicClass::play(int _musicmode)
 
 	string listenersFromWhere() {
 		string story;
-		extern short lawList[LAWNUM];
-
-		const string CONST_news623 = "within the town. ";
-		const string CONST_news622 = "in neighboring towns. ";
-		const string CONST_news621 = "within the county. ";
-		const string CONST_news620 = "from all over the state. ";
-		const string CONST_news619 = "across the nation. ";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news619;
 		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news620;
@@ -3027,31 +2269,10 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
-	const string CONST_news625 = "stated that the incident is under investigation.";
-	const string CONST_news624 = " A spokesperson for the FCC ";
-	const string CONST_news618 = "from irate listeners ";
-	const string CONST_news617 = " complaints ";
-	const string CONST_news611 = "the FCC received ";
-	const string CONST_news610 = " later apologized, ";
-	const string CONST_news609 = " on the air. Although ";
-
-	const string CONST_news593 = " reportedly ";
-	const string CONST_news592 = "\", ";
-	const string CONST_news591 = "'s ";
-	const string CONST_news590 = "broadcast of the program \"";
-	const string CONST_news589 = " has brought radio entertainment to a new low. During yesterday's ";
-	const string CONST_news588 = " - Infamous FM radio shock jock ";
 	string constructNegativeVIEW_AMRADIO()
 	{ //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
 
 
-		extern vector<string> fm_radio_name;
-		extern vector<string> fm_radio_name_2;
-
-
-
-		extern string singleDot;
-		extern string ampersandR;
 		char dstr[200], dstr2[200];
 		generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
 
@@ -3094,11 +2315,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string misterMissMrsOrMs(const int jg2) {
-		const string CONST_newsB939 = "Miss ";
-		const string CONST_news638 = "Mr. ";
-		const string CONST_news637 = "Mrs. ";
-		const string CONST_news636 = "Ms. ";
-		extern short lawList[LAWNUM];
 		string tg2;
 
 		if (jg2 == GENDER_FEMALE)
@@ -3114,8 +2330,6 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseMassShooting() {
 		string story;
-		extern short lawList[LAWNUM];
-		const string CONST_news648 = "mass shooting";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
 		else story += CONST_news648;
@@ -3126,11 +2340,7 @@ void MusicClass::play(int _musicmode)
 	string getPhraseKillingAttacker() {
 
 		string story;
-		extern short lawList[LAWNUM];
 
-
-		const string CONST_news642 = "firefight, killing the attacker ";
-		const string CONST_news641 = "firefight, [putting the attacker to sleep] ";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news641;
 		else story += CONST_news642;
@@ -3138,34 +2348,8 @@ void MusicClass::play(int _musicmode)
 		return story;
 
 	}
-	const string CONST_newsB940 = "he ";
-
-	const string CONST_news650 = "'s heroic actions.\"";
-	const string CONST_news649 = " if not for ";
-	const string CONST_news646 = " The spokesperson for the police department said, \"We'd have a yet another ";
-	const string CONST_news645 = "could hurt anyone else.&r";
-	const string CONST_news644 = "she ";
-	const string CONST_news643 = "before ";
-
-	const string CONST_news640 = " became more agitated, the heroic citizen was forced to engage the shooter in a ";
-	const string CONST_news639 = " attempted to talk down the shooter, but as ";
-	const string CONST_news635 = " Initially, ";
-	const string CONST_news634 = " to take cover while others called the police.&r";
-	const string CONST_news633 = "forcing ";
-	const string CONST_news632 = "The citizen pulled a concealed handgun and fired once at the shooter, ";
-	const string CONST_news631 = " sprung into action. ";
-	const string CONST_news630 = " opened fire at the ";
-	const string CONST_news629 = " After ";
-	const string CONST_news628 = " was prevented by a bystander with a gun.";
-	const string CONST_news626 = " - In a surprising turn, a ";
 	string constructNegativeVIEW_GUNCONTROL()
 	{
-		extern vector<string> public_place;
-		extern string commaSpace;
-
-
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname();
 		char jstr[200], jstr2[200], jstr3[200], jstr4[200], jstr5[200];
 		const char jg1 = pickrandom(maleOrFemale);
@@ -3220,20 +2404,7 @@ void MusicClass::play(int _musicmode)
 		return story;
 	}
 	string threatenToKillPolice() {
-		const string CONST_news678 = "Imma kill all you b*tches, startin' with this m*th*f*ck*r here.";
-		const string CONST_news677 = "[I will harm all police officers], startin' with this [one] here.";
-		const string CONST_news676 = "Imma kill all you bitches, startin' with this mothafucker here.";
-		const string CONST_news675 = "Why the f*ck am I talkin' to you? I'd rather kill this pig.";
-		const string CONST_news674 = "Why [am I] talkin' to you? I'd rather [harm this police officer.]";
-		const string CONST_news673 = "Why the fuck am I talkin' to you? I'd rather kill this pig.";
-		const string CONST_news672 = "F*ck a m*th*f*ck*n' bull. I'm killin' this pig sh*t.";
-		const string CONST_news671 = "[Too late.] [I am going to harm this police officer.]";
-		const string CONST_news670 = "Fuck a muthafuckin' bull. I'm killin' this pig shit.";
-		const string CONST_news669 = "Ah, f*ck this sh*t. This punk b*tch is f*ckin' dead!";
-		const string CONST_news668 = "Ah, [no way.] This [police officer will be harmed!]";
-		const string CONST_news667 = "Ah, fuck this shit. This punk bitch is fuckin' dead!";
 		string story;
-		extern short lawList[LAWNUM];
 		switch (LCSrandom(4))
 		{
 		case 0:
@@ -3259,40 +2430,8 @@ void MusicClass::play(int _musicmode)
 		}
 		return story;
 	}
-	const string CONST_news684 = "killed the guard";
-	const string CONST_news683 = "[harmed] the guard";
-
-	const string CONST_newsB944 = "neo-pagan";
-	const string CONST_newsB943 = "him";
-	const string CONST_newsB942 = "Bloods";
-
-	const string CONST_news708 = " altar";
-	const string CONST_news707 = "Satanic";
-	const string CONST_news706 = "sacrificed the guard on a makeshift ";
-
-	const string CONST_news701 = " off";
-	const string CONST_news699 = "taken the guard to the execution chamber and finished ";
-	const string CONST_news695 = "Crips";
-	const string CONST_news694 = "poisoned the guard with drugs smuggled into the prison by the ";
-	const string CONST_news693 = " own gun";
-	const string CONST_news691 = "shot the guard with ";
-	const string CONST_news690 = " cell";
-	const string CONST_news688 = "smashed the guard's skull with the toilet seat from ";
-	const vector<string> vicious_killing_of_guard = {
-		"slit the guard's throat with a shank",
-		"strangled the guard to death with a knotted bed sheet",
-		"chewed out the guard's throat",
-		"hit all 36 pressure points of death on the guard",
-		"electrocuted the guard with high-voltage wires",
-		"thrown the guard out the top-storey window",
-		"tricked another guard into shooting the guard dead",
-		"burnt the guard to a crisp using a lighter and some gasoline",
-		"eaten the guard's liver with some fava beans and a nice chianti",
-		"performed deadly experiments on the guard unheard of since Dr. Mengele"
-	};
 	string viciousGuardKilling(const char ggn, const char dgn) {
 		string story;
-		extern short lawList[LAWNUM];
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news683;
 		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news684;
@@ -3322,11 +2461,8 @@ void MusicClass::play(int _musicmode)
 	string getPhraseBeatenToDeath() {
 
 		string story;
-		extern short lawList[LAWNUM];
 
 
-		const string CONST_news711 = "beaten to death";
-		const string CONST_news710 = "[also harmed]";
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news710;
 		else  story += CONST_news711;
@@ -3336,42 +2472,15 @@ void MusicClass::play(int _musicmode)
 
 	string getPhraseRapist() {
 		string story;
-		extern short lawList[LAWNUM];
-
-
-		const string CONST_news657 = " Two weeks ago, convicted rapist ";
-		const string CONST_news656 = " Two weeks ago, convicted [reproduction fiend] ";
 
 		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news656;
 		else story += CONST_news657;
 
 		return story;
 	}
-	const string CONST_newsB941 = "himself";
-
-	const string CONST_news712 = " while \"resisting capture\", according to a prison spokesperson.";
-	const string CONST_news709 = ". The prisoner was ";
-	const string CONST_news682 = " had already ";
-	const string CONST_news681 = "the hostage, but ";
-	const string CONST_news680 = " The tower was breached in an attempt to reach ";
-	const string CONST_news666 = " reportedly screamed into the receiver \"";
-	const string CONST_news665 = " days, but talks were cut short when ";
-	const string CONST_news664 = "attempted to negotiate by phone for ";
-	const string CONST_news663 = "Authorities locked down the prison and ";
-	const string CONST_news662 = " with the guard in a prison tower. ";
-	const string CONST_news661 = "herself";
-	const string CONST_news660 = " and barricaded ";
-	const string CONST_news659 = ", overpowered ";
-	const string CONST_news658 = ", an inmate at ";
-	const string CONST_news655 = " captor.";
-	const string CONST_news653 = "death of both the prison guard being held hostage and ";
-	const string CONST_news652 = " Correctional Facility ended tragically yesterday with the ";
-	const string CONST_news651 = " - The hostage crisis at the ";
 	string constructNegativeVIEW_PRISONS()
 	{
 
-		extern string singleDot;
-		extern string ampersandR;
 		string story = cityname();
 		story += CONST_news651;
 		char jstr[200];
@@ -3501,18 +2610,10 @@ void MusicClass::play(int _musicmode)
 
 
 	string wasUnableToFind(const string old) {
-		const string CONST_activities149 = " but did find a ";
-		const string CONST_activities148 = " was unable to find a ";
 		return CONST_activities148 + old + CONST_activities149;
 	}
 
 	string considerLeaving(const bool sensealarm, const bool alarmon, const string name) {
-		const string singleDot = ".";
-		const string CONST_activities186 = "Enter - Call it a day.";
-
-		const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
-		const string CONST_activities167 = " is deterred.";
-		const string CONST_activities166 = "Enter - The Viper?   ";
 
 		if (!sensealarm) return CONST_activities186;
 		else
@@ -3530,16 +2631,6 @@ void MusicClass::play(int _musicmode)
 
 	string getDespairString(const bool drugs, const bool restrain, const bool religion) {
 
-		const string CONST_interrogation133 = " wonders about death.";
-		const string CONST_interrogation132 = " wonders about apples.";
-		const string CONST_interrogation131 = " cries helplessly.";
-		const string CONST_interrogation130 = " barks helplessly.";
-		const string CONST_interrogation129 = " curls up in the corner and doesn't move.";
-		const string CONST_interrogation128 = " goes limp in the restraints.";
-		const string CONST_interrogation127 = "mommy.";
-		const string CONST_interrogation126 = "God's mercy.";
-		const string CONST_interrogation125 = "John Lennon's mercy.";
-		const string CONST_interrogation124 = " screams helplessly for ";
 
 		string output;
 		switch (LCSrandom(4))
@@ -3564,8 +2655,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string victimPrays(const bool onDrugs) {
-		extern vector<string> prays;
-		extern vector<string> prays_on_drugs;
 		if (!onDrugs)
 		{
 			return pickrandom(prays);
@@ -3577,14 +2666,7 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string getFallsInLove(const string name, const bool restrain) {
-		extern vector<vector<string> > fall_in_love;
-		const string singleDot = ".";
 		string output;
-
-		const string CONST_interrogation143 = "talks about hugging ";
-		const string CONST_interrogation142 = " stammers and ";
-
-		const string CONST_interrogationB150 = "hugs ";
 
 		switch (LCSrandom(fall_in_love.size() + 1))
 		{
@@ -3605,14 +2687,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string getBadTrip(const string name, const bool restrain, const bool rapport) {
-		extern vector<vector<string> > bad_trip;
-		const string singleDot = ".";
-
-		const string CONST_interrogation148 = " begs for the nightmare to end.";
-		const string CONST_interrogation147 = " curls up and";
-		const string CONST_interrogation146 = " to stop looking like Hitler.";
-		const string CONST_interrogation145 = " screams for ";
-		const string CONST_interrogation144 = " begs Hitler to stay and kill ";
 
 		string output;
 		switch (LCSrandom(bad_trip.size() + 2))
@@ -3645,8 +2719,6 @@ void MusicClass::play(int _musicmode)
 		return output;
 	}
 	string outPsychologyCaptor(const string name) {
-		extern vector<string> smarter_than_you_one_line;
-		extern vector<vector<string> > smarter_than_you;
 		string output;
 		int which_smarter = LCSrandom(smarter_than_you.size() + smarter_than_you_one_line.size());
 		if (which_smarter < smarter_than_you.size()) {
@@ -3662,8 +2734,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string triedConvertingTheAbused(const string name) {
-		extern vector<string> develops_hatred_one_line;
-		extern vector<vector<string> > develops_hatred;
 		string output;
 		int which_hatred = LCSrandom(develops_hatred.size() + develops_hatred_one_line.size());
 		if (which_hatred < develops_hatred.size())
@@ -3680,8 +2750,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string feelsBadForAbused(const string name) {
-		extern vector<string> interrogater_shows_compassion_one_line;
-		extern vector<vector<string> > interrogater_shows_compassion;
 
 		string output;
 		int which_compassion = LCSrandom(interrogater_shows_compassion.size() + interrogater_shows_compassion_one_line.size());
@@ -3697,8 +2765,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string stockholmSyndrome(const string name) {
-		extern vector<vector<string> > cling_to_interrogater;
-		extern vector<string> clinging_one_line;
 
 		string output;
 		int which_cling = LCSrandom(cling_to_interrogater.size() + clinging_one_line.size());
@@ -3714,8 +2780,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string failToBreakReligion(const string a, const string cr) {
-		extern vector<vector<string> > cling_to_religion;
-		extern vector<string> cling_to_religion_one_line;
 
 		string output;
 		int which_cling = LCSrandom(cling_to_religion.size() + cling_to_religion_one_line.size());
@@ -3733,8 +2797,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string failedToBreakBusiness(const string a, const string cr) {
-		extern vector<vector<string> > cling_to_business;
-		extern vector<string> cling_to_business_one_line;
 
 		string output;
 		int which_cling = LCSrandom(cling_to_business.size() + cling_to_business_one_line.size());
@@ -3752,8 +2814,6 @@ void MusicClass::play(int _musicmode)
 	}
 
 	string failedToBreakScience(const string a, const string cr) {
-		extern vector<vector<string> > cling_to_science;
-		extern vector<string> cling_to_science_one_line;
 		string output;
 		int which_cling = LCSrandom(cling_to_science.size() + cling_to_science_one_line.size());
 		if (which_cling < cling_to_science.size()) {
@@ -3772,13 +2832,6 @@ void MusicClass::play(int _musicmode)
 
 	string howGracefulAttack(int handToHand) {
 
-		const string CONST_fight126 = "gracefully strikes at";
-		const string CONST_fight125 = "jump kicks";
-		const string CONST_fight124 = "strikes at";
-		const string CONST_fight123 = "kicks";
-		const string CONST_fight122 = "grapples with";
-		const string CONST_fight121 = "swings at";
-		const string CONST_fight120 = "punches";
 
 		if (!LCSrandom(handToHand + 1))
 			return CONST_fight120;
@@ -3797,11 +2850,6 @@ void MusicClass::play(int _musicmode)
 
 	string dismemberingWound(const int w, const int wound) {
 
-		const string CONST_fight152 = " BLOWING IT OFF!";
-		const string CONST_fight151 = " CUTTING IT OFF!";
-		const string CONST_fight150 = " BLOWING IT IN HALF!";
-		const string CONST_fight149 = " BLOWING IT APART!";
-		const string CONST_fight148 = " CUTTING IT IN HALF!";
 
 		string output = blankString;
 
@@ -3830,28 +2878,6 @@ void MusicClass::play(int _musicmode)
 
 	vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]) {
 		vector<string> woundList;
-		const string CONST_commondisplay180 = "Missing Teeth";
-		const string CONST_commondisplay178 = "No Teeth";
-		const string CONST_commondisplay177 = "No Tongue";
-
-		const string CONST_commondisplay188 = "Broken Ribs";
-		const string CONST_commondisplay187 = "Broken Rib";
-		const string CONST_commondisplay186 = "All Ribs Broken";
-		const string CONST_commondisplay185 = "Busted Spleen";
-		const string CONST_commondisplay184 = "Stomach Injured";
-		const string CONST_commondisplay183 = "L. Kidney Damaged";
-		const string CONST_commondisplay182 = "R. Kidney Damaged";
-		const string CONST_commondisplay181 = "Liver Damaged";
-		const string CONST_commondisplay179 = "Missing a Tooth";
-		const string CONST_commondisplay176 = "No Nose";
-		const string CONST_commondisplay175 = "No Left Eye";
-		const string CONST_commondisplay174 = "No Right Eye";
-		const string CONST_commondisplay173 = "Broken Lw Spine";
-		const string CONST_commondisplay172 = "Broken Up Spine";
-		const string CONST_commondisplay171 = "Broken Neck";
-		const string CONST_commondisplay170 = "L. Lung Collapsed";
-		const string CONST_commondisplay169 = "R. Lung Collapsed";
-		const string CONST_commondisplay168 = "Heart Punctured";
 
 		if (special[SPECIALWOUND_HEART] != 1)
 		{

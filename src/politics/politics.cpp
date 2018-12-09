@@ -1,80 +1,5 @@
+#define	POLITICS_CPP
 #include "../includes.h"
-const string CONST_politics112 = "pro-Human Rights";
-const string CONST_politics111 = "return attitude[]";
-const string CONST_politics110 = "    ";
-const string CONST_politics109 = "None of the items made it to the President's desk.";
-const string CONST_politics107 = "*** VETO ***";
-const string CONST_politics106 = "FORCED BY CONGRESS";
-const string CONST_politics105 = "Dead in Congress";
-const string CONST_politics104 = "President";
-const string CONST_politics103 = "Press any key to watch the President.                   ";
-const string CONST_politics102 = "VP";
-const string CONST_politics100 = "Senate";
-const string CONST_politics099 = "House";
-const string CONST_politics098 = "Press any key to watch the votes unfold.";
-const string CONST_politics097 = "Expand Prisoners' Rights";
-const string CONST_politics096 = "Mandate Prison Rehabilitation";
-const string CONST_politics095 = "To ";
-const string CONST_politics094 = "Joint Resolution ";
-const string CONST_politics093 = "Legislative Agenda ";
-const string CONST_politics092 = "Congress is acting on legislation!";
-const string CONST_politics091 = ", is appointed to the bench.";
-const string CONST_politics090 = "the Honorable ";
-const string CONST_politics089 = "Comrade ";
-const string CONST_politics088 = "After much debate and televised testimony, a new justice,";
-const string CONST_politics087 = "Press any key to see what happens.";
-const string CONST_politics086 = ", is stepping down.";
-const string CONST_politics085 = "Justice ";
-const string CONST_politics084 = "Changing the Guard!";
-const string CONST_politics083 = " for Status Quo";
-const string CONST_politics082 = " for Change";
-const string CONST_politics080 = "Press any key to watch the decisions unfold.";
-const string CONST_politics077 = "A Decision could ";
-const string CONST_politics076 = " vs. ";
-const string CONST_politics075 = "United States";
-const string CONST_politics074 = "Supreme Court Watch ";
-const string CONST_politics073 = "The Supreme court is handing down decisions!";
-const string CONST_politics072 = "A Recount was Necessary";
-const string CONST_politics071 = "% No";
-const string CONST_politics070 = "% Yes";
-const string CONST_politics069 = "Press any key to watch the elections unfold.";
-const string CONST_politics065 = "Proposition ";
-const string CONST_politics064 = "Important Propositions ";
-const string CONST_politics063 = "Press any key to continue the elections.   ";
-const string CONST_politics062 = " (After Recount)";
-const string CONST_politics061 = "Press any key to watch the election unfold.";
-const string CONST_politics060 = "Mrs. ";
-const string CONST_politics059 = "Mr. ";
-const string CONST_politics058 = "Representative ";
-const string CONST_politics057 = "Ret. General ";
-const string CONST_politics056 = "Senator ";
-const string CONST_politics055 = "Governor ";
-const string CONST_politics054 = "Vice President ";
-const string CONST_politics053 = "President ";
-const string CONST_politics052 = "After a long primary campaign, the people have rallied around two leaders...";
-const string CONST_politics051 = "After a long primary campaign, the people have rallied around three leaders...";
-const string CONST_politics050 = "Presidential General Election ";
-const string CONST_politics049 = "The Elections are being held today!";
-const string CONST_politics048 = "Press any key to continue the elections.    ";
-const string CONST_politics047 = "        ";
-const string CONST_politics046 = "+";
-const string CONST_politics045 = "   C+: ";
-const string CONST_politics043 = "   C: ";
-const string CONST_politics041 = "   m: ";
-const string CONST_politics039 = "   L: ";
-const string CONST_politics037 = "   L+: ";
-const string CONST_politics035 = "   S: ";
-const string CONST_politics034 = "Net change:";
-const string CONST_politics033 = "S ";
-const string CONST_politics032 = "L+";
-const string CONST_politics031 = "L ";
-const string CONST_politics030 = "m ";
-const string CONST_politics029 = "C ";
-const string CONST_politics028 = "C+";
-const string CONST_politics020 = "House Elections ";
-const string CONST_politics004 = "                    ";
-const string CONST_politics002 = "Senate Elections ";
-const string CONST_politics001 = "corporateSuffix.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -101,100 +26,12 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-#include "../creature/creatureEnums.h"
-/* fills a string with a proper name */
-void generate_name(char *str, char gender = GENDER_NEUTRAL);
-string lastname(bool x = false);
-//#include "../common/commonactions.h"
-int randomissue(bool core_only = 0);
-#include "../common/commondisplay.h"
-// for  void makedelimiter(int y=8,int x=0);
-//#include "../monthly/EndGameStatus.h"
-/* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
-void tossjustices(char canseethings);
-/* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
-void amendment_termlimits(char canseethings);
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include <common\\getnames.h>
-map<short, string> conservatiseLaw;
-map<short, string> liberalizeLaw;
-#include "../common/musicClass.h"
- string establishPrisonReform;
- string improvePrisonConditions;
-extern string pressKeyToReflect;
-extern string YEA;
-extern string NAY;
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;
- const string mostlyendings = "mostlyendings\\";
- extern string commaSpace;
-#include "../customMaps.h"
  vector<file_and_text_collection> politics_text_file_collection = {
 	 customText(&corporateSuffix, mostlyendings + CONST_politics001),
  };
 
- map<int, bool> stalinView = {
-	 map<int, bool>::value_type(VIEW_STALIN,  false), // Liberals and Stalinists don't get along
-	 map<int, bool>::value_type(VIEW_MOOD,  false), // Liberals and Stalinists don't get along
-	 map<int, bool>::value_type(VIEW_GAY,  false), // Stalinists discriminate against gay people
-	 map<int, bool>::value_type(VIEW_DEATHPENALTY,  false), // Stalinists execute lots of people
-	 map<int, bool>::value_type(VIEW_TAXES,  true), // Stalinists support communist income redistribution
-	 map<int, bool>::value_type(VIEW_NUCLEARPOWER,  false), // Stalinists believe the more nuclear, the better
-	 map<int, bool>::value_type(VIEW_ANIMALRESEARCH,  false), // Stalinists are in favor of unethical research
-	 map<int, bool>::value_type(VIEW_POLICEBEHAVIOR,  false), // Stalinists use police for brutal repression
-	 map<int, bool>::value_type(VIEW_TORTURE,  false), // Stalinists torture their enemies
-	 map<int, bool>::value_type(VIEW_INTELLIGENCE,  false), // Stalinists don't believe in privacy
-	 map<int, bool>::value_type(VIEW_FREESPEECH,  false), // Stalinists don't allow any dissent
-	 map<int, bool>::value_type(VIEW_GENETICS,  false), // Stalinists are in favor of unethical research
-	 map<int, bool>::value_type(VIEW_JUSTICES,  false), // Liberals and Stalinists don't get along
-	 map<int, bool>::value_type(VIEW_GUNCONTROL,  true), // Stalinists don't want any armed resistance
-	 map<int, bool>::value_type(VIEW_SWEATSHOPS,  true), // Stalinists say, Workers of the world unite!
-	 map<int, bool>::value_type(VIEW_POLLUTION,  false), // Stalinists don't care about pollution
-	 map<int, bool>::value_type(VIEW_CORPORATECULTURE,  true), // Stalinists hate rich people and corporations
-	 map<int, bool>::value_type(VIEW_CEOSALARY,  true), // Stalinists hate rich people and corporations
-	 map<int, bool>::value_type(VIEW_WOMEN,  false), // Stalinists discriminate against women
-	 map<int, bool>::value_type(VIEW_CIVILRIGHTS,  false), // Stalinists discriminate against ethnic groups
-	 map<int, bool>::value_type(VIEW_DRUGS,  false), // Stalinists only allow vodka
-	 map<int, bool>::value_type(VIEW_IMMIGRATION,  false), // Stalinists maintained tight border security at the Iron Curtain
-	 map<int, bool>::value_type(VIEW_MILITARY,  false), // Stalinists use the military for brutal repression
-	 map<int, bool>::value_type(VIEW_PRISONS,  false), // Stalinists annex Canada to fill it with gulags
-	 map<int, bool>::value_type(VIEW_AMRADIO,  true), // Stalinists agree that Conservatives are bad
-	 map<int, bool>::value_type(VIEW_CABLENEWS,  true), // Stalinists agree that Conservatives are bad
-														//map<int, bool>::value_type( VIEW_POLITICALVIOLENCE,  true), // the LCS and Stalinists both like using political violence
-														map<int, bool>::value_type(VIEW_LIBERALCRIMESQUAD,  false), // Liberals and Stalinists don't get along
-														map<int, bool>::value_type(VIEW_LIBERALCRIMESQUADPOS,  false), // Liberals and Stalinists don't get along
-														map<int, bool>::value_type(VIEW_CONSERVATIVECRIMESQUAD,  true), // Stalinists agree that Conservatives are bad
-														map<int, bool>::value_type(VIEWNUM,  false), // Liberals and Stalinists don't get along
- };
- map<int, bool> stalinLaw = {
-	 map<int, bool>::value_type(LAW_STALIN,  false), // Liberals and Stalinists don't get along
-	 map<int, bool>::value_type(LAW_MOOD,  false), // Liberals and Stalinists don't get along
-	 map<int, bool>::value_type(LAW_ABORTION,  true), // Stalinists agree that abortion is good, although technically they don't let women choose
-	 map<int, bool>::value_type(LAW_ANIMALRESEARCH,  false), // Stalinists are in favor of unethical research
-	 map<int, bool>::value_type(LAW_POLICEBEHAVIOR,  false), // Stalinists use police for brutal repression
-	 map<int, bool>::value_type(LAW_PRIVACY,  false), // Stalinists don't believe in privacy
-	 map<int, bool>::value_type(LAW_DEATHPENALTY,  false), // Stalinists execute lots of people
-	 map<int, bool>::value_type(LAW_NUCLEARPOWER,  false), // Stalinists believe the more nuclear, the better
-	 map<int, bool>::value_type(LAW_POLLUTION,  false), // Stalinists don't care about pollution
-	 map<int, bool>::value_type(LAW_LABOR,  true), // Stalinists say, Workers of the world unite!
-	 map<int, bool>::value_type(LAW_GAY,  false), // Stalinists discriminate against gay people
-	 map<int, bool>::value_type(LAW_CORPORATE,  true), // Stalinists hate rich people and corporations
-	 map<int, bool>::value_type(LAW_FREESPEECH,  false), // Stalinists don't allow any dissent
-	 map<int, bool>::value_type(LAW_FLAGBURNING,  true), // Stalinists regularly burn flags
-	 map<int, bool>::value_type(LAW_GUNCONTROL,  true), // Stalinists don't want any armed resistance
-	 map<int, bool>::value_type(LAW_TAX,  true), // Stalinists support communist income redistribution
-	 map<int, bool>::value_type(LAW_WOMEN,  false), // Stalinists discriminate against women
-	 map<int, bool>::value_type(LAW_CIVILRIGHTS,  false), // Stalinists discriminate against ethnic groups
-	 map<int, bool>::value_type(LAW_DRUGS,  false), // Stalinists only allow vodka
-	 map<int, bool>::value_type(LAW_IMMIGRATION,  false), // Stalinists maintained tight border security at the Iron Curtain
-	 map<int, bool>::value_type(LAW_ELECTIONS,  false), // Stalinists don't even have elections
-	 map<int, bool>::value_type(LAW_MILITARY,  false), // Stalinists use the military for brutal repression
-	 map<int, bool>::value_type(LAW_PRISONS,  false), // Stalinists annex Canada to fill it with gulags
-	 map<int, bool>::value_type(LAW_TORTURE,  false), // Stalinists torture their enemies
-	 map<int, bool>::value_type(LAWNUM,  false), // Liberals and Stalinists don't get along
- };
  /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
  * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
  bool stalinview(short view, bool islaw)
@@ -216,28 +53,6 @@ vector<string> corporateSuffix;
 			 return false; // if the view doesn't exist, assume false
 	 }
  }
- map<int, int> lawReturnAttitude = {
-	 map<int, int>::value_type(LAW_ABORTION, VIEW_WOMEN), //XXX, There is no ``VIEW_ABORTION''!
-	 map<int, int>::value_type(LAW_ANIMALRESEARCH, VIEW_ANIMALRESEARCH),
-	 map<int, int>::value_type(LAW_POLICEBEHAVIOR, VIEW_POLICEBEHAVIOR),
-	 map<int, int>::value_type(LAW_PRIVACY, VIEW_INTELLIGENCE),
-	 map<int, int>::value_type(LAW_DEATHPENALTY, VIEW_DEATHPENALTY),
-	 map<int, int>::value_type(LAW_NUCLEARPOWER, VIEW_NUCLEARPOWER),
-	 map<int, int>::value_type(LAW_POLLUTION, VIEW_POLLUTION),
-	 map<int, int>::value_type(LAW_LABOR, VIEW_SWEATSHOPS),
-	 map<int, int>::value_type(LAW_GAY, VIEW_GAY),
-	 map<int, int>::value_type(LAW_FREESPEECH, VIEW_FREESPEECH),
-	 map<int, int>::value_type(LAW_TAX, VIEW_TAXES),
-	 map<int, int>::value_type(LAW_FLAGBURNING, VIEW_FREESPEECH),  // <-- I'm keeping this pure free speech instead of free speech
-	 map<int, int>::value_type(LAW_WOMEN, VIEW_WOMEN),             // plus political violence. Ideologically, there's no association
-	 map<int, int>::value_type(LAW_CIVILRIGHTS, VIEW_CIVILRIGHTS), // between flag burning and violence. - Jonathan S. Fox
-	 map<int, int>::value_type(LAW_DRUGS, VIEW_DRUGS),
-	 map<int, int>::value_type(LAW_IMMIGRATION, VIEW_IMMIGRATION), //XXX, VIEW_DRUGS?
-	 map<int, int>::value_type(LAW_MILITARY, VIEW_MILITARY),
-	 map<int, int>::value_type(LAW_TORTURE, VIEW_TORTURE),
-	 map<int, int>::value_type(LAW_GUNCONTROL, VIEW_GUNCONTROL),
-	 map<int, int>::value_type(LAW_PRISONS, VIEW_PRISONS),
- };
  /* politics - checks the prevailing attitude on a specific law, or overall */
  int publicmood(const int old_l)
  {
@@ -246,7 +61,6 @@ vector<string> corporateSuffix;
 		 return lawReturnAttitude[l];
 	 }
 	 else {
-		 extern short attitude[VIEWNUM];
 		 switch (l)
 		 {  // All laws should be affected by exactly one issue if there is a direct
 			// correlation between that law and an issue. For example, police behavior
@@ -284,9 +98,6 @@ vector<string> corporateSuffix;
  /* common - shifts public opinion on an issue */
  void change_public_opinion(int v, int power, char affect, char cap)
  {
-	 extern short attitude[VIEWNUM];
-	 extern short public_interest[VIEWNUM];
-	 extern short background_liberal_influence[VIEWNUM];
 	 // First note this in the liberal influence -- mostly for the
 	 // sake of the nice visual intelligence report entry
 	 if (v < VIEWNUM - 5)
@@ -384,7 +195,6 @@ vector<string> corporateSuffix;
  /* politics -- gets the leaning of an issue voter for an election */
  int getswingvoter(bool stalin)
  {
-	 extern short attitude[VIEWNUM];
 	 // Take a random voter, calculate how liberal or conservative they are
 	 // If stalin parameter is true, it calculates how libertarian or Stalinist they are instead
 	 int bias = publicmood(-1 - stalin) - LCSrandom(100), vote = -2;
@@ -404,8 +214,6 @@ vector<string> corporateSuffix;
  /* politics - calculate presidential approval */
  int presidentapproval()
  {
-	 extern short presparty;
-	 extern short exec[EXECNUM];
 	 //Calculate Presidential approval rating
 	 int approval = 0;
 	 for (int i = 0; i < 1000; i++)
@@ -432,7 +240,6 @@ vector<string> corporateSuffix;
  /* politics -- gets the leaning of a partyline voter for an election */
  int getsimplevoter(int leaning)
  {
-	 extern short attitude[VIEWNUM];
 	 // no need for this to deal with Stalinism, this function deliberately only deals with the liberal vs. conservative spectrum
 	 int vote = leaning - 1;
 	 for (int i = 0; i < 2; i++) if (LCSrandom(100) < attitude[randomissue(true)]) vote++;
@@ -442,8 +249,6 @@ vector<string> corporateSuffix;
  /* politics -- appoints a figure to an executive office, based on the President's alignment */
  void fillCabinetPost(int position)
  {
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	 extern short exec[EXECNUM];
 	 // Set alignment
 	 if (exec[EXEC_PRESIDENT] == ALIGN_ARCHCONSERVATIVE) exec[position] = ALIGN_ARCHCONSERVATIVE;
 	 else if (exec[EXEC_PRESIDENT] == ALIGN_ELITELIBERAL) exec[position] = ALIGN_ELITELIBERAL;
@@ -457,9 +262,6 @@ vector<string> corporateSuffix;
  /* politics -- promotes the Vice President to President, and replaces VP */
  void promoteVP()
  {
-	 extern short presparty;
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	 extern short exec[EXECNUM];
 	 exec[EXEC_PRESIDENT] = exec[EXEC_VP]; // VP takes over as President
 	 strcpy(execname[EXEC_PRESIDENT], execname[EXEC_VP]);
 	 switch (exec[EXEC_PRESIDENT])
@@ -487,9 +289,7 @@ vector<string> corporateSuffix;
 		 if (abs(exec[EXEC_PRESIDENT] - exec[EXEC_ATTORNEY]) > 1) fillCabinetPost(EXEC_ATTORNEY);
 	 }
  }
- void addStringYear();
  void printSenateElectionsHeader() {
-	 extern MusicClass music;
 	 music.play(MUSIC_ELECTIONS);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -502,8 +302,6 @@ vector<string> corporateSuffix;
 	 pressAnyKey();
  }
  void printSenateStatus(const int change[]) {
-	 extern bool stalinmode;
-	 extern char disbanding;
 
 	 set_color_easy(WHITE_ON_BLACK);
 	 mvaddstrAlt(20, 0, CONST_politics034);
@@ -565,19 +363,12 @@ vector<string> corporateSuffix;
 	 pressAnyKey();
  }
  void printSingleSenator(const int s, const int x, const int y) {
-	 extern short senate[SENATENUM];
 	 set_alignment_color(senate[s], true);
 	 mvaddstrAlt(y, x, CONST_politics004);
 	 mvaddstrAlt(y, x, getalign(senate[s], false));
  }
  void elections_senate(int senmod, char canseethings)
  {
-	 extern MusicClass music;
-	 extern bool termlimits;
-	 extern bool stalinmode;
-	 extern char disbanding;
-	 extern short lawList[LAWNUM];
-	 extern short senate[SENATENUM];
 	 const int mood = publicmood(LAW_MOOD);
 	 const int stalinmood = publicmood(LAW_STALIN);
 	 if (canseethings)
@@ -654,7 +445,6 @@ vector<string> corporateSuffix;
 	 }
  }
  void printSingleHouseMember(const int h, const int y, const int x) {
-	 extern short house[HOUSENUM];
 	 moveAlt(y, x);
 	 switch (house[h]) {
 	 case -2:
@@ -701,8 +491,6 @@ vector<string> corporateSuffix;
 	 }
  }
  void printHouseChanges(const int x, const int y, const int h, const int change[]) {
-	 extern bool stalinmode;
-	 extern char disbanding;
 	 printSingleHouseMember(h, y, x);
 	 set_color_easy(WHITE_ON_BLACK);
 	 mvaddstrAlt(20, 0, CONST_politics034);
@@ -732,7 +520,6 @@ vector<string> corporateSuffix;
  }
  void printWinnerOfElection(const int change[]) {
 	 const int mood = publicmood(LAW_MOOD);
-	 extern char disbanding;
 	 moveAlt(21, 0);
 	 signed char winner;
 	 if (change[5] > 0 && change[5] > change[0] + change[1] && change[5] > change[3] + change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
@@ -769,7 +556,6 @@ vector<string> corporateSuffix;
 	 else pause_ms(800);
  }
  void printHouseElectionsHeader() {
-	 extern MusicClass music;
 	 music.play(MUSIC_ELECTIONS);
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -782,11 +568,6 @@ vector<string> corporateSuffix;
  }
  void elections_house(const char canseethings)
  {
-	 extern bool termlimits;
-	 extern bool stalinmode;
-	 extern char disbanding;
-	 extern short lawList[LAWNUM];
-	 extern short house[HOUSENUM];
 	 const int mood = publicmood(LAW_MOOD);
 	 const int stalinmood = publicmood(LAW_STALIN);
 	 if (canseethings)
@@ -877,13 +658,6 @@ vector<string> corporateSuffix;
 	 return yeswin;
  }
  void printCandiadates(const char candidate[3][POLITICIAN_NAMELEN + 1]) {
-	 extern short presparty;
-	 extern bool stalinmode;
-	 extern char disbanding;
-	 extern short execterm;
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	 extern Log gamelog;
-
 	 for (int c = 0; c < 2 + stalinmode; c++)
 	 {
 		 // Pick color by political orientation
@@ -911,8 +685,6 @@ vector<string> corporateSuffix;
 	 else pause_ms(200);
  }
  int singleVote(const int l, const char liberalCandiadate, const char conservativeCandiadate) {
-	 extern bool stalinmode;
-	 extern char disbanding;
 	 int partyVote;
 	 if (l % 2 == 0 && LCSrandom(5))
 	 {  // Partyline Liberals (~40%) - except when stalin mode is enabled they can go Stalinist sometimes
@@ -951,13 +723,6 @@ vector<string> corporateSuffix;
  }
  void presidentialElection(const char canseethings) {
 
-	 extern short presparty;
-	 extern bool stalinmode;
-	 extern char disbanding;
-	 extern short execterm;
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	 extern short exec[EXECNUM];
-	 extern Log gamelog;
 	 // IsaacG This is goddamn disgusting.  a candiadate is a single char representing alignment followed by a char* of their name
 	 char candidate[3][POLITICIAN_NAMELEN + 1];
 	 int votes[3] = { 0,0,0 };
@@ -1073,31 +838,21 @@ vector<string> corporateSuffix;
 	 }
  }
  bool isPresidentElectionYear() {
-	 extern int year;
 	 return year % 4 == 0;
  }
  bool isAnyElectionYear() {
-	 extern int year;
 	 return year % 2 == 0;
 
  }
  int senMod() {
-	 extern int year;
 	 return (year % 6) / 2;
  }
  void addStringYear() {
-	 extern int year;
 	 addstrAlt(year);
  }
  /* politics - causes the people to vote (presidential, congressional, propositions) */
  void elections(char clearformess, char canseethings)
  {
-	 extern MusicClass music;
-
-	 extern bool stalinmode;
-
-	 extern short lawList[LAWNUM];
-	 extern short public_interest[VIEWNUM];
 	 if (canseethings)
 	 {
 		 music.play(MUSIC_ELECTIONS);
@@ -1234,12 +989,6 @@ vector<string> corporateSuffix;
  /* politics - causes the supreme court to hand down decisions */
  void supremecourt(char clearformess, char canseethings)
  {
-	 extern MusicClass music;
-	 extern short exec[EXECNUM];
-	 extern short lawList[LAWNUM];
-	 extern short senate[SENATENUM];
-	 extern short court[COURTNUM];
-	 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	 if (canseethings)
 	 {
 		 music.play(MUSIC_ELECTIONS);
@@ -1425,13 +1174,6 @@ vector<string> corporateSuffix;
 		 }
 	 }
  }
- enum BillStatus
- {
-	 BILL_SIGNED = -2,
-	 BILL_OVERRIDE_VETO = -1,
-	 BILL_PASSED_CONGRESS = 0,
-	 BILL_FAILED = 1
- };
  //Some politicians listen to public opinion, but no politician will radically deviate from their alignment.
  //More extreme politicians are less likely to deviate from their views. Moderates always consult public opinion.
  char determine_politician_vote(char alignment, int law)
@@ -1465,9 +1207,6 @@ vector<string> corporateSuffix;
 	 return vote;
  }
  void determineBills(const char canseethings, vector<int> &bill, vector<int> &billdir) {
-	 extern short lawList[LAWNUM];
-	 extern short house[HOUSENUM];
-	 extern short senate[SENATENUM];
 
 	 char lawtaken[LAWNUM];
 	 memset(lawtaken, 0, LAWNUM * sizeof(char));
@@ -1564,7 +1303,6 @@ vector<string> corporateSuffix;
 	 }
  }
  void displayCongressHeader(const char clearformess) {
-	 extern MusicClass music;
 	 music.play(MUSIC_ELECTIONS);
 	 if (clearformess) eraseAlt();
 	 else makedelimiter();
@@ -1628,7 +1366,6 @@ vector<string> corporateSuffix;
 	 pause_ms(500);
  }
  void printBillResults(const BillStatus bill, const int c) {
-	 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	 moveAlt(c * 3 + 2, 35);
 	 if (bill == BILL_SIGNED)
 	 {
@@ -1664,11 +1401,6 @@ vector<string> corporateSuffix;
 	 pressAnyKey();
  }
  BillStatus determineBillStatus(const int billc, const int billdirc, const int c, const char canseethings) {
-
-	 extern short house[HOUSENUM];
-	 extern short senate[SENATENUM];
-	 extern short exec[EXECNUM];
-	 extern short lawList[LAWNUM];
 
 	 BillStatus killbillc = BILL_PASSED_CONGRESS;
 
@@ -1736,28 +1468,19 @@ vector<string> corporateSuffix;
  }
 vector<int> getHouseMake() {
 
-	 extern short house[HOUSENUM];
 	 vector<int> housemake = { 0,0,0,0,0,0 };
 	 for (int h = 0; h < HOUSENUM; h++) housemake[house[h] + 2]++;
 	 return housemake;
  }
 vector<int> getSenateMake() {
 
-	 extern short senate[SENATENUM];
 	 vector<int> senatemake = { 0,0,0,0,0,0 };
 	 for (int s = 0; s < SENATENUM; s++) senatemake[senate[s] + 2]++;
 	 return senatemake;
  }
- void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
  /* politics - causes congress to act on legislation */
  void congress(char clearformess, char canseethings)
  {
-	 extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-	 extern bool nocourtpurge;
-
-	 extern short exec[EXECNUM];
-	 extern short lawList[LAWNUM];
-	 extern short court[COURTNUM];
 	 if (canseethings)
 	 {
 		 displayCongressHeader(clearformess);
@@ -1845,12 +1568,6 @@ vector<int> getSenateMake() {
  /* politics - checks if the game is won */
  char wincheck()
  {
-	 extern short wincondition;
-	 extern short exec[EXECNUM];
-	 extern short lawList[LAWNUM];
-	 extern short house[HOUSENUM];
-	 extern short senate[SENATENUM];
-	 extern short court[COURTNUM];
 	 for (int e = 0; e < EXECNUM; e++) if (exec[e] < ALIGN_ELITELIBERAL) return 0;
 	 if (wincondition == WINCONDITION_ELITE) for (int l = 0; l < LAWNUM; l++) if (lawList[l] < ALIGN_ELITELIBERAL) return 0;
 	 else

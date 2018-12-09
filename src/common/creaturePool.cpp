@@ -1,25 +1,6 @@
+#define	CREATUREPOOL_CPP
 #include "../includes.h"
 
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-
-#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../common/creaturePool.h"
-#include "../common/creaturePoolCreature.h"
 vector<DeprecatedCreature *> pool;
 CreaturePool singletonPool;
 void addCreature(DeprecatedCreature* cr)
@@ -72,15 +53,8 @@ void CreaturePool::clearAllBleedingAndEscapeFlags()
 		}
 	}
 }
-extern string string_sleeper;
-#include "../cursesAlternative.h"
-#include "../log/log.h"
-//#include "../common/consolesupport.h"
 void CreaturePool::outSleepers(int cursite, int base)
 {
-	const string CONST_creaturePool007 = "The Liberal is now at your command as a normal squad member.";
-	const string CONST_creaturePool006 = " has been outed by your bold attack!";
-	extern Log gamelog;
 	for (int p = 0; p < lenpool(); p++)
 	{
 		if (pool[p]->flag&CREATUREFLAG_SLEEPER &&
@@ -100,9 +74,6 @@ void CreaturePool::outSleepers(int cursite, int base)
 		}
 	}
 }
-#include "../sitemode/advance.h"
-/* handles end of round stuff for one creature */
-void advancecreature(DeprecatedCreature &cr);
 void CreaturePool::advanceCreaturesAtLocation(int cursite)
 {
 	for (int p = 0; p < lenpool(); p++)
@@ -113,8 +84,6 @@ void CreaturePool::advanceCreaturesAtLocation(int cursite)
 		advancecreature(*pool[p]);
 	}
 }
-#include "../common/commonactionsCreature.h"
-#include "../combat/fightCreature.h"
 void CreaturePool::arrestOrKillCCSSleepers()
 {
 	for (int p = 0; p < lenpool(); p++)
@@ -131,7 +100,6 @@ void CreaturePool::arrestOrKillCCSSleepers()
 		}
 	}
 }
-#include "../locations/locationsPool.h"
 const int CreaturePool::liberal_guardian_writing_power()
 {
 	int power = 0;
@@ -246,48 +214,12 @@ DeprecatedCreature* findSleeperCarSalesman(int loc) {
 	return NULL;
 }
 map<short, string> issueEventString;
-#include "../common/musicClass.h"
-extern string commaSpace;
-#include "../set_color_support.h"
-#include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../common/getnames.h"
-extern string singleDot;
 static void getissueeventstring(char* str)
 {
 	strcat(str, issueEventString[LCSrandom(VIEWNUM - 3)].data());
 }
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
-const string CONST_creaturePool046 = "This whole thing was a mistake. There won't be another meeting.";
-const string CONST_creaturePool045 = " comes off as slightly insane.";
-const string CONST_creaturePool044 = " needs more experience.";
-const string CONST_creaturePool043 = "Maybe ";
-const string CONST_creaturePool042 = " really understands the problem.";
-const string CONST_creaturePool041 = " isn't convinced ";
-const string CONST_creaturePool040 = "They'll meet again tomorrow.";
-const string CONST_creaturePool039 = "'s arguments.";
-const string CONST_creaturePool038 = " is skeptical about some of ";
-const string CONST_creaturePool037 = "They'll definitely meet again tomorrow.";
-const string CONST_creaturePool036 = "'s views to be insightful.";
-const string CONST_creaturePool035 = " found ";
-const string CONST_creaturePool034 = " views on ";
-const string CONST_creaturePool033 = " explains ";
-const string CONST_creaturePool032 = " shares ";
-const string CONST_creaturePool031 = " accepts, and is eager to get started.";
-const string CONST_creaturePool030 = " join the Liberal Crime Squad.";
-const string CONST_creaturePool029 = " offers to let ";
 
 LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecruitst &r, int &y) {
-	extern Log gamelog;
-	extern int stat_recruits;
-	extern class Ledger ledger;
-
 	int c = getkeyAlt();
 	if (c == 'c' && subordinatesleft(*pool[p]) && r.eagerness() >= 4)
 	{
@@ -441,26 +373,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 	if (c == 'd') return RETURN_ONE;
 	return REPEAT;
 }
-const string CONST_creaturePool028 = "D - Break off the meetings.";
-const string CONST_creaturePool027 = " isn't ready to join the LCS.";
-const string CONST_creaturePool026 = "C - ";
-const string CONST_creaturePool025 = " needs more Juice to recruit.";
-const string CONST_creaturePool023 = " join the LCS as a full member.";
-const string CONST_creaturePool022 = "C - Offer to let ";
-const string CONST_creaturePool021 = "B - Just casually chat with them and discuss politics.";
-const string CONST_creaturePool020 = "A - Spend $50 on props and a book for them to keep afterward.";
-const string CONST_creaturePool019 = " approach the situation?";
-const string CONST_creaturePool018 = "How should ";
-const string CONST_creaturePool017 = " kind of regrets agreeing to this.";
-const string CONST_creaturePool016 = " is ready to fight for the Liberal Cause.";
-const string CONST_creaturePool015 = " feels something needs to be done.";
-const string CONST_creaturePool014 = " is interested in learning more.";
-const string CONST_creaturePool013 = " will take a lot of persuading.";
-const string CONST_creaturePool012 = "Meeting with ";
 void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
-
-	extern Log gamelog;
-	extern class Ledger ledger;
 
 	addstrAlt(CONST_creaturePool012, gamelog);
 	addstrAlt(r.recruit->getNameAndAlignment().name, gamelog);
@@ -518,13 +431,6 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(Deprecatedrecruitst &r, const int p)
 {
-	const string CONST_creaturePool011 = "!";
-	const string CONST_creaturePool010 = "Get it together, ";
-	const string CONST_creaturePool009 = "due to multiple booking of recruitment sessions.";
-	const string CONST_creaturePool008 = " accidentally missed the meeting with ";
-
-	extern MusicClass music;
-	extern Log gamelog;
 	music.play(MUSIC_RECRUITING);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -575,8 +481,6 @@ void findAllTendersToThisHostage(DeprecatedCreature* cr, vector<DeprecatedCreatu
 	}
 }
 void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
-	const string CONST_creaturePool047 = " has escaped!";
-	extern Log gamelog;
 	for (int p = 0; p < len(pool); p++)
 	{
 		if (pool[p] == cr)
@@ -637,8 +541,6 @@ bool DeprecatedCreature::enemy() const
 	}
 	else return false;
 }
-#include "../common/translateid.h"
-// for  int getpoolcreature(int)
 vector<DeprecatedCreature *> selectOnlySleepersThatCanWork() {
 	vector<DeprecatedCreature *> temppool;
 	// Comb the pool of Liberals for sleeper agents
@@ -657,12 +559,7 @@ vector<DeprecatedCreature *> selectOnlySleepersThatCanWork() {
 	}
 	return temppool;
 }
-#include "../daily/siege.h"
 void determineMedicalSupportAtEachLocation(bool clearformess) {
-	const string CONST_creaturePool049 = "'s injuries require professional treatment.";
-	const string CONST_creaturePool048 = " has died of injuries.";
-	extern Log gamelog;
-	extern char disbanding;
 	// Healing - determine medical support at each location
 	int *healing = new int[LocationsPool::getInstance().lenpool()];
 	int *healing2 = new int[LocationsPool::getInstance().lenpool()];
@@ -870,14 +767,6 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 /* promote a subordinate to maintain chain of command when boss is lost */
 bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 {
-	const string CONST_creaturePool057 = " is the new leader of the Liberal Crime Squad!";
-	const string CONST_creaturePool056 = " has died.";
-	const string CONST_creaturePool055 = " in the command chain.";
-	const string CONST_creaturePool054 = " will take over for ";
-	const string CONST_creaturePool053 = "due to the death of ";
-	const string CONST_creaturePool052 = " has promoted ";
-	const string CONST_creaturePool051 = "There are none left with the courage and conviction to lead....";
-	extern Log gamelog;
 	int newboss = -1;
 	int bigboss = -2;
 	if (cr.hireid == -1)bigboss = -1;//Special: Founder
@@ -986,25 +875,9 @@ bool promotesubordinates(DeprecatedCreature &cr, char &clearformess)
 	}
 	return 1;
 }
-enum DispersalTypes
-{
-	DISPERSAL_SAFE = -1,
-	DISPERSAL_BOSSSAFE,
-	DISPERSAL_NOCONTACT,
-	DISPERSAL_BOSSINPRISON,
-	DISPERSAL_HIDING,
-	DISPERSAL_BOSSINHIDING,
-	DISPERSAL_ABANDONLCS
-};
-#include "../common/commonactions.h"
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess)
 {
-	const string CONST_creaturePool061 = " has lost touch with the Liberal Crime Squad.";
-	const string CONST_creaturePool060 = " has abandoned the LCS.";
-	const string CONST_creaturePool059 = "The Liberal has gone into hiding...";
-	extern Log gamelog;
-	extern char disbanding;
 
 	//NUKE DISPERSED SQUAD MEMBERS WHOSE MASTERS ARE NOT AVAILABLE
 	if (CreaturePool::getInstance().lenpool())
@@ -1209,7 +1082,6 @@ void dispersalcheck(char &clearformess)
 	endcheck(END_DISPERSED);
 	cleangonesquads();
 }
-extern vector<Deprecatedsquadst *> squad;
 vector<DeprecatedCreature *> activatable_liberals()
 {
 	vector<DeprecatedCreature *> temppool;
@@ -1335,20 +1207,7 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 	}
 	return output;
 }
-//#include "../monthly/justice.h"
-void trial(DeprecatedCreature &g);
-char prison(DeprecatedCreature &g);
 void monthlyRunTheSystem(char &clearformess) {
-	const string CONST_creaturePool069 = " is moved to the courthouse for trial.";
-	const string CONST_creaturePool068 = "The traitor will testify in court, and safehouses may be compromised.";
-	const string CONST_creaturePool067 = " has broken under the pressure and ratted you out!";
-	const string CONST_creaturePool066 = "deportation.";
-	const string CONST_creaturePool065 = "execution.";
-	const string CONST_creaturePool064 = " has been shipped out to the INS to face ";
-	const string CONST_creaturePool063 = "'s mind with Conservatism!";
-	const string CONST_creaturePool062 = "Cops re-polluted ";
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (!pool[p]->getNameAndAlignment().alive) continue;
@@ -1453,9 +1312,6 @@ void monthlyRunExecutions() {
 	}
 }
 void monthlyRunHealClinicPeople(char &clearformess) {
-	const string CONST_creaturePool071 = " has left ";
-	const string CONST_creaturePool070 = " has been transferred to ";
-	extern Log gamelog;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (!(pool[p]->getNameAndAlignment().alive)) continue;
@@ -1543,8 +1399,6 @@ void monthlyRunHealClinicPeople(char &clearformess) {
 		}
 	}
 }
-//#include "../monthly/sleeper_update.h"
-void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
 void havingSleepers(char &clearformess, char canseethings, int(&libpower)[VIEWNUM]) {
 	for (int pl = CreaturePool::getInstance().lenpool() - 1; pl > 0; pl--) {
 		if (pool[pl]->getNameAndAlignment().alive && (pool[pl]->flag & CREATUREFLAG_SLEEPER)) {
@@ -1615,14 +1469,9 @@ int getpoolcreature(int id)
 	return -1;
 }
 
-void savehighscore(char endtype);
-void viewhighscores(int musicoverride = MUSIC_OFF);
-void end_game(int err = EXIT_SUCCESS);
-short getCurrentSite();
 /* common - test for possible game over */
 char endcheck(char cause)
 {
-	extern MusicClass music;
 	bool dead = true;
 	for (int p = 0; p < CreaturePool::getInstance().lenpool() && dead; p++)
 		if (pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1 &&

@@ -1,220 +1,5 @@
+#define	FIGHT_CPP
 #include "../includes.h"
-const string CONST_fight239 = "'s neck is broken!";
-const string CONST_fight238 = "'s neck bones are shattered!";
-const string CONST_fight237 = "'s nose is removed!";
-const string CONST_fight236 = "'s nose is cut off!";
-const string CONST_fight235 = "'s nose is torn off!";
-const string CONST_fight234 = "'s nose is burned away!";
-const string CONST_fight233 = "'s nose is blasted off!";
-const string CONST_fight232 = "'s tongue is removed!";
-const string CONST_fight231 = "'s tongue is cut off!";
-const string CONST_fight230 = "'s tongue is torn out!";
-const string CONST_fight229 = "'s tongue is burned away!";
-const string CONST_fight228 = "'s tongue is blasted off!";
-const string CONST_fight227 = "'s left eye is removed!";
-const string CONST_fight226 = "'s left eye is poked out!";
-const string CONST_fight225 = "'s left eye is torn out!";
-const string CONST_fight224 = "'s left eye is burned away!";
-const string CONST_fight223 = "'s left eye is blasted out!";
-const string CONST_fight222 = "'s right eye is removed!";
-const string CONST_fight221 = "'s right eye is poked out!";
-const string CONST_fight220 = "'s right eye is torn out!";
-const string CONST_fight219 = "'s right eye is burned away!";
-const string CONST_fight218 = "'s right eye is blasted out!";
-const string CONST_fight217 = "knocked out!";
-const string CONST_fight216 = "cut out!";
-const string CONST_fight215 = "gouged out!";
-const string CONST_fight214 = "burned away!";
-const string CONST_fight213 = "shot out!";
-const string CONST_fight212 = "'s last tooth is ";
-const string CONST_fight211 = "'s teeth is ";
-const string CONST_fight210 = "One of ";
-const string CONST_fight209 = "'s teeth are ";
-const string CONST_fight208 = " of ";
-const string CONST_fight207 = "All ";
-const string CONST_fight206 = "'s face is removed!";
-const string CONST_fight205 = "'s face is cut away!";
-const string CONST_fight204 = "'s face is torn off!";
-const string CONST_fight203 = "'s face is burned away!";
-const string CONST_fight202 = "'s face is blasted off!";
-const string CONST_fight201 = "broken!";
-const string CONST_fight200 = "shot apart!";
-const string CONST_fight199 = "'s last unbroken rib is ";
-const string CONST_fight198 = "'s rib is ";
-const string CONST_fight196 = "'s ribs are ";
-const string CONST_fight193 = "'s spleen is punctured!";
-const string CONST_fight192 = "'s spleen is torn!";
-const string CONST_fight191 = "'s spleen is blasted!";
-const string CONST_fight190 = "'s left kidney is punctured!";
-const string CONST_fight189 = "'s left kidney is torn!";
-const string CONST_fight188 = "'s left kidney is blasted!";
-const string CONST_fight187 = "'s right kidney is punctured!";
-const string CONST_fight186 = "'s right kidney is torn!";
-const string CONST_fight185 = "'s right kidney is blasted!";
-const string CONST_fight184 = "'s stomach is punctured!";
-const string CONST_fight183 = "'s stomach is torn!";
-const string CONST_fight182 = "'s stomach is blasted!";
-const string CONST_fight181 = "'s liver is punctured!";
-const string CONST_fight180 = "'s liver is torn!";
-const string CONST_fight179 = "'s liver is blasted!";
-const string CONST_fight178 = "'s heart is punctured!";
-const string CONST_fight177 = "'s heart is torn!";
-const string CONST_fight176 = "'s heart is blasted!";
-const string CONST_fight175 = "'s left lung is punctured!";
-const string CONST_fight174 = "'s left lung is torn!";
-const string CONST_fight173 = "'s left lung is blasted!";
-const string CONST_fight172 = "'s right lung is punctured!";
-const string CONST_fight171 = "'s right lung is torn!";
-const string CONST_fight170 = "'s right lung is blasted!";
-const string CONST_fight169 = "'s lower spine is broken!";
-const string CONST_fight168 = "'s lower spine is shattered!";
-const string CONST_fight167 = "'s upper spine is broken!";
-const string CONST_fight166 = "'s upper spine is shattered!";
-const string CONST_fight165 = "'s body.";
-const string CONST_fight164 = " drops ";
-const string CONST_fight163 = "super enemy";
-const string CONST_fight162 = "dangerous enemies";
-const string CONST_fight161 = "super enemies";
-const string CONST_fight160 = " misses completely!";
-const string CONST_fight159 = " just barely missed!";
-const string CONST_fight158 = " missed!";
-const string CONST_fight154 = " knocks the blow aside and counters!";
-const string CONST_fight153 = " to no effect.";
-const string CONST_fight152 = " BLOWING IT OFF!";
-const string CONST_fight151 = " CUTTING IT OFF!";
-const string CONST_fight150 = " BLOWING IT IN HALF!";
-const string CONST_fight149 = " BLOWING IT APART!";
-const string CONST_fight148 = " CUTTING IT IN HALF!";
-const string CONST_fight146 = "!";
-const string CONST_fight145 = "'s corpse";
-const string CONST_fight144 = " shields ";
-const string CONST_fight143 = " heroically";
-const string CONST_fight142 = " misguidedly";
-const string CONST_fight141 = "(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)";
-const string CONST_fight140 = "the ";
-const string CONST_fight139 = "The attack bounces off ";
-const string CONST_fight138 = " through ";
-const string CONST_fight137 = "striking";
-const string CONST_fight136 = "'s ";
-const string CONST_fight135 = " hits ";
-const string CONST_fight134 = " stabs ";
-const string CONST_fight132 = " with a ";
-const string CONST_fight131 = "sneaks up on";
-const string CONST_fight130 = "bites";
-const string CONST_fight129 = "stabs";
-const string CONST_fight128 = "breathes fire at";
-const string CONST_fight127 = "fires a 120mm shell at";
-const string CONST_fight126 = "gracefully strikes at";
-const string CONST_fight125 = "jump kicks";
-const string CONST_fight124 = "strikes at";
-const string CONST_fight123 = "kicks";
-const string CONST_fight122 = "grapples with";
-const string CONST_fight121 = "swings at";
-const string CONST_fight120 = "punches";
-const string CONST_fight119 = "MISTAKENLY ";
-const string CONST_fight118 = " readies another ";
-const string CONST_fight117 = " reloads.";
-const string CONST_fight116 = "actual";
-const string CONST_fight114 = "\"A plague on both your houses...\"";
-const string CONST_fight113 = " speaks these final words: ";
-const string CONST_fight112 = "soils the floor.";
-const string CONST_fight111 = "[makes a mess].";
-const string CONST_fight110 = " gasps a last breath and ";
-const string CONST_fight109 = "something about Jesus, and dies.";
-const string CONST_fight108 = "something [good] about Jesus, and dies.";
-const string CONST_fight107 = " sweats profusely, murmurs ";
-const string CONST_fight106 = "the neck hole, then is quiet.";
-const string CONST_fight105 = " sucks a last breath through ";
-const string CONST_fight104 = "neck and falls to the side.";
-const string CONST_fight103 = "neck and runs down the hall.";
-const string CONST_fight102 = " out of the ";
-const string CONST_fight101 = "[red water]";
-const string CONST_fight100 = " squirts ";
-const string CONST_fight099 = "moment then crumples over.";
-const string CONST_fight098 = " sits headless for a ";
-const string CONST_fight097 = " stands headless for a ";
-const string CONST_fight096 = "is no head, and slumps over.";
-const string CONST_fight095 = "is no head, and falls.";
-const string CONST_fight094 = " reaches once where there ";
-const string CONST_fight093 = " has been destroyed.";
-const string CONST_fight091 = "'s grasp.";
-const string CONST_fight090 = " slips from";
-const string CONST_fight089 = "NULL BODYPART";
-const string CONST_fight088 = " remains strong.";
-const string CONST_fight087 = " has turned Liberal!";
-const string CONST_fight086 = "'s Heart swells!";
-const string CONST_fight085 = " seems less badass!";
-const string CONST_fight083 = " doesn't want to fight anymore";
-const string CONST_fight081 = " is turned Conservative";
-const string CONST_fight080 = " can't bear to leave!";
-const string CONST_fight079 = " is tainted with Wisdom!";
-const string CONST_fight078 = " loses juice!";
-const string CONST_fight077 = " already agrees with ";
-const string CONST_fight076 = " is immune to the attack!";
-const string CONST_fight074 = "rocks out at";
-const string CONST_fight073 = "plays country songs at";
-const string CONST_fight072 = "plays protest songs at";
-const string CONST_fight071 = " at";
-const string CONST_fight070 = "blows a harmonica";
-const string CONST_fight069 = "strums the ";
-const string CONST_fight068 = "sings to";
-const string CONST_fight067 = "plays a song for";
-const string CONST_fight060 = "explains ethical research to";
-const string CONST_fight059 = "explains the benefits of research to";
-const string CONST_fight057 = " spits up a cluster of bloody bubbles.";
-const string CONST_fight056 = " [makes a mess].";
-const string CONST_fight055 = " vomits up a clot of blood.";
-const string CONST_fight049 = "'s gums start chattering.";
-const string CONST_fight048 = "'s tooth starts chattering.";
-const string CONST_fight047 = "'s teeth start chattering.";
-const string CONST_fight046 = " pisses on the floor, moaning.";
-const string CONST_fight045 = " [makes a mess], moaning.";
-const string CONST_fight044 = " stares out with hollow sockets.";
-const string CONST_fight043 = " stares into space with one empty eye.";
-const string CONST_fight042 = " stares off into space.";
-const string CONST_fight041 = " leans against the door.";
-const string CONST_fight040 = " stumbles against a wall.";
-const string CONST_fight039 = " soils the floor.";
-const string CONST_fight038 = " [makes a stinky].";
-const string CONST_fight035 = " times";
-const string CONST_fight034 = " five times";
-const string CONST_fight033 = " four times";
-const string CONST_fight032 = " three times";
-const string CONST_fight031 = " twice";
-const string CONST_fight030 = "evasionStringsAlt.txt";
-const string CONST_fight029 = "evasionStrings.txt";
-const string CONST_fight028 = "body_falls_apart.txt";
-const string CONST_fight027 = "double_line_death.txt";
-const string CONST_fight026 = "bleeding_animal.txt";
-const string CONST_fight025 = "paralyzed_tank.txt";
-const string CONST_fight024 = "paralyzed_text.txt";
-const string CONST_fight023 = "stunned_text.txt";
-const string CONST_fight022 = "bleeding_to_death.txt";
-const string CONST_fight021 = "cry_alarm.txt";
-const string CONST_fight020 = "scientist_debate.txt";
-const string CONST_fight019 = "police_debate.txt";
-const string CONST_fight018 = "military_debate.txt";
-const string CONST_fight017 = "media_debate.txt";
-const string CONST_fight016 = "other_politician_debate.txt";
-const string CONST_fight015 = "conservative_politician_debate.txt";
-const string CONST_fight014 = "other_ceo_debate.txt";
-const string CONST_fight013 = "conservative_ceo_debate.txt";
-const string CONST_fight012 = "judge_debate.txt";
-const string CONST_fight011 = "escape_crawling.txt";
-const string CONST_fight010 = "escape_running.txt";
-const string CONST_fightX01 = " cries \"Mommy!\"";
-const string CONST_fightX02 = " murmurs \"What about my offspring?\"";
-const string CONST_fightX03 = " murmurs \"What about my puppies?\"";
-const string CONST_fightX04 = " murmurs \"What about my children?\"";
-const string CONST_fightX05 = "\"Better dead than liberal...\"";
-
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string blankString = "";
-const string tag_false = "false";
-const string tag_blood = "blood";
-const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -240,98 +25,7 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../sitemode/stealth.h"
-#include "../sitemode/sitedisplay.h"
-#include "../items/money.h"
-#include "../log/log.h"
-// for gamelog
-//#include "../common/translateid.h"
-int getarmortype(const string &idname);
-//#include "../common/commondisplay.h"
-void printparty();
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-//#include "../combat/chaseCreature.h"
-Vehicle* getChaseVehicle(const DeprecatedCreature &c);
-DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c);
-//#include "../combat/haulkidnapCreature.h"
-void freehostage(DeprecatedCreature &cr,char situation);
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
 bool goodguyattack = false;
- vector<string> escape_running;
- vector<string> escape_crawling;
- vector<string> judge_debate;
- vector<string> conservative_ceo_debate;
- vector<string> other_ceo_debate;
- vector<string> conservative_politician_debate;
- vector<string> other_politician_debate;
- vector<string> media_debate;
- vector<string> military_debate;
- vector<string> police_debate;
- vector<string> scientist_debate;
- vector<string> cry_alarm;
- vector<string> bleeding_to_death;
- vector<string> stunned_text;
- vector<string> paralyzed_text;
- vector<string> paralyzed_tank;
- vector<string> bleeding_animal;
- vector<vector<string> > double_line_death;
- vector<string> body_falls_apart;
- vector<string> evasionStringsAlt;
- vector<string> evasionStrings;
- const string fighty = "fight\\";
-  const int DOUBLE_LINE = 2;
-  const string mostlyendings = "mostlyendings\\";
- vector<file_and_text_collection> fighty_text_file_collection = {
-	 /*fight.cpp*/
-	 customText(&escape_running, fighty + CONST_fight010),
-	 customText(&escape_crawling, fighty + CONST_fight011),
-	 customText(&judge_debate, fighty + CONST_fight012),
-	 customText(&conservative_ceo_debate, fighty + CONST_fight013),
-	 customText(&other_ceo_debate, fighty + CONST_fight014),
-	 customText(&conservative_politician_debate, fighty + CONST_fight015),
-	 customText(&other_politician_debate, fighty + CONST_fight016),
-	 customText(&media_debate, fighty + CONST_fight017),
-	 customText(&military_debate, fighty + CONST_fight018),
-	 customText(&police_debate, fighty + CONST_fight019),
-	 customText(&scientist_debate, fighty + CONST_fight020),
-	 customText(&cry_alarm, fighty + CONST_fight021),
-	 customText(&bleeding_to_death, fighty + CONST_fight022),
-	 customText(&stunned_text, fighty + CONST_fight023),
-	 customText(&paralyzed_text, fighty + CONST_fight024),
-	 customText(&paralyzed_tank, fighty + CONST_fight025),
-	 customText(&bleeding_animal, fighty + CONST_fight026),
-	 customText(&double_line_death, fighty + CONST_fight027, DOUBLE_LINE),
-	 customText(&body_falls_apart, fighty + CONST_fight028),
-	 customText(&evasionStrings, mostlyendings + CONST_fight029),
-	 customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
- };
- extern string singleSpace;
- extern string singleDot;
- extern string commaSpace;
- vector<Item *> groundloot;
-
  /* generates the loot dropped by a creature when it dies */
  void makeloot(DeprecatedCreature &cr)
  {
@@ -344,24 +38,8 @@ bool goodguyattack = false;
 	 delete_and_clear(groundloot);
  }
 
-
- vector<NameAndAlignment> getEncounterNameAndAlignment();
- void delenc(const short e, const char loot);
- string specialWoundPossibilityBody(
-	 DeprecatedCreature &target,
-	 const char breakdam,
-	 const char pokedam,
-	 const char damtype
- );
- string specialWoundPossibilityHead(
-	 DeprecatedCreature &target,
-	 const char breakdam,
-	 const char heavydam,
-	 const char damtype
- );
  bool incapacitatedTank(DeprecatedCreature &a, const char noncombat, char &printed) {
 
-	 extern Log gamelog;
 	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
 	 {
 		 a.forceinc = 0;
@@ -383,8 +61,6 @@ bool goodguyattack = false;
 
  bool incapacitatedAnimal(DeprecatedCreature &a, const char noncombat, char &printed) {
 
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
 	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
 	 {
 		 a.forceinc = 0;
@@ -410,9 +86,6 @@ bool goodguyattack = false;
 
  }
  bool incapacitatedPerson(DeprecatedCreature &a, const char noncombat, char &printed) {
-	 extern Log gamelog;
-	 extern short mode;
-	 extern short lawList[LAWNUM];
 	 if (a.getCreatureHealth().blood <= 20 || (a.getCreatureHealth().blood <= 50 && (LCSrandom(2) || a.forceinc)))
 	 {
 		 a.forceinc = 0;
@@ -645,11 +318,6 @@ bool goodguyattack = false;
  }
  void specialattack(DeprecatedCreature &a, DeprecatedCreature &t)
  {
-	 extern short mode;
-	 extern Log gamelog;
-	 extern Deprecatedsquadst *activesquad;
-	 extern short lawList[LAWNUM];
-	 extern DeprecatedCreature encounter[ENCMAX];
 	 int resist = 0;
 	 clearmessagearea();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -818,9 +486,6 @@ bool goodguyattack = false;
 	 }
 	 if (damamount < 0)damamount = 0;
  }
- map<short, string> tankBodyParts;
- map<short, string> animalBodyParts;
- map<short, string> humanBodyParts;
  std::string bodypartName(Bodyparts w, AnimalGlosses t) {
 	 if (t == ANIMALGLOSS_TANK) {
 		 if (tankBodyParts.count(w) > 0)
@@ -851,15 +516,9 @@ bool goodguyattack = false;
 		 }
 	 }
  }
- std::string burstHitString(int bursthits);
  /* blood explosions */
- void bloodyUpEncounterArmor();
  void bloodblast(Armor* armor)
  {
-	 extern short mode;
-	 extern Deprecatedsquadst *activesquad;
-	 extern coordinatest loc_coord;
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //GENERAL
 	 if (armor != NULL)
 		 armor->set_bloody(true);
@@ -881,8 +540,6 @@ bool goodguyattack = false;
  /* destroys armor, masks, drops weapons based on severe damage */
  void severloot(DeprecatedCreature &cr)
  {
-	 extern short mode;
-	 extern Log gamelog;
 	 int armok = 2;
 	 if ((cr.getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF) ||
 		 (cr.getCreatureHealth().wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
@@ -924,10 +581,6 @@ bool goodguyattack = false;
  /* describes a character's death */
  void adddeathmessage(DeprecatedCreature &cr)
  {
-	 extern short mode;
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
-	 extern string slogan_str;
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	 char str[200];
 	 char secondLine[200];
@@ -1013,11 +666,6 @@ bool goodguyattack = false;
 	 }
 	 gamelog.newline();
  }
- /* attack handling for an individual creature and its target */
- // returns a boolean representing whether it was the intended target or CONST_fight116
- // so bool actual does not need to be passed by reference
- bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
-
  bool attemptSpecialAttack(DeprecatedCreature &a, DeprecatedCreature &t, const bool force_melee) {
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	 //SPECIAL ATTACK!
@@ -1046,8 +694,6 @@ bool goodguyattack = false;
 	 return false;
  }
  bool attemptReload(DeprecatedCreature &a, const bool force_melee) {
-	 extern short mode;
-	 extern Log gamelog;
 	 //RELOAD
 	 if ((a.will_reload(mode == GAMEMODE_CHASECAR, force_melee)
 		 || (a.has_thrown_weapon && a.has_extra_throwing_weapons()))
@@ -1081,7 +727,6 @@ bool goodguyattack = false;
 	 return false;
  }
  bool attemptIncapacitated(DeprecatedCreature &a) {
-	 extern short mode;
 	 //INCAPACITATED
 	 char incaprint;
 	 a.forceinc = 0;
@@ -1124,8 +769,6 @@ bool goodguyattack = false;
 	 return str;
  }
  DeprecatedCreature* takeBulletForLeader(DeprecatedCreature &t, const int damamount, const int w) {
-	 extern Log gamelog;
-	 extern Deprecatedsquadst *activesquad;
 	 DeprecatedCreature* target = 0;
 	 if (t.squadid != -1 && t.hireid == -1 && //if the founder is hit...
 		 (damamount > t.getCreatureHealth().blood || damamount >= 10) && //and lethal or potentially crippling damage is done...
@@ -1262,8 +905,6 @@ bool goodguyattack = false;
 	 return damtype;
  }
 
- void setSiteAlarmOne();
- string howGracefulAttack(int handToHand);
  string initiateCombat(const DeprecatedCreature a, const bool sneak_attack, const attackst attack_used) {
 
 
@@ -1303,7 +944,6 @@ bool goodguyattack = false;
 
  string unsuccessfulHit(DeprecatedCreature &a, DeprecatedCreature &t, const int droll) {
 
-	 extern short mode;
 
 	 string str;
 
@@ -1348,41 +988,6 @@ bool goodguyattack = false;
 	 return str;
 
  }
- string dismemberingWound(const int w, const int wound);
- int bodypartSeverAmount(const int w);
-
- class AttackInfliction {
- public:
-	 AttackInfliction(const bool, const int, const int, const attackst);
-	 const bool sneak_attack;
-	 const int aroll;
-	 const int droll;
-	 const attackst attack_used;
- };
- AttackInfliction::AttackInfliction(const bool _sneak_attack, const int _aroll, const int _droll, const attackst _attack_used) : sneak_attack(_sneak_attack), aroll(_aroll < 0 ? 0 : _aroll),
-	 droll(_droll < 0 ? 0 : _droll),
-	 attack_used(_attack_used) {
-
-
- }
- class AttackSeverity {
- public:
-	 AttackSeverity::AttackSeverity(const int, const int, const int, const int);
-	 const int damamount;
-	 const int damagearmor;
-	 const int severtype;
-	 const int hit_location;
-
- };
- AttackSeverity::AttackSeverity(const int _damamount, const int _damagearmor, const int _severtype, const int w) : damamount(_damamount),
-	 damagearmor(_damagearmor),
-	 severtype(_severtype),
-	 hit_location(w)
- {
-
-
- }
-short  getCurrentSite();
  void inflictNonZeroDamage(AttackInfliction attackI,
 	 DeprecatedCreature &a,
 	 const string inputStr,
@@ -1390,19 +995,6 @@ short  getCurrentSite();
 	 const int damtype,
 	 DeprecatedCreature &t)
  {
-	 extern short mode;
-	 extern int stat_dead;
-	 extern int stat_kills;
-	 extern int ccs_siege_kills;
-	 extern int ccs_boss_kills;
-	 extern Log gamelog;
-	 extern Deprecatednewsstoryst *sitestory;
-
-	 extern int sitecrime;
-	 extern coordinatest loc_coord;
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	 extern short lawList[LAWNUM];
-
 	 // These two variables are used and changed within this function, but are never used again by the function that calls this one
 	 string str = inputStr;
 	 int damamount = attackS.damamount;
@@ -1569,13 +1161,6 @@ short  getCurrentSite();
 
 	 return str;
  }
- struct damageDetails  {
-	 const int mod;
-	 const int hit_location;
-	 const int extraarmor;
-	 const char armorpiercing;
-	 damageDetails(int _mod, int _hit_location, int _extraarmor, char _armorpiercing) : mod(_mod), hit_location(_hit_location), extraarmor(_extraarmor), armorpiercing(_armorpiercing) {};
- };
  void updateDamageExcludingCar(const DeprecatedCreature t, char &damtype, int &damamount, const damageDetails ddetails) {
 
 	 int mod3 = ddetails.mod;
@@ -1596,9 +1181,6 @@ short  getCurrentSite();
 	 damagemod(t, damtype, damamount, mod3);
  }
  void inflictDamage(const int numhits, DeprecatedCreature &a, DeprecatedCreature &t, const AttackInfliction attackI) {
-
-	 extern short mode;
-	 extern Log gamelog;
 
 
 	 int hit_location = determineBodypartHit(t, attackI.aroll, attackI.droll, attackI.sneak_attack);
@@ -1777,17 +1359,8 @@ short  getCurrentSite();
 		 pressAnyKey();
 	 }
  }
- void addLocationChange(int cursite, sitechangest change);
  void directlyUseWeapon(DeprecatedCreature &a, int &num_attacks, int &thrownweapons, int &bursthits, const attackst attack_used) {
 
-	 extern short mode;
-
-	 extern Deprecatednewsstoryst *sitestory;
-
-	 extern int sitecrime;
-	 extern coordinatest loc_coord;
-
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	 if (mode == GAMEMODE_SITE && LCSrandom(100) < attack_used.fire.chance_causes_debris)
 	 {// TODO - In a car chase, debris should make driving harder for one round, or require a drive skill check to avoid damage
@@ -1862,20 +1435,12 @@ short  getCurrentSite();
  }
 
  bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee) {
-	 extern DeprecatedCreature encounter[ENCMAX];
-	 extern vector<DeprecatedCreature *> pool;
 	 return attack(*pool[p], encounter[t], mistake, force_melee);
  }
 
-bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee = false);
-void addLocationChange(int cursite, sitechangest change);
-bool isThereASiteAlarm();
 /* attack handling for an individual creature and its target */
 bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee)
 {
-	extern short mode;
-	extern Log gamelog;
-	extern short sitealarmtimer;
 
 	clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -2078,11 +1643,6 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	return true;
 }
 void singleSquadMemberAttack(const int p, const bool wasalarm) {
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-
-	extern int sitecrime;
-	extern DeprecatedCreature encounter[ENCMAX];
 	vector<int> super_enemies;
 	vector<int> dangerous_enemies;
 	vector<int> enemies;
@@ -2195,7 +1755,6 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 }
 
 void yourinitialattack() {
-	extern Deprecatedsquadst *activesquad;
 	const bool wasalarm = isThereASiteAlarm();
 	for (int p = 0; p < 6; p++)
 	{
@@ -2205,16 +1764,10 @@ void yourinitialattack() {
 	}
 }
 
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 /* attack handling for each side as a whole */
 void youattack()
 {
-	extern char foughtthisround;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	extern vector<DeprecatedCreature *> pool;
 	foughtthisround = 1;
 	goodguyattack = true;
 	yourinitialattack();
@@ -2293,27 +1846,10 @@ void youattack()
 		}
 	}
 }
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
-void conservatise(const int e);
 // RETURN_ONE - special meaning, additional conditionals
 // RETURN_ZERO - break surrounding loop
 LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 
-	extern short mode;
-	extern char foughtthisround;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-
-	extern int sitecrime;
-	// Enemies don't attack
-	extern bool NOENEMYATTACK;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (!encounter[e].getNameAndAlignment().exists) return REPEAT;
 	if (!encounter[e].getCreatureHealth().alive) return REPEAT;
@@ -2455,14 +1991,6 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 }
 void enemyattack()
 {
-	extern Log gamelog;
-	extern short mode;
-	extern char foughtthisround;
-
-	extern Deprecatedsquadst *activesquad;
-
-	extern bool NOENEMYATTACK;
-	extern DeprecatedCreature encounter[ENCMAX];
 
 	foughtthisround = 1;
 	goodguyattack = false;
@@ -2590,11 +2118,6 @@ string damtypeToLeftKidneyString(const char damtype) {
 	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight188);
 	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight189);
 	else damageDescription += (CONST_fight190);
-
-	return damageDescription;
-}
-string damtypeTo9String(const char damtype) {
-	string damageDescription;
 
 	return damageDescription;
 }
@@ -2923,7 +2446,6 @@ string specialWoundPossibilityHead(
 /* abandoned liberal is captured by conservatives */
 void capturecreature(DeprecatedCreature &t)
 {
-	extern short sitetype;
 	t.set_activity(ACTIVITY_NONE);
 	t.drop_weapons_and_clips(NULL);
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
@@ -2956,8 +2478,6 @@ void capturecreature(DeprecatedCreature &t)
 /* pushes people into the current squad (used in a siege) */
 void autopromote(const int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern vector<DeprecatedCreature *> pool;
 	if (!activesquad) return;
 	const int partysize = activesquadSize(), partyalive = activesquadAlive();
 	int libnum = 0;

@@ -1,8 +1,5 @@
-
+#define	TITLESCREEN_CPP
 #include "../includes.h"
-const string CONST_titlescreen003 = "real_quote.txt";
-
-const string blankString = "";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -55,135 +52,14 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-#include "../title/titlescreen.h"
-void mode_base();
-//#include "../common/consolesupport.h"
-// for void getkeyAlt()
-#include "../common/commondisplay.h"
-// for addstr
-#include "../common/getnames.h"
-// for enter_name
-#include "../title/highscore.h"
-//for void viewhighscores
-#include "../title/newgame.h"
-//for void setup_newgame();
-//#include "../title/saveload.h"
-bool file_exists(const std::string& filename);
-char load(const string& filename);
-void savegame(const string& filename);
-string title_screen::savefile_name;
-vector<string> title_screen::s_savefiles;
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
-/* end the game and clean up */
-void end_game(int err = EXIT_SUCCESS);
-#include "../common/musicClass.h"
-#include "../creature/creatureEnums.h"
-#include "../customMaps.h"
-const string titley = "titlescreen\\";
-const int REAL_QUOTE_SIZE = 4;
-vector<vector<string> > real_quote;
-vector<file_and_text_collection> title_screen_text_files = {
-	customText(&real_quote, titley + CONST_titlescreen003, REAL_QUOTE_SIZE),
-};
-const string spaceDashSpace = " - ";
-string deleteSave;
-string chooseSave;
-string titleScreenLine;
-string newGame;
-string pressToSelectSave;
-string pressToDeleteSave;
-string vToSwitchXToQuit;
-string areYouSureDelte;
-string questionYSlashN;
-string pressMtoTurnOffMusic;
-string pressMtoTurnOnMusic;
-string inWhatWorld;
-string enterNameForSave;
-string pleaseEnterName;
-string prettyPlease;
-string justEnterName;
-string liberalCrimeSquad;
-string inspiredByOubliette;
-string copyrightTarn;
-string bayTwelveProductions;
-string lcsHyperlink;
-string vChar;
-string maintainedByOpenSource;
-string kingDrakeHyperlink;
-string lcsForumHyperlink;
-string lcsWikiHyperlink;
-string pressESCToQuit;
-string pressAnyKeyToPursue;
-string plusChar;
-string dotDat;
-// private
-void title_screen::title() {
-	extern string PACKAGE_VERSION_STR;
-	//title screen
-	eraseAlt();
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrCenter(2, liberalCrimeSquad);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrCenter(4, inspiredByOubliette);
-	vector<string> quote = pickrandom(real_quote);
-	mvaddstrCenter(6, quote[0]);
-	mvaddstrCenter(7, quote[1]);
-	mvaddstrCenter(8, quote[2]);
-	mvaddstrCenter(9, quote[3]);
-	mvaddstrCenter(11, copyrightTarn);
-	mvaddstrCenter(12, bayTwelveProductions);
-	mvaddstrCenter(13, lcsHyperlink);
-	mvaddstrCenter(15, vChar + PACKAGE_VERSION_STR + maintainedByOpenSource);
-	mvaddstrCenter(16, kingDrakeHyperlink);
-	mvaddstrCenter(17, lcsForumHyperlink);
-	mvaddstrCenter(18, lcsWikiHyperlink);
-	mvaddstrCenter(20, pressESCToQuit);
-	mvaddstrCenter(22, pressAnyKeyToPursue);
-	mvaddstrAlt(24, 79, plusChar);
-}
+
 void title_screen::choose_savefile_name()
 {
-	const int SAVE_FILE_NAMELEN = 21;
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, inWhatWorld);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 0, enterNameForSave);
-	char savefile_temp[SAVE_FILE_NAMELEN];
-	enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, blankString.c_str());
-	bool justEnter = false;
-	bool enterDamn = false;
-	do {
-		if (strcmp(savefile_temp, blankString.c_str()) == 0) {
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, inWhatWorld);
-			string enterTheName;
-			if (enterDamn) {
-				enterTheName = (justEnterName);
-			}
-			else if (justEnter) {
-				enterTheName = (prettyPlease);
-				enterDamn = true;
-			}
-			else {
-				enterTheName = (pleaseEnterName);
-			}
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1, 0, enterTheName);
-			enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, blankString.c_str());
-			justEnter = true;
-		}
-		else {
-			savefile_name = string(savefile_temp) + dotDat;
-			justEnter = false;
-		}
-	} while (justEnter);
+	savefile_name = printNewGameHeader();
 	setup_newgame();
 	makecharacter();
 }
+
 void title_screen::selectAndLoadSaveFile() {
 	s_savefiles = move(LCSSaveFiles());
 	char loaded = s_savefiles.size() > 0;
@@ -197,22 +73,10 @@ void title_screen::selectAndLoadSaveFile() {
 		// IsaacG This almost has to be redone
 		while (!len(savefile_name))
 		{
-			eraseAlt();
-			set_color_easy(to_delete ? YELLOW_ON_RED : WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, to_delete ? deleteSave : chooseSave);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1, 0, titleScreenLine);
-			int y = 2;
-			for (int p = page * 19; p < s_savefiles.size() && p < page * 19 + 19; p++, y++)
-			{
-				mvaddchAlt(y, 0, y + 'A' - 2);
-				addstrAlt(spaceDashSpace);
-				const string &strtemp = s_savefiles[y - 2];
-				addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
-			}
-			mvaddstrAlt(y, 0, (char(y + 'A' - 2)) + spaceDashSpace + newGame);
-			mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
-			mvaddstrAlt(23, 0, addpagestr());
+			printSaveHeader(to_delete);
+			printSaveList(page, s_savefiles);
+			printSaveFooter(to_delete);
+
 			int c = getkeyAlt();
 			//PAGE UP
 			if (is_page_up(c) && page > 0)page--;
@@ -226,8 +90,7 @@ void title_screen::selectAndLoadSaveFile() {
 						savefile_name = s_savefiles[p];
 					}
 					else {
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrCenter(10, areYouSureDelte + s_savefiles[p] + questionYSlashN);
+						printAreYouSure(s_savefiles[p]);
 						c = getkeyAlt();
 						if (c == 'y')
 						{
@@ -257,33 +120,24 @@ title_screen title_screen::getInstance()
 	}
 	return s_title_singleton;
 }
-void automatedDataTests();
+
 // public
 void title_screen::mode_title()
 {
-	extern short mode;
-	extern MusicClass music;
-	title();
+	printTitleScreen();
 	int c = 0;
 	do {
 		if (c == 'h') {
 			viewhighscores();
 			pressAnyKey();
-			title();
+			printTitleScreen();
 		}
 		if (c == 'm') music.enableIf(!music.isEnabled());
-		string str;
-		if (music.isEnabled()) {
-			(str = pressMtoTurnOffMusic);
-		}
-		else {
-			(str = pressMtoTurnOnMusic);
-		}
 		if (c == 'd') {
 			automatedDataTests();
-			title();
+			printTitleScreen();
 		}
-		mvaddstrCenter(22, str);
+		printMusicFooter();
 		if (c == ESC || c == 'x') end_game();
 		c = getkeyAlt();
 	} while (c == 'm' || c == 'h' || c == 'x' || c == ESC || c == 'd');

@@ -1,177 +1,5 @@
-
+#define	JUSTICE_CPP
 #include "../includes.h"
-const string CONST_justiceB174 = "hiring an undocumented worker";
-const string CONST_justiceB173 = "hiring undocumented workers";
-const string CONST_justice182 = " months.";
-const string CONST_justice181 = " is due to be executed in ";
-const string CONST_justice180 = " is due to be released next month.";
-const string CONST_justice179 = " is due to be executed next month.";
-const string CONST_justice178 = "No doubt there are some mental scars, but the Liberal is back.";
-const string CONST_justice177 = " has been released from prison.";
-const string CONST_justice176 = "If you can't protect your own people, who can you protect?";
-const string CONST_justice175 = " has failed the Liberal Crime Squad.";
-const string CONST_justice174 = "by ";
-const string CONST_justice173 = "Today, the Conservative Machine executed ";
-const string CONST_justice172 = "FOR SHAME:";
-const string CONST_justice171 = "due to the abolition of the death penalty.";
-const string CONST_justice170 = "'s death sentence has been commuted to life, ";
-const string CONST_justice169 = " seems to be mostly fine, though.";
-const string CONST_justice168 = " is kinda losing it in here. Juice, that is.";
-const string CONST_justice167 = " has become a more hardened, Juicier criminal.";
-const string CONST_justice166 = "The LCS will rise again! Multiple LCS members escape!";
-const string CONST_justice165 = "Another imprisoned LCS member also gets out!";
-const string CONST_justice164 = " escaped from prison!";
-const string CONST_justice163 = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
-const string CONST_justice162 = " jimmies the cell door and cuts the outer fence in the dead of night!";
-const string CONST_justice161 = " puts on smuggled street clothes and calmly walks out of prison.";
-const string CONST_justice160 = " codes a virus on a smuggled phone that opens all the prison doors!";
-const string CONST_justice159 = " leads a riot with dozens of prisoners chanting the LCS slogan!";
-const string CONST_justice158 = " managed to avoid lasting injury.";
-const string CONST_justice157 = " is found dead.";
-const string CONST_justice156 = " is badly hurt in the process.";
-const string CONST_justice152 = " consumes drugs that simulate death, and is thrown out with the trash!";
-const string CONST_justice151 = " picks the lock on their leg chains and then sneaks away!";
-const string CONST_justice150 = " wears an electrician's outfit and rides away with some contractors.";
-const string CONST_justice149 = " leads the oppressed prisoners and overwhelms the prison guards!";
-const string CONST_justice148 = " remains strong.";
-const string CONST_justice147 = " abandons the Liberal Crime Squad!";
-const string CONST_justice146 = " only stays loyal to the LCS for ";
-const string CONST_justice145 = " silently grows Wiser...";
-const string CONST_justice144 = " feels bad about LCS actions, and loses juice!";
-const string CONST_justice143 = "The court accepts the plea.";
-const string CONST_justice142 = "nolo";
-const string CONST_justice141 = ", less a month for time already served.";
-const string CONST_justice140 = " will be returned to prison to resume an earlier sentence";
-const string CONST_justice139 = " is free!";
-const string CONST_justice138 = "NOT GUILTY!";
-const string CONST_justice134 = "The prosecution declines to re-try the case.";
-const string CONST_justice133 = "The case will be re-tried next month.";
-const string CONST_justice132 = "But they can't reach a verdict!";
-const string CONST_justice131 = "The jury has returned from deliberations.";
-const string CONST_justice130 = "The jury leaves to consider the case.";
-const string CONST_justice129 = " to acquit)";
-const string CONST_justice128 = ", need ";
-const string CONST_justice127 = " (";
-const string CONST_justice126 = " had the jury, judge, and prosecution crying for freedom.";
-const string CONST_justice125 = " made a very powerful case.";
-const string CONST_justice124 = " worked the jury very well.";
-const string CONST_justice123 = "'s arguments were pretty good.";
-const string CONST_justice122 = " did all right, but made some mistakes.";
-const string CONST_justice121 = "'s case really sucked.";
-const string CONST_justice120 = " makes one horrible mistake after another.";
-const string CONST_justice119 = " conducts an incredible defense.";
-const string CONST_justice118 = "and shout \"NOT GUILTY!\" before deliberations even began.";
-const string CONST_justice117 = "'s arguments made several of the jurors stand up ";
-const string CONST_justice116 = "The defense is extremely compelling.";
-const string CONST_justice115 = "The defense makes the prosecution look like amateurs.";
-const string CONST_justice114 = "The defense was really slick.";
-const string CONST_justice113 = "Defense arguments were pretty good.";
-const string CONST_justice112 = "The defense was lackluster.";
-const string CONST_justice111 = "The defense is totally lame.";
-const string CONST_justice110 = "The defense attorney accidentally said \"My client is GUILTY!\" during closing.";
-const string CONST_justice109 = "The defense attorney rarely showed up.";
-const string CONST_justice108 = " to convict)";
-const string CONST_justice107 = " to +";
-const string CONST_justice106 = " (+";
-const string CONST_justice105 = "The prosecution is incredibly strong.";
-const string CONST_justice104 = "The prosecution makes an airtight case.";
-const string CONST_justice103 = "The prosecution's case is solid.";
-const string CONST_justice102 = "The prosecution gives a standard presentation.";
-const string CONST_justice101 = "The prosecution's presentation is terrible.";
-const string CONST_justice098 = "The jury is a bit Conservative.";
-const string CONST_justice097 = "The jury is quite moderate.";
-const string CONST_justice096 = "The jury is fairly Liberal.";
-const string CONST_justice095 = "'s best friend from childhood is a juror.";
-const string CONST_justice094 = "'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!";
-const string CONST_justice093 = "'s favor!";
-const string CONST_justice092 = " ensures the jury is stacked in ";
-const string CONST_justice091 = "The trial proceeds.  Jury selection is first.";
-const string CONST_justice090 = " is standing trial.";
-const string CONST_justice089 = "Intelligence: ";
-const string CONST_justice088 = "Law: ";
-const string CONST_justice087 = "Charisma: ";
-const string CONST_justice086 = "Persuasion: ";
-const string CONST_justice085 = "Heart: ";
-const string CONST_justice084 = "'s offer to assist pro bono.";
-const string CONST_justice083 = "E - Accept sleeper ";
-const string CONST_justice082 = "D - Pay $5000 to hire ace Liberal attorney ";
-const string CONST_justice081 = "C - Plead guilty.";
-const string CONST_justice080 = "B - Defend self!";
-const string CONST_justice079 = "A - Use a court-appointed attorney.";
-const string CONST_justice078 = "How will you conduct the defense?";
-const string CONST_justice077 = "A former LCS member will testify against ";
-const string CONST_justice076 = " former LCS members will testify against ";
-const string CONST_justice075 = "loitering";
-const string CONST_justice074 = "indecent exposure";
-const string CONST_justice073 = "disturbing the peace";
-const string CONST_justice072 = "resisting arrest";
-const string CONST_justice071 = "vandalism";
-const string CONST_justice070 = "breaking and entering";
-const string CONST_justice069 = "unlawful burial";
-const string CONST_justice068 = "unlawful access of an information system";
-const string CONST_justice067 = "interference with interstate commerce";
-const string CONST_justice066 = "possession of an illegal weapon";
-const string CONST_justice065 = "firing an illegal weapon";
-const string CONST_justice064 = "hiring an illegal alien";
-const string CONST_justice063 = "hiring illegal aliens";
-const string CONST_justice062 = "prostitution";
-const string CONST_justice061 = "petty larceny";
-const string CONST_justice060 = "credit card fraud";
-const string CONST_justice059 = "grand theft auto";
-const string CONST_justice058 = "misdemeanor assault";
-const string CONST_justice057 = "felony assault";
-const string CONST_justice056 = "extortion";
-const string CONST_justice055 = "racketeering";
-const string CONST_justice054 = "jury tampering";
-const string CONST_justice053 = "aiding a prison escape";
-const string CONST_justice052 = "escaping prison";
-const string CONST_justice051 = "drug dealing";
-const string CONST_justice050 = "sedition";
-const string CONST_justice049 = "flag burning";
-const string CONST_justice048 = "felony flag burning";
-const string CONST_justice047 = "Flag Murder";
-const string CONST_justice046 = "arson";
-const string CONST_justice045 = "bank robbery";
-const string CONST_justice044 = "kidnapping";
-const string CONST_justice043 = "murder";
-const string CONST_justice042 = "terrorism";
-const string CONST_justice041 = "treason";
-const string CONST_justice040 = ", is charged with ";
-const string CONST_justice039 = "The defendant, ";
-const string CONST_justice038 = "The judge reads the charges:";
-const string CONST_justice037 = " reads the charges, trying to hide a smile:";
-const string CONST_justice035 = "to be served consecutively";
-const string CONST_justice034 = "to be served concurrently";
-const string CONST_justice033 = ",";
-const string CONST_justice032 = " in prison";
-const string CONST_justice031 = "s";
-const string CONST_justice030 = " month";
-const string CONST_justice029 = " years in prison";
-const string CONST_justice028 = "life in prison";
-const string CONST_justice027 = "Have a nice day, ";
-const string CONST_justice026 = " consecutive life terms in prison";
-const string CONST_justice025 = ", you are sentenced to ";
-const string CONST_justice024 = ", consider this a warning.  You are free to go.";
-const string CONST_justice022 = "You will be returned to prison to resume it";
-const string CONST_justice021 = ", the court sees no need to add to your existing sentence.";
-const string CONST_justice020 = ", you are sentenced to DEATH!";
-const string CONST_justice019 = ", you will be returned to prison to carry out your death sentence.";
-const string CONST_justice018 = "During sentencing, the judge grants some leniency.";
-const string CONST_justice017 = "GUILTY!";
-const string CONST_justice016 = "general_experiences.txt";
-const string CONST_justice015 = "bad_experiences.txt";
-const string CONST_justice014 = "good_experiences.txt";
-const string CONST_justice013 = "labor_camp_experiences.txt";
-const string CONST_justice012 = "reeducation_experiences.txt";
-const string CONST_justice011 = "supposedly_painless_execution_method.txt";
-const string CONST_justice010 = "standard_execution_methods.txt";
-const string CONST_justice009 = "cruel_and_unusual_execution_methods.txt";
-const string CONST_justice008 = "conservative_jury.txt";
-const string CONST_justice007 = "liberal_jury.txt";
-
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -197,64 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../log/log.h"
-//#include "../common/commonactions.h"
-int scare_factor(int lawflag, int crimenumber);
-#include "../common/commonactionsCreature.h"
-// for  bool iscriminal(Creature &)
-#include "../common/translateid.h"
-// for  int getarmortype
-#include "../politics/politics.h"
-//for publicmood
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../common/creaturePoolCreature.h"
- vector<string> liberal_jury;
- vector<string> conservative_jury;
- vector<string> cruel_and_unusual_execution_methods;
- vector<string> standard_execution_methods;
- vector<string> supposedly_painless_execution_method;
- vector<string> reeducation_experiences;
- vector<string> labor_camp_experiences;
- vector<string> good_experiences;
- vector<string> bad_experiences;
- vector<string> general_experiences;
-#include "../customMaps.h"
- const string justice = "justice\\";
- vector<file_and_text_collection> justice_text_file_collection = {
-	 /*justice.cpp*/
-	 customText(&liberal_jury, justice + CONST_justice007),
-	 customText(&conservative_jury, justice + CONST_justice008),
-	 customText(&cruel_and_unusual_execution_methods, justice + CONST_justice009),
-	 customText(&standard_execution_methods, justice + CONST_justice010),
-	 customText(&supposedly_painless_execution_method, justice + CONST_justice011),
-	 customText(&reeducation_experiences, justice + CONST_justice012),
-	 customText(&labor_camp_experiences, justice + CONST_justice013),
-	 customText(&good_experiences, justice + CONST_justice014),
-	 customText(&bad_experiences, justice + CONST_justice015),
-	 customText(&general_experiences, justice + CONST_justice016),
- };
-#include "../common/musicClass.h"
- string counts_of; 
-extern string string_sleeper;
-extern string singleDot;
-extern string AND;
-extern string commaSpace;
-extern string singleSpace;
- string execution_in_three_months;
-#include "../common/creaturePool.h"
-#include "../locations/locationsPool.h"
  /* monthly - sentence a liberal */
  int calculateSentence(CreatureJustice g, const char lenient) {
-	 extern short lawList[LAWNUM];
 	 int new_sentence = g.sentence;
 	 if (!(new_sentence < 0))
 	 {
@@ -324,8 +96,6 @@ extern string singleSpace;
  void penalize(DeprecatedCreature &g, const char lenient)
  {
 	 CreatureJustice g_crimes = g.getCreatureJustice();
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
 	 gamelog.newline();
@@ -484,10 +254,8 @@ extern string singleSpace;
 	 if (typenum == 0) return singleDot;
 	 else return blankString;
  }
- void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
  void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts) {
 
-	 extern Log gamelog;
 	 if (mention_multiple_counts && g.crimes_suspected[law_flag] > 1)
 	 {
 		 addstrAlt(g.crimes_suspected[law_flag], gamelog);
@@ -497,74 +265,8 @@ extern string singleSpace;
 	 addstrAlt(commaAndPunctuation(typenum), gamelog);
 	 pressAnyKey();
  }
- map<Lawflags, string> crimeBlockOne = {
-	 map<Lawflags, string>::value_type(LAWFLAG_TREASON, CONST_justice041),
-	 map<Lawflags, string>::value_type(LAWFLAG_TERRORISM, CONST_justice042),
-	 map<Lawflags, string>::value_type(LAWFLAG_MURDER, CONST_justice043),
-	 map<Lawflags, string>::value_type(LAWFLAG_KIDNAPPING, CONST_justice044),
-	 map<Lawflags, string>::value_type(LAWFLAG_BANKROBBERY, CONST_justice045),
-	 map<Lawflags, string>::value_type(LAWFLAG_ARSON, CONST_justice046),
- };
- map<Lawflags, string> crimeBlockTwo = {
-	 map<Lawflags, string>::value_type(LAWFLAG_SPEECH, CONST_justice050),
-	 map<Lawflags, string>::value_type(LAWFLAG_BROWNIES, CONST_justice051),
-	 map<Lawflags, string>::value_type(LAWFLAG_ESCAPED, CONST_justice052),
-	 map<Lawflags, string>::value_type(LAWFLAG_HELPESCAPE, CONST_justice053),
-	 map<Lawflags, string>::value_type(LAWFLAG_JURY, CONST_justice054),
-	 map<Lawflags, string>::value_type(LAWFLAG_RACKETEERING, CONST_justice055),
-	 map<Lawflags, string>::value_type(LAWFLAG_EXTORTION, CONST_justice056),
-	 map<Lawflags, string>::value_type(LAWFLAG_ARMEDASSAULT, CONST_justice057),
-	 map<Lawflags, string>::value_type(LAWFLAG_ASSAULT, CONST_justice058),
-	 map<Lawflags, string>::value_type(LAWFLAG_CARTHEFT, CONST_justice059),
-	 map<Lawflags, string>::value_type(LAWFLAG_CCFRAUD, CONST_justice060),
-	 map<Lawflags, string>::value_type(LAWFLAG_THEFT, CONST_justice061),
-	 map<Lawflags, string>::value_type(LAWFLAG_PROSTITUTION, CONST_justice062),
- };
- map<Lawflags, string> crimeBlockThree = {
-	 map<Lawflags, string>::value_type(LAWFLAG_COMMERCE, CONST_justice067),
-	 map<Lawflags, string>::value_type(LAWFLAG_INFORMATION, CONST_justice068),
-	 map<Lawflags, string>::value_type(LAWFLAG_BURIAL, CONST_justice069),
-	 map<Lawflags, string>::value_type(LAWFLAG_BREAKING, CONST_justice070),
-	 map<Lawflags, string>::value_type(LAWFLAG_VANDALISM, CONST_justice071),
-	 map<Lawflags, string>::value_type(LAWFLAG_RESIST, CONST_justice072),
-	 map<Lawflags, string>::value_type(LAWFLAG_DISTURBANCE, CONST_justice073),
-	 map<Lawflags, string>::value_type(LAWFLAG_PUBLICNUDITY, CONST_justice074),
-	 map<Lawflags, string>::value_type(LAWFLAG_LOITERING, CONST_justice075),
- };
- map<Lawflags, bool> crimeMultipleCounts = {
-	 map<Lawflags, bool>::value_type(LAWFLAG_TREASON,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_TERRORISM,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_MURDER,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_KIDNAPPING,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_BANKROBBERY,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_ARSON,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_SPEECH,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_BROWNIES,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_ESCAPED,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_HELPESCAPE,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_JURY,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_RACKETEERING, false),
-	 map<Lawflags, bool>::value_type(LAWFLAG_EXTORTION,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_ARMEDASSAULT,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_ASSAULT,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_CARTHEFT,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_CCFRAUD,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_THEFT,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_PROSTITUTION,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_COMMERCE,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_INFORMATION,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_BURIAL,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_BREAKING,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_VANDALISM,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_RESIST, false),
-	 map<Lawflags, bool>::value_type(LAWFLAG_DISTURBANCE,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_PUBLICNUDITY,  true),
-	 map<Lawflags, bool>::value_type(LAWFLAG_LOITERING, false),
- };
  int listAllCrimes(CreatureJustice g) {
 
-	 extern Log gamelog;
-	 extern short lawList[LAWNUM];
 
 	 int typenum = 0;
 	 for (int i = 0; i < LAWFLAGNUM; i++) {
@@ -636,16 +338,7 @@ extern string singleSpace;
 	 return y;
 
  }
- enum LegalDefense {
-	 UNDECIDED = -1,
-	 COURT_ATTORNEY = 0,
-	 SELF_REPRESENT = 1,
-	 PLEAD_GUILTY = 2,
-	 ACE_ATTORNEY = 3,
-	 SLEEPER_ATTORNEY = 4
- };
  int get_sentence(CreatureJustice g, DeprecatedCreature &sleeperLawyer, const LegalDefense defense, const bool sleeperjudge) {
-	 extern Log gamelog;
 	 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice138, gamelog);
 	 gamelog.newline();
@@ -677,7 +370,6 @@ extern string singleSpace;
 	 return new_sentence;
  }
  bool hung_jury(DeprecatedCreature &g, const bool sleeperjudge, const int scarefactor) {
-	 extern Log gamelog;
 	 bool keeplawflags = false;
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(3, 1, CONST_justice132, gamelog);
@@ -728,7 +420,6 @@ extern string singleSpace;
 	 return keeplawflags;
  }
  void printdefensepower(const int defensepower) {
-	 extern Log gamelog;
 
 	 if (defensepower <= 5) { addstrAlt(CONST_justice109, gamelog); }
 	 else if (defensepower <= 15) { addstrAlt(CONST_justice110, gamelog); }
@@ -738,7 +429,6 @@ extern string singleSpace;
 	 else /*if (defensepower <= 100)*/ { addstrAlt(CONST_justice114, gamelog); }
  }
  void printstrongdefensepower(const int prosecution) {
-	 extern Log gamelog;
 
 
 	 if (prosecution < 100) { addstrAlt(CONST_justice115, gamelog); }
@@ -746,7 +436,6 @@ extern string singleSpace;
 
  }
  void printultimatedefensepower(const int prosecution, const string attorneyname) {
-	 extern Log gamelog;
 	 if (prosecution < 100)
 	 {
 		 addstrAlt(attorneyname, gamelog);
@@ -760,7 +449,6 @@ extern string singleSpace;
 	 }
  }
  int get_defensepower(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const int prosecution) {
-	 extern Log gamelog;
 	 DeprecatedCreature *sleeperlawyer = &sleeperLawyer;
 	 int defensepower = 0;
 	 if (defense == COURT_ATTORNEY || defense == ACE_ATTORNEY || defense == SLEEPER_ATTORNEY)
@@ -827,9 +515,6 @@ extern string singleSpace;
  }
  bool pleadInnocent(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const bool sleeperjudge, const int scarefactor) {
 
-	 // Show die rolls, 100% accurate poll numbers
-	 extern bool SHOWMECHANICS;
-	 extern Log gamelog;
 	 DeprecatedCreature *sleeperlawyer = &sleeperLawyer;
 	 int prosecution = 0;
 	 eraseAlt();
@@ -982,9 +667,7 @@ extern string singleSpace;
 	 return keeplawflags;
  }
  void pleadGuilty(DeprecatedCreature &g, const bool sleeperjudge) {
-
-	 extern Log gamelog;
-
+	 
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK);
 	 mvaddstrAlt(1, 1, CONST_justice143, gamelog);
@@ -999,11 +682,6 @@ extern string singleSpace;
  void trial(DeprecatedCreature &g)
  {
 	 CreatureJustice g_crimes = g.getCreatureJustice();
-	 extern Log gamelog;
-	 extern MusicClass music;
-	 extern class Ledger ledger;
-	 extern unsigned long attorneyseed[RNG_SIZE];
-	 extern unsigned long seed[RNG_SIZE];
 	 music.play(MUSIC_TRIAL);
 	 // If their old base is no longer under LCS control, wander back to the
 	 // homeless shelter instead.
@@ -1145,8 +823,6 @@ extern string singleSpace;
  }
  void reeducation(DeprecatedCreature &g)
  {
-	 extern Log gamelog;
-	 extern vector<DeprecatedCreature *> pool;
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
@@ -1203,7 +879,6 @@ extern string singleSpace;
  }
  void laborcamp(DeprecatedCreature &g)
  {
-	 extern Log gamelog;
 	 int escaped = 0;
 	 const char *experience;
 	 // Escape attempt!
@@ -1288,8 +963,6 @@ extern string singleSpace;
  }
  void prisonscene(DeprecatedCreature &g)
  {
-	 extern Log gamelog;
-	 extern vector<DeprecatedCreature *> pool;
 	 int escaped = 0;
 	 int effect = 0;
 	 const char *experience;
@@ -1405,10 +1078,6 @@ extern string singleSpace;
  //RETURNS IF SCREEN WAS ERASED
  char prison(DeprecatedCreature &g)
  {
-	 extern Log gamelog;
-	 extern int stat_dead;
-	 extern short lawList[LAWNUM];
-	 extern vector<DeprecatedCreature *> pool;
 	 char showed = 0;
 	 // People not on death row or about to be released can have a scene in prison
 	 if (!g.getCreatureJustice().deathpenalty && g.getCreatureJustice().sentence != 1)

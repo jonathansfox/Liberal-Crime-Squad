@@ -1,61 +1,5 @@
-
+#define	SHOP_CPP
 #include "../includes.h"
-const string CONST_shopB061 = "option";
-const string CONST_shop062 = "$";
-const string CONST_shop061 = "Enter - ";
-const string CONST_shop060 = "B - Choose a buyer";
-const string CONST_shop059 = "S - Sell something";
-const string CONST_shop058 = "E - Look over Equipment";
-const string CONST_shop057 = "M - Buy a Mask                ($15)";
-const string CONST_shop056 = "Buyer: ";
-const string CONST_shop055 = " With a Random Mask";
-const string CONST_shop054 = "Z - Surprise ";
-const string CONST_shop053 = "Press a Letter to select a Mask";
-const string CONST_shop052 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?ESCRIPTION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_shop051 = " buy?";
-const string CONST_shop050 = "Which mask will ";
-const string CONST_shop049 = "SPEND.";
-const string CONST_shop048 = " to Liberal Funds.";
-const string CONST_shop047 = "You add $";
-const string CONST_shop046 = "Really sell all clothes? (Y)es to confirm.           ";
-const string CONST_shop045 = "Really sell all ammo? (Y)es to confirm.              ";
-const string CONST_shop044 = "Really sell all weapons? (Y)es to confirm.           ";
-const string CONST_shop043 = "Enter - Done pawning";
-const string CONST_shop042 = "L - Pawn all Loot";
-const string CONST_shop041 = "C - Pawn all Clothes";
-const string CONST_shop040 = "A - Pawn all Ammunition";
-const string CONST_shop039 = "W - Pawn all Weapons";
-const string CONST_shop038 = "F - Pawn Selectively";
-const string CONST_shop036 = " You can't sell damaged goods.";
-const string CONST_shop035 = "Press a letter to select an item to sell.";
-const string CONST_shop034 = " x";
-const string CONST_shop033 = "/";
-const string CONST_shop032 = "Estimated Liberal Amount: $";
-const string CONST_shop031 = "What will you sell?";
-const string CONST_shop029 = "Press a Letter to select an option";
-const string CONST_shop028 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?RICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_shop026 = "What will ";
-
-const string tag_letter = "letter";
-const string tag_sleeperprice = "sleeperprice";
-const string tag_price = "price";
-const string tag_description = "description";
-const string tag_type = "type";
-const string tag_LOOT = "LOOT";
-const string tag_ARMOR = "ARMOR";
-const string tag_CLIP = "CLIP";
-const string tag_WEAPON = "WEAPON";
-const string tag_class = "class";
-const string tag_item = "item";
-const string tag_sell_masks = "sell_masks";
-const string tag_exit = "exit";
-const string tag_entry = "entry";
-const string tag_department = "department";
-const string tag_increase_prices_with_illegality = "increase_prices_with_illegality";
-const string tag_allow_selling = "allow_selling";
-const string tag_fullscreen = "fullscreen";
-const string tag_on = "on";
-const string tag_only_sell_legal_items = "only_sell_legal_items";
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -83,54 +27,6 @@ const string tag_only_sell_legal_items = "only_sell_legal_items";
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../items/armortype.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../items/loottype.h"
-#include "../items/itemPool.h"
-#include "../items/loottypePool.h"
-#include "../items/loot.h"
-#include "../sitemode/shop.h"
-//own header 
-#include "../common/stringconversion.h"
-//for string conversion
-#include "../common/commondisplay.h"
-// for void printfunds(int,int,char*)
-#include "../common/equipment.h"
-//for void equip(vector<Item *> &loot,int loc);
-//#include "../common/commonactionsCreature.h"
-#include "../common/translateid.h"
-// for  int getweapontype
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
-#include "../common/musicClass.h"
-#include <functional>
-extern string spaceDashSpace;
-extern string closeParenthesis;
-extern string undefined;
- extern string check_status_of_squad_liberal;
- extern string show_squad_liberal_status;
- extern string enter_done;
- extern string chooseALiberalTo;
- extern string singleSpace;
- Item* getNewLoot(const string& newLootType, int num = 1);
- string paranthesisDollar;
  ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
  { }
  Shop::Shop(MCD_STR xmlstring)
@@ -148,19 +44,6 @@ extern string undefined;
 	 init(xmlstring);
  }
 
- map<string, int> shopInitTags = {
-	 map<string, int>::value_type(tag_only_sell_legal_items, ENUM_tag_only_sell_legal_items),
-	 map<string, int>::value_type(tag_fullscreen, ENUM_tag_fullscreen),
-	 map<string, int>::value_type(tag_allow_selling, ENUM_tag_allow_selling),
-	 map<string, int>::value_type(tag_increase_prices_with_illegality, ENUM_tag_increase_prices_with_illegality),
-	 map<string, int>::value_type(tag_department, ENUM_tag_department),
-	 map<string, int>::value_type(tag_entry, ENUM_tag_entry),
-	 map<string, int>::value_type(tag_exit, ENUM_tag_exit),
-	 map<string, int>::value_type(tag_sell_masks, ENUM_tag_sell_masks),
-	 map<string, int>::value_type(tag_letter, ENUM_tag_letter),
-	 map<string, int>::value_type(tag_item, ENUM_tag_item),
-
- };
  void Shop::init(const MCD_STR &xmlstring)
  {
 	 CMarkup xml;
@@ -237,7 +120,6 @@ extern string undefined;
  }
  void Shop::enter(Deprecatedsquadst& customers) const
  {
-	 extern MusicClass music;
 	 music.play(MUSIC_SHOPPING);
 	 int buyer = 0;
 	 choose(customers, buyer);
@@ -293,14 +175,6 @@ extern string undefined;
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	 }
  }
- void consolidateLoot(const int l);
- string getLootTitle(const int base, const int l);
- int getFenceValueLocation(int l, int slot);
- int getLootNumber(const int base, const int l);
- int getLocationLootNumber(int l, int slot);
- bool getCanBeSoldLocation(int l, int slot);
- void decreateLocationLoot(int loc, int loot, int num);
-#include "locations/locationsPool.h"
  int fenceselect(Deprecatedsquadst& customers)
  {
 	 int ret = 0, page = 0;
@@ -402,14 +276,8 @@ extern string undefined;
 	 }
 	 return ret;
  }
- void equipLoot(int l, int loc);
- void deleteLocationLoot(int loc, int loot);
- int whatIsThisItemInLocation(int loc, int l);
- bool noQuickFenceLocation(int loc, int l);
  void sell_loot(Deprecatedsquadst& customers)
  {
-	 extern short party_status;
-	 extern class Ledger ledger;
 	 int partysize = customers.squadsize();
 	 while (true)
 	 {
@@ -507,7 +375,6 @@ extern string undefined;
  }
  void choose_buyer(Deprecatedsquadst& customers, int& buyer)
  {
-	 extern short party_status;
 	 party_status = -1;
 	 int partysize = customers.squadsize();
 	 if (partysize <= 1) return;
@@ -529,8 +396,6 @@ extern string undefined;
  // Removing the subsequent references to location will be difficult.
  void maskselect(DeprecatedCreature &buyer)
  {
-	 extern class Ledger ledger;
-	 extern vector<ArmorType *> armortype;
 	 short maskindex = -1;
 	 std::vector<int> masktype;
 	 for (int a = 0; a < len(armortype); a++)
@@ -588,7 +453,6 @@ extern string undefined;
 		 }
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	 }
-	 extern vector<Location *> location;
 	 if (maskindex != -1 && ledger.get_funds() >= 15)
 	 {
 		 Armor a = Armor(maskindex);
@@ -598,8 +462,6 @@ extern string undefined;
  }
  void Shop::browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const
  {
-	 extern short party_status;
-	 extern class Ledger ledger;
 	 int page = 0, partysize = customers.squadsize();
 	 std::vector<ShopOption*> available_options = options_;
 	 available_options.erase(remove_if(available_options.begin(),
@@ -723,16 +585,6 @@ extern string undefined;
 	 return r;
  }
 
- map<string, int> shopItemTags = {
-	 map<string, int>::value_type(tag_class, ENUM_tag_class),
-	 map<string, int>::value_type(tag_type, ENUM_tag_type),
-	 map<string, int>::value_type(tag_description, ENUM_tag_description),
-	 map<string, int>::value_type(tag_price, ENUM_tag_price),
-	 map<string, int>::value_type(tag_sleeperprice, ENUM_tag_sleeperprice),
-	 map<string, int>::value_type(tag_letter, ENUM_tag_letter),
-
- };
-
  Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
 	 bool increase_price_with_illegality)
 	 : price_(0), only_sell_legal_(only_sell_legal),
@@ -815,12 +667,10 @@ extern string undefined;
  }
  bool Shop::ShopItem::can_afford() const
  {
-	 extern class Ledger ledger;
 	 return(adjusted_price() <= ledger.get_funds());
  }
  bool Shop::ShopItem::legal() const
  {
-	 extern vector<WeaponType *> weapontype;
 	 bool r = true;
 	 switch (itemclass_)
 	 {
@@ -854,8 +704,6 @@ extern string undefined;
  }
  int Shop::ShopItem::adjusted_price() const
  {
-	 extern short lawList[LAWNUM];
-	 extern vector<WeaponType *> weapontype;
 	 int p = price_;
 	 if (increase_price_with_illegality_&&itemclass_ == WEAPON && valid_item())
 		 for (int i = weapontype[getweapontype(itemtypename_)]->get_legality(); i < lawList[LAW_GUNCONTROL]; i++)
@@ -864,9 +712,6 @@ extern string undefined;
  }
  const std::string Shop::ShopItem::get_description() const
  {
-	 extern vector<ArmorType *> armortype;
-	 extern vector<ClipType *> cliptype;
-	 extern vector<WeaponType *> weapontype;
 	 if (description_defined_) return description_;
 	 else switch (itemclass_)
 	 {
@@ -880,12 +725,8 @@ extern string undefined;
 
  void Shop::ShopItem::choose(Deprecatedsquadst& customers, int& buyer) const
  {
-	 extern class Ledger ledger;
-	 extern vector<ClipType *> cliptype;
-	 extern vector<WeaponType *> weapontype;
 	 if (!is_available()) return;
 	 ledger.subtract_funds(adjusted_price(), EXPENSE_SHOPPING);
-	 extern vector<Location *> location;
 	 switch (itemclass_)
 	 {
 	 case WEAPON: {

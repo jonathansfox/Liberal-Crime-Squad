@@ -9,7 +9,6 @@ private:
 	static string savefile_name;
 	bool static autosave;
 	static bool titleInitiated;
-	void title();
 	void choose_savefile_name();
 	void selectAndLoadSaveFile();
 public:

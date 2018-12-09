@@ -1,23 +1,5 @@
+#define	CHASE_CPP
 #include "../includes.h"
-const string CONST_chase015 = "carchase_obstacle_child.txt";
-const string CONST_chase014 = "carchase_obstacle_cross_traffic.txt";
-const string CONST_chase013 = "carchase_obstacle_truck_pulls_out.txt";
-const string CONST_chase012 = "carchase_obstacle_fruit_stand.txt";
-const string CONST_chase011 = "carchase_obstacle_none.txt";
-const string CONST_chase010 = "die_in_car.txt";
-const string CONST_chase009 = "car_crash_fatalities.txt";
-const string CONST_chase008 = "car_crash_modes.txt";
-const string CONST_chase007 = "car_plows_through.txt";
-const string CONST_chase006 = "car_speed.txt";
-
-const string CONST_chase048 = " is still on your tail!";
-const string CONST_chase079 = "C - Reflect on your lack of skill.";
-const string CONST_chase076 = "F - Fight!";
-const string CONST_chase075 = "E - Equip";
-const string CONST_chase074 = "D - Try to lose them!";
-
-const string tag_POLICECAR = "POLICECAR";
-const string tag_The = "The ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -43,65 +25,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-//#include "basemode/baseactions.h"
-void orderparty();
-//#include "sitemode/advance.h"
-void creatureadvance();
-#include "../sitemode/sitedisplay.h"
-//#include "sitemode/miscactions.h"
-void reloadparty(bool wasteful = false);
-#include "../log/log.h"
-// for gamelog
-#include "../common/translateid.h"
-// for  int id_getcar(int)
-#include "../common/commondisplay.h"
-// for addstr (with log)
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-//#include "common/equipment.h"
-void equip(vector<Item *> &loot, int loc);
-#include "fight.h"
-#include "fightCreature.h"  
-// for void youattack();
-#include "haulkidnapCreature.h"
-// for  void kidnaptransfer(Creature &cr);
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-#include "../common/musicClass.h"
-#include "../common/creaturePool.h"
-extern string change_squad_order;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string singleSpace;
-extern string singleDot;
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
-const string mostlyendings = "mostlyendings\\";
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-void makecreature(const int x, const short type);
 void fillEncounter(CreatureTypes c, int numleft) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int e = 0; e < ENCMAX; e++)
@@ -114,50 +37,8 @@ void fillEncounter(CreatureTypes c, int numleft) {
 		if (numleft == 0)break;
 	}
 }
-void emptyEncounter();
-
-vector<string> car_speed;
-vector<string> car_plows_through;
-vector<string> car_crash_modes;
-vector<string> car_crash_fatalities;
-vector<string> die_in_car;
-vector<string> carchase_obstacle_none;
-vector<string> carchase_obstacle_fruit_stand;
-vector<string> carchase_obstacle_truck_pulls_out;
-vector<string> carchase_obstacle_cross_traffic;
-vector<string> carchase_obstacle_child;
-const string chase = "chase\\";
-vector<file_and_text_collection> chase_text_file_collection = {
-	/*chase.cpp*/
-	customText(&car_speed, chase + CONST_chase006),
-	customText(&car_plows_through, chase + CONST_chase007),
-	customText(&car_crash_modes, chase + CONST_chase008),
-	customText(&car_crash_fatalities, chase + CONST_chase009),
-	customText(&die_in_car, chase + CONST_chase010),
-	customText(&carchase_obstacle_none, mostlyendings + CONST_chase011),
-	customText(&carchase_obstacle_fruit_stand, mostlyendings + CONST_chase012),
-	customText(&carchase_obstacle_truck_pulls_out, mostlyendings + CONST_chase013),
-	customText(&carchase_obstacle_cross_traffic, mostlyendings + CONST_chase014),
-	customText(&carchase_obstacle_child, mostlyendings + CONST_chase015),
-};
-map<short, vector<string> > carchaseObstacles;
-string beingFollowedBySwine;
-string lostThem;
-string hereTheyCome;
-string isSeized;
-const int DRIVING_RANDOMNESS = 13;
-void deleteVehicles(vector<Vehicle *>& carid);
 void chase_giveup()
 {
-	const string CONST_chase020 = " is free.";
-	const string CONST_chase019 = "s are free.";
-	const string CONST_chase018 = "Your hostage";
-	const string CONST_chase017 = "You pull over and are arrested.";
-	const string CONST_chase016 = "You stop and are arrested.";
-	extern chaseseqst chaseseq;
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	int ps = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, chaseseq.location);
 	deleteVehicles(chaseseq.friendcar);
 	int hostagefreed = 0;
@@ -195,11 +76,6 @@ void chase_giveup()
 	pressAnyKey();
 }
 void printSemiRandomEscape(const int yourworst) {
-	extern Log gamelog;
-	const string CONST_chase024 = "You scale a small building and leap between rooftops!";
-	const string CONST_chase023 = "You climb a fence in record time!";
-	const string CONST_chase022 = "You run as fast as you can!";
-	const string CONST_chase021 = "You suddenly dart into an alley!";
 
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -224,7 +100,6 @@ void printSemiRandomEscape(const int yourworst) {
 	pressAnyKey();
 }
 void tankPlowsThrough(const int e) {
-	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	clearmessagearea();
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -234,12 +109,7 @@ void tankPlowsThrough(const int e) {
 	pressAnyKey();
 }
 string isCapturedByCop(const int p) {
-	extern short lawList[LAWNUM];
-	extern Deprecatedsquadst *activesquad;
 
-	const string CONST_chase031 = "thrown to the ground, and tazed repeatedly!";
-	const string CONST_chase030 = "thrown to the ground, and tazed to death!";
-	const string CONST_chase029 = "pushed to the ground, and handcuffed!";
 	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 	if (lawList[LAW_POLICEBEHAVIOR] >= ALIGN_LIBERAL)
 	{
@@ -261,9 +131,7 @@ string isCapturedByCop(const int p) {
 }
 string isSummaryExecuted(const int p) {
 
-	extern Deprecatedsquadst *activesquad;
 
-	const string CONST_chase032 = "thrown to the ground, and shot in the head!";
 
 	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 
@@ -275,9 +143,7 @@ string isSummaryExecuted(const int p) {
 }
 string isCrushedByTank(const int p) {
 
-	extern Deprecatedsquadst *activesquad;
 
-	const string CONST_chase033 = " crushed beneath the tank's treads!";
 
 	string output = activesquad->squad[p]->getNameAndAlignment().name + CONST_chase033;
 
@@ -287,11 +153,7 @@ string isCrushedByTank(const int p) {
 }
 string isCapturedByOther(const int p) {
 
-	extern short lawList[LAWNUM];
-	extern Deprecatedsquadst *activesquad;
 
-	const string CONST_chase035 = "thrown to the ground, and beaten senseless!";
-	const string CONST_chase034 = "thrown to the ground, and beaten to death!";
 
 	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 
@@ -308,15 +170,8 @@ string isCapturedByOther(const int p) {
 
 	return output;
 }
-const string CONST_chase028 = " breaks away!";
-const string CONST_chase026 = " can't keep up!";
-const string CONST_chase025 = " tips into a pool. The tank is trapped!";
 void evasiverun()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern short lawList[LAWNUM];
 	vector<int> yourspeed;
 	yourspeed.resize(6);
 	int yourworst = 10000, yourbest = 0, wheelchair = 0, notwheelchair = 0, theirbest = 0, theirworst = 10000;
@@ -455,9 +310,6 @@ void evasiverun()
 	}
 }
 void printDrivingSituation(const int partysize) {
-	extern chaseseqst chaseseq;
-	extern short party_status;
-	const string CONST_chase040 = "G - Give Up";
 
 	//PRINT DRIVING SITUATION AND INSTRUCTIONS
 	if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
@@ -479,8 +331,6 @@ void printDrivingSituation(const int partysize) {
 	}
 }
 void destroyAllCarsOfParty() {
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
 
 	//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
 	deleteVehicles(chaseseq.friendcar);
@@ -495,16 +345,7 @@ void destroyAllCarsOfParty() {
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(9, 1, CONST_chase079);
 }
-int encounterSize();
-int baddieCount(const bool in_car);
-int baddieCount();
 LOOP_CONTINUATION increment_footchase() {
-	extern chaseseqst chaseseq;
-	extern char foughtthisround;
-	extern Deprecatedsquadst *activesquad;
-	extern short party_status;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int partysize = activesquadSize(), partyalive = activesquadAlive();
 	int encsize = encounterSize();
@@ -614,12 +455,6 @@ LOOP_CONTINUATION increment_footchase() {
 }
 bool footchase()
 {
-	const string CONST_chase036 = "As you exit the site, you notice that you are ";
-	extern chaseseqst chaseseq;
-	extern MusicClass music;
-	extern short mode;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	//NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
 	//IT SHOULD NOT DELETE SQUADS OR CREATURES
 	//SQUADS MAY BE FICTITIOUS AND BOTH WILL BE DELETED LATER ANYWAY
@@ -662,7 +497,6 @@ bool footchase()
 		}
 	}
 }
-int driveskill(DeprecatedCreature &cr, int v);
 int driveskill(DeprecatedCreature &cr, Vehicle &v)
 {
 	int driveskill = cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
@@ -671,19 +505,8 @@ int driveskill(DeprecatedCreature &cr, Vehicle &v)
 	driveskill *= static_cast<int>(cr.getCreatureHealth().blood / 50.0);
 	return driveskill;
 }
-const string CONST_chase047 = " brakes hard and nearly crashes!";
-const string CONST_chase046 = " backs off for safety.";
-const string CONST_chase045 = " skids out!";
-const string CONST_chase044 = " falls behind!";
-const string CONST_chase043 = "You make obscene gestures at the pursuers!";
-const string CONST_chase042 = "You boldly weave through oncoming traffic!";
 void evasivedrive()
 {
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern short fieldskillrate;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	vector<long> yourrolls, theirrolls, theirrolls_id, theirrolls_drv;
 	long yourworst = 10000;
 	for (int p = 0; p < 6; p++)
@@ -820,22 +643,8 @@ void evasivedrive()
 		}
 	}
 }
-const string CONST_chase058 = " crawls free of the car, shivering with pain.";
-const string CONST_chase057 = " gasps in pain, but lives, for now.";
-const string CONST_chase056 = " feet.";
-const string CONST_chase055 = " wheelchair.";
-const string CONST_chase054 = " and struggles to ";
-const string CONST_chase053 = "car frame";
-const string CONST_chase052 = " grips the ";
-const string CONST_chase051 = " seat, out cold, and dies.";
-const string CONST_chase050 = " slumps in ";
-const string CONST_chase049 = "Your ";
 void crashfriendlycar(int v)
 {
-	extern int stat_dead;
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	//CRASH CAR
 	clearmessagearea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -981,16 +790,8 @@ void crashfriendlycar(int v)
 		activesquad->squad[p]->carid = -1;
 	}
 }
-int getEncounterCarID(const int p);
 void crashenemycar(int v)
 {
-	const string CONST_chase063 = " hits a parked car and flips over.";
-	const string CONST_chase062 = "The person inside is squashed into a cube.";
-	const string CONST_chase061 = "Everyone inside is peeled off against the pavement.";
-	const string CONST_chase060 = " spins out and crashes.";
-	const string CONST_chase059 = " slams into a building.";
-	extern chaseseqst chaseseq;
-	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int victimsum = 0;
 	for (int p = ENCMAX - 1; p >= 0; p--)
@@ -1025,12 +826,6 @@ void crashenemycar(int v)
 }
 bool drivingupdate(short &obstacle)
 {
-	const string CONST_chase064 = " takes over the wheel.";
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	//CHECK TO SEE WHICH CARS ARE BEING DRIVEN
 	vector<int> passenger;
 	int driver;
@@ -1114,12 +909,6 @@ bool drivingupdate(short &obstacle)
 }
 bool dodgedrive()
 {
-	const string CONST_chase065 = "You swerve to avoid the obstacle!";
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
 	clearmessagearea();
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, CONST_chase065, gamelog);
@@ -1177,14 +966,6 @@ bool dodgedrive()
 }
 bool obstacledrive(short obstacle, char choice)
 {
-	const string CONST_chase072 = "Both sides refrain from endangering the child...";
-	const string CONST_chase071 = "The Conservative bastards unleash a hail of gunfire!";
-	const string CONST_chase070 = "You slow down and carefully avoid the kid.";
-	const string CONST_chase069 = "The fruit seller is squashed!";
-	const string CONST_chase068 = "Fruit smashes all over the windshield!";
-	const string CONST_chase067 = "You slow down, and carefully evade the truck.";
-	const string CONST_chase066 = "You slow down, and turn the corner.";
-	extern Log gamelog;
 	switch (obstacle)
 	{
 	case CARCHASE_OBSTACLE_CROSSTRAFFIC:
@@ -1289,13 +1070,8 @@ bool obstacledrive(short obstacle, char choice)
 	return 0;
 }
 void printSituationAndInstructions(const short obstacle) {
-	extern Log gamelog;
-	extern chaseseqst chaseseq;
-	extern short party_status;
 	int partysize = activesquadSize();
 
-	const string CONST_chase078 = "P - Pull over";
-	const string CONST_chase077 = "B - Bail out and run!";
 	//PRINT DRIVING SITUATION AND INSTRUCTIONS
 	if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
@@ -1328,8 +1104,6 @@ void printSituationAndInstructions(const short obstacle) {
 	}
 }
 void destroyAllCarsAndDetermineMusic() {
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
 	//DESTROY ALL CARS BROUGHT ALONG WITH PARTY
 	deleteVehicles(chaseseq.friendcar);
 	for (int p = 0; p < 6; p++)
@@ -1345,13 +1119,6 @@ void destroyAllCarsAndDetermineMusic() {
 }
 LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 
-
-	extern short mode;
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern short party_status;
-	extern Deprecatednewsstoryst *sitestory;
-	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 
@@ -1478,8 +1245,6 @@ LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 }
 LOOP_CONTINUATION increment_chasesequence(short& obstacle) {
 
-	extern chaseseqst chaseseq;
-	extern short party_status;
 	int partyalive = activesquadAlive();
 
 	eraseAlt();
@@ -1513,15 +1278,8 @@ LOOP_CONTINUATION increment_chasesequence(short& obstacle) {
 	return REPEAT;
 
 }
-void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *> &veh);
 bool chasesequence()
 {
-	const string CONST_chase073 = "As you pull away from the site, you notice that you are ";
-	extern MusicClass music;
-	extern short mode;
-	extern chaseseqst chaseseq;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int chasenum = 0;
 	reloadparty();
@@ -1568,8 +1326,6 @@ bool chasesequence()
 }
 Vehicle* getChaseVehicle(const DeprecatedCreature &c)
 {
-	extern short mode;
-	extern chaseseqst chaseseq;
 	Vehicle* found = NULL;
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
@@ -1590,9 +1346,6 @@ Vehicle* getChaseVehicle(const DeprecatedCreature &c)
 }
 DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 {
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern DeprecatedCreature encounter[ENCMAX];
 	DeprecatedCreature* found = NULL;
 	if (mode == GAMEMODE_CHASECAR && c.carid != -1)
 	{
@@ -1621,20 +1374,8 @@ DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 	//gamelog.newline();
 	return found;
 }
-void conservatise(const int e);
-Vehicle* getVehicleOfThisType(int cartype);
-const string CONST_chase094 = "STATIONWAGON";
-const string CONST_chase093 = "PICKUP";
-const string CONST_chase092 = "JEEP";
-const string CONST_chase091 = "SUV";
-const string CONST_chase090 = "AGENTCAR";
-const string CONST_chase088 = "HMMWV";
 void makechasers(long type, const long sitecriminality)
 {
-	extern char endgamestate;
-	extern chaseseqst chaseseq;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern short lawList[LAWNUM];
 	// 
 	long sitecrime_chasers;
 	if (sitecriminality > 10) {
@@ -1780,14 +1521,10 @@ void makechasers(long type, const long sitecriminality)
 			load[v]++;
 		}
 }
-void removeCreatureFromSquad(DeprecatedCreature &cr, int oldsqid);
 
 /* the next two functions force a chase sequence with a specific liberal */
 bool footchase(DeprecatedCreature &cr)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern short party_status;
-	extern long cursquadid;
 	long oldsqid = cr.squadid;
 	DeprecatedCreature *crp = &cr;
 	Deprecatedsquadst *sq = new Deprecatedsquadst;
@@ -1812,10 +1549,6 @@ bool footchase(DeprecatedCreature &cr)
 }
 bool chasesequence(DeprecatedCreature &cr, Vehicle &v)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern short party_status;
-	extern long cursquadid;
-	extern Log gamelog;
 	long oldsqid = cr.squadid;
 	Deprecatedsquadst *sq = new Deprecatedsquadst;
 	sq->squad[0] = &cr;

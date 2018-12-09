@@ -1,67 +1,5 @@
-
+#define	NEWGAME_CPP
 #include "../includes.h"
-const string tag_CLIP = "CLIP";
-
-const string tag_CLIP_ASSAULT = "CLIP_ASSAULT";
-
-const string tag_WEAPON = "WEAPON";
-
-const string tag_WEAPON_AUTORIFLE_AK47 = "WEAPON_AUTORIFLE_AK47";
-
-const string tag_SPORTS_CAR = "SPORTS_CAR";
-
-const string tag_ASSAULT_RIFLE = "ASSAULT_RIFLE";
-
-const string tag_RECRUITS_GANG = "RECRUITS_GANG";
-
-const string tag_JUICE = "JUICE";
-
-const string tag_ARMOR = "ARMOR";
-
-const string tag_B = "B";
-
-const string tag_BASE = "BASE";
-
-const string tag_CREATURE = "CREATURE";
-
-const string tag_HASMAPS = "HASMAPS";
-
-const string tag_GAY = "GAY";
-
-const string tag_D = "D";
-
-const string tag_DATING_LAWYER = "DATING_LAWYER";
-
-const string tag_MONEY = "MONEY";
-
-const string tag_YEAR = "YEAR";
-
-const string tag_Y = "Y";
-
-const string tag_DAY = "DAY";
-
-const string tag_MONTH = "MONTH";
-
-const string tag_BIRTHDAY_ = "BIRTHDAY_";
-
-const string tag_STARTING_ = "STARTING_";
-
-const string tag_ATTRIBUTE_ = "ATTRIBUTE_";
-
-const string tag_SKILL_ = "SKILL_";
-
-const string blankString = "";
-
-const string tag__2 = "_2";
-
-const string tag_QUESTION = "QUESTION";
-
-const string tag_ANSWER = "ANSWER";
-
-const string tag_HEADER = "HEADER";
-
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-
 
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -88,145 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string tag_value = "value";
 
-const string tag_attribute = "attribute";
-
-
-const string tag_skill = "skill";
-
-#include "../creature/creature.h"
-#include "../locations/locations.h"
-
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-
-//#include "../common/consolesupport.h"
-// for getkey
-
-#include "../log/log.h"
-
-#include "../common/stringconversion.h"
-//for string attribute_enum_to_string(int)
-
-#include "../common/getnames.h"
-// for cityname
-
-#include "../common/translateid.h"
-// for  getarmortype
-
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-
-#include "../common/creaturePoolCreature.h"
-
-#include "../common/musicClass.h"
-
-
-string theLCS;
-string notASkill;
-string notAnAttribute;
-
-Vehicle* newSportsCar();
-
-string aNewConEra;
-string theYearIs;
-string conservativePresident;
-string endsSecondTerm;
-string highSeventiesApprovePres;
-string conMajorityHouse;
-string senateConMajority;
-string beginningOfNew;
-string conEra;
-string thePresident;
-string hasAskedCongressBeQuick;
-string rubberStampArchCon;
-string theLeftSeems;
-string powerlessToStop;
-string inThisDarkTime;
-string whatIsYourName;
-string pressEnterToBeRealName;
-
-string invalidTag;
-string theDocSaid;
-string aBoy;
-string aGirl;
-string intersex;
-string myParents;
-string insistedOtherwise;
-string they;
-string namedMe;
-
-string error;
-
-string theFounder;
-string firstName;
-string pressAtoReconsider;
-string lastName;
-string pressBtoBeReborn;
-string sexIs;
-string male;
-string female;
-string itsComplicated;
-string pressCtoChangeSex;
-string history;
-string letMeChoose;
-string letFateDecide;
-string pressDtoToggle;
-string city;
-string pressEtoRelocate;
-string pressAnyKeyString;
-string allOptions;
-
-string unSelected;
-string isSelected;
-string pressAnyOtherKey;
-
-string notCreature;
-string notValidMap;
-string notSpecialWound;
-string newGameAdvanced;
-string a_classicMode;
-string b_weDidntStartIt;
-string c_nightmareMode;
-string d_nationalLCS;
-string e_marathonMode;
-string f_stalinistMode;
-string newGameYourAgenda;
-string a_noComprimise;
-string b_democrat;
-string newGameFieldLearn;
-string affectsTheseSkills;
-string a_fastSkills;
-string b_classic;
-string c_hardMode;
-
-enum LOOP_CONTINUATION {
-	RETURN_ZERO,
-	RETURN_ONE,
-	REPEAT
-};
-
-extern string spaceDashSpace;
-
-extern UniqueCreatures uniqueCreatures;
-extern string singleSpace;
-void newVehicle(Vehicle *startcar);
-extern string singleDot;
-vector<string> founderQuestions;
-
-#include "../customMaps.h"
-vector<file_and_text_collection> newgame_file_collection = {
-	/*newgame.cpp*/
-	customText(&founderQuestions, "newgame\\founderQuestions.txt"),
-};
-map<string, short> getSkillEnumFromString;
-map<short, string> enumToCreature;
-map<string, short> getBaseEnumFromString;
-map<string, short> getSpecialWoundEnumFromString;
 bool getSetValue(const string& s) {
 	int j = -1;
 	for (int i = 0; i < s.size(); i++) {
@@ -344,12 +144,6 @@ int getSpecialWoundFromString(const string& s) {
 	}
 }
 LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs, bool &nightmarelaws) {
-	extern bool stalinmode;
-	extern bool multipleCityMode;
-	extern bool ALLOWSTALIN;
-	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-	extern bool nocourtpurge;
-
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(4, 6, newGameAdvanced);
 	set_color_easy(WHITE_ON_BLACK);
@@ -418,12 +212,6 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 	return REPEAT;
 }
 void implementNightmareLaws() {
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern short attitude[VIEWNUM];
 
 	for (int l = 0; l < LAWNUM; l++)
 		lawList[l] = ALIGN_ARCHCONSERVATIVE;
@@ -461,7 +249,6 @@ void implementNightmareLaws() {
 	}
 }
 LOOP_CONTINUATION implementWinCondition(const bool classicmode) {
-	extern short wincondition;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(4, 6, newGameYourAgenda);
@@ -498,7 +285,6 @@ LOOP_CONTINUATION implementWinCondition(const bool classicmode) {
 	return RETURN_ZERO;
 }
 LOOP_CONTINUATION implementFieldSkillRate() {
-	extern short fieldskillrate;
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(4, 6, newGameFieldLearn);
@@ -543,10 +329,6 @@ LOOP_CONTINUATION implementFieldSkillRate() {
 /* select new game options */
 void setup_newgame()
 {
-	extern char endgamestate;
-	extern bool stalinmode;
-	extern bool multipleCityMode;
-	extern MusicClass music;
 
 	music.play(MUSIC_NEWGAME);
 	bool classicmode = false;
@@ -581,53 +363,7 @@ void setup_newgame()
 		;
 	}
 }
-enum Stat_Or_Attribute {
-	SKILL,
-	ATTRIBUTE,
-	OTHER
-};
-enum Other_Influence {
-	BIRTH_MONTH,
-	BIRTH_DAY,
-	BIRTH_YEAR,
-	STARTING_MONTH,
-	STARTING_DAY,
-	STARTING_YEAR,
-	GAY,
-	DATING_LAWYER,
-	DATING,
-	HAS_MAPS,
-	JUICE,
-	SPORTS_CAR,
-	ASSAULT_RIFLE,
-	MONEY,
-	BASE,
-	CREATURE,
-	ARMOR,
-	RECRUITS
-};
-struct Impact {
-	Stat_Or_Attribute type;
-	int item_to_influcence;
-	int magnitude;
-	bool set_value;
-};
-struct Choice {
-	string ANSWER;
-	string ANSWER_2;
-	vector<Impact> impact;
-};
-struct Question {
-	string HEADER;
-	string HEADER_2;
-	string QUESTION;
-	string QUESTION_2;
-	vector<Choice> choices;
-};
 void printIntroduction() {
-	extern Log gamelog;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern int year;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(2, 2, aNewConEra, gamelog);
@@ -671,46 +407,6 @@ void printIntroduction() {
 	gamelog.nextMessage();
 	pressAnyKey();
 }
-enum founderQuestionTagEnums {
-	ENUM_tag_HEADER,
-	ENUM_tag_ANSWER,
-	ENUM_tag_QUESTION,
-	ENUM_tag_SKILL_,
-	ENUM_tag_ATTRIBUTE_,
-	ENUM_tag_STARTING_,
-	ENUM_tag_BIRTHDAY_,
-	ENUM_tag_MONEY,
-	ENUM_tag_DATING_LAWYER,
-	ENUM_tag_GAY,
-	ENUM_tag_HASMAPS,
-	ENUM_tag_CREATURE,
-	ENUM_tag_BASE,
-	ENUM_tag_ARMOR,
-	ENUM_tag_JUICE,
-	ENUM_tag_RECRUITS_GANG,
-	ENUM_tag_ASSAULT_RIFLE,
-	ENUM_tag_SPORTS_CAR,
-};
-map<string, int> founderQuestionTags = {
-	map<string, int>::value_type(tag_HEADER, ENUM_tag_HEADER),
-	map<string, int>::value_type(tag_ANSWER, ENUM_tag_ANSWER),
-	map<string, int>::value_type(tag_QUESTION, ENUM_tag_QUESTION),
-	map<string, int>::value_type(tag_SKILL_, ENUM_tag_SKILL_),
-	map<string, int>::value_type(tag_ATTRIBUTE_, ENUM_tag_ATTRIBUTE_),
-	map<string, int>::value_type(tag_STARTING_, ENUM_tag_STARTING_),
-	map<string, int>::value_type(tag_BIRTHDAY_, ENUM_tag_BIRTHDAY_),
-	map<string, int>::value_type(tag_MONEY, ENUM_tag_MONEY),
-	map<string, int>::value_type(tag_DATING_LAWYER, ENUM_tag_DATING_LAWYER),
-	map<string, int>::value_type(tag_GAY, ENUM_tag_GAY),
-	map<string, int>::value_type(tag_HASMAPS, ENUM_tag_HASMAPS),
-	map<string, int>::value_type(tag_CREATURE, ENUM_tag_CREATURE),
-	map<string, int>::value_type(tag_BASE, ENUM_tag_BASE),
-	map<string, int>::value_type(tag_ARMOR, ENUM_tag_ARMOR),
-	map<string, int>::value_type(tag_JUICE, ENUM_tag_JUICE),
-	map<string, int>::value_type(tag_RECRUITS_GANG, ENUM_tag_RECRUITS_GANG),
-	map<string, int>::value_type(tag_ASSAULT_RIFLE, ENUM_tag_ASSAULT_RIFLE),
-	map<string, int>::value_type(tag_SPORTS_CAR, ENUM_tag_SPORTS_CAR),
-};
 void resetChoiceAndQuestion(Choice &currentChoice, Question &currentQuestion, const string header, const string header_2, const string firstsubstr) {
 
 
@@ -808,7 +504,6 @@ bool getArmorFromFounderQuestion(const string question, Impact &currentImpact) {
 
 }
 vector<Question> gatherAllFounderQuestions() {
-	const int MAX_CHOICES = 10;
 	vector<Question> allQuestions;
 	bool firstQuestion = true;
 	bool firstAnswer = true;
@@ -1108,17 +803,6 @@ void set_attributes_zero(DeprecatedCreature* newcr) {
 	newcr->set_attribute(ATTRIBUTE_CHARISMA, 0);
 }
 void set_default_values(DeprecatedCreature* newcr) {
-	// Make the founder blind
-	extern bool BLIND;
-	// Make the founder unable to walk
-	extern bool NOWALK;
-	// Make the founder have no face
-	extern bool NOFACE;
-	// Make the founder have a severely injured spine
-	extern bool SPINE;
-	// Make the founder have severe internal damage
-	extern bool INTERNAL;
-
 	newcr->align = ALIGN_LIBERAL;
 	set_attributes_zero(newcr);
 	if (BLIND) {
@@ -1138,8 +822,6 @@ void set_default_values(DeprecatedCreature* newcr) {
 	}
 }
 bool print_default_founder_window(DeprecatedCreature* newcr) {
-	extern bool multipleCityMode;
-	extern char lcityname[CITY_NAMELEN];
 
 	char first[3][80];
 	char last[80];
@@ -1260,19 +942,7 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 	return choices;
 }
 
-#include "../recruits.h"
-/* creates your founder */
-struct newGameArguments {
-	const char recruits;
-	const char base;
-	const bool makelawyer;
-	const bool gaylawyer;
-	const bool sports_car;
-	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
-};
 void giveMeAssaultRifle(DeprecatedCreature* newcr) {
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
 
 	Weapon neww(*weapontype[getweapontype(tag_WEAPON_AUTORIFLE_AK47)]);
 	Clip newc(*cliptype[getcliptype(tag_CLIP_ASSAULT)], 9);
@@ -1282,12 +952,6 @@ void giveMeAssaultRifle(DeprecatedCreature* newcr) {
 void initiateNewgameLocations(DeprecatedCreature* newcr, newGameArguments ngm);
 void makecharacter()
 {
-	extern UniqueCreatures uniqueCreatures;
-	extern Log gamelog;
-	extern int year;
-	extern int day;
-	extern int month;
-	extern class Ledger ledger;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	set_default_values(newcr);
 	bool choices = print_default_founder_window(newcr);

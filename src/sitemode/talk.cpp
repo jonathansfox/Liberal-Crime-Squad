@@ -1,40 +1,6 @@
+#define	TALK_CPP
 #include "../includes.h"
-const string CONST_talk040 = "# ";
-const string CONST_talk039 = "allText.txt";
-const string CONST_talk038 = " ";
-const string CONST_talk034 = "agree_to_release_hostages.txt";
-const string CONST_talk033 = "go_ahead_and_die.txt";
-const string CONST_talk032 = "let_hostages_go.txt";
-const string CONST_talk031 = "please_no_more.txt";
-const string CONST_talk030 = "hostage_negotiation.txt";
-const string CONST_talk029 = "who_cares_about_hostage.txt";
-const string CONST_talk028 = "please_spare_hostage.txt";
-const string CONST_talk027 = "threaten_hostage.txt";
-const string CONST_talk026 = "backs_off.txt";
-const string CONST_talk025 = "come_at_me_bro.txt";
-const string CONST_talk024 = "teller_complies.txt";
-const string CONST_talk023 = "teller_gestures.txt";
-const string CONST_talk022 = "robbing_bank.txt";
-const string CONST_talk021 = "that_is_not_disturbing.txt";
-const string CONST_talk020 = "that_is_disturbing.txt";
-const string CONST_talk019 = "mutant_rejection.txt";
-const string CONST_talk018 = "dog_rejection.txt";
-const string CONST_talk017 = "normal_talk_to_dog.txt";
-const string CONST_talk016 = "lovingly_talk_to_dog.txt";
-const string CONST_talk015 = "normal_talk_to_mutant.txt";
-const string CONST_talk014 = "lovingly_talk_to_mutant.txt";
-const string CONST_talk013 = "pickupLines.txt";
-const string CONST_talk012 = "no_free_speech_flirt.txt";
 
-const string tag_ARMOR_MITHRIL = "ARMOR_MITHRIL";
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
-const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
-const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
-const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
-const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
-const string blankString = "";
-const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -60,61 +26,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-// for renting
-#include "../sitemode/sitedisplay.h"
-#include "../items/money.h"
-#include "../log/log.h"
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-// for void basesquad(squadst *st,long loc);
-
-/*
-daily.cpp
-*/
-/* active squad visits the arms dealer */
-void armsdealer(int loc);
-
-#include "../combat/fight.h"
-// for void delenc(short e,char loot);
-//void delenc(Creature &tk);
-//void delenc(const int e, const int i);
-#include "../combat/fightCreature.h"  
-//for void capturecreature(Creature &t);
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-void moveEverythingAwayFromSite(int cursite);
-#include "../customMaps.h"
-
-//const string tag_ARMOR_MITHRIL = "ARMOR_MITHRIL";
-/*
-daily.cpp
-*/
-/* active squad visits the arms dealer */
-void armsdealer(int loc);
-
-// #include "../combat/fight.h"
-// for void delenc(short e,char loot);
-void delenc(DeprecatedCreature &tk);
-// #include "../locations/locationsPool.h"
-void moveEverythingAwayFromSite(int cursite);
 vector<vector<string> > no_free_speech_flirt;
 vector<vector<string> > pickupLines;
 vector<vector<string> > lovingly_talk_to_mutant;
@@ -128,8 +39,6 @@ vector<string> that_is_not_disturbing;
 vector<string> robbing_bank;
 vector<string> teller_gestures;
 vector<string> teller_complies;
-const string talky = "talk\\";
-const int PICKUP_LINE_SIZE = 5;
 //const int DOUBLE_LINE = 2;
 vector<string> come_at_me_bro;
 vector<string> backs_off;
@@ -141,8 +50,6 @@ vector<string> please_no_more;
 vector<string> let_hostages_go;
 vector<string> go_ahead_and_die;
 vector<string> agree_to_release_hostages;
-const string talk_combat = "talk_combat\\";
-const int DOUBLE_LINE = 2;
 vector<file_and_text_collection> talk_file_collection = {
 	/*talk.cpp*/
 	customText(&no_free_speech_flirt, talky + CONST_talk012, PICKUP_LINE_SIZE),
@@ -170,216 +77,37 @@ vector<file_and_text_collection> talk_file_collection = {
 	customText(&go_ahead_and_die, talk_combat + CONST_talk033),
 	customText(&agree_to_release_hostages, talk_combat + CONST_talk034),
 };
-string while_naked;
-char heyMisterDog(DeprecatedCreature &tk);
-char heyMisterMonster(DeprecatedCreature &tk);
-char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk);
-char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk);
-char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk);
-char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk);
-char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk);
-char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk);
-char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk);
-char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk);
-char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk);
+//string while_naked;
 map<short, string> conservativeLegalArgument;
 map<short, vector<string> > talkAboutTheIssues;
 map<short, string> youAreStupidTalkAboutIssues;
 map<short, string> issueTooLiberal;
-string saysComma;
-string respondsComma;
-string colonSpace;
-string unnamed_String_Talk_cpp_001;
-string unnamed_String_Talk_cpp_002;
-string unnamed_String_Talk_cpp_003;
-string unnamed_String_Talk_cpp_004;
-string unnamed_String_Talk_cpp_005;
-string unnamed_String_Talk_cpp_006;
-string unnamed_String_Talk_cpp_007;
-string unnamed_String_Talk_cpp_008;
-string unnamed_String_Talk_cpp_009;
-string unnamed_String_Talk_cpp_010;
-string unnamed_String_Talk_cpp_011;
-string unnamed_String_Talk_cpp_012;
-string unnamed_String_Talk_cpp_013;
-string unnamed_String_Talk_cpp_014;
-string unnamed_String_Talk_cpp_015;
-string unnamed_String_Talk_cpp_016;
-string unnamed_String_Talk_cpp_017;
-string unnamed_String_Talk_cpp_018;
-string unnamed_String_Talk_cpp_019;
-string unnamed_String_Talk_cpp_020;
-string unnamed_String_Talk_cpp_021;
-string unnamed_String_Talk_cpp_022;
-string unnamed_String_Talk_cpp_023;
-string unnamed_String_Talk_cpp_024;
-string unnamed_String_Talk_cpp_025;
-string unnamed_String_Talk_cpp_026;
-string unnamed_String_Talk_cpp_027;
-string unnamed_String_Talk_cpp_028;
-string unnamed_String_Talk_cpp_029;
-string unnamed_String_Talk_cpp_030;
-string unnamed_String_Talk_cpp_031;
-string unnamed_String_Talk_cpp_032;
-string unnamed_String_Talk_cpp_033;
-string unnamed_String_Talk_cpp_034;
-string unnamed_String_Talk_cpp_035;
-string unnamed_String_Talk_cpp_036;
-string unnamed_String_Talk_cpp_037;
-string unnamed_String_Talk_cpp_038;
-string unnamed_String_Talk_cpp_039;
-string unnamed_String_Talk_cpp_040;
-string unnamed_String_Talk_cpp_041;
-string unnamed_String_Talk_cpp_042;
-string unnamed_String_Talk_cpp_043;
-string unnamed_String_Talk_cpp_044;
-string unnamed_String_Talk_cpp_045;
-string unnamed_String_Talk_cpp_046;
-string unnamed_String_Talk_cpp_047;
-string unnamed_String_Talk_cpp_048;
-string unnamed_String_Talk_cpp_049;
-string unnamed_String_Talk_cpp_050;
-string unnamed_String_Talk_cpp_051;
-string unnamed_String_Talk_cpp_052;
-string unnamed_String_Talk_cpp_053;
-string unnamed_String_Talk_cpp_054;
-string unnamed_String_Talk_cpp_055;
-string unnamed_String_Talk_cpp_056;
-string unnamed_String_Talk_cpp_057;
-string unnamed_String_Talk_cpp_058;
-string unnamed_String_Talk_cpp_059;
-string unnamed_String_Talk_cpp_060;
-string unnamed_String_Talk_cpp_061;
-string unnamed_String_Talk_cpp_062;
-string unnamed_String_Talk_cpp_063;
-string unnamed_String_Talk_cpp_064;
-string unnamed_String_Talk_cpp_065;
-string unnamed_String_Talk_cpp_066;
-string unnamed_String_Talk_cpp_067;
-string unnamed_String_Talk_cpp_068;
-string unnamed_String_Talk_cpp_069;
-string unnamed_String_Talk_cpp_070;
-string unnamed_String_Talk_cpp_071;
-string unnamed_String_Talk_cpp_072;
-string unnamed_String_Talk_cpp_073;
-string unnamed_String_Talk_cpp_074;
-string unnamed_String_Talk_cpp_075;
-string unnamed_String_Talk_cpp_076;
-string unnamed_String_Talk_cpp_077;
-string unnamed_String_Talk_cpp_078;
-string unnamed_String_Talk_cpp_079;
-string unnamed_String_Talk_cpp_080;
-string unnamed_String_Talk_cpp_081;
-string unnamed_String_Talk_cpp_082;
-string unnamed_String_Talk_cpp_083;
-string unnamed_String_Talk_cpp_084;
-string unnamed_String_Talk_cpp_085;
-string unnamed_String_Talk_cpp_086;
-string unnamed_String_Talk_cpp_087;
-string unnamed_String_Talk_cpp_088;
-string unnamed_String_Talk_cpp_089;
-string unnamed_String_Talk_cpp_090;
-string unnamed_String_Talk_cpp_091;
-string unnamed_String_Talk_cpp_092;
-string unnamed_String_Talk_cpp_093;
-string unnamed_String_Talk_cpp_094;
-string unnamed_String_Talk_cpp_095;
-string unnamed_String_Talk_cpp_096;
-string unnamed_String_Talk_cpp_097;
-string unnamed_String_Talk_cpp_098;
-string unnamed_String_Talk_cpp_099;
-string unnamed_String_Talk_cpp_100;
-string unnamed_String_Talk_cpp_101;
-string unnamed_String_Talk_cpp_102;
-string unnamed_String_Talk_cpp_103;
-string unnamed_String_Talk_cpp_104;
-string unnamed_String_Talk_cpp_105;
-string unnamed_String_Talk_cpp_106;
-string unnamed_String_Talk_cpp_107;
-string unnamed_String_Talk_cpp_108;
-string unnamed_String_Talk_cpp_109;
-string unnamed_String_Talk_cpp_110;
-string unnamed_String_Talk_cpp_111;
-string unnamed_String_Talk_cpp_112;
-string unnamed_String_Talk_cpp_113;
-string unnamed_String_Talk_cpp_114;
-string unnamed_String_Talk_cpp_115;
-string unnamed_String_Talk_cpp_116;
-string unnamed_String_Talk_cpp_117;
-string unnamed_String_Talk_cpp_118;
-string unnamed_String_Talk_cpp_119;
-string unnamed_String_Talk_cpp_120;
-string unnamed_String_Talk_cpp_121;
-string unnamed_String_Talk_cpp_122;
-string unnamed_String_Talk_cpp_123;
-string unnamed_String_Talk_cpp_124;
-string unnamed_String_Talk_cpp_125;
-string unnamed_String_Talk_cpp_126;
-string unnamed_String_Talk_cpp_127;
-string unnamed_String_Talk_cpp_128;
-string unnamed_String_Talk_cpp_129;
-string unnamed_String_Talk_cpp_130;
-string unnamed_String_Talk_cpp_131;
-string unnamed_String_Talk_cpp_132;
-string unnamed_String_Talk_cpp_133;
-string unnamed_String_Talk_cpp_134;
-string unnamed_String_Talk_cpp_135;
-string unnamed_String_Talk_cpp_136;
-string unnamed_String_Talk_cpp_137;
-string unnamed_String_Talk_cpp_138;
-string unnamed_String_Talk_cpp_139;
-string unnamed_String_Talk_cpp_140;
-string unnamed_String_Talk_cpp_141;
-string unnamed_String_Talk_cpp_142;
-string unnamed_String_Talk_cpp_143;
-string unnamed_String_Talk_cpp_144;
-string unnamed_String_Talk_cpp_145;
-string unnamed_String_Talk_cpp_146;
-string unnamed_String_Talk_cpp_147;
-string unnamed_String_Talk_cpp_148;
-string unnamed_String_Talk_cpp_149;
+//
 /* bluff, date, issues */
-bool isThereASiteAlarm();
-
-short getCurrentSite();
-char talk(DeprecatedCreature &a, const int t)
+void talk(DeprecatedCreature &a, const int t)
 {
-	extern DeprecatedCreature encounter[ENCMAX];
 	DeprecatedCreature &tk = encounter[t];
 	// TALKING TO DOGS
 	if (tk.type == CREATURE_GUARDDOG && tk.align != ALIGN_LIBERAL)
 	{
-		return heyMisterDog(tk);
-	}
+		 heyMisterDog(tk);
+	}else
 	// TALKING TO MONSTERS
 	if (tk.type == CREATURE_GENETIC && tk.align != ALIGN_LIBERAL)
 	{
-		return heyMisterMonster(tk);
-	}
+		 heyMisterMonster(tk);
+	}else
 	// BLUFFING
 	if ((isThereASiteAlarm() || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) && tk.enemy())
 	{
-		return talkInCombat(a, tk);
+		 talkInCombat(a, tk);
 	}
-	return talkToGeneric(a, tk);
+	else {
+		 talkToGeneric(a, tk);
+	}
 }
-const string singleSpace = " ";
-extern string singleDot;
-void setSiteAlarmOne();
-void setEncounterZeroExistsFalse();
-void giveActiveSquadThisLoot(Item* de);
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
-	extern Deprecatedsquadst *activesquad;
-	extern short sitealienate;
-
-	extern string slogan_str;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitealarmtimer;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK);
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
@@ -597,30 +325,41 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 		switch (c)
 		{
 		case 'a':
-			return wannaHearSomethingDisturbing(a, tk);
+			wannaHearSomethingDisturbing(a, tk);
+			return 1;
 		case 'b':
 			if (!tk.can_date(a.getCreatureBio().age, a.animalgloss)) break;
-			return doYouComeHereOften(a, tk);
+			doYouComeHereOften(a, tk);
+			return 1;
 		case 'c':
 			return 0;
 		case 'd':
 			if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == -1)
-				return heyIWantToRentARoom(a, tk);
+			{
+				heyIWantToRentARoom(a, tk);
+				return 1;
+			}
 			else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 0)
-				return heyIWantToCancelMyRoom(a, tk);
+			{
+				heyIWantToCancelMyRoom(a, tk);
+				return 1;
+			}
 			else if (tk.type == CREATURE_GANGMEMBER || tk.type == CREATURE_MERC)
-				return heyINeedAGun(a, tk);
+			{
+				heyINeedAGun(a, tk);
+				return 1;
+			}
 			else if (tk.type == CREATURE_BANK_TELLER)
+			{
 				return talkToBankTeller(a, tk);
+			}
 			break;
 		}
 	}
 }
 // #include "../common/creaturePool.h"
-void locationIsNowRented(int l, int rent);
-char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
+void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
 	clearcommandarea();
 	clearmessagearea();
 	clearmaparea();
@@ -641,7 +380,7 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_026, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
@@ -657,17 +396,11 @@ char heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 	moveEverythingAwayFromSite(getCurrentSite());
 
-	return 1;
 }
 
 /* common - assigns a new base to all members of a squad */
-void basesquad(Deprecatedsquadst *st, long loc);
-char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
+void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern char newscherrybusted;
-	extern Deprecatedsquadst *activesquad;
-	extern class Ledger ledger;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
@@ -684,7 +417,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_030, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	int rent;
 	switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
@@ -739,7 +472,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			ledger.subtract_funds(rent, EXPENSE_RENT);
 			locationIsNowRented(getCurrentSite(), rent);
 			basesquad(activesquad, getCurrentSite());
-			return 1;
+			return;
 		case 'b': // Refuse rent deal
 			clearcommandarea(); clearmessagearea(); clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -756,7 +489,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			addstrAlt(unnamed_String_Talk_cpp_044, gamelog);
 			gamelog.newline();
 			pressAnyKey();
-			return 1;
+			return;
 		case 'c': // Threaten landlord
 			clearcommandarea(); clearmessagearea(); clearmaparea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -803,7 +536,7 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 				gamelog.newline();
 				pressAnyKey();
 				tk.make_cantbluff_one();
-				return 1;
+				return;
 			}
 			else
 			{
@@ -827,16 +560,14 @@ char heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 				else rent = 0;
 				locationIsNowRented(getCurrentSite(), rent);
 				basesquad(activesquad, getCurrentSite());
-				return 1;
+				return;
 			}
 		}
 	}
 }
 
-char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
+void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
@@ -853,7 +584,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_051, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	// IsaacG Migrate Strings
 	if (a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM ||
@@ -868,7 +599,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_052, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	if (isThereASiteAlarm())
 	{
@@ -878,7 +609,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_053, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 	{
@@ -896,7 +627,7 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		gamelog.newline();
 		pressAnyKey();
 		armsdealer(getCurrentSite());
-		return 1;
+		return;
 	default:
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
@@ -904,12 +635,11 @@ char heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_055, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 }
-char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
+void wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
@@ -933,7 +663,6 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
 	}
 	else if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) != 0 && interested)
 	{
@@ -943,7 +672,7 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_061, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return talkAboutIssues(a, tk);
+		talkAboutIssues(a, tk);
 	}
 	else
 	{
@@ -961,15 +690,10 @@ char wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 		addstrAlt(unnamed_String_Talk_cpp_065, gamelog);
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
 	}
 }
-int getCity(int l);
-void newDate(DeprecatedCreature &a, DeprecatedCreature &tk);
-char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
+void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 	int y = 12;
 	clearcommandarea(); clearmessagearea(); clearmaparea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -1029,7 +753,7 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		gamelog.newline();
 		pressAnyKey();
-		return 1;
+		return;
 	}
 	a.train(SKILL_SEDUCTION, LCSrandom(5) + 2);
 	if ((a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM // Police property on armor? -XML
@@ -1097,14 +821,9 @@ char doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		pressAnyKey();
 		tk.make_cantbluff_one();
 	}
-	return 1;
 }
-void newRecruit(DeprecatedCreature *cr, int c);
-char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
+void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern char newscherrybusted;
-	extern short lawList[LAWNUM];
 	const int lw = LCSrandom(LAWNUM); // pick a random law to talk about
 	bool succeeded = false;
 	bool you_are_stupid = false;
@@ -1113,44 +832,24 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		you_are_stupid = true;
 	else if (lawList[lw] == ALIGN_ELITELIBERAL && newscherrybusted)
 		issue_too_liberal = true;
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	int y = 10;
+
+	printTalkAboutIssuesHeader(a.getNameAndAlignment().name);
+
 	if (you_are_stupid)
 	{
-		if (lw == LAW_POLICEBEHAVIOR) {
-			if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
-				mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_076, gamelog);
-			else
-				mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_077, gamelog);
-		}
-		else {
-			mvaddstrAlt(y++, 1, youAreStupidTalkAboutIssues[lw]);
-		}
+		printTalkAboutIssuesWhenStupid(lw);
 	}
 	else if (issue_too_liberal)
 	{
-
-		mvaddstrAlt(y++, 1, issueTooLiberal[lw]);
+		printTalkAboutIssuesTooLiberal(lw);
 	}
 	else
 	{
-		if (lw == LAW_POLLUTION) {
-			mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_078, gamelog);
-			if (tk.animalgloss == ANIMALGLOSS_ANIMAL) mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_079, gamelog);
-			else mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_080, gamelog);
-		}
-		else {
-			mvaddstrAlt(y++, 1, talkAboutTheIssues[lw][0], gamelog);
-			mvaddstrAlt(y++, 1, talkAboutTheIssues[lw][1], gamelog);
-		}
+		printTalkAboutIssuesNormal(lw, tk.animalgloss);
 	}
-	gamelog.newline();
+
+	
+
 	pressAnyKey();
 	int difficulty = DIFFICULTY_VERYEASY;
 	if (tk.align == ALIGN_CONSERVATIVE)
@@ -1165,120 +864,69 @@ char talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if (is_naked)
 		difficulty += 5;
 	succeeded = a.skill_check(SKILL_PERSUASION, difficulty);
+	const bool extraline = you_are_stupid || issue_too_liberal;
+	const int special_case = LCSrandom(10);
+	bool another_extraline = !special_case;
 	// Prisoners never accept to join you, you must liberate them instead
-	if (succeeded && strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_081.data()) != 0)
+
+	if (succeeded && !isPrisoner(tk.getNameAndAlignment().name))
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt((++y)++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		if (tk.type == CREATURE_MUTANT && tk.get_attribute(ATTRIBUTE_INTELLIGENCE, true) < 3)
-			mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_082, gamelog);
+		bool unableToSpeak = tk.type == CREATURE_MUTANT && tk.get_attribute(ATTRIBUTE_INTELLIGENCE, true) < 3;
+		if (unableToSpeak) {
+			printUnableToSpeakAgree(tk.getNameAndAlignment().name, extraline);
+		}
 		else
 		{
-			switch (LCSrandom(10))
-			{
-			case 0: mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_083, gamelog);
-				pressAnyKey();
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_084, gamelog);
-				break;
-			case 1: mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_085, gamelog);
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				addstrAlt(unnamed_String_Talk_cpp_086, gamelog);
-				break;
-			default:
-				mvaddstrAlt(y++, 1, pickrandom(that_is_disturbing), gamelog);
-				break;
-			}
+			printThatIsDisturbing(tk.getNameAndAlignment().name, extraline, special_case);
 		}
-		gamelog.newline();
 		pressAnyKey();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(++y, 1, unnamed_String_Talk_cpp_087, gamelog);
-		addstrAlt(tk.getNameAndAlignment().name, gamelog);
-		addstrAlt(unnamed_String_Talk_cpp_088, gamelog);
-		gamelog.newline();
+		printAgreesToComeByLater(tk.getNameAndAlignment().name, extraline, another_extraline && !unableToSpeak);
 		pressAnyKey();
 		DeprecatedCreature *newcr = new DeprecatedCreature;
 		*newcr = tk;
 		newcr->namecreature();
 		newRecruit(newcr, a.id);
 		delenc(tk);
-		return 1;
 	}
 	else
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt((++y)++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		if (tk.type == CREATURE_MUTANT &&
 			tk.get_attribute(ATTRIBUTE_INTELLIGENCE, true) < 3)
 		{
-			mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_089, gamelog);
+			printMutantTalkAboutIssues(tk.getNameAndAlignment().name, extraline);
 		}
 		else
 		{
+			const bool tkConservativeCounter = tk.align != ALIGN_LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM, DIFFICULTY_AVERAGE);
 			if (tk.align == ALIGN_CONSERVATIVE && you_are_stupid)
 			{
-				if (tk.type == CREATURE_GANGUNIT)
-					mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_090, gamelog);
-				else if (tk.type == CREATURE_DEATHSQUAD)
-					mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_091, gamelog);
-				else
-				{
-					mvaddstrAlt(y++, 1, pickrandom(that_is_not_disturbing), gamelog);
-				}
+				printConservativeRespondsToStupid(tk.type, extraline);
 			}
-			else if (tk.align != ALIGN_LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM, DIFFICULTY_AVERAGE))
+			else if (tkConservativeCounter)
 			{
-				mvaddstrAlt(y++, 1, conservativeLegalArgument[lw], gamelog);
+				printConservativeCounter(extraline, lw);
 			}
 			else
 			{
-				mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_092, gamelog);
+				printRejectTalk(extraline);
 			}
 		}
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
-		gamelog.newline();
+		printTurnsAway();
 		pressAnyKey();
 		tk.make_cantbluff_one();
-		return 1;
 	}
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-int encounterWisdomRoll(const int e);
-void pressKeyAInCombat(DeprecatedCreature &a) {
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern short attitude[VIEWNUM];
-	extern string slogan_str;
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
-	addstrAlt(colonSpace, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	switch (LCSrandom(4))
-	{
-	case 0:
-	{   // Formatting the slogan so that it always has quotes around it and punctuation
-		if (slogan_str[0] != '"') mvaddcharAlt(17, 1, '"');
-		mvaddstrAlt(17, 1 + (slogan_str[0] != '"' ? 1 : 0), slogan_str, gamelog);
-		const int last = len(slogan_str);
-		if (last && slogan_str[last - 1] != '"' && slogan_str[last - 1] != '!' && slogan_str[last - 1] != '.' && slogan_str[last - 1] != '?')
-			addcharAlt('!', gamelog);
-		if (last && slogan_str[last - 1] != '"') addcharAlt('"', gamelog);
-		if (!sitestory->claimed)
-			sitestory->claimed = 1;
-		break;
-	}
-	default:
-		mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
-		break;
-	}
+
+bool isPrisoner(const string tkname) {
+	return strcmp(tkname.data(), unnamed_String_Talk_cpp_081.data()) != 0;
+}
+
+
+void pressKeyAInCombat(DeprecatedCreature &a) {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	printThreatenEnemy(a.getNameAndAlignment().name);
 	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy)
@@ -1299,9 +947,7 @@ void pressKeyAInCombat(DeprecatedCreature &a) {
 				{
 					if (LCSrandom(3)) continue;
 				}
-				clearmessagearea();
-				mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-				addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
+				printAnotherOneBacksOff(encounter[e].name);
 				delenc(e, 0);
 				addjuice(a, 2, 200); // Instant juice!
 				pressAnyKey();
@@ -1309,14 +955,9 @@ void pressKeyAInCombat(DeprecatedCreature &a) {
 		}
 	}
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
+
+
 void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int e) {
-	extern Log gamelog;
-	extern int sitecrime;
-	extern short lawList[LAWNUM];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern short exec[EXECNUM];
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	DeprecatedCreature* executer = 0;
 	if (a.is_holding_body())
@@ -1332,29 +973,20 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 			break;
 		}
 	}
-	set_color_easy(RED_ON_BLACK_BRIGHT);
+	
+	if (executer->get_weapon().is_ranged()
+		&& executer->get_weapon().get_ammoamount() > 0)
 	{
-		string executerGetAmmo;
-		if (executer->get_weapon().is_ranged()
-			&& executer->get_weapon().get_ammoamount() > 0)
-		{
-			executerGetAmmo = (unnamed_String_Talk_cpp_113);
-			executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
-		}
-		else
-		{
-			executerGetAmmo = (unnamed_String_Talk_cpp_114);
-		}
-		mvaddstrAlt(16, 1, executerGetAmmo, gamelog);
+		printExecutionGunshot();
+		executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
 	}
-	gamelog.newline();
+	else
+	{
+		printExecutionBareHands();
+	}
+	
 	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(17, 1, executer->getNameAndAlignment().name, gamelog);
-	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
-	addstrAlt(executer->get_prisoner_name(), gamelog);
-	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
-	gamelog.newline();
+	printDiscardsBody(executer->getNameAndAlignment().name, executer->get_prisoner_name());
 	addjuice(*executer, -5, -50); // DE-juice for this shit
 	sitecrime += 10;
 	sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -1369,46 +1001,20 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	executer->delete_and_nullify_prisoner();
 	if (hostages > 1 && LCSrandom(2))
 	{
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-		addstrAlt(colonSpace, gamelog);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
-		addstrAlt(pickrandom(please_no_more), gamelog);
-		gamelog.newline();
+		printEnemyWatchesHostageDeath(encounter[e].name);
 		for (int i = ENCMAX - 1; i >= 0; i--)
+		{
 			if (encounter[i].exists && encounter[i].enemy && encounter[i].alive)
+			{
 				delenc(i, 0);
+			}
+		}
 		pressAnyKey();
 	}
 }
 void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int e) {
-	extern Log gamelog;
-	extern int sitecrime;
-	extern short lawList[LAWNUM];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	extern short exec[EXECNUM];
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
-	addstrAlt(colonSpace, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	{
-		string nameHostages;
-		if (LCSrandom(5))
-		{
-			if (hostages > 1) nameHostages = (unnamed_String_Talk_cpp_119);
-			else nameHostages = (unnamed_String_Talk_cpp_120);
-		}
-		else {
-			nameHostages = (pickrandom(let_hostages_go));
-		}
-		mvaddstrAlt(17, 1, nameHostages, gamelog);
-	}
-	gamelog.newline();
+	printLetUsGoAndTheyGoFree(a.getNameAndAlignment().name, hostages);
 	pressAnyKey();
 	if (((encounter[e].type == CREATURE_DEATHSQUAD ||
 		encounter[e].type == CREATURE_AGENT ||
@@ -1417,33 +1023,21 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		encounter[e].type == CREATURE_GANGUNIT) &&
 		LCSrandom(2)) && encounter[e].align == ALIGN_CONSERVATIVE)
 	{
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-		addstrAlt(colonSpace, gamelog);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, pickrandom(go_ahead_and_die), gamelog);
-		gamelog.newline();
+		printEnemyAllowsHostagesToDie(encounter[e].name);
 		pressAnyKey();
 	}
 	else
 	{
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-		addstrAlt(colonSpace, gamelog);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, pickrandom(agree_to_release_hostages), gamelog);
-		gamelog.newline();
+
+		printReleaseHostagesHeader(encounter[e].name);
 		pressAnyKey();
-		for (int i = ENCMAX - 1; i >= 0; i--)
+		printReleaseHostagesFooter(hostages);
+		for (int i = ENCMAX - 1; i >= 0; i--) {
 			if (encounter[i].exists&&encounter[i].enemy && encounter[i].alive)
+			{
 				delenc(i, 0);
-		clearmessagearea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		juiceparty(15, 200); // Instant juice for successful hostage negotiation
-		mvaddstrAlt(16, 1, hostages > 1 ? unnamed_String_Talk_cpp_121 : unnamed_String_Talk_cpp_122, gamelog);
-		gamelog.newline();
+			}
+		}
 		for (int i = 0; i < 6; i++)
 		{
 			if (activesquad->squad[i] &&
@@ -1456,35 +1050,10 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		pressAnyKey();
 	}
 }
-void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int hostages, const int weaponhostage) {
-	extern int sitecrime;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	extern short exec[EXECNUM];
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, a.getNameAndAlignment().name + colonSpace, gamelog);
-	{
-		string anotherHostageThing;
-		switch (LCSrandom(6))
-		{
-		case 0:anotherHostageThing = (unnamed_String_Talk_cpp_100);
-			if (!sitestory->claimed)sitestory->claimed = 1; break;
-		case 1:
-			if (lawList[LAW_FREESPEECH] == -2)anotherHostageThing = (unnamed_String_Talk_cpp_101);
-			else anotherHostageThing = (unnamed_String_Talk_cpp_102);
-			break;
-		default:
-			anotherHostageThing = (pickrandom(threaten_hostage));
-			break;
-		}
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, anotherHostageThing, gamelog);
-	}
-	gamelog.newline();
+void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int hostages, const int weaponhostage) {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+	printThreatenHostages(a.getNameAndAlignment().name);
 	sitecrime += 5;
 	criminalizeparty(LAWFLAG_KIDNAPPING);
 	addjuice(a, -2, -10); // DE-juice for this shit
@@ -1510,43 +1079,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 					encounter[e].type == CREATURE_SECRET_SERVICE) &&
 					LCSrandom(5))
 				{
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					clearmessagearea();
-					mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-					addstrAlt(colonSpace, gamelog);
-					if (encounter[e].align != ALIGN_CONSERVATIVE ||
-						(encounter[e].type == CREATURE_SECRET_SERVICE && exec[EXEC_PRESIDENT] > ALIGN_CONSERVATIVE))
-					{
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						mvaddstrAlt(17, 1, pickrandom(please_spare_hostage), gamelog);
-					}
-					else
-					{
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						if (((encounter[e].type == CREATURE_DEATHSQUAD ||
-							encounter[e].type == CREATURE_AGENT ||
-							encounter[e].type == CREATURE_MERC ||
-							encounter[e].type == CREATURE_CCS_ARCHCONSERVATIVE ||
-							encounter[e].type == CREATURE_GANGUNIT))
-							&& encounter[e].align == ALIGN_CONSERVATIVE)
-						{
-							mvaddstrAlt(17, 1, pickrandom(who_cares_about_hostage), gamelog);
-						}
-						else
-						{
-							string moreHostageQuestions;
-							if (LCSrandom(5)) {
-								moreHostageQuestions = (pickrandom(hostage_negotiation));
-							}
-							else {
-								if (hostages > 1)
-									moreHostageQuestions = (unnamed_String_Talk_cpp_103);
-								else moreHostageQuestions = (unnamed_String_Talk_cpp_104);
-							}
-							mvaddstrAlt(17, 1, moreHostageQuestions, gamelog);
-						}
-					}
-					gamelog.newline();
+					printHostageNegotiation(encounter[e].name, encounter[e].type, encounter[e].align, hostages);
 					pressAnyKey();
 					noretreat = true;
 					break;
@@ -1556,10 +1089,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 		if (e == ENCMAX) { e--; }
 		if (noretreat == false)
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			clearmessagearea();
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_105, gamelog);
-			gamelog.newline();
+			printPloyWorksEnemyBacksOff();
 			for (int i = ENCMAX - 1; i >= 0; i--)
 			{
 				if (encounter[i].exists&&
@@ -1573,16 +1103,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 		}
 		else
 		{
-			set_color_easy(WHITE_ON_BLACK);
-			clearcommandarea();
-			clearmessagearea();
-			clearmaparea();
-			mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_106);
-			addstrAlt(a.getNameAndAlignment().name);
-			addstrAlt(unnamed_String_Talk_cpp_107);
-			mvaddstrAlt(11, 1, hostages > 1 ? (unnamed_String_Talk_cpp_108) : (unnamed_String_Talk_cpp_109));
-			mvaddstrAlt(12, 1, hostages > 1 ? (unnamed_String_Talk_cpp_110) : (unnamed_String_Talk_cpp_111));
-			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_112);
+			printHowShouldWeRespond(a.getNameAndAlignment().name, hostages);
 			char c = pressSpecificKey('a', 'b'); // TODO: something to happen if you press 'c'
 			switch (c) {
 			case 'a':
@@ -1599,105 +1120,45 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 	}
 	else
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		clearmessagearea();
-		mvaddstrAlt(16, 1, tk.getNameAndAlignment().name, gamelog);
-		addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
-		gamelog.newline();
+		printEnemyIgnoresThreat(tk.getNameAndAlignment().name);
 		pressAnyKey();
 	}
 }
-int getDifficultyBasedOnEncounterWisdom(const int e);
-void pressKeyCInCombat(DeprecatedCreature &a) {
-	extern Log gamelog;
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern coordinatest loc_coord;
-	extern short siteonfire;
-	extern short fieldskillrate;
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+void pressKeyCInCombat(DeprecatedCreature &a) {
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+
 	if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
-		mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
-		addstrAlt(singleSpace, gamelog);
-		switch (LocationsPool::getInstance().getSiegeType(getCurrentSite()))
-		{
-		case SIEGE_POLICE:
-			addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
-			break;
-		case SIEGE_CIA:
-			addstrAlt(unnamed_String_Talk_cpp_125, gamelog);
-			break;
-		case SIEGE_CCS:
-		case SIEGE_HICKS:
-			switch (LCSrandom(2))
-			{
-			case 0:
-				addstrAlt(unnamed_String_Talk_cpp_126, gamelog);
-				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_127, gamelog);
-				break;
-			case 1:
-				addstrAlt(unnamed_String_Talk_cpp_128, gamelog);
-				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_129, gamelog);
-				break;
-			}
-			break;
-		case SIEGE_CORPORATE:
-			addstrAlt(unnamed_String_Talk_cpp_130, gamelog);
-			break;
-		case SIEGE_FIREMEN:
-			addstrAlt(unnamed_String_Talk_cpp_131, gamelog);
-			if ((!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_END) ||
-				!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_PEAK) ||
-				!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_START) ||
-				!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_DEBRIS)) && !LCSrandom(10))
-			{
-				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_FIRE_START;
-				mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_132, gamelog);
-				gamelog.newline();
-				mvaddstrAlt(18, 1, unnamed_String_Talk_cpp_133, gamelog);
-			}
-			break;
-		}
+		printSiegeBluff(a.getNameAndAlignment().name, LocationsPool::getInstance().getSiegeType(getCurrentSite()));
+		
 	}
 	else        //Special bluff messages for various uniforms
 	{
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		if (a.get_armor().get_itemtypename() == tag_ARMOR_POLICEUNIFORM ||
 			a.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR ||
 			a.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)
 		{
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_134, gamelog);
+			printPoliceBluff();
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)
 		{
-			if (siteonfire) mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_135, gamelog);
-			else mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_136, gamelog);
+			printBunkerGearBluff();
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_137, gamelog);
+			printLabCoatBluff();
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_138, gamelog);
+			printDeathSquadBluff();
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_MITHRIL)
 		{
-			mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_139, gamelog);
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			addstrAlt(unnamed_String_Talk_cpp_140, gamelog);     //Fanciful multicolor message
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			addstrAlt(unnamed_String_Talk_cpp_141, gamelog);
+			printEngraveElbereth(a.getNameAndAlignment().name);
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, a.getNameAndAlignment().name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_142, gamelog);
-			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_143, gamelog);
+			printITalkLikeAConservative(a.getNameAndAlignment().name);
 		}
 
 	}
-	gamelog.newline();
 	pressAnyKey();
 	bool fooled = true;
 	int e = 0;
@@ -1726,43 +1187,27 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	}
 	if (!fooled)
 	{
-		clearmessagearea();
-		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (encounter[e].type == CREATURE_HICK)
 		{
-			mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_144, gamelog);
-			addstrAlt(encounter[e].name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_145, gamelog);
+			printWeWerentBornYesterday(encounter[e].name);
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-			if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
-				addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
-			else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
+			printXeIsNotFooled(encounter[e].name);
 		}
 		pressAnyKey();
 	}
 	else
 	{
-		clearmessagearea();
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_148, gamelog);
+		printTheEnemyIsFooled();
 		pressAnyKey();
 		for (int e = ENCMAX - 1; e >= 0; e--)
 			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy)
 				delenc(e, 0);
 	}
-	gamelog.newline();
 }
-
 void pressKeyDInCombat() {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_149, gamelog);
-	gamelog.newline();
+	printTheSquadIsArrested();
 	pressAnyKey();
 	int stolen = 0;
 	// Police assess stolen goods in inventory
@@ -1782,42 +1227,37 @@ void pressKeyDInCombat() {
 	}
 	LocationsPool::getInstance().isThereASiegeHere(getCurrentSite(), 0);
 }
-char haveActiveSquadTalk(const int sp, const int tk) {
-	extern Deprecatedsquadst *activesquad;
-	return talk(*activesquad->squad[sp], tk);
-}
-char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
-{
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
-	extern Deprecatedsquadst *activesquad;
-	extern coordinatest loc_coord;
-	extern short siteonfire;
-	extern short fieldskillrate;
-
-	extern short exec[EXECNUM];
-	extern string slogan_str;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern short attitude[VIEWNUM];
-
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
-	addstrAlt(unnamed_String_Talk_cpp_094, gamelog);
-	switch (tk.align)
+char haveActiveSquadTalk(const int sp, const int t) {
+	DeprecatedCreature &tk = encounter[t];
+	// TALKING TO DOGS
+	if (tk.type == CREATURE_GUARDDOG && tk.align != ALIGN_LIBERAL)
 	{
-	case ALIGN_CONSERVATIVE: set_color_easy(RED_ON_BLACK_BRIGHT); break;
-	case ALIGN_LIBERAL: set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
-	case ALIGN_MODERATE: set_color_easy(WHITE_ON_BLACK_BRIGHT); break;
+		heyMisterDog(tk);
+		return 1;
 	}
-	addstrAlt(tk.getNameAndAlignment().name, gamelog);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(unnamed_String_Talk_cpp_095, gamelog);
-	gamelog.newline();
+	else {
+		// TALKING TO MONSTERS
+		if (tk.type == CREATURE_GENETIC && tk.align != ALIGN_LIBERAL)
+		{
+			heyMisterMonster(tk);
+			return 1;
+		}
+		else
+			// BLUFFING
+			if ((isThereASiteAlarm() || LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) && tk.enemy())
+			{
+				talkInCombat(*activesquad->squad[sp], tk);
+				return 1;
+			}
+			else {
+				return talkToGeneric(*activesquad->squad[sp], tk);
+			}
+	}
+
+}
+void talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
+{
+	printTalksToThem(a.name, tk.align, tk.getNameAndAlignment().name);
 	int c = 0, hostages = 0, weaponhostage = 0;
 	bool cop = 0;
 	for (int i = 0; i < 6; i++)
@@ -1845,18 +1285,7 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	{
 		cop = 1;
 	}
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_096);
-	if (!hostages)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_097);
-	if (!tk.is_cantbluff_two())set_color_easy(WHITE_ON_BLACK);
-	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_098);
-	if (cop)set_color_easy(WHITE_ON_BLACK);
-	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_099);
-	set_color_easy(WHITE_ON_BLACK);
-
+	printTalkOptionsDuringCombat(hostages, tk.is_cantbluff_two(), cop);
 	while (true)
 	{
 		c = getkeyAlt();
@@ -1887,11 +1316,8 @@ char talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 		break;
 
 	}
-	return 1;
 }
 int findMostHeartfulLiberal() {
-	extern Deprecatedsquadst *activesquad;
-
 	int bestp = 0;
 	for (int p = 0; p < 6; p++)
 	{
@@ -1904,32 +1330,9 @@ int findMostHeartfulLiberal() {
 	}
 	return bestp;
 }
-void printSpecialRecruitment(const string aname, const string tkname, const string pitch, const string response) {
-	extern Log gamelog;
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, aname, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(11, 1, pitch, gamelog);
-	gamelog.newline();
-	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, tkname, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14, 1, response, gamelog);
-	gamelog.newline();
-	pressAnyKey();
 
-}
-void liberalizeEncounterIfThisType(const int type);
-char heyMisterDog(DeprecatedCreature &tk)
+void heyMisterDog(DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
 	bool success = false;
 	string pitch;
 	string response;
@@ -1952,15 +1355,14 @@ char heyMisterDog(DeprecatedCreature &tk)
 	}
 
 	printSpecialRecruitment(activesquad->squad[bestp]->getNameAndAlignment().name, tk.getNameAndAlignment().name, pitch, response);
+	pressAnyKey();
 
-	if (success)
+	if (success) {
 		liberalizeEncounterIfThisType(CREATURE_GUARDDOG);
-	return 1;
+	}
 }
-char heyMisterMonster(DeprecatedCreature &tk)
+void heyMisterMonster(DeprecatedCreature &tk)
 {
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
 	bool success = false;
 	string pitch;
 	string response;
@@ -1983,1395 +1385,16 @@ char heyMisterMonster(DeprecatedCreature &tk)
 	}
 
 	printSpecialRecruitment(activesquad->squad[bestp]->getNameAndAlignment().name, tk.getNameAndAlignment().name, pitch, response);
+	pressAnyKey();
 
-	if (success)
+	if (success) {
 		liberalizeEncounterIfThisType(CREATURE_GENETIC);
-	return 1;
-}
-
-
-//const string CONST_talk039 = "allText.txt";
-string study_string1;
-string study_string2;
-vector<string> allText;
-vector<file_and_text_collection> text_file_collection = {
-	customText(&allText, CONST_talk039),
-};
-
-
-
-extern string findingBugs;
-extern string undefined;
-extern string NONE;
-extern string YEA;
-extern string NAY;
-extern string AND;
-extern string counts_of;
-extern string feels_sick_and;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string change_squad_order;
-extern string string_sleeper;
-extern string execution_in_three_months;
-extern string major_news_take_it_up;
-extern string they_are_stashed;
-extern string they_ll_round_you_up;
-extern string conservativesRemakeWorld;
-extern string bound_to_rile_up;
-extern string establishPrisonReform;
-extern string improvePrisonConditions;
-extern string stalinistsRemakeWorld;
-extern string chooseALiberalTo;
-extern string youWentOnVacation;
-extern string youWentIntoHiding;
-extern string whileYouWereInPrison;
-extern string youDisappearedSafely;
-extern string proposeConservative;
-extern string proposeStalinist;
-extern string enter_done;
-extern string beingFollowedBySwine;
-extern string lostThem;
-extern string hereTheyCome;
-extern string spaceDashSpace;
-extern string currentLocation;
-extern string safeHouse;
-extern string enemySafeHouse;
-extern string closedDown;
-extern string highSecurity;
-extern string needCar;
-extern string spaceParanthesisDollar;
-extern string paranthesisDollar;
-extern string closeParenthesis;
-extern string underSiege;
-extern string percentSign;
-extern string secrecyLevel;
-extern string heatLevel;
-extern string travelDifCity;
-extern string smellsPanic;
-extern string moderateLC;
-extern string buggyString;
-extern string isSeized;
-extern string selectA;
-extern string selectAn;
-extern string enterDash;
-extern string accordingToSourcesAtScene;
-extern string accordingToPoliceSources;
-extern string ampersandR;
-extern string singleDot;
-extern string membersOfLCS;
-extern string lcsSpokeseperson;
-extern string policeSpokesperson;
-extern string pressKeyToReflect;
-extern string pressLToViewHighScores;
-extern string ampersandC;
-extern string saysComma;
-extern string while_naked;
-extern string respondsComma;
-extern string colonSpace;
-extern string theLCS;
-extern string notASkill;
-extern string notAnAttribute;
-extern string vehicleSportsCar;
-extern string aNewConEra;
-extern string theYearIs;
-extern string conservativePresident;
-extern string endsSecondTerm;
-extern string highSeventiesApprovePres;
-extern string conMajorityHouse;
-extern string senateConMajority;
-extern string beginningOfNew;
-extern string conEra;
-extern string thePresident;
-extern string hasAskedCongressBeQuick;
-extern string rubberStampArchCon;
-extern string theLeftSeems;
-extern string powerlessToStop;
-extern string inThisDarkTime;
-extern string whatIsYourName;
-extern string pressEnterToBeRealName;
-extern string invalidTag;
-extern string theDocSaid;
-extern string aBoy;
-extern string aGirl;
-extern string intersex;
-extern string myParents;
-extern string insistedOtherwise;
-extern string they;
-extern string namedMe;
-extern string error;
-extern string theFounder;
-extern string firstName;
-extern string pressAtoReconsider;
-extern string lastName;
-extern string pressBtoBeReborn;
-extern string sexIs;
-extern string male;
-extern string female;
-extern string itsComplicated;
-extern string pressCtoChangeSex;
-extern string history;
-extern string letMeChoose;
-extern string letFateDecide;
-extern string pressDtoToggle;
-extern string city;
-extern string pressEtoRelocate;
-extern string pressAnyKeyString;
-extern string allOptions;
-extern string unSelected;
-extern string isSelected;
-extern string pressAnyOtherKey;
-extern string notCreature;
-extern string notValidMap;
-extern string notSpecialWound;
-extern string newGameAdvanced;
-extern string a_classicMode;
-extern string b_weDidntStartIt;
-extern string c_nightmareMode;
-extern string d_nationalLCS;
-extern string e_marathonMode;
-extern string f_stalinistMode;
-extern string newGameYourAgenda;
-extern string a_noComprimise;
-extern string b_democrat;
-extern string newGameFieldLearn;
-extern string affectsTheseSkills;
-extern string a_fastSkills;
-extern string b_classic;
-extern string c_hardMode;
-extern string deleteSave;
-extern string chooseSave;
-extern string titleScreenLine;
-extern string newGame;
-extern string pressToSelectSave;
-extern string pressToDeleteSave;
-extern string vToSwitchXToQuit;
-extern string areYouSureDelte;
-extern string questionYSlashN;
-extern string pressMtoTurnOffMusic;
-extern string pressMtoTurnOnMusic;
-extern string inWhatWorld;
-extern string enterNameForSave;
-extern string pleaseEnterName;
-extern string prettyPlease;
-extern string justEnterName;
-extern string liberalCrimeSquad;
-extern string inspiredByOubliette;
-extern string copyrightTarn;
-extern string bayTwelveProductions;
-extern string lcsHyperlink;
-extern string vChar;
-extern string maintainedByOpenSource;
-extern string kingDrakeHyperlink;
-extern string lcsForumHyperlink;
-extern string lcsWikiHyperlink;
-extern string pressESCToQuit;
-extern string pressAnyKeyToPursue;
-extern string plusChar;
-extern string dotDat;
-extern string itemType;
-extern string doesNotExistItem;
-extern string vehicleType;
-extern string doesNotExistVehicle;
-extern string couldNotLoad;
-extern string itemClassClip;
-extern string itemClassWeapon;
-extern string itemClassArmor;
-extern string itemClassLoot;
-extern string itemClassMoney;
-extern string failedToLoadSitemaps;
-extern string debugCode;
-extern string activated;
-extern string failedToLoad;
-extern string exclamationPoint;
-extern string defaultMissingForMask;
-extern string defaultUnknownForMask;
-extern string ableToStopBleed;
-extern string sWounds;
-extern string isBurned;
-extern string drops;
-extern string sBody;
-extern string hasBeenCaughtSnooping;
-extern string isNowHomeless;
-extern string hasLeakedIntelligence;
-extern string hasLeakedPolice;
-extern string hasLeakedCorporate;
-extern string hasLeakedPrison;
-extern string hasLeakedCableNews;
-extern string hasLeakedAMRadio;
-extern string hasLeakedAnimalResearch;
-extern string hasLeakedJudiciary;
-extern string papersAreStashed;
-extern string hasLeakedCCS;
-extern string diskIsStashed;
-extern string arrestedWhileEmbezzling;
-extern string arrestedWhileStealing;
-extern string droppedOffPackage;
-extern string itemNotFound;
-extern string lostStolenItem;
-extern string contactModAuthor;
-extern string hasRecruited;
-extern string looksForwardToServing;
-extern string toSpend;
-extern string chooseAColor;
-extern string theseColorsAreCon;
-extern string thisColor;
-extern string notEnoughMoney;
-extern string chooseVehicle;
-extern string thisVehicle;
-extern string weDontNeedCar;
-extern string enterLeave;
-extern string b_chooseBuyer;
-extern string s_sellCar;
-extern string s_sellThe;
-extern string g_getCar;
-extern string f_fixWounds;
-extern string univer;
-extern string numRecruit;
-extern string numMartyr;
-extern string numKills;
-extern string numKidnap;
-extern string cashTaxed;
-extern string cashSpent;
-extern string flagsBought;
-extern string flagsBurned;
-extern string noValid;
-extern string heLiElite;
-extern string heLiLiber;
-extern string heLiBrought;
-extern string heLiBlot;
-extern string heLiMob;
-extern string heLiDownsized;
-extern string heLiKIA;
-extern string hecoReag;
-extern string heLiDie;
-extern string heLiExec;
-extern string heLiVaca;
-extern string heLiHide;
-extern string heLiHunted;
-extern string heLiScattered;
-extern string heLiOutCrime;
-extern string heLiBurned;
-extern string hecoStalinized;
-extern string dotSpace;
-extern string liberalHelpOn;
-extern string pressAnyKeyToReturn;
-extern string commaSpace;
-vector<string*> allTextString = {
-	&respondsComma,
-	&saysComma,
-	&while_naked,
-	&colonSpace,
-	&pressLToViewHighScores,
-	&ampersandC,
-	&commaSpace,
-	&findingBugs,
-	&undefined,
-	&NONE,
-	&YEA,
-	&NAY,
-	&AND,
-	&counts_of,
-	&feels_sick_and,
-	&show_squad_liberal_status,
-	&change_squad_order,
-	&string_sleeper,
-	&execution_in_three_months,
-	&major_news_take_it_up,
-	&they_are_stashed,
-	&they_ll_round_you_up,
-	&conservativesRemakeWorld,
-	&bound_to_rile_up,
-	&establishPrisonReform,
-	&improvePrisonConditions,
-	&stalinistsRemakeWorld,
-	&chooseALiberalTo,
-	&youWentOnVacation,
-	&youWentIntoHiding,
-	&whileYouWereInPrison,
-	&youDisappearedSafely,
-	&proposeConservative,
-	&proposeStalinist,
-
-	&enter_done,
-	&beingFollowedBySwine,
-	&lostThem,
-	&hereTheyCome,
-	&spaceDashSpace,
-	&currentLocation,
-	&safeHouse,
-	&enemySafeHouse,
-	&closedDown,
-	&highSecurity,
-	&needCar,
-	&spaceParanthesisDollar,
-	&paranthesisDollar,
-	&closeParenthesis,
-	&underSiege,
-	&percentSign,
-	&secrecyLevel,
-	&heatLevel,
-	&travelDifCity,
-	&smellsPanic,
-	&moderateLC,
-	&buggyString,
-	&isSeized,
-	&selectA,
-	&selectAn,
-	&enterDash,
-	&accordingToSourcesAtScene,
-	&accordingToPoliceSources,
-	&ampersandR,
-	&singleDot,
-	&membersOfLCS,
-	&lcsSpokeseperson,
-	&policeSpokesperson,
-	&pressKeyToReflect,
-	&theLCS,
-	&notASkill,
-	&notAnAttribute,
-	&vehicleSportsCar,
-	&aNewConEra,
-	&theYearIs,
-	&conservativePresident,
-	&endsSecondTerm,
-	&highSeventiesApprovePres,
-	&conMajorityHouse,
-	&senateConMajority,
-	&beginningOfNew,
-	&conEra,
-	&thePresident,
-	&hasAskedCongressBeQuick,
-	&rubberStampArchCon,
-	&theLeftSeems,
-	&powerlessToStop,
-	&inThisDarkTime,
-	&whatIsYourName,
-	&pressEnterToBeRealName,
-	&invalidTag,
-	&theDocSaid,
-	&aBoy,
-	&aGirl,
-	&intersex,
-	&myParents,
-	&insistedOtherwise,
-	&they,
-	&namedMe,
-	&error,
-	&theFounder,
-	&firstName,
-	&pressAtoReconsider,
-	&lastName,
-	&pressBtoBeReborn,
-	&sexIs,
-	&male,
-	&female,
-	&itsComplicated,
-	&pressCtoChangeSex,
-	&history,
-	&letMeChoose,
-	&letFateDecide,
-	&pressDtoToggle,
-	&city,
-	&pressEtoRelocate,
-	&pressAnyKeyString,
-	&allOptions,
-	&unSelected,
-	&isSelected,
-	&pressAnyOtherKey,
-	&notCreature,
-	&notValidMap,
-	&notSpecialWound,
-	&newGameAdvanced,
-	&a_classicMode,
-	&b_weDidntStartIt,
-	&c_nightmareMode,
-	&d_nationalLCS,
-	&e_marathonMode,
-	&f_stalinistMode,
-	&newGameYourAgenda,
-	&a_noComprimise,
-	&b_democrat,
-	&newGameFieldLearn,
-	&affectsTheseSkills,
-	&a_fastSkills,
-	&b_classic,
-	&c_hardMode,
-	&deleteSave,
-	&chooseSave,
-	&titleScreenLine,
-	&newGame,
-	&pressToSelectSave,
-	&pressToDeleteSave,
-	&vToSwitchXToQuit,
-	&areYouSureDelte,
-	&questionYSlashN,
-	&pressMtoTurnOffMusic,
-	&pressMtoTurnOnMusic,
-	&inWhatWorld,
-	&enterNameForSave,
-	&pleaseEnterName,
-	&prettyPlease,
-	&justEnterName,
-	&liberalCrimeSquad,
-	&inspiredByOubliette,
-	&copyrightTarn,
-	&bayTwelveProductions,
-	&lcsHyperlink,
-	&vChar,
-	&maintainedByOpenSource,
-	&kingDrakeHyperlink,
-	&lcsForumHyperlink,
-	&lcsWikiHyperlink,
-	&pressESCToQuit,
-	&pressAnyKeyToPursue,
-	&plusChar,
-	&dotDat,
-	&itemType,
-	&doesNotExistItem,
-	&vehicleType,
-	&doesNotExistVehicle,
-	&couldNotLoad,
-	&itemClassClip,
-	&itemClassWeapon,
-	&itemClassArmor,
-	&itemClassLoot,
-	&itemClassMoney,
-	&failedToLoadSitemaps,
-	&debugCode,
-	&activated,
-	&failedToLoad,
-	&exclamationPoint,
-	&defaultMissingForMask,
-	&defaultUnknownForMask,
-	&ableToStopBleed,
-	&sWounds,
-	&isBurned,
-	&drops,
-	&sBody,
-	&hasBeenCaughtSnooping,
-	&isNowHomeless,
-	&hasLeakedIntelligence,
-	&hasLeakedPolice,
-	&hasLeakedCorporate,
-	&hasLeakedPrison,
-	&hasLeakedCableNews,
-	&hasLeakedAMRadio,
-	&hasLeakedAnimalResearch,
-	&hasLeakedJudiciary,
-	&papersAreStashed,
-	&hasLeakedCCS,
-	&diskIsStashed,
-	&arrestedWhileEmbezzling,
-	&arrestedWhileStealing,
-	&droppedOffPackage,
-	&itemNotFound,
-	&lostStolenItem,
-	&contactModAuthor,
-	&hasRecruited,
-	&looksForwardToServing,
-	&toSpend,
-	&chooseAColor,
-	&theseColorsAreCon,
-	&thisColor,
-	&notEnoughMoney,
-	&chooseVehicle,
-	&thisVehicle,
-	&weDontNeedCar,
-	&enterLeave,
-	&b_chooseBuyer,
-	&s_sellCar,
-	&s_sellThe,
-	&g_getCar,
-	&f_fixWounds,
-	&univer,
-	&numRecruit,
-	&numMartyr,
-	&numKills,
-	&numKidnap,
-	&cashTaxed,
-	&cashSpent,
-	&flagsBought,
-	&flagsBurned,
-	&noValid,
-	&heLiElite,
-	&heLiLiber,
-	&heLiBrought,
-	&heLiBlot,
-	&heLiMob,
-	&heLiDownsized,
-	&heLiKIA,
-	&hecoReag,
-	&heLiDie,
-	&heLiExec,
-	&heLiVaca,
-	&heLiHide,
-	&heLiHunted,
-	&heLiScattered,
-	&heLiOutCrime,
-	&heLiBurned,
-	&hecoStalinized,
-	&dotSpace,
-	&unnamed_String_Talk_cpp_001,
-	&unnamed_String_Talk_cpp_002,
-	&unnamed_String_Talk_cpp_003,
-	&unnamed_String_Talk_cpp_004,
-	&unnamed_String_Talk_cpp_005,
-	&unnamed_String_Talk_cpp_006,
-	&unnamed_String_Talk_cpp_007,
-	&unnamed_String_Talk_cpp_008,
-	&unnamed_String_Talk_cpp_009,
-	&unnamed_String_Talk_cpp_010,
-	&unnamed_String_Talk_cpp_011,
-	&unnamed_String_Talk_cpp_012,
-	&unnamed_String_Talk_cpp_013,
-	&unnamed_String_Talk_cpp_014,
-	&unnamed_String_Talk_cpp_015,
-	&unnamed_String_Talk_cpp_016,
-	&unnamed_String_Talk_cpp_017,
-	&unnamed_String_Talk_cpp_018,
-	&unnamed_String_Talk_cpp_019,
-	&unnamed_String_Talk_cpp_020,
-	&unnamed_String_Talk_cpp_021,
-	&unnamed_String_Talk_cpp_022,
-	&unnamed_String_Talk_cpp_023,
-	&unnamed_String_Talk_cpp_024,
-	&unnamed_String_Talk_cpp_025,
-	&unnamed_String_Talk_cpp_026,
-	&unnamed_String_Talk_cpp_027,
-	&unnamed_String_Talk_cpp_028,
-	&unnamed_String_Talk_cpp_029,
-	&unnamed_String_Talk_cpp_030,
-	&unnamed_String_Talk_cpp_031,
-	&unnamed_String_Talk_cpp_032,
-	&unnamed_String_Talk_cpp_033,
-	&unnamed_String_Talk_cpp_034,
-	&unnamed_String_Talk_cpp_035,
-	&unnamed_String_Talk_cpp_036,
-	&unnamed_String_Talk_cpp_037,
-	&unnamed_String_Talk_cpp_038,
-	&unnamed_String_Talk_cpp_039,
-	&unnamed_String_Talk_cpp_040,
-	&unnamed_String_Talk_cpp_041,
-	&unnamed_String_Talk_cpp_042,
-	&unnamed_String_Talk_cpp_043,
-	&unnamed_String_Talk_cpp_044,
-	&unnamed_String_Talk_cpp_045,
-	&unnamed_String_Talk_cpp_046,
-	&unnamed_String_Talk_cpp_047,
-	&unnamed_String_Talk_cpp_048,
-	&unnamed_String_Talk_cpp_049,
-	&unnamed_String_Talk_cpp_050,
-	&unnamed_String_Talk_cpp_051,
-	&unnamed_String_Talk_cpp_052,
-	&unnamed_String_Talk_cpp_053,
-	&unnamed_String_Talk_cpp_054,
-	&unnamed_String_Talk_cpp_055,
-	&unnamed_String_Talk_cpp_056,
-	&unnamed_String_Talk_cpp_057,
-	&unnamed_String_Talk_cpp_058,
-	&unnamed_String_Talk_cpp_059,
-	&unnamed_String_Talk_cpp_060,
-	&unnamed_String_Talk_cpp_061,
-	&unnamed_String_Talk_cpp_062,
-	&unnamed_String_Talk_cpp_063,
-	&unnamed_String_Talk_cpp_064,
-	&unnamed_String_Talk_cpp_065,
-	&unnamed_String_Talk_cpp_066,
-	&unnamed_String_Talk_cpp_067,
-	&unnamed_String_Talk_cpp_068,
-	&unnamed_String_Talk_cpp_069,
-	&unnamed_String_Talk_cpp_070,
-	&unnamed_String_Talk_cpp_071,
-	&unnamed_String_Talk_cpp_072,
-	&unnamed_String_Talk_cpp_073,
-	&unnamed_String_Talk_cpp_074,
-	&unnamed_String_Talk_cpp_075,
-	&unnamed_String_Talk_cpp_076,
-	&unnamed_String_Talk_cpp_077,
-	&unnamed_String_Talk_cpp_078,
-	&unnamed_String_Talk_cpp_079,
-	&unnamed_String_Talk_cpp_080,
-	&unnamed_String_Talk_cpp_081,
-	&unnamed_String_Talk_cpp_082,
-	&unnamed_String_Talk_cpp_083,
-	&unnamed_String_Talk_cpp_084,
-	&unnamed_String_Talk_cpp_085,
-	&unnamed_String_Talk_cpp_086,
-	&unnamed_String_Talk_cpp_087,
-	&unnamed_String_Talk_cpp_088,
-	&unnamed_String_Talk_cpp_089,
-	&unnamed_String_Talk_cpp_090,
-	&unnamed_String_Talk_cpp_091,
-	&unnamed_String_Talk_cpp_092,
-	&unnamed_String_Talk_cpp_093,
-	&unnamed_String_Talk_cpp_094,
-	&unnamed_String_Talk_cpp_095,
-	&unnamed_String_Talk_cpp_096,
-	&unnamed_String_Talk_cpp_097,
-	&unnamed_String_Talk_cpp_098,
-	&unnamed_String_Talk_cpp_099,
-	&unnamed_String_Talk_cpp_100,
-	&unnamed_String_Talk_cpp_101,
-	&unnamed_String_Talk_cpp_102,
-	&unnamed_String_Talk_cpp_103,
-	&unnamed_String_Talk_cpp_104,
-	&unnamed_String_Talk_cpp_105,
-	&unnamed_String_Talk_cpp_106,
-	&unnamed_String_Talk_cpp_107,
-	&unnamed_String_Talk_cpp_108,
-	&unnamed_String_Talk_cpp_109,
-	&unnamed_String_Talk_cpp_110,
-	&unnamed_String_Talk_cpp_111,
-	&unnamed_String_Talk_cpp_112,
-	&unnamed_String_Talk_cpp_113,
-	&unnamed_String_Talk_cpp_114,
-	&unnamed_String_Talk_cpp_115,
-	&unnamed_String_Talk_cpp_116,
-	&unnamed_String_Talk_cpp_117,
-	&unnamed_String_Talk_cpp_118,
-	&unnamed_String_Talk_cpp_119,
-	&unnamed_String_Talk_cpp_120,
-	&unnamed_String_Talk_cpp_121,
-	&unnamed_String_Talk_cpp_122,
-	&unnamed_String_Talk_cpp_123,
-	&unnamed_String_Talk_cpp_124,
-	&unnamed_String_Talk_cpp_125,
-	&unnamed_String_Talk_cpp_126,
-	&unnamed_String_Talk_cpp_127,
-	&unnamed_String_Talk_cpp_128,
-	&unnamed_String_Talk_cpp_129,
-	&unnamed_String_Talk_cpp_130,
-	&unnamed_String_Talk_cpp_131,
-	&unnamed_String_Talk_cpp_132,
-	&unnamed_String_Talk_cpp_133,
-	&unnamed_String_Talk_cpp_134,
-	&unnamed_String_Talk_cpp_135,
-	&unnamed_String_Talk_cpp_136,
-	&unnamed_String_Talk_cpp_137,
-	&unnamed_String_Talk_cpp_138,
-	&unnamed_String_Talk_cpp_139,
-	&unnamed_String_Talk_cpp_140,
-	&unnamed_String_Talk_cpp_141,
-	&unnamed_String_Talk_cpp_142,
-	&unnamed_String_Talk_cpp_143,
-	&unnamed_String_Talk_cpp_144,
-	&unnamed_String_Talk_cpp_145,
-	&unnamed_String_Talk_cpp_146,
-	&unnamed_String_Talk_cpp_147,
-	&unnamed_String_Talk_cpp_148,
-	&unnamed_String_Talk_cpp_149,
-	&liberalHelpOn,
-	&pressAnyKeyToReturn,
-	&study_string1,
-	&study_string2,
-};
-bool initialize_incomplete_txt() {
-	int i = 0;
-	check_status_of_squad_liberal.append(CONST_talk040);
-	check_status_of_squad_liberal.append(allText[i++]);
-	for (string* str : allTextString) {
-		*str = allText[i++];
 	}
-	return i == len(allText);
 }
 
-map<int, vector<SiteTypes> > okaySiteList = {
-	map<int, vector<SiteTypes> >::value_type(CREATURE_BOUNCER,
-		{
-			SITE_BUSINESS_CIGARBAR,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_POLITICIAN,
-		{
-			SITE_GOVERNMENT_WHITE_HOUSE,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_CEO,
-		{
-			SITE_CORPORATE_HEADQUARTERS,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_SECURITYGUARD,
-		{
-			SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-			SITE_LABORATORY_COSMETICS,
-			SITE_LABORATORY_GENETIC,
-			SITE_GOVERNMENT_COURTHOUSE,
-			SITE_GOVERNMENT_INTELLIGENCEHQ,
-			SITE_INDUSTRY_SWEATSHOP,
-			SITE_INDUSTRY_POLLUTER,
-			SITE_INDUSTRY_NUCLEAR,
-			SITE_CORPORATE_HEADQUARTERS,
-			SITE_CORPORATE_HOUSE,
-			SITE_MEDIA_AMRADIO,
-			SITE_MEDIA_CABLENEWS,
-			SITE_BUSINESS_CIGARBAR,
-			SITE_BUSINESS_BANK,
-			//SITE_GOVERNMENT_FIRESTATION,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_MANAGER,
-		{
-			SITE_BUSINESS_BANK,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_TELLER,
-		{
-			SITE_BUSINESS_BANK,
-
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_LABTECH,
-		{
-			SITE_LABORATORY_COSMETICS,
-			SITE_LABORATORY_GENETIC,
-			SITE_INDUSTRY_NUCLEAR,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_SCIENTIST_EMINENT,
-		{
-			SITE_LABORATORY_COSMETICS,
-			SITE_LABORATORY_GENETIC,
-			SITE_INDUSTRY_NUCLEAR,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_CORPORATE_MANAGER,
-		{
-			SITE_LABORATORY_COSMETICS,
-			SITE_LABORATORY_GENETIC,
-			SITE_INDUSTRY_SWEATSHOP,
-			SITE_INDUSTRY_POLLUTER,
-			SITE_INDUSTRY_NUCLEAR,
-			SITE_CORPORATE_HEADQUARTERS,
-			SITE_MEDIA_AMRADIO,
-			SITE_MEDIA_CABLENEWS,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SERVANT,
-		{
-			SITE_CORPORATE_HOUSE,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_JANITOR,
-		{
-			SITE_RESIDENTIAL_TENEMENT,
-			SITE_RESIDENTIAL_APARTMENT,
-			SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-			SITE_LABORATORY_COSMETICS,
-			SITE_LABORATORY_GENETIC,
-			SITE_HOSPITAL_CLINIC,
-			SITE_HOSPITAL_UNIVERSITY,
-			SITE_GOVERNMENT_POLICESTATION,
-			SITE_GOVERNMENT_COURTHOUSE,
-			SITE_GOVERNMENT_PRISON,
-			SITE_GOVERNMENT_INTELLIGENCEHQ,
-			SITE_INDUSTRY_POLLUTER,
-			SITE_INDUSTRY_NUCLEAR,
-			SITE_CORPORATE_HEADQUARTERS,
-			SITE_MEDIA_AMRADIO,
-			SITE_MEDIA_CABLENEWS,
-			SITE_BUSINESS_PAWNSHOP,
-			SITE_BUSINESS_CRACKHOUSE,
-			SITE_BUSINESS_JUICEBAR,
-			SITE_BUSINESS_CIGARBAR,
-			SITE_BUSINESS_LATTESTAND,
-			SITE_BUSINESS_VEGANCOOP,
-			SITE_BUSINESS_INTERNETCAFE,
-			SITE_BUSINESS_DEPTSTORE,
-			SITE_BUSINESS_HALLOWEEN,
-			SITE_GOVERNMENT_FIRESTATION,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SWEATSHOP,
-		{
-			SITE_INDUSTRY_SWEATSHOP,
-		}
-		),
-	map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_NONUNION,
-		{
-			SITE_INDUSTRY_POLLUTER,
-		}
-		),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_CHILD,
-				{
-					SITE_INDUSTRY_POLLUTER,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_SECRETARY,
-				{
-					SITE_LABORATORY_COSMETICS,
-					SITE_LABORATORY_GENETIC,
-					SITE_HOSPITAL_CLINIC,
-					SITE_HOSPITAL_UNIVERSITY,
-					SITE_GOVERNMENT_POLICESTATION,
-					SITE_GOVERNMENT_COURTHOUSE,
-					SITE_GOVERNMENT_INTELLIGENCEHQ,
-					SITE_INDUSTRY_POLLUTER,
-					SITE_INDUSTRY_NUCLEAR,
-					SITE_CORPORATE_HEADQUARTERS,
-					SITE_CORPORATE_HOUSE,
-					SITE_MEDIA_AMRADIO,
-					SITE_MEDIA_CABLENEWS,
-					SITE_GOVERNMENT_FIRESTATION,
-					SITE_GOVERNMENT_WHITE_HOUSE,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_WORKER_FACTORY_UNION,
-				{
-					SITE_INDUSTRY_POLLUTER,
-				}
-				),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_LANDLORD,
-			{
-				SITE_RESIDENTIAL_TENEMENT,
-				SITE_RESIDENTIAL_APARTMENT,
-				SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-			}
-			),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_TEENAGER,
-			{
-				SITE_RESIDENTIAL_TENEMENT,
-				SITE_RESIDENTIAL_APARTMENT,
-				SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-				SITE_RESIDENTIAL_SHELTER,
-				SITE_CORPORATE_HOUSE,
-			}
-			),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_COP,
-				{
-					SITE_GOVERNMENT_POLICESTATION,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_DEATHSQUAD,
-				{
-					SITE_GOVERNMENT_POLICESTATION,
-				}
-				),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_FIREFIGHTER,
-			{
-				SITE_GOVERNMENT_FIRESTATION,
-			}
-			),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_GANGUNIT,
-			{
-				SITE_GOVERNMENT_POLICESTATION,
-			}
-			),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_SWAT,
-				{
-					SITE_GOVERNMENT_POLICESTATION,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_LIBERAL,
-				{
-					SITE_GOVERNMENT_COURTHOUSE,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_JUDGE_CONSERVATIVE,
-				{
-					SITE_GOVERNMENT_COURTHOUSE,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_SECRET_SERVICE,
-				{
-					SITE_GOVERNMENT_WHITE_HOUSE,
-				}
-				),
-			map<int, vector<SiteTypes> >::value_type(CREATURE_AGENT,
-				{
-					SITE_GOVERNMENT_INTELLIGENCEHQ,
-				}
-				),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_RADIOPERSONALITY,
-			{
-				SITE_MEDIA_AMRADIO,
-			}
-			),
-		map<int, vector<SiteTypes> >::value_type(CREATURE_NEWSANCHOR,
-			{
-				SITE_MEDIA_CABLENEWS,
-			}
-			),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_GENETIC,
-					{
-						SITE_LABORATORY_GENETIC,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_GUARDDOG,
-					{
-						SITE_GOVERNMENT_PRISON,
-						SITE_GOVERNMENT_INTELLIGENCEHQ,
-						SITE_CORPORATE_HOUSE,
-						SITE_GOVERNMENT_ARMYBASE,
-					}
-					),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONER,
-						{
-							SITE_RESIDENTIAL_TENEMENT,
-							SITE_RESIDENTIAL_SHELTER,
-						}
-						),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_JUROR,
-						{
-							SITE_RESIDENTIAL_APARTMENT,
-							SITE_RESIDENTIAL_TENEMENT,
-							SITE_RESIDENTIAL_SHELTER,
-						}
-						),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_LAWYER,
-						{
-							SITE_GOVERNMENT_COURTHOUSE,
-							SITE_GOVERNMENT_WHITE_HOUSE,
-						}
-						),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_DOCTOR,
-					{
-						SITE_DOWNTOWN,
-						SITE_UDISTRICT,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_PSYCHOLOGIST,
-					{
-						SITE_DOWNTOWN,
-						SITE_UDISTRICT,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_NURSE,
-					{
-						SITE_DOWNTOWN,
-						SITE_UDISTRICT,
-						SITE_INDUSTRIAL,
-					}
-					),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_SEWERWORKER,
-						{
-							SITE_DOWNTOWN,
-							SITE_UDISTRICT,
-							SITE_INDUSTRIAL,
-						}
-						),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_COLLEGESTUDENT,
-					{
-						SITE_UDISTRICT,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_MUSICIAN,
-					{
-						SITE_DOWNTOWN,
-						SITE_UDISTRICT,
-						SITE_INDUSTRIAL,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_MATHEMATICIAN,
-					{
-						SITE_UDISTRICT,
-					}
-					),
-				map<int, vector<SiteTypes> >::value_type(CREATURE_TEACHER,
-					{
-						SITE_DOWNTOWN,
-						SITE_UDISTRICT,
-						SITE_INDUSTRIAL,
-					}
-					),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_HSDROPOUT,
-						{
-							SITE_INDUSTRIAL,
-						}
-						),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_BUM,
-						{
-							SITE_DOWNTOWN,	
-							SITE_UDISTRICT,
-
-							SITE_INDUSTRIAL,
-							SITE_RESIDENTIAL_SHELTER,
-						}
-						),
-
-				map<int, vector<SiteTypes> >::value_type(CREATURE_GANGMEMBER,
-					{
-						SITE_BUSINESS_CRACKHOUSE,
-					}
-					),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_CRACKHEAD,
-							{
-								SITE_BUSINESS_CRACKHOUSE,
-							}
-							),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_PRIEST,
-							{
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_ENGINEER,
-								{
-									SITE_MEDIA_AMRADIO,
-									SITE_MEDIA_CABLENEWS,
-									SITE_INDUSTRY_NUCLEAR,
-								}
-								),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_FASTFOODWORKER,
-								{
-									SITE_DOWNTOWN,
-									SITE_UDISTRICT,
-									SITE_INDUSTRIAL,
-								}
-								),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_BAKER,
-								{
-									SITE_DOWNTOWN,
-									SITE_UDISTRICT,
-									SITE_INDUSTRIAL,
-								}
-								),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_BARISTA,
-							{
-								SITE_BUSINESS_LATTESTAND,
-								SITE_BUSINESS_INTERNETCAFE,
-							}
-							),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_BARTENDER,
-							{
-								SITE_BUSINESS_CIGARBAR,
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_TELEMARKETER,
-							{
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_CARSALESMAN,
-								{
-									SITE_BUSINESS_CARDEALERSHIP,
-								}
-								),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_OFFICEWORKER,
-							{
-								SITE_LABORATORY_COSMETICS,
-								SITE_LABORATORY_GENETIC,
-								SITE_HOSPITAL_CLINIC,
-								SITE_HOSPITAL_UNIVERSITY,
-								SITE_GOVERNMENT_COURTHOUSE,
-								SITE_CORPORATE_HEADQUARTERS,
-								SITE_MEDIA_AMRADIO,
-								SITE_MEDIA_CABLENEWS,
-								SITE_BUSINESS_DEPTSTORE,
-								SITE_GOVERNMENT_WHITE_HOUSE,
-							}
-							),
-					map<int, vector<SiteTypes> >::value_type(CREATURE_FOOTBALLCOACH,
-						{
-							SITE_UDISTRICT,
-						}
-						),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_PROSTITUTE,
-							{
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_MAILMAN,
-							{
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_GARBAGEMAN,
-								{
-									SITE_DOWNTOWN,
-									SITE_UDISTRICT,
-									SITE_INDUSTRIAL,
-								}
-								),
-						map<int, vector<SiteTypes> >::value_type(CREATURE_PLUMBER,
-							{
-								SITE_DOWNTOWN,
-								SITE_UDISTRICT,
-								SITE_INDUSTRIAL,
-							}
-							),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_CHEF,
-									{
-										SITE_DOWNTOWN,
-										SITE_UDISTRICT,
-										SITE_INDUSTRIAL,
-										SITE_BUSINESS_CIGARBAR,
-									}
-									),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_CONSTRUCTIONWORKER,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-										}
-										),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_AMATEURMAGICIAN,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-										}
-										),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_TANK,
-										{
-											SITE_GOVERNMENT_ARMYBASE,
-										}
-										),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_MERC,
-								{
-									SITE_CORPORATE_HEADQUARTERS,
-									SITE_CORPORATE_HOUSE,
-									SITE_INDUSTRY_NUCLEAR,
-									SITE_LABORATORY_GENETIC,
-									SITE_BUSINESS_BANK,
-								}
-								),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_HICK,
-									{
-										SITE_MEDIA_AMRADIO,
-										SITE_MEDIA_CABLENEWS,
-										SITE_OUTOFTOWN,
-									}
-									),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_VETERAN,
-									{
-										SITE_DOWNTOWN,
-										SITE_UDISTRICT,
-										SITE_INDUSTRIAL,
-									}
-									),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_HARDENED_VETERAN,
-										{
-											SITE_GOVERNMENT_ARMYBASE,
-										}
-										),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_SOLDIER,
-									{
-										SITE_GOVERNMENT_ARMYBASE,
-									}
-									),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYPOLICE,
-									{
-										SITE_GOVERNMENT_ARMYBASE,
-									}
-									),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_MILITARYOFFICER,
-									{
-										SITE_GOVERNMENT_ARMYBASE,
-									}
-									),
-							map<int, vector<SiteTypes> >::value_type(CREATURE_SEAL,
-								{
-									SITE_GOVERNMENT_ARMYBASE,
-								}
-								),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_EDUCATOR,
-									{
-										SITE_GOVERNMENT_PRISON,
-									}
-									),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_PRISONGUARD,
-									{
-										SITE_GOVERNMENT_PRISON,
-									}
-									),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_HIPPIE,
-									{
-										SITE_BUSINESS_VEGANCOOP,
-									}
-									),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_ART,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-											SITE_MEDIA_CABLENEWS,
-										}
-										),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_CRITIC_MUSIC,
-
-									{
-										SITE_DOWNTOWN,
-										SITE_UDISTRICT,
-										SITE_INDUSTRIAL,
-										SITE_MEDIA_AMRADIO,
-									}
-									),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_SOCIALITE,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-											map<int, vector<SiteTypes> >::value_type(CREATURE_PROGRAMMER,
-												{
-													SITE_DOWNTOWN,
-													SITE_UDISTRICT,
-													SITE_INDUSTRIAL,
-													SITE_GOVERNMENT_INTELLIGENCEHQ,
-													SITE_CORPORATE_HEADQUARTERS,
-												}
-												),
-											map<int, vector<SiteTypes> >::value_type(CREATURE_RETIREE,
-												{
-													SITE_DOWNTOWN,
-													SITE_UDISTRICT,
-													SITE_INDUSTRIAL,
-												}
-												),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_PAINTER,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-										}
-										),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_SCULPTOR,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_AUTHOR,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-											map<int, vector<SiteTypes> >::value_type(CREATURE_JOURNALIST,
-												{
-													SITE_DOWNTOWN,
-													SITE_UDISTRICT,
-													SITE_INDUSTRIAL,
-												}
-												),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_DANCER,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_PHOTOGRAPHER,
-										{
-											SITE_MEDIA_CABLENEWS,
-										}
-										),
-								map<int, vector<SiteTypes> >::value_type(CREATURE_CAMERAMAN,
-									{
-										SITE_MEDIA_CABLENEWS,
-									}
-									),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_HAIRSTYLIST,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-										}
-										),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_FASHIONDESIGNER,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_CLERK,
-											{
-												SITE_BUSINESS_JUICEBAR,
-												SITE_BUSINESS_LATTESTAND,
-												SITE_BUSINESS_INTERNETCAFE,
-												SITE_BUSINESS_DEPTSTORE,
-												SITE_BUSINESS_HALLOWEEN,
-											}
-											),
-									map<int, vector<SiteTypes> >::value_type(CREATURE_THIEF,
-										{
-											SITE_DOWNTOWN,
-											SITE_UDISTRICT,
-											SITE_INDUSTRIAL,
-										}
-										),
-										map<int, vector<SiteTypes> >::value_type(CREATURE_ACTOR,
-											{
-												SITE_DOWNTOWN,
-												SITE_UDISTRICT,
-												SITE_INDUSTRIAL,
-											}
-											),
-												map<int, vector<SiteTypes> >::value_type(CREATURE_YOGAINSTRUCTOR,
-													{
-														SITE_BUSINESS_VEGANCOOP,
-													}
-													),
-													map<int, vector<SiteTypes> >::value_type(CREATURE_MARTIALARTIST,
-														{
-															SITE_DOWNTOWN,
-															SITE_UDISTRICT,
-															SITE_INDUSTRIAL,
-														}
-														),
-													map<int, vector<SiteTypes> >::value_type(CREATURE_ATHLETE,
-														{
-															SITE_UDISTRICT,
-														}
-														),
-													map<int, vector<SiteTypes> >::value_type(CREATURE_BIKER,
-														{
-															SITE_DOWNTOWN,
-															SITE_UDISTRICT,
-															SITE_INDUSTRIAL,
-														}
-														),
-											map<int, vector<SiteTypes> >::value_type(CREATURE_TRUCKER,
-												{
-													SITE_OUTOFTOWN,
-												}
-												),
-												map<int, vector<SiteTypes> >::value_type(CREATURE_TAXIDRIVER,
-													{
-														SITE_DOWNTOWN,
-														SITE_UDISTRICT,
-														SITE_INDUSTRIAL,
-													}
-													),
-												map<int, vector<SiteTypes> >::value_type(CREATURE_NUN,
-													{
-														SITE_DOWNTOWN,
-														SITE_UDISTRICT,
-														SITE_INDUSTRIAL,
-													}
-													),
-													map<int, vector<SiteTypes> >::value_type(CREATURE_LOCKSMITH,
-														{
-															SITE_DOWNTOWN,
-															SITE_UDISTRICT,
-															SITE_INDUSTRIAL,
-														}
-														),
-};
-
-vector<SiteTypes> defaultSiteList = {
-	SITE_RESIDENTIAL_SHELTER
-};
 /* ensures that the creature's work location is appropriate to its type */
 int verifyworklocation(const int type, const int worklocation)
 {
-	extern bool multipleCityMode;
-	extern char ccs_kills;
 	int okaysite[SITENUM];
 	memset(okaysite, 0, SITENUM * sizeof(int));
 

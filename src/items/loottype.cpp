@@ -1,13 +1,5 @@
+#define	LOOTTYPE_CPP
 #include "../includes.h"
-const string CONST_loottype009 = "::cloth: ";
-const string CONST_loottype008 = "Invalid boolean value for loot type ";
-const string CONST_loottype007 = "::no_quick_fencing: ";
-const string CONST_loottype005 = "::stackable: ";
-
-const string tag_cloth = "cloth";
-const string tag_no = "no";
-const string tag_no_quick_fencing = "no_quick_fencing";
-const string tag_stackable = "stackable";
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/loottype.h"

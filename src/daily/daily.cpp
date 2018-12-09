@@ -1,23 +1,5 @@
+#define	DAILY_CPP
 #include "../includes.h"
-const string CONST_daily024 = " regains contact with the LCS.";
-const string CONST_daily023 = "CREATURE_POLITICALACTIVIST";
-const string CONST_daily022 = "CREATURE_TEENAGER";
-const string CONST_daily021 = ". The Liberal will be missed.";
-const string CONST_daily020 = " has passed away at the age of ";
-const string CONST_daily019 = " surfs the Net for recent opinion polls.";
-const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
-const string CONST_daily017 = " has arrived at ";
-const string CONST_daily016 = " looks around ";
-const string CONST_daily013 = " arrives in ";
-const string CONST_daily012 = "%s spent $%d on tickets to go to %s.";
-const string CONST_daily011 = "%s couldn't afford tickets to go to %s.";
-const string CONST_daily010 = "travel location";
-const string CONST_daily009 = " didn't have a car to get to ";
-const string CONST_daily008 = " couldn't use the ";
-const string CONST_daily007 = " was too hot to risk.";
-const string CONST_daily006 = " decided ";
-const string CONST_daily005 = " instead of ";
-const string CONST_daily004 = " acted with ";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -44,117 +26,9 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-#include "../creature/deprecatedCreatureA.h"
-
-#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-//#include "../news/news.h"
-void majornewspaper(char &clearformess, char canseethings);
-//#include "../sitemode/sitemode.h"
-void mode_site(const short loc);
-#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-// for makedelimeter
-#include "../common/getnames.h"
-// for std::string getactivity(ActivityST)
-#include "../common/translateid.h"
-// for  int getsquad(int)
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-/* tells how many total members a squad has (including dead members) */
-// for void basesquad(squadst *,long)
-#include "../daily/daily.h"
-/* squad members with no chain of command lose contact */
-void dispersalcheck(char &clearformess);
-
-#include "../daily/activities.h"
-//for void repairarmor(Creature &cr,char &clearformess); and stealcar
-#include "../daily/siege.h"        
-//for sigeturn and siegecheck
-//#include "../daily/recruit.h"
-void recruitment_activity(DeprecatedCreature &cr);
-char completerecruitmeeting(Deprecatedrecruitst &d, const int p);
-//#include "../daily/date.h"
-char completevacation(Deprecateddatest &d, int p);
-char completedate(Deprecateddatest &d, int p);
-#include "../combat/chaseCreature.h"
-//for int driveskill(Creature &cr,Vehicle &v);
-//hmm --Schmel924
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../title/titlescreen.h"
-#include "../locations/locationsPool.h"
-#include "../common/creaturePool.h"
-
-
-
-
-/*
-shopsnstuff.cpp
-*/
-
-const string CONST_shopsnstuff008 = "oubliette.xml";
-const string CONST_shopsnstuff007 = "deptstore.xml";
-const string CONST_shopsnstuff006 = "P - Repaint car, replace plates and tags ($500)";
-const string CONST_shopsnstuff005 = "pawnshop.xml";
-const string CONST_shopsnstuff004 = "armsdealer.xml";
-
-#include "../sitemode/shop.h"
-#include "../common/musicClass.h"
-extern string closeParenthesis;
-extern string undefined;
-extern string check_status_of_squad_liberal;
-extern string show_squad_liberal_status;
-extern string enter_done;
-extern string chooseALiberalTo;
-extern string spaceParanthesisDollar;
-string toSpend;
-string chooseAColor;
-string theseColorsAreCon;
-string thisColor;
-string notEnoughMoney;
-string chooseVehicle;
-string thisVehicle;
-string weDontNeedCar;
-string enterLeave;
-string b_chooseBuyer;
-string s_sellCar;
-string s_sellThe;
-string g_getCar;
-string f_fixWounds;
-/* active squad visits the hospital */
-/* active squad visits the hospital */
-
-/* common - moves all squad members and their cars to a new location */
-void locatesquad(Deprecatedsquadst *st, long loc);
-/* common - assigns a new base to all members of a squad */
-void basesquad(Deprecatedsquadst *st, long loc);
-
-void locateActiveSquad(const int loc);
 
 void hospital(int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern short party_status;
 	music.play(MUSIC_SHOPPING);
 
 	locateActiveSquad(loc);
@@ -198,9 +72,6 @@ void hospital(int loc)
 /* active squad visits the arms dealer */
 void armsdealer(int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -211,9 +82,6 @@ void armsdealer(int loc)
 /* active squad visits the pawn shop */
 void pawnshop(int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -224,7 +92,6 @@ void pawnshop(int loc)
 /* choose buyer */
 void choose_buyer(short &buyer)
 {
-	extern short party_status;
 	party_status = -1;
 	int partysize = activesquadSize();
 	if (partysize <= 1) return;
@@ -242,24 +109,9 @@ void choose_buyer(short &buyer)
 		}
 	}
 }
-int lenVehicleType();
-string vehicleTypelongname(const int p);
-Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year);
-int getVehicleTypePrice(const int carchoice);
-int getVehicleTypeSleeperPrice(const int carchoice);
-vector<string> getVehicleTypeColor(const int carchoice);
-bool vehicletypeavailableatshop(const int i);
-DeprecatedCreature* findSleeperCarSalesman(int loc);
 /* active squad visits the car dealership */
 void dealership(int loc)
 {
-	extern string spaceParanthesisDollar;
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern int year;
-	extern short party_status;
-	extern class Ledger ledger;
-	extern vector<Vehicle *> vehicle;
 	music.play(MUSIC_SHOPPING);
 	short buyer = 0;
 	locateActiveSquad(loc);
@@ -378,9 +230,6 @@ void dealership(int loc)
 /* active squad visits the department store */
 void deptstore(int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
@@ -391,9 +240,6 @@ void deptstore(int loc)
 /* active squad visits the oubliette */
 void halloweenstore(int loc)
 {
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml;
@@ -403,19 +249,7 @@ void halloweenstore(int loc)
 }
 
 
-void determineMedicalSupportAtEachLocation(bool clearformess);
-
 void ageThings(const char clearformess) {
-	const string CONST_daily024 = " regains contact with the LCS.";
-	const string CONST_daily023 = "CREATURE_POLITICALACTIVIST";
-	const string CONST_daily022 = "CREATURE_TEENAGER";
-	const string CONST_daily021 = ". The Liberal will be missed.";
-	const string CONST_daily020 = " has passed away at the age of ";
-	extern int day;
-	extern int month;
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatednewsstoryst *> newsstory;
 	day++;
 	int pday = day, pmonth = month; // Find out if it's next month already.
 	if (pday > monthday()) // Day counter has increased but end-of-month has not yet been
@@ -521,9 +355,6 @@ void ageThings(const char clearformess) {
 	}
 }
 void meetWithPotentialRecruits(char &clearformess) {
-	extern char disbanding;
-	extern vector<Deprecatedrecruitst *> recruit;
-	extern vector<DeprecatedCreature *> pool;
 	for (int i = len(pool) - 1; i >= 0; i--)
 		pool[i]->meetings = 0;
 	if (!disbanding) for (int r = len(recruit) - 1; r >= 0; r--)
@@ -561,7 +392,6 @@ void meetWithPotentialRecruits(char &clearformess) {
 // Determines the number of recruitment meetings a creature has scheduled
 int scheduledmeetings(const DeprecatedCreature& cr)
 {
-	extern vector<Deprecatedrecruitst *> recruit;
 	int meetings = 0;
 	for (int p = len(recruit) - 1; p >= 0; p--)
 		// If meeting is with this creature
@@ -569,9 +399,6 @@ int scheduledmeetings(const DeprecatedCreature& cr)
 	return meetings;
 }
 void doRent(const char clearformess) {
-	extern char disbanding;
-	extern int day;
-	extern class Ledger ledger;
 	if (day == 3 && !disbanding)
 		for (int l = 0; l < LocationsPool::getInstance().lenpool(); l++)
 			if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE,l) > 0 &&
@@ -589,24 +416,8 @@ void doRent(const char clearformess) {
 			}
 }
 
-/* hostage tending */
-void tendhostage(DeprecatedCreature *cr, char &clearformess);
-/* armor repair */
-void repairarmor(DeprecatedCreature &cr, char &clearformess);
-/* armor manufacture */
-void makearmor(DeprecatedCreature &cr, char &clearformess);
-/* search for polls */
-void survey(DeprecatedCreature *cr);
-/* steal a car */
-bool stealcar(DeprecatedCreature &cr, char &clearformess);
-bool carselect(DeprecatedCreature &cr, short &cartype);
-/* get a wheelchair */
-void getwheelchair(DeprecatedCreature &cr, char &clearformess);
 
 void activitiesForIndividuals(char &clearformess) {
-	const string CONST_daily019 = " surfs the Net for recent opinion polls.";
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < len(pool); p++)
 	{
 		pool[p]->income = 0;
@@ -685,7 +496,6 @@ void activitiesForIndividuals(char &clearformess) {
 	}
 }
 void tendAllHostages(char &clearformess) {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = len(pool) - 1; p >= 0; p--)
 	{
 		if (!pool[p]->getNameAndAlignment().alive) continue;
@@ -694,11 +504,6 @@ void tendAllHostages(char &clearformess) {
 	}
 }
 void squadOverrideIndividual(const int sq, const char clearformess) {
-	const string CONST_daily005 = " instead of ";
-	const string CONST_daily004 = " acted with ";
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	const string singleDot = ".";
 
 	for (int p = 0; p < 6; p++)
 	{
@@ -725,12 +530,7 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 	}
 
 }
-string getVehicleFullname(int i);
 void cullUnavailableCars(vector<long> &wantcar, vector<long> &caridused, const int sq, const char clearformess) {
-	const string singleDot = ".";
-	const string CONST_daily008 = " couldn't use the ";
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
 	if (len(wantcar)) {
 		for (int c = len(wantcar) - 1; c >= 0; c--) {
 			for (int c2 = 0; c2 < len(caridused); c2++) {
@@ -756,10 +556,7 @@ void cullUnavailableCars(vector<long> &wantcar, vector<long> &caridused, const i
 		}
 	}
 }
-int driveskill(DeprecatedCreature &cr, int v);
 void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) {
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
 	//CAR UP AS NECESSARY
 	vector<long> wantcar;
 	for (int p = 0; p < 6; p++) if (squad[sq]->squad[p])
@@ -866,10 +663,6 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 	}
 }
 void turnSquadAway(const int sq) {
-	const string CONST_daily007 = " was too hot to risk.";
-	const string CONST_daily006 = " decided ";
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
 	addstrAlt(CONST_daily006, gamelog);
@@ -881,8 +674,6 @@ void turnSquadAway(const int sq) {
 	squad[sq]->activity.type = ACTIVITY_NONE;
 }
 void giveDriverExperience(const int sq) {
-	extern short fieldskillrate;
-	extern vector<Deprecatedsquadst *> squad;
 
 	for (int i = 0; i < 6; i++)
 		if (squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
@@ -899,16 +690,6 @@ void giveDriverExperience(const int sq) {
 		}
 }
 void squadDepart(const int sq, char &clearformess) {
-	const string singleDot = ".";
-	const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
-	const string CONST_daily017 = " has arrived at ";
-	const string CONST_daily016 = " looks around ";
-	const string CONST_daily013 = " arrives in ";
-	extern char showcarprefs;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	extern vector<Deprecatednewsstoryst *> newsstory;
 	switch (LocationsPool::getInstance().getLocationType(squad[sq]->activity.arg))
 	{
 	case SITE_CITY_NEW_YORK:
@@ -1043,18 +824,6 @@ void squadDepart(const int sq, char &clearformess) {
 	}
 }
 void advanceSquads(char &clearformess) {
-	const string CONST_daily012A = " spent $";
-	const string CONST_daily012B = " on tickets to go to ";
-	const string CONST_daily012C = ".";
-	const string CONST_daily011A = " couldn't afford tickets to go to %";
-	const string CONST_daily011B = ".";
-	const string CONST_daily010 = "travel location";
-	const string CONST_daily009 = " didn't have a car to get to ";
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	extern class Ledger ledger;
-	const string singleDot = ".";
 	vector<long> caridused;
 	//ADVANCE SQUADS
 	Deprecatedsquadst *oactivesquad = activesquad;
@@ -1140,7 +909,6 @@ void advanceSquads(char &clearformess) {
 	activesquad = oactivesquad;
 }
 void moveSquadlessToBaseIfNotSiege() {
-	extern vector<DeprecatedCreature *> pool;
 	for (int p = 0; p < len(pool); p++)
 	{
 		if (!pool[p]->getNameAndAlignment().alive || !pool[p]->is_active_liberal() || pool[p]->squadid != -1)
@@ -1156,13 +924,8 @@ void moveSquadlessToBaseIfNotSiege() {
 	}
 
 }
-void doDates(char &clearformess);
-void clearCarStates();
 void advanceday(char &clearformess, char canseethings)
 {
-	extern char showcarprefs;
-	extern char disbanding;
-	extern class Ledger ledger;
 	//
 	showcarprefs = 0;
 	//int w = 0;

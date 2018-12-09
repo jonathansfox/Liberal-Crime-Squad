@@ -1,107 +1,5 @@
-
+#define	WEAPONTYPE_CPP
 #include "../includes.h"
-const string CONST_weapontypeB091 = "striking";
-const string CONST_weapontype099 = "UNDEF";
-const string CONST_weapontype098 = "INVALID SUBTYPE";
-const string CONST_weapontype096 = "Unknown element for attack: ";
-const string CONST_weapontype095 = "Unknown element for attack::fire: ";
-const string CONST_weapontype094 = "Unknown element for attack::critical: ";
-const string CONST_weapontype093 = "Invalid severtype for attack::critical::severtype: ";
-const string CONST_weapontype092 = "Invalid boolean value for attack::damages_armor: ";
-const string CONST_weapontype091 = "Invalid severtype for attack::severtype: ";
-const string CONST_weapontype090 = "Invalid boolean value for attack::bleeding: ";
-const string CONST_weapontype089 = "Invalid boolean value for attack::shoots: ";
-const string CONST_weapontype088 = "Invalid boolean value for attack::burns: ";
-const string CONST_weapontype087 = "Invalid boolean value for attack::cuts: ";
-const string CONST_weapontype086 = "Invalid boolean value for attack::tears: ";
-const string CONST_weapontype085 = "Invalid boolean value for attack::bruises: ";
-const string CONST_weapontype084 = "Invalid skill name for attack::skill: ";
-const string CONST_weapontype083 = "Invalid boolean value for attack::always_describe_hit: ";
-const string CONST_weapontype082 = "Invalid boolean value for attack::thrown ";
-const string CONST_weapontype081 = "Invalid boolean value for attack::ranged ";
-const string CONST_weapontype080 = "assaults";
-const string CONST_weapontype078 = ": ";
-const string CONST_weapontype077 = "Unknown element for weapon type ";
-const string CONST_weapontype076 = "::suspicious: ";
-const string CONST_weapontype075 = "Invalid boolean value for weapon type ";
-const string CONST_weapontype074 = "::auto_break_locks: ";
-const string CONST_weapontype072 = "::graffiti: ";
-const string CONST_weapontype070 = "::instrument: ";
-const string CONST_weapontype068 = "::musical_attack: ";
-const string CONST_weapontype066 = "::threatening: ";
-const string CONST_weapontype064 = "::can_take_hostages: ";
-
-const string tag_chance_causes_debris = "chance_causes_debris";
-const string tag_chance = "chance";
-const string tag_fire = "fire";
-const string tag_severtype = "severtype";
-const string tag_fixed_damage = "fixed_damage";
-const string tag_random_damage = "random_damage";
-const string tag_hits_required = "hits_required";
-const string tag_critical = "critical";
-const string tag_no = "no";
-const string tag_no_DR_for_limbs_chance = "no_damage_reduction_for_limbs_chance";
-const string tag_armor = "armor";
-const string tag_armorpiercing = "armorpiercing";
-const string tag_damages_armor = "damages_armor";
-const string tag_bleeding = "bleeding";
-const string tag_shoots = "shoots";
-const string tag_burns = "burns";
-const string tag_cuts = "cuts";
-const string tag_tears = "tears";
-const string tag_bruises = "bruises";
-const string tag_strength = "strength";
-const string tag_strength_max = "strength_max";
-const string tag_strength_min = "strength_min";
-const string tag_successive_attacks_difficulty = "successive_attacks_difficulty";
-const string tag_number_attacks = "number_attacks";
-const string tag_accuracy_bonus = "accuracy_bonus";
-const string tag_skill = "skill";
-const string tag_hit_punctuation = "hit_punctuation";
-const string tag_always_describe_hit = "always_describe_hit";
-const string tag_hit_description = "hit_description";
-const string tag_attack = "attack";
-const string tag_attack_description = "attack_description";
-const string tag_ammotype = "ammotype";
-const string tag_ammo = "ammo";
-const string tag_can_backstab = "can_backstab";
-const string tag_thrown = "thrown";
-const string tag_ranged = "ranged";
-const string tag_priority = "priority";
-const string tag_size = "size";
-const string tag_suspicious = "suspicious";
-const string tag_auto_break_locks = "auto_break_locks";
-const string tag_bashstrengthmod = "bashstrengthmod";
-const string tag_legality = "legality";
-const string tag_graffiti = "graffiti";
-const string tag_instrument = "instrument";
-const string tag_music = "music";
-const string tag_musical_attack = "musical_attack";
-const string tag_protects_against_kidnapping = "protects_against_kidnapping";
-const string tag_can_threaten_hostages = "can_threaten_hostages";
-const string tag_threatening = "threatening";
-const string tag_can_take_hostages = "can_take_hostages";
-const string tag_shortname_future = "shortname_future";
-const string tag_shortname = "shortname";
-const string tag_shortname_future_sub_2 = "shortname_future_sub_2";
-const string tag_shortname_future_sub_1 = "shortname_future_sub_1";
-const string tag_shortname_sub_2 = "shortname_sub_2";
-const string tag_shortname_sub_1 = "shortname_sub_1";
-const string tag_name_future = "name_future";
-const string tag_name = "name";
-const string tag_name_future_sub_2 = "name_future_sub_2";
-const string tag_name_future_sub_1 = "name_future_sub_1";
-const string tag_name_sub_2 = "name_sub_2";
-const string tag_name_sub_1 = "name_sub_1";
-const string singleDot = ".";
-#include "../creature/creatureEnums.h"
-#include "../items/itemtype.h"
-#include "../items/cliptype.h"
-#include "../items/weapontype.h"
-//own header currently inside includes.h
-//own header
-#include "../common/stringconversion.h"
-//for stringtobool
 
 map<string, int> weaponTypeTags = {
 	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),
@@ -630,7 +528,6 @@ WeaponType::~WeaponType()
 }
 const string& WeaponType::get_name(unsigned subtype) const
 {
-	extern int year;
 	if (subtype == 0)
 		return get_name();
 	else if (subtype == 1)
@@ -656,7 +553,6 @@ const string& WeaponType::get_name(unsigned subtype) const
 }
 const string& WeaponType::get_shortname(unsigned subtype) const
 {
-	extern int year;
 	if (subtype > 2)
 		return shortname_; //return CONST_weapontype098; //Reference to temporary. -XML
 	else if (subtype == 1)
@@ -722,7 +618,6 @@ bool WeaponType::is_throwable() const
 }
 bool WeaponType::is_legal() const
 {
-	extern short lawList[LAWNUM];
 	return legality_ >= lawList[LAW_GUNCONTROL];
 }
 

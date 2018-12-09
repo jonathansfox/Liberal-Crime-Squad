@@ -1,158 +1,5 @@
-
+#define	MAPSPECIALS_CPP
 #include "../includes.h"
-const string CONST_mapspecialsX01 = "\"Get the fuck out of here.\"";
-const string CONST_mapspecialsX02 = "\"Get the hell out of here.\"";
-const string CONST_mapspecialsX03 = "\"The best way not to fail is to succeed.\"";
-const string CONST_mapspecialsX04 = "\"Great work is done by people who do great work.\"";
-
-const string CONST_mapspecials161 = "The CCS leader is here.";
-const string CONST_mapspecials160 = "The CCS leader is ready for you!";
-const string CONST_mapspecials159 = "The President is in the Oval Office.";
-const string CONST_mapspecials158 = "Secret Service agents ambush the squad!";
-const string CONST_mapspecials157 = "The President isn't here... ";
-const string CONST_mapspecials156 = "A SWAT team storms the vault!!";
-const string CONST_mapspecials155 = "Another SWAT team moves in!!";
-const string CONST_mapspecials154 = "The squad loads bricks of cash into a duffel bag.";
-const string CONST_mapspecials153 = "A bank teller is available.";
-const string CONST_mapspecials152 = "The teller window is empty.";
-const string CONST_mapspecials151 = "The squad has nobody that can do the job.";
-const string CONST_mapspecials150 = " is no longer recognized.";
-const string CONST_mapspecials149 = "and will join the active LCS to avoid arrest.";
-const string CONST_mapspecials148 = " opens the vault, ";
-const string CONST_mapspecials147 = "The hostage is forced to open the vault.";
-const string CONST_mapspecials146 = " opens the vault.";
-const string CONST_mapspecials145 = "to the bank's managers.";
-const string CONST_mapspecials144 = "Last is the biometric lock that keyed only ";
-const string CONST_mapspecials143 = "The money was so close the squad could taste it!";
-const string CONST_mapspecials142 = "be bypassed by a computer expert.";
-const string CONST_mapspecials141 = "Next is the electronic lock that will have ";
-const string CONST_mapspecials140 = "on the other side of this door...";
-const string CONST_mapspecials139 = "The squad can only dream of the money ";
-const string CONST_mapspecials138 = "be cracked by a security expert.";
-const string CONST_mapspecials137 = "First is the combo lock that will have ";
-const string CONST_mapspecials136 = "Open the bank vault? (Yes or No)";
-const string CONST_mapspecials135 = "but you'll still have to crack the other locks.";
-const string CONST_mapspecials134 = " can handle the biometrics, ";
-const string CONST_mapspecials133 = "expert, and one of the bank managers.";
-const string CONST_mapspecials132 = "You will need a security expert, a computer ";
-const string CONST_mapspecials131 = "an electronic lock, and a biometric lock.";
-const string CONST_mapspecials130 = "The vault door has three layers: A combo lock, ";
-const string CONST_mapspecials129 = "-BEEEP- -BEEEP- -BEEEP-";
-const string CONST_mapspecials128 = "\"Jesus! Put some clothes on!\"";
-const string CONST_mapspecials127 = "This door is guarded.";
-const string CONST_mapspecials126 = "The squad steps into a metal detector.";
-const string CONST_mapspecials125 = "The squad flashes ID badges.";
-const string CONST_mapspecials124 = "The security checkpoint is abandoned.";
-const string CONST_mapspecials123 = "Smash it? (Yes or No)";
-const string CONST_mapspecials122 = "You see a display case.";
-const string CONST_mapspecials121 = "Start an impromptu news program? (Yes or No)";
-const string CONST_mapspecials120 = "You've found a Cable News broadcasting studio.";
-const string CONST_mapspecials119 = " Take over the studio? (Yes or No)";
-const string CONST_mapspecials118 = "their rush to get out.";
-const string CONST_mapspecials117 = "The Cable News broadcasters left the equipment on in";
-const string CONST_mapspecials116 = "Interrupt this evening's programming? (Yes or No)";
-const string CONST_mapspecials115 = "You've found a radio broadcasting room.";
-const string CONST_mapspecials112 = "The radio broadcasters left the equipment on in ";
-const string CONST_mapspecials111 = "The Squad has found some very interesting files.";
-const string CONST_mapspecials110 = "Open it? (Yes or No)";
-const string CONST_mapspecials109 = "You've found a safe.";
-const string CONST_mapspecials108 = "Guards are everywhere!";
-const string CONST_mapspecials107 = "It's a trap!  The armory is empty.";
-const string CONST_mapspecials106 = "The squad finds some body armor.";
-const string CONST_mapspecials105 = "The squad finds some M4 Carbines.";
-const string CONST_mapspecials104 = "The squad finds some M16 Assault Rifles.";
-const string CONST_mapspecials103 = "Jackpot! The squad found a M249 Machine Gun!";
-const string CONST_mapspecials102 = "Alarms go off!";
-const string CONST_mapspecials101 = "Break in? (Yes or No)";
-const string CONST_mapspecials100 = "You've found the armory.";
-const string CONST_mapspecials099 = "Wow, it's empty.  That sucks.";
-const string CONST_mapspecials098 = "These documents show serious tax evasion.";
-const string CONST_mapspecials097 = "The squad will take those.";
-const string CONST_mapspecials096 = "Wow, get a load of these love letters. ";
-const string CONST_mapspecials095 = "There are some drugs here.";
-const string CONST_mapspecials094 = "There are some... very compromising photos here.";
-const string CONST_mapspecials093 = "The squad Liberates some expensive jewelery.";
-const string CONST_mapspecials092 = "This guy sure had a lot of $100 bills.";
-const string CONST_mapspecials091 = "The squad has found a Desert Eagle.";
-const string CONST_mapspecials088 = "Destroy it? (Yes or No)";
-const string CONST_mapspecials087 = "You see some industrial equipment.";
-const string CONST_mapspecials085 = "You see some textile equipment.";
-const string CONST_mapspecials084 = "The squad sprays Liberal Graffiti!";
-const string CONST_mapspecials083 = "including a list of government backers of the CCS.";
-const string CONST_mapspecials082 = ",";
-const string CONST_mapspecials081 = "The Squad obtains sensitive information";
-const string CONST_mapspecials080 = "Hack it? (Yes or No)";
-const string CONST_mapspecials079 = "You've found the Intelligence Supercomputer.";
-const string CONST_mapspecials078 = "computer to shut down.";
-const string CONST_mapspecials077 = "The security alert has caused the ";
-const string CONST_mapspecials076 = "Free the prisoners? (Yes or No)";
-const string CONST_mapspecials075 = "prison control room.";
-const string CONST_mapspecials074 = "high security ";
-const string CONST_mapspecials073 = "medium security ";
-const string CONST_mapspecials072 = "low security ";
-const string CONST_mapspecials071 = "You've found the ";
-const string CONST_mapspecials070 = " wasn't quite convincing...";
-const string CONST_mapspecials069 = " wasn't really wrong here.";
-const string CONST_mapspecials068 = "concludes that ";
-const string CONST_mapspecials067 = " works the room like in Twelve Angry Men, and the jury ";
-const string CONST_mapspecials066 = "Attempt to influence them? (Yes or No)";
-const string CONST_mapspecials065 = "You've found a Jury in deliberations!";
-const string CONST_mapspecials064 = "vacated in a hurry.";
-const string CONST_mapspecials063 = "It appears as if this room has been ";
-const string CONST_mapspecials062 = "Free them? (Yes or No)";
-const string CONST_mapspecials061 = "You see prisoners in the Courthouse jail.";
-const string CONST_mapspecials059 = "You see prisoners in the detention room.";
-const string CONST_mapspecials058 = "Uh, maybe that idea was Conservative in retrospect...";
-const string CONST_mapspecials056 = "You see horrible misshapen creatures in a sealed cage.";
-const string CONST_mapspecials055 = "the Squad resigns to just leaving a threatening note.";
-const string CONST_mapspecials054 = "After some failed attempts, and a very loud alarm, ";
-const string CONST_mapspecials053 = "The reactor is overheating!";
-const string CONST_mapspecials052 = "                ";
-const string CONST_mapspecials051 = "A deafening alarm sounds!";
-const string CONST_mapspecials050 = "The nuclear waste gets released into the state's water supply!";
-const string CONST_mapspecials049 = " presses the big red button!";
-const string CONST_mapspecials048 = "Mess with the reactor settings? (Yes or No)";
-const string CONST_mapspecials047 = "You see the nuclear power plant control room.";
-const string CONST_mapspecials046 = "Attempt to release nuclear waste? (Yes or No)";
-const string CONST_mapspecials045 = "You see the nuclear waste center control room.";
-const string CONST_mapspecials044 = "Employees Only";
-const string CONST_mapspecials042 = "on the left.";
-const string CONST_mapspecials041 = "The landlord's office is the first door";
-const string CONST_mapspecials040 = "the museum displays in the gift shop.";
-const string CONST_mapspecials039 = "Welcome to the NPP Nuclear Plant. Please enjoy";
-const string CONST_mapspecials036 = "You see fluffy white rabbits in a locked cage.";
-const string CONST_mapspecials033 = "\"Get the [heck] out of here.\"";
-const string CONST_mapspecials032 = "The bouncer assesses your squad.";
-const string CONST_mapspecials031 = "The Conservative scum block the door.";
-const string CONST_mapspecials030 = " smirks and lets the squad in.";
-const string CONST_mapspecials029 = "caseNOT_REJECTED.txt";
-const string CONST_mapspecials028 = "caseREJECTED_WEAPONS.txt";
-const string CONST_mapspecials027 = "caseREJECTED_NUDE.txt";
-const string CONST_mapspecials026 = "randomCrime.txt";
-const string CONST_mapspecials025 = "notRejected.txt";
-const string CONST_mapspecials024 = "rejectedBecauseSmellFunny.txt";
-const string CONST_mapspecials020 = "";
-
-const string tag_LOOT_CORPFILES = "LOOT_CORPFILES";
-const string tag_LOOT = "LOOT";
-const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_CLIP = "CLIP";
-const string tag_CLIP_ASSAULT = "CLIP_ASSAULT";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
-const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
-const string tag_CLIP_DRUM = "CLIP_DRUM";
-const string tag_WEAPON_M249_MACHINEGUN = "WEAPON_M249_MACHINEGUN";
-const string tag_LOOT_CEOTAXPAPERS = "LOOT_CEOTAXPAPERS";
-const string tag_LOOT_CEOLOVELETTERS = "LOOT_CEOLOVELETTERS";
-const string tag_LOOT_CEOPHOTOS = "LOOT_CEOPHOTOS";
-const string tag_LOOT_EXPENSIVEJEWELERY = "LOOT_EXPENSIVEJEWELERY";
-const string tag_CLIP_50AE = "CLIP_50AE";
-const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-const string tag_LOOT_INTHQDISK = "LOOT_INTHQDISK";
-const string tag_LOOT_CCS_BACKERLIST = "LOOT_CCS_BACKERLIST";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -178,69 +25,7 @@ This file is part of Liberal Crime Squad.                                       
 		To see descriptions of files and functions, see the list at
 		the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../sitemode/advance.h"
-#include "../sitemode/miscactions.h"
-#include "../sitemode/sitedisplay.h"
-#include "../sitemode/stealth.h"
-#include "../items/loottype.h"
-#include "../items/loot.h"
-#include "../items/money.h"
-#include "../log/log.h"
-#include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-// for void addjuice(DeprecatedCreature &cr, long juice, long cap);
-#include "../common/translateid.h"
-// for  int getloottype(int id);
-//#include "../combat/fight.h"
-void enemyattack();
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-extern string string_sleeper;
-extern string singleDot;
-char run_broadcast(bool tv_broadcast);
-#include "../common/creaturePool.h"
-#include "../common/creaturePoolHeader.h"
-string itemClassClip;
-string itemClassWeapon;
-string itemClassArmor;
-string itemClassLoot;
-string itemClassMoney;
-/* Used by load() to create items of the correct class. */
-
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
-
-void addCrimeToSiteStory(const int crime);
-void giveActiveSquadLoot(const string loot);
-void claimSiteStory();
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-void claimSiteStoryOne();
-void juiceActiveSquad(const long juice, const long cap);
-void giveActiveSquadThisLoot(Item* de);
-/* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
-/* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(const DeprecatedCreature &cr);
 char checkActiveSquadForRejection(const char autoadmit, const bool metaldetect) {
-	extern Deprecatedsquadst *activesquad;
-	extern short sitetype;
 	char rejected = NOT_REJECTED;
 	// Size up the squad for entry
 	for (int s = 0; s < 6; s++)
@@ -291,8 +76,6 @@ Item* create_item(const std::string& inputXml)
 		it = new Money(inputXml);
 	return it;
 }
-short getCurrentSite();
-void makecreature(const int x, const short type);
 void special_bouncer_greet_squad()
 {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
@@ -312,7 +95,6 @@ void special_bouncer_greet_squad()
 		}
 	}
 }
-void emptyEncounter();
 map<int, vector<string> > rejectionReasons;
 map<int, vector<string> > caseRejectionReasons;
 // the vector<string> 'caseREJECTED' and 'rejected' are similar but not identicle.
@@ -323,8 +105,6 @@ vector<string> randomCrime;
 vector<string> caseREJECTED_NUDE;
 vector<string> caseREJECTED_WEAPONS;
 vector<string> caseNOT_REJECTED;
-const string mostlyendings = "mostlyendings\\";
-#include "../customMaps.h"
 vector<file_and_text_collection> map_specials_text_file_collection = {
 customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_mapspecials024),
 	customText(&notRejected, mostlyendings + CONST_mapspecials025),
@@ -333,13 +113,8 @@ customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_mapspecials024),
 	customText(&caseREJECTED_WEAPONS, mostlyendings + CONST_mapspecials028),
 	customText(&caseNOT_REJECTED, mostlyendings + CONST_mapspecials029),
 };
-void setEncounterZeroExistsFalse();
 char sizeUpSquadForEntry(const bool autoadmit) {
 
-	extern short sitetype;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 
 	char rejected = NOT_REJECTED;
 	// Size up the squad for entry
@@ -429,10 +204,6 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 }
 void special_bouncer_assess_squad()
 {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
 
 	if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_PERMANENT) return;
 	bool autoadmit = 0;
@@ -490,11 +261,6 @@ void special_bouncer_assess_squad()
 }
 void special_lab_cosmetics_cagedanimals()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -572,12 +338,6 @@ void special_readsign(int sign)
 }
 void special_nuclear_onoff()
 {
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 	while (true)
 	{
 		clearmessagearea();
@@ -669,15 +429,8 @@ void special_nuclear_onoff()
 		else if (c == 'n')return;
 	}
 }
-void fillEncounter(CreatureTypes c, int numleft);
 void special_lab_genetic_cagedanimals()
 {
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -733,12 +486,6 @@ void special_lab_genetic_cagedanimals()
 }
 void special_policestation_lockup()
 {
-	extern coordinatest loc_coord;
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -783,12 +530,6 @@ void special_policestation_lockup()
 
 void courtLockupPressY() {
 
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
 	UnlockAttempt actualy = unlock(UNLOCK_CELL);
 	if (actualy == UNLOCKED)
 	{
@@ -822,7 +563,6 @@ void courtLockupPressY() {
 }
 void special_courthouse_lockup()
 {
-	extern Log gamelog;
 	int c;
 	do
 	{
@@ -844,13 +584,6 @@ void special_courthouse_lockup()
 }
 void special_courthouse_jury()
 {
-	extern short sitealienate;
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate)
 	{
 		clearmessagearea();
@@ -942,16 +675,8 @@ void special_courthouse_jury()
 		else if (c == 'n')return;
 	}
 }
-#include "../items/lootTypePoolItem.h"
 void special_prison_control(short prison_control_type)
 {
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 	while (true)
 	{
 		clearmessagearea();
@@ -1019,14 +744,6 @@ void special_prison_control(short prison_control_type)
 }
 void special_intel_supercomputer()
 {
-	extern CCSexposure ccsexposure;
-	extern short sitealienate;
-	extern char endgamestate;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate)
 	{
 		clearmessagearea();
@@ -1089,11 +806,6 @@ void special_intel_supercomputer()
 }
 void special_graffiti()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, CONST_mapspecials084, gamelog);
@@ -1119,11 +831,6 @@ void special_graffiti()
 }
 void special_sweatshop_equipment()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1152,11 +859,6 @@ void special_sweatshop_equipment()
 }
 void special_polluter_equipment()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1186,14 +888,6 @@ void special_polluter_equipment()
 }
 void special_house_photos()
 {
-	extern bool deagle;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
 	while (true)
 	{
 		clearmessagearea();
@@ -1317,14 +1011,6 @@ void special_house_photos()
 }
 void special_armory()
 {
-	extern bool m249;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
 	while (true)
 	{
 		clearmessagearea();
@@ -1468,11 +1154,6 @@ void special_armory()
 }
 void special_corporate_files()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1515,10 +1196,6 @@ void special_corporate_files()
 }
 void special_radio_broadcaststudio()
 {
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1551,10 +1228,6 @@ void special_radio_broadcaststudio()
 }
 void special_news_broadcaststudio()
 {
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1586,11 +1259,6 @@ void special_news_broadcaststudio()
 }
 void special_display_case()
 {
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	while (true)
 	{
 		clearmessagearea();
@@ -1671,8 +1339,6 @@ void spawn_security()
 }
 void lock_or_unlock_adjacent_doors(const bool rejected) {
 
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	for (int dx = -1; dx <= 1; dx++) {
 		for (int dy = -1; dy <= 1; dy++)
@@ -1691,11 +1357,6 @@ void lock_or_unlock_adjacent_doors(const bool rejected) {
 }
 void special_security(bool metaldetect)
 {
-	extern short sitetype;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
 	char autoadmit = 0;
 	emptyEncounter();
 	spawn_security();
@@ -1788,12 +1449,6 @@ void special_security_secondvisit()
 }
 void special_bank_vault()
 {
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	clearmessagearea();
 	mvaddstrAlt(16, 1, CONST_mapspecials130, gamelog);
 	mvaddstrAlt(17, 1, CONST_mapspecials131, gamelog);
@@ -1960,10 +1615,6 @@ void special_bank_vault()
 }
 void special_bank_teller()
 {
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{
@@ -1986,15 +1637,8 @@ void special_bank_teller()
 		makecreature(0, CREATURE_BANK_TELLER);
 	}
 }
-void giveActiveSquadMoney(const int money);
 void special_bank_money()
 {
-	extern short sitealarmtimer;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short postalarmtimer;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	static int swat_counter = 0;
 	clearmessagearea(false);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
@@ -2022,12 +1666,8 @@ void special_bank_money()
 	}
 	pressAnyKey();
 }
-void spawnPresident();
 void special_oval_office()
 {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	// Clear entire Oval Office area
 	for (int dx = -1; dx <= 1; dx++)
 		for (int dy = -1; dy <= 1; dy++)
@@ -2072,10 +1712,6 @@ void special_oval_office()
 }
 void special_ccs_boss()
 {
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (isThereASiteAlarm() || sitealienate ||
 		LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
 	{

@@ -1,71 +1,5 @@
+#define	STEALTH_CPP
 #include "../includes.h"
-const string CONST_stealth075 = "and shouts for help!";
-const string CONST_stealth074 = "and lets forth a piercing Conservative alarm cry!";
-const string CONST_stealth073 = "and launches into angry Conservative barking!";
-const string CONST_stealth072 = " looks at the Squad with Intolerance ";
-const string CONST_stealth069 = " sees the Squad's Liberal Weapons ";
-const string CONST_stealth068 = " looks at the Squad suspiciously.";
-const string CONST_stealth067 = " shouts in alarm at the squad's Liberal Trespassing!";
-const string CONST_stealth066 = " acts natural.";
-const string CONST_stealth065 = "The squad";
-const string CONST_stealth064 = " fades into the shadows.";
-const string CONST_stealth062 = "holstered";
-const string CONST_stealth061 = "                                                        ";
-const string CONST_stealth060 = "We've alienated absolutely everyone here!               ";
-const string CONST_stealth059 = "We've alienated the masses here!              ";
-const string CONST_stealth058 = "Prisoner";
-const string CONST_stealth055 = " observes your Liberal activity ";
-const string CONST_stealth053 = "blew_stealth_check.txt";
-
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
-const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
-const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
-const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
-const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
-const string tag_ARMOR_EXPENSIVEDRESS = "ARMOR_EXPENSIVEDRESS";
-const string tag_ARMOR_EXPENSIVESUIT = "ARMOR_EXPENSIVESUIT";
-const string tag_ARMOR_SECURITYUNIFORM = "ARMOR_SECURITYUNIFORM";
-const string tag_ARMOR_CHEAPDRESS = "ARMOR_CHEAPDRESS";
-const string tag_ARMOR_CHEAPSUIT = "ARMOR_CHEAPSUIT";
-const string tag_ARMOR_SEALSUIT = "ARMOR_SEALSUIT";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_ARMOR_MILITARY = "ARMOR_MILITARY";
-const string tag_ARMOR_SERVANTUNIFORM = "ARMOR_SERVANTUNIFORM";
-const string tag_ARMOR_HARDHAT = "ARMOR_HARDHAT";
-const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
-const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
-const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
-const string tag_ARMOR_BLACKDRESS = "ARMOR_BLACKDRESS";
-const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
-const string tag_ARMOR_OVERALLS = "ARMOR_OVERALLS";
-const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
-const string tag_ARMOR_PRISONGUARD = "ARMOR_PRISONGUARD";
-const string tag_ARMOR_BLACKROBE = "ARMOR_BLACKROBE";
-const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
-const string tag_ARMOR_WIFEBEATER = "ARMOR_WIFEBEATER";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
-const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
-const string tag_WEAPON_SHANK = "WEAPON_SHANK";
-const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
-const string tag_WEAPON_TORCH = "WEAPON_TORCH";
-const string tag_WEAPON_PITCHFORK = "WEAPON_PITCHFORK";
-const string tag_WEAPON_NIGHTSTICK = "WEAPON_NIGHTSTICK";
-const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
-const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-const string tag_WEAPON_AXE = "WEAPON_AXE";
-const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
-const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
-const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
-const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
-const string tag_WEAPON_REVOLVER_38 = "WEAPON_REVOLVER_38";
-const string tag_WEAPON_REVOLVER_44 = "WEAPON_REVOLVER_44";
-const string tag_WEAPON_GAVEL = "WEAPON_GAVEL";
-const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string tag_WEAPON_MP5_SMG = "WEAPON_MP5_SMG";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -91,49 +25,14 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../sitemode/sitedisplay.h"
-#include "../log/log.h"
-#include "../common/commonactionsCreature.h"
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
  vector<string> blew_stealth_check;
-#include "../customMaps.h"
- const string stealth = "stealth\\";
  vector<file_and_text_collection> stealth_text_file_collection = {
 	 customText(&blew_stealth_check, stealth + CONST_stealth053),
  };
- short getCurrentSite();
- extern short fieldskillrate;
-/* checks if your liberal activity is noticed */
-
-/* checks if your liberal activity is noticed */
- char disguisesite(long type);
-
- vector<NameAndAlignment> getEncounterNameAndAlignment();
- bool isThereASiteAlarm();
- void setSiteAlarmOne();
  void noticecheck(int exclude, int difficulty)
  {
-	 extern Log gamelog;
 
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	 extern Deprecatedsquadst *activesquad;
 	 if (isThereASiteAlarm()) return;
 	 char sneak = 0;
 	 int topi = 0;
@@ -158,14 +57,9 @@ const string tag_skill = "skill";
 		 }
 	 }
  }
- void conservatise(const int e);
  /* checks if your liberal behavior/attack alienates anyone */
  char alienationcheck(char mistake)
  {
-	 extern Log gamelog;
-	 extern short mode;
-
-	 extern short sitealienate;
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	 if (LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))return 0;
 	 char alienate = 0;
@@ -218,7 +112,6 @@ const string tag_skill = "skill";
  }
  char weapon_in_character(const string wtype, const string atype)
  {
-	 extern short lawList[LAWNUM];
 	 //// TODO Move to XML
 	 if (atype == tag_ARMOR_LABCOAT && wtype == tag_WEAPON_SYRINGE)
 		 return CREATURE_SCIENTIST_LABTECH;
@@ -379,10 +272,6 @@ const string tag_skill = "skill";
  /* checks if a creature's uniform is appropriate to the location */
  char hasdisguise(const DeprecatedCreature &cr)
  {
-	 extern coordinatest loc_coord;
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	 extern short lawList[LAWNUM];
-
 	 short type = -1;
 	 if (getCurrentSite() >= 0)type = LocationsPool::getInstance().getLocationType(getCurrentSite());
 	 char uniformed = 0;
@@ -638,21 +527,9 @@ const string tag_skill = "skill";
 	 }
 	 return 0; // Nothing to see here
  }
- int get_stealth_difficulty(const int n);
- int get_disguise_difficulty(const int n);
- int get_encounter_time(const int n);
- vector<int> potentialEncounterNoticers();
  /* checks if conservatives see through your disguise */
  void disguisecheck(int timer)
  {
-	 extern short fieldskillrate;
-	 extern Log gamelog;
-	 extern short sitetype;
-
-	 extern coordinatest loc_coord;
-	 extern short sitealarmtimer;
-	 extern Deprecatedsquadst *activesquad;
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 int weapon = 0, partysize = activesquadSize();
 
 	 bool forcecheck = false;

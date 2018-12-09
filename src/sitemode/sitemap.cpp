@@ -1,47 +1,5 @@
-
+#define	SITEMAP_CPP
 #include "../includes.h"
-const string CONST_sitemapC043 = "Export";
-
-const string CONST_sitemapB042 = "mapCSV_ApartmentIndustrial2_Tiles.csv";
-const string CONST_sitemapB041 = "3";
-const string CONST_sitemapB040 = "csv";
-const string CONST_sitemap039 = "ApartmentIndustrial2";
-const string CONST_sitemap038 = "2";
-const string CONST_sitemap037 = "mapCSV_ApartmentIndustrial_Tiles.csv";
-const string CONST_sitemap036 = "ApartmentIndustrial";
-const string CONST_sitemap035 = "mapCSV_[NAMEHERE]_Specials.csv";
-const string CONST_sitemap034 = "mapCSV_[NAMEHERE]_Tiles.csv";
-const string CONST_sitemap033 = "../art";
-const string CONST_sitemap032 = "csvTilemap.lua";
-const string CONST_sitemap031 = "Deadly Alien Map Editor";
-const string CONST_sitemap030 = "GENERIC_UNSECURE";
-
-const string tag_WEIGHT = "WEIGHT";
-const string tag_Z = "Z";
-const string tag_FREQ = "FREQ";
-const string tag_ZEND = "ZEND";
-const string tag_ZSTART = "ZSTART";
-const string tag_Y = "Y";
-const string tag_YEND = "YEND";
-const string tag_YSTART = "YSTART";
-const string tag_X = "X";
-const string tag_XEND = "XEND";
-const string tag_XSTART = "XSTART";
-const string tag_STAIRS_RANDOM = "STAIRS_RANDOM";
-const string tag_STAIRS = "STAIRS";
-const string tag_HALLWAY_YAXIS = "HALLWAY_YAXIS";
-const string tag_ROOM = "ROOM";
-const string tag_SUBTRACT = "SUBTRACT";
-const string tag_ADD = "ADD";
-const string tag_NOTE = "NOTE";
-const string tag_LOOT = "LOOT";
-const string tag_UNIQUE = "UNIQUE";
-const string tag_SPECIAL = "SPECIAL";
-const string tag_SCRIPT = "SCRIPT";
-const string tag_TILE = "TILE";
-const string tag_USE = "USE";
-const string tag_NAME = "NAME";
-const string tag_SITEMAP = "SITEMAP";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -67,18 +25,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/newcreature.h"
-#include "../locations/locations.h"
-#include "../configfile.h"
-// needed for something contained in sitemap.h
-#include "../sitemode/sitemap.h"
-        //own header
-void emptyEncounter();
-void delete_and_clear_groundloot();
 map<short, string> siteReadMap;
 map<short, string> buildThisSite;
  vector<configSiteMap *> sitemaps;
@@ -100,7 +46,6 @@ map<short, string> buildThisSite;
  /* recursive dungeon-generating algorithm */
  void generateroom(int rx, int ry, int dx, int dy, int z)
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = rx; x < rx + dx; x++)
 		 for (int y = ry; y < ry + dy; y++)
 			 levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
@@ -148,7 +93,6 @@ map<short, string> buildThisSite;
 	 build_site(CONST_sitemap030);
  }
  void addSemiPermanentChanges(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 /*******************************************************
 	 * Add semi-permanent changes inflicted by LCS and others
 	 *******************************************************/
@@ -198,7 +142,6 @@ map<short, string> buildThisSite;
 	 }
  }
  void addLootToLocation(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = 2; x < MAPX - 2; x++)
 		 for (int y = 2; y < MAPY - 2; y++)
 			 for (int z = 0; z < MAPZ; z++)
@@ -224,7 +167,6 @@ map<short, string> buildThisSite;
 					 }
  }
  void clearOutRestrictions(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //Clear out restrictions
 	 char acted;
 	 do
@@ -287,7 +229,6 @@ map<short, string> buildThisSite;
 	 } while (acted);
  }
  void useOldMapMode(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //ADD RESTRICTIONS
 	 //bool restricted=0;
 	 switch (loc.type)
@@ -312,7 +253,6 @@ map<short, string> buildThisSite;
 
  }
  void useOldMapModeP2(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //ADD ACCESSORIES
 	 for (int x = 2; x < MAPX - 2; x++)
 		 for (int y = 2; y < MAPY - 2; y++)
@@ -383,18 +323,6 @@ map<short, string> buildThisSite;
 		 levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
 		 levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT ||
 		 levelmap[freex][freey][freez].special != -1) && count > 0);
-	 map<int, int>  site_special_list = {
-		 map<int, int> ::value_type(SITE_INDUSTRY_NUCLEAR,           SPECIAL_NUCLEAR_ONOFF),
-		 map<int, int> ::value_type(SITE_GOVERNMENT_POLICESTATION,   SPECIAL_POLICESTATION_LOCKUP),
-		 map<int, int> ::value_type(SITE_GOVERNMENT_COURTHOUSE,      SPECIAL_COURTHOUSE_LOCKUP),
-		 map<int, int> ::value_type(SITE_GOVERNMENT_PRISON,          SPECIAL_PRISON_CONTROL),
-		 map<int, int> ::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,  SPECIAL_INTEL_SUPERCOMPUTER),
-		 map<int, int> ::value_type(SITE_CORPORATE_HEADQUARTERS,     SPECIAL_CORPORATE_FILES),
-		 map<int, int> ::value_type(SITE_CORPORATE_HOUSE,            SPECIAL_HOUSE_PHOTOS),
-		 map<int, int> ::value_type(SITE_GOVERNMENT_ARMYBASE,        SPECIAL_ARMORY),
-		 map<int, int> ::value_type(SITE_MEDIA_AMRADIO,              SPECIAL_RADIO_BROADCASTSTUDIO),
-		 map<int, int> ::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
-	 };
 	 if (site_special_list.count(loc.type)) {
 		 levelmap[freex][freey][freez].special = site_special_list[loc.type];
 	 }
@@ -416,7 +344,6 @@ map<short, string> buildThisSite;
 
  }
  void clearBlockedStairwells(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //CLEAR BLOCKED STAIRWELLS
 	 for (int x = 0; x < MAPX; x++)
 		 for (int y = 0; y < MAPY; y++)
@@ -427,7 +354,6 @@ map<short, string> buildThisSite;
 				 }
  }
  void deleteNonDoors(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //DELETE NON-DOORS
 	 for (int x = 0; x < MAPX; x++)
 		 for (int y = 0; y < MAPY; y++)
@@ -446,7 +372,6 @@ map<short, string> buildThisSite;
 				 }
  }
  void clearBlockedDoorways(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //CLEAR AWAY BLOCKED DOORWAYS
 	 for (int x = 0; x < MAPX; x++)
 		 for (int y = 0; y < MAPY; y++)
@@ -533,7 +458,6 @@ map<short, string> buildThisSite;
 				 }
  }
  void generateRandomMap(Location &loc) {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 // Last resort -- generate random map
 	 levelmap[MAPX >> 1][0][0].flag = SITEBLOCK_EXIT;
 	 levelmap[(MAPX >> 1) + 1][0][0].flag = SITEBLOCK_EXIT;
@@ -613,10 +537,6 @@ map<short, string> buildThisSite;
  /* re-create site from seed before squad arrives */
  void initsite(Location &loc)
  {
-	 extern int oldMapMode;
-	 //PREP
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	 extern unsigned long seed[RNG_SIZE];
 	 if (isThereNoActivesquad())return;
 	 emptyEncounter();
 	 clearActiveSquadForceInc();
@@ -796,7 +716,6 @@ map<short, string> buildThisSite;
  }
  void configSiteTile::build()
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = xstart; x <= xend; x++)
 		 for (int y = ystart; y <= yend; y++)
 			 for (int z = zstart; z <= zend; z++)
@@ -838,7 +757,6 @@ map<short, string> buildThisSite;
  /* recursive dungeon-generating algorithm */
  void configSiteScript::generateroom(int rx, int ry, int dx, int dy, int z)
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = rx; x < rx + dx; x++)
 		 for (int y = ry; y < ry + dy; y++)
 			 levelmap[x][y][z].flag &= ~SITEBLOCK_BLOCK;
@@ -876,7 +794,6 @@ map<short, string> buildThisSite;
  /* generates a hallway with rooms on either side */
  void configSiteScript::generatehallway_y(int rx, int ry, int dx, int dy, int z)
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int y = ry; y < ry + dy; y++)
 	 {  // Clear hallway
 		 levelmap[rx][y][z].flag = 0;
@@ -903,7 +820,6 @@ map<short, string> buildThisSite;
  /* generates a stairwell, must have (dx or dy) and dz at least 1 */
  void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, int dz)
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int z = rz; z <= rz + dz; z++)
 	 {
 		 if (z > rz) // If not bottom floor, add down stairs
@@ -936,7 +852,6 @@ map<short, string> buildThisSite;
  }
  void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int dy, int dz)
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 int x, y, z;
 	 vector< std::pair<int, int> > secure, secure_above, unsecure, unsecure_above;
 	 // Look through bottom level for secure and unsecure tiles.
@@ -1050,7 +965,6 @@ map<short, string> buildThisSite;
  }
  void configSiteSpecial::build()
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 for (int x = xstart; x <= xend; x++)
 		 for (int y = ystart; y <= yend; y++)
 			 for (int z = zstart; z <= zend; z++)
@@ -1074,7 +988,6 @@ map<short, string> buildThisSite;
  };
  void configSiteUnique::build()
  {
-	 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	 //int count=0;
 	 vector<coordinates> secure, unsecure;
 	 //Clear out restrictions

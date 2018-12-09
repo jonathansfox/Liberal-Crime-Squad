@@ -1,9 +1,7 @@
 
+#define	ACTIVATE_CPP
 #include "../includes.h"
 
-const string blankString = "";
-const string CONST_activate066 = "Activate Uninvolved Liberals";
-const string CONST_activate067 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -56,52 +54,8 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-string singleDot = ".";
-#include "../creature/creature.h"
-#include "../locations/locations.h"
-#include "../items/armortype.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../creature/augmenttype.h"
-#include "../common/translateid.h"
-// for  int getsquad(int)
-//#include "../common/commonactions.h"
-void sorting_prompt(short listforsorting);
-#include "../common/commonactionsCreature.h"
-// for void sortliberals(std::vector<Creature *>&,short,bool)
-#include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-// for void printfunds(int,int,char*)
-//#include "../common/getnames.h"
-std::string gettitle(const int align, const int juice);
-string getactivity(ActivityST &act);
-//#include "../common/help.h"
-void HelpActivities(int);
-//#include "../common/stringconversion.h"
-string attribute_enum_to_string(int);
-#include "../cursesAlternative.h"
-#include "../cursesAlternativeConstants.h"
-#include "../customMaps.h"
-#include "../set_color_support.h"
-#include "../locations/locationsPool.h"
-siegest* getseigestFromLocation(int secondaryLocation);
-void gotoEquipmentScreen(int loc);
-void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid);
-#include "../common/creaturePoolCreature.h"
-#include "../common/musicClass.h"
-vector<ActivityAndString> data_lessons;
-map<Activity, Data_Activity> data_activities;
-map<char, vector<ActivityAndString> > activate_menu_items;
 
-vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
-// this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
-vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
-// this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
-vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
-// this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
+
 Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {
 	for (CreatureTypes type : ACTIVITY_TEACH_FIGHTING_DEFAULT) {
 		if (cr->type == type) {
@@ -121,16 +75,12 @@ Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {
 	return ACTIVITY_TEACH_POLITICS;
 
 }
-extern string closeParenthesis;
-string spaceDashSpace;
-const string singleSpace = " ";
-string commaSpace;
+
 // These two functions handle listing and updating class choices
 int classlist = 0;
 void listclasses(DeprecatedCreature *cr)
 {
-	const string CONST_activate007 = "Other classes";
-	const string CONST_activate006 = "Classes cost $60 a day. Study what?";
+
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 40, CONST_activate006);
 	for (int i = 0; i < 5; ++i)
@@ -165,12 +115,6 @@ char incrementChar(char c, int i) {
 }
 void recruitSelect(DeprecatedCreature &cr)
 {
-	extern vector<RecruitData> recruitable_creatures;
-	const string CONST_activate011 = "Press a Letter to select a Profession";
-	const string CONST_activate010 = "컴컴TYPE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY TO ARRANGE MEETING컴";
-	const string CONST_activate009 = " try to meet and recruit today?";
-	const string CONST_activate008 = "What type of person will ";
-	extern short lawList[LAWNUM];
 	// Number of recruitable creatures
 	int options = len(recruitable_creatures);
 	for (int i = 0; i < options; i++)
@@ -229,9 +173,7 @@ void recruitSelect(DeprecatedCreature &cr)
 }
 void show_victim_status(CreatureHealth victim, const int age, const int HEART)
 {
-	const string CONST_activate014 = "Age: ";
-	const string CONST_activate013 = "Heart: ";
-	const string CONST_activate012 = "Status:";
+
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 55, CONST_activate012);
 	printhealthstat(victim, 2, 66, true);
@@ -261,12 +203,6 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
 	return elems;
 }
 void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, AugmentType *selected_aug) {
-	extern Log gamelog;
-
-	const string CONST_activate032 = " has been brutally murdered by ";
-	const string CONST_activate031 = " has been augmented with ";
-	const string CONST_activate030 = " has been horribly disfigured";
-	const string CONST_activate029 = "Press any key to return";
 
 	int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
 	int difficulty = selected_aug->get_difficulty();
@@ -359,23 +295,10 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 		addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate032 + cr->getNameAndAlignment().name, gamelog);
 	}
 }
-void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);
-const string CONST_activate028 = "Are you sure? (y/n)";
-const string CONST_activate027 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_activate026 = "Description";
-const string CONST_activate025 = "Chance at Success: ";
-const string CONST_activate024 = " +";
-const string CONST_activate023 = "Effect: ";
-const string CONST_activate022 = "Augmentation: ";
-const string CONST_activate021 = "Subject: ";
-const string CONST_activate020 = "Select an Augmentation";
-const string CONST_activate019 = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-const string CONST_activate017 = "Press a Letter to select a Liberal";
-const string CONST_activate016 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�";
-const string CONST_activate015 = "Select a Liberal to perform experiments on";
+void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);	
+
 void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general cleanup
 {
-	extern Log gamelog;
 	DeprecatedCreature *victim = 0;
 	vector<DeprecatedCreature *> temppool = getLiberalsSharingLocation(cr);
 	int cur_step = 0;
@@ -543,18 +466,11 @@ int armor_makedifficulty(ArmorType& type, DeprecatedCreature *cr) //Make class m
 }
 int armor_makedifficulty(Armor& type, DeprecatedCreature *cr)
 {
-	extern vector<ArmorType *> armortype;
 	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
 }
 /* base - activate - make clothing */
 void select_makeclothing(DeprecatedCreature *cr)
 {
-	const string CONST_activate036 = "Press a Letter to select a Type of Clothing";
-	const string CONST_activate035 = "컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴";
-	const string CONST_activate034 = " try to make?   (Note: Half Cost if you have cloth)";
-	const string CONST_activate033 = "Which will ";
-	extern short lawList[LAWNUM];
-	extern vector<ArmorType *> armortype;
 	vector<int> armortypei;
 	for (int a = 0; a < len(armortype); a++)
 	{
@@ -611,7 +527,6 @@ void select_makeclothing(DeprecatedCreature *cr)
 }
 vector<string> standard_activities_and_data;
 void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *cr) {
-	extern bool ZEROMORAL;
 	int choice = choiceChar - '1';
 	switch (c) {
 	case 'a':
@@ -734,15 +649,8 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 	}
 }
 /* base - activate - hostages */
-const string CONST_activate043 = "Press a Letter to select a Conservative";
-const string CONST_activate042 = "Day";
-const string CONST_activate041 = "Days";
-const string CONST_activate040 = "DAYS IN CAPTIVITY";
-const string CONST_activate038 = " be watching over?";
-const string CONST_activate037 = "Which hostage will ";
 void select_tendhostage(DeprecatedCreature *cr)
 {
-	extern short mode;
 	vector<DeprecatedCreature *> temppool = getHostagesSharingLocation(cr);
 	if (!len(temppool))return;
 	if (len(temppool) == 1)
@@ -815,7 +723,6 @@ enum LOOP_CONTINUATION {
 	REPEAT
 };
 int getKeyInActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead, const char sieged, const char oldstate) {
-	extern long cursquadid;
 	int c = getkeyAlt();
 	if (c >= 'a'&&c <= 'z') state = c;
 	if ((c >= 'a'&&c <= 'z') || (c >= '0'&&c <= '9'))
@@ -888,24 +795,8 @@ int getKeyInActivate(DeprecatedCreature *cr, const int hostagecount, int &state,
 	}
 	return c;
 }
-const string CONST_activate058 = " will ";
-const string CONST_activate057 = "X - Nothing for Now";
-const string CONST_activate056 = "Enter - Confirm Selection";
-const string CONST_activate055 = "? - Help";
-const string CONST_activate054 = "E - Equip this Liberal";
-const string CONST_activate053 = "Z - Dispose of bodies";
-const string CONST_activate052 = "H - Heal Liberals";
-const string CONST_activate051 = "M - Move to the Free Clinic";
-const string CONST_activate050 = "L - Learn in the University District";
-const string CONST_activate049 = "I - Tend to a Conservative hostage";
-const string CONST_activate048 = "T - Teaching Other Liberals";
-const string CONST_activate047 = " be doing today?";
-const string CONST_activate046 = "Taking Action: What will ";
-const string CONST_activate045 = " yesterday. What now?";
-const string CONST_activate044 = " made $";
-LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead) {
 
-	extern int selectedsiege;
+LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead) {
 
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
@@ -1066,7 +957,6 @@ Activity getDefaultActivityFundraising(DeprecatedCreature *cr) {
 }
 //Illegal Fundraising
 Activity getDefaultActivityIllegalFundraising(DeprecatedCreature *cr) {
-	extern bool ZEROMORAL;
 	if (cr->get_skill(SKILL_COMPUTERS) > 1)
 		return ACTIVITY_CCFRAUD;
 	else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->getCreatureBio().age >= 18))
@@ -1075,19 +965,14 @@ Activity getDefaultActivityIllegalFundraising(DeprecatedCreature *cr) {
 		return ACTIVITY_SELL_DRUGS;
 }
 vector<string> bulkActivityString;
-const string mostlyendings = "mostlyendings\\";
 
-const string CONST_activate060 = "standard_activities_and_data.txt";
-const string CONST_activate059 = "bulkActivityString.txt";
 vector<file_and_text_collection> activate_text_file_collection = {
 	customText(&bulkActivityString, mostlyendings + CONST_activate059),
 	customText(&standard_activities_and_data, mostlyendings + CONST_activate060),
 };
 void activatebulk()
 {
-	const string CONST_activate064 = "Press a Letter to Assign an Activity.  Press a Number to select an Activity.";
-	const string CONST_activate063 = "BULK ACTIVITY";
-	const string CONST_activate062 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT ACTIVITY컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
+
 	vector<DeprecatedCreature *> temppool = activatable_liberals();
 	if (!len(temppool)) return;
 	int page = 0, selectedactivity = 0;
@@ -1166,15 +1051,9 @@ void activatebulk()
 	}
 }
 /* base - activate the uninvolved */
-const string CONST_activate071 = "Press Z to assign simple tasks in bulk.";
-const string CONST_activate070 = " T to sort people.";
-const string CONST_activate069 = "Press a Letter to Assign an Activity.";
-const string CONST_activate068 = "ACTIVITY";
+
 void activate()
 {
-	extern MusicClass music;
-	extern short mode;
-	extern short activesortingchoice[SORTINGCHOICENUM];
 	vector<DeprecatedCreature *> temppool = activatable_liberals();
 	if (!len(temppool)) return;
 	sortliberals(temppool, activesortingchoice[SORTINGCHOICE_ACTIVATE]);

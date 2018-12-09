@@ -1,4 +1,4 @@
-
+#define HELP_CPP
 #include "../includes.h"
 
 #include "../cursesAlternative.h"
@@ -8,8 +8,8 @@
 // NOTE: This will probably need updating if there are any fundamental code
 // changes that will change gameplay.
 map<short, vector<string> > helpTopics;
-string liberalHelpOn;
-string pressAnyKeyToReturn;
+//string liberalHelpOn;
+//string pressAnyKeyToReturn;
 void help(const char* string)
 {
 	eraseAlt();

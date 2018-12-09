@@ -1,83 +1,5 @@
-
+#define	SAVELOAD_CPP
 #include "../includes.h"
-const string CONST_saveloadB081 = "# and are thereby ignored";
-const string CONST_saveload091 = "rb";
-const string CONST_saveload090 = "wb";
-const string CONST_saveload089 = ".verbose";
-const string CONST_saveload088 = ".";
-const string CONST_saveload084 = "# cursquadid";
-const string CONST_saveload083 = "# curcreatureid";
-const string CONST_saveload082 = "# Vehicle::curcarid";
-const string CONST_saveload081 = "# ";
-const string CONST_saveload080 = "# Crimes";
-const string CONST_saveload079 = "# Next Creature";
-const string CONST_saveload076 = "# Skills";
-const string CONST_saveload074 = "# Juice";
-const string CONST_saveload073 = "# Alignment";
-const string CONST_saveload072 = "# Birthday Day";
-const string CONST_saveload071 = "# Birthday Month";
-const string CONST_saveload070 = "# Age";
-const string CONST_saveload069 = "# Gender (Liberal)";
-const string CONST_saveload068 = "# Gender (Conservative)";
-const string CONST_saveload067 = "# Proper Name";
-const string CONST_saveload066 = "# Name";
-const string CONST_saveload064 = "# oldPresidentName";
-const string CONST_saveload063 = "# execname";
-const string CONST_saveload062 = "# exec";
-const string CONST_saveload061 = "# Supreme Court Names";
-const string CONST_saveload060 = "# Supreme Court";
-const string CONST_saveload059 = "# Senate";
-const string CONST_saveload058 = "# House";
-const string CONST_saveload056 = "# Law List";
-const string CONST_saveload055 = "# Concerning ";
-const string CONST_saveload054 = "# Attitude";
-const string CONST_saveload053 = "# Party Status";
-const string CONST_saveload052 = "# Slogan";
-const string CONST_saveload051 = "# Liberal Guardian Published";
-const string CONST_saveload050 = "# L City Name";
-const string CONST_saveload049 = "# attorneyseed";
-const string CONST_saveload048 = "# Offended Firemen";
-const string CONST_saveload047 = "# Offended Cablenews";
-const string CONST_saveload046 = "# Offended Amradio";
-const string CONST_saveload045 = "# Offended CIA";
-const string CONST_saveload044 = "# Offended Corps";
-const string CONST_saveload043 = "# Police Heat";
-const string CONST_saveload042 = "# ccs_kills";
-const string CONST_saveload041 = "# ccsexposure";
-const string CONST_saveload040 = "# endgamestate";
-const string CONST_saveload039 = "# stat_burns";
-const string CONST_saveload038 = "# stat_buys";
-const string CONST_saveload037 = "# stat_kidnappings";
-const string CONST_saveload036 = "# stat_kills";
-const string CONST_saveload035 = "# stat_dead";
-const string CONST_saveload034 = "# stat_recruits";
-const string CONST_saveload033 = "# stalinmode";
-const string CONST_saveload032 = "# nocourtpurge";
-const string CONST_saveload031 = "# notermlimit";
-const string CONST_saveload030 = "# m249";
-const string CONST_saveload029 = "# deagle";
-const string CONST_saveload028 = "# termlimits";
-const string CONST_saveload027 = "# multipleCityMode";
-const string CONST_saveload026 = "# amendnum";
-const string CONST_saveload025 = "# presparty";
-const string CONST_saveload024 = "# execterm";
-const string CONST_saveload023 = "# year";
-const string CONST_saveload022 = "# month";
-const string CONST_saveload021 = "# day";
-const string CONST_saveload020 = "# fieldskillrate";
-const string CONST_saveload019 = "# wincondition";
-const string CONST_saveload018 = "# mode";
-const string CONST_saveload017 = "# seed";
-const string CONST_saveload016 = "# LCS Funding level (max value 2147483647) can be negative";
-const string CONST_saveload015 = "# NOVERBOSECOMMENTS to remove them (almost) entirely";
-const string CONST_saveload014 = "# If these comments are more trouble than they're worth, add to the debug_defines.txt file";
-const string CONST_saveload013 = "# There will be quite a few comments generated automatically";
-const string CONST_saveload012 = "# Since the purpose of verbose savefiles is to make them human readable and editable,";
-const string CONST_saveload011 = "# All lines beginning with # are comments";
-const string CONST_saveload010 = "# remove NOVERBOSECOMMENTS to activate autocomments";
-const string CONST_saveload009 = "# Autocomments disabled";
-const string CONST_saveload008 = "Verbose File Could Not Be Opened";
-const string CONST_saveload004 = "export";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
 																					//
@@ -104,106 +26,6 @@ This file is part of Liberal Crime Squad.                                       
 		the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-#include "../creature/creature.h"
-////
-
-#include "../creature/deprecatedCreatureA.h"
-#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
-#include "../vehicle/vehicletype.h"
-#include "../vehicle/vehicle.h"
-#include "../common/equipment.h"
-//for void consolidateloot(vector<Item *> &loot);
-#include "../common/translateid.h"
-// for  getloottype
-#include "titlescreen.h"
-#include "../cursesAlternative.h"
-#include "../common/creaturePool.h"
-string itemType;
-string doesNotExistItem;
-string vehicleType;
-string doesNotExistVehicle;
-string couldNotLoad;
-Item* create_item(const std::string& inputXml);
-extern vector<DeprecatedCreature *> pool;
-extern Log gamelog;
-extern char newscherrybusted;
-extern vector<Location *> location;
-extern bool multipleCityMode;
-extern int stat_buys;
-extern int stat_burns;
-extern short presparty;
-#include "../common/musicClass.h"
-extern MusicClass music;
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern int stat_kidnappings;
-extern int year;
-extern short mode;
-extern short exec[EXECNUM];
-extern char endgamestate;
-extern bool encounterwarnings;
-extern int stat_dead;
-extern int stat_kills;
-extern int stat_recruits;
-extern char oldPresidentName[POLITICIAN_NAMELEN];
-extern vector<Vehicle *> vehicle;
-extern unsigned long seed[RNG_SIZE];
-extern short wincondition;
-extern short fieldskillrate;
-extern int day;
-extern int month;
-extern int year;
-extern short execterm;
-extern short presparty;
-extern int amendnum;
-extern bool termlimits;
-extern bool deagle;
-extern bool m249;
-extern bool notermlimit;
-extern bool nocourtpurge;
-extern bool stalinmode;
-extern char ccs_kills;
-extern long curcreatureid;
-extern long cursquadid;
-extern short offended_corps;
-extern short offended_cia;
-extern short offended_amradio;
-extern short offended_cablenews;
-extern short offended_firemen;
-extern int police_heat;
-extern unsigned long attorneyseed[RNG_SIZE];
-extern char lcityname[CITY_NAMELEN];
-extern char slogan[SLOGAN_LEN];
-extern string slogan_str;
-extern short party_status;
-extern short attitude[VIEWNUM];
-extern short public_interest[VIEWNUM];
-extern short background_liberal_influence[VIEWNUM];
-extern short lawList[LAWNUM];
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short court[COURTNUM];
-extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-extern UniqueCreatures uniqueCreatures;
-extern vector<Deprecatedsquadst *> squad;
-extern vector<Deprecateddatest *> date;
-extern vector<Deprecatedrecruitst *> recruit;
-extern vector<Deprecatednewsstoryst *> newsstory;
-extern Deprecatedsquadst *activesquad;
-extern char homedir[MAX_PATH_SIZE];
 // TODO: It would be really cool to be able to CONST_saveload004 characters.
 /* handles saving */
 bool file_exists(const std::string& filename)
@@ -215,14 +37,6 @@ bool file_exists(const std::string& filename)
 	}
 	return true;
 }
-struct  saveLoadChunk {
-	void * Buffer;
-	size_t      ElementSize;
-	size_t      ElementCount;
-	saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
-};
-extern class Ledger ledger;
-extern CCSexposure ccsexposure;
 vector<saveLoadChunk> firstChunk =
 {
 	saveLoadChunk(seed, sizeof(unsigned long), RNG_SIZE),
@@ -279,7 +93,6 @@ vector<saveLoadChunk> firstChunk =
 void writeVerbose(string filename) {
 	// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
 	// Remove almost all automatically generated comments from verbose savefiles
-	extern bool NOVERBOSECOMMENTS;
 	string filepath = homedir;
 	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
@@ -399,7 +212,6 @@ void writeVerbose(string filename) {
 			//outClientFile << CONST_saveload055 + getview(i, false) << endl;
 			outClientFile << attitude[i] << endl;
 		}
-		extern map<short, string> getLawString;
 		outClientFile << CONST_saveload056 << endl;
 		for (int i = 0; i < len(lawList); i++) {
 			if (!NOVERBOSECOMMENTS)
@@ -471,7 +283,6 @@ void writeVerbose(string filename) {
 				//outClientFile << CONST_saveload081 + attribute_enum_to_string(i) << endl;
 				outClientFile << pool[pl]->get_true_attribute(i) << endl;
 			}
-			extern map<short, string> skillEnumToString;
 			outClientFile << CONST_saveload076 << endl;
 			for (int i = 0; i < SKILLNUM; i++) {
 				if (!NOVERBOSECOMMENTS)
@@ -493,8 +304,6 @@ void writeVerbose(string filename) {
 			outClientFile <<  pool[pl]->special[i] << endl;
 			}
 			*/
-			extern map<short, string> getLawFlagString;
-			extern map<short, map<short, string> > getLawFlagStringFull;
 			outClientFile << CONST_saveload080 << endl;
 			for (int i = 0; i < LAWFLAGNUM; i++) {//Bad, relies on their order in the xml file. -XML
 												  // 6
@@ -748,11 +557,6 @@ void deleteVerbose(const string& filename) {
 }
 void savegame(const string& filename)
 {
-	// Store savefiles in plaintext, making it human readable and editable
-	extern bool VERBOSESAVEFILE;
-	// Don't save the game
-	extern bool NOSAVE;
-	extern int version;
 	if (NOSAVE) {
 		return;
 	}
@@ -964,7 +768,6 @@ void savegame(const string& filename)
 /* loads the game from save.dat */
 char load(const string& filename)
 {
-	extern int lowestloadversion;
 	//LOAD FILE
 	int loadversion;
 	bool dummy_b;

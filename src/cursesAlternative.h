@@ -4,6 +4,7 @@ void pressSpecificKey(const int x, const int y, const int z, const int w);
 int pressSpecificKey(const int x, const int y, const int z, const int w, const int u);
 int clearAlt(void);
 int refreshAlt(void);
+// These are the functions we seek to remove from as much as possible
 int moveAlt(const int, const int);
 int	mvaddstrAlt(const int, const int, const std::string);
 int	mvaddstrAlt(const int, const int, const std::string, Log &a);
@@ -22,8 +23,8 @@ int addcharAlt(const char ch);
 int addcharAlt(const char ch, Log &log);
 int mvaddcharAlt(int y, int x, char ch);
 int mvaddcharAlt(int y, int x, char ch, Log &log);
-
-
+//
+// These are less critical to the goal
 int eraseAlt(void);
 int mvaddchAlt(int, int, const int);
 int mvgetnstrAlt(int, int, char *, int);
@@ -33,7 +34,7 @@ int endwinAlt();
 int mvaddstrCenter(int i, string str);
 int mvaddstrCenter(int i, string str, Log &log);
 void pressAnyKey();
-
+//
 void noechoAlt();
 void start_colorAlt();
 void curs_setAlt(int i);

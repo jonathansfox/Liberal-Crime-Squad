@@ -1,14 +1,5 @@
+#define	ITEMTYPE_CPP
 #include "../includes.h"
-const string CONST_itemtype007 = "Unknown element for item type << idname_ << ";
-const string CONST_itemtype006 = "LACKS IDNAME ";
-const string CONST_itemtype005 = "UNDEFINED";
-
-const string tag_fencevalue = "fencevalue";
-const string tag_name_future = "name_future";
-const string tag_name = "name";
-const string tag_idname = "idname";
-const string tag_id = "id";
-#include "../items/itemtype.h"
 int ItemType::number_of_itemtypes = 0;
 ItemType::ItemType(MCD_STR xmlstring)
 	: name_(CONST_itemtype005), name_future_defined_(false), fencevalue_(0)
@@ -53,7 +44,6 @@ void ItemType::init(const MCD_STR& xmlstring)
 }
 const string& ItemType::get_name() const
 {
-	extern int year;
 	if (name_future_defined_ && year >= 2100)
 		return name_future_;
 	else

@@ -1,48 +1,5 @@
+#define	ENDGAME_CPP
 #include "../includes.h"
-const string CONST_endgame047 = "Press any key to breathe a sigh of relief.                   ";
-const string CONST_endgame046 = "Press any key to reflect on what has happened ONE LAST TIME.";
-const string CONST_endgame045 = "Press 'C' to watch the ratification process unfold.";
-const string CONST_endgame044 = "INVALID ALIGNMENT FOR AMENDMENT";
-const string CONST_endgame043 = "Press any key to hold new elections!                           ";
-const string CONST_endgame041 = "A National Convention has proposed an ELITE LIBERAL AMENDMENT!";
-const string CONST_endgame039 = "the Senate.";
-const string CONST_endgame038 = "the President's choosing with the advice and consent of";
-const string CONST_endgame037 = ", also of";
-const string CONST_endgame036 = "a Proper Justice";
-const string CONST_endgame035 = "Proper Justices";
-const string CONST_endgame034 = "choosing to be replaced by ";
-const string CONST_endgame033 = " of the President's";
-const string CONST_endgame032 = "a Conservative country";
-const string CONST_endgame031 = "Conservative countries";
-const string CONST_endgame030 = "be deported to ";
-const string CONST_endgame029 = " will";
-const string CONST_endgame028 = "s";
-const string CONST_endgame027 = "not serve on the Supreme Court.  Said former citizen";
-const string CONST_endgame026 = " may";
-const string CONST_endgame024 = "In particular, the aforementioned former citizen";
-const string CONST_endgame023 = " branded Arch-Conservative:";
-const string CONST_endgame022 = " is";
-const string CONST_endgame021 = "s are";
-const string CONST_endgame020 = "The following former citizen";
-const string CONST_endgame019 = "The Elite Liberal Congress is proposing an ELITE LIBERAL AMENDMENT!";
-const string CONST_endgame018 = " to the United States Constitution:";
-const string CONST_endgame017 = "Proposed Amendment ";
-const string CONST_endgame016 = "AMENDMENT REJECTED.";
-const string CONST_endgame015 = "AMENDMENT ADOPTED.";
-const string CONST_endgame014 = "Nay";
-const string CONST_endgame013 = "Yea";
-const string CONST_endgame012 = "Press any key to watch the State votes unfold.              ";
-const string CONST_endgame011 = "Press any key to watch the Congressional votes unfold.     ";
-const string CONST_endgame010 = "Senate";
-const string CONST_endgame009 = "House";
-const string CONST_endgame008 = "The Ratification Process:";
-const string CONST_endgame007 = "stalinizedCabinet.txt";
-const string CONST_endgame006 = "reaganifiedCabinet.txt";
-const string CONST_endgame005 = "stalinistPrison.txt";
-const string CONST_endgame004 = "conservativePrison.txt";
-const string CONST_endgame003 = "amendmentPass.txt";
-const string CONST_endgame002 = "archConservativeAmendment.txt";
-const string CONST_endgame001 = "stalinAmendment.txt";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
                                                                                     //
@@ -69,72 +26,6 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-const string blankString = "";
-#include "../creature/creatureEnums.h"
-/* fills a string with a proper name */
-void generate_name(char *str, char gender = GENDER_NEUTRAL);
-#include "../basemode/liberalagenda.h"
-// for liberalagenda
-//#include "../log/log.h"
-// for commondisplay.h
-#include "../common/commondisplay.h"
-// for void printfunds(int,int,char*)
-#include "../common/misc.h"
-// for char* statename(int)
-         //shouldn't be in getnames? --Schmel924
-// for romannumeral (int)
-         //only usage here --Schmel924
-#include "../title/titlescreen.h"
-// for void reset;
-#include "../title/highscore.h"
-// for void savehighscore(char endtype);
-//#include "../monthly/EndGameStatus.h"
-//own header
-        //does not compile without --Schmel924
-#include "../politics/politics.h"
-//for publicmood
-#include "../cursesAlternative.h"
-#include <gui_constants.h>
-#include "../set_color_support.h"
-/* end the game and clean up */
-void end_game(int err = EXIT_SUCCESS);
-#include "../common/musicClass.h"
- string pressKeyToReflect;
- string they_ll_round_you_up;
-vector<int> state_biases;
-vector<string> reaganifiedCabinet;
-vector<string> stalinizedCabinet;
-string proposeConservative;
-string proposeStalinist;
-vector<string> archConservativeAmendment;
-vector<string> stalinAmendment;
-string YEA;
-string NAY;
-string youWentOnVacation;
-string youWentIntoHiding;
-string whileYouWereInPrison;
-string youDisappearedSafely;
-vector<string> conservativePrison;
-vector<string> stalinistPrison;
-vector<string> amendmentPass;
-const string mostlyendings = "mostlyendings\\";
-#include "../customMaps.h"
-vector<file_and_text_collection> endgame_text_file_collection = {
-	customText(&stalinAmendment, mostlyendings + CONST_endgame001),
-	customText(&archConservativeAmendment, mostlyendings + CONST_endgame002),
-	customText(&amendmentPass, mostlyendings + CONST_endgame003),
-	customText(&conservativePrison, mostlyendings + CONST_endgame004),
-	customText(&stalinistPrison, mostlyendings + CONST_endgame005),
-	customText(&reaganifiedCabinet, mostlyendings + CONST_endgame006),
-	customText(&stalinizedCabinet, mostlyendings + CONST_endgame007),
-};
-struct fullName {
-	string first;
-	string middle;
-	string last;
-
-};
-fullName generate_long_name(char gender);
 void printRatifyHeader() {
 	mvaddstrAlt(0, 62, CONST_endgame009);
 	mvaddstrAlt(0, 70, CONST_endgame010);
@@ -186,10 +77,6 @@ void printSenateRatification(const int s, const int yesstate) {
 /* EndGameStatus - checks if a constitutional amendment is ratified */
 char ratify(int level, int lawview, int view, char congress, char canseethings)
 {
-	extern MusicClass music;
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short attitude[VIEWNUM];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -302,7 +189,6 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 /* EndGameStatus - header for announcing constitutional amendments */
 void amendmentheading()
 {
-	extern int amendnum;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, CONST_endgame017);
@@ -313,14 +199,9 @@ void amendmentheading()
 TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
 that the country has become arch-conservative... --Addictgamer
 */
-fullName generate_long_name(char gender = GENDER_NEUTRAL);
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
 {
-	extern MusicClass music;
-	extern int amendnum;
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	if (canseethings)
 	{
 		music.play(MUSIC_ELECTIONS);
@@ -385,9 +266,6 @@ void tossjustices(char canseethings)
 /* EndGameStatus - attempts to pass a constitutional amendment to help win the game */
 void amendment_termlimits(char canseethings)
 {
-	extern MusicClass music;
-	extern int amendnum;
-	extern bool termlimits;
 	if (termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
 	if (canseethings)
 	{
@@ -431,8 +309,6 @@ void amendment_termlimits(char canseethings)
 		pressAnyKey();
 	}
 }
-string conservativesRemakeWorld;
-string stalinistsRemakeWorld;
 void badEndRemakeWorld(const string& str, const string& str2, const string& str3, EndTypes end) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	eraseAlt();
@@ -451,12 +327,6 @@ void badEndRemakeWorld(const string& str, const string& str2, const string& str3
 /* EndGameStatus - attempts to pass a constitutional amendment to lose the game */
 void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 {
-	extern MusicClass music;
-	extern int amendnum;
-	extern char cantseereason;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
-	extern short lawList[LAWNUM];
 	vector<string> output;
 	MusicModes endMusic;
 	vector<string> finalCabinet;

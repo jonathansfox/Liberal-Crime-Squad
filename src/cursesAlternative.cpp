@@ -1,37 +1,5 @@
+#define	CURSESALTERNATIVE_CPP
 #include "includes.h"
-const string CONST_cursesAlternative013 = "]";
-const string CONST_cursesAlternative011 = "[";
-const string CONST_cursesAlternative008 = " times";
-const string CONST_cursesAlternative007 = " five times";
-const string CONST_cursesAlternative006 = " four times";
-const string CONST_cursesAlternative005 = " three times";
-const string CONST_cursesAlternative004 = " twice";
-
-const string blankString = "";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-//#include "../creature/newcreature.h"
-
-#include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-#include "../creature/deprecatedCreatureC.h"
-//#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../common/getnames.h"
-
-#include "../locations/locations.h"
-#include "../pdcurses/curses.h"
-#include "../log/log.h"
-#include "../cursesAlternative.h"
-#include "../customMaps.h"
-#include <gui_constants.h>
-
 
 short interface_pgup = '[';
 short interface_pgdn = ']';
@@ -41,27 +9,6 @@ bool is_page_up(const int c) {
 bool is_page_down(const int c) {
 	return c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT;
 }
-void translategetch(int &c);
-void translategetch_cap(int &c);
-/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
-int getkey();
-/* Variant of getkeyAlt() that doesn't make all letters lowercase */
-int getkey_cap();
-/* Empties the keyboard buffer, and returns most recent key pressed, if any */
-int checkkey();
-/* Variant of checkkey() that doesn't make all letters lowercase */
-// UNUSED
-int checkkey_cap();
-#ifdef CH_USE_UNICODE
-bool setup_unicode();
-#endif
-void set_title(char *c);
-void init_console();
-#include <common\\consolesupport.h>
-
-void set_color(short f, short b, bool bright, bool blink = false);
-#include "../set_color_support.h"
-extern string singleSpace;
 inline int translateGraphicsChar(unsigned char c) { return c; }
 inline short translateGraphicsColor(short c) { return c; }
 /* Variants of addch and mvaddch that work on chars and use translateGraphicsChar(), fixing display of extended characters */
@@ -194,35 +141,8 @@ int     clearAlt(void) {
 int     refreshAlt(void) {
 	return refresh();
 }
-const ColorSetup BLACK_ON_BLACK = { COLOR_BLACK, COLOR_BLACK };
-const ColorSetup BLACK_ON_BLACK_BRIGHT = { COLOR_BLACK, COLOR_BLACK, 1 };
-const ColorSetup BLACK_ON_WHITE = { COLOR_BLACK, COLOR_WHITE };
-const ColorSetup BLUE_ON_BLACK_BRIGHT = { COLOR_BLUE, COLOR_BLACK, 1 };
-const ColorSetup CYAN_ON_BLACK = { COLOR_CYAN, COLOR_BLACK };
-const ColorSetup CYAN_ON_BLACK_BRIGHT = { COLOR_CYAN, COLOR_BLACK, 1 };
-const ColorSetup GREEN_ON_BLACK = { COLOR_GREEN, COLOR_BLACK };
-const ColorSetup GREEN_ON_BLACK_BRIGHT = { COLOR_GREEN, COLOR_BLACK, 1 };
-const ColorSetup MAGENTA_ON_BLACK = { COLOR_MAGENTA, COLOR_BLACK };
-const ColorSetup MAGENTA_ON_BLACK_BRIGHT = { COLOR_MAGENTA, COLOR_BLACK, 1 };
-const ColorSetup RED_ON_BLACK = { COLOR_RED, COLOR_BLACK };
-const ColorSetup RED_ON_BLACK_BRIGHT = { COLOR_RED, COLOR_BLACK, 1 };
-const ColorSetup RED_ON_BLUE_BRIGHT = { COLOR_RED, COLOR_BLUE, 1 };
-const ColorSetup RED_ON_GREEN_BRIGHT = { COLOR_RED, COLOR_GREEN, 1 };
-const ColorSetup RED_ON_RED = { COLOR_RED, COLOR_RED };
-const ColorSetup WHITE_ON_BLACK = { COLOR_WHITE, COLOR_BLACK };
-const ColorSetup WHITE_ON_BLACK_BRIGHT = { COLOR_WHITE, COLOR_BLACK, 1 };
-const ColorSetup WHITE_ON_RED_BRIGHT = { COLOR_WHITE, COLOR_RED, 1 };
-const ColorSetup WHITE_ON_BLUE_BRIGHT = { COLOR_WHITE, COLOR_BLUE, 1 };
-const ColorSetup WHITE_ON_WHITE = { COLOR_WHITE, COLOR_WHITE };
-const ColorSetup WHITE_ON_WHITE_BRIGHT = { COLOR_WHITE, COLOR_WHITE, 1 };
-const ColorSetup YELLOW_ON_BLACK = { COLOR_YELLOW, COLOR_BLACK };
-const ColorSetup YELLOW_ON_BLACK_BRIGHT = { COLOR_YELLOW, COLOR_BLACK, 1 };
-const ColorSetup YELLOW_ON_RED = { COLOR_YELLOW, COLOR_RED };
-const ColorSetup YELLOW_ON_RED_BRIGHT = { COLOR_YELLOW, COLOR_RED, 1 };
-const ColorSetup YELLOW_ON_RED_BRIGHT_BLINK = { COLOR_YELLOW, COLOR_RED, 1, 1 };
 void displayDifficulty(int difficulty)
 {
-	const char *_difficulty[] = { "Simple", "Very Easy", "Easy", "Below Average", "Average", "Above Average", "Hard", "Very Hard", "Extremely Difficult", "Nearly Impossible", "Impossible" };
 	switch (difficulty)
 	{
 	case 0:	set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
@@ -252,7 +172,6 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
-void printfunds(int y, int offsetx, const char* prefix, long funds);
 void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
 	char moneystr[50], prefixbuffer[50];
@@ -416,11 +335,8 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
-#include "../common/ledgerEnums.h"
-#include "../common/ledger.h"
 void printfunds(int y, int offsetx, const char* prefix)
 {
-	extern class Ledger ledger;
 	printfunds(y, offsetx, prefix, ledger.get_funds());
 }
 
@@ -456,7 +372,6 @@ int pressSpecificKey(const int x, const int y, const int z) {
 	} while (c != x && c != y && c != z);
 	return c;
 }
-#include "../locations/locationsPool.h"
 // prints a formatted name, used by promoteliberals
 void printname(const int hiding, const int location, const int flag, const string name) {
 	int bracketcolor = -1, namecolor, brightness;
@@ -519,100 +434,11 @@ void printname(const int hiding, const int location, const int flag, const strin
 	set_color_easy(WHITE_ON_BLACK);
 }
 
-
-
-const string CONST_sitedisplay102 = "                                                     ";
-const string CONST_sitedisplay100 = "                                                                                ";
-const string CONST_sitedisplay097 = "                           ";
-const string CONST_sitedisplay095 = "LOOT!";
-const string CONST_sitedisplay094 = "ENCTR";
-const string CONST_sitedisplay093 = "enemy";
-const string CONST_sitedisplay092 = "ENEMY";
-const string CONST_sitedisplay091 = "SQUAD";
-const string CONST_sitedisplay090 = "The Office of the President";
-const string CONST_sitedisplay089 = "CCS Boss";
-const string CONST_sitedisplay088 = "Oh Wow So Much Money";
-const string CONST_sitedisplay087 = "Bank Teller";
-const string CONST_sitedisplay086 = "Bank Vault";
-const string CONST_sitedisplay085 = "Bench";
-const string CONST_sitedisplay084 = "Computer";
-const string CONST_sitedisplay083 = "Table";
-const string CONST_sitedisplay082 = "Stairs Down";
-const string CONST_sitedisplay081 = "Stairs Up";
-const string CONST_sitedisplay080 = "Display Case";
-const string CONST_sitedisplay079 = "Sign";
-const string CONST_sitedisplay078 = "Landlord's Office";
-const string CONST_sitedisplay077 = "News Broadcast Studio";
-const string CONST_sitedisplay076 = "Radio Broadcast Room";
-const string CONST_sitedisplay075 = "Safe";
-const string CONST_sitedisplay074 = "CEO's Study";
-const string CONST_sitedisplay073 = "Armory";
-const string CONST_sitedisplay072 = "Factory Equipment";
-const string CONST_sitedisplay071 = "Textile Equipment";
-const string CONST_sitedisplay070 = "Supercomputer";
-const string CONST_sitedisplay069 = "Prison Control Room";
-const string CONST_sitedisplay068 = "Jury Room";
-const string CONST_sitedisplay067 = "Courthouse Jail";
-const string CONST_sitedisplay066 = "Police Detention Room";
-const string CONST_sitedisplay065 = "Caged \"Animals\"";
-const string CONST_sitedisplay064 = "Reactor Control Room";
-const string CONST_sitedisplay063 = "Caged Animals";
-const string CONST_sitedisplay058 = "ICE";
-const string CONST_sitedisplay057 = "OFF";
-const string CONST_sitedisplay056 = "AL";
-const string CONST_sitedisplay055 = "OV";
-const string CONST_sitedisplay054 = "BOSS!";
-const string CONST_sitedisplay053 = "TELER";
-const string CONST_sitedisplay052 = "VAULT";
-const string CONST_sitedisplay051 = "CASE";
-const string CONST_sitedisplay050 = "GUARD";
-const string CONST_sitedisplay049 = "METAL";
-const string CONST_sitedisplay048 = "BENCH";
-const string CONST_sitedisplay047 = "CPU";
-const string CONST_sitedisplay046 = "TABLE";
-const string CONST_sitedisplay045 = "SIGN!";
-const string CONST_sitedisplay044 = "RENT?";
-const string CONST_sitedisplay043 = "STAGE";
-const string CONST_sitedisplay042 = "MIC";
-const string CONST_sitedisplay041 = "SAFE!";
-const string CONST_sitedisplay040 = "ARMRY";
-const string CONST_sitedisplay039 = "EQUIP";
-const string CONST_sitedisplay038 = "INTEL";
-const string CONST_sitedisplay037 = "CTROL";
-const string CONST_sitedisplay036 = "JURY!";
-const string CONST_sitedisplay035 = "CELLS";
-const string CONST_sitedisplay034 = "CAGES";
-const string CONST_sitedisplay033 = "POWER";
-const string CONST_sitedisplay031 = "TRAP!";
-const string CONST_sitedisplay030 = "~$~";
-const string CONST_sitedisplay029 = "EXT";
-const string CONST_sitedisplay022 = "LCS";
-const string CONST_sitedisplay018 = "CCS";
-const string CONST_sitedisplay014 = "GNG";
-const string CONST_sitedisplay010 = "   ";
-const string CONST_sitedisplay096 = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
-const string CONST_sitedisplay062 = "³                         ³";
-const string CONST_sitedisplay061 = "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ";
-const string CONST_sitedisplay060 = "ÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ";
-const string CONST_sitedisplay028 = "¼";
-const string CONST_sitedisplay027 = "È";
-const string CONST_sitedisplay026 = "»";
-const string CONST_sitedisplay025 = "É";
-const string CONST_sitedisplay024 = "Í";
-const string CONST_sitedisplay023 = "º";
-const string tag_ARMOR = "ARMOR";
-//const string blankString = "";
-const string tag_MONEY = "MONEY";
-const string tag_CEO = "CEO";
-void printchaseencounter();
-bool isThereGroundLoot();
 // Imperfect but quick and dirty line of sight check
 // Only works if the target point is at most two spaces
 // away in any direction
 bool LineOfSight(int x, int y, int z)
 {
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (levelmap[x][y][z].flag&SITEBLOCK_KNOWN) return true; // already explored
 	if (DIFF(x, loc_coord.locx) > 2 || DIFF(y, loc_coord.locy) > 2) return false; // too far away
 	if (DIFF(x, loc_coord.locx) <= 1 && DIFF(y, loc_coord.locy) <= 1) return true; // right next to us or right where we're standing
@@ -627,7 +453,6 @@ bool LineOfSight(int x, int y, int z)
 		return false; // Blocked on some axis
 	return true;
 }
-vector<NameAndAlignment> getEncounterNameAndAlignment();
 /* prints the names of creatures you see */
 void printencounter()
 {
@@ -649,20 +474,7 @@ void printencounter()
 		if (px > 37) px = 1, py++;
 	}
 }
-enum wallDirection {
-	WALL_UP = 0,
-	WALL_DOWN = 1,
-	WALL_LEFT = 2,
-	WALL_RIGHT = 3,
-	CORNER_UL = 4,
-	CORNER_UR = 5,
-	CORNER_DL = 6,
-	CORNER_DR = 7
-};
 void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) {
-
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	if (x > loc_coord.locx && x < MAPX) visible[WALL_LEFT] = true;
 	if (x > 0 && x < loc_coord.locx) visible[WALL_RIGHT] = true;
@@ -674,8 +486,6 @@ void checkForDirectionalVisibility(bool(&visible)[8], const int x, const int y) 
 	if (y > 0 && y < loc_coord.locy && x>0 && x < loc_coord.locx) visible[CORNER_DR] = true;
 }
 void checkForLOS(bool(&visible)[8], const int x, const int y, const int z) {
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 
 	if (!LineOfSight(x - 1, y, z)) visible[WALL_LEFT] = false;
@@ -690,7 +500,6 @@ void checkForLOS(bool(&visible)[8], const int x, const int y, const int z) {
 
 int getSiteFlagForWall(const int x, const int y, const int z, const wallDirection wall) {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	switch (wall) {
 	case WALL_UP:
@@ -768,7 +577,6 @@ void checkForLCSGraffiti(char(&graffiti)[4][4], char(&graffiticolor)[4], const i
 void printwall(int x, int y, const int z, const int px, const int py)
 {
 
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	bool visible[8] = { false,false,false,false,false,false,false,false };
 	bool bloody[8] = { false,false,false,false,false,false,false,false };
 	char graffiti[4][4] = { "   ","   ","   ","   " };
@@ -1088,7 +896,6 @@ void printstatusofsquare(const int flag, const int px, const int py) {
 }
 void printblock(int x, int y, int z, int px, int py)
 {
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	if (!LineOfSight(x, y, z))
 	{
 		set_color_easy(BLACK_ON_BLACK);
@@ -1136,53 +943,9 @@ void printblock(int x, int y, int z, int px, int py)
 		}
 	}
 }
-map<SpecialBlocks, string> specialString = {
-	map<SpecialBlocks, string>::value_type(SPECIAL_LAB_COSMETICS_CAGEDANIMALS, CONST_sitedisplay063),
-	map<SpecialBlocks, string>::value_type(SPECIAL_NUCLEAR_ONOFF, CONST_sitedisplay064),
-	map<SpecialBlocks, string>::value_type(SPECIAL_LAB_GENETIC_CAGEDANIMALS, CONST_sitedisplay065),
-	map<SpecialBlocks, string>::value_type(SPECIAL_POLICESTATION_LOCKUP, CONST_sitedisplay066),
-	map<SpecialBlocks, string>::value_type(SPECIAL_COURTHOUSE_LOCKUP, CONST_sitedisplay067),
-	map<SpecialBlocks, string>::value_type(SPECIAL_COURTHOUSE_JURYROOM, CONST_sitedisplay068),
-	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL, CONST_sitedisplay069),
-	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_LOW, CONST_sitedisplay069),
-	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_MEDIUM, CONST_sitedisplay069),
-	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_HIGH, CONST_sitedisplay069),
-	map<SpecialBlocks, string>::value_type(SPECIAL_INTEL_SUPERCOMPUTER, CONST_sitedisplay070),
-	map<SpecialBlocks, string>::value_type(SPECIAL_SWEATSHOP_EQUIPMENT, CONST_sitedisplay071),
-	map<SpecialBlocks, string>::value_type(SPECIAL_POLLUTER_EQUIPMENT, CONST_sitedisplay072),
-	map<SpecialBlocks, string>::value_type(SPECIAL_ARMORY, CONST_sitedisplay073),
-	map<SpecialBlocks, string>::value_type(SPECIAL_HOUSE_CEO, CONST_sitedisplay074),
-	map<SpecialBlocks, string>::value_type(SPECIAL_HOUSE_PHOTOS, CONST_sitedisplay075),
-	map<SpecialBlocks, string>::value_type(SPECIAL_CORPORATE_FILES, CONST_sitedisplay075),
-	map<SpecialBlocks, string>::value_type(SPECIAL_RADIO_BROADCASTSTUDIO, CONST_sitedisplay076),
-	map<SpecialBlocks, string>::value_type(SPECIAL_NEWS_BROADCASTSTUDIO, CONST_sitedisplay077),
-	map<SpecialBlocks, string>::value_type(SPECIAL_APARTMENT_LANDLORD, CONST_sitedisplay078),
-	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_ONE, CONST_sitedisplay079),
-	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_TWO, CONST_sitedisplay079),
-	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_THREE, CONST_sitedisplay079),
-	map<SpecialBlocks, string>::value_type(SPECIAL_DISPLAY_CASE, CONST_sitedisplay080),
-	map<SpecialBlocks, string>::value_type(SPECIAL_STAIRS_UP, CONST_sitedisplay081),
-	map<SpecialBlocks, string>::value_type(SPECIAL_STAIRS_DOWN, CONST_sitedisplay082),
-	map<SpecialBlocks, string>::value_type(SPECIAL_RESTAURANT_TABLE, CONST_sitedisplay083),
-	map<SpecialBlocks, string>::value_type(SPECIAL_CAFE_COMPUTER, CONST_sitedisplay084),
-	map<SpecialBlocks, string>::value_type(SPECIAL_PARK_BENCH, CONST_sitedisplay085),
-	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_VAULT, CONST_sitedisplay086),
-	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_TELLER, CONST_sitedisplay087),
-	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_MONEY, CONST_sitedisplay088),
-	map<SpecialBlocks, string>::value_type(SPECIAL_CCS_BOSS, CONST_sitedisplay089),
-	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_NW, CONST_sitedisplay090),
-	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_NE, CONST_sitedisplay090),
-	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_SW, CONST_sitedisplay090),
-	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_SE, CONST_sitedisplay090),
-};
-int encounterSize();
-int squadAlive();
 // Prints the map graphics in the bottom right of the screen
 void printsitemap(int x, int y, int z)
 {
-	extern bool mapshowing;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	mapshowing = true;
 	// Build the frame
 	set_color_easy(WHITE_ON_BLACK);
@@ -1241,7 +1004,6 @@ void printsitemap(int x, int y, int z)
 }
 void clearmaparea(bool lower, bool upper)
 {
-	extern bool mapshowing;
 	if (upper) mapshowing = false;
 	set_color_easy(WHITE_ON_BLACK);
 	for (int y = 8; y < 25; y++)
@@ -1255,7 +1017,6 @@ void clearmaparea(bool lower, bool upper)
 /* blanks a part of the screen */
 void clearcommandarea()
 {
-	extern short mode;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	for (int y = 9; y < 16; y++)
 		mvaddstrAlt(y, 0, CONST_sitedisplay102); // 53 spaces
@@ -1263,14 +1024,11 @@ void clearcommandarea()
 }
 void refreshmaparea()
 {
-	extern short mode;
-	extern coordinatest loc_coord;
 	if (mode == GAMEMODE_SITE) printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 	else clearmaparea(true, false);
 }
 void clearmessagearea(bool redrawmaparea)
 {
-	extern short mode;
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (redrawmaparea)
 	{
@@ -1286,15 +1044,9 @@ void clearmessagearea(bool redrawmaparea)
 		mvaddstrAlt(17, 0, CONST_sitedisplay102); // 53 spaces
 	}
 }
-int monthday();
 /* news - show major news story */
 void preparepage(const Deprecatednewsstoryst ns, const bool liberalguardian)
 {
-	extern string commaSpace;
-	extern int day;
-	extern int month;
-	extern int year;
-	extern unsigned char newstops[6][80][5][4];
 	set_color_easy(WHITE_ON_WHITE);
 	for (int x = 0; x < 80; x++)
 		for (int y = 0; y < 25; y++)
@@ -1351,7 +1103,6 @@ void preparepage(const Deprecatednewsstoryst ns, const bool liberalguardian)
 
 void displaycenterednewsfont(const std::string& str, int y)
 {
-	extern unsigned char bigletters[27][5][7][4];
 	int width = -1;
 	for (int s = 0; s < len(str); s++)
 	{
@@ -1404,7 +1155,6 @@ void displaycenterednewsfont(const std::string& str, int y)
 
 void displaynewspicture(int p, int y)
 {
-	extern unsigned char newspic[20][78][18][4];
 	for (int x2 = 0; x2 < 78; x2++)
 		for (int y2 = 0; y2 < 15; y2++)
 		{
@@ -1468,156 +1218,6 @@ void set_color_for_armor(const Armor armor) {
 	set_color(fg, bg, in);
 }
 
-#define CH_BOX_DRAWINGS_LIGHT_VERTICAL 0xb3
-#define CH_UPPER_HALF_BLOCK 0xdf
-#define CH_LOWER_HALF_BLOCK 0xdc
-#define CH_BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL 0xc5
-#define CH_FULL_BLOCK 0xdb
-#define CH_LIGHT_SHADE 0xb0
-#define CH_MEDIUM_SHADE 0xb1
-#define CH_DARK_SHADE 0xb2
-std::pair<ColorSetup, int> AmericanFlag[7][18] = {
-	{
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
-		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	},
-{
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-},
-{
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-},
-{
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-},
-{
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-},
-{
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
-},
-{
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
-},
-};
 
 bool has_ignited(const int c) {
 
@@ -1636,7 +1236,7 @@ bool has_ignited(const int c) {
 		c == ' ';
 }
 
-void printFlag() {
+void printFlagB() {
 	for (int i = 0; i < 7; i++) {
 		for (int j = 0; j < 18; j++) {
 			set_color_easy(AmericanFlag[i][j].first);
@@ -1644,23 +1244,34 @@ void printFlag() {
 		}
 	}
 }
+void printFlag() {
+	
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 17; j++) {
+				set_color_easy(ConfederateFlag[i][j].first);
+				mvaddchAlt(i + 10, j + 31, ConfederateFlag[i][j].second);
+			}
+		}
+}
 /* base - burn the flag */
 void burnflag()
 {
-	int flagparts = 126;
-	std::pair<ColorSetup, int> flag[18][7];
-	for (int y = 0; y < 7; y++) {
-		for (int x = 0; x < 18; x++) {
-			flag[x][y] = AmericanFlag[y][x];
+	const int FLAG_HEIGHT = 7;
+	const int FLAG_WIDTH = 17;
+	int flagparts = FLAG_HEIGHT * FLAG_WIDTH;
+	std::pair<ColorSetup, int> flag[FLAG_WIDTH][FLAG_HEIGHT];
+	for (int y = 0; y < FLAG_HEIGHT; y++) {
+		for (int x = 0; x < FLAG_WIDTH; x++) {
+			flag[x][y] = ConfederateFlag[y][x];
 		}
 	}
-	int x1 = LCSrandom(18);
-	int y1 = LCSrandom(7);
+	int x1 = LCSrandom(FLAG_WIDTH);
+	int y1 = LCSrandom(FLAG_HEIGHT);
 	flag[x1][y1] = std::pair<ColorSetup, int>(YELLOW_ON_BLACK_BRIGHT, CH_DARK_SHADE);
 	bool first = true;
 	while (flagparts > 0)
 	{
-		if (!first) for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
+		if (!first) for (int x = 0; x < FLAG_WIDTH; x++) for (int y = 0; y < FLAG_HEIGHT; y++)
 		{
 			if (flag[x][y].second == CH_BOX_DRAWINGS_LIGHT_VERTICAL) { flag[x][y] = std::pair<ColorSetup, int>(flag[x][y].first, CH_DARK_SHADE); }
 			else if (flag[x][y].second == CH_DARK_SHADE)
@@ -1678,7 +1289,7 @@ void burnflag()
 			}
 		}
 		else first = false;
-		for (int x = 0; x < 18; x++) for (int y = 0; y < 7; y++)
+		for (int x = 0; x < FLAG_WIDTH; x++) for (int y = 0; y < FLAG_HEIGHT; y++)
 		{
 			set_color_easy(flag[x][y].first);
 			mvaddchAlt(y + 10, x + 31, flag[x][y].second);
@@ -1689,8 +1300,8 @@ void burnflag()
 		bool gotnew = false;
 		while (!gotnew&&flagparts > 3)
 		{
-			int x = LCSrandom(18);
-			int y = LCSrandom(7);
+			int x = LCSrandom(FLAG_WIDTH);
+			int y = LCSrandom(FLAG_HEIGHT);
 
 			if (!has_ignited(flag[x][y].second))
 			{
@@ -1721,19 +1332,6 @@ void burnflag()
 	}
 }
 
-const string CONST_consolesupportB011 = "from status line";
-const string CONST_consolesupportB010 = "to status line";
-
-const string CONST_consolesupport011 = "rb";
-const string CONST_consolesupport012 = "wb";
-const string CONST_consolesupport010 = "cleartype.dat";
-const string CONST_consolesupport007 = "en_US.CP437";
-const string CONST_consolesupport005 = "en_US.UTF-8";
-const string CONST_consolesupport004 = "English_United States.437";
-const string CONST_consolesupport003 = "fsl";
-const string CONST_consolesupport002 = "tsl";
-const string CONST_consolesupport001 = "hs";
-const string CONST_consolesupport000 = "UTF-8";
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -1943,7 +1541,6 @@ BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
 void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
 {
-	extern bool fixcleartype;
 	if (fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
 	{
 		// first we get the font smoothing parameters from Windows so that the old settings are backed up
@@ -1978,7 +1575,6 @@ void begin_cleartype_fix() // execute this function after loading settings from 
 }
 void end_cleartype_fix() // execute this function after the user is done playing the game, but before the program closes
 {
-	extern bool fixcleartype;
 	if (fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
 	{
 		// restore the original settings the user had for font smoothing
