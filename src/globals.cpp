@@ -934,6 +934,7 @@ void sleeperSuccessfullyRecruits(const string name, const int id, const float in
 	gamelog.newline();
 	mvaddstrAlt(8, 1, recruit->getNameAndAlignment().name, gamelog);
 	addstrAlt(looksForwardToServing, gamelog);
+	gamelog.nextMessage();
 }
 
 

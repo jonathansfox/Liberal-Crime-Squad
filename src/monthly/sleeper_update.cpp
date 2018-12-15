@@ -18,291 +18,8 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /* monthly - sleeper behavior */
-Log gamelog; //The gamelog.
-Log xmllog; // Log for xml errors or bad values.
 
 
-map<CreatureTypes, vector<CreatureSkill> > skill_influence = {
-	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_ART,
-		{ SKILL_WRITING, SKILL_ART }),
-		map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PAINTER,
-			{ SKILL_ART }),
-			map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCULPTOR,
-				{ SKILL_ART }),
-				map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_MUSIC,
-					{ SKILL_WRITING, SKILL_MUSIC }),
-					map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_MUSICIAN,
-						{ SKILL_MUSIC }),
-						map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_AUTHOR,
-							{ SKILL_WRITING }),
-							map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JOURNALIST,
-								{ SKILL_WRITING }),
-								map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JUDGE_CONSERVATIVE,
-									{ SKILL_WRITING, SKILL_LAW }),
-									map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_LAWYER,
-										{ SKILL_LAW }),
-										map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_LABTECH,
-											{ SKILL_SCIENCE }),
-											map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_EMINENT,
-												{ SKILL_SCIENCE }),
-												map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_CEO,
-													{ SKILL_BUSINESS }),
-													map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_MANAGER,
-														{ SKILL_BUSINESS }),
-														map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PRIEST,
-															{ SKILL_RELIGION }),
-															map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_NUN,
-																{ SKILL_RELIGION }),
-																map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_EDUCATOR,
-																	{ SKILL_PSYCHOLOGY }),
-};
-map<CreatureTypes, int> super_sleepers_multiplier = {
-	map<CreatureTypes, int> ::value_type(CREATURE_CORPORATE_CEO, 20),
-	map<CreatureTypes, int> ::value_type(CREATURE_POLITICIAN, 20),
-	map<CreatureTypes, int> ::value_type(CREATURE_SCIENTIST_EMINENT, 20),
-	map<CreatureTypes, int> ::value_type(CREATURE_DEATHSQUAD, 6),
-	map<CreatureTypes, int> ::value_type(CREATURE_EDUCATOR, 6),
-	map<CreatureTypes, int> ::value_type(CREATURE_MILITARYOFFICER, 6),
-	map<CreatureTypes, int> ::value_type(CREATURE_ACTOR, 4),
-	map<CreatureTypes, int> ::value_type(CREATURE_GANGUNIT, 4),
-	map<CreatureTypes, int> ::value_type(CREATURE_MILITARYPOLICE, 4),
-	map<CreatureTypes, int> ::value_type(CREATURE_SEAL, 4),
-};
-
-map<CreatureTypes, vector<Views> > creature_influences_views = {
-
-	/* Cultural leaders block - influences cultural issues */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_PRIEST,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-		),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_PAINTER,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SCULPTOR,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_AUTHOR,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_JOURNALIST,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_PSYCHOLOGIST,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_MUSICIAN,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_CRITIC_ART,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_CRITIC_MUSIC,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_ACTOR,
-		{ VIEW_WOMEN,
-		VIEW_CIVILRIGHTS,
-		VIEW_GAY,
-		VIEW_FREESPEECH,
-		VIEW_DRUGS,
-		VIEW_IMMIGRATION }
-	),
-	/* Legal block - influences an array of social issues */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_JUDGE_CONSERVATIVE,
-		{ VIEW_JUSTICES,
-		VIEW_FREESPEECH,
-		VIEW_INTELLIGENCE,
-		VIEW_POLICEBEHAVIOR,
-		VIEW_DEATHPENALTY,
-		VIEW_GUNCONTROL,
-		VIEW_DRUGS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_LAWYER,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DEATHPENALTY,
-		VIEW_GUNCONTROL,
-		VIEW_DRUGS }
-	),
-	/* Scientists block */
-	map<CreatureTypes, vector<Views> > ::value_type ( CREATURE_SCIENTIST_EMINENT,
-		{ VIEW_POLLUTION,
-		VIEW_NUCLEARPOWER,
-		VIEW_ANIMALRESEARCH,
-		VIEW_GENETICS }
-	),
-
-
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SCIENTIST_LABTECH,
-		{ VIEW_NUCLEARPOWER,
-		VIEW_ANIMALRESEARCH,
-		VIEW_GENETICS }
-	),
-	/* Corporate block */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_CORPORATE_CEO,
-		{ VIEW_CEOSALARY,
-		VIEW_WOMEN,
-		VIEW_TAXES,
-		VIEW_CORPORATECULTURE,
-		VIEW_SWEATSHOPS,
-		VIEW_POLLUTION,
-		VIEW_CIVILRIGHTS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_CORPORATE_MANAGER,
-		{ VIEW_WOMEN,
-		VIEW_TAXES,
-		VIEW_CORPORATECULTURE,
-		VIEW_SWEATSHOPS,
-		VIEW_POLLUTION,
-		VIEW_CIVILRIGHTS }
-	),
-	/* Law enforcement block */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_DEATHSQUAD,
-		{ VIEW_PRISONS,
-		VIEW_DEATHPENALTY,
-		VIEW_POLICEBEHAVIOR,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_GUNCONTROL,
-		VIEW_PRISONS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SWAT,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_GUNCONTROL,
-		VIEW_PRISONS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_COP,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_GUNCONTROL,
-		VIEW_PRISONS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_GANGUNIT,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_GUNCONTROL,
-		VIEW_PRISONS }
-	),
-	/* Prison block */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_EDUCATOR,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DEATHPENALTY,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_PRISONS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_PRISONGUARD,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DEATHPENALTY,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_PRISONS }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_PRISONER,
-		{ VIEW_POLICEBEHAVIOR,
-		VIEW_DEATHPENALTY,
-		VIEW_DRUGS,
-		VIEW_TORTURE,
-		VIEW_PRISONS }
-	),
-	/* Intelligence block */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SECRET_SERVICE,
-		{ VIEW_INTELLIGENCE }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_AGENT,
-		{ VIEW_INTELLIGENCE,
-		VIEW_TORTURE,
-		VIEW_PRISONS,
-		VIEW_FREESPEECH }
-	),
-	/* Military block */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_MERC,
-		{ VIEW_GUNCONTROL }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SOLDIER,
-		{ VIEW_MILITARY,
-		VIEW_TORTURE,
-		VIEW_GAY,
-		VIEW_WOMEN }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_VETERAN,
-		{ VIEW_MILITARY,
-		VIEW_TORTURE,
-		VIEW_GAY,
-		VIEW_WOMEN }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_MILITARYPOLICE,
-		{ VIEW_MILITARY,
-		VIEW_TORTURE,
-		VIEW_GAY,
-		VIEW_WOMEN }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_MILITARYOFFICER,
-		{ VIEW_MILITARY,
-		VIEW_TORTURE,
-		VIEW_GAY,
-		VIEW_WOMEN }
-	),
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_SEAL,
-		{ VIEW_MILITARY,
-		VIEW_TORTURE,
-		VIEW_GAY,
-		VIEW_WOMEN }
-	),
-	/* Sweatshop workers */
-	map<CreatureTypes, vector<Views> > ::value_type(CREATURE_WORKER_SWEATSHOP,
-		{ VIEW_IMMIGRATION,
-		VIEW_SWEATSHOPS }
-	),
-};
 
 /*********************************
 **
@@ -396,15 +113,6 @@ void sleeper_influence(DeprecatedCreature &cr, char &clearformess, char canseeth
 **   SLEEPERS SNOOPING AROUND
 **
 **********************************/
-void creatureLeaksIntel(DeprecatedCreature cr, const string& leak, const string& stashed) {
-	eraseAlt();
-	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.getNameAndAlignment().name, gamelog);
-	addstrAlt(leak, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(7, 1, stashed, gamelog);
-	gamelog.nextMessage();
-}
 void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
 	int homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
@@ -413,13 +121,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		cr.juice -= 1;
 		if (cr.juice < -2)
 		{
-			eraseAlt();
-			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.getNameAndAlignment().name, gamelog);
-			addstrAlt(hasBeenCaughtSnooping, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(8, 1, isNowHomeless, gamelog);
-			gamelog.nextMessage();
+			printHasBeenCaughtSnooping(cr.getNameAndAlignment().name);
 			pressAnyKey();
 			removesquadinfo(cr);
 			cr.location = homes;
@@ -448,7 +150,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_PRIVACY] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_SECRETDOCUMENTS, homes);
-			creatureLeaksIntel(cr, hasLeakedIntelligence, they_are_stashed);
+			printCreatureLeaksIntelligence(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -461,7 +163,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_POLICERECORDS, homes);
-			creatureLeaksIntel(cr, hasLeakedPolice, they_are_stashed);
+			printCreatureLeaksPolice(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -472,7 +174,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_CORPORATE] + 3) && cr.type != CREATURE_CORPORATE_CEO) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CORPFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedCorporate, they_are_stashed);
+			printCreatureLeaksCorp(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -482,7 +184,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_POLICEBEHAVIOR] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_PRISONFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedPrison, they_are_stashed);
+			printCreatureLeaksPrison(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -494,7 +196,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CABLENEWSFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedCableNews, papersAreStashed);
+			printCreatureLeaksCable(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -506,7 +208,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 			// less any particular action the media takes seems scandalous
 			if (LCSrandom(lawList[LAW_FREESPEECH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_AMRADIOFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedAMRadio, papersAreStashed);
+			printCreatureLeaksRadio(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -516,7 +218,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(lawList[LAW_ANIMALRESEARCH] + 3)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_RESEARCHFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedAnimalResearch, they_are_stashed);
+			printCreatureLeaksAnimalResearch(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -525,7 +227,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (LCSrandom(5)) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_JUDGEFILES, homes);
-			creatureLeaksIntel(cr, hasLeakedJudiciary, papersAreStashed);
+			printCreatureLeaksJudiciary(cr.getNameAndAlignment().name);
 			pause = true;
 		}
 		break;
@@ -534,19 +236,20 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 		{
 			if (ccsexposure >= CCSEXPOSURE_LCSGOTDATA) break;
 			LocationsPool::getInstance().stashThisLootHere(tag_LOOT_CCS_BACKERLIST, homes);
-			creatureLeaksIntel(cr, hasLeakedCCS, diskIsStashed);
+			printCreatureLeaksCCS(cr.getNameAndAlignment().name);
 			pause = true;
 			ccsexposure = CCSEXPOSURE_LCSGOTDATA;
 		}
 		break;
 	}
-	if (pause) getkeyAlt();
+	if (pause) pressAnyKey();
 }
 /*********************************
 **
 **   SLEEPERS EMBEZZLING FUNDS
 **
 **********************************/
+
 void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
 	if (LCSrandom(100) > 100 * cr.infiltration)
@@ -554,11 +257,7 @@ void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethi
 		cr.juice -= 1;
 		if (cr.juice < -2)
 		{
-			eraseAlt();
-			mvaddstrAlt(6, 1, string_sleeper, gamelog);
-			addstrAlt(cr.getNameAndAlignment().name, gamelog);
-			addstrAlt(arrestedWhileEmbezzling, gamelog);
-			gamelog.nextMessage();
+			printArrestedWhileEmbezzling(cr.getNameAndAlignment().name);
 			pressAnyKey();
 			cr.criminalize_me(LAWFLAG_COMMERCE);
 			removesquadinfo(cr);
@@ -815,14 +514,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 **   SLEEPERS STEALING THINGS
 **
 **********************************/
-void printArrestedWhileStealing(string crname) {
-	eraseAlt();
-	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(crname, gamelog);
-	addstrAlt(arrestedWhileStealing, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
-}
+
 void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
 	if (LCSrandom(100) > 100 * cr.infiltration)
@@ -831,6 +523,7 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 		if (cr.juice < -2)
 		{
 			printArrestedWhileStealing(cr.getNameAndAlignment().name);
+			pressAnyKey();
 
 			cr.criminalize_me(LAWFLAG_THEFT);
 			removesquadinfo(cr);
@@ -855,23 +548,13 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 	{
 		stashRandomStolenItem(cr, numberofxmlfails);
 	}
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(6, 1, string_sleeper, gamelog);
-	addstrAlt(cr.getNameAndAlignment().name, gamelog);
-	addstrAlt(droppedOffPackage, gamelog);
-	gamelog.nextMessage();
+	printSleeperDropOffPackage(cr.getNameAndAlignment().name);
 	if (numberofxmlfails > 0) {
-		set_color_easy(RED_ON_BLUE_BRIGHT);
-		mvaddstrAlt(8, 1, itemNotFound, xmllog);
-		mvaddstrAlt(9, 1, tostring(numberofxmlfails), xmllog);
-		addstrAlt(lostStolenItem, xmllog);
-		set_color_easy(RED_ON_GREEN_BRIGHT);
-		mvaddstrAlt(11, 1, contactModAuthor, xmllog);
-		xmllog.nextMessage();
+		printxmlFail(numberofxmlfails);
 	}
 	pressAnyKey();
 }
+
 /*********************************
 **
 **   SLEEPERS CREATING SCANDALS
@@ -906,8 +589,7 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 			if (getEncounterWorkLocation(e) == cr.worklocation || !LCSrandom(5))
 			{
 				if (encounter[e].align != 1 && LCSrandom(5))continue;
-				sleeperSuccessfullyRecruits(cr.getNameAndAlignment().name, cr.id, cr.infiltration, e);
-				gamelog.nextMessage();
+				sleeperSuccessfullyRecruits(cr.getNameAndAlignment().name, cr.id, cr.infiltration, e);				
 				pressAnyKey();
 				if (!subordinatesleft(cr))cr.set_activity(ACTIVITY_NONE);
 				incrementStatRecruits();

@@ -54,6 +54,10 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 
+
+
+
+
 void createNewStoryMassacre(const int loc, const int killnumber) {
 
 	Deprecatednewsstoryst *ns = new Deprecatednewsstoryst;
@@ -1165,33 +1169,26 @@ int numbereating(int loc)
 	return eaters;
 }
 void noOneIsThere(const int l) {
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege176, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege177, gamelog);
-	gamelog.newline();
+	printConservativesRaidedUnoccupiedSafehouse(LocationsPool::getInstance().getLocationName(l));
 	if (LocationsPool::getInstance().getSiegeType(l) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(l) == SITE_INDUSTRY_WAREHOUSE)
 		CCSCapturesSite(l);
 	pressAnyKey();
-	int y = 9;
+	int y = 0;
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l) continue;
 		if (!pool[p]->getNameAndAlignment().alive)
 		{
-			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name);
-			addstrAlt(CONST_siege178, gamelog);
-			gamelog.newline();
+			printCorpseRecovered(pool[p]->getNameAndAlignment().name, y);
+			y++;
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			continue;
 		}
 		if (pool[p]->align != 1)
 		{
-			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name);
-			addstrAlt(CONST_siege179, gamelog);
-			gamelog.newline();
+			printLiberalRescued(pool[p]->getNameAndAlignment().name, y);
+			y++;
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			continue;
@@ -1202,39 +1199,33 @@ void noOneIsThere(const int l) {
 	gamelog.newline();
 	endLocationSiege(l);
 }
+
+
 void airStrike(const char clearformess, const int l, int &num_liberals) {
 
 
 	bool hit = true;
-	if (clearformess) eraseAlt();
-	else makedelimiter();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege189, gamelog);
-	gamelog.newline();
+	printCONST_siege189(clearformess);
 	pressAnyKey();
 	bool hasAAGun = siteHasAAGun(l);
 	bool hasGenerator = hasAGenerator(l);
 	if (hasAAGun)
 	{
-		if (clearformess) eraseAlt();
-		else makedelimiter();
-		mvaddstrAlt(8, 1, CONST_siege190, gamelog);
-		gamelog.newline();
+ printCONST_siege190(clearformess);
 		pressAnyKey();
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		if (LCSrandom(5))
 		{
 			hit = false;
-			if (LCSrandom(2)) mvaddstrAlt(8, 1, CONST_siege191, gamelog);
+			if (LCSrandom(2)) {
+				printCONST_siege191(clearformess);
+			}
 			else
 			{
-				mvaddstrAlt(8, 1, CONST_siege192, gamelog);
-				gamelog.newline();
+				printCONST_siege192(clearformess);
 				pressAnyKey();
-				if (clearformess) eraseAlt();
-				else makedelimiter();
-				mvaddstrAlt(8, 1, CONST_siege193, gamelog);
+				printCONST_siege193(clearformess);
 				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
 			}
 			gamelog.newline();
@@ -1242,43 +1233,27 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 		}
 		else
 		{
-			mvaddstrAlt(8, 1, CONST_siege194, gamelog);
-			gamelog.newline();
+			printCONST_siege194(clearformess);
 			pressAnyKey();
 		}
 	}
 	if (hit)
 	{
-		if (clearformess) eraseAlt();
-		else makedelimiter();
-		mvaddstrAlt(8, 1, CONST_siege195, gamelog);
-		gamelog.newline();
+		printCONST_siege195(clearformess);
 		pressAnyKey();
 		if (hasAAGun && !LCSrandom(3))
 		{
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			mvaddstrAlt(8, 1, CONST_siege196, gamelog);
-			gamelog.newline();
+			printCONST_siege196(clearformess);
 			pressAnyKey();
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			mvaddstrAlt(8, 1, CONST_siege197, gamelog);
-			gamelog.newline();
+			printCONST_siege197(clearformess);
 			pressAnyKey();
 			deleteAAGun(l);
 		}
 		else if (hasGenerator && !LCSrandom(3))
 		{
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			mvaddstrAlt(8, 1, CONST_siege198, gamelog);
-			gamelog.newline();
+			printCONST_siege198(clearformess);
 			pressAnyKey();
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			mvaddstrAlt(8, 1, CONST_siege199, gamelog);
-			gamelog.newline();
+			printCONST_siege199(clearformess);
 			pressAnyKey();
 			deleteGeneratorLightsOff(l);
 		}
@@ -1290,32 +1265,24 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 			{
 				if (clearformess) eraseAlt();
 				else makedelimiter();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				int targ = pickrandom(pol);
 				if ((int)LCSrandom(100) > pool[targ]->juice)
 				{
-					mvaddstrAlt(8, 1, pool[targ]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_siege200, gamelog);
-					gamelog.newline();
+					printWasKilledInBombing(pool[targ]->getNameAndAlignment().name);
 					if (pool[targ]->align == 1) stat_dead++, num_liberals--;
 					removesquadinfo(*pool[targ]);
 					pool[targ]->die();
 				}
 				else
 				{
-					mvaddstrAlt(8, 1, pool[targ]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_siege201, gamelog);
-					gamelog.newline();
+					printNarrowlyAvoidsDeath(pool[targ]->getNameAndAlignment().name);
 				}
 				pressAnyKey();
 			}
 		}
 		else
 		{
-			if (clearformess) eraseAlt();
-			else makedelimiter();
-			mvaddstrAlt(8, 1, CONST_siege202, gamelog);
-			gamelog.newline();
+			printNoOneIsHurt(clearformess);
 			pressAnyKey();
 		}
 	}
@@ -1332,92 +1299,25 @@ void shotAtBySniper(const char clearformess, const int l, int &num_liberals) {
 		int targ = pickrandom(pol);
 		if ((int)LCSrandom(50) > pool[targ]->juice)
 		{
-			mvaddstrAlt(8, 1, CONST_siege185, gamelog);
-			addstrAlt(pool[targ]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege188, gamelog);
-			gamelog.newline();
+			printShotBySniper(pool[targ]->getNameAndAlignment().name);
 			if (pool[targ]->align == 1) stat_dead++, num_liberals--;
 			removesquadinfo(*pool[targ]);
 			pool[targ]->die();
 		}
 		else
 		{
-			mvaddstrAlt(8, 1, CONST_siege187, gamelog);
-			addstrAlt(pool[targ]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege188, gamelog);
-			gamelog.newline();
+			printMissedBySniper(pool[targ]->getNameAndAlignment().name);
+			
 		}
 		pressAnyKey();
 	}
 }
-void printReporterDuringSiege(const string repname, const string name, const int segmentpower) {
 
-	string line_one;
-	string line_two = blankString;
-	if (segmentpower < 15)
-	{
-		line_one = repname + CONST_siege210;
-		line_two = CONST_siege211;
-		if (LCSrandom(insult_for_liberal.size() + 1)) {
-			mvaddstrAlt(10, 1, pickrandom(insult_for_liberal));
-		}
-		else {
-			if (lawList[LAW_FREESPEECH] == -2) mvaddstrAlt(10, 1, CONST_siege212, gamelog);
-			else mvaddstrAlt(10, 1, CONST_siege213, gamelog);
-		}
-		addstrAlt(singleSpace, gamelog);
-		addstrAlt(pickrandom(word_replacing_liberal));
-		addstrAlt(singleDot, gamelog);
-	}
-	else if (segmentpower < 20)
-	{
-		line_one = CONST_siege214 + name + CONST_siege215;
-	}
-	else if (segmentpower < 25)
-	{
-		line_one = CONST_siege216 + name + CONST_siege217;
-	}
-	else if (segmentpower < 30)
-	{
-		line_one = name + CONST_siege218;
-
-	}
-	else if (segmentpower < 45)
-	{
-		line_one = name + CONST_siege219;
-	}
-	else if (segmentpower < 60)
-	{
-		line_one = CONST_siege220;
-		line_two = CONST_siege221;
-	}
-	else
-	{
-		line_one = repname + CONST_siege222;
-		line_two = CONST_siege223 + name + CONST_siege224;
-	}
-	mvaddstrAlt(8, 1, line_one, gamelog);
-	if (len(line_two) > 0) {
-		mvaddstrAlt(9, 1, line_two, gamelog);
-	}
-	gamelog.newline();
-}
 void generateReporterDuringSiege(const int l) {
 
 
 	string repname = generate_name();
-	set_color_easy(WHITE_ON_BLACK);
-	eraseAlt();
-	mvaddstrAlt(1, 1, CONST_siege205, gamelog);
-	addstrAlt(repname, gamelog);
-	addstrAlt(CONST_siege206, gamelog);
-	addstrAlt(pickrandom(words_meaning_news), gamelog);
-	addstrAlt(singleSpace);
-	addstrAlt(pickrandom(newspaper_first_name), gamelog);
-	addstrAlt(singleSpace, gamelog);
-	addstrAlt(pickrandom(newspaper_last_name), gamelog);
-	mvaddstrAlt(2, 1, CONST_siege207, gamelog);
-	gamelog.newline();
+	printReporterEnteredCompound(repname);
 	pressAnyKey();
 	int segmentpower = printBestLCSMemberForNews(repname, l);
 	pressAnyKey();
@@ -1434,11 +1334,7 @@ int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
 		!(hasAGenerator(l)) && !LCSrandom(10))
 	{
 		no_bad = 0;
-		if (clearformess) eraseAlt();
-		else makedelimiter();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege184, gamelog);
-		gamelog.newline();
+		printThePoliceCutLights(clearformess);
 		pressAnyKey();
 		setLightsOff(l);
 	}
@@ -1459,18 +1355,9 @@ int siegeDontAttack(const int l, const bool clearformess, int num_liberals) {
 	{
 		no_bad = 0;
 		//ENGINEERS
-		if (clearformess) eraseAlt();
-		else makedelimiter();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege203, gamelog);
-		gamelog.newline();
+		printEngineersRemoveTankTrap(clearformess);
 		pressAnyKey();
-		if (!clearformess)
-		{
-			makedelimiter();
-		}
-		mvaddstrAlt(clearformess ? 9 : 8, 1, CONST_siege204, gamelog);
-		gamelog.newline();
+		printTanksMoveToEntrance(clearformess);
 		pressAnyKey();
 		LocationsPool::getInstance().deleteTankTraps(l);
 	}
@@ -1511,19 +1398,14 @@ void siegeturn(char clearformess)
 			if (!LocationsPool::getInstance().isThisUnderAttack(l))
 			{
 				// Seperate logging message.
-				gamelog.record(CONST_siege180);
-				gamelog.newline();
+				logADayPasses();
 				//EAT
 				bool starving = false;
 				int eaters = numbereating(l);
 				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) == 0 && eaters > 0)
 				{
 					starving = true;
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_siege181, gamelog);
-					gamelog.newline();
+					printYourLiberalsAreStarving(clearformess);
 					pressAnyKey();
 				}
 				if (LocationsPool::getInstance().get_specific_integer(INT_GETSTORESAMOUNT, l) >= eaters) reduceCompoundStores(l, eaters);
@@ -1538,23 +1420,14 @@ void siegeturn(char clearformess)
 					if (pool[p]->blood <= 0)
 					{
 						pool[p]->die();
-						if (clearformess) eraseAlt();
-						else makedelimiter();
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
-						addstrAlt(CONST_siege182, gamelog);
-						gamelog.newline();
+						printHasStarvedToDeath(pool[p]->getNameAndAlignment().name, clearformess);
 						pressAnyKey();
 					}
 				}
 				if (!LCSrandom(12))attack = 1;
 				if (attack)
 				{
-					if (clearformess) eraseAlt();
-					else makedelimiter();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 1, CONST_siege183, gamelog);
-					gamelog.newline();
+					printTheCopsAreComing(clearformess);
 					pressAnyKey();
 					setUnderAttack(l);
 				}
@@ -1582,24 +1455,11 @@ void escapesiege(char won)
 	{
 		music.play(MUSIC_CONQUER);
 		//GIVE INFO SCREEN
-		eraseAlt();
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(1, 32, CONST_siege225, gamelog);
-		gamelog.nextMessage();
-		set_color_easy(WHITE_ON_BLACK);
-		int yLevel = 3;
-		for (int i = 0; i < len(engageConservativesEscape); i++) {
-			mvaddstrAlt(yLevel + i, 11, engageConservativesEscape[i]);
-		}
-		yLevel += len(engageConservativesEscape);
+		printYouHaveEscaped();
 		int homes = -1;
 		if (activesquad)
 			if (activesquad->squad[0] != NULL)
 				homes = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, activesquad->squad[0]->location);
-		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(yLevel + 1, 11, CONST_siege226);
-		// Seperate logging text
-		gamelog.log(CONST_siege227);
 		pressAnyKey();
 		//dump retrieved loot in homeless shelter - is there anywhere better to put it?
 		if (activesquad&&homes != -1) dumpLootAtLocation(homes, activesquad->loot);
@@ -1623,32 +1483,15 @@ void escapesiege(char won)
 		if (police_heat < 4) police_heat++;
 	}
 }
+
 /* siege - flavor text when you fought off the raid */
 void conquertext()
 {
 	//GIVE INFO SCREEN
 	music.play(MUSIC_CONQUER);
-	eraseAlt();
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
-	gamelog.newline();
-	if (LocationsPool::getInstance().getSiegeType(getCurrentSite()) == SIEGE_POLICE)
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3, 16, CONST_siege229, gamelog);
-		mvaddstrAlt(4, 11, CONST_siege230, gamelog);
-		mvaddstrAlt(5, 11, CONST_siege231, gamelog);
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(3, 16, CONST_siege232, gamelog);
-		mvaddstrAlt(4, 11, CONST_siege233, gamelog);
-		mvaddstrAlt(5, 11, CONST_siege234, gamelog);
-	}
-	gamelog.nextMessage();
-	mvaddstrAlt(7, 19, CONST_siege274);
-	while (getkeyAlt() != 'c');
+	printConquerText(LocationsPool::getInstance().getSiegeType(getCurrentSite()) == SIEGE_POLICE);
+	pressSpecificKey('c', 'x');
+	//while (getkeyAlt() != 'c');
 }
 void addTank() {
 
@@ -1663,6 +1506,8 @@ void checkIfRunningFromCops() {
 		criminalizeparty(LAWFLAG_RESIST);
 	}
 }
+
+void addNewLineIfFoughtThisRound();
 // Siege -- Mass combat outside safehouse
 char sally_forth_aux(int loc)
 {
@@ -1704,41 +1549,25 @@ char sally_forth_aux(int loc)
 		int encsize = encounterSize();
 		// Let's roll
 		autopromote(loc);
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, LocationsPool::getInstance().getLocationName(loc));
+		printLocationName(LocationsPool::getInstance().getLocationName(loc));
+
 		// Player's party
 		if (partyalive == 0) party_status = -1;
 		printparty();
 		if (partyalive > 0)
 		{
 			// Options
-			if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 40, change_squad_order);
-			if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 40, check_status_of_squad_liberal);
-			if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
-			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 40, show_squad_liberal_status);
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9, 1, CONST_siege236);
-			mvaddstrAlt(10, 1, CONST_siege237);
-			mvaddstrAlt(11, 1, CONST_siege238);
-			mvaddstrAlt(12, 1, CONST_siege239);
+			printSiegeOptions(partysize, party_status);
 		}
 		else
 		{
 			endcheck(END_BUT_NOT_END); // play the right music in case we're dead
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(9, 1, CONST_siege240);
+			printReflectOnYourConJudgement();
 		}
 		// Enemies
 		printencounter();
 		// check if we fought the previous loop; if so, add a blank gamelog line
-		if (foughtthisround) gamelog.newline();
-		foughtthisround = 0;
+		addNewLineIfFoughtThisRound();
 		int c = getkeyAlt();
 		// Reflecting on your poor judgment
 		if (partyalive == 0 && c == 'c' && !endcheck())
@@ -1784,10 +1613,7 @@ char sally_forth_aux(int loc)
 				if (ranaway)
 				{
 					music.play(MUSIC_CONQUER);
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					clearmessagearea();
-					mvaddstrAlt(16, 1, CONST_siege241, gamelog);
-					gamelog.nextMessage();
+					printYoureFree();
 					pressAnyKey();
 					escapesiege(false);
 					return 1;
@@ -1795,10 +1621,7 @@ char sally_forth_aux(int loc)
 				else
 				{
 					music.play(MUSIC_CONQUER);
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					clearmessagearea();
-					mvaddstrAlt(16, 1, CONST_siege242, gamelog);
-					gamelog.nextMessage();
+					printSiegeIsBroken();
 					pressAnyKey();
 					conquertext();
 					escapesiege(true);
@@ -1826,10 +1649,10 @@ void createNewStoryEscape(const int loc) {
 
 
 	// If you fail, make sure the safehouse isn't under siege anymore by
-	// forcing you to CONST_siege247.
+	// forcing you to give up.
 	if (result == 0)
 	{
-		gamelog.log(CONST_siege248);
+		logDefeat();
 		resolvesafehouses();
 	}
 }
@@ -1838,25 +1661,10 @@ void sally_forth()
 {
 	//GIVE INFO SCREEN
 	music.play(MUSIC_DEFENSE);
-	eraseAlt();
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 26, CONST_siege243);
-	set_color_easy(WHITE_ON_BLACK);
-	int yLevel = 3;
-	for (int i = 0; i < len(nextSiege); i++) {
-		mvaddstrAlt(yLevel + i, 11, nextSiege[i]);
-	}
-	yLevel++;
-	yLevel += len(nextSiege);
-	for (int i = 0; i < len(nextSiegeAgain); i++) {
-		mvaddstrAlt(yLevel + i, 11, nextSiegeAgain[i]);
-	}
+	printSallyForthSiege();
 	int loc = getEscapeEngageLocation();
 	if (loc == -1)return;
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23, 11, CONST_siege252);
-	// Seperate logging text
-	gamelog.log(CONST_siege245);
+	printSallyForthFooter();
 	pressAnyKey();
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		CCSCapturesSite(loc); // CCS Captures warehouse -- this will be reversed if you fight them off
@@ -1871,34 +1679,18 @@ void sally_forth()
 	//START FIGHTING
 	createNewStoryEscape(loc);
 }
+
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage()
 {
 	music.play(MUSIC_DEFENSE);
 	//GIVE INFO SCREEN
-	eraseAlt();
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 26, CONST_siege249);
-	set_color_easy(WHITE_ON_BLACK);
-	int yLevel = 3;
-	for (int i = 0; i < len(engageConservatives); i++) {
-		mvaddstrAlt(yLevel + i, 11, engageConservatives[i]);
-	}
-	yLevel += len(engageConservatives);
+	printEscapeEngageInfo();
+
 	int loc = getEscapeEngageLocation();
 	if (loc == -1) return;
-	if (LocationsPool::getInstance().siteHasCameras(loc))
-	{
-		mvaddstrAlt(yLevel, 16, CONST_siege250);
-	}
-	if (LocationsPool::getInstance().hasTraps(loc))
-	{
-		mvaddstrAlt(yLevel + 1, 16, CONST_siege251);
-	}
-	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23, 11, CONST_siege252);
-	// Seperate logging text
-	gamelog.log(CONST_siege253);
+
+	printEscapeEngageInfoFooter(LocationsPool::getInstance().siteHasCameras(loc), LocationsPool::getInstance().hasTraps(loc));
 	pressAnyKey();
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		CCSCapturesSite(loc); // CCS Captures warehouse -- this will be reversed if you fight them off
@@ -1914,56 +1706,17 @@ void escape_engage()
 	createNewStoryFieldAttack(loc);
 	mode_site(loc);
 }
+
 /* siege - flavor text when you crush a CCS safe house */
 void conquertextccs()
 {
 	music.play(MUSIC_CONQUER);
 	//GIVE INFO SCREEN
-	eraseAlt();
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
-	gamelog.newline();
-	if (ccs_kills < 3)
+	printConquerTextCCS(ccs_siege_kills, ccs_kills);
+	if (ccs_kills >= 3)
 	{
-		set_color_easy(WHITE_ON_BLACK);
-		if (ccs_siege_kills > 10)
-		{
-			mvaddstrAlt(3, 16, CONST_siege263, gamelog);
-			mvaddstrAlt(4, 11, CONST_siege257, gamelog);
-		}
-		else
-		{
-			mvaddstrAlt(3, 16, CONST_siege258, gamelog);
-			mvaddstrAlt(4, 11, CONST_siege268);
-		}
-		addstrAlt(CONST_siege260, gamelog);
-		mvaddstrAlt(5, 11, CONST_siege261, gamelog);
-		mvaddstrAlt(6, 11, CONST_siege262, gamelog);
-	}
-	else
-	{
-		if (ccs_siege_kills > 10)
-		{
-			mvaddstrAlt(3, 16, CONST_siege263, gamelog);
-			mvaddstrAlt(4, 11, CONST_siege264, gamelog);
-			mvaddstrAlt(6, 16, CONST_siege265, gamelog);
-			mvaddstrAlt(7, 11, CONST_siege266, gamelog);
-		}
-		else
-		{
-			mvaddstrAlt(3, 16, CONST_siege267, gamelog);
-			mvaddstrAlt(4, 11, CONST_siege268, gamelog);
-			mvaddstrAlt(6, 16, CONST_siege269, gamelog);
-			mvaddstrAlt(7, 11, CONST_siege270, gamelog);
-		}
-		gamelog.newline();
-		mvaddstrAlt(9, 16, CONST_siege271, gamelog);
-		mvaddstrAlt(10, 16, CONST_siege272, gamelog);
-		gamelog.newline();
-		mvaddstrAlt(12, 5, CONST_siege273, gamelog);
 		juiceEntireCreaturePool(200, 1000);
 	}
-	gamelog.nextMessage();
-	mvaddstrAlt(15, 19, CONST_siege274);
-	while (getkeyAlt() != 'c');
+	pressSpecificKey('c', 'x');
+	//while (getkeyAlt() != 'c');
 }

@@ -137,7 +137,7 @@ void title_screen::mode_title()
 			automatedDataTests();
 			printTitleScreen();
 		}
-		printMusicFooter();
+		printMusicFooter(music.isEnabled());
 		if (c == ESC || c == 'x') end_game();
 		c = getkeyAlt();
 	} while (c == 'm' || c == 'h' || c == 'x' || c == ESC || c == 'd');

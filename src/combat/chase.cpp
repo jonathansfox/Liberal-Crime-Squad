@@ -345,6 +345,8 @@ void destroyAllCarsOfParty() {
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(9, 1, CONST_chase079);
 }
+
+void addNewLineIfFoughtThisRound();
 LOOP_CONTINUATION increment_footchase() {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int partysize = activesquadSize(), partyalive = activesquadAlive();
@@ -366,8 +368,9 @@ LOOP_CONTINUATION increment_footchase() {
 	//PRINT ENEMIES
 	printchaseencounter();
 	// check if we fought the previous loop; if so, add a blank gamelog line
-	if (foughtthisround)gamelog.newline();
-	foughtthisround = 0;
+	
+	addNewLineIfFoughtThisRound();
+
 	int c = getkeyAlt();
 	if (partyalive == 0 && c == 'c')
 	{

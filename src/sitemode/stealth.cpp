@@ -25,10 +25,7 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
- vector<string> blew_stealth_check;
- vector<file_and_text_collection> stealth_text_file_collection = {
-	 customText(&blew_stealth_check, stealth + CONST_stealth053),
- };
+ 
  void noticecheck(int exclude, int difficulty)
  {
 
@@ -40,23 +37,19 @@ This file is part of Liberal Crime Squad.                                       
 		 sneak = activesquad->squad[i]->get_skill(SKILL_STEALTH), topi = i;
 	 for (int e = 0; e < ENCMAX; e++)
 	 {  //Prisoners shouldn't shout for help.
-		 if (!strcmp(encounter[e].name.data(), CONST_stealth058.c_str()) || e == exclude || encounter[e].exists == false || activesquad->squad[topi]->skill_check(SKILL_STEALTH, difficulty)) continue;
+		 if (isPrisoner(encounter[e].name) || e == exclude || encounter[e].exists == false || activesquad->squad[topi]->skill_check(SKILL_STEALTH, difficulty)) { 
+			 continue; 
+		 }
 		 else
 		 {
-			 clearmessagearea();
-			 set_color_easy(RED_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(16, 1, encounter[e].name, gamelog);
-			 addstrAlt(CONST_stealth055, gamelog);
-			 if (encounter[e].align == ALIGN_CONSERVATIVE)
-				 mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
-			 else mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
-			 gamelog.newline();
+			 printShoutsForHelp(encounter[e].name, encounter[e].align);
 			 setSiteAlarmOne();
 			 pressAnyKey();
 			 break;
 		 }
 	 }
  }
+
  /* checks if your liberal behavior/attack alienates anyone */
  char alienationcheck(char mistake)
  {
@@ -73,7 +66,7 @@ This file is part of Liberal Crime Squad.                                       
 		 //if(encounter[e].type==CREATURE_PRISONER)continue;
 		 // ...but Prisoners are now spawned with a variety of creature
 		 // types, so we'll go by name instead
-		 if (!strcmp(encounter[e].name.data(), CONST_stealth058.c_str())) continue;
+		 if (isPrisoner(encounter[e].name)) continue;
 		 if (encounter[e].exists&&encounter[e].alive && (encounter[e].align == 0 || (encounter[e].align == 1 && mistake)))
 			 noticer.push_back(e);
 	 }
@@ -92,11 +85,7 @@ This file is part of Liberal Crime Squad.                                       
 		 if (alienate&&sitealienate != 2) sitealienate = 1;
 		 if (oldsitealienate < sitealienate)
 		 {
-			 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			 if (sitealienate == 1)mvaddstrAlt(16, 1, CONST_stealth059, gamelog);
-			 else mvaddstrAlt(16, 1, CONST_stealth060, gamelog);
-			 gamelog.newline();
-			 mvaddstrAlt(17, 1, CONST_stealth061);
+			 printAlienation(sitealienate);
 			 setSiteAlarmOne();
 			 for (int i = 0; i < ENCMAX; i++)
 				 if (encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
@@ -110,6 +99,7 @@ This file is part of Liberal Crime Squad.                                       
 	 }
 	 return alienate;
  }
+
  char weapon_in_character(const string wtype, const string atype)
  {
 	 //// TODO Move to XML
@@ -165,110 +155,7 @@ This file is part of Liberal Crime Squad.                                       
 		 return CREATURE_SEAL;
 	 return -1;
  }
- map<short, map<string, int> > siegeDisguises = {
-	 map<SiegeTypes, map<string, int> >::value_type(SIEGE_CIA,
-		 {
-			 map<string, int>::value_type(tag_ARMOR_BLACKSUIT, 1),
-			 map<string, int>::value_type(tag_ARMOR_BLACKDRESS, 1)
-		 }
-	 ),
-
-	 map<SiegeTypes, map<string, int> >::value_type(SIEGE_CORPORATE,	
-		 {
-			 map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			 map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			 map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-		 }
-	 ),
-	 map<SiegeTypes, map<string, int> >::value_type(SIEGE_HICKS,
-		 {
-			 map<string, int>::value_type(tag_ARMOR_CLOTHES,  2),
-			 map<string, int>::value_type(tag_ARMOR_OVERALLS,  1),
-			 map<string, int>::value_type(tag_ARMOR_WIFEBEATER, 1),		 
-		 }
-	 ),
-	 map<SiegeTypes, map<string, int> >::value_type(SIEGE_FIREMEN,
-		 {
-			 map<string, int>::value_type(tag_ARMOR_BUNKERGEAR, 1),
-		 }
-	),
- };
-
- map<short, map<string, int> > siteDisguises = {
-
-	 map<SiteTypes, map<string, int> >::value_type(SITE_BUSINESS_CIGARBAR,{
-	 map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-	 map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-	 map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-	 map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-	 map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-	 map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
- } 
- ),
- map<SiteTypes, map<string, int> >::value_type(SITE_CORPORATE_HEADQUARTERS,{
-	 map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-	 map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-	 map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-	 map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-	 map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
- }
-	 ),
- };
- map<short, map<string, int> > siteDisguisesRestricted = {
-
-	 map<SiteTypes, map<string, int> >::value_type(SITE_INDUSTRY_NUCLEAR,{
-	 map<string, int>::value_type(tag_ARMOR_LABCOAT,  1),
-			 map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			 map<string, int>::value_type(tag_ARMOR_CIVILLIANARMOR,  1),
-			 map<string, int>::value_type(tag_ARMOR_HARDHAT,  1),
-	 
- } 
- ),
- map<SiteTypes, map<string, int> >::value_type(SITE_MEDIA_AMRADIO,{
-	 map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-			 map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-	 
- }
-	 ),
- map<SiteTypes, map<string, int> >::value_type(SITE_MEDIA_CABLENEWS,{
-	 map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-	 
- }
- ),
-
- map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
-	 map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
-			 map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-			 map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			 map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			 map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-	 
- } 
- ),
- map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_ARMYBASE,{
-	 map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			 map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			 map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-	 
- } 
- ),
- map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,{
-	 map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-			 map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
-	 
- } 
- ),
-
- };
+ 
  /* checks if a creature's uniform is appropriate to the location */
  char hasdisguise(const DeprecatedCreature &cr)
  {
@@ -659,13 +546,7 @@ This file is part of Liberal Crime Squad.                                       
 			 }
 			 if (timer == 0)
 			 {
-				 set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				 if (partysize > 1)
-					 mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
-				 else
-					 mvaddstrAlt(16, 1, activesquad->squad[0]->getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_stealth064, gamelog);
-				 gamelog.newline();
+				 printFadesAway(activesquad->squad[0]->getNameAndAlignment().name, partysize);
 				 pressAnyKey();
 			 }
 		 }
@@ -693,28 +574,17 @@ This file is part of Liberal Crime Squad.                                       
 			 }
 			 if (blew_it != -1 && LCSrandom(2))
 			 {
-				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(16, 1, activesquad->squad[blew_it]->getNameAndAlignment().name, gamelog);
-				 addstrAlt(pickrandom(blew_stealth_check), gamelog);
-				 gamelog.newline();
+				 printBlewStealthCheck(activesquad->squad[blew_it]->getNameAndAlignment().name);
 				 pressAnyKey();
 			 }
 			 else if (!noticed)
 			 {
-				 set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				 if (partysize > 1)
-					 mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
-				 else
-					 mvaddstrAlt(16, 1, activesquad->squad[0]->getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_stealth066, gamelog);
-				 gamelog.newline();
+				 printActsNatural(activesquad->squad[0]->getNameAndAlignment().name, partysize);
 				 pressAnyKey();
 			 }
 		 }
 		 if (!noticed)return;
-		 clearmessagearea();
-		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(16, 1, encounter[n].name, gamelog);
+		 printEnemyNameInAlarm(encounter[n].name);
 		 if (sitealarmtimer != 0 && weapon < 1 && encounter[n].type != CREATURE_GUARDDOG)
 		 {
 			 if ((sitetype == SITE_RESIDENTIAL_TENEMENT ||
@@ -722,12 +592,12 @@ This file is part of Liberal Crime Squad.                                       
 				 sitetype == SITE_RESIDENTIAL_APARTMENT_UPSCALE) &&
 				 levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_RESTRICTED)
 			 {
+				 printShoutsInAlarm();
 				 setSiteAlarmOne();
-				 addstrAlt(CONST_stealth067, gamelog);
 			 }
 			 else
 			 {
-				 addstrAlt(CONST_stealth068, gamelog);
+				 printLooksAtSquadSuspiciously();
 				 int time = get_encounter_time(n);
 				 if (time < 1)time = 1;
 				 if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
@@ -740,34 +610,10 @@ This file is part of Liberal Crime Squad.                                       
 		 }
 		 else
 		 {
-			 if (weapon&&encounter[n].type != CREATURE_GUARDDOG)
-			 {
-				 addstrAlt(CONST_stealth069, gamelog);
-				 if (encounter[n].align == ALIGN_CONSERVATIVE)
-					 mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
-				 else
-					 mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
-				 for (int i = 0; i < 6; i++)
-				 {
-					 if (activesquad->squad[i] == NULL)break;
-				 }
-			 }
-			 else
-			 {
-				 addstrAlt(CONST_stealth072, gamelog);
-				 if (encounter[n].align == ALIGN_CONSERVATIVE)
-				 {
-					 if (encounter[n].type == CREATURE_GUARDDOG)
-						 mvaddstrAlt(17, 1, CONST_stealth073, gamelog);
-					 else
-						 mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
-				 }
-				 else
-					 mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
-			 }
-			 gamelog.newline();
+			 printConservativeRaisesAlarm(weapon, encounter[n].type, encounter[n].align);
 			 setSiteAlarmOne();
 		 }
 		 pressAnyKey();
 	 }
  }
+ 

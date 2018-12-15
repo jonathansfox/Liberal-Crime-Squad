@@ -26,62 +26,6 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
-vector<vector<string> > no_free_speech_flirt;
-vector<vector<string> > pickupLines;
-vector<vector<string> > lovingly_talk_to_mutant;
-vector<vector<string> > normal_talk_to_mutant;
-vector<vector<string> > lovingly_talk_to_dog;
-vector<vector<string> > normal_talk_to_dog;
-vector<string> dog_rejection;
-vector<string> mutant_rejection;
-vector<string> that_is_disturbing;
-vector<string> that_is_not_disturbing;
-vector<string> robbing_bank;
-vector<string> teller_gestures;
-vector<string> teller_complies;
-//const int DOUBLE_LINE = 2;
-vector<string> come_at_me_bro;
-vector<string> backs_off;
-vector<string> threaten_hostage;
-vector<string> please_spare_hostage;
-vector<string> who_cares_about_hostage;
-vector<string> hostage_negotiation;
-vector<string> please_no_more;
-vector<string> let_hostages_go;
-vector<string> go_ahead_and_die;
-vector<string> agree_to_release_hostages;
-vector<file_and_text_collection> talk_file_collection = {
-	/*talk.cpp*/
-	customText(&no_free_speech_flirt, talky + CONST_talk012, PICKUP_LINE_SIZE),
-	customText(&pickupLines, talky + CONST_talk013, PICKUP_LINE_SIZE),
-	customText(&lovingly_talk_to_mutant, talky + CONST_talk014, DOUBLE_LINE),
-	customText(&normal_talk_to_mutant, talky + CONST_talk015, DOUBLE_LINE),
-	customText(&lovingly_talk_to_dog, talky + CONST_talk016, DOUBLE_LINE),
-	customText(&normal_talk_to_dog, talky + CONST_talk017, DOUBLE_LINE),
-	customText(&dog_rejection, talky + CONST_talk018),
-	customText(&mutant_rejection, talky + CONST_talk019),
-	customText(&that_is_disturbing, talky + CONST_talk020),
-	customText(&that_is_not_disturbing, talky + CONST_talk021),
-	customText(&robbing_bank, talky + CONST_talk022),
-	customText(&teller_gestures, talky + CONST_talk023),
-	customText(&teller_complies, talky + CONST_talk024),
-	//talk in combat
-	customText(&come_at_me_bro, talk_combat + CONST_talk025),
-	customText(&backs_off, talk_combat + CONST_talk026),
-	customText(&threaten_hostage, talk_combat + CONST_talk027),
-	customText(&please_spare_hostage, talk_combat + CONST_talk028),
-	customText(&who_cares_about_hostage, talk_combat + CONST_talk029),
-	customText(&hostage_negotiation, talk_combat + CONST_talk030),
-	customText(&please_no_more, talk_combat + CONST_talk031),
-	customText(&let_hostages_go, talk_combat + CONST_talk032),
-	customText(&go_ahead_and_die, talk_combat + CONST_talk033),
-	customText(&agree_to_release_hostages, talk_combat + CONST_talk034),
-};
-//string while_naked;
-map<short, string> conservativeLegalArgument;
-map<short, vector<string> > talkAboutTheIssues;
-map<short, string> youAreStupidTalkAboutIssues;
-map<short, string> issueTooLiberal;
 //
 /* bluff, date, issues */
 void talk(DeprecatedCreature &a, const int t)
@@ -108,37 +52,18 @@ void talk(DeprecatedCreature &a, const int t)
 }
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK);
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
-	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_001);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
-	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_002);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
-	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_003);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
+	printOptionsWithinBank(is_naked);
 	int c = pressSpecificKey('a', 'b', 'c');
 	switch (c)
 	{
 	case 'a':
-		clearcommandarea(); clearmessagearea(); clearmaparea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
-		addstrAlt(unnamed_String_Talk_cpp_004, gamelog);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(10, 1, pickrandom(robbing_bank), gamelog);
-		gamelog.newline();
+		printIRobTheBank(a.getNameAndAlignment().name);
 		pressAnyKey();
 		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_005, gamelog);
-			addstrAlt(pickrandom(teller_gestures), gamelog);
-			mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_006, gamelog);
-			gamelog.newline();
+			printTellerAlertsCops();
+
 			pressAnyKey();
 			setSiteAlarmOne();
 			criminalize(a, LAWFLAG_BANKROBBERY);
@@ -151,11 +76,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		else
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_007, gamelog);
-			addstrAlt(pickrandom(teller_complies), gamelog);
-			mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_008, gamelog);
-			gamelog.newline();
+			printTellerComplies();
 			pressAnyKey();
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
@@ -168,7 +89,6 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case 'b':
 	{
 		clearcommandarea(); clearmessagearea(); clearmaparea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		DeprecatedCreature *armed_liberal = NULL;
 		for (int i = 0; i < 6; i++)
 		{
@@ -181,22 +101,13 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		if (armed_liberal)
 		{
-			mvaddstrAlt(9, 1, armed_liberal->getNameAndAlignment().name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_009, gamelog);
-			addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
-			addstrAlt(singleDot, gamelog);
-			gamelog.newline();
+			printBrandishWeapon(armed_liberal->getNameAndAlignment().name, armed_liberal->get_weapon().get_shortname(0));
 			pressAnyKey();
 			clearmessagearea();
 		}
-		mvaddstrAlt(10, 1, a.getNameAndAlignment().name, gamelog);
-		addstrAlt(saysComma, gamelog);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_010, gamelog);
-		addstrAlt(slogan_str, gamelog);
-		gamelog.record(singleSpace);
-		mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_011, gamelog);
-		gamelog.newline();
+
+		printDemandVaultBeOpened(a.getNameAndAlignment().name);
+
 		pressAnyKey();
 		const int roll = a.skill_roll(SKILL_PERSUASION);
 		int difficulty = DIFFICULTY_VERYEASY;
@@ -204,14 +115,10 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			difficulty += 12;
 		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 			difficulty += 12;
-		clearcommandarea(); clearmessagearea(); clearmaparea();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (roll < difficulty)
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_012, gamelog);
-			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_013, gamelog);
-			gamelog.newline();
+			printGuardsCloseIn();
+
 			pressAnyKey();
 			setSiteAlarmOne();
 			sitealienate = 2;
@@ -229,13 +136,14 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		else
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_014, gamelog);
-			gamelog.newline();
+			printBankerCooperates();
+
 			pressAnyKey();
-			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_015, gamelog);
-			gamelog.newline();
+
+			printTheVaultIsOpen();
+
 			pressAnyKey();
+
 			criminalizeparty(LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKSTICKUP);
 			sitecrime += 50;
@@ -259,65 +167,36 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		return 0;
 	}
 }
+
+
 char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name);
-	addstrAlt(unnamed_String_Talk_cpp_016);
-	switch (tk.align)
-	{
-	case ALIGN_CONSERVATIVE:
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_LIBERAL:
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		break;
-	case ALIGN_MODERATE:
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		break;
-	}
-	addstrAlt(tk.getNameAndAlignment().name);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	addstrAlt(get_age_string(tk.getCreatureBio(), tk.animalgloss));
-	addstrAlt(unnamed_String_Talk_cpp_017);
+	printTalkToHeader(a.getNameAndAlignment().name);
+	printTalkToMiddle(tk.align, tk.getNameAndAlignment().name, get_age_string(tk.getCreatureBio(), tk.animalgloss));
+
+
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_018);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
-	if (tk.can_date(a.getCreatureBio().age, a.animalgloss))set_color_easy(WHITE_ON_BLACK);
-	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_019);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_020);
-	if (is_naked)addstrAlt(while_naked);
-	addstrAlt(singleDot);
+
+	printTalkToFooter(is_naked, tk.can_date(a.getCreatureBio().age, a.animalgloss));
+
 	if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == -1)
 	{
-		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_021);
-		if (is_naked)addstrAlt(while_naked);
-		addstrAlt(singleDot);
+		printTalkToPotentialLandlord(is_naked);
 	}
 	else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 0)
 	{
-		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_022);
-		if (is_naked)addstrAlt(while_naked);
-		addstrAlt(singleDot);
+		printTalkToLandlord(is_naked);
+
 	}
 	else if (tk.type == CREATURE_GANGMEMBER || tk.type == CREATURE_MERC)
 	{
-		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_023);
-		if (is_naked)addstrAlt(while_naked);
-		addstrAlt(singleDot);
+		printTalkToGangMemberOrMerc(is_naked);
+
 	}
 	else if (tk.type == CREATURE_BANK_TELLER)
 	{
-		mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_024);
-		if (is_naked)addstrAlt(while_naked);
-		addstrAlt(singleDot);
+		printTalkToBankTeller(is_naked);
+
 	}
 	while (true)
 	{
@@ -357,41 +236,25 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 	}
 }
-// #include "../common/creaturePool.h"
+
 void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea();
-	clearmessagearea();
-	clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
-	addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_025, gamelog);
-	gamelog.newline();
+	printIWantToCancelRent(a.getNameAndAlignment().name);
+
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
-		addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_026, gamelog);
-		gamelog.newline();
+		printPutSomeDamnClothesOn(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
-	addstrAlt(respondsComma, gamelog);
-	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_027, gamelog);
-	gamelog.newline();
+	printClearOutYourRoom(tk.getNameAndAlignment().name);
+
 	pressAnyKey();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(15, 1, unnamed_String_Talk_cpp_028, gamelog);
-	gamelog.newline();
+
+	printYourPossessionsAreRelocated();
+
 	pressAnyKey();
 
 	moveEverythingAwayFromSite(getCurrentSite());
@@ -401,21 +264,12 @@ void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 /* common - assigns a new base to all members of a squad */
 void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_029, gamelog);
-	gamelog.newline();
+	printIWantToRent(a.getNameAndAlignment().name);
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_030, gamelog);
-		gamelog.newline();
+		printPutSomeDamnClothesOn(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -426,73 +280,41 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case SITE_RESIDENTIAL_APARTMENT:rent = 650; break;
 	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:rent = 1500; break;
 	}
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_031, gamelog);
-	addstrAlt(rent, gamelog);
-	addstrAlt(unnamed_String_Talk_cpp_032, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_033, gamelog);
-	addstrAlt(rent, gamelog);
-	addstrAlt(unnamed_String_Talk_cpp_034, gamelog);
-	gamelog.newline();
+
+	printINeedThisMuchRent(tk.getNameAndAlignment().name, rent);
+
 	pressAnyKey();
 	clearcommandarea(); clearmessagearea(); clearmaparea();
+
 	while (true)
 	{
 		int c = 'a';
-		if (ledger.get_funds() < rent)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_035);
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_036);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_037);
+		printRentingOptions(ledger.get_funds() < rent);
 		c = getkeyAlt();
 		switch (c)
 		{
 		case 'a': // Accept rent deal
 			if (ledger.get_funds() < rent) break;
-			clearcommandarea(); clearmessagearea(); clearmaparea();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_038, gamelog);
-			gamelog.newline();
+			printAcceptRentHeader(a.getNameAndAlignment().name);
+
 			pressAnyKey();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_039, gamelog);
-			gamelog.newline();
-			mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_040, gamelog);
-			gamelog.newline();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt(unnamed_String_Talk_cpp_041);
+
+			printAcceptRentFooter(tk.getNameAndAlignment().name);
+
 			pressAnyKey();
+
 			ledger.subtract_funds(rent, EXPENSE_RENT);
 			locationIsNowRented(getCurrentSite(), rent);
 			basesquad(activesquad, getCurrentSite());
 			return;
 		case 'b': // Refuse rent deal
-			clearcommandarea(); clearmessagearea(); clearmaparea();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_042, gamelog);
-			gamelog.newline();
+			printRefuseRentDeal(a.getNameAndAlignment().name);
 			pressAnyKey();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_043, gamelog);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt(unnamed_String_Talk_cpp_044, gamelog);
-			gamelog.newline();
+			printNotMyProblem(tk.getNameAndAlignment().name);
 			pressAnyKey();
 			return;
 		case 'c': // Threaten landlord
 			clearcommandarea(); clearmessagearea(); clearmaparea();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			DeprecatedCreature *armed_liberal = NULL;
 			for (int i = 0; i < 6; i++)
 			{
@@ -505,19 +327,12 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			}
 			if (armed_liberal)
 			{
-				mvaddstrAlt(9, 1, armed_liberal->getNameAndAlignment().name, gamelog);
-				addstrAlt(unnamed_String_Talk_cpp_045, gamelog);
-				addstrAlt(armed_liberal->get_weapon().get_shortname(0), gamelog);
-				addstrAlt(singleDot, gamelog);
-				gamelog.newline();
+
+				printThreatensWithAGun(armed_liberal->getNameAndAlignment().name, armed_liberal->get_weapon().get_shortname(0));
 				pressAnyKey();
 				clearmessagearea();
 			}
-			mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog);
-			addstrAlt(saysComma, gamelog);
-			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_046, gamelog);
-			gamelog.newline();
+			printGiveMeTheLCSPrice(a.getNameAndAlignment().name);
 			pressAnyKey();
 			const int roll = a.skill_roll(SKILL_PERSUASION);
 			int difficulty = DIFFICULTY_FORMIDABLE;
@@ -527,24 +342,15 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 				difficulty += 6;
 			if (roll < difficulty - 1)
 			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-				set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_047, gamelog);
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				addstrAlt(unnamed_String_Talk_cpp_048, gamelog);
-				gamelog.newline();
+
+				printIWantYouToLeave(tk.getNameAndAlignment().name);
 				pressAnyKey();
 				tk.make_cantbluff_one();
 				return;
 			}
 			else
 			{
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-				set_color_easy(CYAN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_049, gamelog);
-				gamelog.newline();
+				printJesusItsYours(tk.getNameAndAlignment().name);
 				pressAnyKey();
 				int rent;
 				// Either he calls the cops...
@@ -568,21 +374,12 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_050, gamelog);
-	gamelog.newline();
+	printINeedAGun(a.getNameAndAlignment().name);
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_051, gamelog);
-		gamelog.newline();
+		printIDontSellToNaked(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -593,21 +390,13 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		(lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 			a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM))
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_052, gamelog);
-		gamelog.newline();
+		printIDontSellToCops(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
 	if (isThereASiteAlarm())
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_053, gamelog);
-		gamelog.newline();
+		printWaitUntilItCoolsDown(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -620,87 +409,48 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case SITE_RESIDENTIAL_TENEMENT:
 	case SITE_RESIDENTIAL_BOMBSHELTER:
 	case SITE_RESIDENTIAL_SHELTER:
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_054, gamelog);
-		gamelog.newline();
+		printLetMeSellYouAGun(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		armsdealer(getCurrentSite());
 		return;
 	default:
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_055, gamelog);
-		gamelog.newline();
+		printNotHereDummy(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
 }
+
 void wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_056, gamelog);
-	gamelog.newline();
+	printWannaHearSomething(a.getNameAndAlignment().name);
 	pressAnyKey();
 	bool interested = tk.talkreceptive();
 	if (!interested && a.skill_check(SKILL_PERSUASION, DIFFICULTY_AVERAGE))
+	{
 		interested = true;
+	}
 	if ((tk.animalgloss == ANIMALGLOSS_ANIMAL && tk.align != ALIGN_LIBERAL) ||
 		tk.animalgloss == ANIMALGLOSS_TANK)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog);
-		switch (tk.type)
-		{
-		case CREATURE_TANK: addstrAlt(unnamed_String_Talk_cpp_057, gamelog); break;
-		case CREATURE_GUARDDOG: addstrAlt(unnamed_String_Talk_cpp_058, gamelog); break;
-		default: addstrAlt(unnamed_String_Talk_cpp_059, gamelog); break;
-		}
-		gamelog.newline();
+		printAnimalDoesntUnderstand(tk.getNameAndAlignment().name, tk.type);
 		pressAnyKey();
 	}
-	else if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) != 0 && interested)
+	else if (!isPrisoner(tk.getNameAndAlignment().name) && interested)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_061, gamelog);
-		gamelog.newline();
+		printSaysWhat(tk.getNameAndAlignment().name);
 		pressAnyKey();
 		talkAboutIssues(a, tk);
 	}
 	else
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) == 0)
-		{
-			if (tk.align == ALIGN_LIBERAL)
-				mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_062, gamelog);
-			else mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_063, gamelog);
-		}
-		else mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_064, gamelog);
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		addstrAlt(unnamed_String_Talk_cpp_065, gamelog);
-		gamelog.newline();
+		printTurnsAway(tk.getNameAndAlignment().name, tk.align);
 		pressAnyKey();
 	}
 }
+
 void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	int y = 12;
-	clearcommandarea(); clearmessagearea(); clearmaparea();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 1, a.getNameAndAlignment().name, gamelog); addstrAlt(saysComma, gamelog);
-	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	vector<string> selected_flirt;
-	int line;
 	if (lawList[LAW_FREESPEECH] == -2)
 	{
 		selected_flirt = pickrandom(no_free_speech_flirt);
@@ -709,12 +459,8 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 	{
 		selected_flirt = pickrandom(pickupLines);
 	}
-	mvaddstrAlt(10, 1, selected_flirt[0], gamelog);
-	if (selected_flirt[1] != blankString) {
-		y++;
-		mvaddstrAlt(11, 1, selected_flirt[1], gamelog);
-	}
-	gamelog.newline();
+	printPickupLine(a.getNameAndAlignment().name, selected_flirt);
+	const bool extraline = (selected_flirt[1] != blankString ? 1 : 0);
 	pressAnyKey();
 	bool succeeded = false;
 	int difficulty = DIFFICULTY_HARD;
@@ -727,31 +473,18 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 	if ((tk.animalgloss == ANIMALGLOSS_ANIMAL && lawList[LAW_ANIMALRESEARCH] != 2 && a.animalgloss != ANIMALGLOSS_ANIMAL) ||
 		tk.animalgloss == ANIMALGLOSS_TANK)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
 		switch (tk.type)
 		{
-		case CREATURE_TANK:
-			addstrAlt(unnamed_String_Talk_cpp_066, gamelog);
-			break;
 		case CREATURE_GUARDDOG:
-			addstrAlt(saysComma, gamelog);
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y, 1, pickrandom(dog_rejection), gamelog);
 			tk.align = ALIGN_CONSERVATIVE;
 			tk.make_cantbluff_one();
 			break;
 		case CREATURE_GENETIC:
-			addstrAlt(saysComma, gamelog);
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y, 1, pickrandom(mutant_rejection), gamelog);
 			tk.align = ALIGN_CONSERVATIVE;
 			tk.make_cantbluff_one();
 			break;
-		default:
-			addstrAlt(unnamed_String_Talk_cpp_067, gamelog);
 		}
-		gamelog.newline();
+		printNonHumanRejection(tk.getNameAndAlignment().name, tk.type, extraline);
 		pressAnyKey();
 		return;
 	}
@@ -763,65 +496,28 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 			&& a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM))
 		&& tk.type == CREATURE_PROSTITUTE)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_068, gamelog);
-		gamelog.newline();
+		printRejectPolicePickupLine(tk.getNameAndAlignment().name, extraline);
 		pressAnyKey();
 		tk.make_cantbluff_one();
 	}
 	else if (succeeded)
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog); addstrAlt(respondsComma, gamelog);
-		set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, selected_flirt[2], gamelog);
-		gamelog.newline();
-		pressAnyKey();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		++y;
-		mvaddstrAlt(y++, 1, a.getNameAndAlignment().name, gamelog);
-		addstrAlt(unnamed_String_Talk_cpp_069, gamelog);
-		addstrAlt(tk.getNameAndAlignment().name, gamelog);
-		addstrAlt(unnamed_String_Talk_cpp_070, gamelog);
-		if (strcmp(tk.getNameAndAlignment().name.data(), unnamed_String_Talk_cpp_060.data()) == 0)
+		printAcceptsPickupLine(a.getNameAndAlignment().name, tk.getNameAndAlignment().name, selected_flirt);
+		if (isPrisoner(tk.getNameAndAlignment().name))
 		{
-			addstrAlt(unnamed_String_Talk_cpp_071, gamelog);
-			mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
-			addstrAlt(unnamed_String_Talk_cpp_072, gamelog);
 			criminalize(tk, LAWFLAG_ESCAPED);
 		}
-		addstrAlt(unnamed_String_Talk_cpp_073, gamelog);
-		gamelog.newline();
 		pressAnyKey();
 		newDate(a, tk);
 	}
 	else
 	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y++, 1, tk.getNameAndAlignment().name, gamelog);
-		addstrAlt(respondsComma, gamelog);
-		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (tk.type == CREATURE_CORPORATE_CEO)
-		{
-			if (a.gender_liberal != GENDER_MALE)
-				mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_074, gamelog);
-			else mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_075, gamelog);
-		}
-		else
-		{
-			mvaddstrAlt(y++, 1, selected_flirt[3], gamelog);
-			if (selected_flirt[4] != blankString) {
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++, 1, selected_flirt[4], gamelog);
-			}
-		}
-		gamelog.newline();
+		printRejectsPickupLine(tk.getNameAndAlignment().name, tk.type, a.gender_liberal, selected_flirt);
 		pressAnyKey();
 		tk.make_cantbluff_one();
 	}
 }
+
 void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	const int lw = LCSrandom(LAWNUM); // pick a random law to talk about
@@ -918,9 +614,6 @@ void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 }
 
 
-bool isPrisoner(const string tkname) {
-	return strcmp(tkname.data(), unnamed_String_Talk_cpp_081.data()) != 0;
-}
 
 
 void pressKeyAInCombat(DeprecatedCreature &a) {
@@ -1032,6 +725,7 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		printReleaseHostagesHeader(encounter[e].name);
 		pressAnyKey();
 		printReleaseHostagesFooter(hostages);
+		juiceparty(15, 200); // Instant juice for successful hostage negotiation
 		for (int i = ENCMAX - 1; i >= 0; i--) {
 			if (encounter[i].exists&&encounter[i].enemy && encounter[i].alive)
 			{

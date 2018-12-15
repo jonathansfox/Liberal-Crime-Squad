@@ -925,9 +925,17 @@ wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
  (and several others within talk.cpp)
 return type set to void, as it only ever returns 1
 
-Removed all usage of cursesAlternative printing in in files after talk.cpp, left off going backwards at
-void doYouComeHereOften()...
-Line 695-824
+Removed all usage of cursesAlternative printing in in files after and including talk.cpp
 
 4407 ...Alt()
-143 moved to includes.h
+moved to cursesAlternative.cpp 486 total
+const string expressions are being transferred to the cursesAlternative.cpp section of includes.h
+Eventually, no file will interact with the cursesAlternative ..Alt( functions, and with it almost none will even interact with strings apart from const tags.
+The files in question are having #include "log.h" and #include "cursesAlternative.h" lines removed.  The latter requires some amount of getkeyAlt() and pressAnyKey() function declarations within includes.h
+Needing a full recompile after any change to includes.h is annoying, but that's the price for using #ifdef instead of separate files.  The first 1080 lines of includes.h are (potentially) used in 77 files.  The solution to the problem is simple, but time consuming.  Removing all these references to cursesAlternative.h will push towards the end goal of abolition of includes.h
+moved to cursesAlternative.cpp 537 total
+moved to cursesAlternative.cpp 668 total
+
+Next target: 291 in siege.cpp
+
+Fixed a bug where having more than 19 save files would display incorrectly.

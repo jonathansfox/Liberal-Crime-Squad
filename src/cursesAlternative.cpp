@@ -1,5 +1,2543 @@
 #define	CURSESALTERNATIVE_CPP
 #include "includes.h"
+#include "../common/commondisplay.h"
+#include "../sitemode/sitedisplay.h"
+
+const string CONST_cursesAlternative013 = "]";
+const string CONST_cursesAlternative011 = "[";
+const string CONST_cursesAlternative008 = " times";
+const string CONST_cursesAlternative007 = " five times";
+const string CONST_cursesAlternative006 = " four times";
+const string CONST_cursesAlternative005 = " three times";
+const string CONST_cursesAlternative004 = " twice";
+const string tag_value = "value";
+const string tag_attribute = "attribute";
+const string tag_skill = "skill";
+
+const string CONST_sitedisplay102 = "                                                     ";
+const string CONST_sitedisplay100 = "                                                                                ";
+const string CONST_sitedisplay097 = "                           ";
+const string CONST_sitedisplay095 = "LOOT!";
+const string CONST_sitedisplay094 = "ENCTR";
+const string CONST_sitedisplay093 = "enemy";
+const string CONST_sitedisplay092 = "ENEMY";
+const string CONST_sitedisplay091 = "SQUAD";
+const string CONST_sitedisplay090 = "The Office of the President";
+const string CONST_sitedisplay089 = "CCS Boss";
+const string CONST_sitedisplay088 = "Oh Wow So Much Money";
+const string CONST_sitedisplay087 = "Bank Teller";
+const string CONST_sitedisplay086 = "Bank Vault";
+const string CONST_sitedisplay085 = "Bench";
+const string CONST_sitedisplay084 = "Computer";
+const string CONST_sitedisplay083 = "Table";
+const string CONST_sitedisplay082 = "Stairs Down";
+const string CONST_sitedisplay081 = "Stairs Up";
+const string CONST_sitedisplay080 = "Display Case";
+const string CONST_sitedisplay079 = "Sign";
+const string CONST_sitedisplay078 = "Landlord's Office";
+const string CONST_sitedisplay077 = "News Broadcast Studio";
+const string CONST_sitedisplay076 = "Radio Broadcast Room";
+const string CONST_sitedisplay075 = "Safe";
+const string CONST_sitedisplay074 = "CEO's Study";
+const string CONST_sitedisplay073 = "Armory";
+const string CONST_sitedisplay072 = "Factory Equipment";
+const string CONST_sitedisplay071 = "Textile Equipment";
+const string CONST_sitedisplay070 = "Supercomputer";
+const string CONST_sitedisplay069 = "Prison Control Room";
+const string CONST_sitedisplay068 = "Jury Room";
+const string CONST_sitedisplay067 = "Courthouse Jail";
+const string CONST_sitedisplay066 = "Police Detention Room";
+const string CONST_sitedisplay065 = "Caged \"Animals\"";
+const string CONST_sitedisplay064 = "Reactor Control Room";
+const string CONST_sitedisplay063 = "Caged Animals";
+const string CONST_sitedisplay058 = "ICE";
+const string CONST_sitedisplay057 = "OFF";
+const string CONST_sitedisplay056 = "AL";
+const string CONST_sitedisplay055 = "OV";
+const string CONST_sitedisplay054 = "BOSS!";
+const string CONST_sitedisplay053 = "TELER";
+const string CONST_sitedisplay052 = "VAULT";
+const string CONST_sitedisplay051 = "CASE";
+const string CONST_sitedisplay050 = "GUARD";
+const string CONST_sitedisplay049 = "METAL";
+const string CONST_sitedisplay048 = "BENCH";
+const string CONST_sitedisplay047 = "CPU";
+const string CONST_sitedisplay046 = "TABLE";
+const string CONST_sitedisplay045 = "SIGN!";
+const string CONST_sitedisplay044 = "RENT?";
+const string CONST_sitedisplay043 = "STAGE";
+const string CONST_sitedisplay042 = "MIC";
+const string CONST_sitedisplay041 = "SAFE!";
+const string CONST_sitedisplay040 = "ARMRY";
+const string CONST_sitedisplay039 = "EQUIP";
+const string CONST_sitedisplay038 = "INTEL";
+const string CONST_sitedisplay037 = "CTROL";
+const string CONST_sitedisplay036 = "JURY!";
+const string CONST_sitedisplay035 = "CELLS";
+const string CONST_sitedisplay034 = "CAGES";
+const string CONST_sitedisplay033 = "POWER";
+const string CONST_sitedisplay031 = "TRAP!";
+const string CONST_sitedisplay030 = "~$~";
+const string CONST_sitedisplay029 = "EXT";
+const string CONST_sitedisplay022 = "LCS";
+const string CONST_sitedisplay018 = "CCS";
+const string CONST_sitedisplay014 = "GNG";
+const string CONST_sitedisplay010 = "   ";
+const string CONST_sitedisplay096 = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
+const string CONST_sitedisplay062 = "³                         ³";
+const string CONST_sitedisplay061 = "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ";
+const string CONST_sitedisplay060 = "ÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ";
+const string CONST_sitedisplay028 = "¼";
+const string CONST_sitedisplay027 = "È";
+const string CONST_sitedisplay026 = "»";
+const string CONST_sitedisplay025 = "É";
+const string CONST_sitedisplay024 = "Í";
+const string CONST_sitedisplay023 = "º";
+const string tag_ARMOR = "ARMOR";
+const string tag_MONEY = "MONEY";
+const string tag_CEO = "CEO";
+const string CONST_consolesupportB011 = "from status line";
+const string CONST_consolesupportB010 = "to status line";
+
+const string CONST_consolesupport011 = "rb";
+const string CONST_consolesupport012 = "wb";
+const string CONST_consolesupport010 = "cleartype.dat";
+const string CONST_consolesupport007 = "en_US.CP437";
+const string CONST_consolesupport005 = "en_US.UTF-8";
+const string CONST_consolesupport004 = "English_United States.437";
+const string CONST_consolesupport003 = "fsl";
+const string CONST_consolesupport002 = "tsl";
+const string CONST_consolesupport001 = "hs";
+const string CONST_consolesupport000 = "UTF-8";
+
+//#include "../creature/newcreature.h"
+
+#include "../creature/creature.h"
+////
+
+//#include "../creature/deprecatedCreatureA.h"
+//#include "../creature/deprecatedCreatureB.h"
+
+#include "../creature/deprecatedCreatureC.h"
+//#include "../creature/deprecatedCreatureD.h"
+
+////
+#include "../common/getnames.h"
+
+#include "../locations/locations.h"
+#include "../pdcurses/curses.h"
+#include "../log/log.h"
+
+#include "../cursesAlternative.h"
+#include "../customMaps.h"
+#include <gui_constants.h>
+
+Log gamelog; //The gamelog.
+Log xmllog; // Log for xml errors or bad values.
+
+void translategetch(int &c);
+void translategetch_cap(int &c);
+/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
+int getkey();
+/* Variant of getkey() that doesn't make all letters lowercase */
+int getkey_cap();
+/* Empties the keyboard buffer, and returns most recent key pressed, if any */
+int checkkey();
+/* Variant of checkkey() that doesn't make all letters lowercase */
+// UNUSED
+int checkkey_cap();
+#ifdef CH_USE_UNICODE
+bool setup_unicode();
+#endif
+void set_title(char *c);
+void init_console();
+#include <common\\consolesupport.h>
+
+void set_color(short f, short b, bool bright, bool blink = false);
+#include "../set_color_support.h"
+const ColorSetup RED_ON_WHITE = { COLOR_RED, COLOR_WHITE, 1 };
+const ColorSetup BLUE_ON_WHITE = { COLOR_BLUE, COLOR_WHITE, 1 };
+const ColorSetup WHITE_ON_BLUE = { COLOR_WHITE, COLOR_BLUE, 1 };
+const ColorSetup BLACK_ON_BLACK = { COLOR_BLACK, COLOR_BLACK };
+const ColorSetup BLACK_ON_BLACK_BRIGHT = { COLOR_BLACK, COLOR_BLACK, 1 };
+const ColorSetup BLACK_ON_WHITE = { COLOR_BLACK, COLOR_WHITE };
+const ColorSetup BLUE_ON_BLACK_BRIGHT = { COLOR_BLUE, COLOR_BLACK, 1 };
+const ColorSetup CYAN_ON_BLACK = { COLOR_CYAN, COLOR_BLACK };
+const ColorSetup CYAN_ON_BLACK_BRIGHT = { COLOR_CYAN, COLOR_BLACK, 1 };
+const ColorSetup GREEN_ON_BLACK = { COLOR_GREEN, COLOR_BLACK };
+const ColorSetup GREEN_ON_BLACK_BRIGHT = { COLOR_GREEN, COLOR_BLACK, 1 };
+const ColorSetup MAGENTA_ON_BLACK = { COLOR_MAGENTA, COLOR_BLACK };
+const ColorSetup MAGENTA_ON_BLACK_BRIGHT = { COLOR_MAGENTA, COLOR_BLACK, 1 };
+const ColorSetup RED_ON_BLACK = { COLOR_RED, COLOR_BLACK };
+const ColorSetup RED_ON_BLACK_BRIGHT = { COLOR_RED, COLOR_BLACK, 1 };
+const ColorSetup RED_ON_BLUE_BRIGHT = { COLOR_RED, COLOR_BLUE, 1 };
+const ColorSetup RED_ON_GREEN_BRIGHT = { COLOR_RED, COLOR_GREEN, 1 };
+const ColorSetup RED_ON_RED = { COLOR_RED, COLOR_RED };
+const ColorSetup RED_ON_RED_BRIGHT = { COLOR_RED, COLOR_RED, 1 };
+const ColorSetup RED_ON_WHITE_BRIGHT = { COLOR_RED, COLOR_WHITE, 1 };
+const ColorSetup BLUE_ON_WHITE_BRIGHT = { COLOR_BLUE, COLOR_WHITE, 1 };
+const ColorSetup WHITE_ON_BLACK = { COLOR_WHITE, COLOR_BLACK };
+const ColorSetup WHITE_ON_BLACK_BRIGHT = { COLOR_WHITE, COLOR_BLACK, 1 };
+const ColorSetup WHITE_ON_RED_BRIGHT = { COLOR_WHITE, COLOR_RED, 1 };
+const ColorSetup WHITE_ON_BLUE_BRIGHT = { COLOR_WHITE, COLOR_BLUE, 1 };
+const ColorSetup WHITE_ON_WHITE = { COLOR_WHITE, COLOR_WHITE };
+const ColorSetup WHITE_ON_WHITE_BRIGHT = { COLOR_WHITE, COLOR_WHITE, 1 };
+const ColorSetup YELLOW_ON_BLACK = { COLOR_YELLOW, COLOR_BLACK };
+const ColorSetup YELLOW_ON_BLACK_BRIGHT = { COLOR_YELLOW, COLOR_BLACK, 1 };
+const ColorSetup YELLOW_ON_RED = { COLOR_YELLOW, COLOR_RED };
+const ColorSetup YELLOW_ON_RED_BRIGHT = { COLOR_YELLOW, COLOR_RED, 1 };
+const ColorSetup YELLOW_ON_RED_BRIGHT_BLINK = { COLOR_YELLOW, COLOR_RED, 1, 1 };
+void printfunds(int y, int offsetx, const char* prefix, long funds);
+#include "../common/ledgerEnums.h"
+#include "../common/ledger.h"
+#include "../locations/locationsPool.h"
+void printchaseencounter();
+bool isThereGroundLoot();
+extern coordinatest loc_coord;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+vector<NameAndAlignment> getEncounterNameAndAlignment();
+enum wallDirection {
+	WALL_UP = 0,
+	WALL_DOWN = 1,
+	WALL_LEFT = 2,
+	WALL_RIGHT = 3,
+	CORNER_UL = 4,
+	CORNER_UR = 5,
+	CORNER_DL = 6,
+	CORNER_DR = 7
+};
+extern coordinatest loc_coord;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+map<SpecialBlocks, string> specialString = {
+	map<SpecialBlocks, string>::value_type(SPECIAL_LAB_COSMETICS_CAGEDANIMALS, CONST_sitedisplay063),
+	map<SpecialBlocks, string>::value_type(SPECIAL_NUCLEAR_ONOFF, CONST_sitedisplay064),
+	map<SpecialBlocks, string>::value_type(SPECIAL_LAB_GENETIC_CAGEDANIMALS, CONST_sitedisplay065),
+	map<SpecialBlocks, string>::value_type(SPECIAL_POLICESTATION_LOCKUP, CONST_sitedisplay066),
+	map<SpecialBlocks, string>::value_type(SPECIAL_COURTHOUSE_LOCKUP, CONST_sitedisplay067),
+	map<SpecialBlocks, string>::value_type(SPECIAL_COURTHOUSE_JURYROOM, CONST_sitedisplay068),
+	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL, CONST_sitedisplay069),
+	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_LOW, CONST_sitedisplay069),
+	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_MEDIUM, CONST_sitedisplay069),
+	map<SpecialBlocks, string>::value_type(SPECIAL_PRISON_CONTROL_HIGH, CONST_sitedisplay069),
+	map<SpecialBlocks, string>::value_type(SPECIAL_INTEL_SUPERCOMPUTER, CONST_sitedisplay070),
+	map<SpecialBlocks, string>::value_type(SPECIAL_SWEATSHOP_EQUIPMENT, CONST_sitedisplay071),
+	map<SpecialBlocks, string>::value_type(SPECIAL_POLLUTER_EQUIPMENT, CONST_sitedisplay072),
+	map<SpecialBlocks, string>::value_type(SPECIAL_ARMORY, CONST_sitedisplay073),
+	map<SpecialBlocks, string>::value_type(SPECIAL_HOUSE_CEO, CONST_sitedisplay074),
+	map<SpecialBlocks, string>::value_type(SPECIAL_HOUSE_PHOTOS, CONST_sitedisplay075),
+	map<SpecialBlocks, string>::value_type(SPECIAL_CORPORATE_FILES, CONST_sitedisplay075),
+	map<SpecialBlocks, string>::value_type(SPECIAL_RADIO_BROADCASTSTUDIO, CONST_sitedisplay076),
+	map<SpecialBlocks, string>::value_type(SPECIAL_NEWS_BROADCASTSTUDIO, CONST_sitedisplay077),
+	map<SpecialBlocks, string>::value_type(SPECIAL_APARTMENT_LANDLORD, CONST_sitedisplay078),
+	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_ONE, CONST_sitedisplay079),
+	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_TWO, CONST_sitedisplay079),
+	map<SpecialBlocks, string>::value_type(SPECIAL_SIGN_THREE, CONST_sitedisplay079),
+	map<SpecialBlocks, string>::value_type(SPECIAL_DISPLAY_CASE, CONST_sitedisplay080),
+	map<SpecialBlocks, string>::value_type(SPECIAL_STAIRS_UP, CONST_sitedisplay081),
+	map<SpecialBlocks, string>::value_type(SPECIAL_STAIRS_DOWN, CONST_sitedisplay082),
+	map<SpecialBlocks, string>::value_type(SPECIAL_RESTAURANT_TABLE, CONST_sitedisplay083),
+	map<SpecialBlocks, string>::value_type(SPECIAL_CAFE_COMPUTER, CONST_sitedisplay084),
+	map<SpecialBlocks, string>::value_type(SPECIAL_PARK_BENCH, CONST_sitedisplay085),
+	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_VAULT, CONST_sitedisplay086),
+	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_TELLER, CONST_sitedisplay087),
+	map<SpecialBlocks, string>::value_type(SPECIAL_BANK_MONEY, CONST_sitedisplay088),
+	map<SpecialBlocks, string>::value_type(SPECIAL_CCS_BOSS, CONST_sitedisplay089),
+	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_NW, CONST_sitedisplay090),
+	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_NE, CONST_sitedisplay090),
+	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_SW, CONST_sitedisplay090),
+	map<SpecialBlocks, string>::value_type(SPECIAL_OVAL_OFFICE_SE, CONST_sitedisplay090),
+};
+int encounterSize();
+int squadAlive();
+extern bool mapshowing;
+extern coordinatest loc_coord;
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern bool mapshowing;
+extern short mode;
+extern coordinatest loc_coord;
+int monthday();
+const char *_difficulty[] = { "Simple", "Very Easy", "Easy", "Below Average", "Average", "Above Average", "Hard", "Very Hard", "Extremely Difficult", "Nearly Impossible", "Impossible" };
+//	extern string commaSpace;
+extern int day;
+extern int month;
+extern int year;
+extern unsigned char newstops[6][80][5][4];
+extern unsigned char bigletters[27][5][7][4];
+extern unsigned char newspic[20][78][18][4];
+#define CH_BOX_DRAWINGS_LIGHT_VERTICAL 0xb3
+#define CH_UPPER_HALF_BLOCK 0xdf
+#define CH_LOWER_HALF_BLOCK 0xdc
+#define CH_BOX_DRAWINGS_LIGHT_VERTICAL_AND_HORIZONTAL 0xc5
+#define CH_FULL_BLOCK 0xdb
+#define CH_LIGHT_SHADE 0xb0
+#define CH_MEDIUM_SHADE 0xb1
+#define CH_DARK_SHADE 0xb2
+
+std::pair<ColorSetup, int> ConfederateFlag[7][17] = {
+{
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1de),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, 0x1dd),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK)
+},
+{
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(RED_ON_RED, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_UPPER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_WHITE_BRIGHT, CH_FULL_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, 0x12a),
+std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_UPPER_HALF_BLOCK)
+}
+};
+
+std::pair<ColorSetup, int> AmericanFlag[7][18] = {
+	{
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, '.'),
+		std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+		std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, ':'),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_BLUE_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(WHITE_ON_RED_BRIGHT, CH_LOWER_HALF_BLOCK),
+},
+{
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+	std::pair<ColorSetup, int>(RED_ON_BLACK, CH_UPPER_HALF_BLOCK),
+},
+};
+extern bool fixcleartype;
+extern class Ledger ledger;
+//
+// SIEGE
+
+const string siege = "siege\\";
+const string mostlyendings = "mostlyendings\\";
+
+const string CONST_siege014 = "engageConservativesEscape.txt";
+const string CONST_siege013 = "engageConservatives.txt";
+const string CONST_siege012 = "nextSiegeAgain.txt";
+const string CONST_siege011 = "nextSiege.txt";
+const string CONST_siege010 = "word_replacing_liberal.txt";
+const string CONST_siege009 = "insult_for_liberal.txt";
+const string CONST_siege008 = "newspaper_last_name.txt";
+const string CONST_siege007 = "newspaper_first_name.txt";
+const string CONST_siege006 = "words_meaning_news.txt";
+const string CONST_siege174 = "The printing press is dismantled and burned.";
+const string CONST_siege188 = "!";
+const string CONST_siege177 = ", an unoccupied safehouse.";
+const string CONST_siege179 = " has been rescued.";
+const string CONST_siege178 = "'s corpse has been recovered.";
+const string CONST_siege167 = "Surrender yourselves!";
+const string CONST_siege029 = "Materials relating to the business front have been taken.";
+const string CONST_siege028 = "The compound is dismantled.";
+const string CONST_siege026A = "Law enforcement has confiscated $";
+const string CONST_siege026B = " in LCS funds.";
+const string CONST_siege025 = "Fortunately, your funds remain intact.";
+const string CONST_siege024 = " Liberals are taken to the police station.";
+const string CONST_siege023 = "is taken to the police station.";
+const string CONST_siege022 = ",";
+const string CONST_siege021 = ", aka ";
+const string CONST_siege020 = "The kidnap victims are rehabilitated and freed.";
+const string CONST_siege019 = " is rehabilitated and freed.";
+const string CONST_siege018 = " confiscate everything, including Squad weapons.";
+const string CONST_siege017 = "The firemen";
+const string CONST_siege016 = "The soldiers";
+const string CONST_siege015 = "The police";
+const string CONST_siege031 = " is slain.";
+const string CONST_siege030 = "Everyone in the ";
+const string CONST_siege074 = "You are wanted for harboring a fugitive from justice";
+const string CONST_siege073 = "You are wanted for loitering";
+const string CONST_siege072 = "You are wanted for indecent exposure";
+const string CONST_siege071 = "You are wanted for disturbing the peace";
+const string CONST_siege070 = "You are wanted for resisting arrest";
+const string CONST_siege069 = "You are wanted for vandalism";
+const string CONST_siege068 = "You are wanted for breaking and entering";
+const string CONST_siege067 = "You are wanted for unlawful burial";
+const string CONST_siege066 = "You are wanted for unlawful access of an information system";
+const string CONST_siege065 = "You are wanted for interference with interstate commerce";
+const string CONST_siege061 = "You are wanted for prostitution";
+const string CONST_siege060 = "You are wanted for petty larceny";
+const string CONST_siege059 = "You are wanted for credit card fraud";
+const string CONST_siege058 = "You are wanted for grand theft auto";
+const string CONST_siege057 = "You are wanted for misdemeanor assault";
+const string CONST_siege056 = "You are wanted for assault with a deadly weapon";
+const string CONST_siege055 = "You are wanted for extortion";
+const string CONST_siege054 = "You are wanted for racketeering";
+const string CONST_siege053 = "You are wanted for jury tampering";
+const string CONST_siege052 = "You are wanted for aiding a prison escape";
+const string CONST_siege051 = "You are wanted for escaping prison";
+const string CONST_siege050 = "You are wanted for sale and distribution of a controlled substance";
+const string CONST_siege049 = "You are wanted for sedition";
+const string CONST_siege045 = "You are wanted for arson";
+const string CONST_siege044 = "You are wanted for bank robbery";
+const string CONST_siege043 = "You are wanted for kidnapping";
+const string CONST_siege042 = "You are wanted for first degree murder";
+const string CONST_siege041 = "You are wanted for terrorism";
+const string CONST_siege040 = "You are wanted for treason";
+const string CONST_siege075 = " and other crimes";
+const string CONST_siege062 = "You are wanted for hiring an illegal alien";
+const string CONST_siege048 = "You are wanted for flag burning";
+const string CONST_siege047 = "You are wanted for felony flag burning";
+const string CONST_siege046 = "You are wanted for Flag Murder";
+const string CONST_siege039 = " unharmed!";
+const string CONST_siege038 = " and the others";
+const string CONST_siege037 = "Release ";
+const string CONST_siege035 = "In the name of God, your campaign of terror ends here!";
+const string CONST_siege034 = "You hear a blaring voice on a loudspeaker:";
+const string CONST_siege033 = "You hear shouts:";
+const string CONST_siegeB252 = "You are wanted for hiring an undocumented worker";
+const string CONST_siegeB254 = "HIRING UNDOCUMENTED WORKERS";
+const string CONST_siegeB253 = "FLAG BURNING";
+const string CONST_siege109 = "LOITERING";
+const string CONST_siege108 = "PUBLIC NUDITY";
+const string CONST_siege107 = "DISTURBING THE PEACE";
+const string CONST_siege106 = "RESISTING ARREST";
+const string CONST_siege105 = "VANDALISM";
+const string CONST_siege104 = "BREAKING AND ENTERING";
+const string CONST_siege103 = "UNLAWFUL BURIAL";
+const string CONST_siege102 = "HACKING";
+const string CONST_siege101 = "ELECTRONIC SABOTAGE";
+const string CONST_siege098 = "HIRING ILLEGAL ALIENS";
+const string CONST_siege097 = "PROSTITUTION";
+const string CONST_siege096 = "THEFT";
+const string CONST_siege095 = "CREDIT CARD FRAUD";
+const string CONST_siege094 = "GRAND THEFT AUTO";
+const string CONST_siege093 = "ASSAULT";
+const string CONST_siege092 = "ARMED ASSAULT";
+const string CONST_siege091 = "EXTORTION";
+const string CONST_siege090 = "RACKETEERING";
+const string CONST_siege089 = "JURY TAMPERING";
+const string CONST_siege088 = "RELEASING PRISONERS";
+const string CONST_siege087 = "ESCAPING PRISON";
+const string CONST_siege086 = "DRUG DEALING";
+const string CONST_siege085 = "HARMFUL SPEECH";
+const string CONST_siege084 = "FLAG MURDER";
+const string CONST_siege083 = "ARSON";
+const string CONST_siege082 = "BANK ROBBERY";
+const string CONST_siege081 = "KIDNAPPING";
+const string CONST_siege080 = "MURDER";
+const string CONST_siege079 = "TERRORISM";
+const string CONST_siege078 = "TREASON";
+const string CONST_siege077 = "REHABILITATION";
+const string CONST_siege076 = "WANTED FOR ";
+const string CONST_siege116 = "Press Esc to ponder the situation...";
+const string CONST_siege115 = "attack will be carried out by SEAL Team 6.";
+const string CONST_siege114 = "Planes will bomb the compound during the siege, and the final ";
+const string CONST_siege113 = "A tank will cover the entrance to the compound.";
+const string CONST_siege112 = "The fighting force will be composed of national guard troops.";
+const string CONST_siege111 = "an imminent police raid on ";
+const string CONST_siege110 = "You have received advance warning from your sleepers regarding ";
+
+const string CONST_siege124 = "The cops have raided the ";
+const string CONST_siege122 = "You hear jet bombers streak overhead.";
+const string CONST_siege121 = "An M1 Abrams Tank takes up position outside the compound.";
+const string CONST_siege120 = "An M1 Abrams Tank is stopped by the tank traps.";
+const string CONST_siege119 = "National Guard troops are replacing normal SWAT units.";
+const string CONST_siege117 = "The police have surrounded the ";
+const string CONST_siege133 = "the LCS";
+const string CONST_siege132 = "are hiring mercenaries to attack ";
+const string CONST_siege131 = " that the Corporations ";
+const string CONST_siege130 = "an anonymous tip";
+const string CONST_siege129 = "your sleeper CEO's warning";
+const string CONST_siege128 = "You have received ";
+const string CONST_siege134 = "Corporate mercenaries are raiding the ";
+const string CONST_siege144 = "CCS members pour out of the truck and shoot in the front doors!";
+const string CONST_siege143 = "INJURED: ";
+const string CONST_siege142 = "KILLED: ";
+const string CONST_siege141 = "CCS CAR BOMBING CASUALTY REPORT";
+const string CONST_siege140 = "The truck plows into the building and explodes!";
+const string CONST_siege138 = "A screeching truck pulls up to ";
+const string CONST_siege137 = " is gearing up to attack ";
+const string CONST_siege136 = "You have received a sleeper warning that the CCS ";
+const string CONST_siege169 = "Come quietly and you will not be harmed.";
+const string CONST_siege168 = "Unacceptable Speech has occurred at this location.";
+const string CONST_siege166 = "You hear a screeching voice over the sound of fire engine sirens:";
+const string CONST_siege165 = "Armored firemen swarm out, pilot lights burning.";
+const string CONST_siege163 = "Screaming fire engines pull up to the ";
+
+const string CONST_siege175 = "Materials relating to the business front have been destroyed.";
+const string CONST_siege170 = "The Firemen have raided the ";
+const string CONST_siege146 = "to launch an attack on ";
+const string CONST_siege145 = "A sleeper agent has reported that the CIA is planning ";
+const string CONST_siege153 = "They've shut off the lights!";
+const string CONST_siege152 = "to shut off the lights!";
+const string CONST_siege151 = "Through some form of high technology, they've managed ";
+const string CONST_siege150 = "to shut off the lights and the cameras!";
+
+const string CONST_siege147 = "Unmarked black vans are surrounding the ";
+const string CONST_siege158 = "are storming the ";
+const string CONST_siege154 = "Masses dissatisfied with your lack of respect for AM Radio ";
+//	const string CONST_siege158 = "are storming the ";
+const string CONST_siege157 = "Masses dissatisfied with your lack of respect for Cable News ";
+const string CONST_siege162 = "the Firemen are planning to burn ";
+const string CONST_siege161 = "Word in the underground is that ";
+const string CONST_siege160 = "A sleeper Fireman has informed you that ";
+const string CONST_siege176 = "Conservatives have raided the ";
+const string CONST_siege202 = "Fortunately, no one is hurt.";
+const string CONST_siege201 = " narrowly avoided death!";
+const string CONST_siege200 = " was killed in the bombing!";
+const string CONST_siege199 = "The lights fade and all is dark.";
+const string CONST_siege198 = "The generator has been destroyed!";
+const string CONST_siege197 = "There's nothing left but smoking wreckage...";
+const string CONST_siege196 = "The anti-aircraft gun takes a direct hit!";
+const string CONST_siege195 = "Explosions rock the compound!";
+const string CONST_siege194 = "A skilled pilot gets through!";
+const string CONST_siege193 = "It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!";
+const string CONST_siege192 = "Hit! One of the bombers slams into to the ground.";
+const string CONST_siege191 = "You didn't shoot any down, but you've made them think twice!";
+const string CONST_siege190 = "The thunder of the anti-aircraft gun shakes the compound!";
+const string CONST_siege189 = "You hear planes streak overhead!";
+const string CONST_siege187 = "A sniper nearly hits ";
+const string CONST_siege185 = "A sniper takes out ";
+const string CONST_siege224 = "'s words.";
+const string CONST_siege223 = "Virtually everyone in America was moved by ";
+const string CONST_siege222 = " later went on to win a Pulitzer for it.";
+const string CONST_siege221 = "Even the Cable News and AM Radio spend days talking about it.";
+const string CONST_siege220 = "The discussion was exciting and dynamic.";
+const string CONST_siege219 = " represents the LCS well.";
+const string CONST_siege218 = "'s verbal finesse leaves something to be desired.";
+const string CONST_siege217 = " stutters nervously the whole time.";
+const string CONST_siege216 = "But ";
+const string CONST_siege215 = " falls asleep.";
+const string CONST_siege214 = "But the interview is so boring that ";
+const string CONST_siege213 = "Retarded";
+const string CONST_siege212 = "Dumb";
+const string CONST_siege211 = "and later used the material for a Broadway play called";
+const string CONST_siege210 = " canceled the interview halfway through";
+const string CONST_siege207 = "got into the compound somehow!";
+const string CONST_siege206 = " from the ";
+const string CONST_siege205 = "Elitist ";
+const string CONST_siege204 = "The tank moves forward to your compound entrance.";
+const string CONST_siege203 = "Army engineers have removed your tank traps.";
+const string CONST_siege184 = "The police have cut the lights!";
+const string CONST_siege183 = "The cops are coming!";
+const string CONST_siege182 = " has starved to death.";
+const string CONST_siege181 = "Your Liberals are starving!";
+const string CONST_siege180 = "A day passes while under siege...";
+const string CONST_siege227 = "Your Liberals split up and lay low for a few days.";
+const string CONST_siege226 = "Press any key to split up and lay low for a few days";
+const string CONST_siege225 = "You have escaped!";
+const string CONST_siege242 = "The siege is broken!";
+const string CONST_siege241 = "You're free!";
+const string CONST_siege240 = "C - Reflect on your Conservative judgment.";
+const string CONST_siege239 = "G - Surrender";
+const string CONST_siege238 = "F - Fight!";
+const string CONST_siege237 = "E - Equip";
+const string CONST_siege236 = "D - Escape";
+
+const string CONST_siege252 = "Press any key to Confront the Conservative Aggressors";
+const string CONST_siege245 = "Your Liberals sally forth to confront the siege.";
+const string CONST_siege243 = "UNDER SIEGE: ESCAPE OR ENGAGE";
+vector<string> words_meaning_news;
+vector<string> newspaper_first_name;
+vector<string> newspaper_last_name;
+vector<string> insult_for_liberal;
+vector<string> word_replacing_liberal;
+vector<string> engageConservativesEscape;
+vector<string> engageConservatives;
+vector<string> nextSiegeAgain;
+vector<string> nextSiege;
+vector<file_and_text_collection> siege_text_file_collection = {
+	/*siege.cpp*/
+	customText(&words_meaning_news, siege + CONST_siege006),
+	customText(&newspaper_first_name, siege + CONST_siege007),
+	customText(&newspaper_last_name, siege + CONST_siege008),
+	customText(&insult_for_liberal, siege + CONST_siege009),
+	customText(&word_replacing_liberal, siege + CONST_siege010),
+	customText(&nextSiege, mostlyendings + CONST_siege011),
+	customText(&nextSiegeAgain, mostlyendings + CONST_siege012),
+	customText(&engageConservatives, mostlyendings + CONST_siege013),
+	customText(&engageConservativesEscape, mostlyendings + CONST_siege014),
+};
+
+map<Lawflags, string> youAreWantedForThis = {
+
+	//TREASON
+	map<Lawflags, string>::value_type(LAWFLAG_TREASON, CONST_siege040),
+	//TERRORISM
+	map<Lawflags, string>::value_type(LAWFLAG_TERRORISM, CONST_siege041),
+	//MURDERER
+	map<Lawflags, string>::value_type(LAWFLAG_MURDER, CONST_siege042),
+	//KIDNAPPER
+	map<Lawflags, string>::value_type(LAWFLAG_KIDNAPPING, CONST_siege043),
+	//BANK ROBBER
+	map<Lawflags, string>::value_type(LAWFLAG_BANKROBBERY, CONST_siege044),
+	//ARSONIST
+	map<Lawflags, string>::value_type(LAWFLAG_ARSON, CONST_siege045),
+	//SPEECH
+	map<Lawflags, string>::value_type(LAWFLAG_SPEECH, CONST_siege049),
+	//BROWNIES
+	map<Lawflags, string>::value_type(LAWFLAG_BROWNIES, CONST_siege050),
+	//ESCAPED
+	map<Lawflags, string>::value_type(LAWFLAG_ESCAPED, CONST_siege051),
+	//HELP ESCAPED
+	map<Lawflags, string>::value_type(LAWFLAG_HELPESCAPE, CONST_siege052),
+	//JURY
+	map<Lawflags, string>::value_type(LAWFLAG_JURY, CONST_siege053),
+	//RACKETEERING
+	map<Lawflags, string>::value_type(LAWFLAG_RACKETEERING, CONST_siege054),
+	//EXTORTION
+	map<Lawflags, string>::value_type(LAWFLAG_EXTORTION, CONST_siege055),
+	//ASSAULT
+	map<Lawflags, string>::value_type(LAWFLAG_ARMEDASSAULT, CONST_siege056),
+	//ASSAULT
+	map<Lawflags, string>::value_type(LAWFLAG_ASSAULT, CONST_siege057),
+	//CAR THEFT
+	map<Lawflags, string>::value_type(LAWFLAG_CARTHEFT, CONST_siege058),
+	//CC FRAUD
+	map<Lawflags, string>::value_type(LAWFLAG_CCFRAUD, CONST_siege059),
+	//THIEF
+	map<Lawflags, string>::value_type(LAWFLAG_THEFT, CONST_siege060),
+	//PROSTITUTION
+	map<Lawflags, string>::value_type(LAWFLAG_PROSTITUTION, CONST_siege061),
+	//COMMERCE
+	map<Lawflags, string>::value_type(LAWFLAG_COMMERCE, CONST_siege065),
+	//INFORMATION
+	map<Lawflags, string>::value_type(LAWFLAG_INFORMATION, CONST_siege066),
+	//UNLAWFUL BURIAL
+	map<Lawflags, string>::value_type(LAWFLAG_BURIAL, CONST_siege067),
+	//BREAKING
+	map<Lawflags, string>::value_type(LAWFLAG_BREAKING, CONST_siege068),
+	//VANDALISM
+	map<Lawflags, string>::value_type(LAWFLAG_VANDALISM, CONST_siege069),
+	//RESIST
+	map<Lawflags, string>::value_type(LAWFLAG_RESIST, CONST_siege070),
+	//DISTURBANCE
+	map<Lawflags, string>::value_type(LAWFLAG_DISTURBANCE, CONST_siege071),
+	//PUBLIC NUDITY
+	map<Lawflags, string>::value_type(LAWFLAG_PUBLICNUDITY, CONST_siege072),
+	//LOITERING
+	map<Lawflags, string>::value_type(LAWFLAG_LOITERING, CONST_siege073),
+};
+map<int, string> mostSeriousCrime = {
+
+	map<int, string>::value_type(LAWFLAG_TREASON,
+	CONST_siege078),
+	//TERRORISM
+	map<int, string>::value_type(LAWFLAG_TERRORISM,
+	CONST_siege079),
+	//MURDERER
+	map<int, string>::value_type(LAWFLAG_MURDER,
+	CONST_siege080),
+	//KIDNAPPER
+	map<int, string>::value_type(LAWFLAG_KIDNAPPING,
+	CONST_siege081),
+	//BANK ROBBER
+	map<int, string>::value_type(LAWFLAG_BANKROBBERY,
+	CONST_siege082),
+	//ARSONIST
+	map<int, string>::value_type(LAWFLAG_BANKROBBERY,
+	CONST_siege083),
+};
+map<int, string> mostSeriousCrime2 = {
+	//SPEECH
+	map<int, string>::value_type(LAWFLAG_SPEECH,
+	CONST_siege085),
+	//BROWNIES
+	map<int, string>::value_type(LAWFLAG_BROWNIES,
+	CONST_siege086),
+	//ESCAPED
+	map<int, string>::value_type(LAWFLAG_ESCAPED,
+	CONST_siege087),
+	//HELP ESCAPED
+	map<int, string>::value_type(LAWFLAG_HELPESCAPE,
+	CONST_siege088),
+	//JURY
+	map<int, string>::value_type(LAWFLAG_JURY,
+	CONST_siege089),
+	//RACKETEERING
+	map<int, string>::value_type(LAWFLAG_RACKETEERING,
+	CONST_siege090),
+	//EXTORTION
+	map<int, string>::value_type(LAWFLAG_EXTORTION,
+	CONST_siege091),
+	//ASSAULT
+	map<int, string>::value_type(LAWFLAG_ARMEDASSAULT,
+	CONST_siege092),
+	//ASSAULT
+	map<int, string>::value_type(LAWFLAG_ASSAULT,
+	CONST_siege093),
+	//CAR THEFT
+	map<int, string>::value_type(LAWFLAG_CARTHEFT,
+	CONST_siege094),
+	//CC FRAUD
+	map<int, string>::value_type(LAWFLAG_CCFRAUD,
+	CONST_siege095),
+	//THIEF
+	map<int, string>::value_type(LAWFLAG_THEFT,
+	CONST_siege096),
+	//PROSTITUTION
+	map<int, string>::value_type(LAWFLAG_PROSTITUTION,
+	CONST_siege097)
+};
+map<int, string> mostSeriousCrime3 = {
+	//COMMERCE
+	map<int, string>::value_type(LAWFLAG_COMMERCE,
+	CONST_siege101),
+	//INFORMATION
+	map<int, string>::value_type(LAWFLAG_INFORMATION,
+	CONST_siege102),
+	//UNLAWFUL BURIAL
+	map<int, string>::value_type(LAWFLAG_BURIAL,
+	CONST_siege103),
+	//BREAKING
+	map<int, string>::value_type(LAWFLAG_BREAKING,
+	CONST_siege104),
+	//VANDALISM
+	map<int, string>::value_type(LAWFLAG_VANDALISM,
+	CONST_siege105),
+	//RESIST
+	map<int, string>::value_type(LAWFLAG_RESIST,
+	CONST_siege106),
+	//DISTURBANCE
+	map<int, string>::value_type(LAWFLAG_DISTURBANCE,
+	CONST_siege107),
+	//PUBLIC NUDITY
+	map<int, string>::value_type(LAWFLAG_PUBLICNUDITY,
+	CONST_siege108),
+	//LOITERING
+	map<int, string>::value_type(LAWFLAG_LOITERING,
+	CONST_siege109),
+};
+
+const string CONST_siege255 = "* * * * *   VICTORY   * * * * *";
+const string CONST_siege274 = "Press C to Continue Liberally.";
+const string CONST_siege234 = "this filth until the Liberal Agenda is realized.";
+const string CONST_siege233 = "Unfortunately, you will never truly be safe from ";
+const string CONST_siege232 = "The Conservative automatons have been driven back.  ";
+const string CONST_siege231 = "abandoning this safe house for a safer location.";
+const string CONST_siege230 = "the time being.  While they are regrouping, you might consider ";
+const string CONST_siege229 = "The Conservative automatons have been driven back ÄÄ for ";
+const string CONST_siege248 = "You have been defeated.";
+const string CONST_siege253 = "Your Liberals confront the Conservatives within the safehouse.";
+const string CONST_siege251 = "Your traps will harass the enemy, but not the Squad.";
+const string CONST_siege250 = "Your security cameras let you see units on the (M)ap.";
+const string CONST_siege249 = "UNDER ATTACK: ESCAPE OR ENGAGE";
+
+void printReporterEnteredCompound(const string repname) {
+	set_color_easy(WHITE_ON_BLACK);
+	eraseAlt();
+	mvaddstrAlt(1, 1, CONST_siege205, gamelog);
+	addstrAlt(repname, gamelog);
+	addstrAlt(CONST_siege206, gamelog);
+	addstrAlt(pickrandom(words_meaning_news), gamelog);
+	addstrAlt(singleSpace);
+	addstrAlt(pickrandom(newspaper_first_name), gamelog);
+	addstrAlt(singleSpace, gamelog);
+	addstrAlt(pickrandom(newspaper_last_name), gamelog);
+	mvaddstrAlt(2, 1, CONST_siege207, gamelog);
+	gamelog.newline();
+}
+void printThePoliceCutLights(const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege184, gamelog);
+	gamelog.newline();
+}
+
+void printReporterDuringSiege(const string repname, const string name, const int segmentpower) {
+
+	string line_one;
+	string line_two = blankString;
+	if (segmentpower < 15)
+	{
+		line_one = repname + CONST_siege210;
+		line_two = CONST_siege211;
+		if (LCSrandom(insult_for_liberal.size() + 1)) {
+			mvaddstrAlt(10, 1, pickrandom(insult_for_liberal));
+		}
+		else {
+			if (lawList[LAW_FREESPEECH] == -2) mvaddstrAlt(10, 1, CONST_siege212, gamelog);
+			else mvaddstrAlt(10, 1, CONST_siege213, gamelog);
+		}
+		addstrAlt(singleSpace, gamelog);
+		addstrAlt(pickrandom(word_replacing_liberal));
+		addstrAlt(singleDot, gamelog);
+	}
+	else if (segmentpower < 20)
+	{
+		line_one = CONST_siege214 + name + CONST_siege215;
+	}
+	else if (segmentpower < 25)
+	{
+		line_one = CONST_siege216 + name + CONST_siege217;
+	}
+	else if (segmentpower < 30)
+	{
+		line_one = name + CONST_siege218;
+
+	}
+	else if (segmentpower < 45)
+	{
+		line_one = name + CONST_siege219;
+	}
+	else if (segmentpower < 60)
+	{
+		line_one = CONST_siege220;
+		line_two = CONST_siege221;
+	}
+	else
+	{
+		line_one = repname + CONST_siege222;
+		line_two = CONST_siege223 + name + CONST_siege224;
+	}
+	mvaddstrAlt(8, 1, line_one, gamelog);
+	if (len(line_two) > 0) {
+		mvaddstrAlt(9, 1, line_two, gamelog);
+	}
+	gamelog.newline();
+}
+void printShotBySniper(const string targname) {
+	mvaddstrAlt(8, 1, CONST_siege185, gamelog);
+	addstrAlt(targname, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+}
+void printMissedBySniper(const string targname) {
+	mvaddstrAlt(8, 1, CONST_siege187, gamelog);
+	addstrAlt(targname, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+}
+
+void printWasKilledInBombing(const string targname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, targname, gamelog);
+	addstrAlt(CONST_siege200, gamelog);
+	gamelog.newline();
+}
+void printNarrowlyAvoidsDeath(const string targname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, targname, gamelog);
+	addstrAlt(CONST_siege201, gamelog);
+	gamelog.newline();
+}
+void printNoOneIsHurt(const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege202, gamelog);
+	gamelog.newline();
+}
+
+void printCONST_siege199(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege199, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege198(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege198, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege197(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege197, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege196(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege196, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege195(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege195, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege194(const bool clearformess) {
+
+	mvaddstrAlt(8, 1, CONST_siege194, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege193(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege193, gamelog);
+}
+void printCONST_siege192(const bool clearformess) {
+
+	mvaddstrAlt(8, 1, CONST_siege192, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege191(const bool clearformess) {
+
+	mvaddstrAlt(8, 1, CONST_siege191, gamelog);
+}
+void printCONST_siege190(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	mvaddstrAlt(8, 1, CONST_siege190, gamelog);
+	gamelog.newline();
+}
+void printCONST_siege189(const bool clearformess) {
+
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege189, gamelog);
+	gamelog.newline();
+}
+void printConservativesRaidedUnoccupiedSafehouse(const string locname) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege176, gamelog);
+	addstrAlt(locname, gamelog);
+	addstrAlt(CONST_siege177, gamelog);
+	gamelog.newline();
+
+}
+void printCorpseRecovered(const string pname, const int y) {
+	mvaddstrAlt(y + 9, 1, pname);
+	addstrAlt(CONST_siege178, gamelog);
+	gamelog.newline();
+
+}
+void printLiberalRescued(const string pname, const int y) {
+	mvaddstrAlt(y + 9, 1, pname);
+	addstrAlt(CONST_siege179, gamelog);
+	gamelog.newline();
+
+}
+
+void printReflectOnYourConJudgement()
+{
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 1, CONST_siege240);
+}
+
+void printSallyForthSiege() {
+	eraseAlt();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 26, CONST_siege243);
+	set_color_easy(WHITE_ON_BLACK);
+	int yLevel = 3;
+	for (int i = 0; i < len(nextSiege); i++) {
+		mvaddstrAlt(yLevel + i, 11, nextSiege[i]);
+	}
+	yLevel++;
+	yLevel += len(nextSiege);
+	for (int i = 0; i < len(nextSiegeAgain); i++) {
+		mvaddstrAlt(yLevel + i, 11, nextSiegeAgain[i]);
+	}
+}
+void printSallyForthFooter() {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(23, 11, CONST_siege252);
+	// Seperate logging text
+	gamelog.log(CONST_siege245);
+}
+void printYoureFree() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	clearmessagearea();
+	mvaddstrAlt(16, 1, CONST_siege241, gamelog);
+	gamelog.nextMessage();
+}
+void printSiegeIsBroken() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	clearmessagearea();
+	mvaddstrAlt(16, 1, CONST_siege242, gamelog);
+	gamelog.nextMessage();
+}
+void printSiegeOptions(const int partysize, const short party_status) {
+	if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 40, change_squad_order);
+	if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 40, check_status_of_squad_liberal);
+	if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 40, show_squad_liberal_status);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 1, CONST_siege236);
+	mvaddstrAlt(10, 1, CONST_siege237);
+	mvaddstrAlt(11, 1, CONST_siege238);
+	mvaddstrAlt(12, 1, CONST_siege239);
+}
+void printLocationName(const string loc) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, loc);
+}
+
+
+void printTanksMoveToEntrance(const bool clearformess) {
+	if (!clearformess)
+	{
+		makedelimiter();
+	}
+	mvaddstrAlt(clearformess ? 9 : 8, 1, CONST_siege204, gamelog);
+	gamelog.newline();
+}
+void printEngineersRemoveTankTrap(const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege203, gamelog);
+	gamelog.newline();
+}
+void logADayPasses() {
+	gamelog.record(CONST_siege180);
+	gamelog.newline();
+}
+void printYourLiberalsAreStarving(const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege181, gamelog);
+	gamelog.newline();
+}
+void printHasStarvedToDeath(const string pname, const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, pname, gamelog);
+	addstrAlt(CONST_siege182, gamelog);
+	gamelog.newline();
+}
+void printTheCopsAreComing(const bool clearformess) {
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege183, gamelog);
+	gamelog.newline();
+}
+void printYouHaveEscaped() {
+	eraseAlt();
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 32, CONST_siege225, gamelog);
+	gamelog.nextMessage();
+	set_color_easy(WHITE_ON_BLACK);
+	int yLevel = 3;
+	for (int i = 0; i < len(engageConservativesEscape); i++) {
+		mvaddstrAlt(yLevel + i, 11, engageConservativesEscape[i]);
+	}
+	yLevel += len(engageConservativesEscape);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(yLevel + 1, 11, CONST_siege226);
+	// Seperate logging text
+	gamelog.log(CONST_siege227);
+}
+void printEscapeEngageInfo() {
+	eraseAlt();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 26, CONST_siege249);
+	set_color_easy(WHITE_ON_BLACK);
+	for (int i = 0; i < len(engageConservatives); i++) {
+		mvaddstrAlt(3 + i, 11, engageConservatives[i]);
+	}
+
+}
+void printEscapeEngageInfoFooter(const bool cameras, const bool traps) {
+	int yLevel = 3 + len(engageConservatives);
+	if (cameras)
+	{
+		mvaddstrAlt(yLevel, 16, CONST_siege250);
+	}
+	if (traps)
+	{
+		mvaddstrAlt(yLevel + 1, 16, CONST_siege251);
+	}
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(23, 11, CONST_siege252);
+	// Seperate logging text
+	gamelog.log(CONST_siege253);
+
+}
+void logDefeat() {
+
+	gamelog.log(CONST_siege248);
+}
+void printConquerText(const bool police) {
+
+	eraseAlt();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
+	gamelog.newline();
+	if (police)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(3, 16, CONST_siege229, gamelog);
+		mvaddstrAlt(4, 11, CONST_siege230, gamelog);
+		mvaddstrAlt(5, 11, CONST_siege231, gamelog);
+	}
+	else
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(3, 16, CONST_siege232, gamelog);
+		mvaddstrAlt(4, 11, CONST_siege233, gamelog);
+		mvaddstrAlt(5, 11, CONST_siege234, gamelog);
+	}
+	gamelog.nextMessage();
+	mvaddstrAlt(7, 19, CONST_siege274);
+}
+
+const string CONST_siege273 = "+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD";
+const string CONST_siege272 = "revolution to attend to?";
+const string CONST_siege271 = "The CCS has been completely destroyed.  Now wasn't there a ";
+const string CONST_siege270 = "the last of the enemy's morale and confidence is shattered.";
+const string CONST_siege269 = "With its Founder killed in the heart of their own base, ";
+const string CONST_siege268 = "slips away.  ";
+const string CONST_siege267 = "The CCS Founder lying dead at their feet, the squad ";
+const string CONST_siege266 = "it is increasingly clear that this was the CCS's last safehouse.";
+const string CONST_siege265 = "As your Liberals pick through the remains of the safehouse, ";
+const string CONST_siege264 = "their final victory.  ";
+const string CONST_siege263 = "Gunfire still ringing in their ears, the squad revels in ";
+const string CONST_siege262 = "this will make a fine base for future Liberal operations.";
+const string CONST_siege261 = "power has been severely weakened.  Once the safehouse cools off, ";
+const string CONST_siege260 = "The CCS Founder wasn't here, but for now, their ";
+const string CONST_siege258 = "The CCS Lieutenant lying dead at their feet, the squad ";
+const string CONST_siege257 = "their victory.  ";
+void printConquerTextCCS(const int ccs_siege_kills, const int ccs_kills) {
+
+	eraseAlt();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 26, CONST_siege255, gamelog);
+	gamelog.newline();
+	if (ccs_kills < 3)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		if (ccs_siege_kills > 10)
+		{
+			mvaddstrAlt(3, 16, CONST_siege263, gamelog);
+			mvaddstrAlt(4, 11, CONST_siege257, gamelog);
+		}
+		else
+		{
+			mvaddstrAlt(3, 16, CONST_siege258, gamelog);
+			mvaddstrAlt(4, 11, CONST_siege268);
+		}
+		addstrAlt(CONST_siege260, gamelog);
+		mvaddstrAlt(5, 11, CONST_siege261, gamelog);
+		mvaddstrAlt(6, 11, CONST_siege262, gamelog);
+	}
+	else
+	{
+		if (ccs_siege_kills > 10)
+		{
+			mvaddstrAlt(3, 16, CONST_siege263, gamelog);
+			mvaddstrAlt(4, 11, CONST_siege264, gamelog);
+			mvaddstrAlt(6, 16, CONST_siege265, gamelog);
+			mvaddstrAlt(7, 11, CONST_siege266, gamelog);
+		}
+		else
+		{
+			mvaddstrAlt(3, 16, CONST_siege267, gamelog);
+			mvaddstrAlt(4, 11, CONST_siege268, gamelog);
+			mvaddstrAlt(6, 16, CONST_siege269, gamelog);
+			mvaddstrAlt(7, 11, CONST_siege270, gamelog);
+		}
+		gamelog.newline();
+		mvaddstrAlt(9, 16, CONST_siege271, gamelog);
+		mvaddstrAlt(10, 16, CONST_siege272, gamelog);
+		gamelog.newline();
+		mvaddstrAlt(12, 5, CONST_siege273, gamelog);
+	}
+	gamelog.nextMessage();
+	mvaddstrAlt(15, 19, CONST_siege274);
+}
+// end SIEGE
+//
+// SITEMODE
+extern short lawList[LAWNUM];
+
+const string CONST_sitemode179 = "-D";
+const string CONST_sitemode178 = "                                                                                ";
+const string CONST_sitemode177 = "C - Reflect on your Conservative ineptitude";
+const string CONST_sitemode176 = "R - Reorganize";
+const string CONST_sitemode175 = "R - Release hostage";
+const string CONST_sitemode174 = "R - Release oppressed";
+const string CONST_sitemode173 = "F - Fight!";
+const string CONST_sitemode172 = "E - Equip";
+const string CONST_sitemode171 = "V - Evade";
+const string CONST_sitemode170 = "V - Run";
+const string CONST_sitemode169 = "V - Sneak";
+const string CONST_sitemode168 = "U - Use";
+const string CONST_sitemode167 = "U - Graffiti";
+const string CONST_sitemode166 = "T - Talk";
+const string CONST_sitemode165 = "K - Kidnap";
+const string CONST_sitemode164 = "L - Reload";
+const string CONST_sitemode163 = "S - Wait";
+const string CONST_sitemode162 = "M - Map";
+const string CONST_sitemode161 = "N - Options";
+const string CONST_sitemode160 = "G - Get Loot";
+const string CONST_sitemodeXRL = "J - Reload Empty";
+const string CONST_sitemode159 = "W,A,D,X - Move";
+const string CONST_sitemode158 = ": CONSERVATIVES SUSPICIOUS";
+const string CONST_sitemode157 = ": CONSERVATIVES ALARMED";
+const string CONST_sitemode156 = ": ALIENATED EVERYONE";
+const string CONST_sitemode155 = ": ALIENATED MASSES";
+const string CONST_sitemode154 = ": CONSERVATIVE REINFORCEMENTS INCOMING";
+const string CONST_sitemode153 = ": POLICE RESPONDING";
+const string CONST_sitemode152 = ": DEATH SQUADS RESPONDING";
+const string CONST_sitemode151 = ": CCS VIGILANTIES RESPONDING";
+const string CONST_sitemode150 = ": GANG MEMBERS RESPONDING";
+const string CONST_sitemode149 = ": ANGRY MOB RESPONDING";
+const string CONST_sitemode148 = ": MERCENARIES RESPONDING";
+const string CONST_sitemode147 = ": AGENTS RESPONDING";
+const string CONST_sitemode146 = ": SECRET SERVICE RESPONDING";
+const string CONST_sitemode145 = ": SOLDIERS AND TANKS RESPONDING";
+const string CONST_sitemode144 = ", Level ";
+const string CONST_sitemode143 = ": Escape or Engage";
+//const string CONST_sitemode141 = "Prisoner";
+const string CONST_sitemode140 = "There is a crowd of people passing by.";
+const string CONST_sitemode139 = "There is a crowd of people up ahead.";
+const string CONST_sitemode138 = "There is a group of people passing by.";
+const string CONST_sitemode137 = "There is a group of people up ahead.";
+const string CONST_sitemode136 = "There are a few people passing by.";
+const string CONST_sitemode135 = "There are a few people up ahead.";
+const string CONST_sitemode134 = "There is someone passing by.";
+const string CONST_sitemode133 = "There is someone up ahead.";
+const string CONST_sitemode132 = "The landlord is in.";
+const string CONST_sitemode131 = "The landlord is out of the office.";
+const string CONST_sitemode130 = "The CEO's study lies empty.";
+const string CONST_sitemode129 = "The CEO is in his study.";
+const string CONST_sitemode128 = "The CEO must have fled to a panic room.";
+const string CONST_sitemode127 = "[Rats!] ";
+const string CONST_sitemode126 = "Damn! ";
+const string CONST_sitemode125 = "There are people sitting here.";
+const string CONST_sitemode124 = "The bench is empty.";
+const string CONST_sitemode123 = "The table is occupied.";
+const string CONST_sitemode122 = "Some people are hiding under the table.";
+const string CONST_sitemode121 = "The computer is occupied.";
+const string CONST_sitemode120 = "The computer has been unplugged.";
+const string CONST_sitemode119 = "the power of your Liberal Convictions!";
+const string CONST_sitemode118 = "The Conservatives have shrunk back under ";
+const string CONST_sitemode117 = "The CCS has been broken!";
+const string CONST_sitemode116 = " has left ";
+const string CONST_sitemode115 = "The squad sneaks past the conservatives!";
+const string CONST_sitemode114 = "You find: ";
+const string CONST_sitemode113 = " you, feeling safer getting out alone.";
+const string CONST_sitemode112 = "One Liberal leaves";
+const string CONST_sitemode111 = "The Liberal leaves";
+const string CONST_sitemode110 = "Some leave";
+const string CONST_sitemode109 = "They all leave";
+const string CONST_sitemode108 = " from the Conservatives.";
+const string CONST_sitemode107 = "an Oppressed Liberal";
+const string CONST_sitemode106 = "some Oppressed Liberals";
+const string CONST_sitemode105 = "You free ";
+const string CONST_sitemode102 = "You have to deal with the enemies first.";
+const string CONST_sitemode101 = " won't talk to you.";
+const string CONST_sitemode100 = "To whom?";
+const string CONST_sitemode099 = "Bluff";
+const string CONST_sitemode098 = "Dating";
+const string CONST_sitemode097 = "Issues";
+const string CONST_sitemode096 = "Which Liberal will speak?";
+const string CONST_sitemode095 = "[ ] M - Music";
+const string CONST_sitemode094 = "[ ] E - Encounter warnings";
+const string CONST_sitemode093 = "Site mode options";
+const string CONST_sitemode092 = "Which way?  (W,A,D, and X to move, ENTER to abort)";
+const string CONST_sitemode091 = "It opens easily. The alarm goes off!";
+const string CONST_sitemode090 = "The alarm goes off!";
+const string CONST_sitemode089 = "Force it open? (Yes or No)";
+const string CONST_sitemode088 = "It's locked from the other side.";
+const string CONST_sitemode087 = "locked.";
+const string CONST_sitemode086 = "still ";
+const string CONST_sitemode085 = "You shake the handle but it is ";
+const string CONST_sitemode084 = "Your tampering sets off the alarm!";
+const string CONST_sitemode083 = "Try to pick the lock? (Yes or No)";
+const string CONST_sitemode082 = "You try the door, but it is locked.";
+const string CONST_sitemode081 = "Try the door anyway? (Yes or No)";
+const string CONST_sitemode080 = "EMERGENCY EXIT ONLY. ALARM WILL SOUND.";
+const string CONST_sitemode079 = "This door appears to be wired up to an alarm.";
+const string CONST_sitemode078 = "The vault door is impenetrable.";
+const string CONST_sitemode077 = "too hot";
+const string CONST_sitemode076 = "Your hostage is free.";
+const string CONST_sitemode075 = "Your hostages are free.";
+const string CONST_sitemode074 = "The police subdue and arrest the squad.";
+const string tag_X = "X";
+void printItOpensWithAlarm() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode091, gamelog);
+	gamelog.newline();
+}
+void printVaultIsImpenetrable() {
+
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode078, gamelog);
+	gamelog.newline();
+}
+void printUnlockedButAlarmed(const bool locked) {
+
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (locked)
+		mvaddstrAlt(16, 1, CONST_sitemode079, gamelog);
+	else
+		mvaddstrAlt(16, 1, CONST_sitemode080, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(17, 1, CONST_sitemode081);
+}
+void printSquadSubduedHostagesFreed(const int hostages) {
+	clearmessagearea();
+	clearcommandarea();
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode074, gamelog);
+	gamelog.newline();
+	if (hostages > 0)
+	{
+		if (hostages > 1) {
+			mvaddstrAlt(17, 1, CONST_sitemode075, gamelog);
+		}
+		else {
+			mvaddstrAlt(17, 1, CONST_sitemode076, gamelog);
+		}
+	}
+	gamelog.newline();
+}
+void printShakeHandle(const bool locked, const bool has_security) {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (locked)
+	{
+
+		mvaddstrAlt(16, 1, CONST_sitemode085, gamelog);
+		if (has_security) addstrAlt(CONST_sitemode086, gamelog);
+		addstrAlt(CONST_sitemode087, gamelog);
+	}
+	else mvaddstrAlt(16, 1, CONST_sitemode088, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(17, 1, CONST_sitemode089);
+}
+void printLockpickPrompt() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode082, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(17, 1, CONST_sitemode083);
+}
+void printLockSetOffAlarm() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, CONST_sitemode084, gamelog);
+	gamelog.newline();
+}
+void printAlarmGoesOff() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode090, gamelog);
+	gamelog.newline();
+}
+void printWhichWay() {
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode092);
+}
+void printSitemodeOptions() {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 1, CONST_sitemode094);
+	mvaddstrAlt(11, 1, CONST_sitemode095);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(24, 1, enter_done);
+}
+void printSitemodeOptionsHeader() {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_sitemode093);
+}
+void printMusicEnabled(const bool musice) {
+
+	if (musice)
+		mvaddstrAlt(11, 2, tag_X);
+	else mvaddstrAlt(11, 2, singleSpace);
+}
+void printEncounterWarnings(const bool ewarn) {
+
+	if (ewarn)
+		mvaddstrAlt(10, 2, tag_X);
+	else mvaddstrAlt(10, 2, singleSpace);
+}
+void printActiveSquadTalkOptionsHeader() {
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, CONST_sitemode096);
+	mvaddstrAlt(9, 50, CONST_sitemode097);
+	mvaddstrAlt(9, 60, CONST_sitemode098);
+	mvaddstrAlt(9, 70, CONST_sitemode099);
+}
+void printToWhom() {
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, CONST_sitemode100);
+}
+void printCreatureEncounter(const int t, const int talign, const string tname, const string tage) {
+	int y = 11 + (t%6);
+	int x = 1 + (30 * (t/6));
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddcharAlt(y, x, t + 'A');
+	addstrAlt(spaceDashSpace);
+	switch (talign)
+	{
+	case ALIGN_CONSERVATIVE:
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		break;
+	case ALIGN_LIBERAL:
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		break;
+	case ALIGN_MODERATE:
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		break;
+	}
+	addstrAlt(tname);
+	addstrAlt(tage);
+}
+void printIWontTalkToYou(const string tkname) {
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, tkname);
+	addstrAlt(CONST_sitemode101);
+}
+void printYouHaveEnemiesFirst() {
+
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, CONST_sitemode102);
+}
+void printFreeThem(const int followers) {
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode105, gamelog);
+	if (followers > 1)addstrAlt(CONST_sitemode106, gamelog);
+	else addstrAlt(CONST_sitemode107, gamelog);
+	addstrAlt(CONST_sitemode108, gamelog);
+	gamelog.newline();
+}
+void printFreeThemWithoutYou(const int followers, const int actgot) {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (actgot == 0 && followers > 1)mvaddstrAlt(16, 1, CONST_sitemode109, gamelog);
+	else if (followers - actgot > 1)mvaddstrAlt(16, 1, CONST_sitemode110, gamelog);
+	else if (actgot == 0)mvaddstrAlt(16, 1, CONST_sitemode111, gamelog);
+	else mvaddstrAlt(16, 1, CONST_sitemode112, gamelog);
+	addstrAlt(CONST_sitemode113, gamelog);
+	gamelog.newline();
+}
+void printEnemyCar(const string cname, const int v) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(19, v * 20 + 1, cname);
+
+}
+void printClearChaseScreen() {
+	for (int i = 19; i <= 24; i++) {
+		mvaddstrAlt(i, 0, CONST_sitemode178); // 80 spaces
+	}
+}
+void printYouFind(const string that_thing) {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(16, 1, CONST_sitemode114, gamelog);
+	mvaddstrAlt(17, 1, that_thing, gamelog);
+	gamelog.newline();
+}
+void printSneakPast() {
+	clearmessagearea();
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode115, gamelog);
+	gamelog.newline();
+}
+void printEnemyCarPassenger(const string ename, const int vnum, const int pnum, const bool driver) {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(pnum + 20, vnum * 20 + 1, ename);
+	if (driver) {
+		addstrAlt(CONST_sitemode179);
+	}
+}
+void printReflectOnIneptitude() {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 1, CONST_sitemode177);
+}
+void printSiegeName(const string sname, const int locz) {
+
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, sname);
+	addstrAlt(CONST_sitemode144);
+	addstrAlt(locz + 1);
+	addstrAlt(CONST_sitemode143);
+}
+void printCONSERVATIVES_SUSPICIOUS() {
+	addstrAlt(CONST_sitemode158);
+}
+void printCONSERVATIVES_ALARMED() {
+	addstrAlt(CONST_sitemode157);
+}
+void printALIENATED_EVERYONE() {
+	addstrAlt(CONST_sitemode156);
+}
+void printALIENATED_MASSES() {
+	addstrAlt(CONST_sitemode155);
+}
+void printCONSERVATIVE_REINFORCEMENTS_INCOMING() {
+	addstrAlt(CONST_sitemode154);
+}
+void printLocationNameAndAlarm(const string lname, const int postalarmtimer, const int locz) {
+
+	if (postalarmtimer > 80) set_color_easy(RED_ON_BLACK_BRIGHT);
+	else if (postalarmtimer > 60) set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	else set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, lname);
+	addstrAlt(CONST_sitemode144);
+	addstrAlt(locz + 1);
+}
+void printLocationSpecificWarning(const int lsite, const bool ccsRent) {
+	switch (lsite)
+	{
+	case SITE_GOVERNMENT_ARMYBASE:
+		addstrAlt(CONST_sitemode145);
+		break;
+	case SITE_GOVERNMENT_WHITE_HOUSE:
+		addstrAlt(CONST_sitemode146);
+		break;
+	case SITE_GOVERNMENT_INTELLIGENCEHQ:
+		addstrAlt(CONST_sitemode147);
+		break;
+	case SITE_CORPORATE_HEADQUARTERS:
+	case SITE_CORPORATE_HOUSE:
+		addstrAlt(CONST_sitemode148);
+		break;
+	case SITE_MEDIA_AMRADIO:
+	case SITE_MEDIA_CABLENEWS:
+		addstrAlt(CONST_sitemode149);
+		break;
+	case SITE_BUSINESS_CRACKHOUSE:
+		addstrAlt(CONST_sitemode150);
+		break;
+	case SITE_GOVERNMENT_POLICESTATION:
+	default:
+		if (ccsRent)
+		{
+			addstrAlt(CONST_sitemode151);
+		}
+		else if (lawList[LAW_DEATHPENALTY] == -2 &&
+			lawList[LAW_POLICEBEHAVIOR] == -2)addstrAlt(CONST_sitemode152);
+		else addstrAlt(CONST_sitemode153);
+		break;
+	}
+}
+void printFoughtOffConservatives() {
+	clearmessagearea();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode118, gamelog);
+	mvaddstrAlt(17, 1, CONST_sitemode119, gamelog);
+	gamelog.newline();
+}
+void logBailOnBase(const string aname, const string sitename) {
+
+	gamelog.record(aname);
+	gamelog.record(CONST_sitemode116);
+	gamelog.record(sitename);
+	gamelog.record(singleDot);
+	gamelog.nextMessage();
+}
+void printCafeComputerEmpty() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode120, gamelog);
+	gamelog.newline();
+}
+void printCafeComputerFull() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode121, gamelog);
+	gamelog.newline();
+}
+void printTheCCSIsBroken() {
+	clearmessagearea();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode117, gamelog);
+	gamelog.newline();
+}
+void printEmptyBench() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode124, gamelog);
+	gamelog.newline();
+}
+void printFullBench() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode125, gamelog);
+	gamelog.newline();
+
+}
+void printRestaurantTableFull() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode123, gamelog);
+	gamelog.newline();
+}
+void printRestaurantTableHiding() {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode122, gamelog);
+	gamelog.newline();
+}
+void printTheCEOHasFled() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (lawList[LAW_FREESPEECH] != ALIGN_ARCHCONSERVATIVE)
+		mvaddstrAlt(16, 1, CONST_sitemode126, gamelog);
+	else
+		mvaddstrAlt(16, 1, CONST_sitemode127, gamelog);
+	addstrAlt(CONST_sitemode128, gamelog);
+	gamelog.newline();
+}
+void printTheCEOIsIn() {
+
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode129, gamelog);
+	gamelog.newline();
+}
+void printTheCEOIsOut() {
+
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode130, gamelog);
+	gamelog.newline();
+}
+void printTheLandlordIsOut() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode131, gamelog);
+	gamelog.newline();
+}
+void printTheLandlordIsIn() {
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, CONST_sitemode132, gamelog);
+	gamelog.newline();
+}
+void printShowEncounterWarning(const int numenc, const bool squadmoved) {
+
+	clearmessagearea(false);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	string weMoved;
+	string weDidntMove;
+	if (numenc == 1)
+	{
+		weMoved = CONST_sitemode133;
+		weDidntMove = CONST_sitemode134;
+	}
+	else if (numenc <= 3)
+	{
+		weMoved = CONST_sitemode135;
+		weDidntMove = CONST_sitemode136;
+	}
+	else if (numenc <= 6)
+	{
+		weMoved = CONST_sitemode137;
+		weDidntMove = CONST_sitemode138;
+	}
+	else
+	{
+		weMoved = CONST_sitemode139;
+		weDidntMove = CONST_sitemode140;
+	}
+	if (squadmoved) {
+		mvaddstrAlt(16, 1, weMoved, gamelog);
+	}
+	else {
+		mvaddstrAlt(16, 1, weDidntMove, gamelog);
+	}
+	gamelog.newline();
+}
+void printPlayerSiteOptions(const bool isThereASiteAlarm, const bool enemy, const int partysize, const int party_status, const bool talkers) {
+
+	if (!enemy || !isThereASiteAlarm)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, CONST_sitemode159);
+	if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, change_squad_order);
+	if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, check_status_of_squad_liberal);
+	if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, show_squad_liberal_status);
+	if (isThereGroundLoot() || (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_LOOT))
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 17, CONST_sitemode160);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 17, CONST_sitemode161);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 32, CONST_sitemode162);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 32, CONST_sitemode163);
+	if (!enemy || !isThereASiteAlarm) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 42, CONST_sitemode164);
+	mvaddstrAlt(10, 1, CONST_sitemodeXRL);
+	if (enemy) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 42, CONST_sitemode165);
+	if (talkers) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 17, CONST_sitemode166);
+}
+void printUseOrGraffiti(const bool graffiti, const bool print_me) {
+	if (print_me) {
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	}
+	else {
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	if (graffiti)mvaddstrAlt(11, 42, CONST_sitemode167);
+	else mvaddstrAlt(11, 42, CONST_sitemode168);
+}
+void printEvade() {
+
+	set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 42, CONST_sitemode171);
+}
+void printEquipAndFight(const bool enemy) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(9, 42, CONST_sitemode172);
+	if (enemy)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, CONST_sitemode173);
+}
+void printReleaseOppressed() {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(14, 32, CONST_sitemode174);
+}
+void printReleaseHostages(const bool hostages) {
+	if (hostages) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 32, CONST_sitemode175);
+
+}
+
+#define CH_FULL_BLOCK 0xdb
+#define CH_UPWARDS_ARROW 0x18
+#define CH_DOWNWARDS_ARROW 0x19
+#define CH_BLACK_SMILING_FACE 0x02
+#define CH_YEN_SIGN 0x9d
+#define CH_BOX_DRAWINGS_DOUBLE_VERTICAL 0xba
+#define CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL 0xcd
+#define CH_WHITE_SMILING_FACE 0x01
+void printMap(const bool has_cameras) {
+	for (int x = 0; x < MAPX; x++)
+	{
+		for (int y = 0; y < MAPY; y++)
+		{
+			if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_KNOWN)
+			{
+				if (x == loc_coord.locx && y == loc_coord.locy)
+				{
+					set_color_easy(GREEN_ON_BLACK_BRIGHT);
+					mvaddchAlt(y + 1, x + 5, CH_WHITE_SMILING_FACE);
+				}
+				else
+				{
+					set_color_easy(WHITE_ON_BLACK);
+					if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_BLOCK)
+					{
+						set_color_easy(WHITE_ON_WHITE);
+						mvaddchAlt(y + 1, x + 5, ' ');
+					}
+					else if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_DOOR)
+					{  // Pick color
+						if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_METAL)
+							set_color_easy(WHITE_ON_WHITE_BRIGHT);
+						else if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_CLOCK
+							&& levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_LOCKED)
+							set_color_easy(RED_ON_BLACK);
+						else if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_KLOCK
+							&& levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_LOCKED)
+							set_color_easy(BLACK_ON_BLACK_BRIGHT);
+						else set_color_easy(YELLOW_ON_BLACK);
+						if ((levelmap[x + 1][y][loc_coord.locz].flag & SITEBLOCK_BLOCK) ||
+							(levelmap[x - 1][y][loc_coord.locz].flag & SITEBLOCK_BLOCK))
+							mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
+						else mvaddchAlt(y + 1, x + 5, CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
+					}
+					else if ((levelmap[x][y][loc_coord.locz].siegeflag & SIEGEFLAG_HEAVYUNIT) &&
+						has_cameras)
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_YEN_SIGN);
+					}
+					else if ((levelmap[x][y][loc_coord.locz].siegeflag & SIEGEFLAG_UNIT) &&
+						has_cameras)
+					{
+						set_color_easy(RED_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
+					}
+					else if ((levelmap[x][y][loc_coord.locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED) &&
+						has_cameras)
+					{
+						set_color_easy(RED_ON_BLACK);
+						mvaddchAlt(y + 1, x + 5, CH_BLACK_SMILING_FACE);
+					}
+					else if (levelmap[x][y][loc_coord.locz].special == SPECIAL_STAIRS_UP)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_UPWARDS_ARROW);
+					}
+					else if (levelmap[x][y][loc_coord.locz].special == SPECIAL_STAIRS_DOWN)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, CH_DOWNWARDS_ARROW);
+					}
+					else if (levelmap[x][y][loc_coord.locz].special != -1)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '!');
+					}
+					else if (levelmap[x][y][loc_coord.locz].siegeflag & SIEGEFLAG_TRAP)
+					{
+						set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '!');
+					}
+					else if (levelmap[x][y][loc_coord.locz].flag & SITEBLOCK_LOOT)
+					{
+						set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+						mvaddchAlt(y + 1, x + 5, '$');
+					}
+					else mvaddchAlt(y + 1, x + 5, ' ');
+				}
+			}
+			else
+			{
+				set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				mvaddchAlt(y + 1, x + 5, CH_FULL_BLOCK);
+			}
+		}
+	}
+}
+void logNewLine() {
+	gamelog.newline();
+}
+void printReorganize(const int libnum) {
+	if (libnum > 6)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 32, CONST_sitemode176);
+}
+void printSneakOrRun(const bool evade) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	if (!evade)
+		mvaddstrAlt(12, 42, CONST_sitemode169);
+	else
+		mvaddstrAlt(12, 42, CONST_sitemode170);
+}
+//
+// STEALTH
+const string stealth = "stealth\\";
+vector<string> blew_stealth_check;
+const string CONST_stealth053 = "blew_stealth_check.txt";
+vector<file_and_text_collection> stealth_text_file_collection = {
+	customText(&blew_stealth_check, stealth + CONST_stealth053),
+};
+const string CONST_stealth075 = "and shouts for help!";
+const string CONST_stealth074 = "and lets forth a piercing Conservative alarm cry!";
+const string CONST_stealth073 = "and launches into angry Conservative barking!";
+const string CONST_stealth072 = " looks at the Squad with Intolerance ";
+const string CONST_stealth069 = " sees the Squad's Liberal Weapons ";
+const string CONST_stealth068 = " looks at the Squad suspiciously.";
+const string CONST_stealth067 = " shouts in alarm at the squad's Liberal Trespassing!";
+const string CONST_stealth066 = " acts natural.";
+const string CONST_stealth065 = "The squad";
+const string CONST_stealth064 = " fades into the shadows.";
+const string CONST_stealth062 = "holstered";
+const string CONST_stealth061 = "                                                        ";
+const string CONST_stealth060 = "We've alienated absolutely everyone here!               ";
+const string CONST_stealth059 = "We've alienated the masses here!              ";
+//const string CONST_stealth058 = "Prisoner";
+const string CONST_stealth055 = " observes your Liberal activity ";
+
+
+// TITLESCREEN
+
+const int REAL_QUOTE_SIZE = 4;
+const string pressMtoTurnOffMusic = "Press M to turn off the Music. Press H to view your Liberal High Score.";
+const string pressMtoTurnOnMusic = "Press M to turn on some Music. Press H to view your Liberal High Score.";
+const string pressToSelectSave = "Press a Letter to Select a Save File";
+const string pressToDeleteSave = "Press a Letter to Delete a Save File";
+const string vToSwitchXToQuit = ", V to switch, or X to quit";
+const string areYouSureDelte = "Are you sure you want to delete ";
+const string questionYSlashN = "? (y/n)";
+const string newGame = "NEW GAME";
+const string dotDat = ".dat";
+const string deleteSave = "Delete a Save File";
+const string chooseSave = "Choose a Save File";
+const string titleScreenLine = "----Title-----------------------------------------------------------------------";
+const string inWhatWorld = "In what world will you pursue your Liberal Agenda?";
+const string enterNameForSave = "Enter a name for the save file.";
+const string pleaseEnterName = "Please enter a name for the save file.";
+const string prettyPlease = "Pretty please enter a name for the save file.";
+const string justEnterName = "Just enter a [darn] name for the save file.";
+const string inspiredByOubliette = "Inspired by the 1983 version of Oubliette";
+const string copyrightTarn = "v3.9 Copyright (C) 2002-4, Tarn Adams";
+const string bayTwelveProductions = "A Bay 12 Games Production";
+const string lcsHyperlink = "http://bay12games.com/lcs/";
+const string vChar = "v";
+const string maintainedByOpenSource = " Maintained by the Open Source Community";
+const string kingDrakeHyperlink = "https://github.com/King-Drake/Liberal-Crime-Squad";
+const string lcsForumHyperlink = "http://www.bay12games.com/forum/index.php?board=3.0";
+const string lcsWikiHyperlink = "http://lcs.wikidot.com/";
+const string pressESCToQuit = "Press ESC now to quit. Quitting later causes your progress to be saved.";
+const string pressAnyKeyToPursue = "Press any other key to pursue your Liberal Agenda!";
+const string plusChar = "+";
+const string liberalCrimeSquad = "Liberal Crime Squad";
+const string titley = "titlescreen\\";
+
+const string CONST_titlescreen003 = "real_quote.txt";
+const int SAVE_FILE_NAMELEN = 21;
+vector<vector<string> > real_quote;
+vector<file_and_text_collection> title_screen_text_files = {
+	customText(&real_quote, titley + CONST_titlescreen003, REAL_QUOTE_SIZE),
+};
+
+// SLEEPER_UPDATE
+
+const string they_are_stashed = "They are stashed at the homeless shelter.";
+const string hasBeenCaughtSnooping = " has been caught snooping around.";
+const string isNowHomeless = "The Liberal is now homeless and jobless...";
+const string hasLeakedIntelligence = " has leaked secret intelligence files.";
+const string hasLeakedPolice = " has leaked secret police records.";
+const string hasLeakedCorporate = " has leaked secret corporate documents.";
+const string hasLeakedPrison = " has leaked internal prison records.";
+const string hasLeakedCableNews = " has leaked proof of systemic Cable News bias.";
+const string hasLeakedAMRadio = " has leaked proof of systemic AM Radio bias.";
+const string hasLeakedAnimalResearch = " has leaked internal animal research reports.";
+const string hasLeakedJudiciary = " has leaked proof of corruption in the judiciary.";
+const string papersAreStashed = "The papers are stashed at the homeless shelter.";
+const string hasLeakedCCS = " has leaked a list of the CCS's government backers.";
+const string diskIsStashed = "The disk is stashed at the homeless shelter.";
+const string arrestedWhileEmbezzling = " has been arrested while embezzling funds.";
+const string arrestedWhileStealing = " has been arrested while stealing things.";
+const string droppedOffPackage = " has dropped a package off at the homeless shelter.";
+const string itemNotFound = "Items not found in XML files led to ";
+const string lostStolenItem = " lost stolen items! ";
+const string contactModAuthor = "Contact the mod author (or DevTeam if playing the vanilla game) at once!";
+const string CONST_sleeper_update046 = "canseethings";
+const string CONST_sleeper_update045 = "abstracted debate";
+const string CONST_sleeper_update044 = "liberal power";
+void printxmlFail(const int numberofxmlfails) {
+	set_color_easy(RED_ON_BLUE_BRIGHT);
+	mvaddstrAlt(8, 1, itemNotFound, xmllog);
+	mvaddstrAlt(9, 1, tostring(numberofxmlfails), xmllog);
+	addstrAlt(lostStolenItem, xmllog);
+	set_color_easy(RED_ON_GREEN_BRIGHT);
+	mvaddstrAlt(11, 1, contactModAuthor, xmllog);
+	xmllog.nextMessage();
+
+}
+void printSleeperDropOffPackage(const string crname) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(crname, gamelog);
+	addstrAlt(droppedOffPackage, gamelog);
+	gamelog.nextMessage();
+
+}
+void printArrestedWhileStealing(const string crname) {
+	eraseAlt();
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(crname, gamelog);
+	addstrAlt(arrestedWhileStealing, gamelog);
+	gamelog.nextMessage();
+}
+void printArrestedWhileEmbezzling(const string crname) {
+	eraseAlt();
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(crname, gamelog);
+	addstrAlt(arrestedWhileEmbezzling, gamelog);
+	gamelog.nextMessage();
+
+}
+void printHasBeenCaughtSnooping(const string crname) {
+	eraseAlt();
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(crname, gamelog);
+	addstrAlt(hasBeenCaughtSnooping, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(8, 1, isNowHomeless, gamelog);
+	gamelog.nextMessage();
+
+}
+
+void creatureLeaksIntel(const string crname, const string& leak, const string& stashed) {
+	eraseAlt();
+	mvaddstrAlt(6, 1, string_sleeper, gamelog);
+	addstrAlt(crname, gamelog);
+	addstrAlt(leak, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(7, 1, stashed, gamelog);
+	gamelog.nextMessage();
+}
+
+void printCreatureLeaksIntelligence(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedIntelligence, they_are_stashed);
+
+}
+void printCreatureLeaksPolice(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedPolice, they_are_stashed);
+
+}
+void printCreatureLeaksCorp(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedCorporate, they_are_stashed);
+
+}
+void printCreatureLeaksPrison(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedPrison, they_are_stashed);
+
+}
+void printCreatureLeaksCable(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedCableNews, papersAreStashed);
+
+}
+void printCreatureLeaksRadio(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedAMRadio, papersAreStashed);
+
+}
+void printCreatureLeaksAnimalResearch(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedAnimalResearch, they_are_stashed);
+
+}
+void printCreatureLeaksJudiciary(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedJudiciary, papersAreStashed);
+
+}
+void printCreatureLeaksCCS(const string crname) {
+	creatureLeaksIntel(crname, hasLeakedCCS, diskIsStashed);
+
+}
+
+//TALK
+// TALK
+
+extern short exec[EXECNUM];
+extern short siteonfire;
+extern Deprecatednewsstoryst *sitestory;
+extern string slogan_str;
+const int PICKUP_LINE_SIZE = 5;
+const int DOUBLE_LINE = 2;
+extern Log gamelog;
+extern short lawList[LAWNUM];
+const string unnamed_String_Talk_cpp_122 = "The squad releases the hostage in the trade.";
+const string while_naked = " while naked";
+const string unnamed_String_Talk_cpp_001 = "A - Quietly pass the teller a robbery note";
+const string unnamed_String_Talk_cpp_002 = "B - Threaten bystanders and demand access to the vault";
+const string unnamed_String_Talk_cpp_003 = "C - On second thought, don't rob the bank";
+const string unnamed_String_Talk_cpp_004 = " slips the teller a note: ";
+const string unnamed_String_Talk_cpp_005 = "The bank teller reads the note, ";
+const string unnamed_String_Talk_cpp_006 = "and dives for cover as the guards move in on the squad!";
+const string unnamed_String_Talk_cpp_007 = "The bank teller reads the note, ";
+const string unnamed_String_Talk_cpp_008 = "and slips several bricks of cash into the squad's bag.";
+const string unnamed_String_Talk_cpp_009 = " brandishes the ";
+const string unnamed_String_Talk_cpp_010 = "\"";
+const string unnamed_String_Talk_cpp_011 = "OPEN THE VAULT, NOW!\"";
+const string unnamed_String_Talk_cpp_012 = "The bank teller and dives for cover as ";
+const string unnamed_String_Talk_cpp_013 = "guards move in on the squad!";
+const string unnamed_String_Talk_cpp_014 = "The bank employees hesitantly cooperate!";
+const string unnamed_String_Talk_cpp_015 = "The vault is open!";
+const string unnamed_String_Talk_cpp_016 = " talks to ";
+const string unnamed_String_Talk_cpp_017 = ":";
+const string unnamed_String_Talk_cpp_018 = "A - Strike up a conversation about politics";
+const string unnamed_String_Talk_cpp_019 = "B - Drop a pickup line";
+const string unnamed_String_Talk_cpp_020 = "C - On second thought, don't say anything";
+const string unnamed_String_Talk_cpp_021 = "D - Rent a room";
+const string unnamed_String_Talk_cpp_022 = "D - Stop renting a room";
+const string unnamed_String_Talk_cpp_023 = "D - Buy weapons";
+const string unnamed_String_Talk_cpp_024 = "D - Rob the bank";
+const string unnamed_String_Talk_cpp_025 = "\"I'd like cancel my room.\"";
+const string unnamed_String_Talk_cpp_027 = "\"Alright.Please clear out your room.\"";
+const string unnamed_String_Talk_cpp_028 = "<Your possessions at this location have been moved to the shelter.>";
+const string unnamed_String_Talk_cpp_029 = "\"I'd like to rent a room.\"";
+const string unnamed_String_Talk_cpp_030 = "\"Put some clothes on before I call the cops.\"";
+const string unnamed_String_Talk_cpp_031 = "\"It'll be $";
+const string unnamed_String_Talk_cpp_032 = " a month.";
+const string unnamed_String_Talk_cpp_033 = "I'll need $";
+const string unnamed_String_Talk_cpp_034 = " now as a security deposit.\"";
+const string unnamed_String_Talk_cpp_035 = "A - Accept.";
+const string unnamed_String_Talk_cpp_036 = "B - Decline.";
+const string unnamed_String_Talk_cpp_037 = "C - Threaten the landlord.";
+const string unnamed_String_Talk_cpp_038 = "\"I'll take it.\"";
+const string unnamed_String_Talk_cpp_039 = "\"Rent is due by the third of every month.";
+const string unnamed_String_Talk_cpp_040 = "We'll start next month.\"";
+const string unnamed_String_Talk_cpp_041 = " <turns away>";
+const string unnamed_String_Talk_cpp_042 = "\"Whoa, I was looking for something cheaper.\"";
+const string unnamed_String_Talk_cpp_043 = "\"Not my problem...\"";
+const string unnamed_String_Talk_cpp_044 = " <turns away>";
+const string unnamed_String_Talk_cpp_045 = " brandishes the ";
+const string unnamed_String_Talk_cpp_046 = "\"What's the price for the Liberal Crime Squad?\"";
+const string unnamed_String_Talk_cpp_047 = "\"I think you'd better leave.\"";
+const string unnamed_String_Talk_cpp_048 = " <crosses arms>";
+const string unnamed_String_Talk_cpp_049 = "\"Jesus... it's yours...\"";
+const string unnamed_String_Talk_cpp_050 = "\"Hey, I need a gun.\"";
+const string unnamed_String_Talk_cpp_051 = "\"Jesus...\"";
+const string unnamed_String_Talk_cpp_052 = "\"I don't sell guns, officer.\"";
+const string unnamed_String_Talk_cpp_053 = "\"We can talk when things are calm.\"";
+const string unnamed_String_Talk_cpp_054 = "\"What exactly do you need ? \"";
+const string unnamed_String_Talk_cpp_055 = "\"Uhhh... not a good place for this.\"";
+const string unnamed_String_Talk_cpp_056 = "\"Do you want to hear something disturbing ? \"";
+const string unnamed_String_Talk_cpp_057 = " rumbles disinterestedly.";
+const string unnamed_String_Talk_cpp_058 = " barks.";
+const string unnamed_String_Talk_cpp_059 = " doesn't understand.";
+const string unnamed_String_Talk_cpp_061 = "\"What ? \"";
+const string unnamed_String_Talk_cpp_062 = "\"Now's not the time!\"";
+const string unnamed_String_Talk_cpp_063 = "\"Leave me alone.\"";
+const string unnamed_String_Talk_cpp_064 = "\"No.\"";
+const string unnamed_String_Talk_cpp_065 = " <turns away>";
+
+const string unnamed_String_Talk_cpp_066 = " shakes its turret a firm 'no'.";
+const string unnamed_String_Talk_cpp_067 = " doesn't quite pick up on the subtext.";
+const string unnamed_String_Talk_cpp_068 = "\"Dirty.You know that's illegal, officer.\"";
+const string unnamed_String_Talk_cpp_069 = " and ";
+const string unnamed_String_Talk_cpp_070 = " make plans for tonight";
+const string unnamed_String_Talk_cpp_071 = ", and ";
+const string unnamed_String_Talk_cpp_072 = " breaks for the exit";
+const string unnamed_String_Talk_cpp_073 = ". ";
+const string unnamed_String_Talk_cpp_074 = "\"I'm a happily married man, sweetie.\"";
+const string unnamed_String_Talk_cpp_075 = "\"This ain't Brokeback Mountain, son.\"";
+const string unnamed_String_Talk_cpp_076 = "\"[The police are not doing their job very well!]\"";
+const string unnamed_String_Talk_cpp_077 = "\"The cops suck!\"";
+const string unnamed_String_Talk_cpp_078 = "\"Industries that stop at nothing to become more profitable are polluting ";
+const string unnamed_String_Talk_cpp_079 = "the environment in ways that hurt not only humans, but animals too.";
+const string unnamed_String_Talk_cpp_080 = "the environment in ways that hurt not only animals, but people too.";
+const string unnamed_String_Talk_cpp_082 = "\"Aaaahhh...\"";
+const string unnamed_String_Talk_cpp_083 = "\"Oh, really ? \"";
+const string unnamed_String_Talk_cpp_084 = "\"Yeah, really!\"";
+const string unnamed_String_Talk_cpp_085 = "\"You got anything to smoke on you ? \"";
+const string unnamed_String_Talk_cpp_086 = "*cough*";
+const string unnamed_String_Talk_cpp_087 = "After more discussion, ";
+const string unnamed_String_Talk_cpp_088 = " agrees to come by later tonight.";
+const string unnamed_String_Talk_cpp_089 = "\"Ugh.Pfft.\"";
+const string unnamed_String_Talk_cpp_090 = "\"Do you want me to arrest you ? \"";
+const string unnamed_String_Talk_cpp_091 = "\"If you don't shut up, I'm going to shoot you.\"";
+const string unnamed_String_Talk_cpp_092 = "\"Whatever.\"";
+const string unnamed_String_Talk_cpp_093 = " <turns away>";
+const string unnamed_String_Talk_cpp_113 = "BLAM!";
+const string unnamed_String_Talk_cpp_114 = "CRUNCH!";
+const string unnamed_String_Talk_cpp_115 = " drops ";
+const string unnamed_String_Talk_cpp_116 = "'s body.";
+const string unnamed_String_Talk_cpp_117 = "\"Fuck!";
+const string unnamed_String_Talk_cpp_118 = "\"[No!] ";
+const string unnamed_String_Talk_cpp_119 = "\"Back off and we'll let the hostages go.\"";
+const string unnamed_String_Talk_cpp_120 = "\"Back off and the hostage goes free.\"";
+const string unnamed_String_Talk_cpp_121 = "The squad releases all hostages in the trade.";
+const string unnamed_String_Talk_cpp_100 = "\"Don't push the LCS!\"";
+const string unnamed_String_Talk_cpp_101 = "\"Don't [play] with me!\"";
+const string unnamed_String_Talk_cpp_102 = "\"Don't fuck with me!\"";
+const string unnamed_String_Talk_cpp_103 = "\"Release your hostages, and nobody gets hurt.\"";
+const string unnamed_String_Talk_cpp_104 = "\"Let the hostage go, and nobody gets hurt.\"";
+const string unnamed_String_Talk_cpp_105 = "The ploy works! The Conservatives back off.";
+const string unnamed_String_Talk_cpp_106 = "How should ";
+const string unnamed_String_Talk_cpp_107 = " respond?";
+const string unnamed_String_Talk_cpp_108 = "A - Execute a hostage";
+const string unnamed_String_Talk_cpp_109 = "A - Execute the hostage";
+const string unnamed_String_Talk_cpp_110 = "B - Offer to trade the hostages for freedom";
+const string unnamed_String_Talk_cpp_111 = "B - Offer to trade the hostage for freedom";
+const string unnamed_String_Talk_cpp_112 = "C - No reply";
+
+const string unnamed_String_Talk_cpp_123 = " isn't interested in your pathetic threats.";
+const string unnamed_String_Talk_cpp_124 = "pretends to be part of a police raid.";
+const string unnamed_String_Talk_cpp_125 = "pretends to be a Secret Agent.";
+const string unnamed_String_Talk_cpp_126 = "pretends to be Mountain ";
+const string unnamed_String_Talk_cpp_127 = "like Patrick Swayze in Next of Kin.";
+const string unnamed_String_Talk_cpp_128 = "squeals like Ned Beatty ";
+const string unnamed_String_Talk_cpp_129 = "in Deliverance.";
+const string unnamed_String_Talk_cpp_130 = "pretends to be a mercenary.";
+const string unnamed_String_Talk_cpp_131 = "lights a match and throws it on the ground. ";
+const string unnamed_String_Talk_cpp_132 = "The carpet smolders, then bursts into flame.";
+const string unnamed_String_Talk_cpp_133 = "Perhaps that was a bad idea...";
+const string unnamed_String_Talk_cpp_134 = "\"The situation is under control.\"";
+const string unnamed_String_Talk_cpp_135 = "\"Fire!Evacuate immediately!\"";
+const string unnamed_String_Talk_cpp_136 = "\"Everything's in check.\"";
+const string unnamed_String_Talk_cpp_137 = "\"Make way, I'm a doctor!\"";
+const string unnamed_String_Talk_cpp_138 = "\"Non - targets please leave the site.\"";
+const string unnamed_String_Talk_cpp_139 = " engraves ";
+const string unnamed_String_Talk_cpp_140 = "Elbereth";
+const string unnamed_String_Talk_cpp_141 = " on the floor.";
+const string unnamed_String_Talk_cpp_142 = " talks like a Conservative ";
+const string unnamed_String_Talk_cpp_143 = "and pretends to belong here.";
+const string unnamed_String_Talk_cpp_144 = "But ";
+const string unnamed_String_Talk_cpp_145 = " weren't born yesterday.";
+const string unnamed_String_Talk_cpp_146 = " is not fooled by that [act].";
+const string unnamed_String_Talk_cpp_147 = " is not fooled by that crap.";
+const string unnamed_String_Talk_cpp_148 = "The Enemy is fooled and departs.";
+const string unnamed_String_Talk_cpp_149 = "The Squad is arrested.";
+const string unnamed_String_Talk_cpp_094 = " talks to ";
+const string unnamed_String_Talk_cpp_095 = ":";
+const string unnamed_String_Talk_cpp_096 = "A - Intimidate";
+const string unnamed_String_Talk_cpp_097 = "B - Threaten hostages";
+const string unnamed_String_Talk_cpp_098 = "C - Bluff";
+const string unnamed_String_Talk_cpp_099 = "D - Surrender to authorities";
+const string respondsComma = " responds, ";
+const string saysComma = " says, ";
+const string CONST_talk034 = "agree_to_release_hostages.txt";
+const string CONST_talk033 = "go_ahead_and_die.txt";
+const string CONST_talk032 = "let_hostages_go.txt";
+const string CONST_talk031 = "please_no_more.txt";
+const string CONST_talk030 = "hostage_negotiation.txt";
+const string CONST_talk029 = "who_cares_about_hostage.txt";
+const string CONST_talk028 = "please_spare_hostage.txt";
+const string CONST_talk027 = "threaten_hostage.txt";
+const string CONST_talk026 = "backs_off.txt";
+const string CONST_talk025 = "come_at_me_bro.txt";
+const string CONST_talk024 = "teller_complies.txt";
+const string CONST_talk023 = "teller_gestures.txt";
+const string CONST_talk022 = "robbing_bank.txt";
+const string CONST_talk021 = "that_is_not_disturbing.txt";
+const string CONST_talk020 = "that_is_disturbing.txt";
+const string CONST_talk019 = "mutant_rejection.txt";
+const string CONST_talk018 = "dog_rejection.txt";
+const string CONST_talk017 = "normal_talk_to_dog.txt";
+const string CONST_talk016 = "lovingly_talk_to_dog.txt";
+const string CONST_talk015 = "normal_talk_to_mutant.txt";
+const string CONST_talk014 = "lovingly_talk_to_mutant.txt";
+const string CONST_talk013 = "pickupLines.txt";
+const string CONST_talk012 = "no_free_speech_flirt.txt";
+
+const string talky = "talk\\";
+const string talk_combat = "talk_combat\\";
+const string unnamed_String_Talk_cpp_081 = "Prisoner";
+extern vector<vector<string> > no_free_speech_flirt;
+extern vector<vector<string> > pickupLines;
+extern vector<vector<string> > lovingly_talk_to_mutant;
+extern vector<vector<string> > normal_talk_to_mutant;
+extern vector<vector<string> > lovingly_talk_to_dog;
+extern vector<vector<string> > normal_talk_to_dog;
+
+vector<string> dog_rejection;
+vector<string> mutant_rejection;
+vector<string> that_is_disturbing;
+vector<string> that_is_not_disturbing;
+vector<string> robbing_bank;
+vector<string> teller_gestures;
+vector<string> teller_complies;
+//const int DOUBLE_LINE = 2;
+vector<string> come_at_me_bro;
+vector<string> backs_off;
+vector<string> threaten_hostage;
+vector<string> please_spare_hostage;
+vector<string> who_cares_about_hostage;
+vector<string> hostage_negotiation;
+vector<string> please_no_more;
+vector<string> let_hostages_go;
+vector<string> go_ahead_and_die;
+vector<string> agree_to_release_hostages;
+vector<file_and_text_collection> talk_file_collection = {
+	/*talk.cpp*/
+	customText(&no_free_speech_flirt, talky + CONST_talk012, PICKUP_LINE_SIZE),
+	customText(&pickupLines, talky + CONST_talk013, PICKUP_LINE_SIZE),
+	customText(&lovingly_talk_to_mutant, talky + CONST_talk014, DOUBLE_LINE),
+	customText(&normal_talk_to_mutant, talky + CONST_talk015, DOUBLE_LINE),
+	customText(&lovingly_talk_to_dog, talky + CONST_talk016, DOUBLE_LINE),
+	customText(&normal_talk_to_dog, talky + CONST_talk017, DOUBLE_LINE),
+	customText(&dog_rejection, talky + CONST_talk018),
+	customText(&mutant_rejection, talky + CONST_talk019),
+	customText(&that_is_disturbing, talky + CONST_talk020),
+	customText(&that_is_not_disturbing, talky + CONST_talk021),
+	customText(&robbing_bank, talky + CONST_talk022),
+	customText(&teller_gestures, talky + CONST_talk023),
+	customText(&teller_complies, talky + CONST_talk024),
+	//talk in combat
+	customText(&come_at_me_bro, talk_combat + CONST_talk025),
+	customText(&backs_off, talk_combat + CONST_talk026),
+	customText(&threaten_hostage, talk_combat + CONST_talk027),
+	customText(&please_spare_hostage, talk_combat + CONST_talk028),
+	customText(&who_cares_about_hostage, talk_combat + CONST_talk029),
+	customText(&hostage_negotiation, talk_combat + CONST_talk030),
+	customText(&please_no_more, talk_combat + CONST_talk031),
+	customText(&let_hostages_go, talk_combat + CONST_talk032),
+	customText(&go_ahead_and_die, talk_combat + CONST_talk033),
+	customText(&agree_to_release_hostages, talk_combat + CONST_talk034),
+};
+//string while_naked;
+map<short, string> conservativeLegalArgument;
+map<short, vector<string> > talkAboutTheIssues;
+map<short, string> youAreStupidTalkAboutIssues;
+map<short, string> issueTooLiberal;
+
 
 short interface_pgup = '[';
 short interface_pgdn = ']';
@@ -1585,3 +4123,1184 @@ void end_cleartype_fix() // execute this function after the user is done playing
 	}
 }
 #endif
+// STEALTH_CPP
+void printShoutsForHelp(const string ename, const int ealign) {
+	clearmessagearea();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(CONST_stealth055, gamelog);
+	if (ealign == ALIGN_CONSERVATIVE)
+		mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
+	else mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
+	gamelog.newline();
+}
+void printAlienation(const short sitealienate) {
+
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	if (sitealienate == 1)mvaddstrAlt(16, 1, CONST_stealth059, gamelog);
+	else mvaddstrAlt(16, 1, CONST_stealth060, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(17, 1, CONST_stealth061);
+}
+void printFadesAway(const string aname, const int partysize) {
+
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	if (partysize > 1)
+		mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
+	else
+		mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(CONST_stealth064, gamelog);
+	gamelog.newline();
+}
+void printBlewStealthCheck(const string aname) {
+
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(pickrandom(blew_stealth_check), gamelog);
+	gamelog.newline();
+}
+void printActsNatural(const string aname, const int partysize) {
+
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	if (partysize > 1)
+		mvaddstrAlt(16, 1, CONST_stealth065, gamelog);
+	else
+		mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(CONST_stealth066, gamelog);
+	gamelog.newline();
+}
+void printEnemyNameInAlarm(const string nname) {
+	clearmessagearea();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, nname, gamelog);
+
+}
+void printLooksAtSquadSuspiciously() {
+	addstrAlt(CONST_stealth068, gamelog);
+
+}
+void printShoutsInAlarm() {
+	addstrAlt(CONST_stealth067, gamelog);
+
+}
+void printConservativeRaisesAlarm(const bool weapon, const int ntype, const int nalign) {
+	if (weapon&&ntype != CREATURE_GUARDDOG)
+	{
+		addstrAlt(CONST_stealth069, gamelog);
+		if (nalign == ALIGN_CONSERVATIVE)
+			mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
+		else
+			mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
+
+	}
+	else
+	{
+		addstrAlt(CONST_stealth072, gamelog);
+		if (nalign == ALIGN_CONSERVATIVE)
+		{
+			if (ntype == CREATURE_GUARDDOG)
+				mvaddstrAlt(17, 1, CONST_stealth073, gamelog);
+			else
+				mvaddstrAlt(17, 1, CONST_stealth074, gamelog);
+		}
+		else
+			mvaddstrAlt(17, 1, CONST_stealth075, gamelog);
+	}
+	gamelog.newline();
+}
+// STEALTH_CPP
+
+// TALK_CPP
+bool isPrisoner(const string tkname) {
+	return strcmp(tkname.data(), unnamed_String_Talk_cpp_081.data()) == 0;
+	//	const string unnamed_String_Talk_cpp_060 = "Prisoner";
+}
+
+void printTalkAboutIssuesHeader(const string aname) {
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+
+}
+void printTalkAboutIssuesWhenStupid(const int lw) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	if (lw == LAW_POLICEBEHAVIOR) {
+		if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
+			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_076, gamelog);
+		else
+			mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_077, gamelog);
+	}
+	else {
+		mvaddstrAlt(10, 1, youAreStupidTalkAboutIssues[lw]);
+	}
+	gamelog.newline();
+}
+void printTalkAboutIssuesTooLiberal(const int lw) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(10, 1, issueTooLiberal[lw]);
+	gamelog.newline();
+}
+void printTalkAboutIssuesNormal(const int lw, const int tkanimalgloss) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	if (lw == LAW_POLLUTION) {
+		mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_078, gamelog);
+		if (tkanimalgloss == ANIMALGLOSS_ANIMAL) { mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_079, gamelog); }
+		else { mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_080, gamelog); }
+	}
+	else {
+		mvaddstrAlt(10, 1, talkAboutTheIssues[lw][0], gamelog);
+		mvaddstrAlt(11, 1, talkAboutTheIssues[lw][1], gamelog);
+	}
+	gamelog.newline();
+}
+void printTurnsAway() {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
+	gamelog.newline();
+}
+void printConservativeRespondsToStupid(const int tktype, const bool extraline) {
+	int y = 13 + (extraline ? 0 : 1);
+
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	if (tktype == CREATURE_GANGUNIT)
+		mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_090, gamelog);
+	else if (tktype == CREATURE_DEATHSQUAD)
+		mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_091, gamelog);
+	else
+	{
+		mvaddstrAlt(y, 1, pickrandom(that_is_not_disturbing), gamelog);
+	}
+}
+void printRespondantName(const string tkname, const bool extraline) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12 + (extraline ? 0 : 1), 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+}
+void printConservativeCounter(const bool extraline, const int lw) {
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, conservativeLegalArgument[lw], gamelog);
+
+}
+void printRejectTalk(const bool extraline) {
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, unnamed_String_Talk_cpp_092, gamelog);
+
+}
+void printMutantTalkAboutIssues(const string tkname, const int extraline) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	int y = 12 + (extraline ? 0 : 1);
+	mvaddstrAlt(y++, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_089, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
+	gamelog.newline();
+}
+
+void printThatIsDisturbing(const string tkname, const bool extraline, const int special_case) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	int y = 12 + (extraline ? 0 : 1);
+	mvaddstrAlt(y, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	y++;
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	switch (special_case)
+	{
+	case 0:
+		mvaddstrAlt(y++, 1, unnamed_String_Talk_cpp_083, gamelog);
+		pressAnyKey();
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_084, gamelog);
+		break;
+	case 1:
+		mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_085, gamelog);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		addstrAlt(unnamed_String_Talk_cpp_086, gamelog);
+		break;
+	default:
+		mvaddstrAlt(y, 1, pickrandom(that_is_disturbing), gamelog);
+		break;
+	}
+	gamelog.newline();
+}
+void printUnableToSpeakAgree(const string tkname, const bool extraline) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	int y = 12 + (extraline ? 0 : 1);
+	mvaddstrAlt(y, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	y++;
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_082, gamelog);
+	gamelog.newline();
+}
+void printAgreesToComeByLater(const string tkname, const bool extraline, const bool another_extraline) {
+
+	int y = 14 + (extraline ? 0 : 1) + (another_extraline ? 1 : 0);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_087, gamelog);
+	addstrAlt(tkname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_088, gamelog);
+	gamelog.newline();
+}
+
+
+void printSpecialRecruitment(const string aname, const string tkname, const string pitch, const string response) {
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, pitch, gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, tkname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, response, gamelog);
+	gamelog.newline();
+
+}
+void printTalkOptionsDuringCombat(const bool hostages, const bool is_cantbluff_two, const bool cop) {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_096);
+	if (!hostages)set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_097);
+	if (!is_cantbluff_two)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_098);
+	if (cop)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_099);
+	set_color_easy(WHITE_ON_BLACK);
+	gamelog.newline();
+
+}
+void printTalksToThem(const string aname, const int tkalign, const string tkname) {
+
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_094, gamelog);
+	switch (tkalign)
+	{
+	case ALIGN_CONSERVATIVE: set_color_easy(RED_ON_BLACK_BRIGHT); break;
+	case ALIGN_LIBERAL: set_color_easy(GREEN_ON_BLACK_BRIGHT); break;
+	case ALIGN_MODERATE: set_color_easy(WHITE_ON_BLACK_BRIGHT); break;
+	}
+	addstrAlt(tkname, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_095, gamelog);
+	gamelog.newline();
+}
+void printTheSquadIsArrested() {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_149, gamelog);
+	gamelog.newline();
+}
+
+void printTheEnemyIsFooled() {
+
+	clearmessagearea();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_148, gamelog);
+	gamelog.newline();
+}
+void printXeIsNotFooled(const string ename) {
+	clearmessagearea();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(16, 1, ename, gamelog);
+	if (lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE)
+		addstrAlt(unnamed_String_Talk_cpp_146, gamelog);
+	else addstrAlt(unnamed_String_Talk_cpp_147, gamelog);
+	gamelog.newline();
+}
+void printITalkLikeAConservative(const string aname) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_142, gamelog);
+	mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_143, gamelog);
+	gamelog.newline();
+}
+void printEngraveElbereth(const string aname) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_139, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_140, gamelog);     //Fanciful multicolor message
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_141, gamelog);
+	gamelog.newline();
+}
+void printDeathSquadBluff() {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_138, gamelog);
+	gamelog.newline();
+}
+
+void printLabCoatBluff() {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_137, gamelog);
+	gamelog.newline();
+}
+void printPoliceBluff() {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_134, gamelog);
+	gamelog.newline();
+}
+void printBunkerGearBluff() {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	if (siteonfire) mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_135, gamelog);
+	else mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_136, gamelog);
+	gamelog.newline();
+}
+void printWeWerentBornYesterday(const string ename) {
+	clearmessagearea();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_144, gamelog);
+	addstrAlt(ename, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_145, gamelog);
+	gamelog.newline();
+}
+void printSiegeBluff(const string aname, const int siegeType) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(singleSpace, gamelog);
+	switch (siegeType)
+	{
+	case SIEGE_POLICE:
+		addstrAlt(unnamed_String_Talk_cpp_124, gamelog);
+		break;
+	case SIEGE_CIA:
+		addstrAlt(unnamed_String_Talk_cpp_125, gamelog);
+		break;
+	case SIEGE_CCS:
+	case SIEGE_HICKS:
+		switch (LCSrandom(2))
+		{
+		case 0:
+			addstrAlt(unnamed_String_Talk_cpp_126, gamelog);
+			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_127, gamelog);
+			break;
+		case 1:
+			addstrAlt(unnamed_String_Talk_cpp_128, gamelog);
+			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_129, gamelog);
+			break;
+		}
+		break;
+	case SIEGE_CORPORATE:
+		addstrAlt(unnamed_String_Talk_cpp_130, gamelog);
+		break;
+	case SIEGE_FIREMEN:
+		addstrAlt(unnamed_String_Talk_cpp_131, gamelog);
+		if ((!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_END) ||
+			!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_PEAK) ||
+			!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_FIRE_START) ||
+			!(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag & SITEBLOCK_DEBRIS)) && !LCSrandom(10))
+		{
+			levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag |= SITEBLOCK_FIRE_START;
+			mvaddstrAlt(17, 1, unnamed_String_Talk_cpp_132, gamelog);
+			gamelog.newline();
+			mvaddstrAlt(18, 1, unnamed_String_Talk_cpp_133, gamelog);
+		}
+		break;
+	}
+}
+void printEnemyIgnoresThreat(const string tkname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	clearmessagearea();
+	mvaddstrAlt(16, 1, tkname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_123, gamelog);
+	gamelog.newline();
+
+}
+void printHowShouldWeRespond(const string aname, const int hostages) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_106);
+	addstrAlt(aname);
+	addstrAlt(unnamed_String_Talk_cpp_107);
+	mvaddstrAlt(11, 1, hostages > 1 ? (unnamed_String_Talk_cpp_108) : (unnamed_String_Talk_cpp_109));
+	mvaddstrAlt(12, 1, hostages > 1 ? (unnamed_String_Talk_cpp_110) : (unnamed_String_Talk_cpp_111));
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_112);
+}
+void printPloyWorksEnemyBacksOff() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	clearmessagearea();
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_105, gamelog);
+	gamelog.newline();
+}
+void printExecutionGunshot() {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_113, gamelog);
+	gamelog.newline();
+
+}
+void printExecutionBareHands() {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, unnamed_String_Talk_cpp_114, gamelog);
+	gamelog.newline();
+
+}
+void printDiscardsBody(const string aname, const string pname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_115, gamelog);
+	addstrAlt(pname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_116, gamelog);
+	gamelog.newline();
+}
+void printAnotherOneBacksOff(const string ename) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+
+	clearmessagearea();
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(singleSpace + pickrandom(backs_off), gamelog);
+}
+void printThreatenEnemy(const string aname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	switch (LCSrandom(4))
+	{
+	case 0:
+	{   // Formatting the slogan so that it always has quotes around it and punctuation
+		if (slogan_str[0] != '"') mvaddcharAlt(17, 1, '"');
+		mvaddstrAlt(17, 1 + (slogan_str[0] != '"' ? 1 : 0), slogan_str, gamelog);
+		const int last = len(slogan_str);
+		if (last && slogan_str[last - 1] != '"' && slogan_str[last - 1] != '!' && slogan_str[last - 1] != '.' && slogan_str[last - 1] != '?')
+			addcharAlt('!', gamelog);
+		if (last && slogan_str[last - 1] != '"') addcharAlt('"', gamelog);
+		if (!sitestory->claimed)
+			sitestory->claimed = 1;
+		break;
+	}
+	default:
+		mvaddstrAlt(17, 1, pickrandom(come_at_me_bro), gamelog);
+		break;
+	}
+}
+void printHostageNegotiation(const string ename, const int etype, const int ealign, const int hostages) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	clearmessagearea();
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	if (ealign != ALIGN_CONSERVATIVE ||
+		(etype == CREATURE_SECRET_SERVICE && exec[EXEC_PRESIDENT] > ALIGN_CONSERVATIVE))
+	{
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, pickrandom(please_spare_hostage), gamelog);
+	}
+	else
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		if (((etype == CREATURE_DEATHSQUAD ||
+			etype == CREATURE_AGENT ||
+			etype == CREATURE_MERC ||
+			etype == CREATURE_CCS_ARCHCONSERVATIVE ||
+			etype == CREATURE_GANGUNIT))
+			&& ealign == ALIGN_CONSERVATIVE)
+		{
+			mvaddstrAlt(17, 1, pickrandom(who_cares_about_hostage), gamelog);
+		}
+		else
+		{
+			string moreHostageQuestions;
+			if (LCSrandom(5)) {
+				moreHostageQuestions = (pickrandom(hostage_negotiation));
+			}
+			else {
+				if (hostages > 1)
+					moreHostageQuestions = (unnamed_String_Talk_cpp_103);
+				else moreHostageQuestions = (unnamed_String_Talk_cpp_104);
+			}
+			mvaddstrAlt(17, 1, moreHostageQuestions, gamelog);
+		}
+	}
+	gamelog.newline();
+}
+void printThreatenHostages(const string aname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, aname + colonSpace, gamelog);
+	{
+		string anotherHostageThing;
+		switch (LCSrandom(6))
+		{
+		case 0:anotherHostageThing = (unnamed_String_Talk_cpp_100);
+			if (!sitestory->claimed)sitestory->claimed = 1; break;
+		case 1:
+			if (lawList[LAW_FREESPEECH] == -2)anotherHostageThing = (unnamed_String_Talk_cpp_101);
+			else anotherHostageThing = (unnamed_String_Talk_cpp_102);
+			break;
+		default:
+			anotherHostageThing = (pickrandom(threaten_hostage));
+			break;
+		}
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		mvaddstrAlt(17, 1, anotherHostageThing, gamelog);
+	}
+	gamelog.newline();
+}
+void printReleaseHostagesHeader(const string ename) {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, pickrandom(agree_to_release_hostages), gamelog);
+	gamelog.newline();
+}
+void printReleaseHostagesFooter(const int hostages) {
+
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, hostages > 1 ? unnamed_String_Talk_cpp_121 : unnamed_String_Talk_cpp_122, gamelog);
+	gamelog.newline();
+}
+void printEnemyAllowsHostagesToDie(const string ename) {
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, pickrandom(go_ahead_and_die), gamelog);
+	gamelog.newline();
+}
+void printLetUsGoAndTheyGoFree(const string aname, const int hostages) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, aname, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	{
+		string nameHostages;
+		if (LCSrandom(5))
+		{
+			if (hostages > 1) nameHostages = (unnamed_String_Talk_cpp_119);
+			else nameHostages = (unnamed_String_Talk_cpp_120);
+		}
+		else {
+			nameHostages = (pickrandom(let_hostages_go));
+		}
+		mvaddstrAlt(17, 1, nameHostages, gamelog);
+	}
+	gamelog.newline();
+
+}
+void printEnemyWatchesHostageDeath(const string ename) {
+	clearmessagearea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(16, 1, ename, gamelog);
+	addstrAlt(colonSpace, gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, lawList[LAW_FREESPEECH] > ALIGN_ARCHCONSERVATIVE ? unnamed_String_Talk_cpp_117 : unnamed_String_Talk_cpp_118, gamelog);
+	addstrAlt(pickrandom(please_no_more), gamelog);
+	gamelog.newline();
+}
+
+void printAcceptsPickupLine(const string aname, const string tkname, const vector<string> selected_flirt) {
+	const bool extraline = (selected_flirt[1] != blankString ? 1 : 0);
+	int y = 12 + (extraline ? 1 : 0);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y++, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y++, 1, selected_flirt[2], gamelog);
+	gamelog.newline();
+	pressAnyKey();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	++y;
+	mvaddstrAlt(y++, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_069, gamelog);
+	addstrAlt(tkname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_070, gamelog);
+
+	if (isPrisoner(tkname))
+	{
+		addstrAlt(unnamed_String_Talk_cpp_071, gamelog);
+		mvaddstrAlt(y++, 1, tkname, gamelog);
+		addstrAlt(unnamed_String_Talk_cpp_072, gamelog);
+	}
+	addstrAlt(unnamed_String_Talk_cpp_073, gamelog);
+	gamelog.newline();
+}
+void printRejectsPickupLine(const string tkname, const int tktype, const int agender_liberal, const vector<string> selected_flirt) {
+
+	const bool extraline = (selected_flirt[1] != blankString ? 1 : 0);
+	int y = 12 + (extraline ? 1 : 0);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y++, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	if (tktype == CREATURE_CORPORATE_CEO)
+	{
+		if (agender_liberal != GENDER_MALE)
+			mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_074, gamelog);
+		else mvaddstrAlt(y, 1, unnamed_String_Talk_cpp_075, gamelog);
+	}
+	else
+	{
+		mvaddstrAlt(y++, 1, selected_flirt[3], gamelog);
+		if (selected_flirt[4] != blankString) {
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y, 1, selected_flirt[4], gamelog);
+		}
+	}
+	gamelog.newline();
+}
+void printSaysWhat(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_061, gamelog);
+	gamelog.newline();
+}
+void printTurnsAway(const string tkname, const int tkalign) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	if (isPrisoner(tkname))
+	{
+		if (tkalign == ALIGN_LIBERAL)
+			mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_062, gamelog);
+		else mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_063, gamelog);
+	}
+	else mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_064, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_065, gamelog);
+	gamelog.newline();
+}
+void printRejectPolicePickupLine(const string tkname, const bool extraline) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12 + (extraline ? 1 : 0), 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13 + (extraline ? 1 : 0), 1, unnamed_String_Talk_cpp_068, gamelog);
+	gamelog.newline();
+}
+void printPickupLine(const string aname, const vector<string> selected_flirt) {
+
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, selected_flirt[0], gamelog);
+	if (selected_flirt[1] != blankString) {
+		mvaddstrAlt(11, 1, selected_flirt[1], gamelog);
+	}
+	gamelog.newline();
+}
+void printNonHumanRejection(const string tkname, const int tktype, const bool extraline) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12 + (extraline ? 1 : 0), 1, tkname, gamelog);
+	switch (tktype)
+	{
+	case CREATURE_TANK:
+		addstrAlt(unnamed_String_Talk_cpp_066, gamelog);
+		break;
+	case CREATURE_GUARDDOG:
+		addstrAlt(saysComma, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13 + (extraline ? 1 : 0), 1, pickrandom(dog_rejection), gamelog);
+		break;
+	case CREATURE_GENETIC:
+		addstrAlt(saysComma, gamelog);
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		mvaddstrAlt(13 + (extraline ? 1 : 0), 1, pickrandom(mutant_rejection), gamelog);
+		break;
+	default:
+		addstrAlt(unnamed_String_Talk_cpp_067, gamelog);
+	}
+	gamelog.newline();
+}
+void printAnimalDoesntUnderstand(const string tkname, const int tktype) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	switch (tktype)
+	{
+	case CREATURE_TANK: addstrAlt(unnamed_String_Talk_cpp_057, gamelog); break;
+	case CREATURE_GUARDDOG: addstrAlt(unnamed_String_Talk_cpp_058, gamelog); break;
+	default: addstrAlt(unnamed_String_Talk_cpp_059, gamelog); break;
+	}
+	gamelog.newline();
+}
+void printWannaHearSomething(const string aname) {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_056, gamelog);
+	gamelog.newline();
+}
+void printLetMeSellYouAGun(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_054, gamelog);
+	gamelog.newline();
+}
+void printNotHereDummy(const string tkname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_055, gamelog);
+	gamelog.newline();
+
+}
+void printWaitUntilItCoolsDown(const string tkname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_053, gamelog);
+	gamelog.newline();
+
+}
+void printIDontSellToCops(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_052, gamelog);
+	gamelog.newline();
+}
+void printIDontSellToNaked(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_051, gamelog);
+	gamelog.newline();
+}
+void printINeedAGun(const string aname) {
+
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_050, gamelog);
+	gamelog.newline();
+}
+void printJesusItsYours(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_049, gamelog);
+	gamelog.newline();
+}
+void printIWantYouToLeave(const string tkname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_047, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_048, gamelog);
+	gamelog.newline();
+}
+void printGiveMeTheLCSPrice(const string aname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_046, gamelog);
+	gamelog.newline();
+}
+void printThreatensWithAGun(const string aname, const string aweapon) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_045, gamelog);
+	addstrAlt(aweapon, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.newline();
+
+}
+void printRefuseRentDeal(const string aname) {
+
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_042, gamelog);
+	gamelog.newline();
+}
+void printNotMyProblem(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_043, gamelog);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_044, gamelog);
+	gamelog.newline();
+}
+void printAcceptRentHeader(const string aname) {
+
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_038, gamelog);
+	gamelog.newline();
+}
+void printAcceptRentFooter(const string tkname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_039, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_040, gamelog);
+	gamelog.newline();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(unnamed_String_Talk_cpp_041);
+
+}
+void printRentingOptions(const bool cannotAfford) {
+
+	if (cannotAfford) {
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_035);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_036);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_037);
+}
+void printINeedThisMuchRent(const string tkname, const int rent) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_031, gamelog);
+	addstrAlt(rent, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_032, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_033, gamelog);
+	addstrAlt(rent, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_034, gamelog);
+	gamelog.newline();
+}
+void printPutSomeDamnClothesOn(const string tkname) {
+	//const string unnamed_String_Talk_cpp_026 = "\"Put some clothes on before I call the cops.\"";
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_030, gamelog);
+	gamelog.newline();
+}
+void printIWantToRent(const string aname) {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_029, gamelog);
+	gamelog.newline();
+}
+void printClearOutYourRoom(const string tkname) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_027, gamelog);
+	gamelog.newline();
+}
+void printYourPossessionsAreRelocated() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(15, 1, unnamed_String_Talk_cpp_028, gamelog);
+	gamelog.newline();
+}
+void printIWantToCancelRent(const string aname) {
+
+	clearcommandarea();
+	clearmessagearea();
+	clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_025, gamelog);
+	gamelog.newline();
+}
+void printTalkToPotentialLandlord(const bool is_naked) {
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_021);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+}
+void printTalkToLandlord(const bool is_naked) {
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_022);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+}
+void printTalkToGangMemberOrMerc(const bool is_naked) {
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_023);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+}
+void printTalkToBankTeller(const bool is_naked) {
+	mvaddstrAlt(14, 1, unnamed_String_Talk_cpp_024);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+}
+void printTalkToHeader(const string aname) {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname);
+	addstrAlt(unnamed_String_Talk_cpp_016);
+
+}
+void printTalkToMiddle(const int tkalign, const string tkname, const string tkbio) {
+	switch (tkalign)
+	{
+	case ALIGN_CONSERVATIVE:
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		break;
+	case ALIGN_LIBERAL:
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		break;
+	case ALIGN_MODERATE:
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		break;
+	}
+	addstrAlt(tkname);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(tkbio);
+	addstrAlt(unnamed_String_Talk_cpp_017);
+}
+void printTalkToFooter(const bool is_naked, const bool can_date) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_018);
+
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+	if (can_date)set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_019);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_020);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+
+}
+void printBankerCooperates() {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_014, gamelog);
+	gamelog.newline();
+}
+void printTheVaultIsOpen() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_015, gamelog);
+	gamelog.newline();
+
+}
+void printGuardsCloseIn() {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, unnamed_String_Talk_cpp_012, gamelog);
+	mvaddstrAlt(10, 1, unnamed_String_Talk_cpp_013, gamelog);
+	gamelog.newline();
+}
+void printDemandVaultBeOpened(const string aname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, aname, gamelog);
+	addstrAlt(saysComma, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_010, gamelog);
+	addstrAlt(slogan_str, gamelog);
+	gamelog.record(singleSpace);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_011, gamelog);
+	gamelog.newline();
+
+}
+void printBrandishWeapon(const string aname, const string aweapon) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_009, gamelog);
+	addstrAlt(aweapon, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.newline();
+}
+void printTellerComplies() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_007, gamelog);
+	addstrAlt(pickrandom(teller_complies), gamelog);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_008, gamelog);
+	gamelog.newline();
+}
+void printTellerAlertsCops() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_005, gamelog);
+	addstrAlt(pickrandom(teller_gestures), gamelog);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_006, gamelog);
+	gamelog.newline();
+}
+void printIRobTheBank(const string aname) {
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(9, 1, aname, gamelog);
+	addstrAlt(unnamed_String_Talk_cpp_004, gamelog);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 1, pickrandom(robbing_bank), gamelog);
+	gamelog.newline();
+}
+void printOptionsWithinBank(const bool is_naked) {
+
+	clearcommandarea(); clearmessagearea(); clearmaparea();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(11, 1, unnamed_String_Talk_cpp_001);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+	mvaddstrAlt(12, 1, unnamed_String_Talk_cpp_002);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+	mvaddstrAlt(13, 1, unnamed_String_Talk_cpp_003);
+	if (is_naked)addstrAlt(while_naked);
+	addstrAlt(singleDot);
+}
+
+
+// end TALK_CPP
+
+
+// TITLESCREEN_CPP
+void printSaveHeader(const bool to_delete) {
+	eraseAlt();
+	set_color_easy(to_delete ? YELLOW_ON_RED : WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, to_delete ? deleteSave : chooseSave);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 0, titleScreenLine);
+}
+void printSaveList(const int page, const vector<string> s_savefiles) {
+	int y = 2;
+	for (int p = page * 19; p < s_savefiles.size() && p < page * 19 + 19; p++, y++)
+	{
+		mvaddchAlt(y, 0, y + 'A' - 2);
+		addstrAlt(spaceDashSpace);
+		const string &strtemp = s_savefiles[p];
+		addstrAlt(strtemp.substr(0, strtemp.find(dotDat)));
+	}
+	mvaddstrAlt(y, 0, (char(y + 'A' - 2)) + spaceDashSpace + newGame);
+
+}
+void printSaveFooter(const bool to_delete) {
+	mvaddstrAlt(22, 0, (to_delete ? pressToDeleteSave : pressToSelectSave) + vToSwitchXToQuit);
+	mvaddstrAlt(23, 0, addpagestr());
+
+}
+void printAreYouSure(const string s_savefiles) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrCenter(10, areYouSureDelte + s_savefiles + questionYSlashN);
+}
+void printMusicFooter(const bool musicEnabled) {
+
+	string str;
+	if (musicEnabled) {
+		(str = pressMtoTurnOffMusic);
+	}
+	else {
+		(str = pressMtoTurnOnMusic);
+	}
+	mvaddstrCenter(22, str);
+}
+
+void printTitleScreen() {
+	//title screen
+	eraseAlt();
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrCenter(2, liberalCrimeSquad);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrCenter(4, inspiredByOubliette);
+	vector<string> quote = pickrandom(real_quote);
+	mvaddstrCenter(6, quote[0]);
+	mvaddstrCenter(7, quote[1]);
+	mvaddstrCenter(8, quote[2]);
+	mvaddstrCenter(9, quote[3]);
+	mvaddstrCenter(11, copyrightTarn);
+	mvaddstrCenter(12, bayTwelveProductions);
+	mvaddstrCenter(13, lcsHyperlink);
+	mvaddstrCenter(15, vChar + PACKAGE_VERSION_STR + maintainedByOpenSource);
+	mvaddstrCenter(16, kingDrakeHyperlink);
+	mvaddstrCenter(17, lcsForumHyperlink);
+	mvaddstrCenter(18, lcsWikiHyperlink);
+	mvaddstrCenter(20, pressESCToQuit);
+	mvaddstrCenter(22, pressAnyKeyToPursue);
+	mvaddstrAlt(24, 79, plusChar);
+}
+
+string printNewGameHeader() {
+	char savefile_temp[SAVE_FILE_NAMELEN];
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, inWhatWorld);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 0, enterNameForSave);
+
+	enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, NULL);
+	bool justEnter = false;
+	bool enterDamn = false;
+	do {
+		if (strcmp(savefile_temp, blankString.c_str()) == 0) {
+			eraseAlt();
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(0, 0, inWhatWorld);
+			string enterTheName;
+			if (enterDamn) {
+				enterTheName = justEnterName;
+			}
+			else if (justEnter) {
+				enterTheName = prettyPlease;
+				enterDamn = true;
+			}
+			else {
+				enterTheName = pleaseEnterName;
+			}
+			set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(1, 0, enterTheName);
+			enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, blankString.c_str());
+			justEnter = true;
+		}
+		else {
+			justEnter = false;
+		}
+	} while (justEnter);
+	return savefile_temp + dotDat;
+}
+// end TITLESCREEN_CPP
