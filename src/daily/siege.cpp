@@ -52,8 +52,128 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
-
-
+void statebrokenlaws(int loc)
+{
+	music.play(MUSIC_SIEGE);
+	short breakercount[LAWFLAGNUM] = { 0 };
+	int typenum = 0, criminalcount = 0, kidnapped = 0;
+	string kname;
+	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	{
+		if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != loc) continue;
+		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
+		{
+			kname = pool[p]->propername;
+			kidnapped++;
+		}
+		if (iscriminal(pool[p]->getCreatureJustice())) criminalcount++;
+		CreatureJustice cr_just = pool[p]->getCreatureJustice();
+		for (int i = 0; i < LAWFLAGNUM; i++) if (cr_just.crimes_suspected[i]) breakercount[i]++;
+	}
+	for (int i = 0; i < LAWFLAGNUM; i++) if (breakercount[i]) typenum++;
+	printBrokenLawsHeader(LocationsPool::getInstance().isThisUnderAttack(loc), LocationsPool::getInstance().getSiegeEscalationState(loc));
+	//KIDNAP VICTIM
+	if (kidnapped)
+	{
+		printReleaseKidnapped(kname, kidnapped);
+	}
+	//TREASON
+	else if (breakercount[LAWFLAG_TREASON])
+		printSpecificCrime(LAWFLAG_TREASON);
+	//TERRORISM
+	else if (breakercount[LAWFLAG_TERRORISM])
+		printSpecificCrime(LAWFLAG_TERRORISM);
+	//MURDERER
+	else if (breakercount[LAWFLAG_MURDER])
+		printSpecificCrime(LAWFLAG_MURDER);
+	//KIDNAPPER
+	else if (breakercount[LAWFLAG_KIDNAPPING])
+		printSpecificCrime(LAWFLAG_KIDNAPPING);
+	//BANK ROBBER
+	else if (breakercount[LAWFLAG_BANKROBBERY])
+		printSpecificCrime(LAWFLAG_BANKROBBERY);
+	//ARSONIST
+	else if (breakercount[LAWFLAG_ARSON])
+		printSpecificCrime(LAWFLAG_ARSON);
+	//BURN FLAG
+	else if (breakercount[LAWFLAG_BURNFLAG])
+	{
+		printBurnedFlag(lawList[LAW_FLAGBURNING]);
+	}
+	//SPEECH
+	else if (breakercount[LAWFLAG_SPEECH])
+		printSpecificCrime(LAWFLAG_SPEECH);
+	//BROWNIES
+	else if (breakercount[LAWFLAG_BROWNIES])
+		printSpecificCrime(LAWFLAG_BROWNIES);
+	//ESCAPED
+	else if (breakercount[LAWFLAG_ESCAPED])
+		printSpecificCrime(LAWFLAG_ESCAPED);
+	//HELP ESCAPED
+	else if (breakercount[LAWFLAG_HELPESCAPE])
+		printSpecificCrime(LAWFLAG_HELPESCAPE);
+	//JURY
+	else if (breakercount[LAWFLAG_JURY])
+		printSpecificCrime(LAWFLAG_JURY);
+	//RACKETEERING
+	else if (breakercount[LAWFLAG_RACKETEERING])
+		printSpecificCrime(LAWFLAG_RACKETEERING);
+	//EXTORTION
+	else if (breakercount[LAWFLAG_EXTORTION])
+		printSpecificCrime(LAWFLAG_EXTORTION);
+	//ASSAULT
+	else if (breakercount[LAWFLAG_ARMEDASSAULT])
+		printSpecificCrime(LAWFLAG_ARMEDASSAULT);
+	//ASSAULT
+	else if (breakercount[LAWFLAG_ASSAULT])
+		printSpecificCrime(LAWFLAG_ASSAULT);
+	//CAR THEFT
+	else if (breakercount[LAWFLAG_CARTHEFT])
+		printSpecificCrime(LAWFLAG_CARTHEFT);
+	//CC FRAUD
+	else if (breakercount[LAWFLAG_CCFRAUD])
+		printSpecificCrime(LAWFLAG_CCFRAUD);
+	//THIEF
+	else if (breakercount[LAWFLAG_THEFT])
+		printSpecificCrime(LAWFLAG_THEFT);
+	//PROSTITUTION
+	else if (breakercount[LAWFLAG_PROSTITUTION])
+		printSpecificCrime(LAWFLAG_PROSTITUTION);
+	//HIRE ILLEGAL
+	else if (breakercount[LAWFLAG_HIREILLEGAL])
+		printHireIllegal(lawList[LAW_IMMIGRATION] < 1);
+	//COMMERCE
+	else if (breakercount[LAWFLAG_COMMERCE])
+		printSpecificCrime(LAWFLAG_COMMERCE);
+	//INFORMATION
+	else if (breakercount[LAWFLAG_INFORMATION])
+		printSpecificCrime(LAWFLAG_INFORMATION);
+	//UNLAWFUL BURIAL
+	else if (breakercount[LAWFLAG_BURIAL])
+		printSpecificCrime(LAWFLAG_BURIAL);
+	//BREAKING
+	else if (breakercount[LAWFLAG_BREAKING])
+		printSpecificCrime(LAWFLAG_BREAKING);
+	//VANDALISM
+	else if (breakercount[LAWFLAG_VANDALISM])
+		printSpecificCrime(LAWFLAG_VANDALISM);
+	//RESIST
+	else if (breakercount[LAWFLAG_RESIST])
+		printSpecificCrime(LAWFLAG_RESIST);
+	//DISTURBANCE
+	else if (breakercount[LAWFLAG_DISTURBANCE])
+		printSpecificCrime(LAWFLAG_DISTURBANCE);
+	//PUBLIC NUDITY
+	else if (breakercount[LAWFLAG_PUBLICNUDITY])
+		printSpecificCrime(LAWFLAG_PUBLICNUDITY);
+	//LOITERING
+	else if (breakercount[LAWFLAG_LOITERING])
+		printSpecificCrime(LAWFLAG_LOITERING);
+	//THEY WERE LOOKING FOR SOMEONE ELSE
+	else printHarboringFugitive();
+	printBrokenLawsFooter(kidnapped, typenum);
+	pressAnyKey();
+}
 
 
 
@@ -92,21 +212,14 @@ make it more likely to be raided:
 /* Work in progress. It works, but needs to be called in more places. */
 /* Currently, it only works when you confront a siege and then fail. */
 /* siege - handles giving up */
+
 void surrenderToAuthorities(const int loc) {
 
 
 	music.play(MUSIC_SIEGE);
 	int polsta = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, loc);
 	//END SIEGE
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) == 0)
-		mvaddstrAlt(1, 1, CONST_siege015, gamelog);
-	else if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_POLICE && LocationsPool::getInstance().getSiegeEscalationState(loc) >= 1)
-		mvaddstrAlt(1, 1, CONST_siege016, gamelog);
-	else mvaddstrAlt(1, 1, CONST_siege017, gamelog);
-	addstrAlt(CONST_siege018, gamelog);
-	gamelog.newline();
+	printTheyConfiscateEverything(LocationsPool::getInstance().getSiegeType(loc), LocationsPool::getInstance().getSiegeEscalationState(loc));
 	int kcount = 0, pcount = 0, icount = 0;
 	string kname;
 	string pname;
@@ -143,47 +256,32 @@ void surrenderToAuthorities(const int loc) {
 	}
 	if (kcount == 1)
 	{
-		mvaddstrAlt(3, 1, kname);
-		addstrAlt(CONST_siege019, gamelog);
-		gamelog.newline();
+		printSingleKidnapFreed(kname);
 	}
 	if (kcount > 1)
 	{
-		mvaddstrAlt(3, 1, CONST_siege020, gamelog);
-		gamelog.newline();
+		printKidnapFreed();
 	}
 	if (pcount == 1)
 	{
-		mvaddstrAlt(5, 1, pname, gamelog);
-		if (pname == pcname)
-		{
-			addstrAlt(CONST_siege021, gamelog);
-			addstrAlt(pcname, gamelog);
-			addstrAlt(CONST_siege022, gamelog);
-		}
-		mvaddstrAlt(6, 1, CONST_siege023, gamelog);
-		gamelog.newline();
+		printSingleLiberalTaken(pname, pcname);
 	}
 	if (pcount > 1)
 	{
-		mvaddstrAlt(5, 1, pcount, gamelog);
-		addstrAlt(CONST_siege024, gamelog);
-		gamelog.newline();
+		printLiberalsTakenToPolice(pcount);
 	}
 	if (ledger.get_funds() > 0)
 	{
 		if (ledger.get_funds() <= 2000 || LocationsPool::getInstance().getSiegeType(loc) == SIEGE_FIREMEN)
 		{
-			mvaddstrAlt(8, 1, CONST_siege025, gamelog);
-			gamelog.newline();
+			printFundsIntact();
 		}
 		else
 		{
 			int confiscated = LCSrandom(LCSrandom(ledger.get_funds() - 2000) + 1) + 1000;
 			if (ledger.get_funds() - confiscated > 50000)
 				confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
-			mvaddstrAlt(8, 1, CONST_siege026A + tostring(confiscated) + CONST_siege026B, gamelog);
-			gamelog.newline();
+			printMoneyConfiscated(confiscated);
 			ledger.subtract_funds(confiscated, EXPENSE_CONFISCATED);
 		}
 	}
@@ -191,8 +289,7 @@ void surrenderToAuthorities(const int loc) {
 	{
 		if (hasPrintingPress(loc))
 		{
-			mvaddstrAlt(10, 1, CONST_siege174, gamelog);
-			gamelog.newline();
+			printPrintingpressDismantled();
 			deletePrintingPress(loc);
 		}
 	}
@@ -200,15 +297,13 @@ void surrenderToAuthorities(const int loc) {
 	{
 		if (LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS, loc))
 		{
-			mvaddstrAlt(10, 1, CONST_siege028, gamelog);
-			gamelog.newline();
+			printCompoundDismantled();
 			deleteCompoundWalls(loc);
 		}
 	}
 	if (LocationsPool::getInstance().isThisAFront(loc) != -1)
 	{
-		mvaddstrAlt(12, 1, CONST_siege029, gamelog);
-		gamelog.newline();
+		printBusinessFrontTaken();
 		deleteBusinessFront(loc);
 	}
 	pressAnyKey();
@@ -261,12 +356,7 @@ void surrenderAndDie(const int loc) {
 	}
 	if (LocationsPool::getInstance().getSiegeType(loc) == SIEGE_CCS && LocationsPool::getInstance().getLocationType(loc) == SITE_INDUSTRY_WAREHOUSE)
 		CCSCapturesSite(loc);
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 1, CONST_siege030, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-	addstrAlt(CONST_siege031, gamelog);
-	gamelog.newline();
+	printEveryoneHereIsDead(LocationsPool::getInstance().getLocationName(loc));
 	if (!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
 	pressAnyKey();
 	createNewStoryMassacre(loc, killnumber);
@@ -313,187 +403,6 @@ void resolvesafehouses()
 	}
 }
 
-void printSpecificCrime(const Lawflags crime) {
-	mvaddstrAlt(4, 1, youAreWantedForThis[crime], gamelog);
-}
-/* siege - CONST_siege032 */
-void statebrokenlaws(int loc)
-{
-	music.play(MUSIC_SIEGE);
-	short breakercount[LAWFLAGNUM] = { 0 };
-	int typenum = 0, criminalcount = 0, kidnapped = 0;
-	string kname;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
-	{
-		if (!pool[p]->getNameAndAlignment().alive || pool[p]->location != loc) continue;
-		if (pool[p]->flag&CREATUREFLAG_KIDNAPPED)
-		{
-			kname = pool[p]->propername;
-			kidnapped++;
-		}
-		if (iscriminal(pool[p]->getCreatureJustice())) criminalcount++;
-		CreatureJustice cr_just = pool[p]->getCreatureJustice();
-		for (int i = 0; i < LAWFLAGNUM; i++) if (cr_just.crimes_suspected[i]) breakercount[i]++;
-	}
-	for (int i = 0; i < LAWFLAGNUM; i++) if (breakercount[i]) typenum++;
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	if (LocationsPool::getInstance().isThisUnderAttack(loc)) mvaddstrAlt(1, 1, CONST_siege033, gamelog);
-	else mvaddstrAlt(1, 1, CONST_siege034, gamelog);
-	gamelog.newline();
-	if (LocationsPool::getInstance().getSiegeEscalationState(loc) >= 2 && publicmood(-1) < 20)
-		mvaddstrAlt(3, 1, CONST_siege035, gamelog);
-	else mvaddstrAlt(3, 1, CONST_siege167, gamelog);
-	gamelog.newline();
-	//KIDNAP VICTIM
-	if (kidnapped)
-	{
-		mvaddstrAlt(4, 1, CONST_siege037, gamelog);
-		addstrAlt(kname, gamelog);
-		if (kidnapped > 1) addstrAlt(CONST_siege038, gamelog);
-		addstrAlt(CONST_siege039, gamelog);
-	}
-	//TREASON
-	else if (breakercount[LAWFLAG_TREASON])
-		printSpecificCrime(LAWFLAG_TREASON);
-	//TERRORISM
-	else if (breakercount[LAWFLAG_TERRORISM])
-		printSpecificCrime(LAWFLAG_TERRORISM);
-	//MURDERER
-	else if (breakercount[LAWFLAG_MURDER])
-		printSpecificCrime(LAWFLAG_MURDER);
-	//KIDNAPPER
-	else if (breakercount[LAWFLAG_KIDNAPPING])
-		printSpecificCrime(LAWFLAG_KIDNAPPING);
-	//BANK ROBBER
-	else if (breakercount[LAWFLAG_BANKROBBERY])
-		printSpecificCrime(LAWFLAG_BANKROBBERY);
-	//ARSONIST
-	else if (breakercount[LAWFLAG_ARSON])
-		printSpecificCrime(LAWFLAG_ARSON);
-	//BURN FLAG
-	else if (breakercount[LAWFLAG_BURNFLAG])
-	{
-		if (lawList[LAW_FLAGBURNING] == -2)mvaddstrAlt(4, 1, CONST_siege046, gamelog);
-		else if (lawList[LAW_FLAGBURNING] == -1)mvaddstrAlt(4, 1, CONST_siege047, gamelog);
-		else mvaddstrAlt(4, 1, CONST_siege048, gamelog);
-	}
-	//SPEECH
-	else if (breakercount[LAWFLAG_SPEECH])
-		printSpecificCrime(LAWFLAG_SPEECH);
-	//BROWNIES
-	else if (breakercount[LAWFLAG_BROWNIES])
-		printSpecificCrime(LAWFLAG_BROWNIES);
-	//ESCAPED
-	else if (breakercount[LAWFLAG_ESCAPED])
-		printSpecificCrime(LAWFLAG_ESCAPED);
-	//HELP ESCAPED
-	else if (breakercount[LAWFLAG_HELPESCAPE])
-		printSpecificCrime(LAWFLAG_HELPESCAPE);
-	//JURY
-	else if (breakercount[LAWFLAG_JURY])
-		printSpecificCrime(LAWFLAG_JURY);
-	//RACKETEERING
-	else if (breakercount[LAWFLAG_RACKETEERING])
-		printSpecificCrime(LAWFLAG_RACKETEERING);
-	//EXTORTION
-	else if (breakercount[LAWFLAG_EXTORTION])
-		printSpecificCrime(LAWFLAG_EXTORTION);
-	//ASSAULT
-	else if (breakercount[LAWFLAG_ARMEDASSAULT])
-		printSpecificCrime(LAWFLAG_ARMEDASSAULT);
-	//ASSAULT
-	else if (breakercount[LAWFLAG_ASSAULT])
-		printSpecificCrime(LAWFLAG_ASSAULT);
-	//CAR THEFT
-	else if (breakercount[LAWFLAG_CARTHEFT])
-		printSpecificCrime(LAWFLAG_CARTHEFT);
-	//CC FRAUD
-	else if (breakercount[LAWFLAG_CCFRAUD])
-		printSpecificCrime(LAWFLAG_CCFRAUD);
-	//THIEF
-	else if (breakercount[LAWFLAG_THEFT])
-		printSpecificCrime(LAWFLAG_THEFT);
-	//PROSTITUTION
-	else if (breakercount[LAWFLAG_PROSTITUTION])
-		printSpecificCrime(LAWFLAG_PROSTITUTION);
-	//HIRE ILLEGAL
-	else if (breakercount[LAWFLAG_HIREILLEGAL])
-		mvaddstrAlt(4, 1, (lawList[LAW_IMMIGRATION] < 1 ? CONST_siege062 : CONST_siegeB252), gamelog);
-	//COMMERCE
-	else if (breakercount[LAWFLAG_COMMERCE])
-		printSpecificCrime(LAWFLAG_COMMERCE);
-	//INFORMATION
-	else if (breakercount[LAWFLAG_INFORMATION])
-		printSpecificCrime(LAWFLAG_INFORMATION);
-	//UNLAWFUL BURIAL
-	else if (breakercount[LAWFLAG_BURIAL])
-		printSpecificCrime(LAWFLAG_BURIAL);
-	//BREAKING
-	else if (breakercount[LAWFLAG_BREAKING])
-		printSpecificCrime(LAWFLAG_BREAKING);
-	//VANDALISM
-	else if (breakercount[LAWFLAG_VANDALISM])
-		printSpecificCrime(LAWFLAG_VANDALISM);
-	//RESIST
-	else if (breakercount[LAWFLAG_RESIST])
-		printSpecificCrime(LAWFLAG_RESIST);
-	//DISTURBANCE
-	else if (breakercount[LAWFLAG_DISTURBANCE])
-		printSpecificCrime(LAWFLAG_DISTURBANCE);
-	//PUBLIC NUDITY
-	else if (breakercount[LAWFLAG_PUBLICNUDITY])
-		printSpecificCrime(LAWFLAG_PUBLICNUDITY);
-	//LOITERING
-	else if (breakercount[LAWFLAG_LOITERING])
-		printSpecificCrime(LAWFLAG_LOITERING);
-	//THEY WERE LOOKING FOR SOMEONE ELSE
-	else mvaddstrAlt(4, 1, CONST_siege074, gamelog);
-	if (!kidnapped)
-	{
-		if (typenum > 1) addstrAlt(CONST_siege075, gamelog);
-		addstrAlt(singleDot, gamelog);
-	}
-	gamelog.nextMessage();
-	pressAnyKey();
-}
-
-void printMostSeriousCrime(const bool breakercount[LAWFLAGNUM]) {
-
-	for (auto const& x : mostSeriousCrime)
-	{
-		if (breakercount[x.first]) {
-			addstrAlt(x.second);
-			return;
-		}
-	}
-
-	if (breakercount[LAWFLAG_BURNFLAG]) {
-		addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253);
-		return;
-	}
-
-	for (auto const& x : mostSeriousCrime2)
-	{
-		if (breakercount[x.first]) {
-			addstrAlt(x.second);
-			return;
-		}
-	}
-
-	if (breakercount[LAWFLAG_HIREILLEGAL]) {
-		addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
-		return;
-	}
-
-	for (auto const& x : mostSeriousCrime3)
-	{
-		if (breakercount[x.first]) {
-			addstrAlt(x.second);
-			return;
-		}
-	}
-}
 void statebrokenlaws(CreatureJustice cr, const int flag)
 {
 	bool kidnapped = (flag&CREATUREFLAG_KIDNAPPED);
@@ -510,12 +419,10 @@ void statebrokenlaws(CreatureJustice cr, const int flag)
 	}
 	if (!criminal && !kidnapped) return;
 
-	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-
-	addstrAlt(CONST_siege076);
+	printWantedFor();
 	//KIDNAP VICTIM
 	if (kidnapped) {
-		addstrAlt(CONST_siege077);
+		printRehab();
 	}
 	else {
 		printMostSeriousCrime(breakercount);
@@ -567,49 +474,23 @@ void possibleWarningFromSleepers(const int l) {
 	}
 	if (policesleeperwarning)
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege110, gamelog);
-		mvaddstrAlt(9, 1, CONST_siege111, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(l));
-		addstrAlt(singleDot, gamelog);
-		gamelog.newline();
-		if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 1)
-		{
-			mvaddstrAlt(11, 1, CONST_siege112, gamelog);
-		}
-		if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 2)
-		{
-			mvaddstrAlt(12, 1, CONST_siege113, gamelog);
-		}
-		if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3)
-		{
-			mvaddstrAlt(13, 1, CONST_siege114, gamelog);
-			mvaddstrAlt(14, 1, CONST_siege115, gamelog);
-		}
-		gamelog.nextMessage(); //Write out buffer to prepare for next message.
-		mvaddstrAlt(15, 1, CONST_siege116);
+		printPoliceSleeperWarning(LocationsPool::getInstance().getLocationName(l), LocationsPool::getInstance().getSiegeEscalationState(l));
 		pressSpecificKey('x', ESC);
 	}
 }
-void policeSiegePrintNonePresent(const int l) {
 
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege124, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege177, gamelog);
-	gamelog.newline();
+void policeSiegePrintNonePresent(const int l) {
+	printPoliceSiegeEmptyHeader(LocationsPool::getInstance().getLocationName(l));
 	pressAnyKey();
-	int y = 9;
+	int y = 0;
+	vector<string> corpseList;
+	vector<string> kidnapList;
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l) continue;
 		if (!pool[p]->getNameAndAlignment().alive)
 		{
-			mvaddstrAlt(y, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege178, gamelog);
-			gamelog.newline();
+			printCorpseRecoveredByPolice(pool[p]->getNameAndAlignment().name, y);
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			y++;
@@ -617,9 +498,7 @@ void policeSiegePrintNonePresent(const int l) {
 		}
 		if (pool[p]->align != 1)
 		{
-			mvaddstrAlt(y, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege179, gamelog);
-			gamelog.newline();
+			printKidnapRecoveredByPolice(pool[p]->getNameAndAlignment().name, y);
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			y++;
@@ -630,36 +509,27 @@ void policeSiegePrintNonePresent(const int l) {
 	deleteLocationLoot(l);
 	deleteLocationVehicles(l);
 }
+
 void policeSiegePrintSomePresent(const int l) {
 
 	music.play(MUSIC_SIEGE);
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege117, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.newline();
+	printPoliceSiegeHeader(LocationsPool::getInstance().getLocationName(l));
 	LocationsPool::getInstance().clearunderattack(l);
 	pressAnyKey();
 	//MENTION ESCALATION STATE
 	if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 1)
 	{
-		mvaddstrAlt(9, 1, CONST_siege119, gamelog);
-		gamelog.nextMessage();
+		printSWATArrival();
 		pressAnyKey();
 	}
 	if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 2)
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l))
-			mvaddstrAlt(10, 1, CONST_siege120, gamelog);
-		else mvaddstrAlt(10, 1, CONST_siege121, gamelog);
-		gamelog.nextMessage();
+		printTankArrival(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l));
 		pressAnyKey();
 	}
 	if (LocationsPool::getInstance().getSiegeEscalationState(l) >= 3)
 	{
-		mvaddstrAlt(11, 1, CONST_siege122, gamelog);
-		gamelog.nextMessage();
+		printJetBombers();
 		pressAnyKey();
 	}
 	// CONST_siege123
@@ -694,36 +564,39 @@ void possiblyWarnOfCorpSiege(const int l) {
 	}
 	if (ceosleepercount || !LCSrandom(5))
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege128, gamelog);
-		if (ceosleepercount)addstrAlt(CONST_siege129, gamelog);
-		else addstrAlt(CONST_siege130, gamelog);
-		addstrAlt(CONST_siege131, gamelog);
-		mvaddstrAlt(9, 1, CONST_siege132, gamelog);
-		if (ceosleepercount)addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-		else addstrAlt(CONST_siege133, gamelog);
-		addstrAlt(singleDot, gamelog);
-		gamelog.nextMessage();
+		printCorpSiegeWarning(ceosleepercount, LocationsPool::getInstance().getLocationName(l));
 		pressAnyKey();
 	}
 }
-
-void corporateSiegePrint(const int l) {
-	music.play(MUSIC_SIEGE);
-	LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1);
-	// Corps raid!
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege134, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
-	corporateSiege(l);
-	offended_corps = 0;
+void printEveryoneInjured(const int l) {
+	printEveryoneInjuredHeader();
+	vector<pair<string, int> > killList;
+	vector<pair<string, int> > injuredList;
+	for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
+	{
+		if (pool[i]->location == l)
+		{
+			if (LCSrandom(2))
+			{
+				int namelength = len(pool[i]->getNameAndAlignment().name);
+				pool[i]->blood -= LCSrandom(101 - pool[i]->juice / 10) + 10;
+				if (pool[i]->blood < 0)
+				{
+					killList.push_back(make_pair(pool[i]->getNameAndAlignment().name, pool[i]->align));
+					pool[i]->die();
+				}
+				else
+				{
+					injuredList.push_back(make_pair(pool[i]->getNameAndAlignment().name, pool[i]->align));
+				}
+				//set_alignment_color(pool[i]->align,false);
+				//addstrAlt(pool[i]->name);
+			}
+		}
+	}
+	printKillList(killList);
+	printInjuredList(injuredList);
 }
-
 void CCSSiegePrint(const int l, const int numpres) {
 
 
@@ -744,13 +617,7 @@ void CCSSiegePrint(const int l, const int numpres) {
 		}
 		if (ccssleepercount > 0)
 		{
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_siege136, gamelog);
-			mvaddstrAlt(9, 1, CONST_siege137, gamelog);
-			addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-			addstrAlt(singleDot, gamelog);
-			gamelog.nextMessage();
+			printCCSSleeperWarning(LocationsPool::getInstance().getLocationName(l));
 			pressAnyKey();
 		}
 	}
@@ -760,160 +627,71 @@ void CCSSiegePrint(const int l, const int numpres) {
 		music.play(MUSIC_SIEGE);
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1);
 		// CCS raid!
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege138, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-		addstrAlt(CONST_siege188, gamelog);
-		gamelog.newline();
+		printCCSRaid(LocationsPool::getInstance().getLocationName(l));
 		pressAnyKey();
 		if (!(LocationsPool::getInstance().get_specific_integer(INT_DOWEHAVETANKTRAPS, l)) &&
 			!LCSrandom(5))
 		{
 			// CCS Carbombs safehouse!!
-			eraseAlt();
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_siege140, gamelog);
-			gamelog.nextMessage();
+			printCCSCarbomb();
 			pressAnyKey();
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 1, CONST_siege141);
-			mvaddstrAlt(2, 1, CONST_siege142);
-			int killed_y = 2;
-			int killed_x = 9;
-			mvaddstrAlt(6, 1, CONST_siege143);
-			int injured_y = 6;
-			int injured_x = 10;
-			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
-			{
-				if (pool[i]->location == l)
-				{
-					if (LCSrandom(2))
-					{
-						int namelength = len(pool[i]->getNameAndAlignment().name);
-						pool[i]->blood -= LCSrandom(101 - pool[i]->juice / 10) + 10;
-						if (pool[i]->blood < 0)
-						{
-							if (killed_x + namelength > 78)
-							{
-								killed_y++;
-								killed_x = 1;
-								//Add limit for killed_y.
-							}
-							pool[i]->die();
-							set_alignment_color(pool[i]->align, false);
-							mvaddstrAlt(injured_y, injured_x, pool[i]->getNameAndAlignment().name);
-							addstrAlt(commaSpace);
-							killed_x += namelength + 2;
-						}
-						else
-						{
-							if (injured_x + namelength > 78)
-							{
-								injured_y++;
-								injured_x = 1;
-								//Add limit for injured_y.
-							}
-							set_alignment_color(pool[i]->align, false);
-							mvaddstrAlt(injured_y, injured_x, pool[i]->getNameAndAlignment().name);
-							addstrAlt(commaSpace);
-							injured_x += namelength + 2;
-						}
-						//set_alignment_color(pool[i]->align,false);
-						//addstrAlt(pool[i]->name);
-					}
-				}
-			}
+			printEveryoneInjured(l);
 			pressAnyKey();
 		}
 		else
 		{
 			// CCS Raids safehouse
-			eraseAlt();
-			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_siege144, gamelog);
-			gamelog.nextMessage();
+			printCCSRaidSafehouse();
 			pressAnyKey();
 			CCSSiege(l);
 		}
 	}
 	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CCS) == 0)LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CCS, -1); // Silently call off foiled ccs raids
 }
-void printFiremenRaid(const string loc) {
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege163, gamelog);
-	addstrAlt(loc, gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(9, 1, CONST_siege165, gamelog);
-	gamelog.newline();
-	pressAnyKey();
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(1, 1, CONST_siege166, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(3, 1, CONST_siege167, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(4, 1, CONST_siege168, gamelog);
-	gamelog.newline();
-	mvaddstrAlt(6, 1, CONST_siege169, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
-}
+
 bool incomingRaidFiremen(const int l) {
 	return lawList[LAW_FREESPEECH] == -2 && LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_FIREMEN) == 0;
 }
+
 void theFiremenHaveRaidedEmptySafehouse(const int l) {
 
 	LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege170, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege177, gamelog);
-	gamelog.newline();
+	printFiremenSiegeEmpty(LocationsPool::getInstance().getLocationName(l));
 	pressAnyKey();
-	int y = 9;
+	int y = 0;
 	for (int p = CreaturePool::getInstance().lenpool() - 1; p >= 0; p--)
 	{
 		if (pool[p]->location != l)continue;
 		if (!pool[p]->getNameAndAlignment().alive)
 		{
-			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege178, gamelog);
-			gamelog.newline();
+
+			printCorpseRecovery(y++, pool[p]->getNameAndAlignment().name);
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			continue;
 		}
 		if (pool[p]->align != 1)
 		{
-			mvaddstrAlt(y++, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_siege179, gamelog);
-			gamelog.newline();
+			printKidnapRescue(y++, pool[p]->getNameAndAlignment().name);
 			pressAnyKey();
 			delete_and_remove(pool, p);
 			continue;
 		}
 	}
 	deleteLocationLoot(l);
+	printFiremenSiegeEmpty(hasPrintingPress(l), hasBusinessFront(l));
 	if (hasPrintingPress(l))
 	{
-		mvaddstrAlt(10, 1, CONST_siege174, gamelog);
-		gamelog.newline();
 		deletePrintingPress(l);
 		offended_firemen = 0;
 	}
 	if (hasBusinessFront(l))
 	{
-		mvaddstrAlt(12, 1, CONST_siege175, gamelog);
-		gamelog.newline();
 		deleteBusinessFront(l);
 	}
 	gamelog.newline();
 }
+
 void possiblyWarnOfCIARaid(const int l) {
 	int agentsleepercount = 0;
 	for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
@@ -930,64 +708,11 @@ void possiblyWarnOfCIARaid(const int l) {
 	}
 	if (agentsleepercount)
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 1, CONST_siege145, gamelog);
-		mvaddstrAlt(9, 1, CONST_siege146, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-		addstrAlt(singleDot, gamelog);
-		gamelog.nextMessage();
+		printCIASiegeWarning(LocationsPool::getInstance().getLocationName(l));
 		pressAnyKey();
 	}
 }
-void printCIASiege(const int l) {
 
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege147, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.newline();
-	if (hasCameras(l))
-	{
-		mvaddstrAlt(9, 1, CONST_siege151, gamelog);
-		mvaddstrAlt(10, 1, CONST_siege150, gamelog);
-		gamelog.nextMessage();
-	}
-	else if (hasAGenerator(l))
-	{
-		mvaddstrAlt(9, 1, CONST_siege151, gamelog);
-		mvaddstrAlt(10, 1, CONST_siege152, gamelog);
-		gamelog.nextMessage();
-	}
-	else
-	{
-		mvaddstrAlt(9, 1, CONST_siege153, gamelog);
-		gamelog.nextMessage();
-	}
-	pressAnyKey();
-}
-void printRadioHicksSiege(const int l) {
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege154, gamelog);
-	mvaddstrAlt(9, 1, CONST_siege158, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
-}
-void printCableHicksSiege(const int l) {
-
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_siege157, gamelog);
-	mvaddstrAlt(9, 1, CONST_siege158, gamelog);
-	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-	addstrAlt(CONST_siege188, gamelog);
-	gamelog.nextMessage();
-	pressAnyKey();
-}
 void possiblyWarnOfFiremenSiege(const int l) {
 
 	int firemensleepercount = 0;
@@ -998,14 +723,7 @@ void possiblyWarnOfFiremenSiege(const int l) {
 			firemensleepercount++;
 	if (LCSrandom(firemensleepercount + 1) > 0 || !LCSrandom(10))
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (firemensleepercount) mvaddstrAlt(8, 1, CONST_siege160, gamelog);
-		else mvaddstrAlt(8, 1, CONST_siege161, gamelog);
-		mvaddstrAlt(9, 1, CONST_siege162, gamelog);
-		addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
-		addstrAlt(singleDot, gamelog);
-		gamelog.nextMessage();
+		printFiremenSiege(firemensleepercount > 0, l);
 		pressAnyKey();
 	}
 }
@@ -1051,7 +769,13 @@ void huntingSiegePrint(const int l, int& numpres) {
 	}
 	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0 && !LocationsPool::getInstance().isThereASiegeHere(l) && offended_corps&&numpres > 0)
 	{
-		corporateSiegePrint(l);
+		music.play(MUSIC_SIEGE);
+		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1);
+		// Corps raid!
+		corporateSiegePrint(LocationsPool::getInstance().getLocationName(l));
+		pressAnyKey();
+		corporateSiege(l);
+		offended_corps = 0;
 	}
 	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CORPORATE) == 0) {
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CORPORATE, -1); // Silently call off foiled corp raids
@@ -1076,7 +800,8 @@ void huntingSiegePrint(const int l, int& numpres) {
 		music.play(MUSIC_SIEGE);
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_CIA, -1);
 		// CIA raids!
-		printCIASiege(l);
+		printCIASiege(LocationsPool::getInstance().getLocationName(l), hasCameras(l), hasAGenerator(l));
+		pressAnyKey();
 		CIASiege(l);
 	}
 	else if (LocationsPool::getInstance().getTimeUntilSiege(l, SIEGE_CIA) == 0) {
@@ -1087,6 +812,7 @@ void huntingSiegePrint(const int l, int& numpres) {
 	{
 		music.play(MUSIC_SIEGE);
 		printRadioHicksSiege(l);
+		pressAnyKey();
 		hicksSiege(l);
 		offended_amradio = 0;
 	}
@@ -1094,6 +820,7 @@ void huntingSiegePrint(const int l, int& numpres) {
 	{
 		music.play(MUSIC_SIEGE);
 		printCableHicksSiege(l);
+		pressAnyKey();
 		hicksSiege(l);
 		offended_cablenews = 0;
 	}
@@ -1112,6 +839,9 @@ void huntingSiegePrint(const int l, int& numpres) {
 		LocationsPool::getInstance().setTimeUntilSiege(l, SIEGE_FIREMEN, -1);
 		// Firemen raid!
 		printFiremenRaid(LocationsPool::getInstance().getLocationName(l));
+		pressAnyKey();
+		printFiremenRaid2();
+		pressAnyKey();
 		firemanSiege(l);
 		offended_firemen = 0;
 	}

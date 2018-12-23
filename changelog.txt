@@ -937,5 +937,6 @@ moved to cursesAlternative.cpp 537 total
 moved to cursesAlternative.cpp 668 total
 
 Next target: 291 in siege.cpp
-
+ 947 total
+Next target: 74 in shop.cpp
 Fixed a bug where having more than 19 save files would display incorrectly.

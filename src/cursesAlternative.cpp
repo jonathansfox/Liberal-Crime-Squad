@@ -987,7 +987,7 @@ void printThePoliceCutLights(const bool clearformess) {
 }
 
 void printReporterDuringSiege(const string repname, const string name, const int segmentpower) {
-
+	extern short lawList[LAWNUM];
 	string line_one;
 	string line_two = blankString;
 	if (segmentpower < 15)
@@ -1161,6 +1161,462 @@ void printLiberalRescued(const string pname, const int y) {
 	gamelog.newline();
 
 }
+void printCCSRaidSafehouse() {
+	eraseAlt();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege144, gamelog);
+	gamelog.nextMessage();
+}
+
+void printCorpSiegeWarning(const int sleeper, const string locationName) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege128, gamelog);
+	if (sleeper)addstrAlt(CONST_siege129, gamelog);
+	else addstrAlt(CONST_siege130, gamelog);
+	addstrAlt(CONST_siege131, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege132, gamelog);
+	if (sleeper)addstrAlt(locationName, gamelog);
+	else addstrAlt(CONST_siege133, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.nextMessage();
+}
+void corporateSiegePrint(const string lname) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege134, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.nextMessage();
+}
+void printCCSCarbomb() {
+	eraseAlt();
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege140, gamelog);
+	gamelog.nextMessage();
+}
+void printCCSRaid(const string lname) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege138, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+}
+void printEveryoneInjuredHeader() {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 1, CONST_siege141);
+	mvaddstrAlt(2, 1, CONST_siege142);
+	mvaddstrAlt(6, 1, CONST_siege143);
+}
+
+void printInjuredList(const vector<pair<string, int> > injuredList) {
+	int injured_y = 6;
+	int injured_x = 10;
+	for (pair<string, int> injured : injuredList)
+	{
+
+
+		int namelength = len(injured.first);
+
+		if (injured_x + namelength > 78)
+		{
+			injured_y++;
+			injured_x = 1;
+			//Add limit for killed_y.
+		}
+		set_alignment_color(injured.second, false);
+		mvaddstrAlt(injured_y, injured_x, injured.first);
+		addstrAlt(commaSpace);
+		injured_x += namelength + 2;
+
+
+		//set_alignment_color(pool[i]->align,false);
+		//addstrAlt(pool[i]->name);
+
+
+	}
+}
+void printKillList(const vector<pair<string, int> > killList) {
+	int killed_y = 2;
+	int killed_x = 9;
+	for (pair<string, int> injured : killList)
+	{
+
+
+		int namelength = len(injured.first);
+
+		if (killed_x + namelength > 78)
+		{
+			killed_y++;
+			killed_x = 1;
+			//Add limit for killed_y.
+		}
+		set_alignment_color(injured.second, false);
+		mvaddstrAlt(killed_y, killed_x, injured.first);
+		addstrAlt(commaSpace);
+		killed_x += namelength + 2;
+
+	}
+}
+void printCCSSleeperWarning(const string lname) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege136, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege137, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.nextMessage();
+}
+
+void printJetBombers() {
+
+	mvaddstrAlt(11, 1, CONST_siege122, gamelog);
+	gamelog.nextMessage();
+}
+void printTankArrival(const bool tank_traps) {
+
+	if (tank_traps)
+		mvaddstrAlt(10, 1, CONST_siege120, gamelog);
+	else mvaddstrAlt(10, 1, CONST_siege121, gamelog);
+	gamelog.nextMessage();
+}
+void printSWATArrival() {
+	mvaddstrAlt(9, 1, CONST_siege119, gamelog);
+	gamelog.nextMessage();
+}
+void printPoliceSiegeHeader(const string lname) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege117, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+}
+void printPoliceSleeperWarning(const string locationName, const int siegeEscalationState) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege110, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege111, gamelog);
+	addstrAlt(locationName);
+	addstrAlt(singleDot, gamelog);
+	gamelog.newline();
+	if (siegeEscalationState >= 1)
+	{
+		mvaddstrAlt(11, 1, CONST_siege112, gamelog);
+	}
+	if (siegeEscalationState >= 2)
+	{
+		mvaddstrAlt(12, 1, CONST_siege113, gamelog);
+	}
+	if (siegeEscalationState >= 3)
+	{
+		mvaddstrAlt(13, 1, CONST_siege114, gamelog);
+		mvaddstrAlt(14, 1, CONST_siege115, gamelog);
+	}
+	gamelog.nextMessage(); //Write out buffer to prepare for next message.
+	mvaddstrAlt(15, 1, CONST_siege116);
+}
+void printPoliceSiegeEmptyHeader(const string lname) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege124, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(CONST_siege177, gamelog);
+	gamelog.newline();
+}
+
+void printCorpseRecoveredByPolice(const string corpse, const int y) {
+	mvaddstrAlt(y + 9, 1, corpse, gamelog);
+	addstrAlt(CONST_siege178, gamelog);
+	gamelog.newline();
+}
+void printKidnapRecoveredByPolice(const string kidnap, const int y) {
+	mvaddstrAlt(y + 9, 1, kidnap, gamelog);
+	addstrAlt(CONST_siege179, gamelog);
+	gamelog.newline();
+}
+
+void printSpecificCrime(const Lawflags crime) {
+	mvaddstrAlt(4, 1, youAreWantedForThis[crime], gamelog);
+}
+
+void printBrokenLawsFooter(const bool kidnapped, const int typenum) {
+	if (!kidnapped)
+	{
+		if (typenum > 1) addstrAlt(CONST_siege075, gamelog);
+		addstrAlt(singleDot, gamelog);
+	}
+	gamelog.nextMessage();
+}
+void printHarboringFugitive() {
+	mvaddstrAlt(4, 1, CONST_siege074, gamelog);
+}
+void printBrokenLawsHeader(const char underAttack, const short escalation) {
+	int publicmood(const int old_l);
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (underAttack) mvaddstrAlt(1, 1, CONST_siege033, gamelog);
+	else mvaddstrAlt(1, 1, CONST_siege034, gamelog);
+	gamelog.newline();
+	if (escalation >= 2 && publicmood(-1) < 20)
+		mvaddstrAlt(3, 1, CONST_siege035, gamelog);
+	else mvaddstrAlt(3, 1, CONST_siege167, gamelog);
+	gamelog.newline();
+}
+void printBurnedFlag(const int flagLaw) {
+
+	if (flagLaw == -2)mvaddstrAlt(4, 1, CONST_siege046, gamelog);
+	else if (flagLaw == -1)mvaddstrAlt(4, 1, CONST_siege047, gamelog);
+	else mvaddstrAlt(4, 1, CONST_siege048, gamelog);
+}
+void printHireIllegal(const bool lawStatus) {
+	mvaddstrAlt(4, 1, (lawStatus ? CONST_siege062 : CONST_siegeB252), gamelog);
+}
+void printReleaseKidnapped(const string kname, const int kidnapped) {
+	mvaddstrAlt(4, 1, CONST_siege037, gamelog);
+	addstrAlt(kname, gamelog);
+	if (kidnapped > 1) addstrAlt(CONST_siege038, gamelog);
+	addstrAlt(CONST_siege039, gamelog);
+}
+
+void printMostSeriousCrime(const bool breakercount[LAWFLAGNUM]) {
+	extern short lawList[LAWNUM];
+	for (auto const& x : mostSeriousCrime)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+
+	if (breakercount[LAWFLAG_BURNFLAG]) {
+		addstrAlt(lawList[LAW_FLAGBURNING] == -2 ? CONST_siege084 : CONST_siegeB253);
+		return;
+	}
+
+	for (auto const& x : mostSeriousCrime2)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+
+	if (breakercount[LAWFLAG_HIREILLEGAL]) {
+		addstrAlt(lawList[LAW_IMMIGRATION] < 1 ? CONST_siege098 : CONST_siegeB254);
+		return;
+	}
+
+	for (auto const& x : mostSeriousCrime3)
+	{
+		if (breakercount[x.first]) {
+			addstrAlt(x.second);
+			return;
+		}
+	}
+}
+void printWantedFor() {
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+
+	addstrAlt(CONST_siege076);
+}
+void printRehab() {
+
+	addstrAlt(CONST_siege077);
+}
+void printEveryoneHereIsDead(const string lname) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 1, CONST_siege030, gamelog);
+	addstrAlt(lname, gamelog);
+	addstrAlt(CONST_siege031, gamelog);
+	gamelog.newline();
+}
+void printBusinessFrontTaken() {
+	mvaddstrAlt(12, 1, CONST_siege029, gamelog);
+	gamelog.newline();
+}
+void printCompoundDismantled() {
+	mvaddstrAlt(10, 1, CONST_siege028, gamelog);
+	gamelog.newline();
+}
+void printPrintingpressDismantled() {
+	mvaddstrAlt(10, 1, CONST_siege174, gamelog);
+	gamelog.newline();
+}
+void printMoneyConfiscated(const int confiscated) {
+	mvaddstrAlt(8, 1, CONST_siege026A + tostring(confiscated) + CONST_siege026B, gamelog);
+	gamelog.newline();
+}
+void printFundsIntact() {
+	mvaddstrAlt(8, 1, CONST_siege025, gamelog);
+	gamelog.newline();
+}
+void printLiberalsTakenToPolice(const int pcount) {
+	mvaddstrAlt(5, 1, pcount, gamelog);
+	addstrAlt(CONST_siege024, gamelog);
+	gamelog.newline();
+}
+void printSingleLiberalTaken(const string pname, const string pcname) {
+
+	mvaddstrAlt(5, 1, pname, gamelog);
+	if (pname == pcname)
+	{
+		addstrAlt(CONST_siege021, gamelog);
+		addstrAlt(pcname, gamelog);
+		addstrAlt(CONST_siege022, gamelog);
+	}
+	mvaddstrAlt(6, 1, CONST_siege023, gamelog);
+	gamelog.newline();
+}
+void printKidnapFreed() {
+	mvaddstrAlt(3, 1, CONST_siege020, gamelog);
+	gamelog.newline();
+}
+void printSingleKidnapFreed(const string kname) {
+
+	mvaddstrAlt(3, 1, kname);
+	addstrAlt(CONST_siege019, gamelog);
+	gamelog.newline();
+}
+void printTheyConfiscateEverything(const int siege, const int escalationState) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (siege == SIEGE_POLICE && escalationState == 0)
+		mvaddstrAlt(1, 1, CONST_siege015, gamelog);
+	else if (siege == SIEGE_POLICE && escalationState >= 1)
+		mvaddstrAlt(1, 1, CONST_siege016, gamelog);
+	else mvaddstrAlt(1, 1, CONST_siege017, gamelog);
+	addstrAlt(CONST_siege018, gamelog);
+	gamelog.newline();
+}
+void printCorpseRecovery(const int y, const string name) {
+	mvaddstrAlt(y + 9, 1, name, gamelog);
+	addstrAlt(CONST_siege178, gamelog);
+	gamelog.newline();
+}
+void printKidnapRescue(const int y, const string name) {
+	mvaddstrAlt(y + 9, 1, name, gamelog);
+	addstrAlt(CONST_siege179, gamelog);
+	gamelog.newline();
+}
+void printFiremenSiegeEmpty(const string locationName) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege170, gamelog);
+	addstrAlt(locationName, gamelog);
+	addstrAlt(CONST_siege177, gamelog);
+	gamelog.newline();
+}
+void printFiremenRaid2() {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(1, 1, CONST_siege166, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(3, 1, CONST_siege167, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(4, 1, CONST_siege168, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(6, 1, CONST_siege169, gamelog);
+	gamelog.nextMessage();
+}
+void printFiremenRaid(const string loc) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege163, gamelog);
+	addstrAlt(loc, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+	mvaddstrAlt(9, 1, CONST_siege165, gamelog);
+	gamelog.newline();
+}
+void printFiremenSiegeEmpty(const bool printingPress, const bool businessFront) {
+	if (printingPress)
+	{
+		mvaddstrAlt(10, 1, CONST_siege174, gamelog);
+		gamelog.newline();
+	}
+	if (businessFront)
+	{
+		mvaddstrAlt(12, 1, CONST_siege175, gamelog);
+		gamelog.newline();
+	}
+}
+void printCIASiegeWarning(const string locationName) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege145, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege146, gamelog);
+	addstrAlt(locationName, gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.nextMessage();
+}
+void printCIASiege(const string locationName, const bool hasCameras, const bool hasAGenerator) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege147, gamelog);
+	addstrAlt(locationName, gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.newline();
+	if (hasCameras)
+	{
+		mvaddstrAlt(9, 1, CONST_siege151, gamelog);
+		mvaddstrAlt(10, 1, CONST_siege150, gamelog);
+		gamelog.nextMessage();
+	}
+	else if (hasAGenerator)
+	{
+		mvaddstrAlt(9, 1, CONST_siege151, gamelog);
+		mvaddstrAlt(10, 1, CONST_siege152, gamelog);
+		gamelog.nextMessage();
+	}
+	else
+	{
+		mvaddstrAlt(9, 1, CONST_siege153, gamelog);
+		gamelog.nextMessage();
+	}
+}
+void printRadioHicksSiege(const int l) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege154, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege158, gamelog);
+	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.nextMessage();
+}
+void printCableHicksSiege(const int l) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_siege157, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege158, gamelog);
+	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
+	addstrAlt(CONST_siege188, gamelog);
+	gamelog.nextMessage();
+}
+void printFiremenSiege(const bool sleeper, const int l) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (sleeper) mvaddstrAlt(8, 1, CONST_siege160, gamelog);
+	else mvaddstrAlt(8, 1, CONST_siege161, gamelog);
+	mvaddstrAlt(9, 1, CONST_siege162, gamelog);
+	addstrAlt(LocationsPool::getInstance().getLocationName(l), gamelog);
+	addstrAlt(singleDot, gamelog);
+	gamelog.nextMessage();
+}
+
+
 
 void printReflectOnYourConJudgement()
 {
