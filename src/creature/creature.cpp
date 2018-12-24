@@ -1449,6 +1449,7 @@ void DeprecatedCreature::namecreature()
 	{
 		fullName fn = generate_long_name(gender_liberal);
 		strcpy(propername, (fn.first + " " + fn.last).data());
+		strcpy(name, propername);
 		dontname = true;
 	}
 }

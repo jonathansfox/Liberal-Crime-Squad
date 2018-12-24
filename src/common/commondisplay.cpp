@@ -562,7 +562,7 @@ void printparty()
 				if (party[p]->get_weapon().get_ammoamount() > 0)
 				{
 					//set_color_easy(WHITE_ON_BLACK);
-					addstrAlt(CONST_commondisplay202);
+					addstrAlt(CONST_SpaceOpenParenthesis);
 					addstrAlt(party[p]->get_weapon().get_ammoamount());
 					addstrAlt(closeParenthesis);
 				}
@@ -571,7 +571,7 @@ void printparty()
 					set_color_easy(BLACK_ON_BLACK_BRIGHT);
 					if (party[p]->has_clips())
 					{
-						addstrAlt(CONST_commondisplay202);
+						addstrAlt(CONST_SpaceOpenParenthesis);
 						addstrAlt(party[p]->count_clips());
 						addstrAlt(closeParenthesis);
 					}
@@ -583,7 +583,7 @@ void printparty()
 				else if (party[p]->has_thrown_weapon && party[p]->has_extra_throwing_weapons())
 				{
 					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					addstrAlt(CONST_commondisplay202);
+					addstrAlt(CONST_SpaceOpenParenthesis);
 					addstrAlt(party[p]->count_weapons() - party[p]->is_armed());
 					addstrAlt(closeParenthesis);
 				}
@@ -781,13 +781,13 @@ void printliberalstats_a(const CreatureBio cr, const CreatureJustice cr_2, const
 	if (strcmp(cr_2.propername.data(), cr_2.name.data()) != 0)
 	{
 		//The names do not match, print real name as well
-		addstrAlt(CONST_commondisplay202);
+		addstrAlt(CONST_SpaceOpenParenthesis);
 		addstrAlt(cr_2.propername);
 		addstrAlt(closeParenthesis);
 	}
 	addstrAlt(commaSpace);
 	addstrAlt(gettitle(cr_2.align, cr_2.juice));
-	addstrAlt(CONST_commondisplay202);
+	addstrAlt(CONST_SpaceOpenParenthesis);
 	addstrAlt(cr_2.get_type_name);
 	addstrAlt(closeParenthesis);
 	moveAlt(3, 0);
@@ -961,7 +961,7 @@ void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2) {
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(commaSpace);
 	addstrAlt(gettitle(cr.align, cr.juice));
-	addstrAlt(CONST_commondisplay202);
+	addstrAlt(CONST_SpaceOpenParenthesis);
 	addstrAlt(cr.get_type_name);
 	addstrAlt(closeParenthesis);
 	// Add all skills
@@ -1021,7 +1021,7 @@ void printliberalcrimes(CreatureJustice cr)
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(commaSpace);
 	addstrAlt(gettitle(cr.align, cr.juice));
-	addstrAlt(CONST_commondisplay202);
+	addstrAlt(CONST_SpaceOpenParenthesis);
 	addstrAlt(cr.get_type_name);
 	addstrAlt(closeParenthesis);
 	// Show outstanding convictions in addition to untried crimes

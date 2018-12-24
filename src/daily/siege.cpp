@@ -589,8 +589,6 @@ void printEveryoneInjured(const int l) {
 				{
 					injuredList.push_back(make_pair(pool[i]->getNameAndAlignment().name, pool[i]->align));
 				}
-				//set_alignment_color(pool[i]->align,false);
-				//addstrAlt(pool[i]->name);
 			}
 		}
 	}

@@ -191,6 +191,255 @@ void printfunds(int y, int offsetx, const char* prefix, long funds);
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../locations/locationsPool.h"
+
+// SHOP
+
+
+
+const string CONST_shop062 = "$";
+
+string asMoney(const int c) {
+	return CONST_shop062 + tostring(c);
+}
+const string CONST_shop061 = "Enter - ";
+const string CONST_shop060 = "B - Choose a buyer";
+const string CONST_shop059 = "S - Sell something";
+const string CONST_shop058 = "E - Look over Equipment";
+const string CONST_shop057 = "M - Buy a Mask                ($15)";
+const string CONST_shop056 = "Buyer: ";
+const string CONST_shop055 = " With a Random Mask";
+const string CONST_shop054 = "Z - Surprise ";
+const string CONST_shop053 = "Press a Letter to select a Mask";
+const string CONST_shop052 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?ESCRIPTION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_shop051 = " buy?";
+const string CONST_shop050 = "Which mask will ";
+const string CONST_shop049 = "SPEND.";
+const string CONST_shop048 = " to Liberal Funds.";
+const string CONST_shop047 = "You add $";
+const string CONST_shop046 = "Really sell all clothes? (Y)es to confirm.           ";
+const string CONST_shop045 = "Really sell all ammo? (Y)es to confirm.              ";
+const string CONST_shop044 = "Really sell all weapons? (Y)es to confirm.           ";
+const string CONST_shop043 = "Enter - Done pawning";
+const string CONST_shop042 = "L - Pawn all Loot";
+const string CONST_shop041 = "C - Pawn all Clothes";
+const string CONST_shop040 = "A - Pawn all Ammunition";
+const string CONST_shop039 = "W - Pawn all Weapons";
+const string CONST_shop038 = "F - Pawn Selectively";
+const string CONST_shop036 = " You can't sell damaged goods.";
+const string CONST_shop035 = "Press a letter to select an item to sell.";
+const string CONST_shop034 = " x";
+const string CONST_shop033 = "/";
+const string CONST_shop032 = "Estimated Liberal Amount: $";
+const string CONST_shop031 = "What will you sell?";
+const string CONST_shop029 = "Press a Letter to select an option";
+const string CONST_shop028 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?RICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_shop026 = "What will ";
+
+
+void printBrowseHalfscreenHeader(const string cname) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(8, 45, CONST_shop056);
+	addstrAlt(cname);
+}
+
+void printShopOptions(const int y, const bool x, const char letter, const string description) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	int xNew = x ? 1 : 40;
+	mvaddstrAlt(y + 10, xNew, letter + spaceDashSpace + description);
+}
+void printShopFooter(const int _y, const short party_status, const int partysize, const string exit_) {
+	int y = _y + 10;
+	if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(++y, 1, show_squad_liberal_status);
+	if (partysize > 0 && (party_status == -1 || partysize > 1))
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y++, 40, check_status_of_squad_liberal);
+	if (partysize >= 2) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(y, 1, CONST_shop060);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(y, 40, CONST_shop061);
+	addstrAlt(exit_);
+}
+void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const bool loot) {
+	int y = 10 + _y;
+	if (sell_masks_)
+	{
+		mvaddstrAlt(y, left_side ? 1 : 40, CONST_shop057);
+	}
+	if (!left_side) y++;
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(y++, 1, CONST_shop058);
+	if (allow_selling_)
+	{
+		if (loot)
+			set_color_easy(WHITE_ON_BLACK);
+		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		mvaddstrAlt(y++, 1, CONST_shop059);
+	}
+}
+
+void printMaskOptions(const int page, const string bname, const vector<int> masktype, const vector<string> mname, const vector<string> mdescription) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, CONST_shop050);
+	addstrAlt(bname);
+	addstrAlt(CONST_shop051);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(1, 0, CONST_shop052);
+	for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+
+		mvaddcharAlt(y, 0, y + 'A' - 2);
+		addstrAlt(spaceDashSpace);
+		addstrAlt(mname[p]);
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(y, 39, mdescription[p]);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_shop053);
+	mvaddstrAlt(23, 0, addpagestr());
+	mvaddstrAlt(24, 0, CONST_shop054);
+	addstrAlt(bname);
+	addstrAlt(CONST_shop055);
+
+}
+void printFenceAmount(const int fenceamount) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 1, CONST_shop047);
+	addstrAlt(fenceamount);
+	addstrAlt(CONST_shop048);
+}
+void printChooseALiberalTo() {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 20, chooseALiberalTo + CONST_shop049);
+}
+
+void printReallySellAllThese(const char c) {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	switch (c)
+	{
+	case 'w': mvaddstrAlt(18, 1, CONST_shop044); break;
+	case 'a': mvaddstrAlt(18, 1, CONST_shop045); break;
+	case 'c': mvaddstrAlt(18, 1, CONST_shop046); break;
+	}
+}
+void printSellLootHeader(const int loot, const int partysize, const short party_status) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 1, CONST_shop058);
+	if (loot)
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(10, 40, CONST_shop038);
+	mvaddstrAlt(11, 1, CONST_shop039);
+	mvaddstrAlt(11, 40, CONST_shop040);
+	mvaddstrAlt(12, 1, CONST_shop041);
+	mvaddstrAlt(12, 40, CONST_shop042);
+	if (party_status != -1)
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(15, 1, show_squad_liberal_status);
+	if (partysize && (party_status == -1 || partysize > 1))
+		set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(15, 40, check_status_of_squad_liberal);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(16, 40, CONST_shop043);
+}
+void printCantSellDamage() {
+
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(8, 15, CONST_shop036);
+}
+void printSellingFooter() {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(23, 1, CONST_shop035);
+	mvaddstrAlt(24, 1, enter_done);
+}
+void printPageOptions(const bool prev, const bool next) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	if (prev)
+	{
+		mvaddstrAlt(17, 1, addprevpagestr());
+	}
+	//PAGE DOWN
+	if (next)
+	{
+		mvaddstrAlt(17, 53, addnextpagestr());
+	}
+}
+
+void printLootForSale(const int i, const int selectedl, const int lootNumber, const string lootTitle) {
+
+	int x = 1 + (i % 3) * 26;
+	int y = 10 + i / 3;
+
+	if (selectedl)
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	else set_color_easy(WHITE_ON_BLACK);
+	string itemstr = lootTitle;
+	if (lootNumber > 1)
+	{
+		if (selectedl)
+			itemstr += singleSpace + tostring(selectedl) + CONST_shop033;
+		else itemstr += CONST_shop034;
+		itemstr += tostring(lootNumber);
+	}
+	string outstr;
+	outstr = static_cast<char>(i + 'A');
+	outstr += spaceDashSpace + itemstr;
+	mvaddstrAlt(y, x, outstr);
+}
+void printFenceHeader(const int ret) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_shop031);
+	if (ret)
+	{
+		mvaddstrAlt(0, 30, CONST_shop032);
+		addstrAlt(ret);
+	}
+}
+void printFullscreenFooter(const string bname, const string exit_) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_shop029); //allow customize option? -XML
+	mvaddstrAlt(23, 0, addpagestr());
+	mvaddstrAlt(24, 0, CONST_shop061 + bname + singleSpace + exit_);
+}
+void printFullscreenHeader(const string bname) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_shop026);
+	addstrAlt(bname);
+	addstrAlt(CONST_shop051);
+	mvaddstrAlt(1, 0, CONST_shop028);
+}
+void printFullscreenOption(const int p, const string dname) {
+
+	mvaddcharAlt(p + 2, 0, 'A' + p);
+	addstrAlt(spaceDashSpace);
+	addstrAlt(dname);
+}
+
+
+
+
+
+// END SHOP
+
+
 void printchaseencounter();
 bool isThereGroundLoot();
 extern coordinatest loc_coord;
@@ -2812,13 +3061,13 @@ const string unnamed_String_Talk_cpp_050 = "\"Hey, I need a gun.\"";
 const string unnamed_String_Talk_cpp_051 = "\"Jesus...\"";
 const string unnamed_String_Talk_cpp_052 = "\"I don't sell guns, officer.\"";
 const string unnamed_String_Talk_cpp_053 = "\"We can talk when things are calm.\"";
-const string unnamed_String_Talk_cpp_054 = "\"What exactly do you need ? \"";
+const string unnamed_String_Talk_cpp_054 = "\"What exactly do you need? \"";
 const string unnamed_String_Talk_cpp_055 = "\"Uhhh... not a good place for this.\"";
-const string unnamed_String_Talk_cpp_056 = "\"Do you want to hear something disturbing ? \"";
+const string unnamed_String_Talk_cpp_056 = "\"Do you want to hear something disturbing? \"";
 const string unnamed_String_Talk_cpp_057 = " rumbles disinterestedly.";
 const string unnamed_String_Talk_cpp_058 = " barks.";
 const string unnamed_String_Talk_cpp_059 = " doesn't understand.";
-const string unnamed_String_Talk_cpp_061 = "\"What ? \"";
+const string unnamed_String_Talk_cpp_061 = "\"What? \"";
 const string unnamed_String_Talk_cpp_062 = "\"Now's not the time!\"";
 const string unnamed_String_Talk_cpp_063 = "\"Leave me alone.\"";
 const string unnamed_String_Talk_cpp_064 = "\"No.\"";
@@ -2840,14 +3089,14 @@ const string unnamed_String_Talk_cpp_078 = "\"Industries that stop at nothing to
 const string unnamed_String_Talk_cpp_079 = "the environment in ways that hurt not only humans, but animals too.";
 const string unnamed_String_Talk_cpp_080 = "the environment in ways that hurt not only animals, but people too.";
 const string unnamed_String_Talk_cpp_082 = "\"Aaaahhh...\"";
-const string unnamed_String_Talk_cpp_083 = "\"Oh, really ? \"";
+const string unnamed_String_Talk_cpp_083 = "\"Oh, really? \"";
 const string unnamed_String_Talk_cpp_084 = "\"Yeah, really!\"";
-const string unnamed_String_Talk_cpp_085 = "\"You got anything to smoke on you ? \"";
+const string unnamed_String_Talk_cpp_085 = "\"You got anything to smoke on you? \"";
 const string unnamed_String_Talk_cpp_086 = "*cough*";
 const string unnamed_String_Talk_cpp_087 = "After more discussion, ";
 const string unnamed_String_Talk_cpp_088 = " agrees to come by later tonight.";
 const string unnamed_String_Talk_cpp_089 = "\"Ugh.Pfft.\"";
-const string unnamed_String_Talk_cpp_090 = "\"Do you want me to arrest you ? \"";
+const string unnamed_String_Talk_cpp_090 = "\"Do you want me to arrest you? \"";
 const string unnamed_String_Talk_cpp_091 = "\"If you don't shut up, I'm going to shoot you.\"";
 const string unnamed_String_Talk_cpp_092 = "\"Whatever.\"";
 const string unnamed_String_Talk_cpp_093 = " <turns away>";
@@ -4230,7 +4479,7 @@ bool has_ignited(const int c) {
 		c == ' ';
 }
 
-void printFlagB() {
+void printFlag() {
 	for (int i = 0; i < 7; i++) {
 		for (int j = 0; j < 18; j++) {
 			set_color_easy(AmericanFlag[i][j].first);
@@ -4238,7 +4487,7 @@ void printFlagB() {
 		}
 	}
 }
-void printFlag() {
+void printFlagB() {
 	
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 17; j++) {
@@ -4256,7 +4505,7 @@ void burnflag()
 	std::pair<ColorSetup, int> flag[FLAG_WIDTH][FLAG_HEIGHT];
 	for (int y = 0; y < FLAG_HEIGHT; y++) {
 		for (int x = 0; x < FLAG_WIDTH; x++) {
-			flag[x][y] = ConfederateFlag[y][x];
+			flag[x][y] = AmericanFlag[y][x];
 		}
 	}
 	int x1 = LCSrandom(FLAG_WIDTH);

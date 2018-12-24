@@ -27,6 +27,10 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+
+//
+
+
  ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
  { }
  Shop::Shop(MCD_STR xmlstring)
@@ -137,30 +141,21 @@
 		 available_options.end(),
 		 not1(mem_fun(&ShopOption::display))),
 		 available_options.end());
-	 while (true)
+	 int c;
+	 do
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(0, 0, CONST_shop026);
-		 addstrAlt(customers.squad[buyer]->getNameAndAlignment().name);
-		 addstrAlt(CONST_shop051);
-		 mvaddstrAlt(1, 0, CONST_shop028);
+		 printFullscreenHeader(customers.squad[buyer]->getNameAndAlignment().name);
 		 //Write wares and prices
-		 for (int p = page * 19, y = 2; p < len(available_options) && p < page * 19 + 19; p++, y++)
+		 for (int p = page * 19; p < len(available_options) && p < page * 19 + 19; p++)
 		 {
-			 if (available_options[p]->is_available())
-				 set_color_easy(WHITE_ON_BLACK);
-			 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-
-			 mvaddcharAlt(y, 0, 'A' + y - 2);
-			 addstrAlt(spaceDashSpace);
-			 addstrAlt(available_options[p]->get_description_fullscreen());
+			 if (available_options[p]->is_available()) {
+				 printFullscreenOption(p, available_options[p]->get_description_fullscreen());
+			 }
 		 }
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(22, 0, CONST_shop029); //allow customize CONST_shopB061? -XML
-		 mvaddstrAlt(23, 0, addpagestr());
-		 mvaddstrAlt(24, 0, CONST_shop061 + std::string(customers.squad[buyer]->getNameAndAlignment().name) + singleSpace + exit_);
-		 int c = getkeyAlt();
+		 printFullscreenFooter(std::string(customers.squad[buyer]->getNameAndAlignment().name), exit_);
+		 
+		 c = getkeyAlt();
+
 		 //PAGE UP
 		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
@@ -172,8 +167,7 @@
 				 available_options[p]->choose(customers, buyer);
 			 break;
 		 }
-		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	 }
+	 } while (!(c == 'x' || c == ENTER || c == ESC || c == SPACEBAR));
  }
  int fenceselect(Deprecatedsquadst& customers)
  {
@@ -183,50 +177,17 @@
 	 vector<int> selected(LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base), 0);
 	 while (true)
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(0, 0, CONST_shop031);
-		 if (ret)
-		 {
-			 mvaddstrAlt(0, 30, CONST_shop032);
-			 addstrAlt(ret);
-		 }
+		 printFenceHeader(ret);
 		 printparty();
-		 int x = 1, y = 10;
-		 for (int l = page * 18; l < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base) && l < page * 18 + 18; l++)
+		 for (int l = page * 18, i = 0; l < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base) && l < page * 18 + 18; l++, i++)
 		 {
-			 if (selected[l])
-				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			 else set_color_easy(WHITE_ON_BLACK);
-			 string itemstr = getLootTitle(customers.squad[0]->base, l);
-			 if (getLootNumber(customers.squad[0]->base, l) > 1)
-			 {
-				 if (selected[l])
-					 itemstr += singleSpace + tostring(selected[l]) + CONST_shop033;
-				 else itemstr += CONST_shop034;
-				 itemstr += tostring(getLootNumber(customers.squad[0]->base, l));
-			 }
-			 string outstr;
-			 outstr = static_cast<char>(l - page * 18 + 'A');
-			 outstr += spaceDashSpace + itemstr;
-			 mvaddstrAlt(y, x, outstr);
-			 x += 26;
-			 if (x > 53) x = 1, y++;
+			 printLootForSale(i, selected[l], getLootNumber(customers.squad[0]->base, l), getLootTitle(customers.squad[0]->base, l));
+
+
 		 }
 		 //PAGE UP
-		 set_color_easy(WHITE_ON_BLACK);
-		 if (page > 0)
-		 {
-			 mvaddstrAlt(17, 1, addprevpagestr());
-		 }
-		 //PAGE DOWN
-		 if ((page + 1) * 18 < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
-		 {
-			 mvaddstrAlt(17, 53, addnextpagestr());
-		 }
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(23, 1, CONST_shop035);
-		 mvaddstrAlt(24, 1, enter_done);
+		 printPageOptions(page > 0, (page + 1) * 18 < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base));
+		 printSellingFooter();
 		 int c = getkeyAlt();
 		 if (c >= 'a' && c <= 'r')
 		 {
@@ -243,8 +204,7 @@
 					 if (!getCanBeSoldLocation(customers.squad[0]->base, slot))
 					 {
 						 printparty();
-						 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						 mvaddstrAlt(8, 15, CONST_shop036);
+						 printCantSellDamage();
 						 pressAnyKey();
 					 }
 					 else
@@ -281,42 +241,17 @@
 	 int partysize = customers.squadsize();
 	 while (true)
 	 {
-		 eraseAlt();
+		 printSellLootHeader(LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base), partysize, party_status);
 		 locheader();
 		 printparty();
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(10, 1, CONST_shop058);
-		 if (LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
-			 set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(10, 40, CONST_shop038);
-		 mvaddstrAlt(11, 1, CONST_shop039);
-		 mvaddstrAlt(11, 40, CONST_shop040);
-		 mvaddstrAlt(12, 1, CONST_shop041);
-		 mvaddstrAlt(12, 40, CONST_shop042);
-		 if (party_status != -1)
-			 set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(15, 1, show_squad_liberal_status);
-		 if (partysize && (party_status == -1 || partysize > 1))
-			 set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(15, 40, check_status_of_squad_liberal);
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(16, 40, CONST_shop043);
+
 		 int c = getkeyAlt();
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 		 if (c == 'e'&&customers.squad[0]->base != -1)
 			 equipLoot(customers.squad[0]->base, -1);
 		 if (c == 'w' || c == 'a' || c == 'c')
 		 {
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 switch (c)
-			 {
-			 case 'w': mvaddstrAlt(18, 1, CONST_shop044); break;
-			 case 'a': mvaddstrAlt(18, 1, CONST_shop045); break;
-			 case 'c': mvaddstrAlt(18, 1, CONST_shop046); break;
-			 }
+			 printReallySellAllThese(c);
 			 if (getkeyAlt() != 'y') c = 0; //no sale
 		 }
 		 if ((c == 'w' || c == 'c' || c == 'l' || c == 'a' || c == 'f') &&
@@ -363,16 +298,14 @@
 			 }
 			 if (fenceamount)
 			 {
-				 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(8, 1, CONST_shop047);
-				 addstrAlt(fenceamount);
-				 addstrAlt(CONST_shop048);
+				 printFenceAmount(fenceamount);
 				 pressAnyKey();
 				 ledger.add_funds(fenceamount, INCOME_PAWN);
 			 }
 		 }
 	 }
  }
+
  void choose_buyer(Deprecatedsquadst& customers, int& buyer)
  {
 	 party_status = -1;
@@ -381,8 +314,7 @@
 	 while (true)
 	 {
 		 printparty();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(8, 20, chooseALiberalTo + CONST_shop049);
+		 printChooseALiberalTo();
 		 int c = getkeyAlt();
 		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		 if (c >= '1'&&c <= partysize + '1' - 1)
@@ -398,61 +330,55 @@
  {
 	 short maskindex = -1;
 	 std::vector<int> masktype;
+	 std::vector<string> masknames;
+	 std::vector<string> maskdescriptions;
 	 for (int a = 0; a < len(armortype); a++)
 	 {
-		 if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
+		 if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask()) {
 			 masktype.push_back(a);
+			 masknames.push_back(armortype[masktype[a]]->get_name());
+			 maskdescriptions.push_back(armortype[masktype[a]]->get_description());
+		 }
 	 }
 	 int page = 0;
-	 while (true)
+	 int c;
+	 do
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(0, 0, CONST_shop050);
-		 addstrAlt(buyer.getNameAndAlignment().name);
-		 addstrAlt(CONST_shop051);
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(1, 0, CONST_shop052);
-		 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++)
-		 {
-			 set_color_easy(WHITE_ON_BLACK);
+		 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++) {
 
-			 mvaddcharAlt(y, 0, y + 'A' - 2);
-			 addstrAlt(spaceDashSpace);
-			 addstrAlt(armortype[masktype[p]]->get_name());
-			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(y, 39, armortype[masktype[p]]->get_description());
 		 }
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(22, 0, CONST_shop053);
-		 mvaddstrAlt(23, 0, addpagestr());
-		 mvaddstrAlt(24, 0, CONST_shop054);
-		 addstrAlt(buyer.getNameAndAlignment().name);
-		 addstrAlt(CONST_shop055);
-		 int c = getkeyAlt();
+		 printMaskOptions(page, buyer.getNameAndAlignment().name, masktype, masknames, maskdescriptions);
+
+
+		 c = getkeyAlt();
+
 		 //PAGE UP
-		 if (is_page_up(c) && page > 0) page--;
+		 if (is_page_up(c) && page > 0) {
+			 page--;
+		 }else
 		 //PAGE DOWN
-		 if (is_page_down(c) && (page + 1) * 19 < len(masktype)) page++;
+		 if (is_page_down(c) && (page + 1) * 19 < len(masktype)) { 
+			 page++; 
+		 }else
 		 if (c >= 'a'&&c <= 's')
 		 {
 			 int p = page * 19 + c - 'a';
 			 if (p < len(masktype))
 			 {
 				 maskindex = masktype[p];
-				 break;
 			 }
-		 }
+		 }else
 		 if (c == 'z')
 		 {
-			 for (int i = 0; i < len(armortype); i++)
+			 for (int i = 0; i < len(armortype); i++) {
 				 if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
+				 {
 					 masktype.push_back(i);
+				 }
+			 }
 			 maskindex = pickrandom(masktype);
-			 break;
 		 }
-		 if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	 }
+	 } while (maskindex == -1 && !(c == 'z' || c == 'x' || c == ENTER || c == ESC || c == SPACEBAR));
 	 if (maskindex != -1 && ledger.get_funds() >= 15)
 	 {
 		 Armor a = Armor(maskindex);
@@ -468,104 +394,93 @@
 		 available_options.end(),
 		 not1(mem_fun(&ShopOption::display))),
 		 available_options.end());
-	 while (true)
+	 int c;
+	 vector<char> unusable_letters;
+	 unusable_letters.push_back('b');
+	 unusable_letters.push_back('e');
+	 if (allow_selling_) { unusable_letters.push_back('s'); }
+	 if (sell_masks_) { unusable_letters.push_back('m'); }
+	 for (int i = 0; i < len(available_options); i++) {
+		 if (available_options[i]->letter_defined_) {
+			 unusable_letters.push_back(available_options[i]->showletter());
+		 }
+	 }
+	 do
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK);
+		 printBrowseHalfscreenHeader(customers.squad[buyer]->getNameAndAlignment().name);
 		 locheader();
 		 printparty();
-		 mvaddstrAlt(8, 45, CONST_shop056);
-		 addstrAlt(customers.squad[buyer]->getNameAndAlignment().name);
 		 //Write wares and prices
-		 int y = 10, x = 1, taken_letters = 0;
+		 int y = 0;
+		 bool left_side = true;
+		 int taken_letters = 0;
 		 for (int p = page * 19; p < len(available_options) && p < page * 19 + 20; p++)
 		 {
-			 if (available_options[p]->is_available())
-				 set_color_easy(WHITE_ON_BLACK);
-			 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			 int xNew;
-			 if (x == 1)xNew = 1;
-			 else xNew = 40;
-			 if (available_options[p]->letter_defined_)
-				 mvaddcharAlt(y, xNew, available_options[p]->showletter());
-			 else
+
+
+
+			 if (!available_options[p]->letter_defined_)
 			 {
 				 // Find an available letter to use for this ware.
 				 bool done = false;
 				 while (taken_letters < 27 && !done)
 				 {
 					 done = true;
-					 if ('a' + taken_letters == 'b' || // Letters used by the shop UI are disallowed.
-						 'a' + taken_letters == 'e' ||
-						 ('a' + taken_letters == 's'&&allow_selling_) ||
-						 ('a' + taken_letters == 'm'&&sell_masks_))
-					 {
-						 taken_letters++;
-						 done = false;
-						 continue;
-					 }
-					 for (int i = 0; i < len(available_options); i++)
-					 {
-						 if (available_options[i]->letter_defined_&&
-							 'a' + taken_letters == available_options[i]->letter_)
-						 {
+					 for (char k : unusable_letters) {
+						 if ('a' + taken_letters == k) {
 							 taken_letters++;
 							 done = false;
-							 break;
 						 }
 					 }
 				 }
 				 available_options[p]->letter_ = 'a' + taken_letters;
-				 mvaddcharAlt(y, xNew, 'A' + taken_letters++);
+				 taken_letters++;
 			 }
-			 addstrAlt(spaceDashSpace);
-			 addstrAlt(available_options[p]->get_description_halfscreen());
-			 if (x == 1) x = 2;
-			 else y++, x = 1;
+			 if (available_options[p]->is_available())
+			 {
+				 printShopOptions(y, left_side, available_options[p]->showletter(), available_options[p]->get_description_halfscreen());
+			 }
+
+
+			 if (!left_side) {
+				 y++;
+			 }
+			 left_side = !left_side;
 		 }
-		 if (sell_masks_)
-		 {
-			 if (ledger.get_funds() >= 15) set_color_easy(WHITE_ON_BLACK);
-			 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(y, 1 + (x - 1) * 39, CONST_shop057);
-		 }
-		 if (x == 2) y++;
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(y++, 1, CONST_shop058);
-		 if (allow_selling_)
-		 {
-			 if (LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
-				 set_color_easy(WHITE_ON_BLACK);
-			 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(y++, 1, CONST_shop059);
-		 }
-		 if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(++y, 1, show_squad_liberal_status);
-		 if (partysize > 0 && (party_status == -1 || partysize > 1))
-			 set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(y++, 40, check_status_of_squad_liberal);
-		 if (partysize >= 2) set_color_easy(WHITE_ON_BLACK);
-		 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(y, 1, CONST_shop060);
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(y, 40, CONST_shop061);
-		 addstrAlt(exit_);
-		 int c = getkeyAlt();
-		 for (int i = 0; i < len(available_options); i++)
+
+		 LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base);
+		 printOptionsMiddle(y, sell_masks_ && ledger.get_funds() >= 15, left_side, allow_selling_, LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base));
+
+		 y += 2 + left_side ? 0 : 1;
+
+		 printShopFooter(y, party_status, partysize, exit_);
+
+		 c = getkeyAlt();
+
+		 for (int i = 0; i < len(available_options); i++) {
 			 if (c == available_options[i]->letter_)
 			 {
 				 available_options[i]->choose(customers, buyer); break;
 			 }
+		 }
 		 if (c == 'e' && customers.squad[0]->base != -1)
+		 {
 			 equipLoot(customers.squad[0]->base, -1);
+		 }
 		 else if (c == 's'&&allow_selling_&&LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base))
+		 {
 			 sell_loot(customers);
+		 }
 		 else if (c == 'm'&&sell_masks_&&ledger.get_funds() >= 15)
+		 {
 			 maskselect(*customers.squad[buyer]);
-		 else if (c == 'b') choose_buyer(customers, buyer);
-		 else if (c == '0') party_status = -1;
+		 }
+		 else if (c == 'b') {
+			 choose_buyer(customers, buyer);
+		 }
+		 else if (c == '0') {
+			 party_status = -1;
+		 }
 		 else if (c >= '1'&&c <= '6')
 		 {
 			 if (customers.squad[c - '1'] != NULL)
@@ -575,8 +490,8 @@
 				 else party_status = c - '1';
 			 }
 		 }
-		 else if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	 }
+	 while (!(c == 'x' || c == ENTER || c == ESC || c == SPACEBAR));
  }
  bool Shop::is_available() const
  {  //Disable shop (department) if it has nothing to sell.
@@ -658,7 +573,7 @@
  {
 	 std::string r = get_description();
 	 r.resize(35, ' ');
-	 r += CONST_shop062 + tostring(adjusted_price());
+	 r += asMoney(adjusted_price());
 	 return r;
  }
  bool Shop::ShopItem::display() const

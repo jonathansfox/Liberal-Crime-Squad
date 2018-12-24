@@ -1446,10 +1446,10 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 
-	const attackst attack_used = *a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
+	const attackst* attack_used = a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
 		force_melee,
 		(force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
-	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || &attack_used == NULL) {
+	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || attack_used == NULL) {
 		// All exit points consolidated here, except the final one.
 		// These four conditions, in order, determine the attacker is not capable of attacking using the standard attack()
 		// It relies on lazy conditional OR, since each condition has side effects.
@@ -1457,9 +1457,9 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 
 	// for tanks, attack_used->ranged returns false, so we need to check if it's a tank
-	bool melee = !attack_used.ranged && !(!a.is_armed() && a.getCreatureHealth().animalgloss && a.specialattack == ATTACK_CANNON);
+	bool melee = !attack_used->ranged && !(!a.is_armed() && a.getCreatureHealth().animalgloss && a.specialattack == ATTACK_CANNON);
 
-	bool sneak_attack = a.is_armed() && (attack_used.can_backstab && a.getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
+	bool sneak_attack = a.is_armed() && (attack_used->can_backstab && a.getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
 
 	if (sneak_attack)
 	{
@@ -1469,7 +1469,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 		t.make_cantbluff_two();
 	}
 
-	mvaddstrAlt(16, 1, firstStrike(a, t, mistake, sneak_attack, attack_used), gamelog);
+	mvaddstrAlt(16, 1, firstStrike(a, t, mistake, sneak_attack, *attack_used), gamelog);
 
 	gamelog.newline();
 	pressAnyKey();
@@ -1478,7 +1478,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 
 	int bonus = 0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 				   //SKILL EFFECTS
-	const int wsk = attack_used.skill;
+	const int wsk = attack_used->skill;
 
 	// Basic roll
 	int aroll = a.skill_roll(wsk);
@@ -1558,9 +1558,9 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 		healthmodroll(aroll, a);
 		healthmodroll(droll, t);
 	}
-	AttackInfliction attackI(sneak_attack, aroll, droll, attack_used);
+	AttackInfliction attackI(sneak_attack, aroll, droll, *attack_used);
 	// Weapon accuracy bonuses and penalties
-	bonus += attack_used.accuracy_bonus;
+	bonus += attack_used->accuracy_bonus;
 	//USE BULLETS
 	int bursthits = 0; // Tracks number of hits.
 	int thrownweapons = 0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
@@ -1573,17 +1573,17 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	}
 	else
 	{
-		int num_attacks = attack_used.number_attacks;
+		int num_attacks = attack_used->number_attacks;
 		if (sneak_attack) {
 			num_attacks = 1;
 			bursthits = 1;
 		}
-		directlyUseWeapon(a, num_attacks, thrownweapons, bursthits, attack_used);
+		directlyUseWeapon(a, num_attacks, thrownweapons, bursthits, *attack_used);
 		if (!sneak_attack) {
 			for (int i = 0; i < num_attacks; i++)
 			{
 				// Each shot in a burst is increasingly less likely to hit
-				if (aroll + bonus - i * attack_used.successive_attacks_difficulty > droll)
+				if (aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
 					bursthits++;
 			}
 		}

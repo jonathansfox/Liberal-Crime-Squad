@@ -2632,7 +2632,7 @@ void makedelimiter(int y = 8, int x = 0);
 
 
 const string CONST_commondisplay000 = ",";
-const string CONST_commondisplay202 = " (";
+const string CONST_SpaceOpenParenthesis = " (";
 const string CONST_commondisplay201 = "Name: ";
 const string CONST_commondisplay200 = "Code name: ";
 const string CONST_commondisplay212 = ": ";
@@ -13558,16 +13558,8 @@ shopsnstuff.cpp
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
 #include <functional>
-//extern string spaceDashSpace;
-//extern string closeParenthesis;
-//extern string undefined;
-// extern string check_status_of_squad_liberal;
-// extern string show_squad_liberal_status;
-// extern string enter_done;
-// extern string chooseALiberalTo;
-// extern string singleSpace;
+
 	Item* getNewLoot(const string& newLootType, int num = 1);
-	// string paranthesisDollar;
 
 	void consolidateLoot(const int l);
 	string getLootTitle(const int base, const int l);
@@ -13602,42 +13594,30 @@ shopsnstuff.cpp
 	extern vector<ClipType *> cliptype;
 	extern vector<WeaponType *> weapontype;
 	extern vector<Location *> location;
-	const string CONST_shopB061 = "option";
-	const string CONST_shop062 = "$";
-	const string CONST_shop061 = "Enter - ";
-	const string CONST_shop060 = "B - Choose a buyer";
-	const string CONST_shop059 = "S - Sell something";
-	const string CONST_shop058 = "E - Look over Equipment";
-	const string CONST_shop057 = "M - Buy a Mask                ($15)";
-	const string CONST_shop056 = "Buyer: ";
-	const string CONST_shop055 = " With a Random Mask";
-	const string CONST_shop054 = "Z - Surprise ";
-	const string CONST_shop053 = "Press a Letter to select a Mask";
-	const string CONST_shop052 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?ESCRIPTION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_shop051 = " buy?";
-	const string CONST_shop050 = "Which mask will ";
-	const string CONST_shop049 = "SPEND.";
-	const string CONST_shop048 = " to Liberal Funds.";
-	const string CONST_shop047 = "You add $";
-	const string CONST_shop046 = "Really sell all clothes? (Y)es to confirm.           ";
-	const string CONST_shop045 = "Really sell all ammo? (Y)es to confirm.              ";
-	const string CONST_shop044 = "Really sell all weapons? (Y)es to confirm.           ";
-	const string CONST_shop043 = "Enter - Done pawning";
-	const string CONST_shop042 = "L - Pawn all Loot";
-	const string CONST_shop041 = "C - Pawn all Clothes";
-	const string CONST_shop040 = "A - Pawn all Ammunition";
-	const string CONST_shop039 = "W - Pawn all Weapons";
-	const string CONST_shop038 = "F - Pawn Selectively";
-	const string CONST_shop036 = " You can't sell damaged goods.";
-	const string CONST_shop035 = "Press a letter to select an item to sell.";
-	const string CONST_shop034 = " x";
-	const string CONST_shop033 = "/";
-	const string CONST_shop032 = "Estimated Liberal Amount: $";
-	const string CONST_shop031 = "What will you sell?";
-	const string CONST_shop029 = "Press a Letter to select an option";
-	const string CONST_shop028 = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴?RICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_shop026 = "What will ";
 
+	string asMoney(const int c);
+
+	void printBrowseHalfscreenHeader(const string cname);
+
+	void printShopOptions(const int y, const bool x, const char letter, const string description);
+	void printShopFooter(const int _y, const short party_status, const int partysize, const string exit_);
+	void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const bool loot);
+
+	void printMaskOptions(const int page, const string bname, const vector<int> masktype, const vector<string> mname, const vector<string> mdescription);
+	void printFenceAmount(const int fenceamount);
+	void printChooseALiberalTo();
+
+	void printReallySellAllThese(const char c);
+	void printSellLootHeader(const int loot, const int partysize, const short party_status);
+	void printCantSellDamage();
+	void printSellingFooter();
+	void printPageOptions(const bool prev, const bool next);
+
+	void printLootForSale(const int i, const int selectedl, const int lootNumber, const string lootTitle);
+	void printFenceHeader(const int ret);
+	void printFullscreenFooter(const string bname, const string exit_);
+	void printFullscreenHeader(const string bname);
+	void printFullscreenOption(const int p, const string dname);
 	const string tag_letter = "letter";
 	const string tag_sleeperprice = "sleeperprice";
 	const string tag_price = "price";
