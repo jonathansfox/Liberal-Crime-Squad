@@ -77,13 +77,10 @@ void recruitment_activity(DeprecatedCreature &cr)
 	{
 		music.play(MUSIC_RECRUITING);
 		cr.train(SKILL_STREETSENSE, 5);
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_recruit013);
+		printAdventuresInRecruitment();
 		printcreatureinfo(&cr);
 		makedelimiter();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit005A + name + CONST_recruit005B);
+		printAskAroundForARecruit(cr.getNameAndAlignment().name, name);
 		pressAnyKey();
 		int recruitCount = 0;
 		if (difficulty < 10)
@@ -98,22 +95,15 @@ void recruitment_activity(DeprecatedCreature &cr)
 				else break;
 			}
 		if (recruitCount == 0) {
-			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit006A + name + CONST_recruit006B);
+			printWasUnableToTrackDown(cr.getNameAndAlignment().name, name);
 			pressAnyKey();
 			setCurrentSite(ocursite);
 			return;
 		}
 		else if (recruitCount == 1) {
-			mvaddstrAlt(11, 0, cr.getNameAndAlignment().name + CONST_recruit007);
-			set_alignment_color(encounter[0].align);
-			addstrAlt(encounter[0].getNameAndAlignment().name);
-			addstrAlt(get_age_string(encounter[0].getCreatureBio(), encounter[0].animalgloss));
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(singleDot);
+			printSetupAMeeting(cr.getNameAndAlignment().name, encounter[0].align, encounter[0].getNameAndAlignment().name, get_age_string(encounter[0].getCreatureBio(), encounter[0].animalgloss));
 			pressAnyKey();
-			eraseAlt();
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_recruit013);
+			printAdventuresInRecruitment();
 			printcreatureinfo(&encounter[0]);
 			makedelimiter();
 			talk(cr, 0);
@@ -121,31 +111,21 @@ void recruitment_activity(DeprecatedCreature &cr)
 		else {
 			while (true)
 			{
-				eraseAlt();
-				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(0, 0, CONST_recruit013);
+				printAdventuresInRecruitment();
 				printcreatureinfo(&cr);
 				makedelimiter();
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(10, 0, cr.getNameAndAlignment().name + CONST_recruit010);
+				printFoundMultipleRecruits(cr.getNameAndAlignment().name);
 				for (int i = 0; i < recruitCount; i++) {
-					set_color_easy(WHITE_ON_BLACK);
-					mvaddstrAlt(12 + i, 0, char('a' + i) + CONST_recruit011);
-					set_alignment_color(encounter[i].align);
-					addstrAlt(encounter[i].getNameAndAlignment().name);
-					addstrAlt(get_age_string(encounter[i].getCreatureBio(), encounter[i].animalgloss));
+					printSingleRecruit(i, encounter[i].align, encounter[i].getNameAndAlignment().name, get_age_string(encounter[i].getCreatureBio(), encounter[i].animalgloss));
 				}
-				set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(12 + recruitCount + 1, 0, CONST_recruit012);
+				printPressEnterToCallItADay(recruitCount);
 				int c = getkeyAlt();
 				if (c == ENTER || c == ESC) break;
 				c -= 'a';
 				if (c >= 0 && c < ENCMAX - 1 && encounter[c].getNameAndAlignment().exists)
 				{
 					int id = encounter[c].id;
-					eraseAlt();
-					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(0, 0, CONST_recruit013);
+					printAdventuresInRecruitment();
 					printcreatureinfo(&encounter[c]);
 					makedelimiter();
 					talk(cr, c);

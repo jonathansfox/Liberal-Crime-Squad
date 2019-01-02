@@ -821,9 +821,7 @@ char load(const string& filename)
 					del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
 				if (del)
 				{
-					addstrAlt(itemType);
-					addstrAlt(location[l]->loot[l2]->get_itemtypename());
-					addstrAlt(doesNotExistItem);
+					printInvalidItem(location[l]->loot[l2]->get_itemtypename());
 					delete_and_remove(location[l]->loot, l2);
 				}
 			}
@@ -960,9 +958,7 @@ char load(const string& filename)
 					del = (getarmortype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
 				if (del)
 				{
-					addstrAlt(itemType);
-					addstrAlt(squad[sq]->loot[l2]->get_itemtypename());
-					addstrAlt(doesNotExistItem);
+					printInvalidItem(squad[sq]->loot[l2]->get_itemtypename());
 					delete_and_remove(squad[sq]->loot, l2);
 				}
 			}
@@ -1070,7 +1066,7 @@ char load(const string& filename)
 		{
 			if (getvehicletype(vehicle[v]->vtypeidname()) == -1)
 			{ //Remove vehicle of non-existing type.
-				addstrAlt(vehicleType + vehicle[v]->vtypeidname() + doesNotExistVehicle);
+				printInvalidVehicle(vehicle[v]->vtypeidname());
 				delete_and_remove(vehicle, v--);
 			}
 		}

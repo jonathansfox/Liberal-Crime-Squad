@@ -1023,7 +1023,6 @@ void shotAtBySniper(const char clearformess, const int l, int &num_liberals) {
 	{
 		if (clearformess) eraseAlt();
 		else makedelimiter();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		int targ = pickrandom(pol);
 		if ((int)LCSrandom(50) > pool[targ]->juice)
 		{

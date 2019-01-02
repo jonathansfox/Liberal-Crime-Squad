@@ -294,6 +294,7 @@ string getHealthStat(CreatureHealth g, const char smll) {
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(CreatureHealth g, int y, int x, char smll)
 {
+	// TODO remove direct usage of this function outside cursesAlternative.cpp
 	string wound = getHealthStat(g, smll);
 	mvaddstrAlt(y, x, wound);
 }

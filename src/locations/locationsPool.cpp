@@ -188,8 +188,13 @@ void LocationsPool::setLocationMappedAndUnhidden(int cursite)
 const string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a)const {
 	return getLocationNameWithGetnameMethod(cursite, a, false);
 }
+
+const string CONST_reviewmode040 = "Away";
 const string LocationsPool::getLocationNameWithGetnameMethod(int cursite, signed char a, bool b)const
 {
+	if (cursite == -1) {
+		return CONST_reviewmode040;
+	}
 	return location[cursite]->getname(a, b);
 }
 const int LocationsPool::getCompoundWalls(int cursite)const

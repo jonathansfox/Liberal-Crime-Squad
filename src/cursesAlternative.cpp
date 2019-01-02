@@ -135,6 +135,8 @@ const string CONST_consolesupport000 = "UTF-8";
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
 
+void setColorBasedOnSiege(const int cursite, const int y, const bool p);
+
 void translategetch(int &c);
 void translategetch_cap(int &c);
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
@@ -191,6 +193,763 @@ void printfunds(int y, int offsetx, const char* prefix, long funds);
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../locations/locationsPool.h"
+///// RECRUIT
+
+const string CONST_recruit013 = "Adventures in Liberal Recruitment";
+const string CONST_recruit012 = "Press enter or escape to call it a day.";
+const string CONST_recruit011 = " - ";
+const string CONST_recruit010 = " was able to get information on multiple people.";
+const string CONST_recruit007 = " managed to set up a meeting with ";
+const string CONST_recruit006A = " was unable to track down a ";
+const string CONST_recruit006B = ".";
+const string CONST_recruit005A = " asks around for a ";
+const string CONST_recruit005B = "...";
+
+void printPressEnterToCallItADay(const int recruitCount) {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(12 + recruitCount + 1, 0, CONST_recruit012);
+
+}
+void printAdventuresInRecruitment() {
+	// Used four times!  Excellent.
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, CONST_recruit013);
+}
+void printSingleRecruit(const int i, const int align, const string name, const string age_string) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(12 + i, 0, char('a' + i) + CONST_recruit011);
+	set_alignment_color(align);
+	addstrAlt(name);
+	addstrAlt(age_string);
+}
+void printAskAroundForARecruit(const string recruiter, const string recruit_type) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 0, recruiter + CONST_recruit005A + recruit_type + CONST_recruit005B);
+}
+void printSetupAMeeting(const string crname, const int align, const string rname, const string age_string) {
+
+	mvaddstrAlt(11, 0, crname + CONST_recruit007);
+	set_alignment_color(align);
+	addstrAlt(rname);
+	addstrAlt(age_string);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(singleDot);
+}
+void printWasUnableToTrackDown(const string crname, const string type) {
+
+	mvaddstrAlt(11, 0, crname + CONST_recruit006A + type + CONST_recruit006B);
+}
+void printFoundMultipleRecruits(const string crname) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(10, 0, crname + CONST_recruit010);
+}
+///// RECRUIT
+// REVIEWMODE
+
+const string eightyBlankSpaces = "                                                                                ";
+const string CONST_reviewmode117 = "Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.";
+const string CONST_reviewmode116 = "Press a letter to promote a Liberal. You cannot promote Liberals in hiding.";
+const string CONST_reviewmode115 = "<LCS Leader>";
+const string CONST_reviewmode114 = "<Can't Lead More>";
+const string CONST_reviewmode113 = "<Refuses Promotion>";
+const string CONST_reviewmode112 = "CONTACT AFTER PROMOTION";
+const string CONST_reviewmode111 = "컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_reviewmode110 = "Promote the Elite Liberals";
+const string CONST_reviewmode109 = "T to sort people.";
+const string CONST_reviewmode108 = ",. to view other Base pages.";
+const string CONST_reviewmode107 = "Liberals must be moved in squads to transfer between cities.";
+const string CONST_reviewmode106 = "Press a Letter to assign a Base.  Press a Number to select a Base.";
+const string CONST_reviewmode105 = " <Under Siege>";
+const string CONST_reviewmode104 = "NEW BASE";
+const string CONST_reviewmode103 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
+const string CONST_reviewmode102 = "New Bases for Squadless Liberals";
+const string CONST_reviewmode101 = " with";
+const string CONST_reviewmode100 = "Choose squad member to replace ";
+const string CONST_reviewmode099 = "                                                                                ";
+const string CONST_reviewmode097 = " has gained wisdom.                                                             ";
+const string CONST_reviewmode096 = " grows colder.                                                                  ";
+const string CONST_reviewmode095 = " has lost heart.                                                                ";
+const string CONST_reviewmode094 = " feels sick to the stomach afterward and                                        ";
+const string CONST_reviewmode091 = " by ";
+const string CONST_reviewmode090 = " executes ";
+const string CONST_reviewmode089 = "  C - Confirm       Any other key to continue                                   ";
+const string CONST_reviewmode088 = "Killing your squad members is Not a Liberal Act.                                ";
+const string CONST_reviewmode087 = " kill this squad member?                               ";
+const string CONST_reviewmode086 = "Confirm you want to have ";
+const string CONST_reviewmode085 = " in court.";
+const string CONST_reviewmode084 = "to testify against ";
+const string CONST_reviewmode083 = "The Conservative traitor has ratted you out to the police, and sworn";
+const string CONST_reviewmode082 = "'s whereabouts.";
+const string CONST_reviewmode081 = "A Liberal friend tips you off on ";
+const string CONST_reviewmode078 = " has been released.                                                             ";
+const string CONST_reviewmode076 = "If the member has low heart they may go to the police.                          ";
+const string CONST_reviewmode075 = "Do you want to permanently release this squad member from the LCS?              ";
+const string CONST_reviewmode073 = "What is the new code name?                                                      ";
+const string CONST_reviewmode072 = "    UP/DOWN  - More Info";
+const string CONST_reviewmode071 = "Press any other key to continue the Struggle";
+const string CONST_reviewmode070 = "    LEFT/RIGHT - View Others";
+const string CONST_reviewmode069 = "N - Change Code Name      G - Fix Gender Label";
+const string CONST_reviewmode068 = "Press N to change this Automaton's Code Name";
+const string CONST_reviewmode067 = "         K - Kill member";
+const string CONST_reviewmode066 = "R - Remove member";
+const string CONST_reviewmode065 = "Profile of a Liberal";
+const string CONST_reviewmode064 = "Profile of an Automaton";
+const string CONST_reviewmode063 = " T to sort people.";
+const string CONST_reviewmode062 = "Reorder Liberals";
+const string CONST_reviewmode061 = "Place ";
+const string CONST_reviewmode060 = "Press a Letter to View Status.        Z - ";
+const string CONST_reviewmode059 = "<No Contact>";
+const string CONST_reviewmode058 = "Day";
+const string CONST_reviewmode057 = "Days";
+const string CONST_reviewmode054 = "Month";
+const string CONST_reviewmode053 = "Months";
+const string CONST_reviewmode052 = "Out in ";
+const string CONST_reviewmode051 = "컴컴컴�";
+const string CONST_reviewmode048 = "Life Sentence";
+const string CONST_reviewmode047 = " Life Sentences";
+const string CONST_reviewmode044 = "DEATH ROW: ";
+const string CONST_reviewmode041 = "SQUAD";
+const string CONST_reviewmode039 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
+const string CONST_SQUAD_DEFAULT_NAME = "The Liberal Crime Squad";
+const string CONST_reviewmode036 = "What shall we designate this Liberal squad?                                     ";
+const string CONST_reviewmode033 = "You cannot form a Squad with only Conservatives!                                ";
+const string CONST_reviewmode028 = "Press a Letter to view Liberal details.                                         ";
+const string CONST_reviewmode026 = "                Squad Liberals must be able to move around.                     ";
+const string CONST_reviewmode023 = "           Liberals must be in the same location to form a Squad.               ";
+const string CONST_reviewmode021 = "9 - Dissolve the squad.";
+const string CONST_reviewmode020 = "Enter - I need no squad!";
+const string CONST_reviewmode019 = "Enter - The squad is ready.";
+const string CONST_reviewmode018 = "V - View a Liberal";
+const string CONST_reviewmode016 = "Press a Letter to add or remove a Liberal from the squad.";
+const string CONST_reviewmode015 = "AWAY";
+const string CONST_reviewmode012 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴";
+const string CONST_reviewmode011 = "Squad: ";
+const string CONST_reviewmode010 = "New Squad";
+const string CONST_reviewmode009 = "The squad is full.";
+const string CONST_reviewmode008 = "Assemble the squad!";
+const string CONST_reviewmode007 = "getsSick.txt";
+const string CONST_reviewmode006 = "methodOfExecution.txt";
+const string mostlyendings = "mostlyendings\\";
+vector<string> methodOfExecution;
+vector<string> getsSick;
+vector<file_and_text_collection> reviewmode_text_file_collection = {
+	/*transferred via algorithm*/
+	customText(&methodOfExecution, mostlyendings + CONST_reviewmode006),
+	customText(&getsSick, mostlyendings + CONST_reviewmode007),
+};
+map<short, string> reviewStrings;
+map<short, string> reviewStringsSecondLine;
+struct stringAndColor
+{
+	string str;
+	ColorSetup type;
+	stringAndColor(const string& str_, const ColorSetup type_) : str(str_), type(type_) { }
+	stringAndColor(const ColorSetup type_, const string& str_) : str(str_), type(type_) { }
+};
+vector<stringAndColor> liberalListAndColor;
+void printJustThis(const string name) {
+	// TODO remove this function
+	addstrAlt(name);
+}
+void printPromotionFooter(const bool addPage) {
+
+	moveAlt(21, 0);
+	for (stringAndColor s : liberalListAndColor) {
+		set_color_easy(s.type);
+		addstrAlt(s.str);
+	}
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode116);
+	mvaddstrAlt(23, 0, CONST_reviewmode117);
+	if (addPage)
+	{
+		mvaddstrAlt(24, 0, addpagestr());
+	}
+}
+void printPromotionHeader() {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_reviewmode110);
+	mvaddstrAlt(1, 0, CONST_reviewmode111); // 80 characters
+	mvaddstrAlt(1, 54, CONST_reviewmode112);
+}
+void printIAmLeader() {
+
+	addstrAlt(CONST_reviewmode115);
+}
+void printPromotionScreenSetup(const int iteration) {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddcharAlt(iteration + 2, 0, iteration + 'A');
+	addstrAlt(spaceDashSpace);
+	moveAlt(iteration + 2, 27);
+}
+
+void printPromotionScreenSetupB(const int iteration) {
+	moveAlt(iteration + 2, 54);
+}
+
+void printPromotionScreenSetupD(const int iteration, const int level) {
+
+	moveAlt(iteration + 2, 4 + level);
+}
+void printIsLoveSlave() {
+	addstrAlt(CONST_reviewmode113);
+
+}
+void printIsBrainWashed() {
+	addstrAlt(CONST_reviewmode114);
+
+}
+
+void printBaseAssignmentFooter(const bool longPool, const bool manyLocations) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(21, 0, CONST_reviewmode106);
+	mvaddstrAlt(22, 0, CONST_reviewmode107);
+	if (longPool)
+	{
+		mvaddstrAlt(23, 0, addpagestr());
+	}
+	if (manyLocations)
+	{
+		mvaddstrAlt(24, 0, CONST_reviewmode108);
+	}
+	mvaddstrAlt(23, 35, CONST_reviewmode109);
+}
+
+void printBaseName(const bool selectedbase, const int iteration, const string locname) {
+
+	if (selectedbase)set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	else set_color_easy(WHITE_ON_BLACK);
+	mvaddcharAlt(iteration + 2, 51, iteration + '1'); addstrAlt(spaceDashSpace);
+	addstrAlt(locname);
+}
+void printLiberalNameInLocation(const bool currentLocation, const bool underSiege, const bool excludeMention, const int iteration, const string tname, const string lname) {
+
+	if (currentLocation && underSiege)
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+	else if (excludeMention)
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	else set_color_easy(WHITE_ON_BLACK);
+	mvaddcharAlt(iteration + 2, 0, iteration + 'A'); addstrAlt(spaceDashSpace);
+	addstrAlt(tname);
+	mvaddstrAlt(iteration + 2, 25, lname);
+	if (underSiege)
+	{
+		addstrAlt(CONST_reviewmode105);
+	}
+}
+void printBaseAssignmentHeader() {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_reviewmode102);
+	mvaddstrAlt(1, 0, CONST_reviewmode103); // 80 characters
+	mvaddstrAlt(1, 51, CONST_reviewmode104);
+}
+
+void printLosesHeart(const string name) {
+
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	gamelog.newline(); //New line.
+	mvaddstrAlt(22, 0, name, gamelog);
+	addstrAlt(CONST_reviewmode094, gamelog); // 80 characters
+	// this sentence probably takes more than 80 characters so use 2 lines and break it here
+	gamelog.newline(); //New line.
+	mvaddstrAlt(23, 0, pickrandom(getsSick), gamelog);
+	gamelog.newline(); //New line.
+	mvaddstrAlt(24, 0, name, gamelog);
+	addstrAlt(CONST_reviewmode095, gamelog); // 80 characters
+	gamelog.nextMessage(); //Write buffer out to prepare for next message.
+}
+void printGainsWisdom(const string name) {
+
+	gamelog.newline(); //New line here too.
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, name, gamelog);
+	addstrAlt(CONST_reviewmode096, gamelog); // 80 characters
+	gamelog.newline(); //New line.
+	mvaddstrAlt(24, 0, name, gamelog);
+	addstrAlt(CONST_reviewmode097, gamelog); // 80 characters
+	gamelog.nextMessage(); //Write buffer out to prepare for next message.
+}
+void printSwapSquadMember() {
+	mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 8, CONST_reviewmode100);
+}
+void printNameWith(const string name) {
+
+	addstrAlt(name);
+	addstrAlt(CONST_reviewmode101);
+}
+void printPerformsExecution(const string executor, const string victim) {
+
+	mvaddstrAlt(22, 0, executor, gamelog);
+	addstrAlt(CONST_reviewmode090, gamelog); // 10 characters (10+4+66=80)
+	addstrAlt(victim, gamelog);
+	addstrAlt(CONST_reviewmode091, gamelog); // 4 characters (10+4+66=80)
+	addstrAlt(pickrandom(methodOfExecution), gamelog);
+	mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+}
+void printKillAllyPrompt(const string executor) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode086); // 25 characters (25+55=80)
+	addstrAlt(executor);
+	addstrAlt(CONST_reviewmode087); // 55 characters (25+55=80)
+	mvaddstrAlt(23, 0, CONST_reviewmode088); // 80 characters
+	mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
+}
+void printTestifiesAgainstBoss(const string tname, const string bname) {
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, CONST_reviewmode081, gamelog);
+	addstrAlt(tname, gamelog);
+	addstrAlt(CONST_reviewmode082, gamelog);
+	gamelog.newline(); //New line.
+	mvaddstrAlt(24, 0, CONST_reviewmode083, gamelog);
+	gamelog.newline(); //New line.
+	mvaddstrAlt(25, 0, CONST_reviewmode084, gamelog);
+	addstrAlt(bname, gamelog);
+	addstrAlt(CONST_reviewmode085, gamelog);
+	gamelog.nextMessage(); //Write out buffer to prepare for next message.
+}
+void printHasBeenReleased(const string name) {
+	mvaddstrAlt(22, 0, name, gamelog);
+	addstrAlt(CONST_reviewmode078, gamelog); // 80 characters
+	gamelog.newline(); //New line.
+	mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+	gamelog.nextMessage(); //Write out buffer to prepare for next message.
+}
+void printReleaseLiberalPrompt() {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode075); // 80 characters
+	mvaddstrAlt(23, 0, CONST_reviewmode076); // 80 characters
+	mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
+}
+void printWhatIsNewName() {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(23, 0, CONST_reviewmode073); // 80 characters
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+}
+void printReviewModeNameFooter(const bool conservative, const bool morePages) {
+
+	moveAlt(23, 0);
+	if (conservative) addstrAlt(CONST_reviewmode068);
+	else addstrAlt(CONST_reviewmode069);
+	if (morePages) addstrAlt(CONST_reviewmode070);
+	mvaddstrAlt(24, 0, CONST_reviewmode071);
+	addstrAlt(CONST_reviewmode072);
+}
+void printRemoveLiberal() {
+	moveAlt(22, 0);
+	addstrAlt(CONST_reviewmode066);
+
+}
+void printKillLiberal() {
+
+	addstrAlt(CONST_reviewmode067);
+}
+void printProfileHeader(const bool conservative) {
+
+	eraseAlt();
+	moveAlt(0, 0);
+	if (conservative)
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_reviewmode064);
+	}
+	else
+	{
+		set_color_easy(GREEN_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_reviewmode065);
+	}
+}
+
+void printSortPeople() {
+
+	mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
+}
+void printSwapMe(const string name) {
+	addstrAlt(CONST_reviewmode061);
+	addstrAlt(name);
+
+}
+void printReorderLiberals() {
+	addstrAlt(CONST_reviewmode062);
+}
+void printPressLetterToViewStats() {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode060);
+}
+void printReviewStringsHeader(const short mode) {
+
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, reviewStrings[mode]);
+	mvaddstrAlt(1, 0, CONST_reviewmode039); // 80 characters
+	mvaddstrAlt(1, 57, reviewStringsSecondLine[mode]);
+}
+
+void printREVIEWMODE_CLINIC(const int clinic) {
+
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_reviewmode052);
+	addstrAlt(clinic);
+	addstrAlt(singleSpace);
+	if (clinic > 1) {
+		addstrAlt(CONST_reviewmode053);
+	}
+	else {
+		addstrAlt(CONST_reviewmode054);
+	}
+}
+void printREVIEWMODE_SLEEPERS(const int align, const string tname) {
+
+	if (align == -1)set_color_easy(RED_ON_BLACK_BRIGHT);
+	else if (align == 0)set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	else set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	addstrAlt(tname);
+}
+void printREVIEWMODE_DEAD(const int deathdays) {
+
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	addstrAlt(deathdays);
+	addstrAlt(singleSpace);
+	if (deathdays > 1) {
+		addstrAlt(CONST_reviewmode057);
+	}
+	else {
+		addstrAlt(CONST_reviewmode058);
+	}
+}
+void printREVIEWMODE_AWAY(const int hiding, const int dating) {
+
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	if (hiding != -1)
+	{
+		addstrAlt(dating + hiding);
+		addstrAlt(singleSpace);
+		if (dating + hiding > 1)
+			addstrAlt(CONST_reviewmode057);
+		else addstrAlt(CONST_reviewmode058);
+	}
+	else addstrAlt(CONST_reviewmode059);
+}
+
+void printREVIEWMODE_JUSTICE(const bool deathpenalty, const int sentence, const int location) {
+	if (deathpenalty&&sentence != 0 &&
+		location == SITE_GOVERNMENT_PRISON)
+	{
+		set_color_easy(RED_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_reviewmode044);
+		addstrAlt(sentence);
+		addstrAlt(singleSpace);
+		if (sentence > 1)addstrAlt(CONST_reviewmode053);
+		else addstrAlt(CONST_reviewmode054);
+	}
+	else if (sentence <= -1 &&
+		location == SITE_GOVERNMENT_PRISON)
+	{
+		set_color_easy(WHITE_ON_BLACK);
+		if (sentence < -1)
+		{
+			addstrAlt(-sentence);
+			addstrAlt(CONST_reviewmode047);
+		}
+		else
+			addstrAlt(CONST_reviewmode048);
+	}
+	else if (sentence != 0 &&
+		location == SITE_GOVERNMENT_PRISON)
+	{
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+		addstrAlt(sentence);
+		addstrAlt(singleSpace);
+		if (sentence > 1)addstrAlt(CONST_reviewmode053);
+		else addstrAlt(CONST_reviewmode054);
+	}
+	else
+	{
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		addstrAlt(CONST_reviewmode051); // 7 characters
+	}
+}
+void printREVIEWMODE_HOSTAGES(const int joindays) {
+
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	addstrAlt(joindays);
+	addstrAlt(singleSpace);
+	if (joindays > 1)addstrAlt(CONST_reviewmode057);
+	else addstrAlt(CONST_reviewmode058);
+}
+
+void printEvaluateLiberalsHeader(const int iteration, const string tname) {
+
+	set_color_easy(WHITE_ON_BLACK);
+
+	mvaddcharAlt(iteration + 2, 0, iteration + 'A');
+	addstrAlt(spaceDashSpace);
+	addstrAlt(tname);
+}
+void printLiberalHealthStat(const bool bright, const int iteration, const int skill, const string hstat) {
+
+	set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+	mvaddstrAlt(iteration + 2, 25, skill);
+	mvaddstrAlt(iteration + 2, 33, hstat);
+
+}
+void printREVIEWMODE_LIBERALS() {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	addstrAlt(CONST_reviewmode041);
+
+}
+void printREVIEWMODE_LIBERALS(const int type, const string activity) {
+
+	set_activity_color(type);
+	addstrAlt(activity);
+}
+void setColorAndPositionForReviewmode(const short mode, const int iteration, const string locationname) {
+
+	if (mode == REVIEWMODE_JUSTICE) {
+		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	}
+	else {
+		set_color_easy(WHITE_ON_BLACK);
+	}
+
+	moveAlt(iteration + 2, 42);
+
+	addstrAlt(locationname);
+
+	moveAlt(iteration + 2, 57);
+}
+void printGiveThisSquadAName(char *name) {
+	mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(23, 0, CONST_reviewmode036); // 80 characters
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+	enter_name(24, 0, name, SQUAD_NAMELEN, CONST_SQUAD_DEFAULT_NAME.c_str());
+
+}
+void printSquadCannotBeOnlyConservative() {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(23, 0, CONST_reviewmode033); // 80 characters
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+}
+void printPressLetterToViewLiberalDetails()
+{
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, CONST_reviewmode028); // 80 characters
+	mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+}
+void printSquadMustBeAbleToMove() {
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(23, 0, CONST_reviewmode026); // 80 characters
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+
+}
+void printSquadMustBeInSameLocation() {
+
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
+	mvaddstrAlt(23, 0, CONST_reviewmode023); // 80 characters
+	mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+}
+void printAddOrRemoveFromSquad(const int partysize) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(22, 0, CONST_reviewmode016);
+	mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
+	mvaddstrAlt(23, 50, CONST_reviewmode018);
+	moveAlt(24, 0);
+	if (partysize > 0) addstrAlt(CONST_reviewmode019);
+	else addstrAlt(CONST_reviewmode020);
+	if (partysize > 0) set_color_easy(WHITE_ON_BLACK);
+	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(24, 40, CONST_reviewmode021);
+}
+void printSquadGreen(const int iteration) {
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(iteration + 2, 75, CONST_reviewmode041);
+
+}
+void printSquadYellow(const int iteration) {
+	set_color_easy(YELLOW_ON_BLACK);
+	mvaddstrAlt(iteration + 2, 75, CONST_reviewmode041);
+
+}
+void printSquadAway(const int iteration) {
+	set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	mvaddstrAlt(iteration + 2, 75, CONST_reviewmode015);
+
+}
+void printCreatureTypename(const int iteration, const int align, const string type) {
+
+	if (align == -1) set_color_easy(RED_ON_BLACK_BRIGHT);
+	else if (align == 0) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	else set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(iteration + 2, 50, type);
+}
+void printTotalSkill(const int iteration, const int skill, const bool bright) {
+
+	set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+	mvaddstrAlt(iteration + 2, 25, skill);
+}
+void printCreatureNameForSquad(const int iteration, const string name) {
+
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddcharAlt(iteration + 2, 0, iteration + 'A');
+	addstrAlt(spaceDashSpace);
+	addstrAlt(name);
+}
+void printAssembleSquadHeader(const int partysize, const char newsquad, const string name) {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	moveAlt(0, 0);
+	if (partysize < 6)addstrAlt(CONST_reviewmode008);
+	else addstrAlt(CONST_reviewmode009);
+	if (newsquad)
+	{
+		mvaddstrAlt(0, 71, CONST_reviewmode010);
+	}
+	else
+	{
+		mvaddstrAlt(0, 73 - len(name), CONST_reviewmode011);
+		addstrAlt(name);
+	}
+	mvaddstrAlt(1, 0, CONST_reviewmode012); // 80 characters
+}
+
+const string CONST_reviewmode134 = "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.";
+const string CONST_reviewmode133 = "  Press U to Promote Liberals.";
+const string CONST_reviewmode132 = "Press a Letter to select a squad.  1-7 to view Liberal groups.";
+const string CONST_reviewmode131 = "Press Y to turn on some Music.";
+const string CONST_reviewmode130 = "Press Y to turn off the Music.";
+const string CONST_reviewmode129 = "Press V to Inspect Liberal finances.";
+
+const string CONST_reviewmode128 = "8 - Review and Move Equipment (";
+const string CONST_reviewmode127 = "7 - Away (";
+const string CONST_reviewmode126 = "6 - The Dead (";
+const string CONST_reviewmode125 = "5 - Sleepers (";
+const string CONST_reviewmode124 = "4 - Justice System (";
+const string CONST_reviewmode123 = "3 - Hospital (";
+const string CONST_reviewmode122 = "2 - Hostages (";
+const string CONST_reviewmode121 = "1 - Active Liberals (";
+const string CONST_reviewmode119 = "컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�";
+const string CONST_reviewmode118 = "Review your Liberals and Assemble Squads";
+void printReviewHeader() {
+	eraseAlt();
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(0, 0, CONST_reviewmode118);
+	mvaddstrAlt(1, 0, CONST_reviewmode119); // 80 characters
+}
+void printReviewActivity(const int activityTypeID, const int iteration, const string str) {
+
+	set_activity_color(activityTypeID);
+
+	mvaddstrAlt(iteration + 2, 51, str);
+}
+void printSquadLocationAndSiegeStatus(const int cursite, const int iteration, const bool activesquad) {
+	setColorBasedOnSiege(cursite, iteration + 2, activesquad);
+
+}
+void printSquadName(const string sname, const bool active, const int iteration) {
+	set_color_easy(active ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+	mvaddcharAlt(iteration + 2, 0, iteration + 'A');
+	addstrAlt(spaceDashSpace);
+	addstrAlt(sname);
+}
+void printReviewModeOptions(const int activity, const int iteration, const int numMembers) {
+	
+	bool invalid = false;
+	ColorSetup const_color;
+	string active_string;
+	switch (activity) {
+	case REVIEWMODE_LIBERALS: //0
+		const_color = GREEN_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode121;
+		break;
+
+	case REVIEWMODE_HOSTAGES: //1
+		const_color = RED_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode122;
+		break;
+	case REVIEWMODE_CLINIC: // 2
+		const_color = WHITE_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode123;
+		break;
+	case REVIEWMODE_JUSTICE: // 3
+		const_color = YELLOW_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode124;
+		break;
+	case REVIEWMODE_SLEEPERS: // 4
+		const_color = MAGENTA_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode125;
+		break;
+	case REVIEWMODE_DEAD: // 5
+		const_color = BLACK_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode126;
+		break;
+	case REVIEWMODE_AWAY: // 6
+		const_color = BLUE_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode127;
+		break;
+	case REVIEWMODENUM: // 7 review and move equipment
+		const_color = CYAN_ON_BLACK_BRIGHT;
+		active_string = CONST_reviewmode128;
+		break;
+	default: // should never happen, would throw an exception before reaching this point, as numMembers is taken from an array whose maximum index is REVIEWMODENUM
+		invalid = true;
+		break;
+	}
+	if (!invalid) {
+		set_color_easy(const_color);
+		mvaddstrAlt(iteration + 2, 0, active_string + tostring(numMembers) + ')');
+	}
+}
+void printReviewModeFooter(const bool musicIsEnabled) {
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(21, 0, CONST_reviewmode129);
+	if (musicIsEnabled)
+		mvaddstrAlt(21, 38, CONST_reviewmode130);
+	else mvaddstrAlt(21, 38, CONST_reviewmode131);
+	mvaddstrAlt(22, 0, CONST_reviewmode132);
+	mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode133);
+	mvaddstrAlt(24, 0, CONST_reviewmode134);
+}
+// end REVIEWMODE
+
+// SAVELOAD
+
+const string itemType = "Item type ";
+const string doesNotExistItem = " does not exist. Deleting item.";
+const string vehicleType = "Vehicle type ";
+const string doesNotExistVehicle = " does not exist. Deleting vehicle.";
+void printInvalidVehicle(const string typeidname) {
+
+	addstrAlt(vehicleType + typeidname + doesNotExistVehicle);
+}
+void printInvalidItem(const string typeidname) {
+
+	addstrAlt(itemType);
+	addstrAlt(typeidname);
+	addstrAlt(doesNotExistItem);
+}
+
+// end SAVELOAD
+
 
 // SHOP
 
@@ -810,7 +1569,6 @@ extern class Ledger ledger;
 // SIEGE
 
 const string siege = "siege\\";
-const string mostlyendings = "mostlyendings\\";
 
 const string CONST_siege014 = "engageConservativesEscape.txt";
 const string CONST_siege013 = "engageConservatives.txt";
@@ -1288,12 +2046,14 @@ void printReporterDuringSiege(const string repname, const string name, const int
 	gamelog.newline();
 }
 void printShotBySniper(const string targname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, CONST_siege185, gamelog);
 	addstrAlt(targname, gamelog);
 	addstrAlt(CONST_siege188, gamelog);
 	gamelog.newline();
 }
 void printMissedBySniper(const string targname) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, CONST_siege187, gamelog);
 	addstrAlt(targname, gamelog);
 	addstrAlt(CONST_siege188, gamelog);

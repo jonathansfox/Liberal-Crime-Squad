@@ -1043,8 +1043,8 @@ string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 //using namespace std;
 
-const string PACKAGE_VERSION_STR = "4.12.32";
-const int version = 41232;
+const string PACKAGE_VERSION_STR = "4.12.33";
+const int version = 41233;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -2880,6 +2880,7 @@ map<int, ColorSetup> activityColors = {
 	// Nothing terribly important
 	map<int, ColorSetup>::value_type(ACTIVITY_HEAL, WHITE_ON_BLACK),// Identical to none in practice
 	map<int, ColorSetup>::value_type(ACTIVITY_NONE, WHITE_ON_BLACK),
+	map<int, ColorSetup>::value_type(ACTIVITYNUM, WHITE_ON_BLACK),
 	// Going somewhere
 	map<int, ColorSetup>::value_type(ACTIVITY_VISIT, YELLOW_ON_BLACK_BRIGHT),
 	// Quitting being a sleeper to join the LCS
@@ -3803,6 +3804,7 @@ const string CONST_creaturePool070 = " has been transferred to ";
 #endif	//CREATURETYPE_CPP
 #ifdef	CURSESALTERNATIVE_CPP
 // cursesAlternative.cpp
+
 
 #endif	//CURSESALTERNATIVE_CPP
 #ifdef	CURSESMOVIE_CPP
@@ -10056,44 +10058,30 @@ shopsnstuff.cpp
 	void publishSpecialEditions(char &clearformess);
 	void manageGrafiti();
 
-	//extern string singleDot;
-
+	
 #include "../common/musicClass.h"
-	extern short attitude[VIEWNUM];
-	extern short background_liberal_influence[VIEWNUM];
-
-	extern MusicClass music;
+	extern bool SHOWMECHANICS;
+	extern bool SHOWWAIT;
+	extern bool stalinmode;
+	extern char disbanding;
 	extern char endgamestate;
 	extern char newscherrybusted;
-	extern bool stalinmode;
-	extern short attitude[VIEWNUM];
-	extern char endgamestate;
-	extern short attitude[VIEWNUM];
+	extern class Ledger ledger;
+	extern int day;
+	extern int disbandtime;
+	extern int month;
+	extern int year;
 	extern Log gamelog;
 	extern MusicClass music;
-	// Show polls when you can't see things
-	extern bool SHOWWAIT;
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
-	extern Log gamelog;
-	extern int year;
-	extern int day;
-	extern int month;
-	extern char disbanding;
-	extern bool stalinmode;
-	extern int disbandtime;
-	extern class Ledger ledger;
-	extern short lawList[LAWNUM];
 	extern short attitude[VIEWNUM];
-	extern short public_interest[VIEWNUM];
 	extern short background_liberal_influence[VIEWNUM];
+	extern short lawList[LAWNUM];
+	extern short public_interest[VIEWNUM];
+
 	const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
 	const string CONST_monthly016 = "The last LCS members have all been hunted down.";
 	const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
 
-//	const string CONST_monthly017 = "They will never see the utopia they dreamed of...";
-//	const string CONST_monthly016 = "The last LCS members have all been hunted down.";
-//	const string CONST_monthly015 = "The Liberal Crime Squad is now just a memory.";
 	const string CONST_monthly014 = "Press any key to reflect on these poll numbers.";
 	const string CONST_monthly013 = "Arch-Conservative";
 	const string CONST_monthly012 = "-  ";
@@ -10108,11 +10096,20 @@ shopsnstuff.cpp
 #ifdef	NEWENCOUNTER_CPP
 // newencounter.cpp
 
-
 #include "../creature/newcreature.h"
 #include "../locations/locations.h"
 
 #include "../locations/locationsPool.h"
+
+	extern coordinatest loc_coord;
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short postalarmtimer;
+	extern short siteonfire;
+	extern short sitetype;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+
+
 	void fillEncounter(CreatureTypes c, int numleft);
 	void emptyEncounter();
 	map<int, vector<int> > locationsSpawners = {
@@ -10838,32 +10835,12 @@ shopsnstuff.cpp
 
 		)
 	};
-	extern short mode;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern short mode;
-	extern coordinatest loc_coord;
-	extern short lawList[LAWNUM];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern coordinatest loc_coord;
-	extern short lawList[LAWNUM];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short siteonfire;
-	extern short sitetype;
-	extern short lawList[LAWNUM];
 	short getCurrentSite();
 	bool populateEncounter(const int type, int creaturearray[CREATURENUM], const char sec);
 	void conservatiseEncslot(const int encslot);
-	extern short mode;
-	extern coordinatest loc_coord;
-	extern short postalarmtimer;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	void conservatise(const int c);
 	void damage_creature(const int e);
 	vector<NameAndAlignment> getEncounterNameAndAlignment();
-	extern short sitetype;
-	extern short lawList[LAWNUM];
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
@@ -10915,17 +10892,37 @@ shopsnstuff.cpp
 	map<short, string> enumToCreature;
 	map<string, short> getBaseEnumFromString;
 	map<string, short> getSpecialWoundEnumFromString;
-	extern short wincondition;
-	extern short fieldskillrate;
-	extern char endgamestate;
+
+	extern bool ALLOWSTALIN;
+	extern bool BLIND;
+	extern bool INTERNAL;
+	extern bool multipleCityMode;
+	extern bool nocourtpurge;
+	extern bool NOFACE;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool NOWALK;
+	extern bool SPINE;
 	extern bool stalinmode;
-	extern bool multipleCityMode;
-	extern MusicClass music;
-	extern Log gamelog;
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern char endgamestate;
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern int year;
-	extern bool multipleCityMode;
 	extern char lcityname[CITY_NAMELEN];
+	extern class Ledger ledger;
+	extern int day;
+	extern int month;
+	extern int year;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short court[COURTNUM];
+	extern short fieldskillrate;
+	extern short house[HOUSENUM];
+	extern short lawList[LAWNUM];
+	extern short senate[SENATENUM];
+	extern short wincondition;
+	extern UniqueCreatures uniqueCreatures;
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
 
 	Vehicle* newSportsCar();
 
@@ -10935,24 +10932,7 @@ shopsnstuff.cpp
 		REPEAT
 	};
 
-	//extern string spaceDashSpace;
-
-	extern UniqueCreatures uniqueCreatures;
-	//extern string singleSpace;
 	void newVehicle(Vehicle *startcar);
-	//extern string singleDot;
-	extern bool stalinmode;
-	extern bool multipleCityMode;
-	extern bool ALLOWSTALIN;
-	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-	extern bool nocourtpurge;
-
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern short attitude[VIEWNUM];
 	enum Stat_Or_Attribute {
 		SKILL,
 		ATTRIBUTE,
@@ -11018,16 +10998,6 @@ shopsnstuff.cpp
 	};
 	
 	const int MAX_CHOICES = 10;
-	// Make the founder blind
-	extern bool BLIND;
-	// Make the founder unable to walk
-	extern bool NOWALK;
-	// Make the founder have no face
-	extern bool NOFACE;
-	// Make the founder have a severely injured spine
-	extern bool SPINE;
-	// Make the founder have severe internal damage
-	extern bool INTERNAL;
 
 #include "../recruits.h"
 	/* creates your founder */
@@ -11039,14 +11009,6 @@ shopsnstuff.cpp
 		const bool sports_car;
 		newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
 	};
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern UniqueCreatures uniqueCreatures;
-	extern Log gamelog;
-	extern int year;
-	extern int day;
-	extern int month;
-	extern class Ledger ledger;
 	const string whatIsYourName = "What is your name to the People?";
 	const string pressEnterToBeRealName = "Press enter to be known by your real name instead.";
 	const string allOptions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -11205,7 +11167,28 @@ shopsnstuff.cpp
 		return newsstory[len(newsstory) - 1];
 	}
 #include "../common/musicClass.h"
+
+	extern bool multipleCityMode;
+	extern CCSexposure ccsexposure;
 	extern char endgamestate;
+	extern char lcityname[CITY_NAMELEN];
+	extern char newscherrybusted;
+	extern char oldPresidentName[POLITICIAN_NAMELEN];
+	extern CursesMoviest movie;
+	extern int month;
+	extern int year;
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short house[HOUSENUM];
+	extern short lawList[LAWNUM];
+	extern short public_interest[VIEWNUM];
+	extern short senate[SENATENUM];
+	extern string slogan_str;
+	extern unsigned char bigletters[27][5][7][4];
+	extern unsigned char newspic[20][78][18][4];
+	extern unsigned char newstops[6][80][5][4];
+
+
 	map<short, vector<string> > newsStories;
 	map<short, string> cityNames;
 	vector<string> liberalCrime;
@@ -11289,14 +11272,6 @@ shopsnstuff.cpp
 	void displaycenterednewsfont(const std::string& str, int y);
 	void preparepage(const Deprecatednewsstoryst ns, const bool liberalguardian);
 
-	extern char endgamestate;
-	extern CCSexposure ccsexposure;
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern CCSexposure ccsexposure;
-	extern short lawList[LAWNUM];
-	extern short public_interest[VIEWNUM];
 	const vector<int> randombox = {
 		CH_LIGHT_SHADE,
 		CH_MEDIUM_SHADE,
@@ -11324,8 +11299,6 @@ shopsnstuff.cpp
 	const int PICTURE_TERRORISTS = 9;
 	const int PICTURE_KKK = 10;
 	const int PICTURE_TSHIRT = 11;
-	extern CursesMoviest movie;
-	extern MusicClass music;
 
 	const string membersOfLCS = "Members of the Liberal Crime Squad ";
 	const string lcsSpokeseperson = "to a Liberal Crime Squad spokesperson.";
@@ -12287,36 +12260,10 @@ shopsnstuff.cpp
 	const string tag_Travel = "Travel";
 	const string tag_Shopping = "Shopping";
 	const string tag_The = "The ";
-	//	const string CONST_news859 = " while they were attempting to perform an arrest. ";
-	//	const string CONST_news858 = "the police officer ";
-	//	const string CONST_news857 = " officers ";
-	//	const string CONST_news856 = "radical political group known as the Liberal Crime Squad, is believed to have killed ";
-	//	const string CONST_news855 = " A suspect, identified only as a member of the ";
-	//	const string CONST_news853 = " killed in the line of duty yesterday, ";
-	//	const string CONST_news852 = "A police officer was";
-	//	const string CONST_news851 = " police officers were";
-	//	const string CONST_newsX10 = " The slogan, \"";
-	//	const string CONST_newsX11 = " One uttered the words, \"";
-	//	const string CONST_newsX12 = " As they left, they shouted, \"";
-	//	const string CONST_newsX13 = " One of them was rumored to have cried out, \"";
-	//	const string CONST_newsX14 = " Witnesses reported hearing the phrase, \"";
-	//	const string CONST_newsX15 = "According to one person familiar with the case, \"";
+
 	const string majorevent = "majorevent\\";
 	const string mostlyendings = "mostlyendings\\";
 
-	//nudityCarDrugOrBurial
-//	const string CONST_news874 = "The name of the officer has not been released pending notification of the officer's family.";
-//	const string CONST_news872 = "A passerby had allegedly spotted the suspect committing a car theft. ";
-//	const string CONST_news871 = "appeared to be a corpse through an empty lot. ";
-//	const string CONST_news870 = "A passerby allegedly called the authorities after seeing the suspect dragging what ";
-//	const string CONST_news869 = "The suspect was allegedly selling \"pot brownies\". ";
-//	const string CONST_news868 = "The incident apparently occurred as a response to a public nudity complaint. ";
-//	const string CONST_news867 = " attempting to perform an arrest. ";
-//	const string CONST_news866 = "a police officer that was";
-//	const string CONST_news865 = " police officers that were";
-//	const string CONST_news864 = "killed ";
-//	const string CONST_news863 = " A suspect, whose identity is unclear, ";
-//	const string CONST_news861 = "A routine arrest went horribly wrong yesterday, ";
 	vector<string> CONST_Woman_744 = {
 		CONST_news740, CONST_news741, CONST_news742, CONST_news743, CONST_news744
 	};
@@ -12489,9 +12436,6 @@ shopsnstuff.cpp
 		NEWSSTORY_SQUAD_DEFENDED, NEWSSTORY_SQUAD_BROKESIEGE, NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
 		NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE, NEWSSTORY_SQUAD_KILLED_SITE, NEWSSTORY_WANTEDARREST,
 		NEWSSTORY_GRAFFITIARREST, NEWSSTORY_CCS_SITE, NEWSSTORY_CCS_KILLED_SITE };
-	extern unsigned char bigletters[27][5][7][4];
-	extern unsigned char newstops[6][80][5][4];
-	extern unsigned char newspic[20][78][18][4];
 	map<short, string> positiveMajorEvents = {
 		map<short, string>::value_type(VIEW_WOMEN,
 		CONST_news790),
@@ -12590,8 +12534,6 @@ shopsnstuff.cpp
 
 
 	};
-	extern int month;
-	extern short lawList[LAWNUM];
 
 	map<int, vector<string> >accordingToLiberalGuardian = {
 
@@ -12635,10 +12577,6 @@ shopsnstuff.cpp
 		CRIME_HOUSE_PHOTOS,
 		CRIME_CORP_FILES
 	};
-	extern short lawList[LAWNUM];
-	extern string slogan_str;
-	extern short lawList[LAWNUM];
-	extern string slogan_str;
 	map<int, vector<string> >siegeMassacreStory = {
 
 		map<SiegeTypes,  vector<string> >::value_type(SIEGE_POLICE,
@@ -12700,12 +12638,6 @@ shopsnstuff.cpp
 
 
 	};
-	extern short lawList[LAWNUM];
-	extern char newscherrybusted;
-	extern bool multipleCityMode;
-	extern MusicClass music;
-	extern char lcityname[CITY_NAMELEN];
-	extern short lawList[LAWNUM];
 	vector<file_and_text_collection> majorevent_text_file_collection = {
 		/*majorevent.cpp*/
 		customText(&liberalCrime, majorevent + CONST_news019),
@@ -12784,14 +12716,6 @@ shopsnstuff.cpp
 		customText(&caseNEWSSTORY_CCS_DEFEATED, mostlyendings + CONST_news091),
 		customText(&caseNEWSSTORY_CCS_NOBACKERS, mostlyendings + CONST_news092),
 	};
-	extern char endgamestate;
-	extern CCSexposure ccsexposure;
-	extern short attitude[VIEWNUM];
-	extern char endgamestate;
-	extern short attitude[VIEWNUM];
-	extern int year;
-	extern char newscherrybusted;
-	extern char oldPresidentName[POLITICIAN_NAMELEN];
 #endif	//NEWS_CPP
 #ifdef	POLITICS_CPP
 // politics.cpp
@@ -12904,62 +12828,31 @@ shopsnstuff.cpp
 		map<int, int>::value_type(LAW_GUNCONTROL, VIEW_GUNCONTROL),
 		map<int, int>::value_type(LAW_PRISONS, VIEW_PRISONS),
 	};
-	extern short attitude[VIEWNUM];
-	extern short public_interest[VIEWNUM];
-	extern short background_liberal_influence[VIEWNUM];
-	extern short presparty;
-	extern short exec[EXECNUM];
-	extern short attitude[VIEWNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
-	extern short presparty;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
-	void addStringYear();
-	extern short senate[SENATENUM];
-	extern MusicClass music;
+
+	extern bool nocourtpurge;
+	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
+	extern bool stalinmode;
 	extern bool termlimits;
-	extern bool stalinmode;
-	extern char disbanding;
-	extern short lawList[LAWNUM];
-	extern short senate[SENATENUM];
-	extern short house[HOUSENUM];
-	extern bool stalinmode;
-	extern char disbanding;
-	extern char disbanding;
-	extern bool termlimits;
-	extern bool stalinmode;
-	extern char disbanding;
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short presparty;
-	extern bool stalinmode;
-	extern char disbanding;
-	extern short execterm;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern Log gamelog;
-
-	extern bool stalinmode;
-	extern char disbanding;
-	extern short presparty;
-	extern bool stalinmode;
-	extern char disbanding;
-	extern short execterm;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short exec[EXECNUM];
-	extern Log gamelog;
-	extern MusicClass music;
-
-	extern bool stalinmode;
-
-	extern short lawList[LAWNUM];
-	extern short public_interest[VIEWNUM];
-	extern MusicClass music;
-	extern short exec[EXECNUM];
-	extern short lawList[LAWNUM];
-	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
 	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern char disbanding;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern int year;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
+	extern short court[COURTNUM];
+	extern short exec[EXECNUM];
+	extern short execterm;
+	extern short house[HOUSENUM];
+	extern short lawList[LAWNUM];
+	extern short presparty;
+	extern short public_interest[VIEWNUM];
+	extern short senate[SENATENUM];
+	extern short wincondition;
+
+
+	void addStringYear();
 	enum BillStatus
 	{
 		BILL_SIGNED = -2,
@@ -12967,31 +12860,7 @@ shopsnstuff.cpp
 		BILL_PASSED_CONGRESS = 0,
 		BILL_FAILED = 1
 	};
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern MusicClass music;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short exec[EXECNUM];
-	extern short lawList[LAWNUM];
-
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
 	void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
-	extern bool notermlimit;           //These determine if ELAs can take place --kviiri
-	extern bool nocourtpurge;
-
-	extern short exec[EXECNUM];
-	extern short lawList[LAWNUM];
-	extern short court[COURTNUM];
-	extern short wincondition;
-	extern short exec[EXECNUM];
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
 	const string pressKeyToReflect = "Press any key to reflect on what has happened.";
 	const string YEA = " Yea";
 	const string NAY = " Nay";
@@ -13074,8 +12943,6 @@ shopsnstuff.cpp
 	const string CONST_politics002 = "Senate Elections ";
 	const string CONST_politics001 = "corporateSuffix.txt";
 	const string mostlyendings = "mostlyendings\\";
-	extern short attitude[VIEWNUM];
-	extern int year;
 #endif	//POLITICS_CPP
 #ifdef	RECRUIT_CPP
 // recruit.cpp
@@ -13106,13 +12973,15 @@ shopsnstuff.cpp
 // for subordinatesleft
 #include "../combat/fight.h"
 
-#include "../cursesAlternative.h"
-#include "../set_color_support.h"
 #include "../common/musicClass.h"
 
 /* recruit struct constructor */
 
 #include "../combat/fight.h"
+
+	int getkeyAlt();
+
+	void pressAnyKey();
 
 	void talk(DeprecatedCreature &a, const int t);
 
@@ -13124,19 +12993,16 @@ shopsnstuff.cpp
 	extern DeprecatedCreature encounter[ENCMAX];
 
 	const string CONST_activate065 = "missingno";
-	const string CONST_recruit013 = "Adventures in Liberal Recruitment";
-	const string CONST_recruit012 = "Press enter or escape to call it a day.";
-	const string CONST_recruit011 = " - ";
-	const string CONST_recruit010 = " was able to get information on multiple people.";
-	const string CONST_recruit007 = " managed to set up a meeting with ";
-	const string CONST_recruit006A = " was unable to track down a ";
-	const string CONST_recruit006B = ".";
-	const string CONST_recruit005A = " asks around for a ";
-	const string CONST_recruit005B = "...";
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
-
+	void printFoundMultipleRecruits(const string crname);
+	void printPressEnterToCallItADay(const int recruitCount);
+	void printAdventuresInRecruitment();
+	void printSingleRecruit(const int i, const int align, const string name, const string age_string);
+	void printAskAroundForARecruit(const string recruiter, const string recruit_type);
+	void printSetupAMeeting(const string crname, const int align, const string rname, const string age_string);
+	void printWasUnableToTrackDown(const string crname, const string type);
 #endif	//RECRUIT_CPP
 #ifdef	REVIEWMODE_CPP
 // reviewmode.cpp
@@ -13172,155 +13038,101 @@ shopsnstuff.cpp
 	//#include "../monthly/lcsmonthly.h"
 	void fundreport(char &clearformess);
 	void printname(const int hiding, const int location, const int flag, const string name);
-#include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../customMaps.h"
-#include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
 #include "../common/creaturePool.h"
+
+	void nukeAllEmptySquads(const vector<int> squadloc, const int mode);
+
 	const int PAGELENGTH = 19;
 
-	struct stringAndColor
-	{
-		string str;
-		ColorSetup type;
-		stringAndColor(const string& str_, const ColorSetup type_) : str(str_), type(type_) { }
-		stringAndColor(const ColorSetup type_, const string& str_) : str(str_), type(type_) { }
-	};
-	void nukeAllEmptySquads(const vector<int> squadloc, const int mode);
 	extern short mode;
+	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern Deprecatedsquadst *activesquad;
 	extern long cursquadid;
-	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
-	extern Log gamelog;
 	extern int stat_kills;
-	extern short activesortingchoice[SORTINGCHOICENUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
 	extern bool multipleCityMode;
-	extern short activesortingchoice[SORTINGCHOICENUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<DeprecatedCreature *> pool;
+//	extern Log gamelog;
 
-	extern vector<DeprecatedCreature *> pool;
-	void setColorBasedOnSiege(const int cursite, const int y, const bool p);
 	int consolidateSiegeLoot();
 
 	extern MusicClass music;
 	extern Deprecatedsquadst *activesquad;
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
-	const string eightyBlankSpaces = "                                                                                ";
-	const string CONST_reviewmode134 = "Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.";
-	const string CONST_reviewmode133 = "  Press U to Promote Liberals.";
-	const string CONST_reviewmode132 = "Press a Letter to select a squad.  1-7 to view Liberal groups.";
-	const string CONST_reviewmode131 = "Press Y to turn on some Music.";
-	const string CONST_reviewmode130 = "Press Y to turn off the Music.";
-	const string CONST_reviewmode129 = "Press V to Inspect Liberal finances.";
-	const string CONST_reviewmode128 = "8 - Review and Move Equipment (";
-	const string CONST_reviewmode127 = "7 - Away (";
-	const string CONST_reviewmode126 = "6 - The Dead (";
-	const string CONST_reviewmode125 = "5 - Sleepers (";
-	const string CONST_reviewmode124 = "4 - Justice System (";
-	const string CONST_reviewmode123 = "3 - Hospital (";
-	const string CONST_reviewmode122 = "2 - Hostages (";
-	const string CONST_reviewmode121 = "1 - Active Liberals (";
-	const string CONST_reviewmode120 = "Acting Individually";
-	const string CONST_reviewmode119 = "컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�";
-	const string CONST_reviewmode118 = "Review your Liberals and Assemble Squads";
-	const string CONST_reviewmode117 = "Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.";
-	const string CONST_reviewmode116 = "Press a letter to promote a Liberal. You cannot promote Liberals in hiding.";
-	const string CONST_reviewmode115 = "<LCS Leader>";
-	const string CONST_reviewmode114 = "<Can't Lead More>";
-	const string CONST_reviewmode113 = "<Refuses Promotion>";
-	const string CONST_reviewmode112 = "CONTACT AFTER PROMOTION";
-	const string CONST_reviewmode111 = "컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_reviewmode110 = "Promote the Elite Liberals";
-	const string CONST_reviewmode109 = "T to sort people.";
-	const string CONST_reviewmode108 = ",. to view other Base pages.";
-	const string CONST_reviewmode107 = "Liberals must be moved in squads to transfer between cities.";
-	const string CONST_reviewmode106 = "Press a Letter to assign a Base.  Press a Number to select a Base.";
-	const string CONST_reviewmode105 = " <Under Siege>";
-	const string CONST_reviewmode104 = "NEW BASE";
-	const string CONST_reviewmode103 = "컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
-	const string CONST_reviewmode102 = "New Bases for Squadless Liberals";
-	const string CONST_reviewmode101 = " with";
-	const string CONST_reviewmode100 = "Choose squad member to replace ";
-	const string CONST_reviewmode099 = "                                                                                ";
-	const string CONST_reviewmode097 = " has gained wisdom.                                                             ";
-	const string CONST_reviewmode096 = " grows colder.                                                                  ";
-	const string CONST_reviewmode095 = " has lost heart.                                                                ";
-	const string CONST_reviewmode094 = " feels sick to the stomach afterward and                                        ";
-	const string CONST_reviewmode091 = " by ";
-	const string CONST_reviewmode090 = " executes ";
-	const string CONST_reviewmode089 = "  C - Confirm       Any other key to continue                                   ";
-	const string CONST_reviewmode088 = "Killing your squad members is Not a Liberal Act.                                ";
-	const string CONST_reviewmode087 = " kill this squad member?                               ";
-	const string CONST_reviewmode086 = "Confirm you want to have ";
-	const string CONST_reviewmode085 = " in court.";
-	const string CONST_reviewmode084 = "to testify against ";
-	const string CONST_reviewmode083 = "The Conservative traitor has ratted you out to the police, and sworn";
-	const string CONST_reviewmode082 = "'s whereabouts.";
-	const string CONST_reviewmode081 = "A Liberal friend tips you off on ";
-	const string CONST_reviewmode078 = " has been released.                                                             ";
-	const string CONST_reviewmode076 = "If the member has low heart they may go to the police.                          ";
-	const string CONST_reviewmode075 = "Do you want to permanently release this squad member from the LCS?              ";
-	const string CONST_reviewmode073 = "What is the new code name?                                                      ";
-	const string CONST_reviewmode072 = "    UP/DOWN  - More Info";
-	const string CONST_reviewmode071 = "Press any other key to continue the Struggle";
-	const string CONST_reviewmode070 = "    LEFT/RIGHT - View Others";
-	const string CONST_reviewmode069 = "N - Change Code Name      G - Fix Gender Label";
-	const string CONST_reviewmode068 = "Press N to change this Automaton's Code Name";
-	const string CONST_reviewmode067 = "         K - Kill member";
-	const string CONST_reviewmode066 = "R - Remove member";
-	const string CONST_reviewmode065 = "Profile of a Liberal";
-	const string CONST_reviewmode064 = "Profile of an Automaton";
-	const string CONST_reviewmode063 = " T to sort people.";
-	const string CONST_reviewmode062 = "Reorder Liberals";
-	const string CONST_reviewmode061 = "Place ";
-	const string CONST_reviewmode060 = "Press a Letter to View Status.        Z - ";
-	const string CONST_reviewmode059 = "<No Contact>";
-	const string CONST_reviewmode058 = "Day";
-	const string CONST_reviewmode057 = "Days";
-	const string CONST_reviewmode054 = "Month";
-	const string CONST_reviewmode053 = "Months";
-	const string CONST_reviewmode052 = "Out in ";
-	const string CONST_reviewmode051 = "컴컴컴�";
-	const string CONST_reviewmode048 = "Life Sentence";
-	const string CONST_reviewmode047 = " Life Sentences";
-	const string CONST_reviewmode044 = "DEATH ROW: ";
-	const string CONST_reviewmode041 = "SQUAD";
-	const string CONST_reviewmode040 = "Away";
-	const string CONST_reviewmode039 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_reviewmode038 = "The Liberal Crime Squad";
-	const string CONST_reviewmode036 = "What shall we designate this Liberal squad?                                     ";
-	const string CONST_reviewmode033 = "You cannot form a Squad with only Conservatives!                                ";
-	const string CONST_reviewmode031 = "Temporary Squad";
-	const string CONST_reviewmode028 = "Press a Letter to view Liberal details.                                         ";
-	const string CONST_reviewmode026 = "                Squad Liberals must be able to move around.                     ";
-	const string CONST_reviewmode023 = "           Liberals must be in the same location to form a Squad.               ";
-	const string CONST_reviewmode021 = "9 - Dissolve the squad.";
-	const string CONST_reviewmode020 = "Enter - I need no squad!";
-	const string CONST_reviewmode019 = "Enter - The squad is ready.";
-	const string CONST_reviewmode018 = "V - View a Liberal";
-	const string CONST_reviewmode016 = "Press a Letter to add or remove a Liberal from the squad.";
-	const string CONST_reviewmode015 = "AWAY";
-	const string CONST_reviewmode012 = "컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴";
-	const string CONST_reviewmode011 = "Squad: ";
-	const string CONST_reviewmode010 = "New Squad";
-	const string CONST_reviewmode009 = "The squad is full.";
-	const string CONST_reviewmode008 = "Assemble the squad!";
-	const string CONST_reviewmode007 = "getsSick.txt";
-	const string CONST_reviewmode006 = "methodOfExecution.txt";
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
 	const string mostlyendings = "mostlyendings\\";
+	const string CONST_reviewmode031 = "Temporary Squad";
+	const string CONST_reviewmode120 = "Acting Individually";
+
+	void printIAmLeader();
+	void printPromotionScreenSetup(const int iteration);
+	void printPromotionScreenSetupB(const int iteration);
+	void printPromotionScreenSetupD(const int iteration, const int level);
+	void printIsLoveSlave();
+	void printIsBrainWashed();
+	void printJustThis(const string name);
+	void printPromotionFooter(const bool addPage);
+	void printPromotionHeader();
+	void printBaseAssignmentFooter(const bool longPool, const bool manyLocations);
+	void printBaseName(const bool selectedbase, const int iteration, const string locname);
+	void printLiberalNameInLocation(const bool currentLocation, const bool underSiege, const bool excludeMention, const int iteration, const string tname, const string lname);
+	void printBaseAssignmentHeader();
+	void printLosesHeart(const string name);
+	void printGainsWisdom(const string name);
+	void printSwapSquadMember();
+	void printNameWith(const string name);
+	void printPerformsExecution(const string executor, const string victim);
+	void printKillAllyPrompt(const string executor);
+	void printTestifiesAgainstBoss(const string tname, const string bname);
+	void printHasBeenReleased(const string name);
+	void printReleaseLiberalPrompt();
+	void printWhatIsNewName();
+	void printReviewModeNameFooter(const bool conservative, const bool morePages);
+	void printRemoveLiberal();
+	void printKillLiberal();
+	void printProfileHeader(const bool conservative);
+	void printSortPeople();
+	void printSwapMe(const string name);
+	void printReorderLiberals();
+	void printPressLetterToViewStats();
+	void printReviewStringsHeader(const short mode);
+	void printREVIEWMODE_CLINIC(const int clinic);
+	void printREVIEWMODE_SLEEPERS(const int align, const string tname);
+	void printREVIEWMODE_DEAD(const int deathdays);
+	void printREVIEWMODE_AWAY(const int hiding, const int dating);
+	void printREVIEWMODE_JUSTICE(const bool deathpenalty, const int sentence, const int location);
+	void printREVIEWMODE_HOSTAGES(const int joindays);
+	void printEvaluateLiberalsHeader(const int iteration, const string tname);
+	void printLiberalHealthStat(const bool bright, const int iteration, const int skill, const string hstat);
+	void printREVIEWMODE_LIBERALS();
+	void printREVIEWMODE_LIBERALS(const int type, const string activity);
+	void setColorAndPositionForReviewmode(const short mode, const int iteration, const string locationname);
+	void printGiveThisSquadAName(char *name);
+	void printSquadCannotBeOnlyConservative();
+	void printPressLetterToViewLiberalDetails();
+	void printSquadMustBeAbleToMove();
+	void printSquadMustBeInSameLocation();
+	void printAddOrRemoveFromSquad(const int partysize);
+	void printSquadGreen(const int iteration);
+	void printSquadYellow(const int iteration);
+	void printSquadAway(const int iteration);
+	void printCreatureTypename(const int iteration, const int align, const string type);
+	void printTotalSkill(const int iteration, const int skill, const bool bright);
+	void printCreatureNameForSquad(const int iteration, const string name);
+	void printAssembleSquadHeader(const int partysize, const char newsquad, const string name);
+	void printReviewModeFooter(const bool musicIsEnabled); 
+	void printReviewModeOptions(const int activity, const int iteration, const int numMembers);
+	void printReviewHeader(); 
+	void printReviewActivity(const int activityTypeID, const int iteration, const string str);
+	void printSquadLocationAndSiegeStatus(const int cursite, const int y, const bool p);
+	void printSquadName(const string sname, const bool active, const int iteration);
 #endif	//REVIEWMODE_CPP
 #ifdef	SAVELOAD_CPP
 // saveload.cpp
@@ -13346,99 +13158,92 @@ shopsnstuff.cpp
 #include "../common/translateid.h"
 // for  getloottype
 #include "titlescreen.h"
-#include "../cursesAlternative.h"
 #include "../common/creaturePool.h"
 
 	Item* create_item(const std::string& inputXml);
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern char newscherrybusted;
-	extern vector<Location *> location;
-	extern bool multipleCityMode;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern short presparty;
 #include "../common/musicClass.h"
-	extern MusicClass music;
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern int stat_kidnappings;
-	extern int year;
-	extern short mode;
-	extern short exec[EXECNUM];
-	extern char endgamestate;
-	extern bool encounterwarnings;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern char oldPresidentName[POLITICIAN_NAMELEN];
-	extern vector<Vehicle *> vehicle;
-	extern unsigned long seed[RNG_SIZE];
-	extern short wincondition;
-	extern short fieldskillrate;
-	extern int day;
-	extern int month;
-	extern int year;
-	extern short execterm;
-	extern short presparty;
-	extern int amendnum;
-	extern bool termlimits;
-	extern bool deagle;
-	extern bool m249;
-	extern bool notermlimit;
-	extern bool nocourtpurge;
-	extern bool stalinmode;
-	extern char ccs_kills;
-	extern long curcreatureid;
-	extern long cursquadid;
-	extern short offended_corps;
-	extern short offended_cia;
-	extern short offended_amradio;
-	extern short offended_cablenews;
-	extern short offended_firemen;
-	extern int police_heat;
-	extern unsigned long attorneyseed[RNG_SIZE];
-	extern char lcityname[CITY_NAMELEN];
-	extern char slogan[SLOGAN_LEN];
-	extern string slogan_str;
-	extern short party_status;
-	extern short attitude[VIEWNUM];
-	extern short public_interest[VIEWNUM];
-	extern short background_liberal_influence[VIEWNUM];
-	extern short lawList[LAWNUM];
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern UniqueCreatures uniqueCreatures;
-	extern vector<Deprecatedsquadst *> squad;
-	extern vector<Deprecateddatest *> date;
-	extern vector<Deprecatedrecruitst *> recruit;
-	extern vector<Deprecatednewsstoryst *> newsstory;
-	extern Deprecatedsquadst *activesquad;
-	extern char homedir[MAX_PATH_SIZE];
 	struct  saveLoadChunk {
 		void * Buffer;
 		size_t      ElementSize;
 		size_t      ElementCount;
 		saveLoadChunk(void * _Buffer, int _ElementSize, int _ElementCount) :Buffer(_Buffer), ElementSize(_ElementSize), ElementCount(_ElementCount) {}
 	};
-	extern class Ledger ledger;
-	extern CCSexposure ccsexposure;
+
+	extern bool deagle;
+	extern bool encounterwarnings;
+	extern bool m249;
+	extern bool multipleCityMode;
+	extern bool nocourtpurge;
+	extern bool NOSAVE;
+	extern bool notermlimit;
 	extern bool NOVERBOSECOMMENTS;
+	extern bool stalinmode;
+	extern bool termlimits;
+	extern bool VERBOSESAVEFILE;
+	extern CCSexposure ccsexposure;
+	extern char ccs_kills;
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern char endgamestate;
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern char homedir[MAX_PATH_SIZE];
+	extern char lcityname[CITY_NAMELEN];
+	extern char newscherrybusted;
+	extern char oldPresidentName[POLITICIAN_NAMELEN];
+	extern char slogan[SLOGAN_LEN];
+	extern class Ledger ledger;
+	extern Deprecatedsquadst *activesquad;
+	extern int amendnum;
+	extern int day;
+	extern int month;
+	extern int police_heat;
+	extern int stat_burns;
+	extern int stat_buys;
+	extern int stat_dead;
+	extern int stat_kidnappings;
+	extern int stat_kills;
+	extern int stat_recruits;
+	extern int year;
+	extern Log gamelog;
+	extern long curcreatureid;
+	extern long cursquadid;
+	extern map<short, map<short, string> > getLawFlagStringFull;
+	extern map<short, string> getLawFlagString;
 	extern map<short, string> getLawString;
 	extern map<short, string> skillEnumToString;
-	extern map<short, string> getLawFlagString;
-	extern map<short, map<short, string> > getLawFlagStringFull;
-	// Store savefiles in plaintext, making it human readable and editable
-	extern bool VERBOSESAVEFILE;
-	// Don't save the game
-	extern bool NOSAVE;
-	//	extern int version;
-	const string itemType = "Item type ";
-	const string doesNotExistItem = " does not exist. Deleting item.";
-	const string vehicleType = "Vehicle type ";
-	const string doesNotExistVehicle = " does not exist. Deleting vehicle.";
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
+	extern short court[COURTNUM];
+	extern short exec[EXECNUM];
+	extern short execterm;
+	extern short fieldskillrate;
+	extern short house[HOUSENUM];
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+	extern short offended_cia;
+	extern short offended_corps;
+	extern short offended_firemen;
+	extern short party_status;
+	extern short presparty;
+	extern short public_interest[VIEWNUM];
+	extern short senate[SENATENUM];
+	extern short wincondition;
+	extern string slogan_str;
+	extern UniqueCreatures uniqueCreatures;
+	extern unsigned long attorneyseed[RNG_SIZE];
+	extern unsigned long seed[RNG_SIZE];
+	extern vector<DeprecatedCreature *> pool;
+	extern vector<Deprecateddatest *> date;
+	extern vector<Deprecatednewsstoryst *> newsstory;
+	extern vector<Deprecatedrecruitst *> recruit;
+	extern vector<Deprecatedsquadst *> squad;
+	extern vector<Location *> location;
+	extern vector<Vehicle *> vehicle;
+
+
+
 	const string CONST_saveloadB081 = "# and are thereby ignored";
 	const string CONST_saveload091 = "rb";
 	const string CONST_saveload090 = "wb";
@@ -13520,6 +13325,8 @@ shopsnstuff.cpp
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
+	void printInvalidVehicle(const string typeidname);
+	void printInvalidItem(const string typeidname);
 #endif	//SAVELOAD_CPP
 #ifdef	SHOP_CPP
 // shop.cpp
@@ -13553,11 +13360,15 @@ shopsnstuff.cpp
 //#include "../common/commonactionsCreature.h"
 #include "../common/translateid.h"
 // for  int getweapontype
-#include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
 #include "../common/musicClass.h"
 #include <functional>
+
+	int getkeyAlt();
+
+	bool is_page_up(const int c);
+	bool is_page_down(const int c);
+	void pressAnyKey();
 
 	Item* getNewLoot(const string& newLootType, int num = 1);
 
@@ -13573,27 +13384,14 @@ shopsnstuff.cpp
 	void deleteLocationLoot(int loc, int loot);
 	int whatIsThisItemInLocation(int loc, int l);
 	bool noQuickFenceLocation(int loc, int l);
-	extern short party_status;
-	extern class Ledger ledger;
-	extern short party_status;
-	extern class Ledger ledger;
-	extern vector<ArmorType *> armortype;
-	extern vector<Location *> location;
-	extern short party_status;
-	extern class Ledger ledger;	
-
 
 	extern class Ledger ledger;
-	extern vector<WeaponType *> weapontype;
 	extern short lawList[LAWNUM];
-	extern vector<WeaponType *> weapontype;
+	extern short party_status;
 	extern vector<ArmorType *> armortype;
 	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern class Ledger ledger;
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
 	extern vector<Location *> location;
+	extern vector<WeaponType *> weapontype;
 
 	string asMoney(const int c);
 
@@ -13708,11 +13506,14 @@ shopsnstuff.cpp
 //for void autopromote(int loc);
 #include "../combat/chase.h"
 //for void evasiverun();
-#include "../cursesAlternative.h"
 #include "../customMaps.h"
-#include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
+
+	int getkeyAlt();
+	int eraseAlt(void);
+	void pressAnyKey();
+	int pressSpecificKey(const int x, const int y);
 
 	void emptyEncounter();
 	void fillEncounter(CreatureTypes c, int numleft);
@@ -13729,20 +13530,8 @@ shopsnstuff.cpp
 	int baddieCount();
 	int encounterSize();
 	vector<NameAndAlignment> getEncounterNameAndAlignment();
-	extern Log gamelog;
-	extern short offended_firemen;
-	extern short offended_amradio;
-	extern short offended_cablenews;
-	extern MusicClass music;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
-	extern class Ledger ledger;
 	short getCurrentSite();
 	void setCurrentSite(const short i);
-	extern int stat_dead;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern vector<DeprecatedCreature *> pool;
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
@@ -13753,11 +13542,6 @@ shopsnstuff.cpp
 	void printConquerTextCCS(const int ccs_siege_kills, const int ccs_kills);
 	void printConquerText(const bool police);
 	
-	extern Log gamelog;
-	extern MusicClass music;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern short lawList[LAWNUM];
 	void dropHeatByFivePercent(int l);
 	int getTimeUntilSiege(int l);
 	void huntFasterIfSiteIncrediblyHot(int l);
@@ -13775,142 +13559,34 @@ shopsnstuff.cpp
 	bool siteHasAAGun(int l);
 	void deleteAAGun(int l);
 
-	extern Log gamelog;
-	extern short offended_corps;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-
-	extern vector<DeprecatedCreature *> pool;
-
-	extern Log gamelog;
-
-	extern MusicClass music;
-	extern vector<DeprecatedCreature *> pool;
-
-
-	extern Log gamelog;
-
-	extern MusicClass music;
-
-	extern Log gamelog;
-
-	extern vector<DeprecatedCreature *> pool;
-
-	extern Log gamelog;
-	extern short offended_corps;
-
-	extern MusicClass music;
-
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern MusicClass music;
-	extern Log gamelog;
-
-	extern short lawList[LAWNUM];
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern short offended_firemen;
-
-	extern Log gamelog;
-	extern char disbanding;
-	extern short offended_corps;
-	extern short offended_cia;
-	extern char endgamestate;
-	extern short offended_amradio;
-	extern short offended_cablenews;
-	extern short offended_firemen;
-	extern MusicClass music;
-	extern short lawList[LAWNUM];
-	extern short attitude[VIEWNUM];
-	extern vector<DeprecatedCreature *> pool;
-
-	extern Log gamelog;
-	extern char disbanding;
-	extern short offended_firemen;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
-
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern int stat_dead;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
 	void deleteGeneratorLightsOff(int l);
 
-	extern Log gamelog;
-	extern int stat_dead;
-	extern vector<DeprecatedCreature *> pool;
-
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 
 	int printBestLCSMemberForNews(const string repname, const int l);
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 
 	bool getLightsOff(int l);
 	void setLightsOff(int l);
 	bool hasBasicCompoundWalls(int l);
 
-	extern Log gamelog;
-	extern int stat_dead;
-	extern short lawList[LAWNUM];
 
 	void reduceCompoundStores(int loc, int amount);
 	void emptyCompoundStores(int l);
 	void setUnderAttack(int l);
 
-	extern Log gamelog;
-	extern char disbanding;
-	extern int stat_dead;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
 	void baseEveryoneLeftAtHomelessShelter(const int homes);
 	void escalateSite(int l);
 	void dumpLootAtLocation(int homes, vector<Item *>& loot);
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern int police_heat;
-	extern Log gamelog;
-	extern MusicClass music;
 	siegest getWholeSiege(int l);
-	extern Deprecatednewsstoryst *sitestory;
 	void cancelOutBleeding();
 	int print_character_info(const int c, const int party_status);
 	void countHeroes(int &partysize, int &partyalive);
-	extern Log gamelog;
-	extern short mode;
-	extern char foughtthisround;
-	extern MusicClass music;
-	extern short party_status;
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern vector<Deprecatednewsstoryst *> newsstory;
 	int print_character_info(const int c, const int party_status);
 	int getEscapeEngageLocation();
 	void deleteAllSquadsInActiveAreaExceptActive(const int loc);
 	void formANewSquadIfThereAreNone();
-	extern Log gamelog;
-	extern int selectedsiege;
-	extern MusicClass music;
-	extern long cursquadid;
-	extern Log gamelog;
-	extern int selectedsiege;
-	extern MusicClass music;
-	extern long cursquadid;
-	void juiceEntireCreaturePool(const long juice, const long cap);
-	extern Log gamelog;
-	extern MusicClass music;
-	extern int ccs_siege_kills;
-	extern char ccs_kills;
 
-	extern vector<Deprecatednewsstoryst *> newsstory;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
+
+	void juiceEntireCreaturePool(const long juice, const long cap);
 	void printBrokenLawsFooter(const bool kidnapped, const int typenum);
 	void printHarboringFugitive();
 	void printBrokenLawsHeader(const char underAttack, const short escalation);
@@ -14001,6 +13677,34 @@ shopsnstuff.cpp
 	void printEscapeEngageInfoFooter(const bool cameras, const bool traps);
 	void logDefeat();
 	void printConquerText(const bool police);
+
+	extern char ccs_kills;
+	extern char disbanding;
+	extern char endgamestate;
+	extern char foughtthisround;
+	extern class Ledger ledger;
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	extern int ccs_siege_kills;
+	extern int police_heat;
+	extern int selectedsiege;
+	extern int stat_dead;
+	extern Log gamelog;
+	extern long cursquadid;
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short offended_amradio;
+	extern short offended_cablenews;
+	extern short offended_cia;
+	extern short offended_corps;
+	extern short offended_firemen;
+	extern short party_status;
+	extern vector<DeprecatedCreature *> pool;
+	extern vector<Deprecatednewsstoryst *> newsstory;
+	extern vector<Deprecatedsquadst *> squad;
+
 #endif	//SIEGE_CPP
 #ifdef	SITEMAP_CPP
 // sitemap.cpp
@@ -14011,14 +13715,12 @@ shopsnstuff.cpp
 // needed for something contained in sitemap.h
 #include "../sitemode/sitemap.h"
 		//own header
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern int oldMapMode;
+	extern unsigned long seed[RNG_SIZE];
+
 	void emptyEncounter();
 	void delete_and_clear_groundloot();
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	map<int, int>  site_special_list = {
 		map<int, int> ::value_type(SITE_INDUSTRY_NUCLEAR,           SPECIAL_NUCLEAR_ONOFF),
 		map<int, int> ::value_type(SITE_GOVERNMENT_POLICESTATION,   SPECIAL_POLICESTATION_LOCKUP),
@@ -14031,13 +13733,7 @@ shopsnstuff.cpp
 		map<int, int> ::value_type(SITE_MEDIA_AMRADIO,              SPECIAL_RADIO_BROADCASTSTUDIO),
 		map<int, int> ::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
 	};
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern int oldMapMode;
 	//PREP
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern unsigned long seed[RNG_SIZE];
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	const string CONST_sitemapC043 = "Export";
 
 	const string CONST_sitemapB042 = "mapCSV_ApartmentIndustrial2_Tiles.csv";
@@ -14177,27 +13873,32 @@ shopsnstuff.cpp
 	void setSiteAlarmOne();
 	bool isThereNoActivesquad();
 	void resetSiteAlarm();
-//#include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
-#include "../set_color_support.h"
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
 #include "../common/musicClass.h"
+
 	extern bool encounterwarnings;
+
 	extern bool mapshowing;
+
 	extern char ccs_kills;
 	extern char endgamestate;
 	extern char foughtthisround;
 	extern char showcarprefs;
+
 	extern chaseseqst chaseseq;
+
 	extern coordinatest loc_coord;
+
 	extern Deprecatednewsstoryst *sitestory;
 	extern Deprecatedsquadst *activesquad;
+
 	extern int ccs_boss_kills;
 	extern int sitecrime;
-	//extern Log gamelog;
 	extern MusicClass music;
+
 	extern short fieldskillrate;
 	extern short lawList[LAWNUM];
 	extern short mode;
@@ -14209,8 +13910,10 @@ shopsnstuff.cpp
 	extern short sitealienate;
 	extern short sitetype;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+
 	extern UniqueCreatures uniqueCreatures;
 	extern vector<Item *> groundloot;
+
 
 	void emptyEncounter();
 	void delete_and_clear_groundloot();
@@ -14261,7 +13964,7 @@ shopsnstuff.cpp
 
 	int getEncounterCarID(const int e);
 	int getEncounterIsDriver(const int e);
-	extern chaseseqst chaseseq;
+
 	const string tag_WEAPON = "WEAPON";
 	const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
 	const string tag_LOOT = "LOOT";
@@ -14333,17 +14036,8 @@ shopsnstuff.cpp
 	const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
 	const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
 	const string tag_WEAPON_CROWBAR = "WEAPON_CROWBAR";
-	//const string tag_X = "X";
-	extern MusicClass music;
-	extern bool mapshowing;
-	extern bool encounterwarnings;
 
-	extern Deprecatedsquadst *activesquad;
 
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern Deprecatedsquadst *activesquad;
-	extern char showcarprefs;
 	const string rndWeps[] = { tag_WEAPON_SEMIPISTOL_9MM, tag_WEAPON_SEMIPISTOL_45, tag_WEAPON_REVOLVER_38, tag_WEAPON_REVOLVER_44,
 	tag_WEAPON_SMG_MP5, tag_WEAPON_CARBINE_M4, tag_WEAPON_AUTORIFLE_M16 };
 	const string rndArmors[] = { tag_ARMOR_CHEAPSUIT, tag_ARMOR_CLOTHES, tag_ARMOR_TRENCHCOAT, tag_ARMOR_WORKCLOTHES,
@@ -14424,16 +14118,12 @@ shopsnstuff.cpp
 //#include "../log/log.h"
 #include "../common/translateid.h"
 	// for  int getloottype(int id);
-//#include "../cursesAlternative.h"
-//#include "../set_color_support.h"
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
+
 	extern short attitude[VIEWNUM];
-	extern short lawList[LAWNUM];
 	extern CCSexposure ccsexposure;
-	extern short lawList[LAWNUM];
 	extern class Ledger ledger;
-	//extern Log gamelog;
 	extern short lawList[LAWNUM];
 	extern char disbanding;
 
@@ -14787,24 +14477,17 @@ void pressAnyKey();
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
 #include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locations.h"
 #include "../sitemode/sitedisplay.h"
-//#include "../log/log.h"
 #include "../common/commonactionsCreature.h"
-//#include "../cursesAlternative.h"
-//#include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../customMaps.h"
+
 	short getCurrentSite();
 	extern short fieldskillrate;
-	/* checks if your liberal activity is noticed */
 
 	/* checks if your liberal activity is noticed */
 	char disguisesite(long type);
@@ -14812,27 +14495,21 @@ void pressAnyKey();
 	vector<NameAndAlignment> getEncounterNameAndAlignment();
 	bool isThereASiteAlarm();
 	void setSiteAlarmOne();
-	//extern Log gamelog;
 	void conservatise(const int e);
-	//extern Log gamelog;
-	extern short mode;
-
-	extern short sitealienate;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 
 	int get_stealth_difficulty(const int n);
 	int get_disguise_difficulty(const int n);
 	int get_encounter_time(const int n);
 	vector<int> potentialEncounterNoticers();
-	extern short fieldskillrate;
-	//extern Log gamelog;
-	extern short sitetype;
 
 	extern coordinatest loc_coord;
-	extern short sitealarmtimer;
 	extern Deprecatedsquadst *activesquad;
+	extern short fieldskillrate;
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short sitealarmtimer;
+	extern short sitealienate;
+	extern short sitetype;
 	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 	const string tag_ARMOR = "ARMOR";
@@ -15098,20 +14775,12 @@ void pressAnyKey();
 #include "../common/commonactionsCreature.h"
 // for void basesquad(squadst *st,long loc);
 
-/*
-daily.cpp
-*/
-/* active squad visits the arms dealer */
-	void armsdealer(int loc);
-
 #include "../combat/fight.h"
 	// for void delenc(short e,char loot);
 	//void delenc(Creature &tk);
 	//void delenc(const int e, const int i);
 #include "../combat/fightCreature.h"  
 //for void capturecreature(Creature &t);
-//#include "../cursesAlternative.h"
-//#include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 	void moveEverythingAwayFromSite(int cursite);
 #include "../customMaps.h"
@@ -15139,95 +14808,49 @@ daily.cpp
 	void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk);
 	void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk);
 	bool isThereASiteAlarm();
-
-	short getCurrentSite();
-	extern DeprecatedCreature encounter[ENCMAX];
-	//extern string singleDot;
 	void setSiteAlarmOne();
 	void setEncounterZeroExistsFalse();
 	void giveActiveSquadThisLoot(Item* de);
-
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
-	extern Deprecatedsquadst *activesquad;
-	extern short sitealienate;
-
-	extern string slogan_str;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitealarmtimer;
 	void locationIsNowRented(int l, int rent);
 	void basesquad(Deprecatedsquadst *st, long loc);
-	//extern Log gamelog;
-	extern char newscherrybusted;
-	extern Deprecatedsquadst *activesquad;
-	extern class Ledger ledger;
-	//extern Log gamelog;
-	//extern Log gamelog;
 	int getCity(int l);
 	void newDate(DeprecatedCreature &a, DeprecatedCreature &tk);
-	//extern Log gamelog;
-	extern short lawList[LAWNUM];
 	void newRecruit(DeprecatedCreature *cr, int c);
-	//extern Log gamelog;
-	extern char newscherrybusted;
-	extern short lawList[LAWNUM];
 	vector<NameAndAlignment> getEncounterNameAndAlignment();
 	int encounterWisdomRoll(const int e);
-	//extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-	extern short attitude[VIEWNUM];
-	//extern Log gamelog;
-	extern int sitecrime;
-	extern short lawList[LAWNUM];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern short exec[EXECNUM];
-	//extern Log gamelog;
-	extern int sitecrime;
-	extern short lawList[LAWNUM];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern short exec[EXECNUM];
-	extern int sitecrime;
-	//extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern Deprecatedsquadst *activesquad;
 	int getDifficultyBasedOnEncounterWisdom(const int e);
-	//extern Log gamelog;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern coordinatest loc_coord;
-	extern short siteonfire;
-	extern short fieldskillrate;
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
-	extern coordinatest loc_coord;
-	extern short fieldskillrate;
+	bool isPrisoner(const string tkname);
+	short getCurrentSite();
 
-	extern short exec[EXECNUM];
-	extern string slogan_str;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern short attitude[VIEWNUM];
-
-	extern short exec[EXECNUM];
-	extern short siteonfire;
-	extern Deprecatednewsstoryst *sitestory;
-	extern string slogan_str;
-	const int PICKUP_LINE_SIZE = 5;
-	const int DOUBLE_LINE = 2;
-	//extern Log gamelog;
-	extern short lawList[LAWNUM];
-	//extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
 	extern bool multipleCityMode;
 	extern char ccs_kills;
+	extern char newscherrybusted;
+	extern class Ledger ledger;
+	extern coordinatest loc_coord;
+	extern DeprecatedCreature encounter[ENCMAX];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	extern int sitecrime;
+	extern short attitude[VIEWNUM];
+	extern short exec[EXECNUM];
+	extern short fieldskillrate;
+	extern short lawList[LAWNUM];
+	extern short sitealarmtimer;
+	extern short sitealienate;
+	extern short siteonfire;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern string slogan_str;
+
+
 	vector<vector<string> > no_free_speech_flirt;
 	vector<vector<string> > pickupLines;
 	vector<vector<string> > lovingly_talk_to_mutant;
 	vector<vector<string> > normal_talk_to_mutant;
 	vector<vector<string> > lovingly_talk_to_dog;
 	vector<vector<string> > normal_talk_to_dog;
+
+	const int PICKUP_LINE_SIZE = 5;
+	const int DOUBLE_LINE = 2;
 
 	const string tag_ARMOR = "ARMOR";
 	const string tag_value = "value";
@@ -15241,7 +14864,6 @@ daily.cpp
 	const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
 	const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
 	const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
-	bool isPrisoner(const string tkname);
 
 
 	map<int, vector<SiteTypes> > okaySiteList = {
@@ -16040,8 +15662,6 @@ daily.cpp
 
 #include "../title/titlescreen.h"
 	void mode_base();
-	//#include "../common/consolesupport.h"
-// for addstr
 #include "../common/getnames.h"
 // for enter_name
 #include "../title/highscore.h"
@@ -16054,16 +15674,14 @@ daily.cpp
 	void savegame(const string& filename);
 	string title_screen::savefile_name;
 	vector<string> title_screen::s_savefiles;
-//#include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
-//#include "../set_color_support.h"
-	/* end the game and clean up */
-	void end_game(int err = EXIT_SUCCESS);
 #include "../creature/creatureEnums.h"
 #include "../customMaps.h"
+#include "../common/musicClass.h"
+	/* end the game and clean up */
+	void end_game(int err = EXIT_SUCCESS);
 	void automatedDataTests();
 	extern short mode;
-#include "../common/musicClass.h"
 	extern MusicClass music;
 	void printSaveHeader(const bool to_delete);
 	void printSaveList(const int page, const vector<string> s_savefiles);
@@ -16193,7 +15811,6 @@ daily.cpp
 
 #include "../common/stringconversion.h"
 
-	extern int year;
 	extern int year;
 	extern short lawList[LAWNUM];
 

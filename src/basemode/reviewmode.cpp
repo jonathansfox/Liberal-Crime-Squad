@@ -1,5 +1,11 @@
 #define	REVIEWMODE_CPP
 #include "../includes.h"
+
+int getkeyAlt();
+void pressAnyKey();
+bool is_page_up(const int c);
+bool is_page_down(const int c);
+int eraseAlt(void);
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -53,16 +59,48 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-vector<string> methodOfExecution;
-vector<string> getsSick;
-vector<file_and_text_collection> reviewmode_text_file_collection = {
-	/*transferred via algorithm*/
-	customText(&methodOfExecution, mostlyendings + CONST_reviewmode006),
-	customText(&getsSick, mostlyendings + CONST_reviewmode007),
-};
-map<short, string> reviewStrings;
-map<short, string> reviewStringsSecondLine;
-vector<stringAndColor> liberalListAndColor;
+
+void printPromotionScreen(const vector<DeprecatedCreature *> temppool, const vector<int> level, const int page) {
+	printPromotionHeader();
+	printfunds();
+	for (int p = page * PAGELENGTH, iteration = 0; p < len(temppool) && p < page*PAGELENGTH + PAGELENGTH; p++, iteration++)
+	{
+		printPromotionScreenSetup(iteration);
+		bool iAmTheLeader = true;
+		for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
+		{
+			if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
+			{
+				printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->getNameAndAlignment().name);
+				printPromotionScreenSetupB(iteration);
+				for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
+				{
+					if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid)
+					{
+						if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE) {
+							printIsLoveSlave();
+						}
+						else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
+						{
+							printIsBrainWashed();
+						}
+						else {
+							printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
+						}
+						break;
+					}
+				}
+				iAmTheLeader = false;
+			}
+		}
+		if (iAmTheLeader) {
+			printIAmLeader();
+		}
+		printPromotionScreenSetupD(iteration, level[p]);
+		printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->getNameAndAlignment().name);
+	}
+	printPromotionFooter(len(temppool) > PAGELENGTH);
+}
 /* base - review - assemble a squad */
 void assemblesquad(Deprecatedsquadst *cursquad)
 {
@@ -100,72 +138,44 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 	while (true)
 	{
 		int partysize = cursquad->squadsize();
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		moveAlt(0, 0);
-		if (partysize < 6)addstrAlt(CONST_reviewmode008);
-		else addstrAlt(CONST_reviewmode009);
-		if (newsquad)
+		printAssembleSquadHeader(partysize, newsquad, cursquad->name);
+
+		for (int p = page * 19, iteration = 0; p < len(temppool) && p < page * 19 + 19; p++, iteration++)
 		{
-			mvaddstrAlt(0, 71, CONST_reviewmode010);
-		}
-		else
-		{
-			mvaddstrAlt(0, 73 - len(cursquad->name), CONST_reviewmode011);
-			addstrAlt(cursquad->name);
-		}
-		mvaddstrAlt(1, 0, CONST_reviewmode012); // 80 characters
-		int y = 2;
-		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->getNameAndAlignment().name);
+			printCreatureNameForSquad(iteration, temppool[p]->getNameAndAlignment().name);
 			char bright = 0;
 			int skill = 0;
 			for (int sk = 0; sk < SKILLNUM; sk++)
 			{
 				skill += (int)temppool[p]->get_skill(sk);
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk)) bright = 1;
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))
+				{
+					bright = 1;
+				}
 			}
-			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y, 25, skill);
-			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, FALSE);
+			printTotalSkill(iteration, skill, bright);
+			printhealthstat(temppool[p]->getCreatureHealth(), iteration + 2, 33, FALSE);
 			if (temppool[p]->squadid == cursquad->id)
 			{
-				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y, 75, CONST_reviewmode041);
+				printSquadGreen(iteration);
 			}
 			else if (temppool[p]->squadid != -1)
 			{
-				set_color_easy(YELLOW_ON_BLACK);
-				mvaddstrAlt(y, 75, CONST_reviewmode041);
+				printSquadYellow(iteration);
 			}
 			else if (cursquad->squad[0] != NULL)
 			{
 				if (cursquad->squad[0]->location != temppool[p]->location)
 				{
-					set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					mvaddstrAlt(y, 75, CONST_reviewmode015);
+					printSquadAway(iteration);
 				}
 			}
-			if (temppool[p]->getCreatureHealth().align == -1) set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (temppool[p]->getCreatureHealth().align == 0) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			else set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y, 50, temppool[p]->get_type_name());
-			y++;
+			printCreatureTypename(iteration, temppool[p]->getCreatureHealth().align, temppool[p]->get_type_name());
 		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_reviewmode016);
-		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
-		mvaddstrAlt(23, 50, CONST_reviewmode018);
-		moveAlt(24, 0);
-		if (partysize > 0) addstrAlt(CONST_reviewmode019);
-		else addstrAlt(CONST_reviewmode020);
-		if (partysize > 0) set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(24, 40, CONST_reviewmode021);
+		printAddOrRemoveFromSquad(partysize);
+
+
 		int c = getkeyAlt();
 		//PAGE UP
 		if (is_page_up(c) && page > 0) page--;
@@ -181,10 +191,8 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 				{
 					if (cursquad->squad[0]->location != temppool[p]->location)
 					{
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
-						mvaddstrAlt(23, 0, CONST_reviewmode023); // 80 characters
-						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+
+						printSquadMustBeInSameLocation();
 						pressAnyKey();
 						conf = 0;
 					}
@@ -192,10 +200,8 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 				if (!temppool[p]->canwalk() &&
 					!(temppool[p]->flag & CREATUREFLAG_WHEELCHAIR))
 				{
-					set_color_easy(RED_ON_BLACK_BRIGHT);
-					mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
-					mvaddstrAlt(23, 0, CONST_reviewmode026); // 80 characters
-					mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+
+					printSquadMustBeAbleToMove();
 					pressAnyKey();
 					conf = 0;
 				}
@@ -238,10 +244,8 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 		}
 		if (c == 'v')
 		{
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(22, 0, CONST_reviewmode028); // 80 characters
-			mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
-			mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+
+			printPressLetterToViewLiberalDetails();
 			int c2 = getkeyAlt();
 			if (c2 >= 'a'&&c2 <= 's')
 			{
@@ -280,10 +284,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 			if (good) break;
 			else
 			{  // At this point we have a non-empty squad, none of whose members are Liberal
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
-				mvaddstrAlt(23, 0, CONST_reviewmode033); // 80 characters
-				mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+				printSquadCannotBeOnlyConservative();
 				pressAnyKey();
 			}
 		}
@@ -305,10 +306,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 		bool hasmembers = cursquad->squadsize() > 0;
 		if (hasmembers)
 		{
-			mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
-			mvaddstrAlt(23, 0, CONST_reviewmode036); // 80 characters
-			mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
-			enter_name(24, 0, cursquad->name, SQUAD_NAMELEN, CONST_reviewmode038.c_str());
+			printGiveThisSquadAName(cursquad->name);
 			squad.push_back(cursquad);
 		}
 		else delete cursquad;
@@ -316,6 +314,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 
 	nukeAllEmptySquads(squadloc, mode);
 }
+
 vector<DeprecatedCreature *> countLiberals(const short mode) {
 	vector<DeprecatedCreature *> temppool;
 	switch (mode) {
@@ -371,13 +370,11 @@ vector<DeprecatedCreature *> countLiberals(const short mode) {
 	}
 	return temppool;
 }
+string getHealthStat(CreatureHealth g, const char smll);
 void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, const short mode) {
-	int y = 2;
-	for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++)
+	for (int p = page * 19, iteration = 0; p < len(temppool) && p < page * 19 + 19; p++, iteration++)
 	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-		addstrAlt(temppool[p]->getNameAndAlignment().name);
+		printEvaluateLiberalsHeader(iteration, temppool[p]->getNameAndAlignment().name);
 		char bright = 0;
 		int skill = 0;
 		for (int sk = 0; sk < SKILLNUM; sk++)
@@ -386,15 +383,10 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 			if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
 				temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = 1;
 		}
-		set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(y, 25, skill);
-		printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
-		if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		else set_color_easy(WHITE_ON_BLACK);
-		moveAlt(y, 42);
-		if (temppool[p]->location == -1) addstrAlt(CONST_reviewmode040);
-		else addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
-		moveAlt(y, 57);
+		printLiberalHealthStat(bright, iteration, skill, getHealthStat(temppool[p]->getCreatureHealth(), true));
+
+		setColorAndPositionForReviewmode(mode, iteration, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
+
 		switch (mode)
 		{
 		case REVIEWMODE_LIBERALS:
@@ -407,111 +399,51 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 				{
 					if (squad[sq]->activity.type != ACTIVITY_NONE)
 					{
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						addstrAlt(CONST_reviewmode041);
+						printREVIEWMODE_LIBERALS();
 						usepers = 0;
 					}
 				}
 			}
 			if (usepers)
 			{  // Let's add some color here...
-				set_activity_color(temppool[p]->activity_type());
-				addstrAlt(getactivity(temppool[p]->activity));
+				printREVIEWMODE_LIBERALS(temppool[p]->activity_type(), getactivity(temppool[p]->activity));
 			}
 			break;
 		}
 		case REVIEWMODE_HOSTAGES:
 		{
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			addstrAlt(temppool[p]->joindays);
-			addstrAlt(singleSpace);
-			if (temppool[p]->joindays > 1)addstrAlt(CONST_reviewmode057);
-			else addstrAlt(CONST_reviewmode058);
+
+			printREVIEWMODE_HOSTAGES(temppool[p]->joindays);
 			break;
 		}
 		case REVIEWMODE_JUSTICE:
 		{
-			if (temppool[p]->getCreatureJustice().deathpenalty&&temppool[p]->getCreatureJustice().sentence != 0 &&
-				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
-			{
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-				addstrAlt(CONST_reviewmode044);
-				addstrAlt(temppool[p]->getCreatureJustice().sentence);
-				addstrAlt(singleSpace);
-				if (temppool[p]->getCreatureJustice().sentence > 1)addstrAlt(CONST_reviewmode053);
-				else addstrAlt(CONST_reviewmode054);
-			}
-			else if (temppool[p]->getCreatureJustice().sentence <= -1 &&
-				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
-			{
-				set_color_easy(WHITE_ON_BLACK);
-				if (temppool[p]->getCreatureJustice().sentence < -1)
-				{
-					addstrAlt(-(temppool[p]->getCreatureJustice().sentence));
-					addstrAlt(CONST_reviewmode047);
-				}
-				else
-					addstrAlt(CONST_reviewmode048);
-			}
-			else if (temppool[p]->getCreatureJustice().sentence != 0 &&
-				LocationsPool::getInstance().getLocationType(temppool[p]->location) == SITE_GOVERNMENT_PRISON)
-			{
-				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				addstrAlt(temppool[p]->getCreatureJustice().sentence);
-				addstrAlt(singleSpace);
-				if (temppool[p]->getCreatureJustice().sentence > 1)addstrAlt(CONST_reviewmode053);
-				else addstrAlt(CONST_reviewmode054);
-			}
-			else
-			{
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				addstrAlt(CONST_reviewmode051); // 7 characters
-			}
+			
+			printREVIEWMODE_JUSTICE(temppool[p]->getCreatureJustice().deathpenalty, temppool[p]->getCreatureJustice().sentence, LocationsPool::getInstance().getLocationType(temppool[p]->location));
+			
 			break;
 		}
 		case REVIEWMODE_CLINIC:
 		{
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			addstrAlt(CONST_reviewmode052);
-			addstrAlt(temppool[p]->clinic);
-			addstrAlt(singleSpace);
-			if (temppool[p]->clinic > 1)addstrAlt(CONST_reviewmode053);
-			else addstrAlt(CONST_reviewmode054);
+			printREVIEWMODE_CLINIC(temppool[p]->clinic);
 			break;
 		}
 		case REVIEWMODE_SLEEPERS:
 		{
-			if (temppool[p]->getCreatureHealth().align == -1)set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (temppool[p]->getCreatureHealth().align == 0)set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			else set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			addstrAlt(temppool[p]->get_type_name());
+			printREVIEWMODE_SLEEPERS(temppool[p]->getCreatureHealth().align, temppool[p]->get_type_name());
 			break;
 		}
 		case REVIEWMODE_DEAD:
 		{
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			addstrAlt(temppool[p]->deathdays);
-			addstrAlt(singleSpace);
-			if (temppool[p]->deathdays > 1)addstrAlt(CONST_reviewmode057);
-			else addstrAlt(CONST_reviewmode058);
+			printREVIEWMODE_DEAD(temppool[p]->deathdays);
 			break;
 		}
 		case REVIEWMODE_AWAY:
 		{
-			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			if (temppool[p]->hiding != -1)
-			{
-				addstrAlt(temppool[p]->dating + temppool[p]->hiding);
-				addstrAlt(singleSpace);
-				if (temppool[p]->dating + temppool[p]->hiding > 1)
-					addstrAlt(CONST_reviewmode057);
-				else addstrAlt(CONST_reviewmode058);
-			}
-			else addstrAlt(CONST_reviewmode059);
+			printREVIEWMODE_AWAY(temppool[p]->hiding, temppool[p]->dating);
 			break;
 		}
 		}
-		y++;
 	}
 }
 void review_mode(const short mode)
@@ -527,18 +459,18 @@ void review_mode(const short mode)
 	int c;
 	do
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, reviewStrings[mode]);
-		mvaddstrAlt(1, 0, CONST_reviewmode039); // 80 characters
-		mvaddstrAlt(1, 57, reviewStringsSecondLine[mode]);
+		printReviewStringsHeader(mode);
+
 		evaluateLiberals(temppool, page, mode);
 
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_reviewmode060);
-		if (swap) { addstrAlt(CONST_reviewmode061); addstrAlt(swap->getNameAndAlignment().name); }
-		else addstrAlt(CONST_reviewmode062);
-		mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode063);
+		printPressLetterToViewStats();
+		if (swap) {
+			printSwapMe(swap->getNameAndAlignment().name);
+		}
+		else {
+			printReorderLiberals();
+		}
+		printSortPeople();
 
 		c = getkeyAlt();
 
@@ -557,39 +489,24 @@ void review_mode(const short mode)
 				//const int pagenum=2;
 				while (true) // a while(true) loop within a while(true) loop  //TODO FIXME
 				{
-					eraseAlt();
-					moveAlt(0, 0);
-					if (temppool[p]->getCreatureHealth().align != 1)
-					{
-						set_color_easy(RED_ON_BLACK_BRIGHT);
-						addstrAlt(CONST_reviewmode064);
-					}
-					else
-					{
-						set_color_easy(GREEN_ON_BLACK_BRIGHT);
-						addstrAlt(CONST_reviewmode065);
-					}
+					printProfileHeader(temppool[p]->getCreatureHealth().align != 1);
 					if (page == 0) {
 						printliberalstats(*temppool[p]);
 					}
 					else if (page == 1) printliberalskills(temppool[p]->getCreatureJustice(), temppool[p]->getListOfCreatureSkills());
 					else if (page == 2) printliberalcrimes(temppool[p]->getCreatureJustice());
 					// Add removal of squad members member
-					moveAlt(22, 0);
 					if (temppool[p]->is_active_liberal() &&
 						temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
 					{
-						addstrAlt(CONST_reviewmode066);
+
+						printRemoveLiberal();
 						int boss = getpoolcreature(temppool[p]->hireid);
-						if (pool[boss]->location == temppool[p]->location)
-							addstrAlt(CONST_reviewmode067);
+						if (pool[boss]->location == temppool[p]->location) {
+							printKillLiberal();
+						}
 					}
-					moveAlt(23, 0);
-					if (temppool[p]->getCreatureHealth().align != 1) addstrAlt(CONST_reviewmode068);
-					else addstrAlt(CONST_reviewmode069);
-					if (len(temppool) > 1) addstrAlt(CONST_reviewmode070);
-					mvaddstrAlt(24, 0, CONST_reviewmode071);
-					addstrAlt(CONST_reviewmode072);
+					printReviewModeNameFooter(temppool[p]->getCreatureHealth().align != 1, len(temppool) > 1);
 					const int d = getkeyAlt();
 					if (len(temppool) > 1 && ((d == KEY_LEFT) || (d == KEY_RIGHT)))
 					{
@@ -612,9 +529,7 @@ void review_mode(const short mode)
 					}else
 					if (d == 'n')
 					{
-						set_color_easy(WHITE_ON_BLACK);
-						mvaddstrAlt(23, 0, CONST_reviewmode073); // 80 characters
-						mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+						printWhatIsNewName();
 						temppool[p]->new_name();
 					}
 					else if (d == 'g' && temppool[p]->getCreatureHealth().align == 1)
@@ -627,19 +542,12 @@ void review_mode(const short mode)
 						temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
 					{
 						int boss = getpoolcreature(temppool[p]->hireid);
-						set_color_easy(WHITE_ON_BLACK);
-						mvaddstrAlt(22, 0, CONST_reviewmode075); // 80 characters
-						mvaddstrAlt(23, 0, CONST_reviewmode076); // 80 characters
-						mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
+						printReleaseLiberalPrompt();
 					
 						if (getkeyAlt() == 'c')
 						{
 							// Release squad member
-							mvaddstrAlt(22, 0, temppool[p]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_reviewmode078, gamelog); // 80 characters
-							gamelog.newline(); //New line.
-							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
-							mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+							printHasBeenReleased(temppool[p]->getNameAndAlignment().name);
 							pressAnyKey();
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
@@ -647,16 +555,7 @@ void review_mode(const short mode)
 							if (temppool[p]->get_attribute(ATTRIBUTE_HEART, true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM, true) + LCSrandom(5)
 								&& iscriminal(pool[boss]->getCreatureJustice()))
 							{
-								set_color_easy(CYAN_ON_BLACK_BRIGHT);
-								mvaddstrAlt(22, 0, CONST_reviewmode081, gamelog);
-								addstrAlt(temppool[p]->getNameAndAlignment().name, gamelog);
-								addstrAlt(CONST_reviewmode082, gamelog);
-								gamelog.newline(); //New line.
-								mvaddstrAlt(24, 0, CONST_reviewmode083, gamelog);
-								gamelog.newline(); //New line.
-								mvaddstrAlt(25, 0, CONST_reviewmode084, gamelog);
-								addstrAlt(pool[boss]->getNameAndAlignment().name, gamelog);
-								addstrAlt(CONST_reviewmode085, gamelog);
+								printTestifiesAgainstBoss(temppool[p]->getNameAndAlignment().name, pool[boss]->getNameAndAlignment().name);
 								criminalize(*pool[boss], LAWFLAG_RACKETEERING);
 								pool[boss]->another_confession();
 								// TODO: Depending on the crime increase heat or make seige
@@ -665,7 +564,6 @@ void review_mode(const short mode)
 								else
 									LocationsPool::getInstance().addHeat(pool[boss]->base, 20);
 							}
-							gamelog.nextMessage(); //Write out buffer to prepare for next message.
 												   // Remove squad member
 							removesquadinfo(*temppool[p]);
 							cleangonesquads();
@@ -679,57 +577,31 @@ void review_mode(const short mode)
 						// Kill squad member
 						int boss = getpoolcreature(temppool[p]->hireid);
 						if (pool[boss]->location != temppool[p]->location) break;
-						set_color_easy(WHITE_ON_BLACK);
-						mvaddstrAlt(22, 0, CONST_reviewmode086); // 25 characters (25+55=80)
-						addstrAlt(pool[boss]->getNameAndAlignment().name);
-						addstrAlt(CONST_reviewmode087); // 55 characters (25+55=80)
-						mvaddstrAlt(23, 0, CONST_reviewmode088); // 80 characters
-						mvaddstrAlt(24, 0, CONST_reviewmode089); // 80 characters
+						printKillAllyPrompt(pool[boss]->getNameAndAlignment().name);
 						
 						if (getkeyAlt() == 'c')
 						{
 							temppool[p]->die();
 							cleangonesquads();
 							stat_kills++;
-							mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_reviewmode090, gamelog); // 10 characters (10+4+66=80)
-							addstrAlt(temppool[p]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_reviewmode091, gamelog); // 4 characters (10+4+66=80)
-							addstrAlt(pickrandom(methodOfExecution), gamelog);
-							mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
-							mvaddstrAlt(24, 0, eightyBlankSpaces); // 80 spaces
+
+							printPerformsExecution(pool[boss]->getNameAndAlignment().name, temppool[p]->getNameAndAlignment().name);
 							pressAnyKey();
 							if (boss != -1)
 							{
 								if (LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART, false)) > LCSrandom(3))
 								{
-									set_color_easy(GREEN_ON_BLACK_BRIGHT);
-									gamelog.newline(); //New line.
-									mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
-									addstrAlt(CONST_reviewmode094, gamelog); // 80 characters
+									printLosesHeart(pool[boss]->getNameAndAlignment().name);
 									pool[boss]->adjust_attribute(ATTRIBUTE_HEART, -1);
-									// this sentence probably takes more than 80 characters so use 2 lines and break it here
-									gamelog.newline(); //New line.
-									mvaddstrAlt(23, 0, pickrandom(getsSick), gamelog);
-									gamelog.newline(); //New line.
-									mvaddstrAlt(24, 0, pool[boss]->getNameAndAlignment().name, gamelog);
-									addstrAlt(CONST_reviewmode095, gamelog); // 80 characters
 									pressAnyKey();
 								}
 								else if (!LCSrandom(3))
 								{
-									gamelog.newline(); //New line here too.
-									set_color_easy(CYAN_ON_BLACK_BRIGHT);
-									mvaddstrAlt(22, 0, pool[boss]->getNameAndAlignment().name, gamelog);
-									addstrAlt(CONST_reviewmode096, gamelog); // 80 characters
+									printGainsWisdom(pool[boss]->getNameAndAlignment().name);
 									pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM, +1);
-									gamelog.newline(); //New line.
-									mvaddstrAlt(24, 0, pool[boss]->getNameAndAlignment().name, gamelog);
-									addstrAlt(CONST_reviewmode097, gamelog); // 80 characters
 									pressAnyKey();
 								}
 							}
-							gamelog.nextMessage(); //Write buffer out to prepare for next message.
 							break;
 						}
 					}
@@ -748,10 +620,7 @@ void review_mode(const short mode)
 		if (c == 'z')
 		{
 			if (len(temppool) <= 1) continue;
-			mvaddstrAlt(22, 0, eightyBlankSpaces); // 80 spaces
-			mvaddstrAlt(23, 0, eightyBlankSpaces); // 80 spaces
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(22, 8, CONST_reviewmode100);
+			printSwapSquadMember();
 			if (!swap) {
 				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -761,8 +630,7 @@ void review_mode(const short mode)
 				if (p < len(temppool)) swap = temppool[swapPos = p];
 			}
 			else { // non-null swap
-				addstrAlt(swap->getNameAndAlignment().name);
-				addstrAlt(CONST_reviewmode101);
+				printNameWith(swap->getNameAndAlignment().name);
 				int c = getkeyAlt();
 				if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 				if (c<'a' || c>'s') continue; // Not within correct range
@@ -804,46 +672,24 @@ void squadlessbaseassign()
 	if (!len(temploc)) return;
 	while (true)
 	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
+		printBaseAssignmentHeader();
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_reviewmode102);
-		mvaddstrAlt(1, 0, CONST_reviewmode103); // 80 characters
-		mvaddstrAlt(1, 51, CONST_reviewmode104);
-		for (int p = page_lib * 19, y = 2; p < len(temppool) && p < page_lib * 19 + 19; p++, y++)
+		for (int p = page_lib * 19, iteration = 0; p < len(temppool) && p < page_lib * 19 + 19; p++, iteration++)
 		{
 			// Red name if location under siege
-			if (temppool[p]->base == temppool[p]->location &&
-				LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
-				set_color_easy(RED_ON_BLACK_BRIGHT);
-			else if (multipleCityMode && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,temppool[p]->base) != LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,temploc[selectedbase]))
-				set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->getNameAndAlignment().name);
-			mvaddstrAlt(y, 25, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->base, true, true));
-			if (LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base))
-				addstrAlt(CONST_reviewmode105);
+			printLiberalNameInLocation(temppool[p]->base == temppool[p]->location,
+				LocationsPool::getInstance().isThereASiegeHere(temppool[p]->base),
+				multipleCityMode && LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, temppool[p]->base) != LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY, temploc[selectedbase]),
+				iteration,
+				temppool[p]->getNameAndAlignment().name,
+				LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->base, true, true)			
+			);
 		}
-		for (int p = page_loc * 9, y = 2; p < len(temploc) && p < page_loc * 9 + 9; p++, y++)
+		for (int p = page_loc * 9, iteration = 0; p < len(temploc) && p < page_loc * 9 + 9; p++, iteration++)
 		{
-			if (p == selectedbase)set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddcharAlt(y, 51, y + '1' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(LocationsPool::getInstance().getLocationNameWithGetnameMethod(temploc[p], true, true));
+			printBaseName(p == selectedbase, iteration, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temploc[p], true, true));
 		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(21, 0, CONST_reviewmode106);
-		mvaddstrAlt(22, 0, CONST_reviewmode107);
-		if (len(temppool) > 19)
-		{
-			mvaddstrAlt(23, 0, addpagestr());
-		}
-		if (len(temploc) > 9)
-		{
-			mvaddstrAlt(24, 0, CONST_reviewmode108);
-		}
-		mvaddstrAlt(23, 35, CONST_reviewmode109);
+		printBaseAssignmentFooter(len(temppool) > 19, len(temploc) > 9);
 		int c = getkeyAlt();
 		//PAGE UP (people)
 		if (is_page_up(c) && page_lib > 0) page_lib--;
@@ -906,67 +752,14 @@ void sortbyhire(vector<DeprecatedCreature *> &temppool, vector<int> &level)
 	for (int p = 0; p < len(newpool); p++)
 		temppool.push_back(newpool[p]);
 }
-void printPromotionScreen(const vector<DeprecatedCreature *> temppool, const vector<int> level, const int page) {
 
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK);
-	printfunds();
-	mvaddstrAlt(0, 0, CONST_reviewmode110);
-	mvaddstrAlt(1, 0, CONST_reviewmode111); // 80 characters
-	mvaddstrAlt(1, 54, CONST_reviewmode112);
-	int y = 2;
-	for (int p = page * PAGELENGTH; p < len(temppool) && p < page*PAGELENGTH + PAGELENGTH; p++)
-	{
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-		moveAlt(y, 27);
-		bool iAmTheLeader = true;
-		for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool() && iAmTheLeader; p2++)
-		{
-			if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
-			{
-				printname(pool[p2]->hiding, pool[p2]->location, pool[p2]->flag, pool[p2]->getNameAndAlignment().name);
-				moveAlt(y, 54);
-				for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
-				{
-					if (pool[p3]->getCreatureHealth().alive == 1 && pool[p3]->id == pool[p2]->hireid)
-					{
-						if (temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
-							addstrAlt(CONST_reviewmode113);
-						else if (!subordinatesleft(*pool[p3]) && !(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
-							addstrAlt(CONST_reviewmode114);
-						else
-							printname(pool[p3]->hiding, pool[p3]->location, pool[p3]->flag, pool[p3]->getNameAndAlignment().name);
-						break;
-					}
-				}
-				iAmTheLeader = false;
-			}
-		}
-		if (iAmTheLeader) addstrAlt(CONST_reviewmode115);
-		moveAlt(y++, 4 + level[p]);
-		printname(temppool[p]->hiding, temppool[p]->location, temppool[p]->flag, temppool[p]->getNameAndAlignment().name);
-	}
-	moveAlt(21, 0);
-	for (stringAndColor s : liberalListAndColor) {
-		set_color_easy(s.type);
-		addstrAlt(s.str);
-	}
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(22, 0, CONST_reviewmode116);
-	mvaddstrAlt(23, 0, CONST_reviewmode117);
-	if (len(temppool) > PAGELENGTH)
-	{
-		mvaddstrAlt(24, 0, addpagestr());
-	}
-}
 bool printAttemptNewPromotion(const vector<DeprecatedCreature *> temppool, const int p) {
 
 	for (int p2 = 0; p2 < CreaturePool::getInstance().lenpool(); p2++)
 	{
 		if (pool[p2]->getCreatureHealth().alive == 1 && pool[p2]->id == temppool[p]->hireid)
 		{
-			addstrAlt(pool[p2]->getNameAndAlignment().name);
+			printJustThis(pool[p2]->getNameAndAlignment().name);
 			for (int p3 = 0; p3 < CreaturePool::getInstance().lenpool(); p3++)
 			{
 				// Can't promote if new boss can't accept more subordinates
@@ -1030,10 +823,7 @@ void promoteliberals()
 bool iterateReview(int &page) {
 
 	music.play(MUSIC_REVIEWMODE);
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(0, 0, CONST_reviewmode118);
-	mvaddstrAlt(1, 0, CONST_reviewmode119); // 80 characters
+	printReviewHeader();
 	int n[8] = { 0,0,0,0,0,0,0,0 };
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
@@ -1047,24 +837,23 @@ bool iterateReview(int &page) {
 	}
 	n[7] += consolidateSiegeLoot();
 
-	int y = 2;
-
-	for (int p = page * 19; p < len(squad) + REVIEWMODENUM + 1 && p < page * 19 + 19; p++, y++)
+	
+	for (int p = page * 19, iteration = 0; p < len(squad) + REVIEWMODENUM + 1 && p < page * 19 + 19; p++, iteration++)
 	{
 		if (p < len(squad))
 		{
-			set_color_easy(activesquad == squad[p] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddcharAlt(y, 0, y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(squad[p]->name);
-			if (squad[p]->squad[0] != NULL && squad[p]->squad[0]->location != -1)
-			{
-				setColorBasedOnSiege(squad[p]->squad[0]->location, y, activesquad == squad[p]);
-				set_color_easy(activesquad == squad[p] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			}
+			printSquadName(squad[p]->name, activesquad == squad[p], iteration);
+			
 			if (squad[p]->squad[0] != NULL)
 			{
+				if (squad[p]->squad[0]->location != -1) {
+					printSquadLocationAndSiegeStatus(squad[p]->squad[0]->location, iteration, activesquad == squad[p]);
+				}
+
 				std::string str = getactivity(squad[p]->activity);
-				set_activity_color(squad[p]->activity.type);
+
+				int activityTypeID = squad[p]->activity.type;
+
 				if (squad[p]->activity.type == ACTIVITY_NONE)
 				{
 					bool haveact = false, multipleact = false;
@@ -1072,76 +861,26 @@ bool iterateReview(int &page) {
 					{
 						if (squad[p]->squad[p2] == NULL) continue;
 						const std::string str2 = getactivity(squad[p]->squad[p2]->activity);
-						set_activity_color(squad[p]->squad[p2]->activity_type());
+						activityTypeID = squad[p]->squad[p2]->activity_type();
 						if (haveact&&str != str2) multipleact = true;
 						str = str2, haveact = true;
 					}
 					if (multipleact)
 					{
+						activityTypeID = ACTIVITYNUM;
 						str = CONST_reviewmode120;
-						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					}
 				}
-				mvaddstrAlt(y, 51, str);
+				printReviewActivity(activityTypeID, iteration, str);
 			}
 		}
-
-		bool invalid = false;
-		ColorSetup const_color;
-		string active_string;
-		switch (p - len(squad)) {
-		case 0:
-			const_color = GREEN_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode121;
-			break;
-
-		case 1:
-			const_color = RED_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode122;
-			break;
-		case 2:
-			const_color = WHITE_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode123;
-			break;
-		case 3:
-			const_color = YELLOW_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode124;
-			break;
-		case 4:
-			const_color = MAGENTA_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode125;
-			break;
-		case 5:
-			const_color = BLACK_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode126;
-			break;
-		case 6:
-			const_color = BLUE_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode127;
-			break;
-		case 7:
-			const_color = CYAN_ON_BLACK_BRIGHT;
-			active_string = CONST_reviewmode128;
-			break;
-		default:
-			invalid = true;
-			break;
-		}
-		if (!invalid) {
-			set_color_easy(const_color);
-			mvaddstrAlt(y, 0, active_string + tostring(n[p - len(squad)]) + ')');
+		else {
+			printReviewModeOptions(p - len(squad), iteration, n[p - len(squad)]);
 		}
 
 
 	}
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(21, 0, CONST_reviewmode129);
-	if (music.isEnabled())
-		mvaddstrAlt(21, 38, CONST_reviewmode130);
-	else mvaddstrAlt(21, 38, CONST_reviewmode131);
-	mvaddstrAlt(22, 0, CONST_reviewmode132);
-	mvaddstrAlt(23, 0, addpagestr() + CONST_reviewmode133);
-	mvaddstrAlt(24, 0, CONST_reviewmode134);
+	printReviewModeFooter(music.isEnabled());
 	int c = getkeyAlt();
 	if (is_page_up(c) && page > 0) page--;
 	if (is_page_down(c) && (page + 1) * 19 < len(squad) + REVIEWMODENUM) page++;

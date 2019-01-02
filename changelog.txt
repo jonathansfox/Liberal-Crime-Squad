@@ -936,7 +936,40 @@ Needing a full recompile after any change to includes.h is annoying, but that's 
 moved to cursesAlternative.cpp 537 total
 moved to cursesAlternative.cpp 668 total
 
-Next target: 291 in siege.cpp
- 947 total
-Next target: 74 in shop.cpp
+//Next target: 291 in siege.cpp
+// 947 total
+//Next target: 74 in shop.cpp
+
+
 Fixed a bug where having more than 19 save files would display incorrectly.
+
+
+new regular expresion used for better accuracy (removes eraseAlt(), that's basic enough to allow.  Also removed moveAlt(), but that's being phased out regardless)
+[rh]Alt\(
+Matching lines: 3992    Matching files: 42    Total files searched: 159
+cursesAlternative.cpp
+Matching lines: 930
+
+moveAlt()
+Matching lines: 159    Matching files: 19    Total files searched: 159
+ugh...
+
+refreshAlt()
+Matching lines: 18    Matching files: 10    Total files searched: 159
+Not significant enough to remove.
+
+Fixed crash to desktop during car chases.
+
+Plan to implement easier car chase testing.  A "start car chase" debug option.
+Sieges, too.
+
+4.12.33
+
+//Next target: 171 in reviewmode.cpp
+1108 total
+//Next target: 15 in recruit.cpp
+10 files down, 34 files to go
+Next target: 160 in politics.cpp
+
+Removed much of the redundant code from includes.h
+Current target: MISCACTIONS_CPP
