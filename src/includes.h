@@ -1078,6 +1078,13 @@ const string pressAnyKeyString = "Press any other key when ready to begin...";
 const string city = "CITY: ";
 const string tag_heat = "heat";
 
+enum BillStatus
+{
+	BILL_SIGNED = -2,
+	BILL_OVERRIDE_VETO = -1,
+	BILL_PASSED_CONGRESS = 0,
+	BILL_FAILED = 1
+};
 #ifdef	ACTIVATE_CPP
 //activate.cpp
 
@@ -3372,19 +3379,18 @@ const string CONST_creaturePool070 = " has been transferred to ";
 	extern Log gamelog;
 	extern char disbanding;
 	extern vector<Deprecatedsquadst *> squad;
+	extern MusicClass music;
+	extern short lawList[LAWNUM];
+
 	//#include "../monthly/justice.h"
 	void trial(DeprecatedCreature &g);
 	char prison(DeprecatedCreature &g);
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern Log gamelog;
 	//#include "../monthly/sleeper_update.h"
 	void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM]);
 	void savehighscore(char endtype);
 	void viewhighscores(int musicoverride = MUSIC_OFF);
 	void end_game(int err = EXIT_SUCCESS);
 	short getCurrentSite();
-	extern MusicClass music;
 #endif	//CREATUREPOOL_CPP
 #ifdef	CREATURETYPE_CPP
 // creaturetype.cpp
@@ -3603,9 +3609,6 @@ const string CONST_creaturePool070 = " has been transferred to ";
 
 	};
 
-	//string undefined;
-	//	extern string NONE;
-	extern Log xmllog;
 	vector<CreatureTypes> armAsCivilian = {
 		// Curiously, CREATURE_CRACKHEAD has a chance to be armed with a shank, regardless of whether they are granted a civilian weapon
 		CREATURE_CRACKHEAD, CREATURE_MUTANT, CREATURE_BUM, CREATURE_WORKER_FACTORY_UNION, CREATURE_WORKER_FACTORY_NONUNION, CREATURE_SCIENTIST_EMINENT, CREATURE_SCIENTIST_LABTECH
@@ -3717,14 +3720,9 @@ const string CONST_creaturePool070 = " has been transferred to ";
 
 #define AGE_TEENAGER    14+LCSrandom(4)  /* HS dropout, teenager, some fast food workers */
 #define AGE_YOUNGADULT  18+LCSrandom(18) /* young lads and ladies */
-	extern short lawList[LAWNUM];
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
 #include "locations/locationsPool.h"
 #include "sitemode/stealth.h"
 	short getCurrentSite();
-	extern short mode;
-	extern short sitetype;
 	struct fullName {
 		string first;
 		string middle;
@@ -3732,64 +3730,6 @@ const string CONST_creaturePool070 = " has been transferred to ";
 
 	};
 	fullName generate_long_name(char gender = GENDER_NEUTRAL);
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern short lawList[LAWNUM];
-	extern vector<WeaponType *> weapontype;
-	bool isThereASiteAlarm();
-
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
-	extern short lawList[LAWNUM];
-	extern short mode;
-
-	extern char endgamestate;
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
-	extern short mode;
-	extern short sitetype;
-	extern char ccs_kills;
-
-	extern char endgamestate;
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern short lawList[LAWNUM];
-	extern short mode;
-	extern short sitetype;
-	extern char ccs_kills;
-
-	extern char endgamestate;
-	extern short lawList[LAWNUM];
-	extern short lawList[LAWNUM];
-	extern vector<WeaponType *> weapontype;
-	extern short mode;
-	extern short sitetype;
-	extern char ccs_kills;
-
-	extern char endgamestate;
-	extern short lawList[LAWNUM];
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
-	extern short sitealienate;
 #include "customMaps.h"
 	vector<string> words_meaning_hick;
 	vector<string> genetic_monster;
@@ -3798,9 +3738,17 @@ const string CONST_creaturePool070 = " has been transferred to ";
 		customText(&words_meaning_hick, creature + CONST_creaturetypes039),
 		customText(&genetic_monster, creature + CONST_creaturetypes040),
 	};
-
-	extern vector<WeaponType *> weapontype;
+	bool isThereASiteAlarm();
+	extern char ccs_kills;
+	extern char endgamestate;
 	extern Log xmllog;
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short sitealienate;
+	extern short sitetype;
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+
 #endif	//CREATURETYPE_CPP
 #ifdef	CURSESALTERNATIVE_CPP
 // cursesAlternative.cpp
@@ -3847,8 +3795,6 @@ const string CONST_creaturePool070 = " has been transferred to ";
 	const string CONST_daily010 = "travel location";
 	const string CONST_daily009 = " didn't have a car to get to ";
 	const string CONST_daily008 = " couldn't use the ";
-//	const string CONST_daily007 = " was too hot to risk.";
-//	const string CONST_daily006 = " decided ";
 	const string CONST_daily005 = " instead of ";
 	const string CONST_daily004 = " acted with ";
 	const string tag_value = "value";
@@ -3859,29 +3805,11 @@ const string CONST_creaturePool070 = " has been transferred to ";
 	const string CONST_shopsnstuff006 = "P - Repaint car, replace plates and tags ($500)";
 	const string CONST_shopsnstuff005 = "pawnshop.xml";
 	const string CONST_shopsnstuff004 = "armsdealer.xml";
-//	const string CONST_daily024 = " regains contact with the LCS.";
-//	const string CONST_daily023 = "CREATURE_POLITICALACTIVIST";
-//	const string CONST_daily022 = "CREATURE_TEENAGER";
-//	const string CONST_daily021 = ". The Liberal will be missed.";
-//	const string CONST_daily020 = " has passed away at the age of ";
-//	const string CONST_daily019 = " surfs the Net for recent opinion polls.";
-//	const string CONST_daily005 = " instead of ";
-//	const string CONST_daily004 = " acted with ";
-//	const string singleDot = ".";
-//	const string CONST_daily008 = " couldn't use the ";
-//	const string singleDot = ".";
-//	const string CONST_daily018 = "Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?";
-//	const string CONST_daily017 = " has arrived at ";
-//	const string CONST_daily016 = " looks around ";
-//	const string CONST_daily013 = " arrives in ";
 	const string CONST_daily012A = " spent $";
 	const string CONST_daily012B = " on tickets to go to ";
 	const string CONST_daily012C = ".";
 	const string CONST_daily011A = " couldn't afford tickets to go to %";
 	const string CONST_daily011B = ".";
-//	const string CONST_daily010 = "travel location";
-//	const string CONST_daily009 = " didn't have a car to get to ";
-//	const string singleDot = ".";
 
 #include "../creature/creature.h"
 ////
@@ -3940,109 +3868,53 @@ const string CONST_creaturePool070 = " has been transferred to ";
 #include "../common/creaturePool.h"
 
 
-
-
-/*
-shopsnstuff.cpp
-*/
-
-
 #include "../sitemode/shop.h"
 #include "../common/musicClass.h"
-//extern string closeParenthesis;
-//extern string undefined;
-//extern string check_status_of_squad_liberal;
 
-/* active squad visits the hospital */
-/* active squad visits the hospital */
 
-/* common - moves all squad members and their cars to a new location */
-	void locatesquad(Deprecatedsquadst *st, long loc);
-	/* common - assigns a new base to all members of a squad */
-	void basesquad(Deprecatedsquadst *st, long loc);
-
-	void locateActiveSquad(const int loc);
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern short party_status;
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern char artdir[MAX_PATH_SIZE];
-	extern short party_status;
-	int lenVehicleType();
-	string vehicleTypelongname(const int p);
-	Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year);
-	int getVehicleTypePrice(const int carchoice);
-	int getVehicleTypeSleeperPrice(const int carchoice);
-	vector<string> getVehicleTypeColor(const int carchoice);
+	bool carselect(DeprecatedCreature &cr, short &cartype);
+	bool stealcar(DeprecatedCreature &cr, char &clearformess);
 	bool vehicletypeavailableatshop(const int i);
 	DeprecatedCreature* findSleeperCarSalesman(int loc);
-	//	extern string spaceParanthesisDollar;
-	extern Deprecatedsquadst *activesquad;
-	extern MusicClass music;
-	extern int year;
-	extern short party_status;
+	extern char artdir[MAX_PATH_SIZE];
+	extern char disbanding;
+	extern char showcarprefs;
 	extern class Ledger ledger;
-	extern vector<Vehicle *> vehicle;
-
-	void determineMedicalSupportAtEachLocation(bool clearformess);
+	extern Deprecatedsquadst *activesquad;
 	extern int day;
 	extern int month;
+	extern int year;
 	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatednewsstoryst *> newsstory;
-	extern char disbanding;
-	extern vector<Deprecatedrecruitst *> recruit;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedrecruitst *> recruit;
-	extern char disbanding;
-	extern int day;
-	extern class Ledger ledger;
-	/* hostage tending */
-	void tendhostage(DeprecatedCreature *cr, char &clearformess);
-	/* armor repair */
-	void repairarmor(DeprecatedCreature &cr, char &clearformess);
-	/* armor manufacture */
-	void makearmor(DeprecatedCreature &cr, char &clearformess);
-	/* search for polls */
-	void survey(DeprecatedCreature *cr);
-	/* steal a car */
-	bool stealcar(DeprecatedCreature &cr, char &clearformess);
-	bool carselect(DeprecatedCreature &cr, short &cartype);
-	/* get a wheelchair */
-	void getwheelchair(DeprecatedCreature &cr, char &clearformess);
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	string getVehicleFullname(int i);
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	int driveskill(DeprecatedCreature &cr, int v);
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
+	extern MusicClass music;
 	extern short fieldskillrate;
-	extern vector<Deprecatedsquadst *> squad;
-	extern char showcarprefs;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	extern vector<Deprecatednewsstoryst *> newsstory;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern vector<Deprecatedsquadst *> squad;
-	extern class Ledger ledger;
+	extern short party_status;
 	extern vector<DeprecatedCreature *> pool;
-	void doDates(char &clearformess);
+	extern vector<Deprecatednewsstoryst *> newsstory;
+	extern vector<Deprecatedrecruitst *> recruit;
+	extern vector<Deprecatedsquadst *> squad;
+	extern vector<Vehicle *> vehicle;
+	int driveskill(DeprecatedCreature &cr, int v);
+	int getVehicleTypePrice(const int carchoice);
+	int getVehicleTypeSleeperPrice(const int carchoice);
+	int lenVehicleType();
+	string getVehicleFullname(int i);
+	string vehicleTypelongname(const int p);
+	vector<string> getVehicleTypeColor(const int carchoice);
+	Vehicle* getVehicleFromTypeYear(const int carchoice, const int colorchoice, const int year);
+	void basesquad(Deprecatedsquadst *st, long loc);
 	void clearCarStates();
-	extern char showcarprefs;
-	extern char disbanding;
-	extern class Ledger ledger;
+	void determineMedicalSupportAtEachLocation(bool clearformess);
+	void doDates(char &clearformess);
+	void getwheelchair(DeprecatedCreature &cr, char &clearformess);
+	void locateActiveSquad(const int loc);
+	void locatesquad(Deprecatedsquadst *st, long loc);
+	void makearmor(DeprecatedCreature &cr, char &clearformess);
+	void repairarmor(DeprecatedCreature &cr, char &clearformess);
+	void survey(DeprecatedCreature *cr);
+	void tendhostage(DeprecatedCreature *cr, char &clearformess);
+
+
+
 #endif	//DAILY_CPP
 #ifdef	DATE_CPP
 // date.cpp
@@ -4156,6 +4028,7 @@ shopsnstuff.cpp
 	const string tag_skill = "skill";
 	const string datey = "date\\";
 
+
 #include "../creature/creature.h"
 	////
 
@@ -4185,6 +4058,15 @@ shopsnstuff.cpp
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
+
+	extern class Ledger ledger;
+	extern int stat_kidnappings;
+	extern int stat_recruits;
+	extern Log gamelog;
+	extern MusicClass music;
+	extern short lawList[LAWNUM];
+	extern vector<DeprecatedCreature *> pool;
+
 	vector<string> date_fail;
 	vector<file_and_text_collection> date_text_file_collection = {
 		/*date.cpp*/
@@ -4197,20 +4079,6 @@ shopsnstuff.cpp
 		DATERESULT_JOINED,
 		DATERESULT_ARRESTED
 	};
-	extern MusicClass music;
-	extern int stat_recruits;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
-	extern MusicClass music;
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern MusicClass music;
-	extern int stat_kidnappings;
-	extern Log gamelog;
-	extern class Ledger ledger;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
 	int getpoolcreature(int id);
 	char completedate(Deprecateddatest &d, int p);
 	void removesquadinfo(DeprecatedCreature &cr);
@@ -4331,35 +4199,31 @@ shopsnstuff.cpp
 		string last;
 
 	};
-	fullName generate_long_name(char gender);
-	extern MusicClass music;
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
-	extern short attitude[VIEWNUM];
-	extern int amendnum;
-	fullName generate_long_name(char gender = GENDER_NEUTRAL);
-	extern MusicClass music;
-	extern int amendnum;
-	extern short court[COURTNUM];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern MusicClass music;
-	extern int amendnum;
 	extern bool termlimits;
-	extern MusicClass music;
-	extern int amendnum;
 	extern char cantseereason;
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern int amendnum;
+	extern MusicClass music;
+	extern short attitude[VIEWNUM];
+	extern short court[COURTNUM];
 	extern short exec[EXECNUM];
+	extern short house[HOUSENUM];
 	extern short lawList[LAWNUM];
+	extern short senate[SENATENUM];
+
+	fullName generate_long_name(char gender = GENDER_NEUTRAL);
 #endif	//ENDGAME_CPP
 #ifdef	EXTERNALLYSTOREDDATA_CPP
 // externallyStoredData.cpp
 
+	const string talky = "talk\\";
+	const string mostlyendings = "mostlyendings\\";
+
 	const string study_string1 = "attend classes in the University District";
 	const string study_string2 = "at a cost of $60 a day.";
 
-	const string talky = "talk\\";
-	const string mostlyendings = "mostlyendings\\";
+
 	const string CONST_externallyStoredDataC1087 = "Sell Liberal Art";
 	const string CONST_externallyStoredDataC1086 = "Sell Liberal T-Shirts";
 	const string CONST_externallyStoredDataC1085 = "uncontrolled immigration.";
@@ -4449,179 +4313,6 @@ shopsnstuff.cpp
 	const string CONST_externallyStoredDataB1002 = "enhance the liberal effect.";
 	const string CONST_externallyStoredDataB1001 = "that is Liberal.";
 
-	const string CONST_externallyStoredData999 = "SITE_OUTDOOR_BUNKER";
-	const string CONST_externallyStoredData998 = "SITE_OUTDOOR_PUBLICPARK";
-	const string CONST_externallyStoredData997 = "SITE_BUSINESS_BARANDGRILL";
-	const string CONST_externallyStoredData996 = "SITE_BUSINESS_INTERNETCAFE";
-	const string CONST_externallyStoredData995 = "SITE_BUSINESS_VEGANCOOP";
-	const string CONST_externallyStoredData994 = "SITE_BUSINESS_LATTESTAND";
-	const string CONST_externallyStoredData993 = "SITE_BUSINESS_CIGARBAR";
-	const string CONST_externallyStoredData992 = "SITE_BUSINESS_JUICEBAR";
-	const string CONST_externallyStoredData991 = "SITE_BUSINESS_CRACKHOUSE";
-	const string CONST_externallyStoredData990 = "SITE_MEDIA_CABLENEWS";
-	const string CONST_externallyStoredData989 = "SITE_MEDIA_AMRADIO";
-	const string CONST_externallyStoredData988 = "SITE_CORPORATE_HOUSE";
-	const string CONST_externallyStoredData987 = "SITE_CORPORATE_HEADQUARTERS";
-	const string CONST_externallyStoredData986 = "SITE_INDUSTRY_WAREHOUSE";
-	const string CONST_externallyStoredData985 = "SITE_INDUSTRY_NUCLEAR";
-	const string CONST_externallyStoredData984 = "SITE_INDUSTRY_POLLUTER";
-	const string CONST_externallyStoredData983 = "SITE_INDUSTRY_SWEATSHOP";
-	const string CONST_externallyStoredData982 = "SITE_GOVERNMENT_FIRESTATION";
-	const string CONST_externallyStoredData981 = "SITE_GOVERNMENT_INTELLIGENCEHQ";
-	const string CONST_externallyStoredData980 = "SITE_GOVERNMENT_PRISON";
-	const string CONST_externallyStoredData979 = "SITE_GOVERNMENT_COURTHOUSE";
-	const string CONST_externallyStoredData978 = "SITE_GOVERNMENT_POLICESTATION";
-	const string CONST_externallyStoredData977 = "SITE_LABORATORY_GENETIC";
-	const string CONST_externallyStoredData976 = "SITE_LABORATORY_COSMETICS";
-	const string CONST_externallyStoredData975 = "SITE_RESIDENTIAL_BOMBSHELTER";
-	const string CONST_externallyStoredData974 = "SITE_RESIDENTIAL_APARTMENT_UPSCALE";
-	const string CONST_externallyStoredData973 = "SITE_RESIDENTIAL_APARTMENT";
-	const string CONST_externallyStoredData972 = "SITE_RESIDENTIAL_TENEMENT";
-	const string CONST_externallyStoredData971 = "SITE_RESIDENTIAL_SHELTER";
-	const string CONST_externallyStoredData970 = "CREATURE_POLITICIAN";
-	const string CONST_externallyStoredData969 = "CREATURE_SECRET_SERVICE";
-	const string CONST_externallyStoredData968 = "CREATURE_BANK_MANAGER";
-	const string CONST_externallyStoredData967 = "CREATURE_BANK_TELLER";
-	const string CONST_externallyStoredData966 = "CREATURE_MILITARYOFFICER";
-	const string CONST_externallyStoredData965 = "CREATURE_SEAL";
-	const string CONST_externallyStoredData964 = "CREATURE_MILITARYPOLICE";
-	const string CONST_externallyStoredData963 = "CREATURE_LOCKSMITH";
-	const string CONST_externallyStoredData962 = "CREATURE_PSYCHOLOGIST";
-	const string CONST_externallyStoredData961 = "CREATURE_CCS_SNIPER";
-	const string CONST_externallyStoredData960 = "CREATURE_CCS_MOLOTOV";
-	const string CONST_externallyStoredData959 = "CREATURE_POLITICALACTIVIST";
-	const string CONST_externallyStoredData958 = "CREATURE_CCS_ARCHCONSERVATIVE";
-	const string CONST_externallyStoredData957 = "CREATURE_CCS_VIGILANTE";
-	const string CONST_externallyStoredData956 = "CREATURE_NURSE";
-	const string CONST_externallyStoredData955 = "CREATURE_DOCTOR";
-	const string CONST_externallyStoredData954 = "CREATURE_MUTANT";
-	const string CONST_externallyStoredData953 = "CREATURE_NUN";
-	const string CONST_externallyStoredData952 = "CREATURE_TAXIDRIVER";
-	const string CONST_externallyStoredData951 = "CREATURE_TRUCKER";
-	const string CONST_externallyStoredData950 = "CREATURE_BIKER";
-	const string CONST_externallyStoredData949 = "CREATURE_ATHLETE";
-	const string CONST_externallyStoredData948 = "CREATURE_MARTIALARTIST";
-	const string CONST_externallyStoredData947 = "CREATURE_YOGAINSTRUCTOR";
-	const string CONST_externallyStoredData946 = "CREATURE_ACTOR";
-	const string CONST_externallyStoredData945 = "CREATURE_THIEF";
-	const string CONST_externallyStoredData944 = "CREATURE_CLERK";
-	const string CONST_externallyStoredData943 = "CREATURE_FASHIONDESIGNER";
-	const string CONST_externallyStoredData942 = "CREATURE_HAIRSTYLIST";
-	const string CONST_externallyStoredData941 = "CREATURE_CAMERAMAN";
-	const string CONST_externallyStoredData940 = "CREATURE_PHOTOGRAPHER";
-	const string CONST_externallyStoredData939 = "CREATURE_DANCER";
-	const string CONST_externallyStoredData938 = "CREATURE_JOURNALIST";
-	const string CONST_externallyStoredData937 = "CREATURE_AUTHOR";
-	const string CONST_externallyStoredData936 = "CREATURE_SCULPTOR";
-	const string CONST_externallyStoredData935 = "CREATURE_PAINTER";
-	const string CONST_externallyStoredData934 = "CREATURE_RETIREE";
-	const string CONST_externallyStoredData933 = "CREATURE_PROGRAMMER";
-	const string CONST_externallyStoredData932 = "CREATURE_SOCIALITE";
-	const string CONST_externallyStoredData931 = "CREATURE_CRITIC_MUSIC";
-	const string CONST_externallyStoredData930 = "CREATURE_CRITIC_ART";
-	const string CONST_externallyStoredData929 = "CREATURE_HIPPIE";
-	const string CONST_externallyStoredData928 = "CREATURE_PRISONGUARD";
-	const string CONST_externallyStoredData927 = "CREATURE_HARDENED_VETERAN";
-	const string CONST_externallyStoredData926 = "CREATURE_VETERAN";
-	const string CONST_externallyStoredData925 = "CREATURE_SOLDIER";
-	const string CONST_externallyStoredData924 = "CREATURE_HICK";
-	const string CONST_externallyStoredData923 = "CREATURE_MERC";
-	const string CONST_externallyStoredData922 = "CREATURE_TANK";
-	const string CONST_externallyStoredData921 = "CREATURE_AMATEURMAGICIAN";
-	const string CONST_externallyStoredData920 = "CREATURE_CONSTRUCTIONWORKER";
-	const string CONST_externallyStoredData919 = "CREATURE_CHEF";
-	const string CONST_externallyStoredData918 = "CREATURE_PLUMBER";
-	const string CONST_externallyStoredData917 = "CREATURE_GARBAGEMAN";
-	const string CONST_externallyStoredData916 = "CREATURE_MAILMAN";
-	const string CONST_externallyStoredData915 = "CREATURE_PROSTITUTE";
-	const string CONST_externallyStoredData914 = "CREATURE_FOOTBALLCOACH";
-	const string CONST_externallyStoredData913 = "CREATURE_OFFICEWORKER";
-	const string CONST_externallyStoredData912 = "CREATURE_CARSALESMAN";
-	const string CONST_externallyStoredData911 = "CREATURE_TELEMARKETER";
-	const string CONST_externallyStoredData910 = "CREATURE_BARTENDER";
-	const string CONST_externallyStoredData909 = "CREATURE_BARISTA";
-	const string CONST_externallyStoredData908 = "CREATURE_BAKER";
-	const string CONST_externallyStoredData907 = "CREATURE_FASTFOODWORKER";
-	const string CONST_externallyStoredData906 = "CREATURE_ENGINEER";
-	const string CONST_externallyStoredData905 = "CREATURE_PRIEST";
-	const string CONST_externallyStoredData904 = "CREATURE_CRACKHEAD";
-	const string CONST_externallyStoredData903 = "CREATURE_GANGMEMBER";
-	const string CONST_externallyStoredData902 = "CREATURE_BUM";
-	const string CONST_externallyStoredData901 = "CREATURE_HSDROPOUT";
-	const string CONST_externallyStoredData900 = "CREATURE_TEACHER";
-	const string CONST_externallyStoredData899 = "CREATURE_MATHEMATICIAN";
-	const string CONST_externallyStoredData898 = "CREATURE_MUSICIAN";
-	const string CONST_externallyStoredData897 = "CREATURE_COLLEGESTUDENT";
-	const string CONST_externallyStoredData896 = "CREATURE_SEWERWORKER";
-	const string CONST_externallyStoredData895 = "CREATURE_LAWYER";
-	const string CONST_externallyStoredData894 = "CREATURE_JUROR";
-	const string CONST_externallyStoredData893 = "CREATURE_PRISONER";
-	const string CONST_externallyStoredData892 = "CREATURE_GUARDDOG";
-	const string CONST_externallyStoredData891 = "CREATURE_GENETIC";
-	const string CONST_externallyStoredData890 = "CREATURE_NEWSANCHOR";
-	const string CONST_externallyStoredData889 = "CREATURE_RADIOPERSONALITY";
-	const string CONST_externallyStoredData888 = "CREATURE_AGENT";
-	const string CONST_externallyStoredData887 = "CREATURE_JUDGE_CONSERVATIVE";
-	const string CONST_externallyStoredData886 = "CREATURE_JUDGE_LIBERAL";
-	const string CONST_externallyStoredData885 = "CREATURE_GANGUNIT";
-	const string CONST_externallyStoredData884 = "CREATURE_EDUCATOR";
-	const string CONST_externallyStoredData883 = "CREATURE_FIREFIGHTER";
-	const string CONST_externallyStoredData882 = "CREATURE_DEATHSQUAD";
-	const string CONST_externallyStoredData881 = "CREATURE_SWAT";
-	const string CONST_externallyStoredData880 = "CREATURE_COP";
-	const string CONST_externallyStoredData879 = "CREATURE_TEENAGER";
-	const string CONST_externallyStoredData878 = "CREATURE_LANDLORD";
-	const string CONST_externallyStoredData877 = "CREATURE_WORKER_FACTORY_UNION";
-	const string CONST_externallyStoredData876 = "CREATURE_WORKER_SECRETARY";
-	const string CONST_externallyStoredData875 = "CREATURE_WORKER_FACTORY_CHILD";
-	const string CONST_externallyStoredData874 = "CREATURE_WORKER_FACTORY_NONUNION";
-	const string CONST_externallyStoredData873 = "CREATURE_WORKER_SWEATSHOP";
-	const string CONST_externallyStoredData872 = "CREATURE_WORKER_JANITOR";
-	const string CONST_externallyStoredData871 = "CREATURE_WORKER_SERVANT";
-	const string CONST_externallyStoredData870 = "CREATURE_CORPORATE_CEO";
-	const string CONST_externallyStoredData869 = "CREATURE_CORPORATE_MANAGER";
-	const string CONST_externallyStoredData868 = "CREATURE_SCIENTIST_EMINENT";
-	const string CONST_externallyStoredData867 = "CREATURE_SCIENTIST_LABTECH";
-	const string CONST_externallyStoredData866 = "CREATURE_SECURITYGUARD";
-	const string CONST_externallyStoredData865 = "CREATURE_BOUNCER";
-	const string CONST_externallyStoredData864 = "ATTRIBUTE_CHARISMA";
-	const string CONST_externallyStoredData863 = "ATTRIBUTE_HEALTH";
-	const string CONST_externallyStoredData862 = "ATTRIBUTE_STRENGTH";
-	const string CONST_externallyStoredData861 = "ATTRIBUTE_AGILITY";
-	const string CONST_externallyStoredData860 = "ATTRIBUTE_INTELLIGENCE";
-	const string CONST_externallyStoredData859 = "ATTRIBUTE_WISDOM";
-	const string CONST_externallyStoredData858 = "ATTRIBUTE_HEART";
-	const string CONST_externallyStoredData857 = "SKILL_WRITING";
-	const string CONST_externallyStoredData856 = "SKILL_THROWING";
-	const string CONST_externallyStoredData855 = "SKILL_TEACHING";
-	const string CONST_externallyStoredData854 = "SKILL_TAILORING";
-	const string CONST_externallyStoredData853 = "SKILL_SWORD";
-	const string CONST_externallyStoredData852 = "SKILL_STREETSENSE";
-	const string CONST_externallyStoredData851 = "SKILL_STEALTH";
-	const string CONST_externallyStoredData850 = "SKILL_SMG";
-	const string CONST_externallyStoredData849 = "SKILL_SHOTGUN";
-	const string CONST_externallyStoredData848 = "SKILL_SEDUCTION";
-	const string CONST_externallyStoredData847 = "SKILL_SECURITY";
-	const string CONST_externallyStoredData846 = "SKILL_SCIENCE";
-	const string CONST_externallyStoredData845 = "SKILL_RIFLE";
-	const string CONST_externallyStoredData844 = "SKILL_RELIGION";
-	const string CONST_externallyStoredData843 = "SKILL_PSYCHOLOGY";
-	const string CONST_externallyStoredData842 = "SKILL_PISTOL";
-	const string CONST_externallyStoredData841 = "SKILL_PERSUASION";
-	const string CONST_externallyStoredData840 = "SKILL_MUSIC";
-	const string CONST_externallyStoredData839 = "SKILL_HANDTOHAND";
-	const string CONST_externallyStoredData838 = "SKILL_LAW";
-	const string CONST_externallyStoredData837 = "SKILL_KNIFE";
-	const string CONST_externallyStoredData836 = "SKILL_HEAVYWEAPONS";
-	const string CONST_externallyStoredData835 = "SKILL_FIRSTAID";
-	const string CONST_externallyStoredData834 = "SKILL_DRIVING";
-	const string CONST_externallyStoredData833 = "SKILL_DODGE";
-	const string CONST_externallyStoredData832 = "SKILL_DISGUISE";
-	const string CONST_externallyStoredData831 = "SKILL_COMPUTERS";
-	const string CONST_externallyStoredData830 = "SKILL_CLUB";
-	const string CONST_externallyStoredData829 = "SKILL_BUSINESS";
-	const string CONST_externallyStoredData828 = "SKILL_AXE";
-	const string CONST_externallyStoredData827 = "SKILL_ART";
 	const string CONST_externallyStoredData720 = "Hiring undocumented workers";
 	const string CONST_externallyStoredData718 = "Hiring illegal aliens";
 	const string CONST_externallyStoredData715 = "Flag burning";
@@ -4779,80 +4470,7 @@ shopsnstuff.cpp
 	const string CONST_externallyStoredData527 = "Liberals in CLINICS";
 	const string CONST_externallyStoredData526 = "Conservative Automatons in Captivity";
 	const string CONST_externallyStoredData525 = "Active Liberals";
-	const string CONST_externallyStoredData524 = "TRINKET";
-	const string CONST_externallyStoredData523 = "SILVERWARE";
-	const string CONST_externallyStoredData522 = "WATCH";
-	const string CONST_externallyStoredData521 = "MICROPHONE";
-	const string CONST_externallyStoredData520 = "CELLPHONE";
-	const string CONST_externallyStoredData519 = "FINEJEWELERY";
-	const string CONST_externallyStoredData518 = "POLICERECORDS";
-	const string CONST_externallyStoredData517 = "AMRADIOFILES";
-	const string CONST_externallyStoredData516 = "CABLENEWSFILES";
-	const string CONST_externallyStoredData515 = "PRISONFILES";
-	const string CONST_externallyStoredData514 = "RESEARCHFILES";
-	const string CONST_externallyStoredData513 = "JUDGEFILES";
-	const string CONST_externallyStoredData512 = "CORPFILES";
-	const string CONST_externallyStoredData511 = "INTHQDISK";
-	const string CONST_externallyStoredData510 = "CEOPHOTOS";
-	const string CONST_externallyStoredData509 = "SECRETDOCUMENTS";
-	const string CONST_externallyStoredData508 = "CHEAPJEWELERY";
-	const string CONST_externallyStoredData507 = "LAPTOP";
-	const string CONST_externallyStoredData506 = "LABEQUIPMENT";
-	const string CONST_externallyStoredData505 = "PDA";
-	const string CONST_externallyStoredData504 = "CHEMICAL";
-	const string CONST_externallyStoredData503 = "FINECLOTH";
-	const string CONST_externallyStoredData502 = "CLUB_BOUNCER_SECONDVISIT";
-	const string CONST_externallyStoredData501 = "CLUB_BOUNCER";
-	const string CONST_externallyStoredData500 = "STAIRS_DOWN";
-	const string CONST_externallyStoredData499 = "STAIRS_UP";
-	const string CONST_externallyStoredData498 = "PARK_BENCH";
-	const string CONST_externallyStoredData497 = "CAFE_COMPUTER";
-	const string CONST_externallyStoredData496 = "RESTAURANT_TABLE";
-	const string CONST_externallyStoredData495 = "APARTMENT_SIGN";
-	const string CONST_externallyStoredData494 = "APARTMENT_LANDLORD";
-	const string CONST_externallyStoredData493 = "NEWS_BROADCASTSTUDIO";
-	const string CONST_externallyStoredData492 = "RADIO_BROADCASTSTUDIO";
-	const string CONST_externallyStoredData491 = "CORPORATE_FILES";
-	const string CONST_externallyStoredData490 = "HOUSE_CEO";
-	const string CONST_externallyStoredData489 = "ARMYBASE_ARMORY";
-	const string CONST_externallyStoredData488 = "HOUSE_PHOTOS";
-	const string CONST_externallyStoredData487 = "NUCLEAR_ONOFF";
-	const string CONST_externallyStoredData486 = "POLLUTER_EQUIPMENT";
-	const string CONST_externallyStoredData485 = "SWEATSHOP_EQUIPMENT";
-	const string CONST_externallyStoredData484 = "INTEL_SUPERCOMPUTER";
-	const string CONST_externallyStoredData483 = "PRISON_CONTROL_HIGH";
-	const string CONST_externallyStoredData482 = "PRISON_CONTROL_MEDIUM";
-	const string CONST_externallyStoredData481 = "PRISON_CONTROL_LOW";
-	const string CONST_externallyStoredData480 = "PRISON_CONTROL";
-	const string CONST_externallyStoredData479 = "COURTHOUSE_JURYROOM";
-	const string CONST_externallyStoredData478 = "COURTHOUSE_LOCKUP";
-	const string CONST_externallyStoredData477 = "POLICESTATION_LOCKUP";
-	const string CONST_externallyStoredData476 = "LAB_GENETIC_CAGEDANIMALS";
-	const string CONST_externallyStoredData475 = "LAB_COSMETICS_CAGEDANIMALS";
-	const string CONST_externallyStoredData446 = "OUTDOOR_PUBLICPARK";
-	const string CONST_externallyStoredData445 = "GENERIC_ONEROOM";
-	const string CONST_externallyStoredData444 = "OUTDOOR_LATTESTAND";
-	const string CONST_externallyStoredData443 = "BUSINESS_RESTRICTEDCAFE";
-	const string CONST_externallyStoredData442 = "BUSINESS_INTERNETCAFE";
-	const string CONST_externallyStoredData441 = "BUSINESS_CAFE";
-	const string CONST_externallyStoredData440 = "MEDIA_CABLENEWS";
-	const string CONST_externallyStoredData439 = "MEDIA_AMRADIO";
-	const string CONST_externallyStoredData438 = "CORPORATE_HOUSE";
-	const string CONST_externallyStoredData437 = "CORPORATE_HEADQUARTERS";
-	const string CONST_externallyStoredData436 = "INDUSTRY_NUCLEAR";
-	const string CONST_externallyStoredData435 = "INDUSTRY_POLLUTER";
-	const string CONST_externallyStoredData434 = "INDUSTRY_SWEATSHOP";
-	const string CONST_externallyStoredData433 = "GOVERNMENT_ARMYBASE";
-	const string CONST_externallyStoredData432 = "GOVERNMENT_WHITE_HOUSE";
-	const string CONST_externallyStoredData431 = "GOVERNMENT_INTELLIGENCEHQ";
-	const string CONST_externallyStoredData430 = "GOVERNMENT_PRISON";
-	const string CONST_externallyStoredData429 = "GOVERNMENT_COURTHOUSE";
-	const string CONST_externallyStoredData428 = "GOVERNMENT_POLICESTATION";
-	const string CONST_externallyStoredData427 = "LABORATORY_GENETICS";
-	const string CONST_externallyStoredData426 = "LABORATORY_COSMETICS";
-	const string CONST_externallyStoredData425 = "GENERIC_LOBBY";
-	const string CONST_externallyStoredData420 = "GENERIC_UNSECURE";
-	const string CONST_externallyStoredData417 = "RESIDENTIAL_APARTMENT";
+
 	const string CONST_externallyStoredData414 = "WhiteHouse";
 	const string CONST_externallyStoredData413 = "NuclearPlant";
 	const string CONST_externallyStoredData412 = "Bank";
@@ -5049,6 +4667,161 @@ shopsnstuff.cpp
 	const string CONST_externallyStoredData209 = "spray political graffiti. Art and Heart will";
 	const string CONST_externallyStoredData208 = "create public disturbances. ";
 	const string CONST_externallyStoredData207 = "help the elderly, local library, anything";
+	const string CONST_externallyStoredData1173 = "stalinized";
+	const string CONST_externallyStoredData1172 = "reaganified";
+	const string CONST_externallyStoredData1171 = "defeat";
+	const string CONST_externallyStoredData1170 = "victory";
+	const string CONST_externallyStoredData1169 = "abort";
+	const string CONST_externallyStoredData1168 = "anchor";
+	const string CONST_externallyStoredData1167 = "glamshow";
+	const string CONST_externallyStoredData1166 = "newscast";
+	const string CONST_externallyStoredData1165 = "lacops";
+	const string CONST_externallyStoredData1164 = "newspaper";
+	const string CONST_externallyStoredData1163 = "recruiting";
+	const string CONST_externallyStoredData1162 = "trial";
+	const string CONST_externallyStoredData1161 = "footchase";
+	const string CONST_externallyStoredData1160 = "carchase";
+	const string CONST_externallyStoredData1159 = "conquer";
+	const string CONST_externallyStoredData1158 = "defense";
+	const string CONST_externallyStoredData1157 = "heavycombat";
+	const string CONST_externallyStoredData1156 = "Pastorale";
+	const string CONST_externallyStoredData1155 = "alarmed";
+	const string CONST_externallyStoredData1154 = "sitemode";
+	const string CONST_externallyStoredData1153 = "shopping";
+	const string CONST_externallyStoredData1152 = "elections";
+	const string CONST_externallyStoredData1151 = "cartheft";
+	const string CONST_externallyStoredData1150 = "finances";
+	const string CONST_externallyStoredData1149 = "disbanded";
+	const string CONST_externallyStoredData1148 = "liberalagenda";
+	const string CONST_externallyStoredData1147 = "reviewmode";
+	const string CONST_externallyStoredData1146 = "stopevil";
+	const string CONST_externallyStoredData1145 = "sleepers";
+	const string CONST_externallyStoredData1144 = "activate";
+	const string CONST_externallyStoredData1143 = "siege";
+	const string CONST_externallyStoredData1142 = "Mars";
+	const string CONST_externallyStoredData1141 = "basemode";
+	const string CONST_externallyStoredData1140 = "newgame";
+	const string CONST_externallyStoredData1139 = "titlemode";
+	const string CONST_externallyStoredData1138 = "Stalinist";
+	const string CONST_externallyStoredData1137 = "Elite Liberal";
+	const string CONST_externallyStoredData1136 = "Liberal";
+	const string CONST_externallyStoredData1135 = "Moderate";
+	const string CONST_externallyStoredData1134 = "Conservative";
+	const string CONST_externallyStoredData1133 = "Arch-Conservative";
+	const string CONST_externallyStoredData1132 = "CHA";
+	const string CONST_externallyStoredData1131 = "HLTH";
+	const string CONST_externallyStoredData1130 = "HRT";
+	const string CONST_externallyStoredData1129 = "INT";
+	const string CONST_externallyStoredData1128 = "WIS";
+	const string CONST_externallyStoredData1127 = "AGI";
+	const string CONST_externallyStoredData1126 = "STR";
+	const string CONST_externallyStoredData1125 = "Dodge";
+	const string CONST_externallyStoredData1124 = "First Aid";
+	const string CONST_externallyStoredData1123 = "Seduction";
+	const string CONST_externallyStoredData1122 = "Street Sense";
+	const string CONST_externallyStoredData1121 = "Teaching";
+	const string CONST_externallyStoredData1120 = "Stealth";
+	const string CONST_externallyStoredData1119 = "Business";
+	const string CONST_externallyStoredData1118 = "Science";
+	const string CONST_externallyStoredData1117 = "Religion";
+	const string CONST_externallyStoredData1116 = "Art";
+	const string CONST_externallyStoredData1115 = "Music";
+	const string CONST_externallyStoredData1114 = "Writing";
+	const string CONST_externallyStoredData1113 = "Driving";
+	const string CONST_externallyStoredData1112 = "Tailoring";
+	const string CONST_externallyStoredData1111 = "Law";
+	const string CONST_externallyStoredData1110 = "Computers";
+	const string CONST_externallyStoredData1109 = "Disguise";
+	const string CONST_externallyStoredData1108 = "Security";
+	const string CONST_externallyStoredData1107 = "Psychology";
+	const string CONST_externallyStoredData1106 = "Persuasion";
+	const string CONST_externallyStoredData1105 = "SMG";
+	const string CONST_externallyStoredData1104 = "Shotgun";
+	const string CONST_externallyStoredData1103 = "Heavy Weapons";
+	const string CONST_externallyStoredData1102 = "Rifle";
+	const string CONST_externallyStoredData1101 = "Pistol";
+	const string CONST_externallyStoredData1100 = "Axe";
+	const string CONST_externallyStoredData1099 = "Club";
+	const string CONST_externallyStoredData1098 = "Throwing";
+	const string CONST_externallyStoredData1097 = "Sword";
+	const string CONST_externallyStoredData1096 = "Knife";
+	const string CONST_externallyStoredData1095 = "Martial Arts";
+	const string CONST_externallyStoredData1094 = "F - Slam the brakes!";
+	const string CONST_externallyStoredData1093 = "D - Swerve around him!";
+	const string CONST_externallyStoredData1092 = "A kid runs into the street for his ball!";
+	const string CONST_externallyStoredData1091 = "F - Slow down and turn!";
+	const string CONST_externallyStoredData1090 = "D - Run the light anyway!";
+	const string CONST_externallyStoredData1089 = "There's a red light with cross traffic ahead!";
+	const string CONST_externallyStoredData1088 = "F - Slow down!";
+	const string CONST_externallyStoredData1087 = "D - Speed around it!";
+	const string CONST_externallyStoredData1086 = "A truck pulls out in your path!";
+	const string CONST_externallyStoredData1085 = "F - Play it safe and plow through it!";
+	const string CONST_externallyStoredData1084 = "D - Swerve to avoid hitting anyone!";
+	const string CONST_externallyStoredData1083 = "You are speeding toward a flimsy fruit stand!";
+	const string CONST_externallyStoredData1082 = "Washington, DC";
+	const string CONST_externallyStoredData1081 = "Miami, FL";
+	const string CONST_externallyStoredData1080 = "Atlanta, GA";
+	const string CONST_externallyStoredData1079 = "Detroit, MI";
+	const string CONST_externallyStoredData1078 = "Chicago, IL";
+	const string CONST_externallyStoredData1077 = "Los Angeles, CA";
+	const string CONST_externallyStoredData1076 = "New York, NY";
+	const string CONST_externallyStoredData1075 = "Seattle, WA";
+	const string CONST_externallyStoredData1074 = "were murdered trying to escape from a police siege yesterday, according ";
+	const string CONST_externallyStoredData1073 = "were slain trying to escape from a police siege yesterday, according ";
+	const string CONST_externallyStoredData1072 = "were murdered during a police raid yesterday, according ";
+	const string CONST_externallyStoredData1071 = "were slain during a police raid yesterday, according ";
+	const string CONST_externallyStoredData1070 = "violently broke a police siege yesterday, according ";
+	const string CONST_externallyStoredData1069 = "fought off a police raid yesterday, according ";
+	const string CONST_externallyStoredData1068 = "escaped from police officers during a raid yesterday, according ";
+	const string CONST_externallyStoredData1067 = "escaped from a police siege yesterday, according ";
+	const string CONST_externallyStoredData1066 = "The Stalinist Party claims victory!";
+	const string CONST_externallyStoredData1065 = "The Progressive Elite Social Liberal Green Party claims victory!";
+	const string CONST_externallyStoredData1064 = "The Liberal Party claims victory!";
+	const string CONST_externallyStoredData1063 = "The next two years promise to be more of the same.";
+	const string CONST_externallyStoredData1062 = "The Conservative Party claims victory!";
+	const string CONST_externallyStoredData1061 = "The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!";
+	const string CONST_externallyStoredData1060 = "thought political violence was justified";
+	const string CONST_externallyStoredData1059 = "have a negative opinion of cable news programs";
+	const string CONST_externallyStoredData1058 = "do not like AM radio";
+	const string CONST_externallyStoredData1057 = "wanted to end prisoner abuse and torture";
+	const string CONST_externallyStoredData1056 = "held the Conservative Crime Squad in contempt";
+	const string CONST_externallyStoredData1055 = "of these held the Liberal Crime Squad in high regard";
+	const string CONST_externallyStoredData1054 = "respected the power of the Liberal Crime Squad";
+	const string CONST_externallyStoredData1053 = "opposed increasing military spending";
+	const string CONST_externallyStoredData1052 = "are concerned about gun violence";
+	const string CONST_externallyStoredData1051 = "felt more work was needed for racial equality";
+	const string CONST_externallyStoredData1050 = "favored doing more for gender equality";
+	const string CONST_externallyStoredData1049 = "believed that CEO salaries are too great";
+	const string CONST_externallyStoredData1048 = "were disgusted by corporate malfeasance";
+	const string CONST_externallyStoredData1047 = "thought industry should lower pollution";
+	const string CONST_externallyStoredData1046 = "would boycott companies that used sweatshops";
+	const string CONST_externallyStoredData1045 = "were for the appointment of Liberal justices";
+	const string CONST_externallyStoredData1044 = "abhorred genetically altered food products";
+	const string CONST_externallyStoredData1043 = "believed in unfettered free speech";
+	const string CONST_externallyStoredData1042 = "thought the intelligence community invades privacy";
+	const string CONST_externallyStoredData1041 = "wanted stronger measures to prevent torture";
+	const string CONST_externallyStoredData1040 = "were critical of the police";
+	const string CONST_externallyStoredData1039 = "deplored animal research";
+	const string CONST_externallyStoredData1038 = "were terrified of nuclear power";
+	const string CONST_externallyStoredData1037 = "were against cutting taxes";
+	const string CONST_externallyStoredData1036 = "opposed the death penalty";
+	const string CONST_externallyStoredData1035 = "were in favor of equal rights for homosexuals";
+	const string CONST_externallyStoredData1034 = "left leg";
+	const string CONST_externallyStoredData1033 = "right leg";
+	const string CONST_externallyStoredData1032 = "left arm";
+	const string CONST_externallyStoredData1031 = "right arm";
+	const string CONST_externallyStoredData1030 = "left rear leg";
+	const string CONST_externallyStoredData1029 = "right rear leg";
+	const string CONST_externallyStoredData1028 = "left front leg";
+	const string CONST_externallyStoredData1027 = "right front leg";
+	const string CONST_externallyStoredData1026 = "left tread";
+	const string CONST_externallyStoredData1025 = "right tread";
+	const string CONST_externallyStoredData1024 = "left side";
+	const string CONST_externallyStoredData1023 = "right side";
+	const string CONST_externallyStoredData1022 = "front";
+	const string CONST_externallyStoredData1021 = "turret";
+
+	// These are filenames, which the variable names should reflect
 	const string CONST_externallyStoredData206 = "helpTopics.txt";
 	const string CONST_externallyStoredData205 = "state_biases.txt";
 	const string CONST_externallyStoredData204 = "endgameLawStrings.txt";
@@ -5078,6 +4851,255 @@ shopsnstuff.cpp
 	const string CONST_externallyStoredData180 = "rejectedBecauseUnderage.txt";
 	const string CONST_externallyStoredData179 = "rejectedBecauseNude.txt";
 	const string CONST_externallyStoredData178 = "rejectedByCCS.txt";
+
+	// Most of these are tags, and should only be defined a single time, rather than both here and elsewhere
+	const string CONST_externallyStoredData999 = "SITE_OUTDOOR_BUNKER";
+	const string CONST_externallyStoredData998 = "SITE_OUTDOOR_PUBLICPARK";
+	const string CONST_externallyStoredData997 = "SITE_BUSINESS_BARANDGRILL";
+	const string CONST_externallyStoredData996 = "SITE_BUSINESS_INTERNETCAFE";
+	const string CONST_externallyStoredData995 = "SITE_BUSINESS_VEGANCOOP";
+	const string CONST_externallyStoredData994 = "SITE_BUSINESS_LATTESTAND";
+	const string CONST_externallyStoredData993 = "SITE_BUSINESS_CIGARBAR";
+	const string CONST_externallyStoredData992 = "SITE_BUSINESS_JUICEBAR";
+	const string CONST_externallyStoredData991 = "SITE_BUSINESS_CRACKHOUSE";
+	const string CONST_externallyStoredData990 = "SITE_MEDIA_CABLENEWS";
+	const string CONST_externallyStoredData989 = "SITE_MEDIA_AMRADIO";
+	const string CONST_externallyStoredData988 = "SITE_CORPORATE_HOUSE";
+	const string CONST_externallyStoredData987 = "SITE_CORPORATE_HEADQUARTERS";
+	const string CONST_externallyStoredData986 = "SITE_INDUSTRY_WAREHOUSE";
+	const string CONST_externallyStoredData985 = "SITE_INDUSTRY_NUCLEAR";
+	const string CONST_externallyStoredData984 = "SITE_INDUSTRY_POLLUTER";
+	const string CONST_externallyStoredData983 = "SITE_INDUSTRY_SWEATSHOP";
+	const string CONST_externallyStoredData982 = "SITE_GOVERNMENT_FIRESTATION";
+	const string CONST_externallyStoredData981 = "SITE_GOVERNMENT_INTELLIGENCEHQ";
+	const string CONST_externallyStoredData980 = "SITE_GOVERNMENT_PRISON";
+	const string CONST_externallyStoredData979 = "SITE_GOVERNMENT_COURTHOUSE";
+	const string CONST_externallyStoredData978 = "SITE_GOVERNMENT_POLICESTATION";
+	const string CONST_externallyStoredData977 = "SITE_LABORATORY_GENETIC";
+	const string CONST_externallyStoredData976 = "SITE_LABORATORY_COSMETICS";
+	const string CONST_externallyStoredData975 = "SITE_RESIDENTIAL_BOMBSHELTER";
+	const string CONST_externallyStoredData974 = "SITE_RESIDENTIAL_APARTMENT_UPSCALE";
+	const string CONST_externallyStoredData973 = "SITE_RESIDENTIAL_APARTMENT";
+	const string CONST_externallyStoredData972 = "SITE_RESIDENTIAL_TENEMENT";
+	const string CONST_externallyStoredData971 = "SITE_RESIDENTIAL_SHELTER";
+	const string CONST_externallyStoredData970 = "CREATURE_POLITICIAN";
+	const string CONST_externallyStoredData969 = "CREATURE_SECRET_SERVICE";
+	const string CONST_externallyStoredData968 = "CREATURE_BANK_MANAGER";
+	const string CONST_externallyStoredData967 = "CREATURE_BANK_TELLER";
+	const string CONST_externallyStoredData966 = "CREATURE_MILITARYOFFICER";
+	const string CONST_externallyStoredData965 = "CREATURE_SEAL";
+	const string CONST_externallyStoredData964 = "CREATURE_MILITARYPOLICE";
+	const string CONST_externallyStoredData963 = "CREATURE_LOCKSMITH";
+	const string CONST_externallyStoredData962 = "CREATURE_PSYCHOLOGIST";
+	const string CONST_externallyStoredData961 = "CREATURE_CCS_SNIPER";
+	const string CONST_externallyStoredData960 = "CREATURE_CCS_MOLOTOV";
+	const string CONST_externallyStoredData959 = "CREATURE_POLITICALACTIVIST";
+	const string CONST_externallyStoredData958 = "CREATURE_CCS_ARCHCONSERVATIVE";
+	const string CONST_externallyStoredData957 = "CREATURE_CCS_VIGILANTE";
+	const string CONST_externallyStoredData956 = "CREATURE_NURSE";
+	const string CONST_externallyStoredData955 = "CREATURE_DOCTOR";
+	const string CONST_externallyStoredData954 = "CREATURE_MUTANT";
+	const string CONST_externallyStoredData953 = "CREATURE_NUN";
+	const string CONST_externallyStoredData952 = "CREATURE_TAXIDRIVER";
+	const string CONST_externallyStoredData951 = "CREATURE_TRUCKER";
+	const string CONST_externallyStoredData950 = "CREATURE_BIKER";
+	const string CONST_externallyStoredData949 = "CREATURE_ATHLETE";
+	const string CONST_externallyStoredData948 = "CREATURE_MARTIALARTIST";
+	const string CONST_externallyStoredData947 = "CREATURE_YOGAINSTRUCTOR";
+	const string CONST_externallyStoredData946 = "CREATURE_ACTOR";
+	const string CONST_externallyStoredData945 = "CREATURE_THIEF";
+	const string CONST_externallyStoredData944 = "CREATURE_CLERK";
+	const string CONST_externallyStoredData943 = "CREATURE_FASHIONDESIGNER";
+	const string CONST_externallyStoredData942 = "CREATURE_HAIRSTYLIST";
+	const string CONST_externallyStoredData941 = "CREATURE_CAMERAMAN";
+	const string CONST_externallyStoredData940 = "CREATURE_PHOTOGRAPHER";
+	const string CONST_externallyStoredData939 = "CREATURE_DANCER";
+	const string CONST_externallyStoredData938 = "CREATURE_JOURNALIST";
+	const string CONST_externallyStoredData937 = "CREATURE_AUTHOR";
+	const string CONST_externallyStoredData936 = "CREATURE_SCULPTOR";
+	const string CONST_externallyStoredData935 = "CREATURE_PAINTER";
+	const string CONST_externallyStoredData934 = "CREATURE_RETIREE";
+	const string CONST_externallyStoredData933 = "CREATURE_PROGRAMMER";
+	const string CONST_externallyStoredData932 = "CREATURE_SOCIALITE";
+	const string CONST_externallyStoredData931 = "CREATURE_CRITIC_MUSIC";
+	const string CONST_externallyStoredData930 = "CREATURE_CRITIC_ART";
+	const string CONST_externallyStoredData929 = "CREATURE_HIPPIE";
+	const string CONST_externallyStoredData928 = "CREATURE_PRISONGUARD";
+	const string CONST_externallyStoredData927 = "CREATURE_HARDENED_VETERAN";
+	const string CONST_externallyStoredData926 = "CREATURE_VETERAN";
+	const string CONST_externallyStoredData925 = "CREATURE_SOLDIER";
+	const string CONST_externallyStoredData924 = "CREATURE_HICK";
+	const string CONST_externallyStoredData923 = "CREATURE_MERC";
+	const string CONST_externallyStoredData922 = "CREATURE_TANK";
+	const string CONST_externallyStoredData921 = "CREATURE_AMATEURMAGICIAN";
+	const string CONST_externallyStoredData920 = "CREATURE_CONSTRUCTIONWORKER";
+	const string CONST_externallyStoredData919 = "CREATURE_CHEF";
+	const string CONST_externallyStoredData918 = "CREATURE_PLUMBER";
+	const string CONST_externallyStoredData917 = "CREATURE_GARBAGEMAN";
+	const string CONST_externallyStoredData916 = "CREATURE_MAILMAN";
+	const string CONST_externallyStoredData915 = "CREATURE_PROSTITUTE";
+	const string CONST_externallyStoredData914 = "CREATURE_FOOTBALLCOACH";
+	const string CONST_externallyStoredData913 = "CREATURE_OFFICEWORKER";
+	const string CONST_externallyStoredData912 = "CREATURE_CARSALESMAN";
+	const string CONST_externallyStoredData911 = "CREATURE_TELEMARKETER";
+	const string CONST_externallyStoredData910 = "CREATURE_BARTENDER";
+	const string CONST_externallyStoredData909 = "CREATURE_BARISTA";
+	const string CONST_externallyStoredData908 = "CREATURE_BAKER";
+	const string CONST_externallyStoredData907 = "CREATURE_FASTFOODWORKER";
+	const string CONST_externallyStoredData906 = "CREATURE_ENGINEER";
+	const string CONST_externallyStoredData905 = "CREATURE_PRIEST";
+	const string CONST_externallyStoredData904 = "CREATURE_CRACKHEAD";
+	const string CONST_externallyStoredData903 = "CREATURE_GANGMEMBER";
+	const string CONST_externallyStoredData902 = "CREATURE_BUM";
+	const string CONST_externallyStoredData901 = "CREATURE_HSDROPOUT";
+	const string CONST_externallyStoredData900 = "CREATURE_TEACHER";
+	const string CONST_externallyStoredData899 = "CREATURE_MATHEMATICIAN";
+	const string CONST_externallyStoredData898 = "CREATURE_MUSICIAN";
+	const string CONST_externallyStoredData897 = "CREATURE_COLLEGESTUDENT";
+	const string CONST_externallyStoredData896 = "CREATURE_SEWERWORKER";
+	const string CONST_externallyStoredData895 = "CREATURE_LAWYER";
+	const string CONST_externallyStoredData894 = "CREATURE_JUROR";
+	const string CONST_externallyStoredData893 = "CREATURE_PRISONER";
+	const string CONST_externallyStoredData892 = "CREATURE_GUARDDOG";
+	const string CONST_externallyStoredData891 = "CREATURE_GENETIC";
+	const string CONST_externallyStoredData890 = "CREATURE_NEWSANCHOR";
+	const string CONST_externallyStoredData889 = "CREATURE_RADIOPERSONALITY";
+	const string CONST_externallyStoredData888 = "CREATURE_AGENT";
+	const string CONST_externallyStoredData887 = "CREATURE_JUDGE_CONSERVATIVE";
+	const string CONST_externallyStoredData886 = "CREATURE_JUDGE_LIBERAL";
+	const string CONST_externallyStoredData885 = "CREATURE_GANGUNIT";
+	const string CONST_externallyStoredData884 = "CREATURE_EDUCATOR";
+	const string CONST_externallyStoredData883 = "CREATURE_FIREFIGHTER";
+	const string CONST_externallyStoredData882 = "CREATURE_DEATHSQUAD";
+	const string CONST_externallyStoredData881 = "CREATURE_SWAT";
+	const string CONST_externallyStoredData880 = "CREATURE_COP";
+	const string CONST_externallyStoredData879 = "CREATURE_TEENAGER";
+	const string CONST_externallyStoredData878 = "CREATURE_LANDLORD";
+	const string CONST_externallyStoredData877 = "CREATURE_WORKER_FACTORY_UNION";
+	const string CONST_externallyStoredData876 = "CREATURE_WORKER_SECRETARY";
+	const string CONST_externallyStoredData875 = "CREATURE_WORKER_FACTORY_CHILD";
+	const string CONST_externallyStoredData874 = "CREATURE_WORKER_FACTORY_NONUNION";
+	const string CONST_externallyStoredData873 = "CREATURE_WORKER_SWEATSHOP";
+	const string CONST_externallyStoredData872 = "CREATURE_WORKER_JANITOR";
+	const string CONST_externallyStoredData871 = "CREATURE_WORKER_SERVANT";
+	const string CONST_externallyStoredData870 = "CREATURE_CORPORATE_CEO";
+	const string CONST_externallyStoredData869 = "CREATURE_CORPORATE_MANAGER";
+	const string CONST_externallyStoredData868 = "CREATURE_SCIENTIST_EMINENT";
+	const string CONST_externallyStoredData867 = "CREATURE_SCIENTIST_LABTECH";
+	const string CONST_externallyStoredData866 = "CREATURE_SECURITYGUARD";
+	const string CONST_externallyStoredData865 = "CREATURE_BOUNCER";
+	const string CONST_externallyStoredData864 = "ATTRIBUTE_CHARISMA";
+	const string CONST_externallyStoredData863 = "ATTRIBUTE_HEALTH";
+	const string CONST_externallyStoredData862 = "ATTRIBUTE_STRENGTH";
+	const string CONST_externallyStoredData861 = "ATTRIBUTE_AGILITY";
+	const string CONST_externallyStoredData860 = "ATTRIBUTE_INTELLIGENCE";
+	const string CONST_externallyStoredData859 = "ATTRIBUTE_WISDOM";
+	const string CONST_externallyStoredData858 = "ATTRIBUTE_HEART";
+	const string CONST_externallyStoredData857 = "SKILL_WRITING";
+	const string CONST_externallyStoredData856 = "SKILL_THROWING";
+	const string CONST_externallyStoredData855 = "SKILL_TEACHING";
+	const string CONST_externallyStoredData854 = "SKILL_TAILORING";
+	const string CONST_externallyStoredData853 = "SKILL_SWORD";
+	const string CONST_externallyStoredData852 = "SKILL_STREETSENSE";
+	const string CONST_externallyStoredData851 = "SKILL_STEALTH";
+	const string CONST_externallyStoredData850 = "SKILL_SMG";
+	const string CONST_externallyStoredData849 = "SKILL_SHOTGUN";
+	const string CONST_externallyStoredData848 = "SKILL_SEDUCTION";
+	const string CONST_externallyStoredData847 = "SKILL_SECURITY";
+	const string CONST_externallyStoredData846 = "SKILL_SCIENCE";
+	const string CONST_externallyStoredData845 = "SKILL_RIFLE";
+	const string CONST_externallyStoredData844 = "SKILL_RELIGION";
+	const string CONST_externallyStoredData843 = "SKILL_PSYCHOLOGY";
+	const string CONST_externallyStoredData842 = "SKILL_PISTOL";
+	const string CONST_externallyStoredData841 = "SKILL_PERSUASION";
+	const string CONST_externallyStoredData840 = "SKILL_MUSIC";
+	const string CONST_externallyStoredData839 = "SKILL_HANDTOHAND";
+	const string CONST_externallyStoredData838 = "SKILL_LAW";
+	const string CONST_externallyStoredData837 = "SKILL_KNIFE";
+	const string CONST_externallyStoredData836 = "SKILL_HEAVYWEAPONS";
+	const string CONST_externallyStoredData835 = "SKILL_FIRSTAID";
+	const string CONST_externallyStoredData834 = "SKILL_DRIVING";
+	const string CONST_externallyStoredData833 = "SKILL_DODGE";
+	const string CONST_externallyStoredData832 = "SKILL_DISGUISE";
+	const string CONST_externallyStoredData831 = "SKILL_COMPUTERS";
+	const string CONST_externallyStoredData830 = "SKILL_CLUB";
+	const string CONST_externallyStoredData829 = "SKILL_BUSINESS";
+	const string CONST_externallyStoredData828 = "SKILL_AXE";
+	const string CONST_externallyStoredData827 = "SKILL_ART";
+	const string CONST_externallyStoredData524 = "TRINKET";
+	const string CONST_externallyStoredData523 = "SILVERWARE";
+	const string CONST_externallyStoredData522 = "WATCH";
+	const string CONST_externallyStoredData521 = "MICROPHONE";
+	const string CONST_externallyStoredData520 = "CELLPHONE";
+	const string CONST_externallyStoredData519 = "FINEJEWELERY";
+	const string CONST_externallyStoredData518 = "POLICERECORDS";
+	const string CONST_externallyStoredData517 = "AMRADIOFILES";
+	const string CONST_externallyStoredData516 = "CABLENEWSFILES";
+	const string CONST_externallyStoredData515 = "PRISONFILES";
+	const string CONST_externallyStoredData514 = "RESEARCHFILES";
+	const string CONST_externallyStoredData513 = "JUDGEFILES";
+	const string CONST_externallyStoredData512 = "CORPFILES";
+	const string CONST_externallyStoredData511 = "INTHQDISK";
+	const string CONST_externallyStoredData510 = "CEOPHOTOS";
+	const string CONST_externallyStoredData509 = "SECRETDOCUMENTS";
+	const string CONST_externallyStoredData508 = "CHEAPJEWELERY";
+	const string CONST_externallyStoredData507 = "LAPTOP";
+	const string CONST_externallyStoredData506 = "LABEQUIPMENT";
+	const string CONST_externallyStoredData505 = "PDA";
+	const string CONST_externallyStoredData504 = "CHEMICAL";
+	const string CONST_externallyStoredData503 = "FINECLOTH";
+	const string CONST_externallyStoredData502 = "CLUB_BOUNCER_SECONDVISIT";
+	const string CONST_externallyStoredData501 = "CLUB_BOUNCER";
+	const string CONST_externallyStoredData500 = "STAIRS_DOWN";
+	const string CONST_externallyStoredData499 = "STAIRS_UP";
+	const string CONST_externallyStoredData498 = "PARK_BENCH";
+	const string CONST_externallyStoredData497 = "CAFE_COMPUTER";
+	const string CONST_externallyStoredData496 = "RESTAURANT_TABLE";
+	const string CONST_externallyStoredData495 = "APARTMENT_SIGN";
+	const string CONST_externallyStoredData494 = "APARTMENT_LANDLORD";
+	const string CONST_externallyStoredData493 = "NEWS_BROADCASTSTUDIO";
+	const string CONST_externallyStoredData492 = "RADIO_BROADCASTSTUDIO";
+	const string CONST_externallyStoredData491 = "CORPORATE_FILES";
+	const string CONST_externallyStoredData490 = "HOUSE_CEO";
+	const string CONST_externallyStoredData489 = "ARMYBASE_ARMORY";
+	const string CONST_externallyStoredData488 = "HOUSE_PHOTOS";
+	const string CONST_externallyStoredData487 = "NUCLEAR_ONOFF";
+	const string CONST_externallyStoredData486 = "POLLUTER_EQUIPMENT";
+	const string CONST_externallyStoredData485 = "SWEATSHOP_EQUIPMENT";
+	const string CONST_externallyStoredData484 = "INTEL_SUPERCOMPUTER";
+	const string CONST_externallyStoredData483 = "PRISON_CONTROL_HIGH";
+	const string CONST_externallyStoredData482 = "PRISON_CONTROL_MEDIUM";
+	const string CONST_externallyStoredData481 = "PRISON_CONTROL_LOW";
+	const string CONST_externallyStoredData480 = "PRISON_CONTROL";
+	const string CONST_externallyStoredData479 = "COURTHOUSE_JURYROOM";
+	const string CONST_externallyStoredData478 = "COURTHOUSE_LOCKUP";
+	const string CONST_externallyStoredData477 = "POLICESTATION_LOCKUP";
+	const string CONST_externallyStoredData476 = "LAB_GENETIC_CAGEDANIMALS";
+	const string CONST_externallyStoredData475 = "LAB_COSMETICS_CAGEDANIMALS";
+	const string CONST_externallyStoredData446 = "OUTDOOR_PUBLICPARK";
+	const string CONST_externallyStoredData445 = "GENERIC_ONEROOM";
+	const string CONST_externallyStoredData444 = "OUTDOOR_LATTESTAND";
+	const string CONST_externallyStoredData443 = "BUSINESS_RESTRICTEDCAFE";
+	const string CONST_externallyStoredData442 = "BUSINESS_INTERNETCAFE";
+	const string CONST_externallyStoredData441 = "BUSINESS_CAFE";
+	const string CONST_externallyStoredData440 = "MEDIA_CABLENEWS";
+	const string CONST_externallyStoredData439 = "MEDIA_AMRADIO";
+	const string CONST_externallyStoredData438 = "CORPORATE_HOUSE";
+	const string CONST_externallyStoredData437 = "CORPORATE_HEADQUARTERS";
+	const string CONST_externallyStoredData436 = "INDUSTRY_NUCLEAR";
+	const string CONST_externallyStoredData435 = "INDUSTRY_POLLUTER";
+	const string CONST_externallyStoredData434 = "INDUSTRY_SWEATSHOP";
+	const string CONST_externallyStoredData433 = "GOVERNMENT_ARMYBASE";
+	const string CONST_externallyStoredData432 = "GOVERNMENT_WHITE_HOUSE";
+	const string CONST_externallyStoredData431 = "GOVERNMENT_INTELLIGENCEHQ";
+	const string CONST_externallyStoredData430 = "GOVERNMENT_PRISON";
+	const string CONST_externallyStoredData429 = "GOVERNMENT_COURTHOUSE";
+	const string CONST_externallyStoredData428 = "GOVERNMENT_POLICESTATION";
+	const string CONST_externallyStoredData427 = "LABORATORY_GENETICS";
+	const string CONST_externallyStoredData426 = "LABORATORY_COSMETICS";
+	const string CONST_externallyStoredData425 = "GENERIC_LOBBY";
+	const string CONST_externallyStoredData420 = "GENERIC_UNSECURE";
+	const string CONST_externallyStoredData417 = "RESIDENTIAL_APARTMENT";
 	const string CONST_externallyStoredData177 = "VIEWNUM";
 	const string CONST_externallyStoredData176 = "VIEW_CONSERVATIVECRIMESQUAD";
 	const string CONST_externallyStoredData175 = "VIEW_LIBERALCRIMESQUADPOS";
@@ -5158,174 +5180,21 @@ shopsnstuff.cpp
 	const string CONST_externallyStoredData1176 = "DOOR";
 	const string CONST_externallyStoredData1175 = "BLOCK";
 	const string CONST_externallyStoredData1174 = "EXIT";
-	const string CONST_externallyStoredData1173 = "stalinized";
-	const string CONST_externallyStoredData1172 = "reaganified";
-	const string CONST_externallyStoredData1171 = "defeat";
-	const string CONST_externallyStoredData1170 = "victory";
-	const string CONST_externallyStoredData117 = "ACTIVITY_SLEEPER_STEAL";
-	const string CONST_externallyStoredData1169 = "abort";
-	const string CONST_externallyStoredData1168 = "anchor";
-	const string CONST_externallyStoredData1167 = "glamshow";
-	const string CONST_externallyStoredData1166 = "newscast";
-	const string CONST_externallyStoredData1165 = "lacops";
-	const string CONST_externallyStoredData1164 = "newspaper";
-	const string CONST_externallyStoredData1163 = "recruiting";
-	const string CONST_externallyStoredData1162 = "trial";
-	const string CONST_externallyStoredData1161 = "footchase";
-	const string CONST_externallyStoredData1160 = "carchase";
-	const string CONST_externallyStoredData116 = "ACTIVITY_SLEEPER_EMBEZZLE";
-	const string CONST_externallyStoredData1159 = "conquer";
-	const string CONST_externallyStoredData1158 = "defense";
-	const string CONST_externallyStoredData1157 = "heavycombat";
-	const string CONST_externallyStoredData1156 = "Pastorale";
-	const string CONST_externallyStoredData1155 = "alarmed";
-	const string CONST_externallyStoredData1154 = "sitemode";
-	const string CONST_externallyStoredData1153 = "shopping";
-	const string CONST_externallyStoredData1152 = "elections";
-	const string CONST_externallyStoredData1151 = "cartheft";
-	const string CONST_externallyStoredData1150 = "finances";
-	const string CONST_externallyStoredData115 = "ACTIVITY_SLEEPER_SCANDAL";
-	const string CONST_externallyStoredData1149 = "disbanded";
-	const string CONST_externallyStoredData1148 = "liberalagenda";
-	const string CONST_externallyStoredData1147 = "reviewmode";
-	const string CONST_externallyStoredData1146 = "stopevil";
-	const string CONST_externallyStoredData1145 = "sleepers";
-	const string CONST_externallyStoredData1144 = "activate";
-	const string CONST_externallyStoredData1143 = "siege";
-	const string CONST_externallyStoredData1142 = "Mars";
-	const string CONST_externallyStoredData1141 = "basemode";
-	const string CONST_externallyStoredData1140 = "newgame";
-	const string CONST_externallyStoredData114 = "ACTIVITY_SLEEPER_RECRUIT";
-	const string CONST_externallyStoredData1139 = "titlemode";
-	const string CONST_externallyStoredData1138 = "Stalinist";
-	const string CONST_externallyStoredData1137 = "Elite Liberal";
-	const string CONST_externallyStoredData1136 = "Liberal";
-	const string CONST_externallyStoredData1135 = "Moderate";
-	const string CONST_externallyStoredData1134 = "Conservative";
-	const string CONST_externallyStoredData1133 = "Arch-Conservative";
-	const string CONST_externallyStoredData1132 = "CHA";
-	const string CONST_externallyStoredData1131 = "HLTH";
-	const string CONST_externallyStoredData1130 = "HRT";
-	const string CONST_externallyStoredData113 = "ACTIVITY_SLEEPER_SPY";
-	const string CONST_externallyStoredData1129 = "INT";
-	const string CONST_externallyStoredData1128 = "WIS";
-	const string CONST_externallyStoredData1127 = "AGI";
-	const string CONST_externallyStoredData1126 = "STR";
-	const string CONST_externallyStoredData1125 = "Dodge";
-	const string CONST_externallyStoredData1124 = "First Aid";
-	const string CONST_externallyStoredData1123 = "Seduction";
-	const string CONST_externallyStoredData1122 = "Street Sense";
-	const string CONST_externallyStoredData1121 = "Teaching";
-	const string CONST_externallyStoredData1120 = "Stealth";
-	const string CONST_externallyStoredData112 = "ACTIVITY_SLEEPER_CONSERVATIVE";
-	const string CONST_externallyStoredData1119 = "Business";
-	const string CONST_externallyStoredData1118 = "Science";
-	const string CONST_externallyStoredData1117 = "Religion";
-	const string CONST_externallyStoredData1116 = "Art";
-	const string CONST_externallyStoredData1115 = "Music";
-	const string CONST_externallyStoredData1114 = "Writing";
-	const string CONST_externallyStoredData1113 = "Driving";
-	const string CONST_externallyStoredData1112 = "Tailoring";
-	const string CONST_externallyStoredData1111 = "Law";
-	const string CONST_externallyStoredData1110 = "Computers";
-	const string CONST_externallyStoredData111 = "ACTIVITY_SLEEPER_LIBERAL";
-	const string CONST_externallyStoredData1109 = "Disguise";
-	const string CONST_externallyStoredData1108 = "Security";
-	const string CONST_externallyStoredData1107 = "Psychology";
-	const string CONST_externallyStoredData1106 = "Persuasion";
-	const string CONST_externallyStoredData1105 = "SMG";
-	const string CONST_externallyStoredData1104 = "Shotgun";
-	const string CONST_externallyStoredData1103 = "Heavy Weapons";
-	const string CONST_externallyStoredData1102 = "Rifle";
-	const string CONST_externallyStoredData1101 = "Pistol";
-	const string CONST_externallyStoredData1100 = "Axe";
-	const string CONST_externallyStoredData110 = "ACTIVITY_HEAL";
-	const string CONST_externallyStoredData1099 = "Club";
-	const string CONST_externallyStoredData1098 = "Throwing";
-	const string CONST_externallyStoredData1097 = "Sword";
-	const string CONST_externallyStoredData1096 = "Knife";
-	const string CONST_externallyStoredData1095 = "Martial Arts";
-	const string CONST_externallyStoredData1094 = "F - Slam the brakes!";
-	const string CONST_externallyStoredData1093 = "D - Swerve around him!";
-	const string CONST_externallyStoredData1092 = "A kid runs into the street for his ball!";
-	const string CONST_externallyStoredData1091 = "F - Slow down and turn!";
-	const string CONST_externallyStoredData1090 = "D - Run the light anyway!";
-	const string CONST_externallyStoredData109 = "ACTIVITY_CLINIC";
-	const string CONST_externallyStoredData1089 = "There's a red light with cross traffic ahead!";
-	const string CONST_externallyStoredData1088 = "F - Slow down!";
-	const string CONST_externallyStoredData1087 = "D - Speed around it!";
-	const string CONST_externallyStoredData1086 = "A truck pulls out in your path!";
-	const string CONST_externallyStoredData1085 = "F - Play it safe and plow through it!";
-	const string CONST_externallyStoredData1084 = "D - Swerve to avoid hitting anyone!";
-	const string CONST_externallyStoredData1083 = "You are speeding toward a flimsy fruit stand!";
-	const string CONST_externallyStoredData1082 = "Washington, DC";
-	const string CONST_externallyStoredData1081 = "Miami, FL";
-	const string CONST_externallyStoredData1080 = "Atlanta, GA";
-	const string CONST_externallyStoredData108 = "ACTIVITY_STUDY_SEDUCTION";
-	const string CONST_externallyStoredData1079 = "Detroit, MI";
-	const string CONST_externallyStoredData1078 = "Chicago, IL";
-	const string CONST_externallyStoredData1077 = "Los Angeles, CA";
-	const string CONST_externallyStoredData1076 = "New York, NY";
-	const string CONST_externallyStoredData1075 = "Seattle, WA";
-	const string CONST_externallyStoredData1074 = "were murdered trying to escape from a police siege yesterday, according ";
-	const string CONST_externallyStoredData1073 = "were slain trying to escape from a police siege yesterday, according ";
-	const string CONST_externallyStoredData1072 = "were murdered during a police raid yesterday, according ";
-	const string CONST_externallyStoredData1071 = "were slain during a police raid yesterday, according ";
-	const string CONST_externallyStoredData1070 = "violently broke a police siege yesterday, according ";
-	const string CONST_externallyStoredData107 = "ACTIVITY_STUDY_STEALTH";
-	const string CONST_externallyStoredData1069 = "fought off a police raid yesterday, according ";
-	const string CONST_externallyStoredData1068 = "escaped from police officers during a raid yesterday, according ";
-	const string CONST_externallyStoredData1067 = "escaped from a police siege yesterday, according ";
-	const string CONST_externallyStoredData1066 = "The Stalinist Party claims victory!";
-	const string CONST_externallyStoredData1065 = "The Progressive Elite Social Liberal Green Party claims victory!";
-	const string CONST_externallyStoredData1064 = "The Liberal Party claims victory!";
-	const string CONST_externallyStoredData1063 = "The next two years promise to be more of the same.";
-	const string CONST_externallyStoredData1062 = "The Conservative Party claims victory!";
-	const string CONST_externallyStoredData1061 = "The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!";
-	const string CONST_externallyStoredData1060 = "thought political violence was justified";
-	const string CONST_externallyStoredData106 = "ACTIVITY_STUDY_THROWING";
-	const string CONST_externallyStoredData1059 = "have a negative opinion of cable news programs";
-	const string CONST_externallyStoredData1058 = "do not like AM radio";
-	const string CONST_externallyStoredData1057 = "wanted to end prisoner abuse and torture";
-	const string CONST_externallyStoredData1056 = "held the Conservative Crime Squad in contempt";
-	const string CONST_externallyStoredData1055 = "of these held the Liberal Crime Squad in high regard";
-	const string CONST_externallyStoredData1054 = "respected the power of the Liberal Crime Squad";
-	const string CONST_externallyStoredData1053 = "opposed increasing military spending";
-	const string CONST_externallyStoredData1052 = "are concerned about gun violence";
-	const string CONST_externallyStoredData1051 = "felt more work was needed for racial equality";
-	const string CONST_externallyStoredData1050 = "favored doing more for gender equality";
-	const string CONST_externallyStoredData105 = "ACTIVITY_STUDY_STREETSENSE";
-	const string CONST_externallyStoredData1049 = "believed that CEO salaries are too great";
-	const string CONST_externallyStoredData1048 = "were disgusted by corporate malfeasance";
-	const string CONST_externallyStoredData1047 = "thought industry should lower pollution";
-	const string CONST_externallyStoredData1046 = "would boycott companies that used sweatshops";
-	const string CONST_externallyStoredData1045 = "were for the appointment of Liberal justices";
-	const string CONST_externallyStoredData1044 = "abhorred genetically altered food products";
-	const string CONST_externallyStoredData1043 = "believed in unfettered free speech";
-	const string CONST_externallyStoredData1042 = "thought the intelligence community invades privacy";
-	const string CONST_externallyStoredData1041 = "wanted stronger measures to prevent torture";
-	const string CONST_externallyStoredData1040 = "were critical of the police";
-	const string CONST_externallyStoredData104 = "ACTIVITY_STUDY_CLUB";
-	const string CONST_externallyStoredData1039 = "deplored animal research";
-	const string CONST_externallyStoredData1038 = "were terrified of nuclear power";
-	const string CONST_externallyStoredData1037 = "were against cutting taxes";
-	const string CONST_externallyStoredData1036 = "opposed the death penalty";
-	const string CONST_externallyStoredData1035 = "were in favor of equal rights for homosexuals";
-	const string CONST_externallyStoredData1034 = "left leg";
-	const string CONST_externallyStoredData1033 = "right leg";
-	const string CONST_externallyStoredData1032 = "left arm";
-	const string CONST_externallyStoredData1031 = "right arm";
-	const string CONST_externallyStoredData1030 = "left rear leg";
 	const string CONST_externallyStoredData103 = "ACTIVITY_STUDY_RELIGION";
-	const string CONST_externallyStoredData1029 = "right rear leg";
-	const string CONST_externallyStoredData1028 = "left front leg";
-	const string CONST_externallyStoredData1027 = "right front leg";
-	const string CONST_externallyStoredData1026 = "left tread";
-	const string CONST_externallyStoredData1025 = "right tread";
-	const string CONST_externallyStoredData1024 = "left side";
-	const string CONST_externallyStoredData1023 = "right side";
-	const string CONST_externallyStoredData1022 = "front";
-	const string CONST_externallyStoredData1021 = "turret";
+	const string CONST_externallyStoredData104 = "ACTIVITY_STUDY_CLUB";
+	const string CONST_externallyStoredData105 = "ACTIVITY_STUDY_STREETSENSE";
+	const string CONST_externallyStoredData106 = "ACTIVITY_STUDY_THROWING";
+	const string CONST_externallyStoredData107 = "ACTIVITY_STUDY_STEALTH";
+	const string CONST_externallyStoredData108 = "ACTIVITY_STUDY_SEDUCTION";
+	const string CONST_externallyStoredData109 = "ACTIVITY_CLINIC";
+	const string CONST_externallyStoredData110 = "ACTIVITY_HEAL";
+	const string CONST_externallyStoredData111 = "ACTIVITY_SLEEPER_LIBERAL";
+	const string CONST_externallyStoredData112 = "ACTIVITY_SLEEPER_CONSERVATIVE";
+	const string CONST_externallyStoredData113 = "ACTIVITY_SLEEPER_SPY";
+	const string CONST_externallyStoredData114 = "ACTIVITY_SLEEPER_RECRUIT";
+	const string CONST_externallyStoredData116 = "ACTIVITY_SLEEPER_EMBEZZLE";
+	const string CONST_externallyStoredData117 = "ACTIVITY_SLEEPER_STEAL";
+	const string CONST_externallyStoredData115 = "ACTIVITY_SLEEPER_SCANDAL";
 	const string CONST_externallyStoredData1020 = "SPECIALWOUND_LOWERSPINE";
 	const string CONST_externallyStoredData102 = "ACTIVITY_STUDY_WEAVING";
 	const string CONST_externallyStoredData1019 = "SPECIALWOUND_UPPERSPINE";
@@ -5496,66 +5365,69 @@ shopsnstuff.cpp
 	};
 	int getLawFromFlag(int type);
 
-	// from activities.cpp
-	//extern string study_string1;
-	//extern string study_string2;
 	extern  map<Activity, Data_Activity> data_activities;
-	extern map< Views, stringConnectedToView > pollingData;
 	extern map< Activity, CreatureSkill> trainingActivity;
-	extern vector<ActivityAndString> data_lessons;
-	extern vector<activityData> hackingActivities;
+	extern map< Views, stringConnectedToView > pollingData;
 	extern map<char, vector<ActivityAndString> > activate_menu_items;
-	extern vector<RecruitData> recruitable_creatures;
-	extern map<short, string> trainingActivitySorting;
-	extern map<short, string> incomeTypes;
-	extern map<short, string> expenseTypes;
-	extern map<short, string> siteReadMap;
+	extern map<int, vector<string> > caseRejectionReasons;
+	extern map<int, vector<string> > rejectionReasons;
+	extern map<short, map<short, string> > getLawFlagStringFull;
+	extern map<short, string> animalBodyParts;
+	extern map<short, string> attEnumToString;
 	extern map<short, string> buildThisSite;
-	extern map<string, short> getSpecial;
-	extern map<string, short> getUnique;
-	extern map<string, string> getLootString;
+	extern map<short, string> cityNames;
+	extern map<short, string> conservatiseLaw;
+	extern map<short, string> conservativeLegalArgument;
+	extern map<short, string> discussesIssues;
+	extern map<short, string> discussIssues;
+	extern map<short, string> enumToCreature;
+	extern map<short, string> expenseTypes;
+	extern map<short, string> getActivityString;
+	extern map<short, string> getAlignString;
+	extern map<short, string> getCityDescription;
+	extern map<short, string> getLawFlagString;
+	extern map<short, string> getLawString;
+	extern map<short, string> humanBodyParts;
+	extern map<short, string> incomeTypes;
+	extern map<short, string> issueEventString;
+	extern map<short, string> issueTooLiberal;
+	extern map<short, string> liberalizeLaw;
+	extern map<short, string> musicList;
 	extern map<short, string> reviewStrings;
 	extern map<short, string> reviewStringsSecondLine;
-	extern vector<stringAndColor> liberalListAndColor;
-	extern map<short, string> issueEventString;
-	extern map<short, string> conservatiseLaw;
-	extern map<short, string> liberalizeLaw;
-	extern map<short, string> discussIssues;
-	extern map<short, string> discussesIssues;
-	extern map<short, string> getCityDescription;
-	extern map<short, vector<string> > getSiteName;
-	extern map<short, vector<string> > endgameLawStrings;
-	extern map<short, string> getActivityString;
-	extern map<short, vector<string> > getViewString;
-	extern map<short, string> getLawString;
-	extern map<short, string> getLawFlagString;
-	extern map<short, map<short, string> > getLawFlagStringFull;
-	extern vector<int> state_biases;
-	extern map<short, string> enumToCreature;
-	extern map<string, short> getSkillEnumFromString;
-	extern map<string, short> getAttributeEnumFromString;
-	extern map<string, short> getCreatureEnumFromString;
-	extern map<string, short> getBaseEnumFromString;
-	extern map<string, short> getSpecialWoundEnumFromString;
-	extern map<short, string> conservativeLegalArgument;
-	extern map<short, string> youAreStupidTalkAboutIssues;
-	extern map<short, string> issueTooLiberal;
-	extern map<short, vector<string> > talkAboutTheIssues;
-	extern map<short, string> tankBodyParts;
-	extern map<short, string> animalBodyParts;
-	extern map<short, string> humanBodyParts;
-	extern map<short, string> supportsLiberalLaw;
-	extern map<short, string> winnerOfElection;
-	extern map<short, vector<string> > newsStories;
-	extern map<short, string> cityNames;
-	extern map<short, vector<string> > carchaseObstacles;
+	extern map<short, string> siteReadMap;
 	extern map<short, string> skillEnumToString;
-	extern map<short, string> attEnumToString;
-	extern map<short, string> getAlignString;
-	extern map<short, string> musicList;
-	extern vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
+	extern map<short, string> supportsLiberalLaw;
+	extern map<short, string> tankBodyParts;
+	extern map<short, string> trainingActivitySorting;
+	extern map<short, string> winnerOfElection;
+	extern map<short, string> youAreStupidTalkAboutIssues;
+	extern map<short, vector<string> > carchaseObstacles;
+	extern map<short, vector<string> > endgameLawStrings;
+	extern map<short, vector<string> > getSiteName;
+	extern map<short, vector<string> > getViewString;
+	extern map<short, vector<string> > helpTopics;
+	extern map<short, vector<string> > newsStories;
+	extern map<short, vector<string> > talkAboutTheIssues;
+	extern map<string, short> getAttributeEnumFromString;
+	extern map<string, short> getBaseEnumFromString;
+	extern map<string, short> getCreatureEnumFromString;
+	extern map<string, short> getSkillEnumFromString;
+	extern map<string, short> getSpecial;
+	extern map<string, short> getSpecialWoundEnumFromString;
+	extern map<string, short> getUnique;
+	extern map<string, short> site_tile_list;
+	extern map<string, string> getLootString;
+	extern vector<ActivityAndString> data_lessons;
+	extern vector<activityData> hackingActivities;
 	extern vector<CreatureTypes> ACTIVITY_TEACH_COVERT_DEFAULT;
 	extern vector<CreatureTypes> ACTIVITY_TEACH_FIGHTING_DEFAULT;
+	extern vector<CreatureTypes> ACTIVITY_TEACH_POLITICS_DEFAULT;
+	extern vector<int> state_biases;
+	extern vector<RecruitData> recruitable_creatures;
+	extern vector<string> theGreatUnknown;
+	extern vector<stringAndColor> liberalListAndColor;
+
 	vector<string> conservativeLegalArgumentUnprocessed;
 	vector<string> youAreStupidTalkAboutIssuesUnprocessed;
 	vector<string> issueTooLiberalUnprocessed;
@@ -5567,8 +5439,6 @@ shopsnstuff.cpp
 	vector<string> talkAboutTheIssuesUnprocessed;
 	vector<string> endgameLawStringsUnprocessed;
 	vector<string> helpTopicUnprocessed;
-	extern map<short, vector<string> > helpTopics;
-	extern vector<string> theGreatUnknown;
 	vector<string> state_biases_Unprocessed;
 	map<string, short> string_to_activity = {
 		map<string, short>::value_type(CONST_externallyStoredData057, ACTIVITY_NONE),
@@ -5702,9 +5572,7 @@ shopsnstuff.cpp
 	// TODO these should have error detection, but that is kinda low priority
 	void processTheUnprocessed(vector<string> &unprocessed, map<short, string> &processed, map<string, short> string_to_short);
 	void processTheUnprocessed(vector<string> &unprocessed, map<short, vector<string> > &processed, map<string, short> string_to_short);
-	extern map<string, short> site_tile_list;
-	extern map<int, vector<string> > rejectionReasons;
-	extern map<int, vector<string> > caseRejectionReasons;
+
 	vector<string> rejectedByCCS;
 	vector<string> rejectedBecauseNude;
 	vector<string> rejectedBecauseUnderage;
@@ -5963,7 +5831,6 @@ shopsnstuff.cpp
 	const string CONST_fight144 = " shields ";
 	const string CONST_fight143 = " heroically";
 	const string CONST_fight142 = " misguidedly";
-	const string CONST_fight141 = "(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)";
 	const string CONST_fight140 = "the ";
 	const string CONST_fight139 = "The attack bounces off ";
 	const string CONST_fight138 = " through ";
@@ -6172,9 +6039,32 @@ shopsnstuff.cpp
 		customText(&evasionStrings, mostlyendings + CONST_fight029),
 		customText(&evasionStringsAlt, mostlyendings + CONST_fight030),
 	};
-	// extern string singleSpace;
-	// extern string singleDot;
-	// extern string commaSpace;
+
+	extern bool NOENEMYATTACK;
+	extern char foughtthisround;
+	extern coordinatest loc_coord;
+	extern DeprecatedCreature encounter[ENCMAX];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	extern int ccs_boss_kills;
+	extern int ccs_siege_kills;
+	extern int sitecrime;
+	extern int stat_dead;
+	extern int stat_kills;
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short sitealarmtimer;
+	extern short sitetype;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern string slogan_str;
+	extern vector<DeprecatedCreature *> pool;
+
+	short  getCurrentSite();
+	void addLocationChange(int cursite, sitechangest change);
+
+
+
 	vector<Item *> groundloot;
 
 
@@ -6192,30 +6082,16 @@ shopsnstuff.cpp
 		const char heavydam,
 		const char damtype
 	);
-	extern Log gamelog;
-	extern short mode;
-	extern short lawList[LAWNUM];
 	map<short, string> tankBodyParts;
 	map<short, string> animalBodyParts;
 	map<short, string> humanBodyParts;
 	std::string burstHitString(int bursthits);
 	void bloodyUpEncounterArmor();
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short mode;
-	extern Log gamelog;
 	/* attack handling for an individual creature and its target */
 	// returns a boolean representing whether it was the intended target or CONST_fight116
 	// so bool actual does not need to be passed by reference
 	bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
 
-	extern short mode;
-	extern Log gamelog;
-	extern short mode;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
 	void setSiteAlarmOne();
 	string howGracefulAttack(int handToHand);
 	string dismemberingWound(const int w, const int wound);
@@ -6252,18 +6128,6 @@ shopsnstuff.cpp
 
 
 	}
-	extern short mode;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int ccs_siege_kills;
-	extern int ccs_boss_kills;
-	extern Log gamelog;
-	extern Deprecatednewsstoryst *sitestory;
-
-	extern int sitecrime;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 
 	struct damageDetails {
 		const int mod;
@@ -6272,77 +6136,16 @@ shopsnstuff.cpp
 		const char armorpiercing;
 		damageDetails(int _mod, int _hit_location, int _extraarmor, char _armorpiercing) : mod(_mod), hit_location(_hit_location), extraarmor(_extraarmor), armorpiercing(_armorpiercing) {};
 	};
-	extern short mode;
-	extern Log gamelog;
-
-	void addLocationChange(int cursite, sitechangest change);
-	extern short mode;
-
-	extern Deprecatednewsstoryst *sitestory;
-
-	extern int sitecrime;
-	extern coordinatest loc_coord;
-
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern vector<DeprecatedCreature *> pool;
 	bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee = false);
 	void addLocationChange(int cursite, sitechangest change);
 	bool isThereASiteAlarm();
-	extern short mode;
-	extern Log gamelog;
-	extern short sitealarmtimer;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-
-	extern int sitecrime;
-	extern DeprecatedCreature encounter[ENCMAX];
 	vector<NameAndAlignment> getEncounterNameAndAlignment();
-	extern char foughtthisround;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatednewsstoryst *sitestory;
-	extern int sitecrime;
-	extern vector<DeprecatedCreature *> pool;
 	enum LOOP_CONTINUATION {
 		RETURN_ZERO,
 		RETURN_ONE,
 		REPEAT
 	};
 	void conservatise(const int e);
-	extern short mode;
-	extern char foughtthisround;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-
-	extern int sitecrime;
-	// Enemies don't attack
-	extern bool NOENEMYATTACK;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern Log gamelog;
-	extern short mode;
-	extern char foughtthisround;
-
-	extern Deprecatedsquadst *activesquad;
-
-	extern bool NOENEMYATTACK;
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern short sitetype;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<DeprecatedCreature *> pool;
-	short  getCurrentSite();
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern short mode;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern short lawList[LAWNUM];
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern short mode;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern string slogan_str;
 #endif	//FIGHT_CPP
 #ifdef	GAME_CPP
 // game.cpp
@@ -6397,44 +6200,31 @@ shopsnstuff.cpp
 	//int mainSeven(bool xml_loaded_ok);
 	void init_console();
 	void initialize_debug_defines();
-	extern Log gamelog; //The gamelog.
-	extern Log gamelog; //The gamelog.
 #include "common/musicClass.h"
-	void set_title(char *s);
-	const string defaultMissingForMask = "Default missing for masks!";
-	const string defaultUnknownForMask = "Default for masks is not a known armor type!";
-	const string activated = " activated";
-	const string debugCode = "debug code ";
-	const string failedToLoadSitemaps = "Failed to load sitemaps.txt! Reverting to old map mode.";
-	const string tag_value = "value";
-	const string tag_attribute = "attribute";
-	const string tag_skill = "skill";
-	const string CONST_game015 = "masktype";
-	const string CONST_game014 = "default";
-	const string CONST_game013 = "Unspecified error with custom text";
-	const string CONST_game012 = "We need a slogan!";
-	const string CONST_game011 = "debug_defines.txt";
-	const string CONST_game010 = "File Error: InitiateMoreIncompleteText";
-	const string CONST_game009 = "File Error: InitiateIncompleteText";
-	const string CONST_game008 = "File Error: ";
-	const string CONST_game006 = "Comment Found";
-	const string CONST_game005 = "sitemaps.txt";
-	const string CONST_game004 = "Liberal Crime Squad ";
+	const int CITY_NAMELEN = 80;
 
-	extern MusicClass music;
-	// Laws start archconservative
-	extern bool SHITLAWS;
-	// Laws start elite liberal
+
+	bool mainSeven(bool xml_loaded_ok);
+	extern bool DISPLAYDEBUG;
 	extern bool PERFECTLAWS;
-	// Public opinion starts at 100% Liberal
 	extern bool REVOLUTIONNOW;
-	extern short activesortingchoice[];
-	extern short attitude[];
-	extern short public_interest[];
-	extern short background_liberal_influence[];
-	extern short lawList[];
-	extern char artdir[];
-	extern char artdir[];
+	extern bool SHITLAWS;
+	extern char artdir[MAX_PATH_SIZE];
+	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern char lcityname[CITY_NAMELEN];
+	extern Log gamelog; //The gamelog.
+	extern MusicClass music;
+	extern short  exec[EXECNUM];
+	extern short activesortingchoice[SORTINGCHOICENUM];
+	extern short attitude[VIEWNUM];
+	extern short background_liberal_influence[VIEWNUM];
+	extern short court[COURTNUM];
+	extern short house[HOUSENUM];
+	extern short lawList[LAWNUM];
+	extern short public_interest[VIEWNUM];
+	extern short senate[SENATENUM];
+	extern unsigned long attorneyseed[RNG_SIZE];
 	extern vector<file_and_text_collection> activate_text_file_collection;
 	extern vector<file_and_text_collection> activities_text_file_collection;
 	extern vector<file_and_text_collection> baseactions_text_file_collection;
@@ -6460,30 +6250,35 @@ shopsnstuff.cpp
 	extern vector<file_and_text_collection> names_text_file_collection;
 	extern vector<file_and_text_collection> newgame_file_collection;
 	extern vector<file_and_text_collection> politics_text_file_collection;
-	extern vector<file_and_text_collection> talk_file_collection;
-	//extern vector<file_and_text_collection> text_file_collection;
-	extern vector<file_and_text_collection> title_screen_text_files;
 	extern vector<file_and_text_collection> reviewmode_text_file_collection;
 	extern vector<file_and_text_collection> siege_text_file_collection;
 	extern vector<file_and_text_collection> stealth_text_file_collection;
-
-	// inform player of activated debug codes
-	extern bool DISPLAYDEBUG;
-	extern char artdir[];
+	extern vector<file_and_text_collection> talk_file_collection;
+	extern vector<file_and_text_collection> title_screen_text_files;
 	extern vector<pointerAndString> debug_defines;
-	extern short senate[];
-	extern short house[];
 	fullName generate_long_name(char gender = GENDER_NEUTRAL);
-	extern short court[];
-	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern short  exec[];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	bool mainSeven(bool xml_loaded_ok);
-	extern char artdir[];
 
-	extern Log gamelog; //The gamelog.
-	extern unsigned long attorneyseed[4];
-	extern char lcityname[];
+	void set_title(char *s);
+	const string defaultMissingForMask = "Default missing for masks!";
+	const string defaultUnknownForMask = "Default for masks is not a known armor type!";
+	const string activated = " activated";
+	const string debugCode = "debug code ";
+	const string failedToLoadSitemaps = "Failed to load sitemaps.txt! Reverting to old map mode.";
+	const string tag_value = "value";
+	const string tag_attribute = "attribute";
+	const string tag_skill = "skill";
+	const string CONST_game015 = "masktype";
+	const string CONST_game014 = "default";
+	const string CONST_game013 = "Unspecified error with custom text";
+	const string CONST_game012 = "We need a slogan!";
+	const string CONST_game011 = "debug_defines.txt";
+	const string CONST_game010 = "File Error: InitiateMoreIncompleteText";
+	const string CONST_game009 = "File Error: InitiateIncompleteText";
+	const string CONST_game008 = "File Error: ";
+	const string CONST_game006 = "Comment Found";
+	const string CONST_game005 = "sitemaps.txt";
+	const string CONST_game004 = "Liberal Crime Squad ";
+
 #endif	//GAME_CPP
 #ifdef	GETNAMES_CPP
 // getnames.cpp
@@ -6492,6 +6287,7 @@ shopsnstuff.cpp
 #include "../cursesAlternative.h"
 #include "../customMaps.h"
 	extern short lawList[LAWNUM];
+
 	const string moderateLC = "moderate";
 	const string buggyString = "Buggy";
 	const string tag_value = "value";
@@ -6575,51 +6371,42 @@ shopsnstuff.cpp
 #include "items/loottype.h"
 #include "log/log.h"
 #include "cursesAlternative.h"
-	//extern string failedToLoad;
-	//extern string exclamationPoint;
-	int driveskill(DeprecatedCreature &cr, Vehicle &v);
-	bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
-	int getweapontype(const string &idname);
-	extern vector<WeaponType *> weapontype;
 #include "common/ledgerEnums.h"
 #include "common/ledger.h"
-	extern class Ledger ledger;
-	void makeloot(DeprecatedCreature &cr);
-	extern short mode;
-	extern DeprecatedCreature encounter[ENCMAX];
 #include "items/money.h"
-	Item* getNewLoot(const string& newLootType, int num = 1);
-	void addjuice(DeprecatedCreature &cr, long juice, long cap);
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<DeprecatedCreature *> pool;
-	void fullstatus(const int party_status);
-	void removesquadinfo(DeprecatedCreature &cr);
-	extern vector<DeprecatedCreature *> pool;
-	void printReporterDuringSiege(const string repname, const string name, const int segmentpower);
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	Deprecatednewsstoryst* lastNewsStory();
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatednewsstoryst *sitestory;
-	void assemblesquad(Deprecatedsquadst *cursquad);
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
-	int getloottype(const string &idname);
-	extern vector<Deprecatedsquadst *> squad;
-	void consolidateloot(vector<Item *> &loot);
-	int getloottype(const string &idname);
-	void criminalize(DeprecatedCreature &cr, short crime);
-	int subordinatesleft(const DeprecatedCreature& cr);
-	void addCreature(DeprecatedCreature* cr);
 #include "common/creaturePoolCreature.h"
 
-	//string hasRecruited;
-	//string looksForwardToServing;
-	//	extern string string_sleeper;
+	extern class Ledger ledger;
+	extern DeprecatedCreature encounter[ENCMAX];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
+	extern Log xmllog;
+	extern short mode;
+	extern vector<DeprecatedCreature *> pool;
+	extern vector<Deprecatedsquadst *> squad;
+	extern vector<LootType *> loottype;
+	extern vector<VehicleType *> vehicletype;
+	extern vector<WeaponType *> weapontype;
+
+	int driveskill(DeprecatedCreature &cr, Vehicle &v);
+	int getloottype(const string &idname);
+	int getweapontype(const string &idname);
+	int subordinatesleft(const DeprecatedCreature& cr);
+	Item* getNewLoot(const string& newLootType, int num = 1);
+	void addCreature(DeprecatedCreature* cr);
+	void addjuice(DeprecatedCreature &cr, long juice, long cap);
+	void assemblesquad(Deprecatedsquadst *cursquad);
+	void consolidateloot(vector<Item *> &loot);
+	void criminalize(DeprecatedCreature &cr, short crime);
+	void fullstatus(const int party_status);
+	void makeloot(DeprecatedCreature &cr);
+	void printReporterDuringSiege(const string repname, const string name, const int segmentpower);
+	void removesquadinfo(DeprecatedCreature &cr);
+	Deprecatednewsstoryst* lastNewsStory();
+	bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log& log);
+
+
 	const string hasRecruited = " has recruited a new ";
 	const string looksForwardToServing = " looks forward serving the Liberal cause!";
 	const string CONST_game012 = "We need a slogan!";
@@ -6642,10 +6429,6 @@ shopsnstuff.cpp
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
 
-	extern vector<LootType *> loottype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<VehicleType *> vehicletype;
-	extern Log xmllog;
 #endif	//GLOBALS_CPP
 #ifdef	HAULKIDNAP_CPP
 // haulkidnap.cpp
@@ -6711,7 +6494,7 @@ shopsnstuff.cpp
 	/* roll on the kidnap attempt and show the results */
 #include "set_color_support.h"
 #include "cursesAlternative.h"
-//string AND;
+
 	void conservatise(const int cr);
 
 	void capturecreature(DeprecatedCreature &t);
@@ -6719,29 +6502,23 @@ shopsnstuff.cpp
 
 	bool isThereASiteAlarm();
 	void setSiteAlarmOne();
+
 	extern short offended_amradio;
 	extern short offended_cablenews;
-	extern Deprecatedsquadst *activesquad;
 	extern int sitecrime;
-	//extern string chooseALiberalTo;
-	//extern string spaceDashSpace;
-	void enemyattack();
-	void delenc(const short e, const char loot);
 	extern short party_status;
 
 	extern short sitealarmtimer;
 	extern Deprecatedsquadst *activesquad;
 	extern DeprecatedCreature encounter[ENCMAX];
 	extern short lawList[LAWNUM];
-	void makeloot(DeprecatedCreature &cr);
-	extern short party_status;
-
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 
 	extern short mode;
 	extern Log gamelog;
-	extern DeprecatedCreature encounter[ENCMAX];
+
+	void enemyattack();
+	void delenc(const short e, const char loot);
+	void makeloot(DeprecatedCreature &cr);
 #endif	//HAULKIDNAP_CPP
 #ifdef HELP_CPP
 
@@ -6760,6 +6537,26 @@ shopsnstuff.cpp
 #include "../set_color_support.h"
 #include "../common/musicClass.h"
 
+	extern class Ledger ledger;
+	extern int month;
+	extern int stat_burns;
+	extern int stat_buys;
+	extern int stat_dead;
+	extern int stat_kidnappings;
+	extern int stat_kills;
+	extern int stat_recruits;
+	extern int ustat_burns;
+	extern int ustat_buys;
+	extern int ustat_dead;
+	extern int ustat_funds;
+	extern int ustat_kidnappings;
+	extern int ustat_kills;
+	extern int ustat_recruits;
+	extern int ustat_spent;
+	extern int year;
+	extern int yourscore;
+	extern MusicClass music;
+	extern string slogan_str;
 
 
 	MusicModes getEndingMusic(EndTypes e);
@@ -6776,14 +6573,6 @@ shopsnstuff.cpp
 		char valid, endtype, slogan[SLOGAN_LEN];
 		int month, year, stat_recruits, stat_kidnappings, stat_dead, stat_kills, stat_funds, stat_spent, stat_buys, stat_burns;
 	};
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
 	highscorest score[SCORENUM];
 
 	vector<saveLoadChunk> highScoreSaveLoad = {
@@ -6797,43 +6586,6 @@ shopsnstuff.cpp
 		saveLoadChunk(&ustat_burns, sizeof(int), 1),
 		saveLoadChunk(score, sizeof(highscorest), SCORENUM)
 	};
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern int stat_kidnappings;
-	extern int year;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern int yourscore;
-	extern int month;
-	extern class Ledger ledger;
-	//	extern int version;
-	extern string slogan_str;
-	extern int ustat_recruits;
-	extern int ustat_kidnappings;
-	extern int ustat_dead;
-	extern int ustat_kills;
-	extern int ustat_funds;
-	extern int ustat_spent;
-	extern int ustat_buys;
-	extern int ustat_burns;
-	extern int stat_buys;
-	extern int stat_burns;
-	extern int stat_kidnappings;
-	extern int year;
-	extern int stat_dead;
-	extern int stat_kills;
-	extern int stat_recruits;
-	extern MusicClass music;
-	extern int yourscore;
 	const string univer = "Universal Liberal Statistics:";
 	const string numRecruit = "Recruits: ";
 	const string numMartyr = "Martyrs: ";
@@ -7061,6 +6813,16 @@ shopsnstuff.cpp
 #include "../common/creaturePoolCreature.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
+
+	extern Log gamelog;
+	// Interrogation always enlightens
+	extern bool AUTOENLIGHTEN;
+	extern MusicClass music;
+	extern int stat_recruits;
+	extern int stat_kills;
+	extern class Ledger ledger;
+	extern short lawList[LAWNUM];
+
 	vector<string> execution;
 	vector<string> feels_sick;
 	vector<string> low_heart_torture_props;
@@ -7133,11 +6895,7 @@ shopsnstuff.cpp
 		customText(&cling_to_business, interrogate + CONST_interrogation036, DOUBLE_LINE),
 		customText(&cling_to_science, interrogate + CONST_interrogation037, DOUBLE_LINE),
 	};
-	// string feels_sick_and;
-	//extern string singleDot;
-	//extern string AND;
-	//extern string singleSpace;
-	//extern string commaSpace;
+
 	enum InterrogationTechnqiues
 	{
 		TECHNIQUE_TALK,
@@ -7158,21 +6916,6 @@ shopsnstuff.cpp
 	string failToBreakReligion(const string a, const string cr);
 	string failedToBreakBusiness(const string a, const string cr);
 	string failedToBreakScience(const string a, const string cr);
-	extern Log gamelog;
-	extern Log gamelog;
-	extern int stat_recruits;
-	extern Log gamelog;
-	extern int stat_kills;
-	extern Log gamelog;
-	extern Log gamelog;
-	// Interrogation always enlightens
-	extern bool AUTOENLIGHTEN;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern int stat_recruits;
-	extern int stat_kills;
-	extern class Ledger ledger;
-	extern short lawList[LAWNUM];
 #endif	//INTERROGATION_CPP
 #ifdef	ITEM_CPP
 // item.cpp
@@ -7422,13 +7165,17 @@ shopsnstuff.cpp
 		customText(&general_experiences, justice + CONST_justice016),
 	};
 #include "../common/musicClass.h"
-	// string counts_of; 
-	//extern string string_sleeper;
-	//extern string singleDot;
-	//extern string AND;
-	//extern string commaSpace;
-	//extern string singleSpace;
-	// string execution_in_three_months;
+
+	extern bool SHOWMECHANICS;
+	extern MusicClass music;
+	extern class Ledger ledger;
+	extern unsigned long attorneyseed[RNG_SIZE];
+	extern unsigned long seed[RNG_SIZE];
+	extern Log gamelog;
+	extern int stat_dead;
+	extern short lawList[LAWNUM];
+	extern vector<DeprecatedCreature *> pool;
+
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
 	void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
@@ -7496,8 +7243,6 @@ shopsnstuff.cpp
 		map<Lawflags, bool>::value_type(LAWFLAG_PUBLICNUDITY,  true),
 		map<Lawflags, bool>::value_type(LAWFLAG_LOITERING, false),
 	};
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
 	enum LegalDefense {
 		UNDECIDED = -1,
 		COURT_ATTORNEY = 0,
@@ -7506,23 +7251,6 @@ shopsnstuff.cpp
 		ACE_ATTORNEY = 3,
 		SLEEPER_ATTORNEY = 4
 	};
-	// Show die rolls, 100% accurate poll numbers
-	extern bool SHOWMECHANICS;
-	extern Log gamelog;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern class Ledger ledger;
-	extern unsigned long attorneyseed[RNG_SIZE];
-	extern unsigned long seed[RNG_SIZE];
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern Log gamelog;
-	extern vector<DeprecatedCreature *> pool;
-	extern Log gamelog;
-	extern int stat_dead;
-	extern short lawList[LAWNUM];
-	extern vector<DeprecatedCreature *> pool;
 #endif	//JUSTICE_CPP
 #ifdef	LCSIO_CPP
 // lcsio.cpp
@@ -7578,24 +7306,19 @@ shopsnstuff.cpp
 	map<short, string> expenseTypes;
 	map<short, string> incomeTypes;
 	void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
-	extern MusicClass music;
 
-	extern Log gamelog;
 	extern CCSexposure ccsexposure;
+	extern char disbanding;
+	extern class Ledger ledger;
 	extern Log gamelog;
-	extern short offended_corps;
-	extern Log gamelog;
-	extern short offended_corps;
-	extern Log gamelog;
-	extern short offended_corps;
-	extern Log gamelog;
-	extern short offended_corps;
-	extern Log gamelog;
-	extern short offended_cia;
-	extern Log gamelog;
-
+	extern MusicClass music;
+	extern short lawList[LAWNUM];
+	extern short offended_amradio;
 	extern short offended_cablenews;
-	extern Log gamelog;
+	extern short offended_cia;
+	extern short offended_corps;
+	extern short offended_firemen;
+
 	const string bound_to_rile_up = "This is bound to get the Corporations a little riled up.";
 	const string major_news_take_it_up = "The major networks and publications take it up and run it for weeks.";
 
@@ -7748,8 +7471,6 @@ shopsnstuff.cpp
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
 
-	extern short offended_amradio;
-	extern Log gamelog;
 	enum lootTypeTags {
 		ENUM_tag_LOOT_CEOPHOTOS,
 		ENUM_tag_LOOT_CEOLOVELETTERS,
@@ -7780,14 +7501,7 @@ shopsnstuff.cpp
 		map<string, int> ::value_type(tag_LOOT_CABLENEWSFILES, ENUM_tag_LOOT_CABLENEWSFILES),
 		map<string, int> ::value_type(tag_LOOT_AMRADIOFILES, ENUM_tag_LOOT_AMRADIOFILES),
 	};
-	extern short offended_firemen;
-	extern MusicClass music;
-	extern short lawList[LAWNUM];
 	static const char dotdotdot[] = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
-	extern class Ledger ledger;
-	extern char disbanding;
-	extern MusicClass music;
-	extern class Ledger ledger;
 	//Temporary, maybe put special edition definition into an xml file. -XML
 	static const string document_types[] =
 	{  // This list MUST be in alphabetical order for binary_search() to work right
@@ -7838,27 +7552,20 @@ shopsnstuff.cpp
 	vector<string> disbandingMessage;
 	vector<string> issue_phrases;
 
-	extern int year;
-	extern int disbandtime;
 	extern bool stalinmode;
-	extern short wincondition;
-	extern short lawList[LAWNUM];
-	extern short court[COURTNUM];
 	extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
-	extern bool stalinmode;
-	extern short house[HOUSENUM];
-	extern short senate[SENATENUM];
+	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+	extern int disbandtime;
+	extern int year;
+	extern MusicClass music;
+	extern short court[COURTNUM];
 	extern short exec[EXECNUM];
 	extern short execterm;
-	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern short court[COURTNUM];
-	extern short wincondition;
+	extern short house[HOUSENUM];
 	extern short lawList[LAWNUM];
-	extern short exec[EXECNUM];
-	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
-	extern MusicClass music;
+	extern short senate[SENATENUM];
 	extern short wincondition;
+
 	const string pressLToViewHighScores = "Press 'L' to view the high score list.";
 
 	const string mostlyendings = "mostlyendings\\";
@@ -8148,16 +7855,6 @@ shopsnstuff.cpp
 	};
 	Vehicle* newSportsCar();
 	void newVehicle(Vehicle *startcar);
-	// Gives you bloody armor
-	extern bool GIVEBLOODYARMOR;
-	// Start with lots of money
-	extern bool HIGHFUNDS;
-	extern class Ledger ledger;
-	extern long cursquadid;
-	extern vector<ClipType *> cliptype;
-	extern vector<WeaponType *> weapontype;
-	extern vector<Deprecatedsquadst *> squad;
-	extern Deprecatedsquadst *activesquad;
 #include "../common/equipment.h"
 #include "../common/creaturePool.h"
 	void initlocation(Location &loc);
@@ -8166,14 +7863,8 @@ shopsnstuff.cpp
 #include "../common/commonactionsCreature.h"
 
 #include "../items/lootTypePoolItem.h"
-	extern bool multipleCityMode;
-	extern short lawList[LAWNUM];
 	map<short, string> getActivityString;
 
-	extern vector<ArmorType *> armortype;
-	extern vector<WeaponType *> weapontype;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<Deprecatedsquadst *> squad;
 	vector<SiteTypes> classicDowntown = {
 		SITE_RESIDENTIAL_APARTMENT_UPSCALE,
 		SITE_GOVERNMENT_POLICESTATION,
@@ -8361,25 +8052,13 @@ shopsnstuff.cpp
 		ENUM_tag_The_Bronx
 	};
 
-	extern bool multipleCityMode;
 	// Check if the player wants to move all items to a new location,
 	// using Shift + a number key.
 	const char upnums[] = "!@#$%^&*(";
 #include "../daily/siege.h"
 	void addStringYear();
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
-	extern int day;
-	extern int month;
-	extern int year;
 #include "../common/commonactions.h"
 #include "../common/musicClass.h"
-	extern class Ledger ledger;
-	extern bool multipleCityMode;
-	extern class Ledger ledger;
-	extern Deprecatedsquadst *activesquad;
-	extern bool multipleCityMode;
-	extern MusicClass music;
 #include "../customMaps.h"
 	enum BusinessFronts
 	{
@@ -8389,29 +8068,37 @@ shopsnstuff.cpp
 		BUSINESSFRONT_MISCELLANEOUS,
 		BUSINESSFRONTNUM
 	};
+	// Gives you bloody armor
+	extern bool GIVEBLOODYARMOR;
+	// Start with lots of money
+	extern bool HIGHFUNDS;
+
+	extern long cursquadid;
+	extern vector<ClipType *> cliptype;
+	extern vector<ArmorType *> armortype;
+
+	extern bool multipleCityMode;
+	extern char endgamestate;
 	extern class Ledger ledger;
-	extern int selectedsiege;
-	extern short lawList[LAWNUM];
 	extern Deprecatedsquadst *activesquad;
+	extern int day;
+	extern int month;
+	extern int selectedsiege;
 	extern int stat_kidnappings;
-	extern class Ledger ledger;
+	extern int year;
+	extern MusicClass music;
+	extern short background_liberal_influence[VIEWNUM];
+	extern short lawList[LAWNUM];
+	extern vector<Deprecatedsquadst *> squad;
+	extern vector<WeaponType *> weapontype;
+
 	/* monthly - lets the player choose a special edition for the guardian */
 	int choosespecialedition(char &clearformess);
 	/* monthly - guardian - prints liberal guardian special editions */
 	void printnews(short l, short newspaper);
 #include "../items/itemPool.h"
 #include "../items/lootTypePool.h"
-	extern char endgamestate;
-	extern short background_liberal_influence[VIEWNUM];
-	extern Deprecatedsquadst *activesquad;
-
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<Deprecatedsquadst *> squad;
 	void giveActiveSquadThisLoot(Item* de);
-	extern vector<WeaponType *> weapontype;
-	extern Deprecatedsquadst *activesquad;
-	extern int selectedsiege;
 	const string needCar = " (Need Car)";
 	const string underSiege = " (Under Siege)";
 	const string secrecyLevel = "Secrecy: ";
@@ -8661,6 +8348,28 @@ shopsnstuff.cpp
 	char run_broadcast(bool tv_broadcast);
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolHeader.h"
+	void setEncounterZeroExistsFalse();
+	extern bool deagle;
+	extern bool m249;
+	extern CCSexposure ccsexposure;
+	extern char endgamestate;
+	extern coordinatest loc_coord;
+	extern DeprecatedCreature encounter[ENCMAX];
+	extern Deprecatednewsstoryst *sitestory;
+	extern Deprecatedsquadst *activesquad;
+	extern int sitecrime;
+	extern Log gamelog;
+	extern short lawList[LAWNUM];
+	extern short mode;
+	extern short postalarmtimer;
+	extern short sitealarmtimer;
+	extern short sitealienate;
+	extern short sitetype;
+	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+	extern vector<ClipType *> cliptype;
+	extern vector<WeaponType *> weapontype;
+	void giveActiveSquadMoney(const int money);
+	void spawnPresident();
 
 	/* Used by load() to create items of the correct class. */
 
@@ -8681,150 +8390,9 @@ shopsnstuff.cpp
 	short getCurrentSite();
 	void makecreature(const int x, const short type);
 	void emptyEncounter();
-#include "../customMaps.h"
-	void setEncounterZeroExistsFalse();
-	extern short sitetype;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	extern short lawList[LAWNUM];
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
 	void fillEncounter(CreatureTypes c, int numleft);
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern coordinatest loc_coord;
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-	extern short sitealienate;
-	extern short mode;
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+#include "../customMaps.h"
 #include "../items/lootTypePoolItem.h"
-	extern short mode;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short lawList[LAWNUM];
-	extern CCSexposure ccsexposure;
-	extern short sitealienate;
-	extern char endgamestate;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern bool deagle;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
-	extern bool m249;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern vector<WeaponType *> weapontype;
-	extern vector<ClipType *> cliptype;
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern int sitecrime;
-	extern short sitealarmtimer;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitetype;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern DeprecatedCreature encounter[ENCMAX];
-	extern Deprecatednewsstoryst *sitestory;
-	extern Deprecatedsquadst *activesquad;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern short sitealienate;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	void giveActiveSquadMoney(const int money);
-	extern short sitealarmtimer;
-	extern int sitecrime;
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short postalarmtimer;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	void spawnPresident();
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-	extern Log gamelog;
-	extern coordinatest loc_coord;
-	extern short sitealienate;
-	extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 	const string itemClassClip = "clip";
 	const string itemClassWeapon = "weapon";
 	const string itemClassArmor = "armor";
@@ -9008,35 +8576,101 @@ shopsnstuff.cpp
 	/* what type of sex? */
 	vector<string> sextypeAcronym;
 	map<short, string> musicList;
-	extern Log gamelog;
-	extern MusicClass music;
-	extern short interface_pgup;
-	extern short interface_pgup;
-	extern short interface_pgup;
-	extern int month;
-	extern int year;
-	extern char newscherrybusted;
-	extern char endgamestate;
-	extern short public_interest[VIEWNUM];
-	extern vector<string> male_first_names;
-	extern vector<string> female_first_names;
-	extern vector<string> gender_neutral_first_names;
-	extern vector<string> great_white_male_patriarch_first_names;
-	extern vector<string> regular_last_names;
-	extern vector<string> archconservative_last_names;
-
-	extern Log gamelog;
 	extern char artdir[MAX_PATH_SIZE];
 	extern char endgamestate;
-	extern short lawList[LAWNUM];
-
-	extern char endgamestate;
-	extern short lawList[LAWNUM];
-	extern char endgamestate;
+	extern char newscherrybusted;
+	extern int month;
+	extern int year;
+	extern Log gamelog;
+	extern map<short, map<short, string> > getLawFlagStringFull;
+	extern map<short, string> getLawFlagString;
+	extern map<short, string> getLawString;
+	extern MusicClass music;
 	extern short exec[EXECNUM];
-
+	extern short interface_pgup;
 	extern short lawList[LAWNUM];
-	extern char endgamestate;
+	extern short presparty;
+	extern short public_interest[VIEWNUM];
+	extern vector<string> AMorPM;
+	extern vector<string> animal_research_country;
+	extern vector<string> archconservative_last_names;
+	extern vector<string> book_title_2;
+	extern vector<string> book_title;
+	extern vector<string> break_in_murder_case;
+	extern vector<string> bribe_officers;
+	extern vector<string> brother_sister;
+	extern vector<string> bullshit_no_free_speech;
+	extern vector<string> bullshit;
+	extern vector<string> chimp_drug_horror;
+	extern vector<string> chimp_drug_impact;
+	extern vector<string> city_names;
+	extern vector<string> cling_to_business_one_line;
+	extern vector<string> cling_to_religion_one_line;
+	extern vector<string> cling_to_science_one_line;
+	extern vector<string> clinging_one_line;
+	extern vector<string> conservative_oppose_book;
+	extern vector<string> crazy_conservative_act;
+	extern vector<string> develops_hatred_one_line;
+	extern vector<string> distrust_liberals;
+	extern vector<string> drug_name_2;
+	extern vector<string> drug_name;
+	extern vector<string> evidence_of_child_murder;
+	extern vector<string> family_values_company_name_2;
+	extern vector<string> family_values_company_name_3;
+	extern vector<string> family_values_company_name;
+	extern vector<string> female_first_names;
+	extern vector<string> fm_radio_name_2;
+	extern vector<string> fm_radio_name;
+	extern vector<string> gender_neutral_first_names;
+	extern vector<string> gene_corp_name_2;
+	extern vector<string> gene_corp_name;
+	extern vector<string> gene_product_benefit;
+	extern vector<string> gene_product_cost;
+	extern vector<string> gene_product_name_2;
+	extern vector<string> gene_product_name;
+	extern vector<string> great_white_male_patriarch_first_names;
+	extern vector<string> his_her;
+	extern vector<string> i_like_polution;
+	extern vector<string> interrogater_shows_compassion_one_line;
+	extern vector<string> judge_with_prostitute_full_free_speech;
+	extern vector<string> judge_with_prostitute_no_free_speech;
+	extern vector<string> judge_with_prostitute;
+	extern vector<string> liberalCrime;
+	extern vector<string> male_first_names;
+	extern vector<string> mutilated_corpse;
+	extern vector<string> my_idol;
+	extern vector<string> older_younger;
+	extern vector<string> petty_violence;
+	extern vector<string> pollution_consumption_2;
+	extern vector<string> pollution_consumption;
+	extern vector<string> prays_on_drugs;
+	extern vector<string> prays;
+	extern vector<string> prison_book_title_2;
+	extern vector<string> prison_book_title;
+	extern vector<string> public_place;
+	extern vector<string> radio_host_crazy_quote;
+	extern vector<string> radio_host_lost_mind;
+	extern vector<string> radio_name_2;
+	extern vector<string> radio_name;
+	extern vector<string> random_nationality;
+	extern vector<string> regular_last_names;
+	extern vector<string> smarter_than_you_one_line;
+	extern vector<string> tech_giant_name_2;
+	extern vector<string> tech_giant_name;
+	extern vector<string> terrorist_group;
+	extern vector<string> terrorist_plot_no_free_speech;
+	extern vector<string> terrorist_plot;
+	extern vector<string> vigilante_murder;
+	extern vector<string> why_chase_ended;
+	extern vector<vector<string> > bad_trip;
+	extern vector<vector<string> > cling_to_business;
+	extern vector<vector<string> > cling_to_interrogater;
+	extern vector<vector<string> > cling_to_religion;
+	extern vector<vector<string> > cling_to_science;
+	extern vector<vector<string> > develops_hatred;
+	extern vector<vector<string> > fall_in_love;
+	extern vector<vector<string> > interrogater_shows_compassion;
+	extern vector<vector<string> > smarter_than_you;
 
 #include "locations/locationsEnums.h"
 	const vector<string> numberTimesHit =
@@ -9047,12 +8681,6 @@ shopsnstuff.cpp
 		" four",
 		" five",
 	};
-	extern map<short, string> getLawString;
-	extern vector<string> city_names;
-	//		extern string findingBugs;
-	extern map<short, string> getLawFlagString;
-	extern map<short, map<short, string> > getLawFlagStringFull;
-	extern short lawList[LAWNUM];
 
 	void generate_name(char *first, char *last, char gender);
 	void firstname(char *str, char gender);
@@ -9077,125 +8705,7 @@ shopsnstuff.cpp
 		"four",
 		"five"
 	};
-	extern vector<string> vigilante_murder;
-	extern vector<string> why_chase_ended;
 
-
-	extern vector<string> book_title;
-	extern vector<string> book_title_2;
-	extern vector<string> random_nationality;
-	extern vector<string> conservative_oppose_book;
-
-	extern vector<string> petty_violence;
-	extern vector<string> his_her;
-	extern vector<string> older_younger;
-	extern vector<string> brother_sister;
-
-	extern int year;
-
-	extern vector<string> AMorPM;
-	//		extern string ampersandR;
-	//		extern string singleDot;
-
-	extern vector<string> liberalCrime;
-
-
-	extern short lawList[LAWNUM];
-
-	extern vector<string> judge_with_prostitute;
-	extern vector<string> judge_with_prostitute_no_free_speech;
-	extern vector<string> judge_with_prostitute_full_free_speech;
-
-	extern int year;
-	extern short presparty;
-	extern vector<string> crazy_conservative_act;
-
-	extern vector<string> bribe_officers;
-
-	extern short lawList[LAWNUM];
-
-	extern vector<string> radio_host_lost_mind;
-
-
-	extern int year;
-	extern short presparty;
-
-	extern vector<string> radio_name;
-	extern vector<string> radio_name_2;
-
-
-	extern vector<string> radio_host_crazy_quote;
-
-	extern vector<string> my_idol;
-
-
-	extern int year;
-	extern short presparty;
-
-	extern short lawList[LAWNUM];
-	extern vector<string> prison_book_title_2;
-
-	extern vector<string> prison_book_title;
-
-	extern vector<string> animal_research_country;
-
-	extern short lawList[LAWNUM];
-
-	extern short lawList[LAWNUM];
-
-	extern vector<string> drug_name;
-
-	extern short lawList[LAWNUM];
-	extern vector<string> chimp_drug_impact;
-
-	extern vector<string> drug_name_2;
-	extern vector<string> chimp_drug_horror;
-
-
-	extern vector<string> family_values_company_name;
-	extern vector<string> family_values_company_name_2;
-	extern vector<string> family_values_company_name_3;
-	extern vector<string> pollution_consumption;
-	extern vector<string> pollution_consumption_2;
-	extern vector<string> i_like_polution;
-	extern vector<string> distrust_liberals;
-
-	extern vector<string> tech_giant_name;
-	extern vector<string> tech_giant_name_2;
-
-	extern short lawList[LAWNUM];
-
-	extern vector<string> bullshit_no_free_speech;
-	extern vector<string> bullshit;
-
-	extern vector<string> gene_corp_name;
-	extern vector<string> gene_corp_name_2;
-	extern vector<string> gene_product_name;
-	extern vector<string> gene_product_name_2;
-	extern vector<string> gene_product_benefit;
-
-
-	extern vector<string> gene_product_cost;
-	extern vector<string> mutilated_corpse;
-
-	extern vector<string> evidence_of_child_murder;
-	extern vector<string> break_in_murder_case;
-
-	extern vector<string> terrorist_plot;
-	extern vector<string> terrorist_plot_no_free_speech;
-
-	//		extern string commaSpace;
-
-
-	extern vector<string> terrorist_group;
-
-
-	extern vector<string> fm_radio_name;
-	extern vector<string> fm_radio_name_2;
-
-	extern short lawList[LAWNUM];
-	extern short lawList[LAWNUM];
-	extern vector<string> public_place;
 	const vector<string> vicious_killing_of_guard = {
 		"slit the guard's throat with a shank",
 		"strangled the guard to death with a knotted bed sheet",
@@ -9208,30 +8718,8 @@ shopsnstuff.cpp
 		"eaten the guard's liver with some fava beans and a nice chianti",
 		"performed deadly experiments on the guard unheard of since Dr. Mengele"
 	};
-	extern short lawList[LAWNUM];
-	extern short lawList[LAWNUM];
-	extern short lawList[LAWNUM];
-	extern vector<string> prays;
-	extern vector<string> prays_on_drugs;
-	extern vector<vector<string> > fall_in_love;
-	extern vector<vector<string> > bad_trip;
-	extern vector<string> smarter_than_you_one_line;
-	extern vector<vector<string> > smarter_than_you;
-	extern vector<string> develops_hatred_one_line;
-	extern vector<vector<string> > develops_hatred;
-	extern vector<string> interrogater_shows_compassion_one_line;
-	extern vector<vector<string> > interrogater_shows_compassion;
-	extern vector<vector<string> > cling_to_interrogater;
-	extern vector<string> clinging_one_line;
-	extern vector<vector<string> > cling_to_religion;
-	extern vector<string> cling_to_religion_one_line;
-	extern vector<vector<string> > cling_to_business;
-	extern vector<string> cling_to_business_one_line;
-	extern vector<vector<string> > cling_to_science;
-	extern vector<string> cling_to_science_one_line;
 
-	//		extern string singleDot;
-	//		extern string ampersandR;
+
 	const string findingBugs = "Finding bugs";
 	const string mostlyendings = "mostlyendings\\";
 	const string CONST_commondisplay223 = "PGDN";
@@ -9246,7 +8734,6 @@ shopsnstuff.cpp
 	const string CONST_commondisplay228 = "; and :";
 	const string CONST_commondisplay227 = "[]";
 	const string CONST_commondisplay22X = " to view other Liberal pages.";
-//	const string singleSpace = " ";
 	const string CONST_fight035 = " times";
 	const string CONST_getnames043 = "Software Bugs";
 	const string CONST_creaturenames009 = "Errol";
@@ -9508,7 +8995,6 @@ shopsnstuff.cpp
 	const string CONST_news488 = ". We have a very experienced research team. ";
 	const string CONST_news487 = "a spokesperson for the research team stated that, \"It really isn't so bad as all that. Chimpanzees are very resilient creatures. ";
 	const string CONST_news486 = "Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ";
-//	const string CONST_news485 = ". ";
 	const string CONST_news484 = " Along with bonobos, chimpanzees are our closest cousins";
 	const string CONST_news480 = ", the drug apparently ";
 	const string CONST_news477 = "Called ";
@@ -9711,7 +9197,6 @@ shopsnstuff.cpp
 	const string CONST_news683 = "[harmed] the guard";
 
 	const string CONST_newsB944 = "neo-pagan";
-//	const string CONST_newsB943 = "him";
 	const string CONST_newsB942 = "Bloods";
 
 	const string CONST_news708 = " altar";
@@ -9754,7 +9239,6 @@ shopsnstuff.cpp
 	const string CONST_news651 = " - The hostage crisis at the ";
 	const string CONST_activities149 = " but did find a ";
 	const string CONST_activities148 = " was unable to find a ";
-//	const string singleDot = ".";
 	const string CONST_activities186 = "Enter - Call it a day.";
 
 	const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
@@ -9775,7 +9259,6 @@ shopsnstuff.cpp
 	const string CONST_interrogation142 = " stammers and ";
 
 	const string CONST_interrogationB150 = "hugs ";
-//	const string singleDot = ".";
 
 	const string CONST_interrogation148 = " begs for the nightmare to end.";
 	const string CONST_interrogation147 = " curls up and";
@@ -9870,9 +9353,6 @@ shopsnstuff.cpp
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
 
@@ -9900,18 +9380,11 @@ shopsnstuff.cpp
 	map<short, string> discussesIssues;
 	const string activities = "activities\\";
 
-	// extern string singleDot;
-	// extern string singleSpace;
 	void fillEncounter(CreatureTypes c, int numleft);
 	void whoAreWaitingForRescue(vector<DeprecatedCreature *>& waiting_for_rescue, int cursite, short special);
-	//vector<string> was_abused;
-	//vector<file_and_text_collection> misc_activities_text_file_collection = {
-		/*miscactions.cpp*/
-		//customText(&was_abused, activities + CONST_miscactions004),
-	//};
+
 	void fillEncounter(CreatureTypes c, int numleft);
-	//map<short, string> discussIssues;
-	//map<short, string> discussesIssues;
+
 	map<int, CheckDifficulty> unlockDifficulty = {
 		map<int, CheckDifficulty>::value_type(UNLOCK_CAGE,        DIFFICULTY_VERYEASY),
 		map<int, CheckDifficulty>::value_type(UNLOCK_CAGE_HARD,   DIFFICULTY_AVERAGE),
@@ -9920,24 +9393,16 @@ shopsnstuff.cpp
 		map<int, CheckDifficulty>::value_type(UNLOCK_SAFE,        DIFFICULTY_HEROIC),
 		map<int, CheckDifficulty>::value_type(UNLOCK_VAULT,       DIFFICULTY_HEROIC),
 	};
+	bool isThereASiteAlarm();
+	void setSiteAlarmOne();
+	vector<NameAndAlignment> getEncounterNameAndAlignment();
+
 	extern Deprecatedsquadst *activesquad;
 	extern Log gamelog;
 	extern short fieldskillrate;
-	bool isThereASiteAlarm();
-	void setSiteAlarmOne();
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
 	extern short sitealarmtimer;
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-	vector<NameAndAlignment> getEncounterNameAndAlignment();
-	extern Deprecatedsquadst *activesquad;
-	extern Log gamelog;
-
 	extern short sitealienate;
-	extern Log gamelog;
-	extern Deprecatedsquadst *activesquad;
-	extern Deprecatedsquadst *activesquad;
+
 	const string CONST_miscactions077 = "You'll have to come back later.";
 	const string CONST_miscactions076 = "There's nobody left to carry the others.";
 	const string CONST_miscactions074 = "There's nobody left to carry ";
@@ -12240,7 +11705,6 @@ shopsnstuff.cpp
 	const string CONST_news021 = "book_title.txt";
 	const string CONST_news020 = "AMorPM.txt";
 	const string CONST_news019 = "liberalCrime.txt";
-	const string CONST_news002 = "";
 
 	const string tag_CEO = "CEO";
 	const string tag_CONSERVATIVE = "CONSERVATIVE";
@@ -12736,8 +12200,6 @@ shopsnstuff.cpp
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include <common\\getnames.h>
-	map<short, string> conservatiseLaw;
-	map<short, string> liberalizeLaw;
 #include "../common/musicClass.h"
 	// string establishPrisonReform;
 	// string improvePrisonConditions;
@@ -12851,98 +12313,55 @@ shopsnstuff.cpp
 	extern short senate[SENATENUM];
 	extern short wincondition;
 
+	const string CONST_politics075 = "United States";
+	const string corporateSuffixtxt = "corporateSuffix.txt";
+	const string mostlyendings = "mostlyendings\\";
 
 	void addStringYear();
-	enum BillStatus
-	{
-		BILL_SIGNED = -2,
-		BILL_OVERRIDE_VETO = -1,
-		BILL_PASSED_CONGRESS = 0,
-		BILL_FAILED = 1
-	};
+	void printCONST_politics048(); 
+	void printCONST_politics072(const int p);
+	void printSingleVoteOnBill(const int l, const int yesvotes, const bool yeswin, const int p);
+	void printSingleSenatorSymbol(const int y, const int x, const short senates);
+	void printSingleWinnerOfElection(const string winner);
 	void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment);
-	const string pressKeyToReflect = "Press any key to reflect on what has happened.";
-	const string YEA = " Yea";
-	const string NAY = " Nay";
-	const string establishPrisonReform = "Establish Prison Rehabilitation";
-	const string improvePrisonConditions = "Improve Prison Conditions";
-	const string CONST_politics112 = "pro-Human Rights";
-	const string CONST_politics111 = "return attitude[]";
-	const string CONST_politics110 = "    ";
-	const string CONST_politics109 = "None of the items made it to the President's desk.";
-	const string CONST_politics107 = "*** VETO ***";
-	const string CONST_politics106 = "FORCED BY CONGRESS";
-	const string CONST_politics105 = "Dead in Congress";
-	const string CONST_politics104 = "President";
-	const string CONST_politics103 = "Press any key to watch the President.                   ";
-	const string CONST_politics102 = "VP";
-	const string CONST_politics100 = "Senate";
-	const string CONST_politics099 = "House";
-	const string CONST_politics098 = "Press any key to watch the votes unfold.";
-	const string CONST_politics097 = "Expand Prisoners' Rights";
-	const string CONST_politics096 = "Mandate Prison Rehabilitation";
-	const string CONST_politics095 = "To ";
-	const string CONST_politics094 = "Joint Resolution ";
-	const string CONST_politics093 = "Legislative Agenda ";
-	const string CONST_politics092 = "Congress is acting on legislation!";
-	const string CONST_politics091 = ", is appointed to the bench.";
-	const string CONST_politics090 = "the Honorable ";
-	const string CONST_politics089 = "Comrade ";
-	const string CONST_politics088 = "After much debate and televised testimony, a new justice,";
-	const string CONST_politics087 = "Press any key to see what happens.";
-	const string CONST_politics086 = ", is stepping down.";
-	const string CONST_politics085 = "Justice ";
-	const string CONST_politics084 = "Changing the Guard!";
-	const string CONST_politics083 = " for Status Quo";
-	const string CONST_politics082 = " for Change";
-	const string CONST_politics080 = "Press any key to watch the decisions unfold.";
-	const string CONST_politics077 = "A Decision could ";
-	const string CONST_politics076 = " vs. ";
-	const string CONST_politics075 = "United States";
-	const string CONST_politics074 = "Supreme Court Watch ";
-	const string CONST_politics073 = "The Supreme court is handing down decisions!";
-	const string CONST_politics072 = "A Recount was Necessary";
-	const string CONST_politics071 = "% No";
-	const string CONST_politics070 = "% Yes";
-	const string CONST_politics069 = "Press any key to watch the elections unfold.";
-	const string CONST_politics065 = "Proposition ";
-	const string CONST_politics064 = "Important Propositions ";
-	const string CONST_politics063 = "Press any key to continue the elections.   ";
-	const string CONST_politics062 = " (After Recount)";
-	const string CONST_politics061 = "Press any key to watch the election unfold.";
-	const string CONST_politics060 = "Mrs. ";
-	const string CONST_politics059 = "Mr. ";
-	const string CONST_politics058 = "Representative ";
-	const string CONST_politics057 = "Ret. General ";
-	const string CONST_politics056 = "Senator ";
-	const string CONST_politics055 = "Governor ";
-	const string CONST_politics054 = "Vice President ";
-	const string CONST_politics053 = "President ";
-	const string CONST_politics052 = "After a long primary campaign, the people have rallied around two leaders...";
-	const string CONST_politics051 = "After a long primary campaign, the people have rallied around three leaders...";
-	const string CONST_politics050 = "Presidential General Election ";
-	const string CONST_politics049 = "The Elections are being held today!";
-	const string CONST_politics048 = "Press any key to continue the elections.    ";
-	const string CONST_politics047 = "        ";
-	const string CONST_politics046 = "+";
-	const string CONST_politics045 = "   C+: ";
-	const string CONST_politics043 = "   C: ";
-	const string CONST_politics041 = "   m: ";
-	const string CONST_politics039 = "   L: ";
-	const string CONST_politics037 = "   L+: ";
-	const string CONST_politics035 = "   S: ";
-	const string CONST_politics034 = "Net change:";
-	const string CONST_politics033 = "S ";
-	const string CONST_politics032 = "L+";
-	const string CONST_politics031 = "L ";
-	const string CONST_politics030 = "m ";
-	const string CONST_politics029 = "C ";
-	const string CONST_politics028 = "C+";
-	const string CONST_politics020 = "House Elections ";
-	const string CONST_politics004 = "                    ";
-	const string CONST_politics002 = "Senate Elections ";
-	const string CONST_politics001 = "corporateSuffix.txt";
-	const string mostlyendings = "mostlyendings\\";
+	void printReflectOnBill();
+	void printDeadInCongress();
+	void printWatchPresidentB();
+	void printWatchPresident();
+	void printBillResults(const BillStatus bill, const int c);
+	void displayCongressHeader(const char clearformess);
+	void addStringYear();
+	void displayCongressHeaderPartOne();
+	void displayCongressHeaderPartTwo();
+	void displayHouseVotes(const int l, const int yesvotes_h, const char yeswin_h, const int c);
+	void displaySenateVotes(const int l, const int yesvotes_s, const char yeswin_s, const int c, const int s);
+	void printHouseElectionsHeader();
+	void printSingleSenator(const short s, const int x, const int y);
+	void printSenateElectionsHeader();
+	void printPressAnyKeyElections();
+	void printSingleHouseMember(const short h, const int y, const int x);
+	void printHouseChanges(const int x, const int y, const short h, const int change[]);
+	void printDetermineBill(const int c, const int billdirc, const int billc);
+	void printCanSeeCourt(const short courtj, const string courtnamej);
+	void printCanSeeCourtB(const short courtj, const string courtnamej);
+	void printChangingOfTheGuard();
+	void printPressKeyToReflect();
+	void printStatusQuoOrChange(const int l, const int c, const char yeswin, const int yesvotes);
+	void printCONSTpolitics080();
+	void printSenateStatus(const int change[]);
+	void printSupremeCourtRuling(const int c, const string name1, const string name2, const int scasedirc, const int scasec); 
+	void actuallyPrintSenateWinner(const string winner);
+	void printCONST_politics069(); 
+	void printCurrentProp(const int p, const int propnumsp, const int propdirp, const int propp);
+	void printImportantProps();
+	void printElectionYearHeader();
+	void printTheElectionsAreHeld();
+	void printSupremeCourtWatch();
+	void printSupremeCourtDecides();
+	void printPressKeyToContinueElections();
+	void printOneSingleVote(const int votesc, const int c, const int winner, const bool lastVote);
+	void printWatchElectionUnfold(); 
+	void printSingleCandidateTitle(const string candidatec1, const char candidatec0, const int c);
 #endif	//POLITICS_CPP
 #ifdef	RECRUIT_CPP
 // recruit.cpp
@@ -13052,6 +12471,7 @@ shopsnstuff.cpp
 	extern short activesortingchoice[SORTINGCHOICENUM];
 	extern Deprecatedsquadst *activesquad;
 	extern long cursquadid;
+	extern MusicClass music;
 	extern vector<DeprecatedCreature *> pool;
 	extern vector<Deprecatedsquadst *> squad;
 	extern int stat_kills;
@@ -13060,10 +12480,6 @@ shopsnstuff.cpp
 
 	int consolidateSiegeLoot();
 
-	extern MusicClass music;
-	extern Deprecatedsquadst *activesquad;
-	extern vector<DeprecatedCreature *> pool;
-	extern vector<Deprecatedsquadst *> squad;
 	const string tag_value = "value";
 	const string tag_attribute = "attribute";
 	const string tag_skill = "skill";
@@ -13734,20 +13150,7 @@ shopsnstuff.cpp
 		map<int, int> ::value_type(SITE_MEDIA_CABLENEWS,            SPECIAL_NEWS_BROADCASTSTUDIO),
 	};
 	//PREP
-	const string CONST_sitemapC043 = "Export";
 
-	const string CONST_sitemapB042 = "mapCSV_ApartmentIndustrial2_Tiles.csv";
-	const string CONST_sitemapB041 = "3";
-	const string CONST_sitemapB040 = "csv";
-	const string CONST_sitemap039 = "ApartmentIndustrial2";
-	const string CONST_sitemap038 = "2";
-	const string CONST_sitemap037 = "mapCSV_ApartmentIndustrial_Tiles.csv";
-	const string CONST_sitemap036 = "ApartmentIndustrial";
-	const string CONST_sitemap035 = "mapCSV_[NAMEHERE]_Specials.csv";
-	const string CONST_sitemap034 = "mapCSV_[NAMEHERE]_Tiles.csv";
-	const string CONST_sitemap033 = "../art";
-	const string CONST_sitemap032 = "csvTilemap.lua";
-	const string CONST_sitemap031 = "Deadly Alien Map Editor";
 	const string CONST_sitemap030 = "GENERIC_UNSECURE";
 
 	const string tag_WEIGHT = "WEIGHT";
@@ -15718,7 +15121,6 @@ void pressAnyKey();
 #include "vehicletype.h"
 #include "../common/stringconversion.h"
 	extern int year;
-	const string CONST_vehicletypeB061 = ": ";
 	const string CONST_vehicletypeB060 = "::stealing: ";
 	const string CONST_vehicletypeB055 = "::colors: ";
 	const string CONST_vehicletypeB054 = "::year: ";
@@ -15814,36 +15216,9 @@ void pressAnyKey();
 	extern int year;
 	extern short lawList[LAWNUM];
 
-	const string CONST_weapontypeB091 = "striking";
-	const string CONST_weapontype099 = "UNDEF";
-	const string CONST_weapontype098 = "INVALID SUBTYPE";
-	const string CONST_weapontype096 = "Unknown element for attack: ";
-	const string CONST_weapontype095 = "Unknown element for attack::fire: ";
-	const string CONST_weapontype094 = "Unknown element for attack::critical: ";
-	const string CONST_weapontype093 = "Invalid severtype for attack::critical::severtype: ";
-	const string CONST_weapontype092 = "Invalid boolean value for attack::damages_armor: ";
-	const string CONST_weapontype091 = "Invalid severtype for attack::severtype: ";
-	const string CONST_weapontype090 = "Invalid boolean value for attack::bleeding: ";
-	const string CONST_weapontype089 = "Invalid boolean value for attack::shoots: ";
-	const string CONST_weapontype088 = "Invalid boolean value for attack::burns: ";
-	const string CONST_weapontype087 = "Invalid boolean value for attack::cuts: ";
-	const string CONST_weapontype086 = "Invalid boolean value for attack::tears: ";
-	const string CONST_weapontype085 = "Invalid boolean value for attack::bruises: ";
-	const string CONST_weapontype084 = "Invalid skill name for attack::skill: ";
-	const string CONST_weapontype083 = "Invalid boolean value for attack::always_describe_hit: ";
-	const string CONST_weapontype082 = "Invalid boolean value for attack::thrown ";
-	const string CONST_weapontype081 = "Invalid boolean value for attack::ranged ";
-	const string CONST_weapontype080 = "assaults";
-	const string CONST_weapontype078 = ": ";
-	const string CONST_weapontype077 = "Unknown element for weapon type ";
-	const string CONST_weapontype076 = "::suspicious: ";
-	const string CONST_weapontype075 = "Invalid boolean value for weapon type ";
-	const string CONST_weapontype074 = "::auto_break_locks: ";
-	const string CONST_weapontype072 = "::graffiti: ";
-	const string CONST_weapontype070 = "::instrument: ";
-	const string CONST_weapontype068 = "::musical_attack: ";
-	const string CONST_weapontype066 = "::threatening: ";
-	const string CONST_weapontype064 = "::can_take_hostages: ";
+	const string CONST_tag_striking = "striking";
+	const string CONST_tag_UNDEF = "UNDEF";
+	const string CONST_tag_assaults = "assaults";
 
 	const string tag_chance_causes_debris = "chance_causes_debris";
 	const string tag_chance = "chance";

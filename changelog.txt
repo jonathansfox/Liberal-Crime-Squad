@@ -969,7 +969,9 @@ Sieges, too.
 1108 total
 //Next target: 15 in recruit.cpp
 10 files down, 34 files to go
-Next target: 160 in politics.cpp
+//Next target: 160 in politics.cpp
+1279 total
+Next target: 11 in news.cpp
 
 Removed much of the redundant code from includes.h
-Current target: MISCACTIONS_CPP
+Current target: CREATUREPOOL_CPP

@@ -546,50 +546,6 @@ map<short, string> buildThisSite;
 	 unsigned long oldseed[RNG_SIZE];
 	 copyRNG(oldseed, seed);
 	 copyRNG(seed, loc.mapseed);
-	 // A short guide to how the new maps work...
-	 //
-	 //   Edit maps using DAME, the CONST_sitemap031. You can find a maps.dam file
-	 // to open with DAME in the /dev directory. You can find DAME here (try search engine if link
-	 // is out of date):
-	 //   http://dambots.com/dame-editor/
-	 //
-	 //   Open up the maps.dam file in DAME. On one side, in the layers listing, you'll see the existing
-	 // maps. Use the check boxes to hide and show maps. You can create new maps by copying the old ones;
-	 // right click a top-level group (like NuclearPlant) and select Duplicate. Rename the new map based
-	 // on the conventions described below.
-	 //   Editing using the Paint tool ('B') is easy; click the tile you want in the tiles panel, then click
-	 // the map view to paint with that tile. You may need to experiment a bit to figure out what the
-	 // specials icons represent, but I've tried to make it pretty self-explanatory. Box-drawing to fill
-	 // large areas is possible, but a little clunky -- use the Tile Matrix tool ('M') and fill the entire
-	 // matrix with the tile you want to use by dragging tiles from the tiles panel. You can then box-drag
-	 // to fill large areas.
-	 //   When you're done editing, save maps.dam and use File->Export to create the map source files the
-	 // game can run. In the Export Project dialog, use CONST_sitemap032 for the LUA exporter. CSV dir should
-	 // be CONST_sitemap033 and File Extension should be CONST_sitemapB040. These are probably the defaults. Press CONST_sitemapC043 and
-	 // it will automagically build the map source files. You're done -- run the game and visit that
-	 // location to view the results in-game. You don't even need to make a new game.
-	 //   To remove a map from the game and go back to the old map generation modes, just delete the .csv
-	 // files. You may also want to clean up the maps.dam file, removing any old maps you don't want, since
-	 // it'll try to generate them again next time you export.
-	 //
-	 //   Map naming conventions:
-	 // CONST_sitemap034 - Tile map
-	 // CONST_sitemap035 - Special locations (vault, equipment, lockup, etc.)
-	 //   [NAMEHERE] is the name in quotes below, and it's what the maps are called in the DAME layer list.
-	 // For example, for the industrial apartment, the DAME name is CONST_sitemap036, and the
-	 // exported file name is CONST_sitemap037. DAME should add the prefix and suffix
-	 // to the exported files automatically.
-	 //
-	 //   Additional Notes:
-	 // 1. All maps MUST have both a tile map and a special map, even if the special map is blank. This
-	 // goes for both first floor maps and otherwise.
-	 // 2. For multi-floor maps, add up stairs to the special map, then create a new set of maps for
-	 // each additional floor, appending CONST_sitemap038 to the location name for the second floor, CONST_sitemapB041 for
-	 // third floor, and so on. For example, a second floor to the industrial apartments would have the
-	 // name CONST_sitemap039 in DAME, and export as CONST_sitemapB042.
-	 //
-	 // With love,
-	 //   Fox
 	 // Try to load from a map file
 	 bool loaded = false;
 	 if (siteReadMap.count(loc.type)) {

@@ -29,9 +29,9 @@ This file is part of Liberal Crime Squad.                                       
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;
  vector<file_and_text_collection> politics_text_file_collection = {
-	 customText(&corporateSuffix, mostlyendings + CONST_politics001),
+	 customText(&corporateSuffix, mostlyendings + corporateSuffixtxt),
  };
-
+ 
  /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
  * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
  bool stalinview(short view, bool islaw)
@@ -289,49 +289,10 @@ vector<string> corporateSuffix;
 		 if (abs(exec[EXEC_PRESIDENT] - exec[EXEC_ATTORNEY]) > 1) fillCabinetPost(EXEC_ATTORNEY);
 	 }
  }
- void printSenateElectionsHeader() {
-	 music.play(MUSIC_ELECTIONS);
-	 eraseAlt();
-	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, CONST_politics002);
-	 addStringYear();
- }
- void printPressAnyKeyElections() {
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, CONST_politics069);
-	 pressAnyKey();
- }
- void printSenateStatus(const int change[]) {
 
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(20, 0, CONST_politics034);
-	 if (stalinmode)
-	 {
-		 addstrAlt(CONST_politics035);
-		 if (change[5] > 0) addstrAlt(CONST_politics046);
-		 addstrAlt(change[5]);
-	 }
-	 addstrAlt(CONST_politics037);
-	 if (change[4] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[4]);
-	 addstrAlt(CONST_politics039);
-	 if (change[3] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[3]);
-	 addstrAlt(CONST_politics041);
-	 if (change[2] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[2]);
-	 addstrAlt(CONST_politics043);
-	 if (change[1] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[1]);
-	 addstrAlt(CONST_politics045);
-	 if (change[0] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[0]);
-	 addstrAlt(CONST_politics047);
-	 if (!disbanding) pause_ms(30);
- }
+
  void printSenateWinner(const int change[]) {
 	 const int mood = publicmood(LAW_MOOD);
-	 moveAlt(21, 0);
 	 signed char winner;
 	 if (change[5] > 0 && change[5] > change[0] + change[1] && change[5] > change[3] + change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
 		 winner = ALIGN_STALINIST;
@@ -358,21 +319,18 @@ vector<string> corporateSuffix;
 	 else if (change[5] > 0 && change[0] <= 0 && change[4] <= 0) // Stalinist increased and C+ and L+ both same or decreased
 		 winner = ALIGN_STALINIST;
 	 else winner = ALIGN_MODERATE; // nobody won
-	 addstrAlt(winnerOfElection[winner]);
-	 mvaddstrAlt(22, 0, CONST_politics048);
+
+	 actuallyPrintSenateWinner(winnerOfElection[winner]);
 	 pressAnyKey();
  }
- void printSingleSenator(const int s, const int x, const int y) {
-	 set_alignment_color(senate[s], true);
-	 mvaddstrAlt(y, x, CONST_politics004);
-	 mvaddstrAlt(y, x, getalign(senate[s], false));
- }
+
  void elections_senate(int senmod, char canseethings)
  {
 	 const int mood = publicmood(LAW_MOOD);
 	 const int stalinmood = publicmood(LAW_STALIN);
 	 if (canseethings)
 	 {
+		 music.play(MUSIC_ELECTIONS);
 		 printSenateElectionsHeader();
 	 }
 	 {
@@ -383,8 +341,7 @@ vector<string> corporateSuffix;
 			 if (senmod != -1 && s % 3 != senmod)continue;
 			 if (canseethings)
 			 {
-				 set_alignment_color(senate[s], true);
-				 mvaddstrAlt(y, x, getalign(senate[s], false));
+				 printSingleSenatorSymbol(y, x, senate[s]);
 			 }
 			 x += 20;
 			 if (x > 70) x = 0, y++;
@@ -393,6 +350,7 @@ vector<string> corporateSuffix;
 	 if (canseethings)
 	 {
 		 printPressAnyKeyElections();
+		 pressAnyKey();
 	 }
 	 int vote, change[6] = { 0,0,0,0,0,0 };
 	 {
@@ -429,13 +387,14 @@ vector<string> corporateSuffix;
 			 change[senate[s] + 2]++;
 			 if (canseethings)
 			 {
-				 printSingleSenator(s, x, y);
+				 printSingleSenator(senate[s], x, y);
 			 }
 			 x += 20;
 			 if (x > 70) x = 0, y++;
 			 if (canseethings)
 			 {
 				 printSenateStatus(change);
+				 if (!disbanding) pause_ms(30);
 			 }
 		 }
 	 }
@@ -444,83 +403,10 @@ vector<string> corporateSuffix;
 		 printSenateWinner(change);
 	 }
  }
- void printSingleHouseMember(const int h, const int y, const int x) {
-	 moveAlt(y, x);
-	 switch (house[h]) {
-	 case -2:
-		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics028);
-		 break;
 
-	 case -1:
-		 set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics029);
-		 break;
 
-	 case 0:
-		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics030);
-		 break;
-
-	 case 1:
-		 set_color_easy(CYAN_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics031);
-		 break;
-
-	 case 2:
-		 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics032);
-		 break;
-
-	 default:
-		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics033);
-		 break;
-	 }
- }
- void printHouseMembership() {
-	 int x = 0;
-	 int y = 2;
-	 for (int h = 0; h < HOUSENUM; h++)
-	 {
-
-		 printSingleHouseMember(h, y, x);
-
-		 x += 3;
-		 if (x > 78) x = 0, y++;
-	 }
- }
- void printHouseChanges(const int x, const int y, const int h, const int change[]) {
-	 printSingleHouseMember(h, y, x);
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(20, 0, CONST_politics034);
-	 if (stalinmode)
-	 {
-		 addstrAlt(CONST_politics035);
-		 if (change[5] > 0) addstrAlt(CONST_politics046);
-		 addstrAlt(change[5]);
-	 }
-	 addstrAlt(CONST_politics037);
-	 if (change[4] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[4]);
-	 addstrAlt(CONST_politics039);
-	 if (change[3] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[3]);
-	 addstrAlt(CONST_politics041);
-	 if (change[2] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[2]);
-	 addstrAlt(CONST_politics043);
-	 if (change[1] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[1]);
-	 addstrAlt(CONST_politics045);
-	 if (change[0] > 0) addstrAlt(CONST_politics046);
-	 addstrAlt(change[0]);
-	 addstrAlt(CONST_politics047);
-	 if (!disbanding) pause_ms(5);
- }
  void printWinnerOfElection(const int change[]) {
 	 const int mood = publicmood(LAW_MOOD);
-	 moveAlt(21, 0);
 	 signed char winner;
 	 if (change[5] > 0 && change[5] > change[0] + change[1] && change[5] > change[3] + change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
 		 winner = ALIGN_STALINIST;
@@ -547,32 +433,25 @@ vector<string> corporateSuffix;
 	 else if (change[5] > 0 && change[0] <= 0 && change[4] <= 0) // Stalinist increased and C+ and L+ both same or decreased
 		 winner = ALIGN_STALINIST;
 	 else winner = ALIGN_MODERATE; // nobody won
-	 addstrAlt(winnerOfElection[winner]);
+
+	 printSingleWinnerOfElection(winnerOfElection[winner]);
 	 if (!disbanding)
 	 {
-		 mvaddstrAlt(22, 0, CONST_politics048);
+		 printCONST_politics048();
 		 pressAnyKey();
 	 }
 	 else pause_ms(800);
  }
- void printHouseElectionsHeader() {
-	 music.play(MUSIC_ELECTIONS);
-	 eraseAlt();
-	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, CONST_politics020);
-	 addStringYear();
-	 printHouseMembership();
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, CONST_politics069);
-	 pressAnyKey();
- }
+
  void elections_house(const char canseethings)
  {
 	 const int mood = publicmood(LAW_MOOD);
 	 const int stalinmood = publicmood(LAW_STALIN);
 	 if (canseethings)
 	 {
+		 music.play(MUSIC_ELECTIONS);
 		 printHouseElectionsHeader();
+		 pressAnyKey();
 	 }
 	 int change[6] = { 0,0,0,0,0,0 };
 	 {
@@ -608,7 +487,8 @@ vector<string> corporateSuffix;
 			 change[house[h] + 2]++;
 			 if (canseethings)
 			 {
-				 printHouseChanges(x, y, h, change);
+				 printHouseChanges(x, y, house[h], change);
+				 if (!disbanding) pause_ms(5);
 			 }
 
 			 x += 3;
@@ -633,57 +513,29 @@ vector<string> corporateSuffix;
 		 }
 		 if (canseethings && (l % 10 == 9))
 		 {
-			 if ((l != 999 && yesvotes > l / 2) || (l == 999 && yeswin)) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 else if (yesvotes < l / 2 || l == 999) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			 else set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(p * 3 + 2, 70, yesvotes / 10);
-			 addcharAlt('.');
-			 addstrAlt(yesvotes % 10);
-			 addstrAlt(CONST_politics070);
-			 if ((l != 999 && yesvotes < l / 2) || (l == 999 && !yeswin)) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 else if (yesvotes > l / 2 || l == 999) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			 else set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(p * 3 + 3, 70, (l + 1 - yesvotes) / 10);
-			 addcharAlt('.');
-			 addstrAlt((l + 1 - yesvotes) % 10);
-			 addstrAlt(CONST_politics071);
+			 printSingleVoteOnBill(l, yesvotes, yeswin, p);
 			 pause_ms(10);
 		 }
 	 }
 	 if (canseethings&&recount)
 	 {
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(p * 3 + 3, 0, CONST_politics072);
+		 printCONST_politics072(p);
 	 }
 	 return yeswin;
  }
- void printCandiadates(const char candidate[3][POLITICIAN_NAMELEN + 1]) {
+ void printCandidates(const char candidate[3][POLITICIAN_NAMELEN + 1]) {
 	 for (int c = 0; c < 2 + stalinmode; c++)
 	 {
-		 // Pick color by political orientation
-		 set_alignment_color(candidate[c][0], true);
-		 moveAlt(8 - ((c + 1) % 3) * 2, 0);
-		 // Choose title -- president or vice president special titles, otherwise
-		 // pick based on historically likely titles (eg, governor most likely...)
-		 if (c == presparty && execterm == 1) addstrAlt(CONST_politics053);
-		 else if (c == presparty && !strcmp(candidate[c] + 1, execname[EXEC_VP])) addstrAlt(CONST_politics054);
-		 else if (LCSrandom(2)) addstrAlt(CONST_politics055);
-		 else if (LCSrandom(2)) addstrAlt(CONST_politics056);
-		 else if (LCSrandom(2)) addstrAlt(CONST_politics057);
-		 else if (LCSrandom(2)) addstrAlt(CONST_politics058);
-		 else if (LCSrandom(2)) addstrAlt(CONST_politics059);
-		 else addstrAlt(CONST_politics060);
-		 addstrAlt(candidate[c] + 1);
-		 addstrAlt(commaSpace + getalign(candidate[c][0], false));
+		 printSingleCandidateTitle(candidate[c] + 1, candidate[c][0], c);
 	 }
 	 if (!disbanding)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(8 + stalinmode * 2, 0, CONST_politics061);
+		 printWatchElectionUnfold();
 		 pressAnyKey();
 	 }
 	 else pause_ms(200);
  }
+
  int singleVote(const int l, const char liberalCandiadate, const char conservativeCandiadate) {
 	 int partyVote;
 	 if (l % 2 == 0 && LCSrandom(5))
@@ -788,7 +640,7 @@ vector<string> corporateSuffix;
 	 //Print candidates
 	 if (canseethings)
 	 {
-		 printCandiadates(candidate);
+		 printCandidates(candidate);
 	 }
 	 int winner = -1;
 	 bool recount = false;
@@ -807,14 +659,7 @@ vector<string> corporateSuffix;
 			 {
 				 for (int c = 0; c < 2 + stalinmode; c++)
 				 {
-					 if (c == winner) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					 else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-					 moveAlt(8 - ((c + 1) % 3) * 2, 45);
-					 addstrAlt(votes[c] / 10);
-					 addcharAlt('.');
-					 addstrAlt(votes[c] % 10);
-					 addcharAlt('%');
-					 if (c == winner && recount&&l == 999) addstrAlt(CONST_politics062);
+					 printOneSingleVote(votes[c], c, winner, c == winner && recount&&l == 999);
 				 }
 				 if (!disbanding) pause_ms(40);
 				 else pause_ms(20);
@@ -823,8 +668,7 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(8 + stalinmode * 2, 0, CONST_politics063);
+		 printPressKeyToContinueElections();
 		 pressAnyKey();
 	 }
 	 //else if(disbanding) pause_ms(800);
@@ -847,9 +691,7 @@ vector<string> corporateSuffix;
  int senMod() {
 	 return (year % 6) / 2;
  }
- void addStringYear() {
-	 addstrAlt(year);
- }
+
  /* politics - causes the people to vote (presidential, congressional, propositions) */
  void elections(char clearformess, char canseethings)
  {
@@ -858,8 +700,7 @@ vector<string> corporateSuffix;
 		 music.play(MUSIC_ELECTIONS);
 		 if (clearformess) eraseAlt();
 		 else makedelimiter();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(8, 1, CONST_politics049);
+		 printTheElectionsAreHeld();
 		 pressAnyKey();
 	 }
 	 //PRESIDENTIAL
@@ -867,14 +708,7 @@ vector<string> corporateSuffix;
 	 {
 		 if (canseethings)
 		 {
-			 eraseAlt();
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(0, 0, CONST_politics050);
-			 addStringYear();
-			 set_color_easy(WHITE_ON_BLACK);
-			 moveAlt(2, 0);
-			 if (stalinmode) addstrAlt(CONST_politics051);
-			 else addstrAlt(CONST_politics052);
+			 printElectionYearHeader();
 		 }
 		 presidentialElection(canseethings);
 	 }
@@ -886,9 +720,7 @@ vector<string> corporateSuffix;
 	 //PROPOSITIONS
 	 if (canseethings)
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(0, 0, CONST_politics064);
+		 printImportantProps();
 		 addStringYear();
 	 }
 	 vector<int> prop, propdir, canlaw;
@@ -948,29 +780,12 @@ vector<string> corporateSuffix;
 		 propdir[p] = lawdir[prop[p]];
 		 if (canseethings)
 		 {
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(p * 3 + 2, 0, CONST_politics065 + tostring(propnums[p]) + ':');
-			 mvaddstrAlt(p * 3 + 2, 18, CONST_politics095);
-			 set_alignment_color(propdir[p]);
-			 if (propdir[p] == 1) {
-				 if (prop[p] == LAW_PRISONS) {
-					 if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
-					 else addstrAlt(improvePrisonConditions);
-				 }
-				 else {
-					 addstrAlt(liberalizeLaw[prop[p]]);
-				 }
-			 }
-			 else {
-				 addstrAlt(conservatiseLaw[prop[p]]);
-			 }
-			 set_color_easy(WHITE_ON_BLACK);
+			 printCurrentProp(p, propnums[p], propdir[p], prop[p]);
 		 }
 	 }
 	 if (canseethings)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(23, 0, CONST_politics069);
+		 printCONST_politics069();
 		 pressAnyKey();
 	 }
 	 for (int p = 0; p < pnum; p++)
@@ -981,11 +796,11 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(23, 0, pressKeyToReflect);
+		 printPressKeyToReflect();
 		 pressAnyKey();
 	 }
  }
+
  /* politics - causes the supreme court to hand down decisions */
  void supremecourt(char clearformess, char canseethings)
  {
@@ -994,18 +809,13 @@ vector<string> corporateSuffix;
 		 music.play(MUSIC_ELECTIONS);
 		 if (clearformess) eraseAlt();
 		 else makedelimiter();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(8, 1, CONST_politics073);
+		 printSupremeCourtDecides();
 		 pressAnyKey();
 	 }
 	 //CHANGE THINGS AND REPORT
 	 if (canseethings)
 	 {
-		 eraseAlt();
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(0, 0, CONST_politics074);
-		 addStringYear();
-		 set_color_easy(WHITE_ON_BLACK);
+		 printSupremeCourtWatch();
 	 }
 	 vector<int> scase, scasedir;
 	 int cnum = LCSrandom(5) + 2, bias = 0;
@@ -1048,29 +858,12 @@ vector<string> corporateSuffix;
 			 else {
 				 name2 = lastname();
 			 }
-			 mvaddstrAlt(c * 3 + 2, 0, name1 + CONST_politics076 + name2);
-			 mvaddstrAlt(c * 3 + 3, 0, CONST_politics077);
-			 set_alignment_color(scasedir[c]);
-			 if (scasedir[c] == 1) {
-				 if (scase[c] == LAW_PRISONS) {
-					 if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
-					 else addstrAlt(improvePrisonConditions);
-				 }
-				 else {
-					 addstrAlt(liberalizeLaw[scase[c]]);
-				 }
-			 }
-			 else {
-				 addstrAlt(conservatiseLaw[scase[c]]);
-			 }
-			 set_color_easy(WHITE_ON_BLACK);
-			 refreshAlt();
+			 printSupremeCourtRuling(c, name1, name2, scasedir[c], scase[c]);
 		 }
 	 }
 	 if (canseethings)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(23, 0, CONST_politics080);
+		 printCONSTpolitics080();
 		 pressAnyKey();
 	 }
 	 for (int c = 0; c < cnum; c++)
@@ -1098,16 +891,7 @@ vector<string> corporateSuffix;
 			 if (l == COURTNUM - 1 && yesvotes >= COURTMAJORITY) yeswin = 1;
 			 if (canseethings)
 			 {
-				 if (l == COURTNUM - 1 && yeswin)set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				 else if (l == COURTNUM - 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				 else set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(c * 3 + 2, 63, yesvotes);
-				 addstrAlt(CONST_politics082);
-				 if (l == COURTNUM - 1 && !yeswin)set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				 else if (l == COURTNUM - 1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				 else set_color_easy(WHITE_ON_BLACK);
-				 mvaddstrAlt(c * 3 + 3, 63, l + 1 - yesvotes);
-				 addstrAlt(CONST_politics083);
+				 printStatusQuoOrChange(l,   c,   yeswin,   yesvotes);
 				 pause_ms(60);
 			 }
 		 }
@@ -1115,8 +899,7 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings)
 	 {
-		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(23, 0, pressKeyToReflect);
+		 printPressKeyToReflect();
 		 pressAnyKey();
 	 }
 	 //CHANGE A JUSTICE 40% OF THE TIME
@@ -1124,21 +907,12 @@ vector<string> corporateSuffix;
 	 {
 		 if (canseethings)
 		 {
-			 eraseAlt();
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(0, 0, CONST_politics084);
+			 printChangingOfTheGuard();
 		 }
 		 int j = LCSrandom(COURTNUM);
 		 if (canseethings)
 		 {
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(2, 0, CONST_politics085);
-			 addstrAlt(courtname[j]);
-			 addstrAlt(commaSpace);
-			 addstrAlt(getalign(court[j], false));
-			 addstrAlt(CONST_politics086);
-			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(7, 0, CONST_politics087);
+			 printCanSeeCourtB(court[j], courtname[j]);
 			 pressAnyKey();
 		 }
 		 float president = (exec[EXEC_PRESIDENT] == ALIGN_STALINIST ? (float)-3 : (float)exec[EXEC_PRESIDENT]);
@@ -1160,20 +934,12 @@ vector<string> corporateSuffix;
 		 } while (len(courtname[j]) > 20);
 		 if (canseethings)
 		 {
-			 mvaddstrAlt(4, 0, CONST_politics088);
-			 moveAlt(5, 0);
-			 if (court[j] == ALIGN_STALINIST) addstrAlt(CONST_politics089);
-			 else addstrAlt(CONST_politics090);
-			 addstrAlt(courtname[j]);
-			 addstrAlt(commaSpace);
-			 addstrAlt(getalign(court[j], false));
-			 addstrAlt(CONST_politics091);
-			 set_color_easy(WHITE_ON_BLACK);
-			 mvaddstrAlt(7, 0, pressKeyToReflect);
+			 printCanSeeCourt(court[j], courtname[j]);
 			 pressAnyKey();
 		 }
 	 }
  }
+ 
  //Some politicians listen to public opinion, but no politician will radically deviate from their alignment.
  //More extreme politicians are less likely to deviate from their views. Moderates always consult public opinion.
  char determine_politician_vote(char alignment, int law)
@@ -1276,130 +1042,12 @@ vector<string> corporateSuffix;
 		 billdir[c] = lawdir[bill[c]];
 		 if (canseethings)
 		 {
-			 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			 mvaddstrAlt(c * 3 + 2, 0, CONST_politics094);
-			 addStringYear();
-			 addcharAlt('-');
-			 addstrAlt(c + 1);
-			 mvaddstrAlt(c * 3 + 3, 0, CONST_politics095);
-			 if (billdir[c] == 1)set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			 else set_color_easy(RED_ON_BLACK_BRIGHT);
-			 set_alignment_color(billdir[c]);
-			 if (billdir[c] == 1) {
-				 if (bill[c] == LAW_PRISONS) {
-					 if (lawList[LAW_PRISONS] == 1) addstrAlt(establishPrisonReform);
-					 else addstrAlt(improvePrisonConditions);
-				 }
-				 else {
-					 addstrAlt(liberalizeLaw[bill[c]]);
-				 }
-			 }
-			 else {
-				 addstrAlt(conservatiseLaw[bill[c]]);
-			 }
-			 set_color_easy(WHITE_ON_BLACK);
-			 refreshAlt();
+			 printDetermineBill(c, billdir[c], bill[c]);
 		 }
 	 }
  }
- void displayCongressHeader(const char clearformess) {
-	 music.play(MUSIC_ELECTIONS);
-	 if (clearformess) eraseAlt();
-	 else makedelimiter();
-	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(8, 1, CONST_politics092);
-	 pressAnyKey();
-	 //CHANGE THINGS AND REPORT
-	 eraseAlt();
-	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(0, 0, CONST_politics093);
-	 addStringYear();
- }
- void displayCongressHeaderPartTwo() {
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, CONST_politics098);
-	 pressAnyKey();
-	 mvaddstrAlt(0, 62, CONST_politics099);
-	 mvaddstrAlt(0, 70, CONST_politics100);
- }
- void displayHouseVotes(const int l, const int yesvotes_h, const char yeswin_h, const int c) {
-	 if (l == HOUSENUM - 1 && yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	 else set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(c * 3 + 2, 62, yesvotes_h);
-	 addstrAlt(YEA);
-	 if (l == HOUSENUM - 1 && !yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	 else set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(c * 3 + 3, 62, l + 1 - yesvotes_h);
-	 addstrAlt(NAY);
- }
- void displaySenateVotes(const int l, const int yesvotes_s, const char yeswin_s, const int c, const int s) {
 
-	 if (l == HOUSENUM - 1 && yeswin_s) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	 else set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(c * 3 + 2, 70, yesvotes_s);
-	 addstrAlt(YEA);
-	 if (l == HOUSENUM - 1 && yesvotes_s == SENATEMAJORITY - 1 && yeswin_s)
-	 {
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(c * 3 + 2, 78, CONST_politics102);
-	 }
-	 if (l == HOUSENUM - 1 && !yeswin_s) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	 else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	 else set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(c * 3 + 3, 70, (s - yesvotes_s));
-	 addstrAlt(NAY);
-	 if (l == HOUSENUM - 1 && yesvotes_s == SENATEMAJORITY - 1 && !yeswin_s)
-	 {
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(c * 3 + 3, 78, CONST_politics102);
-	 }
-	 if (l % 5 == 0) pause_ms(5);
- }
- void printWatchPresident() {
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, CONST_politics103);
-	 pressAnyKey();
-	 mvaddstrAlt(0, 35, CONST_politics104);
-	 pause_ms(500);
- }
- void printBillResults(const BillStatus bill, const int c) {
-	 moveAlt(c * 3 + 2, 35);
-	 if (bill == BILL_SIGNED)
-	 {
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 addstrAlt(execname[EXEC_PRESIDENT]);
-	 }
-	 else if (bill == BILL_FAILED)
-	 {
-		 set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics105);
-	 }
-	 else if (bill == BILL_OVERRIDE_VETO)
-	 {
-		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics106);
-	 }
-	 else
-	 {
-		 set_color_easy(RED_ON_BLACK_BRIGHT);
-		 addstrAlt(CONST_politics107);
-	 }
-	 pause_ms(500);
- }
- void printReflectOnBill() {
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, pressKeyToReflect + CONST_politics110);
-	 pressAnyKey();
- }
- void printDeadInCongress() {
-	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(23, 0, CONST_politics109);
-	 mvaddstrAlt(24, 0, pressKeyToReflect + CONST_politics110);
-	 pressAnyKey();
- }
+ 
  BillStatus determineBillStatus(const int billc, const int billdirc, const int c, const char canseethings) {
 
 	 BillStatus killbillc = BILL_PASSED_CONGRESS;
@@ -1483,7 +1131,10 @@ vector<int> getSenateMake() {
  {
 	 if (canseethings)
 	 {
+		 music.play(MUSIC_ELECTIONS);
 		 displayCongressHeader(clearformess);
+		 pressAnyKey();
+		 displayCongressHeaderPartOne();
 	 }
 	 vector<int> bill, billdir;
 	 vector<BillStatus> killbill;
@@ -1510,6 +1161,9 @@ vector<int> getSenateMake() {
 		 if (canseethings)
 		 {
 			 printWatchPresident();
+			 pressAnyKey();
+			 printWatchPresidentB();
+			 pause_ms(500);
 		 }
 		 for (int c = 0; c < len(bill); c++)
 		 {
@@ -1535,17 +1189,20 @@ vector<int> getSenateMake() {
 			 if (canseethings)
 			 {
 				 printBillResults(static_cast<BillStatus> (killbill[c]), c);
+				 pause_ms(500);
 			 }
 			 if (killbill[c] == BILL_SIGNED || killbill[c] == BILL_OVERRIDE_VETO) lawList[bill[c]] += billdir[c];
 		 }
 		 if (canseethings)
 		 {
 			 printReflectOnBill();
+			 pressAnyKey();
 		 }
 	 }
 	 else if (canseethings)
 	 {
 		 printDeadInCongress();
+		 pressAnyKey();
 	 }
 	 //CONGRESS CONSTITUTION CHANGES
 	 vector<int> housemake = getHouseMake();

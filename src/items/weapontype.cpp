@@ -30,7 +30,7 @@ map<string, int> weaponTypeTags = {
 WeaponType::WeaponType(MCD_STR xmlstring)
 	: ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
 	name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
-	shortname_(CONST_weapontype099), shortname_defined_(false), shortname_future_defined_(false),
+	shortname_(CONST_tag_UNDEF), shortname_defined_(false), shortname_future_defined_(false),
 	shortname_sub_1_defined_(false), shortname_sub_2_defined_(false),
 	shortname_future_sub_1_defined_(false), shortname_future_sub_2_defined_(false),
 	can_take_hostages_(false), threatening_(false), can_threaten_hostages_(true),
@@ -105,9 +105,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					can_take_hostages_ = true;
 				else if (b == 0)
 					can_take_hostages_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype064 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_threatening:
 				b = stringtobool(xml.GetData());
@@ -115,9 +112,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					threatening_ = true;
 				else if (b == 0)
 					threatening_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype066 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_can_threaten_hostages:
 				b = stringtobool(xml.GetData());
@@ -139,9 +133,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					musical_attack_ = true;
 				else if (b == 0)
 					musical_attack_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype068 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_instrument:
 				b = stringtobool(xml.GetData());
@@ -149,9 +140,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					instrument_ = true;
 				else if (b == 0)
 					instrument_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype070 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_graffiti:
 				b = stringtobool(xml.GetData());
@@ -159,9 +147,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					can_graffiti_ = true;
 				else if (b == 0)
 					can_graffiti_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype072 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_legality:
 				legality_ = atoi(xml.GetData());
@@ -175,9 +160,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					auto_break_lock_ = true;
 				else if (b == 0)
 					auto_break_lock_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype074 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_suspicious:
 				b = stringtobool(xml.GetData());
@@ -185,9 +167,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 					suspicious_ = true;
 				else if (b == 0)
 					suspicious_ = false;
-				/*else
-				errorlog << CONST_weapontype075 << idname()
-				<< CONST_weapontype076 << xml.GetData() << endl;*/
 				break;
 			case ENUM_tag_size:
 				size_ = atoi(xml.GetData());
@@ -197,10 +176,6 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 				for (b = 0; b < len(attacks_) && attack->priority >= attacks_[b]->priority; b++);
 				attacks_.insert(attacks_.begin() + b, attack);
 				break;
-				/*default:
-				errorlog << CONST_weapontype077 << idname()
-				<< CONST_weapontype078 << element << endl;
-				break;*/
 			}
 		}
 		if (!shortname_defined_)
@@ -251,8 +226,8 @@ map<string, int> attackstTags = {
 };
 
 attackst::attackst(MCD_STR xmlstring)
-	: priority(1), ranged(false), thrown(false), ammotype(CONST_weapontype099), uses_ammo(false),
-	attack_description(CONST_weapontype080), hit_description(CONST_weapontypeB091),
+	: priority(1), ranged(false), thrown(false), ammotype(CONST_tag_UNDEF), uses_ammo(false),
+	attack_description(CONST_tag_assaults), hit_description(CONST_tag_striking),
 	always_describe_hit(false), can_backstab(false), hit_punctuation(singleDot),
 	skill(SKILL_CLUB), accuracy_bonus(0), number_attacks(1),
 	successive_attacks_difficulty(0), strength_min(5), strength_max(10),
@@ -281,8 +256,6 @@ attackst::attackst(MCD_STR xmlstring)
 					ranged = true;
 				else if (b == 0)
 					ranged = false;
-				/*else
-				errorlog << CONST_weapontype081 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_thrown:
@@ -291,8 +264,6 @@ attackst::attackst(MCD_STR xmlstring)
 					thrown = true;
 				else if (b == 0)
 					thrown = false;
-				/*else
-				errorlog << CONST_weapontype082 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_can_backstab:
@@ -322,8 +293,6 @@ attackst::attackst(MCD_STR xmlstring)
 					always_describe_hit = true;
 				else if (b == 0)
 					always_describe_hit = false;
-				/*else
-				errorlog << CONST_weapontype083 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_hit_punctuation:
@@ -334,8 +303,6 @@ attackst::attackst(MCD_STR xmlstring)
 				b = skill_string_to_enum(xml.GetData());
 				if (b != -1)
 					skill = b;
-				/*else
-				errorlog << CONST_weapontype084 << xml.GetData() << endl; */
 				break;
 
 			case ENUM_tag_accuracy_bonus:
@@ -372,8 +339,6 @@ attackst::attackst(MCD_STR xmlstring)
 					bruises = true;
 				else if (b == 0)
 					bruises = false;
-				/*else
-				errorlog << CONST_weapontype085 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_tears:
@@ -382,8 +347,6 @@ attackst::attackst(MCD_STR xmlstring)
 					tears = true;
 				else if (b == 0)
 					tears = false;
-				/*else
-				errorlog << CONST_weapontype086 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_cuts:
@@ -392,8 +355,6 @@ attackst::attackst(MCD_STR xmlstring)
 					cuts = true;
 				else if (b == 0)
 					cuts = false;
-				/*else
-				errorlog << CONST_weapontype087 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_burns:
@@ -402,8 +363,6 @@ attackst::attackst(MCD_STR xmlstring)
 					burns = true;
 				else if (b == 0)
 					burns = false;
-				/*else
-				errorlog << CONST_weapontype088 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_shoots:
@@ -412,8 +371,6 @@ attackst::attackst(MCD_STR xmlstring)
 					shoots = true;
 				else if (b == 0)
 					shoots = false;
-				/*else
-				errorlog << CONST_weapontype089 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_bleeding:
@@ -422,16 +379,12 @@ attackst::attackst(MCD_STR xmlstring)
 					bleeding = true;
 				else if (b == 0)
 					bleeding = false;
-				/*else
-				errorlog << CONST_weapontype090 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_severtype:
 				b = severtype_string_to_enum(xml.GetData());
 				if (b != -1)
 					severtype = b;
-				/*else
-				errorlog << CONST_weapontype091 << xml.GetData() << endl; */
 				break;
 
 			case ENUM_tag_damages_armor:
@@ -440,8 +393,6 @@ attackst::attackst(MCD_STR xmlstring)
 					damages_armor = true;
 				else if (b == 0)
 					damages_armor = false;
-				/*else
-				errorlog << CONST_weapontype092 << xml.GetData() << endl;*/
 				break;
 
 			case ENUM_tag_armorpiercing:
@@ -479,11 +430,7 @@ attackst::attackst(MCD_STR xmlstring)
 							critical.severtype = b;
 							critical.severtype_defined = true;
 						}
-						/*else
-						errorlog << CONST_weapontype093 << xml.GetData() << endl; */
 					}
-					/*else
-					errorlog << CONST_weapontype094 << element << endl; */
 				}
 				xml.OutOfElem();
 				break;
@@ -496,15 +443,11 @@ attackst::attackst(MCD_STR xmlstring)
 						fire.chance = atoi(xml.GetData());
 					else if (element == tag_chance_causes_debris)
 						fire.chance_causes_debris = atoi(xml.GetData());
-					/*else
-					errorlog << CONST_weapontype095 << element << endl; */
 				}
 				xml.OutOfElem();
 				break;
 
 			default:
-				/*else
-				errorlog << CONST_weapontype096 << element << endl; */
 				break;
 			}
 		}
@@ -549,12 +492,12 @@ const string& WeaponType::get_name(unsigned subtype) const
 			return get_name();
 	}
 	else
-		return get_name(); //return CONST_weapontype098; //Reference to temporary. -XML
+		return get_name(); //Reference to temporary. -XML
 }
 const string& WeaponType::get_shortname(unsigned subtype) const
 {
 	if (subtype > 2)
-		return shortname_; //return CONST_weapontype098; //Reference to temporary. -XML
+		return shortname_; //Reference to temporary. -XML
 	else if (subtype == 1)
 	{
 		if (shortname_future_sub_1_defined_ && year >= 2100)
@@ -583,10 +526,6 @@ const string& WeaponType::get_shortname(unsigned subtype) const
 		return name_future_;
 	else //if (shortname_defined_)
 		return shortname_;
-	/*else if (len(name()) <= 14) //Too long for ammo using weapons. -XML
-	return name();
-	else
-	return CONST_weapontype099;*/
 }
 bool WeaponType::uses_ammo() const
 {
