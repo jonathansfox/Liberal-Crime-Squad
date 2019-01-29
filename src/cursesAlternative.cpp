@@ -84,16 +84,16 @@ const string CONST_sitedisplay022 = "LCS";
 const string CONST_CCS = "CCS";
 const string CONST_GNG = "GNG";
 const string CONST_sitedisplay010 = "   ";
-const string CONST_sitedisplay096 = "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
-const string CONST_sitedisplay062 = "â”‚                         â”‚";
-const string CONST_sitedisplay061 = "â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜";
-const string CONST_sitedisplay060 = "â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬";
-const string CONST_sitedisplay028 = "â•";
-const string CONST_sitedisplay027 = "â•š";
-const string CONST_sitedisplay026 = "â•—";
-const string CONST_sitedisplay025 = "â•”";
-const string CONST_sitedisplay024 = "â•";
-const string CONST_sitedisplay023 = "â•‘";
+const string CONST_sitedisplay096 = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
+const string CONST_sitedisplay062 = "³                         ³";
+const string CONST_sitedisplay061 = "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ";
+const string CONST_sitedisplay060 = "ÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ";
+const string CONST_sitedisplay028 = "¼";
+const string CONST_sitedisplay027 = "È";
+const string CONST_sitedisplay026 = "»";
+const string CONST_sitedisplay025 = "É";
+const string CONST_sitedisplay024 = "Í";
+const string CONST_sitedisplay023 = "º";
 const string tag_ARMOR = "ARMOR";
 const string tag_MONEY = "MONEY";
 const string tag_CEO = "CEO";
@@ -673,7 +673,7 @@ void printSenateStatus(const int change[]) {
 	addstrAlt(CONST_politics047);
 }
 void printSingleCandidateTitle(const string candidatec1, const char candidatec0, const int c) {
-	extern short presparty; 
+	extern short presparty;
 	extern short execterm;
 	extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 	// Pick color by political orientation
@@ -834,7 +834,7 @@ const string CONST_LCS_LEADER = "<LCS Leader>";
 const string CONST_CAN_T_LEAD_MORE = "<Can't Lead More>";
 const string CONST_REFUSES_PROMOTION = "<Refuses Promotion>";
 const string CONST_CONTACT_AFTER_PROMOTION = "CONTACT AFTER PROMOTION";
-const string CONST_CODE_NAME_HEADER = "â”€â”€â”€â”€CODE NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€CURRENT CONTACTâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_CODE_NAME_HEADER = "ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄCURRENT CONTACTÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_PROMOTE_THE_ELITE_LIBERALS = "Promote the Elite Liberals";
 const string CONST_reviewmode109 = "T to sort people.";
 const string CONST_reviewmode108 = ",. to view other Base pages.";
@@ -842,7 +842,7 @@ const string CONST_LIBERALS_MUST_BE_MOVED_IN_SQUADS_TO_TRANSFER_BETWEEN_CITIES =
 const string CONST_reviewmode106 = "Press a Letter to assign a Base.  Press a Number to select a Base.";
 const string CONST_UNDER_SIEGE = " <Under Siege>";
 const string CONST_NEW_BASE = "NEW BASE";
-const string CONST_CODE_NAME_CURRENT_BASE_HEADER = "â”€â”€â”€â”€CODE NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€CURRENT BASEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_CODE_NAME_CURRENT_BASE_HEADER = "ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄCURRENT BASEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_NEW_BASES_FOR_SQUADLESS_LIBERALS = "New Bases for Squadless Liberals";
 const string CONST_reviewmode101 = " with";
 const string CONST_CHOOSE_SQUAD_MEMBER_TO_REPLACE = "Choose squad member to replace ";
@@ -885,12 +885,12 @@ const string CONST_DAYS = "Days";
 const string CONST_reviewmode054 = "Month";
 const string CONST_reviewmode053 = "Months";
 const string CONST_OUT_IN = "Out in ";
-const string CONST_reviewmode051 = "â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_reviewmode051 = "ÄÄÄÄÄÄÄ";
 const string CONST_LIFE_SENTENCE = "Life Sentence";
 const string CONST_LIFE_SENTENCES = " Life Sentences";
 const string CONST_DEATH_ROW = "DEATH ROW: ";
 const string CONST_reviewmode041 = "SQUAD";
-const string CONST_SKILL_HEALTH_LOCATION_HEADER = "â”€â”€â”€â”€CODE NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€SKILLâ”€â”€â”€HEALTHâ”€â”€â”€LOCATIONâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_SKILL_HEALTH_LOCATION_HEADER = "ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_SQUAD_DEFAULT_NAME = "The Liberal Crime Squad";
 const string CONST_WHAT_SHALL_WE_DESIGNATE_THIS_LIBERAL_SQUAD = "What shall we designate this Liberal squad?                                     ";
 const string CONST_YOU_CANNOT_FORM_A_SQUAD_WITH_ONLY_CONSERVATIVES = "You cannot form a Squad with only Conservatives!                                ";
@@ -903,7 +903,7 @@ const string CONST_ENTER_THE_SQUAD_IS_READY = "Enter - The squad is ready.";
 const string CONST_V_VIEW_A_LIBERAL = "V - View a Liberal";
 const string CONST_PRESS_A_LETTER_TO_ADD_OR_REMOVE_A_LIBERAL_FROM_THE_SQUAD = "Press a Letter to add or remove a Liberal from the squad.";
 const string CONST_AWAY = "AWAY";
-const string CONST_CODE_NAME_PROFESSION_HEADER = "â”€â”€â”€â”€CODE NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€SKILLâ”€â”€â”€HEALTHâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€PROFESSIONâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_CODE_NAME_PROFESSION_HEADER = "ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄÄÄÄÄÄÄÄÄPROFESSIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_SQUAD = "Squad: ";
 const string CONST_NEW_SQUAD = "New Squad";
 const string CONST_THE_SQUAD_IS_FULL = "The squad is full.";
@@ -1424,7 +1424,7 @@ const string CONST_4_JUSTICE_SYSTEM = "4 - Justice System (";
 const string CONST_3_HOSPITAL = "3 - Hospital (";
 const string CONST_2_HOSTAGES = "2 - Hostages (";
 const string CONST_1_ACTIVE_LIBERALS = "1 - Active Liberals (";
-const string CONST_SQUAD_NAME_LOCATION_ACTIVITY_HEADER = "â”€â”€â”€â”€SQUAD NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€LOCATIONâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ACTIVITYâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_SQUAD_NAME_LOCATION_ACTIVITY_HEADER = "ÄÄÄÄSQUAD NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄACTIVITYÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_REVIEW_YOUR_LIBERALS_AND_ASSEMBLE_SQUADS = "Review your Liberals and Assemble Squads";
 void printReviewHeader() {
 	eraseAlt();
@@ -1449,7 +1449,7 @@ void printSquadName(const string sname, const bool active, const int iteration) 
 	addstrAlt(sname);
 }
 void printReviewModeOptions(const int activity, const int iteration, const int numMembers) {
-	
+
 	bool invalid = false;
 	ColorSetup const_color;
 	string active_string;
@@ -1546,7 +1546,7 @@ const string CONST_BUYER = "Buyer: ";
 const string CONST_WITH_A_RANDOM_MASK = " With a Random Mask";
 const string CONST_Z_SURPRISE = "Z - Surprise ";
 const string CONST_PRESS_A_LETTER_TO_SELECT_A_MASK = "Press a Letter to select a Mask";
-const string CONST_PRODUCT_NAME_HEADER = "â”€â”€â”€â”€PRODUCT NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€?ESCRIPTIONâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_PRODUCT_NAME_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?ESCRIPTIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_BUY = " buy?";
 const string CONST_WHICH_MASK_WILL = "Which mask will ";
 const string CONST_SPEND = "SPEND.";
@@ -1568,7 +1568,7 @@ const string CONST_shop033 = "/";
 const string CONST_ESTIMATED_LIBERAL_AMOUNT = "Estimated Liberal Amount: $";
 const string CONST_WHAT_WILL_YOU_SELL = "What will you sell?";
 const string CONST_PRESS_A_LETTER_TO_SELECT_AN_OPTION = "Press a Letter to select an option";
-const string CONST_PRODUCT_NAME_PRICE_HEADER = "â”€â”€â”€â”€PRODUCT NAMEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€?RICEâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+const string CONST_PRODUCT_NAME_PRICE_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?RICEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_WHAT_WILL = "What will ";
 
 
@@ -2541,7 +2541,7 @@ const string CONST_UNFORTUNATELY_YOU_WILL_NEVER_TRULY_BE_SAFE_FROM = "Unfortunat
 const string CONST_siege232 = "The Conservative automatons have been driven back.  ";
 const string CONST_ABANDONING_THIS_SAFE_HOUSE_FOR_A_SAFER_LOCATION = "abandoning this safe house for a safer location.";
 const string CONST_THE_TIME_BEING_WHILE_THEY_ARE_REGROUPING_YOU_MIGHT_CONSIDER = "the time being.  While they are regrouping, you might consider ";
-const string CONST_THE_CONSERVATIVE_AUTOMATONS_HAVE_BEEN_DRIVEN_BACK = "The Conservative automatons have been driven back â”€â”€ for ";
+const string CONST_THE_CONSERVATIVE_AUTOMATONS_HAVE_BEEN_DRIVEN_BACK = "The Conservative automatons have been driven back ÄÄ for ";
 const string CONST_YOU_HAVE_BEEN_DEFEATED = "You have been defeated.";
 const string CONST_YOUR_LIBERALS_CONFRONT_THE_CONSERVATIVES_WITHIN_THE_SAFEHOUSE = "Your Liberals confront the Conservatives within the safehouse.";
 const string CONST_YOUR_TRAPS_WILL_HARASS_THE_ENEMY_BUT_NOT_THE_SQUAD = "Your traps will harass the enemy, but not the Squad.";
@@ -3567,7 +3567,7 @@ void printVaultIsImpenetrable() {
 void printUnlockedButAlarmed(const bool locked) {
 
 	clearmessagearea(false);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);	
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(16, 1, locked ? CONST_THIS_DOOR_APPEARS_TO_BE_WIRED_UP_TO_AN_ALARM : CONST_EMERGENCY_EXIT_ONLY_ALARM_WILL_SOUND, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(17, 1, CONST_TRY_THE_DOOR_ANYWAY_YES_OR_NO);
@@ -3641,7 +3641,7 @@ void printSitemodeOptionsHeader() {
 void printMusicEnabled(const bool musice) {
 	mvaddstrAlt(11, 2, musice ? tag_X : singleSpace);
 }
-void printEncounterWarnings(const bool ewarn) {	
+void printEncounterWarnings(const bool ewarn) {
 	mvaddstrAlt(10, 2, ewarn ? tag_X : singleSpace);
 }
 void printActiveSquadTalkOptionsHeader() {
@@ -3671,8 +3671,8 @@ void set_color_easy_alignment(const int align) {
 
 }
 void printCreatureEncounter(const int t, const int talign, const string tname, const string tage) {
-	int y = 11 + (t%6);
-	int x = 1 + (30 * (t/6));
+	int y = 11 + (t % 6);
+	int x = 1 + (30 * (t / 6));
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddcharAlt(y, x, t + 'A');
 	addstrAlt(spaceDashSpace);
@@ -4176,7 +4176,7 @@ const string newGame = "NEW GAME";
 const string dotDat = ".dat";
 const string deleteSave = "Delete a Save File";
 const string CHOOSE_A_SAVE_FILE = "Choose a Save File";
-const string titleScreenLine = "----Title-----------------------------------------------------------------------";
+const string titleScreenLine = "ÄÄÄÄTitleÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string inWhatWorld = "In what world will you pursue your Liberal Agenda?";
 const string enterNameForSave = "Enter a name for the save file.";
 const string pleaseEnterName = "Please enter a name for the save file.";
@@ -5800,7 +5800,7 @@ bool has_ignited(const int c) {
 	return c == CH_BOX_DRAWINGS_LIGHT_VERTICAL ||
 		c == CH_DARK_SHADE ||
 		c == CH_MEDIUM_SHADE ||
-		c == CH_LIGHT_SHADE  ||
+		c == CH_LIGHT_SHADE ||
 		c == ' ';
 }
 
@@ -5813,13 +5813,13 @@ void printFlag() {
 	}
 }
 void printFlagB() {
-	
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 17; j++) {
-				set_color_easy(ConfederateFlag[i][j].first);
-				mvaddchAlt(i + 10, j + 31, ConfederateFlag[i][j].second);
-			}
+
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 17; j++) {
+			set_color_easy(ConfederateFlag[i][j].first);
+			mvaddchAlt(i + 10, j + 31, ConfederateFlag[i][j].second);
 		}
+	}
 }
 /* base - burn the flag */
 void burnflag()
@@ -6492,7 +6492,7 @@ void printPoliceBluff() {
 }
 void printBunkerGearBluff(const short onfire) {
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, onfire ? CONST_FIRE_EVACUATE_IMMEDIATELY : CONST_EVERYTHING_S_IN_CHECK, gamelog); 
+	mvaddstrAlt(16, 1, onfire ? CONST_FIRE_EVACUATE_IMMEDIATELY : CONST_EVERYTHING_S_IN_CHECK, gamelog);
 	gamelog.newline();
 }
 void printWeWerentBornYesterday(const string ename) {
@@ -6985,7 +6985,7 @@ void printRefuseRentDeal(const string aname) {
 void printNotMyProblem(const string tkname) {
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); 
+	mvaddstrAlt(12, 1, tkname, gamelog);
 	addstrAlt(respondsComma, gamelog);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_NOT_MY_PROBLEM, gamelog);

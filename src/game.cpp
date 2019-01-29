@@ -75,9 +75,9 @@ void mainTwo() {
 	time_t t = time(0);
 	struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
 	char datetime[41];
-	sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n",
+	sprintf(datetime, "ÄÄÄÄÄÄÄÄÄ%iÄ%02iÄ%02i %02i:%02i:%02iÄÄÄÄÄÄÄÄÄ\n\n\n",
 		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
-	gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
+	gamelog.log(string("\n\n\nÄÄÄÄÄÄÄÄÄÄ PROGRAM STARTED ÄÄÄÄÄÄÄÄÄÄ\n") + datetime);
 }
 void mainThree() {
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
@@ -174,6 +174,9 @@ void mainFive() {
 			lawList[LAW_TORTURE] = -1;
 		}
 }
+// IsaacG Unfortunately, changing the file encoding to oem 437 makes this function and its comments look like gibberish
+// It was constructed through painful trial and error to accomodate characters that are represented in source files differently than they are interpretted by pdcurses
+// 
 string fixLineSpecialCharacter(char * toFix) {
 	string str = BLANK_STRING;
 	for (int i = 0; i < len(toFix); i++) {

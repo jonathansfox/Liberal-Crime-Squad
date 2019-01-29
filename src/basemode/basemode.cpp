@@ -4,33 +4,33 @@
 
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
+																					  //
 This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
+																					//
+	Liberal Crime Squad is free software; you can redistribute it and/or modify     //
+	it under the terms of the GNU General Public License as published by            //
+	the Free Software Foundation; either version 2 of the License, or               //
+	(at your option) any later version.                                             //
+																					//
+	Liberal Crime Squad is distributed in the hope that it will be useful,          //
+	but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
+	GNU General Public License for more details.                                    //
+																					//
+	You should have received a copy of the GNU General Public License               //
+	along with Liberal Crime Squad; if not, write to the Free Software              //
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+		This file was created by Chris Johnson (grundee@users.sourceforge.net)
+		by copying code from game.cpp.
+		To see descriptions of files and functions, see the list at
+		the bottom of includes.h in the top src folder.
 */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: Ã©
+// set to use that character set, such as this e with an accent: ‚
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -86,7 +86,7 @@ void printSenateMake() {
 		senatemake[senate[s] + 2]++;
 	}
 	senatemake[exec[EXEC_VP] + 2]++; // Vice President is tie-breaking vote in the Senate
-	
+
 	signed char align;
 	if (senatemake[5] + min(senatemake[0], senatemake[4]) >= SENATEMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
 	else if (senatemake[0] >= SENATEMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
@@ -95,7 +95,7 @@ void printSenateMake() {
 	else if (senatemake[3] + senatemake[4] >= SENATEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
-	
+
 	senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
 	mvaddstrAlt(3, 0, SENATE_COLON);
 	if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
@@ -111,7 +111,7 @@ void printCourtMake() {
 		courtmake[court[s] + 2]++;
 	}
 
-	
+
 	signed char align;
 	if (courtmake[5] + min(courtmake[0], courtmake[4]) >= COURTMAJORITY) align = ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
 	else if (courtmake[0] >= COURTMAJORITY) align = ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
@@ -120,7 +120,7 @@ void printCourtMake() {
 	else if (courtmake[3] + courtmake[4] >= COURTMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
-	
+
 
 	mvaddstrAlt(4, 0, SUPREME_COURT_COLON);
 	if (stalinmode) addstrAlt(tostring(courtmake[5]) + tag_Sta);
@@ -152,7 +152,7 @@ void printStalinMood() {
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(17, 68, LIBERTARIAN);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 0, "\x11â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
+	mvaddstrAlt(18, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(18, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -160,7 +160,7 @@ void printStalinMood() {
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(18, 48, MID_LENGTH_LINE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 64, "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\x10");
+	mvaddstrAlt(18, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 	set_alignment_color(align, true);
 	mvaddcharAlt(18, stalin, 'O');
 }
@@ -189,7 +189,7 @@ void printMood() {
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(21, 67, CONSERVATIVE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 0, "\x11â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
+	mvaddstrAlt(22, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -197,7 +197,7 @@ void printMood() {
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 48, MID_LENGTH_LINE);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 64, "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\x10");
+	mvaddstrAlt(22, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 	set_alignment_color(align, true);
 
 	mvaddcharAlt(22, mood, 'O');
@@ -407,7 +407,7 @@ void dontForceWait(const char sieged, const char underattack,
 
 
 	if (haveflag) {
-		printFlag(); 
+		printFlag();
 	}
 
 
