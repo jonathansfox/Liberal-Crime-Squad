@@ -1,3 +1,4 @@
+
 #define	LOCATIONSPOOL_CPP
 #include "../includes.h"
 vector<Location *> location;
@@ -214,9 +215,9 @@ void LocationsPool::evictLCSFrom(int l)
 {
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 1, CONST_locationsPool035);
+	mvaddstrAlt(8, 1, CONST_EVICTION_NOTICE);
 	addstrAlt(LocationsPool::getInstance().getLocationName(l));
-	addstrAlt(CONST_locationsPool036);
+	addstrAlt(CONST_POSSESSIONS_GO_TO_THE_SHELTER);
 	pressAnyKey();
 	location[l]->renting = RENTING_NOCONTROL;
 	CreaturePool::getInstance().moveAllSquadMembers(l);
@@ -405,25 +406,25 @@ void sleeperize_prompt(DeprecatedCreature &converted, DeprecatedCreature &recrui
 	while (true)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y, 0, CONST_locationsPool037);
+		mvaddstrAlt(y, 0, CONST_IN_WHAT_CAPACITY_WILL);
 		addstrAlt(converted.getNameAndAlignment().name);
-		addstrAlt(CONST_locationsPool038);
+		addstrAlt(CONST_BEST_SERVE_THE_LIBERAL_CAUSE);
 		set_color_easy(selection ? WHITE_ON_BLACK : WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(y + 2, 0, selection ? CONST_locationsPool039 : CONST_locationsPool043);
-		addstrAlt(CONST_locationsPool040);
+		mvaddstrAlt(y + 2, 0, selection ? TWO_SPACES : ARROW_RIGHT);
+		addstrAlt(CONST_COME_TO);
 		addstrAlt(location[recruiter.location]->getname(-1, true));
-		addstrAlt(CONST_locationsPool045);
+		addstrAlt(CONST_AS_A);
 		set_color_easy(selection ? GREEN_ON_BLACK : GREEN_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_locationsPool042);
+		addstrAlt(CONST_REGULAR_MEMBER);
 		set_color_easy(selection ? WHITE_ON_BLACK : WHITE_ON_BLACK_BRIGHT);
 		addstrAlt(singleDot);
 		set_color_easy(selection ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(y + 3, 0, selection ? CONST_locationsPool043 : CONST_locationsPool039);
-		addstrAlt(CONST_locationsPool044);
+		mvaddstrAlt(y + 3, 0, selection ? ARROW_RIGHT : TWO_SPACES);
+		addstrAlt(CONST_STAY_AT);
 		addstrAlt(location[converted.worklocation]->getname(-1, true));
-		addstrAlt(CONST_locationsPool045);
+		addstrAlt(CONST_AS_A);
 		set_color_easy(selection ? CYAN_ON_BLACK_BRIGHT : CYAN_ON_BLACK);
-		addstrAlt(CONST_locationsPool046);
+		addstrAlt(CONST_SLEEPER_AGENT);
 		set_color_easy(selection ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 		addstrAlt(singleDot);
 		int c = getkeyAlt();
@@ -654,7 +655,7 @@ void make_world(const bool hasmaps)
 	district = city->addchild(SITE_UDISTRICT);
 	district->area = 0;
 	strcpy(district->name, tag_National_Mall);
-	strcpy(district->shortname, CONST_locationsPool047);
+	strcpy(district->shortname, CONST_MALL);
 	district->addchild(SITE_OUTDOOR_PUBLICPARK);
 	district->addchild(SITE_GOVERNMENT_WHITE_HOUSE);
 	district = city->addchild(SITE_OUTOFTOWN);
@@ -736,24 +737,24 @@ string Location::getname(const signed char shortname_, const bool include_city)
 				str = cityname + singleSpace + str;
 				break;
 			case ENUM_tag_City_Outskirts:
-				str = cityname + CONST_locationsPool048;
+				str = cityname + CONST_OUTSKIRTS;
 				break;
 			case ENUM_tag_Arlington:
-				str += (shortname_ < 0 ? CONST_locationsPool049 : CONST_locationsPoolB144);
+				str += (shortname_ < 0 ? CONST_VIRGINIA : CONST_VA);
 				break;
 			case ENUM_tag_Hollywood:
 			case ENUM_tag_Greater_Hollywood:
-				str += (shortname_ < 0 ? CONST_locationsPool050 : CONST_locationsPoolB145);
+				str += (shortname_ < 0 ? CONST_CALIFORNIA : CONST_CA);
 				break;
 			case ENUM_tag_Manhattan:
 			case ENUM_tag_Manhattan_Island:
 			case ENUM_tag_Brooklyn_ampersand_Queens:
 			case ENUM_tag_Long_Island:
 			case ENUM_tag_The_Bronx:
-				str += (shortname_ < 0 ? CONST_locationsPool051 : CONST_locationsPoolB146);
+				str += (shortname_ < 0 ? CONST_locationsPool051 : CONST_NY);
 				break;
 			default:
-				str += commaSpace + cityname;
+				str += COMMA_SPACE + cityname;
 				break;
 			}
 		
@@ -833,17 +834,17 @@ std::string getactivity(ActivityST &act)
 		{
 		case ACTIVITY_HOSTAGETENDING:
 		{
-			std::string str = CONST_locationsPool052;
+			std::string str = CONST_TENDING_TO;
 			int pl = getpoolcreature(act.arg);
 			if (pl != -1) return str + CreaturePool::getInstance().getName(pl);
-			else return str + CONST_locationsPool053;
+			else return str + CONST_A_BUG;
 		}
 		case ACTIVITY_MAKE_ARMOR:
-			return CONST_locationsPool054 + armortype[act.arg]->get_shortname();
+			return CONST_MAKING + armortype[act.arg]->get_shortname();
 		case ACTIVITY_VISIT:
-			return CONST_locationsPool055 + location[act.arg]->getname(!location[act.arg]->is_city());
+			return CONST_GOING_TO + location[act.arg]->getname(!location[act.arg]->is_city());
 		default:
-			return CONST_locationsPool056;
+			return CONST_REPORTING_BUGS_TO_THE_DEV_TEAM;
 		}
 }
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
@@ -891,7 +892,7 @@ long prompt_amount(long min, long max)
 {
 	printparty();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 15, CONST_locationsPool057);
+	mvaddstrAlt(8, 15, CONST_HOW_MANY);
 	char str[100];
 	enter_name(8, 30, str, 100, toCstring(max));
 	int amount = atoi(str);
@@ -904,7 +905,7 @@ long prompt_amount(long min, long max)
 void printEquipMenu(const int loc, const int page, const string errmsg, const vector<Item *> loot) {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(0, 0, CONST_locationsPool058);
+	mvaddstrAlt(0, 0, CONST_EQUIP_THE_SQUAD);
 	printparty();
 	if (!errmsg.empty()) {
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -918,7 +919,7 @@ void printEquipMenu(const int loc, const int page, const string errmsg, const ve
 	{
 		string s = loot[l]->equip_title();
 		if (loot[l]->get_number() > 1)
-			s += CONST_locationsPool059 + tostring(loot[l]->get_number());
+			s += CONST_X + tostring(loot[l]->get_number());
 		str[0] = l - page * 18 + 'A';
 		str[1] = '\x0';
 		strcat(str, spaceDashSpace);
@@ -938,19 +939,19 @@ void printEquipMenu(const int loc, const int page, const string errmsg, const ve
 		mvaddstrAlt(17, 53, addnextpagestr());
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(19, 1, CONST_locationsPool060);
-	mvaddstrAlt(20, 1, CONST_locationsPool061);
-	mvaddstrAlt(21, 1, CONST_locationsPool062);
-	mvaddstrAlt(22, 1, CONST_locationsPool063);
+	mvaddstrAlt(19, 1, CONST_PRESS_A_LETTER_TO_EQUIP_A_LIBERAL_ITEM);
+	mvaddstrAlt(20, 1, CONST_PRESS_A_NUMBER_TO_DROP_THAT_SQUAD_MEMBER_S_CONSERVATIVE_WEAPON);
+	mvaddstrAlt(21, 1, CONST_S_LIBERALLY_STRIP_A_SQUAD_MEMBER);
+	mvaddstrAlt(22, 1, CONST_CURSORS_INCREASE_OR_DECREASE_AMMO_ALLOCATION);
 	if (loc != -1)
 	{
 		if (len(location[loc]->loot)) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(23, 1, CONST_locationsPool064);
+		mvaddstrAlt(23, 1, CONST_Y_GET_THINGS_FROM);
 		addstrAlt(location[loc]->getname(true));
 		if (len(loot)) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(23, 40, CONST_locationsPool065);
+		mvaddstrAlt(23, 40, CONST_Z_STASH_THINGS_AT);
 		addstrAlt(location[loc]->getname(true));
 	}
 	set_color_easy(WHITE_ON_BLACK);
@@ -962,10 +963,10 @@ int makeChoice(const int increaseammo, const int decreaseammo) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	moveAlt(8, 20);
 	if (increaseammo)
-		addstrAlt(chooseALiberalTo + CONST_locationsPool067);
+		addstrAlt(CHOOSE_A_LIBERAL_TO + CONST_RECEIVE_A_CLIP);
 	else if (decreaseammo)
-		addstrAlt(chooseALiberalTo + CONST_locationsPool068);
-	else addstrAlt(chooseALiberalTo + CONST_locationsPool069);
+		addstrAlt(CHOOSE_A_LIBERAL_TO + CONST_DROP_A_CLIP);
+	else addstrAlt(CHOOSE_A_LIBERAL_TO + CONST_RECEIVE_IT);
 	return getkeyAlt();
 
 }
@@ -987,18 +988,18 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 			}
 			else if (!squaddie->get_weapon().uses_ammo())
 			{
-				return CONST_locationsPool070;
+				return CONST_NO_AMMO_TO_DROP;
 			}
 			else
 			{
-				return CONST_locationsPool071;
+				return CONST_NO_SPARE_CLIPS;
 			}
 		}
 		if (increaseammo)
 		{
 			if (!squaddie->get_weapon().uses_ammo())
 			{
-				return CONST_locationsPool072;
+				return CONST_NO_AMMO_REQUIRED;
 			}
 			slot = -1;
 			for (int sl = 0; sl < len(loot); sl++)
@@ -1020,7 +1021,7 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 			}
 			if (slot == -1)
 			{
-				return CONST_locationsPool073;
+				return CONST_NO_AMMO_AVAILABLE;
 			}
 		}
 		int armok = 2;
@@ -1049,15 +1050,15 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 			int space = 9 - squaddie->count_clips();
 			if (!squaddie->get_weapon().uses_ammo())
 			{
-				return CONST_locationsPool074;
+				return CONST_CAN_T_CARRY_AMMO_WITHOUT_A_GUN;
 			}
 			else if (!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
 			{
-				return CONST_locationsPool075;
+				return CONST_THAT_AMMO_DOESN_T_FIT;
 			}
 			else if (space < 1)
 			{
-				return CONST_locationsPool076;
+				return CONST_CAN_T_CARRY_ANY_MORE_AMMO;
 			}
 			else
 			{
@@ -1071,7 +1072,7 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 		}
 		consolidateloot(loot);
 	}
-	return blankString;
+	return BLANK_STRING;
 }
 bool isThereNoActivesquad() {
 	return activesquad == NULL;
@@ -1119,11 +1120,11 @@ void equip(vector<Item *> &loot, int loc)
 	consolidateloot(loot);
 	if (loc != -1) consolidateloot(location[loc]->loot);
 	int page = 0;
-	string errmsg = blankString;
+	string errmsg = BLANK_STRING;
 	while (true)
 	{
 		printEquipMenu(loc, page, errmsg, loot);
-		errmsg = blankString;
+		errmsg = BLANK_STRING;
 
 		int c = getkeyAlt();
 		bool increaseammo = (c == KEY_UP);
@@ -1139,7 +1140,7 @@ void equip(vector<Item *> &loot, int loc)
 					&& !(loot[slot]->whatIsThis() == THIS_IS_ARMOR)
 					&& !(loot[slot]->whatIsThis() == THIS_IS_CLIP))
 				{
-					errmsg = CONST_locationsPool066;
+					errmsg = CONST_YOU_CAN_T_EQUIP_THAT;
 					continue;
 				}
 			}
@@ -1154,7 +1155,7 @@ void equip(vector<Item *> &loot, int loc)
 				errmsg = transferClipBaseSquad(decreaseammo, increaseammo, slot, page, e, loot);
 				if (!errmsg.empty()) {
 					if (errmsg == NOT_ERROR_BUT_CONTINUE) {
-						errmsg = blankString;
+						errmsg = BLANK_STRING;
 					}
 					continue;
 				}
@@ -1169,7 +1170,7 @@ void equip(vector<Item *> &loot, int loc)
 				if (choice)
 				{
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(8, 20, chooseALiberalTo + CONST_locationsPool077);
+					mvaddstrAlt(8, 20, CHOOSE_A_LIBERAL_TO + CONST_STRIP_DOWN);
 					d = getkeyAlt();
 				}
 				if (d >= '1'&& d <= '6')
@@ -1205,7 +1206,7 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, CONST_locationsPool078);
+		mvaddstrAlt(0, 0, CONST_SELECT_OBJECTS);
 		printparty();
 		int x = 1, y = 10;
 		char str[200];
@@ -1241,7 +1242,7 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			mvaddstrAlt(17, 53, addnextpagestr());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(23, 1, CONST_locationsPool081);
+		mvaddstrAlt(23, 1, CONST_PRESS_A_LETTER_TO_SELECT_AN_ITEM);
 		mvaddstrAlt(24, 1, enter_done);
 		int c = getkeyAlt();
 		if (c >= 'a'&&c <= 'r')
@@ -1300,9 +1301,9 @@ void equipmentbaseassign()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_locationsPool082);
-		mvaddstrAlt(1, 0, CONST_locationsPool083);
-		mvaddstrAlt(1, 51, CONST_locationsPool084);
+		mvaddstrAlt(0, 0, CONST_MOVING_EQUIPMENT);
+		mvaddstrAlt(1, 0, CONST_ITEM_CURRENT_LOCATION);
+		mvaddstrAlt(1, 51, CONST_NEW_LOCATION);
 		for (int p = page_loot * 19, y = 2; p < len(temploot) && p < page_loot * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
@@ -1320,15 +1321,15 @@ void equipmentbaseassign()
 			addstrAlt(location[temploc[p]]->getname(true, true));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_locationsPool085);
+		mvaddstrAlt(22, 0, CONST_PRESS_A_LETTER_TO_ASSIGN_A_BASE_PRESS_A_NUMBER_TO_SELECT_A_BASE);
 		moveAlt(23, 0);
-		if (sortbytype) addstrAlt(CONST_locationsPool086);
-		else addstrAlt(CONST_locationsPool087);
-		addstrAlt(CONST_locationsPool088);
+		if (sortbytype) addstrAlt(CONST_T_TO_SORT_BY_LOCATION);
+		else addstrAlt(CONST_T_TO_SORT_BY_TYPE);
+		addstrAlt(CONST_SHIFT_AND_A_NUMBER_WILL_MOVE_ALL_ITEMS);
 		moveAlt(24, 0); // location for either viewing other base pages or loot pages
 		if (len(temploc) > 9)
 		{
-			addstrAlt(CONST_locationsPool089);
+			addstrAlt(CONST_TO_VIEW_OTHER_BASE_PAGES);
 			moveAlt(24, 34); // we have base pages, so different location for viewing other loot pages
 		}
 		if (len(temploot) > 19)
@@ -1435,7 +1436,7 @@ void printlocation(long loc)
 		if (!location[loc]->siege.underattack)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 1, CONST_locationsPool091);
+			mvaddstrAlt(2, 1, CONST_THE_POLICE_HAVE_SURROUNDED_THIS_LOCATION);
 		}
 		else
 		{
@@ -1443,24 +1444,24 @@ void printlocation(long loc)
 			switch (location[loc]->siege.siegetype)
 			{
 			case SIEGE_POLICE:
-				mvaddstrAlt(2, 1, CONST_locationsPool092); break;
+				mvaddstrAlt(2, 1, CONST_THE_POLICE_ARE_RAIDING_THIS_LOCATION); break;
 			case SIEGE_CIA:
-				mvaddstrAlt(2, 1, CONST_locationsPool093); break;
+				mvaddstrAlt(2, 1, CONST_THE_CIA_IS_RAIDING_THIS_LOCATION); break;
 			case SIEGE_HICKS:
-				mvaddstrAlt(2, 1, CONST_locationsPool094); break;
+				mvaddstrAlt(2, 1, CONST_THE_MASSES_ARE_STORMING_THIS_LOCATION); break;
 			case SIEGE_CORPORATE:
-				mvaddstrAlt(2, 1, CONST_locationsPool095); break;
+				mvaddstrAlt(2, 1, CONST_THE_CORPORATIONS_ARE_RAIDING_THIS_LOCATION); break;
 			case SIEGE_CCS:
-				mvaddstrAlt(2, 1, CONST_locationsPool096); break;
+				mvaddstrAlt(2, 1, CONST_THE_CCS_IS_RAIDING_THIS_LOCATION); break;
 			case SIEGE_FIREMEN:
-				mvaddstrAlt(2, 1, CONST_locationsPool097); break;
+				mvaddstrAlt(2, 1, CONST_FIREMEN_ARE_RAIDING_THIS_LOCATION); break;
 			}
 		}
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(2, 1, CONST_locationsPool098);
+		mvaddstrAlt(2, 1, CONST_YOU_ARE_NOT_UNDER_SIEGE_YET);
 	}
 	if (location[loc]->can_be_upgraded())
 	{
@@ -1472,68 +1473,68 @@ void printlocation(long loc)
 				{
 					if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
 					else set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					mvaddstrAlt(3, 1, CONST_locationsPool099);
+					mvaddstrAlt(3, 1, CONST_THIS_LOCATION_HAS_FOOD_FOR_ONLY_A_FEW_DAYS);
 				}
 			}
 			else
 			{
 				if (!location[loc]->siege.siege)set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(3, 1, CONST_locationsPool100);
+				mvaddstrAlt(3, 1, CONST_THIS_LOCATION_HAS_INSUFFICIENT_FOOD_STORES);
 			}
 		}
 		if (location[loc]->compound_walls & COMPOUND_BASIC)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 1, CONST_locationsPool101);
+			mvaddstrAlt(4, 1, CONST_FORTIFIED_COMPOUND);
 		}
 		if (location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
 		{
 			set_color_easy(BLUE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 31, CONST_locationsPool102);
+			mvaddstrAlt(4, 31, CONST_PRINTING_PRESS);
 		}
 		if (location[loc]->front_business != -1)
 		{
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 54, CONST_locationsPool103);
+			mvaddstrAlt(4, 54, CONST_BUSINESS_FRONT);
 		}
 		if (location[loc]->compound_walls & COMPOUND_CAMERAS)
 		{
 			if (location[loc]->siege.siege&&location[loc]->siege.cameras_off)
 			{
 				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(5, 1, CONST_locationsPool104);
+				mvaddstrAlt(5, 1, CONST_CAMERAS_OFF);
 			}
 			else
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(5, 1, CONST_locationsPool105);
+				mvaddstrAlt(5, 1, CONST_CAMERAS_ON);
 			}
 		}
 		if (location[loc]->compound_walls & COMPOUND_TRAPS)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 16, CONST_locationsPool106);
+			mvaddstrAlt(5, 16, CONST_BOOBY_TRAPS);
 		}
 		if (location[loc]->compound_walls & COMPOUND_AAGUN)
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 33, CONST_locationsPool107);
+			mvaddstrAlt(5, 33, CONST_AA_GUN);
 		}
 		if (location[loc]->compound_walls & COMPOUND_TANKTRAPS)
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 46, CONST_locationsPool108);
+			mvaddstrAlt(5, 46, CONST_TANK_TRAPS);
 		}
 		if (location[loc]->siege.siege&&location[loc]->siege.lights_off)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(5, 60, CONST_locationsPool109);
+			mvaddstrAlt(5, 60, CONST_LIGHTS_OUT);
 		}
 		else if (location[loc]->compound_walls & COMPOUND_GENERATOR)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 61, CONST_locationsPool110);
+			mvaddstrAlt(5, 61, CONST_GENERATOR);
 		}
 		int eaters = numbereating(loc), days = fooddaysleft(loc);
 		if (eaters > 0)
@@ -1544,21 +1545,21 @@ void printlocation(long loc)
 				mvaddstrAlt(6, 50, days);
 				addstrAlt(CONST_locationsPool111);
 				if (days != 1)addcharAlt('s');
-				addstrAlt(CONST_locationsPool112);
+				addstrAlt(CONST_OF_FOOD_LEFT);
 			}
 			else if (days == 0)
 			{
 				set_color_easy(RED_ON_BLACK);
-				mvaddstrAlt(6, 50, CONST_locationsPool113);
+				mvaddstrAlt(6, 50, CONST_NOT_ENOUGH_FOOD);
 			}
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(6, 1, location[loc]->compound_stores);
-		addstrAlt(CONST_locationsPool114);
+		addstrAlt(CONST_DAILY_RATION);
 		if (location[loc]->compound_stores != 1)addstrAlt(CONST_locationsPool115);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(6, 30, eaters);
-		addstrAlt(CONST_locationsPool116);
+		addstrAlt(CONST_EATING);
 	}
 }
 /* location and squad header */
@@ -1588,32 +1589,32 @@ void locheader()
 	if (activesquad != NULL && activesquad->squad[0]->location != -1)
 	{
 		addstrAlt(location[activesquad->squad[0]->location]->getname(false, true));
-		addstrAlt(commaSpace);
+		addstrAlt(COMMA_SPACE);
 	}
 	else
 	{
 		if (selectedsiege == -1)
 		{
-			addstrAlt(CONST_locationsPool117);
-			addstrAlt(commaSpace);
+			addstrAlt(CONST_NO_SQUAD_SELECTED);
+			addstrAlt(COMMA_SPACE);
 		}
 		else
 		{
 			addstrAlt(location[selectedsiege]->getname(false, true));
-			addstrAlt(commaSpace);
+			addstrAlt(COMMA_SPACE);
 		}
 	}
 	addstrAlt(getmonth(month, true));
 	addstrAlt(singleSpace);
 	addstrAlt(day);
-	addstrAlt(commaSpace);
+	addstrAlt(COMMA_SPACE);
 	addStringYear();
 	if (activesquad == NULL && selectedsiege == -1)
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(3, 6, CONST_locationsPool118);
-		mvaddstrAlt(4, 6, CONST_locationsPool119);
-		mvaddstrAlt(5, 6, CONST_locationsPool120);
+		mvaddstrAlt(3, 6, CONST_TO_FORM_A_NEW_SQUAD);
+		mvaddstrAlt(4, 6, CONST_1_R_REVIEW_ASSETS_AND_FORM_SQUADS);
+		mvaddstrAlt(5, 6, CONST_2_PRESS_Z_TO_ASSEMBLE_A_NEW_SQUAD);
 		set_color_easy(WHITE_ON_BLACK);
 	}
 	printfunds();
@@ -1634,7 +1635,7 @@ void locheader()
 			}
 			if (multipleact)
 			{
-				str = CONST_locationsPool121;
+				str = CONST_ACTING_INDIVIDUALLY;
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			}
 		}
@@ -1661,7 +1662,7 @@ bool showSafehouseInfo(Location* this_location, Location* squad_location, const 
 	}
 	else if (this_location->closed) {
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(closedDown);
+		addstrAlt(PARENTHESIS_CLOSED_DOWN);
 	}
 	else if (this_location->highsecurity) {
 		set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
@@ -1680,7 +1681,7 @@ bool showSafehouseInfo(Location* this_location, Location* squad_location, const 
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 		else
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
+		addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + CLOSE_PARENTHESIS);
 	}
 	return show_safehouse_info;
 }
@@ -1726,7 +1727,7 @@ void stopevil()
 		music.play(MUSIC_STOPEVIL);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, CONST_locationsPool122);
+		mvaddstrAlt(0, 0, CONST_WHERE_WILL_THE_SQUAD_GO);
 		printparty();
 		if (loc != -1)
 		{
@@ -1793,7 +1794,7 @@ void stopevil()
 				if (ledger.get_funds() < ticketprice)
 					set_color_easy(RED_ON_BLACK_BRIGHT);
 				else set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + closeParenthesis);
+				addstrAlt(spaceParanthesisDollar + tostring(ticketprice) + CLOSE_PARENTHESIS);
 			}
 			temploc.push_back(-1);
 		}
@@ -1809,8 +1810,8 @@ void stopevil()
 			mvaddstrAlt(20, 60, addnextpagestr());
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		if ((loc == -1) || (multipleCityMode && LocationsPool::getInstance().getLocationType(loc) == squad_location->city)) mvaddstrAlt(24, 1, CONST_locationsPool123);
-		else mvaddstrAlt(24, 1, CONST_locationsPool124);
+		if ((loc == -1) || (multipleCityMode && LocationsPool::getInstance().getLocationType(loc) == squad_location->city)) mvaddstrAlt(24, 1, CONST_ENTER_THE_SQUAD_IS_NOT_YET_LIBERAL_ENOUGH);
+		else mvaddstrAlt(24, 1, CONST_ENTER_BACK_ONE_STEP);
 		int c = getkeyAlt();
 		//PAGE UP
 		if (is_page_up(c) && page > 0) page--;
@@ -1865,10 +1866,10 @@ vector<string> caseBUSINESSFRONT_TEMPAGENCY;
 vector<string> caseBUSINESSFRONT_RESTAURANT;
 vector<string> caseBUSINESSFRONT_MISCELLANEOUS;
 vector<file_and_text_collection> locationspool_text_file_collection = {
-	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + CONST_locationsPool125),
-	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + CONST_locationsPool126),
-	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + CONST_locationsPool127),
-	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + CONST_locationsPool128),
+	customText(&caseBUSINESSFRONT_INSURANCE, mostlyendings + CONST_CASEBUSINESSFRONT_INSURANCE_TXT),
+	customText(&caseBUSINESSFRONT_TEMPAGENCY, mostlyendings + CONST_CASEBUSINESSFRONT_TEMPAGENCY_TXT),
+	customText(&caseBUSINESSFRONT_RESTAURANT, mostlyendings + CONST_CASEBUSINESSFRONT_RESTAURANT_TXT),
+	customText(&caseBUSINESSFRONT_MISCELLANEOUS, mostlyendings + CONST_CASEBUSINESSFRONT_MISCELLANEOUS_TXT),
 };
 /* base - invest in this location */
 void investlocation()
@@ -1884,65 +1885,65 @@ void investlocation()
 			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 			if (LocationsPool::getInstance().getLocationType(loc) == SITE_OUTDOOR_BUNKER)
-				mvaddstrAlt(8, 1, CONST_locationsPool129);
+				mvaddstrAlt(8, 1, CONST_W_REPAIR_THE_BUNKER_FORTIFICATIONS_2000);
 			else if (LocationsPool::getInstance().getLocationType(loc) == SITE_RESIDENTIAL_BOMBSHELTER)
-				mvaddstrAlt(8, 1, CONST_locationsPool130);
+				mvaddstrAlt(8, 1, CONST_W_FORTIFY_THE_BOMB_SHELTER_ENTRANCES_2000);
 			else
-				mvaddstrAlt(8, 1, CONST_locationsPool131);
+				mvaddstrAlt(8, 1, CONST_W_FORTIFY_THE_COMPOUND_FOR_A_SIEGE_2000);
 		}
 		if (!(LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,loc) & COMPOUND_CAMERAS))
 		{
 			if (ledger.get_funds() >= 2000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(9, 1, CONST_locationsPool132);
+			mvaddstrAlt(9, 1, CONST_C_PLACE_SECURITY_CAMERAS_AROUND_THE_COMPOUND_2000);
 		}
 		if (location[loc]->can_be_trapped())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(10, 1, CONST_locationsPool133);
+			mvaddstrAlt(10, 1, CONST_B_PLACE_BOOBY_TRAPS_THROUGHOUT_THE_COMPOUND_3000);
 		}
 		if (location[loc]->can_install_tanktraps())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(11, 1, CONST_locationsPool134);
+			mvaddstrAlt(11, 1, CONST_T_RING_THE_COMPOUND_WITH_TANK_TRAPS_3000);
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_GENERATOR))
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(12, 1, CONST_locationsPool135);
+			mvaddstrAlt(12, 1, CONST_G_BUY_A_GENERATOR_FOR_EMERGENCY_ELECTRICITY_3000);
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_AAGUN))
 		{
 			if (lawList[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
 			{
 				if (ledger.get_funds() >= 35000) set_color_easy(WHITE_ON_BLACK);
-				mvaddstrAlt(13, 1, CONST_locationsPool136);
+				mvaddstrAlt(13, 1, CONST_A_INSTALL_A_PERFECTLY_LEGAL_ANTI_AIRCRAFT_GUN_ON_THE_ROOF_35_000);
 			}
 			else
 			{
 				if (ledger.get_funds() >= 200000) set_color_easy(WHITE_ON_BLACK);
 				else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-				mvaddstrAlt(13, 1, CONST_locationsPool137);
+				mvaddstrAlt(13, 1, CONST_A_INSTALL_AND_CONCEAL_AN_ILLEGAL_ANTI_AIRCRAFT_GUN_ON_THE_ROOF_200_000);
 			}
 		}
 		if (!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(14, 1, CONST_locationsPool138);
+			mvaddstrAlt(14, 1, CONST_P_BUY_A_PRINTING_PRESS_TO_START_YOUR_OWN_NEWSPAPER_3000);
 		}
 		if (location[loc]->can_have_businessfront())
 		{
 			if (ledger.get_funds() >= 3000) set_color_easy(WHITE_ON_BLACK);
 			else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-			mvaddstrAlt(15, 1, CONST_locationsPool139);
+			mvaddstrAlt(15, 1, CONST_F_SETUP_A_BUSINESS_FRONT_TO_WARD_OFF_SUSPICION_3000);
 		}
 		if (ledger.get_funds() >= 150) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_locationsPool140);
+		mvaddstrAlt(16, 1, CONST_R_STOCKPILE_20_DAILY_RATIONS_OF_FOOD_150);
 		mvaddstrAlt(17, 1, enter_done);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
@@ -2197,7 +2198,7 @@ void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid) 
 	int oldsquadid = cr->squadid;
 	Deprecatedsquadst *oldactivesquad = activesquad;
 	activesquad = new Deprecatedsquadst;
-	strcpy(activesquad->name, CONST_locationsPool145);
+	strcpy(activesquad->name, CONST_TEMPORARY_SQUAD);
 	activesquad->id = cursquadid;
 	activesquad->squad[0] = cr;
 	cr->squadid = activesquad->id;

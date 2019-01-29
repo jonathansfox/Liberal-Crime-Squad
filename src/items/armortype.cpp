@@ -1,3 +1,4 @@
+
 #define	ARMORTYPE_CPP
 #include "../includes.h"
 
@@ -57,8 +58,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 				else if (b == 0)
 					deathsquad_legality_ = false;
 				/*else
-				errorlog << CONST_armortype048 << idname()
-				<< CONST_armortype035 << xml.GetData() << std::endl;*/
+				errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+				<< COLON_DEATHSQUAD_LEGALITY << xml.GetData() << std::endl;*/
 				break;
 			case ENUM_tag_can_get_bloody:
 				b = stringtobool(xml.GetData());
@@ -93,12 +94,12 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							fireprotection_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype037 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_FIREPROTECTION << xml.GetData() << std::endl;*/
 					}
 					/*else
-					errorlog << CONST_armortype054 << idname()
-					<< CONST_armortype051 << element << endl;*/
+					errorlog << UNKNOWN_ELEMENT_FOR_ARMOR_TYPE << idname()
+					<< COLON_ARMOR << element << endl;*/
 				}
 				xml.OutOfElem();
 				break;
@@ -115,8 +116,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							cover_body_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype041 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_BODY_COVERING << xml.GetData() << std::endl;*/
 					}
 					else if (element == tag_head)
 					{
@@ -126,8 +127,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							cover_head_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype043 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_HEAD_COVERING << xml.GetData() << std::endl;*/
 					}
 					else if (element == tag_arms)
 					{
@@ -137,8 +138,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							cover_arms_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype045 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_ARM_COVERING << xml.GetData() << std::endl;*/
 					}
 					else if (element == tag_legs)
 					{
@@ -148,8 +149,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							cover_legs_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype047 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_LEG_COVERING << xml.GetData() << std::endl;*/
 					}
 					else if (element == tag_conceals_face)
 					{
@@ -159,12 +160,12 @@ void ArmorType::init(const MCD_STR& xmlstring)
 						else if (b == 0)
 							conceal_face_ = false;
 						/*else
-						errorlog << CONST_armortype048 << idname()
-						<< CONST_armortype049 << xml.GetData() << std::endl;*/
+						errorlog << INVALID_BOOLEAN_FOR_ARMOR << idname()
+						<< COLON_CONCEAL_FACE << xml.GetData() << std::endl;*/
 					}
 					/*else
-					errorlog << CONST_armortype054 << idname()
-					<< CONST_armortype051 << element << endl;*/
+					errorlog << UNKNOWN_ELEMENT_FOR_ARMOR_TYPE << idname()
+					<< COLON_ARMOR << element << endl;*/
 				}
 				xml.OutOfElem();
 				break;
@@ -185,8 +186,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
 					else if (element == tag_drugbonus)
 						interrogation_drugbonus_ = atoi(xml.GetData());
 					/*else
-					errorlog << CONST_armortype054 << idname()
-					<< CONST_armortype053 << element << endl;*/
+					errorlog << UNKNOWN_ELEMENT_FOR_ARMOR_TYPE << idname()
+					<< COLON_INTERROGATION_ST << element << endl;*/
 				}
 				xml.OutOfElem();
 				break;
@@ -223,7 +224,7 @@ void ArmorType::init(const MCD_STR& xmlstring)
 				durability_ = max(0, atoi(xml.GetData()));
 				break;
 				/*default:
-				errorlog << CONST_armortype054 << idname() << CONST_armortypeB044 << element << endl;
+				errorlog << UNKNOWN_ELEMENT_FOR_ARMOR_TYPE << idname() << CONST_armortypeB044 << element << endl;
 				break;
 				*/
 			}

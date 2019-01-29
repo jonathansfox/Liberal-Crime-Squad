@@ -1,3 +1,4 @@
+
 #define	AUGMENTTYPE_CPP
 #include "../includes.h"
 
@@ -13,8 +14,8 @@ AugmentType::AugmentType(const std::string& xmlstring) : max_age_(-1), min_age_(
 	idname_ = xml.GetAttrib(tag_idname);
 	if (!len(idname_))
 	{
-		idname_ = CONST_augmenttype012 + tostring(id_);
-		xmllog.log(CONST_augmenttype013 + tostring(id_) + CONST_augmenttypeB014);
+		idname_ = LACKS_IDNAME + tostring(id_);
+		xmllog.log(AUGMENT_TYPE_SPACE + tostring(id_) + LACKS_IDNAME_LOWERCASE);
 	}
 	xml.IntoElem();
 	while (xml.FindElem())

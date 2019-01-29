@@ -1,3 +1,4 @@
+
 #define	CREATURE_CPP
 #include "../includes.h"
 /*
@@ -254,10 +255,10 @@ void DeprecatedCreature::creatureinit()
 	align = pickrandom(randomAlignments);
 	infiltration = 0.0f;
 	type = CREATURE_WORKER_JANITOR;
-	type_idname = CONST_creature087;
+	type_idname = CONST_CREATURE_WORKER_JANITOR;
 	meetings = 0;
-	strcpy(name, CONST_creature089.c_str());
-	strcpy(propername, CONST_creature089.c_str());
+	strcpy(name, SCRUFFY_UNNAMED_JANITOR.c_str());
+	strcpy(propername, SCRUFFY_UNNAMED_JANITOR.c_str());
 }
 DeprecatedCreature::DeprecatedCreature(const std::string& inputXml)
 	: weapon(NULL), armor(NULL), prisoner(NULL)
@@ -428,7 +429,7 @@ string DeprecatedCreature::showXml() const
 	xml.AddElem(tag_type, type);
 	xml.AddElem(tag_type_idname, type_idname);
 	char buf[256];
-	snprintf(buf, 255, CONST_creature090.c_str(), infiltration);
+	snprintf(buf, 255, PERCENT_F.c_str(), infiltration);
 	xml.AddElem(tag_infiltration, buf);
 	xml.AddElem(tag_animalgloss, animalgloss);
 	xml.AddElem(tag_specialattack, specialattack);
@@ -678,13 +679,13 @@ int DeprecatedCreature::attribute_roll(int attribute) const
 {
 	int return_value = roll_check(get_attribute(attribute, true));
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, CONST_creature091);
+		mvaddstrAlt(8, 1, ATTRIBUTE_ROLL);
 		addstrAlt(attribute_enum_to_string(attribute));
-		addstrAlt(CONST_creature092);
+		addstrAlt(ATTRIBUTE_LEVEL);
 		addstrAlt(get_attribute(attribute, true));
-		addstrAlt(CONST_creature102);
+		addstrAlt(OUTCOME_OF_SPACE);
 		addstrAlt(return_value);
-		addstrAlt(closeParenthesis);
+		addstrAlt(CLOSE_PARENTHESIS);
 		pressAnyKey();
 	}
 	// Roll on the attribute value
@@ -693,15 +694,15 @@ int DeprecatedCreature::attribute_roll(int attribute) const
 bool DeprecatedCreature::attribute_check(int attribute, int difficulty) const
 {
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, CONST_creature094);
+		mvaddstrAlt(8, 1, ATTRIBUTE_CHECK);
 		addstrAlt(attribute_enum_to_string(attribute));
 		if (difficulty < 21)
 		{
-			addstrAlt(CONST_creature104);
+			addstrAlt(DIFFICULTY);
 			addstrAlt(difficulty);
 		}
-		else addstrAlt(CONST_creature105);
-		addstrAlt(closeParenthesis);
+		else addstrAlt(IMPOSSIBLE);
+		addstrAlt(CLOSE_PARENTHESIS);
 		pressAnyKey();
 	}
 	return(attribute_roll(attribute) >= difficulty);
@@ -716,7 +717,7 @@ int DeprecatedCreature::skill_roll(int skill) const
 		{
 		default:
 			set_color_easy(YELLOW_ON_RED_BRIGHT);
-			addstrAlt(CONST_creature097, gamelog);
+			addstrAlt(ILLEGAL_SKILL_ROLL, gamelog);
 			pressAnyKey();
 			break;
 		case PSEUDOSKILL_ESCAPEDRIVE:
@@ -825,21 +826,21 @@ int DeprecatedCreature::skill_roll(int skill) const
 	}
 	}
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, CONST_creature098);
+		mvaddstrAlt(8, 1, SKILL_ROLL);
 		addstrAlt(skill_enum_to_string(skill));
-		addstrAlt(CONST_creature099);
+		addstrAlt(SKILL_VALUE);
 		addstrAlt(skills[skill]);
-		addstrAlt(commaSpace);
+		addstrAlt(COMMA_SPACE);
 		if (return_value == 0)
-			addstrAlt(CONST_creature100);
+			addstrAlt(AUTOMATIC_FAILURE);
 		else
 		{
-			addstrAlt(CONST_creature101);
+			addstrAlt(ADJUSTED_ATTRIBUTE_VALUE);
 			addstrAlt(adjusted_attribute_value);
-			addstrAlt(CONST_creature102);
+			addstrAlt(OUTCOME_OF_SPACE);
 			addstrAlt(return_value);
 		}
-		addstrAlt(closeParenthesis);
+		addstrAlt(CLOSE_PARENTHESIS);
 		pressAnyKey();
 	}
 	return return_value;
@@ -848,15 +849,15 @@ int DeprecatedCreature::skill_roll(int skill) const
 bool DeprecatedCreature::skill_check(int skill, int difficulty) const
 {
 	if (SHOWMECHANICS) {
-		mvaddstrAlt(8, 1, CONST_creature103);
+		mvaddstrAlt(8, 1, SKILL_CHECK);
 		addstrAlt(skill_enum_to_string(skill));
 		if (difficulty < 21)
 		{
-			addstrAlt(CONST_creature104);
+			addstrAlt(DIFFICULTY);
 			addstrAlt(difficulty);
 		}
-		else addstrAlt(CONST_creature105);
-		addstrAlt(closeParenthesis);
+		else addstrAlt(IMPOSSIBLE);
+		addstrAlt(CLOSE_PARENTHESIS);
 		pressAnyKey();
 	}
 	return(skill_roll(skill) >= difficulty);
@@ -908,10 +909,10 @@ void conservatise(DeprecatedCreature &cr)
 	switch (cr.type)
 	{
 	case CREATURE_WORKER_FACTORY_UNION:
-		cr.rename(CONST_creature106);
+		cr.rename(EX_UNION_WORKER);
 		break;
 	case CREATURE_JUDGE_LIBERAL:
-		cr.rename(CONST_creature107);
+		cr.rename(JADED_LIBERAL_JUDGE);
 		break;
 	}
 }
@@ -926,10 +927,10 @@ void liberalize(DeprecatedCreature &cr, bool rename)
 		switch (cr.type)
 		{
 		case CREATURE_WORKER_FACTORY_NONUNION:
-			cr.rename(CONST_creature108);
+			cr.rename(NEW_UNION_WORKER);
 			break;
 			//    case CREATURE_JUDGE_CONSERVATIVE:
-			//       strcpy(cr.name,CONST_creature109.c_str());
+			//       strcpy(cr.name,ENLIGHTENED_JUDGE.c_str());
 			//       break;
 		}
 }
@@ -938,15 +939,15 @@ void nameCCSMember(DeprecatedCreature &cr)
 {
 	if (cr.get_armor().get_itemtypename() == tag_ARMOR_CIVILLIANARMOR) {
 
-		cr.rename(CONST_creature110);
+		cr.rename(ELITE_SECURITY);
 	}
 	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_ARMYARMOR) {
 
-		cr.rename(CONST_creature111);
+		cr.rename(SOLDIER);
 	}
 	else if (cr.get_armor().get_itemtypename() == tag_ARMOR_HEAVYARMOR) {
 
-		cr.rename(CONST_creature112);
+		cr.rename(CCS_HEAVY);
 	}
 	else if (cr.get_weapon().get_itemtypename() == tag_WEAPON_SHOTGUN_PUMP || LCSrandom(2)) {
 
@@ -1066,50 +1067,27 @@ const char* DeprecatedCreature::heshe(bool capitalize) const
 {  // subject pronoun (nominative case)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? CONST_creature114.c_str() : CONST_creatureX01.c_str();
-	case GENDER_FEMALE: return capitalize ? CONST_creature115.c_str() : CONST_creatureX02.c_str();
-	default: return capitalize ? CONST_creature116.c_str() : CONST_creature117.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature118 rhyming with CONST_creatureB154
-																						// see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-																						// or http://en.wiktionary.org/wiki/xe or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-																						// or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-																						// full conjugation of CONST_creature117/CONST_creatureB153/CONST_creatureB066 (the CONST_creatureC161es are pronounced like CONST_creatureD162s):
-																						// subject prononoun (nominative case):          xe      (pronounced CONST_creature118 rhyming with CONST_creatureB154)
-																						// pronominal adjective (possessive determiner): xyr     (pronounced CONST_creature119 rhyming with CONST_creatureB159)
-																						// object pronoun (oblique case);                xem     (pronounced CONST_creature120 rhyming with CONST_creatureB160)
-																						// possessive pronoun:                           xyrs    (pronounced CONST_creature121 rhyming with CONST_creatureB157)
-																						// reflexive pronoun:                            xemself (pronounced CONST_creature122 rhyming with CONST_creatureB158)
-																						// public schools in Vancouver, British Columbia in Canada officially use these pronouns:
-																						// http://news.nationalpost.com/2014/06/17/vancouver-school-boards-genderless-pronouns-not-likely-to-stick-if-history-is-any-indication/
+	case GENDER_MALE: return capitalize ? HE_SPACE.c_str() : HE_LOWERCASE.c_str();
+	case GENDER_FEMALE: return capitalize ? SHE_SPACE.c_str() : SHE_LOWERCASE.c_str();
+	default: return capitalize ? XE_SPACE.c_str() : XE_LOWERCASE.c_str(); // Elite Liberal gender-neutral pronoun
 	}
 }
 const char* DeprecatedCreature::hisher(bool capitalize) const
 {  // pronominal adjective (possessive determiner)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? CONST_creature123.c_str() : CONST_creatureX03.c_str();
+	case GENDER_MALE: return capitalize ? CONST_creature123.c_str() : HIS_LOWERCASE.c_str();
 	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
-	default: return capitalize ? CONST_creature125.c_str() : CONST_creatureX05.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature119 rhyming with CONST_creatureB159
-																						// see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-																						// or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-																						// or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-																						// the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so CONST_creature126 is correct):
-																						// his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add CONST_creature127 at the end if it doesn't already have an CONST_creature127 at the end
+	default: return capitalize ? CONST_creature125.c_str() : CONST_creatureX05.c_str(); // Elite Liberal gender-neutral pronoun
 	}
 }
 const char* DeprecatedCreature::himher(bool capitalize) const
 {  // object pronoun (oblique case)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? CONST_creature128.c_str() : CONST_creatureX06.c_str();
+	case GENDER_MALE: return capitalize ? CONST_creature128.c_str() : HIM_LOWERCASE.c_str();
 	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
-	default: return capitalize ? CONST_creature130.c_str() : CONST_creatureX07.c_str(); // Elite Liberal gender-neutral pronoun... it is pronounced CONST_creature120 rhyming with CONST_creatureB160
-																						// see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-																						// or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-																						// or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
-																						// the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so CONST_creature131 is correct):
-																						// him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add CONST_creature132 unless plural in which case add CONST_creatureB161
-																						// some people mistakenly use xyrself instead of xemself but this is wrong as it doesn't follow the pattern used by ALL standard third-person pronouns,
-																						// instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
+	default: return capitalize ? CONST_creature130.c_str() : CONST_creatureX07.c_str(); // Elite Liberal gender-neutral pronoun
 	}
 }
 
@@ -1339,14 +1317,14 @@ string DeprecatedCreature::get_weapon_string(int subtype) const
 	{
 		r = weapon->get_name(subtype);
 		if (weapon->uses_ammo())
-			r += CONST_creature138 + tostring(weapon->get_ammoamount()) + CONST_creatureB162 + tostring(count_clips()) + closeParenthesis;
+			r += SPACE_PARENTHESIS + tostring(weapon->get_ammoamount()) + SLASH_MARK + tostring(count_clips()) + CLOSE_PARENTHESIS;
 		else if (weapon->is_throwable())
-			r += CONST_creature134 + tostring(count_weapons() - 1) + closeParenthesis; // -1 so not to count weapon in hands.
+			r += ONE_OVER + tostring(count_weapons() - 1) + CLOSE_PARENTHESIS; // -1 so not to count weapon in hands.
 	}
 	else if (len(extra_throwing_weapons))
 	{
 		r = extra_throwing_weapons[0]->get_name(subtype);
-		r += CONST_creature135 + tostring(count_weapons()) + closeParenthesis;
+		r += ZERO_OVER + tostring(count_weapons()) + CLOSE_PARENTHESIS;
 	}
 	else r = CONST_creature136;
 	return r;
@@ -1371,14 +1349,14 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 	// Who knows how old the purple gorilla/tank/flaming bunny/dog is?
 	if (animalgloss != ANIMALGLOSS_NONE)
 	{
-		return (CONST_creature137);
+		return (PARENTHESIS_QUESTION);
 	}
 	else {
 
 
 		
 		// For humans, estimate their age and gender
-		string str = (CONST_creature138);
+		string str = (SPACE_PARENTHESIS);
 		// Almost precise estimates of child and teen ages
 		if (bio.age < 20)
 		{
@@ -1392,21 +1370,21 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 		else
 		{
 			if (bio.age < 30)
-				str += (CONST_creature140);
+				str += (TWENTIES);
 			else if (bio.age < 40)
-				str += (CONST_creature141);
+				str += (THIRTIES);
 			else if (bio.age < 50)
-				str += (CONST_creature142);
+				str += (FORTIES);
 			else if (bio.age < 60)
-				str += (CONST_creature143);
+				str += (FIFTIES);
 			else if (bio.age < 70)
-				str += (CONST_creature144);
+				str += (SIXTIES);
 			else if (bio.age < 80)
-				str += (CONST_creature145);
+				str += (SEVENTIES);
 			else if (bio.age < 90)
-				str += (CONST_creature146);
+				str += (EIGHTIES);
 			else
-				str += (CONST_creature147);
+				str += (VERY_OLD);
 		}
 		// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
 		if (bio.gender_liberal == GENDER_MALE)
@@ -1414,11 +1392,11 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 		else if (bio.gender_liberal == GENDER_FEMALE)
 			str += (CONST_creature149);
 		else
-			str += (CONST_creature150);
+			str += (COMMA_AMBIGUOUS);
 		// Note if there's some conflict with Conservative society's perceptions
 		if (bio.gender_liberal != bio.gender_conservative && bio.gender_liberal != GENDER_NEUTRAL)
 			str += (CONST_creature151);
-		str += (closeParenthesis);
+		str += (CLOSE_PARENTHESIS);
 
 		return str;
 	}

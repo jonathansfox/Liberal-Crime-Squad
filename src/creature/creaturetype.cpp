@@ -1,3 +1,4 @@
+
 #define	CREATURETYPE_CPP
 #include "../includes.h"
 Weapon& DeprecatedCreature::weapon_none()
@@ -13,7 +14,7 @@ void assign_interval(Interval& i, const std::string& value,
 	const std::string& owner, const std::string& element)
 {
 	if (!i.set_interval(value))
-		xmllog.log(CONST_creaturetype055 + element + CONST_creaturetypeB075 + owner + CONST_creaturetypeB086 + value);
+		xmllog.log(INVALID_INTERVAL + element + CONST_creaturetypeB075 + owner + CONST_creaturetypeB086 + value);
 }
 int CreatureType::s_number_of_creaturetypes = 0;
 CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int weapons, const std::string& clip, int clips)
@@ -38,7 +39,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	if (!len(idname_))
 	{
 		idname_ = CONST_creaturetype061 + tostring(id_);
-		xmllog.log(CONST_creaturetype062 + tostring(id_) + CONST_creaturetypeB080);
+		xmllog.log(CREATURE_TYPE + tostring(id_) + CONST_creaturetypeB080);
 	}
 	type_ = creaturetype_string_to_enum(idname_);
 	xml.IntoElem();
@@ -72,7 +73,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 					alignment_public_mood_ = false;
 					break;
 				default:
-					xmllog.log(CONST_creaturetype063 + idname_ + CONST_creaturetypeB086 + age_alignment_or_whatever);
+					xmllog.log(INVALID_ALIGNMENT + idname_ + CONST_creaturetypeB086 + age_alignment_or_whatever);
 					break;
 				}
 				break;
@@ -117,7 +118,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 					if (attribute != -1)
 						assign_interval(attributes_[attribute], xml.GetChildData(), idname_, element);
 					else
-						xmllog.log(CONST_creaturetype064 + idname_ + CONST_creaturetypeB086 + xml.GetTagName());
+						xmllog.log(UNKNOWN_ATTRIBUTE + idname_ + CONST_creaturetypeB086 + xml.GetTagName());
 				}
 				break;
 			case ENUM_tag_juice:
@@ -128,7 +129,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 				if (gender != -1 && gender != GENDER_WHITEMALEPATRIARCH)
 					gender_liberal_ = gender_conservative_ = gender;
 				else
-					xmllog.log(CONST_creaturetype065 + idname_ + CONST_creaturetypeB086 + xml.GetData());
+					xmllog.log(INVALID_GENDER + idname_ + CONST_creaturetypeB086 + xml.GetData());
 				break;
 			case ENUM_tag_infiltration:
 				assign_interval(infiltration_, xml.GetData(), idname_, element);
@@ -143,14 +144,14 @@ CreatureType::CreatureType(const std::string& xmlstring)
 					if (skill != -1)
 						assign_interval(skills_[skill], xml.GetChildData(), idname_, element);
 					else
-						xmllog.log(CONST_creaturetype066 + idname_ + CONST_creaturetypeB086 + xml.GetChildTagName());
+						xmllog.log(UNKNOWN_SKILL + idname_ + CONST_creaturetypeB086 + xml.GetChildTagName());
 				}
 				break;
 			case ENUM_tag_armor:
 				if (getarmortype(xml.GetData()) != -1)
 					armortypes_.push_back(xml.GetData());
 				else
-					xmllog.log(CONST_creaturetype067 + idname_ + CONST_creaturetypeB086 + xml.GetData());
+					xmllog.log(INVALID_ARMORTYPE + idname_ + CONST_creaturetypeB086 + xml.GetData());
 				break;
 			case ENUM_tag_weapon:
 				//xml.SavePos(tag_creature);
@@ -166,11 +167,11 @@ CreatureType::CreatureType(const std::string& xmlstring)
 			}
 		}
 		else {
-			xmllog.log(CONST_creaturetype068 + idname_ + CONST_creaturetypeB086 + element);
+			xmllog.log(UNKNOWN_ELEMENT + idname_ + CONST_creaturetypeB086 + element);
 		}
 		if (!len(type_name_))
 		{
-			xmllog.log(CONST_creaturetype069 + idname_ + singleDot);
+			xmllog.log(TYPE_NAME_NOT_DEFINED + idname_ + singleDot);
 			type_name_ = undefined;
 		}
 		// If no weapon type has been given then use WEAPON_NONE.
@@ -247,16 +248,16 @@ std::string CreatureType::get_type_name() const
 		if (lawList[LAW_LABOR] == -2 && lawList[LAW_CORPORATE] == -2) return CONST_creaturetype070;
 		break;
 	case CREATURE_WORKER_JANITOR:
-		if (lawList[LAW_LABOR] == 2) return CONST_creaturetype071;
+		if (lawList[LAW_LABOR] == 2) return CUSTODIAN;
 		break;
 	case CREATURE_WORKER_SWEATSHOP:
-		if (lawList[LAW_LABOR] == 2 && lawList[LAW_IMMIGRATION] == 2) return CONST_creaturetype072;
+		if (lawList[LAW_LABOR] == 2 && lawList[LAW_IMMIGRATION] == 2) return MIGRANT_WORKER;
 		break;
 	case CREATURE_CARSALESMAN:
-		if (lawList[LAW_WOMEN] == -2) return CONST_creaturetype073;
+		if (lawList[LAW_WOMEN] == -2) return CAR_SALESMAN;
 		break;
 	case CREATURE_FIREFIGHTER:
-		if (lawList[LAW_FREESPEECH] == -2) return CONST_creaturetype074;
+		if (lawList[LAW_FREESPEECH] == -2) return FIREMAN;
 		break;
 	}
 	return type_name_;
@@ -340,7 +341,7 @@ void giveDefaultWeapon(DeprecatedCreature &cr, const short type) {
 void armBouncer(DeprecatedCreature &cr) {
 	if (mode == GAMEMODE_SITE && LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 	{
-		cr.rename(CONST_creaturetypes041);
+		cr.rename(ENFORCER);
 		cr.set_skill(SKILL_CLUB, LCSrandom(3) + 3);
 	}
 	if (disguisesite(sitetype))
@@ -372,7 +373,7 @@ void armCREATURE_SCIENTIST_EMINENT(DeprecatedCreature &cr) {
 void armCREATURE_CORPORATE_CEO(DeprecatedCreature &cr) {
 	fullName fn = generate_long_name(GENDER_WHITEMALEPATRIARCH);
 	strcpy(cr.propername, (fn.first + " " + fn.last).data());
-	cr.rename(CONST_creaturetypes042 + cr.propername);
+	cr.rename(CEO_SPACE + cr.propername);
 	cr.dontname = true;
 }
 void armCREATURE_WORKER_FACTORY_NONUNION(DeprecatedCreature &cr) {
@@ -444,7 +445,7 @@ void armCREATURE_COP(DeprecatedCreature &cr) {
 	if (lawList[LAW_POLICEBEHAVIOR] == 2 && cr.align == ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
 	{
 		cr.align = ALIGN_MODERATE;
-		cr.rename(CONST_creaturetypes043);
+		cr.rename(POLICE_NEGOTIATOR);
 		cr.set_skill(SKILL_PERSUASION, LCSrandom(4) + 1);
 		cr.set_skill(SKILL_PISTOL, LCSrandom(3) + 1);
 		cr.set_attribute(ATTRIBUTE_HEART, 4);
@@ -491,7 +492,7 @@ void armCREATURE_FIREFIGHTER(DeprecatedCreature &cr) {
 	{
 		cr.give_weapon(*weapontype[getweapontype(tag_WEAPON_AXE)], NULL);
 		cr.set_skill(SKILL_AXE, LCSrandom(3) + 2);
-		cr.rename(CONST_creaturetypes045);
+		cr.rename(FIREFIGHTER);
 	}
 	if (isThereASiteAlarm()) // Respond to emergencies in bunker gear
 		cr.give_armor(getarmortype(tag_ARMOR_BUNKERGEAR), NULL);
@@ -558,7 +559,7 @@ void armCREATURE_CCS_VIGILANTE(DeprecatedCreature &cr) {
 		nameCCSMember(cr);
 }
 void armCREATURE_CCS_ARCHCONSERVATIVE(DeprecatedCreature &cr) {
-	cr.rename((LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) ? CONST_creaturetypes046 : (ccs_kills < 2 ? CONST_creaturetypesX01 : CONST_creaturetypesX02)));
+	cr.rename((LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()) ? CCS_TEAM_LEADER : (ccs_kills < 2 ? CCS_LIEUTENANT : CCS_FOUNDER)));
 }
 void armCREATURE_PRISONGUARD(DeprecatedCreature &cr) {
 	if (lawList[LAW_GUNCONTROL] == -2 && !LCSrandom(3))
@@ -593,19 +594,19 @@ void armCREATURE_EDUCATOR(DeprecatedCreature &cr) {
 void armCREATURE_GENETIC(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
 	if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_CORPORATE_HOUSE)
 	{
-		cr.rename( CONST_creaturetypes047);
+		cr.rename( PET_SPACE);
 		attcap[ATTRIBUTE_CHARISMA] = 10;
 	}
 	else
-		cr.rename( blankString);
+		cr.rename( BLANK_STRING);
 	switch (LCSrandom(11))
 	{
 	case 0:
-		cr.rename(cr.getNameAndAlignment().name + CONST_creaturetypes048);
+		cr.rename(cr.getNameAndAlignment().name + FLAMING_RABBIT);
 		cr.specialattack = ATTACK_FLAME;
 		break;
 	case 1:
-		cr.rename(cr.getNameAndAlignment().name + CONST_creaturetypes049);
+		cr.rename(cr.getNameAndAlignment().name + GIANT_MOSQUITO);
 		cr.specialattack = ATTACK_SUCK;
 		break;
 	default:
@@ -1013,7 +1014,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 			else if (element == tag_cliptype) cliptype = xml.GetChildData();
 			else if (element == tag_number_clips)
 				assign_interval(number_clips, xml.GetChildData(), owner, element);
-			else xmllog.log(CONST_creaturetype056 + owner + CONST_creaturetypeB086 + element);
+			else xmllog.log(UNKNOWN_ELEMENT_FOR_WEAPON + owner + CONST_creaturetypeB086 + element);
 		}
 	}
 	// Check values.
@@ -1021,7 +1022,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 	{
 		if (getweapontype(weapon_type_str) == -1)
 		{
-			xmllog.log(CONST_creaturetype057 + owner + CONST_creaturetypeB086 + weapon_type_str);
+			xmllog.log(INVALID_WEAPON_TYPE + owner + CONST_creaturetypeB086 + weapon_type_str);
 			weapon_type_str = tag_WEAPON_NONE;
 			cliptype = NONE;
 		}
@@ -1048,15 +1049,15 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 				for (i = 0; i < len(attacks) && cliptype != attacks[i]->ammotype; i++);
 				if (i == len(attacks))
 				{
-					xmllog.log(CONST_creaturetype058 + owner + CONST_creaturetypeB078 + cliptype +
-						CONST_creaturetype059 + weapon_type_str + singleDot);
+					xmllog.log(IN_SPACE + owner + CONST_creaturetypeB078 + cliptype +
+						CAN_NOT_BE_USED_BY + weapon_type_str + singleDot);
 					cliptype = NONE;
 				}
 			}
 			// Undefined clip type.
 			else
 			{
-				xmllog.log(CONST_creaturetype060 + owner + CONST_creaturetypeB086 + cliptype);
+				xmllog.log(INVALID_CLIP_TYPE + owner + CONST_creaturetypeB086 + cliptype);
 				cliptype = NONE;
 			}
 		}

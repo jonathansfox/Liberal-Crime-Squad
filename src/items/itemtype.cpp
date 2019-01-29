@@ -1,8 +1,9 @@
+
 #define	ITEMTYPE_CPP
 #include "../includes.h"
 int ItemType::number_of_itemtypes = 0;
 ItemType::ItemType(MCD_STR xmlstring)
-	: name_(CONST_itemtype005), name_future_defined_(false), fencevalue_(0)
+	: name_(CONST_UNDEFINED), name_future_defined_(false), fencevalue_(0)
 {
 	init(xmlstring);
 }
@@ -24,7 +25,7 @@ void ItemType::init(const MCD_STR& xmlstring)
 	xml.FindElem();
 	idname_ = xml.GetAttrib(tag_idname);
 	if (!len(idname_))
-		idname_ = CONST_itemtype006 + tostring(id_);
+		idname_ = CONST_LACKS_IDNAME + tostring(id_);
 	xml.IntoElem();
 	while (xml.FindElem()) //Loop over all the elements inside the element.
 	{
@@ -39,7 +40,7 @@ void ItemType::init(const MCD_STR& xmlstring)
 		else if (element == tag_fencevalue)
 			fencevalue_ = atoi(xml.GetData().c_str());
 		/*else
-		errorlog << CONST_itemtype007: " << element << endl;*/
+		errorlog << CONST_UNKNOWN_ELEMENT_FOR_ITEM_TYPE_IDNAME: " << element << endl;*/
 	}
 }
 const string& ItemType::get_name() const

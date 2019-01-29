@@ -1,3 +1,4 @@
+
 #define	WEAPONTYPE_CPP
 #include "../includes.h"
 
@@ -30,7 +31,7 @@ map<string, int> weaponTypeTags = {
 WeaponType::WeaponType(MCD_STR xmlstring)
 	: ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
 	name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
-	shortname_(CONST_tag_UNDEF), shortname_defined_(false), shortname_future_defined_(false),
+	shortname_(CONST_UNDEF), shortname_defined_(false), shortname_future_defined_(false),
 	shortname_sub_1_defined_(false), shortname_sub_2_defined_(false),
 	shortname_future_sub_1_defined_(false), shortname_future_sub_2_defined_(false),
 	can_take_hostages_(false), threatening_(false), can_threaten_hostages_(true),
@@ -226,8 +227,8 @@ map<string, int> attackstTags = {
 };
 
 attackst::attackst(MCD_STR xmlstring)
-	: priority(1), ranged(false), thrown(false), ammotype(CONST_tag_UNDEF), uses_ammo(false),
-	attack_description(CONST_tag_assaults), hit_description(CONST_tag_striking),
+	: priority(1), ranged(false), thrown(false), ammotype(CONST_UNDEF), uses_ammo(false),
+	attack_description(CONST_ASSAULTS), hit_description(CONST_tag_striking),
 	always_describe_hit(false), can_backstab(false), hit_punctuation(singleDot),
 	skill(SKILL_CLUB), accuracy_bonus(0), number_attacks(1),
 	successive_attacks_difficulty(0), strength_min(5), strength_max(10),
@@ -559,4 +560,3 @@ bool WeaponType::is_legal() const
 {
 	return legality_ >= lawList[LAW_GUNCONTROL];
 }
-

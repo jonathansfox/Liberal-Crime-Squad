@@ -1,3 +1,4 @@
+
 #define	ENDGAME_CPP
 #include "../includes.h"
 /*
@@ -27,9 +28,9 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 void printRatifyHeader() {
-	mvaddstrAlt(0, 62, CONST_endgame009);
-	mvaddstrAlt(0, 70, CONST_endgame010);
-	mvaddstrAlt(24, 0, CONST_endgame011);
+	mvaddstrAlt(0, 62, CONST_HOUSE);
+	mvaddstrAlt(0, 70, CONST_SENATE);
+	mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_WATCH_THE_CONGRESSIONAL_VOTES_UNFOLD);
 	pressAnyKey();
 }
 void printHouseRatification(const int l, const bool yeswin_h, const int yesvotes_h) {
@@ -82,7 +83,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_endgame008);
+		mvaddstrAlt(0, 0, CONST_THE_RATIFICATION_PROCESS);
 	}
 	//THE STATE VOTE WILL BE BASED ON VIEW OF LAW
 	int mood = publicmood(lawview);
@@ -139,7 +140,7 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 				else if (s < 34) moveAlt(5 + s - 17, 27);
 				else mvaddstrAlt(5 + s - 34, 54, statename(s));
 			}
-			mvaddstrAlt(24, 0, CONST_endgame012);
+			mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_WATCH_THE_STATE_VOTES_UNFOLD);
 			pressAnyKey();
 		}
 		for (int s = 0; s < STATENUM; s++)
@@ -166,10 +167,10 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 				else moveAlt(5 + s - 34, 76);
 
 				if (vote == level) {
-					addstrAlt(CONST_endgame013);
+					addstrAlt(CONST_YEA);
 				}
 				else {
-					addstrAlt(CONST_endgame014);
+					addstrAlt(CONST_NAY);
 				}
 
 				printSenateRatification(s, yesstate);
@@ -181,8 +182,8 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(23, 0);
-		if (ratified) addstrAlt(CONST_endgame015);
-		else addstrAlt(CONST_endgame016);
+		if (ratified) addstrAlt(CONST_AMENDMENT_ADOPTED);
+		else addstrAlt(CONST_AMENDMENT_REJECTED);
 	}
 	return ratified;
 }
@@ -191,9 +192,9 @@ void amendmentheading()
 {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_endgame017);
+	mvaddstrAlt(0, 0, CONST_PROPOSED_AMENDMENT);
 	addstrAlt(romannumeral(amendnum));
-	addstrAlt(CONST_endgame018);
+	addstrAlt(CONST_TO_THE_UNITED_STATES_CONSTITUTION);
 }
 /*
 TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
@@ -207,7 +208,7 @@ void tossjustices(char canseethings)
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 6, CONST_endgame019);
+		mvaddstrAlt(12, 6, CONST_THE_ELITE_LIBERAL_CONGRESS_IS_PROPOSING_AN_ELITE_LIBERAL_AMENDMENT);
 		pressAnyKey();
 	}
 	//STATE THE AMENDMENT
@@ -216,32 +217,32 @@ void tossjustices(char canseethings)
 		int tossnum = 0;
 		for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL) tossnum++;
 		amendmentheading();
-		mvaddstrAlt(2, 5, CONST_endgame020);
-		if (tossnum != 1)addstrAlt(CONST_endgame021);
-		else addstrAlt(CONST_endgame022);
-		addstrAlt(CONST_endgame023);
+		mvaddstrAlt(2, 5, CONST_THE_FOLLOWING_FORMER_CITIZEN);
+		if (tossnum != 1)addstrAlt(CONST_S_ARE);
+		else addstrAlt(CONST_IS);
+		addstrAlt(CONST_BRANDED_ARCH_CONSERVATIVE);
 		int y = 4;
 		for (int j = 0; j < COURTNUM; j++) if (court[j] != ALIGN_ELITELIBERAL)
 		{
 			mvaddstrAlt(y++, 0, courtname[j]);
 		}
-		mvaddstrAlt(y + 1, 5, CONST_endgame024);
+		mvaddstrAlt(y + 1, 5, CONST_IN_PARTICULAR_THE_AFOREMENTIONED_FORMER_CITIZEN);
 		if (tossnum != 1)addstrAlt(CONST_endgame028);
-		addstrAlt(CONST_endgame026);
-		mvaddstrAlt(y + 2, 0, CONST_endgame027);
+		addstrAlt(CONST_MAY);
+		mvaddstrAlt(y + 2, 0, CONST_NOT_SERVE_ON_THE_SUPREME_COURT_SAID_FORMER_CITIZEN);
 		if (tossnum != 1)addstrAlt(CONST_endgame028);
-		addstrAlt(CONST_endgame029);
-		mvaddstrAlt(y + 3, 0, CONST_endgame030);
-		if (tossnum != 1)addstrAlt(CONST_endgame031);
-		else addstrAlt(CONST_endgame032);
-		addstrAlt(CONST_endgame033);
-		mvaddstrAlt(y + 4, 0, CONST_endgame034);
-		if (tossnum != 1)addstrAlt(CONST_endgame035);
-		else addstrAlt(CONST_endgame036);
-		addstrAlt(CONST_endgame037);
-		mvaddstrAlt(y + 5, 0, CONST_endgame038);
-		mvaddstrAlt(y + 6, 0, CONST_endgame039);
-		mvaddstrAlt(24, 0, CONST_endgame045);
+		addstrAlt(CONST_WILL);
+		mvaddstrAlt(y + 3, 0, CONST_BE_DEPORTED_TO);
+		if (tossnum != 1)addstrAlt(CONST_CONSERVATIVE_COUNTRIES);
+		else addstrAlt(CONST_A_CONSERVATIVE_COUNTRY);
+		addstrAlt(CONST_OF_THE_PRESIDENT_S);
+		mvaddstrAlt(y + 4, 0, CONST_CHOOSING_TO_BE_REPLACED_BY);
+		if (tossnum != 1)addstrAlt(CONST_PROPER_JUSTICES);
+		else addstrAlt(CONST_A_PROPER_JUSTICE);
+		addstrAlt(CONST_ALSO_OF);
+		mvaddstrAlt(y + 5, 0, CONST_THE_PRESIDENT_S_CHOOSING_WITH_THE_ADVICE_AND_CONSENT_OF);
+		mvaddstrAlt(y + 6, 0, CONST_THE_SENATE);
+		mvaddstrAlt(24, 0, CONST_PRESS_C_TO_WATCH_THE_RATIFICATION_PROCESS_UNFOLD);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(2, -1, -1, 1, canseethings))
@@ -272,7 +273,7 @@ void amendment_termlimits(char canseethings)
 		music.play(MUSIC_ELECTIONS);
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(12, 6, CONST_endgame041);
+		mvaddstrAlt(12, 6, CONST_A_NATIONAL_CONVENTION_HAS_PROPOSED_AN_ELITE_LIBERAL_AMENDMENT);
 		pressAnyKey();
 	}
 	//STATE THE AMENDMENT
@@ -286,7 +287,7 @@ void amendment_termlimits(char canseethings)
 				i++;
 			}
 		}
-		mvaddstrAlt(24, 0, CONST_endgame045);
+		mvaddstrAlt(24, 0, CONST_PRESS_C_TO_WATCH_THE_RATIFICATION_PROCESS_UNFOLD);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(2, -1, -1, 0, canseethings))
@@ -294,7 +295,7 @@ void amendment_termlimits(char canseethings)
 		termlimits = true;
 		if (canseethings)
 		{
-			mvaddstrAlt(24, 0, CONST_endgame043);
+			mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_HOLD_NEW_ELECTIONS);
 			pressAnyKey();
 		}
 		elections_senate(0, canseethings);
@@ -351,7 +352,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		};
 	}
 	else {
-		addstrAlt(CONST_endgame044);
+		addstrAlt(CONST_INVALID_ALIGNMENT_FOR_AMENDMENT);
 		return;
 	}
 	move_center_string(12, proposedAmendment.data());
@@ -370,7 +371,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 				i++;
 			}
 		}
-		mvaddstrAlt(24, 0, CONST_endgame045);
+		mvaddstrAlt(24, 0, CONST_PRESS_C_TO_WATCH_THE_RATIFICATION_PROCESS_UNFOLD);
 		while (getkeyAlt() != 'c');
 	}
 	if (ratify(ratificationNumbers[0], ratificationNumbers[1], ratificationNumbers[2], ratificationNumbers[3], canseethings))
@@ -378,7 +379,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 		music.play(endMusic);
 		if (canseethings)
 		{
-			mvaddstrAlt(24, 0, CONST_endgame046);
+			mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_WHAT_HAS_HAPPENED_ONE_LAST_TIME);
 			pressAnyKey();
 		}
 		amendnum = 1; // Constitution repealed...
@@ -413,7 +414,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 				//DATING AND 
 				endingOne = youWentOnVacation;
 				if (enforcedAlignment == ALIGN_ARCHCONSERVATIVE) {
-					endingTwo = conservativesRemakeWorld;
+					endingTwo = CONSERVATIVES_HAVE_REMADE_THE_WORLD;
 				}
 				else if (enforcedAlignment == ALIGN_STALINIST) {
 					endingTwo = stalinistsRemakeWorld;
@@ -425,7 +426,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 				//HIDING AND 
 				endingOne = youWentIntoHiding;
 				if (enforcedAlignment == ALIGN_ARCHCONSERVATIVE) {
-					endingTwo = conservativesRemakeWorld;
+					endingTwo = CONSERVATIVES_HAVE_REMADE_THE_WORLD;
 				}
 				else if (enforcedAlignment == ALIGN_STALINIST) {
 					endingTwo = stalinistsRemakeWorld;
@@ -450,7 +451,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 				//DISBANDED AND 
 				endingOne = youDisappearedSafely;
 				if (enforcedAlignment == ALIGN_ARCHCONSERVATIVE) {
-					endingTwo = conservativesRemakeWorld;
+					endingTwo = CONSERVATIVES_HAVE_REMADE_THE_WORLD;
 				}
 				else if (enforcedAlignment == ALIGN_STALINIST) {
 					endingTwo = stalinistsRemakeWorld;
@@ -468,7 +469,7 @@ void attemptAmendmentEnding(char canseethings, Alignment enforcedAlignment)
 	{
 		if (canseethings)
 		{
-			mvaddstrAlt(24, 0, CONST_endgame047);
+			mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_BREATHE_A_SIGH_OF_RELIEF);
 			pressAnyKey();
 		}
 	}

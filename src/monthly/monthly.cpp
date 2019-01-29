@@ -1,3 +1,4 @@
+
 #define	MONTHLY_CPP
 #include "../includes.h"
 /*
@@ -28,7 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -206,7 +207,7 @@ void print_labels_on_bottom_of_screen() {
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_monthly013);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24, 0, CONST_monthly014);
+	mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THESE_POLL_NUMBERS);
 }
 void printIntelligenceReport(char &clearformess) {
 	/*******************************************************
@@ -218,8 +219,8 @@ void printIntelligenceReport(char &clearformess) {
 	music.play(MUSIC_ELECTIONS);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 23, CONST_monthly002);
-	mvaddstrAlt(2, 27, CONST_monthly003);
+	mvaddstrAlt(0, 23, CONST_LCS_MONTHLY_INTELLIGENCE_REPORT);
+	mvaddstrAlt(2, 27, CONST_CURRENT_POLITICAL_TRENDS);
 	int numviews = (endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2) ? VIEWNUM - 1 : VIEWNUM;
 	for (int v = -1 - stalinmode, y = 4, x = 0, pip; v < numviews; v++)
 	{
@@ -273,17 +274,17 @@ void long_disband_loss() {
 	music.play(MUSIC_DEFEAT);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	eraseAlt();
-	mvaddstrAlt(12, 10, CONST_monthly015, gamelog);
+	mvaddstrAlt(12, 10, CONST_THE_LIBERAL_CRIME_SQUAD_IS_NOW_JUST_A_MEMORY, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
 	eraseAlt();
-	mvaddstrAlt(12, 12, CONST_monthly016, gamelog);
+	mvaddstrAlt(12, 12, CONST_THE_LAST_LCS_MEMBERS_HAVE_ALL_BEEN_HUNTED_DOWN, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	eraseAlt();
-	mvaddstrAlt(12, 14, CONST_monthly017, gamelog);
+	mvaddstrAlt(12, 14, CONST_THEY_WILL_NEVER_SEE_THE_UTOPIA_THEY_DREAMED_OF, gamelog);
 	gamelog.newline();
 	gamelog.nextMessage();
 	pressAnyKey();

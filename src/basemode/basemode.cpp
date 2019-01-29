@@ -1,3 +1,4 @@
+
 #define	BASEMODE_CPP
 #include "../includes.h"
 
@@ -29,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -68,7 +69,7 @@ void printHouseMake() {
 		else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 		else align = ALIGN_MODERATE; // nobody has a majority
 		set_alignment_color(align, true);
-		mvaddstrAlt(2, 0, CONST_basemode015);
+		mvaddstrAlt(2, 0, HOUSE_COLON);
 		if (stalinmode) {
 			addstrAlt(tostring(housemake[5]) + tag_Sta);
 		}
@@ -96,7 +97,7 @@ void printSenateMake() {
 	set_alignment_color(align, true);
 	
 	senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
-	mvaddstrAlt(3, 0, CONST_basemode016);
+	mvaddstrAlt(3, 0, SENATE_COLON);
 	if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
 	addstrAlt(tostring(senatemake[4]) + tag_Libp);
 	addstrAlt(tostring(senatemake[3]) + tag_Lib);
@@ -121,7 +122,7 @@ void printCourtMake() {
 	set_alignment_color(align, true);
 	
 
-	mvaddstrAlt(4, 0, CONST_basemode017);
+	mvaddstrAlt(4, 0, SUPREME_COURT_COLON);
 	if (stalinmode) addstrAlt(tostring(courtmake[5]) + tag_Sta);
 	addstrAlt(tostring(courtmake[4]) + tag_Libp);
 	addstrAlt(tostring(courtmake[3]) + tag_Lib);
@@ -145,21 +146,21 @@ void printStalinMood() {
 	else if (stalin >= 16) align = ALIGN_CONSERVATIVE;
 	else align = ALIGN_ARCHCONSERVATIVE;
 	set_alignment_color(align, true);
-	mvaddstrAlt(17, 33, CONST_basemode024);
+	mvaddstrAlt(17, 33, PUBLIC_MOOD);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(17, 1, CONST_basemode019);
+	mvaddstrAlt(17, 1, STALINIST);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(17, 68, CONST_basemode020);
+	mvaddstrAlt(17, 68, LIBERTARIAN);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+	mvaddstrAlt(18, 0, "\x11â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 16, CONST_basemode029);
+	mvaddstrAlt(18, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 32, CONST_basemode029);
+	mvaddstrAlt(18, 32, MID_LENGTH_LINE);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 48, CONST_basemode029);
+	mvaddstrAlt(18, 48, MID_LENGTH_LINE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
+	mvaddstrAlt(18, 64, "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\x10");
 	set_alignment_color(align, true);
 	mvaddcharAlt(18, stalin, 'O');
 }
@@ -182,21 +183,21 @@ void printMood() {
 	else align = ALIGN_ELITELIBERAL;
 	set_alignment_color(align, true);
 
-	mvaddstrAlt(stalinmode ? 21 : 20, 33, CONST_basemode024);
+	mvaddstrAlt(stalinmode ? 21 : 20, 33, PUBLIC_MOOD);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(21, 1, CONST_basemode025);
+	mvaddstrAlt(21, 1, LIBERAL);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(21, 67, CONST_basemode026);
+	mvaddstrAlt(21, 67, CONSERVATIVE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+	mvaddstrAlt(22, 0, "\x11â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€");
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 16, CONST_basemode029);
+	mvaddstrAlt(22, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 32, CONST_basemode029);
+	mvaddstrAlt(22, 32, MID_LENGTH_LINE);
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 48, CONST_basemode029);
+	mvaddstrAlt(22, 48, MID_LENGTH_LINE);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
+	mvaddstrAlt(22, 64, "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\x10");
 	set_alignment_color(align, true);
 
 	mvaddcharAlt(22, mood, 'O');
@@ -228,15 +229,15 @@ void letTheUnworthyLeave() {
 void printExecMove() {
 
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
-	mvaddstrAlt(1, 0, CONST_basemode012);
+	mvaddstrAlt(1, 0, PRESIDENT_COLON);
 	addstrAlt(execname[EXEC_PRESIDENT]);
-	addstrAlt(commaSpace);
+	addstrAlt(COMMA_SPACE);
 	addstrAlt(getalign(exec[EXEC_PRESIDENT]));
 	if (execterm == 1) {
-		addstrAlt(CONST_basemode013);
+		addstrAlt(FIRST_TERM);
 	}
 	else {
-		addstrAlt(CONST_basemode014);
+		addstrAlt(SECOND_TERM);
 	}
 
 }
@@ -260,7 +261,7 @@ void printDisbandScreen() {
 
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24, 0, CONST_basemode030);
+	mvaddstrAlt(24, 0, R_RECREATE_THE_LCS_OR_WAIT_NEXT_MONTH);
 }
 bool show_disbanding_screen(int& oldforcemonth)
 {
@@ -278,10 +279,10 @@ void printIfLongWait(int nonsighttime) {
 		eraseAlt();
 		char str[100];
 		if (nonsighttime >= 365 * 16)
-			strcpy(str, CONST_basemode031.c_str());
+			strcpy(str, HOW_LONG_SINCE_TIMES_HAVE_CHANGED.c_str());
 		else if (nonsighttime >= 365 * 8)
-			strcpy(str, CONST_basemode032.c_str());
-		else strcpy(str, CONST_basemode033.c_str());
+			strcpy(str, IT_HAS_BEEN_LONG_LOT_CHANGED.c_str());
+		else strcpy(str, IT_HAS_BEEN_WHILE.c_str());
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrCenter(12, str, gamelog);
 		gamelog.nextMessage(); //Write out buffer to prepare for the next message.
@@ -299,7 +300,7 @@ void stillDontForceWait(const char sieged, const char cannotwait,
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	}
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(20, 1, CONST_basemode051);
+	mvaddstrAlt(20, 1, C_CANCEL_DEPARTURE);
 
 
 
@@ -318,44 +319,44 @@ void stillDontForceWait(const char sieged, const char cannotwait,
 				}
 			}
 		}
-		mvaddstrAlt(19, 1, CONST_basemode052);
+		mvaddstrAlt(19, 1, F_ESCAPE_ENGAGE);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19, 23, CONST_basemode053);
+		mvaddstrAlt(19, 23, G_GIVE_UP);
 	}
 	else
 	{
 		if (partysize) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(19, 1, CONST_basemode054);
+		mvaddstrAlt(19, 1, F_GO_FORTH_TO_STOP_EVIL);
 	}
 
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23, 40, CONST_basemode055);
+	mvaddstrAlt(23, 40, X_LIVE_TO_FIGHT_ANOTHER_DAY);
 	set_color_easy(WHITE_ON_BLACK);
 
-	if (cannotwait) mvaddstrAlt(23, 1, CONST_basemode056);
+	if (cannotwait) mvaddstrAlt(23, 1, CANNOT_WAIT_UNTIL_RESOLVED);
 	else
 	{
-		if (sieged) mvaddstrAlt(23, 1, CONST_basemode057);
-		else mvaddstrAlt(23, 1, CONST_basemode058);
-		if (day == monthday()) addstrAlt(CONST_basemode059);
+		if (sieged) mvaddstrAlt(23, 1, W_WAIT_OUT_SIEGE);
+		else mvaddstrAlt(23, 1, W_WAIT_A_DAY);
+		if (day == monthday()) addstrAlt(NEXT_MONTH);
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(22, 40, CONST_basemode060);
+	mvaddstrAlt(22, 40, S_FREE_SPEECH_LIBERAL_SLOGAN);
 
 	if (haveflag)
 	{
 		if (sieged) set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		else set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 1, CONST_basemode061);
+		mvaddstrAlt(22, 1, P_PROTEST);
 	}
 	else
 	{
 		if (ledger.get_funds() >= 20 && !sieged && (selectedsiege != -1 || activesquad != NULL))
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(22, 1, CONST_basemode062);
+		mvaddstrAlt(22, 1, P_PATRIOTISM);
 	}
 
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -380,7 +381,7 @@ void dontForceWait(const char sieged, const char underattack,
 			!LocationsPool::getInstance().isThereASiegeHere(selectedsiege))
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8, 1, CONST_basemode034);
+			mvaddstrAlt(8, 1, I_INVEST_IN_LOCATION);
 		}
 	}
 	else if (activesquad != NULL) printparty();
@@ -392,15 +393,15 @@ void dontForceWait(const char sieged, const char underattack,
 		if (underattack)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_basemode035);
+			mvaddstrAlt(8, 1, UNDER_ATTACK);
 		}
 		else
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_basemode036);
+			mvaddstrAlt(8, 1, UNDER_SIEGE);
 			int stock = 1;
 			if (loc)stock = loc->compound_stores;
-			if (!stock)addstrAlt(CONST_basemode037);
+			if (!stock)addstrAlt(NO_FOOD);
 		}
 	}
 
@@ -411,20 +412,20 @@ void dontForceWait(const char sieged, const char underattack,
 
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(18, 10, CONST_basemode040);
-	mvaddstrAlt(18, 51, CONST_basemode041);
+	mvaddstrAlt(18, 10, ACTIVISM_HEADER);
+	mvaddstrAlt(18, 51, PLANNING_HEADER);
 	if (partysize && !underattack) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(19, 40, CONST_basemode042);
+	mvaddstrAlt(19, 40, E_EQUIP_SQUAD);
 	if (lenVehiclePool() && partysize) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(19, 60, CONST_basemode043);
+	mvaddstrAlt(19, 60, V_VEHICLES);
 	if (CreaturePool::getInstance().lenpool()) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(20, 40, CONST_basemode044);
+	mvaddstrAlt(20, 40, R_REVIEW_ASSETS_AND_FORM_SQUAD);
 	if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	if (partysize && !sieged) mvaddstrAlt(8, 30, CONST_basemode045);
+	if (partysize && !sieged) mvaddstrAlt(8, 30, O_REORDER);
 	if (activesquad && !sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
 	{
 		set_color_easy(WHITE_ON_BLACK);
@@ -435,14 +436,14 @@ void dontForceWait(const char sieged, const char underattack,
 
 	if (len(squad) > 1 || (!activesquad&&len(squad))) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(8, 43, CONST_basemode046);
+	mvaddstrAlt(8, 43, TAB_NEXT_SQUAD);
 	if (safenumber > 0) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 
 
-	mvaddstrAlt(8, 62, CONST_basemode047);
+	mvaddstrAlt(8, 62, Z_NEXT_LOCATION);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(21, 40, CONST_basemode048);
+	mvaddstrAlt(21, 40, L_STATUS_OF_AGENDA);
 	set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->is_active_liberal())
 	{
@@ -456,7 +457,7 @@ void dontForceWait(const char sieged, const char underattack,
 	}
 
 
-	mvaddstrAlt(21, 1, CONST_basemode049);
+	mvaddstrAlt(21, 1, A_ACTIVATE_LIBERALS);
 	set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) {
 		if (pool[p]->is_lcs_sleeper())
@@ -466,7 +467,7 @@ void dontForceWait(const char sieged, const char underattack,
 		}
 	}
 
-	mvaddstrAlt(21, 25, CONST_basemode050);
+	mvaddstrAlt(21, 25, B_SLEEPERS);
 
 
 }
@@ -600,9 +601,9 @@ void pressedKeyWInBaseMode(const char forcewait, const char canseethings, int &n
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(7, 5, CONST_basemode063, gamelog);
+		mvaddstrAlt(7, 5, TIME_PASSES, gamelog);
 		mvaddstrAlt(9, 12, getmonth(month, true) + singleSpace, gamelog);
-		mvaddstrAlt(9, 17, tostring(day) + commaSpace, gamelog);
+		mvaddstrAlt(9, 17, tostring(day) + COMMA_SPACE, gamelog);
 		mvaddstrAlt(9, 21, year, gamelog);
 		gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 		refreshAlt();

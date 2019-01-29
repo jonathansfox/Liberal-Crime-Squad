@@ -1,3 +1,4 @@
+
 #define	CHASE_CPP
 #include "../includes.h"
 /*
@@ -62,15 +63,15 @@ void chase_giveup()
 	clearcommandarea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	moveAlt(16, 1);
-	if (mode != GAMEMODE_CHASECAR)addstrAlt(CONST_chase016, gamelog);
-	else addstrAlt(CONST_chase017, gamelog);
+	if (mode != GAMEMODE_CHASECAR)addstrAlt(YOU_STOP_AND_ARE_ARRESTED, gamelog);
+	else addstrAlt(YOU_PULL_OVER_AND_ARRESTED, gamelog);
 	gamelog.newline(); //New line.
 	if (hostagefreed)
 	{
-		mvaddstrAlt(17, 1, CONST_chase018, gamelog);
+		mvaddstrAlt(17, 1, YOUR_HOSTAGE, gamelog);
 		if (hostagefreed > 1)
-			addstrAlt(CONST_chase019, gamelog);
-		else addstrAlt(CONST_chase020, gamelog);
+			addstrAlt(S_ARE_FREE, gamelog);
+		else addstrAlt(IS_FREE, gamelog);
 		gamelog.newline(); //New line.
 	}
 	pressAnyKey();
@@ -83,16 +84,16 @@ void printSemiRandomEscape(const int yourworst) {
 	switch (LCSrandom(yourworst / 5))
 	{
 	default:
-		output = CONST_chase021;
+		output = YOU_SUDDENLY_DART_INTO_ALLEY;
 		break;
 	case 1:
-		output = CONST_chase022;
+		output = YOU_RUN_AS_FAST_AS_YOU_CAN;
 		break;
 	case 2:
-		output = CONST_chase023;
+		output = YOU_CLIMB_A_FENCE;
 		break;
 	case 3:
-		output = CONST_chase024;
+		output = YOU_SCALE_A_SMALL_BUILDING;
 		break;
 	}
 	mvaddstrAlt(16, 1, output, gamelog);
@@ -113,17 +114,17 @@ string isCapturedByCop(const int p) {
 	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 	if (lawList[LAW_POLICEBEHAVIOR] >= ALIGN_LIBERAL)
 	{
-		output += CONST_chase029;
+		output += PUSHED_TO_GROUND_HANDCUFFED;
 	}
 	else
 	{
 		if (activesquad->squad[p]->getCreatureHealth().blood <= 10)
 		{
-			output += CONST_chase030;
+			output += THROWN_TO_GROUND_TAZED_TO_DEATH;
 		}
 		else
 		{
-			output += CONST_chase031;
+			output += THROWN_TO_GROUND_AND_TAZED;
 		}
 		activesquad->squad[p]->lose_blood(10);
 	}
@@ -136,7 +137,7 @@ string isSummaryExecuted(const int p) {
 	string output = activesquad->squad[p]->getNameAndAlignment().name + isSeized;
 
 	output += isSeized;
-	output += CONST_chase032;
+	output += THROWN_TO_GROUND_AND_SHOT;
 	activesquad->squad[p]->lose_all_blood();
 
 	return output;
@@ -145,7 +146,7 @@ string isCrushedByTank(const int p) {
 
 
 
-	string output = activesquad->squad[p]->getNameAndAlignment().name + CONST_chase033;
+	string output = activesquad->squad[p]->getNameAndAlignment().name + CRUSHED_BENEATH_TANK;
 
 	activesquad->squad[p]->lose_all_blood();
 
@@ -160,11 +161,11 @@ string isCapturedByOther(const int p) {
 	output += isSeized;
 	if (activesquad->squad[p]->getCreatureHealth().blood <= 60)
 	{
-		output += CONST_chase034;
+		output += THROWN_TO_GROUND_AND_BEATEN_DEAD;
 	}
 	else
 	{
-		output += CONST_chase035;
+		output += THROWN_TO_GROUND_AND_BEATEN_SENSELESS;
 	}
 	activesquad->squad[p]->lose_blood(60);
 
@@ -220,12 +221,12 @@ void evasiverun()
 			mvaddstrAlt(16, 1, encounter[e].getNameAndAlignment().name, gamelog);
 			if (encounter[e].type == CREATURE_TANK)
 			{
-				addstrAlt(CONST_chase025, gamelog);
+				addstrAlt(TIPS_INTO_A_POOL_TANK_IS_TRAPPED, gamelog);
 				gamelog.newline(); //New line.
 			}
 			else
 			{
-				addstrAlt(CONST_chase026, gamelog);
+				addstrAlt(CANT_KEEP_UP, gamelog);
 				gamelog.newline(); //Another new line.
 			}
 			delenc(e--, 0);
@@ -237,7 +238,7 @@ void evasiverun()
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, encounter[e].getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_chase048, gamelog);
+			addstrAlt(IS_STILL_ON_YOUR_TAIL, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
 		}
@@ -258,7 +259,7 @@ void evasiverun()
 				clearmessagearea();
 				set_color_easy(CYAN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_chase028, gamelog);
+				addstrAlt(BREAKS_AWAY, gamelog);
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				//Unload hauled hostage or body when they get back to the safehouse
@@ -314,17 +315,17 @@ void printDrivingSituation(const int partysize) {
 	//PRINT DRIVING SITUATION AND INSTRUCTIONS
 	if (partysize > 1) set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 40, change_squad_order);
+	mvaddstrAlt(9, 40, O_CHANGE_SQUAD_ORDER);
 	if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 40, check_status_of_squad_liberal);
+	mvaddstrAlt(10, 40, HASH_CHECK_STATUS_OF_LIBERAL);
 	if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11, 40, show_squad_liberal_status);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(9, 1, CONST_chase074);
-	mvaddstrAlt(10, 1, CONST_chase075);
-	mvaddstrAlt(11, 1, CONST_chase076);
+	mvaddstrAlt(9, 1, D_TRY_TO_LOSE_THEM);
+	mvaddstrAlt(10, 1, E_EQUIP);
+	mvaddstrAlt(11, 1, F_FIGHT);
 	if (chaseseq.canpullover)
 	{
 		mvaddstrAlt(12, 1, CONST_chase040);
@@ -343,7 +344,7 @@ void destroyAllCarsOfParty() {
 	}
 	endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(9, 1, CONST_chase079);
+	mvaddstrAlt(9, 1, C_REFLECT_ON_YOUR_LACK_OF_SKILL);
 }
 
 void addNewLineIfFoughtThisRound();
@@ -476,10 +477,10 @@ bool footchase()
 	music.play(MUSIC_FOOTCHASE);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_chase036, gamelog);
+	mvaddstrAlt(0, 0, AS_YOU_EXIT_YOU_NOTICE, gamelog);
 	moveAlt(1, 0);
 	gamelog.newline(); //New line.
-	addstrAlt(beingFollowedBySwine, gamelog);
+	addstrAlt(BEING_FOLLOWED, gamelog);
 	gamelog.newline(); //New line.
 	pressAnyKey();
 	while (true) {
@@ -560,9 +561,9 @@ void evasivedrive()
 	{
 	case 0:
 		if (yourworst > 15)
-			addstrAlt(CONST_chase042, gamelog);
+			addstrAlt(YOU_BOLDLY_WEAVE_THROUGH_TRAFFIC, gamelog);
 		else
-			addstrAlt(CONST_chase043, gamelog);
+			addstrAlt(YOU_MAKE_OBSCENE_GESTURES, gamelog);
 		gamelog.newline(); //new line.
 		break;
 	default:
@@ -590,19 +591,19 @@ void evasivedrive()
 			switch (LCSrandom(cnt / 5))
 			{
 			default:
-				addstrAlt(CONST_chase044, gamelog);
+				addstrAlt(FALLS_BEHIND, gamelog);
 				gamelog.newline(); //New line.
 				break;
 			case 1:
-				addstrAlt(CONST_chase045, gamelog);
+				addstrAlt(SKIDS_OUT, gamelog);
 				gamelog.newline(); //New line.
 				break;
 			case 2:
-				addstrAlt(CONST_chase046, gamelog);
+				addstrAlt(BACKS_OFF, gamelog);
 				gamelog.newline(); //New line.
 				break;
 			case 3:
-				addstrAlt(CONST_chase047, gamelog);
+				addstrAlt(BRAKES_HARD, gamelog);
 				gamelog.newline(); //New line.
 				break;
 			}
@@ -640,7 +641,7 @@ void evasivedrive()
 					break;
 				}
 			}
-			addstrAlt(CONST_chase048, gamelog);
+			addstrAlt(IS_STILL_ON_YOUR_TAIL, gamelog);
 			gamelog.newline(); //Blarg. Newline.
 			pressAnyKey();
 		}
@@ -651,7 +652,7 @@ void crashfriendlycar(int v)
 	//CRASH CAR
 	clearmessagearea();
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, CONST_chase049, gamelog);
+	mvaddstrAlt(16, 1, YOUR_SPACE, gamelog);
 	addstrAlt(chaseseq.friendcar[v]->fullname(), gamelog);
 	addstrAlt(pickrandom(car_crash_modes), gamelog);
 	gamelog.newline(); //New line it.
@@ -723,9 +724,9 @@ void crashfriendlycar(int v)
 				switch (LCSrandom(die_in_car.size() + 1))
 				{
 					//TODO IsaacG Migrate Strings
-				case 0:addstrAlt(CONST_chase050, gamelog);
+				case 0:addstrAlt(SLUMPS_IN, gamelog);
 					addstrAlt(activesquad->squad[p]->hisher(), gamelog);
-					addstrAlt(CONST_chase051, gamelog); break;
+					addstrAlt(SEAT_OUT_COLD_AND_DIES, gamelog); break;
 				default:
 					addstrAlt(pickrandom(die_in_car), gamelog);
 					break;
@@ -751,20 +752,20 @@ void crashfriendlycar(int v)
 				switch (LCSrandom(3))
 				{
 				case 0:
-					addstrAlt(CONST_chase052, gamelog);
+					addstrAlt(GRIPS_THE_SPACE, gamelog);
 					if (activesquad->squad[p]->is_armed())
 						addstrAlt(activesquad->squad[p]->get_weapon().get_shortname(), gamelog);
-					else addstrAlt(CONST_chase053, gamelog);
-					addstrAlt(CONST_chase054, gamelog);
+					else addstrAlt(CAR_FRAME, gamelog);
+					addstrAlt(AND_STRUGGLES_TO, gamelog);
 					addstrAlt(activesquad->squad[p]->hisher(), gamelog);
 					if (activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
-						addstrAlt(CONST_chase055, gamelog);
-					else addstrAlt(CONST_chase056, gamelog);
+						addstrAlt(WHEELCHAIR_PERIOD, gamelog);
+					else addstrAlt(FEET_PERIOD, gamelog);
 					break;
 				case 1:
-					addstrAlt(CONST_chase057, gamelog);
+					addstrAlt(GASPS_IN_PAIN_BUT_LIVES, gamelog);
 					break;
-				case 2:addstrAlt(CONST_chase058, gamelog);
+				case 2:addstrAlt(CRAWLS_FREE_OF_CAR, gamelog);
 					activesquad->squad[p]->drop_weapon(NULL);
 					break;
 				}
@@ -813,14 +814,14 @@ void crashenemycar(int v)
 	addstrAlt(chaseseq.enemycar[v]->fullname(), gamelog);
 	switch (LCSrandom(3))
 	{
-	case 0:addstrAlt(CONST_chase059, gamelog); break;
+	case 0:addstrAlt(SLAMS_INTO_BUILDING, gamelog); break;
 	case 1:
-		addstrAlt(CONST_chase060, gamelog);
+		addstrAlt(SPINS_OUT_AND_CRASHES, gamelog);
 		moveAlt(17, 1);
-		if (victimsum > 1)addstrAlt(CONST_chase061, gamelog);
-		else if (victimsum == 1)addstrAlt(CONST_chase062, gamelog);
+		if (victimsum > 1)addstrAlt(EVERYONE_INSIDE_PEELED_OFF_AGAINST_PAVEMENT, gamelog);
+		else if (victimsum == 1)addstrAlt(PERSON_INSIDE_IS_SQUASHED_INTO_CUBE, gamelog);
 		break;
-	case 2:addstrAlt(CONST_chase063, gamelog); break;
+	case 2:addstrAlt(HITS_A_PARKED_CAR, gamelog); break;
 	}
 	gamelog.newline(); //New line.
 	delete_and_remove(chaseseq.enemycar, v);
@@ -868,7 +869,7 @@ bool drivingupdate(short &obstacle)
 				clearmessagearea();
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_chase064, gamelog);
+				addstrAlt(TAKES_OVER_THE_WHEEL, gamelog);
 				gamelog.newline(); //New line.
 				printparty();
 				pressAnyKey();
@@ -914,7 +915,7 @@ bool dodgedrive()
 {
 	clearmessagearea();
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, CONST_chase065, gamelog);
+	mvaddstrAlt(16, 1, YOU_SWERVE_TO_AVOID, gamelog);
 	gamelog.newline(); //New line.
 	pressAnyKey();
 	int driver;
@@ -980,7 +981,7 @@ bool obstacledrive(short obstacle, char choice)
 		{
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_chase066, gamelog);
+			mvaddstrAlt(16, 1, YOU_SLOW_DOWN, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
 			if (!LCSrandom(3))
@@ -1003,7 +1004,7 @@ bool obstacledrive(short obstacle, char choice)
 		{
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_chase067, gamelog);
+			mvaddstrAlt(16, 1, YOU_SLOW_DOWN_AND_EVADE, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
 			if (!LCSrandom(3))
@@ -1026,13 +1027,13 @@ bool obstacledrive(short obstacle, char choice)
 		{
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_chase068, gamelog);
+			mvaddstrAlt(16, 1, FRUIT_SMASHES_ALL_OVER_WINDSHIELD, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
 			if (!LCSrandom(5))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(17, 1, CONST_chase069, gamelog);
+				mvaddstrAlt(17, 1, FRUIT_SELLER_IS_SQUASHED, gamelog);
 				gamelog.newline(); //All this logging and lining...
 				pressAnyKey();
 				criminalizeparty(LAWFLAG_MURDER);
@@ -1048,13 +1049,13 @@ bool obstacledrive(short obstacle, char choice)
 		{
 			clearmessagearea();
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_chase070, gamelog);
+			mvaddstrAlt(16, 1, YOU_SLOW_DOWN_AND_AVOID_KID, gamelog);
 			gamelog.newline(); //New line.
 			pressAnyKey();
 			if (!LCSrandom(3))
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
-				mvaddstrAlt(17, 1, CONST_chase071, gamelog);
+				mvaddstrAlt(17, 1, CONSERVATIVES_UNLEASH_GUNFIRE, gamelog);
 				gamelog.newline(); //New line.
 				pressAnyKey();
 				enemyattack();
@@ -1063,7 +1064,7 @@ bool obstacledrive(short obstacle, char choice)
 			else
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				mvaddstrAlt(17, 1, CONST_chase072, gamelog);
+				mvaddstrAlt(17, 1, BOTH_SIDES_AVOID_ENDANGERING_CHILD, gamelog);
 				gamelog.newline(); //New line.
 				pressAnyKey();
 			}
@@ -1078,19 +1079,19 @@ void printSituationAndInstructions(const short obstacle) {
 	//PRINT DRIVING SITUATION AND INSTRUCTIONS
 	if (partysize > 1)set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(9, 40, change_squad_order);
+	mvaddstrAlt(9, 40, O_CHANGE_SQUAD_ORDER);
 	if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(10, 40, check_status_of_squad_liberal);
+	mvaddstrAlt(10, 40, HASH_CHECK_STATUS_OF_LIBERAL);
 	if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(11, 40, show_squad_liberal_status);
 	if (obstacle == -1)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(9, 1, CONST_chase074);
-		mvaddstrAlt(10, 1, CONST_chase075);
-		mvaddstrAlt(11, 1, CONST_chase076);
+		mvaddstrAlt(9, 1, D_TRY_TO_LOSE_THEM);
+		mvaddstrAlt(10, 1, E_EQUIP);
+		mvaddstrAlt(11, 1, F_FIGHT);
 	}
 	else
 	{
@@ -1100,10 +1101,10 @@ void printSituationAndInstructions(const short obstacle) {
 		mvaddstrAlt(10, 1, carchaseObstacles[obstacle][1]);
 		mvaddstrAlt(11, 1, carchaseObstacles[obstacle][2]);
 	}
-	mvaddstrAlt(12, 1, CONST_chase077);
+	mvaddstrAlt(12, 1, B_BAIL_OUT);
 	if (chaseseq.canpullover)
 	{
-		mvaddstrAlt(13, 1, CONST_chase078);
+		mvaddstrAlt(13, 1, P_PULL_OVER);
 	}
 }
 void destroyAllCarsAndDetermineMusic() {
@@ -1118,7 +1119,7 @@ void destroyAllCarsAndDetermineMusic() {
 	}
 	endcheck(END_BUT_NOT_END); // play the right music in case we're dead
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(9, 1, CONST_chase079);
+	mvaddstrAlt(9, 1, C_REFLECT_ON_YOUR_LACK_OF_SKILL);
 }
 LOOP_CONTINUATION chaseWithPartyAlive(const int c, short &obstacle) {
 
@@ -1302,8 +1303,8 @@ bool chasesequence()
 	music.play(MUSIC_CARCHASE);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_chase073, gamelog);
-	mvaddstrAlt(1, 0, beingFollowedBySwine, gamelog);
+	mvaddstrAlt(0, 0, AS_YOU_PULL_AWAY_YOU_NOTICE, gamelog);
+	mvaddstrAlt(1, 0, BEING_FOLLOWED, gamelog);
 	gamelog.newline(); //New line.
 	pressAnyKey();
 	if (LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONPARENT,chaseseq.location) != -1)
@@ -1426,14 +1427,14 @@ void makechasers(long type, const long sitecriminality)
 			chasing_enemy = CREATURE_SOLDIER;
 			break;
 		case SITE_GOVERNMENT_WHITE_HOUSE:
-			cartype = CONST_chase090; //Site property? Temporary solution. -XML
+			cartype = AGENTCAR; //Site property? Temporary solution. -XML
 			crime_ratio = 5;
 			min_enemies = 1;
 			max_enemies = 6;
 			chasing_enemy = CREATURE_SECRET_SERVICE;
 			break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			cartype = CONST_chase090; //Site property? Temporary solution. -XML
+			cartype = AGENTCAR; //Site property? Temporary solution. -XML
 			crime_ratio = 5;
 			min_enemies = 1;
 			max_enemies = 6;
@@ -1457,7 +1458,7 @@ void makechasers(long type, const long sitecriminality)
 			chasing_enemy = CREATURE_HICK;
 			break;
 		case SITE_BUSINESS_CRACKHOUSE:
-			cartype = CONST_chase094; //Site property? Temporary solution. -XML
+			cartype = STATIONWAGON; //Site property? Temporary solution. -XML
 			crime_ratio = 3;
 			min_enemies = 1;
 			max_enemies = 18;

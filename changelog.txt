@@ -971,7 +971,16 @@ Sieges, too.
 10 files down, 34 files to go
 //Next target: 160 in politics.cpp
 1279 total
-Next target: 11 in news.cpp
+//Next target: 11 in news.cpp
 
 Removed much of the redundant code from includes.h
-Current target: CREATUREPOOL_CPP
+Namely the redundant usage of extern lines and function declarations.
+
+The remaining usage of cursesAlternative within news.cpp are... complicated.  They will require detailed examination.
+
+Next target: newgame.cpp
+
+Gave somewhat more useful names to various constant strings.
+Found out why Java wasn't parsing the text properly.  The charset used by pdcurses is "IBM437", and when attempting to parse text with the default charset, java.io.Scanner throws an exception when it comes across an illegal character.  Setting the charset to "IBM437" allows Java to interpret the text data from pdcurses without issue.  Of the 6000 or so strings, about 120 still have previous default names.
+
+Finally, I know how to get Java to actually read the text data the same way pdcurses does.  71 files altered.

@@ -1,9 +1,10 @@
+
 #define	LIBERALAGENDA_CPP
 #include "../includes.h"
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -36,13 +37,13 @@ bool confirmdisband()
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_liberalagenda013);
+		mvaddstrAlt(0, 0, CONST_ARE_YOU_SURE_YOU_WANT_TO_DISBAND);
 		set_color_easy(WHITE_ON_BLACK);
 		for (int i = 0; i < len(disbandingMessage); i++) {
 			mvaddstrAlt(i + 2, 0, disbandingMessage[i]);
 		}
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 0, CONST_liberalagenda014);
+		mvaddstrAlt(13, 0, CONST_TYPE_THIS_LIBERAL_PHRASE_TO_CONFIRM_PRESS_A_WRONG_LETTER_TO_RETHINK_IT);
 		for (int x = 0; x < len(word); x++)
 		{
 			if (x == pos) set_color_easy(GREEN_ON_BLACK);
@@ -76,34 +77,34 @@ void printDisbandOption() {
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt(CONST_liberalagenda063);
+		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_liberalagenda058);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt(CONST_liberalagenda063);
+		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_liberalagenda060);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt(CONST_liberalagenda063);
+		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_liberalagenda062);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		addstrAlt(CONST_liberalagenda063);
+		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_liberalagenda064);
 	set_color_easy(WHITE_ON_BLACK);
 	//mvaddstrAlt(23,0,CONST_liberalagenda065);
-	mvaddstrAlt(24, 0, CONST_liberalagenda066);
+	mvaddstrAlt(24, 0, CONST_PRESS_D_TO_DISBAND_AND_WAIT_USE_CURSORS_FOR_OTHER_PAGES_ANY_OTHER_KEY_TO_EXIT);
 }
 void printLaws(const int startinglaw, const signed char won) {
 	for (int l = startinglaw, y = 4; l < startinglaw + 18 && l < LAWNUM; l++, y++)
@@ -126,15 +127,15 @@ void printLaws(const int startinglaw, const signed char won) {
 void printReplacements(const signed char won) {
 	if (won == -1)
 	{
-		mvaddstrAlt(7, 65, CONST_liberalagenda039);
-		mvaddstrAlt(8, 63, CONST_liberalagenda040);
-		mvaddstrAlt(9, 62, CONST_liberalagenda041);
+		mvaddstrAlt(7, 65, CONST_REPLACED);
+		mvaddstrAlt(8, 63, CONST_BY_CORPORATE);
+		mvaddstrAlt(9, 62, CONST_ETHICS_OFFICERS);
 	}
 	else if (won == -2)
 	{
-		mvaddstrAlt(7, 63, CONST_liberalagenda042);
-		mvaddstrAlt(8, 62, CONST_liberalagenda043);
-		mvaddstrAlt(9, 63, CONST_liberalagenda044);
+		mvaddstrAlt(7, 63, CONST_REPLACED_BY);
+		mvaddstrAlt(8, 62, CONST_STALINIST_SHOW);
+		mvaddstrAlt(9, 63, CONST_TRIAL_JUDGES);
 	}
 	else
 	{
@@ -191,38 +192,38 @@ void printLeadersFirstPage(const signed char won) {
 	signed char align;
 
 	moveAlt(5, 0);
-	if (won == -1) addstrAlt(CONST_liberalagenda021);
-	else if (won == -2) addstrAlt(CONST_liberalagenda022);
+	if (won == -1) addstrAlt(CONST_KING);
+	else if (won == -2) addstrAlt(CONST_GENERAL_SECRETARY);
 	else
 	{
-		addstrAlt(CONST_liberalagenda023);
-		if (execterm == 1)addstrAlt(CONST_liberalagenda024);
-		else addstrAlt(CONST_liberalagenda025);
+		addstrAlt(CONST_PRESIDENT);
+		if (execterm == 1)addstrAlt(CONST_1ST_TERM);
+		else addstrAlt(CONST_2ND_TERM);
 	}
 	if (won == -2) moveAlt(5, 30);
 	else mvaddstrAlt(5, 25, execname[EXEC_PRESIDENT]);
 	align = exec[EXEC_VP];
 	set_alignment_color(align, true);
 	moveAlt(6, 0);
-	if (won == -1) addstrAlt(CONST_liberalagenda026);
-	else if (won == -2) addstrAlt(CONST_liberalagenda027);
-	else addstrAlt(CONST_liberalagenda028);
+	if (won == -1) addstrAlt(CONST_MINISTER_OF_LOVE);
+	else if (won == -2) addstrAlt(CONST_PREMIER);
+	else addstrAlt(CONST_VICE_PRESIDENT);
 	if (won == -2) moveAlt(6, 30);
 	else mvaddstrAlt(6, 25, execname[EXEC_VP]);
 	align = exec[EXEC_STATE];
 	set_alignment_color(align, true);
 	moveAlt(7, 0);
-	if (won == -1) addstrAlt(CONST_liberalagenda029);
-	else if (won == -2) addstrAlt(CONST_liberalagenda030);
-	else addstrAlt(CONST_liberalagenda031);
+	if (won == -1) addstrAlt(CONST_MINISTER_OF_PEACE);
+	else if (won == -2) addstrAlt(CONST_FOREIGN_AFFAIRS_COMMISSAR);
+	else addstrAlt(CONST_SECRETARY_OF_STATE);
 	if (won == -2) moveAlt(7, 30);
 	else mvaddstrAlt(7, 25, execname[EXEC_STATE]);
 	align = exec[EXEC_ATTORNEY];
 	set_alignment_color(align, true);
 	moveAlt(8, 0);
-	if (won == -1) addstrAlt(CONST_liberalagenda032);
-	else if (won == -2) addstrAlt(CONST_liberalagenda033);
-	else addstrAlt(CONST_liberalagenda034);
+	if (won == -1) addstrAlt(CONST_MINISTER_OF_TRUTH);
+	else if (won == -2) addstrAlt(CONST_INTERNAL_AFFAIRS_COMMISSAR);
+	else addstrAlt(CONST_ATTORNEY_GENERAL);
 
 }
 void printCourtWithoutVictory() {
@@ -245,7 +246,7 @@ void printSingleLaw(const signed char won, const int l) {
 	else if (won == 1 && wincondition == WINCONDITION_ELITE)
 		set_alignment_color(ALIGN_ELITELIBERAL, true);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ÄÄÄÄÄ\x10");
+	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11â”€â”€â”€â”€â”€\x10");
 	if (won == -1 || won == -2)
 		set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
 	else set_alignment_color(lawList[l], true);
@@ -256,8 +257,8 @@ void printPageLeaders(const signed char won) {
 
 
 
-	mvaddstrAlt(1, 0, CONST_liberalagenda018);
-	mvaddstrAlt(2, 0, CONST_liberalagenda019);
+	mvaddstrAlt(1, 0, FORMATTED_LINE);
+	mvaddstrAlt(2, 0, GENERAL_SUMMARY_ISSUES_HEADER);
 	mvaddstrAlt(3, 0, CONST_liberalagenda020);
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
 	printLeadersFirstPage(won);
@@ -266,12 +267,12 @@ void printPageLeaders(const signed char won) {
 	if (won == -1)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(10, 0, CONST_liberalagenda035);
+		mvaddstrAlt(10, 0, CONST_THE_CONGRESS_CONSISTS_OF_CEOS_AND_TELEVANGELISTS);
 	}
 	else if (won == -2)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		mvaddstrAlt(10, 0, CONST_liberalagenda036);
+		mvaddstrAlt(10, 0, CONST_THE_CONGRESS_CONSISTS_OF_STALINIST_PARTY_LOYALISTS);
 	}
 	else
 	{
@@ -335,20 +336,20 @@ bool liberalagenda(signed char won)
 		if (won == 1)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_liberalagenda015);
+			mvaddstrAlt(0, 0, CONST_THE_TRIUMPH_OF_THE_LIBERAL_AGENDA);
 			music.play(MUSIC_VICTORY);
 		}
 		else if (won == -1 || won == -2)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_liberalagenda016);
+			mvaddstrAlt(0, 0, CONST_THE_ABJECT_FAILURE_OF_THE_LIBERAL_AGENDA);
 			if (won == -1) music.play(MUSIC_REAGANIFIED);
 			if (won == -2) music.play(MUSIC_STALINIZED);
 		}
 		else
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_liberalagenda017);
+			mvaddstrAlt(0, 0, CONST_THE_STATUS_OF_THE_LIBERAL_AGENDA);
 			music.play(MUSIC_LIBERALAGENDA);
 		}
 		if (page < 0) page = PAGENUM - 1;
@@ -358,8 +359,8 @@ bool liberalagenda(signed char won)
 		{
 			set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			if (wincondition == WINCONDITION_EASY)
-				mvaddstrAlt(23, 0, CONST_liberalagenda051);
-			else mvaddstrAlt(23, 0, CONST_liberalagenda052);
+				mvaddstrAlt(23, 0, CONST_THE_COUNTRY_HAS_ACHIEVED_LIBERAL_STATUS);
+			else mvaddstrAlt(23, 0, CONST_THE_COUNTRY_HAS_ACHIEVED_ELITE_LIBERAL_STATUS);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
 			if (is_page_down(c)) page++;
@@ -369,7 +370,7 @@ bool liberalagenda(signed char won)
 		else if (won == -1)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 0, CONST_liberalagenda053);
+			mvaddstrAlt(23, 0, CONST_THE_COUNTRY_HAS_BEEN_REAGANIFIED);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
 			if (is_page_down(c)) page++;
@@ -379,7 +380,7 @@ bool liberalagenda(signed char won)
 		else if (won == -2)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(23, 0, CONST_liberalagenda054);
+			mvaddstrAlt(23, 0, CONST_THE_COUNTRY_HAS_BEEN_STALINIZED);
 			mvaddstrAlt(24, 0, pressLToViewHighScores);
 			int c = getkeyAlt();
 			if (is_page_down(c)) page++;
@@ -398,4 +399,3 @@ bool liberalagenda(signed char won)
 	}
 	return false;
 }
-

@@ -1,3 +1,4 @@
+
 #define	MONEY_CPP
 #include "../includes.h"
 #include "../creature/creatureEnums.h"
@@ -13,7 +14,7 @@ Money::Money(const std::string& inputXml) : Item(inputXml)
 	xml.SetDoc(inputXml);
 	xml.FindElem();
 	xml.IntoElem();
-	while (xml.FindElem()) if (xml.GetTagName() == CONST_money002) amount_ = atoi(xml.GetData().c_str());
+	while (xml.FindElem()) if (xml.GetTagName() == CONST_AMOUNT) amount_ = atoi(xml.GetData().c_str());
 }
 string Money::showXml() const
 {
@@ -21,7 +22,7 @@ string Money::showXml() const
 	xml.AddElem(tag_money);
 	xml.IntoElem();
 	addBaseValues(xml);
-	xml.AddElem(CONST_money002, tostring(amount_));
+	xml.AddElem(CONST_AMOUNT, tostring(amount_));
 	return xml.GetDoc();
 }
 Money* Money::split(int number)

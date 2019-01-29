@@ -1,3 +1,4 @@
+
 #define	AUTOMATEDDATATESTS_CPP
 #include "includes.h"
 
@@ -25,7 +26,7 @@ void automatedDataTests() {
 		for (int j = 0; j < 8; j++) {
 			mvaddstrAlt(k++, 0, endgameLawStrings[i][j]); // 0~7
 		}
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests008);
+		mvaddstrAlt(k++, 0, SUCCESS);
 	}
 	pressAnyKey();
 	clearAlt();

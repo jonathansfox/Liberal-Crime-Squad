@@ -1,3 +1,4 @@
+
 #define	ITEM_CPP
 #include "../includes.h"
 
@@ -20,16 +21,16 @@ Item::Item(const std::string& inputXml)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (tag == CONST_item003) itemtypename_ = xml.GetData();
-		else if (tag == CONST_item004) itemtypeid_ = atoi(xml.GetData().c_str());
-		else if (tag == CONST_item005) number_ = atoi(xml.GetData().c_str());
+		if (tag == CONST_ITEMTYPENAME) itemtypename_ = xml.GetData();
+		else if (tag == CONST_ITEMTYPEID) itemtypeid_ = atoi(xml.GetData().c_str());
+		else if (tag == CONST_NUMBER) number_ = atoi(xml.GetData().c_str());
 	}
 }
 void Item::addBaseValues(CMarkup& xml) const
 {
-	xml.AddElem(CONST_item003, itemtypename_);
-	xml.AddElem(CONST_item004, itemtypeid_);
-	xml.AddElem(CONST_item005, tostring(number_));
+	xml.AddElem(CONST_ITEMTYPENAME, itemtypename_);
+	xml.AddElem(CONST_ITEMTYPEID, itemtypeid_);
+	xml.AddElem(CONST_NUMBER, tostring(number_));
 }
 bool Item::sort_compare(Item *b, Item *a)
 {
@@ -52,7 +53,7 @@ const char* Item::aan() const
 	case 'i': case 'I':
 	case 'o': case 'O':
 	case 'u': case 'U':
-		return CONST_item006.c_str();
+		return CONST_AN.c_str();
 	default:
 		return CONST_item007.c_str();
 	}

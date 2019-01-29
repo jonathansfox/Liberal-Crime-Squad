@@ -1,3 +1,4 @@
+
 #define	SLEEPER_UPDATE_CPP
 #include "../includes.h"
 /*
@@ -603,10 +604,10 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 ** *JDS*
 ** ----- The sleeper system has been completely reworked.
 ** - Sleepers no longer directly influence the issues. They now affect
-** the broad CONST_sleeper_update044 stats across many issues, which are used
+** the broad CONST_LIBERAL_POWER stats across many issues, which are used
 ** as a kind of monthly liberal roll akin to AM Radio and Cable News.
 ** - Each sleeper can affect one or more issue, throwing their power
-** into the CONST_sleeper_update045 on that issue.
+** into the CONST_ABSTRACTED_DEBATE on that issue.
 ** - After all of the sleepers have contributed to the liberal power
 ** stats, a roll is made on each issue to see whether the liberals
 ** make background progress on those issues.
@@ -615,7 +616,7 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 ** corporate managers, CEOs, and agents can all now leak secret
 ** documents of the appropriate types, and they will make a check
 ** each month. This will only happen if the homeless shelter is not
-** under siege, and CONST_sleeper_update046 is enabled (eg, you're not in prison
+** under siege, and CONST_CANSEETHINGS is enabled (eg, you're not in prison
 ** or disbanded or some other situation where your sleeper can't get
 ** in touch with anyone in your squad).
 ** - News Anchors and Radio Personalities remain the two most powerful

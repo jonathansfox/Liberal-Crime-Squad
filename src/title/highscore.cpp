@@ -1,3 +1,4 @@
+
 #define	HIGHSCORE_CPP
 #include "../includes.h"
 /*
@@ -31,7 +32,7 @@ void loadhighscores()
 	for (int s = 0; s < SCORENUM; s++)score[s].valid = 0;
 	//LOAD FILE
 	int loadversion;
-	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB002.c_str(), LCSIO_PRE_HOME);
+	FILE *h = LCSOpenFile(CONST_SCORE_DAT.c_str(), CONST_RB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		fread(&loadversion, sizeof(int), 1, h);
@@ -96,7 +97,7 @@ void savehighscore(char endtype)
 			break;
 		}
 	}
-	FILE *h = LCSOpenFile(CONST_highscore002.c_str(), CONST_highscoreB003.c_str(), LCSIO_PRE_HOME);
+	FILE *h = LCSOpenFile(CONST_SCORE_DAT.c_str(), CONST_WB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		int lversion = version;
@@ -151,9 +152,9 @@ void viewhighscores(int musicoverride)
 			addstrAlt(score[s].stat_kills);
 			mvaddstrAlt(y + 3, 20, numKidnap);
 			addstrAlt(score[s].stat_kidnappings);
-			mvaddstrAlt(y + 2, 40, cashTaxed);
+			mvaddstrAlt(y + 2, 40, CASH_TAXED);
 			addstrAlt(score[s].stat_funds);
-			mvaddstrAlt(y + 3, 40, cashSpent);
+			mvaddstrAlt(y + 3, 40, CASH_SPENT);
 			addstrAlt(score[s].stat_spent);
 			mvaddstrAlt(y + 2, 60, flagsBought);
 			addstrAlt(score[s].stat_buys);
@@ -173,9 +174,9 @@ void viewhighscores(int musicoverride)
 	addstrAlt(ustat_kills);
 	mvaddstrAlt(24, 20, numKidnap);
 	addstrAlt(ustat_kidnappings);
-	mvaddstrAlt(23, 40, cashTaxed);
+	mvaddstrAlt(23, 40, CASH_TAXED);
 	addstrAlt(ustat_funds);
-	mvaddstrAlt(24, 40, cashSpent);
+	mvaddstrAlt(24, 40, CASH_SPENT);
 	addstrAlt(ustat_spent);
 	mvaddstrAlt(23, 60, flagsBought);
 	addstrAlt(ustat_buys);
@@ -274,8 +275,7 @@ string getEndingString(EndTypes e) {
 		return(hecoStalinized);
 		break;
 	default:
-		return blankString;
+		return BLANK_STRING;
 		break;
 	}
 }
-

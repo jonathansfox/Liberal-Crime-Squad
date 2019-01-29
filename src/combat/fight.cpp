@@ -1,3 +1,4 @@
+
 #define	FIGHT_CPP
 #include "../includes.h"
 /*
@@ -72,8 +73,8 @@ bool goodguyattack = false;
 			 addstrAlt(a.getNameAndAlignment().name);
 			 switch (LCSrandom(3))
 			 {
-			 case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_fight038, gamelog);
-					 else addstrAlt(CONST_fight039, gamelog); break;
+			 case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_MAKES_A_STINKY, gamelog);
+					 else addstrAlt(CONST_SOILS_THE_FLOOR, gamelog); break;
 			 default:
 				 addstrAlt(singleSpace + pickrandom(bleeding_animal), gamelog); break;
 			 }
@@ -97,33 +98,33 @@ bool goodguyattack = false;
 			 switch (LCSrandom(54))
 			 {
 				 //TODO IsaacG Complete Migration of Strings
-			 case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_fight038);
-					 else addstrAlt(CONST_fight039); break;
-			 case 1: if (mode != GAMEMODE_CHASECAR) addstrAlt(CONST_fight040);
-					 else addstrAlt(CONST_fight041); break;
+			 case 0: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_MAKES_A_STINKY);
+					 else addstrAlt(CONST_SOILS_THE_FLOOR); break;
+			 case 1: if (mode != GAMEMODE_CHASECAR) addstrAlt(CONST_STUMBLES_AGAINST_A_WALL);
+					 else addstrAlt(CONST_LEANS_AGAINST_THE_DOOR); break;
 			 case 2: if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] && a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
-				 addstrAlt(CONST_fight042);
+				 addstrAlt(CONST_STARES_OFF_INTO_SPACE);
 					 else if (a.getCreatureHealth().special[SPECIALWOUND_RIGHTEYE] || a.getCreatureHealth().special[SPECIALWOUND_LEFTEYE])
-						 addstrAlt(CONST_fight043);
-					 else addstrAlt(CONST_fight044); break;
-			 case 3: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_fight045);
-					 else addstrAlt(CONST_fight046); break;
-			 case 4: if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] > 1) addstrAlt(CONST_fight047);
-					 else if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] == 1) addstrAlt(CONST_fight048);
-					 else addstrAlt(CONST_fight049); break;
-			 case 5: if (a.getCreatureBio().age < 20 && !a.getCreatureHealth().animalgloss) addstrAlt(CONST_fightX01);
+						 addstrAlt(CONST_STARES_INTO_SPACE_WITH_ONE_EMPTY_EYE);
+					 else addstrAlt(CONST_STARES_OUT_WITH_HOLLOW_SOCKETS); break;
+			 case 3: if (lawList[LAW_FREESPEECH] == -2) addstrAlt(CONST_MAKES_A_MESS_MOANING);
+					 else addstrAlt(CONST_PISSES_ON_THE_FLOOR_MOANING); break;
+			 case 4: if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] > 1) addstrAlt(CONST_S_TEETH_START_CHATTERING);
+					 else if (a.getCreatureHealth().special[SPECIALWOUND_TEETH] == 1) addstrAlt(CONST_S_TOOTH_STARTS_CHATTERING);
+					 else addstrAlt(CONST_S_GUMS_START_CHATTERING); break;
+			 case 5: if (a.getCreatureBio().age < 20 && !a.getCreatureHealth().animalgloss) addstrAlt(CONST_CRIES_MOMMY);
 					 else switch (a.type) {
 					 case CREATURE_GENETIC:
-						 addstrAlt(CONST_fightX02); break;
+						 addstrAlt(CONST_MURMURS_WHAT_ABOUT_MY_OFFSPRING); break;
 					 case CREATURE_GUARDDOG:
-						 addstrAlt(CONST_fightX03); break;
+						 addstrAlt(CONST_MURMURS_WHAT_ABOUT_MY_PUPPIES); break;
 					 default:
-						 addstrAlt(CONST_fightX04); break;
+						 addstrAlt(CONST_MURMURS_WHAT_ABOUT_MY_CHILDREN); break;
 					 } break;
-			 case 6: if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_fight056);
-					 else addstrAlt(CONST_fight055); break;
-			 case 7: if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_fight056);
-					 else addstrAlt(CONST_fight057); break;
+			 case 6: if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_MAKES_A_MESS);
+					 else addstrAlt(CONST_VOMITS_UP_A_CLOT_OF_BLOOD); break;
+			 case 7: if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_MAKES_A_MESS);
+					 else addstrAlt(CONST_SPITS_UP_A_CLUSTER_OF_BLOODY_BUBBLES); break;
 			 default: addstrAlt(pickrandom(bleeding_to_death));
 			 }
 			 printed = 1;
@@ -197,8 +198,8 @@ bool goodguyattack = false;
 	 case CREATURE_SCIENTIST_EMINENT:
 		 switch (LCSrandom(scientist_debate.size() + 1))
 		 {
-		 case 0:if (a.getCreatureHealth().align == ALIGN_CONSERVATIVE)strcat(str, CONST_fight059.c_str());
-				else strcat(str, CONST_fight060.c_str()); break;
+		 case 0:if (a.getCreatureHealth().align == ALIGN_CONSERVATIVE)strcat(str, CONST_EXPLAINS_THE_BENEFITS_OF_RESEARCH_TO.c_str());
+				else strcat(str, CONST_EXPLAINS_ETHICAL_RESEARCH_TO.c_str()); break;
 		 default:
 			 strcat(str, pickrandom(scientist_debate).c_str()); break;
 		 }
@@ -286,20 +287,20 @@ bool goodguyattack = false;
 			 switch (LCSrandom(5))
 			 {
 				 //TODO IsaacG Migrate Strings
-			 case 0:strcat(str, CONST_fight067.c_str()); break;
-			 case 1:strcat(str, CONST_fight068.c_str()); break;
+			 case 0:strcat(str, CONST_PLAYS_A_SONG_FOR.c_str()); break;
+			 case 1:strcat(str, CONST_SINGS_TO.c_str()); break;
 			 case 2:if (a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_))
 			 {
-				 strcat(str, CONST_fight069.c_str());
+				 strcat(str, CONST_STRUMS_THE.c_str());
 				 strcat(str, a.get_weapon().get_name().c_str());
 			 }
 					else // let's use a small enough instrument for anyone to carry in their pocket
-						strcat(str, CONST_fight070.c_str());
-				 strcat(str, CONST_fight071.c_str()); break;
-			 case 3:if (a.getCreatureHealth().align == 1)strcat(str, CONST_fight072.c_str());
-					else strcat(str, CONST_fight073.c_str());
+						strcat(str, CONST_BLOWS_A_HARMONICA.c_str());
+				 strcat(str, CONST_AT.c_str()); break;
+			 case 3:if (a.getCreatureHealth().align == 1)strcat(str, CONST_PLAYS_PROTEST_SONGS_AT.c_str());
+					else strcat(str, CONST_PLAYS_COUNTRY_SONGS_AT.c_str());
 					break;
-			 case 4:strcat(str, CONST_fight074.c_str()); break;
+			 case 4:strcat(str, CONST_ROCKS_OUT_AT.c_str()); break;
 			 }
 			 strcat(str, singleSpace.c_str());
 			 strcat(str, t.getNameAndAlignment().name.data());
@@ -333,11 +334,11 @@ bool goodguyattack = false;
 	 if ((t.getCreatureHealth().animalgloss == ANIMALGLOSS_TANK || (t.getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL && lawList[LAW_ANIMALRESEARCH] != 2))
 		 || (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
 	 {
-		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight076, gamelog);
+		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_IS_IMMUNE_TO_THE_ATTACK, gamelog);
 	 }
 	 else if (a.getCreatureHealth().align == t.getCreatureHealth().align)
 	 {
-		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight077 + a.getNameAndAlignment().name + singleDot);
+		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_ALREADY_AGREES_WITH + a.getNameAndAlignment().name + singleDot);
 	 }
 	 else if (attack > resist)
 	 {
@@ -346,23 +347,23 @@ bool goodguyattack = false;
 		 {
 			 if (t.juice > 100)
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight078, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_LOSES_JUICE, gamelog);
 				 addjuice(t, -50, 100);
 			 }
 			 else if (LCSrandom(15) > t.get_attribute(ATTRIBUTE_WISDOM, true) || t.get_attribute(ATTRIBUTE_WISDOM, true) < t.get_attribute(ATTRIBUTE_HEART, true))
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight079, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_IS_TAINTED_WITH_WISDOM, gamelog);
 				 t.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 			 }
 			 else if (t.getCreatureHealth().align == ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight080, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_CAN_T_BEAR_TO_LEAVE, gamelog);
 			 }
 			 else
 			 {
 				 if (a.getCreatureHealth().align == -1)
 				 {
-					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight081, gamelog);
+					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_IS_TURNED_CONSERVATIVE, gamelog);
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
@@ -370,7 +371,7 @@ bool goodguyattack = false;
 				 }
 				 else
 				 {
-					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight083, gamelog);
+					 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_DOESN_T_WANT_TO_FIGHT_ANYMORE, gamelog);
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
@@ -407,18 +408,18 @@ bool goodguyattack = false;
 		 {
 			 if (t.juice >= 100)
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight085, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_SEEMS_LESS_BADASS, gamelog);
 				 addjuice(t, -50, 99);
 			 }
 			 else if (!t.attribute_check(ATTRIBUTE_HEART, DIFFICULTY_AVERAGE) ||
 				 t.get_attribute(ATTRIBUTE_HEART, true) < t.get_attribute(ATTRIBUTE_WISDOM, true))
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight086, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_S_HEART_SWELLS, gamelog);
 				 t.adjust_attribute(ATTRIBUTE_HEART, +1);
 			 }
 			 else
 			 {
-				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight087, gamelog);
+				 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_HAS_TURNED_LIBERAL, gamelog);
 				 t.stop_being_stunned();
 				 liberalize(t);
 				 t.infiltration /= 2;
@@ -429,7 +430,7 @@ bool goodguyattack = false;
 	 }
 	 else
 	 {
-		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_fight088, gamelog);
+		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_REMAINS_STRONG, gamelog);
 	 }
 	 gamelog.newline();
 	 printparty();
@@ -499,7 +500,7 @@ bool goodguyattack = false;
 		 if (humanBodyParts.count(w) > 0)
 			 return humanBodyParts[w];
 	 }
-	 return CONST_fight089;
+	 return CONST_NULL_BODYPART;
  }
  /* damages the selected armor if it covers the body part specified */
  void armordamage(Armor &armor, const int bp, const int damamount)
@@ -553,9 +554,9 @@ bool goodguyattack = false;
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(16, 1, tag_The, gamelog);
 		 addstrAlt(cr.get_weapon().get_name(1), gamelog);
-		 addstrAlt(CONST_fight090, gamelog);
+		 addstrAlt(CONST_SLIPS_FROM, gamelog);
 		 mvaddstrAlt(17, 1, cr.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_fight091, gamelog);
+		 addstrAlt(CONST_S_GRASP, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 		 if (mode == GAMEMODE_SITE) cr.drop_weapons_and_clips(&groundloot);
@@ -572,7 +573,7 @@ bool goodguyattack = false;
 		 mvaddstrAlt(16, 1, cr.getNameAndAlignment().name, gamelog);
 		 addstrAlt(CONST_fight136, gamelog);
 		 addstrAlt(cr.get_armor().get_name(), gamelog);
-		 addstrAlt(CONST_fight093, gamelog);
+		 addstrAlt(CONST_HAS_BEEN_DESTROYED, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 		 cr.strip(NULL);
@@ -594,29 +595,29 @@ bool goodguyattack = false;
 		 {
 			 //TODO IsaacG Complete Migration of Strings
 		 case 0:
-			 strcat(str, CONST_fight094.c_str());
+			 strcat(str, CONST_REACHES_ONCE_WHERE_THERE.c_str());
 			 if (mode != GAMEMODE_CHASECAR)
-				 strcpy(secondLine, CONST_fight095.c_str());
-			 else strcpy(secondLine, CONST_fight096.c_str());
+				 strcpy(secondLine, CONST_IS_NO_HEAD_AND_FALLS.c_str());
+			 else strcpy(secondLine, CONST_IS_NO_HEAD_AND_SLUMPS_OVER.c_str());
 			 break;
 		 case 1:
 			 if (mode != GAMEMODE_CHASECAR)
-				 strcat(str, CONST_fight097.c_str());
-			 else strcat(str, CONST_fight098.c_str());
-			 strcpy(secondLine, CONST_fight099.c_str());
+				 strcat(str, CONST_STANDS_HEADLESS_FOR_A.c_str());
+			 else strcat(str, CONST_SITS_HEADLESS_FOR_A.c_str());
+			 strcpy(secondLine, CONST_MOMENT_THEN_CRUMPLES_OVER.c_str());
 			 break;
 		 case 2:
-			 strcat(str, CONST_fight100.c_str());
-			 if (lawList[LAW_FREESPEECH] == -2)strcat(str, CONST_fight101.c_str());
+			 strcat(str, CONST_SQUIRTS.c_str());
+			 if (lawList[LAW_FREESPEECH] == -2)strcat(str, CONST_RED_WATER.c_str());
 			 else strcat(str, tag_blood.c_str());
-			 strcat(str, CONST_fight102.c_str());
+			 strcat(str, CONST_OUT_OF_THE.c_str());
 			 if (mode != GAMEMODE_CHASECAR)
-				 strcpy(secondLine, CONST_fight103.c_str());
-			 else strcpy(secondLine, CONST_fight104.c_str());
+				 strcpy(secondLine, CONST_NECK_AND_RUNS_DOWN_THE_HALL.c_str());
+			 else strcpy(secondLine, CONST_NECK_AND_FALLS_TO_THE_SIDE.c_str());
 			 break;
 		 case 3:
-			 strcat(str, CONST_fight105.c_str());
-			 strcpy(secondLine, CONST_fight106.c_str());
+			 strcat(str, CONST_SUCKS_A_LAST_BREATH_THROUGH.c_str());
+			 strcpy(secondLine, CONST_THE_NECK_HOLE_THEN_IS_QUIET.c_str());
 			 break;
 		 }
 	 }
@@ -631,26 +632,26 @@ bool goodguyattack = false;
 		 switch (LCSrandom(11))
 		 {
 		 case 0:
-			 strcat(str, CONST_fight107.c_str());
-			 if (lawList[LAW_FREESPEECH] == -2)strcpy(secondLine, CONST_fight108.c_str());
-			 else strcpy(secondLine, CONST_fight109.c_str());
+			 strcat(str, CONST_SWEATS_PROFUSELY_MURMURS.c_str());
+			 if (lawList[LAW_FREESPEECH] == -2)strcpy(secondLine, CONST_SOMETHING_GOOD_ABOUT_JESUS_AND_DIES.c_str());
+			 else strcpy(secondLine, CONST_SOMETHING_ABOUT_JESUS_AND_DIES.c_str());
 			 break;
 		 case 1:
-			 strcat(str, CONST_fight110.c_str());
+			 strcat(str, CONST_GASPS_A_LAST_BREATH_AND.c_str());
 			 if (lawList[LAW_FREESPEECH] == -2) strcpy(secondLine, CONST_fight111.c_str());
 			 else strcpy(secondLine, CONST_fight112.c_str());
 			 break;
 		 case 2:
-			 strcat(str, CONST_fight113.c_str());
+			 strcat(str, CONST_SPEAKS_THESE_FINAL_WORDS.c_str());
 			 switch (cr.getCreatureHealth().align)
 			 {
 			 case ALIGN_LIBERAL:
 			 case ALIGN_ELITELIBERAL:
 				 strcpy(secondLine, slogan_str.c_str()); break;
 			 case ALIGN_MODERATE:
-				 strcpy(secondLine, CONST_fight114.c_str()); break;
+				 strcpy(secondLine, CONST_A_PLAGUE_ON_BOTH_YOUR_HOUSES.c_str()); break;
 			 default:
-				 strcpy(secondLine, CONST_fightX05.c_str()); break;
+				 strcpy(secondLine, CONST_BETTER_DEAD_THAN_LIBERAL.c_str()); break;
 			 }
 			 break;
 		 default:
@@ -704,13 +705,13 @@ bool goodguyattack = false;
 		 {
 			 a.reload(false);
 			 strcpy(str, a.getNameAndAlignment().name.data());
-			 strcat(str, CONST_fight117.c_str());
+			 strcat(str, CONST_RELOADS.c_str());
 		 }
 		 else if (a.has_thrown_weapon && a.has_extra_throwing_weapons())
 		 {
 			 a.ready_another_throwing_weapon();
 			 strcpy(str, a.getNameAndAlignment().name.data());
-			 strcat(str, CONST_fight118.c_str());
+			 strcat(str, CONST_READIES_ANOTHER.c_str());
 			 strcat(str, a.get_weapon().get_name().c_str());
 			 strcat(str, singleDot.c_str());
 		 }
@@ -751,10 +752,10 @@ bool goodguyattack = false;
 	 // show multiple hits
 	 if (bursthits > 1 && a.is_armed()) // Only show if not melee
 	 {
-		 str = commaSpace;
+		 str = COMMA_SPACE;
 		 if (!a.is_armed()) //Move into WEAPON_NONE? -XML
 		 {
-			 str += CONST_fight137;
+			 str += CONST_STRIKING;
 		 }
 		 else {
 			 str += attack_used.hit_description;
@@ -763,7 +764,7 @@ bool goodguyattack = false;
 	 }
 	 else if (attack_used.always_describe_hit)
 	 {
-		 str += commaSpace;
+		 str += COMMA_SPACE;
 		 str += attack_used.hit_description;
 	 }
 	 return str;
@@ -786,11 +787,11 @@ bool goodguyattack = false;
 				 clearmessagearea();
 				 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(16, 1, target->getNameAndAlignment().name, gamelog);
-				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_fight142, gamelog);
-				 else addstrAlt(CONST_fight143, gamelog);
-				 addstrAlt(CONST_fight144, gamelog);
+				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_MISGUIDEDLY, gamelog);
+				 else addstrAlt(CONST_HEROICALLY, gamelog);
+				 addstrAlt(CONST_SHIELDS, gamelog);
 				 addstrAlt(t.getNameAndAlignment().name, gamelog);
-				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_fight145, gamelog);
+				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_S_CORPSE, gamelog);
 				 addstrAlt(CONST_fight146, gamelog);
 				 gamelog.newline();
 				 addjuice(*target, 10, 1000);//Instant juice!! Way to take the bullet!!
@@ -920,11 +921,11 @@ bool goodguyattack = false;
 		 {
 			 if (a.specialattack == ATTACK_CANNON)
 			 {
-				 str += CONST_fight127;
+				 str += CONST_FIRES_A_120MM_SHELL_AT;
 			 }
-			 else if (a.specialattack == ATTACK_FLAME) str += CONST_fight128;
-			 else if (a.specialattack == ATTACK_SUCK) str += CONST_fight129;
-			 else str += CONST_fight130;
+			 else if (a.specialattack == ATTACK_FLAME) str += CONST_BREATHES_FIRE_AT;
+			 else if (a.specialattack == ATTACK_SUCK) str += CONST_STABS;
+			 else str += CONST_BITES;
 		 }
 	 }
 	 else
@@ -932,7 +933,7 @@ bool goodguyattack = false;
 
 		 if (sneak_attack)
 		 {
-			 str += CONST_fight131;
+			 str += CONST_SNEAKS_UP_ON;
 		 }
 		 else {
 			 str += attack_used.attack_description;
@@ -953,15 +954,15 @@ bool goodguyattack = false;
 		 str = driver->getNameAndAlignment().name;
 		 if (droll == 1) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight158;
+			 str += CONST_MISSED;
 		 }
 		 else if (droll == 2) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight159;
+			 str += CONST_JUST_BARELY_MISSED;
 		 }
 		 else if (droll > 18 || droll < 1) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
+			 str += CONST_MISSES_COMPLETELY;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
 		 }
 		 else {
 			 str += evasionStringsAlt[droll - 3];
@@ -971,15 +972,15 @@ bool goodguyattack = false;
 		 str = t.getNameAndAlignment().name;
 		 if (droll == 1) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight158;
+			 str += CONST_MISSED;
 		 }
 		 else if (droll == 2) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight159;
+			 str += CONST_JUST_BARELY_MISSED;
 		 }
 		 else if (droll > 18 || droll < 1) {
 			 str = a.getNameAndAlignment().name;
-			 str += CONST_fight160;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
+			 str += CONST_MISSES_COMPLETELY;  // You failed to hit someone who probably rolled a zero.  You should feel bad.
 		 }
 		 else {
 			 str += evasionStrings[droll - 3];
@@ -1154,9 +1155,9 @@ bool goodguyattack = false;
 		 severtype = attack_used.critical.severtype;
  }
  string bouncesOffCar(const Vehicle* vehicle, const int vehicleHitLocation) {
-	 string str = CONST_fight139;
+	 string str = CONST_THE_ATTACK_BOUNCES_OFF;
 
-	 str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+	 str += (CONST_THE + vehicle->shortname() + CONST_fight136);
 	 str += vehicle->getpartname(vehicleHitLocation);
 
 	 return str;
@@ -1315,7 +1316,7 @@ bool goodguyattack = false;
 	 if (len(str) < 1) {
 		 str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
 		 if (attackI.sneak_attack) str += CONST_fight134;
-		 else str += CONST_fight135;
+		 else str += CONST_HITS;
 		 str += t.getNameAndAlignment().name;
 		 str += CONST_fight136;
 		 str += bodypartName((Bodyparts)hit_location, (AnimalGlosses)t.getCreatureHealth().animalgloss);
@@ -1323,9 +1324,9 @@ bool goodguyattack = false;
 		 // Report vehicle protection effect
 		 if (mode == GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
 		 {
-			 str += CONST_fight138;
+			 str += CONST_THROUGH;
 
-			 str += (CONST_fight140 + vehicle->shortname() + CONST_fight136);
+			 str += (CONST_THE + vehicle->shortname() + CONST_fight136);
 			 str += vehicle->getpartname(vehicleHitLocation);
 		 }
 	 }
@@ -1349,7 +1350,7 @@ bool goodguyattack = false;
 	 else
 	 {
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		 str += CONST_fight153;
+		 str += CONST_TO_NO_EFFECT;
 		 mvaddstrAlt(17, 1, str, gamelog);
 		 gamelog.newline();
 		 printparty();
@@ -1404,14 +1405,14 @@ bool goodguyattack = false;
 	 string str = a.getNameAndAlignment().name;
 
 	 str += singleSpace;
-	 if (mistake) { str += CONST_fight119; }
+	 if (mistake) { str += CONST_MISTAKENLY; }
 	 str += initiateCombat(a, sneak_attack, attack_used);
 	 str += singleSpace;
 	 str += t.getNameAndAlignment().name;
 
 	 if (a.is_armed() && !attack_used.thrown)
 	 {
-		 str += CONST_fight132;
+		 str += CONST_WITH_A;
 		 str += a.get_weapon().get_name(1);
 	 }
 
@@ -1600,7 +1601,7 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 			&& t.is_armed() && t.get_weapon().get_attack(false, true, true) != NULL)
 		{
 			string str2 = t.getNameAndAlignment().name;
-			str2 += CONST_fight154;
+			str2 += CONST_KNOCKS_THE_BLOW_ASIDE_AND_COUNTERS;
 			mvaddstrAlt(17, 1, str2, gamelog);
 			gamelog.newline();
 			pressAnyKey();
@@ -1677,7 +1678,7 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 	}
 	if (!(len(super_enemies) + len(dangerous_enemies) + len(enemies))) return;
 	int target;
-	// If there are CONST_fight161, shoot at one of them unless we're using a persuasion-based attack
+	// If there are CONST_SUPER_ENEMIES, shoot at one of them unless we're using a persuasion-based attack
 	if (len(super_enemies) &&
 		((activesquad->squad[p]->type != CREATURE_SCIENTIST_EMINENT &&
 			activesquad->squad[p]->type != CREATURE_JUDGE_LIBERAL &&
@@ -1691,12 +1692,12 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 			(!activesquad->squad[p]->get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) &&
 				activesquad->squad[p]->is_armed())))
 		target = pickrandom(super_enemies);
-	// Else, if there are CONST_fight162, shoot at one of them
+	// Else, if there are CONST_DANGEROUS_ENEMIES, shoot at one of them
 	else if (len(dangerous_enemies))
 		target = pickrandom(dangerous_enemies);
 	// Else, if there are regular enemies, shoot at one of them
 	else if (len(enemies)) target = pickrandom(enemies);
-	// Else, we skipped a CONST_fight163 because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
+	// Else, we skipped a CONST_SUPER_ENEMY because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
 	else target = pickrandom(super_enemies);
 	char mistake = 0;
 	// Mistaken attack
@@ -1942,9 +1943,9 @@ LOOP_CONTINUATION singleEnemyAttack(const int e, const bool armed) {
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(16, 1, activesquad->squad[target]->getNameAndAlignment().name, gamelog);
-						addstrAlt(CONST_fight164, gamelog);
+						addstrAlt(CONST_DROPS, gamelog);
 						addstrAlt(activesquad->squad[target]->get_prisoner_name(), gamelog);
-						addstrAlt(CONST_fight165, gamelog);
+						addstrAlt(CONST_S_BODY, gamelog);
 						gamelog.newline();
 						const int prisonerType = activesquad->squad[target]->get_prisoner_type();
 						if (prisonerType == CREATURE_CORPORATE_CEO ||
@@ -2045,88 +2046,88 @@ void enemyattack()
 string damtypeToUpperSpineString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT) damageDescription += (CONST_fight166);
-	else (damageDescription += CONST_fight167);
+	if (damtype & WOUND_SHOT) damageDescription += (CONST_S_UPPER_SPINE_IS_SHATTERED);
+	else (damageDescription += CONST_S_UPPER_SPINE_IS_BROKEN);
 
 	return damageDescription;
 }
 string damtypeToLowerSpineString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += CONST_fight168;
-	else damageDescription += (CONST_fight169);
+	if (damtype & WOUND_SHOT)damageDescription += CONST_S_LOWER_SPINE_IS_SHATTERED;
+	else damageDescription += (CONST_S_LOWER_SPINE_IS_BROKEN);
 
 	return damageDescription;
 }
 string damtypeToRightLungString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight170);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight171);
-	else damageDescription += (CONST_fight172);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_RIGHT_LUNG_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_RIGHT_LUNG_IS_TORN);
+	else damageDescription += (CONST_S_RIGHT_LUNG_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToLeftLungString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight173);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight174);
-	else damageDescription += (CONST_fight175);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_LEFT_LUNG_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_LEFT_LUNG_IS_TORN);
+	else damageDescription += (CONST_S_LEFT_LUNG_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToHeartString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight176);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight177);
-	else damageDescription += (CONST_fight178);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_HEART_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_HEART_IS_TORN);
+	else damageDescription += (CONST_S_HEART_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToLiverString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight179);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight180);
-	else damageDescription += (CONST_fight181);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_LIVER_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_LIVER_IS_TORN);
+	else damageDescription += (CONST_S_LIVER_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToStomachString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight182);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight183);
-	else damageDescription += (CONST_fight184);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_STOMACH_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_STOMACH_IS_TORN);
+	else damageDescription += (CONST_S_STOMACH_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToRightKidneyString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight185);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight186);
-	else damageDescription += (CONST_fight187);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_RIGHT_KIDNEY_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_RIGHT_KIDNEY_IS_TORN);
+	else damageDescription += (CONST_S_RIGHT_KIDNEY_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToLeftKidneyString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight188);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight189);
-	else damageDescription += (CONST_fight190);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_LEFT_KIDNEY_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_LEFT_KIDNEY_IS_TORN);
+	else damageDescription += (CONST_S_LEFT_KIDNEY_IS_PUNCTURED);
 
 	return damageDescription;
 }
 string damtypeToSpleenString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight191);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight192);
-	else damageDescription += (CONST_fight193);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_SPLEEN_IS_BLASTED);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_SPLEEN_IS_TORN);
+	else damageDescription += (CONST_S_SPLEEN_IS_PUNCTURED);
 
 	return damageDescription;
 }
@@ -2135,25 +2136,25 @@ string damtypeToRibsString(const char damtype, const char ribminus, const int ri
 	if (ribminus > 1)
 	{
 		if (ribminus == ribsleft)
-			damageDescription += (CONST_fight207);
+			damageDescription += (CONST_ALL);
 		damageDescription += (name);
-		damageDescription += (CONST_fight208);
+		damageDescription += (CONST_OF);
 		damageDescription += (name);
-		damageDescription += (CONST_fight196);
+		damageDescription += (CONST_S_RIBS_ARE);
 	}
 	else if (ribsleft > 1)
 	{
-		damageDescription += (CONST_fight210);
+		damageDescription += (CONST_ONE_OF);
 		damageDescription += (name);
-		damageDescription += (CONST_fight198);
+		damageDescription += (CONST_S_RIB_IS);
 	}
 	else
 	{
 		damageDescription += (name);
-		damageDescription += (CONST_fight199);
+		damageDescription += (CONST_S_LAST_UNBROKEN_RIB_IS);
 	}
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight200);
-	else damageDescription += (CONST_fight201);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_SHOT_APART);
+	else damageDescription += (CONST_BROKEN);
 	return damageDescription;
 }
 //std::string bodypartName(Bodyparts w, AnimalGlosses t);
@@ -2164,7 +2165,7 @@ string specialWoundPossibilityBody(
 	const char damtype)
 {
 	DeprecatedCreature* target = &t;
-	string damageDescription = blankString;
+	string damageDescription = BLANK_STRING;
 	switch (LCSrandom(11))
 	{
 	case 0:
@@ -2277,85 +2278,85 @@ string damtypeToTeethString(const char damtype, const int woundTeeth, const stri
 	{
 		if (teethminus == woundTeeth)
 		{
-			damageDescription += (CONST_fight207);
+			damageDescription += (CONST_ALL);
 		}
 		damageDescription += tostring(teethminus);
-		damageDescription += CONST_fight208;
+		damageDescription += CONST_OF;
 		damageDescription += name;
-		damageDescription += CONST_fight209;
+		damageDescription += CONST_S_TEETH_ARE;
 	}
 	else if (woundTeeth > 1)
 	{
-		damageDescription += (CONST_fight210);
+		damageDescription += (CONST_ONE_OF);
 		damageDescription += (name);
-		damageDescription += (CONST_fight211);
+		damageDescription += (CONST_S_TEETH_IS);
 	}
 	else
 	{
 		damageDescription += (name);
-		damageDescription += (CONST_fight212);
+		damageDescription += (CONST_S_LAST_TOOTH_IS);
 	}
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight213);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight214);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight215);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight216);
-	else damageDescription += (CONST_fight217);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_SHOT_OUT);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_GOUGED_OUT);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_CUT_OUT);
+	else damageDescription += (CONST_KNOCKED_OUT);
 	return damageDescription;
 }
 string damtypeToFaceString(const char damtype) {
 	string damageDescription;
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight202);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight203);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight204);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight205);
-	else damageDescription += (CONST_fight206);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_FACE_IS_BLASTED_OFF);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_S_FACE_IS_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_FACE_IS_TORN_OFF);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_S_FACE_IS_CUT_AWAY);
+	else damageDescription += (CONST_S_FACE_IS_REMOVED);
 	return damageDescription;
 }
 string damtypeToRightEyeString(const char damtype) {
 	string damageDescription;
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight218);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight219);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight220);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight221);
-	else damageDescription += (CONST_fight222);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_RIGHT_EYE_IS_BLASTED_OUT);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_S_RIGHT_EYE_IS_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_RIGHT_EYE_IS_TORN_OUT);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_S_RIGHT_EYE_IS_POKED_OUT);
+	else damageDescription += (CONST_S_RIGHT_EYE_IS_REMOVED);
 	return damageDescription;
 }
 string damtypeToLeftEyeString(const char damtype) {
 	string damageDescription;
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight223);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight224);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight225);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight226);
-	else damageDescription += (CONST_fight227);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_LEFT_EYE_IS_BLASTED_OUT);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_S_LEFT_EYE_IS_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_LEFT_EYE_IS_TORN_OUT);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_S_LEFT_EYE_IS_POKED_OUT);
+	else damageDescription += (CONST_S_LEFT_EYE_IS_REMOVED);
 	return damageDescription;
 }
 string damtypeToTongueString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight228);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight229);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight230);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight231);
-	else damageDescription += (CONST_fight232);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_TONGUE_IS_BLASTED_OFF);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_S_TONGUE_IS_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_TONGUE_IS_TORN_OUT);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_S_TONGUE_IS_CUT_OFF);
+	else damageDescription += (CONST_S_TONGUE_IS_REMOVED);
 
 	return damageDescription;
 }
 string damtypeToNoseString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight233);
-	else if (damtype & WOUND_BURNED)damageDescription += (CONST_fight234);
-	else if (damtype & WOUND_TORN)damageDescription += (CONST_fight235);
-	else if (damtype & WOUND_CUT)damageDescription += (CONST_fight236);
-	else damageDescription += (CONST_fight237);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_NOSE_IS_BLASTED_OFF);
+	else if (damtype & WOUND_BURNED)damageDescription += (CONST_S_NOSE_IS_BURNED_AWAY);
+	else if (damtype & WOUND_TORN)damageDescription += (CONST_S_NOSE_IS_TORN_OFF);
+	else if (damtype & WOUND_CUT)damageDescription += (CONST_S_NOSE_IS_CUT_OFF);
+	else damageDescription += (CONST_S_NOSE_IS_REMOVED);
 
 	return damageDescription;
 }
 string damtypeToNeckString(const char damtype) {
 	string damageDescription;
 
-	if (damtype & WOUND_SHOT)damageDescription += (CONST_fight238);
-	else damageDescription += (CONST_fight239);
+	if (damtype & WOUND_SHOT)damageDescription += (CONST_S_NECK_BONES_ARE_SHATTERED);
+	else damageDescription += (CONST_S_NECK_IS_BROKEN);
 
 	return damageDescription;
 }
@@ -2368,7 +2369,7 @@ string specialWoundPossibilityHead(
 	const char damtype
 ) {
 	DeprecatedCreature* target = &t;
-	string damageDescription = blankString;
+	string damageDescription = BLANK_STRING;
 	switch (LCSrandom(7))
 	{
 
@@ -2507,4 +2508,3 @@ void autopromote(const int loc)
 		}
 	}
 }
-

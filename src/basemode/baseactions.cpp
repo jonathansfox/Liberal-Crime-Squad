@@ -1,3 +1,4 @@
+
 #define	BASEACTIONS_CPP
 #include "../includes.h"
 /*
@@ -28,7 +29,7 @@ the bottom of includes.h in the top src folder.
 
  vector<string> vehicleParagraph;
  vector<file_and_text_collection> baseactions_text_file_collection = {
-	 customText(&vehicleParagraph, mostlyendings + CONST_baseactions004),
+	 customText(&vehicleParagraph, mostlyendings + VEHICLE_PARAGRAPH_TXT),
  };
 /* base - burn the flag */
 
@@ -36,8 +37,8 @@ the bottom of includes.h in the top src folder.
  void getslogan()
  {
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(16, 0, CONST_baseactions005);
-	 mvaddstrAlt(17, 0, CONST_baseactions006); // 80 spaces
+	 mvaddstrAlt(16, 0, WHAT_IS_YOUR_NEW_SLOGAN);
+	 mvaddstrAlt(17, 0, MANY_SPACES_SOMETHING); // 80 spaces
 	 enter_name(17, 0, slogan, SLOGAN_LEN, pickrandom(default_slogans).c_str());
 	 slogan_str = slogan;
  }
@@ -51,14 +52,14 @@ the bottom of includes.h in the top src folder.
 	 {
 		 printparty();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(8, 26, CONST_baseactions007);
+		 mvaddstrAlt(8, 26, CHOOSE_SQUAD_MEMBER_TO_MOVE);
 		 int oldPos = getkeyAlt();
 		 if (oldPos<'1' || oldPos>partysize + '1' - 1) return; // User chose index out of range, exit
 		 makedelimiter();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 std::string str = CONST_baseactions008;
+		 std::string str = CHOSE_SQUAD_MEMBER_TO_REPLACE;
 		 str += activesquad->squad[oldPos - '1']->getNameAndAlignment().name;
-		 str += CONST_baseactions009;
+		 str += IN_SPOT_SPACE;
 		 str += (char)oldPos;
 		 mvaddstrCenter(8, str);
 		 int newPos = getkeyAlt();
@@ -109,7 +110,7 @@ the bottom of includes.h in the top src folder.
 	 {
 		 eraseAlt();
 		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		 mvaddstrAlt(0, 0, CONST_baseactions010);
+		 mvaddstrAlt(0, 0, CHOOSING_THE_RIGHT_LIBERAL_VEHICLE);
 		 printparty();
 		 printCars(page);
 		 set_color_easy(WHITE_ON_BLACK);
@@ -149,7 +150,7 @@ the bottom of includes.h in the top src folder.
 				 if (choice)
 				 {
 					 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					 mvaddstrAlt(8, 20, chooseALiberalTo + CONST_baseactions011);
+					 mvaddstrAlt(8, 20, CHOOSE_A_LIBERAL_TO + DRIVE_IT);
 					 c = getkeyAlt();
 				 }
 				 if (c >= '1'&&c <= '6')
@@ -186,7 +187,7 @@ the bottom of includes.h in the top src folder.
 				 if (choice)
 				 {
 					 set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					 mvaddstrAlt(8, 20, chooseALiberalTo + CONST_baseactions012);
+					 mvaddstrAlt(8, 20, CHOOSE_A_LIBERAL_TO + BE_A_PASSENGER);
 					 c = getkeyAlt();
 				 }
 				 if (c >= '1'&&c <= '6')
@@ -222,4 +223,3 @@ the bottom of includes.h in the top src folder.
 		 if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	 }
  }
-

@@ -1,3 +1,4 @@
+
 #define	POLITICS_CPP
 #include "../includes.h"
 /*
@@ -437,7 +438,7 @@ vector<string> corporateSuffix;
 	 printSingleWinnerOfElection(winnerOfElection[winner]);
 	 if (!disbanding)
 	 {
-		 printCONST_politics048();
+		 printCONST_PRESS_ANY_KEY_TO_CONTINUE_THE_ELECTIONS();
 		 pressAnyKey();
 	 }
 	 else pause_ms(800);
@@ -519,7 +520,7 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings&&recount)
 	 {
-		 printCONST_politics072(p);
+		 printCONST_A_RECOUNT_WAS_NECESSARY(p);
 	 }
 	 return yeswin;
  }
@@ -785,7 +786,7 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings)
 	 {
-		 printCONST_politics069();
+		 printCONST_PRESS_ANY_KEY_TO_WATCH_THE_ELECTIONS_UNFOLD();
 		 pressAnyKey();
 	 }
 	 for (int p = 0; p < pnum; p++)
@@ -847,7 +848,7 @@ vector<string> corporateSuffix;
 		 {
 
 			 string name1, name2;
-			 if (!LCSrandom(5)) (name1 = CONST_politics075);
+			 if (!LCSrandom(5)) (name1 = CONST_UNITED_STATES);
 			 else name1 = lastname();
 			 if ((scase[c] == LAW_LABOR || scase[c] == LAW_CORPORATE ||
 				 scase[c] == LAW_ANIMALRESEARCH || scase[c] == LAW_POLLUTION) &&
@@ -1256,4 +1257,3 @@ vector<int> getSenateMake() {
 	 if (elibjudge < COURTMAJORITY && (wincondition == WINCONDITION_ELITE || elibjudge + libjudge / 2 < COURTSUPERMAJORITY)) return 0;
 	 return 1;
  }
-

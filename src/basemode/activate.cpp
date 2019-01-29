@@ -1,4 +1,5 @@
 
+
 #define	ACTIVATE_CPP
 #include "../includes.h"
 
@@ -30,7 +31,7 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -82,7 +83,7 @@ void listclasses(DeprecatedCreature *cr)
 {
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(10, 40, CONST_activate006);
+	mvaddstrAlt(10, 40, CLASSES_COST_SIXTY);
 	for (int i = 0; i < 5; ++i)
 	{
 		if (i + classlist < len(data_lessons))
@@ -92,7 +93,7 @@ void listclasses(DeprecatedCreature *cr)
 		}
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(17, 40, to_string(6) + spaceDashSpace + CONST_activate007);
+	mvaddstrAlt(17, 40, to_string(6) + spaceDashSpace + OTHER_CLASSES);
 }
 void updateclasschoice(DeprecatedCreature *cr, char choice)
 {
@@ -135,11 +136,11 @@ void recruitSelect(DeprecatedCreature &cr)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activate008);
+		mvaddstrAlt(0, 0, WHAT_TYPE_OF_PERSON_WILL);
 		addstrAlt(cr.getNameAndAlignment().name);
-		addstrAlt(CONST_activate009);
+		addstrAlt(TRY_TO_MEET_AND_RECRUIT);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1, 0, CONST_activate010);
+		mvaddstrAlt(1, 0, TYPE_DIFFICULTY_HEADER);
 		for (int p = page * 19, y = 2; p < options&&p < page * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
@@ -150,7 +151,7 @@ void recruitSelect(DeprecatedCreature &cr)
 			displayDifficulty(recruitable_creatures[p].difficulty);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate011);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_PROFESSION);
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
@@ -175,12 +176,12 @@ void show_victim_status(CreatureHealth victim, const int age, const int HEART)
 {
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2, 55, CONST_activate012);
+	mvaddstrAlt(2, 55, STATUS_COLON);
 	printhealthstat(victim, 2, 66, true);
 	printwoundstat(victim, 4, 55);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(11, 55, CONST_activate013); mvaddstrAlt(11, 66, tostring(HEART));
-	mvaddstrAlt(12, 55, CONST_activate014); mvaddstrAlt(12, 66, tostring(age));
+	mvaddstrAlt(11, 55, HEART_COLON); mvaddstrAlt(11, 66, tostring(HEART));
+	mvaddstrAlt(12, 55, AGE_COLON); mvaddstrAlt(12, 66, tostring(age));
 }
 #include <sstream>
 vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
@@ -194,7 +195,7 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
 		else if (c == '\n')
 		{
 			elems.push_back(oss.str());
-			elems.push_back(blankString);
+			elems.push_back(BLANK_STRING);
 			oss.str(string());
 		}
 		else oss << c;
@@ -208,7 +209,7 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	int difficulty = selected_aug->get_difficulty();
 
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23, 1, CONST_activate029);
+	mvaddstrAlt(23, 1, PRESS_ANY_KEY);
 	moveAlt(21, 1);
 	int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
 	if (blood_saved > 100) blood_saved = 100;
@@ -252,7 +253,7 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 		if (victim->getCreatureHealth().blood > 0)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate030, gamelog);
+			addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_HORRIBLY_DISFIGURED, gamelog);
 		}
 	}
 	else //It was successful... but not without some injuries
@@ -286,13 +287,13 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 		cr->train(SKILL_SCIENCE, 15);
 		addjuice(*cr, 10, 1000);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate031 + selected_aug->get_name(), gamelog);
+		addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_AUGMENTED_WITH + selected_aug->get_name(), gamelog);
 	}
 	if (victim->getCreatureHealth().blood <= 0) //Lost too much blood, you killed 'em
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		victim->die();
-		addstrAlt(string(victim->getNameAndAlignment().name) + CONST_activate032 + cr->getNameAndAlignment().name, gamelog);
+		addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_BRUTALLY_MURDERED_BY + cr->getNameAndAlignment().name, gamelog);
 	}
 }
 void selectAugmentType(vector<AugmentType *> &aug_type, char aug_c, int age);	
@@ -314,9 +315,9 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 		switch (cur_step) {
 		case 0: //PAGE 0, selecting a liberal
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_activate015);
+			mvaddstrAlt(0, 0, SELECT_LIBERAL_TO_PERFORM_EXPERIMENTS_UPON);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(1, 0, CONST_activate016);
+			mvaddstrAlt(1, 0, NAME_HEALTH_HEART_HEADER);
 			for (int p = page * 19, y = 2; p < len(temppool) && p < page * 19 + 19; p++, y++)
 			{
 				set_color_easy(WHITE_ON_BLACK); //c==y+'a'-2);
@@ -328,7 +329,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 				printhealthstat(temppool[p]->getCreatureHealth(), y, 31, TRUE);
 			}
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(22, 0, CONST_activate017);
+			mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_LIBERAL);
 			mvaddstrAlt(23, 0, addpagestr());
 			c = getkeyAlt();
 			//PAGE UP
@@ -350,12 +351,12 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			break;
 		case 1: //PAGE 1, selecting an augmentation
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_activate021);
+			mvaddstrAlt(0, 0, SUBJECT_COLON);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
-			//mvaddstrAlt(1,0,CONST_activate019);
+			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(COMMA_SPACE); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
+			//mvaddstrAlt(1,0,EIGHTY_LINE);
 			show_victim_status(victim->getCreatureHealth(), victim->getCreatureBio().age, victim->get_attribute(ATTRIBUTE_HEART, true));
-			mvaddstrAlt(2, 1, CONST_activate020);
+			mvaddstrAlt(2, 1, SELECT_AUGMENTATION);
 			for (int p = page * 19, y = 4; p < AUGMENTATIONNUM&&p < page * 19 + 19; p++, y++)
 			{
 				bool already_augmented = victim->get_augmentation(y - 4).type != -1;
@@ -393,31 +394,31 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			break;
 		case 2: //PAGE 2, confirm your choices
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(0, 0, CONST_activate021);
+			mvaddstrAlt(0, 0, SUBJECT_COLON);
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(commaSpace); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
+			addstrAlt(victim->getNameAndAlignment().name); addstrAlt(COMMA_SPACE); addstrAlt(gettitle(victim->getCreatureHealth().align, victim->juice));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 0, CONST_activate022);
+			mvaddstrAlt(2, 0, AUGMENTATION_COLON);
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(selected_aug->get_name());
 			show_victim_status(victim->getCreatureHealth(), victim->getCreatureBio().age, victim->get_attribute(ATTRIBUTE_HEART, true));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(4, 0, CONST_activate023);
+			mvaddstrAlt(4, 0, EFFECT_COLON);
 			set_color_easy(WHITE_ON_BLACK);
 			string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
 			addstrAlt((char)(toupper(selected_attribute.at(0))) +
 				selected_attribute.substr(1) +
-				(selected_aug->get_effect() >= 0 ? CONST_activate024 : singleSpace) +
+				(selected_aug->get_effect() >= 0 ? SPACE_PLUS : singleSpace) +
 				tostring(selected_aug->get_effect()));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 0, CONST_activate025);
+			mvaddstrAlt(5, 0, CHANCE_AT_SUCCESS_COLON);
 			int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
 			int difficulty = selected_aug->get_difficulty();
 			set_color_easy(WHITE_ON_BLACK);
 			addstrAlt(to_string(100 * skills / difficulty));
-			mvaddstrAlt(7, 0, CONST_activate026);
+			mvaddstrAlt(7, 0, DESCRIPTION);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8, 0, CONST_activate027);
+			mvaddstrAlt(8, 0, LONG_LINE_BUT_NOT_EIGHTY);
 			vector<string> desc;
 			split_string(selected_aug->get_description(), ' ', desc);
 			int chars_left = 50;
@@ -425,7 +426,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			for (int i = 0; i < desc.size(); i++)
 			{
 				if (desc[i].length() > 50) continue;
-				else if (desc[i] == blankString)
+				else if (desc[i] == BLANK_STRING)
 				{
 					line++;
 					chars_left = 50;
@@ -444,7 +445,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 					chars_left -= (desc[i].length() + 1);
 				}
 			}
-			mvaddstrAlt(23, 1, CONST_activate028);
+			mvaddstrAlt(23, 1, ARE_YOU_SURE_Y_N);
 			c = getkeyAlt();
 			if (c == 'y')
 			{
@@ -486,11 +487,11 @@ void select_makeclothing(DeprecatedCreature *cr)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activate033);
+		mvaddstrAlt(0, 0, WHICH_WILL);
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate034);
+		addstrAlt(TRY_TO_MAKE_NOTE_HALF_COST_WITH_CLOTH);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1, 0, CONST_activate035);
+		mvaddstrAlt(1, 0, NAME_DIFFICULTY_COST_HEADER);
 		int y = 2;
 		for (int p = page * 19; p < len(armortypei) && p < page * 19 + 19; p++, y++)
 		{
@@ -505,7 +506,7 @@ void select_makeclothing(DeprecatedCreature *cr)
 			mvaddstrAlt(y, 64 - len(price), price);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate036);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_CLOTHING_TYPE);
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
@@ -664,11 +665,11 @@ void select_tendhostage(DeprecatedCreature *cr)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, CONST_activate037);
+		mvaddstrAlt(0, 0, WHICH_HOSTAGE_WILL);
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate038);
-		mvaddstrAlt(1, 0, CONST_activate067);
-		mvaddstrAlt(1, 57, CONST_activate040);
+		addstrAlt(BE_WATCHING_OVER);
+		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
+		mvaddstrAlt(1, 57, DAYS_IN_CAPTIVITY);
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
@@ -697,7 +698,7 @@ void select_tendhostage(DeprecatedCreature *cr)
 			else addstrAlt(CONST_activate042);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate043);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_CONSERVATIVE);
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
@@ -805,15 +806,15 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	if (cr->income)
 	{
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate044);
+		addstrAlt(MADE_DOLLARS);
 		addstrAlt(cr->income);
-		addstrAlt(CONST_activate045);
+		addstrAlt(YESTERDAY_WHAT_NOW);
 	}
 	else
 	{
-		addstrAlt(CONST_activate046);
+		addstrAlt(TAKING_ACTION_COLON_WHAT_WILL);
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate047);
+		addstrAlt(BE_DOING_TODAY);
 	}
 	printcreatureinfo(cr);
 	makedelimiter();
@@ -829,23 +830,23 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 		mvaddstrAlt(10 + i, 1, incrementChar('A', i) + spaceDashSpace + standard_activities_and_data[i]);
 	}
 	set_color_easy(state == 't' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-	mvaddstrAlt(14, 1, CONST_activate048);
+	mvaddstrAlt(14, 1, T_TEACHING_OTHER_LIBERALS);
 	if (hostagecount > 0)set_color_easy(state == 'i' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(15, 1, CONST_activate049);
+	mvaddstrAlt(15, 1, I_TEND_TO_HOSTAGE);
 	set_color_easy(state == 'l' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-	mvaddstrAlt(16, 1, CONST_activate050);
+	mvaddstrAlt(16, 1, L_LEARN_IN_UNIVERSITY);
 	if (clinictime(*cr))set_color_easy(state == 'm' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(17, 1, CONST_activate051);
+	mvaddstrAlt(17, 1, M_MOVE_TO_CLINIC);
 	if (cr->get_skill(SKILL_FIRSTAID) != 0)
 		set_color_easy(state == 'h' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	else
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 1, CONST_activate052);
+	mvaddstrAlt(18, 1, H_HEAL_LIBERALS);
 	if (havedead)set_color_easy(state == 'z' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(19, 1, CONST_activate053);
+	mvaddstrAlt(19, 1, Z_DIZPOSE_OF_BODIES);
 	char sieged = 0;
 	{
 		siegest *siege = getseigestFromLocation(selectedsiege);
@@ -857,16 +858,16 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 		set_color_easy(WHITE_ON_BLACK);
 	else
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(20, 1, CONST_activate054);
+	mvaddstrAlt(20, 1, E_EQUIP_THIS_LIBERAL);
 	if (state >= 'a' && state < 'a' + len(standard_activities_and_data))
 	{
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(19, 40, CONST_activate055);
+		mvaddstrAlt(19, 40, QUESTION_HELP);
 	}
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(20, 40, CONST_activate056);
 	set_color_easy(state == 'x' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-	mvaddstrAlt(21, 1, CONST_activate057);
+	mvaddstrAlt(21, 1, X_NOTHING);
 	if (state == 'l')
 	{
 		listclasses(cr);
@@ -901,7 +902,7 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	if (activity.show_name)
 	{
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate058);
+		addstrAlt(SPACE_WILL_SPACE);
 	}
 	addstrAlt(activity.lineAttempt(0, cr));
 	mvaddstrAlt(23, 3, activity.lineAttempt(1, cr));
@@ -967,8 +968,8 @@ Activity getDefaultActivityIllegalFundraising(DeprecatedCreature *cr) {
 vector<string> bulkActivityString;
 
 vector<file_and_text_collection> activate_text_file_collection = {
-	customText(&bulkActivityString, mostlyendings + CONST_activate059),
-	customText(&standard_activities_and_data, mostlyendings + CONST_activate060),
+	customText(&bulkActivityString, mostlyendings + BULK_ACTIVITY_STRING_TXT),
+	customText(&standard_activities_and_data, mostlyendings + STANDARD_ACTIVITIES_AND_DATA_TXT),
 };
 void activatebulk()
 {
@@ -981,9 +982,9 @@ void activatebulk()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_activate066);
-		mvaddstrAlt(1, 0, CONST_activate062);
-		mvaddstrAlt(1, 51, CONST_activate063);
+		mvaddstrAlt(0, 0, ACTIVATE_UNINVOLVED_LIBERALS);
+		mvaddstrAlt(1, 0, CODE_NAME_CURRENT_ACTIVITY_HEADER);
+		mvaddstrAlt(1, 51, BULK_ACTIVITY_HEADER);
 
 		for (int i = 0; i < len(bulkActivityString); i++) {
 			set_color_easy(selectedactivity == i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
@@ -1003,11 +1004,11 @@ void activatebulk()
 			{
 			addstrAlt(spaceParanthesisDollar);
 			addstrAlt(temppool[p]->activity.arg);
-			addstrAlt(closeParenthesis);
+			addstrAlt(CLOSE_PARENTHESIS);
 			}*/
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate064);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN_ACTIVITY_OR_NUMBER);
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
@@ -1064,8 +1065,8 @@ void activate()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_activate066);
-		mvaddstrAlt(1, 0, CONST_activate067);
+		mvaddstrAlt(0, 0, ACTIVATE_UNINVOLVED_LIBERALS);
+		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
 		mvaddstrAlt(1, 57, CONST_activate068);
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
@@ -1094,10 +1095,10 @@ void activate()
 			addstrAlt(getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate069);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN_ACTIVITY);
 		mvaddstrAlt(23, 0, addpagestr());
 		addstrAlt(CONST_activate070);
-		mvaddstrAlt(24, 0, CONST_activate071);
+		mvaddstrAlt(24, 0, Z_TO_ASSIGN_SIMPLE_TASKS);
 		int c = getkeyAlt();
 		//PAGE UP
 		if (is_page_up(c) && page > 0) page--;

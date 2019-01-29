@@ -1,3 +1,4 @@
+
 #define	ARMOR_CPP
 #include "../includes.h"
 
@@ -35,12 +36,12 @@ string Armor::equip_title(bool full) const
 	string et = (full ? get_name() : get_shortname());
 	if (quality_ <= get_quality_levels() && (bloody_ || damaged_ || quality_ > 1))
 	{
-		et += CONST_armor010;
+		et += OPEN_BRACKET;
 		if (quality_ > 9) et += tag_X;
 		else if (quality_ > 1) et += tostring(quality_);
 		if (bloody_) et += tag_B;
 		if (damaged_) et += tag_D;
-		et += CONST_armor011;
+		et += CLOSE_BRACKET;
 	}
 	return et;
 }
@@ -206,4 +207,3 @@ int Armor::get_quality_levels() const
 Armor::Armor(const int seed, int quality, int number)
 	: Item(*armortype[seed], number), bloody_(false), damaged_(false), quality_(quality)
 { }
-

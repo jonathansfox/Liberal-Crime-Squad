@@ -1,4 +1,5 @@
 
+
 #define	ACTIVATE_SLEEPERS_CPP
 #include "../includes.h"
 /*
@@ -28,46 +29,46 @@ void activate_sleeper(DeprecatedCreature *cr)
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_activate_sleepers004);
+		mvaddstrAlt(0, 0, TAKING_UNDERCOVER_ACTION_WHAT_WILL);
 		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(CONST_activate_sleepers005);
+		addstrAlt(FOCUS_ON);
 		printcreatureinfo(cr);
 		makedelimiter();
 		set_color_easy(state == 'a' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(10, 1, CONST_activate_sleepers006);
+		mvaddstrAlt(10, 1, A_COMMUNICATION);
 		set_color_easy(state == 'b' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(11, 1, CONST_activate_sleepers007);
+		mvaddstrAlt(11, 1, B_ESPIONAGE);
 		set_color_easy(state == 'c' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-		mvaddstrAlt(12, 1, CONST_activate_sleepers008);
+		mvaddstrAlt(12, 1, C_JOIN_ACTIVE_LCS);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(20, 40, CONST_activate_sleepers009);
+		mvaddstrAlt(20, 40, ENTER_CONFIRM_SELECTION);
 		switch (state)
 		{
 		case 'a':
 			set_color_easy(cr->activity_type() == ACTIVITY_NONE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, CONST_activate_sleepers010);
+			mvaddstrAlt(10, 40, ONE_LAY_LOW);
 			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_LIBERAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(11, 40, CONST_activate_sleepers011);
+			mvaddstrAlt(11, 40, TWO_ADVOCATE_LIBERALISM);
 			if (subordinatesleft(*cr))
 			{
 				set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_RECRUIT ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-				mvaddstrAlt(12, 40, CONST_activate_sleepers012);
+				mvaddstrAlt(12, 40, THREE_EXPAND_SLEEPER_NETWORK);
 			}
 			else
 			{
 				set_color_easy(BLACK_ON_BLACK_BRIGHT);
 				if (cr->flag & CREATUREFLAG_BRAINWASHED)
-					mvaddstrAlt(12, 40, CONST_activate_sleepers013);
-				else mvaddstrAlt(12, 40, CONST_activate_sleepers014);
+					mvaddstrAlt(12, 40, THREE_ENLIGHTENED_CANNOT_RECRUIT);
+				else mvaddstrAlt(12, 40, THREE_NEED_MORE_JUICE_TO_RECRUIT);
 			}
 			break;
 		case 'b':
 			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_SPY ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(10, 40, CONST_activate_sleepers015);
+			mvaddstrAlt(10, 40, ONE_UNCOVER_SECRETS);
 			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_EMBEZZLE ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(11, 40, CONST_activate_sleepers016);
+			mvaddstrAlt(11, 40, TWO_EMBEZZLE);
 			set_color_easy(cr->activity_type() == ACTIVITY_SLEEPER_STEAL ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(12, 40, CONST_activate_sleepers017);
+			mvaddstrAlt(12, 40, THREE_STEAL);
 			break;
 		}
 		set_color_easy(WHITE_ON_BLACK);
@@ -75,30 +76,30 @@ void activate_sleeper(DeprecatedCreature *cr)
 		{
 		case ACTIVITY_NONE:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-			addstrAlt(CONST_activate_sleepers018);
+			addstrAlt(WILL_STAY_OUT_OF_TROUBLE);
 			break;
 		case ACTIVITY_SLEEPER_LIBERAL:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-			addstrAlt(CONST_activate_sleepers019);
+			addstrAlt(WILL_BUILD_SUPPORT);
 			break;
 		case ACTIVITY_SLEEPER_RECRUIT:
 			if (subordinatesleft(*cr))
 			{
 				mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-				addstrAlt(CONST_activate_sleepers020);
+				addstrAlt(WILL_TRY_TO_RECRUIT);
 			}
 			break;
 		case ACTIVITY_SLEEPER_SPY:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-			addstrAlt(CONST_activate_sleepers021);
+			addstrAlt(WILL_SNOOP);
 			break;
 		case ACTIVITY_SLEEPER_EMBEZZLE:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-			addstrAlt(CONST_activate_sleepers022);
+			addstrAlt(WILL_EMBEZZLE);
 			break;
 		case ACTIVITY_SLEEPER_STEAL:
 			mvaddstrAlt(22, 3, cr->getNameAndAlignment().name);
-			addstrAlt(CONST_activate_sleepers023);
+			addstrAlt(WILL_STEAL);
 			break;
 		}
 		int c = getkeyAlt();
@@ -157,12 +158,12 @@ void activate_sleepers()
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK);
 		printfunds();
-		mvaddstrAlt(0, 0, CONST_activate_sleepers024);
+		mvaddstrAlt(0, 0, ACTIVATE_SLEEPER);
 		makedelimiter(1);
-		mvaddstrAlt(1, 4, CONST_activate_sleepers025);
-		mvaddstrAlt(1, 25, CONST_activate_sleepers026);
-		mvaddstrAlt(1, 42, CONST_activate_sleepers027);
-		mvaddstrAlt(1, 57, CONST_activate_sleepers028);
+		mvaddstrAlt(1, 4, CODE_NAME_HEADER);
+		mvaddstrAlt(1, 25, JOB_HEADER);
+		mvaddstrAlt(1, 42, SITE_HEADER);
+		mvaddstrAlt(1, 57, ACTIVITY_HEADER);
 		int y = 2;
 		for (int p = page * 9; p < len(temppool) && p < page * 9 + 9; p++, y += 2)
 		{
@@ -170,7 +171,7 @@ void activate_sleepers()
 			mvaddcharAlt(y, 0, (y - 2) / 2 + 'A'); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			mvaddstrAlt(y, 25, temppool[p]->get_type_name());
-			mvaddstrAlt(y + 1, 6, CONST_activate_sleepers029);
+			mvaddstrAlt(y + 1, 6, EFFECTIVENESS_COLON);
 			if (temppool[p]->infiltration > 0.8f)
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 			else if (temppool[p]->infiltration > 0.6f)
@@ -191,8 +192,8 @@ void activate_sleepers()
 			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activate_sleepers030);
-		mvaddstrAlt(23, 0, addpagestr() + CONST_activate_sleepers031);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN);
+		mvaddstrAlt(23, 0, addpagestr() + T_TO_SORT_PEOPLE);
 		set_color_easy(WHITE_ON_BLACK);
 		int c = getkeyAlt();
 		//PAGE UP

@@ -1,3 +1,4 @@
+
 #define	RECRUIT_CPP
 #include "../includes.h"
 /*
@@ -63,7 +64,7 @@ string recruitName(int creatureType) {
 	for (int i = 0; i < len(recruitable_creatures); i++)
 		if (recruitable_creatures[i].type == creatureType)
 			return recruitable_creatures[i].name;
-	return CONST_activate065;
+	return MISSING_NO;
 }
 
 void recruitment_activity(DeprecatedCreature &cr)

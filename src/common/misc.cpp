@@ -1,3 +1,4 @@
+
 #define	MISC_CPP
 #include "../includes.h"
 void sexdesc(char *str)
@@ -40,7 +41,7 @@ const char* statename(int i)
 /* EndGameStatus - converts an integer into a roman numeral for amendments */
 string romannumeral(int amendnum)
 {
-	string roman = blankString;
+	string roman = BLANK_STRING;
 	while (amendnum >= 1000)
 	{
 		amendnum -= 1000;
@@ -127,19 +128,19 @@ void loadsong(int i, const char* filename)
 	eraseAlt();
 	if (oggsupport)
 	{
-		mvaddstrAlt(12, 0, CONST_misc006 + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + CONST_miscC026 + artdir + CONST_misc009 + filename + CONST_miscB022);
-		mvaddstrAlt(13, 0, string(CONST_misc007) + artdir + CONST_misc011 + filename + CONST_miscB020);
+		mvaddstrAlt(12, 0, CONST_LOADING_OGG_VORBIS_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_OGG + filename + CONST_miscB022);
+		mvaddstrAlt(13, 0, string(CONST_WITH) + artdir + CONST_MIDI + filename + CONST_MID_AS_MIDI_FALLBACK);
 	}
-	else mvaddstrAlt(12, 0, CONST_misc008 + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + CONST_miscC026 + artdir + CONST_misc011 + filename + CONST_miscB024);
+	else mvaddstrAlt(12, 0, CONST_LOADING_MIDI_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_MIDI + filename + CONST_MID);
 	refreshAlt();
-	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_misc009 + filename + CONST_miscB022).c_str()); // only attempt loading Ogg if we have Ogg support
+	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_OGG + filename + CONST_miscB022).c_str()); // only attempt loading Ogg if we have Ogg support
 	if (!songs[i] || !oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead
 	{
-		if (oggsupport) gamelog.log(string(CONST_misc012) + artdir + CONST_misc009 + filename + CONST_miscB023 + Mix_GetError()); // Ogg Vorbis music failed to load
-		songs[i] = Mix_LoadMUS((string(artdir) + CONST_misc011 + filename + CONST_miscB024).c_str());
+		if (oggsupport) gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_OGG + filename + CONST_miscB023 + Mix_GetError()); // Ogg Vorbis music failed to load
+		songs[i] = Mix_LoadMUS((string(artdir) + CONST_MIDI + filename + CONST_MID).c_str());
 	}
 	if (!songs[i]) // there was an error with Mix_LoadMUS() when called on the MIDI file
-		gamelog.log(string(CONST_misc012) + artdir + CONST_misc011 + filename + CONST_miscB025 + Mix_GetError()); // MIDI music failed to load
+		gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_MIDI + filename + CONST_miscB025 + Mix_GetError()); // MIDI music failed to load
 }
 #endif // DONT_INCLUDE_SDL
 /* initialize SDL, SDL_mixer, and songs */
@@ -149,7 +150,7 @@ void MusicClass::init()
 	if (songsinitialized) return; // only initialize once
 	if (SDL_Init(SDL_INIT_AUDIO) != 0) // initialize what we need from SDL for audio
 	{  // SDL failed to initialize, so log it and exit
-		addstrAlt(string(CONST_misc013) + SDL_GetError(), gamelog);
+		addstrAlt(string(CONST_UNABLE_TO_INITIALIZE_SDL) + SDL_GetError(), gamelog);
 		gamelog.nextMessage();
  	pressAnyKey();
 		endwinAlt();
@@ -157,7 +158,7 @@ void MusicClass::init()
 	}
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) != 0) // initialize the audio mixer at 44.1 kHz with a large buffer size, since we're just playing music not sound effects
 	{  // SDL_mixer failed to initialize, so log it and exit
-		addstrAlt(string(CONST_misc014) + Mix_GetError(), gamelog);
+		addstrAlt(string(CONST_UNABLE_TO_INITIALIZE_SDL_MIXER) + Mix_GetError(), gamelog);
 		gamelog.nextMessage();
  	pressAnyKey();
 		SDL_Quit();
@@ -166,7 +167,7 @@ void MusicClass::init()
 	}
 	if ((Mix_Init(MIX_INIT_OGG | MIX_INIT_FLUIDSYNTH)&MIX_INIT_OGG) != MIX_INIT_OGG) // initialize Ogg Vorbis support (and FluidSynth if it's there for better MIDI quality)
 	{  // Ogg Vorbis support failed to load, we'll use MIDI instead
-		gamelog.log(CONST_misc015);
+		gamelog.log(CONST_OGG_VORBIS_SUPPORT_FAILED_TO_LOAD_MIDI_MUSIC_WILL_BE_USED_INSTEAD_IF_POSSIBLE);
 		gamelog.nextMessage();
 		oggsupport = false;
 	}
@@ -282,7 +283,7 @@ void MusicClass::play(int _musicmode)
 	if (!songs[musicmode]) // there was an error with Mix_LoadMUS() back when it was called on this song
 		return; // we can't play music if it isn't loaded, might as well return
 	if (Mix_PlayMusic(songs[musicmode], -1) != 0) // start playing the music, and have it loop indefinitely
-		gamelog.log(string(CONST_misc018) + Mix_GetError()); // Music failed to play
+		gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_PLAYMUSIC_FAILED) + Mix_GetError()); // Music failed to play
 	enableIf(isEnabled());
 #endif // DONT_INCLUDE_SDL
 }
@@ -300,7 +301,7 @@ void MusicClass::play(int _musicmode)
 	bool Interval::set_interval(const string& interval)
 	{
 		if (!len(interval) ||
-			interval.find_first_not_of(CONST_misc019) != string::npos)
+			interval.find_first_not_of(CONST_1234567890) != string::npos)
 			return false;
 		size_t dashpos = interval.find('-', 1);
 		if (dashpos == string::npos) // Just a constant.
@@ -621,11 +622,11 @@ void MusicClass::play(int _musicmode)
 	{
 		string output;
 		if (interface_pgup == '[')
-			output = CONST_commondisplay221;
+			output = CLOSING_BRACKET;
 		else if (interface_pgup == '.')
 			output = CONST_commondisplay222;
 		else output = CONST_commondisplay223;
-		return output + CONST_commondisplay22Z;
+		return output + DASH_NEXT;
 	}
 	/* prints a short blurb showing how to page back */
 	string addprevpagestr()
@@ -634,20 +635,20 @@ void MusicClass::play(int _musicmode)
 		if (interface_pgup == '[')
 			output = CONST_commondisplay224;
 		else if (interface_pgup == '.')
-			output = CONST_commondisplay225;
+			output = SEMI_COLON;
 		else output = CONST_commondisplay226;
-		return output + CONST_commondisplay22Y;
+		return output + DASH_PREVIOUS;
 	}
 	/* prints a long blurb showing how to page forward and back */
 	string addpagestr()
 	{
 		string output;
 		if (interface_pgup == '[')
-			output = CONST_commondisplay227;
+			output = OPEN_CLOSE_BRACKET;
 		else if (interface_pgup == '.')
-			output = CONST_commondisplay228;
-		else output = CONST_commondisplay229;
-		return output + CONST_commondisplay22X;
+			output = SEMI_COLON_AND_COLON;
+		else output = PGUP_PGDN;
+		return output + TO_VIEW_OTHER_LIBERAL_PAGES;
 	}
 
 	/* daily - returns the number of days in the current month */
@@ -981,7 +982,7 @@ void MusicClass::play(int _musicmode)
 			str = pickrandom(great_white_male_patriarch_first_names);
 			break;
 		default:
-			str = CONST_creaturenames009;
+			str = ERROL_DEFAULT_NAME;
 			break;
 		}
 		return str;
@@ -1026,31 +1027,31 @@ void MusicClass::play(int _musicmode)
 		string output = str \
 			+ singleSpace \
 			+ str2 \
-			+ CONST_news238 \
-			+ CONST_news239 \
+			+ CONST_IS_IN_CUSTODY_R \
+			+ CONST_WITNESSES_REPORT_THAT \
 			+ str2 \
-			+ CONST_news240 \
-			+ CONST_news241 \
-			+ CONST_news242 \
+			+ CONST_REMAINED_AT_THE_SCENE_AFTER_THE_SHOOTING_SCREAMING \
+			+ CONST_VERSES_OF_THE_BIBLE_AT_THE_STUNNED_ONLOOKERS_SOMEONE \
+			+ CONST_CALLED_THE_POLICE_ON_A_CELLPHONE_AND_THEY_ARRIVED_SHORTLY_THEREAFTER \
 			+ str2;
 		return output;
 	}
 	string atTheAbortionClinic() {
 		string story;
 		story += lastname(true) \
-			+ CONST_news229 \
-			+ CONST_news230;
+			+ CONST_CLINIC_YESTERDAY \
+			+ CONST_DR;
 		return story;
 	}
 	string abortionDoctorShot() {
 
 		string story;
-		if (lawList[LAW_ABORTION] == -2) story += CONST_news224;
-		else if (lawList[LAW_ABORTION] == -1) story += CONST_news225;
-		else if (lawList[LAW_ABORTION] == 0) story += CONST_news226;
-		else story += CONST_news227;
+		if (lawList[LAW_ABORTION] == -2) story += CONST_A_DOCTOR_THAT_ROUTINELY_PERFORMED_ILLEGAL_ABORTION_MURDERS_WAS_RUTHLESSLY;
+		else if (lawList[LAW_ABORTION] == -1) story += CONST_A_DOCTOR_THAT_ROUTINELY_PERFORMED_ILLEGAL_ABORTIONS_WAS_RUTHLESSLY;
+		else if (lawList[LAW_ABORTION] == 0) story += CONST_A_DOCTOR_THAT_ROUTINELY_PERFORMED_SEMI_LEGAL_ABORTIONS_WAS_RUTHLESSLY;
+		else story += CONST_A_DOCTOR_THAT_ROUTINELY_PERFORMED_ABORTIONS_WAS_RUTHLESSLY;
 
-		story += CONST_news228;
+		story += CONST_GUNNED_DOWN_OUTSIDE_OF_THE;
 
 		return story;
 	}
@@ -1060,13 +1061,13 @@ void MusicClass::play(int _musicmode)
 
 		if (lawList[LAW_WOMEN] == -2)
 		{
-			story += CONST_news243 \
-				+ CONST_news244;
+			story += CONST_LATER_ADMITTED_TO_BEING_A_ROGUE_FBI_VIGILANTE_HUNTING_DOWN \
+				+ CONST_ABORTION_DOCTORS_AS_OPPOSED_TO_ARRESTING_THEM_R;
 		}
 		else
 		{
-			story += CONST_news245 \
-				+ CONST_news246;
+			story += CONST_SURRENDERED_WITHOUT_A_STRUGGLE_REPORTEDLY_SAYING_THAT_GOD_S_WORK \
+				+ CONST_HAD_BEEN_COMPLETED_R;
 		}
 
 
@@ -1086,24 +1087,24 @@ void MusicClass::play(int _musicmode)
 			+ singleSpace \
 			+ dstr2;
 		char gen[200];
-		strcpy(gen, (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378).data());
+		strcpy(gen, (gn == GENDER_FEMALE ? CONST_HER : CONST_HIS).data());
 
-		story += CONST_news232 \
+		story += CONST_WAS_WALKING_TO \
 			+ gen;//TODO() Add more variety, not just in the parking lot.
-		story += CONST_news233 \
-			+ CONST_news234 \
+		story += CONST_CAR_WHEN_ACCORDING_TO_POLICE_REPORTS \
+			+ CONST_SHOTS_WERE_FIRED_FROM_A_NEARBY_VEHICLE \
 			+ dstr2 \
-			+ CONST_news235 \
+			+ CONST_WAS_HIT \
 			+ tostring(LCSrandom(15) + 3) \
-			+ CONST_news236 \
-			+ CONST_news237;
+			+ CONST_TIMES_AND_DIED_IMMEDIATELY_IN_THE_PARKING_LOT \
+			+ CONST_THE_SUSPECTED_SHOOTER;
 
 
 		story += isInCustody();
 		story += howCrazyIsKiller();
 		story += singleSpace \
 			+ dstr2 \
-			+ CONST_news248 \
+			+ CONST_IS_SURVIVED_BY \
 			+ gen \
 			+ singleSpace;
 
@@ -1111,7 +1112,7 @@ void MusicClass::play(int _musicmode)
 		if (lawList[LAW_GAY] <= 1)
 			spouse = (gn == GENDER_FEMALE ? GENDER_MALE : GENDER_FEMALE);
 
-		story += (spouse == GENDER_FEMALE ? CONST_news249 : CONST_newsB925) \
+		story += (spouse == GENDER_FEMALE ? CONST_WIFE : CONST_newsB925) \
 			+ CONST_news250;
 
 		return story;
@@ -1129,7 +1130,7 @@ void MusicClass::play(int _musicmode)
 		story += newsOnKiller();
 
 		story += pickrandom(two_to_five) \
-			+ CONST_news255;
+			+ CONST_CHILDREN_R;
 
 		return story;
 	}
@@ -1141,15 +1142,15 @@ void MusicClass::play(int _musicmode)
 		switch (LCSrandom(3))
 		{
 		case 0:
-			if (lawList[LAW_FREESPEECH] == -2) story += CONST_news265;
-			else story += CONST_news266;
+			if (lawList[LAW_FREESPEECH] == -2) story += CONST_THROWING_JUICE_BOXES;
+			else story += CONST_THROWING_BEER_BOTTLES;
 			break;
 		case 1:
-			if (lawList[LAW_FREESPEECH] == -2) story += CONST_news267;
-			else if (lawList[LAW_FREESPEECH] == 2) story += CONST_news268;
-			else story += CONST_news269;
+			if (lawList[LAW_FREESPEECH] == -2) story += CONST_RELIEVING_THEMSELVES_OUT_THE_WINDOW;
+			else if (lawList[LAW_FREESPEECH] == 2) story += CONST_PISSING_OUT_THE_WINDOW;
+			else story += CONST_URINATING_OUT_THE_WINDOW;
 			break;
-		case 2: story += CONST_news270; break;
+		case 2: story += CONST_TAKING_SWIPES; break;
 		}
 
 		return story;
@@ -1160,9 +1161,9 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_GAY] == -2) story += CONST_news256;
-		else if (lawList[LAW_GAY] == -1) story += CONST_news257;
-		else story += CONST_news258;
+		if (lawList[LAW_GAY] == -2) story += CONST_A_KNOWN_SEXUAL_DEVIANT_WAS;
+		else if (lawList[LAW_GAY] == -1) story += CONST_A_KNOWN_HOMOSEXUAL_WAS;
+		else story += CONST_A_HOMOSEXUAL_WAS;
 
 
 		return story;
@@ -1175,13 +1176,13 @@ void MusicClass::play(int _musicmode)
 
 		if (lawList[LAW_GAY] == -2 && lawList[LAW_FREESPEECH] != -2)
 		{
-			story += CONST_news277 \
+			story += CONST_DESPITE_THE_FACT_THAT \
 				+ dstr \
 				+ singleSpace \
 				+ dstr2 \
-				+ CONST_news278;
+				+ CONST_IS_A_KNOWN_FAGGOT;
 		}
-		else if (lawList[LAW_GAY] == -2)story += CONST_news279;
+		else if (lawList[LAW_GAY] == -2)story += CONST_EVEN_THOUGH_BEING_GAY_IS_DEVIANT_AS_WE_ALL_KNOW;
 		else story += singleDot;
 
 		return story;
@@ -1200,31 +1201,31 @@ void MusicClass::play(int _musicmode)
 		story += dstr \
 			+ singleSpace \
 			+ dstr2 \
-			+ commaSpace;
+			+ COMMA_SPACE;
 
 
 		story += getPhraseKnownHomosexual();
 
 		story += pickrandom(vigilante_murder) \
-			+ CONST_news259 \
-			+ CONST_news260 \
-			+ CONST_news261 \
-			+ CONST_news262 \
+			+ CONST_HERE_YESTERDAY \
+			+ CONST_A_POLICE_SPOKESPERSON_REPORTED_THAT_FOUR_SUSPECTS \
+			+ CONST_WERE_APPREHENDED_AFTER_A_HIGH_SPEED_CHASE_THEIR_NAMES \
+			+ CONST_HAVE_NOT_YET_BEEN_RELEASED \
 			+ ampersandR \
-			+ CONST_news263 \
-			+ CONST_news264;
+			+ CONST_WITNESSES_OF_THE_FREEWAY_CHASE_DESCRIBED_THE_PICKUP_OF_THE_ALLEGED \
+			+ CONST_MURDERERS_SWERVING_WILDLY;
 
 		story += getPhraseDrunkDriving();
 
-		story += CONST_news271 \
-			+ CONST_news272 \
+		story += CONST_AT_THE_PURSUING_POLICE_CRUISERS \
+			+ CONST_THE_CHASE_ENDED_WHEN \
 			+ pickrandom(why_chase_ended) \
 			+ " " \
-			+ CONST_news273 \
+			+ CONST_AT_WHICH_POINT_THEY_WERE_TAKEN_INTO_CUSTODY_NOBODY_WAS_SERIOUSLY_INJURED_DURING_THE_INCIDENT \
 			+ ampersandR \
-			+ CONST_news274 \
-			+ CONST_news275 \
-			+ CONST_news276;
+			+ CONST_AUTHORITIES_HAVE_STATED_THAT_THEY_WILL_VIGOROUSLY \
+			+ CONST_PROSECUTE_THIS_CASE_AS_A_HATE_CRIME_DUE_TO_THE \
+			+ CONST_AGGRAVATED_NATURE_OF_THE_OFFENSE;
 
 		story += getPhraseNoEmpathyForHomosexual(dstr, dstr2);
 
@@ -1237,10 +1238,10 @@ void MusicClass::play(int _musicmode)
 
 		string story;
 		story = cityname();
-		story += CONST_news320 \
-			+ CONST_news321 \
+		story += CONST_A_CHILDREN_S_STORY_HAS_BEEN_REMOVED_FROM_LIBRARIES_HERE_AFTER \
+			+ CONST_THE_CITY_BOWED_TO_PRESSURE_FROM_RELIGIOUS_GROUPS \
 			+ ampersandR \
-			+ CONST_news322 \
+			+ CONST_THE_BOOK \
 			+ CONST_news441;
 
 		char dstr[200], nstr[200];
@@ -1250,13 +1251,13 @@ void MusicClass::play(int _musicmode)
 		story += nstr \
 			+ CONST_news441 \
 			+ dstr \
-			+ CONST_news325 \
+			+ CONST_AND_THE \
 			+ pickrandom(book_title) \
 			+ CONST_news441 \
 			+ pickrandom(book_title_2) \
-			+ CONST_news327 \
+			+ CONST_IS_THE_THIRD_IN_AN_IMMENSELY_POPULAR_SERIES_BY \
 			+ pickrandom(random_nationality) \
-			+ CONST_news328;
+			+ CONST_AUTHOR;
 
 		char c[2] = { 0,0 };
 
@@ -1274,17 +1275,17 @@ void MusicClass::play(int _musicmode)
 
 		story += dstr \
 			+ CONST_news485 \
-			+ CONST_news331 \
-			+ CONST_news332 \
+			+ CONST_ALTHOUGH_THE_SERIES_IS_ADORED_BY_CHILDREN_WORLDWIDE \
+			+ CONST_SOME_CONSERVATIVES_FEEL_THAT_THE_BOOKS \
 			+ pickrandom(conservative_oppose_book) \
 			+ singleSpace \
-			+ CONST_news334;
+			+ CONST_IN_THEIR_COMPLAINT_THE_GROUPS_CITED_AN_INCIDENT_INVOLVING;
 
 		switch (LCSrandom(3))
 		{
-		case 0: story += CONST_news335; break;
-		case 1: story += CONST_news336; break;
-		case 2: story += CONST_news337 \
+		case 0: story += CONST_A_CHILD_THAT_SWORE_IN_CLASS; break;
+		case 1: story += CONST_A_CHILD_THAT_SAID_A_MAGIC_SPELL_AT_HER_PARENTS; break;
+		case 2: story += CONST_A_CHILD_THAT \
 			+ pickrandom(petty_violence) \
 			+ singleSpace \
 			+ pickrandom(his_her) \
@@ -1295,27 +1296,27 @@ void MusicClass::play(int _musicmode)
 			break;
 		}
 
-		story += CONST_news338 \
+		story += CONST_AS_KEY_EVIDENCE_OF_THE_DARK_NATURE_OF_THE_BOOK \
 			+ ampersandR \
-			+ CONST_news339 \
-			+ CONST_news340 \
+			+ CONST_WHEN_THE_DECISION_TO_BAN_THE_BOOK_WAS_ANNOUNCED_YESTERDAY \
+			+ CONST_MANY_AREA_CHILDREN_SPONTANEOUSLY_BROKE_INTO_TEARS_ONE_CHILD_WAS \
 			+ CONST_newsX02;
 
 		switch (LCSrandom(2))
 		{
 		case 0:
-			story += CONST_news342 \
+			story += CONST_MAMMA_IS \
 				+ nstr \
-				+ CONST_news343;
+				+ CONST_DEAD;
 			break;
 		case 1:
-			story += CONST_news344 \
+			story += CONST_MAMMA_WHY_DID_THEY_KILL \
 				+ nstr \
 				+ CONST_news345;
 			break;
 		}
 
-		story += CONST_news1030 \
+		story += QUOTATION_MARK \
 			+ ampersandR;
 
 		return story;
@@ -1326,7 +1327,7 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 		story += statename() \
-			+ CONST_news280;
+			+ CONST_AN_INNOCENT_CITIZEN_HAS_BEEN_PUT_TO_DEATH_IN_THE_ELECTRIC_CHAIR;
 
 		char dstr[200], dstr2[200], dstr3[200];
 
@@ -1337,63 +1338,63 @@ void MusicClass::play(int _musicmode)
 			+ dstr2 \
 			+ singleSpace \
 			+ dstr3 \
-			+ CONST_news281 \
+			+ CONST_WAS_PRONOUNCED_DEAD_AT \
 			+ tostring(LCSrandom(12) + 1) \
 			+ CONST_news282 \
 			+ tostring(LCSrandom(60)) \
 			+ pickrandom(AMorPM) \
-			+ CONST_news283;
+			+ CONST_YESTERDAY_AT_THE;
 
 		char jstr[200];
 
 		strcpy(jstr, lastname(true).data());
 
 		story += jstr \
-			+ CONST_news284 \
+			+ CONST_CORRECTIONAL_FACILITY_R \
 			+ singleSpace \
 			+ dstr3 \
-			+ CONST_news286 \
+			+ CONST_WAS_CONVICTED_IN \
 			+ tostring(year - LCSrandom(11) - 10) \
-			+ CONST_news287 \
-			+ CONST_news288 \
-			+ CONST_news289;
+			+ CONST_OF_13_SERIAL_MURDERS \
+			+ CONST_SINCE_THEN_NUMEROUS_PIECES_OF_EXCULPATORY_EVIDENCE \
+			+ CONST_HAVE_BEEN_PRODUCED_INCLUDING;
 
 		switch (LCSrandom(3))
 		{
-		case 0: story += CONST_news290;
+		case 0: story += CONST_A_CONFESSION_FROM_ANOTHER_CONVICT;
 			break;
-		case 1: story += CONST_news291;
+		case 1: story += CONST_A_BATTERY_OF_NEGATIVE_DNA_TESTS;
 			break;
 		case 2:
-			story += CONST_news292 \
+			story += CONST_AN_ADMISSION_FROM_A_FORMER_PROSECUTOR_THAT \
 				+ dstr3 \
-				+ CONST_news293;
+				+ CONST_WAS_FRAMED;
 			break;
 		}
 
-		story += CONST_news294 \
-			+ CONST_news295 \
-			+ CONST_news1030;
+		story += CONST_THE_STATE_STILL_WENT_THROUGH_WITH_THE_EXECUTION_WITH_A \
+			+ CONST_SPOKESPERSON_FOR_THE_GOVERNOR_SAYING \
+			+ QUOTATION_MARK;
 
 		switch (LCSrandom(3))
 		{
-		case 0: story += CONST_news297;
+		case 0: story += CONST_LET_S_NOT_FORGET_THE_CONVICT_IS_COLORED_YOU_KNOW_HOW_THEIR_KIND_ARE;
 			break;
 		case 1:
-			story += CONST_news298 \
-				+ CONST_news299 \
-				+ CONST_news300;
+			story += CONST_THE_CONVICT_IS_ALWAYS_REFERRED_TO_BY_THREE_NAMES \
+				+ CONST_ASSASSIN_SERIAL_KILLER_EITHER_WAY_GUILTY \
+				+ CONST_END_OF_STORY;
 			break;
-		case 2: story += CONST_news301;
+		case 2: story += CONST_THE_FAMILY_WANTS_CLOSURE_WE_DON_T_HAVE_TIME_FOR_ANOTHER_TRIAL;
 			break;
 		}
 
 		story += CONST_news458 \
 			+ ampersandR \
-			+ CONST_news303 \
-			+ CONST_news304 \
-			+ CONST_news305 \
-			+ CONST_news306 \
+			+ CONST_CANDLELIGHT_VIGILS_WERE_HELD_THROUGHOUT_THE_COUNTRY_LAST_NIGHT_DURING_THE_EXECUTION \
+			+ CONST_AND_MORE_EVENTS_ARE_EXPECTED_THIS_EVENING_IF_THERE_IS_A_BRIGHT_SIDE_TO_BE_FOUND_FROM_THIS \
+			+ CONST_TRAGEDY_IT_WILL_BE_THAT_OUR_NATION_IS_NOW_EVALUATING_THE_EASE_WITH_WHICH_PEOPLE \
+			+ CONST_CAN_BE_PUT_TO_DEATH_IN_THIS_COUNTRY \
 			+ ampersandR;
 
 		return story;
@@ -1402,21 +1403,21 @@ void MusicClass::play(int _musicmode)
 	{
 
 		string story;
-		story += CONST_news307 \
-			+ CONST_news308 \
-			+ CONST_news309 \
-			+ CONST_news310 \
+		story += CONST_WASHINGTON_DC_THE_FBI_MIGHT_BE_KEEPING_TABS_ON_YOU \
+			+ CONST_THIS_NEWSPAPER_YESTERDAY_RECEIVED_A_COLLECTION_OF_FILES_FROM_A_SOURCE_IN_THE_FEDERAL_BUREAU_OF_INVESTIGATIONS \
+			+ CONST_THE_FILES_CONTAIN_INFORMATION_ON_WHICH_PEOPLE_HAVE_BEEN_ATTENDING_DEMONSTRATIONS_ORGANIZING \
+			+ CONST_UNIONS_WORKING_FOR_LIBERAL_ORGANIZATIONS_EVEN \
 			+ pickrandom(liberalCrime) \
 			+ ampersandR \
-			+ CONST_news311 \
-			+ CONST_news312 \
+			+ CONST_MORE_DISTURBINGLY_THE_FILES_MAKE_REFERENCE_TO_A_PLAN_TO \
+			+ CONST_DEAL_WITH_THE_UNDESIRABLES_ALTHOUGH_THIS_PHRASE_IS_NOT_CLARIFIED \
 			+ ampersandR \
-			+ CONST_news313 \
+			+ CONST_THE_FBI_REFUSED_TO_COMMENT_INITIALLY_BUT_WHEN_CONFRONTED_WITH_THE_INFORMATION \
 			+ CONST_newsX01 \
-			+ CONST_news315 \
-			+ CONST_news316 \
-			+ CONST_news317 \
-			+ CONST_news318 \
+			+ CONST_WELL_YOU_KNOW_THERE_S_PRIVACY_AND_THERE_S_PRIVACY \
+			+ CONST_IT_MIGHT_BE_A_BIT_PRESUMPTIVE_TO_ASSUME_THAT \
+			+ CONST_THESE_FILES_DEAL_WITH_THE_ONE_AND_NOT_THE_OTHER \
+			+ CONST_YOU_THINK_ABOUT_THAT_BEFORE_YOU_CONTINUE_SLANGING_ACCUSATIONS \
 			+ CONST_news458 \
 			+ ampersandR;
 		return story;
@@ -1443,8 +1444,8 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news348;
-		else story += CONST_news349;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_HAS_RESIGNED_IN_DISGRACE_AFTER_BEING_CAUGHT_WITH_A_CIVIL_SERVANT;
+		else story += CONST_HAS_RESIGNED_IN_DISGRACE_AFTER_BEING_CAUGHT_WITH_A_PROSTITUTE;
 
 		return story;
 	}
@@ -1452,7 +1453,7 @@ void MusicClass::play(int _musicmode)
 	{
 		string story;
 		story = cityname();
-		story += CONST_news347;
+		story += CONST_CONSERVATIVE_FEDERAL_JUDGE;
 
 		char dstr[200], dstr2[200];
 
@@ -1467,9 +1468,9 @@ void MusicClass::play(int _musicmode)
 		story += ampersandR \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news351 \
+			+ CONST_WHO_ONCE \
 			+ pickrandom(crazy_conservative_act) \
-			+ CONST_news352;
+			+ CONST_WAS_FOUND_WITH;
 
 		char pstr[200], pstr2[200];
 		generate_name(pstr, pstr2);
@@ -1477,23 +1478,23 @@ void MusicClass::play(int _musicmode)
 		story += pstr \
 			+ singleSpace \
 			+ pstr2 \
-			+ CONST_news353 \
-			+ CONST_news354 \
-			+ CONST_news355;
+			+ CONST_LAST_WEEK_IN_A_HOTEL_DURING_A_POLICE_STING_OPERATION \
+			+ CONST_ACCORDING_TO_SOURCES_FAMILIAR_WITH_THE_PARTICULARS \
+			+ CONST_WHEN_POLICE_BROKE_INTO_THE_HOTEL_ROOM_THEY_SAW;
 
 
 		story += getPhraseJudgeWithProstitute();
 
 		story += singleSpace \
 			+ pstr2 \
-			+ CONST_news357 \
+			+ CONST_REPORTEDLY_OFFERED \
 			+ pickrandom(bribe_officers) \
-			+ CONST_news358 \
+			+ CONST_IN_EXCHANGE_FOR_THEIR_SILENCE \
 			+ ampersandR \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news360 \
-			+ CONST_news361 \
+			+ CONST_COULD_NOT_BE_REACHED_FOR_COMMENT_ALTHOUGH_AN_AID_STATED_THAT \
+			+ CONST_THE_JUDGE_WOULD_BE_GOING_ON_A_BIBLE_RETREAT_FOR_A_FEW_WEEKS_TO \
 			+ CONST_newsB928 \
 			+ ampersandR;
 
@@ -1507,11 +1508,11 @@ void MusicClass::play(int _musicmode)
 		switch (LCSrandom(radio_host_lost_mind.size()))
 		{
 		case 0:
-			story += CONST_news377 \
-				+ CONST_news378; // the AM personality's a white male patriarch
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_news379;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news380;
-			else story += CONST_news381;
+			story += CONST_LOST \
+				+ CONST_HIS; // the AM personality's a white male patriarch
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_GODDAMN_MIND;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_GOSH_DARN_MIND;
+			else story += CONST_G_DD_MN_MIND;
 			break;
 		default:
 			story += pickrandom(radio_host_lost_mind);
@@ -1524,7 +1525,7 @@ void MusicClass::play(int _musicmode)
 
 		string story;
 		story = cityname();
-		story += CONST_news363;
+		story += CONST_WELL_KNOWN_AM_RADIO_PERSONALITY;
 
 		char dstr[200], dstr2[200];
 		generate_name(dstr, dstr2, GENDER_WHITEMALEPATRIARCH);
@@ -1532,7 +1533,7 @@ void MusicClass::play(int _musicmode)
 		story += dstr \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news364 \
+			+ CONST_WENT_OFF_FOR_FIFTEEN_MINUTES_IN_AN_INEXPLICABLE_RANT \
 			+ CONST_newsX03 \
 			+ pickrandom(radio_name) \
 			+ singleSpace \
@@ -1541,23 +1542,23 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news368 \
+			+ CONST_S_MONOLOGUE_FOR_THE_EVENING_BEGAN_THE_WAY_THAT_FANS \
 			+ CONST_newsX04 \
 			+ CONST_newsX05;
 
 		switch (LCSrandom(radio_host_crazy_quote.size()))
 		{
 		case 0:
-			story += CONST_news371;
-			if (presparty != CONSERVATIVE_PARTY) story += CONST_news372; // Limbaugh
-			else story += CONST_news373;
+			story += CONST_AND_THE_GREATEST_LIVING_EXAMPLE_OF_A_REVERSE_RACIST_IS_THE;
+			if (presparty != CONSERVATIVE_PARTY) story += CONST_CURRENT_PRESIDENT; // Limbaugh
+			else story += CONST_LIBERAL_MEDIA_ESTABLISHMENT;
 			break;
 		default:
 			story += pickrandom(radio_host_crazy_quote);
 			break;
 		}
 
-		story += CONST_news374;
+		story += CONST_A_FORMER_FAN_OF_THE_SHOW;
 
 		char nstr[200], nstr2[200];
 		generate_name(nstr, nstr2);
@@ -1567,7 +1568,7 @@ void MusicClass::play(int _musicmode)
 			+ nstr2 \
 			+ CONST_newsX06 \
 			+ pickrandom(my_idol) \
-			+ CONST_news376;
+			+ CONST_HAD;
 
 
 		story += getPhraseRadioHostLostMind();
@@ -1576,13 +1577,13 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news384 \
-			+ CONST_news385 \
-			+ CONST_news386 \
-			+ CONST_news387; // XXX How many of them switch should
-		story += CONST_news388; // depend on [LAW_FREESPEECH]
-		story += CONST_news389 \
-			+ CONST_news390 \
+			+ CONST_ISSUED_AN_APOLOGY_LATER_IN_THE_PROGRAM_BUT \
+			+ CONST_THE_DAMAGE_MIGHT_ALREADY_BE_DONE \
+			+ CONST_ACCORDING_TO_A_POLL_COMPLETED_YESTERDAY \
+			+ CONST_FULLY_HALF_OF_THE_HOST_S_MOST_LOYAL_SUPPORTERS; // XXX How many of them switch should
+		story += CONST_HAVE_DECIDED_TO_LEAVE_THE_PROGRAM_FOR_SANER; // depend on [LAW_FREESPEECH]
+		story += CONST_PASTURES_OF_THESE_MANY_SAID_THAT_THEY_WOULD_BE_SWITCHING_OVER \
+			+ CONST_TO_THE_FM_BAND \
 			+ ampersandR;
 
 		return story;
@@ -1599,16 +1600,16 @@ void MusicClass::play(int _musicmode)
 	string getPhraseKillingSpree() {
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
-		else story += CONST_news393;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_HURTING_SPREE;
+		else story += CONST_SHOOTING_RAMPAGE;
 
 		return story;
 	}
 
 	string getPhraseKilledSelf() {
 		string story;
-		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news427;
-		else story += CONST_news428;
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_FEEL_DEEPLY_ASLEEP;
+		else story += CONST_COMMITTED_SUICIDE;
 
 		return story;
 	}
@@ -1617,8 +1618,8 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news401;
-		else story += CONST_news402;
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_SCARE;
+		else story += CONST_MOW_DOWN;
 
 		return story;
 	}
@@ -1627,24 +1628,24 @@ void MusicClass::play(int _musicmode)
 
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news414;
-		else story += CONST_news415;
-		story += CONST_news416 \
-			+ CONST_news417 \
-			+ (dg == GENDER_FEMALE ? CONST_news700 : CONST_newsB943) \
-			+ CONST_news419;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_SCARING;
+		else story += CONST_SPRAYING_BULLETS_AT;
+		story += CONST_STUDENTS_AND_TEACHERS_INSIDE \
+			+ CONST_WHEN_OTHER_STUDENTS_TRIED_TO_WRESTLE_THE_WEAPONS_AWAY_FROM \
+			+ (dg == GENDER_FEMALE ? CONST_HER : CONST_newsB943) \
+			+ CONST_THEY_WERE;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news420;
-		else story += CONST_news421;
-		story += CONST_news422 \
-			+ CONST_news423;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_UNFORTUNATELY_HARMED;
+		else story += CONST_SHOT;
+		story += CONST_AS_WELL_R \
+			+ CONST_WHEN_THE_POLICE_ARRIVED_THE_STUDENT_HAD_ALREADY;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news424;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_HURT_SOME_PEOPLE;
 		else
 		{
-			story += CONST_news864 \
+			story += CONST_KILLED \
 				+ tostring(2 + LCSrandom(30)) \
-				+ CONST_news426;
+				+ CONST_AND_WOUNDED_DOZENS_MORE;
 		}
 
 
@@ -1659,11 +1660,11 @@ void MusicClass::play(int _musicmode)
 		story = cityname();
 
 		story += spaceDashSpace \
-			+ CONST_news391;
+			+ CONST_A_STUDENT_HAS_GONE_ON_A;
 
 		story += getPhraseKillingSpree();
 
-		story += CONST_news394;
+		story += CONST_AT_A_LOCAL;
 
 		story += getSchool(schtype, false);
 
@@ -1676,12 +1677,12 @@ void MusicClass::play(int _musicmode)
 		story += dstr \
 			+ singleSpace \
 			+ dstr2 \
-			+ commaSpace;
+			+ COMMA_SPACE;
 
 		story += getAgeForSchoolStudent(schtype);
-		story += CONST_news400;
+		story += CONST_USED_A_VARIETY_OF_GUNS_TO;
 		story += getPhraseMowedDown();
-		story += CONST_news403;
+		story += CONST_MORE_THAN_A_DOZEN_CLASSMATES_AND_TWO_TEACHERS_AT;
 
 
 		story += lastname(true);
@@ -1692,12 +1693,12 @@ void MusicClass::play(int _musicmode)
 
 		story += CONST_news485 \
 			+ dstr2 \
-			+ CONST_news409;
+			+ CONST_ENTERED_THE;
 
-		if (schtype != 3) story += CONST_news410;
+		if (schtype != 3) story += CONST_SCHOOL;
 		else story += CONST_news411;
-		story += CONST_news412 \
-			+ CONST_news413;
+		story += CONST_WHILE_CLASSES_WERE_IN_SESSION_THEN_SYSTEMATICALLY_STARTED_BREAKING_INTO \
+			+ CONST_CLASSROOMS;
 
 		story += getGraphicShootingDetails(dg);
 
@@ -1705,11 +1706,11 @@ void MusicClass::play(int _musicmode)
 
 		story += getPhraseKilledSelf();
 
-		story += CONST_news429 \
-			+ CONST_news430 \
-			+ CONST_news431 \
-			+ (dg == GENDER_FEMALE ? CONST_news432 : CONST_newsB935) \
-			+ CONST_news433;
+		story += CONST_SHORTLY_AFTERWARDS_R \
+			+ CONST_INVESTIGATORS_ARE_CURRENTLY_SEARCHING_THE_STUDENT_S_BELONGINGS_AND_INITIAL \
+			+ CONST_REPORTS_INDICATE_THAT_THE_STUDENT_KEPT_A_JOURNAL_THAT_SHOWED \
+			+ (dg == GENDER_FEMALE ? CONST_SHE : CONST_newsB935) \
+			+ CONST_WAS_DISTURBINGLY_OBSESSED_WITH_GUNS_AND_DEATH_R;
 
 		return story;
 	}
@@ -1718,8 +1719,8 @@ void MusicClass::play(int _musicmode)
 
 		if (!LCSrandom(prison_book_title_2.size())) {
 			story;
-			if (lawList[LAW_FREESPEECH] == -2) story += CONST_news442;
-			else story += CONST_news443;
+			if (lawList[LAW_FREESPEECH] == -2) story += CONST_BUMLORD;
+			else story += CONST_BUTTLORD;
 		}
 		else {
 			story;
@@ -1730,8 +1731,8 @@ void MusicClass::play(int _musicmode)
 	}
 	string getPhraseAIDS() {
 		string story;
-		if (lawList[LAW_GAY] == -2)story += CONST_news452;// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for AIDS.
-		else story += CONST_news453;
+		if (lawList[LAW_GAY] == -2)story += CONST_GRIDS;// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for AIDS.
+		else story += CONST_AIDS;
 
 		return story;
 
@@ -1740,8 +1741,8 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news455;
-		else story += CONST_news456;
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_DIFFICULT;
+		else story += CONST_HELLUVA;
 
 		return story;
 
@@ -1752,39 +1753,39 @@ void MusicClass::play(int _musicmode)
 
 		string story;
 		story = cityname();
-		story += CONST_news434 \
-			+ CONST_news435 \
-			+ CONST_news436 \
-			+ CONST_news437 \
-			+ CONST_news438;
+		story += CONST_A_FORMER_PRISONER_HAS_WRITTEN_A_BOOK_DESCRIBING_IN_HORRIFYING \
+			+ CONST_DETAIL_WHAT_GOES_ON_BEHIND_BARS \
+			+ CONST_ALTHOUGH_POPULAR_CULTURE_HAS_USED_OR_PERHAPS_OVERUSED_THE \
+			+ CONST_PRISON_THEME_LATELY_IN_ITS_OFFERINGS_FOR_MASS_CONSUMPTION_RARELY \
+			+ CONST_HAVE_THESE_WORKS_BEEN_AS_POIGNANT_AS;
 		char dstr[200], dstr2[200];
 		generate_name(dstr, dstr2); // allow either gender (look up 'Orange is the New Black' online to see why)
 		story += dstr \
 			+ singleSpace \
 			+ dstr2 \
-			+ CONST_news440 \
+			+ CONST_S_NEW_TOUR_DE_FORCE \
 			+ pickrandom(prison_book_title) \
 			+ CONST_news441;
 		story += getPhrasePrisonBook();
 
 
-		story += CONST_news444 \
-			+ CONST_news445;//TODO() Add more excerpts, more variety.
-		story += CONST_news446 \
-			+ CONST_news447 \
-			+ CONST_news448 \
-			+ CONST_news449 \
-			+ CONST_news450 \
-			+ CONST_news451;
+		story += CONST_R \
+			+ CONST_TAKE_THIS_EXCERPT;//TODO() Add more excerpts, more variety.
+		story += CONST_THE_STEEL_BARS_GRATED_FORWARD_IN_THEIR_RAILS \
+			+ CONST_COMING_TO_A_HALT_WITH_A_DEAFENING_CLANG_THAT_SAID_IT_ALL \
+			+ CONST_I_WAS_TRAPPED_WITH_THEM_NOW_THERE_WERE_THREE_LOOKING_ME_OVER \
+			+ CONST_WITH_DARK_GLARES_OF_BARE_LUST_AS_FOOTBALL_PLAYERS_MIGHT_STARE_AT_A_STUPEFIED_DRUNKEN_HELPLESS_TEENAGER \
+			+ CONST_MY_SHANK_S_UNDER_THE_MATTRESS_BETTER_TO_BE_BRAVE_AND_FIGHT_OR_CHICKEN_OUT_AND_LET_THEM_TAKE_IT \
+			+ CONST_MAYBE_LOSE_AN_EYE_THE_ONE_WAY_MAYBE_CATCH;
 
 
 		story += getPhraseAIDS();
 
-		story += CONST_news454;
+		story += CONST_THE_OTHER_A;
 
 		story += getPhraseDifficult();
 
-		story += CONST_news457 \
+		story += CONST_CHOICE_AND_I_WOULD_ONLY_HAVE_A_FEW_SECONDS_BEFORE_THEY_MADE_IT_FOR_ME \
 			+ CONST_news458 \
 			+ ampersandR;
 		return story;
@@ -1792,7 +1793,7 @@ void MusicClass::play(int _musicmode)
 
 	string constructPositiveEventStory(const short view) {
 
-		string story = blankString;
+		string story = BLANK_STRING;
 
 		switch (view)
 		{
@@ -1851,12 +1852,12 @@ void MusicClass::play(int _musicmode)
 
 		if (lawList[LAW_ANIMALRESEARCH] == 2)
 		{
-			story += CONST_news474;
+			story += CONST_FROM;
 			story += pickrandom(animal_research_country);
-			story += CONST_news475;
+			story += CONST_REPORT_THAT_THEY_HAVE_DISCOVERED_AN_AMAZING_NEW_WONDER_DRUG;
 		}
 		else {
-			story += CONST_news476;
+			story += CONST_HERE_REPORT_THAT_THEY_HAVE_DISCOVERED_AN_AMAZING_NEW_WONDER_DRUG;
 		}
 
 
@@ -1870,8 +1871,8 @@ void MusicClass::play(int _musicmode)
 			story += pickrandom(drug_name);
 		}
 		else {
-			if (lawList[LAW_FREESPEECH] == -2)story += CONST_news478;
-			else story += CONST_news479;
+			if (lawList[LAW_FREESPEECH] == -2)story += CONST_BUM_BUM;
+			else story += CONST_ANAL;
 		}
 
 		return story;
@@ -1883,8 +1884,8 @@ void MusicClass::play(int _musicmode)
 			story += pickrandom(chimp_drug_impact);
 		}
 		else {
-			if (lawList[LAW_FREESPEECH] == -2)story += CONST_news481;
-			else story += CONST_news482;
+			if (lawList[LAW_FREESPEECH] == -2)story += CONST_HELPS_CHIMPANZEES_REPRODUCE;
+			else story += CONST_CORRECTS_ERECTILE_DYSFUNCTION_IN_CHIMPANZEES;
 		}
 
 
@@ -1894,33 +1895,33 @@ void MusicClass::play(int _musicmode)
 	{
 
 		string story = cityname()\
-			+ CONST_news473;
+			+ CONST_RESEARCHERS;
 
 		story += getAnimalTestNation();
 
-		story += CONST_news477;
+		story += CONST_CALLED;
 
 		story += getPhraseDrugName();
 
 
 		story += pickrandom(drug_name_2)\
-			+ CONST_news480;
+			+ CONST_THE_DRUG_APPARENTLY;
 
 		story += getPhraseViagra();
 
 		story += CONST_news485 \
 			+ ampersandR \
-			+ CONST_news484 \
+			+ CONST_ALONG_WITH_BONOBOS_CHIMPANZEES_ARE_OUR_CLOSEST_COUSINS \
 			+ CONST_news485 \
-			+ CONST_news486 \
-			+ CONST_news487\
+			+ CONST_FIELDING_QUESTIONS_ABOUT_THE_ETHICS_OF_THEIR_EXPERIMENTS_FROM_REPORTERS_DURING_A_PRESS_CONFERENCE_YESTERDAY \
+			+ CONST_A_SPOKESPERSON_FOR_THE_RESEARCH_TEAM_STATED_THAT_IT_REALLY_ISN_T_SO_BAD_AS_ALL_THAT_CHIMPANZEES_ARE_VERY_RESILIENT_CREATURES\
 			+ pickrandom(chimp_drug_horror)\
-			+ CONST_news488\
-			+ CONST_news489\
-			+ CONST_news490\
-			+ CONST_news1030\
+			+ CONST_WE_HAVE_A_VERY_EXPERIENCED_RESEARCH_TEAM\
+			+ CONST_WHILE_WE_UNDERSTAND_YOUR_CONCERNS_ANY_WORRIES_ARE_ENTIRELY_UNFOUNDED\
+			+ CONST_I_THINK_THE_MEDIA_SHOULD_BE_FOCUSING_ON_THE_ENORMOUS_BENEFITS_OF_THIS_DRUG\
+			+ QUOTATION_MARK\
 			+ ampersandR\
-			+ CONST_news492\
+			+ CONST_THE_FIRST_PHASE_OF_HUMAN_TRIALS_IS_SLATED_TO_BEGIN_IN_A_FEW_MONTHS\
 			+ ampersandR;
 		return story;
 	}
@@ -1928,31 +1929,31 @@ void MusicClass::play(int _musicmode)
 	string constructNegativeVIEW_POLLUTION() {
 
 		string story = cityname()\
-			+ CONST_news558\
+			+ CONST_POLLUTION_MIGHT_NOT_BE_SO_BAD_AFTER_ALL_THE\
 			+ pickrandom(family_values_company_name)\
 			+ singleSpace\
 			+ pickrandom(family_values_company_name_2)\
 			+ singleSpace\
 			+ pickrandom(family_values_company_name_3)\
-			+ CONST_news559\
-			+ CONST_news560\
-			+ CONST_news561\
+			+ CONST_RECENTLY_RELEASED_A_WIDE_RANGING_REPORT_DETAILING_RECENT_TRENDS\
+			+ CONST_AND_THE_LATEST_SCIENCE_ON_THE_ISSUE\
+			+ CONST_AMONG_THE_MOST_STARTLING_OF_THE_THINK_TANK_S_FINDINGS_IS_THAT\
 			+ pickrandom(pollution_consumption)\
-			+ CONST_news562\
+			+ CONST_MIGHT_ACTUALLY\
 			+ pickrandom(pollution_consumption_2)\
 			+ singleDot\
 			+ ampersandR\
-			+ CONST_news563\
-			+ CONST_news564\
+			+ CONST_WHEN_QUESTIONED_ABOUT_THE_SCIENCE_BEHIND_THESE_RESULTS\
+			+ CONST_A_SPOKESPERSON_STATED_THAT\
 			+ pickrandom(i_like_polution)\
-			+ CONST_news565\
+			+ CONST_YOU_HAVE_TO_REALIZE_THAT\
 			+ pickrandom(distrust_liberals)\
-			+ CONST_news566\
-			+ CONST_news567\
-			+ CONST_news568\
-			+ CONST_news569\
-			+ CONST_news570\
-			+ CONST_news571\
+			+ CONST_THESE_ISSUES_TO_THEIR_OWN_ADVANTAGE\
+			+ CONST_ALL_WE_VE_DONE_IS_INTRODUCED_A_LITTLE_CLARITY_INTO_THE_ONGOING_DEBATE\
+			+ CONST_WHY_IS_THERE_CONTENTION_ON_THE_POLLUTION_QUESTION_IT_S_BECAUSE\
+			+ CONST_THERE_S_WORK_LEFT_TO_BE_DONE_WE_SHOULD_STUDY_MUCH_MORE\
+			+ CONST_BEFORE_WE_URGE_ANY_ACTION_SOCIETY_REALLY_JUST\
+			+ CONST_NEEDS_TO_TAKE_A_BREATHER_ON_THIS_ONE_WE_DON_T_SEE_WHY_THERE_S_SUCH_A_RUSH_TO_JUDGMENT_HERE\
 			+ ampersandR;
 		return story;
 	}
@@ -1961,24 +1962,24 @@ void MusicClass::play(int _musicmode)
 
 
 		string story = cityname()\
-			+ CONST_news572\
-			+ CONST_news573\
-			+ CONST_news574\
-			+ CONST_news575\
-			+ CONST_news576\
-			+ CONST_news577\
+			+ CONST_SEVERAL_MAJOR_COMPANIES_HAVE_ANNOUNCED\
+			+ CONST_AT_A_JOINT_NEWS_CONFERENCE_HERE_THAT_THEY\
+			+ CONST_WILL_BE_EXPANDING_THEIR_WORK_FORCES_CONSIDERABLY\
+			+ CONST_DURING_THE_NEXT_QUARTER_OVER_THIRTY_THOUSAND_JOBS\
+			+ CONST_ARE_EXPECTED_IN_THE_FIRST_MONTH_WITH\
+			+ CONST_TECH_GIANT\
 			+ pickrandom(tech_giant_name)\
 			+ pickrandom(tech_giant_name_2)\
-			+ CONST_news578\
-			+ CONST_news579\
-			+ CONST_news580\
-			+ CONST_news581\
-			+ CONST_news582\
-			+ CONST_news583\
-			+ CONST_news584\
-			+ CONST_news585\
-			+ CONST_news586\
-			+ CONST_news587;
+			+ CONST_INCREASING_ITS_PAYROLLS_BY_OVER_TEN_THOUSAND_WORKERS_ALONE\
+			+ CONST_GIVEN_THE_STATE_OF_THE_ECONOMY_RECENTLY_AND_IN\
+			+ CONST_LIGHT_OF_THE_TENDENCY\
+			+ CONST_OF_LARGE_CORPORATIONS_TO_EXPORT_JOBS_OVERSEAS_THESE_DAYS\
+			+ CONST_THIS_WELCOME_NEWS_IS_BOUND_TO_BE_A_PLEASANT_SURPRISE_TO_THOSE_IN_THE_UNEMPLOYMENT_LINES\
+			+ CONST_THE_MARKETS_REPORTEDLY_RESPONDED_TO_THE_ANNOUNCEMENT_WITH_MILD_INTEREST\
+			+ CONST_ALTHOUGH_THE_DAMPENED_MOVEMENT_MIGHT_BE_EXPECTED_DUE_TO_THE_UNCERTAIN\
+			+ CONST_FUTURES_OF_SOME_OF_THE_COMPANIES_IN_THE_TECH_SECTOR_ON_THE_WHOLE_HOWEVER\
+			+ CONST_ANALYSTS_SUGGEST_THAT_NOT_ONLY_DOES_THE_EXPANSION_SPEAK_TO_THE_HEALTH\
+			+ CONST_OF_THE_TECH_INDUSTRY_BUT_IS_ALSO_INDICATIVE_OF_A_FULL_ECONOMIC_RECOVER_R;
 		return story;
 	}
 	string getPhraseBullshit() {
@@ -1998,13 +1999,13 @@ void MusicClass::play(int _musicmode)
 		string story = pickrandom(gene_corp_name)\
 			+ singleSpace\
 			+ pickrandom(gene_corp_name_2)\
-			+ CONST_news514\
+			+ CONST_PRESENTED_THEIR_PRODUCT\
 			+ pickrandom(gene_product_name)\
 			+ singleSpace\
 			+ pickrandom(gene_product_name_2)\
-			+ CONST_news515\
-			+ CONST_news516\
-			+ CONST_news517\
+			+ CONST_DURING_AN_AFTERNOON_POWERPOINT_PRESENTATION\
+			+ CONST_ACCORDING_TO_THE_PUBLIC_RELATIONS_REPRESENTATIVE_SPEAKING\
+			+ CONST_THIS_AMAZING_NEW_PRODUCT_ACTUALLY\
 			+ pickrandom(gene_product_benefit)\
 			+ singleDot;
 
@@ -2014,28 +2015,28 @@ void MusicClass::play(int _musicmode)
 	{
 
 		string story = cityname()\
-			+ CONST_news510\
-			+ CONST_news511\
-			+ CONST_news512\
+			+ CONST_THE_GENETIC_FOODS_INDUSTRY_STAGED_A_MAJOR_EVENT_HERE_YESTERDAY\
+			+ CONST_TO_SHOWCASE_ITS_UPCOMING_PRODUCTS_OVER_THIRTY_COMPANIES_SET_UP\
+			+ CONST_BOOTHS_AND_GAVE_TALKS_TO_WIDE_EYED_ONLOOKERS\
 			+ ampersandR\
-			+ CONST_news513;
+			+ CONST_ONE_SUCH_CORPORATION;
 
 		story += getCorporationNameAndProduct();
 
 		story += ampersandR\
-			+ CONST_news518\
-			+ CONST_news519\
-			+ CONST_news520\
-			+ CONST_news521\
+			+ CONST_SPOKESPEOPLE_FOR_THE_GM_CORPORATIONS_WERE_UNIVERSAL\
+			+ CONST_IN_THEIR_DISMISSAL_OF_THE_CRITICISM_WHICH_OFTEN_FOLLOWS_THE_INDUSTRY\
+			+ CONST_ONE_IN_PARTICULAR_SAID\
+			+ CONST_LOOK_THESE_PRODUCTS_ARE_SAFE_THAT_THING_ABOUT_THE\
 			+ pickrandom(gene_product_cost)\
-			+ CONST_news522;
+			+ CONST_IS_JUST_A_LOAD_OF;
 
 		story += getPhraseBullshit();
 
-		story += CONST_news523\
-			+ CONST_news524\
-			+ CONST_news525\
-			+ CONST_news1030\
+		story += CONST_WOULD_WE_STAKE_THE_REPUTATION_OF_OUR_COMPANY_ON_UNSAFE_PRODUCTS\
+			+ CONST_NO_THAT_S_JUST_RIDICULOUS_I_MEAN_SURE_COMPANIES_HAVE_PUT_UNSAFE_PRODUCTS_OUT\
+			+ CONST_BUT_THE_GM_INDUSTRY_OPERATES_AT_A_HIGHER_ETHICAL_STANDARD_THAT_GOES_WITHOUT_SAYING\
+			+ QUOTATION_MARK\
 			+ ampersandR;
 		return story;
 	}
@@ -2043,10 +2044,10 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 		if (lawList[LAW_FREESPEECH] == -2)
-			story += CONST_news466;
+			story += CONST_IN_A_BETTER_PLACE;
 		else
 		{
-			story += CONST_news467;
+			story += CONST_DEAD_AND;
 			story += pickrandom(mutilated_corpse);
 		}
 
@@ -2057,9 +2058,9 @@ void MusicClass::play(int _musicmode)
 
 		
 		if (lawList[LAW_DEATHPENALTY] == 2)
-			story += CONST_news471;
+			story += CONST_LIFE_IMPRISONMENT_IN_THIS_CASE;
 		else
-			story += CONST_news472;
+			story += CONST_THE_DEATH_PENALTY_IN_THIS_CASE;
 
 
 		return story;
@@ -2070,28 +2071,28 @@ void MusicClass::play(int _musicmode)
 		char dstr[200], dstr2[200], dstr3[200];
 		generate_long_name(dstr, dstr2, dstr3);
 		string story = cityname()\
-			+ CONST_news459\
-			+ CONST_news460\
-			+ CONST_news461\
-			+ CONST_news462\
+			+ CONST_PERHAPS_PARENTS_CAN_REST_EASIER_TONIGHT\
+			+ CONST_THE_AUTHORITIES_HAVE_APPREHENDED_THEIR_PRIMARY_SUSPECT_IN_THE\
+			+ CONST_STRING_OF_BRUTAL_CHILD_KILLINGS_THAT_HAS_KEPT_EVERYONE_IN_THE_AREA_ON_EDGE\
+			+ CONST_ACCORDING_TO_A_SPOKESPERSON_FOR_THE_POLICE_DEPARTMENT_HERE\
 			+ dstr\
 			+ singleSpace\
 			+ dstr2\
 			+ singleSpace\
 			+ dstr3\
-			+ CONST_news463\
+			+ CONST_WAS_DETAINED_YESTERDAY_AFTERNOON_REPORTEDLY_IN_POSSESSION_OF\
 			+ pickrandom(evidence_of_child_murder)\
-			+ CONST_news464\
-			+ CONST_news465;
+			+ CONST_OVER_TWENTY_CHILDREN_IN_THE_PAST_TWO_YEARS_HAVE_GONE_MISSING\
+			+ CONST_ONLY_TO_TURN_UP_LATER;
 
 		story += getPhraseMutilatedCorpse();
 
-		story += CONST_news468\
+		story += CONST_SOURCES_SAY_THAT_THE_POLICE_GOT_A_BREAK_IN_THE_CASE_WHEN\
 			+ pickrandom(break_in_murder_case)\
 			+ singleDot\
 			+ ampersandR\
-			+ CONST_news469\
-			+ CONST_news470;
+			+ CONST_THE_DISTRICT_ATTORNEY_S_OFFICE_HAS_ALREADY_REPEATEDLY_SAID_IT_WILL_BE\
+			+ CONST_SEEKING;
 		story += getPhraseDeathPenalty();
 		story += ampersandR;
 		return story;
@@ -2109,57 +2110,57 @@ void MusicClass::play(int _musicmode)
 	{
 
 		string story;
-		story += CONST_news493\
-			+ CONST_news494\
+		story += CONST_WASHINGTON_DC_THE_CIA_ANNOUNCED_YESTERDAY_THAT_IT_HAS_AVERTED_A_TERROR_ATTACK_THAT\
+			+ CONST_WOULD_HAVE_OCCURRED_ON_AMERICAN_SOIL\
 			+ ampersandR\
-			+ CONST_news495\
+			+ CONST_ACCORDING_TO_A_SPOKESPERSON_FOR_THE_AGENCY\
 			+ pickrandom(terrorist_group)\
-			+ CONST_news496;
+			+ CONST_PLANNED_TO;
 
 		story += getPhraseTerroristPlot();
 
-		story += CONST_news497\
-			+ CONST_news498\
-			+ CONST_news499\
+		story += CONST_HOWEVER_INTELLIGENCE_GARNERED_FROM_DEEP_WITHIN_THE_MYSTERIOUS\
+			+ CONST_TERRORIST_ORGANIZATION_ALLOWED_THE_PLOT_TO_BE_FOILED_JUST_DAYS_BEFORE_IT\
+			+ CONST_WAS_TO_OCCUR\
 			+ ampersandR\
 			+ CONST_newsX08\
-			+ CONST_news501\
-			+ CONST_news502\
-			+ CONST_news503\
-			+ CONST_news504\
-			+ CONST_news505\
-			+ CONST_news506\
-			+ CONST_news507\
-			+ CONST_news508\
-			+ CONST_news1030\
+			+ CONST_I_WON_T_COMPROMISE_OUR_SOURCES_AND_METHODS_BUT_LET_ME_JUST_SAY\
+			+ CONST_THAT_WE_ARE_GRATEFUL_TO_THE_CONGRESS_AND_THIS_ADMINISTRATION_FOR\
+			+ CONST_PROVIDING_US_WITH_THE_TOOLS_WE_NEED_TO_NEUTRALIZE_THESE_ENEMIES_OF\
+			+ CONST_CIVILIZATION_BEFORE_THEY_CAN_DESTROY_AMERICAN_FAMILIES\
+			+ CONST_HOWEVER_LET_ME_ALSO_SAY_THAT_THERE_S_MORE_THAT_NEEDS_TO_BE_DONE\
+			+ CONST_THE_HEAD_OF_THE_AGENCY_WILL_BE_SENDING_A_REQUEST_TO_CONGRESS\
+			+ CONST_FOR_WHAT_WE_FEEL_ARE_THE_ESSENTIAL_TOOLS_FOR_COMBATING_TERRORISM_IN\
+			+ CONST_THIS_NEW_AGE\
+			+ QUOTATION_MARK\
 			+ ampersandR;
 		return story;
 	}
 	string unreliableTestimony(const char gn, const string dstr3) {
 
-		string gen = (gn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
+		string gen = (gn == GENDER_FEMALE ? CONST_HER : CONST_HIS);
 		string story;
 		switch (LCSrandom(7))
 		{
-		case 0:story = CONST_news533; break;
-		case 1:story = gen; story += CONST_news534; break;
-		case 2:story = gen; story += CONST_news535; break; // Clinton
+		case 0:story = CONST_TEN_YEAR_OLD_EYEWITNESS_TESTIMONY; break;
+		case 1:story = gen; story += CONST_GENERAL_FEELING_ABOUT_POLICE_CORRUPTION; break;
+		case 2:story = gen; story += CONST_BELIEF_THAT_THE_CRIMES_WERE_A_VAST_RIGHT_WING_CONSPIRACY; break; // Clinton
 		case 3:
 			story = gen;
-			story += CONST_news536;
+			story += CONST_BELIEF_THAT;
 			story += dstr3;
-			story += CONST_news537;
+			story += CONST_DESERVED_ANOTHER_CHANCE;
 			break;
 		case 4:
 			story = gen;
-			story += CONST_news538; break;
+			story += CONST_PERSONAL_PHILOSOPHY_OF_LIBERTY; break;
 		case 5:
 			story = gen;
-			story += CONST_news539;
+			story += CONST_CLOSE_PERSONAL_FRIENDSHIP_WITH_THE;
 			story += dstr3; // I know Charles Manson.
-			story += CONST_news540; // Charles Manson was a friend of mine.
+			story += CONST_FAMILY; // Charles Manson was a friend of mine.
 			break; // And you, sir, are no Charles Manson!
-		case 6:story = gen; story += CONST_news541; break;
+		case 6:story = gen; story += CONST_CONSULTATIONS_WITH_A_MAGIC_8_BALL; break;
 		}
 		return story;
 	}
@@ -2172,44 +2173,44 @@ void MusicClass::play(int _musicmode)
 		const char gn = pickrandom(maleOrFemale);
 		generate_name(jstr, jstr2, gn);
 		string story = cityname()\
-			+ CONST_news527\
+			+ CONST_THE_CONVICTION_OF_CONFESSED_SERIAL_KILLER\
 			+ dstr\
 			+ singleSpace\
 			+ dstr2\
 			+ singleSpace\
 			+ dstr3\
-			+ CONST_news528\
-			+ CONST_news529\
+			+ CONST_WAS_OVERTURNED_BY_A_FEDERAL_JUDGE_YESTERDAY\
+			+ CONST_JUSTICE\
 			+ jstr\
 			+ singleSpace\
 			+ jstr2\
-			+ CONST_news530\
-			+ CONST_news531;
+			+ CONST_OF_THE_NOTORIOUSLY_LIBERAL_CIRCUIT_OF_APPEALS_HERE\
+			+ CONST_MADE_THE_DECISION_BASED_ON;
 		story += unreliableTestimony(gn, dstr3);
 		char sstr[200];
 		strcpy(sstr, lastname().data());
-		story += CONST_news542\
+		story += CONST_DESPITE_THE_CONFESSION_OF\
 			+ dstr3\
-			+ CONST_news543\
+			+ CONST_WHICH_EVEN_JUSTICE\
 			+ jstr2\
-			+ CONST_news544\
-			+ CONST_news545\
+			+ CONST_GRANTS_WAS_NOT_COERCED_IN_ANY_WAY_R\
+			+ CONST_TEN_YEARS_AGO\
 			+ dstr3\
-			+ CONST_news546\
+			+ CONST_WAS_CONVICTED_OF_THE_NOW_INFAMOUS\
 			+ sstr\
-			+ CONST_news547\
-			+ CONST_news548\
+			+ CONST_SLAYINGS\
+			+ CONST_AFTER_AN_INTENSIVE_MANHUNT\
 			+ dstr3\
-			+ CONST_news549\
-			+ CONST_news550\
+			+ CONST_WAS_FOUND_WITH_THE_MURDER_WEAPON\
+			+ CONST_COVERED_IN_THE_VICTIMS_BLOOD\
 			+ dstr3\
-			+ CONST_news551\
-			+ CONST_news552\
+			+ CONST_CONFESSED_AND_WAS_SENTENCED_TO_LIFE_SAYING\
+			+ CONST_THANK_YOU_FOR_SAVING_ME_FROM_MYSELF\
 			+ CONST_newsB937\
-			+ CONST_news554\
-			+ CONST_news555\
-			+ CONST_news556\
-			+ CONST_news557;
+			+ CONST_A_SPOKESPERSON_FOR_THE_DISTRICT_ATTORNEY\
+			+ CONST_HAS_STATED_THAT_THE_CASE_WILL_NOT_BE_RETRIED_DUE\
+			+ CONST_TO_THE_CURRENT_ECONOMIC_DOLDRUMS_THAT_HAVE_LEFT_THE_STATE\
+			+ CONST_COMPLETELY_STRAPPED_FOR_CASH_R;
 		return story;
 	}
 	string obsceneAct() {
@@ -2218,25 +2219,25 @@ void MusicClass::play(int _musicmode)
 		switch (LCSrandom(5))
 		{
 		case 0:
-			if (lawList[LAW_FREESPEECH] == -2)story += CONST_news594;
-			else if (lawList[LAW_FREESPEECH] == 2)story += CONST_news595;
-			else story += CONST_news596; break;
+			if (lawList[LAW_FREESPEECH] == -2)story += CONST_HAD_CONSENSUAL_INTERCOURSE_IN_THE_MISSIONARY_POSITION;
+			else if (lawList[LAW_FREESPEECH] == 2)story += CONST_FUCKED;
+			else story += CONST_HAD_INTERCOURSE; break;
 		case 1:
-			if (lawList[LAW_FREESPEECH] == -2)story += CONST_news597;
-			else if (lawList[LAW_FREESPEECH] == 2)story += CONST_news598;
-			else story += CONST_news599; break;
+			if (lawList[LAW_FREESPEECH] == -2)story += CONST_ENCOURAGED_LISTENERS_TO_CALL_IN_AND_URINATE;
+			else if (lawList[LAW_FREESPEECH] == 2)story += CONST_ENCOURAGED_LISTENERS_TO_CALL_IN_AND_TAKE_A_PISS;
+			else story += CONST_ENCOURAGED_LISTENERS_TO_CALL_IN_AND_RELIEVE_THEMSELVES; break;
 		case 2:
 			if (lawList[LAW_FREESPEECH] == 2)story += CONST_newsX09;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news601;
-			else story += CONST_news602; break;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_SCREAMED_DARN_THE_POLICE_THOSE_BIG_DUMB_JERKS_I_GOT_A_STUPID_TICKET_THIS_MORNING_AND_I_M_SO_ANGRY;
+			else story += CONST_SCREAMED_F_CK_THE_POLICE_THOSE_G_DD_MN_M_TH_F_CK_RS_I_GOT_A_F_CKING_TICKET_THIS_MORNING_AND_I_M_F_CKING_P_SS_D_AS_SH_T; break;
 		case 3:
-			if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] == -2)story += CONST_news603;
-			else if (lawList[LAW_FREESPEECH] != -2 && lawList[LAW_WOMEN] == -2)story += CONST_news604;
-			else if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] != -2)story += CONST_news605;
-			else story += CONST_news606; break;
+			if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] == -2)story += CONST_FED_FROM_AN_INDECENT_WOMAN;
+			else if (lawList[LAW_FREESPEECH] != -2 && lawList[LAW_WOMEN] == -2)story += CONST_BREASTFED_FROM_AN_EXPOSED_WOMAN;
+			else if (lawList[LAW_FREESPEECH] == -2 && lawList[LAW_WOMEN] != -2)story += CONST_FED_FROM_A_WOMAN;
+			else story += CONST_BREASTFED_FROM_A_LACTATING_WOMAN; break;
 		case 4:
-			if (lawList[LAW_FREESPEECH] == -2)story += CONST_news607;
-			else story += CONST_news608; break;
+			if (lawList[LAW_FREESPEECH] == -2)story += CONST_HAD_FUN;
+			else story += CONST_MASTURBATED; break;
 		}
 
 		return story;
@@ -2246,11 +2247,11 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news612;
-		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news613;
-		else if (lawList[LAW_FREESPEECH] == 0) story += CONST_news614;
-		else if (lawList[LAW_FREESPEECH] == 1) story += CONST_news615;
-		else story += CONST_news616;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_THOUSANDS_OF;
+		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_SEVERAL_HUNDRED;
+		else if (lawList[LAW_FREESPEECH] == 0) story += CONST_HUNDREDS_OF;
+		else if (lawList[LAW_FREESPEECH] == 1) story += CONST_DOZENS_OF;
+		else story += CONST_SOME;
 
 
 		return story;
@@ -2259,11 +2260,11 @@ void MusicClass::play(int _musicmode)
 	string listenersFromWhere() {
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news619;
-		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news620;
-		else if (lawList[LAW_FREESPEECH] == 0) story += CONST_news621;
-		else if (lawList[LAW_FREESPEECH] == 1) story += CONST_news622;
-		else story += CONST_news623;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_ACROSS_THE_NATION;
+		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_FROM_ALL_OVER_THE_STATE;
+		else if (lawList[LAW_FREESPEECH] == 0) story += CONST_WITHIN_THE_COUNTY;
+		else if (lawList[LAW_FREESPEECH] == 1) story += CONST_IN_NEIGHBORING_TOWNS;
+		else story += CONST_WITHIN_THE_TOWN;
 
 
 		return story;
@@ -2279,12 +2280,12 @@ void MusicClass::play(int _musicmode)
 
 		string story = cityname();
 
-		story += CONST_news588\
+		story += CONST_INFAMOUS_FM_RADIO_SHOCK_JOCK\
 			+ dstr\
 			+ singleSpace\
 			+ dstr2\
-			+ CONST_news589\
-			+ CONST_news590\
+			+ CONST_HAS_BROUGHT_RADIO_ENTERTAINMENT_TO_A_NEW_LOW_DURING_YESTERDAY_S\
+			+ CONST_BROADCAST_OF_THE_PROGRAM\
 			+ dstr\
 			+ CONST_news591\
 			+ pickrandom(fm_radio_name)\
@@ -2292,24 +2293,24 @@ void MusicClass::play(int _musicmode)
 			+ pickrandom(fm_radio_name_2)\
 			+ CONST_news592\
 			+ dstr2\
-			+ CONST_news593;
+			+ CONST_REPORTEDLY;
 
 		story += obsceneAct();
 
-		story += CONST_news609\
+		story += CONST_ON_THE_AIR_ALTHOUGH\
 			+ dstr2\
-			+ CONST_news610\
-			+ CONST_news611;
+			+ CONST_LATER_APOLOGIZED\
+			+ CONST_THE_FCC_RECEIVED;
 
 		story += howManyListeners();
 
-		story += CONST_news617;
-		story += CONST_news618;
+		story += CONST_COMPLAINTS;
+		story += CONST_FROM_IRATE_LISTENERS;
 
 		story += listenersFromWhere();
 
-		story += CONST_news624;
-		story += CONST_news625;
+		story += CONST_A_SPOKESPERSON_FOR_THE_FCC;
+		story += CONST_STATED_THAT_THE_INCIDENT_IS_UNDER_INVESTIGATION;
 		story += ampersandR;
 		return story;
 	}
@@ -2320,19 +2321,19 @@ void MusicClass::play(int _musicmode)
 		if (jg2 == GENDER_FEMALE)
 		{
 			if (LCSrandom(4) < lawList[LAW_WOMEN] + 2) // 0% chance at lawList[LAW_WOMEN]==-2, 100% chance at lawList[LAW_WOMEN]==2
-				(tg2 = CONST_news636);
+				(tg2 = CONST_MS);
 			else
-				(tg2 = (LCSrandom(2) ? CONST_news637 : CONST_newsB939));
+				(tg2 = (LCSrandom(2) ? CONST_MRS : CONST_newsB939));
 		}
-		else (tg2 = CONST_news638);
+		else (tg2 = CONST_MR);
 
 		return tg2;
 	}
 	string getPhraseMassShooting() {
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news647;
-		else story += CONST_news648;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_HURTING_SPREE;
+		else story += CONST_MASS_SHOOTING;
 
 
 		return story;
@@ -2342,8 +2343,8 @@ void MusicClass::play(int _musicmode)
 		string story;
 
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news641;
-		else story += CONST_news642;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_FIREFIGHT_PUTTING_THE_ATTACKER_TO_SLEEP;
+		else story += CONST_FIREFIGHT_KILLING_THE_ATTACKER;
 
 		return story;
 
@@ -2356,51 +2357,51 @@ void MusicClass::play(int _musicmode)
 		const char jg2 = pickrandom(maleOrFemale);
 		generate_long_name(jstr, jstr2, jstr3, jg1);
 		generate_name(jstr4, jstr5, jg2);
-		story += CONST_news626;
+		story += CONST_IN_A_SURPRISING_TURN_A;
 
 		story += getPhraseMassShooting();
 
-		story += CONST_news628\
-			+ CONST_news629\
+		story += CONST_WAS_PREVENTED_BY_A_BYSTANDER_WITH_A_GUN\
+			+ CONST_AFTER\
 			+ jstr\
 			+ singleSpace\
 			+ jstr2\
-			+ CONST_news630\
+			+ CONST_OPENED_FIRE_AT_THE\
 			+ jstr3\
 			+ singleSpace\
 			+ pickrandom(public_place)\
-			+ commaSpace\
+			+ COMMA_SPACE\
 			+ jstr4\
 			+ singleSpace\
 			+ jstr5\
-			+ CONST_news631\
-			+ CONST_news632\
-			+ CONST_news633\
+			+ CONST_SPRUNG_INTO_ACTION\
+			+ CONST_THE_CITIZEN_PULLED_A_CONCEALED_HANDGUN_AND_FIRED_ONCE_AT_THE_SHOOTER\
+			+ CONST_FORCING\
 			+ jstr2\
-			+ CONST_news634\
-			+ CONST_news635;
+			+ CONST_TO_TAKE_COVER_WHILE_OTHERS_CALLED_THE_POLICE_R\
+			+ CONST_INITIALLY;
 
 		string tg2 = misterMissMrsOrMs(jg2);
 
 		story += tg2;
 		story += jstr5;
-		story += CONST_news639;
+		story += CONST_ATTEMPTED_TO_TALK_DOWN_THE_SHOOTER_BUT_AS;
 		story += jstr2;
-		story += CONST_news640;
+		story += CONST_BECAME_MORE_AGITATED_THE_HEROIC_CITIZEN_WAS_FORCED_TO_ENGAGE_THE_SHOOTER_IN_A;
 
 		story += getPhraseKillingAttacker();
 
-		story += CONST_news643;
+		story += CONST_BEFORE;
 		story += (jg1 == GENDER_FEMALE ? CONST_news644 : CONST_newsB940);
-		story += CONST_news645;
-		story += CONST_news646;
+		story += CONST_COULD_HURT_ANYONE_ELSE_R;
+		story += CONST_THE_SPOKESPERSON_FOR_THE_POLICE_DEPARTMENT_SAID_WE_D_HAVE_A_YET_ANOTHER;
 
 		story += getPhraseMassShooting();
 
-		story += CONST_news649;
+		story += CONST_IF_NOT_FOR;
 		story += tg2;
 		story += jstr5;
-		story += CONST_news650;
+		story += CONST_S_HEROIC_ACTIONS;
 		return story;
 	}
 	string threatenToKillPolice() {
@@ -2408,24 +2409,24 @@ void MusicClass::play(int _musicmode)
 		switch (LCSrandom(4))
 		{
 		case 0:
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_news667;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news668;
-			else story += CONST_news669;
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_AH_FUCK_THIS_SHIT_THIS_PUNK_BITCH_IS_FUCKIN_DEAD;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_AH_NO_WAY_THIS_POLICE_OFFICER_WILL_BE_HARMED;
+			else story += CONST_AH_F_CK_THIS_SH_T_THIS_PUNK_B_TCH_IS_F_CKIN_DEAD;
 			break;
 		case 1:
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_news670;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news671;
-			else story += CONST_news672;
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_FUCK_A_MUTHAFUCKIN_BULL_I_M_KILLIN_THIS_PIG_SHIT;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_TOO_LATE_I_AM_GOING_TO_HARM_THIS_POLICE_OFFICER;
+			else story += CONST_F_CK_A_M_TH_F_CK_N_BULL_I_M_KILLIN_THIS_PIG_SH_T;
 			break;
 		case 2:
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_news673;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news674;
-			else story += CONST_news675;
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_WHY_THE_FUCK_AM_I_TALKIN_TO_YOU_I_D_RATHER_KILL_THIS_PIG;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_WHY_AM_I_TALKIN_TO_YOU_I_D_RATHER_HARM_THIS_POLICE_OFFICER;
+			else story += CONST_WHY_THE_F_CK_AM_I_TALKIN_TO_YOU_I_D_RATHER_KILL_THIS_PIG;
 			break;
 		case 3:
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_news676;
-			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_news677;
-			else story += CONST_news678;
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_IMMA_KILL_ALL_YOU_BITCHES_STARTIN_WITH_THIS_MOTHAFUCKER_HERE;
+			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_I_WILL_HARM_ALL_POLICE_OFFICERS_STARTIN_WITH_THIS_ONE_HERE;
+			else story += CONST_IMMA_KILL_ALL_YOU_B_TCHES_STARTIN_WITH_THIS_M_TH_F_CK_R_HERE;
 			break;
 		}
 		return story;
@@ -2433,27 +2434,27 @@ void MusicClass::play(int _musicmode)
 	string viciousGuardKilling(const char ggn, const char dgn) {
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news683;
-		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_news684;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_HARMED_THE_GUARD;
+		else if (lawList[LAW_FREESPEECH] == -1) story += CONST_KILLED_THE_GUARD;
 		else switch (LCSrandom(15))
 		{
 		default:
 			story += pickrandom(vicious_killing_of_guard);
 			break;
-		case 10: story += CONST_news688;
-			story += (dgn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
-			story += CONST_news690; break;
-		case 11: story += CONST_news691;
-			story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
-			story += CONST_news693; break;
-		case 12: story += CONST_news694;
-			story += (LCSrandom(2) ? CONST_news695 : CONST_newsB942); break;
-		case 13: story += CONST_news699;
-			story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_newsB943);
-			story += CONST_news701; break;
-		case 14: story += CONST_news706;
-			story += (LCSrandom(2) ? CONST_news707 : CONST_newsB944);
-			story += CONST_news708; break;
+		case 10: story += CONST_SMASHED_THE_GUARD_S_SKULL_WITH_THE_TOILET_SEAT_FROM;
+			story += (dgn == GENDER_FEMALE ? CONST_HER : CONST_HIS);
+			story += CONST_CELL; break;
+		case 11: story += CONST_SHOT_THE_GUARD_WITH;
+			story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_HIS);
+			story += CONST_OWN_GUN; break;
+		case 12: story += CONST_POISONED_THE_GUARD_WITH_DRUGS_SMUGGLED_INTO_THE_PRISON_BY_THE;
+			story += (LCSrandom(2) ? CONST_CRIPS : CONST_newsB942); break;
+		case 13: story += CONST_TAKEN_THE_GUARD_TO_THE_EXECUTION_CHAMBER_AND_FINISHED;
+			story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_newsB943);
+			story += CONST_OFF; break;
+		case 14: story += CONST_SACRIFICED_THE_GUARD_ON_A_MAKESHIFT;
+			story += (LCSrandom(2) ? CONST_SATANIC : CONST_newsB944);
+			story += CONST_ALTAR; break;
 		}
 		return story;
 	}
@@ -2464,8 +2465,8 @@ void MusicClass::play(int _musicmode)
 
 
 
-		if (lawList[LAW_FREESPEECH] == -2) story += CONST_news710;
-		else  story += CONST_news711;
+		if (lawList[LAW_FREESPEECH] == -2) story += CONST_ALSO_HARMED;
+		else  story += CONST_BEATEN_TO_DEATH;
 
 		return story;
 	}
@@ -2473,8 +2474,8 @@ void MusicClass::play(int _musicmode)
 	string getPhraseRapist() {
 		string story;
 
-		if (lawList[LAW_FREESPEECH] == -2)story += CONST_news656;
-		else story += CONST_news657;
+		if (lawList[LAW_FREESPEECH] == -2)story += CONST_TWO_WEEKS_AGO_CONVICTED_REPRODUCTION_FIEND;
+		else story += CONST_TWO_WEEKS_AGO_CONVICTED_RAPIST;
 
 		return story;
 	}
@@ -2482,15 +2483,15 @@ void MusicClass::play(int _musicmode)
 	{
 
 		string story = cityname();
-		story += CONST_news651;
+		story += CONST_THE_HOSTAGE_CRISIS_AT_THE;
 		char jstr[200];
 		strcpy(jstr, lastname(true).data());
 		story += jstr;
-		story += CONST_news652;
-		story += CONST_news653;
+		story += CONST_CORRECTIONAL_FACILITY_ENDED_TRAGICALLY_YESTERDAY_WITH_THE;
+		story += CONST_DEATH_OF_BOTH_THE_PRISON_GUARD_BEING_HELD_HOSTAGE_AND;
 		const char ggn = pickrandom(maleOrFemale);
-		story += (ggn == GENDER_FEMALE ? CONST_news700 : CONST_news378);
-		story += CONST_news655;
+		story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_HIS);
+		story += CONST_CAPTOR;
 		story += ampersandR;
 
 		story += getPhraseRapist();
@@ -2503,40 +2504,40 @@ void MusicClass::play(int _musicmode)
 		story += dstr\
 			+ singleSpace\
 			+ dstr2\
-			+ CONST_news658\
+			+ CONST_AN_INMATE_AT\
 			+ jstr\
-			+ CONST_news659\
+			+ CONST_OVERPOWERED\
 			+ gstr\
 			+ singleSpace\
 			+ gstr2\
-			+ CONST_news660\
-			+ (dgn == GENDER_FEMALE ? CONST_news661 : CONST_newsB941)\
-			+ CONST_news662\
-			+ CONST_news663\
-			+ CONST_news664\
+			+ CONST_AND_BARRICADED\
+			+ (dgn == GENDER_FEMALE ? CONST_HERSELF : CONST_newsB941)\
+			+ CONST_WITH_THE_GUARD_IN_A_PRISON_TOWER\
+			+ CONST_AUTHORITIES_LOCKED_DOWN_THE_PRISON_AND\
+			+ CONST_ATTEMPTED_TO_NEGOTIATE_BY_PHONE_FOR\
 			+ tostring(LCSrandom(18) + 5)\
-			+ CONST_news665\
+			+ CONST_DAYS_BUT_TALKS_WERE_CUT_SHORT_WHEN\
 			+ dstr2\
-			+ CONST_news666\
+			+ CONST_REPORTEDLY_SCREAMED_INTO_THE_RECEIVER\
 			+ threatenToKillPolice()\
-			+ CONST_news1030\
-			+ CONST_news680\
-			+ CONST_news681\
+			+ QUOTATION_MARK\
+			+ CONST_THE_TOWER_WAS_BREACHED_IN_AN_ATTEMPT_TO_REACH\
+			+ CONST_THE_HOSTAGE_BUT\
 			+ dstr2\
-			+ CONST_news682\
+			+ CONST_HAD_ALREADY\
 			+ viciousGuardKilling(ggn, dgn)\
-			+ CONST_news709;
+			+ CONST_THE_PRISONER_WAS;
 
 		story += getPhraseBeatenToDeath();
 
-		story += CONST_news712;
+		story += CONST_WHILE_RESISTING_CAPTURE_ACCORDING_TO_A_PRISON_SPOKESPERSON;
 		story += ampersandR;
 		return story;
 	}
 
 
 	string constructNegativeEventStory(const short view) {
-		string story = blankString;
+		string story = BLANK_STRING;
 		switch (view)
 		{
 		case VIEW_ANIMALRESEARCH:
@@ -2635,20 +2636,20 @@ void MusicClass::play(int _musicmode)
 		string output;
 		switch (LCSrandom(4))
 		{
-		case 0: output = CONST_interrogation124;
-			if (drugs) output = CONST_interrogation125;
-			else if (religion) output = CONST_interrogation126;
-			else  output = CONST_interrogation127;
+		case 0: output = CONST_SCREAMS_HELPLESSLY_FOR;
+			if (drugs) output = CONST_JOHN_LENNON_S_MERCY;
+			else if (religion) output = CONST_GOD_S_MERCY;
+			else  output = CONST_MOMMY;
 			break;
 		case 1:
-			if (restrain)  output = CONST_interrogation128;
-			else  output = CONST_interrogation129; break;
+			if (restrain)  output = CONST_GOES_LIMP_IN_THE_RESTRAINTS;
+			else  output = CONST_CURLS_UP_IN_THE_CORNER_AND_DOESN_T_MOVE; break;
 		case 2:
-			if (drugs && !LCSrandom(5))  output = CONST_interrogation130;
-			else  output = CONST_interrogation131; break;
+			if (drugs && !LCSrandom(5))  output = CONST_BARKS_HELPLESSLY;
+			else  output = CONST_CRIES_HELPLESSLY; break;
 		case 3:
-			if (drugs && !LCSrandom(3))  output = CONST_interrogation132;
-			else  output = CONST_interrogation133;
+			if (drugs && !LCSrandom(3))  output = CONST_WONDERS_ABOUT_APPLES;
+			else  output = CONST_WONDERS_ABOUT_DEATH;
 			break;
 		}
 		return output;
@@ -2671,8 +2672,8 @@ void MusicClass::play(int _musicmode)
 		switch (LCSrandom(fall_in_love.size() + 1))
 		{
 		case 0:
-			output = CONST_interrogation142;
-			output += restrain ? CONST_interrogation143 : CONST_interrogationB150;
+			output = CONST_STAMMERS_AND;
+			output += restrain ? CONST_TALKS_ABOUT_HUGGING : CONST_HUGS;
 			output += name;
 			output += singleDot;
 			break;
@@ -2694,20 +2695,20 @@ void MusicClass::play(int _musicmode)
 		case 0:
 			if (rapport)
 			{
-				output = CONST_interrogation144;
+				output = CONST_BEGS_HITLER_TO_STAY_AND_KILL;
 				output += name;
 				output += singleDot;
 			}
 			else
 			{
-				output = CONST_interrogation145;
+				output = CONST_SCREAMS_FOR;
 				output += name;
-				output += CONST_interrogation146;
+				output += CONST_TO_STOP_LOOKING_LIKE_HITLER;
 			}
 			break;
 		case 1:
-			if (!restrain) output = CONST_interrogation147;
-			output = CONST_interrogation148;
+			if (!restrain) output = CONST_CURLS_UP_AND;
+			output = CONST_BEGS_FOR_THE_NIGHTMARE_TO_END;
 			break;
 		default:
 			int which_trip = LCSrandom(bad_trip.size());
@@ -2851,7 +2852,7 @@ void MusicClass::play(int _musicmode)
 	string dismemberingWound(const int w, const int wound) {
 
 
-		string output = blankString;
+		string output = BLANK_STRING;
 
 		if (w == BODYPART_HEAD && wound & WOUND_CLEANOFF) {
 			output = CONST_fight151;
@@ -2881,75 +2882,75 @@ void MusicClass::play(int _musicmode)
 
 		if (special[SPECIALWOUND_HEART] != 1)
 		{
-			woundList.push_back(CONST_commondisplay168);
+			woundList.push_back(HEART_PUNCTURED);
 		}
 		if (special[SPECIALWOUND_RIGHTLUNG] != 1)
 		{
-			woundList.push_back(CONST_commondisplay169);
+			woundList.push_back(R_LUNG_COLLAPSED);
 		}
 		if (special[SPECIALWOUND_LEFTLUNG] != 1)
 		{
-			woundList.push_back(CONST_commondisplay170);
+			woundList.push_back(L_LUNG_COLLAPSED);
 		}
 		if (special[SPECIALWOUND_NECK] != 1)
 		{
-			woundList.push_back(CONST_commondisplay171);
+			woundList.push_back(BROKEN_NECK);
 		}
 		if (special[SPECIALWOUND_UPPERSPINE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay172);
+			woundList.push_back(BROKEN_UP_SPINE);
 		}
 		if (special[SPECIALWOUND_LOWERSPINE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay173);
+			woundList.push_back(BROKEN_LW_SPINE);
 		}
 		if (special[SPECIALWOUND_RIGHTEYE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay174);
+			woundList.push_back(NO_RIGHT_EYE);
 		}
 		if (special[SPECIALWOUND_LEFTEYE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay175);
+			woundList.push_back(NO_LEFT_EYE);
 		}
 		if (special[SPECIALWOUND_NOSE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay176);
+			woundList.push_back(NO_NOSE);
 		}
 		if (special[SPECIALWOUND_TONGUE] != 1)
 		{
-			woundList.push_back(CONST_commondisplay177);
+			woundList.push_back(NO_TONGUE);
 		}
 		if (special[SPECIALWOUND_TEETH] != TOOTHNUM)
 		{
-			if (special[SPECIALWOUND_TEETH] == 0)woundList.push_back(CONST_commondisplay178);
-			else if (special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)woundList.push_back(CONST_commondisplay179);
-			else if (special[SPECIALWOUND_TEETH] < TOOTHNUM)woundList.push_back(CONST_commondisplay180);
+			if (special[SPECIALWOUND_TEETH] == 0)woundList.push_back(NO_TEETH);
+			else if (special[SPECIALWOUND_TEETH] == TOOTHNUM - 1)woundList.push_back(MISSING_TOOTH);
+			else if (special[SPECIALWOUND_TEETH] < TOOTHNUM)woundList.push_back(MISSING_TEETH);
 		}
 		if (special[SPECIALWOUND_LIVER] != 1)
 		{
-			woundList.push_back(CONST_commondisplay181);
+			woundList.push_back(LIVER_DAMAGED);
 		}
 		if (special[SPECIALWOUND_RIGHTKIDNEY] != 1)
 		{
-			woundList.push_back(CONST_commondisplay182);
+			woundList.push_back(R_KIDNEY_DAMAGED);
 		}
 		if (special[SPECIALWOUND_LEFTKIDNEY] != 1)
 		{
-			woundList.push_back(CONST_commondisplay183);
+			woundList.push_back(L_KIDNEY_DAMAGED);
 		}
 		if (special[SPECIALWOUND_STOMACH] != 1)
 		{
-			woundList.push_back(CONST_commondisplay184);
+			woundList.push_back(STOMACH_INJURED);
 		}
 		if (special[SPECIALWOUND_SPLEEN] != 1)
 		{
-			woundList.push_back(CONST_commondisplay185);
+			woundList.push_back(BUSTED_SPLEEN);
 		}
 		if (special[SPECIALWOUND_RIBS] != RIBNUM)
 		{
-			if (special[SPECIALWOUND_RIBS] == 0)woundList.push_back(CONST_commondisplay186);
-			else if (special[SPECIALWOUND_RIBS] == RIBNUM - 1)woundList.push_back(CONST_commondisplay187);
-			else if (special[SPECIALWOUND_RIBS] < RIBNUM)woundList.push_back(CONST_commondisplay188);
+			if (special[SPECIALWOUND_RIBS] == 0)woundList.push_back(ALL_RIBS_BROKEN);
+			else if (special[SPECIALWOUND_RIBS] == RIBNUM - 1)woundList.push_back(BROKEN_RIB);
+			else if (special[SPECIALWOUND_RIBS] < RIBNUM)woundList.push_back(BROKEN_RIBS);
 		}
 		return woundList;
 	}

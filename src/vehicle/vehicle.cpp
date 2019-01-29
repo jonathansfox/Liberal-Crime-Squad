@@ -1,3 +1,4 @@
+
 #define	VEHICLE_CPP
 #include "../includes.h"
 #include "vehicletype.h"
@@ -97,7 +98,7 @@ string Vehicle::fullname(bool halffull) const
 	int words = 0;
 	if (heat_)
 	{
-		s = CONST_vehicle007;
+		s = CONST_STOLEN;
 		words++;
 	}
 	if (displayscolor())

@@ -1,3 +1,4 @@
+
 #define	GLOBALS_CPP
 #define	CREATURENAMES_CPP
 #include "includes.h"
@@ -5,7 +6,7 @@
 /*
 DEBUG DEFINES
 */
-// inform player of activated debug codes
+// inform player of ACTIVATED debug codes
 bool DISPLAYDEBUG = false;
 // Don't save the game
 bool NOSAVE = false;
@@ -68,7 +69,7 @@ long curcreatureid = 0;
 vector<string> default_slogans;
 #include "customMaps.h"
 vector<file_and_text_collection> globals_text_file_collection = {
-	customText(&default_slogans, CONST_globals004),
+	customText(&default_slogans, CONST_DEFAULT_SLOGANS_TXT),
 };
 vector<Vehicle *> vehicle;
 void newVehicle(Vehicle *startcar) {
@@ -327,15 +328,15 @@ void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *>
 }
 
 bool mainSeven(bool xml_loaded_ok) {
-	xmllog.initialize(CONST_globals005, true, 1);
-	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_globals006, xmllog);
-	xml_loaded_ok &= populate_from_xml(cliptype, CONST_globals007, xmllog);
-	xml_loaded_ok &= populate_from_xml(weapontype, CONST_globals008, xmllog);
-	xml_loaded_ok &= populate_from_xml(armortype, CONST_globals009, xmllog);
-	xml_loaded_ok &= populate_masks_from_xml(armortype, CONST_globals010, xmllog);
-	xml_loaded_ok &= populate_from_xml(loottype, CONST_globals011, xmllog);
-	xml_loaded_ok &= populate_from_xml(creaturetype, CONST_globals012, xmllog);
-	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_globals013, xmllog);
+	xmllog.initialize(CONST_XMLLOG, true, 1);
+	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_VEHICLES_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(cliptype, CONST_CLIPS_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(weapontype, CONST_WEAPONS_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(armortype, CONST_ARMORS_XML, xmllog);
+	xml_loaded_ok &= populate_masks_from_xml(armortype, CONST_MASKS_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(loottype, CONST_LOOT_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(creaturetype, CONST_CREATURES_XML, xmllog);
+	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_AUGMENTATIONS_XML, xmllog);
 	return xml_loaded_ok;
 }
 
@@ -645,10 +646,10 @@ int printBestLCSMemberForNews(const string repname, const int l) {
 	}
 	mvaddstrAlt(4, 1, pool[best]->getNameAndAlignment().name, gamelog);
 
-	addstrAlt(CONST_siege208, gamelog);
+	addstrAlt(CONST_DECIDES_TO_GIVE_AN_INTERVIEW, gamelog);
 	gamelog.newline();
 	pressAnyKey();
-	mvaddstrAlt(6, 1, CONST_siege209, gamelog);
+	mvaddstrAlt(6, 1, CONST_THE_INTERVIEW_IS_WIDE_RANGING_COVERING_A_VARIETY_OF_TOPICS, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	int segmentpower = pool[best]->attribute_roll(ATTRIBUTE_INTELLIGENCE)
@@ -971,10 +972,10 @@ vector<string> regular_last_names;
 vector<string> archconservative_last_names;
 vector<file_and_text_collection> names_text_file_collection = {
 	/*creaturenames.cpp*/
-	customText(&male_first_names, names + CONST_creaturenames003),
-	customText(&female_first_names, names + CONST_creaturenames004),
-	customText(&gender_neutral_first_names, names + CONST_creaturenames005),
-	customText(&great_white_male_patriarch_first_names, names + CONST_creaturenames006),
-	customText(&regular_last_names, names + CONST_creaturenames007),
-	customText(&archconservative_last_names, names + CONST_creaturenames008),
+	customText(&male_first_names, names + MALE_FIRST_NAMES_TXT),
+	customText(&female_first_names, names + FEMALE_FIRST_NAMES_TXT),
+	customText(&gender_neutral_first_names, names + GENDER_NEUTRAL_FIRST_NAMES_TXT),
+	customText(&great_white_male_patriarch_first_names, names + GWMP_FIRST_NAMES_TXT),
+	customText(&regular_last_names, names + REGULAR_LAST_NAMES_TXT),
+	customText(&archconservative_last_names, names + ARCHCONSERVATIVE_LAST_NAMES_TXT),
 };

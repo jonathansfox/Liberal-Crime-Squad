@@ -1,3 +1,4 @@
+
 #define	SITEMODE_CPP
 #include "../includes.h"
 
@@ -90,7 +91,7 @@ void knowmap() {
 	knowmap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 }
 short getCurrentSite();
-/* site - determines spin on site news story, CONST_sitemode077 timer */
+/* site - determines spin on site news story, CONST_TOO_HOT timer */
 void resolvesite()
 {
 	if (sitealienate) sitestory->positive = 0;
@@ -1674,7 +1675,7 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 	}
 	for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) newenc = 0;
 	// Handle special tiles that activate when you step on them
-	// (rather than those that must be manually activated)
+	// (rather than those that must be manually ACTIVATED)
 	long makespecial = -1;
 	switch (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special)
 	{

@@ -1,3 +1,4 @@
+
 #define	NEWGAME_CPP
 #include "../includes.h"
 
@@ -26,6 +27,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+
+const string error = "ERROR";
 
 bool getSetValue(const string& s) {
 	int j = -1;
@@ -113,7 +116,7 @@ string enumToCreatureString(const int i) {
 		return enumToCreature[i];
 	}
 	else {
-		return blankString;
+		return BLANK_STRING;
 	}
 }
 int getBaseFromString(const string& s) {
@@ -149,15 +152,15 @@ LOOP_CONTINUATION newgame_starting_conditions(bool &classicmode, bool &strongccs
 	set_color_easy(WHITE_ON_BLACK);
 	{
 		mvaddstrAlt(7, 0, classicmode ? isSelected : unSelected);
-		addstrAlt(a_classicMode);
+		addstrAlt(A_CLASSIC_MODE);
 		if (!classicmode)
 			set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(9, 0, strongccs ? isSelected : unSelected);
-		addstrAlt(b_weDidntStartIt);
+		addstrAlt(B_CCS_STARTS_ACTIVE_AND_STRONG);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(11, 0, nightmarelaws ? isSelected : unSelected);
-		addstrAlt(c_nightmareMode);
+		addstrAlt(C_NIGHTMARE_MODE);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(13, 0, multipleCityMode ? isSelected : unSelected);
 		addstrAlt(d_nationalLCS);
@@ -258,7 +261,7 @@ LOOP_CONTINUATION implementWinCondition(const bool classicmode) {
 		isThisSelected = (isSelected);
 	else isThisSelected = (unSelected);
 	mvaddstrAlt(7, 0, isThisSelected);
-	addstrAlt(a_noComprimise);
+	addstrAlt(A_NO_COMPROMISE);
 	ColorSetup useThisColor;
 	if (!classicmode)
 		useThisColor = (WHITE_ON_BLACK);
@@ -268,7 +271,7 @@ LOOP_CONTINUATION implementWinCondition(const bool classicmode) {
 		isThisSelected = (isSelected);
 	else isThisSelected = (unSelected);
 	mvaddstrAlt(9, 0, isThisSelected);
-	addstrAlt(b_democrat);
+	addstrAlt(B_DEMOCRAT_MODE);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(13, 4, pressAnyOtherKey);
 	const int c = getkeyAlt();
@@ -289,23 +292,23 @@ LOOP_CONTINUATION implementFieldSkillRate() {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(4, 6, newGameFieldLearn);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(5, 6, affectsTheseSkills);
+	mvaddstrAlt(5, 6, AFFECTS_THESE_SKILLS);
 	string isThisSelected;
 	if (fieldskillrate == FIELDSKILLRATE_FAST)
 		isThisSelected = isSelected;
 	else isThisSelected = unSelected;
 	mvaddstrAlt(8, 0, isThisSelected);
-	addstrAlt(a_fastSkills);
+	addstrAlt(A_FAST_SKILLS);
 	if (fieldskillrate == FIELDSKILLRATE_CLASSIC)
 		isThisSelected = isSelected;
 	else isThisSelected = unSelected;
 	mvaddstrAlt(10, 0, isThisSelected);
-	addstrAlt(b_classic);
+	addstrAlt(B_CLASSIC_EXCELLENCE_REQUIRES_PRACTICE);
 	if (fieldskillrate == FIELDSKILLRATE_HARD)
 		isThisSelected = isSelected;
 	else isThisSelected = unSelected;
 	mvaddstrAlt(12, 0, isThisSelected);
-	addstrAlt(c_hardMode);
+	addstrAlt(C_HARD_MODE);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(16, 4, pressAnyOtherKey);
 	const int c = getkeyAlt();
@@ -366,14 +369,14 @@ void setup_newgame()
 void printIntroduction() {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(2, 2, aNewConEra, gamelog);
+	mvaddstrAlt(2, 2, A_NEW_CON_ERA, gamelog);
 	gamelog.newline();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(4, 2, theYearIs, gamelog);
 	addstrAlt(year, gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.newline();
-	mvaddstrAlt(6, 2, conservativePresident, gamelog);
+	mvaddstrAlt(6, 2, CONSERVATIVE_PRESIDENT, gamelog);
 	char president[80];
 	generate_name(president, GENDER_WHITEMALEPATRIARCH);
 	addstrAlt(president, gamelog);
@@ -384,11 +387,11 @@ void printIntroduction() {
 	mvaddstrAlt(8, 2, execname[EXEC_PRESIDENT], gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.nextMessage();
-	mvaddstrAlt(10, 2, conMajorityHouse, gamelog);
+	mvaddstrAlt(10, 2, WITH_CONSERVATIVES_SWEEPING_INTO_POWER, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(11, 2, senateConMajority, gamelog);
 	gamelog.newline();
-	mvaddstrAlt(12, 2, beginningOfNew, gamelog);
+	mvaddstrAlt(12, 2, US_HAILING_BEGINNING_OF_A_NEW, gamelog);
 	gamelog.newline();
 	mvaddstrAlt(13, 2, conEra, gamelog);
 	gamelog.nextMessage();
@@ -410,12 +413,12 @@ void printIntroduction() {
 void resetChoiceAndQuestion(Choice &currentChoice, Question &currentQuestion, const string header, const string header_2, const string firstsubstr) {
 
 
-	currentChoice.ANSWER = blankString;
-	currentChoice.ANSWER_2 = blankString;
+	currentChoice.ANSWER = BLANK_STRING;
+	currentChoice.ANSWER_2 = BLANK_STRING;
 	currentQuestion.HEADER = header;
 	currentQuestion.HEADER_2 = header_2;
 	currentQuestion.QUESTION = firstsubstr;
-	currentQuestion.QUESTION_2 = blankString;
+	currentQuestion.QUESTION_2 = BLANK_STRING;
 
 }
 bool getAttributeFromFounderQuestion(const string question, Impact &currentImpact) {
@@ -509,10 +512,10 @@ vector<Question> gatherAllFounderQuestions() {
 	bool firstAnswer = true;
 	Question currentQuestion;
 	Choice currentChoice;
-	string header = blankString;
-	string header_2 = blankString;
-	string answer = blankString;
-	string answer_2 = blankString;
+	string header = BLANK_STRING;
+	string header_2 = BLANK_STRING;
+	string answer = BLANK_STRING;
+	string answer_2 = BLANK_STRING;
 
 	for (int i = 0; i < founderQuestions.size(); i++) {
 		Impact currentImpact;
@@ -528,7 +531,7 @@ vector<Question> gatherAllFounderQuestions() {
 		case ENUM_tag_HEADER:
 			if (first.substr(6, 1) == singleSpace) {
 				header = first.substr(7);
-				header_2 = blankString;
+				header_2 = BLANK_STRING;
 			}
 			else  if (first.substr(6, 2) == tag__2) {
 				header_2 = first.substr(9);
@@ -538,7 +541,7 @@ vector<Question> gatherAllFounderQuestions() {
 			if (firstAnswer) {
 				if (first.substr(6, 1) == singleSpace) {
 					answer = first.substr(7);
-					answer_2 = blankString;
+					answer_2 = BLANK_STRING;
 					firstAnswer = false;
 				}
 				else  if (first.substr(6, 2) == tag__2) {
@@ -554,7 +557,7 @@ vector<Question> gatherAllFounderQuestions() {
 					}
 					currentChoice.impact.clear();
 					answer = first.substr(7);
-					answer_2 = blankString;
+					answer_2 = BLANK_STRING;
 				}
 				else  if (first.substr(6, 2) == tag__2) {
 					answer_2 = first.substr(9);
@@ -729,14 +732,14 @@ vector<Impact> printQuestionsThenGatherImpacts(vector<Question> allQuestions, co
 			int offset = LCSrandom(allQuestions[i].choices.size());
 			selection = 'a' + offset;
 			string currentOption = spaceDashSpace;
-			mvaddstrAlt(5 + 2 * offset, 0, allOptions.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
+			mvaddstrAlt(5 + 2 * offset, 0, ALL_OPTIONS.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
 			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
 			pressAnyKey();
 		}
 		else {
 			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
 				string currentOption = spaceDashSpace;
-				mvaddstrAlt(5 + 2 * j, 0, allOptions.substr(j, 1) + currentOption + allQuestions[i].choices[j].ANSWER);
+				mvaddstrAlt(5 + 2 * j, 0, ALL_OPTIONS.substr(j, 1) + currentOption + allQuestions[i].choices[j].ANSWER);
 				mvaddstrAlt(6 + 2 * j, 0, allQuestions[i].choices[j].ANSWER_2);
 			}
 			selection = getkeyAlt();
@@ -961,7 +964,9 @@ void makecharacter()
 	bool gaylawyer = false;
 	char recruits = RECRUITS_NONE;
 	char base = SITE_RESIDENTIAL_SHELTER;
-	for (int sk = 0; sk < SKILLNUM; sk++)newcr->set_skill((sk), 0);
+	for (int sk = 0; sk < SKILLNUM; sk++) { 
+		newcr->set_skill((sk), 0);
+	}
 	bool assault_rifle = false;
 	bool sports_car = false;
 	int birth_year = 1984; // default birth year, month, and day in case left undefined
@@ -1061,16 +1066,12 @@ void makecharacter()
 				}
 				break;
 			default:
-				clearAlt();
-				mvaddstrAlt(0, 0, error);
-				mvaddstrAlt(1, 0, currentImpact.item_to_influcence);
+				printErrorTypeOther(currentImpact.item_to_influcence);
 				break;
 			}
 			break;
 		default:
-			clearAlt();
-			mvaddstrAlt(0, 0, error);
-			mvaddstrAlt(1, 0, currentImpact.type);
+			printErrorTypeOther(currentImpact.type);
 			break;
 		}
 	}
@@ -1080,11 +1081,7 @@ void makecharacter()
 		giveMeAssaultRifle(newcr);
 	}
 	printIntroduction();
-	eraseAlt();
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, whatIsYourName);
-	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 0, pressEnterToBeRealName);
+	printWhatIsYourName();
 	newcr->new_name_two();
 	addCreature(newcr);
 	make_world(hasmaps);

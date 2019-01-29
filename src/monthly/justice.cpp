@@ -1,3 +1,4 @@
+
 #define	JUSTICE_CPP
 #include "../includes.h"
 /*
@@ -97,7 +98,7 @@ This file is part of Liberal Crime Squad.                                       
  {
 	 CreatureJustice g_crimes = g.getCreatureJustice();
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(3, 1, CONST_justice017, gamelog);
+	 mvaddstrAlt(3, 1, CONST_GUILTY, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 short oldsentence = g.getCreatureJustice().sentence;
@@ -125,7 +126,7 @@ This file is part of Liberal Crime Squad.                                       
 	 if (lenient)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(5, 1, CONST_justice018, gamelog);
+		 mvaddstrAlt(5, 1, CONST_DURING_SENTENCING_THE_JUDGE_GRANTS_SOME_LENIENCY, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 	 }
@@ -136,7 +137,7 @@ This file is part of Liberal Crime Squad.                                       
 		 g.sentence = 3;
 		 set_color_easy(RED_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice019, gamelog);
+		 addstrAlt(CONST_YOU_WILL_BE_RETURNED_TO_PRISON_TO_CARRY_OUT_YOUR_DEATH_SENTENCE, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 		 set_color_easy(WHITE_ON_BLACK);
@@ -148,7 +149,7 @@ This file is part of Liberal Crime Squad.                                       
 		 g.sentence = 3;
 		 set_color_easy(YELLOW_ON_RED_BRIGHT);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice020, gamelog);
+		 addstrAlt(CONST_YOU_ARE_SENTENCED_TO_DEATH, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 		 set_color_easy(WHITE_ON_BLACK);
@@ -162,12 +163,12 @@ This file is part of Liberal Crime Squad.                                       
 		 g.sentence = oldsentence;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice021, gamelog);
-		 mvaddstrAlt(8, 1, CONST_justice022, gamelog);
+		 addstrAlt(CONST_THE_COURT_SEES_NO_NEED_TO_ADD_TO_YOUR_EXISTING_SENTENCE, gamelog);
+		 mvaddstrAlt(8, 1, CONST_YOU_WILL_BE_RETURNED_TO_PRISON_TO_RESUME_IT, gamelog);
 		 if (g.getCreatureJustice().sentence > 1 && lenient)
 		 {
 			 g.sentence--;
-			 addstrAlt(CONST_justice141, gamelog);
+			 addstrAlt(CONST_LESS_A_MONTH_FOR_TIME_ALREADY_SERVED, gamelog);
 		 }
 		 else addstrAlt(singleDot, gamelog);
 		 pressAnyKey();
@@ -176,7 +177,7 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice024, gamelog);
+		 addstrAlt(CONST_CONSIDER_THIS_A_WARNING_YOU_ARE_FREE_TO_GO, gamelog);
 		 pressAnyKey();
 	 }
 	 else
@@ -184,14 +185,14 @@ This file is part of Liberal Crime Squad.                                       
 		 if (g.getCreatureJustice().sentence >= 36)g.sentence -= g.sentence % 12;
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(7, 1, g.propername, gamelog);
-		 addstrAlt(CONST_justice025, gamelog);
+		 addstrAlt(CONST_YOU_ARE_SENTENCED_TO, gamelog);
 		 if (g.getCreatureJustice().sentence > 1200) g.sentence /= -1200;
 		 if (g.getCreatureJustice().sentence <= -1)
 		 {
 			 if (g.getCreatureJustice().sentence < -1)
 			 {
 				 addstrAlt(-(g.getCreatureJustice().sentence), gamelog);
-				 addstrAlt(CONST_justice026, gamelog);
+				 addstrAlt(CONST_CONSECUTIVE_LIFE_TERMS_IN_PRISON, gamelog);
 				 gamelog.newline();
 				 // Don't bother saying this if the convicted already has one or
 				 // more life sentences. Makes the 'consecutively' and 'concurrently'
@@ -200,23 +201,23 @@ This file is part of Liberal Crime Squad.                                       
 				 {
 					 addstrAlt(singleDot, gamelog);
 					 pressAnyKey();
-					 mvaddstrAlt(9, 1, CONST_justice027, gamelog);
+					 mvaddstrAlt(9, 1, CONST_HAVE_A_NICE_DAY, gamelog);
 					 addstrAlt(g.propername, gamelog);
 				 }
 			 }
-			 else addstrAlt(CONST_justice028, gamelog);
+			 else addstrAlt(CONST_LIFE_IN_PRISON, gamelog);
 		 }
 		 else if (g.getCreatureJustice().sentence >= 36)
 		 {
 			 addstrAlt(g.getCreatureJustice().sentence / 12, gamelog);
-			 addstrAlt(CONST_justice029, gamelog);
+			 addstrAlt(CONST_YEARS_IN_PRISON, gamelog);
 		 }
 		 else
 		 {
 			 addstrAlt(g.getCreatureJustice().sentence, gamelog);
-			 addstrAlt(CONST_justice030, gamelog);
+			 addstrAlt(CONST_MONTH, gamelog);
 			 if (g.getCreatureJustice().sentence > 1)addstrAlt(CONST_justice031, gamelog);
-			 addstrAlt(CONST_justice032, gamelog);
+			 addstrAlt(CONST_IN_PRISON, gamelog);
 		 }
 		 // Mash together compatible sentences.
 		 if ((g.getCreatureJustice().sentence > 0 && oldsentence > 0) ||
@@ -228,12 +229,12 @@ This file is part of Liberal Crime Squad.                                       
 			 {
 				 if (abs(oldsentence) > abs(g.getCreatureJustice().sentence))
 					 g.sentence = oldsentence;
-				 addstrAlt(CONST_justice034, gamelog);
+				 addstrAlt(CONST_TO_BE_SERVED_CONCURRENTLY, gamelog);
 			 }
 			 else
 			 {
 				 g.sentence += oldsentence;
-				 addstrAlt(CONST_justice035, gamelog);
+				 addstrAlt(CONST_TO_BE_SERVED_CONSECUTIVELY, gamelog);
 			 }
 		 }
 		 addstrAlt(singleDot, gamelog);
@@ -249,10 +250,10 @@ This file is part of Liberal Crime Squad.                                       
 	 g.location = find_site_index_in_city(SITE_GOVERNMENT_PRISON, LocationsPool::getInstance().get_specific_integer(INT_GETLOCATIONCITY,g.location));
  }
  string commaAndPunctuation(const int typenum) {
-	 if (typenum > 1) return commaSpace;
+	 if (typenum > 1) return COMMA_SPACE;
 	 if (typenum == 1) return AND;
 	 if (typenum == 0) return singleDot;
-	 else return blankString;
+	 else return BLANK_STRING;
  }
  void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts) {
 
@@ -293,7 +294,7 @@ This file is part of Liberal Crime Squad.                                       
 		 if (lawList[LAW_FLAGBURNING] == -2)
 			 crime = (CONST_justice047);
 		 else if (lawList[LAW_FLAGBURNING] == -1)
-			 crime = (CONST_justice048);
+			 crime = (CONST_FELONY_FLAG_BURNING);
 		 else if (lawList[LAW_FLAGBURNING] == 0)
 			 crime = (CONST_justice049);
 		 // otherwise, not a crime
@@ -318,7 +319,7 @@ This file is part of Liberal Crime Squad.                                       
 			 addstrAlt(counts_of, gamelog);
 			 addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice063 : CONST_justiceB173), gamelog);
 		 }
-		 else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice064 : CONST_justiceB174), gamelog);
+		 else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_HIRING_AN_ILLEGAL_ALIEN : CONST_HIRING_AN_UNDOCUMENTED_WORKER), gamelog);
 		 x = 2;
 		 typenum--;
 		 addstrAlt(commaAndPunctuation(typenum), gamelog);
@@ -340,7 +341,7 @@ This file is part of Liberal Crime Squad.                                       
  }
  int get_sentence(CreatureJustice g, DeprecatedCreature &sleeperLawyer, const LegalDefense defense, const bool sleeperjudge) {
 	 set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(3, 1, CONST_justice138, gamelog);
+	 mvaddstrAlt(3, 1, CONST_NOT_GUILTY, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 int new_sentence = g.sentence;
@@ -348,17 +349,17 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(5, 1, g.name, gamelog);
-		 addstrAlt(CONST_justice139, gamelog);
+		 addstrAlt(CONST_IS_FREE, gamelog);
 	 }
 	 else
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
 		 mvaddstrAlt(5, 1, g.name, gamelog);
-		 addstrAlt(CONST_justice140, gamelog);
+		 addstrAlt(CONST_WILL_BE_RETURNED_TO_PRISON_TO_RESUME_AN_EARLIER_SENTENCE, gamelog);
 		 if (!g.deathpenalty && g.sentence > 1 && (LCSrandom(2) || sleeperjudge))
 		 {
 			 new_sentence--;
-			 addstrAlt(CONST_justice141, gamelog);
+			 addstrAlt(CONST_LESS_A_MONTH_FOR_TIME_ALREADY_SERVED, gamelog);
 		 }
 		 else addstrAlt(singleDot, gamelog);
 		 if (g.deathpenalty)
@@ -372,14 +373,14 @@ This file is part of Liberal Crime Squad.                                       
  bool hung_jury(DeprecatedCreature &g, const bool sleeperjudge, const int scarefactor) {
 	 bool keeplawflags = false;
 	 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(3, 1, CONST_justice132, gamelog);
+	 mvaddstrAlt(3, 1, CONST_BUT_THEY_CAN_T_REACH_A_VERDICT, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 //RE-TRY
 	 if (LCSrandom(2) || scarefactor >= 10 || g.getCreatureConfessions())
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(5, 1, CONST_justice133, gamelog);
+		 mvaddstrAlt(5, 1, CONST_THE_CASE_WILL_BE_RE_TRIED_NEXT_MONTH, gamelog);
 		 gamelog.newline();
 		 pressAnyKey();
 		 g.location = find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, g.location);
@@ -389,23 +390,23 @@ This file is part of Liberal Crime Squad.                                       
 	 else
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(5, 1, CONST_justice134, gamelog);
+		 mvaddstrAlt(5, 1, CONST_THE_PROSECUTION_DECLINES_TO_RE_TRY_THE_CASE, gamelog);
 		 gamelog.newline();
 		 if (g.getCreatureJustice().sentence == 0)
 		 {
 			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 			 mvaddstrAlt(7, 1, g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice139, gamelog);
+			 addstrAlt(CONST_IS_FREE, gamelog);
 		 }
 		 else
 		 {
 			 set_color_easy(WHITE_ON_BLACK);
 			 mvaddstrAlt(7, 1, g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice140, gamelog);
+			 addstrAlt(CONST_WILL_BE_RETURNED_TO_PRISON_TO_RESUME_AN_EARLIER_SENTENCE, gamelog);
 			 if (!g.getCreatureJustice().deathpenalty && g.getCreatureJustice().sentence > 1 && (LCSrandom(2) || sleeperjudge))
 			 {
 				 g.sentence--;
-				 addstrAlt(CONST_justice141, gamelog);
+				 addstrAlt(CONST_LESS_A_MONTH_FOR_TIME_ALREADY_SERVED, gamelog);
 			 }
 			 else addstrAlt(singleDot, gamelog);
 			 if (g.getCreatureJustice().deathpenalty)
@@ -421,31 +422,31 @@ This file is part of Liberal Crime Squad.                                       
  }
  void printdefensepower(const int defensepower) {
 
-	 if (defensepower <= 5) { addstrAlt(CONST_justice109, gamelog); }
-	 else if (defensepower <= 15) { addstrAlt(CONST_justice110, gamelog); }
-	 else if (defensepower <= 25) { addstrAlt(CONST_justice111, gamelog); }
-	 else if (defensepower <= 50) { addstrAlt(CONST_justice112, gamelog); }
-	 else if (defensepower <= 75) { addstrAlt(CONST_justice113, gamelog); }
-	 else /*if (defensepower <= 100)*/ { addstrAlt(CONST_justice114, gamelog); }
+	 if (defensepower <= 5) { addstrAlt(CONST_THE_DEFENSE_ATTORNEY_RARELY_SHOWED_UP, gamelog); }
+	 else if (defensepower <= 15) { addstrAlt(CONST_THE_DEFENSE_ATTORNEY_ACCIDENTALLY_SAID_MY_CLIENT_IS_GUILTY_DURING_CLOSING, gamelog); }
+	 else if (defensepower <= 25) { addstrAlt(CONST_THE_DEFENSE_IS_TOTALLY_LAME, gamelog); }
+	 else if (defensepower <= 50) { addstrAlt(CONST_THE_DEFENSE_WAS_LACKLUSTER, gamelog); }
+	 else if (defensepower <= 75) { addstrAlt(CONST_DEFENSE_ARGUMENTS_WERE_PRETTY_GOOD, gamelog); }
+	 else /*if (defensepower <= 100)*/ { addstrAlt(CONST_THE_DEFENSE_WAS_REALLY_SLICK, gamelog); }
  }
  void printstrongdefensepower(const int prosecution) {
 
 
-	 if (prosecution < 100) { addstrAlt(CONST_justice115, gamelog); }
-	 else { addstrAlt(CONST_justice116, gamelog); }
+	 if (prosecution < 100) { addstrAlt(CONST_THE_DEFENSE_MAKES_THE_PROSECUTION_LOOK_LIKE_AMATEURS, gamelog); }
+	 else { addstrAlt(CONST_THE_DEFENSE_IS_EXTREMELY_COMPELLING, gamelog); }
 
  }
  void printultimatedefensepower(const int prosecution, const string attorneyname) {
 	 if (prosecution < 100)
 	 {
 		 addstrAlt(attorneyname, gamelog);
-		 addstrAlt(CONST_justice117, gamelog);
-		 mvaddstrAlt(10, 1, CONST_justice118, gamelog);
+		 addstrAlt(CONST_S_ARGUMENTS_MADE_SEVERAL_OF_THE_JURORS_STAND_UP, gamelog);
+		 mvaddstrAlt(10, 1, CONST_AND_SHOUT_NOT_GUILTY_BEFORE_DELIBERATIONS_EVEN_BEGAN, gamelog);
 	 }
 	 else
 	 {
 		 addstrAlt(attorneyname, gamelog);
-		 addstrAlt(CONST_justice119, gamelog);
+		 addstrAlt(CONST_CONDUCTS_AN_INCREDIBLE_DEFENSE, gamelog);
 	 }
  }
  int get_defensepower(DeprecatedCreature &g, DeprecatedCreature &sleeperLawyer, const char attorneyname[200], const LegalDefense defense, const int prosecution) {
@@ -495,18 +496,18 @@ This file is part of Liberal Crime Squad.                                       
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 if (defensepower <= 0)
 		 {
-			 addstrAlt(CONST_justice120, gamelog);
+			 addstrAlt(CONST_MAKES_ONE_HORRIBLE_MISTAKE_AFTER_ANOTHER, gamelog);
 			 gamelog.newline();
 			 addjuice(g, -10, -50); // You should be ashamed
 		 }
-		 else if (defensepower <= 25) addstrAlt(CONST_justice121, gamelog);
-		 else if (defensepower <= 50) addstrAlt(CONST_justice122, gamelog);
-		 else if (defensepower <= 75) addstrAlt(CONST_justice123, gamelog);
-		 else if (defensepower <= 100) addstrAlt(CONST_justice124, gamelog);
-		 else if (defensepower <= 150) addstrAlt(CONST_justice125, gamelog);
+		 else if (defensepower <= 25) addstrAlt(CONST_S_CASE_REALLY_SUCKED, gamelog);
+		 else if (defensepower <= 50) addstrAlt(CONST_DID_ALL_RIGHT_BUT_MADE_SOME_MISTAKES, gamelog);
+		 else if (defensepower <= 75) addstrAlt(CONST_S_ARGUMENTS_WERE_PRETTY_GOOD, gamelog);
+		 else if (defensepower <= 100) addstrAlt(CONST_WORKED_THE_JURY_VERY_WELL, gamelog);
+		 else if (defensepower <= 150) addstrAlt(CONST_MADE_A_VERY_POWERFUL_CASE, gamelog);
 		 else
 		 {
-			 addstrAlt(CONST_justice126, gamelog);
+			 addstrAlt(CONST_HAD_THE_JURY_JUDGE_AND_PROSECUTION_CRYING_FOR_FREEDOM, gamelog);
 			 addjuice(g, 50, 1000); // That shit is legend
 		 }
 		 gamelog.newline();
@@ -520,10 +521,10 @@ This file is part of Liberal Crime Squad.                                       
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(1, 1, g.getNameAndAlignment().name, gamelog);
-	 addstrAlt(CONST_justice090);
+	 addstrAlt(CONST_IS_STANDING_TRIAL);
 	 //TRIAL MESSAGE
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(3, 1, CONST_justice091, gamelog);
+	 mvaddstrAlt(3, 1, CONST_THE_TRIAL_PROCEEDS_JURY_SELECTION_IS_FIRST, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 //JURY MAKEUP MESSAGE
@@ -536,9 +537,9 @@ This file is part of Liberal Crime Squad.                                       
 		 if (LCSrandom(10))
 		 {
 			 addstrAlt(attorneyname, gamelog);
-			 addstrAlt(CONST_justice092, gamelog);
+			 addstrAlt(CONST_ENSURES_THE_JURY_IS_STACKED_IN, gamelog);
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice093, gamelog);
+			 addstrAlt(CONST_S_FAVOR, gamelog);
 			 gamelog.newline();
 			 if (jury > 0) jury = 0;
 			 jury -= 30;
@@ -547,7 +548,7 @@ This file is part of Liberal Crime Squad.                                       
 		 {
 			 set_color_easy(RED_ON_BLACK_BRIGHT);
 			 addstrAlt(attorneyname, gamelog);
-			 addstrAlt(CONST_justice094, gamelog);
+			 addstrAlt(CONST_S_CONSERVATIVE_ARCH_NEMESIS_WILL_REPRESENT_THE_PROSECUTION, gamelog);
 			 gamelog.newline();
 			 jury = 0;
 			 prosecution += 100; // DUN DUN DUN!!
@@ -558,14 +559,14 @@ This file is part of Liberal Crime Squad.                                       
 		 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		 switch (LCSrandom(liberal_jury.size() + 1))
 		 {
-		 case 0:addstrAlt(g.getNameAndAlignment().name); addstrAlt(CONST_justice095, gamelog); break;
+		 case 0:addstrAlt(g.getNameAndAlignment().name); addstrAlt(CONST_S_BEST_FRIEND_FROM_CHILDHOOD_IS_A_JUROR, gamelog); break;
 		 default:addstrAlt(pickrandom(liberal_jury), gamelog); break;
 		 }
 		 gamelog.newline();
 	 }
-	 else if (jury <= -15) addstrAlt(CONST_justice096, gamelog);
-	 else if (jury < 15) addstrAlt(CONST_justice097, gamelog);
-	 else if (jury < 29) addstrAlt(CONST_justice098, gamelog);
+	 else if (jury <= -15) addstrAlt(CONST_THE_JURY_IS_FAIRLY_LIBERAL, gamelog);
+	 else if (jury < 15) addstrAlt(CONST_THE_JURY_IS_QUITE_MODERATE, gamelog);
+	 else if (jury < 29) addstrAlt(CONST_THE_JURY_IS_A_BIT_CONSERVATIVE, gamelog);
 	 else
 	 {
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -578,7 +579,7 @@ This file is part of Liberal Crime Squad.                                       
 		 addstrAlt(CONST_justice127);
 		 if (jury >= 0) addcharAlt('+');
 		 addstrAlt(jury);
-		 addstrAlt(CONST_justice108);
+		 addstrAlt(CONST_TO_CONVICT);
 	 }
 	 pressAnyKey();
 	 //PROSECUTION MESSAGE
@@ -590,21 +591,21 @@ This file is part of Liberal Crime Squad.                                       
 	 moveAlt(7, 1);
 
 	 {
-		 if (prosecution <= 50) addstrAlt(CONST_justice101, gamelog);
-		 else if (prosecution <= 75) addstrAlt(CONST_justice102, gamelog);
-		 else if (prosecution <= 125) addstrAlt(CONST_justice103, gamelog);
-		 else if (prosecution <= 175) addstrAlt(CONST_justice104, gamelog);
-		 else addstrAlt(CONST_justice105, gamelog);
+		 if (prosecution <= 50) addstrAlt(CONST_THE_PROSECUTION_S_PRESENTATION_IS_TERRIBLE, gamelog);
+		 else if (prosecution <= 75) addstrAlt(CONST_THE_PROSECUTION_GIVES_A_STANDARD_PRESENTATION, gamelog);
+		 else if (prosecution <= 125) addstrAlt(CONST_THE_PROSECUTION_S_CASE_IS_SOLID, gamelog);
+		 else if (prosecution <= 175) addstrAlt(CONST_THE_PROSECUTION_MAKES_AN_AIRTIGHT_CASE, gamelog);
+		 else addstrAlt(CONST_THE_PROSECUTION_IS_INCREDIBLY_STRONG, gamelog);
 		 gamelog.newline();
 	 }
 	 // Debug prosecution power
 	 if (SHOWMECHANICS)
 	 {
-		 addstrAlt(CONST_justice106);
+		 addstrAlt(PARENTHESIS_PLUS);
 		 addstrAlt(prosecution / 2);
 		 addstrAlt(CONST_justice107);
 		 addstrAlt(prosecution);
-		 addstrAlt(CONST_justice108);
+		 addstrAlt(CONST_TO_CONVICT);
 	 }
 	 pressAnyKey();
 	 jury += LCSrandom(prosecution / 2 + 1) + prosecution / 2;
@@ -618,20 +619,20 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 addstrAlt(CONST_justice127);
 		 addstrAlt(defensepower);
-		 addstrAlt(CONST_justice128);
+		 addstrAlt(CONST_NEED);
 		 addstrAlt(jury + 1);
-		 addstrAlt(CONST_justice129);
+		 addstrAlt(CONST_TO_ACQUIT);
 	 }
 	 pressAnyKey();
 	 //DELIBERATION MESSAGE
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(12, 1, CONST_justice130, gamelog);
+	 mvaddstrAlt(12, 1, CONST_THE_JURY_LEAVES_TO_CONSIDER_THE_CASE, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 //JURY RETURN MESSAGE
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(1, 1, CONST_justice131, gamelog);
+	 mvaddstrAlt(1, 1, CONST_THE_JURY_HAS_RETURNED_FROM_DELIBERATIONS, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 bool keeplawflags = false;
@@ -670,7 +671,7 @@ This file is part of Liberal Crime Squad.                                       
 	 
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(1, 1, CONST_justice143, gamelog);
+	 mvaddstrAlt(1, 1, CONST_THE_COURT_ACCEPTS_THE_PLEA, gamelog);
 	 gamelog.nextMessage();
 	 pressAnyKey();
 	 // Check for lenience; sleeper judge will always be merciful
@@ -690,7 +691,7 @@ This file is part of Liberal Crime Squad.                                       
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(1, 1, g.getNameAndAlignment().name, gamelog);
-	 addstrAlt(CONST_justice090, gamelog);
+	 addstrAlt(CONST_IS_STANDING_TRIAL, gamelog);
 	 gamelog.newline();
 	 pressAnyKey();
 	 set_color_easy(WHITE_ON_BLACK);
@@ -710,15 +711,15 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 mvaddstrAlt(3, 1, string_sleeper, gamelog);
 		 addstrAlt(sleeperjudge->getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice037, gamelog);
+		 addstrAlt(CONST_READS_THE_CHARGES_TRYING_TO_HIDE_A_SMILE, gamelog);
 		 g.confessions = 0; //Made sleeper judge prevent these lunatics from testifying
 	 }
-	 else mvaddstrAlt(3, 1, CONST_justice038, gamelog);
+	 else mvaddstrAlt(3, 1, CONST_THE_JUDGE_READS_THE_CHARGES, gamelog);
 	 gamelog.newline();
 	 set_color_easy(RED_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(5, 1, CONST_justice039, gamelog);
+	 mvaddstrAlt(5, 1, CONST_THE_DEFENDANT, gamelog);
 	 addstrAlt(g.propername, gamelog);
-	 addstrAlt(CONST_justice040, gamelog);
+	 addstrAlt(CONST_IS_CHARGED_WITH, gamelog);
 	 int y = listAllCrimes(g.getCreatureJustice());
 	 gamelog.newline();
 	 if (g.getCreatureConfessions())
@@ -726,9 +727,9 @@ This file is part of Liberal Crime Squad.                                       
 		 if (g.getCreatureConfessions() > 1)
 		 {
 			 mvaddstrAlt(y += 2, 1, g.getCreatureConfessions(), gamelog);
-			 addstrAlt(CONST_justice076, gamelog);
+			 addstrAlt(CONST_FORMER_LCS_MEMBERS_WILL_TESTIFY_AGAINST, gamelog);
 		 }
-		 else mvaddstrAlt(y += 2, 1, CONST_justice077, gamelog);
+		 else mvaddstrAlt(y += 2, 1, CONST_A_FORMER_LCS_MEMBER_WILL_TESTIFY_AGAINST, gamelog);
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
 		 addstrAlt(singleDot, gamelog);
 		 gamelog.newline();
@@ -736,7 +737,7 @@ This file is part of Liberal Crime Squad.                                       
 	 }
 	 //CHOOSE DEFENSE
 	 set_color_easy(WHITE_ON_BLACK);
-	 mvaddstrAlt(y + 2, 1, CONST_justice078);
+	 mvaddstrAlt(y + 2, 1, CONST_HOW_WILL_YOU_CONDUCT_THE_DEFENSE);
 	 char attorneyname[200];
 	 unsigned long oldseed[RNG_SIZE];
 	 copyRNG(oldseed, seed);
@@ -744,19 +745,19 @@ This file is part of Liberal Crime Squad.                                       
 	 generate_name(attorneyname);
 	 copyRNG(seed, oldseed);
 	 y += 4;
-	 mvaddstrAlt(y++, 1, CONST_justice079);
-	 mvaddstrAlt(y++, 1, CONST_justice080);
-	 mvaddstrAlt(y++, 1, CONST_justice081);
+	 mvaddstrAlt(y++, 1, CONST_A_USE_A_COURT_APPOINTED_ATTORNEY);
+	 mvaddstrAlt(y++, 1, CONST_B_DEFEND_SELF);
+	 mvaddstrAlt(y++, 1, CONST_C_PLEAD_GUILTY);
 	 if (ledger.get_funds() < 5000) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	 mvaddstrAlt(y++, 1, CONST_justice082);
+	 mvaddstrAlt(y++, 1, CONST_D_PAY_5000_TO_HIRE_ACE_LIBERAL_ATTORNEY);
 	 addstrAlt(attorneyname);
 	 addstrAlt(singleDot);
 	 if (sleeperlawyer)
 	 {
 		 set_color_easy(WHITE_ON_BLACK);
-		 mvaddstrAlt(y++, 1, CONST_justice083);
+		 mvaddstrAlt(y++, 1, CONST_E_ACCEPT_SLEEPER);
 		 addstrAlt(sleeperlawyer->getNameAndAlignment().name);
-		 addstrAlt(CONST_justice084);
+		 addstrAlt(CONST_S_OFFER_TO_ASSIST_PRO_BONO);
 	 }
 	 if (ledger.get_funds() < 5000) set_color_easy(WHITE_ON_BLACK);
 	 //SAV - added in display of skills and relevant attributes to help
@@ -765,11 +766,11 @@ This file is part of Liberal Crime Squad.                                       
 	 addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
 	 mvaddstrAlt(y, 25, CONST_justice086);
 	 addstrAlt(g.get_skill(SKILL_PERSUASION));
-	 mvaddstrAlt(++y, 5, CONST_justice087);
+	 mvaddstrAlt(++y, 5, CONST_CHARISMA);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
 	 mvaddstrAlt(y++, 25, CONST_justice088);
 	 addstrAlt(g.get_skill(SKILL_LAW));
-	 mvaddstrAlt(y++, 5, CONST_justice089);
+	 mvaddstrAlt(y++, 5, CONST_INTELLIGENCE);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
 	 // End SAV's adds
 	 LegalDefense defense = UNDECIDED;
@@ -800,7 +801,7 @@ This file is part of Liberal Crime Squad.                                       
 	 bool keeplawflags = false;
 	 if (defense != PLEAD_GUILTY) { keeplawflags = pleadInnocent(g, *sleeperlawyer, attorneyname, defense, sleeperjudge, scarefactor); }
 	 //GUILTY PLEA
-	 // How about CONST_justice142 (Nolo contendere) -- LK
+	 // How about CONST_NOLO (Nolo contendere) -- LK
 	 // I would imagine this would disregard the strength of the defense. -- LK
 	 else { pleadGuilty(g, sleeperjudge); }
 
@@ -835,27 +836,27 @@ This file is part of Liberal Crime Squad.                                       
 		 if (g.juice > 0 && LCSrandom(2))
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice144, gamelog);
+			 addstrAlt(CONST_FEELS_BAD_ABOUT_LCS_ACTIONS_AND_LOSES_JUICE, gamelog);
 			 addjuice(g, -50, 0);
 		 }
 		 else if (LCSrandom(15) > g.get_attribute(ATTRIBUTE_WISDOM, true)
 			 || g.get_attribute(ATTRIBUTE_WISDOM, true) < g.get_attribute(ATTRIBUTE_HEART, true))
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice145, gamelog);
+			 addstrAlt(CONST_SILENTLY_GROWS_WISER, gamelog);
 			 g.adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		 }
 		 else if (g.align == ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice146, gamelog);
+			 addstrAlt(CONST_ONLY_STAYS_LOYAL_TO_THE_LCS_FOR, gamelog);
 			 addstrAlt(pool[g.hireid]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(singleDot, gamelog);
 		 }
 		 else
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice147, gamelog);
+			 addstrAlt(CONST_ABANDONS_THE_LIBERAL_CRIME_SQUAD, gamelog);
 			 //Rat out contact
 			 int contact = getpoolcreature(g.hireid);
 			 if (contact >= 0)
@@ -885,23 +886,23 @@ This file is part of Liberal Crime Squad.                                       
 	 if (g.hireid == -1 && !LCSrandom(3))
 	 {
 		 escaped = 2;
-		 experience = CONST_justice149.c_str();
+		 experience = CONST_LEADS_THE_OPPRESSED_PRISONERS_AND_OVERWHELMS_THE_PRISON_GUARDS.c_str();
 	 }
 	 else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
 	 {
 		 escaped = 1;
-		 experience = CONST_justice150.c_str();
+		 experience = CONST_WEARS_AN_ELECTRICIAN_S_OUTFIT_AND_RIDES_AWAY_WITH_SOME_CONTRACTORS.c_str();
 		 g.give_armor(getarmortype(tag_ARMOR_WORKCLOTHES), NULL);
 	 }
 	 else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
 	 {
 		 escaped = 1;
-		 experience = CONST_justice151.c_str();
+		 experience = CONST_PICKS_THE_LOCK_ON_THEIR_LEG_CHAINS_AND_THEN_SNEAKS_AWAY.c_str();
 	 }
 	 else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
 	 {
 		 escaped = 1;
-		 experience = CONST_justice152.c_str();
+		 experience = CONST_CONSUMES_DRUGS_THAT_SIMULATE_DEATH_AND_IS_THROWN_OUT_WITH_THE_TRASH.c_str();
 	 }
 	 if (!escaped)experience = (singleSpace + pickrandom(labor_camp_experiences)).data();
 	 eraseAlt();
@@ -915,7 +916,7 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 int prison = g.location;
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice164, gamelog);
+		 addstrAlt(CONST_ESCAPED_FROM_PRISON, gamelog);
 		 addjuice(g, 50, 1000);
 		 criminalize(g, LAWFLAG_ESCAPED);
 		 g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
@@ -925,12 +926,12 @@ This file is part of Liberal Crime Squad.                                       
 			 if (num_escaped == 1)
 			 {
 				 gamelog.nextMessage();
-				 mvaddstrAlt(11, 1, CONST_justice165, gamelog);
+				 mvaddstrAlt(11, 1, CONST_ANOTHER_IMPRISONED_LCS_MEMBER_ALSO_GETS_OUT, gamelog);
 			 }
 			 else if (num_escaped > 1)
 			 {
 				 gamelog.nextMessage();
-				 mvaddstrAlt(11, 1, CONST_justice166, gamelog);
+				 mvaddstrAlt(11, 1, CONST_THE_LCS_WILL_RISE_AGAIN_MULTIPLE_LCS_MEMBERS_ESCAPE, gamelog);
 			 }
 		 }
 	 }
@@ -939,14 +940,14 @@ This file is part of Liberal Crime Squad.                                       
 		 if (g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice156, gamelog);
+			 addstrAlt(CONST_IS_BADLY_HURT_IN_THE_PROCESS, gamelog);
 			 addjuice(g, -40, 0);
 			 addjuice(g, -10, -50);
 		 }
 		 else
 		 {
 			 addstrAlt(g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice157, gamelog);
+			 addstrAlt(CONST_IS_FOUND_DEAD, gamelog);
 			 g.die();
 			 g.location = -1;
 		 }
@@ -954,7 +955,7 @@ This file is part of Liberal Crime Squad.                                       
 	 else
 	 {
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice158, gamelog);
+		 addstrAlt(CONST_MANAGED_TO_AVOID_LASTING_INJURY, gamelog);
 	 }
 	 gamelog.nextMessage();
 	 pressAnyKey();
@@ -972,28 +973,28 @@ This file is part of Liberal Crime Squad.                                       
 		 if (g.hireid == -1 && !LCSrandom(10))
 		 {
 			 escaped = 2;
-			 experience = CONST_justice159.c_str();
+			 experience = CONST_LEADS_A_RIOT_WITH_DOZENS_OF_PRISONERS_CHANTING_THE_LCS_SLOGAN.c_str();
 		 }
 		 else if (g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
 		 {
 			 escaped = 2;
-			 experience = CONST_justice160.c_str();
+			 experience = CONST_CODES_A_VIRUS_ON_A_SMUGGLED_PHONE_THAT_OPENS_ALL_THE_PRISON_DOORS.c_str();
 		 }
 		 else if (g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
 		 {
 			 escaped = 1;
-			 experience = CONST_justice161.c_str();
+			 experience = CONST_PUTS_ON_SMUGGLED_STREET_CLOTHES_AND_CALMLY_WALKS_OUT_OF_PRISON.c_str();
 			 g.give_armor(getarmortype(tag_ARMOR_CLOTHES), NULL);
 		 }
 		 else if (g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
 		 {
 			 escaped = 1;
-			 experience = CONST_justice162.c_str();
+			 experience = CONST_JIMMIES_THE_CELL_DOOR_AND_CUTS_THE_OUTER_FENCE_IN_THE_DEAD_OF_NIGHT.c_str();
 		 }
 		 else if (g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
 		 {
 			 escaped = 1;
-			 experience = CONST_justice163.c_str();
+			 experience = CONST_INTENTIONALLY_ODS_ON_SMUGGLED_DRUGS_THEN_BREAKS_OUT_OF_THE_MEDICAL_WARD.c_str();
 		 }
 	 }
 	 if (escaped == 0)
@@ -1024,7 +1025,7 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 int prison = g.location;
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice164, gamelog);
+		 addstrAlt(CONST_ESCAPED_FROM_PRISON, gamelog);
 		 addjuice(g, 50, 1000);
 		 criminalize(g, LAWFLAG_ESCAPED);
 		 g.location = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, g.location);
@@ -1043,31 +1044,31 @@ This file is part of Liberal Crime Squad.                                       
 			 if (num_escaped == 1)
 			 {
 				 gamelog.nextMessage();
-				 mvaddstrAlt(11, 1, CONST_justice165, gamelog);
+				 mvaddstrAlt(11, 1, CONST_ANOTHER_IMPRISONED_LCS_MEMBER_ALSO_GETS_OUT, gamelog);
 			 }
 			 else if (num_escaped > 1)
 			 {
 				 gamelog.nextMessage();
-				 mvaddstrAlt(11, 1, CONST_justice166, gamelog);
+				 mvaddstrAlt(11, 1, CONST_THE_LCS_WILL_RISE_AGAIN_MULTIPLE_LCS_MEMBERS_ESCAPE, gamelog);
 			 }
 		 }
 	 }
 	 else if (effect > 0)
 	 {
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice167, gamelog);
+		 addstrAlt(CONST_HAS_BECOME_A_MORE_HARDENED_JUICIER_CRIMINAL, gamelog);
 		 addjuice(g, 20, 1000);
 	 }
 	 else if (effect < 0)
 	 {
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice168, gamelog);
+		 addstrAlt(CONST_IS_KINDA_LOSING_IT_IN_HERE_JUICE_THAT_IS, gamelog);
 		 addjuice(g, -20, -30);
 	 }
 	 else
 	 {
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice169, gamelog);
+		 addstrAlt(CONST_SEEMS_TO_BE_MOSTLY_FINE_THOUGH, gamelog);
 	 }
 	 gamelog.nextMessage();
 	 pressAnyKey();
@@ -1106,8 +1107,8 @@ This file is part of Liberal Crime Squad.                                       
 			 eraseAlt();
 			 set_color_easy(WHITE_ON_BLACK);
 			 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
-			 addstrAlt(CONST_justice170, gamelog);
-			 mvaddstrAlt(9, 1, CONST_justice171, gamelog);
+			 addstrAlt(CONST_S_DEATH_SENTENCE_HAS_BEEN_COMMUTED_TO_LIFE, gamelog);
+			 mvaddstrAlt(9, 1, CONST_DUE_TO_THE_ABOLITION_OF_THE_DEATH_PENALTY, gamelog);
 			 gamelog.nextMessage();
 			 pressAnyKey();
 			 g.sentence = -1;
@@ -1123,9 +1124,9 @@ This file is part of Liberal Crime Squad.                                       
 			 {
 				 eraseAlt();
 				 set_color_easy(RED_ON_BLACK_BRIGHT);
-				 mvaddstrAlt(8, 1, CONST_justice172, gamelog);
+				 mvaddstrAlt(8, 1, CONST_FOR_SHAME, gamelog);
 				 gamelog.newline();
-				 mvaddstrAlt(9, 1, CONST_justice173, gamelog);
+				 mvaddstrAlt(9, 1, CONST_TODAY_THE_CONSERVATIVE_MACHINE_EXECUTED, gamelog);
 				 addstrAlt(g.getNameAndAlignment().name, gamelog);
 				 gamelog.record(singleSpace); //Log this for formatting purposes.
 				 mvaddstrAlt(10, 1, CONST_justice174, gamelog);
@@ -1144,9 +1145,9 @@ This file is part of Liberal Crime Squad.                                       
 					 gamelog.newline();
 					 set_color_easy(WHITE_ON_BLACK);
 					 mvaddstrAlt(12, 1, pool[boss]->getNameAndAlignment().name, gamelog);
-					 addstrAlt(CONST_justice175, gamelog);
+					 addstrAlt(CONST_HAS_FAILED_THE_LIBERAL_CRIME_SQUAD, gamelog);
 					 gamelog.newline();
-					 mvaddstrAlt(14, 1, CONST_justice176, gamelog);
+					 mvaddstrAlt(14, 1, CONST_IF_YOU_CAN_T_PROTECT_YOUR_OWN_PEOPLE_WHO_CAN_YOU_PROTECT, gamelog);
 					 pressAnyKey();
 					 addjuice(*pool[boss], -50, -50);
 				 }
@@ -1161,9 +1162,9 @@ This file is part of Liberal Crime Squad.                                       
 				 eraseAlt();
 				 set_color_easy(WHITE_ON_BLACK);
 				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_justice177, gamelog);
+				 addstrAlt(CONST_HAS_BEEN_RELEASED_FROM_PRISON, gamelog);
 				 gamelog.newline();
-				 mvaddstrAlt(9, 1, CONST_justice178, gamelog);
+				 mvaddstrAlt(9, 1, CONST_NO_DOUBT_THERE_ARE_SOME_MENTAL_SCARS_BUT_THE_LIBERAL_IS_BACK, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
 				 Armor clothes(getarmortype(tag_ARMOR_CLOTHES));
@@ -1183,7 +1184,7 @@ This file is part of Liberal Crime Squad.                                       
 				 eraseAlt();
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_justice179, gamelog);
+				 addstrAlt(CONST_IS_DUE_TO_BE_EXECUTED_NEXT_MONTH, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
 				 showed = 1;
@@ -1193,7 +1194,7 @@ This file is part of Liberal Crime Squad.                                       
 				 eraseAlt();
 				 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_justice180, gamelog);
+				 addstrAlt(CONST_IS_DUE_TO_BE_RELEASED_NEXT_MONTH, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
 				 showed = 1;
@@ -1206,9 +1207,9 @@ This file is part of Liberal Crime Squad.                                       
 				 eraseAlt();
 				 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 				 mvaddstrAlt(8, 1, g.getNameAndAlignment().name, gamelog);
-				 addstrAlt(CONST_justice181, gamelog);
+				 addstrAlt(CONST_IS_DUE_TO_BE_EXECUTED_IN, gamelog);
 				 addstrAlt(g.getCreatureJustice().sentence, gamelog);
-				 addstrAlt(CONST_justice182, gamelog);
+				 addstrAlt(CONST_MONTHS, gamelog);
 				 gamelog.nextMessage();
 				 pressAnyKey();
 				 showed = 1;

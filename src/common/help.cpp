@@ -1,3 +1,4 @@
+
 #define HELP_CPP
 #include "../includes.h"
 
@@ -41,4 +42,3 @@ void HelpActivities(int activityType)
 	mvaddstrAlt(23, 0, pressAnyKeyToReturn);
 	pressAnyKey();
 }
-

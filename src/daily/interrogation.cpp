@@ -1,3 +1,4 @@
+
 #define	INTERROGATION_CPP
 #include "../includes.h"
 /*
@@ -31,69 +32,69 @@ void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
 	clear_interrogation_sidebar();
 	map<long, struct Float_Zero>& rapport = cr->activity.intr()->rapport;
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(4, 40, CONST_interrogation039);
+	mvaddstrAlt(4, 40, CONST_PRISONER);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(cr->getNameAndAlignment().name);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(6, 40, CONST_interrogation045);
+	mvaddstrAlt(6, 40, CONST_HEALTH);
 	printhealthstat(cr->getCreatureHealth(), 6, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(7, 40, CONST_interrogation047);
+	mvaddstrAlt(7, 40, CONST_HEART);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(8, 40, CONST_interrogation048);
+	mvaddstrAlt(8, 40, CONST_WISDOM);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(9, 40, CONST_interrogation045);
+	mvaddstrAlt(9, 40, CONST_HEALTH);
 	addstrAlt(cr->get_attribute(ATTRIBUTE_HEALTH, true));
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(13, 40, CONST_interrogation044);
+	mvaddstrAlt(13, 40, CONST_LEAD_INTERROGATOR);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	addstrAlt(a->getNameAndAlignment().name);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(15, 40, CONST_interrogation045);
+	mvaddstrAlt(15, 40, CONST_HEALTH);
 	printhealthstat(a->getCreatureHealth(), 16, 48, 0);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(17, 40, CONST_interrogation046);
+	mvaddstrAlt(17, 40, CONST_PSYCHOLOGY_SKILL);
 	addstrAlt(a->get_skill(SKILL_PSYCHOLOGY));
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(18, 40, CONST_interrogation047);
+	mvaddstrAlt(18, 40, CONST_HEART);
 	addstrAlt(a->get_attribute(ATTRIBUTE_HEART, true));
-	mvaddstrAlt(19, 40, CONST_interrogation048);
+	mvaddstrAlt(19, 40, CONST_WISDOM);
 	addstrAlt(a->get_attribute(ATTRIBUTE_WISDOM, true));
-	mvaddstrAlt(20, 40, CONST_interrogation049);
+	mvaddstrAlt(20, 40, CONST_OUTFIT);
 	addstrAlt(a->get_armor().get_name());
 	// What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
 	// These are greater than and less than comparisons, so they are testing ranges -Fox
 	string line_one;
-	string line_two = blankString;
+	string line_two = BLANK_STRING;
 	if (rapport[a->id] > 3)
 	{
-		line_one = CONST_interrogation050;
-		line_two = CONST_interrogation051;
+		line_one = CONST_THE_CONSERVATIVE_CLINGS_HELPLESSLY;
+		line_two = CONST_TO;
 		line_two += string(a->getNameAndAlignment().name);
-		line_two += CONST_interrogation052;
+		line_two += CONST_AS_ITS_ONLY_FRIEND;
 	}
 	else if (rapport[a->id] > 1)
 	{
-		line_one = CONST_interrogation053;
+		line_one = CONST_THE_CONSERVATIVE_LIKES;
 		line_one += string(a->getNameAndAlignment().name);
 		line_one += singleDot;
 	}
 	else if (rapport[a->id] > -1)
 	{
-		line_one = CONST_interrogation054;
-		line_two = CONST_interrogation055;
+		line_one = CONST_THE_CONSERVATIVE_IS_UNCOOPERATIVE;
+		line_two = CONST_TOWARD;
 		line_two += string(a->getNameAndAlignment().name);
 		line_two += singleDot;
 	}
 	else if (rapport[a->id] > -4)
 	{
-		line_one = CONST_interrogation056;
+		line_one = CONST_THE_CONSERVATIVE_HATES;
 		line_one += string(a->getNameAndAlignment().name);
 		line_one += singleDot;
 	}
 	else
 	{
-		line_one = CONST_interrogation057;
+		line_one = CONST_THE_CONSERVATIVE_WOULD_LIKE_TO;
 		line_two, CONST_interrogation058;
 		line_two += string(a->getNameAndAlignment().name);
 		line_two += singleDot;
@@ -111,58 +112,58 @@ void printInterrogationMenu(bool techniques[6], DeprecatedCreature * cr, Depreca
 		if (techniques[TECHNIQUE_KILL])
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 0, CONST_interrogation061);
+			mvaddstrAlt(2, 0, CONST_THE_EXECUTION_OF_AN_AUTOMATON);
 		}
 		else
 		{
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			mvaddstrAlt(2, 0, CONST_interrogation062);
+			mvaddstrAlt(2, 0, CONST_SELECTING_A_LIBERAL_INTERROGATION_PLAN);
 		}
 		if (techniques[TECHNIQUE_KILL])set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		else set_color_easy(techniques[TECHNIQUE_TALK] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 
-		mvaddstrAlt(4, 0, CONST_interrogation063);
+		mvaddstrAlt(4, 0, CONST_A);
 
-		if (!techniques[TECHNIQUE_TALK]) addstrAlt(CONST_interrogation064);
-		else addstrAlt(CONST_interrogation065);
+		if (!techniques[TECHNIQUE_TALK]) addstrAlt(CONST_NO_VERBAL_CONTACT);
+		else addstrAlt(CONST_ATTEMPT_TO_CONVERT);
 
 		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_RESTRAIN] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 
-		mvaddstrAlt(5, 0, CONST_interrogation066);
-		if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_interrogation077);
+		mvaddstrAlt(5, 0, CONST_B);
+		if (!techniques[TECHNIQUE_RESTRAIN]) addstrAlt(CONST_NO);
 
-		addstrAlt(CONST_interrogation068);
+		addstrAlt(CONST_PHYSICAL_RESTRAINTS);
 		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_BEAT] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 
-		mvaddstrAlt(6, 0, CONST_interrogation069);
+		mvaddstrAlt(6, 0, CONST_C);
 
-		if (!techniques[TECHNIQUE_BEAT]) addstrAlt(CONST_interrogation070);
+		if (!techniques[TECHNIQUE_BEAT]) addstrAlt(CONST_NOT);
 
-		addstrAlt(CONST_interrogation071);
+		addstrAlt(CONST_VIOLENTLY_BEATEN);
 
 		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_PROPS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 
-		mvaddstrAlt(7, 0, CONST_interrogation072);
+		mvaddstrAlt(7, 0, CONST_D);
 
-		if (!techniques[TECHNIQUE_PROPS])addstrAlt(CONST_interrogation077);
+		if (!techniques[TECHNIQUE_PROPS])addstrAlt(CONST_NO);
 
-		addstrAlt(CONST_interrogation074);
-		mvaddstrAlt(7, 27, CONST_interrogation075);
+		addstrAlt(CONST_EXPENSIVE_PROPS);
+		mvaddstrAlt(7, 27, CONST_250);
 
 		if (!techniques[TECHNIQUE_KILL])set_color_easy(techniques[TECHNIQUE_DRUGS] ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 
-		mvaddstrAlt(8, 0, CONST_interrogation076);
+		mvaddstrAlt(8, 0, CONST_E);
 
-		if (!techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_interrogation077);
+		if (!techniques[TECHNIQUE_DRUGS])addstrAlt(CONST_NO);
 
-		addstrAlt(CONST_interrogation078);
-		mvaddstrAlt(8, 28, CONST_interrogation079);
+		addstrAlt(CONST_HALLUCINOGENIC_DRUGS);
+		mvaddstrAlt(8, 28, CONST_50);
 
 		if (techniques[TECHNIQUE_KILL])set_color_easy(RED_ON_BLACK_BRIGHT);
 		else set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(10, 0, CONST_interrogation080);
+		mvaddstrAlt(10, 0, CONST_K_KILL_THE_HOSTAGE);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12, 0, CONST_interrogation081);
+		mvaddstrAlt(12, 0, CONST_PRESS_ENTER_TO_CONFIRM_THE_PLAN);
 		show_interrogation_sidebar(cr, a);
 		c = getkeyAlt();
 		if (c >= 'a'&&c <= 'e') { techniques[c - 'a'] = !techniques[c - 'a']; }
@@ -175,9 +176,9 @@ void attemptExecution(DeprecatedCreature * cr) {
 	findAllTendersToThisHostage(cr, temppool);
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_interrogation082, gamelog);
+	mvaddstrAlt(0, 0, CONST_THE_FINAL_EDUCATION_OF, gamelog);
 	addstrAlt(cr->getNameAndAlignment().name, gamelog);
-	addstrAlt(CONST_interrogation092, gamelog);
+	addstrAlt(CONST_DAY, gamelog);
 	addstrAlt(cr->joindays, gamelog);
 	gamelog.newline();
 	DeprecatedCreature *a = NULL;
@@ -192,9 +193,9 @@ void attemptExecution(DeprecatedCreature * cr) {
 		set_color_easy(MAGENTA_ON_BLACK);
 		cr->die();
 		mvaddstrAlt(13, 0, a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation084, gamelog);
+		addstrAlt(CONST_EXECUTES, gamelog);
 		addstrAlt(cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation085, gamelog);
+		addstrAlt(CONST_BY, gamelog);
 		addstrAlt(pickrandom(execution), gamelog);
 		//show_interrogation_sidebar(cr,a);
 		pressAnyKey();
@@ -212,7 +213,7 @@ void attemptExecution(DeprecatedCreature * cr) {
 			gamelog.newline();
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(14, 0, a->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation160, gamelog);
+			addstrAlt(CONST_GROWS_COLDER, gamelog);
 			a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		}
 		gamelog.nextMessage();
@@ -220,15 +221,15 @@ void attemptExecution(DeprecatedCreature * cr) {
 	else
 	{
 		set_color_easy(YELLOW_ON_BLACK);
-		mvaddstrAlt(13, 0, CONST_interrogation087, gamelog);
-		mvaddstrAlt(14, 0, CONST_interrogation088, gamelog);
+		mvaddstrAlt(13, 0, CONST_THERE_IS_NO_ONE_ABLE_TO_GET_UP_THE_NERVE_TO, gamelog);
+		mvaddstrAlt(14, 0, CONST_EXECUTE, gamelog);
 		addstrAlt(cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation089, gamelog);
+		addstrAlt(CONST_IN_COLD_BLOOD, gamelog);
 		gamelog.nextMessage();
 	}
 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24, 0, CONST_interrogation167);
+	mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THIS);
 	pressAnyKey();
 }
 char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
@@ -236,7 +237,7 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 	cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 	pressAnyKey();
 	mvaddstrAlt(7, 0, cr->getNameAndAlignment().name, gamelog);
-	addstrAlt(CONST_interrogation099, gamelog);
+	addstrAlt(CONST_FOAMS_AT_THE_MOUTH_AND_ITS_EYES_ROLL_BACK_IN_ITS_SKULL, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	mvaddstrAlt(8, 0, doctor->getNameAndAlignment().name, gamelog);
@@ -245,19 +246,19 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 	{
 		if (doctor->get_skill(SKILL_FIRSTAID))
 		{ // we have a real doctor but the patient is still dead anyway
-			addstrAlt(CONST_interrogation100, gamelog);
+			addstrAlt(CONST_USES_A_DEFIBRILLATOR_REPEATEDLY_BUT, gamelog);
 			addstrAlt(cr->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation101, gamelog);
+			addstrAlt(CONST_FLATLINES, gamelog);
 		}
 		else
 		{
 			if (lawList[LAW_FREESPEECH] == -2)
-				addstrAlt(CONST_interrogation102, gamelog);
+				addstrAlt(CONST_HAS_A_PANIC_ATTACK_AND_MAKES_A_STINKY, gamelog);
 			else
 			{
-				addstrAlt(CONST_interrogation103, gamelog);
+				addstrAlt(CONST_HAS_A_PANIC_ATTACK_AND_SHITS, gamelog);
 				addstrAlt(doctor->hisher(), gamelog);
-				addstrAlt(CONST_interrogation104, gamelog);
+				addstrAlt(CONST_PANTS, gamelog);
 			}
 		}
 		gamelog.newline();
@@ -265,16 +266,16 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		if (doctor->get_skill(SKILL_FIRSTAID))
 		{
-			mvaddstrAlt(9, 0, CONST_interrogation105, gamelog);
+			mvaddstrAlt(9, 0, CONST_IT_IS_A_LETHAL_OVERDOSE_IN, gamelog);
 			addstrAlt(cr->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation106, gamelog);
+			addstrAlt(CONST_S_WEAKENED_STATE, gamelog);
 		}
 		else
 		{
 			mvaddstrAlt(9, 0, cr->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation107, gamelog);
+			addstrAlt(CONST_DIES_DUE_TO, gamelog);
 			addstrAlt(doctor->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation108, gamelog);
+			addstrAlt(CONST_S_INCOMPETENCE_AT_FIRST_AID, gamelog);
 		}
 		gamelog.newline();
 		cr->die();
@@ -284,26 +285,26 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 		if (doctor->skill_check(SKILL_FIRSTAID, DIFFICULTY_CHALLENGING)) // is the doctor AWESOME?
 		{
 			doctor->train(SKILL_FIRSTAID, 5 * max(10 - doctor->get_skill(SKILL_FIRSTAID), 0), 10); // can train up to 10
-			addstrAlt(CONST_interrogation109, gamelog); // not long enough for near-death experience
+			addstrAlt(CONST_DEFTLY_RESCUES_IT_FROM_CARDIAC_ARREST_WITH_A_DEFIBRILLATOR, gamelog); // not long enough for near-death experience
 			gamelog.newline();
 			pressAnyKey();
 			mvaddstrAlt(9, 0, doctor->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation110, gamelog);
+			addstrAlt(CONST_SKILLFULLY_SAVES, gamelog);
 			addstrAlt(cr->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation111, gamelog);
+			addstrAlt(CONST_FROM_ANY_HEALTH_DAMAGE, gamelog);
 			cr->adjust_attribute(ATTRIBUTE_HEALTH, +1); // no permanent health damage from a skilled doctor
 			emptyDrugs = 1;
 		}
 		else
 		{
 			doctor->train(SKILL_FIRSTAID, 5 * max(5 - doctor->get_skill(SKILL_FIRSTAID), 0), 5); // can train up to 5
-			addstrAlt(CONST_interrogation112, gamelog);
+			addstrAlt(CONST_CLUMSILY_RESCUES_IT_FROM_CARDIAC_ARREST_WITH_A_DEFIBRILLATOR, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			mvaddstrAlt(9, 0, cr->getNameAndAlignment().name, gamelog);
 			if (cr->get_skill(SKILL_RELIGION)) // the patient was out long enough to have a near-death experience
-				addstrAlt(CONST_interrogation113, gamelog);
-			else addstrAlt(CONST_interrogation114, gamelog);
+				addstrAlt(CONST_HAD_A_NEAR_DEATH_EXPERIENCE_AND_MET_GOD_IN_HEAVEN, gamelog);
+			else addstrAlt(CONST_HAD_A_NEAR_DEATH_EXPERIENCE_AND_MET_JOHN_LENNON, gamelog);
 			emptyDrugs = 2;
 		}
 		gamelog.newline();
@@ -314,10 +315,10 @@ char feelTheDrugUse(DeprecatedCreature *cr, DeprecatedCreature *doctor) {
 string acquireMapFromWork(const int worklocation) {
 
 	if (LocationsPool::getInstance().getLocationType(worklocation) <= SITE_RESIDENTIAL_SHELTER)
-		return CONST_interrogation164;
+		return CONST_UNFORTUNATELY_NONE_OF_IT_IS_USEFUL_TO_THE_LCS;
 	else
 	{
-		return CONST_interrogation136 + LocationsPool::getInstance().getLocationName(worklocation) + singleDot;
+		return CONST_A_DETAILED_MAP_HAS_BEEN_CREATED_OF + LocationsPool::getInstance().getLocationName(worklocation) + singleDot;
 	}
 }
 
@@ -357,16 +358,16 @@ bool attemptToOutsmartCaptor(DeprecatedCreature *cr, DeprecatedCreature *a, cons
 }
 void getCreatureWorkplaceMaps(DeprecatedCreature* cr, int &y, const string aname) {
 	mvaddstrAlt(y, 0, cr->getNameAndAlignment().name, gamelog);
-	addstrAlt(CONST_interrogation163, gamelog);
+	addstrAlt(CONST_REVEALS_DETAILS_ABOUT_THE, gamelog);
 	addstrAlt(LocationsPool::getInstance().getLocationName(cr->worklocation), gamelog);
 	addstrAlt(singleDot, gamelog);
 	gamelog.newline();
 	if (LocationsPool::getInstance().getLocationType(cr->worklocation) <= SITE_RESIDENTIAL_SHELTER)
-		mvaddstrAlt(++y, 0, CONST_interrogation164, gamelog);
+		mvaddstrAlt(++y, 0, CONST_UNFORTUNATELY_NONE_OF_IT_IS_USEFUL_TO_THE_LCS, gamelog);
 	else
 	{
 		mvaddstrAlt(++y, 0, aname, gamelog);
-		addstrAlt(CONST_interrogation165, gamelog);
+		addstrAlt(CONST_WAS_ABLE_TO_CREATE_A_MAP_OF_THE_SITE_WITH_THIS_INFORMATION, gamelog);
 	}
 	LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 
@@ -416,7 +417,7 @@ void interrogaterNotOutsmarted(DeprecatedCreature *cr, DeprecatedCreature *a, co
 		//Not completely unproductive; builds rapport
 		rapport[a->id] += 0.2f;
 		mvaddstrAlt(y++, 0, cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation152, gamelog);
+		addstrAlt(CONST_HOLDS_FIRM, gamelog);
 		gamelog.newline();
 	}
 	//Target actually wins the argument so successfully that the Liberal
@@ -428,14 +429,14 @@ void interrogaterNotOutsmarted(DeprecatedCreature *cr, DeprecatedCreature *a, co
 		rapport[a->id] += 0.5f;
 		a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		mvaddstrAlt(y++, 0, cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation153, gamelog);
+		addstrAlt(CONST_TURNS_THE_TABLES_ON, gamelog);
 		addstrAlt(a->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_interrogation154, gamelog);
 		gamelog.newline();
 		//show_interrogation_sidebar(cr,a);
 		pressAnyKey();
 		mvaddstrAlt(y++, 0, a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation155, gamelog);
+		addstrAlt(CONST_HAS_BEEN_TAINTED_WITH_WISDOM, gamelog);
 		gamelog.newline();
 	}
 }
@@ -454,7 +455,7 @@ void creaturePossiblyLosesHeartOrGainsWisdom(DeprecatedCreature* a, int &y) {
 	{
 		set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++, 0, a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation160, gamelog);
+		addstrAlt(CONST_GROWS_COLDER, gamelog);
 		gamelog.newline();
 		a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 	}
@@ -467,13 +468,13 @@ string creatureIsHurtAndMightDie(DeprecatedCreature* cr) {
 	{
 		cr->adjust_attribute(ATTRIBUTE_HEALTH, -1);
 		output = (cr->getNameAndAlignment().name);
-		output += (CONST_interrogation138);
+		output += (CONST_IS_BADLY_HURT);
 	}
 	else
 	{
 		cr->set_attribute(ATTRIBUTE_HEALTH, 0);
 		output = (cr->getNameAndAlignment().name);
-		output += (CONST_interrogation139);
+		output += (CONST_S_WEAKENED_BODY_CRUMBLES_UNDER_THE_BRUTAL_ASSAULT);
 		cr->die();
 	}
 	return output;
@@ -482,30 +483,30 @@ string creatureIsHurtAndMightDie(DeprecatedCreature* cr) {
 vector<string> printCreatureInterrogationStatus(DeprecatedCreature* cr, const bool restrain) {
 	vector<string> output;
 
-	output.push_back(CONST_interrogation091 + cr->getNameAndAlignment().name + CONST_interrogation092 + tostring(cr->joindays));
+	output.push_back(CONST_interrogation091 + cr->getNameAndAlignment().name + CONST_DAY + tostring(cr->joindays));
 
 	if (restrain)
 	{
-		output.push_back(CONST_interrogation093 + CONST_interrogation094);
-		output.push_back(CONST_interrogation095);
+		output.push_back(CONST_THE_AUTOMATON + CONST_IS_TIED_HANDS_AND_FEET_TO_A_METAL_CHAIR);
+		output.push_back(CONST_IN_THE_MIDDLE_OF_A_BACK_ROOM);
 	}
 	else
 	{
-		output.push_back(CONST_interrogation093 + CONST_interrogation096);
-		output.push_back(CONST_interrogation097);
+		output.push_back(CONST_THE_AUTOMATON + CONST_IS_LOCKED_IN_A_BACK_ROOM);
+		output.push_back(CONST_CONVERTED_INTO_A_MAKESHIFT_CELL);
 	}
 
 	return output;
 }
 void creatureConversion(DeprecatedCreature* cr, DeprecatedCreature* a, int &y) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(++y, 0, CONST_interrogation161, gamelog);
+	mvaddstrAlt(++y, 0, CONST_THE_AUTOMATON_HAS_BEEN_ENLIGHTENED_YOUR_LIBERAL_RANKS_ARE_SWELLING, gamelog);
 	if (cr->get_attribute(ATTRIBUTE_HEART, true) > 7 &&
 		cr->get_attribute(ATTRIBUTE_WISDOM, true) > 2 &&
 		!LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
 	{
 		gamelog.newline();
-		mvaddstrAlt(++y, 0, CONST_interrogation162, gamelog);
+		mvaddstrAlt(++y, 0, CONST_THE_CONVERSION_IS_CONVINCING_ENOUGH_THAT_THE_POLICE_NO_LONGER_CONSIDER_IT_A_KIDNAPPING, gamelog);
 		//Actually liberalized -- they'll clean up the kidnapping story
 		cr->flag &= ~CREATUREFLAG_MISSING;
 		cr->flag &= ~CREATUREFLAG_KIDNAPPED;
@@ -522,10 +523,10 @@ void creatureConversion(DeprecatedCreature* cr, DeprecatedCreature* a, int &y) {
 	}
 }
 string tortureLineOne() {
-	return singleSpace + pickrandom(low_heart_torture_props) + commaSpace;
+	return singleSpace + pickrandom(low_heart_torture_props) + COMMA_SPACE;
 }
 string tortureLineTwo() {
-	return  CONST_interrogation115 + pickrandom(screaming) + CONST_interrogation122 + pickrandom(screaming) + CONST_interrogation123;
+	return  CONST_SCREAMING + pickrandom(screaming) + EXCLAMATION_POINT_SPACE + pickrandom(screaming) + CONST_IN_ITS_FACE;
 }
 void hostageDies(DeprecatedCreature *cr, DeprecatedCreature *a, int &y) {
 
@@ -533,12 +534,12 @@ void hostageDies(DeprecatedCreature *cr, DeprecatedCreature *a, int &y) {
 	stat_kills++;
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(++y, 0, cr->getNameAndAlignment().name, gamelog);
-	addstrAlt(CONST_interrogation157, gamelog);
+	addstrAlt(CONST_IS_DEAD, gamelog);
 	if (a)
 	{
-		addstrAlt(CONST_interrogation158, gamelog);
+		addstrAlt(CONST_UNDER, gamelog);
 		addstrAlt(a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation159, gamelog);
+		addstrAlt(CONST_S_INTERROGATION, gamelog);
 	}
 	else addstrAlt(singleDot, gamelog);
 	set_color_easy(WHITE_ON_BLACK);
@@ -561,7 +562,7 @@ void hostageDies(DeprecatedCreature *cr, DeprecatedCreature *a, int &y) {
 			gamelog.newline();
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
 			mvaddstrAlt(++y, 0, a->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation160, gamelog);
+			addstrAlt(CONST_GROWS_COLDER, gamelog);
 			a->adjust_attribute(ATTRIBUTE_WISDOM, +1);
 		}
 	}
@@ -587,7 +588,7 @@ void attemptSuicide(DeprecatedCreature *cr, const bool restrain, int &y) {
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		mvaddstrAlt(++y, 0, cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation156, gamelog);
+		addstrAlt(CONST_HAS_COMMITTED_SUICIDE, gamelog);
 		gamelog.newline(); //TODO: Next message?
 		cr->die();
 	}
@@ -610,7 +611,7 @@ void illTellYouWhatIKnow(DeprecatedCreature *cr, DeprecatedCreature *a, const in
 		//show_interrogation_sidebar(cr,a);
 		pressAnyKey();
 		mvaddstrAlt(y++, 0, a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation134, gamelog);
+		addstrAlt(CONST_BEATS_INFORMATION_OUT_OF_THE_PATHETIC_THING, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		mvaddstrAlt(y++, 0, acquireMapFromWork(cr->worklocation), gamelog);
@@ -700,15 +701,15 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 		string guardsAdministerBeating;
 		switch (len(temppool)) {
 		case 1: // X beats the automaton
-			guardsAdministerBeating = temppool[0]->getNameAndAlignment().name + CONST_interrogation118;
+			guardsAdministerBeating = temppool[0]->getNameAndAlignment().name + CONST_BEATS;
 			break;
 
 		case 2: // X and Y beat the automaton
-			guardsAdministerBeating = temppool[0]->getNameAndAlignment().name + AND + temppool[1]->getNameAndAlignment().name + CONST_interrogation119;
+			guardsAdministerBeating = temppool[0]->getNameAndAlignment().name + AND + temppool[1]->getNameAndAlignment().name + CONST_BEAT;
 			break;
 
 		default: // cr->name's guards beat the automaton
-			guardsAdministerBeating = cr->getNameAndAlignment().name + CONST_interrogation120;
+			guardsAdministerBeating = cr->getNameAndAlignment().name + CONST_S_GUARDS_BEAT;
 			break;
 		}
 		mvaddstrAlt(y, 0, guardsAdministerBeating + CONST_interrogation121, gamelog);
@@ -717,15 +718,15 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 			addstrAlt(singleSpace, gamelog);
 			addstrAlt(pickrandom(beat_with_props), gamelog);
 		}
-		addstrAlt(commaSpace, gamelog);
+		addstrAlt(COMMA_SPACE, gamelog);
 		mvaddstrAlt(++y, 0, pickrandom(words_meaning_screaming), gamelog);
-		addstrAlt(CONST_news1030);
+		addstrAlt(QUOTATION_MARK);
 		for (int i = 0; i < 3; i++)
 		{
 			addstrAlt(pickrandom(words_to_scream), gamelog);
-			if (i < 2) addstrAlt(CONST_interrogation122, gamelog);
+			if (i < 2) addstrAlt(EXCLAMATION_POINT_SPACE, gamelog);
 		}
-		addstrAlt(CONST_interrogation123, gamelog);
+		addstrAlt(CONST_IN_ITS_FACE, gamelog);
 		gamelog.newline();
 	}
 	y++;
@@ -755,7 +756,7 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 		else
 		{
 			mvaddstrAlt(y++, 0, cr->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_interrogation137, gamelog);
+			addstrAlt(CONST_SEEMS_TO_BE_GETTING_THE_MESSAGE, gamelog);
 			gamelog.newline();
 			if (cr->juice > 0) if ((cr->juice -= forceroll) < 0) cr->juice = 0;
 			if (cr->get_attribute(ATTRIBUTE_WISDOM, false) > 1)
@@ -776,7 +777,7 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 	else
 	{
 		mvaddstrAlt(y++, 0, cr->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation140, gamelog);
+		addstrAlt(CONST_TAKES_IT_WELL, gamelog);
 		gamelog.newline();
 	}
 	//show_interrogation_sidebar(cr,a);
@@ -823,7 +824,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(0, 0, CONST_interrogation091);
 	addstrAlt(cr->getNameAndAlignment().name);
-	addstrAlt(CONST_interrogation092);
+	addstrAlt(CONST_DAY);
 	addstrAlt(cr->joindays);
 	pressAnyKey();
 	set_color_easy(WHITE_ON_BLACK);
@@ -888,7 +889,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 		if (techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
 		{
 
-			mvaddstrAlt(5, 0, CONST_interrogation098, gamelog);
+			mvaddstrAlt(5, 0, CONST_IT_IS_SUBJECTED_TO_DANGEROUS_HALLUCINOGENS, gamelog);
 			gamelog.newline();
 			int drugbonus = 10 + a->get_armor().get_interrogation_drugbonus(); // we won't apply this JUST yet
 																			   //Possible permanent health damage
@@ -1083,7 +1084,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				gamelog.newline();
 				mvaddstrAlt(1, 0, cr->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_interrogation166, gamelog);
+				addstrAlt(CONST_S_DISAPPEARANCE_HAS_NOT_YET_BEEN_REPORTED, gamelog);
 				sleeperize_prompt(*cr, *a, 3);
 				cr->flag &= ~CREATUREFLAG_MISSING;
 				gamelog.nextMessage();
@@ -1096,6 +1097,6 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 	}
 	gamelog.nextMessage();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(24, 0, CONST_interrogation167);
+	mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THIS);
 	pressAnyKey();
 }

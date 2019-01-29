@@ -1,3 +1,4 @@
+
 #define	LOCATIONS_CPP
 #include "../includes.h"
 /*
@@ -41,7 +42,7 @@ This file is part of Liberal Crime Squad.                                       
 		 return getCityDescription[type];
 	 }
 	 else {
-		 return blankString;
+		 return BLANK_STRING;
 	 }
  }
  bool Location::can_be_fortified()
@@ -130,50 +131,50 @@ This file is part of Liberal Crime Squad.                                       
  }
  void renameWarehouse(Location &loc) {
 	 do {
-		 strcpy(loc.name, CONST_locations041);
+		 strcpy(loc.name, CONST_ABANDONED);
 		 /*lastname(loc.name,true);
 		 strcat(loc.name,singleSpace);*/
 		 switch (LCSrandom(10))
 		 {
 		 case 0:
-			 strcat(loc.name, CONST_locations043);
-			 strcpy(loc.shortname, CONST_locations043);
+			 strcat(loc.name, CONST_MEAT_PLANT);
+			 strcpy(loc.shortname, CONST_MEAT_PLANT);
 			 break;
 		 case 1:
 			 strcat(loc.name, CONST_locations045);
 			 strcpy(loc.shortname, CONST_locations045);
 			 break;
 		 case 2:
-			 strcat(loc.name, CONST_locations047);
-			 strcpy(loc.shortname, CONST_locations047);
+			 strcat(loc.name, CONST_PAPER_MILL);
+			 strcpy(loc.shortname, CONST_PAPER_MILL);
 			 break;
 		 case 3:
-			 strcat(loc.name, CONST_locations048);
-			 strcpy(loc.shortname, CONST_locations049);
+			 strcat(loc.name, CONST_CEMENT_FACTORY);
+			 strcpy(loc.shortname, CONST_CEMENT);
 			 break;
 		 case 4:
-			 strcat(loc.name, CONST_locations050);
-			 strcpy(loc.shortname, CONST_locations051);
+			 strcat(loc.name, CONST_FERTILIZER_PLANT);
+			 strcpy(loc.shortname, CONST_FERTILIZER);
 			 break;
 		 case 5:
-			 strcat(loc.name, CONST_locations052);
-			 strcpy(loc.shortname, CONST_locations053);
+			 strcat(loc.name, CONST_DRILL_FACTORY);
+			 strcpy(loc.shortname, CONST_DRILL);
 			 break;
 		 case 6:
-			 strcat(loc.name, CONST_locations054);
-			 strcpy(loc.shortname, CONST_locations055);
+			 strcat(loc.name, CONST_STEEL_PLANT);
+			 strcpy(loc.shortname, CONST_STEEL);
 			 break;
 		 case 7:
-			 strcat(loc.name, CONST_locations056);
-			 strcpy(loc.shortname, CONST_locations057);
+			 strcat(loc.name, CONST_PACKING_PLANT);
+			 strcpy(loc.shortname, CONST_PACKING);
 			 break;
 		 case 8:
-			 strcat(loc.name, CONST_locations058);
-			 strcpy(loc.shortname, CONST_locations059);
+			 strcat(loc.name, CONST_TOY_FACTORY);
+			 strcpy(loc.shortname, CONST_TOY);
 			 break;
 		 case 9:
-			 strcat(loc.name, CONST_locations060);
-			 strcpy(loc.shortname, CONST_locations061);
+			 strcat(loc.name, CONST_BUILDING_SITE);
+			 strcpy(loc.shortname, CONST_BUILDING);
 			 break;
 		 }
 	 } while (loc.duplicatelocation());
@@ -184,8 +185,8 @@ This file is part of Liberal Crime Squad.                                       
 		 strcpy(loc.name, pickrandom(labor_camp_name));
 		 strcat(loc.name, singleSpace);
 		 strcat(loc.name, pickrandom(labor_camp_name_2));
-		 strcat(loc.name, CONST_locations021);
-		 strcpy(loc.shortname, CONST_locations022);
+		 strcat(loc.name, CONST_FORCED_LABOR_CAMP);
+		 strcpy(loc.shortname, CONST_JOYCAMP);
 	 }
 	 else
 	 {
@@ -198,33 +199,33 @@ This file is part of Liberal Crime Squad.                                       
 	 switch (LCSrandom(5))
 	 {
 	 case 0:
-		 loc.rename(CONST_locations062, CONST_locationsB119);
+		 loc.rename(CONST_ALUMINUM_FACTORY, CONST_ALUM_FACT);
 		 break;
 	 case 1:
-		 loc.rename(CONST_locations063, CONST_locationsB120);
+		 loc.rename(CONST_PLASTIC_FACTORY, CONST_PLAST_FACT);
 		 break;
 	 case 2:
-		 loc.rename(CONST_locations064, CONST_locationsB121);
+		 loc.rename(CONST_OIL_REFINERY, CONST_REFINERY);
 		 break;
 	 case 3:
-		 loc.rename(CONST_locations065, CONST_locations065);
+		 loc.rename(CONST_AUTO_PLANT, CONST_AUTO_PLANT);
 		 break;
 	 case 4:
-		 loc.rename(CONST_locations066, CONST_locationsB122);
+		 loc.rename(CONST_CHEMICAL_FACTORY, CONST_CHEM_FACT);
 		 break;
 	 }
  }
  void renamePoliceStation(Location &loc) {
 	 if (lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2) {
-		 loc.rename(CONST_locations015, CONST_locations015);
+		 loc.rename(CONST_DEATH_SQUAD_HQ, CONST_DEATH_SQUAD_HQ);
 	 }
 	 else {
-		 loc.rename(CONST_locations016, CONST_locations016);
+		 loc.rename(CONST_POLICE_STATION, CONST_POLICE_STATION);
 	 }
  }
  void renameCourthouse(Location &loc) {
 	 if (lawList[LAW_DEATHPENALTY] == -2) {
-		 loc.rename(CONST_locations017, CONST_locationsB109);
+		 loc.rename(CONST_HALLS_OF_ULTIMATE_JUDGMENT, CONST_JUDGE_HALL);
 	 }
 	 else {
 		 loc.rename(CONST_locations018, CONST_locations018);
@@ -233,38 +234,38 @@ This file is part of Liberal Crime Squad.                                       
  void renameFireStation(Location &loc) {
 
 	 if (lawList[LAW_FREESPEECH] == -2) {
-		 loc.rename(CONST_locations019, CONST_locations019);
+		 loc.rename(CONST_FIREMAN_HQ, CONST_FIREMAN_HQ);
 		 loc.hidden = false;
 	 }
 	 else {
-		 loc.rename(CONST_locations020, CONST_locations020);
+		 loc.rename(CONST_FIRE_STATION, CONST_FIRE_STATION);
 		 loc.hidden = true;
 	 }
  }
  void renameNuclear(Location &loc) {
 	 if (lawList[LAW_NUCLEARPOWER] == 2) {
-		 loc.rename(CONST_locations025, CONST_locationsB110);
+		 loc.rename(CONST_NUCLEAR_WASTE_CENTER, CONST_NWASTE_CENTER);
 	 }
 	 else {
-		 loc.rename(CONST_locations026, CONST_locationsB111);
+		 loc.rename(CONST_NUCLEAR_POWER_PLANT, CONST_NPOWER_PLANT);
 	 }
  }
  void renameIntelligenceHQ(Location &loc) {
 
 	 if (lawList[LAW_PRIVACY] == -2 && lawList[LAW_POLICEBEHAVIOR] == -2) {
-		 loc.rename(CONST_locations027, CONST_locationsB112);
+		 loc.rename(CONST_MINISTRY_OF_LOVE, CONST_MINILUV);
 	 }
 	 else {
-		 loc.rename(CONST_locations028, CONST_locationsB113);
+		 loc.rename(CONST_INTELLIGENCE_HQ, CONST_INT_HQ);
 	 }
  }
  void renameArmyBase(Location &loc) {
 	 if (lawList[LAW_MILITARY] == -2) {
-		 loc.rename(CONST_locations029, CONST_locationsB114);
+		 loc.rename(CONST_MINISTRY_OF_PEACE, CONST_MINIPAX);
 	 }
 	 else {
 		 strcpy(loc.name, lastname(true));
-		 strcat(loc.name, CONST_locations030);
+		 strcat(loc.name, CONST_ARMY_BASE);
 		 strcpy(loc.shortname, CONST_locations031);
 	 }
  }
@@ -272,50 +273,50 @@ This file is part of Liberal Crime Squad.                                       
 
 	 strcpy(loc.name, lastname(true));
 	 if (lawList[LAW_GUNCONTROL] == ALIGN_ELITELIBERAL)
-		 strcat(loc.name, CONST_locations035);
+		 strcat(loc.name, CONST_S_PAWNSHOP);
 	 else
-		 strcat(loc.name, CONST_locations036);
-	 strcpy(loc.shortname, CONST_locations037);
+		 strcat(loc.name, CONST_PAWN_GUN);
+	 strcpy(loc.shortname, CONST_PAWNSHOP);
  }
  void renameCorporateHouse(Location &loc) {
 
 	 if (lawList[LAW_CORPORATE] == -2 && lawList[LAW_TAX] == -2)
-		 loc.rename(CONST_locations038, CONST_locations038);
+		 loc.rename(CONST_CEO_CASTLE, CONST_CEO_CASTLE);
 	 else
-		 loc.rename(CONST_locations039, CONST_locationsB117);
+		 loc.rename(CONST_CEO_RESIDENCE, CONST_CEO_HOUSE);
  }
 
  void renameCrackhouse(Location &loc) {
 	 do {
 		 strcpy(loc.name, lastname(true));
-		 strcat(loc.name, CONST_locations088);
+		 strcat(loc.name, CONST_ST);
 		 if (lawList[LAW_DRUGS] == 2)
 		 {
 			 switch (LCSrandom(4))
 			 {
 				 //TODO IsaacG Migrate Strings
 			 case 0:
-				 strcat(loc.name, CONST_locations089);
-				 strcpy(loc.shortname, CONST_locations090);
+				 strcat(loc.name, CONST_RECREATIONAL_DRUGS_CENTER);
+				 strcpy(loc.shortname, CONST_DRUGS_CENTER);
 				 break;
 			 case 1:
-				 strcat(loc.name, CONST_locations092);
-				 strcpy(loc.shortname, CONST_locations092);
+				 strcat(loc.name, CONST_COFFEE_HOUSE);
+				 strcpy(loc.shortname, CONST_COFFEE_HOUSE);
 				 break;
 			 case 2:
-				 strcat(loc.name, CONST_locations094);
-				 strcpy(loc.shortname, CONST_locations094);
+				 strcat(loc.name, CONST_CANNABIS_LOUNGE);
+				 strcpy(loc.shortname, CONST_CANNABIS_LOUNGE);
 				 break;
 			 case 3:
-				 strcat(loc.name, CONST_locations095);
-				 strcpy(loc.shortname, CONST_locations096);
+				 strcat(loc.name, CONST_MARIJUANA_DISPENSARY);
+				 strcpy(loc.shortname, CONST_DISPENSARY);
 				 break;
 			 }
 		 }
 		 else
 		 {
-			 strcat(loc.name, CONST_locations098);
-			 strcpy(loc.shortname, CONST_locations098);
+			 strcat(loc.name, CONST_CRACK_HOUSE);
+			 strcpy(loc.shortname, CONST_CRACK_HOUSE);
 		 }
 	 } while (loc.duplicatelocation());
  }
@@ -325,8 +326,8 @@ This file is part of Liberal Crime Squad.                                       
 	 do {
 		 strcpy(loc.name, lastname(true));
 		 strcpy(loc.shortname, loc.name);
-		 strcat(loc.name, CONST_locations071);
-		 strcat(loc.shortname, CONST_locations072);
+		 strcat(loc.name, CONST_APARTMENTS);
+		 strcat(loc.shortname, CONST_APTS);
 	 } while (loc.duplicatelocation());
 
  }
@@ -336,8 +337,8 @@ This file is part of Liberal Crime Squad.                                       
 	 do {
 		 strcpy(loc.name, lastname(true));
 		 strcpy(loc.shortname, loc.name);
-		 strcat(loc.name, CONST_locations069);
-		 strcat(loc.shortname, CONST_locations070);
+		 strcat(loc.name, CONST_CONDOMINIUMS);
+		 strcat(loc.shortname, CONST_CONDOS);
 	 } while (loc.duplicatelocation());
 
  }
@@ -348,8 +349,8 @@ This file is part of Liberal Crime Squad.                                       
 		 do {
 			 strcpy(loc.name, lastname(true));
 		 } while (len(loc.name) > 7);
-		 strcat(loc.name, CONST_locations073);
-		 strcpy(loc.shortname, CONST_locations074);
+		 strcat(loc.name, CONST_ST_HOUSING_PROJECTS);
+		 strcpy(loc.shortname, CONST_PROJECTS);
 	 } while (loc.duplicatelocation());
 
  }
@@ -357,102 +358,102 @@ This file is part of Liberal Crime Squad.                                       
 	 switch (loc.type)
 	 {
 	 case SITE_GOVERNMENT_WHITE_HOUSE:
-		 loc.rename(CONST_locations032, CONST_locations032);
+		 loc.rename(CONST_WHITE_HOUSE, CONST_WHITE_HOUSE);
 		 break;
 	 case SITE_CORPORATE_HEADQUARTERS:
-		 loc.rename(CONST_locations033, CONST_locationsB115);
+		 loc.rename(CONST_CORPORATE_HQ, CONST_CORP_HQ);
 		 break;
 	 case SITE_BUSINESS_BANK:
-		 loc.rename(CONST_locations034, CONST_locationsB116);
+		 loc.rename(CONST_AMERICAN_BANK_CORP, CONST_locationsB116);
 		 break;
 	 case SITE_RESIDENTIAL_SHELTER:
-		 loc.rename(CONST_locations040, CONST_locationsB118);
+		 loc.rename(CONST_HOMELESS_SHELTER, CONST_SHELTER);
 		 break;
 	 case SITE_MEDIA_CABLENEWS:
-		 loc.rename(CONST_locations067, CONST_locationsB123);
+		 loc.rename(CONST_CABLE_NEWS_STATION, CONST_NEWS_STATION);
 		 break;
 	 case SITE_MEDIA_AMRADIO:
-		 loc.rename(CONST_locations068, CONST_locationsB124);
+		 loc.rename(CONST_AM_RADIO_STATION, CONST_RADIO_STATION);
 		 break;
 	 case SITE_HOSPITAL_UNIVERSITY:
-		 loc.rename(CONST_locations075, CONST_locationsB125);
+		 loc.rename(CONST_THE_UNIVERSITY_HOSPITAL, CONST_U_HOSPITAL);
 		 break;
 	 case SITE_HOSPITAL_CLINIC:
-		 loc.rename(CONST_locations076, CONST_locationsB126);
+		 loc.rename(CONST_THE_FREE_CLINIC, CONST_CLINIC);
 		 break;
 	 case SITE_RESIDENTIAL_BOMBSHELTER:
-		 loc.rename(CONST_locations111, CONST_locationsB128);
+		 loc.rename(CONST_FALLOUT_SHELTER, CONST_BOMB_SHELTER);
 		 break;
 	 case SITE_BUSINESS_BARANDGRILL:
-		 loc.rename(CONST_locations112, CONST_locationsB129);
+		 loc.rename(CONST_DESERT_EAGLE_BAR_GRILL, CONST_BAR_GRILL);
 		 break;
 	 case SITE_OUTDOOR_BUNKER:
-		 loc.rename(CONST_locations113, CONST_locationsB130);
+		 loc.rename(CONST_ROBERT_E_LEE_BUNKER, CONST_locationsB130);
 		 break;
 	 case SITE_BUSINESS_ARMSDEALER:
-		 loc.rename(CONST_locations114, CONST_locations114);
+		 loc.rename(CONST_BLACK_MARKET, CONST_BLACK_MARKET);
 		 break;
 	 case SITE_BUSINESS_HALLOWEEN:
-		 loc.rename(CONST_locations085, CONST_locationsB127);
+		 loc.rename(CONST_THE_OUBLIETTE, CONST_OUBLIETTE);
 		 break;
 	 }
  }
  void renameSITE_LABORATORY_GENETIC(char* name, char* shortname) {
 
 	 strcpy(name, lastname(true));
-	 strcat(name, CONST_locations077);
-	 strcpy(shortname, CONST_locations078);
+	 strcat(name, CONST_GENETICS);
+	 strcpy(shortname, CONST_GENETICS_LAB);
  }
  void renameSITE_LABORATORY_COSMETICS(char* name, char* shortname) {
 
 	 strcpy(name, lastname(true));
-	 strcat(name, CONST_locations079);
-	 strcpy(shortname, CONST_locations080);
+	 strcat(name, CONST_COSMETICS);
+	 strcpy(shortname, CONST_COSMETICS_LAB);
  }
  void renameSITE_BUSINESS_CARDEALERSHIP(char* name, char* shortname) {
 
 	 generate_name(name, GENDER_WHITEMALEPATRIARCH);
-	 strcat(name, CONST_locations081);
-	 strcpy(shortname, CONST_locations082);
+	 strcat(name, CONST_S_USED_CARS);
+	 strcpy(shortname, CONST_USED_CARS);
  }
  void renameSITE_BUSINESS_DEPTSTORE(char* name, char* shortname) {
 
 	 strcpy(name, lastname(true));
-	 strcat(name, CONST_locations083);
-	 strcpy(shortname, CONST_locations084);
+	 strcat(name, CONST_S_DEPARTMENT_STORE);
+	 strcpy(shortname, CONST_DEPT_STORE);
  }
  void renameSITE_INDUSTRY_SWEATSHOP(char* name, char* shortname) {
 
 	 strcpy(name, lastname(true));
-	 strcat(name, CONST_locations086);
+	 strcat(name, CONST_GARMENT_MAKERS);
 	 strcpy(shortname, CONST_locations087);
  }
  void renameSITE_BUSINESS_JUICEBAR(char* name, char* shortname) {
 
-	 strcpy(name, blankString);
+	 strcpy(name, BLANK_STRING);
 	 strcat(name, pickrandom(juice_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(juice_name_2));
-	 strcat(name, CONST_locations099);
+	 strcat(name, CONST_JUICE_BAR);
 	 strcpy(shortname, CONST_locations100);
  }
  void renameSITE_BUSINESS_VEGANCOOP(char* name, char* shortname) {
 
-	 strcpy(name, blankString);
+	 strcpy(name, BLANK_STRING);
 	 strcat(name, pickrandom(vegan_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(vegan_name_2));
-	 strcat(name, CONST_locations101);
+	 strcat(name, CONST_VEGAN_CO_OP);
 	 strcpy(shortname, CONST_locations102);
  }
  void renameSITE_BUSINESS_INTERNETCAFE(char* name, char* shortname) {
 
-	 strcpy(name, blankString);
+	 strcpy(name, BLANK_STRING);
 	 strcat(name, pickrandom(cafe_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(cafe_name_2));
-	 strcat(name, CONST_locations103);
-	 strcpy(shortname, CONST_locations104);
+	 strcat(name, CONST_INTERNET_CAFE);
+	 strcpy(shortname, CONST_NET_CAFE);
  }
  void rename(char* name, char* shortname) {
 
@@ -461,16 +462,16 @@ This file is part of Liberal Crime Squad.                                       
 
 	 strcpy(name, tag_The);
 	 strcat(name, lastname(true));
-	 strcat(name, CONST_locations105);
-	 strcpy(shortname, CONST_locations106);
+	 strcat(name, CONST_GENTLEMEN_S_CLUB);
+	 strcpy(shortname, CONST_CIGAR_BAR);
  }
  void renameSITE_BUSINESS_LATTESTAND(char* name, char* shortname) {
 
-	 strcpy(name, blankString);
+	 strcpy(name, BLANK_STRING);
 	 strcat(name, pickrandom(latte_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(latte_name_2));
-	 strcat(name, CONST_locations107);
+	 strcat(name, CONST_LATTE_STAND);
 	 strcpy(shortname, CONST_locations108);
  }
  void renameSITE_OUTDOOR_PUBLICPARK(char* name, char* shortname) {

@@ -1,3 +1,4 @@
+
 #define	ACTIVITIES_CPP
 #include "../includes.h"
 /*
@@ -28,7 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -197,7 +198,7 @@ void repairarmor(DeprecatedCreature &cr, char &clearformess)
 			qualityReduction = false; // Low skill repairers shredding your shirts seem too harsh
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(8, 1);
-		std::string result = blankString;
+		std::string result = BLANK_STRING;
 		result += cr.getNameAndAlignment().name;
 		if (armorDestroyed)
 		{

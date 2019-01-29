@@ -1,3 +1,4 @@
+
 #define	SAVELOAD_CPP
 #include "../includes.h"
 /*
@@ -26,7 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 		the bottom of includes.h in the top src folder.
 */
 
-// TODO: It would be really cool to be able to CONST_saveload004 characters.
+// TODO: It would be really cool to be able to CONST_EXPORT characters.
 /* handles saving */
 bool file_exists(const std::string& filename)
 {
@@ -96,123 +97,123 @@ void writeVerbose(string filename) {
 	string filepath = homedir;
 	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
-	filename += CONST_saveload089;
+	filename += CONST_VERBOSE;
 	filepath.append(filename);
 	//FILE *h;
 	//h = LCSOpenFile((filename).c_str(), CONST_saveload090, LCSIO_PRE_HOME);
 	//LCSCloseFile(h);
 	ofstream outClientFile(filename, ios::out);
 	if (!outClientFile) {
-		cerr << CONST_saveload008 << endl;
+		cerr << CONST_VERBOSE_FILE_COULD_NOT_BE_OPENED << endl;
 	}
 	else {
 		if (NOVERBOSECOMMENTS) {
-			outClientFile << CONST_saveload009 << endl;
-			outClientFile << CONST_saveload010 << endl;
+			outClientFile << CONST_AUTOCOMMENTS_DISABLED << endl;
+			outClientFile << CONST_REMOVE_NOVERBOSECOMMENTS_TO_ACTIVATE_AUTOCOMMENTS << endl;
 		}
 		else {
-			outClientFile << CONST_saveload011 << endl << CONST_saveloadB081 << endl;
-			outClientFile << CONST_saveload012 << endl;
-			outClientFile << CONST_saveload013 << endl;
-			outClientFile << CONST_saveload014 << endl;
-			outClientFile << CONST_saveload015 << endl;
-			outClientFile << CONST_saveload016 << endl;
+			outClientFile << CONST_ALL_LINES_BEGINNING_WITH_ARE_COMMENTS << endl << CONST_AND_ARE_THEREBY_IGNORED << endl;
+			outClientFile << CONST_SINCE_THE_PURPOSE_OF_VERBOSE_SAVEFILES_IS_TO_MAKE_THEM_HUMAN_READABLE_AND_EDITABLE << endl;
+			outClientFile << CONST_THERE_WILL_BE_QUITE_A_FEW_COMMENTS_GENERATED_AUTOMATICALLY << endl;
+			outClientFile << CONST_IF_THESE_COMMENTS_ARE_MORE_TROUBLE_THAN_THEY_RE_WORTH_ADD_TO_THE_DEBUG_DEFINES_TXT_FILE << endl;
+			outClientFile << CONST_NOVERBOSECOMMENTS_TO_REMOVE_THEM_ALMOST_ENTIRELY << endl;
+			outClientFile << CONST_LCS_FUNDING_LEVEL_MAX_VALUE_2147483647_CAN_BE_NEGATIVE << endl;
 		}
 		outClientFile << ledger.get_funds() << endl;
 		/*
-		outClientFile << CONST_saveload017 << endl;
+		outClientFile << CONST_SEED << endl;
 		outClientFile <<  seed[0] << endl;
 		outClientFile <<  seed[1] << endl;
 		outClientFile <<  seed[2] << endl;
 		outClientFile <<  seed[3] << endl;
-		outClientFile << CONST_saveload018 << endl;
+		outClientFile << CONST_MODE << endl;
 		outClientFile <<  mode << endl;
-		outClientFile << CONST_saveload019 << endl;
+		outClientFile << CONST_WINCONDITION << endl;
 		outClientFile <<  wincondition << endl;
-		outClientFile << CONST_saveload020 << endl;
+		outClientFile << CONST_FIELDSKILLRATE << endl;
 		outClientFile <<  fieldskillrate << endl;
 		*/
 		outClientFile << CONST_saveload021 << endl;
 		outClientFile << day << endl;
 		outClientFile << CONST_saveload022 << endl;
 		outClientFile << month << endl;
-		outClientFile << CONST_saveload023 << endl;
+		outClientFile << CONST_YEAR << endl;
 		outClientFile << year << endl;
-		outClientFile << CONST_saveload024 << endl;
+		outClientFile << CONST_EXECTERM << endl;
 		outClientFile << execterm << endl;
-		outClientFile << CONST_saveload025 << endl;
+		outClientFile << CONST_PRESPARTY << endl;
 		outClientFile << presparty << endl;
-		outClientFile << CONST_saveload026 << endl;
+		outClientFile << CONST_AMENDNUM << endl;
 		outClientFile << amendnum << endl;
-		outClientFile << CONST_saveload027 << endl;
+		outClientFile << CONST_MULTIPLECITYMODE << endl;
 		outClientFile << multipleCityMode << endl;
-		outClientFile << CONST_saveload028 << endl;
+		outClientFile << CONST_TERMLIMITS << endl;
 		outClientFile << termlimits << endl;
-		outClientFile << CONST_saveload029 << endl;
+		outClientFile << CONST_DEAGLE << endl;
 		outClientFile << deagle << endl;
-		outClientFile << CONST_saveload030 << endl;
+		outClientFile << CONST_M249 << endl;
 		outClientFile << m249 << endl;
-		outClientFile << CONST_saveload031 << endl;
+		outClientFile << CONST_NOTERMLIMIT << endl;
 		outClientFile << notermlimit << endl;
-		outClientFile << CONST_saveload032 << endl;
+		outClientFile << CONST_NOCOURTPURGE << endl;
 		outClientFile << nocourtpurge << endl;
-		outClientFile << CONST_saveload033 << endl;
+		outClientFile << CONST_STALINMODE << endl;
 		outClientFile << stalinmode << endl;
-		outClientFile << CONST_saveload034 << endl;
+		outClientFile << CONST_STAT_RECRUITS << endl;
 		outClientFile << stat_recruits << endl;
-		outClientFile << CONST_saveload035 << endl;
+		outClientFile << CONST_STAT_DEAD << endl;
 		outClientFile << stat_dead << endl;
-		outClientFile << CONST_saveload036 << endl;
+		outClientFile << CONST_STAT_KILLS << endl;
 		outClientFile << stat_kills << endl;
-		outClientFile << CONST_saveload037 << endl;
+		outClientFile << CONST_STAT_KIDNAPPINGS << endl;
 		outClientFile << stat_kidnappings << endl;
-		outClientFile << CONST_saveload038 << endl;
+		outClientFile << CONST_STAT_BUYS << endl;
 		outClientFile << stat_buys << endl;
-		outClientFile << CONST_saveload039 << endl;
+		outClientFile << CONST_STAT_BURNS << endl;
 		outClientFile << stat_burns << endl;
 		/*
-		outClientFile << CONST_saveload040 << endl;
+		outClientFile << CONST_ENDGAMESTATE << endl;
 		outClientFile <<  endgamestate << endl;
-		outClientFile << CONST_saveload041 << endl;
+		outClientFile << CONST_CCSEXPOSURE << endl;
 		outClientFile <<  ccsexposure << endl;
-		outClientFile << CONST_saveload042 << endl;
+		outClientFile << CONST_CCS_KILLS << endl;
 		outClientFile <<  ccs_kills << endl;
 		*/
-		outClientFile << CONST_saveload043 << endl;
+		outClientFile << CONST_POLICE_HEAT << endl;
 		outClientFile << police_heat << endl;
-		outClientFile << CONST_saveload044 << endl;
+		outClientFile << CONST_OFFENDED_CORPS << endl;
 		outClientFile << offended_corps << endl;
-		outClientFile << CONST_saveload045 << endl;
+		outClientFile << CONST_OFFENDED_CIA << endl;
 		outClientFile << offended_cia << endl;
-		outClientFile << CONST_saveload046 << endl;
+		outClientFile << CONST_OFFENDED_AMRADIO << endl;
 		outClientFile << offended_amradio << endl;
-		outClientFile << CONST_saveload047 << endl;
+		outClientFile << CONST_OFFENDED_CABLENEWS << endl;
 		outClientFile << offended_cablenews << endl;
-		outClientFile << CONST_saveload048 << endl;
+		outClientFile << CONST_OFFENDED_FIREMEN << endl;
 		outClientFile << offended_firemen << endl;
 		/*
-		outClientFile << CONST_saveload049 << endl;
+		outClientFile << CONST_ATTORNEYSEED << endl;
 		outClientFile <<  attorneyseed[0] << endl;
 		outClientFile <<  attorneyseed[1] << endl;
 		outClientFile <<  attorneyseed[2] << endl;
 		outClientFile <<  attorneyseed[3] << endl;
 		*/
-		outClientFile << CONST_saveload050 << endl;
+		outClientFile << CONST_L_CITY_NAME << endl;
 		outClientFile << lcityname << endl;
 		/*
-		outClientFile << CONST_saveload051 << endl;
+		outClientFile << CONST_LIBERAL_GUARDIAN_PUBLISHED << endl;
 		outClientFile <<  newscherrybusted << endl;
 		*/
-		outClientFile << CONST_saveload052 << endl;
+		outClientFile << CONST_SLOGAN << endl;
 		outClientFile << slogan << endl;
-		outClientFile << CONST_saveload053 << endl;
+		outClientFile << CONST_PARTY_STATUS << endl;
 		outClientFile << party_status << endl;
-		outClientFile << CONST_saveload054 << endl;
+		outClientFile << CONST_ATTITUDE << endl;
 		for (int i = 0; i < len(attitude); i++) {
-			//outClientFile << CONST_saveload055 + getview(i, false) << endl;
+			//outClientFile << CONST_CONCERNING + getview(i, false) << endl;
 			outClientFile << attitude[i] << endl;
 		}
-		outClientFile << CONST_saveload056 << endl;
+		outClientFile << CONST_LAW_LIST << endl;
 		for (int i = 0; i < len(lawList); i++) {
 			if (!NOVERBOSECOMMENTS)
 				outClientFile << CONST_saveload081 + getLawString[i] << endl;
@@ -226,64 +227,64 @@ void writeVerbose(string filename) {
 		for (int i = 0; i < len(senate); i++) {
 			outClientFile << senate[i] << endl;
 		}
-		outClientFile << CONST_saveload060 << endl;
+		outClientFile << CONST_SUPREME_COURT << endl;
 		for (int i = 0; i < len(court); i++) {
 			outClientFile << court[i] << endl;
 		}
-		outClientFile << CONST_saveload061 << endl;
+		outClientFile << CONST_SUPREME_COURT_NAMES << endl;
 		for (int i = 0; i < len(courtname); i++) {
 			outClientFile << courtname[i] << endl;
 		}
-		outClientFile << CONST_saveload062 << endl;
+		outClientFile << CONST_EXEC << endl;
 		for (int i = 0; i < len(exec); i++) {
 			outClientFile << exec[i] << endl;
 		}
-		outClientFile << CONST_saveload063 << endl;
+		outClientFile << CONST_EXECNAME << endl;
 		for (int i = 0; i < len(execname); i++) {
 			outClientFile << execname[i] << endl;
 		}
 		/*
-		outClientFile << CONST_saveload064 << endl;
+		outClientFile << CONST_OLDPRESIDENTNAME << endl;
 		outClientFile << oldPresidentName << endl;
 		*/
 		for (int pl = 0; pl < CreaturePool::getInstance().lenpool(); pl++)
 		{
-			outClientFile << CONST_saveload079 << endl;
+			outClientFile << CONST_NEXT_CREATURE << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload066 << endl;
+				outClientFile << CONST_NAME << endl;
 			outClientFile << pool[pl]->name << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload067 << endl;
+				outClientFile << CONST_PROPER_NAME << endl;
 			outClientFile << pool[pl]->propername << endl;
 			/*
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << CONST_saveload068 << endl;
+			outClientFile << CONST_GENDER_CONSERVATIVE << endl;
 			outClientFile <<  pool[pl]->gender_conservative << endl;
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << CONST_saveload069 << endl;
+			outClientFile << CONST_GENDER_LIBERAL << endl;
 			outClientFile <<  pool[pl]->gender_liberal << endl;
 			*/
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload070 << endl;
+				outClientFile << CONST_AGE << endl;
 			outClientFile << pool[pl]->age << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload071 << endl;
+				outClientFile << CONST_BIRTHDAY_MONTH << endl;
 			outClientFile << pool[pl]->birthday_month << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload072 << endl;
+				outClientFile << CONST_BIRTHDAY_DAY << endl;
 			outClientFile << pool[pl]->birthday_day << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload073 << endl;
+				outClientFile << CONST_ALIGNMENT << endl;
 			outClientFile << pool[pl]->align << endl;
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload074 << endl;
+				outClientFile << CONST_JUICE << endl;
 			outClientFile << pool[pl]->juice << endl;
 			for (int i = 0; i < ATTNUM; i++) {
 				//if (!NOVERBOSECOMMENTS)
 				//outClientFile << CONST_saveload081 + attribute_enum_to_string(i) << endl;
 				outClientFile << pool[pl]->get_true_attribute(i) << endl;
 			}
-			outClientFile << CONST_saveload076 << endl;
+			outClientFile << CONST_SKILLS << endl;
 			for (int i = 0; i < SKILLNUM; i++) {
 				if (!NOVERBOSECOMMENTS)
 					outClientFile << CONST_saveload081 + skillEnumToString[i] << endl;
@@ -295,16 +296,16 @@ void writeVerbose(string filename) {
 			}
 			for (int i = 0; i < BODYPARTNUM; i++) {//Bad, relies on their order in the xml file. -XML
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << CONST_saveload079 << endl;
+			outClientFile << CONST_NEXT_CREATURE << endl;
 			outClientFile <<  pool[pl]->wound[i] << endl;
 			}
 			for (int i = 0; i < SPECIALWOUNDNUM; i++) { //Bad, relies on their order in the xml file. -XML
 			if (!NOVERBOSECOMMENTS)
-			outClientFile << CONST_saveload079 << endl;
+			outClientFile << CONST_NEXT_CREATURE << endl;
 			outClientFile <<  pool[pl]->special[i] << endl;
 			}
 			*/
-			outClientFile << CONST_saveload080 << endl;
+			outClientFile << CONST_CRIMES << endl;
 			for (int i = 0; i < LAWFLAGNUM; i++) {//Bad, relies on their order in the xml file. -XML
 												  // 6
 												  // 20
@@ -314,11 +315,11 @@ void writeVerbose(string filename) {
 			}
 		}
 		/*
-		outClientFile << CONST_saveload082 << endl;
+		outClientFile << CONST_VEHICLE_CURCARID << endl;
 		outClientFile << Vehicle::curcarid << endl;
-		outClientFile << CONST_saveload083 << endl;
+		outClientFile << CONST_CURCREATUREID << endl;
 		outClientFile << curcreatureid << endl;
-		outClientFile << CONST_saveload084 << endl;
+		outClientFile << CONST_CURSQUADID << endl;
 		outClientFile << cursquadid << endl;
 		*/
 	}
@@ -528,7 +529,7 @@ void readVerbose(string filename) {
 	string filepath = homedir;
 	int position = filename.find(CONST_saveload088);
 	filename.erase(position);
-	filename += CONST_saveload089;
+	filename += CONST_VERBOSE;
 	FILE *h;
 	h = LCSOpenFile((filename).c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL) {
@@ -552,7 +553,7 @@ void deleteVerbose(const string& filename) {
 	string verboseFilename = filename;
 	int position = verboseFilename.find(CONST_saveload088);
 	verboseFilename.erase(position);
-	verboseFilename += CONST_saveload089;
+	verboseFilename += CONST_VERBOSE;
 	LCSDeleteFile(verboseFilename.c_str(), LCSIO_PRE_HOME);
 }
 void savegame(const string& filename)

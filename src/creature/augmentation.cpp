@@ -1,3 +1,4 @@
+
 #define	AUGMENTATION_CPP
 #include "../includes.h"
 
@@ -10,7 +11,7 @@ std::string Augmentation::get_name(int au)
 	case AUGMENTATION_ARMS: return CONST_augmentation014;
 	case AUGMENTATION_LEGS: return CONST_augmentation015;
 	case AUGMENTATION_SKIN: return CONST_augmentation016;
-	default: return CONST_augmentation017;
+	default: return CONSERVATIVE_BUG;
 	}
 }
 std::string Augmentation::showXml() const

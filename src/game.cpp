@@ -1,3 +1,4 @@
+
 #define	GAME_CPP
 #include "includes.h"
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +83,7 @@ void mainThree() {
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 								 // set window title
 	char wtitle[50];
-	strcpy(wtitle, CONST_game004);
+	strcpy(wtitle, CONST_LIBERAL_CRIME_SQUAD);
 	strcat(wtitle, PACKAGE_VERSION_STR.c_str());
 	set_title(wtitle);
 }
@@ -115,7 +116,7 @@ void mainFour() {
 	//Loading Init File Options...
 	loadinitfile();
 	//Loading sitemaps.txt...
-	oldMapMode = !readConfigFile(CONST_game005); // load site map data
+	oldMapMode = !readConfigFile(CONST_SITEMAPS_TXT); // load site map data
 	if (oldMapMode)
 	{
 		addstrAlt(failedToLoadSitemaps, gamelog);
@@ -174,54 +175,54 @@ void mainFive() {
 		}
 }
 string fixLineSpecialCharacter(char * toFix) {
-	string str = blankString;
+	string str = BLANK_STRING;
 	for (int i = 0; i < len(toFix); i++) {
 		bool special = (static_cast<int> (toFix[i])) == -61;
 		if (special) {
 			i++;
 			char c;
 			switch (toFix[i]) {
-			case -87: // 'È'
+			case -87: // 'Œò'
 				c = (char)0x82;
 				break;
-			case -74: // 'ˆ'
+			case -74: // '√∑'
 				c = (char)0x94;
 				break;
-			case -95: // '·'
+			case -95: // '√ü'
 				c = (char)0xa0;
 				break;
-			case -83: // 'Ì'
+			case -83: // 'œÜ'
 				c = (char)0xa1;
 				break;
-			case -77: // 'Û'
+			case -77: // '‚â§'
 				c = (char)0xa2;
 				break;
-			case -70: // '˙'
+			case -70: // '¬∑'
 				c = (char)0xa3;
 				break;
-			case (int) 'º':
-				// '¸'
+			case (int) '‚ïù':
+				// '‚Åø'
 				c = (char)0x81;
 				break;
-			case (int) '´':
-				// 'Î'
+			case (int) '¬Ω':
+				// 'Œ¥'
 				c = (char)0x89;
 				break;
-			case (int) '≤':
-				// 'Ú'
+			case (int) '‚ñì':
+				// '‚â•'
 				c = (char)0x95;
 				break;
-			case (int) '¢':
-				// '‚'
+			case (int) '√≥':
+				// 'Œì'
 				c = (char)0x83;
 				break;
-			case (int) '¥':
-				// 'Ù'
+			case (int) '‚î§':
+				// '‚å†'
 				c = (char)0x93;
 				break;
 				/*
-				case (int) '¬':
-				// '¢'
+				case (int) '‚î¨':
+				// '√≥'
 				// This letter does not use the escape character '-61'
 				// meaning it would need its own switch statement
 				// in addition to the hassle of determining what escape character is used
@@ -271,7 +272,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 					line.push_back(currentLine);
 					if (!isThisNotComment(currentLine)) {
-						cout << CONST_game006 << endl << currentLine << endl;
+						cout << CONST_COMMENT_FOUND << endl << currentLine << endl;
 						pressAnyKey();
 					}
 				}
@@ -281,7 +282,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 	}
 	success = types.size() > 0;
 	if (!success) {
-		addstrAlt(CONST_game008 + fileName);
+		addstrAlt(CONST_FILE_ERROR + fileName);
 		pressAnyKey();
 	}
 	return success;
@@ -311,7 +312,7 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	}
 	success = types.size() > 0;
 	if (!success) {
-		addstrAlt(CONST_game008 + fileName);
+		addstrAlt(CONST_FILE_ERROR + fileName);
 		pressAnyKey();
 	}
 	return success;
@@ -368,13 +369,13 @@ bool initialize_txt() {
 		}
 	}
 	if (!loaded) {
-		addstrAlt(CONST_game009);
+		addstrAlt(CONST_FILE_ERROR_INITIATEINCOMPLETETEXT);
 		pressAnyKey();
 	}
 	else {
 		loaded &= initialize_more_incomplete_txt();
 		if (!loaded) {
-			addstrAlt(CONST_game010);
+			addstrAlt(CONST_FILE_ERROR_INITIATEMOREINCOMPLETETEXT);
 			pressAnyKey();
 		}
 		
@@ -382,7 +383,7 @@ bool initialize_txt() {
 	return loaded;
 }
 void initialize_debug_defines() {
-	string fileName = CONST_game011;
+	string fileName = CONST_DEBUG_DEFINES_TXT;
 	ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	//int debug_codes = 0;
@@ -400,7 +401,7 @@ void initialize_debug_defines() {
 				for (pointerAndString p : debug_defines) {
 					if (currentLine == p.fileName) {
 						*(p.super_collection) = true;
-						mvaddstrAlt(y++, 0, debugCode + p.fileName + activated);
+						mvaddstrAlt(y++, 0, debugCode + p.fileName + ACTIVATED);
 					}
 				}
 			}
@@ -475,7 +476,7 @@ int main(int argc, char* argv[])
 	initialize_debug_defines();
 	bool xml_loaded_ok = initialize_txt();
 	if (!xml_loaded_ok) {
-		mvaddstrAlt(0, 0, CONST_game013);
+		mvaddstrAlt(0, 0, CONST_UNSPECIFIED_ERROR_WITH_CUSTOM_TEXT);
 		pressAnyKey();
 	}
 	mainThree();
@@ -504,7 +505,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 	xml.FindElem();
 	xml.IntoElem();
 	int defaultindex;
-	if (xml.FindElem(CONST_game014)) defaultindex = getarmortype(xml.GetData());
+	if (xml.FindElem(CONST_DEFAULT)) defaultindex = getarmortype(xml.GetData());
 	else
 	{
 		addstrAlt(defaultMissingForMask, log);
@@ -518,6 +519,6 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 		return false; //Abort.
 	}
 	xml.ResetMainPos();
-	while (xml.FindElem(CONST_game015)) masks.push_back(new ArmorType(*masks[defaultindex], xml.GetSubDoc()));
+	while (xml.FindElem(CONST_MASKTYPE)) masks.push_back(new ArmorType(*masks[defaultindex], xml.GetSubDoc()));
 	return true;
 }

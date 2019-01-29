@@ -1,3 +1,4 @@
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -63,7 +64,7 @@ void advancecreature(DeprecatedCreature &cr)
 				clearmessagearea();
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, topmedical->getNameAndAlignment().name, gamelog);
-				addstrAlt(ableToStopBleed, gamelog);
+				addstrAlt(ABLE_TO_SLOW_BLEEDING, gamelog);
 				mvaddstrAlt(17, 1, cr.getNameAndAlignment().name, gamelog);
 				addstrAlt(sWounds, gamelog);
 				gamelog.newline();

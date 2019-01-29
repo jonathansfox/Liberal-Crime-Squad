@@ -1,3 +1,4 @@
+
 #define	SIEGE_CPP
 #include "../includes.h"
 /*
@@ -28,7 +29,7 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -933,13 +934,13 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 
 
 	bool hit = true;
-	printCONST_siege189(clearformess);
+	printCONST_YOU_HEAR_PLANES_STREAK_OVERHEAD(clearformess);
 	pressAnyKey();
 	bool hasAAGun = siteHasAAGun(l);
 	bool hasGenerator = hasAGenerator(l);
 	if (hasAAGun)
 	{
- printCONST_siege190(clearformess);
+ printCONST_THE_THUNDER_OF_THE_ANTI_AIRCRAFT_GUN_SHAKES_THE_COMPOUND(clearformess);
 		pressAnyKey();
 		if (clearformess) eraseAlt();
 		else makedelimiter();
@@ -947,13 +948,13 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 		{
 			hit = false;
 			if (LCSrandom(2)) {
-				printCONST_siege191(clearformess);
+				printCONST_YOU_DIDN_T_SHOOT_ANY_DOWN_BUT_YOU_VE_MADE_THEM_THINK_TWICE(clearformess);
 			}
 			else
 			{
-				printCONST_siege192(clearformess);
+				printCONST_HIT_ONE_OF_THE_BOMBERS_SLAMS_INTO_TO_THE_GROUND(clearformess);
 				pressAnyKey();
-				printCONST_siege193(clearformess);
+				printCONST_IT_S_ALL_OVER_THE_TV_EVERYONE_IN_THE_LIBERAL_CRIME_SQUAD_GAINS_20_JUICE(clearformess);
 				for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) addjuice(*pool[p], 20, 1000);
 			}
 			gamelog.newline();
@@ -961,27 +962,27 @@ void airStrike(const char clearformess, const int l, int &num_liberals) {
 		}
 		else
 		{
-			printCONST_siege194(clearformess);
+			printCONST_A_SKILLED_PILOT_GETS_THROUGH(clearformess);
 			pressAnyKey();
 		}
 	}
 	if (hit)
 	{
-		printCONST_siege195(clearformess);
+		printCONST_EXPLOSIONS_ROCK_THE_COMPOUND(clearformess);
 		pressAnyKey();
 		if (hasAAGun && !LCSrandom(3))
 		{
-			printCONST_siege196(clearformess);
+			printCONST_THE_ANTI_AIRCRAFT_GUN_TAKES_A_DIRECT_HIT(clearformess);
 			pressAnyKey();
-			printCONST_siege197(clearformess);
+			printCONST_THERE_S_NOTHING_LEFT_BUT_SMOKING_WRECKAGE(clearformess);
 			pressAnyKey();
 			deleteAAGun(l);
 		}
 		else if (hasGenerator && !LCSrandom(3))
 		{
-			printCONST_siege198(clearformess);
+			printCONST_THE_GENERATOR_HAS_BEEN_DESTROYED(clearformess);
 			pressAnyKey();
-			printCONST_siege199(clearformess);
+			printCONST_THE_LIGHTS_FADE_AND_ALL_IS_DARK(clearformess);
 			pressAnyKey();
 			deleteGeneratorLightsOff(l);
 		}

@@ -1,3 +1,4 @@
+
 #define	VEHICLETYPE_CPP
 #include "../includes.h"
 //for atoi
@@ -60,7 +61,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 	xmlfile.SetDoc(xmlstring);
 	xmlfile.FindElem();
 	idname_ = xmlfile.GetAttrib(tag_idname);
-	if (idname_ == blankString)
+	if (idname_ == BLANK_STRING)
 		idname_ = CONST_vehicletype047 + tostring(id_);
 	xmlfile.IntoElem();
 	while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
@@ -343,4 +344,3 @@ int VehicleType::touchalarmchance() const { return touchalarmchance_; }
 bool VehicleType::availableatshop() const { return availableatshop_; }
 int VehicleType::price() const { return price_; }
 int VehicleType::sleeperprice() const { return sleeperprice_; }
-

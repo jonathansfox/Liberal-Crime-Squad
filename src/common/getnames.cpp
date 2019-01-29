@@ -1,3 +1,4 @@
+
 #define	GETNAMES_CPP
 #include "../includes.h"
 /*
@@ -28,7 +29,7 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: ‚
+// set to use that character set, such as this e with an accent: Ã©
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -60,59 +61,59 @@ std::string gettitle(const int align, const int juice)
 	{
 		if (juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
-			else return CONST_getnames031;
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_DARN_WORTHLESS;
+			else return CONST_DAMN_WORTHLESS;
 		}
-		else if (juice <= -10) return CONST_getnames008;
-		else if (juice < 0) return CONST_getnames009;
-		else if (juice < 10) return CONST_getnames010;
-		else if (juice < 50) return CONST_getnames011;
+		else if (juice <= -10) return CONST_CONSERVATIVE_DREGS;
+		else if (juice < 0) return CONST_CONSERVATIVE_PUNK;
+		else if (juice < 10) return CONST_MINDLESS_CONSERVATIVE;
+		else if (juice < 50) return CONST_WRONG_THINKER;
 		else if (juice < 100)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames012;
-			else return CONST_getnames013;
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_STUBBORN_AS_HECK;
+			else return CONST_STUBBORN_AS_HELL;
 		}
 		else if (juice < 200)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames014;
-			else return CONST_getnames015;
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_HEARTLESS_JERK;
+			else return CONST_HEARTLESS_BASTARD;
 		}
-		else if (juice < 500) return CONST_getnames016;
+		else if (juice < 500) return CONST_INSANE_VIGILANTE;
 		else if (juice < 1000) return CONST_getnames017;
-		else return CONST_getnames018;
+		else return CONST_EVIL_INCARNATE;
 	}
 	else if (align == 0)
 	{
 		if (juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
-			else return CONST_getnames031;
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_DARN_WORTHLESS;
+			else return CONST_DAMN_WORTHLESS;
 		}
-		else if (juice <= -10) return CONST_getnames032;
-		else if (juice < 0) return CONST_getnames022;
-		else if (juice < 10) return CONST_getnames023;
-		else if (juice < 50) return CONST_getnames024;
-		else if (juice < 100) return CONST_getnames025;
-		else if (juice < 200) return CONST_getnames026;
-		else if (juice < 500) return CONST_getnames027;
-		else if (juice < 1000) return CONST_getnames028;
-		else return CONST_getnames029;
+		else if (juice <= -10) return CONST_SOCIETY_S_DREGS;
+		else if (juice < 0) return CONST_NON_LIBERAL_PUNK;
+		else if (juice < 10) return CONST_NON_LIBERAL;
+		else if (juice < 50) return CONST_HARD_WORKING;
+		else if (juice < 100) return CONST_RESPECTED;
+		else if (juice < 200) return CONST_UPSTANDING_CITIZEN;
+		else if (juice < 500) return CONST_GREAT_PERSON;
+		else if (juice < 1000) return CONST_PEACEMAKER;
+		else return CONST_PEACE_PRIZE_WINNER;
 	}
 	else
 	{
 		if (juice <= -50)
 		{
-			if (lawList[LAW_FREESPEECH] == -2) return CONST_getnames030;
-			else return CONST_getnames031;
+			if (lawList[LAW_FREESPEECH] == -2) return CONST_DARN_WORTHLESS;
+			else return CONST_DAMN_WORTHLESS;
 		}
-		else if (juice <= -10) return CONST_getnames032;
-		else if (juice < 0) return CONST_getnames033;
-		else if (juice < 10) return CONST_getnames034;
-		else if (juice < 50) return CONST_getnames035;
-		else if (juice < 100) return CONST_getnames036;
-		else if (juice < 200) return CONST_getnames037;
-		else if (juice < 500) return CONST_getnames038;
-		else if (juice < 1000) return CONST_getnames039;
+		else if (juice <= -10) return CONST_SOCIETY_S_DREGS;
+		else if (juice < 0) return CONST_PUNK;
+		else if (juice < 10) return CONST_CIVILIAN;
+		else if (juice < 50) return CONST_ACTIVIST;
+		else if (juice < 100) return CONST_SOCIALIST_THREAT;
+		else if (juice < 200) return CONST_REVOLUTIONARY;
+		else if (juice < 500) return CONST_URBAN_COMMANDO;
+		else if (juice < 1000) return CONST_LIBERAL_GUARDIAN;
 		else return CONST_getnames040;
 	}
 }
@@ -126,7 +127,7 @@ std::string getview(short view, bool shortname)
 			return getViewString[view][0];
 		}
 		else
-			return CONST_getnames041;
+			return CONST_BUGS;
 	}
 	else
 	{
@@ -134,7 +135,7 @@ std::string getview(short view, bool shortname)
 			return getViewString[view][1];
 		}
 		else
-			return CONST_getnames042;
+			return CONST_BUGGY_SOFTWARE;
 	}
 }
 map<short, string> getLawString;
@@ -157,12 +158,12 @@ std::string getmonth(int month, bool shortname)
 }
 vector<file_and_text_collection> get_names_text_file_collection = {
 	/*getnames.cpp*/
-	customText(&city_names, names + CONST_getnames044),
-	customText(&getMonth, mostlyendings + CONST_getnames045),
+	customText(&city_names, names + CONST_CITY_NAMES_TXT),
+	customText(&getMonth, mostlyendings + CONST_GETMONTH_TXT),
 };
 map<short, string> getAlignString;
 //string moderateLC;
-//string buggyString;
+//string BUGGY_STRING;
 std::string getalign(short alignment, bool capitalize)
 {
 	if (capitalize == false && alignment == ALIGN_MODERATE) {
@@ -172,6 +173,6 @@ std::string getalign(short alignment, bool capitalize)
 		return getAlignString[alignment];
 	}
 	else {
-		return buggyString;
+		return BUGGY_STRING;
 	}
 }

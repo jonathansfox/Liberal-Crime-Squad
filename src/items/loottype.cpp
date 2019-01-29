@@ -1,3 +1,4 @@
+
 #define	LOOTTYPE_CPP
 #include "../includes.h"
 #include "../creature/creatureEnums.h"
@@ -25,8 +26,8 @@ LootType::LootType(MCD_STR xmlstring)
 			else if (b == 0)
 				stackable_ = false;
 			/*else
-			errorlog << CONST_loottype008 << idname
-			<< CONST_loottype005 << xml.GetData() << std::endl;*/
+			errorlog << CONST_INVALID_BOOLEAN_VALUE_FOR_LOOT_TYPE << idname
+			<< CONST_STACKABLE << xml.GetData() << std::endl;*/
 		}
 		else if (element == tag_no_quick_fencing)
 		{
@@ -36,8 +37,8 @@ LootType::LootType(MCD_STR xmlstring)
 			else if (b == 0)
 				no_quick_fencing_ = false;
 			/*else
-			errorlog << CONST_loottype008 << idname
-			<< CONST_loottype007 << xml.GetData() << std::endl;*/
+			errorlog << CONST_INVALID_BOOLEAN_VALUE_FOR_LOOT_TYPE << idname
+			<< CONST_NO_QUICK_FENCING << xml.GetData() << std::endl;*/
 		}
 		else if (element == tag_cloth)
 		{
@@ -47,8 +48,8 @@ LootType::LootType(MCD_STR xmlstring)
 			else if (b == 0)
 				cloth_ = false;
 			/*else
-			errorlog << CONST_loottype008 << idname
-			<< CONST_loottype009 << xml.GetData() << std::endl;*/
+			errorlog << CONST_INVALID_BOOLEAN_VALUE_FOR_LOOT_TYPE << idname
+			<< CONST_CLOTH << xml.GetData() << std::endl;*/
 		}
 	}
 }

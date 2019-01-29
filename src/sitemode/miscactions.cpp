@@ -1,3 +1,4 @@
+
 #define	MISCACTIONS_CPP
 #include "../includes.h"
 /*
@@ -95,13 +96,13 @@ UnlockAttempt unlock(short type)
 			addstrAlt(singleSpace, gamelog);
 			switch (type)
 			{
-			case UNLOCK_DOOR:addstrAlt(CONST_miscactions005, gamelog); break;
+			case UNLOCK_DOOR:addstrAlt(CONST_UNLOCKS_THE_DOOR, gamelog); break;
 			case UNLOCK_CAGE_HARD:
-			case UNLOCK_CAGE:addstrAlt(CONST_miscactions006, gamelog); break;
-			case UNLOCK_SAFE:addstrAlt(CONST_miscactions007, gamelog); break;
-			case UNLOCK_ARMORY:addstrAlt(CONST_miscactions008, gamelog); break;
-			case UNLOCK_CELL:addstrAlt(CONST_miscactions009, gamelog); break;
-			case UNLOCK_VAULT:addstrAlt(CONST_miscactions010, gamelog); break;
+			case UNLOCK_CAGE:addstrAlt(CONST_UNLOCKS_THE_CAGE, gamelog); break;
+			case UNLOCK_SAFE:addstrAlt(CONST_CRACKS_THE_SAFE, gamelog); break;
+			case UNLOCK_ARMORY:addstrAlt(CONST_OPENS_THE_ARMORY, gamelog); break;
+			case UNLOCK_CELL:addstrAlt(CONST_UNLOCKS_THE_CELL, gamelog); break;
+			case UNLOCK_VAULT:addstrAlt(CONST_CRACKS_THE_COMBO_LOCKS, gamelog); break;
 			}
 			addstrAlt(CONST_miscactions028, gamelog);
 			gamelog.newline();
@@ -149,7 +150,7 @@ UnlockAttempt unlock(short type)
 						activesquad->squad[p]->train(SKILL_SECURITY, 10); break;
 					}
 					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_miscactions012, gamelog);
+					addstrAlt(CONST_IS_CLOSE_BUT_CAN_T_QUITE_GET_THE_LOCK_OPEN, gamelog);
 					gamelog.newline();
 					break;
 				}
@@ -157,7 +158,7 @@ UnlockAttempt unlock(short type)
 			if (i == 3)
 			{
 				mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_miscactions013, gamelog);
+				addstrAlt(CONST_CAN_T_FIGURE_THE_LOCK_OUT, gamelog);
 				gamelog.newline();
 			}
 			pressAnyKey();
@@ -168,7 +169,7 @@ UnlockAttempt unlock(short type)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions033, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_CAN_T_FIND_ANYONE_TO_DO_THE_JOB, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}
@@ -254,12 +255,12 @@ UnlockAttempt bash()
 		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		
-			if (crowable) addstrAlt(CONST_miscactions015, gamelog);
+			if (crowable) addstrAlt(CONST_USES_A_CROWBAR_ON_THE_DOOR, gamelog);
 			else if (activesquad->squad[maxp]->get_weapon().get_bashstrengthmod() > 1)
-				addstrAlt(CONST_miscactions016, gamelog);
+				addstrAlt(CONST_SMASHES_IN_THE_DOOR, gamelog);
 			else if (activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
-				addstrAlt(CONST_miscactions017, gamelog);
-			else addstrAlt(CONST_miscactions018, gamelog);
+				addstrAlt(CONST_RAMS_OPEN_THE_DOOR, gamelog);
+			else addstrAlt(CONST_KICKS_IN_THE_DOOR, gamelog);
 		
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
@@ -289,8 +290,8 @@ UnlockAttempt bash()
 		mvaddstrAlt(16, 1, activesquad->squad[maxp]->getNameAndAlignment().name, gamelog);
 		
 			if (activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
-				addstrAlt(CONST_miscactions021, gamelog);
-			else addstrAlt(CONST_miscactions022, gamelog);
+				addstrAlt(CONST_RAMS_INTO_THE_DOOR, gamelog);
+			else addstrAlt(CONST_KICKS_THE_DOOR, gamelog);
 		
 		addstrAlt(CONST_miscactions028, gamelog);
 		gamelog.newline();
@@ -339,14 +340,14 @@ UnlockAttempt hack(short type)
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, activesquad->squad[hacker]->getNameAndAlignment().name, gamelog);
-			if (!blind) addstrAlt(CONST_miscactions024, gamelog);
+			if (!blind) addstrAlt(CONST_HAS, gamelog);
 			switch (type)
 			{
-			case HACK_SUPERCOMPUTER:addstrAlt(CONST_miscactions025, gamelog); break;
-			case HACK_VAULT:addstrAlt(CONST_miscactions026, gamelog); break;
+			case HACK_SUPERCOMPUTER:addstrAlt(CONST_BURNED_A_DISK_OF_TOP_SECRET_FILES, gamelog); break;
+			case HACK_VAULT:addstrAlt(CONST_DISABLED_THE_SECOND_LAYER_OF_SECURITY, gamelog); break;
 			}
 			if (blind)
-				addstrAlt(CONST_miscactions027, gamelog);
+				addstrAlt(CONST_DESPITE_BEING_BLIND, gamelog);
 			addstrAlt(CONST_miscactions028, gamelog);
 			gamelog.newline();
 			pressAnyKey();
@@ -357,12 +358,12 @@ UnlockAttempt hack(short type)
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(16, 1, activesquad->squad[hacker]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_miscactions029, gamelog);
-			if (blind) addstrAlt(CONST_miscactions030, gamelog);
+			addstrAlt(CONST_COULDN_T, gamelog);
+			if (blind) addstrAlt(CONST_SEE_HOW_TO, gamelog);
 			switch (type)
 			{
-			case HACK_SUPERCOMPUTER:addstrAlt(CONST_miscactions031, gamelog); break;
-			case HACK_VAULT:addstrAlt(CONST_miscactions032, gamelog); break;
+			case HACK_SUPERCOMPUTER:addstrAlt(CONST_BYPASS_THE_SUPERCOMPUTER_SECURITY, gamelog); break;
+			case HACK_VAULT:addstrAlt(CONST_BYPASS_THE_VAULT_S_ELECTRONIC_LOCK, gamelog); break;
 			}
 			gamelog.newline();
 			pressAnyKey();
@@ -373,12 +374,12 @@ UnlockAttempt hack(short type)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions033, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_CAN_T_FIND_ANYONE_TO_DO_THE_JOB, gamelog);
 		gamelog.newline();
 		if (blind)
 		{  // your only hacker was blind and had a skill roll, after the handicap, of 0 or less
 			pressAnyKey();
-			mvaddstrAlt(17, 1, CONST_miscactions034, gamelog);
+			mvaddstrAlt(17, 1, CONST_INCLUDING_THE_BLIND_HACKER_YOU_BROUGHT, gamelog);
 			gamelog.newline();
 		}
 		pressAnyKey();
@@ -402,8 +403,8 @@ char run_broadcast(bool tv_broadcase)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions035, gamelog);
-		mvaddstrAlt(17, 1, CONST_miscactions036, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_CONSERVATIVES_IN_THE_ROOM_HURRY_THE_SQUAD_SO, gamelog);
+		mvaddstrAlt(17, 1, CONST_THE_BROADCAST_NEVER_HAPPENS, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		return 0;
@@ -412,10 +413,10 @@ char run_broadcast(bool tv_broadcase)
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (tv_broadcase) {
-		mvaddstrAlt(16, 1, CONST_miscactions037, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_SQUAD_STEPS_IN_FRONT_OF_THE_CAMERAS_AND, gamelog);
 	}
 	else {
-		mvaddstrAlt(16, 1, CONST_miscactions038, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_SQUAD_TAKES_CONTROL_OF_THE_MICROPHONE_AND, gamelog);
 	}
 	int viewhit = LCSrandom(VIEWNUM);
 	if (discussesIssues.count(viewhit)) {
@@ -454,24 +455,24 @@ char run_broadcast(bool tv_broadcase)
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	if (tv_broadcase) {
-		if (segmentpower < 25)mvaddstrAlt(16, 1, CONST_miscactions039, gamelog);
-		else if (segmentpower < 35)mvaddstrAlt(16, 1, CONST_miscactions048, gamelog);
-		else if (segmentpower < 45)mvaddstrAlt(16, 1, CONST_miscactions049, gamelog);
-		else if (segmentpower < 55)mvaddstrAlt(16, 1, CONST_miscactions042, gamelog);
-		else if (segmentpower < 70)mvaddstrAlt(16, 1, CONST_miscactions051, gamelog);
-		else if (segmentpower < 85)mvaddstrAlt(16, 1, CONST_miscactions052, gamelog);
-		else if (segmentpower < 100)mvaddstrAlt(16, 1, CONST_miscactions053, gamelog);
-		else mvaddstrAlt(16, 1, CONST_miscactions046, gamelog);
+		if (segmentpower < 25)mvaddstrAlt(16, 1, CONST_THE_SQUAD_LOOKS_COMPLETELY_INSANE, gamelog);
+		else if (segmentpower < 35)mvaddstrAlt(16, 1, CONST_THE_SHOW_REALLY_SUCKS, gamelog);
+		else if (segmentpower < 45)mvaddstrAlt(16, 1, CONST_IT_IS_A_VERY_BORING_HOUR, gamelog);
+		else if (segmentpower < 55)mvaddstrAlt(16, 1, CONST_IT_IS_MEDIOCRE_TV, gamelog);
+		else if (segmentpower < 70)mvaddstrAlt(16, 1, CONST_THE_SHOW_WAS_ALL_RIGHT, gamelog);
+		else if (segmentpower < 85)mvaddstrAlt(16, 1, CONST_THE_SQUAD_PUT_ON_A_GOOD_SHOW, gamelog);
+		else if (segmentpower < 100)mvaddstrAlt(16, 1, CONST_IT_WAS_THOUGHT_PROVOKING_EVEN_HUMOROUS, gamelog);
+		else mvaddstrAlt(16, 1, CONST_IT_WAS_THE_BEST_HOUR_OF_CABLE_TV_EVER, gamelog);
 	}
 	else {
-		if (segmentpower < 25)mvaddstrAlt(16, 1, CONST_miscactions047, gamelog);
-		else if (segmentpower < 35)mvaddstrAlt(16, 1, CONST_miscactions048, gamelog);
-		else if (segmentpower < 45)mvaddstrAlt(16, 1, CONST_miscactions049, gamelog);
-		else if (segmentpower < 55)mvaddstrAlt(16, 1, CONST_miscactions050, gamelog);
-		else if (segmentpower < 70)mvaddstrAlt(16, 1, CONST_miscactions051, gamelog);
-		else if (segmentpower < 85)mvaddstrAlt(16, 1, CONST_miscactions052, gamelog);
-		else if (segmentpower < 100)mvaddstrAlt(16, 1, CONST_miscactions053, gamelog);
-		else mvaddstrAlt(16, 1, CONST_miscactions054, gamelog);
+		if (segmentpower < 25)mvaddstrAlt(16, 1, CONST_THE_SQUAD_SOUNDS_WHOLLY_INSANE, gamelog);
+		else if (segmentpower < 35)mvaddstrAlt(16, 1, CONST_THE_SHOW_REALLY_SUCKS, gamelog);
+		else if (segmentpower < 45)mvaddstrAlt(16, 1, CONST_IT_IS_A_VERY_BORING_HOUR, gamelog);
+		else if (segmentpower < 55)mvaddstrAlt(16, 1, CONST_IT_IS_MEDIOCRE_RADIO, gamelog);
+		else if (segmentpower < 70)mvaddstrAlt(16, 1, CONST_THE_SHOW_WAS_ALL_RIGHT, gamelog);
+		else if (segmentpower < 85)mvaddstrAlt(16, 1, CONST_THE_SQUAD_PUT_ON_A_GOOD_SHOW, gamelog);
+		else if (segmentpower < 100)mvaddstrAlt(16, 1, CONST_IT_WAS_THOUGHT_PROVOKING_EVEN_HUMOROUS, gamelog);
+		else mvaddstrAlt(16, 1, CONST_IT_WAS_THE_BEST_HOUR_OF_AM_RADIO_EVER, gamelog);
 	}
 	gamelog.newline();
 	pressAnyKey();
@@ -498,9 +499,9 @@ char run_broadcast(bool tv_broadcase)
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_miscactions055, gamelog);
+					mvaddstrAlt(16, 1, CONST_THE_HOSTAGE, gamelog);
 					addstrAlt(activesquad->squad[p]->get_prisoner_name(), gamelog);
-					addstrAlt(CONST_miscactions056, gamelog);
+					addstrAlt(CONST_IS_FORCED_ON_TO, gamelog);
 					viewhit = LCSrandom(VIEWNUM);
 					if (discussIssues.count(viewhit)) {
 						mvaddstrAlt(17, 1, discussIssues[viewhit], gamelog);
@@ -527,7 +528,7 @@ char run_broadcast(bool tv_broadcase)
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, activesquad->squad[p]->get_prisoner_name(), gamelog);
-					addstrAlt(CONST_miscactions057, gamelog);
+					addstrAlt(CONST_THE_HOSTAGE_IS_KEPT_OFF_AIR, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 				}
@@ -539,9 +540,9 @@ char run_broadcast(bool tv_broadcase)
 		sitealienate = 0;
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions058, gamelog);
+		mvaddstrAlt(16, 1, CONST_MODERATES_AT_THE_STATION_APPRECIATED_THE_SHOW, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_miscactions059, gamelog);
+		mvaddstrAlt(17, 1, CONST_THEY_NO_LONGER_FEEL_ALIENATED, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}
@@ -550,8 +551,8 @@ char run_broadcast(bool tv_broadcase)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions060, gamelog);
-		mvaddstrAlt(17, 1, CONST_miscactions061, gamelog);
+		mvaddstrAlt(16, 1, CONST_SECURITY_IS_WAITING_FOR_THE_SQUAD, gamelog);
+		mvaddstrAlt(17, 1, CONST_AFTER_THE_SHOW, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		int numleft = LCSrandom(8) + 2;
@@ -562,17 +563,17 @@ char run_broadcast(bool tv_broadcase)
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (tv_broadcase) {
-			mvaddstrAlt(16, 1, CONST_miscactions062, gamelog);
+			mvaddstrAlt(16, 1, CONST_THE_SHOW_WAS_SO, gamelog);
 			if (segmentpower < 50)
-				addstrAlt(CONST_miscactions063, gamelog);
+				addstrAlt(CONST_HILARIOUS, gamelog);
 			else
-				addstrAlt(CONST_miscactions064, gamelog);
-			addstrAlt(CONST_miscactions065, gamelog);
+				addstrAlt(CONST_ENTERTAINING, gamelog);
+			addstrAlt(CONST_THAT_SECURITY_WATCHED_IT, gamelog);
 		}
 		else {
-			mvaddstrAlt(16, 1, CONST_miscactions066, gamelog);
+			mvaddstrAlt(16, 1, CONST_THE_SHOW_WAS_SO_GOOD_THAT_SECURITY_LISTENED_TO_IT, gamelog);
 		}
-		mvaddstrAlt(17, 1, CONST_miscactions067, gamelog);
+		mvaddstrAlt(17, 1, CONST_AT_THEIR_DESKS_THE_SQUAD_MIGHT_YET_ESCAPE, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}
@@ -619,9 +620,9 @@ void partyrescue(short special)
 			freeslots--;
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
+			mvaddstrAlt(16, 1, CONST_YOU_VE_RESCUED, gamelog);
 			addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_miscactions071, gamelog);
+			addstrAlt(CONST_FROM_THE_CONSERVATIVES, gamelog);
 			gamelog.newline();
 			printparty();
 			pressAnyKey();
@@ -647,18 +648,18 @@ void partyrescue(short special)
 						waiting_for_rescue[pl]->flag |= CREATUREFLAG_JUSTESCAPED;
 						clearmessagearea();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
-						mvaddstrAlt(16, 1, CONST_miscactions070, gamelog);
+						mvaddstrAlt(16, 1, CONST_YOU_VE_RESCUED, gamelog);
 						addstrAlt(waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
-						addstrAlt(CONST_miscactions071, gamelog);
+						addstrAlt(CONST_FROM_THE_CONSERVATIVES, gamelog);
 						gamelog.newline();
 						pressAnyKey();
 						clearmessagearea();
 						mvaddstrAlt(16, 1, waiting_for_rescue[pl]->getNameAndAlignment().name, gamelog);
 						addstrAlt(singleSpace, gamelog);
 						addstrAlt(pickrandom(was_abused), gamelog);
-						mvaddstrAlt(17, 1, CONST_miscactions072, gamelog);
+						mvaddstrAlt(17, 1, CONST_SO, gamelog);
 						addstrAlt(activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-						addstrAlt(CONST_miscactions073, gamelog);
+						addstrAlt(CONST_WILL_HAVE_TO_HAUL_A_LIBERAL, gamelog);
 						gamelog.newline();
 						waiting_for_rescue[pl]->location = -1;
 						waiting_for_rescue[pl]->base = activesquad->squad[p]->base;
@@ -678,12 +679,12 @@ void partyrescue(short special)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions074, gamelog);
+		mvaddstrAlt(16, 1, CONST_THERE_S_NOBODY_LEFT_TO_CARRY, gamelog);
 		addstrAlt(waiting_for_rescue[0]->getNameAndAlignment().name, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, CONST_miscactions077, gamelog);
+		mvaddstrAlt(17, 1, CONST_YOU_LL_HAVE_TO_COME_BACK_LATER, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}
@@ -691,10 +692,10 @@ void partyrescue(short special)
 	{
 		clearmessagearea();
 		set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_miscactions076, gamelog);
+		mvaddstrAlt(16, 1, CONST_THERE_S_NOBODY_LEFT_TO_CARRY_THE_OTHERS, gamelog);
 		gamelog.newline();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(17, 1, CONST_miscactions077, gamelog);
+		mvaddstrAlt(17, 1, CONST_YOU_LL_HAVE_TO_COME_BACK_LATER, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 	}

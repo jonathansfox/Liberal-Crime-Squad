@@ -1,3 +1,4 @@
+
 #define	LCSIO_CPP
 #include "../includes.h"
 
@@ -22,13 +23,13 @@ bool initialized = false;
 const char *art_search_paths[] =
 {
    #ifdef INSTALL_DATA_DIR
-   INSTALL_DATA_DIR CONST_lcsio002,
+   INSTALL_DATA_DIR CONST_LCS_ART,
    #endif
    #ifndef WIN32
-   CONST_lcsio003.c_str(),
-   CONST_lcsio004.c_str(),
-   CONST_lcsio005.c_str(),
-   CONST_lcsio006.c_str(),
+   CONST_USR_LOCAL_SHARE_LCS_ART.c_str(),
+   CONST_USR_SHARE_LCS_ART.c_str(),
+   CONST_USR_GAMES_SHARE_LCS_ART.c_str(),
+   CONST_USR_GAMES_LCS_ART.c_str(),
    #endif
    CONST_lcsio007.c_str(),
    CONST_lcsio008.c_str(),
@@ -47,16 +48,16 @@ bool LCSFileExists(const char* filename)
 bool LCSInitHomeDir()
 {
 #ifndef WIN32
-	char* homeenv = getenv(CONST_lcsio009.c_str());
+	char* homeenv = getenv(CONST_HOME.c_str());
 #else
-	char* homeenv = (char*)CONST_lcsio010.c_str();
+	char* homeenv = (char*)DOT_SLASH.c_str();
 #endif
 	//Do everything using STL String, it is safer that way.
 	std::string str = homeenv;
 	if (str[len(str) - 1] != '/')
 		str += CONST_lcsio011;
 #ifndef WIN32
-	str += CONST_lcsio012;
+	str += CONST_LCS;
 #endif
 	strncpy(homedir, str.c_str(), MAX_PATH_SIZE);
 	if ((!LCSFileExists(homedir)) && (strncmp(homedir, CONST_lcsio013.c_str(), 1) != 0))
@@ -80,7 +81,7 @@ bool LCSInitArtDir()
 	for (int i = 1; artprefix != NULL; i++)
 	{
 		tester = artprefix;
-		tester.append(arttest);
+		tester.append(NEWSPIC_CPC);
 		if (LCSFileExists(tester.c_str()))
 			break;
 		artprefix = art_search_paths[i];
@@ -134,7 +135,7 @@ vector<string> LCSSaveFiles()
 	{
 		tinydir_file file;
 		tinydir_readfile(&dir, &file);
-		if (strstr(file.name, CONST_lcsio014.c_str()) != NULL && strstr(file.name, CONST_lcsioX01.c_str()) == NULL)
+		if (strstr(file.name, CONST_DAT.c_str()) != NULL && strstr(file.name, CONST_SCORE.c_str()) == NULL)
 			save_files.push_back(file.name);
 		tinydir_next(&dir);
 	}
@@ -150,7 +151,7 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 		LCSInitArtDir(); //Initialize the art dir.
 		initialized = true; //Initialized.
 	}
-	std::string filepath = blankString; //The actual path to the file.
+	std::string filepath = BLANK_STRING; //The actual path to the file.
 	//This ifelse block decides which directory the file gets saved to.
 	if (flags & LCSIO_PRE_ART) //Art dir specified.
 		filepath = artdir; //Set the filepath to the artdir.

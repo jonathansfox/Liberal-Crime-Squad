@@ -1,3 +1,4 @@
+
 #define	TALK_CPP
 #include "../includes.h"
 
@@ -460,7 +461,7 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		selected_flirt = pickrandom(pickupLines);
 	}
 	printPickupLine(a.getNameAndAlignment().name, selected_flirt);
-	const bool extraline = (selected_flirt[1] != blankString ? 1 : 0);
+	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
 	pressAnyKey();
 	bool succeeded = false;
 	int difficulty = DIFFICULTY_HARD;
@@ -837,7 +838,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)
 		{
-			printBunkerGearBluff();
+			printBunkerGearBluff(siteonfire);
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)
 			printLabCoatBluff();
@@ -887,7 +888,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 		}
 		else
 		{
-			printXeIsNotFooled(encounter[e].name);
+			printXeIsNotFooled(encounter[e].name, lawList[LAW_FREESPEECH] == ALIGN_ARCHCONSERVATIVE);
 		}
 		pressAnyKey();
 	}
@@ -1146,4 +1147,3 @@ int verifyworklocation(const int type, const int worklocation)
 	}
 	return new_work_location;
 }
-

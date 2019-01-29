@@ -1,10 +1,11 @@
+
 #define	CONFIGFILE_CPP
 #include "includes.h"
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
    std::ifstream* file = new std::ifstream();
-   addstrAlt(attemptingToOpenFile);
+   addstrAlt(ATTEMPTING_TO_OPEN);
    addstrAlt(filename);
    addstrAlt(singleSpace);
    file->open((artdir+filename).c_str(), format);
@@ -139,7 +140,7 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
 }
 bool readMap(const std::string& filename)
 {
-   std::string prefix = std::string(CONST_configfile002);
+   std::string prefix = std::string(MAPCSV_);
    // clear any old map data
    for(int x=0;x<MAPX;x++)
    for(int y=0;y<MAPY;y++)
@@ -149,15 +150,15 @@ bool readMap(const std::string& filename)
       levelmap[x][y][z].special=SPECIAL_NONE;
       levelmap[x][y][z].siegeflag=0;
    }
-   // Try first floor (eg CONST_configfile003), abort this method if it doesn't exist
-   if(!readMapFile(prefix+filename+CONST_configfile007, 0, readMapCBTiles)) return false;
-   if(!readMapFile(prefix+filename+CONST_configfile008, 0, readMapCBSpecials)) return false;
-   // Try upper levels (eg CONST_configfile006), but don't sweat it if they don't exist
+   // Try first floor (eg MAPCSV_BANK_TILES_CSV), abort this method if it doesn't exist
+   if(!readMapFile(prefix+filename+TILES_CSV, 0, readMapCBTiles)) return false;
+   if(!readMapFile(prefix+filename+SPECIALS_CSV, 0, readMapCBSpecials)) return false;
+   // Try upper levels (eg MAPCSV_BANK2_TILES_CSV), but don't sweat it if they don't exist
    for(int z=1;z<MAPZ;z++)
    {
       std::string str=tostring(z+1);
-      if(!readMapFile(prefix+filename+str+CONST_configfile007, z, readMapCBTiles)) break;
-      if(!readMapFile(prefix+filename+str+CONST_configfile008, z, readMapCBSpecials)) break;
+      if(!readMapFile(prefix+filename+str+TILES_CSV, z, readMapCBTiles)) break;
+      if(!readMapFile(prefix+filename+str+SPECIALS_CSV, z, readMapCBSpecials)) break;
    }
    return true;
 }

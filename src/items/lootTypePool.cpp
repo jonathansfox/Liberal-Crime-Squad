@@ -1,3 +1,4 @@
+
 #define	LOOTTYPEPOOL_CPP
 #include "../includes.h"
 
@@ -91,7 +92,7 @@ Loot::Loot(const std::string& inputXml) : Item(inputXml)
 string Loot::showXml() const
 {
 	CMarkup xml;
-	xml.AddElem(CONST_lootTypePool000);
+	xml.AddElem(CONST_LOOT);
 	xml.IntoElem();
 	addBaseValues(xml);
 	return xml.GetDoc();

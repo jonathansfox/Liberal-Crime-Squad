@@ -1,3 +1,4 @@
+
 #define	DAILY_CPP
 #include "../includes.h"
 /*
@@ -45,7 +46,7 @@ void hospital(int loc)
 		mvaddstrAlt(12, 1, enterLeave);
 		if (partysize > 0 && (party_status == -1 || partysize > 1)) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(13, 1, check_status_of_squad_liberal);
+		mvaddstrAlt(13, 1, HASH_CHECK_STATUS_OF_LIBERAL);
 		if (party_status != -1) set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(14, 1, show_squad_liberal_status);
@@ -75,7 +76,7 @@ void armsdealer(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + CONST_shopsnstuff004);
+	xml.Load(string(artdir) + CONST_ARMSDEALER_XML);
 	Shop armsdealer(xml.GetDoc());
 	armsdealer.enter(*activesquad);
 }
@@ -85,7 +86,7 @@ void pawnshop(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + CONST_shopsnstuff005);
+	xml.Load(string(artdir) + CONST_PAWNSHOP_XML);
 	Shop pawnshop(xml.GetDoc());
 	pawnshop.enter(*activesquad);
 }
@@ -99,7 +100,7 @@ void choose_buyer(short &buyer)
 	{
 		printparty();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(8, 20, chooseALiberalTo + toSpend);
+		mvaddstrAlt(8, 20, CHOOSE_A_LIBERAL_TO + toSpend);
 		int c = getkeyAlt();
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return;
 		if (c >= '1'&&c <= partysize + '1' - 1)
@@ -136,7 +137,7 @@ void dealership(int loc)
 			if (car_to_sell->get_heat())
 				price /= 10;
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(11, 1, s_sellThe + car_to_sell->fullname() + spaceParanthesisDollar + tostring(price) + closeParenthesis);
+			mvaddstrAlt(11, 1, s_sellThe + car_to_sell->fullname() + spaceParanthesisDollar + tostring(price) + CLOSE_PARENTHESIS);
 		}
 		else
 		{
@@ -145,7 +146,7 @@ void dealership(int loc)
 		}
 		if (partysize >= 2)set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, b_chooseBuyer);
+		mvaddstrAlt(16, 1, B_CHOOSE_BUYER);
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(16, 40, enterLeave);
 		if (party_status != -1)set_color_easy(WHITE_ON_BLACK);
@@ -153,7 +154,7 @@ void dealership(int loc)
 		mvaddstrAlt(15, 1, show_squad_liberal_status);
 		if (partysize > 0 && (party_status == -1 || partysize > 1))set_color_easy(WHITE_ON_BLACK);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(15, 40, check_status_of_squad_liberal);
+		mvaddstrAlt(15, 40, HASH_CHECK_STATUS_OF_LIBERAL);
 		int c = getkeyAlt();
 		// Leave
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR)break;
@@ -179,11 +180,11 @@ void dealership(int loc)
 				{
 					availablevehicle.push_back(i);
 					vehicleoption.push_back(vehicleTypelongname(i) + spaceParanthesisDollar +
-						tostring(sleepercarsalesman ? getVehicleTypeSleeperPrice(i) : getVehicleTypePrice(i)) + closeParenthesis);
+						tostring(sleepercarsalesman ? getVehicleTypeSleeperPrice(i) : getVehicleTypePrice(i)) + CLOSE_PARENTHESIS);
 				}
 			while (true)
 			{
-				carchoice = choiceprompt(chooseVehicle, blankString, vehicleoption, thisVehicle,
+				carchoice = choiceprompt(CHOOSE_A_VEHICLE, BLANK_STRING, vehicleoption, thisVehicle,
 					true, weDontNeedCar);
 				if (carchoice != -1 && (sleepercarsalesman ? getVehicleTypeSleeperPrice(availablevehicle[carchoice]) :
 					getVehicleTypePrice(availablevehicle[carchoice])) > ledger.get_funds())
@@ -199,7 +200,7 @@ void dealership(int loc)
 			int colorchoice;
 			//if(len(vehicletype[availablevehicle[choice]]->color())>1) //Allow to back out if you don't like single colour? -XML
 			//{
-			colorchoice = choiceprompt(chooseAColor, blankString, getVehicleTypeColor(availablevehicle[carchoice]),
+			colorchoice = choiceprompt(CHOOSE_A_COLOR, BLANK_STRING, getVehicleTypeColor(availablevehicle[carchoice]),
 				thisColor, true, theseColorsAreCon);
 			//}
 			//else
@@ -233,7 +234,7 @@ void deptstore(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml; // -XML
-	xml.Load(string(artdir) + CONST_shopsnstuff007);
+	xml.Load(string(artdir) + CONST_DEPTSTORE_XML);
 	Shop deptstore(xml.GetDoc());
 	deptstore.enter(*activesquad);
 }
@@ -243,7 +244,7 @@ void halloweenstore(int loc)
 	music.play(MUSIC_SHOPPING);
 	locatesquad(activesquad, loc);
 	CMarkup xml;
-	xml.Load(string(artdir) + CONST_shopsnstuff008);
+	xml.Load(string(artdir) + CONST_OUBLIETTE_XML);
 	Shop oubliette(xml.GetDoc());
 	oubliette.enter(*activesquad);
 }
@@ -285,9 +286,9 @@ void ageThings(const char clearformess) {
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_daily020, gamelog);
+							addstrAlt(HAS_PASSED_AWAY, gamelog);
 							addstrAlt(pool[p]->getCreatureBio().age, gamelog);
-							addstrAlt(CONST_daily021, gamelog);
+							addstrAlt(THE_LIBERAL_WILL_BE_MISSED, gamelog);
 							gamelog.nextMessage();
 							pressAnyKey();
 							break;
@@ -305,11 +306,11 @@ void ageThings(const char clearformess) {
 				{
 				case 13:
 					pool[p]->type = CREATURE_TEENAGER; // aww, all grown up
-					pool[p]->type_idname = CONST_daily022;
+					pool[p]->type_idname = CONST_CREATURE_TEENAGER;
 					break;
 				case 18:
 					pool[p]->type = CREATURE_POLITICALACTIVIST; // ok seriously this time
-					pool[p]->type_idname = CONST_daily023;
+					pool[p]->type_idname = CONST_CREATURE_POLITICALACTIVIST;
 					break;
 				}
 			}
@@ -330,7 +331,7 @@ void ageThings(const char clearformess) {
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_daily024, gamelog);
+					addstrAlt(REGAINS_CONTACT, gamelog);
 					gamelog.nextMessage();
 					pressAnyKey();
 				}
@@ -477,7 +478,7 @@ void activitiesForIndividuals(char &clearformess) {
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_daily019, gamelog);
+			addstrAlt(SURFS_THE_NET, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
 			pool[p]->train(SKILL_COMPUTERS, max(3 - pool[p]->get_skill(SKILL_COMPUTERS), 1));
@@ -516,9 +517,9 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, squad[sq]->squad[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_daily004, gamelog);
+				addstrAlt(ACTED_WITH, gamelog);
 				addstrAlt(squad[sq]->name, gamelog);
-				addstrAlt(CONST_daily005, gamelog);
+				addstrAlt(INSTEAD_OF, gamelog);
 				addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
@@ -543,7 +544,7 @@ void cullUnavailableCars(vector<long> &wantcar, vector<long> &caridused, const i
 						else makedelimiter();
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-						addstrAlt(CONST_daily008, gamelog);
+						addstrAlt(COULDNT_USE_THE, gamelog);
 						addstrAlt(getVehicleFullname(v), gamelog);
 						addstrAlt(singleDot, gamelog);
 						gamelog.nextMessage();
@@ -665,9 +666,9 @@ void carUpSquad(const int sq, vector<long> &caridused, const char clearformess) 
 void turnSquadAway(const int sq) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-	addstrAlt(CONST_daily006, gamelog);
+	addstrAlt(DECIDED, gamelog);
 	addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
-	addstrAlt(CONST_daily007, gamelog);
+	addstrAlt(WAS_TOO_HOT_TO_RISK, gamelog);
 	gamelog.nextMessage();
 	pressAnyKey();
 	//ON TO THE NEXT SQUAD
@@ -703,7 +704,7 @@ void squadDepart(const int sq, char &clearformess) {
 		if (clearformess) eraseAlt();
 		else makedelimiter();
 		mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-		addstrAlt(CONST_daily013, gamelog);
+		addstrAlt(ARRIVES_IN, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -725,7 +726,7 @@ void squadDepart(const int sq, char &clearformess) {
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-		addstrAlt(CONST_daily017, gamelog);
+		addstrAlt(HAS_ARRIVED_AT, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -761,7 +762,7 @@ void squadDepart(const int sq, char &clearformess) {
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-		addstrAlt(CONST_daily017, gamelog);
+		addstrAlt(HAS_ARRIVED_AT, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -779,7 +780,7 @@ void squadDepart(const int sq, char &clearformess) {
 		if (squad[sq]->squad[0]->base == squad[sq]->activity.arg)
 		{
 			mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-			addstrAlt(CONST_daily016, gamelog);
+			addstrAlt(LOOKS_AROUND, gamelog);
 			addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.nextMessage();
@@ -787,7 +788,7 @@ void squadDepart(const int sq, char &clearformess) {
 		else
 		{
 			mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-			addstrAlt(CONST_daily017, gamelog);
+			addstrAlt(HAS_ARRIVED_AT, gamelog);
 			addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 			addstrAlt(singleDot, gamelog);
 			gamelog.nextMessage();
@@ -803,7 +804,7 @@ void squadDepart(const int sq, char &clearformess) {
 			squad[sq]->squad[0]->base != squad[sq]->activity.arg)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(8, 1, CONST_daily018);
+			mvaddstrAlt(8, 1, WHY_IS_THE_SQUAD_HERE);
 			c = pressSpecificKey('s', 'b', 't');
 		}
 		if (c == 's' || c == 'b') basesquad(squad[sq], squad[sq]->activity.arg);
@@ -854,7 +855,7 @@ void advanceSquads(char &clearformess) {
 					else makedelimiter();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, squad[sq]->name, gamelog);
-					addstrAlt(CONST_daily009, gamelog);
+					addstrAlt(DIDNT_HAVE_A_CAR, gamelog);
 					addstrAlt(LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
@@ -868,7 +869,7 @@ void advanceSquads(char &clearformess) {
 				giveDriverExperience(sq);
 			}
 			//GO PLACES
-			// Identify the CONST_daily010 -- top level in multi-city play,
+			// Identify the TRAVEL_LOCATION -- top level in multi-city play,
 			// a particular district in one-city play
 			int travelLocation = -1;
 			for (int i = 0; i < LocationsPool::getInstance().lenpool(); i++)
@@ -888,13 +889,13 @@ void advanceSquads(char &clearformess) {
 				price *= 100;
 				if (ledger.get_funds() < price)
 				{
-					mvaddstrAlt(8, 1, squad[sq]->name + CONST_daily011A + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + CONST_daily011B, gamelog);
+					mvaddstrAlt(8, 1, squad[sq]->name + COULDNT_AFFORD_TICKETSA + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + COULDNT_AFFORD_TICKETSB, gamelog);
 					canDepart = false;
 				}
 				else
 				{
 					ledger.subtract_funds(price, EXPENSE_TRAVEL);
-					mvaddstrAlt(8, 1, squad[sq]->name + CONST_daily012A + tostring(price) + CONST_daily012B + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + CONST_daily012C, gamelog);
+					mvaddstrAlt(8, 1, squad[sq]->name + SPENT_DOLLARS + tostring(price) + ON_TICKETS + LocationsPool::getInstance().getLocationName(squad[sq]->activity.arg) + SPENT_ON_TICKETSC, gamelog);
 				}
 				pressAnyKey();
 			}
@@ -999,4 +1000,3 @@ char securityable(int type)
 	}
 	return 0;
 }
-

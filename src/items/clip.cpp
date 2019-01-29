@@ -1,3 +1,4 @@
+
 #define	CLIP_CPP
 #include "../includes.h"
 
@@ -81,6 +82,6 @@ ClipType::ClipType(MCD_STR xmlstring) : ItemType(xmlstring), ammo_(1)
 		if (element == tag_ammo)
 			ammo_ = atoi(xml.GetData().c_str());
 		/*else
-		errorlog << CONST_clip002 << idname() << CONST_clipB003 << element << endl;*/
+		errorlog << UNKNOWN_ELEMENT_FOR_CLIP << idname() << CONST_clipB003 << element << endl;*/
 	}
 }

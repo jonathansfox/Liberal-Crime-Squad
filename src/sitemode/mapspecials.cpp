@@ -1,3 +1,4 @@
+
 #define	MAPSPECIALS_CPP
 #include "../includes.h"
 /*
@@ -106,12 +107,12 @@ vector<string> caseREJECTED_NUDE;
 vector<string> caseREJECTED_WEAPONS;
 vector<string> caseNOT_REJECTED;
 vector<file_and_text_collection> map_specials_text_file_collection = {
-customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_mapspecials024),
-	customText(&notRejected, mostlyendings + CONST_mapspecials025),
-	customText(&randomCrime, mostlyendings + CONST_mapspecials026),
-	customText(&caseREJECTED_NUDE, mostlyendings + CONST_mapspecials027),
-	customText(&caseREJECTED_WEAPONS, mostlyendings + CONST_mapspecials028),
-	customText(&caseNOT_REJECTED, mostlyendings + CONST_mapspecials029),
+customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_REJECTEDBECAUSESMELLFUNNY_TXT),
+	customText(&notRejected, mostlyendings + CONST_NOTREJECTED_TXT),
+	customText(&randomCrime, mostlyendings + CONST_RANDOMCRIME_TXT),
+	customText(&caseREJECTED_NUDE, mostlyendings + CONST_CASEREJECTED_NUDE_TXT),
+	customText(&caseREJECTED_WEAPONS, mostlyendings + CONST_CASEREJECTED_WEAPONS_TXT),
+	customText(&caseNOT_REJECTED, mostlyendings + CONST_CASENOT_REJECTED_TXT),
 };
 char sizeUpSquadForEntry(const bool autoadmit) {
 
@@ -181,9 +182,9 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 			case REJECTED_SMELLFUNNY:
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				if (!LCSrandom(len(rejectedBecauseSmellFunny) - 1)) {
-					if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_mapspecials033, gamelog);
-					else if (lawList[LAW_FREESPEECH] == 2)addstrAlt(CONST_mapspecialsX01, gamelog);
-					else addstrAlt(CONST_mapspecialsX02, gamelog);
+					if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_GET_THE_HECK_OUT_OF_HERE, gamelog);
+					else if (lawList[LAW_FREESPEECH] == 2)addstrAlt(CONST_GET_THE_FUCK_OUT_OF_HERE, gamelog);
+					else addstrAlt(CONST_GET_THE_HELL_OUT_OF_HERE, gamelog);
 				}
 				else {
 					addstrAlt(pickrandom(rejectedBecauseSmellFunny), gamelog);
@@ -227,16 +228,16 @@ void special_bouncer_assess_squad()
 	{
 		addstrAlt(string_sleeper, gamelog);
 		addstrAlt(sleepername, gamelog);
-		addstrAlt(CONST_mapspecials030, gamelog);
+		addstrAlt(CONST_SMIRKS_AND_LETS_THE_SQUAD_IN, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 	}
 	else
 	{
 		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
-			addstrAlt(CONST_mapspecials031, gamelog);
+			addstrAlt(CONST_THE_CONSERVATIVE_SCUM_BLOCK_THE_DOOR, gamelog);
 		else
-			addstrAlt(CONST_mapspecials032, gamelog);
+			addstrAlt(CONST_THE_BOUNCER_ASSESSES_YOUR_SQUAD, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_CLUB_BOUNCER_SECONDVISIT;
 	}
@@ -265,9 +266,9 @@ void special_lab_cosmetics_cagedanimals()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials036, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_FLUFFY_WHITE_RABBITS_IN_A_LOCKED_CAGE, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials062);
+		mvaddstrAlt(17, 1, CONST_FREE_THEM_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -303,17 +304,17 @@ void special_readsign(int sign)
 		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
-			mvaddstrAlt(16, 1, CONST_mapspecialsX03);
+			mvaddstrAlt(16, 1, CONST_THE_BEST_WAY_NOT_TO_FAIL_IS_TO_SUCCEED);
 			break;
 		case SITE_INDUSTRY_NUCLEAR:
-			mvaddstrAlt(16, 1, CONST_mapspecials039);
-			mvaddstrAlt(17, 1, CONST_mapspecials040);
+			mvaddstrAlt(16, 1, CONST_WELCOME_TO_THE_NPP_NUCLEAR_PLANT_PLEASE_ENJOY);
+			mvaddstrAlt(17, 1, CONST_THE_MUSEUM_DISPLAYS_IN_THE_GIFT_SHOP);
 			break;
 		case SITE_RESIDENTIAL_TENEMENT:
 		case SITE_RESIDENTIAL_APARTMENT:
 		case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			mvaddstrAlt(16, 1, CONST_mapspecials041);
-			mvaddstrAlt(17, 1, CONST_mapspecials042);
+			mvaddstrAlt(16, 1, CONST_THE_LANDLORD_S_OFFICE_IS_THE_FIRST_DOOR);
+			mvaddstrAlt(17, 1, CONST_ON_THE_LEFT);
 			break;
 		}
 		break;
@@ -321,7 +322,7 @@ void special_readsign(int sign)
 		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
-			mvaddstrAlt(16, 1, CONST_mapspecialsX04);
+			mvaddstrAlt(16, 1, CONST_GREAT_WORK_IS_DONE_BY_PEOPLE_WHO_DO_GREAT_WORK);
 			break;
 		}
 		break;
@@ -329,7 +330,7 @@ void special_readsign(int sign)
 		switch (LocationsPool::getInstance().getLocationType(getCurrentSite()))
 		{
 		default:
-			mvaddstrAlt(16, 1, CONST_mapspecials044);
+			mvaddstrAlt(16, 1, CONST_EMPLOYEES_ONLY);
 			break;
 		}
 		break;
@@ -344,15 +345,15 @@ void special_nuclear_onoff()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (lawList[LAW_NUCLEARPOWER] == 2)
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials045, gamelog);
+			mvaddstrAlt(16, 1, CONST_YOU_SEE_THE_NUCLEAR_WASTE_CENTER_CONTROL_ROOM, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(17, 1, CONST_mapspecials046);
+			mvaddstrAlt(17, 1, CONST_ATTEMPT_TO_RELEASE_NUCLEAR_WASTE_YES_OR_NO);
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials047, gamelog);
+			mvaddstrAlt(16, 1, CONST_YOU_SEE_THE_NUCLEAR_POWER_PLANT_CONTROL_ROOM, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(17, 1, CONST_mapspecials048);
+			mvaddstrAlt(17, 1, CONST_MESS_WITH_THE_REACTOR_SETTINGS_YES_OR_NO);
 		}
 		int c = getkeyAlt();
 		if (c == 'y')
@@ -376,7 +377,7 @@ void special_nuclear_onoff()
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 1, maxs->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_mapspecials049, gamelog);
+				addstrAlt(CONST_PRESSES_THE_BIG_RED_BUTTON, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				mvaddstrAlt(17, 1, singleDot, gamelog);
@@ -387,7 +388,7 @@ void special_nuclear_onoff()
 				pressAnyKey();
 				if (lawList[LAW_NUCLEARPOWER] == 2)
 				{
-					mvaddstrAlt(17, 1, CONST_mapspecials050, gamelog);
+					mvaddstrAlt(17, 1, CONST_THE_NUCLEAR_WASTE_GETS_RELEASED_INTO_THE_STATE_S_WATER_SUPPLY, gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
 					change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, -50, 0, 0);
@@ -398,10 +399,10 @@ void special_nuclear_onoff()
 				}
 				else
 				{
-					mvaddstrAlt(16, 1, CONST_mapspecials051, gamelog);
+					mvaddstrAlt(16, 1, CONST_A_DEAFENING_ALARM_SOUNDS, gamelog);
 					gamelog.newline();
 					addstrAlt(CONST_mapspecials052); // Remove remaining part of previous text.
-					mvaddstrAlt(17, 1, CONST_mapspecials053, gamelog);
+					mvaddstrAlt(17, 1, CONST_THE_REACTOR_IS_OVERHEATING, gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
 					pressAnyKey();
@@ -413,8 +414,8 @@ void special_nuclear_onoff()
 			else
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials054, gamelog);
-				mvaddstrAlt(17, 1, CONST_mapspecials055, gamelog);
+				mvaddstrAlt(16, 1, CONST_AFTER_SOME_FAILED_ATTEMPTS_AND_A_VERY_LOUD_ALARM, gamelog);
+				mvaddstrAlt(17, 1, CONST_THE_SQUAD_RESIGNS_TO_JUST_LEAVING_A_THREATENING_NOTE, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				juiceparty(15, 500);
@@ -435,9 +436,9 @@ void special_lab_genetic_cagedanimals()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials056, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_HORRIBLE_MISSHAPEN_CREATURES_IN_A_SEALED_CAGE, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials062);
+		mvaddstrAlt(17, 1, CONST_FREE_THEM_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -455,7 +456,7 @@ void special_lab_genetic_cagedanimals()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials058, gamelog);
+					mvaddstrAlt(16, 1, CONST_UH_MAYBE_THAT_IDEA_WAS_CONSERVATIVE_IN_RETROSPECT, gamelog);
 					gamelog.newline();
 					int numleft = LCSrandom(6) + 1;
 					fillEncounter(CREATURE_GENETIC, numleft);
@@ -490,9 +491,9 @@ void special_policestation_lockup()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials059, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_PRISONERS_IN_THE_DETENTION_ROOM, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials062);
+		mvaddstrAlt(17, 1, CONST_FREE_THEM_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -568,9 +569,9 @@ void special_courthouse_lockup()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials061, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_PRISONERS_IN_THE_COURTHOUSE_JAIL, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials062);
+		mvaddstrAlt(17, 1, CONST_FREE_THEM_YES_OR_NO);
 
 		c = getkeyAlt();
 
@@ -588,8 +589,8 @@ void special_courthouse_jury()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials063, gamelog);
-		mvaddstrAlt(17, 1, CONST_mapspecials064, gamelog);
+		mvaddstrAlt(16, 1, CONST_IT_APPEARS_AS_IF_THIS_ROOM_HAS_BEEN, gamelog);
+		mvaddstrAlt(17, 1, CONST_VACATED_IN_A_HURRY, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		return;
@@ -598,9 +599,9 @@ void special_courthouse_jury()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials065, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_A_JURY_IN_DELIBERATIONS, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials066);
+		mvaddstrAlt(17, 1, CONST_ATTEMPT_TO_INFLUENCE_THEM_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -638,10 +639,10 @@ void special_courthouse_jury()
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_mapspecials067, gamelog);
-					mvaddstrAlt(17, 1, CONST_mapspecials068, gamelog);//XXX: This is very awkward grammar.
+					addstrAlt(CONST_WORKS_THE_ROOM_LIKE_IN_TWELVE_ANGRY_MEN_AND_THE_JURY, gamelog);
+					mvaddstrAlt(17, 1, CONST_CONCLUDES_THAT, gamelog);//XXX: This is very awkward grammar.
 					addstrAlt(pickrandom(randomCrime), gamelog);
-					addstrAlt(CONST_mapspecials069, gamelog);
+					addstrAlt(CONST_WASN_T_REALLY_WRONG_HERE, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					alienationcheck(0);
@@ -654,7 +655,7 @@ void special_courthouse_jury()
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(16, 1, activesquad->squad[p]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_mapspecials070, gamelog);
+					addstrAlt(CONST_WASN_T_QUITE_CONVINCING, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					int numleft = 12;
@@ -681,16 +682,16 @@ void special_prison_control(short prison_control_type)
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials071, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_THE, gamelog);
 		if (prison_control_type == SPECIAL_PRISON_CONTROL_LOW)
-			addstrAlt(CONST_mapspecials072, gamelog);
+			addstrAlt(CONST_LOW_SECURITY, gamelog);
 		else if (prison_control_type == SPECIAL_PRISON_CONTROL_MEDIUM)
-			addstrAlt(CONST_mapspecials073, gamelog);
+			addstrAlt(CONST_MEDIUM_SECURITY, gamelog);
 		else if (prison_control_type == SPECIAL_PRISON_CONTROL_HIGH)
-			addstrAlt(CONST_mapspecials074, gamelog);
-		addstrAlt(CONST_mapspecials075, gamelog);
+			addstrAlt(CONST_HIGH_SECURITY, gamelog);
+		addstrAlt(CONST_PRISON_CONTROL_ROOM, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials076);
+		mvaddstrAlt(17, 1, CONST_FREE_THE_PRISONERS_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -748,8 +749,8 @@ void special_intel_supercomputer()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials077, gamelog);
-		mvaddstrAlt(17, 1, CONST_mapspecials078, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_SECURITY_ALERT_HAS_CAUSED_THE, gamelog);
+		mvaddstrAlt(17, 1, CONST_COMPUTER_TO_SHUT_DOWN, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		return;
@@ -758,9 +759,9 @@ void special_intel_supercomputer()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials079, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_THE_INTELLIGENCE_SUPERCOMPUTER, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials080);
+		mvaddstrAlt(17, 1, CONST_HACK_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -770,11 +771,11 @@ void special_intel_supercomputer()
 				clearmessagearea();
 				//char *loot;
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials081, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_OBTAINS_SENSITIVE_INFORMATION, gamelog);
 				if (endgamestate >= ENDGAME_CCS_APPEARANCE && endgamestate < ENDGAME_CCS_DEFEATED && ccsexposure < CCSEXPOSURE_LCSGOTDATA)
 				{
 					addstrAlt(CONST_mapspecials082, gamelog);
-					mvaddstrAlt(17, 1, CONST_mapspecials083, gamelog);
+					mvaddstrAlt(17, 1, CONST_INCLUDING_A_LIST_OF_GOVERNMENT_BACKERS_OF_THE_CCS, gamelog);
 					giveActiveSquadLoot(tag_LOOT_CCS_BACKERLIST);
 					ccsexposure = CCSEXPOSURE_LCSGOTDATA;
 				}
@@ -808,7 +809,7 @@ void special_graffiti()
 {
 	clearmessagearea();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, CONST_mapspecials084, gamelog);
+	mvaddstrAlt(16, 1, CONST_THE_SQUAD_SPRAYS_LIBERAL_GRAFFITI, gamelog);
 	gamelog.newline();
 	claimSiteStoryOne();
 	pressAnyKey();
@@ -835,9 +836,9 @@ void special_sweatshop_equipment()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials085, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_SOME_TEXTILE_EQUIPMENT, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials088);
+		mvaddstrAlt(17, 1, CONST_DESTROY_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -863,9 +864,9 @@ void special_polluter_equipment()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials087, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_SOME_INDUSTRIAL_EQUIPMENT, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials088);
+		mvaddstrAlt(17, 1, CONST_DESTROY_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -892,9 +893,9 @@ void special_house_photos()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials109, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_A_SAFE, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials110);
+		mvaddstrAlt(17, 1, CONST_OPEN_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -906,7 +907,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials091, gamelog);
+					mvaddstrAlt(16, 1, CONST_THE_SQUAD_HAS_FOUND_A_DESERT_EAGLE, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_DESERT_EAGLE)]);
@@ -922,7 +923,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials092, gamelog);
+					mvaddstrAlt(16, 1, CONST_THIS_GUY_SURE_HAD_A_LOT_OF_100_BILLS, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					Item *it = new Money(1000 * (1 + LCSrandom(10)));
@@ -933,7 +934,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials093, gamelog);
+					mvaddstrAlt(16, 1, CONST_THE_SQUAD_LIBERATES_SOME_EXPENSIVE_JEWELERY, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					giveActiveSquadThisLoot(getNewLoot(tag_LOOT_EXPENSIVEJEWELERY, 3));
@@ -943,7 +944,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials094, gamelog);
+					mvaddstrAlt(16, 1, CONST_THERE_ARE_SOME_VERY_COMPROMISING_PHOTOS_HERE, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					giveActiveSquadThisLoot(getNewLoot(tag_LOOT_CEOPHOTOS));
@@ -953,7 +954,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials095, gamelog);
+					mvaddstrAlt(16, 1, CONST_THERE_ARE_SOME_DRUGS_HERE, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					empty = false;
@@ -962,8 +963,8 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials096, gamelog);
-					mvaddstrAlt(17, 1, CONST_mapspecials097);
+					mvaddstrAlt(16, 1, CONST_WOW_GET_A_LOAD_OF_THESE_LOVE_LETTERS, gamelog);
+					mvaddstrAlt(17, 1, CONST_THE_SQUAD_WILL_TAKE_THOSE);
 					gamelog.newline();
 					pressAnyKey();
 					giveActiveSquadThisLoot(getNewLoot(tag_LOOT_CEOLOVELETTERS));
@@ -973,7 +974,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials098, gamelog);
+					mvaddstrAlt(16, 1, CONST_THESE_DOCUMENTS_SHOW_SERIOUS_TAX_EVASION, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					giveActiveSquadThisLoot(getNewLoot(tag_LOOT_CEOTAXPAPERS));
@@ -983,7 +984,7 @@ void special_house_photos()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials099, gamelog);
+					mvaddstrAlt(16, 1, CONST_WOW_IT_S_EMPTY_THAT_SUCKS, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 				}
@@ -1015,16 +1016,16 @@ void special_armory()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials100, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_THE_ARMORY, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials101);
+		mvaddstrAlt(17, 1, CONST_BREAK_IN_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			clearmessagearea();
 			setSiteAlarmOne();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_mapspecials102, gamelog);
+			mvaddstrAlt(16, 1, CONST_ALARMS_GO_OFF, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			bool empty = true;
@@ -1033,7 +1034,7 @@ void special_armory()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials103, gamelog);
+				mvaddstrAlt(16, 1, CONST_JACKPOT_THE_SQUAD_FOUND_A_M249_MACHINE_GUN, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				Weapon* de = new Weapon(*weapontype[getweapontype(tag_WEAPON_M249_MACHINEGUN)]);
@@ -1049,7 +1050,7 @@ void special_armory()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials104, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_FINDS_SOME_M16_ASSAULT_RIFLES, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				int num = 0;
@@ -1069,7 +1070,7 @@ void special_armory()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials105, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_FINDS_SOME_M4_CARBINES, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				int num = 0;
@@ -1089,7 +1090,7 @@ void special_armory()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials106, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_FINDS_SOME_BODY_ARMOR, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				int num = 0;
@@ -1110,7 +1111,7 @@ void special_armory()
 				criminalizeparty(LAWFLAG_TREASON);
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials107, gamelog);
+				mvaddstrAlt(16, 1, CONST_IT_S_A_TRAP_THE_ARMORY_IS_EMPTY, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				int numleft = LCSrandom(8) + 2;
@@ -1133,7 +1134,7 @@ void special_armory()
 				if (sitealarmtimer > time || sitealarmtimer == -1)sitealarmtimer = time;
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials108, gamelog);
+				mvaddstrAlt(16, 1, CONST_GUARDS_ARE_EVERYWHERE, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				int numleft = LCSrandom(4) + 2;
@@ -1158,9 +1159,9 @@ void special_corporate_files()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials109, gamelog);
+		mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_A_SAFE, gamelog);
 		gamelog.newline();
-		mvaddstrAlt(17, 1, CONST_mapspecials110);
+		mvaddstrAlt(17, 1, CONST_OPEN_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -1169,7 +1170,7 @@ void special_corporate_files()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials111, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_HAS_FOUND_SOME_VERY_INTERESTING_FILES, gamelog);
 				gamelog.newline();
 				giveActiveSquadLoot(tag_LOOT_CORPFILES);
 				giveActiveSquadLoot(tag_LOOT_CORPFILES);
@@ -1202,16 +1203,16 @@ void special_radio_broadcaststudio()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (isThereASiteAlarm() || sitealienate)
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials112, gamelog);
-			mvaddstrAlt(17, 1, CONST_mapspecials118, gamelog);
+			mvaddstrAlt(16, 1, CONST_THE_RADIO_BROADCASTERS_LEFT_THE_EQUIPMENT_ON_IN, gamelog);
+			mvaddstrAlt(17, 1, CONST_THEIR_RUSH_TO_GET_OUT, gamelog);
 			gamelog.newline();
-			addstrAlt(CONST_mapspecials119);
+			addstrAlt(CONST_TAKE_OVER_THE_STUDIO_YES_OR_NO);
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials115, gamelog);
+			mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_A_RADIO_BROADCASTING_ROOM, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(17, 1, CONST_mapspecials116);
+			mvaddstrAlt(17, 1, CONST_INTERRUPT_THIS_EVENING_S_PROGRAMMING_YES_OR_NO);
 		}
 		int c = getkeyAlt();
 		if (c == 'y')
@@ -1234,15 +1235,15 @@ void special_news_broadcaststudio()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		if (isThereASiteAlarm() || sitealienate)
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials117, gamelog);
-			mvaddstrAlt(17, 1, CONST_mapspecials118);
+			mvaddstrAlt(16, 1, CONST_THE_CABLE_NEWS_BROADCASTERS_LEFT_THE_EQUIPMENT_ON_IN, gamelog);
+			mvaddstrAlt(17, 1, CONST_THEIR_RUSH_TO_GET_OUT);
 			gamelog.newline();
-			addstrAlt(CONST_mapspecials119);
+			addstrAlt(CONST_TAKE_OVER_THE_STUDIO_YES_OR_NO);
 		}
 		else
 		{
-			mvaddstrAlt(16, 1, CONST_mapspecials120, gamelog);
-			mvaddstrAlt(17, 1, CONST_mapspecials121);
+			mvaddstrAlt(16, 1, CONST_YOU_VE_FOUND_A_CABLE_NEWS_BROADCASTING_STUDIO, gamelog);
+			mvaddstrAlt(17, 1, CONST_START_AN_IMPROMPTU_NEWS_PROGRAM_YES_OR_NO);
 		}
 		int c = getkeyAlt();
 		if (c == 'y')
@@ -1263,8 +1264,8 @@ void special_display_case()
 	{
 		clearmessagearea();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials122, gamelog);
-		mvaddstrAlt(17, 1, CONST_mapspecials123);
+		mvaddstrAlt(16, 1, CONST_YOU_SEE_A_DISPLAY_CASE, gamelog);
+		mvaddstrAlt(17, 1, CONST_SMASH_IT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
@@ -1375,22 +1376,22 @@ void special_security(bool metaldetect)
 	moveAlt(16, 1);
 	if (isThereASiteAlarm())
 	{
-		addstrAlt(CONST_mapspecials124, gamelog);
+		addstrAlt(CONST_THE_SECURITY_CHECKPOINT_IS_ABANDONED, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_NONE;
 		return;
 	}
 	else if (autoadmit)
 	{
-		addstrAlt(CONST_mapspecials125, gamelog);
+		addstrAlt(CONST_THE_SQUAD_FLASHES_ID_BADGES, gamelog);
 		metaldetect = false;
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_SECURITY_SECONDVISIT;
 	}
 	else
 	{
-		if (metaldetect) addstrAlt(CONST_mapspecials126, gamelog);
-		else addstrAlt(CONST_mapspecials127, gamelog);
+		if (metaldetect) addstrAlt(CONST_THE_SQUAD_STEPS_INTO_A_METAL_DETECTOR, gamelog);
+		else addstrAlt(CONST_THIS_DOOR_IS_GUARDED, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = SPECIAL_SECURITY_SECONDVISIT;
 	}
@@ -1407,7 +1408,7 @@ void special_security(bool metaldetect)
 		{
 		case REJECTED_NUDE:
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			if (autoadmit) addstrAlt(CONST_mapspecials128, gamelog);
+			if (autoadmit) addstrAlt(CONST_JESUS_PUT_SOME_CLOTHES_ON, gamelog);
 			else addstrAlt(pickrandom(caseREJECTED_NUDE), gamelog);
 			gamelog.newline();
 			break;
@@ -1415,7 +1416,7 @@ void special_security(bool metaldetect)
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			if (metaldetect)
 			{
-				addstrAlt(CONST_mapspecials129, gamelog);
+				addstrAlt(CONST_BEEEP_BEEEP_BEEEP, gamelog);
 				setSiteAlarmOne();
 			}
 			else addstrAlt(pickrandom(caseREJECTED_WEAPONS), gamelog);
@@ -1450,13 +1451,13 @@ void special_security_secondvisit()
 void special_bank_vault()
 {
 	clearmessagearea();
-	mvaddstrAlt(16, 1, CONST_mapspecials130, gamelog);
-	mvaddstrAlt(17, 1, CONST_mapspecials131, gamelog);
+	mvaddstrAlt(16, 1, CONST_THE_VAULT_DOOR_HAS_THREE_LAYERS_A_COMBO_LOCK, gamelog);
+	mvaddstrAlt(17, 1, CONST_AN_ELECTRONIC_LOCK_AND_A_BIOMETRIC_LOCK, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	clearmessagearea();
-	mvaddstrAlt(16, 1, CONST_mapspecials132, gamelog);
-	mvaddstrAlt(17, 1, CONST_mapspecials133, gamelog);
+	mvaddstrAlt(16, 1, CONST_YOU_WILL_NEED_A_SECURITY_EXPERT_A_COMPUTER, gamelog);
+	mvaddstrAlt(17, 1, CONST_EXPERT_AND_ONE_OF_THE_BANK_MANAGERS, gamelog);
 	gamelog.newline();
 	pressAnyKey();
 	{
@@ -1465,8 +1466,8 @@ void special_bank_vault()
 			clearmessagearea();
 			mvaddstrAlt(16, 1, string_sleeper, gamelog);
 			addstrAlt(sleeperBanker, gamelog);
-			addstrAlt(CONST_mapspecials134, gamelog);
-			mvaddstrAlt(17, 1, CONST_mapspecials135, gamelog);
+			addstrAlt(CONST_CAN_HANDLE_THE_BIOMETRICS, gamelog);
+			mvaddstrAlt(17, 1, CONST_BUT_YOU_LL_STILL_HAVE_TO_CRACK_THE_OTHER_LOCKS, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 		}
@@ -1474,14 +1475,14 @@ void special_bank_vault()
 	while (true)
 	{
 		clearmessagearea();
-		mvaddstrAlt(16, 1, CONST_mapspecials136);
+		mvaddstrAlt(16, 1, CONST_OPEN_THE_BANK_VAULT_YES_OR_NO);
 		int c = getkeyAlt();
 		if (c == 'y')
 		{
 			clearmessagearea();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_mapspecials137, gamelog);
-			mvaddstrAlt(17, 1, CONST_mapspecials138, gamelog);
+			mvaddstrAlt(16, 1, CONST_FIRST_IS_THE_COMBO_LOCK_THAT_WILL_HAVE, gamelog);
+			mvaddstrAlt(17, 1, CONST_BE_CRACKED_BY_A_SECURITY_EXPERT, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			UnlockAttempt actualy = unlock(UNLOCK_VAULT);
@@ -1489,8 +1490,8 @@ void special_bank_vault()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials139, gamelog);
-				mvaddstrAlt(17, 1, CONST_mapspecials140, gamelog);
+				mvaddstrAlt(16, 1, CONST_THE_SQUAD_CAN_ONLY_DREAM_OF_THE_MONEY, gamelog);
+				mvaddstrAlt(17, 1, CONST_ON_THE_OTHER_SIDE_OF_THIS_DOOR, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
@@ -1499,8 +1500,8 @@ void special_bank_vault()
 			{
 				clearmessagearea();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
-				mvaddstrAlt(16, 1, CONST_mapspecials141, gamelog);
-				mvaddstrAlt(17, 1, CONST_mapspecials142, gamelog);
+				mvaddstrAlt(16, 1, CONST_NEXT_IS_THE_ELECTRONIC_LOCK_THAT_WILL_HAVE, gamelog);
+				mvaddstrAlt(17, 1, CONST_BE_BYPASSED_BY_A_COMPUTER_EXPERT, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 				actualy = hack(HACK_VAULT);
@@ -1508,7 +1509,7 @@ void special_bank_vault()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials143, gamelog);
+					mvaddstrAlt(16, 1, CONST_THE_MONEY_WAS_SO_CLOSE_THE_SQUAD_COULD_TASTE_IT, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
@@ -1517,8 +1518,8 @@ void special_bank_vault()
 				{
 					clearmessagearea();
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
-					mvaddstrAlt(16, 1, CONST_mapspecials144, gamelog);
-					mvaddstrAlt(17, 1, CONST_mapspecials145, gamelog);
+					mvaddstrAlt(16, 1, CONST_LAST_IS_THE_BIOMETRIC_LOCK_THAT_KEYED_ONLY, gamelog);
+					mvaddstrAlt(17, 1, CONST_TO_THE_BANK_S_MANAGERS, gamelog);
 					gamelog.newline();
 					pressAnyKey();
 					DeprecatedCreature *manager = 0;
@@ -1536,7 +1537,7 @@ void special_bank_vault()
 									clearmessagearea();
 									set_color_easy(WHITE_ON_BLACK_BRIGHT);
 									mvaddstrAlt(16, 1, c->getNameAndAlignment().name, gamelog);
-									addstrAlt(CONST_mapspecials146, gamelog);
+									addstrAlt(CONST_OPENS_THE_VAULT, gamelog);
 									gamelog.newline();
 									pressAnyKey();
 									canbreakin = true;
@@ -1547,7 +1548,7 @@ void special_bank_vault()
 							{
 								clearmessagearea();
 								set_color_easy(WHITE_ON_BLACK_BRIGHT);
-								mvaddstrAlt(16, 1, CONST_mapspecials147, gamelog);
+								mvaddstrAlt(16, 1, CONST_THE_HOSTAGE_IS_FORCED_TO_OPEN_THE_VAULT, gamelog);
 								gamelog.newline();
 								pressAnyKey();
 								canbreakin = true;
@@ -1564,7 +1565,7 @@ void special_bank_vault()
 							mvaddstrAlt(16, 1, string_sleeper, gamelog);
 							addstrAlt(sleeperBankRobber, gamelog);
 							addstrAlt(CONST_mapspecials148, gamelog);
-							mvaddstrAlt(17, 1, CONST_mapspecials149, gamelog);
+							mvaddstrAlt(17, 1, CONST_AND_WILL_JOIN_THE_ACTIVE_LCS_TO_AVOID_ARREST, gamelog);
 							gamelog.newline();
 							pressAnyKey();
 							canbreakin = true;
@@ -1588,7 +1589,7 @@ void special_bank_vault()
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(16, 1, manager->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_mapspecials150, gamelog);
+							addstrAlt(CONST_IS_NO_LONGER_RECOGNIZED, gamelog);
 							gamelog.newline();
 							pressAnyKey();
 						}
@@ -1596,7 +1597,7 @@ void special_bank_vault()
 						{
 							clearmessagearea();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(16, 1, CONST_mapspecials151, gamelog);
+							mvaddstrAlt(16, 1, CONST_THE_SQUAD_HAS_NOBODY_THAT_CAN_DO_THE_JOB, gamelog);
 							gamelog.newline();
 							pressAnyKey();
 						}
@@ -1620,7 +1621,7 @@ void special_bank_teller()
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials152, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_TELLER_WINDOW_IS_EMPTY, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
@@ -1629,7 +1630,7 @@ void special_bank_teller()
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials153, gamelog);
+		mvaddstrAlt(16, 1, CONST_A_BANK_TELLER_IS_AVAILABLE, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
@@ -1642,7 +1643,7 @@ void special_bank_money()
 	static int swat_counter = 0;
 	clearmessagearea(false);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(16, 1, CONST_mapspecials154, gamelog);
+	mvaddstrAlt(16, 1, CONST_THE_SQUAD_LOADS_BRICKS_OF_CASH_INTO_A_DUFFEL_BAG, gamelog);
 	gamelog.newline();
 	levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 	giveActiveSquadMoney(20000);
@@ -1656,9 +1657,9 @@ void special_bank_money()
 	{
 		pressAnyKey();
 		if (swat_counter > 0)
-			mvaddstrAlt(17, 1, CONST_mapspecials155, gamelog);
+			mvaddstrAlt(17, 1, CONST_ANOTHER_SWAT_TEAM_MOVES_IN, gamelog);
 		else
-			mvaddstrAlt(17, 1, CONST_mapspecials156, gamelog);
+			mvaddstrAlt(17, 1, CONST_A_SWAT_TEAM_STORMS_THE_VAULT, gamelog);
 		gamelog.newline();
 		swat_counter++;
 		int swatnum = 9;
@@ -1685,10 +1686,10 @@ void special_oval_office()
 		emptyEncounter();
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials157, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_PRESIDENT_ISN_T_HERE, gamelog);
 		printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 		pressAnyKey();
-		mvaddstrAlt(17, 1, CONST_mapspecials158, gamelog);
+		mvaddstrAlt(17, 1, CONST_SECRET_SERVICE_AGENTS_AMBUSH_THE_SQUAD, gamelog);
 		gamelog.newline();
 		for (int e = 0; e < 6; e++)makecreature(e, CREATURE_SECRET_SERVICE);
 		printencounter();
@@ -1701,7 +1702,7 @@ void special_oval_office()
 		emptyEncounter();
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials159, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_PRESIDENT_IS_IN_THE_OVAL_OFFICE, gamelog);
 		gamelog.newline();
 		printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 		for (int e = 0; e < 2; e++)makecreature(e, CREATURE_SECRET_SERVICE);
@@ -1717,7 +1718,7 @@ void special_ccs_boss()
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials160, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_CCS_LEADER_IS_READY_FOR_YOU, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
@@ -1733,7 +1734,7 @@ void special_ccs_boss()
 	{
 		clearmessagearea(false);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(16, 1, CONST_mapspecials161, gamelog);
+		mvaddstrAlt(16, 1, CONST_THE_CCS_LEADER_IS_HERE, gamelog);
 		gamelog.newline();
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();

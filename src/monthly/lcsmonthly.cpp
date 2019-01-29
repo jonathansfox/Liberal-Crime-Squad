@@ -1,3 +1,4 @@
+
 #define	LCSMONTHLY_CPP
 #include "../includes.h"
 
@@ -9,32 +10,32 @@ const vector<int> emptyVector = {};
 const vector<int> viewSweatshop = { VIEW_SWEATSHOPS, 10 };
 const vector<int> viewGeneticAndPollution = { VIEW_GENETICS, 10, VIEW_POLLUTION, 10 };
 const vector< pair<string, vector<int> > > CEOLoveLettersInfluence = {
-	std::make_pair(CONST_lcsmonthly043, viewAnimals),
-	std::make_pair(CONST_lcsmonthly044, viewJustice),
-	std::make_pair(CONST_lcsmonthly045, viewGay),
-	std::make_pair(CONST_lcsmonthly046, emptyVector),
-	std::make_pair(CONST_lcsmonthly047, viewSweatshop),
-	std::make_pair(CONST_lcsmonthly048, viewGeneticAndPollution),
-	std::make_pair(CONST_lcsmonthly049, emptyVector),
-	std::make_pair(CONST_lcsmonthly050, emptyVector),
+	std::make_pair(CONST_ADDRESSED_TO_HIS_PET_DOG_YIKES, viewAnimals),
+	std::make_pair(CONST_TO_THE_JUDGE_THAT_ACQUIT_HIM_IN_A_CORRUPTION_TRIAL, viewJustice),
+	std::make_pair(CONST_TO_AN_ILLICIT_GAY_LOVER, viewGay),
+	std::make_pair(CONST_TO_HIMSELF_THEY_RE_VERY_STEAMY, emptyVector),
+	std::make_pair(CONST_IMPLYING_THAT_HE_HAS_ENSLAVED_HIS_HOUSESERVANTS, viewSweatshop),
+	std::make_pair(CONST_TO_THE_FDA_OFFICIAL_OVERSEEING_THE_CEO_S_PRODUCTS, viewGeneticAndPollution),
+	std::make_pair(CONST_THAT_SEEM_TO_TOUCH_ON_EVERY_FETISH_KNOWN_TO_MAN, emptyVector),
+	std::make_pair(CONST_PROMISING_SOMEONE_COMPANY_PROFITS_IN_EXCHANGE_FOR_SEXUAL_FAVORS, emptyVector),
 };
 
 const vector<int> viewPoliceAndJustice = { VIEW_POLICEBEHAVIOR, 15, VIEW_JUSTICES, 10 };
  const vector< pair<string, vector<int> > > CEOPhotosInfluence  = {
-	std::make_pair(CONST_lcsmonthly032, viewAnimals),
-	std::make_pair(CONST_lcsmonthly033, emptyVector),
-	std::make_pair(CONST_lcsmonthly034, viewPoliceAndJustice),
-	std::make_pair(CONST_lcsmonthly035, emptyVector),
-	std::make_pair(CONST_lcsmonthly036, emptyVector),
-	std::make_pair(CONST_lcsmonthly037, viewGeneticAndPollution),
-	std::make_pair(CONST_lcsmonthly038, emptyVector),
-	std::make_pair(CONST_lcsmonthly039, emptyVector),
-	std::make_pair(CONST_lcsmonthly040, viewSweatshop),
-	std::make_pair(CONST_lcsmonthly041, emptyVector),
+	std::make_pair(CONST_ENGAGING_IN_LEWD_BEHAVIOR_WITH_ANIMALS, viewAnimals),
+	std::make_pair(CONST_DIGGING_UP_GRAVES_AND_SLEEPING_WITH_THE_DEAD, emptyVector),
+	std::make_pair(CONST_PARTICIPATING_IN_A_MURDER, viewPoliceAndJustice),
+	std::make_pair(CONST_ENGAGING_IN_HEAVY_BONDAGE_A_CUCUMBER_WAS_INVOLVED_IN_SOME_WAY, emptyVector),
+	std::make_pair(CONST_TONGUE_KISSING_AN_INFAMOUS_DICTATOR, emptyVector),
+	std::make_pair(CONST_MAKING_OUT_WITH_AN_FDA_OFFICIAL_OVERSEEING_THE_CEO_S_PRODUCTS, viewGeneticAndPollution),
+	std::make_pair(CONST_CASTRATING_HIMSELF, emptyVector),
+	std::make_pair(CONST_WAVING_A_NAZI_FLAG_AT_A_SUPREMACIST_RALLY, emptyVector),
+	std::make_pair(CONST_TORTURING_AN_EMPLOYEE_WITH_A_HOT_IRON, viewSweatshop),
+	std::make_pair(CONST_PLAYING_WITH_FECES_AND_URINE, emptyVector),
 };
 const vector<int> viewTaxesStrong = { VIEW_TAXES, 25 };
 const vector< pair<string, vector<int> > > CEOTaxesInfluence = {
-	std::make_pair(CONST_lcsmonthly052, viewTaxesStrong),
+	std::make_pair(CONST_SHOWING_THAT_HE_HAS_ENGAGED_IN_CONSISTENT_TAX_EVASION, viewTaxesStrong),
 
 };
 
@@ -44,22 +45,22 @@ const vector<int> strongWomen = { VIEW_WOMEN, 50 };
 const vector<int> strongSweat = { VIEW_SWEATSHOPS, 50 };
 const vector<int> strongTaxes = { VIEW_TAXES, 50 };
  const vector< pair<string, vector<int> > > CorpFilesInfluence = {
-	std::make_pair(CONST_lcsmonthly054, strongGenetics),
-	std::make_pair(CONST_lcsmonthly055, strongGay),
-	std::make_pair(CONST_lcsmonthly056, strongWomen),
-	std::make_pair(CONST_lcsmonthly057, strongSweat),
-	std::make_pair(CONST_lcsmonthly058, strongTaxes),
+	std::make_pair(CONST_DESCRIBING_A_GENETIC_MONSTER_CREATED_IN_A_LAB, strongGenetics),
+	std::make_pair(CONST_WITH_A_LIST_OF_GAY_EMPLOYEES_ENTITLED_HOMO_WORKERS, strongGay),
+	std::make_pair(CONST_CONTAINING_A_MEMO_TERMINATE_THE_PREGNANCY_I_TERMINATE_YOU, strongWomen),
+	std::make_pair(CONST_CHEERFULLY_DESCRIBING_FOREIGN_CORPORATE_SWEATSHOPS, strongSweat),
+	std::make_pair(CONST_DESCRIBING_AN_INTRICATE_TAX_SCHEME, strongTaxes),
 };
 
 const vector<int> strongJustice = { VIEW_JUSTICES, 50 };
 const vector<int> strongFreeSpeech = { VIEW_FREESPEECH, 50 };
 const vector< pair<string, vector<int> > > CIAPapersInfluence = {
-	std::make_pair(CONST_lcsmonthly074, emptyVector),
-	std::make_pair(CONST_lcsmonthly075, strongJustice),
-	std::make_pair(CONST_lcsmonthly076, emptyVector),
-	std::make_pair(CONST_lcsmonthly077, strongFreeSpeech),
-	std::make_pair(CONST_lcsmonthly078, strongGay),
-	std::make_pair(CONST_lcsmonthly079, strongWomen),
+	std::make_pair(CONST_DOCUMENTING_THE_OVERTHROW_OF_A_GOVERNMENT, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_THE_PLANNED_ASSASSINATION_OF_A_LIBERAL_FEDERAL_JUDGE, strongJustice),
+	std::make_pair(CONST_CONTAINING_PRIVATE_INFORMATION_ON_INNOCENT_CITIZENS, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_HARMFUL_SPEECH_MADE_BY_INNOCENT_CITIZENS, strongFreeSpeech),
+	std::make_pair(CONST_USED_TO_KEEP_TABS_ON_GAY_CITIZENS, strongGay),
+	std::make_pair(CONST_DOCUMENTING_THE_INFILTRATION_OF_A_PRO_CHOICE_GROUP, strongWomen),
 
 };
 
@@ -70,56 +71,56 @@ const vector<int> viewIntelligence = { VIEW_INTELLIGENCE , 15 };
 const vector<int> viewDeathPrisons = { VIEW_DEATHPENALTY , 50, VIEW_PRISONS , 20 };
   const vector< pair<string, vector<int> > > PolicePapersInfluence =
 {
-	std::make_pair(CONST_lcsmonthly082, viewTorture),
-	std::make_pair(CONST_lcsmonthly083, strongTorture),
+	std::make_pair(CONST_DOCUMENTING_HUMAN_RIGHTS_ABUSES_BY_THE_FORCE, viewTorture),
+	std::make_pair(CONST_DOCUMENTING_A_POLICE_TORTURE_CASE, strongTorture),
 
-	std::make_pair(CONST_lcsmonthly084, viewIntelligence),
+	std::make_pair(CONST_DOCUMENTING_A_SYSTEMATIC_INVASION_OF_PRIVACY_BY_THE_FORCE, viewIntelligence),
 
-	std::make_pair(CONST_lcsmonthly085, emptyVector),
-	std::make_pair(CONST_lcsmonthly086, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_A_FORCED_CONFESSION, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_WIDESPREAD_CORRUPTION_IN_THE_FORCE, emptyVector),
 
-	std::make_pair(CONST_lcsmonthly100, viewDeathPrisons),
+	std::make_pair(CONST_DOCUMENTING_GLADIATORIAL_MATCHES_HELD_BETWEEN_PRISONERS_BY_GUARDS, viewDeathPrisons),
 
 };
 
 const vector< pair<string, vector<int> > > JudgePapersInfluence =
 {
-	std::make_pair(CONST_lcsmonthly089, emptyVector),
-	std::make_pair(CONST_lcsmonthly090, emptyVector),
+	std::make_pair(CONST_TAKING_BRIBES_TO_ACQUIT_MURDERERS, emptyVector),
+	std::make_pair(CONST_PROMISING_CONSERVATIVE_RULINGS_IN_EXCHANGE_FOR_APPOINTMENTS, emptyVector),
 };
 
 
 const vector<int> strongAnimals = { VIEW_ANIMALRESEARCH, 50 };
 
 const vector< pair<string, vector<int> > > ResearchPapersInfluence = {
-	std::make_pair(CONST_lcsmonthly092, strongAnimals),
-	std::make_pair(CONST_lcsmonthly093, strongAnimals),
-	std::make_pair(CONST_lcsmonthly094, strongGenetics),
-	std::make_pair(CONST_lcsmonthly095, strongGenetics),
+	std::make_pair(CONST_DOCUMENTING_HORRIFIC_ANIMAL_RIGHTS_ABUSES, strongAnimals),
+	std::make_pair(CONST_STUDYING_THE_EFFECTS_OF_TORTURE_ON_CATS, strongAnimals),
+	std::make_pair(CONST_COVERING_UP_THE_ACCIDENTAL_CREATION_OF_A_GENETIC_MONSTER, strongGenetics),
+	std::make_pair(CONST_SHOWING_HUMAN_TEST_SUBJECTS_DYING_UNDER_GENETIC_RESEARCH, strongGenetics),
 };
 
 const vector< pair<string, vector<int> > > PrisonPapersInfluence =
 {
-	std::make_pair(CONST_lcsmonthly097, emptyVector),
-	std::make_pair(CONST_lcsmonthly098, strongTorture),
+	std::make_pair(CONST_DOCUMENTING_HUMAN_RIGHTS_ABUSES_BY_PRISON_GUARDS, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_A_PRISON_TORTURE_CASE, strongTorture),
 
-	std::make_pair(CONST_lcsmonthly099, emptyVector),
-	std::make_pair(CONST_lcsmonthly100, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_WIDESPREAD_CORRUPTION_AMONG_PRISON_EMPLOYEES, emptyVector),
+	std::make_pair(CONST_DOCUMENTING_GLADIATORIAL_MATCHES_HELD_BETWEEN_PRISONERS_BY_GUARDS, emptyVector),
 };
 
 const vector< pair<string, vector<int> > > CablePapersInfluence  = {
-	std::make_pair(CONST_lcsmonthly102, emptyVector),
-	std::make_pair(CONST_lcsmonthly103, emptyVector),
-	std::make_pair(CONST_lcsmonthly110, emptyVector),
-	std::make_pair(CONST_lcsmonthly105, emptyVector),
+	std::make_pair(CONST_CALLING_THEIR_NEWS_THE_VANGUARD_OF_CONSERVATIVE_THOUGHT, emptyVector),
+	std::make_pair(CONST_MANDATING_NEGATIVE_COVERAGE_OF_LIBERAL_POLITICIANS, emptyVector),
+	std::make_pair(CONST_PLANNING_TO_DRUM_UP_A_FALSE_SCANDAL_ABOUT_A_LIBERAL_FIGURE, emptyVector),
+	std::make_pair(CONST_INSTRUCTING_A_FEMALE_ANCHOR_TO_GET_SEXIER_OR_GET_A_NEW_JOB, emptyVector),
 
 };
 
 const vector< pair<string, vector<int> > > RadioPapersInfluence  =
 {
-	std::make_pair(CONST_lcsmonthly108, emptyVector),
-	std::make_pair(CONST_lcsmonthly109, emptyVector),
-	std::make_pair(CONST_lcsmonthly110, emptyVector),
+	std::make_pair(CONST_CALLING_LISTENERS_SHEEP_TO_BE_TOLD_WHAT_TO_THINK, emptyVector),
+	std::make_pair(CONST_SAYING_IT_S_OKAY_TO_LIE_THEY_DON_T_NEED_THE_TRUTH, emptyVector),
+	std::make_pair(CONST_PLANNING_TO_DRUM_UP_A_FALSE_SCANDAL_ABOUT_A_LIBERAL_FIGURE, emptyVector),
 };
 
 
@@ -158,42 +159,42 @@ the bottom of includes.h in the top src folder.
 	  moveAlt(5, 2);
 	  if (size)
 	  {
-		  addstrAlt(CONST_lcsmonthly018, gamelog);
+		  addstrAlt(CONST_THE_MONTHLY_LIBERAL_GUARDIAN_NEWSPAPER, gamelog);
 	  }
 	  else
 	  {
-		  addstrAlt(CONST_lcsmonthly019, gamelog);
+		  addstrAlt(CONST_THE_MONTHLY_LIBERAL_GUARDIAN_ONLINE_NEWSLETTER, gamelog);
 	  }
-	  addstrAlt(CONST_lcsmonthly020, gamelog);
+	  addstrAlt(CONST_IS_PUBLISHED, gamelog);
 	  gamelog.newline();
 	  moveAlt(7, 2);
 	  if (power < 0)
 	  {
-		  addstrAlt(CONST_lcsmonthly021, gamelog);
+		  addstrAlt(CONST_THE_ONLY_READERS_ARE_CONSERVATIVES_WHO_SEEM_TO_THINK_IT_S_FUNNY, gamelog);
 	  }
 	  else if (power == 0)
 	  {
-		  addstrAlt(CONST_lcsmonthly022, gamelog);
+		  addstrAlt(CONST_UNFORTUNATELY_NOBODY_SEEMS_INTERESTED, gamelog);
 	  }
 	  else if (power < 5)
 	  {
-		  addstrAlt(CONST_lcsmonthly023, gamelog);
+		  addstrAlt(CONST_VERY_FEW_PEOPLE_SEEM_TO_BE_INTERESTED, gamelog);
 	  }
 	  else if (power < 50)
 	  {
-		  addstrAlt(CONST_lcsmonthly024, gamelog);
+		  addstrAlt(CONST_A_FAIR_NUMBER_OF_PEOPLE_ARE_READING_IT, gamelog);
 	  }
 	  else if (power < 100)
 	  {
-		  addstrAlt(CONST_lcsmonthly025, gamelog);
+		  addstrAlt(CONST_MANY_PEOPLE_ARE_READING_IT, gamelog);
 	  }
 	  else if (power < 250)
 	  {
-		  addstrAlt(CONST_lcsmonthly026, gamelog);
+		  addstrAlt(CONST_THE_RESPONSE_IS_VERY_STRONG_PEOPLE_ARE_CHANGING_THEIR_MINDS, gamelog);
 	  }
 	  else
 	  {
-		  addstrAlt(CONST_lcsmonthly027, gamelog);
+		  addstrAlt(CONST_THE_RESPONSE_IS_ELECTRIC_EVERYONE_IS_TALKING_ABOUT_THIS_MONTH_S, gamelog);
 		  mvaddstrAlt(8, 2, CONST_lcsmonthly028, gamelog);
 	  }
 	  gamelog.nextMessage();
@@ -219,7 +220,7 @@ the bottom of includes.h in the top src folder.
 		  music.play(MUSIC_NEWSPAPER);
 		  eraseAlt();
 		  set_color_easy(WHITE_ON_BLACK);
-		  mvaddstrAlt(0, 0, CONST_lcsmonthly029);
+		  mvaddstrAlt(0, 0, CONST_DO_YOU_WANT_TO_RUN_A_SPECIAL_EDITION);
 		  int x = 1, y = 10;
 		  char str[200];
 		  for (int l = page * 18; l < len(loottypeindex) && l < page * 18 + 18; l++)
@@ -242,7 +243,7 @@ the bottom of includes.h in the top src folder.
 		  {
 			  mvaddstrAlt(17, 53, addnextpagestr());
 		  }
-		  mvaddstrAlt(24, 1, CONST_lcsmonthly030);
+		  mvaddstrAlt(24, 1, CONST_ENTER_NOT_IN_THIS_MONTH_S_LIBERAL_GUARDIAN);
 		  int c = getkeyAlt();
 		  if (c >= 'a'&&c <= 'r')
 		  {
@@ -282,32 +283,32 @@ the bottom of includes.h in the top src folder.
 
   void printLootCCSBackers() {
 
-	  mvaddstrAlt(5, 1, CONST_lcsmonthly059, gamelog);
+	  mvaddstrAlt(5, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_MORE_THAN_ONE_THOUSAND_PAGES_OF_DOCUMENTS_ABOUT, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly060, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_CCS_ORGANIZATION_ALSO_REVEALING_IN_EXTREME_DETAIL_THE_NAMES_AND, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(7, 1, CONST_lcsmonthly061, gamelog);
+	  mvaddstrAlt(7, 1, CONST_RESPONSIBILITIES_OF_CONSERVATIVE_CRIME_SQUAD_SYMPATHIZERS_AND_SUPPORTERS, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(8, 1, CONST_lcsmonthly062, gamelog);
+	  mvaddstrAlt(8, 1, CONST_IN_THE_STATE_AND_FEDERAL_GOVERNMENTS_SECTIONS_PRECISELY_DOCUMENT_THE, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(9, 1, CONST_lcsmonthly063, gamelog);
+	  mvaddstrAlt(9, 1, CONST_EXTENSIVE_PLANNING_TO_CREATE_AN_EXTRA_JUDICIAL_DEATH_SQUAD_THAT_WOULD_BE, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, CONST_lcsmonthly064, gamelog);
+	  mvaddstrAlt(10, 1, CONST_ABOVE_PROSECUTION_AND_COULD_HUNT_DOWN_LAW_ABIDING_LIBERALS_AND_ACT, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(11, 1, CONST_lcsmonthly065, gamelog);
+	  mvaddstrAlt(11, 1, CONST_AS_A_FOIL_WHEN_NO_OTHER_ENEMIES_WERE_PRESENT_TO_DIRECT_PUBLIC_ENERGY, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(12, 1, CONST_lcsmonthly066, gamelog);
-	  mvaddstrAlt(14, 1, CONST_lcsmonthly067, gamelog);
+	  mvaddstrAlt(12, 1, CONST_AGAINST, gamelog);
+	  mvaddstrAlt(14, 1, CONST_THE_SCANDAL_REACHES_INTO_THE_HEART_OF_THE_CONSERVATIVE_LEADERSHIP_IN_THE, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(15, 1, CONST_lcsmonthly068, gamelog);
+	  mvaddstrAlt(15, 1, CONST_COUNTRY_AND_THE_FULL_RAMIFICATIONS_OF_THIS_REVELATION_MAY_NOT_BE_FELT, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(16, 1, CONST_lcsmonthly069, gamelog);
+	  mvaddstrAlt(16, 1, CONST_FOR_MONTHS_ONE_THING_IS_CLEAR_HOWEVER_FROM_THE_IMMEDIATE_PUBLIC_REACTION, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(17, 1, CONST_lcsmonthly070, gamelog);
+	  mvaddstrAlt(17, 1, CONST_TOWARD_THE_REVELATIONS_AND_THE_SPEED_WITH_WHICH_EVEN_AM_RADIO_AND_CABLE, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(18, 1, CONST_lcsmonthly071, gamelog);
+	  mvaddstrAlt(18, 1, CONST_NEWS_DENOUNCE_THE_CCS, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(20, 1, CONST_lcsmonthly072, gamelog);
+	  mvaddstrAlt(20, 1, CONST_THIS_IS_THE_BEGINNING_OF_THE_END_FOR_THE_CONSERVATIVE_CRIME_SQUAD, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_INTELLIGENCE, 50);
 	  change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 100);
@@ -316,7 +317,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootCEOPhotos() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly031, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_PHOTOS_OF_A_MAJOR_CEO, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -326,14 +327,14 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  mvaddstrAlt(10, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_CEOSALARY, 50);
 	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
 	  offended_corps = 1;
   }
   void printLootCEOLoveLetters() {
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly042, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_LOVE_LETTERS_FROM_A_MAJOR_CEO, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -345,7 +346,7 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  mvaddstrAlt(10, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_CEOSALARY, 50);
 	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -353,7 +354,7 @@ the bottom of includes.h in the top src folder.
   }
   void printLootCEOTaxes() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly051, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_A_MAJOR_CEO_S_TAX_PAPERS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -363,7 +364,7 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  mvaddstrAlt(10, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_CEOSALARY, 50);
 	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
@@ -372,7 +373,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootCorpFiles(const short newspaper) {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly053, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_CORPORATE_FILES, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, newspaper * 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
@@ -383,14 +384,14 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, bound_to_rile_up, gamelog);
+	  mvaddstrAlt(10, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_CEOSALARY, 50);
 	  change_public_opinion(VIEW_CORPORATECULTURE, 50);
 	  offended_corps = 1;
   }
   void printLootCIAPapers() {
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly073, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_CIA_AND_OTHER_INTELLIGENCE_FILES, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -401,7 +402,7 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, CONST_lcsmonthly080, gamelog);
+	  mvaddstrAlt(10, 1, CONST_THIS_IS_BOUND_TO_GET_THE_GOVERNMENT_A_LITTLE_RILED_UP, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_INTELLIGENCE, 50);
 	  offended_cia = 1;
@@ -409,7 +410,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootPolicePapers() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly081, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_POLICE_RECORDS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -425,7 +426,7 @@ the bottom of includes.h in the top src folder.
   }
   void printLootJudgePapers() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly088, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_WITH_EVIDENCE_OF_A_CONSERVATIVE_JUDGE, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -441,7 +442,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootResearchPapers() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly091, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_RESEARCH_PAPERS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -456,7 +457,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootPrisonPapers() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly096, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_PRISON_DOCUMENTS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -473,7 +474,7 @@ the bottom of includes.h in the top src folder.
 
   void printLootCablePapers() {
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly101, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_CABLE_NEWS_MEMOS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -484,7 +485,7 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, CONST_lcsmonthly111, gamelog);
+	  mvaddstrAlt(10, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_CABLENEWS, 50);
 	  offended_cablenews = 1;
@@ -494,7 +495,7 @@ the bottom of includes.h in the top src folder.
   void printLootRadioPapers() {
 
 
-	  mvaddstrAlt(6, 1, CONST_lcsmonthly107, gamelog);
+	  mvaddstrAlt(6, 1, CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_AM_RADIO_PLANS, gamelog);
 	  moveAlt(7, 1);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUAD, 10);
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, 10);
@@ -505,7 +506,7 @@ the bottom of includes.h in the top src folder.
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);
 	  gamelog.newline();
-	  mvaddstrAlt(10, 1, CONST_lcsmonthly111, gamelog);
+	  mvaddstrAlt(10, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
 	  gamelog.nextMessage();
 	  change_public_opinion(VIEW_AMRADIO, 50);
 	  offended_amradio = 1;
@@ -599,14 +600,14 @@ the bottom of includes.h in the top src folder.
 	  set_color_easy(WHITE_ON_BLACK);
 	  mvaddstrAlt(y, 0, dotdotdot);
 	  set_color_easy(GREEN_ON_BLACK);
-	  string num = CONST_lcsmonthly114 + tostring(ledger.income[i]);
+	  string num = PLUS_DOLLAR + tostring(ledger.income[i]);
 	  mvaddstrAlt(y, 60 - len(num), num);
 	  if (ledger.dailyIncome[i])
-		  num = CONST_lcsmonthly124 + tostring(ledger.dailyIncome[i]) + closeParenthesis;
+		  num = PAREN_PLUS_DOLLAR + tostring(ledger.dailyIncome[i]) + CLOSE_PARENTHESIS;
 	  else
 	  {
 		  set_color_easy(WHITE_ON_BLACK);
-		  num = CONST_lcsmonthly126;
+		  num = DOLLAR_ZERO;
 	  }
 	  mvaddstrAlt(y, 73 - len(num), num);
 	  set_color_easy(WHITE_ON_BLACK);
@@ -621,14 +622,14 @@ the bottom of includes.h in the top src folder.
 	  set_color_easy(WHITE_ON_BLACK);
 	  mvaddstrAlt(y, 0, dotdotdot);
 	  set_color_easy(RED_ON_BLACK);
-	  string num = CONST_lcsmonthly117 + tostring(ledger.expense[i]);
+	  string num = MINUS_DOLLAR + tostring(ledger.expense[i]);
 	  mvaddstrAlt(y, 60 - len(num), num);
 	  if (ledger.dailyExpense[i])
-		  num = CONST_lcsmonthly125 + tostring(ledger.dailyExpense[i]) + closeParenthesis;
+		  num = PAREN_MINUS_DOLLAR + tostring(ledger.dailyExpense[i]) + CLOSE_PARENTHESIS;
 	  else
 	  {
 		  set_color_easy(WHITE_ON_BLACK);
-		  num = CONST_lcsmonthly126;
+		  num = DOLLAR_ZERO;
 	  }
 	  mvaddstrAlt(y, 73 - len(num), num);
 	  set_color_easy(WHITE_ON_BLACK);
@@ -642,31 +643,31 @@ the bottom of includes.h in the top src folder.
   void printDailyMoney(const int y, const int dailymoney, const int totalmoney) {
 	  string num;
 	  set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	  mvaddstrAlt(y, 0, CONST_lcsmonthly120);
+	  mvaddstrAlt(y, 0, CONST_NET_CHANGE_THIS_MONTH_DAY);
 	  if (totalmoney > 0) { set_color_easy(GREEN_ON_BLACK_BRIGHT); num = CONST_lcsmonthly121; }
 	  else if (totalmoney < 0) { set_color_easy(RED_ON_BLACK_BRIGHT); num = CONST_lcsmonthly122; }
-	  else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = blankString; }
-	  num += CONST_lcsmonthly138 + tostring(abs(totalmoney));
+	  else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = BLANK_STRING; }
+	  num += DOLLAR_SIGN + tostring(abs(totalmoney));
 	  mvaddstrAlt(y, 60 - len(num), num);
 	  if (dailymoney > 0)
 	  {
 		  set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		  num = CONST_lcsmonthly124 + tostring(abs(dailymoney)) + closeParenthesis;
+		  num = PAREN_PLUS_DOLLAR + tostring(abs(dailymoney)) + CLOSE_PARENTHESIS;
 	  }
 	  else if (dailymoney < 0)
 	  {
 		  set_color_easy(RED_ON_BLACK_BRIGHT);
-		  num = CONST_lcsmonthly125 + tostring(abs(dailymoney)) + closeParenthesis;
+		  num = PAREN_MINUS_DOLLAR + tostring(abs(dailymoney)) + CLOSE_PARENTHESIS;
 	  }
 	  else
 	  {
 		  set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		  num = CONST_lcsmonthly126;
+		  num = DOLLAR_ZERO;
 	  }
 	  mvaddstrAlt(y, 73 - len(num), num);
   }
   void printLedgerPage(const int y, const string lcsmonthly, const long get_funds) {
-	  string num = CONST_lcsmonthly138 + tostring(get_funds);
+	  string num = DOLLAR_SIGN + tostring(get_funds);
 	  set_color_easy(WHITE_ON_BLACK);
 	  mvaddstrAlt(y, 0, dotdotdot);
 	  mvaddstrAlt(y, 0, lcsmonthly);
@@ -690,7 +691,7 @@ the bottom of includes.h in the top src folder.
 		  eraseAlt();
 		  int y = 2, totalmoney = 0, dailymoney = 0, numpages = 1;
 		  set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		  mvaddstrAlt(0, 0, CONST_lcsmonthly113);
+		  mvaddstrAlt(0, 0, CONST_LIBERAL_CRIME_SQUAD_FUNDING_REPORT);
 		  for (int i = 0; i < INCOMETYPENUM; i++)
 		  {
 			  if (ledger.income[i])
@@ -739,27 +740,27 @@ the bottom of includes.h in the top src folder.
 
 		  if (page == numpages - 1)
 		  {
-			  printLedgerPage(y, CONST_lcsmonthly127, ledger.get_funds());
+			  printLedgerPage(y, CONST_CASH, ledger.get_funds());
 		  }
 		  if (++y >= 23) y = 2, numpages++;
 		  if (page == numpages - 1)
 		  {
-			  printLedgerPage(y, CONST_lcsmonthly129, weaponValue);
+			  printLedgerPage(y, CONST_TOOLS_AND_WEAPONS, weaponValue);
 		  }
 		  if (++y >= 23) y = 2, numpages++;
 		  if (page == numpages - 1)
 		  {
-			  printLedgerPage(y, CONST_lcsmonthly131, armorValue);
+			  printLedgerPage(y, CONST_CLOTHING_AND_ARMOR, armorValue);
 		  }
 		  if (++y >= 23) y = 2, numpages++;
 		  if (page == numpages - 1)
 		  {
-			  printLedgerPage(y, CONST_lcsmonthly133, clipValue);
+			  printLedgerPage(y, CONST_AMMUNITION, clipValue);
 		  }
 		  if (++y >= 23) y = 2, numpages++;
 		  if (page == numpages - 1)
 		  {
-			  printLedgerPage(y, CONST_lcsmonthly135, lootValue);
+			  printLedgerPage(y, CONST_MISCELLANEOUS_LOOT, lootValue);
 		  }
 		  if (++y >= 23) y = 2, numpages++;
 		  if (page == numpages - 1) makedelimiter(y);
@@ -767,16 +768,16 @@ the bottom of includes.h in the top src folder.
 		  if (page == numpages - 1)
 		  {
 			  set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			  mvaddstrAlt(y, 0, CONST_lcsmonthly137);
+			  mvaddstrAlt(y, 0, CONST_TOTAL_LIQUID_ASSETS);
 			  long netWorth = ledger.get_funds() + weaponValue + armorValue + clipValue + lootValue;
 			  set_color_easy(netWorth ? GREEN_ON_BLACK_BRIGHT : WHITE_ON_BLACK_BRIGHT);
-			  string num = CONST_lcsmonthly138 + tostring(netWorth);
+			  string num = DOLLAR_SIGN + tostring(netWorth);
 			  mvaddstrAlt(y, 60 - len(num), num);
 		  }
 		  set_color_easy(WHITE_ON_BLACK);
 		  if (numpages > 1)
 		  {
-			  mvaddstrAlt(24, 0, CONST_lcsmonthly139 + addpagestr());
+			  mvaddstrAlt(24, 0, CONST_PRESS_ENTER_TO_REFLECT_ON_THE_REPORT + addpagestr());
 			  while (true)
 			  {
 				  int c = getkeyAlt();
@@ -793,11 +794,10 @@ the bottom of includes.h in the top src folder.
 		  }
 		  else
 		  {
-			  mvaddstrAlt(24, 0, CONST_lcsmonthly140);
+			  mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THE_REPORT);
 			  pressAnyKey();
 			  music.play(MUSIC_PREVIOUS);
 			  return;
 		  }
 	  }
   }
-

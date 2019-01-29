@@ -1,3 +1,4 @@
+
 #define	COMMONACTIONS_CPP
 #include "../includes.h"
 /*
@@ -79,9 +80,9 @@ void hospitalize(int loc, DeprecatedCreature &patient)
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, patient.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_commonactions004, gamelog);
+		addstrAlt(WILL_BE_AT_SPACE, gamelog);
 		addstrAlt(LocationsPool::getInstance().getLocationName(loc), gamelog);
-		addstrAlt(CONST_commonactions005, gamelog);
+		addstrAlt(FOR_SPACE, gamelog);
 		addstrAlt(time, gamelog);
 		addstrAlt(singleSpace, gamelog);
 		if (time > 1)addstrAlt(CONST_commonactions006, gamelog);
@@ -130,7 +131,7 @@ int lawflagheat(int lawflag)
 	case LAWFLAG_JURY:return 0;
 	case LAWFLAG_RACKETEERING:return 50;
 	case LAWFLAG_EXTORTION:return 20;
-	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as CONST_commonactions008?
+	case LAWFLAG_ARMEDASSAULT:return 0;   // XXX: This is on the same level as HARMFUL_SPEECH?
 	case LAWFLAG_ASSAULT:return 0;        // Fox: Yes. You get too many assault charges to put heat on it.
 	case LAWFLAG_CARTHEFT:return 0;
 	case LAWFLAG_CCFRAUD:return 20;
@@ -310,14 +311,14 @@ void sortliberals(std::vector<DeprecatedCreature *>& liberals, short sortingchoi
 map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
 vector<file_and_text_collection> common_text_file_collection = {
-	customText(&methodOfSorting, mostlyendings + CONST_commonactions009),
+	customText(&methodOfSorting, mostlyendings + METHOD_OF_SORTING_TXT),
 };
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)
 {
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(1, 1, CONST_commonactions010);
+	mvaddstrAlt(1, 1, CHOOSE_HOW_TO_SORT_LIST);
 	if (trainingActivitySorting.count(listforsorting)) {
 		addstrAlt(trainingActivitySorting[listforsorting]);
 	}
@@ -437,7 +438,7 @@ int buyprompt(const string &firstline, const string &secondline,
 			mvaddcharAlt(y, 0, 'A' + y - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(nameprice[p].first);
 			moveAlt(y++, namepaddedlength + 4); //Add 4 for start of line, eg A - .
-			addstrAlt(CONST_commonactions012 + tostring(nameprice[p].second));
+			addstrAlt(DOLLARSIGN + tostring(nameprice[p].second));
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		moveAlt(22, 0);
