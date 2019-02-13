@@ -1979,7 +1979,7 @@ string otherCrime(const Deprecatednewsstoryst ns, const bool liberalguardian, co
 		if (crime[CRIME_KILLEDSOMEBODY]) typesum--;
 	}
 
-	story += extraCrimes(ccs, liberalguardian, typesum, crime);
+	story += extraCrimes(liberalguardian, ccs, typesum, crime);
 
 	if (crime[CRIME_CARCHASE])
 	{

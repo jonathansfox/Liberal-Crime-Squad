@@ -18,8 +18,3 @@
 &cVisit Your Local&r
 &cSubGenius Clench&r
 &cFor More Info&r
-# The last element indicates a bug
-&cDebuggers Needed&r&r
-&cIt Seems&r
-&cYou've Found&r
-&cA Bug!&r
