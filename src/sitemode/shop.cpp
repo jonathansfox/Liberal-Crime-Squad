@@ -16,8 +16,6 @@
 // when it opens the file and it can't be changed after that; what we changed was
 // how it detects encoding for files it opens in the future, not files already open).
 // In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select CONST_shop020, choose CONST_shopB056,
-// then choose CONST_shop021.
 // In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
 // the codepage will be correct already since it's running in a console window just
 // like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
@@ -140,7 +138,7 @@
 	 std::vector<ShopOption*> available_options = options_;
 	 available_options.erase(remove_if(available_options.begin(),
 		 available_options.end(),
-		 not1(mem_fun(&ShopOption::display))),
+		 std::not1(std::mem_fun(&ShopOption::display))),
 		 available_options.end());
 	 int c;
 	 do
@@ -393,7 +391,7 @@
 	 std::vector<ShopOption*> available_options = options_;
 	 available_options.erase(remove_if(available_options.begin(),
 		 available_options.end(),
-		 not1(mem_fun(&ShopOption::display))),
+		 std::not1(std::mem_fun(&ShopOption::display))),
 		 available_options.end());
 	 int c;
 	 vector<char> unusable_letters;

@@ -107,12 +107,12 @@ vector<string> caseREJECTED_NUDE;
 vector<string> caseREJECTED_WEAPONS;
 vector<string> caseNOT_REJECTED;
 vector<file_and_text_collection> map_specials_text_file_collection = {
-customText(&rejectedBecauseSmellFunny, mostlyendings + CONST_REJECTEDBECAUSESMELLFUNNY_TXT),
-	customText(&notRejected, mostlyendings + CONST_NOTREJECTED_TXT),
-	customText(&randomCrime, mostlyendings + CONST_RANDOMCRIME_TXT),
-	customText(&caseREJECTED_NUDE, mostlyendings + CONST_CASEREJECTED_NUDE_TXT),
-	customText(&caseREJECTED_WEAPONS, mostlyendings + CONST_CASEREJECTED_WEAPONS_TXT),
-	customText(&caseNOT_REJECTED, mostlyendings + CONST_CASENOT_REJECTED_TXT),
+customText(&rejectedBecauseSmellFunny, MOSTLY_ENDINGS_FOLDER + CONST_REJECTEDBECAUSESMELLFUNNY_TXT),
+	customText(&notRejected, MOSTLY_ENDINGS_FOLDER + CONST_NOTREJECTED_TXT),
+	customText(&randomCrime, MOSTLY_ENDINGS_FOLDER + CONST_RANDOMCRIME_TXT),
+	customText(&caseREJECTED_NUDE, MOSTLY_ENDINGS_FOLDER + CONST_CASEREJECTED_NUDE_TXT),
+	customText(&caseREJECTED_WEAPONS, MOSTLY_ENDINGS_FOLDER + CONST_CASEREJECTED_WEAPONS_TXT),
+	customText(&caseNOT_REJECTED, MOSTLY_ENDINGS_FOLDER + CONST_CASENOT_REJECTED_TXT),
 };
 char sizeUpSquadForEntry(const bool autoadmit) {
 

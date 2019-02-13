@@ -46,9 +46,9 @@ map<string, int> vehicleTypeTagList = {
 	map<string, int>::value_type(tag_sleeperprice, ENUM_tag_sleeperprice),
 };
 VehicleType::VehicleType(MCD_STR xmlstring)
-	: /*idname_(CONST_vehicletype046), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
+	: /*idname_(CONST_UNDEFINED), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
 	year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
-	longname_(CONST_vehicletype046), shortname_(CONST_vehicletypeB053),
+	longname_(CONST_UNDEFINED), shortname_(CONST_UNDEF),
 	drivebonus_(0), drivebonus_factor_(1), drivebonus_limit1_(8), drivebonus_limit2_(99),
 	dodgebonus_(0), dodgebonus_factor_(1), dodgebonus_limit1_(8), dodgebonus_limit2_(99),
 	attackbonus_driver_(-2), attackbonus_passenger_(0),
@@ -62,7 +62,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 	xmlfile.FindElem();
 	idname_ = xmlfile.GetAttrib(tag_idname);
 	if (idname_ == BLANK_STRING)
-		idname_ = CONST_vehicletype047 + tostring(id_);
+		idname_ = CONST_LACKS_IDNAME + tostring(id_);
 	xmlfile.IntoElem();
 	while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
 	{

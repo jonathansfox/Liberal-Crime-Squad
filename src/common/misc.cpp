@@ -1112,8 +1112,8 @@ void MusicClass::play(int _musicmode)
 		if (lawList[LAW_GAY] <= 1)
 			spouse = (gn == GENDER_FEMALE ? GENDER_MALE : GENDER_FEMALE);
 
-		story += (spouse == GENDER_FEMALE ? CONST_WIFE : CONST_newsB925) \
-			+ CONST_news250;
+		story += (spouse == GENDER_FEMALE ? CONST_WIFE : CONST_HUSBAND_LOWERCASE) \
+			+ CONST_SPACE_AND_SPACE;
 
 		return story;
 	}
@@ -1242,18 +1242,18 @@ void MusicClass::play(int _musicmode)
 			+ CONST_THE_CITY_BOWED_TO_PRESSURE_FROM_RELIGIOUS_GROUPS \
 			+ ampersandR \
 			+ CONST_THE_BOOK \
-			+ CONST_news441;
+			+ CONST_UNDERSCORE;
 
 		char dstr[200], nstr[200];
 
 		generate_name(nstr, dstr);
 
 		story += nstr \
-			+ CONST_news441 \
+			+ CONST_UNDERSCORE \
 			+ dstr \
 			+ CONST_AND_THE \
 			+ pickrandom(book_title) \
-			+ CONST_news441 \
+			+ CONST_UNDERSCORE \
 			+ pickrandom(book_title_2) \
 			+ CONST_IS_THE_THIRD_IN_AN_IMMENSELY_POPULAR_SERIES_BY \
 			+ pickrandom(random_nationality) \
@@ -1269,12 +1269,12 @@ void MusicClass::play(int _musicmode)
 		c[0] = 'A' + LCSrandom(26);
 
 		story += c \
-			+ CONST_news329;
+			+ CONST_PERIOD_SPACE;
 
 		strcpy(dstr, lastname().data());
 
 		story += dstr \
-			+ CONST_news485 \
+			+ CONST_DOT_SPACE \
 			+ CONST_ALTHOUGH_THE_SERIES_IS_ADORED_BY_CHILDREN_WORLDWIDE \
 			+ CONST_SOME_CONSERVATIVES_FEEL_THAT_THE_BOOKS \
 			+ pickrandom(conservative_oppose_book) \
@@ -1300,7 +1300,7 @@ void MusicClass::play(int _musicmode)
 			+ ampersandR \
 			+ CONST_WHEN_THE_DECISION_TO_BAN_THE_BOOK_WAS_ANNOUNCED_YESTERDAY \
 			+ CONST_MANY_AREA_CHILDREN_SPONTANEOUSLY_BROKE_INTO_TEARS_ONE_CHILD_WAS \
-			+ CONST_newsX02;
+			+ CONST_HEARD_SAYING_COMMA_QUOTE;
 
 		switch (LCSrandom(2))
 		{
@@ -1312,7 +1312,7 @@ void MusicClass::play(int _musicmode)
 		case 1:
 			story += CONST_MAMMA_WHY_DID_THEY_KILL \
 				+ nstr \
-				+ CONST_news345;
+				+ CONST_QUESTION_MARK;
 			break;
 		}
 
@@ -1340,7 +1340,7 @@ void MusicClass::play(int _musicmode)
 			+ dstr3 \
 			+ CONST_WAS_PRONOUNCED_DEAD_AT \
 			+ tostring(LCSrandom(12) + 1) \
-			+ CONST_news282 \
+			+ CONST_SINGLE_COLON \
 			+ tostring(LCSrandom(60)) \
 			+ pickrandom(AMorPM) \
 			+ CONST_YESTERDAY_AT_THE;
@@ -1389,7 +1389,7 @@ void MusicClass::play(int _musicmode)
 			break;
 		}
 
-		story += CONST_news458 \
+		story += CONST_DOT_QUOTATION_MARK \
 			+ ampersandR \
 			+ CONST_CANDLELIGHT_VIGILS_WERE_HELD_THROUGHOUT_THE_COUNTRY_LAST_NIGHT_DURING_THE_EXECUTION \
 			+ CONST_AND_MORE_EVENTS_ARE_EXPECTED_THIS_EVENING_IF_THERE_IS_A_BRIGHT_SIDE_TO_BE_FOUND_FROM_THIS \
@@ -1413,12 +1413,12 @@ void MusicClass::play(int _musicmode)
 			+ CONST_DEAL_WITH_THE_UNDESIRABLES_ALTHOUGH_THIS_PHRASE_IS_NOT_CLARIFIED \
 			+ ampersandR \
 			+ CONST_THE_FBI_REFUSED_TO_COMMENT_INITIALLY_BUT_WHEN_CONFRONTED_WITH_THE_INFORMATION \
-			+ CONST_newsX01 \
+			+ CONST_A_SPOKESPERSON_STATED_COMMA_QUOTE \
 			+ CONST_WELL_YOU_KNOW_THERE_S_PRIVACY_AND_THERE_S_PRIVACY \
 			+ CONST_IT_MIGHT_BE_A_BIT_PRESUMPTIVE_TO_ASSUME_THAT \
 			+ CONST_THESE_FILES_DEAL_WITH_THE_ONE_AND_NOT_THE_OTHER \
 			+ CONST_YOU_THINK_ABOUT_THAT_BEFORE_YOU_CONTINUE_SLANGING_ACCUSATIONS \
-			+ CONST_news458 \
+			+ CONST_DOT_QUOTATION_MARK \
 			+ ampersandR;
 		return story;
 	}
@@ -1495,7 +1495,7 @@ void MusicClass::play(int _musicmode)
 			+ dstr2 \
 			+ CONST_COULD_NOT_BE_REACHED_FOR_COMMENT_ALTHOUGH_AN_AID_STATED_THAT \
 			+ CONST_THE_JUDGE_WOULD_BE_GOING_ON_A_BIBLE_RETREAT_FOR_A_FEW_WEEKS_TO \
-			+ CONST_newsB928 \
+			+ CONST_MAKE_THINGS_RIGHT_WITH_THE_ALMIGHTY_FATHER \
 			+ ampersandR;
 
 		return story;
@@ -1534,17 +1534,17 @@ void MusicClass::play(int _musicmode)
 			+ singleSpace \
 			+ dstr2 \
 			+ CONST_WENT_OFF_FOR_FIFTEEN_MINUTES_IN_AN_INEXPLICABLE_RANT \
-			+ CONST_newsX03 \
+			+ CONST_TWO_NIGHTS_AGO_DURING_RADIO \
 			+ pickrandom(radio_name) \
 			+ singleSpace \
 			+ pickrandom(radio_name_2) \
-			+ CONST_news366 \
+			+ CONST_QUOTATION_PERIOD \
 			+ ampersandR \
 			+ singleSpace \
 			+ dstr2 \
 			+ CONST_S_MONOLOGUE_FOR_THE_EVENING_BEGAN_THE_WAY_THAT_FANS \
-			+ CONST_newsX04 \
-			+ CONST_newsX05;
+			+ CONST_HAD_COME_TO_EXPECT_WITH_ATTACKS_ON_LIBERAL_MEDIA \
+			+ CONST_DOT_BUT_WHEN_THE_RADIO_ICON_SAID;
 
 		switch (LCSrandom(radio_host_crazy_quote.size()))
 		{
@@ -1566,14 +1566,14 @@ void MusicClass::play(int _musicmode)
 		story += nstr \
 			+ singleSpace \
 			+ nstr2 \
-			+ CONST_newsX06 \
+			+ CONST_COMMA_KNEW_THAT_QUOTE \
 			+ pickrandom(my_idol) \
 			+ CONST_HAD;
 
 
 		story += getPhraseRadioHostLostMind();
 
-		story += CONST_newsX07 \
+		story += CONST_DOT_AFTER_THAT_IT_GOT_WORSE \
 			+ ampersandR \
 			+ singleSpace \
 			+ dstr2 \
@@ -1632,7 +1632,7 @@ void MusicClass::play(int _musicmode)
 		else story += CONST_SPRAYING_BULLETS_AT;
 		story += CONST_STUDENTS_AND_TEACHERS_INSIDE \
 			+ CONST_WHEN_OTHER_STUDENTS_TRIED_TO_WRESTLE_THE_WEAPONS_AWAY_FROM \
-			+ (dg == GENDER_FEMALE ? CONST_HER : CONST_newsB943) \
+			+ (dg == GENDER_FEMALE ? CONST_HER : CONST_HIM_LOWERCASE) \
 			+ CONST_THEY_WERE;
 
 		if (lawList[LAW_FREESPEECH] == -2) story += CONST_UNFORTUNATELY_HARMED;
@@ -1668,7 +1668,7 @@ void MusicClass::play(int _musicmode)
 
 		story += getSchool(schtype, false);
 
-		story += CONST_news485;
+		story += CONST_DOT_SPACE;
 
 		char dstr[200], dstr2[200];
 		const char dg = pickrandom(maleOrFemale);
@@ -1691,12 +1691,12 @@ void MusicClass::play(int _musicmode)
 
 		story += getSchool(schtype, true);
 
-		story += CONST_news485 \
+		story += CONST_DOT_SPACE \
 			+ dstr2 \
 			+ CONST_ENTERED_THE;
 
 		if (schtype != 3) story += CONST_SCHOOL;
-		else story += CONST_news411;
+		else story += CONST_UNIVERSITY_LOWERCASE;
 		story += CONST_WHILE_CLASSES_WERE_IN_SESSION_THEN_SYSTEMATICALLY_STARTED_BREAKING_INTO \
 			+ CONST_CLASSROOMS;
 
@@ -1709,7 +1709,7 @@ void MusicClass::play(int _musicmode)
 		story += CONST_SHORTLY_AFTERWARDS_R \
 			+ CONST_INVESTIGATORS_ARE_CURRENTLY_SEARCHING_THE_STUDENT_S_BELONGINGS_AND_INITIAL \
 			+ CONST_REPORTS_INDICATE_THAT_THE_STUDENT_KEPT_A_JOURNAL_THAT_SHOWED \
-			+ (dg == GENDER_FEMALE ? CONST_SHE : CONST_newsB935) \
+			+ (dg == GENDER_FEMALE ? CONST_SHE : CONST_HE_LOWERCASE) \
 			+ CONST_WAS_DISTURBINGLY_OBSESSED_WITH_GUNS_AND_DEATH_R;
 
 		return story;
@@ -1765,11 +1765,11 @@ void MusicClass::play(int _musicmode)
 			+ dstr2 \
 			+ CONST_S_NEW_TOUR_DE_FORCE \
 			+ pickrandom(prison_book_title) \
-			+ CONST_news441;
+			+ CONST_UNDERSCORE;
 		story += getPhrasePrisonBook();
 
 
-		story += CONST_R \
+		story += CONST_UNDERSCORE_DOT_AMPERSAND_R \
 			+ CONST_TAKE_THIS_EXCERPT;//TODO() Add more excerpts, more variety.
 		story += CONST_THE_STEEL_BARS_GRATED_FORWARD_IN_THEIR_RAILS \
 			+ CONST_COMING_TO_A_HALT_WITH_A_DEAFENING_CLANG_THAT_SAID_IT_ALL \
@@ -1786,7 +1786,7 @@ void MusicClass::play(int _musicmode)
 		story += getPhraseDifficult();
 
 		story += CONST_CHOICE_AND_I_WOULD_ONLY_HAVE_A_FEW_SECONDS_BEFORE_THEY_MADE_IT_FOR_ME \
-			+ CONST_news458 \
+			+ CONST_DOT_QUOTATION_MARK \
 			+ ampersandR;
 		return story;
 	}
@@ -1909,10 +1909,10 @@ void MusicClass::play(int _musicmode)
 
 		story += getPhraseViagra();
 
-		story += CONST_news485 \
+		story += CONST_DOT_SPACE \
 			+ ampersandR \
 			+ CONST_ALONG_WITH_BONOBOS_CHIMPANZEES_ARE_OUR_CLOSEST_COUSINS \
-			+ CONST_news485 \
+			+ CONST_DOT_SPACE \
 			+ CONST_FIELDING_QUESTIONS_ABOUT_THE_ETHICS_OF_THEIR_EXPERIMENTS_FROM_REPORTERS_DURING_A_PRESS_CONFERENCE_YESTERDAY \
 			+ CONST_A_SPOKESPERSON_FOR_THE_RESEARCH_TEAM_STATED_THAT_IT_REALLY_ISN_T_SO_BAD_AS_ALL_THAT_CHIMPANZEES_ARE_VERY_RESILIENT_CREATURES\
 			+ pickrandom(chimp_drug_horror)\
@@ -2123,7 +2123,7 @@ void MusicClass::play(int _musicmode)
 			+ CONST_TERRORIST_ORGANIZATION_ALLOWED_THE_PLOT_TO_BE_FOILED_JUST_DAYS_BEFORE_IT\
 			+ CONST_WAS_TO_OCCUR\
 			+ ampersandR\
-			+ CONST_newsX08\
+			+ CONST_SPACE_THE_SPOKESMAN_FURTHER_STATED\
 			+ CONST_I_WON_T_COMPROMISE_OUR_SOURCES_AND_METHODS_BUT_LET_ME_JUST_SAY\
 			+ CONST_THAT_WE_ARE_GRATEFUL_TO_THE_CONGRESS_AND_THIS_ADMINISTRATION_FOR\
 			+ CONST_PROVIDING_US_WITH_THE_TOOLS_WE_NEED_TO_NEUTRALIZE_THESE_ENEMIES_OF\
@@ -2206,7 +2206,7 @@ void MusicClass::play(int _musicmode)
 			+ dstr3\
 			+ CONST_CONFESSED_AND_WAS_SENTENCED_TO_LIFE_SAYING\
 			+ CONST_THANK_YOU_FOR_SAVING_ME_FROM_MYSELF\
-			+ CONST_newsB937\
+			+ CONST_I_WOULD_KILL_AGAIN\
 			+ CONST_A_SPOKESPERSON_FOR_THE_DISTRICT_ATTORNEY\
 			+ CONST_HAS_STATED_THAT_THE_CASE_WILL_NOT_BE_RETRIED_DUE\
 			+ CONST_TO_THE_CURRENT_ECONOMIC_DOLDRUMS_THAT_HAVE_LEFT_THE_STATE\
@@ -2227,7 +2227,7 @@ void MusicClass::play(int _musicmode)
 			else if (lawList[LAW_FREESPEECH] == 2)story += CONST_ENCOURAGED_LISTENERS_TO_CALL_IN_AND_TAKE_A_PISS;
 			else story += CONST_ENCOURAGED_LISTENERS_TO_CALL_IN_AND_RELIEVE_THEMSELVES; break;
 		case 2:
-			if (lawList[LAW_FREESPEECH] == 2)story += CONST_newsX09;
+			if (lawList[LAW_FREESPEECH] == 2)story += CONST_SCREAMED_FUCK_POLICE_AND_MORE;
 			else if (lawList[LAW_FREESPEECH] == -2)story += CONST_SCREAMED_DARN_THE_POLICE_THOSE_BIG_DUMB_JERKS_I_GOT_A_STUPID_TICKET_THIS_MORNING_AND_I_M_SO_ANGRY;
 			else story += CONST_SCREAMED_F_CK_THE_POLICE_THOSE_G_DD_MN_M_TH_F_CK_RS_I_GOT_A_F_CKING_TICKET_THIS_MORNING_AND_I_M_F_CKING_P_SS_D_AS_SH_T; break;
 		case 3:
@@ -2287,11 +2287,11 @@ void MusicClass::play(int _musicmode)
 			+ CONST_HAS_BROUGHT_RADIO_ENTERTAINMENT_TO_A_NEW_LOW_DURING_YESTERDAY_S\
 			+ CONST_BROADCAST_OF_THE_PROGRAM\
 			+ dstr\
-			+ CONST_news591\
+			+ CONST_APOS_S_SPACE\
 			+ pickrandom(fm_radio_name)\
 			+ singleSpace\
 			+ pickrandom(fm_radio_name_2)\
-			+ CONST_news592\
+			+ CONST_QUOTATION_COMMA_SPACE\
 			+ dstr2\
 			+ CONST_REPORTEDLY;
 
@@ -2323,7 +2323,7 @@ void MusicClass::play(int _musicmode)
 			if (LCSrandom(4) < lawList[LAW_WOMEN] + 2) // 0% chance at lawList[LAW_WOMEN]==-2, 100% chance at lawList[LAW_WOMEN]==2
 				(tg2 = CONST_MS);
 			else
-				(tg2 = (LCSrandom(2) ? CONST_MRS : CONST_newsB939));
+				(tg2 = (LCSrandom(2) ? CONST_MRS : CONST_MISS_SPACE));
 		}
 		else (tg2 = CONST_MR);
 
@@ -2392,7 +2392,7 @@ void MusicClass::play(int _musicmode)
 		story += getPhraseKillingAttacker();
 
 		story += CONST_BEFORE;
-		story += (jg1 == GENDER_FEMALE ? CONST_news644 : CONST_newsB940);
+		story += (jg1 == GENDER_FEMALE ? CONST_SHE_LOWERCASE_SPACE : CONST_HE_LOWERCASE_SPACE);
 		story += CONST_COULD_HURT_ANYONE_ELSE_R;
 		story += CONST_THE_SPOKESPERSON_FOR_THE_POLICE_DEPARTMENT_SAID_WE_D_HAVE_A_YET_ANOTHER;
 
@@ -2448,12 +2448,12 @@ void MusicClass::play(int _musicmode)
 			story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_HIS);
 			story += CONST_OWN_GUN; break;
 		case 12: story += CONST_POISONED_THE_GUARD_WITH_DRUGS_SMUGGLED_INTO_THE_PRISON_BY_THE;
-			story += (LCSrandom(2) ? CONST_CRIPS : CONST_newsB942); break;
+			story += (LCSrandom(2) ? CONST_CRIPS : CONST_BLOODS_CAPITALIZED); break;
 		case 13: story += CONST_TAKEN_THE_GUARD_TO_THE_EXECUTION_CHAMBER_AND_FINISHED;
-			story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_newsB943);
+			story += (ggn == GENDER_FEMALE ? CONST_HER : CONST_HIM_LOWERCASE);
 			story += CONST_OFF; break;
 		case 14: story += CONST_SACRIFICED_THE_GUARD_ON_A_MAKESHIFT;
-			story += (LCSrandom(2) ? CONST_SATANIC : CONST_newsB944);
+			story += (LCSrandom(2) ? CONST_SATANIC : CONST_NEO_PAGAN_LOWERCASE);
 			story += CONST_ALTAR; break;
 		}
 		return story;
@@ -2511,7 +2511,7 @@ void MusicClass::play(int _musicmode)
 			+ singleSpace\
 			+ gstr2\
 			+ CONST_AND_BARRICADED\
-			+ (dgn == GENDER_FEMALE ? CONST_HERSELF : CONST_newsB941)\
+			+ (dgn == GENDER_FEMALE ? CONST_HERSELF : CONST_HIMSELF_LOWERCASE)\
 			+ CONST_WITH_THE_GUARD_IN_A_PRISON_TOWER\
 			+ CONST_AUTHORITIES_LOCKED_DOWN_THE_PRISON_AND\
 			+ CONST_ATTEMPTED_TO_NEGOTIATE_BY_PHONE_FOR\

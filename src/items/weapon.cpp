@@ -30,7 +30,7 @@ string Weapon::showXml() const
 string Weapon::equip_title() const
 {
 	string et = get_name();
-	if (ammo_ > 0) et += CONST_weapon003 + tostring(ammo_) + CONST_weaponB004;
+	if (ammo_ > 0) et += CONST_SPACE_OPEN_PARENTHESIS + tostring(ammo_) + CONST_CLOSE_PARENTHESIS;
 	return et;
 }
 bool Weapon::reload(Clip& clip)

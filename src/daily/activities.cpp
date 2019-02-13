@@ -73,20 +73,20 @@ map< Activity, CreatureSkill> trainingActivity;
 
 vector<file_and_text_collection> activities_text_file_collection = {
 	/*activities.cpp*/
-	customText(&quality_0, activities + CONST_activities009),
-	customText(&quality_20, activities + CONST_activities010),
-	customText(&quality_35, activities + CONST_activities011),
-	customText(&quality_50, activities + CONST_activities012),
-	customText(&words_meaning_hacked, activities + CONST_activities013),
-	customText(&enemy_website, activities + CONST_activities014),
-	customText(&win_hand_to_hand, activities + CONST_activities015),
-	customText(&lose_hand_to_hand, activities + CONST_activities016),
-	customText(&car_wont_start, activities + CONST_activities017),
-	customText(&gets_nervous, activities + CONST_activities018),
-	customText(&cant_hotwire_car, activities + CONST_activities019),
-	customText(&almost_hotwire_car, activities + CONST_activities020),
-	customText(&cant_find_keys, activities + CONST_activities021),
-	customText(&cant_find_keys_no_free_speech, activities + CONST_activities022),
+	customText(&quality_0, ACTIVITIES_FOLDER + CONST_activities009),
+	customText(&quality_20, ACTIVITIES_FOLDER + CONST_activities010),
+	customText(&quality_35, ACTIVITIES_FOLDER + CONST_activities011),
+	customText(&quality_50, ACTIVITIES_FOLDER + CONST_activities012),
+	customText(&words_meaning_hacked, ACTIVITIES_FOLDER + CONST_activities013),
+	customText(&enemy_website, ACTIVITIES_FOLDER + CONST_activities014),
+	customText(&win_hand_to_hand, ACTIVITIES_FOLDER + CONST_activities015),
+	customText(&lose_hand_to_hand, ACTIVITIES_FOLDER + CONST_activities016),
+	customText(&car_wont_start, ACTIVITIES_FOLDER + CONST_activities017),
+	customText(&gets_nervous, ACTIVITIES_FOLDER + CONST_activities018),
+	customText(&cant_hotwire_car, ACTIVITIES_FOLDER + CONST_activities019),
+	customText(&almost_hotwire_car, ACTIVITIES_FOLDER + CONST_activities020),
+	customText(&cant_find_keys, ACTIVITIES_FOLDER + CONST_activities021),
+	customText(&cant_find_keys_no_free_speech, ACTIVITIES_FOLDER + CONST_activities022),
 };
 void adjustblogpower(int &power)
 {

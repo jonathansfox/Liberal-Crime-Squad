@@ -968,8 +968,8 @@ Activity getDefaultActivityIllegalFundraising(DeprecatedCreature *cr) {
 vector<string> bulkActivityString;
 
 vector<file_and_text_collection> activate_text_file_collection = {
-	customText(&bulkActivityString, mostlyendings + BULK_ACTIVITY_STRING_TXT),
-	customText(&standard_activities_and_data, mostlyendings + STANDARD_ACTIVITIES_AND_DATA_TXT),
+	customText(&bulkActivityString, MOSTLY_ENDINGS_FOLDER + BULK_ACTIVITY_STRING_TXT),
+	customText(&standard_activities_and_data, MOSTLY_ENDINGS_FOLDER + STANDARD_ACTIVITIES_AND_DATA_TXT),
 };
 void activatebulk()
 {

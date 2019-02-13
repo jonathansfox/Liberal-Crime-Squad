@@ -17,7 +17,7 @@ int readConfigFile(const std::string& filename)
 {
    std::string command, value;
    configurable* object=0;
-   std::ifstream* file = openFile(filename, ios::in);
+   std::ifstream* file = openFile(filename, std::ios::in);
    if(!file->is_open())
    {
       delete file;
@@ -111,7 +111,7 @@ void readMapCBTiles(int x, int y, int z, int i)
 bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,int,int,int))
 {
    // open the file in question
-   std::ifstream* file = openFile(filename, ios::in);
+   std::ifstream* file = openFile(filename, std::ios::in);
    // abort if the file couldn't be opened
    if(!file->is_open())
    {

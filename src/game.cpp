@@ -1,4 +1,3 @@
-
 #define	GAME_CPP
 #include "includes.h"
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -174,76 +173,7 @@ void mainFive() {
 			lawList[LAW_TORTURE] = -1;
 		}
 }
-// IsaacG Unfortunately, changing the file encoding to oem 437 makes this function and its comments look like gibberish
-// It was constructed through painful trial and error to accomodate characters that are represented in source files differently than they are interpretted by pdcurses
-// 
-string fixLineSpecialCharacter(char * toFix) {
-	string str = BLANK_STRING;
-	for (int i = 0; i < len(toFix); i++) {
-		bool special = (static_cast<int> (toFix[i])) == -61;
-		if (special) {
-			i++;
-			char c;
-			switch (toFix[i]) {
-			case -87: // 'Θ'
-				c = (char)0x82;
-				break;
-			case -74: // '÷'
-				c = (char)0x94;
-				break;
-			case -95: // 'ß'
-				c = (char)0xa0;
-				break;
-			case -83: // 'φ'
-				c = (char)0xa1;
-				break;
-			case -77: // '≤'
-				c = (char)0xa2;
-				break;
-			case -70: // '·'
-				c = (char)0xa3;
-				break;
-			case (int) '╝':
-				// 'ⁿ'
-				c = (char)0x81;
-				break;
-			case (int) '½':
-				// 'δ'
-				c = (char)0x89;
-				break;
-			case (int) '▓':
-				// '≥'
-				c = (char)0x95;
-				break;
-			case (int) 'ó':
-				// 'Γ'
-				c = (char)0x83;
-				break;
-			case (int) '┤':
-				// '⌠'
-				c = (char)0x93;
-				break;
-				/*
-				case (int) '┬':
-				// 'ó'
-				// This letter does not use the escape character '-61'
-				// meaning it would need its own switch statement
-				// in addition to the hassle of determining what escape character is used
-				c = (char) 0x9b;
-				break;
-				*/
-			default:
-				c = toFix[i];
-				break;
-			}
-			str += c;
-		}
-		else {
-			str += toFix[i];
-		}
-	}
-	return str;
-}
+
 bool isThisNotComment(char* currentLine) {
 	return currentLine[0] != '#' && currentLine[1] != '#';
 }
@@ -254,10 +184,10 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
-	ifstream txtFile;
+	std::ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		cout << failedToLoad + fileName + exclamationPoint << endl;
+		std::cout << failedToLoad + fileName + exclamationPoint << std::endl;
 		pressAnyKey();
 	}
 	else {
@@ -272,10 +202,9 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 					// whether the line is not a comment, and is also the line whose contents are optional
 					// Testing until obtain proper data from file
 					txtFile.getline(currentLine, line_length);
-					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 					line.push_back(currentLine);
 					if (!isThisNotComment(currentLine)) {
-						cout << CONST_COMMENT_FOUND << endl << currentLine << endl;
+						std::cout << CONST_COMMENT_FOUND << std::endl << currentLine << std::endl;
 						pressAnyKey();
 					}
 				}
@@ -295,20 +224,19 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	types.clear();
 	const int line_length = 2048;
 	bool success = false;
-	ifstream txtFile;
+	std::ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		cout << failedToLoad + fileName + exclamationPoint << endl;
+		std::cout << failedToLoad + fileName + exclamationPoint << std::endl;
 		pressAnyKey();
 	}
 	else {
-		cout << endl;
+		std::cout << std::endl;
 		while (!txtFile.eof()) {
 			char currentLine[line_length];
 			txtFile.getline(currentLine, line_length);
 			const bool notComment = (currentLine[0] && currentLine[0] != '#');
 			if (notComment) {
-				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 				types.push_back(currentLine);
 			}
 		}
@@ -387,7 +315,7 @@ bool initialize_txt() {
 }
 void initialize_debug_defines() {
 	string fileName = CONST_DEBUG_DEFINES_TXT;
-	ifstream txtFile;
+	std::ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	//int debug_codes = 0;
 	if (txtFile.fail()) {

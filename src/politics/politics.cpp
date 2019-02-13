@@ -30,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;
  vector<file_and_text_collection> politics_text_file_collection = {
-	 customText(&corporateSuffix, mostlyendings + corporateSuffixtxt),
+	 customText(&corporateSuffix, MOSTLY_ENDINGS_FOLDER + corporateSuffixtxt),
  };
  
  /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
@@ -765,10 +765,10 @@ vector<string> corporateSuffix;
 				 case 5: propnum = 13 * (17 - LCSrandom(2) * 6)*(2 - LCSrandom(2) * 1); break;
 				 case 6: propnum = 17 * (17 - LCSrandom(2) * 6)*(2 - LCSrandom(2) * 1); break;
 				 }
-			 } while (find(propnums, propnums + p, propnum) != propnums + p); // redo loop if we already used this proposition number, end loop if it's unused
+			 } while (std::find(propnums, propnums + p, propnum) != propnums + p); // redo loop if we already used this proposition number, end loop if it's unused
 			 propnums[p] = propnum; // put the proposition number we chose into the array, so we don't choose it again for a later proposition
 		 }
-		 sort(propnums, propnums + pnum);
+		 std::sort(propnums, propnums + pnum);
 	 }
 	 for (int p = 0; p < pnum; p++)
 	 {

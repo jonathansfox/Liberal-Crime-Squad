@@ -736,7 +736,7 @@ int DeprecatedCreature::skill_roll(int skill) const
 	{
 		// most attributes get halved when applied to skills, capped by relative skill level...
 	default:
-		adjusted_attribute_value = min(attribute_value / 2, skill_value + 3);
+		adjusted_attribute_value = std::min(attribute_value / 2, skill_value + 3);
 		break;
 		// ...and some may be so specialized that they ignore attributes, instead counting skill double
 	case SKILL_SECURITY:
@@ -872,7 +872,7 @@ void DeprecatedCreature::train(int trainedskill, int experience, int upto)
 		// This is the only instance in the entire solution to use skill_cap(.., false)
 		// thereby replaced with an inline copy paste get_attribute(.., false)
 		// Skill gain scaled by ability in the area
-		skill_experience[trainedskill] += max(1, static_cast<int>(experience * get_attribute(get_associated_attribute((CreatureSkill)trainedskill), false) / 6.0));
+		skill_experience[trainedskill] += std::max(1, static_cast<int>(experience * get_attribute(get_associated_attribute((CreatureSkill)trainedskill), false) / 6.0));
 		int abovenextlevel;
 		// only allow gaining experience on the new level if it doesn't put us over a level limit
 		if (skills[trainedskill] >= (upto - 1) ||
@@ -884,7 +884,7 @@ void DeprecatedCreature::train(int trainedskill, int experience, int upto)
 		{
 			abovenextlevel = 50 + 5 * (1 + skills[trainedskill]);
 		} // enough skill points to get halfway through the next skill level
-		skill_experience[trainedskill] = min(skill_experience[trainedskill], 100 + 10 * skills[trainedskill] + abovenextlevel);
+		skill_experience[trainedskill] = std::min(skill_experience[trainedskill], 100 + 10 * skills[trainedskill] + abovenextlevel);
 	}
 }
 void DeprecatedCreature::skill_up()
@@ -1339,7 +1339,7 @@ int get_XML_value(const std::string& inputXml) {
 	{
 		std::string tag = xml.GetTagName();
 		if (tag == tag_value)
-			value = min(atoi(xml.GetData().data()), MAXATTRIBUTE);
+			value = std::min(atoi(xml.GetData().data()), MAXATTRIBUTE);
 	}
 	return value;
 }

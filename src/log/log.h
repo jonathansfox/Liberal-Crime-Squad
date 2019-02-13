@@ -88,7 +88,7 @@ private:
 	//The file itself.
 	//fstream for easier use in case I (or somebody else) wants to add a "read log" feature.
 	//I would like that; so that one could check events and the like ingame.
-	fstream file;
+	std::fstream file;
 	//Controls the automatic addition of newlines.
 	//0 = no newlines.
 	//1 = newline.

@@ -61,7 +61,7 @@ void setconfigoption(std::string name, std::string value)
 void loadinitfile()
 {
 	std::fstream file;
-	if (LCSOpenFileCPP(CONST_INIT_TXT, ios::in, LCSIO_PRE_HOME, file))
+	if (LCSOpenFileCPP(CONST_INIT_TXT, std::ios::in, LCSIO_PRE_HOME, file))
 	{
 		std::string str;
 		int posequal;

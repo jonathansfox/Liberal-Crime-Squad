@@ -258,7 +258,7 @@ void assemblesquad(Deprecatedsquadst *cursquad)
 					int oldSquadID = temppool[p]->squadid;
 					//create a temp squad containing just this liberal
 					activesquad = new Deprecatedsquadst;
-					strcpy(activesquad->name, CONST_reviewmode031.c_str());
+					strcpy(activesquad->name, CONST_TEMPORARY_SQUAD_CAMELCAPS.c_str());
 					activesquad->id = cursquadid;
 					activesquad->squad[0] = temppool[p];
 					temppool[p]->squadid = activesquad->id;
@@ -869,7 +869,7 @@ bool iterateReview(int &page) {
 					if (multipleact)
 					{
 						activityTypeID = ACTIVITYNUM;
-						str = CONST_reviewmode120;
+						str = CONST_ACTING_INDIVIDUALLY_CAMELCAPS;
 					}
 				}
 				printReviewActivity(activityTypeID, iteration, str);

@@ -104,7 +104,7 @@ UnlockAttempt unlock(short type)
 			case UNLOCK_CELL:addstrAlt(CONST_UNLOCKS_THE_CELL, gamelog); break;
 			case UNLOCK_VAULT:addstrAlt(CONST_CRACKS_THE_COMBO_LOCKS, gamelog); break;
 			}
-			addstrAlt(CONST_miscactions028, gamelog);
+			addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 			gamelog.newline();
 			for (int j = 0; j < 6; j++) //If people witness a successful unlock, they learn a little bit.
 			{
@@ -262,7 +262,7 @@ UnlockAttempt bash()
 				addstrAlt(CONST_RAMS_OPEN_THE_DOOR, gamelog);
 			else addstrAlt(CONST_KICKS_IN_THE_DOOR, gamelog);
 		
-		addstrAlt(CONST_miscactions028, gamelog);
+		addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		int timer = 5;
@@ -277,7 +277,7 @@ UnlockAttempt bash()
 		{
 			setSiteAlarmOne();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(17, 1, CONST_miscactions020, gamelog);
+			mvaddstrAlt(17, 1, CONST_ALARMS_GO_OFF_EXCLAMATION, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 		}
@@ -293,7 +293,7 @@ UnlockAttempt bash()
 				addstrAlt(CONST_RAMS_INTO_THE_DOOR, gamelog);
 			else addstrAlt(CONST_KICKS_THE_DOOR, gamelog);
 		
-		addstrAlt(CONST_miscactions028, gamelog);
+		addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 		gamelog.newline();
 		pressAnyKey();
 		if (sitealarmtimer < 0) sitealarmtimer = 25;
@@ -348,7 +348,7 @@ UnlockAttempt hack(short type)
 			}
 			if (blind)
 				addstrAlt(CONST_DESPITE_BEING_BLIND, gamelog);
-			addstrAlt(CONST_miscactions028, gamelog);
+			addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			return UNLOCKED;

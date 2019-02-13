@@ -31,7 +31,7 @@ void printRandomCableNewsName() {
 
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	string str = CONST_TONIGHT_ON_A_CABLE_NEWS_CHANNEL + pickrandom(cable_name) + singleSpace + pickrandom(cable_name_2) + CONST_news720;
+	string str = CONST_TONIGHT_ON_A_CABLE_NEWS_CHANNEL + pickrandom(cable_name) + singleSpace + pickrandom(cable_name_2) + CONST_SPACE_WITH_SPACE;
 	string bname;
 	bname = generate_name(GENDER_WHITEMALEPATRIARCH);
 	str += bname;
@@ -908,9 +908,9 @@ string storyPlaceName(string &placename, const char location_type, const bool li
 			story += CONST_IN_THE;
 		break;
 	case SITE_BUSINESS_PAWNSHOP:
-		if (placename.find(CONST_news121) != string::npos)
+		if (placename.find(CONST_APOSTROPHE_S) != string::npos)
 		{
-			story += CONST_news126;
+			story += CONST_AT_SPACE;
 			if (liberalguardian && !ccs)story += CONST_THE_NOTORIOUS;
 		}
 		else
@@ -923,7 +923,7 @@ string storyPlaceName(string &placename, const char location_type, const bool li
 	case SITE_BUSINESS_CARDEALERSHIP:
 	case SITE_BUSINESS_DEPTSTORE:
 	case SITE_OUTDOOR_PUBLICPARK:
-		story += CONST_news126;
+		story += CONST_AT_SPACE;
 		if (liberalguardian && !ccs)story += CONST_THE_NOTORIOUS;
 		break;
 	default:
@@ -986,7 +986,7 @@ string squadstory_text_location(const Deprecatednewsstoryst ns, const bool liber
 			story += CONST_RICHARD_DAWKINS_FOOD_BANK; break;
 		default:
 			story += placename;
-			story += CONST_news485; break;
+			story += CONST_DOT_SPACE; break;
 		}
 	}
 	else story += placename;
@@ -1028,11 +1028,11 @@ string squadstory_text_location(const Deprecatednewsstoryst ns, const bool liber
 		case SITE_BUSINESS_BANK:
 			story += CONST_THE_VERY_SYMBOL_OF_ECONOMIC_INEQUALITY; break;
 		default:
-			story += CONST_news485; break;
+			story += CONST_DOT_SPACE; break;
 		}
 	}
 	else if (!ccs)
-		story += CONST_news485;
+		story += CONST_DOT_SPACE;
 
 	return story;
 }
@@ -1114,7 +1114,7 @@ string squadstory_text_opening(const Deprecatednewsstoryst ns, bool liberalguard
 			{
 				story += CONST_A_GROUP_OF_M16_WIELDING_VIGILANTES_CALLING_THEMSELVES_THE_CONSERVATIVE_CRIME_SQUAD;
 				story += CONST_BURST_BRIEFLY_ONTO_THE_SCENE_OF_POLITICAL_ACTIVISM_YESTERDAY_ACCORDING;
-				story += CONST_news209;
+				story += CONST_TO_A_SPOKESPERSON_FROM_THE_POLICE_DEPARTMENT_SPACE;
 				story += AMPERSAND_R;
 			}
 			else
@@ -1152,14 +1152,14 @@ string squadstory_text_opening(const Deprecatednewsstoryst ns, bool liberalguard
 			{
 				story += CONST_A_GROUP_CALLING_ITSELF_THE_LIBERAL_CRIME_SQUAD;
 				story += CONST_BURST_BRIEFLY_ONTO_THE_SCENE_OF_POLITICAL_ACTIVISM_YESTERDAY_ACCORDING;
-				story += CONST_news209;
+				story += CONST_TO_A_SPOKESPERSON_FROM_THE_POLICE_DEPARTMENT_SPACE;
 				story += AMPERSAND_R;
 			}
 			else
 			{
 				story += CONST_A_GROUP_OF_THUGS_CALLING_ITSELF_THE_LIBERAL_CRIME_SQUAD;
 				story += CONST_WENT_ON_A_SUICIDAL_RAMPAGE_YESTERDAY_ACCORDING;
-				story += CONST_news209;
+				story += CONST_TO_A_SPOKESPERSON_FROM_THE_POLICE_DEPARTMENT_SPACE;
 				story += AMPERSAND_R;
 			}
 		}
@@ -1526,7 +1526,7 @@ void loadgraphics()
 {
 	int picnum, dimx, dimy;
 	FILE *h;
-	if ((h = LCSOpenFile(CONST_LARGECAP_CPC.c_str(), CONST_newsB947.c_str(), LCSIO_PRE_ART)) != NULL)
+	if ((h = LCSOpenFile(CONST_LARGECAP_CPC.c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_ART)) != NULL)
 	{
 		fread(&picnum, sizeof(int), 1, h);
 		fread(&dimx, sizeof(int), 1, h);
@@ -1537,7 +1537,7 @@ void loadgraphics()
 					fread(&bigletters[p][x][y][0], sizeof(char), 4, h);
 		LCSCloseFile(h);
 	}
-	if ((h = LCSOpenFile(CONST_NEWSTOPS_CPC.c_str(), CONST_newsB947.c_str(), LCSIO_PRE_ART)) != NULL)
+	if ((h = LCSOpenFile(CONST_NEWSTOPS_CPC.c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_ART)) != NULL)
 	{
 		fread(&picnum, sizeof(int), 1, h);
 		fread(&dimx, sizeof(int), 1, h);
@@ -1548,7 +1548,7 @@ void loadgraphics()
 					fread(&newstops[p][x][y][0], sizeof(char), 4, h);
 		LCSCloseFile(h);
 	}
-	if ((h = LCSOpenFile(CONST_NEWSPIC_CPC.c_str(), CONST_newsB947.c_str(), LCSIO_PRE_ART)) != NULL)
+	if ((h = LCSOpenFile(CONST_NEWSPIC_CPC.c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_ART)) != NULL)
 	{
 		fread(&picnum, sizeof(int), 1, h);
 		fread(&dimx, sizeof(int), 1, h);
@@ -1713,7 +1713,7 @@ string wantedOrGraffitiArrest(const Deprecatednewsstoryst ns) {
 	if (crime[CRIME_KILLEDSOMEBODY] > 1)
 	{
 		if (crime[CRIME_KILLEDSOMEBODY] == 2)
-			story += CONST_news849;
+			story += CONST_TWO_UPPERCASE;
 		else
 			story += CONST_SEVERAL;
 		story += CONST_POLICE_OFFICERS_WERE;
@@ -1832,7 +1832,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_ARSON])
 	{
-		story += liberalguardian || !ccs ? CONST_SET_FIRE_TO_CONSERVATIVE_PROPERTY : CONST_news916;
+		story += liberalguardian || !ccs ? CONST_SET_FIRE_TO_CONSERVATIVE_PROPERTY : CONST_ARSON_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1842,7 +1842,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	{
 		if (crime[CRIME_KILLEDSOMEBODY])
 		{
-			story += CONST_news918;
+			story += CONST_MURDER_LOWERCASE;
 			if (typesum >= 3)story += COMMA_SPACE;
 			else if (typesum == 2)story += AND;
 			typesum--;
@@ -1875,7 +1875,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_STOLEGROUND] || crime[CRIME_BANKTELLERROBBERY])
 	{
-		story += liberalguardian || !ccs ? CONST_LIBERATED_ENEMY_RESOURCES : CONST_news923;
+		story += liberalguardian || !ccs ? CONST_LIBERATED_ENEMY_RESOURCES : CONST_THEFT_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1899,7 +1899,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_TAGGING])
 	{
-		story += liberalguardian || !ccs ? CONST_MARKED_THE_SITE_FOR_LIBERATION : CONST_news929;
+		story += liberalguardian || !ccs ? CONST_MARKED_THE_SITE_FOR_LIBERATION : CONST_VANDALISM_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1907,7 +1907,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_BROKEDOWNDOOR])
 	{
-		story += liberalguardian || !ccs ? CONST_BROKE_DOWN_DOORS : CONST_news931;
+		story += liberalguardian || !ccs ? CONST_BROKE_DOWN_DOORS : CONST_BREAKING_AND_ENTERING_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -2113,7 +2113,7 @@ string generatefiller(int amount) {
 	for (int par = 0; amount > 0; amount--)
 	{
 		par++;
-		for (int i = 0; i < LCSrandom(10) + 3; i++)story += CONST_news222;
+		for (int i = 0; i < LCSrandom(10) + 3; i++)story += CONST_TILDA;
 		if (amount > 1)story += singleSpace;
 		if (par >= 50 && !LCSrandom(5) && amount > 20)
 		{
@@ -2221,7 +2221,7 @@ string displayMassacreStory(const Deprecatednewsstoryst ns, const bool liberalgu
 		story += siegeMassacreStory[ns.crime[0]][liberalguardian];
 		break;
 	}
-	story += CONST_newsB955;
+	story += CONST_DOT_QUOTATION_MARK;
 	story += ampersandR;
 	story += generatefiller(200);
 	return story;
@@ -2355,7 +2355,7 @@ void displaystory(const Deprecatednewsstoryst ns, const bool liberalguardian, in
 				case CREATURE_SCIENTIST_EMINENT:
 					displaycenterednewsfont(CONST_SCIENTIST, 5); break;
 				case CREATURE_JUDGE_CONSERVATIVE:
-					displaycenterednewsfont(CONST_news1013, 5); break;
+					displaycenterednewsfont(CONST_JUDGE_CAPS, 5); break;
 				case CREATURE_COP:
 				case CREATURE_GANGUNIT:
 				case CREATURE_DEATHSQUAD:

@@ -981,6 +981,25 @@ The remaining usage of cursesAlternative within news.cpp are... complicated.  Th
 Next target: newgame.cpp
 
 Gave somewhat more useful names to various constant strings.
-Found out why Java wasn't parsing the text properly.  The charset used by pdcurses is "IBM437", and when attempting to parse text with the default charset, java.io.Scanner throws an exception when it comes across an illegal character.  Setting the charset to "IBM437" allows Java to interpret the text data from pdcurses without issue.  Of the 6000 or so strings, about 120 still have previous default names.
+Found out why Java wasn't parsing the text properly.  The charset used by pdcurses is "IBM437", and when attempting to parse text with the default charset, java.io.Scanner throws an exception when it comes across an illegal character.  Setting the charset to "IBM437" allows Java to interpret the text data from pdcurses without issue.  Of the 6000 or so strings, about 120 still have previous default names.  Maybe 400.
 
 Finally, I know how to get Java to actually read the text data the same way pdcurses does.  71 files altered.
+
+4.12.34
+
+Time for Bugfixin'
+(approx 461 const strings still named const_filename_000 via regex [a-zA-Z]\d\d\d within includes.h)
+
+Note: CppDepend has identified over 1200 instances of fields with too long a name.  Naturally these are the auto-generated const string field names.  Not a big deal, but there are a lot of them.
+
+Replaced 
+using namespace std
+ with 
+using std::string;
+using std::vector;
+using std::map;
+etc.
+I just learned how to do this.
+That said, current setup only had a single instance of "using namespace std", so this was not a large change.
+But it broke the hell out of everything, so I switched it back.
+Broke the specialCharacter reading function, so accented characters are not all that usable for the time being.

@@ -159,7 +159,7 @@ std::string getmonth(int month, bool shortname)
 vector<file_and_text_collection> get_names_text_file_collection = {
 	/*getnames.cpp*/
 	customText(&city_names, names + CONST_CITY_NAMES_TXT),
-	customText(&getMonth, mostlyendings + CONST_GETMONTH_TXT),
+	customText(&getMonth, MOSTLY_ENDINGS_FOLDER + CONST_GETMONTH_TXT),
 };
 map<short, string> getAlignString;
 //string moderateLC;

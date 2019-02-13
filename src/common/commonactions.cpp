@@ -311,7 +311,7 @@ void sortliberals(std::vector<DeprecatedCreature *>& liberals, short sortingchoi
 map<short, string> trainingActivitySorting;
 vector<string> methodOfSorting;
 vector<file_and_text_collection> common_text_file_collection = {
-	customText(&methodOfSorting, mostlyendings + METHOD_OF_SORTING_TXT),
+	customText(&methodOfSorting, MOSTLY_ENDINGS_FOLDER + METHOD_OF_SORTING_TXT),
 };
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting)

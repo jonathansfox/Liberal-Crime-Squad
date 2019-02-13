@@ -189,23 +189,23 @@ void publicOpinionNaturalMoves(int(&issuebalance)[VIEWNUM - 5],
 void print_labels_on_bottom_of_screen() {
 
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(23, 0, CONST_monthly005);
+	mvaddstrAlt(23, 0, CONST_ELITE_LIBERAL_UPPERCASE_SPACE);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
+	addstrAlt(CONST_DASH_SPACE_SPACE);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly007);
+	addstrAlt(CONST_LIBERAL_UPPERCASE_SPACE);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
+	addstrAlt(CONST_DASH_SPACE_SPACE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly009);
+	addstrAlt(CONST_MODERATE_SPACE);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
+	addstrAlt(CONST_DASH_SPACE_SPACE);
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly011);
+	addstrAlt(CONST_CONSERVATIVE_UPPERCASE_SPACE);
 	set_color_easy(WHITE_ON_BLACK);
-	addstrAlt(CONST_monthly012);
+	addstrAlt(CONST_DASH_SPACE_SPACE);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_monthly013);
+	addstrAlt(CONST_ARCH_CONSERVATIVE_UPPERCASE);
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THESE_POLL_NUMBERS);
 }
@@ -229,7 +229,7 @@ void printIntelligenceReport(char &clearformess) {
 		{
 			set_alignment_color(pip, true);
 			if (pip == 2) mvaddcharAlt(y, x + 22, '\x11');
-			addstrAlt(CONST_monthly004);
+			addstrAlt(CONST_THREE_CHARACTER_LINE);
 			if (pip == -2) addcharAlt('\x10');
 		}
 		if (v >= 0) pip = 14 - (attitude[v] * 14) / 100;

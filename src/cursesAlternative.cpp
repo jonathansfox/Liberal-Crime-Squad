@@ -194,7 +194,120 @@ void printfunds(int y, int offsetx, const char* prefix, long funds);
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../locations/locationsPool.h"
+// BASEMODE
 
+const string PLANNING_HEADER = "„Ÿ„Ÿ„Ÿ PLANNING „Ÿ„Ÿ„Ÿ";
+const string ACTIVISM_HEADER = "„Ÿ„Ÿ„Ÿ ACTIVISM „Ÿ„Ÿ„Ÿ";
+const string COLONS_NO_DOTS = ":::::::::";
+const string COLONS_AND_DOTS = ":.:.:.:.:";
+const string NO_FOOD = " (No Food)";
+const string UNDER_SIEGE = "Under Siege";
+const string UNDER_ATTACK = "Under Attack";
+const string I_INVEST_IN_LOCATION = "I - Invest in this location";
+
+const string tag_Sta = "Sta, ";
+const string tag_Libp = "Lib+, ";
+const string tag_Lib = "Lib, ";
+const string tag_Mod = "Mod, ";
+const string tag_Cons = "Cons, ";
+const string tag_Consp = "Cons+";
+//const string tag_value = "value";
+//const string tag_attribute = "attribute";
+//const string tag_skill = "skill";
+const string HOUSE_COLON = "House: ";
+const string SENATE_COLON = "Senate: ";
+const string SUPREME_COURT_COLON = "Supreme Court: ";
+const string MID_LENGTH_LINE = "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ";
+const string PUBLIC_MOOD = "Public Mood";
+const string LIBERTARIAN = "Libertarian";
+const string STALINIST = "Stalinist";
+const string CONSERVATIVE = "Conservative";
+const string LIBERAL = "Liberal";
+
+bool stalinview(short view, bool islaw);
+
+void printStalinMood() {
+	extern short attitude[VIEWNUM];
+
+	signed char align;
+	int stalin = 0; // the Stalinist mood position from 1 to 78 (left=Stalinist, right=Libertarian)
+	for (int v = 0; v < VIEWNUM - 3; v++)
+	{
+		stalin += stalinview(v, false) ? attitude[v] : 100 - attitude[v];
+	}
+	stalin = 78 - (stalin * 77) / ((VIEWNUM - 3) * 100); // very accurate Stalinist mood positioning!
+	if (stalin >= 64) align = ALIGN_ELITELIBERAL;
+	else if (stalin >= 48) align = ALIGN_LIBERAL;
+	else if (stalin >= 32) align = ALIGN_MODERATE;
+	else if (stalin >= 16) align = ALIGN_CONSERVATIVE;
+	else align = ALIGN_ARCHCONSERVATIVE;
+	set_alignment_color(align, true);
+	mvaddstrAlt(17, 33, PUBLIC_MOOD);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 1, STALINIST);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(17, 68, LIBERTARIAN);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 0, "\x11„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ");
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 16, MID_LENGTH_LINE);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 32, MID_LENGTH_LINE);
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 48, MID_LENGTH_LINE);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(18, 64, "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ\x10");
+	set_alignment_color(align, true);
+	mvaddcharAlt(18, stalin, 'O');
+}
+void printMood() {
+	extern short attitude[VIEWNUM];
+	extern bool stalinmode;
+	if (stalinmode)
+	{
+		printStalinMood();
+	}
+
+
+	int mood = 0; // the mood position from 1 to 78 (left=left-wing, right=right-wing)
+	for (int v = 0; v < VIEWNUM - 3; v++) { mood += attitude[v]; }
+	mood = 78 - (mood * 77) / ((VIEWNUM - 3) * 100); // very accurate mood positioning!
+	signed char align;
+	if (mood >= 64) align = ALIGN_ARCHCONSERVATIVE;
+	else if (mood >= 48) align = ALIGN_CONSERVATIVE;
+	else if (mood >= 32) align = ALIGN_MODERATE;
+	else if (mood >= 16) align = ALIGN_LIBERAL;
+	else align = ALIGN_ELITELIBERAL;
+	set_alignment_color(align, true);
+
+	mvaddstrAlt(stalinmode ? 21 : 20, 33, PUBLIC_MOOD);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(21, 1, LIBERAL);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(21, 67, CONSERVATIVE);
+	set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 0, "\x11„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ");
+	set_color_easy(CYAN_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 16, MID_LENGTH_LINE);
+	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 32, MID_LENGTH_LINE);
+	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 48, MID_LENGTH_LINE);
+	set_color_easy(RED_ON_BLACK_BRIGHT);
+	mvaddstrAlt(22, 64, "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ\x10");
+	set_alignment_color(align, true);
+
+	mvaddcharAlt(22, mood, 'O');
+}
+
+
+
+
+
+
+
+
+//
 // NEWGAME
 const string error = "ERROR";
 const string whatIsYourName = "What is your name to the People?";
@@ -910,13 +1023,13 @@ const string CONST_THE_SQUAD_IS_FULL = "The squad is full.";
 const string CONST_ASSEMBLE_THE_SQUAD = "Assemble the squad!";
 const string CONST_GETSSICK_TXT = "getsSick.txt";
 const string CONST_METHODOFEXECUTION_TXT = "methodOfExecution.txt";
-const string mostlyendings = "mostlyendings\\";
+const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
 vector<string> methodOfExecution;
 vector<string> getsSick;
 vector<file_and_text_collection> reviewmode_text_file_collection = {
 	/*transferred via algorithm*/
-	customText(&methodOfExecution, mostlyendings + CONST_METHODOFEXECUTION_TXT),
-	customText(&getsSick, mostlyendings + CONST_GETSSICK_TXT),
+	customText(&methodOfExecution, MOSTLY_ENDINGS_FOLDER + CONST_METHODOFEXECUTION_TXT),
+	customText(&getsSick, MOSTLY_ENDINGS_FOLDER + CONST_GETSSICK_TXT),
 };
 map<short, string> reviewStrings;
 map<short, string> reviewStringsSecondLine;
@@ -2378,10 +2491,10 @@ vector<file_and_text_collection> siege_text_file_collection = {
 	customText(&newspaper_last_name, siege + CONST_NEWSPAPER_LAST_NAME_TXT),
 	customText(&insult_for_liberal, siege + CONST_INSULT_FOR_LIBERAL_TXT),
 	customText(&word_replacing_liberal, siege + CONST_WORD_REPLACING_LIBERAL_TXT),
-	customText(&nextSiege, mostlyendings + CONST_NEXTSIEGE_TXT),
-	customText(&nextSiegeAgain, mostlyendings + CONST_NEXTSIEGEAGAIN_TXT),
-	customText(&engageConservatives, mostlyendings + CONST_ENGAGECONSERVATIVES_TXT),
-	customText(&engageConservativesEscape, mostlyendings + CONST_ENGAGECONSERVATIVESESCAPE_TXT),
+	customText(&nextSiege, MOSTLY_ENDINGS_FOLDER + CONST_NEXTSIEGE_TXT),
+	customText(&nextSiegeAgain, MOSTLY_ENDINGS_FOLDER + CONST_NEXTSIEGEAGAIN_TXT),
+	customText(&engageConservatives, MOSTLY_ENDINGS_FOLDER + CONST_ENGAGECONSERVATIVES_TXT),
+	customText(&engageConservativesEscape, MOSTLY_ENDINGS_FOLDER + CONST_ENGAGECONSERVATIVESESCAPE_TXT),
 };
 
 map<Lawflags, string> youAreWantedForThis = {

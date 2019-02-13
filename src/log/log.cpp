@@ -45,12 +45,12 @@ bool Log::initialize(const string& _filename, bool overwrite_existing, int _newl
 	//to overwrite the file.
 	if (!overwrite_existing)
 	{  //Yes, it is to append, so open the file in append mode, with error checking.
-		if (!LCSOpenFileCPP(filename, ios::out | ios::app, LCSIO_PRE_HOME, file))
+		if (!LCSOpenFileCPP(filename, std::ios::out | std::ios::app, LCSIO_PRE_HOME, file))
 			return false; //Failed to open file.
 	}
 	else //overwrite_existing = true. Overwrite the file.
 	{  //Open the file. Use the trunc parameter to ensure the file is going to be overwritten.
-		if (!LCSOpenFileCPP(filename, ios::out | ios::trunc, LCSIO_PRE_HOME, file)) //With error checking.
+		if (!LCSOpenFileCPP(filename, std::ios::out | std::ios::trunc, LCSIO_PRE_HOME, file)) //With error checking.
 			return false; //Failed to open file.
 	}
 	//File's open and everything. Okay to proceed.

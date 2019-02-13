@@ -1,6 +1,8 @@
 
 #define	SAVELOAD_CPP
 #include "../includes.h"
+using std::ios;
+using std::endl;
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
 																					//
@@ -95,16 +97,16 @@ void writeVerbose(string filename) {
 	// NOVERBOSECOMMENTS only affect anything if VERBOSESAVEFILE is active
 	// Remove almost all automatically generated comments from verbose savefiles
 	string filepath = homedir;
-	int position = filename.find(CONST_saveload088);
+	int position = filename.find(SINGLE_DOT);
 	filename.erase(position);
 	filename += CONST_VERBOSE;
 	filepath.append(filename);
 	//FILE *h;
-	//h = LCSOpenFile((filename).c_str(), CONST_saveload090, LCSIO_PRE_HOME);
+	//h = LCSOpenFile((filename).c_str(), CONST_CPP_IO_WB, LCSIO_PRE_HOME);
 	//LCSCloseFile(h);
-	ofstream outClientFile(filename, ios::out);
+	std::ofstream outClientFile(filename, ios::out);
 	if (!outClientFile) {
-		cerr << CONST_VERBOSE_FILE_COULD_NOT_BE_OPENED << endl;
+		std::cerr << CONST_VERBOSE_FILE_COULD_NOT_BE_OPENED << endl;
 	}
 	else {
 		if (NOVERBOSECOMMENTS) {
@@ -133,9 +135,9 @@ void writeVerbose(string filename) {
 		outClientFile << CONST_FIELDSKILLRATE << endl;
 		outClientFile <<  fieldskillrate << endl;
 		*/
-		outClientFile << CONST_saveload021 << endl;
+		outClientFile << CONST_HASH_DAY << endl;
 		outClientFile << day << endl;
-		outClientFile << CONST_saveload022 << endl;
+		outClientFile << CONST_HASH_MONTH << endl;
 		outClientFile << month << endl;
 		outClientFile << CONST_YEAR << endl;
 		outClientFile << year << endl;
@@ -216,14 +218,14 @@ void writeVerbose(string filename) {
 		outClientFile << CONST_LAW_LIST << endl;
 		for (int i = 0; i < len(lawList); i++) {
 			if (!NOVERBOSECOMMENTS)
-				outClientFile << CONST_saveload081 + getLawString[i] << endl;
+				outClientFile << CONST_HASH_SPACE + getLawString[i] << endl;
 			outClientFile << lawList[i] << endl;
 		}
-		outClientFile << CONST_saveload058 << endl;
+		outClientFile << CONST_HASH_HOUSE << endl;
 		for (int i = 0; i < len(house); i++) {
 			outClientFile << house[i] << endl;
 		}
-		outClientFile << CONST_saveload059 << endl;
+		outClientFile << CONST_HASH_SENATE << endl;
 		for (int i = 0; i < len(senate); i++) {
 			outClientFile << senate[i] << endl;
 		}
@@ -281,13 +283,13 @@ void writeVerbose(string filename) {
 			outClientFile << pool[pl]->juice << endl;
 			for (int i = 0; i < ATTNUM; i++) {
 				//if (!NOVERBOSECOMMENTS)
-				//outClientFile << CONST_saveload081 + attribute_enum_to_string(i) << endl;
+				//outClientFile << CONST_HASH_SPACE + attribute_enum_to_string(i) << endl;
 				outClientFile << pool[pl]->get_true_attribute(i) << endl;
 			}
 			outClientFile << CONST_SKILLS << endl;
 			for (int i = 0; i < SKILLNUM; i++) {
 				if (!NOVERBOSECOMMENTS)
-					outClientFile << CONST_saveload081 + skillEnumToString[i] << endl;
+					outClientFile << CONST_HASH_SPACE + skillEnumToString[i] << endl;
 				outClientFile << pool[pl]->get_skill(i) << endl;
 			}
 			/*
@@ -310,7 +312,7 @@ void writeVerbose(string filename) {
 												  // 6
 												  // 20
 				if (!NOVERBOSECOMMENTS)
-					outClientFile << CONST_saveload081 << ((i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
+					outClientFile << CONST_HASH_SPACE << ((i == 6 || i == 20) ? getLawFlagStringFull[i][0] : getLawFlagString[i]) << endl;
 				outClientFile << pool[pl]->crimes_suspected[i] << endl;
 			}
 		}
@@ -527,14 +529,14 @@ void useData(vector<string> types) {
 }
 void readVerbose(string filename) {
 	string filepath = homedir;
-	int position = filename.find(CONST_saveload088);
+	int position = filename.find(SINGLE_DOT);
 	filename.erase(position);
 	filename += CONST_VERBOSE;
 	FILE *h;
-	h = LCSOpenFile((filename).c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
+	h = LCSOpenFile((filename).c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL) {
 		LCSCloseFile(h);
-		ifstream txtFile;
+		std::ifstream txtFile;
 		char currentLine[2048];
 		txtFile.open(filepath + filename);
 		vector<string> types;
@@ -551,7 +553,7 @@ void readVerbose(string filename) {
 }
 void deleteVerbose(const string& filename) {
 	string verboseFilename = filename;
-	int position = verboseFilename.find(CONST_saveload088);
+	int position = verboseFilename.find(SINGLE_DOT);
 	verboseFilename.erase(position);
 	verboseFilename += CONST_VERBOSE;
 	LCSDeleteFile(verboseFilename.c_str(), LCSIO_PRE_HOME);
@@ -564,7 +566,7 @@ void savegame(const string& filename)
 	bool dummy_b;
 	int dummy;
 	FILE *h;
-	h = LCSOpenFile(filename.c_str(), CONST_saveload090.c_str(), LCSIO_PRE_HOME);
+	h = LCSOpenFile(filename.c_str(), CONST_CPP_IO_WB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		int lversion = version;
@@ -775,7 +777,7 @@ char load(const string& filename)
 	int dummy;
 	long dummy_l;
 	FILE *h;
-	h = LCSOpenFile(filename.c_str(), CONST_saveload091.c_str(), LCSIO_PRE_HOME);
+	h = LCSOpenFile(filename.c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		fread(&loadversion, sizeof(int), 1, h);

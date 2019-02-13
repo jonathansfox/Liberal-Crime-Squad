@@ -29,7 +29,7 @@ the bottom of includes.h in the top src folder.
 
  vector<string> vehicleParagraph;
  vector<file_and_text_collection> baseactions_text_file_collection = {
-	 customText(&vehicleParagraph, mostlyendings + VEHICLE_PARAGRAPH_TXT),
+	 customText(&vehicleParagraph, MOSTLY_ENDINGS_FOLDER + VEHICLE_PARAGRAPH_TXT),
  };
 /* base - burn the flag */
 

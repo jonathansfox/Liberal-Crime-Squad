@@ -53,5 +53,5 @@ bool Money::sort_compare_special(Item* other) const
 }
 string Money::equip_title() const
 {
-	return CONST_money003 + tostring(amount_);
+	return CONST_DOLLAR_SIGN + tostring(amount_);
 }

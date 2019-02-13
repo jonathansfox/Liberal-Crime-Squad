@@ -91,7 +91,7 @@ map<short, string> buildThisSite;
 			 return;
 		 }
 	 // Backup: use a generic
-	 build_site(CONST_sitemap030);
+	 build_site(tag_GENERIC_UNSECURE);
  }
  void addSemiPermanentChanges(Location &loc) {
 	 /*******************************************************
