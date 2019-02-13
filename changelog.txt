@@ -1003,3 +1003,6 @@ I just learned how to do this.
 That said, current setup only had a single instance of "using namespace std", so this was not a large change.
 But it broke the hell out of everything, so I switched it back.
 Broke the specialCharacter reading function, so accented characters are not all that usable for the time being.
+
+Fixed "no encounter warnings" (the encounter vector is set to read-only, but the vector was created before the encounter would be, so it would basically always be empty.)
+Fixed "Release Oppressed" when there aren't any oppressed (turns out the isPrisoner(creature) code was backwards.  This probably fixes other unnoticed problems)

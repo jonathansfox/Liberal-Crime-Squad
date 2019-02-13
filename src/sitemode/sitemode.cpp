@@ -286,7 +286,7 @@ void pressedKeyN() {
 }
 
 
-void pressedKeyU(const int enemy) {
+void pressedKeyU(const bool enemy) {
 	
 		if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
 		{
@@ -417,7 +417,7 @@ int pressedKeyTWithMultipleLivingMembers() {
 	}
 	return sp;
 }
-int pressedKeyTAndMeantIt(const int enemy, const int forcetk, const int sp) {
+int pressedKeyTAndMeantIt(const bool enemy, const int forcetk, const int sp) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int tk = NO_VALID_MEMBERS;
 	if (forcetk == MULTIPLE_LIVING_MEMBERS)
@@ -471,7 +471,7 @@ int pressedKeyTAndMeantIt(const int enemy, const int forcetk, const int sp) {
 	else tk = forcetk;
 	return tk;
 }
-void pressedKeyT(const int enemy, int& encounter_timer) {
+void pressedKeyT(const bool enemy, int& encounter_timer) {
 	// forcesp is the index of the only living activesquad member, or is -2 if more than one living activesquad members exist
 	int forcesp = findLivingSquadMemberIndex();
 	// forcetk is the index of the only encounter creature with cantbluff != 1 (or isThereASiteAlarm()), or is -2 if more than one such creature exists
@@ -552,7 +552,7 @@ void pressedKeyF(int& encounter_timer) {
 	}
 
 }
-void pressedKeyR(const int freeable, const int enemy) {
+void pressedKeyR(const bool freeable, const bool enemy) {
 	const int hostages = countactivesquadhostages();
 	int partysize = activesquadSize();
 	const int libnum = CreaturePool::getInstance().countLiberals(getCurrentSite());
@@ -1035,7 +1035,7 @@ void getThatGroundLoot() {
 	}
 	pickupAndPrintNewLoot(newLootType, newWeaponType, newArmorType);
 }
-void pressedKeyG(const int enemy, int& encounter_timer) {
+void pressedKeyG(const bool enemy, int& encounter_timer) {
 	if ((isThereGroundLoot() || (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].flag&SITEBLOCK_LOOT)))
 	{
 		bool tookground = 0;
@@ -1572,7 +1572,6 @@ void encounterApartmentLandlord() {
 	}
 }
 void encounterOtherSpecial(const int olocx, const int olocy, const int olocz) {
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
 	bool squadmoved = (olocx != loc_coord.locx || olocy != loc_coord.locy || olocz != loc_coord.locz);
 	if (squadmoved &&
@@ -1583,6 +1582,8 @@ void encounterOtherSpecial(const int olocx, const int olocy, const int olocz) {
 		if (LCSrandom(3))return; // Rarely encounter someone in apartments.
 	}
 	prepareencounter(sitetype, LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()));
+	// Since vector<NameAndAlignment> encounter is read-only, this must be called AFTER the encounter has been prepared.
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	int numenc = 0;
 	// TODO This is bizarre
 	// the for loop breaks if it finds an empty encounter
@@ -1744,9 +1745,9 @@ int moveOrWaitThenCheckForExit(const int olocx, const int olocy, const int olocz
 
 	return 0;
 }
-void partyIsAliveOnSite(const int enemy,
+void partyIsAliveOnSite(const bool enemy,
 	const int talkers,
-	const int freeable) {
+	const bool freeable) {
 
 	const int hostages = countactivesquadhostages();
 	const int partysize = activesquadSize();
@@ -1806,8 +1807,7 @@ void partyIsAliveOnSite(const int enemy,
 		printEvade();
 	}
 	printEquipAndFight(enemy);
-	if (!LocationsPool::getInstance().isThereASiegeHere(getCurrentSite()))
-	{
+	if (!LocationsPool::getInstance().isThereASiegeHere(getCurrentSite())) {
 		if (freeable && (!enemy || !isThereASiteAlarm()))
 		{
 			printReleaseOppressed();
@@ -1845,7 +1845,7 @@ void playSiegeMusic() {
 	printSiegeName(LocationsPool::getInstance().getLocationNameWithGetnameMethod(getCurrentSite(), -1, true), loc_coord.locz);
 }
 
-void partyPerformsAction(const int c, const bool canMove, const int enemy, const int talkers, int &encounter_timer) {
+void partyPerformsAction(const int c, const bool canMove, const bool enemy, const int talkers, int &encounter_timer) {
 
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
@@ -1936,42 +1936,8 @@ void recounttalkers(int& talkers) {
 		if (encounter[e].exists)
 			if (encounter[e].enemy && (get_encounter_cantbluff_is_zero(e) || getEncounterAnimalGloss(e) == ANIMALGLOSS_ANIMAL)) talkers++;
 }
-void tallyupencounter(int& encsize, int& enemy, int& freeable, int& talkers, int& majorenemy) {
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 
-	encsize = 0;
-	freeable = 0;
-	enemy = 0;
-	majorenemy = 0;
-	talkers = 0;
-
-	for (int e = 0; e < ENCMAX; e++)
-	{
-		if (encounter[e].exists)
-		{
-			encsize++;
-			if (encounter[e].enemy)enemy++;
-			if (encounter[e].type == CREATURE_WORKER_SERVANT ||
-				encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
-				encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
-				(isPrisoner(encounter[e].name) == 0 && encounter[e].align == 1))freeable++;
-			else if ((!get_encounter_cantbluff_is_one(e) || isThereASiteAlarm()) && !(encounter[e].align == 1 && isThereASiteAlarm() && enemy))talkers++;
-			if (encounter[e].type == CREATURE_CORPORATE_CEO ||
-				encounter[e].type == CREATURE_RADIOPERSONALITY ||
-				encounter[e].type == CREATURE_NEWSANCHOR ||
-				encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
-				encounter[e].type == CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
-		}
-	}
-
-	//If in combat, do a second check
-	if (talkers&&isThereASiteAlarm() && enemy)
-	{
-		recounttalkers(talkers);
-	}
-}
-
-bool canactivesquadmove(int& c, const int enemy) {
+bool canactivesquadmove(int& c, const bool enemy) {
 
 	bool canMove = !enemy || !isThereASiteAlarm();
 	{
@@ -2057,11 +2023,51 @@ void addNewLineIfFoughtThisRound() {
 bool increment_mode_site(char &bail_on_base, char &hostcheck, int &encounter_timer) {
 
 	int encsize;
-	int freeable;
-	int enemy;
+	bool freeable;
+	bool enemy;
 	int majorenemy;
 	int talkers;
-	tallyupencounter(encsize, enemy, freeable, talkers, majorenemy);
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
+
+	encsize = 0;
+	freeable = false;
+	enemy = false;
+	majorenemy = 0;
+	talkers = 0;
+
+	for (int e = 0; e < ENCMAX; e++)
+	{
+		if (encounter[e].exists)
+		{
+			encsize++;
+			if (encounter[e].enemy) { 
+				enemy = true;
+			}
+			if (encounter[e].type == CREATURE_WORKER_SERVANT ||
+				encounter[e].type == CREATURE_WORKER_FACTORY_CHILD ||
+				encounter[e].type == CREATURE_WORKER_SWEATSHOP ||
+				(isPrisoner(encounter[e].name) != 0 && encounter[e].align == 1)
+				){
+				freeable = true;
+			}
+			else if ((!get_encounter_cantbluff_is_one(e) || isThereASiteAlarm()) && !(encounter[e].align == 1 && isThereASiteAlarm() && enemy)) { 
+				talkers++; 
+			}
+			if (encounter[e].type == CREATURE_CORPORATE_CEO ||
+				encounter[e].type == CREATURE_RADIOPERSONALITY ||
+				encounter[e].type == CREATURE_NEWSANCHOR ||
+				encounter[e].type == CREATURE_SCIENTIST_EMINENT ||
+				encounter[e].type == CREATURE_JUDGE_CONSERVATIVE) {
+				majorenemy++;
+			}
+		}
+	}
+
+	//If in combat, do a second check
+	if (talkers&&isThereASiteAlarm() && enemy)
+	{
+		recounttalkers(talkers);
+	}
 
 	
 	// Let the squad stop stressing out over the encounter if there are no enemies this round
