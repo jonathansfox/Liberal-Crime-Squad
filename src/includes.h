@@ -1042,8 +1042,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.34";
-const int version = 41233;
+const string PACKAGE_VERSION_STR = "4.12.35";
+const int version = 41235;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 

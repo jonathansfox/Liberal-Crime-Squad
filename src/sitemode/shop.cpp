@@ -323,7 +323,7 @@
 		 }
 	 }
  }
-
+ 
  // Removing the subsequent references to location will be difficult.
  void maskselect(DeprecatedCreature &buyer)
  {
@@ -335,17 +335,17 @@
 	 {
 		 if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask()) {
 			 masktype.push_back(a);
-			 masknames.push_back(armortype[masktype[a]]->get_name());
-			 maskdescriptions.push_back(armortype[masktype[a]]->get_description());
+			 masknames.push_back(armortype[a]->get_name());
+			 maskdescriptions.push_back(armortype[a]->get_description());
 		 }
 	 }
 	 int page = 0;
 	 int c;
 	 do
 	 {
-		 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++) {
+	//	 for (int p = page * 19, y = 2; p < len(masktype) && p < page * 19 + 19; p++, y++) {
 
-		 }
+	//	 }
 		 printMaskOptions(page, buyer.getNameAndAlignment().name, masktype, masknames, maskdescriptions);
 
 
@@ -385,6 +385,7 @@
 		 ledger.subtract_funds(15, EXPENSE_SHOPPING);
 	 }
  }
+ 
  void Shop::browse_halfscreen(Deprecatedsquadst& customers, int& buyer) const
  {
 	 int page = 0, partysize = customers.squadsize();

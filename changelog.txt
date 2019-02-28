@@ -1006,3 +1006,11 @@ Broke the specialCharacter reading function, so accented characters are not all 
 
 Fixed "no encounter warnings" (the encounter vector is set to read-only, but the vector was created before the encounter would be, so it would basically always be empty.)
 Fixed "Release Oppressed" when there aren't any oppressed (turns out the isPrisoner(creature) code was backwards.  This probably fixes other unnoticed problems)
+
+string extraCrimes(const bool liberalguardian, const bool ccs, const int type_sum, const int crime[CRIMENUM])
+	story += extraCrimes(ccs, liberalguardian, typesum, crime);
+Fixed newspaper referring to lcs as ccs.  Variables had been switched around.
+Fixed "Debuggers Needed" showing up in newspapers ad generation.  Hard to explain the exact cause, but basically it was an error test that was converted into a normal ad during code migration.
+
+4.12.35
+Fixed game crash when buying masks.
