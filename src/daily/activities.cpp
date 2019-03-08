@@ -1,4 +1,5 @@
 
+
 #define	ACTIVITIES_CPP
 #include "../includes.h"
 /*
@@ -29,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: é
+// set to use that character set, such as this e with an accent: ├⌐
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -73,20 +74,20 @@ map< Activity, CreatureSkill> trainingActivity;
 
 vector<file_and_text_collection> activities_text_file_collection = {
 	/*activities.cpp*/
-	customText(&quality_0, ACTIVITIES_FOLDER + CONST_activities009),
-	customText(&quality_20, ACTIVITIES_FOLDER + CONST_activities010),
-	customText(&quality_35, ACTIVITIES_FOLDER + CONST_activities011),
-	customText(&quality_50, ACTIVITIES_FOLDER + CONST_activities012),
-	customText(&words_meaning_hacked, ACTIVITIES_FOLDER + CONST_activities013),
-	customText(&enemy_website, ACTIVITIES_FOLDER + CONST_activities014),
-	customText(&win_hand_to_hand, ACTIVITIES_FOLDER + CONST_activities015),
-	customText(&lose_hand_to_hand, ACTIVITIES_FOLDER + CONST_activities016),
-	customText(&car_wont_start, ACTIVITIES_FOLDER + CONST_activities017),
-	customText(&gets_nervous, ACTIVITIES_FOLDER + CONST_activities018),
-	customText(&cant_hotwire_car, ACTIVITIES_FOLDER + CONST_activities019),
-	customText(&almost_hotwire_car, ACTIVITIES_FOLDER + CONST_activities020),
-	customText(&cant_find_keys, ACTIVITIES_FOLDER + CONST_activities021),
-	customText(&cant_find_keys_no_free_speech, ACTIVITIES_FOLDER + CONST_activities022),
+	customText(&quality_0, ACTIVITIES_FOLDER + CONST_X_QUALITY_0_TXT),
+	customText(&quality_20, ACTIVITIES_FOLDER + CONST_X_QUALITY_20_TXT),
+	customText(&quality_35, ACTIVITIES_FOLDER + CONST_X_QUALITY_35_TXT),
+	customText(&quality_50, ACTIVITIES_FOLDER + CONST_X_QUALITY_50_TXT),
+	customText(&words_meaning_hacked, ACTIVITIES_FOLDER + CONST_X_WORDS_MEANING_HACKED_TXT),
+	customText(&enemy_website, ACTIVITIES_FOLDER + CONST_X_ENEMY_WEBSITE_TXT),
+	customText(&win_hand_to_hand, ACTIVITIES_FOLDER + CONST_X_WIN_HAND_TO_HAND_TXT),
+	customText(&lose_hand_to_hand, ACTIVITIES_FOLDER + CONST_X_LOST_HAND_TO_HAND_TXT),
+	customText(&car_wont_start, ACTIVITIES_FOLDER + CONST_X_CAR_WONT_START_TXT),
+	customText(&gets_nervous, ACTIVITIES_FOLDER + CONST_X_GETS_NERVOUS_TXT),
+	customText(&cant_hotwire_car, ACTIVITIES_FOLDER + CONST_X_CANT_HOTWIRE_TXT),
+	customText(&almost_hotwire_car, ACTIVITIES_FOLDER + CONST_X_ALMOST_HOTWIRE_TXT),
+	customText(&cant_find_keys, ACTIVITIES_FOLDER + CONST_X_CANT_FIND_KEYS_TXT),
+	customText(&cant_find_keys_no_free_speech, ACTIVITIES_FOLDER + CONST_X_CANT_FIND_KEYS_NFS_TXT),
 };
 void adjustblogpower(int &power)
 {
@@ -123,10 +124,10 @@ struct stringAndMaybeTrain {
 	stringAndMaybeTrain(const string& str_, const vector<trainItem>& trainingItem_) : str(str_), trainingItem(trainingItem_) {}
 };
 vector<stringAndMaybeTrain> cleanSafeHouse = {
-	stringAndMaybeTrain(CONST_activities023, vector<trainItem>({})),
-	stringAndMaybeTrain(CONST_activities024, vector<trainItem>({})),
-	stringAndMaybeTrain(CONST_activities025, vector<trainItem>({})),
-	stringAndMaybeTrain(CONST_activities026, vector<trainItem>({ trainItem(SKILL_TAILORING, 1,MAXATTRIBUTE) }))
+	stringAndMaybeTrain(CONST_X_TIDIES_SAFEHOUSE, vector<trainItem>({})),
+	stringAndMaybeTrain(CONST_X_REORGANIZES_CLOSET, vector<trainItem>({})),
+	stringAndMaybeTrain(CONST_X_CLEANS_KITCHEN, vector<trainItem>({})),
+	stringAndMaybeTrain(CONST_X_PERUSES_MAGAZINES, vector<trainItem>({ trainItem(SKILL_TAILORING, 1,MAXATTRIBUTE) }))
 };
 void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > *pilelist, DeprecatedCreature cr);
 
@@ -203,24 +204,24 @@ void repairarmor(DeprecatedCreature &cr, char &clearformess)
 		if (armorDestroyed)
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			result += CONST_activities027;
+			result += CONST_X_DISPOSES_OF;
 		}
 		else if (repairfailed && armor->is_bloody())
 		{
 			set_color_easy(CYAN_ON_BLACK_BRIGHT);
-			result += CONST_activities028;
+			result += CONST_X_CLEANS;
 		}
 		else if (repairfailed)
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			result += CONST_activities029;
+			result += CONST_X_IS_WORKING_TO_REPAIR;
 		}
 		else
 		{
 			if (!qualityReduction)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
-				result += CONST_activities030;
+				result += CONST_X_REPAIRS;
 			}
 			else
 			{
@@ -228,12 +229,12 @@ void repairarmor(DeprecatedCreature &cr, char &clearformess)
 				if (armorDestroyed)
 				{
 					set_color_easy(RED_ON_BLACK_BRIGHT);
-					result += CONST_activities031;
+					result += CONST_X_NO_HOPE_TO_REPAIR;
 				}
 				else
 				{
 					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-					result += CONST_activities032;
+					result += CONST_X_REPAIRS_SOMEWHAT;
 				}
 			}
 		}
@@ -244,7 +245,7 @@ void repairarmor(DeprecatedCreature &cr, char &clearformess)
 		else
 			result += cr.hisher();
 		if (armorDestroyed)
-			result += CONST_activities033;
+			result += CONST_X_RUINED;
 		result += singleSpace + armorname + singleDot;
 		addstrAlt(result, gamelog);
 		gamelog.nextMessage();
@@ -288,7 +289,7 @@ void makearmor(DeprecatedCreature &cr, char &clearformess)
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities034, gamelog);
+		addstrAlt(CONST_X_CANNOT_AFFORD_MATERIAL, gamelog);
 		gamelog.nextMessage();
 		pressAnyKey();
 		return;
@@ -317,7 +318,7 @@ void makearmor(DeprecatedCreature &cr, char &clearformess)
 			else makedelimiter();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_activities035, gamelog);
+			addstrAlt(CONST_X_CANNOT_FIND_CLOTH, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
 		}
@@ -336,20 +337,20 @@ void makearmor(DeprecatedCreature &cr, char &clearformess)
 			mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
 			if (quality <= ((Armor*)it)->get_quality_levels())
 			{
-				addstrAlt(CONST_activities036, gamelog);
+				addstrAlt(CONST_X_HAS_MADE_A, gamelog);
 				switch (quality)
 				{
-				case 1:addstrAlt(CONST_activities037, gamelog); break;
-				case 2:addstrAlt(CONST_activities038, gamelog); break;
-				case 3:addstrAlt(CONST_activities039, gamelog); break;
-				case 4:addstrAlt(CONST_activities040, gamelog); break;
-				default:addstrAlt(quality, gamelog); addstrAlt(CONST_activities041, gamelog); break;
+				case 1:addstrAlt(CONST_X_FIRST_RATE, gamelog); break;
+				case 2:addstrAlt(CONST_X_SECOND_RATE, gamelog); break;
+				case 3:addstrAlt(CONST_X_THIRD_RATE, gamelog); break;
+				case 4:addstrAlt(CONST_X_FOURTH_RATE, gamelog); break;
+				default:addstrAlt(quality, gamelog); addstrAlt(CONST_X_TH_RATE, gamelog); break;
 				}
 				addLootToLoc(cr.location, it);
 			}
 			else
 			{
-				addstrAlt(CONST_activities042, gamelog);
+				addstrAlt(CONST_X_WASTED_MATERIALS, gamelog);
 			}
 			addstrAlt(singleSpace, gamelog);
 			addstrAlt(armortype[at]->get_name(), gamelog);
@@ -381,15 +382,15 @@ int get_noise_based_on_skill(const int creatureskill) {
 }
 void print_issue_box(const int noise) {
 	//Header for issue box
-	mvaddstrAlt(6, 0, CONST_activities055);
-	mvaddstrAlt(7, 0, CONST_activities056);
+	mvaddstrAlt(6, 0, CONST_X_ADDITIONAL_FINDINGS);
+	mvaddstrAlt(7, 0, CONST_X_ISSUE_PUBLIC_INTEREST_HEADER);
 	//Footer
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23, 0, CONST_activities057);
+	mvaddstrAlt(23, 0, CONST_X_RESULTS_ARE_PLUS_MINUS);
 	addstrAlt(noise);
-	addstrAlt(CONST_activities058);
-	mvaddstrAlt(24, 0, CONST_activities059);
-	mvaddstrAlt(24, 40, addprevpagestr() + CONST_activities060 + addnextpagestr());
+	addstrAlt(CONST_X_LIBERAL_PERCENTAGE_POINTS);
+	mvaddstrAlt(24, 0, CONST_X_ENTER_DONE);
+	mvaddstrAlt(24, 40, addprevpagestr() + CONST_X_LITTLE_WHITESPACE + addnextpagestr());
 }
 void draw_issue_page(const int page, const int noise, const int survey[], const char SURVEY_PAGE_SIZE) {
 
@@ -400,24 +401,24 @@ void draw_issue_page(const int page, const int noise, const int survey[], const 
 	{
 		if (v >= VIEWNUM || (v == VIEW_CONSERVATIVECRIMESQUAD && (endgamestate >= ENDGAME_CCS_DEFEATED || newscherrybusted < 2)))
 		{
-			mvaddstrAlt(y, 0, CONST_activities061);
+			mvaddstrAlt(y, 0, CONST_X_LOTS_OF_WHITESPACE);
 			continue;
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y, 4, CONST_activities062);
-		if (noise >= 7 || survey[v] == -1) addstrAlt(CONST_activities063);
+		mvaddstrAlt(y, 4, CONST_X_MANY_DOTS);
+		if (noise >= 7 || survey[v] == -1) addstrAlt(CONST_X_UNKNOWN);
 		else if (noise >= 4)
 		{
-			if (public_interest[v] > 50) addstrAlt(CONST_activities067);
-			else addstrAlt(CONST_activities069);
+			if (public_interest[v] > 50) addstrAlt(CONST_X_HIGH);
+			else addstrAlt(CONST_X_LOW);
 		}
 		else
 		{
-			if (public_interest[v] > 100) addstrAlt(CONST_activities066);
-			else if (public_interest[v] > 50) addstrAlt(CONST_activities067);
-			else if (public_interest[v] > 10) addstrAlt(CONST_activities068);
-			else if (public_interest[v]) addstrAlt(CONST_activities069);
-			else addstrAlt(CONST_activities070);
+			if (public_interest[v] > 100) addstrAlt(CONST_X_VERY_HIGH);
+			else if (public_interest[v] > 50) addstrAlt(CONST_X_HIGH);
+			else if (public_interest[v] > 10) addstrAlt(CONST_X_MODERATE);
+			else if (public_interest[v]) addstrAlt(CONST_X_LOW);
+			else addstrAlt(CONST_X_NONE_SPACE);
 		}
 		if (survey[v] == -1)set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		else if (survey[v] < 10)set_color_easy(RED_ON_BLACK_BRIGHT);
@@ -427,20 +428,20 @@ void draw_issue_page(const int page, const int noise, const int survey[], const 
 		else if (survey[v] < 90)set_color_easy(CYAN_ON_BLACK_BRIGHT);
 		else set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		moveAlt(y, 0);
-		if (survey[v] == -1) addstrAlt(CONST_activities071);
+		if (survey[v] == -1) addstrAlt(CONST_X_TWO_QUESTION_MARKS);
 		else
 		{
 			if (survey[v] < 10)addcharAlt('0');
 			addstrAlt(survey[v]);
 		}
-		addstrAlt(CONST_activities072);
+		addstrAlt(CONST_X_PERCENT_SIGN);
 		if (v == VIEW_DRUGS) {
-			if (lawList[LAW_DRUGS] >= 1) addstrAlt(CONST_activities073);
-			else addstrAlt(CONST_activities074);
+			if (lawList[LAW_DRUGS] >= 1) addstrAlt(CONST_X_SUPPORTED_MARIJUANA_LEGAL);
+			else addstrAlt(CONST_X_BELIEVE_IN_LEGAL_MARIJUANA);
 		}
 		else if (v == VIEW_IMMIGRATION) {
-			if (lawList[LAW_IMMIGRATION] >= 1) addstrAlt(CONST_activities075);
-			else addstrAlt(CONST_activities076);
+			if (lawList[LAW_IMMIGRATION] >= 1) addstrAlt(CONST_X_CONDEMN_IMMIGRATION_REGULATIONS);
+			else addstrAlt(CONST_X_AMNESTY_FOR_IMMIGRANTS);
 		}
 		else {
 			addstrAlt(supportsLiberalLaw[v]);
@@ -452,22 +453,22 @@ void printMostConcernedAbout(const int maxview) {
 	switch (maxview)
 	{
 		//case VIEW_POLITICALVIOLENCE:
-		//   if(attitude[VIEW_POLITICALVIOLENCE]>50) addstrAlt(CONST_activities047);
+		//   if(attitude[VIEW_POLITICALVIOLENCE]>50) addstrAlt(CONST_X_TAKING_STRONG_ACTION);
 		//   else addstrAlt(CONST_activities048);
 		//   break;
 	case VIEW_LIBERALCRIMESQUAD:
 	case VIEW_LIBERALCRIMESQUADPOS:
-		if (attitude[VIEW_LIBERALCRIMESQUAD] < 50) addstrAlt(CONST_activities049);
+		if (attitude[VIEW_LIBERALCRIMESQUAD] < 50) addstrAlt(CONST_X_ACTIVIST_POLITICAL_GROUPS);
 		else
 		{
-			if (attitude[VIEW_LIBERALCRIMESQUADPOS] > 50) addstrAlt(CONST_activities050);
-			else addstrAlt(CONST_activities051);
+			if (attitude[VIEW_LIBERALCRIMESQUADPOS] > 50) addstrAlt(CONST_X_THE_LIBERAL_CRIME_SQUAD);
+			else addstrAlt(CONST_X_THE_LCS_TERRORISTS);
 		}
 		break;
 	case VIEW_AMRADIO:
 	case VIEW_CABLENEWS:
-		if (attitude[VIEW_AMRADIO] + attitude[VIEW_CABLENEWS] > 100) addstrAlt(CONST_activities052);
-		else addstrAlt(CONST_activities053);
+		if (attitude[VIEW_AMRADIO] + attitude[VIEW_CABLENEWS] > 100) addstrAlt(CONST_X_CONSERVATIVE_MEDIA_BIAS);
+		else addstrAlt(CONST_X_LIBERAL_MEDIA_BIAS);
 		break;
 	default:
 		stringConnectedToView currentView = pollingData[(Views)maxview];
@@ -530,25 +531,25 @@ void survey(DeprecatedCreature *cr)
 	eraseAlt();
 	//TODO: Sort out the gamelog for this.
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_activities043);
+	mvaddstrAlt(0, 0, CONST_X_SURVEY_OF_PUBLIC_OPINION);
 	int approval = presidentapproval();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 0, approval / 10 + (LCSrandom(noise * 2 + 1) - noise), gamelog);
-	addstrAlt(CONST_activities044);
+	addstrAlt(CONST_X_HAD_FAVORABLE_OPINION);
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
-	addstrAlt(CONST_activities045);
+	addstrAlt(CONST_X_PRESIDENT);
 	addstrAlt(execname[EXEC_PRESIDENT]);
 	set_color_easy(WHITE_ON_BLACK);
 	addstrAlt(singleDot);
 	//Top excitement issue
 	if (maxview != -1)
 	{
-		mvaddstrAlt(4, 0, CONST_activities046);
+		mvaddstrAlt(4, 0, CONST_X_THE_PEOPLE_ARE_MOST_CONCERNED);
 		printMostConcernedAbout(maxview);
 	}
 	else
 	{
-		mvaddstrAlt(4, 0, CONST_activities054);
+		mvaddstrAlt(4, 0, CONST_X_THE_PUBLIC_IS_UNCONCERNED);
 	}
 	print_issue_box(noise);
 	int page = 0;
@@ -581,9 +582,9 @@ void attemptarrest(DeprecatedCreature & liberal, const char* str, int clearforme
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, liberal.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities077, gamelog);
+		addstrAlt(CONST_X_IS_ACCOSTED_BY_POLICE, gamelog);
 		addstrAlt(str, gamelog);
-		addstrAlt(CONST_activities121, gamelog);
+		addstrAlt(CONST_X_EXCLAMATION_POINT, gamelog);
 		gamelog.nextMessage();
 		pressAnyKey();
 	}
@@ -762,7 +763,7 @@ void doActivitySolicitDonations(vector<DeprecatedCreature *> &solicit, char &cle
 	long total_income = 0;
 	for (int s = 0; s < len(solicit); s++)
 	{
-		if (!checkforarrest(*solicit[s], CONST_activities079.c_str(), clearformess))
+		if (!checkforarrest(*solicit[s], CONST_X_SOLICITING_DONATIONS.c_str(), clearformess))
 		{
 			int income = solicit[s]->skill_roll(SKILL_PERSUASION) *
 				solicit[s]->get_armor().get_professionalism() + 1;
@@ -783,7 +784,7 @@ void doActivitySellTshirts(vector<DeprecatedCreature *> &tshirts, char &clearfor
 {
 	for (int s = 0; s < len(tshirts); s++)
 	{
-		if (!checkforarrest(*tshirts[s], CONST_activities080.c_str(), clearformess))
+		if (!checkforarrest(*tshirts[s], CONST_X_SELLING_SHIRTS.c_str(), clearformess))
 		{
 			long money = (tshirts[s]->skill_roll(SKILL_TAILORING) +
 				tshirts[s]->skill_roll(SKILL_BUSINESS)) / 2;
@@ -805,7 +806,7 @@ void doActivitySellArt(vector<DeprecatedCreature *> &art, char &clearformess)
 {
 	for (int s = 0; s < len(art); s++)
 	{
-		if (!checkforarrest(*art[s], CONST_activities081.c_str(), clearformess))
+		if (!checkforarrest(*art[s], CONST_X_SKETCHING_PORTRAITS.c_str(), clearformess))
 		{
 			long money = art[s]->skill_roll(SKILL_ART);
 			// Country's alignment affects effectiveness
@@ -825,7 +826,7 @@ void doActivitySellMusic(vector<DeprecatedCreature *> &music, char &clearformess
 {
 	for (int s = 0; s < len(music); s++)
 	{
-		if (!checkforarrest(*music[s], CONST_activities082.c_str(), clearformess))
+		if (!checkforarrest(*music[s], CONST_X_PLAYING_MUSIC.c_str(), clearformess))
 		{
 			long money = music[s]->skill_roll(SKILL_MUSIC) / 2;
 			bool has_instrument = music[s]->get_weapon().get_specific_bool(BOOL_INSTRUMENT_);
@@ -861,7 +862,7 @@ void doActivitySellBrownies(vector<DeprecatedCreature *> &brownies, char &clearf
 			newsstory.push_back(ns);
 			sitestory = ns;
 			criminalize(*brownies[s], LAWFLAG_BROWNIES);
-			attemptarrest(*brownies[s], CONST_activities083.c_str(), clearformess);
+			attemptarrest(*brownies[s], CONST_X_SELLING_BROWNIES.c_str(), clearformess);
 		}
 		long money = brownies[s]->skill_roll(SKILL_PERSUASION) +
 			brownies[s]->skill_roll(SKILL_BUSINESS) +
@@ -917,8 +918,8 @@ void doActivityHacking(vector<DeprecatedCreature *> &hack, char &clearformess)
 			hack_skill = max(hack_skill, truehack[h]->skill_roll(SKILL_COMPUTERS));
 		if (DIFFICULTY_HEROIC <= hack_skill + len(truehack) - 1)
 		{
-			if (len(truehack) > 1) strcpy(msg, CONST_activities084.c_str());
-			else { strcpy(msg, truehack[0]->getNameAndAlignment().name.data()); strcat(msg, CONST_activities106.c_str()); }
+			if (len(truehack) > 1) strcpy(msg, CONST_X_YOUR_HACKERS_HAVE_.c_str());
+			else { strcpy(msg, truehack[0]->getNameAndAlignment().name.data()); strcat(msg, CONST_X_HAS_.c_str()); }
 			int trackdif = 0, juiceval = 0;
 			int short crime = 0;
 			activityData currentActivity = pickrandom(hackingActivities);
@@ -942,10 +943,10 @@ void doActivityHacking(vector<DeprecatedCreature *> &hack, char &clearformess)
 		else if (DIFFICULTY_FORMIDABLE <= hack_skill + len(truehack) - 1)
 		{
 			int issue = LCSrandom(VIEWNUM - 5), crime = LAWFLAG_INFORMATION;
-			if (len(truehack) > 1) strcpy(msg, CONST_activities086.c_str());
-			else { strcpy(msg, truehack[0]->getNameAndAlignment().name.data()); strcat(msg, CONST_activities106.c_str()); }
+			if (len(truehack) > 1) strcpy(msg, CONST_X_YOUR_HACKERS_HAVE_LOWERCASE.c_str());
+			else { strcpy(msg, truehack[0]->getNameAndAlignment().name.data()); strcat(msg, CONST_X_HAS_.c_str()); }
 			strcat(msg, pickrandom(words_meaning_hacked).data());
-			strcat(msg, CONST_activities088.c_str());
+			strcat(msg, CONST_X_A_SPACE.c_str());
 			strcat(msg, pickrandom(enemy_website).data());
 			strcat(msg, singleDot.data());
 			change_public_opinion(issue, 1);
@@ -1020,9 +1021,9 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				string gottaCan = gimmeASprayCan(graffiti[s]);
 				if (len(gottaCan)) {
 					foundone = true;
-					addstrAlt(CONST_activities089, gamelog);
+					addstrAlt(CONST_X_GRABBED_A_, gamelog);
 					addstrAlt(gottaCan, gamelog);
-					addstrAlt(CONST_activities090, gamelog);
+					addstrAlt(CONST_X_FROM_, gamelog);
 					addstrAlt(LocationsPool::getInstance().getLocationName(graffiti[s]->base)); //TODO: Explicitly log it, or will the game log it?
 					addstrAlt(singleDot, gamelog);
 					pressAnyKey();
@@ -1031,13 +1032,13 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				if (!foundone && ledger.get_funds() >= 20)
 				{
 					ledger.subtract_funds(20, EXPENSE_SHOPPING);
-					addstrAlt(CONST_activities091, gamelog);
+					addstrAlt(CONST_X_BOUGHT_SPRAYPAINT_FOR_GRAFFITI, gamelog);
 					pressAnyKey();
 					buyMeASprayCan(graffiti[s]);
 				}
 				else if (!foundone)
 				{
-					addstrAlt(CONST_activities092, gamelog);
+					addstrAlt(CONST_X_NEEDS_A_SPRAYCAN_EQUIPPED_TO_DO_GRAFFITI, gamelog);
 					graffiti[s]->set_activity(ACTIVITY_NONE);
 					pressAnyKey();
 				}
@@ -1053,15 +1054,15 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, graffiti[s]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities093, gamelog);
+				addstrAlt(CONST_X_WAS_SPOTTED_BY_THE_POLICE, gamelog);
 				criminalize(*graffiti[s], LAWFLAG_VANDALISM);
 				graffiti[s]->train(SKILL_STREETSENSE, 20);
 				if (graffiti[s]->activity_arg() != -1)
 				{
-					addstrAlt(CONST_activities094, gamelog);
+					addstrAlt(CONST_X_WHILE_WORKING_ON_THE_MURAL, gamelog);
 					graffiti[s]->activity.arg = -1;
 				}
-				else addstrAlt(CONST_activities095, gamelog);
+				else addstrAlt(CONST_X_WHILE_SPRAYING_AN_LCS_TAG, gamelog);
 				gamelog.nextMessage();
 				Deprecatednewsstoryst *ns = new Deprecatednewsstoryst;
 				ns->type = NEWSSTORY_GRAFFITIARREST;
@@ -1081,9 +1082,9 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 					power = graffiti[s]->skill_roll(SKILL_ART) / 3;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, graffiti[s]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_activities096, gamelog);
-					if (power > 3)addstrAlt(CONST_activities097, gamelog);
-					addstrAlt(CONST_activities098, gamelog);
+					addstrAlt(CONST_X_HAS_COMPLETED_A, gamelog);
+					if (power > 3)addstrAlt(CONST_X_BEAUTIFUL, gamelog);
+					addstrAlt(CONST_X_MURAL_ABOUT_, gamelog);
 					addstrAlt(getview(issue, false), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
@@ -1098,7 +1099,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 					power = 0;
 					set_color_easy(WHITE_ON_BLACK_BRIGHT);
 					mvaddstrAlt(8, 1, graffiti[s]->getNameAndAlignment().name, gamelog);
-					addstrAlt(CONST_activities099, gamelog);
+					addstrAlt(CONST_X_WORKS_THROUGH_THE_NIGHT_ON_A_LARGE_MURAL, gamelog);
 					gamelog.nextMessage();
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
 					pressAnyKey();
@@ -1109,7 +1110,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				issue = randomissue();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, graffiti[s]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities100, gamelog);
+				addstrAlt(CONST_X_HAS_BEGUN_WORK_ON_A_LARGE_MURAL_ABOUT_, gamelog);
 				addstrAlt(getview(issue, false), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
@@ -1167,7 +1168,7 @@ void doActivityProstitution(vector<DeprecatedCreature *> &prostitutes, char &cle
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, prostitutes[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities101, gamelog);
+				addstrAlt(CONST_X_HAS_BEEN_ARRESTED_IN_A_PROSTITUTION_STING, gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], -7, -30);
 				pressAnyKey();
@@ -1185,7 +1186,7 @@ void doActivityProstitution(vector<DeprecatedCreature *> &prostitutes, char &cle
 				else makedelimiter();
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(8, 1, prostitutes[p]->getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities102, gamelog);
+				addstrAlt(CONST_X_WAS_NEARLY_CAUGHT_IN_A_PROSTITUTION_STING, gamelog);
 				gamelog.nextMessage();
 				addjuice(*prostitutes[p], 5, 0);
 				pressAnyKey();
@@ -1224,9 +1225,9 @@ void doActivityLearn(vector<DeprecatedCreature *> &students, char &clearformess)
 			students[s]->set_activity(ACTIVITY_NONE);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 1, students[s]->getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_activities103, gamelog);
+			addstrAlt(CONST_X_HAS_LEARNED_AS_MUCH_AS_, gamelog);
 			addstrAlt(students[s]->heshe(), gamelog);
-			addstrAlt(CONST_activities104, gamelog);
+			addstrAlt(CONST_X_CAN, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
 		}
@@ -1239,7 +1240,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		switch (LCSrandom(10))
 		{
 		case 0:
-			addstrAlt(CONST_activities107, gamelog);
+			addstrAlt(CONST_X_RUN_AROUND_UPTOWN_SPLASHING_PAINT_ON_FUR_COATS, gamelog);
 			juiceval = 2;
 			crime = LAWFLAG_ASSAULT;
 			change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
@@ -1252,7 +1253,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_GAY] < 2)
 			{
-				addstrAlt(CONST_activities108, gamelog);
+				addstrAlt(CONST_X_DISRUPTED_A_TRADITIONAL_WEDDING_AT_A_CHURCH, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_GAY] += mod;
@@ -1267,7 +1268,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_ABORTION] < 2)
 			{
-				addstrAlt(CONST_activities109, gamelog);
+				addstrAlt(CONST_X_POSTED_HORRIFYING_DEAD_ABORTION_DOCTOR_PICTURES_DOWNTOWN, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_WOMEN] += mod;
@@ -1281,7 +1282,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_POLICEBEHAVIOR] < 2)
 			{
-				addstrAlt(CONST_activities110, gamelog);
+				addstrAlt(CONST_X_GONE_DOWNTOWN_AND_REENACTED_A_POLICE_BEATING, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_POLICEBEHAVIOR] += mod;
@@ -1296,8 +1297,8 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_NUCLEARPOWER] < 2)
 			{
-				if (len(trouble) > 1)addstrAlt(CONST_activities111, gamelog);
-				else addstrAlt(CONST_activities112, gamelog);
+				if (len(trouble) > 1)addstrAlt(CONST_X_DRESSED_UP_AND_PRETENDED_TO_BE_RADIOACTIVE_MUTANTS, gamelog);
+				else addstrAlt(CONST_X_DRESSED_UP_AND_PRETENDED_TO_BE_A_RADIOACTIVE_MUTANT, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_NUCLEARPOWER] += mod;
@@ -1312,7 +1313,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_POLLUTION] < 2)
 			{
-				addstrAlt(CONST_activities113, gamelog);
+				addstrAlt(CONST_X_SQUIRTED_BUSINESS_PEOPLE_WITH_FAKE_POLLUTED_WATER, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_POLLUTION] += mod;
@@ -1327,7 +1328,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		{
 			if (lawList[LAW_DEATHPENALTY] < 2)
 			{
-				addstrAlt(CONST_activities114, gamelog);
+				addstrAlt(CONST_X_DISTRIBUTED_FLIERS_GRAPHICALLY_ILLUSTRATING_EXECUTIONS, gamelog);
 				change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 				change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 				public_interest[VIEW_DEATHPENALTY] += mod;
@@ -1339,7 +1340,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		}
 		case 7:
 		{
-			addstrAlt(CONST_activities115, gamelog);
+			addstrAlt(CONST_X_DISTRIBUTED_FLIERS_GRAPHICALLY_ILLUSTRATING_CIA_TORTURE, gamelog);
 			change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 			change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 			public_interest[VIEW_TORTURE] += mod;
@@ -1350,7 +1351,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		}
 		case 8:
 		{
-			addstrAlt(CONST_activities116, gamelog);
+			addstrAlt(CONST_X_BURNED_A_CORPORATE_SYMBOL_AND_DENOUNCED_CAPITALISM, gamelog);
 			change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 			change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 			public_interest[VIEW_CORPORATECULTURE] += mod;
@@ -1366,7 +1367,7 @@ void finishTrouble(short &crime, long &juiceval, const int mod, const vector<Dep
 		}
 		case 9:
 		{
-			addstrAlt(CONST_activities117, gamelog);
+			addstrAlt(CONST_X_SET_UP_A_MOCK_SWEATSHOP_IN_THE_MIDDLE_OF_THE_MALL, gamelog);
 			change_public_opinion(VIEW_LIBERALCRIMESQUAD, mod);
 			change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, mod, 0, 70);
 			public_interest[VIEW_SWEATSHOPS] += mod;
@@ -1388,8 +1389,8 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 		else makedelimiter();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(8, 1);
-		if (len(trouble) > 1) addstrAlt(CONST_activities105, gamelog);
-		else { addstrAlt(trouble[0]->getNameAndAlignment().name, gamelog); addstrAlt(CONST_activities106, gamelog); }
+		if (len(trouble) > 1) addstrAlt(CONST_X_YOUR_ACTIVISTS_HAVE_, gamelog);
+		else { addstrAlt(trouble[0]->getNameAndAlignment().name, gamelog); addstrAlt(CONST_X_HAS_, gamelog); }
 		int power = 0;
 		for (int t = 0; t < len(trouble); t++)
 			power += trouble[t]->skill_roll(SKILL_PERSUASION) +
@@ -1423,13 +1424,13 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 						ns->positive = 0;
 						newsstory.push_back(ns);
 						sitestory = ns;
-						attemptarrest(*trouble[t], CONST_activities118.c_str(), clearformess);
+						attemptarrest(*trouble[t], CONST_X_CAUSING_TROUBLE.c_str(), clearformess);
 					}
 					else
 					{
 						set_color_easy(WHITE_ON_BLACK_BRIGHT);
 						mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-						addstrAlt(CONST_activities119, gamelog);
+						addstrAlt(CONST_X_IS_CORNERED_BY_A_MOB_OF_ANGRY_REDNECKS, gamelog);
 						gamelog.nextMessage();
 						pressAnyKey();
 						bool wonfight = false;
@@ -1439,15 +1440,15 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_activities120, gamelog);
+							addstrAlt(CONST_X_BRANDISHES_THE_, gamelog);
 							addstrAlt(trouble[t]->get_weapon().get_name(), gamelog);
-							addstrAlt(CONST_activities121, gamelog);
+							addstrAlt(CONST_X_EXCLAMATION_POINT, gamelog);
 							gamelog.nextMessage();
 							pressAnyKey();
 							if (clearformess) eraseAlt();
 							else makedelimiter();
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
-							mvaddstrAlt(8, 1, CONST_activities122, gamelog);
+							mvaddstrAlt(8, 1, CONST_X_THE_MOB_SCATTERS, gamelog);
 							gamelog.nextMessage();
 							pressAnyKey();
 							addjuice(*trouble[t], 5, 20);
@@ -1487,11 +1488,11 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 								else makedelimiter();
 								set_color_easy(GREEN_ON_BLACK_BRIGHT);
 								mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-								addstrAlt(CONST_activities123, gamelog);
+								addstrAlt(CONST_X_BEAT_THE, gamelog);
 								if (lawList[LAW_FREESPEECH] == -2)
-									addstrAlt(CONST_activities124, gamelog);
-								else addstrAlt(CONST_activities125, gamelog);
-								addstrAlt(CONST_activities126, gamelog);
+									addstrAlt(CONST_X_TAR, gamelog);
+								else addstrAlt(CONST_X_SHIT, gamelog);
+								addstrAlt(CONST_X_OUT_OF_EVERYONE_WHO_GOT_CLOSE, gamelog);
 								gamelog.nextMessage();
 								pressAnyKey();
 								addjuice(*trouble[t], 30, 300);
@@ -1504,7 +1505,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 							else makedelimiter();
 							set_color_easy(RED_ON_BLACK_BRIGHT);
 							mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-							addstrAlt(CONST_activities127, gamelog);
+							addstrAlt(CONST_X_IS_SEVERELY_BEATEN_BEFORE_THE_MOB_IS_BROKEN_UP, gamelog);
 							gamelog.nextMessage();
 							trouble[t]->set_activity(ACTIVITY_CLINIC);
 							pressAnyKey();
@@ -1520,7 +1521,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 									if (trouble[t]->special[SPECIALWOUND_LOWERSPINE] == 1)
 									{
 										mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-										addstrAlt(CONST_activities128, gamelog);
+										addstrAlt(CONST_X_S_LOWER_SPINE_HAS_BEEN_BROKEN, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_LOWERSPINE] = 0;
 										pressAnyKey();
@@ -1530,7 +1531,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 									if (trouble[t]->special[SPECIALWOUND_UPPERSPINE] == 1)
 									{
 										mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-										addstrAlt(CONST_activities129, gamelog);
+										addstrAlt(CONST_X_S_UPPER_SPINE_HAS_BEEN_BROKEN, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_UPPERSPINE] = 0;
 										pressAnyKey();
@@ -1540,7 +1541,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 									if (trouble[t]->special[SPECIALWOUND_NECK] == 1)
 									{
 										mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
-										addstrAlt(CONST_activities130, gamelog);
+										addstrAlt(CONST_X_S_NECK_HAS_BEEN_BROKEN, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_NECK] = 0;
 										pressAnyKey();
@@ -1550,8 +1551,8 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 									if (trouble[t]->special[SPECIALWOUND_TEETH] > 0)
 									{
 										mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name);
-										if (trouble[t]->special[SPECIALWOUND_TEETH] > 1)addstrAlt(CONST_activities131, gamelog);
-										else addstrAlt(CONST_activities132, gamelog);
+										if (trouble[t]->special[SPECIALWOUND_TEETH] > 1)addstrAlt(CONST_X_S_TEETH_HAVE_BEEN_SMASHED_OUT_ON_THE_CURB, gamelog);
+										else addstrAlt(CONST_X_S_TOOTH_HAS_BEEN_PULLED_OUT_WITH_PLIERS, gamelog);
 										gamelog.nextMessage();
 										trouble[t]->special[SPECIALWOUND_TEETH] = 0;
 										pressAnyKey();
@@ -1567,24 +1568,24 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 										if (ribminus > 1)
 										{
 											if (ribminus == trouble[t]->special[SPECIALWOUND_RIBS])
-												addstrAlt(CONST_activities133, gamelog);
+												addstrAlt(CONST_X_ALL_SPACE, gamelog);
 											addstrAlt(ribminus, gamelog);
-											addstrAlt(CONST_activities134, gamelog);
+											addstrAlt(CONST_X_OF_, gamelog);
 											addstrAlt(trouble[t]->getNameAndAlignment().name, gamelog);
-											addstrAlt(CONST_activities135, gamelog);
+											addstrAlt(CONST_X_S_RIBS_ARE_, gamelog);
 										}
 										else if (trouble[t]->special[SPECIALWOUND_RIBS] > 1)
 										{
-											addstrAlt(CONST_activities136, gamelog);
+											addstrAlt(CONST_X_ONE_OF_, gamelog);
 											addstrAlt(trouble[t]->getNameAndAlignment().name, gamelog);
-											addstrAlt(CONST_activities137, gamelog);
+											addstrAlt(CONST_X_S_RIB_IS_, gamelog);
 										}
 										else
 										{
 											addstrAlt(trouble[t]->getNameAndAlignment().name);
-											addstrAlt(CONST_activities138, gamelog);
+											addstrAlt(CONST_X_S_LAST_UNBROKEN_RIB_IS_, gamelog);
 										}
-										addstrAlt(CONST_activities139, gamelog);
+										addstrAlt(CONST_X_BROKEN, gamelog);
 										gamelog.nextMessage();
 										pressAnyKey();
 										trouble[t]->special[SPECIALWOUND_RIBS] -= ribminus;
@@ -1757,9 +1758,9 @@ void doActivityBury(vector<DeprecatedCreature *> &bury, char &clearformess)
 					sitestory = ns;
 					criminalize(*bury[b], LAWFLAG_BURIAL);
 					char str[100];
-					strcpy(str, CONST_activities140.c_str());
+					strcpy(str, CONST_X_BURYING_.c_str());
 					strcat(str, pool[p]->getNameAndAlignment().name.data());
-					strcat(str, CONST_activities141.c_str());
+					strcat(str, CONST_X_S_BODY.c_str());
 					attemptarrest(*bury[b], str, clearformess);
 					// If a liberal is spotted they should not do more burials.
 					bury.erase(bury.begin() + b--);
@@ -1786,11 +1787,11 @@ bool carselect(DeprecatedCreature &cr, short &cartype)
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activities142);
+		mvaddstrAlt(0, 0, CONST_X_WHAT_TYPE_OF_CAR_WILL_);
 		addstrAlt(cr.getNameAndAlignment().name);
-		addstrAlt(CONST_activities143);
+		addstrAlt(CONST_X_TRY_TO_FIND_AND_STEAL_TODAY);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(1, 0, CONST_activities144);
+		mvaddstrAlt(1, 0, CONST_X_TYPEDIFFICULTY_TO_FIND_UNATTENDED);
 		int y = 2;
 		for (int p = page * 19; p < len(cart) && p < page * 19 + 19; p++)
 		{
@@ -1802,7 +1803,7 @@ bool carselect(DeprecatedCreature &cr, short &cartype)
 			displayDifficulty(steal_difficultytofind(cart[p]));
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, CONST_activities145);
+		mvaddstrAlt(22, 0, CONST_X_PRESS_A_LETTER_TO_SELECT_A_TYPE_OF_CAR);
 		mvaddstrAlt(23, 0, addpagestr());
 		int c = getkeyAlt();
 		//PAGE UP
@@ -1832,26 +1833,26 @@ void observeAlarm(const bool sensealarm, const bool alarmon, const string name, 
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		moveAlt(10, 0);
-		if (sensealarm)addstrAlt(CONST_activities180);
+		if (sensealarm)addstrAlt(CONST_X_THE_VIPER);
 		else addstrAlt(carname);
-		addstrAlt(CONST_activities181);
+		addstrAlt(CONST_X_COLON_SPACE_SPACE);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		if (sensealarm)addstrAlt(CONST_activities158);
-		else addstrAlt(CONST_activities183);
+		if (sensealarm)addstrAlt(CONST_X_STAND_AWAY_FROM_THE_VEHICLE_BEEP_BEEP);
+		else addstrAlt(CONST_X_BEEP_BEEP_BEEP_BEEP);
 	}
 	else if (sensealarm)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(10, 0, CONST_activities160);
+		mvaddstrAlt(10, 0, CONST_X_THE_VIPER_COLON);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_activities161, gamelog);
+		addstrAlt(CONST_X_THIS_IS_THE_VIPER_STAND_AWAY, gamelog);
 		gamelog.nextMessage();
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10, 0, name, gamelog);
-		addstrAlt(CONST_activities162, gamelog);
+		addstrAlt(CONST_X_STANDS_BY_THE_, gamelog);
 		addstrAlt(carname, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -1862,16 +1863,16 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 	{
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activities178);
+		mvaddstrAlt(0, 0, CONST_X_ADVENTURES_IN_LIBERAL_CAR_THEFT);
 		printcreatureinfo(&cr);
 		makedelimiter();
 
 		observeAlarm(sensealarm != 0, alarmon, cr.getNameAndAlignment().name, carname);
 
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(12, 0, CONST_activities163);
+		mvaddstrAlt(12, 0, CONST_X_A_PICK_THE_LOCK);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(13, 0, CONST_activities164);
+		mvaddstrAlt(13, 0, CONST_X_B_BREAK_THE_WINDOW);
 		moveAlt(14, 0);
 
 		addstrAlt(considerLeaving(sensealarm, alarmon, cr.getNameAndAlignment().name));
@@ -1900,7 +1901,7 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 				}
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities169, gamelog);
+				addstrAlt(CONST_X_JIMMIES_THE_CAR_DOOR_OPEN, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
 				entered = true;
@@ -1909,7 +1910,7 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities170, gamelog);
+				addstrAlt(CONST_X_FIDDLES_WITH_THE_LOCK_WITH_NO_LUCK, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
 			}
@@ -1922,10 +1923,10 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities171, gamelog);
+				addstrAlt(CONST_X_SMASHES_THE_WINDOW, gamelog);
 				if (cr.get_weapon().get_bashstrengthmod() > 1)
 				{
-					addstrAlt(CONST_activities174, gamelog);
+					addstrAlt(CONST_X_WITH_A_, gamelog);
 					addstrAlt(cr.get_weapon().get_name(2), gamelog);
 				}
 				addstrAlt(singleDot, gamelog);
@@ -1938,13 +1939,13 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 			{
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(16, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities173, gamelog);
+				addstrAlt(CONST_X_CRACKS_THE_WINDOW, gamelog);
 				if (cr.get_weapon().get_bashstrengthmod() > 1)
 				{
-					addstrAlt(CONST_activities174, gamelog);
+					addstrAlt(CONST_X_WITH_A_, gamelog);
 					addstrAlt(cr.get_weapon().get_name(2), gamelog);
 				}
-				addstrAlt(CONST_activities175, gamelog);
+				addstrAlt(CONST_X_BUT_IT_IS_STILL_SOMEWHAT_INTACT, gamelog);
 				gamelog.nextMessage();
 				windowdamage++;
 				pressAnyKey();
@@ -1957,7 +1958,7 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 			if (!alarmon)
 			{
 				set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-				mvaddstrAlt(y++, 0, CONST_activities176, gamelog);
+				mvaddstrAlt(y++, 0, CONST_X_AN_ALARM_SUDDENLY_STARTS_BLARING, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
 				alarmon = true;
@@ -1968,7 +1969,7 @@ bool enterCar(DeprecatedCreature &cr, const bool sensealarm, bool &alarmon, stri
 		{
 			set_color_easy(RED_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y++, 0, cr.getNameAndAlignment().name, gamelog);
-			addstrAlt(CONST_activities202, gamelog);
+			addstrAlt(CONST_X_HAS_BEEN_SPOTTED_BY_A_PASSERBY, gamelog);
 			gamelog.nextMessage();
 			pressAnyKey();
 			//FOOT CHASE
@@ -1999,40 +2000,40 @@ bool attempt_find_keys(const bool keys_in_car, const int key_location, const int
 	if (!keys_in_car)
 	{
 		difficulty = DIFFICULTY_IMPOSSIBLE;
-		location = CONST_activities189;
+		location = CONST_X_IN_SPACE_WITH_ALIENS_SERIOUSLY;
 	}
 	else switch (key_location)
 	{
 	case 0:
 	default:
 		difficulty = DIFFICULTY_AUTOMATIC;
-		location = CONST_activities190;
+		location = CONST_X_IN_THE_IGNITION_DAMN;
 		break;
 	case 1:
 		difficulty = DIFFICULTY_EASY;
-		location = CONST_activities191;
+		location = CONST_X_ABOVE_THE_PULLDOWN_SUNBLOCK_THINGY;
 		break;
 	case 2:
 		difficulty = DIFFICULTY_EASY;
-		location = CONST_activities192;
+		location = CONST_X_IN_THE_GLOVE_COMPARTMENT;
 		break;
 	case 3:
 		difficulty = DIFFICULTY_AVERAGE;
-		location = CONST_activities193;
+		location = CONST_X_UNDER_THE_FRONT_SEAT;
 		break;
 	case 4:
 		difficulty = DIFFICULTY_HARD;
-		location = CONST_activities194;
+		location = CONST_X_UNDER_THE_BACK_SEAT;
 		break;
 	}
 	if (cr.attribute_check(ATTRIBUTE_INTELLIGENCE, difficulty))
 	{
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		moveAlt(y++, 0);
-		if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_activities195, gamelog); // Holy car keys Batman!
-		else addstrAlt(CONST_activities196, gamelog);
+		if (lawList[LAW_FREESPEECH] == -2)addstrAlt(CONST_X_HOLY_CAR_KEYS_, gamelog); // Holy car keys Batman!
+		else addstrAlt(CONST_X_HOLY_SHIT_, gamelog);
 		addstrAlt(cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities197, gamelog);
+		addstrAlt(CONST_X_FOUND_THE_KEYS, gamelog);
 		addstrAlt(location, gamelog);
 		started = true;
 	}
@@ -2040,14 +2041,14 @@ bool attempt_find_keys(const bool keys_in_car, const int key_location, const int
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(y++, 0, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities198, gamelog);
+		addstrAlt(CONST_X_RUMMAGING_, gamelog);
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		if (key_search_total == 5)
-			addstrAlt(CONST_activities199, gamelog);
+			addstrAlt(CONST_X_ARE_THEY_EVEN_IN_HERE, gamelog);
 		else if (key_search_total == 10)
-			addstrAlt(CONST_activities200, gamelog);
+			addstrAlt(CONST_X_I_DONT_THINK_THEYRE_IN_HERE, gamelog);
 		else if (key_search_total == 15)
-			addstrAlt(CONST_activities201, gamelog);
+			addstrAlt(CONST_X_IF_THEY_WERE_HERE_ID_HAVE_FOUND_THEM_BY_NOW, gamelog);
 		else if (key_search_total > 15)
 		{
 			addstrAlt(pickrandom(car_wont_start), gamelog);
@@ -2078,13 +2079,13 @@ bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, 
 		nervous_counter++;
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activities178);
+		mvaddstrAlt(0, 0, CONST_X_ADVENTURES_IN_LIBERAL_CAR_THEFT);
 		printcreatureinfo(&cr);
 		makedelimiter();
 		int y = 10;
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(y++, 0, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities179, gamelog);
+		addstrAlt(CONST_X_IS_BEHIND_THE_WHEEL_OF_A_, gamelog);
 		addstrAlt(carname, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -2092,20 +2093,20 @@ bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, 
 		{
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			moveAlt(y++, 0);
-			if (sensealarm)addstrAlt(CONST_activities180);
+			if (sensealarm)addstrAlt(CONST_X_THE_VIPER);
 			else addstrAlt(carname);
-			addstrAlt(CONST_activities181);
+			addstrAlt(CONST_X_COLON_SPACE_SPACE);
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			if (sensealarm)addstrAlt(CONST_activities182);
-			else addstrAlt(CONST_activities183);
+			if (sensealarm)addstrAlt(CONST_X_REMOVE_YOURSELF_FROM_THE_VEHICLE_BEEP_BEEP);
+			else addstrAlt(CONST_X_BEEP_BEEP_BEEP_BEEP);
 		}
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt((++y)++, 0, CONST_activities184);
+		mvaddstrAlt((++y)++, 0, CONST_X_A_HOTWIRE_THE_CAR);
 		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(y++, 0, CONST_activities185);
+		mvaddstrAlt(y++, 0, CONST_X_B_DESPERATELY_SEARCH_FOR_KEYS);
 		moveAlt(y++, 0);
-		if (!sensealarm)addstrAlt(CONST_activities186);
-		else { addstrAlt(CONST_activities187); addstrAlt(cr.getNameAndAlignment().name); addstrAlt(singleDot); }
+		if (!sensealarm)addstrAlt(CONST_CALL_IT_A_DAY_PRESS_ENTER);
+		else { addstrAlt(CONST_X_ENTER_THE_VIPER_HAS_FINALLY_DETERRED_); addstrAlt(cr.getNameAndAlignment().name); addstrAlt(singleDot); }
 		y++;
 		CarHotwireMethod method = UNDETERMINED;
 		while (method == UNDETERMINED)
@@ -2131,7 +2132,7 @@ bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, 
 				}
 				set_color_easy(WHITE_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y++, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities188, gamelog);
+				addstrAlt(CONST_X_HOTWIRES_THE_CAR, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
 				started = true;
@@ -2175,7 +2176,7 @@ bool startCar(DeprecatedCreature &cr, const string carname, const bool alarmon, 
 			{
 				set_color_easy(RED_ON_BLACK_BRIGHT);
 				mvaddstrAlt(y++, 0, cr.getNameAndAlignment().name, gamelog);
-				addstrAlt(CONST_activities202, gamelog);
+				addstrAlt(CONST_X_HAS_BEEN_SPOTTED_BY_A_PASSERBY, gamelog);
 				gamelog.nextMessage();
 				pressAnyKey();
 				//FOOT CHASE
@@ -2227,13 +2228,13 @@ bool stealcar(DeprecatedCreature &cr, char &clearformess)
 		//THEFT SEQUENCE
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activities178, gamelog);
+		mvaddstrAlt(0, 0, CONST_X_ADVENTURES_IN_LIBERAL_CAR_THEFT, gamelog);
 		gamelog.nextMessage();
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10, 0, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities147, gamelog);
+		addstrAlt(CONST_X_LOOKS_AROUND_FOR_AN_ACCESSIBLE_VEHICLE, gamelog);
 		pressAnyKey();
 		//ROUGH DAY
 		if (!cr.skill_check(SKILL_STREETSENSE, diff))
@@ -2246,7 +2247,7 @@ bool stealcar(DeprecatedCreature &cr, char &clearformess)
 		{
 			addstrAlt(wasUnableToFind(vehicleTypelongname(old)), gamelog);
 		}
-		else addstrAlt(CONST_activities150, gamelog);
+		else addstrAlt(CONST_X_FOUND_A, gamelog);
 		addstrAlt(v->longname(), gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
@@ -2254,17 +2255,17 @@ bool stealcar(DeprecatedCreature &cr, char &clearformess)
 		//APPROACH?
 		eraseAlt();
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, CONST_activities178);
+		mvaddstrAlt(0, 0, CONST_X_ADVENTURES_IN_LIBERAL_CAR_THEFT);
 		printcreatureinfo(&cr);
 		makedelimiter();
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(10, 0, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities152, gamelog);
+		addstrAlt(CONST_X_LOOKS_FROM_A_DISTANCE_AT_AN_EMPTY_, gamelog);
 		addstrAlt(carname, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage();
-		mvaddstrAlt(12, 0, CONST_activities153);
-		mvaddstrAlt(13, 0, CONST_activities186);
+		mvaddstrAlt(12, 0, CONST_X_A_APPROACH_THE_DRIVERS_SIDE_DOOR);
+		mvaddstrAlt(13, 0, CONST_CALL_IT_A_DAY_PRESS_ENTER);
 		while (true)
 		{
 			int c = getkeyAlt();
@@ -2325,14 +2326,14 @@ void getwheelchair(DeprecatedCreature &cr, char &clearformess)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities203, gamelog);
+		addstrAlt(CONST_X_HAS_PROCURED_A_WHEELCHAIR, gamelog);
 		cr.flag |= CREATUREFLAG_WHEELCHAIR;
 	}
 	else
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(8, 1, cr.getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_activities204, gamelog);
+		addstrAlt(CONST_X_WAS_UNABLE_TO_GET_A_WHEELCHAIR_MAYBE_TOMORROW, gamelog);
 	}
 	gamelog.nextMessage();
 	pressAnyKey();

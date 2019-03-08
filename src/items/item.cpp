@@ -1,4 +1,5 @@
 
+
 #define	ITEM_CPP
 #include "../includes.h"
 
@@ -55,6 +56,6 @@ const char* Item::aan() const
 	case 'u': case 'U':
 		return CONST_AN.c_str();
 	default:
-		return CONST_item007.c_str();
+		return CONST_X_LETTER_A.c_str();
 	}
 }

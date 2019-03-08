@@ -1,4 +1,3 @@
-
 #define	LIBERALAGENDA_CPP
 #include "../includes.h"
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
@@ -70,31 +69,31 @@ void printDisbandOption() {
 	if (stalinmode)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_liberalagenda055);
+		addstrAlt(CONST_X_STALINIST_SPACE);
 	}
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_liberalagenda056);
+	addstrAlt(CONST_X_ELITE_LIBERAL_SPACE);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_liberalagenda058);
+	addstrAlt(CONST_X_LIBERAL_SPACE);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_liberalagenda060);
+	addstrAlt(CONST_X_MODERATE_SPACE);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		addstrAlt(DASH_SPACE);
 	}
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-	addstrAlt(CONST_liberalagenda062);
+	addstrAlt(CONST_X_CONSERVATIVE_SPACE);
 	if (!stalinmode)
 	{
 		set_color_easy(WHITE_ON_BLACK);
@@ -103,7 +102,6 @@ void printDisbandOption() {
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	addstrAlt(CONST_liberalagenda064);
 	set_color_easy(WHITE_ON_BLACK);
-	//mvaddstrAlt(23,0,CONST_liberalagenda065);
 	mvaddstrAlt(24, 0, CONST_PRESS_D_TO_DISBAND_AND_WAIT_USE_CURSORS_FOR_OTHER_PAGES_ANY_OTHER_KEY_TO_EXIT);
 }
 void printLaws(const int startinglaw, const signed char won) {
@@ -159,7 +157,7 @@ void printLeadersWithoutVictor() {
 	else if (housemake[3] + housemake[4] >= HOUSEMAJORITY) align = ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
-	mvaddstrAlt(10, 0, CONST_liberalagenda037);
+	mvaddstrAlt(10, 0, CONST_X_HOUSE_COLON);
 	if (stalinmode) addstrAlt(tostring(housemake[5]) + tag_Sta);
 	addstrAlt(tostring(housemake[4]) + tag_Libp);
 	addstrAlt(tostring(housemake[3]) + tag_Lib);
@@ -177,7 +175,7 @@ void printLeadersWithoutVictor() {
 	else align = ALIGN_MODERATE; // nobody has a majority
 	set_alignment_color(align, true);
 	senatemake[exec[EXEC_VP] + 2]--; // Vice President isn't actually a Senator though
-	mvaddstrAlt(11, 0, CONST_liberalagenda038);
+	mvaddstrAlt(11, 0, CONST_X_SENATE_COLON);
 	if (stalinmode) addstrAlt(tostring(senatemake[5]) + tag_Sta);
 	addstrAlt(tostring(senatemake[4]) + tag_Libp);
 	addstrAlt(tostring(senatemake[3]) + tag_Lib);
@@ -246,7 +244,7 @@ void printSingleLaw(const signed char won, const int l) {
 	else if (won == 1 && wincondition == WINCONDITION_ELITE)
 		set_alignment_color(ALIGN_ELITELIBERAL, true);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11â”€â”€â”€â”€â”€\x10");
+	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ÍÍÍÍÍ\x10");
 	if (won == -1 || won == -2)
 		set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
 	else set_alignment_color(lawList[l], true);
@@ -259,7 +257,7 @@ void printPageLeaders(const signed char won) {
 
 	mvaddstrAlt(1, 0, FORMATTED_LINE);
 	mvaddstrAlt(2, 0, GENERAL_SUMMARY_ISSUES_HEADER);
-	mvaddstrAlt(3, 0, CONST_liberalagenda020);
+	mvaddstrAlt(3, 0, CONST_X_GEN_SUM_FOOTER);
 	set_alignment_color(exec[EXEC_PRESIDENT], true);
 	printLeadersFirstPage(won);
 	if (won == -2) moveAlt(8, 30);
@@ -306,18 +304,18 @@ void printPage(const int page, const signed char won) {
 		break;
 	}
 	case PAGE_ISSUES_A:
-		mvaddstrAlt(1, 0, CONST_liberalagenda045);
-		mvaddstrAlt(2, 0, CONST_liberalagenda046);
-		mvaddstrAlt(3, 0, CONST_liberalagenda047);
+		mvaddstrAlt(1, 0, CONST_X_GEN_SUM_HEADER_2);
+		mvaddstrAlt(2, 0, CONST_X_GENERAL_SUMMARY_ISSUES_A_ISSUES_B_2);
+		mvaddstrAlt(3, 0, CONST_X_GEN_SUM_FOOTER_2);
 
 
 		printLaws(0, won);
 		break;
 	case PAGE_ISSUES_B:
 
-		mvaddstrAlt(1, 0, CONST_liberalagenda048);
-		mvaddstrAlt(2, 0, CONST_liberalagenda049);
-		mvaddstrAlt(3, 0, CONST_liberalagenda050);
+		mvaddstrAlt(1, 0, CONST_X_GEN_SUM_HEADER_3);
+		mvaddstrAlt(2, 0, CONST_X_GENERAL_SUMMARY_ISSUES_A_ISSUES_B_3);
+		mvaddstrAlt(3, 0, CONST_X_GEN_SUM_FOOTER_3);
 
 		printLaws(18, won);
 		break;

@@ -8,10 +8,10 @@ ArmorType::ArmorType(MCD_STR xmlstring)
 	can_get_bloody_(true), can_get_damaged_(true),
 	stealth_value_(0), armor_body_(0), armor_head_(0), armor_limbs_(0), fireprotection_(false),
 	cover_head_(false), cover_body_(true), cover_arms_(true), cover_legs_(true), conceal_face_(false),
-	shortname_(CONST_armortype055), shortname_future_(CONST_armortype055), shortname_defined_(false), shortname_future_defined_(false),
+	shortname_(CONST_armortypeUNDEF), shortname_future_(CONST_armortypeUNDEF), shortname_defined_(false), shortname_future_defined_(false),
 	interrogation_basepower_(0), interrogation_assaultbonus_(0), interrogation_drugbonus_(0),
 	professionalism_(2), conceal_weaponsize_(5),
-	mask_(false), surprise_mask_(false), description_(CONST_armortype055),
+	mask_(false), surprise_mask_(false), description_(CONST_armortypeUNDEF),
 	quality_levels_(4), durability_(10)
 {
 	init(xmlstring);
@@ -223,10 +223,6 @@ void ArmorType::init(const MCD_STR& xmlstring)
 			case ENUM_tag_durability:
 				durability_ = max(0, atoi(xml.GetData()));
 				break;
-				/*default:
-				errorlog << UNKNOWN_ELEMENT_FOR_ARMOR_TYPE << idname() << CONST_armortypeB044 << element << endl;
-				break;
-				*/
 			}
 		}
 
@@ -275,10 +271,6 @@ const string& ArmorType::get_shortname() const
 		return name_future_;
 	else //if (shortname_defined_)
 		return shortname_;
-	/*else if (len(name()) <= 14)
-	return name();
-	else
-	return CONST_armortype055;*/
 }
 bool ArmorType::conceals_weaponsize(int weaponsize) const
 {

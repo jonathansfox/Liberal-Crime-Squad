@@ -1,4 +1,5 @@
 
+
 #define	INTERROGATION_CPP
 #include "../includes.h"
 /*
@@ -95,7 +96,7 @@ void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
 	else
 	{
 		line_one = CONST_THE_CONSERVATIVE_WOULD_LIKE_TO;
-		line_two, CONST_interrogation058;
+		line_two, CONST_X_MURDER_SPACE;
 		line_two += string(a->getNameAndAlignment().name);
 		line_two += singleDot;
 	}
@@ -483,7 +484,7 @@ string creatureIsHurtAndMightDie(DeprecatedCreature* cr) {
 vector<string> printCreatureInterrogationStatus(DeprecatedCreature* cr, const bool restrain) {
 	vector<string> output;
 
-	output.push_back(CONST_interrogation091 + cr->getNameAndAlignment().name + CONST_DAY + tostring(cr->joindays));
+	output.push_back(CONST_X_THE_EDUCATION_OF_ + cr->getNameAndAlignment().name + CONST_DAY + tostring(cr->joindays));
 
 	if (restrain)
 	{
@@ -712,7 +713,7 @@ void beatCaptive(DeprecatedCreature* a, DeprecatedCreature* cr, int &y, const ve
 			guardsAdministerBeating = cr->getNameAndAlignment().name + CONST_S_GUARDS_BEAT;
 			break;
 		}
-		mvaddstrAlt(y, 0, guardsAdministerBeating + CONST_interrogation121, gamelog);
+		mvaddstrAlt(y, 0, guardsAdministerBeating + CONST_X_THE_AUTOMATON, gamelog);
 		if (techniques[TECHNIQUE_PROPS])
 		{
 			addstrAlt(singleSpace, gamelog);
@@ -822,7 +823,7 @@ void tendhostage(DeprecatedCreature *cr, char &clearformess)
 	clearformess = 1;
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(0, 0, CONST_interrogation091);
+	mvaddstrAlt(0, 0, CONST_X_THE_EDUCATION_OF_);
 	addstrAlt(cr->getNameAndAlignment().name);
 	addstrAlt(CONST_DAY);
 	addstrAlt(cr->joindays);

@@ -1,4 +1,5 @@
 
+
 #define	NEWS_CPP
 #include "../includes.h"
 /*
@@ -671,7 +672,7 @@ string defaultAdFour() {
 	ad += singleSpace;
 	// strcat(ad,cartype);
 	//TODO: leading zeros, etc.
-	ad += CONST_LEXUS_GS_300 + ampersandR;
+	ad += CONST_X_LEXUS_GS_ + ampersandR;
 	ad += ampersandC + CONST_SEDAN_4D + ampersandR;
 	ad += ampersandC + CONST_ONLY;
 	ad += tostring(LCSrandom(16) + 15);

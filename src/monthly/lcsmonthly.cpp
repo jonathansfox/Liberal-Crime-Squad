@@ -1,4 +1,5 @@
 
+
 #define	LCSMONTHLY_CPP
 #include "../includes.h"
 
@@ -195,7 +196,7 @@ the bottom of includes.h in the top src folder.
 	  else
 	  {
 		  addstrAlt(CONST_THE_RESPONSE_IS_ELECTRIC_EVERYONE_IS_TALKING_ABOUT_THIS_MONTH_S, gamelog);
-		  mvaddstrAlt(8, 2, CONST_lcsmonthly028, gamelog);
+		  mvaddstrAlt(8, 2, CONST_X_LIBERAL_GUARDIAN, gamelog);
 	  }
 	  gamelog.nextMessage();
 	  pressAnyKey();
@@ -644,8 +645,8 @@ the bottom of includes.h in the top src folder.
 	  string num;
 	  set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	  mvaddstrAlt(y, 0, CONST_NET_CHANGE_THIS_MONTH_DAY);
-	  if (totalmoney > 0) { set_color_easy(GREEN_ON_BLACK_BRIGHT); num = CONST_lcsmonthly121; }
-	  else if (totalmoney < 0) { set_color_easy(RED_ON_BLACK_BRIGHT); num = CONST_lcsmonthly122; }
+	  if (totalmoney > 0) { set_color_easy(GREEN_ON_BLACK_BRIGHT); num = CONST_X_PLUS_SIGN; }
+	  else if (totalmoney < 0) { set_color_easy(RED_ON_BLACK_BRIGHT); num = CONST_X_MINUS_SIGN; }
 	  else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = BLANK_STRING; }
 	  num += DOLLAR_SIGN + tostring(abs(totalmoney));
 	  mvaddstrAlt(y, 60 - len(num), num);

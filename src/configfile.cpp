@@ -1,4 +1,5 @@
 
+
 #define	CONFIGFILE_CPP
 #include "includes.h"
 
@@ -28,7 +29,7 @@ int readConfigFile(const std::string& filename)
       // if COMMAND is OBJECT,
       // call a object creator factory, passing VALUE
       // (record pointer to that object)
-      if(command==CONST_configfile001) object=createObject(value);
+      if(command==CONST_X_OBJECT) object=createObject(value);
       // if I have an object,
       // pass COMMAND and VALUE to the object
       else if(object) object->configure(command, value);

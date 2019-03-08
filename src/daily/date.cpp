@@ -1,4 +1,5 @@
 
+
 #define	DATE_CPP
 #include "../includes.h"
 /*
@@ -51,7 +52,7 @@ This file is part of Liberal Crime Squad.                                       
 			 int num_relationships = loveslaves(*pool[p]);
 			 if (pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
 			 if (num_relationships == 1) addstrAlt(SOMEONE, gamelog);
-			 else addstrAlt(tostring(num_relationships) + CONST_date012, gamelog);
+			 else addstrAlt(tostring(num_relationships) + CONST_X_PEOPLE, gamelog);
 			 gamelog.newline();
 			 mvaddstrAlt(y++, 0, pool[p]->getNameAndAlignment().name, gamelog);
 			 addstrAlt(ISNT_SEDUCTIVE_ENOUGH, gamelog);
@@ -161,9 +162,9 @@ This file is part of Liberal Crime Squad.                                       
 			 addstrAlt(s + TO_TAKE_CARE_OF + d.date[e]->hisher() + CONST_PET, gamelog);
 			 switch (LCSrandom(3 + (lawList[LAW_ANIMALRESEARCH] == -2)))
 			 {
-			 case 0: addstrAlt(CONST_date036, gamelog); break;
-			 case 1: addstrAlt(CONST_date037, gamelog); break;
-			 case 2: addstrAlt(CONST_date038, gamelog); break;
+			 case 0: addstrAlt(CONST_X_CAT, gamelog); break;
+			 case 1: addstrAlt(CONST_X_DOG, gamelog); break;
+			 case 2: addstrAlt(CONST_X_FISH, gamelog); break;
 			 case 3: addstrAlt(SIX_LEGGED_PIG, gamelog); break;
 			 }
 			 break;

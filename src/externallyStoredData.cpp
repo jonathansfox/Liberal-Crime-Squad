@@ -1,4 +1,5 @@
 
+
 #define	EXTERNALLYSTOREDDATA_CPP
 #include "includes.h"
 
@@ -36,32 +37,32 @@ bool initialize_more_incomplete_txt() {
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_POLITICS, Data_Activity('t', false, CONST_SKILLS_TRAINED_WRITING_PERSUASION_LAW_STREET_SENSE_SCIENCE, CONST_RELIGION_BUSINESS_MUSIC_ART, CONST_CLASSES_COST_UP_TO_20_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_COVERT, Data_Activity('t', false, CONST_SKILLS_TRAINED_COMPUTERS_SECURITY_STEALTH_DISGUISE_TAILORING, CONST_SEDUCTION_PSYCHOLOGY_DRIVING, CONST_CLASSES_COST_UP_TO_60_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_FIGHTING, Data_Activity('t', false, CONST_SKILLS_TRAINED_ALL_WEAPON_SKILLS_MARTIAL_ARTS_DODGE_FIRST_AID, BLANK_STRING, CONST_CLASSES_COST_UP_TO_100_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DEBATING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MARTIAL_ARTS, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DRIVING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_PSYCHOLOGY, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FIRST_AID, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_LAW, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DISGUISE, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SCIENCE, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_BUSINESS, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_GYMNASTICS, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WRITING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_ART, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MUSIC, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_TEACHING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_LOCKSMITHING, Data_Activity('l', true, study_string1, study_string2)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COMPUTERS, Data_Activity('l', true, study_string1, study_string2)),
-		 //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COOKING, Data_Activity'l', true,study_string1, study_string2)),
-		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FENCING, Data_Activity('l', true, study_string1, study_string2)),
-		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WEAVING, Data_Activity('l', true, study_string1, study_string2)),
-		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_RELIGION, Data_Activity('l', true, study_string1, study_string2)),
-		  //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MAGIC, Data_Activity'l', true,study_string1, study_string2)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_CLUB, Data_Activity('l', true, study_string1, study_string2)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STREETSENSE, Data_Activity('l', true, study_string1, study_string2)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_THROWING, Data_Activity('l', true, study_string1, study_string2)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STEALTH, Data_Activity('l', true, study_string1, study_string2)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SEDUCTION, Data_Activity('l', true, study_string1, study_string2)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DEBATING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MARTIAL_ARTS, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DRIVING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_PSYCHOLOGY, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FIRST_AID, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_LAW, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DISGUISE, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SCIENCE, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_BUSINESS, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_GYMNASTICS, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WRITING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_ART, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MUSIC, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_TEACHING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_LOCKSMITHING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COMPUTERS, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		 //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_COOKING, Data_Activity'l', true,CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_FENCING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_WEAVING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_RELIGION, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		  //  map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MAGIC, Data_Activity'l', true,CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_CLUB, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STREETSENSE, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_THROWING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STEALTH, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SEDUCTION, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
 		   map<Activity, Data_Activity>::value_type(ACTIVITY_NONE, Data_Activity('x', false, BLANK_STRING))
 	};
 	pollingData = {
@@ -121,30 +122,30 @@ bool initialize_more_incomplete_txt() {
 	data_lessons = {
 	   ActivityAndString(ACTIVITY_STUDY_DEBATING,	CONST_PUBLIC_POLICY),
 	   ActivityAndString(ACTIVITY_STUDY_BUSINESS,	CONST_ECONOMICS),
-	   ActivityAndString(ACTIVITY_STUDY_PSYCHOLOGY,	CONST_ACTIVITY_HEAL7),
+	   ActivityAndString(ACTIVITY_STUDY_PSYCHOLOGY,	CONST_X_PSYCHOLOGY),
 	   ActivityAndString(ACTIVITY_STUDY_LAW,	CONST_CRIMINAL_LAW),
 	   ActivityAndString(ACTIVITY_STUDY_SCIENCE,	CONST_PHYSICS),
 	   ActivityAndString(ACTIVITY_STUDY_DRIVING,	CONST_DRIVERS_ED),
-	   ActivityAndString(ACTIVITY_STUDY_FIRST_AID,	CONST_ACTIVITY_SLEEPER_CONSERVATIVE4),
+	   ActivityAndString(ACTIVITY_STUDY_FIRST_AID,	CONST_X_FIRST_AID),
 	   ActivityAndString(ACTIVITY_STUDY_ART,	CONST_PAINTING),
 	   ActivityAndString(ACTIVITY_STUDY_DISGUISE,	CONST_THEATRE),
 	   ActivityAndString(ACTIVITY_STUDY_MARTIAL_ARTS,CONST_KUNG_FU),
 	   ActivityAndString(ACTIVITY_STUDY_GYMNASTICS,	CONST_GYMNASTICS),
-	   ActivityAndString(ACTIVITY_STUDY_WRITING,	CONST_ACTIVITY_SLEEPER_LIBERAL4),
+	   ActivityAndString(ACTIVITY_STUDY_WRITING,	CONST_X_WRITING),
 	   ActivityAndString(ACTIVITY_STUDY_TEACHING,	CONST_EDUCATION),
-	   ActivityAndString(ACTIVITY_STUDY_MUSIC,	CONST_ACTIVITY_SLEEPER_LIBERAL5),
+	   ActivityAndString(ACTIVITY_STUDY_MUSIC,	CONST_X_MUSIC),
 	   ActivityAndString(ACTIVITY_STUDY_LOCKSMITHING,CONST_LOCKSMITHING),
 	   // Terra Vitae
 	   ActivityAndString(ACTIVITY_STUDY_COMPUTERS, CONST_COMPUTER_SCIENCE),
 	   ActivityAndString(ACTIVITY_STUDY_FENCING, CONST_FENCING),
 	   ActivityAndString(ACTIVITY_STUDY_WEAVING, CONST_WEAVING),
-	   ActivityAndString(ACTIVITY_STUDY_RELIGION, CONST_ACTIVITY_SLEEPER_LIBERAL7),
+	   ActivityAndString(ACTIVITY_STUDY_RELIGION, CONST_X_RELIGION),
 	   //, ActivityAndString(ACTIVITY_STUDY_MAGIC, CONST_MAGIC)
 	   // new for 4.12.6
 	   ActivityAndString(ACTIVITY_STUDY_CLUB,	CONST_BASEBALL),
 	   ActivityAndString(ACTIVITY_STUDY_STREETSENSE,	CONST_POLICE_PROCEDURE),
 	   ActivityAndString(ACTIVITY_STUDY_THROWING,	CONST_BASKETBALL),
-	   ActivityAndString(ACTIVITY_STUDY_STEALTH,	CONST_ACTIVITY_SLEEPER_CONSERVATIVE0),
+	   ActivityAndString(ACTIVITY_STUDY_STEALTH,	CONST_X_STEALTH),
 	   ActivityAndString(ACTIVITY_STUDY_SEDUCTION,CONST_BUYING_DRINKS)
 	};
 	hackingActivities = {
@@ -166,7 +167,7 @@ bool initialize_more_incomplete_txt() {
 	{
 		map<char, vector<ActivityAndString> >::value_type('a',vector<ActivityAndString>({ ActivityAndString(1, ACTIVITY_COMMUNITYSERVICE, CONST_COMMUNITY_SERVICE),
 		ActivityAndString(2, ACTIVITY_TROUBLE,	CONST_LIBERAL_DISOBEDIENCE),
-			ActivityAndString(3, ACTIVITY_GRAFFITI,	CONST_externallyStoredData297),
+			ActivityAndString(3, ACTIVITY_GRAFFITI,	CONST_X_GRAFFITI),
 			ActivityAndString(4, ACTIVITY_POLLS,	CONST_SEARCH_OPINION_POLLS),
 			//ActivityAndString(ACTIVITY_DOS_ATTACKS, CONST_HARASS_WEBSITES),
 			ActivityAndString(5, ACTIVITY_HACKING,	CONST_HACKING),
@@ -180,9 +181,9 @@ bool initialize_more_incomplete_txt() {
 			ActivityAndString(2, ACTIVITY_PROSTITUTION,	CONST_PROSTITUTION, ACTIVITIY_MENU_CHECK_AGE),
 			//	ActivityAndString(ACTIVITY_DOS_RACKET, CONST_ELECTRONIC_PROTECTION_RACKET),
 			ActivityAndString(3, ACTIVITY_CCFRAUD,	CONST_STEAL_CREDIT_CARD_NUMBERS) })),
-		map<char, vector<ActivityAndString> >::value_type('d',vector<ActivityAndString>({ ActivityAndString(1, ACTIVITY_RECRUITING,	CONST_externallyStoredData566),
-			ActivityAndString(2, ACTIVITY_MAKE_ARMOR,	CONST_externallyStoredData312),
-			ActivityAndString(3, ACTIVITY_REPAIR_ARMOR,	CONST_externallyStoredData313),
+		map<char, vector<ActivityAndString> >::value_type('d',vector<ActivityAndString>({ ActivityAndString(1, ACTIVITY_RECRUITING,	CONST_X_RECRUITING),
+			ActivityAndString(2, ACTIVITY_MAKE_ARMOR,	CONST_X_MAKE_CLOTHING),
+			ActivityAndString(3, ACTIVITY_REPAIR_ARMOR,	CONST_X_REPAIR_CLOTHING),
 			ActivityAndString(4, ACTIVITY_STEALCARS,	CONST_STEAL_A_CAR, ACTIVITIY_MENU_CHECK_CAN_WALK),
 			ActivityAndString(5, ACTIVITY_WHEELCHAIR,	CONST_PROCURE_A_WHEELCHAIR, ACTIVITIY_MENU_CHECK_WHEELCHAIR),
 			ActivityAndString(6, ACTIVITY_AUGMENT, CONST_AUGMENT_A_LIBERAL, ACTIVITIY_MENU_CHECK_CAN_AUGMENT) })),
@@ -218,7 +219,7 @@ bool initialize_more_incomplete_txt() {
 		map<short, string>::value_type(SORTINGCHOICE_HOSTAGES, CONST_HOSTAGES),
 		map<short, string>::value_type(SORTINGCHOICE_CLINIC, CONST_LIBERALS_IN_HOSPITAL),
 		map<short, string>::value_type(SORTINGCHOICE_JUSTICE, CONST_OPPRESSED_LIBERALS),
-		map<short, string>::value_type(SORTINGCHOICE_SLEEPERS, CONST_externallyStoredData345),
+		map<short, string>::value_type(SORTINGCHOICE_SLEEPERS, CONST_X_SLEEPERS_DOT),
 		map<short, string>::value_type(SORTINGCHOICE_DEAD, CONST_DEAD_PEOPLE),
 		map<short, string>::value_type(SORTINGCHOICE_AWAY, CONST_PEOPLE_AWAY),
 		map<short, string>::value_type(SORTINGCHOICE_ACTIVATE, CONST_LIBERAL_ACTIVITY),
@@ -415,11 +416,11 @@ bool initialize_more_incomplete_txt() {
 		map<string, string>::value_type(CONST_TRINKET,tag_LOOT_TRINKET)
 	};
 	reviewStrings = {
-		map<short, string>::value_type(REVIEWMODE_LIBERALS, CONST_externallyStoredData525),
+		map<short, string>::value_type(REVIEWMODE_LIBERALS, CONST_X_ACTIVE_LIBERALS),
 		map<short, string>::value_type(REVIEWMODE_HOSTAGES,	CONST_CONSERVATIVE_AUTOMATONS_IN_CAPTIVITY),
 		map<short, string>::value_type(REVIEWMODE_CLINIC,	CONST_LIBERALS_IN_CLINICS),
 		map<short, string>::value_type(REVIEWMODE_JUSTICE,	CONST_LIBERALS_AND_THE_JUSTICE_SYSTEM),
-		map<short, string>::value_type(REVIEWMODE_SLEEPERS,	CONST_externallyStoredData529),
+		map<short, string>::value_type(REVIEWMODE_SLEEPERS,	CONST_X_SLEEPERS),
 		map<short, string>::value_type(REVIEWMODE_DEAD,	CONST_LIBERAL_MARTYRS_AND_DEAD_BODIES),
 		map<short, string>::value_type(REVIEWMODE_AWAY,	CONST_LIBERALS_THAT_ARE_AWAY)
 	};
@@ -435,20 +436,20 @@ bool initialize_more_incomplete_txt() {
 	liberalListAndColor = {
 	   stringAndColor(WHITE_ON_BLACK,	CONST_RECRUITED),
 	   stringAndColor(MAGENTA_ON_BLACK,	CONST_SEDUCED),
-	   stringAndColor(WHITE_ON_BLACK,	CONST_externallyStoredData541),
+	   stringAndColor(WHITE_ON_BLACK,	CONST_X_BACKSLASH),
 	   stringAndColor(YELLOW_ON_BLACK,	CONST_ENLIGHTENED),
 	   stringAndColor(YELLOW_ON_BLACK_BRIGHT,	TWO_SPACE_OPEN_BRACKET),
 	   stringAndColor(WHITE_ON_BLACK,	CONST_ARRESTED),
-	   stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(YELLOW_ON_BLACK_BRIGHT,	CONST_X_CLOSE_BRACKET),
 	   stringAndColor(RED_ON_BLACK_BRIGHT,	SPACE_OPEN_BRACKET),
 	   stringAndColor(WHITE_ON_BLACK,	CONST_IN_JAIL),
-	   stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(RED_ON_BLACK_BRIGHT,	CONST_X_CLOSE_BRACKET),
 	   stringAndColor(BLACK_ON_BLACK_BRIGHT,	SPACE_OPEN_BRACKET),
 	   stringAndColor(WHITE_ON_BLACK,	CONST_IN_HIDING),
-	   stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_externallyStoredData554),
+	   stringAndColor(BLACK_ON_BLACK_BRIGHT,	CONST_X_CLOSE_BRACKET),
 	   stringAndColor(BLUE_ON_BLACK_BRIGHT,	SPACE_OPEN_BRACKET),
 	   stringAndColor(WHITE_ON_BLACK,	CONST_SLEEPER),
-	   stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_externallyStoredData554)
+	   stringAndColor(BLUE_ON_BLACK_BRIGHT,	CONST_X_CLOSE_BRACKET)
 	};
 	getCityDescription = {
 		map<short, string>::value_type(SITE_CITY_SEATTLE, CONST_BIRTHPLACE_OF_THE_LCS),
@@ -477,7 +478,7 @@ bool initialize_more_incomplete_txt() {
 		map<short, vector<string> >::value_type(SITE_TRAVEL,{ tag_Travel, tag_Travel }),
 	};
 	getActivityString = {
-		map<short, string>::value_type(ACTIVITY_RECRUITING,	CONST_externallyStoredData566),
+		map<short, string>::value_type(ACTIVITY_RECRUITING,	CONST_X_RECRUITING),
 		map<short, string>::value_type(ACTIVITY_REPAIR_ARMOR,	CONST_REPAIRING_CLOTHING),
 		map<short, string>::value_type(ACTIVITY_WHEELCHAIR,	CONST_PROCURING_A_WHEELCHAIR),
 		map<short, string>::value_type(ACTIVITY_STEALCARS,	CONST_STEALING_A_CAR),
@@ -542,55 +543,55 @@ bool initialize_more_incomplete_txt() {
 	};
 	getViewString = {
 		map<short, vector<string> >::value_type(VIEW_STALIN,{ CONST_STALINISM, CONST_STALINISM }) ,
-		map<short, vector<string> >::value_type(VIEW_MOOD,{ CONST_PUBLIC_MOOD, CONST_externallyStoredDataB1042 }) ,
-		map<short, vector<string> >::value_type(VIEW_GAY,{ CONST_LGBTQ_RIGHTS, CONST_externallyStoredDataB1043 }) ,
+		map<short, vector<string> >::value_type(VIEW_MOOD,{ CONST_PUBLIC_MOOD, CONST_X_PUBLIC_MOOD }) ,
+		map<short, vector<string> >::value_type(VIEW_GAY,{ CONST_LGBTQ_RIGHTS, CONST_X_LGBTQ_RIGHTS }) ,
 		map<short, vector<string> >::value_type(VIEW_DEATHPENALTY,{ CONST_THE_DEATH_PENALTY, CONST_BARBARIC_EXECUTIONS }) ,
 		map<short, vector<string> >::value_type(VIEW_TAXES,{ CONST_TAXES, CONST_THE_TAX_STRUCTURE }) ,
 		map<short, vector<string> >::value_type(VIEW_NUCLEARPOWER,{ CONST_NUCLEAR_POWER, CONST_NUCLEAR_MELTDOWNS }) ,
-		map<short, vector<string> >::value_type(VIEW_ANIMALRESEARCH,{ CONST_ANIMAL_CRUELTY, CONST_externallyStoredDataB1047 }) ,
+		map<short, vector<string> >::value_type(VIEW_ANIMALRESEARCH,{ CONST_ANIMAL_CRUELTY, CONST_X_ANIMAL_CRUELTY }) ,
 		map<short, vector<string> >::value_type(VIEW_POLICEBEHAVIOR,{ CONST_COPS, CONST_POLICE_MISCONDUCT }) ,
-		map<short, vector<string> >::value_type(VIEW_TORTURE,{ CONST_TORTURE, CONST_externallyStoredDataB1049 }) ,
-		map<short, vector<string> >::value_type(VIEW_PRISONS,{ CONST_THE_PRISON_SYSTEM, CONST_externallyStoredDataB1050 }) ,
+		map<short, vector<string> >::value_type(VIEW_TORTURE,{ CONST_TORTURE, CONST_X_TORTURE }) ,
+		map<short, vector<string> >::value_type(VIEW_PRISONS,{ CONST_THE_PRISON_SYSTEM, CONST_X_THE_PRISON_SYSTEM }) ,
 		map<short, vector<string> >::value_type(VIEW_INTELLIGENCE,{ CONST_PRIVACY, CONST_PRIVACY_RIGHTS }) ,
 		map<short, vector<string> >::value_type(VIEW_FREESPEECH,{ CONST_FREE_SPEECH, CONST_FREEDOM_OF_SPEECH }) ,
 		map<short, vector<string> >::value_type(VIEW_GENETICS,{ CONST_GENETIC_RESEARCH, CONST_DANGEROUS_GMOS }) ,
 		map<short, vector<string> >::value_type(VIEW_JUSTICES,{ CONST_JUDGES, CONST_THE_JUDICIARY }) ,
 		map<short, vector<string> >::value_type(VIEW_GUNCONTROL,{ CONST_GUN_CONTROL, CONST_MASS_SHOOTINGS }) ,
 		map<short, vector<string> >::value_type(VIEW_SWEATSHOPS,{ CONST_LABOR_UNIONS, CONST_WORKERS_RIGHTS }) ,
-		map<short, vector<string> >::value_type(VIEW_POLLUTION,{ CONST_POLLUTION, CONST_externallyStoredData664 }) ,
-		map<short, vector<string> >::value_type(VIEW_CORPORATECULTURE,{ CONST_CORPORATIONS, CONST_externallyStoredDataB1056 }) ,
-		map<short, vector<string> >::value_type(VIEW_CEOSALARY,{ CONST_CEO_COMPENSATION, CONST_externallyStoredDataB1057 }) ,
+		map<short, vector<string> >::value_type(VIEW_POLLUTION,{ CONST_POLLUTION, CONST_X_POLLUTION }) ,
+		map<short, vector<string> >::value_type(VIEW_CORPORATECULTURE,{ CONST_CORPORATIONS, CONST_X_CORPORATE_CORRUPTION }) ,
+		map<short, vector<string> >::value_type(VIEW_CEOSALARY,{ CONST_CEO_COMPENSATION, CONST_X_CEO_COMPENSATION }) ,
 		map<short, vector<string> >::value_type(VIEW_WOMEN,{ CONST_WOMEN_S_RIGHTS, CONST_GENDER_EQUALITY }) ,
-		map<short, vector<string> >::value_type(VIEW_CIVILRIGHTS,{ CONST_externallyStoredData648, CONST_RACIAL_EQUALITY }) ,
+		map<short, vector<string> >::value_type(VIEW_CIVILRIGHTS,{ CONST_X_CIVIL_RIGHTS, CONST_RACIAL_EQUALITY }) ,
 		map<short, vector<string> >::value_type(VIEW_DRUGS,{ CONST_DRUGS, CONST_OPPRESSIVE_DRUG_LAWS }) ,
-		map<short, vector<string> >::value_type(VIEW_IMMIGRATION,{ CONST_IMMIGRATION, CONST_externallyStoredDataB1061 }) ,
+		map<short, vector<string> >::value_type(VIEW_IMMIGRATION,{ CONST_IMMIGRATION, CONST_X_IMMIGRANT_RIGHTS }) ,
 		map<short, vector<string> >::value_type(VIEW_MILITARY,{ CONST_THE_MILITARY, CONST_MILITARY_SPENDING }) ,
 		map<short, vector<string> >::value_type(VIEW_AMRADIO,{ CONST_AM_RADIO, CONST_AM_RADIO_PROPAGANDA }) ,
 		map<short, vector<string> >::value_type(VIEW_CABLENEWS,{ CONST_CABLE_NEWS, CONST_CABLE_NEWS_LIES }) ,
 		//map<short, vector<string> >::value_type( VIEW_POLITICALVIOLENCE, { CONST_POLITICAL_VIOLENCE, CONST_THE_NEED_FOR_ACTION } ) ,
 		map<short, vector<string> >::value_type(VIEW_LIBERALCRIMESQUAD,{ CONST_THE_LCS, CONST_WHO_WE_ARE }) ,
 		map<short, vector<string> >::value_type(VIEW_LIBERALCRIMESQUADPOS,{ CONST_THE_LCS, CONST_WHY_WE_ROCK }) ,
-		map<short, vector<string> >::value_type(VIEW_CONSERVATIVECRIMESQUAD,{ CONST_THE_CCS, CONST_externallyStoredDataB1067 })
+		map<short, vector<string> >::value_type(VIEW_CONSERVATIVECRIMESQUAD,{ CONST_THE_CCS, CONST_X_THE_CCS_TERRORISTS })
 	};
 	getLawString = {
 		map<short, string>::value_type(LAW_ABORTION, CONST_ABORTION_RIGHTS),
 		map<short, string>::value_type(LAW_ANIMALRESEARCH, CONST_ANIMAL_RIGHTS), // a.k.a. CONST_ANIMAL_RESEARCH
 		map<short, string>::value_type(LAW_POLICEBEHAVIOR, CONST_POLICE_REGULATION), // a.k.a. CONST_POLICE_BEHAVIOR
-		map<short, string>::value_type(LAW_PRIVACY, CONST_PRIVACY_RIGHTS), // a.k.a. CONST_externallyStoredDataB1070
+		map<short, string>::value_type(LAW_PRIVACY, CONST_PRIVACY_RIGHTS), // a.k.a. CONST_X_PRIVACY
 		map<short, string>::value_type(LAW_DEATHPENALTY, CONST_DEATH_PENALTY), // a.k.a. CONST_CAPITAL_PUNISHMENT
-		map<short, string>::value_type(LAW_NUCLEARPOWER, CONST_externallyStoredData663),
-		map<short, string>::value_type(LAW_POLLUTION, CONST_externallyStoredData664),
+		map<short, string>::value_type(LAW_NUCLEARPOWER, CONST_X_NUCLEAR_POWER),
+		map<short, string>::value_type(LAW_POLLUTION, CONST_X_POLLUTION),
 		map<short, string>::value_type(LAW_LABOR, CONST_LABOR_LAWS), // a.k.a. CONST_WORKERS_RIGHTS
 		map<short, string>::value_type(LAW_GAY, CONST_GAY_RIGHTS), // a.k.a. CONST_HOMOSEXUAL_RIGHTS
 		map<short, string>::value_type(LAW_CORPORATE, CONST_CORPORATE_LAW), // a.k.a. CONST_CORPORATE_ETHICS
-		map<short, string>::value_type(LAW_FREESPEECH, CONST_externallyStoredData668), // a.k.a. CONST_FREEDOM_OF_SPEECH
+		map<short, string>::value_type(LAW_FREESPEECH, CONST_X_FREE_SPEECH), // a.k.a. CONST_FREEDOM_OF_SPEECH
 		map<short, string>::value_type(LAW_FLAGBURNING, CONST_FLAG_BURNING),
-		map<short, string>::value_type(LAW_GUNCONTROL, CONST_externallyStoredData670),
+		map<short, string>::value_type(LAW_GUNCONTROL, CONST_X_GUN_CONTROL),
 		map<short, string>::value_type(LAW_TAX, CONST_TAX_STRUCTURE), // a.k.a. CONST_TAX_LAW
-		map<short, string>::value_type(LAW_WOMEN, CONST_externallyStoredData672),
+		map<short, string>::value_type(LAW_WOMEN, CONST_X_WOMENS_RIGHTS),
 		map<short, string>::value_type(LAW_CIVILRIGHTS, CONST_externallyStoredData673),
 		map<short, string>::value_type(LAW_DRUGS, CONST_DRUG_LAWS), // a.k.a. CONST_DRUG_LAW
-		map<short, string>::value_type(LAW_IMMIGRATION, CONST_externallyStoredData675),
+		map<short, string>::value_type(LAW_IMMIGRATION, CONST_X_IMMIGRATION),
 		map<short, string>::value_type(LAW_ELECTIONS, CONST_ELECTION_REFORM),
 		map<short, string>::value_type(LAW_MILITARY, CONST_MILITARY_SPENDING),
 		map<short, string>::value_type(LAW_PRISONS, CONST_PRISON_REGULATION),
@@ -613,7 +614,7 @@ bool initialize_more_incomplete_txt() {
 		map<short, string>::value_type(LAWFLAG_ARMEDASSAULT,  CONST_ARMED_ASSAULT),
 		map<short, string>::value_type(LAWFLAG_ASSAULT,  CONST_ASSAULT),
 		map<short, string>::value_type(LAWFLAG_CARTHEFT,  CONST_GRAND_THEFT_AUTO),
-		map<short, string>::value_type(LAWFLAG_CCFRAUD,  CONST_externallyStoredData696),
+		map<short, string>::value_type(LAWFLAG_CCFRAUD,  CONST_X_CREDIT_CARD_FRAUD),
 		map<short, string>::value_type(LAWFLAG_THEFT,  CONST_THEFT),
 		map<short, string>::value_type(LAWFLAG_PROSTITUTION,  CONST_PROSTITUTION),
 		//map<short, string>::value_type( LAWFLAG_GUNUSE,  CONST_FIRING_ILLEGAL_WEAPONS),
@@ -632,11 +633,11 @@ bool initialize_more_incomplete_txt() {
 		map<short, map<short, string> >::value_type(LAWFLAG_BURNFLAG,
 		{
 			map<short, string>::value_type(ALIGN_ARCHCONSERVATIVE ,	CONST_FLAG_MURDER),
-			map<short, string>::value_type(ALIGN_CONSERVATIVE,CONST_externallyStoredData715),
-			map<short, string>::value_type(ALIGN_MODERATE,CONST_externallyStoredData715),
-			map<short, string>::value_type(ALIGN_LIBERAL,CONST_externallyStoredData715),
-			map<short, string>::value_type(ALIGN_ELITELIBERAL,CONST_externallyStoredData715),
-			map<short, string>::value_type(ALIGN_STALINIST ,CONST_externallyStoredData715)
+			map<short, string>::value_type(ALIGN_CONSERVATIVE,CONST_X_FLAG_BURNING),
+			map<short, string>::value_type(ALIGN_MODERATE,CONST_X_FLAG_BURNING),
+			map<short, string>::value_type(ALIGN_LIBERAL,CONST_X_FLAG_BURNING),
+			map<short, string>::value_type(ALIGN_ELITELIBERAL,CONST_X_FLAG_BURNING),
+			map<short, string>::value_type(ALIGN_STALINIST ,CONST_X_FLAG_BURNING)
 		}
 			),
 		map<short, map<short, string> >::value_type(LAWFLAG_HIREILLEGAL,{
@@ -1074,123 +1075,123 @@ map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
 		map<short, string>::value_type(SKILL_SWORD,           CONST_SWORD),
 		map<short, string>::value_type(SKILL_THROWING,        CONST_THROWING),
 		map<short, string>::value_type(SKILL_CLUB,            CONST_CLUB),
-		map<short, string>::value_type(SKILL_AXE,             CONST_ACTIVITY_HEAL0),
-		map<short, string>::value_type(SKILL_PISTOL,          CONST_ACTIVITY_HEAL1),
-		map<short, string>::value_type(SKILL_RIFLE,           CONST_ACTIVITY_HEAL2),
-		map<short, string>::value_type(SKILL_HEAVYWEAPONS,    CONST_ACTIVITY_HEAL3),
-		map<short, string>::value_type(SKILL_SHOTGUN,         CONST_ACTIVITY_HEAL4),
-		map<short, string>::value_type(SKILL_SMG,             CONST_ACTIVITY_HEAL5),
-		map<short, string>::value_type(SKILL_PERSUASION,      CONST_ACTIVITY_HEAL6),
-		map<short, string>::value_type(SKILL_PSYCHOLOGY,      CONST_ACTIVITY_HEAL7),
-		map<short, string>::value_type(SKILL_SECURITY,        CONST_ACTIVITY_HEAL8),
-		map<short, string>::value_type(SKILL_DISGUISE,        CONST_ACTIVITY_HEAL9),
-		map<short, string>::value_type(SKILL_COMPUTERS,       CONST_ACTIVITY_SLEEPER_LIBERAL0),
-		map<short, string>::value_type(SKILL_LAW,             CONST_ACTIVITY_SLEEPER_LIBERAL1),
-		map<short, string>::value_type(SKILL_TAILORING,       CONST_ACTIVITY_SLEEPER_LIBERAL2),
-		map<short, string>::value_type(SKILL_DRIVING,         CONST_ACTIVITY_SLEEPER_LIBERAL3),
-		map<short, string>::value_type(SKILL_WRITING,         CONST_ACTIVITY_SLEEPER_LIBERAL4),
-		map<short, string>::value_type(SKILL_MUSIC,           CONST_ACTIVITY_SLEEPER_LIBERAL5),
-		map<short, string>::value_type(SKILL_ART,             CONST_ACTIVITY_SLEEPER_LIBERAL6),
-		map<short, string>::value_type(SKILL_RELIGION,        CONST_ACTIVITY_SLEEPER_LIBERAL7),
-		map<short, string>::value_type(SKILL_SCIENCE,         CONST_ACTIVITY_SLEEPER_LIBERAL8),
-		map<short, string>::value_type(SKILL_BUSINESS,        CONST_ACTIVITY_SLEEPER_LIBERAL9),
-		map<short, string>::value_type(SKILL_STEALTH,         CONST_ACTIVITY_SLEEPER_CONSERVATIVE0),
-		map<short, string>::value_type(SKILL_TEACHING,        CONST_ACTIVITY_SLEEPER_CONSERVATIVE1),
-		map<short, string>::value_type(SKILL_STREETSENSE,     CONST_ACTIVITY_SLEEPER_CONSERVATIVE2),
-		map<short, string>::value_type(SKILL_SEDUCTION,       CONST_ACTIVITY_SLEEPER_CONSERVATIVE3),
-		map<short, string>::value_type(SKILL_FIRSTAID,        CONST_ACTIVITY_SLEEPER_CONSERVATIVE4),
-		map<short, string>::value_type(SKILL_DODGE,           CONST_ACTIVITY_SLEEPER_CONSERVATIVE5)
+		map<short, string>::value_type(SKILL_AXE,             CONST_X_AXE),
+		map<short, string>::value_type(SKILL_PISTOL,          CONST_X_PISTOL),
+		map<short, string>::value_type(SKILL_RIFLE,           CONST_X_RIFLE),
+		map<short, string>::value_type(SKILL_HEAVYWEAPONS,    CONST_X_HEAVY_WEAPONS),
+		map<short, string>::value_type(SKILL_SHOTGUN,         CONST_X_SHOTGUN),
+		map<short, string>::value_type(SKILL_SMG,             CONST_X_SMG),
+		map<short, string>::value_type(SKILL_PERSUASION,      CONST_X_PERSUASION),
+		map<short, string>::value_type(SKILL_PSYCHOLOGY,      CONST_X_PSYCHOLOGY),
+		map<short, string>::value_type(SKILL_SECURITY,        CONST_X_SECURITY),
+		map<short, string>::value_type(SKILL_DISGUISE,        CONST_X_DISGUISE),
+		map<short, string>::value_type(SKILL_COMPUTERS,       CONST_X_COMPUTERS),
+		map<short, string>::value_type(SKILL_LAW,             CONST_X_LAW),
+		map<short, string>::value_type(SKILL_TAILORING,       CONST_X_TAILORING),
+		map<short, string>::value_type(SKILL_DRIVING,         CONST_X_DRIVING),
+		map<short, string>::value_type(SKILL_WRITING,         CONST_X_WRITING),
+		map<short, string>::value_type(SKILL_MUSIC,           CONST_X_MUSIC),
+		map<short, string>::value_type(SKILL_ART,             CONST_X_ART),
+		map<short, string>::value_type(SKILL_RELIGION,        CONST_X_RELIGION),
+		map<short, string>::value_type(SKILL_SCIENCE,         CONST_X_SCIENCE),
+		map<short, string>::value_type(SKILL_BUSINESS,        CONST_X_BUSINESS),
+		map<short, string>::value_type(SKILL_STEALTH,         CONST_X_STEALTH),
+		map<short, string>::value_type(SKILL_TEACHING,        CONST_X_TEACHING),
+		map<short, string>::value_type(SKILL_STREETSENSE,     CONST_X_STREET_SENSE),
+		map<short, string>::value_type(SKILL_SEDUCTION,       CONST_X_SEDUCTION),
+		map<short, string>::value_type(SKILL_FIRSTAID,        CONST_X_FIRST_AID),
+		map<short, string>::value_type(SKILL_DODGE,           CONST_X_DODGE)
 	};
 	attEnumToString = {
-		map<short, string>::value_type(ATTRIBUTE_STRENGTH,       CONST_ACTIVITY_SLEEPER_CONSERVATIVE6),
-		map<short, string>::value_type(ATTRIBUTE_AGILITY,        CONST_ACTIVITY_SLEEPER_CONSERVATIVE7),
-		map<short, string>::value_type(ATTRIBUTE_WISDOM,         CONST_ACTIVITY_SLEEPER_CONSERVATIVE8),
-		map<short, string>::value_type(ATTRIBUTE_INTELLIGENCE,   CONST_ACTIVITY_SLEEPER_CONSERVATIVE9),
-		map<short, string>::value_type(ATTRIBUTE_HEART,          CONST_ACTIVITY_SLEEPER_SPY0),
-		map<short, string>::value_type(ATTRIBUTE_HEALTH,         CONST_ACTIVITY_SLEEPER_SPY1),
-		map<short, string>::value_type(ATTRIBUTE_CHARISMA,       CONST_ACTIVITY_SLEEPER_SPY2)
+		map<short, string>::value_type(ATTRIBUTE_STRENGTH,       CONST_X_STR),
+		map<short, string>::value_type(ATTRIBUTE_AGILITY,        CONST_X_AGI),
+		map<short, string>::value_type(ATTRIBUTE_WISDOM,         CONST_X_WIS),
+		map<short, string>::value_type(ATTRIBUTE_INTELLIGENCE,   CONST_X_INT),
+		map<short, string>::value_type(ATTRIBUTE_HEART,          CONST_X_HRT),
+		map<short, string>::value_type(ATTRIBUTE_HEALTH,         CONST_X_HLTH),
+		map<short, string>::value_type(ATTRIBUTE_CHARISMA,       CONST_X_CHA)
 	};
 	getAlignString = {
-		map<short, string>::value_type(ALIGN_ARCHCONSERVATIVE,  CONST_ACTIVITY_SLEEPER_SPY3),
-		map<short, string>::value_type(ALIGN_CONSERVATIVE,  CONST_ACTIVITY_SLEEPER_SPY4),
+		map<short, string>::value_type(ALIGN_ARCHCONSERVATIVE,  CONST_X_ARCHCONSERVATIVE),
+		map<short, string>::value_type(ALIGN_CONSERVATIVE,  CONST_X_CONSERVATIVE),
 		map<short, string>::value_type(ALIGN_MODERATE,  CONST_ACTIVITY_SLEEPER_SPY5),
-		map<short, string>::value_type(ALIGN_LIBERAL,  CONST_ACTIVITY_SLEEPER_SPY6),
-		map<short, string>::value_type(ALIGN_ELITELIBERAL,  CONST_ACTIVITY_SLEEPER_SPY7),
-		map<short, string>::value_type(ALIGN_STALINIST,  CONST_ACTIVITY_SLEEPER_SPY8)
+		map<short, string>::value_type(ALIGN_LIBERAL,  CONST_X_LIBERAL),
+		map<short, string>::value_type(ALIGN_ELITELIBERAL,  CONST_X_ELITE_LIBERAL),
+		map<short, string>::value_type(ALIGN_STALINIST,  CONST_X_STALINIST)
 	};
 	musicList = {
 		// titlemode.ogg or .mid - Also sprach Zarathustra, introduction by Richard Strauss
-		map<short, string>::value_type(MUSIC_TITLEMODE, CONST_ACTIVITY_SLEEPER_SPY9), // load title mode music
+		map<short, string>::value_type(MUSIC_TITLEMODE, CONST_X_TITLEMODE), // load title mode music
 																  // newgame.ogg or .mid- The Liberty Bell March by John Philip Sousa
-		map<short, string>::value_type(MUSIC_NEWGAME, CONST_ACTIVITY_SLEEPER_RECRUIT0), // load new game music
+		map<short, string>::value_type(MUSIC_NEWGAME, CONST_X_NEWGAME), // load new game music
 															  // basemode.ogg or .mid - The Stars and Stripes Forever by John Philip Sousa
-		map<short, string>::value_type(MUSIC_BASEMODE, CONST_ACTIVITY_SLEEPER_RECRUIT1), // load regular base mode music
-																// siege.ogg or .mid- The Planets, 1st Movement CONST_ACTIVITY_SLEEPER_RECRUIT2 by Gustav Holst
-		map<short, string>::value_type(MUSIC_SIEGE, CONST_ACTIVITY_SLEEPER_RECRUIT3), // load base mode while under siege music
+		map<short, string>::value_type(MUSIC_BASEMODE, CONST_X_BASEMODE), // load regular base mode music
+																// siege.ogg or .mid- The Planets, 1st Movement CONST_X_MARS by Gustav Holst
+		map<short, string>::value_type(MUSIC_SIEGE, CONST_X_SIEGE), // load base mode while under siege music
 														  // activate.ogg or .mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
-		map<short, string>::value_type(MUSIC_ACTIVATE, CONST_ACTIVITY_SLEEPER_RECRUIT4), // load activate Liberals music
+		map<short, string>::value_type(MUSIC_ACTIVATE, CONST_X_ACTIVATE), // load activate Liberals music
 																// sleepers.ogg or .mid - Toccata and Fugue in D Minor, BWV 565 by Johann Sebastian Bach
-		map<short, string>::value_type(MUSIC_SLEEPERS, CONST_ACTIVITY_SLEEPER_RECRUIT5), // load activate Sleepers music
+		map<short, string>::value_type(MUSIC_SLEEPERS, CONST_X_SLEEPERS_LOWERCASE), // load activate Sleepers music
 																// stopevil.ogg or .mid - Hungarian Dance #5 by Johannes Brahms (based on the csardas "Bartfai emlek" by Bela Keler)
-		map<short, string>::value_type(MUSIC_STOPEVIL, CONST_ACTIVITY_SLEEPER_RECRUIT6), // load go forth to stop evil music
+		map<short, string>::value_type(MUSIC_STOPEVIL, CONST_X_STOPEVIL), // load go forth to stop evil music
 																// reviewmode.ogg or .mid - Symphony #94, 2nd Movement "Surprise Symphony" by Joseph Haydn
-		map<short, string>::value_type(MUSIC_REVIEWMODE, CONST_ACTIVITY_SLEEPER_RECRUIT7), // load review mode music
+		map<short, string>::value_type(MUSIC_REVIEWMODE, CONST_X_REVIEWMODE), // load review mode music
 																	// liberalagenda.ogg or .mid - Beautiful Dreamer by Stephen Foster
-		map<short, string>::value_type(MUSIC_LIBERALAGENDA, CONST_ACTIVITY_SLEEPER_RECRUIT8), // load status of the Liberal agenda music
+		map<short, string>::value_type(MUSIC_LIBERALAGENDA, CONST_X_LIBERALAGENDA), // load status of the Liberal agenda music
 																		  // disbanded.ogg or .mid - La Cucaracha, a traditional Mexican folk song originally from Spain
-		map<short, string>::value_type(MUSIC_DISBANDED, CONST_ACTIVITY_SLEEPER_RECRUIT9), // load disbanded music
+		map<short, string>::value_type(MUSIC_DISBANDED, CONST_X_DISBANDED), // load disbanded music
 																  // finances.ogg or .mid - Minuet in G Major by Christian Petzold (falsely attributed to Johann Sebastian Bach until 1970)
-		map<short, string>::value_type(MUSIC_FINANCES, CONST_ACTIVITY_SLEEPER_SCANDAL0), // load finance report music
+		map<short, string>::value_type(MUSIC_FINANCES, CONST_X_FINANCES), // load finance report music
 																// cartheft.ogg or .mid - The Ride of the Valkyries by Richard Wanger
-		map<short, string>::value_type(MUSIC_CARTHEFT, CONST_ACTIVITY_SLEEPER_SCANDAL1), // load car theft music
+		map<short, string>::value_type(MUSIC_CARTHEFT, CONST_X_CARTHEFT), // load car theft music
 																// elections.ogg or .mid - Habanera from Carmen by Georges Bizet
-		map<short, string>::value_type(MUSIC_ELECTIONS, CONST_ACTIVITY_SLEEPER_SCANDAL2), // load elections music
+		map<short, string>::value_type(MUSIC_ELECTIONS, CONST_X_ELECTIONS), // load elections music
 																  // shopping.ogg or .mid - The Entertainer by Scott Joplin
-		map<short, string>::value_type(MUSIC_SHOPPING, CONST_ACTIVITY_SLEEPER_SCANDAL3), // load shopping music
+		map<short, string>::value_type(MUSIC_SHOPPING, CONST_X_SHOPPING), // load shopping music
 																// sitemode.ogg or .mid - Dance of the Sugar Plum Fairy by Pyotr Ilyich Tchaikovsky
-		map<short, string>::value_type(MUSIC_SITEMODE, CONST_ACTIVITY_SLEEPER_SCANDAL4), // load site mode music
+		map<short, string>::value_type(MUSIC_SITEMODE, CONST_X_SITEMODE), // load site mode music
 																// suspicious.ogg or .mid - Hall of the Mountain King by Edvard Grieg
 		map<short, string>::value_type(MUSIC_SUSPICIOUS, tag_suspicious), // load suspicious music
 																	// alarmed.ogg or .mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
-		map<short, string>::value_type(MUSIC_ALARMED, CONST_ACTIVITY_SLEEPER_SCANDAL5), // load alarmed music
-															  // heavycombat.ogg or .mid - 6th Symphony CONST_ACTIVITY_SLEEPER_SCANDAL6, 4th Movement by Ludwig van Beethoven
-		map<short, string>::value_type(MUSIC_HEAVYCOMBAT, CONST_ACTIVITY_SLEEPER_SCANDAL7), // load massive Conservative response music
+		map<short, string>::value_type(MUSIC_ALARMED, CONST_X_ALARMED), // load alarmed music
+															  // heavycombat.ogg or .mid - 6th Symphony CONST_X_PASTORALE, 4th Movement by Ludwig van Beethoven
+		map<short, string>::value_type(MUSIC_HEAVYCOMBAT, CONST_X_HEAVYCOMBAT), // load massive Conservative response music
 																	  // defense.ogg or .mid - Danse Macabre by Camille Saint-Saens
-		map<short, string>::value_type(MUSIC_DEFENSE, CONST_ACTIVITY_SLEEPER_SCANDAL8), // load escaping/engaging a siege music
+		map<short, string>::value_type(MUSIC_DEFENSE, CONST_X_DEFENSE_LOWERCASE), // load escaping/engaging a siege music
 															  // conquer.ogg or .mid - Infernal Galop / Can-Can from Orpheus in the Underworld by Jacques Offenbach
-		map<short, string>::value_type(MUSIC_CONQUER, CONST_ACTIVITY_SLEEPER_SCANDAL9), // load success in conquering a siege or safehouse or the CCS music
+		map<short, string>::value_type(MUSIC_CONQUER, CONST_X_CONQUER), // load success in conquering a siege or safehouse or the CCS music
 															  // carchase.ogg or .mid - The William Tell Overture by Gioacchino Antonio Rossini
-		map<short, string>::value_type(MUSIC_CARCHASE, CONST_ACTIVITY_SLEEPER_EMBEZZLE0), // load car chase music
+		map<short, string>::value_type(MUSIC_CARCHASE, CONST_X_CARCHASE), // load car chase music
 																// footchase.ogg or .mid - The Maple Leaf Rag by Scott Joplin
-		map<short, string>::value_type(MUSIC_FOOTCHASE, CONST_ACTIVITY_SLEEPER_EMBEZZLE1), // load foot chase music
+		map<short, string>::value_type(MUSIC_FOOTCHASE, CONST_X_FOOTCHASE), // load foot chase music
 																  // InterrogationST.ogg or .mid - Night on Bald Mountain by Modest Mussorgsky
 		map<short, string>::value_type(MUSIC_INTERROGATION, tag_interrogation), // load InterrogationST music
 																		  // trial.ogg or .mid - Hungarian Rhapsody #2 by Franz Liszt
-		map<short, string>::value_type(MUSIC_TRIAL, CONST_ACTIVITY_SLEEPER_EMBEZZLE2), // load trial music
+		map<short, string>::value_type(MUSIC_TRIAL, CONST_X_TRIAL), // load trial music
 														  // recruiting.ogg or .mid - Dance of the Hours by Amilcare Ponchielli
-		map<short, string>::value_type(MUSIC_RECRUITING, CONST_ACTIVITY_SLEEPER_EMBEZZLE3), // load recruiting music
+		map<short, string>::value_type(MUSIC_RECRUITING, CONST_X_RECRUITING_LOWERCASE), // load recruiting music
 																	// dating.ogg or .mid - The Blue Danube Waltz by Johann Strauss Jr.
 		map<short, string>::value_type(MUSIC_DATING, tag_dating), // load dating music
 															// newspaper.ogg or .mid - Eine Kleine Nachtmusik, 1st Movement by Wolfgang Amadeus Mozart
-		map<short, string>::value_type(MUSIC_NEWSPAPER, CONST_ACTIVITY_SLEEPER_EMBEZZLE4), // load newspaper music
+		map<short, string>::value_type(MUSIC_NEWSPAPER, CONST_X_NEWSPAPER), // load newspaper music
 																  // lacops.ogg or .mid - The Flight of the Bumblebee by Nikolai Rimsky-Korsakov
-		map<short, string>::value_type(MUSIC_LACOPS, CONST_ACTIVITY_SLEEPER_EMBEZZLE5), // load LA cops beating black man and getting caught on video music
+		map<short, string>::value_type(MUSIC_LACOPS, CONST_X_LACOPS), // load LA cops beating black man and getting caught on video music
 															// newscast.ogg or .mid - La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle
-		map<short, string>::value_type(MUSIC_NEWSCAST, CONST_ACTIVITY_SLEEPER_EMBEZZLE6), // load newscast where smart liberal guest gets some words in edgewise music
+		map<short, string>::value_type(MUSIC_NEWSCAST, CONST_X_NEWSCAST), // load newscast where smart liberal guest gets some words in edgewise music
 																// glamshow.ogg or .mid - Das Deutschlandlied, The German National Anthem by Joseph Haydn
-		map<short, string>::value_type(MUSIC_GLAMSHOW, CONST_ACTIVITY_SLEEPER_EMBEZZLE7), // load glamorous TV show about lifestyles of the rich and famous music
+		map<short, string>::value_type(MUSIC_GLAMSHOW, CONST_X_GLAMSHOW), // load glamorous TV show about lifestyles of the rich and famous music
 																// anchor.ogg or .mid - I Am the Very Model of a Modern Major-General by Sir Arthur Seymour Sullivan
-		map<short, string>::value_type(MUSIC_ANCHOR, CONST_ACTIVITY_SLEEPER_EMBEZZLE8), // load handsome charismatic new Conservative cable news anchor music
+		map<short, string>::value_type(MUSIC_ANCHOR, CONST_X_ANCHOR), // load handsome charismatic new Conservative cable news anchor music
 															// abort.ogg or .mid - Tarantella Napoletana, a traditional Italian folk song from Naples
-		map<short, string>::value_type(MUSIC_ABORT, CONST_ACTIVITY_SLEEPER_EMBEZZLE9), // load failed partial birth abortion on trashy daytime talk show music
+		map<short, string>::value_type(MUSIC_ABORT, CONST_X_ABORT), // load failed partial birth abortion on trashy daytime talk show music
 														  // victory.ogg or .mid - The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith
-		map<short, string>::value_type(MUSIC_VICTORY, CONST_ACTIVITY_SLEEPER_STEAL0), // load victory music
+		map<short, string>::value_type(MUSIC_VICTORY, CONST_X_VICTORY), // load victory music
 															  // defeat.ogg or .mid - Piano Sonata #2, 3rd Movement "Funeral March" by Frederic Francois Chopin
-		map<short, string>::value_type(MUSIC_DEFEAT, CONST_ACTIVITY_SLEEPER_STEAL1), // load defeat music
+		map<short, string>::value_type(MUSIC_DEFEAT, CONST_X_DEFEAT), // load defeat music
 															// reagainified.ogg or .mid - Dixie, The Confederate National Anthem by Daniel Decatur Emmett
-		map<short, string>::value_type(MUSIC_REAGANIFIED, CONST_ACTIVITY_SLEEPER_STEAL2), // load Reaganified music
+		map<short, string>::value_type(MUSIC_REAGANIFIED, CONST_X_REAGANIFIED), // load Reaganified music
 																	  // stalinized.ogg or .mid - The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov
-		map<short, string>::value_type(MUSIC_STALINIZED, CONST_ACTIVITY_SLEEPER_STEAL3) // load Stalinized music
+		map<short, string>::value_type(MUSIC_STALINIZED, CONST_X_STALINIZED) // load Stalinized music
 	};
 	ACTIVITY_TEACH_FIGHTING_DEFAULT =
 		// this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
@@ -1319,27 +1320,27 @@ map<short, vector<string> >::value_type(CARCHASE_OBSTACLE_CHILD,
 		state_biases.push_back(atoi(str.data()));
 	}
 	site_tile_list = {
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL4, SITEBLOCK_EXIT),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL5, SITEBLOCK_BLOCK),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL6, SITEBLOCK_DOOR),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL7, SITEBLOCK_KNOWN),
+		map<string, short>::value_type(CONST_X_EXIT, SITEBLOCK_EXIT),
+		map<string, short>::value_type(CONST_X_BLOCK, SITEBLOCK_BLOCK),
+		map<string, short>::value_type(CONST_X_DOOR, SITEBLOCK_DOOR),
+		map<string, short>::value_type(CONST_X_KNOWN, SITEBLOCK_KNOWN),
 		map<string, short>::value_type(tag_LOOT, SITEBLOCK_LOOT),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL8, SITEBLOCK_LOCKED),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_STEAL9, SITEBLOCK_KLOCK),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS0, SITEBLOCK_CLOCK),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS1, SITEBLOCK_RESTRICTED),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS2, SITEBLOCK_BLOODY),
+		map<string, short>::value_type(CONST_X_LOCKED, SITEBLOCK_LOCKED),
+		map<string, short>::value_type(CONST_X_KLOCK, SITEBLOCK_KLOCK),
+		map<string, short>::value_type(CONST_X_CLOCK, SITEBLOCK_CLOCK),
+		map<string, short>::value_type(CONST_X_RESTRICTED, SITEBLOCK_RESTRICTED),
+		map<string, short>::value_type(CONST_X_BLOODY, SITEBLOCK_BLOODY),
 		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS3, SITEBLOCK_BLOODY2),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS4, SITEBLOCK_GRASSY),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS5, SITEBLOCK_OUTDOOR),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS6, SITEBLOCK_DEBRIS),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS7, SITEBLOCK_GRAFFITI),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS8, SITEBLOCK_GRAFFITI_CCS),
-		map<string, short>::value_type(CONST_ACTIVITY_SLEEPER_JOINLCS9, SITEBLOCK_GRAFFITI_OTHER),
-		map<string, short>::value_type(CONST_ACTIVITY_RECRUITING0, SITEBLOCK_FIRE_START),
-		map<string, short>::value_type(CONST_ACTIVITY_RECRUITING1, SITEBLOCK_FIRE_PEAK),
-		map<string, short>::value_type(CONST_ACTIVITY_RECRUITING2, SITEBLOCK_FIRE_END),
-		map<string, short>::value_type(CONST_ACTIVITY_RECRUITING3, 0),
+		map<string, short>::value_type(CONST_X_GRASSY, SITEBLOCK_GRASSY),
+		map<string, short>::value_type(CONST_X_OUTDOOR, SITEBLOCK_OUTDOOR),
+		map<string, short>::value_type(CONST_X_DEBRIS, SITEBLOCK_DEBRIS),
+		map<string, short>::value_type(CONST_X_GRAFFITI_ALLCAPS, SITEBLOCK_GRAFFITI),
+		map<string, short>::value_type(CONST_X_GRAFFITI_CCS, SITEBLOCK_GRAFFITI_CCS),
+		map<string, short>::value_type(CONST_X_GRAFFITI_OTHER, SITEBLOCK_GRAFFITI_OTHER),
+		map<string, short>::value_type(CONST_X_FIRE_START, SITEBLOCK_FIRE_START),
+		map<string, short>::value_type(CONST_X_FIRE_PEAK, SITEBLOCK_FIRE_PEAK),
+		map<string, short>::value_type(CONST_X_FIRE_END, SITEBLOCK_FIRE_END),
+		map<string, short>::value_type(CONST_X_OPEN, 0),
 	};
 	rejectionReasons = {
 		map<int, vector<string> >::value_type(REJECTED_CCS, rejectedByCCS),

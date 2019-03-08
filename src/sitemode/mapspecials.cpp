@@ -1,4 +1,5 @@
 
+
 #define	MAPSPECIALS_CPP
 #include "../includes.h"
 /*
@@ -401,7 +402,7 @@ void special_nuclear_onoff()
 				{
 					mvaddstrAlt(16, 1, CONST_A_DEAFENING_ALARM_SOUNDS, gamelog);
 					gamelog.newline();
-					addstrAlt(CONST_mapspecials052); // Remove remaining part of previous text.
+					addstrAlt(CONST_X_LITTLE_MORE_WHITESPACE); // Remove remaining part of previous text.
 					mvaddstrAlt(17, 1, CONST_THE_REACTOR_IS_OVERHEATING, gamelog);
 					gamelog.newline();
 					change_public_opinion(VIEW_NUCLEARPOWER, 15, 0, 95);
@@ -1564,7 +1565,7 @@ void special_bank_vault()
 							set_color_easy(WHITE_ON_BLACK_BRIGHT);
 							mvaddstrAlt(16, 1, string_sleeper, gamelog);
 							addstrAlt(sleeperBankRobber, gamelog);
-							addstrAlt(CONST_mapspecials148, gamelog);
+							addstrAlt(CONST_X_OPENS_THE_VAULT_, gamelog);
 							mvaddstrAlt(17, 1, CONST_AND_WILL_JOIN_THE_ACTIVE_LCS_TO_AVOID_ARREST, gamelog);
 							gamelog.newline();
 							pressAnyKey();

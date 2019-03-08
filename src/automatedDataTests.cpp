@@ -1,4 +1,5 @@
 
+
 #define	AUTOMATEDDATATESTS_CPP
 #include "includes.h"
 
@@ -6,23 +7,23 @@ void automatedDataTests() {
 
 	clearAlt();
 	for (int i = 0, k = 0; i < LAWNUM; i++) {
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, i);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, conservativeLegalArgument[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, youAreStupidTalkAboutIssues[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, issueTooLiberal[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, conservatiseLaw[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, liberalizeLaw[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		for (int j = 0; j < 2; j++) {
 			mvaddstrAlt(k++, 0, talkAboutTheIssues[i][j]); // 0~1
 		}
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		for (int j = 0; j < 8; j++) {
 			mvaddstrAlt(k++, 0, endgameLawStrings[i][j]); // 0~7
 		}
@@ -31,19 +32,19 @@ void automatedDataTests() {
 	pressAnyKey();
 	clearAlt();
 	for (int i = 0, k = 0; i < VIEWNUM - 3; i++) {
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, i);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, issueEventString[i]);
 	}
 	pressAnyKey();
 	clearAlt();
 	for (int i = 0, k = 0; i < VIEWNUM; i++) {
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, i);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, discussIssues[i]);
-		mvaddstrAlt(k++, 0, CONST_automatedDataTests013);
+		mvaddstrAlt(k++, 0, CONST_X_TEST);
 		mvaddstrAlt(k++, 0, discussesIssues[i]);
 	}
 	pressAnyKey();

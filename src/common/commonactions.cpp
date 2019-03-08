@@ -1,4 +1,5 @@
 
+
 #define	COMMONACTIONS_CPP
 #include "../includes.h"
 /*
@@ -85,8 +86,8 @@ void hospitalize(int loc, DeprecatedCreature &patient)
 		addstrAlt(FOR_SPACE, gamelog);
 		addstrAlt(time, gamelog);
 		addstrAlt(singleSpace, gamelog);
-		if (time > 1)addstrAlt(CONST_commonactions006, gamelog);
-		else addstrAlt(CONST_commonactions007, gamelog);
+		if (time > 1)addstrAlt(CONST_X_MONTHS, gamelog);
+		else addstrAlt(CONST_X_MONTH, gamelog);
 		addstrAlt(singleDot, gamelog);
 		gamelog.nextMessage(); //Time for the next message.
 		pressAnyKey();

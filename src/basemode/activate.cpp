@@ -1,5 +1,6 @@
 
 
+
 #define	ACTIVATE_CPP
 #include "../includes.h"
 
@@ -31,7 +32,7 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: é
+// set to use that character set, such as this e with an accent: ├⌐
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -469,6 +470,12 @@ int armor_makedifficulty(Armor& type, DeprecatedCreature *cr)
 {
 	return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
 }
+// Macro definition 
+#ifndef MAX
+// maximum of 2 numbers
+#define MAX(a,b) (((a)<(b))?(b):(a))
+#endif
+
 /* base - activate - make clothing */
 void select_makeclothing(DeprecatedCreature *cr)
 {
@@ -694,8 +701,8 @@ void select_tendhostage(DeprecatedCreature *cr)
 			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 57, temppool[p]->joindays);
 			addstrAlt(singleSpace);
-			if (temppool[p]->joindays > 1)addstrAlt(CONST_activate041);
-			else addstrAlt(CONST_activate042);
+			if (temppool[p]->joindays > 1)addstrAlt(CONST_X_DAYS);
+			else addstrAlt(CONST_X_DAY);
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_CONSERVATIVE);
@@ -865,7 +872,7 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 		mvaddstrAlt(19, 40, QUESTION_HELP);
 	}
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(20, 40, CONST_activate056);
+	mvaddstrAlt(20, 40, CONST_X_ENTER_CONFIRM);
 	set_color_easy(state == 'x' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	mvaddstrAlt(21, 1, X_NOTHING);
 	if (state == 'l')
@@ -1067,7 +1074,7 @@ void activate()
 		printfunds();
 		mvaddstrAlt(0, 0, ACTIVATE_UNINVOLVED_LIBERALS);
 		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
-		mvaddstrAlt(1, 57, CONST_activate068);
+		mvaddstrAlt(1, 57, CONST_X_TITLE_ACTIVITY);
 		int y = 2;
 		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
@@ -1097,7 +1104,7 @@ void activate()
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN_ACTIVITY);
 		mvaddstrAlt(23, 0, addpagestr());
-		addstrAlt(CONST_activate070);
+		addstrAlt(CONST_X_T_TO_SORT);
 		mvaddstrAlt(24, 0, Z_TO_ASSIGN_SIMPLE_TASKS);
 		int c = getkeyAlt();
 		//PAGE UP

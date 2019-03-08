@@ -1,4 +1,5 @@
 
+
 #define	HAULKIDNAP_CPP
 #include "../includes.h"
 /*
@@ -39,7 +40,7 @@ void printKidnapString(const string aname, const string tname, const string weap
 	mvaddstrAlt(16, 1, aname, gamelog);
 	addstrAlt(CONST_SHOWS, gamelog);
 	addstrAlt(tname, gamelog);
-	addstrAlt(CONST_haulkidnap011, gamelog);
+	addstrAlt(CONST_X_THE_, gamelog);
 	addstrAlt(weapon, gamelog);
 	addstrAlt(singleSpace, gamelog);
 	mvaddstrAlt(17, 1, CONST_AND_SAYS, gamelog);
@@ -144,8 +145,8 @@ void freehostage(DeprecatedCreature &cr, char situation)
 			else
 			{
 				mvaddstrAlt(16, 1, cr.get_prisoner_name(), gamelog);
-				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_haulkidnap019, gamelog);
-				else addstrAlt(CONST_haulkidnap020, gamelog);
+				if (cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstrAlt(CONST_X_IS_RECAPTURED, gamelog);
+				else addstrAlt(CONST_X_IS_CAPTURED, gamelog);
 			}
 			gamelog.newline(); //New line.
 		}
@@ -240,7 +241,7 @@ void kidnapattempt()
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_NO_ONE_CAN_DO_THE_JOB);
-		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		mvaddstrAlt(17, 1, CONST_X_SOME_WHITESPACE);
 		pressAnyKey();
 		return;
 	}
@@ -348,7 +349,7 @@ void kidnapattempt()
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_ALL_OF_THE_TARGETS_ARE_TOO_DANGEROUS);
-		mvaddstrAlt(17, 1, CONST_haulkidnap026);
+		mvaddstrAlt(17, 1, CONST_X_MUCH_WHITESPACE);
 		pressAnyKey();
 	}
 }
@@ -367,7 +368,7 @@ void releasehostage()
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_NO_HOSTAGES_ARE_BEING_HELD);
-		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		mvaddstrAlt(17, 1, CONST_X_SOME_WHITESPACE);
 		pressAnyKey();
 		return;
 	}
@@ -389,7 +390,7 @@ void releasehostage()
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
 		mvaddstrAlt(16, 1, CONST_THE_HOSTAGE_SHOUTS_FOR_HELP, gamelog);
 		gamelog.nextMessage(); //Next message.
-		mvaddstrAlt(17, 1, CONST_haulkidnap031);
+		mvaddstrAlt(17, 1, CONST_X_SOME_WHITESPACE);
 		pressAnyKey();
 		setSiteAlarmOne();
 		alienationcheck(1);

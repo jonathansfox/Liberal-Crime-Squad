@@ -1,4 +1,5 @@
 
+
 #define	CHASE_CPP
 #include "../includes.h"
 /*
@@ -328,7 +329,7 @@ void printDrivingSituation(const int partysize) {
 	mvaddstrAlt(11, 1, F_FIGHT);
 	if (chaseseq.canpullover)
 	{
-		mvaddstrAlt(12, 1, CONST_chase040);
+		mvaddstrAlt(12, 1, CONST_X_G_GIVE_UP);
 	}
 }
 void destroyAllCarsOfParty() {
@@ -1409,7 +1410,7 @@ void makechasers(long type, const long sitecriminality)
 	int max_enemies;
 	if (type != -1 && (endgamestate == ENDGAME_CCS_SIEGES || endgamestate == ENDGAME_CCS_ATTACKS) && LCSrandom(2))
 	{
-		cartype = CONST_chase091; //A CCS property, not a vehicle property. Temporary solution -XML
+		cartype = CONST_X_SUV; //A CCS property, not a vehicle property. Temporary solution -XML
 		crime_ratio = 5;
 		min_enemies = 1;
 		max_enemies = 12;
@@ -1420,7 +1421,7 @@ void makechasers(long type, const long sitecriminality)
 		switch (type)
 		{
 		case SITE_GOVERNMENT_ARMYBASE:
-			cartype = CONST_chase088; //Site property? Temporary solution. -XML
+			cartype = CONST_X_HMMWV; //Site property? Temporary solution. -XML
 			crime_ratio = 5;
 			min_enemies = 3;
 			max_enemies = 6;
@@ -1442,8 +1443,8 @@ void makechasers(long type, const long sitecriminality)
 			break;
 		case SITE_CORPORATE_HEADQUARTERS:
 		case SITE_CORPORATE_HOUSE:
-			if (LCSrandom(2))cartype = CONST_chase091; //Site property? Temporary solution. -XML
-			else cartype = CONST_chase092; //Site property? Temporary solution. -XML
+			if (LCSrandom(2))cartype = CONST_X_SUV; //Site property? Temporary solution. -XML
+			else cartype = CONST_X_JEEP; //Site property? Temporary solution. -XML
 			crime_ratio = 5;
 			min_enemies = 1;
 			max_enemies = 6;
@@ -1451,7 +1452,7 @@ void makechasers(long type, const long sitecriminality)
 			break;
 		case SITE_MEDIA_AMRADIO:
 		case SITE_MEDIA_CABLENEWS:
-			cartype = CONST_chase093; //Site property? Temporary solution. -XML
+			cartype = CONST_X_PICKUP; //Site property? Temporary solution. -XML
 			crime_ratio = 3;
 			min_enemies = 1;
 			max_enemies = 18;

@@ -1,4 +1,5 @@
 
+
 #define	GLOBALS_CPP
 #define	CREATURENAMES_CPP
 #include "includes.h"
@@ -560,7 +561,7 @@ void formANewSquadIfThereAreNone() {
 		squad.push_back(new Deprecatedsquadst);
 		squad.back()->id = cursquadid++;
 		strcpy(squad.back()->name, LocationsPool::getInstance().getLocationNameWithGetnameMethod(selectedsiege, true).c_str());
-		strcat(squad.back()->name, CONST_siege254.c_str());
+		strcat(squad.back()->name, CONST_X_DEFENSE.c_str());
 		int i = 0;
 		for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++) if (pool[p]->location == selectedsiege && pool[p]->getNameAndAlignment().alive&&pool[p]->align == 1)
 		{

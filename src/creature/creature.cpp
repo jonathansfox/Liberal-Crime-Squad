@@ -1,4 +1,5 @@
 
+
 #define	CREATURE_CPP
 #include "../includes.h"
 /*
@@ -1002,7 +1003,7 @@ void UniqueCreatures::newPresident()
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
-	Pres_.rename((((string)CONST_creature113) + pres_name.substr(pres_name.find(' ') + 1)));
+	Pres_.rename((((string)CONST_X_PRESIDENT_) + pres_name.substr(pres_name.find(' ') + 1)));
 	strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
 	switch (exec[EXEC_PRESIDENT])
 	{ // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
@@ -1076,18 +1077,18 @@ const char* DeprecatedCreature::hisher(bool capitalize) const
 {  // pronominal adjective (possessive determiner)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? CONST_creature123.c_str() : HIS_LOWERCASE.c_str();
-	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
-	default: return capitalize ? CONST_creature125.c_str() : CONST_creatureX05.c_str(); // Elite Liberal gender-neutral pronoun
+	case GENDER_MALE: return capitalize ? CONST_X_HIS.c_str() : HIS_LOWERCASE.c_str();
+	case GENDER_FEMALE: return capitalize ? CONST_X_HER.c_str() : CONST_X_HER_LOWERCASE.c_str();
+	default: return capitalize ? CONST_X_XYR.c_str() : CONST_X_XYR_LOWERCASE.c_str(); // Elite Liberal gender-neutral pronoun
 	}
 }
 const char* DeprecatedCreature::himher(bool capitalize) const
 {  // object pronoun (oblique case)
 	switch (gender_liberal)
 	{
-	case GENDER_MALE: return capitalize ? CONST_creature128.c_str() : HIM_LOWERCASE.c_str();
-	case GENDER_FEMALE: return capitalize ? CONST_creature129.c_str() : CONST_creatureX04.c_str();
-	default: return capitalize ? CONST_creature130.c_str() : CONST_creatureX07.c_str(); // Elite Liberal gender-neutral pronoun
+	case GENDER_MALE: return capitalize ? CONST_X_HIM.c_str() : HIM_LOWERCASE.c_str();
+	case GENDER_FEMALE: return capitalize ? CONST_X_HER.c_str() : CONST_X_HER_LOWERCASE.c_str();
+	default: return capitalize ? CONST_X_XEM.c_str() : CONST_X_XEM_LOWERCASE.c_str(); // Elite Liberal gender-neutral pronoun
 	}
 }
 
@@ -1326,7 +1327,7 @@ string DeprecatedCreature::get_weapon_string(int subtype) const
 		r = extra_throwing_weapons[0]->get_name(subtype);
 		r += ZERO_OVER + tostring(count_weapons()) + CLOSE_PARENTHESIS;
 	}
-	else r = CONST_creature136;
+	else r = CONST_X_NONE;
 	return r;
 }
 int get_XML_value(const std::string& inputXml) {
@@ -1364,7 +1365,7 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 			// time a character is queried. I'm using the day of the
 			// month the character was born on to determine this.
 			str += tostring(bio.age + bio.birthday_day % 3 - 1);
-			str += (CONST_creature151);
+			str += (CONST_X_QUESTION_MARK);
 		}
 		// More rough estimates of everyone else
 		else
@@ -1388,14 +1389,14 @@ string get_age_string(const CreatureBio bio, const char animalgloss) {
 		}
 		// Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
 		if (bio.gender_liberal == GENDER_MALE)
-			str += (CONST_creature148);
+			str += (CONST_X_MALE);
 		else if (bio.gender_liberal == GENDER_FEMALE)
-			str += (CONST_creature149);
+			str += (CONST_X_FEMALE);
 		else
 			str += (COMMA_AMBIGUOUS);
 		// Note if there's some conflict with Conservative society's perceptions
 		if (bio.gender_liberal != bio.gender_conservative && bio.gender_liberal != GENDER_NEUTRAL)
-			str += (CONST_creature151);
+			str += (CONST_X_QUESTION_MARK);
 		str += (CLOSE_PARENTHESIS);
 
 		return str;

@@ -1,4 +1,5 @@
 
+
 #define	CREATUREPOOL_CPP
 #include "../includes.h"
 
@@ -352,7 +353,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(REALLY_UNDERSTANDS_PROBLEM, gamelog);
 				gamelog.newline();
-				mvaddstrAlt(y++, 0, CONST_creaturePool043, gamelog);
+				mvaddstrAlt(y++, 0, CONST_X_MAYBE_, gamelog);
 				addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 				addstrAlt(NEEDS_MORE_EXPERIENCE, gamelog);
 				gamelog.nextMessage();
@@ -414,7 +415,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	else if (!subordinatesleft(*pool[p]))
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_creaturePool026);
+		addstrAlt(CONST_X_C_DASH);
 		addstrAlt(pool[p]->getNameAndAlignment().name);
 		addstrAlt(NEEDS_MORE_JUICE_TO_RECRUIT);
 		set_color_easy(WHITE_ON_BLACK);
@@ -422,7 +423,7 @@ void printrecruitmeeting(Deprecatedrecruitst &r, const int p) {
 	else
 	{
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		addstrAlt(CONST_creaturePool026);
+		addstrAlt(CONST_X_C_DASH);
 		addstrAlt(r.recruit->getNameAndAlignment().name);
 		addstrAlt(ISNT_READY_TO_JOIN);
 		set_color_easy(WHITE_ON_BLACK);

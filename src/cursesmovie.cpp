@@ -1,3 +1,4 @@
+
 #define	CURSESMOVIE_CPP
 #include "includes.h"
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +82,7 @@ void filelistst::smartappend(filelistst &list2)
 void CursesMoviest::savemovie(const char *filename, int flags = 0)
 {
 	FILE *h;
-	h = LCSOpenFile(filename, CONST_cursesmovie000.c_str(), flags);
+	h = LCSOpenFile(filename, CONST_X_WB.c_str(), flags);
 	long dummy;
 	if (h != NULL)
 	{
@@ -110,7 +111,7 @@ void CursesMoviest::loadmovie(const char *filename)
 {
 	clean();
 	FILE* h;
-	h = LCSOpenFile(filename, CONST_cursesmovie001.c_str(), LCSIO_PRE_ART);
+	h = LCSOpenFile(filename, CONST_X_RB.c_str(), LCSIO_PRE_ART);
 	long dummy;
 	if (h != NULL)
 	{

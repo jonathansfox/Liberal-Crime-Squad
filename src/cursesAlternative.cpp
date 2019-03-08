@@ -5115,6 +5115,10 @@ void printname(const int hiding, const int location, const int flag, const strin
 	set_color_easy(WHITE_ON_BLACK);
 }
 
+#ifndef DIFF
+// difference between 2 numbers (absolute value of subtracting one from the other)
+#define DIFF(x,y) ((x)<(y)?((y)-(x)):((x)-(y)))
+#endif
 // Imperfect but quick and dirty line of sight check
 // Only works if the target point is at most two spaces
 // away in any direction

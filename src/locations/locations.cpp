@@ -1,4 +1,5 @@
 
+
 #define	LOCATIONS_CPP
 #include "../includes.h"
 /*
@@ -141,8 +142,8 @@ This file is part of Liberal Crime Squad.                                       
 			 strcpy(loc.shortname, CONST_MEAT_PLANT);
 			 break;
 		 case 1:
-			 strcat(loc.name, CONST_locations045);
-			 strcpy(loc.shortname, CONST_locations045);
+			 strcat(loc.name, CONST_X_WAREHOUSE);
+			 strcpy(loc.shortname, CONST_X_WAREHOUSE);
 			 break;
 		 case 2:
 			 strcat(loc.name, CONST_PAPER_MILL);
@@ -191,8 +192,8 @@ This file is part of Liberal Crime Squad.                                       
 	 else
 	 {
 		 strcpy(loc.name, lastname(true));
-		 strcat(loc.name, CONST_locations023);
-		 strcpy(loc.shortname, CONST_locations024);
+		 strcat(loc.name, CONST_X_SPACE_PRISON);
+		 strcpy(loc.shortname, CONST_X_PRISON);
 	 }
  }
  void renamePoluter(Location &loc) {
@@ -228,7 +229,7 @@ This file is part of Liberal Crime Squad.                                       
 		 loc.rename(CONST_HALLS_OF_ULTIMATE_JUDGMENT, CONST_JUDGE_HALL);
 	 }
 	 else {
-		 loc.rename(CONST_locations018, CONST_locations018);
+		 loc.rename(CONST_X_COURTHOUSE, CONST_X_COURTHOUSE);
 	 }
  }
  void renameFireStation(Location &loc) {
@@ -266,7 +267,7 @@ This file is part of Liberal Crime Squad.                                       
 	 else {
 		 strcpy(loc.name, lastname(true));
 		 strcat(loc.name, CONST_ARMY_BASE);
-		 strcpy(loc.shortname, CONST_locations031);
+		 strcpy(loc.shortname, CONST_X_ARMY_BASE);
 	 }
  }
  void renamePawnShop(Location &loc) {
@@ -364,7 +365,7 @@ This file is part of Liberal Crime Squad.                                       
 		 loc.rename(CONST_CORPORATE_HQ, CONST_CORP_HQ);
 		 break;
 	 case SITE_BUSINESS_BANK:
-		 loc.rename(CONST_AMERICAN_BANK_CORP, CONST_locationsB116);
+		 loc.rename(CONST_AMERICAN_BANK_CORP, CONST_X_BANK);
 		 break;
 	 case SITE_RESIDENTIAL_SHELTER:
 		 loc.rename(CONST_HOMELESS_SHELTER, CONST_SHELTER);
@@ -388,7 +389,7 @@ This file is part of Liberal Crime Squad.                                       
 		 loc.rename(CONST_DESERT_EAGLE_BAR_GRILL, CONST_BAR_GRILL);
 		 break;
 	 case SITE_OUTDOOR_BUNKER:
-		 loc.rename(CONST_ROBERT_E_LEE_BUNKER, CONST_locationsB130);
+		 loc.rename(CONST_ROBERT_E_LEE_BUNKER, CONST_X_BUNKER);
 		 break;
 	 case SITE_BUSINESS_ARMSDEALER:
 		 loc.rename(CONST_BLACK_MARKET, CONST_BLACK_MARKET);
@@ -426,7 +427,7 @@ This file is part of Liberal Crime Squad.                                       
 
 	 strcpy(name, lastname(true));
 	 strcat(name, CONST_GARMENT_MAKERS);
-	 strcpy(shortname, CONST_locations087);
+	 strcpy(shortname, CONST_X_SWEATSHOP);
  }
  void renameSITE_BUSINESS_JUICEBAR(char* name, char* shortname) {
 
@@ -435,7 +436,7 @@ This file is part of Liberal Crime Squad.                                       
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(juice_name_2));
 	 strcat(name, CONST_JUICE_BAR);
-	 strcpy(shortname, CONST_locations100);
+	 strcpy(shortname, CONST_X_JUICE_BAR);
  }
  void renameSITE_BUSINESS_VEGANCOOP(char* name, char* shortname) {
 
@@ -444,7 +445,7 @@ This file is part of Liberal Crime Squad.                                       
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(vegan_name_2));
 	 strcat(name, CONST_VEGAN_CO_OP);
-	 strcpy(shortname, CONST_locations102);
+	 strcpy(shortname, CONST_X_VEGAN_COOP);
  }
  void renameSITE_BUSINESS_INTERNETCAFE(char* name, char* shortname) {
 
@@ -472,13 +473,13 @@ This file is part of Liberal Crime Squad.                                       
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(latte_name_2));
 	 strcat(name, CONST_LATTE_STAND);
-	 strcpy(shortname, CONST_locations108);
+	 strcpy(shortname, CONST_X_LATTE_STAND);
  }
  void renameSITE_OUTDOOR_PUBLICPARK(char* name, char* shortname) {
 
 	 strcpy(name, lastname(true));
-	 strcat(name, CONST_locations109);
-	 strcpy(shortname, CONST_locations110);
+	 strcat(name, CONST_X_SPACE_PARK);
+	 strcpy(shortname, CONST_X_PARK);
  }
  map<short, vector<string> > getSiteName;
  /* daily - seeds and names a site (will re-seed and rename if used after start) */

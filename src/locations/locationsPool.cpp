@@ -1,4 +1,5 @@
 
+
 #define	LOCATIONSPOOL_CPP
 #include "../includes.h"
 vector<Location *> location;
@@ -751,7 +752,7 @@ string Location::getname(const signed char shortname_, const bool include_city)
 			case ENUM_tag_Brooklyn_ampersand_Queens:
 			case ENUM_tag_Long_Island:
 			case ENUM_tag_The_Bronx:
-				str += (shortname_ < 0 ? CONST_locationsPool051 : CONST_NY);
+				str += (shortname_ < 0 ? CONST_X_NEW_YORK : CONST_NY);
 				break;
 			default:
 				str += COMMA_SPACE + cityname;
@@ -1219,7 +1220,7 @@ void moveloot(vector<Item *> &dest, vector<Item *> &source)
 			{
 				s += singleSpace;
 				if (selected[l] > 0) s += tostring(selected[l]) + CONST_locationsPool079;
-				else s += CONST_locationsPool080;
+				else s += CONST_X_X;
 				s += tostring(source[l]->get_number());
 			}
 			str[0] = l - page * 18 + 'A';
@@ -1543,7 +1544,7 @@ void printlocation(long loc)
 			{
 				set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(6, 50, days);
-				addstrAlt(CONST_locationsPool111);
+				addstrAlt(CONST_X_SPACE_DAY);
 				if (days != 1)addcharAlt('s');
 				addstrAlt(CONST_OF_FOOD_LEFT);
 			}
@@ -2075,10 +2076,10 @@ void kidnaptransfer(DeprecatedCreature &cr)
 	mvaddstrAlt(0, 0, CONST_locationsPool141);
 	addstrAlt(newcr->propername);
 	set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(2, 0, CONST_locationsPool142);
+	mvaddstrAlt(2, 0, CONST_X_WHAT_NAME_WILL_YOU_USE_FOR_THIS_);
 	addstrAlt(newcr->get_type_name());
-	addstrAlt(CONST_locationsPool143);
-	mvaddstrAlt(3, 0, CONST_locationsPool144);
+	addstrAlt(CONST_X_IN_ITS_PRESENCE);
+	mvaddstrAlt(3, 0, CONST_X_IF_YOU_DO_NOT_ENTER_ANYTHING_THEIR_REAL_NAME_WILL_BE_USED);
 	newcr->new_name_four();
 	addCreature(newcr);
 	stat_kidnappings++;

@@ -1,4 +1,5 @@
 
+
 #define	COMMONDISPLAY_CPP
 #include "../includes.h"
 /*
@@ -29,7 +30,7 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: é
+// set to use that character set, such as this e with an accent: ├⌐
 // In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
 // You can set this in Notepad by going to Format->Font and choosing the Terminal font,
 // then choosing OEM/DOS in the Script dropdown box.
@@ -93,7 +94,7 @@ void makedelimiter(int y, int x)
 	if (mode == GAMEMODE_SITE && y == 8 && x == 0 && mapshowing) // special case: there is a map on the right in site mode
 		mvaddstrAlt(y, x, SEVENTY_NINE_LINE); // 80 characters
 	else // normal delimiter
-		mvaddstrAlt(y, x, CONST_commondisplay005); // 80 characters
+		mvaddstrAlt(y, x, CONST_X_LONG_LINE); // 80 characters
 }
 string perfectlyHealthy(const int align, const int animalgloss, const char smll) {
 
@@ -113,7 +114,7 @@ string perfectlyHealthy(const int align, const int animalgloss, const char smll)
 	{
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		if (animalgloss == ANIMALGLOSS_ANIMAL)
-			return (CONST_commondisplay115);
+			return (CONST_X_ANIMAL);
 		else return (CONST_commondisplay116);
 	}
 }
@@ -160,12 +161,12 @@ string missingArmAndOrLeg(const int armok, const int legok, const char smll, con
 	else if (legok == 2 && armok == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		return (CONST_commondisplay024);
+		return (CONST_X_NO_ARMS);
 	}
 	else if (legok == 0 && armok == 2)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		return (CONST_commondisplay025);
+		return (CONST_X_NO_LEGS);
 	}
 	else if (legok == 1 && armok == 1)
 	{
@@ -190,7 +191,7 @@ string missingPartOfFace(const char lefteye, const char righteye, const char nos
 		lefteye == 0)
 	{
 		if (!bleeding)set_color_easy(GREEN_ON_BLACK);
-		return (CONST_commondisplay030);
+		return (CONST_X_BLIND);
 	}
 	else if ((righteye == 0 ||
 		lefteye == 0) &&
@@ -355,14 +356,14 @@ void printWounds(DeprecatedCreature *cr) {
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				if (cr->getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL)
-					addstrAlt(CONST_commondisplay115);
+					addstrAlt(CONST_X_ANIMAL);
 				else addstrAlt(CONST_commondisplay116);
 			}
-			if (cr->getCreatureHealth().wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay088); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->getCreatureHealth().wound[w] & WOUND_BRUISED) { addstrAlt(CONST_commondisplay089); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->getCreatureHealth().wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->getCreatureHealth().wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay091); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr->getCreatureHealth().wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay092); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_SHOT) { addstrAlt(CONST_X_SHT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_BRUISED) { addstrAlt(CONST_X_BRS); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_CUT) { addstrAlt(CONST_X_CUT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_TORN) { addstrAlt(CONST_X_TRN); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr->getCreatureHealth().wound[w] & WOUND_BURNED) { addstrAlt(CONST_X_BRN); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
 		}
 	}
 }
@@ -399,7 +400,7 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 		char d;
 		if (showcarprefs == 1)d = cr->pref_is_driver;
 		else d = cr->is_driver;
-		if (d)(str += CONST_commondisplay156);
+		if (d)(str += CONST_X_DASH_D);
 	}
 	else
 	{
@@ -409,7 +410,7 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 		if ((cr->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
 			(cr->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
 		if (cr->flag & CREATUREFLAG_WHEELCHAIR) { (str = WHEEL_CHAIR); }
-		else if (legok >= 1) { (str = CONST_commondisplay158); }
+		else if (legok >= 1) { (str = CONST_X_ON_FOOT); }
 		else { (str = ON_FOOT); }
 	}
 	addstrAlt(str);
@@ -472,7 +473,7 @@ void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge)
 			if (knowledge > 5 - snum)
 				addstrAlt(skill_enum_to_string(maxs));
 			else addstrAlt(SEVEN_QUESTION_MARKS);
-			addstrAlt(CONST_commondisplay212);
+			addstrAlt(CONST_X_COLON_SPACE);
 			if (knowledge > 7 - snum)
 				addstrAlt(cr->get_skill(maxs));
 			else addcharAlt('?');
@@ -531,7 +532,7 @@ void printparty()
 				if (party[p]->is_holding_body())set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 				else set_color_easy(WHITE_ON_BLACK);
 				mvaddstrAlt(p + 2, 2, party[p]->getNameAndAlignment().name);
-				if (party[p]->is_holding_body())addstrAlt(CONST_commondisplay096);
+				if (party[p]->is_holding_body())addstrAlt(CONST_X_H);
 				int skill = 0;
 				char bright = 0;
 				for (int sk = 0; sk < SKILLNUM; sk++)
@@ -542,7 +543,7 @@ void printparty()
 				}
 				set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 				mvaddstrAlt(p + 2, 23, skill);
-				addstrAlt(CONST_commondisplay097);
+				addstrAlt(CONST_X_SLASH);
 				addstrAlt(party[p]->get_weapon_skill());
 				moveAlt(p + 2, 31);
 				if (mode != GAMEMODE_SITE) { set_color_easy(WHITE_ON_BLACK); }
@@ -619,7 +620,7 @@ void printparty()
 				if (v != -1 && showcarprefs != -1)
 				{
 					strcpy(str, getVehicleShortname(v).c_str());
-					if (showcarprefs == 1 ? party[p]->pref_is_driver : party[p]->is_driver)strcat(str, CONST_commondisplay156.c_str());
+					if (showcarprefs == 1 ? party[p]->pref_is_driver : party[p]->is_driver)strcat(str, CONST_X_DASH_D.c_str());
 				}
 				else
 				{
@@ -629,7 +630,7 @@ void printparty()
 					if ((party[p]->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
 						(party[p]->getCreatureHealth().wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
 					if (party[p]->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str, WHEEL_CHAIR.c_str());
-					else if (legok >= 1)strcpy(str, CONST_commondisplay158.c_str());
+					else if (legok >= 1)strcpy(str, CONST_X_ON_FOOT.c_str());
 					else strcpy(str, ON_FOOT.c_str());
 				}
 				addstrAlt(str);
@@ -670,14 +671,14 @@ void printwoundstat(CreatureHealth cr, int y, int x)
 			{
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				if (cr.animalgloss == ANIMALGLOSS_ANIMAL)
-					addstrAlt(CONST_commondisplay115);
+					addstrAlt(CONST_X_ANIMAL);
 				else addstrAlt(CONST_commondisplay116);
 			}
-			if (cr.wound[w] & WOUND_SHOT) { addstrAlt(CONST_commondisplay117); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt(BRUISED); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_CUT) { addstrAlt(CONST_commondisplay119); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_TORN) { addstrAlt(CONST_commondisplay120); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
-			if (cr.wound[w] & WOUND_BURNED) { addstrAlt(CONST_commondisplay121); sum--; if (sum > 0)addstrAlt(CONST_commondisplay000); }
+			if (cr.wound[w] & WOUND_SHOT) { addstrAlt(CONST_X_SHOT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt(BRUISED); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr.wound[w] & WOUND_CUT) { addstrAlt(CONST_X_CUT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr.wound[w] & WOUND_TORN) { addstrAlt(CONST_X_TORN); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
+			if (cr.wound[w] & WOUND_BURNED) { addstrAlt(CONST_X_BURNED); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
 		}
 	}
 }
@@ -688,8 +689,8 @@ string juiceUntilLevelUp(const int juice) {
 	{
 		howMuchJuice = NEXT_COLON;
 		if (juice < 0) howMuchJuice += tag_0;
-		else if (juice < 10) howMuchJuice += CONST_commondisplay133;
-		else if (juice < 50) howMuchJuice += CONST_commondisplay134;
+		else if (juice < 10) howMuchJuice += CONST_X_NUM_10;
+		else if (juice < 50) howMuchJuice += CONST_X_NUM_50;
 		else if (juice < 100) howMuchJuice += ONE_HUNDRED;
 		else if (juice < 200) howMuchJuice += TWO_HUNDRED;
 		else if (juice < 500) howMuchJuice += FIVE_HUNDRED;
@@ -703,7 +704,7 @@ string twoDigits(const int x) {
 }
 void printCreatureAttributes(DeprecatedCreature &cr) {
 
-	mvaddstrAlt(5, 0, CONST_commondisplay139);
+	mvaddstrAlt(5, 0, CONST_X_HEART_COLON);
 	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
 	mvaddstrAlt(6, 0, INTELLIGENCE_COLON);
 	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
@@ -750,9 +751,9 @@ void printCreatureSkills(DeprecatedCreature &cr) {
 			// >=1 skills are light gray
 			else set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(6 + skills_shown, 28, skill_enum_to_string(maxs));
-			addstrAlt(CONST_commondisplay212);
+			addstrAlt(CONST_X_COLON_SPACE);
 			moveAlt(6 + skills_shown, 42);
-			addstrAlt(twoDigits(cr.get_skill(maxs)) + CONST_commondisplay196);
+			addstrAlt(twoDigits(cr.get_skill(maxs)) + CONST_X_DOT);
 			if (cr.get_skill_ip(maxs) < 100 + (10 * cr.get_skill(maxs)))
 			{
 				if ((cr.get_skill_ip(maxs) * 100) / (100 + (10 * cr.get_skill(maxs))) != 0)
@@ -847,7 +848,7 @@ void printliberalstats_c(const CreatureCar cr, const CreatureInventory cr_2, con
 		char d;
 		if (showcarprefs == 1)d = cr.pref_is_driver;
 		else d = cr.is_driver;
-		if (d)addstrAlt(CONST_commondisplay156);
+		if (d)addstrAlt(CONST_X_DASH_D);
 	}
 	else
 	{
@@ -857,7 +858,7 @@ void printliberalstats_c(const CreatureCar cr, const CreatureInventory cr_2, con
 		if ((cr_3.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF) ||
 			(cr_3.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
 		if (flag & CREATUREFLAG_WHEELCHAIR)addstrAlt(WHEEL_CHAIR);
-		else if (legok >= 1)addstrAlt(CONST_commondisplay158);
+		else if (legok >= 1)addstrAlt(CONST_X_ON_FOOT);
 		else addstrAlt(ON_FOOT);
 	}
 
@@ -927,7 +928,7 @@ void printliberalstats_f(DeprecatedCreature &cr) {
 	{
 		if (cr.get_augmentation(i).type == -1) continue;
 		mvaddstrAlt(y, 55, Augmentation::get_name(i));
-		addstrAlt(CONST_commondisplay212);
+		addstrAlt(CONST_X_COLON_SPACE);
 		addstrAlt(cr.get_augmentation(i).name);
 	}
 
@@ -940,7 +941,7 @@ void printliberalstats(DeprecatedCreature &cr)
 	// Add attributes
 	printCreatureAttributes(cr);
 	// Add highest skills
-	mvaddstrAlt(5, 28, CONST_commondisplay193);
+	mvaddstrAlt(5, 28, CONST_X_SKILL);
 	mvaddstrAlt(5, 43, NOW_MAX);
 	printCreatureSkills(cr);
 
@@ -973,7 +974,7 @@ void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2) {
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(4, 27 * (s / 3));
-			addstrAlt(CONST_commondisplay193);
+			addstrAlt(CONST_X_SKILL);
 			moveAlt(4, 15 + 27 * (s / 3));
 			addstrAlt(NOW_MAX);
 		}
@@ -988,9 +989,9 @@ void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2) {
 		else set_color_easy(WHITE_ON_BLACK);
 		moveAlt(5 + s / 3, 27 * (s % 3));
 		addstrAlt(skill_enum_to_string(s));
-		addstrAlt(CONST_commondisplay212);
+		addstrAlt(CONST_X_COLON_SPACE);
 		moveAlt(5 + s / 3, 14 + 27 * (s % 3));
-		addstrAlt(twoDigits(cr_2.get_skill(s)) + CONST_commondisplay196);
+		addstrAlt(twoDigits(cr_2.get_skill(s)) + CONST_X_DOT);
 		if (cr_2.get_skill_ip(s) < 100 + (10 * cr_2.get_skill(s)))
 		{
 			if ((cr_2.get_skill_ip(s) * 100) / (100 + (10 * cr_2.get_skill(s))) != 0)
@@ -1056,14 +1057,14 @@ void printliberalcrimes(CreatureJustice cr)
 		if (i % 2 == 0 && i < 4)
 		{
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(4, 40 * (i / 2), CONST_commondisplay210);
-			mvaddstrAlt(4, 30 + 40 * (i / 2), CONST_commondisplay211);
+			mvaddstrAlt(4, 40 * (i / 2), CONST_X_CRIME);
+			mvaddstrAlt(4, 30 + 40 * (i / 2), CONST_X_NUM);
 		}
 		// Commited crimes are yellow
 		if (cr.crimes_suspected[i] > 0)
 			set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-		mvaddstrAlt(5 + i / 2, 40 * (i % 2), getlawflag(i) + CONST_commondisplay212);
+		mvaddstrAlt(5 + i / 2, 40 * (i % 2), getlawflag(i) + CONST_X_COLON_SPACE);
 		mvaddstrAlt(5 + i / 2, 30 + 40 * (i % 2), twoDigits(cr.crimes_suspected[i]));
 	}
 	set_color_easy(WHITE_ON_BLACK);

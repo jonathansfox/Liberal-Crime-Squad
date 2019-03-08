@@ -1,4 +1,5 @@
 
+
 #define	JUSTICE_CPP
 #include "../includes.h"
 /*
@@ -223,7 +224,7 @@ This file is part of Liberal Crime Squad.                                       
 		 if ((g.getCreatureJustice().sentence > 0 && oldsentence > 0) ||
 			 (g.getCreatureJustice().sentence < 0 && oldsentence < 0))
 		 {
-			 addstrAlt(CONST_justice033, gamelog);
+			 addstrAlt(CONST_X_COMMA, gamelog);
 			 moveAlt(8, 1);
 			 if (lenient)
 			 {
@@ -292,11 +293,11 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 string crime;
 		 if (lawList[LAW_FLAGBURNING] == -2)
-			 crime = (CONST_justice047);
+			 crime = (CONST_X_FLAG_MURDER);
 		 else if (lawList[LAW_FLAGBURNING] == -1)
 			 crime = (CONST_FELONY_FLAG_BURNING);
 		 else if (lawList[LAW_FLAGBURNING] == 0)
-			 crime = (CONST_justice049);
+			 crime = (CONST_X_FLAG_BURNING_LOWERCASE);
 		 // otherwise, not a crime
 		 printSingleCrime(g, LAWFLAG_BURNFLAG, typenum, crime, true);
 		 if ((x++) >= 2) { x = 0; moveAlt(++y, 1); }
@@ -317,7 +318,7 @@ This file is part of Liberal Crime Squad.                                       
 		 {
 			 addstrAlt(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
 			 addstrAlt(counts_of, gamelog);
-			 addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_justice063 : CONST_justiceB173), gamelog);
+			 addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_X_HIRING_ILLEGAL_ALIENS : CONST_X_HIRING_UNDOCUMENTED_WORKERS), gamelog);
 		 }
 		 else addstrAlt((lawList[LAW_IMMIGRATION] < 1 ? CONST_HIRING_AN_ILLEGAL_ALIEN : CONST_HIRING_AN_UNDOCUMENTED_WORKER), gamelog);
 		 x = 2;
@@ -576,7 +577,7 @@ This file is part of Liberal Crime Squad.                                       
 	 // Debug jury bias
 	 if (SHOWMECHANICS)
 	 {
-		 addstrAlt(CONST_justice127);
+		 addstrAlt(CONST_X_SPACE_PARENTHESIS);
 		 if (jury >= 0) addcharAlt('+');
 		 addstrAlt(jury);
 		 addstrAlt(CONST_TO_CONVICT);
@@ -603,7 +604,7 @@ This file is part of Liberal Crime Squad.                                       
 	 {
 		 addstrAlt(PARENTHESIS_PLUS);
 		 addstrAlt(prosecution / 2);
-		 addstrAlt(CONST_justice107);
+		 addstrAlt(CONST_X_TO_PLUS);
 		 addstrAlt(prosecution);
 		 addstrAlt(CONST_TO_CONVICT);
 	 }
@@ -617,7 +618,7 @@ This file is part of Liberal Crime Squad.                                       
 	 // Debug defense power
 	 if (SHOWMECHANICS)
 	 {
-		 addstrAlt(CONST_justice127);
+		 addstrAlt(CONST_X_SPACE_PARENTHESIS);
 		 addstrAlt(defensepower);
 		 addstrAlt(CONST_NEED);
 		 addstrAlt(jury + 1);
@@ -764,11 +765,11 @@ This file is part of Liberal Crime Squad.                                       
 	 // decide when to defend self.
 	 mvaddstrAlt(++y, 5, CONST_justice085);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
-	 mvaddstrAlt(y, 25, CONST_justice086);
+	 mvaddstrAlt(y, 25, CONST_X_PERSUASION_COLON);
 	 addstrAlt(g.get_skill(SKILL_PERSUASION));
 	 mvaddstrAlt(++y, 5, CONST_CHARISMA);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_CHARISMA, true));
-	 mvaddstrAlt(y++, 25, CONST_justice088);
+	 mvaddstrAlt(y++, 25, CONST_X_LAW_COLON);
 	 addstrAlt(g.get_skill(SKILL_LAW));
 	 mvaddstrAlt(y++, 5, CONST_INTELLIGENCE);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_INTELLIGENCE, true));
@@ -871,7 +872,7 @@ This file is part of Liberal Crime Squad.                                       
 	 else
 	 {
 		 addstrAlt(g.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_justice148, gamelog);
+		 addstrAlt(CONST_X_REMAINS_STRONG, gamelog);
 	 }
 	 gamelog.nextMessage();
 	 pressAnyKey();
@@ -1129,7 +1130,7 @@ This file is part of Liberal Crime Squad.                                       
 				 mvaddstrAlt(9, 1, CONST_TODAY_THE_CONSERVATIVE_MACHINE_EXECUTED, gamelog);
 				 addstrAlt(g.getNameAndAlignment().name, gamelog);
 				 gamelog.record(singleSpace); //Log this for formatting purposes.
-				 mvaddstrAlt(10, 1, CONST_justice174, gamelog);
+				 mvaddstrAlt(10, 1, CONST_X_BY_SPACE, gamelog);
 				 if (lawList[LAW_DEATHPENALTY] == -2)
 					 addstrAlt(pickrandom(cruel_and_unusual_execution_methods), gamelog);
 				 else if (lawList[LAW_DEATHPENALTY] == -1 || lawList[LAW_DEATHPENALTY] == 0)

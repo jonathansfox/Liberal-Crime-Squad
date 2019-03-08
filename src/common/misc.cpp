@@ -1,4 +1,5 @@
 
+
 #define	MISC_CPP
 #include "../includes.h"
 void sexdesc(char *str)
@@ -128,19 +129,19 @@ void loadsong(int i, const char* filename)
 	eraseAlt();
 	if (oggsupport)
 	{
-		mvaddstrAlt(12, 0, CONST_LOADING_OGG_VORBIS_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_OGG + filename + CONST_miscB022);
+		mvaddstrAlt(12, 0, CONST_LOADING_OGG_VORBIS_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_OGG + filename + CONST_X_OGG);
 		mvaddstrAlt(13, 0, string(CONST_WITH) + artdir + CONST_MIDI + filename + CONST_MID_AS_MIDI_FALLBACK);
 	}
 	else mvaddstrAlt(12, 0, CONST_LOADING_MIDI_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_MIDI + filename + CONST_MID);
 	refreshAlt();
-	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_OGG + filename + CONST_miscB022).c_str()); // only attempt loading Ogg if we have Ogg support
+	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_OGG + filename + CONST_X_OGG).c_str()); // only attempt loading Ogg if we have Ogg support
 	if (!songs[i] || !oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead
 	{
-		if (oggsupport) gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_OGG + filename + CONST_miscB023 + Mix_GetError()); // Ogg Vorbis music failed to load
+		if (oggsupport) gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_OGG + filename + CONST_X_OGG_COLON + Mix_GetError()); // Ogg Vorbis music failed to load
 		songs[i] = Mix_LoadMUS((string(artdir) + CONST_MIDI + filename + CONST_MID).c_str());
 	}
 	if (!songs[i]) // there was an error with Mix_LoadMUS() when called on the MIDI file
-		gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_MIDI + filename + CONST_miscB025 + Mix_GetError()); // MIDI music failed to load
+		gamelog.log(string(CONST_SDL_MIXER_FUNCTION_MIX_LOADMUS_FAILED_TO_LOAD) + artdir + CONST_MIDI + filename + CONST_X_MID_ + Mix_GetError()); // MIDI music failed to load
 }
 #endif // DONT_INCLUDE_SDL
 /* initialize SDL, SDL_mixer, and songs */
@@ -624,8 +625,8 @@ void MusicClass::play(int _musicmode)
 		if (interface_pgup == '[')
 			output = CLOSING_BRACKET;
 		else if (interface_pgup == '.')
-			output = CONST_commondisplay222;
-		else output = CONST_commondisplay223;
+			output = CONST_X_SINGLE_COLON;
+		else output = CONST_X_PGDN;
 		return output + DASH_NEXT;
 	}
 	/* prints a short blurb showing how to page back */
@@ -633,10 +634,10 @@ void MusicClass::play(int _musicmode)
 	{
 		string output;
 		if (interface_pgup == '[')
-			output = CONST_commondisplay224;
+			output = CONST_X_OPEN_BRACKET;
 		else if (interface_pgup == '.')
 			output = SEMI_COLON;
-		else output = CONST_commondisplay226;
+		else output = CONST_X_PGUP;
 		return output + DASH_PREVIOUS;
 	}
 	/* prints a long blurb showing how to page forward and back */
@@ -2611,21 +2612,21 @@ void MusicClass::play(int _musicmode)
 
 
 	string wasUnableToFind(const string old) {
-		return CONST_activities148 + old + CONST_activities149;
+		return CONST_X_WAS_UNABLE_TO_FIND_A_ + old + CONST_X_BUT_DID_FIND_A_;
 	}
 
 	string considerLeaving(const bool sensealarm, const bool alarmon, const string name) {
 
-		if (!sensealarm) return CONST_activities186;
+		if (!sensealarm) return CONST_CALL_IT_A_DAY_PRESS_ENTER;
 		else
 		{
 			if (!alarmon)
 			{
-				return (CONST_activities166)+(name)+(CONST_activities167);
+				return (CONST_X_ENTER_THE_VIPER_)+(name)+(CONST_X_IS_DETERRED);
 			}
 			else
 			{
-				return (CONST_activities168)+(name)+(singleDot);
+				return (CONST_X_ENTER_YES_THE_VIPER_HAS_DETERRED_)+(name)+(singleDot);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 
+
 #define	CREATURETYPE_CPP
 #include "../includes.h"
 Weapon& DeprecatedCreature::weapon_none()
@@ -14,7 +15,7 @@ void assign_interval(Interval& i, const std::string& value,
 	const std::string& owner, const std::string& element)
 {
 	if (!i.set_interval(value))
-		xmllog.log(INVALID_INTERVAL + element + CONST_creaturetypeB075 + owner + CONST_creaturetypeB086 + value);
+		xmllog.log(INVALID_INTERVAL + element + CONST_X_IN_ + owner + CONST_creaturetypeB086 + value);
 }
 int CreatureType::s_number_of_creaturetypes = 0;
 CreatureType::WeaponsAndClips::WeaponsAndClips(const std::string& weapon, int weapons, const std::string& clip, int clips)
@@ -38,8 +39,8 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	idname_ = xml.GetAttrib(tag_idname);
 	if (!len(idname_))
 	{
-		idname_ = CONST_creaturetype061 + tostring(id_);
-		xmllog.log(CREATURE_TYPE + tostring(id_) + CONST_creaturetypeB080);
+		idname_ = CONST_X_LACKS_IDNAME__ALLCAPS + tostring(id_);
+		xmllog.log(CREATURE_TYPE + tostring(id_) + CONST_X_LACKS_IDNAME);
 	}
 	type_ = creaturetype_string_to_enum(idname_);
 	xml.IntoElem();
@@ -245,7 +246,7 @@ std::string CreatureType::get_type_name() const
 	switch (type_) // Hardcoded special cases.
 	{
 	case CREATURE_WORKER_SERVANT:
-		if (lawList[LAW_LABOR] == -2 && lawList[LAW_CORPORATE] == -2) return CONST_creaturetype070;
+		if (lawList[LAW_LABOR] == -2 && lawList[LAW_CORPORATE] == -2) return CONST_X_SLAVE;
 		break;
 	case CREATURE_WORKER_JANITOR:
 		if (lawList[LAW_LABOR] == 2) return CUSTODIAN;
@@ -485,7 +486,7 @@ void armCREATURE_FIREFIGHTER(DeprecatedCreature &cr) {
 		cr.take_clips(*cliptype[getcliptype(tag_CLIP_GASOLINE)], 4);
 		cr.reload(false);
 		cr.set_skill(SKILL_HEAVYWEAPONS, LCSrandom(3) + 2);
-		cr.rename(CONST_creaturetypes044);
+		cr.rename(CONST_X_FIREMAN);
 		cr.align = ALIGN_CONSERVATIVE;
 	}
 	else
@@ -1049,7 +1050,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 				for (i = 0; i < len(attacks) && cliptype != attacks[i]->ammotype; i++);
 				if (i == len(attacks))
 				{
-					xmllog.log(IN_SPACE + owner + CONST_creaturetypeB078 + cliptype +
+					xmllog.log(IN_SPACE + owner + CONST_X_COMMA_SPACE + cliptype +
 						CAN_NOT_BE_USED_BY + weapon_type_str + singleDot);
 					cliptype = NONE;
 				}

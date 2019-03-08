@@ -1,4 +1,5 @@
 
+
 #define	LCSIO_CPP
 #include "../includes.h"
 
@@ -31,8 +32,8 @@ const char *art_search_paths[] =
    CONST_USR_GAMES_SHARE_LCS_ART.c_str(),
    CONST_USR_GAMES_LCS_ART.c_str(),
    #endif
-   CONST_lcsio007.c_str(),
-   CONST_lcsio008.c_str(),
+   CONST_X_ART_FOLDER.c_str(),
+   CONST_X_PARENT_ART_FOLDER.c_str(),
    NULL
 };
 //Check if filename exists on the system.

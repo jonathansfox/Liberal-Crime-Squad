@@ -7,6 +7,11 @@
 
 #include "newcreature.h"
 
+#ifndef MIN
+// minimum of 2 numbers
+#define MIN(a,b) (((a)>(b))?(b):(a))
+#endif
+
 class DeprecatedCreature
 {
 public:

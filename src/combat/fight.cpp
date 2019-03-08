@@ -1,4 +1,5 @@
 
+
 #define	FIGHT_CPP
 #include "../includes.h"
 /*
@@ -571,7 +572,7 @@ bool goodguyattack = false;
 		 clearmessagearea();
 		 set_color_easy(YELLOW_ON_BLACK_BRIGHT);
 		 mvaddstrAlt(16, 1, cr.getNameAndAlignment().name, gamelog);
-		 addstrAlt(CONST_fight136, gamelog);
+		 addstrAlt(CONST_X_S_SPACE, gamelog);
 		 addstrAlt(cr.get_armor().get_name(), gamelog);
 		 addstrAlt(CONST_HAS_BEEN_DESTROYED, gamelog);
 		 gamelog.newline();
@@ -638,8 +639,8 @@ bool goodguyattack = false;
 			 break;
 		 case 1:
 			 strcat(str, CONST_GASPS_A_LAST_BREATH_AND.c_str());
-			 if (lawList[LAW_FREESPEECH] == -2) strcpy(secondLine, CONST_fight111.c_str());
-			 else strcpy(secondLine, CONST_fight112.c_str());
+			 if (lawList[LAW_FREESPEECH] == -2) strcpy(secondLine, CONST_X_MAKES_A_MESS.c_str());
+			 else strcpy(secondLine, CONST_X_SOILS_THE_FLOOR.c_str());
 			 break;
 		 case 2:
 			 strcat(str, CONST_SPEAKS_THESE_FINAL_WORDS.c_str());
@@ -1157,7 +1158,7 @@ bool goodguyattack = false;
  string bouncesOffCar(const Vehicle* vehicle, const int vehicleHitLocation) {
 	 string str = CONST_THE_ATTACK_BOUNCES_OFF;
 
-	 str += (CONST_THE + vehicle->shortname() + CONST_fight136);
+	 str += (CONST_THE + vehicle->shortname() + CONST_X_S_SPACE);
 	 str += vehicle->getpartname(vehicleHitLocation);
 
 	 return str;
@@ -1315,10 +1316,10 @@ bool goodguyattack = false;
 
 	 if (len(str) < 1) {
 		 str = a.heshe(true); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
-		 if (attackI.sneak_attack) str += CONST_fight134;
+		 if (attackI.sneak_attack) str += CONST_X_STABS_;
 		 else str += CONST_HITS;
 		 str += t.getNameAndAlignment().name;
-		 str += CONST_fight136;
+		 str += CONST_X_S_SPACE;
 		 str += bodypartName((Bodyparts)hit_location, (AnimalGlosses)t.getCreatureHealth().animalgloss);
 		 str += showMultipleHits(a, numhits, attackI.attack_used);
 		 // Report vehicle protection effect
@@ -1326,7 +1327,7 @@ bool goodguyattack = false;
 		 {
 			 str += CONST_THROUGH;
 
-			 str += (CONST_THE + vehicle->shortname() + CONST_fight136);
+			 str += (CONST_THE + vehicle->shortname() + CONST_X_S_SPACE);
 			 str += vehicle->getpartname(vehicleHitLocation);
 		 }
 	 }

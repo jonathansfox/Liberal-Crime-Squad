@@ -81,7 +81,5 @@ ClipType::ClipType(MCD_STR xmlstring) : ItemType(xmlstring), ammo_(1)
 		std::string element = xml.GetTagName();
 		if (element == tag_ammo)
 			ammo_ = atoi(xml.GetData().c_str());
-		/*else
-		errorlog << UNKNOWN_ELEMENT_FOR_CLIP << idname() << CONST_clipB003 << element << endl;*/
 	}
 }

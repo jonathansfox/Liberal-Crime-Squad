@@ -2,6 +2,7 @@
 
 
 
+
 /*
 	File created by Chris Johnson.
 	These were previously all in game.cpp.
@@ -47,23 +48,7 @@ constexpr auto __USE_MINGW_ANSI_STDIO = 0;
 
 using namespace std;
 
-// Macro definition 
-#ifndef MAX
-// maximum of 2 numbers
-#define MAX(a,b) (((a)<(b))?(b):(a))
-#endif
-#ifndef MIN
-// minimum of 2 numbers
-#define MIN(a,b) (((a)>(b))?(b):(a))
-#endif
-#ifndef ABS
-// absolute value of a number
-#define ABS(x) ((x)<0)?(-x):(x)
-#endif
-#ifndef DIFF
-// difference between 2 numbers (absolute value of subtracting one from the other)
-#define DIFF(x,y) ((x)<(y)?((y)-(x)):((x)-(y)))
-#endif
+
 const int BIT1 = (1 << 0);
 const int BIT2 = (1 << 1);
 const int BIT3 = (1 << 2);
@@ -1042,8 +1027,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.35";
-const int version = 41235;
+const string PACKAGE_VERSION_STR = "4.12.36";
+const int version = 41236;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -1169,14 +1154,14 @@ const string NAME_DIFFICULTY_COST_HEADER = "ÄÄÄÄNAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 const string TRY_TO_MAKE_NOTE_HALF_COST_WITH_CLOTH = " try to make?   (Note: Half Cost if you have cloth)";
 const string WHICH_WILL = "Which will ";
 const string PRESS_A_LETTER_TO_SELECT_CONSERVATIVE = "Press a Letter to select a Conservative";
-const string CONST_activate042 = "Day";
-const string CONST_activate041 = "Days";
+const string CONST_X_DAY = "Day";
+const string CONST_X_DAYS = "Days";
 const string DAYS_IN_CAPTIVITY = "DAYS IN CAPTIVITY";
 const string BE_WATCHING_OVER = " be watching over?";
 const string WHICH_HOSTAGE_WILL = "Which hostage will ";
 const string SPACE_WILL_SPACE = " will ";
 const string X_NOTHING = "X - Nothing for Now";
-const string CONST_activate056 = "Enter - Confirm Selection";
+const string CONST_X_ENTER_CONFIRM = "Enter - Confirm Selection";
 const string QUESTION_HELP = "? - Help";
 const string E_EQUIP_THIS_LIBERAL = "E - Equip this Liberal";
 const string Z_DIZPOSE_OF_BODIES = "Z - Dispose of bodies";
@@ -1193,9 +1178,9 @@ const string PRESS_A_LETTER_TO_ASSIGN_ACTIVITY_OR_NUMBER = "Press a Letter to As
 const string BULK_ACTIVITY_HEADER = "BULK ACTIVITY";
 const string CODE_NAME_CURRENT_ACTIVITY_HEADER = "ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄCURRENT ACTIVITYÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string Z_TO_ASSIGN_SIMPLE_TASKS = "Press Z to assign simple tasks in bulk.";
-const string CONST_activate070 = " T to sort people.";
+const string CONST_X_T_TO_SORT = " T to sort people.";
 const string PRESS_A_LETTER_TO_ASSIGN_ACTIVITY = "Press a Letter to Assign an Activity.";
-const string CONST_activate068 = "ACTIVITY";
+const string CONST_X_TITLE_ACTIVITY = "ACTIVITY";
 const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
 
 const string STANDARD_ACTIVITIES_AND_DATA_TXT = "standard_activities_and_data.txt";
@@ -1379,200 +1364,200 @@ enum CarHotwireMethod {
 };
 
 
-const string CONST_activities104 = " can.";
-const string CONST_activities103 = " has learned as much as ";
+const string CONST_X_CAN = " can.";
+const string CONST_X_HAS_LEARNED_AS_MUCH_AS_ = " has learned as much as ";
 
 const string tag_POLICECAR = "POLICECAR";
 const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 const string tag_WEAPON = "WEAPON";
-const string CONST_activities106 = " has ";
-const string CONST_activities121 = "!";
+const string CONST_X_HAS_ = " has ";
+const string CONST_X_EXCLAMATION_POINT = "!";
 const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
-const string CONST_activities026 = " peruses some sewing magazines.";
-const string CONST_activities025 = " cleans the kitchen.";
-const string CONST_activities024 = " reorganizes the armor closet.";
-const string CONST_activities023 = " tidies up the safehouse.";
-const string CONST_activities033 = " ruined";
-const string CONST_activities032 = " repairs what little can be fixed of ";
-const string CONST_activities031 = " finds there is no hope of repairing ";
-const string CONST_activities030 = " repairs ";
-const string CONST_activities029 = " is working to repair ";
-const string CONST_activities028 = " cleans ";
-const string CONST_activities027 = " disposes of ";
-const string CONST_activities042 = " wasted the materials for a";
-const string CONST_activities041 = "th-rate";
-const string CONST_activities040 = "fourth-rate";
-const string CONST_activities039 = "third-rate";
-const string CONST_activities038 = "second-rate";
-const string CONST_activities037 = "first-rate";
-const string CONST_activities036 = " has made a ";
-const string CONST_activities035 = " cannot find enough cloth to reduce clothing costs.";
-const string CONST_activities034 = " cannot afford material for clothing.";
-const string CONST_activities060 = "    ";
-const string CONST_activities059 = "Enter - Done";
-const string CONST_activities058 = " Liberal percentage points.";
-const string CONST_activities057 = "Results are +/- ";
-const string CONST_activities056 = "XX% Issue ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?Public Interest";
-const string CONST_activities055 = "Additional notable findings:";
-const string CONST_activities076 = "wanted amnesty for illegal immigrants";
-const string CONST_activities075 = "condemned unnecessary immigration regulations";
-const string CONST_activities074 = "believed in legalizing marijuana";
-const string CONST_activities073 = "supported keeping marijuana legal";
-const string CONST_activities072 = "% ";
-const string CONST_activities071 = "??";
-const string CONST_activities070 = "None     ";
-const string CONST_activities069 = "Low      ";
-const string CONST_activities068 = "Moderate ";
-const string CONST_activities067 = "High     ";
-const string CONST_activities066 = "Very High";
-const string CONST_activities063 = "Unknown  ";
-const string CONST_activities062 = "........................................................";
-const string CONST_activities061 = "                                                                                ";
-const string CONST_activities053 = "Liberal Media Bias.";
-const string CONST_activities052 = "Conservative Media Bias.";
-const string CONST_activities051 = "the LCS terrorists.";
-const string CONST_activities050 = "the Liberal Crime Squad.";
-const string CONST_activities049 = "activist political groups.";
-const string CONST_activities054 = "The public is not concerned with politics right now.";
+const string CONST_X_PERUSES_MAGAZINES = " peruses some sewing magazines.";
+const string CONST_X_CLEANS_KITCHEN = " cleans the kitchen.";
+const string CONST_X_REORGANIZES_CLOSET = " reorganizes the armor closet.";
+const string CONST_X_TIDIES_SAFEHOUSE = " tidies up the safehouse.";
+const string CONST_X_RUINED = " ruined";
+const string CONST_X_REPAIRS_SOMEWHAT = " repairs what little can be fixed of ";
+const string CONST_X_NO_HOPE_TO_REPAIR = " finds there is no hope of repairing ";
+const string CONST_X_REPAIRS = " repairs ";
+const string CONST_X_IS_WORKING_TO_REPAIR = " is working to repair ";
+const string CONST_X_CLEANS = " cleans ";
+const string CONST_X_DISPOSES_OF = " disposes of ";
+const string CONST_X_WASTED_MATERIALS = " wasted the materials for a";
+const string CONST_X_TH_RATE = "th-rate";
+const string CONST_X_FOURTH_RATE = "fourth-rate";
+const string CONST_X_THIRD_RATE = "third-rate";
+const string CONST_X_SECOND_RATE = "second-rate";
+const string CONST_X_FIRST_RATE = "first-rate";
+const string CONST_X_HAS_MADE_A = " has made a ";
+const string CONST_X_CANNOT_FIND_CLOTH = " cannot find enough cloth to reduce clothing costs.";
+const string CONST_X_CANNOT_AFFORD_MATERIAL = " cannot afford material for clothing.";
+const string CONST_X_LITTLE_WHITESPACE = "    ";
+const string CONST_X_ENTER_DONE = "Enter - Done";
+const string CONST_X_LIBERAL_PERCENTAGE_POINTS = " Liberal percentage points.";
+const string CONST_X_RESULTS_ARE_PLUS_MINUS = "Results are +/- ";
+const string CONST_X_ISSUE_PUBLIC_INTEREST_HEADER = "XX% Issue ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄPublic Interest";
+const string CONST_X_ADDITIONAL_FINDINGS = "Additional notable findings:";
+const string CONST_X_AMNESTY_FOR_IMMIGRANTS = "wanted amnesty for illegal immigrants";
+const string CONST_X_CONDEMN_IMMIGRATION_REGULATIONS = "condemned unnecessary immigration regulations";
+const string CONST_X_BELIEVE_IN_LEGAL_MARIJUANA = "believed in legalizing marijuana";
+const string CONST_X_SUPPORTED_MARIJUANA_LEGAL = "supported keeping marijuana legal";
+const string CONST_X_PERCENT_SIGN = "% ";
+const string CONST_X_TWO_QUESTION_MARKS = "??";
+const string CONST_X_NONE_SPACE = "None     ";
+const string CONST_X_LOW = "Low      ";
+const string CONST_X_MODERATE = "Moderate ";
+const string CONST_X_HIGH = "High     ";
+const string CONST_X_VERY_HIGH = "Very High";
+const string CONST_X_UNKNOWN = "Unknown  ";
+const string CONST_X_MANY_DOTS = "........................................................";
+const string CONST_X_LOTS_OF_WHITESPACE = "                                                                                ";
+const string CONST_X_LIBERAL_MEDIA_BIAS = "Liberal Media Bias.";
+const string CONST_X_CONSERVATIVE_MEDIA_BIAS = "Conservative Media Bias.";
+const string CONST_X_THE_LCS_TERRORISTS = "the LCS terrorists.";
+const string CONST_X_THE_LIBERAL_CRIME_SQUAD = "the Liberal Crime Squad.";
+const string CONST_X_ACTIVIST_POLITICAL_GROUPS = "activist political groups.";
+const string CONST_X_THE_PUBLIC_IS_UNCONCERNED = "The public is not concerned with politics right now.";
 
-const string CONST_activities047 = "taking strong action.";
-const string CONST_activities046 = "The people are most concerned about ";
-const string CONST_activities045 = "President ";
-const string CONST_activities044 = "% had a favorable opinion of ";
-const string CONST_activities043 = "Survey of Public Opinion, According to Recent Polls";
-const string CONST_activities077 = " is accosted by police while ";
-const string CONST_activities079 = "soliciting donations";
-const string CONST_activities080 = "selling shirts";
-const string CONST_activities081 = "sketching portraits";
+const string CONST_X_TAKING_STRONG_ACTION = "taking strong action.";
+const string CONST_X_THE_PEOPLE_ARE_MOST_CONCERNED = "The people are most concerned about ";
+const string CONST_X_PRESIDENT = "President ";
+const string CONST_X_HAD_FAVORABLE_OPINION = "% had a favorable opinion of ";
+const string CONST_X_SURVEY_OF_PUBLIC_OPINION = "Survey of Public Opinion, According to Recent Polls";
+const string CONST_X_IS_ACCOSTED_BY_POLICE = " is accosted by police while ";
+const string CONST_X_SOLICITING_DONATIONS = "soliciting donations";
+const string CONST_X_SELLING_SHIRTS = "selling shirts";
+const string CONST_X_SKETCHING_PORTRAITS = "sketching portraits";
 
-const string CONST_activities082 = "playing music";
-const string CONST_activities083 = "selling brownies";
-const string CONST_activities088 = " a ";
-const string CONST_activities086 = "Your hackers have ";
-const string CONST_activities084 = "Your Hackers have ";
-const string CONST_activities100 = " has begun work on a large mural about ";
-const string CONST_activities099 = " works through the night on a large mural.";
-const string CONST_activities098 = " mural about ";
-const string CONST_activities097 = " beautiful";
-const string CONST_activities096 = " has completed a";
-const string CONST_activities095 = " while spraying an LCS tag!";
-const string CONST_activities094 = " while working on the mural!";
-const string CONST_activities093 = " was spotted by the police";
-const string CONST_activities092 = " needs a spraycan equipped to do graffiti.";
-const string CONST_activities091 = " bought spraypaint for graffiti.";
-const string CONST_activities090 = " from ";
-const string CONST_activities089 = " grabbed a ";
-const string CONST_activities102 = " was nearly caught in a prostitution sting.";
-const string CONST_activities101 = " has been arrested in a prostitution sting.";
-const string CONST_activities117 = "set up a mock sweatshop in the middle of the mall!";
-const string CONST_activities116 = "burned a corporate symbol and denounced capitalism!";
-const string CONST_activities115 = "distributed fliers graphically illustrating CIA torture!";
-const string CONST_activities114 = "distributed fliers graphically illustrating executions!";
-const string CONST_activities113 = "squirted business people with fake polluted water!";
-const string CONST_activities112 = "dressed up and pretended to be a radioactive mutant!";
-const string CONST_activities111 = "dressed up and pretended to be radioactive mutants!";
-const string CONST_activities110 = "gone downtown and reenacted a police beating!";
-const string CONST_activities109 = "posted horrifying dead abortion doctor pictures downtown!";
-const string CONST_activities108 = "disrupted a traditional wedding at a church!";
-const string CONST_activities107 = "run around uptown splashing paint on fur coats!";
-const string CONST_activities139 = "broken!";
-const string CONST_activities138 = "'s last unbroken rib is ";
-const string CONST_activities137 = "'s rib is ";
-const string CONST_activities136 = "One of ";
-const string CONST_activities135 = "'s ribs are ";
-const string CONST_activities134 = " of ";
-const string CONST_activities133 = "All ";
-const string CONST_activities132 = "'s tooth has been pulled out with pliers!";
-const string CONST_activities131 = "'s teeth have been smashed out on the curb.";
-const string CONST_activities130 = "'s neck has been broken!";
-const string CONST_activities129 = "'s upper spine has been broken!";
-const string CONST_activities128 = "'s lower spine has been broken!";
-const string CONST_activities127 = " is severely beaten before the mob is broken up.";
-const string CONST_activities126 = " out of everyone who got close!";
-const string CONST_activities125 = "shit";
-const string CONST_activities124 = "[tar]";
-const string CONST_activities123 = " beat the ";
-const string CONST_activities122 = "The mob scatters!";
-const string CONST_activities120 = " brandishes the ";
-const string CONST_activities119 = " is cornered by a mob of angry rednecks.";
-const string CONST_activities118 = "causing trouble";
-const string CONST_activities105 = "Your Activists have ";
-const string CONST_activities145 = "Press a Letter to select a Type of Car";
-const string CONST_activities144 = "ÄÄÄÄTYPEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄDIFFICULTY TO FIND UNATTENDEDÄÄ";
-const string CONST_activities143 = " try to find and steal today?";
-const string CONST_activities142 = "What type of car will ";
-const string CONST_activities162 = " stands by the ";
-const string CONST_activities161 = "THIS IS THE VIPER!   STAND AWAY!";
-const string CONST_activities160 = "THE VIPER:   ";
-const string CONST_activities158 = "STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
-const string CONST_activities183 = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
-const string CONST_activities181 = ":   ";
-const string CONST_activities180 = "THE VIPER";
-const string CONST_activities164 = "B - Break the window.";
-const string CONST_activities163 = "A - Pick the lock.";
-const string CONST_activities175 = " but it is still somewhat intact.";
-const string CONST_activities174 = " with a ";
-const string CONST_activities173 = " cracks the window";
-const string CONST_activities171 = " smashes the window";
-const string CONST_activities170 = " fiddles with the lock with no luck.";
-const string CONST_activities176 = "An alarm suddenly starts blaring!";
-const string CONST_activities169 = " jimmies the car door open.";
-const string CONST_activities202 = " has been spotted by a passerby!";
+const string CONST_X_PLAYING_MUSIC = "playing music";
+const string CONST_X_SELLING_BROWNIES = "selling brownies";
+const string CONST_X_A_SPACE = " a ";
+const string CONST_X_YOUR_HACKERS_HAVE_LOWERCASE = "Your hackers have ";
+const string CONST_X_YOUR_HACKERS_HAVE_ = "Your Hackers have ";
+const string CONST_X_HAS_BEGUN_WORK_ON_A_LARGE_MURAL_ABOUT_ = " has begun work on a large mural about ";
+const string CONST_X_WORKS_THROUGH_THE_NIGHT_ON_A_LARGE_MURAL = " works through the night on a large mural.";
+const string CONST_X_MURAL_ABOUT_ = " mural about ";
+const string CONST_X_BEAUTIFUL = " beautiful";
+const string CONST_X_HAS_COMPLETED_A = " has completed a";
+const string CONST_X_WHILE_SPRAYING_AN_LCS_TAG = " while spraying an LCS tag!";
+const string CONST_X_WHILE_WORKING_ON_THE_MURAL = " while working on the mural!";
+const string CONST_X_WAS_SPOTTED_BY_THE_POLICE = " was spotted by the police";
+const string CONST_X_NEEDS_A_SPRAYCAN_EQUIPPED_TO_DO_GRAFFITI = " needs a spraycan equipped to do graffiti.";
+const string CONST_X_BOUGHT_SPRAYPAINT_FOR_GRAFFITI = " bought spraypaint for graffiti.";
+const string CONST_X_FROM_ = " from ";
+const string CONST_X_GRABBED_A_ = " grabbed a ";
+const string CONST_X_WAS_NEARLY_CAUGHT_IN_A_PROSTITUTION_STING = " was nearly caught in a prostitution sting.";
+const string CONST_X_HAS_BEEN_ARRESTED_IN_A_PROSTITUTION_STING = " has been arrested in a prostitution sting.";
+const string CONST_X_SET_UP_A_MOCK_SWEATSHOP_IN_THE_MIDDLE_OF_THE_MALL = "set up a mock sweatshop in the middle of the mall!";
+const string CONST_X_BURNED_A_CORPORATE_SYMBOL_AND_DENOUNCED_CAPITALISM = "burned a corporate symbol and denounced capitalism!";
+const string CONST_X_DISTRIBUTED_FLIERS_GRAPHICALLY_ILLUSTRATING_CIA_TORTURE = "distributed fliers graphically illustrating CIA torture!";
+const string CONST_X_DISTRIBUTED_FLIERS_GRAPHICALLY_ILLUSTRATING_EXECUTIONS = "distributed fliers graphically illustrating executions!";
+const string CONST_X_SQUIRTED_BUSINESS_PEOPLE_WITH_FAKE_POLLUTED_WATER = "squirted business people with fake polluted water!";
+const string CONST_X_DRESSED_UP_AND_PRETENDED_TO_BE_A_RADIOACTIVE_MUTANT = "dressed up and pretended to be a radioactive mutant!";
+const string CONST_X_DRESSED_UP_AND_PRETENDED_TO_BE_RADIOACTIVE_MUTANTS = "dressed up and pretended to be radioactive mutants!";
+const string CONST_X_GONE_DOWNTOWN_AND_REENACTED_A_POLICE_BEATING = "gone downtown and reenacted a police beating!";
+const string CONST_X_POSTED_HORRIFYING_DEAD_ABORTION_DOCTOR_PICTURES_DOWNTOWN = "posted horrifying dead abortion doctor pictures downtown!";
+const string CONST_X_DISRUPTED_A_TRADITIONAL_WEDDING_AT_A_CHURCH = "disrupted a traditional wedding at a church!";
+const string CONST_X_RUN_AROUND_UPTOWN_SPLASHING_PAINT_ON_FUR_COATS = "run around uptown splashing paint on fur coats!";
+const string CONST_X_BROKEN = "broken!";
+const string CONST_X_S_LAST_UNBROKEN_RIB_IS_ = "'s last unbroken rib is ";
+const string CONST_X_S_RIB_IS_ = "'s rib is ";
+const string CONST_X_ONE_OF_ = "One of ";
+const string CONST_X_S_RIBS_ARE_ = "'s ribs are ";
+const string CONST_X_OF_ = " of ";
+const string CONST_X_ALL_SPACE = "All ";
+const string CONST_X_S_TOOTH_HAS_BEEN_PULLED_OUT_WITH_PLIERS = "'s tooth has been pulled out with pliers!";
+const string CONST_X_S_TEETH_HAVE_BEEN_SMASHED_OUT_ON_THE_CURB = "'s teeth have been smashed out on the curb.";
+const string CONST_X_S_NECK_HAS_BEEN_BROKEN = "'s neck has been broken!";
+const string CONST_X_S_UPPER_SPINE_HAS_BEEN_BROKEN = "'s upper spine has been broken!";
+const string CONST_X_S_LOWER_SPINE_HAS_BEEN_BROKEN = "'s lower spine has been broken!";
+const string CONST_X_IS_SEVERELY_BEATEN_BEFORE_THE_MOB_IS_BROKEN_UP = " is severely beaten before the mob is broken up.";
+const string CONST_X_OUT_OF_EVERYONE_WHO_GOT_CLOSE = " out of everyone who got close!";
+const string CONST_X_SHIT = "shit";
+const string CONST_X_TAR = "[tar]";
+const string CONST_X_BEAT_THE = " beat the ";
+const string CONST_X_THE_MOB_SCATTERS = "The mob scatters!";
+const string CONST_X_BRANDISHES_THE_ = " brandishes the ";
+const string CONST_X_IS_CORNERED_BY_A_MOB_OF_ANGRY_REDNECKS = " is cornered by a mob of angry rednecks.";
+const string CONST_X_CAUSING_TROUBLE = "causing trouble";
+const string CONST_X_YOUR_ACTIVISTS_HAVE_ = "Your Activists have ";
+const string CONST_X_PRESS_A_LETTER_TO_SELECT_A_TYPE_OF_CAR = "Press a Letter to select a Type of Car";
+const string CONST_X_TYPEDIFFICULTY_TO_FIND_UNATTENDED = "ÄÄÄÄTYPEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄDIFFICULTY TO FIND UNATTENDEDÄÄ";
+const string CONST_X_TRY_TO_FIND_AND_STEAL_TODAY = " try to find and steal today?";
+const string CONST_X_WHAT_TYPE_OF_CAR_WILL_ = "What type of car will ";
+const string CONST_X_STANDS_BY_THE_ = " stands by the ";
+const string CONST_X_THIS_IS_THE_VIPER_STAND_AWAY = "THIS IS THE VIPER!   STAND AWAY!";
+const string CONST_X_THE_VIPER_COLON = "THE VIPER:   ";
+const string CONST_X_STAND_AWAY_FROM_THE_VEHICLE_BEEP_BEEP = "STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+const string CONST_X_BEEP_BEEP_BEEP_BEEP = "<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>";
+const string CONST_X_COLON_SPACE_SPACE = ":   ";
+const string CONST_X_THE_VIPER = "THE VIPER";
+const string CONST_X_B_BREAK_THE_WINDOW = "B - Break the window.";
+const string CONST_X_A_PICK_THE_LOCK = "A - Pick the lock.";
+const string CONST_X_BUT_IT_IS_STILL_SOMEWHAT_INTACT = " but it is still somewhat intact.";
+const string CONST_X_WITH_A_ = " with a ";
+const string CONST_X_CRACKS_THE_WINDOW = " cracks the window";
+const string CONST_X_SMASHES_THE_WINDOW = " smashes the window";
+const string CONST_X_FIDDLES_WITH_THE_LOCK_WITH_NO_LUCK = " fiddles with the lock with no luck.";
+const string CONST_X_AN_ALARM_SUDDENLY_STARTS_BLARING = "An alarm suddenly starts blaring!";
+const string CONST_X_JIMMIES_THE_CAR_DOOR_OPEN = " jimmies the car door open.";
+const string CONST_X_HAS_BEEN_SPOTTED_BY_A_PASSERBY = " has been spotted by a passerby!";
 
-const string CONST_activities178 = "Adventures in Liberal Car Theft";
+const string CONST_X_ADVENTURES_IN_LIBERAL_CAR_THEFT = "Adventures in Liberal Car Theft";
 
-const string CONST_activities201 = "If they were here, I'd have found them by now.";
-const string CONST_activities200 = "I don't think they're in here...";
-const string CONST_activities199 = "Are they even in here?";
-const string CONST_activities198 = ": <rummaging> ";
-const string CONST_activities197 = " found the keys ";
-const string CONST_activities196 = "Holy shit!  ";
-const string CONST_activities195 = "Holy [Car Keys]!  ";
-const string CONST_activities194 = "under the back seat!";
-const string CONST_activities193 = "under the front seat!";
-const string CONST_activities192 = "in the glove compartment!";
-const string CONST_activities191 = "above the pull-down sunblock thingy!";
-const string CONST_activities190 = "in the ignition.  Damn.";
-const string CONST_activities189 = "in SPACE. With ALIENS. Seriously.";
+const string CONST_X_IF_THEY_WERE_HERE_ID_HAVE_FOUND_THEM_BY_NOW = "If they were here, I'd have found them by now.";
+const string CONST_X_I_DONT_THINK_THEYRE_IN_HERE = "I don't think they're in here...";
+const string CONST_X_ARE_THEY_EVEN_IN_HERE = "Are they even in here?";
+const string CONST_X_RUMMAGING_ = ": <rummaging> ";
+const string CONST_X_FOUND_THE_KEYS = " found the keys ";
+const string CONST_X_HOLY_SHIT_ = "Holy shit!  ";
+const string CONST_X_HOLY_CAR_KEYS_ = "Holy [Car Keys]!  ";
+const string CONST_X_UNDER_THE_BACK_SEAT = "under the back seat!";
+const string CONST_X_UNDER_THE_FRONT_SEAT = "under the front seat!";
+const string CONST_X_IN_THE_GLOVE_COMPARTMENT = "in the glove compartment!";
+const string CONST_X_ABOVE_THE_PULLDOWN_SUNBLOCK_THINGY = "above the pull-down sunblock thingy!";
+const string CONST_X_IN_THE_IGNITION_DAMN = "in the ignition.  Damn.";
+const string CONST_X_IN_SPACE_WITH_ALIENS_SERIOUSLY = "in SPACE. With ALIENS. Seriously.";
 
-const string CONST_activities188 = " hotwires the car!";
-const string CONST_activities187 = "Enter - The Viper has finally deterred ";
-const string CONST_activities186 = "Enter - Call it a day.";
-const string CONST_activities185 = "B - Desperately search for keys.";
-const string CONST_activities184 = "A - Hotwire the car.";
-
-
-const string CONST_activities182 = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+const string CONST_X_HOTWIRES_THE_CAR = " hotwires the car!";
+const string CONST_X_ENTER_THE_VIPER_HAS_FINALLY_DETERRED_ = "Enter - The Viper has finally deterred ";
+const string CONST_CALL_IT_A_DAY_PRESS_ENTER = "Enter - Call it a day.";
+const string CONST_X_B_DESPERATELY_SEARCH_FOR_KEYS = "B - Desperately search for keys.";
+const string CONST_X_A_HOTWIRE_THE_CAR = "A - Hotwire the car.";
 
 
-const string CONST_activities179 = " is behind the wheel of a ";
-const string CONST_activities153 = "A - Approach the driver's side door.";
-const string CONST_activities152 = " looks from a distance at an empty ";
-const string CONST_activities150 = " found a ";
-const string CONST_activities147 = " looks around for an accessible vehicle...";
-const string CONST_activities204 = " was unable to get a wheelchair.  Maybe tomorrow...";
-const string CONST_activities203 = " has procured a wheelchair.";
+const string CONST_X_REMOVE_YOURSELF_FROM_THE_VEHICLE_BEEP_BEEP = "REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>";
+
+
+const string CONST_X_IS_BEHIND_THE_WHEEL_OF_A_ = " is behind the wheel of a ";
+const string CONST_X_A_APPROACH_THE_DRIVERS_SIDE_DOOR = "A - Approach the driver's side door.";
+const string CONST_X_LOOKS_FROM_A_DISTANCE_AT_AN_EMPTY_ = " looks from a distance at an empty ";
+const string CONST_X_FOUND_A = " found a ";
+const string CONST_X_LOOKS_AROUND_FOR_AN_ACCESSIBLE_VEHICLE = " looks around for an accessible vehicle...";
+const string CONST_X_WAS_UNABLE_TO_GET_A_WHEELCHAIR_MAYBE_TOMORROW = " was unable to get a wheelchair.  Maybe tomorrow...";
+const string CONST_X_HAS_PROCURED_A_WHEELCHAIR = " has procured a wheelchair.";
 const string ACTIVITIES_FOLDER = "activities\\";
 
-const string CONST_activities022 = "cant_find_keys_no_free_speech.txt";
-const string CONST_activities021 = "cant_find_keys.txt";
-const string CONST_activities020 = "almost_hotwire_car.txt";
-const string CONST_activities019 = "cant_hotwire_car.txt";
-const string CONST_activities018 = "gets_nervous.txt";
-const string CONST_activities017 = "car_wont_start.txt";
-const string CONST_activities016 = "lose_hand_to_hand.txt";
-const string CONST_activities015 = "win_hand_to_hand.txt";
-const string CONST_activities014 = "enemy_website.txt";
-const string CONST_activities013 = "words_meaning_hacked.txt";
-const string CONST_activities012 = "quality_50.txt";
-const string CONST_activities011 = "quality_35.txt";
-const string CONST_activities010 = "quality_20.txt";
-const string CONST_activities009 = "quality_0.txt";
+const string CONST_X_CANT_FIND_KEYS_NFS_TXT = "cant_find_keys_no_free_speech.txt";
+const string CONST_X_CANT_FIND_KEYS_TXT = "cant_find_keys.txt";
+const string CONST_X_ALMOST_HOTWIRE_TXT = "almost_hotwire_car.txt";
+const string CONST_X_CANT_HOTWIRE_TXT = "cant_hotwire_car.txt";
+const string CONST_X_GETS_NERVOUS_TXT = "gets_nervous.txt";
+const string CONST_X_CAR_WONT_START_TXT = "car_wont_start.txt";
+const string CONST_X_LOST_HAND_TO_HAND_TXT = "lose_hand_to_hand.txt";
+const string CONST_X_WIN_HAND_TO_HAND_TXT = "win_hand_to_hand.txt";
+const string CONST_X_ENEMY_WEBSITE_TXT = "enemy_website.txt";
+const string CONST_X_WORDS_MEANING_HACKED_TXT = "words_meaning_hacked.txt";
+const string CONST_X_QUALITY_50_TXT = "quality_50.txt";
+const string CONST_X_QUALITY_35_TXT = "quality_35.txt";
+const string CONST_X_QUALITY_20_TXT = "quality_20.txt";
+const string CONST_X_QUALITY_0_TXT = "quality_0.txt";
 // doActivityBury
-const string CONST_activities141 = "'s body";
-const string CONST_activities140 = "burying ";
+const string CONST_X_S_BODY = "'s body";
+const string CONST_X_BURYING_ = "burying ";
 
 #endif	//ACTIVITIES_CPP
 #ifdef	ADVANCE_CPP
@@ -1699,9 +1684,7 @@ extern vector<ArmorType *> armortype;
 #include "../common/stringconversion.h"
 //for stringtobool
 
-const string CONST_armortypeB044 = ": ";
-
-const string CONST_armortype055 = "UNDEF";
+const string CONST_armortypeUNDEF = "UNDEF";
 const string UNKNOWN_ELEMENT_FOR_ARMOR_TYPE = "Unknown element for armor type ";
 const string COLON_INTERROGATION_ST = "::InterrogationST: ";
 const string COLON_ARMOR = "::armor: ";
@@ -1772,11 +1755,11 @@ extern int year;
 #include "augmentation.h"
 
 const string CONSERVATIVE_BUG = "Conservative Swine! (Bug)";
-const string CONST_augmentation016 = "Skin";
-const string CONST_augmentation015 = "Legs";
-const string CONST_augmentation014 = "Arms";
-const string CONST_augmentation013 = "Body";
-const string CONST_augmentation012 = "Head";
+const string CONST_X_SKIN = "Skin";
+const string CONST_X_LEGS = "Legs";
+const string CONST_X_ARMS = "Arms";
+const string CONST_X_BODY = "Body";
+const string CONST_X_HEAD = "Head";
 const string tag_skin = "skin";
 const string tag_effect = "effect";
 const string tag_type = "type";
@@ -1861,7 +1844,7 @@ extern bool multipleCityMode;
 extern short lawList[LAWNUM];
 void testCreature();
 
-const string CONST_automatedDataTests013 = "TEST";
+const string CONST_X_TEST = "TEST";
 const string SUCCESS = "SUCCESS";
 
 #endif	//AUTOMATEDDATATESTS_CPP
@@ -2182,7 +2165,7 @@ const string THROWN_TO_GROUND_AND_BEATEN_DEAD = "thrown to the ground, and beate
 const string BREAKS_AWAY = " breaks away!";
 const string CANT_KEEP_UP = " can't keep up!";
 const string TIPS_INTO_A_POOL_TANK_IS_TRAPPED = " tips into a pool. The tank is trapped!";
-const string CONST_chase040 = "G - Give Up";
+const string CONST_X_G_GIVE_UP = "G - Give Up";
 const string AS_YOU_EXIT_YOU_NOTICE = "As you exit the site, you notice that you are ";
 const string BRAKES_HARD = " brakes hard and nearly crashes!";
 const string BACKS_OFF = " backs off for safety.";
@@ -2206,11 +2189,11 @@ const string P_PULL_OVER = "P - Pull over";
 const string B_BAIL_OUT = "B - Bail out and run!";
 const string AS_YOU_PULL_AWAY_YOU_NOTICE = "As you pull away from the site, you notice that you are ";
 const string STATIONWAGON = "STATIONWAGON";
-const string CONST_chase093 = "PICKUP";
-const string CONST_chase092 = "JEEP";
-const string CONST_chase091 = "SUV";
+const string CONST_X_PICKUP = "PICKUP";
+const string CONST_X_JEEP = "JEEP";
+const string CONST_X_SUV = "SUV";
 const string AGENTCAR = "AGENTCAR";
-const string CONST_chase088 = "HMMWV";
+const string CONST_X_HMMWV = "HMMWV";
 //crashenemycar
 
 const string HITS_A_PARKED_CAR = " hits a parked car and flips over.";
@@ -2295,7 +2278,6 @@ map<short, vector<string> > carchaseObstacles;
 #include "../common/translateid.h"
 // for  int getcliptype
 
-const string CONST_clipB003 = ": ";
 const string UNKNOWN_ELEMENT_FOR_CLIP = "Unknown element for clip type ";
 
 const string tag_ammo = "ammo";
@@ -2353,8 +2335,8 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 const string HARMFUL_SPEECH = "harmful speech";
-const string CONST_commonactions007 = "month";
-const string CONST_commonactions006 = "months";
+const string CONST_X_MONTH = "month";
+const string CONST_X_MONTHS = "months";
 const string FOR_SPACE = " for ";
 const string WILL_BE_AT_SPACE = " will be at ";
 const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
@@ -2422,28 +2404,28 @@ extern short sitealarmtimer;
 
 
 
-const string CONST_commondisplay000 = ",";
+const string CONST_X_SINGLE_COMMA = ",";
 const string CONST_SpaceOpenParenthesis = " (";
 const string NAME_COLON = "Name: ";
 const string CODE_NAME_COLON = "Code name: ";
-const string CONST_commondisplay212 = ": ";
+const string CONST_X_COLON_SPACE = ": ";
 const string POINT_DOUBLE_ZERO = ".00";
 const string NINETY_NINE_PLUS = "99+";
 const string DOUBLE_ZERO = "00";
-const string CONST_commondisplay196 = ".";
+const string CONST_X_DOT = ".";
 const string NOW_MAX = "NOW   MAX";
-const string CONST_commondisplay193 = "SKILL";
+const string CONST_X_SKILL = "SKILL";
 const string ON_FOOT = "On \"Foot\"";
-const string CONST_commondisplay158 = "On Foot";
+const string CONST_X_ON_FOOT = "On Foot";
 const string WHEEL_CHAIR = "Wheelchair";
-const string CONST_commondisplay156 = "-D";
+const string CONST_X_DASH_D = "-D";
 const string FIFTY_OR_SO_SPACES = "                                                                                ";
 const string WEAPON_COLON = "Weapon: ";
-const string CONST_commondisplay119 = "Cut";
+const string CONST_X_CUT = "Cut";
 const string BRUISED = "Bruised";
-const string CONST_commondisplay117 = "Shot";
+const string CONST_X_SHOT = "Shot";
 const string CONST_commondisplay116 = "Liberal";
-const string CONST_commondisplay115 = "Animal";
+const string CONST_X_ANIMAL = "Animal";
 const string SEVERED = "Severed";
 const string RIPPED_OFF = "Ripped off";
 const string LEFT_LEG_COLON = "Left Leg:";
@@ -2460,7 +2442,7 @@ const string NO_TONGUE = "No Tongue";
 
 
 const string tag_0 = "0";
-const string CONST_commondisplay005 = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
+const string CONST_X_LONG_LINE = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string SEVENTY_NINE_LINE = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ";
 const string CONST_commondisplay044 = "Moderate";
 const string CONST_commondisplay043 = "Conservative";
@@ -2477,8 +2459,8 @@ const string ONE_LEG = "One Leg";
 const string ONE_ARM = "One Arm";
 const string ONE_ARM_ONE_LEG = "One Arm, One Leg";
 const string ONEARMONELEG = "1Arm1Leg";
-const string CONST_commondisplay025 = "No Legs";
-const string CONST_commondisplay024 = "No Arms";
+const string CONST_X_NO_LEGS = "No Legs";
+const string CONST_X_NO_ARMS = "No Arms";
 const string ONELIMB = "One Limb";
 const string NOLIMBS = "No Limbs";
 const string MISSING_EYE = "Missing Eye";
@@ -2487,7 +2469,7 @@ const string MISSING_NOSE = "Missing Nose";
 const string NOSEGONE = "NoseGone";
 const string FACE_MUTILATED = "Face Mutilated";
 const string FACEMUTL = "FaceMutl";
-const string CONST_commondisplay030 = "Blind";
+const string CONST_X_BLIND = "Blind";
 
 const string MISTEETH = "MisTeeth";
 const string NOTONGUE = "NoTongue";
@@ -2513,10 +2495,10 @@ const string A_SMARMY_NEWS_ANCHOR = "a smarmy News Anchor";
 const string A_CRYING_RADIO_PERSON = "a crying Radio Personality";
 const string A_SQUIRMING_CEO = "a squirming CEO";
 const string A_CURSING_POLITICIAN = "a cursing Politician";
-const string CONST_commondisplay092 = "Brn";
-const string CONST_commondisplay091 = "Trn";
-const string CONST_commondisplay089 = "Brs";
-const string CONST_commondisplay088 = "Sht";
+const string CONST_X_BRN = "Brn";
+const string CONST_X_TRN = "Trn";
+const string CONST_X_BRS = "Brs";
+const string CONST_X_SHT = "Sht";
 const string CLEAN_SEVER = "Clean sever";
 const string TOP_SKILLS_COLON = "Top Skills:";
 const string SEVEN_QUESTION_MARKS = "???????";
@@ -2526,11 +2508,11 @@ const string TRANS_COLON = "Trans: ";
 const string COMMA_HOLDING = ", holding ";
 const string ONE_PARENTHESIS = " (1)";
 const string X_X_PARENTHESIS = " (XX)";
-const string CONST_commondisplay097 = "/";
-const string CONST_commondisplay096 = "+H";
+const string CONST_X_SLASH = "/";
+const string CONST_X_H = "+H";
 const string CODENAME_SKILL_WEAPON_ARMOR_HEALTH_HEADER = "#ÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄWEAPONÄÄÄÄÄÄÄÄÄARMORÄÄÄÄÄÄÄÄÄÄHEALTHÄÄÄTRANSPORTÄ";
-const string CONST_commondisplay121 = "Burned";
-const string CONST_commondisplay120 = "Torn";
+const string CONST_X_BURNED = "Burned";
+const string CONST_X_TORN = "Torn";
 const string SCHEDULED_DATES = "Scheduled Dates:    ";
 const string LETTER_S = "s";
 const string ROMANTIC_INTEREST = " Romantic Interest";
@@ -2554,8 +2536,8 @@ const string ONE_THOUSAND = "1000";
 const string FIVE_HUNDRED = "500";
 const string TWO_HUNDRED = "200";
 const string ONE_HUNDRED = "100";
-const string CONST_commondisplay134 = "50";
-const string CONST_commondisplay133 = "10";
+const string CONST_X_NUM_50 = "50";
+const string CONST_X_NUM_10 = "10";
 const string NEXT_COLON = "Next:  ";
 //printcreatureattributes
 
@@ -2566,11 +2548,11 @@ const string AGILITY_COLON = "Agility: ";
 const string HEALTH_COLON = "Health: ";
 const string WISDOM_COLON = "Wisdom: ";
 const string INTELLIGENCE_COLON = "Intelligence: ";
-const string CONST_commondisplay139 = "Heart: ";
+const string CONST_X_HEART_COLON = "Heart: ";
 //printliberalcrimes
 
-const string CONST_commondisplay211 = "NUM";
-const string CONST_commondisplay210 = "CRIME";
+const string CONST_X_NUM = "NUM";
+const string CONST_X_CRIME = "CRIME";
 const string MONTHS_IN_PRISON = " months in prison.";
 const string SENTENCED_TO_SPACE = "Sentenced to ";
 const string SERVING_SPACE = "Serving ";
@@ -2712,7 +2694,7 @@ const string TILES_CSV = "_Tiles.csv";
 const string MAPCSV_BANK2_TILES_CSV = "mapCSV_Bank2_Tiles.csv";
 const string MAPCSV_BANK_TILES_CSV = "mapCSV_Bank_Tiles.csv";
 const string MAPCSV_ = "mapCSV_";
-const string CONST_configfile001 = "OBJECT";
+const string CONST_X_OBJECT = "OBJECT";
 
 extern char artdir[MAX_PATH_SIZE];
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
@@ -2791,7 +2773,7 @@ const string LETTER_Z = "z";
 const string LETTER_X = "x";
 
 const string SLASH_MARK = "/";
-const string CONST_creatureB161 = "selves";
+const string CONST_X_SELVES = "selves";
 const string THEM_LOWERCASE = "them";
 const string HER_LOWERCASE = "her";
 const string THEMSELF_LOWERCASE = "themself";
@@ -2799,10 +2781,10 @@ const string HERS_LOWERCASE = "hers";
 const string HE_AND_SHE = "heANDshe";
 const string XYR_LOWERCASE = "xyr";
 const string XEM_LOWERCASE = "xem";
-const string CONST_creature151 = "?";
+const string CONST_X_QUESTION_MARK = "?";
 const string COMMA_AMBIGUOUS = ", Ambiguous";
-const string CONST_creature149 = ", Female";
-const string CONST_creature148 = ", Male";
+const string CONST_X_FEMALE = ", Female";
+const string CONST_X_MALE = ", Male";
 const string VERY_OLD = "Very Old";
 const string EIGHTIES = "80s";
 const string SEVENTIES = "70s";
@@ -2813,23 +2795,23 @@ const string THIRTIES = "30s";
 const string TWENTIES = "20s";
 const string SPACE_PARENTHESIS = " (";
 const string PARENTHESIS_QUESTION = " (?)";
-const string CONST_creature136 = "None";
+const string CONST_X_NONE = "None";
 const string ZERO_OVER = " (0/";
 const string ONE_OVER = " (1/";
-const string CONST_creature132 = "self";
+const string CONST_X_SELF = "self";
 const string XEMSELF_LOWERCASE = "xemself";
-const string CONST_creature130 = "Xem";
-const string CONST_creature129 = "Her";
-const string CONST_creature128 = "Him";
-const string CONST_creature127 = "s";
-const string CONST_creature126 = "xyrs";
-const string CONST_creature125 = "Xyr";
-const string CONST_creature123 = "His";
+const string CONST_X_XEM = "Xem";
+const string CONST_X_HER = "Her";
+const string CONST_X_HIM = "Him";
+const string CONST_X_S = "s";
+const string CONST_X_XYRS = "xyrs";
+const string CONST_X_XYR = "Xyr";
+const string CONST_X_HIS = "His";
 const string XE_LOWERCASE = "xe";
 const string XE_SPACE = "Xe";
 const string SHE_SPACE = "She";
 const string HE_SPACE = "He";
-const string CONST_creature113 = "President ";
+const string CONST_X_PRESIDENT_ = "President ";
 const string CCS_HEAVY = "CCS Heavy";
 const string SOLDIER = "Soldier";
 const string ELITE_SECURITY = "Elite Security";
@@ -2857,10 +2839,10 @@ const string CCS_COVERNAME_SHOTGUN_TXT = "ccs_covername_shotgun.txt";
 const string HE_LOWERCASE = "he";
 const string SHE_LOWERCASE = "she";
 const string HIS_LOWERCASE = "his";
-const string CONST_creatureX04 = "her";
-const string CONST_creatureX05 = "xyr";
+const string CONST_X_HER_LOWERCASE = "her";
+const string CONST_X_XYR_LOWERCASE = "xyr";
 const string HIM_LOWERCASE = "him";
-const string CONST_creatureX07 = "xem";
+const string CONST_X_XEM_LOWERCASE = "xem";
 
 const string tag_value = "value";
 const string tag_ARMOR = "ARMOR";
@@ -3024,7 +3006,7 @@ const string HAS_BEEN_OUTED_BY_YOUR_ATTACK = " has been outed by your bold attac
 const string THIS_WHOLE_THING_WAS_A_MISTAKE = "This whole thing was a mistake. There won't be another meeting.";
 const string COMESOFF_AS_INSANE = " comes off as slightly insane.";
 const string NEEDS_MORE_EXPERIENCE = " needs more experience.";
-const string CONST_creaturePool043 = "Maybe ";
+const string CONST_X_MAYBE_ = "Maybe ";
 const string REALLY_UNDERSTANDS_PROBLEM = " really understands the problem.";
 const string ISNT_CONVINCED = " isn't convinced ";
 const string THEYLL_MEET_AGAIN_MAYBE = "They'll meet again tomorrow.";
@@ -3041,7 +3023,7 @@ const string JOIN_THE_LIBERAL_CRIME_SQUAD = " join the Liberal Crime Squad.";
 const string OFFERS_TO_LET = " offers to let ";
 const string D_BREAK_OFF_MEETINGS = "D - Break off the meetings.";
 const string ISNT_READY_TO_JOIN = " isn't ready to join the LCS.";
-const string CONST_creaturePool026 = "C - ";
+const string CONST_X_C_DASH = "C - ";
 const string NEEDS_MORE_JUICE_TO_RECRUIT = " needs more Juice to recruit.";
 const string JOIN_THE_LCS = " join the LCS as a full member.";
 const string C_OFFER_TO_LET = "C - Offer to let ";
@@ -3125,14 +3107,14 @@ short getCurrentSite();
 
 const string NONE = "NONE";
 const string CONST_creaturetypeB086 = ": ";
-const string CONST_creaturetypeB080 = " lacks idname.";
-const string CONST_creaturetypeB078 = ", ";
-const string CONST_creaturetypeB075 = " in ";
+const string CONST_X_LACKS_IDNAME = " lacks idname.";
+const string CONST_X_COMMA_SPACE = ", ";
+const string CONST_X_IN_ = " in ";
 const string FIREMAN = "Fireman";
 const string CAR_SALESMAN = "Car Salesman";
 const string MIGRANT_WORKER = "Migrant Worker";
 const string CUSTODIAN = "Custodian";
-const string CONST_creaturetype070 = "Slave";
+const string CONST_X_SLAVE = "Slave";
 const string TYPE_NAME_NOT_DEFINED = "type_name not defined for ";
 const string UNKNOWN_ELEMENT = "Unknown element for ";
 const string INVALID_ARMORTYPE = "Invalid armor type for ";
@@ -3141,7 +3123,7 @@ const string INVALID_GENDER = "Invalid gender for ";
 const string UNKNOWN_ATTRIBUTE = "Unknown attribute in ";
 const string INVALID_ALIGNMENT = "Invalid alignment for ";
 const string CREATURE_TYPE = "Creature type ";
-const string CONST_creaturetype061 = "LACKS IDNAME ";
+const string CONST_X_LACKS_IDNAME__ALLCAPS = "LACKS IDNAME ";
 const string INVALID_CLIP_TYPE = "Invalid clip type for ";
 const string CAN_NOT_BE_USED_BY = "can not be used by ";
 const string IN_SPACE = "In ";
@@ -3219,7 +3201,7 @@ const string FLAMING_RABBIT = "Flaming Rabbit";
 const string PET_SPACE = "Pet ";
 const string CCS_TEAM_LEADER = "CCS Team Leader";
 const string FIREFIGHTER = "Firefighter";
-const string CONST_creaturetypes044 = "Fireman";
+const string CONST_X_FIREMAN = "Fireman";
 const string POLICE_NEGOTIATOR = "Police Negotiator";
 const string CEO_SPACE = "CEO ";
 const string ENFORCER = "Enforcer";
@@ -3486,8 +3468,8 @@ extern vector<WeaponType *> weapontype;
 #ifdef	CURSESMOVIE_CPP
 // cursesmovie.cpp
 
-const string CONST_cursesmovie001 = "rb";
-const string CONST_cursesmovie000 = "wb";
+const string CONST_X_RB = "rb";
+const string CONST_X_WB = "wb";
 #endif	//CURSESMOVIE_CPP
 #ifdef	DAILY_CPP
 // daily.cpp
@@ -3720,9 +3702,9 @@ const string THEYLL_MEET_AGAIN_TOMORROW = "They'll meet again tomorrow.";
 const string TO_RECHARGE = " to recharge ";
 const string TO_GO_TO_BIRTHDAY = " to go to a birthday party.";
 const string SIX_LEGGED_PIG = " six-legged pig.";
-const string CONST_date038 = " fish.";
-const string CONST_date037 = " dog.";
-const string CONST_date036 = " cat.";
+const string CONST_X_FISH = " fish.";
+const string CONST_X_DOG = " dog.";
+const string CONST_X_CAT = " cat.";
 const string TO_TAKE_CARE_OF = " to take care of ";
 const string TO_CATCH = " to catch ";
 const string DUE_TO_EARLY_MEETING = " due to an early meeting tomorrow.";
@@ -3742,7 +3724,7 @@ const string RELATIONSHIP = " relationship.";
 const string YET_ANOTHER = "yet another";
 const string ANOTHER = "another";
 const string ISNT_SEDUCTIVE_ENOUGH = " isn't seductive enough to juggle ";
-const string CONST_date012 = " people!";
+const string CONST_X_PEOPLE = " people!";
 const string SOMEONE = "someone!";
 const string IS_ALREADY_DATING = " is already dating ";
 const string S_UNIQUE_PHILOSOPHY = "'s unique life philosophy...";
@@ -3948,8 +3930,8 @@ fullName generate_long_name(char gender = GENDER_NEUTRAL);
 const string talky = "talk\\";
 const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
 
-const string study_string1 = "attend classes in the University District";
-const string study_string2 = "at a cost of $60 a day.";
+const string CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT = "attend classes in the University District";
+const string CONST_AT_A_COST_OF_60_A_DAY = "at a cost of $60 a day.";
 
 
 const string CONST_SELL_LIBERAL_ART = "Sell Liberal Art";
@@ -3972,33 +3954,33 @@ const string CONST_CORPORATE_ETHICS = "Corporate Ethics";
 const string CONST_HOMOSEXUAL_RIGHTS = "Homosexual Rights";
 const string CONST_WORKERS_RIGHTS = "Workers' Rights";
 const string CONST_CAPITAL_PUNISHMENT = "Capital Punishment";
-const string CONST_externallyStoredDataB1070 = "Privacy";
+const string CONST_X_PRIVACY = "Privacy";
 const string CONST_POLICE_BEHAVIOR = "Police Behavior";
 const string CONST_ANIMAL_RESEARCH = "Animal Research";
-const string CONST_externallyStoredDataB1067 = "The CCS Terrorists";
+const string CONST_X_THE_CCS_TERRORISTS = "The CCS Terrorists";
 const string CONST_WHY_WE_ROCK = "Why We Rock";
 const string CONST_WHO_WE_ARE = "Who We Are";
 const string CONST_THE_NEED_FOR_ACTION = "The Need For Action";
 const string CONST_CABLE_NEWS_LIES = "Cable \"News\" Lies";
 const string CONST_AM_RADIO_PROPAGANDA = "AM Radio Propaganda";
-const string CONST_externallyStoredDataB1061 = "Immigrant Rights";
+const string CONST_X_IMMIGRANT_RIGHTS = "Immigrant Rights";
 const string CONST_OPPRESSIVE_DRUG_LAWS = "Oppressive Drug Laws";
 const string CONST_RACIAL_EQUALITY = "Racial Equality";
 const string CONST_GENDER_EQUALITY = "Gender Equality";
-const string CONST_externallyStoredDataB1057 = "CEO Compensation";
-const string CONST_externallyStoredDataB1056 = "Corporate Corruption";
+const string CONST_X_CEO_COMPENSATION = "CEO Compensation";
+const string CONST_X_CORPORATE_CORRUPTION = "Corporate Corruption";
 const string CONST_MASS_SHOOTINGS = "Mass Shootings";
 const string CONST_THE_JUDICIARY = "The Judiciary";
 const string CONST_DANGEROUS_GMOS = "Dangerous GMOs";
-const string CONST_externallyStoredDataB1050 = "The Prison System";
-const string CONST_externallyStoredDataB1049 = "Torture";
+const string CONST_X_THE_PRISON_SYSTEM = "The Prison System";
+const string CONST_X_TORTURE = "Torture";
 const string CONST_POLICE_MISCONDUCT = "Police Misconduct";
-const string CONST_externallyStoredDataB1047 = "Animal Cruelty";
+const string CONST_X_ANIMAL_CRUELTY = "Animal Cruelty";
 const string CONST_NUCLEAR_MELTDOWNS = "Nuclear Meltdowns";
 const string CONST_THE_TAX_STRUCTURE = "The Tax Structure";
 const string CONST_BARBARIC_EXECUTIONS = "Barbaric Executions";
-const string CONST_externallyStoredDataB1043 = "LGBTQ Rights";
-const string CONST_externallyStoredDataB1042 = "Public Mood";
+const string CONST_X_LGBTQ_RIGHTS = "LGBTQ Rights";
+const string CONST_X_PUBLIC_MOOD = "Public Mood";
 const string CONST_PLAY_LIBERAL_MUSIC = "Play Liberal Music";
 const string CONST_SELL_PAINTINGS = "Sell Paintings";
 const string CONST_SELL_EMBROIDERED_SHIRTS = "Sell Embroidered Shirts";
@@ -4043,7 +4025,7 @@ const string CONST_THAT_IS_LIBERAL = "that is Liberal.";
 
 const string CONST_HIRING_UNDOCUMENTED_WORKERS = "Hiring undocumented workers";
 const string CONST_HIRING_ILLEGAL_ALIENS = "Hiring illegal aliens";
-const string CONST_externallyStoredData715 = "Flag burning";
+const string CONST_X_FLAG_BURNING = "Flag burning";
 const string CONST_FLAG_MURDER = "Flag Murder";
 const string CONST_LOITERING = "Loitering";
 const string CONST_PUBLIC_NUDITY = "Public nudity";
@@ -4058,7 +4040,7 @@ const string CONST_CARRYING_ILLEGAL_WEAPONS = "Carrying illegal weapons";
 const string CONST_FIRING_ILLEGAL_WEAPONS = "Firing illegal weapons";
 const string CONST_PROSTITUTION = "Prostitution";
 const string CONST_THEFT = "Theft";
-const string CONST_externallyStoredData696 = "Credit card fraud";
+const string CONST_X_CREDIT_CARD_FRAUD = "Credit card fraud";
 const string CONST_GRAND_THEFT_AUTO = "Grand theft auto";
 const string CONST_ASSAULT = "Assault";
 const string CONST_ARMED_ASSAULT = "Armed assault";
@@ -4079,19 +4061,19 @@ const string CONST_HUMAN_RIGHTS = "Human Rights";
 const string CONST_PRISON_REGULATION = "Prison Regulation";
 const string CONST_MILITARY_SPENDING = "Military Spending";
 const string CONST_ELECTION_REFORM = "Election Reform";
-const string CONST_externallyStoredData675 = "Immigration";
+const string CONST_X_IMMIGRATION = "Immigration";
 const string CONST_DRUG_LAWS = "Drug Laws";
 const string CONST_externallyStoredData673 = "Civil Rights";
-const string CONST_externallyStoredData672 = "Women's Rights";
+const string CONST_X_WOMENS_RIGHTS = "Women's Rights";
 const string CONST_TAX_STRUCTURE = "Tax Structure";
-const string CONST_externallyStoredData670 = "Gun Control";
+const string CONST_X_GUN_CONTROL = "Gun Control";
 const string CONST_FLAG_BURNING = "Flag Burning";
-const string CONST_externallyStoredData668 = "Free Speech";
+const string CONST_X_FREE_SPEECH = "Free Speech";
 const string CONST_CORPORATE_LAW = "Corporate Law";
 const string CONST_GAY_RIGHTS = "Gay Rights";
 const string CONST_LABOR_LAWS = "Labor Laws";
-const string CONST_externallyStoredData664 = "Pollution";
-const string CONST_externallyStoredData663 = "Nuclear Power";
+const string CONST_X_POLLUTION = "Pollution";
+const string CONST_X_NUCLEAR_POWER = "Nuclear Power";
 const string CONST_DEATH_PENALTY = "Death Penalty";
 const string CONST_PRIVACY_RIGHTS = "Privacy Rights";
 const string CONST_POLICE_REGULATION = "Police Regulation";
@@ -4105,7 +4087,7 @@ const string CONST_AM_RADIO = "AM radio";
 const string CONST_THE_MILITARY = "the military";
 const string CONST_IMMIGRATION = "immigration";
 const string CONST_DRUGS = "drugs";
-const string CONST_externallyStoredData648 = "civil rights";
+const string CONST_X_CIVIL_RIGHTS = "civil rights";
 const string CONST_WOMEN_S_RIGHTS = "women's rights";
 const string CONST_CEO_COMPENSATION = "CEO compensation";
 const string CONST_CORPORATIONS = "corporations";
@@ -4162,7 +4144,7 @@ const string CONST_GATHERING_OPINION_INFO = "Gathering Opinion Info";
 const string CONST_STEALING_A_CAR = "Stealing a Car";
 const string CONST_PROCURING_A_WHEELCHAIR = "Procuring a Wheelchair";
 const string CONST_REPAIRING_CLOTHING = "Repairing Clothing";
-const string CONST_externallyStoredData566 = "Recruiting";
+const string CONST_X_RECRUITING = "Recruiting";
 const string CONST_NEW_YORK = "New York";
 const string CONST_LOS_ANGELES = "Los Angeles";
 const string CONST_A_TROPICAL_PARADISE = "A Tropical Paradise.";
@@ -4173,7 +4155,7 @@ const string CONST_THE_NATION_S_CAPITAL = "The Nation's Capital.";
 const string CONST_WALL_STREET_AND_BIG_MEDIA = "Wall Street and Big Media.";
 const string CONST_HOLLYWOOD_AND_TRADE = "Hollywood and Trade.";
 const string CONST_BIRTHPLACE_OF_THE_LCS = "Birthplace of the LCS.";
-const string CONST_externallyStoredData554 = "]";
+const string CONST_X_CLOSE_BRACKET = "]";
 const string CONST_SLEEPER = "Sleeper";
 const string SPACE_OPEN_BRACKET = " [";
 const string CONST_IN_HIDING = "In Hiding";
@@ -4181,7 +4163,7 @@ const string CONST_IN_JAIL = "In Jail";
 const string CONST_ARRESTED = "Arrested";
 const string TWO_SPACE_OPEN_BRACKET = "   [";
 const string CONST_ENLIGHTENED = "Enlightened";
-const string CONST_externallyStoredData541 = "/";
+const string CONST_X_BACKSLASH = "/";
 const string CONST_SEDUCED = "Seduced";
 const string CONST_RECRUITED = "Recruited/";
 const string CONST_DAYS_UNTIL_RETURN = "DAYS UNTIL RETURN";
@@ -4193,11 +4175,11 @@ const string CONST_DAYS_IN_CAPTIVITY = "DAYS IN CAPTIVITY";
 const string CONST_SQUAD_ACTIVITY = "SQUAD / ACTIVITY";
 const string CONST_LIBERALS_THAT_ARE_AWAY = "Liberals that are Away";
 const string CONST_LIBERAL_MARTYRS_AND_DEAD_BODIES = "Liberal Martyrs and Dead Bodies";
-const string CONST_externallyStoredData529 = "Sleepers";
+const string CONST_X_SLEEPERS = "Sleepers";
 const string CONST_LIBERALS_AND_THE_JUSTICE_SYSTEM = "Liberals and the Justice System";
 const string CONST_LIBERALS_IN_CLINICS = "Liberals in CLINICS";
 const string CONST_CONSERVATIVE_AUTOMATONS_IN_CAPTIVITY = "Conservative Automatons in Captivity";
-const string CONST_externallyStoredData525 = "Active Liberals";
+const string CONST_X_ACTIVE_LIBERALS = "Active Liberals";
 
 const string CONST_WHITEHOUSE = "WhiteHouse";
 const string CONST_NUCLEARPLANT = "NuclearPlant";
@@ -4265,7 +4247,7 @@ const string CONST_SLEEPER_ACTIVITY = "sleeper activity.";
 const string CONST_LIBERAL_ACTIVITY = "Liberal activity.";
 const string CONST_PEOPLE_AWAY = "people away.";
 const string CONST_DEAD_PEOPLE = "dead people.";
-const string CONST_externallyStoredData345 = "sleepers.";
+const string CONST_X_SLEEPERS_DOT = "sleepers.";
 const string CONST_OPPRESSED_LIBERALS = "oppressed Liberals.";
 const string CONST_LIBERALS_IN_HOSPITAL = "Liberals in hospital.";
 const string CONST_HOSTAGES = "hostages.";
@@ -4297,8 +4279,8 @@ const string CONST_TEACH_LIBERALS_ABOUT_WHAT = "Teach Liberals About What?";
 const string CONST_AUGMENT_A_LIBERAL = "Augment a Liberal";
 const string CONST_PROCURE_A_WHEELCHAIR = "Procure a Wheelchair";
 const string CONST_STEAL_A_CAR = "Steal a Car";
-const string CONST_externallyStoredData313 = "Repair Clothing";
-const string CONST_externallyStoredData312 = "Make Clothing";
+const string CONST_X_REPAIR_CLOTHING = "Repair Clothing";
+const string CONST_X_MAKE_CLOTHING = "Make Clothing";
 const string CONST_STEAL_CREDIT_CARD_NUMBERS = "Steal Credit Card Numbers";
 const string CONST_ELECTRONIC_PROTECTION_RACKET = "Electronic Protection Racket";
 const string CONST_SELL_BROWNIES = "Sell Brownies";
@@ -4310,7 +4292,7 @@ const string CONST_WRITE_FOR_THE_LIBERAL_GUARDIAN = "Write for The Liberal Guard
 const string CONST_WRITE_TO_NEWSPAPERS = "Write to Newspapers";
 const string CONST_HARASS_WEBSITES = "Harass Websites";
 const string CONST_SEARCH_OPINION_POLLS = "Search Opinion Polls";
-const string CONST_externallyStoredData297 = "Graffiti";
+const string CONST_X_GRAFFITI = "Graffiti";
 const string CONST_LIBERAL_DISOBEDIENCE = "Liberal Disobedience";
 const string CONST_COMMUNITY_SERVICE = "Community Service";
 const string CONST_INTERCEPTED_INTERNAL_MEDIA_EMAILS = "intercepted internal media emails.";
@@ -4395,80 +4377,80 @@ const string CONST_SEARCH_THE_INTERNET_FOR_PUBLIC_OPINION_POLLS = "search the in
 const string CONST_SPRAY_POLITICAL_GRAFFITI_ART_AND_HEART_WILL = "spray political graffiti. Art and Heart will";
 const string CONST_CREATE_PUBLIC_DISTURBANCES = "create public disturbances. ";
 const string CONST_HELP_THE_ELDERLY_LOCAL_LIBRARY_ANYTHING = "help the elderly, local library, anything";
-const string CONST_ACTIVITY_SLEEPER_STEAL3 = "stalinized";
-const string CONST_ACTIVITY_SLEEPER_STEAL2 = "reaganified";
-const string CONST_ACTIVITY_SLEEPER_STEAL1 = "defeat";
-const string CONST_ACTIVITY_SLEEPER_STEAL0 = "victory";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE9 = "abort";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE8 = "anchor";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE7 = "glamshow";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE6 = "newscast";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE5 = "lacops";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE4 = "newspaper";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE3 = "recruiting";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE2 = "trial";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE1 = "footchase";
-const string CONST_ACTIVITY_SLEEPER_EMBEZZLE0 = "carchase";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL9 = "conquer";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL8 = "defense";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL7 = "heavycombat";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL6 = "Pastorale";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL5 = "alarmed";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL4 = "sitemode";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL3 = "shopping";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL2 = "elections";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL1 = "cartheft";
-const string CONST_ACTIVITY_SLEEPER_SCANDAL0 = "finances";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT9 = "disbanded";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT8 = "liberalagenda";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT7 = "reviewmode";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT6 = "stopevil";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT5 = "sleepers";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT4 = "activate";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT3 = "siege";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT2 = "Mars";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT1 = "basemode";
-const string CONST_ACTIVITY_SLEEPER_RECRUIT0 = "newgame";
-const string CONST_ACTIVITY_SLEEPER_SPY9 = "titlemode";
-const string CONST_ACTIVITY_SLEEPER_SPY8 = "Stalinist";
-const string CONST_ACTIVITY_SLEEPER_SPY7 = "Elite Liberal";
-const string CONST_ACTIVITY_SLEEPER_SPY6 = "Liberal";
+const string CONST_X_STALINIZED = "stalinized";
+const string CONST_X_REAGANIFIED = "reaganified";
+const string CONST_X_DEFEAT = "defeat";
+const string CONST_X_VICTORY = "victory";
+const string CONST_X_ABORT = "abort";
+const string CONST_X_ANCHOR = "anchor";
+const string CONST_X_GLAMSHOW = "glamshow";
+const string CONST_X_NEWSCAST = "newscast";
+const string CONST_X_LACOPS = "lacops";
+const string CONST_X_NEWSPAPER = "newspaper";
+const string CONST_X_RECRUITING_LOWERCASE = "recruiting";
+const string CONST_X_TRIAL = "trial";
+const string CONST_X_FOOTCHASE = "footchase";
+const string CONST_X_CARCHASE = "carchase";
+const string CONST_X_CONQUER = "conquer";
+const string CONST_X_DEFENSE_LOWERCASE = "defense";
+const string CONST_X_HEAVYCOMBAT = "heavycombat";
+const string CONST_X_PASTORALE = "Pastorale";
+const string CONST_X_ALARMED = "alarmed";
+const string CONST_X_SITEMODE = "sitemode";
+const string CONST_X_SHOPPING = "shopping";
+const string CONST_X_ELECTIONS = "elections";
+const string CONST_X_CARTHEFT = "cartheft";
+const string CONST_X_FINANCES = "finances";
+const string CONST_X_DISBANDED = "disbanded";
+const string CONST_X_LIBERALAGENDA = "liberalagenda";
+const string CONST_X_REVIEWMODE = "reviewmode";
+const string CONST_X_STOPEVIL = "stopevil";
+const string CONST_X_SLEEPERS_LOWERCASE = "sleepers";
+const string CONST_X_ACTIVATE = "activate";
+const string CONST_X_SIEGE = "siege";
+const string CONST_X_MARS = "Mars";
+const string CONST_X_BASEMODE = "basemode";
+const string CONST_X_NEWGAME = "newgame";
+const string CONST_X_TITLEMODE = "titlemode";
+const string CONST_X_STALINIST = "Stalinist";
+const string CONST_X_ELITE_LIBERAL = "Elite Liberal";
+const string CONST_X_LIBERAL = "Liberal";
 const string CONST_ACTIVITY_SLEEPER_SPY5 = "Moderate";
-const string CONST_ACTIVITY_SLEEPER_SPY4 = "Conservative";
-const string CONST_ACTIVITY_SLEEPER_SPY3 = "Arch-Conservative";
-const string CONST_ACTIVITY_SLEEPER_SPY2 = "CHA";
-const string CONST_ACTIVITY_SLEEPER_SPY1 = "HLTH";
-const string CONST_ACTIVITY_SLEEPER_SPY0 = "HRT";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE9 = "INT";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE8 = "WIS";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE7 = "AGI";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE6 = "STR";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE5 = "Dodge";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE4 = "First Aid";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE3 = "Seduction";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE2 = "Street Sense";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE1 = "Teaching";
-const string CONST_ACTIVITY_SLEEPER_CONSERVATIVE0 = "Stealth";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL9 = "Business";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL8 = "Science";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL7 = "Religion";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL6 = "Art";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL5 = "Music";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL4 = "Writing";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL3 = "Driving";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL2 = "Tailoring";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL1 = "Law";
-const string CONST_ACTIVITY_SLEEPER_LIBERAL0 = "Computers";
-const string CONST_ACTIVITY_HEAL9 = "Disguise";
-const string CONST_ACTIVITY_HEAL8 = "Security";
-const string CONST_ACTIVITY_HEAL7 = "Psychology";
-const string CONST_ACTIVITY_HEAL6 = "Persuasion";
-const string CONST_ACTIVITY_HEAL5 = "SMG";
-const string CONST_ACTIVITY_HEAL4 = "Shotgun";
-const string CONST_ACTIVITY_HEAL3 = "Heavy Weapons";
-const string CONST_ACTIVITY_HEAL2 = "Rifle";
-const string CONST_ACTIVITY_HEAL1 = "Pistol";
-const string CONST_ACTIVITY_HEAL0 = "Axe";
+const string CONST_X_CONSERVATIVE = "Conservative";
+const string CONST_X_ARCHCONSERVATIVE = "Arch-Conservative";
+const string CONST_X_CHA = "CHA";
+const string CONST_X_HLTH = "HLTH";
+const string CONST_X_HRT = "HRT";
+const string CONST_X_INT = "INT";
+const string CONST_X_WIS = "WIS";
+const string CONST_X_AGI = "AGI";
+const string CONST_X_STR = "STR";
+const string CONST_X_DODGE = "Dodge";
+const string CONST_X_FIRST_AID = "First Aid";
+const string CONST_X_SEDUCTION = "Seduction";
+const string CONST_X_STREET_SENSE = "Street Sense";
+const string CONST_X_TEACHING = "Teaching";
+const string CONST_X_STEALTH = "Stealth";
+const string CONST_X_BUSINESS = "Business";
+const string CONST_X_SCIENCE = "Science";
+const string CONST_X_RELIGION = "Religion";
+const string CONST_X_ART = "Art";
+const string CONST_X_MUSIC = "Music";
+const string CONST_X_WRITING = "Writing";
+const string CONST_X_DRIVING = "Driving";
+const string CONST_X_TAILORING = "Tailoring";
+const string CONST_X_LAW = "Law";
+const string CONST_X_COMPUTERS = "Computers";
+const string CONST_X_DISGUISE = "Disguise";
+const string CONST_X_SECURITY = "Security";
+const string CONST_X_PSYCHOLOGY = "Psychology";
+const string CONST_X_PERSUASION = "Persuasion";
+const string CONST_X_SMG = "SMG";
+const string CONST_X_SHOTGUN = "Shotgun";
+const string CONST_X_HEAVY_WEAPONS = "Heavy Weapons";
+const string CONST_X_RIFLE = "Rifle";
+const string CONST_X_PISTOL = "Pistol";
+const string CONST_X_AXE = "Axe";
 const string CONST_CLUB = "Club";
 const string CONST_THROWING = "Throwing";
 const string CONST_SWORD = "Sword";
@@ -4886,28 +4868,28 @@ const string CONST_LAW_STALIN = "LAW_STALIN";
 const string CONST_THEGREATUNKNOWN = "theGreatUnknown";
 const string CONST_ACTIVITYNUM = "ACTIVITYNUM";
 const string CONST_ACTIVITY_AUGMENT = "ACTIVITY_AUGMENT";
-const string CONST_ACTIVITY_RECRUITING3 = "OPEN";
-const string CONST_ACTIVITY_RECRUITING2 = "FIRE_END";
-const string CONST_ACTIVITY_RECRUITING1 = "FIRE_PEAK";
-const string CONST_ACTIVITY_RECRUITING0 = "FIRE_START";
+const string CONST_X_OPEN = "OPEN";
+const string CONST_X_FIRE_END = "FIRE_END";
+const string CONST_X_FIRE_PEAK = "FIRE_PEAK";
+const string CONST_X_FIRE_START = "FIRE_START";
 const string CONST_ACTIVITY_RECRUITING = "ACTIVITY_RECRUITING";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS9 = "GRAFFITI_OTHER";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS8 = "GRAFFITI_CCS";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS7 = "GRAFFITI";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS6 = "DEBRIS";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS5 = "OUTDOOR";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS4 = "GRASSY";
+const string CONST_X_GRAFFITI_OTHER = "GRAFFITI_OTHER";
+const string CONST_X_GRAFFITI_CCS = "GRAFFITI_CCS";
+const string CONST_X_GRAFFITI_ALLCAPS = "GRAFFITI";
+const string CONST_X_DEBRIS = "DEBRIS";
+const string CONST_X_OUTDOOR = "OUTDOOR";
+const string CONST_X_GRASSY = "GRASSY";
 const string CONST_ACTIVITY_SLEEPER_JOINLCS3 = "BLOODY2";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS2 = "BLOODY";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS1 = "RESTRICTED";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS0 = "CLOCK";
+const string CONST_X_BLOODY = "BLOODY";
+const string CONST_X_RESTRICTED = "RESTRICTED";
+const string CONST_X_CLOCK = "CLOCK";
 const string CONST_ACTIVITY_SLEEPER_JOINLCS = "ACTIVITY_SLEEPER_JOINLCS";
-const string CONST_ACTIVITY_SLEEPER_STEAL9 = "KLOCK";
-const string CONST_ACTIVITY_SLEEPER_STEAL8 = "LOCKED";
-const string CONST_ACTIVITY_SLEEPER_STEAL7 = "KNOWN";
-const string CONST_ACTIVITY_SLEEPER_STEAL6 = "DOOR";
-const string CONST_ACTIVITY_SLEEPER_STEAL5 = "BLOCK";
-const string CONST_ACTIVITY_SLEEPER_STEAL4 = "EXIT";
+const string CONST_X_KLOCK = "KLOCK";
+const string CONST_X_LOCKED = "LOCKED";
+const string CONST_X_KNOWN = "KNOWN";
+const string CONST_X_DOOR = "DOOR";
+const string CONST_X_BLOCK = "BLOCK";
+const string CONST_X_EXIT = "EXIT";
 const string CONST_ACTIVITY_STUDY_RELIGION = "ACTIVITY_STUDY_RELIGION";
 const string CONST_ACTIVITY_STUDY_CLUB = "ACTIVITY_STUDY_CLUB";
 const string CONST_ACTIVITY_STUDY_STREETSENSE = "ACTIVITY_STUDY_STREETSENSE";
@@ -5563,9 +5545,9 @@ const string CONST_THE = "the ";
 const string CONST_THE_ATTACK_BOUNCES_OFF = "The attack bounces off ";
 const string CONST_THROUGH = " through ";
 const string CONST_STRIKING = "striking";
-const string CONST_fight136 = "'s ";
+const string CONST_X_S_SPACE = "'s ";
 const string CONST_HITS = " hits ";
-const string CONST_fight134 = " stabs ";
+const string CONST_X_STABS_ = " stabs ";
 const string CONST_WITH_A = " with a ";
 const string CONST_SNEAKS_UP_ON = "sneaks up on";
 const string CONST_BITES = "bites";
@@ -5585,8 +5567,8 @@ const string CONST_RELOADS = " reloads.";
 const string CONST_ACTUAL = "actual";
 const string CONST_A_PLAGUE_ON_BOTH_YOUR_HOUSES = "\"A plague on both your houses...\"";
 const string CONST_SPEAKS_THESE_FINAL_WORDS = " speaks these final words: ";
-const string CONST_fight112 = "soils the floor.";
-const string CONST_fight111 = "[makes a mess].";
+const string CONST_X_SOILS_THE_FLOOR = "soils the floor.";
+const string CONST_X_MAKES_A_MESS = "[makes a mess].";
 const string CONST_GASPS_A_LAST_BREATH_AND = " gasps a last breath and ";
 const string CONST_SOMETHING_ABOUT_JESUS_AND_DIES = "something about Jesus, and dies.";
 const string CONST_SOMETHING_GOOD_ABOUT_JESUS_AND_DIES = "something [good] about Jesus, and dies.";
@@ -6140,7 +6122,7 @@ const string looksForwardToServing = " looks forward serving the Liberal cause!"
 const string CONST_game012 = "We need a slogan!";
 const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
 const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-const string CONST_siege254 = " Defense";
+const string CONST_X_DEFENSE = " Defense";
 const string CONST_THE_INTERVIEW_IS_WIDE_RANGING_COVERING_A_VARIETY_OF_TOPICS = "The interview is wide-ranging, covering a variety of topics.";
 const string CONST_DECIDES_TO_GIVE_AN_INTERVIEW = " decides to give an interview.";
 const string CONST_AUGMENTATIONS_XML = "augmentations.xml";
@@ -6167,23 +6149,23 @@ const string CONST_HAULS = " hauls ";
 const string CONST_IS_LEFT_TO_BE_CAPTURED = " is left to be captured.";
 const string CONST_NOBODY_CAN_CARRY_MARTYR = "Nobody can carry Martyr ";
 const string CONST_CAN_NO_LONGER_HANDLE = " can no longer handle ";
-const string CONST_haulkidnap031 = "                                  ";
+const string CONST_X_SOME_WHITESPACE = "                                  ";
 const string CONST_THE_HOSTAGE_SHOUTS_FOR_HELP = "The hostage shouts for help!      ";
 const string CONST_RELEASE_THEIR_HOSTAGE = "release their hostage.";
 const string CONST_NO_HOSTAGES_ARE_BEING_HELD = "No hostages are being held.       ";
-const string CONST_haulkidnap026 = "                                                     ";
+const string CONST_X_MUCH_WHITESPACE = "                                                     ";
 const string CONST_ALL_OF_THE_TARGETS_ARE_TOO_DANGEROUS = "All of the targets are too dangerous.                ";
 const string CONST_KIDNAP_WHOM = "Kidnap whom?";
 const string CONST_DO_THE_JOB = "do the job.";
 const string CONST_NO_ONE_CAN_DO_THE_JOB = "No one can do the job.            ";
-const string CONST_haulkidnap020 = " is captured.";
-const string CONST_haulkidnap019 = " is recaptured.";
+const string CONST_X_IS_CAPTURED = " is captured.";
+const string CONST_X_IS_RECAPTURED = " is recaptured.";
 const string CONST_A_HOSTAGE_ESCAPES = "A hostage escapes!";
 const string CONST_IS_CAPTURED = " is captured";
 const string CONST_IS_RECAPTURED = " is recaptured";
 const string CONST_AND_A_HOSTAGE_IS_FREED = " and a hostage is freed";
 const string CONST_AND_SAYS = "and says, ";
-const string CONST_haulkidnap011 = " the ";
+const string CONST_X_THE_ = " the ";
 const string CONST_SHOWS = " shows ";
 const string CONST_WRITHES_AWAY = " writhes away!";
 const string CONST_BUT = "but ";
@@ -6414,7 +6396,7 @@ const string CONST_JOHN_LENNON_S_MERCY = "John Lennon's mercy.";
 const string CONST_SCREAMS_HELPLESSLY_FOR = " screams helplessly for ";
 const string CONST_IN_ITS_FACE = "!\" in its face.";
 const string EXCLAMATION_POINT_SPACE = "! ";
-const string CONST_interrogation121 = " the Automaton";
+const string CONST_X_THE_AUTOMATON = " the Automaton";
 const string CONST_S_GUARDS_BEAT = "'s guards beat";
 const string CONST_BEAT = " beat";
 const string CONST_BEATS = " beats";
@@ -6442,7 +6424,7 @@ const string CONST_IN_THE_MIDDLE_OF_A_BACK_ROOM = "in the middle of a back room.
 const string CONST_IS_TIED_HANDS_AND_FEET_TO_A_METAL_CHAIR = " is tied hands and feet to a metal chair";
 const string CONST_THE_AUTOMATON = "The Automaton";
 const string CONST_DAY = ": Day ";
-const string CONST_interrogation091 = "The Education of ";
+const string CONST_X_THE_EDUCATION_OF_ = "The Education of ";
 const string CONST_IN_COLD_BLOOD = " in cold blood.";
 const string CONST_EXECUTE = "execute ";
 const string CONST_THERE_IS_NO_ONE_ABLE_TO_GET_UP_THE_NERVE_TO = "There is no one able to get up the nerve to ";
@@ -6468,7 +6450,7 @@ const string CONST_NO_VERBAL_CONTACT = "No Verbal Contact     ";
 const string CONST_A = "A - ";
 const string CONST_SELECTING_A_LIBERAL_INTERROGATION_PLAN = "Selecting a Liberal Interrogation Plan";
 const string CONST_THE_EXECUTION_OF_AN_AUTOMATON = "The Execution of an Automaton         ";
-const string CONST_interrogation058 = "murder ";
+const string CONST_X_MURDER_SPACE = "murder ";
 const string CONST_THE_CONSERVATIVE_WOULD_LIKE_TO = "The Conservative would like to ";
 const string CONST_THE_CONSERVATIVE_HATES = "The Conservative hates ";
 const string CONST_TOWARD = "toward ";
@@ -6647,7 +6629,7 @@ string failedToBreakScience(const string a, const string cr);
 #endif	//INTERROGATION_CPP
 #ifdef	ITEM_CPP
 // item.cpp
-const string CONST_item007 = "a";
+const string CONST_X_LETTER_A = "a";
 const string CONST_AN = "an";
 const string CONST_NUMBER = "number";
 const string CONST_ITEMTYPEID = "itemtypeid";
@@ -6677,7 +6659,7 @@ const string counts_of = " counts of ";
 const string execution_in_three_months = "The execution is scheduled to occur three months from now.";
 const string justice = "justice\\";
 const string CONST_HIRING_AN_UNDOCUMENTED_WORKER = "hiring an undocumented worker";
-const string CONST_justiceB173 = "hiring undocumented workers";
+const string CONST_X_HIRING_UNDOCUMENTED_WORKERS = "hiring undocumented workers";
 const string CONST_MONTHS = " months.";
 const string CONST_IS_DUE_TO_BE_EXECUTED_IN = " is due to be executed in ";
 const string CONST_IS_DUE_TO_BE_RELEASED_NEXT_MONTH = " is due to be released next month.";
@@ -6686,7 +6668,7 @@ const string CONST_NO_DOUBT_THERE_ARE_SOME_MENTAL_SCARS_BUT_THE_LIBERAL_IS_BACK 
 const string CONST_HAS_BEEN_RELEASED_FROM_PRISON = " has been released from prison.";
 const string CONST_IF_YOU_CAN_T_PROTECT_YOUR_OWN_PEOPLE_WHO_CAN_YOU_PROTECT = "If you can't protect your own people, who can you protect?";
 const string CONST_HAS_FAILED_THE_LIBERAL_CRIME_SQUAD = " has failed the Liberal Crime Squad.";
-const string CONST_justice174 = "by ";
+const string CONST_X_BY_SPACE = "by ";
 const string CONST_TODAY_THE_CONSERVATIVE_MACHINE_EXECUTED = "Today, the Conservative Machine executed ";
 const string CONST_FOR_SHAME = "FOR SHAME:";
 const string CONST_DUE_TO_THE_ABOLITION_OF_THE_DEATH_PENALTY = "due to the abolition of the death penalty.";
@@ -6709,7 +6691,7 @@ const string CONST_CONSUMES_DRUGS_THAT_SIMULATE_DEATH_AND_IS_THROWN_OUT_WITH_THE
 const string CONST_PICKS_THE_LOCK_ON_THEIR_LEG_CHAINS_AND_THEN_SNEAKS_AWAY = " picks the lock on their leg chains and then sneaks away!";
 const string CONST_WEARS_AN_ELECTRICIAN_S_OUTFIT_AND_RIDES_AWAY_WITH_SOME_CONTRACTORS = " wears an electrician's outfit and rides away with some contractors.";
 const string CONST_LEADS_THE_OPPRESSED_PRISONERS_AND_OVERWHELMS_THE_PRISON_GUARDS = " leads the oppressed prisoners and overwhelms the prison guards!";
-const string CONST_justice148 = " remains strong.";
+const string CONST_X_REMAINS_STRONG = " remains strong.";
 const string CONST_ABANDONS_THE_LIBERAL_CRIME_SQUAD = " abandons the Liberal Crime Squad!";
 const string CONST_ONLY_STAYS_LOYAL_TO_THE_LCS_FOR = " only stays loyal to the LCS for ";
 const string CONST_SILENTLY_GROWS_WISER = " silently grows Wiser...";
@@ -6727,7 +6709,7 @@ const string CONST_THE_JURY_HAS_RETURNED_FROM_DELIBERATIONS = "The jury has retu
 const string CONST_THE_JURY_LEAVES_TO_CONSIDER_THE_CASE = "The jury leaves to consider the case.";
 const string CONST_TO_ACQUIT = " to acquit)";
 const string CONST_NEED = ", need ";
-const string CONST_justice127 = " (";
+const string CONST_X_SPACE_PARENTHESIS = " (";
 const string CONST_HAD_THE_JURY_JUDGE_AND_PROSECUTION_CRYING_FOR_FREEDOM = " had the jury, judge, and prosecution crying for freedom.";
 const string CONST_MADE_A_VERY_POWERFUL_CASE = " made a very powerful case.";
 const string CONST_WORKED_THE_JURY_VERY_WELL = " worked the jury very well.";
@@ -6747,7 +6729,7 @@ const string CONST_THE_DEFENSE_IS_TOTALLY_LAME = "The defense is totally lame.";
 const string CONST_THE_DEFENSE_ATTORNEY_ACCIDENTALLY_SAID_MY_CLIENT_IS_GUILTY_DURING_CLOSING = "The defense attorney accidentally said \"My client is GUILTY!\" during closing.";
 const string CONST_THE_DEFENSE_ATTORNEY_RARELY_SHOWED_UP = "The defense attorney rarely showed up.";
 const string CONST_TO_CONVICT = " to convict)";
-const string CONST_justice107 = " to +";
+const string CONST_X_TO_PLUS = " to +";
 const string PARENTHESIS_PLUS = " (+";
 const string CONST_THE_PROSECUTION_IS_INCREDIBLY_STRONG = "The prosecution is incredibly strong.";
 const string CONST_THE_PROSECUTION_MAKES_AN_AIRTIGHT_CASE = "The prosecution makes an airtight case.";
@@ -6764,9 +6746,9 @@ const string CONST_ENSURES_THE_JURY_IS_STACKED_IN = " ensures the jury is stacke
 const string CONST_THE_TRIAL_PROCEEDS_JURY_SELECTION_IS_FIRST = "The trial proceeds.  Jury selection is first.";
 const string CONST_IS_STANDING_TRIAL = " is standing trial.";
 const string CONST_INTELLIGENCE = "Intelligence: ";
-const string CONST_justice088 = "Law: ";
+const string CONST_X_LAW_COLON = "Law: ";
 const string CONST_CHARISMA = "Charisma: ";
-const string CONST_justice086 = "Persuasion: ";
+const string CONST_X_PERSUASION_COLON = "Persuasion: ";
 const string CONST_justice085 = "Heart: ";
 const string CONST_S_OFFER_TO_ASSIST_PRO_BONO = "'s offer to assist pro bono.";
 const string CONST_E_ACCEPT_SLEEPER = "E - Accept sleeper ";
@@ -6777,48 +6759,48 @@ const string CONST_A_USE_A_COURT_APPOINTED_ATTORNEY = "A - Use a court-appointed
 const string CONST_HOW_WILL_YOU_CONDUCT_THE_DEFENSE = "How will you conduct the defense?";
 const string CONST_A_FORMER_LCS_MEMBER_WILL_TESTIFY_AGAINST = "A former LCS member will testify against ";
 const string CONST_FORMER_LCS_MEMBERS_WILL_TESTIFY_AGAINST = " former LCS members will testify against ";
-const string CONST_justice075 = "loitering";
+const string CONST_X_LOITERING = "loitering";
 const string CONST_INDECENT_EXPOSURE = "indecent exposure";
-const string CONST_justice073 = "disturbing the peace";
-const string CONST_justice072 = "resisting arrest";
-const string CONST_justice071 = "vandalism";
-const string CONST_justice070 = "breaking and entering";
-const string CONST_justice069 = "unlawful burial";
+const string CONST_X_DISTURBING_THE_PEACE = "disturbing the peace";
+const string CONST_X_RESISTING_ARREST = "resisting arrest";
+const string CONST_X_VANDALISM = "vandalism";
+const string CONST_X_BREAKING_AND_ENTERING = "breaking and entering";
+const string CONST_X_UNLAWFUL_BURIAL = "unlawful burial";
 const string CONST_UNLAWFUL_ACCESS_OF_AN_INFORMATION_SYSTEM = "unlawful access of an information system";
 const string CONST_INTERFERENCE_WITH_INTERSTATE_COMMERCE = "interference with interstate commerce";
 const string CONST_POSSESSION_OF_AN_ILLEGAL_WEAPON = "possession of an illegal weapon";
 const string CONST_FIRING_AN_ILLEGAL_WEAPON = "firing an illegal weapon";
 const string CONST_HIRING_AN_ILLEGAL_ALIEN = "hiring an illegal alien";
-const string CONST_justice063 = "hiring illegal aliens";
-const string CONST_justice062 = "prostitution";
+const string CONST_X_HIRING_ILLEGAL_ALIENS = "hiring illegal aliens";
+const string CONST_X_PROSTITUTION = "prostitution";
 const string CONST_PETTY_LARCENY = "petty larceny";
-const string CONST_justice060 = "credit card fraud";
-const string CONST_justice059 = "grand theft auto";
+const string CONST_X_CREDIT_CARD_FRAUD_LOWERCASE = "credit card fraud";
+const string CONST_X_GRAND_THEFT_AUTO = "grand theft auto";
 const string CONST_MISDEMEANOR_ASSAULT = "misdemeanor assault";
 const string CONST_FELONY_ASSAULT = "felony assault";
-const string CONST_justice056 = "extortion";
-const string CONST_justice055 = "racketeering";
-const string CONST_justice054 = "jury tampering";
+const string CONST_X_EXTORTION = "extortion";
+const string CONST_X_RACKETEERING = "racketeering";
+const string CONST_X_JURY_TAMPERING = "jury tampering";
 const string CONST_AIDING_A_PRISON_ESCAPE = "aiding a prison escape";
-const string CONST_justice052 = "escaping prison";
-const string CONST_justice051 = "drug dealing";
+const string CONST_X_ESCAPING_PRISON = "escaping prison";
+const string CONST_X_DRUG_DEALING = "drug dealing";
 const string CONST_SEDITION = "sedition";
-const string CONST_justice049 = "flag burning";
+const string CONST_X_FLAG_BURNING_LOWERCASE = "flag burning";
 const string CONST_FELONY_FLAG_BURNING = "felony flag burning";
-const string CONST_justice047 = "Flag Murder";
-const string CONST_justice046 = "arson";
-const string CONST_justice045 = "bank robbery";
-const string CONST_justice044 = "kidnapping";
-const string CONST_justice043 = "murder";
-const string CONST_justice042 = "terrorism";
-const string CONST_justice041 = "treason";
+const string CONST_X_FLAG_MURDER = "Flag Murder";
+const string CONST_X_ARSON = "arson";
+const string CONST_X_BANK_ROBBERY = "bank robbery";
+const string CONST_X_KIDNAPPING = "kidnapping";
+const string CONST_X_MURDER = "murder";
+const string CONST_X_TERRORISM = "terrorism";
+const string CONST_X_TREASON = "treason";
 const string CONST_IS_CHARGED_WITH = ", is charged with ";
 const string CONST_THE_DEFENDANT = "The defendant, ";
 const string CONST_THE_JUDGE_READS_THE_CHARGES = "The judge reads the charges:";
 const string CONST_READS_THE_CHARGES_TRYING_TO_HIDE_A_SMILE = " reads the charges, trying to hide a smile:";
 const string CONST_TO_BE_SERVED_CONSECUTIVELY = "to be served consecutively";
 const string CONST_TO_BE_SERVED_CONCURRENTLY = "to be served concurrently";
-const string CONST_justice033 = ",";
+const string CONST_X_COMMA = ",";
 const string CONST_IN_PRISON = " in prison";
 const string CONST_justice031 = "s";
 const string CONST_MONTH = " month";
@@ -6908,38 +6890,38 @@ extern vector<DeprecatedCreature *> pool;
 #include "../locations/locationsPool.h"
 void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
 map<Lawflags, string> crimeBlockOne = {
-	map<Lawflags, string>::value_type(LAWFLAG_TREASON, CONST_justice041),
-	map<Lawflags, string>::value_type(LAWFLAG_TERRORISM, CONST_justice042),
-	map<Lawflags, string>::value_type(LAWFLAG_MURDER, CONST_justice043),
-	map<Lawflags, string>::value_type(LAWFLAG_KIDNAPPING, CONST_justice044),
-	map<Lawflags, string>::value_type(LAWFLAG_BANKROBBERY, CONST_justice045),
-	map<Lawflags, string>::value_type(LAWFLAG_ARSON, CONST_justice046),
+	map<Lawflags, string>::value_type(LAWFLAG_TREASON, CONST_X_TREASON),
+	map<Lawflags, string>::value_type(LAWFLAG_TERRORISM, CONST_X_TERRORISM),
+	map<Lawflags, string>::value_type(LAWFLAG_MURDER, CONST_X_MURDER),
+	map<Lawflags, string>::value_type(LAWFLAG_KIDNAPPING, CONST_X_KIDNAPPING),
+	map<Lawflags, string>::value_type(LAWFLAG_BANKROBBERY, CONST_X_BANK_ROBBERY),
+	map<Lawflags, string>::value_type(LAWFLAG_ARSON, CONST_X_ARSON),
 };
 map<Lawflags, string> crimeBlockTwo = {
 	map<Lawflags, string>::value_type(LAWFLAG_SPEECH, CONST_SEDITION),
-	map<Lawflags, string>::value_type(LAWFLAG_BROWNIES, CONST_justice051),
-	map<Lawflags, string>::value_type(LAWFLAG_ESCAPED, CONST_justice052),
+	map<Lawflags, string>::value_type(LAWFLAG_BROWNIES, CONST_X_DRUG_DEALING),
+	map<Lawflags, string>::value_type(LAWFLAG_ESCAPED, CONST_X_ESCAPING_PRISON),
 	map<Lawflags, string>::value_type(LAWFLAG_HELPESCAPE, CONST_AIDING_A_PRISON_ESCAPE),
-	map<Lawflags, string>::value_type(LAWFLAG_JURY, CONST_justice054),
-	map<Lawflags, string>::value_type(LAWFLAG_RACKETEERING, CONST_justice055),
-	map<Lawflags, string>::value_type(LAWFLAG_EXTORTION, CONST_justice056),
+	map<Lawflags, string>::value_type(LAWFLAG_JURY, CONST_X_JURY_TAMPERING),
+	map<Lawflags, string>::value_type(LAWFLAG_RACKETEERING, CONST_X_RACKETEERING),
+	map<Lawflags, string>::value_type(LAWFLAG_EXTORTION, CONST_X_EXTORTION),
 	map<Lawflags, string>::value_type(LAWFLAG_ARMEDASSAULT, CONST_FELONY_ASSAULT),
 	map<Lawflags, string>::value_type(LAWFLAG_ASSAULT, CONST_MISDEMEANOR_ASSAULT),
-	map<Lawflags, string>::value_type(LAWFLAG_CARTHEFT, CONST_justice059),
-	map<Lawflags, string>::value_type(LAWFLAG_CCFRAUD, CONST_justice060),
+	map<Lawflags, string>::value_type(LAWFLAG_CARTHEFT, CONST_X_GRAND_THEFT_AUTO),
+	map<Lawflags, string>::value_type(LAWFLAG_CCFRAUD, CONST_X_CREDIT_CARD_FRAUD_LOWERCASE),
 	map<Lawflags, string>::value_type(LAWFLAG_THEFT, CONST_PETTY_LARCENY),
-	map<Lawflags, string>::value_type(LAWFLAG_PROSTITUTION, CONST_justice062),
+	map<Lawflags, string>::value_type(LAWFLAG_PROSTITUTION, CONST_X_PROSTITUTION),
 };
 map<Lawflags, string> crimeBlockThree = {
 	map<Lawflags, string>::value_type(LAWFLAG_COMMERCE, CONST_INTERFERENCE_WITH_INTERSTATE_COMMERCE),
 	map<Lawflags, string>::value_type(LAWFLAG_INFORMATION, CONST_UNLAWFUL_ACCESS_OF_AN_INFORMATION_SYSTEM),
-	map<Lawflags, string>::value_type(LAWFLAG_BURIAL, CONST_justice069),
-	map<Lawflags, string>::value_type(LAWFLAG_BREAKING, CONST_justice070),
-	map<Lawflags, string>::value_type(LAWFLAG_VANDALISM, CONST_justice071),
-	map<Lawflags, string>::value_type(LAWFLAG_RESIST, CONST_justice072),
-	map<Lawflags, string>::value_type(LAWFLAG_DISTURBANCE, CONST_justice073),
+	map<Lawflags, string>::value_type(LAWFLAG_BURIAL, CONST_X_UNLAWFUL_BURIAL),
+	map<Lawflags, string>::value_type(LAWFLAG_BREAKING, CONST_X_BREAKING_AND_ENTERING),
+	map<Lawflags, string>::value_type(LAWFLAG_VANDALISM, CONST_X_VANDALISM),
+	map<Lawflags, string>::value_type(LAWFLAG_RESIST, CONST_X_RESISTING_ARREST),
+	map<Lawflags, string>::value_type(LAWFLAG_DISTURBANCE, CONST_X_DISTURBING_THE_PEACE),
 	map<Lawflags, string>::value_type(LAWFLAG_PUBLICNUDITY, CONST_INDECENT_EXPOSURE),
-	map<Lawflags, string>::value_type(LAWFLAG_LOITERING, CONST_justice075),
+	map<Lawflags, string>::value_type(LAWFLAG_LOITERING, CONST_X_LOITERING),
 };
 map<Lawflags, bool> crimeMultipleCounts = {
 	map<Lawflags, bool>::value_type(LAWFLAG_TREASON,  true),
@@ -6993,8 +6975,8 @@ const string CONST_LCS = ".lcs/";
 const string CONST_lcsio011 = "/";
 const string DOT_SLASH = "./";
 const string CONST_HOME = "HOME";
-const string CONST_lcsio008 = "../art/";
-const string CONST_lcsio007 = "./art/";
+const string CONST_X_PARENT_ART_FOLDER = "../art/";
+const string CONST_X_ART_FOLDER = "./art/";
 const string CONST_USR_GAMES_LCS_ART = "/usr/games/lcs/art/";
 const string CONST_USR_GAMES_SHARE_LCS_ART = "/usr/games/share/lcs/art/";
 const string CONST_USR_SHARE_LCS_ART = "/usr/share/lcs/art/";
@@ -7124,8 +7106,8 @@ const string CONST_CASH = "Cash";
 const string DOLLAR_ZERO = " ($0)";
 const string PAREN_MINUS_DOLLAR = " (-$";
 const string PAREN_PLUS_DOLLAR = " (+$";
-const string CONST_lcsmonthly122 = "-";
-const string CONST_lcsmonthly121 = "+";
+const string CONST_X_MINUS_SIGN = "-";
+const string CONST_X_PLUS_SIGN = "+";
 const string CONST_NET_CHANGE_THIS_MONTH_DAY = "Net Change This Month (Day):";
 const string MINUS_DOLLAR = "-$";
 const string PLUS_DOLLAR = "+$";
@@ -7169,7 +7151,7 @@ const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_LOVE_LETTERS_FROM
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_PHOTOS_OF_A_MAJOR_CEO = "The Liberal Guardian runs a story featuring photos of a major CEO ";
 const string CONST_ENTER_NOT_IN_THIS_MONTH_S_LIBERAL_GUARDIAN = "Enter - Not in this month's Liberal Guardian";
 const string CONST_DO_YOU_WANT_TO_RUN_A_SPECIAL_EDITION = "Do you want to run a special edition?";
-const string CONST_lcsmonthly028 = "Liberal Guardian.";
+const string CONST_X_LIBERAL_GUARDIAN = "Liberal Guardian.";
 const string CONST_THE_RESPONSE_IS_ELECTRIC_EVERYONE_IS_TALKING_ABOUT_THIS_MONTH_S = "The response is electric. Everyone is talking about this month's ";
 const string CONST_THE_RESPONSE_IS_VERY_STRONG_PEOPLE_ARE_CHANGING_THEIR_MINDS = "The response is very strong. People are changing their minds.";
 const string CONST_MANY_PEOPLE_ARE_READING_IT = "Many people are reading it.";
@@ -7313,19 +7295,19 @@ const string CONST_ARE_YOU_SURE_YOU_WANT_TO_DISBAND = "Are you sure you want to 
 const string CONST_PRESS_D_TO_DISBAND_AND_WAIT_USE_CURSORS_FOR_OTHER_PAGES_ANY_OTHER_KEY_TO_EXIT = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
 const string CONST_liberalagenda064 = "Arch-Conservative";
 const string DASH_SPACE = "-  ";
-const string CONST_liberalagenda062 = "Conservative  ";
-const string CONST_liberalagenda060 = "moderate  ";
-const string CONST_liberalagenda058 = "Liberal  ";
-const string CONST_liberalagenda056 = "Elite Liberal  ";
-const string CONST_liberalagenda055 = "Stalinist  ";
+const string CONST_X_CONSERVATIVE_SPACE = "Conservative  ";
+const string CONST_X_MODERATE_SPACE = "moderate  ";
+const string CONST_X_LIBERAL_SPACE = "Liberal  ";
+const string CONST_X_ELITE_LIBERAL_SPACE = "Elite Liberal  ";
+const string CONST_X_STALINIST_SPACE = "Stalinist  ";
 const string CONST_TRIAL_JUDGES = "Trial Judges";
 const string CONST_STALINIST_SHOW = "Stalinist Show";
 const string CONST_REPLACED_BY = "Replaced By";
 const string CONST_ETHICS_OFFICERS = "Ethics Officers";
 const string CONST_BY_CORPORATE = "By Corporate";
 const string CONST_REPLACED = "Replaced";
-const string CONST_liberalagenda038 = "Senate: ";
-const string CONST_liberalagenda037 = "House: ";
+const string CONST_X_SENATE_COLON = "Senate: ";
+const string CONST_X_HOUSE_COLON = "House: ";
 const string CONST_ATTORNEY_GENERAL = "Attorney General: ";
 const string CONST_INTERNAL_AFFAIRS_COMMISSAR = "Internal Affairs Commissar: ";
 const string CONST_MINISTER_OF_TRUTH = "Minister of Truth: ";
@@ -7343,15 +7325,15 @@ const string CONST_KING = "King: ";
 const string CONST_THE_CONGRESS_CONSISTS_OF_STALINIST_PARTY_LOYALISTS = "The Congress consists of Stalinist Party loyalists.";
 const string CONST_THE_CONGRESS_CONSISTS_OF_CEOS_AND_TELEVANGELISTS = "The Congress consists of CEOs and televangelists.";
 
-const string CONST_liberalagenda020 = "¼                 ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+const string CONST_X_GEN_SUM_FOOTER = "¼                 ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
 const string GENERAL_SUMMARY_ISSUES_HEADER = "º GENERAL SUMMARY º ISSUES A ³ ISSUES B ³";
 const string FORMATTED_LINE = "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿";
-const string CONST_liberalagenda050 = "ÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍ¼          ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-const string CONST_liberalagenda049 = "³ GENERAL SUMMARY ³ ISSUES A º ISSUES B º";
-const string CONST_liberalagenda048 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»";
-const string CONST_liberalagenda047 = "ÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼          ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-const string CONST_liberalagenda046 = "³ GENERAL SUMMARY º ISSUES A º ISSUES B ³";
-const string CONST_liberalagenda045 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄ¿";
+const string CONST_X_GEN_SUM_FOOTER_3 = "ÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍ¼          ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+const string CONST_X_GENERAL_SUMMARY_ISSUES_A_ISSUES_B_3 = "³ GENERAL SUMMARY ³ ISSUES A º ISSUES B º";
+const string CONST_X_GEN_SUM_HEADER_3 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»";
+const string CONST_X_GEN_SUM_FOOTER_2 = "ÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼          ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+const string CONST_X_GENERAL_SUMMARY_ISSUES_A_ISSUES_B_2 = "³ GENERAL SUMMARY º ISSUES A º ISSUES B ³";
+const string CONST_X_GEN_SUM_HEADER_2 = "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÉÍÍÍÍÍÍÍÍÍÍ»ÄÄÄÄÄÄÄÄÄÄ¿";
 const string CONST_THE_COUNTRY_HAS_BEEN_STALINIZED = "The country has been Stalinized.";
 const string CONST_THE_COUNTRY_HAS_BEEN_REAGANIFIED = "The country has been Reaganified.";
 const string CONST_THE_COUNTRY_HAS_ACHIEVED_ELITE_LIBERAL_STATUS = "The country has achieved Elite Liberal status!";
@@ -7379,7 +7361,7 @@ const string tag_Consp = "Cons+";
 void strcpy(char* c, string str);
 void strcat(char* c, string str);
 extern short lawList[LAWNUM];
-const string CONST_locationsB130 = "Bunker";
+const string CONST_X_BUNKER = "Bunker";
 const string CONST_BAR_GRILL = "Bar & Grill";
 const string CONST_BOMB_SHELTER = "Bomb Shelter";
 const string CONST_OUBLIETTE = "Oubliette";
@@ -7393,7 +7375,7 @@ const string CONST_PLAST_FACT = "Plast Fact";
 const string CONST_ALUM_FACT = "Alum Fact";
 const string CONST_SHELTER = "Shelter";
 const string CONST_CEO_HOUSE = "CEO House";
-const string CONST_locationsB116 = "Bank";
+const string CONST_X_BANK = "Bank";
 const string CONST_CORP_HQ = "Corp. HQ";
 const string CONST_MINIPAX = "Minipax";
 const string CONST_INT_HQ = "Int. HQ";
@@ -7405,17 +7387,17 @@ const string CONST_BLACK_MARKET = "Black Market";
 const string CONST_ROBERT_E_LEE_BUNKER = "Robert E. Lee Bunker";
 const string CONST_DESERT_EAGLE_BAR_GRILL = "Desert Eagle Bar & Grill";
 const string CONST_FALLOUT_SHELTER = "Fallout Shelter";
-const string CONST_locations110 = "Park";
-const string CONST_locations109 = " Park";
-const string CONST_locations108 = "Latte Stand";
+const string CONST_X_PARK = "Park";
+const string CONST_X_SPACE_PARK = " Park";
+const string CONST_X_LATTE_STAND = "Latte Stand";
 const string CONST_LATTE_STAND = " Latte Stand";
 const string CONST_CIGAR_BAR = "Cigar Bar";
 const string CONST_GENTLEMEN_S_CLUB = " Gentlemen's Club";
 const string CONST_NET_CAFE = "Net Cafe";
 const string CONST_INTERNET_CAFE = " Internet Cafe";
-const string CONST_locations102 = "Vegan Co-op";
+const string CONST_X_VEGAN_COOP = "Vegan Co-op";
 const string CONST_VEGAN_CO_OP = " Vegan Co-op";
-const string CONST_locations100 = "Juice Bar";
+const string CONST_X_JUICE_BAR = "Juice Bar";
 const string CONST_JUICE_BAR = " Juice Bar";
 const string CONST_CRACK_HOUSE = "Crack House";
 const string CONST_DISPENSARY = "Dispensary";
@@ -7425,7 +7407,7 @@ const string CONST_COFFEE_HOUSE = "Coffee House";
 const string CONST_DRUGS_CENTER = "Drugs Center";
 const string CONST_RECREATIONAL_DRUGS_CENTER = "Recreational Drugs Center";
 const string CONST_ST = " St. ";
-const string CONST_locations087 = "Sweatshop";
+const string CONST_X_SWEATSHOP = "Sweatshop";
 const string CONST_GARMENT_MAKERS = " Garment Makers";
 const string CONST_THE_OUBLIETTE = "The Oubliette";
 const string CONST_DEPT_STORE = "Dept. Store";
@@ -7466,7 +7448,7 @@ const string CONST_FERTILIZER_PLANT = "Fertilizer Plant";
 const string CONST_CEMENT = "Cement";
 const string CONST_CEMENT_FACTORY = "Cement Factory";
 const string CONST_PAPER_MILL = "Paper Mill";
-const string CONST_locations045 = "Warehouse";
+const string CONST_X_WAREHOUSE = "Warehouse";
 const string CONST_MEAT_PLANT = "Meat Plant";
 const string CONST_ABANDONED = "Abandoned ";
 const string CONST_HOMELESS_SHELTER = "Homeless Shelter";
@@ -7478,20 +7460,20 @@ const string CONST_S_PAWNSHOP = "'s Pawnshop";
 const string CONST_AMERICAN_BANK_CORP = "American Bank Corp";
 const string CONST_CORPORATE_HQ = "Corporate HQ";
 const string CONST_WHITE_HOUSE = "White House";
-const string CONST_locations031 = "Army Base";
+const string CONST_X_ARMY_BASE = "Army Base";
 const string CONST_ARMY_BASE = " Army Base";
 const string CONST_MINISTRY_OF_PEACE = "Ministry of Peace";
 const string CONST_INTELLIGENCE_HQ = "Intelligence HQ";
 const string CONST_MINISTRY_OF_LOVE = "Ministry of Love";
 const string CONST_NUCLEAR_POWER_PLANT = "Nuclear Power Plant";
 const string CONST_NUCLEAR_WASTE_CENTER = "Nuclear Waste Center";
-const string CONST_locations024 = "Prison";
-const string CONST_locations023 = " Prison";
+const string CONST_X_PRISON = "Prison";
+const string CONST_X_SPACE_PRISON = " Prison";
 const string CONST_JOYCAMP = "Joycamp";
 const string CONST_FORCED_LABOR_CAMP = " Forced Labor Camp";
 const string CONST_FIRE_STATION = "Fire Station";
 const string CONST_FIREMAN_HQ = "Fireman HQ";
-const string CONST_locations018 = "Courthouse";
+const string CONST_X_COURTHOUSE = "Courthouse";
 const string CONST_HALLS_OF_ULTIMATE_JUDGMENT = "Halls of Ultimate Judgment";
 const string CONST_POLICE_STATION = "Police Station";
 const string CONST_DEATH_SQUAD_HQ = "Death Squad HQ";
@@ -7850,7 +7832,7 @@ const string TWO_SPACES = "   ";
 const string CONST_BEST_SERVE_THE_LIBERAL_CAUSE = " best serve the Liberal cause?";
 const string CONST_IN_WHAT_CAPACITY_WILL = "In what capacity will ";
 const string CONST_MALL = "Mall";
-const string CONST_locationsPool051 = ", New York";
+const string CONST_X_NEW_YORK = ", New York";
 const string CONST_CALIFORNIA = ", California";
 const string CONST_VIRGINIA = ", Virginia";
 const string CONST_OUTSKIRTS = " Outskirts";
@@ -7889,7 +7871,7 @@ const string CONST_STRIP_DOWN = "strip down.";
 
 const string CONST_YOU_CAN_T_EQUIP_THAT = "You can't equip that.";
 const string CONST_PRESS_A_LETTER_TO_SELECT_AN_ITEM = "Press a letter to select an item.";
-const string CONST_locationsPool080 = "x";
+const string CONST_X_X = "x";
 const string CONST_locationsPool079 = "/";
 const string CONST_SELECT_OBJECTS = "Select Objects";
 const string CONST_TO_VIEW_OTHER_BASE_PAGES = ",. to view other base pages.";
@@ -7905,7 +7887,7 @@ const string CONST_locationsPool115 = "s";
 const string CONST_DAILY_RATION = " Daily Ration";
 const string CONST_NOT_ENOUGH_FOOD = "Not Enough Food";
 const string CONST_OF_FOOD_LEFT = " of Food Left";
-const string CONST_locationsPool111 = " Day";
+const string CONST_X_SPACE_DAY = " Day";
 const string CONST_GENERATOR = "GENERATOR";
 const string CONST_LIGHTS_OUT = "LIGHTS OUT";
 const string CONST_TANK_TRAPS = "TANK TRAPS";
@@ -7951,9 +7933,9 @@ const string CONST_C_PLACE_SECURITY_CAMERAS_AROUND_THE_COMPOUND_2000 = "C - Plac
 const string CONST_W_FORTIFY_THE_COMPOUND_FOR_A_SIEGE_2000 = "W - Fortify the Compound for a Siege ($2000)";
 const string CONST_W_FORTIFY_THE_BOMB_SHELTER_ENTRANCES_2000 = "W - Fortify the Bomb Shelter Entrances ($2000)";
 const string CONST_W_REPAIR_THE_BUNKER_FORTIFICATIONS_2000 = "W - Repair the Bunker Fortifications ($2000)";
-const string CONST_locationsPool144 = "If you do not enter anything, their real name will be used.";
-const string CONST_locationsPool143 = " in its presence?";
-const string CONST_locationsPool142 = "What name will you use for this ";
+const string CONST_X_IF_YOU_DO_NOT_ENTER_ANYTHING_THEIR_REAL_NAME_WILL_BE_USED = "If you do not enter anything, their real name will be used.";
+const string CONST_X_IN_ITS_PRESENCE = " in its presence?";
+const string CONST_X_WHAT_NAME_WILL_YOU_USE_FOR_THIS_ = "What name will you use for this ";
 const string CONST_locationsPool141 = "The Education of ";
 const string CONST_TEMPORARY_SQUAD = "Temporary Squad";
 const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
@@ -8145,7 +8127,7 @@ const string CONST_THE_TELLER_WINDOW_IS_EMPTY = "The teller window is empty.";
 const string CONST_THE_SQUAD_HAS_NOBODY_THAT_CAN_DO_THE_JOB = "The squad has nobody that can do the job.";
 const string CONST_IS_NO_LONGER_RECOGNIZED = " is no longer recognized.";
 const string CONST_AND_WILL_JOIN_THE_ACTIVE_LCS_TO_AVOID_ARREST = "and will join the active LCS to avoid arrest.";
-const string CONST_mapspecials148 = " opens the vault, ";
+const string CONST_X_OPENS_THE_VAULT_ = " opens the vault, ";
 const string CONST_THE_HOSTAGE_IS_FORCED_TO_OPEN_THE_VAULT = "The hostage is forced to open the vault.";
 const string CONST_OPENS_THE_VAULT = " opens the vault.";
 const string CONST_TO_THE_BANK_S_MANAGERS = "to the bank's managers.";
@@ -8234,7 +8216,7 @@ const string CONST_YOU_SEE_HORRIBLE_MISSHAPEN_CREATURES_IN_A_SEALED_CAGE = "You 
 const string CONST_THE_SQUAD_RESIGNS_TO_JUST_LEAVING_A_THREATENING_NOTE = "the Squad resigns to just leaving a threatening note.";
 const string CONST_AFTER_SOME_FAILED_ATTEMPTS_AND_A_VERY_LOUD_ALARM = "After some failed attempts, and a very loud alarm, ";
 const string CONST_THE_REACTOR_IS_OVERHEATING = "The reactor is overheating!";
-const string CONST_mapspecials052 = "                ";
+const string CONST_X_LITTLE_MORE_WHITESPACE = "                ";
 const string CONST_A_DEAFENING_ALARM_SOUNDS = "A deafening alarm sounds!";
 const string CONST_THE_NUCLEAR_WASTE_GETS_RELEASED_INTO_THE_STATE_S_WATER_SUPPLY = "The nuclear waste gets released into the state's water supply!";
 const string CONST_PRESSES_THE_BIG_RED_BUTTON = " presses the big red button!";
@@ -8258,7 +8240,7 @@ const string CONST_CASEREJECTED_NUDE_TXT = "caseREJECTED_NUDE.txt";
 const string CONST_RANDOMCRIME_TXT = "randomCrime.txt";
 const string CONST_NOTREJECTED_TXT = "notRejected.txt";
 const string CONST_REJECTEDBECAUSESMELLFUNNY_TXT = "rejectedBecauseSmellFunny.txt";
-const string CONST_mapspecials020 = "";
+const string CONST_X_BLANK_STRING = "";
 const string tag_LOOT_CORPFILES = "LOOT_CORPFILES";
 const string tag_LOOT = "LOOT";
 const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
@@ -8450,13 +8432,13 @@ const vector<string> vicious_killing_of_guard = {
 
 const string findingBugs = "Finding bugs";
 const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
-const string CONST_commondisplay223 = "PGDN";
-const string CONST_commondisplay222 = ":";
+const string CONST_X_PGDN = "PGDN";
+const string CONST_X_SINGLE_COLON = ":";
 const string CLOSING_BRACKET = "]";
 const string DASH_NEXT = " - Next";
-const string CONST_commondisplay226 = "PGUP";
+const string CONST_X_PGUP = "PGUP";
 const string SEMI_COLON = ";";
-const string CONST_commondisplay224 = "[";
+const string CONST_X_OPEN_BRACKET = "[";
 const string DASH_PREVIOUS = " - Previous";
 const string PGUP_PGDN = "PGUP/PGDN";
 const string SEMI_COLON_AND_COLON = "; and :";
@@ -8965,13 +8947,13 @@ const string CONST_CAPTOR = " captor.";
 const string CONST_DEATH_OF_BOTH_THE_PRISON_GUARD_BEING_HELD_HOSTAGE_AND = "death of both the prison guard being held hostage and ";
 const string CONST_CORRECTIONAL_FACILITY_ENDED_TRAGICALLY_YESTERDAY_WITH_THE = " Correctional Facility ended tragically yesterday with the ";
 const string CONST_THE_HOSTAGE_CRISIS_AT_THE = " - The hostage crisis at the ";
-const string CONST_activities149 = " but did find a ";
-const string CONST_activities148 = " was unable to find a ";
-const string CONST_activities186 = "Enter - Call it a day.";
+const string CONST_X_BUT_DID_FIND_A_ = " but did find a ";
+const string CONST_X_WAS_UNABLE_TO_FIND_A_ = " was unable to find a ";
+const string CONST_CALL_IT_A_DAY_PRESS_ENTER = "Enter - Call it a day.";
 
-const string CONST_activities168 = "Enter - Yes, the Viper has deterred ";
-const string CONST_activities167 = " is deterred.";
-const string CONST_activities166 = "Enter - The Viper?   ";
+const string CONST_X_ENTER_YES_THE_VIPER_HAS_DETERRED_ = "Enter - Yes, the Viper has deterred ";
+const string CONST_X_IS_DETERRED = " is deterred.";
+const string CONST_X_ENTER_THE_VIPER_ = "Enter - The Viper?   ";
 const string CONST_WONDERS_ABOUT_DEATH = " wonders about death.";
 const string CONST_WONDERS_ABOUT_APPLES = " wonders about apples.";
 const string CONST_CRIES_HELPLESSLY = " cries helplessly.";
@@ -9029,10 +9011,10 @@ const string R_LUNG_COLLAPSED = "R. Lung Collapsed";
 const string HEART_PUNCTURED = "Heart Punctured";
 const string PARENTHESIS_COLON = "): ";
 
-const string CONST_miscB025 = ".mid:  ";
+const string CONST_X_MID_ = ".mid:  ";
 const string CONST_MID = ".mid";
-const string CONST_miscB023 = ".ogg:  ";
-const string CONST_miscB022 = ".ogg";
+const string CONST_X_OGG_COLON = ".ogg:  ";
+const string CONST_X_OGG = ".ogg";
 const string CONST_miscB021 = "/";
 const string CONST_MID_AS_MIDI_FALLBACK = ".mid as MIDI fallback)";
 const string CONST_1234567890 = "1234567890-";
@@ -11328,7 +11310,6 @@ const string CONST_DAYS_AGO_BY_A_PERSON_OR_PERSONS_AS_YET_UNDETERMINED = " days 
 const string CONST_WAS_TAKEN = " was taken ";
 const string CONST_WE_NOW_BELIEVE_THAT = "\"We now believe that ";
 const string CONST_SPEAKING_ON_BEHALF_OF_THE_POLICE_DEPARTMENT_STATED = ", speaking on behalf of the police department, stated ";
-const string CONST_LIBERAL_DEFENSE_LAWYER0 = "  ";
 const string CONST_LIBERAL_DEFENSE_LAWYER = "Liberal Defense Lawyer";
 const string CONST_ACCORDING_TO_A_POLICE_SPOKESPERSON = "according to a police spokesperson.";
 const string CONST_IS_NOW_CONSIDERED_A_KIDNAPPING = " is now considered a kidnapping, ";
@@ -11351,7 +11332,7 @@ const string CONST_WE_ARE_WORKING_CLOSELY_WITH_THE_FIRE_DEPARTMENT_TO_TRACK_DOWN
 const string CONST_SCORCH_MARKS_THROUGHOUT_THE_SITE_INDICATE_THAT_THIS_WAS_NO_ACCIDENT = "Scorch marks throughout the site indicate that this was no accident; ";
 const string CONST_ONLY = "Only $";
 const string CONST_SEDAN_4D = "Sedan 4D";
-const string CONST_LEXUS_GS_300 = "Lexus GS 300";
+const string CONST_X_LEXUS_GS_ = "Lexus GS 300";
 const string CONST_VEHICLES_R = "Vehicles&r";
 const string CONST_QUALITY_PRE_OWNED = "Quality Pre-Owned";
 const string CONST_NOW = "Now $";
@@ -13304,38 +13285,55 @@ const string tag_skill = "skill";
 
 map<CreatureTypes, vector<CreatureSkill> > skill_influence = {
 	map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_ART,
-		{ SKILL_WRITING, SKILL_ART }),
+		{ SKILL_WRITING, SKILL_ART }
+		),
 		map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PAINTER,
-			{ SKILL_ART }),
+			{ SKILL_ART }
+		),
 			map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCULPTOR,
-				{ SKILL_ART }),
+				{ SKILL_ART }
+			),
 				map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CRITIC_MUSIC,
-					{ SKILL_WRITING, SKILL_MUSIC }),
+					{ SKILL_WRITING, SKILL_MUSIC }
+				),
 					map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_MUSICIAN,
-						{ SKILL_MUSIC }),
+						{ SKILL_MUSIC }
+					),
 						map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_AUTHOR,
-							{ SKILL_WRITING }),
+							{ SKILL_WRITING }
+						),
 							map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JOURNALIST,
-								{ SKILL_WRITING }),
+								{ SKILL_WRITING }
+							),
 								map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_JUDGE_CONSERVATIVE,
-									{ SKILL_WRITING, SKILL_LAW }),
+									{ SKILL_WRITING, SKILL_LAW }
+								),
 									map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_LAWYER,
-										{ SKILL_LAW }),
+										{ SKILL_LAW }
+									),
 										map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_LABTECH,
-											{ SKILL_SCIENCE }),
+											{ SKILL_SCIENCE }
+										),
 											map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_SCIENTIST_EMINENT,
-												{ SKILL_SCIENCE }),
+												{ SKILL_SCIENCE }
+											),
 												map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_CEO,
-													{ SKILL_BUSINESS }),
+													{ SKILL_BUSINESS }
+												),
 													map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_CORPORATE_MANAGER,
-														{ SKILL_BUSINESS }),
+														{ SKILL_BUSINESS }
+													),
 														map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_PRIEST,
-															{ SKILL_RELIGION }),
+															{ SKILL_RELIGION }
+														),
 															map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_NUN,
-																{ SKILL_RELIGION }),
+																{ SKILL_RELIGION }
+															),
 																map<CreatureTypes, vector<CreatureSkill> > ::value_type(CREATURE_EDUCATOR,
-																	{ SKILL_PSYCHOLOGY }),
+																	{ SKILL_PSYCHOLOGY }
+																),
 };
+
 map<CreatureTypes, int> super_sleepers_multiplier = {
 	map<CreatureTypes, int> ::value_type(CREATURE_CORPORATE_CEO, 20),
 	map<CreatureTypes, int> ::value_type(CREATURE_POLITICIAN, 20),
