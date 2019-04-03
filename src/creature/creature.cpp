@@ -599,7 +599,7 @@ int DeprecatedCreature::get_attribute(int attribute, bool usejuice) const
 	bool skip_juice = (attribute == ATTRIBUTE_WISDOM && align != ALIGN_CONSERVATIVE) || (attribute == ATTRIBUTE_HEART && align != ALIGN_LIBERAL);
 
 	// Effects of juice on the character's attributes
-	if (skip_juice)
+	if (!skip_juice)
 	{
 		if (juice <= -50)ret = 1; // Damn worthless
 		else if (juice <= -10)ret = static_cast<int>(ret*0.6); // Society's dregs

@@ -40,7 +40,7 @@ bool getSetValue(const string& s) {
 	}
 	return j > -1 && (s[j] == '-' || s[j] == '+');
 }
-int getMagnitudeFromString(const string& s) {
+int getMagnitudeFromString(const string s) {
 	bool spaceUnfound = true;
 	int j = 0;
 	for (int i = s.size() - 2; i > 0 && spaceUnfound; i--) {
@@ -97,7 +97,7 @@ int getAttributeFromString(const string& s) {
 	}
 }
 map<string, short> getCreatureEnumFromString;
-int getCreatureFromString(const string& s) {
+int getCreatureFromString(const string s) {
 	int output = findSubstring(getCreatureEnumFromString, s);
 	if (output >= 0) {
 		return output;
@@ -119,7 +119,7 @@ string enumToCreatureString(const int i) {
 		return BLANK_STRING;
 	}
 }
-int getBaseFromString(const string& s) {
+int getBaseFromString(const string s) {
 	const string baseString = s.substr(5);
 	int output = findSubstring(getBaseEnumFromString, baseString);
 	if (output >= 0) {
@@ -410,7 +410,7 @@ void printIntroduction() {
 	gamelog.nextMessage();
 	pressAnyKey();
 }
-void resetChoiceAndQuestion(Choice &currentChoice, Question &currentQuestion, const string header, const string header_2, const string firstsubstr) {
+void resetChoiceAndQuestion(MutableChoice &currentChoice, MutableQuestion &currentQuestion, const string header, const string header_2, const string firstsubstr) {
 
 
 	currentChoice.ANSWER = BLANK_STRING;
@@ -421,14 +421,14 @@ void resetChoiceAndQuestion(Choice &currentChoice, Question &currentQuestion, co
 	currentQuestion.QUESTION_2 = BLANK_STRING;
 
 }
-bool getAttributeFromFounderQuestion(const string question, Impact &currentImpact) {
+bool getAttributeFromFounderQuestion(const string question, MutableImpact &currentImpact) {
 
 	currentImpact.type = ATTRIBUTE;
-	currentImpact.item_to_influcence = getAttributeFromString(question);
+	currentImpact.item_to_influence = getAttributeFromString(question);
 	currentImpact.set_value = getSetValue(question);
 	currentImpact.magnitude = getMagnitudeFromString(question);
 
-	if (currentImpact.item_to_influcence == -1) {
+	if (currentImpact.item_to_influence == -1) {
 		return false;
 	}
 	else {
@@ -436,13 +436,13 @@ bool getAttributeFromFounderQuestion(const string question, Impact &currentImpac
 	}
 }
 
-bool getSkillFromFounderQuestion(const string question, Impact &currentImpact) {
+bool getSkillFromFounderQuestion(const string question, MutableImpact &currentImpact) {
 	currentImpact.type = SKILL;
-	currentImpact.item_to_influcence = getSkillFromString(question);
+	currentImpact.item_to_influence = getSkillFromString(question);
 	currentImpact.set_value = getSetValue(question);
 	currentImpact.magnitude = getMagnitudeFromString(question);
 
-	if (currentImpact.item_to_influcence == -1) {
+	if (currentImpact.item_to_influence == -1) {
 		return false;
 	}
 	else {
@@ -450,22 +450,22 @@ bool getSkillFromFounderQuestion(const string question, Impact &currentImpact) {
 	}
 }
 
-bool getStartingFromFounderQuestion(const string question, Impact &currentImpact, const string first) {
+bool getStartingFromFounderQuestion(const string first, MutableImpact &currentImpact) {
 
 	currentImpact.type = OTHER;
 	currentImpact.set_value = true;
-	currentImpact.magnitude = getMagnitudeFromString(question);
+	currentImpact.magnitude = getMagnitudeFromString(first);
 	if (first.substr(9, 5) == tag_MONTH) {
-		currentImpact.item_to_influcence = STARTING_MONTH;
+		currentImpact.item_to_influence = STARTING_MONTH;
 	}
 	else if (first.substr(9, 3) == tag_DAY) {
-		currentImpact.item_to_influcence = STARTING_DAY;
+		currentImpact.item_to_influence = STARTING_DAY;
 	}
 	else if (first.substr(9, 4) == tag_YEAR) {
-		currentImpact.item_to_influcence = STARTING_YEAR;
+		currentImpact.item_to_influence = STARTING_YEAR;
 	}
 
-	if (currentImpact.item_to_influcence == -1) {
+	if (currentImpact.item_to_influence == -1) {
 		return false;
 	}
 	else {
@@ -473,23 +473,23 @@ bool getStartingFromFounderQuestion(const string question, Impact &currentImpact
 	}
 }
 
-bool getBirthdayFromFounderQuestion(const string question, Impact &currentImpact, const string first) {
+bool getBirthdayFromFounderQuestion(const string first, MutableImpact &currentImpact) {
 
 	currentImpact.type = OTHER;
-	currentImpact.item_to_influcence = -1;
+	currentImpact.item_to_influence = -1;
 	currentImpact.set_value = true;
-	currentImpact.magnitude = getMagnitudeFromString(question);
+	currentImpact.magnitude = getMagnitudeFromString(first);
 	if (first.substr(9, 5) == tag_MONTH) {
-		currentImpact.item_to_influcence = BIRTH_MONTH;
+		currentImpact.item_to_influence = BIRTH_MONTH;
 	}
 	else if (first.substr(9, 3) == tag_DAY) {
-		currentImpact.item_to_influcence = BIRTH_DAY;
+		currentImpact.item_to_influence = BIRTH_DAY;
 	}
 	else if (first.substr(9, 4) == tag_YEAR) {
-		currentImpact.item_to_influcence = BIRTH_YEAR;
+		currentImpact.item_to_influence = BIRTH_YEAR;
 	}
 
-	if (currentImpact.item_to_influcence == -1) {
+	if (currentImpact.item_to_influence == -1) {
 		return false;
 	}
 	else {
@@ -497,37 +497,71 @@ bool getBirthdayFromFounderQuestion(const string question, Impact &currentImpact
 	}
 }
 
-bool getArmorFromFounderQuestion(const string question, Impact &currentImpact) {
+bool getArmorFromFounderQuestion(const string question, MutableImpact &currentImpact) {
 
 	currentImpact.type = OTHER;
-	currentImpact.item_to_influcence = ARMOR;
+	currentImpact.item_to_influence = ARMOR;
 	currentImpact.set_value = true;
 
 	return false;
 
 }
+int findEnumTag(const string str) {
+	int enumTag = -1;
+	for (int j = 3; j < 14 && enumTag == -1; j++) {
+		if (founderQuestionTags.count(str.substr(0, j))) {
+			enumTag = founderQuestionTags[str.substr(0, j)];
+		}
+	}
+	return enumTag;
+}
+bool isAnImpact(const int i) {
+	switch (i) {
+	case ENUM_tag_HEADER:
+	case ENUM_tag_ANSWER:
+	case ENUM_tag_QUESTION:
+		return false;
+		break;
+	case ENUM_tag_SKILL_:
+	case ENUM_tag_ATTRIBUTE_:
+	case ENUM_tag_STARTING_:
+	case ENUM_tag_BIRTHDAY_:
+	case ENUM_tag_MONEY:
+	case ENUM_tag_DATING_LAWYER:
+	case ENUM_tag_GAY:
+	case ENUM_tag_HASMAPS:
+	case ENUM_tag_CREATURE:
+	case ENUM_tag_BASE:
+	case ENUM_tag_ARMOR:
+	case ENUM_tag_JUICE:
+	case ENUM_tag_RECRUITS_GANG:
+	case ENUM_tag_ASSAULT_RIFLE:
+	case ENUM_tag_SPORTS_CAR:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
 vector<Question> gatherAllFounderQuestions() {
 	vector<Question> allQuestions;
+
+
 	bool firstQuestion = true;
 	bool firstAnswer = true;
-	Question currentQuestion;
-	Choice currentChoice;
+	MutableQuestion currentQuestion;
+	MutableChoice currentChoice;
 	string header = BLANK_STRING;
 	string header_2 = BLANK_STRING;
 	string answer = BLANK_STRING;
 	string answer_2 = BLANK_STRING;
 
-	for (int i = 0; i < founderQuestions.size(); i++) {
-		Impact currentImpact;
+	for (string first : founderQuestions) {
+		MutableImpact currentImpact;
 		bool invalidTag = false;
-		const string first = founderQuestions[i];
-		int enumTag = -1;
-		for (int j = 3; j < 14 && enumTag == -1; j++) {
-			if (founderQuestionTags.count(first.substr(0, j))) {
-				enumTag = founderQuestionTags[first.substr(0, j)];
-			}
-		}
-		switch (enumTag) {
+		switch (findEnumTag(first)) {
+
 		case ENUM_tag_HEADER:
 			if (first.substr(6, 1) == singleSpace) {
 				header = first.substr(7);
@@ -591,82 +625,82 @@ vector<Question> gatherAllFounderQuestions() {
 			}
 			break;
 		case ENUM_tag_SKILL_:
-			invalidTag = !getSkillFromFounderQuestion(founderQuestions[i], currentImpact);
+			invalidTag = !getSkillFromFounderQuestion(first, currentImpact);
 			break;
 		case ENUM_tag_ATTRIBUTE_:
-			invalidTag = !getAttributeFromFounderQuestion(founderQuestions[i], currentImpact);
+			invalidTag = !getAttributeFromFounderQuestion(first, currentImpact);
 			break;
 		case ENUM_tag_STARTING_:
-			invalidTag = !getStartingFromFounderQuestion(founderQuestions[i], currentImpact, first);
+			invalidTag = !getStartingFromFounderQuestion(first, currentImpact);
 			break;
 		case ENUM_tag_BIRTHDAY_:
-			invalidTag = !getBirthdayFromFounderQuestion(founderQuestions[i], currentImpact, first);
+			invalidTag = !getBirthdayFromFounderQuestion(first, currentImpact);
+			break;
+		case ENUM_tag_ARMOR:
+			invalidTag = !getArmorFromFounderQuestion(first, currentImpact);
+			break;
+		case ENUM_tag_JUICE:
+			currentImpact.type = OTHER;
+			currentImpact.item_to_influence = JUICE;
+			currentImpact.set_value = getSetValue(first);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_MONEY:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = MONEY;
-			currentImpact.set_value = getSetValue(founderQuestions[i]);
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.item_to_influence = MONEY;
+			currentImpact.set_value = getSetValue(first);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_DATING_LAWYER:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = DATING_LAWYER;
+			currentImpact.item_to_influence = DATING_LAWYER;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_GAY:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = GAY;
+			currentImpact.item_to_influence = GAY;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_HASMAPS:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = HAS_MAPS;
+			currentImpact.item_to_influence = HAS_MAPS;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_CREATURE:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = CREATURE;
+			currentImpact.item_to_influence = CREATURE;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getCreatureFromString(founderQuestions[i].substr(9));
+			currentImpact.magnitude = getCreatureFromString(first.substr(9));
 			break;
 		case ENUM_tag_BASE:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = BASE;
+			currentImpact.item_to_influence = BASE;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getBaseFromString(founderQuestions[i]);
+			currentImpact.magnitude = getBaseFromString(first);
 			if (currentImpact.magnitude == -1) {
 				invalidTag = true;
 			}
 			break;
-		case ENUM_tag_ARMOR:
-			invalidTag = !getArmorFromFounderQuestion(founderQuestions[i], currentImpact);
-			break;
-		case ENUM_tag_JUICE:
-			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = JUICE;
-			currentImpact.set_value = getSetValue(founderQuestions[i]);
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
-			break;
 		case ENUM_tag_RECRUITS_GANG:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = RECRUITS;
+			currentImpact.item_to_influence = RECRUITS;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_ASSAULT_RIFLE:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = ASSAULT_RIFLE;
+			currentImpact.item_to_influence = ASSAULT_RIFLE;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		case ENUM_tag_SPORTS_CAR:
 			currentImpact.type = OTHER;
-			currentImpact.item_to_influcence = SPORTS_CAR;
+			currentImpact.item_to_influence = SPORTS_CAR;
 			currentImpact.set_value = true;
-			currentImpact.magnitude = getMagnitudeFromString(founderQuestions[i]);
+			currentImpact.magnitude = getMagnitudeFromString(first);
 			break;
 		default:
 			invalidTag = true;
@@ -676,87 +710,90 @@ vector<Question> gatherAllFounderQuestions() {
 		if (invalidTag) {
 			clearAlt();
 			addstrAlt(invalidTag);
-			addstrAlt(founderQuestions[i]);
+			addstrAlt(first);
 			pressAnyKey();
 			clearAlt();
 		}
-		else {
+		else if (isAnImpact(findEnumTag(first))) {
 			currentChoice.impact.push_back(currentImpact);
 		}
-
 	}
-	// The last choice and question added after the loop ends
 	currentChoice.ANSWER = answer;
 	currentChoice.ANSWER_2 = answer_2;
 	currentQuestion.choices.push_back(currentChoice);
 	allQuestions.push_back(currentQuestion);
 	return allQuestions;
 }
-vector<Impact> printQuestionsThenGatherImpacts(vector<Question> allQuestions, const bool choices, const int gender_conservative, const string propername) {
+void printSingleQuestion(const Question currentQuestion) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(0, 0, currentQuestion.HEADER);
+	mvaddstrAlt(1, 0, currentQuestion.HEADER_2);
+	set_color_easy(WHITE_ON_BLACK);
+	mvaddstrAlt(2, 0, currentQuestion.QUESTION);
+	mvaddstrAlt(3, 0, currentQuestion.QUESTION_2);
+}
+void printSingleQuestionAnswers(const Question currentQuestion) {
+	for (int j = 0; j < currentQuestion.choices.size(); j++) {
+		string currentOption = spaceDashSpace;
+		mvaddstrAlt(5 + 2 * j, 0, ALL_OPTIONS.substr(j, 1) + currentOption + currentQuestion.choices[j].ANSWER);
+		mvaddstrAlt(6 + 2 * j, 0, currentQuestion.choices[j].ANSWER_2);
+	}
+}
+void printSingleQuestionAnswersFateDecides(const Question currentQuestion, const int FATE) {
+		
+		string currentOption = spaceDashSpace;
+		mvaddstrAlt(5 + 2 * FATE, 0, ALL_OPTIONS.substr(FATE, 1) + currentOption + currentQuestion.choices[FATE].ANSWER);
+		mvaddstrAlt(6 + 2 * FATE, 0, currentQuestion.choices[FATE].ANSWER_2);
+}
+void printParentsNamedMe(const int gender_conservative, const string propername) {
+
+	mvaddstrAlt(17, 0, theDocSaid);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	if (gender_conservative == GENDER_MALE)
+		addstrAlt(aBoy);
+	else if (gender_conservative == GENDER_FEMALE)
+		addstrAlt(aGirl);
+	else
+		addstrAlt(intersex);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(singleDot);
+	mvaddstrAlt(19, 0, myParents);
+	if (gender_conservative == GENDER_NEUTRAL)
+	{
+		addstrAlt(insistedOtherwise);
+		mvaddstrAlt(20, 0, they);
+	}
+	addstrAlt(namedMe);
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	addstrAlt(propername);
+	set_color_easy(WHITE_ON_BLACK);
+	addstrAlt(singleDot);
+
+}
+vector<Impact> printQuestionsThenGatherImpacts(const vector<Question> allQuestions, const bool choices) {
 
 	vector<Impact> impactsToApply;
-	for (int i = 0; i < allQuestions.size(); i++) {
+	for (Question currentQuestion : allQuestions) {
+
+		printSingleQuestion(currentQuestion);
+
+		if (choices) {
+			printSingleQuestionAnswers(currentQuestion);
+		}
+		else {
+			int FATE = LCSrandom(currentQuestion.choices.size());
+			printSingleQuestionAnswersFateDecides(currentQuestion, FATE);
+
+		}
+		int selection = getkeyAlt();
+
+		for (Impact currentImpact : currentQuestion.choices[selection - 'a'].impact) {
+			impactsToApply.push_back(currentImpact);
+		}
 		clearAlt();
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		mvaddstrAlt(0, 0, allQuestions[i].HEADER);
-		mvaddstrAlt(1, 0, allQuestions[i].HEADER_2);
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(2, 0, allQuestions[i].QUESTION);
-		mvaddstrAlt(3, 0, allQuestions[i].QUESTION_2);
-		// print answers
-		if (i == 0) {
-			mvaddstrAlt(17, 0, theDocSaid);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			if (gender_conservative == GENDER_MALE)
-				addstrAlt(aBoy);
-			else if (gender_conservative == GENDER_FEMALE)
-				addstrAlt(aGirl);
-			else
-				addstrAlt(intersex);
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(singleDot);
-			mvaddstrAlt(19, 0, myParents);
-			if (gender_conservative == GENDER_NEUTRAL)
-			{
-				addstrAlt(insistedOtherwise);
-				mvaddstrAlt(20, 0, they);
-			}
-			addstrAlt(namedMe);
-			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			addstrAlt(propername);
-			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(singleDot);
-		}
-		char selection;
-		if (!choices) {
-			int offset = LCSrandom(allQuestions[i].choices.size());
-			selection = 'a' + offset;
-			string currentOption = spaceDashSpace;
-			mvaddstrAlt(5 + 2 * offset, 0, ALL_OPTIONS.substr(offset, 1) + currentOption + allQuestions[i].choices[offset].ANSWER);
-			mvaddstrAlt(6 + 2 * offset, 0, allQuestions[i].choices[offset].ANSWER_2);
-			pressAnyKey();
-		}
-		else {
-			for (int j = 0; j < allQuestions[i].choices.size(); j++) {
-				string currentOption = spaceDashSpace;
-				mvaddstrAlt(5 + 2 * j, 0, ALL_OPTIONS.substr(j, 1) + currentOption + allQuestions[i].choices[j].ANSWER);
-				mvaddstrAlt(6 + 2 * j, 0, allQuestions[i].choices[j].ANSWER_2);
-			}
-			selection = getkeyAlt();
-		}
-		if (selection >= 'a' && selection < 'a' + allQuestions[i].choices.size()) {
-			//IsaacG I assume there's a way to combine vectors that is easier and/or
-			// more elegant than this, but whatever, this works.
-			int impactNumber = allQuestions[i].choices[selection - 'a'].impact.size();
-			vector<Impact> currentImpacts = allQuestions[i].choices[selection - 'a'].impact;
-			for (int j = 0; j < impactNumber; j++) {
-				impactsToApply.push_back(currentImpacts[j]);
-			}
-		}
-		else {
-			i--;
-		}
 	}
+
+
 	return impactsToApply;
 }
 void make_blind(DeprecatedCreature *newcr) {
@@ -975,29 +1012,31 @@ void makecharacter()
 
 	vector<Question> allQuestions = gatherAllFounderQuestions();
 
-	vector<Impact> impactsToApply = printQuestionsThenGatherImpacts(allQuestions, choices, newcr->gender_conservative, newcr->propername);
+	clearAlt();
+	printParentsNamedMe(newcr->gender_conservative, newcr->propername);
 
-	for (int i = 0; i < impactsToApply.size(); i++) {
-		const Impact currentImpact = impactsToApply[i];
+	vector<Impact> impactsToApply = printQuestionsThenGatherImpacts(allQuestions, choices);
+
+	for (Impact currentImpact : impactsToApply) {
 		switch (currentImpact.type) {
 		case SKILL:
 			if (currentImpact.set_value) {
-				newcr->set_skill((currentImpact.item_to_influcence), currentImpact.magnitude);
+				newcr->set_skill((currentImpact.item_to_influence), currentImpact.magnitude);
 			}
 			else {
-				newcr->set_skill((currentImpact.item_to_influcence), newcr->get_skill((currentImpact.item_to_influcence)) + currentImpact.magnitude);
+				newcr->set_skill((currentImpact.item_to_influence), newcr->get_skill((currentImpact.item_to_influence)) + currentImpact.magnitude);
 			}
 			break;
 		case ATTRIBUTE:
 			if (currentImpact.set_value) {
-				newcr->set_attribute((currentImpact.item_to_influcence), currentImpact.magnitude);
+				newcr->set_attribute((currentImpact.item_to_influence), currentImpact.magnitude);
 			}
 			else {
-				newcr->adjust_attribute((currentImpact.item_to_influcence), currentImpact.magnitude);
+				newcr->adjust_attribute((currentImpact.item_to_influence), currentImpact.magnitude);
 			}
 			break;
 		case OTHER:
-			switch (currentImpact.item_to_influcence) {
+			switch (currentImpact.item_to_influence) {
 			case BIRTH_MONTH:
 				birth_month = currentImpact.magnitude;
 				break;
@@ -1066,7 +1105,7 @@ void makecharacter()
 				}
 				break;
 			default:
-				printErrorTypeOther(currentImpact.item_to_influcence);
+				printErrorTypeOther(currentImpact.item_to_influence);
 				break;
 			}
 			break;

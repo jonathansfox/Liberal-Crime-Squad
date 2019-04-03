@@ -217,7 +217,7 @@ This file is part of Liberal Crime Squad.                                       
 		 {
 			 addstrAlt(g.getCreatureJustice().sentence, gamelog);
 			 addstrAlt(CONST_MONTH, gamelog);
-			 if (g.getCreatureJustice().sentence > 1)addstrAlt(CONST_justice031, gamelog);
+			 if (g.getCreatureJustice().sentence > 1)addstrAlt(CONST_LETTER_S, gamelog);
 			 addstrAlt(CONST_IN_PRISON, gamelog);
 		 }
 		 // Mash together compatible sentences.
@@ -763,7 +763,7 @@ This file is part of Liberal Crime Squad.                                       
 	 if (ledger.get_funds() < 5000) set_color_easy(WHITE_ON_BLACK);
 	 //SAV - added in display of skills and relevant attributes to help
 	 // decide when to defend self.
-	 mvaddstrAlt(++y, 5, CONST_justice085);
+	 mvaddstrAlt(++y, 5, HEART_COLON);
 	 addstrAlt(g.get_attribute(ATTRIBUTE_HEART, true));
 	 mvaddstrAlt(y, 25, CONST_X_PERSUASION_COLON);
 	 addstrAlt(g.get_skill(SKILL_PERSUASION));

@@ -1027,8 +1027,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.36";
-const int version = 41236;
+const string PACKAGE_VERSION_STR = "4.12.37";
+const int version = 41237;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -2548,7 +2548,7 @@ const string AGILITY_COLON = "Agility: ";
 const string HEALTH_COLON = "Health: ";
 const string WISDOM_COLON = "Wisdom: ";
 const string INTELLIGENCE_COLON = "Intelligence: ";
-const string CONST_X_HEART_COLON = "Heart: ";
+const string HEART_COLON = "Heart: ";
 //printliberalcrimes
 
 const string CONST_X_NUM = "NUM";
@@ -4879,7 +4879,7 @@ const string CONST_X_GRAFFITI_ALLCAPS = "GRAFFITI";
 const string CONST_X_DEBRIS = "DEBRIS";
 const string CONST_X_OUTDOOR = "OUTDOOR";
 const string CONST_X_GRASSY = "GRASSY";
-const string CONST_ACTIVITY_SLEEPER_JOINLCS3 = "BLOODY2";
+const string CONST_BLOODY_2 = "BLOODY2";
 const string CONST_X_BLOODY = "BLOODY";
 const string CONST_X_RESTRICTED = "RESTRICTED";
 const string CONST_X_CLOCK = "CLOCK";
@@ -6461,7 +6461,7 @@ const string CONST_TO = "to ";
 const string CONST_THE_CONSERVATIVE_CLINGS_HELPLESSLY = "The Conservative clings helplessly ";
 const string CONST_OUTFIT = "Outfit: ";
 const string CONST_WISDOM = "Wisdom: ";
-const string CONST_HEART = "Heart: ";
+const string HEART_COLON = "Heart: ";
 const string CONST_PSYCHOLOGY_SKILL = "Psychology Skill: ";
 const string CONST_HEALTH = "Health: ";
 const string CONST_LEAD_INTERROGATOR = "Lead Interrogator: ";
@@ -6749,7 +6749,7 @@ const string CONST_INTELLIGENCE = "Intelligence: ";
 const string CONST_X_LAW_COLON = "Law: ";
 const string CONST_CHARISMA = "Charisma: ";
 const string CONST_X_PERSUASION_COLON = "Persuasion: ";
-const string CONST_justice085 = "Heart: ";
+const string HEART_COLON = "Heart: ";
 const string CONST_S_OFFER_TO_ASSIST_PRO_BONO = "'s offer to assist pro bono.";
 const string CONST_E_ACCEPT_SLEEPER = "E - Accept sleeper ";
 const string CONST_D_PAY_5000_TO_HIRE_ACE_LIBERAL_ATTORNEY = "D - Pay $5000 to hire ace Liberal attorney ";
@@ -6802,7 +6802,7 @@ const string CONST_TO_BE_SERVED_CONSECUTIVELY = "to be served consecutively";
 const string CONST_TO_BE_SERVED_CONCURRENTLY = "to be served concurrently";
 const string CONST_X_COMMA = ",";
 const string CONST_IN_PRISON = " in prison";
-const string CONST_justice031 = "s";
+const string CONST_LETTER_S = "s";
 const string CONST_MONTH = " month";
 const string CONST_YEARS_IN_PRISON = " years in prison";
 const string CONST_LIFE_IN_PRISON = "life in prison";
@@ -10133,23 +10133,46 @@ enum Other_Influence {
 	ARMOR,
 	RECRUITS
 };
-struct Impact {
+struct MutableImpact {
 	Stat_Or_Attribute type;
-	int item_to_influcence;
+	int item_to_influence;
 	int magnitude;
 	bool set_value;
 };
-struct Choice {
+
+struct Impact {
+	const Stat_Or_Attribute type;
+	const int item_to_influence;
+	const int magnitude;
+	const bool set_value;
+	Impact(MutableImpact i) : type(i.type), item_to_influence(i.item_to_influence), magnitude(i.magnitude), set_value(i.set_value) {}
+};
+struct MutableChoice {
 	string ANSWER;
 	string ANSWER_2;
 	vector<Impact> impact;
 };
-struct Question {
+struct Choice {
+	const string ANSWER;
+	const string ANSWER_2;
+	const vector<Impact> impact;
+	Choice(MutableChoice c) : ANSWER(c.ANSWER), ANSWER_2(c.ANSWER_2), impact(c.impact) {}
+};
+struct MutableQuestion {
 	string HEADER;
 	string HEADER_2;
 	string QUESTION;
 	string QUESTION_2;
 	vector<Choice> choices;
+};
+struct Question {
+
+	const string HEADER;
+	const string HEADER_2;
+	const string QUESTION;
+	const string QUESTION_2;
+	const vector<Choice> choices;
+	Question(MutableQuestion q) : HEADER(q.HEADER), HEADER_2(q.HEADER_2), QUESTION(q.QUESTION), QUESTION_2(q.QUESTION_2), choices(q.choices) {}
 };
 enum founderQuestionTagEnums {
 	ENUM_tag_HEADER,

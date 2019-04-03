@@ -30,13 +30,11 @@ public:
 		return ListOfCreatureSkills(skills, skill_experience, skill_attribute);
 	};
 	const CreatureAttributeList getCreatureAttributeList() const {
-		int attribute_list[ATTNUM];
 		int attribute_juice_list[ATTNUM];
 		for (int i = 0; i < ATTNUM; i++) {
-			attribute_list[i] = get_attribute(i, false);
 			attribute_juice_list[i] = get_attribute(i, true);
 		}
-		return CreatureAttributeList(attribute_list, attribute_juice_list);
+		return CreatureAttributeList(attribute_juice_list);
 	}
 
 	DeprecatedCreature() { creatureinit(); }

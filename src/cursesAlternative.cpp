@@ -196,8 +196,8 @@ void printfunds(int y, int offsetx, const char* prefix, long funds);
 #include "../locations/locationsPool.h"
 // BASEMODE
 
-const string PLANNING_HEADER = "„Ÿ„Ÿ„Ÿ PLANNING „Ÿ„Ÿ„Ÿ";
-const string ACTIVISM_HEADER = "„Ÿ„Ÿ„Ÿ ACTIVISM „Ÿ„Ÿ„Ÿ";
+const string PLANNING_HEADER = "ÄÄÄ PLANNING ÄÄÄ";
+const string ACTIVISM_HEADER = "ÄÄÄ ACTIVISM ÄÄÄ";
 const string COLONS_NO_DOTS = ":::::::::";
 const string COLONS_AND_DOTS = ":.:.:.:.:";
 const string NO_FOOD = " (No Food)";
@@ -217,7 +217,7 @@ const string tag_Consp = "Cons+";
 const string HOUSE_COLON = "House: ";
 const string SENATE_COLON = "Senate: ";
 const string SUPREME_COURT_COLON = "Supreme Court: ";
-const string MID_LENGTH_LINE = "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ";
+const string MID_LENGTH_LINE = "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string PUBLIC_MOOD = "Public Mood";
 const string LIBERTARIAN = "Libertarian";
 const string STALINIST = "Stalinist";
@@ -248,7 +248,7 @@ void printStalinMood() {
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(17, 68, LIBERTARIAN);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 0, "\x11„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ");
+	mvaddstrAlt(18, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(18, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -256,7 +256,7 @@ void printStalinMood() {
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(18, 48, MID_LENGTH_LINE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(18, 64, "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ\x10");
+	mvaddstrAlt(18, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 	set_alignment_color(align, true);
 	mvaddcharAlt(18, stalin, 'O');
 }
@@ -286,7 +286,7 @@ void printMood() {
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(21, 67, CONSERVATIVE);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 0, "\x11„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ");
+	mvaddstrAlt(22, 0, "\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 16, MID_LENGTH_LINE);
 	set_color_easy(YELLOW_ON_BLACK_BRIGHT);
@@ -294,7 +294,7 @@ void printMood() {
 	set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
 	mvaddstrAlt(22, 48, MID_LENGTH_LINE);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
-	mvaddstrAlt(22, 64, "„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ\x10");
+	mvaddstrAlt(22, 64, "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
 	set_alignment_color(align, true);
 
 	mvaddcharAlt(22, mood, 'O');
@@ -1659,7 +1659,7 @@ const string CONST_BUYER = "Buyer: ";
 const string CONST_WITH_A_RANDOM_MASK = " With a Random Mask";
 const string CONST_Z_SURPRISE = "Z - Surprise ";
 const string CONST_PRESS_A_LETTER_TO_SELECT_A_MASK = "Press a Letter to select a Mask";
-const string CONST_PRODUCT_NAME_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?ESCRIPTIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
+const string CONST_PRODUCT_NAME_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄDESCRIPTIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_BUY = " buy?";
 const string CONST_WHICH_MASK_WILL = "Which mask will ";
 const string CONST_SPEND = "SPEND.";
@@ -1681,7 +1681,7 @@ const string CONST_shop033 = "/";
 const string CONST_ESTIMATED_LIBERAL_AMOUNT = "Estimated Liberal Amount: $";
 const string CONST_WHAT_WILL_YOU_SELL = "What will you sell?";
 const string CONST_PRESS_A_LETTER_TO_SELECT_AN_OPTION = "Press a Letter to select an option";
-const string CONST_PRODUCT_NAME_PRICE_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ?RICEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
+const string CONST_PRODUCT_NAME_PRICE_HEADER = "ÄÄÄÄPRODUCT NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄPRICEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ";
 const string CONST_WHAT_WILL = "What will ";
 
 

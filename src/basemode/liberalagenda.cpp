@@ -244,7 +244,7 @@ void printSingleLaw(const signed char won, const int l) {
 	else if (won == 1 && wincondition == WINCONDITION_ELITE)
 		set_alignment_color(ALIGN_ELITELIBERAL, true);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11อออออ\x10");
+	mvaddstrAlt(14 + l / 3, l % 3 * 26, "\x11ฤฤฤฤฤ\x10");
 	if (won == -1 || won == -2)
 		set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
 	else set_alignment_color(lawList[l], true);

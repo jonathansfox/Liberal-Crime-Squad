@@ -213,25 +213,10 @@ struct CantBluffAnimal {
 };
 
 struct CreatureAttributeList {
-	const int get_attribute(const int x, const bool use_juice) {
-		if (use_juice) {
+	const int get_attribute(const int x) {
 			return attribute_juice_list.at(x);
-		}
-		else {
-			return attribute_list.at(x);
-		}
 	}
-	CreatureAttributeList(const int _attribute_list[ATTNUM], const int _attribute_juice_list[ATTNUM]) : 
-		attribute_list{ 
-		map<int, int>::value_type(ATTRIBUTE_STRENGTH, _attribute_list [ATTRIBUTE_STRENGTH]),
-		map<int, int>::value_type(ATTRIBUTE_INTELLIGENCE, _attribute_list[ATTRIBUTE_INTELLIGENCE]),
-		map<int, int>::value_type(ATTRIBUTE_WISDOM, _attribute_list[ATTRIBUTE_WISDOM]),
-		map<int, int>::value_type(ATTRIBUTE_AGILITY, _attribute_list[ATTRIBUTE_AGILITY]),
-		map<int, int>::value_type(ATTRIBUTE_HEALTH, _attribute_list[ATTRIBUTE_HEALTH]),
-		map<int, int>::value_type(ATTRIBUTE_CHARISMA, _attribute_list[ATTRIBUTE_CHARISMA]),
-		map<int, int>::value_type(ATTRIBUTE_HEART, _attribute_list[ATTRIBUTE_HEART]),
-
-	},
+	CreatureAttributeList(const int _attribute_juice_list[ATTNUM]) : 
 		attribute_juice_list{
 		map<int, int>::value_type(ATTRIBUTE_STRENGTH, _attribute_juice_list[ATTRIBUTE_STRENGTH]),
 		map<int, int>::value_type(ATTRIBUTE_INTELLIGENCE, _attribute_juice_list[ATTRIBUTE_INTELLIGENCE]),
@@ -243,6 +228,5 @@ struct CreatureAttributeList {
 	}
 	{}
 private:
-	const map<int, int> attribute_list;
 	const map<int, int> attribute_juice_list;
 };

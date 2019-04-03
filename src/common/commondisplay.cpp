@@ -301,13 +301,13 @@ void printhealthstat(CreatureHealth g, int y, int x, char smll)
 	mvaddstrAlt(y, x, wound);
 }
 void printAttributesAsKnowledgePermits(CreatureAttributeList cr, unsigned char knowledge) {
-	mvaddstrAlt(2, 0, HRT_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_HEART, true)) : QUESTION_MARK));
-	mvaddstrAlt(3, 0, INT_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true)) : QUESTION_MARK));
-	mvaddstrAlt(4, 0, WIS_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_WISDOM, true)) : QUESTION_MARK));
-	mvaddstrAlt(5, 0, HLTH_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_HEALTH, true)) : QUESTION_MARK));
-	mvaddstrAlt(2, 11, AGI_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_AGILITY, true)) : QUESTION_MARK));
-	mvaddstrAlt(3, 11, STR_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_STRENGTH, true)) : QUESTION_MARK));
-	mvaddstrAlt(4, 11, CHAR_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_CHARISMA, true)) : QUESTION_MARK));
+	mvaddstrAlt(2, 0, HRT_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_HEART)) : QUESTION_MARK));
+	mvaddstrAlt(3, 0, INT_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_INTELLIGENCE)) : QUESTION_MARK));
+	mvaddstrAlt(4, 0, WIS_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_WISDOM)) : QUESTION_MARK));
+	mvaddstrAlt(5, 0, HLTH_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_HEALTH)) : QUESTION_MARK));
+	mvaddstrAlt(2, 11, AGI_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_AGILITY)) : QUESTION_MARK));
+	mvaddstrAlt(3, 11, STR_COLON + ((knowledge > 1) ? tostring(cr.get_attribute(ATTRIBUTE_STRENGTH)) : QUESTION_MARK));
+	mvaddstrAlt(4, 11, CHAR_COLON + ((knowledge > 0) ? tostring(cr.get_attribute(ATTRIBUTE_CHARISMA)) : QUESTION_MARK));
 }
 void set_color_for_disguise(DeprecatedCreature* cr) {
 
@@ -704,7 +704,7 @@ string twoDigits(const int x) {
 }
 void printCreatureAttributes(DeprecatedCreature &cr) {
 
-	mvaddstrAlt(5, 0, CONST_X_HEART_COLON);
+	mvaddstrAlt(5, 0, HEART_COLON);
 	addstrAlt(cr.get_attribute(ATTRIBUTE_HEART, true));
 	mvaddstrAlt(6, 0, INTELLIGENCE_COLON);
 	addstrAlt(cr.get_attribute(ATTRIBUTE_INTELLIGENCE, true));

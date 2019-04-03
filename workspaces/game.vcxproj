@@ -204,7 +204,6 @@
     <ClCompile Include="..\src\creature\augmentation.cpp" />
     <ClCompile Include="..\src\creature\augmenttype.cpp" />
     <ClCompile Include="..\src\creature\creature.cpp" />
-    <ClCompile Include="..\src\creature\creaturenames.cpp" />
     <ClCompile Include="..\src\creature\creaturetype.cpp" />
     <ClCompile Include="..\src\cursesAlternative.cpp" />
     <ClCompile Include="..\src\cursesmovie.cpp" />
@@ -257,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\basemode\activate.h" />
+    <ClInclude Include="..\src\basemode\activate_const_string.h" />
     <ClInclude Include="..\src\basemode\activate_sleepers.h" />
     <ClInclude Include="..\src\basemode\liberalagenda.h" />
     <ClInclude Include="..\src\basemode\reviewmode.h" />
@@ -266,6 +266,7 @@
     <ClInclude Include="..\src\combat\fight.h" />
     <ClInclude Include="..\src\combat\fightCreature.h" />
     <ClInclude Include="..\src\combat\haulkidnap.h" />
+    <ClInclude Include="..\src\combat\haulkidnapCreature.h" />
     <ClInclude Include="..\src\common\commonactions.h" />
     <ClInclude Include="..\src\common\commonactionsCreature.h" />
     <ClInclude Include="..\src\common\commondisplay.h" />
@@ -290,6 +291,8 @@
     <ClInclude Include="..\src\creature\creature.h" />
     <ClInclude Include="..\src\creature\creatureEnums.h" />
     <ClInclude Include="..\src\creature\creaturetype.h" />
+    <ClInclude Include="..\src\creature\deprecatedCreatureA.h" />
+    <ClInclude Include="..\src\creature\deprecatedCreatureB.h" />
     <ClInclude Include="..\src\creature\deprecatedCreatureC.h" />
     <ClInclude Include="..\src\creature\deprecatedCreatureD.h" />
     <ClInclude Include="..\src\creature\newcreature.h" />
@@ -312,6 +315,8 @@
     <ClInclude Include="..\src\sitemode\advance.h" />
     <ClInclude Include="..\src\sitemode\miscactions.h" />
     <ClInclude Include="..\src\sitemode\sitedisplay.h" />
+    <ClInclude Include="..\src\sitemode\stealth_const_string.h" />
+    <ClInclude Include="..\src\sitemode\talk_const_string.h" />
     <ClInclude Include="..\src\title\initfile.h" />
     <ClInclude Include="..\src\title\newgame.h" />
     <ClInclude Include="..\src\title\titlescreen.h" />
