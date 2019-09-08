@@ -777,16 +777,22 @@ vector<Impact> printQuestionsThenGatherImpacts(const vector<Question> allQuestio
 
 		printSingleQuestion(currentQuestion);
 
-		if (choices) {
-			printSingleQuestionAnswers(currentQuestion);
+		int selection;
+		if (!choices) {
+			selection = LCSrandom(currentQuestion.choices.size());
+			printSingleQuestionAnswersFateDecides(currentQuestion, selection);
+			pressAnyKey();
 		}
 		else {
-			int FATE = LCSrandom(currentQuestion.choices.size());
-			printSingleQuestionAnswersFateDecides(currentQuestion, FATE);
+			printSingleQuestionAnswers(currentQuestion);
+			selection = getkeyAlt();
+			// if selection is invalid, try again
+			while (selection - 'a' < 0 || currentQuestion.choices.size() <= (selection - 'a')) {
+				selection = getkeyAlt();
+			}
+
 
 		}
-		int selection = getkeyAlt();
-
 		for (Impact currentImpact : currentQuestion.choices[selection - 'a'].impact) {
 			impactsToApply.push_back(currentImpact);
 		}

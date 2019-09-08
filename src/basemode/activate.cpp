@@ -1,9 +1,5 @@
 
 
-
-#define	ACTIVATE_CPP
-#include "../includes.h"
-
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -44,8 +40,8 @@ the bottom of includes.h in the top src folder.
 // when it opens the file and it can't be changed after that; what we changed was
 // how it detects encoding for files it opens in the future, not files already open).
 // In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// select CONST_activate001, choose CONST_activateB066,
-// then choose CONST_activate002.
+// select Open With..., choose C++ Source Code Editor (with encoding),
+// then choose OEM United States - Codepage 437.
 // In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
 // the codepage will be correct already since it's running in a console window just
 // like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
@@ -56,6 +52,10 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+
+
+#define	ACTIVATE_CPP
+#include "../includes.h"
 
 
 Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {
@@ -101,7 +101,7 @@ void updateclasschoice(DeprecatedCreature *cr, char choice)
 	if (choice >= '1' && choice <= '5')
 	{
 		if (choice - '1' + classlist < len(data_lessons))
-			cr->set_activity(data_lessons[choice - '1' + classlist].activity);
+			cr->set_activity_type(data_lessons[choice - '1' + classlist].activity);
 		listclasses(cr);
 	}
 	else if (choice == '6')
@@ -164,7 +164,7 @@ void recruitSelect(DeprecatedCreature &cr)
 			int p = page * 19 + (int)(c - 'a');
 			if (p < options)
 			{
-				cr.set_activity(ACTIVITY_RECRUITING);
+				cr.set_activity_type(ACTIVITY_RECRUITING);
 				cr.activity.arg = recruitable_creatures[p].type;
 				break;
 			}
@@ -525,7 +525,7 @@ void select_makeclothing(DeprecatedCreature *cr)
 			int p = page * 19 + c - 'a';
 			if (p < len(armortypei))
 			{
-				cr->set_activity(ACTIVITY_MAKE_ARMOR);
+				cr->set_activity_type(ACTIVITY_MAKE_ARMOR);
 				cr->activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
 				return;
 			}
@@ -546,33 +546,33 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 			//case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;
 		case '5':
 		case '6':
-			cr->set_activity(activate_menu_items[c][choice].activity);
+			cr->set_activity_type(activate_menu_items[c][choice].activity);
 			break;
-		case '3':cr->set_activity(ACTIVITY_GRAFFITI);
+		case '3':cr->set_activity_type(ACTIVITY_GRAFFITI);
 			cr->activity.arg = -1;
 			break;
 		case '7':
 			if (cr->location != -1 &&
 				LocationsPool::getInstance().get_specific_integer(INT_GETCOMPOUNDWALLS,cr->location) & COMPOUND_PRINTINGPRESS)
 			{
-				cr->set_activity(ACTIVITY_WRITE_GUARDIAN); break;
+				cr->set_activity_type(ACTIVITY_WRITE_GUARDIAN); break;
 			}
 		default:
 			if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 7 || cr->juice < 0)
-				cr->set_activity(ACTIVITY_COMMUNITYSERVICE);
+				cr->set_activity_type(ACTIVITY_COMMUNITYSERVICE);
 			else if (cr->get_attribute(ATTRIBUTE_WISDOM, true) > 4)
-				cr->set_activity(ACTIVITY_TROUBLE);
+				cr->set_activity_type(ACTIVITY_TROUBLE);
 			else
 			{
 				if (cr->get_skill(SKILL_COMPUTERS) > 2)
-					cr->set_activity(ACTIVITY_HACKING);
+					cr->set_activity_type(ACTIVITY_HACKING);
 				else if (cr->get_skill(SKILL_ART) > 1)
 				{
-					cr->set_activity(ACTIVITY_GRAFFITI);
+					cr->set_activity_type(ACTIVITY_GRAFFITI);
 					cr->activity.arg = -1;
 				}
 				else
-					cr->set_activity(ACTIVITY_TROUBLE);
+					cr->set_activity_type(ACTIVITY_TROUBLE);
 			}
 		}
 		break;
@@ -583,18 +583,18 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 		case '2':
 		case '3':
 		case '4':
-			cr->set_activity(activate_menu_items[c][choice].activity);
+			cr->set_activity_type(activate_menu_items[c][choice].activity);
 			break;
 		default:
 			if (cr->get_weapon().get_specific_bool(BOOL_INSTRUMENT_))
-				cr->set_activity(ACTIVITY_SELL_MUSIC);
+				cr->set_activity_type(ACTIVITY_SELL_MUSIC);
 			else if (cr->get_skill(SKILL_ART) > 1)
-				cr->set_activity(ACTIVITY_SELL_ART);
+				cr->set_activity_type(ACTIVITY_SELL_ART);
 			else if (cr->get_skill(SKILL_TAILORING) > 1)
-				cr->set_activity(ACTIVITY_SELL_TSHIRTS);
+				cr->set_activity_type(ACTIVITY_SELL_TSHIRTS);
 			else if (cr->get_skill(SKILL_MUSIC) > 1)
-				cr->set_activity(ACTIVITY_SELL_MUSIC);
-			else cr->set_activity(ACTIVITY_DONATIONS);
+				cr->set_activity_type(ACTIVITY_SELL_MUSIC);
+			else cr->set_activity_type(ACTIVITY_DONATIONS);
 		}
 		break;
 	case 'c':
@@ -603,17 +603,17 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 		case '1':
 		case '3':
 			//case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
-			cr->set_activity(activate_menu_items[c][choice].activity);
+			cr->set_activity_type(activate_menu_items[c][choice].activity);
 			break;
 		case '2':
 			if (ZEROMORAL || cr->getCreatureBio().age >= 18)
-				cr->set_activity(ACTIVITY_PROSTITUTION); break;
+				cr->set_activity_type(ACTIVITY_PROSTITUTION); break;
 		default:
 			if (cr->get_skill(SKILL_COMPUTERS) > 1)
-				cr->set_activity(ACTIVITY_CCFRAUD);
+				cr->set_activity_type(ACTIVITY_CCFRAUD);
 			else if (cr->get_skill(SKILL_SEDUCTION) > 1 && (ZEROMORAL || cr->getCreatureBio().age >= 18))
-				cr->set_activity(ACTIVITY_PROSTITUTION);
-			else cr->set_activity(ACTIVITY_SELL_DRUGS);
+				cr->set_activity_type(ACTIVITY_PROSTITUTION);
+			else cr->set_activity_type(ACTIVITY_SELL_DRUGS);
 		}
 		break;
 	case 'd':
@@ -621,32 +621,32 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 		{
 		case '1': { // Pick type to recruit
 			ActivityST oact = cr->activity;
-			cr->set_activity(ACTIVITY_NONE);
+			cr->set_activity_type(ACTIVITY_NONE);
 			recruitSelect(*cr);
 			if (cr->activity_type() == ACTIVITY_RECRUITING) break;
 			else cr->activity = oact;
 			break; }
 		case '2': { // Pick clothing to make
 			ActivityST oact = cr->activity;
-			cr->set_activity(ACTIVITY_NONE);
+			cr->set_activity_type(ACTIVITY_NONE);
 			select_makeclothing(cr);
 			if (cr->activity_type() == ACTIVITY_MAKE_ARMOR) break;
 			else cr->activity = oact;
 			break; }
 		case '3':
-			cr->set_activity(activate_menu_items[c][choice].activity);
+			cr->set_activity_type(activate_menu_items[c][choice].activity);
 			break;
 		case '4':
-			cr->set_activity(ACTIVITY_STEALCARS);
+			cr->set_activity_type(ACTIVITY_STEALCARS);
 			break;
 		case '5':
 			if (!cr->canwalk() && !(cr->flag & CREATUREFLAG_WHEELCHAIR))
-				cr->set_activity(ACTIVITY_WHEELCHAIR);
+				cr->set_activity_type(ACTIVITY_WHEELCHAIR);
 			break;
 		case '6': {
 			if (cr->get_skill(SKILL_SCIENCE) != 0) {
 				ActivityST oact = cr->activity;
-				cr->set_activity(ACTIVITY_NONE);
+				cr->set_activity_type(ACTIVITY_NONE);
 				select_augmentation(cr);
 				if (cr->activity_type() == ACTIVITY_AUGMENT) break;
 				else cr->activity = oact;
@@ -663,7 +663,7 @@ void select_tendhostage(DeprecatedCreature *cr)
 	if (!len(temppool))return;
 	if (len(temppool) == 1)
 	{
-		cr->set_activity(ACTIVITY_HOSTAGETENDING);
+		cr->set_activity_type(ACTIVITY_HOSTAGETENDING);
 		cr->activity.arg = temppool[0]->id;
 		return;
 	}
@@ -677,20 +677,19 @@ void select_tendhostage(DeprecatedCreature *cr)
 		addstrAlt(BE_WATCHING_OVER);
 		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
 		mvaddstrAlt(1, 57, DAYS_IN_CAPTIVITY);
-		int y = 2;
-		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
+		for (int y = 2, p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
 			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
 			addstrAlt(temppool[p]->getNameAndAlignment().name);
-			char bright = 0;
+			bool bright = false;
 			int skill = 0;
 			for (int sk = 0; sk < SKILLNUM; sk++)
 			{
 				skill += temppool[p]->get_skill(sk);
 				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = 1;
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = true;
 			}
 			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(y, 25, skill);
@@ -717,7 +716,7 @@ void select_tendhostage(DeprecatedCreature *cr)
 			int p = page * 19 + (int)(c - 'a');
 			if (p < len(temppool))
 			{
-				cr->set_activity(ACTIVITY_HOSTAGETENDING);
+				cr->set_activity_type(ACTIVITY_HOSTAGETENDING);
 				cr->activity.arg = temppool[p]->id;
 				return;
 			}
@@ -730,80 +729,6 @@ enum LOOP_CONTINUATION {
 	RETURN_ONE,
 	REPEAT
 };
-int getKeyInActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead, const char sieged, const char oldstate) {
-	int c = getkeyAlt();
-	if (c >= 'a'&&c <= 'z') state = c;
-	if ((c >= 'a'&&c <= 'z') || (c >= '0'&&c <= '9'))
-	{
-		int choice = c;
-		switch (state)
-		{
-		case 'a':
-		case 'b':
-		case 'c':
-		case 'd':
-			selectOneOfStandardActivities(state, choice, cr);
-			break;
-		case 't':
-			switch (choice)
-			{
-			case '1':
-			case '2':
-			case '3':
-				// activate_menu_items['t'] starts its index at 0 with ACTIVITY_NONE, instead of starting at 1 the way the other maps do
-				// This is a temporary fix as part of a move to basically remove switch(state) as well as switch(choice)
-				cr->set_activity(activate_menu_items['t'][(choice - '1') + 1].activity);
-				break;
-			default:
-				cr->set_activity(getDefaultActivityTeaching(cr));
-				break;
-			}
-			break;
-		case 'i':
-			if (hostagecount > 0)
-			{
-				ActivityST oact = cr->activity;
-				cr->set_activity(ACTIVITY_NONE);
-				select_tendhostage(cr);
-				if (cr->activity_type() == ACTIVITY_HOSTAGETENDING) break;
-				else cr->activity = oact;
-			}
-			state = oldstate;
-			break;
-		case 'l':
-			updateclasschoice(cr, choice);
-			break;
-		case 'm':
-			if (clinictime(*cr)) cr->set_activity(ACTIVITY_CLINIC);
-			else state = oldstate;
-			break;
-		case 'h':
-			if (cr->get_skill(SKILL_FIRSTAID)) cr->set_activity(ACTIVITY_HEAL);
-			else state = oldstate;
-			break;
-		case 'z':
-			if (havedead) cr->set_activity(ACTIVITY_BURY);
-			else state = oldstate;
-			break;
-		case 'e':
-			if (!sieged)
-			{
-
-				createTempSquadWithJustThisLiberal(cr, cursquadid);
-			}
-			state = oldstate;
-			break;
-		case 'x':
-			cr->set_activity(ACTIVITY_NONE);
-			break;
-		default:
-			state = oldstate;
-			break;
-		}
-	}
-	return c;
-}
-
 LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount, int &state, const char havedead) {
 
 	eraseAlt();
@@ -854,11 +779,9 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	if (havedead)set_color_easy(state == 'z' ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(19, 1, Z_DIZPOSE_OF_BODIES);
-	char sieged = 0;
-	{
-		siegest *siege = getseigestFromLocation(selectedsiege);
-		if (siege) sieged = siege->siege;
-	}
+
+	char sieged =  getseigedFromLocation(selectedsiege);
+	
 	/*char underattack=0;
 	if(siege&&sieged) underattack=siege->underattack;*/
 	if (!sieged)
@@ -866,7 +789,9 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	else
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	mvaddstrAlt(20, 1, E_EQUIP_THIS_LIBERAL);
-	if (state >= 'a' && state < 'a' + len(standard_activities_and_data))
+	// standard activities are coded as 'a' to 'd'
+	// All other activities use ordinal letters, rather than consecutive
+	if (state >= 'a' && state < 'e' )
 	{
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(19, 40, QUESTION_HELP);
@@ -914,7 +839,75 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 	addstrAlt(activity.lineAttempt(0, cr));
 	mvaddstrAlt(23, 3, activity.lineAttempt(1, cr));
 	mvaddstrAlt(24, 3, activity.lineAttempt(2, cr));
-	int c = getKeyInActivate(cr, hostagecount, state, havedead, sieged, oldstate);
+	int c = getkeyAlt();
+	if (c >= 'a'&&c <= 'z') state = c;
+	if ((c >= 'a'&&c <= 'z') || (c >= '0'&&c <= '9'))
+	{
+		int choice = c;
+		switch (state)
+		{
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+			selectOneOfStandardActivities(state, choice, cr);
+			break;
+		case 't':
+			switch (choice)
+			{
+			case '1':
+			case '2':
+			case '3':
+				// activate_menu_items['t'] starts its index at 0 with ACTIVITY_NONE, instead of starting at 1 the way the other maps do
+				// This is a temporary fix as part of a move to basically remove switch(state) as well as switch(choice)
+				cr->set_activity_type(activate_menu_items['t'][(choice - '1') + 1].activity);
+				break;
+			default:
+				cr->set_activity_type(getDefaultActivityTeaching(cr));
+				break;
+			}
+			break;
+		case 'i':
+			if (hostagecount > 0)
+			{
+				ActivityST oact = cr->activity;
+				cr->set_activity_type(ACTIVITY_NONE);
+				select_tendhostage(cr);
+				if (cr->activity_type() == ACTIVITY_HOSTAGETENDING) break;
+				else cr->activity = oact;
+			}
+			state = oldstate;
+			break;
+		case 'l':
+			updateclasschoice(cr, choice);
+			break;
+		case 'm':
+			if (clinictime(*cr)) cr->set_activity_type(ACTIVITY_CLINIC);
+			else state = oldstate;
+			break;
+		case 'h':
+			if (cr->get_skill(SKILL_FIRSTAID)) cr->set_activity_type(ACTIVITY_HEAL);
+			else state = oldstate;
+			break;
+		case 'z':
+			if (havedead) cr->set_activity_type(ACTIVITY_BURY);
+			else state = oldstate;
+			break;
+		case 'e':
+			if (!sieged)
+			{
+				createTempSquadWithJustThisLiberal(cr, cursquadid);
+			}
+			state = oldstate;
+			break;
+		case 'x':
+			cr->set_activity_type(ACTIVITY_NONE);
+			break;
+		default:
+			state = oldstate;
+			break;
+		}
+	}
 	// Enter pressed
 	if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) return RETURN_ZERO;
 	// ? Pressed
@@ -976,6 +969,7 @@ vector<string> bulkActivityString;
 
 vector<file_and_text_collection> activate_text_file_collection = {
 	customText(&bulkActivityString, MOSTLY_ENDINGS_FOLDER + BULK_ACTIVITY_STRING_TXT),
+	// standard_activities_and_data is capped at four (4) elements
 	customText(&standard_activities_and_data, MOSTLY_ENDINGS_FOLDER + STANDARD_ACTIVITIES_AND_DATA_TXT),
 };
 void activatebulk()
@@ -997,8 +991,8 @@ void activatebulk()
 			set_color_easy(selectedactivity == i ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
 			mvaddstrAlt(2 + i, 51, incrementChar('1', i) + spaceDashSpace + bulkActivityString[i]);
 		}
-		int y = 2;
-		for (int p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
+
+		for (int y = 2, p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
 		{
 			set_color_easy(WHITE_ON_BLACK);
 			moveAlt(y, 0);
@@ -1030,25 +1024,25 @@ void activatebulk()
 				switch (selectedactivity)
 				{
 				case 0: //Activism
-					temppool[p]->set_activity(getDefaultActivityActivism(temppool[p]));
+					temppool[p]->set_activity_type(getDefaultActivityActivism(temppool[p]));
 					break;
 				case 1: //Fundraising
-					temppool[p]->set_activity(getDefaultActivityFundraising(temppool[p]));
+					temppool[p]->set_activity_type(getDefaultActivityFundraising(temppool[p]));
 					break;
 				case 2: //Illegal Fundraising
-					temppool[p]->set_activity(getDefaultActivityIllegalFundraising(temppool[p]));
+					temppool[p]->set_activity_type(getDefaultActivityIllegalFundraising(temppool[p]));
 					break;
 				case 3: //Check polls
-					temppool[p]->set_activity(ACTIVITY_POLLS);
+					temppool[p]->set_activity_type(ACTIVITY_POLLS);
 					break;
 				case 4: //Steal cars
-					temppool[p]->set_activity(ACTIVITY_STEALCARS);
+					temppool[p]->set_activity_type(ACTIVITY_STEALCARS);
 					break;
 				case 5: //Volunteer
-					temppool[p]->set_activity(ACTIVITY_COMMUNITYSERVICE);
+					temppool[p]->set_activity_type(ACTIVITY_COMMUNITYSERVICE);
 					break;
 				case 6: //Repair Clothing
-					temppool[p]->set_activity(ACTIVITY_REPAIR_ARMOR);
+					temppool[p]->set_activity_type(ACTIVITY_REPAIR_ARMOR);
 					break;
 				}
 			}

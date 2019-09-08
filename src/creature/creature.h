@@ -303,7 +303,7 @@ public:
 	int activity_type() const {
 		return activity.type;
 	}
-	void set_activity(const int c) {
+	void set_activity_type(const int c) {
 		activity.type = c;
 	}
 	int activity_arg() const {

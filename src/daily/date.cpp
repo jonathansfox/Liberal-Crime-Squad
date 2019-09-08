@@ -223,7 +223,7 @@ This file is part of Liberal Crime Squad.                                       
 				 pool[p]->carid = -1;
 				 pool[p]->location = ps;
 				 pool[p]->drop_weapons_and_clips(NULL);
-				 pool[p]->set_activity(ACTIVITY_NONE);
+				 pool[p]->set_activity_type(ACTIVITY_NONE);
 				 pressAnyKey();
 				 delete_and_remove(d.date, e);
 				 return DATERESULT_ARRESTED;
@@ -689,7 +689,7 @@ This file is part of Liberal Crime Squad.                                       
 						 pool[p]->carid = -1;
 						 pool[p]->location = ps;
 						 pool[p]->drop_weapons_and_clips(NULL);
-						 pool[p]->set_activity(ACTIVITY_NONE);
+						 pool[p]->set_activity_type(ACTIVITY_NONE);
 						 // Charge with kidnapping
 						 criminalize(*pool[p], LAWFLAG_KIDNAPPING);
 						 pressAnyKey();

@@ -113,20 +113,20 @@ void activate_sleeper(DeprecatedCreature *cr)
 				switch (choice)
 				{
 				default:
-				case '1':cr->set_activity(ACTIVITY_NONE); break;
-				case '2':cr->set_activity(ACTIVITY_SLEEPER_LIBERAL); break;
+				case '1':cr->set_activity_type(ACTIVITY_NONE); break;
+				case '2':cr->set_activity_type(ACTIVITY_SLEEPER_LIBERAL); break;
 				case '3':
 					if (subordinatesleft(*cr))
-						cr->set_activity(ACTIVITY_SLEEPER_RECRUIT); break;
+						cr->set_activity_type(ACTIVITY_SLEEPER_RECRUIT); break;
 				}
 				break;
 			case 'b':
 				switch (choice)
 				{
 				default:
-				case '1':cr->set_activity(ACTIVITY_SLEEPER_SPY); break;
-				case '2':cr->set_activity(ACTIVITY_SLEEPER_EMBEZZLE); break;
-				case '3':cr->set_activity(ACTIVITY_SLEEPER_STEAL); break;
+				case '1':cr->set_activity_type(ACTIVITY_SLEEPER_SPY); break;
+				case '2':cr->set_activity_type(ACTIVITY_SLEEPER_EMBEZZLE); break;
+				case '3':cr->set_activity_type(ACTIVITY_SLEEPER_STEAL); break;
 				}
 				break;
 			}
@@ -134,11 +134,11 @@ void activate_sleeper(DeprecatedCreature *cr)
 		if (state == 'c')
 		{
 			//ActivityST oact=cr->activity;
-			cr->set_activity(ACTIVITY_SLEEPER_JOINLCS);
+			cr->set_activity_type(ACTIVITY_SLEEPER_JOINLCS);
 		}
 		if (c == 'x')
 		{
-			cr->set_activity(ACTIVITY_NONE);
+			cr->set_activity_type(ACTIVITY_NONE);
 			break;
 		}
 		else

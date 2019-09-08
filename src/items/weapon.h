@@ -24,7 +24,6 @@ public:
 	// number is reduced by one.
 	bool reload(Clip& clip);
 	int get_ammoamount() const { return ammo_; }
-	//void set_ammo(int b) { ammo_ = b; }
 	void decrease_ammo(int d) { ammo_ -= d; }
 	const string& get_loaded_cliptypename() const { return loaded_cliptype_; }
 	const attackst* get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const;

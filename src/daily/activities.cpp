@@ -641,7 +641,7 @@ void funds_and_trouble(char &clearformess)
 		if (!pool[p]->getNameAndAlignment().alive) continue;
 		if (pool[p]->location == -1)
 		{
-			pool[p]->set_activity(ACTIVITY_NONE);
+			pool[p]->set_activity_type(ACTIVITY_NONE);
 			continue;
 		}
 		switch (pool[p]->activity_type())
@@ -687,11 +687,11 @@ void funds_and_trouble(char &clearformess)
 			break;
 		case ACTIVITY_BURY:
 			bury.push_back(pool[p]);
-			pool[p]->set_activity(ACTIVITY_NONE);
+			pool[p]->set_activity_type(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_CLINIC:
 			hospitalize(find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, pool[p]->location), *pool[p]);
-			pool[p]->set_activity(ACTIVITY_NONE);
+			pool[p]->set_activity_type(ACTIVITY_NONE);
 			break;
 		case ACTIVITY_STUDY_DEBATING:
 		case ACTIVITY_STUDY_MARTIAL_ARTS:
@@ -724,7 +724,7 @@ void funds_and_trouble(char &clearformess)
 		case ACTIVITY_SLEEPER_JOINLCS:
 			if (!LocationsPool::getInstance().isThereASiegeHere(find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location)))
 			{
-				pool[p]->set_activity(ACTIVITY_NONE);
+				pool[p]->set_activity_type(ACTIVITY_NONE);
 				pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
 				pool[p]->location = pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
 			}
@@ -1039,7 +1039,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				else if (!foundone)
 				{
 					addstrAlt(CONST_X_NEEDS_A_SPRAYCAN_EQUIPPED_TO_DO_GRAFFITI, gamelog);
-					graffiti[s]->set_activity(ACTIVITY_NONE);
+					graffiti[s]->set_activity_type(ACTIVITY_NONE);
 					pressAnyKey();
 				}
 				gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
@@ -1177,7 +1177,7 @@ void doActivityProstitution(vector<DeprecatedCreature *> &prostitutes, char &cle
 				prostitutes[p]->carid = -1;
 				prostitutes[p]->location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, prostitutes[p]->location);
 				prostitutes[p]->drop_weapons_and_clips(NULL);
-				prostitutes[p]->set_activity(ACTIVITY_NONE);
+				prostitutes[p]->set_activity_type(ACTIVITY_NONE);
 				criminalize(*prostitutes[p], LAWFLAG_PROSTITUTION);
 			}
 			else
@@ -1222,7 +1222,7 @@ void doActivityLearn(vector<DeprecatedCreature *> &students, char &clearformess)
 			}
 		if (!worthcontinuing)
 		{
-			students[s]->set_activity(ACTIVITY_NONE);
+			students[s]->set_activity_type(ACTIVITY_NONE);
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(8, 1, students[s]->getNameAndAlignment().name, gamelog);
 			addstrAlt(CONST_X_HAS_LEARNED_AS_MUCH_AS_, gamelog);
@@ -1507,7 +1507,7 @@ void doActivityTrouble(vector<DeprecatedCreature *> &trouble, char &clearformess
 							mvaddstrAlt(8, 1, trouble[t]->getNameAndAlignment().name, gamelog);
 							addstrAlt(CONST_X_IS_SEVERELY_BEATEN_BEFORE_THE_MOB_IS_BROKEN_UP, gamelog);
 							gamelog.nextMessage();
-							trouble[t]->set_activity(ACTIVITY_CLINIC);
+							trouble[t]->set_activity_type(ACTIVITY_CLINIC);
 							pressAnyKey();
 							addjuice(*trouble[t], -10, -50);
 							if (trouble[t]->blood > 10)trouble[t]->blood = 10;

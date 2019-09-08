@@ -195,7 +195,6 @@ enum LCSIO_FLAGS
 {
 	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
 	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
-					   //LCSIO_PRE_CONFIG = 3 /// Append the given file name to the config directory path.
 };
 FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
@@ -314,8 +313,6 @@ enum Lawflags
 	LAWFLAG_THEFT,        // "Theft"
 	LAWFLAG_PROSTITUTION, // "Prostitution"
 	LAWFLAG_HIREILLEGAL,  // "Hiring illegal aliens" / "Hiring undocumented workers"
-	//LAWFLAG_GUNUSE,     // "Firing illegal weapons"
-	//LAWFLAG_GUNCARRY,   // "Carrying illegal weapons"
 	LAWFLAG_COMMERCE,     // "Electronic sabotage"
 	LAWFLAG_INFORMATION,  // "Hacking"
 	LAWFLAG_BURIAL,       // "Unlawful burial"
@@ -386,7 +383,6 @@ enum Activity
 	ACTIVITY_STUDY_DISGUISE,
 	ACTIVITY_STUDY_SCIENCE,
 	ACTIVITY_STUDY_BUSINESS,
-	//ACTIVITY_STUDY_COOKING,
 	ACTIVITY_STUDY_GYMNASTICS,
 	ACTIVITY_STUDY_MUSIC,
 	ACTIVITY_STUDY_ART,
@@ -394,11 +390,9 @@ enum Activity
 	ACTIVITY_STUDY_WRITING,
 	ACTIVITY_STUDY_LOCKSMITHING,
 	ACTIVITY_STUDY_COMPUTERS,
-	// Terra Vitae
 	ACTIVITY_STUDY_FENCING,
 	ACTIVITY_STUDY_WEAVING,
 	ACTIVITY_STUDY_RELIGION,
-	// ACTIVITY_STUDY_MAGIC,
 	ACTIVITY_STUDY_CLUB,
 	ACTIVITY_STUDY_STREETSENSE,
 	ACTIVITY_STUDY_THROWING,
@@ -539,7 +533,6 @@ enum Views
 	//for VIEWNUM-5 to change it if it needs to be changed.
 	VIEW_AMRADIO,
 	VIEW_CABLENEWS,
-	//VIEW_POLITICALVIOLENCE,
 	//THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
 	VIEW_LIBERALCRIMESQUAD,
 	VIEW_LIBERALCRIMESQUADPOS,
@@ -841,19 +834,13 @@ enum bigListOfEnumTags {
 	ENUM_tag_sell_masks,
 	ENUM_tag_letter,
 	ENUM_tag_item,
-	//};
 
-	//enum shopItemTagEnums {
 	ENUM_tag_class,
 	ENUM_tag_type,
 	ENUM_tag_description,
 	ENUM_tag_price,
 	ENUM_tag_sleeperprice,
-	//	ENUM_tag_letter,
 
-	//};
-
-	//enum creatureTypeTagEnums {
 	ENUM_tag_alignment,
 	ENUM_tag_PUBLIC_MOOD,
 	ENUM_tag_LIBERAL,
@@ -879,9 +866,7 @@ enum bigListOfEnumTags {
 	ENUM_tag_weapon,
 	ENUM_tag_encounter_name,
 	ENUM_tag_type_name,
-	//};
 
-	//enum weaponTypeTagEnum {
 	ENUM_tag_shortname,
 	ENUM_tag_shortname_future,
 	ENUM_tag_name_sub_1,
@@ -905,9 +890,7 @@ enum bigListOfEnumTags {
 	ENUM_tag_suspicious,
 	ENUM_tag_size,
 	ENUM_tag_attack,
-	//};
 
-	//enum attackSTEnums {
 	ENUM_tag_priority,
 	ENUM_tag_ranged,
 	ENUM_tag_thrown,
@@ -937,41 +920,30 @@ enum bigListOfEnumTags {
 	ENUM_tag_no_DR_for_limbs_chance,
 	ENUM_tag_critical,
 	ENUM_tag_fire,
-	//};
 
-	//enum augmentTagEnums {
 	ENUM_tag_name,
-	//	ENUM_tag_type,
 	ENUM_tag_attribute,
 	ENUM_tag_effect,
-	//	ENUM_tag_description,
 	ENUM_tag_max_age,
 	ENUM_tag_min_age,
 	ENUM_tag_cost,
 	ENUM_tag_difficulty,
-	//};
 
-	//enum armorTypeInitEnums {
 	ENUM_tag_make_difficulty,
 	ENUM_tag_make_price,
 	ENUM_tag_deathsquad_legality,
 	ENUM_tag_can_get_bloody,
 	ENUM_tag_can_get_damaged,
-	//	ENUM_tag_armor,
 	ENUM_tag_body_covering,
-	//	ENUM_tag_shortname,
 	ENUM_tag_interrogation,
 	ENUM_tag_professionalism,
 	ENUM_tag_conceal_weapon_size,
 	ENUM_tag_stealth_value,
 	ENUM_tag_mask,
 	ENUM_tag_surprise,
-	//	ENUM_tag_description,
 	ENUM_tag_qualitylevels,
 	ENUM_tag_durability,
-	//};
 
-	//enum vehicleTagEnums {
 	ENUM_tag_vtypeidname,
 	ENUM_tag_vtypeid,
 	ENUM_tag_color,
@@ -979,9 +951,7 @@ enum bigListOfEnumTags {
 	ENUM_tag_location,
 	ENUM_tag_myear,
 	ENUM_tag_id,
-	//};
 
-	//enum vehicleTypeTagsEnums {
 	ENUM_tag_year,
 	ENUM_tag_start_at_current_year,
 	ENUM_tag_start_at_year,
@@ -989,7 +959,6 @@ enum bigListOfEnumTags {
 	ENUM_tag_add_random,
 	ENUM_tag_add,
 	ENUM_tag_colors,
-	//	ENUM_tag_color,
 	ENUM_tag_display_color,
 	ENUM_tag_drivebonus,
 	ENUM_tag_base,
@@ -997,38 +966,29 @@ enum bigListOfEnumTags {
 	ENUM_tag_softlimit,
 	ENUM_tag_hardlimit,
 	ENUM_tag_dodgebonus,
-	//	ENUM_tag_base,
-	//	ENUM_tag_skillfactor,
-	//	ENUM_tag_softlimit,
-	//	ENUM_tag_hardlimit,
 	ENUM_tag_attackbonus,
 	ENUM_tag_driver,
 	ENUM_tag_passenger,
 	ENUM_tag_longname,
-	//	ENUM_tag_shortname,
 	ENUM_tag_stealing,
 	ENUM_tag_difficulty_to_find,
-	//	ENUM_tag_juice,
 	ENUM_tag_extra_heat,
 	ENUM_tag_sense_alarm_chance,
 	ENUM_tag_touch_alarm_chance,
-	//	ENUM_tag_armor,
 	ENUM_tag_low_armor_min,
 	ENUM_tag_low_armor_max,
 	ENUM_tag_high_armor_min,
 	ENUM_tag_high_armor_max,
 	ENUM_tag_armor_midpoint,
 	ENUM_tag_available_at_dealership,
-	//	ENUM_tag_price,
-	//	ENUM_tag_sleeperprice
 };
 
 string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.37";
-const int version = 41237;
+const string PACKAGE_VERSION_STR = "4.12.38";
+const int version = 41238;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -1100,8 +1060,7 @@ string attribute_enum_to_string(int);
 #include "../customMaps.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-siegest* getseigestFromLocation(int secondaryLocation);
-void gotoEquipmentScreen(int loc);
+char getseigedFromLocation(int secondaryLocation);
 void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid);
 #include "../common/creaturePoolCreature.h"
 #include "../common/musicClass.h"
@@ -1555,7 +1514,6 @@ const string CONST_X_QUALITY_50_TXT = "quality_50.txt";
 const string CONST_X_QUALITY_35_TXT = "quality_35.txt";
 const string CONST_X_QUALITY_20_TXT = "quality_20.txt";
 const string CONST_X_QUALITY_0_TXT = "quality_0.txt";
-// doActivityBury
 const string CONST_X_S_BODY = "'s body";
 const string CONST_X_BURYING_ = "burying ";
 
@@ -1601,7 +1559,6 @@ void squadgrab_immobile(char dead);
 #include "../common/creaturePool.h"
 
 void addLocationChange(int cursite, sitechangest change);
-//string smellsPanic;
 void squadgrab_immobile(char dead);
 //// #include "combat/haulkidnapCreature.h"
 void freehostage(DeprecatedCreature &cr, char situation);
@@ -1819,27 +1776,16 @@ extern Log xmllog;
 // automatedDataTests.cpp
 #include "cursesAlternative.h"
 
-//string_to_activity;
 extern map<short, string>  conservativeLegalArgument;
-//string_to_law;
 extern map<short, string>  youAreStupidTalkAboutIssues;
-//string_to_law;
 extern map<short, string>  issueTooLiberal;
-//string_to_law;
 extern map<short, string>  issueEventString;
-//string_to_view; [LCSrandom(VIEWNUM - 3)]
 extern map<short, string>  conservatiseLaw;
-//string_to_law;
 extern map<short, string>  liberalizeLaw;
-//string_to_law;
 extern map<short, string>  discussIssues;
-//string_to_view; LCSrandom(VIEWNUM);
 extern map<short, string>  discussesIssues;
-//string_to_view; LCSrandom(VIEWNUM);
-extern map<short, vector<string> >  talkAboutTheIssues; // 0~1
-//string_to_law;
-extern map<short, vector<string> >  endgameLawStrings; // 0~7
-//string_to_law;
+extern map<short, vector<string> >  talkAboutTheIssues; 
+extern map<short, vector<string> >  endgameLawStrings; 
 extern bool multipleCityMode;
 extern short lawList[LAWNUM];
 void testCreature();
@@ -1876,11 +1822,6 @@ void enter_name(int, int, char*, int, const char*);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/creaturePool.h"
-//extern string singleSpace;
-//string enter_done;
-//extern string spaceDashSpace;
-// string CHOOSE_A_LIBERAL_TO;
-// string string_sleeper;
 
 int getkey_cap_alt();
 int lenVehiclePool();
@@ -1901,11 +1842,9 @@ const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
 const string BE_A_PASSENGER = "be a passenger.";
 const string DRIVE_IT = "drive it.";
 const string CHOOSING_THE_RIGHT_LIBERAL_VEHICLE = "Choosing the Right Liberal Vehicle";
-// orderparty
 const string IN_SPOT_SPACE = " in Spot ";
 const string CHOSE_SQUAD_MEMBER_TO_REPLACE = "Choose squad member to replace ";
 const string CHOOSE_SQUAD_MEMBER_TO_MOVE = "Choose squad member to move";
-// getslogan
 const string MANY_SPACES_SOMETHING = "                                                                                          ";
 const string WHAT_IS_YOUR_NEW_SLOGAN = "What is your new slogan?";
 
@@ -2051,19 +1990,15 @@ const string MID_LENGTH_LINE = "컴컴컴컴컴컴컴컴";
 const string PUBLIC_MOOD = "Public Mood";
 const string LIBERTARIAN = "Libertarian";
 const string STALINIST = "Stalinist";
-//const string MID_LENGTH_LINE = "컴컴컴컴컴컴컴컴";
 const string CONSERVATIVE = "Conservative";
 const string LIBERAL = "Liberal";
-//const string PUBLIC_MOOD = "Public Mood";
 const string SECOND_TERM = ", 2nd Term";
 const string FIRST_TERM = ", 1st Term";
 const string PRESIDENT_COLON = "President: ";
 const string R_RECREATE_THE_LCS_OR_WAIT_NEXT_MONTH = "R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month";
-//printIfLongWait
 const string IT_HAS_BEEN_WHILE = "It sure has been a while.  Things might have changed a bit.";
 const string IT_HAS_BEEN_LONG_LOT_CHANGED = "It has been a long time.  A lot must have changed...";
 const string HOW_LONG_SINCE_TIMES_HAVE_CHANGED = "How long since you've heard these sounds...  times have changed.";
-//pressedKeyWInBaseMode
 const string TIME_PASSES = "Time passes...";
 
 #endif	//BASEMODE_CPP
@@ -2632,11 +2567,9 @@ map<int, ColorSetup> activityColors = {
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WRITING, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_LOCKSMITHING, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COMPUTERS, MAGENTA_ON_BLACK_BRIGHT),
-	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_COOKING, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_FENCING, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_WEAVING, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_RELIGION, MAGENTA_ON_BLACK_BRIGHT),
-	//map<int, ColorSetup>::value_type(ACTIVITY_STUDY_MAGIC, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_CLUB, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_STREETSENSE, MAGENTA_ON_BLACK_BRIGHT),
 	map<int, ColorSetup>::value_type(ACTIVITY_STUDY_THROWING, MAGENTA_ON_BLACK_BRIGHT),
@@ -2664,7 +2597,6 @@ map<int, ColorSetup> activityColors = {
 char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const DeprecatedCreature &cr);
-//void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
 string getVehicleShortname(int i);
 map<int, string> prisoner_description = {
 	map<int, string>::value_type(CREATURE_POLITICIAN, A_CURSING_POLITICIAN),
@@ -3517,7 +3449,7 @@ const string CONST_PAWNSHOP_XML = "pawnshop.xml";
 const string CONST_ARMSDEALER_XML = "armsdealer.xml";
 const string SPENT_DOLLARS = " spent $";
 const string ON_TICKETS = " on tickets to go to ";
-const string SPENT_ON_TICKETSC = ".";
+const string SINGLE_DOT = ".";
 const string COULDNT_AFFORD_TICKETSA = " couldn't afford tickets to go to %";
 const string COULDNT_AFFORD_TICKETSB = ".";
 
@@ -5907,7 +5839,6 @@ struct fullName {
 	string last;
 
 };
-//int mainSeven(bool xml_loaded_ok);
 void init_console();
 void initialize_debug_defines();
 #include "common/musicClass.h"
@@ -6834,6 +6765,11 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
+const string SINGLE_DOT = ".";
+const string CONST_X_COMMA_SPACE = ", ";
+const string CONST_SPACE_AND_SPACE = " and ";
+const string LETTER_S = "s";
+
 #include "../creature/creature.h"
 #include "../locations/locations.h"
 #include "../common/ledgerEnums.h"
@@ -6961,6 +6897,7 @@ enum LegalDefense {
 	ACE_ATTORNEY = 3,
 	SLEEPER_ATTORNEY = 4
 };
+
 #endif	//JUSTICE_CPP
 #ifdef	LCSIO_CPP
 // lcsio.cpp
@@ -7009,10 +6946,6 @@ void removeItemFromSquad(const int loottypeindex);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
-//extern string spaceDashSpace;
-//extern string CLOSE_PARENTHESIS;
-// string THIS_IS_BOUND_TO_RILE_UP_CORPS;
-// string major_news_take_it_up;
 map<short, string> expenseTypes;
 map<short, string> incomeTypes;
 void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
@@ -7247,7 +7180,6 @@ void cleangonesquads();
 #include "../common/musicClass.h"
 vector<string> supremeChars;
 vector<string> courtChars;
-//string pressLToViewHighScores;
 map<short, vector<string> > endgameLawStrings;
 #include "../common/creaturePool.h"
 enum Pages
@@ -7255,8 +7187,6 @@ enum Pages
 	PAGE_LEADERS,
 	PAGE_ISSUES_A,
 	PAGE_ISSUES_B,
-	//PAGE_POLLS_A,
-	//PAGE_POLLS_B
 	PAGENUM
 };
 vector<string> disbandingMessage;
@@ -7355,8 +7285,6 @@ const string tag_Consp = "Cons+";
 #include "../creature/newcreature.h"
 #include "../locations/locations.h"
 #include "../common/creaturePool.h"
-//extern string singleSpace;
-//extern string COMMA_SPACE;
 #include "../customMaps.h"
 void strcpy(char* c, string str);
 void strcat(char* c, string str);
@@ -7738,8 +7666,6 @@ vector<SiteTypes> washingtonDCDowntown = {
 
 };
 #include "../daily/daily.h"
-//extern string singleSpace;
-//extern string COMMA_SPACE;
 enum cityLocationTagEnums {
 	ENUM_tag_Downtown,
 	ENUM_tag_University_District,
@@ -8053,8 +7979,6 @@ void enemyattack();
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
-//extern string string_sleeper;
-//extern string singleDot;
 char run_broadcast(bool tv_broadcast);
 #include "../common/creaturePool.h"
 #include "../common/creaturePoolHeader.h"
@@ -9852,7 +9776,6 @@ map<int, vector<int> > locationsSpawners = {
 	CREATURE_YOGAINSTRUCTOR, 1,
 	CREATURE_MARTIALARTIST, 1,
 	CREATURE_ATHLETE, 1,
-	//CREATURE_FIREFIGHTER]+=1,
 	CREATURE_LOCKSMITH, 5 }       //Forensic locksmiths
 	),
 	map<int, vector<int> >::value_type(SITE_GOVERNMENT_COURTHOUSE,{
@@ -9924,7 +9847,6 @@ map<int, vector<int> > locationsSpawners = {
 	CREATURE_YOGAINSTRUCTOR, 1,
 	CREATURE_MARTIALARTIST, 1,
 	CREATURE_ATHLETE, 1,
-	//CREATURE_FIREFIGHTER]+=1,
 	CREATURE_LOCKSMITH, 5 }
 	),
 	map<int, vector<int> >::value_type(SITE_GOVERNMENT_FIRESTATION,{
@@ -10358,7 +10280,6 @@ int monthday();
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
 #include "../cursesmovie.h"
-//extern string singleSpace;
 vector<Deprecatednewsstoryst *> newsstory;
 Deprecatednewsstoryst* lastNewsStory() {
 	return newsstory[len(newsstory) - 1];
@@ -11931,12 +11852,6 @@ void amendment_termlimits(char canseethings);
 #include "../set_color_support.h"
 #include <common\\getnames.h>
 #include "../common/musicClass.h"
-// string establishPrisonReform;
-// string improvePrisonConditions;
-//extern string pressKeyToReflect;
-//extern string YEA;
-//extern string NAY;
-// extern string COMMA_SPACE;
 #include "../customMaps.h"
 map<int, bool> stalinView = {
 	map<int, bool>::value_type(VIEW_STALIN,  false), // Liberals and Stalinists don't get along
@@ -14048,7 +13963,6 @@ map<int, vector<SiteTypes> > okaySiteList = {
 			SITE_MEDIA_CABLENEWS,
 			SITE_BUSINESS_CIGARBAR,
 			SITE_BUSINESS_BANK,
-			//SITE_GOVERNMENT_FIRESTATION,
 		}
 		),
 	map<int, vector<SiteTypes> >::value_type(CREATURE_BANK_MANAGER,

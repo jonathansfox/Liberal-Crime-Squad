@@ -51,7 +51,7 @@ void chase_giveup()
 		activesquad->squad[p]->carid = -1;
 		activesquad->squad[p]->location = ps;
 		activesquad->squad[p]->drop_weapons_and_clips(NULL);
-		activesquad->squad[p]->set_activity(ACTIVITY_NONE);
+		activesquad->squad[p]->set_activity_type(ACTIVITY_NONE);
 		if (activesquad->squad[p]->is_holding_body())
 		{
 			if (activesquad->squad[p]->is_prisoner_non_LCS()) hostagefreed++;

@@ -318,7 +318,7 @@ void surrenderToAuthorities(const int loc) {
 			// Clear actions for anybody who was tending to this person
 			for (int i = 0; i < CreaturePool::getInstance().lenpool(); i++)
 				if (pool[i]->getNameAndAlignment().alive&&pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity.arg == pool[p]->id)
-					pool[i]->set_activity(ACTIVITY_NONE);
+					pool[i]->set_activity_type(ACTIVITY_NONE);
 			removesquadinfo(*pool[p]);
 			delete_and_remove(pool, p);
 			continue;
@@ -334,7 +334,7 @@ void surrenderToAuthorities(const int loc) {
 		{
 			removesquadinfo(*pool[p]);
 			pool[p]->location = polsta;
-			pool[p]->set_activity(ACTIVITY_NONE);
+			pool[p]->set_activity_type(ACTIVITY_NONE);
 		}
 	}
 }

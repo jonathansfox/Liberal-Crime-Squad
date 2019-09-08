@@ -2180,7 +2180,7 @@ void manageGrafiti() {
 		}
 	}
 }
-siegest* getseigestFromLocation(int secondaryLocation) {
+char getseigedFromLocation(int secondaryLocation) {
 	siegest* siege = NULL;
 	int primaryLocation = activesquad ? activesquad->squad[0]->location : -1;
 	if (primaryLocation != -1) {
@@ -2189,11 +2189,9 @@ siegest* getseigestFromLocation(int secondaryLocation) {
 	else if (secondaryLocation != -1) {
 		siege = &location[secondaryLocation]->siege;
 	}
-	return siege;
+	return siege->siege;
 }
-void gotoEquipmentScreen(int loc) {
-	equip(location[loc]->loot, -1);
-}
+
 void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid) {
 	//create a temp squad containing just this liberal
 	int oldsquadid = cr->squadid;
@@ -2204,7 +2202,7 @@ void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid) 
 	activesquad->squad[0] = cr;
 	cr->squadid = activesquad->id;
 	//go to equipment screen
-	gotoEquipmentScreen(activesquad->squad[0]->location);
+	equip(location[activesquad->squad[0]->location]->loot, -1);
 	//once you're done, restore original squad status.
 	delete activesquad;
 	activesquad = oldactivesquad;

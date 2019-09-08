@@ -128,7 +128,7 @@ void sleeper_spy(DeprecatedCreature &cr, char &clearformess, char canseethings, 
 			cr.location = homes;
 			cr.base = homes;
 			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
+			cr.set_activity_type(ACTIVITY_NONE);
 			cr.flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
@@ -264,7 +264,7 @@ void sleeper_embezzle(DeprecatedCreature &cr, char &clearformess, char canseethi
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
 			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
+			cr.set_activity_type(ACTIVITY_NONE);
 			cr.flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
@@ -530,7 +530,7 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 			removesquadinfo(cr);
 			cr.location = find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, cr.location);
 			cr.drop_weapons_and_clips(NULL);
-			cr.set_activity(ACTIVITY_NONE);
+			cr.set_activity_type(ACTIVITY_NONE);
 			cr.flag &= ~CREATUREFLAG_SLEEPER;
 		}
 		return;
@@ -592,7 +592,7 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 				if (encounter[e].align != 1 && LCSrandom(5))continue;
 				sleeperSuccessfullyRecruits(cr.getNameAndAlignment().name, cr.id, cr.infiltration, e);				
 				pressAnyKey();
-				if (!subordinatesleft(cr))cr.set_activity(ACTIVITY_NONE);
+				if (!subordinatesleft(cr))cr.set_activity_type(ACTIVITY_NONE);
 				incrementStatRecruits();
 				break;
 			}
@@ -624,7 +624,7 @@ void sleeper_recruit(DeprecatedCreature &cr, char &clearformess, char canseethin
 **********************************************************************/
 void sleepereffect(DeprecatedCreature &cr, char &clearformess, char canseethings, int(&libpower)[VIEWNUM])
 {
-	if (disbanding)cr.set_activity(ACTIVITY_SLEEPER_LIBERAL);
+	if (disbanding)cr.set_activity_type(ACTIVITY_SLEEPER_LIBERAL);
 	int infiltrate = 1;
 	switch (cr.activity_type())
 	{

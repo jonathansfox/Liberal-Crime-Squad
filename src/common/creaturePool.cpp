@@ -116,7 +116,7 @@ const int CreaturePool::liberal_guardian_writing_power()
 				power += pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
 				criminalize(*pool[i], LAWFLAG_SPEECH); // Record possibly illegal speech activity
 			}
-			else pool[i]->set_activity(ACTIVITY_NONE);
+			else pool[i]->set_activity_type(ACTIVITY_NONE);
 		}
 	}
 	return power;
@@ -478,7 +478,7 @@ void findAllTendersToThisHostage(DeprecatedCreature* cr, vector<DeprecatedCreatu
 			if (pool[p]->location == cr->location&&pool[p]->location != -1)
 				temppool.push_back(pool[p]);
 			//If they're someplace else, take them off the job
-			else pool[p]->set_activity(ACTIVITY_NONE);
+			else pool[p]->set_activity_type(ACTIVITY_NONE);
 		}
 	}
 }
@@ -500,7 +500,7 @@ void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
 			{
 				if (!pool[i]->getNameAndAlignment().alive) continue;
 				if (pool[i]->activity_type() == ACTIVITY_HOSTAGETENDING && pool[i]->activity_arg() == cr->id)
-					pool[i]->set_activity(ACTIVITY_NONE);
+					pool[i]->set_activity_type(ACTIVITY_NONE);
 			}
 			delete_and_remove(pool, p);
 			break;
@@ -509,7 +509,7 @@ void hostageEscapes(DeprecatedCreature* cr, char clearformess) {
 }
 void setAllCreatureActivities(Activity cr, vector<DeprecatedCreature *>& temppool) {
 	for (int p = 0; p < len(temppool); p++) {
-		temppool[p]->set_activity(cr);
+		temppool[p]->set_activity_type(cr);
 	}
 }
 DeprecatedCreature::~DeprecatedCreature()
@@ -587,7 +587,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 				healing[pool[p]->location] < pool[p]->get_skill(SKILL_FIRSTAID))
 			{
 				healing[pool[p]->location] = pool[p]->get_skill(SKILL_FIRSTAID);
-				pool[p]->set_activity(ACTIVITY_HEAL);
+				pool[p]->set_activity_type(ACTIVITY_HEAL);
 			}
 	}
 	// Don't let starving locations heal
@@ -743,7 +743,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 					mvaddstrAlt(8, 1, pool[p]->getNameAndAlignment().name, gamelog);
 					addstrAlt(S_INJURIES_REQUIRE_PROFESSIONAL, gamelog);
 					gamelog.nextMessage();
-					pool[p]->set_activity(ACTIVITY_CLINIC);
+					pool[p]->set_activity_type(ACTIVITY_CLINIC);
 					pressAnyKey();
 				}
 			}
@@ -757,7 +757,7 @@ void determineMedicalSupportAtEachLocation(bool clearformess) {
 		{
 			//Clear activity if their location doesn't have healing work to do
 			if (healing2[pool[p]->location] == 0)
-				pool[p]->set_activity(ACTIVITY_NONE);
+				pool[p]->set_activity_type(ACTIVITY_NONE);
 			//Give experience based on work done and current skill
 			else
 				pool[p]->train(SKILL_FIRSTAID, max(0, healing2[pool[p]->location] / 5 - pool[p]->get_skill(SKILL_FIRSTAID) * 2));
@@ -1074,7 +1074,7 @@ void dispersalcheck(char &clearformess)
 					pool[p]->location = -1;
 					if (!(pool[p]->flag & CREATUREFLAG_SLEEPER)) //Sleepers end up in shelter otherwise.
 						pool[p]->base = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, pool[p]->location);
-					pool[p]->set_activity(ACTIVITY_NONE);
+					pool[p]->set_activity_type(ACTIVITY_NONE);
 					pool[p]->hiding = -1; // Hide indefinitely
 				}
 			}
@@ -1114,7 +1114,7 @@ vector<DeprecatedCreature *> getLiberalsSharingLocation(DeprecatedCreature * cr)
 }
 vector<DeprecatedCreature *> getHostagesSharingLocation(DeprecatedCreature *cr) {
 	vector<DeprecatedCreature *> temppool;
-	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
+	for (int p = 0; p < len(pool); p++)
 	{
 		if (pool[p]->align != 1 &&
 			pool[p]->getNameAndAlignment().alive&&
@@ -1202,7 +1202,7 @@ string haveSleeperBankerCrackSafe(short cursite, int base) {
 			output = pool[p]->getNameAndAlignment().name;
 			pool[p]->location = pool[p]->base = base;
 			pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-			pool[p]->set_activity(ACTIVITY_NONE);
+			pool[p]->set_activity_type(ACTIVITY_NONE);
 			pool[p]->criminalize_me(LAWFLAG_BANKROBBERY, false);
 			break;
 		}

@@ -2448,7 +2448,7 @@ string specialWoundPossibilityHead(
 /* abandoned liberal is captured by conservatives */
 void capturecreature(DeprecatedCreature &t)
 {
-	t.set_activity(ACTIVITY_NONE);
+	t.set_activity_type(ACTIVITY_NONE);
 	t.drop_weapons_and_clips(NULL);
 	Armor clothes = Armor(getarmortype(tag_ARMOR_CLOTHES));
 	t.give_armor(clothes, NULL);

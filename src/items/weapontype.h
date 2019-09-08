@@ -71,16 +71,6 @@ enum WeaponTypeString {
 
 };
 enum WeaponTypeBool {
-	/*BOOL_NAME_SUB_1_DEFINED_,
-	BOOL_NAME_SUB_2_DEFINED_,
-	BOOL_NAME_FUTURE_SUB_1_DEFINED_,
-	BOOL_NAME_FUTURE_SUB_2_DEFINED_,
-	BOOL_SHORTNAME_DEFINED_,
-	BOOL_SHORTNAME_FUTURE_DEFINED_,
-	BOOL_SHORTNAME_SUB_1_DEFINED_,
-	BOOL_SHORTNAME_SUB_2_DEFINED_,
-	BOOL_SHORTNAME_FUTURE_SUB_1_DEFINED_,
-	BOOL_SHORTNAME_FUTURE_SUB_2_DEFINED_,*/
 	BOOL_CAN_TAKE_HOSTAGES_,
 	BOOL_THREATENING_,
 	BOOL_CAN_THREATEN_HOSTAGES_,
@@ -97,16 +87,6 @@ class WeaponType : public ItemType
 public:
 	const bool get_specific_bool(const WeaponTypeBool b) const {
 		switch (b) {
-		/*case BOOL_NAME_SUB_1_DEFINED_: return (); break;
-		case BOOL_NAME_SUB_2_DEFINED_: return (); break;
-		case BOOL_NAME_FUTURE_SUB_1_DEFINED_: return (); break;
-		case BOOL_NAME_FUTURE_SUB_2_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_FUTURE_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_SUB_1_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_SUB_2_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_FUTURE_SUB_1_DEFINED_: return (); break;
-		case BOOL_SHORTNAME_FUTURE_SUB_2_DEFINED_: return (); break;*/
 		case BOOL_CAN_TAKE_HOSTAGES_: return can_take_hostages_; break;
 		case BOOL_THREATENING_: return threatening_; break;
 		case BOOL_CAN_THREATEN_HOSTAGES_: return can_threaten_hostages_; break;
@@ -120,9 +100,6 @@ public:
 			return false;
 		}
 	}
-	//const int get_specific_int(const WeaponTypeInt i);
-	//const string get_specific_string(const WeaponTypeString s);
-	//const float get_specific_float(const WeaponTypeFloat f);
 	virtual thisItemIs whatIsThis() const { return THIS_IS_WEAPON; }
 	// Constructor to create a weapon type from xml.
 	explicit WeaponType(MCD_STR xmlstring);
