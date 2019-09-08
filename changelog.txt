@@ -1029,3 +1029,23 @@ Fixed bug where juice was applied incorrectly to boost stats.
 4.12.37
 
 Fixed bug in character creation where answers would be applied repeatedly.
+
+4.12.38
+
+Fixed missing messages in justice.cpp
+Fixed crash during new game if wrong key is pressed
+
+4.12.39
+
+Fixed incorrect accented characters, again.
+áéöúóíüëòâ but not ¢ or ô
+
+4.12.40
+
+Fixed missing text in "pawn loot" at pawn shop.  Turns out it was an autoconversion between an int and a bool in the code I wrote.  Ah, the ignorance of youth.
+Didn't work.
+The real cause:
+y += 2 + left_side ? 0 : 1;
+Order of Operations!
+needs to be
+y += 2 + (left_side ? 0 : 1);

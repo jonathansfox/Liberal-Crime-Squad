@@ -451,7 +451,7 @@
 		 LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base);
 		 printOptionsMiddle(y, sell_masks_ && ledger.get_funds() >= 15, left_side, allow_selling_, LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, customers.squad[0]->base));
 
-		 y += 2 + left_side ? 0 : 1;
+		 y += 2 + (left_side ? 0 : 1);
 
 		 printShopFooter(y, party_status, partysize, exit_);
 

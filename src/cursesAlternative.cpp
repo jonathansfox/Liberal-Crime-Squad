@@ -1715,7 +1715,7 @@ void printShopFooter(const int _y, const short party_status, const int partysize
 	mvaddstrAlt(y, 40, CONST_ENTER);
 	addstrAlt(exit_);
 }
-void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const bool loot) {
+void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const int loot) {
 	int y = 10 + _y;
 	if (sell_masks_)
 	{
@@ -1726,9 +1726,10 @@ void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_si
 	mvaddstrAlt(y++, 1, CONST_E_LOOK_OVER_EQUIPMENT);
 	if (allow_selling_)
 	{
-		if (loot)
+		if (loot >= 1) {
 			set_color_easy(WHITE_ON_BLACK);
-		else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+		}
+		else { set_color_easy(BLACK_ON_BLACK_BRIGHT); }
 		mvaddstrAlt(y++, 1, CONST_S_SELL_SOMETHING);
 	}
 }
@@ -1785,9 +1786,11 @@ void printSellLootHeader(const int loot, const int partysize, const short party_
 	eraseAlt();
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(10, 1, CONST_E_LOOK_OVER_EQUIPMENT);
-	if (loot)
+	mvaddstrAlt(10, 1, CONST_E_LOOK_OVER_EQUIPMENT);
+	if (loot > 0) {
 		set_color_easy(WHITE_ON_BLACK);
-	else set_color_easy(BLACK_ON_BLACK_BRIGHT);
+	}
+	else { set_color_easy(BLACK_ON_BLACK_BRIGHT); }
 	mvaddstrAlt(10, 40, CONST_F_PAWN_SELECTIVELY);
 	mvaddstrAlt(11, 1, CONST_W_PAWN_ALL_WEAPONS);
 	mvaddstrAlt(11, 40, CONST_A_PAWN_ALL_AMMUNITION);

@@ -987,8 +987,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.39";
-const int version = 41239;
+const string PACKAGE_VERSION_STR = "4.12.40";
+const int version = 41240;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -6824,7 +6824,7 @@ extern vector<DeprecatedCreature *> pool;
 
 #include "../common/creaturePool.h"
 #include "../locations/locationsPool.h"
-void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
+//void printSingleCrime(const CreatureJustice g, const Lawflags law_flag, const int typenum, const string crime_string, const bool mention_multiple_counts = false);
 map<Lawflags, string> crimeBlockOne = {
 	map<Lawflags, string>::value_type(LAWFLAG_TREASON, CONST_X_TREASON),
 	map<Lawflags, string>::value_type(LAWFLAG_TERRORISM, CONST_X_TERRORISM),
@@ -12460,7 +12460,7 @@ void printBrowseHalfscreenHeader(const string cname);
 
 void printShopOptions(const int y, const bool x, const char letter, const string description);
 void printShopFooter(const int _y, const short party_status, const int partysize, const string exit_);
-void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const bool loot);
+void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const int loot);
 
 void printMaskOptions(const int page, const string bname, const vector<int> masktype, const vector<string> mname, const vector<string> mdescription);
 void printFenceAmount(const int fenceamount);
