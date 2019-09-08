@@ -241,7 +241,6 @@
     <ClCompile Include="..\src\sitemode\miscactions.cpp" />
     <ClCompile Include="..\src\sitemode\newencounter.cpp" />
     <ClCompile Include="..\src\sitemode\shop.cpp" />
-    <ClCompile Include="..\src\sitemode\sitedisplay.cpp" />
     <ClCompile Include="..\src\sitemode\sitemap.cpp" />
     <ClCompile Include="..\src\sitemode\sitemode.cpp" />
     <ClCompile Include="..\src\sitemode\stealth.cpp" />
