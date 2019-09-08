@@ -173,7 +173,74 @@ void mainFive() {
 			lawList[LAW_TORTURE] = -1;
 		}
 }
-
+const string blankString = "";
+string fixLineSpecialCharacter(char * toFix) {
+	string str = blankString;
+	for (int i = 0; i < len(toFix); i++) {
+		bool special = (static_cast<int> (toFix[i])) == -61;
+		if (special) {
+			i++;
+			char c;
+			switch (toFix[i]) {
+			case -87: // 'é'
+				c = (char)0x82;
+				break;
+			case -74: // 'ö'
+				c = (char)0x94;
+				break;
+			case -95: // 'á'
+				c = (char)0xa0;
+				break;
+			case -83: // 'í'
+				c = (char)0xa1;
+				break;
+			case -77: // 'ó'
+				c = (char)0xa2;
+				break;
+			case -70: // 'ú'
+				c = (char)0xa3;
+				break;
+			case (int) '¼':
+				// 'ü'
+				c = (char)0x81;
+				break;
+			case (int) '«':
+				// 'ë'
+				c = (char)0x89;
+				break;
+			case (int) '²':
+				// 'ò'
+				c = (char)0x95;
+				break;
+			case (int) '¢':
+				// 'â'
+				c = (char)0x83;
+				break;
+				//	case (int) '´': // Repeat?
+						// 'ô'
+				//		c = (char)0x93;
+				//		break;
+						/*
+						case (int) 'Â':
+						// '¢'
+						// This letter does not use the escape character '-61'
+						// meaning it would need its own switch statement
+						// in addition to the hassle of determining what escape character is used
+						c = (char) 0x9b;
+						break;
+						*/
+			default:
+				c = toFix[i];
+				break;
+			}
+			str += c;
+		}
+		else {
+			str += toFix[i];
+		}
+	}
+	return str;
+}
 bool isThisNotComment(char* currentLine) {
 	return currentLine[0] != '#' && currentLine[1] != '#';
 }
@@ -202,6 +269,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 					// whether the line is not a comment, and is also the line whose contents are optional
 					// Testing until obtain proper data from file
 					txtFile.getline(currentLine, line_length);
+					strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 					line.push_back(currentLine);
 					if (!isThisNotComment(currentLine)) {
 						std::cout << CONST_COMMENT_FOUND << std::endl << currentLine << std::endl;
@@ -237,6 +305,7 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 			txtFile.getline(currentLine, line_length);
 			const bool notComment = (currentLine[0] && currentLine[0] != '#');
 			if (notComment) {
+				strcpy(currentLine, fixLineSpecialCharacter(currentLine));
 				types.push_back(currentLine);
 			}
 		}
