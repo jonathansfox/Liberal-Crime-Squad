@@ -59,6 +59,12 @@ private:
 	int gender_conservative_; // starting gender.
 	Interval infiltration_;
 	Interval skills_[SKILLNUM];
+
+	int seethroughdisguise_;
+	int seethroughstealth_;
+	bool istalkreceptive_;
+	bool iskidnap_resistant_;
+	bool isreports_to_police_;
 };
 /* transforms a CreatureTypes value into a pointer to that creature type */
 const CreatureType* getcreaturetype(short crtype);

@@ -90,7 +90,7 @@ void recruitment_activity(DeprecatedCreature &cr)
 			{
 				if (recruitCount == 0 || cr.skill_roll(SKILL_STREETSENSE) >(difficulty + recruitCount * 2))
 				{
-					makecreature(recruitCount, type);
+					make_creature_without_encounter_array(recruitCount, type);
 					encounter[recruitCount].namecreature();
 				}
 				else break;

@@ -162,8 +162,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <!-- <club>3-5</club> Hardcoded when highsecurity -->
             <handtohand>1-3</handtohand>
         </skills>
-		<stealth_difficulty>  7</stealth_difficulty>
-		<disguise_difficulty>  5</disguise_difficulty>
+		<seethroughstealth>  7</seethroughstealth>
+		<seethroughdisguise>  5</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_SECURITYGUARD">
@@ -182,8 +182,8 @@ Elements marked as hardcoded may have their values overridden by the game.
         <skills>
             <pistol>1-3</pistol>
         </skills>
-				<stealth_difficulty>  7</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  7</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_SCIENTIST_LABTECH">
@@ -221,8 +221,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <science>6-11</science>
             <writing>1-3</writing>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_POLITICIAN">
@@ -284,8 +284,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <dodge>10-15</dodge>
             <pistol>10-15</pistol>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_WORKER_SERVANT">
@@ -446,8 +446,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <psychology>1-3</psychology>
             <!-- + some hardcoded -->
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
 	<reports_to_police>1</reports_to_police>
 	<kidnap_resistant>1</kidnap_resistant>
     </creaturetype>
@@ -480,8 +480,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <rifle>1-4</rifle>
             <shotgun>1-4</shotgun>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
 	<reports_to_police>1</reports_to_police>
 	<kidnap_resistant>1</kidnap_resistant>
     </creaturetype>
@@ -512,8 +512,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <rifle>2-5</rifle>
             <shotgun>1-2</shotgun>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
 	<reports_to_police>1</reports_to_police>
 	<kidnap_resistant>1</kidnap_resistant>
     </creaturetype>
@@ -588,8 +588,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <rifle>1-3</rifle>
             <shotgun>1-3</shotgun>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
 	<reports_to_police>1</reports_to_police>
 	<kidnap_resistant>1</kidnap_resistant>
     </creaturetype>
@@ -633,8 +633,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <law>5-10</law>
             <writing>1-3</writing>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_AGENT">
@@ -671,8 +671,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <shotgun>2-9</shotgun>
             <smg>2-9</smg>
         </skills>
-				<stealth_difficulty>  7</stealth_difficulty>
-				<disguise_difficulty>  7</disguise_difficulty>
+				<seethroughstealth>  7</seethroughstealth>
+				<seethroughdisguise>  7</seethroughdisguise>
 	<kidnap_resistant>1</kidnap_resistant>
 	<reports_to_police>1</reports_to_police>
     </creaturetype>
@@ -704,8 +704,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <rifle>4-9</rifle>
             <smg>4-9</smg>
         </skills>
-				<stealth_difficulty>  13 </stealth_difficulty>
-				<disguise_difficulty>  13</disguise_difficulty>
+				<seethroughstealth>  13 </seethroughstealth>
+				<seethroughdisguise>  13</seethroughdisguise>
 	<kidnap_resistant>1</kidnap_resistant>
 	<reports_to_police>1</reports_to_police>
     </creaturetype>
@@ -727,8 +727,8 @@ Elements marked as hardcoded may have their values overridden by the game.
         <skills>
             <persuasion>1-8</persuasion>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_NEWSANCHOR">
@@ -745,8 +745,8 @@ Elements marked as hardcoded may have their values overridden by the game.
         <infiltration>60-90</infiltration>
         <juice>100-150</juice>
         <money>50-100</money>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
     </creaturetype>
 
     <creaturetype idname="CREATURE_GENETIC">
@@ -779,8 +779,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <strength>7-12</strength>
             <wisdom>1-6</wisdom>
         </attributes>
-				<stealth_difficulty>  15</stealth_difficulty>
-				<disguise_difficulty>  7</disguise_difficulty>
+				<seethroughstealth>  15</seethroughstealth>
+				<seethroughdisguise>  7</seethroughdisguise>
         <!--<money> Hardcoded to 0 if animal research law is not elite liberal.-->
     </creaturetype>
 
@@ -1329,8 +1329,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <pistol>1-2</pistol>
             <shotgun>1-3</shotgun>
         </skills>
-				<stealth_difficulty>  7</stealth_difficulty>
-				<disguise_difficulty>  5</disguise_difficulty>
+				<seethroughstealth>  7</seethroughstealth>
+				<seethroughdisguise>  5</seethroughdisguise>
 	<kidnap_resistant>1</kidnap_resistant>
 	<reports_to_police>1</reports_to_police>
     </creaturetype>
@@ -1769,8 +1769,8 @@ Elements marked as hardcoded may have their values overridden by the game.
             <rifle>6-9</rifle>
             <shotgun>6-9</shotgun>
         </skills>
-				<stealth_difficulty>  5</stealth_difficulty>
-				<disguise_difficulty>  11</disguise_difficulty>
+				<seethroughstealth>  5</seethroughstealth>
+				<seethroughdisguise>  11</seethroughdisguise>
 	<kidnap_resistant>1</kidnap_resistant>
     </creaturetype>
 

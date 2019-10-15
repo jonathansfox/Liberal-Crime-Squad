@@ -126,6 +126,7 @@ public:
 
 
 	int getTimeUntilSiege(int loc, int type) const;
+
 private:
 
 	int getStoresAmount(int l) const;

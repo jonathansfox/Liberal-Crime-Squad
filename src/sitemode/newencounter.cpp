@@ -232,7 +232,7 @@ void prepareencounter(short type, char sec)
 		addCCS(creaturearray);
 		for (int n = 0; n < LCSrandom(6) + 1; n++)
 		{
-			makecreature(encslot, getrandomcreaturetype(creaturearray));
+			make_creature_without_encounter_array(encslot, getrandomcreaturetype(creaturearray));
 			conservatiseEncslot(encslot);
 			encslot++;
 		}
@@ -275,7 +275,7 @@ void prepareencounter(short type, char sec)
 		}
 		for (int n = 0; n < LCSrandom(encnum) + 1; n++)
 		{
-			makecreature(encslot, getrandomcreaturetype(creaturearray));
+			make_creature_without_encounter_array(encslot, getrandomcreaturetype(creaturearray));
 			encslot++;
 		}
 	}
@@ -323,12 +323,12 @@ char addsiegeencounter(char type)
 				for (int e = 0; e < ENCMAX && num > 0; e++) {
 					if (!encounter[e].exists) {
 						if (!LCSrandom(12))
-							makecreature(e, CREATURE_CCS_ARCHCONSERVATIVE);
+							make_creature_without_encounter_array(e, CREATURE_CCS_ARCHCONSERVATIVE);
 						else if (!LCSrandom(11))
-							makecreature(e, CREATURE_CCS_MOLOTOV);
+							make_creature_without_encounter_array(e, CREATURE_CCS_MOLOTOV);
 						else if (!LCSrandom(10))
-							makecreature(e, CREATURE_CCS_SNIPER);
-						else makecreature(e, CREATURE_CCS_VIGILANTE);
+							make_creature_without_encounter_array(e, CREATURE_CCS_SNIPER);
+						else make_creature_without_encounter_array(e, CREATURE_CCS_VIGILANTE);
 						num--;
 					}
 				}
@@ -344,7 +344,7 @@ char addsiegeencounter(char type)
 			{
 			case SITE_GOVERNMENT_ARMYBASE:
 				if (!encounter[0].exists && !LCSrandom(2)) {
-					makecreature(0, CREATURE_TANK);
+					make_creature_without_encounter_array(0, CREATURE_TANK);
 					num--;
 				}
 				fillEncounter(CREATURE_SOLDIER, num);
@@ -378,10 +378,10 @@ char addsiegeencounter(char type)
 				{
 					for (int e = 0; e < ENCMAX && num > 0; e++) {
 						if (!LCSrandom(11))
-							makecreature(e, CREATURE_CCS_MOLOTOV);
+							make_creature_without_encounter_array(e, CREATURE_CCS_MOLOTOV);
 						else if (!LCSrandom(10))
-							makecreature(e, CREATURE_CCS_SNIPER);
-						else makecreature(e, CREATURE_CCS_VIGILANTE);
+							make_creature_without_encounter_array(e, CREATURE_CCS_SNIPER);
+						else make_creature_without_encounter_array(e, CREATURE_CCS_VIGILANTE);
 						num--;
 					}
 				}

@@ -70,10 +70,10 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
 			sitecrime += 30;
-			makecreature(0, CREATURE_MERC);
-			makecreature(1, CREATURE_MERC);
-			makecreature(2, CREATURE_MERC);
-			makecreature(3, CREATURE_MERC);
+			make_creature_without_encounter_array(0, CREATURE_MERC);
+			make_creature_without_encounter_array(1, CREATURE_MERC);
+			make_creature_without_encounter_array(2, CREATURE_MERC);
+			make_creature_without_encounter_array(3, CREATURE_MERC);
 		}
 		else
 		{
@@ -128,12 +128,12 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			sitecrime += 50;
 			CreatureTypes guard = CREATURE_SECURITYGUARD;
 			if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite())) guard = CREATURE_MERC;
-			makecreature(0, guard);
-			makecreature(1, guard);
-			makecreature(2, guard);
-			makecreature(3, guard);
-			makecreature(4, guard);
-			makecreature(5, guard);
+			make_creature_without_encounter_array(0, guard);
+			make_creature_without_encounter_array(1, guard);
+			make_creature_without_encounter_array(2, guard);
+			make_creature_without_encounter_array(3, guard);
+			make_creature_without_encounter_array(4, guard);
+			make_creature_without_encounter_array(5, guard);
 		}
 		else
 		{

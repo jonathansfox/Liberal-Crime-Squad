@@ -128,10 +128,12 @@ bool DeprecatedCreature::kidnap_resistant() const
 {
 	return iskidnap_resistant;
 }
+
 bool DeprecatedCreature::reports_to_police() const
 {
 	return isreports_to_police;
 }
+
 bool DeprecatedCreature::is_lcs_sleeper() const
 {
 	return(alive && align == ALIGN_LIBERAL && clinic == 0 &&
@@ -326,13 +328,13 @@ DeprecatedCreature::DeprecatedCreature(const std::string& inputXml)
 	while (xml.FindElem())
 	{
 		std::string tag = xml.GetTagName();
-		if (creature_XML_Integers.count(tag)) {
+		if (creature_XML_Integers.count(tag) > 0) {
 			*creature_XML_Integers[tag] = atoi(xml.GetData().c_str());
 		}
-		else if (creature_XML_Chars.count(tag)) {
+		else if (creature_XML_Chars.count(tag) > 0) {
 			*creature_XML_Chars[tag] = atoi(xml.GetData().c_str());
 		}
-		else if (creature_XML_Bools.count(tag)) {
+		else if (creature_XML_Bools.count(tag) > 0) {
 			*creature_XML_Bools[tag] = atoi(xml.GetData().c_str());
 		}
 		else if (tag == tag_attribute && attributesi < ATTNUM)
@@ -489,7 +491,7 @@ string DeprecatedCreature::showXml() const
 	xml.AddElem(tag_flag, flag);
 	xml.AddElem(tag_dontname, dontname);
 	xml.AddElem(tag_seethroughdisguise, seethroughdisguise);
-	xml.AddElem(tag_seethroughstealth, seethroughdisguise);
+	xml.AddElem(tag_seethroughstealth, seethroughstealth);
 	xml.AddElem(tag_talkreceptive, istalkreceptive);
 	xml.AddElem(tag_kidnap_resistant, iskidnap_resistant);
 	xml.AddElem(tag_reports_to_police, isreports_to_police);
@@ -992,6 +994,7 @@ void DeprecatedCreature::die()
 		uniqueCreatures.newPresident();
 	}
 }
+void makecreature(DeprecatedCreature &cr, short type);
 void UniqueCreatures::newCEO()
 {
 	makecreature(CEO_, CREATURE_CORPORATE_CEO);

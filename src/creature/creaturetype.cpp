@@ -32,6 +32,163 @@ CreatureType::CreatureType(const std::string& xmlstring)
 {
 	for (int i = 0; i < ATTNUM; i++)
 		attributes_[i].set_interval(1, 10);
+
+	id_ = s_number_of_creaturetypes++;
+
+	CMarkup xml;
+	xml.SetDoc(xmlstring);
+	xml.FindElem();
+
+	idname_ = xml.GetAttrib("idname");
+	if (!len(idname_))
+	{
+		idname_ = "LACKS IDNAME " + tostring(id_);
+		xmllog.log("Creature type " + tostring(id_) + " lacks idname.");
+	}
+	type_ = creaturetype_string_to_enum(idname_);
+
+	xml.IntoElem();
+	// Loop over all the elements inside the creaturetype element.
+	while (xml.FindElem())
+	{
+		std::string element = xml.GetTagName();
+
+		if (element == "alignment")
+		{
+			std::string alignment = xml.GetData();
+			if (alignment == "PUBLIC MOOD")
+				alignment_public_mood_ = true;
+			else if (alignment == "LIBERAL")
+			{
+				alignment_ = ALIGN_LIBERAL;
+				alignment_public_mood_ = false;
+			}
+			else if (alignment == "MODERATE")
+			{
+				alignment_ = ALIGN_MODERATE;
+				alignment_public_mood_ = false;
+			}
+			else if (alignment == "CONSERVATIVE")
+			{
+				alignment_ = ALIGN_CONSERVATIVE;
+				alignment_public_mood_ = false;
+			}
+			else
+				xmllog.log("Invalid alignment for " + idname_ + ": " + alignment);
+		}
+		else if (element == "age")
+		{
+			std::string age = xml.GetData();
+			if (age == "DOGYEARS")
+				age_.set_interval(2, 6);
+			else if (age == "CHILD")
+				age_.set_interval(7, 10);
+			else if (age == "TEENAGER")
+				age_.set_interval(14, 17);
+			else if (age == "YOUNGADULT")
+				age_.set_interval(18, 35);
+			else if (age == "MATURE")
+				age_.set_interval(20, 59);
+			else if (age == "GRADUATE")
+				age_.set_interval(26, 59);
+			else if (age == "MIDDLEAGED")
+				age_.set_interval(35, 59);
+			else if (age == "SENIOR")
+				age_.set_interval(65, 94);
+			else
+				assign_interval(age_, age, idname_, element);
+		}
+		else if (element == "attribute_points")
+			assign_interval(attribute_points_, xml.GetData(), idname_, element);
+		else if (element == "attributes")
+		{
+			while (xml.FindChildElem())
+			{
+				int attribute = attribute_string_to_enum(xml.GetChildTagName());
+				if (attribute != -1)
+					assign_interval(attributes_[attribute], xml.GetChildData(), idname_, element);
+				else
+					xmllog.log("Unknown attribute in " + idname_ + ": " + xml.GetTagName());
+			}
+		}
+		else if (element == "juice")
+			assign_interval(juice_, xml.GetData(), idname_, element);
+		else if (element == "gender")
+		{
+			int gender = gender_string_to_enum(xml.GetData());
+			if (gender != -1 && gender != GENDER_WHITEMALEPATRIARCH)
+				gender_liberal_ = gender_conservative_ = gender;
+			else
+				xmllog.log("Invalid gender for " + idname_ + ": " + xml.GetData());
+		}
+		else if (element == "infiltration")
+			assign_interval(infiltration_, xml.GetData(), idname_, element);
+		else if (element == "money")
+			assign_interval(money_, xml.GetData(), idname_, element);
+		else if (element == "skills")
+		{
+			while (xml.FindChildElem())
+			{
+				int skill = skill_string_to_enum(xml.GetChildTagName());
+				if (skill != -1)
+					assign_interval(skills_[skill], xml.GetChildData(), idname_, element);
+				else
+					xmllog.log("Unknown skill for " + idname_ + ": " + xml.GetChildTagName());
+			}
+		}
+		else if (element == "armor")
+		{
+			if (getarmortype(xml.GetData()) != -1)
+				armortypes_.push_back(xml.GetData());
+			else
+				xmllog.log("Invalid armor type for " + idname_ + ": " + xml.GetData());;
+		}
+		else if (element == "weapon")
+		{
+			//xml.SavePos("creature");
+			weapons_and_clips_.push_back(WeaponsAndClips(xml, idname_));
+			//xml.RestorePos("creature");
+		}
+		else if (element == "encounter_name")
+			encounter_name_ = xml.GetData();
+		else if (element == "type_name")
+			type_name_ = xml.GetData(); 
+		else if (element == "talkreceptive")
+			istalkreceptive_ = atoi(xml.GetData());
+		else if (element == "seethroughstealth")
+			seethroughstealth_ = atoi(xml.GetData());
+		else if (element == "seethroughdisguise")
+			seethroughdisguise_ = atoi(xml.GetData());
+		else if (element == "reports_to_police")
+			isreports_to_police_ = atoi(xml.GetData());
+		else if (element == "kidnap_resistant")
+			iskidnap_resistant_ = atoi(xml.GetData());
+		else 
+			xmllog.log("Unknown element for " + idname_ + ": " + element);
+	}
+
+	if (!len(type_name_))
+	{
+		xmllog.log("type_name not defined for " + idname_ + ".");
+		type_name_ = "UNDEFINED";
+	}
+	// If no weapon type has been given then use WEAPON_NONE.
+	if (!len(weapons_and_clips_))
+		weapons_and_clips_.push_back(WeaponsAndClips("WEAPON_NONE", 1, "NONE", 0));
+	// If no armor type has been given then use ARMOR_NONE.
+	if (!len(armortypes_))
+		armortypes_.push_back("ARMOR_NONE");
+}
+
+/*
+CreatureType::CreatureType(const std::string& xmlstring)
+	: age_(18, 57), alignment_public_mood_(true),
+	attribute_points_(40),
+	gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
+	infiltration_(0), juice_(0), money_(20, 40)
+{
+	for (int i = 0; i < ATTNUM; i++)
+		attributes_[i].set_interval(1, 10);
 	id_ = s_number_of_creaturetypes++;
 	CMarkup xml;
 	xml.SetDoc(xmlstring);
@@ -183,6 +340,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 			armortypes_.push_back(tag_ARMOR_NONE);
 	}
 }
+*/
 void CreatureType::make_creature(DeprecatedCreature& cr) const
 {
 	cr.type_idname = idname_;
@@ -193,6 +351,11 @@ void CreatureType::make_creature(DeprecatedCreature& cr) const
 	cr.infiltration = roll_infiltration();
 	cr.set_money(money_.roll());
 	cr.rename(get_encounter_name());
+	cr.settalkreceptive(istalkreceptive_);
+	cr.setseethroughstealth(	seethroughstealth_);
+	cr.setseethroughdisguise(	seethroughdisguise_);
+	cr.setisreports_to_police(	isreports_to_police_);
+	cr.setiskidnap_resistant(	iskidnap_resistant_);
 	for (int i = 0; i < SKILLNUM; i++) cr.set_skill(i, skills_[i].roll());
 	give_armor(cr);
 	give_weapon(cr);
@@ -896,8 +1059,9 @@ void armCreature(DeprecatedCreature &cr, short type) {
 		makecreature(cr, replacement);
 	}
 	giveDefaultWeapon(cr, type);
-	if (!skipThisCreature)
+	if (!skipThisCreature) {
 		armSpecificCreature(cr, type, crtype, attcap);
+	}
 
 	vector<int> possible;
 	for (int a = 0; a < ATTNUM; a++)
@@ -1000,6 +1164,77 @@ void makecreature(DeprecatedCreature &cr, short type)
 
 CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
 	: number_weapons(1),
+	cliptype("APPROPRIATE"), number_clips(4)
+{ // The main position of the CMarkup object is expected not to be changed here.
+	weapon_type_str = xml.GetData();
+
+	// Read in values.
+	if (!len(weapon_type_str))
+	{
+		while (xml.FindChildElem())
+		{
+			std::string element = xml.GetChildTagName();
+			if (element == "type") weapon_type_str = xml.GetChildData();
+			else if (element == "number_weapons")
+				assign_interval(number_weapons, xml.GetChildData(), owner, element);
+			else if (element == "cliptype") cliptype = xml.GetChildData();
+			else if (element == "number_clips")
+				assign_interval(number_clips, xml.GetChildData(), owner, element);
+			else xmllog.log("Unknown element for weapon in " + owner + ": " + element);
+		}
+	}
+
+	// Check values.
+	if (weapon_type_str != "CIVILIAN")
+	{
+		if (getweapontype(weapon_type_str) == -1)
+		{
+			xmllog.log("Invalid weapon type for " + owner + ": " + weapon_type_str);
+			weapon_type_str = "WEAPON_NONE";
+			cliptype = "NONE";
+		}
+		else
+		{
+			const vector<attackst*>& attacks = ::weapontype[getweapontype(weapon_type_str)]->get_attacks();
+
+			// Find a usable clip type for the weapon.
+			if (cliptype == "APPROPRIATE")
+			{
+				cliptype = "NONE";
+				for (int i = 0; i < len(attacks); i++)
+				{
+					if (attacks[i]->uses_ammo)
+					{
+						cliptype = attacks[i]->ammotype;
+						break;
+					}
+				}
+			}
+			// Check clip is usable by the weapon.
+			else if (getcliptype(cliptype) != -1) //Must be a clip type too.
+			{
+				int i;
+				for (i = 0; i < len(attacks) && cliptype != attacks[i]->ammotype; i++);
+				if (i == len(attacks))
+				{
+					xmllog.log("In " + owner + ", " + cliptype +
+						"can not be used by " + weapon_type_str + ".");
+					cliptype = "NONE";
+				}
+			}
+			// Undefined clip type.
+			else
+			{
+				xmllog.log("Invalid clip type for " + owner + ": " + cliptype);
+				cliptype = "NONE";
+			}
+		}
+	}
+}
+
+/*
+CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
+	: number_weapons(1),
 	cliptype(tag_APPROPRIATE), number_clips(4)
 {
 	weapon_type_str = xml.GetData();
@@ -1064,3 +1299,4 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 		}
 	}
 }
+*/

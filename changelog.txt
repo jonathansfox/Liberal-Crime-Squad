@@ -1049,3 +1049,12 @@ y += 2 + left_side ? 0 : 1;
 Order of Operations!
 needs to be
 y += 2 + (left_side ? 0 : 1);
+
+4.12.41
+
+Applied Schmel924's fix in newgame.cpp to allow randomized character creation.
+Partially reverted some of creaturetype.cpp to 4.10
+xmllog is now 0 KB!  No errors in xml detected.
+Fixed the "why is everyone naked" bug.
+Fixed the implementation of XML basis for talkreceptive, seethroughstealth, seethroughdisguise, reports_to_police, and kidnap_resistant.
+This was the biggest known existing problem.  :dance for joy:

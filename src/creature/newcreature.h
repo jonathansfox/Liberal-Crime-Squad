@@ -52,7 +52,7 @@ struct NameAndAlignment
 };
 int get_XML_value(const std::string& inputXml);
 
-void makecreature(int cr, short type);
+void make_creature_without_encounter_array(int cr, short type);
 /* fills a string with a proper name */
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* get a first and last name for the same person */

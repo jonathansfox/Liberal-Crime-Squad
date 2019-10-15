@@ -987,8 +987,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.40";
-const int version = 41240;
+const string PACKAGE_VERSION_STR = "4.12.41";
+const int version = 41241;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -2051,7 +2051,7 @@ enum LOOP_CONTINUATION {
 	REPEAT
 };
 vector<NameAndAlignment> getEncounterNameAndAlignment();
-void makecreature(const int x, const short type);
+void make_creature_without_encounter_array(const int x, const short type);
 const string hereTheyCome = "Here they come!";
 const string BEING_FOLLOWED = "being followed by Conservative swine!";
 const string lostThem = "It looks like you've lost them!";
@@ -8022,7 +8022,7 @@ char weaponcheck(const DeprecatedCreature &cr, bool metaldetect = false);
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const DeprecatedCreature &cr);
 short getCurrentSite();
-void makecreature(const int x, const short type);
+void make_creature_without_encounter_array(const int x, const short type);
 void emptyEncounter();
 void fillEncounter(CreatureTypes c, int numleft);
 #include "../customMaps.h"
@@ -12049,7 +12049,7 @@ void pressAnyKey();
 
 void talk(DeprecatedCreature &a, const int t);
 
-void makecreature(const int x, const short type);
+void make_creature_without_encounter_array(const int x, const short type);
 short getCurrentSite();
 void setCurrentSite(const short i);
 extern MusicClass music;

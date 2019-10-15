@@ -87,13 +87,13 @@ void special_bouncer_greet_squad()
 	{
 		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 		{
-			makecreature(0, CREATURE_CCS_VIGILANTE);
-			makecreature(1, CREATURE_CCS_VIGILANTE);
+			make_creature_without_encounter_array(0, CREATURE_CCS_VIGILANTE);
+			make_creature_without_encounter_array(1, CREATURE_CCS_VIGILANTE);
 		}
 		else //if (!encounter[0].exists || encounter[0].type != CREATURE_BOUNCER)
 		{
-			makecreature(0, CREATURE_BOUNCER);
-			makecreature(1, CREATURE_BOUNCER);
+			make_creature_without_encounter_array(0, CREATURE_BOUNCER);
+			make_creature_without_encounter_array(1, CREATURE_BOUNCER);
 		}
 	}
 }
@@ -1299,42 +1299,42 @@ void spawn_security()
 		case SITE_BUSINESS_ARMSDEALER:
 		case SITE_BUSINESS_BANK:
 		case SITE_INDUSTRY_NUCLEAR:
-			makecreature(0, CREATURE_MERC);
-			makecreature(1, CREATURE_MERC);
+			make_creature_without_encounter_array(0, CREATURE_MERC);
+			make_creature_without_encounter_array(1, CREATURE_MERC);
 			break;
 		case SITE_GOVERNMENT_POLICESTATION:
 		case SITE_GOVERNMENT_COURTHOUSE:
 		case SITE_OUTDOOR_PUBLICPARK:
-			makecreature(0, CREATURE_COP);
-			makecreature(1, CREATURE_COP);
+			make_creature_without_encounter_array(0, CREATURE_COP);
+			make_creature_without_encounter_array(1, CREATURE_COP);
 			break;
 		case SITE_GOVERNMENT_PRISON:
-			makecreature(0, CREATURE_PRISONGUARD);
-			makecreature(1, CREATURE_PRISONGUARD);
-			makecreature(2, CREATURE_GUARDDOG);
+			make_creature_without_encounter_array(0, CREATURE_PRISONGUARD);
+			make_creature_without_encounter_array(1, CREATURE_PRISONGUARD);
+			make_creature_without_encounter_array(2, CREATURE_GUARDDOG);
 			break;
 		case SITE_GOVERNMENT_WHITE_HOUSE:
-			makecreature(0, CREATURE_SECRET_SERVICE);
-			makecreature(1, CREATURE_SECRET_SERVICE);
-			makecreature(2, CREATURE_SECRET_SERVICE);
-			makecreature(3, CREATURE_SECRET_SERVICE);
+			make_creature_without_encounter_array(0, CREATURE_SECRET_SERVICE);
+			make_creature_without_encounter_array(1, CREATURE_SECRET_SERVICE);
+			make_creature_without_encounter_array(2, CREATURE_SECRET_SERVICE);
+			make_creature_without_encounter_array(3, CREATURE_SECRET_SERVICE);
 			break;
 		case SITE_GOVERNMENT_INTELLIGENCEHQ:
-			makecreature(0, CREATURE_AGENT);
-			makecreature(1, CREATURE_AGENT);
-			makecreature(2, CREATURE_GUARDDOG);
+			make_creature_without_encounter_array(0, CREATURE_AGENT);
+			make_creature_without_encounter_array(1, CREATURE_AGENT);
+			make_creature_without_encounter_array(2, CREATURE_GUARDDOG);
 			break;
 		case SITE_GOVERNMENT_ARMYBASE:
-			makecreature(0, CREATURE_MILITARYPOLICE);
-			makecreature(1, CREATURE_MILITARYPOLICE);
+			make_creature_without_encounter_array(0, CREATURE_MILITARYPOLICE);
+			make_creature_without_encounter_array(1, CREATURE_MILITARYPOLICE);
 			break;
 		case SITE_BUSINESS_BARANDGRILL:
 		case SITE_RESIDENTIAL_BOMBSHELTER:
 		case SITE_OUTDOOR_BUNKER:
 			if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
 			{
-				makecreature(0, CREATURE_CCS_VIGILANTE);
-				makecreature(1, CREATURE_CCS_VIGILANTE);
+				make_creature_without_encounter_array(0, CREATURE_CCS_VIGILANTE);
+				make_creature_without_encounter_array(1, CREATURE_CCS_VIGILANTE);
 			}
 		}
 	}
@@ -1636,7 +1636,7 @@ void special_bank_teller()
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
-		makecreature(0, CREATURE_BANK_TELLER);
+		make_creature_without_encounter_array(0, CREATURE_BANK_TELLER);
 	}
 }
 void special_bank_money()
@@ -1692,7 +1692,7 @@ void special_oval_office()
 		pressAnyKey();
 		mvaddstrAlt(17, 1, CONST_SECRET_SERVICE_AGENTS_AMBUSH_THE_SQUAD, gamelog);
 		gamelog.newline();
-		for (int e = 0; e < 6; e++)makecreature(e, CREATURE_SECRET_SERVICE);
+		for (int e = 0; e < 6; e++)make_creature_without_encounter_array(e, CREATURE_SECRET_SERVICE);
 		printencounter();
 		pressAnyKey();
 		enemyattack();
@@ -1706,7 +1706,7 @@ void special_oval_office()
 		mvaddstrAlt(16, 1, CONST_THE_PRESIDENT_IS_IN_THE_OVAL_OFFICE, gamelog);
 		gamelog.newline();
 		printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
-		for (int e = 0; e < 2; e++)makecreature(e, CREATURE_SECRET_SERVICE);
+		for (int e = 0; e < 2; e++)make_creature_without_encounter_array(e, CREATURE_SECRET_SERVICE);
 		spawnPresident();
 		printencounter();
 		pressAnyKey();
@@ -1724,12 +1724,12 @@ void special_ccs_boss()
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
-		makecreature(0, CREATURE_CCS_ARCHCONSERVATIVE);
-		makecreature(1, CREATURE_CCS_VIGILANTE);
-		makecreature(2, CREATURE_CCS_VIGILANTE);
-		makecreature(3, CREATURE_CCS_VIGILANTE);
-		makecreature(4, CREATURE_CCS_VIGILANTE);
-		makecreature(5, CREATURE_CCS_VIGILANTE);
+		make_creature_without_encounter_array(0, CREATURE_CCS_ARCHCONSERVATIVE);
+		make_creature_without_encounter_array(1, CREATURE_CCS_VIGILANTE);
+		make_creature_without_encounter_array(2, CREATURE_CCS_VIGILANTE);
+		make_creature_without_encounter_array(3, CREATURE_CCS_VIGILANTE);
+		make_creature_without_encounter_array(4, CREATURE_CCS_VIGILANTE);
+		make_creature_without_encounter_array(5, CREATURE_CCS_VIGILANTE);
 	}
 	else
 	{
@@ -1740,6 +1740,6 @@ void special_ccs_boss()
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
-		makecreature(0, CREATURE_CCS_ARCHCONSERVATIVE);
+		make_creature_without_encounter_array(0, CREATURE_CCS_ARCHCONSERVATIVE);
 	}
 }

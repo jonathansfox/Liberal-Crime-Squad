@@ -412,7 +412,7 @@ vector<NameAndAlignment> getEncounterNameAndAlignment() {
 	}
 	return nameList;
 }
-void makecreature(const int x, const short type) {
+void make_creature_without_encounter_array(const int x, const short type) {
 	makecreature(encounter[x], type);
 }
 // TODO convert this to Linked List?

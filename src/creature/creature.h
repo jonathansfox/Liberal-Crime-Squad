@@ -478,6 +478,23 @@ public:
 	int age;
 	int birthday_month;
 	int birthday_day;
+
+	void settalkreceptive(const bool istalkreceptive_) {
+		istalkreceptive = istalkreceptive_;
+	}
+	void setseethroughstealth(const int seethroughstealth_) {
+		seethroughstealth = seethroughstealth_;
+	}
+	void setseethroughdisguise(const int seethroughdisguise_) {
+		seethroughdisguise = seethroughdisguise_;
+	}
+	void setisreports_to_police(const bool isreports_to_police_) {
+		isreports_to_police = isreports_to_police_;
+	}
+	void setiskidnap_resistant(const bool iskidnap_resistant_) {
+		iskidnap_resistant = iskidnap_resistant_;
+	}
+
 private:
 
 	deque<Clip*> clips;
@@ -571,8 +588,6 @@ implementations should be in creature.cpp
 */
 // Add an age estimate to a person's name
 string get_age_string(const CreatureBio bio, const char animalgloss);
-/* rolls up a creature's stats and equipment */
-void makecreature(DeprecatedCreature &cr, short type);
 /* ensures that the creature's work location is appropriate to its type */
 int verifyworklocation(const int type, const int worklocation);
 /* turns a creature into a conservative */

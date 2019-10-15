@@ -2,6 +2,8 @@
 
 #define	LOCATIONSPOOL_CPP
 #include "../includes.h"
+/* rolls up a creature's stats and equipment */
+void makecreature(DeprecatedCreature &cr, short type);
 vector<Location *> location;
 void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm) {
 	Deprecatedsquadst *newsq = new Deprecatedsquadst;

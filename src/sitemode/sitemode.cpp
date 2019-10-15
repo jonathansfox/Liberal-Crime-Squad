@@ -1568,7 +1568,7 @@ void encounterApartmentLandlord() {
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		emptyEncounter();
-		makecreature(0, CREATURE_LANDLORD);
+		make_creature_without_encounter_array(0, CREATURE_LANDLORD);
 	}
 }
 void encounterOtherSpecial(const int olocx, const int olocy, const int olocz) {

@@ -2,8 +2,24 @@
 
 #define	AUTOMATEDDATATESTS_CPP
 #include "includes.h"
+// CREATURENUM = 106
+void addCigarbar(int creaturearray[106]) {
+	for (int i = 0; i < 106; i++) {
+		creaturearray[i]++;
+	}
 
+}
 void automatedDataTests() {
+	int carray[106];
+	carray[0]++;
+	mvaddstrAlt(0, 0, carray[0]);
+	addCigarbar(carray);
+	mvaddstrAlt(1, 0, carray[0]);
+	addCigarbar(carray);
+	mvaddstrAlt(2, 0, carray[0]);
+	addCigarbar(carray);
+	mvaddstrAlt(3, 0, carray[0]);
+	pressAnyKey();
 
 	clearAlt();
 	for (int i = 0, k = 0; i < LAWNUM; i++) {
@@ -68,6 +84,7 @@ struct newGameArguments {
 	newGameArguments(char _recruits, char _base, bool _makelawyer, bool _gaylawyer, bool _sports_car) : recruits(_recruits), base(_base), makelawyer(_makelawyer), gaylawyer(_gaylawyer), sports_car(_sports_car) {}
 };
 void initiateNewgameLocations(DeprecatedCreature* newcr, const newGameArguments ngm);
+void makecreature(DeprecatedCreature &cr, short type);
 void testCreature() {
 
 	// This, this requires a lot of prepwork to test the makecreature(...) method
@@ -81,8 +98,8 @@ void testCreature() {
 	char base = 21;
 	DeprecatedCreature *newcr = new DeprecatedCreature;
 	void recruitment_activity(DeprecatedCreature &cr);
-	recruitment_activity(*newcr);
 	initiateNewgameLocations(newcr, newGameArguments(recruits, base, makelawyer, gaylawyer, sports_car));
+	recruitment_activity(*newcr);
 
 	for (int i = 0; i < CREATURENUM; i++) {
 		DeprecatedCreature cr;

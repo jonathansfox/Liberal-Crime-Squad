@@ -1220,7 +1220,7 @@ void conquertext()
 }
 void addTank() {
 
-	makecreature(ENCMAX - 9, CREATURE_TANK);
+	make_creature_without_encounter_array(ENCMAX - 9, CREATURE_TANK);
 }
 
 void checkIfRunningFromCops() {

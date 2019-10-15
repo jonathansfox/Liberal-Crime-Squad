@@ -33,7 +33,7 @@ void fillEncounter(CreatureTypes c, int numleft) {
 	{
 		if (!encounter[e].exists)
 		{
-			makecreature(e, c);
+			make_creature_without_encounter_array(e, c);
 			numleft--;
 		}
 		if (numleft == 0)break;
@@ -1490,7 +1490,7 @@ void makechasers(long type, const long sitecriminality)
 	pnum = LCSrandom((sitecrime_chasers / crime_ratio) + 1) + min_enemies;
 	if (pnum > max_enemies) pnum = max_enemies;
 	for (int n = 0; n < pnum; n++) {
-		makecreature(n, chasing_enemy);
+		make_creature_without_encounter_array(n, chasing_enemy);
 	}
 	for (int n = 0; n < pnum; n++) conservatise(n);
 	//ASSIGN CARS TO CREATURES
