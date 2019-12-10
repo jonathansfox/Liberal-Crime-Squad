@@ -1058,3 +1058,7 @@ xmllog is now 0 KB!  No errors in xml detected.
 Fixed the "why is everyone naked" bug.
 Fixed the implementation of XML basis for talkreceptive, seethroughstealth, seethroughdisguise, reports_to_police, and kidnap_resistant.
 This was the biggest known existing problem.  :dance for joy:
+
+4.12.42
+
+Fixed clothing repair bug.

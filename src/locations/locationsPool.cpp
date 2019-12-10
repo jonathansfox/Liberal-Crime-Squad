@@ -2373,45 +2373,196 @@ bool LocationsPool::lightsOff(int loc) const {
 	return location[loc]->siege.lights_off;
 }
 int armor_makedifficulty(Armor& type, DeprecatedCreature *cr);
-void findArmorToRepair(Armor* armor, Item* pile, int &pileindex, vector<Item* > *pilelist, DeprecatedCreature cr) {
-	for (int passnum = 0; passnum < 3 && armor == NULL; passnum++) {
+/* armor repair */
+#include "log/log.h"
+extern Log gamelog;
+void repairarmor(DeprecatedCreature &cr, char &clearformess)
+{
+	Armor *armor = NULL;
+	Item *pile = NULL;
+	vector<Item *> *pilelist = NULL;
+	int pileindex = 0;
 
-		for (int l = 0; l < LocationsPool::getInstance().get_specific_integer(INT_LENLOOT, cr.location); l++) {
-
-			if (location[cr.location]->loot[l]->whatIsThis() == THIS_IS_ARMOR)
+	// Clean yourself up first
+	if (cr.get_armor().is_bloody() || cr.get_armor().is_damaged())
+		armor = &cr.get_armor();
+	else if (cr.squadid != -1)
+	{
+		int sq = getsquad(cr.squadid);
+		for (int l = 0; l < len(squad[sq]->loot); l++)
+			if (squad[sq]->loot[l]->whatIsThis() == THIS_IS_ARMOR)
 			{
-				bool dothis = false;
-				Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
-				bool blood = a->is_bloody();
-				bool damage = a->is_damaged();
-				bool hard = armor_makedifficulty(*a, &cr) > 4;
-				bool easy = armor_makedifficulty(*a, &cr) <= 4;
-
-				switch (passnum)
-				{
-				case 0: // Guaranteed to accomplish something
-					dothis = (blood && damage);
-					break;
-				case 1: // Find something to clean if low skill, repair if high
-					dothis = (blood && hard)
-						|| (damage && easy);
-					break;
-				case 2: // Anything that needs work
-					dothis = (blood || damage);
-					break;
-				}
-				if (dothis)
+				Armor* a = static_cast<Armor*>(squad[sq]->loot[l]); //cast -XML
+				if (a->is_bloody() || a->is_damaged())
 				{
 					armor = a;
-					pile = location[cr.location]->loot[l];
+					pile = squad[sq]->loot[l];
 					pileindex = l;
-					pilelist = &location[cr.location]->loot;
+					pilelist = &squad[sq]->loot;
 					break;
 				}
 			}
+	}
+	// Multiple passes, to find the best item to work on
+	bool dothis = false;
+	for (int passnum = 0; passnum < 3 && !dothis; passnum++)
+		if (armor == NULL && cr.location != -1)
+			for (int l = 0; l < len(location[cr.location]->loot); l++)
+				if (location[cr.location]->loot[l]->whatIsThis() == THIS_IS_ARMOR)
+				{
+					Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
+					switch (passnum)
+					{
+					case 0: // Guaranteed to accomplish something
+						dothis = (a->is_bloody() && a->is_damaged());
+						break;
+					case 1: // Find something to clean if low skill, repair if high
+						dothis = (a->is_bloody() && armor_makedifficulty(*a, &cr) > 4)
+							|| (a->is_damaged() && armor_makedifficulty(*a, &cr) <= 4);
+						break;
+					case 2: // Anything that needs work
+						dothis = (a->is_bloody() || a->is_damaged());
+						break;
+					}
+					if (dothis)
+					{
+						armor = a;
+						pile = location[cr.location]->loot[l];
+						pileindex = l;
+						pilelist = &location[cr.location]->loot;
+						break;
+					}
+				}
 
+	if (clearformess) eraseAlt();
+	else makedelimiter();
+
+	if (armor == NULL)
+	{
+		moveAlt(8, 1);
+		addstrAlt(cr.name, gamelog);
+		switch (LCSrandom(4))
+		{
+		case 0: addstrAlt(" tidies up the safehouse.", gamelog); break;
+		case 1: addstrAlt(" reorganizes the armor closet.", gamelog); break;
+		case 2: addstrAlt(" cleans the kitchen.", gamelog); break;
+		case 3:
+			addstrAlt(" peruses some sewing magazines.", gamelog);
+			cr.train(SKILL_TAILORING, 1);
+			break;
+		}
+		gamelog.nextMessage();
+		pressAnyKey();
+	}
+	else
+	{
+		string armorname = armor->get_name();// Get name before we maybe destroy it
+		bool repairfailed = false;
+		bool qualityReduction = !LCSrandom(10);
+		bool armorDestroyed = !armor->decrease_quality(0);
+
+		if (armor->is_damaged())
+		{
+			long dif = armor_makedifficulty(*armor, &cr);
+			dif >>= (armor->get_quality() - 1);  // it is easy to patch up rags
+			cr.train(SKILL_TAILORING, dif / 2 + 1);
+
+			if (LCSrandom(1 + dif / 2)) repairfailed = true;
+		}
+		else {
+			repairfailed = true;
+		}
+		if (armorDestroyed)
+			repairfailed = false;  // Its dead, Jim; stop trying to fix it
+		if (repairfailed)
+			qualityReduction = false; // Low skill repairers shredding your shirts seem too harsh
+
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		moveAlt(8, 1);
+
+		std::string result = "";
+		result += cr.name;
+
+		if (armorDestroyed)
+		{
+			set_color_easy(RED_ON_BLACK_BRIGHT);
+			result += " disposes of ";
+		}
+		else if (repairfailed && armor->is_bloody())
+		{
+			set_color_easy(CYAN_ON_BLACK_BRIGHT);
+			result += " cleans ";
+		}
+		else if (repairfailed)
+		{
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			result += " is working to repair ";
+		}
+		else
+		{
+			if (!qualityReduction)
+			{
+				set_color_easy(GREEN_ON_BLACK_BRIGHT);
+				result += " repairs ";
+			}
+			else
+			{
+				armorDestroyed = !armor->decrease_quality(1);
+				if (armorDestroyed)
+				{
+					set_color_easy(RED_ON_BLACK_BRIGHT);
+					result += " finds there is no hope of repairing ";
+				}
+				else
+				{
+					set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+					result += " repairs what little can be fixed of ";
+				}
+			}
 		}
 
+		if (pile)
+		{
+			result += armor->aan();
+		}
+		else
+			result += cr.hisher();
+
+		if (armorDestroyed)
+			result += " ruined";
+
+		result += " " + armorname + ".";
+
+		addstrAlt(result, gamelog);
+		gamelog.nextMessage();
+
+		if (pile)
+		{
+			if (pile->get_number() > 1)
+			{
+				Item *newpile = pile->split(pile->get_number() - 1);
+				pilelist->push_back(newpile);
+			}
+		}
+
+		armor->set_bloody(false);
+		if (!repairfailed)
+		{
+			armor->set_damaged(false);
+		}
+		if (armorDestroyed)
+		{
+			if (!pile) // repairer was wearing it
+			{
+				cr.strip(NULL);
+			}
+			else // scrap from stockpile
+			{
+				delete_and_remove(*pilelist, pileindex);
+			}
+		}
+
+		pressAnyKey();
 	}
 }
 char tryFindCloth(int cursite) {
