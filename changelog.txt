@@ -1066,3 +1066,13 @@ Fixed clothing repair bug.
 4.12.43
 
 Fixed squadless bug crash
+
+4.12.44
+Added changes by ArrowThunder
+'
+Fixed the bug where liberal views weren't affecting propositions, along with some other minor mistakes. The bug was actually affecting almost everywhere the public's opinions mattered, so some balance changes may be needed.
+
+Added a function to evaluate the public's interest in a given law. On a related note, legislators now factor in the intensity of the spotlight on the issue in question when proposing bills and casting their votes. Specifically, the intent of a bill is more strongly affected by the public when the public is extremely interested in the issue, and bills on hot topics also are made a higher priority. When it comes time to vote, now even arch-conservatives and elite-liberals have a chance of voting conservative and liberal respectively if interest levels are high enough. Conversely, at low interest levels, liberals and conservatives ignore any desires the public might have that might make them vote moderately.
+'
+
+Renamed const string YEA and const string NAY as CONST_YEA and CONST_NAY respectively

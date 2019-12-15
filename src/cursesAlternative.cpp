@@ -334,8 +334,8 @@ map<short, string> conservatiseLaw;
 map<short, string> liberalizeLaw;
 
 const string pressKeyToReflect = "Press any key to reflect on what has happened.";
-const string YEA = " Yea";
-const string NAY = " Nay";
+const string CONST_YEA = " Yea";
+const string CONST_NAY = " Nay";
 const string establishPrisonReform = "Establish Prison Rehabilitation";
 const string improvePrisonConditions = "Improve Prison Conditions";
 const string CONST_PRO_HUMAN_RIGHTS = "pro-Human Rights";
@@ -517,12 +517,12 @@ void displayHouseVotes(const int l, const int yesvotes_h, const char yeswin_h, c
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(c * 3 + 2, 62, yesvotes_h);
-	addstrAlt(YEA);
+	addstrAlt(CONST_YEA);
 	if (l == HOUSENUM - 1 && !yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(c * 3 + 3, 62, l + 1 - yesvotes_h);
-	addstrAlt(NAY);
+	addstrAlt(CONST_NAY);
 }
 void displaySenateVotes(const int l, const int yesvotes_s, const char yeswin_s, const int c, const int s) {
 
@@ -530,7 +530,7 @@ void displaySenateVotes(const int l, const int yesvotes_s, const char yeswin_s, 
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(c * 3 + 2, 70, yesvotes_s);
-	addstrAlt(YEA);
+	addstrAlt(CONST_YEA);
 	if (l == HOUSENUM - 1 && yesvotes_s == SENATEMAJORITY - 1 && yeswin_s)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -540,7 +540,7 @@ void displaySenateVotes(const int l, const int yesvotes_s, const char yeswin_s, 
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(c * 3 + 3, 70, (s - yesvotes_s));
-	addstrAlt(NAY);
+	addstrAlt(CONST_NAY);
 	if (l == HOUSENUM - 1 && yesvotes_s == SENATEMAJORITY - 1 && !yeswin_s)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

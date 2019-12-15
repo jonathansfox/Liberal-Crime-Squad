@@ -987,8 +987,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.43";
-const int version = 41243;
+const string PACKAGE_VERSION_STR = "4.12.44";
+const int version = 41244;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -3739,8 +3739,8 @@ const string proposeConservative = "The Arch-Conservative Congress is proposing 
 const string proposeStalinist = "The Stalinist Congress is proposing a STALINIST AMENDMENT!";
 const string they_ll_round_you_up = "They'll round up the last of you up eventually.  All is lost.";
 const string pressKeyToReflect = "Press any key to reflect on what has happened.";
-const string YEA = " Yea";
-const string NAY = " Nay";
+const string CONST_YEA = " Yea";
+const string CONST_NAY = " Nay";
 const string CONST_PRESS_ANY_KEY_TO_BREATHE_A_SIGH_OF_RELIEF = "Press any key to breathe a sigh of relief.                   ";
 const string CONST_PRESS_ANY_KEY_TO_REFLECT_ON_WHAT_HAS_HAPPENED_ONE_LAST_TIME = "Press any key to reflect on what has happened ONE LAST TIME.";
 const string CONST_PRESS_C_TO_WATCH_THE_RATIFICATION_PROCESS_UNFOLD = "Press 'C' to watch the ratification process unfold.";
@@ -3771,8 +3771,6 @@ const string CONST_TO_THE_UNITED_STATES_CONSTITUTION = " to the United States Co
 const string CONST_PROPOSED_AMENDMENT = "Proposed Amendment ";
 const string CONST_AMENDMENT_REJECTED = "AMENDMENT REJECTED.";
 const string CONST_AMENDMENT_ADOPTED = "AMENDMENT ADOPTED.";
-const string CONST_NAY = "Nay";
-const string CONST_YEA = "Yea";
 const string CONST_PRESS_ANY_KEY_TO_WATCH_THE_STATE_VOTES_UNFOLD = "Press any key to watch the State votes unfold.              ";
 const string CONST_PRESS_ANY_KEY_TO_WATCH_THE_CONGRESSIONAL_VOTES_UNFOLD = "Press any key to watch the Congressional votes unfold.     ";
 const string CONST_SENATE = "Senate";

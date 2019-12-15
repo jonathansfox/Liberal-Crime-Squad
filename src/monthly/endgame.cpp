@@ -39,12 +39,12 @@ void printHouseRatification(const int l, const bool yeswin_h, const int yesvotes
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 62, yesvotes_h);
-	addstrAlt(YEA);
+	addstrAlt(CONST_YEA);
 	if (l == HOUSENUM - 1 && !yeswin_h) set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(3, 62, l + 1 - yesvotes_h);
-	addstrAlt(NAY);
+	addstrAlt(CONST_NAY);
 }
 void printHouseRatificationS(const int l, const bool yeswin_s, const int yesvotes_s, const int s) {
 
@@ -52,12 +52,12 @@ void printHouseRatificationS(const int l, const bool yeswin_s, const int yesvote
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 70, yesvotes_s);
-	addstrAlt(YEA);
+	addstrAlt(CONST_YEA);
 	if (l == HOUSENUM - 1 && !yeswin_s) set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	else if (l == HOUSENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(3, 70, s - yesvotes_s);
-	addstrAlt(NAY);
+	addstrAlt(CONST_NAY);
 	if (l % 5 == 0) pause_ms(10);
 }
 void printSenateRatification(const int s, const int yesstate) {
@@ -66,12 +66,12 @@ void printSenateRatification(const int s, const int yesstate) {
 	else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(23, 50, yesstate);
-	addstrAlt(YEA);
+	addstrAlt(CONST_YEA);
 	if (s == STATENUM - 1 && yesstate < STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
 	else set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(23, 60, s + 1 - yesstate);
-	addstrAlt(NAY);
+	addstrAlt(CONST_NAY);
 	pause_ms(50);
 }
 
