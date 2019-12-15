@@ -1062,3 +1062,7 @@ This was the biggest known existing problem.  :dance for joy:
 4.12.42
 
 Fixed clothing repair bug.
+
+4.12.43
+
+Fixed squadless bug crash

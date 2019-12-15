@@ -2191,7 +2191,12 @@ char getseigedFromLocation(int secondaryLocation) {
 	else if (secondaryLocation != -1) {
 		siege = &location[secondaryLocation]->siege;
 	}
+	if (siege == NULL) {
+		return 0;
+	}
+	else {
 	return siege->siege;
+	}
 }
 
 void createTempSquadWithJustThisLiberal(DeprecatedCreature *cr, int cursquadid) {
