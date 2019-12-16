@@ -60,21 +60,6 @@ void printHouseRatificationS(const int l, const bool yeswin_s, const int yesvote
 	addstrAlt(CONST_NAY);
 	if (l % 5 == 0) pause_ms(10);
 }
-void printSenateRatification(const int s, const int yesstate) {
-
-	if (s == STATENUM - 1 && yesstate >= STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	else set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23, 50, yesstate);
-	addstrAlt(CONST_YEA);
-	if (s == STATENUM - 1 && yesstate < STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
-	else set_color_easy(WHITE_ON_BLACK);
-	mvaddstrAlt(23, 60, s + 1 - yesstate);
-	addstrAlt(CONST_NAY);
-	pause_ms(50);
-}
-
 /* EndGameStatus - checks if a constitutional amendment is ratified */
 char ratify(int level, int lawview, int view, char congress, char canseethings)
 {
@@ -136,9 +121,11 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			for (int s = 0; s < 50; s++)
 			{
-				if (s < 17) moveAlt(5 + s, 0);
-				else if (s < 34) moveAlt(5 + s - 17, 27);
-				else mvaddstrAlt(5 + s - 34, 54, statename(s));
+				if (s < 17) { moveAlt(5 + s, 0); }
+				else if (s < 34) { moveAlt(5 + s - 17, 27); }
+				else { moveAlt(5 + s - 34, 54); }
+
+				addstrAlt(statename(s));
 			}
 			mvaddstrAlt(24, 0, CONST_PRESS_ANY_KEY_TO_WATCH_THE_STATE_VOTES_UNFOLD);
 			pressAnyKey();
@@ -173,7 +160,17 @@ char ratify(int level, int lawview, int view, char congress, char canseethings)
 					addstrAlt(CONST_NAY);
 				}
 
-				printSenateRatification(s, yesstate);
+				if (s == STATENUM - 1 && yesstate >= STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(23, 50, yesstate);
+				addstrAlt(CONST_YEA);
+				if (s == STATENUM - 1 && yesstate < STATESUPERMAJORITY) set_color_easy(WHITE_ON_BLACK_BRIGHT);
+				else if (s == STATENUM - 1) set_color_easy(BLACK_ON_BLACK_BRIGHT);
+				else set_color_easy(WHITE_ON_BLACK);
+				mvaddstrAlt(23, 60, s + 1 - yesstate);
+				addstrAlt(CONST_NAY);
+				pause_ms(50);
 			}
 		}
 		if (yesstate >= STATESUPERMAJORITY) ratified = true;

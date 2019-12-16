@@ -1076,3 +1076,8 @@ Added a function to evaluate the public's interest in a given law. On a related 
 '
 
 Renamed const string YEA and const string NAY as CONST_YEA and CONST_NAY respectively
+
+4.12.45
+Fixed display error for state names
+
+Fixed missing break; statement that caused corporate files to mix with ccs backerlist

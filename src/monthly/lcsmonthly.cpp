@@ -543,6 +543,7 @@ the bottom of includes.h in the top src folder.
 
 
 		  printLootCorpFiles(newspaper);
+		  break;
 
 	  case ENUM_tag_LOOT_CCS_BACKERLIST:
 
