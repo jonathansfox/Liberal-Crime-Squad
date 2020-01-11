@@ -1769,10 +1769,10 @@ void yourinitialattack() {
 /* attack handling for each side as a whole */
 void youattack()
 {
-	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	foughtthisround = 1;
 	goodguyattack = true;
 	yourinitialattack();
+	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int e = 0; e < ENCMAX; e++)
 	{
 		if (encounter[e].exists && encounter[e].alive && encounter[e].enemy)

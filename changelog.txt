@@ -1081,3 +1081,7 @@ Renamed const string YEA and const string NAY as CONST_YEA and CONST_NAY respect
 Fixed display error for state names
 
 Fixed missing break; statement that caused corporate files to mix with ccs backerlist
+
+4.12.46
+Sneak attacks done against lone conservative targets will no longer cause site alarm.
+This should also help when dangerous targets are attacked even after they've been disabled.
