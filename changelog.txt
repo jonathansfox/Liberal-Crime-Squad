@@ -1084,4 +1084,6 @@ Fixed missing break; statement that caused corporate files to mix with ccs backe
 
 4.12.46
 Sneak attacks done against lone conservative targets will no longer cause site alarm.
-This should also help when dangerous targets are attacked even after they've been disabled.
+
+4.12.47
+Rebalanced Stealth to make it actually usuable.  Difficulty is capped at SUPERHUMAN.

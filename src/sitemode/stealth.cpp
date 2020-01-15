@@ -458,8 +458,8 @@ This file is part of Liberal Crime Squad.                                       
 		 int n;
 		 int blew_it = -1;
 		 bool spotted = false;
-		 char noticed = 0;
-		 do
+		 bool noticed = false;
+		 for(int ji = len(noticer); !noticed && ji > 0; ji--)
 		 {
 			 int an = LCSrandom(len(noticer));
 			 n = noticer[an];
@@ -473,20 +473,22 @@ This file is part of Liberal Crime Squad.                                       
 			 // Increase difficulty if Conservatives suspicious...
 			 if (sitealarmtimer == 1)
 			 {
-				 stealth_difficulty += 6;
-				 disguise_difficulty += 6;
+				 stealth_difficulty += 2;
+				 disguise_difficulty += 4;
 			 }
 			 else if (sitealarmtimer > 1)
 			 {
-				 stealth_difficulty += 3;
-				 disguise_difficulty += 3;
+				 stealth_difficulty += 1;
+				 disguise_difficulty += 2;
 			 }
 			 // Sneaking with a party is hard
-			 stealth_difficulty += (partysize - 1) * 3;
+			 stealth_difficulty += (partysize - 1);
+			 if (stealth_difficulty > DIFFICULTY_SUPERHEROIC) {
+				 stealth_difficulty = DIFFICULTY_SUPERHEROIC;
+			 }
 			 // Make the attempt!
-			 for (int i = 0; i < 6; i++)
+			 for (int i = 0; i < 6 && !noticed && activesquad->squad[i] != NULL; i++)
 			 {
-				 if (activesquad->squad[i] == NULL)break;
 				 // Try to sneak.
 				 if (!spotted)
 				 {
@@ -506,7 +508,6 @@ This file is part of Liberal Crime Squad.                                       
 					 if (weaponcheck(*activesquad->squad[i], false) == 2)
 					 {
 						 noticed = true;
-						 break;
 					 }
 					 else
 					 {
@@ -521,13 +522,11 @@ This file is part of Liberal Crime Squad.                                       
 							 // That was not very casual, dude.
 							 if (result < 0)blew_it = i;
 							 noticed = true;
-							 break;
 						 }
 					 }
 				 }
 			 }
-			 if (noticed) break;
-		 } while (len(noticer));
+		 } 
 		 // Give feedback on the Liberal Performance
 		 if (!spotted)
 		 {

@@ -991,22 +991,22 @@ void talkInCombat(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	switch (c) {
 	case 'a':
-
+		// Intimidate
 		pressKeyAInCombat(a);
 		break;
 
 	case 'b':
-
+		// Threaten Hostages
 		pressKeyBInCombat(a, tk, hostages, weaponhostage);
 		break;
 
 	case 'c':
-
+		// Bluff
 		pressKeyCInCombat(a);
 		break;
 
 	case 'd':
-
+		// Surrender to authorities
 		pressKeyDInCombat();
 		break;
 
