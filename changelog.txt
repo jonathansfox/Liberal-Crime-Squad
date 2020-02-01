@@ -1087,3 +1087,6 @@ Sneak attacks done against lone conservative targets will no longer cause site a
 
 4.12.47
 Rebalanced Stealth to make it actually usuable.  Difficulty is capped at SUPERHUMAN.
+
+4.12.48
+Fixed null pointer when a graffiti artist takes spray paint from storage

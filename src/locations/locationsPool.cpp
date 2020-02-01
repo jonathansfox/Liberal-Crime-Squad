@@ -2594,10 +2594,11 @@ string gimmeASprayCan(DeprecatedCreature* graffiti) {
 			Weapon *w = static_cast<Weapon*>(location[graffiti->base]->loot[i]); //cast -XML
 			if (w->get_specific_bool(BOOL_CAN_GRAFFITI_))
 			{
+				string spray_name = w->get_name();
 				graffiti->give_weapon(*w, &(location[graffiti->base]->loot));
 				if (location[graffiti->base]->loot[i]->empty())
 					delete_and_remove(location[graffiti->base]->loot, i);
-				return w->get_name();
+				return spray_name;
 			}
 		}
 	}
