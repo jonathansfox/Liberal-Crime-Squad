@@ -1090,3 +1090,6 @@ Rebalanced Stealth to make it actually usuable.  Difficulty is capped at SUPERHU
 
 4.12.48
 Fixed null pointer when a graffiti artist takes spray paint from storage
+
+4.12.49
+Fixed error message that appeared whenever a sleeper tried to steal from a place where there was nothing to steal, falsely presented as an XML fail

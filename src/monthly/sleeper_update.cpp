@@ -301,6 +301,12 @@ struct stringAndInt
 	stringAndInt(int integer_, const string& str_) : str(str_), integer(integer_) {}
 };
 string randomString(vector<stringAndInt>);
+// Somewhat bizarre formula, but in short, checks the items in order, each has a 1/n chance of being selected
+// if n = listlength - index for all items, then all items have an equal chance of selection
+// Integer must be positive
+// The last item in the collection is selected if nothing else is, so the integer used for the last item in the collection is irrelevant (unless error in code)
+// If an item has the interger '1', then no items listed after it can be selected
+// nonpositive integers have unknown behavior, and may cause runtime errors
 string randomString(vector<stringAndInt> outputList) {
 	for (stringAndInt s : outputList) {
 		if (!LCSrandom(s.integer)) {
@@ -309,11 +315,20 @@ string randomString(vector<stringAndInt> outputList) {
 	}
 	return outputList[len(outputList) - 1].str;
 }
-void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
+// return true to indicate an item has been stolen
+// or an xmlfail has occured
+// 
+bool stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 	string item;
 	int shelter = find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, cr.location);
 
-
+	enum ANY_LOOT {
+		GOT_LOOT,
+		GOT_WEAPON,
+		GOT_ARMOR,
+		GOT_NOTHING
+	};
+	ANY_LOOT whatWasStolen;
 	bool loot = false;
 	bool armor = false;
 	bool weapon = false;
@@ -323,7 +338,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 		item = randomString({ stringAndInt(3, tag_LOOT_KIDART),
 			stringAndInt(2, tag_LOOT_DIRTYSOCK),
 			stringAndInt(1, tag_LOOT_FAMILYPHOTO) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_RESIDENTIAL_APARTMENT:
 		item = randomString({ stringAndInt(5, tag_LOOT_CELLPHONE),
@@ -331,7 +346,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(3, tag_LOOT_TRINKET),
 			stringAndInt(2, tag_LOOT_CHEAPJEWELERY),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 		item = randomString({ stringAndInt(10, tag_LOOT_EXPENSIVEJEWELERY),
@@ -340,7 +355,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(3, tag_LOOT_PDA),
 			stringAndInt(2, tag_LOOT_CHEAPJEWELERY),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_LABORATORY_COSMETICS:
 	case SITE_INDUSTRY_NUCLEAR:
@@ -351,39 +366,39 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(5, tag_LOOT_PDA),
 			stringAndInt(5, tag_LOOT_CHEMICAL),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_GOVERNMENT_COURTHOUSE:
 		item = randomString({ stringAndInt(5, tag_LOOT_JUDGEFILES),
 			stringAndInt(3, tag_LOOT_CELLPHONE),
 			stringAndInt(2, tag_LOOT_PDA),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_GOVERNMENT_PRISON:
 		item = randomString({ stringAndInt(1, tag_WEAPON_SHANK) });
-		weapon = true;
+		whatWasStolen = GOT_WEAPON;
 		break;
 	case SITE_BUSINESS_BANK:
 	case SITE_GOVERNMENT_FIRESTATION:
 		item = randomString({ stringAndInt(2, tag_LOOT_TRINKET),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_INDUSTRY_SWEATSHOP:
 		item = randomString({ stringAndInt(1, tag_LOOT_FINECLOTH) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_INDUSTRY_POLLUTER:
 		item = randomString({ stringAndInt(1, tag_LOOT_CHEMICAL) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_CORPORATE_HEADQUARTERS:
 		item = randomString({ stringAndInt(5, tag_LOOT_CORPFILES),
 			stringAndInt(3, tag_LOOT_CELLPHONE),
 			stringAndInt(2, tag_LOOT_PDA),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_CORPORATE_HOUSE:
 		item = randomString({ stringAndInt(8, tag_LOOT_TRINKET),
@@ -394,7 +409,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(3, tag_LOOT_CHEAPJEWELERY),
 			stringAndInt(2, tag_LOOT_FAMILYPHOTO),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_MEDIA_AMRADIO:
 		item = randomString({ stringAndInt(5, tag_LOOT_AMRADIOFILES),
@@ -402,7 +417,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(3, tag_LOOT_PDA),
 			stringAndInt(2, tag_LOOT_CELLPHONE),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_MEDIA_CABLENEWS:
 		item = randomString({ stringAndInt(5, tag_LOOT_CABLENEWSFILES),
@@ -410,7 +425,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			stringAndInt(3, tag_LOOT_PDA),
 			stringAndInt(2, tag_LOOT_CELLPHONE),
 			stringAndInt(1,  tag_LOOT_COMPUTER) });
-		loot = true;
+		whatWasStolen = GOT_LOOT;
 		break;
 	case SITE_GOVERNMENT_POLICESTATION:
 		if (!LCSrandom(3))
@@ -419,7 +434,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 				stringAndInt(3, tag_WEAPON_SEMIPISTOL_45),
 				stringAndInt(2, tag_WEAPON_SHOTGUN_PUMP),
 				stringAndInt(1,  tag_WEAPON_SEMIRIFLE_AR15) });
-			weapon = true;
+			whatWasStolen = GOT_WEAPON;
 		}
 		else if (!LCSrandom(2))
 		{
@@ -427,7 +442,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			else item = randomString({ stringAndInt(3, tag_ARMOR_POLICEUNIFORM),
 				stringAndInt(2, tag_ARMOR_SWATARMOR),
 				stringAndInt(1,  tag_ARMOR_POLICEARMOR) });
-			armor = true;
+			whatWasStolen = GOT_ARMOR;
 		}
 		else
 		{
@@ -435,7 +450,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 				stringAndInt(3, tag_LOOT_CELLPHONE),
 				stringAndInt(2, tag_LOOT_PDA),
 				stringAndInt(1,  tag_LOOT_COMPUTER) });
-			loot = true;
+			whatWasStolen = GOT_LOOT;
 		}
 		break;
 	case SITE_GOVERNMENT_ARMYBASE:
@@ -444,12 +459,12 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 			item = randomString({
 				stringAndInt(3,  tag_WEAPON_CARBINE_M4),
 				stringAndInt(1, tag_WEAPON_AUTORIFLE_M16) });
-			weapon = true;
+			whatWasStolen = GOT_WEAPON;
 		}
 		else if (!LCSrandom(2))
 		{
 			item = randomString({ stringAndInt(1, tag_ARMOR_ARMYARMOR) });
-			armor = true;
+			whatWasStolen = GOT_ARMOR;
 		}
 		else
 		{
@@ -457,7 +472,7 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 				stringAndInt(3, tag_LOOT_CELLPHONE),
 				stringAndInt(2, tag_LOOT_CHEMICAL),
 				stringAndInt(1,  tag_LOOT_SILVERWARE) });
-			loot = true;
+			whatWasStolen = GOT_LOOT;
 		}
 		break;
 	case SITE_GOVERNMENT_WHITE_HOUSE:
@@ -468,12 +483,12 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 				stringAndInt(3, tag_WEAPON_AUTORIFLE_M16),
 				stringAndInt(2, tag_WEAPON_SHOTGUN_PUMP),
 				stringAndInt(1,  tag_WEAPON_CARBINE_M4) });
-			weapon = true;
+			whatWasStolen = GOT_WEAPON;
 		}
 		else if (!LCSrandom(2))
 		{
 			item = randomString({ stringAndInt(1, tag_ARMOR_BLACKSUIT) });
-			armor = true;
+			whatWasStolen = GOT_ARMOR;
 		}
 		else
 		{
@@ -481,34 +496,75 @@ void stashRandomStolenItem(DeprecatedCreature &cr, int &numberofxmlfails) {
 				stringAndInt(3, tag_LOOT_CELLPHONE),
 				stringAndInt(2, tag_LOOT_PDA),
 				stringAndInt(1,  tag_LOOT_COMPUTER) });
-			loot = true;
+			whatWasStolen = GOT_LOOT;
 		}
 		break;
 	default:
-		// xmlfail
-		item = "";
-		break;
+		// locations that currently do not allow anything to be stolen
+
+		case SITE_CITY_SEATTLE: // first are the cities
+		case SITE_CITY_LOS_ANGELES:
+		case SITE_CITY_NEW_YORK:
+		case SITE_CITY_CHICAGO:
+		case SITE_CITY_DETROIT:
+		case SITE_CITY_ATLANTA:
+		case SITE_CITY_MIAMI:
+		case SITE_CITY_WASHINGTON_DC:
+		case SITE_DOWNTOWN: // then are the districts
+		case SITE_COMMERCIAL:
+
+		case SITE_UDISTRICT:
+
+		case SITE_OUTOFTOWN:
+		case SITE_INDUSTRIAL:
+		case SITE_TRAVEL:
+		case SITE_HOSPITAL_CLINIC: // then come sites which cannot be mapped
+		case SITE_HOSPITAL_UNIVERSITY:
+		case SITE_BUSINESS_PAWNSHOP:
+		case SITE_BUSINESS_DEPTSTORE:
+		case SITE_BUSINESS_HALLOWEEN:
+		case SITE_BUSINESS_ARMSDEALER:
+		case SITE_BUSINESS_CARDEALERSHIP:
+		case SITE_RESIDENTIAL_SHELTER: 
+		case SITE_RESIDENTIAL_BOMBSHELTER:
+		case SITE_INDUSTRY_WAREHOUSE:
+		case SITE_BUSINESS_CRACKHOUSE:
+		case SITE_BUSINESS_JUICEBAR:
+		case SITE_BUSINESS_CIGARBAR:
+		case SITE_BUSINESS_LATTESTAND:
+		case SITE_BUSINESS_VEGANCOOP:
+		case SITE_BUSINESS_INTERNETCAFE:
+		case SITE_BUSINESS_BARANDGRILL:
+		case SITE_OUTDOOR_PUBLICPARK:
+		case SITE_OUTDOOR_BUNKER:
+		case SITE_GOVERNMENT_LIBERAL_PARTY_HQ:
+			whatWasStolen = GOT_NOTHING;
+			break;
 	}
-	if (loot) {
-		int itemindex = getloottype(item);
+	int itemindex = -1;
+	switch (whatWasStolen) {
+
+	case GOT_LOOT:
+		itemindex = getloottype(item);
 		if (itemindex > -1) { LocationsPool::getInstance().stashThisLootHere(item, shelter); }
 		else { numberofxmlfails++; }
-	}
-	else if (armor) {
-		int itemindex = getarmortype(item);
+		break;
+	case GOT_WEAPON:
+		itemindex = getweapontype(item);
+		if (itemindex > -1) { LocationsPool::getInstance().stashThisWeaponHere(itemindex, shelter); }
+		else { numberofxmlfails++; }
+		break;
+	case GOT_ARMOR:
+		itemindex = getarmortype(item);
 		if (itemindex > -1) {
 			LocationsPool::getInstance().stashThisArmorHere(itemindex, shelter);
 		}
 		else { numberofxmlfails++; }
+		break;
+	case GOT_NOTHING:
+		break;
 	}
-	else if (weapon) {
-		int itemindex = getweapontype(item);
-		if (itemindex > -1) { LocationsPool::getInstance().stashThisWeaponHere(itemindex, shelter); }
-		else { numberofxmlfails++; }
-	}
-	else {
-		numberofxmlfails++;
-	}
+	return whatWasStolen != GOT_NOTHING;
 }
 /*********************************
 **
@@ -545,11 +601,15 @@ void sleeper_steal(DeprecatedCreature &cr, char &clearformess, char canseethings
 													//Item *item;
 
 	int numberofxmlfails = 0; // Tell them how many fails
+	bool stoleSomething = false;
 	for (int number_of_items = LCSrandom(10) + 1; number_of_items > 0; number_of_items--)
 	{
-		stashRandomStolenItem(cr, numberofxmlfails);
+		stoleSomething |= stashRandomStolenItem(cr, numberofxmlfails);
 	}
-	printSleeperDropOffPackage(cr.getNameAndAlignment().name);
+	if (stoleSomething) {
+		printSleeperDropOffPackage(cr.getNameAndAlignment().name);
+
+	}
 	if (numberofxmlfails > 0) {
 		printxmlFail(numberofxmlfails);
 	}
