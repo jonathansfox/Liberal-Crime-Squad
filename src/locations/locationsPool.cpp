@@ -2069,8 +2069,7 @@ void makeIntoHostage(DeprecatedCreature* newcr) {
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(DeprecatedCreature &cr)
 {
-
-	DeprecatedCreature *newcr = new DeprecatedCreature;
+	DeprecatedCreature* newcr = new DeprecatedCreature;
 	*newcr = cr;
 	makeIntoHostage(newcr);
 	eraseAlt();

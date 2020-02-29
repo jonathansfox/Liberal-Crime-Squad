@@ -2800,32 +2800,28 @@ void MusicClass::play(int _musicmode)
 
 	string failedToBreakBusiness(const string a, const string cr) {
 
-		string output;
+		string output = cr;
 		int which_cling = LCSrandom(cling_to_business.size() + cling_to_business_one_line.size());
 		if (which_cling < cling_to_business.size()) {
-			output + cr;
 			output += cling_to_business[which_cling][0];
 			output += a;
 			output += cling_to_business[which_cling][1];
 		}
 		else {
-			output + cr;
 			output += pickrandom(cling_to_business_one_line);
 		}
 		return output;
 	}
 
 	string failedToBreakScience(const string a, const string cr) {
-		string output;
+		string output = cr;
 		int which_cling = LCSrandom(cling_to_science.size() + cling_to_science_one_line.size());
 		if (which_cling < cling_to_science.size()) {
-			output + cr;
 			output += cling_to_science[which_cling][0];
 			output += a;
 			output += cling_to_science[which_cling][1];
 		}
 		else {
-			output + cr;
 			output += pickrandom(cling_to_science_one_line);
 		}
 		return output;

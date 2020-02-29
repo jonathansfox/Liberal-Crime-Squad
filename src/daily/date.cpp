@@ -808,7 +808,7 @@ This file is part of Liberal Crime Squad.                                       
 		 newd->city = getCity(a.location);
 		 date.push_back(newd);
 	 }
-	 DeprecatedCreature *newcr = new DeprecatedCreature;
+	 DeprecatedCreature* newcr = new DeprecatedCreature;
 	 *newcr = tk;
 	 newcr->namecreature();
 	 newcr->location = a.location;

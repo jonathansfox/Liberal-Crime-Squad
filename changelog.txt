@@ -1093,3 +1093,18 @@ Fixed null pointer when a graffiti artist takes spray paint from storage
 
 4.12.49
 Fixed error message that appeared whenever a sleeper tried to steal from a place where there was nothing to steal, falsely presented as an XML fail
+
+4.12.50
+Fixed characters for ¢ and ô, the two missing characters from 4.12.39
+
+that helped me find the "CCS Leader Farm" bug
+sitemode.cpp 1710    //BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
+    if (ccs_boss_kills >= 1 &&
+...
+adding a check for the ccs_boss being kidnapped should resolve that
+
+Added initial support for RustKnight Portraits
+
+Fixed X Responds bug
+
+Major refactoring of talk.cpp, replacing many functions with enums

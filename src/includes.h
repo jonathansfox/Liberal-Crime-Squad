@@ -987,8 +987,8 @@ string skill_enum_to_string(int skill_type);
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.49";
-const int version = 41249;
+const string PACKAGE_VERSION_STR = "4.12.50";
+const int version = 41250;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
@@ -14621,98 +14621,130 @@ vector<SiteTypes> defaultSiteList = {
 	SITE_RESIDENTIAL_SHELTER
 };
 void delenc(const short e, const char loot);
+void liberalizeEncounterIfThisType(const int type);
 
+
+void printAgreesToComeByLater(const string tkname, const bool extraline, const bool another_extraline);
+void printNonHumanRejection(const string tkname, const int tktype, const bool extraline);
+void printConservativeRespondsToStupid(const string tkname, const int tktype, const bool extraline);
+void printConservativeCounter(const string tkname, const bool extraline, const int lw);
+void printThatIsDisturbing(const string tkname, const bool extraline, const int special_case);
+
+void printRejectTalk(const string tkname, const bool extraline);
+void printMutantTalkAboutIssues(const string tkname, const int extraline);
+void printUnableToSpeakAgree(const string tkname, const bool extraline);
+void printRejectPolicePickupLine(const string tkname, const bool extraline);
+
+
+void printTalkOptionsDuringCombat(const bool hostages, const bool is_cantbluff_two, const bool cop);
+void printTalksToThem(const string aname, const int tkalign, const string tkname);
 void printTalkAboutIssuesHeader(const string aname);
+
 void printTalkAboutIssuesWhenStupid(const int lw);
 void printTalkAboutIssuesTooLiberal(const int lw);
 void printTalkAboutIssuesNormal(const int lw, const int tkanimalgloss);
-void printTurnsAway();
-void printConservativeRespondsToStupid(const int tktype, const bool extraline);
-void printRespondantName(const string tkname, const bool extraline);
-void printConservativeCounter(const bool extraline, const int lw);
-void printRejectTalk(const bool extraline);
-void printMutantTalkAboutIssues(const string tkname, const int extraline);
-void printThatIsDisturbing(const string tkname, const bool extraline, const int special_case);
-void printUnableToSpeakAgree(const string tkname, const bool extraline);
-void printAgreesToComeByLater(const string tkname, const bool extraline, const bool another_extraline);
-void printSpecialRecruitment(const string aname, const string tkname, const string pitch, const string response);
-void printTalkOptionsDuringCombat(const bool hostages, const bool is_cantbluff_two, const bool cop);
-void printTalksToThem(const string aname, const int tkalign, const string tkname);
-
-void liberalizeEncounterIfThisType(const int type);
-
-void printTheSquadIsArrested();
-void printTheEnemyIsFooled();
-void printXeIsNotFooled(const string ename, const bool noFreeSpeech);
-void printITalkLikeAConservative(const string aname);
-void printEngraveElbereth(const string aname);
-void printDeathSquadBluff();
-void printLabCoatBluff();
-void printPoliceBluff();
 void printBunkerGearBluff(const short onfire);
-void printWeWerentBornYesterday(const string ename);
+
+void printXeIsNotFooled(const string ename, const bool noFreeSpeech);
+
+
+enum COMMON_XE_DOES_PRINTABLE {
+
+	eprintITalkLikeAConservative,
+	eprintEngraveElbereth,
+	eprintWeWerentBornYesterday,
+	eprintWannaHearSomething,
+	eprintLetMeSellYouAGun,
+	eprintNotHereDummy,
+	eprintWaitUntilItCoolsDown,
+	eprintIDontSellToCops,
+	eprintIDontSellToNaked,
+	eprintINeedAGun,
+	eprintJesusItsYours,
+	eprintIWantYouToLeave,
+	eprintGiveMeTheLCSPrice,
+	eprintEnemyIgnoresThreat,
+	eprintAnotherOneBacksOff,
+	eprintThreatenEnemy,
+	eprintThreatenHostages,
+	eprintReleaseHostagesHeader,
+	eprintRefuseRentDeal,
+	eprintNotMyProblem,
+	eprintAcceptRentHeader,
+	eprintAcceptRentFooter,
+	eprintDemandVaultBeOpened,
+	eprintIRobTheBank,
+	eprintEnemyWatchesHostageDeath,
+	eprintSaysWhat,
+	eprintPutSomeDamnClothesOn,
+	eprintIWantToRent,
+	eprintClearOutYourRoom,
+	eprintIWantToCancelRent,
+	eprintEnemyAllowsHostagesToDie,
+	eprintTalkToHeader,
+
+};
+void printCommonXeDoesStatement(const COMMON_XE_DOES_PRINTABLE pr, const string aname);
+
+
 void printSiegeBluff(const string aname, const int siegeType);
-void printEnemyIgnoresThreat(const string tkname);
+
 void printHowShouldWeRespond(const string aname, const int hostages);
-void printPloyWorksEnemyBacksOff();
-void printExecutionGunshot();
-void printExecutionBareHands();
-void printDiscardsBody(const string aname, const string pname);
-void printAnotherOneBacksOff(const string ename);
-void printThreatenEnemy(const string aname);
 void printHostageNegotiation(const string ename, const int etype, const int ealign, const int hostages);
-void printThreatenHostages(const string aname);
-void printReleaseHostagesHeader(const string ename);
 void printReleaseHostagesFooter(const int hostages);
-void printEnemyAllowsHostagesToDie(const string ename);
 void printLetUsGoAndTheyGoFree(const string aname, const int hostages);
-void printEnemyWatchesHostageDeath(const string ename);
-void printAcceptsPickupLine(const string aname, const string tkname, const vector<string> selected_flirt);
-void printRejectsPickupLine(const string tkname, const int tktype, const int agender_liberal, const vector<string> selected_flirt);
-void printSaysWhat(const string tkname);
 void printTurnsAway(const string tkname, const int tkalign);
-void printRejectPolicePickupLine(const string tkname, const bool extraline);
-void printPickupLine(const string aname, const vector<string> selected_flirt);
-void printNonHumanRejection(const string tkname, const int tktype, const bool extraline);
 void printAnimalDoesntUnderstand(const string tkname, const int tktype);
-void printWannaHearSomething(const string aname);
-void printLetMeSellYouAGun(const string tkname);
-void printNotHereDummy(const string tkname);
-void printWaitUntilItCoolsDown(const string tkname);
-void printIDontSellToCops(const string tkname);
-void printIDontSellToNaked(const string tkname);
-void printINeedAGun(const string aname);
-void printJesusItsYours(const string tkname);
-void printIWantYouToLeave(const string tkname);
-void printGiveMeTheLCSPrice(const string aname);
 void printThreatensWithAGun(const string aname, const string aweapon);
-void printRefuseRentDeal(const string aname);
-void printNotMyProblem(const string tkname);
-void printAcceptRentHeader(const string aname);
-void printAcceptRentFooter(const string tkname);
-void printRentingOptions(const bool cannotAfford);
 void printINeedThisMuchRent(const string tkname, const int rent);
-void printPutSomeDamnClothesOn(const string tkname);
-void printIWantToRent(const string aname);
-void printClearOutYourRoom(const string tkname);
-void printYourPossessionsAreRelocated();
-void printIWantToCancelRent(const string aname);
-void printTalkToPotentialLandlord(const bool is_naked);
-void printTalkToLandlord(const bool is_naked);
-void printTalkToGangMemberOrMerc(const bool is_naked);
-void printTalkToBankTeller(const bool is_naked);
-void printTalkToHeader(const string aname);
+
+void printBrandishWeapon(const string aname, const string aweapon);
+void printDiscardsBody(const string aname, const string pname);
+
 void printTalkToMiddle(const int tkalign, const string tkname, const string tkbio);
 void printTalkToFooter(const bool is_naked, const bool can_date);
-void printBankerCooperates();
-void printTheVaultIsOpen();
-void printGuardsCloseIn();
-void printDemandVaultBeOpened(const string aname);
-void printBrandishWeapon(const string aname, const string aweapon);
-void printTellerComplies();
-void printTellerAlertsCops();
-void printIRobTheBank(const string aname);
-void printOptionsWithinBank(const bool is_naked);
+
+void printSpecialRecruitment(const string aname, const string tkname, const string pitch, const string response);
+void printAcceptsPickupLine(const string aname, const string tkname, const vector<string> selected_flirt);
+void printRejectsPickupLine(const string tkname, const int tktype, const int agender_liberal, const vector<string> selected_flirt);
+void printPickupLine(const string aname, const vector<string> selected_flirt);
+
+enum COMMON_PRINTABLE {
+
+	eprintTurnsAway,
+	eprintTheSquadIsArrested,
+	eprintTheEnemyIsFooled,
+	eprintDeathSquadBluff,
+	eprintLabCoatBluff,
+	eprintPoliceBluff,
+	eprintPloyWorksEnemyBacksOff,
+	eprintExecutionGunshot,
+	eprintExecutionBareHands,
+	eprintYourPossessionsAreRelocated,
+	eprintBankerCooperates,
+	eprintTheVaultIsOpen,
+	eprintGuardsCloseIn,
+	eprintTellerComplies,
+	eprintTellerAlertsCops,
+
+	eprintOptionsWithinBank,
+	eprintTalkToPotentialLandlord,
+	eprintTalkToLandlord,
+	eprintTalkToGangMemberOrMerc,
+	eprintTalkToBankTeller,
+
+	eprintOptionsWithinBankWhileNaked,
+	eprintTalkToPotentialLandlordWhileNaked,
+	eprintTalkToLandlordWhileNaked,
+	eprintTalkToGangMemberOrMercWhileNaked,
+	eprintTalkToBankTellerWhileNaked,
+
+	eprintRentingOptions,
+	eprintRentingOptionsCannotAfford,
+
+};
+void printCommonStatement(const COMMON_PRINTABLE pr);
+
 void pressAnyKey();
 int getkeyAlt();
 int pressSpecificKey(const int x, const int y);

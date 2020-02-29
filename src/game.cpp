@@ -216,24 +216,23 @@ string fixLineSpecialCharacter(char * toFix) {
 				// 'â'
 				c = (char)0x83;
 				break;
-				//	case (int) '´': // Repeat?
-						// 'ô'
-				//		c = (char)0x93;
-				//		break;
-						/*
-						case (int) 'Â':
-						// '¢'
-						// This letter does not use the escape character '-61'
-						// meaning it would need its own switch statement
-						// in addition to the hassle of determining what escape character is used
-						c = (char) 0x9b;
-						break;
-						*/
 			default:
 				c = toFix[i];
 				break;
 			}
 			str += c;
+		}
+		else if (toFix[i] == 'ô') {
+			str += (char)0x93;
+			//str += 'ô';
+		}
+		//else if (toFix[i] == 'Â') {
+		//	oem 437 does not have this character
+		//	str += 'Â';
+		//}
+		else if (toFix[i] == '¢') {
+			str += (char)0x9b;
+			//str += '¢';
 		}
 		else {
 			str += toFix[i];

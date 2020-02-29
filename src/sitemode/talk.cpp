@@ -54,16 +54,16 @@ void talk(DeprecatedCreature &a, const int t)
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
-	printOptionsWithinBank(is_naked);
+	printCommonStatement(is_naked ? eprintOptionsWithinBankWhileNaked : eprintOptionsWithinBank);
 	int c = pressSpecificKey('a', 'b', 'c');
 	switch (c)
 	{
 	case 'a':
-		printIRobTheBank(a.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintIRobTheBank,a.getNameAndAlignment().name);
 		pressAnyKey();
 		if (LocationsPool::getInstance().get_specific_integer(INT_ISTHISPLACEHIGHSECURITY, getCurrentSite()))
 		{
-			printTellerAlertsCops();
+			printCommonStatement(eprintTellerAlertsCops);
 
 			pressAnyKey();
 			setSiteAlarmOne();
@@ -77,7 +77,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		else
 		{
-			printTellerComplies();
+			printCommonStatement(eprintTellerComplies);
 			pressAnyKey();
 			criminalize(a, LAWFLAG_BANKROBBERY);
 			sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
@@ -107,7 +107,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			clearmessagearea();
 		}
 
-		printDemandVaultBeOpened(a.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintDemandVaultBeOpened,a.getNameAndAlignment().name);
 
 		pressAnyKey();
 		const int roll = a.skill_roll(SKILL_PERSUASION);
@@ -118,7 +118,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 			difficulty += 12;
 		if (roll < difficulty)
 		{
-			printGuardsCloseIn();
+			printCommonStatement(eprintGuardsCloseIn);
 
 			pressAnyKey();
 			setSiteAlarmOne();
@@ -137,11 +137,11 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 		}
 		else
 		{
-			printBankerCooperates();
+			printCommonStatement(eprintBankerCooperates);
 
 			pressAnyKey();
 
-			printTheVaultIsOpen();
+			printCommonStatement(eprintTheVaultIsOpen);
 
 			pressAnyKey();
 
@@ -172,7 +172,7 @@ char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	printTalkToHeader(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintTalkToHeader,a.getNameAndAlignment().name);
 	printTalkToMiddle(tk.align, tk.getNameAndAlignment().name, get_age_string(tk.getCreatureBio(), tk.animalgloss));
 
 
@@ -182,21 +182,21 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 	if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == -1)
 	{
-		printTalkToPotentialLandlord(is_naked);
+		printCommonStatement(is_naked ? eprintTalkToPotentialLandlordWhileNaked : eprintTalkToPotentialLandlord);
 	}
 	else if (tk.type == CREATURE_LANDLORD && LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) > 0)
 	{
-		printTalkToLandlord(is_naked);
+		printCommonStatement(is_naked ? eprintTalkToLandlordWhileNaked : eprintTalkToLandlord);
 
 	}
 	else if (tk.type == CREATURE_GANGMEMBER || tk.type == CREATURE_MERC)
 	{
-		printTalkToGangMemberOrMerc(is_naked);
+		printCommonStatement(is_naked ? eprintTalkToGangMemberOrMercWhileNaked : eprintTalkToGangMemberOrMerc);
 
 	}
 	else if (tk.type == CREATURE_BANK_TELLER)
 	{
-		printTalkToBankTeller(is_naked);
+		printCommonStatement(is_naked ? eprintTalkToBankTellerWhileNaked : eprintTalkToBankTeller);
 
 	}
 	while (true)
@@ -240,37 +240,36 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	printIWantToCancelRent(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintIWantToCancelRent,a.getNameAndAlignment().name);
 
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		printPutSomeDamnClothesOn(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintPutSomeDamnClothesOn,tk.getNameAndAlignment().name);
 		pressAnyKey();
-		return;
+	}else{
+		printCommonXeDoesStatement(eprintClearOutYourRoom, tk.getNameAndAlignment().name);
+
+		pressAnyKey();
+
+		printCommonStatement(eprintYourPossessionsAreRelocated);
+
+		pressAnyKey();
+
+		moveEverythingAwayFromSite(getCurrentSite());
 	}
-	printClearOutYourRoom(tk.getNameAndAlignment().name);
-
-	pressAnyKey();
-
-	printYourPossessionsAreRelocated();
-
-	pressAnyKey();
-
-	moveEverythingAwayFromSite(getCurrentSite());
-
 }
 
 /* common - assigns a new base to all members of a squad */
 void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	printIWantToRent(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintIWantToRent,a.getNameAndAlignment().name);
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		printPutSomeDamnClothesOn(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintPutSomeDamnClothesOn,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -290,17 +289,17 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	while (true)
 	{
 		int c = 'a';
-		printRentingOptions(ledger.get_funds() < rent);
+		printCommonStatement(ledger.get_funds() < rent ? eprintRentingOptionsCannotAfford : eprintRentingOptions);
 		c = getkeyAlt();
 		switch (c)
 		{
 		case 'a': // Accept rent deal
 			if (ledger.get_funds() < rent) break;
-			printAcceptRentHeader(a.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintAcceptRentHeader,a.getNameAndAlignment().name);
 
 			pressAnyKey();
 
-			printAcceptRentFooter(tk.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintAcceptRentFooter,tk.getNameAndAlignment().name);
 
 			pressAnyKey();
 
@@ -309,9 +308,9 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			basesquad(activesquad, getCurrentSite());
 			return;
 		case 'b': // Refuse rent deal
-			printRefuseRentDeal(a.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintRefuseRentDeal,a.getNameAndAlignment().name);
 			pressAnyKey();
-			printNotMyProblem(tk.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintNotMyProblem,tk.getNameAndAlignment().name);
 			pressAnyKey();
 			return;
 		case 'c': // Threaten landlord
@@ -333,7 +332,7 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 				pressAnyKey();
 				clearmessagearea();
 			}
-			printGiveMeTheLCSPrice(a.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintGiveMeTheLCSPrice,a.getNameAndAlignment().name);
 			pressAnyKey();
 			const int roll = a.skill_roll(SKILL_PERSUASION);
 			int difficulty = DIFFICULTY_FORMIDABLE;
@@ -344,14 +343,14 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 			if (roll < difficulty - 1)
 			{
 
-				printIWantYouToLeave(tk.getNameAndAlignment().name);
+				printCommonXeDoesStatement(eprintIWantYouToLeave,tk.getNameAndAlignment().name);
 				pressAnyKey();
 				tk.make_cantbluff_one();
 				return;
 			}
 			else
 			{
-				printJesusItsYours(tk.getNameAndAlignment().name);
+				printCommonXeDoesStatement(eprintJesusItsYours,tk.getNameAndAlignment().name);
 				pressAnyKey();
 				int rent;
 				// Either he calls the cops...
@@ -375,12 +374,12 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	printINeedAGun(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintINeedAGun,a.getNameAndAlignment().name);
 	pressAnyKey();
 	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
 	if (is_naked)
 	{
-		printIDontSellToNaked(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintIDontSellToNaked,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -391,13 +390,13 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 		(lawList[LAW_POLICEBEHAVIOR] == -2 && lawList[LAW_DEATHPENALTY] == -2 &&
 			a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM))
 	{
-		printIDontSellToCops(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintIDontSellToCops,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
 	if (isThereASiteAlarm())
 	{
-		printWaitUntilItCoolsDown(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintWaitUntilItCoolsDown,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -410,12 +409,12 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 	case SITE_RESIDENTIAL_TENEMENT:
 	case SITE_RESIDENTIAL_BOMBSHELTER:
 	case SITE_RESIDENTIAL_SHELTER:
-		printLetMeSellYouAGun(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintLetMeSellYouAGun,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		armsdealer(getCurrentSite());
 		return;
 	default:
-		printNotHereDummy(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintNotHereDummy,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		return;
 	}
@@ -423,7 +422,7 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 void wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	printWannaHearSomething(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintWannaHearSomething,a.getNameAndAlignment().name);
 	pressAnyKey();
 	bool interested = tk.talkreceptive();
 	if (!interested && a.skill_check(SKILL_PERSUASION, DIFFICULTY_AVERAGE))
@@ -438,7 +437,7 @@ void wannaHearSomethingDisturbing(DeprecatedCreature &a, DeprecatedCreature &tk)
 	}
 	else if (!isPrisoner(tk.getNameAndAlignment().name) && interested)
 	{
-		printSaysWhat(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintSaysWhat,tk.getNameAndAlignment().name);
 		pressAnyKey();
 		talkAboutIssues(a, tk);
 	}
@@ -579,7 +578,7 @@ void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		pressAnyKey();
 		printAgreesToComeByLater(tk.getNameAndAlignment().name, extraline, another_extraline && !unableToSpeak);
 		pressAnyKey();
-		DeprecatedCreature *newcr = new DeprecatedCreature;
+		DeprecatedCreature* newcr = new DeprecatedCreature;
 		*newcr = tk;
 		newcr->namecreature();
 		newRecruit(newcr, a.id);
@@ -597,18 +596,18 @@ void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 			const bool tkConservativeCounter = tk.align != ALIGN_LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM, DIFFICULTY_AVERAGE);
 			if (tk.align == ALIGN_CONSERVATIVE && you_are_stupid)
 			{
-				printConservativeRespondsToStupid(tk.type, extraline);
+				printConservativeRespondsToStupid(tk.getNameAndAlignment().name, tk.type, extraline);
 			}
 			else if (tkConservativeCounter)
 			{
-				printConservativeCounter(extraline, lw);
+				printConservativeCounter(tk.getNameAndAlignment().name, extraline, lw);
 			}
 			else
 			{
-				printRejectTalk(extraline);
+				printRejectTalk(tk.getNameAndAlignment().name, extraline);
 			}
 		}
-		printTurnsAway();
+		printCommonStatement(eprintTurnsAway);
 		pressAnyKey();
 		tk.make_cantbluff_one();
 	}
@@ -619,7 +618,7 @@ void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 
 void pressKeyAInCombat(DeprecatedCreature &a) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	printThreatenEnemy(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintThreatenEnemy,a.getNameAndAlignment().name);
 	pressAnyKey();
 	for (int e = 0; e < ENCMAX; e++)
 	{
@@ -641,7 +640,7 @@ void pressKeyAInCombat(DeprecatedCreature &a) {
 				{
 					if (LCSrandom(3)) continue;
 				}
-				printAnotherOneBacksOff(encounter[e].name);
+				printCommonXeDoesStatement(eprintAnotherOneBacksOff,encounter[e].name);
 				delenc(e, 0);
 				addjuice(a, 2, 200); // Instant juice!
 				pressAnyKey();
@@ -671,12 +670,12 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	if (executer->get_weapon().is_ranged()
 		&& executer->get_weapon().get_ammoamount() > 0)
 	{
-		printExecutionGunshot();
+		printCommonStatement(eprintExecutionGunshot);
 		executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
 	}
 	else
 	{
-		printExecutionBareHands();
+		printCommonStatement(eprintExecutionBareHands);
 	}
 	
 	pressAnyKey();
@@ -695,7 +694,7 @@ void pressedKeyAWithHostage(DeprecatedCreature &a, const int hostages, const int
 	executer->delete_and_nullify_prisoner();
 	if (hostages > 1 && LCSrandom(2))
 	{
-		printEnemyWatchesHostageDeath(encounter[e].name);
+		printCommonXeDoesStatement(eprintEnemyWatchesHostageDeath,encounter[e].name);
 		for (int i = ENCMAX - 1; i >= 0; i--)
 		{
 			if (encounter[i].exists && encounter[i].enemy && encounter[i].alive)
@@ -717,13 +716,13 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 		encounter[e].type == CREATURE_GANGUNIT) &&
 		LCSrandom(2)) && encounter[e].align == ALIGN_CONSERVATIVE)
 	{
-		printEnemyAllowsHostagesToDie(encounter[e].name);
+		printCommonXeDoesStatement(eprintEnemyAllowsHostagesToDie,encounter[e].name);
 		pressAnyKey();
 	}
 	else
 	{
 
-		printReleaseHostagesHeader(encounter[e].name);
+		printCommonXeDoesStatement(eprintReleaseHostagesHeader,encounter[e].name);
 		pressAnyKey();
 		printReleaseHostagesFooter(hostages);
 		juiceparty(15, 200); // Instant juice for successful hostage negotiation
@@ -748,7 +747,7 @@ void pressedKeyBWithHostage(DeprecatedCreature &a, const int hostages, const int
 
 void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int hostages, const int weaponhostage) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
-	printThreatenHostages(a.getNameAndAlignment().name);
+	printCommonXeDoesStatement(eprintThreatenHostages,a.getNameAndAlignment().name);
 	sitecrime += 5;
 	criminalizeparty(LAWFLAG_KIDNAPPING);
 	addjuice(a, -2, -10); // DE-juice for this shit
@@ -784,7 +783,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 		if (e == ENCMAX) { e--; }
 		if (noretreat == false)
 		{
-			printPloyWorksEnemyBacksOff();
+			printCommonStatement(eprintPloyWorksEnemyBacksOff);
 			for (int i = ENCMAX - 1; i >= 0; i--)
 			{
 				if (encounter[i].exists&&
@@ -815,7 +814,7 @@ void pressKeyBInCombat(DeprecatedCreature &a, DeprecatedCreature &tk, const int 
 	}
 	else
 	{
-		printEnemyIgnoresThreat(tk.getNameAndAlignment().name);
+		printCommonXeDoesStatement(eprintEnemyIgnoresThreat,tk.getNameAndAlignment().name);
 		pressAnyKey();
 	}
 }
@@ -834,23 +833,23 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 			a.get_armor().get_itemtypename() == tag_ARMOR_POLICEARMOR ||
 			a.get_armor().get_itemtypename() == tag_ARMOR_SWATARMOR)
 		{
-			printPoliceBluff();
+			printCommonStatement(eprintPoliceBluff);
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_BUNKERGEAR)
 		{
 			printBunkerGearBluff(siteonfire);
 		}
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_LABCOAT)
-			printLabCoatBluff();
+			printCommonStatement(eprintLabCoatBluff);
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_DEATHSQUADUNIFORM)
-			printDeathSquadBluff();
+			printCommonStatement(eprintDeathSquadBluff);
 		else if (a.get_armor().get_itemtypename() == tag_ARMOR_MITHRIL)
 		{
-			printEngraveElbereth(a.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintEngraveElbereth,a.getNameAndAlignment().name);
 		}
 		else
 		{
-			printITalkLikeAConservative(a.getNameAndAlignment().name);
+			printCommonXeDoesStatement(eprintITalkLikeAConservative,a.getNameAndAlignment().name);
 		}
 
 	}
@@ -884,7 +883,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	{
 		if (encounter[e].type == CREATURE_HICK)
 		{
-			printWeWerentBornYesterday(encounter[e].name);
+			printCommonXeDoesStatement(eprintWeWerentBornYesterday, encounter[e].name);
 		}
 		else
 		{
@@ -894,7 +893,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	}
 	else
 	{
-		printTheEnemyIsFooled();
+		printCommonStatement(eprintTheEnemyIsFooled);
 		pressAnyKey();
 		for (int e = ENCMAX - 1; e >= 0; e--)
 			if (encounter[e].exists&&encounter[e].alive&&encounter[e].enemy)
@@ -902,7 +901,7 @@ void pressKeyCInCombat(DeprecatedCreature &a) {
 	}
 }
 void pressKeyDInCombat() {
-	printTheSquadIsArrested();
+	printCommonStatement(eprintTheSquadIsArrested);
 	pressAnyKey();
 	int stolen = 0;
 	// Police assess stolen goods in inventory

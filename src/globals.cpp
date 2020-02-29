@@ -853,7 +853,7 @@ int checkForPeopleWhoCanRecruit() {
 	return -1;
 }
 void addNewRecruit(int i, int e) {
-	DeprecatedCreature *newcr = new DeprecatedCreature;
+	DeprecatedCreature* newcr = new DeprecatedCreature;
 	*newcr = encounter[e];
 	newcr->namecreature();
 	newcr->location = activesquad->squad[i]->location;
@@ -980,3 +980,20 @@ vector<file_and_text_collection> names_text_file_collection = {
 	customText(&regular_last_names, names + REGULAR_LAST_NAMES_TXT),
 	customText(&archconservative_last_names, names + ARCHCONSERVATIVE_LAST_NAMES_TXT),
 };
+
+
+NameAndAlignment PNameAndAlignment() {
+	return encounter[0].getNameAndAlignment();
+}
+CreatureJustice PCreatureJustice() {
+	return encounter[0].getCreatureJustice();
+
+}
+CreatureBio PCreatureBio() {
+	return encounter[0].getCreatureBio();
+
+}
+int PCreatureCharisma() {
+	CreatureAttributeList a = encounter[0].getCreatureAttributeList();
+	return a.get_attribute(ATTRIBUTE_CHARISMA);
+}

@@ -4921,7 +4921,10 @@ int checkkeyAlt() {
 void echoAlt() {
 	echo();
 }
+
+void outputPortraitFile();
 int getkeyAlt() {
+	//outputPortraitFile();
 	return getkey();
 }
 /* Allow the player to enter a name with an optional default */
@@ -6415,7 +6418,13 @@ void printTurnsAway() {
 	addstrAlt(unnamed_String_Talk_cpp_093, gamelog);
 	gamelog.newline();
 }
-void printConservativeRespondsToStupid(const int tktype, const bool extraline) {
+void printRespondantName(const string tkname, const bool extraline = false) {
+	set_color_easy(WHITE_ON_BLACK_BRIGHT);
+	mvaddstrAlt(12 + (extraline ? 0 : 1), 1, tkname, gamelog);
+	addstrAlt(respondsComma, gamelog);
+}
+void printConservativeRespondsToStupid(const string tkname, const int tktype, const bool extraline) {
+	printRespondantName(tkname, extraline);
 	int y = 13 + (extraline ? 0 : 1);
 
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -6428,27 +6437,22 @@ void printConservativeRespondsToStupid(const int tktype, const bool extraline) {
 		mvaddstrAlt(y, 1, pickrandom(that_is_not_disturbing), gamelog);
 	}
 }
-void printRespondantName(const string tkname, const bool extraline) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12 + (extraline ? 0 : 1), 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
-}
-void printConservativeCounter(const bool extraline, const int lw) {
+
+void printConservativeCounter(const string tkname, const bool extraline, const int lw) {
+	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, conservativeLegalArgument[lw], gamelog);
 
 }
-void printRejectTalk(const bool extraline) {
+void printRejectTalk(const string tkname, const bool extraline) {
+	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, CONST_WHATEVER, gamelog);
 
 }
 void printMutantTalkAboutIssues(const string tkname, const int extraline) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	int y = 12 + (extraline ? 0 : 1);
-	mvaddstrAlt(y++, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname, extraline);
+	int y = 13 + (extraline ? 0 : 1);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y, 1, CONST_UGH_PFFT, gamelog);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -6457,10 +6461,8 @@ void printMutantTalkAboutIssues(const string tkname, const int extraline) {
 }
 
 void printThatIsDisturbing(const string tkname, const bool extraline, const int special_case) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	int y = 12 + (extraline ? 0 : 1);
-	mvaddstrAlt(y, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
-	y++;
+	printRespondantName(tkname, extraline);
+	int y = 13 + (extraline ? 0 : 1);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	switch (special_case)
 	{
@@ -6483,10 +6485,8 @@ void printThatIsDisturbing(const string tkname, const bool extraline, const int 
 }
 void printUnableToSpeakAgree(const string tkname, const bool extraline) {
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	int y = 12 + (extraline ? 0 : 1);
-	mvaddstrAlt(y, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
-	y++;
+	printRespondantName(tkname, extraline);
+	int y = 13 + (extraline ? 0 : 1);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y, 1, CONST_AAAAHHH, gamelog);
 	gamelog.newline();
@@ -6870,9 +6870,8 @@ void printEnemyWatchesHostageDeath(const string ename) {
 
 void printAcceptsPickupLine(const string aname, const string tkname, const vector<string> selected_flirt) {
 	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
-	int y = 12 + (extraline ? 1 : 0);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(y++, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	int y = 13 + (extraline ? 1 : 0); 
+	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y++, 1, selected_flirt[2], gamelog);
 	gamelog.newline();
@@ -6896,10 +6895,8 @@ void printAcceptsPickupLine(const string aname, const string tkname, const vecto
 void printRejectsPickupLine(const string tkname, const int tktype, const int agender_liberal, const vector<string> selected_flirt) {
 
 	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
-	int y = 12 + (extraline ? 1 : 0);
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(y++, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	int y = 13 + (extraline ? 1 : 0);
+	printRespondantName(tkname, extraline);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	if (tktype == CREATURE_CORPORATE_CEO)
 	{
@@ -6918,19 +6915,13 @@ void printRejectsPickupLine(const string tkname, const int tktype, const int age
 	gamelog.newline();
 }
 void printSaysWhat(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_WHAT, gamelog);
 	gamelog.newline();
 }
 void printTurnsAway(const string tkname, const int tkalign) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	if (isPrisoner(tkname))
 	{
@@ -6944,8 +6935,7 @@ void printTurnsAway(const string tkname, const int tkalign) {
 	gamelog.newline();
 }
 void printRejectPolicePickupLine(const string tkname, const bool extraline) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12 + (extraline ? 1 : 0), 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname, extraline);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13 + (extraline ? 1 : 0), 1, CONST_DIRTY_YOU_KNOW_THAT_S_ILLEGAL_OFFICER, gamelog);
 	gamelog.newline();
@@ -7007,44 +6997,33 @@ void printWannaHearSomething(const string aname) {
 	gamelog.newline();
 }
 void printLetMeSellYouAGun(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_WHAT_EXACTLY_DO_YOU_NEED, gamelog);
 	gamelog.newline();
 }
 void printNotHereDummy(const string tkname) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_UHHH_NOT_A_GOOD_PLACE_FOR_THIS, gamelog);
 	gamelog.newline();
 
 }
 void printWaitUntilItCoolsDown(const string tkname) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_WE_CAN_TALK_WHEN_THINGS_ARE_CALM, gamelog);
 	gamelog.newline();
 
 }
 void printIDontSellToCops(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_I_DON_T_SELL_GUNS_OFFICER, gamelog);
 	gamelog.newline();
 }
 void printIDontSellToNaked(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_JESUS, gamelog);
 	gamelog.newline();
@@ -7059,16 +7038,13 @@ void printINeedAGun(const string aname) {
 	gamelog.newline();
 }
 void printJesusItsYours(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_JESUS_IT_S_YOURS, gamelog);
 	gamelog.newline();
 }
 void printIWantYouToLeave(const string tkname) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_I_THINK_YOU_D_BETTER_LEAVE, gamelog);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -7103,10 +7079,7 @@ void printRefuseRentDeal(const string aname) {
 	gamelog.newline();
 }
 void printNotMyProblem(const string tkname) {
-
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_NOT_MY_PROBLEM, gamelog);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -7123,8 +7096,7 @@ void printAcceptRentHeader(const string aname) {
 	gamelog.newline();
 }
 void printAcceptRentFooter(const string tkname) {
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog); addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_RENT_IS_DUE_BY_THE_THIRD_OF_EVERY_MONTH, gamelog);
 	gamelog.newline();
@@ -7146,9 +7118,7 @@ void printRentingOptions(const bool cannotAfford) {
 }
 void printINeedThisMuchRent(const string tkname, const int rent) {
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_IT_LL_BE, gamelog);
 	addstrAlt(rent, gamelog);
@@ -7161,9 +7131,7 @@ void printINeedThisMuchRent(const string tkname, const int rent) {
 }
 void printPutSomeDamnClothesOn(const string tkname) {
 	//const string unnamed_String_Talk_cpp_026 = "\"Put some clothes on before I call the cops.\"";
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_PUT_SOME_CLOTHES_ON_BEFORE_I_CALL_THE_COPS, gamelog);
 	gamelog.newline();
@@ -7179,9 +7147,7 @@ void printIWantToRent(const string aname) {
 }
 void printClearOutYourRoom(const string tkname) {
 
-	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12, 1, tkname, gamelog);
-	addstrAlt(respondsComma, gamelog);
+	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_ALRIGHT_PLEASE_CLEAR_OUT_YOUR_ROOM, gamelog);
 	gamelog.newline();
@@ -7442,3 +7408,292 @@ string printNewGameHeader() {
 	return savefile_temp + dotDat;
 }
 // end TITLESCREEN_CPP
+
+enum COMMON_PRINTABLE {
+
+	eprintTurnsAway,
+	eprintTheSquadIsArrested,
+	eprintTheEnemyIsFooled,
+	eprintDeathSquadBluff,
+	eprintLabCoatBluff,
+	eprintPoliceBluff,
+	eprintPloyWorksEnemyBacksOff,
+	eprintExecutionGunshot,
+	eprintExecutionBareHands,
+	eprintYourPossessionsAreRelocated,
+	eprintBankerCooperates,
+	eprintTheVaultIsOpen,
+	eprintGuardsCloseIn,
+	eprintTellerComplies,
+	eprintTellerAlertsCops,
+
+	eprintOptionsWithinBank,
+	eprintTalkToPotentialLandlord,
+	eprintTalkToLandlord,
+	eprintTalkToGangMemberOrMerc,
+	eprintTalkToBankTeller,
+
+	eprintOptionsWithinBankWhileNaked,
+	eprintTalkToPotentialLandlordWhileNaked,
+	eprintTalkToLandlordWhileNaked,
+	eprintTalkToGangMemberOrMercWhileNaked,
+	eprintTalkToBankTellerWhileNaked,
+
+	eprintRentingOptions,
+	eprintRentingOptionsCannotAfford,
+};
+void printCommonStatement(const COMMON_PRINTABLE pr) {
+	switch (pr) {
+	case eprintTurnsAway:
+		printTurnsAway();
+	break; 
+	case eprintTheSquadIsArrested:
+		printTheSquadIsArrested();
+	break; 
+	case eprintTheEnemyIsFooled:
+		printTheEnemyIsFooled();
+	break; 
+	case eprintDeathSquadBluff:
+		printDeathSquadBluff();
+	break; 
+	case eprintLabCoatBluff:
+		printLabCoatBluff();
+	break; 
+	case eprintPoliceBluff:
+		printPoliceBluff();
+	break; 
+	case eprintPloyWorksEnemyBacksOff:
+		printPloyWorksEnemyBacksOff();
+	break;
+	case eprintExecutionGunshot:
+		printExecutionGunshot();
+	break;
+	case eprintExecutionBareHands:
+		printExecutionBareHands();
+	break; 
+	case eprintYourPossessionsAreRelocated:
+		printYourPossessionsAreRelocated();
+	break; 
+	case eprintBankerCooperates:
+		printBankerCooperates();
+	break;
+	case eprintTheVaultIsOpen:
+		printTheVaultIsOpen();
+	break; 
+	case eprintGuardsCloseIn:
+		printGuardsCloseIn();
+	break;
+	case eprintTellerComplies:
+		printTellerComplies();
+	break;
+	case eprintTellerAlertsCops:
+		printTellerAlertsCops();
+		break;
+	case eprintOptionsWithinBank:
+		printOptionsWithinBank(false);
+		break;
+	case eprintTalkToPotentialLandlord:
+		printTalkToPotentialLandlord(false);
+		break;
+	case eprintTalkToLandlord:
+		printTalkToLandlord(false);
+		break;
+	case eprintTalkToGangMemberOrMerc:
+		printTalkToGangMemberOrMerc(false);
+		break;
+	case eprintTalkToBankTeller:
+		printTalkToBankTeller(false);
+		break;
+	case eprintOptionsWithinBankWhileNaked:
+		printOptionsWithinBank(true);
+		break;
+	case eprintTalkToPotentialLandlordWhileNaked:
+		printTalkToPotentialLandlord(true);
+		break;
+	case eprintTalkToLandlordWhileNaked:
+		printTalkToLandlord(true);
+		break;
+	case eprintTalkToGangMemberOrMercWhileNaked:
+		printTalkToGangMemberOrMerc(true);
+		break;
+	case eprintTalkToBankTellerWhileNaked:
+		printTalkToBankTeller(true);
+		break;
+	case eprintRentingOptions:
+		printRentingOptions(false);
+		break;
+	case eprintRentingOptionsCannotAfford:
+		printRentingOptions(true);
+		break;
+	}
+}
+
+enum COMMON_XE_DOES_PRINTABLE {
+
+	eprintITalkLikeAConservative,
+	eprintEngraveElbereth,
+	eprintWeWerentBornYesterday,
+	eprintWannaHearSomething,
+	eprintLetMeSellYouAGun,
+	eprintNotHereDummy,
+	eprintWaitUntilItCoolsDown,
+	eprintIDontSellToCops,
+	eprintIDontSellToNaked,
+	eprintINeedAGun,
+	eprintJesusItsYours,
+	eprintIWantYouToLeave,
+	eprintGiveMeTheLCSPrice,
+	eprintEnemyIgnoresThreat,
+	eprintAnotherOneBacksOff,
+	eprintThreatenEnemy,
+	eprintThreatenHostages,
+	eprintReleaseHostagesHeader,
+	eprintRefuseRentDeal,
+	eprintNotMyProblem,
+	eprintAcceptRentHeader,
+	eprintAcceptRentFooter,
+	eprintDemandVaultBeOpened,
+	eprintIRobTheBank,
+	eprintEnemyWatchesHostageDeath,
+	eprintSaysWhat,
+	eprintPutSomeDamnClothesOn,
+	eprintIWantToRent,
+	eprintClearOutYourRoom,
+	eprintIWantToCancelRent,
+	eprintEnemyAllowsHostagesToDie,
+	eprintTalkToHeader,
+
+};
+
+void printCommonXeDoesStatement(const COMMON_XE_DOES_PRINTABLE pr, const string aname) {
+	switch (pr) {
+
+	case eprintITalkLikeAConservative:
+		printITalkLikeAConservative(aname);
+		break;
+
+	case eprintEngraveElbereth:
+		printEngraveElbereth(aname);
+		break;
+
+	case eprintWeWerentBornYesterday:
+		printWeWerentBornYesterday(aname);
+		break;
+
+	case eprintWannaHearSomething:
+		printWannaHearSomething(aname);
+		break;
+
+	case eprintLetMeSellYouAGun:
+		printLetMeSellYouAGun(aname);
+		break;
+
+	case eprintNotHereDummy:
+		printNotHereDummy(aname);
+		break;
+
+	case eprintWaitUntilItCoolsDown:
+		printWaitUntilItCoolsDown(aname);
+		break;
+
+	case eprintIDontSellToCops:
+		printIDontSellToCops(aname);
+		break;
+
+	case eprintIDontSellToNaked:
+		printIDontSellToNaked(aname);
+		break;
+
+	case eprintINeedAGun:
+		printINeedAGun(aname);
+		break;
+
+	case eprintJesusItsYours:
+		printJesusItsYours(aname);
+		break;
+
+	case eprintIWantYouToLeave:
+		printIWantYouToLeave(aname);
+		break;
+
+	case eprintGiveMeTheLCSPrice:
+		printGiveMeTheLCSPrice(aname);
+		break;
+
+	case eprintEnemyIgnoresThreat:
+		printEnemyIgnoresThreat(aname);
+		break;
+
+	case eprintAnotherOneBacksOff:
+		printAnotherOneBacksOff(aname);
+		break;
+
+	case eprintThreatenEnemy:
+		printThreatenEnemy(aname);
+		break;
+
+	case eprintThreatenHostages:
+		printThreatenHostages(aname);
+		break;
+
+	case eprintReleaseHostagesHeader:
+		printReleaseHostagesHeader(aname);
+		break;
+
+	case eprintRefuseRentDeal:
+		printRefuseRentDeal(aname);
+		break;
+
+	case eprintNotMyProblem:
+		printNotMyProblem(aname);
+		break;
+
+	case eprintAcceptRentHeader:
+		printAcceptRentHeader(aname);
+		break;
+
+	case eprintAcceptRentFooter:
+		printAcceptRentFooter(aname);
+		break;
+
+	case eprintDemandVaultBeOpened:
+		printDemandVaultBeOpened(aname);
+		break;
+
+	case eprintIRobTheBank:
+		printIRobTheBank(aname);
+		break;
+
+	case eprintEnemyWatchesHostageDeath:
+		printEnemyWatchesHostageDeath(aname);
+		break;
+
+	case eprintSaysWhat:
+		printSaysWhat(aname);
+		break;
+
+	case eprintPutSomeDamnClothesOn:
+		printPutSomeDamnClothesOn(aname);
+		break;
+
+	case eprintIWantToRent:
+		printIWantToRent(aname);
+		break;
+
+	case eprintClearOutYourRoom:
+		printClearOutYourRoom(aname);
+		break;
+
+	case eprintIWantToCancelRent:
+		printIWantToCancelRent(aname);
+		break;
+
+	case eprintEnemyAllowsHostagesToDie:
+		printEnemyAllowsHostagesToDie(aname);
+		break;
+
+	case eprintTalkToHeader:
+		printTalkToHeader(aname);
+		break;
+	}
+}
