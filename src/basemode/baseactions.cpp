@@ -67,10 +67,11 @@ the bottom of includes.h in the top src folder.
 		 swap(activesquad->squad[oldPos - '1'], activesquad->squad[newPos - '1']);
 	 }
  }
+ const int CARS_PER_PAGE = 18;
  void printCars(const int page) {
 	 int x = 1, y = 10;
 	 string str;
-	 for (int l = page * 18; l < lenVehiclePool() && l < page * 18 + 18; l++)
+	 for (int l = page * CARS_PER_PAGE; l < lenVehiclePool() && l < page * CARS_PER_PAGE + CARS_PER_PAGE; l++)
 	 {
 		 bool this_squad = false;
 		 for (int p = 0; p < 6; p++)
@@ -92,8 +93,8 @@ the bottom of includes.h in the top src folder.
 			 set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		 else
 			 set_color_easy(WHITE_ON_BLACK);
-		 str[0] = l - page * 18 + 'A';
-		 str[1] = '\x0';
+		 str = ((l - (page * CARS_PER_PAGE)) + 'A');
+		 //str[1] = '\x0';
 		 str += spaceDashSpace;
 		 str += getCarFullname(l);
 		 mvaddstrAlt(y, x, str);
@@ -120,7 +121,7 @@ the bottom of includes.h in the top src folder.
 			 mvaddstrAlt(17, 1, addprevpagestr());
 		 }
 		 //PAGE DOWN
-		 if ((page + 1) * 18 < lenVehiclePool())
+		 if ((page + 1) * CARS_PER_PAGE < lenVehiclePool())
 		 {
 			 mvaddstrAlt(17, 53, addnextpagestr());
 		 }
@@ -130,7 +131,7 @@ the bottom of includes.h in the top src folder.
 		 int c = getkey_cap_alt();
 		 if (c >= 'A'&&c <= 'R')
 		 {
-			 int slot = c - 'A' + page * 18;
+			 int slot = c - 'A' + page * CARS_PER_PAGE;
 			 if (slot >= 0 && slot < lenVehiclePool())
 			 {
 				 bool choice = true;
@@ -167,7 +168,7 @@ the bottom of includes.h in the top src folder.
 		 }
 		 if (c >= 'a'&&c <= 'r')
 		 {
-			 int slot = c - 'a' + page * 18;
+			 int slot = c - 'a' + page * CARS_PER_PAGE;
 			 if (slot >= 0 && slot < lenVehiclePool())
 			 {
 				 bool choice = true;
@@ -219,7 +220,7 @@ the bottom of includes.h in the top src folder.
 		 //PAGE UP
 		 if (is_page_up(c) && page > 0) page--;
 		 //PAGE DOWN
-		 if (is_page_down(c) && (page + 1) * 18 < lenVehiclePool()) page++;
+		 if (is_page_down(c) && (page + 1) * CARS_PER_PAGE < lenVehiclePool()) page++;
 		 if (c == 'x' || c == 'X' || c == ENTER || c == ESC || c == SPACEBAR) return;
 	 }
  }

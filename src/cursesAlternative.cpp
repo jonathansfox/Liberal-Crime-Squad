@@ -4502,13 +4502,13 @@ const string CONST_HEY_I_NEED_A_GUN = "\"Hey, I need a gun.\"";
 const string CONST_JESUS = "\"Jesus...\"";
 const string CONST_I_DON_T_SELL_GUNS_OFFICER = "\"I don't sell guns, officer.\"";
 const string CONST_WE_CAN_TALK_WHEN_THINGS_ARE_CALM = "\"We can talk when things are calm.\"";
-const string CONST_WHAT_EXACTLY_DO_YOU_NEED = "\"What exactly do you need? \"";
+const string CONST_WHAT_EXACTLY_DO_YOU_NEED = "\"What exactly do you need?\"";
 const string CONST_UHHH_NOT_A_GOOD_PLACE_FOR_THIS = "\"Uhhh... not a good place for this.\"";
-const string CONST_DO_YOU_WANT_TO_HEAR_SOMETHING_DISTURBING = "\"Do you want to hear something disturbing? \"";
+const string CONST_DO_YOU_WANT_TO_HEAR_SOMETHING_DISTURBING = "\"Do you want to hear something disturbing?\"";
 const string CONST_RUMBLES_DISINTERESTEDLY = " rumbles disinterestedly.";
 const string CONST_BARKS = " barks.";
 const string CONST_DOESN_T_UNDERSTAND = " doesn't understand.";
-const string CONST_WHAT = "\"What? \"";
+const string CONST_WHAT = "\"What?\"";
 const string CONST_NOW_S_NOT_THE_TIME = "\"Now's not the time!\"";
 const string CONST_LEAVE_ME_ALONE = "\"Leave me alone.\"";
 const string unnamed_String_Talk_cpp_064 = "\"No.\"";
@@ -4530,14 +4530,14 @@ const string CONST_INDUSTRIES_THAT_STOP_AT_NOTHING_TO_BECOME_MORE_PROFITABLE_ARE
 const string CONST_THE_ENVIRONMENT_IN_WAYS_THAT_HURT_NOT_ONLY_HUMANS_BUT_ANIMALS_TOO = "the environment in ways that hurt not only humans, but animals too.";
 const string CONST_THE_ENVIRONMENT_IN_WAYS_THAT_HURT_NOT_ONLY_ANIMALS_BUT_PEOPLE_TOO = "the environment in ways that hurt not only animals, but people too.";
 const string CONST_AAAAHHH = "\"Aaaahhh...\"";
-const string CONST_OH_REALLY = "\"Oh, really? \"";
+const string CONST_OH_REALLY = "\"Oh, really?\"";
 const string CONST_YEAH_REALLY = "\"Yeah, really!\"";
-const string CONST_YOU_GOT_ANYTHING_TO_SMOKE_ON_YOU = "\"You got anything to smoke on you? \"";
+const string CONST_YOU_GOT_ANYTHING_TO_SMOKE_ON_YOU = "\"You got anything to smoke on you?\"";
 const string CONST_COUGH = "*cough*";
 const string CONST_AFTER_MORE_DISCUSSION = "After more discussion, ";
 const string CONST_AGREES_TO_COME_BY_LATER_TONIGHT = " agrees to come by later tonight.";
 const string CONST_UGH_PFFT = "\"Ugh.Pfft.\"";
-const string CONST_DO_YOU_WANT_ME_TO_ARREST_YOU = "\"Do you want me to arrest you? \"";
+const string CONST_DO_YOU_WANT_ME_TO_ARREST_YOU = "\"Do you want me to arrest you?\"";
 const string CONST_IF_YOU_DON_T_SHUT_UP_I_M_GOING_TO_SHOOT_YOU = "\"If you don't shut up, I'm going to shoot you.\"";
 const string CONST_WHATEVER = "\"Whatever.\"";
 const string unnamed_String_Talk_cpp_093 = " <turns away>";
@@ -6420,12 +6420,12 @@ void printTurnsAway() {
 }
 void printRespondantName(const string tkname, const bool extraline = false) {
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
-	mvaddstrAlt(12 + (extraline ? 0 : 1), 1, tkname, gamelog);
+	mvaddstrAlt(12 + (extraline ? 1 : 0), 1, tkname, gamelog);
 	addstrAlt(respondsComma, gamelog);
 }
 void printConservativeRespondsToStupid(const string tkname, const int tktype, const bool extraline) {
 	printRespondantName(tkname, extraline);
-	int y = 13 + (extraline ? 0 : 1);
+	int y = 13 + (extraline ? 1 : 0);
 
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	if (tktype == CREATURE_GANGUNIT)
@@ -6441,18 +6441,18 @@ void printConservativeRespondsToStupid(const string tkname, const int tktype, co
 void printConservativeCounter(const string tkname, const bool extraline, const int lw) {
 	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, conservativeLegalArgument[lw], gamelog);
+	mvaddstrAlt(13 + (extraline ? 1 : 0), 1, conservativeLegalArgument[lw], gamelog);
 
 }
 void printRejectTalk(const string tkname, const bool extraline) {
 	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
-	mvaddstrAlt(13 + (extraline ? 0 : 1), 1, CONST_WHATEVER, gamelog);
+	mvaddstrAlt(13 + (extraline ? 1 : 0), 1, CONST_WHATEVER, gamelog);
 
 }
 void printMutantTalkAboutIssues(const string tkname, const int extraline) {
 	printRespondantName(tkname, extraline);
-	int y = 13 + (extraline ? 0 : 1);
+	int y = 13 + (extraline ? 1 : 0);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y, 1, CONST_UGH_PFFT, gamelog);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
@@ -6462,7 +6462,7 @@ void printMutantTalkAboutIssues(const string tkname, const int extraline) {
 
 void printThatIsDisturbing(const string tkname, const bool extraline, const int special_case) {
 	printRespondantName(tkname, extraline);
-	int y = 13 + (extraline ? 0 : 1);
+	int y = 13 + (extraline ? 1 : 0);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	switch (special_case)
 	{
@@ -6486,14 +6486,14 @@ void printThatIsDisturbing(const string tkname, const bool extraline, const int 
 void printUnableToSpeakAgree(const string tkname, const bool extraline) {
 
 	printRespondantName(tkname, extraline);
-	int y = 13 + (extraline ? 0 : 1);
+	int y = 13 + (extraline ? 1 : 0);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y, 1, CONST_AAAAHHH, gamelog);
 	gamelog.newline();
 }
 void printAgreesToComeByLater(const string tkname, const bool extraline, const bool another_extraline) {
 
-	int y = 14 + (extraline ? 0 : 1) + (another_extraline ? 1 : 0);
+	int y = 14 + (extraline ? 1 : 0) + (another_extraline ? 1 : 0);
 	set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	mvaddstrAlt(y, 1, CONST_AFTER_MORE_DISCUSSION, gamelog);
 	addstrAlt(tkname, gamelog);

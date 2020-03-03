@@ -1108,3 +1108,7 @@ Added initial support for RustKnight Portraits
 Fixed X Responds bug
 
 Major refactoring of talk.cpp, replacing many functions with enums
+
+4.12.51
+Fixed minor error introduced in 4.12.50
+Fixed display error 070) Cars

@@ -236,6 +236,7 @@
     <ClCompile Include="..\src\monthly\sleeper_update.cpp" />
     <ClCompile Include="..\src\news\news.cpp" />
     <ClCompile Include="..\src\politics\politics.cpp" />
+    <ClCompile Include="..\src\portraits.cpp" />
     <ClCompile Include="..\src\sitemode\advance.cpp" />
     <ClCompile Include="..\src\sitemode\mapspecials.cpp" />
     <ClCompile Include="..\src\sitemode\miscactions.cpp" />
