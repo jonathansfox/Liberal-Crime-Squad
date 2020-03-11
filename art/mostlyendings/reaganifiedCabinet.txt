@@ -1,4 +1,5 @@
-# { "Ronald Reagan",
+#
+Ronald Reagan
 Strom Thurmond
 Jesse Helms
 Jerry Falwell
