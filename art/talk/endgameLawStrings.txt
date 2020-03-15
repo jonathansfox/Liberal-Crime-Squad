@@ -28,7 +28,7 @@ The government distributes free recreational drugs to anyone who wants them.
 LAW_IMMIGRATION
 All Americans must carry around an internal passport, or be shot on sight.
 Private border militiamen shoot suspected foreigners on sight.
-Immigration is illegal, and noncitizens are shipped to Mexico at gunpoint.
+Immigration is illegal, and non-citizens are shipped to Mexico at gunpoint.
 The National Guard has been deployed to the borders to slow immigration.
 Great expense is taken to slow immigration, without success.
 The government works to accommodate potential immigrants but deports criminals.
@@ -83,7 +83,7 @@ LAW_ABORTION
 Mandatory abortions are carried out for population control.
 Abortion, contraception, and consensual sex are all capital offenses.
 Abortion is a felony equal to murder, not allowed under any circumstance.
-Abortion is prohibited except in s of rape, incest, or health of the mother.
+Abortion is prohibited except in cases of rape, incest, or health of the mother.
 Abortion is limited to the first trimester, and is very expensive.
 Abortion is legal, but taxpayer funding of abortion is prohibited.
 The right to an abortion is strongly protected, and subsidized for poor women.
@@ -121,7 +121,7 @@ Poor and minority criminals receive mandatory death sentences.
 People can be put to death for minor offenses.
 The death penalty is actively enforced in many states.
 The death penalty is in effect but under scrutiny.
-The death penalty is only permitted in extreme s.
+The death penalty is only permitted in extreme cases.
 The death penalty is considered barbaric and never practiced.
 The death penalty, like all other harsh punishments, has been abolished.
 LAW_NUCLEARPOWER
