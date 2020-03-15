@@ -1486,7 +1486,6 @@ void encounterCafeComputer() {
 		levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special = -1;
 		pressAnyKey();
 		prepareencounter(sitetype, 0);
-		emptyEncounter();
 	}
 }
 void encounterRestaurantTable() {

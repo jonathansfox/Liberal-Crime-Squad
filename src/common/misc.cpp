@@ -398,6 +398,49 @@ void MusicClass::play(int _musicmode)
 		if (endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
 			creaturearray[CREATURE_CCS_VIGILANTE] += 5;
 	}
+	void addJuiceBar(int creaturearray[CREATURENUM]) {
+		creaturearray[CREATURE_TEENAGER] += 10;
+		creaturearray[CREATURE_JUDGE_LIBERAL] += 1;
+		creaturearray[CREATURE_COLLEGESTUDENT] += 10;
+		creaturearray[CREATURE_MUSICIAN] += 2;
+		creaturearray[CREATURE_MATHEMATICIAN] += 1;
+		creaturearray[CREATURE_TEACHER] += 1;
+		creaturearray[CREATURE_HSDROPOUT] += 1;
+		creaturearray[CREATURE_ENGINEER] += 1;
+		creaturearray[CREATURE_FASTFOODWORKER] += 1;
+		creaturearray[CREATURE_BAKER] += 1;
+		creaturearray[CREATURE_BARISTA] += 1;
+		creaturearray[CREATURE_BARTENDER] += 1;
+		creaturearray[CREATURE_TELEMARKETER] += 1;
+		creaturearray[CREATURE_CARSALESMAN] += 1;
+		creaturearray[CREATURE_OFFICEWORKER] += 1;
+		creaturearray[CREATURE_MAILMAN] += 1;
+		creaturearray[CREATURE_CHEF] += 1;
+		creaturearray[CREATURE_NURSE] += 1;
+		creaturearray[CREATURE_AMATEURMAGICIAN] += 1;
+		creaturearray[CREATURE_HIPPIE] += 6;
+		creaturearray[CREATURE_CRITIC_ART] += 1;
+		creaturearray[CREATURE_CRITIC_MUSIC] += 1;
+		creaturearray[CREATURE_AUTHOR] += 1;
+		creaturearray[CREATURE_JOURNALIST] += 1;
+		creaturearray[CREATURE_SOCIALITE] += 2;
+		creaturearray[CREATURE_PROGRAMMER] += 1;
+		creaturearray[CREATURE_RETIREE] += 1;
+		creaturearray[CREATURE_PAINTER] += 1;
+		creaturearray[CREATURE_SCULPTOR] += 1;
+		creaturearray[CREATURE_DANCER] += 1;
+		creaturearray[CREATURE_PHOTOGRAPHER] += 1;
+		creaturearray[CREATURE_CAMERAMAN] += 1;
+		creaturearray[CREATURE_HAIRSTYLIST] += 1;
+		creaturearray[CREATURE_FASHIONDESIGNER] += 1;
+		creaturearray[CREATURE_CLERK] += 1;
+		creaturearray[CREATURE_THIEF] += 1;
+		creaturearray[CREATURE_ACTOR] += 1;
+		creaturearray[CREATURE_YOGAINSTRUCTOR] += 1;
+		creaturearray[CREATURE_MARTIALARTIST] += 1;
+		creaturearray[CREATURE_ATHLETE] += 1;
+		creaturearray[CREATURE_LOCKSMITH] += 1;
+	}
 	void addCigarbar(int creaturearray[CREATURENUM], const char sec) {
 		if (sec || isThereASiteAlarm())creaturearray[CREATURE_BOUNCER] += 100;
 		else creaturearray[CREATURE_BOUNCER] += 10;
@@ -443,7 +486,34 @@ void MusicClass::play(int _musicmode)
 		if (lawList[LAW_POLLUTION] == -2 &&
 			lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 2;
 	}
+	void addInternetCafe(int creaturearray[CREATURENUM]) {
 
+		creaturearray[CREATURE_SCIENTIST_LABTECH] += 5;
+		creaturearray[CREATURE_CORPORATE_MANAGER] += 3;
+		creaturearray[CREATURE_TEENAGER] += 15;
+		creaturearray[CREATURE_LAWYER] += 3;
+		creaturearray[CREATURE_COLLEGESTUDENT] += 25;
+		creaturearray[CREATURE_MUSICIAN] += 2;
+		creaturearray[CREATURE_MATHEMATICIAN] += 1;
+		creaturearray[CREATURE_TEACHER] += 5;
+		creaturearray[CREATURE_ENGINEER] += 15;
+		creaturearray[CREATURE_DOCTOR] += 1;
+		creaturearray[CREATURE_BARISTA] += 10;
+		creaturearray[CREATURE_CARSALESMAN] += 3;
+		creaturearray[CREATURE_OFFICEWORKER] += 15;
+		creaturearray[CREATURE_WORKER_SECRETARY] += 5;
+		creaturearray[CREATURE_HIPPIE] += 1;
+		creaturearray[CREATURE_PROGRAMMER] += 15;
+		creaturearray[CREATURE_RETIREE] += 5;
+		creaturearray[CREATURE_PAINTER] += 1;
+		creaturearray[CREATURE_SCULPTOR] += 1;
+		creaturearray[CREATURE_DANCER] += 1;
+		creaturearray[CREATURE_PHOTOGRAPHER] += 1;
+		creaturearray[CREATURE_CAMERAMAN] += 1;
+		creaturearray[CREATURE_CLERK] += 1;
+		creaturearray[CREATURE_LOCKSMITH] += 1;
+
+	}
 	void addShelter(int creaturearray[CREATURENUM]) {
 
 		if (lawList[LAW_NUCLEARPOWER] == -2)creaturearray[CREATURE_MUTANT] += 2;
@@ -676,6 +746,7 @@ void MusicClass::play(int _musicmode)
 		}
 		case SITE_BUSINESS_JUICEBAR:
 		{
+			addJuiceBar(creaturearray);
 			break;
 		}
 		case SITE_BUSINESS_CIGARBAR:
@@ -701,6 +772,7 @@ void MusicClass::play(int _musicmode)
 		}
 		case SITE_BUSINESS_INTERNETCAFE:
 		{
+			addInternetCafe(creaturearray);
 			break;
 		}
 		default:

@@ -7697,3 +7697,7 @@ void printCommonXeDoesStatement(const COMMON_XE_DOES_PRINTABLE pr, const string 
 		break;
 	}
 }
+
+void printStuff(std::string str) {
+	mvaddstrAlt(0, 0, str);
+}

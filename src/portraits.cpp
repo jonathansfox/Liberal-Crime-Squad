@@ -411,10 +411,23 @@ struct CreatureBio {
 	const char gender_liberal;
 	CreatureBio(const int _birthday_month, const int _birthday_day, const int _age, const  char _gender_conservative, const char _gender_liberal) : birthday_month(_birthday_month), birthday_day(_birthday_day), age(_age), gender_conservative(_gender_conservative), gender_liberal(_gender_liberal) {};
 };
-int PCreatureCharisma();
-NameAndAlignment PNameAndAlignment();
-CreatureJustice PCreatureJustice();
-CreatureBio PCreatureBio();
+
+#include <vector>
+
+template <class Container> inline long len(const Container& x)
+{
+	return x.size();
+}
+std::vector<int> PCreatureCharisma();
+std::vector<NameAndAlignment> PNameAndAlignment();
+std::vector<CreatureJustice> PCreatureJustice();
+std::vector<CreatureBio> PCreatureBio();
+
+std::vector<int> ActiveSquadPCreatureCharisma();
+std::vector<NameAndAlignment> ActiveSquadPNameAndAlignment();
+std::vector<CreatureJustice> ActiveSquadPCreatureJustice();
+std::vector<CreatureBio> ActiveSquadPCreatureBio();
+
 const std::string CONST_CPP_IO_WB = "wb";
 FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
 int HASHME(const std::string n) {
@@ -436,33 +449,49 @@ enum CreatureGender
 	GENDER_FEMALE_BIAS,
 	GENDER_RANDOM
 };
+bool nullActive();
 void LCSCloseFile(FILE* handle);
+void printStuff(std::string str);
 void outputPortraitFile() {
-	Package entry;
-	NameAndAlignment nAA = PNameAndAlignment();
-	CreatureJustice jAA = PCreatureJustice();
-	CreatureBio bAA = PCreatureBio();
-	
-	 entry.age = bAA.age;
-	 entry.isFemale = bAA.gender_liberal == GENDER_FEMALE;
-	 entry.occupation = (Occupation) nAA.type;
-	 entry.laws = ARCH_CONSERVATIVE;
-	 entry.charisma = PCreatureCharisma();
-	 entry.identityHash = HASHME(nAA.name);
-	 entry.isHostile = nAA.enemy;
-	 entry.isNPC = 1;
-	 entry.isGeneric = 0;
-	 entry.allignment = (Allignment) nAA.align;
-	 entry.name = nAA.name;
-	 entry.selector = 0;
-	 entry.isAlive = nAA.alive;
-	 entry.isSleeper = 0;
 
-	std::string fileName = "message.dat";
+
+	std::vector<NameAndAlignment> nAA = PNameAndAlignment();
+	std::vector < CreatureJustice> jAA = PCreatureJustice();
+	std::vector < CreatureBio> bAA = PCreatureBio();
+	std::vector <int> cAA = PCreatureCharisma();
+
+
+	std::string fileName = "message.raw";
 	FILE* h;
 	h = LCSOpenFile(fileName.c_str(), CONST_CPP_IO_WB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
+		
+		// TODO selector number does not account for entities leaving, or prisoners
+		// start with the number of entries
+		int lengthOf = len(nAA);
+		fwrite(&lengthOf, sizeof(int), 1, h);
+
+		for (int i = 0; i < len(nAA); i++) {
+
+			Package entry;
+			entry.age = bAA[i].age;
+			entry.isFemale = bAA[i].gender_liberal == GENDER_FEMALE;
+			entry.occupation = (Occupation)nAA[i].type;
+			entry.laws = ARCH_CONSERVATIVE;
+			entry.charisma = cAA[i];
+			entry.identityHash = HASHME(nAA[i].name);
+			entry.isHostile = nAA[i].enemy;
+			entry.isNPC = 1;
+			entry.isGeneric = true;
+			entry.allignment = (Allignment) (nAA[i].align + 2);
+			entry.name = nAA[i].name;
+			entry.selector = i;
+			entry.isAlive = nAA[i].alive;
+			entry.isSleeper = 0;
+			char outputName[32]{ "" };
+			strcpy(outputName, nAA[i].name.c_str());
+
 		fwrite(&entry.age, sizeof(int), 1, h);
 		fwrite(&entry.isFemale, sizeof(bool), 1, h);
 		fwrite(&entry.occupation, sizeof(int), 1, h);
@@ -473,11 +502,58 @@ void outputPortraitFile() {
 		fwrite(&entry.isNPC, sizeof(bool), 1, h);
 		fwrite(&entry.isGeneric, sizeof(bool), 1, h);
 		fwrite(&entry.allignment, sizeof(int), 1, h);
-		fwrite(&entry.name, sizeof(std::string), 1, h);
+		fwrite(&outputName, sizeof(char), 32, h);
 		fwrite(&entry.selector, sizeof(int), 1, h);
 		fwrite(&entry.isAlive, sizeof(bool), 1, h);
 		fwrite(&entry.isSleeper, sizeof(bool), 1, h);
+		}
+		/*
+		if (!nullActive()) {
+	std::vector<int> AScAA = ActiveSquadPCreatureCharisma();
+	std::vector<NameAndAlignment> ASnAA = ActiveSquadPNameAndAlignment();
+	std::vector<CreatureJustice> ASjAA = ActiveSquadPCreatureJustice();
+	std::vector<CreatureBio> ASbAA = ActiveSquadPCreatureBio();
+			// start with the number of active squad members
+			lengthOf = len(ASnAA);
+			fwrite(&lengthOf, sizeof(int), 1, h);
 
+			for (int i = 0; i < len(ASnAA); i++) {
+
+				Package entry;
+				entry.age = ASbAA[i].age;
+				entry.isFemale = ASbAA[i].gender_liberal == GENDER_FEMALE;
+				entry.occupation = (Occupation)ASnAA[i].type;
+				entry.laws = ARCH_CONSERVATIVE;
+				entry.charisma = AScAA[i];
+				entry.identityHash = HASHME(ASnAA[i].name);
+				entry.isHostile = ASnAA[i].enemy;
+				entry.isNPC = false;
+				entry.isGeneric = false;
+				entry.allignment = (Allignment)(ASnAA[i].align + 2);
+				entry.name = ASnAA[i].name;
+				entry.selector = 0;
+				entry.isAlive = ASnAA[i].alive;
+				entry.isSleeper = false;
+
+				fwrite(&entry.age, sizeof(int), 1, h);
+				fwrite(&entry.isFemale, sizeof(bool), 1, h);
+				fwrite(&entry.occupation, sizeof(int), 1, h);
+				fwrite(&entry.laws, sizeof(int), 1, h);
+				fwrite(&entry.charisma, sizeof(int), 1, h);
+				fwrite(&entry.identityHash, sizeof(int), 1, h);
+				fwrite(&entry.isHostile, sizeof(bool), 1, h);
+				fwrite(&entry.isNPC, sizeof(bool), 1, h);
+				fwrite(&entry.isGeneric, sizeof(bool), 1, h);
+				fwrite(&entry.allignment, sizeof(int), 1, h);
+				fwrite(&entry.name, sizeof(std::string), 1, h);
+				fwrite(&entry.selector, sizeof(int), 1, h);
+				fwrite(&entry.isAlive, sizeof(bool), 1, h);
+				fwrite(&entry.isSleeper, sizeof(bool), 1, h);
+			}
+		}
+		*/
+		
+		
 		LCSCloseFile(h);
 	}
 }

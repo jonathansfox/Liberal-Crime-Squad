@@ -40,6 +40,59 @@ bool file_exists(const std::string& filename)
 	}
 	return true;
 }
+vector<saveLoadChunk> newFirstChunk =
+{
+	saveLoadChunk(seed, sizeof(unsigned long), RNG_SIZE),
+	saveLoadChunk(&mode, sizeof(short), 1),
+	saveLoadChunk(&wincondition, sizeof(short), 1),
+	saveLoadChunk(&fieldskillrate, sizeof(short), 1),
+	saveLoadChunk(&day, sizeof(int), 1),
+	saveLoadChunk(&month, sizeof(int), 1),
+	saveLoadChunk(&year, sizeof(int), 1),
+	saveLoadChunk(&execterm, sizeof(short), 1),
+	saveLoadChunk(&presparty, sizeof(short), 1),
+	saveLoadChunk(&amendnum, sizeof(int), 1),
+	saveLoadChunk(&multipleCityMode, sizeof(bool), 1),
+	saveLoadChunk(&termlimits, sizeof(bool), 1),
+	saveLoadChunk(&deagle, sizeof(bool), 1),
+	saveLoadChunk(&m249, sizeof(bool), 1),
+	saveLoadChunk(&notermlimit, sizeof(bool), 1),
+	saveLoadChunk(&nocourtpurge, sizeof(bool), 1),
+	saveLoadChunk(&stalinmode, sizeof(bool), 1),
+	saveLoadChunk(&stat_recruits, sizeof(int), 1),
+	saveLoadChunk(&stat_dead, sizeof(int), 1),
+	saveLoadChunk(&stat_kills, sizeof(int), 1),
+	saveLoadChunk(&stat_kidnappings, sizeof(int), 1),
+	saveLoadChunk(&stat_buys, sizeof(int), 1),
+	saveLoadChunk(&stat_burns, sizeof(int), 1),
+	saveLoadChunk(&endgamestate, sizeof(char), 1),
+	saveLoadChunk(&ccsexposure, sizeof(char), 1),
+	saveLoadChunk(&ccs_kills, sizeof(char), 1),
+	saveLoadChunk(&Vehicle::curcarid, sizeof(long), 1),
+	saveLoadChunk(&curcreatureid, sizeof(long), 1),
+	saveLoadChunk(&cursquadid, sizeof(long), 1),
+	saveLoadChunk(&police_heat, sizeof(int), 1),
+	saveLoadChunk(&offended_corps, sizeof(short), 1),
+	saveLoadChunk(&offended_cia, sizeof(short), 1),
+	saveLoadChunk(&offended_amradio, sizeof(short), 1),
+	saveLoadChunk(&offended_cablenews, sizeof(short), 1),
+	saveLoadChunk(&offended_firemen, sizeof(short), 1),
+	saveLoadChunk(attorneyseed, sizeof(unsigned long), RNG_SIZE),
+	saveLoadChunk(lcityname, sizeof(char), CITY_NAMELEN),
+	saveLoadChunk(&newscherrybusted, sizeof(char), 1),
+	saveLoadChunk(slogan, sizeof(char), SLOGAN_LEN),
+	saveLoadChunk(&ledger, sizeof(class Ledger), 1),
+	saveLoadChunk(&party_status, sizeof(short), 1),
+	saveLoadChunk(attitude, sizeof(short), VIEWNUM),
+	saveLoadChunk(lawList, sizeof(short), LAWNUM),
+	saveLoadChunk(house, sizeof(short), HOUSENUM),
+	saveLoadChunk(senate, sizeof(short), SENATENUM),
+	saveLoadChunk(court, sizeof(short), COURTNUM),
+	saveLoadChunk(courtname, sizeof(char) * POLITICIAN_NAMELEN, COURTNUM),
+	saveLoadChunk(exec, sizeof(short), EXECNUM),
+	saveLoadChunk(execname, sizeof(char) * POLITICIAN_NAMELEN, EXECNUM),
+	saveLoadChunk(oldPresidentName, sizeof(char), POLITICIAN_NAMELEN)
+};
 vector<saveLoadChunk> firstChunk =
 {
 	saveLoadChunk(seed, sizeof(unsigned long), RNG_SIZE),
@@ -88,9 +141,9 @@ vector<saveLoadChunk> firstChunk =
 	saveLoadChunk(house, sizeof(short), HOUSENUM),
 	saveLoadChunk(senate, sizeof(short), SENATENUM),
 	saveLoadChunk(court, sizeof(short), COURTNUM),
-	saveLoadChunk(courtname, sizeof(char)*POLITICIAN_NAMELEN, COURTNUM),
+	saveLoadChunk(courtname, sizeof(char) * POLITICIAN_NAMELEN, COURTNUM),
 	saveLoadChunk(exec, sizeof(char), EXECNUM),
-	saveLoadChunk(execname, sizeof(char)*POLITICIAN_NAMELEN, EXECNUM),
+	saveLoadChunk(execname, sizeof(char) * POLITICIAN_NAMELEN, EXECNUM),
 	saveLoadChunk(oldPresidentName, sizeof(char), POLITICIAN_NAMELEN)
 };
 void writeVerbose(string filename) {
@@ -532,7 +585,7 @@ void readVerbose(string filename) {
 	int position = filename.find(SINGLE_DOT);
 	filename.erase(position);
 	filename += CONST_VERBOSE;
-	FILE *h;
+	FILE* h;
 	h = LCSOpenFile((filename).c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL) {
 		LCSCloseFile(h);
@@ -565,13 +618,13 @@ void savegame(const string& filename)
 	}
 	bool dummy_b;
 	int dummy;
-	FILE *h;
+	FILE* h;
 	h = LCSOpenFile(filename.c_str(), CONST_CPP_IO_WB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
 		int lversion = version;
 		fwrite(&lversion, sizeof(int), 1, h);
-		for (saveLoadChunk s : firstChunk) {
+		for (saveLoadChunk s : newFirstChunk) {
 			fwrite(s.Buffer, s.ElementSize, s.ElementCount, h);
 		}
 
@@ -644,7 +697,7 @@ void savegame(const string& filename)
 			// extra InterrogationST data if applicable
 			if (pool[pl]->align == -1 && pool[pl]->getNameAndAlignment().alive)
 			{
-				InterrogationST* &intr = pool[pl]->activity.intr();
+				InterrogationST*& intr = pool[pl]->activity.intr();
 				fwrite(intr->techniques, sizeof(bool[6]), 1, h);
 				fwrite(&intr->druguse, sizeof(int), 1, h);
 				//deep write rapport map
@@ -776,7 +829,7 @@ char load(const string& filename)
 	bool dummy_b;
 	int dummy;
 	long dummy_l;
-	FILE *h;
+	FILE* h;
 	h = LCSOpenFile(filename.c_str(), CONST_CPP_IO_RB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
 	{
@@ -788,8 +841,16 @@ char load(const string& filename)
 			title_screen::getInstance().reset();
 			return 0;
 		}
-		for (saveLoadChunk s : firstChunk) {
-			fread(s.Buffer, s.ElementSize, s.ElementCount, h);
+		if (loadversion < 41253) {
+			for (saveLoadChunk s : firstChunk) {
+				fread(s.Buffer, s.ElementSize, s.ElementCount, h);
+			}
+			
+		}
+		else {
+			for (saveLoadChunk s : newFirstChunk) {
+				fread(s.Buffer, s.ElementSize, s.ElementCount, h);
+			}
 		}
 		//LOCATIONS
 		fread(&dummy, sizeof(int), 1, h);
@@ -886,7 +947,7 @@ char load(const string& filename)
 			// extra InterrogationST data if applicable
 			if (pool[pl]->align == -1 && pool[pl]->getNameAndAlignment().alive)
 			{
-				InterrogationST* &intr = pool[pl]->activity.intr();
+				InterrogationST*& intr = pool[pl]->activity.intr();
 				intr = new InterrogationST;
 				fread(intr->techniques, sizeof(bool[6]), 1, h);
 				fread(&intr->druguse, sizeof(int), 1, h);

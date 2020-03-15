@@ -982,18 +982,90 @@ vector<file_and_text_collection> names_text_file_collection = {
 };
 
 
-NameAndAlignment PNameAndAlignment() {
-	return encounter[0].getNameAndAlignment();
+vector<NameAndAlignment> PNameAndAlignment() {
+	vector<NameAndAlignment> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			out.push_back(p.getNameAndAlignment());
+		}
+	}
+	return out;
 }
-CreatureJustice PCreatureJustice() {
-	return encounter[0].getCreatureJustice();
+vector<CreatureJustice> PCreatureJustice() {
+	vector<CreatureJustice> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			out.push_back(p.getCreatureJustice());
+		}
+	}
+	return out;
 
 }
-CreatureBio PCreatureBio() {
-	return encounter[0].getCreatureBio();
+vector<CreatureBio> PCreatureBio() {
+	vector<CreatureBio> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			out.push_back(p.getCreatureBio());
+		}
+	}
+	return out;
 
 }
-int PCreatureCharisma() {
-	CreatureAttributeList a = encounter[0].getCreatureAttributeList();
-	return a.get_attribute(ATTRIBUTE_CHARISMA);
+vector<int> PCreatureCharisma() {
+	vector<int> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			int cha;
+			CreatureAttributeList c = p.getCreatureAttributeList();
+			cha = c.get_attribute(ATTRIBUTE_CHARISMA);
+			out.push_back(cha);
+		}
+	}
+	return out;
+}
+
+bool nullActive() {
+	return activesquad == NULL;
+}
+
+vector<NameAndAlignment> ActiveSquadPNameAndAlignment() {
+	vector<NameAndAlignment> out;
+	for (DeprecatedCreature* p : activesquad->squad) {
+		if (p->getNameAndAlignment().exists) {
+			out.push_back(p->getNameAndAlignment());
+		}
+	}
+	return out;
+}
+vector<CreatureJustice> ActiveSquadPCreatureJustice() {
+	vector<CreatureJustice> out;
+	for (DeprecatedCreature* p : activesquad->squad) {
+		if (p->getNameAndAlignment().exists) {
+			out.push_back(p->getCreatureJustice());
+		}
+	}
+	return out;
+
+}
+vector<CreatureBio> ActiveSquadPCreatureBio() {
+	vector<CreatureBio> out;
+	for (DeprecatedCreature* p : activesquad->squad) {
+		if (p->getNameAndAlignment().exists) {
+			out.push_back(p->getCreatureBio());
+		}
+	}
+	return out;
+
+}
+vector<int> ActiveSquadPCreatureCharisma() {
+	vector<int> out;
+	for (DeprecatedCreature* p : activesquad->squad) {
+		if (p->getNameAndAlignment().exists) {
+			int cha;
+			CreatureAttributeList c = p->getCreatureAttributeList();
+			cha = c.get_attribute(ATTRIBUTE_CHARISMA);
+			out.push_back(cha);
+		}
+	}
+	return out;
 }
