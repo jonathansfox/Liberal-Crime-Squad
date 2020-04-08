@@ -4305,7 +4305,7 @@ const string lcsHyperlink = "http://bay12games.com/lcs/";
 const string vChar = "v";
 const string maintainedByOpenSource = " Maintained by the Open Source Community";
 const string kingDrakeHyperlink = "https://github.com/King-Drake/Liberal-Crime-Squad";
-const string lcsForumHyperlink = "http://www.bay12games.com/forum/index.php?board=3.0";
+const string lcsForumHyperlink = "http://www.bay12forums.com/smf/index.php?board=3.0";
 const string lcsWikiHyperlink = "http://lcs.wikidot.com/";
 const string pressESCToQuit = "Press ESC now to quit. Quitting later causes your progress to be saved.";
 const string pressAnyKeyToPursue = "Press any other key to pursue your Liberal Agenda!";

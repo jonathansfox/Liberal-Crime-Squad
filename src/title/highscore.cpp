@@ -182,7 +182,6 @@ void viewhighscores(int musicoverride)
 	addstrAlt(ustat_buys);
 	mvaddstrAlt(24, 60, flagsBurned);
 	addstrAlt(ustat_burns);
-	pressAnyKey();
 }
 MusicModes getEndingMusic(EndTypes e) {
 	switch (e)

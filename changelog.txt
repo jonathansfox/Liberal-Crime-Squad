@@ -1121,3 +1121,7 @@ Fixed minor typo in Status of Liberal Agenda
 Identified and fixed the Party Switch Error 057)
 The error was determined to be present in 4.10, thereby predating my involvement
 Fixed lack of encounters in Internet Cafe (and Juice Bar)
+
+4.12.54
+Fixed extra press key bug on Highscore Menu
+Updated bay12 forums link

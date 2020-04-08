@@ -1025,47 +1025,57 @@ vector<int> PCreatureCharisma() {
 }
 
 bool nullActive() {
-	return activesquad == NULL;
+	if (activesquad != NULL) {
+		return activesquad->squadsize() <= 0;
+	}
+	else {
+		return true;
+	}
 }
 
+// return integer between 0 and 4
+int getAverageLawLevel() {
+	int average = 0;
+	for (short i : lawList) {
+		average += i + 2;
+	}
+	if (average % LAWNUM > LAWNUM / 2) {
+		// hotfix to treat integer division as though it is real division
+		average += average % LAWNUM;
+	}
+	average /= LAWNUM;
+	return average;
+}
 vector<NameAndAlignment> ActiveSquadPNameAndAlignment() {
 	vector<NameAndAlignment> out;
-	for (DeprecatedCreature* p : activesquad->squad) {
-		if (p->getNameAndAlignment().exists) {
-			out.push_back(p->getNameAndAlignment());
-		}
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+		out.push_back(activesquad->squad[i]->getNameAndAlignment());
 	}
 	return out;
 }
 vector<CreatureJustice> ActiveSquadPCreatureJustice() {
 	vector<CreatureJustice> out;
-	for (DeprecatedCreature* p : activesquad->squad) {
-		if (p->getNameAndAlignment().exists) {
-			out.push_back(p->getCreatureJustice());
-		}
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+		out.push_back(activesquad->squad[i]->getCreatureJustice());
 	}
 	return out;
 
 }
 vector<CreatureBio> ActiveSquadPCreatureBio() {
 	vector<CreatureBio> out;
-	for (DeprecatedCreature* p : activesquad->squad) {
-		if (p->getNameAndAlignment().exists) {
-			out.push_back(p->getCreatureBio());
-		}
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+		out.push_back(activesquad->squad[i]->getCreatureBio());
 	}
 	return out;
 
 }
 vector<int> ActiveSquadPCreatureCharisma() {
 	vector<int> out;
-	for (DeprecatedCreature* p : activesquad->squad) {
-		if (p->getNameAndAlignment().exists) {
-			int cha;
-			CreatureAttributeList c = p->getCreatureAttributeList();
-			cha = c.get_attribute(ATTRIBUTE_CHARISMA);
-			out.push_back(cha);
-		}
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+		int cha;
+		CreatureAttributeList c = activesquad->squad[i]->getCreatureAttributeList();
+		cha = c.get_attribute(ATTRIBUTE_CHARISMA);
+		out.push_back(cha);
 	}
 	return out;
 }

@@ -452,6 +452,7 @@ enum CreatureGender
 bool nullActive();
 void LCSCloseFile(FILE* handle);
 void printStuff(std::string str);
+int getAverageLawLevel();
 void outputPortraitFile() {
 
 
@@ -461,7 +462,9 @@ void outputPortraitFile() {
 	std::vector <int> cAA = PCreatureCharisma();
 
 
-	std::string fileName = "message.raw";
+	std::string fileName = "message.raw"; 
+	int averageLaw = getAverageLawLevel();
+
 	FILE* h;
 	h = LCSOpenFile(fileName.c_str(), CONST_CPP_IO_WB.c_str(), LCSIO_PRE_HOME);
 	if (h != NULL)
@@ -478,7 +481,7 @@ void outputPortraitFile() {
 			entry.age = bAA[i].age;
 			entry.isFemale = bAA[i].gender_liberal == GENDER_FEMALE;
 			entry.occupation = (Occupation)nAA[i].type;
-			entry.laws = ARCH_CONSERVATIVE;
+			entry.laws = (Allignment) averageLaw;
 			entry.charisma = cAA[i];
 			entry.identityHash = HASHME(nAA[i].name);
 			entry.isHostile = nAA[i].enemy;
@@ -507,7 +510,7 @@ void outputPortraitFile() {
 		fwrite(&entry.isAlive, sizeof(bool), 1, h);
 		fwrite(&entry.isSleeper, sizeof(bool), 1, h);
 		}
-		/*
+		
 		if (!nullActive()) {
 	std::vector<int> AScAA = ActiveSquadPCreatureCharisma();
 	std::vector<NameAndAlignment> ASnAA = ActiveSquadPNameAndAlignment();
@@ -523,17 +526,19 @@ void outputPortraitFile() {
 				entry.age = ASbAA[i].age;
 				entry.isFemale = ASbAA[i].gender_liberal == GENDER_FEMALE;
 				entry.occupation = (Occupation)ASnAA[i].type;
-				entry.laws = ARCH_CONSERVATIVE;
+				entry.laws = (Allignment)averageLaw;
 				entry.charisma = AScAA[i];
 				entry.identityHash = HASHME(ASnAA[i].name);
 				entry.isHostile = ASnAA[i].enemy;
-				entry.isNPC = false;
-				entry.isGeneric = false;
+				entry.isNPC = 1;
+				entry.isGeneric = true;
 				entry.allignment = (Allignment)(ASnAA[i].align + 2);
 				entry.name = ASnAA[i].name;
-				entry.selector = 0;
+				entry.selector = i;
 				entry.isAlive = ASnAA[i].alive;
-				entry.isSleeper = false;
+				entry.isSleeper = 0;
+				char outputName[32]{ "" };
+				strcpy(outputName, ASnAA[i].name.c_str());
 
 				fwrite(&entry.age, sizeof(int), 1, h);
 				fwrite(&entry.isFemale, sizeof(bool), 1, h);
@@ -545,13 +550,13 @@ void outputPortraitFile() {
 				fwrite(&entry.isNPC, sizeof(bool), 1, h);
 				fwrite(&entry.isGeneric, sizeof(bool), 1, h);
 				fwrite(&entry.allignment, sizeof(int), 1, h);
-				fwrite(&entry.name, sizeof(std::string), 1, h);
+				fwrite(&outputName, sizeof(char), 32, h);
 				fwrite(&entry.selector, sizeof(int), 1, h);
 				fwrite(&entry.isAlive, sizeof(bool), 1, h);
 				fwrite(&entry.isSleeper, sizeof(bool), 1, h);
 			}
 		}
-		*/
+		
 		
 		
 		LCSCloseFile(h);
