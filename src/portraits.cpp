@@ -413,6 +413,7 @@ struct CreatureBio {
 };
 
 #include <vector>
+#include <common\stringconversion.h>
 
 template <class Container> inline long len(const Container& x)
 {
@@ -430,13 +431,8 @@ std::vector<CreatureBio> ActiveSquadPCreatureBio();
 
 const std::string CONST_CPP_IO_WB = "wb";
 FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
-int HASHME(const std::string n) {
-	int i = 0;
-	for (char c : n) {
-		i += c;
-	}
-	return i;
-}
+std::vector<int> ActiveSquadID();
+std::vector<int> PCreatureID();
 enum CreatureGender
 {
 	GENDER_NEUTRAL,
@@ -453,14 +449,36 @@ bool nullActive();
 void LCSCloseFile(FILE* handle);
 void printStuff(std::string str);
 int getAverageLawLevel();
+class title_screen {
+
+private:
+	static title_screen s_title_singleton;
+	static std::vector<std::string> s_savefiles;
+	static std::string savefile_name;
+	bool static autosave;
+	static bool titleInitiated;
+	void choose_savefile_name();
+	void selectAndLoadSaveFile();
+public:
+	static title_screen getInstance();
+	void mode_title();
+	std::string getFileName();
+	void reset();
+	static void setautosaveoption(bool shouldautosave);
+	void autosavegame();
+};
+std::vector<std::string> PAllClothes();
+std::vector<std::string> SquadAllClothes();
 void outputPortraitFile() {
 
 
 	std::vector<NameAndAlignment> nAA = PNameAndAlignment();
 	std::vector < CreatureJustice> jAA = PCreatureJustice();
 	std::vector < CreatureBio> bAA = PCreatureBio();
+	std::vector<std::string> allClothes = PAllClothes();
 	std::vector <int> cAA = PCreatureCharisma();
-
+	std::vector<std::string> squadClothes = SquadAllClothes();
+	std::vector<int> pAAID = PCreatureID();
 
 	std::string fileName = "message.raw"; 
 	int averageLaw = getAverageLawLevel();
@@ -483,7 +501,7 @@ void outputPortraitFile() {
 			entry.occupation = (Occupation)nAA[i].type;
 			entry.laws = (Allignment) averageLaw;
 			entry.charisma = cAA[i];
-			entry.identityHash = HASHME(nAA[i].name);
+			entry.identityHash = pAAID[i];
 			entry.isHostile = nAA[i].enemy;
 			entry.isNPC = 1;
 			entry.isGeneric = true;
@@ -494,6 +512,8 @@ void outputPortraitFile() {
 			entry.isSleeper = 0;
 			char outputName[32]{ "" };
 			strcpy(outputName, nAA[i].name.c_str());
+			char outputClothes[32]{ "" };
+			strcpy(outputClothes, allClothes[i].c_str());
 
 		fwrite(&entry.age, sizeof(int), 1, h);
 		fwrite(&entry.isFemale, sizeof(bool), 1, h);
@@ -509,6 +529,7 @@ void outputPortraitFile() {
 		fwrite(&entry.selector, sizeof(int), 1, h);
 		fwrite(&entry.isAlive, sizeof(bool), 1, h);
 		fwrite(&entry.isSleeper, sizeof(bool), 1, h);
+		fwrite(&outputClothes, sizeof(char), 32, h);
 		}
 		
 		if (!nullActive()) {
@@ -516,6 +537,7 @@ void outputPortraitFile() {
 	std::vector<NameAndAlignment> ASnAA = ActiveSquadPNameAndAlignment();
 	std::vector<CreatureJustice> ASjAA = ActiveSquadPCreatureJustice();
 	std::vector<CreatureBio> ASbAA = ActiveSquadPCreatureBio();
+	std::vector<int> pAAID = ActiveSquadID();
 			// start with the number of active squad members
 			lengthOf = len(ASnAA);
 			fwrite(&lengthOf, sizeof(int), 1, h);
@@ -528,7 +550,7 @@ void outputPortraitFile() {
 				entry.occupation = (Occupation)ASnAA[i].type;
 				entry.laws = (Allignment)averageLaw;
 				entry.charisma = AScAA[i];
-				entry.identityHash = HASHME(ASnAA[i].name);
+				entry.identityHash = pAAID[i];
 				entry.isHostile = ASnAA[i].enemy;
 				entry.isNPC = 1;
 				entry.isGeneric = true;
@@ -539,6 +561,8 @@ void outputPortraitFile() {
 				entry.isSleeper = 0;
 				char outputName[32]{ "" };
 				strcpy(outputName, ASnAA[i].name.c_str());
+				char outputClothes[32]{ "" };
+				strcpy(outputClothes, squadClothes[i].c_str());
 
 				fwrite(&entry.age, sizeof(int), 1, h);
 				fwrite(&entry.isFemale, sizeof(bool), 1, h);
@@ -554,10 +578,17 @@ void outputPortraitFile() {
 				fwrite(&entry.selector, sizeof(int), 1, h);
 				fwrite(&entry.isAlive, sizeof(bool), 1, h);
 				fwrite(&entry.isSleeper, sizeof(bool), 1, h);
+				fwrite(&outputClothes, sizeof(char), 32, h);
 			}
 		}
-		
-		
+		else {
+			int i = 0;
+			fwrite(&i, sizeof(int), 1, h);
+		}
+
+		char outputFilename[32]{ "" };
+		strcpy(outputFilename, title_screen::getInstance().getFileName());
+		fwrite(&outputFilename, sizeof(char), 32, h);
 		
 		LCSCloseFile(h);
 	}

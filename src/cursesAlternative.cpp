@@ -4924,7 +4924,7 @@ void echoAlt() {
 
 void outputPortraitFile();
 int getkeyAlt() {
-	//outputPortraitFile();
+	outputPortraitFile();
 	return getkey();
 }
 /* Allow the player to enter a name with an optional default */

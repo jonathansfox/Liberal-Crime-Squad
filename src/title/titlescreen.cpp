@@ -120,6 +120,9 @@ void title_screen::mode_title()
 	mode_base();
 	savegame(savefile_name);
 }
+string title_screen::getFileName() {
+	return savefile_name;
+}
 bool title_screen::autosave = true;
 void title_screen::reset()
 {

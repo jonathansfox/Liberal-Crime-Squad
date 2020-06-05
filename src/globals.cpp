@@ -1001,6 +1001,23 @@ vector<CreatureJustice> PCreatureJustice() {
 	return out;
 
 }
+vector<std::string> PAllClothes() {
+	vector<string> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			out.push_back(p.get_armor_string(true));
+		}
+	}
+	return out;
+}
+vector<std::string> SquadAllClothes() {
+	vector<string> out;
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+			out.push_back(activesquad->squad[i]->get_armor_string(true));
+		
+	}
+	return out;
+}
 vector<CreatureBio> PCreatureBio() {
 	vector<CreatureBio> out;
 	for (DeprecatedCreature p : encounter) {
@@ -1078,4 +1095,25 @@ vector<int> ActiveSquadPCreatureCharisma() {
 		out.push_back(cha);
 	}
 	return out;
+}
+
+vector<int> ActiveSquadID() {
+	vector<int> out;
+	for (int i = 0; i < activesquad->squadsize(); i++) {
+		int cha  = activesquad->squad[i]->id;
+		out.push_back(cha);
+	}
+	return out;
+
+}
+vector<int> PCreatureID() {
+	vector<int> out;
+	for (DeprecatedCreature p : encounter) {
+		if (p.getNameAndAlignment().exists) {
+			int cha = p.id;
+			out.push_back(cha);
+		}
+	}
+	return out;
+
 }

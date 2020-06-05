@@ -14,6 +14,7 @@ private:
 public:
 	static title_screen getInstance();
 	void mode_title();
+	string getFileName();
 	void reset();
 	static void setautosaveoption(bool shouldautosave);
 	void autosavegame();
