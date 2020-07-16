@@ -83,13 +83,8 @@ const int BIT31 = (1 << 30);
 const int BIT32 = (1 << 31);
 const int MAX_PATH_SIZE = 2048;
 const int RNG_SIZE = 4;
-/* These 6 random number generator functions are implemented in compat.cpp */
-unsigned long getSeed();
-unsigned long r_num();
+
 long LCSrandom(long max);
-void initMainRNG();
-void copyRNG(unsigned long(&dest)[RNG_SIZE], unsigned long(&src)[RNG_SIZE]);
-void initOtherRNG(unsigned long(&rng)[RNG_SIZE]);
 /* Determine size of vectors and any other container that implements the size() function.
 This basically includes all types of containers except for the C++11 std::forward_list. */
 template <class Container> inline long len(const Container& x)
@@ -191,23 +186,8 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
-enum LCSIO_FLAGS
-{
-	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
-	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
-};
-FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
-bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
-void LCSCloseFile(FILE* handle);
-void LCSCloseFileCPP(std::fstream &file);
-void LCSDeleteFile(const char* filename, int flags);
-void LCSRenameFile(const char* old_filename, const char* new_filename, int flags);
-//returns a list of all files in homedir with extension .dat
-vector<string> LCSSaveFiles();
 
-void pause_ms(int t);
-void alarmset(int t);
-void alarmwait();
+
 #define CH_USE_CP437
 
 
@@ -217,12 +197,10 @@ void alarmwait();
 #endif
 
 
-const int TAB = 9;
 const int ENTER = 10;
 const int ESC = 27;
 const int SPACEBAR = 32;
 
-class Log;
 
 enum Alignment
 {
@@ -246,21 +224,6 @@ enum UnlockTypes
 	UNLOCKNUM
 };
 
-enum HackTypes
-{
-	HACK_SUPERCOMPUTER,
-	HACK_VAULT,
-	HACKNUM
-};
-
-enum SpecialAttacks
-{
-	ATTACK_CANNON,
-	ATTACK_FLAME,
-	ATTACK_SUCK,
-	ATTACKNUM
-};
-
 enum EndGameStatus
 {
 	ENDGAME_NONE,
@@ -271,18 +234,6 @@ enum EndGameStatus
 	ENDGAME_MARTIALLAW,
 	ENDGAMENUM
 };
-
-enum CCSexposure
-{
-	CCSEXPOSURE_NONE,
-	CCSEXPOSURE_LCSGOTDATA,
-	CCSEXPOSURE_EXPOSED,
-	CCSEXPOSURE_NOBACKERS,
-	CCSEXPOSURENUM
-};
-
-const int ARMORFLAG_DAMAGED = BIT1;
-const int ARMORFLAG_BLOODY = BIT2;
 
 
 /* *JDS* I'm making laws an array instead of a bunch
@@ -415,15 +366,6 @@ enum Activity
 
 
 
-enum CarChaseObstacles
-{
-	CARCHASE_OBSTACLE_FRUITSTAND,
-	CARCHASE_OBSTACLE_TRUCKPULLSOUT,
-	CARCHASE_OBSTACLE_CROSSTRAFFIC,
-	CARCHASE_OBSTACLE_CHILD,
-	CARCHASE_OBSTACLENUM
-};
-
 enum SquadStances
 {
 	SQUADSTANCE_ANONYMOUS,
@@ -489,11 +431,6 @@ enum MusicModes
 	MUSIC_RANDOM // this one must come after MUSIC_OFF (this one plays a random song)
 };
 
-enum WinConditions
-{
-	WINCONDITION_ELITE,
-	WINCONDITION_EASY
-};
 enum FieldSkillRates
 {
 	FIELDSKILLRATE_FAST,
@@ -501,46 +438,6 @@ enum FieldSkillRates
 	FIELDSKILLRATE_HARD
 };
 
-enum Views
-{
-	VIEW_STALIN = -2, // this one is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
-	VIEW_MOOD, // this one is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
-	VIEW_GAY, // view #0, the first one that is actually in the attitude[] array
-	VIEW_DEATHPENALTY,
-	VIEW_TAXES,
-	VIEW_NUCLEARPOWER,
-	VIEW_ANIMALRESEARCH,
-	VIEW_POLICEBEHAVIOR,
-	VIEW_TORTURE,
-	VIEW_INTELLIGENCE,
-	VIEW_FREESPEECH,
-	VIEW_GENETICS,
-	VIEW_JUSTICES,
-	VIEW_GUNCONTROL,
-	VIEW_SWEATSHOPS,
-	VIEW_POLLUTION,
-	VIEW_CORPORATECULTURE,
-	VIEW_CEOSALARY,
-	VIEW_WOMEN,//XXX: VIEW_ABORTION DOES NOT EXIST
-	VIEW_CIVILRIGHTS,
-	VIEW_DRUGS,
-	VIEW_IMMIGRATION,
-	VIEW_MILITARY,
-	VIEW_PRISONS,
-	//*JDS* I'm using VIEWNUM-5 in a random generator that rolls a
-	//random issue, not including the media/politicalviolence ones, and this will
-	//break if these stop being the last 4 issues; do a search
-	//for VIEWNUM-5 to change it if it needs to be changed.
-	VIEW_AMRADIO,
-	VIEW_CABLENEWS,
-	//THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
-	VIEW_LIBERALCRIMESQUAD,
-	VIEW_LIBERALCRIMESQUADPOS,
-	//THIS ONE MUST BE LAST. randomissue RELIES ON IT BEING LAST TO IGNORE IT IF
-	//CCS IS DEAD.
-	VIEW_CONSERVATIVECRIMESQUAD,
-	VIEWNUM
-};
 
 enum Laws
 {
@@ -646,10 +543,6 @@ enum NewsStories
 const int SQUAD_NAMELEN = 40;
 
 
-const int SLOGAN_LEN = 80;
-
-const int SCORENUM = 5;
-
 enum EndTypes
 {
 	END_BUT_NOT_END = -2,
@@ -672,104 +565,6 @@ enum EndTypes
 	END_STALIN,
 	ENDNUM
 };
-
-enum Execs
-{
-	EXEC_PRESIDENT,
-	EXEC_VP,
-	EXEC_STATE,
-	EXEC_ATTORNEY,
-	EXECNUM
-};
-
-enum PoliticalParties
-{
-	LIBERAL_PARTY,
-	CONSERVATIVE_PARTY,
-	STALINIST_PARTY,
-	PARTYNUM
-};
-
-// full house (100%) - for looping thru full house
-const int  HOUSENUM = 435;
-// just over half of house (50%+1) - to pass bills
-const int  HOUSEMAJORITY = 218;
-// 3/5 of house - has no significance other than in seeing if you won game
-const int  HOUSECOMFYMAJORITY = 261;
-// 2/3 of house - to override veto or pass constitutional amendment
-const int  HOUSESUPERMAJORITY = 290;
-// full senate (100%) - for looping thru full senate
-const int  SENATENUM = 100;
-// just over half of senate(50%+1) - to bass bills
-const int  SENATEMAJORITY = 51;
-// 3/5 of senate - to break filibuster in real world, but in game, has no significance other than seeing if you won
-const int  SENATECOMFYMAJORITY = 60;
-// 2/3 of senate - to override veto or pass constitutional amendment
-const int  SENATESUPERMAJORITY = 67;
-// full court (100%) - for looping thru full court
-const int  COURTNUM = 9;
-// just over half of court (50%+1) - to make majority rulings
-const int  COURTMAJORITY = 5;
-// 2/3 of court - has no significance other than seeing if you won game
-const int  COURTSUPERMAJORITY = 6;
-// all states (100%) - for looping thru all states
-const int  STATENUM = 50;
-// 3/4 of states (75%) - needed to pass constitutional amendments
-const int  STATESUPERMAJORITY = 38;
-
-const int  POLITICIAN_NAMELEN = 80;
-
-enum ReviewModes
-{
-	REVIEWMODE_LIBERALS,
-	REVIEWMODE_HOSTAGES,
-	REVIEWMODE_CLINIC,
-	REVIEWMODE_JUSTICE,
-	REVIEWMODE_SLEEPERS,
-	REVIEWMODE_DEAD,
-	REVIEWMODE_AWAY,
-	REVIEWMODENUM
-};
-
-enum SortingChoices
-{
-	SORTING_NONE,
-	SORTING_NAME,
-	SORTING_LOCATION_AND_NAME,
-	SORTING_SQUAD_OR_NAME,
-	SORTINGNUM
-};
-
-enum ActiveSortingChoices
-{
-	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
-	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
-	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
-	SORTINGCHOICE_JUSTICE,
-	SORTINGCHOICE_SLEEPERS,
-	SORTINGCHOICE_DEAD,
-	SORTINGCHOICE_AWAY,
-	SORTINGCHOICE_ACTIVATE,
-	SORTINGCHOICE_ACTIVATESLEEPERS,
-	SORTINGCHOICE_ASSEMBLESQUAD,
-	SORTINGCHOICE_BASEASSIGN,
-	SORTINGCHOICENUM
-};
-
-/*
-   Declarations for every function grouped by folder and file.
-   Created by jonathansfox.
-*/
-
-/* This is declared again lower down, just needed here for this header. */
-std::string tostring(long i);
-
-
-//
-
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 struct Float_Zero
@@ -804,231 +599,7 @@ struct ActivityST
 int get_associated_attribute(int skill_type);
 
 
-enum Bouncer_Reject_Reason
-{
-	REJECTED_CCS,
-	REJECTED_NUDE,
-	REJECTED_WEAPONS,
-	REJECTED_UNDERAGE,
-	REJECTED_FEMALEISH,
-	REJECTED_FEMALE,
-	REJECTED_BLOODYCLOTHES,
-	REJECTED_DAMAGEDCLOTHES,
-	REJECTED_CROSSDRESSING,
-	REJECTED_GUESTLIST,
-	REJECTED_DRESSCODE,
-	REJECTED_SECONDRATECLOTHES,
-	REJECTED_SMELLFUNNY,
-	NOT_REJECTED
-};
 
-
-enum bigListOfEnumTags {
-	ENUM_tag_only_sell_legal_items,
-	ENUM_tag_fullscreen,
-	ENUM_tag_allow_selling,
-	ENUM_tag_increase_prices_with_illegality,
-	ENUM_tag_department,
-	ENUM_tag_entry,
-	ENUM_tag_exit,
-	ENUM_tag_sell_masks,
-	ENUM_tag_letter,
-	ENUM_tag_item,
-
-	ENUM_tag_class,
-	ENUM_tag_type,
-	ENUM_tag_description,
-	ENUM_tag_price,
-	ENUM_tag_sleeperprice,
-
-	ENUM_tag_alignment,
-	ENUM_tag_PUBLIC_MOOD,
-	ENUM_tag_LIBERAL,
-	ENUM_tag_MODERATE,
-	ENUM_tag_CONSERVATIVE,
-	ENUM_tag_age,
-	ENUM_tag_DOGYEARS,
-	ENUM_tag_CHILD,
-	ENUM_tag_TEENAGER,
-	ENUM_tag_YOUNGADULT,
-	ENUM_tag_MATURE,
-	ENUM_tag_GRADUATE,
-	ENUM_tag_MIDDLEAGED,
-	ENUM_tag_SENIOR,
-	ENUM_tag_attribute_points,
-	ENUM_tag_attributes,
-	ENUM_tag_juice,
-	ENUM_tag_gender,
-	ENUM_tag_infiltration,
-	ENUM_tag_money,
-	ENUM_tag_skills,
-	ENUM_tag_armor,
-	ENUM_tag_weapon,
-	ENUM_tag_encounter_name,
-	ENUM_tag_type_name,
-
-	ENUM_tag_shortname,
-	ENUM_tag_shortname_future,
-	ENUM_tag_name_sub_1,
-	ENUM_tag_name_sub_2,
-	ENUM_tag_name_future_sub_1,
-	ENUM_tag_name_future_sub_2,
-	ENUM_tag_shortname_sub_1,
-	ENUM_tag_shortname_sub_2,
-	ENUM_tag_shortname_future_sub_1,
-	ENUM_tag_shortname_future_sub_2,
-	ENUM_tag_can_take_hostages,
-	ENUM_tag_threatening,
-	ENUM_tag_can_threaten_hostages,
-	ENUM_tag_protects_against_kidnapping,
-	ENUM_tag_musical_attack,
-	ENUM_tag_instrument,
-	ENUM_tag_graffiti,
-	ENUM_tag_legality,
-	ENUM_tag_bashstrengthmod,
-	ENUM_tag_auto_break_locks,
-	ENUM_tag_suspicious,
-	ENUM_tag_size,
-	ENUM_tag_attack,
-
-	ENUM_tag_priority,
-	ENUM_tag_ranged,
-	ENUM_tag_thrown,
-	ENUM_tag_can_backstab,
-	ENUM_tag_ammotype,
-	ENUM_tag_attack_description,
-	ENUM_tag_hit_description,
-	ENUM_tag_always_describe_hit,
-	ENUM_tag_hit_punctuation,
-	ENUM_tag_skill,
-	ENUM_tag_accuracy_bonus,
-	ENUM_tag_number_attacks,
-	ENUM_tag_successive_attacks_difficulty,
-	ENUM_tag_strength_min,
-	ENUM_tag_strength_max,
-	ENUM_tag_random_damage,
-	ENUM_tag_fixed_damage,
-	ENUM_tag_bruises,
-	ENUM_tag_tears,
-	ENUM_tag_cuts,
-	ENUM_tag_burns,
-	ENUM_tag_shoots,
-	ENUM_tag_bleeding,
-	ENUM_tag_severtype,
-	ENUM_tag_damages_armor,
-	ENUM_tag_armorpiercing,
-	ENUM_tag_no_DR_for_limbs_chance,
-	ENUM_tag_critical,
-	ENUM_tag_fire,
-
-	ENUM_tag_name,
-	ENUM_tag_attribute,
-	ENUM_tag_effect,
-	ENUM_tag_max_age,
-	ENUM_tag_min_age,
-	ENUM_tag_cost,
-	ENUM_tag_difficulty,
-
-	ENUM_tag_make_difficulty,
-	ENUM_tag_make_price,
-	ENUM_tag_deathsquad_legality,
-	ENUM_tag_can_get_bloody,
-	ENUM_tag_can_get_damaged,
-	ENUM_tag_body_covering,
-	ENUM_tag_interrogation,
-	ENUM_tag_professionalism,
-	ENUM_tag_conceal_weapon_size,
-	ENUM_tag_stealth_value,
-	ENUM_tag_mask,
-	ENUM_tag_surprise,
-	ENUM_tag_qualitylevels,
-	ENUM_tag_durability,
-
-	ENUM_tag_vtypeidname,
-	ENUM_tag_vtypeid,
-	ENUM_tag_color,
-	ENUM_tag_heat,
-	ENUM_tag_location,
-	ENUM_tag_myear,
-	ENUM_tag_id,
-
-	ENUM_tag_year,
-	ENUM_tag_start_at_current_year,
-	ENUM_tag_start_at_year,
-	ENUM_tag_add_random_up_to_current_year,
-	ENUM_tag_add_random,
-	ENUM_tag_add,
-	ENUM_tag_colors,
-	ENUM_tag_display_color,
-	ENUM_tag_drivebonus,
-	ENUM_tag_base,
-	ENUM_tag_skillfactor,
-	ENUM_tag_softlimit,
-	ENUM_tag_hardlimit,
-	ENUM_tag_dodgebonus,
-	ENUM_tag_attackbonus,
-	ENUM_tag_driver,
-	ENUM_tag_passenger,
-	ENUM_tag_longname,
-	ENUM_tag_stealing,
-	ENUM_tag_difficulty_to_find,
-	ENUM_tag_extra_heat,
-	ENUM_tag_sense_alarm_chance,
-	ENUM_tag_touch_alarm_chance,
-	ENUM_tag_low_armor_min,
-	ENUM_tag_low_armor_max,
-	ENUM_tag_high_armor_min,
-	ENUM_tag_high_armor_max,
-	ENUM_tag_armor_midpoint,
-	ENUM_tag_available_at_dealership,
-};
-
-string skill_enum_to_string(int skill_type);
-string showXmlSkill(int skill_, int value_);
-string showXmlAttribute(int attribute_, int value_);
-
-const string PACKAGE_VERSION_STR = "4.12.55";
-const int version = 41255;
-const int lowestloadversion = 40100;
-const int lowestloadscoreversion = 31203;
-
-
-const string singleDot = ".";
-const string dotSpace = ". ";
-const string COMMA_SPACE = ", ";
-const string spaceDashSpace = " - ";
-const string spaceParanthesisDollar = " ($";
-const string paranthesisDollar = "($";
-const string COLON_SPACE = ": ";
-const string ampersandC = "&c";
-const string CLOSE_PARENTHESIS = ")";
-const string percentSign = "%";
-const string singleSpace = " ";
-
-const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
-
-const string AND = " and ";
-const string string_sleeper = "Sleeper ";
-const string ampersandR = "&r";
-const string show_squad_liberal_status = "0 - Show the squad's Liberal status";
-const string HASH_CHECK_STATUS_OF_LIBERAL = "# - Check the status of a squad Liberal";
-const string O_CHANGE_SQUAD_ORDER = "O - Change the squad's Liberal order";
-const string enter_done = "Enter - Done";
-const string undefined = "UNDEFINED";
-const string exclamationPoint = "!";
-const string failedToLoad = "Failed to load ";
-const string pressAnyOtherKey = "Press any other key to continue...";
-const string pressAnyKeyString = "Press any other key when ready to begin...";
-const string city = "CITY: ";
-const string tag_heat = "heat";
-
-enum BillStatus
-{
-	BILL_SIGNED = -2,
-	BILL_OVERRIDE_VETO = -1,
-	BILL_PASSED_CONGRESS = 0,
-	BILL_FAILED = 1
-};
 #ifdef	SITEMODE_CPP
 // sitemode.cpp
 
