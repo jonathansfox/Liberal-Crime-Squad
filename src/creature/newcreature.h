@@ -9,6 +9,18 @@
 #include "augmentation.h"
 
 #include "creatureEnums.h"
+
+enum Bodyparts
+{
+	BODYPART_HEAD,
+	BODYPART_BODY,
+	BODYPART_ARM_RIGHT,
+	BODYPART_ARM_LEFT,
+	BODYPART_LEG_RIGHT,
+	BODYPART_LEG_LEFT,
+	BODYPARTNUM
+};
+
 struct CreatureBools
 {
 	const bool exists;

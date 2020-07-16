@@ -1,6 +1,6 @@
 
 #define	VEHICLETYPE_CPP
-#include "../includes.h"
+#include "../includes00.h"
 //for atoi
 int VehicleType::number_of_vehicletypes = 0;
 
@@ -61,7 +61,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 	xmlfile.SetDoc(xmlstring);
 	xmlfile.FindElem();
 	idname_ = xmlfile.GetAttrib(tag_idname);
-	if (idname_ == BLANK_STRING)
+	if (idname_ == "")
 		idname_ = CONST_LACKS_IDNAME + tostring(id_);
 	xmlfile.IntoElem();
 	while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.

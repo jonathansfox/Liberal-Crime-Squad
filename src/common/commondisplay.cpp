@@ -1,7 +1,7 @@
 
 
 #define	COMMONDISPLAY_CPP
-#include "../includes.h"
+#include "../includes59.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //

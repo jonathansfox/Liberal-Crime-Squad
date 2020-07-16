@@ -1,6 +1,6 @@
 
 #define	TALK_CPP
-#include "../includes.h"
+#include "../includes07.h"
 
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -460,7 +460,7 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 		selected_flirt = pickrandom(pickupLines);
 	}
 	printPickupLine(a.getNameAndAlignment().name, selected_flirt);
-	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
+	const bool extraline = (selected_flirt[1] != "" ? 1 : 0);
 	pressAnyKey();
 	bool succeeded = false;
 	int difficulty = DIFFICULTY_HARD;

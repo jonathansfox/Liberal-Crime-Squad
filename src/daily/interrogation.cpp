@@ -1,7 +1,7 @@
 
 
 #define	INTERROGATION_CPP
-#include "../includes.h"
+#include "../includes42.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -66,7 +66,7 @@ void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
 	// What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
 	// These are greater than and less than comparisons, so they are testing ranges -Fox
 	string line_one;
-	string line_two = BLANK_STRING;
+	string line_two = "";
 	if (rapport[a->id] > 3)
 	{
 		line_one = CONST_THE_CONSERVATIVE_CLINGS_HELPLESSLY;

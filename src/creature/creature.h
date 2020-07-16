@@ -536,8 +536,8 @@ struct Data_Activity
 	string line;
 	string line2;
 	string line3;
-	Data_Activity(char _key, bool _show_name, string _line0, string _line1 = BLANK_STRING, string _line2 = BLANK_STRING, CreatureSkill _skill = SKILLNUM) : key(_key), show_name(_show_name), skill(_skill), line(_line0), line2(_line1), line3(_line2) {}
-	Data_Activity() : Data_Activity('x', false, BLANK_STRING) {}
+	Data_Activity(char _key, bool _show_name, string _line0, string _line1 = "", string _line2 = "", CreatureSkill _skill = SKILLNUM) : key(_key), show_name(_show_name), skill(_skill), line(_line0), line2(_line1), line3(_line2) {}
+	Data_Activity() : Data_Activity('x', false, "") {}
 	string lineAttempt(int row, DeprecatedCreature *cr)
 	{
 		if (skill == SKILLNUM) {
@@ -546,7 +546,7 @@ struct Data_Activity
 		}
 		else
 		{
-			if (row > 0) return BLANK_STRING;
+			if (row > 0) return "";
 			if (cr->get_skill(skill) >= 8) return line3;
 			if (cr->get_skill(skill) >= 4) return line2;
 			return line;

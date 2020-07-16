@@ -230,16 +230,6 @@ struct RecruitData
 	RecruitData(CreatureTypes type_, const char* name_, int difficulty_) : type(type_), difficulty(difficulty_) { strcpy(name, name_); }
 	RecruitData(CreatureTypes type_, const string name_, int difficulty_) : type(type_), difficulty(difficulty_) { strcpy(name, name_.c_str()); }
 };
-enum Bodyparts
-{
-	BODYPART_HEAD,
-	BODYPART_BODY,
-	BODYPART_ARM_RIGHT,
-	BODYPART_ARM_LEFT,
-	BODYPART_LEG_RIGHT,
-	BODYPART_LEG_LEFT,
-	BODYPARTNUM
-};
 enum SpecialWounds
 {
 	SPECIALWOUND_TEETH,

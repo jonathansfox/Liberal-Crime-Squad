@@ -1,6 +1,6 @@
 
 #define	ITEMTYPE_CPP
-#include "../includes.h"
+#include "../includes32.h"
 int ItemType::number_of_itemtypes = 0;
 ItemType::ItemType(MCD_STR xmlstring)
 	: name_(CONST_UNDEFINED), name_future_defined_(false), fencevalue_(0)

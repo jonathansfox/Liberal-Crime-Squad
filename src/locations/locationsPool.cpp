@@ -1,7 +1,7 @@
 
 
 #define	LOCATIONSPOOL_CPP
-#include "../includes.h"
+#include "../includes24.h"
 /* rolls up a creature's stats and equipment */
 void makecreature(DeprecatedCreature &cr, short type);
 vector<Location *> location;
@@ -1075,7 +1075,7 @@ string transferClipBaseSquad(const bool decreaseammo, const bool increaseammo, i
 		}
 		consolidateloot(loot);
 	}
-	return BLANK_STRING;
+	return "";
 }
 bool isThereNoActivesquad() {
 	return activesquad == NULL;
@@ -1123,11 +1123,11 @@ void equip(vector<Item *> &loot, int loc)
 	consolidateloot(loot);
 	if (loc != -1) consolidateloot(location[loc]->loot);
 	int page = 0;
-	string errmsg = BLANK_STRING;
+	string errmsg = "";
 	while (true)
 	{
 		printEquipMenu(loc, page, errmsg, loot);
-		errmsg = BLANK_STRING;
+		errmsg = "";
 
 		int c = getkeyAlt();
 		bool increaseammo = (c == KEY_UP);
@@ -1158,7 +1158,7 @@ void equip(vector<Item *> &loot, int loc)
 				errmsg = transferClipBaseSquad(decreaseammo, increaseammo, slot, page, e, loot);
 				if (!errmsg.empty()) {
 					if (errmsg == NOT_ERROR_BUT_CONTINUE) {
-						errmsg = BLANK_STRING;
+						errmsg = "";
 					}
 					continue;
 				}

@@ -1,5 +1,5 @@
 #define	LIBERALAGENDA_CPP
-#include "../includes.h"
+#include "../includes65.h"
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is

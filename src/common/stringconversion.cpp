@@ -1,6 +1,6 @@
 
 #define	STRINGCONVERSION_CPP
-#include "../includes.h"
+#include "../includes54.h"
 
 std::string tostring(long i)
 {
@@ -48,7 +48,7 @@ string skill_enum_to_string(int skill_type) {
 		return skillEnumToString[skill_type];
 	}
 	else
-		return BLANK_STRING;
+		return "";
 }
 string attribute_enum_to_string(int attribute)
 {
@@ -56,7 +56,7 @@ string attribute_enum_to_string(int attribute)
 		return attEnumToString[attribute];
 	}
 	else
-		return BLANK_STRING;
+		return "";
 	/*
 	if (attribute == ATTRIBUTE_STRENGTH)
 		return tag_strength;
@@ -73,7 +73,7 @@ string attribute_enum_to_string(int attribute)
 	else if (attribute == ATTRIBUTE_HEART)
 		return tag_heart;
 	else
-		return BLANK_STRING;*/
+		return "";*/
 }
 int attribute_string_to_enum(const string& attribute)
 {

@@ -1,6 +1,5 @@
 
-#define	CURSESALTERNATIVE_CPP
-#include "includes.h"
+#include "includes47.h"
 #include "../common/commondisplay.h"
 #include "../sitemode/sitedisplay.h"
 
@@ -2689,7 +2688,7 @@ void printThePoliceCutLights(const bool clearformess) {
 void printReporterDuringSiege(const string repname, const string name, const int segmentpower) {
 	extern short lawList[LAWNUM];
 	string line_one;
-	string line_two = BLANK_STRING;
+	string line_two = "";
 	if (segmentpower < 15)
 	{
 		line_one = repname + CONST_CANCELED_THE_INTERVIEW_HALFWAY_THROUGH;
@@ -4810,7 +4809,7 @@ string qualifiedFailure(const int droll, const string name, vector<string> strin
 }
 string qualifiedFailure(const int droll, vector<string> stringCollection) {
 	if (stringCollection.size() == 0) {
-		return BLANK_STRING;
+		return "";
 	}
 	if (droll < stringCollection.size() && droll >= 0) {
 		return stringCollection[droll];
@@ -4860,7 +4859,7 @@ void printfunds(int y, int offsetx, const char* prefix, long funds)
 {
 	char moneystr[50], prefixbuffer[50];
 	if (prefix == NULL)
-		strncpy(prefixbuffer, BLANK_STRING.c_str(), 50);
+		strncpy(prefixbuffer, "", 50);
 	else strncpy(prefixbuffer, prefix, 50);
 	strcpy(moneystr, tostring(funds).data());
 	//Save screen coordinates for later.
@@ -4940,7 +4939,7 @@ void enter_name(int y, int x, char *name, int len, const char* defname)
 	noechoAlt();
 	raw_outputAlt(TRUE);
 	keypadAlt(TRUE);
-	if ((defname != NULL) && (strncmp(name, BLANK_STRING.c_str(), len - 1) == 0)) strncpy(name, defname, len - 1);
+	if ((defname != NULL) && (strncmp(name, "", len - 1) == 0)) strncpy(name, defname, len - 1);
 	name[len - 1] = '\0';
 }
 
@@ -5659,7 +5658,7 @@ void printsitemap(int x, int y, int z)
 		str = specialString[static_cast<SpecialBlocks>(levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special)];
 	}
 	else {
-		str = BLANK_STRING;
+		str = "";
 	}
 
 	if (levelmap[loc_coord.locx][loc_coord.locy][loc_coord.locz].special != -1)
@@ -6869,7 +6868,7 @@ void printEnemyWatchesHostageDeath(const string ename) {
 }
 
 void printAcceptsPickupLine(const string aname, const string tkname, const vector<string> selected_flirt) {
-	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
+	const bool extraline = (selected_flirt[1].empty() ? 0 : 1);
 	int y = 13 + (extraline ? 1 : 0); 
 	printRespondantName(tkname, extraline);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
@@ -6894,7 +6893,7 @@ void printAcceptsPickupLine(const string aname, const string tkname, const vecto
 }
 void printRejectsPickupLine(const string tkname, const int tktype, const int agender_liberal, const vector<string> selected_flirt) {
 
-	const bool extraline = (selected_flirt[1] != BLANK_STRING ? 1 : 0);
+	const bool extraline = (selected_flirt[1].empty() ?  0 : 1);
 	int y = 13 + (extraline ? 1 : 0);
 	printRespondantName(tkname, extraline);
 	set_color_easy(RED_ON_BLACK_BRIGHT);
@@ -6907,7 +6906,7 @@ void printRejectsPickupLine(const string tkname, const int tktype, const int age
 	else
 	{
 		mvaddstrAlt(y++, 1, selected_flirt[3], gamelog);
-		if (selected_flirt[4] != BLANK_STRING) {
+		if (! selected_flirt[4].empty()) {
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(y, 1, selected_flirt[4], gamelog);
 		}
@@ -6947,7 +6946,7 @@ void printPickupLine(const string aname, const vector<string> selected_flirt) {
 	mvaddstrAlt(9, 1, aname, gamelog); addstrAlt(saysComma, gamelog);
 	set_color_easy(GREEN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(10, 1, selected_flirt[0], gamelog);
-	if (selected_flirt[1] != BLANK_STRING) {
+	if (!selected_flirt[1].empty()) {
 		mvaddstrAlt(11, 1, selected_flirt[1], gamelog);
 	}
 	gamelog.newline();
@@ -7381,7 +7380,7 @@ string printNewGameHeader() {
 	bool justEnter = false;
 	bool enterDamn = false;
 	do {
-		if (strcmp(savefile_temp, BLANK_STRING.c_str()) == 0) {
+		if (strcmp(savefile_temp, "") == 0) {
 			eraseAlt();
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
 			mvaddstrAlt(0, 0, inWhatWorld);
@@ -7398,7 +7397,7 @@ string printNewGameHeader() {
 			}
 			set_color_easy(WHITE_ON_BLACK);
 			mvaddstrAlt(1, 0, enterTheName);
-			enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, BLANK_STRING.c_str());
+			enter_name(2, 0, savefile_temp, SAVE_FILE_NAMELEN, "");
 			justEnter = true;
 		}
 		else {

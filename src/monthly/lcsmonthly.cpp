@@ -1,7 +1,7 @@
 
 
 #define	LCSMONTHLY_CPP
-#include "../includes.h"
+#include "../includes20.h"
 
 
 const vector<int> viewAnimals = { VIEW_ANIMALRESEARCH, 15 };
@@ -648,7 +648,7 @@ the bottom of includes.h in the top src folder.
 	  mvaddstrAlt(y, 0, CONST_NET_CHANGE_THIS_MONTH_DAY);
 	  if (totalmoney > 0) { set_color_easy(GREEN_ON_BLACK_BRIGHT); num = CONST_X_PLUS_SIGN; }
 	  else if (totalmoney < 0) { set_color_easy(RED_ON_BLACK_BRIGHT); num = CONST_X_MINUS_SIGN; }
-	  else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = BLANK_STRING; }
+	  else { set_color_easy(WHITE_ON_BLACK_BRIGHT); num = ""; }
 	  num += DOLLAR_SIGN + tostring(abs(totalmoney));
 	  mvaddstrAlt(y, 60 - len(num), num);
 	  if (dailymoney > 0)

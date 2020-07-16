@@ -1128,3 +1128,6 @@ Updated bay12 forums link
 
 4.12.55
 Added support for RustKnight Portraits
+
+4.12.56
+Reconstructed includes.h to allow compiling in 1/5 the time

@@ -2,7 +2,7 @@
 
 
 #define	JUSTICE_CPP
-#include "../includes.h"
+#include "../includes21.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -1670,5 +1670,5 @@ string commaAndPunctuation(const int typenum) {
 	if (typenum > 1) return COMMA_SPACE;
 	if (typenum == 1) return AND;
 	if (typenum == 0) return singleDot;
-	else return BLANK_STRING;
+	else return "";
 }

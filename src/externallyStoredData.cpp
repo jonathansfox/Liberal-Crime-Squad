@@ -1,7 +1,7 @@
 
 
 #define	EXTERNALLYSTOREDDATA_CPP
-#include "includes.h"
+#include "includes39.h"
 
 bool initialize_more_incomplete_txt() {
 	// this is the string data for activities. they write up to three lines of text about the activity
@@ -36,7 +36,7 @@ bool initialize_more_incomplete_txt() {
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_BURY, Data_Activity('z', true, CONST_BURY_DEAD_BODIES)), // did not have any strings listed
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_POLITICS, Data_Activity('t', false, CONST_SKILLS_TRAINED_WRITING_PERSUASION_LAW_STREET_SENSE_SCIENCE, CONST_RELIGION_BUSINESS_MUSIC_ART, CONST_CLASSES_COST_UP_TO_20_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_COVERT, Data_Activity('t', false, CONST_SKILLS_TRAINED_COMPUTERS_SECURITY_STEALTH_DISGUISE_TAILORING, CONST_SEDUCTION_PSYCHOLOGY_DRIVING, CONST_CLASSES_COST_UP_TO_60_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
-		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_FIGHTING, Data_Activity('t', false, CONST_SKILLS_TRAINED_ALL_WEAPON_SKILLS_MARTIAL_ARTS_DODGE_FIRST_AID, BLANK_STRING, CONST_CLASSES_COST_UP_TO_100_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
+		 map<Activity, Data_Activity>::value_type(ACTIVITY_TEACH_FIGHTING, Data_Activity('t', false, CONST_SKILLS_TRAINED_ALL_WEAPON_SKILLS_MARTIAL_ARTS_DODGE_FIRST_AID, "", CONST_CLASSES_COST_UP_TO_100_DAY_TO_CONDUCT_ALL_LIBERALS_ABLE_WILL_ATTEND)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DEBATING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_MARTIAL_ARTS, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
 		 map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_DRIVING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
@@ -63,7 +63,7 @@ bool initialize_more_incomplete_txt() {
 		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_THROWING, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
 		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_STEALTH, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
 		   map<Activity, Data_Activity>::value_type(ACTIVITY_STUDY_SEDUCTION, Data_Activity('l', true, CONST_ATTEND_CLASSES_IN_UNIVERSITY_DISTRICT, CONST_AT_A_COST_OF_60_A_DAY)),
-		   map<Activity, Data_Activity>::value_type(ACTIVITY_NONE, Data_Activity('x', false, BLANK_STRING))
+		   map<Activity, Data_Activity>::value_type(ACTIVITY_NONE, Data_Activity('x', false, ""))
 	};
 	pollingData = {
 		map< Views, stringConnectedToView >::value_type(VIEW_GAY,  stringConnectedToView(CONST_PROTECTING_GAY_RIGHTS, CONST_PROTECTING_THE_TRADITIONAL_FAMILY)),

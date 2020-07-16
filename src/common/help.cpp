@@ -1,6 +1,6 @@
 
 #define HELP_CPP
-#include "../includes.h"
+#include "../includes56.h"
 
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"

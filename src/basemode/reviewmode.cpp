@@ -1,6 +1,6 @@
 
 #define	REVIEWMODE_CPP
-#include "../includes.h"
+#include "../includes64.h"
 
 int getkeyAlt();
 void pressAnyKey();

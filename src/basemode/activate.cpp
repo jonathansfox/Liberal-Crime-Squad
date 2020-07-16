@@ -55,7 +55,7 @@ the bottom of includes.h in the top src folder.
 
 
 #define	ACTIVATE_CPP
-#include "../includes.h"
+#include "../includes69.h"
 
 
 Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {
@@ -196,7 +196,7 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
 		else if (c == '\n')
 		{
 			elems.push_back(oss.str());
-			elems.push_back(BLANK_STRING);
+			elems.push_back("");
 			oss.str(string());
 		}
 		else oss << c;
@@ -427,7 +427,7 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 			for (int i = 0; i < desc.size(); i++)
 			{
 				if (desc[i].length() > 50) continue;
-				else if (desc[i] == BLANK_STRING)
+				else if (desc[i].empty())
 				{
 					line++;
 					chars_left = 50;

@@ -1,7 +1,7 @@
 
 
 #define	LOCATIONS_CPP
-#include "../includes.h"
+#include "../includes25.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -43,7 +43,7 @@ This file is part of Liberal Crime Squad.                                       
 		 return getCityDescription[type];
 	 }
 	 else {
-		 return BLANK_STRING;
+		 return "";
 	 }
  }
  bool Location::can_be_fortified()
@@ -431,7 +431,7 @@ This file is part of Liberal Crime Squad.                                       
  }
  void renameSITE_BUSINESS_JUICEBAR(char* name, char* shortname) {
 
-	 strcpy(name, BLANK_STRING);
+	 strcpy(name, "");
 	 strcat(name, pickrandom(juice_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(juice_name_2));
@@ -440,7 +440,7 @@ This file is part of Liberal Crime Squad.                                       
  }
  void renameSITE_BUSINESS_VEGANCOOP(char* name, char* shortname) {
 
-	 strcpy(name, BLANK_STRING);
+	 strcpy(name, "");
 	 strcat(name, pickrandom(vegan_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(vegan_name_2));
@@ -449,7 +449,7 @@ This file is part of Liberal Crime Squad.                                       
  }
  void renameSITE_BUSINESS_INTERNETCAFE(char* name, char* shortname) {
 
-	 strcpy(name, BLANK_STRING);
+	 strcpy(name, "");
 	 strcat(name, pickrandom(cafe_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(cafe_name_2));
@@ -468,7 +468,7 @@ This file is part of Liberal Crime Squad.                                       
  }
  void renameSITE_BUSINESS_LATTESTAND(char* name, char* shortname) {
 
-	 strcpy(name, BLANK_STRING);
+	 strcpy(name, "");
 	 strcat(name, pickrandom(latte_name));
 	 strcat(name, singleSpace);
 	 strcat(name, pickrandom(latte_name_2));

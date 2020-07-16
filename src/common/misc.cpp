@@ -1,7 +1,7 @@
 
 
 #define	MISC_CPP
-#include "../includes.h"
+#include "../includes55.h"
 void sexdesc(char *str)
 {
 	strcpy(str, pickrandom(sexdescAcronym).c_str());
@@ -42,7 +42,7 @@ const char* statename(int i)
 /* EndGameStatus - converts an integer into a roman numeral for amendments */
 string romannumeral(int amendnum)
 {
-	string roman = BLANK_STRING;
+	string roman = "";
 	while (amendnum >= 1000)
 	{
 		amendnum -= 1000;
@@ -1866,7 +1866,7 @@ void MusicClass::play(int _musicmode)
 
 	string constructPositiveEventStory(const short view) {
 
-		string story = BLANK_STRING;
+		string story = "";
 
 		switch (view)
 		{
@@ -2610,7 +2610,7 @@ void MusicClass::play(int _musicmode)
 
 
 	string constructNegativeEventStory(const short view) {
-		string story = BLANK_STRING;
+		string story = "";
 		switch (view)
 		{
 		case VIEW_ANIMALRESEARCH:
@@ -2921,7 +2921,7 @@ void MusicClass::play(int _musicmode)
 	string dismemberingWound(const int w, const int wound) {
 
 
-		string output = BLANK_STRING;
+		string output = "";
 
 		if (w == BODYPART_HEAD && wound & WOUND_CLEANOFF) {
 			output = CONST_fight151;

@@ -1,7 +1,7 @@
 
 
 #define	CREATURETYPE_CPP
-#include "../includes.h"
+#include "../includes48.h"
 Weapon& DeprecatedCreature::weapon_none()
 {
 	static Weapon unarmed(*weapontype[getweapontype(tag_WEAPON_NONE)]);
@@ -762,7 +762,7 @@ void armCREATURE_GENETIC(DeprecatedCreature &cr, int(&attcap)[ATTNUM]) {
 		attcap[ATTRIBUTE_CHARISMA] = 10;
 	}
 	else
-		cr.rename( BLANK_STRING);
+		cr.rename( "");
 	switch (LCSrandom(11))
 	{
 	case 0:

@@ -1,6 +1,6 @@
 
 #define	NEWGAME_CPP
-#include "../includes.h"
+#include "../includes04.h"
 
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -116,7 +116,7 @@ string enumToCreatureString(const int i) {
 		return enumToCreature[i];
 	}
 	else {
-		return BLANK_STRING;
+		return "";
 	}
 }
 int getBaseFromString(const string s) {
@@ -413,12 +413,12 @@ void printIntroduction() {
 void resetChoiceAndQuestion(MutableChoice &currentChoice, MutableQuestion &currentQuestion, const string header, const string header_2, const string firstsubstr) {
 
 
-	currentChoice.ANSWER = BLANK_STRING;
-	currentChoice.ANSWER_2 = BLANK_STRING;
+	currentChoice.ANSWER = "";
+	currentChoice.ANSWER_2 = "";
 	currentQuestion.HEADER = header;
 	currentQuestion.HEADER_2 = header_2;
 	currentQuestion.QUESTION = firstsubstr;
-	currentQuestion.QUESTION_2 = BLANK_STRING;
+	currentQuestion.QUESTION_2 = "";
 
 }
 bool getAttributeFromFounderQuestion(const string question, MutableImpact &currentImpact) {
@@ -552,10 +552,10 @@ vector<Question> gatherAllFounderQuestions() {
 	bool firstAnswer = true;
 	MutableQuestion currentQuestion;
 	MutableChoice currentChoice;
-	string header = BLANK_STRING;
-	string header_2 = BLANK_STRING;
-	string answer = BLANK_STRING;
-	string answer_2 = BLANK_STRING;
+	string header = "";
+	string header_2 = "";
+	string answer = "";
+	string answer_2 = "";
 
 	for (string first : founderQuestions) {
 		MutableImpact currentImpact;
@@ -565,7 +565,7 @@ vector<Question> gatherAllFounderQuestions() {
 		case ENUM_tag_HEADER:
 			if (first.substr(6, 1) == singleSpace) {
 				header = first.substr(7);
-				header_2 = BLANK_STRING;
+				header_2 = "";
 			}
 			else  if (first.substr(6, 2) == tag__2) {
 				header_2 = first.substr(9);
@@ -575,7 +575,7 @@ vector<Question> gatherAllFounderQuestions() {
 			if (firstAnswer) {
 				if (first.substr(6, 1) == singleSpace) {
 					answer = first.substr(7);
-					answer_2 = BLANK_STRING;
+					answer_2 = "";
 					firstAnswer = false;
 				}
 				else  if (first.substr(6, 2) == tag__2) {
@@ -591,7 +591,7 @@ vector<Question> gatherAllFounderQuestions() {
 					}
 					currentChoice.impact.clear();
 					answer = first.substr(7);
-					answer_2 = BLANK_STRING;
+					answer_2 = "";
 				}
 				else  if (first.substr(6, 2) == tag__2) {
 					answer_2 = first.substr(9);

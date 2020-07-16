@@ -1,6 +1,6 @@
 
 #define	INITFILE_CPP
-#include "../includes.h"
+#include "../includes05.h"
 /*
 This file handles the loading of init.txt
 This file is part of Liberal Crime Squad.

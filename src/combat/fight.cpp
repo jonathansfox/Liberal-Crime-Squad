@@ -1,7 +1,7 @@
 
 
 #define	FIGHT_CPP
-#include "../includes.h"
+#include "../includes62.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -2166,7 +2166,7 @@ string specialWoundPossibilityBody(
 	const char damtype)
 {
 	DeprecatedCreature* target = &t;
-	string damageDescription = BLANK_STRING;
+	string damageDescription = "";
 	switch (LCSrandom(11))
 	{
 	case 0:
@@ -2370,7 +2370,7 @@ string specialWoundPossibilityHead(
 	const char damtype
 ) {
 	DeprecatedCreature* target = &t;
-	string damageDescription = BLANK_STRING;
+	string damageDescription = "";
 	switch (LCSrandom(7))
 	{
 

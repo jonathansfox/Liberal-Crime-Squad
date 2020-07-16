@@ -1,6 +1,6 @@
 
 #define	WEAPONTYPE_CPP
-#include "../includes.h"
+#include "../includes27.h"
 
 map<string, int> weaponTypeTags = {
 	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),

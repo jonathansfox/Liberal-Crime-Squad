@@ -24,7 +24,7 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
 /* common - Display a list of options and return choice. */
 int choiceprompt(const string &firstline, const string &secondline,
 	const vector<string> &option, const string &optiontypename,
-	bool allowexitwochoice, const string &exitstring = BLANK_STRING);
+	bool allowexitwochoice, const string &exitstring = "");
 /* common - Displays a list of things to buy and returns an int corresponding
 to the index of the chosen thing in the nameprice vector. */
 int buyprompt(const string &firstline, const string &secondline,

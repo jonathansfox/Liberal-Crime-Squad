@@ -1,6 +1,6 @@
 
 #define	MONEY_CPP
-#include "../includes.h"
+#include "../includes29.h"
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/item.h"

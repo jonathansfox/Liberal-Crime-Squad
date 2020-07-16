@@ -1,6 +1,6 @@
 
 #define	LOG_CPP
-#include "../includes.h"
+#include "../includes23.h"
 /*
 	log.cpp
 	Ciprian Ilies
@@ -31,9 +31,9 @@ Log::Log()
 	//(some compiler in windows) murdered me if I didn't do this. And I want to live.
 	//Besides, it's good practice to always explicitly initialize a variable.
 	//You never know what a compiler's going to initialize something as :)
-	filename = BLANK_STRING;
+	filename = "";
 	newline_mode = NEWLINEMODE_LOGFILES_DEFAULT; //Set this to whatever the default has been defined as.
-	buffer = BLANK_STRING; //Same situation as with filename.
+	buffer = ""; //Same situation as with filename.
 	logged_since_last_message = false; //Well, this starts out false for obvious reasons.
 }
 //The initialization function.
@@ -60,7 +60,7 @@ bool Log::initialize(const string& _filename, bool overwrite_existing, int _newl
 //This is the actual logging function.
 bool Log::log(const string& text)
 {
-	if (text == BLANK_STRING) //Check if no text given.
+	if (text == "") //Check if no text given.
 	{
 		//No text given. No reason to continue.
 		//Also, it acts as a guard to the len(text) < 2 function.
@@ -108,10 +108,10 @@ bool Log::log(const string& text)
 void Log::nextMessage()
 {  //This check makes sure the log is formatted correctly even when there is
    //nothing in the buffer (a result of using newline());
-	if (buffer == BLANK_STRING) for (int i = 0; i < newline_mode; i++)
+	if (buffer == "") for (int i = 0; i < newline_mode; i++)
 		buffer += "\n"; //Add as many newlines as the game calls for.
 	log(buffer); //Write out the current text.
-	buffer = BLANK_STRING; //Clear the buffer.
+	buffer = ""; //Clear the buffer.
 	logged_since_last_message = false; //Reset this, since this is the CONST_LAST_MESSAGE.
 }
 void Log::newline()

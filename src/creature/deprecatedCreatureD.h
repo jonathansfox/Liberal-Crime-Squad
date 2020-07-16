@@ -14,7 +14,7 @@ struct Deprecatedsquadst
 	Deprecatedsquadst()
 	{
 		for (int p = 0; p < 6; p++) squad[p] = NULL;
-		strcpy(name, BLANK_STRING.c_str());
+		strcpy(name, "");
 		activity.type = ACTIVITY_NONE, id = -1, stance = SQUADSTANCE_STANDARD;
 	}
 	~Deprecatedsquadst() { delete_and_clear(loot); }

@@ -1,7 +1,7 @@
 
 
 #define	CREATUREPOOL_CPP
-#include "../includes.h"
+#include "../includes58.h"
 
 vector<DeprecatedCreature *> pool;
 CreaturePool singletonPool;
@@ -277,7 +277,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 		else recruit_reluctance -= lib_persuasiveness;
 		int difficulty = recruit_reluctance;
 		char str[75];
-		strcpy(str, BLANK_STRING.c_str());
+		strcpy(str, "");
 		if (c == 'a')
 		{
 			difficulty -= 5;
@@ -1142,7 +1142,7 @@ int countDeadSharingLocation(DeprecatedCreature *cr) {
 	return havedead;
 }
 string getSleeperBouncerName(short cursite) {
-	string output = BLANK_STRING;
+	string output = "";
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->base == cursite && pool[p]->type == CREATURE_BOUNCER)
@@ -1154,7 +1154,7 @@ string getSleeperBouncerName(short cursite) {
 	return output;
 }
 string getSleeperSecurityName(short cursite, int type) {
-	string name = BLANK_STRING;
+	string name = "";
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->base == cursite)
@@ -1180,7 +1180,7 @@ char doWeHaveASleeperHere(short cursite) {
 	return autoadmit;
 }
 string getSleeperBankerName(short cursite) {
-	string output = BLANK_STRING;
+	string output = "";
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->type == CREATURE_BANK_MANAGER &&
@@ -1194,7 +1194,7 @@ string getSleeperBankerName(short cursite) {
 	return output;
 }
 string haveSleeperBankerCrackSafe(short cursite, int base) {
-	string output = BLANK_STRING;
+	string output = "";
 	for (int p = 0; p < CreaturePool::getInstance().lenpool(); p++)
 	{
 		if (pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)

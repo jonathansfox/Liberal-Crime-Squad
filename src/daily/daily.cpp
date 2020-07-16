@@ -1,6 +1,6 @@
 
 #define	DAILY_CPP
-#include "../includes.h"
+#include "../includes44.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -184,7 +184,7 @@ void dealership(int loc)
 				}
 			while (true)
 			{
-				carchoice = choiceprompt(CHOOSE_A_VEHICLE, BLANK_STRING, vehicleoption, thisVehicle,
+				carchoice = choiceprompt(CHOOSE_A_VEHICLE, "", vehicleoption, thisVehicle,
 					true, weDontNeedCar);
 				if (carchoice != -1 && (sleepercarsalesman ? getVehicleTypeSleeperPrice(availablevehicle[carchoice]) :
 					getVehicleTypePrice(availablevehicle[carchoice])) > ledger.get_funds())
@@ -200,7 +200,7 @@ void dealership(int loc)
 			int colorchoice;
 			//if(len(vehicletype[availablevehicle[choice]]->color())>1) //Allow to back out if you don't like single colour? -XML
 			//{
-			colorchoice = choiceprompt(CHOOSE_A_COLOR, BLANK_STRING, getVehicleTypeColor(availablevehicle[carchoice]),
+			colorchoice = choiceprompt(CHOOSE_A_COLOR, "", getVehicleTypeColor(availablevehicle[carchoice]),
 				thisColor, true, theseColorsAreCon);
 			//}
 			//else

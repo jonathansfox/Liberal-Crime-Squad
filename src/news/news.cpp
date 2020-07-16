@@ -1,7 +1,7 @@
 
 
 #define	NEWS_CPP
-#include "../includes.h"
+#include "../includes17.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -784,7 +784,7 @@ void displaysinglead(const bool liberalguardian, char addplace[2][3], short* sto
 			case 3:
 			case 5:
 			default:
-				ad = BLANK_STRING;
+				ad = "";
 				for (string str : pickrandom(adList)) {
 					ad += str;
 				}
@@ -811,7 +811,7 @@ void displaysinglead(const bool liberalguardian, char addplace[2][3], short* sto
 			case 4:
 			case 5:
 			default:
-				ad = BLANK_STRING;
+				ad = "";
 				for (string str : pickrandom(adListB)) {
 					ad += str;
 				}
@@ -1819,9 +1819,9 @@ string accordingToCrimeString(const int c, const bool liberalguardian) {
 string extraCrimes(const bool liberalguardian, const bool ccs, const int type_sum, const int crime[CRIMENUM]) {
 	int typesum = type_sum;
 	if (typesum <= 0) {
-		return BLANK_STRING;
+		return "";
 	}
-	string story = BLANK_STRING;
+	string story = "";
 	if (!ccs)
 	{
 		story += liberalguardian ? CONST_THE_LIBERAL_CRIME_SQUAD : CONST_FURTHER_DETAILS_ARE_SKETCHY_BUT_POLICE_SOURCES_SUGGEST_THAT_THE_LCS + CONST_ENGAGED_IN;

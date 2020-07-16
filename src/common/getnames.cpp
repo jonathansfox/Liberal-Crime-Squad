@@ -1,6 +1,6 @@
 
 #define	GETNAMES_CPP
-#include "../includes.h"
+#include "../includes57.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -79,7 +79,7 @@ std::string gettitle(const int align, const int juice)
 			else return CONST_HEARTLESS_BASTARD;
 		}
 		else if (juice < 500) return CONST_INSANE_VIGILANTE;
-		else if (juice < 1000) return CONST_getnames017;
+		else if (juice < 1000) return CONST_ARCH_CONSERVATIVE;
 		else return CONST_EVIL_INCARNATE;
 	}
 	else if (align == 0)

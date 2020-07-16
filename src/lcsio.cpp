@@ -1,7 +1,7 @@
 
 
 #define	LCSIO_CPP
-#include "../includes.h"
+#include "../includes26.h"
 
 /*
 This file is a complete rewrite of the LCS I/O system.
@@ -152,7 +152,7 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 		LCSInitArtDir(); //Initialize the art dir.
 		initialized = true; //Initialized.
 	}
-	std::string filepath = BLANK_STRING; //The actual path to the file.
+	std::string filepath = ""; //The actual path to the file.
 	//This ifelse block decides which directory the file gets saved to.
 	if (flags & LCSIO_PRE_ART) //Art dir specified.
 		filepath = artdir; //Set the filepath to the artdir.

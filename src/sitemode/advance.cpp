@@ -25,7 +25,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 #define	ADVANCE_CPP
-#include "../includes.h"
+#include "../includes15.h"
 
 
 /* handles end of round stuff for one creature */

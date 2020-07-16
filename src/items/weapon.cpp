@@ -1,5 +1,5 @@
 #define	WEAPON_CPP
-#include "../includes.h"
+#include "../includes28.h"
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)

@@ -1,6 +1,6 @@
 
 #define	SITEMODE_CPP
-#include "../includes.h"
+#include "../includes09.h"
 
 void pressAnyKey(); 
 int getkeyAlt();

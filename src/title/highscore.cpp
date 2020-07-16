@@ -1,6 +1,6 @@
 
 #define	HIGHSCORE_CPP
-#include "../includes.h"
+#include "../includes06.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -274,7 +274,7 @@ string getEndingString(EndTypes e) {
 		return(hecoStalinized);
 		break;
 	default:
-		return BLANK_STRING;
+		return "";
 		break;
 	}
 }

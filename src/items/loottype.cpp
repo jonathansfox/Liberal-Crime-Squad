@@ -1,6 +1,6 @@
 
 #define	LOOTTYPE_CPP
-#include "../includes.h"
+#include "../includes31.h"
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/loottype.h"

@@ -1,7 +1,7 @@
 
 
 #define	DATE_CPP
-#include "../includes.h"
+#include "../includes43.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
  static int dateresult(int aroll, int troll, Deprecateddatest &d, int e, int p, int y)
  {
 	 music.play(MUSIC_DATING);
-	 std::string s = BLANK_STRING;
+	 std::string s = "";
 	 if (aroll > troll)
 	 {
 		 set_color_easy(CYAN_ON_BLACK_BRIGHT);

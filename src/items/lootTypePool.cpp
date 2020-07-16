@@ -1,6 +1,6 @@
 
 #define	LOOTTYPEPOOL_CPP
-#include "../includes.h"
+#include "../includes30.h"
 
 #include "../items/itemPool.h"
 #include "../items/lootTypePool.h"
