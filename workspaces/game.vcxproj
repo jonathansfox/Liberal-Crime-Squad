@@ -255,11 +255,13 @@
     <ClCompile Include="..\src\vehicle\vehicletype.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\activityST.h" />
     <ClInclude Include="..\src\basemode\activate.h" />
     <ClInclude Include="..\src\basemode\activate_const_string.h" />
     <ClInclude Include="..\src\basemode\activate_sleepers.h" />
     <ClInclude Include="..\src\basemode\liberalagenda.h" />
     <ClInclude Include="..\src\basemode\reviewmode.h" />
+    <ClInclude Include="..\src\bigListEnumTags.h" />
     <ClInclude Include="..\src\cmarkup\Markup.h" />
     <ClInclude Include="..\src\combat\chase.h" />
     <ClInclude Include="..\src\combat\chaseCreature.h" />
@@ -304,6 +306,7 @@
     <ClInclude Include="..\src\daily\activities.h" />
     <ClInclude Include="..\src\daily\daily.h" />
     <ClInclude Include="..\src\daily\siege.h" />
+    <ClInclude Include="..\src\floatZero.h" />
     <ClInclude Include="..\src\gui_constants.h" />
     <ClInclude Include="..\src\includes00.h" />
     <ClInclude Include="..\src\includes01.h" />
@@ -377,6 +380,8 @@
     <ClInclude Include="..\src\includes69.h" />
     <ClInclude Include="..\src\includes70.h" />
     <ClInclude Include="..\src\includes71.h" />
+    <ClInclude Include="..\src\includesDeprecated.h" />
+    <ClInclude Include="..\src\includesDeprecatedB.h" />
     <ClInclude Include="..\src\items\itemPool.h" />
     <ClInclude Include="..\src\items\lootTypePool.h" />
     <ClInclude Include="..\src\items\lootTypePoolItem.h" />

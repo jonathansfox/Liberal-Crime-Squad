@@ -1131,3 +1131,5 @@ Added support for RustKnight Portraits
 
 4.12.56
 Reconstructed includes.h to allow compiling in 1/5 the time
+Massive Refactoring
+Working to restructure code to be more coherent

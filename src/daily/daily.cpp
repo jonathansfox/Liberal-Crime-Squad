@@ -520,13 +520,13 @@ void squadOverrideIndividual(const int sq, const char clearformess) {
 				addstrAlt(ACTED_WITH, gamelog);
 				addstrAlt(squad[sq]->name, gamelog);
 				addstrAlt(INSTEAD_OF, gamelog);
-				addstrAlt(getactivity(squad[sq]->squad[p]->activity), gamelog);
+				addstrAlt(squad[sq]->squad[p]->getActivityString(), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.newline();
 				pressAnyKey();
 			}
 			squad[sq]->squad[p]->set_activity_type(ACTIVITY_VISIT);
-			squad[sq]->squad[p]->activity.arg = squad[sq]->activity.arg;
+			squad[sq]->squad[p]->setactivityarg(squad[sq]->activity.arg);
 		}
 	}
 

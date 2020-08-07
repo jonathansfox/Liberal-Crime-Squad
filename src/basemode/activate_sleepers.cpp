@@ -189,7 +189,7 @@ void activate_sleepers()
 			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->worklocation, true, true));
 			// Let's add some color here...
 			set_activity_color(temppool[p]->activity_type());
-			mvaddstrAlt(y, 57, getactivity(temppool[p]->activity));
+			mvaddstrAlt(y, 57, temppool[p]->getActivityString());
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN);

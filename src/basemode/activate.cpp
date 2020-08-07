@@ -164,8 +164,7 @@ void recruitSelect(DeprecatedCreature &cr)
 			int p = page * 19 + (int)(c - 'a');
 			if (p < options)
 			{
-				cr.set_activity_type(ACTIVITY_RECRUITING);
-				cr.activity.arg = recruitable_creatures[p].type;
+				cr.set_activity_type(ACTIVITY_RECRUITING, recruitable_creatures[p].type);
 				break;
 			}
 		}
@@ -525,13 +524,102 @@ void select_makeclothing(DeprecatedCreature *cr)
 			int p = page * 19 + c - 'a';
 			if (p < len(armortypei))
 			{
-				cr->set_activity_type(ACTIVITY_MAKE_ARMOR);
-				cr->activity.arg = armortypei[p]; //Use id name of armor type instead? -XML
+				cr->set_activity_type(ACTIVITY_MAKE_ARMOR, armortypei[p]); //Use id name of armor type instead? -XML
 				return;
 			}
 		}
 		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
 	}
+}
+
+/* base - activate - hostages */
+void select_tendhostage(DeprecatedCreature* cr)
+{
+	vector<DeprecatedCreature*> temppool = getHostagesSharingLocation(cr);
+	if (!len(temppool))return;
+	if (len(temppool) == 1)
+	{
+		cr->set_activity_type(ACTIVITY_HOSTAGETENDING, temppool[0]->id);
+		return;
+	}
+	int page = 0;
+	while (true)
+	{
+		eraseAlt();
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(0, 0, WHICH_HOSTAGE_WILL);
+		addstrAlt(cr->getNameAndAlignment().name);
+		addstrAlt(BE_WATCHING_OVER);
+		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
+		mvaddstrAlt(1, 57, DAYS_IN_CAPTIVITY);
+		for (int y = 2, p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
+		{
+			set_color_easy(WHITE_ON_BLACK);
+			moveAlt(y, 0);
+			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
+			addstrAlt(temppool[p]->getNameAndAlignment().name);
+			bool bright = false;
+			int skill = 0;
+			for (int sk = 0; sk < SKILLNUM; sk++)
+			{
+				skill += temppool[p]->get_skill(sk);
+				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
+					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = true;
+			}
+			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
+			mvaddstrAlt(y, 25, skill);
+			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
+			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
+			else set_color_easy(WHITE_ON_BLACK);
+			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
+			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
+			mvaddstrAlt(y, 57, temppool[p]->joindays);
+			addstrAlt(singleSpace);
+			if (temppool[p]->joindays > 1)addstrAlt(CONST_X_DAYS);
+			else addstrAlt(CONST_X_DAY);
+		}
+		set_color_easy(WHITE_ON_BLACK);
+		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_CONSERVATIVE);
+		mvaddstrAlt(23, 0, addpagestr());
+		int c = getkeyAlt();
+		//PAGE UP
+		if (is_page_up(c) && page > 0) page--;
+		//PAGE DOWN
+		if (is_page_down(c) && (page + 1) * 19 < len(temppool)) page++;
+		if (c >= 'a' && c <= 's')
+		{
+			int p = page * 19 + (int)(c - 'a');
+			if (p < len(temppool))
+			{
+				cr->set_activity_type(ACTIVITY_HOSTAGETENDING, temppool[p]->id);
+				return;
+			}
+		}
+		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
+	}
+}
+bool attempt_set_activity(DeprecatedCreature* cr, const int nact) {
+	ActivityST oact = cr->activity;
+	cr->set_activity_type(ACTIVITY_NONE);
+	switch (nact) {
+	case ACTIVITY_RECRUITING:
+		recruitSelect(*cr);
+		break;
+	case ACTIVITY_MAKE_ARMOR:
+		select_makeclothing(cr);
+		break;
+
+	case ACTIVITY_AUGMENT:
+		select_augmentation(cr);
+		break;
+
+	case ACTIVITY_HOSTAGETENDING:
+		select_tendhostage(cr);
+		break;
+	}
+	if (cr->activity_type() == nact) ;
+	else cr->activity = oact;
+	return cr->activity_type() == nact;
 }
 vector<string> standard_activities_and_data;
 void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *cr) {
@@ -548,8 +636,8 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 		case '6':
 			cr->set_activity_type(activate_menu_items[c][choice].activity);
 			break;
-		case '3':cr->set_activity_type(ACTIVITY_GRAFFITI);
-			cr->activity.arg = -1;
+		case '3':
+			cr->set_activity_type(ACTIVITY_GRAFFITI, -1);
 			break;
 		case '7':
 			if (cr->location != -1 &&
@@ -568,8 +656,7 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 					cr->set_activity_type(ACTIVITY_HACKING);
 				else if (cr->get_skill(SKILL_ART) > 1)
 				{
-					cr->set_activity_type(ACTIVITY_GRAFFITI);
-					cr->activity.arg = -1;
+					cr->set_activity_type(ACTIVITY_GRAFFITI, -1);
 				}
 				else
 					cr->set_activity_type(ACTIVITY_TROUBLE);
@@ -620,18 +707,10 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 		switch (choiceChar)
 		{
 		case '1': { // Pick type to recruit
-			ActivityST oact = cr->activity;
-			cr->set_activity_type(ACTIVITY_NONE);
-			recruitSelect(*cr);
-			if (cr->activity_type() == ACTIVITY_RECRUITING) break;
-			else cr->activity = oact;
+			attempt_set_activity(cr, ACTIVITY_RECRUITING);
 			break; }
 		case '2': { // Pick clothing to make
-			ActivityST oact = cr->activity;
-			cr->set_activity_type(ACTIVITY_NONE);
-			select_makeclothing(cr);
-			if (cr->activity_type() == ACTIVITY_MAKE_ARMOR) break;
-			else cr->activity = oact;
+			attempt_set_activity(cr, ACTIVITY_MAKE_ARMOR);
 			break; }
 		case '3':
 			cr->set_activity_type(activate_menu_items[c][choice].activity);
@@ -644,86 +723,13 @@ void selectOneOfStandardActivities(char c, char choiceChar, DeprecatedCreature *
 				cr->set_activity_type(ACTIVITY_WHEELCHAIR);
 			break;
 		case '6': {
-			if (cr->get_skill(SKILL_SCIENCE) != 0) {
-				ActivityST oact = cr->activity;
-				cr->set_activity_type(ACTIVITY_NONE);
-				select_augmentation(cr);
-				if (cr->activity_type() == ACTIVITY_AUGMENT) break;
-				else cr->activity = oact;
-			}
+			attempt_set_activity(cr, ACTIVITY_AUGMENT);
 			break; }
 		}
 		break;
 	}
 }
-/* base - activate - hostages */
-void select_tendhostage(DeprecatedCreature *cr)
-{
-	vector<DeprecatedCreature *> temppool = getHostagesSharingLocation(cr);
-	if (!len(temppool))return;
-	if (len(temppool) == 1)
-	{
-		cr->set_activity_type(ACTIVITY_HOSTAGETENDING);
-		cr->activity.arg = temppool[0]->id;
-		return;
-	}
-	int page = 0;
-	while (true)
-	{
-		eraseAlt();
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(0, 0, WHICH_HOSTAGE_WILL);
-		addstrAlt(cr->getNameAndAlignment().name);
-		addstrAlt(BE_WATCHING_OVER);
-		mvaddstrAlt(1, 0, CODENAME_SKILL_HEALTH_LOCATION_HEADER);
-		mvaddstrAlt(1, 57, DAYS_IN_CAPTIVITY);
-		for (int y = 2, p = page * 19; p < len(temppool) && p < page * 19 + 19; p++, y++)
-		{
-			set_color_easy(WHITE_ON_BLACK);
-			moveAlt(y, 0);
-			addcharAlt(y + 'A' - 2); addstrAlt(spaceDashSpace);
-			addstrAlt(temppool[p]->getNameAndAlignment().name);
-			bool bright = false;
-			int skill = 0;
-			for (int sk = 0; sk < SKILLNUM; sk++)
-			{
-				skill += temppool[p]->get_skill(sk);
-				if (temppool[p]->get_skill_ip(sk) >= 100 + (10 * temppool[p]->get_skill(sk)) &&
-					temppool[p]->get_skill(sk) < temppool[p]->skill_cap(sk))bright = true;
-			}
-			set_color_easy(bright ? WHITE_ON_BLACK_BRIGHT : WHITE_ON_BLACK);
-			mvaddstrAlt(y, 25, skill);
-			printhealthstat(temppool[p]->getCreatureHealth(), y, 33, TRUE);
-			if (mode == REVIEWMODE_JUSTICE)set_color_easy(YELLOW_ON_BLACK_BRIGHT);
-			else set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(y, 42, LocationsPool::getInstance().getLocationNameWithGetnameMethod(temppool[p]->location, true, true));
-			set_color_easy(MAGENTA_ON_BLACK_BRIGHT);
-			mvaddstrAlt(y, 57, temppool[p]->joindays);
-			addstrAlt(singleSpace);
-			if (temppool[p]->joindays > 1)addstrAlt(CONST_X_DAYS);
-			else addstrAlt(CONST_X_DAY);
-		}
-		set_color_easy(WHITE_ON_BLACK);
-		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_SELECT_CONSERVATIVE);
-		mvaddstrAlt(23, 0, addpagestr());
-		int c = getkeyAlt();
-		//PAGE UP
-		if (is_page_up(c) && page > 0) page--;
-		//PAGE DOWN
-		if (is_page_down(c) && (page + 1) * 19 < len(temppool)) page++;
-		if (c >= 'a'&&c <= 's')
-		{
-			int p = page * 19 + (int)(c - 'a');
-			if (p < len(temppool))
-			{
-				cr->set_activity_type(ACTIVITY_HOSTAGETENDING);
-				cr->activity.arg = temppool[p]->id;
-				return;
-			}
-		}
-		if (c == 'x' || c == ENTER || c == ESC || c == SPACEBAR) break;
-	}
-}
+
 enum LOOP_CONTINUATION {
 	RETURN_ZERO,
 	RETURN_ONE,
@@ -870,13 +876,13 @@ LOOP_CONTINUATION iterateActivate(DeprecatedCreature *cr, const int hostagecount
 		case 'i':
 			if (hostagecount > 0)
 			{
-				ActivityST oact = cr->activity;
-				cr->set_activity_type(ACTIVITY_NONE);
-				select_tendhostage(cr);
-				if (cr->activity_type() == ACTIVITY_HOSTAGETENDING) break;
-				else cr->activity = oact;
+				if (attempt_set_activity(cr, ACTIVITY_HOSTAGETENDING)) {
+
+				}
+				else {
+					state = oldstate;
+				}
 			}
-			state = oldstate;
 			break;
 		case 'l':
 			updateclasschoice(cr, choice);
@@ -938,7 +944,7 @@ Activity getDefaultActivityActivism(DeprecatedCreature *cr) {
 			return ACTIVITY_HACKING;
 		else if (cr->get_skill(SKILL_ART) > 1)
 		{
-			cr->activity.arg = -1;
+			cr->setactivityargNegativeOne();
 			return ACTIVITY_GRAFFITI;
 		}
 		else return ACTIVITY_TROUBLE;
@@ -1000,7 +1006,7 @@ void activatebulk()
 			addstrAlt(temppool[p]->getNameAndAlignment().name);
 			moveAlt(y, 25);
 			set_activity_color(temppool[p]->activity_type());
-			addstrAlt(getactivity(temppool[p]->activity));
+			addstrAlt(temppool[p]->getActivityString());
 			/*if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
 			{
 			addstrAlt(spaceParanthesisDollar);
@@ -1093,7 +1099,7 @@ void activate()
 			moveAlt(y, 57);
 			// Let's add some color here...
 			set_activity_color(temppool[p]->activity_type());
-			addstrAlt(getactivity(temppool[p]->activity));
+			addstrAlt(temppool[p]->getActivityString());
 		}
 		set_color_easy(WHITE_ON_BLACK);
 		mvaddstrAlt(22, 0, PRESS_A_LETTER_TO_ASSIGN_ACTIVITY);

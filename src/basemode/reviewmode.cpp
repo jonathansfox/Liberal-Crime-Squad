@@ -407,7 +407,7 @@ void evaluateLiberals(vector<DeprecatedCreature *> temppool, const int page, con
 			}
 			if (usepers)
 			{  // Let's add some color here...
-				printREVIEWMODE_LIBERALS(temppool[p]->activity_type(), getactivity(temppool[p]->activity));
+				printREVIEWMODE_LIBERALS(temppool[p]->activity_type(), temppool[p]->getActivityString());
 			}
 			break;
 		}
@@ -861,7 +861,7 @@ bool iterateReview(int &page) {
 					for (int p2 = 0; p2 < 6; p2++)
 					{
 						if (squad[p]->squad[p2] == NULL) continue;
-						const std::string str2 = getactivity(squad[p]->squad[p2]->activity);
+						const std::string str2 = squad[p]->squad[p2]->getActivityString();
 						activityTypeID = squad[p]->squad[p2]->activity_type();
 						if (haveact&&str != str2) multipleact = true;
 						str = str2, haveact = true;

@@ -1435,3 +1435,23 @@ void DeprecatedCreature::namecreature()
 		dontname = true;
 	}
 }
+void DeprecatedCreature::clear_no_longer_crimes() {
+	extern short lawList[LAWNUM];
+	if (lawList[LAW_FLAGBURNING] > 0)crimes_suspected[LAWFLAG_BURNFLAG] = 0;
+	if (lawList[LAW_DRUGS] > 0)crimes_suspected[LAWFLAG_BROWNIES] = 0;
+	if (lawList[LAW_IMMIGRATION] == 2)flag &= ~CREATUREFLAG_ILLEGALALIEN;
+	if (lawList[LAW_FREESPEECH] > -2)crimes_suspected[LAWFLAG_SPEECH] = 0;
+}
+void DeprecatedCreature::cap_crimes_at_ten() {
+
+	for (int l = 0; l < LAWFLAGNUM; l++) {
+		if (crimes_suspected[l] > 10) {
+
+			crimes_suspected[l] = 10;
+		}
+	}
+}
+std::string getactivity(ActivityST& act);
+std::string DeprecatedCreature::getActivityString() {
+	return getactivity(activity);
+}

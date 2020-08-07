@@ -130,22 +130,8 @@ public:
 	void criminalize_me(const int crime) {
 		criminalize_me(crime, false);
 	}
-	void clear_no_longer_crimes() {
-		extern short lawList[LAWNUM];
-		if (lawList[LAW_FLAGBURNING] > 0)crimes_suspected[LAWFLAG_BURNFLAG] = 0;
-		if (lawList[LAW_DRUGS] > 0)crimes_suspected[LAWFLAG_BROWNIES] = 0;
-		if (lawList[LAW_IMMIGRATION] == 2)flag &= ~CREATUREFLAG_ILLEGALALIEN;
-		if (lawList[LAW_FREESPEECH] > -2)crimes_suspected[LAWFLAG_SPEECH] = 0;
-	}
-	void cap_crimes_at_ten() {
-
-		for (int l = 0; l < LAWFLAGNUM; l++) {
-			if (crimes_suspected[l] > 10) {
-
-				crimes_suspected[l] = 10;
-			}
-		}
-	}
+	void clear_no_longer_crimes();
+	void cap_crimes_at_ten();
 
 	void apply_special_wound(const int wound, const int flag) {
 		special[wound] |= flag;
@@ -305,6 +291,10 @@ public:
 	}
 	void set_activity_type(const int c) {
 		activity.type = c;
+	}
+	void set_activity_type(const int c, const int d) {
+		activity.type = c;
+		activity.arg = d;
 	}
 	int activity_arg() const {
 		return activity.arg;
@@ -494,6 +484,13 @@ public:
 	void setiskidnap_resistant(const bool iskidnap_resistant_) {
 		iskidnap_resistant = iskidnap_resistant_;
 	}
+	void setactivityargNegativeOne() {
+		setactivityarg(-1);
+	}
+	void setactivityarg(const int c) {
+		activity.arg = c;
+	}
+	std::string getActivityString();
 
 private:
 

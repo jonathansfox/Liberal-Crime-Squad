@@ -1631,7 +1631,7 @@ void locheader()
 			for (int p = 0; p < 6; p++)
 			{
 				if (activesquad->squad[p] == NULL) continue;
-				const string str2 = getactivity(activesquad->squad[p]->activity);
+				const string str2 = activesquad->squad[p]->getActivityString();
 				set_activity_color(activesquad->squad[p]->activity.type);
 				if (haveact&&str != str2) multipleact = true;
 				str = str2, haveact = true;

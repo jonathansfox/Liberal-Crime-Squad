@@ -1,54 +1,5 @@
 
 
-
-
-
-/*
-	File created by Chris Johnson.
-	These were previously all in game.cpp.
-
-	This file includes all the the enums, defines, and included headers required globally by all components.
-
-	All code released under GNU GPL.
-*/
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
-
-using namespace std;
-
-
 const int BIT1 = (1 << 0);
 const int BIT2 = (1 << 1);
 const int BIT3 = (1 << 2);
@@ -83,8 +34,13 @@ const int BIT31 = (1 << 30);
 const int BIT32 = (1 << 31);
 const int MAX_PATH_SIZE = 2048;
 const int RNG_SIZE = 4;
-
+/* These 6 random number generator functions are implemented in compat.cpp */
+unsigned long getSeed();
+unsigned long r_num();
 long LCSrandom(long max);
+void initMainRNG();
+void copyRNG(unsigned long(&dest)[RNG_SIZE], unsigned long(&src)[RNG_SIZE]);
+void initOtherRNG(unsigned long(&rng)[RNG_SIZE]);
 /* Determine size of vectors and any other container that implements the size() function.
 This basically includes all types of containers except for the C++11 std::forward_list. */
 template <class Container> inline long len(const Container& x)
@@ -141,7 +97,7 @@ inline char& pickrandom(char* x)
 	return x[LCSrandom(len(x))];
 }
 /* Deletes a specified pointer and sets it to NULL. */
-template <typename T> inline void delete_and_nullify(T* &o)
+template <typename T> inline void delete_and_nullify(T*& o)
 {
 	delete o;
 	o = NULL;
@@ -186,6 +142,23 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
+enum LCSIO_FLAGS
+{
+	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
+	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
+};
+FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
+bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream& file);
+void LCSCloseFile(FILE* handle);
+void LCSCloseFileCPP(std::fstream& file);
+void LCSDeleteFile(const char* filename, int flags);
+void LCSRenameFile(const char* old_filename, const char* new_filename, int flags);
+//returns a list of all files in homedir with extension .dat
+vector<string> LCSSaveFiles();
+
+void pause_ms(int t);
+void alarmset(int t);
+void alarmwait();
 #define CH_USE_CP437
 
 
@@ -195,6 +168,12 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 #endif
 
 
+const int TAB = 9;
+const int ENTER = 10;
+const int ESC = 27;
+const int SPACEBAR = 32;
+
+class Log;
 
 enum Alignment
 {
@@ -205,6 +184,57 @@ enum Alignment
 	ALIGN_ELITELIBERAL,
 	ALIGN_STALINIST
 };
+
+enum UnlockTypes
+{
+	UNLOCK_DOOR,
+	UNLOCK_CAGE,
+	UNLOCK_CAGE_HARD,
+	UNLOCK_CELL,
+	UNLOCK_SAFE,
+	UNLOCK_ARMORY,
+	UNLOCK_VAULT,
+	UNLOCKNUM
+};
+
+enum HackTypes
+{
+	HACK_SUPERCOMPUTER,
+	HACK_VAULT,
+	HACKNUM
+};
+
+enum SpecialAttacks
+{
+	ATTACK_CANNON,
+	ATTACK_FLAME,
+	ATTACK_SUCK,
+	ATTACKNUM
+};
+
+enum EndGameStatus
+{
+	ENDGAME_NONE,
+	ENDGAME_CCS_APPEARANCE,
+	ENDGAME_CCS_ATTACKS,
+	ENDGAME_CCS_SIEGES,
+	ENDGAME_CCS_DEFEATED,
+	ENDGAME_MARTIALLAW,
+	ENDGAMENUM
+};
+
+enum CCSexposure
+{
+	CCSEXPOSURE_NONE,
+	CCSEXPOSURE_LCSGOTDATA,
+	CCSEXPOSURE_EXPOSED,
+	CCSEXPOSURE_NOBACKERS,
+	CCSEXPOSURENUM
+};
+
+const int ARMORFLAG_DAMAGED = BIT1;
+const int ARMORFLAG_BLOODY = BIT2;
+
 
 /* *JDS* I'm making laws an array instead of a bunch
  * of bits which are either on or off. Each charge can be
@@ -336,6 +366,15 @@ enum Activity
 
 
 
+enum CarChaseObstacles
+{
+	CARCHASE_OBSTACLE_FRUITSTAND,
+	CARCHASE_OBSTACLE_TRUCKPULLSOUT,
+	CARCHASE_OBSTACLE_CROSSTRAFFIC,
+	CARCHASE_OBSTACLE_CHILD,
+	CARCHASE_OBSTACLENUM
+};
+
 enum SquadStances
 {
 	SQUADSTANCE_ANONYMOUS,
@@ -357,6 +396,55 @@ enum GameModes
 	GAMEMODE_CHASEFOOT
 };
 
+enum MusicModes
+{
+	MUSIC_TITLEMODE,
+	MUSIC_NEWGAME,
+	MUSIC_BASEMODE,
+	MUSIC_SIEGE,
+	MUSIC_ACTIVATE,
+	MUSIC_SLEEPERS,
+	MUSIC_STOPEVIL,
+	MUSIC_REVIEWMODE,
+	MUSIC_LIBERALAGENDA,
+	MUSIC_DISBANDED,
+	MUSIC_FINANCES,
+	MUSIC_CARTHEFT,
+	MUSIC_ELECTIONS,
+	MUSIC_SHOPPING,
+	MUSIC_SITEMODE,
+	MUSIC_SUSPICIOUS,
+	MUSIC_ALARMED,
+	MUSIC_HEAVYCOMBAT,
+	MUSIC_DEFENSE,
+	MUSIC_CONQUER,
+	MUSIC_CARCHASE,
+	MUSIC_FOOTCHASE,
+	MUSIC_INTERROGATION,
+	MUSIC_TRIAL,
+	MUSIC_RECRUITING,
+	MUSIC_DATING,
+	MUSIC_NEWSPAPER,
+	MUSIC_LACOPS,
+	MUSIC_NEWSCAST,
+	MUSIC_GLAMSHOW,
+	MUSIC_ANCHOR,
+	MUSIC_ABORT,
+	MUSIC_VICTORY,
+	MUSIC_DEFEAT,
+	MUSIC_REAGANIFIED,
+	MUSIC_STALINIZED,
+	MUSIC_OFF, // this one must come immediately after the ones corresponding to music files (this one is to have silence)
+	MUSIC_PREVIOUS, // this one must come after MUSIC_OFF (this one is to play the previous song)
+	MUSIC_CURRENT, // this one must come after MUSIC_OFF (this one continues playing the current song)
+	MUSIC_RANDOM // this one must come after MUSIC_OFF (this one plays a random song)
+};
+
+enum WinConditions
+{
+	WINCONDITION_ELITE,
+	WINCONDITION_EASY
+};
 enum FieldSkillRates
 {
 	FIELDSKILLRATE_FAST,
@@ -434,230 +522,195 @@ enum Laws
 	LAWNUM
 };
 
+enum Crimes
+{
+	CRIME_STOLEGROUND,
+	CRIME_UNLOCKEDDOOR,
+	CRIME_BROKEDOWNDOOR,
+	CRIME_ATTACKED_MISTAKE,
+	CRIME_ATTACKED,
+	CRIME_CARCHASE,
+	CRIME_CARCRASH,
+	CRIME_FOOTCHASE,
+	CRIME_KILLEDSOMEBODY,
+	CRIME_SHUTDOWNREACTOR,
+	CRIME_POLICE_LOCKUP,
+	CRIME_COURTHOUSE_LOCKUP,
+	CRIME_PRISON_RELEASE,
+	CRIME_JURYTAMPERING,
+	CRIME_HACK_INTEL,
+	CRIME_BREAK_SWEATSHOP,
+	CRIME_BREAK_FACTORY,
+	CRIME_HOUSE_PHOTOS,
+	CRIME_CORP_FILES,
+	CRIME_FREE_RABBITS,
+	CRIME_FREE_BEASTS,
+	CRIME_ARSON,
+	CRIME_TAGGING,
+	CRIME_ARMORY,
+	CRIME_VANDALISM,
+	CRIME_BANKVAULTROBBERY,
+	CRIME_BANKTELLERROBBERY,
+	CRIME_BANKSTICKUP,
+	CRIMENUM
+};
+
+enum NewsStories
+{
+	NEWSSTORY_MAJOREVENT,
+	NEWSSTORY_SQUAD_SITE,
+	NEWSSTORY_SQUAD_ESCAPED,
+	NEWSSTORY_SQUAD_FLEDATTACK,
+	NEWSSTORY_SQUAD_DEFENDED,
+	NEWSSTORY_SQUAD_BROKESIEGE,
+	NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
+	NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE,
+	NEWSSTORY_SQUAD_KILLED_SITE,
+	NEWSSTORY_CCS_SITE,
+	NEWSSTORY_CCS_DEFENDED,
+	NEWSSTORY_CCS_KILLED_SIEGEATTACK,
+	NEWSSTORY_CCS_KILLED_SITE,
+	NEWSSTORY_CARTHEFT,
+	NEWSSTORY_MASSACRE,
+	NEWSSTORY_KIDNAPREPORT,
+	NEWSSTORY_NUDITYARREST,
+	NEWSSTORY_WANTEDARREST,
+	NEWSSTORY_DRUGARREST,
+	NEWSSTORY_GRAFFITIARREST,
+	NEWSSTORY_BURIALARREST,
+	NEWSSTORY_RAID_CORPSESFOUND,
+	NEWSSTORY_RAID_GUNSFOUND,
+	NEWSSTORY_HOSTAGE_RESCUED,
+	NEWSSTORY_HOSTAGE_ESCAPES,
+	NEWSSTORY_CCS_NOBACKERS,
+	NEWSSTORY_CCS_DEFEATED,
+	NEWSSTORY_PRESIDENT_IMPEACHED,
+	NEWSSTORY_PRESIDENT_BELIEVED_DEAD,
+	NEWSSTORY_PRESIDENT_FOUND_DEAD,
+	NEWSSTORY_PRESIDENT_FOUND,
+	NEWSSTORY_PRESIDENT_KIDNAPPED,
+	NEWSSTORY_PRESIDENT_MISSING,
+	NEWSSTORY_PRESIDENT_ASSASSINATED,
+	NEWSSTORYNUM
+};
+
 const int SQUAD_NAMELEN = 40;
 
 
+const int SLOGAN_LEN = 80;
 
+const int SCORENUM = 5;
 
-//just a float that is initialized to 0
-#include "floatZero.h"
-//Interrogation information for the InterrogationST system, to be
-//dynamically created on capture and deleted when InterrogationST ends,
-//referenced using a pointer typecast into one of the arguments
-//of the target's current action.
-#include "activityST.h"
-
-int get_associated_attribute(int skill_type);
-
-#ifdef	STEALTH_CPP
-// stealth.cpp
-
-#include "../creature/creature.h"
-////
-
-#include "../creature/deprecatedCreatureD.h"
-
-////
-#include "../locations/locations.h"
-#include "../sitemode/sitedisplay.h"
-#include "../common/commonactionsCreature.h"
-#include "../locations/locationsPool.h"
-#include "../customMaps.h"
-
-short getCurrentSite();
-extern short fieldskillrate;
-
-/* checks if your liberal activity is noticed */
-char disguisesite(long type);
-
-vector<NameAndAlignment> getEncounterNameAndAlignment();
-bool isThereASiteAlarm();
-void setSiteAlarmOne();
-void conservatise(const int e);
-
-int get_stealth_difficulty(const int n);
-int get_disguise_difficulty(const int n);
-int get_encounter_time(const int n);
-vector<int> potentialEncounterNoticers();
-
-extern coordinatest loc_coord;
-extern Deprecatedsquadst *activesquad;
-extern short fieldskillrate;
-extern short lawList[LAWNUM];
-extern short mode;
-extern short sitealarmtimer;
-extern short sitealienate;
-extern short sitetype;
-extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-const string tag_ARMOR = "ARMOR";
-const string tag_ARMOR_BUNKERGEAR = "ARMOR_BUNKERGEAR";
-const string tag_ARMOR_SWATARMOR = "ARMOR_SWATARMOR";
-const string tag_ARMOR_DEATHSQUADUNIFORM = "ARMOR_DEATHSQUADUNIFORM";
-const string tag_ARMOR_POLICEARMOR = "ARMOR_POLICEARMOR";
-const string tag_ARMOR_POLICEUNIFORM = "ARMOR_POLICEUNIFORM";
-const string tag_ARMOR_EXPENSIVEDRESS = "ARMOR_EXPENSIVEDRESS";
-const string tag_ARMOR_EXPENSIVESUIT = "ARMOR_EXPENSIVESUIT";
-const string tag_ARMOR_SECURITYUNIFORM = "ARMOR_SECURITYUNIFORM";
-const string tag_ARMOR_CHEAPDRESS = "ARMOR_CHEAPDRESS";
-const string tag_ARMOR_CHEAPSUIT = "ARMOR_CHEAPSUIT";
-const string tag_ARMOR_SEALSUIT = "ARMOR_SEALSUIT";
-const string tag_ARMOR_ARMYARMOR = "ARMOR_ARMYARMOR";
-const string tag_ARMOR_MILITARY = "ARMOR_MILITARY";
-const string tag_ARMOR_SERVANTUNIFORM = "ARMOR_SERVANTUNIFORM";
-const string tag_ARMOR_HARDHAT = "ARMOR_HARDHAT";
-const string tag_ARMOR_CIVILLIANARMOR = "ARMOR_CIVILLIANARMOR";
-const string tag_ARMOR_LABCOAT = "ARMOR_LABCOAT";
-const string tag_ARMOR_WORKCLOTHES = "ARMOR_WORKCLOTHES";
-const string tag_ARMOR_BLACKDRESS = "ARMOR_BLACKDRESS";
-const string tag_ARMOR_BLACKSUIT = "ARMOR_BLACKSUIT";
-const string tag_ARMOR_OVERALLS = "ARMOR_OVERALLS";
-const string tag_ARMOR_PRISONER = "ARMOR_PRISONER";
-const string tag_ARMOR_PRISONGUARD = "ARMOR_PRISONGUARD";
-const string tag_ARMOR_BLACKROBE = "ARMOR_BLACKROBE";
-const string tag_ARMOR_HEAVYARMOR = "ARMOR_HEAVYARMOR";
-const string tag_ARMOR_WIFEBEATER = "ARMOR_WIFEBEATER";
-const string tag_WEAPON = "WEAPON";
-const string tag_WEAPON_CARBINE_M4 = "WEAPON_CARBINE_M4";
-const string tag_WEAPON_CHAIN = "WEAPON_CHAIN";
-const string tag_WEAPON_SHANK = "WEAPON_SHANK";
-const string tag_WEAPON_SHOTGUN_PUMP = "WEAPON_SHOTGUN_PUMP";
-const string tag_WEAPON_TORCH = "WEAPON_TORCH";
-const string tag_WEAPON_PITCHFORK = "WEAPON_PITCHFORK";
-const string tag_WEAPON_NIGHTSTICK = "WEAPON_NIGHTSTICK";
-const string tag_WEAPON_SMG_MP5 = "WEAPON_SMG_MP5";
-const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
-const string tag_WEAPON_AXE = "WEAPON_AXE";
-const string tag_WEAPON_SEMIRIFLE_AR15 = "WEAPON_SEMIRIFLE_AR15";
-const string tag_WEAPON_AUTORIFLE_M16 = "WEAPON_AUTORIFLE_M16";
-const string tag_WEAPON_SEMIPISTOL_45 = "WEAPON_SEMIPISTOL_45";
-const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
-const string tag_WEAPON_SEMIPISTOL_9MM = "WEAPON_SEMIPISTOL_9MM";
-const string tag_WEAPON_REVOLVER_38 = "WEAPON_REVOLVER_38";
-const string tag_WEAPON_REVOLVER_44 = "WEAPON_REVOLVER_44";
-const string tag_WEAPON_GAVEL = "WEAPON_GAVEL";
-const string tag_WEAPON_SYRINGE = "WEAPON_SYRINGE";
-const string tag_ARMOR_CLOTHES = "ARMOR_CLOTHES";
-const string tag_WEAPON_MP5_SMG = "WEAPON_MP5_SMG";
-const string tag_value = "value";
-const string tag_attribute = "attribute";
-const string tag_skill = "skill";
-
-map<short, map<string, int> > siegeDisguises = {
-	map<SiegeTypes, map<string, int> >::value_type(SIEGE_CIA,
-		{
-			map<string, int>::value_type(tag_ARMOR_BLACKSUIT, 1),
-			map<string, int>::value_type(tag_ARMOR_BLACKDRESS, 1)
-		}
-	),
-
-	map<SiegeTypes, map<string, int> >::value_type(SIEGE_CORPORATE,
-		{
-			map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-		}
-	),
-	map<SiegeTypes, map<string, int> >::value_type(SIEGE_HICKS,
-		{
-			map<string, int>::value_type(tag_ARMOR_CLOTHES,  2),
-			map<string, int>::value_type(tag_ARMOR_OVERALLS,  1),
-			map<string, int>::value_type(tag_ARMOR_WIFEBEATER, 1),
-		}
-	),
-	map<SiegeTypes, map<string, int> >::value_type(SIEGE_FIREMEN,
-		{
-			map<string, int>::value_type(tag_ARMOR_BUNKERGEAR, 1),
-		}
-   ),
+enum EndTypes
+{
+	END_BUT_NOT_END = -2,
+	END_OTHER = -1,
+	END_WON,
+	END_HICKS,
+	END_CIA,
+	END_POLICE,
+	END_CORP,
+	END_REAGAN,
+	END_DEAD,
+	END_PRISON,
+	END_EXECUTED,
+	END_DATING,
+	END_HIDING,
+	END_DISBANDLOSS,
+	END_DISPERSED,
+	END_CCS,
+	END_FIREMEN,
+	END_STALIN,
+	ENDNUM
 };
 
-map<short, map<string, int> > siteDisguises = {
-
-	map<SiteTypes, map<string, int> >::value_type(SITE_BUSINESS_CIGARBAR,{
-	map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-	map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-	map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-	map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-	map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-	map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
-}
-),
-map<SiteTypes, map<string, int> >::value_type(SITE_CORPORATE_HEADQUARTERS,{
-	map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-	map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-	map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-	map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-	map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-}
-	),
-};
-map<short, map<string, int> > siteDisguisesRestricted = {
-
-	map<SiteTypes, map<string, int> >::value_type(SITE_INDUSTRY_NUCLEAR,{
-	map<string, int>::value_type(tag_ARMOR_LABCOAT,  1),
-			map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			map<string, int>::value_type(tag_ARMOR_CIVILLIANARMOR,  1),
-			map<string, int>::value_type(tag_ARMOR_HARDHAT,  1),
-
-}
-),
-map<SiteTypes, map<string, int> >::value_type(SITE_MEDIA_AMRADIO,{
-	map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-			map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-
-}
-	),
-map<SiteTypes, map<string, int> >::value_type(SITE_MEDIA_CABLENEWS,{
-	map<string, int>::value_type(tag_ARMOR_SECURITYUNIFORM,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-
-}
-),
-
-map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_WHITE_HOUSE,{
-	map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
-			map<string, int>::value_type(tag_ARMOR_CHEAPSUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_CHEAPDRESS,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVESUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_EXPENSIVEDRESS,  1),
-			map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-
-}
-),
-map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_ARMYBASE,{
-	map<string, int>::value_type(tag_ARMOR_MILITARY,  1),
-			map<string, int>::value_type(tag_ARMOR_ARMYARMOR,  1),
-			map<string, int>::value_type(tag_ARMOR_SEALSUIT,  1),
-
-}
-),
-map<SiteTypes, map<string, int> >::value_type(SITE_GOVERNMENT_INTELLIGENCEHQ,{
-	map<string, int>::value_type(tag_ARMOR_BLACKSUIT,  1),
-			map<string, int>::value_type(tag_ARMOR_BLACKDRESS,  1),
-
-}
-),
-
+enum Execs
+{
+	EXEC_PRESIDENT,
+	EXEC_VP,
+	EXEC_STATE,
+	EXEC_ATTORNEY,
+	EXECNUM
 };
 
-void printShoutsForHelp(const string ename, const int ealign);
-bool isPrisoner(const string tkname);
-void printAlienation(const short sitealienate);
-void printFadesAway(const string aname, const int partysize);
-void printBlewStealthCheck(const string aname);
-void printActsNatural(const string aname, const int partysize);
-void printEnemyNameInAlarm(const string nname);
-void printLooksAtSquadSuspiciously();
-void printShoutsInAlarm();
-void printConservativeRaisesAlarm(const bool weapon, const int ntype, const int nalign);
-void pressAnyKey();
-#endif	//STEALTH_CPP
-#endif // INCLUDES_H_INCLUDED
+enum PoliticalParties
+{
+	LIBERAL_PARTY,
+	CONSERVATIVE_PARTY,
+	STALINIST_PARTY,
+	PARTYNUM
+};
+
+// full house (100%) - for looping thru full house
+const int  HOUSENUM = 435;
+// just over half of house (50%+1) - to pass bills
+const int  HOUSEMAJORITY = 218;
+// 3/5 of house - has no significance other than in seeing if you won game
+const int  HOUSECOMFYMAJORITY = 261;
+// 2/3 of house - to override veto or pass constitutional amendment
+const int  HOUSESUPERMAJORITY = 290;
+// full senate (100%) - for looping thru full senate
+const int  SENATENUM = 100;
+// just over half of senate(50%+1) - to bass bills
+const int  SENATEMAJORITY = 51;
+// 3/5 of senate - to break filibuster in real world, but in game, has no significance other than seeing if you won
+const int  SENATECOMFYMAJORITY = 60;
+// 2/3 of senate - to override veto or pass constitutional amendment
+const int  SENATESUPERMAJORITY = 67;
+// full court (100%) - for looping thru full court
+const int  COURTNUM = 9;
+// just over half of court (50%+1) - to make majority rulings
+const int  COURTMAJORITY = 5;
+// 2/3 of court - has no significance other than seeing if you won game
+const int  COURTSUPERMAJORITY = 6;
+// all states (100%) - for looping thru all states
+const int  STATENUM = 50;
+// 3/4 of states (75%) - needed to pass constitutional amendments
+const int  STATESUPERMAJORITY = 38;
+
+const int  POLITICIAN_NAMELEN = 80;
+
+enum ReviewModes
+{
+	REVIEWMODE_LIBERALS,
+	REVIEWMODE_HOSTAGES,
+	REVIEWMODE_CLINIC,
+	REVIEWMODE_JUSTICE,
+	REVIEWMODE_SLEEPERS,
+	REVIEWMODE_DEAD,
+	REVIEWMODE_AWAY,
+	REVIEWMODENUM
+};
+
+enum SortingChoices
+{
+	SORTING_NONE,
+	SORTING_NAME,
+	SORTING_LOCATION_AND_NAME,
+	SORTING_SQUAD_OR_NAME,
+	SORTINGNUM
+};
+
+enum ActiveSortingChoices
+{
+	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+	SORTINGCHOICE_JUSTICE,
+	SORTINGCHOICE_SLEEPERS,
+	SORTINGCHOICE_DEAD,
+	SORTINGCHOICE_AWAY,
+	SORTINGCHOICE_ACTIVATE,
+	SORTINGCHOICE_ACTIVATESLEEPERS,
+	SORTINGCHOICE_ASSEMBLESQUAD,
+	SORTINGCHOICE_BASEASSIGN,
+	SORTINGCHOICENUM
+};
+
+/*
+   Declarations for every function grouped by folder and file.
+   Created by jonathansfox.
+*/
+
+/* This is declared again lower down, just needed here for this header. */
+std::string tostring(long i);

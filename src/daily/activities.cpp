@@ -917,7 +917,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				if (graffiti[s]->activity_arg() != -1)
 				{
 					addstrAlt(CONST_X_WHILE_WORKING_ON_THE_MURAL, gamelog);
-					graffiti[s]->activity.arg = -1;
+					graffiti[s]->setactivityargNegativeOne();
 				}
 				else addstrAlt(CONST_X_WHILE_SPRAYING_AN_LCS_TAG, gamelog);
 				gamelog.nextMessage();
@@ -945,7 +945,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 					addstrAlt(getview(issue, false), gamelog);
 					addstrAlt(singleDot, gamelog);
 					gamelog.nextMessage();
-					graffiti[s]->activity.arg = -1;
+					graffiti[s]->setactivityargNegativeOne();
 					addjuice(*graffiti[s], power, power * 20);
 					change_public_opinion(issue, power);
 					graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
@@ -971,7 +971,7 @@ void doActivityGraffiti(vector<DeprecatedCreature *> &graffiti, char &clearforme
 				addstrAlt(getview(issue, false), gamelog);
 				addstrAlt(singleDot, gamelog);
 				gamelog.nextMessage();
-				graffiti[s]->activity.arg = issue;
+				graffiti[s]->setactivityarg(issue);
 				power = 0;
 				graffiti[s]->train(SKILL_ART, max(10 - graffiti[s]->get_skill(SKILL_ART) / 2, 1));
 				pressAnyKey();
