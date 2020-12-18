@@ -1133,3 +1133,8 @@ Added support for RustKnight Portraits
 Reconstructed includes.h to allow compiling in 1/5 the time
 Massive Refactoring
 Working to restructure code to be more coherent
+Added noop3451 contributions
+Added some more text to art file
+Fixed Crackhouse business front note working
+Made Liberals have principles in elections
+Fixed newspaper bug where LCS flees from scene in CCS story 
