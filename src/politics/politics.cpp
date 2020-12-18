@@ -382,11 +382,60 @@ vector<string> corporateSuffix;
 					 if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote2 = 3;
 					 if (first) switch (lawList[LAW_ELECTIONS])
 					 {
+					 case -2: 
+						switch (senate[s]) { // Nested switch statement is because liberal members are less corrupt by nature, which puts them at a disadvantage - Noop
+							case  3: 
+							case -2: if (LCSrandom(3)) vote2 = senate[s]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+							case -1: if (LCSrandom(2)) vote2 = senate[s]; break; // 1/2 chance of incumbent winning no matter what (big   advantage)
+							case  0: if (!LCSrandom(3)) vote2 = senate[s]; break; // 1/3 chance of incumbent winning no matter what (medium   advantage)
+							case  1: if (!LCSrandom(5)) vote2 = senate[s]; break; // 1/5 chance of incumbent winning no matter what (small   advantage)
+							case  2: if (!LCSrandom(8)) vote2 = senate[s]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+							default: if (LCSrandom(3)) vote2 = senate[s]; break;
+						 }
+						 break;
+					 case -1:
+						 switch (senate[s]) {
+						 case  3:
+						 case -2: 
+						 case -1: if (LCSrandom(2)) vote2 = senate[s]; break;
+						 case  0: if (!LCSrandom(3)) vote2 = senate[s]; break;
+						 case  1: if (!LCSrandom(5)) vote2 = senate[s]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = senate[s]; break;
+						 default: if (LCSrandom(3)) vote2 = senate[s]; break;
+						 }
+						 break;
+					 case 0:
+						 switch (senate[s]) {
+						 case  3:
+						 case -2:
+						 case -1: 
+						 case  0: if (!LCSrandom(3)) vote2 = senate[s]; break;
+						 case  1: if (!LCSrandom(5)) vote2 = senate[s]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = senate[s]; break;
+						 default: if (!LCSrandom(3)) vote2 = senate[s]; break;
+						 }
+						 break;
+					 case 1:
+						 switch (senate[s]) {
+						 case  3:
+						 case -2:
+						 case -1:
+						 case  0:
+						 case  1: if (!LCSrandom(5)) vote2 = senate[s]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = senate[s]; break;
+						 default: if (!LCSrandom(5)) vote2 = senate[s]; break;
+						 }
+						 break;
+					 case 2: 
+						 if (!LCSrandom(8)) vote2 = senate[s]; break;
+					 // Legacy (Deprecated by Noop) 
+					 /*
 					 case -2: if (LCSrandom(3)) vote2 = senate[s]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
 					 case -1: if (LCSrandom(2)) vote2 = senate[s]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
 					 case  0: if (!LCSrandom(3)) vote2 = senate[s]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
 					 case  1: if (!LCSrandom(5)) vote2 = senate[s]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
 					 case  2: if (!LCSrandom(8)) vote2 = senate[s]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+					 */
 					 }
 					 first = false;
 				 } while (vote2 != senate[s] && vote2 != vote);
@@ -482,11 +531,60 @@ vector<string> corporateSuffix;
 					 if (stalinmode&&stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100)) vote2 = 3;
 					 if (first) switch (lawList[LAW_ELECTIONS])
 					 {
+					 case -2:
+						 switch (house[h]) { // Nested switch statement is because liberal members are less corrupt by nature, which puts them at a disadvantage - Noop
+						 case  3:
+						 case -2: if (LCSrandom(3)) vote2 = house[h]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+						 case -1: if (LCSrandom(2)) vote2 = house[h]; break; // 1/2 chance of incumbent winning no matter what (big   advantage)
+						 case  0: if (!LCSrandom(3)) vote2 = house[h]; break; // 1/3 chance of incumbent winning no matter what (medium   advantage)
+						 case  1: if (!LCSrandom(5)) vote2 = house[h]; break; // 1/5 chance of incumbent winning no matter what (small   advantage)
+						 case  2: if (!LCSrandom(8)) vote2 = house[h]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+						 default: if (LCSrandom(3)) vote2 = house[h]; break;
+						 }
+						 break;
+					 case -1:
+						 switch (house[h]) {
+						 case  3:
+						 case -2:
+						 case -1: if (LCSrandom(2)) vote2 = house[h]; break;
+						 case  0: if (!LCSrandom(3)) vote2 = house[h]; break;
+						 case  1: if (!LCSrandom(5)) vote2 = house[h]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = house[h]; break;
+						 default: if (LCSrandom(3)) vote2 = house[h]; break;
+						 }
+						 break;
+					 case 0:
+						 switch (house[h]) {
+						 case  3:
+						 case -2:
+						 case -1:
+						 case  0: if (!LCSrandom(3)) vote2 = house[h]; break;
+						 case  1: if (!LCSrandom(5)) vote2 = house[h]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = house[h]; break;
+						 default: if (!LCSrandom(3)) vote2 = house[h]; break;
+						 }
+						 break;
+					 case 1:
+						 switch (house[h]) {
+						 case  3:
+						 case -2:
+						 case -1:
+						 case  0:
+						 case  1: if (!LCSrandom(5)) vote2 = house[h]; break;
+						 case  2: if (!LCSrandom(8)) vote2 = house[h]; break;
+						 default: if (!LCSrandom(5)) vote2 = house[h]; break;
+						 }
+						 break;
+					 case 2:
+						 if (!LCSrandom(8)) vote2 = house[h]; break;
+					 // Legacy (Deprecated by Noop)
+					 /*
 					 case -2: if (LCSrandom(3)) vote2 = house[h]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
 					 case -1: if (LCSrandom(2)) vote2 = house[h]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
 					 case  0: if (!LCSrandom(3)) vote2 = house[h]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
 					 case  1: if (!LCSrandom(5)) vote2 = house[h]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
 					 case  2: if (!LCSrandom(8)) vote2 = house[h]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+					 */
 					 }
 					 first = false;
 				 } while (vote2 != house[h] && vote2 != vote);

@@ -189,3 +189,8 @@ stability and being, like, really smart."
 that no matter how righteous you think your cause is, there's always someone
 bigger to keep you down.  And that day is today and that someone is me."
 -- Cameron Cambell
+#
+"We must guard against the acquisition of unwarranted influence, whether sought 
+or unsought, by the military-industrial complex. [...] We must never let the 
+weight of this combination endanger our liberties or democratic processes."
+-- Dwight D. Eisenhower

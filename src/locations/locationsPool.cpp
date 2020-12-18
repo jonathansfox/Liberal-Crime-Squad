@@ -803,6 +803,12 @@ void Location::update_heat_protection()
 		else
 			heat_protection += 0; // Abandoned warehouse -- no protection
 		break;
+	case SITE_BUSINESS_CRACKHOUSE:
+		if (location[l]->front_business != -1)
+			heat_protection += 10; // Business front -- high medium protection (Cops still find it a bit shady)
+		else
+			heat_protection += 0; // Regular Crackhouse -- no protection
+		break;
 	case SITE_RESIDENTIAL_SHELTER:
 		heat_protection += 0; // Homeless shelter -- no protection
 		break;
