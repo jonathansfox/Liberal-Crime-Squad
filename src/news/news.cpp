@@ -171,6 +171,7 @@ Deprecatednewsstoryst* new_major_event()
 	public_interest[ns->view] += 50;
 	return ns;
 }
+const int MAJOR_NEWS_RATE = 60;
 void generate_random_event_news_stories()
 {
 	//Conservative Crime Squad Strikes!
@@ -187,7 +188,7 @@ void generate_random_event_news_stories()
 		advance_ccs_defeat_storyline();
 	}
 	// Random major event news stories
-	if (!LCSrandom(60)) {
+	if (!LCSrandom(MAJOR_NEWS_RATE)) {
 		newsstory.push_back(new_major_event());
 	}
 }

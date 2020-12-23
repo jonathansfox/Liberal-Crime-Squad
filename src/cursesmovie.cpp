@@ -173,10 +173,11 @@ void CursesMoviest::convertindices_sound(filelistst &master)
 	for (int f = 0; f < len(frame); f++)
 		if (frame[f]->sound != -1) frame[f]->sound = convert[frame[f]->sound];
 }
+inline int translateGraphicsChar(unsigned char c) { return c; }
 void CursesMoviest::playmovie(int x, int y)
 {
 	long timer = 0, finalframe = 0;
-	for (bool cont = false; cont; ) {
+	for (bool cont = true; cont; ) {
 		//int time=GetTickCount();
 		alarmset(10);
 		cont = false;
@@ -207,7 +208,9 @@ void CursesMoviest::playmovie(int x, int y)
 							set_colorAlt((movie.picture[frame[f]->frame][fx][fy][1]),
 								(movie.picture[frame[f]->frame][fx][fy][2]),
 								movie.picture[frame[f]->frame][fx][fy][3]);
-							mvaddstrAlt(fy + y, fx + x, (movie.picture[frame[f]->frame][fx][fy][0]));
+							mvaddcharAlt(fy + y, fx + x, movie.picture[frame[f]->frame][fx][fy][0]);
+
+							//mvaddstrAlt(fy + y, fx + x, (char) translateGraphicsChar(movie.picture[frame[f]->frame][fx][fy][0]));
 						}
 					pted = true;
 				}
