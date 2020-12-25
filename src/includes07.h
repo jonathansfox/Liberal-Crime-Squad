@@ -551,7 +551,7 @@ std::string tostring(long i);
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
 
 

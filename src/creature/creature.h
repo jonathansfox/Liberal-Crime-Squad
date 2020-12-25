@@ -4,14 +4,14 @@
 
 #ifndef CREATURE_H
 #define CREATURE_H0
-
+#include "creatureConstants.h"
 #include "newcreature.h"
 
 #ifndef MIN
 // minimum of 2 numbers
 #define MIN(a,b) (((a)>(b))?(b):(a))
 #endif
-
+int get_associated_attribute(int skill_type);
 class DeprecatedCreature
 {
 public:

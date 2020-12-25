@@ -33,69 +33,7 @@ const int BIT30 = (1 << 29);
 const int BIT31 = (1 << 30);
 const int BIT32 = (1 << 31);
 const int MAX_PATH_SIZE = 2048;
-const int RNG_SIZE = 4;
-/* These 6 random number generator functions are implemented in compat.cpp */
-unsigned long getSeed();
-unsigned long r_num();
-long LCSrandom(long max);
-void initMainRNG();
-void copyRNG(unsigned long(&dest)[RNG_SIZE], unsigned long(&src)[RNG_SIZE]);
-void initOtherRNG(unsigned long(&rng)[RNG_SIZE]);
-/* Determine size of vectors and any other container that implements the size() function.
-This basically includes all types of containers except for the C++11 std::forward_list. */
-template <class Container> inline long len(const Container& x)
-{
-	return x.size();
-}
-/* Determine array size in pickrandom() and various functions throughout the code.
-Only works on actual arrays, not on vectors or other containers. */
-template <typename T, size_t N> inline long len(const T(&x)[N])
-{
-	return N;
-}
-/* Override of the prior function for null-terminated C-strings as char arrays.
-This override allows pickrandom() to pick a random character from a C-string we have as a char array. */
-template <size_t N> inline long len(const char(&x)[N])
-{
-	return strlen(x);
-}
-/* Override of the prior function for null-terminated C-strings as char pointers.
-This override allows pickrandom() to pick a random character from a C-string we have as a char pointer. */
-inline long len(const char* x)
-{
-	return strlen(x);
-}
-/* Override for when it doesn't work with const in front of the char*
-(compilers are weird about template function overrides) */
-inline long len(char* x)
-{
-	return strlen(x);
-}
-/* Pick a random element from a vector/deque/map/std::string/C++11 std::array/etc. (e.g. a random string from a vector of strings).
-It works on any container class that implements the [] operator, size() function, and value_type typename.
-This doesn't work if the vector/deque/map/std::string/C++11 std::array/etc. has zero elements. */
-template <class Container> inline typename Container::value_type& pickrandom(const Container& x)
-{
-	return const_cast<typename Container::value_type&>(x[LCSrandom(len(x))]);
-}
-/* Pick a random element from an array (e.g. a random string from an array of strings).
-This doesn't work if the array has zero elements. */
-template <typename T, size_t N> inline T& pickrandom(const T(&x)[N])
-{
-	return const_cast<T&>(x[LCSrandom(len(x))]);
-}
-/* Pick a random element from a C-string.
-Returns '\x0' (null character) for empty string. */
-inline char& pickrandom(const char* x)
-{
-	return const_cast<char&>(x[LCSrandom(len(x))]);
-}
-/* Override for when it doesn't work with const in front of the char*
-(compilers are weird about template function overrides) */
-inline char& pickrandom(char* x)
-{
-	return x[LCSrandom(len(x))];
-}
+#include "includesLen.h"
 /* Deletes a specified pointer and sets it to NULL. */
 template <typename T> inline void delete_and_nullify(T*& o)
 {
@@ -712,5 +650,3 @@ enum ActiveSortingChoices
    Created by jonathansfox.
 */
 
-/* This is declared again lower down, just needed here for this header. */
-std::string tostring(long i);

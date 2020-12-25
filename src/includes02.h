@@ -365,7 +365,7 @@ std::string tostring(long i);
 
 
 //just a float that is initialized to 0
-#include "floatZero.h"
+//#include "floatZero.h"
 
 #ifdef	TITLESCREEN_CPP
 // titlescreen.cpp

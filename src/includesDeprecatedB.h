@@ -18,49 +18,14 @@ enum Bouncer_Reject_Reason
 };
 
 
-string skill_enum_to_string(int skill_type);
-string showXmlSkill(int skill_, int value_);
-string showXmlAttribute(int attribute_, int value_);
 
-const string PACKAGE_VERSION_STR = "4.12.57";
-const int version = 41257;
+
+const string PACKAGE_VERSION_STR = "4.12.58";
+const int version = 41258;
 const int lowestloadversion = 40100;
 const int lowestloadscoreversion = 31203;
 
+#include "includesSDS.h"
 
-const string singleDot = ".";
-const string dotSpace = ". ";
-const string COMMA_SPACE = ", ";
-const string spaceDashSpace = " - ";
-const string spaceParanthesisDollar = " ($";
-const string paranthesisDollar = "($";
-const string COLON_SPACE = ": ";
-const string ampersandC = "&c";
-const string CLOSE_PARENTHESIS = ")";
-const string percentSign = "%";
-const string singleSpace = " ";
 
-const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
-
-const string AND = " and ";
-const string string_sleeper = "Sleeper ";
-const string ampersandR = "&r";
-const string show_squad_liberal_status = "0 - Show the squad's Liberal status";
-const string HASH_CHECK_STATUS_OF_LIBERAL = "# - Check the status of a squad Liberal";
-const string O_CHANGE_SQUAD_ORDER = "O - Change the squad's Liberal order";
-const string enter_done = "Enter - Done";
-const string undefined = "UNDEFINED";
-const string exclamationPoint = "!";
-const string failedToLoad = "Failed to load ";
-const string pressAnyOtherKey = "Press any other key to continue...";
-const string pressAnyKeyString = "Press any other key when ready to begin...";
-const string city = "CITY: ";
-const string tag_heat = "heat";
-
-enum BillStatus
-{
-	BILL_SIGNED = -2,
-	BILL_OVERRIDE_VETO = -1,
-	BILL_PASSED_CONGRESS = 0,
-	BILL_FAILED = 1
-};
+#include "includesSDS2.h"

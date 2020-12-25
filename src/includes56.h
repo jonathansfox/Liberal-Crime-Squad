@@ -54,16 +54,16 @@ using namespace std;
 
 
 //just a float that is initialized to 0
-#include "floatZero.h"
+//#include "floatZero.h"
 //Interrogation information for the InterrogationST system, to be
 //dynamically created on capture and deleted when InterrogationST ends,
 //referenced using a pointer typecast into one of the arguments
 //of the target's current action.
 //#include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
-#include "includesDeprecatedB.h"
+//#include "includesDeprecatedB.h"
 #ifdef HELP_CPP
 const string liberalHelpOn = "Liberal help on:";
 const string pressAnyKeyToReturn = "   Press any key - Return to previous screen";

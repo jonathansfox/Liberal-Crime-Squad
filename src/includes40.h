@@ -49,6 +49,7 @@ constexpr auto __USE_MINGW_ANSI_STDIO = 0;
 using namespace std;
 
 #include "includesDeprecated.h"
+#include "includesRandom.h"
 //#include "vehicle/vehicletype.h"
 //#include "vehicle/vehicle.h"
 
@@ -61,9 +62,9 @@ using namespace std;
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
-#include "includesDeprecatedB.h"
+//#include "includesDeprecatedB.h"
 #ifdef	SIEGE_CPP
 // siege.cpp
 

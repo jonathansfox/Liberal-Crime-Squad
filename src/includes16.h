@@ -49,6 +49,7 @@ constexpr auto __USE_MINGW_ANSI_STDIO = 0;
 using namespace std;
 
 #include "includesDeprecated.h"
+#include "includesRandom.h"
 
 //
 
@@ -57,15 +58,22 @@ using namespace std;
 
 
 //just a float that is initialized to 0
-#include "floatZero.h"
+//#include "floatZero.h"
 //Interrogation information for the InterrogationST system, to be
 //dynamically created on capture and deleted when InterrogationST ends,
 //referenced using a pointer typecast into one of the arguments
 //of the target's current action.
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
-#include "includesDeprecatedB.h"
+enum BillStatus
+{
+	BILL_SIGNED = -2,
+	BILL_OVERRIDE_VETO = -1,
+	BILL_PASSED_CONGRESS = 0,
+	BILL_FAILED = 1
+};
+//#include "includesDeprecatedB.h"
 #ifdef	POLITICS_CPP
 // politics.cpp
 

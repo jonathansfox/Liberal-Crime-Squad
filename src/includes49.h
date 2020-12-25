@@ -49,6 +49,9 @@ constexpr auto __USE_MINGW_ANSI_STDIO = 0;
 using namespace std;
 
 #include "includesDeprecated.h"
+#include "includesRandom.h"
+/* This is declared again lower down, just needed here for this header. */
+std::string tostring(long i);
 //#include "vehicle/vehicletype.h"
 //#include "vehicle/vehicle.h"
 
@@ -61,9 +64,15 @@ using namespace std;
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
-#include "includesDeprecatedB.h"
+
+#include "includesSDS.h"
+#include "includesSDS2.h"
+string showXmlSkill(int skill_, int value_);
+string showXmlAttribute(int attribute_, int value_);
+//#include "includesDeprecatedB.h"
+string skill_enum_to_string(int skill_type);
 #ifdef	CREATURE_CPP
 // creature.cpp
 

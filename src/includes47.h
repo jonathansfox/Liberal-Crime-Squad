@@ -49,6 +49,9 @@ constexpr auto __USE_MINGW_ANSI_STDIO = 0;
 using namespace std;
 
 #include "includesDeprecated.h"
+#include "includesRandom.h"
+/* This is declared again lower down, just needed here for this header. */
+std::string tostring(long i);
 //#include "vehicle/vehicletype.h"
 //#include "vehicle/vehicle.h"
 
@@ -61,9 +64,17 @@ using namespace std;
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
+enum BillStatus
+{
+	BILL_SIGNED = -2,
+	BILL_OVERRIDE_VETO = -1,
+	BILL_PASSED_CONGRESS = 0,
+	BILL_FAILED = 1
+};
 #include "includesDeprecatedB.h"
+const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
 
 #ifdef CURSES_ALTERNATIVE
 #include "../common/commondisplay.h"

@@ -61,10 +61,10 @@ using namespace std;
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
-
-#include "includesDeprecatedB.h"
+#include "includesSDS.h"
+//#include "includesDeprecatedB.h"
 #ifdef	ACTIVATE_SLEEPERS_CPP
 //activate_sleepers.cpp
 #include "../creature/creature.h"

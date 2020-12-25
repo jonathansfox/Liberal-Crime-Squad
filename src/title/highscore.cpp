@@ -1,6 +1,7 @@
 
 #define	HIGHSCORE_CPP
 #include "../includes06.h"
+#include "../includesDeprecatedB.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //

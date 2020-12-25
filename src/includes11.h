@@ -414,7 +414,7 @@ const int SQUAD_NAMELEN = 40;
 //of the target's current action.
 #include "activityST.h"
 
-int get_associated_attribute(int skill_type);
+//int get_associated_attribute(int skill_type);
 
 
 
