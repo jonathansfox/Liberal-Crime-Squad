@@ -1,5 +1,4 @@
-#ifndef WEAPONTYPE_H
-#define WEAPONTYPE_H0
+#pragma once
 struct attackst
 {
 	attackst(MCD_STR xmlstring);
@@ -170,4 +169,3 @@ private:
 	bool auto_break_lock_;
 	vector<attackst*> attacks_;
 };
-#endif //WEAPONTYPE_H

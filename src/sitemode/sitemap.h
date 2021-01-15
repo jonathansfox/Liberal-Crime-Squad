@@ -1,7 +1,6 @@
 //#include <includeDefault.h>
 //#include "tinydir.h"
-#ifndef SITEMAP_H
-#define SITEMAP_H0
+#pragma once
 const int SITEMAP_ADDTYPE_OR = 1;
 const int SITEMAP_ADDTYPE_ANDNOT = 2;
 enum sitemapscripts
@@ -101,4 +100,3 @@ private:
 	std::string loot;
 	int weight;
 };
-#endif

@@ -1,9 +1,7 @@
 
 
 
-
-#ifndef CREATURE_H
-#define CREATURE_H0
+#pragma once
 #include "creatureConstants.h"
 #include "newcreature.h"
 
@@ -595,5 +593,3 @@ void liberalize(DeprecatedCreature &cr, bool rename = true);
 void nameCCSMember(DeprecatedCreature &cr);
 //end of ripped part
 
-
-#endif

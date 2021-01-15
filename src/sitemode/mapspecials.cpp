@@ -775,7 +775,7 @@ void special_intel_supercomputer()
 				mvaddstrAlt(16, 1, CONST_THE_SQUAD_OBTAINS_SENSITIVE_INFORMATION, gamelog);
 				if (endgamestate >= ENDGAME_CCS_APPEARANCE && endgamestate < ENDGAME_CCS_DEFEATED && ccsexposure < CCSEXPOSURE_LCSGOTDATA)
 				{
-					addstrAlt(CONST_mapspecials082, gamelog);
+					addstrAlt(CONST_X_SINGLE_COMMA, gamelog);
 					mvaddstrAlt(17, 1, CONST_INCLUDING_A_LIST_OF_GOVERNMENT_BACKERS_OF_THE_CCS, gamelog);
 					giveActiveSquadLoot(tag_LOOT_CCS_BACKERLIST);
 					ccsexposure = CCSEXPOSURE_LCSGOTDATA;
@@ -1026,7 +1026,7 @@ void special_armory()
 			clearmessagearea();
 			setSiteAlarmOne();
 			set_color_easy(RED_ON_BLACK_BRIGHT);
-			mvaddstrAlt(16, 1, CONST_ALARMS_GO_OFF, gamelog);
+			mvaddstrAlt(16, 1, CONST_ALARMS_GO_OFF_EXCLAMATION, gamelog);
 			gamelog.newline();
 			pressAnyKey();
 			bool empty = true;

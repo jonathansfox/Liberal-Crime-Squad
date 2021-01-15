@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -69,7 +38,7 @@ std::string tostring(long i);
 #include "includesSDS.h"
 #include "includesSDS2.h"
 //#include "includesDeprecatedB.h"
-#ifdef	INTERROGATION_CPP
+//#ifdef	INTERROGATION_CPP
 // interrogation.cpp
 
 const string feels_sick_and = " feels sick to the stomach afterward and ";
@@ -78,7 +47,7 @@ const string QUOTATION_MARK = "\"";
 const string CONST_HUGS = "hugs ";
 const string CONST_PRESS_ANY_KEY_TO_REFLECT_ON_THIS = "Press any key to reflect on this.";
 const string CONST_S_DISAPPEARANCE_HAS_NOT_YET_BEEN_REPORTED = "'s disappearance has not yet been reported.";
-const string CONST_WAS_ABLE_TO_CREATE_A_MAP_OF_THE_SITE_WITH_THIS_INFORMATION = " was able to create a map of the site with this information.";
+const string WAS_ABLE_TO_CREATE_MAP = " was able to create a map of the site with this information.";
 const string CONST_UNFORTUNATELY_NONE_OF_IT_IS_USEFUL_TO_THE_LCS = "Unfortunately, none of it is useful to the LCS.";
 const string CONST_REVEALS_DETAILS_ABOUT_THE = " reveals details about the ";
 const string CONST_THE_CONVERSION_IS_CONVINCING_ENOUGH_THAT_THE_POLICE_NO_LONGER_CONSIDER_IT_A_KIDNAPPING = "The conversion is convincing enough that the police no longer consider it a kidnapping.";
@@ -89,7 +58,7 @@ const string CONST_UNDER = " under ";
 const string CONST_IS_DEAD = " is dead";
 const string CONST_HAS_COMMITTED_SUICIDE = " has committed suicide.";
 const string CONST_HAS_BEEN_TAINTED_WITH_WISDOM = " has been tainted with wisdom!";
-const string CONST_interrogation154 = "!";
+//const string CONST_EXCLAMATION_POINT = "!";
 const string CONST_TURNS_THE_TABLES_ON = " turns the tables on ";
 const string CONST_HOLDS_FIRM = " holds firm.";
 const string CONST_BEGS_FOR_THE_NIGHTMARE_TO_END = " begs for the nightmare to end.";
@@ -187,7 +156,7 @@ const string CONST_PSYCHOLOGY_SKILL = "Psychology Skill: ";
 const string CONST_HEALTH = "Health: ";
 const string CONST_LEAD_INTERROGATOR = "Lead Interrogator: ";
 const string CONST_PRISONER = "Prisoner: ";
-const string CONST_interrogation038 = "                                  ";
+const string CONST_34_SPACES = "                                  ";
 const string CONST_CLING_TO_SCIENCE_TXT = "cling_to_science.txt";
 const string CONST_CLING_TO_BUSINESS_TXT = "cling_to_business.txt";
 const string CONST_CLING_TO_SCIENCE_ONE_LINE_TXT = "cling_to_science_one_line.txt";
@@ -347,5 +316,5 @@ string stockholmSyndrome(const string name);
 string failToBreakReligion(const string a, const string cr);
 string failedToBreakBusiness(const string a, const string cr);
 string failedToBreakScience(const string a, const string cr);
-#endif	//INTERROGATION_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//INTERROGATION_CPP
+//#endif// INCLUDES_H_INCLUDED

@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -65,7 +34,7 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 #include "includesDeprecatedB.h"
-#ifdef	GAME_CPP
+//#ifdef	GAME_CPP
 // game.cpp
 
 #include "creature/newcreature.h"
@@ -187,7 +156,7 @@ const string tag_skill = "skill";
 const string CONST_MASKTYPE = "masktype";
 const string CONST_DEFAULT = "default";
 const string CONST_UNSPECIFIED_ERROR_WITH_CUSTOM_TEXT = "Unspecified error with custom text";
-const string CONST_game012 = "We need a slogan!";
+//const string CONST_WE_NEED_A_SLOGAN = "We need a slogan!";
 const string CONST_DEBUG_DEFINES_TXT = "debug_defines.txt";
 const string CONST_FILE_ERROR_INITIATEMOREINCOMPLETETEXT = "File Error: InitiateMoreIncompleteText";
 const string CONST_FILE_ERROR_INITIATEINCOMPLETETEXT = "File Error: InitiateIncompleteText";
@@ -196,5 +165,5 @@ const string CONST_COMMENT_FOUND = "Comment Found";
 const string CONST_SITEMAPS_TXT = "sitemaps.txt";
 const string CONST_LIBERAL_CRIME_SQUAD = "Liberal Crime Squad ";
 
-#endif	//GAME_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//GAME_CPP
+//#endif// INCLUDES_H_INCLUDED

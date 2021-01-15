@@ -56,12 +56,12 @@ bool LCSInitHomeDir()
 	//Do everything using STL String, it is safer that way.
 	std::string str = homeenv;
 	if (str[len(str) - 1] != '/')
-		str += CONST_lcsio011;
+		str += CONST_SLASH;
 #ifndef WIN32
 	str += CONST_LCS;
 #endif
 	strncpy(homedir, str.c_str(), MAX_PATH_SIZE);
-	if ((!LCSFileExists(homedir)) && (strncmp(homedir, CONST_lcsio013.c_str(), 1) != 0))
+	if ((!LCSFileExists(homedir)) && (strncmp(homedir, CONST_DOT.c_str(), 1) != 0))
 	{
 #ifdef WIN32
 		if (_mkdir(homedir) != 0)

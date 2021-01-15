@@ -1,6 +1,5 @@
 
-
-#define	MISC_CPP
+#define MISC_CPP
 #include "../includes55.h"
 void sexdesc(char *str)
 {
@@ -129,10 +128,10 @@ void loadsong(int i, const char* filename)
 	eraseAlt();
 	if (oggsupport)
 	{
-		mvaddstrAlt(12, 0, CONST_LOADING_OGG_VORBIS_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_OGG + filename + CONST_X_OGG);
+		mvaddstrAlt(12, 0, CONST_LOADING_OGG_VORBIS_MUSIC + tostring(i + 1) + CONST_SLASH + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_OGG + filename + CONST_X_OGG);
 		mvaddstrAlt(13, 0, string(CONST_WITH) + artdir + CONST_MIDI + filename + CONST_MID_AS_MIDI_FALLBACK);
 	}
-	else mvaddstrAlt(12, 0, CONST_LOADING_MIDI_MUSIC + tostring(i + 1) + CONST_miscB021 + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_MIDI + filename + CONST_MID);
+	else mvaddstrAlt(12, 0, CONST_LOADING_MIDI_MUSIC + tostring(i + 1) + CONST_SLASH + tostring(MUSIC_OFF) + PARENTHESIS_COLON + artdir + CONST_MIDI + filename + CONST_MID);
 	refreshAlt();
 	if (oggsupport) songs[i] = Mix_LoadMUS((string(artdir) + CONST_OGG + filename + CONST_X_OGG).c_str()); // only attempt loading Ogg if we have Ogg support
 	if (!songs[i] || !oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead
@@ -180,7 +179,7 @@ void MusicClass::init()
 		loadsong(MUSIC_NEWGAME, musicList[MUSIC_NEWGAME].data()), // load new game music
 																  // basemode.ogg or .mid - The Stars and Stripes Forever by John Philip Sousa
 		loadsong(MUSIC_BASEMODE, musicList[MUSIC_BASEMODE].data()), // load regular base mode music
-																	// siege.ogg or .mid- The Planets, 1st Movement CONST_misc016 by Gustav Holst
+																	// siege.ogg or .mid- The Planets, 1st Movement Mars by Gustav Holst
 		loadsong(MUSIC_SIEGE, musicList[MUSIC_SIEGE].data()), // load base mode while under siege music
 															  // activate.ogg or .mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
 		loadsong(MUSIC_ACTIVATE, musicList[MUSIC_ACTIVATE].data()), // load activate Liberals music
@@ -208,7 +207,7 @@ void MusicClass::init()
 		loadsong(MUSIC_SUSPICIOUS, musicList[MUSIC_SUSPICIOUS].data()), // load suspicious music
 																		// alarmed.ogg or .mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
 		loadsong(MUSIC_ALARMED, musicList[MUSIC_ALARMED].data()), // load alarmed music
-																  // heavycombat.ogg or .mid - 6th Symphony CONST_misc017, 4th Movement by Ludwig van Beethoven
+																  // heavycombat.ogg or .mid - 6th Symphony Pastorale, 4th Movement by Ludwig van Beethoven
 		loadsong(MUSIC_HEAVYCOMBAT, musicList[MUSIC_HEAVYCOMBAT].data()), // load massive Conservative response music
 																		  // defense.ogg or .mid - Danse Macabre by Camille Saint-Saens
 		loadsong(MUSIC_DEFENSE, musicList[MUSIC_DEFENSE].data()), // load escaping/engaging a siege music
@@ -893,7 +892,7 @@ void MusicClass::play(int _musicmode)
 			output += numberTimesHit[bursthits - 1];
 		}
 		if (bursthits > 2) {
-			output += CONST_fight035;
+			output += CONST_TIMES;
 		}
 		return output;
 	}
@@ -903,7 +902,7 @@ void MusicClass::play(int _musicmode)
 			return getLawString[l];
 		}
 		else {
-			return CONST_getnames043;
+			return CONST_SOFTWARE_BUGS;
 		}
 	}
 	std::string cityname()
@@ -2904,18 +2903,18 @@ void MusicClass::play(int _musicmode)
 
 
 		if (!LCSrandom(handToHand + 1))
-			return CONST_fight120;
+			return CONST_PUNCHES;
 		else if (!LCSrandom(handToHand))
-			return CONST_fight121;
+			return CONST_SWINGS_AT;
 		else if (!LCSrandom(handToHand - 1))
-			return CONST_fight122;
+			return CONST_GRAPPLES_WITH;
 		else if (!LCSrandom(handToHand - 2))
-			return CONST_fight123;
+			return CONST_KICKS;
 		else if (!LCSrandom(handToHand - 3))
-			return CONST_fight124;
+			return CONST_STRIKES_AT;
 		else if (!LCSrandom(handToHand - 4))
-			return CONST_fight125;
-		else return CONST_fight126;
+			return CONST_JUMP_KICKS;
+		else return CONST_GRACEFULLY_STRIKES_AT;
 	}
 
 	string dismemberingWound(const int w, const int wound) {
@@ -2924,22 +2923,22 @@ void MusicClass::play(int _musicmode)
 		string output = "";
 
 		if (w == BODYPART_HEAD && wound & WOUND_CLEANOFF) {
-			output = CONST_fight151;
+			output = CONST_CUTTING_IT_OFF;
 		}
 		else if (w == BODYPART_BODY && wound & WOUND_CLEANOFF) {
-			output = CONST_fight148;
+			output = CONST_CUTTING_IN_HALF;
 		}
 		else if (w == BODYPART_HEAD && wound & WOUND_NASTYOFF) {
-			output = CONST_fight149;
+			output = CONST_BLOWING_IT_APART;
 		}
 		else if (w == BODYPART_BODY && wound & WOUND_NASTYOFF) {
-			output = CONST_fight150;
+			output = CONST_BLOWING_IT_IN_HALF;
 		}
 		else if (wound & WOUND_CLEANOFF) {
-			output = CONST_fight151;
+			output = CONST_CUTTING_IT_OFF;
 		}
 		else if (wound & WOUND_NASTYOFF) {
-			output = CONST_fight152;
+			output = CONST_BLOWING_IT_OFF;
 		}
 
 		return output;

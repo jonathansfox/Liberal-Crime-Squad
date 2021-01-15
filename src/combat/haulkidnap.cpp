@@ -77,7 +77,7 @@ void printAmateurKidnapString(const string aname, const string tname) {
 	mvaddstrAlt(16, 1, aname, gamelog);
 	addstrAlt(CONST_SNATCHES, gamelog);
 	addstrAlt(tname, gamelog);
-	addstrAlt(CONST_haulkidnap005, gamelog);
+	addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 	gamelog.newline(); //New line.
 	pressAnyKey();
 	set_color_easy(RED_ON_BLACK_BRIGHT);

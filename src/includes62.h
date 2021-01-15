@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -69,7 +38,7 @@ std::string tostring(long i);
 #include "includesSDS.h"
 
 //#include "includesDeprecatedB.h"
-#ifdef	FIGHT_CPP
+//#ifdef	FIGHT_CPP
 // fight.cpp
 
 const string fighty = "fight\\";
@@ -155,12 +124,7 @@ const string CONST_JUST_BARELY_MISSED = " just barely missed!";
 const string CONST_MISSED = " missed!";
 const string CONST_KNOCKS_THE_BLOW_ASIDE_AND_COUNTERS = " knocks the blow aside and counters!";
 const string CONST_TO_NO_EFFECT = " to no effect.";
-const string CONST_fight152 = " BLOWING IT OFF!";
-const string CONST_fight151 = " CUTTING IT OFF!";
-const string CONST_fight150 = " BLOWING IT IN HALF!";
-const string CONST_fight149 = " BLOWING IT APART!";
-const string CONST_fight148 = " CUTTING IT IN HALF!";
-const string CONST_fight146 = "!";
+const string CONST_EXCLAMATION_POINT = "!";
 const string CONST_S_CORPSE = "'s corpse";
 const string CONST_SHIELDS = " shields ";
 const string CONST_HEROICALLY = " heroically";
@@ -178,13 +142,6 @@ const string CONST_BITES = "bites";
 const string CONST_STABS = "stabs";
 const string CONST_BREATHES_FIRE_AT = "breathes fire at";
 const string CONST_FIRES_A_120MM_SHELL_AT = "fires a 120mm shell at";
-const string CONST_fight126 = "gracefully strikes at";
-const string CONST_fight125 = "jump kicks";
-const string CONST_fight124 = "strikes at";
-const string CONST_fight123 = "kicks";
-const string CONST_fight122 = "grapples with";
-const string CONST_fight121 = "swings at";
-const string CONST_fight120 = "punches";
 const string CONST_MISTAKENLY = "MISTAKENLY ";
 const string CONST_READIES_ANOTHER = " readies another ";
 const string CONST_RELOADS = " reloads.";
@@ -250,7 +207,7 @@ const string CONST_LEANS_AGAINST_THE_DOOR = " leans against the door.";
 const string CONST_STUMBLES_AGAINST_A_WALL = " stumbles against a wall.";
 const string CONST_SOILS_THE_FLOOR = " soils the floor.";
 const string CONST_MAKES_A_STINKY = " [makes a stinky].";
-const string CONST_fight035 = " times";
+//const string CONST_TIMES = " times";
 const string CONST_FIVE_TIMES = " five times";
 const string CONST_FOUR_TIMES = " four times";
 const string CONST_THREE_TIMES = " three times";
@@ -480,5 +437,5 @@ enum LOOP_CONTINUATION {
 	REPEAT
 };
 void conservatise(const int e);
-#endif	//FIGHT_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//FIGHT_CPP
+//#endif// INCLUDES_H_INCLUDED

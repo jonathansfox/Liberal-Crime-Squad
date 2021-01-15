@@ -1,5 +1,4 @@
-#ifndef COMMON_DISPLAY_H
-#define COMMON_DISPLAY_H0
+#pragma once
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
@@ -29,5 +28,3 @@ string addpagestr();
 int addstr_f(const char * format, ...);
 /* mvaddstr with formatted output */
 int mvaddstr_f(int y, int x, const char * format, ...);
-
-#endif

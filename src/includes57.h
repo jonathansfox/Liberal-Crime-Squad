@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -64,7 +33,7 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 //#include "includesDeprecatedB.h"
-#ifdef	GETNAMES_CPP
+//#ifdef	GETNAMES_CPP
 // getnames.cpp
 
 #include "../creature/newcreature.h"
@@ -81,10 +50,10 @@ const string names = "names\\";
 const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
 const string CONST_GETMONTH_TXT = "getMonth.txt";
 const string CONST_CITY_NAMES_TXT = "city_names.txt";
-const string CONST_getnames043 = "Software Bugs";
+//const string CONST_SOFTWARE_BUGS = "Software Bugs";
 const string CONST_BUGGY_SOFTWARE = "Buggy Software";
 const string CONST_BUGS = "bugs";
-const string CONST_getnames040 = "Elite Liberal";
+const string CONST_X_ELITE_LIBERAL = "Elite Liberal";
 const string CONST_LIBERAL_GUARDIAN = "Liberal Guardian";
 const string CONST_URBAN_COMMANDO = "Urban Commando";
 const string CONST_REVOLUTIONARY = "Revolutionary";
@@ -114,5 +83,5 @@ const string CONST_WRONG_THINKER = "Wrong-Thinker";
 const string CONST_MINDLESS_CONSERVATIVE = "Mindless Conservative";
 const string CONST_CONSERVATIVE_PUNK = "Conservative Punk";
 const string CONST_CONSERVATIVE_DREGS = "Conservative Dregs";
-#endif	//GETNAMES_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//GETNAMES_CPP
+//#endif// INCLUDES_H_INCLUDED

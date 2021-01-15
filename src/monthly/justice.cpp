@@ -254,7 +254,7 @@ void penalize(DeprecatedCreature &g, char lenient)
 		if ((g.sentence > 0 && oldsentence > 0) ||
 			(g.sentence < 0 && oldsentence < 0))
 		{
-			addstrAlt(CONST_X_COMMA, gamelog);
+			addstrAlt(CONST_X_SINGLE_COMMA, gamelog);
 			moveAlt(8, 1);
 			if (lenient)
 			{

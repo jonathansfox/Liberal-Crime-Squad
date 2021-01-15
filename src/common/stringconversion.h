@@ -1,6 +1,4 @@
-#ifndef STRINGCONVERSION_H
-#define STRINGCONVERSION_H
-
+#pragma once
 
 // brutally ripped from includes.h --Schmel924
 /*
@@ -30,5 +28,3 @@ int skill_string_to_enum(std::string skillname);
 int gender_string_to_enum(const std::string& gender);
 int severtype_string_to_enum(const std::string& severtype);
 
-
-#endif // STRINGCONVERSION_H 

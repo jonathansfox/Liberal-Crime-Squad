@@ -1,6 +1,4 @@
-#ifndef GET_NAMES_H
-#define GET_NAMES_H0
-
+#pragma once
 std::string getview(short view, bool shortname);
 std::string getlaw(int l);
 std::string cityname(); /* random city name */
@@ -9,4 +7,3 @@ void enter_name(int y, int x, char *name, int len, const char *defname = NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month, bool shortname = false);
 std::string getalign(short alignment, bool capitalize = false);
-#endif

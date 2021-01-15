@@ -1,5 +1,4 @@
-#ifndef LOOTTYPE_H
-#define LOOTTYPE_H0
+#pragma once
 class LootType : public ItemType
 {
 public:
@@ -16,4 +15,3 @@ private:
 	bool no_quick_fencing_;
 	bool cloth_;
 };
-#endif //LOOTTYPE_H

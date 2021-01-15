@@ -11,41 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
-
+#include "includes.h"
 using namespace std;
 
 #include "includesDeprecated.h"
@@ -68,7 +36,7 @@ std::string tostring(long i);
 #include "includesSDS.h"
 string skill_enum_to_string(int skill_type);
 //#include "includesDeprecatedB.h"
-#ifdef COMMONDISPLAY_CPP
+//#ifdef COMMONDISPLAY_CPP
 // commondisplay.cpp
 #include "../creature/creature.h"
 ////
@@ -139,7 +107,7 @@ const string WEAPON_COLON = "Weapon: ";
 const string CONST_X_CUT = "Cut";
 const string BRUISED = "Bruised";
 const string CONST_X_SHOT = "Shot";
-const string CONST_commondisplay116 = "Liberal";
+const string CONST_X_LIBERAL = "Liberal";
 const string CONST_X_ANIMAL = "Animal";
 const string SEVERED = "Severed";
 const string RIPPED_OFF = "Ripped off";
@@ -159,8 +127,8 @@ const string NO_TONGUE = "No Tongue";
 const string tag_0 = "0";
 const string CONST_X_LONG_LINE = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 const string SEVENTY_NINE_LINE = "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫";
-const string CONST_commondisplay044 = "Moderate";
-const string CONST_commondisplay043 = "Conservative";
+const string CONST_X_MODERATE = "Moderate";
+const string CONST_X_CONSERVATIVE = "Conservative";
 const string CONSRVTV = "Consrvtv";
 const string LIGHTLY_WOUNDED = "Lightly Wounded";
 const string LTWOUND = "LtWound";
@@ -387,5 +355,3 @@ map<int, string> prisoner_description = {
 	map<int, string>::value_type(CREATURE_JUDGE_CONSERVATIVE, AN_ANGRY_HANGIN_JUDGE),
 };
 vector<string> printSpecialWounds(const char special[SPECIALWOUNDNUM]);
-#endif	//COMMONDISPLAY_CPP
-#endif // INCLUDES_H_INCLUDED

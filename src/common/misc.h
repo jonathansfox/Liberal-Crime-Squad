@@ -1,6 +1,4 @@
-#ifndef MISC_H
-#define MISC_H0
-
+#pragma once
 // brutally ripped from includes.h --Schmel924
 /*
 implementations should be in misc.cpp
@@ -19,5 +17,3 @@ const char* statename(int state = -1);
 std::string romannumeral(int amendnum);
 /* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 
-
-#endif // MISC_H 

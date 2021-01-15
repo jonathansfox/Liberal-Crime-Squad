@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -68,7 +37,7 @@ std::string tostring(long i);
 
 
 //#include "includesDeprecatedB.h"
-#ifdef	LIBERALAGENDA_CPP
+//#ifdef	LIBERALAGENDA_CPP
 // liberalagenda.cpp
 
 #include "../creature/creatureEnums.h"
@@ -128,7 +97,7 @@ customText(&courtChars, MOSTLY_ENDINGS_FOLDER + CONST_COURTCHARS_TXT),
 const string CONST_TYPE_THIS_LIBERAL_PHRASE_TO_CONFIRM_PRESS_A_WRONG_LETTER_TO_RETHINK_IT = "Type this Liberal phrase to confirm (press a wrong letter to rethink it):";
 const string CONST_ARE_YOU_SURE_YOU_WANT_TO_DISBAND = "Are you sure you want to disband?";
 const string CONST_PRESS_D_TO_DISBAND_AND_WAIT_USE_CURSORS_FOR_OTHER_PAGES_ANY_OTHER_KEY_TO_EXIT = "Press D to disband and wait. Use cursors for other pages. Any other key to exit.";
-const string CONST_liberalagenda064 = "Arch-Conservative";
+const string CONST_ARCH_CONSERVATIVE = "Arch-Conservative";
 const string DASH_SPACE = "-  ";
 const string CONST_X_CONSERVATIVE_SPACE = "Conservative  ";
 const string CONST_X_MODERATE_SPACE = "moderate  ";
@@ -183,5 +152,5 @@ const string tag_Lib = "Lib, ";
 const string tag_Mod = "Mod, ";
 const string tag_Cons = "Cons, ";
 const string tag_Consp = "Cons+";
-#endif	//LIBERALAGENDA_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//LIBERALAGENDA_CPP
+//#endif// INCLUDES_H_INCLUDED

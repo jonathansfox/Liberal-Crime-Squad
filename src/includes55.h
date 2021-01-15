@@ -11,43 +11,12 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
+#include "includes.h"
+using namespace std;
 #include "sdl/SDL.h"
 #include "sdl/SDL_mixer.h"
-
-
-#include <string.h>
-
-using namespace std;
 
 #include "includesDeprecated.h"
 #include "creatureConstants.h"
@@ -71,7 +40,7 @@ std::string tostring(long i);
 #include "includesSDS.h"
 #include "includesSDS2.h"
 //#include "includesDeprecatedB.h"
-#ifdef	MISC_CPP
+//#ifdef	MISC_CPP
 // misc.cpp
 
 #include "../common/ledgerEnums.h"
@@ -262,8 +231,8 @@ const string PGUP_PGDN = "PGUP/PGDN";
 const string SEMI_COLON_AND_COLON = "; and :";
 const string OPEN_CLOSE_BRACKET = "[]";
 const string TO_VIEW_OTHER_LIBERAL_PAGES = " to view other Liberal pages.";
-const string CONST_fight035 = " times";
-const string CONST_getnames043 = "Software Bugs";
+const string CONST_TIMES = " times";
+const string CONST_SOFTWARE_BUGS = "Software Bugs";
 const string ERROL_DEFAULT_NAME = "Errol";
 const string CONST_HER = "her";
 const string CONST_HIS = "his";
@@ -793,18 +762,18 @@ const string CONST_CURLS_UP_AND = " curls up and";
 const string CONST_TO_STOP_LOOKING_LIKE_HITLER = " to stop looking like Hitler.";
 const string CONST_SCREAMS_FOR = " screams for ";
 const string CONST_BEGS_HITLER_TO_STAY_AND_KILL = " begs Hitler to stay and kill ";
-const string CONST_fight126 = "gracefully strikes at";
-const string CONST_fight125 = "jump kicks";
-const string CONST_fight124 = "strikes at";
-const string CONST_fight123 = "kicks";
-const string CONST_fight122 = "grapples with";
-const string CONST_fight121 = "swings at";
-const string CONST_fight120 = "punches";
-const string CONST_fight152 = " BLOWING IT OFF!";
-const string CONST_fight151 = " CUTTING IT OFF!";
-const string CONST_fight150 = " BLOWING IT IN HALF!";
-const string CONST_fight149 = " BLOWING IT APART!";
-const string CONST_fight148 = " CUTTING IT IN HALF!";
+const string CONST_GRACEFULLY_STRIKES_AT = "gracefully strikes at";
+const string CONST_JUMP_KICKS = "jump kicks";
+const string CONST_STRIKES_AT = "strikes at";
+const string CONST_KICKS = "kicks";
+const string CONST_GRAPPLES_WITH = "grapples with";
+const string CONST_SWINGS_AT = "swings at";
+const string CONST_PUNCHES = "punches";
+const string CONST_BLOWING_IT_OFF = " BLOWING IT OFF!";
+const string CONST_CUTTING_IT_OFF = " CUTTING IT OFF!";
+const string CONST_BLOWING_IT_IN_HALF = " BLOWING IT IN HALF!";
+const string CONST_BLOWING_IT_APART = " BLOWING IT APART!";
+const string CONST_CUTTING_IN_HALF = " CUTTING IT IN HALF!";
 const string MISSING_TEETH = "Missing Teeth";
 const string NO_TEETH = "No Teeth";
 const string NO_TONGUE = "No Tongue";
@@ -833,12 +802,10 @@ const string CONST_X_MID_ = ".mid:  ";
 const string CONST_MID = ".mid";
 const string CONST_X_OGG_COLON = ".ogg:  ";
 const string CONST_X_OGG = ".ogg";
-const string CONST_miscB021 = "/";
+const string CONST_SLASH = "/";
 const string CONST_MID_AS_MIDI_FALLBACK = ".mid as MIDI fallback)";
 const string CONST_1234567890 = "1234567890-";
 const string CONST_SDL_MIXER_FUNCTION_MIX_PLAYMUSIC_FAILED = "SDL_mixer function Mix_PlayMusic() failed:  ";
-const string CONST_misc017 = "Pastorale";
-const string CONST_misc016 = "Mars";
 const string CONST_OGG_VORBIS_SUPPORT_FAILED_TO_LOAD_MIDI_MUSIC_WILL_BE_USED_INSTEAD_IF_POSSIBLE = "Ogg Vorbis support failed to load. MIDI music will be used instead if possible.";
 const string CONST_UNABLE_TO_INITIALIZE_SDL_MIXER = "Unable to initialize SDL_mixer:  ";
 const string CONST_UNABLE_TO_INITIALIZE_SDL = "Unable to initialize SDL:  ";
@@ -872,5 +839,3 @@ map<int, vector<string> > SchoolTypes = {
 	map<int,  vector<string> >::value_type(3, university),
 };
 
-#endif	//MISC_CPP
-#endif // INCLUDES_H_INCLUDED

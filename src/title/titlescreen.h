@@ -1,6 +1,4 @@
-#ifndef TITLESCREEN_H
-#define TITLESCREEN_H0
-
+#pragma once
 class title_screen {
 
 private:
@@ -23,6 +21,3 @@ public:
  titlescreen.cpp
 */
 //void mode_title();
-
-
-#endif //TITLESCREEN_H 

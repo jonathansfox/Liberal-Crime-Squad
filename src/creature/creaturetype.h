@@ -1,6 +1,4 @@
-#ifndef CREATURE_TYPE_H
-#define CREATURE_TYPE_H0
-
+#pragma once
 class CreatureType
 {
 public:
@@ -72,4 +70,4 @@ const CreatureType* getcreaturetype(short crtype);
 // It isn't part of the CreatureType class or creaturetype.cpp file, it's implemented elsewhere.
 /* transforms a creature type name into a pointer to that creature type */
 const CreatureType* getcreaturetype(const std::string& crtype);
-#endif //CREATURE_TYPE_H
+

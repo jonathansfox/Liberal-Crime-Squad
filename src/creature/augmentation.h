@@ -1,8 +1,6 @@
 
 
-
-#ifndef AUGMENTATION_H
-#define AUGMENTATION_H0
+#pragma once
 enum Augmentations
 {
 	AUGMENTATION_HEAD,
@@ -28,4 +26,3 @@ public:
 	static std::string get_name(int augmentation_type);
 	//static int get_associated_attribute(int augmentation_type);
 };
-#endif

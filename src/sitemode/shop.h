@@ -1,5 +1,4 @@
-#ifndef SHOP_H
-#define SHOP_H0
+#pragma once
 class Shop;
 class ShopOption
 {
@@ -94,4 +93,3 @@ private:
 		//Item* make_item() const;
 	};
 };
-#endif //SHOP_H

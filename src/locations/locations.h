@@ -1,5 +1,4 @@
-#ifndef LOCATIONS_H_INCLUDED
-#define LOCATIONS_H_INCLUDED0
+#pragma once
 //#include "common.h"
 #include "locationsEnums.h"
 
@@ -167,4 +166,4 @@ inline int find_hospital(int site_index) { return find_site_index_in_same_city(S
 inline int find_hospital(const DeprecatedCreature& cr) { return find_hospital(cr.location); }
 /* sets up the list of locations */
 void make_world(const bool hasmaps);
-#endif //LOCATIONS_H_INCLUDED
+

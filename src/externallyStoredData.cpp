@@ -141,7 +141,6 @@ bool initialize_more_incomplete_txt() {
 	   ActivityAndString(ACTIVITY_STUDY_WEAVING, CONST_WEAVING),
 	   ActivityAndString(ACTIVITY_STUDY_RELIGION, CONST_X_RELIGION),
 	   //, ActivityAndString(ACTIVITY_STUDY_MAGIC, CONST_MAGIC)
-	   // new for 4.12.6
 	   ActivityAndString(ACTIVITY_STUDY_CLUB,	CONST_BASEBALL),
 	   ActivityAndString(ACTIVITY_STUDY_STREETSENSE,	CONST_POLICE_PROCEDURE),
 	   ActivityAndString(ACTIVITY_STUDY_THROWING,	CONST_BASKETBALL),
@@ -589,7 +588,7 @@ bool initialize_more_incomplete_txt() {
 		map<short, string>::value_type(LAW_GUNCONTROL, CONST_X_GUN_CONTROL),
 		map<short, string>::value_type(LAW_TAX, CONST_TAX_STRUCTURE), // a.k.a. CONST_TAX_LAW
 		map<short, string>::value_type(LAW_WOMEN, CONST_X_WOMENS_RIGHTS),
-		map<short, string>::value_type(LAW_CIVILRIGHTS, CONST_externallyStoredData673),
+		map<short, string>::value_type(LAW_CIVILRIGHTS, CONST_CC_CIVIL_RIGHTS),
 		map<short, string>::value_type(LAW_DRUGS, CONST_DRUG_LAWS), // a.k.a. CONST_DRUG_LAW
 		map<short, string>::value_type(LAW_IMMIGRATION, CONST_X_IMMIGRATION),
 		map<short, string>::value_type(LAW_ELECTIONS, CONST_ELECTION_REFORM),

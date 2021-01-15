@@ -1,6 +1,4 @@
-#ifndef POLITICS_H
-#define POLITICS_H0
-
+#pragma once
 
 /*
  politics.cpp
@@ -35,4 +33,3 @@ int publicinterest(int i);
  * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
 bool stalinview(short view, bool islaw);
 
-#endif // POLITICS_H 

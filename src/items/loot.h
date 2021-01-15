@@ -1,5 +1,4 @@
-#ifndef LOOT_H
-#define LOOT_H0
+#pragma once
 class Loot : public Item
 {
 public:
@@ -19,4 +18,3 @@ public:
 	bool is_cloth() const;
 private:
 };
-#endif //LOOT_H

@@ -1,5 +1,4 @@
-#ifndef ARMORTYPE_H
-#define ARMORTYPE_H0
+#pragma once
 class ArmorType : public ItemType
 {
 public:
@@ -79,4 +78,3 @@ private:
 	int quality_levels_;
 	int durability_;
 };
-#endif //ARMORTYPE_H

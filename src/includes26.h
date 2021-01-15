@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -64,7 +33,7 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 //#include "includesDeprecatedB.h"
-#ifdef	LCSIO_CPP
+//#ifdef	LCSIO_CPP
 // lcsio.cpp
 
 #include <tinydir.h>
@@ -72,9 +41,9 @@ extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 const string NEWSPIC_CPC = "newspic.cpc";
 const string CONST_DAT = ".dat";
-const string CONST_lcsio013 = ".";
+const string CONST_DOT = ".";
 const string CONST_LCS = ".lcs/";
-const string CONST_lcsio011 = "/";
+const string CONST_SLASH = "/";
 const string DOT_SLASH = "./";
 const string CONST_HOME = "HOME";
 const string CONST_X_PARENT_ART_FOLDER = "../art/";
@@ -86,5 +55,5 @@ const string CONST_USR_LOCAL_SHARE_LCS_ART = "/usr/local/share/lcs/art/";
 const string CONST_LCS_ART = "/lcs/art/";
 const string CONST_SCORE = "score";
 
-#endif	//LCSIO_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//LCSIO_CPP
+//#endif// INCLUDES_H_INCLUDED

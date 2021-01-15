@@ -1,5 +1,4 @@
-#ifndef ITEM_H
-#define ITEM_H0
+#pragma once
 /*enum thisItemIs {
 	THIS_IS_WEAPON,
 	THIS_IS_ARMOR,
@@ -57,4 +56,3 @@ private:
 	string itemtypename_;
 	long itemtypeid_;
 };
-#endif //ITEM_H

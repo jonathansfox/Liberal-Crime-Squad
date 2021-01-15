@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -67,7 +36,7 @@ using namespace std;
 #include "includesSDS.h"
 #include "includesSDS2.h"
 //#include "includesDeprecatedB.h"
-#ifdef	CREATURENAMES_CPP
+//#ifdef	CREATURENAMES_CPP
 // creaturenames.cpp
 
 const string ARCHCONSERVATIVE_LAST_NAMES_TXT = "archconservative_last_names.txt";
@@ -77,8 +46,8 @@ const string GENDER_NEUTRAL_FIRST_NAMES_TXT = "gender_neutral_first_names.txt";
 const string FEMALE_FIRST_NAMES_TXT = "female_first_names.txt";
 const string MALE_FIRST_NAMES_TXT = "male_first_names.txt";
 const string names = "names\\";
-#endif	//CREATURENAMES_CPP
-#ifdef	GLOBALS_CPP
+//#endif//CREATURENAMES_CPP
+//#ifdef	GLOBALS_CPP
 // globals.cpp
 
 #include "creature/creature.h"
@@ -156,7 +125,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 
 const string hasRecruited = " has recruited a new ";
 const string looksForwardToServing = " looks forward serving the Liberal cause!";
-const string CONST_game012 = "We need a slogan!";
+const string CONST_WE_NEED_A_SLOGAN = "We need a slogan!";
 const string tag_WEAPON_FLAMETHROWER = "WEAPON_FLAMETHROWER";
 const string tag_WEAPON_DESERT_EAGLE = "WEAPON_DESERT_EAGLE";
 const string CONST_X_DEFENSE = " Defense";
@@ -176,5 +145,5 @@ const string tag_value = "value";
 const string tag_attribute = "attribute";
 const string tag_skill = "skill";
 
-#endif	//GLOBALS_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//GLOBALS_CPP
+//#endif// INCLUDES_H_INCLUDED

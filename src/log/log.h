@@ -17,7 +17,7 @@ This file is part of Liberal Crime Squad.
 	along with Liberal Crime Squad; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
-
+#pragma once
 // Next segment brutally riipped from includes.h
 // Right until "#include log/log.h>"
 /*******************************************************************************
@@ -26,8 +26,7 @@ This file is part of Liberal Crime Squad.
 *                             Folder: "log"
 *
 *******************************************************************************/
-#ifndef LOG_H
-#define LOG_H0
+
 //TODO: Make NEWLINEMODE_LOGFILES_DEFAULT, NEWLINEMODE_GAMELOG, and OVERWRITE_GAMELOG set by the cfg.
 //Whether or not it should autonewline logfiles by defualt.
 const int  NEWLINEMODE_LOGFILES_DEFAULT = 1;
@@ -164,5 +163,3 @@ public:
 	// read-only access to private member variable logged_since_last_message
 	bool hasMessage() { return logged_since_last_message; }
 };
-//#endif //LOG_H_INCLUDED
-#endif

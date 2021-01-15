@@ -1,5 +1,4 @@
-#ifndef CLIP_H
-#define CLIP_H0
+#pragma once
 class Clip : public Item
 {
 public:
@@ -17,4 +16,3 @@ public:
 	int get_ammoamount() const;
 private:
 };
-#endif //CLIP_H

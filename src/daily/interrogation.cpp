@@ -25,7 +25,7 @@ This file is part of Liberal Crime Squad.                                       
 void clear_interrogation_sidebar()
 {
 	for (int i = 4; i < 23; i++)
-		mvaddstrAlt(i, 40, CONST_interrogation038); // 34 spaces
+		mvaddstrAlt(i, 40, CONST_34_SPACES); // 34 spaces
 }
 // Shows the InterrogationST data at the right side of the screen
 void show_interrogation_sidebar(DeprecatedCreature * cr, DeprecatedCreature * a)
@@ -368,7 +368,7 @@ void getCreatureWorkplaceMaps(DeprecatedCreature* cr, int &y, const string aname
 	else
 	{
 		mvaddstrAlt(++y, 0, aname, gamelog);
-		addstrAlt(CONST_WAS_ABLE_TO_CREATE_A_MAP_OF_THE_SITE_WITH_THIS_INFORMATION, gamelog);
+		addstrAlt(WAS_ABLE_TO_CREATE_MAP, gamelog);
 	}
 	LocationsPool::getInstance().setLocationMappedAndUnhidden(cr->worklocation);
 
@@ -432,7 +432,7 @@ void interrogaterNotOutsmarted(DeprecatedCreature *cr, DeprecatedCreature *a, co
 		mvaddstrAlt(y++, 0, cr->getNameAndAlignment().name, gamelog);
 		addstrAlt(CONST_TURNS_THE_TABLES_ON, gamelog);
 		addstrAlt(a->getNameAndAlignment().name, gamelog);
-		addstrAlt(CONST_interrogation154, gamelog);
+		addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 		gamelog.newline();
 		//show_interrogation_sidebar(cr,a);
 		pressAnyKey();

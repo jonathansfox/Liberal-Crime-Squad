@@ -253,7 +253,7 @@ bool populate_from_txt(vector< vector<string> >& types, const string& fileName, 
 	std::ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		std::cout << failedToLoad + fileName + exclamationPoint << std::endl;
+		std::cout << failedToLoad + fileName + CONST_EXCLAMATION_POINT << std::endl;
 		pressAnyKey();
 	}
 	else {
@@ -294,7 +294,7 @@ bool populate_from_txt(vector<string> & types, const string& fileName)
 	std::ifstream txtFile;
 	txtFile.open(string(artdir) + fileName);
 	if (txtFile.fail()) {
-		std::cout << failedToLoad + fileName + exclamationPoint << std::endl;
+		std::cout << failedToLoad + fileName + CONST_EXCLAMATION_POINT << std::endl;
 		pressAnyKey();
 	}
 	else {
@@ -497,7 +497,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks, const string& file, Log&
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ //File is missing or not valid XML.
-		addstrAlt(failedToLoad + file + exclamationPoint, log);
+		addstrAlt(failedToLoad + file + CONST_EXCLAMATION_POINT, log);
 		pressAnyKey();
 		return false; //Abort.
 	}

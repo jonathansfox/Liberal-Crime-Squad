@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -69,7 +38,7 @@ std::string tostring(long i);
 #include "includesSDS.h"
 #include "includesSDS2.h"
 //#include "includesDeprecatedB.h"
-#ifdef	DATE_CPP
+//#ifdef	DATE_CPP
 // date.cpp
 
 const string CONST_S = "'s ";
@@ -121,7 +90,7 @@ const string AT_SPACE = " at ";
 const string DATES_TO_MANAGE = "dates to manage with ";
 const string A_HOT_DATE = "a hot date with ";
 const string A_H_O_T_DATE = "a \"hot\" date with ";
-const string CONST_date062 = " has ";
+const string CONST_S_HAS_S = " has ";
 const string IS_BACK_FROM_VACATION = " is back from vacation.";
 const string THE_RELATIONSHIP_IS_OVER = "This relationship is over.";
 const string CAN_SENSE_THAT_THINGS_ARENT_WORKING = " can sense that things just aren't working out.";
@@ -236,5 +205,5 @@ int getpoolcreature(int id);
 char completedate(Deprecateddatest &d, int p);
 void removesquadinfo(DeprecatedCreature &cr);
 char completevacation(Deprecateddatest &d, int p);
-#endif	//DATE_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//DATE_CPP
+//#endif// INCLUDES_H_INCLUDED

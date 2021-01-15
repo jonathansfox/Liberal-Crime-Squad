@@ -187,7 +187,7 @@ bool goodguyattack = false;
 		 strcat(str, pickrandom(judge_debate).c_str());
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.skill_roll(SKILL_LAW) +
 			 t.attribute_roll(ATTRIBUTE_HEART);
@@ -206,7 +206,7 @@ bool goodguyattack = false;
 		 }
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.skill_roll(SKILL_SCIENCE) +
 			 t.attribute_roll(ATTRIBUTE_HEART);
@@ -222,7 +222,7 @@ bool goodguyattack = false;
 			 strcat(str, pickrandom(other_politician_debate).c_str());
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.skill_roll(SKILL_LAW) +
 			 t.attribute_roll(ATTRIBUTE_HEART);
@@ -238,7 +238,7 @@ bool goodguyattack = false;
 			 strcat(str, pickrandom(other_ceo_debate).c_str());
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.skill_roll(SKILL_BUSINESS) +
 			 t.attribute_roll(ATTRIBUTE_HEART);
@@ -252,7 +252,7 @@ bool goodguyattack = false;
 		 strcat(str, pickrandom(media_debate).c_str());
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
 		 else
@@ -263,7 +263,7 @@ bool goodguyattack = false;
 		 strcat(str, pickrandom(military_debate).c_str());
 		 strcat(str, singleSpace.c_str());
 		 strcat(str, t.getNameAndAlignment().name.data());
-		 strcat(str, CONST_fight146.c_str());
+		 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 		 if (t.getCreatureHealth().align == 1)
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
 		 else
@@ -276,7 +276,7 @@ bool goodguyattack = false;
 			 strcat(str, pickrandom(police_debate).c_str());
 			 strcat(str, singleSpace.c_str());
 			 strcat(str, t.getNameAndAlignment().name.data());
-			 strcat(str, CONST_fight146.c_str());
+			 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 			 resist = t.attribute_roll(ATTRIBUTE_HEART);
 			 attack += a.skill_roll(SKILL_PERSUASION);
 			 break;
@@ -305,7 +305,7 @@ bool goodguyattack = false;
 			 }
 			 strcat(str, singleSpace.c_str());
 			 strcat(str, t.getNameAndAlignment().name.data());
-			 strcat(str, CONST_fight146.c_str());
+			 strcat(str, CONST_EXCLAMATION_POINT.c_str());
 			 attack = a.skill_roll(SKILL_MUSIC);
 			 if (t.getCreatureHealth().align == 1)
 				 resist = t.attribute_roll(ATTRIBUTE_HEART);
@@ -368,7 +368,7 @@ bool goodguyattack = false;
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
-					 addstrAlt(CONST_fight146, gamelog);
+					 addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 				 }
 				 else
 				 {
@@ -376,7 +376,7 @@ bool goodguyattack = false;
 					 t.stop_being_stunned();
 					 if (t.is_holding_body())
 						 freehostage(t, 0);
-					 addstrAlt(CONST_fight146, gamelog);
+					 addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 				 }
 				 for (int e = 0; e < ENCMAX; e++)
 				 {
@@ -793,7 +793,7 @@ bool goodguyattack = false;
 				 addstrAlt(CONST_SHIELDS, gamelog);
 				 addstrAlt(t.getNameAndAlignment().name, gamelog);
 				 if (!t.getCreatureHealth().alive) addstrAlt(CONST_S_CORPSE, gamelog);
-				 addstrAlt(CONST_fight146, gamelog);
+				 addstrAlt(CONST_EXCLAMATION_POINT, gamelog);
 				 gamelog.newline();
 				 addjuice(*target, 10, 1000);//Instant juice!! Way to take the bullet!!
 				 pressAnyKey();
@@ -1417,7 +1417,7 @@ bool goodguyattack = false;
 		 str += a.get_weapon().get_name(1);
 	 }
 
-	 str += CONST_fight146;
+	 str += CONST_EXCLAMATION_POINT;
 	 return str;
  }
  int driverAttackBonus(const DeprecatedCreature a) {

@@ -369,7 +369,7 @@ This file is part of Liberal Crime Squad.                                       
 	 eraseAlt();
 	 set_color_easy(WHITE_ON_BLACK_BRIGHT);
 	 mvaddstrAlt(0, 0, pool[p]->getNameAndAlignment().name, gamelog);
-	 addstrAlt(CONST_date062, gamelog);
+	 addstrAlt(CONST_S_HAS_S, gamelog);
 	 if (len(d.date) == 1)
 	 {
 		 if (pool[p]->clinic) addstrAlt(A_H_O_T_DATE, gamelog);

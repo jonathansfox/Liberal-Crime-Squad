@@ -1,5 +1,4 @@
-#ifndef VEHICLETYPE_H
-#define VEHICLETYPE_H0
+#pragma once
 enum carparts
 {
 	CARPART_BODY,
@@ -70,4 +69,3 @@ private:
 	int price_;
 	int sleeperprice_;
 };
-#endif

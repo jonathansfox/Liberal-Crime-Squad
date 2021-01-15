@@ -32,34 +32,6 @@
 * Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
-*
-* We can do the following:
-*
-* (a) Write alternative calls for the ports, keep Windows calls.
-* (b) Write portable alternatives for use by Windows and ports.
-* (c) Do (a) and (b) and decide what Windows does (API or portable)
-*     based on the value of a MACRO GO_PORTABLE.
-*
-* compat.cpp is the place for non-trivial or more global functions,
-*
-* History
-*
-* LiteralKa's changes:
-* 1) Added Window's mostly nonsensical custom type definitions.
-*
-* Changes for portability...
-* 1) For Visual C++ 6.0 don't use namespace std.
-* 2) MINGW32 had a name clash between the UNIX-like time() function and
-* the time variable used for WIN32. Changed time to ptime.
-*
-* Revision 1.3  2004/06/30 22:46:33  sadler
-* Moved itoa() from game into compat.cpp
-*
-* itoa() removed 2014/07/01 yetisyny
-* - it's unnecessary, use tostring() or toCstring() instead
-* - for exact same functionality as itoa(value,str,10) use strcpy(str,value)
-* - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with CONST_compat000
-* - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
 #include "../cursesAlternative.h"

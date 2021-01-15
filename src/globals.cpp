@@ -79,7 +79,7 @@ void newVehicle(Vehicle *startcar) {
 char showcarprefs = 1;
 siteblockst levelmap[MAPX][MAPY][MAPZ];
 chaseseqst chaseseq;
-string slogan_str = CONST_game012;
+string slogan_str = CONST_WE_NEED_A_SLOGAN;
 char slogan[SLOGAN_LEN] = "We need a slogan!";
 vector<Deprecatedsquadst *> squad;
 Deprecatedsquadst *activesquad = NULL;
@@ -192,7 +192,7 @@ bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
 	CMarkup xml;
 	if (!xml.Load(string(artdir) + file))
 	{ // File is missing or not valid XML.
-		addstrAlt(failedToLoad + file + exclamationPoint, log);
+		addstrAlt(failedToLoad + file + CONST_EXCLAMATION_POINT, log);
 		pressAnyKey();
 		// Will cause abort here or else if file is missing all unrecognized types
 		// loaded from a saved game will be deleted. Also, you probably don't want

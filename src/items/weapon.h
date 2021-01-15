@@ -1,5 +1,4 @@
-#ifndef WEAPON_H
-#define WEAPON_H0
+#pragma once
 class Weapon : public Item
 {
 public:
@@ -38,4 +37,3 @@ private:
 	string loaded_cliptype_;
 	int ammo_;
 };
-#endif //WEAPON_H

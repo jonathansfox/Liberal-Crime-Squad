@@ -11,41 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
-
+#include "includes.h"
 using namespace std;
 
 #include "includesDeprecated.h"
@@ -67,7 +35,7 @@ using namespace std;
 #include "includesSDS2.h"
 //#include "includesDeprecatedB.h"
 const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
-#ifdef	LOCATIONSPOOL_CPP
+//#ifdef	LOCATIONSPOOL_CPP
 // locationsPool.cpp
 
 #include "../creature/creature.h"
@@ -417,7 +385,7 @@ const string CONST_STRIP_DOWN = "strip down.";
 const string CONST_YOU_CAN_T_EQUIP_THAT = "You can't equip that.";
 const string CONST_PRESS_A_LETTER_TO_SELECT_AN_ITEM = "Press a letter to select an item.";
 const string CONST_X_X = "x";
-const string CONST_locationsPool079 = "/";
+const string CONST_SLASH = "/";
 const string CONST_SELECT_OBJECTS = "Select Objects";
 const string CONST_TO_VIEW_OTHER_BASE_PAGES = ",. to view other base pages.";
 const string CONST_SHIFT_AND_A_NUMBER_WILL_MOVE_ALL_ITEMS = "  Shift and a Number will move ALL items!";
@@ -428,7 +396,7 @@ const string CONST_NEW_LOCATION = "NEW LOCATION";
 const string CONST_ITEM_CURRENT_LOCATION = "컴컴ITEM컴컴컴컴컴컴컴컴CURRENT LOCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�";
 const string CONST_MOVING_EQUIPMENT = "Moving Equipment";
 const string CONST_EATING = " Eating";
-const string CONST_locationsPool115 = "s";
+const string CONST_S = "s";
 const string CONST_DAILY_RATION = " Daily Ration";
 const string CONST_NOT_ENOUGH_FOOD = "Not Enough Food";
 const string CONST_OF_FOOD_LEFT = " of Food Left";
@@ -481,7 +449,7 @@ const string CONST_W_REPAIR_THE_BUNKER_FORTIFICATIONS_2000 = "W - Repair the Bun
 const string CONST_X_IF_YOU_DO_NOT_ENTER_ANYTHING_THEIR_REAL_NAME_WILL_BE_USED = "If you do not enter anything, their real name will be used.";
 const string CONST_X_IN_ITS_PRESENCE = " in its presence?";
 const string CONST_X_WHAT_NAME_WILL_YOU_USE_FOR_THIS_ = "What name will you use for this ";
-const string CONST_locationsPool141 = "The Education of ";
+const string CONST_THE_EDUCATION_OF = "The Education of ";
 const string CONST_TEMPORARY_SQUAD = "Temporary Squad";
 const string tag_WEAPON_SPRAYCAN = "WEAPON_SPRAYCAN";
 
@@ -540,5 +508,3 @@ map<string, int>::value_type(tag_Brooklyn_ampersand_Queens, ENUM_tag_Brooklyn_am
 map<string, int>::value_type(tag_Long_Island, ENUM_tag_Long_Island),
 map<string, int>::value_type(tag_The_Bronx, ENUM_tag_The_Bronx)
 };
-#endif	//LOCATIONSPOOL_CPP
-#endif // INCLUDES_H_INCLUDED

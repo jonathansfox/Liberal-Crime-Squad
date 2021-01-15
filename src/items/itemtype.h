@@ -1,5 +1,4 @@
-#ifndef ITEM_TYPE_H
-#define ITEM_TYPE_H0
+#pragma once
 enum thisItemIs {
 	THIS_IS_WEAPON,
 	THIS_IS_ARMOR,
@@ -55,4 +54,3 @@ private:
 	long id_;
 	long fencevalue_;
 };
-#endif //ITEMTYPE_H

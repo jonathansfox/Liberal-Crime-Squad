@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -66,7 +35,7 @@ using namespace std;
 
 #include "includesSDS.h"
 //#include "includesDeprecatedB.h"
-#ifdef	ACTIVITIES_CPP
+//#ifdef	ACTIVITIES_CPP
 // activities.cpp
 
 #include "../creature/creature.h"
@@ -205,7 +174,7 @@ const string CONST_X_LITTLE_WHITESPACE = "    ";
 const string CONST_X_ENTER_DONE = "Enter - Done";
 const string CONST_X_LIBERAL_PERCENTAGE_POINTS = " Liberal percentage points.";
 const string CONST_X_RESULTS_ARE_PLUS_MINUS = "Results are +/- ";
-const string CONST_X_ISSUE_PUBLIC_INTEREST_HEADER = "XX% Issue 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횾ublic Interest";
+const string CONST_X_ISSUE_PUBLIC_INTEREST_HEADER = "XX% Issue 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴?ublic Interest";
 const string CONST_X_ADDITIONAL_FINDINGS = "Additional notable findings:";
 const string CONST_X_AMNESTY_FOR_IMMIGRANTS = "wanted amnesty for illegal immigrants";
 const string CONST_X_CONDEMN_IMMIGRATION_REGULATIONS = "condemned unnecessary immigration regulations";
@@ -364,5 +333,5 @@ const string CONST_X_QUALITY_0_TXT = "quality_0.txt";
 const string CONST_X_S_BODY = "'s body";
 const string CONST_X_BURYING_ = "burying ";
 
-#endif	//ACTIVITIES_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//ACTIVITIES_CPP
+//#endif// INCLUDES_H_INCLUDED

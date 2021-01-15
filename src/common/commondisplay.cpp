@@ -103,19 +103,19 @@ string perfectlyHealthy(const int align, const int animalgloss, const char smll)
 	{
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		if (smll)return (CONSRVTV);
-		else return (CONST_commondisplay043);
+		else return (CONST_X_CONSERVATIVE);
 	}
 	else if (align == 0)
 	{
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		return (CONST_commondisplay044);
+		return (CONST_X_MODERATE);
 	}
 	else
 	{
 		set_color_easy(GREEN_ON_BLACK_BRIGHT);
 		if (animalgloss == ANIMALGLOSS_ANIMAL)
 			return (CONST_X_ANIMAL);
-		else return (CONST_commondisplay116);
+		else return (CONST_X_LIBERAL);
 	}
 }
 string bleedingOut(const int alive, const int blood, const char smll) {
@@ -357,7 +357,7 @@ void printWounds(DeprecatedCreature *cr) {
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				if (cr->getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL)
 					addstrAlt(CONST_X_ANIMAL);
-				else addstrAlt(CONST_commondisplay116);
+				else addstrAlt(CONST_X_LIBERAL);
 			}
 			if (cr->getCreatureHealth().wound[w] & WOUND_SHOT) { addstrAlt(CONST_X_SHT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
 			if (cr->getCreatureHealth().wound[w] & WOUND_BRUISED) { addstrAlt(CONST_X_BRS); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
@@ -672,7 +672,7 @@ void printwoundstat(CreatureHealth cr, int y, int x)
 				set_color_easy(GREEN_ON_BLACK_BRIGHT);
 				if (cr.animalgloss == ANIMALGLOSS_ANIMAL)
 					addstrAlt(CONST_X_ANIMAL);
-				else addstrAlt(CONST_commondisplay116);
+				else addstrAlt(CONST_X_LIBERAL);
 			}
 			if (cr.wound[w] & WOUND_SHOT) { addstrAlt(CONST_X_SHOT); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }
 			if (cr.wound[w] & WOUND_BRUISED) { addstrAlt(BRUISED); sum--; if (sum > 0)addstrAlt(CONST_X_SINGLE_COMMA); }

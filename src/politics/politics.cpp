@@ -969,7 +969,7 @@ vector<string> corporateSuffix;
 	 }
 	 if (canseethings)
 	 {
-		 printCONSTpolitics080();
+		 printPressKeyToWatch();
 		 pressAnyKey();
 	 }
 	 for (int c = 0; c < cnum; c++)

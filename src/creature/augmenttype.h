@@ -1,5 +1,4 @@
-#ifndef AUGMENT_TYPE_H
-#define AUGMENT_TYPE_H0
+#pragma once
 class AugmentType {
 public:
 	explicit AugmentType(const std::string& xmlstring);
@@ -29,4 +28,3 @@ private:
 	int difficulty_;
 	std::string description_;
 };
-#endif

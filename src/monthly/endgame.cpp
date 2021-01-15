@@ -224,10 +224,10 @@ void tossjustices(char canseethings)
 			mvaddstrAlt(y++, 0, courtname[j]);
 		}
 		mvaddstrAlt(y + 1, 5, CONST_IN_PARTICULAR_THE_AFOREMENTIONED_FORMER_CITIZEN);
-		if (tossnum != 1)addstrAlt(CONST_endgame028);
+		if (tossnum != 1)addstrAlt(CONST_S);
 		addstrAlt(CONST_MAY);
 		mvaddstrAlt(y + 2, 0, CONST_NOT_SERVE_ON_THE_SUPREME_COURT_SAID_FORMER_CITIZEN);
-		if (tossnum != 1)addstrAlt(CONST_endgame028);
+		if (tossnum != 1)addstrAlt(CONST_S);
 		addstrAlt(CONST_WILL);
 		mvaddstrAlt(y + 3, 0, CONST_BE_DEPORTED_TO);
 		if (tossnum != 1)addstrAlt(CONST_CONSERVATIVE_COUNTRIES);

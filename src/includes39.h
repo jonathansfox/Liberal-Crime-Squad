@@ -11,40 +11,9 @@
 
 	All code released under GNU GPL.
 */
-#ifndef INCLUDES_H_INCLUDED
-#define INCLUDES_H_INCLUDED0
-constexpr auto __USE_MINGW_ANSI_STDIO = 0;
-#include <windows.h>
-#include <io.h> //needed for unlink()
-#include <direct.h>
-#include <ciso646> // alternate keywords included in the ISO C++ standard
-// but not directly supported by Microsoft Visual Studio C++
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <time.h>
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <queue>
-#include <math.h>
-#include <cstring>
-#include "cmarkup/Markup.h" //For XML.
-#include <locale.h>
-
-#include <mbctype.h>
-
-
-
-
-#include <string.h>
+#include "includes.h"
 
 using namespace std;
 
@@ -65,7 +34,7 @@ const int RNG_SIZE = 4;  // needed for locations.h
 //int get_associated_attribute(int skill_type);
 
 #include "includesDeprecatedB.h"
-#ifdef	EXTERNALLYSTOREDDATA_CPP
+//#ifdef	EXTERNALLYSTOREDDATA_CPP
 // externallyStoredData.cpp
 
 const string talky = "talk\\";
@@ -204,7 +173,7 @@ const string CONST_MILITARY_SPENDING = "Military Spending";
 const string CONST_ELECTION_REFORM = "Election Reform";
 const string CONST_X_IMMIGRATION = "Immigration";
 const string CONST_DRUG_LAWS = "Drug Laws";
-const string CONST_externallyStoredData673 = "Civil Rights";
+const string CONST_CC_CIVIL_RIGHTS = "Civil Rights";
 const string CONST_X_WOMENS_RIGHTS = "Women's Rights";
 const string CONST_TAX_STRUCTURE = "Tax Structure";
 const string CONST_X_GUN_CONTROL = "Gun Control";
@@ -1475,5 +1444,5 @@ vector<file_and_text_collection> externally_stored_data_text_file_collection = {
 	customText(&helpTopicUnprocessed, CONST_HELPTOPICS_TXT),
 };
 bool initialize_more_incomplete_txt();
-#endif	//EXTERNALLYSTOREDDATA_CPP
-#endif // INCLUDES_H_INCLUDED
+//#endif//EXTERNALLYSTOREDDATA_CPP
+//#endif// INCLUDES_H_INCLUDED

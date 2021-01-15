@@ -1,5 +1,3 @@
-#ifndef VEHICLE_H
-#define VEHICLE_H0
 // These 2 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
 // They're just needed by this header and implemented elsewhere.
 
@@ -60,7 +58,7 @@ public:
 	static long curcarid;
 };
 
-
+#pragma once
 struct chaseseqst
 {
 	long location;
@@ -68,6 +66,3 @@ struct chaseseqst
 	char canpullover;
 	void clean() { delete_and_clear(enemycar); friendcar.clear(); }
 };
-
-
-#endif

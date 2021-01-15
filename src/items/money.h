@@ -1,5 +1,4 @@
-#ifndef MONEY_H
-#define MONEY_H0
+#pragma once
 class Money : public Item
 {
 public:
@@ -22,4 +21,3 @@ public:
 private:
 	long amount_;
 };
-#endif //MONEY_H

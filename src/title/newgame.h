@@ -1,6 +1,4 @@
-#ifndef NEWGAME_H
-#define NEWGAME_H0
-
+#pragma once
 
 /*
  newgame.cpp
@@ -10,5 +8,3 @@ void setup_newgame();
 /* creates your founder */
 void makecharacter();
 
-
-#endif // NEWGAME_H 

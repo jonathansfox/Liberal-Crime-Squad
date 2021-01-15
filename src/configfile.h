@@ -1,5 +1,4 @@
-#ifndef CONFIG_FILE_H
-#define CONFIG_FILE_H0
+#pragma once
 // OBJECTIVE: SUPPORT TAB-SEPARATED CONFIGURATION FILES
 //   TO MAKE LCS CONTENT HIGHLY MODDABLE AND DATA-DRIVEN,
 //   INCLUDING EQUIPMENT, LOCATIONS, MAPS, CREATURES,
@@ -89,4 +88,3 @@ int readLine(std::ifstream& file, std::string& command, std::string& value);
 configurable* createObject(const std::string& objectType);
 // Reads in an entire map; returns true if and only if the read was successful
 bool readMap(const std::string& filename);
-#endif

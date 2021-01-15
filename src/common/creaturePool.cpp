@@ -339,7 +339,7 @@ LOOP_CONTINUATION increment_completerecruitmeeting(const int p, Deprecatedrecrui
 			addstrAlt(pool[p]->getNameAndAlignment().name, gamelog);
 			addstrAlt(S_ARGUMENTS, gamelog);
 			gamelog.newline();
-			mvaddstrAlt(y++, 0, THEYLL_MEET_AGAIN_MAYBE, gamelog);
+			mvaddstrAlt(y++, 0, THEYLL_MEET_AGAIN_TOMORROW, gamelog);
 			gamelog.nextMessage();
 		}
 		else

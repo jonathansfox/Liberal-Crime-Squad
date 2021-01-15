@@ -1,5 +1,4 @@
-#ifndef ARMOR_H
-#define ARMOR_H0
+#pragma once
 class Armor : public Item
 {
 public:
@@ -58,4 +57,3 @@ private:
 	bool damaged_;
 	int quality_;
 };
-#endif //ARMOR_H

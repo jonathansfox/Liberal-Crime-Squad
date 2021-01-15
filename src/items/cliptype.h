@@ -1,5 +1,4 @@
-#ifndef CLIP_TYPE_H
-#define CLIP_TYPE_H0
+#pragma once
 class ClipType : public ItemType
 {
 public:
@@ -9,4 +8,3 @@ public:
 private:
 	int ammo_;
 };
-#endif //CLIP_TYPE_H

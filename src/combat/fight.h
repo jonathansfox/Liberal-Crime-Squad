@@ -1,6 +1,4 @@
-#ifndef FIGHT_H
-#define FIGHT_H0
-
+#pragma once
 /* attack handling for each side as a whole */
 void youattack();
 void enemyattack();
@@ -8,4 +6,3 @@ void enemyattack();
 void delenc(short e, char loot);
 /* pushes people into the current squad (used in a siege) */
 void autopromote(int loc);
-#endif
