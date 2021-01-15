@@ -160,30 +160,9 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
-enum LCSIO_FLAGS
-{
-	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
-	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
-};
-FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
-bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
-void LCSCloseFile(FILE* handle);
-void LCSCloseFileCPP(std::fstream &file);
-void LCSDeleteFile(const char* filename, int flags);
-void LCSRenameFile(const char* old_filename, const char* new_filename, int flags);
-//returns a list of all files in homedir with extension .dat
-vector<string> LCSSaveFiles();
-
-void pause_ms(int t);
-void alarmset(int t);
-void alarmwait();
 #define CH_USE_CP437
 
 
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
 
 
 const int TAB = 9;

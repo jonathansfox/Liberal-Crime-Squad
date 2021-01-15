@@ -1,6 +1,5 @@
 
-#define	POLITICS_CPP
-#include "../includes16.h"
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -27,6 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include "../includes16.h"
+#include <algorithm>
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;
  vector<file_and_text_collection> politics_text_file_collection = {

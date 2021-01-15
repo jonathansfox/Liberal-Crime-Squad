@@ -1,6 +1,5 @@
 
 
-#define	NEWS_CPP
 #include "../includes17.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //

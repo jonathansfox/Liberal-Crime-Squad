@@ -1,5 +1,4 @@
 
-#define MISC_CPP
 #include "../includes55.h"
 void sexdesc(char *str)
 {

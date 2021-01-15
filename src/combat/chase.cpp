@@ -1,7 +1,6 @@
 
 
-#define	CHASE_CPP
-#include "../includes63.h"
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -27,6 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include "../includes63.h"
+#include <algorithm>
 void fillEncounter(CreatureTypes c, int numleft) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	for (int e = 0; e < ENCMAX; e++)

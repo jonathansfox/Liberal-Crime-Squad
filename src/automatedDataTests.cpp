@@ -1,6 +1,6 @@
 
 
-#define	AUTOMATEDDATATESTS_CPP
+
 #include "includes70.h"
 // CREATURENUM = 106
 void addCigarbar(int creaturearray[106]) {

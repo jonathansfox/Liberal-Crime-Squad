@@ -1,5 +1,4 @@
 
-#define	HIGHSCORE_CPP
 #include "../includes06.h"
 #include "../includesDeprecatedB.h"
 /*

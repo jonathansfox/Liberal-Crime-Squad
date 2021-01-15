@@ -1,7 +1,9 @@
 
 
-#define	CREATURETYPE_CPP
+
 #include "../includes48.h"
+#include <algorithm>
+
 Weapon& DeprecatedCreature::weapon_none()
 {
 	static Weapon unarmed(*weapontype[getweapontype(tag_WEAPON_NONE)]);

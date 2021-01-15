@@ -1,6 +1,6 @@
 
 
-#define	ITEM_CPP
+
 #include "../includes33.h"
 
 #include "../creature/creatureEnums.h"

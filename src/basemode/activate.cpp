@@ -54,9 +54,9 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 
-#define	ACTIVATE_CPP
-#include "../includes69.h"
 
+#include "../includes69.h"
+#include <algorithm>
 
 Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {
 	for (CreatureTypes type : ACTIVITY_TEACH_FIGHTING_DEFAULT) {

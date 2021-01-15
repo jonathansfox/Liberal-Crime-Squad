@@ -1,6 +1,6 @@
 
-#define	SIEGE_CPP
-#include "../includes40.h"
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -51,6 +51,8 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include "../includes40.h"
+#include <algorithm>
 void statebrokenlaws(int loc)
 {
 	music.play(MUSIC_SIEGE);

@@ -80,25 +80,14 @@ void fnvHash(unsigned long &fnv_hash, unsigned long num)
 unsigned long getSeed()
 {
 	unsigned long _seed = 2166136261UL; // start out at the FNV-1a hash's 32-bit offset basis
-#ifdef GO_PORTABLE // we have access to time.h's functions as entropy sources
-	fnvHash(_seed, time(NULL)); /* Seconds since 1970-01-01 00:00:00 */
-	fnvHash(_seed, clock()); /* clock ticks since LCS was launched (clock ticks are some fraction of a second that varies on different implementations) */
-#endif // GO_PORTABLE
-#ifdef WIN32 // We're on Windows and can use the Win32 API as entropy sources
+// We're on Windows and can use the Win32 API as entropy sources
 	fnvHash(_seed, GetTickCount()); /* ms since system boot */
 	fnvHash(_seed, GetCurrentProcessId()); /* process ID for current process */
 	SYSTEM_INFO info; /* a whole bunch of system info */
 	GetSystemInfo(&info); /* get the system info */
 	fnvHash(_seed, (unsigned long)info.lpMinimumApplicationAddress); /* pointer to minimum accessible memory location */
 	fnvHash(_seed, (unsigned long)info.lpMaximumApplicationAddress); /* pointer to maximum accessible memory location */
-#else // we're on a POSIX system and can use POSIX API entropy sources
-#if defined(_SC_AVPHYS_PAGES) && defined(_SC_PAGESIZE) // might or might not be defined... optional in POSIX
-	fnvHash(_seed, sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE)); /* current available memory */
-#endif // defined(_SC_AVPHYS_PAGES) && defined(_SC_PAGESIZE)
-#ifdef _SC_NPROCESSORS_ONLN // might or might not be defined... optional in POSIX
-	fnvHash(_seed, sysconf(_SC_NPROCESSORS_ONLN));
-#endif // _SC_NPROCESSORS_ONLN
-#endif // WIN32
+
 	return _seed;
 }
 // Return a random number from 1 to 0xffffffff (any 32-bit integer except 0), using all of seed[].

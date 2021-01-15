@@ -1,5 +1,4 @@
 
-#define HELP_CPP
 #include "../includes56.h"
 
 #include "../cursesAlternative.h"

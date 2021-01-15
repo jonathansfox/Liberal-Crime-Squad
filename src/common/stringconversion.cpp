@@ -1,6 +1,9 @@
 
-#define	STRINGCONVERSION_CPP
+
 #include "../includes54.h"
+#include <sstream>
+#include <algorithm>
+
 
 std::string tostring(long i)
 {

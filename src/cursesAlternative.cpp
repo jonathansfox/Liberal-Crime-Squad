@@ -1,5 +1,5 @@
-#define CURSES_ALTERNATIVE
 #include "includes47.h"
+#include <mbctype.h>
 #include <gui_constants.h>
 
 Log gamelog; //The gamelog.
@@ -18,9 +18,6 @@ int checkkey();
 /* Variant of checkkey() that doesn't make all letters lowercase */
 // UNUSED
 int checkkey_cap();
-#ifdef CH_USE_UNICODE
-bool setup_unicode();
-#endif
 void set_title(char *c);
 void init_console();
 #include <common\\consolesupport.h>
@@ -5910,14 +5907,9 @@ by copying code from game.cpp.
 To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
-#define CONSOLE_SUPPORT // define this BEFORE including anything
+//#define CONSOLE_SUPPORT // define this BEFORE including anything
 
 void    PDC_set_titleAlt(const char *ch);
-#if defined(USE_NCURSES)
-#include <term.h>
-#elif defined(USE_NCURSES_W)
-#include <ncursesw/term.h>
-#endif
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
 void translategetch(int &c)
 {
@@ -5991,105 +5983,20 @@ void translategetch_cap(int &c)
 	if(c==5)c='6';
 	*/
 }
-#ifdef CH_USE_UNICODE
-bool unicode_enabled = false;
-bool setup_unicode() {
-#ifdef WIN32
-#ifdef PDC_WIDE
-	unicode_enabled = true; // We're using a version of PDCurses with UTF-8 support (e.g. from pdc34dllu.zip)
-#else
-	unicode_enabled = false; // We're using a version of PDCurses without UTF-8 support (e.g. from pdc34dllw.zip)
-#endif
-#else
-	// Is it a UTF-8 locale?
-	unicode_enabled = !strcmp(nl_langinfo(CODESET), CONST_UTF_8);
-#endif
-	return unicode_enabled;
-}
-int lookup_unicode_hack(int c) {
-	for (int i = 0; i < len(unicode_hacks); i++)
-		if (unicode_hacks[i].unicode_char == c)
-			return unicode_hacks[i].hack_char;
-	return '?';
-}
-#endif
-#ifndef CH_USE_CP437
-// This function's for both UTF-8 and the ASCII hack (only disabled in pure CP437 mode)
-int addch_unicode(int c) {
-#ifdef CH_USE_UNICODE
-	// This part here is for Unicode only, not the ASCII hack
-	wchar_t wch;
-	cchar_t cch;
-	if (unicode_enabled) {
-		// We can do this because we've already verified
-		// that __STDC_ISO_10646__ is set.
-		wch = c;
-		setcchar(&cch, &wch, 0, 0, NULL);
-		return add_wch(&cch);
-	}
-	else {
-		c = lookup_unicode_hack(c);
-#endif
-		// Now this code will run on both Unicode AND the ASCII hack
-		if (c&A_REVERSE)
-		{  // we need to reverse the colors
-			c &= ~A_REVERSE; // unset A_REVERSE for the character, curses does it wrong
-			set_color(curBackground, curForeground, isBlinking, isBright); // reverse colors
-			int ret = addch(c); // add the character
-			set_color(curBackground, curForeground, isBlinking, isBright); // reverse them back again
-			return ret; // done
-		} // don't need to reverse colors, just add the character
-		else return addch(c);
-#ifdef CH_USE_UNICODE
-	}
-#endif
-}
-#endif
 void set_title(char *s)
 {
-#ifdef NCURSES
-	if (tgetflag(CONST_HS))
-	{ // terminal has status line support
-		char buf[255] = { 0 };
-		char *p = buf; // tgetstr modifies its second argument, let buf keep pointing to the beginning
-		char *ok; // tgetstr's return value is apparently undocumented, except that it's NULL on errors
-		ok = tgetstr(CONST_TSL, &p); // TO_STATUS_LINE
-		if (!ok) return;
-		strcpy(p - 1, s); // tgetstr leaves us *after* the null, so skip back a bit
-		p += len(s) - 1; // same here
-		ok = tgetstr(CONST_FSL, &p); // FROM_STATUS_LINE
-		if (!ok) return;
-		putp(buf);
-	}
-#else // assume pdcurses
 	PDC_set_titleAlt(s);
-#endif
 }
 // Initialize the console, depending on the OS and language/code page settings
 void init_console()
 {
-#ifdef WIN32
 	// This has to be set to Code Page 437 in Windows regardless of Unicode, that's just how PDCurses works on Windows, even the UTF-8 version of PDCurses
 	SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output, regardless of anything else
 	SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input, regardless of anything else
 	setlocale(LC_ALL, ENGLISH_UNITED_437.c_str());
 	_setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page
-#else // WIN32
-#ifdef CH_USE_UNICODE
-	setlocale(LC_ALL, EN_US_UTF_8.c_str()); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
-#endif
-#ifdef CH_USE_CP437
-	setlocale(LC_ALL, EN_US_CP437.c_str());
-#endif
-#ifdef CH_USE_ASCII_HACK
-	setlocale(LC_ALL, EN_US_CP437.c_str());
-#endif
-#endif // WIN32
-#ifdef CH_USE_UNICODE
-	setup_unicode();
-#endif
+
 }
-#ifdef WIN32
 BOOL FontSmoothingEnabled;
 UINT TypeOfFontSmoothing;
 void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
@@ -6137,7 +6044,6 @@ void end_cleartype_fix() // execute this function after the user is done playing
 		LCSDeleteFile(CLEARTYPE_DAT.c_str(), LCSIO_PRE_HOME);
 	}
 }
-#endif
 // STEALTH_CPP
 void printShoutsForHelp(const string ename, const int ealign) {
 	clearmessagearea();
@@ -6992,7 +6898,6 @@ void printINeedThisMuchRent(const string tkname, const int rent) {
 	gamelog.newline();
 }
 void printPutSomeDamnClothesOn(const string tkname) {
-	//const string unnamed_String_Talk_cpp_026 = "\"Put some clothes on before I call the cops.\"";
 	printRespondantName(tkname);
 	set_color_easy(CYAN_ON_BLACK_BRIGHT);
 	mvaddstrAlt(13, 1, CONST_PUT_SOME_CLOTHES_ON_BEFORE_I_CALL_THE_COPS, gamelog);

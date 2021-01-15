@@ -1,7 +1,7 @@
 
 
-#define	INTERROGATION_CPP
-#include "../includes42.h"
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -22,6 +22,8 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 // Clear sidebar
+#include "../includes42.h"
+#include <algorithm>
 void clear_interrogation_sidebar()
 {
 	for (int i = 4; i < 23; i++)

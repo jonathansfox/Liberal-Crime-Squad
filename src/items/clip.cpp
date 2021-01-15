@@ -1,5 +1,5 @@
 
-#define	CLIP_CPP
+
 #include "../includes34.h"
 
 

@@ -1,6 +1,6 @@
-#define	BASEMODE_CPP
-#include "../includes66.h"
 
+#include "../includes66.h"
+#include <algorithm>
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //

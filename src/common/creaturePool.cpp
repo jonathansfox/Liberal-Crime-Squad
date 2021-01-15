@@ -1,7 +1,8 @@
 
 
-#define	CREATUREPOOL_CPP
+
 #include "../includes58.h"
+#include <algorithm>
 
 vector<DeprecatedCreature *> pool;
 CreaturePool singletonPool;

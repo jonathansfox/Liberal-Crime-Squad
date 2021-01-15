@@ -42,7 +42,6 @@ string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
 //#include "includesDeprecatedB.h"
 string skill_enum_to_string(int skill_type);
-//#ifdef	CREATURE_CPP
 // creature.cpp
 
 #include "../creature/creature.h"

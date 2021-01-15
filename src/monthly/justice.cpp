@@ -1,7 +1,5 @@
 
 
-
-#define	JUSTICE_CPP
 #include "../includes21.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //

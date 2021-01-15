@@ -42,7 +42,7 @@ const string GAMELOG_FILEPATH = "gamelog.txt";
 //End of Ripped segment
 
 
-
+#include <fstream>
 /* Not in log.cpp, we just need this declared inside this header */
 void LCSCloseFileCPP(std::fstream &file);
 /*

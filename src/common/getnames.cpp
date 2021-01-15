@@ -1,5 +1,5 @@
 
-#define	GETNAMES_CPP
+
 #include "../includes57.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //

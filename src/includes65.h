@@ -36,8 +36,6 @@ std::string tostring(long i);
 //int get_associated_attribute(int skill_type);
 
 
-//#include "includesDeprecatedB.h"
-//#ifdef	LIBERALAGENDA_CPP
 // liberalagenda.cpp
 
 #include "../creature/creatureEnums.h"

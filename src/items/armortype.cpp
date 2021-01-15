@@ -1,6 +1,8 @@
 
-#define	ARMORTYPE_CPP
+
 #include "../includes35.h"
+#include <algorithm>
+
 
 ArmorType::ArmorType(MCD_STR xmlstring)
 	: ItemType(xmlstring),

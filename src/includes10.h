@@ -161,13 +161,6 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 #define CH_USE_CP437
 
 
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-
-
-
 enum Activity
 {
 	ACTIVITY_NONE,

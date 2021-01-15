@@ -33,7 +33,6 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 //#include "includesDeprecatedB.h"
-//#ifdef	CURSESMOVIE_CPP
 // cursesmovie.cpp
 
 const string CONST_X_RB = "rb";

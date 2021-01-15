@@ -1,7 +1,7 @@
 
-#define	SAVELOAD_CPP
 #include "../includes03.h"
 #include "../includesDeprecatedB.h"
+#include <fstream>
 using std::ios;
 using std::endl;
 /*

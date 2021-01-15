@@ -1,5 +1,4 @@
-#define	LIBERALAGENDA_CPP
-#include "../includes65.h"
+
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -12,6 +11,8 @@
 // then pick WINDOWS-437 from the dropdown box and then choose the radio button
 // to make this the default encoding and disable auto-detection of the encoding.
 
+#include "../includes65.h"
+#include <algorithm>
 /* base - liberal agenda - disband */
 bool confirmdisband()
 {

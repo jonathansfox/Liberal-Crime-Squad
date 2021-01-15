@@ -94,6 +94,7 @@ enum LCSIO_FLAGS
 	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
 	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
 };
+#include <iostream>
 FILE* LCSOpenFile(const char* filename, const char* mode, int flags);
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
 void LCSCloseFile(FILE* handle);
@@ -105,11 +106,6 @@ vector<string> LCSSaveFiles();
 
 #define CH_USE_CP437
 
-
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
 
 const int ESC = 27;
 

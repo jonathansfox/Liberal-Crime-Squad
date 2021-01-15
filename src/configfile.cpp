@@ -1,7 +1,9 @@
 
 
-#define	CONFIGFILE_CPP
+
 #include "includes52.h"
+#include <algorithm>
+#include <fstream>
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {

@@ -1,5 +1,4 @@
 
-#define	VEHICLE_CPP
 #include "../includes01.h"
 #include "vehicletype.h"
 vector<VehicleType *> vehicletype;

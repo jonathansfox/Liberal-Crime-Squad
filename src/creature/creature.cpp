@@ -1,7 +1,7 @@
 
 
-#define	CREATURE_CPP
-#include "../includes49.h"
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -28,6 +28,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include "../includes49.h"
+#include <algorithm>
 DeprecatedCreature& DeprecatedCreature::operator=(const DeprecatedCreature& rhs)
 {
 	if (this != &rhs)

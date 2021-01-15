@@ -36,8 +36,6 @@ std::string tostring(long i);
 //int get_associated_attribute(int skill_type);
 
 #include "includesSDS.h"
-//#include "includesDeprecatedB.h"
-//#ifdef	COMMONACTIONS_CPP
 // commonactions.cpp
 
 #include "../creature/creature.h"

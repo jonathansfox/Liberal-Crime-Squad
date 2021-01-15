@@ -1,5 +1,5 @@
 
-#define	REVIEWMODE_CPP
+
 #include "../includes64.h"
 
 int getkeyAlt();

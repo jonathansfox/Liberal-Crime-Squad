@@ -1,5 +1,4 @@
 
-#define	SITEMODE_CPP
 #include "../includes09.h"
 
 void pressAnyKey(); 

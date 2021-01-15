@@ -1,5 +1,5 @@
 
-#define	ARMOR_CPP
+
 #include "../includes36.h"
 
 Armor::Armor(const std::string& inputXml) : Item(inputXml)

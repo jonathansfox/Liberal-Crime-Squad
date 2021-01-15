@@ -33,8 +33,6 @@ using namespace std;
 
 //int get_associated_attribute(int skill_type);
 
-//#include "includesDeprecatedB.h"
-//#ifdef	STRINGCONVERSION_CPP
 // stringconversion.cpp
 
 #include "../creature/creatureEnums.h"

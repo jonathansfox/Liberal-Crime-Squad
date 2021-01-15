@@ -34,8 +34,6 @@ using namespace std;
 
 #include "includesSDS.h"
 #include "includesSDS2.h"
-//#include "includesDeprecatedB.h"
-//#ifdef	CREATUREPOOL_CPP
 // creaturePool.cpp
 
 

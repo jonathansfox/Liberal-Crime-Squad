@@ -34,7 +34,6 @@ using namespace std;
 
 //#include "includesDeprecatedB.h"
 
-//#ifdef	AUTOMATEDDATATESTS_CPP
 // automatedDataTests.cpp
 #include "cursesAlternative.h"
 

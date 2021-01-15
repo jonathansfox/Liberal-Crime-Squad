@@ -70,9 +70,7 @@ std::string cityname();
 #include "customMaps.h"
 /* end the game and clean up */
 void end_game(int err = EXIT_SUCCESS);
-#ifdef WIN32
 bool fixcleartype = false;
-#endif
 struct pointerAndString {
 	bool *super_collection;
 	string fileName;

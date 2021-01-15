@@ -1,5 +1,4 @@
 
-#define	LOG_CPP
 #include "../includes23.h"
 /*
 	log.cpp

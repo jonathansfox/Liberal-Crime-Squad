@@ -1,5 +1,5 @@
 
-#define	BASEACTIONS_CPP
+
 #include "../includes67.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //

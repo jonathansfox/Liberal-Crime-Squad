@@ -1,6 +1,6 @@
 
 
-#define	EXTERNALLYSTOREDDATA_CPP
+
 #include "includes39.h"
 
 bool initialize_more_incomplete_txt() {

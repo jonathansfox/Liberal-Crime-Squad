@@ -38,7 +38,6 @@ using namespace std;
 #include "includesSDS.h"
 #include "includesSDS2.h"
 
-//#ifdef	CHASE_CPP
 // chase.cpp
 
 #include "../creature/creature.h"

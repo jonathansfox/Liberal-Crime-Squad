@@ -288,6 +288,7 @@
     <ClInclude Include="..\src\common\stringconversion.h" />
     <ClInclude Include="..\src\common\translateid.h" />
     <ClInclude Include="..\src\configfile.h" />
+    <ClInclude Include="..\src\creatureConstants.h" />
     <ClInclude Include="..\src\creature\augmentation.h" />
     <ClInclude Include="..\src\creature\augmenttype.h" />
     <ClInclude Include="..\src\creature\creature.h" />
@@ -308,6 +309,7 @@
     <ClInclude Include="..\src\daily\siege.h" />
     <ClInclude Include="..\src\floatZero.h" />
     <ClInclude Include="..\src\gui_constants.h" />
+    <ClInclude Include="..\src\includes.h" />
     <ClInclude Include="..\src\includes00.h" />
     <ClInclude Include="..\src\includes01.h" />
     <ClInclude Include="..\src\includes02.h" />
@@ -379,9 +381,12 @@
     <ClInclude Include="..\src\includes68.h" />
     <ClInclude Include="..\src\includes69.h" />
     <ClInclude Include="..\src\includes70.h" />
-    <ClInclude Include="..\src\includes71.h" />
     <ClInclude Include="..\src\includesDeprecated.h" />
     <ClInclude Include="..\src\includesDeprecatedB.h" />
+    <ClInclude Include="..\src\includesLen.h" />
+    <ClInclude Include="..\src\includesRandom.h" />
+    <ClInclude Include="..\src\includesSDS.h" />
+    <ClInclude Include="..\src\includesSDS2.h" />
     <ClInclude Include="..\src\items\itemPool.h" />
     <ClInclude Include="..\src\items\lootTypePool.h" />
     <ClInclude Include="..\src\items\lootTypePoolItem.h" />

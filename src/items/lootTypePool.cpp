@@ -1,5 +1,4 @@
 
-#define	LOOTTYPEPOOL_CPP
 #include "../includes30.h"
 
 #include "../items/itemPool.h"

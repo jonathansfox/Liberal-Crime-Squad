@@ -1,6 +1,6 @@
 
 
-#define	ACTIVATE_SLEEPERS_CPP
+
 #include "../includes68.h"
 /*
 This file is part of Liberal Crime Squad.                                           //

@@ -39,7 +39,6 @@ using namespace std;
 
 //#include "includesDeprecatedB.h"
 const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
-//#ifdef	HAULKIDNAP_CPP
 // haulkidnap.cpp
 
 const string CONST_IS_THE_ONLY_VIABLE_TARGET = " Is The Only Viable Target";

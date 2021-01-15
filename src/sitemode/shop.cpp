@@ -1,34 +1,6 @@
 
-#define	SHOP_CPP
 #include "../includes11.h"
-// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
-// (The same character set used by Liberal Crime Squad when it is running)
-// Certain special characters won't display correctly unless your text editor is
-// set to use that character set, such as this e with an accent: é
-// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
-// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
-// then choosing OEM/DOS in the Script dropdown box.
-// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
-// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
-// then pick WINDOWS-437 from the dropdown box and then choose the radio button
-// to make this the default encoding and disable auto-detection of the encoding.
-// Then close the file and reopen it (since Code::Blocks detects the encoding
-// when it opens the file and it can't be changed after that; what we changed was
-// how it detects encoding for files it opens in the future, not files already open).
-// In Microsoft Visual C++, right-click the file in the Solution Explorer,
-// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
-// the codepage will be correct already since it's running in a console window just
-// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
-// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
-// Advanced tab, and choose English (United States) from the dropdown box as the encoding
-// for non-Unicode applications, then press OK.
-// If you have a Linux or other UNIX-based system you are obviously smart enough
-// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
-// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
-// it out for yourself.
-
-//
-
+#include <algorithm>
 
  ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)
  { }

@@ -1,5 +1,4 @@
 
-#define	NEWGAME_CPP
 #include "../includes04.h"
 
 /*

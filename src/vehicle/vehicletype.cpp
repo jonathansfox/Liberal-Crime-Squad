@@ -1,5 +1,4 @@
 
-#define	VEHICLETYPE_CPP
 #include "../includes00.h"
 //for atoi
 int VehicleType::number_of_vehicletypes = 0;

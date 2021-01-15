@@ -1,5 +1,5 @@
 
-#define	LOOTTYPE_CPP
+
 #include "../includes31.h"
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"

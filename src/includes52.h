@@ -37,7 +37,6 @@ std::string tostring(long i);
 
 //#include "includesDeprecatedB.h"
 #include "includesSDS.h"
-//#ifdef	CONFIGFILE_CPP
 // configfile.cpp
 
 #include "../items/itemtype.h"

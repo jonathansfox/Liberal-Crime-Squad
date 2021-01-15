@@ -1,7 +1,5 @@
 
 
-#define	COMMONACTIONS_CPP
-#include "../includes60.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -28,6 +26,9 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+
+#include "../includes60.h"
+#include <algorithm>
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
 bool iscriminal(CreatureJustice cr)

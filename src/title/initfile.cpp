@@ -1,6 +1,5 @@
 
-#define	INITFILE_CPP
-#include "../includes05.h"
+
 /*
 This file handles the loading of init.txt
 This file is part of Liberal Crime Squad.
@@ -16,6 +15,9 @@ This file is part of Liberal Crime Squad.
 	along with Liberal Crime Squad; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
+#include "../includes05.h"
+#include <algorithm>
+#include <fstream>
 void setconfigoption(std::string name, std::string value)
 {
 	transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -43,7 +45,6 @@ void setconfigoption(std::string name, std::string value)
 		if (stringtobool(value) == 0)
 			title_screen::getInstance().setautosaveoption(false);
 	}
-#ifdef WIN32
 	else if (name == tag_fixcleartype) // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false
 	{
 		if (stringtobool(value) == 1)
@@ -55,7 +56,6 @@ void setconfigoption(std::string name, std::string value)
 			fixcleartype = ((osvi.dwMajorVersion > 5) || ((osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion >= 1))); // Windows XP is version 5.1
 		}
 	}
-#endif
 }
 #include <common\\consolesupport.h>
 void loadinitfile()
@@ -80,7 +80,5 @@ void loadinitfile()
 		}
 	}
 	file.close();
-#ifdef WIN32
 	begin_cleartype_fix(); // won't do anything unless fixcleartype is true
-#endif
 }

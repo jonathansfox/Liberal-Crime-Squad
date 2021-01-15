@@ -38,7 +38,6 @@ std::string tostring(long i);
 
 //#include "includesDeprecatedB.h"
 #include "includesSDS.h"
-//#ifdef	BASEMODE_CPP
 // basemode.cpp
 #include "../creature/creature.h"
 ////

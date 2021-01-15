@@ -54,10 +54,6 @@ inline long len(char* x)
 
 
 
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-
 #include "bigListEnumTags.h"
 
 //#ifdef	VEHICLETYPE_CPP

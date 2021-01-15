@@ -1,5 +1,4 @@
 
-#define	TALK_CPP
 #include "../includes07.h"
 
 /*

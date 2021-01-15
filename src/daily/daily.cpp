@@ -1,6 +1,6 @@
 
-#define	DAILY_CPP
-#include "../includes44.h"
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -28,6 +28,8 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 
+#include "../includes44.h"
+#include <algorithm>
 void hospital(int loc)
 {
 	music.play(MUSIC_SHOPPING);

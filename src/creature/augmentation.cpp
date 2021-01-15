@@ -1,6 +1,6 @@
 
 
-#define	AUGMENTATION_CPP
+
 #include "../includes51.h"
 
 std::string Augmentation::get_name(int au)

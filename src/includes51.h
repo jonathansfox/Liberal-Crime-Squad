@@ -33,7 +33,6 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 //#include "includesDeprecatedB.h"
-//#ifdef	AUGMENTATION_CPP
 // augmentation.cpp
 #include "augmentation.h"
 

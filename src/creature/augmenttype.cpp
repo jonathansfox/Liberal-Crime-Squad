@@ -1,5 +1,5 @@
 
-#define	AUGMENTTYPE_CPP
+
 #include "../includes50.h"
 
 int AugmentType::number_of_augmenttypes = 0;

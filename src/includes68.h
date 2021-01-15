@@ -34,7 +34,6 @@ using namespace std;
 
 #include "includesSDS.h"
 //#include "includesDeprecatedB.h"
-//#ifdef	ACTIVATE_SLEEPERS_CPP
 //activate_sleepers.cpp
 #include "../creature/creature.h"
 //#include "../common/commonactions.h"

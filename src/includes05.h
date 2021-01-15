@@ -52,15 +52,10 @@ enum LCSIO_FLAGS
 	LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
 	LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
 };
+#include <iostream>
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
 #define CH_USE_CP437
 
-
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-//#ifdef	INITFILE_CPP
 
 // initfile.cpp
 

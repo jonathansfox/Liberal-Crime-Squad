@@ -1,5 +1,5 @@
 
-#define	ITEMTYPE_CPP
+
 #include "../includes32.h"
 int ItemType::number_of_itemtypes = 0;
 ItemType::ItemType(MCD_STR xmlstring)

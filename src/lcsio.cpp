@@ -1,12 +1,6 @@
 
-
-#define	LCSIO_CPP
-#include "../includes26.h"
-
 /*
 This file is a complete rewrite of the LCS I/O system.
-The original lcsio.h can be found in lcsio-old.h in the sourceforge Subversion
-repository.
 This file is part of Liberal Crime Squad.
 	Liberal Crime Squad is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,18 +14,12 @@ This file is part of Liberal Crime Squad.
 	along with Liberal Crime Squad; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
+#include "../includes26.h"
+#include <fstream>
+#include <direct.h>
 bool initialized = false;
 const char *art_search_paths[] =
 {
-   #ifdef INSTALL_DATA_DIR
-   INSTALL_DATA_DIR CONST_LCS_ART,
-   #endif
-   #ifndef WIN32
-   CONST_USR_LOCAL_SHARE_LCS_ART.c_str(),
-   CONST_USR_SHARE_LCS_ART.c_str(),
-   CONST_USR_GAMES_SHARE_LCS_ART.c_str(),
-   CONST_USR_GAMES_LCS_ART.c_str(),
-   #endif
    CONST_X_ART_FOLDER.c_str(),
    CONST_X_PARENT_ART_FOLDER.c_str(),
    NULL
@@ -48,28 +36,16 @@ bool LCSFileExists(const char* filename)
 //Create the home directory if it does not exist.
 bool LCSInitHomeDir()
 {
-#ifndef WIN32
-	char* homeenv = getenv(CONST_HOME.c_str());
-#else
 	char* homeenv = (char*)DOT_SLASH.c_str();
-#endif
 	//Do everything using STL String, it is safer that way.
 	std::string str = homeenv;
 	if (str[len(str) - 1] != '/')
 		str += CONST_SLASH;
-#ifndef WIN32
-	str += CONST_LCS;
-#endif
 	strncpy(homedir, str.c_str(), MAX_PATH_SIZE);
 	if ((!LCSFileExists(homedir)) && (strncmp(homedir, CONST_DOT.c_str(), 1) != 0))
 	{
-#ifdef WIN32
 		if (_mkdir(homedir) != 0)
 			return false;
-#else
-		if (mkdir(homedir, 0750) != 0)
-			return false;
-#endif
 	}
 	return true;
 }

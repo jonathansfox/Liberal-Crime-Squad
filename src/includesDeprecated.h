@@ -34,6 +34,7 @@ const int BIT31 = (1 << 30);
 const int BIT32 = (1 << 31);
 const int MAX_PATH_SIZE = 2048;
 #include "includesLen.h"
+#include <iostream>
 /* Deletes a specified pointer and sets it to NULL. */
 template <typename T> inline void delete_and_nullify(T*& o)
 {
@@ -98,12 +99,6 @@ void pause_ms(int t);
 void alarmset(int t);
 void alarmwait();
 #define CH_USE_CP437
-
-
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
 
 
 const int TAB = 9;

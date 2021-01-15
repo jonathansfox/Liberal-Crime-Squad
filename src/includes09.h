@@ -161,11 +161,6 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 
 
 
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-
-
 const int ENTER = 10;
 const int ESC = 27;
 const int SPACEBAR = 32;

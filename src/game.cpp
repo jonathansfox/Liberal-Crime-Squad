@@ -1,5 +1,5 @@
-#define	GAME_CPP
-#include "includes38.h"
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
@@ -21,46 +21,8 @@
 //      along with Liberal Crime Squad; if not, write to the Free Software              //
 //      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 //////////////////////////////////////////////////////////////////////////////////////////
-//outstanding issues
-   //site trucker-type bug still happens (latte-stand)
-      //might have to do with missing location in the verifyworklocation() loop
-         //but cannot locate instance of this
-   //can have hostage in court?
-//changes 3.10 alpha 1
-   //added AZERTY keyboard support
-   //added bullet-proof vests
-   //added SWAT units
-   //reduced chance of hitting bystanders
-   //added multiple hit chances for automatic weapons
-   //added extra hit probability for shotguns
-   //removed sever types from handguns and knives
-   //fixed bug in newspaper site emphasis
-   //reduced fence values for armor
-   //sleepers can warn before raids
-   //courts made more difficult
-   //hacking harder, a little less rewarding
-   //sleeper overhaul
-   //dating conservatives, kidnapping on dates more risky
-   //made it easier to maintain LCS integrity when someone high up is arrested
-   //changed version variable to 31001
-//changes 3.09
-   //udistrict -> outoftown for the outskirts location
-   //in advanceday(), made people going on vacation drop off squad loot
-      //if they are the last person in their squad (or else it would be deleted)
-   //added a function to every instance where a vehicle is deleted that
-      //makes sure that the liberal car preferences are nullified
-   //update version number on the title screen
-   //changed version variable to 30900
-   //changed activesquad to squad[sq] in one portion of the squad movement code
-   //added a tweak to verifyworklocation(), but problem probably still exists
-//changes 3.08
-   //siegetype occurred many times where it shouldn't have in a majornewspaper() if statement
-   //added loitering offense if no other offense exists
-   //fixed the wheelchair bug in assemblesquad()
-//OUTSTANDING ISSUES:
-//possible bug with hauling people
-//somebody claims saving works only 3/4 of the time (no confirmation)
-//somebody claims squads don't move (sounds like older version bug, they haven't told me version)
+#include "includes38.h"
+#include <time.h>
 void mainOne() {
 	init_console(); // do this FIRST
 					//start curses

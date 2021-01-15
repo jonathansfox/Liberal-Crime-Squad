@@ -1,4 +1,4 @@
-#define	WEAPON_CPP
+
 #include "../includes28.h"
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }

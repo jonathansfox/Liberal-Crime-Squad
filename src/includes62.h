@@ -37,8 +37,6 @@ std::string tostring(long i);
 
 #include "includesSDS.h"
 
-//#include "includesDeprecatedB.h"
-//#ifdef	FIGHT_CPP
 // fight.cpp
 
 const string fighty = "fight\\";

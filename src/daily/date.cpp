@@ -1,7 +1,7 @@
 
 
-#define	DATE_CPP
-#include "../includes43.h"
+
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -27,6 +27,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include "../includes43.h"
+#include <algorithm>
  vector<Deprecateddatest *> date;
  // Handles the result of a date or vacation
  static int dateresult(int aroll, int troll, Deprecateddatest &d, int e, int p, int y)

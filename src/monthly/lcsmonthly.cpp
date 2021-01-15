@@ -1,6 +1,5 @@
 
 
-#define	LCSMONTHLY_CPP
 #include "../includes20.h"
 
 

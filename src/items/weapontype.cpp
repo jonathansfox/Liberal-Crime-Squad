@@ -1,5 +1,4 @@
 
-#define	WEAPONTYPE_CPP
 #include "../includes27.h"
 
 map<string, int> weaponTypeTags = {

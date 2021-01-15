@@ -1,8 +1,10 @@
 
 
-#define	GLOBALS_CPP
-#define	CREATURENAMES_CPP
+
+
 #include "includes37.h"
+#include <algorithm>
+
 ///
 /*
 DEBUG DEFINES
@@ -163,9 +165,7 @@ int yourscore = -1;
 /* Free memory and exit the game */ // This function closes the entire program, and can be called anywhere
 void end_game(int err)
 {
-#ifdef WIN32
 	end_cleartype_fix(); // won't do anything unless fixcleartype is true
-#endif
 	// title_screen::getInstance().delete_screen();
 	LocationsPool::getInstance().delete_and_clear_pool();
 	delete_and_clear(squad);

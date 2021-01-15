@@ -1,6 +1,6 @@
 
 
-#define	HAULKIDNAP_CPP
+
 #include "../includes61.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //

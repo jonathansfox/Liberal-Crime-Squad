@@ -35,8 +35,6 @@ std::string tostring(long i);
 
 #include "includesSDS.h"
 string skill_enum_to_string(int skill_type);
-//#include "includesDeprecatedB.h"
-//#ifdef COMMONDISPLAY_CPP
 // commondisplay.cpp
 #include "../creature/creature.h"
 ////

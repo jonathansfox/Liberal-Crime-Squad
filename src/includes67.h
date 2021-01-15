@@ -37,7 +37,6 @@ using namespace std;
 const string spaceDashSpace = " - ";
 const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
 //#include "includesDeprecatedB.h"
-//#ifdef	BASEACTIONS_CPP
 // baseactions.cpp
 
 

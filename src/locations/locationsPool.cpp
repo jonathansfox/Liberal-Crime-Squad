@@ -1,7 +1,8 @@
 
 
-#define	LOCATIONSPOOL_CPP
 #include "../includes24.h"
+#include <algorithm>
+
 /* rolls up a creature's stats and equipment */
 void makecreature(DeprecatedCreature &cr, short type);
 vector<Location *> location;

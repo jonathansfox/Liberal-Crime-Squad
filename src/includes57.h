@@ -32,8 +32,6 @@ using namespace std;
 
 //int get_associated_attribute(int skill_type);
 
-//#include "includesDeprecatedB.h"
-//#ifdef	GETNAMES_CPP
 // getnames.cpp
 
 #include "../creature/newcreature.h"

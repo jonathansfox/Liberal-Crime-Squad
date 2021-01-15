@@ -35,7 +35,6 @@ using namespace std;
 
 
 //#include "includesDeprecatedB.h"
-//#ifdef	REVIEWMODE_CPP
 std::string getactivity(ActivityST& act);
 // reviewmode.cpp
 

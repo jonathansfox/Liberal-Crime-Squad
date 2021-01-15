@@ -37,7 +37,6 @@ std::string tostring(long i);
 
 //#include "includesDeprecatedB.h"
 #include "includesSDS.h"
-//#ifdef	ACTIVATE_CPP
 //activate.cpp
 
 

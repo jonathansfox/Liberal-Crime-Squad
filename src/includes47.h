@@ -44,7 +44,6 @@ enum BillStatus
 #include "includesDeprecatedB.h"
 const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
 
-//#ifdef CURSES_ALTERNATIVE
 #include "../common/commondisplay.h"
 #include "../sitemode/sitedisplay.h"
 

@@ -1,4 +1,4 @@
-#define	NEWENCOUNTER_CPP
+
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //

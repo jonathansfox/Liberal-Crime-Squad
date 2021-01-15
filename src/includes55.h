@@ -39,8 +39,6 @@ std::string tostring(long i);
 
 #include "includesSDS.h"
 #include "includesSDS2.h"
-//#include "includesDeprecatedB.h"
-//#ifdef	MISC_CPP
 // misc.cpp
 
 #include "../common/ledgerEnums.h"
