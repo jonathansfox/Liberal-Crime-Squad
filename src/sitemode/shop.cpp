@@ -1,5 +1,6 @@
 
 #include "../includes11.h"
+#include "../constStringshop.h"
 #include <algorithm>
 
  ShopOption::ShopOption() : description_(undefined), letter_(0), letter_defined_(false)

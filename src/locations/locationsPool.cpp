@@ -1,6 +1,30 @@
 
 
 #include "../includes24.h"
+#include "../constStringOEMlocationsPool.h"
+
+map <string, int> cityLocationTags = {
+map<string, int>::value_type(tag_Downtown, ENUM_tag_Downtown),
+map<string, int>::value_type(tag_University_District, ENUM_tag_University_District),
+map<string, int>::value_type(tag_u_District, ENUM_tag_u_District),
+map<string, int>::value_type(tag_Industrial_District, ENUM_tag_Industrial_District),
+map<string, int>::value_type(tag_i_District, ENUM_tag_i_District),
+map<string, int>::value_type(tag_Shopping, ENUM_tag_Shopping),
+map<string, int>::value_type(tag_Outskirts, ENUM_tag_Outskirts),
+map<string, int>::value_type(tag_Seaport_Area, ENUM_tag_Seaport_Area),
+map<string, int>::value_type(tag_Seaport, ENUM_tag_Seaport),
+map<string, int>::value_type(tag_Outskirts_amp_Orange_County, ENUM_tag_Outskirts_amp_Orange_County),
+map<string, int>::value_type(tag_City_Outskirts, ENUM_tag_City_Outskirts),
+map<string, int>::value_type(tag_Arlington, ENUM_tag_Arlington),
+map<string, int>::value_type(tag_Hollywood, ENUM_tag_Hollywood),
+map<string, int>::value_type(tag_Greater_Hollywood, ENUM_tag_Greater_Hollywood),
+map<string, int>::value_type(tag_Manhattan, ENUM_tag_Manhattan),
+map<string, int>::value_type(tag_Manhattan_Island, ENUM_tag_Manhattan_Island),
+map<string, int>::value_type(tag_Brooklyn_ampersand_Queens, ENUM_tag_Brooklyn_ampersand_Queens),
+map<string, int>::value_type(tag_Long_Island, ENUM_tag_Long_Island),
+map<string, int>::value_type(tag_The_Bronx, ENUM_tag_The_Bronx)
+};
+
 #include <algorithm>
 
 /* rolls up a creature's stats and equipment */

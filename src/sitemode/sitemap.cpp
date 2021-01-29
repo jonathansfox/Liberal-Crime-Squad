@@ -1,5 +1,4 @@
 
-#include "../includes10.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -25,12 +24,15 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+
+#include "../includes10.h"
+#include "../constStringsitemap.h"
 map<short, string> siteReadMap;
 map<short, string> buildThisSite;
- vector<configSiteMap *> sitemaps;
- map<string, short> getUnique;
- map<string, string> getLootString;
- map<string, short> getSpecial;
+vector<configSiteMap *> sitemaps;
+map<string, short> getUnique;
+map<string, string> getLootString;
+map<string, short> getSpecial;
 
  void delete_and_clear_sitemaps() {
 	 delete_and_clear(sitemaps);

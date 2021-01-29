@@ -1,7 +1,6 @@
 
 
 
-#include "../includes61.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -32,6 +31,8 @@ This file is part of Liberal Crime Squad.                                       
 //handles the squad moving around the site. For now, this'll do. I must remember
 //to come back here and finish the job.
 
+#include "../includes61.h"
+#include "../constStringhaulkidnap.h"
 void printKidnapString(const string aname, const string tname, const string weapon) {
 
 

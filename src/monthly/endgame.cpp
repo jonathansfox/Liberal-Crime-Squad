@@ -1,5 +1,4 @@
 
-#include "../includes22.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
                                                                                     //
@@ -26,6 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include "../includes22.h"
+#include "../constStringendgame.h"
 void printRatifyHeader() {
 	mvaddstrAlt(0, 62, CONST_HOUSE);
 	mvaddstrAlt(0, 70, CONST_SENATE);

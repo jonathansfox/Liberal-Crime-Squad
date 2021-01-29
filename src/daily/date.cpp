@@ -28,6 +28,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 #include "../includes43.h"
+#include "../constStringdate.h"
 #include <algorithm>
  vector<Deprecateddatest *> date;
  // Handles the result of a date or vacation

@@ -23,6 +23,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 // Clear sidebar
 #include "../includes42.h"
+#include "../constStringinterrogation.h"
 #include <algorithm>
 void clear_interrogation_sidebar()
 {

@@ -1,6 +1,7 @@
 
 
 #include "../includes36.h"
+#include "../constStringarmor.h"
 
 Armor::Armor(const std::string& inputXml) : Item(inputXml)
 {

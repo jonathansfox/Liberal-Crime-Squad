@@ -26,7 +26,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include "../includes12.h"
-
+#include "../constStringnewencounter.h"
 
 
 /* rolls up a random creature type according to the passed weighting array */

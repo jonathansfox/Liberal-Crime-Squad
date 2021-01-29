@@ -11,10 +11,11 @@
 
 	All code released under GNU GPL.
 */
-#pragma once
-
-#include "includes.h"
-
+#include <windows.h>
+#include <vector>
+#include <map>
+#include <deque>
+#include "cmarkup/Markup.h"
 using namespace std;
 
 
@@ -99,23 +100,10 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
 
-const string singleSpace = " ";
-const string tag_heat = "heat";
-
 //#ifdef	VEHICLE_CPP
 #include "bigListEnumTags.h"
 // vehicle.cpp
 
-const string vehicleSportsCar = "SPORTSCAR";
-const string CONST_STOLEN = "Stolen ";
-
-const string tag_id = "id";
-const string tag_myear = "myear";
-const string tag_location = "location";
-const string tag_color = "color";
-const string tag_vtypeid = "vtypeid";
-const string tag_vtypeidname = "vtypeidname";
-const string tag_vehicle = "vehicle";
 
 //#endif//VEHICLE_CPP
 //#endif// INCLUDES_H_INCLUDED

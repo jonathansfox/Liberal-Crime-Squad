@@ -1,6 +1,4 @@
 
-#include "../includes04.h"
-
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -27,6 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include "../includes04.h"
+#include "../constStringnewgame.h"
 const string error = "ERROR";
 
 bool getSetValue(const string& s) {

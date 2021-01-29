@@ -1,4 +1,5 @@
 #include "includes47.h"
+#include "constStringOEMcursesAlternative.h"
 #include <mbctype.h>
 #include <gui_constants.h>
 
@@ -7111,7 +7112,7 @@ void printMusicFooter(const bool musicEnabled) {
 	}
 	mvaddstrCenter(22, str);
 }
-
+const string discordHyperlink = "https://discord.gg/CHNcaSn";
 void printTitleScreen() {
 	//title screen
 	eraseAlt();
@@ -7127,9 +7128,9 @@ void printTitleScreen() {
 	mvaddstrCenter(11, copyrightTarn);
 	mvaddstrCenter(12, A_BAY_12_GAMES_PRODUCTION);
 	mvaddstrCenter(13, lcsHyperlink);
-	mvaddstrCenter(15, vChar + PACKAGE_VERSION_STR + maintainedByOpenSource);
-	mvaddstrCenter(16, kingDrakeHyperlink);
-	mvaddstrCenter(17, lcsForumHyperlink);
+	mvaddstrCenter(14, lcsForumHyperlink);
+	mvaddstrCenter(16, vChar + PACKAGE_VERSION_STR + maintainedByOpenSource);
+	mvaddstrCenter(17, discordHyperlink);
 	mvaddstrCenter(18, lcsWikiHyperlink);
 	mvaddstrCenter(20, pressESCToQuit);
 	mvaddstrCenter(22, pressAnyKeyToPursue);

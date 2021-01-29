@@ -1,5 +1,4 @@
 
-#include "../includes18.h"
 /*
 This file is part of Liberal Crime Squad.                                           //
                                                                                     //
@@ -17,6 +16,9 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
+
+#include "../includes18.h"
+#include "../constStringsleeper_update.h"
 /* monthly - sleeper behavior */
 
 

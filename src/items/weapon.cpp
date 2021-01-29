@@ -1,5 +1,6 @@
 
 #include "../includes28.h"
+#include "../constStringweapon.h"
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }
 Weapon::Weapon(const std::string& inputXml) : Item(inputXml)

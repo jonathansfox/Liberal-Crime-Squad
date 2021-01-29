@@ -1,7 +1,7 @@
 
 
 #include "../includes20.h"
-
+#include "../constStringlcsmonthly.h"
 
 const vector<int> viewAnimals = { VIEW_ANIMALRESEARCH, 15 };
 const vector<int> viewJustice = { VIEW_JUSTICES, 15 };

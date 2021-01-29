@@ -1,6 +1,5 @@
 
 
-#include "../includes67.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -27,6 +26,8 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
+#include "../includes67.h"
+#include "../constStringbaseactions.h"
  vector<string> vehicleParagraph;
  vector<file_and_text_collection> baseactions_text_file_collection = {
 	 customText(&vehicleParagraph, MOSTLY_ENDINGS_FOLDER + VEHICLE_PARAGRAPH_TXT),

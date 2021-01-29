@@ -2,6 +2,7 @@
 
 
 #include "../includes33.h"
+#include "../constStringitem.h"
 
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"

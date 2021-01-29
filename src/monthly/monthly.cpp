@@ -1,5 +1,4 @@
 
-#include "../includes19.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -53,6 +52,8 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
+#include "../includes19.h"
+#include "../constStringmonthly.h"
 /* rename various buildings according to the new laws */
 
 bool policeStationNeedsUpdate(short *law, short *oldlaw) {

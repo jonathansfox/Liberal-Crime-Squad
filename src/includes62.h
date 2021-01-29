@@ -11,10 +11,11 @@
 
 	All code released under GNU GPL.
 */
-#pragma once
-
-#include "includes.h"
-
+#include <windows.h>
+#include <vector>
+#include <map>
+#include <deque>
+#include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
 #include "includesDeprecated.h"
@@ -114,9 +115,6 @@ const string CONST_S_UPPER_SPINE_IS_BROKEN = "'s upper spine is broken!";
 const string CONST_S_UPPER_SPINE_IS_SHATTERED = "'s upper spine is shattered!";
 const string CONST_S_BODY = "'s body.";
 const string CONST_DROPS = " drops ";
-const string CONST_SUPER_ENEMY = "super enemy";
-const string CONST_DANGEROUS_ENEMIES = "dangerous enemies";
-const string CONST_SUPER_ENEMIES = "super enemies";
 const string CONST_MISSES_COMPLETELY = " misses completely!";
 const string CONST_JUST_BARELY_MISSED = " just barely missed!";
 const string CONST_MISSED = " missed!";

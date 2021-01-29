@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 #include "../includes63.h"
+#include "../constStringchase.h"
 #include <algorithm>
 void fillEncounter(CreatureTypes c, int numleft) {
 	vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();

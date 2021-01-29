@@ -1,5 +1,4 @@
 
-#include "../includes08.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -25,7 +24,9 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
- 
+
+#include "../includes08.h"
+#include "../constStringstealth.h"
  void noticecheck(int exclude, int difficulty)
  {
 

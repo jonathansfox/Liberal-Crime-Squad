@@ -1,6 +1,5 @@
 
 
-#include "../includes21.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -26,8 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 		To see descriptions of files and functions, see the list at
 		the bottom of includes.h in the top src folder.
 */
-/* monthly - sentence a liberal */
 
+#include "../includes21.h"
+#include "../constStringjustice.h"
 
 /* monthly - sentence a liberal */
 void penalize(DeprecatedCreature &g, char lenient)

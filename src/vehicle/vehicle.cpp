@@ -1,5 +1,6 @@
 
 #include "../includes01.h"
+#include "../constStringvehicle.h"
 #include "vehicletype.h"
 vector<VehicleType *> vehicletype;
 #include "vehicle.h"

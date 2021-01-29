@@ -28,6 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include "../includes60.h"
+#include "../constStringcommonactions.h"
 #include <algorithm>
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal

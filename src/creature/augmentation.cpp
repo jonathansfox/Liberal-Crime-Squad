@@ -2,6 +2,7 @@
 
 
 #include "../includes51.h"
+#include "../constStringaugmentation.h"
 
 std::string Augmentation::get_name(int au)
 {

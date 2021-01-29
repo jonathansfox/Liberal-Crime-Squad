@@ -1,4 +1,4 @@
-#include "includes53.h"
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
 //Copyright (c) 2004 by Kevin Sadler                                                    //
@@ -33,7 +33,8 @@
 *
 * These functions are intended to replace explicit calls to Windows API.
 */
-
+#include "includes53.h"
+#include "constStringcompat.h"
 #include "../cursesAlternative.h"
 
 /* end the game and clean up */

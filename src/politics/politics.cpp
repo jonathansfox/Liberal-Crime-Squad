@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include "../includes16.h"
+#include "../constStringpolitics.h"
 #include <algorithm>
 vector<string> corporateSuffix;
  map<short, string> winnerOfElection;

@@ -3,6 +3,7 @@
 
 
 #include "includes37.h"
+#include "constStringglobals.h"
 #include <algorithm>
 
 ///

@@ -1,6 +1,4 @@
 
-#include "../includes66.h"
-#include <algorithm>
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 																					  //
@@ -27,6 +25,9 @@ This file is part of Liberal Crime Squad.                                       
 		the bottom of includes.h in the top src folder.
 */
 
+#include "../includes66.h"
+#include "../constStringbasemode.h"
+#include <algorithm>
 void printHouseMake() {
 	int housemake[6] = { 0,0,0,0,0,0 };
 	for (int h = 0; h < HOUSENUM; h++) {

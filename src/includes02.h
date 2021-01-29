@@ -11,10 +11,11 @@
 
 	All code released under GNU GPL.
 */
-#pragma once
-
-#include "includes.h"
-
+#include <windows.h>
+#include <vector>
+#include <map>
+#include <deque>
+#include "cmarkup/Markup.h"
 using namespace std;
 
 

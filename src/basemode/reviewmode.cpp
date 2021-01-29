@@ -1,12 +1,5 @@
 
 
-#include "../includes64.h"
-
-int getkeyAlt();
-void pressAnyKey();
-bool is_page_up(const int c);
-bool is_page_down(const int c);
-int eraseAlt(void);
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -45,6 +38,14 @@ the bottom of includes.h in the top src folder.
 // to make this the default encoding and disable auto-detection of the encoding.
 
 
+#include "../includes64.h"
+#include "../constStringreviewmode.h"
+
+int getkeyAlt();
+void pressAnyKey();
+bool is_page_up(const int c);
+bool is_page_down(const int c);
+int eraseAlt(void);
 void printPromotionScreen(const vector<DeprecatedCreature *> temppool, const vector<int> level, const int page) {
 	printPromotionHeader();
 	printfunds();

@@ -1,6 +1,7 @@
 
 
 #include "../includes50.h"
+#include "../constStringaugmenttype.h"
 
 int AugmentType::number_of_augmenttypes = 0;
 

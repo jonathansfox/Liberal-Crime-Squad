@@ -1,5 +1,4 @@
 
-#include "../includes25.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -19,6 +18,9 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
+
+#include "../includes25.h"
+#include "../constStringlocations.h"
  void Location::init()
  {
 	 haveflag = 0;

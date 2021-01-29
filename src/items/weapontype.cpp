@@ -1,6 +1,6 @@
 
 #include "../includes27.h"
-
+#include "../constStringweapontype.h"
 map<string, int> weaponTypeTags = {
 	map<string, int>::value_type(tag_shortname, ENUM_tag_shortname),
 	map<string, int>::value_type(tag_shortname_future, ENUM_tag_shortname_future),

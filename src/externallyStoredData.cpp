@@ -2,6 +2,7 @@
 
 
 #include "includes39.h"
+#include "constStringexternallyStoredData.h"
 
 bool initialize_more_incomplete_txt() {
 	// this is the string data for activities. they write up to three lines of text about the activity

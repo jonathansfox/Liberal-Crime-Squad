@@ -1,6 +1,5 @@
 
 
-#include "includes46.h"
 //////////////////////////////////////////////////////////////////////////////////////////
 //																						//
 //Copyright (c) 2002,2003,2004 by Tarn Adams											//
@@ -23,6 +22,8 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
+#include "includes46.h"
+#include "constStringcursesmovie.h"
 #include "../cursesmovie.h"
 //own header
 #include "../cursesAlternative.h"

@@ -1,7 +1,6 @@
 
 
 
-#include "../includes62.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -27,6 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include "../includes62.h"
+#include "../constStringfight.h"
 bool goodguyattack = false;
  /* generates the loot dropped by a creature when it dies */
  void makeloot(DeprecatedCreature &cr)
@@ -1679,7 +1680,7 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 	}
 	if (!(len(super_enemies) + len(dangerous_enemies) + len(enemies))) return;
 	int target;
-	// If there are CONST_SUPER_ENEMIES, shoot at one of them unless we're using a persuasion-based attack
+	// If there are super enemies, shoot at one of them unless we're using a persuasion-based attack
 	if (len(super_enemies) &&
 		((activesquad->squad[p]->type != CREATURE_SCIENTIST_EMINENT &&
 			activesquad->squad[p]->type != CREATURE_JUDGE_LIBERAL &&
@@ -1693,12 +1694,12 @@ void singleSquadMemberAttack(const int p, const bool wasalarm) {
 			(!activesquad->squad[p]->get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) &&
 				activesquad->squad[p]->is_armed())))
 		target = pickrandom(super_enemies);
-	// Else, if there are CONST_DANGEROUS_ENEMIES, shoot at one of them
+	// Else, if there are dangerous enemies, shoot at one of them
 	else if (len(dangerous_enemies))
 		target = pickrandom(dangerous_enemies);
 	// Else, if there are regular enemies, shoot at one of them
 	else if (len(enemies)) target = pickrandom(enemies);
-	// Else, we skipped a CONST_SUPER_ENEMY because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
+	// Else, we skipped a super enemy because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
 	else target = pickrandom(super_enemies);
 	char mistake = 0;
 	// Mistaken attack

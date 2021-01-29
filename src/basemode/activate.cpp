@@ -56,6 +56,7 @@ the bottom of includes.h in the top src folder.
 
 
 #include "../includes69.h"
+#include "../constStringOEMactivate.h"
 #include <algorithm>
 
 Activity getDefaultActivityTeaching(DeprecatedCreature *cr) {

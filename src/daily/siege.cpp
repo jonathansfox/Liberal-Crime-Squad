@@ -52,6 +52,7 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 #include "../includes40.h"
+#include "../constStringsiege.h"
 #include <algorithm>
 void statebrokenlaws(int loc)
 {

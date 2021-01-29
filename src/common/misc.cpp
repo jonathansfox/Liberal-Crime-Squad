@@ -1,5 +1,6 @@
 
 #include "../includes55.h"
+#include "../constStringmisc.h"
 void sexdesc(char *str)
 {
 	strcpy(str, pickrandom(sexdescAcronym).c_str());

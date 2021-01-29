@@ -1,6 +1,5 @@
 
 
-#include "../includes41.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -21,6 +20,8 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
+#include "../includes41.h"
+#include "../constStringrecruit.h"
 Deprecatedrecruitst::Deprecatedrecruitst(DeprecatedCreature *cr, int id) {
 	recruit = cr;
 	recruiter_id = id;

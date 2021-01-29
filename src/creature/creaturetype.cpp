@@ -2,6 +2,7 @@
 
 
 #include "../includes48.h"
+#include "../constStringcreaturetype.h"
 #include <algorithm>
 
 Weapon& DeprecatedCreature::weapon_none()

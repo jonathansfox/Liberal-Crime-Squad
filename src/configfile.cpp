@@ -2,6 +2,7 @@
 
 
 #include "includes52.h"
+#include "constStringconfigfile.h"
 #include <algorithm>
 #include <fstream>
 

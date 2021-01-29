@@ -1,6 +1,7 @@
 
 
 #include "../includes31.h"
+#include "../constStringloottype.h"
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/loottype.h"

@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 #include "../includes44.h"
+#include "../constStringdaily.h"
 #include <algorithm>
 void hospital(int loc)
 {

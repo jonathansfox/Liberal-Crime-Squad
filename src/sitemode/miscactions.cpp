@@ -1,5 +1,4 @@
 
-#include "../includes13.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -26,6 +25,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include "../includes13.h"
+#include "../constStringmiscactions.h"
 UnlockAttempt unlock(short type)
 {
 	int difficulty = 0;

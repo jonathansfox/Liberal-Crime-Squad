@@ -1,9 +1,4 @@
 
-#include "../includes03.h"
-#include "../includesDeprecatedB.h"
-#include <fstream>
-using std::ios;
-using std::endl;
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
 																					//
@@ -30,6 +25,12 @@ This file is part of Liberal Crime Squad.                                       
 		the bottom of includes.h in the top src folder.
 */
 
+#include "../includes03.h"
+#include "../constStringsaveload.h"
+#include "../includesDeprecatedB.h"
+#include <fstream>
+using std::ios;
+using std::endl;
 // TODO: It would be really cool to be able to CONST_EXPORT characters.
 /* handles saving */
 bool file_exists(const std::string& filename)

@@ -1,6 +1,5 @@
 
 
-#include "../includes57.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
 //
@@ -29,6 +28,8 @@ the bottom of includes.h in the top src folder.
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 
+#include "../includes57.h"
+#include "../constStringgetnames.h"
 vector<string> city_names;
 std::string gettitle(const int align, const int juice)
 {

@@ -1,6 +1,4 @@
 
-#include "../includes06.h"
-#include "../includesDeprecatedB.h"
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -26,6 +24,11 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+
+#include "../includes06.h"
+#include "../constStringhighscore.h"
+#include "../includesDeprecatedB.h"
+
 /* loads the high scores file */
 void loadhighscores()
 {

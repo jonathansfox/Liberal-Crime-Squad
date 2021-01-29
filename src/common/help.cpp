@@ -1,5 +1,6 @@
 
 #include "../includes56.h"
+#include "../constStringhelp.h"
 
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"

@@ -1,6 +1,7 @@
 
 
 #include "../includes34.h"
+#include "../constStringclip.h"
 
 
 Clip::Clip(const ClipType& seed, int number) : Item(seed, number)

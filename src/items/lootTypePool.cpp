@@ -1,5 +1,6 @@
 
 #include "../includes30.h"
+#include "../constStringlootTypePool.h"
 
 #include "../items/itemPool.h"
 #include "../items/lootTypePool.h"

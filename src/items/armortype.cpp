@@ -1,6 +1,7 @@
 
 
 #include "../includes35.h"
+#include "../constStringarmortype.h"
 #include <algorithm>
 
 

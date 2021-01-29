@@ -2,6 +2,7 @@
 
 
 #include "../includes58.h"
+#include "../constStringOEMcreaturePool.h"
 #include <algorithm>
 
 vector<DeprecatedCreature *> pool;

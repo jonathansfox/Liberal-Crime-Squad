@@ -1,11 +1,5 @@
 
-#include "../includes09.h"
 
-void pressAnyKey(); 
-int getkeyAlt();
-int refreshAlt(void);
-int eraseAlt(void);
-void logNewLine();
 /*
 Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
                                                                                       //
@@ -31,6 +25,13 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include "../includes09.h"
+#include "../constStringsitemode.h"
+void pressAnyKey(); 
+int getkeyAlt();
+int refreshAlt(void);
+int eraseAlt(void);
+void logNewLine();
 void fight_subdued()
 {
 	//int p;

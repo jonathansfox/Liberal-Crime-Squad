@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include "../includes49.h"
+#include "../constStringcreature.h"
 #include <algorithm>
 DeprecatedCreature& DeprecatedCreature::operator=(const DeprecatedCreature& rhs)
 {

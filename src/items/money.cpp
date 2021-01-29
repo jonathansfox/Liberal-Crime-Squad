@@ -1,5 +1,6 @@
 
 #include "../includes29.h"
+#include "../constStringmoney.h"
 #include "../creature/creatureEnums.h"
 #include "../items/itemtype.h"
 #include "../items/item.h"
