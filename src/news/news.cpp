@@ -27,7 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include "../includes17.h"
-#include "../constStringnews.h"
+#include "../constStringOEMnews.h"
 //TODO: Add logging for this file? --Addictgamer
 void printRandomCableNewsName() {
 

@@ -1,4 +1,6 @@
 
+const string CONST_AWAY = "Away";
+
 const string CHOOSE_A_LIBERAL_TO = "Choose a Liberal squad member to ";
 const string needCar = " (Need Car)";
 const string underSiege = " (Under Siege)";

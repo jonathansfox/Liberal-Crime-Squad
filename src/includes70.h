@@ -52,9 +52,3 @@ extern map<short, vector<string> >  endgameLawStrings;
 extern bool multipleCityMode;
 extern short lawList[LAWNUM];
 void testCreature();
-
-const string CONST_X_TEST = "TEST";
-const string SUCCESS = "SUCCESS";
-
-//#endif//AUTOMATEDDATATESTS_CPP
-//#endif// INCLUDES_H_INCLUDED

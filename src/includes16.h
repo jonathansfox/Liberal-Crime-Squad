@@ -170,10 +170,6 @@ extern short public_interest[VIEWNUM];
 extern short senate[SENATENUM];
 extern short wincondition;
 
-const string CONST_UNITED_STATES = "United States";
-const string corporateSuffixtxt = "corporateSuffix.txt";
-const string MOSTLY_ENDINGS_FOLDER = "mostlyendings\\";
-
 void addStringYear();
 void printCONST_PRESS_ANY_KEY_TO_CONTINUE_THE_ELECTIONS();
 void printCONST_A_RECOUNT_WAS_NECESSARY(const int p);

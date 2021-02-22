@@ -53,7 +53,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include "../includes19.h"
-#include "../constStringmonthly.h"
+#include "../constStringOEMmonthly.h"
 /* rename various buildings according to the new laws */
 
 bool policeStationNeedsUpdate(short *law, short *oldlaw) {

@@ -12,7 +12,7 @@
 // to make this the default encoding and disable auto-detection of the encoding.
 
 #include "../includes65.h"
-#include "../constStringliberalagenda.h"
+#include "../constStringOEMliberalagenda.h"
 #include <algorithm>
 /* base - liberal agenda - disband */
 bool confirmdisband()
