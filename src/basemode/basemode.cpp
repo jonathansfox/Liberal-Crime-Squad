@@ -27,6 +27,10 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "../includes66.h"
 #include "../constStringOEMbasemode.h"
+
+// cursesgraphics
+#define CH_BOX_DRAWINGS_LIGHT_HORIZONTAL 0xc4
+
 #include <algorithm>
 void printHouseMake() {
 	int housemake[6] = { 0,0,0,0,0,0 };

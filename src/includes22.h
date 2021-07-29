@@ -18,23 +18,71 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+enum EndTypes
+{
+	END_BUT_NOT_END = -2,
+	END_OTHER = -1,
+	END_WON,
+	END_HICKS,
+	END_CIA,
+	END_POLICE,
+	END_CORP,
+	END_REAGAN,
+	END_DEAD,
+	END_PRISON,
+	END_EXECUTED,
+	END_DATING,
+	END_HIDING,
+	END_DISBANDLOSS,
+	END_DISPERSED,
+	END_CCS,
+	END_FIREMEN,
+	END_STALIN,
+	ENDNUM
+};
+
+enum Execs
+{
+	EXEC_PRESIDENT,
+	EXEC_VP,
+	EXEC_STATE,
+	EXEC_ATTORNEY,
+	EXECNUM
+};
+
 #include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
-
-//just a float that is initialized to 0
-//#include "floatZero.h"
-//Interrogation information for the InterrogationST system, to be
-//dynamically created on capture and deleted when InterrogationST ends,
-//referenced using a pointer typecast into one of the arguments
-//of the target's current action.
-//#include "activityST.h"
-
-//int get_associated_attribute(int skill_type);
-
-//#include "includesDeprecatedB.h"
 //#ifdef	ENDGAME_CPP
 // endgame.cpp
 
@@ -43,7 +91,6 @@ using namespace std;
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 #include "../basemode/liberalagenda.h"
 // for liberalagenda
-//#include "../log/log.h"
 // for commondisplay.h
 #include "../common/commondisplay.h"
 // for void printfunds(int,int,char*)
@@ -56,7 +103,6 @@ void generate_name(char *str, char gender = GENDER_NEUTRAL);
 // for void reset;
 #include "../title/highscore.h"
 // for void savehighscore(char endtype);
-//#include "../monthly/EndGameStatus.h"
 //own header
 		//does not compile without --Schmel924
 #include "../politics/politics.h"
@@ -82,12 +128,18 @@ extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern int amendnum;
 extern MusicClass music;
-extern short attitude[VIEWNUM];
-extern short court[COURTNUM];
-extern short exec[EXECNUM];
-extern short house[HOUSENUM];
-extern short lawList[LAWNUM];
-extern short senate[SENATENUM];
+extern short attitude[];
+extern short court[];
+extern short exec[];
+extern short house[];
+extern short lawList[];
+extern short senate[];
+
+
+/* displays the high score board */
+void viewhighscores(int musicoverride = MUSIC_OFF);
+/* saves a new high score */
+void savehighscore(char endtype);
 
 fullName generate_long_name(char gender = GENDER_NEUTRAL);
 //#endif//ENDGAME_CPP

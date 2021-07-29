@@ -94,7 +94,7 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 /* This is declared again lower down, just needed here for this header. */

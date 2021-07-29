@@ -18,13 +18,59 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+
+
+enum FieldSkillRates
+{
+	FIELDSKILLRATE_FAST,
+	FIELDSKILLRATE_CLASSIC,
+	FIELDSKILLRATE_HARD
+};
+enum NewsStories
+{
+	NEWSSTORY_MAJOREVENT,
+	NEWSSTORY_SQUAD_SITE,
+	NEWSSTORY_SQUAD_ESCAPED,
+	NEWSSTORY_SQUAD_FLEDATTACK,
+	NEWSSTORY_SQUAD_DEFENDED,
+	NEWSSTORY_SQUAD_BROKESIEGE,
+	NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
+	NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE,
+	NEWSSTORY_SQUAD_KILLED_SITE,
+	NEWSSTORY_CCS_SITE,
+	NEWSSTORY_CCS_DEFENDED,
+	NEWSSTORY_CCS_KILLED_SIEGEATTACK,
+	NEWSSTORY_CCS_KILLED_SITE,
+	NEWSSTORY_CARTHEFT,
+	NEWSSTORY_MASSACRE,
+	NEWSSTORY_KIDNAPREPORT,
+	NEWSSTORY_NUDITYARREST,
+	NEWSSTORY_WANTEDARREST,
+	NEWSSTORY_DRUGARREST,
+	NEWSSTORY_GRAFFITIARREST,
+	NEWSSTORY_BURIALARREST,
+	NEWSSTORY_RAID_CORPSESFOUND,
+	NEWSSTORY_RAID_GUNSFOUND,
+	NEWSSTORY_HOSTAGE_RESCUED,
+	NEWSSTORY_HOSTAGE_ESCAPES,
+	NEWSSTORY_CCS_NOBACKERS,
+	NEWSSTORY_CCS_DEFEATED,
+	NEWSSTORY_PRESIDENT_IMPEACHED,
+	NEWSSTORY_PRESIDENT_BELIEVED_DEAD,
+	NEWSSTORY_PRESIDENT_FOUND_DEAD,
+	NEWSSTORY_PRESIDENT_FOUND,
+	NEWSSTORY_PRESIDENT_KIDNAPPED,
+	NEWSSTORY_PRESIDENT_MISSING,
+	NEWSSTORY_PRESIDENT_ASSASSINATED,
+	NEWSSTORYNUM
+};
 #include "includesRandom.h"
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -38,7 +84,6 @@ std::string tostring(long i);
 
 #include "includesSDS.h"
 #include "includesSDS2.h"
-//#include "includesDeprecatedB.h"
 
 #include "../creature/creature.h"
 ////
@@ -57,9 +102,7 @@ std::string tostring(long i);
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
-//#include "../news/news.h"
 void majornewspaper(char &clearformess, char canseethings);
-//#include "../sitemode/sitemode.h"
 void mode_site(const short loc);
 #include "../log/log.h"
 // for commondisplay.h
@@ -70,7 +113,10 @@ void mode_site(const short loc);
 #include "../common/translateid.h"
 // for  int getsquad(int)
 #include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
+/* common - sends somebody to the hospital */
+void hospitalize(int loc, DeprecatedCreature& patient);
+/* common - applies a crime to a person */
+void criminalize(DeprecatedCreature& cr, short crime);
 /* tells how many total members a squad has (including dead members) */
 // for void basesquad(squadst *,long)
 #include "../daily/daily.h"
@@ -81,10 +127,9 @@ void dispersalcheck(char &clearformess);
 //for void repairarmor(Creature &cr,char &clearformess); and stealcar
 #include "../daily/siege.h"        
 //for sigeturn and siegecheck
-//#include "../daily/recruit.h"
 void recruitment_activity(DeprecatedCreature &cr);
 char completerecruitmeeting(Deprecatedrecruitst &d, const int p);
-//#include "../daily/date.h"
+
 char completevacation(Deprecateddatest &d, int p);
 char completedate(Deprecateddatest &d, int p);
 #include "../combat/chaseCreature.h"

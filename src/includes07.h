@@ -28,29 +28,8 @@ const int BIT6 = (1 << 5);
 const int BIT7 = (1 << 6);
 const int BIT8 = (1 << 7);
 const int BIT9 = (1 << 8);
-const int BIT10 = (1 << 9);
-const int BIT11 = (1 << 10);
-const int BIT12 = (1 << 11);
-const int BIT13 = (1 << 12);
-const int BIT14 = (1 << 13);
-const int BIT15 = (1 << 14);
-const int BIT16 = (1 << 15);
-const int BIT17 = (1 << 16);
-const int BIT18 = (1 << 17);
-const int BIT19 = (1 << 18);
-const int BIT20 = (1 << 19);
-const int BIT21 = (1 << 20);
-const int BIT22 = (1 << 21);
-const int BIT23 = (1 << 22);
-const int BIT24 = (1 << 23);
-const int BIT25 = (1 << 24);
-const int BIT26 = (1 << 25);
-const int BIT27 = (1 << 26);
-const int BIT28 = (1 << 27);
-const int BIT29 = (1 << 28);
-const int BIT30 = (1 << 29);
-const int BIT31 = (1 << 30);
-const int BIT32 = (1 << 31);
+
+
 const int MAX_PATH_SIZE = 2048;
 const int RNG_SIZE = 4;
 /* These 6 random number generator functions are implemented in compat.cpp */
@@ -161,7 +140,7 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 const int TAB = 9;
@@ -201,55 +180,6 @@ enum CCSexposure
 	CCSEXPOSURENUM
 };
 
-/* *JDS* I'm making laws an array instead of a bunch
- * of bits which are either on or off. Each charge can be
- * duplicated, for multiple counts, and intense focus
- * for wanted persons.
- */
-enum Lawflags
-{
-	LAWFLAG_TREASON,      // "Treason"
-	LAWFLAG_TERRORISM,    // "Terrorism"
-	LAWFLAG_MURDER,       // "Murder"
-	LAWFLAG_KIDNAPPING,   // "Kidnapping"
-	LAWFLAG_BANKROBBERY,  // "Bank robbery"
-	LAWFLAG_ARSON,        // "Arson"
-	LAWFLAG_BURNFLAG,     // "Flag burning" / "Flag Murder"
-	LAWFLAG_SPEECH,       // "Harmful speech"
-	LAWFLAG_BROWNIES,     // "Drug dealing"
-	LAWFLAG_ESCAPED,      // "Escaping prison"
-	LAWFLAG_HELPESCAPE,   // "Releasing prisoners"
-	LAWFLAG_JURY,         // "Jury tampering"
-	LAWFLAG_RACKETEERING, // "Racketeering"
-	LAWFLAG_EXTORTION,    // "Extortion"
-	LAWFLAG_ARMEDASSAULT, // "Armed assault"
-	LAWFLAG_ASSAULT,      // "Assault"
-	LAWFLAG_CARTHEFT,     // "Grand theft auto"
-	LAWFLAG_CCFRAUD,      // "Credit card fraud"
-	LAWFLAG_THEFT,        // "Theft"
-	LAWFLAG_PROSTITUTION, // "Prostitution"
-	LAWFLAG_HIREILLEGAL,  // "Hiring illegal aliens" / "Hiring undocumented workers"
-	LAWFLAG_COMMERCE,     // "Electronic sabotage"
-	LAWFLAG_INFORMATION,  // "Hacking"
-	LAWFLAG_BURIAL,       // "Unlawful burial"
-	LAWFLAG_BREAKING,     // "Breaking and entering"
-	LAWFLAG_VANDALISM,    // "Vandalism"
-	LAWFLAG_RESIST,       // "Resisting arrest"
-	LAWFLAG_DISTURBANCE,  // "Disturbing the peace"
-	LAWFLAG_PUBLICNUDITY, // "Public nudity"
-	LAWFLAG_LOITERING,    // "Loitering"
-	LAWFLAGNUM
-};
-
-/* *JDS* In addition to laws being an array,
- * each law will be associated with a tag_heat value,
- * indicating how much that particular crime draws
- * police attention to the wanted person, and to the
- * LCS as a whole. This is a global array, available
- * at runtime and indexed to the lawflag enum, so that
- * code can dynamically look up these heat values as
- * needed at runtime.
- */
 
 
 enum AnimalGlosses
@@ -260,83 +190,8 @@ enum AnimalGlosses
 	ANIMALGLOSSNUM
 };
 
-enum Activity
-{
-	ACTIVITY_NONE,
-	ACTIVITY_VISIT,
-	ACTIVITY_HOSTAGETENDING,
-	ACTIVITY_TROUBLE,
-	ACTIVITY_GRAFFITI,
-	ACTIVITY_COMMUNITYSERVICE,
-	ACTIVITY_SELL_ART,
-	ACTIVITY_SELL_MUSIC,
-	ACTIVITY_SELL_TSHIRTS,
-	ACTIVITY_DONATIONS,
-	ACTIVITY_SELL_DRUGS,
-	ACTIVITY_PROSTITUTION,
-	ACTIVITY_POLLS,
-	ACTIVITY_CCFRAUD,
-	ACTIVITY_DOS_RACKET,
-	ACTIVITY_DOS_ATTACKS,
-	ACTIVITY_HACKING,
-	ACTIVITY_REPAIR_ARMOR,
-	ACTIVITY_MAKE_ARMOR,
-	ACTIVITY_STEALCARS,
-	ACTIVITY_WHEELCHAIR,
-	ACTIVITY_BURY,
-	ACTIVITY_WRITE_BLOG,
-	ACTIVITY_WRITE_LETTERS,
-	ACTIVITY_WRITE_GUARDIAN,
-	ACTIVITY_TEACH_POLITICS,
-	ACTIVITY_TEACH_FIGHTING,
-	ACTIVITY_TEACH_COVERT,
-	ACTIVITY_STUDY_DEBATING,
-	ACTIVITY_STUDY_MARTIAL_ARTS,
-	ACTIVITY_STUDY_DRIVING,
-	ACTIVITY_STUDY_PSYCHOLOGY,
-	ACTIVITY_STUDY_FIRST_AID,
-	ACTIVITY_STUDY_LAW,
-	ACTIVITY_STUDY_DISGUISE,
-	ACTIVITY_STUDY_SCIENCE,
-	ACTIVITY_STUDY_BUSINESS,
-	ACTIVITY_STUDY_GYMNASTICS,
-	ACTIVITY_STUDY_MUSIC,
-	ACTIVITY_STUDY_ART,
-	ACTIVITY_STUDY_TEACHING,
-	ACTIVITY_STUDY_WRITING,
-	ACTIVITY_STUDY_LOCKSMITHING,
-	ACTIVITY_STUDY_COMPUTERS,
-	ACTIVITY_STUDY_FENCING,
-	ACTIVITY_STUDY_WEAVING,
-	ACTIVITY_STUDY_RELIGION,
-	ACTIVITY_STUDY_CLUB,
-	ACTIVITY_STUDY_STREETSENSE,
-	ACTIVITY_STUDY_THROWING,
-	ACTIVITY_STUDY_STEALTH,
-	ACTIVITY_STUDY_SEDUCTION,
-	ACTIVITY_CLINIC,
-	ACTIVITY_HEAL,
-	ACTIVITY_SLEEPER_LIBERAL,
-	ACTIVITY_SLEEPER_CONSERVATIVE,
-	ACTIVITY_SLEEPER_SPY,
-	ACTIVITY_SLEEPER_RECRUIT,
-	ACTIVITY_SLEEPER_SCANDAL,
-	ACTIVITY_SLEEPER_EMBEZZLE,
-	ACTIVITY_SLEEPER_STEAL,
-	ACTIVITY_SLEEPER_JOINLCS,
-	ACTIVITY_RECRUITING,
-	ACTIVITY_AUGMENT,
-	ACTIVITYNUM
-};
 
 
-enum SquadStances
-{
-	SQUADSTANCE_ANONYMOUS,
-	SQUADSTANCE_STANDARD,
-	SQUADSTANCE_BATTLECOLORS,
-	SQUADSTANCE_MAX
-};
 
 const int ENCMAX = 18;
 // ENCMAX _HAS_ to be 26 or less, or else there aren't enough letters
@@ -460,28 +315,6 @@ const int SLOGAN_LEN = 80;
 
 const int SCORENUM = 5;
 
-enum EndTypes
-{
-	END_BUT_NOT_END = -2,
-	END_OTHER = -1,
-	END_WON,
-	END_HICKS,
-	END_CIA,
-	END_POLICE,
-	END_CORP,
-	END_REAGAN,
-	END_DEAD,
-	END_PRISON,
-	END_EXECUTED,
-	END_DATING,
-	END_HIDING,
-	END_DISBANDLOSS,
-	END_DISPERSED,
-	END_CCS,
-	END_FIREMEN,
-	END_STALIN,
-	ENDNUM
-};
 
 enum Execs
 {
@@ -503,10 +336,6 @@ std::string tostring(long i);
 
 //
 
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
-
 //just a float that is initialized to 0
 #include "floatZero.h"
 //Interrogation information for the InterrogationST system, to be
@@ -526,9 +355,6 @@ std::string tostring(long i);
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
@@ -539,9 +365,10 @@ std::string tostring(long i);
 #include "../common/ledger.h"
 // for renting
 #include "../items/money.h"
-//#include "../log/log.h"
 #include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
+/* common - applies a crime to a person */
+void criminalize(DeprecatedCreature& cr, short crime);
+void addjuice(DeprecatedCreature& cr, long juice, long cap);
 // for void basesquad(squadst *st,long loc);
 
 #include "../combat/fight.h"

@@ -1155,3 +1155,16 @@ String transfer 00,01,24,47,58,59,69
 4.12.59
 Finished String transfer
 Fixed error where SiegeMode Cover Fire may shoot at dead targets
+
+4.12.60
+Fixed display error for character 'ô'
+Found in names Itô and Satô
+
+4.12.61
+Removed unused //#define CH_USE_CP437
+Deleted cursesgraphics.h 
+it was only used once and for a single character
+Deleted common/commonactionsCreature.h
+common/commondisplayCreature.h
+
+Renamed includesDeprecatedB to includesVersionInfo, deleted rest of file

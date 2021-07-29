@@ -18,11 +18,10 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
 #include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -34,26 +33,15 @@ using namespace std;
 
 //int get_associated_attribute(int skill_type);
 
-//#include "includesSDS.h"
-//#include "includesDeprecatedB.h"
 // baseactions.cpp
 
 
 #include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
 
-////
-//#include "../cursesgraphics.h"
-
 #include "../vehicle/vehicletype.h"
 #include "../vehicle/vehicle.h"
-//#include "../common/getnames.h"
 void enter_name(int, int, char*, int, const char*);
 #include "../common/commondisplay.h"
 // for void printparty(void)

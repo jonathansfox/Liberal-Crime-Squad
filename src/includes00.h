@@ -51,7 +51,7 @@ inline long len(char* x)
 	return strlen(x);
 }
 
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 

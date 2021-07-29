@@ -1,7 +1,20 @@
 #pragma once
-//#include "common.h"
 #include "locationsEnums.h"
+const int BIT10 = (1 << 9);
+const int BIT11 = (1 << 10);
+const int BIT12 = (1 << 11);
+const int BIT13 = (1 << 12);
+const int BIT14 = (1 << 13);
+const int BIT15 = (1 << 14);
+const int BIT16 = (1 << 15);
 
+const int BIT17 = (1 << 16);
+const int BIT18 = (1 << 17);
+const int BIT19 = (1 << 18);
+const int BIT20 = (1 << 19);
+const int BIT21 = (1 << 20);
+const int BIT22 = (1 << 21);
+const int BIT23 = (1 << 22);
 
 const int SITEBLOCK_EXIT = BIT1;
 const int SITEBLOCK_BLOCK = BIT2;

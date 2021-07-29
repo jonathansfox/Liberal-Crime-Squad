@@ -1,13 +1,235 @@
-British
-Indian
-Chinese
-Rwandan
-Palestinian
-Egyptian
-French
-German
-Iraqi
+Afghan
+Albanian
+Algerian
+American
+Andorran
+Angolan
+Antiguan
+Argentinian
+Armenian
+Australian
+Austrian
+Azerbaijani
+Bahamian
+Bahraini
+Bangladeshi
+Barbadian
+Barbudan
+Barthélemois
+Basotho
+Belarusian
+Belgian
+Belizean
+Beninese
+Bermudian
+Bhutanese
 Bolivian
+Bonaire
+Bosnian
+Botswanan
+Brazilian
+British
+Bruneian
+Bulgarian
+Burkinabé
+Burmese
+Burundian
+Cabo Verdean
+Cambodian
+Cameroonian
+Canadian
+Caymanian
+Central African
+Chadian
+Chilean
+Chinese
 Columbian
+Comoran
+Congolese
+Costa Rican
+Croatian
+Cuban
+Curaçaoan
+Cypriot
+Czech
+Danish
+Djiboutian
+Dominican
+Dutch
+Ecuadorian
+Egyptian
+Emirati
+English
+Equatoguinean
+Eritrean
+Estonian
+Ethiopian
+Faeroese
+Fijian
+Filipino
+Finnish
+French
+Futunan
+Gabonese
+Gambian
+Georgian
+German
+Ghanaian
+Greek
+Greenlander
+Grenadian
+Guamanian
+Guatemalan
+Guernsey
+Guianese
+Guinean
+Guyanese
+Haitian
+Honduran
+Hong Konger
+Hungarian
+Icelandic
+Indian
+Indonesian
+Iranian
+Iraqi
+Irish
+Israeli
+Italian
+Ivorian
+Jamaican
+Jan Mayan
+Japanese
+Jersey
+Jordanian
+Kenyan
+Kirghiz
+Kiribati
+Korean
+Kosovan
+Kurdish
+Kuwaiti
+Kazakh
+Laotian
+Latvian
+Lebanese
+Liberian
+Libyan
+Liechtensteiner
+Lithuanian
+Luxembourger
+Macanese
+Macedonian
+Mahoran
+Malagasy
+Malawian
+Malaysian
+Maldivian
+Malinese
+Maltese
+Manx
+Marshallese
+Martinican
+Mauritian
+Mexican
+Micronesian
+Miquelonnais
+Moldovan
+Monégasque
+Mongolian
+Montenegrin
+Montserratian
+Moroccan
+Mozambican
+Myanma
+Namibian
+Nauruan
+Nepalese
+Nevisian
+New Caledonian
+New Zealander
+Ni-Vanuatu
+Nicaraguan
+Nigerian
+Niuean
+Northern Irish
+Northern Mariana Islander
+Norwegian
+Omani
+Pakistani
+Palauan
+Palestinian
+Panamanian
+Papuan
+Paraguayan
+Peruvian
+Polish
+Polynesian
+Portuguese
+Puerto Rican
+Qatari
+Réunionese
+Romanian
+Russian
+Rwandan
+Saba Dutch
+Sahrawi
+Saint Helenian
+Saint Lucian
+Saint-Martinoise
+Salvadorian
+Sammarinese
+Samoan
+São Toméan
+Saudi
+Scottish
+Senegalese
+Serbian
+Seychellois
+Sierra Leonean
+Singaporean
+Sint Maartener
+Slovak
+Slovenian
+Somali
+Somalilander
+South African
+South Ossetian
+South Sudanese
+Spanish
+Sri Lankan
+Statian
+Sudanese
+Surinamese
+Svalbard resident
+Swazi
+Swedish
+Swiss
+Syrian
+Taiwanese
+Tajikistani
+Tanzanian
+Thai
+Timorese
+Togolese
+Tokelauan
+Tongan
+Trinidadian
+Tunisian
+Turkish
+Turkmen
+Tuvaluan
+Ugandan
+Ukrainian
+Uruguayan
+Uzbekistani
+Venezuelan
+Vietnamese
+Vincentian
+Welsh
+Yemeni
+Zambian
+Zanzibari
+Zimbabwean
 Elbonian
-# from Dilbert
+#From Dilbert

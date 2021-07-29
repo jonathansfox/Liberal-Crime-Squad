@@ -18,18 +18,38 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
-
-//just a float that is initialized to 0
-//#include "floatZero.h"
-//Interrogation information for the InterrogationST system, to be
-//dynamically created on capture and deleted when InterrogationST ends,
-//referenced using a pointer typecast into one of the arguments
-//of the target's current action.
-//#include "activityST.h"
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
 
 //int get_associated_attribute(int skill_type);
 

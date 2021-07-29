@@ -31,6 +31,10 @@ This file is part of Liberal Crime Squad.                                       
 #include "../includes49.h"
 #include "../constStringcreature.h"
 #include <algorithm>
+void DeprecatedCreature::delete_and_nullify_prisoner() {
+
+	delete_and_nullify(prisoner);
+}
 DeprecatedCreature& DeprecatedCreature::operator=(const DeprecatedCreature& rhs)
 {
 	if (this != &rhs)

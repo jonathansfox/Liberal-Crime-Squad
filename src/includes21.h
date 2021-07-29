@@ -18,11 +18,40 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
-#include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+#include "includesRandom.h"
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -35,7 +64,6 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 #include "includesSDS.h"
 #include "includesSDS2.h"
-//#include "includesDeprecatedB.h"
 //#ifdef	JUSTICE_CPP
 // justice.cpp
 
@@ -44,10 +72,14 @@ using namespace std;
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../log/log.h"
-//#include "../common/commonactions.h"
 int scare_factor(int lawflag, int crimenumber);
-#include "../common/commonactionsCreature.h"
+/* common - tests if the person is a wanted criminal */
+bool iscriminal(CreatureJustice cr);
+/* common - applies a crime to a person */
+void criminalize(DeprecatedCreature& cr, short crime);
 // for  bool iscriminal(Creature &)
+void addjuice(DeprecatedCreature& cr, long juice, long cap);
+
 #include "../common/translateid.h"
 // for  int getarmortype
 #include "../politics/politics.h"

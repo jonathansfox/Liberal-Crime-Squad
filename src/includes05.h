@@ -55,14 +55,13 @@ enum LCSIO_FLAGS
 };
 #include <iostream>
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 // initfile.cpp
 
 #include "../common/stringconversion.h"
 //for int stringtobool(std::string boolstr);
-//#include "../common/consolesupport.h"
 // for void begin_cleartype_fix();
 #include "../title/titlescreen.h"
 extern short interface_pgup;

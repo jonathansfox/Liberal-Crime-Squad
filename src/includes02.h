@@ -105,7 +105,7 @@ void LCSRenameFile(const char* old_filename, const char* new_filename, int flags
 //returns a list of all files in homedir with extension .dat
 vector<string> LCSSaveFiles();
 
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 const int ESC = 27;
@@ -151,74 +151,6 @@ enum Lawflags
 };
 
 
-enum Activity
-{
-	ACTIVITY_NONE,
-	ACTIVITY_VISIT,
-	ACTIVITY_HOSTAGETENDING,
-	ACTIVITY_TROUBLE,
-	ACTIVITY_GRAFFITI,
-	ACTIVITY_COMMUNITYSERVICE,
-	ACTIVITY_SELL_ART,
-	ACTIVITY_SELL_MUSIC,
-	ACTIVITY_SELL_TSHIRTS,
-	ACTIVITY_DONATIONS,
-	ACTIVITY_SELL_DRUGS,
-	ACTIVITY_PROSTITUTION,
-	ACTIVITY_POLLS,
-	ACTIVITY_CCFRAUD,
-	ACTIVITY_DOS_RACKET,
-	ACTIVITY_DOS_ATTACKS,
-	ACTIVITY_HACKING,
-	ACTIVITY_REPAIR_ARMOR,
-	ACTIVITY_MAKE_ARMOR,
-	ACTIVITY_STEALCARS,
-	ACTIVITY_WHEELCHAIR,
-	ACTIVITY_BURY,
-	ACTIVITY_WRITE_BLOG,
-	ACTIVITY_WRITE_LETTERS,
-	ACTIVITY_WRITE_GUARDIAN,
-	ACTIVITY_TEACH_POLITICS,
-	ACTIVITY_TEACH_FIGHTING,
-	ACTIVITY_TEACH_COVERT,
-	ACTIVITY_STUDY_DEBATING,
-	ACTIVITY_STUDY_MARTIAL_ARTS,
-	ACTIVITY_STUDY_DRIVING,
-	ACTIVITY_STUDY_PSYCHOLOGY,
-	ACTIVITY_STUDY_FIRST_AID,
-	ACTIVITY_STUDY_LAW,
-	ACTIVITY_STUDY_DISGUISE,
-	ACTIVITY_STUDY_SCIENCE,
-	ACTIVITY_STUDY_BUSINESS,
-	ACTIVITY_STUDY_GYMNASTICS,
-	ACTIVITY_STUDY_MUSIC,
-	ACTIVITY_STUDY_ART,
-	ACTIVITY_STUDY_TEACHING,
-	ACTIVITY_STUDY_WRITING,
-	ACTIVITY_STUDY_LOCKSMITHING,
-	ACTIVITY_STUDY_COMPUTERS,
-	ACTIVITY_STUDY_FENCING,
-	ACTIVITY_STUDY_WEAVING,
-	ACTIVITY_STUDY_RELIGION,
-	ACTIVITY_STUDY_CLUB,
-	ACTIVITY_STUDY_STREETSENSE,
-	ACTIVITY_STUDY_THROWING,
-	ACTIVITY_STUDY_STEALTH,
-	ACTIVITY_STUDY_SEDUCTION,
-	ACTIVITY_CLINIC,
-	ACTIVITY_HEAL,
-	ACTIVITY_SLEEPER_LIBERAL,
-	ACTIVITY_SLEEPER_CONSERVATIVE,
-	ACTIVITY_SLEEPER_SPY,
-	ACTIVITY_SLEEPER_RECRUIT,
-	ACTIVITY_SLEEPER_SCANDAL,
-	ACTIVITY_SLEEPER_EMBEZZLE,
-	ACTIVITY_SLEEPER_STEAL,
-	ACTIVITY_SLEEPER_JOINLCS,
-	ACTIVITY_RECRUITING,
-	ACTIVITY_AUGMENT,
-	ACTIVITYNUM
-};
 
 
 
@@ -231,49 +163,6 @@ enum GameModes
 	GAMEMODE_CHASEFOOT
 };
 
-enum MusicModes
-{
-	MUSIC_TITLEMODE,
-	MUSIC_NEWGAME,
-	MUSIC_BASEMODE,
-	MUSIC_SIEGE,
-	MUSIC_ACTIVATE,
-	MUSIC_SLEEPERS,
-	MUSIC_STOPEVIL,
-	MUSIC_REVIEWMODE,
-	MUSIC_LIBERALAGENDA,
-	MUSIC_DISBANDED,
-	MUSIC_FINANCES,
-	MUSIC_CARTHEFT,
-	MUSIC_ELECTIONS,
-	MUSIC_SHOPPING,
-	MUSIC_SITEMODE,
-	MUSIC_SUSPICIOUS,
-	MUSIC_ALARMED,
-	MUSIC_HEAVYCOMBAT,
-	MUSIC_DEFENSE,
-	MUSIC_CONQUER,
-	MUSIC_CARCHASE,
-	MUSIC_FOOTCHASE,
-	MUSIC_INTERROGATION,
-	MUSIC_TRIAL,
-	MUSIC_RECRUITING,
-	MUSIC_DATING,
-	MUSIC_NEWSPAPER,
-	MUSIC_LACOPS,
-	MUSIC_NEWSCAST,
-	MUSIC_GLAMSHOW,
-	MUSIC_ANCHOR,
-	MUSIC_ABORT,
-	MUSIC_VICTORY,
-	MUSIC_DEFEAT,
-	MUSIC_REAGANIFIED,
-	MUSIC_STALINIZED,
-	MUSIC_OFF, // this one must come immediately after the ones corresponding to music files (this one is to have silence)
-	MUSIC_PREVIOUS, // this one must come after MUSIC_OFF (this one is to play the previous song)
-	MUSIC_CURRENT, // this one must come after MUSIC_OFF (this one continues playing the current song)
-	MUSIC_RANDOM // this one must come after MUSIC_OFF (this one plays a random song)
-};
 
 enum Views
 {
@@ -326,14 +215,6 @@ enum Views
 std::string tostring(long i);
 
 
-//
-
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
-
-//just a float that is initialized to 0
-//#include "floatZero.h"
 
 //#ifdef	TITLESCREEN_CPP
 // titlescreen.cpp
@@ -347,7 +228,6 @@ void mode_base();
 //for void viewhighscores
 #include "../title/newgame.h"
 //for void setup_newgame();
-//#include "../title/saveload.h"
 bool file_exists(const std::string& filename);
 char load(const string& filename);
 void savegame(const string& filename);
@@ -374,5 +254,9 @@ void pressAnyKey();
 int getkeyAlt();
 bool is_page_up(const int c);
 bool is_page_down(const int c);
+
+
+/* displays the high score board */
+void viewhighscores(int musicoverride = MUSIC_OFF);
 //#endif//TITLESCREEN_CPP
 //#endif// INCLUDES_H_INCLUDED

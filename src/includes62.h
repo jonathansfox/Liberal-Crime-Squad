@@ -18,13 +18,92 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+enum AnimalGlosses
+{
+	ANIMALGLOSS_NONE,//IMPORTANT THAT THIS BE HERE AT ZERO
+	ANIMALGLOSS_TANK,
+	ANIMALGLOSS_ANIMAL,
+	ANIMALGLOSSNUM
+};
+
+enum GameModes
+{
+	GAMEMODE_TITLE,
+	GAMEMODE_BASE,
+	GAMEMODE_SITE,
+	GAMEMODE_CHASECAR,
+	GAMEMODE_CHASEFOOT
+};
+
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+enum Crimes
+{
+	CRIME_STOLEGROUND,
+	CRIME_UNLOCKEDDOOR,
+	CRIME_BROKEDOWNDOOR,
+	CRIME_ATTACKED_MISTAKE,
+	CRIME_ATTACKED,
+	CRIME_CARCHASE,
+	CRIME_CARCRASH,
+	CRIME_FOOTCHASE,
+	CRIME_KILLEDSOMEBODY,
+	CRIME_SHUTDOWNREACTOR,
+	CRIME_POLICE_LOCKUP,
+	CRIME_COURTHOUSE_LOCKUP,
+	CRIME_PRISON_RELEASE,
+	CRIME_JURYTAMPERING,
+	CRIME_HACK_INTEL,
+	CRIME_BREAK_SWEATSHOP,
+	CRIME_BREAK_FACTORY,
+	CRIME_HOUSE_PHOTOS,
+	CRIME_CORP_FILES,
+	CRIME_FREE_RABBITS,
+	CRIME_FREE_BEASTS,
+	CRIME_ARSON,
+	CRIME_TAGGING,
+	CRIME_ARMORY,
+	CRIME_VANDALISM,
+	CRIME_BANKVAULTROBBERY,
+	CRIME_BANKTELLERROBBERY,
+	CRIME_BANKSTICKUP,
+	CRIMENUM
+};
+
 #include "includesRandom.h"
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -42,9 +121,6 @@ std::string tostring(long i);
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
@@ -57,17 +133,16 @@ std::string tostring(long i);
 #include "../sitemode/sitedisplay.h"
 #include "../items/money.h"
 #include "../log/log.h"
-// for gamelog
-//#include "../common/translateid.h"
+
 int getarmortype(const string &idname);
-//#include "../common/commondisplay.h"
 void printparty();
 #include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
-//#include "../combat/chaseCreature.h"
+/* common - applies a crime to a person */
+void criminalize(DeprecatedCreature& cr, short crime);
+void addjuice(DeprecatedCreature& cr, long juice, long cap);
+
 Vehicle* getChaseVehicle(const DeprecatedCreature &c);
 DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c);
-//#include "../combat/haulkidnapCreature.h"
 void freehostage(DeprecatedCreature &cr, char situation);
 #include "../cursesAlternative.h"
 #include "../customMaps.h"

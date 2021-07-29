@@ -867,6 +867,7 @@ void set_default_values(DeprecatedCreature* newcr) {
 		severe_internal_damage(newcr);
 	}
 }
+int addstrAltTest(const char* z);
 bool print_default_founder_window(DeprecatedCreature* newcr) {
 
 	char first[3][80];
@@ -892,6 +893,9 @@ bool print_default_founder_window(DeprecatedCreature* newcr) {
 		mvaddstrAlt(4, 6, theFounder);
 		mvaddstrAlt(7, 2, firstName);
 		addstrAlt(first[(int)gender]);
+		// Names are a frequent source of characters that don't convert properly from OEM 437
+		//mvaddstrAlt(8, 2, ":");
+		//addstrAltTest(first[(int)gender]);
 		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 		mvaddstrAlt(7, 30, pressAtoReconsider);
 		set_color_easy(WHITE_ON_BLACK_BRIGHT);

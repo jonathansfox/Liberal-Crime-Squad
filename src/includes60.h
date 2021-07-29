@@ -18,13 +18,60 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+enum GameModes
+{
+	GAMEMODE_TITLE,
+	GAMEMODE_BASE,
+	GAMEMODE_SITE,
+	GAMEMODE_CHASECAR,
+	GAMEMODE_CHASEFOOT
+};
+
+enum ReviewModes
+{
+	REVIEWMODE_LIBERALS,
+	REVIEWMODE_HOSTAGES,
+	REVIEWMODE_CLINIC,
+	REVIEWMODE_JUSTICE,
+	REVIEWMODE_SLEEPERS,
+	REVIEWMODE_DEAD,
+	REVIEWMODE_AWAY,
+	REVIEWMODENUM
+};
+
+enum SortingChoices
+{
+	SORTING_NONE,
+	SORTING_NAME,
+	SORTING_LOCATION_AND_NAME,
+	SORTING_SQUAD_OR_NAME,
+	SORTINGNUM
+};
+
+
+enum ActiveSortingChoices
+{
+	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+	SORTINGCHOICE_JUSTICE,
+	SORTINGCHOICE_SLEEPERS,
+	SORTINGCHOICE_DEAD,
+	SORTINGCHOICE_AWAY,
+	SORTINGCHOICE_ACTIVATE,
+	SORTINGCHOICE_ACTIVATESLEEPERS,
+	SORTINGCHOICE_ASSEMBLESQUAD,
+	SORTINGCHOICE_BASEASSIGN,
+	SORTINGCHOICENUM
+};
+
 #include "includesRandom.h"
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -42,16 +89,11 @@ std::string tostring(long i);
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
-//#include "../creature/deprecatedCreatureC.h"
-
 #include "../creature/deprecatedCreatureD.h"
 
 ////
 #include "../locations/locationsEnums.h"
-//#include "../pdcurses/curses.h"
+
 #include "../common/ledgerEnums.h"
 #include "../common/ledger.h"
 #include "../vehicle/vehicletype.h"

@@ -1,6 +1,5 @@
 
 
-
 typedef struct {
 	vector<vector<string> >* super_collection;
 	vector<string>* collection;
@@ -27,21 +26,4 @@ struct stringConnectedToView {
 	stringConnectedToView(string aboveFifty_, string belowFifty_, string belowFiftyEliteLiberalLaw_, string belowFiftyLiberalLaw_) : aboveFifty(aboveFifty_), belowFifty(belowFifty_), belowFiftyLiberalLaw(belowFiftyLiberalLaw_), belowFiftyEliteLiberalLaw(belowFiftyEliteLiberalLaw_) {}
 };
 
-
-struct ChangeOfOpinion
-{
-	Views view;
-	int x, y, z;
-	ChangeOfOpinion(Views view_, int x_, int y_, int z_) : view(view_), x(x_), y(y_), z(z_) { }
-};
-struct activityData
-{
-	const char* msgString;
-	CheckDifficulty difficulty;
-	int juiceval;
-	Lawflags crime;
-	vector<ChangeOfOpinion> opinion;
-	vector<string> lootType;
-	activityData(const char* msgString_, CheckDifficulty difficulty_, int juiceval_, Lawflags crime_, vector<ChangeOfOpinion> opinion_, vector<string> lootType_) : msgString(msgString_), difficulty(difficulty_), juiceval(juiceval_), crime(crime_), opinion(opinion_), lootType(lootType_) { }
-};
 void displayDifficulty(int difficulty);

@@ -1,9 +1,6 @@
 #include <cstdio>
 #include <string>
 
-//#include <QString>
-//#include <QDataStream>
-
 enum GuiState { GAME_MODE, PORTRAIT_GENERATOR, LOOKS_CALIBRATION, TOTAL_GUI };
 
 

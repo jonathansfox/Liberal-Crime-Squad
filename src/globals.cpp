@@ -417,6 +417,7 @@ void make_creature_without_encounter_array(const int x, const short type) {
 	makecreature(encounter[x], type);
 }
 // TODO convert this to Linked List?
+// IsaacG POINTER ARITHMETIC
 /* kills the specified creature from the encounter, dropping loot */
 void delenc(const short e, const char loot)
 {

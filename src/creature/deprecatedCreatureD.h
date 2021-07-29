@@ -1,6 +1,14 @@
 
 #pragma once
 
+enum SquadStances
+{
+	SQUADSTANCE_ANONYMOUS,
+	SQUADSTANCE_STANDARD,
+	SQUADSTANCE_BATTLECOLORS,
+	SQUADSTANCE_MAX
+};
+
 struct Deprecatedsquadst
 {
 	char name[SQUAD_NAMELEN];

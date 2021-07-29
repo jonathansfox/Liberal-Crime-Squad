@@ -18,9 +18,27 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
+
+
+enum ActiveSortingChoices
+{
+	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+	SORTINGCHOICE_JUSTICE,
+	SORTINGCHOICE_SLEEPERS,
+	SORTINGCHOICE_DEAD,
+	SORTINGCHOICE_AWAY,
+	SORTINGCHOICE_ACTIVATE,
+	SORTINGCHOICE_ACTIVATESLEEPERS,
+	SORTINGCHOICE_ASSEMBLESQUAD,
+	SORTINGCHOICE_BASEASSIGN,
+	SORTINGCHOICENUM
+};
+
 
 
 //just a float that is initialized to 0
@@ -34,17 +52,17 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 #include "includesSDS.h"
-//#include "includesDeprecatedB.h"
 //activate_sleepers.cpp
 #include "../creature/creature.h"
-//#include "../common/commonactions.h"
 void sorting_prompt(short listforsorting);
-#include "../common/commonactionsCreature.h"
-// for void sortliberals(std::vector<Creature *>&,short,bool)
+
+/* Determines the number of subordinates a creature may recruit,
+based on their max and the number they already command */
+int subordinatesleft(const DeprecatedCreature& cr);
+void sortliberals(std::vector<DeprecatedCreature*>& liberals, short sortingchoice, bool dosortnone = false);
+
 #include "../common/commondisplay.h"
-//#include "../common/commondisplayCreature.h"
 void printcreatureinfo(DeprecatedCreature *cr, unsigned char knowledge = 255);
-//#include "../common/getnames.h"
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"
 #include "../set_color_support.h"

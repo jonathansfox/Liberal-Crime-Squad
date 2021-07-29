@@ -1,4 +1,4 @@
-
+ï»¿
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                      //
@@ -22,6 +22,9 @@
 //      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 //////////////////////////////////////////////////////////////////////////////////////////
 #include "includes38.h"
+#include "includesSDS.h"
+#include "includesSDS2.h"
+#include "includesVersionInfo.h"
 #include "constStringgame.h"
 #include <time.h>
 void mainOne() {
@@ -37,9 +40,9 @@ void mainTwo() {
 	time_t t = time(0);
 	struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
 	char datetime[41];
-	sprintf(datetime, "ÄÄÄÄÄÄÄÄÄ%iÄ%02iÄ%02i %02i:%02i:%02iÄÄÄÄÄÄÄÄÄ\n\n\n",
+	sprintf(datetime, "Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„%iÃ„%02iÃ„%02i %02i:%02i:%02iÃ„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„\n\n\n",
 		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
-	gamelog.log(string("\n\n\nÄÄÄÄÄÄÄÄÄÄ PROGRAM STARTED ÄÄÄÄÄÄÄÄÄÄ\n") + datetime);
+	gamelog.log(string("\n\n\nÃ„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„ PROGRAM STARTED Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„\n") + datetime);
 }
 void mainThree() {
 	music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
@@ -136,6 +139,7 @@ void mainFive() {
 			lawList[LAW_TORTURE] = -1;
 		}
 }
+
 const string blankString = "";
 string fixLineSpecialCharacter(char * toFix) {
 	string str = blankString;
@@ -145,38 +149,41 @@ string fixLineSpecialCharacter(char * toFix) {
 			i++;
 			char c;
 			switch (toFix[i]) {
-			case -87: // 'é'
+			case -87: // 'Ã©'
 				c = (char)0x82;
 				break;
-			case -74: // 'ö'
+			case -74: // 'Ã¶'
 				c = (char)0x94;
 				break;
-			case -95: // 'á'
+			case -95: // 'Ã¡'
 				c = (char)0xa0;
 				break;
-			case -83: // 'í'
+			case -83: // 'Ã­'
 				c = (char)0xa1;
 				break;
-			case -77: // 'ó'
+			case -77: // 'Ã³'
 				c = (char)0xa2;
 				break;
-			case -70: // 'ú'
+			case -76: // 'Ã´'
+				c = (char)0x93;
+				break;
+			case -70: // 'Ãº'
 				c = (char)0xa3;
 				break;
-			case (int) '¼':
-				// 'ü'
+			case (int) 'Â¼':
+				// 'Ã¼'
 				c = (char)0x81;
 				break;
-			case (int) '«':
-				// 'ë'
+			case (int) 'Â«':
+				// 'Ã«'
 				c = (char)0x89;
 				break;
-			case (int) '²':
-				// 'ò'
+			case (int) 'Â²':
+				// 'Ã²'
 				c = (char)0x95;
 				break;
-			case (int) '¢':
-				// 'â'
+			case (int) 'Â¢':
+				// 'Ã¢'
 				c = (char)0x83;
 				break;
 			default:
@@ -185,17 +192,20 @@ string fixLineSpecialCharacter(char * toFix) {
 			}
 			str += c;
 		}
-		else if (toFix[i] == 'ô') {
+		else if (toFix[i] == -76) {
 			str += (char)0x93;
-			//str += 'ô';
+			//str += 'Ã´';
 		}
-		//else if (toFix[i] == 'Â') {
+		else if (toFix[i] == 180) {
+			str += (char) 147;
+		}
+		//else if (toFix[i] == 'Ã‚') {
 		//	oem 437 does not have this character
-		//	str += 'Â';
+		//	str += 'Ã‚';
 		//}
-		else if (toFix[i] == '¢') {
+		else if (toFix[i] == 'Â¢') {
 			str += (char)0x9b;
-			//str += '¢';
+			//str += 'Â¢';
 		}
 		else {
 			str += toFix[i];

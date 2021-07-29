@@ -59,6 +59,7 @@ public:
 };
 
 #pragma once
+
 struct chaseseqst
 {
 	long location;

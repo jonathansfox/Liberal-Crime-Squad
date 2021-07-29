@@ -18,12 +18,93 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
-#include "includesDeprecated.h"
+#include "includesLen.h"
+#include <iostream>
+//#include "includesDeprecated.h"
+const int BIT1 = (1 << 0);
+const int BIT2 = (1 << 1);
+const int BIT3 = (1 << 2);
+const int BIT4 = (1 << 3);
+const int BIT5 = (1 << 4);
+const int BIT6 = (1 << 5);
+const int BIT7 = (1 << 6);
+const int BIT8 = (1 << 7);
+const int BIT9 = (1 << 8);
+
+class Log;
+
+/* Deletes and removes all pointers in a container. */
+template <class Container> inline void delete_and_clear(Container& c)
+{
+	while (len(c))
+	{
+		delete c.back();
+		c.pop_back();
+	}
+}
+const int ENTER = 10;
+const int ESC = 27;
+const int SPACEBAR = 32;
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+enum ReviewModes
+{
+	REVIEWMODE_LIBERALS,
+	REVIEWMODE_HOSTAGES,
+	REVIEWMODE_CLINIC,
+	REVIEWMODE_JUSTICE,
+	REVIEWMODE_SLEEPERS,
+	REVIEWMODE_DEAD,
+	REVIEWMODE_AWAY,
+	REVIEWMODENUM
+};
+
+enum ActiveSortingChoices
+{
+	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+	SORTINGCHOICE_JUSTICE,
+	SORTINGCHOICE_SLEEPERS,
+	SORTINGCHOICE_DEAD,
+	SORTINGCHOICE_AWAY,
+	SORTINGCHOICE_ACTIVATE,
+	SORTINGCHOICE_ACTIVATESLEEPERS,
+	SORTINGCHOICE_ASSEMBLESQUAD,
+	SORTINGCHOICE_BASEASSIGN,
+	SORTINGCHOICENUM
+};
+
 #include "includesRandom.h"
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
 
 //just a float that is initialized to 0
@@ -36,8 +117,6 @@ std::string tostring(long i);
 
 //int get_associated_attribute(int skill_type);
 
-
-//#include "includesDeprecatedB.h"
 #include "includesSDS.h"
 //activate.cpp
 
@@ -50,18 +129,23 @@ std::string tostring(long i);
 #include "../creature/augmenttype.h"
 #include "../common/translateid.h"
 // for  int getsquad(int)
-//#include "../common/commonactions.h"
 void sorting_prompt(short listforsorting);
-#include "../common/commonactionsCreature.h"
-// for void sortliberals(std::vector<Creature *>&,short,bool)
+
+/* common - gives juice to a given creature */
+void addjuice(DeprecatedCreature& cr, long juice, long cap);
+/* common - determines how long a creature's injuries will take to heal */
+int clinictime(DeprecatedCreature& g);
+void sortliberals(std::vector<DeprecatedCreature*>& liberals, short sortingchoice, bool dosortnone = false);
+
 #include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
-// for void printfunds(int,int,char*)
-//#include "../common/getnames.h"
+/* character info at top of screen */
+void printcreatureinfo(DeprecatedCreature* cr, unsigned char knowledge = 255);
+/* prints a character's general health description (One Leg, Liberal, NearDETH...) */
+void printhealthstat(CreatureHealth g, int y, int x, char smll);
+/* prints a character's health description for each bodypart (Head, Body...) */
+void printwoundstat(CreatureHealth cr, int y, int x);
 std::string gettitle(const int align, const int juice);
-//#include "../common/help.h"
 void HelpActivities(int);
-//#include "../common/stringconversion.h"
 string attribute_enum_to_string(int);
 #include "../cursesAlternative.h"
 #include "../cursesAlternativeConstants.h"

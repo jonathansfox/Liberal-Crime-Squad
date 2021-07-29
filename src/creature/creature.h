@@ -5,6 +5,56 @@
 #include "creatureConstants.h"
 #include "newcreature.h"
 
+/* *JDS* I'm making laws an array instead of a bunch
+ * of bits which are either on or off. Each charge can be
+ * duplicated, for multiple counts, and intense focus
+ * for wanted persons.
+ */
+enum Lawflags
+{
+	LAWFLAG_TREASON,      // "Treason"
+	LAWFLAG_TERRORISM,    // "Terrorism"
+	LAWFLAG_MURDER,       // "Murder"
+	LAWFLAG_KIDNAPPING,   // "Kidnapping"
+	LAWFLAG_BANKROBBERY,  // "Bank robbery"
+	LAWFLAG_ARSON,        // "Arson"
+	LAWFLAG_BURNFLAG,     // "Flag burning" / "Flag Murder"
+	LAWFLAG_SPEECH,       // "Harmful speech"
+	LAWFLAG_BROWNIES,     // "Drug dealing"
+	LAWFLAG_ESCAPED,      // "Escaping prison"
+	LAWFLAG_HELPESCAPE,   // "Releasing prisoners"
+	LAWFLAG_JURY,         // "Jury tampering"
+	LAWFLAG_RACKETEERING, // "Racketeering"
+	LAWFLAG_EXTORTION,    // "Extortion"
+	LAWFLAG_ARMEDASSAULT, // "Armed assault"
+	LAWFLAG_ASSAULT,      // "Assault"
+	LAWFLAG_CARTHEFT,     // "Grand theft auto"
+	LAWFLAG_CCFRAUD,      // "Credit card fraud"
+	LAWFLAG_THEFT,        // "Theft"
+	LAWFLAG_PROSTITUTION, // "Prostitution"
+	LAWFLAG_HIREILLEGAL,  // "Hiring illegal aliens" / "Hiring undocumented workers"
+	LAWFLAG_COMMERCE,     // "Electronic sabotage"
+	LAWFLAG_INFORMATION,  // "Hacking"
+	LAWFLAG_BURIAL,       // "Unlawful burial"
+	LAWFLAG_BREAKING,     // "Breaking and entering"
+	LAWFLAG_VANDALISM,    // "Vandalism"
+	LAWFLAG_RESIST,       // "Resisting arrest"
+	LAWFLAG_DISTURBANCE,  // "Disturbing the peace"
+	LAWFLAG_PUBLICNUDITY, // "Public nudity"
+	LAWFLAG_LOITERING,    // "Loitering"
+	LAWFLAGNUM
+};
+
+/* *JDS* In addition to laws being an array,
+ * each law will be associated with a tag_heat value,
+ * indicating how much that particular crime draws
+ * police attention to the wanted person, and to the
+ * LCS as a whole. This is a global array, available
+ * at runtime and indexed to the lawflag enum, so that
+ * code can dynamically look up these heat values as
+ * needed at runtime.
+ */
+
 #ifndef MIN
 // minimum of 2 numbers
 #define MIN(a,b) (((a)>(b))?(b):(a))
@@ -321,10 +371,7 @@ public:
 	bool is_prisoner_enemy()const {
 		return prisoner->enemy();
 	}
-	void delete_and_nullify_prisoner() {
-
-		delete_and_nullify(prisoner);
-	}
+	void delete_and_nullify_prisoner();
 	void make_prisoner_ground_loot() {
 		void makeloot(DeprecatedCreature &cr);
 		makeloot(*prisoner);

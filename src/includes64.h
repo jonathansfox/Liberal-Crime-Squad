@@ -18,10 +18,46 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+/* Deletes a specified pointer and sets it to NULL. */
+template <typename T> inline void delete_and_nullify(T*& o)
+{
+	delete o;
+	o = NULL;
+}
+
+enum ReviewModes
+{
+	REVIEWMODE_LIBERALS,
+	REVIEWMODE_HOSTAGES,
+	REVIEWMODE_CLINIC,
+	REVIEWMODE_JUSTICE,
+	REVIEWMODE_SLEEPERS,
+	REVIEWMODE_DEAD,
+	REVIEWMODE_AWAY,
+	REVIEWMODENUM
+};
+
+enum ActiveSortingChoices
+{
+	SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+	SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+	SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+	SORTINGCHOICE_JUSTICE,
+	SORTINGCHOICE_SLEEPERS,
+	SORTINGCHOICE_DEAD,
+	SORTINGCHOICE_AWAY,
+	SORTINGCHOICE_ACTIVATE,
+	SORTINGCHOICE_ACTIVATESLEEPERS,
+	SORTINGCHOICE_ASSEMBLESQUAD,
+	SORTINGCHOICE_BASEASSIGN,
+	SORTINGCHOICENUM
+};
+
 #include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
 
 //just a float that is initialized to 0
@@ -35,16 +71,10 @@ using namespace std;
 //int get_associated_attribute(int skill_type);
 
 
-//#include "includesDeprecatedB.h"
 std::string getactivity(ActivityST& act);
 // reviewmode.cpp
 
 #include "../creature/creature.h"
-////
-
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
 
@@ -53,21 +83,34 @@ std::string getactivity(ActivityST& act);
 #include "../log/log.h"
 // for commondisplay.h
 #include "../common/commondisplay.h"
-#include "../common/commondisplayCreature.h"
+/* full screen character sheet, just skills */
+void printliberalskills(CreatureJustice cr, ListOfCreatureSkills cr_2);
+/* full screen character sheet */
+void printliberalstats(DeprecatedCreature& cr);
+/* Full screen character sheet, crime sheet */
+void printliberalcrimes(CreatureJustice cr);
+/* prints a character's general health description (One Leg, Liberal, NearDETH...) */
+void printhealthstat(CreatureHealth g, int y, int x, char smll);
 // for void printfunds(int,int,char*)
 #include "../common/getnames.h"
 // for std::string getactivity(ActivityST)
-//#include "../common/equipment.h"
 void consolidateloot(vector<Item *>&);
 void equipmentbaseassign();
 #include "../common/commonactions.h"
-#include "../common/commonactionsCreature.h"
+/* common - applies a crime to a person */
+void criminalize(DeprecatedCreature& cr, short crime);
+/* common - tests if the person is a wanted criminal */
+bool iscriminal(CreatureJustice cr);
+/* common - removes the liberal from all squads */
+void removesquadinfo(DeprecatedCreature& cr);
+/* Determines the number of subordinates a creature may recruit,
+based on their max and the number they already command */
+int subordinatesleft(const DeprecatedCreature& cr);
+void sortliberals(std::vector<DeprecatedCreature*>& liberals, short sortingchoice, bool dosortnone = false);
 /* tells how many total members a squad has (including dead members) */
 // for short reviewmodeenum_to_sortingchoiceenum(short)
-//#include "../common/translateid.h"
 int getsquad(int);
 int getpoolcreature(int);
-//#include "../monthly/lcsmonthly.h"
 void fundreport(char &clearformess);
 void printname(const int hiding, const int location, const int flag, const string name);
 #include "../cursesAlternativeConstants.h"

@@ -27,8 +27,8 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "../includes06.h"
 #include "../constStringhighscore.h"
-#include "../includesDeprecatedB.h"
-
+#include "../includesVersionInfo.h"
+#include "includesSDS.h"
 /* loads the high scores file */
 void loadhighscores()
 {

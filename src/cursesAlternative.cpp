@@ -1,5 +1,8 @@
 #include "includes47.h"
+#include "includesSDS.h"
+#include "includesSDS2.h"
 #include "constStringOEMcursesAlternative.h"
+#include "includesVersionInfo.h"
 #include <mbctype.h>
 #include <gui_constants.h>
 
@@ -3533,6 +3536,13 @@ int     mvgetnstrAlt(int x, int y, char *ch, int z) {
 int moveAlt(const int x, const int y) { return move(x, y); }
 int	mvaddstrAlt(const int x, const int y, const string z) { return mvaddstr(x, y, z.data()); }
 int	mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y, z); }
+// Curses uses OEM 437, which is different in unusual ways
+// This function helps translate OEM 437 to other text
+int addstrAltTest(const char* z) {
+	int ret = ERR;
+	for (int i = 0; i < len(z); i++) { ret = addstrAlt((int)z[i]); ret = addstrAlt(" "); }
+	return ret;
+}
 //int		mvaddstrAlt(const int x, const int y, const char* z) { return mvaddstr(x, y, z); }
 //int addstrAlt(const char* x, Log y) { return addstr(x,y); }
 //int addstrAlt(const string x) { return addstr(x); }

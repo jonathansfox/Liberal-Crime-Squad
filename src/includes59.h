@@ -18,12 +18,29 @@
 #include "cmarkup/Markup.h" //For XML.
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+enum AnimalGlosses
+{
+	ANIMALGLOSS_NONE,//IMPORTANT THAT THIS BE HERE AT ZERO
+	ANIMALGLOSS_TANK,
+	ANIMALGLOSS_ANIMAL,
+	ANIMALGLOSSNUM
+};
+
+enum GameModes
+{
+	GAMEMODE_TITLE,
+	GAMEMODE_BASE,
+	GAMEMODE_SITE,
+	GAMEMODE_CHASECAR,
+	GAMEMODE_CHASEFOOT
+};
+
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -41,10 +58,6 @@ string skill_enum_to_string(int skill_type);
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
 #include "../creature/deprecatedCreatureD.h"
 
 ////
@@ -56,8 +69,18 @@ string skill_enum_to_string(int skill_type);
 // for getmonth
 #include "../common/translateid.h"
 // for  int getcar(int)
-#include "../common/commonactionsCreature.h"
-// for void sortliberals(std::vector<Creature *>&,short,bool)
+// Determines the number of dates a creature has scheduled
+int scheduleddates(const DeprecatedCreature& cr);
+// Determines the number of love slaves a creature has
+int loveslaves(const DeprecatedCreature& cr);
+// Determines the number of recruitment meetings a creature has scheduled
+int scheduledmeetings(const DeprecatedCreature& cr);
+/* Determines the number of subordinates a creature may command */
+int maxsubordinates(const DeprecatedCreature& cr);
+/* Determines the number of subordinates a creature may recruit,
+based on their max and the number they already command */
+int subordinatesleft(const DeprecatedCreature& cr);
+
 #include "../daily/siege.h"
 // for statebrokenlaws(cr);
 #include "../cursesAlternative.h"

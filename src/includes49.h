@@ -18,13 +18,66 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
+
+/* Deletes a specified pointer and sets it to NULL. */
+template <typename T> inline void delete_and_nullify(T*& o)
+{
+	delete o;
+	o = NULL;
+}
+
+enum AnimalGlosses
+{
+	ANIMALGLOSS_NONE,//IMPORTANT THAT THIS BE HERE AT ZERO
+	ANIMALGLOSS_TANK,
+	ANIMALGLOSS_ANIMAL,
+	ANIMALGLOSSNUM
+};
+
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+enum Execs
+{
+	EXEC_PRESIDENT,
+	EXEC_VP,
+	EXEC_STATE,
+	EXEC_ATTORNEY,
+	EXECNUM
+};
+
 #include "includesRandom.h"
 /* This is declared again lower down, just needed here for this header. */
 std::string tostring(long i);
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
-
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -41,7 +94,6 @@ std::string tostring(long i);
 #include "includesSDS2.h"
 string showXmlSkill(int skill_, int value_);
 string showXmlAttribute(int attribute_, int value_);
-//#include "includesDeprecatedB.h"
 string skill_enum_to_string(int skill_type);
 // creature.cpp
 
@@ -50,11 +102,8 @@ string skill_enum_to_string(int skill_type);
 #include "../vehicle/vehicle.h"
 #include "../sitemode/stealth.h"
 // for hasdisguise
-//#include "../common/stringconversion.h"
 string attribute_enum_to_string(int attribute);
 #include "../common/translateid.h"
-// for  int getweapontype(int )
-//#include "../politics/politics.h"
 /* politics -- promotes the Vice President to President, and replaces VP */
 void promoteVP();
 //only use here. --Schmel924

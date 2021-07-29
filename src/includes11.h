@@ -28,29 +28,8 @@ const int BIT6 = (1 << 5);
 const int BIT7 = (1 << 6);
 const int BIT8 = (1 << 7);
 const int BIT9 = (1 << 8);
-const int BIT10 = (1 << 9);
-const int BIT11 = (1 << 10);
-const int BIT12 = (1 << 11);
-const int BIT13 = (1 << 12);
-const int BIT14 = (1 << 13);
-const int BIT15 = (1 << 14);
-const int BIT16 = (1 << 15);
-const int BIT17 = (1 << 16);
-const int BIT18 = (1 << 17);
-const int BIT19 = (1 << 18);
-const int BIT20 = (1 << 19);
-const int BIT21 = (1 << 20);
-const int BIT22 = (1 << 21);
-const int BIT23 = (1 << 22);
-const int BIT24 = (1 << 23);
-const int BIT25 = (1 << 24);
-const int BIT26 = (1 << 25);
-const int BIT27 = (1 << 26);
-const int BIT28 = (1 << 27);
-const int BIT29 = (1 << 28);
-const int BIT30 = (1 << 29);
-const int BIT31 = (1 << 30);
-const int BIT32 = (1 << 31);
+
+
 const int MAX_PATH_SIZE = 2048;
 const int RNG_SIZE = 4;
 
@@ -157,7 +136,7 @@ template <class Container> inline void delete_and_clear(Container& c1, Container
 			if (c1[i1] == c2[i2]) delete_and_remove(c1, i1, c2, i2);
 }
 
-#define CH_USE_CP437
+//#define CH_USE_CP437
 
 
 const int ENTER = 10;
@@ -165,180 +144,6 @@ const int ESC = 27;
 const int SPACEBAR = 32;
 
 
-
-/* *JDS* I'm making laws an array instead of a bunch
- * of bits which are either on or off. Each charge can be
- * duplicated, for multiple counts, and intense focus
- * for wanted persons.
- */
-enum Lawflags
-{
-	LAWFLAG_TREASON,      // "Treason"
-	LAWFLAG_TERRORISM,    // "Terrorism"
-	LAWFLAG_MURDER,       // "Murder"
-	LAWFLAG_KIDNAPPING,   // "Kidnapping"
-	LAWFLAG_BANKROBBERY,  // "Bank robbery"
-	LAWFLAG_ARSON,        // "Arson"
-	LAWFLAG_BURNFLAG,     // "Flag burning" / "Flag Murder"
-	LAWFLAG_SPEECH,       // "Harmful speech"
-	LAWFLAG_BROWNIES,     // "Drug dealing"
-	LAWFLAG_ESCAPED,      // "Escaping prison"
-	LAWFLAG_HELPESCAPE,   // "Releasing prisoners"
-	LAWFLAG_JURY,         // "Jury tampering"
-	LAWFLAG_RACKETEERING, // "Racketeering"
-	LAWFLAG_EXTORTION,    // "Extortion"
-	LAWFLAG_ARMEDASSAULT, // "Armed assault"
-	LAWFLAG_ASSAULT,      // "Assault"
-	LAWFLAG_CARTHEFT,     // "Grand theft auto"
-	LAWFLAG_CCFRAUD,      // "Credit card fraud"
-	LAWFLAG_THEFT,        // "Theft"
-	LAWFLAG_PROSTITUTION, // "Prostitution"
-	LAWFLAG_HIREILLEGAL,  // "Hiring illegal aliens" / "Hiring undocumented workers"
-	LAWFLAG_COMMERCE,     // "Electronic sabotage"
-	LAWFLAG_INFORMATION,  // "Hacking"
-	LAWFLAG_BURIAL,       // "Unlawful burial"
-	LAWFLAG_BREAKING,     // "Breaking and entering"
-	LAWFLAG_VANDALISM,    // "Vandalism"
-	LAWFLAG_RESIST,       // "Resisting arrest"
-	LAWFLAG_DISTURBANCE,  // "Disturbing the peace"
-	LAWFLAG_PUBLICNUDITY, // "Public nudity"
-	LAWFLAG_LOITERING,    // "Loitering"
-	LAWFLAGNUM
-};
-
-/* *JDS* In addition to laws being an array,
- * each law will be associated with a tag_heat value,
- * indicating how much that particular crime draws
- * police attention to the wanted person, and to the
- * LCS as a whole. This is a global array, available
- * at runtime and indexed to the lawflag enum, so that
- * code can dynamically look up these heat values as
- * needed at runtime.
- */
-
-
-enum Activity
-{
-	ACTIVITY_NONE,
-	ACTIVITY_VISIT,
-	ACTIVITY_HOSTAGETENDING,
-	ACTIVITY_TROUBLE,
-	ACTIVITY_GRAFFITI,
-	ACTIVITY_COMMUNITYSERVICE,
-	ACTIVITY_SELL_ART,
-	ACTIVITY_SELL_MUSIC,
-	ACTIVITY_SELL_TSHIRTS,
-	ACTIVITY_DONATIONS,
-	ACTIVITY_SELL_DRUGS,
-	ACTIVITY_PROSTITUTION,
-	ACTIVITY_POLLS,
-	ACTIVITY_CCFRAUD,
-	ACTIVITY_DOS_RACKET,
-	ACTIVITY_DOS_ATTACKS,
-	ACTIVITY_HACKING,
-	ACTIVITY_REPAIR_ARMOR,
-	ACTIVITY_MAKE_ARMOR,
-	ACTIVITY_STEALCARS,
-	ACTIVITY_WHEELCHAIR,
-	ACTIVITY_BURY,
-	ACTIVITY_WRITE_BLOG,
-	ACTIVITY_WRITE_LETTERS,
-	ACTIVITY_WRITE_GUARDIAN,
-	ACTIVITY_TEACH_POLITICS,
-	ACTIVITY_TEACH_FIGHTING,
-	ACTIVITY_TEACH_COVERT,
-	ACTIVITY_STUDY_DEBATING,
-	ACTIVITY_STUDY_MARTIAL_ARTS,
-	ACTIVITY_STUDY_DRIVING,
-	ACTIVITY_STUDY_PSYCHOLOGY,
-	ACTIVITY_STUDY_FIRST_AID,
-	ACTIVITY_STUDY_LAW,
-	ACTIVITY_STUDY_DISGUISE,
-	ACTIVITY_STUDY_SCIENCE,
-	ACTIVITY_STUDY_BUSINESS,
-	ACTIVITY_STUDY_GYMNASTICS,
-	ACTIVITY_STUDY_MUSIC,
-	ACTIVITY_STUDY_ART,
-	ACTIVITY_STUDY_TEACHING,
-	ACTIVITY_STUDY_WRITING,
-	ACTIVITY_STUDY_LOCKSMITHING,
-	ACTIVITY_STUDY_COMPUTERS,
-	ACTIVITY_STUDY_FENCING,
-	ACTIVITY_STUDY_WEAVING,
-	ACTIVITY_STUDY_RELIGION,
-	ACTIVITY_STUDY_CLUB,
-	ACTIVITY_STUDY_STREETSENSE,
-	ACTIVITY_STUDY_THROWING,
-	ACTIVITY_STUDY_STEALTH,
-	ACTIVITY_STUDY_SEDUCTION,
-	ACTIVITY_CLINIC,
-	ACTIVITY_HEAL,
-	ACTIVITY_SLEEPER_LIBERAL,
-	ACTIVITY_SLEEPER_CONSERVATIVE,
-	ACTIVITY_SLEEPER_SPY,
-	ACTIVITY_SLEEPER_RECRUIT,
-	ACTIVITY_SLEEPER_SCANDAL,
-	ACTIVITY_SLEEPER_EMBEZZLE,
-	ACTIVITY_SLEEPER_STEAL,
-	ACTIVITY_SLEEPER_JOINLCS,
-	ACTIVITY_RECRUITING,
-	ACTIVITY_AUGMENT,
-	ACTIVITYNUM
-};
-
-
-
-enum SquadStances
-{
-	SQUADSTANCE_ANONYMOUS,
-	SQUADSTANCE_STANDARD,
-	SQUADSTANCE_BATTLECOLORS,
-	SQUADSTANCE_MAX
-};
-
-enum MusicModes
-{
-	MUSIC_TITLEMODE,
-	MUSIC_NEWGAME,
-	MUSIC_BASEMODE,
-	MUSIC_SIEGE,
-	MUSIC_ACTIVATE,
-	MUSIC_SLEEPERS,
-	MUSIC_STOPEVIL,
-	MUSIC_REVIEWMODE,
-	MUSIC_LIBERALAGENDA,
-	MUSIC_DISBANDED,
-	MUSIC_FINANCES,
-	MUSIC_CARTHEFT,
-	MUSIC_ELECTIONS,
-	MUSIC_SHOPPING,
-	MUSIC_SITEMODE,
-	MUSIC_SUSPICIOUS,
-	MUSIC_ALARMED,
-	MUSIC_HEAVYCOMBAT,
-	MUSIC_DEFENSE,
-	MUSIC_CONQUER,
-	MUSIC_CARCHASE,
-	MUSIC_FOOTCHASE,
-	MUSIC_INTERROGATION,
-	MUSIC_TRIAL,
-	MUSIC_RECRUITING,
-	MUSIC_DATING,
-	MUSIC_NEWSPAPER,
-	MUSIC_LACOPS,
-	MUSIC_NEWSCAST,
-	MUSIC_GLAMSHOW,
-	MUSIC_ANCHOR,
-	MUSIC_ABORT,
-	MUSIC_VICTORY,
-	MUSIC_DEFEAT,
-	MUSIC_REAGANIFIED,
-	MUSIC_STALINIZED,
-	MUSIC_OFF, // this one must come immediately after the ones corresponding to music files (this one is to have silence)
-	MUSIC_PREVIOUS, // this one must come after MUSIC_OFF (this one is to play the previous song)
-	MUSIC_CURRENT, // this one must come after MUSIC_OFF (this one continues playing the current song)
-	MUSIC_RANDOM // this one must come after MUSIC_OFF (this one plays a random song)
-};
 
 
 enum Laws
@@ -391,10 +196,6 @@ const int SQUAD_NAMELEN = 40;
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-//#include "../creature/deprecatedCreatureC.h"
-
 #include "../creature/deprecatedCreatureD.h"
 
 ////
@@ -414,7 +215,6 @@ const int SQUAD_NAMELEN = 40;
 // for void printfunds(int,int,char*)
 #include "../common/equipment.h"
 //for void equip(vector<Item *> &loot,int loc);
-//#include "../common/commonactionsCreature.h"
 #include "../common/translateid.h"
 // for  int getweapontype
 #include "../cursesAlternativeConstants.h"

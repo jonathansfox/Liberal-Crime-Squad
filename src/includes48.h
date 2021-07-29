@@ -18,11 +18,57 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
-#include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
+enum AnimalGlosses
+{
+	ANIMALGLOSS_NONE,//IMPORTANT THAT THIS BE HERE AT ZERO
+	ANIMALGLOSS_TANK,
+	ANIMALGLOSS_ANIMAL,
+	ANIMALGLOSSNUM
+};
+
+enum GameModes
+{
+	GAMEMODE_TITLE,
+	GAMEMODE_BASE,
+	GAMEMODE_SITE,
+	GAMEMODE_CHASECAR,
+	GAMEMODE_CHASEFOOT
+};
+
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+#include "includesRandom.h"
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -33,8 +79,6 @@ using namespace std;
 #include "activityST.h"
 
 //int get_associated_attribute(int skill_type);
-
-//#include "includesDeprecatedB.h"
 
 #include "bigListEnumTags.h"
 // creaturetype.cpp

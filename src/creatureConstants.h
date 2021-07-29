@@ -1,6 +1,5 @@
 
-// Please do not directly include this file. Include includes.h instead.
-// You will get compiler errors otherwise.
+
 const int CREATUREFLAG_WHEELCHAIR = BIT1;
 const int CREATUREFLAG_JUSTESCAPED = BIT2;
 const int CREATUREFLAG_MISSING = BIT3;

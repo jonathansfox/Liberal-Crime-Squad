@@ -27,7 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "../includes03.h"
 #include "../constStringsaveload.h"
-#include "../includesDeprecatedB.h"
+#include "../includesVersionInfo.h"
 #include <fstream>
 using std::ios;
 using std::endl;

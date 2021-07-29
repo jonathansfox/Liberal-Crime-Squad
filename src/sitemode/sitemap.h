@@ -1,5 +1,3 @@
-//#include <includeDefault.h>
-//#include "tinydir.h"
 #pragma once
 const int SITEMAP_ADDTYPE_OR = 1;
 const int SITEMAP_ADDTYPE_ANDNOT = 2;

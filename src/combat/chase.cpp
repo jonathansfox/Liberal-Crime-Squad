@@ -1351,6 +1351,7 @@ Vehicle* getChaseVehicle(const DeprecatedCreature &c)
 	}
 	return found;
 }
+// IsaacG This is a potential problem
 DeprecatedCreature* getChaseDriver(const DeprecatedCreature &c)
 {
 	DeprecatedCreature* found = NULL;

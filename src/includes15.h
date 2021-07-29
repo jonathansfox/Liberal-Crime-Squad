@@ -18,11 +18,90 @@
 #include "cmarkup/Markup.h"
 using namespace std;
 
+#include "includesLen.h"
+#include <iostream>
 #include "includesDeprecated.h"
-#include "includesRandom.h"
-//#include "vehicle/vehicletype.h"
-//#include "vehicle/vehicle.h"
 
+enum AnimalGlosses
+{
+	ANIMALGLOSS_NONE,//IMPORTANT THAT THIS BE HERE AT ZERO
+	ANIMALGLOSS_TANK,
+	ANIMALGLOSS_ANIMAL,
+	ANIMALGLOSSNUM
+};
+
+enum GameModes
+{
+	GAMEMODE_TITLE,
+	GAMEMODE_BASE,
+	GAMEMODE_SITE,
+	GAMEMODE_CHASECAR,
+	GAMEMODE_CHASEFOOT
+};
+
+enum Laws
+{
+	LAW_STALIN = -2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+	LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+	LAW_ABORTION, // law #0, the first one that is actually in the law[] array
+	LAW_ANIMALRESEARCH,
+	LAW_POLICEBEHAVIOR,
+	LAW_PRIVACY,
+	LAW_DEATHPENALTY,
+	LAW_NUCLEARPOWER,
+	LAW_POLLUTION,
+	LAW_LABOR,
+	LAW_GAY,
+	LAW_CORPORATE,
+	LAW_FREESPEECH,
+	LAW_FLAGBURNING,
+	LAW_GUNCONTROL,
+	LAW_TAX,
+	LAW_WOMEN,
+	LAW_CIVILRIGHTS,
+	LAW_DRUGS,
+	LAW_IMMIGRATION,
+	LAW_ELECTIONS,
+	LAW_MILITARY,
+	LAW_PRISONS,
+	LAW_TORTURE,
+	LAWNUM
+};
+
+enum Crimes
+{
+	CRIME_STOLEGROUND,
+	CRIME_UNLOCKEDDOOR,
+	CRIME_BROKEDOWNDOOR,
+	CRIME_ATTACKED_MISTAKE,
+	CRIME_ATTACKED,
+	CRIME_CARCHASE,
+	CRIME_CARCRASH,
+	CRIME_FOOTCHASE,
+	CRIME_KILLEDSOMEBODY,
+	CRIME_SHUTDOWNREACTOR,
+	CRIME_POLICE_LOCKUP,
+	CRIME_COURTHOUSE_LOCKUP,
+	CRIME_PRISON_RELEASE,
+	CRIME_JURYTAMPERING,
+	CRIME_HACK_INTEL,
+	CRIME_BREAK_SWEATSHOP,
+	CRIME_BREAK_FACTORY,
+	CRIME_HOUSE_PHOTOS,
+	CRIME_CORP_FILES,
+	CRIME_FREE_RABBITS,
+	CRIME_FREE_BEASTS,
+	CRIME_ARSON,
+	CRIME_TAGGING,
+	CRIME_ARMORY,
+	CRIME_VANDALISM,
+	CRIME_BANKVAULTROBBERY,
+	CRIME_BANKTELLERROBBERY,
+	CRIME_BANKSTICKUP,
+	CRIMENUM
+};
+
+#include "includesRandom.h"
 
 //just a float that is initialized to 0
 #include "floatZero.h"
@@ -42,9 +121,6 @@ using namespace std;
 #include "../creature/creature.h"
 ////
 
-//#include "../creature/deprecatedCreatureA.h"
-//#include "../creature/deprecatedCreatureB.h"
-
 #include "../creature/deprecatedCreatureC.h"
 
 #include "../creature/deprecatedCreatureD.h"
@@ -56,7 +132,6 @@ using namespace std;
 
 #include "../log/log.h"
 
-//#include "common/commondisplay.h"
 void printparty();
 
 #include "../common/commonactions.h"
@@ -65,9 +140,7 @@ void printparty();
 #include "../combat/fight.h"
 #include "../combat/fightCreature.h"  
 
-//#include "combat/haulkidnap.h"
 void squadgrab_immobile(char dead);
-//#include "combat/haulkidnapCreature.h"
 
 #include "../cursesAlternative.h"
 #include "../set_color_support.h"
@@ -77,7 +150,6 @@ void squadgrab_immobile(char dead);
 
 void addLocationChange(int cursite, sitechangest change);
 void squadgrab_immobile(char dead);
-//// #include "combat/haulkidnapCreature.h"
 void freehostage(DeprecatedCreature &cr, char situation);
 void advancecreature(const int e);
 bool isThereASiteAlarm();
