@@ -31,7 +31,8 @@ CreatureType::CreatureType(const std::string& xmlstring)
 	: age_(18, 57), alignment_public_mood_(true),
 	attribute_points_(40),
 	gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
-	infiltration_(0), juice_(0), money_(20, 40)
+	infiltration_(0), juice_(0), money_(20, 40),
+	seethroughdisguise_(DIFFICULTY_VERYEASY), seethroughstealth_(DIFFICULTY_VERYEASY)
 {
 	for (int i = 0; i < ATTNUM; i++)
 		attributes_[i].set_interval(1, 10);
