@@ -1460,7 +1460,7 @@ void handle_public_opinion_impact(const Deprecatednewsstoryst &ns)
 	for (int i = 0; i < len(okay_types) && !validType; i++)
 	{
 		if (okay_types[i] == ns.type)
-			validType = false;
+			validType = true;
 	}
 	if (validType) {
 
@@ -1490,10 +1490,17 @@ void handle_public_opinion_impact(const Deprecatednewsstoryst &ns)
 		if (ns.type == NEWSSTORY_CCS_SITE || ns.type == NEWSSTORY_CCS_KILLED_SITE)
 		{
 			impact_direction = ALIGN_CONSERVATIVE;
-			if (ns.positive)
-				change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, impact, 0);
-			else
+			if (ns.positive) {
+				/*
+				This is quite confusing (kinda like dealing with double negatives) but I believe that this means the spin on the story is positive.
+				However, a positive spin on the CCS is bad for the purposes of the LCS (or vice versa) - so therefore it should lower CCS opinion
+				bearing in mind that in the game text, CCS opinion is % of people that hold CCS in contempt --Noop
+				*/
 				change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, -impact, 0);
+			}
+			else {
+				change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, impact, 0);
+			}
 		}
 		else
 		{
@@ -1637,7 +1644,7 @@ void displaypositivemajoreventstory(const Deprecatednewsstoryst ns, const short*
 		default:
 			str += pickrandom(ceo_behaving_badly);
 		}
-		displaynewsandpicture(CONST_THIS_MAJOR_CEO, str, PICTURE_CEO);
+		displaynewsandpicture(CONST_AMERICAN_CEO, str, PICTURE_CEO);
 		break;
 	}
 
@@ -1835,7 +1842,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_ARSON])
 	{
-		story += liberalguardian || !ccs ? CONST_SET_FIRE_TO_CONSERVATIVE_PROPERTY : CONST_ARSON_LOWERCASE;
+		story += liberalguardian && !ccs ? CONST_SET_FIRE_TO_CONSERVATIVE_PROPERTY : CONST_ARSON_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1878,7 +1885,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_STOLEGROUND] || crime[CRIME_BANKTELLERROBBERY])
 	{
-		story += liberalguardian || !ccs ? CONST_LIBERATED_ENEMY_RESOURCES : CONST_THEFT_LOWERCASE;
+		story += liberalguardian && !ccs ? CONST_LIBERATED_ENEMY_RESOURCES : CONST_THEFT_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1894,7 +1901,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_BREAK_SWEATSHOP] || crime[CRIME_BREAK_FACTORY] || crime[CRIME_VANDALISM])
 	{
-		story += liberalguardian || !ccs ? CONST_DAMAGED_ENEMY_INFRASTRUCTURE : CONST_DESTRUCTION_OF_PRIVATE_PROPERTY;
+		story += liberalguardian && !ccs ? CONST_DAMAGED_ENEMY_INFRASTRUCTURE : CONST_DESTRUCTION_OF_PRIVATE_PROPERTY;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1902,7 +1909,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_TAGGING])
 	{
-		story += liberalguardian || !ccs ? CONST_MARKED_THE_SITE_FOR_LIBERATION : CONST_VANDALISM_LOWERCASE;
+		story += liberalguardian && !ccs ? CONST_MARKED_THE_SITE_FOR_LIBERATION : CONST_VANDALISM_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1910,7 +1917,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_BROKEDOWNDOOR])
 	{
-		story += liberalguardian || !ccs ? CONST_BROKE_DOWN_DOORS : CONST_BREAKING_AND_ENTERING_LOWERCASE;
+		story += liberalguardian && !ccs ? CONST_BROKE_DOWN_DOORS : CONST_BREAKING_AND_ENTERING_LOWERCASE;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -1918,7 +1925,7 @@ string extraCrimes(const bool liberalguardian, const bool ccs, const int type_su
 	}
 	if (crime[CRIME_UNLOCKEDDOOR])
 	{
-		story += liberalguardian || !ccs ? CONST_PICKED_LOCKS : CONST_UNLAWFUL_ENTRY;
+		story += liberalguardian && !ccs ? CONST_PICKED_LOCKS : CONST_UNLAWFUL_ENTRY;
 
 		if (typesum >= 3)story += COMMA_SPACE;
 		else if (typesum == 2)story += AND;
@@ -2001,7 +2008,7 @@ string otherCrime(const Deprecatednewsstoryst ns, const bool liberalguardian, co
 		}
 		if (crime[CRIME_FOOTCHASE])
 		{
-			story += liberalguardian || !ccs ? CONST_THE_LIBERAL_CRIME_SQUAD_ENDED_THE_DANGEROUS_HIGH_SPEED_CHASE_IN_ORDER_TO_PROTECT_THE_PUBLIC_AND_ATTEMPTED_TO_ESCAPE_ON_FOOT : CONST_THERE_WAS_ALSO_A_FOOT_CHASE_WHEN_THE_SUSPECT_OR_SUSPECTS_BAILED_OUT_AFTER_THE_HIGH_SPEED_PURSUIT;
+			story += liberalguardian && !ccs ? CONST_THE_LIBERAL_CRIME_SQUAD_ENDED_THE_DANGEROUS_HIGH_SPEED_CHASE_IN_ORDER_TO_PROTECT_THE_PUBLIC_AND_ATTEMPTED_TO_ESCAPE_ON_FOOT : CONST_THERE_WAS_ALSO_A_FOOT_CHASE_WHEN_THE_SUSPECT_OR_SUSPECTS_BAILED_OUT_AFTER_THE_HIGH_SPEED_PURSUIT;
 
 		}
 		story += ampersandR;

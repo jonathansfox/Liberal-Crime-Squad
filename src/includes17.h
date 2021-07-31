@@ -365,6 +365,7 @@ const int PICTURE_OIL = 8;
 const int PICTURE_TERRORISTS = 9;
 const int PICTURE_KKK = 10;
 const int PICTURE_TSHIRT = 11;
+const int PICTURE_TSHIRT_HELP = 12;
 
 //#endif//NEWS_CPP
 //#endif// INCLUDES_H_INCLUDED

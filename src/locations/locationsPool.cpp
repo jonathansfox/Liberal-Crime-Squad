@@ -173,6 +173,10 @@ void LocationsPool::hideCCSSafehouses()
 	{
 		if (getRentingType(l) == RENTING_CCS)
 		{
+			if (getLocationType(l) == SITE_INDUSTRY_WAREHOUSE) {
+				location[l]->renting = RENTING_PERMANENT;
+				continue;
+			}
 			location[l]->renting = RENTING_NOCONTROL;
 			location[l]->hidden = true;
 		}

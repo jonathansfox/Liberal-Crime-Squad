@@ -379,7 +379,7 @@ the bottom of includes.h in the top src folder.
 	  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS, newspaper * 10);
 
 
-	  change_opinion_from_Influence(CEOPhotosInfluence);
+	  change_opinion_from_Influence(CorpFilesInfluence);
 
 	  gamelog.newline();
 	  mvaddstrAlt(9, 1, major_news_take_it_up, gamelog);

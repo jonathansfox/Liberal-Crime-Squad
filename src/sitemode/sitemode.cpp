@@ -99,15 +99,15 @@ void resolvesite()
 	//notice later on that all their stuff has been stolen or whatever.
 	if (sitecrime > 5 + LCSrandom(95))//was 100 but that meant I could still steal everything from a building every day without anyone caring...
 	{
-		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_NOCONTROL)
+		// Capture a warehouse or crack den?
+		if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_INDUSTRY_WAREHOUSE ||
+			LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_BUSINESS_CRACKHOUSE)
 		{
-			// Capture a warehouse or crack den?
-			if (LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_INDUSTRY_WAREHOUSE ||
-				LocationsPool::getInstance().getLocationType(getCurrentSite()) == SITE_BUSINESS_CRACKHOUSE)
-			{
-				LocationsPool::getInstance().captureSite(getCurrentSite());
-			}
-			else LocationsPool::getInstance().closeSite(getCurrentSite(), sitecrime);
+			LocationsPool::getInstance().captureSite(getCurrentSite());
+		}
+		else if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_NOCONTROL)
+		{
+			LocationsPool::getInstance().closeSite(getCurrentSite(), sitecrime);
 		}
 		// Out sleepers
 		if (LocationsPool::getInstance().get_specific_integer(INT_GETRENTINGTYPE, getCurrentSite()) == RENTING_CCS)
