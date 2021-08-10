@@ -212,7 +212,6 @@
     <ClCompile Include="..\src\daily\interrogation.cpp" />
     <ClCompile Include="..\src\daily\recruit.cpp" />
     <ClCompile Include="..\src\daily\siege.cpp" />
-    <ClCompile Include="..\src\externallyStoredText.cpp" />
     <ClCompile Include="..\src\game.cpp" />
     <ClCompile Include="..\src\globals.cpp" />
     <ClCompile Include="..\src\items\armor.cpp" />

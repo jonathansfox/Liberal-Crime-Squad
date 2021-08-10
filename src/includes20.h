@@ -129,14 +129,18 @@ void removeItemFromSquad(const int loottypeindex);
 #include "../set_color_support.h"
 #include "../locations/locationsPool.h"
 #include "../common/musicClass.h"
+// for atoi wrapper
+#include "../common/stringconversion.h"
 map<short, string> expenseTypes;
 map<short, string> incomeTypes;
 void constructLootIndices(vector<bool> &havetype, vector<int> &loottypeindex, const vector<string> dox);
 
 extern CCSexposure ccsexposure;
 extern char disbanding;
+extern char artdir[MAX_PATH_SIZE];
 extern class Ledger ledger;
 extern Log gamelog;
+extern Log xmllog;
 extern MusicClass music;
 extern short lawList[LAWNUM];
 extern short offended_amradio;

@@ -1,0 +1,379 @@
+<specialEditions type="GUARDIAN">
+    <!-- Clarification
+    <LOOT_IDNAME storyNum = "integer"> 	ID of the special edition, it should match the idname in loot.xml
+										storyNum is the number of stories associated with the special edition
+        <intro> (string) The liberal guardian runs a story... (this will be common for all stories on a particular subject)
+            Default: UNDEFINED
+        <view view="VIEWTYPE"> (integer) Effect on public opinion on a particular view
+            Default: UNDEFINED
+		<viewScaling>
+			<view view="VIEWTYPE">int</view> wrapping a view tag with viewScaling gives bonus public opinion depending on the number of printing presses
+											owned by the LCS (e.g. 2 printing presses will double public opinion impact)
+		</viewScaling>
+        
+		<story> 
+			<description> (string) gives a short description of the story
+			
+			<longDescription> gives a multi line description of the story (use this or <description> NOT BOTH!!)
+				<line> (string) wrap each line with this tag - you can fit probably around 20 lines on screen
+			</longDescription>
+			
+			<view view="VIEWTYPE"> (integer) same as <view>, except this is used for a particular story
+		</story>
+        
+		<majorNews> (boolean) Appends the line "Major News Take It Up" (Place this before offending people)
+            Default: false
+        <offendCorps> (boolean) Offend the corporations. (also appends line saying LCS riles up corps)
+            Default: false
+        <offendCIA> (boolean) Offend the CIA. (also appends line saying LCS riles up CIA)
+            Default: false
+        <offendCable> (boolean) Offend the cable news hicks. (also appends line saying LCS riles up Cable)
+            Default: false
+        <offendAM> (boolean) Offend the am radio hicks. (also appends line saying LCS riles up AM radio)
+            Default: false
+		<exposeCCS> (boolean) Makes the special edition Expose the CCS
+			Default: false
+		<treason> (boolean) Flags those in safehouses with printing presses with treason
+			Default: false
+    </LOOT_IDNAME>
+    -->
+	<LOOT_CEOPHOTOS storyNum="10">
+		<intro>The Liberal Guardian runs a story featuring photos of a major CEO </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>engaging in lewd behavior with animals.</description>
+			<view view="VIEW_ANIMALRESEARCH">15</view>
+		</story>
+		<story>
+			<description>digging up graves and sleeping with the dead.</description>
+		</story>
+		<story>
+			<description>participating in a murder.</description>
+			<view view="VIEW_POLICEBEHAVIOR">15</view>
+			<view view="VIEW_JUSTICES">10</view>
+		</story>
+		<story>
+			<description>engaging in heavy bondage.  A cucumber was involved in some way.</description>
+		</story>
+		<story>
+			<description>tongue-kissing an infamous dictator.</description>
+			<view view="VIEW_ANIMALRESEARCH">15</view>
+		</story>
+		<story>
+			<description>making out with an FDA official overseeing the CEO's products.</description>
+			<view view="VIEW_GENETICS">10</view>
+			<view view="VIEW_POLLUTION">10</view>
+		</story>
+		<story>
+			<description>castrating himself.</description>
+		</story>
+		<story>
+			<description>waving a Nazi flag at a supremacist rally.</description>
+		</story>
+		<story>
+			<description>torturing an employee with a hot iron.</description>
+			<view view="VIEW_SWEATSHOPS">10</view>
+		</story>
+		<story>
+			<description>playing with feces and urine.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_CEOSALARY">50</view>
+		<view view="VIEW_CORPORATECULTURE">50</view>
+		<offendCorps>true</offendCorps>
+	</LOOT_CEOPHOTOS>
+	<LOOT_CEOLOVELETTERS storyNum="8">
+		<intro>The Liberal Guardian runs a story featuring love letters from a major CEO </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>addressed to his pet dog.  Yikes.</description>
+			<view view="VIEW_ANIMALRESEARCH">15</view>
+		</story>
+		<story>
+			<description>to the judge that acquit him in a corruption trial.</description>
+			<view view="VIEW_JUSTICES">15</view>
+		</story>
+		<story>
+			<description>to an illicit gay lover.</description>
+			<view view="VIEW_GAY">15</view>
+		</story>
+		<story>
+			<description>to himself.  They're very steamy.</description>
+		</story>
+		<story>
+			<description>implying that he has enslaved his houseservants.</description>
+			<view view="VIEW_SWEATSHOPS">10</view>
+		</story>
+		<story>
+			<description>to the FDA official overseeing the CEO's products.</description>
+			<view view="VIEW_GENETICS">10</view>
+			<view view="VIEW_POLLUTION">10</view>
+		</story>
+		<story>
+			<description>that seem to touch on every fetish known to man.</description>
+		</story>
+		<story>
+			<description>promising someone company profits in exchange for sexual favors.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_CEOSALARY">50</view>
+		<view view="VIEW_CORPORATECULTURE">50</view>
+		<offendCorps>true</offendCorps>
+	</LOOT_CEOLOVELETTERS>
+	<LOOT_CEOTAXPAPERS storyNum="1">
+		<intro>The Liberal Guardian runs a story featuring a major CEO's tax papers </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>showing that he has engaged in consistent tax evasion.</description>
+			<view view="VIEW_TAXES">25</view>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_CEOSALARY">50</view>
+		<view view="VIEW_CORPORATECULTURE">50</view>
+		<offendCorps>true</offendCorps>
+	</LOOT_CEOTAXPAPERS>
+	<LOOT_CORPFILES storyNum="5">
+		<intro>The Liberal Guardian runs a story featuring Corporate files </intro>
+		<viewScaling>
+			<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+			<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		</viewScaling>
+		<story>
+			<description>describing a genetic monster created in a lab.</description>
+			<view view="VIEW_GENETICS">50</view>
+		</story>
+		<story>
+			<description>with a list of gay employees entitled "Homo-workers".</description>
+			<view view="VIEW_GAY">50</view>
+		</story>
+		<story>
+			<description>containing a memo: "Terminate the pregnancy, I terminate you."</description>
+			<view view="VIEW_WOMEN">50</view>
+		</story>
+		<story>
+			<description>cheerfully describing foreign corporate sweatshops.</description>
+			<view view="VIEW_SWEATSHOPS">50</view>
+		</story>
+		<story>
+			<description>describing an intricate tax scheme.</description>
+			<view view="VIEW_TAXES">50</view>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_CEOSALARY">50</view>
+		<view view="VIEW_CORPORATECULTURE">50</view>
+		<offendCorps>true</offendCorps>
+	</LOOT_CORPFILES>
+	<LOOT_CCS_BACKERLIST storyNum="1">
+		<story>
+			<longDescription>
+				<line>The Liberal Guardian runs more than one thousand pages of documents about </line>
+				<line>the CCS organization, also revealing in extreme detail the names and </line>
+				<line>responsibilities of Conservative Crime Squad sympathizers and supporters</line>
+				<line>in the state and federal governments. Sections precisely document the</line>
+				<line>extensive planning to create an extra-judicial death squad that would be</line>
+				<line>above prosecution, and could hunt down law-abiding Liberals and act</line>
+				<line>as a foil when no other enemies were present to direct public energy</line>
+				<line>against.</line>
+				<line></line>
+				<line>The scandal reaches into the heart of the Conservative leadership in the</line>
+				<line>country, and the full ramifications of this revelation may not be felt</line>
+				<line>for months. One thing is clear, however, from the immediate public reaction</line>
+				<line>toward the revelations, and the speed with which even AM Radio and Cable</line>
+				<line>News denounce the CCS.</line>
+				<line></line>
+				<line>This is the beginning of the end for the Conservative Crime Squad.</line>
+			</longDescription>
+		</story>
+		<view view="VIEW_INTELLIGENCE">50</view>
+		<view view="VIEW_CONSERVATIVECRIMESQUAD">100</view>
+		<exposeCCS>true</exposeCCS>
+	</LOOT_CCS_BACKERLIST>
+	<LOOT_INTHQDISK storyNum = "6">
+		<intro>The Liberal Guardian runs a story featuring CIA and other intelligence files </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>documenting the overthrow of a government.</description>
+		</story>
+		<story>
+			<description>documenting the planned assassination of a Liberal federal judge.</description>
+			<view view="VIEW_JUSTICES">50</view>
+		</story>
+		<story>
+			<description>containing private information on innocent citizens.</description>
+		</story>
+		<story>
+			<description>documenting "harmful speech" made by innocent citizens.</description>
+			<view view="VIEW_FREESPEECH">50</view>
+		</story>
+		<story>
+			<description>used to keep tabs on gay citizens.</description>
+			<view view="VIEW_GAY">50</view>
+		</story>
+		<story>
+			<description>documenting the infiltration of a pro-choice group.</description>
+			<view view="VIEW_WOMEN">50</view>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_INTELLIGENCE">50</view>
+		<offendCIA>true</offendCIA>
+		<treason>true</treason>
+	</LOOT_INTHQDISK>
+	<LOOT_SECRETDOCUMENTS storyNum = "6">
+		<intro>The Liberal Guardian runs a story featuring CIA and other intelligence files </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>documenting the overthrow of a government.</description>
+		</story>
+		<story>
+			<description>documenting the planned assassination of a Liberal federal judge.</description>
+			<view view="VIEW_JUSTICES">50</view>
+		</story>
+		<story>
+			<description>containing private information on innocent citizens.</description>
+		</story>
+		<story>
+			<description>documenting "harmful speech" made by innocent citizens.</description>
+			<view view="VIEW_FREESPEECH">50</view>
+		</story>
+		<story>
+			<description>used to keep tabs on gay citizens.</description>
+			<view view="VIEW_GAY">50</view>
+		</story>
+		<story>
+			<description>documenting the infiltration of a pro-choice group.</description>
+			<view view="VIEW_WOMEN">50</view>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_INTELLIGENCE">50</view>
+		<offendCIA>true</offendCIA>
+		<treason>true</treason>
+	</LOOT_SECRETDOCUMENTS>
+	<LOOT_POLICERECORDS storyNum = "6">
+		<intro>The Liberal Guardian runs a story featuring police records </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>documenting human rights abuses by the force.</description>
+			<view view="VIEW_TORTURE">15</view>
+		</story>
+		<story>
+			<description>documenting a police torture case.</description>
+			<view view="VIEW_TORTURE">50</view>
+		</story>
+		<story>
+			<description>documenting a systematic invasion of privacy by the force.</description>
+			<view view="VIEW_INTELLIGENCE">15</view>
+		</story>
+		<story>
+			<description>documenting a forced confession.</description>
+		</story>
+		<story>
+			<description>documenting widespread corruption in the force.</description>
+		</story>
+		<story>
+			<description>documenting gladiatorial matches held between prisoners by guards.</description>
+			<view view="VIEW_DEATHPENALTY">50</view>
+			<view view="VIEW_PRISONS">20</view>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_POLICEBEHAVIOR">50</view>
+	</LOOT_POLICERECORDS>
+	<LOOT_JUDGEFILES storyNum = "2">
+		<intro>The Liberal Guardian runs a story with evidence of a Conservative judge </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>taking bribes to acquit murderers.</description>
+		</story>
+		<story>
+			<description>promising Conservative rulings in exchange for appointments.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_JUSTICES">50</view>
+	</LOOT_JUDGEFILES>
+	<LOOT_RESEARCHFILES storyNum = "4">
+		<intro>The Liberal Guardian runs a story featuring research papers </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>documenting horrific animal rights abuses.</description>
+			<view view="VIEW_ANIMALRESEARCH">50</view>
+		</story>
+		<story>
+			<description>studying the effects of torture on cats.</description>
+			<view view="VIEW_ANIMALRESEARCH">50</view>
+		</story>
+		<story>
+			<description>covering up the accidental creation of a genetic monster.</description>
+			<view view="VIEW_GENETICS">50</view>
+		</story>
+		<story>
+			<description>showing human test subjects dying under genetic research.</description>
+			<view view="VIEW_GENETICS">50</view>
+		</story>
+		<majorNews>true</majorNews>
+	</LOOT_RESEARCHFILES>
+	<LOOT_PRISONFILES storyNum = "4">
+		<intro>The Liberal Guardian runs a story featuring prison documents </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>documenting human rights abuses by prison guards.</description>
+		</story>
+		<story>
+			<description>documenting a prison torture case.</description>
+			<view view="VIEW_TORTURE">50</view>
+		</story>
+		<story>
+			<description>documenting widespread corruption among prison employees.</description>
+		</story>
+		<story>
+			<description>documenting gladiatorial matches held between prisoners by guards.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_PRISONS">50</view>
+		<view view="VIEW_DEATHPENALTY">50</view>
+	</LOOT_PRISONFILES>
+	<LOOT_CABLENEWSFILES storyNum = "4">
+		<intro>The Liberal Guardian runs a story featuring cable news memos </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>calling their news 'the vanguard of Conservative thought'.</description>
+		</story>
+		<story>
+			<description>mandating negative coverage of Liberal politicians.</description>
+		</story>
+		<story>
+			<description>instructing a female anchor to 'get sexier or get a new job'.</description>
+		</story>
+		<story>
+			<description>planning to drum up a false scandal about a Liberal figure.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_CABLENEWS">50</view>
+		<offendCable>true</offendCable>
+	</LOOT_CABLENEWSFILES>
+	<LOOT_AMRADIOFILES storyNum = "3">
+		<intro>The Liberal Guardian runs a story featuring AM radio plans </intro>
+		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
+		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
+		<story>
+			<description>saying 'it's okay to lie, they don't need the truth'..</description>
+		</story>
+		<story>
+			<description>calling listeners 'sheep to be told what to think'.</description>
+		</story>
+		<story>
+			<description>planning to drum up a false scandal about a Liberal figure.</description>
+		</story>
+		<majorNews>true</majorNews>
+		<view view="VIEW_AMRADIO">50</view>
+		<offendAM>true</offendAM>
+	</LOOT_AMRADIOFILES>
+</specialEditions>

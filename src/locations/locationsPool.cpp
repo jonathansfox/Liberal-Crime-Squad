@@ -2153,10 +2153,7 @@ void publishSpecialEditions(char &clearformess) {
 		int loottypeindex = choosespecialedition(clearformess);
 		if (loottypeindex != -1)
 		{
-			printnews(loottypeindex, len(nploc));
-			if (LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_INTHQDISK || //For special edition xml file? -XML
-				LootTypePool::getInstance().getIdName(loottypeindex) == tag_LOOT_SECRETDOCUMENTS)
-			{
+			if (printnews(loottypeindex, len(nploc))) {
 				for (int l = 0; l < len(nploc); l++)
 					criminalizepool(LAWFLAG_TREASON, -1, nploc[l]);
 			}
