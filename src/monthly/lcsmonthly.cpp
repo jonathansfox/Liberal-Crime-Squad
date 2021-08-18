@@ -1,6 +1,7 @@
 
 
 #include "../includes20.h"
+#include "specialeditions.h"
 #include "../constStringlcsmonthly.h"
 
 /*
@@ -149,145 +150,63 @@ the bottom of includes.h in the top src folder.
 	  return -1;
   }
   /* monthly - guardian - prints liberal guardian special editions */
-
-  int printnews(short li, short newspaper) {
+// return whether printing counts as treason
+  extern map<string, AbstractStory> specialEditionStories;
+  bool printnews(short li, short newspaper) {
 
 	  music.play(MUSIC_NEWSPAPER);
 	  if (lawList[LAW_FREESPEECH] == -2)offended_firemen = 1;
 	  eraseAlt();
 	  set_color_easy(WHITE_ON_BLACK_BRIGHT);
 
-	  int treason = 0;
-	  CMarkup xml;
-	  if (!xml.Load(string(artdir) + CONST_SPECIALEDITIONS_XML)) //TODO actually learn c++ and make this load on game start (look at globals.cpp)
-	  { //File is missing or not valid XML.
-		  mvaddstrAlt(1,1,"Failed To Load " + CONST_SPECIALEDITIONS_XML + "!", xmllog);
-		  pressAnyKey();
-		  return -1; //Abort.
-	  }
-	  xml.FindElem();
-	  xml.IntoElem();
-	  bool specialEdition = xml.FindElem(LootTypePool::getInstance().getIdName(li)); //Find the special edition in question
-	  //if (!specialEdition) return -1;
-	  int storyNumber = atoi(xml.GetAttrib(tag_STORYNUM));
-	  int storyToRun = LCSrandom(storyNumber);
-	  int storyCounter = 0;
+	  bool treason = false;
+
+	  AbstractStory abStory = specialEditionStories[LootTypePool::getInstance().getIdName(li)]; //Find the special edition in question
 	  int y = 6;
+	  
+	  mvaddstrAlt(y, 1, abStory.intro, gamelog);
+	  abStory.pickStory();
 
-	  int b, linenum, view, power;
+	  for (int i = 0; i < len(abStory.getStory()); i++) {
+		  mvaddstrAlt(y++, 1, abStory.getStory()[i], gamelog);
+	  }
 
-	  xml.IntoElem();
+	  if (abStory.hasTag(ENUM_tag_MAJOR_NEWS)) {
+		  mvaddstrAlt(y++, 1, major_news_take_it_up, gamelog);
+	  }
+	  if (abStory.hasTag(ENUM_tag_OFFEND_CORPS)) {
+		  mvaddstrAlt(y++, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
+		  offended_corps = 1;
+	  }	
+	  if (abStory.hasTag(ENUM_tag_OFFEND_CIA)) {
+		  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_GOVERNMENT_A_LITTLE_RILED_UP, gamelog);
+		  offended_cia = 1;
+	  }	  
+	  if (abStory.hasTag(ENUM_tag_OFFEND_CABLE)) {
+		  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
+		  offended_cablenews = 1;
+	  }	
+	  if (abStory.hasTag(ENUM_tag_OFFEND_AMRADIO)) {
+		  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
+		  offended_amradio = 1;
+	  }	
+	  if (abStory.hasTag(ENUM_tag_EXPOSE_CCS)) {
+		  ccsexposure = CCSEXPOSURE_EXPOSED;
+	  }
+	  if (abStory.hasTag(ENUM_tag_TREASONOUS)) {
+		  treason = true;
+	  }
+	  vector<tuple<Views, int, bool> > impactOnViews = abStory.getViews();
 
-	  //Loop through elements in Special Edition
-	  while (xml.FindElem()) {
-		  switch (specialEditionTagsIDEnum[xml.GetTagName()]) {
-		  case ENUM_tag_INTRO:
-			  mvaddstrAlt(y++, 1, xml.GetData(), gamelog); // Liberal Guardian runs a story featuring...
-			  break;
-		  case ENUM_tag_STORY:
-			  if (storyCounter == storyToRun) { //find the right story
-				  xml.IntoElem();
-				  while (xml.FindElem()) { // Loop Through Elements in story
-					  switch (specialEditionTagsIDEnum[xml.GetTagName()]) {
-					  case ENUM_tag_DESCRIPTION: //print said story
-						  mvaddstrAlt(y++, 1, xml.GetData(), gamelog);
-						  gamelog.newline();
-						  break;
-					  case ENUM_tag_LONG_DESCRIPTION:
-						  xml.IntoElem();
-						  while (xml.FindElem()) {
-							  if (xml.GetTagName() == tag_LINE) {
-								  mvaddstrAlt(y++, 1, xml.GetData(), gamelog);
-								  gamelog.newline();
-							  }
-						  }
-						  xml.OutOfElem();
-						  break;
-					  case ENUM_tag_VIEW:
-						  view = viewAttributes[xml.GetAttrib(tag_VIEW)];
-						  power = atoi(xml.GetData());
-						  change_public_opinion(view, power); //apply public opinion
-						  break;
-					  }
-				  }
-				  xml.OutOfElem();
-			  }
-			  storyCounter++;
-			  break;
-		  case ENUM_tag_SCALING:
-			  xml.IntoElem();
-			  while (xml.FindElem()) {
-				  if (xml.GetTagName() == tag_VIEW) {
-					  view = viewAttributes[xml.GetAttrib(tag_VIEW)];
-					  power = atoi(xml.GetData());
-					  change_public_opinion(view, power * newspaper);
-				  }
-			  }
-			  xml.OutOfElem();
-			  break;
-		  case ENUM_tag_VIEW:
-			  view = viewAttributes[xml.GetAttrib(tag_VIEW)];
-			  power = atoi(xml.GetData());
-			  change_public_opinion(view, power); //apply public opinion
-			  break;
-		  case ENUM_tag_MAJOR_NEWS:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  mvaddstrAlt(y++, 1, major_news_take_it_up, gamelog);
-				  gamelog.newline();
-			  }
-			  break;
-		  case ENUM_tag_OFFEND_CORPS:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  mvaddstrAlt(y++, 1, THIS_IS_BOUND_TO_RILE_UP_CORPS, gamelog);
-				  gamelog.nextMessage();
-				  offended_corps = 1;
-			  }
-			  break;
-		  case ENUM_tag_OFFEND_CIA:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_GOVERNMENT_A_LITTLE_RILED_UP, gamelog);
-				  gamelog.nextMessage();
-				  offended_cia = 1;
-			  }
-			  break;
-		  case ENUM_tag_OFFEND_CABLE:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
-				  gamelog.nextMessage();
-				  offended_cablenews = 1;
-			  }
-			  break;
-		  case ENUM_tag_OFFEND_AMRADIO:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  mvaddstrAlt(y++, 1, CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP, gamelog);
-				  gamelog.nextMessage();
-				  offended_amradio = 1;
-			  }
-			  break;
-		  case ENUM_tag_EXPOSE_CCS:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  ccsexposure = CCSEXPOSURE_EXPOSED;
-			  }
-			  break;
-		  case ENUM_tag_TREASONOUS:
-			  b = stringtobool(xml.GetData());
-			  if (b) {
-				  treason = 1;
-			  }
-			  break;
-		  }
+	  for (int i = 0; i < len(impactOnViews); i++) {
+		  tuple<Views, int, bool> nextView = impactOnViews[i];
+		  change_public_opinion(get<0>(nextView), get<1>(nextView) * get<2>(nextView) ? newspaper : 1);
+
 	  }
 	  pressAnyKey();
 	  return treason;
   }
 
- 
   void printIncomeTypes(const int y, const int i) {
 	  set_color_easy(WHITE_ON_BLACK);
 	  mvaddstrAlt(y, 0, dotdotdot);

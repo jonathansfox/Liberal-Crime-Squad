@@ -1,7 +1,6 @@
 <specialEditions type="GUARDIAN">
     <!-- Clarification
-    <LOOT_IDNAME storyNum = "integer"> 	ID of the special edition, it should match the idname in loot.xml
-										storyNum is the number of stories associated with the special edition
+    <LOOT_IDNAME> 	ID of the special edition, it should match the idname in loot.xml
         <intro> (string) The liberal guardian runs a story... (this will be common for all stories on a particular subject)
             Default: UNDEFINED
         <view view="VIEWTYPE"> (integer) Effect on public opinion on a particular view
@@ -37,7 +36,7 @@
 			Default: false
     </LOOT_IDNAME>
     -->
-	<LOOT_CEOPHOTOS storyNum="10">
+	<LOOT_CEOPHOTOS>
 		<intro>The Liberal Guardian runs a story featuring photos of a major CEO </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -83,7 +82,7 @@
 		<view view="VIEW_CORPORATECULTURE">50</view>
 		<offendCorps>true</offendCorps>
 	</LOOT_CEOPHOTOS>
-	<LOOT_CEOLOVELETTERS storyNum="8">
+	<LOOT_CEOLOVELETTERS>
 		<intro>The Liberal Guardian runs a story featuring love letters from a major CEO </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -122,7 +121,7 @@
 		<view view="VIEW_CORPORATECULTURE">50</view>
 		<offendCorps>true</offendCorps>
 	</LOOT_CEOLOVELETTERS>
-	<LOOT_CEOTAXPAPERS storyNum="1">
+	<LOOT_CEOTAXPAPERS>
 		<intro>The Liberal Guardian runs a story featuring a major CEO's tax papers </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -135,7 +134,7 @@
 		<view view="VIEW_CORPORATECULTURE">50</view>
 		<offendCorps>true</offendCorps>
 	</LOOT_CEOTAXPAPERS>
-	<LOOT_CORPFILES storyNum="5">
+	<LOOT_CORPFILES>
 		<intro>The Liberal Guardian runs a story featuring Corporate files </intro>
 		<viewScaling>
 			<view view="VIEW_LIBERALCRIMESQUAD">10</view>
@@ -166,10 +165,10 @@
 		<view view="VIEW_CORPORATECULTURE">50</view>
 		<offendCorps>true</offendCorps>
 	</LOOT_CORPFILES>
-	<LOOT_CCS_BACKERLIST storyNum="1">
+	<LOOT_CCS_BACKERLIST>
+		<intro>The Liberal Guardian runs more than one thousand pages of documents about </intro>
 		<story>
 			<longDescription>
-				<line>The Liberal Guardian runs more than one thousand pages of documents about </line>
 				<line>the CCS organization, also revealing in extreme detail the names and </line>
 				<line>responsibilities of Conservative Crime Squad sympathizers and supporters</line>
 				<line>in the state and federal governments. Sections precisely document the</line>
@@ -191,7 +190,7 @@
 		<view view="VIEW_CONSERVATIVECRIMESQUAD">100</view>
 		<exposeCCS>true</exposeCCS>
 	</LOOT_CCS_BACKERLIST>
-	<LOOT_INTHQDISK storyNum = "6">
+	<LOOT_INTHQDISK>
 		<intro>The Liberal Guardian runs a story featuring CIA and other intelligence files </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -222,7 +221,7 @@
 		<offendCIA>true</offendCIA>
 		<treason>true</treason>
 	</LOOT_INTHQDISK>
-	<LOOT_SECRETDOCUMENTS storyNum = "6">
+	<LOOT_SECRETDOCUMENTS>
 		<intro>The Liberal Guardian runs a story featuring CIA and other intelligence files </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -253,7 +252,7 @@
 		<offendCIA>true</offendCIA>
 		<treason>true</treason>
 	</LOOT_SECRETDOCUMENTS>
-	<LOOT_POLICERECORDS storyNum = "6">
+	<LOOT_POLICERECORDS>
 		<intro>The Liberal Guardian runs a story featuring police records </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -283,7 +282,7 @@
 		<majorNews>true</majorNews>
 		<view view="VIEW_POLICEBEHAVIOR">50</view>
 	</LOOT_POLICERECORDS>
-	<LOOT_JUDGEFILES storyNum = "2">
+	<LOOT_JUDGEFILES>
 		<intro>The Liberal Guardian runs a story with evidence of a Conservative judge </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -296,7 +295,7 @@
 		<majorNews>true</majorNews>
 		<view view="VIEW_JUSTICES">50</view>
 	</LOOT_JUDGEFILES>
-	<LOOT_RESEARCHFILES storyNum = "4">
+	<LOOT_RESEARCHFILES>
 		<intro>The Liberal Guardian runs a story featuring research papers </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -318,7 +317,7 @@
 		</story>
 		<majorNews>true</majorNews>
 	</LOOT_RESEARCHFILES>
-	<LOOT_PRISONFILES storyNum = "4">
+	<LOOT_PRISONFILES>
 		<intro>The Liberal Guardian runs a story featuring prison documents </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -339,7 +338,7 @@
 		<view view="VIEW_PRISONS">50</view>
 		<view view="VIEW_DEATHPENALTY">50</view>
 	</LOOT_PRISONFILES>
-	<LOOT_CABLENEWSFILES storyNum = "4">
+	<LOOT_CABLENEWSFILES>
 		<intro>The Liberal Guardian runs a story featuring cable news memos </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>
@@ -359,7 +358,7 @@
 		<view view="VIEW_CABLENEWS">50</view>
 		<offendCable>true</offendCable>
 	</LOOT_CABLENEWSFILES>
-	<LOOT_AMRADIOFILES storyNum = "3">
+	<LOOT_AMRADIOFILES>
 		<intro>The Liberal Guardian runs a story featuring AM radio plans </intro>
 		<view view="VIEW_LIBERALCRIMESQUAD">10</view>
 		<view view="VIEW_LIBERALCRIMESQUADPOS">10</view>

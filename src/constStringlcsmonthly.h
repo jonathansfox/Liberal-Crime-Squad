@@ -22,7 +22,7 @@ const string CONST_NET_CHANGE_THIS_MONTH_DAY = "Net Change This Month (Day):";
 const string MINUS_DOLLAR = "-$";
 const string PLUS_DOLLAR = "+$";
 const string CONST_LIBERAL_CRIME_SQUAD_FUNDING_REPORT = "Liberal Crime Squad: Funding Report";
-const string CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP = "This is bound to get the Conservative masses a little riled up.";
+/*
 
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_AM_RADIO_PLANS = "The Liberal Guardian runs a story featuring AM radio plans ";
 
@@ -35,7 +35,6 @@ const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_RESEARCH_PAPERS =
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_WITH_EVIDENCE_OF_A_CONSERVATIVE_JUDGE = "The Liberal Guardian runs a story with evidence of a Conservative judge ";
 
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_POLICE_RECORDS = "The Liberal Guardian runs a story featuring police records ";
-const string CONST_THIS_IS_BOUND_TO_GET_THE_GOVERNMENT_A_LITTLE_RILED_UP = "This is bound to get the Government a little riled up.";
 
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_CIA_AND_OTHER_INTELLIGENCE_FILES = "The Liberal Guardian runs a story featuring CIA and other intelligence files ";
 
@@ -45,19 +44,23 @@ const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_A_MAJOR_CEO_S_TAX
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_LOVE_LETTERS_FROM_A_MAJOR_CEO = "The Liberal Guardian runs a story featuring love letters from a major CEO ";
 
 const string CONST_THE_LIBERAL_GUARDIAN_RUNS_A_STORY_FEATURING_PHOTOS_OF_A_MAJOR_CEO = "The Liberal Guardian runs a story featuring photos of a major CEO ";
+*/
+const string CONST_THE_MONTHLY_LIBERAL_GUARDIAN_NEWSPAPER = "The monthly Liberal Guardian newspaper";
+const string CONST_THE_MONTHLY_LIBERAL_GUARDIAN_ONLINE_NEWSLETTER = "The monthly Liberal Guardian online newsletter";
+const string CONST_IS_PUBLISHED = " is published.";
+const string CONST_THE_ONLY_READERS_ARE_CONSERVATIVES_WHO_SEEM_TO_THINK_IT_S_FUNNY = "The only readers are Conservatives, who seem to think it's funny.";
+const string CONST_UNFORTUNATELY_NOBODY_SEEMS_INTERESTED = "Unfortunately, nobody seems interested.";
+const string CONST_VERY_FEW_PEOPLE_SEEM_TO_BE_INTERESTED = "Very few people seem to be interested.";
+const string CONST_A_FAIR_NUMBER_OF_PEOPLE_ARE_READING_IT = "A fair number of people are reading it.";
+const string CONST_MANY_PEOPLE_ARE_READING_IT = "Many people are reading it.";
+const string CONST_THE_RESPONSE_IS_VERY_STRONG_PEOPLE_ARE_CHANGING_THEIR_MINDS = "The response is very strong. People are changing their minds.";
+const string CONST_THE_RESPONSE_IS_ELECTRIC_EVERYONE_IS_TALKING_ABOUT_THIS_MONTH_S = "The response is electric. Everyone is talking about this month's ";
+const string CONST_X_LIBERAL_GUARDIAN = "Liberal Guardian.";
 const string CONST_ENTER_NOT_IN_THIS_MONTH_S_LIBERAL_GUARDIAN = "Enter - Not in this month's Liberal Guardian";
 const string CONST_DO_YOU_WANT_TO_RUN_A_SPECIAL_EDITION = "Do you want to run a special edition?";
-const string CONST_X_LIBERAL_GUARDIAN = "Liberal Guardian.";
-const string CONST_THE_RESPONSE_IS_ELECTRIC_EVERYONE_IS_TALKING_ABOUT_THIS_MONTH_S = "The response is electric. Everyone is talking about this month's ";
-const string CONST_THE_RESPONSE_IS_VERY_STRONG_PEOPLE_ARE_CHANGING_THEIR_MINDS = "The response is very strong. People are changing their minds.";
-const string CONST_MANY_PEOPLE_ARE_READING_IT = "Many people are reading it.";
-const string CONST_A_FAIR_NUMBER_OF_PEOPLE_ARE_READING_IT = "A fair number of people are reading it.";
-const string CONST_VERY_FEW_PEOPLE_SEEM_TO_BE_INTERESTED = "Very few people seem to be interested.";
-const string CONST_UNFORTUNATELY_NOBODY_SEEMS_INTERESTED = "Unfortunately, nobody seems interested.";
-const string CONST_THE_ONLY_READERS_ARE_CONSERVATIVES_WHO_SEEM_TO_THINK_IT_S_FUNNY = "The only readers are Conservatives, who seem to think it's funny.";
-const string CONST_IS_PUBLISHED = " is published.";
-const string CONST_THE_MONTHLY_LIBERAL_GUARDIAN_ONLINE_NEWSLETTER = "The monthly Liberal Guardian online newsletter";
-const string CONST_THE_MONTHLY_LIBERAL_GUARDIAN_NEWSPAPER = "The monthly Liberal Guardian newspaper";
+const string CONST_THIS_IS_BOUND_TO_GET_THE_GOVERNMENT_A_LITTLE_RILED_UP = "This is bound to get the Government a little riled up.";
+const string CONST_THIS_IS_BOUND_TO_GET_THE_CONSERVATIVE_MASSES_A_LITTLE_RILED_UP = "This is bound to get the Conservative masses a little riled up.";
+
 
 const string CONST_SPECIALEDITIONS_XML = "specialeditions.xml";
 
@@ -158,36 +161,36 @@ const string attrib_VIEW_LIBERALCRIMESQUAD = "VIEW_LIBERALCRIMESQUAD";
 const string attrib_VIEW_LIBERALCRIMESQUADPOS = "VIEW_LIBERALCRIMESQUADPOS";
 const string attrib_VIEW_CONSERVATIVECRIMESQUAD = "VIEW_CONSERVATIVECRIMESQUAD";
 
-map<string, int> viewAttributes = {
-	map<string, int> ::value_type(attrib_VIEW_STALIN, VIEW_STALIN),
-	map<string, int> ::value_type(attrib_VIEW_MOOD, VIEW_MOOD),
-	map<string, int> ::value_type(attrib_VIEW_GAY, VIEW_GAY),
-	map<string, int> ::value_type(attrib_VIEW_DEATHPENALTY, VIEW_DEATHPENALTY),
-	map<string, int> ::value_type(attrib_VIEW_TAXES, VIEW_TAXES),
-	map<string, int> ::value_type(attrib_VIEW_NUCLEARPOWER, VIEW_NUCLEARPOWER),
-	map<string, int> ::value_type(attrib_VIEW_ANIMALRESEARCH, VIEW_ANIMALRESEARCH),
-	map<string, int> ::value_type(attrib_VIEW_POLICEBEHAVIOR, VIEW_POLICEBEHAVIOR),
-	map<string, int> ::value_type(attrib_VIEW_TORTURE, VIEW_TORTURE),
-	map<string, int> ::value_type(attrib_VIEW_INTELLIGENCE, VIEW_INTELLIGENCE),
-	map<string, int> ::value_type(attrib_VIEW_FREESPEECH, VIEW_FREESPEECH),
-	map<string, int> ::value_type(attrib_VIEW_GENETICS, VIEW_GENETICS),
-	map<string, int> ::value_type(attrib_VIEW_JUSTICES, VIEW_JUSTICES),
-	map<string, int> ::value_type(attrib_VIEW_GUNCONTROL, VIEW_JUSTICES),
-	map<string, int> ::value_type(attrib_VIEW_SWEATSHOPS, VIEW_SWEATSHOPS),
-	map<string, int> ::value_type(attrib_VIEW_POLLUTION, VIEW_POLLUTION),
-	map<string, int> ::value_type(attrib_VIEW_CORPORATECULTURE, VIEW_CORPORATECULTURE),
-	map<string, int> ::value_type(attrib_VIEW_CEOSALARY, VIEW_CEOSALARY),
-	map<string, int> ::value_type(attrib_VIEW_WOMEN, VIEW_WOMEN),
-	map<string, int> ::value_type(attrib_VIEW_CIVILRIGHTS, VIEW_CIVILRIGHTS),
-	map<string, int> ::value_type(attrib_VIEW_DRUGS, VIEW_DRUGS),
-	map<string, int> ::value_type(attrib_VIEW_IMMIGRATION, VIEW_IMMIGRATION),
-	map<string, int> ::value_type(attrib_VIEW_MILITARY, VIEW_MILITARY),
-	map<string, int> ::value_type(attrib_VIEW_PRISONS, VIEW_PRISONS),
-	map<string, int> ::value_type(attrib_VIEW_AMRADIO, VIEW_AMRADIO),
-	map<string, int> ::value_type(attrib_VIEW_CABLENEWS, VIEW_CABLENEWS),
-	map<string, int> ::value_type(attrib_VIEW_LIBERALCRIMESQUAD, VIEW_LIBERALCRIMESQUAD),
-	map<string, int> ::value_type(attrib_VIEW_LIBERALCRIMESQUADPOS, VIEW_LIBERALCRIMESQUADPOS),
-	map<string, int> ::value_type(attrib_VIEW_CONSERVATIVECRIMESQUAD, VIEW_CONSERVATIVECRIMESQUAD)
+map<string, Views> viewAttributes = {
+	map<string, Views> ::value_type(attrib_VIEW_STALIN, VIEW_STALIN),
+	map<string, Views> ::value_type(attrib_VIEW_MOOD, VIEW_MOOD),
+	map<string, Views> ::value_type(attrib_VIEW_GAY, VIEW_GAY),
+	map<string, Views> ::value_type(attrib_VIEW_DEATHPENALTY, VIEW_DEATHPENALTY),
+	map<string, Views> ::value_type(attrib_VIEW_TAXES, VIEW_TAXES),
+	map<string, Views> ::value_type(attrib_VIEW_NUCLEARPOWER, VIEW_NUCLEARPOWER),
+	map<string, Views> ::value_type(attrib_VIEW_ANIMALRESEARCH, VIEW_ANIMALRESEARCH),
+	map<string, Views> ::value_type(attrib_VIEW_POLICEBEHAVIOR, VIEW_POLICEBEHAVIOR),
+	map<string, Views> ::value_type(attrib_VIEW_TORTURE, VIEW_TORTURE),
+	map<string, Views> ::value_type(attrib_VIEW_INTELLIGENCE, VIEW_INTELLIGENCE),
+	map<string, Views> ::value_type(attrib_VIEW_FREESPEECH, VIEW_FREESPEECH),
+	map<string, Views> ::value_type(attrib_VIEW_GENETICS, VIEW_GENETICS),
+	map<string, Views> ::value_type(attrib_VIEW_JUSTICES, VIEW_JUSTICES),
+	map<string, Views> ::value_type(attrib_VIEW_GUNCONTROL, VIEW_JUSTICES),
+	map<string, Views> ::value_type(attrib_VIEW_SWEATSHOPS, VIEW_SWEATSHOPS),
+	map<string, Views> ::value_type(attrib_VIEW_POLLUTION, VIEW_POLLUTION),
+	map<string, Views> ::value_type(attrib_VIEW_CORPORATECULTURE, VIEW_CORPORATECULTURE),
+	map<string, Views> ::value_type(attrib_VIEW_CEOSALARY, VIEW_CEOSALARY),
+	map<string, Views> ::value_type(attrib_VIEW_WOMEN, VIEW_WOMEN),
+	map<string, Views> ::value_type(attrib_VIEW_CIVILRIGHTS, VIEW_CIVILRIGHTS),
+	map<string, Views> ::value_type(attrib_VIEW_DRUGS, VIEW_DRUGS),
+	map<string, Views> ::value_type(attrib_VIEW_IMMIGRATION, VIEW_IMMIGRATION),
+	map<string, Views> ::value_type(attrib_VIEW_MILITARY, VIEW_MILITARY),
+	map<string, Views> ::value_type(attrib_VIEW_PRISONS, VIEW_PRISONS),
+	map<string, Views> ::value_type(attrib_VIEW_AMRADIO, VIEW_AMRADIO),
+	map<string, Views> ::value_type(attrib_VIEW_CABLENEWS, VIEW_CABLENEWS),
+	map<string, Views> ::value_type(attrib_VIEW_LIBERALCRIMESQUAD, VIEW_LIBERALCRIMESQUAD),
+	map<string, Views> ::value_type(attrib_VIEW_LIBERALCRIMESQUADPOS, VIEW_LIBERALCRIMESQUADPOS),
+	map<string, Views> ::value_type(attrib_VIEW_CONSERVATIVECRIMESQUAD, VIEW_CONSERVATIVECRIMESQUAD)
 };
 
 const string tag_INTRO = "intro";
@@ -224,20 +227,20 @@ enum specialEditionTags {
 	ENUM_tag_TREASONOUS
 };
 
-map<string, int> specialEditionTagsIDEnum = {
-	map<string, int> ::value_type(tag_INTRO, ENUM_tag_INTRO),
-	map<string, int> ::value_type(tag_STORYNUM, ENUM_tag_STORYNUM),
-	map<string, int> ::value_type(tag_STORY, ENUM_tag_STORY),
-	map<string, int> ::value_type(tag_DESCRIPTION, ENUM_tag_DESCRIPTION),
-	map<string, int> ::value_type(tag_LONG_DESCRIPTION, ENUM_tag_LONG_DESCRIPTION),
-	map<string, int> ::value_type(tag_LINE, ENUM_tag_LINE),
-	map<string, int> ::value_type(tag_VIEW, ENUM_tag_VIEW),
-	map<string, int> ::value_type(tag_SCALING, ENUM_tag_SCALING),
-	map<string, int> ::value_type(tag_MAJOR_NEWS, ENUM_tag_MAJOR_NEWS),
-	map<string, int> ::value_type(tag_OFFEND_CORPS, ENUM_tag_OFFEND_CORPS),
-	map<string, int> ::value_type(tag_OFFEND_CIA, ENUM_tag_OFFEND_CIA),
-	map<string, int> ::value_type(tag_OFFEND_CABLE, ENUM_tag_OFFEND_CABLE),
-	map<string, int> ::value_type(tag_OFFEND_AMRADIO, ENUM_tag_OFFEND_AMRADIO),
-	map<string, int> ::value_type(tag_EXPOSE_CCS, ENUM_tag_EXPOSE_CCS),
-	map<string, int> ::value_type(tag_TREASONOUS, ENUM_tag_TREASONOUS)
+map<string, specialEditionTags> specialEditionTagsIDEnum = {
+	map<string, specialEditionTags> ::value_type(tag_INTRO, ENUM_tag_INTRO),
+	map<string, specialEditionTags> ::value_type(tag_STORYNUM, ENUM_tag_STORYNUM),
+	map<string, specialEditionTags> ::value_type(tag_STORY, ENUM_tag_STORY),
+	map<string, specialEditionTags> ::value_type(tag_DESCRIPTION, ENUM_tag_DESCRIPTION),
+	map<string, specialEditionTags> ::value_type(tag_LONG_DESCRIPTION, ENUM_tag_LONG_DESCRIPTION),
+	map<string, specialEditionTags> ::value_type(tag_LINE, ENUM_tag_LINE),
+	map<string, specialEditionTags> ::value_type(tag_VIEW, ENUM_tag_VIEW),
+	map<string, specialEditionTags> ::value_type(tag_SCALING, ENUM_tag_SCALING),
+	map<string, specialEditionTags> ::value_type(tag_MAJOR_NEWS, ENUM_tag_MAJOR_NEWS),
+	map<string, specialEditionTags> ::value_type(tag_OFFEND_CORPS, ENUM_tag_OFFEND_CORPS),
+	map<string, specialEditionTags> ::value_type(tag_OFFEND_CIA, ENUM_tag_OFFEND_CIA),
+	map<string, specialEditionTags> ::value_type(tag_OFFEND_CABLE, ENUM_tag_OFFEND_CABLE),
+	map<string, specialEditionTags> ::value_type(tag_OFFEND_AMRADIO, ENUM_tag_OFFEND_AMRADIO),
+	map<string, specialEditionTags> ::value_type(tag_EXPOSE_CCS, ENUM_tag_EXPOSE_CCS),
+	map<string, specialEditionTags> ::value_type(tag_TREASONOUS, ENUM_tag_TREASONOUS)
 };

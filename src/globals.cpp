@@ -187,6 +187,191 @@ void end_game(int err)
 	endwinAlt();
 	exit(err);
 }
+
+#include "specialeditions.h"
+
+enum specialEditionTags {
+	ENUM_tag_INTRO,
+	ENUM_tag_STORYNUM,
+	ENUM_tag_STORY,
+	ENUM_tag_DESCRIPTION,
+	ENUM_tag_LONG_DESCRIPTION,
+	ENUM_tag_LINE,
+	ENUM_tag_VIEW,
+	ENUM_tag_SCALING,
+	ENUM_tag_MAJOR_NEWS,
+	ENUM_tag_OFFEND_CORPS,
+	ENUM_tag_OFFEND_CIA,
+	ENUM_tag_OFFEND_CABLE,
+	ENUM_tag_OFFEND_AMRADIO,
+	ENUM_tag_EXPOSE_CCS,
+	ENUM_tag_TREASONOUS
+};
+
+const string tag_INTRO = "intro";
+const string tag_STORYNUM = "storyNum";
+const string tag_STORY = "story";
+const string tag_DESCRIPTION = "description";
+const string tag_LONG_DESCRIPTION = "longDescription";
+const string tag_LINE = "line";
+const string tag_VIEW = "view";
+const string tag_SCALING = "viewScaling";
+const string tag_MAJOR_NEWS = "majorNews";
+const string tag_OFFEND_CORPS = "offendCorps";
+const string tag_OFFEND_CIA = "offendCIA";
+const string tag_OFFEND_CABLE = "offendCable";
+const string tag_OFFEND_AMRADIO = "offendAM";
+const string tag_EXPOSE_CCS = "exposeCCS";
+const string tag_TREASONOUS = "treason";
+
+extern map<string, Views> viewAttributes;
+map<string, AbstractStory> specialEditionStories;
+extern map<string, specialEditionTags> specialEditionTagsIDEnum;
+int stringtobool(string boolstr);
+
+bool addSingleStory(map<string, AbstractStory>& types, MCD_STR xmltext) {
+	CMarkup xml;
+	xml.SetDoc(xmltext);
+	xml.FindElem();
+	string storyName = xml.GetTagName();
+	xml.IntoElem();
+	string nextStoryTag;
+	AbstractStory nextAbStory = AbstractStory(xml.GetTagName());
+	PrintableStory nextStory;
+	bool b;
+	//Loop through elements in Special Edition
+	while (xml.FindElem()) {
+		switch (specialEditionTagsIDEnum[xml.GetTagName()]) {
+		case ENUM_tag_INTRO:
+			nextAbStory.addIntro(xml.GetData());
+
+			break;
+		case ENUM_tag_STORY:
+			//mvaddstrCenter(y++, storyName);
+			//mvaddstrCenter(y++, "" + len(nextAbStory.getStory()));
+			///pressAnyKey();
+			nextStory = PrintableStory();
+			xml.IntoElem();
+			while (xml.FindElem()) {
+				switch (specialEditionTagsIDEnum[xml.GetTagName()]) {
+				case ENUM_tag_DESCRIPTION:
+					nextStory.addLine(xml.GetData());
+					//mvaddstrCenter(y++, xml.GetData());
+					break;
+				case ENUM_tag_LONG_DESCRIPTION:
+					xml.IntoElem();
+					while (xml.FindElem()) {
+						if (xml.GetTagName() == tag_LINE) {
+							nextStory.addLine(xml.GetData());
+						}
+					}
+					xml.OutOfElem();
+					break;
+				case ENUM_tag_VIEW:
+					nextStory.addView(viewAttributes[xml.GetAttrib(tag_VIEW)], atoi(xml.GetData().data()), false);
+					break;
+				}
+			}
+			xml.OutOfElem();
+			nextAbStory.addStory(nextStory);
+			//nextAbStory.pickStory();
+			//mvaddstrCenter(y++, nextAbStory.getStory()[0]);
+			break;
+		case ENUM_tag_SCALING:
+			xml.IntoElem();
+			while (xml.FindElem()) {
+				if (xml.GetTagName() == tag_VIEW) {
+					nextAbStory.addView(viewAttributes[xml.GetAttrib(tag_VIEW)], atoi(xml.GetData().data()), true);
+				}
+			}
+			xml.OutOfElem();
+			break;
+		case ENUM_tag_VIEW:
+			nextAbStory.addView(viewAttributes[xml.GetAttrib(tag_VIEW)], atoi(xml.GetData().data()), false);
+			break;
+		case ENUM_tag_MAJOR_NEWS:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_MAJOR_NEWS);
+			}
+			break;
+		case ENUM_tag_OFFEND_CORPS:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_OFFEND_CORPS);
+			}
+			break;
+		case ENUM_tag_OFFEND_CIA:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_OFFEND_CIA);
+			}
+			break;
+		case ENUM_tag_OFFEND_CABLE:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_OFFEND_CABLE);
+			}
+			break;
+		case ENUM_tag_OFFEND_AMRADIO:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_OFFEND_AMRADIO);
+			}
+			break;
+		case ENUM_tag_EXPOSE_CCS:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_EXPOSE_CCS);
+			}
+			break;
+		case ENUM_tag_TREASONOUS:
+			b = stringtobool(xml.GetData());
+			if (b) {
+				nextAbStory.addTag(ENUM_tag_TREASONOUS);
+			}
+			break;
+		}
+	}
+	bool invalid = false;
+	if (types.count(storyName) >= 1) {
+		mvaddstrCenter(2, "DUPLICATE : " + storyName);
+		invalid = true;
+	}
+	types.emplace(storyName, nextAbStory);
+	nextAbStory.pickStory();
+	if (getloottype(storyName) == -1) {
+		mvaddstrCenter(3, "INVALID SPECIAL ED : " + storyName);
+		invalid = true;
+	}
+	if (invalid) {
+		pressAnyKey();
+		return false;
+	}
+	return len(nextAbStory.getStory()) >= 1;
+
+}
+
+bool populate_stories_from_xml(map<string, AbstractStory>& types, const string& file, Log& log) {
+	CMarkup xml;
+	if (!xml.Load(string(artdir) + file)) //TODO actually learn c++ and make this load on game start (look at globals.cpp)
+	{ //File is missing or not valid XML.
+		mvaddstrAlt(1, 1, "Failed To Load " + file + "!", xmllog);
+		pressAnyKey();
+		return false; //Abort.
+	}
+	xml.FindElem();
+	xml.IntoElem();
+
+	bool valid_xml = true;
+
+	while (xml.FindElem()) {
+		valid_xml &= addSingleStory(types, xml.GetSubDoc());
+	}
+
+	return valid_xml;
+}
+
 template<class Type>
 bool populate_from_xml(vector<Type*>& types, const string& file, Log& log)
 {
@@ -328,7 +513,7 @@ void addCreatueVehiclesToCollection(DeprecatedCreature *cr[6], vector<Vehicle *>
 		}
 	}
 }
-
+const string CONST_SPECIALEDITIONS_XML = "specialeditions.xml";
 bool mainSeven(bool xml_loaded_ok) {
 	xmllog.initialize(CONST_XMLLOG, true, 1);
 	xml_loaded_ok &= populate_from_xml(vehicletype, CONST_VEHICLES_XML, xmllog);
@@ -337,6 +522,7 @@ bool mainSeven(bool xml_loaded_ok) {
 	xml_loaded_ok &= populate_from_xml(armortype, CONST_ARMORS_XML, xmllog);
 	xml_loaded_ok &= populate_masks_from_xml(armortype, CONST_MASKS_XML, xmllog);
 	xml_loaded_ok &= populate_from_xml(loottype, CONST_LOOT_XML, xmllog);
+	xml_loaded_ok &= populate_stories_from_xml(specialEditionStories, CONST_SPECIALEDITIONS_XML, xmllog); // must be after loottype for testing purposes
 	xml_loaded_ok &= populate_from_xml(creaturetype, CONST_CREATURES_XML, xmllog);
 	xml_loaded_ok &= populate_from_xml(augmenttype, CONST_AUGMENTATIONS_XML, xmllog);
 	return xml_loaded_ok;

@@ -405,7 +405,8 @@ extern vector<WeaponType *> weapontype;
 /* monthly - lets the player choose a special edition for the guardian */
 int choosespecialedition(char &clearformess);
 /* monthly - guardian - prints liberal guardian special editions */
-int printnews(short l, short newspaper);
+// return whether printing counts as treason
+bool printnews(short l, short newspaper);
 #include "../items/itemPool.h"
 #include "../items/lootTypePool.h"
 void giveActiveSquadThisLoot(Item* de);
