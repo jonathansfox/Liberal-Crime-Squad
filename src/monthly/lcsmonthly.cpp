@@ -164,7 +164,7 @@ the bottom of includes.h in the top src folder.
 	  AbstractStory abStory = specialEditionStories[LootTypePool::getInstance().getIdName(li)]; //Find the special edition in question
 	  int y = 6;
 	  
-	  mvaddstrAlt(y, 1, abStory.intro, gamelog);
+	  mvaddstrAlt(y++, 1, abStory.intro, gamelog);
 	  abStory.pickStory();
 
 	  for (int i = 0; i < len(abStory.getStory()); i++) {
