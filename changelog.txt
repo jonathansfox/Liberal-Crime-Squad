@@ -1169,17 +1169,7 @@ common/commondisplayCreature.h
 Renamed includesDeprecatedB to includesVersionInfo, deleted rest of file
 
 Added noop3451 / TH3JU1C3 bugfixes and changes
-Fixed Crackhouse business front note working
-Fixed newspaper bug where LCS flees from scene in CCS story
-Fixed 073) Drug, Military, and Immigration Issues Often Cannot Become L+
-Fixed bug that made CCS gain rep with a negative story (and vice versa)
-Fixed minor bugs where LCS was mentioned in CCS stories
-Fixed similar bugs to this before with regard to car chases, but evidently there were more
-Fixed graphical error with CEO story headline and added unused picture for Child's Plea
-Fixed bug where publishing corpfiles will actually publish CEOpics
-Stopped warehouses captured by CCS being hidden after FBI raid
-Fixed 075) LCS Safehouse Still Listed as Under CCS Control After CCS Defeated
-Allowed Violent retakover of captured CCS warehouse
-recapture is done in same manner as taking a crackhouse
-Added ability to modify Special Editions published in the liberal guardian
+Namely the ability to modify Special Editions published in the liberal guardian
 
+4.12.62
+Fixed gamecrash if augment attempted when cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID) == 0

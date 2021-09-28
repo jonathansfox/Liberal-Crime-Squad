@@ -215,8 +215,9 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
 	if (blood_saved > 100) blood_saved = 100;
 	victim->lose_blood(100 - blood_saved);
+	// divide by zero risk, replaced "/ skills" with "/ (skills + 1)"
 	if (skills < difficulty &&
-		LCSrandom((100 * difficulty) / skills) < 100)
+		LCSrandom((100 * difficulty) / (skills + 1)) < 100)
 	{
 		unsigned char* wound = nullptr;
 		switch (selected_aug->get_type())
