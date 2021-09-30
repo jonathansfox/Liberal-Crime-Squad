@@ -254,7 +254,7 @@ string asMoney(const int c);
 
 void printBrowseHalfscreenHeader(const string cname);
 
-void printShopOptions(const int y, const bool x, const char letter, const string description);
+void printShopOptions(const int y, const bool x, const char letter, const string description, const bool available);
 void printShopFooter(const int _y, const short party_status, const int partysize, const string exit_);
 void printOptionsMiddle(const int _y, const bool sell_masks_, const bool left_side, const bool allow_selling_, const int loot);
 

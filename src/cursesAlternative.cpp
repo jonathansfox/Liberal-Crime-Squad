@@ -1267,9 +1267,15 @@ void printBrowseHalfscreenHeader(const string cname) {
 	addstrAlt(cname);
 }
 
-void printShopOptions(const int y, const bool x, const char letter, const string description) {
+void printShopOptions(const int y, const bool x, const char letter, const string description, const bool available) {
+	if (!available) {
+		set_color_easy(BLACK_ON_BLACK_BRIGHT);
 
-	set_color_easy(WHITE_ON_BLACK);
+	}
+	else {
+		set_color_easy(WHITE_ON_BLACK);
+
+	}
 	int xNew = x ? 1 : 40;
 	mvaddstrAlt(y + 10, xNew, letter + spaceDashSpace + description);
 }

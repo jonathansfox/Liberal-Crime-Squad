@@ -409,10 +409,9 @@
 				 available_options[p]->letter_ = 'a' + taken_letters;
 				 taken_letters++;
 			 }
-			 if (available_options[p]->is_available())
-			 {
-				 printShopOptions(y, left_side, available_options[p]->showletter(), available_options[p]->get_description_halfscreen());
-			 }
+
+				 printShopOptions(y, left_side, available_options[p]->showletter(), available_options[p]->get_description_halfscreen(), available_options[p]->is_available());
+			 
 
 
 			 if (!left_side) {
