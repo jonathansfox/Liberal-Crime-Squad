@@ -35,7 +35,7 @@ char checkActiveSquadForRejection(const char autoadmit, const bool metaldetect) 
 		if (activesquad->squad[s])
 		{
 			// Wrong clothes? Gone
-			if (activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss != ANIMALGLOSS_ANIMAL)
+			if (activesquad->squad[s]->is_naked_human())
 				if (rejected > REJECTED_NUDE)rejected = REJECTED_NUDE;
 			if (autoadmit < 1 && !hasdisguise(*activesquad->squad[s]))
 				if (rejected > REJECTED_DRESSCODE)rejected = REJECTED_DRESSCODE;
@@ -127,7 +127,7 @@ char sizeUpSquadForEntry(const bool autoadmit) {
 			if (activesquad->squad[s])
 			{
 				// Wrong clothes? Gone
-				if (activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss != ANIMALGLOSS_ANIMAL)
+				if (activesquad->squad[s]->is_naked_human())
 					if (rejected > REJECTED_NUDE)rejected = REJECTED_NUDE;
 				if (!hasdisguise(*activesquad->squad[s]))
 					if (rejected > REJECTED_DRESSCODE)rejected = REJECTED_DRESSCODE;

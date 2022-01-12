@@ -27,11 +27,43 @@
 #include "includesVersionInfo.h"
 #include "constStringgame.h"
 #include <time.h>
+#include <Windows.h>
 void mainOne() {
+	bool resizeFont = false;
 	init_console(); // do this FIRST
 					//start curses
 	initscrAlt();
 	gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog (and also initialize artdir and homedir)
+
+	// resize window
+	system("mode 80,25");
+	SMALL_RECT WinRect = { 0, 0, 80, 25 };   //New dimensions for window in 8x12 pixel chars
+	SMALL_RECT* WinSize = &WinRect;
+	SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, WinSize);
+
+	//
+	if (resizeFont) {
+		// resize font
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Obtain the Console handle
+
+		PCONSOLE_FONT_INFOEX lpConsoleCurrentFontEx = new CONSOLE_FONT_INFOEX();
+
+		// set the size of the CONSOLE_FONT_INFOEX
+		lpConsoleCurrentFontEx->cbSize = sizeof(CONSOLE_FONT_INFOEX);
+
+		// get the current value
+		GetCurrentConsoleFontEx(hConsole, 0, lpConsoleCurrentFontEx);
+
+		// set size to be 8x18, the default size is 8x16
+		lpConsoleCurrentFontEx->dwFontSize.X = 20;
+		lpConsoleCurrentFontEx->dwFontSize.Y = 32;
+
+		// submit the settings
+		SetCurrentConsoleFontEx(hConsole, 0, lpConsoleCurrentFontEx);
+		//
+
+	}
+
 	title_screen::getInstance();
 	CreaturePool::getInstance();
 	LocationsPool::getInstance();

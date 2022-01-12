@@ -202,7 +202,7 @@ This file is part of Liberal Crime Squad.                                       
 	 else
 	 {
 		 //// TODO Move to XML
-		 if ((!cr.is_naked() || cr.animalgloss == ANIMALGLOSS_ANIMAL)
+		 if ((!cr.is_naked_human())
 			 && cr.get_armor().get_itemtypename() != tag_ARMOR_HEAVYARMOR)uniformed = 1;
 
 		 switch (type)
@@ -295,7 +295,8 @@ This file is part of Liberal Crime Squad.                                       
 			 break;
 		 case SITE_INDUSTRY_SWEATSHOP:
 			 uniformed = 0;
-			 if (cr.is_naked())uniformed = 1;
+			 if (cr.animalgloss != ANIMALGLOSS_NONE) uniformed = 1;
+			 if (cr.is_naked_human())uniformed = 1;
 			 if (cr.get_armor().get_itemtypename() == tag_ARMOR_SECURITYUNIFORM)uniformed = 1;
 			 break;
 		 case SITE_GOVERNMENT_PRISON:
@@ -428,8 +429,7 @@ This file is part of Liberal Crime Squad.                                       
 	 for (int i = 0; i < 6; i++)
 	 {
 		 if (activesquad->squad[i] == NULL)break;
-		 if (activesquad->squad[i]->is_naked() &&
-			 activesquad->squad[i]->animalgloss != ANIMALGLOSS_ANIMAL)forcecheck = true;
+		 if (activesquad->squad[i]->is_naked_human())forcecheck = true;
 		 int thisweapon = weaponcheck(*activesquad->squad[i], false);
 		 if (thisweapon > weapon)weapon = thisweapon;
 		 //if(thisweapon==2)weaponar[i]=1;

@@ -1204,4 +1204,4 @@ const string CONST_PRESS_A_LETTER_TO_SELECT_AN_OPTION = "Press a Letter to selec
 const string CONST_PRODUCT_NAME_PRICE_HEADER = "컴컴PRODUCT NAME컴컴컴컴컴컴컴컴컴컴컴PRICE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴";
 const string CONST_WHAT_WILL = "What will ";
 
-const string discordHyperlink = "https://discord.gg/CHNcaSn";
+const string discordHyperlink = "https://discord.gg/HYbss8eswM";

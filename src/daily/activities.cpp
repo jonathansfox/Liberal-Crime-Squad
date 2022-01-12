@@ -439,7 +439,7 @@ void attemptarrest(DeprecatedCreature & liberal, const char* str, int clearforme
 int checkforarrest(DeprecatedCreature & liberal, const char* string, int clearformess)
 {
 	bool arrest = false;
-	if (!liberal.animalgloss && liberal.is_naked() && LCSrandom(2))
+	if (liberal.is_naked_human() && LCSrandom(2))
 	{
 		criminalize(liberal, LAWFLAG_DISTURBANCE);
 		Deprecatednewsstoryst *ns = new Deprecatednewsstoryst;

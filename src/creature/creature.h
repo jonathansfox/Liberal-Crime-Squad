@@ -96,8 +96,6 @@ public:
 
 	bool enemy() const;
 
-
-
 	int get_disguise_difficulty() const;
 	int	get_stealth_difficulty() const;
 	int get_true_attribute(int attribute) const;
@@ -112,7 +110,7 @@ public:
 	std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after DeprecatedCreature)
 	
 	bool is_armed() const { return weapon; }
-	bool is_naked() const { return !armor; }
+	bool is_naked_human() const { return !armor && !animalgloss; }
 	bool will_do_ranged_attack(bool force_ranged, bool force_melee) const; //force_melee is likely unnecessary. -XML
 	bool can_reload() const;
 	bool will_reload(bool force_ranged, bool force_melee) const;
@@ -259,7 +257,7 @@ public:
 	}
 	Augmentation & get_augmentation(int aug_num) { return augmentations[aug_num]; }
 	Weapon& get_weapon() const { return is_armed() ? *weapon : weapon_none(); }
-	Armor& get_armor() const { return is_naked() ? armor_none() : *armor; }
+	Armor& get_armor() const { return !armor ? armor_none() : *armor; }
 	bool take_clips(Item& clip, int number);
 	bool take_clips(Clip& clip, int number);
 	bool take_clips(const ClipType& ct, int number);

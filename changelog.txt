@@ -1173,3 +1173,11 @@ Namely the ability to modify Special Editions published in the liberal guardian
 
 4.12.62
 Fixed gamecrash if augment attempted when cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID) == 0
+
+4.12.63
+Unavailable options in shops are now greyed out, rather than omitted entirely
+
+4.12.64
+Refactoring, replaced "is_naked() && !animalgloss" with new function "is_naked_human()"
+fixed console dimensions
+added crimesquad_big.exe for larger font size

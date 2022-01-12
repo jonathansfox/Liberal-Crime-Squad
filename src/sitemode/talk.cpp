@@ -52,7 +52,7 @@ void talk(DeprecatedCreature &a, const int t)
 }
 char talkToBankTeller(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	printCommonStatement(is_naked ? eprintOptionsWithinBankWhileNaked : eprintOptionsWithinBank);
 	int c = pressSpecificKey('a', 'b', 'c');
 	switch (c)
@@ -175,7 +175,7 @@ char talkToGeneric(DeprecatedCreature &a, DeprecatedCreature &tk)
 	printTalkToMiddle(tk.align, tk.getNameAndAlignment().name, get_age_string(tk.getCreatureBio(), tk.animalgloss));
 
 
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 
 	printTalkToFooter(is_naked, tk.can_date(a.getCreatureBio().age, a.animalgloss));
 
@@ -242,7 +242,7 @@ void heyIWantToCancelMyRoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 	printCommonXeDoesStatement(eprintIWantToCancelRent,a.getNameAndAlignment().name);
 
 	pressAnyKey();
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	if (is_naked)
 	{
 		printCommonXeDoesStatement(eprintPutSomeDamnClothesOn,tk.getNameAndAlignment().name);
@@ -265,7 +265,7 @@ void heyIWantToRentARoom(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	printCommonXeDoesStatement(eprintIWantToRent,a.getNameAndAlignment().name);
 	pressAnyKey();
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	if (is_naked)
 	{
 		printCommonXeDoesStatement(eprintPutSomeDamnClothesOn,tk.getNameAndAlignment().name);
@@ -375,7 +375,7 @@ void heyINeedAGun(DeprecatedCreature &a, DeprecatedCreature &tk)
 {
 	printCommonXeDoesStatement(eprintINeedAGun,a.getNameAndAlignment().name);
 	pressAnyKey();
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	if (is_naked)
 	{
 		printCommonXeDoesStatement(eprintIDontSellToNaked,tk.getNameAndAlignment().name);
@@ -465,7 +465,7 @@ void doYouComeHereOften(DeprecatedCreature &a, DeprecatedCreature &tk)
 	int difficulty = DIFFICULTY_HARD;
 	if (tk.type == CREATURE_CORPORATE_CEO)
 		difficulty = DIFFICULTY_HEROIC;
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	if (is_naked) difficulty -= 4;
 	if (a.skill_check(SKILL_SEDUCTION, difficulty))
 		succeeded = true;
@@ -555,7 +555,7 @@ void talkAboutIssues(DeprecatedCreature &a, DeprecatedCreature &tk)
 		difficulty += 5;
 	if (issue_too_liberal)
 		difficulty += 5;
-	const bool is_naked = a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL;
+	const bool is_naked = a.is_naked_human();
 	if (is_naked)
 		difficulty += 5;
 	succeeded = a.skill_check(SKILL_PERSUASION, difficulty);
