@@ -1181,3 +1181,19 @@ Unavailable options in shops are now greyed out, rather than omitted entirely
 Refactoring, replaced "is_naked() && !animalgloss" with new function "is_naked_human()"
 fixed console dimensions
 added crimesquad_big.exe for larger font size
+
+4.12.65
+Added Weeping-Cat's changes
+* Newspaper Crimes Only Affects Writers, Unless There Is None.
+
+* Mask Overhaul
+
+Hiding liberal's face protects against heat build up from crimes, but makes social interactions and acting casual during infiltration harder.
+
+* Encoding comment
+
+Just thought I'd point this out, no idea if there's an easy fix.
+
+* Black Bloc Outfits
+
+Basic dark clothing with stealth and concealed face, comes with an armored variant. Can only be crafted.
