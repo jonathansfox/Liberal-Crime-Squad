@@ -1698,7 +1698,7 @@ void special_oval_office()
 		enemyattack();
 		creatureadvance();
 	}
-	else
+	else if(uniqueCreatures.President().location == getCurrentSite())
 	{
 		emptyEncounter();
 		clearmessagearea(false);
@@ -1709,6 +1709,15 @@ void special_oval_office()
 		for (int e = 0; e < 2; e++)make_creature_without_encounter_array(e, CREATURE_SECRET_SERVICE);
 		spawnPresident();
 		printencounter();
+		pressAnyKey();
+	}
+	else
+	{
+		emptyEncounter();
+		clearmessagearea(false);
+		set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		mvaddstrAlt(16, 1, CONST_THE_PRESIDENT_ISN_T_HERE, gamelog);
+		printsitemap(loc_coord.locx, loc_coord.locy, loc_coord.locz);
 		pressAnyKey();
 	}
 }
