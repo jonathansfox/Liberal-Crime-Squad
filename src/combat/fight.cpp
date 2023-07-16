@@ -334,7 +334,7 @@ bool goodguyattack = false;
 
 	 gamelog.newline();
 	 if ((t.getCreatureHealth().animalgloss == ANIMALGLOSS_TANK || (t.getCreatureHealth().animalgloss == ANIMALGLOSS_ANIMAL && lawList[LAW_ANIMALRESEARCH] != 2))
-		 || (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
+		 || (a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED) || (a.enemy() && t.get_augmentation(AUGMENTATION_SKIN).attribute == ATTRIBUTE_WISDOM))
 	 {
 		 mvaddstrAlt(17, 1, t.getNameAndAlignment().name + (string)CONST_IS_IMMUNE_TO_THE_ATTACK, gamelog);
 	 }
