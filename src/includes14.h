@@ -501,6 +501,7 @@ extern short sitealarmtimer;
 extern short sitealienate;
 extern short sitetype;
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
+extern UniqueCreatures uniqueCreatures;
 extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 void giveActiveSquadMoney(const int money);

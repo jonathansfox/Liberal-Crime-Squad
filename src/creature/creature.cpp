@@ -916,6 +916,8 @@ void conservatise(DeprecatedCreature &cr)
 {
 	if (cr.align == ALIGN_LIBERAL && cr.juice > 0)cr.juice = 0;
 	cr.align = ALIGN_CONSERVATIVE;
+	if(cr.id == uniqueCreatures.President().id)
+		exec[EXEC_PRESIDENT] = ALIGN_ARCHCONSERVATIVE;
 	switch (cr.type)
 	{
 	case CREATURE_WORKER_FACTORY_UNION:
@@ -933,6 +935,8 @@ void liberalize(DeprecatedCreature &cr, bool rename)
 	cr.align = ALIGN_LIBERAL;
 	if (cr.id == uniqueCreatures.CEO().id)
 		uniqueCreatures.newCEO();
+	if(cr.id == uniqueCreatures.President().id)
+		exec[EXEC_PRESIDENT] = ALIGN_ELITELIBERAL;
 	if (rename)
 		switch (cr.type)
 		{
@@ -1011,6 +1015,7 @@ void UniqueCreatures::newPresident()
 {
 	makecreature(Pres_, CREATURE_POLITICIAN);
 	Pres_ID = Pres_.id, Pres_state = UNIQUECREATURE_ALIVE, Pres_.dontname = true;
+	Pres_.location = Pres_.worklocation;
 	//Turn into President (not just random pol)
 	std::string pres_name = execname[EXEC_PRESIDENT];
 	Pres_.rename((((string)CONST_X_PRESIDENT_) + pres_name.substr(pres_name.find(' ') + 1)));

@@ -175,7 +175,9 @@ void recruitSelect(DeprecatedCreature &cr)
 }
 void show_victim_status(CreatureHealth victim, const int age, const int HEART)
 {
-
+	for(int i = 2; i < 13; i++) {
+		mvaddstrAlt(i, 55, "                         ");
+	}
 	set_color_easy(WHITE_ON_BLACK);
 	mvaddstrAlt(2, 55, STATUS_COLON);
 	printhealthstat(victim, 2, 66, true);
@@ -215,41 +217,43 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	int blood_saved = 10 * cr->get_skill(SKILL_SCIENCE) + 15 * cr->get_skill(SKILL_FIRSTAID);
 	if (blood_saved > 100) blood_saved = 100;
 	victim->lose_blood(100 - blood_saved);
-	// divide by zero risk, replaced "/ skills" with "/ (skills + 1)"
-	if (skills < difficulty &&
-		LCSrandom((100 * difficulty) / (skills + 1)) < 100)
+	ledger.subtract_funds(selected_aug->get_cost(), EXPENSE_MANUFACTURE); // Maybe change this to a new category, but it would break safe compatibility
+	if (LCSrandom(100) > 100 * skills / difficulty)
 	{
 		unsigned char* wound = nullptr;
 		switch (selected_aug->get_type())
 		{
 		case AUGMENTATION_HEAD:
-			victim->apply_special_wound(BODYPART_HEAD, WOUND_NASTYOFF);
+			victim->apply_wound(BODYPART_HEAD, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			victim->lose_blood( 100);
 			break;
 		case AUGMENTATION_BODY:
-			victim->apply_special_wound(BODYPART_BODY, WOUND_NASTYOFF);
+			victim->apply_wound(BODYPART_BODY, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			victim->lose_blood( 100);
 			break;
 		case AUGMENTATION_ARMS:
 			if (LCSrandom(2))
-				victim->apply_special_wound(BODYPART_ARM_LEFT, WOUND_NASTYOFF);
+				victim->apply_wound(BODYPART_ARM_LEFT, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			else
-				victim->apply_special_wound(BODYPART_ARM_RIGHT, WOUND_NASTYOFF);
+				victim->apply_wound(BODYPART_ARM_RIGHT, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			victim->lose_blood( 25);
 			break;
 		case AUGMENTATION_LEGS:
 			if (LCSrandom(2))
-				victim->apply_special_wound(BODYPART_LEG_LEFT, WOUND_NASTYOFF);
+				victim->apply_wound(BODYPART_LEG_LEFT, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			else
-				victim->apply_special_wound(BODYPART_LEG_RIGHT, WOUND_NASTYOFF);
+				victim->apply_wound(BODYPART_LEG_RIGHT, (WOUND_BLEEDING | WOUND_NASTYOFF));
 			victim->lose_blood( 25);
 			break;
 		case AUGMENTATION_SKIN:
-			if (LCSrandom(2))
-				victim->apply_special_wound(BODYPART_HEAD, WOUND_NASTYOFF);
-			else
-				victim->apply_special_wound(BODYPART_BODY, WOUND_NASTYOFF);
+			char injury = WOUND_BLEEDING | WOUND_CUT | WOUND_TORN;
 			victim->lose_blood( 50);
+			victim->apply_wound(BODYPART_ARM_LEFT, injury);
+			victim->apply_wound(BODYPART_ARM_RIGHT, injury);
+			victim->apply_wound(BODYPART_LEG_LEFT, injury);
+			victim->apply_wound(BODYPART_LEG_RIGHT, injury);
+			victim->apply_wound(BODYPART_BODY, injury);
+			victim->apply_wound(BODYPART_HEAD, injury);
 			break;
 		}
 		if (victim->getCreatureHealth().blood > 0)
@@ -260,41 +264,55 @@ void apply_augmentation(DeprecatedCreature *victim, DeprecatedCreature *cr, Augm
 	}
 	else //It was successful... but not without some injuries
 	{
+		char injury = WOUND_BRUISED | WOUND_CUT;
+		if(blood_saved < 100) injury |= WOUND_BLEEDING;
 		switch (selected_aug->get_type())
 		{
 		case AUGMENTATION_HEAD:
-			victim->apply_special_wound(BODYPART_HEAD, WOUND_BLEEDING | WOUND_BRUISED);
+			victim->apply_wound(BODYPART_HEAD, injury);
 			break;
 		case AUGMENTATION_BODY:
-			victim->apply_special_wound(BODYPART_BODY, WOUND_BLEEDING | WOUND_BRUISED);
+			victim->apply_wound(BODYPART_BODY, injury);
 			break;
 		case AUGMENTATION_ARMS:
 			if (LCSrandom(2))
-				victim->apply_special_wound(BODYPART_ARM_RIGHT, WOUND_BLEEDING | WOUND_BRUISED);
+				victim->apply_wound(BODYPART_ARM_RIGHT, injury);
 			else
-				victim->apply_special_wound(BODYPART_ARM_LEFT, WOUND_BLEEDING | WOUND_BRUISED);
+				victim->apply_wound(BODYPART_ARM_LEFT, injury);
 			break;
 		case AUGMENTATION_LEGS:
 			if (LCSrandom(2))
-				victim->apply_special_wound(BODYPART_LEG_RIGHT, WOUND_BLEEDING | WOUND_BRUISED);
+				victim->apply_wound(BODYPART_LEG_RIGHT, injury);
 			else
-				victim->apply_special_wound(BODYPART_LEG_LEFT, WOUND_BLEEDING | WOUND_BRUISED);
+				victim->apply_wound(BODYPART_LEG_LEFT, injury);
 			break;
 		case AUGMENTATION_SKIN:
-			victim->apply_special_wound(BODYPART_HEAD, WOUND_BLEEDING | WOUND_BRUISED);
+			victim->apply_wound(BODYPART_ARM_LEFT, injury);
+			victim->apply_wound(BODYPART_ARM_RIGHT, injury);
+			victim->apply_wound(BODYPART_LEG_LEFT, injury);
+			victim->apply_wound(BODYPART_LEG_RIGHT, injury);
+			victim->apply_wound(BODYPART_BODY, injury);
+			victim->apply_wound(BODYPART_HEAD, injury);
 			break;
 		}
-		selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
-		victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
-		cr->train(SKILL_SCIENCE, 15);
-		addjuice(*cr, 10, 1000);
-		set_color_easy(GREEN_ON_BLACK_BRIGHT);
-		addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_AUGMENTED_WITH + selected_aug->get_name(), gamelog);
+		if(victim->getCreatureHealth().blood > 0) {
+			selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
+			victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
+			addjuice(*cr, 25, 1000);
+			set_color_easy(GREEN_ON_BLACK_BRIGHT);
+			addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_AUGMENTED_WITH + selected_aug->get_name(), gamelog);
+		}
 	}
+	cr->train(SKILL_SCIENCE, 25 * difficulty);
+	cr->train(SKILL_FIRSTAID, 50);
 	if (victim->getCreatureHealth().blood <= 0) //Lost too much blood, you killed 'em
 	{
+		// De-Juice for murdering a fellow squad member
+		addjuice(*cr, -5, -50);
 		set_color_easy(RED_ON_BLACK_BRIGHT);
 		victim->die();
+		removesquadinfo(*victim);
+		cleangonesquads();
 		addstrAlt(string(victim->getNameAndAlignment().name) + HAS_BEEN_BRUTALLY_MURDERED_BY + cr->getNameAndAlignment().name, gamelog);
 	}
 }
@@ -413,18 +431,24 @@ void select_augmentation(DeprecatedCreature *cr) //TODO: Finish and general clea
 				(selected_aug->get_effect() >= 0 ? SPACE_PLUS : singleSpace) +
 				tostring(selected_aug->get_effect()));
 			set_color_easy(WHITE_ON_BLACK_BRIGHT);
-			mvaddstrAlt(5, 0, CHANCE_AT_SUCCESS_COLON);
+			mvaddstrAlt(5, 0, COST_COLON);
+			set_color_easy(WHITE_ON_BLACK);
+			addstrAlt("$");
+			addstrAlt(to_string(selected_aug->get_cost()));
+			set_color_easy(WHITE_ON_BLACK_BRIGHT);
+			mvaddstrAlt(6, 0, CHANCE_OF_SUCCESS_COLON);
 			int skills = cr->get_skill(SKILL_SCIENCE) + (cr->get_skill(SKILL_FIRSTAID) / 2);
 			int difficulty = selected_aug->get_difficulty();
 			set_color_easy(WHITE_ON_BLACK);
-			addstrAlt(to_string(100 * skills / difficulty));
-			mvaddstrAlt(7, 0, DESCRIPTION);
+			addstrAlt(to_string(min(100, 100 * skills / difficulty)));
+			addstrAlt("%");
+			mvaddstrAlt(8, 0, DESCRIPTION);
 			set_color_easy(WHITE_ON_BLACK);
-			mvaddstrAlt(8, 0, LONG_LINE_BUT_NOT_EIGHTY);
+			mvaddstrAlt(9, 0, LONG_LINE_BUT_NOT_EIGHTY);
 			vector<string> desc;
 			split_string(selected_aug->get_description(), ' ', desc);
 			int chars_left = 50;
-			int line = 9;
+			int line = 10;
 			for (int i = 0; i < desc.size(); i++)
 			{
 				if (desc[i].length() > 50) continue;

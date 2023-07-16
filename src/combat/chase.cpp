@@ -675,17 +675,17 @@ void crashfriendlycar(int v)
 					// Inflict injuries
 					if (LCSrandom(2))
 					{
-						activesquad->squad[p]->apply_special_wound(w, (WOUND_TORN | WOUND_BLEEDING));
+						activesquad->squad[p]->apply_wound(w, (WOUND_TORN | WOUND_BLEEDING));
 						activesquad->squad[p]->lose_blood(1 + LCSrandom(25));
 					}
 					if (!LCSrandom(3))
 					{
-						activesquad->squad[p]->apply_special_wound(w, (WOUND_CUT | WOUND_BLEEDING));
+						activesquad->squad[p]->apply_wound(w, (WOUND_CUT | WOUND_BLEEDING));
 						activesquad->squad[p]->lose_blood(1 + LCSrandom(25));
 					}
 					if (LCSrandom(2) || activesquad->squad[p]->getCreatureHealth().wound[w] == 0)
 					{
-						activesquad->squad[p]->apply_special_wound(w, WOUND_BRUISED);
+						activesquad->squad[p]->apply_wound(w, WOUND_BRUISED);
 						activesquad->squad[p]->lose_blood(1 + LCSrandom(10));
 					}
 				}

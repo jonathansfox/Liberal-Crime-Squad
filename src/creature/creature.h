@@ -186,10 +186,6 @@ public:
 	void clear_no_longer_crimes();
 	void cap_crimes_at_ten();
 
-	void apply_special_wound(const int wound, const int flag) {
-		special[wound] |= flag;
-	}
-
 	void lose_blood(const int loss) {
 		blood -= loss;
 	}

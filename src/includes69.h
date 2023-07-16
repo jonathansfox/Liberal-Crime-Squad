@@ -167,6 +167,10 @@ extern short mode;
 extern short activesortingchoice[SORTINGCHOICENUM];
 extern vector<ArmorType *> armortype;
 extern vector<RecruitData> recruitable_creatures;
+extern class Ledger ledger;
+
+void removesquadinfo(DeprecatedCreature& cr);
+void cleangonesquads();
 
 vector<ActivityAndString> data_lessons;
 map<Activity, Data_Activity> data_activities;
