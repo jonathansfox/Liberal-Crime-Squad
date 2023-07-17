@@ -3763,9 +3763,6 @@ int getkey()
 	while (getch() != ERR);
 	nodelay(stdscr, FALSE);
 	int c = getch();
-
-	addstrAlt(c);
-	//mvaddstrAlt(0,0,c);
 	translategetch(c);
 	return c;
 }
