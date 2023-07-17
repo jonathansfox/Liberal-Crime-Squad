@@ -323,3 +323,9 @@
 "I can tell, your breath stinks!"
  <shoves gum down your throat>
 #
+"That shirt looks good on you, but it would look better stuffed in the neck"
+"of a vodka bottle and flung burning through our office building's window."
+"Let's fucking do it and never look back.
+"What are you, a psycho?"
+<starts dialing police>
+#
