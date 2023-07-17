@@ -70,5 +70,3 @@ titlescreen (the quote that generates on game start)
 newgame\founderQuestions.txt
 
 Customize the questions at the start of the game! Allow anywhere from 1~10 answers per question, with as many in game impacts (mostly stat and skill for the founder, but also starting funds, birthday, even starting year!) Allow as many questions as you want.
-
-![http://www.cppdepend.com](/cppdependlogo.png)
