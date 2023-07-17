@@ -72,6 +72,7 @@ void alarmwait();
 
 
 const int TAB = 9;
+const int SHIFT_TAB = 351;
 const int ENTER = 10;
 const int ESC = 27;
 const int SPACEBAR = 32;

@@ -399,7 +399,16 @@ void pressedThisKeyInBaseMode(const int c) {
 				break;
 			}
 	} break;
-
+	case SHIFT_TAB: if (len(squad)) {
+		if (!activesquad) activesquad = squad[len(squad) - 1];
+		else for (int sq = len(squad) - 1; sq >= 0; sq--)
+			if (squad[sq] == activesquad)
+			{
+				if (sq == 0) activesquad = squad[len(squad) - 1];
+				else activesquad = squad[sq - 1];
+				break;
+			}
+	} break;
 	case 'r': if (CreaturePool::getInstance().lenpool()) review(); break;
 
 	case 's': getslogan(); break;

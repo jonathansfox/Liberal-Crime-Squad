@@ -1207,18 +1207,19 @@ Make Liberalizing the President Actually Do Something (#9)
 
 * Fixed logic around the President being out of the oval office after being recruited or kidnapped
 
-4.12.67 (prelim)
+4.12.67
 Thanks to jonathansfox
- Fixed probability calculation of augmentation to match displayed chance of success and limited the maximum displayed chance of success to 100%
- Chanced "Chance at Success" in augmentations to "Chance of Success" 
- Fixed car crash and augmentation injuries to apply intended body location injuries instead of flagging special wounds
- Altered the various injuries applied by augmentation success and failure somewhat
- Increased experience and juice rewards for augmentation significantly; added -5 juice penalty for murdering a liberal using augmentations
- Added cost feedback and expenditure of money to augmentations 
- Fixed display bug with augmentation injuries 
- Prevent success text from showing when liberal dies under augmentation surgery
- Cost information shown in UI for augmentations 
- Changed lethal skin mod failure from rip all body parts off to tear and cut all body parts
- Cleaned up squad status for deceased victims of augmentation 
- Gave thick skin augmentation the ability to make a Liberal completely immune to special attacks
- Gave augmentations diverse difficulty and cost and altered some of the descriptions
+* Fixed probability calculation of augmentation to match displayed chance of success and limited the maximum displayed chance of success to 100%
+* Chanced "Chance at Success" in augmentations to "Chance of Success" 
+* Fixed car crash and augmentation injuries to apply intended body location injuries instead of flagging special wounds
+* Altered the various injuries applied by augmentation success and failure somewhat
+* Increased experience and juice rewards for augmentation significantly; added -5 juice penalty for murdering a liberal using augmentations
+* Added cost feedback and expenditure of money to augmentations 
+* Fixed display bug with augmentation injuries 
+* Prevent success text from showing when liberal dies under augmentation surgery
+* Cost information shown in UI for augmentations 
+* Changed lethal skin mod failure from rip all body parts off to tear and cut all body parts
+* Cleaned up squad status for deceased victims of augmentation 
+* Gave thick skin augmentation the ability to make a Liberal completely immune to special attacks
+* Gave augmentations diverse difficulty and cost and altered some of the descriptions
+* Added Shift+Tab for reverse squad selection
