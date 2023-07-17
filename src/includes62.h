@@ -199,7 +199,7 @@ void bloodyUpEncounterArmor();
 /* attack handling for an individual creature and its target */
 // returns a boolean representing whether it was the intended target or CONST_ACTUAL
 // so bool actual does not need to be passed by reference
-bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
+bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake);
 
 void setSiteAlarmOne();
 string howGracefulAttack(int handToHand);
@@ -245,7 +245,7 @@ struct damageDetails {
 	const char armorpiercing;
 	damageDetails(int _mod, int _hit_location, int _extraarmor, char _armorpiercing) : mod(_mod), hit_location(_hit_location), extraarmor(_extraarmor), armorpiercing(_armorpiercing) {};
 };
-bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee = false);
+bool attackPoolEncounter(const int p, const int t, const char mistake);
 void addLocationChange(int cursite, sitechangest change);
 bool isThereASiteAlarm();
 vector<NameAndAlignment> getEncounterNameAndAlignment();

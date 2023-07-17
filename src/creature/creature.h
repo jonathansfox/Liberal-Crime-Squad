@@ -446,7 +446,7 @@ public:
 		delete prisoner;
 	}
 	char human_shield_attacked(DeprecatedCreature &cr) {
-		bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee = false);
+		bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake);
 		return attack(cr, *prisoner, 1);
 	}
 	int type;

@@ -1222,4 +1222,7 @@ Thanks to jonathansfox
 * Cleaned up squad status for deceased victims of augmentation 
 * Gave thick skin augmentation the ability to make a Liberal completely immune to special attacks
 * Gave augmentations diverse difficulty and cost and altered some of the descriptions
+
 * Added Shift+Tab for reverse squad selection
+* Paraplegics and Quadriplegics characters can still use special attacks
+* Removed "char force_melee" variable from attack function (discovered that attack function called itself recursively for counter-attacks)

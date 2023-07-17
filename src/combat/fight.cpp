@@ -147,6 +147,18 @@ bool goodguyattack = false;
 		 }
 		 return 1;
 	 }
+	 bool specialAttackIsPossible = (
+		 (((a.type == CREATURE_COP && a.getCreatureHealth().align == ALIGN_MODERATE && a.enemy()) ||
+			 a.type == CREATURE_SCIENTIST_EMINENT ||
+			 a.type == CREATURE_JUDGE_LIBERAL ||
+			 a.type == CREATURE_JUDGE_CONSERVATIVE ||
+			 (a.type == CREATURE_CORPORATE_CEO && LCSrandom(2)) ||
+			 a.type == CREATURE_POLITICIAN ||
+			 a.type == CREATURE_RADIOPERSONALITY ||
+			 a.type == CREATURE_NEWSANCHOR ||
+			 a.type == CREATURE_MILITARYOFFICER ||
+			 a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_)) &&
+			 (a.get_weapon().get_specific_bool(BOOL_MUSICAL_ATTACK_) || !a.is_armed() || a.getCreatureHealth().align != 1)));
 	 if (a.getCreatureHealth().special[SPECIALWOUND_NECK] == 2 || a.getCreatureHealth().special[SPECIALWOUND_UPPERSPINE] == 2)
 	 {
 		 if (!noncombat)
@@ -669,12 +681,12 @@ bool goodguyattack = false;
 	 }
 	 gamelog.newline();
  }
- bool attemptSpecialAttack(DeprecatedCreature &a, DeprecatedCreature &t, const bool force_melee) {
+ bool attemptSpecialAttack(DeprecatedCreature &a, DeprecatedCreature &t) {
 	 vector<NameAndAlignment> encounter = getEncounterNameAndAlignment();
 	 //SPECIAL ATTACK!
 	 int encnum = 0;
 	 for (int e = 0; e < ENCMAX; e++) if (encounter[e].exists) encnum++;
-	 bool specialAttackIsPossible = (!force_melee &&
+	 bool specialAttackIsPossible = (
 		 (((a.type == CREATURE_COP && a.getCreatureHealth().align == ALIGN_MODERATE && a.enemy()) ||
 			 a.type == CREATURE_SCIENTIST_EMINENT ||
 			 a.type == CREATURE_JUDGE_LIBERAL ||
@@ -1436,13 +1448,218 @@ bool goodguyattack = false;
 	 }
 
  }
-
- bool attackPoolEncounter(const int p, const int t, const char mistake, const bool force_melee) {
-	 return attack(*pool[p], encounter[t], mistake, force_melee);
+ bool counterAttack(DeprecatedCreature& a, DeprecatedCreature& t);
+ bool attackPoolEncounter(const int p, const int t, const char mistake) {
+	 return attack(*pool[p], encounter[t], mistake);
  }
+ bool useAttack(DeprecatedCreature& a, DeprecatedCreature& t, const attackst* attack_used, const char mistake) {
 
+	 // for tanks, attack_used->ranged returns false, so we need to check if it's a tank
+	 bool melee = !attack_used->ranged && !(!a.is_armed() && a.getCreatureHealth().animalgloss && a.specialattack == ATTACK_CANNON);
+
+	 bool sneak_attack = a.is_armed() && (attack_used->can_backstab && a.getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
+
+	 if (sneak_attack)
+	 {
+		 if (sitealarmtimer > 10 || sitealarmtimer < 0) {
+			 sitealarmtimer = 10;
+		 }
+		 t.make_cantbluff_two();
+	 }
+
+	 mvaddstrAlt(16, 1, firstStrike(a, t, mistake, sneak_attack, *attack_used), gamelog);
+
+	 gamelog.newline();
+	 pressAnyKey();
+	 if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	 else set_color_easy(RED_ON_BLACK_BRIGHT);
+
+	 int bonus = 0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
+	 //SKILL EFFECTS
+	 const int wsk = attack_used->skill;
+
+	 // Basic roll
+	 int aroll = a.skill_roll(wsk);
+	 // In a car chase, the driver provides the defence roll instead of the victim.
+	 int droll;
+	 if (mode != GAMEMODE_CHASECAR)
+	 {
+		 droll = t.skill_roll(SKILL_DODGE) / 2;
+	 }
+	 else
+	 {
+
+		 DeprecatedCreature* driver = getChaseDriver(t);
+		 Vehicle* vehicle = getChaseVehicle(t);
+
+		 if (driver != NULL && vehicle != NULL)
+		 {  // without a vehicle or driver, you get a zero roll.
+			 droll = driver->skill_roll(PSEUDOSKILL_DODGEDRIVE);
+		 }
+		 else {
+			 droll = 0;
+		 }
+
+		 DeprecatedCreature* adriver = getChaseDriver(a);
+		 Vehicle* avehicle = getChaseVehicle(a);
+
+		 if (adriver != NULL && avehicle != NULL)
+		 {
+			 bonus += avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
+		 }
+		 else // shouldn't happen
+		 {
+			 bonus += -10; // You're on the wrong side of a drive-by shooting?!
+		 }
+	 }
+	 if (sneak_attack)
+	 {
+		 droll = t.attribute_roll(ATTRIBUTE_WISDOM) / 2;
+		 aroll += a.skill_roll(SKILL_STEALTH);
+		 a.train(wsk, 10);
+	 }
+	 else
+	 {
+		 DeprecatedCreature* driver = getChaseDriver(t);
+
+		 if (driver != NULL)
+			 driver->train(SKILL_DRIVING, aroll / 2);
+		 else
+			 t.train(SKILL_DODGE, aroll * 2);
+		 a.train(wsk, droll * 2 + 5);
+	 }
+	 // Hostages interfere with attack
+	 if (t.is_holding_body()) bonus -= LCSrandom(10);
+	 if (a.is_holding_body()) aroll -= LCSrandom(10);
+	 //Injured people suck at attacking, are like fish in a barrel to attackers
+	 if (mode == GAMEMODE_CHASEFOOT)
+	 {
+		 // If in a foot chase, double the debilitating effect of injuries
+		 healthmodroll(aroll, a);
+		 healthmodroll(droll, t);
+		 healthmodroll(droll, t);
+	 }
+	 else if (mode == GAMEMODE_CHASECAR)
+	 {
+		 // In a car chase, the driver is applying dodge rolls even for crippled people.
+		 healthmodroll(aroll, a);
+		 DeprecatedCreature* driver = getChaseDriver(t);
+
+		 if (driver != NULL)
+		 {// if there is no driver, we already rolled a zero, so don't worry about further penalties.
+			 healthmodroll(droll, *driver);
+		 }
+	 }
+	 else
+	 {
+		 // Any other case (site fight) normal penalties.
+		 healthmodroll(aroll, a);
+		 healthmodroll(droll, t);
+	 }
+	 AttackInfliction attackI(sneak_attack, aroll, droll, *attack_used);
+	 // Weapon accuracy bonuses and penalties
+	 bonus += attack_used->accuracy_bonus;
+	 //USE BULLETS
+	 int bursthits = 0; // Tracks number of hits.
+	 int thrownweapons = 0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
+	 if (!a.is_armed()) //Move into WEAPON_NONE -XML
+	 {
+		 // Martial arts multi-strikes
+		 bursthits = 1 + LCSrandom(a.get_skill(SKILL_HANDTOHAND) / 3 + 1);
+		 if (bursthits > 5) bursthits = 5;
+		 if (a.getCreatureHealth().animalgloss) bursthits = 1; // Whoops, must be human to use martial arts fanciness
+	 }
+	 else
+	 {
+		 int num_attacks = attack_used->number_attacks;
+		 if (sneak_attack) {
+			 num_attacks = 1;
+			 bursthits = 1;
+		 }
+		 directlyUseWeapon(a, num_attacks, thrownweapons, bursthits, *attack_used);
+		 if (!sneak_attack) {
+			 for (int i = 0; i < num_attacks; i++)
+			 {
+				 // Each shot in a burst is increasingly less likely to hit
+				 if (aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
+					 bursthits++;
+			 }
+		 }
+	 }
+	 //HIT!
+	 if (aroll + bonus > droll)
+	 {
+		 inflictDamage(bursthits, a, t, attackI);
+	 }
+	 else
+	 {
+		 set_color_easy(WHITE_ON_BLACK_BRIGHT);
+		 // IsaacG This is the only scenario where force_melee is true
+		 if (melee && aroll < droll - 10 && t.getCreatureHealth().blood>70 && t.getCreatureHealth().animalgloss == ANIMALGLOSS_NONE
+			 && t.is_armed() && t.get_weapon().get_attack(false, true, true) != NULL)
+		 {
+			 string str2 = t.getNameAndAlignment().name;
+			 str2 += CONST_KNOCKS_THE_BLOW_ASIDE_AND_COUNTERS;
+			 mvaddstrAlt(17, 1, str2, gamelog);
+			 gamelog.newline();
+			 pressAnyKey();
+			 goodguyattack = !goodguyattack;
+			 counterAttack(t, a);
+			 goodguyattack = !goodguyattack;
+		 }//TODO if missed person, but vehicle is large, it might damage the car. 
+		 else {
+			 string str2;
+			 if (sneak_attack)
+			 {
+				 str2 = t.getNameAndAlignment().name;
+				 str2 += singleSpace + pickrandom(cry_alarm);
+				 setSiteAlarmOne();
+			 }
+			 else {
+				 str2 += unsuccessfulHit(a, t, droll);
+
+			 }
+			 mvaddstrAlt(17, 1, str2, gamelog);
+
+			 gamelog.newline();
+			 printparty();
+			 if (mode == GAMEMODE_CHASECAR ||
+				 mode == GAMEMODE_CHASEFOOT) printchaseencounter();
+			 else printencounter();
+			 pressAnyKey();
+
+
+
+		 }
+	 }
+	 for (; thrownweapons > 0; thrownweapons--)
+	 {
+		 if (a.has_thrown_weapon)
+			 a.ready_another_throwing_weapon();
+		 a.drop_weapon(NULL);
+	 }
+	 // This is the only point in the function that returns true
+	 return true;
+ }
+ bool counterAttack(DeprecatedCreature& a, DeprecatedCreature& t) {
+	 clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
+	 if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
+	 else set_color_easy(RED_ON_BLACK_BRIGHT);
+
+	 const attackst* attack_used = a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
+		 true,
+		 true ); //No reload if force melee or unable to reload, cannot reload during a counter-attack
+	 // special_attack cannot be used in force_melee
+	 if (attemptIncapacitated(a) || /*attemptSpecialAttack(a, t, true) || */attemptReload(a, true) || attack_used == NULL) {
+		 // All exit points consolidated here, except the final one.
+		 // These four conditions, in order, determine the attacker is not capable of attacking using the standard attack()
+		 // It relies on lazy conditional OR, since each condition has side effects.
+		 return false;
+	 }
+	 return useAttack(a, t, attack_used, false);
+ }
 /* attack handling for an individual creature and its target */
-bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, const bool force_melee)
+bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake)
 {
 
 	clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
@@ -1450,200 +1667,15 @@ bool attack(DeprecatedCreature &a, DeprecatedCreature &t, const char mistake, co
 	else set_color_easy(RED_ON_BLACK_BRIGHT);
 
 	const attackst* attack_used = a.get_weapon().get_attack(mode == GAMEMODE_CHASECAR,          //Force ranged if in a car.
-		force_melee,
-		(force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
-	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t, force_melee) || attemptReload(a, force_melee) || attack_used == NULL) {
+		false,
+		(false || !a.can_reload())); //No reload if force melee or unable to reload.
+	if (attemptIncapacitated(a) || attemptSpecialAttack(a, t) || attemptReload(a, false) || attack_used == NULL) {
 		// All exit points consolidated here, except the final one.
 		// These four conditions, in order, determine the attacker is not capable of attacking using the standard attack()
 		// It relies on lazy conditional OR, since each condition has side effects.
 		return false;
 	}
-
-	// for tanks, attack_used->ranged returns false, so we need to check if it's a tank
-	bool melee = !attack_used->ranged && !(!a.is_armed() && a.getCreatureHealth().animalgloss && a.specialattack == ATTACK_CANNON);
-
-	bool sneak_attack = a.is_armed() && (attack_used->can_backstab && a.getCreatureHealth().align == ALIGN_LIBERAL && !mistake) && (t.is_cantbluff_zero() && !isThereASiteAlarm());
-
-	if (sneak_attack)
-	{
-		if (sitealarmtimer > 10 || sitealarmtimer < 0) {
-			sitealarmtimer = 10;
-		}
-		t.make_cantbluff_two();
-	}
-
-	mvaddstrAlt(16, 1, firstStrike(a, t, mistake, sneak_attack, *attack_used), gamelog);
-
-	gamelog.newline();
-	pressAnyKey();
-	if (goodguyattack) set_color_easy(GREEN_ON_BLACK_BRIGHT);
-	else set_color_easy(RED_ON_BLACK_BRIGHT);
-
-	int bonus = 0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
-				   //SKILL EFFECTS
-	const int wsk = attack_used->skill;
-
-	// Basic roll
-	int aroll = a.skill_roll(wsk);
-	// In a car chase, the driver provides the defence roll instead of the victim.
-	int droll;
-	if (mode != GAMEMODE_CHASECAR)
-	{
-		droll = t.skill_roll(SKILL_DODGE) / 2;
-	}
-	else
-	{
-
-		DeprecatedCreature* driver = getChaseDriver(t);
-		Vehicle* vehicle = getChaseVehicle(t);
-
-		if (driver != NULL && vehicle != NULL)
-		{  // without a vehicle or driver, you get a zero roll.
-			droll = driver->skill_roll(PSEUDOSKILL_DODGEDRIVE);
-		}
-		else {
-			droll = 0;
-		}
-
-		DeprecatedCreature* adriver = getChaseDriver(a);
-		Vehicle* avehicle = getChaseVehicle(a);
-
-		if (adriver != NULL && avehicle != NULL)
-		{
-			bonus += avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
-		}
-		else // shouldn't happen
-		{
-			bonus += -10; // You're on the wrong side of a drive-by shooting?!
-		}
-	}
-	if (sneak_attack)
-	{
-		droll = t.attribute_roll(ATTRIBUTE_WISDOM) / 2;
-		aroll += a.skill_roll(SKILL_STEALTH);
-		a.train(wsk, 10);
-	}
-	else
-	{
-		DeprecatedCreature* driver = getChaseDriver(t);
-
-		if (driver != NULL)
-			driver->train(SKILL_DRIVING, aroll / 2);
-		else
-			t.train(SKILL_DODGE, aroll * 2);
-		a.train(wsk, droll * 2 + 5);
-	}
-	// Hostages interfere with attack
-	if (t.is_holding_body()) bonus -= LCSrandom(10);
-	if (a.is_holding_body()) aroll -= LCSrandom(10);
-	//Injured people suck at attacking, are like fish in a barrel to attackers
-	if (mode == GAMEMODE_CHASEFOOT)
-	{
-		// If in a foot chase, double the debilitating effect of injuries
-		healthmodroll(aroll, a);
-		healthmodroll(droll, t);
-		healthmodroll(droll, t);
-	}
-	else if (mode == GAMEMODE_CHASECAR)
-	{
-		// In a car chase, the driver is applying dodge rolls even for crippled people.
-		healthmodroll(aroll, a);
-		DeprecatedCreature* driver = getChaseDriver(t);
-
-		if (driver != NULL)
-		{// if there is no driver, we already rolled a zero, so don't worry about further penalties.
-			healthmodroll(droll, *driver);
-		}
-	}
-	else
-	{
-		// Any other case (site fight) normal penalties.
-		healthmodroll(aroll, a);
-		healthmodroll(droll, t);
-	}
-	AttackInfliction attackI(sneak_attack, aroll, droll, *attack_used);
-	// Weapon accuracy bonuses and penalties
-	bonus += attack_used->accuracy_bonus;
-	//USE BULLETS
-	int bursthits = 0; // Tracks number of hits.
-	int thrownweapons = 0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
-	if (!a.is_armed()) //Move into WEAPON_NONE -XML
-	{
-		// Martial arts multi-strikes
-		bursthits = 1 + LCSrandom(a.get_skill(SKILL_HANDTOHAND) / 3 + 1);
-		if (bursthits > 5) bursthits = 5;
-		if (a.getCreatureHealth().animalgloss) bursthits = 1; // Whoops, must be human to use martial arts fanciness
-	}
-	else
-	{
-		int num_attacks = attack_used->number_attacks;
-		if (sneak_attack) {
-			num_attacks = 1;
-			bursthits = 1;
-		}
-		directlyUseWeapon(a, num_attacks, thrownweapons, bursthits, *attack_used);
-		if (!sneak_attack) {
-			for (int i = 0; i < num_attacks; i++)
-			{
-				// Each shot in a burst is increasingly less likely to hit
-				if (aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
-					bursthits++;
-			}
-		}
-	}
-	//HIT!
-	if (aroll + bonus > droll)
-	{
-		inflictDamage(bursthits, a, t, attackI);
-	}
-	else
-	{
-		set_color_easy(WHITE_ON_BLACK_BRIGHT);
-		if (melee && aroll < droll - 10 && t.getCreatureHealth().blood>70 && t.getCreatureHealth().animalgloss == ANIMALGLOSS_NONE
-			&& t.is_armed() && t.get_weapon().get_attack(false, true, true) != NULL)
-		{
-			string str2 = t.getNameAndAlignment().name;
-			str2 += CONST_KNOCKS_THE_BLOW_ASIDE_AND_COUNTERS;
-			mvaddstrAlt(17, 1, str2, gamelog);
-			gamelog.newline();
-			pressAnyKey();
-			goodguyattack = !goodguyattack;
-			attack(t, a, 0, true);
-			goodguyattack = !goodguyattack;
-		}//TODO if missed person, but vehicle is large, it might damage the car. 
-		else {
-			string str2;
-			if (sneak_attack)
-			{
-				str2 = t.getNameAndAlignment().name;
-				str2 += singleSpace + pickrandom(cry_alarm);
-				setSiteAlarmOne();
-			}
-			else {
-				str2 += unsuccessfulHit(a, t, droll);
-
-			}
-			mvaddstrAlt(17, 1, str2, gamelog);
-
-			gamelog.newline();
-			printparty();
-			if (mode == GAMEMODE_CHASECAR ||
-				mode == GAMEMODE_CHASEFOOT) printchaseencounter();
-			else printencounter();
-			pressAnyKey();
-
-
-
-		}
-	}
-	for (; thrownweapons > 0; thrownweapons--)
-	{
-		if (a.has_thrown_weapon)
-			a.ready_another_throwing_weapon();
-		a.drop_weapon(NULL);
-	}
-	// This is the only point in the function that returns true
-	return true;
+	return useAttack(a, t, attack_used, mistake);
 }
 void singleSquadMemberAttack(const int p, const bool wasalarm) {
 	vector<int> super_enemies;
