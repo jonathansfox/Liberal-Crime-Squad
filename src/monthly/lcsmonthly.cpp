@@ -200,7 +200,7 @@ the bottom of includes.h in the top src folder.
 
 	  for (int i = 0; i < len(impactOnViews); i++) {
 		  tuple<Views, int, bool> nextView = impactOnViews[i];
-		  change_public_opinion(get<0>(nextView), get<1>(nextView) * get<2>(nextView) ? newspaper : 1);
+		  change_public_opinion(get<0>(nextView), get<1>(nextView) * (get<2>(nextView) ? newspaper : 1));
 
 	  }
 	  pressAnyKey();
